@@ -44,14 +44,13 @@ __webpack_require__.d(__webpack_exports__, {
   withI18n: () => (/* binding */ withI18n)
 });
 
-;// CONCATENATED MODULE: external "React"
-const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+;// CONCATENATED MODULE: external "ReactJSXRuntime"
+const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 ;// CONCATENATED MODULE: ./packages/react-i18n/build-module/index.js
-
 /**
  * External dependencies
  */
@@ -59,6 +58,7 @@ const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 /**
  * WordPress dependencies
  */
+
 
 
 /**
@@ -110,9 +110,10 @@ function I18nProvider(props) {
   // Rerender translations whenever the i18n instance fires a change event.
   (0,external_wp_element_namespaceObject.useEffect)(() => i18n.subscribe(forceUpdate), [i18n]);
   const value = (0,external_wp_element_namespaceObject.useMemo)(() => makeContextValue(i18n), [i18n, update]);
-  return (0,external_React_namespaceObject.createElement)(I18nContext.Provider, {
-    value: value
-  }, children);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(I18nContext.Provider, {
+    value: value,
+    children: children
+  });
 }
 
 /**
@@ -152,7 +153,7 @@ const useI18n = () => (0,external_wp_element_namespaceObject.useContext)(I18nCon
 function withI18n(InnerComponent) {
   const EnhancedComponent = props => {
     const i18nProps = useI18n();
-    return (0,external_React_namespaceObject.createElement)(InnerComponent, {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InnerComponent, {
       ...props,
       ...i18nProps
     });

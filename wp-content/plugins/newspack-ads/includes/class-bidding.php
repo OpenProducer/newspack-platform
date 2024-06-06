@@ -183,9 +183,6 @@ final class Bidding {
 		if ( ! Providers::is_provider_active( 'gam' ) ) {
 			return;
 		}
-		if ( Core::is_amp() ) {
-			return;
-		}
 		if ( ! self::is_enabled() ) {
 			return;
 		}
@@ -200,7 +197,7 @@ final class Bidding {
 			'script_loader_tag',
 			function( $tag, $handle, $src ) {
 				if ( self::PREBID_SCRIPT_HANDLE === $handle ) {
-					return '<script data-amp-plus-allowed async src="' . $src . '"></script>';
+					return '<script async src="' . $src . '"></script>';
 				}
 				return $tag;
 			},
@@ -296,9 +293,6 @@ final class Bidding {
 			return;
 		}
 		if ( ! Providers::is_provider_active( 'gam' ) ) {
-			return;
-		}
-		if ( Core::is_amp() ) {
 			return;
 		}
 
@@ -402,7 +396,7 @@ final class Bidding {
 			return;
 		}
 		?>
-		<script data-amp-plus-allowed>
+		<script>
 			( function() {
 				window.pbjs = window.pbjs || { que: [] };
 				window.googletag = window.googletag || { cmd: [] };
@@ -663,12 +657,6 @@ final class Bidding {
 	 * @return array Updated list of settings.
 	 */
 	public function register_settings( $settings_list ) {
-
-		// Skip if using AMP.
-		if ( Core::is_amp() ) {
-			return $settings_list;
-		}
-
 		// Skip if no bidders are registered.
 		if ( false === $this->has_registered_bidders() ) {
 			return $settings_list;

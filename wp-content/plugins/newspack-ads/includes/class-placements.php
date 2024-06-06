@@ -340,15 +340,6 @@ final class Placements {
 		$placements = apply_filters( 'newspack_ads_placements', self::$placements );
 
 		foreach ( $placements as $placement_key => $placement ) {
-
-			// Force disable `stick_to_top` on AMP.
-			if ( isset( $placement['supports'] ) && Core::is_amp() ) {
-				$feature_index = array_search( 'stick_to_top', $placement['supports'] );
-				if ( false !== $feature_index ) {
-					unset( $placement['supports'][ $feature_index ] );
-				}
-			}
-
 			$placement['data'] = self::get_placement_data( $placement_key, $placement );
 
 			$placements[ $placement_key ] = wp_parse_args(
@@ -734,9 +725,6 @@ final class Placements {
 		$provider_id = isset( $placement_data['provider'] ) && ! empty( $placement_data['provider'] ) ? $placement_data['provider'] : Providers::get_default_provider();
 		$ad_unit     = $placement_data['ad_unit'];
 
-		$is_amp        = Core::is_amp();
-		$is_sticky_amp = 'sticky' === $placement_key && true === $is_amp;
-
 		/**
 		 * Fires before an ad is injected into a placement.
 		 *
@@ -757,13 +745,12 @@ final class Placements {
 		$classnames = apply_filters(
 			'newspack_ads_placement_classnames',
 			[
-				'newspack_global_ad'                => ! $is_sticky_amp,
-				'newspack_amp_sticky_ad__container' => $is_sticky_amp,
-				$placement_key                      => true,
-				$placement_key . '-' . $hook_key    => ! empty( $hook_key ),
-				'hook-' . $hook_key                 => ! empty( $hook_key ),
-				'stick-to-top'                      => $stick_to_top,
-				'fixed-height'                      => Settings::get_setting( 'fixed_height', 'active' ),
+				'newspack_global_ad'             => true,
+				$placement_key                   => true,
+				$placement_key . '-' . $hook_key => ! empty( $hook_key ),
+				'hook-' . $hook_key              => ! empty( $hook_key ),
+				'stick-to-top'                   => $stick_to_top,
+				'fixed-height'                   => Settings::get_setting( 'fixed_height', 'active' ),
 			],
 			$placement_key,
 			$hook_key,
@@ -774,7 +761,7 @@ final class Placements {
 
 		?>
 		<div class='<?php echo esc_attr( $classnames_str ); ?>'>
-			<?php if ( 'sticky' === $placement_key && false === $is_amp ) : ?>
+			<?php if ( 'sticky' === $placement_key ) : ?>
 				<button class='newspack_sticky_ad__close'></button>
 			<?php endif; ?>
 			<?php

@@ -32,27 +32,8 @@ class Ad_Refresh_Control {
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		\add_filter( 'newspack_amp_plus_sanitized', [ __CLASS__, 'allow_amp_plus' ], 10, 2 );
 		\add_filter( 'avc_advertiser_ids', [ __CLASS__, 'default_advertiser_ids' ] );
 		\add_action( 'rest_api_init', [ __CLASS__, 'register_api_endpoints' ] );
-	}
-
-	/**
-	 * Allow plugin frontend script to be loaded on AMP Plus.
-	 *
-	 * @param bool|null $is_sanitized If null, the error will be handled. If false, rejected.
-	 * @param object    $error        The AMP sanitisation error.
-	 *
-	 * @return bool Whether the error should be rejected.
-	 */
-	public static function allow_amp_plus( $is_sanitized, $error ) {
-		if ( isset( $error, $error['node_attributes'], $error['node_attributes']['id'] ) ) {
-			// Match starting position so it includes `-js`, `js-extra`, `-after` and `-before` scripts.
-			if ( 0 === strpos( $error['node_attributes']['id'], 'avc_frontend' ) ) {
-				$is_sanitized = false;
-			}
-		}
-		return $is_sanitized;
 	}
 
 	/**
@@ -156,15 +137,6 @@ class Ad_Refresh_Control {
 				__( 'The "Ad Refresh Control" plugin is not active.', 'newspack-ads' ),
 				[
 					'status' => 404,
-				]
-			);
-		}
-		if ( Core::is_amp() ) {
-			return new \WP_Error(
-				'newspack_ad_refresh_control_amp',
-				__( 'AMP not supported', 'newspack-ads' ),
-				[
-					'status' => 400,
 				]
 			);
 		}

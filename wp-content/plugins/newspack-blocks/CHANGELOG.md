@@ -1,3 +1,61 @@
+# [3.2.0](https://github.com/Automattic/newspack-blocks/compare/v3.1.0...v3.2.0) (2024-05-28)
+
+
+### Bug Fixes
+
+* **donate-block:** fix typo in textdomain and color variables ([#1738](https://github.com/Automattic/newspack-blocks/issues/1738)) ([7f7de88](https://github.com/Automattic/newspack-blocks/commit/7f7de8847f254c4f55b875b6476ff0334fdeba11))
+* modal checkout continue button ([#1733](https://github.com/Automattic/newspack-blocks/issues/1733)) ([c672d4a](https://github.com/Automattic/newspack-blocks/commit/c672d4a26547f7948799c86b1ab7569bf31c40f2))
+* respect subscriptions limiter, and handle cart errors in modal ([#1728](https://github.com/Automattic/newspack-blocks/issues/1728)) ([8a828fa](https://github.com/Automattic/newspack-blocks/commit/8a828fae726757c748ff97562c1a4fb6e8536e0c))
+
+
+### Features
+
+* **donate:** add new "Modern" style variation ([#1734](https://github.com/Automattic/newspack-blocks/issues/1734)) ([b83d840](https://github.com/Automattic/newspack-blocks/commit/b83d8400957c179c2c228bc8c1ea87deb047c2aa))
+* update donations patterns and add new one ([#1731](https://github.com/Automattic/newspack-blocks/issues/1731)) ([607c93a](https://github.com/Automattic/newspack-blocks/commit/607c93ad5a207615eb79e9ff4871b2542caaed0b))
+
+# [3.2.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v3.1.0...v3.2.0-alpha.1) (2024-05-20)
+
+
+### Bug Fixes
+
+* **donate-block:** fix typo in textdomain and color variables ([#1738](https://github.com/Automattic/newspack-blocks/issues/1738)) ([7f7de88](https://github.com/Automattic/newspack-blocks/commit/7f7de8847f254c4f55b875b6476ff0334fdeba11))
+* modal checkout continue button ([#1733](https://github.com/Automattic/newspack-blocks/issues/1733)) ([c672d4a](https://github.com/Automattic/newspack-blocks/commit/c672d4a26547f7948799c86b1ab7569bf31c40f2))
+* respect subscriptions limiter, and handle cart errors in modal ([#1728](https://github.com/Automattic/newspack-blocks/issues/1728)) ([8a828fa](https://github.com/Automattic/newspack-blocks/commit/8a828fae726757c748ff97562c1a4fb6e8536e0c))
+
+
+### Features
+
+* **donate:** add new "Modern" style variation ([#1734](https://github.com/Automattic/newspack-blocks/issues/1734)) ([b83d840](https://github.com/Automattic/newspack-blocks/commit/b83d8400957c179c2c228bc8c1ea87deb047c2aa))
+* update donations patterns and add new one ([#1731](https://github.com/Automattic/newspack-blocks/issues/1731)) ([607c93a](https://github.com/Automattic/newspack-blocks/commit/607c93ad5a207615eb79e9ff4871b2542caaed0b))
+
+# [3.1.0](https://github.com/Automattic/newspack-blocks/compare/v3.0.11...v3.1.0) (2024-05-15)
+
+
+### Bug Fixes
+
+* **homepage-articles:** author URL ([#1710](https://github.com/Automattic/newspack-blocks/issues/1710)) ([2f80876](https://github.com/Automattic/newspack-blocks/commit/2f80876dbdf1a380789b5c8110fca7f28ef3685f))
+* **iframe-block:** prevent fatal error on blocks without attributes ([#1708](https://github.com/Automattic/newspack-blocks/issues/1708)) ([4077ee8](https://github.com/Automattic/newspack-blocks/commit/4077ee8d83716cfb66448efa51f4e9904bbc034a))
+* make sure font scale 5 previews in editor ([#1706](https://github.com/Automattic/newspack-blocks/issues/1706)) ([43bda7c](https://github.com/Automattic/newspack-blocks/commit/43bda7c42e8bd683cbd66f6de6930d4cd6ee9fb9))
+
+
+### Features
+
+* homepage articles update loading animation ([#1709](https://github.com/Automattic/newspack-blocks/issues/1709)) ([d2ca12e](https://github.com/Automattic/newspack-blocks/commit/d2ca12e366755a129b57e6ee6739f6db37f3691b))
+
+# [3.1.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v3.0.10...v3.1.0-alpha.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* **homepage-articles:** author URL ([#1710](https://github.com/Automattic/newspack-blocks/issues/1710)) ([2f80876](https://github.com/Automattic/newspack-blocks/commit/2f80876dbdf1a380789b5c8110fca7f28ef3685f))
+* **iframe-block:** prevent fatal error on blocks without attributes ([#1708](https://github.com/Automattic/newspack-blocks/issues/1708)) ([4077ee8](https://github.com/Automattic/newspack-blocks/commit/4077ee8d83716cfb66448efa51f4e9904bbc034a))
+* make sure font scale 5 previews in editor ([#1706](https://github.com/Automattic/newspack-blocks/issues/1706)) ([43bda7c](https://github.com/Automattic/newspack-blocks/commit/43bda7c42e8bd683cbd66f6de6930d4cd6ee9fb9))
+
+
+### Features
+
+* homepage articles update loading animation ([#1709](https://github.com/Automattic/newspack-blocks/issues/1709)) ([d2ca12e](https://github.com/Automattic/newspack-blocks/commit/d2ca12e366755a129b57e6ee6739f6db37f3691b))
+
 ## [3.0.10](https://github.com/Automattic/newspack-blocks/compare/v3.0.9...v3.0.10) (2024-04-24)
 
 

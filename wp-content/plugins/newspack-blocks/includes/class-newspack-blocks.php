@@ -84,6 +84,7 @@ class Newspack_Blocks {
 
 			foreach ( $blocks as $block ) {
 				if ( 'newspack-blocks/iframe' === $block['blockName']
+					&& is_array( $block['attrs'] )
 					&& array_key_exists( 'isFullScreen', $block['attrs'] )
 					&& $block['attrs']['isFullScreen']
 					) {

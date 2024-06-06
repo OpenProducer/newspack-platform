@@ -13,13 +13,12 @@ defined( 'ABSPATH' ) || exit;
  * WooCommerce Order UTM class.
  */
 class WooCommerce_Order_UTM {
-
 	/**
 	 * UTM parameters.
 	 *
 	 * @var string[]
 	 */
-	private static $params = [
+	public static $params = [
 		'source',
 		'medium',
 		'campaign',

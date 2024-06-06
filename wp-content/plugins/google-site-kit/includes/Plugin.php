@@ -174,6 +174,9 @@ final class Plugin {
 
 				$dismissed_items = $dismissals->get_dismissed_items();
 
+				$expirables = new Core\Expirables\Expirables( $this->context, $user_options );
+				$expirables->register();
+
 				$permissions = new Core\Permissions\Permissions( $this->context, $authentication, $modules, $user_options, $dismissed_items );
 				$permissions->register();
 
@@ -202,6 +205,7 @@ final class Plugin {
 				( new Core\Admin\Notices() )->register();
 				( new Core\Admin\Pointers() )->register();
 				( new Core\Admin\Dashboard( $this->context, $assets, $modules ) )->register();
+				( new Core\Admin\Authorize_Application( $this->context, $assets ) )->register();
 				( new Core\Notifications\Notifications( $this->context, $options, $authentication ) )->register();
 				( new Core\Site_Health\Site_Health( $this->context, $options, $user_options, $authentication, $modules, $permissions ) )->register();
 				( new Core\Util\Health_Checks( $authentication ) )->register();
@@ -216,6 +220,10 @@ final class Plugin {
 				( new Core\Prompts\Prompts( $this->context, $user_options ) )->register();
 				( new Core\Consent_Mode\Consent_Mode( $this->context, $options ) )->register();
 				( new Core\Tags\GTag() )->register();
+
+				if ( Feature_Flags::enabled( 'conversionInfra' ) ) {
+					( new Core\Conversion_Tracking\Conversion_Tracking( $this->context, $options ) )->register();
+				}
 
 				// If a login is happening (runs after 'init'), update current user in dependency chain.
 				add_action(

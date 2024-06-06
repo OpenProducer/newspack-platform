@@ -68,7 +68,7 @@ var deepsignal_module_a=new WeakMap,deepsignal_module_o=new WeakMap,deepsignal_m
  * Internal dependencies
  */
 
-const isObject = item => item && typeof item === 'object' && item.constructor === Object;
+const isObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
 const deepMerge = (target, source) => {
   if (isObject(target) && isObject(source)) {
     for (const key in source) {
@@ -78,7 +78,9 @@ const deepMerge = (target, source) => {
           get: getter
         });
       } else if (isObject(source[key])) {
-        if (!target[key]) target[key] = {};
+        if (!target[key]) {
+          target[key] = {};
+        }
         deepMerge(target[key], source[key]);
       } else {
         try {
@@ -171,7 +173,9 @@ const handlers = {
             resetScope();
             resetNamespace();
           }
-          if (it.done) break;
+          if (it.done) {
+            break;
+          }
         }
         return value;
       };
@@ -192,7 +196,9 @@ const handlers = {
     }
 
     // Check if the property is an object. If it is, proxyify it.
-    if (isObject(result)) return proxify(result, ns);
+    if (isObject(result)) {
+      return proxify(result, ns);
+    }
     return result;
   },
   // Prevents passing the current proxy as the receiver to the deepSignal.
@@ -301,13 +307,16 @@ function store(namespace, {
   return stores.get(namespace);
 }
 const parseInitialData = (dom = document) => {
-  const storeTag = dom.querySelector(`script[type="application/json"]#wp-interactivity-data`);
-  if (storeTag?.textContent) {
+  var _dom$getElementById;
+  const jsonDataScriptTag =
+  // Preferred Script Module data passing form
+  (_dom$getElementById = dom.getElementById('wp-script-module-data-@wordpress/interactivity')) !== null && _dom$getElementById !== void 0 ? _dom$getElementById :
+  // Legacy form
+  dom.getElementById('wp-interactivity-data');
+  if (jsonDataScriptTag?.textContent) {
     try {
-      return JSON.parse(storeTag.textContent);
-    } catch (e) {
-      // Do nothing.
-    }
+      return JSON.parse(jsonDataScriptTag.textContent);
+    } catch {}
   }
   return {};
 };
@@ -332,7 +341,8 @@ const populateInitialData = data => {
 const data = parseInitialData();
 populateInitialData(data);
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/hooks.js
-/* @jsx createElement */
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /**
  * External dependencies
@@ -342,6 +352,7 @@ populateInitialData(data);
 /**
  * Internal dependencies
  */
+
 
 // Main context.
 const context = F({});
@@ -360,7 +371,9 @@ const immutableHandlers = {
   deleteProperty: immutableError
 };
 const deepImmutable = target => {
-  if (!immutableMap.has(target)) immutableMap.set(target, new Proxy(target, immutableHandlers));
+  if (!immutableMap.has(target)) {
+    immutableMap.set(target, new Proxy(target, immutableHandlers));
+  }
   return immutableMap.get(target);
 };
 
@@ -500,18 +513,24 @@ const directive = (name, callback, {
 
 // Resolve the path to some property of the store object.
 const resolve = (path, namespace) => {
+  if (!namespace) {
+    warn(`Namespace missing for "${path}". The value for that path won't be resolved.`);
+    return;
+  }
   let resolvedStore = stores.get(namespace);
   if (typeof resolvedStore === 'undefined') {
     resolvedStore = store(namespace, undefined, {
       lock: universalUnlock
     });
   }
-  let current = {
+  const current = {
     ...resolvedStore,
     context: getScope().context[namespace]
   };
-  path.split('.').forEach(p => current = current[p]);
-  return current;
+  try {
+    // TODO: Support lazy/dynamically initialized stores
+    return path.split('.').reduce((acc, key) => acc[key], current);
+  } catch (e) {}
 };
 
 // Generate the evaluate function.
@@ -576,10 +595,10 @@ const Directives = ({
 
   // Recursively render the wrapper for the next priority level.
   const children = nextPriorityLevels.length > 0 ? y(Directives, {
-    directives: directives,
+    directives,
     priorityLevels: nextPriorityLevels,
-    element: element,
-    originalProps: originalProps,
+    element,
+    originalProps,
     previousScope: scope
   }) : element;
   const props = {
@@ -596,7 +615,9 @@ const Directives = ({
   setScope(scope);
   for (const directiveName of currentPriorityLevel) {
     const wrapper = directiveCallbacks[directiveName]?.(directiveArgs);
-    if (wrapper !== undefined) props.children = wrapper;
+    if (wrapper !== undefined) {
+      props.children = wrapper;
+    }
   }
   resetScope();
   return props.children;
@@ -608,9 +629,11 @@ l.vnode = vnode => {
   if (vnode.props.__directives) {
     const props = vnode.props;
     const directives = props.__directives;
-    if (directives.key) vnode.key = directives.key.find(({
-      suffix
-    }) => suffix === 'default').value;
+    if (directives.key) {
+      vnode.key = directives.key.find(({
+        suffix
+      }) => suffix === 'default').value;
+    }
     delete props.__directives;
     const priorityLevels = getPriorityLevels(directives);
     if (priorityLevels.length > 0) {
@@ -625,7 +648,9 @@ l.vnode = vnode => {
       vnode.type = Directives;
     }
   }
-  if (old) old(vnode);
+  if (old) {
+    old(vnode);
+  }
 };
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/utils.js
 /**
@@ -660,6 +685,18 @@ const afterNextFrame = callback => {
 };
 
 /**
+ * Returns a promise that resolves after yielding to main.
+ *
+ * @return Promise
+ */
+const yieldToMain = () => {
+  return new Promise(resolve => {
+    // TODO: Use scheduler.yield() when available.
+    setTimeout(resolve, 0);
+  });
+};
+
+/**
  * Creates a Flusher object that can be used to flush computed values and notify listeners.
  *
  * Using the mangled properties:
@@ -672,7 +709,7 @@ const afterNextFrame = callback => {
  * @return The Flusher object with `flush` and `dispose` properties.
  */
 function createFlusher(compute, notify) {
-  let flush;
+  let flush = () => undefined;
   const dispose = signals_core_module_E(function () {
     flush = this.c.bind(this);
     this.x = compute;
@@ -743,7 +780,9 @@ function withScope(func) {
         } catch (e) {
           gen.throw(e);
         }
-        if (it.done) break;
+        if (it.done) {
+          break;
+        }
       }
       return value;
     };
@@ -884,7 +923,7 @@ const createRootFragment = (parent, replaceNode) => {
     }
   };
 };
-;// CONCATENATED MODULE: ./packages/interactivity/build-module/utils/kebab-to-camelcase.js
+
 /**
  * Transforms a kebab-case string to camelCase.
  *
@@ -896,8 +935,21 @@ function kebabToCamelCase(str) {
     return group1.toUpperCase();
   });
 }
+const logged = new Set();
+
+/**
+ * Shows a warning with `message` if environment is not `production`.
+ *
+ * Based on the `@wordpress/warning` package.
+ *
+ * @param message Message to show in the warning.
+ */
+const warn = message => {
+  if (false) {}
+};
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/directives.js
-/* @jsx createElement */
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /**
  * External dependencies
@@ -912,15 +964,14 @@ function kebabToCamelCase(str) {
 
 
 
-
-// Assigned objects should be ignore during proxification.
+// Assigned objects should be ignored during proxification.
 const contextAssignedObjects = new WeakMap();
 
 // Store the context proxy and fallback for each object in the context.
 const contextObjectToProxy = new WeakMap();
 const contextProxyToObject = new WeakMap();
 const contextObjectToFallback = new WeakMap();
-const isPlainObject = item => item && typeof item === 'object' && item.constructor === Object;
+const isPlainObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
 const descriptor = Reflect.getOwnPropertyDescriptor;
 
 /**
@@ -932,10 +983,10 @@ const descriptor = Reflect.getOwnPropertyDescriptor;
  * By default, all plain objects inside the context are wrapped, unless it is
  * listed in the `ignore` option.
  *
- * @param {Object} current   Current context.
- * @param {Object} inherited Inherited context, used as fallback.
+ * @param current   Current context.
+ * @param inherited Inherited context, used as fallback.
  *
- * @return {Object} The wrapped context object.
+ * @return The wrapped context object.
  */
 const proxifyContext = (current, inherited = {}) => {
   // Update the fallback object reference when it changes.
@@ -1009,8 +1060,8 @@ const proxifyContext = (current, inherited = {}) => {
 /**
  * Recursively update values within a deepSignal object.
  *
- * @param {Object} target A deepSignal instance.
- * @param {Object} source Object with properties to update in `target`
+ * @param target A deepSignal instance.
+ * @param source Object with properties to update in `target`.
  */
 const updateSignals = (target, source) => {
   for (const k in source) {
@@ -1025,10 +1076,10 @@ const updateSignals = (target, source) => {
 /**
  * Recursively clone the passed object.
  *
- * @param {Object} source Source object.
- * @return {Object} Cloned object.
+ * @param source Source object.
+ * @return Cloned object.
  */
-const deepClone = source => {
+function deepClone(source) {
   if (isPlainObject(source)) {
     return Object.fromEntries(Object.entries(source).map(([key, value]) => [key, deepClone(value)]));
   }
@@ -1036,7 +1087,7 @@ const deepClone = source => {
     return source.map(i => deepClone(i));
   }
   return source;
-};
+}
 const newRule = /(?:([\u0080-\uFFFF\w-%@]+) *:? *([^{;]+?);|([^;}{]*?) *{)|(}\s*)/g;
 const ruleClean = /\/\*[^]*?\*\/|  +/g;
 const ruleNewline = /\n+/g;
@@ -1048,8 +1099,8 @@ const empty = ' ';
  * Made by Cristian Bote (@cristianbote) for Goober.
  * https://unpkg.com/browse/goober@2.1.13/src/core/astish.js
  *
- * @param {string} val CSS string.
- * @return {Object} CSS object.
+ * @param val CSS string.
+ * @return CSS object.
  */
 const cssStringToObject = val => {
   const tree = [{}];
@@ -1071,27 +1122,61 @@ const cssStringToObject = val => {
  * Creates a directive that adds an event listener to the global window or
  * document object.
  *
- * @param {string} type 'window' or 'document'
- * @return {void}
+ * @param type 'window' or 'document'
  */
-const getGlobalEventDirective = type => ({
-  directives,
-  evaluate
-}) => {
-  directives[`on-${type}`].filter(({
-    suffix
-  }) => suffix !== 'default').forEach(entry => {
-    useInit(() => {
-      const cb = event => evaluate(entry, event);
-      const globalVar = type === 'window' ? window : document;
-      globalVar.addEventListener(entry.suffix, cb);
-      return () => globalVar.removeEventListener(entry.suffix, cb);
-    }, []);
-  });
+const getGlobalEventDirective = type => {
+  return ({
+    directives,
+    evaluate
+  }) => {
+    directives[`on-${type}`].filter(({
+      suffix
+    }) => suffix !== 'default').forEach(entry => {
+      const eventName = entry.suffix.split('--', 1)[0];
+      useInit(() => {
+        const cb = event => evaluate(entry, event);
+        const globalVar = type === 'window' ? window : document;
+        globalVar.addEventListener(eventName, cb);
+        return () => globalVar.removeEventListener(eventName, cb);
+      });
+    });
+  };
+};
+
+/**
+ * Creates a directive that adds an async event listener to the global window or
+ * document object.
+ *
+ * @param type 'window' or 'document'
+ */
+const getGlobalAsyncEventDirective = type => {
+  return ({
+    directives,
+    evaluate
+  }) => {
+    directives[`on-async-${type}`].filter(({
+      suffix
+    }) => suffix !== 'default').forEach(entry => {
+      const eventName = entry.suffix.split('--', 1)[0];
+      useInit(() => {
+        const cb = async event => {
+          await yieldToMain();
+          evaluate(entry, event);
+        };
+        const globalVar = type === 'window' ? window : document;
+        globalVar.addEventListener(eventName, cb, {
+          passive: true
+        });
+        return () => globalVar.removeEventListener(eventName, cb);
+      });
+    });
+  };
 };
 /* harmony default export */ const directives = (() => {
   // data-wp-context
-  directive('context', ({
+  directive('context',
+  // @ts-ignore-next-line
+  ({
     directives: {
       context
     },
@@ -1116,6 +1201,10 @@ const getGlobalEventDirective = type => ({
           namespace,
           value
         } = defaultEntry;
+        // Check that the value is a JSON object. Send a console warning if not.
+        if (!isPlainObject(value)) {
+          warn(`The value of data-wp-context in "${namespace}" store must be a valid stringified JSON object.`);
+        }
         updateSignals(currentValue.current, {
           [namespace]: deepClone(value)
         });
@@ -1167,12 +1256,50 @@ const getGlobalEventDirective = type => ({
       suffix
     }) => suffix !== 'default').forEach(entry => {
       const event = entry.suffix.split('--')[0];
-      if (!events.has(event)) events.set(event, new Set());
+      if (!events.has(event)) {
+        events.set(event, new Set());
+      }
       events.get(event).add(entry);
     });
     events.forEach((entries, eventType) => {
+      const existingHandler = element.props[`on${eventType}`];
       element.props[`on${eventType}`] = event => {
         entries.forEach(entry => {
+          if (existingHandler) {
+            existingHandler(event);
+          }
+          evaluate(entry, event);
+        });
+      };
+    });
+  });
+
+  // data-wp-on-async--[event]
+  directive('on-async', ({
+    directives: {
+      'on-async': onAsync
+    },
+    element,
+    evaluate
+  }) => {
+    const events = new Map();
+    onAsync.filter(({
+      suffix
+    }) => suffix !== 'default').forEach(entry => {
+      const event = entry.suffix.split('--')[0];
+      if (!events.has(event)) {
+        events.set(event, new Set());
+      }
+      events.get(event).add(entry);
+    });
+    events.forEach((entries, eventType) => {
+      const existingHandler = element.props[`on${eventType}`];
+      element.props[`on${eventType}`] = event => {
+        if (existingHandler) {
+          existingHandler(event);
+        }
+        entries.forEach(async entry => {
+          await yieldToMain();
           evaluate(entry, event);
         });
       };
@@ -1183,6 +1310,11 @@ const getGlobalEventDirective = type => ({
   directive('on-window', getGlobalEventDirective('window'));
   // data-wp-on-document--[event]
   directive('on-document', getGlobalEventDirective('document'));
+
+  // data-wp-on-async-window--[event]
+  directive('on-async-window', getGlobalAsyncEventDirective('window'));
+  // data-wp-on-async-document--[event]
+  directive('on-async-document', getGlobalAsyncEventDirective('document'));
 
   // data-wp-class--[classname]
   directive('class', ({
@@ -1199,7 +1331,11 @@ const getGlobalEventDirective = type => ({
       const result = evaluate(entry);
       const currentClass = element.props.class || '';
       const classFinder = new RegExp(`(^|\\s)${className}(\\s|$)`, 'g');
-      if (!result) element.props.class = currentClass.replace(classFinder, ' ').trim();else if (!classFinder.test(currentClass)) element.props.class = currentClass ? `${currentClass} ${className}` : className;
+      if (!result) {
+        element.props.class = currentClass.replace(classFinder, ' ').trim();
+      } else if (!classFinder.test(currentClass)) {
+        element.props.class = currentClass ? `${currentClass} ${className}` : className;
+      }
       useInit(() => {
         /*
          * This seems necessary because Preact doesn't change the class
@@ -1229,8 +1365,14 @@ const getGlobalEventDirective = type => ({
       const styleProp = entry.suffix;
       const result = evaluate(entry);
       element.props.style = element.props.style || {};
-      if (typeof element.props.style === 'string') element.props.style = cssStringToObject(element.props.style);
-      if (!result) delete element.props.style[styleProp];else element.props.style[styleProp] = result;
+      if (typeof element.props.style === 'string') {
+        element.props.style = cssStringToObject(element.props.style);
+      }
+      if (!result) {
+        delete element.props.style[styleProp];
+      } else {
+        element.props.style[styleProp] = result;
+      }
       useInit(() => {
         /*
          * This seems necessary because Preact doesn't change the styles on
@@ -1275,7 +1417,9 @@ const getGlobalEventDirective = type => ({
          * logic: https://github.com/preactjs/preact/blob/ea49f7a0f9d1ff2c98c0bdd66aa0cbc583055246/src/diff/props.js#L110-L129
          */
         if (attribute === 'style') {
-          if (typeof result === 'string') el.style.cssText = result;
+          if (typeof result === 'string') {
+            el.style.cssText = result;
+          }
           return;
         } else if (attribute !== 'width' && attribute !== 'height' && attribute !== 'href' && attribute !== 'list' && attribute !== 'form' &&
         /*
@@ -1341,6 +1485,10 @@ const getGlobalEventDirective = type => ({
     const entry = text.find(({
       suffix
     }) => suffix === 'default');
+    if (!entry) {
+      element.props.children = null;
+      return;
+    }
     try {
       const result = evaluate(entry);
       element.props.children = typeof result === 'object' ? null : result.toString();
@@ -1369,7 +1517,9 @@ const getGlobalEventDirective = type => ({
     element,
     evaluate
   }) => {
-    if (element.type !== 'template') return;
+    if (element.type !== 'template') {
+      return;
+    }
     const {
       Provider
     } = inheritedContext;
@@ -1398,13 +1548,15 @@ const getGlobalEventDirective = type => ({
       })(eachKey[0]) : item;
       return y(Provider, {
         value: mergedContext,
-        key: key
+        key
       }, element.props.content);
     });
   }, {
     priority: 20
   });
-  directive('each-child', () => null);
+  directive('each-child', () => null, {
+    priority: 1
+  });
 });
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/constants.js
 const directivePrefix = 'wp';
@@ -1417,6 +1569,7 @@ const directivePrefix = 'wp';
  * Internal dependencies
  */
 
+
 const ignoreAttr = `data-${directivePrefix}-ignore`;
 const islandAttr = `data-${directivePrefix}-interactive`;
 const fullPrefix = `data-${directivePrefix}-`;
@@ -1425,6 +1578,7 @@ const currentNamespace = () => {
   var _namespaces;
   return (_namespaces = namespaces[namespaces.length - 1]) !== null && _namespaces !== void 0 ? _namespaces : null;
 };
+const vdom_isObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
 
 // Regular expression for directive parsing.
 const directiveParser = new RegExp(`^data-${directivePrefix}-` +
@@ -1443,76 +1597,104 @@ const directiveParser = new RegExp(`^data-${directivePrefix}-` +
 // the reference, separated by `::`, like `some-namespace::state.somePath`.
 // Namespaces can contain any alphanumeric characters, hyphens, underscores or
 // forward slashes. References don't have any restrictions.
-const nsPathRegExp = /^([\w-_\/]+)::(.+)$/;
+const nsPathRegExp = /^([\w_\/-]+)::(.+)$/;
 const hydratedIslands = new WeakSet();
 
 /**
  * Recursive function that transforms a DOM tree into vDOM.
  *
- * @param {Node} root The root element or node to start traversing on.
- * @return {import('preact').VNode[]} The resulting vDOM tree.
+ * @param root The root element or node to start traversing on.
+ * @return The resulting vDOM tree.
  */
 function toVdom(root) {
-  const treeWalker = document.createTreeWalker(root, 205 // ELEMENT + TEXT + COMMENT + CDATA_SECTION + PROCESSING_INSTRUCTION
+  const treeWalker = document.createTreeWalker(root, 205 // TEXT + CDATA_SECTION + COMMENT + PROCESSING_INSTRUCTION + ELEMENT
   );
   function walk(node) {
     const {
-      attributes,
-      nodeType,
-      localName
+      nodeType
     } = node;
-    if (nodeType === 3) return [node.data];
+
+    // TEXT_NODE (3)
+    if (nodeType === 3) {
+      return [node.data];
+    }
+
+    // CDATA_SECTION_NODE (4)
     if (nodeType === 4) {
+      var _nodeValue;
       const next = treeWalker.nextSibling();
-      node.replaceWith(new window.Text(node.nodeValue));
+      node.replaceWith(new window.Text((_nodeValue = node.nodeValue) !== null && _nodeValue !== void 0 ? _nodeValue : ''));
       return [node.nodeValue, next];
     }
+
+    // COMMENT_NODE (8) || PROCESSING_INSTRUCTION_NODE (7)
     if (nodeType === 8 || nodeType === 7) {
       const next = treeWalker.nextSibling();
       node.remove();
       return [null, next];
     }
+    const elementNode = node;
+    const {
+      attributes
+    } = elementNode;
+    const localName = elementNode.localName;
     const props = {};
     const children = [];
     const directives = [];
     let ignore = false;
     let island = false;
     for (let i = 0; i < attributes.length; i++) {
-      const n = attributes[i].name;
-      if (n[fullPrefix.length] && n.slice(0, fullPrefix.length) === fullPrefix) {
-        if (n === ignoreAttr) {
+      const attributeName = attributes[i].name;
+      const attributeValue = attributes[i].value;
+      if (attributeName[fullPrefix.length] && attributeName.slice(0, fullPrefix.length) === fullPrefix) {
+        if (attributeName === ignoreAttr) {
           ignore = true;
         } else {
-          var _nsPathRegExp$exec$sl;
-          let [ns, value] = (_nsPathRegExp$exec$sl = nsPathRegExp.exec(attributes[i].value)?.slice(1)) !== null && _nsPathRegExp$exec$sl !== void 0 ? _nsPathRegExp$exec$sl : [null, attributes[i].value];
+          var _regexResult$, _regexResult$2;
+          const regexResult = nsPathRegExp.exec(attributeValue);
+          const namespace = (_regexResult$ = regexResult?.[1]) !== null && _regexResult$ !== void 0 ? _regexResult$ : null;
+          let value = (_regexResult$2 = regexResult?.[2]) !== null && _regexResult$2 !== void 0 ? _regexResult$2 : attributeValue;
           try {
-            value = JSON.parse(value);
-          } catch (e) {}
-          if (n === islandAttr) {
-            var _value$namespace;
+            const parsedValue = JSON.parse(value);
+            value = vdom_isObject(parsedValue) ? parsedValue : value;
+          } catch {}
+          if (attributeName === islandAttr) {
             island = true;
-            namespaces.push(typeof value === 'string' ? value : (_value$namespace = value?.namespace) !== null && _value$namespace !== void 0 ? _value$namespace : null);
+            const islandNamespace =
+            // eslint-disable-next-line no-nested-ternary
+            typeof value === 'string' ? value : typeof value?.namespace === 'string' ? value.namespace : null;
+            namespaces.push(islandNamespace);
           } else {
-            directives.push([n, ns, value]);
+            directives.push([attributeName, namespace, value]);
           }
         }
-      } else if (n === 'ref') {
+      } else if (attributeName === 'ref') {
         continue;
       }
-      props[n] = attributes[i].value;
+      props[attributeName] = attributeValue;
     }
-    if (ignore && !island) return [y(localName, {
-      ...props,
-      innerHTML: node.innerHTML,
-      __directives: {
-        ignore: true
-      }
-    })];
-    if (island) hydratedIslands.add(node);
+    if (ignore && !island) {
+      return [y(localName, {
+        ...props,
+        innerHTML: elementNode.innerHTML,
+        __directives: {
+          ignore: true
+        }
+      })];
+    }
+    if (island) {
+      hydratedIslands.add(elementNode);
+    }
     if (directives.length) {
       props.__directives = directives.reduce((obj, [name, ns, value]) => {
-        const [, prefix, suffix = 'default'] = directiveParser.exec(name);
-        if (!obj[prefix]) obj[prefix] = [];
+        const directiveMatch = directiveParser.exec(name);
+        if (directiveMatch === null) {
+          warn(`Found malformed directive name: ${name}.`);
+          return obj;
+        }
+        const prefix = directiveMatch[1] || '';
+        const suffix = directiveMatch[2] || 'default';
+        obj[prefix] = obj[prefix] || [];
         obj[prefix].push({
           namespace: ns !== null && ns !== void 0 ? ns : currentNamespace(),
           value,
@@ -1521,14 +1703,18 @@ function toVdom(root) {
         return obj;
       }, {});
     }
+
+    // @ts-expect-error Fixed in upcoming preact release https://github.com/preactjs/preact/pull/4334
     if (localName === 'template') {
-      props.content = [...node.content.childNodes].map(childNode => toVdom(childNode));
+      props.content = [...elementNode.content.childNodes].map(childNode => toVdom(childNode));
     } else {
       let child = treeWalker.firstChild();
       if (child) {
         while (child) {
           const [vnode, nextChild] = walk(child);
-          if (vnode) children.push(vnode);
+          if (vnode) {
+            children.push(vnode);
+          }
           child = nextChild || treeWalker.nextSibling();
         }
         treeWalker.parentNode();
@@ -1536,7 +1722,9 @@ function toVdom(root) {
     }
 
     // Restore previous namespace.
-    if (island) namespaces.pop();
+    if (island) {
+      namespaces.pop();
+    }
     return [y(localName, props, children)];
   }
   return walk(treeWalker.currentNode);
@@ -1556,17 +1744,14 @@ function toVdom(root) {
 // Keep the same root fragment for each interactive region node.
 const regionRootFragments = new WeakMap();
 const getRegionRootFragment = region => {
+  if (!region.parentElement) {
+    throw Error('The passed region should be an element with a parent.');
+  }
   if (!regionRootFragments.has(region)) {
     regionRootFragments.set(region, createRootFragment(region.parentElement, region));
   }
   return regionRootFragments.get(region);
 };
-function yieldToMain() {
-  return new Promise(resolve => {
-    // TODO: Use scheduler.yield() when available.
-    setTimeout(resolve, 0);
-  });
-}
 
 // Initial vDOM regions associated with its DOM element.
 const initialVdom = new WeakMap();

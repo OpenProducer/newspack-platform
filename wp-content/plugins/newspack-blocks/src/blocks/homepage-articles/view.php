@@ -385,17 +385,17 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 		if ( $has_more_button ) :
 			?>
 			<button type="button" class="wp-block-button__link" data-next="<?php echo esc_url( $articles_rest_url ); ?>">
-			<?php
-			if ( ! empty( $attributes['moreButtonText'] ) ) {
-				echo esc_html( $attributes['moreButtonText'] );
-			} else {
-				esc_html_e( 'Load more posts', 'newspack-blocks' );
-			}
-			?>
+				<span class="label">
+					<?php
+					if ( ! empty( $attributes['moreButtonText'] ) ) {
+						echo esc_html( $attributes['moreButtonText'] );
+					} else {
+						esc_html_e( 'Load more posts', 'newspack-blocks' );
+					}
+					?>
+				</span>
+				<span class="loading"></span>
 			</button>
-			<p class="loading">
-				<?php esc_html_e( 'Loading...', 'newspack-blocks' ); ?>
-			</p>
 			<p class="error">
 				<?php esc_html_e( 'Something went wrong. Please refresh the page and/or try again.', 'newspack-blocks' ); ?>
 			</p>
@@ -478,19 +478,13 @@ function newspack_blocks_format_byline( $author_info ) {
 			function ( $accumulator, $author ) use ( $author_info, &$index ) {
 				$index++;
 				$penultimate = count( $author_info ) - 2;
-
-				$get_author_posts_url = get_author_posts_url( $author->ID );
-				if ( function_exists( 'coauthors_posts_links' ) ) {
-					$get_author_posts_url = get_author_posts_url( $author->ID, $author->user_nicename );
-				}
-
 				return array_merge(
 					$accumulator,
 					[
 						sprintf(
 							/* translators: 1: author link. 2: author name. 3. variable seperator (comma, 'and', or empty) */
 							'<span class="author vcard"><a class="url fn n" href="%1$s">%2$s</a></span>',
-							esc_url( $get_author_posts_url ),
+							esc_url( $author->url ),
 							esc_html( $author->display_name )
 						),
 						( $index < $penultimate ) ? ', ' : '',

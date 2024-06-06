@@ -19186,7 +19186,11 @@ const saveEntityRecord = (kind, name, record, {
           }
           return acc;
         }, {
-          status: data.status === 'auto-draft' ? 'draft' : data.status
+          // Do not update the `status` if we have edited it when auto saving.
+          // It's very important to let the user explicitly save this change,
+          // because it can lead to unexpected results. An example would be to
+          // have a draft post and change the status to publish.
+          status: data.status === 'auto-draft' ? 'draft' : undefined
         });
         updatedRecord = await __unstableFetch({
           path: `${path}/autosaves`,
@@ -21504,9 +21508,13 @@ const getEntityRecordsTotalPages = (state, kind, name, query) => {
   if (!queriedState) {
     return null;
   }
-  if (query.per_page === -1) return 1;
+  if (query.per_page === -1) {
+    return 1;
+  }
   const totalItems = getQueriedTotalItems(queriedState, query);
-  if (!totalItems) return totalItems;
+  if (!totalItems) {
+    return totalItems;
+  }
   // If `per_page` is not set and the query relies on the defaults of the
   // REST endpoint, get the info from query's meta.
   if (!query.per_page) {
@@ -21658,10 +21666,21 @@ function hasEditsForEntityRecord(state, kind, name, recordId) {
  *
  * @return The entity record, merged with its edits.
  */
-const getEditedEntityRecord = (0,external_wp_data_namespaceObject.createSelector)((state, kind, name, recordId) => ({
-  ...getRawEntityRecord(state, kind, name, recordId),
-  ...getEntityRecordEdits(state, kind, name, recordId)
-}), (state, kind, name, recordId, query) => {
+const getEditedEntityRecord = (0,external_wp_data_namespaceObject.createSelector)((state, kind, name, recordId) => {
+  const raw = getRawEntityRecord(state, kind, name, recordId);
+  const edited = getEntityRecordEdits(state, kind, name, recordId);
+  // Never return a non-falsy empty object. Unfortunately we can't return
+  // undefined or null because we were previously returning an empty
+  // object, so trying to read properties from the result would throw.
+  // Using false here is a workaround to avoid breaking changes.
+  if (!raw && !edited) {
+    return false;
+  }
+  return {
+    ...raw,
+    ...edited
+  };
+}, (state, kind, name, recordId, query) => {
   var _query$context4;
   const context = (_query$context4 = query?.context) !== null && _query$context4 !== void 0 ? _query$context4 : 'default';
   return [state.entities.config, state.entities.records?.[kind]?.[name]?.queriedData.items[context]?.[recordId], state.entities.records?.[kind]?.[name]?.queriedData.itemIsComplete[context]?.[recordId], state.entities.records?.[kind]?.[name]?.edits?.[recordId]];
@@ -23118,7 +23137,8 @@ const resolvers_getDefaultTemplateId = query => async ({
   const template = await external_wp_apiFetch_default()({
     path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/templates/lookup', query)
   });
-  if (template) {
+  // Endpoint may return an empty object if no template is found.
+  if (template?.id) {
     dispatch.receiveDefaultTemplateId(query, template.id);
   }
 };
@@ -23520,8 +23540,6 @@ const {
   unlock
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/core-data');
 
-;// CONCATENATED MODULE: external "React"
-const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: external ["wp","blocks"]
@@ -23613,14 +23631,20 @@ function updateFootnotesFromMeta(blocks, meta) {
   const output = {
     blocks
   };
-  if (!meta) return output;
+  if (!meta) {
+    return output;
+  }
 
   // If meta.footnotes is empty, it means the meta is not registered.
-  if (meta.footnotes === undefined) return output;
+  if (meta.footnotes === undefined) {
+    return output;
+  }
   const newOrder = getFootnotesOrder(blocks);
   const footnotes = meta.footnotes ? JSON.parse(meta.footnotes) : [];
   const currentOrder = footnotes.map(fn => fn.id);
-  if (currentOrder.join('') === newOrder.join('')) return output;
+  if (currentOrder.join('') === newOrder.join('')) {
+    return output;
+  }
   const newFootnotes = newOrder.map(fnId => footnotes.find(fn => fn.id === fnId) || oldFootnotes[fnId] || {
     id: fnId,
     content: ''
@@ -23700,8 +23724,9 @@ function updateFootnotesFromMeta(blocks, meta) {
   };
 }
 
+;// CONCATENATED MODULE: external "ReactJSXRuntime"
+const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/entity-provider.js
-
 /**
  * WordPress dependencies
  */
@@ -23718,37 +23743,7 @@ function updateFootnotesFromMeta(blocks, meta) {
 /** @typedef {import('@wordpress/blocks').WPBlock} WPBlock */
 
 const EMPTY_ARRAY = [];
-
-/**
- * Internal dependencies
- */
-
-const entityContexts = {
-  ...rootEntitiesConfig.reduce((acc, loader) => {
-    if (!acc[loader.kind]) {
-      acc[loader.kind] = {};
-    }
-    acc[loader.kind][loader.name] = {
-      context: (0,external_wp_element_namespaceObject.createContext)(undefined)
-    };
-    return acc;
-  }, {}),
-  ...additionalEntityConfigLoaders.reduce((acc, loader) => {
-    acc[loader.kind] = {};
-    return acc;
-  }, {})
-};
-const getEntityContext = (kind, name) => {
-  if (!entityContexts[kind]) {
-    throw new Error(`Missing entity config for kind: ${kind}.`);
-  }
-  if (!entityContexts[kind][name]) {
-    entityContexts[kind][name] = {
-      context: (0,external_wp_element_namespaceObject.createContext)(undefined)
-    };
-  }
-  return entityContexts[kind][name].context;
-};
+const EntityContext = (0,external_wp_element_namespaceObject.createContext)({});
 
 /**
  * Context provider component for providing
@@ -23769,10 +23764,18 @@ function EntityProvider({
   id,
   children
 }) {
-  const Provider = getEntityContext(kind, name).Provider;
-  return (0,external_React_namespaceObject.createElement)(Provider, {
-    value: id
-  }, children);
+  const parent = (0,external_wp_element_namespaceObject.useContext)(EntityContext);
+  const childContext = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    ...parent,
+    [kind]: {
+      ...parent?.[kind],
+      [name]: id
+    }
+  }), [parent, kind, name, id]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EntityContext.Provider, {
+    value: childContext,
+    children: children
+  });
 }
 
 /**
@@ -23783,7 +23786,8 @@ function EntityProvider({
  * @param {string} name The entity name.
  */
 function useEntityId(kind, name) {
-  return (0,external_wp_element_namespaceObject.useContext)(getEntityContext(kind, name));
+  const context = (0,external_wp_element_namespaceObject.useContext)(EntityContext);
+  return context?.[kind]?.[name];
 }
 
 /**

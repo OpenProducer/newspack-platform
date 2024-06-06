@@ -4,7 +4,7 @@ Contributors:      google
 Requires at least: 5.2
 Tested up to:      6.5
 Requires PHP:      7.4
-Stable tag:        1.125.0
+Stable tag:        1.128.0
 License:           Apache License 2.0
 License URI:       https://www.apache.org/licenses/LICENSE-2.0
 Tags:              google, search-console, analytics, adsense, pagespeed-insights
@@ -109,33 +109,35 @@ Please create a new topic on our [WordPress.org support forum](https://wordpress
 
 == Changelog ==
 
-= 1.125.0 =
+= 1.128.0 =
 
 **Enhanced**
 
-* Add "Learn more" link in the Ads Module setup screen. See [#8532](https://github.com/google/site-kit-wp/issues/8532).
-* Add the `Conversion_Events_Provider` Interface. See [#8529](https://github.com/google/site-kit-wp/issues/8529).
-* Block Ads module setup when ad blocker is detected. See [#8515](https://github.com/google/site-kit-wp/issues/8515).
-* Add a "New" badge to the Ads module in Site Kit settings. See [#8448](https://github.com/google/site-kit-wp/issues/8448).
-* Extend the Consent Mode conditions for determining whether Ads is connected to include a check for the presence of an Ads tag as the destination of the connected Analytics property's Google tag. See [#8432](https://github.com/google/site-kit-wp/issues/8432).
-* Update the description copy in the Consent Mode modal, simplifying the text and making it clear that measurement from visitors from the UK may also be affected by disabling Consent Mode. See [#8389](https://github.com/google/site-kit-wp/issues/8389).
-* Ensure that the check for a conversion tracking ID is maintained for the Consent Mode feature with the conversion ID having been migrated to the Ads module. See [#8365](https://github.com/google/site-kit-wp/issues/8365).
-* Add Site Health entries for the current Consent Mode status, and the presence of the WP Consent API. See [#8356](https://github.com/google/site-kit-wp/issues/8356).
-* Add an error state for the Audience tile component. See [#8228](https://github.com/google/site-kit-wp/issues/8228).
-
-**Changed**
-
-* Track GA events for the lifecycle of the Ads Conversion ID migration notification. See [#8458](https://github.com/google/site-kit-wp/issues/8458).
-* Update minimum required version of PHP to 7.4. See [#8030](https://github.com/google/site-kit-wp/issues/8030).
+* Update permissions required for the conversion tracking setting saving. See [#8738](https://github.com/google/site-kit-wp/issues/8738).
+* Improve style specificity in the Authorize Application screen. See [#8673](https://github.com/google/site-kit-wp/issues/8673).
+* Add PAX notification banner when PAX setup is completed successfully. See [#8661](https://github.com/google/site-kit-wp/issues/8661).
+* Add the Ads module setup CTA banner. See [#8660](https://github.com/google/site-kit-wp/issues/8660).
+* Enhance Key Metrics selection panel by introducing and reusing generic selection panel components. See [#8652](https://github.com/google/site-kit-wp/issues/8652).
+* Include Switzerland in Consent Mode regions from July 31st, 2024, to match the corresponding changes to the EU user consent policy. See [#8643](https://github.com/google/site-kit-wp/issues/8643).
+* Update conversion tracking events to include source of event tracking as Site Kit. See [#8641](https://github.com/google/site-kit-wp/issues/8641).
+* Improve Ad Blocker warning messages for Ads and AdSense modules. See [#8634](https://github.com/google/site-kit-wp/issues/8634).
+* Add conversion tracking toggle component. See [#8616](https://github.com/google/site-kit-wp/issues/8616).
+* Implement the new conversion tracking partial datastore. See [#8615](https://github.com/google/site-kit-wp/issues/8615).
+* Implement partner service for new campaign creation completed signal. See [#8560](https://github.com/google/site-kit-wp/issues/8560).
+* Add the “New” badge to the Audience Widget Area. See [#8169](https://github.com/google/site-kit-wp/issues/8169).
+* Add a new API/infrastructure for managing “expirable items". See [#8168](https://github.com/google/site-kit-wp/issues/8168).
+* Display information about partial data availability in Audience widget area when complete data for the selected date range is not available. See [#8142](https://github.com/google/site-kit-wp/issues/8142).
+* Add the audiences widget area to the Site Kit dashboard. See [#8138](https://github.com/google/site-kit-wp/issues/8138).
+* Implement dismissal behaviour for the audience groups setup banner. See [#8133](https://github.com/google/site-kit-wp/issues/8133).
+* Introduce creation of audience groups from Audience Setup Banner. See [#8131](https://github.com/google/site-kit-wp/issues/8131).
+* Update Ad Blocker warning message in Ads and AdSense modules. See [#7251](https://github.com/google/site-kit-wp/issues/7251).
 
 **Fixed**
 
-* Add AMP tag with Conversion Tracking ID when Ads module is enabled. See [#8518](https://github.com/google/site-kit-wp/issues/8518).
-* Ensure Ads module cannot be saved when settings are invalid. See [#8508](https://github.com/google/site-kit-wp/issues/8508).
-* Fix unstable time based PHPUnit tests. See [#8488](https://github.com/google/site-kit-wp/issues/8488).
-* Fix bug that caused "Top search queries" widget to overflow on small screens. See [#8417](https://github.com/google/site-kit-wp/issues/8417).
-* Fix a bug where the Enhanced Measurement toggle may not have the intended effect when creating a new property during Analytics module setup. See [#8409](https://github.com/google/site-kit-wp/issues/8409).
-* Prevent a Consent Mode related console error on the view-only dashboard. See [#8408](https://github.com/google/site-kit-wp/issues/8408).
-* Exclude connection check requests from internal error reporting. See [#8268](https://github.com/google/site-kit-wp/issues/8268).
+* Ensure conversion ID is output when Ads module is connected by PAX. See [#8732](https://github.com/google/site-kit-wp/issues/8732).
+* Update reports that use the `adSourceName` dimension to use the correct dimension filter. See [#8658](https://github.com/google/site-kit-wp/issues/8658).
+* Avoid line wrapping and show ellipses for long post titles in the "Top content by pageviews" section of an Audience tile. See [#8626](https://github.com/google/site-kit-wp/issues/8626).
+* Update the AdSense overview widget to use the correct date range. See [#8478](https://github.com/google/site-kit-wp/issues/8478).
+* Update the Tag Manager module to display permission errors to users. See [#5556](https://github.com/google/site-kit-wp/issues/5556).
 
 [See changelog for all versions](https://raw.githubusercontent.com/google/site-kit-wp/main/changelog.txt).

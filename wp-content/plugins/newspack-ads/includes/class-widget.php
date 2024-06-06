@@ -52,19 +52,19 @@ final class Widget extends \WP_Widget {
 			array(
 				'placement' => 'newspack_ads_widget',
 				'context'   => $args['id'],
-			) 
+			)
 		);
 
 		if ( \is_wp_error( $ad_unit ) ) {
 			return;
 		}
-		if ( ! Core::is_amp() && isset( $instance['stick_to_top'] ) ) {
+		if ( isset( $instance['stick_to_top'] ) ) {
 			$stick_to_top = $instance['stick_to_top'];
 		} else {
 			$stick_to_top = false;
 		}
 
-		$code = Core::is_amp() ? $ad_unit['amp_ad_code'] : $ad_unit['ad_code'];
+		$code = $ad_unit['ad_code'];
 
 		$before_widget = $args['before_widget'];
 		if ( false !== $stick_to_top ) {
@@ -112,19 +112,17 @@ final class Widget extends \WP_Widget {
 					<?php endforeach; ?>
 				</select>
 			</label>
-			<?php if ( Core::is_amp_plus_configured() ) : ?>
-				<br/>
-				<br/>
-				<label for="<?php echo esc_attr( $this->get_field_id( 'stick_to_top' ) ); ?>">
-					<?php echo esc_html__( 'Stick to top (only if the last widget in the sidebar)', 'newspack-ads' ); ?>
-					<input
-						type="checkbox"
-						id="<?php echo esc_attr( $this->get_field_id( 'stick_to_top' ) ); ?>"
-						name="<?php echo esc_attr( $this->get_field_name( 'stick_to_top' ) ); ?>"
-						<?php checked( ! $stick_to_top, isset( $ad_unit['stick_to_top'] ) ? $ad_unit['stick_to_top'] : false ); ?>
-					>
-				</label>
-			<?php endif; ?>
+			<br/>
+			<br/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'stick_to_top' ) ); ?>">
+				<?php echo esc_html__( 'Stick to top (only if the last widget in the sidebar)', 'newspack-ads' ); ?>
+				<input
+					type="checkbox"
+					id="<?php echo esc_attr( $this->get_field_id( 'stick_to_top' ) ); ?>"
+					name="<?php echo esc_attr( $this->get_field_name( 'stick_to_top' ) ); ?>"
+					<?php checked( ! $stick_to_top, isset( $ad_unit['stick_to_top'] ) ? $ad_unit['stick_to_top'] : false ); ?>
+				>
+			</label>
 		</p>
 		<?php
 	}

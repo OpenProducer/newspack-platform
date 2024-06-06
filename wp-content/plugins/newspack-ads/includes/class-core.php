@@ -122,31 +122,5 @@ final class Core {
 		}
 		return \untrailingslashit( plugins_url( '/', NEWSPACK_ADS_PLUGIN_FILE ) ) . $path;
 	}
-
-	/**
-	 * Should current request be treated as an AMP endpoint.
-	 *
-	 * @return bool AMP or not
-	 */
-	public static function is_amp() {
-		if ( self::is_amp_plus_configured() ) {
-			return false;
-		}
-		if ( function_exists( 'is_amp_endpoint' ) && \is_amp_endpoint() ) {
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * Can the site use AMP Plus features?
-	 *
-	 * @return bool Configured or not.
-	 */
-	public static function is_amp_plus_configured() {
-		return (
-			! ( defined( 'NEWSPACK_AMP_PLUS_ADS_DISABLED' ) && true === NEWSPACK_AMP_PLUS_ADS_DISABLED ) && // Ensure AMP Plus for Ads is not opted-out.
-			method_exists( '\Newspack\AMP_Enhancements', 'should_use_amp_plus' ) && \Newspack\AMP_Enhancements::should_use_amp_plus()
-		);
-	}
 }
 Core::instance();

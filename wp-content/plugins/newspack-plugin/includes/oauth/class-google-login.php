@@ -92,9 +92,15 @@ class Google_Login {
 	 * @return WP_REST_Response Response with the URL.
 	 */
 	public static function api_google_auth_get_url() {
+		$csrf_token = OAuth::generate_csrf_token( self::CSRF_TOKEN_NAMESPACE );
+		if ( $csrf_token === false ) {
+			/* translators: %s is the unique id of the visitor. */
+			self::handle_error( sprintf( __( 'Failed to save the CSRF token for id: %s', 'newspack-plugin' ), OAuth::get_unique_id() ) );
+			return new WP_Error( 'newspack_google_login', __( 'Failed to save the CSRF token.', 'newspack-plugin' ) );
+		}
 		$url = Google_OAuth::google_auth_get_url(
 			[
-				'csrf_token'     => OAuth::generate_csrf_token( self::CSRF_TOKEN_NAMESPACE ),
+				'csrf_token'     => $csrf_token,
 				'scope'          => implode( ' ', self::REQUIRED_SCOPES ),
 				'redirect_after' => add_query_arg( self::AUTH_CALLBACK, wp_create_nonce( self::AUTH_CALLBACK ), get_home_url() ),
 			]
@@ -130,7 +136,8 @@ class Google_Login {
 		$saved_csrf_token = OAuth::retrieve_csrf_token( self::CSRF_TOKEN_NAMESPACE );
 
 		if ( $_REQUEST['csrf_token'] !== $saved_csrf_token ) {
-			self::handle_error( __( 'CSRF token verification failed.', 'newspack-plugin' ) );
+			/* translators: %s is a unique user id */
+			self::handle_error( sprintf( __( 'CSRF token verification failed for id: %s', 'newspack-plugin' ), OAuth::get_unique_id() ) );
 			\wp_die( \esc_html__( 'Authentication failed.', 'newspack-plugin' ) );
 		}
 
@@ -144,18 +151,22 @@ class Google_Login {
 		Logger::log( 'Got user email from Google: ' . $user_email );
 
 		// Associate the email address with the a unique ID for later retrieval.
-		$transient_expiration_time = 60 * 5; // 5 minutes.
-		$has_set_transient = set_transient( self::EMAIL_TRANSIENT_PREFIX . OAuth::get_unique_id(), $user_email, $transient_expiration_time );
+		$uid = OAuth::get_unique_id();
+		$set_transient_result = OAuth_Transients::set( $uid, 'email', $user_email );
 		// If transient setting failed, the email address will not be available for the registration endpoint.
-		if ( ! $has_set_transient ) {
-			self::handle_error( __( 'Failed setting transient.', 'newspack-plugin' ) );
+		if ( $set_transient_result === false ) {
+			/* translators: %s is a unique user id */
+			self::handle_error( sprintf( __( 'Failed setting email transient for id: %s', 'newspack-plugin' ), $uid ) );
 			\wp_die( \esc_html__( 'Authentication failed.', 'newspack-plugin' ) );
 		}
 
 		/** Close window if it's a popup. */
 		?>
 		<script type="text/javascript" data-amp-plus-allowed>
-			if ( window.opener ) { window.close(); }
+			if ( window.opener ) {
+				window.opener.dispatchEvent( new Event('google-oauth-success') );
+				window.close();
+			}
 		</script>
 		<?php
 	}
@@ -166,7 +177,23 @@ class Google_Login {
 	 * @param string $message The message to log.
 	 */
 	private static function handle_error( $message ) {
-		Logger::error( $message );
+		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
+		Logger::error(
+			sprintf(
+				// Translators: %1$s is the error message, %2$s is the user agent.
+				__( '%1$s | Details: %2$s', 'newspack-plugin' ),
+				$message,
+				\wp_json_encode(
+					[
+						'user_agent'   => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : 'N/A',
+						'referrer'     => isset( $_SERVER['HTTP_REFERER'] ) ? esc_url( $_SERVER['HTTP_REFERER'] ) : 'N/A',
+						'request_time' => isset( $_SERVER['REQUEST_TIME'] ) ? gmdate( 'Y-m-d\TH:i:s', intval( $_SERVER['REQUEST_TIME'] ) ) : 'N/A',
+					],
+					JSON_PRETTY_PRINT
+				)
+			)
+		);
+		// phpcs:enable
 		do_action( 'newspack_google_login_error', new WP_Error( 'newspack_google_login', $message ) );
 	}
 
@@ -178,8 +205,7 @@ class Google_Login {
 	public static function api_google_login_register( $request ) {
 		$uid = OAuth::get_unique_id();
 		// Retrieve the email address associated with the unique ID when the user was authenticated.
-		$email = get_transient( self::EMAIL_TRANSIENT_PREFIX . $uid );
-		delete_transient( self::EMAIL_TRANSIENT_PREFIX . $uid ); // Burn after reading.
+		$email    = OAuth_Transients::get( $uid, 'email' );
 		$metadata = [];
 		if ( $request->get_param( 'metadata' ) ) {
 			try {

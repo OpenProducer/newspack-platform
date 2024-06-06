@@ -86,6 +86,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-popups.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-memberships.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/connectors/ga4/class-ga4.php';
+		include_once NEWSPACK_ABSPATH . 'includes/data-events/connectors/class-connector.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/connectors/class-mailchimp.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/connectors/class-activecampaign.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-woo-user-registration.php';
@@ -101,6 +102,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/my-account/class-woocommerce-my-account.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth.php';
+		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth-transients.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-services-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-mailchimp-api.php';
@@ -158,6 +160,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-onesignal.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-organic-profile-block.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-perfmatters.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-co-authors-plus.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/wc-memberships/class-memberships.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
@@ -206,6 +209,9 @@ final class Newspack {
 	 * Handle resetting of various options and content.
 	 */
 	public function handle_resets() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 		$redirect_url   = admin_url( 'admin.php?page=newspack' );
 		$newspack_reset = filter_input( INPUT_GET, 'newspack_reset', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( 'starter-content' === $newspack_reset ) {

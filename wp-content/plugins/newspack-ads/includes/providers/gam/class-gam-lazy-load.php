@@ -32,9 +32,6 @@ final class GAM_Lazy_Load {
 	 * @return array Updated list of settings.
 	 */
 	public static function register_settings( $settings_list ) {
-		if ( Core::is_amp() ) {
-			return $settings_list;
-		}
 		return array_merge(
 			[
 				[
@@ -82,9 +79,6 @@ final class GAM_Lazy_Load {
 	 * Render lazy loading script.
 	 */
 	public static function render_lazy_load_script() {
-		if ( Core::is_amp() ) {
-			return;
-		}
 		$settings = Settings::get_settings( 'lazy_load', true );
 		if ( ! $settings['active'] ) {
 			return;
@@ -93,7 +87,7 @@ final class GAM_Lazy_Load {
 		ob_start();
 
 		?>
-		<script data-amp-plus-allowed>
+		<script>
 			( function() {
 				var lazy_load = <?php echo wp_json_encode( $settings, JSON_FORCE_OBJECT ); ?>;
 				googletag.cmd.push( function() {

@@ -14,11 +14,6 @@ final class Pixel {
 	const QUERY_VAR = 'np_newsletters_pixel';
 
 	/**
-	 * Maximum number of lines to process from the log file at a time.
-	 */
-	const MAX_LINES = 100;
-
-	/**
 	 * Store whether the tracking pixel has been added to the newsletter.
 	 *
 	 * @var bool[] Whether the tracking pixel has been by newsletter ID.
@@ -289,22 +284,24 @@ final class Pixel {
 
 	/**
 	 * Process logs.
+	 *
+	 * @param int $max_lines Maximum number of lines to process at a time.
 	 */
-	public static function process_logs() {
+	public static function process_logs( $max_lines = 100 ) {
 		$current_log_file = \get_option( 'newspack_newsletters_tracking_pixel_log_file' );
 
 		if ( $current_log_file && file_exists( $current_log_file ) ) {
 			// Read the tracking data from the log file. Process in batches to avoid memory issues.
-			$handle    = fopen( $current_log_file, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-			$file_end  = false;
-			$pos       = 0;
+			$handle = fopen( $current_log_file, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+			$file_end = false;
+			$file_pointer_position = 0;
 
 			while ( ! $file_end ) {
 				$file_size = filesize( $current_log_file );
 				$lines     = 0;
 
 				// Process a chunk of lines from the file.
-				while ( $lines < self::MAX_LINES ) {
+				while ( $lines < $max_lines ) {
 					// Process the tracking data.
 					$item = trim( fgets( $handle ) );
 
@@ -324,10 +321,15 @@ final class Pixel {
 				}
 
 				// Get the current position in the file after processing the chunk.
-				$pos = ftell( $handle );
+				$file_pointer_position = ftell( $handle );
+				$file_length_remaining = $file_size - $file_pointer_position;
+				if ( $file_length_remaining <= 0 ) {
+					$file_end = true;
+					break;
+				}
 
 				// If there are more lines to process, truncate the file for the next chunk.
-				$truncated_contents = fread( $handle, $file_size - $pos ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
+				$truncated_contents = fread( $handle, $file_length_remaining ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
 
 				// Reopen the file in write mode.
 				fclose( $handle );

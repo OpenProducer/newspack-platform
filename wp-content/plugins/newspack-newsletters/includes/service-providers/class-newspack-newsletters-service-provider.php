@@ -365,12 +365,37 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 			if ( ! is_array( $errors ) ) {
 				$errors = [];
 			}
+			$error_message = $result->get_error_message();
 			$errors[] = [
 				'timestamp' => time(),
-				'message'   => $result->get_error_message(),
+				'message'   => $error_message,
 			];
 			$errors   = array_slice( $errors, -10, 10, true );
 			update_post_meta( $post_id, 'newsletter_send_errors', $errors );
+
+			$message = sprintf(
+				/* translators: %1$s is the campaign title, %2$s is the edit link, %3$s is the error message. */
+				__(
+					'Hi,
+
+A newsletter campaign called "%1$s" failed to send on your site.
+
+You can edit the campaign here: %2$s.
+
+Details of the error message: "%3$s"
+',
+					'newspack-newsletters'
+				),
+				$post->post_title,
+				get_edit_post_link( $post_id ),
+				$error_message
+			);
+
+			\wp_mail( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail
+				get_option( 'admin_email' ),
+				__( 'Sending a newsletter failed', 'newspack-newsletters' ),
+				$message
+			);
 		}
 
 		return $result;

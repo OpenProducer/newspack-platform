@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Main class.
  */
 class OAuth {
-	const CSRF_TOKEN_TRANSIENT_NAME_BASE = '_newspack_google_oauth_csrf_';
+	const CSRF_TOKEN_TRANSIENT_SCOPE_PREFIX = 'csrf_';
 
 	/**
 	 * Get API key for proxies.
@@ -46,10 +46,9 @@ class OAuth {
 	 * @return string CSRF token.
 	 */
 	public static function generate_csrf_token( $namespace ) {
-		$csrf_token     = sha1( openssl_random_pseudo_bytes( 1024 ) );
-		$transient_name = self::CSRF_TOKEN_TRANSIENT_NAME_BASE . $namespace . self::get_unique_id();
-		set_transient( $transient_name, $csrf_token, 5 * MINUTE_IN_SECONDS );
-		return $csrf_token;
+		$csrf_token = wp_generate_password( 40, false );
+		$transient_scope = self::CSRF_TOKEN_TRANSIENT_SCOPE_PREFIX . $namespace;
+		return OAuth_Transients::set( self::get_unique_id(), $transient_scope, $csrf_token );
 	}
 
 	/**
@@ -59,8 +58,9 @@ class OAuth {
 	 * @return string CSRF token.
 	 */
 	public static function retrieve_csrf_token( $namespace ) {
-		$csrf_token_transient_name = self::CSRF_TOKEN_TRANSIENT_NAME_BASE . $namespace . self::get_unique_id();
-		return get_transient( $csrf_token_transient_name );
+		$transient_scope = self::CSRF_TOKEN_TRANSIENT_SCOPE_PREFIX . $namespace;
+		$value = OAuth_Transients::get( self::get_unique_id(), $transient_scope );
+		return $value;
 	}
 
 	/**

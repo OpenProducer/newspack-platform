@@ -23,11 +23,11 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 	protected static $starter_categories = [ 'Featured', 'Sports', 'Entertainment', 'Opinion', 'News', 'Events', 'Longform', 'Arts', 'Politics', 'Science', 'Tech', 'Health' ];
 
 	/**
-	 * Meta key to store starter category data.
+	 * Prefix for starter categories.
 	 *
 	 * @var string
 	 */
-	private static $starter_categories_meta = '_newspack_starter_content_categories';
+	private static $starter_category_prefix = '_newspack_';
 
 	/**
 	 * Initialize starter content provider.
@@ -49,7 +49,7 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 	public static function create_post( $post_index ) {
 		$existing_post_id = self::get_starter_post( $post_index );
 		if ( $existing_post_id ) {
-			return $existing_post_id;
+			wp_trash_post( $existing_post_id );
 		}
 
 		if ( ! function_exists( 'wp_insert_post' ) ) {
@@ -121,8 +121,8 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 			]
 		);
 
-		$category_ids = get_option( self::$starter_categories_meta );
-		$category_id  = Starter_Content::is_e2e() ? $category_ids[ $post_index ] : $categories[0];
+		$category_ids = self::get_starter_categories_ids();
+		$category_id = Starter_Content::is_e2e() ? $category_ids[ $post_index ] : $categories[0];
 
 		wp_set_post_categories( $post_id, $category_id );
 
@@ -147,12 +147,11 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 		self::remove_starter_categories();
 		$category_ids = array_map(
 			function( $category ) {
-				$created_category = wp_insert_term( $category, 'category', [ 'slug' => '_newspack_' . $category ] );
+				$created_category = wp_insert_term( $category, 'category', [ 'slug' => self::$starter_category_prefix . $category ] );
 				return $created_category['term_id'];
 			},
 			self::$starter_categories
 		);
-		update_option( self::$starter_categories_meta, $category_ids );
 		return $category_ids;
 	}
 
@@ -164,17 +163,19 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 	public static function create_homepage() {
 		$existing_homepage_id = self::get_starter_homepage();
 		if ( $existing_homepage_id ) {
-			return $existing_homepage_id;
+			wp_delete_post( $existing_homepage_id, true );
 		}
 
 		if ( ! function_exists( 'wp_insert_post' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/post.php';
 		}
-		$categories = get_categories(
-			[
-				'hide_empty' => false,
-			]
-		);
+		$categories = [];
+		foreach ( self::get_starter_categories_ids() as $category_id ) {
+			$categories[] = (object) [
+				'term_id' => $category_id,
+				'name'    => get_term( $category_id )->name,
+			];
+		}
 		ob_start();
 		?>
 		<!-- wp:columns {"className":"is-style-borders"} --><div class="wp-block-columns is-style-borders">
@@ -375,15 +376,28 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 	}
 
 	/**
+	 * Get starter categories IDs.
+	 */
+	private static function get_starter_categories_ids() {
+		global $wpdb;
+		$category_ids = array_column(
+			$wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->prepare(
+					"SELECT term_id FROM $wpdb->terms WHERE slug LIKE %s",
+					self::$starter_category_prefix . '%'
+				)
+			),
+			'term_id'
+		);
+		return $category_ids;
+	}
+
+	/**
 	 * Removes starter categories.
 	 */
 	public static function remove_starter_categories() {
-		$category_ids = get_option( self::$starter_categories_meta, [] );
-		if ( ! empty( $category_ids ) ) {
-			foreach ( $category_ids as $category_id ) {
-				wp_delete_category( $category_id );
-			}
-			delete_option( self::$starter_categories_meta );
+		foreach ( self::get_starter_categories_ids() as $category_id ) {
+			wp_delete_category( $category_id );
 		}
 	}
 }

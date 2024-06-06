@@ -32,9 +32,6 @@ final class GAM_Ad_Block_Recovery {
 	 * @return array Updated list of settings.
 	 */
 	public static function register_settings( $settings_list ) {
-		if ( Core::is_amp() ) {
-			return $settings_list;
-		}
 		return array_merge(
 			[
 				[
@@ -71,9 +68,6 @@ final class GAM_Ad_Block_Recovery {
 	 * Render Ad Block Recovery script.
 	 */
 	public static function render_script() {
-		if ( Core::is_amp() ) {
-			return;
-		}
 		$settings = Settings::get_settings( self::SECTION, true );
 		if ( empty( $settings ) ) {
 			return;
@@ -82,8 +76,8 @@ final class GAM_Ad_Block_Recovery {
 			return;
 		}
 		?>
-		<script data-amp-plus-allowed async src="https://fundingchoicesmessages.google.com/i/pub-<?php echo \esc_attr( $settings['pub'] ); ?>?ers=1" nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>"></script>
-		<script data-amp-plus-allowed nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
+		<script async src="https://fundingchoicesmessages.google.com/i/pub-<?php echo \esc_attr( $settings['pub'] ); ?>?ers=1" nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>"></script>
+		<script nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
 			( function() {
 				function signalGooglefcPresent() {
 					if ( !window.frames['googlefcPresent'] ) {

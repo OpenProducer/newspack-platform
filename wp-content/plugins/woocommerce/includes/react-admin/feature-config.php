@@ -29,7 +29,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'product-grouped' => true,
 			'product-linked' => true,
 			'product-pre-publish-modal' => true,
-			'product-custom-fields' => false,
+			'product-custom-fields' => true,
 			'remote-inbox-notifications' => true,
 			'remote-free-extensions' => true,
 			'payment-gateway-suggestions' => true,

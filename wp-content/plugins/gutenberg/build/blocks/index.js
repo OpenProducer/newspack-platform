@@ -6524,6 +6524,11 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
     support: ['background', 'backgroundSize'],
     useEngine: true
   },
+  backgroundPosition: {
+    value: ['background', 'backgroundPosition'],
+    support: ['background', 'backgroundPosition'],
+    useEngine: true
+  },
   borderColor: {
     value: ['border', 'color'],
     support: ['__experimentalBorder', 'color'],
@@ -6759,6 +6764,7 @@ const __EXPERIMENTAL_PATHS_WITH_OVERRIDE = {
   'color.duotone': true,
   'color.gradients': true,
   'color.palette': true,
+  'dimensions.aspectRatios': true,
   'typography.fontSizes': true,
   'spacing.spacingSizes': true
 };
@@ -7340,13 +7346,13 @@ const hasChildBlocksWithInserterSupport = blockName => {
 };
 
 /**
- * Registers a new block style for the given block.
+ * Registers a new block style for the given block types.
  *
  * For more information on connecting the styles with CSS
  * [the official documentation](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/#styles).
  *
- * @param {string} blockName      Name of block (example: “core/latest-posts”).
- * @param {Object} styleVariation Object containing `name` which is the class name applied to the block and `label` which identifies the variation to the user.
+ * @param {string|Array} blockNames     Name of blocks e.g. “core/latest-posts” or `["core/group", "core/columns"]`.
+ * @param {Object}       styleVariation Object containing `name` which is the class name applied to the block and `label` which identifies the variation to the user.
  *
  * @example
  * ```js
@@ -7371,8 +7377,8 @@ const hasChildBlocksWithInserterSupport = blockName => {
  * };
  * ```
  */
-const registerBlockStyle = (blockName, styleVariation) => {
-  (0,external_wp_data_namespaceObject.dispatch)(store).addBlockStyles(blockName, styleVariation);
+const registerBlockStyle = (blockNames, styleVariation) => {
+  (0,external_wp_data_namespaceObject.dispatch)(store).addBlockStyles(blockNames, styleVariation);
 };
 
 /**
@@ -7452,6 +7458,9 @@ const getBlockVariations = (blockName, scope) => {
  * ```
  */
 const registerBlockVariation = (blockName, variation) => {
+  if (typeof variation.name !== 'string') {
+    console.warn('Variation names must be unique strings.');
+  }
   (0,external_wp_data_namespaceObject.dispatch)(store).addBlockVariations(blockName, variation);
 };
 
@@ -7756,9 +7765,13 @@ function __experimentalSanitizeBlockAttributes(name, attributes) {
  */
 function __experimentalGetBlockAttributesNamesByRole(name, role) {
   const attributes = getBlockType(name)?.attributes;
-  if (!attributes) return [];
+  if (!attributes) {
+    return [];
+  }
   const attributesNames = Object.keys(attributes);
-  if (!role) return attributesNames;
+  if (!role) {
+    return attributesNames;
+  }
   return attributesNames.filter(attributeName => attributes[attributeName]?.__experimentalRole === role);
 }
 
@@ -7947,7 +7960,7 @@ function blockTypes(state = {}, action) {
  * @return {Object} Updated state.
  */
 function blockStyles(state = {}, action) {
-  var _state$action$blockNa, _state$action$blockNa2;
+  var _state$action$blockNa;
   switch (action.type) {
     case 'ADD_BLOCK_TYPES':
       return {
@@ -7963,14 +7976,19 @@ function blockStyles(state = {}, action) {
         }))
       };
     case 'ADD_BLOCK_STYLES':
+      const updatedStyles = {};
+      action.blockNames.forEach(blockName => {
+        var _state$blockName;
+        updatedStyles[blockName] = getUniqueItemsByName([...((_state$blockName = state[blockName]) !== null && _state$blockName !== void 0 ? _state$blockName : []), ...action.styles]);
+      });
       return {
         ...state,
-        [action.blockName]: getUniqueItemsByName([...((_state$action$blockNa = state[action.blockName]) !== null && _state$action$blockNa !== void 0 ? _state$action$blockNa : []), ...action.styles])
+        ...updatedStyles
       };
     case 'REMOVE_BLOCK_STYLES':
       return {
         ...state,
-        [action.blockName]: ((_state$action$blockNa2 = state[action.blockName]) !== null && _state$action$blockNa2 !== void 0 ? _state$action$blockNa2 : []).filter(style => action.styleNames.indexOf(style.name) === -1)
+        [action.blockName]: ((_state$action$blockNa = state[action.blockName]) !== null && _state$action$blockNa !== void 0 ? _state$action$blockNa : []).filter(style => action.styleNames.indexOf(style.name) === -1)
       };
   }
   return state;
@@ -7985,7 +8003,7 @@ function blockStyles(state = {}, action) {
  * @return {Object} Updated state.
  */
 function blockVariations(state = {}, action) {
-  var _state$action$blockNa3, _state$action$blockNa4;
+  var _state$action$blockNa2, _state$action$blockNa3;
   switch (action.type) {
     case 'ADD_BLOCK_TYPES':
       return {
@@ -8003,12 +8021,12 @@ function blockVariations(state = {}, action) {
     case 'ADD_BLOCK_VARIATIONS':
       return {
         ...state,
-        [action.blockName]: getUniqueItemsByName([...((_state$action$blockNa3 = state[action.blockName]) !== null && _state$action$blockNa3 !== void 0 ? _state$action$blockNa3 : []), ...action.variations])
+        [action.blockName]: getUniqueItemsByName([...((_state$action$blockNa2 = state[action.blockName]) !== null && _state$action$blockNa2 !== void 0 ? _state$action$blockNa2 : []), ...action.variations])
       };
     case 'REMOVE_BLOCK_VARIATIONS':
       return {
         ...state,
-        [action.blockName]: ((_state$action$blockNa4 = state[action.blockName]) !== null && _state$action$blockNa4 !== void 0 ? _state$action$blockNa4 : []).filter(variation => action.variationNames.indexOf(variation.name) === -1)
+        [action.blockName]: ((_state$action$blockNa3 = state[action.blockName]) !== null && _state$action$blockNa3 !== void 0 ? _state$action$blockNa3 : []).filter(variation => action.variationNames.indexOf(variation.name) === -1)
       };
   }
   return state;
@@ -8092,15 +8110,15 @@ function collections(state = {}, action) {
 }
 function blockBindingsSources(state = {}, action) {
   if (action.type === 'REGISTER_BLOCK_BINDINGS_SOURCE') {
-    var _action$lockAttribute;
     return {
       ...state,
       [action.sourceName]: {
         label: action.sourceLabel,
         getValue: action.getValue,
         setValue: action.setValue,
+        setValues: action.setValues,
         getPlaceholder: action.getPlaceholder,
-        lockAttributesEditing: (_action$lockAttribute = action.lockAttributesEditing) !== null && _action$lockAttribute !== void 0 ? _action$lockAttribute : true
+        canUserEditValue: action.canUserEditValue || (() => false)
       }
     };
   }
@@ -8124,8 +8142,6 @@ function blockBindingsSources(state = {}, action) {
 // EXTERNAL MODULE: ./node_modules/remove-accents/index.js
 var remove_accents = __webpack_require__(4793);
 var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
-;// CONCATENATED MODULE: external ["wp","compose"]
-const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/store/utils.js
 /**
  * Helper util to return a value from a certain path of the object.
@@ -8148,6 +8164,27 @@ const getValueFromObjectPath = (object, path, defaultValue) => {
   });
   return (_value = value) !== null && _value !== void 0 ? _value : defaultValue;
 };
+function utils_isObject(candidate) {
+  return typeof candidate === 'object' && candidate.constructor === Object && candidate !== null;
+}
+
+/**
+ * Determine whether a set of object properties matches a given object.
+ *
+ * Given an object of block attributes and an object of variation attributes,
+ * this function checks recursively whether all the variation attributes are
+ * present in the block attributes object.
+ *
+ * @param {Object} blockAttributes     The object to inspect.
+ * @param {Object} variationAttributes The object of property values to match.
+ * @return {boolean} Whether the block attributes match the variation attributes.
+ */
+function matchesAttributes(blockAttributes, variationAttributes) {
+  if (utils_isObject(blockAttributes) && utils_isObject(variationAttributes)) {
+    return Object.entries(variationAttributes).every(([key, value]) => matchesAttributes(blockAttributes?.[key], value));
+  }
+  return blockAttributes === variationAttributes;
+}
 
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/store/selectors.js
 /**
@@ -8378,18 +8415,48 @@ const selectors_getBlockVariations = (0,external_wp_data_namespaceObject.createS
  */
 function getActiveBlockVariation(state, blockName, attributes, scope) {
   const variations = selectors_getBlockVariations(state, blockName, scope);
-  const match = variations?.find(variation => {
+  if (!variations) {
+    return variations;
+  }
+  const blockType = selectors_getBlockType(state, blockName);
+  const attributeKeys = Object.keys(blockType?.attributes || {});
+  let match;
+  let maxMatchedAttributes = 0;
+  for (const variation of variations) {
     if (Array.isArray(variation.isActive)) {
-      const blockType = selectors_getBlockType(state, blockName);
-      const attributeKeys = Object.keys(blockType?.attributes || {});
-      const definedAttributes = variation.isActive.filter(attribute => attributeKeys.includes(attribute));
-      if (definedAttributes.length === 0) {
-        return false;
+      const definedAttributes = variation.isActive.filter(attribute => {
+        // We support nested attribute paths, e.g. `layout.type`.
+        // In this case, we need to check if the part before the
+        // first dot is a known attribute.
+        const topLevelAttribute = attribute.split('.')[0];
+        return attributeKeys.includes(topLevelAttribute);
+      });
+      const definedAttributesLength = definedAttributes.length;
+      if (definedAttributesLength === 0) {
+        continue;
       }
-      return definedAttributes.every(attribute => attributes[attribute] === variation.attributes[attribute]);
+      const isMatch = definedAttributes.every(attribute => {
+        const variationAttributeValue = getValueFromObjectPath(variation.attributes, attribute);
+        if (variationAttributeValue === undefined) {
+          return false;
+        }
+        let blockAttributeValue = getValueFromObjectPath(attributes, attribute);
+        if (blockAttributeValue instanceof external_wp_richText_namespaceObject.RichTextData) {
+          blockAttributeValue = blockAttributeValue.toHTMLString();
+        }
+        return matchesAttributes(blockAttributeValue, variationAttributeValue);
+      });
+      if (isMatch && definedAttributesLength > maxMatchedAttributes) {
+        match = variation;
+        maxMatchedAttributes = definedAttributesLength;
+      }
+    } else if (variation.isActive?.(attributes, variation.attributes)) {
+      // If isActive is a function, we cannot know how many attributes it matches.
+      // This means that we cannot compare the specificity of our matches,
+      // and simply return the best match we have found.
+      return match || variation;
     }
-    return variation.isActive?.(attributes, variation.attributes);
-  });
+  }
   return match;
 }
 
@@ -8763,6 +8830,16 @@ function selectors_hasBlockSupport(state, nameOrType, feature, defaultSupports) 
 }
 
 /**
+ * Normalizes a search term string: removes accents, converts to lowercase, removes extra whitespace.
+ *
+ * @param {string|null|undefined} term Search term to normalize.
+ * @return {string} Normalized search term.
+ */
+function getNormalizedSearchTerm(term) {
+  return remove_accents_default()(term !== null && term !== void 0 ? term : '').toLowerCase().trim();
+}
+
+/**
  * Returns true if the block type by the given name or object value matches a
  * search term, or false otherwise.
  *
@@ -8801,20 +8878,10 @@ function selectors_hasBlockSupport(state, nameOrType, feature, defaultSupports) 
  *
  * @return {Object[]} Whether block type matches search term.
  */
-function isMatchingSearchTerm(state, nameOrType, searchTerm) {
+function isMatchingSearchTerm(state, nameOrType, searchTerm = '') {
   const blockType = getNormalizedBlockType(state, nameOrType);
-  const getNormalizedSearchTerm = (0,external_wp_compose_namespaceObject.pipe)([
-  // Disregard diacritics.
-  //  Input: "média"
-  term => remove_accents_default()(term !== null && term !== void 0 ? term : ''),
-  // Lowercase.
-  //  Input: "MEDIA"
-  term => term.toLowerCase(),
-  // Strip leading and trailing whitespace.
-  //  Input: " media "
-  term => term.trim()]);
   const normalizedSearchTerm = getNormalizedSearchTerm(searchTerm);
-  const isSearchMatch = (0,external_wp_compose_namespaceObject.pipe)([getNormalizedSearchTerm, normalizedCandidate => normalizedCandidate.includes(normalizedSearchTerm)]);
+  const isSearchMatch = candidate => getNormalizedSearchTerm(candidate).includes(normalizedSearchTerm);
   return isSearchMatch(blockType.title) || blockType.keywords?.some(isSearchMatch) || isSearchMatch(blockType.category) || typeof blockType.description === 'string' && isSearchMatch(blockType.description);
 }
 
@@ -9131,6 +9198,31 @@ const LEGACY_CATEGORY_MAPPING = {
 };
 
 /**
+ * Merge block variations bootstrapped from the server and client.
+ *
+ * When a variation is registered in both places, its properties are merged.
+ *
+ * @param {Array} bootstrappedVariations - A block type variations from the server.
+ * @param {Array} clientVariations       - A block type variations from the client.
+ * @return {Array} The merged array of block variations.
+ */
+function mergeBlockVariations(bootstrappedVariations = [], clientVariations = []) {
+  const result = [...bootstrappedVariations];
+  clientVariations.forEach(clientVariation => {
+    const index = result.findIndex(bootstrappedVariation => bootstrappedVariation.name === clientVariation.name);
+    if (index !== -1) {
+      result[index] = {
+        ...result[index],
+        ...clientVariation
+      };
+    } else {
+      result.push(clientVariation);
+    }
+  });
+  return result;
+}
+
+/**
  * Takes the unprocessed block type settings, merges them with block type metadata
  * and applies all the existing filters for the registered block type.
  * Next, it validates all the settings and performs additional processing to the block type definition.
@@ -9143,6 +9235,7 @@ const LEGACY_CATEGORY_MAPPING = {
 const processBlockType = (name, blockSettings) => ({
   select
 }) => {
+  const bootstrappedBlockType = select.getBootstrappedBlockType(name);
   const blockType = {
     name,
     icon: BLOCK_ICON_DEFAULT,
@@ -9153,11 +9246,11 @@ const processBlockType = (name, blockSettings) => ({
     selectors: {},
     supports: {},
     styles: [],
-    variations: [],
     blockHooks: {},
     save: () => null,
-    ...select.getBootstrappedBlockType(name),
-    ...blockSettings
+    ...bootstrappedBlockType,
+    ...blockSettings,
+    variations: mergeBlockVariations(bootstrappedBlockType?.variations, blockSettings?.variations)
   };
   const settings = (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType', blockType, name, null);
   if (settings.description && typeof settings.description !== 'string') {
@@ -9313,18 +9406,18 @@ function removeBlockTypes(names) {
  * Returns an action object used in signalling that new block styles have been added.
  * Ignored from documentation as the recommended usage for this action through registerBlockStyle from @wordpress/blocks.
  *
- * @param {string}       blockName Block name.
- * @param {Array|Object} styles    Block style object or array of block style objects.
+ * @param {string|Array} blockNames Block names to register new styles for.
+ * @param {Array|Object} styles     Block style object or array of block style objects.
  *
  * @ignore
  *
  * @return {Object} Action object.
  */
-function addBlockStyles(blockName, styles) {
+function addBlockStyles(blockNames, styles) {
   return {
     type: 'ADD_BLOCK_STYLES',
     styles: Array.isArray(styles) ? styles : [styles],
-    blockName
+    blockNames: Array.isArray(blockNames) ? blockNames : [blockNames]
   };
 }
 
@@ -9591,8 +9684,9 @@ function registerBlockBindingsSource(source) {
     sourceLabel: source.label,
     getValue: source.getValue,
     setValue: source.setValue,
+    setValues: source.setValues,
     getPlaceholder: source.getPlaceholder,
-    lockAttributesEditing: source.lockAttributesEditing
+    canUserEditValue: source.canUserEditValue
   };
 }
 
@@ -10167,8 +10261,6 @@ const getBlockFromExample = (name, example) => {
 const external_wp_blockSerializationDefaultParser_namespaceObject = window["wp"]["blockSerializationDefaultParser"];
 ;// CONCATENATED MODULE: external ["wp","autop"]
 const external_wp_autop_namespaceObject = window["wp"]["autop"];
-;// CONCATENATED MODULE: external "React"
-const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","isShallowEqual"]
 const external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
 var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(external_wp_isShallowEqual_namespaceObject);
@@ -10222,8 +10314,9 @@ function serializeRawBlock(rawBlock, options = {}) {
   return isCommentDelimited ? getCommentDelimitedContent(blockName, attrs, content) : content;
 }
 
+;// CONCATENATED MODULE: external "ReactJSXRuntime"
+const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/api/serializer.js
-
 /**
  * WordPress dependencies
  */
@@ -10254,6 +10347,7 @@ function serializeRawBlock(rawBlock, options = {}) {
  *
  * @return {string} The block's default class.
  */
+
 function getBlockDefaultClassName(blockName) {
   // Generated HTML classes for blocks follow the `wp-block-{name}` nomenclature.
   // Blocks provided by WordPress drop the prefixes 'core/' or 'core-' (historically used in 'core-embed/').
@@ -10314,7 +10408,9 @@ function getInnerBlocksProps(props = {}) {
     isInnerBlocks: true
   });
   // Use special-cased raw HTML tag to avoid default escaping.
-  const children = (0,external_React_namespaceObject.createElement)(external_wp_element_namespaceObject.RawHTML, null, html);
+  const children = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.RawHTML, {
+    children: html
+  });
   return {
     ...props,
     children
@@ -10333,7 +10429,9 @@ function getInnerBlocksProps(props = {}) {
  */
 function getSaveElement(blockTypeOrName, attributes, innerBlocks = []) {
   const blockType = normalizeBlockType(blockTypeOrName);
-  if (!blockType?.save) return null;
+  if (!blockType?.save) {
+    return null;
+  }
   let {
     save
   } = blockType;
@@ -11976,13 +12074,29 @@ function convertLegacyBlockNameAndAttributes(name, attributes) {
     // Convert pattern overrides added during experimental phase.
     // Only four blocks were supported initially.
     // These checks can be removed in WordPress 6.6.
-    if (newAttributes.metadata?.bindings && (name === 'core/paragraph' || name === 'core/heading' || name === 'core/image' || name === 'core/button')) {
-      const bindings = ['content', 'url', 'title', 'alt', 'text', 'linkTarget'];
+    if (newAttributes.metadata?.bindings && (name === 'core/paragraph' || name === 'core/heading' || name === 'core/image' || name === 'core/button') && newAttributes.metadata.bindings.__default?.source !== 'core/pattern-overrides') {
+      const bindings = ['content', 'url', 'title', 'id', 'alt', 'text', 'linkTarget'];
+      // Delete any existing individual bindings and add a default binding.
+      // It was only possible to add all the default attributes through the UI,
+      // So as soon as we find an attribute, we can assume all default attributes are overridable.
+      let hasPatternOverrides = false;
       bindings.forEach(binding => {
-        if (newAttributes.metadata.bindings[binding]?.source?.name === 'pattern_attributes') {
-          newAttributes.metadata.bindings[binding].source = 'core/pattern-overrides';
+        if (newAttributes.metadata.bindings[binding]?.source === 'core/pattern-overrides') {
+          hasPatternOverrides = true;
+          newAttributes.metadata = {
+            ...newAttributes.metadata,
+            bindings: {
+              ...newAttributes.metadata.bindings
+            }
+          };
+          delete newAttributes.metadata.bindings[binding];
         }
       });
+      if (hasPatternOverrides) {
+        newAttributes.metadata.bindings.__default = {
+          source: 'core/pattern-overrides'
+        };
+      }
     }
   }
   return [name, newAttributes];
@@ -12495,7 +12609,7 @@ function toHTML(node) {
  *
  * @return {Function} hpq matcher.
  */
-function node_matcher(selector) {
+function matcher(selector) {
   external_wp_deprecated_default()('wp.blocks.node.matcher', {
     since: '6.1',
     version: '6.3',
@@ -12530,7 +12644,7 @@ function node_matcher(selector) {
   isNodeOfType,
   fromDOM,
   toHTML,
-  matcher: node_matcher
+  matcher
 });
 
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/api/children.js
@@ -12722,7 +12836,6 @@ function children_matcher(selector) {
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -12740,21 +12853,7 @@ function children_matcher(selector) {
  *
  * @return {Function} Enhanced hpq matcher.
  */
-const toBooleanAttributeMatcher = matcher => (0,external_wp_compose_namespaceObject.pipe)([matcher,
-// Expected values from `attr( 'disabled' )`:
-//
-// <input>
-// - Value:       `undefined`
-// - Transformed: `false`
-//
-// <input disabled>
-// - Value:       `''`
-// - Transformed: `true`
-//
-// <input disabled="disabled">
-// - Value:       `'disabled'`
-// - Transformed: `true`
-value => value !== undefined]);
+const toBooleanAttributeMatcher = matcher => value => matcher(value) !== undefined;
 
 /**
  * Returns true if value is of the given JSON schema type, or false otherwise.
@@ -12890,11 +12989,13 @@ function isValidByEnum(value, enumSet) {
 const matcherFromSource = memize(sourceConfig => {
   switch (sourceConfig.source) {
     case 'attribute':
-      let matcher = attr(sourceConfig.selector, sourceConfig.attribute);
-      if (sourceConfig.type === 'boolean') {
-        matcher = toBooleanAttributeMatcher(matcher);
+      {
+        let matcher = attr(sourceConfig.selector, sourceConfig.attribute);
+        if (sourceConfig.type === 'boolean') {
+          matcher = toBooleanAttributeMatcher(matcher);
+        }
+        return matcher;
       }
-      return matcher;
     case 'html':
       return matchers_html(sourceConfig.selector, sourceConfig.multiline);
     case 'text':
@@ -12904,12 +13005,15 @@ const matcherFromSource = memize(sourceConfig => {
     case 'children':
       return children_matcher(sourceConfig.selector);
     case 'node':
-      return node_matcher(sourceConfig.selector);
+      return matcher(sourceConfig.selector);
     case 'query':
       const subMatchers = Object.fromEntries(Object.entries(sourceConfig.query).map(([key, subSourceConfig]) => [key, matcherFromSource(subSourceConfig)]));
       return query(sourceConfig.selector, subMatchers);
     case 'tag':
-      return (0,external_wp_compose_namespaceObject.pipe)([prop(sourceConfig.selector, 'nodeName'), nodeName => nodeName ? nodeName.toLowerCase() : undefined]);
+      {
+        const matcher = prop(sourceConfig.selector, 'nodeName');
+        return domNode => matcher(domNode)?.toLowerCase();
+      }
     default:
       // eslint-disable-next-line no-console
       console.error(`Unknown source type "${sourceConfig.source}"`);

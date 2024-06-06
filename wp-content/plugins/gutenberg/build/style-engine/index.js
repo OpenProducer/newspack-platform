@@ -826,7 +826,7 @@ const backgroundImage = {
   name: 'backgroundImage',
   generate: (style, options) => {
     const _backgroundImage = style?.background?.backgroundImage;
-    if (typeof _backgroundImage === 'object' && _backgroundImage?.source === 'file' && _backgroundImage?.url) {
+    if (typeof _backgroundImage === 'object' && _backgroundImage?.url) {
       return [{
         selector: options.selector,
         key: 'backgroundImage',
@@ -846,7 +846,7 @@ const backgroundImage = {
   }
 };
 const backgroundPosition = {
-  name: 'backgroundRepeat',
+  name: 'backgroundPosition',
   generate: (style, options) => {
     return generateRule(style, options, ['background', 'backgroundPosition'], 'backgroundPosition');
   }

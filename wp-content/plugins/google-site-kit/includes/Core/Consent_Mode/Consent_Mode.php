@@ -84,6 +84,8 @@ class Consent_Mode {
 				return $consent_mode_enabled ? 'enabled' : 'disabled';
 			}
 		);
+
+		add_filter( 'googlesitekit_inline_base_data', $this->get_method_proxy( 'inline_js_base_data' ) );
 	}
 
 	/**
@@ -92,18 +94,37 @@ class Consent_Mode {
 	 * @since 1.122.0
 	 */
 	protected function render_gtag_consent_snippet() {
-		$consent_defaults = array(
-			'ad_personalization' => 'denied',
-			'ad_storage'         => 'denied',
-			'ad_user_data'       => 'denied',
-			'analytics_storage'  => 'denied',
-			// TODO: The value for `region` should be retrieved from $this->consent_mode_settings->get_regions(),
-			// but we'll need to migrate/clean up the incorrect values that were set from the initial release.
-			// See https://github.com/google/site-kit-wp/issues/8444.
-			'region'             => Regions::EU_USER_CONSENT_POLICY,
-			'wait_for_update'    => 500, // Allow 500ms for Consent Management Platforms (CMPs) to update the consent status.
+		/**
+		 * Filters the consent mode defaults.
+		 *
+		 * Allows these defaults to be modified, thus allowing users complete control over the consent mode parameters.
+		 *
+		 * @since 1.126.0
+		 *
+		 * @param array $consent_mode_defaults Default values for consent mode.
+		 */
+		$consent_defaults = apply_filters(
+			'googlesitekit_consent_defaults',
+			array(
+				'ad_personalization' => 'denied',
+				'ad_storage'         => 'denied',
+				'ad_user_data'       => 'denied',
+				'analytics_storage'  => 'denied',
+				// TODO: The value for `region` should be retrieved from $this->consent_mode_settings->get_regions(),
+				// but we'll need to migrate/clean up the incorrect values that were set from the initial release.
+				// See https://github.com/google/site-kit-wp/issues/8444.
+				'region'             => Regions::get_regions(),
+				'wait_for_update'    => 500, // Allow 500ms for Consent Management Platforms (CMPs) to update the consent status.
+			)
 		);
 
+		/**
+		 * Filters the consent category mapping.
+		 *
+		 * @since 1.124.0
+		 *
+		 * @param array $consent_category_map Default consent category mapping.
+		 */
 		$consent_category_map = apply_filters(
 			'googlesitekit_consent_category_map',
 			array(
@@ -179,5 +200,19 @@ window._googlesitekitConsentCategoryMap = <?php	echo wp_json_encode( $consent_ca
 </script>
 <!-- <?php echo esc_html__( 'End Google tag (gtag.js) Consent Mode snippet added by Site Kit', 'google-site-kit' ); ?> -->
 			<?php
+	}
+
+	/**
+	 * Extends base data with a static list of consent mode regions.
+	 *
+	 * @since 1.128.0
+	 *
+	 * @param array $data Inline base data.
+	 * @return array Filtered $data.
+	 */
+	protected function inline_js_base_data( $data ) {
+		$data['consentModeRegions'] = Regions::get_regions();
+
+		return $data;
 	}
 }

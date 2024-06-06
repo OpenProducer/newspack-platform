@@ -388,6 +388,42 @@ class Woocommerce_Memberships {
 		}
 		return $value[ $membership_id ];
 	}
+
+	/**
+	 * Determines whether a given list id is associated with a membership plan.
+	 *
+	 * @param string $list_id The list ID.
+	 *
+	 * @return bool
+	 */
+	public static function is_subscription_list_tied_to_plan( $list_id ) {
+		if ( ! function_exists( 'wc_memberships_get_membership_plans' ) ) {
+			return false;
+		}
+
+		$plans = wc_memberships_get_membership_plans();
+
+		if ( empty( $plans ) ) {
+			return false;
+		}
+
+		foreach ( $plans as $plan ) {
+			$rules = $plan->get_content_restriction_rules();
+
+			foreach ( $rules as $rule ) {
+				if ( Subscription_Lists::CPT !== $rule->get_content_type_name() ) {
+					continue;
+				}
+
+				$object_ids = $rule->get_object_ids();
+				if ( in_array( $list_id, $object_ids, true ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 }
 
 Woocommerce_Memberships::init();

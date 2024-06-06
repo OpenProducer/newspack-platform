@@ -31,9 +31,6 @@ final class Fixed_Height {
 	 * @return array Updated list of settings.
 	 */
 	public static function register_settings( $settings_list ) {
-		if ( Core::is_amp() ) {
-			return $settings_list;
-		}
 		return array_merge(
 			$settings_list,
 			[
