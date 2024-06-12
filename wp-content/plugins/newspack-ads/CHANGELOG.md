@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/Automattic/newspack-ads/compare/v2.0.0...v2.0.1) (2024-06-10)
+
+
+### Bug Fixes
+
+* update above-header hook ([5a0f8c8](https://github.com/Automattic/newspack-ads/commit/5a0f8c855ccda9ce625de8732bb4e84d3475ad20))
+
 # [2.0.0](https://github.com/Automattic/newspack-ads/compare/v1.48.0...v2.0.0) (2024-05-28)
 
 

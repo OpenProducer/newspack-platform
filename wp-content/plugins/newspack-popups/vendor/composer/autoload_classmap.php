@@ -20,6 +20,7 @@ return array(
     'Newspack_Popups_Criteria' => $baseDir . '/includes/class-newspack-popups-criteria.php',
     'Newspack_Popups_Custom_Placements' => $baseDir . '/includes/class-newspack-popups-custom-placements.php',
     'Newspack_Popups_Data_Api' => $baseDir . '/includes/class-newspack-popups-data-api.php',
+    'Newspack_Popups_Expiry' => $baseDir . '/includes/class-newspack-popups-expiry.php',
     'Newspack_Popups_Exporter' => $baseDir . '/includes/class-newspack-popups-exporter.php',
     'Newspack_Popups_Importer' => $baseDir . '/includes/class-newspack-popups-importer.php',
     'Newspack_Popups_Inserter' => $baseDir . '/includes/class-newspack-popups-inserter.php',

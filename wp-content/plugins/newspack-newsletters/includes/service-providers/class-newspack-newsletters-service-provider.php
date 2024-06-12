@@ -85,7 +85,10 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 * Manage singleton instances of all descendant service provider classes.
 	 */
 	public static function instance() {
-		if ( empty( self::$instances[ static::class ] ) ) {
+		// Escape hatch from the OOP logic for tests. When running in PHPUnit, some tests only pass if
+		// the class is always instantiated and not returned from self::$instances.
+		$is_test = defined( 'IS_TEST_ENV' ) && IS_TEST_ENV;
+		if ( $is_test || empty( self::$instances[ static::class ] ) ) {
 			self::$instances[ static::class ] = new static();
 		}
 		return self::$instances[ static::class ];
@@ -141,7 +144,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		// Prevent status change from the controlled status if newsletter has been sent.
 		if ( ! in_array( $new_status, self::$controlled_statuses, true ) && $old_status !== $new_status && $sent ) {
 			$error = new WP_Error( 'newspack_newsletters_error', __( 'You cannot change a sent newsletter status.', 'newspack-newsletters' ), [ 'status' => 403 ] );
-			wp_die( esc_html( $error->get_error_message() ) );
+			wp_die( esc_html( $error->get_error_message() ), '', 400 );
 		}
 
 		// Send if changing from any status to controlled statuses - 'publish' or 'private'.
@@ -153,7 +156,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		) {
 			$result = $this->send_newsletter( $post );
 			if ( is_wp_error( $result ) ) {
-				wp_die( esc_html( $result->get_error_message() ) );
+				wp_die( esc_html( $result->get_error_message() ), '', esc_html( $result->get_error_code() ) );
 			}
 		}
 	}
@@ -194,7 +197,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 						'post_status' => 'draft',
 					]
 				);
-				wp_die( esc_html( $result->get_error_message() ) );
+				wp_die( esc_html( $result->get_error_message() ), '', esc_html( $result->get_error_code() ) );
 			}
 			delete_post_meta( $post->ID, 'sending_scheduled' );
 		}
@@ -373,29 +376,32 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 			$errors   = array_slice( $errors, -10, 10, true );
 			update_post_meta( $post_id, 'newsletter_send_errors', $errors );
 
-			$message = sprintf(
-				/* translators: %1$s is the campaign title, %2$s is the edit link, %3$s is the error message. */
-				__(
-					'Hi,
+			$email_sending_disabled = defined( 'NEWSPACK_NEWSLETTERS_DISABLE_SEND_FAILURE_EMAIL' ) && NEWSPACK_NEWSLETTERS_DISABLE_SEND_FAILURE_EMAIL;
+			if ( ! $email_sending_disabled ) {
+				$message = sprintf(
+					/* translators: %1$s is the campaign title, %2$s is the edit link, %3$s is the error message. */
+					__(
+						'Hi,
 
 A newsletter campaign called "%1$s" failed to send on your site.
 
 You can edit the campaign here: %2$s.
 
 Details of the error message: "%3$s"
-',
-					'newspack-newsletters'
-				),
-				$post->post_title,
-				get_edit_post_link( $post_id ),
-				$error_message
-			);
+	',
+						'newspack-newsletters'
+					),
+					$post->post_title,
+					get_edit_post_link( $post_id ),
+					$error_message
+				);
 
-			\wp_mail( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail
-				get_option( 'admin_email' ),
-				__( 'Sending a newsletter failed', 'newspack-newsletters' ),
-				$message
-			);
+				\wp_mail( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail
+					get_option( 'admin_email' ),
+					__( 'Sending a newsletter failed', 'newspack-newsletters' ),
+					$message
+				);
+			}
 		}
 
 		return $result;

@@ -178,7 +178,7 @@ function render_block( $attrs ) {
 	ob_start();
 	?>
 	<div
-		class="newspack-newsletters-subscribe <?php echo esc_attr( get_block_classes( $attrs ) ); ?>"
+		class="wp-block-newspack-newsletters-subscribe newspack-newsletters-subscribe <?php echo esc_attr( get_block_classes( $attrs ) ); ?>"
 		data-success-message="<?php echo \esc_attr( $attrs['successMessage'] ); ?>"
 		<?php echo $subscribed ? 'data-status="200"' : ''; ?>
 	>

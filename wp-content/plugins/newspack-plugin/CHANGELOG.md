@@ -1,3 +1,51 @@
+# [4.3.0](https://github.com/Automattic/newspack-plugin/compare/v4.2.0...v4.3.0) (2024-06-12)
+
+
+### Bug Fixes
+
+* **newsletters:** missing UTM params passing ([#3145](https://github.com/Automattic/newspack-plugin/issues/3145)) ([0688fa0](https://github.com/Automattic/newspack-plugin/commit/0688fa002700d479c69d56ee3325a74ba63cc39d))
+* **ras-setup:** redirect to init screen after setup ([#3142](https://github.com/Automattic/newspack-plugin/issues/3142)) ([b86580b](https://github.com/Automattic/newspack-plugin/commit/b86580b6c0926cbddb5c621409d4cc448e1f5e1e))
+* **ras:** handle RAS disabled in newsletters signup handling ([3d70a1d](https://github.com/Automattic/newspack-plugin/commit/3d70a1d3700f10b1e9aa9e37035bd6e8c5ebb6e3))
+* **ras:** prevent email address exposure via user login ([#3139](https://github.com/Automattic/newspack-plugin/issues/3139)) ([9b534d3](https://github.com/Automattic/newspack-plugin/commit/9b534d3c51ac93f269e1baa3577e426b5b4be7a5))
+* **reader-revenue:** prevent sending duplicate receipt emails ([aa91890](https://github.com/Automattic/newspack-plugin/commit/aa9189023bd03f0a117c5bd0c4d2db60d28c66d2))
+* **tracking:** handling user role in pixel ([#3137](https://github.com/Automattic/newspack-plugin/issues/3137)) ([a041764](https://github.com/Automattic/newspack-plugin/commit/a0417642806ae7be499e9b1d2d571831d07d6331))
+
+
+### Features
+
+* **cli:** enable running the setup with a site import ([#3122](https://github.com/Automattic/newspack-plugin/issues/3122)) ([c6cc10e](https://github.com/Automattic/newspack-plugin/commit/c6cc10efd5e2ccfa2f0eba11fa11ac083d2213d4))
+* expand memberships perf to archives ([#3148](https://github.com/Automattic/newspack-plugin/issues/3148)) ([bdbdf1d](https://github.com/Automattic/newspack-plugin/commit/bdbdf1db6b816f424053c9b6fdb86fd05b250150))
+* **memberships:** remove content restriction handling on the homepage ([b63a3fa](https://github.com/Automattic/newspack-plugin/commit/b63a3fa8ad9317aa5bf92416a398e58808502f40))
+* update donation landing page ([#3109](https://github.com/Automattic/newspack-plugin/issues/3109)) ([96218c1](https://github.com/Automattic/newspack-plugin/commit/96218c18f206c330e36c0472253b6c79b70c9791))
+
+# [4.2.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v4.1.0...v4.2.0-alpha.1) (2024-05-31)
+
+
+### Bug Fixes
+
+* **newsletters:** missing UTM params passing ([#3145](https://github.com/Automattic/newspack-plugin/issues/3145)) ([0688fa0](https://github.com/Automattic/newspack-plugin/commit/0688fa002700d479c69d56ee3325a74ba63cc39d))
+* **ras-setup:** redirect to init screen after setup ([#3142](https://github.com/Automattic/newspack-plugin/issues/3142)) ([b86580b](https://github.com/Automattic/newspack-plugin/commit/b86580b6c0926cbddb5c621409d4cc448e1f5e1e))
+* **ras:** handle RAS disabled in newsletters signup handling ([3d70a1d](https://github.com/Automattic/newspack-plugin/commit/3d70a1d3700f10b1e9aa9e37035bd6e8c5ebb6e3))
+* **ras:** prevent email address exposure via user login ([#3139](https://github.com/Automattic/newspack-plugin/issues/3139)) ([9b534d3](https://github.com/Automattic/newspack-plugin/commit/9b534d3c51ac93f269e1baa3577e426b5b4be7a5))
+* **reader-revenue:** prevent sending duplicate receipt emails ([aa91890](https://github.com/Automattic/newspack-plugin/commit/aa9189023bd03f0a117c5bd0c4d2db60d28c66d2))
+* **tracking:** handling user role in pixel ([#3137](https://github.com/Automattic/newspack-plugin/issues/3137)) ([a041764](https://github.com/Automattic/newspack-plugin/commit/a0417642806ae7be499e9b1d2d571831d07d6331))
+
+
+### Features
+
+* **cli:** enable running the setup with a site import ([#3122](https://github.com/Automattic/newspack-plugin/issues/3122)) ([c6cc10e](https://github.com/Automattic/newspack-plugin/commit/c6cc10efd5e2ccfa2f0eba11fa11ac083d2213d4))
+* expand memberships perf to archives ([#3148](https://github.com/Automattic/newspack-plugin/issues/3148)) ([bdbdf1d](https://github.com/Automattic/newspack-plugin/commit/bdbdf1db6b816f424053c9b6fdb86fd05b250150))
+* **memberships:** remove content restriction handling on the homepage ([b63a3fa](https://github.com/Automattic/newspack-plugin/commit/b63a3fa8ad9317aa5bf92416a398e58808502f40))
+* update donation landing page ([#3109](https://github.com/Automattic/newspack-plugin/issues/3109)) ([96218c1](https://github.com/Automattic/newspack-plugin/commit/96218c18f206c330e36c0472253b6c79b70c9791))
+
+# [4.2.0](https://github.com/Automattic/newspack-plugin/compare/v4.1.0...v4.2.0) (2024-06-11)
+
+
+### Bug Fixes
+
+* **ga:** add custom parameters to FE-originating GA requests ([#3178](https://github.com/Automattic/newspack-plugin/issues/3178)) ([860791f](https://github.com/Automattic/newspack-plugin/commit/860791fe9e0f77aa34e85a9a155316868ad77844))
+
+
 # [4.1.0](https://github.com/Automattic/newspack-plugin/compare/v4.0.1...v4.1.0) (2024-05-30)
 
 

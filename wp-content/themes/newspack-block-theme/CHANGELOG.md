@@ -1,3 +1,41 @@
+# [1.9.0](https://github.com/Automattic/newspack-block-theme/compare/v1.8.0...v1.9.0) (2024-06-12)
+
+
+### Bug Fixes
+
+* disqus captcha cropping ([#163](https://github.com/Automattic/newspack-block-theme/issues/163)) ([93d6d06](https://github.com/Automattic/newspack-block-theme/commit/93d6d066c6e2371dc1460861b2697bbc95417741))
+
+
+### Features
+
+* add basic styles for input submit ([#157](https://github.com/Automattic/newspack-block-theme/issues/157)) ([df2ace1](https://github.com/Automattic/newspack-block-theme/commit/df2ace1317b354d0c493cc8969eb53f7e3df2fe7))
+* add blank page template ([#158](https://github.com/Automattic/newspack-block-theme/issues/158)) ([b56d2b6](https://github.com/Automattic/newspack-block-theme/commit/b56d2b65b1d77b0c90f826c27fb79235a06576a6))
+* add jetpack compatibility file ([#160](https://github.com/Automattic/newspack-block-theme/issues/160)) ([dce13dd](https://github.com/Automattic/newspack-block-theme/commit/dce13dd29dfa798acad232b01d76970ffa76da93))
+* add post-meta pattern ([#148](https://github.com/Automattic/newspack-block-theme/issues/148)) ([67d3860](https://github.com/Automattic/newspack-block-theme/commit/67d38600bfa128707c060ef510ce39271542a1d0))
+* add specific styles for media & text block ([#154](https://github.com/Automattic/newspack-block-theme/issues/154)) ([99e77c9](https://github.com/Automattic/newspack-block-theme/commit/99e77c90226b26d86ef57d98185c9c859e5e0d84))
+* add support for jetpack top posts ([#161](https://github.com/Automattic/newspack-block-theme/issues/161)) ([492538b](https://github.com/Automattic/newspack-block-theme/commit/492538b0ef5b30b7dde6f0c4a8b04359faa9a08d))
+* add support for table block ([#166](https://github.com/Automattic/newspack-block-theme/issues/166)) ([1b3d85f](https://github.com/Automattic/newspack-block-theme/commit/1b3d85f2d60b3c6c8194f5eefdfb5ab240c577b8))
+* **post-comments:** improve style for pingback and trackbacks ([#162](https://github.com/Automattic/newspack-block-theme/issues/162)) ([1f7cc01](https://github.com/Automattic/newspack-block-theme/commit/1f7cc012c5d26a6ea4b53e4f5e06524ef1c2cc21))
+
+# [1.9.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.8.0...v1.9.0-alpha.1) (2024-05-31)
+
+
+### Bug Fixes
+
+* disqus captcha cropping ([#163](https://github.com/Automattic/newspack-block-theme/issues/163)) ([93d6d06](https://github.com/Automattic/newspack-block-theme/commit/93d6d066c6e2371dc1460861b2697bbc95417741))
+
+
+### Features
+
+* add basic styles for input submit ([#157](https://github.com/Automattic/newspack-block-theme/issues/157)) ([df2ace1](https://github.com/Automattic/newspack-block-theme/commit/df2ace1317b354d0c493cc8969eb53f7e3df2fe7))
+* add blank page template ([#158](https://github.com/Automattic/newspack-block-theme/issues/158)) ([b56d2b6](https://github.com/Automattic/newspack-block-theme/commit/b56d2b65b1d77b0c90f826c27fb79235a06576a6))
+* add jetpack compatibility file ([#160](https://github.com/Automattic/newspack-block-theme/issues/160)) ([dce13dd](https://github.com/Automattic/newspack-block-theme/commit/dce13dd29dfa798acad232b01d76970ffa76da93))
+* add post-meta pattern ([#148](https://github.com/Automattic/newspack-block-theme/issues/148)) ([67d3860](https://github.com/Automattic/newspack-block-theme/commit/67d38600bfa128707c060ef510ce39271542a1d0))
+* add specific styles for media & text block ([#154](https://github.com/Automattic/newspack-block-theme/issues/154)) ([99e77c9](https://github.com/Automattic/newspack-block-theme/commit/99e77c90226b26d86ef57d98185c9c859e5e0d84))
+* add support for jetpack top posts ([#161](https://github.com/Automattic/newspack-block-theme/issues/161)) ([492538b](https://github.com/Automattic/newspack-block-theme/commit/492538b0ef5b30b7dde6f0c4a8b04359faa9a08d))
+* add support for table block ([#166](https://github.com/Automattic/newspack-block-theme/issues/166)) ([1b3d85f](https://github.com/Automattic/newspack-block-theme/commit/1b3d85f2d60b3c6c8194f5eefdfb5ab240c577b8))
+* **post-comments:** improve style for pingback and trackbacks ([#162](https://github.com/Automattic/newspack-block-theme/issues/162)) ([1f7cc01](https://github.com/Automattic/newspack-block-theme/commit/1f7cc012c5d26a6ea4b53e4f5e06524ef1c2cc21))
+
 # [1.8.0](https://github.com/Automattic/newspack-block-theme/compare/v1.7.0...v1.8.0) (2024-05-28)
 
 

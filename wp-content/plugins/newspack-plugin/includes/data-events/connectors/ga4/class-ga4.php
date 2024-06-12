@@ -160,30 +160,15 @@ class GA4 {
 	}
 
 	/**
-	 * Filters the event body before dispatching it.
-	 *
-	 * @param array  $body The event body.
-	 * @param string $event_name The event name.
-	 * @return array
+	 * Get custom parameters for a GA configuration or event body.
 	 */
-	public static function filter_event_body( $body, $event_name ) {
-		if ( ! in_array( $event_name, self::$watched_events, true ) ) {
-			return $body;
-		}
-		if ( ! self::can_use_ga4() ) {
-			return $body;
-		}
-
-		$body['data']['ga_client_id'] = self::extract_cid_from_cookies();
-
-		// Default params added to all events will go here.
-		$body['data']['ga_params'] = [
+	public static function get_custom_parameters() {
+		$params = [
 			'logged_in' => is_user_logged_in() ? 'yes' : 'no',
 		];
-
 		$session_id = self::extract_sid_from_cookies();
 		if ( $session_id ) {
-			$body['data']['ga_params']['ga_session_id'] = $session_id;
+			$params['ga_session_id'] = $session_id;
 		}
 
 		// Get current post author name.
@@ -206,7 +191,7 @@ class GA4 {
 			}
 		}
 		if ( ! empty( $author_name ) ) {
-			$body['data']['ga_params']['author'] = $author_name;
+			$params['author'] = $author_name;
 		}
 
 		// Get current post categories.
@@ -217,26 +202,45 @@ class GA4 {
 			get_the_category()
 		);
 		if ( ! empty( $category_names ) ) {
-			$body['data']['ga_params']['categories'] = implode( ', ', $category_names );
+			$params['categories'] = implode( ', ', $category_names );
 		}
 
-		$body['data']['ga_params']['is_reader'] = 'no';
+		$params['is_reader'] = 'no';
 		if ( is_user_logged_in() ) {
-			$current_user                            = wp_get_current_user();
-			$body['data']['ga_params']['is_reader']  = Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
-			$body['data']['ga_params']['email_hash'] = md5( $current_user->user_email );
+			$current_user = wp_get_current_user();
+			$params['is_reader'] = Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
+			$params['email_hash'] = md5( $current_user->user_email );
 
 			if ( method_exists( 'Newspack\Reader_Data', 'get_data' ) ) {
 				$reader_data = \Newspack\Reader_Data::get_data( get_current_user_id() );
 				// If the reader is signed up for any newsletters.
-				$body['data']['ga_params']['is_newsletter_subscriber'] = empty( $reader_data['is_newsletter_subscriber'] ) ? 'no' : 'yes';
+				$params['is_newsletter_subscriber'] = empty( $reader_data['is_newsletter_subscriber'] ) ? 'no' : 'yes';
 				// If reader has donated.
-				$body['data']['ga_params']['is_donor'] = empty( $reader_data['is_donor'] ) ? 'no' : 'yes';
+				$params['is_donor'] = empty( $reader_data['is_donor'] ) ? 'no' : 'yes';
 				// If reader has any currently active non-donation subscriptions.
-				$body['data']['ga_params']['is_subscriber'] = empty( $reader_data['active_subscriptions'] ) ? 'no' : 'yes';
+				$params['is_subscriber'] = empty( $reader_data['active_subscriptions'] ) ? 'no' : 'yes';
 			}
 		}
 
+		return $params;
+	}
+
+	/**
+	 * Filters the event body before dispatching it.
+	 *
+	 * @param array  $body The event body.
+	 * @param string $event_name The event name.
+	 * @return array
+	 */
+	public static function filter_event_body( $body, $event_name ) {
+		if ( ! in_array( $event_name, self::$watched_events, true ) ) {
+			return $body;
+		}
+		if ( ! self::can_use_ga4() ) {
+			return $body;
+		}
+		$body['data']['ga_client_id'] = self::extract_cid_from_cookies();
+		$body['data']['ga_params'] = self::get_custom_parameters();
 		return $body;
 	}
 

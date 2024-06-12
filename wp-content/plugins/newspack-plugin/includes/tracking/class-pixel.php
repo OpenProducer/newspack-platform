@@ -72,12 +72,12 @@ abstract class Pixel {
 	}
 
 	/**
-	 * Checks if option is active
+	 * Checks if pixel should be printed.
 	 *
 	 * @return boolean
 	 */
-	public function is_active() {
-		return $this->get_option()['active'];
+	public function is_configured() {
+		return ! empty( $this->get_pixel_id() );
 	}
 
 	/**
@@ -86,7 +86,7 @@ abstract class Pixel {
 	 * @return string
 	 */
 	public function get_pixel_id() {
-		if ( ! $this->is_active() ) {
+		if ( ! $this->get_option()['active'] ) {
 			return '';
 		}
 		return $this->get_option()['pixel_id'];
@@ -145,14 +145,10 @@ abstract class Pixel {
 	 * @return void
 	 */
 	public function create_js_snippet( $payload ) {
-		if ( $this->is_amp() ) {
+		if ( $this->is_amp() || ! $this->is_configured() ) {
 			return;
 		}
-		$pixel_id = $this->get_pixel_id();
-		if ( empty( $pixel_id ) ) {
-			return;
-		}
-		echo str_replace( '__PIXEL_ID__', $pixel_id, $payload ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo str_replace( '__PIXEL_ID__', $this->get_pixel_id(), $payload ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -162,12 +158,11 @@ abstract class Pixel {
 	 * @return void
 	 */
 	public function create_noscript_snippet( $payload ) {
-		$pixel_id = $this->get_pixel_id();
-		if ( empty( $pixel_id ) ) {
+		if ( ! $this->is_configured() ) {
 			return;
 		}
 		// If AMP plugin is enabled, it will convert the image into a <amp-pixel> tag.
-		echo '<noscript>' . str_replace( '__PIXEL_ID__', $pixel_id, $payload ) . '</noscript>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<noscript>' . str_replace( '__PIXEL_ID__', $this->get_pixel_id(), $payload ) . '</noscript>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

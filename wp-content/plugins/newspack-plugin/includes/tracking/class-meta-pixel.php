@@ -24,6 +24,9 @@ class Meta_Pixel extends Pixel {
 	 * Print the pixels' codes.
 	 */
 	public function print_code_snippets() {
+		if ( ! $this->is_configured() ) {
+			return;
+		}
 		add_action( 'wp_head', [ $this, 'print_head_snippet' ], 100 );
 		add_action( 'wp_footer', [ $this, 'print_footer_snippet' ] );
 	}
@@ -38,7 +41,7 @@ class Meta_Pixel extends Pixel {
 		$current_user = wp_get_current_user();
 		$event_params = [
 			'page_title' => get_the_title(),
-			'user_role'  => empty( $current_user->roles ) ? 'guest' : $current_user->roles[0],
+			'user_role'  => empty( $current_user->roles ) ? 'guest' : reset( $current_user->roles ),
 			'event_url'  => home_url( $wp->request ),
 		];
 

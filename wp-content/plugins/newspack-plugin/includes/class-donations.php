@@ -801,35 +801,60 @@ class Donations {
 	public static function create_donation_page() {
 		$revenue_model = 'donations';
 
-		$intro           = esc_html__( 'With the support of readers like you, we provide thoughtfully researched articles for a more informed and connected community. This is your chance to support credible, community-based, public-service journalism. Please join us!', 'newspack' );
-		$content_heading = esc_html__( 'Donation', 'newspack' );
-		$content         = esc_html__( "Edit and add to this content to tell your publication's story and explain the benefits of becoming a member. This is a good place to mention any special member privileges, let people know that donations are tax-deductible, or provide any legal information.", 'newspack' );
+		$title   = esc_html__( 'Support our publication', 'newspack' );
+		$intro   = esc_html__( 'With the support of readers like you, we provide thoughtfully researched articles for a more informed and connected community. This is your chance to support credible, community-based, public-service journalism. Please join us!', 'newspack' );
+		$content = esc_html__( "Edit and add to this content to tell your publication's story and explain the benefits of becoming a member. This is a good place to mention any special member privileges, let people know that donations are tax-deductible, or provide any legal information.", 'newspack' );
+		$image   = Newspack::plugin_url() . '/includes/images/placeholder-donation.jpg';
 
+		$container_block       = '
+			<!-- wp:cover {"url":"' . $image . '","dimRatio":20,"overlayColor":"black","isUserOverlayColor":true,"minHeight":85,"minHeightUnit":"vh","align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80","left":"var:preset|spacing|80","right":"var:preset|spacing|80"}}},"layout":{"type":"constrained"}} -->
+				<div class="wp-block-cover alignfull" style="padding-top:var(--wp--preset--spacing--80);padding-right:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80);padding-left:var(--wp--preset--spacing--80);min-height:85vh">
+					<span aria-hidden="true" class="wp-block-cover__background has-black-background-color has-background-dim-20 has-background-dim"></span>
+					<img class="wp-block-cover__image-background" alt="" src="' . $image . '" data-object-fit="cover"/>
+					<div class="wp-block-cover__inner-container">
+						<!-- wp:columns {"verticalAlignment":"center","align":"wide"} -->
+							<div class="wp-block-columns alignwide are-vertically-aligned-center">
+								<!-- wp:column {"verticalAlignment":"center"} -->
+									<div class="wp-block-column is-vertically-aligned-center">
+										%1$s
+									</div>
+								<!-- /wp:column -->
+								<!-- wp:column {"verticalAlignment":"center"} -->
+									<div class="wp-block-column is-vertically-aligned-center">
+										%2$s
+									</div>
+								<!-- /wp:column -->
+							</div>
+						<!-- /wp:columns -->
+					</div>
+				</div>
+			<!-- /wp:cover -->';
+		$heading_block = '
+			<!-- wp:heading -->
+				<h2>%s</h2>
+			<!-- /wp:heading -->';
 		$intro_block           = '
 			<!-- wp:paragraph -->
 				<p>%s</p>
 			<!-- /wp:paragraph -->';
-		$content_heading_block = '
-			<!-- wp:heading -->
-				<h2>%s</h2>
-			<!-- /wp:heading -->';
 		$content_block         = '
 			<!-- wp:paragraph -->
 				<p>%s</p>
 			<!-- /wp:paragraph -->';
 
-		$page_content = sprintf( $intro_block, $intro );
+		$column_content  = sprintf( $heading_block, $title );
+		$column_content .= sprintf( $intro_block, $intro );
+		$column_content .= sprintf( $content_block, $content );
+
 		if ( 'donations' === $revenue_model ) {
-			$page_content .= self::get_donations_block();
+			$page_content = sprintf( $container_block, $column_content, self::get_donations_block() );
 		} elseif ( 'subscriptions' === $revenue_model ) {
-			$page_content .= self::get_subscriptions_block();
+			$page_content = sprintf( $container_block, $column_content, self::get_subscriptions_block() );
 		}
-		$page_content .= sprintf( $content_heading_block, $content_heading );
-		$page_content .= sprintf( $content_block, $content );
 
 		$page_args = [
 			'post_type'      => 'page',
-			'post_title'     => __( 'Support our publication', 'newspack' ),
+			'post_title'     => $title,
 			'post_content'   => $page_content,
 			'post_excerpt'   => __( 'Support quality journalism by joining us today!', 'newspack' ),
 			'post_status'    => 'draft',
@@ -841,6 +866,7 @@ class Donations {
 		if ( is_numeric( $page_id ) ) {
 			self::set_donation_page( $page_id );
 			update_post_meta( $page_id, '_wp_page_template', 'single-feature.php' );
+			update_post_meta( $page_id, 'newspack_hide_page_title', true );
 		}
 
 		return $page_id;
@@ -882,7 +908,7 @@ class Donations {
 	 * @return string Raw block content.
 	 */
 	protected static function get_donations_block() {
-		$block = '<!-- wp:newspack-blocks/donate /-->';
+		$block = '<!-- wp:newspack-blocks/donate {"className":"is-style-modern"} /-->';
 		return $block;
 	}
 

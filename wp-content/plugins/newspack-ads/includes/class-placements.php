@@ -365,7 +365,7 @@ final class Placements {
 			'global_above_header' => array(
 				'name'        => __( 'Global: Above Header', 'newspack-ads' ),
 				'description' => __( 'Choose an ad unit to display above the header.', 'newspack-ads' ),
-				'hook_name'   => 'before_header',
+				'hook_name'   => 'wp_body_open',
 			),
 			'global_below_header' => array(
 				'name'        => __( 'Global: Below Header', 'newspack-ads' ),

@@ -1727,9 +1727,7 @@ final class Reader_Activation {
 			return $user_data;
 		}
 
-		$user_login      = str_replace( '+', '_', \sanitize_user( $user_data['user_email'], true ) ); // Matches the email address, but replace + with _ to allow for Gmail aliases.
-		$random_password = \wp_generate_password();
-		$user_nicename   = self::generate_user_nicename( ! empty( $user_data['display_name'] ) ? $user_data['display_name'] : $user_data['user_email'] );
+		$user_nicename = self::generate_user_nicename( ! empty( $user_data['display_name'] ) ? $user_data['display_name'] : $user_data['user_email'] );
 
 		// If we don't have a display name, make it match the nicename.
 		if ( empty( $user_data['display_name'] ) ) {
@@ -1739,9 +1737,10 @@ final class Reader_Activation {
 		$user_data = array_merge(
 			$user_data,
 			[
-				'user_login'    => $user_login,
+				'user_login'    => $user_nicename,
 				'user_nicename' => $user_nicename,
-				'user_pass'     => $random_password,
+				'display_name'  => $user_nicename,
+				'user_pass'     => \wp_generate_password(),
 			]
 		);
 

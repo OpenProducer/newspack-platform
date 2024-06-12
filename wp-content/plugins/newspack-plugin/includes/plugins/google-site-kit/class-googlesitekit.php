@@ -25,6 +25,7 @@ class GoogleSiteKit {
 		add_action( 'admin_init', [ __CLASS__, 'setup_sitekit_ga4' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'insert_ga4_analytics' ] );
 		add_filter( 'option_googlesitekit_analytics_settings', [ __CLASS__, 'filter_ga_settings' ] );
+		add_filter( 'googlesitekit_gtag_opt', [ __CLASS__, 'add_ga_custom_parameters' ] );
 	}
 
 	/**
@@ -157,6 +158,22 @@ class GoogleSiteKit {
 		} catch ( \Throwable $e ) {
 			Logger::error( 'Failed updating Site Kit GA4 settings option: ' . $e->getMessage() );
 		}
+	}
+
+	/**
+	 * Filter the GA config to add custom parameters.
+	 *
+	 * @param array $gtag_opt gtag config options.
+	 */
+	public static function add_ga_custom_parameters( $gtag_opt ) {
+		// The custom params might interfere with caching, since they are based on cookies.
+		// This environment variable allows for disabling this feature if the effects on caching are detrimental.
+		$disable_fe_custom_params = defined( 'NEWSPACK_GA_DISABLE_CUSTOM_FE_PARAMS' ) && NEWSPACK_GA_DISABLE_CUSTOM_FE_PARAMS;
+		if ( $disable_fe_custom_params ) {
+			return $gtag_opt;
+		}
+		$custom_params = \Newspack\Data_Events\Connectors\GA4::get_custom_parameters();
+		return array_merge( $custom_params, $gtag_opt );
 	}
 }
 GoogleSiteKit::init();

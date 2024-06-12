@@ -1,3 +1,11 @@
+# [3.3.0](https://github.com/Automattic/newspack-blocks/compare/v3.2.0...v3.3.0) (2024-06-12)
+
+
+### Features
+
+* improve subscribe patterns and use new style variation ([#1745](https://github.com/Automattic/newspack-blocks/issues/1745)) ([c55e830](https://github.com/Automattic/newspack-blocks/commit/c55e830d5de41647049c09b4228aa4f9dcd96eea))
+* update donations patterns to match subscription pattern; add squeeze pattern ([#1752](https://github.com/Automattic/newspack-blocks/issues/1752)) ([818d89d](https://github.com/Automattic/newspack-blocks/commit/818d89d1f1cc1da2a4fc65178d2f02512ce791ee))
+
 # [3.2.0](https://github.com/Automattic/newspack-blocks/compare/v3.1.0...v3.2.0) (2024-05-28)
 
 

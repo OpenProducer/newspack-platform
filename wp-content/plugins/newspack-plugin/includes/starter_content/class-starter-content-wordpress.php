@@ -88,7 +88,7 @@ class Starter_Content_WordPress extends Starter_Content_Provider {
 			);
 		}
 
-		$relevant_info = array_map( 
+		$relevant_info = array_map(
 			function( $post_data ) use ( $site_url ) {
 				return [
 					'title'          => $post_data['title']['rendered'],
@@ -98,7 +98,7 @@ class Starter_Content_WordPress extends Starter_Content_Provider {
 					'site_url'       => $site_url,
 				];
 			},
-			$response_json 
+			$response_json
 		);
 
 		update_option( self::$existing_content_raw_data_option, $relevant_info );
