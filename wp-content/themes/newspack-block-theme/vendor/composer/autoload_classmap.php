@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Newspack_Block_Theme\\Core' => $baseDir . '/includes/class-core.php',
+    'Newspack_Block_Theme\\Jetpack' => $baseDir . '/includes/class-jetpack.php',
 );
