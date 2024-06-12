@@ -64,5 +64,6 @@ return array(
     'Newspack_Newsletters_Service_Provider_Usage_Report' => $baseDir . '/includes/service-providers/class-newspack-newsletters-service-provider-usage-report.php',
     'Newspack_Newsletters_Settings' => $baseDir . '/includes/class-newspack-newsletters-settings.php',
     'Newspack_Newsletters_Subscription' => $baseDir . '/includes/class-newspack-newsletters-subscription.php',
+    'Newspack_Newsletters_Subscription_Attempts' => $baseDir . '/includes/class-newspack-newsletters-subscription-attempts.php',
     'Newspack_Newsletters_WP_Hookable_Interface' => $baseDir . '/includes/service-providers/interface-newspack-newsletters-wp-hookable.php',
 );

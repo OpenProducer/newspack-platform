@@ -15,6 +15,8 @@ final class Click {
 
 	/**
 	 * Initialize hooks.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public static function init() {
 		\add_action( 'init', [ __CLASS__, 'rewrite_rule' ] );
@@ -28,6 +30,8 @@ final class Click {
 	 * Add rewrite rule for tracking url.
 	 *
 	 * Backwards compatibility for old tracking URLs.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public static function rewrite_rule() {
 		\add_rewrite_rule( 'np-newsletters-click', 'index.php?' . self::QUERY_VAR . '=1', 'top' );
@@ -41,6 +45,8 @@ final class Click {
 
 	/**
 	 * Add query vars.
+	 *
+	 * @codeCoverageIgnore
 	 *
 	 * @param array $vars Query vars.
 	 *
@@ -132,8 +138,10 @@ final class Click {
 
 	/**
 	 * Handle proxied URL click and redirect to destination.
+	 *
+	 * @param bool $with_redirect Whether to redirect after tracking the link click. This is for testing convenience.
 	 */
-	public static function handle_click() {
+	public static function handle_click( $with_redirect = true ) {
 		if ( ! \get_query_var( self::QUERY_VAR ) && ! isset( $_GET[ self::QUERY_VAR ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
@@ -149,7 +157,7 @@ final class Click {
 		$url_without_query_args = untrailingslashit( strtok( $url, '?' ) );
 		$newsletter_content     = get_post_field( 'post_content', $newsletter_id, 'raw' );
 		if ( '' === $newsletter_content || false === stripos( $newsletter_content, $url_without_query_args ) ) {
-			\wp_die( 'Invalid URL' );
+			\wp_die( 'Invalid URL', '', 400 );
 			exit;
 		}
 
@@ -165,14 +173,16 @@ final class Click {
 		}
 
 		if ( ! $url || ! \wp_http_validate_url( $url ) ) {
-			\wp_die( 'Invalid URL' );
+			\wp_die( 'Invalid URL', '', 400 );
 			exit;
 		}
 
 		self::track_click( $newsletter_id, $email_address, $url );
 
-		\wp_redirect( $url ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
-		exit;
+		if ( $with_redirect ) {
+			\wp_redirect( $url ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+			exit;
+		}
 	}
 }
 Click::init();

@@ -19,6 +19,7 @@ return array(
     'StellarWP\\Installer\\' => array($vendorDir . '/stellarwp/installer/src/Installer'),
     'StellarWP\\DB\\' => array($vendorDir . '/stellarwp/db/src/DB'),
     'StellarWP\\ContainerContract\\' => array($vendorDir . '/stellarwp/container-contract/src'),
+    'StellarWP\\Assets\\' => array($vendorDir . '/stellarwp/assets/src/Assets'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),

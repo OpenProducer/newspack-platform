@@ -1,3 +1,10 @@
+# [2.33.0](https://github.com/Automattic/newspack-popups/compare/v2.32.0...v2.33.0) (2024-06-12)
+
+
+### Features
+
+* prompt expiration date ([#1305](https://github.com/Automattic/newspack-popups/issues/1305)) ([301c41c](https://github.com/Automattic/newspack-popups/commit/301c41cd55e8ed468afe7e6b614be11a61db441d))
+
 # [2.32.0](https://github.com/Automattic/newspack-popups/compare/v2.31.3...v2.32.0) (2024-05-28)
 
 

@@ -361,6 +361,20 @@ class Newspack_Newsletters_Subscription {
 			$lists = [ $lists ];
 		}
 
+		/**
+		 * Trigger an action before contact adding.
+		 *
+		 * @param string[]|false $lists    Array of list IDs the contact will be subscribed to, or false.
+		 * @param array          $contact  {
+		 *          Contact information.
+		 *
+		 *    @type string   $email    Contact email address.
+		 *    @type string   $name     Contact name. Optional.
+		 *    @type string[] $metadata Contact additional metadata. Optional.
+		 * }
+		 */
+		do_action( 'newspack_newsletters_pre_add_contact', $lists, $contact );
+
 		$provider = Newspack_Newsletters::get_service_provider();
 		if ( empty( $provider ) ) {
 			return new WP_Error( 'newspack_newsletters_invalid_provider', __( 'Provider is not set.' ) );
@@ -590,18 +604,18 @@ class Newspack_Newsletters_Subscription {
 		session_write_close(); // phpcs:ignore
 
 		if ( ! isset( $_REQUEST['nonce'] ) || ! \wp_verify_nonce( \sanitize_text_field( $_REQUEST['nonce'] ), self::ASYNC_ACTION ) ) {
-			\wp_die();
+			\wp_die( 'Invalid nonce.', '', 400 );
 		}
 
 		$intent_id = $_POST['intent_id'] ?? ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$intent_id = \absint( $intent_id );
 
 		if ( empty( $intent_id ) ) {
-			\wp_die();
+			\wp_die( 'Invalid intent ID.', '', 400 );
 		}
 
 		self::process_subscription_intents( $intent_id );
-		\wp_die();
+		\wp_die( 'OK', '', 200 );
 	}
 
 	/**
@@ -942,7 +956,7 @@ class Newspack_Newsletters_Subscription {
 		}
 
 		if ( ! is_user_logged_in() ) {
-			wp_die( esc_html( __( 'Invalid request.', 'newspack-newsletters' ) ) );
+			wp_die( esc_html( __( 'Invalid request.', 'newspack-newsletters' ) ), '', 400 );
 		}
 
 		$user               = wp_get_current_user();
@@ -1035,15 +1049,15 @@ class Newspack_Newsletters_Subscription {
 			return;
 		}
 		if ( ! is_user_logged_in() ) {
-			wp_die( esc_html( __( 'You\'re not logged in.', 'newspack-newsletters' ) ) );
+			wp_die( esc_html( __( 'You\'re not logged in.', 'newspack-newsletters' ) ), '', 401 );
 		}
 		$transient_key = self::get_email_verification_transient_key();
 		$token         = get_transient( $transient_key );
 		if ( ! $token ) {
-			wp_die( esc_html( __( 'Invalid request.', 'newspack-newsletters' ) ) );
+			wp_die( esc_html( __( 'Invalid request.', 'newspack-newsletters' ) ), '', 400 );
 		}
 		if ( ! isset( $_GET['token'] ) || sanitize_text_field( $_GET['token'] ) !== $token ) {
-			wp_die( esc_html( __( 'Invalid request.', 'newspack-newsletters' ) ) );
+			wp_die( esc_html( __( 'Invalid request.', 'newspack-newsletters' ) ), '', 400 );
 		}
 
 		self::set_email_verified( get_current_user_id() );

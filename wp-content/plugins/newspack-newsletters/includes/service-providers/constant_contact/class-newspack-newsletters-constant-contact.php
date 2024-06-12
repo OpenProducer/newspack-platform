@@ -177,7 +177,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 			}
 		</script>
 		<?php
-		wp_die();
+		wp_die( 'OK', '', 200 );
 	}
 
 	/**

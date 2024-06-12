@@ -1,3 +1,26 @@
+# [2.17.0](https://github.com/Automattic/newspack-newsletters/compare/v2.16.1...v2.17.0) (2024-06-12)
+
+
+### Features
+
+* add new modern style variation to block ([#1513](https://github.com/Automattic/newspack-newsletters/issues/1513)) ([a204510](https://github.com/Automattic/newspack-newsletters/commit/a2045104c21d3211d89dc783f09a66de3390ecdb))
+* **error-codes:** non-500 error codes where applicable ([d4ec39c](https://github.com/Automattic/newspack-newsletters/commit/d4ec39c1a74b5aea16922c33f218924d922d1ed3))
+* save a backup of subscription attempts in a custom DB table ([#1503](https://github.com/Automattic/newspack-newsletters/issues/1503)) ([be9ea3d](https://github.com/Automattic/newspack-newsletters/commit/be9ea3dc46ae58f6157893756d9261d4ef1ca09f))
+
+## [2.16.1](https://github.com/Automattic/newspack-newsletters/compare/v2.16.0...v2.16.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* **usage-reports:** fix MC reports ([#1521](https://github.com/Automattic/newspack-newsletters/issues/1521)) ([093527e](https://github.com/Automattic/newspack-newsletters/commit/093527e2e8e751d076f23ea35c10d5e920f907dc))
+
+# [2.16.0](https://github.com/Automattic/newspack-newsletters/compare/v2.15.0...v2.16.0) (2024-06-06)
+
+
+### Features
+
+* enable disabling the newsletter send failure email notification ([b40c6b2](https://github.com/Automattic/newspack-newsletters/commit/b40c6b207eefd5a34c76c2320b440005b8569dae))
+
 # [2.15.0](https://github.com/Automattic/newspack-newsletters/compare/v2.14.4...v2.15.0) (2024-05-28)
 
 

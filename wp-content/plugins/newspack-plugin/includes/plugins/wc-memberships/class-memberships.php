@@ -52,6 +52,7 @@ class Memberships {
 		add_filter( 'newspack_popups_assess_has_disabled_popups', [ __CLASS__, 'disable_popups' ] );
 		add_filter( 'newspack_reader_activity_article_view', [ __CLASS__, 'suppress_article_view_activity' ], 100 );
 		add_filter( 'user_has_cap', [ __CLASS__, 'user_has_cap' ], 10, 3 );
+		add_action( 'wp', [ __CLASS__, 'remove_unnecessary_content_restriction' ], 11 );
 
 		/** Add gate content filters to mimic 'the_content'. See 'wp-includes/default-filters.php' for reference. */
 		add_filter( 'newspack_gate_content', 'capital_P_dangit', 11 );
@@ -980,6 +981,21 @@ class Memberships {
 					$reactivated_memberships
 				)
 			);
+		}
+	}
+
+	/**
+	 * Remove content restriction on the front page and archives, to increase performance.
+	 * The only thing Memberships would really do on these pages is add a "You need a membership"-type message in excerpts.
+	 */
+	public static function remove_unnecessary_content_restriction() {
+		if ( ( is_front_page() || is_archive() ) && function_exists( 'wc_memberships' ) ) {
+			$memberships = wc_memberships();
+			$restrictions_instance = $memberships->get_restrictions_instance();
+			$posts_restrictions_instance = $restrictions_instance->get_posts_restrictions_instance();
+			remove_action( 'the_post', [ $posts_restrictions_instance, 'restrict_post' ], 0 );
+			remove_filter( 'the_content', [ $posts_restrictions_instance, 'handle_restricted_post_content_filtering' ], 999 );
+			remove_action( 'loop_start', [ $posts_restrictions_instance, 'display_restricted_taxonomy_term_notice' ], 1 );
 		}
 	}
 }

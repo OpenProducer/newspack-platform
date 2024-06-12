@@ -279,7 +279,7 @@ class Newspack_Newsletters {
 						if ( 'utm' === substr( $param, 0, 3 ) ) {
 							$param = str_replace( 'utm_', '', $param );
 							$key   = self::get_metadata_key( $utm_key_prefix ) . $param;
-							if ( ! isset( $contact['metadata'][ $key ] ) ) {
+							if ( ! isset( $contact['metadata'][ $key ] ) || empty( $contact['metadata'][ $key ] ) ) {
 								$contact['metadata'][ $key ] = $value;
 							}
 						}

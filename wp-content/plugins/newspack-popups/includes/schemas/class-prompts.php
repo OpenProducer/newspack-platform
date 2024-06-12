@@ -368,6 +368,12 @@ class Prompts extends Schema {
 								],
 							],
 						],
+						'expiration_date'                => [
+							'name'     => 'expiration_date',
+							'type'     => 'string',
+							'required' => false,
+							'default'  => false,
+						],
 						'newspack_popups_has_disabled_popups' => [
 							'name'     => 'newspack_popups_has_disabled_popups',
 							'type'     => 'boolean',

@@ -93,5 +93,11 @@
 	"supports": {
 		"html": false,
 		"align": true
-	}
+	},
+	"styles": [
+		{
+			"name": "modern",
+			"label": "Modern"
+		}
+	]
 }
