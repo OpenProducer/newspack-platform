@@ -444,6 +444,7 @@ class Plugin_Manager {
 			'safety-net',
 			'web-stories',
 			'woocommerce-memberships',
+			'radio-station',
 		];
 	}
 
