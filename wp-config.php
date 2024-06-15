@@ -84,3 +84,6 @@ if ( !defined('ABSPATH') )
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
+
+/** Add back site-specific FSE blocks that newspack removes. */
+define( 'NEWSPACK_FSE_BLOCKS_ALLOWED', ['core/post-date', 'core/post-excerpt', 'core/post-terms', 'core/post-title', 'core/post-featured-image', 'core/query'] );
