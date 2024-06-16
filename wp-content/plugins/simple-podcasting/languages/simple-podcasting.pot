@@ -1,0 +1,582 @@
+# Copyright (C) 2024 10up
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Simple Podcasting 1.8.0\n"
+"Report-Msgid-Bugs-To: "
+"https://wordpress.org/support/plugin/simple-podcasting\n"
+"POT-Creation-Date: 2024-06-13 15:55:47+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: node-wp-i18n 1.2.7\n"
+
+#: includes/admin/onboarding.php:51
+msgid "Simple Podcasting Onboarding"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Simple Podcasting"
+msgstr ""
+
+#: includes/admin/views/onboarding-header.php:20
+msgid "Get Started With Podcasting"
+msgstr ""
+
+#: includes/admin/views/onboarding-header.php:24
+msgid "Skip Setup"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:12
+msgid "Create your first podcast show"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:17
+msgid "Podcast name*"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:19
+msgid "What’s the title of your podcast show that listeners will see?"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:24
+msgid "Podcast Artist / Author name*"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:26
+msgid "Who’s the artist or author of your podcast show that listeners will see?"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:31
+msgid "Podcast summary*"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:33
+msgid ""
+"Briefly describe to your listeners what your podcast is about. (No HTML "
+"please)"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:39
+msgid "Cover image*"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:41
+msgid "Select image"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:42
+msgid ""
+"Minimum size: 1400px x 1400 px — maximum size: 2048px x 2048px. Make sure "
+"the image is square so it will properly display within podcatcher apps."
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:47
+msgid "Podcast category*"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:53
+msgid ""
+"What’s the category the listeners will use to discover your podcast under "
+"when browsing  podcatchers?"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-one.php:57
+msgid "Create"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:14
+msgid "Well done!"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:21
+#. translators: %s podcast term edit page.
+msgid "You can always edit show details <a href=\"%s\">here</a>."
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:26
+msgid "Now let’s create your show’s first episode:"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:28
+msgid "Create a new post"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:29
+msgid "Assign the post to a show"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:30
+msgid "Insert a podcast block with an audio file into the content"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:32
+msgid ""
+"You can then submit the feed URL to podcatchers. The feed will "
+"automatically update each time you add a new episode."
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:33
+msgid "Let's get started!"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:36
+msgid "Create a new Post"
+msgstr ""
+
+#: includes/admin/views/onboarding-page-two.php:37
+msgid "Create another Show"
+msgstr ""
+
+#: includes/block-patterns.php:28
+msgid "Podcast Grid"
+msgstr ""
+
+#: includes/blocks/podcast/markup.php:81
+msgid "Season: "
+msgstr ""
+
+#: includes/blocks/podcast/markup.php:87
+msgid "Episode: "
+msgstr ""
+
+#: includes/blocks/podcast/markup.php:95
+msgid "Listen Time: "
+msgstr ""
+
+#: includes/blocks/podcast/markup.php:101
+msgid "Episode type: "
+msgstr ""
+
+#: includes/blocks/podcast/markup.php:107
+msgid "Explicit: "
+msgstr ""
+
+#: includes/blocks.php:81
+msgid "Podcast Transcript"
+msgstr ""
+
+#: includes/blocks.php:98
+msgid "Transcript Link"
+msgstr ""
+
+#: includes/blocks.php:126
+msgid "Cite"
+msgstr ""
+
+#: includes/blocks.php:153
+msgid "Time"
+msgstr ""
+
+#: includes/blocks.php:289
+msgid ""
+"Insert a podcast episode into a post. To add it to a podcast feed, select a "
+"podcast in document settings."
+msgstr ""
+
+#: includes/blocks.php:290
+msgid "Podcast Settings"
+msgstr ""
+
+#: includes/blocks.php:291
+msgid "Length (MM:SS)"
+msgstr ""
+
+#: includes/blocks.php:292
+msgid "a podcast episode"
+msgstr ""
+
+#: includes/blocks.php:293 includes/post-meta-box.php:63
+msgid "Season Number"
+msgstr ""
+
+#: includes/blocks.php:294 includes/post-meta-box.php:69
+msgid "Episode Number"
+msgstr ""
+
+#: includes/blocks.php:295 includes/post-meta-box.php:74
+msgid "Episode Type"
+msgstr ""
+
+#: includes/blocks.php:348
+msgid "Term ID not valid"
+msgstr ""
+
+#: includes/blocks.php:354
+msgid "No shows found"
+msgstr ""
+
+#: includes/create-podcast.php:67
+msgid "Nonce verification failed."
+msgstr ""
+
+#: includes/create-podcast.php:94
+msgid "A podcast name is required."
+msgstr ""
+
+#: includes/create-podcast.php:101
+msgid "A podcast artist name is required."
+msgstr ""
+
+#: includes/create-podcast.php:108
+msgid "A podcast summary name is required."
+msgstr ""
+
+#: includes/create-podcast.php:115
+msgid "A podcast category is required."
+msgstr ""
+
+#: includes/create-podcast.php:122
+msgid "A podcast cover image is required."
+msgstr ""
+
+#: includes/datatypes.php:223 includes/datatypes.php:281
+#: includes/datatypes.php:282
+msgid "Podcasts"
+msgstr ""
+
+#: includes/datatypes.php:224
+msgid "Podcast"
+msgstr ""
+
+#: includes/datatypes.php:225
+msgid "Search Podcasts"
+msgstr ""
+
+#: includes/datatypes.php:226
+msgid "All Podcasts"
+msgstr ""
+
+#: includes/datatypes.php:227
+msgid "Parent Podcast"
+msgstr ""
+
+#: includes/datatypes.php:228
+msgid "Parent Podcast:"
+msgstr ""
+
+#: includes/datatypes.php:229
+msgid "Edit Podcast"
+msgstr ""
+
+#: includes/datatypes.php:230
+msgid "View Podcast"
+msgstr ""
+
+#: includes/datatypes.php:231
+msgid "Update Podcast"
+msgstr ""
+
+#: includes/datatypes.php:232
+msgid "Add New Podcast"
+msgstr ""
+
+#: includes/datatypes.php:233
+msgid "New Podcast Name"
+msgstr ""
+
+#: includes/datatypes.php:234
+msgid "Add or remove podcasts"
+msgstr ""
+
+#: includes/datatypes.php:235
+msgid "No podcasts found"
+msgstr ""
+
+#: includes/datatypes.php:236
+msgid "No podcasts"
+msgstr ""
+
+#: includes/datatypes.php:237
+msgid "Podcasts list navigation"
+msgstr ""
+
+#: includes/datatypes.php:238
+msgid "Podcasts list"
+msgstr ""
+
+#: includes/datatypes.php:239
+msgid "&larr; Back to Podcasts"
+msgstr ""
+
+#: includes/datatypes.php:297
+msgid ""
+"Once at least one podcast exists, you can add episodes by creating a post, "
+"assigning it to the appropriate podcast, and inserting an audio player or "
+"podcast block into the content of the post. You can then submit the feed "
+"URL to podcast directories."
+msgstr ""
+
+#: includes/datatypes.php:311
+msgid "Pocket Casts"
+msgstr ""
+
+#: includes/datatypes.php:315
+msgid "Apple Podcasts"
+msgstr ""
+
+#: includes/datatypes.php:319
+msgid "Google Podcasts"
+msgstr ""
+
+#: includes/datatypes.php:323
+msgid "Stitcher"
+msgstr ""
+
+#: includes/datatypes.php:327
+msgid "PlayerFM"
+msgstr ""
+
+#: includes/datatypes.php:331
+msgid "Overcast"
+msgstr ""
+
+#: includes/datatypes.php:335
+msgid "Pandora"
+msgstr ""
+
+#: includes/datatypes.php:339
+msgid "Castro"
+msgstr ""
+
+#: includes/datatypes.php:343
+msgid "TuneIn"
+msgstr ""
+
+#: includes/datatypes.php:347
+msgid "Spotify"
+msgstr ""
+
+#: includes/datatypes.php:373
+msgid "Platform"
+msgstr ""
+
+#: includes/datatypes.php:374
+msgid "Podcast URL"
+msgstr ""
+
+#: includes/datatypes.php:375
+msgid "Icon"
+msgstr ""
+
+#: includes/datatypes.php:533
+msgid "Select Image"
+msgstr ""
+
+#: includes/datatypes.php:535
+msgid "Podcast Image"
+msgstr ""
+
+#: includes/datatypes.php:536
+msgid "Choose Selected Image"
+msgstr ""
+
+#: includes/datatypes.php:679
+msgid "Your Podcast Feed: "
+msgstr ""
+
+#: includes/datatypes.php:681
+msgid "This is the URL you submit to iTunes or podcasting service."
+msgstr ""
+
+#: includes/datatypes.php:739
+msgid "Podcast Cover"
+msgstr ""
+
+#: includes/datatypes.php:743
+msgid "Feed URL"
+msgstr ""
+
+#: includes/datatypes.php:759
+msgid "Subtitle"
+msgstr ""
+
+#: includes/datatypes.php:764
+msgid "Artist / Author name (required)"
+msgstr ""
+
+#: includes/datatypes.php:769
+msgid "Podcast email"
+msgstr ""
+
+#: includes/datatypes.php:774
+msgid "Summary (required)"
+msgstr ""
+
+#: includes/datatypes.php:779
+msgid "Copyright / License information"
+msgstr ""
+
+#: includes/datatypes.php:784
+msgid "Mark as explicit"
+msgstr ""
+
+#: includes/datatypes.php:794
+msgid "Language"
+msgstr ""
+
+#: includes/datatypes.php:800
+msgid "Cover image (required)"
+msgstr ""
+
+#: includes/datatypes.php:802
+msgid "Minimum size: 1400px x 1400 px — maximum size: 2048px x 2048px"
+msgstr ""
+
+#: includes/datatypes.php:806
+msgid "Keywords"
+msgstr ""
+
+#: includes/datatypes.php:808
+msgid "Comma-separated keywords to help people find your podcast."
+msgstr ""
+
+#: includes/datatypes.php:812
+msgid "Type of show"
+msgstr ""
+
+#: includes/datatypes.php:815
+msgid "n/a"
+msgstr ""
+
+#: includes/datatypes.php:816
+msgid "Episodic"
+msgstr ""
+
+#: includes/datatypes.php:817
+msgid "Serial"
+msgstr ""
+
+#: includes/datatypes.php:822
+msgid "Category 1 (required)"
+msgstr ""
+
+#: includes/datatypes.php:828
+msgid "Category 2"
+msgstr ""
+
+#: includes/datatypes.php:834
+msgid "Category 3"
+msgstr ""
+
+#: includes/datatypes.php:840
+msgid "Podcasting Platforms"
+msgstr ""
+
+#: includes/datatypes.php:845
+msgid "Podcasting Platforms icon theme"
+msgstr ""
+
+#: includes/datatypes.php:1071 includes/post-meta-box.php:77
+msgid "None"
+msgstr ""
+
+#: includes/post-meta-box.php:16
+msgid "Podcasting"
+msgstr ""
+
+#: includes/post-meta-box.php:46
+msgid "Closed Captioned"
+msgstr ""
+
+#: includes/post-meta-box.php:53
+msgid "Explicit Content"
+msgstr ""
+
+#: includes/post-meta-box.php:55
+msgid "No"
+msgstr ""
+
+#: includes/post-meta-box.php:56
+msgid "Yes"
+msgstr ""
+
+#: includes/post-meta-box.php:57
+msgid "Clean"
+msgstr ""
+
+#: includes/post-meta-box.php:79
+msgid "Full"
+msgstr ""
+
+#: includes/post-meta-box.php:81
+msgid "Trailer"
+msgstr ""
+
+#: includes/post-meta-box.php:83
+msgid "Bonus"
+msgstr ""
+
+#: includes/post-meta-box.php:87
+msgid "Episode Cover"
+msgstr ""
+
+#: includes/post-meta-box.php:88
+msgid ""
+"The featured image of the current post is used as the episode cover art. "
+"Please select a featured image to set it."
+msgstr ""
+
+#: includes/post-meta-box.php:90
+msgid "Cover Art"
+msgstr ""
+
+#: includes/post-meta-box.php:94
+msgid "Enclosure"
+msgstr ""
+
+#: includes/post-meta-box.php:96
+msgid "Choose File"
+msgstr ""
+
+#: includes/post-meta-box.php:96
+msgid "Podcast Enclosure"
+msgstr ""
+
+#: includes/post-meta-box.php:96
+msgid "Select this file"
+msgstr ""
+
+#: includes/post-meta-box.php:99
+msgid ""
+"Optional: Use this field if you have more than one audio/video file in your "
+"post."
+msgstr ""
+
+#: simple-podcasting.php:54
+#. translators: %s: Minimum required PHP version
+msgid ""
+"Simple Podcasting requires PHP version %s or later. Please upgrade PHP or "
+"disable the plugin."
+msgstr ""
+
+#: templates/transcript.php:26
+#. translators: %s: The page title
+msgid "Transcript - %s"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/10up/simple-podcasting"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Easily set up multiple podcast feeds using built-in WordPress posts. "
+"Includes a podcast block for the new WordPress editor."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "10up"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://10up.com/"
+msgstr ""
+
+#: includes/block-patterns.php:29
+msgctxt "This block pattern is used to display podcast in a grid structure."
+msgid "Podcast Grid"
+msgstr ""
