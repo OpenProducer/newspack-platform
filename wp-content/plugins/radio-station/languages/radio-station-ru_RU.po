@@ -1,0 +1,552 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: radio station\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-08 08:27-0600\n"
+"PO-Revision-Date: 2014-06-26 10:32+0400\n"
+"Last-Translator: Alexander Esin <esin@ranenburgfm.ru>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__;esc_attr_e\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.6.5\n"
+"X-Poedit-Basepath: c:\\xampp\\htdocs\\wp352test\\wp-content\\plugins\\radio-"
+"station\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: ru_RU\n"
+"X-Poedit-SearchPath-0: includes\n"
+"X-Poedit-SearchPath-1: templates\n"
+"X-Poedit-SearchPath-2: .\n"
+
+#: includes/dj-on-air.php:90 includes/dj-on-air.php:664
+#: includes/playlist.php:22 includes/playlist.php:359
+#: includes/playlist.php:546
+msgid "View Playlist"
+msgstr "Смотреть плейлист"
+
+#: includes/dj-on-air.php:480
+msgid "None Upcoming"
+msgstr "Не запланировано"
+
+#: includes/dj-on-air.php:495
+msgid "The current on-air DJ."
+msgstr "Диджей в эфире."
+
+#: includes/dj-on-air.php:496
+msgid "Radio Station: Show/DJ On-Air"
+msgstr "Радиостанция: Шоу / диджей в эфире"
+
+#: includes/dj-on-air.php:511 includes/dj-on-air.php:738
+#: includes/playlist.php:436
+msgid "Title"
+msgstr "Название"
+
+#: includes/dj-on-air.php:519 includes/dj-on-air.php:746
+msgid "Show Avatars"
+msgstr "Показать аватары"
+
+#: includes/dj-on-air.php:526
+msgid "Link to the Show/DJ's profile"
+msgstr "Ссылка на профиль шоу / диджея"
+
+#: includes/dj-on-air.php:533 includes/dj-on-air.php:767
+msgid "Display schedule info for this show"
+msgstr "Отображать информацию о расписании для этого шоу"
+
+#: includes/dj-on-air.php:540
+msgid "Display link to show's playlist"
+msgstr "Показать ссылку на плейлист шоу"
+
+#: includes/dj-on-air.php:545
+msgid "Default DJ Name"
+msgstr "Имя диджея по-умолчанию"
+
+#: includes/dj-on-air.php:548 includes/dj-on-air.php:761
+msgid ""
+"If no Show/DJ is scheduled for the current hour, display this name/text."
+msgstr ""
+"Если никакие шоу или диджеи не запланированы на текущий час, отобразить это "
+"имя / текст."
+
+#: includes/dj-on-air.php:552 includes/dj-on-air.php:779
+msgid "Time Format"
+msgstr "Формат времени"
+
+#: includes/dj-on-air.php:554 includes/dj-on-air.php:781
+msgid "12-hour"
+msgstr "12-часовой"
+
+#: includes/dj-on-air.php:555 includes/dj-on-air.php:782
+msgid "24-hour"
+msgstr "24-часовой"
+
+#: includes/dj-on-air.php:558
+msgid "Choose time format for displayed schedules"
+msgstr "Выберите формат времени для отображения расписаний"
+
+#: includes/dj-on-air.php:722
+msgid "The upcoming DJs/Shows."
+msgstr "Предстоящие диджеи / шоу."
+
+#: includes/dj-on-air.php:723
+msgid "Radio Station: Upcoming DJ On-Air"
+msgstr "Радиостанция: Предстоящие диджеи в эфире"
+
+#: includes/dj-on-air.php:753
+msgid "Link to Show/DJ's user profile"
+msgstr "Ссылка на профиль шоу / диджея"
+
+#: includes/dj-on-air.php:758
+msgid "No Additional Schedules"
+msgstr "Нет дополнительных описаний"
+
+#: includes/dj-on-air.php:772
+msgid "Limit"
+msgstr "Лимит"
+
+#: includes/dj-on-air.php:775
+msgid "Number of upcoming DJs/Shows to display."
+msgstr "Количество предстоящих диджеев / шоу для отображения."
+
+#: includes/dj-on-air.php:785
+msgid "Choose time format for displayed schedules."
+msgstr "Выберите формат времени для отображения расписаний."
+
+#: includes/master_schedule.php:21 includes/master_schedule.php:22
+msgid "Schedule Override"
+msgstr "Переопределение расписания"
+
+#: includes/master_schedule.php:23 includes/master_schedule.php:24
+msgid "Add Schedule Override"
+msgstr "Добавить переопределение расписания"
+
+#: includes/master_schedule.php:25
+msgid "Edit Schedule Override"
+msgstr "Изменить переопределение расписания"
+
+#: includes/master_schedule.php:26
+msgid "New Schedule Override"
+msgstr "Новое переопределение расписания"
+
+#: includes/master_schedule.php:27
+msgid "View Schedule Override"
+msgstr "Просмотреть переопределение расписания"
+
+#: includes/master_schedule.php:30
+msgid "Post type for Schedule Override"
+msgstr "Тип записи для переопределения расписания"
+
+#: includes/master_schedule.php:49
+msgid "Override Schedule"
+msgstr "Переопределение расписания"
+
+#: includes/master_schedule.php:79
+msgid "Date"
+msgstr "Дата"
+
+#: includes/master_schedule.php:82 includes/playlist.php:756
+#: includes/playlist.php:835
+msgid "Start Time"
+msgstr "Время начала"
+
+#: includes/master_schedule.php:108 includes/playlist.php:782
+#: includes/playlist.php:861
+msgid "End Time"
+msgstr "Время завершения"
+
+#: includes/master_schedule.php:432 includes/master_schedule.php:595
+msgid "encore airing"
+msgstr "повторная трансляция"
+
+#: includes/master_schedule.php:437 includes/master_schedule.php:600
+msgid "Audio File"
+msgstr "Аудиофайл"
+
+#: includes/master_schedule.php:454
+msgid "Sun"
+msgstr "Вс"
+
+#: includes/master_schedule.php:454
+msgid "Mon"
+msgstr "Пн"
+
+#: includes/master_schedule.php:454
+msgid "Tue"
+msgstr "Вт"
+
+#: includes/master_schedule.php:454
+msgid "Wed"
+msgstr "Ср"
+
+#: includes/master_schedule.php:454
+msgid "Thu"
+msgstr "Чт"
+
+#: includes/master_schedule.php:454
+msgid "Fri"
+msgstr "Пт"
+
+#: includes/master_schedule.php:454
+msgid "Sat"
+msgstr "Сб"
+
+#: includes/master_schedule.php:619 includes/playlist.php:572
+msgid "Genres"
+msgstr "Жанры"
+
+#: includes/playlist.php:16 templates/single-show.php:136
+msgid "Playlists"
+msgstr "Плейлисты"
+
+#: includes/playlist.php:17
+msgid "Playlist"
+msgstr "Плейлист"
+
+#: includes/playlist.php:18 includes/playlist.php:19
+msgid "Add Playlist"
+msgstr "Добавить плейлист"
+
+#: includes/playlist.php:20
+msgid "Edit Playlist"
+msgstr "Редактировать плейлис"
+
+#: includes/playlist.php:21
+msgid "New Playlist"
+msgstr "Новый плейлист"
+
+#: includes/playlist.php:25
+msgid "Post type for Playlist descriptions"
+msgstr "Тип записи для описания плейлиста"
+
+#: includes/playlist.php:42
+msgid "Shows"
+msgstr "Шоу"
+
+#: includes/playlist.php:43 includes/playlist.php:191
+msgid "Show"
+msgstr "Шоу"
+
+#: includes/playlist.php:44 includes/playlist.php:45
+msgid "Add Show"
+msgstr "Добавить шоу"
+
+#: includes/playlist.php:46
+msgid "Edit Show"
+msgstr "Изменить шоу"
+
+#: includes/playlist.php:47
+msgid "New Show"
+msgstr "Новое шоу"
+
+#: includes/playlist.php:48
+msgid "View Show"
+msgstr "Просмотр шоу"
+
+#: includes/playlist.php:51
+msgid "Post type for Show descriptions"
+msgstr "Тип записи для описания шоу"
+
+#: includes/playlist.php:71
+msgid "Playlist Entries"
+msgstr "Записи в плейлисте"
+
+#: includes/playlist.php:93 templates/single-playlist.php:43
+msgid "Artist"
+msgstr "Исполнитель"
+
+#: includes/playlist.php:93 templates/single-playlist.php:44
+msgid "Song"
+msgstr "Композиция"
+
+#: includes/playlist.php:93 templates/single-playlist.php:45
+msgid "Album"
+msgstr "Альбом"
+
+#: includes/playlist.php:93 templates/single-playlist.php:46
+msgid "Record Label"
+msgstr "Лейбл"
+
+#: includes/playlist.php:93 templates/single-playlist.php:47
+msgid "DJ Comments"
+msgstr "Комментарии диджея"
+
+#: includes/playlist.php:93
+msgid "New"
+msgstr "Новый"
+
+#: includes/playlist.php:93
+msgid "Status"
+msgstr "Статус"
+
+#: includes/playlist.php:93 includes/playlist.php:127
+#: includes/playlist.php:144 includes/playlist.php:807
+#: includes/playlist.php:888
+msgid "Remove"
+msgstr "Удален"
+
+#: includes/playlist.php:119 includes/playlist.php:144
+msgid "Queued"
+msgstr "В очереди"
+
+#: includes/playlist.php:123 includes/playlist.php:144
+msgid "Played"
+msgstr "Воспроизводится"
+
+#: includes/playlist.php:136
+msgid "Add Entry"
+msgstr "Добавить запись"
+
+#: includes/playlist.php:163 includes/playlist.php:164
+#: templates/single-show.php:99
+msgid "Schedule"
+msgstr "Расписание"
+
+#: includes/playlist.php:166 includes/playlist.php:167
+msgid "Publish"
+msgstr "Опубликовать"
+
+#: includes/playlist.php:170
+msgid "Submit for Review"
+msgstr "Отправить на рассмотрение"
+
+#: includes/playlist.php:171 includes/playlist.php:176
+msgid "Update Playlist"
+msgstr "Обновить плейлист"
+
+#: includes/playlist.php:175
+msgid "Update"
+msgstr "Обновить"
+
+#: includes/playlist.php:420
+msgid "Display the current song."
+msgstr "Отобразить текущую композицию."
+
+#: includes/playlist.php:421
+msgid "Radio Station: Now Playing"
+msgstr "Радиостанция: Сейчас в эфире"
+
+#: includes/playlist.php:444
+msgid "Show Artist Name"
+msgstr "Показать исполнителя композиции"
+
+#: includes/playlist.php:451
+msgid "Show Song Title"
+msgstr "Показать название композиции"
+
+#: includes/playlist.php:458
+msgid "Show Album Name"
+msgstr "Показать название альбома"
+
+#: includes/playlist.php:465
+msgid "Show Record Label Name"
+msgstr "Показать название лэйбла"
+
+#: includes/playlist.php:472
+msgid "Show DJ Comments"
+msgstr "Показать комментарии диджея"
+
+#: includes/playlist.php:573 templates/single-show.php:60
+msgid "Genre"
+msgstr "Жанр"
+
+#: includes/playlist.php:594
+msgid "Information"
+msgstr "Информация"
+
+#: includes/playlist.php:612
+msgid "Active"
+msgstr "Активно"
+
+#: includes/playlist.php:614
+msgid ""
+"Check this box if show is currently active (Show will not appear on "
+"programming schedule if unchecked)"
+msgstr ""
+"Установите этот флажок, если шоу сейчас активно (Шоу не будет отображаться в "
+"расписании, если флажок снят)"
+
+#: includes/playlist.php:616
+msgid "Current Audio File"
+msgstr "Текущий аудиофайл"
+
+#: includes/playlist.php:619
+msgid "DJ Email"
+msgstr "Email диджея"
+
+#: includes/playlist.php:622
+msgid "Website Link"
+msgstr "Ссылка на сайт"
+
+#: includes/playlist.php:633
+msgid "DJs"
+msgstr "Диджеи"
+
+#: includes/playlist.php:719
+msgid "Schedules"
+msgstr "Расписания"
+
+#: includes/playlist.php:744 includes/playlist.php:824
+msgid "Day"
+msgstr "День"
+
+#: includes/playlist.php:747 includes/playlist.php:827
+msgid "Monday"
+msgstr "Понедельник"
+
+#: includes/playlist.php:748 includes/playlist.php:828
+msgid "Tuesday"
+msgstr "Вторник"
+
+#: includes/playlist.php:749 includes/playlist.php:829
+msgid "Wednesday"
+msgstr "Среда"
+
+#: includes/playlist.php:750 includes/playlist.php:830
+msgid "Thursday"
+msgstr "Четверг"
+
+#: includes/playlist.php:751 includes/playlist.php:831
+msgid "Friday"
+msgstr "Пятница"
+
+#: includes/playlist.php:752 includes/playlist.php:832
+msgid "Saturday"
+msgstr "Суббота"
+
+#: includes/playlist.php:753 includes/playlist.php:833
+msgid "Sunday"
+msgstr "Воскресенье"
+
+#: includes/playlist.php:806 includes/playlist.php:886
+msgid "Encore Presentation"
+msgstr "Повторная презентация"
+
+#: includes/playlist.php:817
+msgid "Add Shift"
+msgstr "Добавить сдвиг"
+
+#: includes/playlist.php:980
+msgid "More Playlists"
+msgstr "Еще плейлисты"
+
+#: includes/playlist.php:1041
+msgid "More Blog Posts"
+msgstr "Еще записи блога"
+
+#: templates/archive-playlist.php:15
+msgid "Playlist Archive for"
+msgstr "Архив плейлиста для"
+
+#: templates/archive-playlist.php:50 templates/single-playlist.php:13
+#: templates/single-show.php:13
+msgid "Post navigation"
+msgstr "Навигация по записям"
+
+#: templates/archive-playlist.php:51
+msgid "Older posts"
+msgstr "Зтарые записи"
+
+#: templates/archive-playlist.php:52
+msgid "Newer posts"
+msgstr "Новые записи"
+
+#: templates/archive-playlist.php:61 templates/author.php:93
+#: templates/playlist-archive-template.php:63
+#: templates/show-blog-archive-template.php:71
+msgid "Nothing Found"
+msgstr "Ничего не найдено"
+
+#: templates/archive-playlist.php:65 templates/author.php:97
+#: templates/playlist-archive-template.php:67
+#: templates/show-blog-archive-template.php:75
+msgid ""
+"Apologies, but no results were found for the requested archive. Perhaps "
+"searching will help find a related post."
+msgstr ""
+"Извините, но в запрошенном архиве ничего не найдено. Возможно, поиск по "
+"сайту поможет найти нужное."
+
+#: templates/author.php:51
+#, php-format
+msgid "Author Archives: %s"
+msgstr "Архив автора: %s "
+
+#: templates/author.php:70
+#, php-format
+msgid "About %s"
+msgstr "О %s"
+
+#: templates/playlist-archive-template.php:16
+msgid "Playlist Archive"
+msgstr "Архив плейлиста"
+
+#: templates/show-blog-archive-template.php:16
+msgid "Blog Archive"
+msgstr "Архив блога"
+
+#: templates/show-blog-archive-template.php:46
+msgid "Posted by"
+msgstr "Автор: "
+
+#: templates/single-playlist.php:14 templates/single-show.php:14
+msgid "Previous"
+msgstr "Раньше"
+
+#: templates/single-playlist.php:15 templates/single-show.php:15
+msgid "Next"
+msgstr "Позже"
+
+#: templates/single-playlist.php:32 templates/single-show.php:144
+msgid "Pages:"
+msgstr "Страницы:"
+
+#: templates/single-playlist.php:65
+msgid "No entries for this playlist"
+msgstr "Для этого плейлиста нет записей"
+
+#: templates/single-show.php:32
+msgid "Hosted by"
+msgstr "Организовано"
+
+#: templates/single-show.php:84
+msgid "Email the DJ"
+msgstr "Написать диджею"
+
+#: templates/single-show.php:88
+msgid "Show Website"
+msgstr "Страница шоу"
+
+#: templates/single-show.php:95
+msgid "Most recent broadcast"
+msgstr "Самые последние трансляции"
+
+#: templates/single-show.php:140
+msgid "Blog Posts"
+msgstr "Записи в блоге"
+
+#: radio-station.php:244 radio-station.php:330
+msgid "Export Playlists"
+msgstr "Экспортировать плейлисты"
+
+#: radio-station.php:244 radio-station.php:451
+msgid "Export"
+msgstr "Экспорт"
+
+#: radio-station.php:323
+msgid "Right-click and download this file to save your export"
+msgstr "Чтобы сохранить экспорт, щелкните правой кнопкой мыши и сохраните файл"
+
+#: radio-station.php:340
+msgid "Start Date"
+msgstr "Начальная дата"
+
+#: radio-station.php:394
+msgid "End Date"
+msgstr "Конечная дата"
+
+#: radio-station.php:466
+msgid "Related to Show"
+msgstr "Относится к шоу"

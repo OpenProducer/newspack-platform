@@ -1,0 +1,338 @@
+/* ============================== */
+/* Radio Station Shortcode Styles */
+/* ============================== */
+
+.radio-clear {
+	display: block;
+	clear: both;
+}
+
+.rs-countdown {
+	font-size: 0.8em;
+}
+
+.show-user-time {
+	display: none;
+	font-style: italic;
+}
+
+
+/* Timezone Shortcode */
+/* ------------------ */
+.radio-timezone-title, .radio-timezone {
+	display: inline-block;
+}
+
+.radio-timezone-title, .radio-user-timezone-title, .radio-clock-title {
+	font-weight: bold;
+}
+
+.radio-user-timezone-title, .radio-user-timezone {
+	display: none;
+}
+
+.radio-user-timezone {
+	font-style: italic;
+}
+
+
+/* Clock Shortcode */
+/* --------------- */
+.radio-server-time, .radio-server-date, .radio-server-zone,
+.radio-user-time, .radio-user-date, .radio-user-zone {
+	display: inline-block;
+}
+
+.widget .radio-clock-title {
+	float: left;
+}
+
+.radio-clock-title {
+	min-width: 100px;
+	min-height: 40px;	
+	display: inline-block;
+}
+
+.radio-timezone-title, .radio-user-timezone-title {
+	min-width: 120px;
+}
+
+.radio-server-time, .radio-user-time, .radio-server-date, .radio-user-date {
+	margin-left: 10px;
+}
+
+.radio-server-zone, .radio-user-zone {
+	margin-left: 20px;
+}
+
+.radio-user-time, .radio-user-date, .radio-user-zone {
+    font-style: italic;
+}
+
+.radio-station-clock-widget .radio-station-server-clock, .radio-station-clock-widget .radio-station-user-clock {
+	font-size: 0.9em;
+	margin-top: 10px;
+	display: inline-block;
+}
+
+.radio-station-clock-widget .radio-server-zone, .radio-station-clock-widget .radio-user-zone {
+	display: block;
+	margin-left: 110px;
+	font-size: 0.9em;
+}
+
+.user-timezone-change, .user-timezone-select {
+	display: inline-block;
+}
+
+/* Archive Shortcodes */
+/* ------------------ */
+
+.genre-archive, .language-archive {
+	clear: both;
+}
+
+.show-archive-list, .playlist-archive-list, .override-archive-list {
+	list-style: none;
+	padding-left: 0;
+}
+
+.show-archive-item, .playlist-archive-item, .override-archive-item {
+	list-style: none;
+	clear: both;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.show-archive-item-thumbnail, .playlist-archive-item-thumbnail, .override-archive-item-thumbnail {
+	float: left;
+	padding-right: 20px;
+}
+
+.genre-archive .show-archive-item-title, .language-archive .show-archive-item-title {
+	font-size: 1em;
+	margin-bottom: 5px;
+}
+
+.genre-archive .show-archive-item-thumbnail, .language-archive .show-archive-item-thumbnail {
+	width: 120px;
+	height: auto;
+}
+
+.show-archive-item-title, .playlist-archive-item-title, .override-archive-item-title {
+	font-size: 1.25em;
+	margin-bottom: 10px;
+}
+
+.show-archive-item-content, .playlist-archive-item-content, .override-archive-item-content,
+.show-archive-item-excerpt, .playlist-archive-item-excerpt, .override-archive-item-excerpt {
+	font-size: 0.8em;
+}
+
+.show-archives.grid .show-archive-item, .override-archives.grid .override-archive-item,
+.genres-archive.grid .show-archive-item, .languages-archive.grid .show-archive-item,
+.playlist-archives.grid .playlist-archive-item {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    width: 220px;
+}
+
+.show-archives.grid .show-archive-item-thumbnail, .override-archives.grid .override-archive-item-thumbnail,
+.genres-archive.grid .show-archive-item-thumbnail, .languages-archive.grid .show-archive-item-thumbnail,
+.playlist-archives.grid .playlist-archive-item-thumbnail {
+	float: none;
+}
+
+/* Show Subarchive Shortcodes */
+/* -------------------------- */
+.show-post, .show-playlist, .show-host, .show-producer, .show-episode {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.show-post-thumbnail, .show-playlist-thumbnail, .show-host-thumbnail, .show-producer-thumbnail, .show-episode-thumbnail,
+.show-post-info, .show-playlist-info, .show-host-info, .show-producer-info, .show-episode-info {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.show-post-thumbnail, .show-playlist-thumbnail, .show-host-thumbnail, .show-producer-thumbnail, .show-episode-thumbnail {
+	padding-right: 30px;
+	margin-top: 10px;
+	min-width: 150px;
+}
+
+.show-post-info, .show-playlist-info, .show-host-info, .show-producer-info, .show-episode-info {
+	max-width: 600px;
+}
+
+.show-post-title, .show-playlist-title, .show-host-title, .show-producer-title, .show-episode-title {
+	margin-bottom: 10px;
+}
+
+/* Archive Pagination */
+/* ------------------ */
+.show-pagination-buttons, .show-pagination-buttons::after, .archive-pagination-buttons, .archive-pagination-buttons::after {
+	clear: both;
+	content: "";
+	display: block;
+}
+
+.show-pagination-button, .archive-pagination-button {
+	float: left; 
+	display: inline-block; 
+	width: 30px; 
+	margin-right: 7px; 
+	cursor: pointer; 
+	text-align: center; 
+	background-color: #eeeeee; 
+	border-radius: 7px;
+	border: 1px solid #777777;
+	font-size: 1em;
+	color: #444444;
+	padding: 5px;
+}
+
+.show-pagination-button a, .show-pagination-button a:hover,
+.archive-pagination-button a, .archive-pagination a:hover {
+	text-decoration: none;
+}
+
+.show-pagination-button.arrow-button, .archive-pagination-button.arrow-button {
+	padding-top: 4px;
+	padding-bottom: 6px;
+}
+
+.show-pagination-button.active, .archive-pagination-button.active {
+	background-color: transparent;
+	font-weight: bold;
+}
+
+.show-pagination-button:hover, .archive-pagination-button:hover {
+	background-color: #f5f5f5;
+}
+
+/* Widget/Shortcode Styles */
+/* ----------------------- */
+
+ul.current-show-list, ul.current-show-list li, ul.upcoming-shows-list, ul.upcoming-shows-list li {
+    list-style: none;
+	padding-left: 0;
+}
+
+.current-show-avatar, .upcoming-show-avatar, .on-air-dj-avatar {
+	padding-bottom: 5px;
+	display: block;
+	max-width: 90%;
+}
+
+.current-show-avatar img, .upcoming-show-avatar img, .on-air-dj-avatar img {
+	width: 100%;
+	height: auto;
+}
+
+.current-show-avatar.float-left, .upcoming-show-avatar.float-left, .on-air-dj-avatar.float-left {
+	float: left;
+	margin-right: 15px;
+}
+
+.current-show-avatar.float-right, .upcoming-show-avatar.float-right, .on-air-dj-avatar.float-right {
+	float: right;
+	margin-left: 15px;
+}
+
+.current-show-list .current-show-title, .on-air-list .on-air-dj-title {
+	font-size: 1.25em;
+}
+
+.current-show-encore, .upcoming-show-encore, .on-air-dj-encore {
+	font-style: italic;
+}
+
+.current-show-encore, .current-show-hosts, .on-air-dj-encore, .on-air-dj-names {
+	font-size: 0.85em;
+}
+
+.current-show-hosts, .upcoming-show-hosts, .on-air-dj-names {
+	overflow: hidden;
+}
+
+.current-show-list, .upcoming-shows-list,
+.on-air-list, .widget .on-air-list, .on-air-upcoming-list, .widget .on-air-upcoming-list {
+	list-style: none;
+}
+
+.current-show-countdown .rs-label, .upcoming-show-countdown .rs-label {
+	font-weight: bold;
+}
+
+.current-show-countdown .rs-hours, .current-show-countdown .rs-minutes, .current-show-countdown .rs-seconds,
+.upcoming-show-countdown .rs-hours, .upcoming-show-countdown .rs-minutes, .upcoming-show-countdown .rs-seconds,
+.show-playlist-countdown .rs-hours, .show-playlist-countdown .rs-minutes, .show-playlist-countdown .rs-seconds {
+	background-color: #F0F0F0;
+	padding: 1px 3px;
+}
+
+.current-show-countdown, .upcoming-show-countdown, .show-playlist-countdown {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.current-show-desc, .on-air-dj-desc,
+.current-show-playlist, .on-air-dj-playlist {
+	font-size: 0.8em;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.current-show-schedule, .upcoming-show-schedule, .on-air-dj-schedule {
+	font-size: 0.85em;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+.current-show-shifts, .upcoming-show-shifts, .on-air-dj-sched {
+	font-size: 0.85em;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.current-show .show-user-time, .upcoming-show-schedule .show-user-time {
+    font-size: 0.85em;
+}
+
+.current-shift-list, .current-shift-list-item {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.current-shift-list .current-shift-list-item {
+	list-style: disc;
+	text-indent: 20px;
+}
+
+.current-show-schedule .current-show-shifts.current-shift {
+	font-style: italic;
+}
+
+.upcoming-shows-list .upcoming-show-title, .on-air-upcoming-list .on-air-dj-title {
+	font-size: 1em;
+}
+
+.upcoming-shows-list .upcoming-show-encore, .upcoming-shows-list .upcoming-show-hosts,
+.on-air-upcoming-list .on-air-dj-encore, .on-air-upcoming-list .on-air-dj-names {
+	font-size: 0.75em;
+}
+
+
+/* Current Playlist Widget */
+.show-playlist-tracks {
+	line-height: 1.6em;
+}
+
+.show-playlist-track {
+	margin-bottom: 10px;
+	font-size: 0.75em;
+}
