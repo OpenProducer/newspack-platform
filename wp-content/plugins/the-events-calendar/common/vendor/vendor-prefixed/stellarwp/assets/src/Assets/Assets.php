@@ -465,16 +465,18 @@ class Assets {
 	/**
 	 * Filters the Script tags to attach type=module based on the rules we set in our Asset class.
 	 *
-	 * @param string $tag Tag we are filtering.
+	 * @since 1.0.0
+	 * @since 1.2.6
+	 *
+	 * @param string $tag    Tag we are filtering.
 	 * @param string $handle Which is the ID/Handle of the tag we are about to print.
 	 *
 	 * @return string Script tag with the type=module
-	 * @since 1.0.0
-	 *
 	 */
 	public function filter_modify_to_module( $tag, $handle ) {
-		// Only filter for own own filters.
-		if ( ! $asset = $this->get( $handle ) ) {
+		$asset = $this->get( $handle );
+		// Only filter for our own filters.
+		if ( ! $asset ) {
 			return $tag;
 		}
 
@@ -488,16 +490,15 @@ class Assets {
 			return $tag;
 		}
 
-		// These themes already have the `type='text/javascript'` added by WordPress core.
-		if ( ! current_theme_supports( 'html5', 'script' ) ) {
-			$replacement = 'type="module"';
-
-			return str_replace( "type='text/javascript'", $replacement, $tag );
+		// Remove the type attribute if it exists.
+		preg_match( "/ *type=['\"]{0,1}[^'\"]+['\"]{0,1}/i", $tag, $matches );
+		if ( ! empty( $matches ) ) {
+			$tag = str_replace( $matches[0], '', $tag );
 		}
 
 		$replacement = '<script type="module" ';
 
-		return str_replace( '<script ', $replacement, $tag );
+		return str_replace( '<script', $replacement, $tag );
 	}
 
 	/**
@@ -680,11 +681,11 @@ class Assets {
 	/**
 	 * Register the Assets on the correct hooks.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @param array|Asset|null $assets Array of asset objects, single asset object, or null.
 	 *
 	 * @return void
-	 * @since 1.0.0
-	 *
 	 */
 	public function register_in_wp( $assets = null ) {
 		if ( ! (
@@ -781,11 +782,11 @@ class Assets {
 	/**
 	 * Removes an Asset from been registered and enqueue.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @param string $slug Slug of the Asset.
 	 *
 	 * @return bool
-	 * @since 1.0.0
-	 *
 	 */
 	public function remove( $slug ) {
 		if ( ! $this->exists( $slug ) ) {
@@ -812,13 +813,13 @@ class Assets {
 	 *
 	 * The method will force the scripts and styles to print overriding their registration and conditional.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @param string|array $group Which group(s) should be enqueued.
 	 * @param bool $echo Whether to print the group(s) tag(s) to the page or not; default to `true` to
 	 *                            print the HTML `script` (JS) and `link` (CSS) tags to the page.
 	 *
 	 * @return string The `script` and `link` HTML tags produced for the group(s).
-	 * @since 1.0.0
-	 *
 	 */
 	public function print_group( $group, $echo = true ) {
 		$all_assets = $this->get();

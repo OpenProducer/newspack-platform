@@ -397,6 +397,109 @@ class Asset {
 	}
 
 	/**
+	 * Builds the minified asset URL.
+	 *
+	 * @since 1.2.4
+	 *
+	 * @param string $original_url The original URL.
+	 *
+	 * @return string
+	 */
+	protected function build_min_asset_url( $original_url ): string {
+		// debt: This is too much of a copy paste from build_asset_url. We should refactor this.
+		$resource                = $this->get_file();
+		$root_path               = $this->get_root_path();
+		$relative_path_to_assets = $this->is_vendor() ? '' : null;
+
+		if ( $root_path === null ) {
+			$root_path = Config::get_path();
+		}
+
+		$plugin_base_url = Config::get_url( $root_path );
+		$hook_prefix     = Config::get_hook_prefix();
+		$extension       = pathinfo( $resource, PATHINFO_EXTENSION );
+		$resource_path   = $relative_path_to_assets;
+		$type            = $this->get_type();
+
+		if ( ! $extension && $type ) {
+			$extension = $type;
+		}
+
+		$should_prefix = $this->should_use_asset_directory_prefix;
+
+		if ( is_null( $resource_path ) ) {
+			$resources_path = $this->get_path();
+			$resource_path  = $resources_path;
+
+			if ( $should_prefix ) {
+				$prefix_dir = '';
+
+				switch ( $extension ) {
+					case 'css':
+						$prefix_dir     = 'css';
+						$resources_path = preg_replace( '#/css/$#', '/', $resources_path );
+						$resource_path  = "{$resources_path}css/";
+						break;
+					case 'js':
+						$prefix_dir     = 'js';
+						$resources_path = preg_replace( '#/js/$#', '/', $resources_path );
+						$resource_path  = "{$resources_path}js/";
+						break;
+					case 'scss':
+						$prefix_dir     = 'scss';
+						$resources_path = preg_replace( '#/scss/$#', '/', $resources_path );
+						$resource_path  = "{$resources_path}scss/";
+						break;
+					case 'pcss':
+						$prefix_dir     = 'postcss';
+						$resources_path = preg_replace( '#/postcss/$#', '/', $resources_path );
+						$resource_path  = "{$resources_path}postcss/";
+						break;
+					default:
+						$resource_path = $resources_path;
+						break;
+				}
+
+				if ( $prefix_dir && strpos( $resource, $prefix_dir . '/' ) === 0 ) {
+					$resource = substr( $resource, strlen( $prefix_dir . '/' ) );
+				}
+			}
+		}
+
+		$relative_asset_path = $this->get_path();
+		$min_asset_path      = $this->get_min_path();
+
+		if ( $min_asset_path !== $relative_asset_path ) {
+			$minified_file_path = preg_replace( '#(.*)(' . preg_quote( $relative_asset_path, '#' ) . ')(.*[a-zA-Z0-0\-\_\.]+).(js|css)#', '$1' . $min_asset_path . '$3.min.$4', $resource_path . $resource );
+		} else {
+			$minified_file_path = preg_replace( '#(.*).(js|css)#', '$1.min.$2', $resource_path . $resource );
+		}
+
+		$script_debug = defined( 'SCRIPT_DEBUG' ) && Utils::is_truthy( SCRIPT_DEBUG );
+
+		if ( $script_debug && file_exists( wp_normalize_path( $root_path . $resource_path . $resource ) ) ) {
+			return $original_url;
+		}
+
+		$minified_abs_file_path = wp_normalize_path( $root_path . $minified_file_path );
+
+		if ( ! file_exists( $minified_abs_file_path ) ) {
+			return $original_url;
+		}
+
+		$url = $plugin_base_url . $minified_file_path;
+
+		/**
+		 * Filters the min asset URL
+		 *
+		 * @param string $url   Asset URL.
+		 * @param string $slug  Asset slug.
+		 * @param Asset  $asset The Asset object.
+		 */
+		return (string) apply_filters( "stellarwp/assets/{$hook_prefix}/min_resource_url", $url, $this->get_slug(), $this );
+	}
+
+	/**
 	 * Set a callable that should fire after enqueuing.
 	 *
 	 * @since 1.0.0
@@ -687,7 +790,7 @@ class Asset {
 		}
 
 		if ( $this->min_url === null ) {
-			$this->min_url = $this->maybe_get_min_file( $this->url );
+			$this->min_url = $this->build_min_asset_url( $this->url );
 		}
 
 		if ( $use_min_if_available && $this->min_url ) {
@@ -850,66 +953,42 @@ class Asset {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @deprecated 1.2.4 Use build_min_asset_url() instead.
+	 *
 	 * @param string $url The absolute URL to the un-minified file.
 	 *
 	 * @return string|false The url to the minified version or false, if file not found.
 	 */
 	public function maybe_get_min_file( $url ) {
-		static $wpmu_plugin_url;
-		static $wp_plugin_url;
-		static $wp_content_url;
-		static $plugins_url;
-		static $base_dirs;
-		static $stylesheet_url;
-		static $stylesheet_dir;
+		_deprecated_function( __METHOD__, '1.2.4', __CLASS__ . '::build_min_asset_url()' );
+		$bases = Utils::get_bases();
 
 		$urls = [];
-		if ( ! isset( $wpmu_plugin_url ) ) {
-			$wpmu_plugin_url = set_url_scheme( WPMU_PLUGIN_URL );
-		}
 
-		if ( ! isset( $wp_plugin_url ) ) {
-			$wp_plugin_url = set_url_scheme( WP_PLUGIN_URL );
-		}
-
-		if ( ! isset( $wp_content_url ) ) {
-			$wp_content_url = set_url_scheme( WP_CONTENT_URL );
-		}
-
-		if ( ! isset( $plugins_url ) ) {
-			$plugins_url = plugins_url();
-		}
-
-		if ( ! isset( $stylesheet_url ) ) {
-			$stylesheet_url = get_stylesheet_directory_uri();
-			$stylesheet_dir = get_stylesheet_directory();
-		}
-
-		if ( ! isset( $base_dirs ) ) {
-			$base_dirs[ WPMU_PLUGIN_DIR ] = wp_normalize_path( WPMU_PLUGIN_DIR );
-			$base_dirs[ WP_PLUGIN_DIR ]   = wp_normalize_path( WP_PLUGIN_DIR );
-			$base_dirs[ WP_CONTENT_DIR ]  = wp_normalize_path( WP_CONTENT_DIR );
-			$base_dirs[ $stylesheet_dir ] = wp_normalize_path( $stylesheet_dir );
-		}
+		$wpmu_plugin_url = $bases['wpmu_plugin']['base_url'];
+		$wp_plugin_url   = $bases['wp_plugin']['base_url'];
+		$wp_content_url  = $bases['wp_content']['base_url'];
+		$plugins_url     = $bases['plugins']['base_url'];
+		$stylesheet_url  = $bases['stylesheet']['base_url'];
 
 		if ( 0 === strpos( $url, $wpmu_plugin_url ) ) {
 			// URL inside WPMU plugin dir.
-			$base_dir = $base_dirs[ WPMU_PLUGIN_DIR ];
-			$base_url = $wpmu_plugin_url;
+			$base_dir = $bases['wpmu_plugin']['base_dir'];
+			$base_url = $bases['wpmu_plugin']['base_url'];
 		} elseif ( 0 === strpos( $url, $wp_plugin_url ) ) {
 			// URL inside WP plugin dir.
-			$base_dir = $base_dirs[ WP_PLUGIN_DIR ];
-			$base_url = $wp_plugin_url;
+			$base_dir = $bases['wp_plugin']['base_dir'];
+			$base_url = $bases['wp_plugin']['base_url'];
 		} elseif ( 0 === strpos( $url, $wp_content_url ) ) {
 			// URL inside WP content dir.
-			$base_dir = $base_dirs[ WP_CONTENT_DIR ];
-			$base_url = $wp_content_url;
+			$base_dir = $bases['wp_content']['base_dir'];
+			$base_url = $bases['wp_content']['base_url'];
 		} elseif ( 0 === strpos( $url, $plugins_url ) ) {
-			$base_dir = $base_dirs[ WP_PLUGIN_DIR ];
-			$base_url = $plugins_url;
+			$base_dir = $bases['plugins']['base_dir'];
+			$base_url = $bases['plugins']['base_url'];
 		} elseif ( 0 === strpos( $url, $stylesheet_url ) ) {
-			$base_dir = $base_dirs[ $stylesheet_dir ];
-			$base_url = $stylesheet_url;
+			$base_dir = $bases['stylesheet']['base_dir'];
+			$base_url = $bases['stylesheet']['base_url'];
 		} else {
 			// Resource needs to be inside wp-content or a plugins dir.
 			return false;

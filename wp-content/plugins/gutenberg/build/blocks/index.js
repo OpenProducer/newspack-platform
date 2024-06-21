@@ -13101,26 +13101,30 @@ function getHTMLRootElementClasses(innerHTML) {
  * @return {Object} Filtered block attributes.
  */
 function fixCustomClassname(blockAttributes, blockType, innerHTML) {
-  if (hasBlockSupport(blockType, 'customClassName', true)) {
-    // To determine difference, serialize block given the known set of
-    // attributes, with the exception of `className`. This will determine
-    // the default set of classes. From there, any difference in innerHTML
-    // can be considered as custom classes.
-    const {
-      className: omittedClassName,
-      ...attributesSansClassName
-    } = blockAttributes;
-    const serialized = getSaveContent(blockType, attributesSansClassName);
-    const defaultClasses = getHTMLRootElementClasses(serialized);
-    const actualClasses = getHTMLRootElementClasses(innerHTML);
-    const customClasses = actualClasses.filter(className => !defaultClasses.includes(className));
-    if (customClasses.length) {
-      blockAttributes.className = customClasses.join(' ');
-    } else if (serialized) {
-      delete blockAttributes.className;
-    }
+  if (!hasBlockSupport(blockType, 'customClassName', true)) {
+    return blockAttributes;
   }
-  return blockAttributes;
+  const modifiedBlockAttributes = {
+    ...blockAttributes
+  };
+  // To determine difference, serialize block given the known set of
+  // attributes, with the exception of `className`. This will determine
+  // the default set of classes. From there, any difference in innerHTML
+  // can be considered as custom classes.
+  const {
+    className: omittedClassName,
+    ...attributesSansClassName
+  } = modifiedBlockAttributes;
+  const serialized = getSaveContent(blockType, attributesSansClassName);
+  const defaultClasses = getHTMLRootElementClasses(serialized);
+  const actualClasses = getHTMLRootElementClasses(innerHTML);
+  const customClasses = actualClasses.filter(className => !defaultClasses.includes(className));
+  if (customClasses.length) {
+    modifiedBlockAttributes.className = customClasses.join(' ');
+  } else if (serialized) {
+    delete modifiedBlockAttributes.className;
+  }
+  return modifiedBlockAttributes;
 }
 
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/api/parser/apply-built-in-validation-fixes.js
@@ -13424,7 +13428,7 @@ function applyBlockValidation(unvalidatedBlock, blockType) {
   // like custom classNames handling.
   const fixedBlock = applyBuiltInValidationFixes(unvalidatedBlock, blockType);
   // Attempt to validate the block once again after the built-in fixes.
-  const [isFixedValid, validationIssues] = validateBlock(unvalidatedBlock, blockType);
+  const [isFixedValid, validationIssues] = validateBlock(fixedBlock, blockType);
   return {
     ...fixedBlock,
     isValid: isFixedValid,
