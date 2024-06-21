@@ -2733,10 +2733,12 @@ function initialize(editorName, blockEditorSettings) {
         sidebarControls.push(control);
       }
     });
-    (0,external_wp_element_namespaceObject.createRoot)(container).render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomizeWidgets, {
-      api: build_module_wp.customize,
-      sidebarControls: sidebarControls,
-      blockEditorSettings: blockEditorSettings
+    (0,external_wp_element_namespaceObject.createRoot)(container).render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.StrictMode, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomizeWidgets, {
+        api: build_module_wp.customize,
+        sidebarControls: sidebarControls,
+        blockEditorSettings: blockEditorSettings
+      })
     }));
   });
 }

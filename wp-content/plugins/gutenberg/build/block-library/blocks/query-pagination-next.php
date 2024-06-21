@@ -77,7 +77,7 @@ function gutenberg_render_block_core_query_pagination_next( $attributes, $conten
 		) ) {
 			$p->set_attribute( 'data-wp-key', 'query-pagination-next' );
 			$p->set_attribute( 'data-wp-on--click', 'core/query::actions.navigate' );
-			$p->set_attribute( 'data-wp-on--mouseenter', 'core/query::actions.prefetch' );
+			$p->set_attribute( 'data-wp-on-async--mouseenter', 'core/query::actions.prefetch' );
 			$p->set_attribute( 'data-wp-watch', 'core/query::callbacks.prefetch' );
 			$content = $p->get_updated_html();
 		}

@@ -722,6 +722,7 @@ function ImportForm({
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
       type: "submit",
       isBusy: isLoading,
+      __experimentalIsFocusable: true,
       disabled: !file || isLoading,
       variant: "secondary",
       className: "list-reusable-blocks-import-form__button",
@@ -812,8 +813,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.createElement('div');
   container.className = 'list-reusable-blocks__container';
   button.parentNode.insertBefore(container, button);
-  (0,external_wp_element_namespaceObject.createRoot)(container).render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(import_dropdown, {
-    onUpload: showNotice
+  (0,external_wp_element_namespaceObject.createRoot)(container).render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.StrictMode, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(import_dropdown, {
+      onUpload: showNotice
+    })
   }));
 });
 
