@@ -207,6 +207,7 @@ return array(
     'Google\\Site_Kit\\Core\\Util\\Migration_1_123_0' => $baseDir . '/Core/Util/Migration_1_123_0.php',
     'Google\\Site_Kit\\Core\\Util\\Migration_1_3_0' => $baseDir . '/Core/Util/Migration_1_3_0.php',
     'Google\\Site_Kit\\Core\\Util\\Migration_1_8_1' => $baseDir . '/Core/Util/Migration_1_8_1.php',
+    'Google\\Site_Kit\\Core\\Util\\Migration_Conversion_ID' => $baseDir . '/Core/Util/Migration_Conversion_ID.php',
     'Google\\Site_Kit\\Core\\Util\\REST_Entity_Search_Controller' => $baseDir . '/Core/Util/REST_Entity_Search_Controller.php',
     'Google\\Site_Kit\\Core\\Util\\Remote_Features' => $baseDir . '/Core/Util/Remote_Features.php',
     'Google\\Site_Kit\\Core\\Util\\Requires_Javascript_Trait' => $baseDir . '/Core/Util/Requires_Javascript_Trait.php',

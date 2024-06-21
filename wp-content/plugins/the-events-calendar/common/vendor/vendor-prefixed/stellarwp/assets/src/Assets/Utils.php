@@ -10,6 +10,15 @@ namespace TEC\Common\StellarWP\Assets;
 
 class Utils {
 	/**
+	 * Stores all the Bases for the request.
+	 *
+	 * @since 1.2.3
+	 *
+	 * @var array
+	 */
+	protected static array $bases = [];
+
+	/**
 	 * Determines if the provided value should be regarded as 'true'.
 	 *
 	 * @since 1.0.0
@@ -58,5 +67,73 @@ class Utils {
 
 		// For other types (ints, floats etc) cast to bool
 		return (bool) $var;
+	}
+
+	/**
+	 * Gets the asset bases for the request, both directory and URL.
+	 *
+	 * @since 1.2.3
+	 *
+	 * @return array
+	 */
+	public static function get_bases(): array {
+		$key = self::get_runtime_cache_key();
+
+		if ( empty( static::$bases[ $key ] ) ) {
+			static::$bases[ $key ] = [
+				'wpmu_plugin' => [
+					'base_dir' => wp_normalize_path( WPMU_PLUGIN_DIR ),
+					'base_url' => set_url_scheme( WPMU_PLUGIN_URL ),
+				],
+				'wp_plugin'   => [
+					'base_dir' => wp_normalize_path( WP_PLUGIN_DIR ),
+					'base_url' => set_url_scheme( WP_PLUGIN_URL ),
+				],
+				'wp_content'  => [
+					'base_dir' => wp_normalize_path( WP_CONTENT_DIR ),
+					'base_url' => set_url_scheme( WP_CONTENT_URL ),
+				],
+				'plugins'     => [
+					'base_dir' => wp_normalize_path( WP_PLUGIN_DIR ),
+					'base_url' => plugins_url(),
+				],
+				'stylesheet'  => [
+					'base_dir' => wp_normalize_path( get_stylesheet_directory() ),
+					'base_url' => get_stylesheet_directory_uri(),
+				],
+			];
+		}
+
+		return static::$bases[ $key ];
+	}
+
+	/**
+	 * Get the runtime cache key.
+	 *
+	 * @since 1.2.3
+	 *
+	 * @param array $extra Extra data to include in the cache key.
+	 *
+	 * @return string
+	 */
+	public static function get_runtime_cache_key( array $extra = [] ): string {
+		return md5(
+			serialize(
+				array_merge(
+					[
+						WPMU_PLUGIN_DIR,
+						WPMU_PLUGIN_URL,
+						WP_PLUGIN_DIR,
+						WP_PLUGIN_URL,
+						WP_CONTENT_DIR,
+						WP_CONTENT_URL,
+						plugins_url(),
+						get_stylesheet_directory(),
+						get_stylesheet_directory_uri(),
+					],
+					$extra
+				)
+			)
+		);
 	}
 }

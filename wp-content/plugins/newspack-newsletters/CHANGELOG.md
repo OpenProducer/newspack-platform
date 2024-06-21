@@ -1,3 +1,10 @@
+## [2.17.1](https://github.com/Automattic/newspack-newsletters/compare/v2.17.0...v2.17.1) (2024-06-17)
+
+
+### Bug Fixes
+
+* **mailchimp-usage-reports:** fix total contacts counting ([#1533](https://github.com/Automattic/newspack-newsletters/issues/1533)) ([2eb9a70](https://github.com/Automattic/newspack-newsletters/commit/2eb9a7077a453c0fdb811b72699c7c85f4c2e688))
+
 # [2.17.0](https://github.com/Automattic/newspack-newsletters/compare/v2.16.1...v2.17.0) (2024-06-12)
 
 

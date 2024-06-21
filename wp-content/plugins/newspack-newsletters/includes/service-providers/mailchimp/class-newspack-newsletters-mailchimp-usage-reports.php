@@ -51,14 +51,14 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 		for ( $day_index = 1; $day_index <= $days_in_past_count; $day_index++ ) {
 			$report = new Newspack_Newsletters_Service_Provider_Usage_Report();
 			$report->set_date( gmdate( 'Y-m-d', strtotime( "-$day_index day" ) ) );
-			$report->total_contacts += $list['stats']['member_count'];
 
-			foreach ( $lists['lists'] as $list ) {
-				$list_activity_for_day = $list['activity'][ $day_index ];
-				$report->emails_sent  += $list_activity_for_day['emails_sent'];
-				$report->opens        += $list_activity_for_day['unique_opens'];
-				$report->clicks       += $list_activity_for_day['recipient_clicks'];
-				$report->subscribes   += $list_activity_for_day['subs'];
+			foreach ( $lists['lists'] as $list_data ) {
+				$report->total_contacts += $list_data['stats']['member_count'];
+				$list_activity_for_day = $list_data['activity'][ $day_index ];
+				$report->emails_sent += $list_activity_for_day['emails_sent'];
+				$report->opens += $list_activity_for_day['unique_opens'];
+				$report->clicks += $list_activity_for_day['recipient_clicks'];
+				$report->subscribes += $list_activity_for_day['subs'];
 				$report->unsubscribes += $list_activity_for_day['unsubs'];
 			}
 			$reports[] = $report;

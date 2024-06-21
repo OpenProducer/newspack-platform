@@ -4943,8 +4943,10 @@ function initializeEditor(id, settings) {
   // do this will result in errors in the default block parser.
   // see: https://github.com/WordPress/gutenberg/issues/33097
   (0,external_wp_blocks_namespaceObject.setFreeformContentHandlerName)('core/html');
-  root.render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(layout, {
-    blockEditorSettings: settings
+  root.render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.StrictMode, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(layout, {
+      blockEditorSettings: settings
+    })
   }));
   return root;
 }

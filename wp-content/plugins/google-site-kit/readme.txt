@@ -4,7 +4,7 @@ Contributors:      google
 Requires at least: 5.2
 Tested up to:      6.5
 Requires PHP:      7.4
-Stable tag:        1.128.1
+Stable tag:        1.129.1
 License:           Apache License 2.0
 License URI:       https://www.apache.org/licenses/LICENSE-2.0
 Tags:              google, search-console, analytics, adsense, pagespeed-insights
@@ -109,15 +109,10 @@ Please create a new topic on our [WordPress.org support forum](https://wordpress
 
 == Changelog ==
 
-= 1.128.1 =
-
-**Enhanced**
-
-* Add new OAuth scope to Ads module. See [#8792](https://github.com/google/site-kit-wp/issues/8792).
-* Improve Partner Ads Experience onboarding flow. See [#8771](https://github.com/google/site-kit-wp/issues/8771).
+= 1.129.1 =
 
 **Fixed**
 
-* Update PAX integration to avoid intermittent authentication errors. See [#8802](https://github.com/google/site-kit-wp/issues/8802).
+* Remove Ads module setup CTA banner from SK dashboard. See [#8902](https://github.com/google/site-kit-wp/issues/8902).
 
 [See changelog for all versions](https://raw.githubusercontent.com/google/site-kit-wp/main/changelog.txt).

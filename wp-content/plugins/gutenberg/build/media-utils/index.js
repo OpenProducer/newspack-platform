@@ -427,6 +427,7 @@ class MediaUpload extends external_wp_element_namespaceObject.Component {
     if (onClose) {
       onClose();
     }
+    this.frame.detach();
   }
   updateCollection() {
     const frameContent = this.frame.content.get();

@@ -7388,6 +7388,7 @@ __webpack_require__.d(__webpack_exports__, {
   PluginSidebarMoreMenuItem: () => (/* reexport */ PluginSidebarMoreMenuItem),
   PluginTemplateSettingPanel: () => (/* reexport */ plugin_template_setting_panel),
   initializeEditor: () => (/* binding */ initializeEditor),
+  initializePostsDashboard: () => (/* reexport */ initializePostsDashboard),
   reinitializeEditor: () => (/* binding */ reinitializeEditor),
   store: () => (/* reexport */ store)
 });
@@ -7572,17 +7573,15 @@ function removePropertyFromObject(object, property) {
 }
 
 /**
- * A convenience wrapper for `useThemeStyleVariationsByProperty()` that fetches the current theme style variations,
- * and user-defined global style/settings object.
+ * Fetches the current theme style variations that contain only the specified property
+ * and merges them with the user config.
  *
- * @param {Object}   props          Object of hook args.
- * @param {string}   props.property The property to filter by.
- * @param {Function} props.filter   Optional. The filter function to apply to the variations.
+ * @param {Object} props          Object of hook args.
+ * @param {string} props.property The property to filter by.
  * @return {Object[]|*} The merged object.
  */
 function useCurrentMergeThemeStyleVariationsWithUserConfig({
-  property,
-  filter
+  property
 }) {
   const {
     variationsFromTheme
@@ -7593,21 +7592,21 @@ function useCurrentMergeThemeStyleVariationsWithUserConfig({
     };
   }, []);
   const {
-    user: baseVariation
+    user: userVariation
   } = (0,external_wp_element_namespaceObject.useContext)(GlobalStylesContext);
-  const variations = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    return [{
-      title: (0,external_wp_i18n_namespaceObject.__)('Default'),
-      settings: {},
-      styles: {}
-    }, ...variationsFromTheme];
-  }, [variationsFromTheme]);
-  return useThemeStyleVariationsByProperty({
-    variations,
-    property,
-    filter,
-    baseVariation: removePropertyFromObject(cloneDeep(baseVariation), property)
-  });
+  return (0,external_wp_element_namespaceObject.useMemo)(() => {
+    const clonedUserVariation = cloneDeep(userVariation);
+
+    // Get user variation and remove the settings for the given property.
+    const userVariationWithoutProperty = removePropertyFromObject(clonedUserVariation, property);
+    userVariationWithoutProperty.title = (0,external_wp_i18n_namespaceObject.__)('Default');
+    const variationsWithSinglePropertyAndBase = variationsFromTheme.filter(variation => {
+      return isVariationWithSingleProperty(variation, property);
+    }).map(variation => {
+      return mergeBaseAndUserConfigs(userVariationWithoutProperty, variation);
+    });
+    return [userVariationWithoutProperty, ...variationsWithSinglePropertyAndBase];
+  }, [property, userVariation, variationsFromTheme]);
 }
 
 /**
@@ -7637,71 +7636,6 @@ const filterObjectByProperty = (object, property) => {
   });
   return newObject;
 };
-
-/**
- * Returns a new object with only the properties specified in `property`.
- * Optional merges the baseVariation object with the variation object.
- * Note: this function will only overwrite the specified property in baseVariation if it exists.
- * The baseVariation will not be otherwise modified. To strip a property from the baseVariation object, use `removePropertyFromObject`.
- * See useCurrentMergeThemeStyleVariationsWithUserConfig for an example of how to use this function.
- *
- * @param {Object}   props               Object of hook args.
- * @param {Object[]} props.variations    The theme style variations to filter.
- * @param {string}   props.property      The property to filter by.
- * @param {Function} props.filter        Optional. The filter function to apply to the variations.
- * @param {Object}   props.baseVariation Optional. Base or user settings to be updated with variation properties.
- * @return {Object[]|*} The merged object.
- */
-function useThemeStyleVariationsByProperty({
-  variations,
-  property,
-  filter,
-  baseVariation
-}) {
-  return (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (!property || !variations || variations?.length === 0) {
-      return variations;
-    }
-    const clonedBaseVariation = typeof baseVariation === 'object' && Object.keys(baseVariation).length > 0 ? cloneDeep(baseVariation) : null;
-    let processedStyleVariations = variations.reduce((accumulator, variation) => {
-      const variationFilteredByProperty = filterObjectByProperty(cloneDeep(variation), property);
-
-      // Remove variations that are empty once the property is filtered out.
-      if (variation.title !== (0,external_wp_i18n_namespaceObject.__)('Default') && Object.keys(variationFilteredByProperty).length === 0) {
-        return accumulator;
-      }
-      let result = {
-        ...variationFilteredByProperty,
-        title: variation?.title,
-        description: variation?.description
-      };
-      if (clonedBaseVariation) {
-        /*
-         * Overwrites all baseVariation object `styleProperty` properties
-         * with the theme variation `styleProperty` properties.
-         */
-        result = mergeBaseAndUserConfigs(clonedBaseVariation, result);
-      }
-
-      // Detect if this is a duplicate variation.
-      const isDuplicate = accumulator.some(item => {
-        return JSON.stringify(item.styles) === JSON.stringify(result?.styles) && JSON.stringify(item.settings) === JSON.stringify(result?.settings);
-      });
-      if (isDuplicate) {
-        return accumulator;
-      }
-
-      // If the variation is not a duplicate, add it to the accumulator.
-      accumulator.push(result);
-      return accumulator;
-    }, [] // Initial accumulator value.
-    );
-    if ('function' === typeof filter) {
-      processedStyleVariations = processedStyleVariations.filter(filter);
-    }
-    return processedStyleVariations;
-  }, [variations, property, baseVariation, filter]);
-}
 
 /**
  * Compares a style variation to the same variation filtered by a single property.
@@ -8150,7 +8084,7 @@ function PushChangesToGlobalStylesControl({
       // notification.
       __unstableMarkNextChangeAsNotPersistent();
       setAttributes(newBlockAttributes);
-      setUserConfig(() => newUserConfig, {
+      setUserConfig(newUserConfig, {
         undoIgnore: true
       });
       createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(
@@ -8162,7 +8096,7 @@ function PushChangesToGlobalStylesControl({
           onClick() {
             __unstableMarkNextChangeAsNotPersistent();
             setAttributes(attributes);
-            setUserConfig(() => userConfig, {
+            setUserConfig(userConfig, {
               undoIgnore: true
             });
           }
@@ -8180,6 +8114,7 @@ function PushChangesToGlobalStylesControl({
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
       __next40pxDefaultSize: true,
       variant: "secondary",
+      __experimentalIsFocusable: true,
       disabled: changes.length === 0,
       onClick: pushChanges,
       children: (0,external_wp_i18n_namespaceObject.__)('Apply globally')
@@ -8801,27 +8736,42 @@ const setCanvasMode = mode => ({
   registry,
   dispatch
 }) => {
-  const isMediumOrBigger = window.matchMedia('(min-width: 782px)').matches;
-  registry.dispatch(external_wp_blockEditor_namespaceObject.store).__unstableSetEditorMode('edit');
-  const isPublishSidebarOpened = registry.select(external_wp_editor_namespaceObject.store).isPublishSidebarOpened();
-  dispatch({
-    type: 'SET_CANVAS_MODE',
-    mode
-  });
-  const isEditMode = mode === 'edit';
-  if (isPublishSidebarOpened && !isEditMode) {
-    registry.dispatch(external_wp_editor_namespaceObject.store).closePublishSidebar();
-  }
+  const switchCanvasMode = () => {
+    registry.batch(() => {
+      const isMediumOrBigger = window.matchMedia('(min-width: 782px)').matches;
+      registry.dispatch(external_wp_blockEditor_namespaceObject.store).clearSelectedBlock();
+      registry.dispatch(external_wp_editor_namespaceObject.store).setDeviceType('Desktop');
+      registry.dispatch(external_wp_blockEditor_namespaceObject.store).__unstableSetEditorMode('edit');
+      const isPublishSidebarOpened = registry.select(external_wp_editor_namespaceObject.store).isPublishSidebarOpened();
+      dispatch({
+        type: 'SET_CANVAS_MODE',
+        mode
+      });
+      const isEditMode = mode === 'edit';
+      if (isPublishSidebarOpened && !isEditMode) {
+        registry.dispatch(external_wp_editor_namespaceObject.store).closePublishSidebar();
+      }
 
-  // Check if the block list view should be open by default.
-  // If `distractionFree` mode is enabled, the block list view should not be open.
-  // This behavior is disabled for small viewports.
-  if (isMediumOrBigger && isEditMode && registry.select(external_wp_preferences_namespaceObject.store).get('core', 'showListViewByDefault') && !registry.select(external_wp_preferences_namespaceObject.store).get('core', 'distractionFree')) {
-    registry.dispatch(external_wp_editor_namespaceObject.store).setIsListViewOpened(true);
+      // Check if the block list view should be open by default.
+      // If `distractionFree` mode is enabled, the block list view should not be open.
+      // This behavior is disabled for small viewports.
+      if (isMediumOrBigger && isEditMode && registry.select(external_wp_preferences_namespaceObject.store).get('core', 'showListViewByDefault') && !registry.select(external_wp_preferences_namespaceObject.store).get('core', 'distractionFree')) {
+        registry.dispatch(external_wp_editor_namespaceObject.store).setIsListViewOpened(true);
+      } else {
+        registry.dispatch(external_wp_editor_namespaceObject.store).setIsListViewOpened(false);
+      }
+      registry.dispatch(external_wp_editor_namespaceObject.store).setIsInserterOpened(false);
+    });
+  };
+  if (!document.startViewTransition) {
+    switchCanvasMode();
   } else {
-    registry.dispatch(external_wp_editor_namespaceObject.store).setIsListViewOpened(false);
+    document.documentElement.classList.add(`canvas-mode-${mode}-transition`);
+    const transition = document.startViewTransition(() => switchCanvasMode());
+    transition.finished.finally(() => {
+      document.documentElement.classList.remove(`canvas-mode-${mode}-transition`);
+    });
   }
-  registry.dispatch(external_wp_editor_namespaceObject.store).setIsInserterOpened(false);
 };
 
 /**
@@ -9273,208 +9223,6 @@ class ErrorBoundary extends external_wp_element_namespaceObject.Component {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sync-state-with-url/use-init-edited-entity-from-url.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-const {
-  useLocation
-} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
-const postTypesWithoutParentTemplate = [TEMPLATE_POST_TYPE, TEMPLATE_PART_POST_TYPE, NAVIGATION_POST_TYPE, PATTERN_TYPES.user];
-const authorizedPostTypes = ['page'];
-function useResolveEditedEntityAndContext({
-  postId,
-  postType
-}) {
-  const {
-    hasLoadedAllDependencies,
-    homepageId,
-    postsPageId,
-    url,
-    frontPageTemplateId
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getSite,
-      getUnstableBase,
-      getEntityRecords
-    } = select(external_wp_coreData_namespaceObject.store);
-    const siteData = getSite();
-    const base = getUnstableBase();
-    const templates = getEntityRecords('postType', TEMPLATE_POST_TYPE, {
-      per_page: -1
-    });
-    const _homepageId = siteData?.show_on_front === 'page' && ['number', 'string'].includes(typeof siteData.page_on_front) && !!+siteData.page_on_front // We also need to check if it's not zero(`0`).
-    ? siteData.page_on_front.toString() : null;
-    const _postsPageId = siteData?.show_on_front === 'page' && ['number', 'string'].includes(typeof siteData.page_for_posts) ? siteData.page_for_posts.toString() : null;
-    let _frontPageTemplateId;
-    if (templates) {
-      const frontPageTemplate = templates.find(t => t.slug === 'front-page');
-      _frontPageTemplateId = frontPageTemplate ? frontPageTemplate.id : false;
-    }
-    return {
-      hasLoadedAllDependencies: !!base && !!siteData,
-      homepageId: _homepageId,
-      postsPageId: _postsPageId,
-      url: base?.home,
-      frontPageTemplateId: _frontPageTemplateId
-    };
-  }, []);
-
-  /**
-   * This is a hook that recreates the logic to resolve a template for a given WordPress postID postTypeId
-   * in order to match the frontend as closely as possible in the site editor.
-   *
-   * It is not possible to rely on the server logic because there maybe unsaved changes that impact the template resolution.
-   */
-  const resolvedTemplateId = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    // If we're rendering a post type that doesn't have a template
-    // no need to resolve its template.
-    if (postTypesWithoutParentTemplate.includes(postType) && postId) {
-      return undefined;
-    }
-    const {
-      getEditedEntityRecord,
-      getEntityRecords,
-      getDefaultTemplateId,
-      __experimentalGetTemplateForLink
-    } = select(external_wp_coreData_namespaceObject.store);
-    function resolveTemplateForPostTypeAndId(postTypeToResolve, postIdToResolve) {
-      // For the front page, we always use the front page template if existing.
-      if (postTypeToResolve === 'page' && homepageId === postIdToResolve) {
-        // We're still checking whether the front page template exists.
-        // Don't resolve the template yet.
-        if (frontPageTemplateId === undefined) {
-          return undefined;
-        }
-        if (!!frontPageTemplateId) {
-          return frontPageTemplateId;
-        }
-      }
-      const editedEntity = getEditedEntityRecord('postType', postTypeToResolve, postIdToResolve);
-      if (!editedEntity) {
-        return undefined;
-      }
-      // Check if the current page is the posts page.
-      if (postTypeToResolve === 'page' && postsPageId === postIdToResolve) {
-        return __experimentalGetTemplateForLink(editedEntity.link)?.id;
-      }
-      // First see if the post/page has an assigned template and fetch it.
-      const currentTemplateSlug = editedEntity.template;
-      if (currentTemplateSlug) {
-        const currentTemplate = getEntityRecords('postType', TEMPLATE_POST_TYPE, {
-          per_page: -1
-        })?.find(({
-          slug
-        }) => slug === currentTemplateSlug);
-        if (currentTemplate) {
-          return currentTemplate.id;
-        }
-      }
-      // If no template is assigned, use the default template.
-      let slugToCheck;
-      // In `draft` status we might not have a slug available, so we use the `single`
-      // post type templates slug(ex page, single-post, single-product etc..).
-      // Pages do not need the `single` prefix in the slug to be prioritized
-      // through template hierarchy.
-      if (editedEntity.slug) {
-        slugToCheck = postTypeToResolve === 'page' ? `${postTypeToResolve}-${editedEntity.slug}` : `single-${postTypeToResolve}-${editedEntity.slug}`;
-      } else {
-        slugToCheck = postTypeToResolve === 'page' ? 'page' : `single-${postTypeToResolve}`;
-      }
-      return getDefaultTemplateId({
-        slug: slugToCheck
-      });
-    }
-    if (!hasLoadedAllDependencies) {
-      return undefined;
-    }
-
-    // If we're rendering a specific page, we need to resolve its template.
-    // The site editor only supports pages for now, not other CPTs.
-    if (postType && postId && authorizedPostTypes.includes(postType)) {
-      return resolveTemplateForPostTypeAndId(postType, postId);
-    }
-
-    // If we're rendering the home page, and we have a static home page, resolve its template.
-    if (homepageId) {
-      return resolveTemplateForPostTypeAndId('page', homepageId);
-    }
-
-    // If we're not rendering a specific page, use the front page template.
-    if (url) {
-      const template = __experimentalGetTemplateForLink(url);
-      return template?.id;
-    }
-  }, [homepageId, postsPageId, hasLoadedAllDependencies, url, postId, postType, frontPageTemplateId]);
-  const context = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (postTypesWithoutParentTemplate.includes(postType) && postId) {
-      return {};
-    }
-    if (postType && postId && authorizedPostTypes.includes(postType)) {
-      return {
-        postType,
-        postId
-      };
-    }
-    if (homepageId) {
-      return {
-        postType: 'page',
-        postId: homepageId
-      };
-    }
-    return {};
-  }, [homepageId, postType, postId]);
-  if (postTypesWithoutParentTemplate.includes(postType) && postId) {
-    return {
-      isReady: true,
-      postType,
-      postId,
-      context
-    };
-  }
-  if (hasLoadedAllDependencies) {
-    return {
-      isReady: resolvedTemplateId !== undefined,
-      postType: TEMPLATE_POST_TYPE,
-      postId: resolvedTemplateId,
-      context
-    };
-  }
-  return {
-    isReady: false
-  };
-}
-function useInitEditedEntityFromURL() {
-  const {
-    params = {}
-  } = useLocation();
-  const {
-    postType,
-    postId,
-    context,
-    isReady
-  } = useResolveEditedEntityAndContext(params);
-  const {
-    setEditedEntity
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (isReady) {
-      setEditedEntity(postType, postId, context);
-    }
-  }, [isReady, postType, postId, context, setEditedEntity]);
-}
-
 ;// CONCATENATED MODULE: external ["wp","htmlEntities"]
 const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
 ;// CONCATENATED MODULE: external ["wp","primitives"]
@@ -9585,9 +9333,6 @@ function SiteIcon({
 
 
 
-
-
-
 /**
  * Internal dependencies
  */
@@ -9596,19 +9341,15 @@ function SiteIcon({
 
 
 
-const HUB_ANIMATION_DURATION = 0.3;
-const SiteHub = (0,external_wp_element_namespaceObject.memo)(({
-  isTransparent,
-  className
-}) => {
+const SiteHub = (0,external_wp_element_namespaceObject.memo)((0,external_wp_element_namespaceObject.forwardRef)(({
+  isTransparent
+}, ref) => {
   const {
-    canvasMode,
     dashboardLink,
     homeUrl,
     siteTitle
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
-      getCanvasMode,
       getSettings
     } = lock_unlock_unlock(select(store));
     const {
@@ -9617,7 +9358,6 @@ const SiteHub = (0,external_wp_element_namespaceObject.memo)(({
     } = select(external_wp_coreData_namespaceObject.store);
     const _site = getSite();
     return {
-      canvasMode: getCanvasMode(),
       dashboardLink: getSettings().__experimentalDashboardLink || 'index.php',
       homeUrl: getUnstableBase()?.home,
       siteTitle: !_site?.title && !!_site?.url ? (0,external_wp_url_namespaceObject.filterURLForDisplay)(_site?.url) : _site?.title
@@ -9626,136 +9366,54 @@ const SiteHub = (0,external_wp_element_namespaceObject.memo)(({
   const {
     open: openCommandCenter
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_commands_namespaceObject.store);
-  const disableMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
-  const {
-    setCanvasMode
-  } = lock_unlock_unlock((0,external_wp_data_namespaceObject.useDispatch)(store));
-  const {
-    clearSelectedBlock
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const {
-    setDeviceType
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_editor_namespaceObject.store);
-  const isBackToDashboardButton = canvasMode === 'view';
-  const siteIconButtonProps = isBackToDashboardButton ? {
-    href: dashboardLink,
-    label: (0,external_wp_i18n_namespaceObject.__)('Go to the Dashboard')
-  } : {
-    href: dashboardLink,
-    // We need to keep the `href` here so the component doesn't remount as a `<button>` and break the animation.
-    role: 'button',
-    label: (0,external_wp_i18n_namespaceObject.__)('Open Navigation'),
-    onClick: event => {
-      event.preventDefault();
-      if (canvasMode === 'edit') {
-        clearSelectedBlock();
-        setDeviceType('Desktop');
-        setCanvasMode('view');
-      }
-    }
-  };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableMotion.div, {
-    className: dist_clsx('edit-site-site-hub', className),
-    variants: {
-      isDistractionFree: {
-        x: '-100%'
-      },
-      isDistractionFreeHovering: {
-        x: 0
-      },
-      view: {
-        x: 0
-      },
-      edit: {
-        x: 0
-      }
-    },
-    initial: false,
-    transition: {
-      type: 'tween',
-      duration: disableMotion ? 0 : HUB_ANIMATION_DURATION,
-      ease: 'easeOut'
-    },
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    className: "edit-site-site-hub",
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
       justify: "flex-start",
       spacing: "0",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableMotion.div, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
         className: dist_clsx('edit-site-site-hub__view-mode-toggle-container', {
           'has-transparent-background': isTransparent
         }),
-        layout: true,
-        transition: {
-          type: 'tween',
-          duration: disableMotion ? 0 : HUB_ANIMATION_DURATION,
-          ease: 'easeOut'
-        },
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-          ...siteIconButtonProps,
+          ref: ref,
+          href: dashboardLink,
+          label: (0,external_wp_i18n_namespaceObject.__)('Go to the Dashboard'),
           className: "edit-site-layout__view-mode-toggle",
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableMotion.div, {
-            initial: false,
-            animate: {
-              scale: canvasMode === 'view' ? 0.5 : 1
-            },
-            whileHover: {
-              scale: canvasMode === 'view' ? 0.5 : 0.96
-            },
-            transition: {
-              type: 'tween',
-              duration: disableMotion ? 0 : HUB_ANIMATION_DURATION,
-              ease: 'easeOut'
-            },
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(site_icon, {
-              className: "edit-site-layout__view-mode-toggle-icon"
-            })
+          style: {
+            transform: 'scale(0.5)',
+            borderRadius: 4
+          },
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(site_icon, {
+            className: "edit-site-layout__view-mode-toggle-icon"
           })
         })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableAnimatePresence, {
-        initial: false,
-        children: canvasMode === 'view' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
-          as: external_wp_components_namespaceObject.__unstableMotion.div,
-          initial: {
-            opacity: 0
-          },
-          animate: {
-            opacity: isTransparent ? 0 : 1
-          },
-          exit: {
-            opacity: 0
-          },
-          transition: {
-            type: 'tween',
-            duration: disableMotion ? 0 : 0.2,
-            ease: 'easeOut',
-            delay: canvasMode === 'view' ? 0.1 : 0
-          },
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-            className: "edit-site-site-hub__title",
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-              variant: "link",
-              href: homeUrl,
-              target: "_blank",
-              label: (0,external_wp_i18n_namespaceObject.__)('View site (opens in a new tab)'),
-              "aria-label": (0,external_wp_i18n_namespaceObject.__)('View site (opens in a new tab)'),
-              children: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(siteTitle)
-            })
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalHStack, {
-            spacing: 0,
-            expanded: false,
-            className: "edit-site-site-hub__actions",
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-              className: "edit-site-site-hub_toggle-command-center",
-              icon: library_search,
-              onClick: () => openCommandCenter(),
-              label: (0,external_wp_i18n_namespaceObject.__)('Open command palette'),
-              shortcut: external_wp_keycodes_namespaceObject.displayShortcut.primary('k')
-            })
-          })]
-        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          className: "edit-site-site-hub__title",
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+            variant: "link",
+            href: homeUrl,
+            target: "_blank",
+            label: (0,external_wp_i18n_namespaceObject.__)('View site (opens in a new tab)'),
+            children: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(siteTitle)
+          })
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalHStack, {
+          spacing: 0,
+          expanded: false,
+          className: "edit-site-site-hub__actions",
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+            className: "edit-site-site-hub_toggle-command-center",
+            icon: library_search,
+            onClick: () => openCommandCenter(),
+            label: (0,external_wp_i18n_namespaceObject.__)('Open command palette'),
+            shortcut: external_wp_keycodes_namespaceObject.displayShortcut.primary('k')
+          })
+        })]
       })]
     })
   });
-});
+}));
 /* harmony default export */ const site_hub = (SiteHub);
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/resizable-frame/index.js
@@ -10034,69 +9692,6 @@ function ResizableFrame({
 }
 /* harmony default export */ const resizable_frame = (ResizableFrame);
 
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sync-state-with-url/use-sync-canvas-mode-with-url.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-const {
-  useLocation: use_sync_canvas_mode_with_url_useLocation,
-  useHistory
-} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
-function useSyncCanvasModeWithURL() {
-  const history = useHistory();
-  const {
-    params
-  } = use_sync_canvas_mode_with_url_useLocation();
-  const canvasMode = (0,external_wp_data_namespaceObject.useSelect)(select => lock_unlock_unlock(select(store)).getCanvasMode(), []);
-  const {
-    setCanvasMode
-  } = lock_unlock_unlock((0,external_wp_data_namespaceObject.useDispatch)(store));
-  const currentCanvasMode = (0,external_wp_element_namespaceObject.useRef)(canvasMode);
-  const {
-    canvas: canvasInUrl
-  } = params;
-  const currentCanvasInUrl = (0,external_wp_element_namespaceObject.useRef)(canvasInUrl);
-  const currentUrlParams = (0,external_wp_element_namespaceObject.useRef)(params);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    currentUrlParams.current = params;
-  }, [params]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    currentCanvasMode.current = canvasMode;
-    if (canvasMode === 'init') {
-      return;
-    }
-    if (canvasMode === 'edit' && currentCanvasInUrl.current !== canvasMode) {
-      history.push({
-        ...currentUrlParams.current,
-        canvas: 'edit'
-      });
-    }
-    if (canvasMode === 'view' && currentCanvasInUrl.current !== undefined) {
-      history.push({
-        ...currentUrlParams.current,
-        canvas: undefined
-      });
-    }
-  }, [canvasMode, history]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    currentCanvasInUrl.current = canvasInUrl;
-    if (canvasInUrl !== 'edit' && currentCanvasMode.current !== 'view') {
-      setCanvasMode('view');
-    } else if (canvasInUrl === 'edit' && currentCanvasMode.current !== 'edit') {
-      setCanvasMode('edit');
-    }
-  }, [canvasInUrl, setCanvasMode]);
-}
-
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/utils/is-previewing-theme.js
 /**
  * WordPress dependencies
@@ -10126,7 +9721,7 @@ function currentlyPreviewingTheme() {
 
 
 const {
-  useHistory: use_activate_theme_useHistory
+  useHistory
 } = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
 
 /**
@@ -10135,7 +9730,7 @@ const {
  * @return {Function} A function that activates the theme.
  */
 function useActivateTheme() {
-  const history = use_activate_theme_useHistory();
+  const history = useHistory();
   const {
     startResolution,
     finishResolution
@@ -10405,6 +10000,5004 @@ function KeyboardShortcutsGlobal() {
   return null;
 }
 /* harmony default export */ const global = (KeyboardShortcutsGlobal);
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/use-edited-entity-record/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+function useEditedEntityRecord(postType, postId) {
+  const {
+    record,
+    title,
+    description,
+    isLoaded,
+    icon
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getEditedPostType,
+      getEditedPostId
+    } = select(store);
+    const {
+      getEditedEntityRecord,
+      hasFinishedResolution
+    } = select(external_wp_coreData_namespaceObject.store);
+    const {
+      __experimentalGetTemplateInfo: getTemplateInfo
+    } = select(external_wp_editor_namespaceObject.store);
+    const usedPostType = postType !== null && postType !== void 0 ? postType : getEditedPostType();
+    const usedPostId = postId !== null && postId !== void 0 ? postId : getEditedPostId();
+    const _record = getEditedEntityRecord('postType', usedPostType, usedPostId);
+    const _isLoaded = usedPostId && hasFinishedResolution('getEditedEntityRecord', ['postType', usedPostType, usedPostId]);
+    const templateInfo = getTemplateInfo(_record);
+    return {
+      record: _record,
+      title: templateInfo.title,
+      description: templateInfo.description,
+      isLoaded: _isLoaded,
+      icon: templateInfo.icon
+    };
+  }, [postType, postId]);
+  return {
+    isLoaded,
+    icon,
+    record,
+    getTitle: () => title ? (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title) : null,
+    getDescription: () => description ? (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(description) : null
+  };
+}
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/layout/hooks.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+const MAX_LOADING_TIME = 10000; // 10 seconds
+
+function useIsSiteEditorLoading() {
+  const {
+    isLoaded: hasLoadedPost
+  } = useEditedEntityRecord();
+  const [loaded, setLoaded] = (0,external_wp_element_namespaceObject.useState)(false);
+  const inLoadingPause = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const hasResolvingSelectors = select(external_wp_coreData_namespaceObject.store).hasResolvingSelectors();
+    return !loaded && !hasResolvingSelectors;
+  }, [loaded]);
+
+  /*
+   * If the maximum expected loading time has passed, we're marking the
+   * editor as loaded, in order to prevent any failed requests from blocking
+   * the editor canvas from appearing.
+   */
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    let timeout;
+    if (!loaded) {
+      timeout = setTimeout(() => {
+        setLoaded(true);
+      }, MAX_LOADING_TIME);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [loaded]);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (inLoadingPause) {
+      /*
+       * We're using an arbitrary 100ms timeout here to catch brief
+       * moments without any resolving selectors that would result in
+       * displaying brief flickers of loading state and loaded state.
+       *
+       * It's worth experimenting with different values, since this also
+       * adds 100ms of artificial delay after loading has finished.
+       */
+      const ARTIFICIAL_DELAY = 100;
+      const timeout = setTimeout(() => {
+        setLoaded(true);
+      }, ARTIFICIAL_DELAY);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [inLoadingPause]);
+  return !loaded || !hasLoadedPost;
+}
+
+;// CONCATENATED MODULE: ./node_modules/@react-spring/rafz/dist/react-spring-rafz.esm.js
+let updateQueue = makeQueue();
+const raf = fn => schedule(fn, updateQueue);
+let writeQueue = makeQueue();
+
+raf.write = fn => schedule(fn, writeQueue);
+
+let onStartQueue = makeQueue();
+
+raf.onStart = fn => schedule(fn, onStartQueue);
+
+let onFrameQueue = makeQueue();
+
+raf.onFrame = fn => schedule(fn, onFrameQueue);
+
+let onFinishQueue = makeQueue();
+
+raf.onFinish = fn => schedule(fn, onFinishQueue);
+
+let timeouts = [];
+
+raf.setTimeout = (handler, ms) => {
+  let time = raf.now() + ms;
+
+  let cancel = () => {
+    let i = timeouts.findIndex(t => t.cancel == cancel);
+    if (~i) timeouts.splice(i, 1);
+    pendingCount -= ~i ? 1 : 0;
+  };
+
+  let timeout = {
+    time,
+    handler,
+    cancel
+  };
+  timeouts.splice(findTimeout(time), 0, timeout);
+  pendingCount += 1;
+  start();
+  return timeout;
+};
+
+let findTimeout = time => ~(~timeouts.findIndex(t => t.time > time) || ~timeouts.length);
+
+raf.cancel = fn => {
+  onStartQueue.delete(fn);
+  onFrameQueue.delete(fn);
+  onFinishQueue.delete(fn);
+  updateQueue.delete(fn);
+  writeQueue.delete(fn);
+};
+
+raf.sync = fn => {
+  sync = true;
+  raf.batchedUpdates(fn);
+  sync = false;
+};
+
+raf.throttle = fn => {
+  let lastArgs;
+
+  function queuedFn() {
+    try {
+      fn(...lastArgs);
+    } finally {
+      lastArgs = null;
+    }
+  }
+
+  function throttled(...args) {
+    lastArgs = args;
+    raf.onStart(queuedFn);
+  }
+
+  throttled.handler = fn;
+
+  throttled.cancel = () => {
+    onStartQueue.delete(queuedFn);
+    lastArgs = null;
+  };
+
+  return throttled;
+};
+
+let nativeRaf = typeof window != 'undefined' ? window.requestAnimationFrame : () => {};
+
+raf.use = impl => nativeRaf = impl;
+
+raf.now = typeof performance != 'undefined' ? () => performance.now() : Date.now;
+
+raf.batchedUpdates = fn => fn();
+
+raf.catch = console.error;
+raf.frameLoop = 'always';
+
+raf.advance = () => {
+  if (raf.frameLoop !== 'demand') {
+    console.warn('Cannot call the manual advancement of rafz whilst frameLoop is not set as demand');
+  } else {
+    update();
+  }
+};
+
+let ts = -1;
+let pendingCount = 0;
+let sync = false;
+
+function schedule(fn, queue) {
+  if (sync) {
+    queue.delete(fn);
+    fn(0);
+  } else {
+    queue.add(fn);
+    start();
+  }
+}
+
+function start() {
+  if (ts < 0) {
+    ts = 0;
+
+    if (raf.frameLoop !== 'demand') {
+      nativeRaf(loop);
+    }
+  }
+}
+
+function stop() {
+  ts = -1;
+}
+
+function loop() {
+  if (~ts) {
+    nativeRaf(loop);
+    raf.batchedUpdates(update);
+  }
+}
+
+function update() {
+  let prevTs = ts;
+  ts = raf.now();
+  let count = findTimeout(ts);
+
+  if (count) {
+    eachSafely(timeouts.splice(0, count), t => t.handler());
+    pendingCount -= count;
+  }
+
+  if (!pendingCount) {
+    stop();
+    return;
+  }
+
+  onStartQueue.flush();
+  updateQueue.flush(prevTs ? Math.min(64, ts - prevTs) : 16.667);
+  onFrameQueue.flush();
+  writeQueue.flush();
+  onFinishQueue.flush();
+}
+
+function makeQueue() {
+  let next = new Set();
+  let current = next;
+  return {
+    add(fn) {
+      pendingCount += current == next && !next.has(fn) ? 1 : 0;
+      next.add(fn);
+    },
+
+    delete(fn) {
+      pendingCount -= current == next && next.has(fn) ? 1 : 0;
+      return next.delete(fn);
+    },
+
+    flush(arg) {
+      if (current.size) {
+        next = new Set();
+        pendingCount -= current.size;
+        eachSafely(current, fn => fn(arg) && next.add(fn));
+        pendingCount += next.size;
+        current = next;
+      }
+    }
+
+  };
+}
+
+function eachSafely(values, each) {
+  values.forEach(value => {
+    try {
+      each(value);
+    } catch (e) {
+      raf.catch(e);
+    }
+  });
+}
+
+const __raf = {
+  count() {
+    return pendingCount;
+  },
+
+  isRunning() {
+    return ts >= 0;
+  },
+
+  clear() {
+    ts = -1;
+    timeouts = [];
+    onStartQueue = makeQueue();
+    updateQueue = makeQueue();
+    onFrameQueue = makeQueue();
+    writeQueue = makeQueue();
+    onFinishQueue = makeQueue();
+    pendingCount = 0;
+  }
+
+};
+
+
+
+// EXTERNAL MODULE: external "React"
+var external_React_ = __webpack_require__(9196);
+var external_React_namespaceObject = /*#__PURE__*/__webpack_require__.t(external_React_, 2);
+;// CONCATENATED MODULE: ./node_modules/@react-spring/shared/dist/react-spring-shared.esm.js
+
+
+
+
+function noop() {}
+const defineHidden = (obj, key, value) => Object.defineProperty(obj, key, {
+  value,
+  writable: true,
+  configurable: true
+});
+const react_spring_shared_esm_is = {
+  arr: Array.isArray,
+  obj: a => !!a && a.constructor.name === 'Object',
+  fun: a => typeof a === 'function',
+  str: a => typeof a === 'string',
+  num: a => typeof a === 'number',
+  und: a => a === undefined
+};
+function isEqual(a, b) {
+  if (react_spring_shared_esm_is.arr(a)) {
+    if (!react_spring_shared_esm_is.arr(b) || a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) return false;
+    }
+
+    return true;
+  }
+
+  return a === b;
+}
+const react_spring_shared_esm_each = (obj, fn) => obj.forEach(fn);
+function react_spring_shared_esm_eachProp(obj, fn, ctx) {
+  if (react_spring_shared_esm_is.arr(obj)) {
+    for (let i = 0; i < obj.length; i++) {
+      fn.call(ctx, obj[i], `${i}`);
+    }
+
+    return;
+  }
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      fn.call(ctx, obj[key], key);
+    }
+  }
+}
+const react_spring_shared_esm_toArray = a => react_spring_shared_esm_is.und(a) ? [] : react_spring_shared_esm_is.arr(a) ? a : [a];
+function flush(queue, iterator) {
+  if (queue.size) {
+    const items = Array.from(queue);
+    queue.clear();
+    react_spring_shared_esm_each(items, iterator);
+  }
+}
+const flushCalls = (queue, ...args) => flush(queue, fn => fn(...args));
+const isSSR = () => typeof window === 'undefined' || !window.navigator || /ServerSideRendering|^Deno\//.test(window.navigator.userAgent);
+
+let createStringInterpolator$1;
+let to;
+let colors$1 = null;
+let skipAnimation = false;
+let willAdvance = noop;
+const react_spring_shared_esm_assign = globals => {
+  if (globals.to) to = globals.to;
+  if (globals.now) raf.now = globals.now;
+  if (globals.colors !== undefined) colors$1 = globals.colors;
+  if (globals.skipAnimation != null) skipAnimation = globals.skipAnimation;
+  if (globals.createStringInterpolator) createStringInterpolator$1 = globals.createStringInterpolator;
+  if (globals.requestAnimationFrame) raf.use(globals.requestAnimationFrame);
+  if (globals.batchedUpdates) raf.batchedUpdates = globals.batchedUpdates;
+  if (globals.willAdvance) willAdvance = globals.willAdvance;
+  if (globals.frameLoop) raf.frameLoop = globals.frameLoop;
+};
+
+var globals = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  get createStringInterpolator () { return createStringInterpolator$1; },
+  get to () { return to; },
+  get colors () { return colors$1; },
+  get skipAnimation () { return skipAnimation; },
+  get willAdvance () { return willAdvance; },
+  assign: react_spring_shared_esm_assign
+});
+
+const startQueue = new Set();
+let currentFrame = [];
+let prevFrame = [];
+let priority = 0;
+const frameLoop = {
+  get idle() {
+    return !startQueue.size && !currentFrame.length;
+  },
+
+  start(animation) {
+    if (priority > animation.priority) {
+      startQueue.add(animation);
+      raf.onStart(flushStartQueue);
+    } else {
+      startSafely(animation);
+      raf(advance);
+    }
+  },
+
+  advance,
+
+  sort(animation) {
+    if (priority) {
+      raf.onFrame(() => frameLoop.sort(animation));
+    } else {
+      const prevIndex = currentFrame.indexOf(animation);
+
+      if (~prevIndex) {
+        currentFrame.splice(prevIndex, 1);
+        startUnsafely(animation);
+      }
+    }
+  },
+
+  clear() {
+    currentFrame = [];
+    startQueue.clear();
+  }
+
+};
+
+function flushStartQueue() {
+  startQueue.forEach(startSafely);
+  startQueue.clear();
+  raf(advance);
+}
+
+function startSafely(animation) {
+  if (!currentFrame.includes(animation)) startUnsafely(animation);
+}
+
+function startUnsafely(animation) {
+  currentFrame.splice(findIndex(currentFrame, other => other.priority > animation.priority), 0, animation);
+}
+
+function advance(dt) {
+  const nextFrame = prevFrame;
+
+  for (let i = 0; i < currentFrame.length; i++) {
+    const animation = currentFrame[i];
+    priority = animation.priority;
+
+    if (!animation.idle) {
+      willAdvance(animation);
+      animation.advance(dt);
+
+      if (!animation.idle) {
+        nextFrame.push(animation);
+      }
+    }
+  }
+
+  priority = 0;
+  prevFrame = currentFrame;
+  prevFrame.length = 0;
+  currentFrame = nextFrame;
+  return currentFrame.length > 0;
+}
+
+function findIndex(arr, test) {
+  const index = arr.findIndex(test);
+  return index < 0 ? arr.length : index;
+}
+
+const colors = {
+  transparent: 0x00000000,
+  aliceblue: 0xf0f8ffff,
+  antiquewhite: 0xfaebd7ff,
+  aqua: 0x00ffffff,
+  aquamarine: 0x7fffd4ff,
+  azure: 0xf0ffffff,
+  beige: 0xf5f5dcff,
+  bisque: 0xffe4c4ff,
+  black: 0x000000ff,
+  blanchedalmond: 0xffebcdff,
+  blue: 0x0000ffff,
+  blueviolet: 0x8a2be2ff,
+  brown: 0xa52a2aff,
+  burlywood: 0xdeb887ff,
+  burntsienna: 0xea7e5dff,
+  cadetblue: 0x5f9ea0ff,
+  chartreuse: 0x7fff00ff,
+  chocolate: 0xd2691eff,
+  coral: 0xff7f50ff,
+  cornflowerblue: 0x6495edff,
+  cornsilk: 0xfff8dcff,
+  crimson: 0xdc143cff,
+  cyan: 0x00ffffff,
+  darkblue: 0x00008bff,
+  darkcyan: 0x008b8bff,
+  darkgoldenrod: 0xb8860bff,
+  darkgray: 0xa9a9a9ff,
+  darkgreen: 0x006400ff,
+  darkgrey: 0xa9a9a9ff,
+  darkkhaki: 0xbdb76bff,
+  darkmagenta: 0x8b008bff,
+  darkolivegreen: 0x556b2fff,
+  darkorange: 0xff8c00ff,
+  darkorchid: 0x9932ccff,
+  darkred: 0x8b0000ff,
+  darksalmon: 0xe9967aff,
+  darkseagreen: 0x8fbc8fff,
+  darkslateblue: 0x483d8bff,
+  darkslategray: 0x2f4f4fff,
+  darkslategrey: 0x2f4f4fff,
+  darkturquoise: 0x00ced1ff,
+  darkviolet: 0x9400d3ff,
+  deeppink: 0xff1493ff,
+  deepskyblue: 0x00bfffff,
+  dimgray: 0x696969ff,
+  dimgrey: 0x696969ff,
+  dodgerblue: 0x1e90ffff,
+  firebrick: 0xb22222ff,
+  floralwhite: 0xfffaf0ff,
+  forestgreen: 0x228b22ff,
+  fuchsia: 0xff00ffff,
+  gainsboro: 0xdcdcdcff,
+  ghostwhite: 0xf8f8ffff,
+  gold: 0xffd700ff,
+  goldenrod: 0xdaa520ff,
+  gray: 0x808080ff,
+  green: 0x008000ff,
+  greenyellow: 0xadff2fff,
+  grey: 0x808080ff,
+  honeydew: 0xf0fff0ff,
+  hotpink: 0xff69b4ff,
+  indianred: 0xcd5c5cff,
+  indigo: 0x4b0082ff,
+  ivory: 0xfffff0ff,
+  khaki: 0xf0e68cff,
+  lavender: 0xe6e6faff,
+  lavenderblush: 0xfff0f5ff,
+  lawngreen: 0x7cfc00ff,
+  lemonchiffon: 0xfffacdff,
+  lightblue: 0xadd8e6ff,
+  lightcoral: 0xf08080ff,
+  lightcyan: 0xe0ffffff,
+  lightgoldenrodyellow: 0xfafad2ff,
+  lightgray: 0xd3d3d3ff,
+  lightgreen: 0x90ee90ff,
+  lightgrey: 0xd3d3d3ff,
+  lightpink: 0xffb6c1ff,
+  lightsalmon: 0xffa07aff,
+  lightseagreen: 0x20b2aaff,
+  lightskyblue: 0x87cefaff,
+  lightslategray: 0x778899ff,
+  lightslategrey: 0x778899ff,
+  lightsteelblue: 0xb0c4deff,
+  lightyellow: 0xffffe0ff,
+  lime: 0x00ff00ff,
+  limegreen: 0x32cd32ff,
+  linen: 0xfaf0e6ff,
+  magenta: 0xff00ffff,
+  maroon: 0x800000ff,
+  mediumaquamarine: 0x66cdaaff,
+  mediumblue: 0x0000cdff,
+  mediumorchid: 0xba55d3ff,
+  mediumpurple: 0x9370dbff,
+  mediumseagreen: 0x3cb371ff,
+  mediumslateblue: 0x7b68eeff,
+  mediumspringgreen: 0x00fa9aff,
+  mediumturquoise: 0x48d1ccff,
+  mediumvioletred: 0xc71585ff,
+  midnightblue: 0x191970ff,
+  mintcream: 0xf5fffaff,
+  mistyrose: 0xffe4e1ff,
+  moccasin: 0xffe4b5ff,
+  navajowhite: 0xffdeadff,
+  navy: 0x000080ff,
+  oldlace: 0xfdf5e6ff,
+  olive: 0x808000ff,
+  olivedrab: 0x6b8e23ff,
+  orange: 0xffa500ff,
+  orangered: 0xff4500ff,
+  orchid: 0xda70d6ff,
+  palegoldenrod: 0xeee8aaff,
+  palegreen: 0x98fb98ff,
+  paleturquoise: 0xafeeeeff,
+  palevioletred: 0xdb7093ff,
+  papayawhip: 0xffefd5ff,
+  peachpuff: 0xffdab9ff,
+  peru: 0xcd853fff,
+  pink: 0xffc0cbff,
+  plum: 0xdda0ddff,
+  powderblue: 0xb0e0e6ff,
+  purple: 0x800080ff,
+  rebeccapurple: 0x663399ff,
+  red: 0xff0000ff,
+  rosybrown: 0xbc8f8fff,
+  royalblue: 0x4169e1ff,
+  saddlebrown: 0x8b4513ff,
+  salmon: 0xfa8072ff,
+  sandybrown: 0xf4a460ff,
+  seagreen: 0x2e8b57ff,
+  seashell: 0xfff5eeff,
+  sienna: 0xa0522dff,
+  silver: 0xc0c0c0ff,
+  skyblue: 0x87ceebff,
+  slateblue: 0x6a5acdff,
+  slategray: 0x708090ff,
+  slategrey: 0x708090ff,
+  snow: 0xfffafaff,
+  springgreen: 0x00ff7fff,
+  steelblue: 0x4682b4ff,
+  tan: 0xd2b48cff,
+  teal: 0x008080ff,
+  thistle: 0xd8bfd8ff,
+  tomato: 0xff6347ff,
+  turquoise: 0x40e0d0ff,
+  violet: 0xee82eeff,
+  wheat: 0xf5deb3ff,
+  white: 0xffffffff,
+  whitesmoke: 0xf5f5f5ff,
+  yellow: 0xffff00ff,
+  yellowgreen: 0x9acd32ff
+};
+
+const NUMBER = '[-+]?\\d*\\.?\\d+';
+const PERCENTAGE = NUMBER + '%';
+
+function call(...parts) {
+  return '\\(\\s*(' + parts.join(')\\s*,\\s*(') + ')\\s*\\)';
+}
+
+const rgb = new RegExp('rgb' + call(NUMBER, NUMBER, NUMBER));
+const rgba = new RegExp('rgba' + call(NUMBER, NUMBER, NUMBER, NUMBER));
+const hsl = new RegExp('hsl' + call(NUMBER, PERCENTAGE, PERCENTAGE));
+const hsla = new RegExp('hsla' + call(NUMBER, PERCENTAGE, PERCENTAGE, NUMBER));
+const hex3 = /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
+const hex4 = /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
+const hex6 = /^#([0-9a-fA-F]{6})$/;
+const hex8 = /^#([0-9a-fA-F]{8})$/;
+
+function normalizeColor(color) {
+  let match;
+
+  if (typeof color === 'number') {
+    return color >>> 0 === color && color >= 0 && color <= 0xffffffff ? color : null;
+  }
+
+  if (match = hex6.exec(color)) return parseInt(match[1] + 'ff', 16) >>> 0;
+
+  if (colors$1 && colors$1[color] !== undefined) {
+    return colors$1[color];
+  }
+
+  if (match = rgb.exec(color)) {
+    return (parse255(match[1]) << 24 | parse255(match[2]) << 16 | parse255(match[3]) << 8 | 0x000000ff) >>> 0;
+  }
+
+  if (match = rgba.exec(color)) {
+    return (parse255(match[1]) << 24 | parse255(match[2]) << 16 | parse255(match[3]) << 8 | parse1(match[4])) >>> 0;
+  }
+
+  if (match = hex3.exec(color)) {
+    return parseInt(match[1] + match[1] + match[2] + match[2] + match[3] + match[3] + 'ff', 16) >>> 0;
+  }
+
+  if (match = hex8.exec(color)) return parseInt(match[1], 16) >>> 0;
+
+  if (match = hex4.exec(color)) {
+    return parseInt(match[1] + match[1] + match[2] + match[2] + match[3] + match[3] + match[4] + match[4], 16) >>> 0;
+  }
+
+  if (match = hsl.exec(color)) {
+    return (hslToRgb(parse360(match[1]), parsePercentage(match[2]), parsePercentage(match[3])) | 0x000000ff) >>> 0;
+  }
+
+  if (match = hsla.exec(color)) {
+    return (hslToRgb(parse360(match[1]), parsePercentage(match[2]), parsePercentage(match[3])) | parse1(match[4])) >>> 0;
+  }
+
+  return null;
+}
+
+function hue2rgb(p, q, t) {
+  if (t < 0) t += 1;
+  if (t > 1) t -= 1;
+  if (t < 1 / 6) return p + (q - p) * 6 * t;
+  if (t < 1 / 2) return q;
+  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+  return p;
+}
+
+function hslToRgb(h, s, l) {
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const r = hue2rgb(p, q, h + 1 / 3);
+  const g = hue2rgb(p, q, h);
+  const b = hue2rgb(p, q, h - 1 / 3);
+  return Math.round(r * 255) << 24 | Math.round(g * 255) << 16 | Math.round(b * 255) << 8;
+}
+
+function parse255(str) {
+  const int = parseInt(str, 10);
+  if (int < 0) return 0;
+  if (int > 255) return 255;
+  return int;
+}
+
+function parse360(str) {
+  const int = parseFloat(str);
+  return (int % 360 + 360) % 360 / 360;
+}
+
+function parse1(str) {
+  const num = parseFloat(str);
+  if (num < 0) return 0;
+  if (num > 1) return 255;
+  return Math.round(num * 255);
+}
+
+function parsePercentage(str) {
+  const int = parseFloat(str);
+  if (int < 0) return 0;
+  if (int > 100) return 1;
+  return int / 100;
+}
+
+function colorToRgba(input) {
+  let int32Color = normalizeColor(input);
+  if (int32Color === null) return input;
+  int32Color = int32Color || 0;
+  let r = (int32Color & 0xff000000) >>> 24;
+  let g = (int32Color & 0x00ff0000) >>> 16;
+  let b = (int32Color & 0x0000ff00) >>> 8;
+  let a = (int32Color & 0x000000ff) / 255;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+const createInterpolator = (range, output, extrapolate) => {
+  if (react_spring_shared_esm_is.fun(range)) {
+    return range;
+  }
+
+  if (react_spring_shared_esm_is.arr(range)) {
+    return createInterpolator({
+      range,
+      output: output,
+      extrapolate
+    });
+  }
+
+  if (react_spring_shared_esm_is.str(range.output[0])) {
+    return createStringInterpolator$1(range);
+  }
+
+  const config = range;
+  const outputRange = config.output;
+  const inputRange = config.range || [0, 1];
+  const extrapolateLeft = config.extrapolateLeft || config.extrapolate || 'extend';
+  const extrapolateRight = config.extrapolateRight || config.extrapolate || 'extend';
+
+  const easing = config.easing || (t => t);
+
+  return input => {
+    const range = findRange(input, inputRange);
+    return interpolate(input, inputRange[range], inputRange[range + 1], outputRange[range], outputRange[range + 1], easing, extrapolateLeft, extrapolateRight, config.map);
+  };
+};
+
+function interpolate(input, inputMin, inputMax, outputMin, outputMax, easing, extrapolateLeft, extrapolateRight, map) {
+  let result = map ? map(input) : input;
+
+  if (result < inputMin) {
+    if (extrapolateLeft === 'identity') return result;else if (extrapolateLeft === 'clamp') result = inputMin;
+  }
+
+  if (result > inputMax) {
+    if (extrapolateRight === 'identity') return result;else if (extrapolateRight === 'clamp') result = inputMax;
+  }
+
+  if (outputMin === outputMax) return outputMin;
+  if (inputMin === inputMax) return input <= inputMin ? outputMin : outputMax;
+  if (inputMin === -Infinity) result = -result;else if (inputMax === Infinity) result = result - inputMin;else result = (result - inputMin) / (inputMax - inputMin);
+  result = easing(result);
+  if (outputMin === -Infinity) result = -result;else if (outputMax === Infinity) result = result + outputMin;else result = result * (outputMax - outputMin) + outputMin;
+  return result;
+}
+
+function findRange(input, inputRange) {
+  for (var i = 1; i < inputRange.length - 1; ++i) if (inputRange[i] >= input) break;
+
+  return i - 1;
+}
+
+function _extends() {
+  _extends = Object.assign ? Object.assign.bind() : function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+  return _extends.apply(this, arguments);
+}
+
+const $get = Symbol.for('FluidValue.get');
+const $observers = Symbol.for('FluidValue.observers');
+
+const hasFluidValue = arg => Boolean(arg && arg[$get]);
+
+const getFluidValue = arg => arg && arg[$get] ? arg[$get]() : arg;
+
+const getFluidObservers = target => target[$observers] || null;
+
+function callFluidObserver(observer, event) {
+  if (observer.eventObserved) {
+    observer.eventObserved(event);
+  } else {
+    observer(event);
+  }
+}
+
+function callFluidObservers(target, event) {
+  let observers = target[$observers];
+
+  if (observers) {
+    observers.forEach(observer => {
+      callFluidObserver(observer, event);
+    });
+  }
+}
+
+class FluidValue {
+  constructor(get) {
+    this[$get] = void 0;
+    this[$observers] = void 0;
+
+    if (!get && !(get = this.get)) {
+      throw Error('Unknown getter');
+    }
+
+    setFluidGetter(this, get);
+  }
+
+}
+
+const setFluidGetter = (target, get) => setHidden(target, $get, get);
+
+function react_spring_shared_esm_addFluidObserver(target, observer) {
+  if (target[$get]) {
+    let observers = target[$observers];
+
+    if (!observers) {
+      setHidden(target, $observers, observers = new Set());
+    }
+
+    if (!observers.has(observer)) {
+      observers.add(observer);
+
+      if (target.observerAdded) {
+        target.observerAdded(observers.size, observer);
+      }
+    }
+  }
+
+  return observer;
+}
+
+function removeFluidObserver(target, observer) {
+  let observers = target[$observers];
+
+  if (observers && observers.has(observer)) {
+    const count = observers.size - 1;
+
+    if (count) {
+      observers.delete(observer);
+    } else {
+      target[$observers] = null;
+    }
+
+    if (target.observerRemoved) {
+      target.observerRemoved(count, observer);
+    }
+  }
+}
+
+const setHidden = (target, key, value) => Object.defineProperty(target, key, {
+  value,
+  writable: true,
+  configurable: true
+});
+
+const numberRegex = /[+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?/g;
+const colorRegex = /(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))/gi;
+const unitRegex = new RegExp(`(${numberRegex.source})(%|[a-z]+)`, 'i');
+const rgbaRegex = /rgba\(([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+)\)/gi;
+const cssVariableRegex = /var\((--[a-zA-Z0-9-_]+),? ?([a-zA-Z0-9 ()%#.,-]+)?\)/;
+
+const variableToRgba = input => {
+  const [token, fallback] = parseCSSVariable(input);
+
+  if (!token || isSSR()) {
+    return input;
+  }
+
+  const value = window.getComputedStyle(document.documentElement).getPropertyValue(token);
+
+  if (value) {
+    return value.trim();
+  } else if (fallback && fallback.startsWith('--')) {
+    const _value = window.getComputedStyle(document.documentElement).getPropertyValue(fallback);
+
+    if (_value) {
+      return _value;
+    } else {
+      return input;
+    }
+  } else if (fallback && cssVariableRegex.test(fallback)) {
+    return variableToRgba(fallback);
+  } else if (fallback) {
+    return fallback;
+  }
+
+  return input;
+};
+
+const parseCSSVariable = current => {
+  const match = cssVariableRegex.exec(current);
+  if (!match) return [,];
+  const [, token, fallback] = match;
+  return [token, fallback];
+};
+
+let namedColorRegex;
+
+const rgbaRound = (_, p1, p2, p3, p4) => `rgba(${Math.round(p1)}, ${Math.round(p2)}, ${Math.round(p3)}, ${p4})`;
+
+const createStringInterpolator = config => {
+  if (!namedColorRegex) namedColorRegex = colors$1 ? new RegExp(`(${Object.keys(colors$1).join('|')})(?!\\w)`, 'g') : /^\b$/;
+  const output = config.output.map(value => {
+    return getFluidValue(value).replace(cssVariableRegex, variableToRgba).replace(colorRegex, colorToRgba).replace(namedColorRegex, colorToRgba);
+  });
+  const keyframes = output.map(value => value.match(numberRegex).map(Number));
+  const outputRanges = keyframes[0].map((_, i) => keyframes.map(values => {
+    if (!(i in values)) {
+      throw Error('The arity of each "output" value must be equal');
+    }
+
+    return values[i];
+  }));
+  const interpolators = outputRanges.map(output => createInterpolator(_extends({}, config, {
+    output
+  })));
+  return input => {
+    var _output$find;
+
+    const missingUnit = !unitRegex.test(output[0]) && ((_output$find = output.find(value => unitRegex.test(value))) == null ? void 0 : _output$find.replace(numberRegex, ''));
+    let i = 0;
+    return output[0].replace(numberRegex, () => `${interpolators[i++](input)}${missingUnit || ''}`).replace(rgbaRegex, rgbaRound);
+  };
+};
+
+const prefix = 'react-spring: ';
+
+const once = fn => {
+  const func = fn;
+  let called = false;
+
+  if (typeof func != 'function') {
+    throw new TypeError(`${prefix}once requires a function parameter`);
+  }
+
+  return (...args) => {
+    if (!called) {
+      func(...args);
+      called = true;
+    }
+  };
+};
+
+const warnInterpolate = once(console.warn);
+function react_spring_shared_esm_deprecateInterpolate() {
+  warnInterpolate(`${prefix}The "interpolate" function is deprecated in v9 (use "to" instead)`);
+}
+const warnDirectCall = once(console.warn);
+function react_spring_shared_esm_deprecateDirectCall() {
+  warnDirectCall(`${prefix}Directly calling start instead of using the api object is deprecated in v9 (use ".start" instead), this will be removed in later 0.X.0 versions`);
+}
+
+function isAnimatedString(value) {
+  return react_spring_shared_esm_is.str(value) && (value[0] == '#' || /\d/.test(value) || !isSSR() && cssVariableRegex.test(value) || value in (colors$1 || {}));
+}
+
+const react_spring_shared_esm_useIsomorphicLayoutEffect = isSSR() ? external_React_.useEffect : external_React_.useLayoutEffect;
+
+const useIsMounted = () => {
+  const isMounted = (0,external_React_.useRef)(false);
+  react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+  return isMounted;
+};
+
+function react_spring_shared_esm_useForceUpdate() {
+  const update = (0,external_React_.useState)()[1];
+  const isMounted = useIsMounted();
+  return () => {
+    if (isMounted.current) {
+      update(Math.random());
+    }
+  };
+}
+
+function useMemoOne(getResult, inputs) {
+  const [initial] = (0,external_React_.useState)(() => ({
+    inputs,
+    result: getResult()
+  }));
+  const committed = (0,external_React_.useRef)();
+  const prevCache = committed.current;
+  let cache = prevCache;
+
+  if (cache) {
+    const useCache = Boolean(inputs && cache.inputs && areInputsEqual(inputs, cache.inputs));
+
+    if (!useCache) {
+      cache = {
+        inputs,
+        result: getResult()
+      };
+    }
+  } else {
+    cache = initial;
+  }
+
+  (0,external_React_.useEffect)(() => {
+    committed.current = cache;
+
+    if (prevCache == initial) {
+      initial.inputs = initial.result = undefined;
+    }
+  }, [cache]);
+  return cache.result;
+}
+
+function areInputsEqual(next, prev) {
+  if (next.length !== prev.length) {
+    return false;
+  }
+
+  for (let i = 0; i < next.length; i++) {
+    if (next[i] !== prev[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+const react_spring_shared_esm_useOnce = effect => (0,external_React_.useEffect)(effect, emptyDeps);
+const emptyDeps = [];
+
+function react_spring_shared_esm_usePrev(value) {
+  const prevRef = useRef();
+  useEffect(() => {
+    prevRef.current = value;
+  });
+  return prevRef.current;
+}
+
+const useReducedMotion = () => {
+  const [reducedMotion, setReducedMotion] = useState(null);
+  react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion)');
+
+    const handleMediaChange = e => {
+      setReducedMotion(e.matches);
+      react_spring_shared_esm_assign({
+        skipAnimation: e.matches
+      });
+    };
+
+    handleMediaChange(mql);
+    mql.addEventListener('change', handleMediaChange);
+    return () => {
+      mql.removeEventListener('change', handleMediaChange);
+    };
+  }, []);
+  return reducedMotion;
+};
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@react-spring/animated/dist/react-spring-animated.esm.js
+
+
+
+
+const $node = Symbol.for('Animated:node');
+const isAnimated = value => !!value && value[$node] === value;
+const getAnimated = owner => owner && owner[$node];
+const setAnimated = (owner, node) => defineHidden(owner, $node, node);
+const getPayload = owner => owner && owner[$node] && owner[$node].getPayload();
+class Animated {
+  constructor() {
+    this.payload = void 0;
+    setAnimated(this, this);
+  }
+
+  getPayload() {
+    return this.payload || [];
+  }
+
+}
+
+class AnimatedValue extends Animated {
+  constructor(_value) {
+    super();
+    this.done = true;
+    this.elapsedTime = void 0;
+    this.lastPosition = void 0;
+    this.lastVelocity = void 0;
+    this.v0 = void 0;
+    this.durationProgress = 0;
+    this._value = _value;
+
+    if (react_spring_shared_esm_is.num(this._value)) {
+      this.lastPosition = this._value;
+    }
+  }
+
+  static create(value) {
+    return new AnimatedValue(value);
+  }
+
+  getPayload() {
+    return [this];
+  }
+
+  getValue() {
+    return this._value;
+  }
+
+  setValue(value, step) {
+    if (react_spring_shared_esm_is.num(value)) {
+      this.lastPosition = value;
+
+      if (step) {
+        value = Math.round(value / step) * step;
+
+        if (this.done) {
+          this.lastPosition = value;
+        }
+      }
+    }
+
+    if (this._value === value) {
+      return false;
+    }
+
+    this._value = value;
+    return true;
+  }
+
+  reset() {
+    const {
+      done
+    } = this;
+    this.done = false;
+
+    if (react_spring_shared_esm_is.num(this._value)) {
+      this.elapsedTime = 0;
+      this.durationProgress = 0;
+      this.lastPosition = this._value;
+      if (done) this.lastVelocity = null;
+      this.v0 = null;
+    }
+  }
+
+}
+
+class AnimatedString extends AnimatedValue {
+  constructor(value) {
+    super(0);
+    this._string = null;
+    this._toString = void 0;
+    this._toString = createInterpolator({
+      output: [value, value]
+    });
+  }
+
+  static create(value) {
+    return new AnimatedString(value);
+  }
+
+  getValue() {
+    let value = this._string;
+    return value == null ? this._string = this._toString(this._value) : value;
+  }
+
+  setValue(value) {
+    if (react_spring_shared_esm_is.str(value)) {
+      if (value == this._string) {
+        return false;
+      }
+
+      this._string = value;
+      this._value = 1;
+    } else if (super.setValue(value)) {
+      this._string = null;
+    } else {
+      return false;
+    }
+
+    return true;
+  }
+
+  reset(goal) {
+    if (goal) {
+      this._toString = createInterpolator({
+        output: [this.getValue(), goal]
+      });
+    }
+
+    this._value = 0;
+    super.reset();
+  }
+
+}
+
+const TreeContext = {
+  dependencies: null
+};
+
+class AnimatedObject extends Animated {
+  constructor(source) {
+    super();
+    this.source = source;
+    this.setValue(source);
+  }
+
+  getValue(animated) {
+    const values = {};
+    react_spring_shared_esm_eachProp(this.source, (source, key) => {
+      if (isAnimated(source)) {
+        values[key] = source.getValue(animated);
+      } else if (hasFluidValue(source)) {
+        values[key] = getFluidValue(source);
+      } else if (!animated) {
+        values[key] = source;
+      }
+    });
+    return values;
+  }
+
+  setValue(source) {
+    this.source = source;
+    this.payload = this._makePayload(source);
+  }
+
+  reset() {
+    if (this.payload) {
+      react_spring_shared_esm_each(this.payload, node => node.reset());
+    }
+  }
+
+  _makePayload(source) {
+    if (source) {
+      const payload = new Set();
+      react_spring_shared_esm_eachProp(source, this._addToPayload, payload);
+      return Array.from(payload);
+    }
+  }
+
+  _addToPayload(source) {
+    if (TreeContext.dependencies && hasFluidValue(source)) {
+      TreeContext.dependencies.add(source);
+    }
+
+    const payload = getPayload(source);
+
+    if (payload) {
+      react_spring_shared_esm_each(payload, node => this.add(node));
+    }
+  }
+
+}
+
+class AnimatedArray extends AnimatedObject {
+  constructor(source) {
+    super(source);
+  }
+
+  static create(source) {
+    return new AnimatedArray(source);
+  }
+
+  getValue() {
+    return this.source.map(node => node.getValue());
+  }
+
+  setValue(source) {
+    const payload = this.getPayload();
+
+    if (source.length == payload.length) {
+      return payload.map((node, i) => node.setValue(source[i])).some(Boolean);
+    }
+
+    super.setValue(source.map(makeAnimated));
+    return true;
+  }
+
+}
+
+function makeAnimated(value) {
+  const nodeType = isAnimatedString(value) ? AnimatedString : AnimatedValue;
+  return nodeType.create(value);
+}
+
+function getAnimatedType(value) {
+  const parentNode = getAnimated(value);
+  return parentNode ? parentNode.constructor : react_spring_shared_esm_is.arr(value) ? AnimatedArray : isAnimatedString(value) ? AnimatedString : AnimatedValue;
+}
+
+function react_spring_animated_esm_extends() {
+  react_spring_animated_esm_extends = Object.assign ? Object.assign.bind() : function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+  return react_spring_animated_esm_extends.apply(this, arguments);
+}
+
+const withAnimated = (Component, host) => {
+  const hasInstance = !react_spring_shared_esm_is.fun(Component) || Component.prototype && Component.prototype.isReactComponent;
+  return (0,external_React_.forwardRef)((givenProps, givenRef) => {
+    const instanceRef = (0,external_React_.useRef)(null);
+    const ref = hasInstance && (0,external_React_.useCallback)(value => {
+      instanceRef.current = updateRef(givenRef, value);
+    }, [givenRef]);
+    const [props, deps] = getAnimatedState(givenProps, host);
+    const forceUpdate = react_spring_shared_esm_useForceUpdate();
+
+    const callback = () => {
+      const instance = instanceRef.current;
+
+      if (hasInstance && !instance) {
+        return;
+      }
+
+      const didUpdate = instance ? host.applyAnimatedValues(instance, props.getValue(true)) : false;
+
+      if (didUpdate === false) {
+        forceUpdate();
+      }
+    };
+
+    const observer = new PropsObserver(callback, deps);
+    const observerRef = (0,external_React_.useRef)();
+    react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
+      observerRef.current = observer;
+      react_spring_shared_esm_each(deps, dep => react_spring_shared_esm_addFluidObserver(dep, observer));
+      return () => {
+        if (observerRef.current) {
+          react_spring_shared_esm_each(observerRef.current.deps, dep => removeFluidObserver(dep, observerRef.current));
+          raf.cancel(observerRef.current.update);
+        }
+      };
+    });
+    (0,external_React_.useEffect)(callback, []);
+    react_spring_shared_esm_useOnce(() => () => {
+      const observer = observerRef.current;
+      react_spring_shared_esm_each(observer.deps, dep => removeFluidObserver(dep, observer));
+    });
+    const usedProps = host.getComponentProps(props.getValue());
+    return external_React_.createElement(Component, react_spring_animated_esm_extends({}, usedProps, {
+      ref: ref
+    }));
+  });
+};
+
+class PropsObserver {
+  constructor(update, deps) {
+    this.update = update;
+    this.deps = deps;
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      raf.write(this.update);
+    }
+  }
+
+}
+
+function getAnimatedState(props, host) {
+  const dependencies = new Set();
+  TreeContext.dependencies = dependencies;
+  if (props.style) props = react_spring_animated_esm_extends({}, props, {
+    style: host.createAnimatedStyle(props.style)
+  });
+  props = new AnimatedObject(props);
+  TreeContext.dependencies = null;
+  return [props, dependencies];
+}
+
+function updateRef(ref, value) {
+  if (ref) {
+    if (react_spring_shared_esm_is.fun(ref)) ref(value);else ref.current = value;
+  }
+
+  return value;
+}
+
+const cacheKey = Symbol.for('AnimatedComponent');
+const createHost = (components, {
+  applyAnimatedValues: _applyAnimatedValues = () => false,
+  createAnimatedStyle: _createAnimatedStyle = style => new AnimatedObject(style),
+  getComponentProps: _getComponentProps = props => props
+} = {}) => {
+  const hostConfig = {
+    applyAnimatedValues: _applyAnimatedValues,
+    createAnimatedStyle: _createAnimatedStyle,
+    getComponentProps: _getComponentProps
+  };
+
+  const animated = Component => {
+    const displayName = getDisplayName(Component) || 'Anonymous';
+
+    if (react_spring_shared_esm_is.str(Component)) {
+      Component = animated[Component] || (animated[Component] = withAnimated(Component, hostConfig));
+    } else {
+      Component = Component[cacheKey] || (Component[cacheKey] = withAnimated(Component, hostConfig));
+    }
+
+    Component.displayName = `Animated(${displayName})`;
+    return Component;
+  };
+
+  react_spring_shared_esm_eachProp(components, (Component, key) => {
+    if (react_spring_shared_esm_is.arr(components)) {
+      key = getDisplayName(Component);
+    }
+
+    animated[key] = animated(Component);
+  });
+  return {
+    animated
+  };
+};
+
+const getDisplayName = arg => react_spring_shared_esm_is.str(arg) ? arg : arg && react_spring_shared_esm_is.str(arg.displayName) ? arg.displayName : react_spring_shared_esm_is.fun(arg) && arg.name || null;
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@react-spring/core/dist/react-spring-core.esm.js
+
+
+
+
+
+
+
+
+function react_spring_core_esm_extends() {
+  react_spring_core_esm_extends = Object.assign ? Object.assign.bind() : function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+  return react_spring_core_esm_extends.apply(this, arguments);
+}
+
+function callProp(value, ...args) {
+  return react_spring_shared_esm_is.fun(value) ? value(...args) : value;
+}
+const matchProp = (value, key) => value === true || !!(key && value && (react_spring_shared_esm_is.fun(value) ? value(key) : react_spring_shared_esm_toArray(value).includes(key)));
+const resolveProp = (prop, key) => react_spring_shared_esm_is.obj(prop) ? key && prop[key] : prop;
+const getDefaultProp = (props, key) => props.default === true ? props[key] : props.default ? props.default[key] : undefined;
+
+const noopTransform = value => value;
+
+const getDefaultProps = (props, transform = noopTransform) => {
+  let keys = DEFAULT_PROPS;
+
+  if (props.default && props.default !== true) {
+    props = props.default;
+    keys = Object.keys(props);
+  }
+
+  const defaults = {};
+
+  for (const key of keys) {
+    const value = transform(props[key], key);
+
+    if (!react_spring_shared_esm_is.und(value)) {
+      defaults[key] = value;
+    }
+  }
+
+  return defaults;
+};
+const DEFAULT_PROPS = ['config', 'onProps', 'onStart', 'onChange', 'onPause', 'onResume', 'onRest'];
+const RESERVED_PROPS = {
+  config: 1,
+  from: 1,
+  to: 1,
+  ref: 1,
+  loop: 1,
+  reset: 1,
+  pause: 1,
+  cancel: 1,
+  reverse: 1,
+  immediate: 1,
+  default: 1,
+  delay: 1,
+  onProps: 1,
+  onStart: 1,
+  onChange: 1,
+  onPause: 1,
+  onResume: 1,
+  onRest: 1,
+  onResolve: 1,
+  items: 1,
+  trail: 1,
+  sort: 1,
+  expires: 1,
+  initial: 1,
+  enter: 1,
+  update: 1,
+  leave: 1,
+  children: 1,
+  onDestroyed: 1,
+  keys: 1,
+  callId: 1,
+  parentId: 1
+};
+
+function getForwardProps(props) {
+  const forward = {};
+  let count = 0;
+  react_spring_shared_esm_eachProp(props, (value, prop) => {
+    if (!RESERVED_PROPS[prop]) {
+      forward[prop] = value;
+      count++;
+    }
+  });
+
+  if (count) {
+    return forward;
+  }
+}
+
+function inferTo(props) {
+  const to = getForwardProps(props);
+
+  if (to) {
+    const out = {
+      to
+    };
+    react_spring_shared_esm_eachProp(props, (val, key) => key in to || (out[key] = val));
+    return out;
+  }
+
+  return react_spring_core_esm_extends({}, props);
+}
+function computeGoal(value) {
+  value = getFluidValue(value);
+  return react_spring_shared_esm_is.arr(value) ? value.map(computeGoal) : isAnimatedString(value) ? globals.createStringInterpolator({
+    range: [0, 1],
+    output: [value, value]
+  })(1) : value;
+}
+function hasProps(props) {
+  for (const _ in props) return true;
+
+  return false;
+}
+function isAsyncTo(to) {
+  return react_spring_shared_esm_is.fun(to) || react_spring_shared_esm_is.arr(to) && react_spring_shared_esm_is.obj(to[0]);
+}
+function detachRefs(ctrl, ref) {
+  var _ctrl$ref;
+
+  (_ctrl$ref = ctrl.ref) == null ? void 0 : _ctrl$ref.delete(ctrl);
+  ref == null ? void 0 : ref.delete(ctrl);
+}
+function replaceRef(ctrl, ref) {
+  if (ref && ctrl.ref !== ref) {
+    var _ctrl$ref2;
+
+    (_ctrl$ref2 = ctrl.ref) == null ? void 0 : _ctrl$ref2.delete(ctrl);
+    ref.add(ctrl);
+    ctrl.ref = ref;
+  }
+}
+
+function useChain(refs, timeSteps, timeFrame = 1000) {
+  useIsomorphicLayoutEffect(() => {
+    if (timeSteps) {
+      let prevDelay = 0;
+      each(refs, (ref, i) => {
+        const controllers = ref.current;
+
+        if (controllers.length) {
+          let delay = timeFrame * timeSteps[i];
+          if (isNaN(delay)) delay = prevDelay;else prevDelay = delay;
+          each(controllers, ctrl => {
+            each(ctrl.queue, props => {
+              const memoizedDelayProp = props.delay;
+
+              props.delay = key => delay + callProp(memoizedDelayProp || 0, key);
+            });
+          });
+          ref.start();
+        }
+      });
+    } else {
+      let p = Promise.resolve();
+      each(refs, ref => {
+        const controllers = ref.current;
+
+        if (controllers.length) {
+          const queues = controllers.map(ctrl => {
+            const q = ctrl.queue;
+            ctrl.queue = [];
+            return q;
+          });
+          p = p.then(() => {
+            each(controllers, (ctrl, i) => each(queues[i] || [], update => ctrl.queue.push(update)));
+            return Promise.all(ref.start());
+          });
+        }
+      });
+    }
+  });
+}
+
+const config = {
+  default: {
+    tension: 170,
+    friction: 26
+  },
+  gentle: {
+    tension: 120,
+    friction: 14
+  },
+  wobbly: {
+    tension: 180,
+    friction: 12
+  },
+  stiff: {
+    tension: 210,
+    friction: 20
+  },
+  slow: {
+    tension: 280,
+    friction: 60
+  },
+  molasses: {
+    tension: 280,
+    friction: 120
+  }
+};
+const c1 = 1.70158;
+const c2 = c1 * 1.525;
+const c3 = c1 + 1;
+const c4 = 2 * Math.PI / 3;
+const c5 = 2 * Math.PI / 4.5;
+
+const bounceOut = x => {
+  const n1 = 7.5625;
+  const d1 = 2.75;
+
+  if (x < 1 / d1) {
+    return n1 * x * x;
+  } else if (x < 2 / d1) {
+    return n1 * (x -= 1.5 / d1) * x + 0.75;
+  } else if (x < 2.5 / d1) {
+    return n1 * (x -= 2.25 / d1) * x + 0.9375;
+  } else {
+    return n1 * (x -= 2.625 / d1) * x + 0.984375;
+  }
+};
+
+const easings = {
+  linear: x => x,
+  easeInQuad: x => x * x,
+  easeOutQuad: x => 1 - (1 - x) * (1 - x),
+  easeInOutQuad: x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2,
+  easeInCubic: x => x * x * x,
+  easeOutCubic: x => 1 - Math.pow(1 - x, 3),
+  easeInOutCubic: x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  easeInQuart: x => x * x * x * x,
+  easeOutQuart: x => 1 - Math.pow(1 - x, 4),
+  easeInOutQuart: x => x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2,
+  easeInQuint: x => x * x * x * x * x,
+  easeOutQuint: x => 1 - Math.pow(1 - x, 5),
+  easeInOutQuint: x => x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2,
+  easeInSine: x => 1 - Math.cos(x * Math.PI / 2),
+  easeOutSine: x => Math.sin(x * Math.PI / 2),
+  easeInOutSine: x => -(Math.cos(Math.PI * x) - 1) / 2,
+  easeInExpo: x => x === 0 ? 0 : Math.pow(2, 10 * x - 10),
+  easeOutExpo: x => x === 1 ? 1 : 1 - Math.pow(2, -10 * x),
+  easeInOutExpo: x => x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 : (2 - Math.pow(2, -20 * x + 10)) / 2,
+  easeInCirc: x => 1 - Math.sqrt(1 - Math.pow(x, 2)),
+  easeOutCirc: x => Math.sqrt(1 - Math.pow(x - 1, 2)),
+  easeInOutCirc: x => x < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2,
+  easeInBack: x => c3 * x * x * x - c1 * x * x,
+  easeOutBack: x => 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2),
+  easeInOutBack: x => x < 0.5 ? Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2) / 2 : (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2,
+  easeInElastic: x => x === 0 ? 0 : x === 1 ? 1 : -Math.pow(2, 10 * x - 10) * Math.sin((x * 10 - 10.75) * c4),
+  easeOutElastic: x => x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1,
+  easeInOutElastic: x => x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * c5)) / 2 : Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * c5) / 2 + 1,
+  easeInBounce: x => 1 - bounceOut(1 - x),
+  easeOutBounce: bounceOut,
+  easeInOutBounce: x => x < 0.5 ? (1 - bounceOut(1 - 2 * x)) / 2 : (1 + bounceOut(2 * x - 1)) / 2
+};
+
+const defaults = react_spring_core_esm_extends({}, config.default, {
+  mass: 1,
+  damping: 1,
+  easing: easings.linear,
+  clamp: false
+});
+
+class AnimationConfig {
+  constructor() {
+    this.tension = void 0;
+    this.friction = void 0;
+    this.frequency = void 0;
+    this.damping = void 0;
+    this.mass = void 0;
+    this.velocity = 0;
+    this.restVelocity = void 0;
+    this.precision = void 0;
+    this.progress = void 0;
+    this.duration = void 0;
+    this.easing = void 0;
+    this.clamp = void 0;
+    this.bounce = void 0;
+    this.decay = void 0;
+    this.round = void 0;
+    Object.assign(this, defaults);
+  }
+
+}
+function mergeConfig(config, newConfig, defaultConfig) {
+  if (defaultConfig) {
+    defaultConfig = react_spring_core_esm_extends({}, defaultConfig);
+    sanitizeConfig(defaultConfig, newConfig);
+    newConfig = react_spring_core_esm_extends({}, defaultConfig, newConfig);
+  }
+
+  sanitizeConfig(config, newConfig);
+  Object.assign(config, newConfig);
+
+  for (const key in defaults) {
+    if (config[key] == null) {
+      config[key] = defaults[key];
+    }
+  }
+
+  let {
+    mass,
+    frequency,
+    damping
+  } = config;
+
+  if (!react_spring_shared_esm_is.und(frequency)) {
+    if (frequency < 0.01) frequency = 0.01;
+    if (damping < 0) damping = 0;
+    config.tension = Math.pow(2 * Math.PI / frequency, 2) * mass;
+    config.friction = 4 * Math.PI * damping * mass / frequency;
+  }
+
+  return config;
+}
+
+function sanitizeConfig(config, props) {
+  if (!react_spring_shared_esm_is.und(props.decay)) {
+    config.duration = undefined;
+  } else {
+    const isTensionConfig = !react_spring_shared_esm_is.und(props.tension) || !react_spring_shared_esm_is.und(props.friction);
+
+    if (isTensionConfig || !react_spring_shared_esm_is.und(props.frequency) || !react_spring_shared_esm_is.und(props.damping) || !react_spring_shared_esm_is.und(props.mass)) {
+      config.duration = undefined;
+      config.decay = undefined;
+    }
+
+    if (isTensionConfig) {
+      config.frequency = undefined;
+    }
+  }
+}
+
+const emptyArray = [];
+class Animation {
+  constructor() {
+    this.changed = false;
+    this.values = emptyArray;
+    this.toValues = null;
+    this.fromValues = emptyArray;
+    this.to = void 0;
+    this.from = void 0;
+    this.config = new AnimationConfig();
+    this.immediate = false;
+  }
+
+}
+
+function scheduleProps(callId, {
+  key,
+  props,
+  defaultProps,
+  state,
+  actions
+}) {
+  return new Promise((resolve, reject) => {
+    var _props$cancel;
+
+    let delay;
+    let timeout;
+    let cancel = matchProp((_props$cancel = props.cancel) != null ? _props$cancel : defaultProps == null ? void 0 : defaultProps.cancel, key);
+
+    if (cancel) {
+      onStart();
+    } else {
+      if (!react_spring_shared_esm_is.und(props.pause)) {
+        state.paused = matchProp(props.pause, key);
+      }
+
+      let pause = defaultProps == null ? void 0 : defaultProps.pause;
+
+      if (pause !== true) {
+        pause = state.paused || matchProp(pause, key);
+      }
+
+      delay = callProp(props.delay || 0, key);
+
+      if (pause) {
+        state.resumeQueue.add(onResume);
+        actions.pause();
+      } else {
+        actions.resume();
+        onResume();
+      }
+    }
+
+    function onPause() {
+      state.resumeQueue.add(onResume);
+      state.timeouts.delete(timeout);
+      timeout.cancel();
+      delay = timeout.time - raf.now();
+    }
+
+    function onResume() {
+      if (delay > 0 && !globals.skipAnimation) {
+        state.delayed = true;
+        timeout = raf.setTimeout(onStart, delay);
+        state.pauseQueue.add(onPause);
+        state.timeouts.add(timeout);
+      } else {
+        onStart();
+      }
+    }
+
+    function onStart() {
+      if (state.delayed) {
+        state.delayed = false;
+      }
+
+      state.pauseQueue.delete(onPause);
+      state.timeouts.delete(timeout);
+
+      if (callId <= (state.cancelId || 0)) {
+        cancel = true;
+      }
+
+      try {
+        actions.start(react_spring_core_esm_extends({}, props, {
+          callId,
+          cancel
+        }), resolve);
+      } catch (err) {
+        reject(err);
+      }
+    }
+  });
+}
+
+const getCombinedResult = (target, results) => results.length == 1 ? results[0] : results.some(result => result.cancelled) ? getCancelledResult(target.get()) : results.every(result => result.noop) ? getNoopResult(target.get()) : getFinishedResult(target.get(), results.every(result => result.finished));
+const getNoopResult = value => ({
+  value,
+  noop: true,
+  finished: true,
+  cancelled: false
+});
+const getFinishedResult = (value, finished, cancelled = false) => ({
+  value,
+  finished,
+  cancelled
+});
+const getCancelledResult = value => ({
+  value,
+  cancelled: true,
+  finished: false
+});
+
+function runAsync(to, props, state, target) {
+  const {
+    callId,
+    parentId,
+    onRest
+  } = props;
+  const {
+    asyncTo: prevTo,
+    promise: prevPromise
+  } = state;
+
+  if (!parentId && to === prevTo && !props.reset) {
+    return prevPromise;
+  }
+
+  return state.promise = (async () => {
+    state.asyncId = callId;
+    state.asyncTo = to;
+    const defaultProps = getDefaultProps(props, (value, key) => key === 'onRest' ? undefined : value);
+    let preventBail;
+    let bail;
+    const bailPromise = new Promise((resolve, reject) => (preventBail = resolve, bail = reject));
+
+    const bailIfEnded = bailSignal => {
+      const bailResult = callId <= (state.cancelId || 0) && getCancelledResult(target) || callId !== state.asyncId && getFinishedResult(target, false);
+
+      if (bailResult) {
+        bailSignal.result = bailResult;
+        bail(bailSignal);
+        throw bailSignal;
+      }
+    };
+
+    const animate = (arg1, arg2) => {
+      const bailSignal = new BailSignal();
+      const skipAnimationSignal = new SkipAniamtionSignal();
+      return (async () => {
+        if (globals.skipAnimation) {
+          stopAsync(state);
+          skipAnimationSignal.result = getFinishedResult(target, false);
+          bail(skipAnimationSignal);
+          throw skipAnimationSignal;
+        }
+
+        bailIfEnded(bailSignal);
+        const props = react_spring_shared_esm_is.obj(arg1) ? react_spring_core_esm_extends({}, arg1) : react_spring_core_esm_extends({}, arg2, {
+          to: arg1
+        });
+        props.parentId = callId;
+        react_spring_shared_esm_eachProp(defaultProps, (value, key) => {
+          if (react_spring_shared_esm_is.und(props[key])) {
+            props[key] = value;
+          }
+        });
+        const result = await target.start(props);
+        bailIfEnded(bailSignal);
+
+        if (state.paused) {
+          await new Promise(resume => {
+            state.resumeQueue.add(resume);
+          });
+        }
+
+        return result;
+      })();
+    };
+
+    let result;
+
+    if (globals.skipAnimation) {
+      stopAsync(state);
+      return getFinishedResult(target, false);
+    }
+
+    try {
+      let animating;
+
+      if (react_spring_shared_esm_is.arr(to)) {
+        animating = (async queue => {
+          for (const props of queue) {
+            await animate(props);
+          }
+        })(to);
+      } else {
+        animating = Promise.resolve(to(animate, target.stop.bind(target)));
+      }
+
+      await Promise.all([animating.then(preventBail), bailPromise]);
+      result = getFinishedResult(target.get(), true, false);
+    } catch (err) {
+      if (err instanceof BailSignal) {
+        result = err.result;
+      } else if (err instanceof SkipAniamtionSignal) {
+        result = err.result;
+      } else {
+        throw err;
+      }
+    } finally {
+      if (callId == state.asyncId) {
+        state.asyncId = parentId;
+        state.asyncTo = parentId ? prevTo : undefined;
+        state.promise = parentId ? prevPromise : undefined;
+      }
+    }
+
+    if (react_spring_shared_esm_is.fun(onRest)) {
+      raf.batchedUpdates(() => {
+        onRest(result, target, target.item);
+      });
+    }
+
+    return result;
+  })();
+}
+function stopAsync(state, cancelId) {
+  flush(state.timeouts, t => t.cancel());
+  state.pauseQueue.clear();
+  state.resumeQueue.clear();
+  state.asyncId = state.asyncTo = state.promise = undefined;
+  if (cancelId) state.cancelId = cancelId;
+}
+class BailSignal extends Error {
+  constructor() {
+    super('An async animation has been interrupted. You see this error because you ' + 'forgot to use `await` or `.catch(...)` on its returned promise.');
+    this.result = void 0;
+  }
+
+}
+class SkipAniamtionSignal extends Error {
+  constructor() {
+    super('SkipAnimationSignal');
+    this.result = void 0;
+  }
+
+}
+
+const isFrameValue = value => value instanceof FrameValue;
+let nextId$1 = 1;
+class FrameValue extends FluidValue {
+  constructor(...args) {
+    super(...args);
+    this.id = nextId$1++;
+    this.key = void 0;
+    this._priority = 0;
+  }
+
+  get priority() {
+    return this._priority;
+  }
+
+  set priority(priority) {
+    if (this._priority != priority) {
+      this._priority = priority;
+
+      this._onPriorityChange(priority);
+    }
+  }
+
+  get() {
+    const node = getAnimated(this);
+    return node && node.getValue();
+  }
+
+  to(...args) {
+    return globals.to(this, args);
+  }
+
+  interpolate(...args) {
+    react_spring_shared_esm_deprecateInterpolate();
+    return globals.to(this, args);
+  }
+
+  toJSON() {
+    return this.get();
+  }
+
+  observerAdded(count) {
+    if (count == 1) this._attach();
+  }
+
+  observerRemoved(count) {
+    if (count == 0) this._detach();
+  }
+
+  _attach() {}
+
+  _detach() {}
+
+  _onChange(value, idle = false) {
+    callFluidObservers(this, {
+      type: 'change',
+      parent: this,
+      value,
+      idle
+    });
+  }
+
+  _onPriorityChange(priority) {
+    if (!this.idle) {
+      frameLoop.sort(this);
+    }
+
+    callFluidObservers(this, {
+      type: 'priority',
+      parent: this,
+      priority
+    });
+  }
+
+}
+
+const $P = Symbol.for('SpringPhase');
+const HAS_ANIMATED = 1;
+const IS_ANIMATING = 2;
+const IS_PAUSED = 4;
+const hasAnimated = target => (target[$P] & HAS_ANIMATED) > 0;
+const isAnimating = target => (target[$P] & IS_ANIMATING) > 0;
+const isPaused = target => (target[$P] & IS_PAUSED) > 0;
+const setActiveBit = (target, active) => active ? target[$P] |= IS_ANIMATING | HAS_ANIMATED : target[$P] &= ~IS_ANIMATING;
+const setPausedBit = (target, paused) => paused ? target[$P] |= IS_PAUSED : target[$P] &= ~IS_PAUSED;
+
+class SpringValue extends FrameValue {
+  constructor(arg1, arg2) {
+    super();
+    this.key = void 0;
+    this.animation = new Animation();
+    this.queue = void 0;
+    this.defaultProps = {};
+    this._state = {
+      paused: false,
+      delayed: false,
+      pauseQueue: new Set(),
+      resumeQueue: new Set(),
+      timeouts: new Set()
+    };
+    this._pendingCalls = new Set();
+    this._lastCallId = 0;
+    this._lastToId = 0;
+    this._memoizedDuration = 0;
+
+    if (!react_spring_shared_esm_is.und(arg1) || !react_spring_shared_esm_is.und(arg2)) {
+      const props = react_spring_shared_esm_is.obj(arg1) ? react_spring_core_esm_extends({}, arg1) : react_spring_core_esm_extends({}, arg2, {
+        from: arg1
+      });
+
+      if (react_spring_shared_esm_is.und(props.default)) {
+        props.default = true;
+      }
+
+      this.start(props);
+    }
+  }
+
+  get idle() {
+    return !(isAnimating(this) || this._state.asyncTo) || isPaused(this);
+  }
+
+  get goal() {
+    return getFluidValue(this.animation.to);
+  }
+
+  get velocity() {
+    const node = getAnimated(this);
+    return node instanceof AnimatedValue ? node.lastVelocity || 0 : node.getPayload().map(node => node.lastVelocity || 0);
+  }
+
+  get hasAnimated() {
+    return hasAnimated(this);
+  }
+
+  get isAnimating() {
+    return isAnimating(this);
+  }
+
+  get isPaused() {
+    return isPaused(this);
+  }
+
+  get isDelayed() {
+    return this._state.delayed;
+  }
+
+  advance(dt) {
+    let idle = true;
+    let changed = false;
+    const anim = this.animation;
+    let {
+      config,
+      toValues
+    } = anim;
+    const payload = getPayload(anim.to);
+
+    if (!payload && hasFluidValue(anim.to)) {
+      toValues = react_spring_shared_esm_toArray(getFluidValue(anim.to));
+    }
+
+    anim.values.forEach((node, i) => {
+      if (node.done) return;
+      const to = node.constructor == AnimatedString ? 1 : payload ? payload[i].lastPosition : toValues[i];
+      let finished = anim.immediate;
+      let position = to;
+
+      if (!finished) {
+        position = node.lastPosition;
+
+        if (config.tension <= 0) {
+          node.done = true;
+          return;
+        }
+
+        let elapsed = node.elapsedTime += dt;
+        const from = anim.fromValues[i];
+        const v0 = node.v0 != null ? node.v0 : node.v0 = react_spring_shared_esm_is.arr(config.velocity) ? config.velocity[i] : config.velocity;
+        let velocity;
+        const precision = config.precision || (from == to ? 0.005 : Math.min(1, Math.abs(to - from) * 0.001));
+
+        if (!react_spring_shared_esm_is.und(config.duration)) {
+          let p = 1;
+
+          if (config.duration > 0) {
+            if (this._memoizedDuration !== config.duration) {
+              this._memoizedDuration = config.duration;
+
+              if (node.durationProgress > 0) {
+                node.elapsedTime = config.duration * node.durationProgress;
+                elapsed = node.elapsedTime += dt;
+              }
+            }
+
+            p = (config.progress || 0) + elapsed / this._memoizedDuration;
+            p = p > 1 ? 1 : p < 0 ? 0 : p;
+            node.durationProgress = p;
+          }
+
+          position = from + config.easing(p) * (to - from);
+          velocity = (position - node.lastPosition) / dt;
+          finished = p == 1;
+        } else if (config.decay) {
+          const decay = config.decay === true ? 0.998 : config.decay;
+          const e = Math.exp(-(1 - decay) * elapsed);
+          position = from + v0 / (1 - decay) * (1 - e);
+          finished = Math.abs(node.lastPosition - position) <= precision;
+          velocity = v0 * e;
+        } else {
+          velocity = node.lastVelocity == null ? v0 : node.lastVelocity;
+          const restVelocity = config.restVelocity || precision / 10;
+          const bounceFactor = config.clamp ? 0 : config.bounce;
+          const canBounce = !react_spring_shared_esm_is.und(bounceFactor);
+          const isGrowing = from == to ? node.v0 > 0 : from < to;
+          let isMoving;
+          let isBouncing = false;
+          const step = 1;
+          const numSteps = Math.ceil(dt / step);
+
+          for (let n = 0; n < numSteps; ++n) {
+            isMoving = Math.abs(velocity) > restVelocity;
+
+            if (!isMoving) {
+              finished = Math.abs(to - position) <= precision;
+
+              if (finished) {
+                break;
+              }
+            }
+
+            if (canBounce) {
+              isBouncing = position == to || position > to == isGrowing;
+
+              if (isBouncing) {
+                velocity = -velocity * bounceFactor;
+                position = to;
+              }
+            }
+
+            const springForce = -config.tension * 0.000001 * (position - to);
+            const dampingForce = -config.friction * 0.001 * velocity;
+            const acceleration = (springForce + dampingForce) / config.mass;
+            velocity = velocity + acceleration * step;
+            position = position + velocity * step;
+          }
+        }
+
+        node.lastVelocity = velocity;
+
+        if (Number.isNaN(position)) {
+          console.warn(`Got NaN while animating:`, this);
+          finished = true;
+        }
+      }
+
+      if (payload && !payload[i].done) {
+        finished = false;
+      }
+
+      if (finished) {
+        node.done = true;
+      } else {
+        idle = false;
+      }
+
+      if (node.setValue(position, config.round)) {
+        changed = true;
+      }
+    });
+    const node = getAnimated(this);
+    const currVal = node.getValue();
+
+    if (idle) {
+      const finalVal = getFluidValue(anim.to);
+
+      if ((currVal !== finalVal || changed) && !config.decay) {
+        node.setValue(finalVal);
+
+        this._onChange(finalVal);
+      } else if (changed && config.decay) {
+        this._onChange(currVal);
+      }
+
+      this._stop();
+    } else if (changed) {
+      this._onChange(currVal);
+    }
+  }
+
+  set(value) {
+    raf.batchedUpdates(() => {
+      this._stop();
+
+      this._focus(value);
+
+      this._set(value);
+    });
+    return this;
+  }
+
+  pause() {
+    this._update({
+      pause: true
+    });
+  }
+
+  resume() {
+    this._update({
+      pause: false
+    });
+  }
+
+  finish() {
+    if (isAnimating(this)) {
+      const {
+        to,
+        config
+      } = this.animation;
+      raf.batchedUpdates(() => {
+        this._onStart();
+
+        if (!config.decay) {
+          this._set(to, false);
+        }
+
+        this._stop();
+      });
+    }
+
+    return this;
+  }
+
+  update(props) {
+    const queue = this.queue || (this.queue = []);
+    queue.push(props);
+    return this;
+  }
+
+  start(to, arg2) {
+    let queue;
+
+    if (!react_spring_shared_esm_is.und(to)) {
+      queue = [react_spring_shared_esm_is.obj(to) ? to : react_spring_core_esm_extends({}, arg2, {
+        to
+      })];
+    } else {
+      queue = this.queue || [];
+      this.queue = [];
+    }
+
+    return Promise.all(queue.map(props => {
+      const up = this._update(props);
+
+      return up;
+    })).then(results => getCombinedResult(this, results));
+  }
+
+  stop(cancel) {
+    const {
+      to
+    } = this.animation;
+
+    this._focus(this.get());
+
+    stopAsync(this._state, cancel && this._lastCallId);
+    raf.batchedUpdates(() => this._stop(to, cancel));
+    return this;
+  }
+
+  reset() {
+    this._update({
+      reset: true
+    });
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      this._start();
+    } else if (event.type == 'priority') {
+      this.priority = event.priority + 1;
+    }
+  }
+
+  _prepareNode(props) {
+    const key = this.key || '';
+    let {
+      to,
+      from
+    } = props;
+    to = react_spring_shared_esm_is.obj(to) ? to[key] : to;
+
+    if (to == null || isAsyncTo(to)) {
+      to = undefined;
+    }
+
+    from = react_spring_shared_esm_is.obj(from) ? from[key] : from;
+
+    if (from == null) {
+      from = undefined;
+    }
+
+    const range = {
+      to,
+      from
+    };
+
+    if (!hasAnimated(this)) {
+      if (props.reverse) [to, from] = [from, to];
+      from = getFluidValue(from);
+
+      if (!react_spring_shared_esm_is.und(from)) {
+        this._set(from);
+      } else if (!getAnimated(this)) {
+        this._set(to);
+      }
+    }
+
+    return range;
+  }
+
+  _update(_ref, isLoop) {
+    let props = react_spring_core_esm_extends({}, _ref);
+
+    const {
+      key,
+      defaultProps
+    } = this;
+    if (props.default) Object.assign(defaultProps, getDefaultProps(props, (value, prop) => /^on/.test(prop) ? resolveProp(value, key) : value));
+    mergeActiveFn(this, props, 'onProps');
+    sendEvent(this, 'onProps', props, this);
+
+    const range = this._prepareNode(props);
+
+    if (Object.isFrozen(this)) {
+      throw Error('Cannot animate a `SpringValue` object that is frozen. ' + 'Did you forget to pass your component to `animated(...)` before animating its props?');
+    }
+
+    const state = this._state;
+    return scheduleProps(++this._lastCallId, {
+      key,
+      props,
+      defaultProps,
+      state,
+      actions: {
+        pause: () => {
+          if (!isPaused(this)) {
+            setPausedBit(this, true);
+            flushCalls(state.pauseQueue);
+            sendEvent(this, 'onPause', getFinishedResult(this, checkFinished(this, this.animation.to)), this);
+          }
+        },
+        resume: () => {
+          if (isPaused(this)) {
+            setPausedBit(this, false);
+
+            if (isAnimating(this)) {
+              this._resume();
+            }
+
+            flushCalls(state.resumeQueue);
+            sendEvent(this, 'onResume', getFinishedResult(this, checkFinished(this, this.animation.to)), this);
+          }
+        },
+        start: this._merge.bind(this, range)
+      }
+    }).then(result => {
+      if (props.loop && result.finished && !(isLoop && result.noop)) {
+        const nextProps = createLoopUpdate(props);
+
+        if (nextProps) {
+          return this._update(nextProps, true);
+        }
+      }
+
+      return result;
+    });
+  }
+
+  _merge(range, props, resolve) {
+    if (props.cancel) {
+      this.stop(true);
+      return resolve(getCancelledResult(this));
+    }
+
+    const hasToProp = !react_spring_shared_esm_is.und(range.to);
+    const hasFromProp = !react_spring_shared_esm_is.und(range.from);
+
+    if (hasToProp || hasFromProp) {
+      if (props.callId > this._lastToId) {
+        this._lastToId = props.callId;
+      } else {
+        return resolve(getCancelledResult(this));
+      }
+    }
+
+    const {
+      key,
+      defaultProps,
+      animation: anim
+    } = this;
+    const {
+      to: prevTo,
+      from: prevFrom
+    } = anim;
+    let {
+      to = prevTo,
+      from = prevFrom
+    } = range;
+
+    if (hasFromProp && !hasToProp && (!props.default || react_spring_shared_esm_is.und(to))) {
+      to = from;
+    }
+
+    if (props.reverse) [to, from] = [from, to];
+    const hasFromChanged = !isEqual(from, prevFrom);
+
+    if (hasFromChanged) {
+      anim.from = from;
+    }
+
+    from = getFluidValue(from);
+    const hasToChanged = !isEqual(to, prevTo);
+
+    if (hasToChanged) {
+      this._focus(to);
+    }
+
+    const hasAsyncTo = isAsyncTo(props.to);
+    const {
+      config
+    } = anim;
+    const {
+      decay,
+      velocity
+    } = config;
+
+    if (hasToProp || hasFromProp) {
+      config.velocity = 0;
+    }
+
+    if (props.config && !hasAsyncTo) {
+      mergeConfig(config, callProp(props.config, key), props.config !== defaultProps.config ? callProp(defaultProps.config, key) : void 0);
+    }
+
+    let node = getAnimated(this);
+
+    if (!node || react_spring_shared_esm_is.und(to)) {
+      return resolve(getFinishedResult(this, true));
+    }
+
+    const reset = react_spring_shared_esm_is.und(props.reset) ? hasFromProp && !props.default : !react_spring_shared_esm_is.und(from) && matchProp(props.reset, key);
+    const value = reset ? from : this.get();
+    const goal = computeGoal(to);
+    const isAnimatable = react_spring_shared_esm_is.num(goal) || react_spring_shared_esm_is.arr(goal) || isAnimatedString(goal);
+    const immediate = !hasAsyncTo && (!isAnimatable || matchProp(defaultProps.immediate || props.immediate, key));
+
+    if (hasToChanged) {
+      const nodeType = getAnimatedType(to);
+
+      if (nodeType !== node.constructor) {
+        if (immediate) {
+          node = this._set(goal);
+        } else throw Error(`Cannot animate between ${node.constructor.name} and ${nodeType.name}, as the "to" prop suggests`);
+      }
+    }
+
+    const goalType = node.constructor;
+    let started = hasFluidValue(to);
+    let finished = false;
+
+    if (!started) {
+      const hasValueChanged = reset || !hasAnimated(this) && hasFromChanged;
+
+      if (hasToChanged || hasValueChanged) {
+        finished = isEqual(computeGoal(value), goal);
+        started = !finished;
+      }
+
+      if (!isEqual(anim.immediate, immediate) && !immediate || !isEqual(config.decay, decay) || !isEqual(config.velocity, velocity)) {
+        started = true;
+      }
+    }
+
+    if (finished && isAnimating(this)) {
+      if (anim.changed && !reset) {
+        started = true;
+      } else if (!started) {
+        this._stop(prevTo);
+      }
+    }
+
+    if (!hasAsyncTo) {
+      if (started || hasFluidValue(prevTo)) {
+        anim.values = node.getPayload();
+        anim.toValues = hasFluidValue(to) ? null : goalType == AnimatedString ? [1] : react_spring_shared_esm_toArray(goal);
+      }
+
+      if (anim.immediate != immediate) {
+        anim.immediate = immediate;
+
+        if (!immediate && !reset) {
+          this._set(prevTo);
+        }
+      }
+
+      if (started) {
+        const {
+          onRest
+        } = anim;
+        react_spring_shared_esm_each(ACTIVE_EVENTS, type => mergeActiveFn(this, props, type));
+        const result = getFinishedResult(this, checkFinished(this, prevTo));
+        flushCalls(this._pendingCalls, result);
+
+        this._pendingCalls.add(resolve);
+
+        if (anim.changed) raf.batchedUpdates(() => {
+          anim.changed = !reset;
+          onRest == null ? void 0 : onRest(result, this);
+
+          if (reset) {
+            callProp(defaultProps.onRest, result);
+          } else {
+            anim.onStart == null ? void 0 : anim.onStart(result, this);
+          }
+        });
+      }
+    }
+
+    if (reset) {
+      this._set(value);
+    }
+
+    if (hasAsyncTo) {
+      resolve(runAsync(props.to, props, this._state, this));
+    } else if (started) {
+      this._start();
+    } else if (isAnimating(this) && !hasToChanged) {
+      this._pendingCalls.add(resolve);
+    } else {
+      resolve(getNoopResult(value));
+    }
+  }
+
+  _focus(value) {
+    const anim = this.animation;
+
+    if (value !== anim.to) {
+      if (getFluidObservers(this)) {
+        this._detach();
+      }
+
+      anim.to = value;
+
+      if (getFluidObservers(this)) {
+        this._attach();
+      }
+    }
+  }
+
+  _attach() {
+    let priority = 0;
+    const {
+      to
+    } = this.animation;
+
+    if (hasFluidValue(to)) {
+      react_spring_shared_esm_addFluidObserver(to, this);
+
+      if (isFrameValue(to)) {
+        priority = to.priority + 1;
+      }
+    }
+
+    this.priority = priority;
+  }
+
+  _detach() {
+    const {
+      to
+    } = this.animation;
+
+    if (hasFluidValue(to)) {
+      removeFluidObserver(to, this);
+    }
+  }
+
+  _set(arg, idle = true) {
+    const value = getFluidValue(arg);
+
+    if (!react_spring_shared_esm_is.und(value)) {
+      const oldNode = getAnimated(this);
+
+      if (!oldNode || !isEqual(value, oldNode.getValue())) {
+        const nodeType = getAnimatedType(value);
+
+        if (!oldNode || oldNode.constructor != nodeType) {
+          setAnimated(this, nodeType.create(value));
+        } else {
+          oldNode.setValue(value);
+        }
+
+        if (oldNode) {
+          raf.batchedUpdates(() => {
+            this._onChange(value, idle);
+          });
+        }
+      }
+    }
+
+    return getAnimated(this);
+  }
+
+  _onStart() {
+    const anim = this.animation;
+
+    if (!anim.changed) {
+      anim.changed = true;
+      sendEvent(this, 'onStart', getFinishedResult(this, checkFinished(this, anim.to)), this);
+    }
+  }
+
+  _onChange(value, idle) {
+    if (!idle) {
+      this._onStart();
+
+      callProp(this.animation.onChange, value, this);
+    }
+
+    callProp(this.defaultProps.onChange, value, this);
+
+    super._onChange(value, idle);
+  }
+
+  _start() {
+    const anim = this.animation;
+    getAnimated(this).reset(getFluidValue(anim.to));
+
+    if (!anim.immediate) {
+      anim.fromValues = anim.values.map(node => node.lastPosition);
+    }
+
+    if (!isAnimating(this)) {
+      setActiveBit(this, true);
+
+      if (!isPaused(this)) {
+        this._resume();
+      }
+    }
+  }
+
+  _resume() {
+    if (globals.skipAnimation) {
+      this.finish();
+    } else {
+      frameLoop.start(this);
+    }
+  }
+
+  _stop(goal, cancel) {
+    if (isAnimating(this)) {
+      setActiveBit(this, false);
+      const anim = this.animation;
+      react_spring_shared_esm_each(anim.values, node => {
+        node.done = true;
+      });
+
+      if (anim.toValues) {
+        anim.onChange = anim.onPause = anim.onResume = undefined;
+      }
+
+      callFluidObservers(this, {
+        type: 'idle',
+        parent: this
+      });
+      const result = cancel ? getCancelledResult(this.get()) : getFinishedResult(this.get(), checkFinished(this, goal != null ? goal : anim.to));
+      flushCalls(this._pendingCalls, result);
+
+      if (anim.changed) {
+        anim.changed = false;
+        sendEvent(this, 'onRest', result, this);
+      }
+    }
+  }
+
+}
+
+function checkFinished(target, to) {
+  const goal = computeGoal(to);
+  const value = computeGoal(target.get());
+  return isEqual(value, goal);
+}
+
+function createLoopUpdate(props, loop = props.loop, to = props.to) {
+  let loopRet = callProp(loop);
+
+  if (loopRet) {
+    const overrides = loopRet !== true && inferTo(loopRet);
+    const reverse = (overrides || props).reverse;
+    const reset = !overrides || overrides.reset;
+    return createUpdate(react_spring_core_esm_extends({}, props, {
+      loop,
+      default: false,
+      pause: undefined,
+      to: !reverse || isAsyncTo(to) ? to : undefined,
+      from: reset ? props.from : undefined,
+      reset
+    }, overrides));
+  }
+}
+function createUpdate(props) {
+  const {
+    to,
+    from
+  } = props = inferTo(props);
+  const keys = new Set();
+  if (react_spring_shared_esm_is.obj(to)) findDefined(to, keys);
+  if (react_spring_shared_esm_is.obj(from)) findDefined(from, keys);
+  props.keys = keys.size ? Array.from(keys) : null;
+  return props;
+}
+function declareUpdate(props) {
+  const update = createUpdate(props);
+
+  if (is.und(update.default)) {
+    update.default = getDefaultProps(update);
+  }
+
+  return update;
+}
+
+function findDefined(values, keys) {
+  react_spring_shared_esm_eachProp(values, (value, key) => value != null && keys.add(key));
+}
+
+const ACTIVE_EVENTS = ['onStart', 'onRest', 'onChange', 'onPause', 'onResume'];
+
+function mergeActiveFn(target, props, type) {
+  target.animation[type] = props[type] !== getDefaultProp(props, type) ? resolveProp(props[type], target.key) : undefined;
+}
+
+function sendEvent(target, type, ...args) {
+  var _target$animation$typ, _target$animation, _target$defaultProps$, _target$defaultProps;
+
+  (_target$animation$typ = (_target$animation = target.animation)[type]) == null ? void 0 : _target$animation$typ.call(_target$animation, ...args);
+  (_target$defaultProps$ = (_target$defaultProps = target.defaultProps)[type]) == null ? void 0 : _target$defaultProps$.call(_target$defaultProps, ...args);
+}
+
+const BATCHED_EVENTS = ['onStart', 'onChange', 'onRest'];
+let nextId = 1;
+class Controller {
+  constructor(props, flush) {
+    this.id = nextId++;
+    this.springs = {};
+    this.queue = [];
+    this.ref = void 0;
+    this._flush = void 0;
+    this._initialProps = void 0;
+    this._lastAsyncId = 0;
+    this._active = new Set();
+    this._changed = new Set();
+    this._started = false;
+    this._item = void 0;
+    this._state = {
+      paused: false,
+      pauseQueue: new Set(),
+      resumeQueue: new Set(),
+      timeouts: new Set()
+    };
+    this._events = {
+      onStart: new Map(),
+      onChange: new Map(),
+      onRest: new Map()
+    };
+    this._onFrame = this._onFrame.bind(this);
+
+    if (flush) {
+      this._flush = flush;
+    }
+
+    if (props) {
+      this.start(react_spring_core_esm_extends({
+        default: true
+      }, props));
+    }
+  }
+
+  get idle() {
+    return !this._state.asyncTo && Object.values(this.springs).every(spring => {
+      return spring.idle && !spring.isDelayed && !spring.isPaused;
+    });
+  }
+
+  get item() {
+    return this._item;
+  }
+
+  set item(item) {
+    this._item = item;
+  }
+
+  get() {
+    const values = {};
+    this.each((spring, key) => values[key] = spring.get());
+    return values;
+  }
+
+  set(values) {
+    for (const key in values) {
+      const value = values[key];
+
+      if (!react_spring_shared_esm_is.und(value)) {
+        this.springs[key].set(value);
+      }
+    }
+  }
+
+  update(props) {
+    if (props) {
+      this.queue.push(createUpdate(props));
+    }
+
+    return this;
+  }
+
+  start(props) {
+    let {
+      queue
+    } = this;
+
+    if (props) {
+      queue = react_spring_shared_esm_toArray(props).map(createUpdate);
+    } else {
+      this.queue = [];
+    }
+
+    if (this._flush) {
+      return this._flush(this, queue);
+    }
+
+    prepareKeys(this, queue);
+    return flushUpdateQueue(this, queue);
+  }
+
+  stop(arg, keys) {
+    if (arg !== !!arg) {
+      keys = arg;
+    }
+
+    if (keys) {
+      const springs = this.springs;
+      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].stop(!!arg));
+    } else {
+      stopAsync(this._state, this._lastAsyncId);
+      this.each(spring => spring.stop(!!arg));
+    }
+
+    return this;
+  }
+
+  pause(keys) {
+    if (react_spring_shared_esm_is.und(keys)) {
+      this.start({
+        pause: true
+      });
+    } else {
+      const springs = this.springs;
+      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].pause());
+    }
+
+    return this;
+  }
+
+  resume(keys) {
+    if (react_spring_shared_esm_is.und(keys)) {
+      this.start({
+        pause: false
+      });
+    } else {
+      const springs = this.springs;
+      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].resume());
+    }
+
+    return this;
+  }
+
+  each(iterator) {
+    react_spring_shared_esm_eachProp(this.springs, iterator);
+  }
+
+  _onFrame() {
+    const {
+      onStart,
+      onChange,
+      onRest
+    } = this._events;
+    const active = this._active.size > 0;
+    const changed = this._changed.size > 0;
+
+    if (active && !this._started || changed && !this._started) {
+      this._started = true;
+      flush(onStart, ([onStart, result]) => {
+        result.value = this.get();
+        onStart(result, this, this._item);
+      });
+    }
+
+    const idle = !active && this._started;
+    const values = changed || idle && onRest.size ? this.get() : null;
+
+    if (changed && onChange.size) {
+      flush(onChange, ([onChange, result]) => {
+        result.value = values;
+        onChange(result, this, this._item);
+      });
+    }
+
+    if (idle) {
+      this._started = false;
+      flush(onRest, ([onRest, result]) => {
+        result.value = values;
+        onRest(result, this, this._item);
+      });
+    }
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      this._changed.add(event.parent);
+
+      if (!event.idle) {
+        this._active.add(event.parent);
+      }
+    } else if (event.type == 'idle') {
+      this._active.delete(event.parent);
+    } else return;
+
+    raf.onFrame(this._onFrame);
+  }
+
+}
+function flushUpdateQueue(ctrl, queue) {
+  return Promise.all(queue.map(props => flushUpdate(ctrl, props))).then(results => getCombinedResult(ctrl, results));
+}
+async function flushUpdate(ctrl, props, isLoop) {
+  const {
+    keys,
+    to,
+    from,
+    loop,
+    onRest,
+    onResolve
+  } = props;
+  const defaults = react_spring_shared_esm_is.obj(props.default) && props.default;
+
+  if (loop) {
+    props.loop = false;
+  }
+
+  if (to === false) props.to = null;
+  if (from === false) props.from = null;
+  const asyncTo = react_spring_shared_esm_is.arr(to) || react_spring_shared_esm_is.fun(to) ? to : undefined;
+
+  if (asyncTo) {
+    props.to = undefined;
+    props.onRest = undefined;
+
+    if (defaults) {
+      defaults.onRest = undefined;
+    }
+  } else {
+    react_spring_shared_esm_each(BATCHED_EVENTS, key => {
+      const handler = props[key];
+
+      if (react_spring_shared_esm_is.fun(handler)) {
+        const queue = ctrl['_events'][key];
+
+        props[key] = ({
+          finished,
+          cancelled
+        }) => {
+          const result = queue.get(handler);
+
+          if (result) {
+            if (!finished) result.finished = false;
+            if (cancelled) result.cancelled = true;
+          } else {
+            queue.set(handler, {
+              value: null,
+              finished: finished || false,
+              cancelled: cancelled || false
+            });
+          }
+        };
+
+        if (defaults) {
+          defaults[key] = props[key];
+        }
+      }
+    });
+  }
+
+  const state = ctrl['_state'];
+
+  if (props.pause === !state.paused) {
+    state.paused = props.pause;
+    flushCalls(props.pause ? state.pauseQueue : state.resumeQueue);
+  } else if (state.paused) {
+    props.pause = true;
+  }
+
+  const promises = (keys || Object.keys(ctrl.springs)).map(key => ctrl.springs[key].start(props));
+  const cancel = props.cancel === true || getDefaultProp(props, 'cancel') === true;
+
+  if (asyncTo || cancel && state.asyncId) {
+    promises.push(scheduleProps(++ctrl['_lastAsyncId'], {
+      props,
+      state,
+      actions: {
+        pause: noop,
+        resume: noop,
+
+        start(props, resolve) {
+          if (cancel) {
+            stopAsync(state, ctrl['_lastAsyncId']);
+            resolve(getCancelledResult(ctrl));
+          } else {
+            props.onRest = onRest;
+            resolve(runAsync(asyncTo, props, state, ctrl));
+          }
+        }
+
+      }
+    }));
+  }
+
+  if (state.paused) {
+    await new Promise(resume => {
+      state.resumeQueue.add(resume);
+    });
+  }
+
+  const result = getCombinedResult(ctrl, await Promise.all(promises));
+
+  if (loop && result.finished && !(isLoop && result.noop)) {
+    const nextProps = createLoopUpdate(props, loop, to);
+
+    if (nextProps) {
+      prepareKeys(ctrl, [nextProps]);
+      return flushUpdate(ctrl, nextProps, true);
+    }
+  }
+
+  if (onResolve) {
+    raf.batchedUpdates(() => onResolve(result, ctrl, ctrl.item));
+  }
+
+  return result;
+}
+function getSprings(ctrl, props) {
+  const springs = react_spring_core_esm_extends({}, ctrl.springs);
+
+  if (props) {
+    each(toArray(props), props => {
+      if (is.und(props.keys)) {
+        props = createUpdate(props);
+      }
+
+      if (!is.obj(props.to)) {
+        props = react_spring_core_esm_extends({}, props, {
+          to: undefined
+        });
+      }
+
+      prepareSprings(springs, props, key => {
+        return createSpring(key);
+      });
+    });
+  }
+
+  setSprings(ctrl, springs);
+  return springs;
+}
+function setSprings(ctrl, springs) {
+  eachProp(springs, (spring, key) => {
+    if (!ctrl.springs[key]) {
+      ctrl.springs[key] = spring;
+      addFluidObserver(spring, ctrl);
+    }
+  });
+}
+
+function createSpring(key, observer) {
+  const spring = new SpringValue();
+  spring.key = key;
+
+  if (observer) {
+    react_spring_shared_esm_addFluidObserver(spring, observer);
+  }
+
+  return spring;
+}
+
+function prepareSprings(springs, props, create) {
+  if (props.keys) {
+    react_spring_shared_esm_each(props.keys, key => {
+      const spring = springs[key] || (springs[key] = create(key));
+      spring['_prepareNode'](props);
+    });
+  }
+}
+
+function prepareKeys(ctrl, queue) {
+  react_spring_shared_esm_each(queue, props => {
+    prepareSprings(ctrl.springs, props, key => {
+      return createSpring(key, ctrl);
+    });
+  });
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+const _excluded$3 = ["children"];
+const SpringContext = _ref => {
+  let {
+    children
+  } = _ref,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded$3);
+
+  const inherited = (0,external_React_.useContext)(ctx);
+  const pause = props.pause || !!inherited.pause,
+        immediate = props.immediate || !!inherited.immediate;
+  props = useMemoOne(() => ({
+    pause,
+    immediate
+  }), [pause, immediate]);
+  const {
+    Provider
+  } = ctx;
+  return external_React_.createElement(Provider, {
+    value: props
+  }, children);
+};
+const ctx = makeContext(SpringContext, {});
+SpringContext.Provider = ctx.Provider;
+SpringContext.Consumer = ctx.Consumer;
+
+function makeContext(target, init) {
+  Object.assign(target, external_React_.createContext(init));
+  target.Provider._context = target;
+  target.Consumer._context = target;
+  return target;
+}
+
+const SpringRef = () => {
+  const current = [];
+
+  const SpringRef = function SpringRef(props) {
+    deprecateDirectCall();
+    const results = [];
+    each(current, (ctrl, i) => {
+      if (is.und(props)) {
+        results.push(ctrl.start());
+      } else {
+        const update = _getProps(props, ctrl, i);
+
+        if (update) {
+          results.push(ctrl.start(update));
+        }
+      }
+    });
+    return results;
+  };
+
+  SpringRef.current = current;
+
+  SpringRef.add = function (ctrl) {
+    if (!current.includes(ctrl)) {
+      current.push(ctrl);
+    }
+  };
+
+  SpringRef.delete = function (ctrl) {
+    const i = current.indexOf(ctrl);
+    if (~i) current.splice(i, 1);
+  };
+
+  SpringRef.pause = function () {
+    each(current, ctrl => ctrl.pause(...arguments));
+    return this;
+  };
+
+  SpringRef.resume = function () {
+    each(current, ctrl => ctrl.resume(...arguments));
+    return this;
+  };
+
+  SpringRef.set = function (values) {
+    each(current, ctrl => ctrl.set(values));
+  };
+
+  SpringRef.start = function (props) {
+    const results = [];
+    each(current, (ctrl, i) => {
+      if (is.und(props)) {
+        results.push(ctrl.start());
+      } else {
+        const update = this._getProps(props, ctrl, i);
+
+        if (update) {
+          results.push(ctrl.start(update));
+        }
+      }
+    });
+    return results;
+  };
+
+  SpringRef.stop = function () {
+    each(current, ctrl => ctrl.stop(...arguments));
+    return this;
+  };
+
+  SpringRef.update = function (props) {
+    each(current, (ctrl, i) => ctrl.update(this._getProps(props, ctrl, i)));
+    return this;
+  };
+
+  const _getProps = function _getProps(arg, ctrl, index) {
+    return is.fun(arg) ? arg(index, ctrl) : arg;
+  };
+
+  SpringRef._getProps = _getProps;
+  return SpringRef;
+};
+
+function useSprings(length, props, deps) {
+  const propsFn = is.fun(props) && props;
+  if (propsFn && !deps) deps = [];
+  const ref = useMemo(() => propsFn || arguments.length == 3 ? SpringRef() : void 0, []);
+  const layoutId = useRef(0);
+  const forceUpdate = useForceUpdate();
+  const state = useMemo(() => ({
+    ctrls: [],
+    queue: [],
+
+    flush(ctrl, updates) {
+      const springs = getSprings(ctrl, updates);
+      const canFlushSync = layoutId.current > 0 && !state.queue.length && !Object.keys(springs).some(key => !ctrl.springs[key]);
+      return canFlushSync ? flushUpdateQueue(ctrl, updates) : new Promise(resolve => {
+        setSprings(ctrl, springs);
+        state.queue.push(() => {
+          resolve(flushUpdateQueue(ctrl, updates));
+        });
+        forceUpdate();
+      });
+    }
+
+  }), []);
+  const ctrls = useRef([...state.ctrls]);
+  const updates = [];
+  const prevLength = usePrev(length) || 0;
+  useMemo(() => {
+    each(ctrls.current.slice(length, prevLength), ctrl => {
+      detachRefs(ctrl, ref);
+      ctrl.stop(true);
+    });
+    ctrls.current.length = length;
+    declareUpdates(prevLength, length);
+  }, [length]);
+  useMemo(() => {
+    declareUpdates(0, Math.min(prevLength, length));
+  }, deps);
+
+  function declareUpdates(startIndex, endIndex) {
+    for (let i = startIndex; i < endIndex; i++) {
+      const ctrl = ctrls.current[i] || (ctrls.current[i] = new Controller(null, state.flush));
+      const update = propsFn ? propsFn(i, ctrl) : props[i];
+
+      if (update) {
+        updates[i] = declareUpdate(update);
+      }
+    }
+  }
+
+  const springs = ctrls.current.map((ctrl, i) => getSprings(ctrl, updates[i]));
+  const context = useContext(SpringContext);
+  const prevContext = usePrev(context);
+  const hasContext = context !== prevContext && hasProps(context);
+  useIsomorphicLayoutEffect(() => {
+    layoutId.current++;
+    state.ctrls = ctrls.current;
+    const {
+      queue
+    } = state;
+
+    if (queue.length) {
+      state.queue = [];
+      each(queue, cb => cb());
+    }
+
+    each(ctrls.current, (ctrl, i) => {
+      ref == null ? void 0 : ref.add(ctrl);
+
+      if (hasContext) {
+        ctrl.start({
+          default: context
+        });
+      }
+
+      const update = updates[i];
+
+      if (update) {
+        replaceRef(ctrl, update.ref);
+
+        if (ctrl.ref) {
+          ctrl.queue.push(update);
+        } else {
+          ctrl.start(update);
+        }
+      }
+    });
+  });
+  useOnce(() => () => {
+    each(state.ctrls, ctrl => ctrl.stop(true));
+  });
+  const values = springs.map(x => react_spring_core_esm_extends({}, x));
+  return ref ? [values, ref] : values;
+}
+
+function useSpring(props, deps) {
+  const isFn = is.fun(props);
+  const [[values], ref] = useSprings(1, isFn ? props : [props], isFn ? deps || [] : deps);
+  return isFn || arguments.length == 2 ? [values, ref] : values;
+}
+
+const initSpringRef = () => SpringRef();
+
+const useSpringRef = () => useState(initSpringRef)[0];
+
+function useTrail(length, propsArg, deps) {
+  var _passedRef;
+
+  const propsFn = is.fun(propsArg) && propsArg;
+  if (propsFn && !deps) deps = [];
+  let reverse = true;
+  let passedRef = undefined;
+  const result = useSprings(length, (i, ctrl) => {
+    const props = propsFn ? propsFn(i, ctrl) : propsArg;
+    passedRef = props.ref;
+    reverse = reverse && props.reverse;
+    return props;
+  }, deps || [{}]);
+  const ref = (_passedRef = passedRef) != null ? _passedRef : result[1];
+  useIsomorphicLayoutEffect(() => {
+    each(ref.current, (ctrl, i) => {
+      const parent = ref.current[i + (reverse ? 1 : -1)];
+
+      if (parent) {
+        ctrl.start({
+          to: parent.springs
+        });
+      } else {
+        ctrl.start();
+      }
+    });
+  }, deps);
+
+  if (propsFn || arguments.length == 3) {
+    ref['_getProps'] = (propsArg, ctrl, i) => {
+      const props = is.fun(propsArg) ? propsArg(i, ctrl) : propsArg;
+
+      if (props) {
+        const parent = ref.current[i + (props.reverse ? 1 : -1)];
+        if (parent) props.to = parent.springs;
+        return props;
+      }
+    };
+
+    return result;
+  }
+
+  ref['start'] = propsArg => {
+    const results = [];
+    each(ref.current, (ctrl, i) => {
+      const props = is.fun(propsArg) ? propsArg(i, ctrl) : propsArg;
+      const parent = ref.current[i + (reverse ? 1 : -1)];
+
+      if (parent) {
+        results.push(ctrl.start(react_spring_core_esm_extends({}, props, {
+          to: parent.springs
+        })));
+      } else {
+        results.push(ctrl.start(react_spring_core_esm_extends({}, props)));
+      }
+    });
+    return results;
+  };
+
+  return result[0];
+}
+
+let TransitionPhase;
+
+(function (TransitionPhase) {
+  TransitionPhase["MOUNT"] = "mount";
+  TransitionPhase["ENTER"] = "enter";
+  TransitionPhase["UPDATE"] = "update";
+  TransitionPhase["LEAVE"] = "leave";
+})(TransitionPhase || (TransitionPhase = {}));
+
+function useTransition(data, props, deps) {
+  const propsFn = is.fun(props) && props;
+  const {
+    reset,
+    sort,
+    trail = 0,
+    expires = true,
+    exitBeforeEnter = false,
+    onDestroyed,
+    ref: propsRef,
+    config: propsConfig
+  } = propsFn ? propsFn() : props;
+  const ref = useMemo(() => propsFn || arguments.length == 3 ? SpringRef() : void 0, []);
+  const items = toArray(data);
+  const transitions = [];
+  const usedTransitions = useRef(null);
+  const prevTransitions = reset ? null : usedTransitions.current;
+  useIsomorphicLayoutEffect(() => {
+    usedTransitions.current = transitions;
+  });
+  useOnce(() => {
+    each(transitions, t => {
+      ref == null ? void 0 : ref.add(t.ctrl);
+      t.ctrl.ref = ref;
+    });
+    return () => {
+      each(usedTransitions.current, t => {
+        if (t.expired) {
+          clearTimeout(t.expirationId);
+        }
+
+        detachRefs(t.ctrl, ref);
+        t.ctrl.stop(true);
+      });
+    };
+  });
+  const keys = getKeys(items, propsFn ? propsFn() : props, prevTransitions);
+  const expired = reset && usedTransitions.current || [];
+  useIsomorphicLayoutEffect(() => each(expired, ({
+    ctrl,
+    item,
+    key
+  }) => {
+    detachRefs(ctrl, ref);
+    callProp(onDestroyed, item, key);
+  }));
+  const reused = [];
+  if (prevTransitions) each(prevTransitions, (t, i) => {
+    if (t.expired) {
+      clearTimeout(t.expirationId);
+      expired.push(t);
+    } else {
+      i = reused[i] = keys.indexOf(t.key);
+      if (~i) transitions[i] = t;
+    }
+  });
+  each(items, (item, i) => {
+    if (!transitions[i]) {
+      transitions[i] = {
+        key: keys[i],
+        item,
+        phase: TransitionPhase.MOUNT,
+        ctrl: new Controller()
+      };
+      transitions[i].ctrl.item = item;
+    }
+  });
+
+  if (reused.length) {
+    let i = -1;
+    const {
+      leave
+    } = propsFn ? propsFn() : props;
+    each(reused, (keyIndex, prevIndex) => {
+      const t = prevTransitions[prevIndex];
+
+      if (~keyIndex) {
+        i = transitions.indexOf(t);
+        transitions[i] = react_spring_core_esm_extends({}, t, {
+          item: items[keyIndex]
+        });
+      } else if (leave) {
+        transitions.splice(++i, 0, t);
+      }
+    });
+  }
+
+  if (is.fun(sort)) {
+    transitions.sort((a, b) => sort(a.item, b.item));
+  }
+
+  let delay = -trail;
+  const forceUpdate = useForceUpdate();
+  const defaultProps = getDefaultProps(props);
+  const changes = new Map();
+  const exitingTransitions = useRef(new Map());
+  const forceChange = useRef(false);
+  each(transitions, (t, i) => {
+    const key = t.key;
+    const prevPhase = t.phase;
+    const p = propsFn ? propsFn() : props;
+    let to;
+    let phase;
+    let propsDelay = callProp(p.delay || 0, key);
+
+    if (prevPhase == TransitionPhase.MOUNT) {
+      to = p.enter;
+      phase = TransitionPhase.ENTER;
+    } else {
+      const isLeave = keys.indexOf(key) < 0;
+
+      if (prevPhase != TransitionPhase.LEAVE) {
+        if (isLeave) {
+          to = p.leave;
+          phase = TransitionPhase.LEAVE;
+        } else if (to = p.update) {
+          phase = TransitionPhase.UPDATE;
+        } else return;
+      } else if (!isLeave) {
+        to = p.enter;
+        phase = TransitionPhase.ENTER;
+      } else return;
+    }
+
+    to = callProp(to, t.item, i);
+    to = is.obj(to) ? inferTo(to) : {
+      to
+    };
+
+    if (!to.config) {
+      const config = propsConfig || defaultProps.config;
+      to.config = callProp(config, t.item, i, phase);
+    }
+
+    delay += trail;
+
+    const payload = react_spring_core_esm_extends({}, defaultProps, {
+      delay: propsDelay + delay,
+      ref: propsRef,
+      immediate: p.immediate,
+      reset: false
+    }, to);
+
+    if (phase == TransitionPhase.ENTER && is.und(payload.from)) {
+      const _p = propsFn ? propsFn() : props;
+
+      const from = is.und(_p.initial) || prevTransitions ? _p.from : _p.initial;
+      payload.from = callProp(from, t.item, i);
+    }
+
+    const {
+      onResolve
+    } = payload;
+
+    payload.onResolve = result => {
+      callProp(onResolve, result);
+      const transitions = usedTransitions.current;
+      const t = transitions.find(t => t.key === key);
+      if (!t) return;
+
+      if (result.cancelled && t.phase != TransitionPhase.UPDATE) {
+        return;
+      }
+
+      if (t.ctrl.idle) {
+        const idle = transitions.every(t => t.ctrl.idle);
+
+        if (t.phase == TransitionPhase.LEAVE) {
+          const expiry = callProp(expires, t.item);
+
+          if (expiry !== false) {
+            const expiryMs = expiry === true ? 0 : expiry;
+            t.expired = true;
+
+            if (!idle && expiryMs > 0) {
+              if (expiryMs <= 0x7fffffff) t.expirationId = setTimeout(forceUpdate, expiryMs);
+              return;
+            }
+          }
+        }
+
+        if (idle && transitions.some(t => t.expired)) {
+          exitingTransitions.current.delete(t);
+
+          if (exitBeforeEnter) {
+            forceChange.current = true;
+          }
+
+          forceUpdate();
+        }
+      }
+    };
+
+    const springs = getSprings(t.ctrl, payload);
+
+    if (phase === TransitionPhase.LEAVE && exitBeforeEnter) {
+      exitingTransitions.current.set(t, {
+        phase,
+        springs,
+        payload
+      });
+    } else {
+      changes.set(t, {
+        phase,
+        springs,
+        payload
+      });
+    }
+  });
+  const context = useContext(SpringContext);
+  const prevContext = usePrev(context);
+  const hasContext = context !== prevContext && hasProps(context);
+  useIsomorphicLayoutEffect(() => {
+    if (hasContext) {
+      each(transitions, t => {
+        t.ctrl.start({
+          default: context
+        });
+      });
+    }
+  }, [context]);
+  each(changes, (_, t) => {
+    if (exitingTransitions.current.size) {
+      const ind = transitions.findIndex(state => state.key === t.key);
+      transitions.splice(ind, 1);
+    }
+  });
+  useIsomorphicLayoutEffect(() => {
+    each(exitingTransitions.current.size ? exitingTransitions.current : changes, ({
+      phase,
+      payload
+    }, t) => {
+      const {
+        ctrl
+      } = t;
+      t.phase = phase;
+      ref == null ? void 0 : ref.add(ctrl);
+
+      if (hasContext && phase == TransitionPhase.ENTER) {
+        ctrl.start({
+          default: context
+        });
+      }
+
+      if (payload) {
+        replaceRef(ctrl, payload.ref);
+
+        if ((ctrl.ref || ref) && !forceChange.current) {
+          ctrl.update(payload);
+        } else {
+          ctrl.start(payload);
+
+          if (forceChange.current) {
+            forceChange.current = false;
+          }
+        }
+      }
+    });
+  }, reset ? void 0 : deps);
+
+  const renderTransitions = render => React.createElement(React.Fragment, null, transitions.map((t, i) => {
+    const {
+      springs
+    } = changes.get(t) || t.ctrl;
+    const elem = render(react_spring_core_esm_extends({}, springs), t.item, t, i);
+    return elem && elem.type ? React.createElement(elem.type, react_spring_core_esm_extends({}, elem.props, {
+      key: is.str(t.key) || is.num(t.key) ? t.key : t.ctrl.id,
+      ref: elem.ref
+    })) : elem;
+  }));
+
+  return ref ? [renderTransitions, ref] : renderTransitions;
+}
+let nextKey = 1;
+
+function getKeys(items, {
+  key,
+  keys = key
+}, prevTransitions) {
+  if (keys === null) {
+    const reused = new Set();
+    return items.map(item => {
+      const t = prevTransitions && prevTransitions.find(t => t.item === item && t.phase !== TransitionPhase.LEAVE && !reused.has(t));
+
+      if (t) {
+        reused.add(t);
+        return t.key;
+      }
+
+      return nextKey++;
+    });
+  }
+
+  return is.und(keys) ? items : is.fun(keys) ? items.map(keys) : toArray(keys);
+}
+
+const _excluded$2 = (/* unused pure expression or super */ null && (["children"]));
+function Spring(_ref) {
+  let {
+    children
+  } = _ref,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded$2);
+
+  return children(useSpring(props));
+}
+
+const _excluded$1 = (/* unused pure expression or super */ null && (["items", "children"]));
+function Trail(_ref) {
+  let {
+    items,
+    children
+  } = _ref,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded$1);
+
+  const trails = useTrail(items.length, props);
+  return items.map((item, index) => {
+    const result = children(item, index);
+    return is.fun(result) ? result(trails[index]) : result;
+  });
+}
+
+const _excluded = (/* unused pure expression or super */ null && (["items", "children"]));
+function Transition(_ref) {
+  let {
+    items,
+    children
+  } = _ref,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded);
+
+  return useTransition(items, props)(children);
+}
+
+class Interpolation extends FrameValue {
+  constructor(source, args) {
+    super();
+    this.key = void 0;
+    this.idle = true;
+    this.calc = void 0;
+    this._active = new Set();
+    this.source = source;
+    this.calc = createInterpolator(...args);
+
+    const value = this._get();
+
+    const nodeType = getAnimatedType(value);
+    setAnimated(this, nodeType.create(value));
+  }
+
+  advance(_dt) {
+    const value = this._get();
+
+    const oldValue = this.get();
+
+    if (!isEqual(value, oldValue)) {
+      getAnimated(this).setValue(value);
+
+      this._onChange(value, this.idle);
+    }
+
+    if (!this.idle && checkIdle(this._active)) {
+      becomeIdle(this);
+    }
+  }
+
+  _get() {
+    const inputs = react_spring_shared_esm_is.arr(this.source) ? this.source.map(getFluidValue) : react_spring_shared_esm_toArray(getFluidValue(this.source));
+    return this.calc(...inputs);
+  }
+
+  _start() {
+    if (this.idle && !checkIdle(this._active)) {
+      this.idle = false;
+      react_spring_shared_esm_each(getPayload(this), node => {
+        node.done = false;
+      });
+
+      if (globals.skipAnimation) {
+        raf.batchedUpdates(() => this.advance());
+        becomeIdle(this);
+      } else {
+        frameLoop.start(this);
+      }
+    }
+  }
+
+  _attach() {
+    let priority = 1;
+    react_spring_shared_esm_each(react_spring_shared_esm_toArray(this.source), source => {
+      if (hasFluidValue(source)) {
+        react_spring_shared_esm_addFluidObserver(source, this);
+      }
+
+      if (isFrameValue(source)) {
+        if (!source.idle) {
+          this._active.add(source);
+        }
+
+        priority = Math.max(priority, source.priority + 1);
+      }
+    });
+    this.priority = priority;
+
+    this._start();
+  }
+
+  _detach() {
+    react_spring_shared_esm_each(react_spring_shared_esm_toArray(this.source), source => {
+      if (hasFluidValue(source)) {
+        removeFluidObserver(source, this);
+      }
+    });
+
+    this._active.clear();
+
+    becomeIdle(this);
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      if (event.idle) {
+        this.advance();
+      } else {
+        this._active.add(event.parent);
+
+        this._start();
+      }
+    } else if (event.type == 'idle') {
+      this._active.delete(event.parent);
+    } else if (event.type == 'priority') {
+      this.priority = react_spring_shared_esm_toArray(this.source).reduce((highest, parent) => Math.max(highest, (isFrameValue(parent) ? parent.priority : 0) + 1), 0);
+    }
+  }
+
+}
+
+function isIdle(source) {
+  return source.idle !== false;
+}
+
+function checkIdle(active) {
+  return !active.size || Array.from(active).every(isIdle);
+}
+
+function becomeIdle(self) {
+  if (!self.idle) {
+    self.idle = true;
+    react_spring_shared_esm_each(getPayload(self), node => {
+      node.done = true;
+    });
+    callFluidObservers(self, {
+      type: 'idle',
+      parent: self
+    });
+  }
+}
+
+const react_spring_core_esm_to = (source, ...args) => new Interpolation(source, args);
+const react_spring_core_esm_interpolate = (source, ...args) => (deprecateInterpolate(), new Interpolation(source, args));
+
+globals.assign({
+  createStringInterpolator: createStringInterpolator,
+  to: (source, args) => new Interpolation(source, args)
+});
+const react_spring_core_esm_update = frameLoop.advance;
+
+
+
+;// CONCATENATED MODULE: external "ReactDOM"
+const external_ReactDOM_namespaceObject = window["ReactDOM"];
+;// CONCATENATED MODULE: ./node_modules/@react-spring/web/dist/react-spring-web.esm.js
+
+
+
+
+
+
+function react_spring_web_esm_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+const react_spring_web_esm_excluded$2 = ["style", "children", "scrollTop", "scrollLeft"];
+const isCustomPropRE = /^--/;
+
+function dangerousStyleValue(name, value) {
+  if (value == null || typeof value === 'boolean' || value === '') return '';
+  if (typeof value === 'number' && value !== 0 && !isCustomPropRE.test(name) && !(isUnitlessNumber.hasOwnProperty(name) && isUnitlessNumber[name])) return value + 'px';
+  return ('' + value).trim();
+}
+
+const attributeCache = {};
+function applyAnimatedValues(instance, props) {
+  if (!instance.nodeType || !instance.setAttribute) {
+    return false;
+  }
+
+  const isFilterElement = instance.nodeName === 'filter' || instance.parentNode && instance.parentNode.nodeName === 'filter';
+
+  const _ref = props,
+        {
+    style,
+    children,
+    scrollTop,
+    scrollLeft
+  } = _ref,
+        attributes = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded$2);
+
+  const values = Object.values(attributes);
+  const names = Object.keys(attributes).map(name => isFilterElement || instance.hasAttribute(name) ? name : attributeCache[name] || (attributeCache[name] = name.replace(/([A-Z])/g, n => '-' + n.toLowerCase())));
+
+  if (children !== void 0) {
+    instance.textContent = children;
+  }
+
+  for (let name in style) {
+    if (style.hasOwnProperty(name)) {
+      const value = dangerousStyleValue(name, style[name]);
+
+      if (isCustomPropRE.test(name)) {
+        instance.style.setProperty(name, value);
+      } else {
+        instance.style[name] = value;
+      }
+    }
+  }
+
+  names.forEach((name, i) => {
+    instance.setAttribute(name, values[i]);
+  });
+
+  if (scrollTop !== void 0) {
+    instance.scrollTop = scrollTop;
+  }
+
+  if (scrollLeft !== void 0) {
+    instance.scrollLeft = scrollLeft;
+  }
+}
+let isUnitlessNumber = {
+  animationIterationCount: true,
+  borderImageOutset: true,
+  borderImageSlice: true,
+  borderImageWidth: true,
+  boxFlex: true,
+  boxFlexGroup: true,
+  boxOrdinalGroup: true,
+  columnCount: true,
+  columns: true,
+  flex: true,
+  flexGrow: true,
+  flexPositive: true,
+  flexShrink: true,
+  flexNegative: true,
+  flexOrder: true,
+  gridRow: true,
+  gridRowEnd: true,
+  gridRowSpan: true,
+  gridRowStart: true,
+  gridColumn: true,
+  gridColumnEnd: true,
+  gridColumnSpan: true,
+  gridColumnStart: true,
+  fontWeight: true,
+  lineClamp: true,
+  lineHeight: true,
+  opacity: true,
+  order: true,
+  orphans: true,
+  tabSize: true,
+  widows: true,
+  zIndex: true,
+  zoom: true,
+  fillOpacity: true,
+  floodOpacity: true,
+  stopOpacity: true,
+  strokeDasharray: true,
+  strokeDashoffset: true,
+  strokeMiterlimit: true,
+  strokeOpacity: true,
+  strokeWidth: true
+};
+
+const prefixKey = (prefix, key) => prefix + key.charAt(0).toUpperCase() + key.substring(1);
+
+const prefixes = ['Webkit', 'Ms', 'Moz', 'O'];
+isUnitlessNumber = Object.keys(isUnitlessNumber).reduce((acc, prop) => {
+  prefixes.forEach(prefix => acc[prefixKey(prefix, prop)] = acc[prop]);
+  return acc;
+}, isUnitlessNumber);
+
+const react_spring_web_esm_excluded$1 = ["x", "y", "z"];
+const domTransforms = /^(matrix|translate|scale|rotate|skew)/;
+const pxTransforms = /^(translate)/;
+const degTransforms = /^(rotate|skew)/;
+
+const addUnit = (value, unit) => react_spring_shared_esm_is.num(value) && value !== 0 ? value + unit : value;
+
+const isValueIdentity = (value, id) => react_spring_shared_esm_is.arr(value) ? value.every(v => isValueIdentity(v, id)) : react_spring_shared_esm_is.num(value) ? value === id : parseFloat(value) === id;
+
+class AnimatedStyle extends AnimatedObject {
+  constructor(_ref) {
+    let {
+      x,
+      y,
+      z
+    } = _ref,
+        style = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded$1);
+
+    const inputs = [];
+    const transforms = [];
+
+    if (x || y || z) {
+      inputs.push([x || 0, y || 0, z || 0]);
+      transforms.push(xyz => [`translate3d(${xyz.map(v => addUnit(v, 'px')).join(',')})`, isValueIdentity(xyz, 0)]);
+    }
+
+    react_spring_shared_esm_eachProp(style, (value, key) => {
+      if (key === 'transform') {
+        inputs.push([value || '']);
+        transforms.push(transform => [transform, transform === '']);
+      } else if (domTransforms.test(key)) {
+        delete style[key];
+        if (react_spring_shared_esm_is.und(value)) return;
+        const unit = pxTransforms.test(key) ? 'px' : degTransforms.test(key) ? 'deg' : '';
+        inputs.push(react_spring_shared_esm_toArray(value));
+        transforms.push(key === 'rotate3d' ? ([x, y, z, deg]) => [`rotate3d(${x},${y},${z},${addUnit(deg, unit)})`, isValueIdentity(deg, 0)] : input => [`${key}(${input.map(v => addUnit(v, unit)).join(',')})`, isValueIdentity(input, key.startsWith('scale') ? 1 : 0)]);
+      }
+    });
+
+    if (inputs.length) {
+      style.transform = new FluidTransform(inputs, transforms);
+    }
+
+    super(style);
+  }
+
+}
+
+class FluidTransform extends FluidValue {
+  constructor(inputs, transforms) {
+    super();
+    this._value = null;
+    this.inputs = inputs;
+    this.transforms = transforms;
+  }
+
+  get() {
+    return this._value || (this._value = this._get());
+  }
+
+  _get() {
+    let transform = '';
+    let identity = true;
+    react_spring_shared_esm_each(this.inputs, (input, i) => {
+      const arg1 = getFluidValue(input[0]);
+      const [t, id] = this.transforms[i](react_spring_shared_esm_is.arr(arg1) ? arg1 : input.map(getFluidValue));
+      transform += ' ' + t;
+      identity = identity && id;
+    });
+    return identity ? 'none' : transform;
+  }
+
+  observerAdded(count) {
+    if (count == 1) react_spring_shared_esm_each(this.inputs, input => react_spring_shared_esm_each(input, value => hasFluidValue(value) && react_spring_shared_esm_addFluidObserver(value, this)));
+  }
+
+  observerRemoved(count) {
+    if (count == 0) react_spring_shared_esm_each(this.inputs, input => react_spring_shared_esm_each(input, value => hasFluidValue(value) && removeFluidObserver(value, this)));
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      this._value = null;
+    }
+
+    callFluidObservers(this, event);
+  }
+
+}
+
+const primitives = ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'big', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr', 'circle', 'clipPath', 'defs', 'ellipse', 'foreignObject', 'g', 'image', 'line', 'linearGradient', 'mask', 'path', 'pattern', 'polygon', 'polyline', 'radialGradient', 'rect', 'stop', 'svg', 'text', 'tspan'];
+
+const react_spring_web_esm_excluded = ["scrollTop", "scrollLeft"];
+globals.assign({
+  batchedUpdates: external_ReactDOM_namespaceObject.unstable_batchedUpdates,
+  createStringInterpolator: createStringInterpolator,
+  colors: colors
+});
+const host = createHost(primitives, {
+  applyAnimatedValues,
+  createAnimatedStyle: style => new AnimatedStyle(style),
+  getComponentProps: _ref => {
+    let props = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded);
+
+    return props;
+  }
+});
+const animated = host.animated;
+
+
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/layout/animation.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+function getAbsolutePosition(element) {
+  return {
+    top: element.offsetTop,
+    left: element.offsetLeft
+  };
+}
+const ANIMATION_DURATION = 400;
+
+/**
+ * Hook used to compute the styles required to move a div into a new position.
+ *
+ * The way this animation works is the following:
+ *  - It first renders the element as if there was no animation.
+ *  - It takes a snapshot of the position of the block to use it
+ *    as a destination point for the animation.
+ *  - It restores the element to the previous position using a CSS transform
+ *  - It uses the "resetAnimation" flag to reset the animation
+ *    from the beginning in order to animate to the new destination point.
+ *
+ * @param {Object} $1                          Options
+ * @param {*}      $1.triggerAnimationOnChange Variable used to trigger the animation if it changes.
+ */
+function useMovingAnimation({
+  triggerAnimationOnChange
+}) {
+  const ref = (0,external_wp_element_namespaceObject.useRef)();
+
+  // Whenever the trigger changes, we need to take a snapshot of the current
+  // position of the block to use it as a destination point for the animation.
+  const {
+    previous,
+    prevRect
+  } = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    previous: ref.current && getAbsolutePosition(ref.current),
+    prevRect: ref.current && ref.current.getBoundingClientRect()
+  }),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [triggerAnimationOnChange]);
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    if (!previous || !ref.current) {
+      return;
+    }
+
+    // We disable the animation if the user has a preference for reduced
+    // motion.
+    const disableAnimation = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (disableAnimation) {
+      return;
+    }
+    const controller = new Controller({
+      x: 0,
+      y: 0,
+      width: prevRect.width,
+      height: prevRect.height,
+      config: {
+        duration: ANIMATION_DURATION,
+        easing: easings.easeInOutQuint
+      },
+      onChange({
+        value
+      }) {
+        if (!ref.current) {
+          return;
+        }
+        let {
+          x,
+          y,
+          width,
+          height
+        } = value;
+        x = Math.round(x);
+        y = Math.round(y);
+        width = Math.round(width);
+        height = Math.round(height);
+        const finishedMoving = x === 0 && y === 0;
+        ref.current.style.transformOrigin = 'center center';
+        ref.current.style.transform = finishedMoving ? null // Set to `null` to explicitly remove the transform.
+        : `translate3d(${x}px,${y}px,0)`;
+        ref.current.style.width = finishedMoving ? null : `${width}px`;
+        ref.current.style.height = finishedMoving ? null : `${height}px`;
+      }
+    });
+    ref.current.style.transform = undefined;
+    const destination = ref.current.getBoundingClientRect();
+    const x = Math.round(prevRect.left - destination.left);
+    const y = Math.round(prevRect.top - destination.top);
+    const width = destination.width;
+    const height = destination.height;
+    controller.start({
+      x: 0,
+      y: 0,
+      width,
+      height,
+      from: {
+        x,
+        y,
+        width: prevRect.width,
+        height: prevRect.height
+      }
+    });
+    return () => {
+      controller.stop();
+      controller.set({
+        x: 0,
+        y: 0,
+        width: prevRect.width,
+        height: prevRect.height
+      });
+    };
+  }, [previous, prevRect]);
+  return ref;
+}
+/* harmony default export */ const animation = (useMovingAnimation);
+
+;// CONCATENATED MODULE: external ["wp","dom"]
+const external_wp_dom_namespaceObject = window["wp"]["dom"];
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar/index.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+const SidebarNavigationContext = (0,external_wp_element_namespaceObject.createContext)(() => {});
+// Focus a sidebar element after a navigation. The element to focus is either
+// specified by `focusSelector` (when navigating back) or it is the first
+// tabbable element (usually the "Back" button).
+function focusSidebarElement(el, direction, focusSelector) {
+  let elementToFocus;
+  if (direction === 'back' && focusSelector) {
+    elementToFocus = el.querySelector(focusSelector);
+  }
+  if (direction !== null && !elementToFocus) {
+    const [firstTabbable] = external_wp_dom_namespaceObject.focus.tabbable.find(el);
+    elementToFocus = firstTabbable !== null && firstTabbable !== void 0 ? firstTabbable : el;
+  }
+  elementToFocus?.focus();
+}
+
+// Navigation state that is updated when navigating back or forward. Helps us
+// manage the animations and also focus.
+function createNavState() {
+  let state = {
+    direction: null,
+    focusSelector: null
+  };
+  return {
+    get() {
+      return state;
+    },
+    navigate(direction, focusSelector = null) {
+      state = {
+        direction,
+        focusSelector: direction === 'forward' && focusSelector ? focusSelector : state.focusSelector
+      };
+    }
+  };
+}
+function SidebarContentWrapper({
+  children
+}) {
+  const navState = (0,external_wp_element_namespaceObject.useContext)(SidebarNavigationContext);
+  const wrapperRef = (0,external_wp_element_namespaceObject.useRef)();
+  const [navAnimation, setNavAnimation] = (0,external_wp_element_namespaceObject.useState)(null);
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    const {
+      direction,
+      focusSelector
+    } = navState.get();
+    focusSidebarElement(wrapperRef.current, direction, focusSelector);
+    setNavAnimation(direction);
+  }, [navState]);
+  const wrapperCls = dist_clsx('edit-site-sidebar__screen-wrapper', {
+    'slide-from-left': navAnimation === 'back',
+    'slide-from-right': navAnimation === 'forward'
+  });
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    ref: wrapperRef,
+    className: wrapperCls,
+    children: children
+  });
+}
+function SidebarContent({
+  routeKey,
+  children
+}) {
+  const [navState] = (0,external_wp_element_namespaceObject.useState)(createNavState);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationContext.Provider, {
+    value: navState,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "edit-site-sidebar__content",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarContentWrapper, {
+        children: children
+      }, routeKey)
+    })
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/check.js
+/**
+ * WordPress dependencies
+ */
+
+
+const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
+  })
+});
+/* harmony default export */ const library_check = (check);
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/save-button/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const {
+  useLocation
+} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
+function SaveButton({
+  className = 'edit-site-save-button__button',
+  variant = 'primary',
+  showTooltip = true,
+  showReviewMessage,
+  icon,
+  size,
+  __next40pxDefaultSize = false
+}) {
+  const {
+    params
+  } = useLocation();
+  const {
+    setIsSaveViewOpened
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  const {
+    saveDirtyEntities
+  } = lock_unlock_unlock((0,external_wp_data_namespaceObject.useDispatch)(external_wp_editor_namespaceObject.store));
+  const {
+    dirtyEntityRecords
+  } = (0,external_wp_editor_namespaceObject.useEntitiesSavedStatesIsDirty)();
+  const {
+    isSaving,
+    isSaveViewOpen,
+    previewingThemeName
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      isSavingEntityRecord,
+      isResolving
+    } = select(external_wp_coreData_namespaceObject.store);
+    const {
+      isSaveViewOpened
+    } = select(store);
+    const isActivatingTheme = isResolving('activateTheme');
+    const currentlyPreviewingThemeId = currentlyPreviewingTheme();
+    return {
+      isSaving: dirtyEntityRecords.some(record => isSavingEntityRecord(record.kind, record.name, record.key)) || isActivatingTheme,
+      isSaveViewOpen: isSaveViewOpened(),
+      // Do not call `getTheme` with null, it will cause a request to
+      // the server.
+      previewingThemeName: currentlyPreviewingThemeId ? select(external_wp_coreData_namespaceObject.store).getTheme(currentlyPreviewingThemeId)?.name?.rendered : undefined
+    };
+  }, [dirtyEntityRecords]);
+  const hasDirtyEntities = !!dirtyEntityRecords.length;
+  let isOnlyCurrentEntityDirty;
+  // Check if the current entity is the only entity with changes.
+  // We have some extra logic for `wp_global_styles` for now, that
+  // is used in navigation sidebar.
+  if (dirtyEntityRecords.length === 1) {
+    if (params.postId) {
+      isOnlyCurrentEntityDirty = `${dirtyEntityRecords[0].key}` === params.postId && dirtyEntityRecords[0].name === params.postType;
+    } else if (params.path?.includes('wp_global_styles')) {
+      isOnlyCurrentEntityDirty = dirtyEntityRecords[0].name === 'globalStyles';
+    }
+  }
+  const disabled = isSaving || !hasDirtyEntities && !isPreviewingTheme();
+  const getLabel = () => {
+    if (isPreviewingTheme()) {
+      if (isSaving) {
+        return (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: The name of theme to be activated. */
+        (0,external_wp_i18n_namespaceObject.__)('Activating %s'), previewingThemeName);
+      } else if (disabled) {
+        return (0,external_wp_i18n_namespaceObject.__)('Saved');
+      } else if (hasDirtyEntities) {
+        return (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: The name of theme to be activated. */
+        (0,external_wp_i18n_namespaceObject.__)('Activate %s & Save'), previewingThemeName);
+      }
+      return (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: The name of theme to be activated. */
+      (0,external_wp_i18n_namespaceObject.__)('Activate %s'), previewingThemeName);
+    }
+    if (isSaving) {
+      return (0,external_wp_i18n_namespaceObject.__)('Saving');
+    }
+    if (disabled) {
+      return (0,external_wp_i18n_namespaceObject.__)('Saved');
+    }
+    if (!isOnlyCurrentEntityDirty && showReviewMessage) {
+      return (0,external_wp_i18n_namespaceObject.sprintf)(
+      // translators: %d: number of unsaved changes (number).
+      (0,external_wp_i18n_namespaceObject._n)('Review %d change…', 'Review %d changes…', dirtyEntityRecords.length), dirtyEntityRecords.length);
+    }
+    return (0,external_wp_i18n_namespaceObject.__)('Save');
+  };
+  const label = getLabel();
+  const onClick = isOnlyCurrentEntityDirty ? () => saveDirtyEntities({
+    dirtyEntityRecords
+  }) : () => setIsSaveViewOpened(true);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    variant: variant,
+    className: className,
+    "aria-disabled": disabled,
+    "aria-expanded": isSaveViewOpen,
+    isBusy: isSaving,
+    onClick: disabled ? undefined : onClick,
+    label: label
+    /*
+     * We want the tooltip to show the keyboard shortcut only when the
+     * button does something, i.e. when it's not disabled.
+     */,
+    shortcut: disabled ? undefined : external_wp_keycodes_namespaceObject.displayShortcut.primary('s')
+    /*
+     * Displaying the keyboard shortcut conditionally makes the tooltip
+     * itself show conditionally. This would trigger a full-rerendering
+     * of the button that we want to avoid. By setting `showTooltip`,
+     * the tooltip is always rendered even when there's no keyboard shortcut.
+     */,
+    showTooltip: showTooltip,
+    icon: icon,
+    __next40pxDefaultSize: __next40pxDefaultSize,
+    size: size,
+    children: label
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/save-hub/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function SaveHub() {
+  const {
+    isDisabled,
+    isSaving
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      __experimentalGetDirtyEntityRecords,
+      isSavingEntityRecord
+    } = select(external_wp_coreData_namespaceObject.store);
+    const dirtyEntityRecords = __experimentalGetDirtyEntityRecords();
+    const _isSaving = dirtyEntityRecords.some(record => isSavingEntityRecord(record.kind, record.name, record.key));
+    return {
+      isSaving: _isSaving,
+      isDisabled: _isSaving || !dirtyEntityRecords.length && !isPreviewingTheme()
+    };
+  }, []);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalHStack, {
+    className: "edit-site-save-hub",
+    alignment: "right",
+    spacing: 4,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveButton, {
+      className: "edit-site-save-hub__button",
+      variant: isDisabled ? null : 'primary',
+      showTooltip: false,
+      icon: isDisabled && !isSaving ? library_check : null,
+      showReviewMessage: true,
+      __next40pxDefaultSize: true
+    })
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sync-state-with-url/use-sync-canvas-mode-with-url.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const {
+  useLocation: use_sync_canvas_mode_with_url_useLocation,
+  useHistory: use_sync_canvas_mode_with_url_useHistory
+} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
+function useSyncCanvasModeWithURL() {
+  const history = use_sync_canvas_mode_with_url_useHistory();
+  const {
+    params
+  } = use_sync_canvas_mode_with_url_useLocation();
+  const canvasMode = (0,external_wp_data_namespaceObject.useSelect)(select => lock_unlock_unlock(select(store)).getCanvasMode(), []);
+  const {
+    setCanvasMode
+  } = lock_unlock_unlock((0,external_wp_data_namespaceObject.useDispatch)(store));
+  const currentCanvasMode = (0,external_wp_element_namespaceObject.useRef)(canvasMode);
+  const {
+    canvas: canvasInUrl
+  } = params;
+  const currentCanvasInUrl = (0,external_wp_element_namespaceObject.useRef)(canvasInUrl);
+  const currentUrlParams = (0,external_wp_element_namespaceObject.useRef)(params);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    currentUrlParams.current = params;
+  }, [params]);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    currentCanvasMode.current = canvasMode;
+    if (canvasMode === 'init') {
+      return;
+    }
+    if (canvasMode === 'edit' && currentCanvasInUrl.current !== canvasMode) {
+      history.push({
+        ...currentUrlParams.current,
+        canvas: 'edit'
+      });
+    }
+    if (canvasMode === 'view' && currentCanvasInUrl.current !== undefined) {
+      history.push({
+        ...currentUrlParams.current,
+        canvas: undefined
+      });
+    }
+  }, [canvasMode, history]);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    currentCanvasInUrl.current = canvasInUrl;
+    if (canvasInUrl !== 'edit' && currentCanvasMode.current !== 'view') {
+      setCanvasMode('view');
+    } else if (canvasInUrl === 'edit' && currentCanvasMode.current !== 'edit') {
+      setCanvasMode('edit');
+    }
+  }, [canvasInUrl, setCanvasMode]);
+}
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/layout/index.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const {
+  useCommands
+} = lock_unlock_unlock(external_wp_coreCommands_namespaceObject.privateApis);
+const {
+  useGlobalStyle: layout_useGlobalStyle
+} = lock_unlock_unlock(external_wp_blockEditor_namespaceObject.privateApis);
+const {
+  NavigableRegion: layout_NavigableRegion
+} = lock_unlock_unlock(external_wp_editor_namespaceObject.privateApis);
+const layout_ANIMATION_DURATION = 0.3;
+function Layout({
+  route
+}) {
+  useSyncCanvasModeWithURL();
+  useCommands();
+  const isMobileViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium', '<');
+  const toggleRef = (0,external_wp_element_namespaceObject.useRef)();
+  const {
+    canvasMode,
+    previousShortcut,
+    nextShortcut
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getAllShortcutKeyCombinations
+    } = select(external_wp_keyboardShortcuts_namespaceObject.store);
+    const {
+      getCanvasMode
+    } = lock_unlock_unlock(select(store));
+    return {
+      canvasMode: getCanvasMode(),
+      previousShortcut: getAllShortcutKeyCombinations('core/editor/previous-region'),
+      nextShortcut: getAllShortcutKeyCombinations('core/editor/next-region')
+    };
+  }, []);
+  const navigateRegionsProps = (0,external_wp_components_namespaceObject.__unstableUseNavigateRegions)({
+    previous: previousShortcut,
+    next: nextShortcut
+  });
+  const disableMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
+  const [canvasResizer, canvasSize] = (0,external_wp_compose_namespaceObject.useResizeObserver)();
+  const [fullResizer] = (0,external_wp_compose_namespaceObject.useResizeObserver)();
+  const isEditorLoading = useIsSiteEditorLoading();
+  const [isResizableFrameOversized, setIsResizableFrameOversized] = (0,external_wp_element_namespaceObject.useState)(false);
+  const {
+    key: routeKey,
+    areas,
+    widths
+  } = route;
+  const animationRef = animation({
+    triggerAnimationOnChange: canvasMode + '__' + routeKey
+  });
+  const [backgroundColor] = layout_useGlobalStyle('color.background');
+  const [gradientValue] = layout_useGlobalStyle('color.gradient');
+  const previousCanvaMode = (0,external_wp_compose_namespaceObject.usePrevious)(canvasMode);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (previousCanvaMode === 'edit') {
+      toggleRef.current?.focus();
+    }
+    // Should not depend on the previous canvas mode value but the next.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canvasMode]);
+
+  // Synchronizing the URL with the store value of canvasMode happens in an effect
+  // This condition ensures the component is only rendered after the synchronization happens
+  // which prevents any animations due to potential canvasMode value change.
+  if (canvasMode === 'init') {
+    return null;
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_commands_namespaceObject.CommandMenu, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(register, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(global, {}), fullResizer, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      ...navigateRegionsProps,
+      ref: navigateRegionsProps.ref,
+      className: dist_clsx('edit-site-layout', navigateRegionsProps.className, {
+        'is-full-canvas': canvasMode === 'edit'
+      }),
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        className: "edit-site-layout__content",
+        children: [(!isMobileViewport || !areas.mobile) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(layout_NavigableRegion, {
+          ariaLabel: (0,external_wp_i18n_namespaceObject.__)('Navigation'),
+          className: "edit-site-layout__sidebar-region",
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableAnimatePresence, {
+            children: canvasMode === 'view' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__unstableMotion.div, {
+              initial: {
+                opacity: 0
+              },
+              animate: {
+                opacity: 1
+              },
+              exit: {
+                opacity: 0
+              },
+              transition: {
+                type: 'tween',
+                duration:
+                // Disable transition in mobile to emulate a full page transition.
+                disableMotion || isMobileViewport ? 0 : layout_ANIMATION_DURATION,
+                ease: 'easeOut'
+              },
+              className: "edit-site-layout__sidebar",
+              children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(site_hub, {
+                ref: toggleRef,
+                isTransparent: isResizableFrameOversized
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarContent, {
+                routeKey: routeKey,
+                children: areas.sidebar
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveHub, {})]
+            })
+          })
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.EditorSnackbars, {}), isMobileViewport && areas.mobile && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          className: "edit-site-layout__mobile",
+          children: areas.mobile
+        }), !isMobileViewport && areas.content && canvasMode !== 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          className: "edit-site-layout__area",
+          style: {
+            maxWidth: widths?.content
+          },
+          children: areas.content
+        }), !isMobileViewport && areas.preview && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+          className: "edit-site-layout__canvas-container",
+          children: [canvasResizer, !!canvasSize.width && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+            className: dist_clsx('edit-site-layout__canvas', {
+              'is-right-aligned': isResizableFrameOversized
+            }),
+            ref: animationRef,
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ErrorBoundary, {
+              children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(resizable_frame, {
+                isReady: !isEditorLoading,
+                isFullWidth: canvasMode === 'edit',
+                defaultSize: {
+                  width: canvasSize.width - 24 /* $canvas-padding */,
+                  height: canvasSize.height
+                },
+                isOversized: isResizableFrameOversized,
+                setIsOversized: setIsResizableFrameOversized,
+                innerContentStyle: {
+                  background: gradientValue !== null && gradientValue !== void 0 ? gradientValue : backgroundColor
+                },
+                children: areas.preview
+              })
+            })
+          })]
+        })]
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SavePanel, {})]
+    })]
+  });
+}
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/styles.js
 /**
@@ -10859,60 +15452,6 @@ const trash = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
 });
 /* harmony default export */ const library_trash = (trash);
 
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/use-edited-entity-record/index.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-function useEditedEntityRecord(postType, postId) {
-  const {
-    record,
-    title,
-    description,
-    isLoaded,
-    icon
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getEditedPostType,
-      getEditedPostId
-    } = select(store);
-    const {
-      getEditedEntityRecord,
-      hasFinishedResolution
-    } = select(external_wp_coreData_namespaceObject.store);
-    const {
-      __experimentalGetTemplateInfo: getTemplateInfo
-    } = select(external_wp_editor_namespaceObject.store);
-    const usedPostType = postType !== null && postType !== void 0 ? postType : getEditedPostType();
-    const usedPostId = postId !== null && postId !== void 0 ? postId : getEditedPostId();
-    const _record = getEditedEntityRecord('postType', usedPostType, usedPostId);
-    const _isLoaded = usedPostId && hasFinishedResolution('getEditedEntityRecord', ['postType', usedPostType, usedPostId]);
-    const templateInfo = getTemplateInfo(_record);
-    return {
-      record: _record,
-      title: templateInfo.title,
-      description: templateInfo.description,
-      isLoaded: _isLoaded,
-      icon: templateInfo.icon
-    };
-  }, [postType, postId]);
-  return {
-    isLoaded,
-    icon,
-    record,
-    getTitle: () => title ? (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title) : null,
-    getDescription: () => description ? (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(description) : null
-  };
-}
-
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/utils/is-template-removable.js
 /**
  * Internal dependencies
@@ -11180,10 +15719,11 @@ function useEditModeCommands() {
   });
 }
 
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/layout/hooks.js
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sync-state-with-url/use-init-edited-entity-from-url.js
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -11192,54 +15732,193 @@ function useEditModeCommands() {
  * Internal dependencies
  */
 
-const MAX_LOADING_TIME = 10000; // 10 seconds
 
-function useIsSiteEditorLoading() {
+
+const {
+  useLocation: use_init_edited_entity_from_url_useLocation
+} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
+const postTypesWithoutParentTemplate = [TEMPLATE_POST_TYPE, TEMPLATE_PART_POST_TYPE, NAVIGATION_POST_TYPE, PATTERN_TYPES.user];
+const authorizedPostTypes = ['page'];
+function useResolveEditedEntityAndContext({
+  postId,
+  postType
+}) {
   const {
-    isLoaded: hasLoadedPost
-  } = useEditedEntityRecord();
-  const [loaded, setLoaded] = (0,external_wp_element_namespaceObject.useState)(false);
-  const inLoadingPause = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const hasResolvingSelectors = select(external_wp_coreData_namespaceObject.store).hasResolvingSelectors();
-    return !loaded && !hasResolvingSelectors;
-  }, [loaded]);
-
-  /*
-   * If the maximum expected loading time has passed, we're marking the
-   * editor as loaded, in order to prevent any failed requests from blocking
-   * the editor canvas from appearing.
-   */
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    let timeout;
-    if (!loaded) {
-      timeout = setTimeout(() => {
-        setLoaded(true);
-      }, MAX_LOADING_TIME);
+    hasLoadedAllDependencies,
+    homepageId,
+    postsPageId,
+    url,
+    frontPageTemplateId
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getSite,
+      getUnstableBase,
+      getEntityRecords
+    } = select(external_wp_coreData_namespaceObject.store);
+    const siteData = getSite();
+    const base = getUnstableBase();
+    const templates = getEntityRecords('postType', TEMPLATE_POST_TYPE, {
+      per_page: -1
+    });
+    const _homepageId = siteData?.show_on_front === 'page' && ['number', 'string'].includes(typeof siteData.page_on_front) && !!+siteData.page_on_front // We also need to check if it's not zero(`0`).
+    ? siteData.page_on_front.toString() : null;
+    const _postsPageId = siteData?.show_on_front === 'page' && ['number', 'string'].includes(typeof siteData.page_for_posts) ? siteData.page_for_posts.toString() : null;
+    let _frontPageTemplateId;
+    if (templates) {
+      const frontPageTemplate = templates.find(t => t.slug === 'front-page');
+      _frontPageTemplateId = frontPageTemplate ? frontPageTemplate.id : false;
     }
-    return () => {
-      clearTimeout(timeout);
+    return {
+      hasLoadedAllDependencies: !!base && !!siteData,
+      homepageId: _homepageId,
+      postsPageId: _postsPageId,
+      url: base?.home,
+      frontPageTemplateId: _frontPageTemplateId
     };
-  }, [loaded]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (inLoadingPause) {
-      /*
-       * We're using an arbitrary 100ms timeout here to catch brief
-       * moments without any resolving selectors that would result in
-       * displaying brief flickers of loading state and loaded state.
-       *
-       * It's worth experimenting with different values, since this also
-       * adds 100ms of artificial delay after loading has finished.
-       */
-      const ARTIFICIAL_DELAY = 100;
-      const timeout = setTimeout(() => {
-        setLoaded(true);
-      }, ARTIFICIAL_DELAY);
-      return () => {
-        clearTimeout(timeout);
+  }, []);
+
+  /**
+   * This is a hook that recreates the logic to resolve a template for a given WordPress postID postTypeId
+   * in order to match the frontend as closely as possible in the site editor.
+   *
+   * It is not possible to rely on the server logic because there maybe unsaved changes that impact the template resolution.
+   */
+  const resolvedTemplateId = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    // If we're rendering a post type that doesn't have a template
+    // no need to resolve its template.
+    if (postTypesWithoutParentTemplate.includes(postType) && postId) {
+      return undefined;
+    }
+    const {
+      getEditedEntityRecord,
+      getEntityRecords,
+      getDefaultTemplateId,
+      __experimentalGetTemplateForLink
+    } = select(external_wp_coreData_namespaceObject.store);
+    function resolveTemplateForPostTypeAndId(postTypeToResolve, postIdToResolve) {
+      // For the front page, we always use the front page template if existing.
+      if (postTypeToResolve === 'page' && homepageId === postIdToResolve) {
+        // We're still checking whether the front page template exists.
+        // Don't resolve the template yet.
+        if (frontPageTemplateId === undefined) {
+          return undefined;
+        }
+        if (!!frontPageTemplateId) {
+          return frontPageTemplateId;
+        }
+      }
+      const editedEntity = getEditedEntityRecord('postType', postTypeToResolve, postIdToResolve);
+      if (!editedEntity) {
+        return undefined;
+      }
+      // Check if the current page is the posts page.
+      if (postTypeToResolve === 'page' && postsPageId === postIdToResolve) {
+        return __experimentalGetTemplateForLink(editedEntity.link)?.id;
+      }
+      // First see if the post/page has an assigned template and fetch it.
+      const currentTemplateSlug = editedEntity.template;
+      if (currentTemplateSlug) {
+        const currentTemplate = getEntityRecords('postType', TEMPLATE_POST_TYPE, {
+          per_page: -1
+        })?.find(({
+          slug
+        }) => slug === currentTemplateSlug);
+        if (currentTemplate) {
+          return currentTemplate.id;
+        }
+      }
+      // If no template is assigned, use the default template.
+      let slugToCheck;
+      // In `draft` status we might not have a slug available, so we use the `single`
+      // post type templates slug(ex page, single-post, single-product etc..).
+      // Pages do not need the `single` prefix in the slug to be prioritized
+      // through template hierarchy.
+      if (editedEntity.slug) {
+        slugToCheck = postTypeToResolve === 'page' ? `${postTypeToResolve}-${editedEntity.slug}` : `single-${postTypeToResolve}-${editedEntity.slug}`;
+      } else {
+        slugToCheck = postTypeToResolve === 'page' ? 'page' : `single-${postTypeToResolve}`;
+      }
+      return getDefaultTemplateId({
+        slug: slugToCheck
+      });
+    }
+    if (!hasLoadedAllDependencies) {
+      return undefined;
+    }
+
+    // If we're rendering a specific page, we need to resolve its template.
+    // The site editor only supports pages for now, not other CPTs.
+    if (postType && postId && authorizedPostTypes.includes(postType)) {
+      return resolveTemplateForPostTypeAndId(postType, postId);
+    }
+
+    // If we're rendering the home page, and we have a static home page, resolve its template.
+    if (homepageId) {
+      return resolveTemplateForPostTypeAndId('page', homepageId);
+    }
+
+    // If we're not rendering a specific page, use the front page template.
+    if (url) {
+      const template = __experimentalGetTemplateForLink(url);
+      return template?.id;
+    }
+  }, [homepageId, postsPageId, hasLoadedAllDependencies, url, postId, postType, frontPageTemplateId]);
+  const context = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    if (postTypesWithoutParentTemplate.includes(postType) && postId) {
+      return {};
+    }
+    if (postType && postId && authorizedPostTypes.includes(postType)) {
+      return {
+        postType,
+        postId
       };
     }
-  }, [inLoadingPause]);
-  return !loaded || !hasLoadedPost;
+    if (homepageId) {
+      return {
+        postType: 'page',
+        postId: homepageId
+      };
+    }
+    return {};
+  }, [homepageId, postType, postId]);
+  if (postTypesWithoutParentTemplate.includes(postType) && postId) {
+    return {
+      isReady: true,
+      postType,
+      postId,
+      context
+    };
+  }
+  if (hasLoadedAllDependencies) {
+    return {
+      isReady: resolvedTemplateId !== undefined,
+      postType: TEMPLATE_POST_TYPE,
+      postId: resolvedTemplateId,
+      context
+    };
+  }
+  return {
+    isReady: false
+  };
+}
+function useInitEditedEntityFromURL() {
+  const {
+    params = {}
+  } = use_init_edited_entity_from_url_useLocation();
+  const {
+    postType,
+    postId,
+    context,
+    isReady
+  } = useResolveEditedEntityAndContext(params);
+  const {
+    setEditedEntity
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (isReady) {
+      setEditedEntity(postType, postId, context);
+    }
+  }, [isReady, postType, postId, context, setEditedEntity]);
 }
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/welcome-guide/image.js
@@ -11629,51 +16308,6 @@ function GlobalStylesRenderer() {
   return null;
 }
 
-;// CONCATENATED MODULE: external ["wp","a11y"]
-const external_wp_a11y_namespaceObject = window["wp"]["a11y"];
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/routes/use-title.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-const {
-  useLocation: use_title_useLocation
-} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
-function useTitle(title) {
-  const location = use_title_useLocation();
-  const siteTitle = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_coreData_namespaceObject.store).getEntityRecord('root', 'site')?.title, []);
-  const isInitialLocationRef = (0,external_wp_element_namespaceObject.useRef)(true);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    isInitialLocationRef.current = false;
-  }, [location]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    // Don't update or announce the title for initial page load.
-    if (isInitialLocationRef.current) {
-      return;
-    }
-    if (title && siteTitle) {
-      // @see https://github.com/WordPress/wordpress-develop/blob/94849898192d271d533e09756007e176feb80697/src/wp-admin/admin-header.php#L67-L68
-      const formattedTitle = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: Admin document title. 1: Admin screen name, 2: Network or site name. */
-      (0,external_wp_i18n_namespaceObject.__)('%1$s ‹ %2$s ‹ Editor — WordPress'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(siteTitle));
-      document.title = formattedTitle;
-
-      // Announce title on route change for screen readers.
-      (0,external_wp_a11y_namespaceObject.speak)(title, 'assertive');
-    }
-  }, [title, siteTitle, location]);
-}
-
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/canvas-loader/index.js
 /**
  * WordPress dependencies
@@ -11729,193 +16363,6 @@ function CanvasLoader({
         value: elapsed
       })
     })
-  });
-}
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/template-part-converter/convert-to-regular.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-function ConvertToRegularBlocks({
-  clientId,
-  onClose
-}) {
-  const {
-    getBlocks
-  } = (0,external_wp_data_namespaceObject.useSelect)(external_wp_blockEditor_namespaceObject.store);
-  const {
-    replaceBlocks
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const canRemove = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_blockEditor_namespaceObject.store).canRemoveBlock(clientId), [clientId]);
-  if (!canRemove) {
-    return null;
-  }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.MenuItem, {
-    onClick: () => {
-      replaceBlocks(clientId, getBlocks(clientId));
-      onClose();
-    },
-    children: (0,external_wp_i18n_namespaceObject.__)('Detach')
-  });
-}
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/symbol-filled.js
-/**
- * WordPress dependencies
- */
-
-
-const symbolFilled = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M21.3 10.8l-5.6-5.6c-.7-.7-1.8-.7-2.5 0l-5.6 5.6c-.7.7-.7 1.8 0 2.5l5.6 5.6c.3.3.8.5 1.2.5s.9-.2 1.2-.5l5.6-5.6c.8-.7.8-1.9.1-2.5zm-17.6 1L10 5.5l-1-1-6.3 6.3c-.7.7-.7 1.8 0 2.5L9 19.5l1.1-1.1-6.3-6.3c-.2 0-.2-.2-.1-.3z"
-  })
-});
-/* harmony default export */ const symbol_filled = (symbolFilled);
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/template-part-converter/convert-to-template-part.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-const {
-  CreateTemplatePartModal
-} = lock_unlock_unlock(external_wp_editor_namespaceObject.privateApis);
-function ConvertToTemplatePart({
-  clientIds,
-  blocks
-}) {
-  const [isModalOpen, setIsModalOpen] = (0,external_wp_element_namespaceObject.useState)(false);
-  const {
-    replaceBlocks
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const {
-    createSuccessNotice
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  const {
-    canCreate
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      supportsTemplatePartsMode
-    } = select(store).getSettings();
-    return {
-      canCreate: !supportsTemplatePartsMode
-    };
-  }, []);
-  if (!canCreate) {
-    return null;
-  }
-  const onConvert = async templatePart => {
-    replaceBlocks(clientIds, (0,external_wp_blocks_namespaceObject.createBlock)('core/template-part', {
-      slug: templatePart.slug,
-      theme: templatePart.theme
-    }));
-    createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Template part created.'), {
-      type: 'snackbar'
-    });
-
-    // The modal and this component will be unmounted because of `replaceBlocks` above,
-    // so no need to call `closeModal` or `onClose`.
-  };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.MenuItem, {
-      icon: symbol_filled,
-      onClick: () => {
-        setIsModalOpen(true);
-      },
-      "aria-expanded": isModalOpen,
-      "aria-haspopup": "dialog",
-      children: (0,external_wp_i18n_namespaceObject.__)('Create template part')
-    }), isModalOpen && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CreateTemplatePartModal, {
-      closeModal: () => {
-        setIsModalOpen(false);
-      },
-      blocks: blocks,
-      onCreate: onConvert
-    })]
-  });
-}
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/template-part-converter/index.js
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-function TemplatePartConverter() {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockSettingsMenuControls, {
-    children: ({
-      selectedClientIds,
-      onClose
-    }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TemplatePartConverterMenuItem, {
-      clientIds: selectedClientIds,
-      onClose: onClose
-    })
-  });
-}
-function TemplatePartConverterMenuItem({
-  clientIds,
-  onClose
-}) {
-  const {
-    isContentOnly,
-    blocks
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getBlocksByClientId,
-      getBlockEditingMode
-    } = select(external_wp_blockEditor_namespaceObject.store);
-    return {
-      blocks: getBlocksByClientId(clientIds),
-      isContentOnly: clientIds.length === 1 && getBlockEditingMode(clientIds[0]) === 'contentOnly'
-    };
-  }, [clientIds]);
-
-  // Do not show the convert button if the block is in content-only mode.
-  if (isContentOnly) {
-    return null;
-  }
-
-  // Allow converting a single template part to standard blocks.
-  if (blocks.length === 1 && blocks[0]?.name === 'core/template-part') {
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ConvertToRegularBlocks, {
-      clientId: clientIds[0],
-      onClose: onClose
-    });
-  }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ConvertToTemplatePart, {
-    clientIds: clientIds,
-    blocks: blocks
   });
 }
 
@@ -13124,6 +17571,8 @@ function ScreenRoot() {
 }
 /* harmony default export */ const screen_root = (ScreenRoot);
 
+;// CONCATENATED MODULE: external ["wp","a11y"]
+const external_wp_a11y_namespaceObject = window["wp"]["a11y"];
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/variations/variations-panel.js
 /**
  * WordPress dependencies
@@ -13868,6 +18317,7 @@ function TypographyElements() {
  */
 
 
+
 const {
   mergeBaseAndUserConfigs: variation_mergeBaseAndUserConfigs
 } = lock_unlock_unlock(external_wp_editor_namespaceObject.privateApis);
@@ -13878,7 +18328,8 @@ const {
 function Variation({
   variation,
   children,
-  isPill
+  isPill,
+  property
 }) {
   const [isFocused, setIsFocused] = (0,external_wp_element_namespaceObject.useState)(false);
   const {
@@ -13887,25 +18338,18 @@ function Variation({
     setUserConfig
   } = (0,external_wp_element_namespaceObject.useContext)(variation_GlobalStylesContext);
   const context = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    var _variation$settings, _variation$styles, _variation$_links;
+    let merged = variation_mergeBaseAndUserConfigs(base, variation);
+    if (property) {
+      merged = filterObjectByProperty(merged, property);
+    }
     return {
-      user: {
-        settings: (_variation$settings = variation.settings) !== null && _variation$settings !== void 0 ? _variation$settings : {},
-        styles: (_variation$styles = variation.styles) !== null && _variation$styles !== void 0 ? _variation$styles : {},
-        _links: (_variation$_links = variation._links) !== null && _variation$_links !== void 0 ? _variation$_links : {}
-      },
+      user: variation,
       base,
-      merged: variation_mergeBaseAndUserConfigs(base, variation),
+      merged,
       setUserConfig: () => {}
     };
-  }, [variation, base]);
-  const selectVariation = () => {
-    setUserConfig(() => ({
-      settings: variation.settings,
-      styles: variation.styles,
-      _links: variation._links
-    }));
-  };
+  }, [variation, base, property]);
+  const selectVariation = () => setUserConfig(variation);
   const selectOnEnter = event => {
     if (event.keyCode === external_wp_keycodes_namespaceObject.ENTER) {
       event.preventDefault();
@@ -13979,6 +18423,7 @@ function TypographyVariations({
       className: "edit-site-global-styles-style-variations-container",
       children: typographyVariations && typographyVariations.length && typographyVariations.map((variation, index) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Variation, {
         variation: variation,
+        property: "typography",
         children: isFocused => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PreviewIframe, {
           label: variation?.title,
           isFocused: isFocused,
@@ -15400,6 +19845,7 @@ function ConfirmDeleteDialog({
     confirmButtonText: (0,external_wp_i18n_namespaceObject.__)('Delete'),
     onCancel: handleCancelUninstall,
     onConfirm: handleConfirmUninstall,
+    size: "medium",
     children: font && (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: Name of the font. */
     (0,external_wp_i18n_namespaceObject.__)('Are you sure you want to delete "%s" font and all its variants and assets?'), font.name)
   });
@@ -20796,11 +25242,12 @@ function ColorVariations({
     children: [title && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(subtitle, {
       level: 3,
       children: title
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalVStack, {
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalGrid, {
       spacing: gap,
       children: colorVariations.map((variation, index) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Variation, {
         variation: variation,
         isPill: true,
+        property: "color",
         children: () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(preview_colors, {})
       }, index))
     })]
@@ -20896,7 +25343,7 @@ const gradients_palette_panel_mobilePopoverProps = {
   placement: 'bottom-start',
   offset: 8
 };
-const noop = () => {};
+const gradients_palette_panel_noop = () => {};
 function GradientPalettePanel({
   name
 }) {
@@ -20950,7 +25397,7 @@ function GradientPalettePanel({
         disableCustomDuotone: true,
         disableCustomColors: true,
         clearable: false,
-        onChange: noop
+        onChange: gradients_palette_panel_noop
       })]
     })]
   });
@@ -21531,6 +25978,7 @@ function ShadowsEditPanel() {
         setIsConfirmDialogVisible(false);
       },
       confirmButtonText: (0,external_wp_i18n_namespaceObject.__)('Delete'),
+      size: "medium",
       children: (0,external_wp_i18n_namespaceObject.sprintf)(
       // translators: %s: name of the shadow
       'Are you sure you want to delete "%s"?', selectedShadow.name)
@@ -22730,7 +27178,7 @@ function ScreenCSS() {
       title: (0,external_wp_i18n_namespaceObject.__)('CSS'),
       description: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
         children: [description, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ExternalLink, {
-          href: "https://wordpress.org/documentation/article/css/",
+          href: "https://developer.wordpress.org/advanced-administration/wordpress/css/",
           className: "edit-site-global-styles-screen-css-help-link",
           children: (0,external_wp_i18n_namespaceObject.__)('Learn more about CSS')
         })]
@@ -23096,6 +27544,7 @@ function RevisionsButtons({
         "aria-current": isSelected,
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
           className: "edit-site-global-styles-screen-revisions__revision-button",
+          __experimentalIsFocusable: true,
           disabled: isSelected,
           onClick: () => {
             onChange(revision);
@@ -23131,7 +27580,6 @@ function RevisionsButtons({
           className: "edit-site-global-styles-screen-revisions__applied-text",
           children: (0,external_wp_i18n_namespaceObject.__)('These styles are already applied to your site.')
         }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-          disabled: areStylesEqual,
           size: "compact",
           variant: "primary",
           className: "edit-site-global-styles-screen-revisions__apply-button",
@@ -23144,6 +27592,36 @@ function RevisionsButtons({
 }
 /* harmony default export */ const revisions_buttons = (RevisionsButtons);
 
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/previous.js
+/**
+ * WordPress dependencies
+ */
+
+
+const previous = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M11.6 7l-1.1-1L5 12l5.5 6 1.1-1L7 12l4.6-5zm6 0l-1.1-1-5.5 6 5.5 6 1.1-1-4.6-5 4.6-5z"
+  })
+});
+/* harmony default export */ const library_previous = (previous);
+
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/next.js
+/**
+ * WordPress dependencies
+ */
+
+
+const next = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M6.6 6L5.4 7l4.5 5-4.5 5 1.1 1 5.5-6-5.4-6zm6 0l-1.1 1 4.5 5-4.5 5 1.1 1 5.5-6-5.5-6z"
+  })
+});
+/* harmony default export */ const library_next = (next);
+
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/pagination/index.js
 /**
  * External dependencies
@@ -23153,6 +27631,7 @@ function RevisionsButtons({
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -23188,15 +27667,19 @@ function Pagination({
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
         variant: buttonVariant,
         onClick: () => changePage(1),
+        __experimentalIsFocusable: true,
         disabled: disabled || currentPage === 1,
-        "aria-label": (0,external_wp_i18n_namespaceObject.__)('First page'),
-        children: "\xAB"
+        label: (0,external_wp_i18n_namespaceObject.__)('First page'),
+        icon: library_previous,
+        size: "compact"
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
         variant: buttonVariant,
         onClick: () => changePage(currentPage - 1),
+        __experimentalIsFocusable: true,
         disabled: disabled || currentPage === 1,
-        "aria-label": (0,external_wp_i18n_namespaceObject.__)('Previous page'),
-        children: "\u2039"
+        label: (0,external_wp_i18n_namespaceObject.__)('Previous page'),
+        icon: chevron_left,
+        size: "compact"
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalText, {
       variant: "muted",
@@ -23209,15 +27692,19 @@ function Pagination({
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
         variant: buttonVariant,
         onClick: () => changePage(currentPage + 1),
+        __experimentalIsFocusable: true,
         disabled: disabled || currentPage === numPages,
-        "aria-label": (0,external_wp_i18n_namespaceObject.__)('Next page'),
-        children: "\u203A"
+        label: (0,external_wp_i18n_namespaceObject.__)('Next page'),
+        icon: chevron_right,
+        size: "compact"
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
         variant: buttonVariant,
         onClick: () => changePage(numPages),
+        __experimentalIsFocusable: true,
         disabled: disabled || currentPage === numPages,
-        "aria-label": (0,external_wp_i18n_namespaceObject.__)('Last page'),
-        children: "\xBB"
+        label: (0,external_wp_i18n_namespaceObject.__)('Last page'),
+        icon: library_next,
+        size: "compact"
       })]
     })]
   });
@@ -23293,25 +27780,9 @@ function ScreenRevisions() {
     setEditorCanvasContainerView(canvasContainerView);
   };
   const restoreRevision = revision => {
-    setUserConfig(() => ({
-      styles: revision?.styles,
-      settings: revision?.settings,
-      _links: revision?._links
-    }));
+    setUserConfig(() => revision);
     setIsLoadingRevisionWithUnsavedChanges(false);
     onCloseRevisions();
-  };
-  const selectRevision = revision => {
-    setCurrentlySelectedRevision({
-      /*
-       * The default must be an empty object so that
-       * `mergeBaseAndUserConfigs()` can merge them correctly.
-       */
-      styles: revision?.styles || {},
-      settings: revision?.settings || {},
-      _links: revision?._links || {},
-      id: revision?.id
-    });
   };
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (!editorCanvasContainerView || !editorCanvasContainerView.startsWith('global-styles-revisions')) {
@@ -23335,11 +27806,7 @@ function ScreenRevisions() {
      * See: https://github.com/WordPress/gutenberg/issues/55866
      */
     if (shouldSelectFirstItem) {
-      setCurrentlySelectedRevision({
-        styles: firstRevision?.styles || {},
-        settings: firstRevision?.settings || {},
-        id: firstRevision?.id
-      });
+      setCurrentlySelectedRevision(firstRevision);
     }
   }, [shouldSelectFirstItem, firstRevision]);
 
@@ -23367,7 +27834,7 @@ function ScreenRevisions() {
       userConfig: currentlySelectedRevision,
       closeButtonLabel: (0,external_wp_i18n_namespaceObject.__)('Close revisions')
     })), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(revisions_buttons, {
-      onChange: selectRevision,
+      onChange: setCurrentlySelectedRevision,
       selectedRevisionId: currentlySelectedRevisionId,
       userRevisions: currentRevisions,
       canApplyRevision: isLoadButtonEnabled,
@@ -23388,6 +27855,7 @@ function ScreenRevisions() {
       confirmButtonText: (0,external_wp_i18n_namespaceObject.__)('Apply'),
       onConfirm: () => restoreRevision(currentlySelectedRevision),
       onCancel: () => setIsLoadingRevisionWithUnsavedChanges(false),
+      size: "medium",
       children: (0,external_wp_i18n_namespaceObject.__)('Are you sure you want to apply this revision? Any unsaved changes will be lost.')
     })]
   });
@@ -23906,6 +28374,7 @@ function GlobalStylesSidebar() {
           icon: library_seen,
           label: (0,external_wp_i18n_namespaceObject.__)('Style Book'),
           isPressed: isStyleBookOpened || isRevisionsStyleBookOpened,
+          __experimentalIsFocusable: true,
           disabled: shouldClearCanvasContainerView,
           onClick: toggleStyleBook,
           size: "compact"
@@ -23915,6 +28384,7 @@ function GlobalStylesSidebar() {
           label: (0,external_wp_i18n_namespaceObject.__)('Revisions'),
           icon: library_backup,
           onClick: toggleRevisions,
+          __experimentalIsFocusable: true,
           disabled: !hasRevisions,
           isPressed: isRevisionsOpened || isRevisionsStyleBookOpened,
           size: "compact"
@@ -23922,142 +28392,6 @@ function GlobalStylesSidebar() {
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GlobalStylesMenuSlot, {})]
     }),
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ui, {})
-  });
-}
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/save-button/index.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-const {
-  useLocation: save_button_useLocation
-} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
-function SaveButton({
-  className = 'edit-site-save-button__button',
-  variant = 'primary',
-  showTooltip = true,
-  showReviewMessage,
-  icon,
-  size,
-  __next40pxDefaultSize = false
-}) {
-  const {
-    params
-  } = save_button_useLocation();
-  const {
-    setIsSaveViewOpened
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
-  const {
-    saveDirtyEntities
-  } = lock_unlock_unlock((0,external_wp_data_namespaceObject.useDispatch)(external_wp_editor_namespaceObject.store));
-  const {
-    dirtyEntityRecords
-  } = (0,external_wp_editor_namespaceObject.useEntitiesSavedStatesIsDirty)();
-  const {
-    isSaving,
-    isSaveViewOpen,
-    previewingThemeName
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      isSavingEntityRecord,
-      isResolving
-    } = select(external_wp_coreData_namespaceObject.store);
-    const {
-      isSaveViewOpened
-    } = select(store);
-    const isActivatingTheme = isResolving('activateTheme');
-    const currentlyPreviewingThemeId = currentlyPreviewingTheme();
-    return {
-      isSaving: dirtyEntityRecords.some(record => isSavingEntityRecord(record.kind, record.name, record.key)) || isActivatingTheme,
-      isSaveViewOpen: isSaveViewOpened(),
-      // Do not call `getTheme` with null, it will cause a request to
-      // the server.
-      previewingThemeName: currentlyPreviewingThemeId ? select(external_wp_coreData_namespaceObject.store).getTheme(currentlyPreviewingThemeId)?.name?.rendered : undefined
-    };
-  }, [dirtyEntityRecords]);
-  const hasDirtyEntities = !!dirtyEntityRecords.length;
-  let isOnlyCurrentEntityDirty;
-  // Check if the current entity is the only entity with changes.
-  // We have some extra logic for `wp_global_styles` for now, that
-  // is used in navigation sidebar.
-  if (dirtyEntityRecords.length === 1) {
-    if (params.postId) {
-      isOnlyCurrentEntityDirty = `${dirtyEntityRecords[0].key}` === params.postId && dirtyEntityRecords[0].name === params.postType;
-    } else if (params.path?.includes('wp_global_styles')) {
-      isOnlyCurrentEntityDirty = dirtyEntityRecords[0].name === 'globalStyles';
-    }
-  }
-  const disabled = isSaving || !hasDirtyEntities && !isPreviewingTheme();
-  const getLabel = () => {
-    if (isPreviewingTheme()) {
-      if (isSaving) {
-        return (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: The name of theme to be activated. */
-        (0,external_wp_i18n_namespaceObject.__)('Activating %s'), previewingThemeName);
-      } else if (disabled) {
-        return (0,external_wp_i18n_namespaceObject.__)('Saved');
-      } else if (hasDirtyEntities) {
-        return (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: The name of theme to be activated. */
-        (0,external_wp_i18n_namespaceObject.__)('Activate %s & Save'), previewingThemeName);
-      }
-      return (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: The name of theme to be activated. */
-      (0,external_wp_i18n_namespaceObject.__)('Activate %s'), previewingThemeName);
-    }
-    if (isSaving) {
-      return (0,external_wp_i18n_namespaceObject.__)('Saving');
-    }
-    if (disabled) {
-      return (0,external_wp_i18n_namespaceObject.__)('Saved');
-    }
-    if (!isOnlyCurrentEntityDirty && showReviewMessage) {
-      return (0,external_wp_i18n_namespaceObject.sprintf)(
-      // translators: %d: number of unsaved changes (number).
-      (0,external_wp_i18n_namespaceObject._n)('Review %d change…', 'Review %d changes…', dirtyEntityRecords.length), dirtyEntityRecords.length);
-    }
-    return (0,external_wp_i18n_namespaceObject.__)('Save');
-  };
-  const label = getLabel();
-  const onClick = isOnlyCurrentEntityDirty ? () => saveDirtyEntities({
-    dirtyEntityRecords
-  }) : () => setIsSaveViewOpened(true);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-    variant: variant,
-    className: className,
-    "aria-disabled": disabled,
-    "aria-expanded": isSaveViewOpen,
-    isBusy: isSaving,
-    onClick: disabled ? undefined : onClick,
-    label: label
-    /*
-     * We want the tooltip to show the keyboard shortcut only when the
-     * button does something, i.e. when it's not disabled.
-     */,
-    shortcut: disabled ? undefined : external_wp_keycodes_namespaceObject.displayShortcut.primary('s')
-    /*
-     * Displaying the keyboard shortcut conditionally makes the tooltip
-     * itself show conditionally. This would trigger a full-rerendering
-     * of the button that we want to avoid. By setting `showTooltip`,
-     * the tooltip is always rendered even when there's no keyboard shortcut.
-     */,
-    showTooltip: showTooltip,
-    icon: icon,
-    __next40pxDefaultSize: __next40pxDefaultSize,
-    size: size,
-    children: label
   });
 }
 
@@ -24260,6 +28594,81 @@ function useEditorIframeProps() {
   };
 }
 
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/routes/use-title.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+const {
+  useLocation: use_title_useLocation
+} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
+function useTitle(title) {
+  const location = use_title_useLocation();
+  const siteTitle = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_coreData_namespaceObject.store).getEntityRecord('root', 'site')?.title, []);
+  const isInitialLocationRef = (0,external_wp_element_namespaceObject.useRef)(true);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    isInitialLocationRef.current = false;
+  }, [location]);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    // Don't update or announce the title for initial page load.
+    if (isInitialLocationRef.current) {
+      return;
+    }
+    if (title && siteTitle) {
+      // @see https://github.com/WordPress/wordpress-develop/blob/94849898192d271d533e09756007e176feb80697/src/wp-admin/admin-header.php#L67-L68
+      const formattedTitle = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: Admin document title. 1: Admin screen name, 2: Network or site name. */
+      (0,external_wp_i18n_namespaceObject.__)('%1$s ‹ %2$s ‹ Editor — WordPress'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(siteTitle));
+      document.title = formattedTitle;
+
+      // Announce title on route change for screen readers.
+      (0,external_wp_a11y_namespaceObject.speak)(title, 'assertive');
+    }
+  }, [title, siteTitle, location]);
+}
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/editor/use-editor-title.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function useEditorTitle() {
+  const {
+    record: editedPost,
+    getTitle,
+    isLoaded: hasLoadedPost
+  } = useEditedEntityRecord();
+  let title;
+  if (hasLoadedPost) {
+    var _POST_TYPE_LABELS$edi;
+    title = (0,external_wp_i18n_namespaceObject.sprintf)(
+    // translators: A breadcrumb trail for the Admin document title. %1$s: title of template being edited, %2$s: type of template (Template or Template Part).
+    (0,external_wp_i18n_namespaceObject.__)('%1$s ‹ %2$s'), getTitle(), (_POST_TYPE_LABELS$edi = POST_TYPE_LABELS[editedPost.type]) !== null && _POST_TYPE_LABELS$edi !== void 0 ? _POST_TYPE_LABELS$edi : POST_TYPE_LABELS[TEMPLATE_POST_TYPE]);
+  }
+
+  // Only announce the title once the editor is ready to prevent "Replace"
+  // action in <URLQueryController> from double-announcing.
+  useTitle(hasLoadedPost && title);
+}
+/* harmony default export */ const use_editor_title = (useEditorTitle);
+
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/editor/index.js
 /**
  * External dependencies
@@ -24269,6 +28678,7 @@ function useEditorIframeProps() {
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -24302,12 +28712,9 @@ function useEditorIframeProps() {
 
 
 
-
-
 const {
-  EditorInterface,
-  ExperimentalEditorProvider: EditorProvider,
-  Sidebar
+  Editor,
+  BackButton
 } = lock_unlock_unlock(external_wp_editor_namespaceObject.privateApis);
 const {
   useHistory: editor_useHistory
@@ -24315,21 +28722,14 @@ const {
 const {
   BlockKeyboardShortcuts
 } = lock_unlock_unlock(external_wp_blockLibrary_namespaceObject.privateApis);
-function Editor({
+function EditSiteEditor({
   isLoading
 }) {
   const {
-    record: editedPost,
-    getTitle,
-    isLoaded: hasLoadedPost
-  } = useEditedEntityRecord();
-  const {
-    type: editedPostType
-  } = editedPost;
-  const {
-    context,
-    contextPost,
-    editorMode,
+    editedPostType,
+    editedPostId,
+    contextPostType,
+    contextPostId,
     canvasMode,
     isEditingPage,
     supportsGlobalStyles,
@@ -24340,26 +28740,25 @@ function Editor({
     const {
       getEditedPostContext,
       getCanvasMode,
-      isPage
+      isPage,
+      getEditedPostType,
+      getEditedPostId
     } = lock_unlock_unlock(select(store));
     const {
       get
     } = select(external_wp_preferences_namespaceObject.store);
     const {
-      getEntityRecord,
       getCurrentTheme
     } = select(external_wp_coreData_namespaceObject.store);
-    const {
-      getEditorMode
-    } = select(external_wp_editor_namespaceObject.store);
     const _context = getEditedPostContext();
 
     // The currently selected entity to display.
     // Typically template or template part in the site editor.
     return {
-      context: _context,
-      contextPost: _context?.postId ? getEntityRecord('postType', _context.postType, _context.postId) : undefined,
-      editorMode: getEditorMode(),
+      editedPostType: getEditedPostType(),
+      editedPostId: getEditedPostId(),
+      contextPostType: _context?.postId ? _context.postType : undefined,
+      contextPostId: _context?.postId ? _context.postId : undefined,
       canvasMode: getCanvasMode(),
       isEditingPage: isPage(),
       supportsGlobalStyles: getCurrentTheme()?.is_block_theme,
@@ -24368,24 +28767,12 @@ function Editor({
       currentPostIsTrashed: select(external_wp_editor_namespaceObject.store).getCurrentPostAttribute('status') === 'trash'
     };
   }, []);
+  use_editor_title();
   const _isPreviewingTheme = isPreviewingTheme();
   const hasDefaultEditorCanvasView = !useHasEditorCanvasContainer();
   const iframeProps = useEditorIframeProps();
-  const isViewMode = canvasMode === 'view';
   const isEditMode = canvasMode === 'edit';
-  const showVisualEditor = isViewMode || editorMode === 'visual';
-  const postWithTemplate = !!context?.postId;
-  let title;
-  if (hasLoadedPost) {
-    var _POST_TYPE_LABELS$edi;
-    title = (0,external_wp_i18n_namespaceObject.sprintf)(
-    // translators: A breadcrumb trail for the Admin document title. %1$s: title of template being edited, %2$s: type of template (Template or Template Part).
-    (0,external_wp_i18n_namespaceObject.__)('%1$s ‹ %2$s'), getTitle(), (_POST_TYPE_LABELS$edi = POST_TYPE_LABELS[editedPostType]) !== null && _POST_TYPE_LABELS$edi !== void 0 ? _POST_TYPE_LABELS$edi : POST_TYPE_LABELS[TEMPLATE_POST_TYPE]);
-  }
-
-  // Only announce the title once the editor is ready to prevent "Replace"
-  // action in <URLQueryController> from double-announcing.
-  useTitle(hasLoadedPost && title);
+  const postWithTemplate = !!contextPostId;
   const loadingProgressId = (0,external_wp_compose_namespaceObject.useInstanceId)(CanvasLoader, 'edit-site-editor__loading-progress');
   const settings = useSpecificEditorSettings();
   const styles = (0,external_wp_element_namespaceObject.useMemo)(() => [...settings.styles, {
@@ -24394,6 +28781,9 @@ function Editor({
 
     css: `body{${canvasMode === 'view' ? `min-height: 100vh; ${currentPostIsTrashed ? '' : 'cursor: pointer;'}` : ''}}}`
   }], [settings.styles, canvasMode, currentPostIsTrashed]);
+  const {
+    setCanvasMode
+  } = lock_unlock_unlock((0,external_wp_data_namespaceObject.useDispatch)(store));
   const {
     createSuccessNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
@@ -24414,7 +28804,7 @@ function Editor({
           const _title = typeof newItem.title === 'string' ? newItem.title : newItem.title?.rendered;
           createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(
           // translators: %s: Title of the created post e.g: "Post 1".
-          (0,external_wp_i18n_namespaceObject.__)('"%s" successfully created.'), _title), {
+          (0,external_wp_i18n_namespaceObject.__)('"%s" successfully created.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(_title)), {
             type: 'snackbar',
             id: 'duplicate-post-action',
             actions: [{
@@ -24432,35 +28822,40 @@ function Editor({
         break;
     }
   }, [history, createSuccessNotice]);
-  const isReady = !isLoading && (postWithTemplate && !!contextPost && !!editedPost || !postWithTemplate && !!editedPost);
+  const isReady = !isLoading;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GlobalStylesRenderer, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.EditorKeyboardShortcutsRegister, {}), isEditMode && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockKeyboardShortcuts, {}), showVisualEditor && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TemplatePartConverter, {}), !isReady ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CanvasLoader, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GlobalStylesRenderer, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.EditorKeyboardShortcutsRegister, {}), isEditMode && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockKeyboardShortcuts, {}), !isReady ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CanvasLoader, {
       id: loadingProgressId
-    }) : null, isEditMode && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WelcomeGuide, {}), hasLoadedPost && !editedPost && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
-      status: "warning",
-      isDismissible: false,
-      children: (0,external_wp_i18n_namespaceObject.__)("You attempted to edit an item that doesn't exist. Perhaps it was deleted?")
-    }), isReady && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(EditorProvider, {
-      post: postWithTemplate ? contextPost : editedPost,
-      __unstableTemplate: postWithTemplate ? editedPost : undefined,
+    }) : null, isEditMode && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WelcomeGuide, {}), isReady && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Editor, {
+      postType: postWithTemplate ? contextPostType : editedPostType,
+      postId: postWithTemplate ? contextPostId : editedPostId,
+      templateId: postWithTemplate ? editedPostId : undefined,
       settings: settings,
-      useSubRegistry: false,
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MoreMenu, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditorInterface, {
-        className: dist_clsx('edit-site-editor__interface-skeleton', {
-          'show-icon-labels': showIconLabels
-        }),
-        styles: styles,
-        enableRegionNavigation: false,
-        customSaveButton: _isPreviewingTheme && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveButton, {
-          size: "compact"
-        }),
-        forceDisableBlockTools: !hasDefaultEditorCanvasView,
-        title: !hasDefaultEditorCanvasView ? getEditorCanvasContainerTitle(editorCanvasView) : undefined,
-        iframeProps: iframeProps
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Sidebar, {
-        onActionPerformed: onActionPerformed,
-        extraPanels: !isEditingPage && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(plugin_template_setting_panel.Slot, {})
-      }), supportsGlobalStyles && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GlobalStylesSidebar, {})]
+      className: dist_clsx('edit-site-editor__editor-interface', {
+        'show-icon-labels': showIconLabels
+      }),
+      styles: styles,
+      enableRegionNavigation: false,
+      customSaveButton: _isPreviewingTheme && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveButton, {
+        size: "compact"
+      }),
+      forceDisableBlockTools: !hasDefaultEditorCanvasView,
+      title: !hasDefaultEditorCanvasView ? getEditorCanvasContainerTitle(editorCanvasView) : undefined,
+      iframeProps: iframeProps,
+      onActionPerformed: onActionPerformed,
+      extraSidebarPanels: !isEditingPage && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(plugin_template_setting_panel.Slot, {}),
+      children: [isEditMode && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BackButton, {
+        children: ({
+          length
+        }) => length <= 1 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          label: (0,external_wp_i18n_namespaceObject.__)('Open Navigation'),
+          className: "edit-site-layout__view-mode-toggle",
+          onClick: () => setCanvasMode('view'),
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(site_icon, {
+            className: "edit-site-layout__view-mode-toggle-icon"
+          })
+        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MoreMenu, {}), supportsGlobalStyles && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GlobalStylesSidebar, {})]
     })]
   });
 }
@@ -24960,6 +29355,7 @@ function CompactItemActions({
       size: "compact",
       icon: more_vertical,
       label: (0,external_wp_i18n_namespaceObject.__)('Actions'),
+      __experimentalIsFocusable: true,
       disabled: !actions.length,
       className: "dataviews-all-actions-button"
     }),
@@ -25972,6 +30368,7 @@ function ListItem({
                 size: "compact",
                 icon: more_vertical,
                 label: (0,external_wp_i18n_namespaceObject.__)('Actions'),
+                __experimentalIsFocusable: true,
                 disabled: !actions.length,
                 onKeyDown: event => {
                   if (event.key === 'ArrowDown') {
@@ -26459,9 +30856,6 @@ var __objRest = (source, exclude) => {
 
 
 
-// EXTERNAL MODULE: external "React"
-var external_React_ = __webpack_require__(9196);
-var external_React_namespaceObject = /*#__PURE__*/__webpack_require__.t(external_React_, 2);
 ;// CONCATENATED MODULE: ./packages/dataviews/node_modules/@ariakit/core/esm/__chunks/4R3V3JGP.js
 "use client";
 var _4R3V3JGP_defProp = Object.defineProperty;
@@ -26620,7 +31014,7 @@ function invariant(condition, message) {
     throw new Error("Invariant failed");
   throw new Error(message);
 }
-function getKeys(obj) {
+function _22HHDS5F_getKeys(obj) {
   return Object.keys(obj);
 }
 function isFalsyBooleanCallback(booleanOrCallback, ...args) {
@@ -27373,12 +31767,12 @@ function createStoreContext(providers = [], scopedProviders = []) {
 
 
 // src/collection/collection-context.tsx
-var ctx = createStoreContext();
-var useCollectionContext = ctx.useContext;
-var useCollectionScopedContext = ctx.useScopedContext;
-var useCollectionProviderContext = ctx.useProviderContext;
-var CollectionContextProvider = ctx.ContextProvider;
-var CollectionScopedContextProvider = ctx.ScopedContextProvider;
+var MADQZZRL_ctx = createStoreContext();
+var useCollectionContext = MADQZZRL_ctx.useContext;
+var useCollectionScopedContext = MADQZZRL_ctx.useScopedContext;
+var useCollectionProviderContext = MADQZZRL_ctx.useProviderContext;
+var CollectionContextProvider = MADQZZRL_ctx.ContextProvider;
+var CollectionScopedContextProvider = MADQZZRL_ctx.ScopedContextProvider;
 
 
 
@@ -27903,7 +32297,7 @@ function createStore(initialState, ...stores) {
     };
     if (initialized)
       return maybeDestroy;
-    const desyncs = getKeys(state).map(
+    const desyncs = _22HHDS5F_getKeys(state).map(
       (key) => chain(
         ...stores.map((store) => {
           var _a;
@@ -27912,7 +32306,7 @@ function createStore(initialState, ...stores) {
             return;
           if (!_22HHDS5F_hasOwnProperty(storeState, key))
             return;
-          return sync(store, [key], (state2) => {
+          return R676XYVY_sync(store, [key], (state2) => {
             setState(
               key,
               state2[key],
@@ -28023,7 +32417,7 @@ function subscribe(store, ...args) {
     return;
   return getInternal(store, "subscribe")(...args);
 }
-function sync(store, ...args) {
+function R676XYVY_sync(store, ...args) {
   if (!store)
     return;
   return getInternal(store, "sync")(...args);
@@ -28138,7 +32532,7 @@ function useStoreProps(store, props, key, setKey) {
   const setValue = setKey ? props[setKey] : void 0;
   const propsRef = useLiveRef({ value, setValue });
   useSafeLayoutEffect(() => {
-    return sync(store, [key], (state, prev) => {
+    return R676XYVY_sync(store, [key], (state, prev) => {
       const { value: value2, setValue: setValue2 } = propsRef.current;
       if (!setValue2)
         return;
@@ -28314,7 +32708,7 @@ function createDisclosureStore(props = {}) {
   const disclosure = createStore(initialState, store);
   setup(
     disclosure,
-    () => sync(disclosure, ["animated", "animating"], (state) => {
+    () => R676XYVY_sync(disclosure, ["animated", "animating"], (state) => {
       if (state.animated)
         return;
       disclosure.setState("animating", false);
@@ -28330,7 +32724,7 @@ function createDisclosureStore(props = {}) {
   );
   setup(
     disclosure,
-    () => sync(disclosure, ["open", "animating"], (state) => {
+    () => R676XYVY_sync(disclosure, ["open", "animating"], (state) => {
       disclosure.setState("mounted", state.open || state.animating);
     })
   );
@@ -28775,7 +33169,7 @@ function createCompositeStore(props = {}) {
   const composite = createStore(initialState, collection, props.store);
   setup(
     composite,
-    () => sync(composite, ["renderedItems", "activeId"], (state) => {
+    () => R676XYVY_sync(composite, ["renderedItems", "activeId"], (state) => {
       composite.setState("activeId", (activeId2) => {
         var _a2;
         if (activeId2 !== void 0)
@@ -28999,7 +33393,7 @@ function createComboboxStore(props = {}) {
   const combobox = createStore(initialState, composite, popover, props.store);
   setup(
     combobox,
-    () => sync(combobox, ["resetValueOnHide", "mounted"], (state) => {
+    () => R676XYVY_sync(combobox, ["resetValueOnHide", "mounted"], (state) => {
       if (!state.resetValueOnHide)
         return;
       if (state.mounted)
@@ -29009,7 +33403,7 @@ function createComboboxStore(props = {}) {
   );
   setup(
     combobox,
-    () => sync(combobox, ["resetValueOnSelect", "selectedValue"], (state) => {
+    () => R676XYVY_sync(combobox, ["resetValueOnSelect", "selectedValue"], (state) => {
       if (!state.resetValueOnSelect)
         return;
       combobox.setState("value", value);
@@ -29026,7 +33420,7 @@ function createComboboxStore(props = {}) {
   );
   setup(
     combobox,
-    () => sync(combobox, ["moves", "activeId"], (state, prevState) => {
+    () => R676XYVY_sync(combobox, ["moves", "activeId"], (state, prevState) => {
       if (state.moves === prevState.moves) {
         combobox.setState("activeValue", void 0);
       }
@@ -29942,8 +34336,6 @@ var FTNKYK65_Composite = forwardRef2(function Composite2(props) {
 
 
 
-;// CONCATENATED MODULE: external "ReactDOM"
-const external_ReactDOM_namespaceObject = window["ReactDOM"];
 ;// CONCATENATED MODULE: ./packages/dataviews/node_modules/@ariakit/react-core/esm/combobox/combobox.js
 "use client";
 
@@ -31428,21 +35820,6 @@ var ComboboxItemValue = forwardRef2(function ComboboxItemValue2(props) {
 // EXTERNAL MODULE: ./node_modules/remove-accents/index.js
 var remove_accents = __webpack_require__(4793);
 var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/check.js
-/**
- * WordPress dependencies
- */
-
-
-const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
-  })
-});
-/* harmony default export */ const library_check = (check);
-
 ;// CONCATENATED MODULE: ./packages/dataviews/build-module/search-widget.js
 /**
  * External dependencies
@@ -32499,6 +36876,7 @@ function Header({
         level: 3,
         weight: 500,
         className: "edit-site-page-header__title",
+        truncate: true,
         children: title
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
         className: "edit-site-page-header__actions",
@@ -32745,6 +37123,7 @@ const DEFAULT_VIEWS = {
 
 
 
+
 function AddNewPageModal({
   onSave,
   onClose
@@ -32775,7 +37154,7 @@ function AddNewPageModal({
       onSave(newPage);
       createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(
       // translators: %s: Title of the created template e.g: "Category".
-      (0,external_wp_i18n_namespaceObject.__)('"%s" successfully created.'), newPage.title?.rendered || title), {
+      (0,external_wp_i18n_namespaceObject.__)('"%s" successfully created.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(newPage.title?.rendered || title)), {
         type: 'snackbar'
       });
     } catch (error) {
@@ -33949,6 +38328,21 @@ const symbol_symbol = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.j
 });
 /* harmony default export */ const library_symbol = (symbol_symbol);
 
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/symbol-filled.js
+/**
+ * WordPress dependencies
+ */
+
+
+const symbolFilled = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M21.3 10.8l-5.6-5.6c-.7-.7-1.8-.7-2.5 0l-5.6 5.6c-.7.7-.7 1.8 0 2.5l5.6 5.6c.3.3.8.5 1.2.5s.9-.2 1.2-.5l5.6-5.6c.8-.7.8-1.9.1-2.5zm-17.6 1L10 5.5l-1-1-6.3 6.3c-.7.7-.7 1.8 0 2.5L9 19.5l1.1-1.1-6.3-6.3c-.2 0-.2-.2-.1-.3z"
+  })
+});
+/* harmony default export */ const symbol_filled = (symbolFilled);
+
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/upload.js
 /**
  * WordPress dependencies
@@ -33995,7 +38389,7 @@ const {
   useAddPatternCategory
 } = lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
 const {
-  CreateTemplatePartModal: add_new_pattern_CreateTemplatePartModal
+  CreateTemplatePartModal
 } = lock_unlock_unlock(external_wp_editor_namespaceObject.privateApis);
 function AddNewPattern() {
   const history = add_new_pattern_useHistory();
@@ -34086,7 +38480,7 @@ function AddNewPattern() {
       onClose: () => setShowPatternModal(false),
       onSuccess: handleCreatePattern,
       onError: handleError
-    }), showTemplatePartModal && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(add_new_pattern_CreateTemplatePartModal, {
+    }), showTemplatePartModal && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CreateTemplatePartModal, {
       closeModal: () => setShowTemplatePartModal(false),
       blocks: [],
       onCreate: handleCreateTemplatePart,
@@ -34501,7 +38895,7 @@ function PatternsHeader({
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
     className: "edit-site-patterns__section-header",
-    spacing: 0,
+    spacing: 1,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
       justify: "space-between",
       className: "edit-site-patterns__title",
@@ -34510,6 +38904,7 @@ function PatternsHeader({
         level: 3,
         id: titleId,
         weight: 500,
+        truncate: true,
         children: title
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
         expanded: false,
@@ -34747,11 +39142,11 @@ const DEFAULT_VIEW = {
 };
 const SYNC_FILTERS = [{
   value: PATTERN_SYNC_TYPES.full,
-  label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'Option that shows all synchronized patterns'),
+  label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'pattern (singular)'),
   description: (0,external_wp_i18n_namespaceObject.__)('Patterns that are kept in sync across the site.')
 }, {
   value: PATTERN_SYNC_TYPES.unsynced,
-  label: (0,external_wp_i18n_namespaceObject._x)('Not synced', 'Option that shows all patterns that are not synchronized'),
+  label: (0,external_wp_i18n_namespaceObject._x)('Not synced', 'pattern (singular)'),
   description: (0,external_wp_i18n_namespaceObject.__)('Patterns that can be changed freely without affecting the site.')
 }];
 function PreviewWrapper({
@@ -34955,11 +39350,11 @@ function DataviewsPatterns() {
           // Non-user patterns are all unsynced for the time being.
           return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
             className: `edit-site-patterns__field-sync-status-${item.syncStatus}`,
-            children: SYNC_FILTERS.find(({
+            children: (SYNC_FILTERS.find(({
               value
-            }) => value === item.syncStatus)?.label || SYNC_FILTERS.find(({
+            }) => value === item.syncStatus) || SYNC_FILTERS.find(({
               value
-            }) => value === PATTERN_SYNC_TYPES.unsynced).label
+            }) => value === PATTERN_SYNC_TYPES.unsynced)).label
           });
         },
         elements: SYNC_FILTERS,
@@ -37250,95 +41645,6 @@ function SidebarButton(props) {
   });
 }
 
-;// CONCATENATED MODULE: external ["wp","dom"]
-const external_wp_dom_namespaceObject = window["wp"]["dom"];
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar/index.js
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-
-const SidebarNavigationContext = (0,external_wp_element_namespaceObject.createContext)(() => {});
-// Focus a sidebar element after a navigation. The element to focus is either
-// specified by `focusSelector` (when navigating back) or it is the first
-// tabbable element (usually the "Back" button).
-function focusSidebarElement(el, direction, focusSelector) {
-  let elementToFocus;
-  if (direction === 'back' && focusSelector) {
-    elementToFocus = el.querySelector(focusSelector);
-  }
-  if (direction !== null && !elementToFocus) {
-    const [firstTabbable] = external_wp_dom_namespaceObject.focus.tabbable.find(el);
-    elementToFocus = firstTabbable !== null && firstTabbable !== void 0 ? firstTabbable : el;
-  }
-  elementToFocus?.focus();
-}
-
-// Navigation state that is updated when navigating back or forward. Helps us
-// manage the animations and also focus.
-function createNavState() {
-  let state = {
-    direction: null,
-    focusSelector: null
-  };
-  return {
-    get() {
-      return state;
-    },
-    navigate(direction, focusSelector = null) {
-      state = {
-        direction,
-        focusSelector: direction === 'forward' && focusSelector ? focusSelector : state.focusSelector
-      };
-    }
-  };
-}
-function SidebarContentWrapper({
-  children
-}) {
-  const navState = (0,external_wp_element_namespaceObject.useContext)(SidebarNavigationContext);
-  const wrapperRef = (0,external_wp_element_namespaceObject.useRef)();
-  const [navAnimation, setNavAnimation] = (0,external_wp_element_namespaceObject.useState)(null);
-  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    const {
-      direction,
-      focusSelector
-    } = navState.get();
-    focusSidebarElement(wrapperRef.current, direction, focusSelector);
-    setNavAnimation(direction);
-  }, [navState]);
-  const wrapperCls = dist_clsx('edit-site-sidebar__screen-wrapper', {
-    'slide-from-left': navAnimation === 'back',
-    'slide-from-right': navAnimation === 'forward'
-  });
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-    ref: wrapperRef,
-    className: wrapperCls,
-    children: children
-  });
-}
-function SidebarContent({
-  routeKey,
-  children
-}) {
-  const [navState] = (0,external_wp_element_namespaceObject.useState)(createNavState);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationContext.Provider, {
-    value: navState,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "edit-site-sidebar__content",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarContentWrapper, {
-        children: children
-      }, routeKey)
-    })
-  });
-}
-
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-navigation-screen/index.js
 /**
  * External dependencies
@@ -37413,7 +41719,7 @@ function SidebarNavigationScreen({
       spacing: 0,
       justify: "flex-start",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
-        spacing: 4,
+        spacing: 3,
         alignment: "flex-start",
         className: "edit-site-sidebar-navigation-screen__title-icon",
         children: [!isRoot && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarButton, {
@@ -38066,6 +42372,7 @@ function rename_modal_RenameModal({
             children: (0,external_wp_i18n_namespaceObject.__)('Cancel')
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
             __next40pxDefaultSize: true,
+            __experimentalIsFocusable: true,
             disabled: !isEditedMenuTitleValid,
             variant: "primary",
             type: "submit",
@@ -38110,6 +42417,7 @@ function DeleteConfirmDialog({
     },
     onCancel: onClose,
     confirmButtonText: (0,external_wp_i18n_namespaceObject.__)('Delete'),
+    size: "medium",
     children: (0,external_wp_i18n_namespaceObject.__)('Are you sure you want to delete this Navigation Menu?')
   });
 }
@@ -39002,11 +43310,15 @@ function DataViewItem({
     }
   } = dataview_item_useLocation();
   const iconToUse = icon || VIEW_LAYOUTS.find(v => v.type === type).icon;
+  let activeView = isCustom ? customViewId : slug;
+  if (activeView === 'all') {
+    activeView = undefined;
+  }
   const linkInfo = useLink({
     postType,
     layout,
-    activeView: isCustom ? customViewId : slug,
-    isCustom: isCustom ? 'true' : 'false'
+    activeView,
+    isCustom: isCustom ? 'true' : undefined
   });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
     justify: "flex-start",
@@ -39162,7 +43474,7 @@ function CategoryItem({
   type
 }) {
   const linkInfo = useLink({
-    categoryId: id,
+    categoryId: id !== TEMPLATE_PART_ALL_AREAS_CATEGORY && id !== PATTERN_DEFAULT_CATEGORY ? id : undefined,
     postType: type === TEMPLATE_PART_POST_TYPE ? TEMPLATE_PART_POST_TYPE : PATTERN_TYPES.user
   });
   if (!count) {
@@ -39311,8 +43623,8 @@ function SidebarNavigationScreenPatterns({
       categoryId
     }
   } = sidebar_navigation_screen_patterns_useLocation();
-  const currentCategory = categoryId || PATTERN_DEFAULT_CATEGORY;
   const currentType = postType || PATTERN_TYPES.user;
+  const currentCategory = categoryId || (currentType === PATTERN_TYPES.user ? PATTERN_DEFAULT_CATEGORY : TEMPLATE_PART_ALL_AREAS_CATEGORY);
   const {
     templatePartAreas,
     hasTemplateParts,
@@ -39827,10 +44139,10 @@ function useLayoutAreas() {
           content: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataViewsSidebarContent, {})
         }),
         content: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PagePages, {}),
-        preview: (isListLayout || canvas === 'edit') && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+        preview: (isListLayout || canvas === 'edit') && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
           isLoading: isSiteEditorLoading
         }),
-        mobile: canvas === 'edit' ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+        mobile: canvas === 'edit' ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
           isLoading: isSiteEditorLoading
         }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PagePages, {})
       },
@@ -39850,7 +44162,7 @@ function useLayoutAreas() {
           backPath: {}
         }),
         content: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PageTemplates, {}),
-        preview: (isListLayout || canvas === 'edit') && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+        preview: (isListLayout || canvas === 'edit') && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
           isLoading: isSiteEditorLoading
         }),
         mobile: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PageTemplates, {})
@@ -39871,7 +44183,7 @@ function useLayoutAreas() {
         }),
         content: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataviewsPatterns, {}),
         mobile: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataviewsPatterns, {}),
-        preview: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+        preview: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
           isLoading: isSiteEditorLoading
         })
       }
@@ -39886,10 +44198,10 @@ function useLayoutAreas() {
         sidebar: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationScreenGlobalStyles, {
           backPath: {}
         }),
-        preview: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+        preview: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
           isLoading: isSiteEditorLoading
         }),
-        mobile: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+        mobile: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
           isLoading: isSiteEditorLoading
         })
       }
@@ -39907,10 +44219,10 @@ function useLayoutAreas() {
               postType: NAVIGATION_POST_TYPE
             }
           }),
-          preview: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+          preview: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
             isLoading: isSiteEditorLoading
           }),
-          mobile: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+          mobile: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
             isLoading: isSiteEditorLoading
           })
         }
@@ -39922,10 +44234,10 @@ function useLayoutAreas() {
         sidebar: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationScreenNavigationMenus, {
           backPath: {}
         }),
-        preview: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+        preview: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
           isLoading: isSiteEditorLoading
         }),
-        mobile: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+        mobile: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
           isLoading: isSiteEditorLoading
         })
       }
@@ -39937,4363 +44249,20 @@ function useLayoutAreas() {
     key: 'default',
     areas: {
       sidebar: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationScreenMain, {}),
-      preview: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+      preview: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
         isLoading: isSiteEditorLoading
       }),
-      mobile: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Editor, {
+      mobile: canvas === 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditSiteEditor, {
         isLoading: isSiteEditorLoading
       })
     }
   };
 }
 
-;// CONCATENATED MODULE: ./node_modules/@react-spring/rafz/dist/react-spring-rafz.esm.js
-let updateQueue = makeQueue();
-const raf = fn => schedule(fn, updateQueue);
-let writeQueue = makeQueue();
-
-raf.write = fn => schedule(fn, writeQueue);
-
-let onStartQueue = makeQueue();
-
-raf.onStart = fn => schedule(fn, onStartQueue);
-
-let onFrameQueue = makeQueue();
-
-raf.onFrame = fn => schedule(fn, onFrameQueue);
-
-let onFinishQueue = makeQueue();
-
-raf.onFinish = fn => schedule(fn, onFinishQueue);
-
-let timeouts = [];
-
-raf.setTimeout = (handler, ms) => {
-  let time = raf.now() + ms;
-
-  let cancel = () => {
-    let i = timeouts.findIndex(t => t.cancel == cancel);
-    if (~i) timeouts.splice(i, 1);
-    pendingCount -= ~i ? 1 : 0;
-  };
-
-  let timeout = {
-    time,
-    handler,
-    cancel
-  };
-  timeouts.splice(findTimeout(time), 0, timeout);
-  pendingCount += 1;
-  start();
-  return timeout;
-};
-
-let findTimeout = time => ~(~timeouts.findIndex(t => t.time > time) || ~timeouts.length);
-
-raf.cancel = fn => {
-  onStartQueue.delete(fn);
-  onFrameQueue.delete(fn);
-  onFinishQueue.delete(fn);
-  updateQueue.delete(fn);
-  writeQueue.delete(fn);
-};
-
-raf.sync = fn => {
-  react_spring_rafz_esm_sync = true;
-  raf.batchedUpdates(fn);
-  react_spring_rafz_esm_sync = false;
-};
-
-raf.throttle = fn => {
-  let lastArgs;
-
-  function queuedFn() {
-    try {
-      fn(...lastArgs);
-    } finally {
-      lastArgs = null;
-    }
-  }
-
-  function throttled(...args) {
-    lastArgs = args;
-    raf.onStart(queuedFn);
-  }
-
-  throttled.handler = fn;
-
-  throttled.cancel = () => {
-    onStartQueue.delete(queuedFn);
-    lastArgs = null;
-  };
-
-  return throttled;
-};
-
-let nativeRaf = typeof window != 'undefined' ? window.requestAnimationFrame : () => {};
-
-raf.use = impl => nativeRaf = impl;
-
-raf.now = typeof performance != 'undefined' ? () => performance.now() : Date.now;
-
-raf.batchedUpdates = fn => fn();
-
-raf.catch = console.error;
-raf.frameLoop = 'always';
-
-raf.advance = () => {
-  if (raf.frameLoop !== 'demand') {
-    console.warn('Cannot call the manual advancement of rafz whilst frameLoop is not set as demand');
-  } else {
-    update();
-  }
-};
-
-let ts = -1;
-let pendingCount = 0;
-let react_spring_rafz_esm_sync = false;
-
-function schedule(fn, queue) {
-  if (react_spring_rafz_esm_sync) {
-    queue.delete(fn);
-    fn(0);
-  } else {
-    queue.add(fn);
-    start();
-  }
-}
-
-function start() {
-  if (ts < 0) {
-    ts = 0;
-
-    if (raf.frameLoop !== 'demand') {
-      nativeRaf(loop);
-    }
-  }
-}
-
-function stop() {
-  ts = -1;
-}
-
-function loop() {
-  if (~ts) {
-    nativeRaf(loop);
-    raf.batchedUpdates(update);
-  }
-}
-
-function update() {
-  let prevTs = ts;
-  ts = raf.now();
-  let count = findTimeout(ts);
-
-  if (count) {
-    eachSafely(timeouts.splice(0, count), t => t.handler());
-    pendingCount -= count;
-  }
-
-  if (!pendingCount) {
-    stop();
-    return;
-  }
-
-  onStartQueue.flush();
-  updateQueue.flush(prevTs ? Math.min(64, ts - prevTs) : 16.667);
-  onFrameQueue.flush();
-  writeQueue.flush();
-  onFinishQueue.flush();
-}
-
-function makeQueue() {
-  let next = new Set();
-  let current = next;
-  return {
-    add(fn) {
-      pendingCount += current == next && !next.has(fn) ? 1 : 0;
-      next.add(fn);
-    },
-
-    delete(fn) {
-      pendingCount -= current == next && next.has(fn) ? 1 : 0;
-      return next.delete(fn);
-    },
-
-    flush(arg) {
-      if (current.size) {
-        next = new Set();
-        pendingCount -= current.size;
-        eachSafely(current, fn => fn(arg) && next.add(fn));
-        pendingCount += next.size;
-        current = next;
-      }
-    }
-
-  };
-}
-
-function eachSafely(values, each) {
-  values.forEach(value => {
-    try {
-      each(value);
-    } catch (e) {
-      raf.catch(e);
-    }
-  });
-}
-
-const __raf = {
-  count() {
-    return pendingCount;
-  },
-
-  isRunning() {
-    return ts >= 0;
-  },
-
-  clear() {
-    ts = -1;
-    timeouts = [];
-    onStartQueue = makeQueue();
-    updateQueue = makeQueue();
-    onFrameQueue = makeQueue();
-    writeQueue = makeQueue();
-    onFinishQueue = makeQueue();
-    pendingCount = 0;
-  }
-
-};
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@react-spring/shared/dist/react-spring-shared.esm.js
-
-
-
-
-function react_spring_shared_esm_noop() {}
-const defineHidden = (obj, key, value) => Object.defineProperty(obj, key, {
-  value,
-  writable: true,
-  configurable: true
-});
-const react_spring_shared_esm_is = {
-  arr: Array.isArray,
-  obj: a => !!a && a.constructor.name === 'Object',
-  fun: a => typeof a === 'function',
-  str: a => typeof a === 'string',
-  num: a => typeof a === 'number',
-  und: a => a === undefined
-};
-function isEqual(a, b) {
-  if (react_spring_shared_esm_is.arr(a)) {
-    if (!react_spring_shared_esm_is.arr(b) || a.length !== b.length) return false;
-
-    for (let i = 0; i < a.length; i++) {
-      if (a[i] !== b[i]) return false;
-    }
-
-    return true;
-  }
-
-  return a === b;
-}
-const react_spring_shared_esm_each = (obj, fn) => obj.forEach(fn);
-function react_spring_shared_esm_eachProp(obj, fn, ctx) {
-  if (react_spring_shared_esm_is.arr(obj)) {
-    for (let i = 0; i < obj.length; i++) {
-      fn.call(ctx, obj[i], `${i}`);
-    }
-
-    return;
-  }
-
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      fn.call(ctx, obj[key], key);
-    }
-  }
-}
-const react_spring_shared_esm_toArray = a => react_spring_shared_esm_is.und(a) ? [] : react_spring_shared_esm_is.arr(a) ? a : [a];
-function flush(queue, iterator) {
-  if (queue.size) {
-    const items = Array.from(queue);
-    queue.clear();
-    react_spring_shared_esm_each(items, iterator);
-  }
-}
-const flushCalls = (queue, ...args) => flush(queue, fn => fn(...args));
-const isSSR = () => typeof window === 'undefined' || !window.navigator || /ServerSideRendering|^Deno\//.test(window.navigator.userAgent);
-
-let createStringInterpolator$1;
-let to;
-let colors$1 = null;
-let skipAnimation = false;
-let willAdvance = react_spring_shared_esm_noop;
-const react_spring_shared_esm_assign = globals => {
-  if (globals.to) to = globals.to;
-  if (globals.now) raf.now = globals.now;
-  if (globals.colors !== undefined) colors$1 = globals.colors;
-  if (globals.skipAnimation != null) skipAnimation = globals.skipAnimation;
-  if (globals.createStringInterpolator) createStringInterpolator$1 = globals.createStringInterpolator;
-  if (globals.requestAnimationFrame) raf.use(globals.requestAnimationFrame);
-  if (globals.batchedUpdates) raf.batchedUpdates = globals.batchedUpdates;
-  if (globals.willAdvance) willAdvance = globals.willAdvance;
-  if (globals.frameLoop) raf.frameLoop = globals.frameLoop;
-};
-
-var globals = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  get createStringInterpolator () { return createStringInterpolator$1; },
-  get to () { return to; },
-  get colors () { return colors$1; },
-  get skipAnimation () { return skipAnimation; },
-  get willAdvance () { return willAdvance; },
-  assign: react_spring_shared_esm_assign
-});
-
-const startQueue = new Set();
-let currentFrame = [];
-let prevFrame = [];
-let priority = 0;
-const frameLoop = {
-  get idle() {
-    return !startQueue.size && !currentFrame.length;
-  },
-
-  start(animation) {
-    if (priority > animation.priority) {
-      startQueue.add(animation);
-      raf.onStart(flushStartQueue);
-    } else {
-      startSafely(animation);
-      raf(advance);
-    }
-  },
-
-  advance,
-
-  sort(animation) {
-    if (priority) {
-      raf.onFrame(() => frameLoop.sort(animation));
-    } else {
-      const prevIndex = currentFrame.indexOf(animation);
-
-      if (~prevIndex) {
-        currentFrame.splice(prevIndex, 1);
-        startUnsafely(animation);
-      }
-    }
-  },
-
-  clear() {
-    currentFrame = [];
-    startQueue.clear();
-  }
-
-};
-
-function flushStartQueue() {
-  startQueue.forEach(startSafely);
-  startQueue.clear();
-  raf(advance);
-}
-
-function startSafely(animation) {
-  if (!currentFrame.includes(animation)) startUnsafely(animation);
-}
-
-function startUnsafely(animation) {
-  currentFrame.splice(findIndex(currentFrame, other => other.priority > animation.priority), 0, animation);
-}
-
-function advance(dt) {
-  const nextFrame = prevFrame;
-
-  for (let i = 0; i < currentFrame.length; i++) {
-    const animation = currentFrame[i];
-    priority = animation.priority;
-
-    if (!animation.idle) {
-      willAdvance(animation);
-      animation.advance(dt);
-
-      if (!animation.idle) {
-        nextFrame.push(animation);
-      }
-    }
-  }
-
-  priority = 0;
-  prevFrame = currentFrame;
-  prevFrame.length = 0;
-  currentFrame = nextFrame;
-  return currentFrame.length > 0;
-}
-
-function findIndex(arr, test) {
-  const index = arr.findIndex(test);
-  return index < 0 ? arr.length : index;
-}
-
-const colors = {
-  transparent: 0x00000000,
-  aliceblue: 0xf0f8ffff,
-  antiquewhite: 0xfaebd7ff,
-  aqua: 0x00ffffff,
-  aquamarine: 0x7fffd4ff,
-  azure: 0xf0ffffff,
-  beige: 0xf5f5dcff,
-  bisque: 0xffe4c4ff,
-  black: 0x000000ff,
-  blanchedalmond: 0xffebcdff,
-  blue: 0x0000ffff,
-  blueviolet: 0x8a2be2ff,
-  brown: 0xa52a2aff,
-  burlywood: 0xdeb887ff,
-  burntsienna: 0xea7e5dff,
-  cadetblue: 0x5f9ea0ff,
-  chartreuse: 0x7fff00ff,
-  chocolate: 0xd2691eff,
-  coral: 0xff7f50ff,
-  cornflowerblue: 0x6495edff,
-  cornsilk: 0xfff8dcff,
-  crimson: 0xdc143cff,
-  cyan: 0x00ffffff,
-  darkblue: 0x00008bff,
-  darkcyan: 0x008b8bff,
-  darkgoldenrod: 0xb8860bff,
-  darkgray: 0xa9a9a9ff,
-  darkgreen: 0x006400ff,
-  darkgrey: 0xa9a9a9ff,
-  darkkhaki: 0xbdb76bff,
-  darkmagenta: 0x8b008bff,
-  darkolivegreen: 0x556b2fff,
-  darkorange: 0xff8c00ff,
-  darkorchid: 0x9932ccff,
-  darkred: 0x8b0000ff,
-  darksalmon: 0xe9967aff,
-  darkseagreen: 0x8fbc8fff,
-  darkslateblue: 0x483d8bff,
-  darkslategray: 0x2f4f4fff,
-  darkslategrey: 0x2f4f4fff,
-  darkturquoise: 0x00ced1ff,
-  darkviolet: 0x9400d3ff,
-  deeppink: 0xff1493ff,
-  deepskyblue: 0x00bfffff,
-  dimgray: 0x696969ff,
-  dimgrey: 0x696969ff,
-  dodgerblue: 0x1e90ffff,
-  firebrick: 0xb22222ff,
-  floralwhite: 0xfffaf0ff,
-  forestgreen: 0x228b22ff,
-  fuchsia: 0xff00ffff,
-  gainsboro: 0xdcdcdcff,
-  ghostwhite: 0xf8f8ffff,
-  gold: 0xffd700ff,
-  goldenrod: 0xdaa520ff,
-  gray: 0x808080ff,
-  green: 0x008000ff,
-  greenyellow: 0xadff2fff,
-  grey: 0x808080ff,
-  honeydew: 0xf0fff0ff,
-  hotpink: 0xff69b4ff,
-  indianred: 0xcd5c5cff,
-  indigo: 0x4b0082ff,
-  ivory: 0xfffff0ff,
-  khaki: 0xf0e68cff,
-  lavender: 0xe6e6faff,
-  lavenderblush: 0xfff0f5ff,
-  lawngreen: 0x7cfc00ff,
-  lemonchiffon: 0xfffacdff,
-  lightblue: 0xadd8e6ff,
-  lightcoral: 0xf08080ff,
-  lightcyan: 0xe0ffffff,
-  lightgoldenrodyellow: 0xfafad2ff,
-  lightgray: 0xd3d3d3ff,
-  lightgreen: 0x90ee90ff,
-  lightgrey: 0xd3d3d3ff,
-  lightpink: 0xffb6c1ff,
-  lightsalmon: 0xffa07aff,
-  lightseagreen: 0x20b2aaff,
-  lightskyblue: 0x87cefaff,
-  lightslategray: 0x778899ff,
-  lightslategrey: 0x778899ff,
-  lightsteelblue: 0xb0c4deff,
-  lightyellow: 0xffffe0ff,
-  lime: 0x00ff00ff,
-  limegreen: 0x32cd32ff,
-  linen: 0xfaf0e6ff,
-  magenta: 0xff00ffff,
-  maroon: 0x800000ff,
-  mediumaquamarine: 0x66cdaaff,
-  mediumblue: 0x0000cdff,
-  mediumorchid: 0xba55d3ff,
-  mediumpurple: 0x9370dbff,
-  mediumseagreen: 0x3cb371ff,
-  mediumslateblue: 0x7b68eeff,
-  mediumspringgreen: 0x00fa9aff,
-  mediumturquoise: 0x48d1ccff,
-  mediumvioletred: 0xc71585ff,
-  midnightblue: 0x191970ff,
-  mintcream: 0xf5fffaff,
-  mistyrose: 0xffe4e1ff,
-  moccasin: 0xffe4b5ff,
-  navajowhite: 0xffdeadff,
-  navy: 0x000080ff,
-  oldlace: 0xfdf5e6ff,
-  olive: 0x808000ff,
-  olivedrab: 0x6b8e23ff,
-  orange: 0xffa500ff,
-  orangered: 0xff4500ff,
-  orchid: 0xda70d6ff,
-  palegoldenrod: 0xeee8aaff,
-  palegreen: 0x98fb98ff,
-  paleturquoise: 0xafeeeeff,
-  palevioletred: 0xdb7093ff,
-  papayawhip: 0xffefd5ff,
-  peachpuff: 0xffdab9ff,
-  peru: 0xcd853fff,
-  pink: 0xffc0cbff,
-  plum: 0xdda0ddff,
-  powderblue: 0xb0e0e6ff,
-  purple: 0x800080ff,
-  rebeccapurple: 0x663399ff,
-  red: 0xff0000ff,
-  rosybrown: 0xbc8f8fff,
-  royalblue: 0x4169e1ff,
-  saddlebrown: 0x8b4513ff,
-  salmon: 0xfa8072ff,
-  sandybrown: 0xf4a460ff,
-  seagreen: 0x2e8b57ff,
-  seashell: 0xfff5eeff,
-  sienna: 0xa0522dff,
-  silver: 0xc0c0c0ff,
-  skyblue: 0x87ceebff,
-  slateblue: 0x6a5acdff,
-  slategray: 0x708090ff,
-  slategrey: 0x708090ff,
-  snow: 0xfffafaff,
-  springgreen: 0x00ff7fff,
-  steelblue: 0x4682b4ff,
-  tan: 0xd2b48cff,
-  teal: 0x008080ff,
-  thistle: 0xd8bfd8ff,
-  tomato: 0xff6347ff,
-  turquoise: 0x40e0d0ff,
-  violet: 0xee82eeff,
-  wheat: 0xf5deb3ff,
-  white: 0xffffffff,
-  whitesmoke: 0xf5f5f5ff,
-  yellow: 0xffff00ff,
-  yellowgreen: 0x9acd32ff
-};
-
-const NUMBER = '[-+]?\\d*\\.?\\d+';
-const PERCENTAGE = NUMBER + '%';
-
-function call(...parts) {
-  return '\\(\\s*(' + parts.join(')\\s*,\\s*(') + ')\\s*\\)';
-}
-
-const rgb = new RegExp('rgb' + call(NUMBER, NUMBER, NUMBER));
-const rgba = new RegExp('rgba' + call(NUMBER, NUMBER, NUMBER, NUMBER));
-const hsl = new RegExp('hsl' + call(NUMBER, PERCENTAGE, PERCENTAGE));
-const hsla = new RegExp('hsla' + call(NUMBER, PERCENTAGE, PERCENTAGE, NUMBER));
-const hex3 = /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
-const hex4 = /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
-const hex6 = /^#([0-9a-fA-F]{6})$/;
-const hex8 = /^#([0-9a-fA-F]{8})$/;
-
-function normalizeColor(color) {
-  let match;
-
-  if (typeof color === 'number') {
-    return color >>> 0 === color && color >= 0 && color <= 0xffffffff ? color : null;
-  }
-
-  if (match = hex6.exec(color)) return parseInt(match[1] + 'ff', 16) >>> 0;
-
-  if (colors$1 && colors$1[color] !== undefined) {
-    return colors$1[color];
-  }
-
-  if (match = rgb.exec(color)) {
-    return (parse255(match[1]) << 24 | parse255(match[2]) << 16 | parse255(match[3]) << 8 | 0x000000ff) >>> 0;
-  }
-
-  if (match = rgba.exec(color)) {
-    return (parse255(match[1]) << 24 | parse255(match[2]) << 16 | parse255(match[3]) << 8 | parse1(match[4])) >>> 0;
-  }
-
-  if (match = hex3.exec(color)) {
-    return parseInt(match[1] + match[1] + match[2] + match[2] + match[3] + match[3] + 'ff', 16) >>> 0;
-  }
-
-  if (match = hex8.exec(color)) return parseInt(match[1], 16) >>> 0;
-
-  if (match = hex4.exec(color)) {
-    return parseInt(match[1] + match[1] + match[2] + match[2] + match[3] + match[3] + match[4] + match[4], 16) >>> 0;
-  }
-
-  if (match = hsl.exec(color)) {
-    return (hslToRgb(parse360(match[1]), parsePercentage(match[2]), parsePercentage(match[3])) | 0x000000ff) >>> 0;
-  }
-
-  if (match = hsla.exec(color)) {
-    return (hslToRgb(parse360(match[1]), parsePercentage(match[2]), parsePercentage(match[3])) | parse1(match[4])) >>> 0;
-  }
-
-  return null;
-}
-
-function hue2rgb(p, q, t) {
-  if (t < 0) t += 1;
-  if (t > 1) t -= 1;
-  if (t < 1 / 6) return p + (q - p) * 6 * t;
-  if (t < 1 / 2) return q;
-  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-  return p;
-}
-
-function hslToRgb(h, s, l) {
-  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-  const p = 2 * l - q;
-  const r = hue2rgb(p, q, h + 1 / 3);
-  const g = hue2rgb(p, q, h);
-  const b = hue2rgb(p, q, h - 1 / 3);
-  return Math.round(r * 255) << 24 | Math.round(g * 255) << 16 | Math.round(b * 255) << 8;
-}
-
-function parse255(str) {
-  const int = parseInt(str, 10);
-  if (int < 0) return 0;
-  if (int > 255) return 255;
-  return int;
-}
-
-function parse360(str) {
-  const int = parseFloat(str);
-  return (int % 360 + 360) % 360 / 360;
-}
-
-function parse1(str) {
-  const num = parseFloat(str);
-  if (num < 0) return 0;
-  if (num > 1) return 255;
-  return Math.round(num * 255);
-}
-
-function parsePercentage(str) {
-  const int = parseFloat(str);
-  if (int < 0) return 0;
-  if (int > 100) return 1;
-  return int / 100;
-}
-
-function colorToRgba(input) {
-  let int32Color = normalizeColor(input);
-  if (int32Color === null) return input;
-  int32Color = int32Color || 0;
-  let r = (int32Color & 0xff000000) >>> 24;
-  let g = (int32Color & 0x00ff0000) >>> 16;
-  let b = (int32Color & 0x0000ff00) >>> 8;
-  let a = (int32Color & 0x000000ff) / 255;
-  return `rgba(${r}, ${g}, ${b}, ${a})`;
-}
-
-const createInterpolator = (range, output, extrapolate) => {
-  if (react_spring_shared_esm_is.fun(range)) {
-    return range;
-  }
-
-  if (react_spring_shared_esm_is.arr(range)) {
-    return createInterpolator({
-      range,
-      output: output,
-      extrapolate
-    });
-  }
-
-  if (react_spring_shared_esm_is.str(range.output[0])) {
-    return createStringInterpolator$1(range);
-  }
-
-  const config = range;
-  const outputRange = config.output;
-  const inputRange = config.range || [0, 1];
-  const extrapolateLeft = config.extrapolateLeft || config.extrapolate || 'extend';
-  const extrapolateRight = config.extrapolateRight || config.extrapolate || 'extend';
-
-  const easing = config.easing || (t => t);
-
-  return input => {
-    const range = findRange(input, inputRange);
-    return interpolate(input, inputRange[range], inputRange[range + 1], outputRange[range], outputRange[range + 1], easing, extrapolateLeft, extrapolateRight, config.map);
-  };
-};
-
-function interpolate(input, inputMin, inputMax, outputMin, outputMax, easing, extrapolateLeft, extrapolateRight, map) {
-  let result = map ? map(input) : input;
-
-  if (result < inputMin) {
-    if (extrapolateLeft === 'identity') return result;else if (extrapolateLeft === 'clamp') result = inputMin;
-  }
-
-  if (result > inputMax) {
-    if (extrapolateRight === 'identity') return result;else if (extrapolateRight === 'clamp') result = inputMax;
-  }
-
-  if (outputMin === outputMax) return outputMin;
-  if (inputMin === inputMax) return input <= inputMin ? outputMin : outputMax;
-  if (inputMin === -Infinity) result = -result;else if (inputMax === Infinity) result = result - inputMin;else result = (result - inputMin) / (inputMax - inputMin);
-  result = easing(result);
-  if (outputMin === -Infinity) result = -result;else if (outputMax === Infinity) result = result + outputMin;else result = result * (outputMax - outputMin) + outputMin;
-  return result;
-}
-
-function findRange(input, inputRange) {
-  for (var i = 1; i < inputRange.length - 1; ++i) if (inputRange[i] >= input) break;
-
-  return i - 1;
-}
-
-function _extends() {
-  _extends = Object.assign ? Object.assign.bind() : function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-  return _extends.apply(this, arguments);
-}
-
-const $get = Symbol.for('FluidValue.get');
-const $observers = Symbol.for('FluidValue.observers');
-
-const hasFluidValue = arg => Boolean(arg && arg[$get]);
-
-const getFluidValue = arg => arg && arg[$get] ? arg[$get]() : arg;
-
-const getFluidObservers = target => target[$observers] || null;
-
-function callFluidObserver(observer, event) {
-  if (observer.eventObserved) {
-    observer.eventObserved(event);
-  } else {
-    observer(event);
-  }
-}
-
-function callFluidObservers(target, event) {
-  let observers = target[$observers];
-
-  if (observers) {
-    observers.forEach(observer => {
-      callFluidObserver(observer, event);
-    });
-  }
-}
-
-class FluidValue {
-  constructor(get) {
-    this[$get] = void 0;
-    this[$observers] = void 0;
-
-    if (!get && !(get = this.get)) {
-      throw Error('Unknown getter');
-    }
-
-    setFluidGetter(this, get);
-  }
-
-}
-
-const setFluidGetter = (target, get) => setHidden(target, $get, get);
-
-function react_spring_shared_esm_addFluidObserver(target, observer) {
-  if (target[$get]) {
-    let observers = target[$observers];
-
-    if (!observers) {
-      setHidden(target, $observers, observers = new Set());
-    }
-
-    if (!observers.has(observer)) {
-      observers.add(observer);
-
-      if (target.observerAdded) {
-        target.observerAdded(observers.size, observer);
-      }
-    }
-  }
-
-  return observer;
-}
-
-function removeFluidObserver(target, observer) {
-  let observers = target[$observers];
-
-  if (observers && observers.has(observer)) {
-    const count = observers.size - 1;
-
-    if (count) {
-      observers.delete(observer);
-    } else {
-      target[$observers] = null;
-    }
-
-    if (target.observerRemoved) {
-      target.observerRemoved(count, observer);
-    }
-  }
-}
-
-const setHidden = (target, key, value) => Object.defineProperty(target, key, {
-  value,
-  writable: true,
-  configurable: true
-});
-
-const numberRegex = /[+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?/g;
-const colorRegex = /(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))/gi;
-const unitRegex = new RegExp(`(${numberRegex.source})(%|[a-z]+)`, 'i');
-const rgbaRegex = /rgba\(([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+)\)/gi;
-const cssVariableRegex = /var\((--[a-zA-Z0-9-_]+),? ?([a-zA-Z0-9 ()%#.,-]+)?\)/;
-
-const variableToRgba = input => {
-  const [token, fallback] = parseCSSVariable(input);
-
-  if (!token || isSSR()) {
-    return input;
-  }
-
-  const value = window.getComputedStyle(document.documentElement).getPropertyValue(token);
-
-  if (value) {
-    return value.trim();
-  } else if (fallback && fallback.startsWith('--')) {
-    const _value = window.getComputedStyle(document.documentElement).getPropertyValue(fallback);
-
-    if (_value) {
-      return _value;
-    } else {
-      return input;
-    }
-  } else if (fallback && cssVariableRegex.test(fallback)) {
-    return variableToRgba(fallback);
-  } else if (fallback) {
-    return fallback;
-  }
-
-  return input;
-};
-
-const parseCSSVariable = current => {
-  const match = cssVariableRegex.exec(current);
-  if (!match) return [,];
-  const [, token, fallback] = match;
-  return [token, fallback];
-};
-
-let namedColorRegex;
-
-const rgbaRound = (_, p1, p2, p3, p4) => `rgba(${Math.round(p1)}, ${Math.round(p2)}, ${Math.round(p3)}, ${p4})`;
-
-const createStringInterpolator = config => {
-  if (!namedColorRegex) namedColorRegex = colors$1 ? new RegExp(`(${Object.keys(colors$1).join('|')})(?!\\w)`, 'g') : /^\b$/;
-  const output = config.output.map(value => {
-    return getFluidValue(value).replace(cssVariableRegex, variableToRgba).replace(colorRegex, colorToRgba).replace(namedColorRegex, colorToRgba);
-  });
-  const keyframes = output.map(value => value.match(numberRegex).map(Number));
-  const outputRanges = keyframes[0].map((_, i) => keyframes.map(values => {
-    if (!(i in values)) {
-      throw Error('The arity of each "output" value must be equal');
-    }
-
-    return values[i];
-  }));
-  const interpolators = outputRanges.map(output => createInterpolator(_extends({}, config, {
-    output
-  })));
-  return input => {
-    var _output$find;
-
-    const missingUnit = !unitRegex.test(output[0]) && ((_output$find = output.find(value => unitRegex.test(value))) == null ? void 0 : _output$find.replace(numberRegex, ''));
-    let i = 0;
-    return output[0].replace(numberRegex, () => `${interpolators[i++](input)}${missingUnit || ''}`).replace(rgbaRegex, rgbaRound);
-  };
-};
-
-const prefix = 'react-spring: ';
-
-const once = fn => {
-  const func = fn;
-  let called = false;
-
-  if (typeof func != 'function') {
-    throw new TypeError(`${prefix}once requires a function parameter`);
-  }
-
-  return (...args) => {
-    if (!called) {
-      func(...args);
-      called = true;
-    }
-  };
-};
-
-const warnInterpolate = once(console.warn);
-function react_spring_shared_esm_deprecateInterpolate() {
-  warnInterpolate(`${prefix}The "interpolate" function is deprecated in v9 (use "to" instead)`);
-}
-const warnDirectCall = once(console.warn);
-function react_spring_shared_esm_deprecateDirectCall() {
-  warnDirectCall(`${prefix}Directly calling start instead of using the api object is deprecated in v9 (use ".start" instead), this will be removed in later 0.X.0 versions`);
-}
-
-function isAnimatedString(value) {
-  return react_spring_shared_esm_is.str(value) && (value[0] == '#' || /\d/.test(value) || !isSSR() && cssVariableRegex.test(value) || value in (colors$1 || {}));
-}
-
-const react_spring_shared_esm_useIsomorphicLayoutEffect = isSSR() ? external_React_.useEffect : external_React_.useLayoutEffect;
-
-const useIsMounted = () => {
-  const isMounted = (0,external_React_.useRef)(false);
-  react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-  return isMounted;
-};
-
-function react_spring_shared_esm_useForceUpdate() {
-  const update = (0,external_React_.useState)()[1];
-  const isMounted = useIsMounted();
-  return () => {
-    if (isMounted.current) {
-      update(Math.random());
-    }
-  };
-}
-
-function useMemoOne(getResult, inputs) {
-  const [initial] = (0,external_React_.useState)(() => ({
-    inputs,
-    result: getResult()
-  }));
-  const committed = (0,external_React_.useRef)();
-  const prevCache = committed.current;
-  let cache = prevCache;
-
-  if (cache) {
-    const useCache = Boolean(inputs && cache.inputs && areInputsEqual(inputs, cache.inputs));
-
-    if (!useCache) {
-      cache = {
-        inputs,
-        result: getResult()
-      };
-    }
-  } else {
-    cache = initial;
-  }
-
-  (0,external_React_.useEffect)(() => {
-    committed.current = cache;
-
-    if (prevCache == initial) {
-      initial.inputs = initial.result = undefined;
-    }
-  }, [cache]);
-  return cache.result;
-}
-
-function areInputsEqual(next, prev) {
-  if (next.length !== prev.length) {
-    return false;
-  }
-
-  for (let i = 0; i < next.length; i++) {
-    if (next[i] !== prev[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-const react_spring_shared_esm_useOnce = effect => (0,external_React_.useEffect)(effect, emptyDeps);
-const emptyDeps = [];
-
-function react_spring_shared_esm_usePrev(value) {
-  const prevRef = useRef();
-  useEffect(() => {
-    prevRef.current = value;
-  });
-  return prevRef.current;
-}
-
-const useReducedMotion = () => {
-  const [reducedMotion, setReducedMotion] = useState(null);
-  react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
-    const mql = window.matchMedia('(prefers-reduced-motion)');
-
-    const handleMediaChange = e => {
-      setReducedMotion(e.matches);
-      react_spring_shared_esm_assign({
-        skipAnimation: e.matches
-      });
-    };
-
-    handleMediaChange(mql);
-    mql.addEventListener('change', handleMediaChange);
-    return () => {
-      mql.removeEventListener('change', handleMediaChange);
-    };
-  }, []);
-  return reducedMotion;
-};
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@react-spring/animated/dist/react-spring-animated.esm.js
-
-
-
-
-const $node = Symbol.for('Animated:node');
-const isAnimated = value => !!value && value[$node] === value;
-const getAnimated = owner => owner && owner[$node];
-const setAnimated = (owner, node) => defineHidden(owner, $node, node);
-const getPayload = owner => owner && owner[$node] && owner[$node].getPayload();
-class Animated {
-  constructor() {
-    this.payload = void 0;
-    setAnimated(this, this);
-  }
-
-  getPayload() {
-    return this.payload || [];
-  }
-
-}
-
-class AnimatedValue extends Animated {
-  constructor(_value) {
-    super();
-    this.done = true;
-    this.elapsedTime = void 0;
-    this.lastPosition = void 0;
-    this.lastVelocity = void 0;
-    this.v0 = void 0;
-    this.durationProgress = 0;
-    this._value = _value;
-
-    if (react_spring_shared_esm_is.num(this._value)) {
-      this.lastPosition = this._value;
-    }
-  }
-
-  static create(value) {
-    return new AnimatedValue(value);
-  }
-
-  getPayload() {
-    return [this];
-  }
-
-  getValue() {
-    return this._value;
-  }
-
-  setValue(value, step) {
-    if (react_spring_shared_esm_is.num(value)) {
-      this.lastPosition = value;
-
-      if (step) {
-        value = Math.round(value / step) * step;
-
-        if (this.done) {
-          this.lastPosition = value;
-        }
-      }
-    }
-
-    if (this._value === value) {
-      return false;
-    }
-
-    this._value = value;
-    return true;
-  }
-
-  reset() {
-    const {
-      done
-    } = this;
-    this.done = false;
-
-    if (react_spring_shared_esm_is.num(this._value)) {
-      this.elapsedTime = 0;
-      this.durationProgress = 0;
-      this.lastPosition = this._value;
-      if (done) this.lastVelocity = null;
-      this.v0 = null;
-    }
-  }
-
-}
-
-class AnimatedString extends AnimatedValue {
-  constructor(value) {
-    super(0);
-    this._string = null;
-    this._toString = void 0;
-    this._toString = createInterpolator({
-      output: [value, value]
-    });
-  }
-
-  static create(value) {
-    return new AnimatedString(value);
-  }
-
-  getValue() {
-    let value = this._string;
-    return value == null ? this._string = this._toString(this._value) : value;
-  }
-
-  setValue(value) {
-    if (react_spring_shared_esm_is.str(value)) {
-      if (value == this._string) {
-        return false;
-      }
-
-      this._string = value;
-      this._value = 1;
-    } else if (super.setValue(value)) {
-      this._string = null;
-    } else {
-      return false;
-    }
-
-    return true;
-  }
-
-  reset(goal) {
-    if (goal) {
-      this._toString = createInterpolator({
-        output: [this.getValue(), goal]
-      });
-    }
-
-    this._value = 0;
-    super.reset();
-  }
-
-}
-
-const TreeContext = {
-  dependencies: null
-};
-
-class AnimatedObject extends Animated {
-  constructor(source) {
-    super();
-    this.source = source;
-    this.setValue(source);
-  }
-
-  getValue(animated) {
-    const values = {};
-    react_spring_shared_esm_eachProp(this.source, (source, key) => {
-      if (isAnimated(source)) {
-        values[key] = source.getValue(animated);
-      } else if (hasFluidValue(source)) {
-        values[key] = getFluidValue(source);
-      } else if (!animated) {
-        values[key] = source;
-      }
-    });
-    return values;
-  }
-
-  setValue(source) {
-    this.source = source;
-    this.payload = this._makePayload(source);
-  }
-
-  reset() {
-    if (this.payload) {
-      react_spring_shared_esm_each(this.payload, node => node.reset());
-    }
-  }
-
-  _makePayload(source) {
-    if (source) {
-      const payload = new Set();
-      react_spring_shared_esm_eachProp(source, this._addToPayload, payload);
-      return Array.from(payload);
-    }
-  }
-
-  _addToPayload(source) {
-    if (TreeContext.dependencies && hasFluidValue(source)) {
-      TreeContext.dependencies.add(source);
-    }
-
-    const payload = getPayload(source);
-
-    if (payload) {
-      react_spring_shared_esm_each(payload, node => this.add(node));
-    }
-  }
-
-}
-
-class AnimatedArray extends AnimatedObject {
-  constructor(source) {
-    super(source);
-  }
-
-  static create(source) {
-    return new AnimatedArray(source);
-  }
-
-  getValue() {
-    return this.source.map(node => node.getValue());
-  }
-
-  setValue(source) {
-    const payload = this.getPayload();
-
-    if (source.length == payload.length) {
-      return payload.map((node, i) => node.setValue(source[i])).some(Boolean);
-    }
-
-    super.setValue(source.map(makeAnimated));
-    return true;
-  }
-
-}
-
-function makeAnimated(value) {
-  const nodeType = isAnimatedString(value) ? AnimatedString : AnimatedValue;
-  return nodeType.create(value);
-}
-
-function getAnimatedType(value) {
-  const parentNode = getAnimated(value);
-  return parentNode ? parentNode.constructor : react_spring_shared_esm_is.arr(value) ? AnimatedArray : isAnimatedString(value) ? AnimatedString : AnimatedValue;
-}
-
-function react_spring_animated_esm_extends() {
-  react_spring_animated_esm_extends = Object.assign ? Object.assign.bind() : function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-  return react_spring_animated_esm_extends.apply(this, arguments);
-}
-
-const withAnimated = (Component, host) => {
-  const hasInstance = !react_spring_shared_esm_is.fun(Component) || Component.prototype && Component.prototype.isReactComponent;
-  return (0,external_React_.forwardRef)((givenProps, givenRef) => {
-    const instanceRef = (0,external_React_.useRef)(null);
-    const ref = hasInstance && (0,external_React_.useCallback)(value => {
-      instanceRef.current = updateRef(givenRef, value);
-    }, [givenRef]);
-    const [props, deps] = getAnimatedState(givenProps, host);
-    const forceUpdate = react_spring_shared_esm_useForceUpdate();
-
-    const callback = () => {
-      const instance = instanceRef.current;
-
-      if (hasInstance && !instance) {
-        return;
-      }
-
-      const didUpdate = instance ? host.applyAnimatedValues(instance, props.getValue(true)) : false;
-
-      if (didUpdate === false) {
-        forceUpdate();
-      }
-    };
-
-    const observer = new PropsObserver(callback, deps);
-    const observerRef = (0,external_React_.useRef)();
-    react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
-      observerRef.current = observer;
-      react_spring_shared_esm_each(deps, dep => react_spring_shared_esm_addFluidObserver(dep, observer));
-      return () => {
-        if (observerRef.current) {
-          react_spring_shared_esm_each(observerRef.current.deps, dep => removeFluidObserver(dep, observerRef.current));
-          raf.cancel(observerRef.current.update);
-        }
-      };
-    });
-    (0,external_React_.useEffect)(callback, []);
-    react_spring_shared_esm_useOnce(() => () => {
-      const observer = observerRef.current;
-      react_spring_shared_esm_each(observer.deps, dep => removeFluidObserver(dep, observer));
-    });
-    const usedProps = host.getComponentProps(props.getValue());
-    return external_React_.createElement(Component, react_spring_animated_esm_extends({}, usedProps, {
-      ref: ref
-    }));
-  });
-};
-
-class PropsObserver {
-  constructor(update, deps) {
-    this.update = update;
-    this.deps = deps;
-  }
-
-  eventObserved(event) {
-    if (event.type == 'change') {
-      raf.write(this.update);
-    }
-  }
-
-}
-
-function getAnimatedState(props, host) {
-  const dependencies = new Set();
-  TreeContext.dependencies = dependencies;
-  if (props.style) props = react_spring_animated_esm_extends({}, props, {
-    style: host.createAnimatedStyle(props.style)
-  });
-  props = new AnimatedObject(props);
-  TreeContext.dependencies = null;
-  return [props, dependencies];
-}
-
-function updateRef(ref, value) {
-  if (ref) {
-    if (react_spring_shared_esm_is.fun(ref)) ref(value);else ref.current = value;
-  }
-
-  return value;
-}
-
-const cacheKey = Symbol.for('AnimatedComponent');
-const createHost = (components, {
-  applyAnimatedValues: _applyAnimatedValues = () => false,
-  createAnimatedStyle: _createAnimatedStyle = style => new AnimatedObject(style),
-  getComponentProps: _getComponentProps = props => props
-} = {}) => {
-  const hostConfig = {
-    applyAnimatedValues: _applyAnimatedValues,
-    createAnimatedStyle: _createAnimatedStyle,
-    getComponentProps: _getComponentProps
-  };
-
-  const animated = Component => {
-    const displayName = getDisplayName(Component) || 'Anonymous';
-
-    if (react_spring_shared_esm_is.str(Component)) {
-      Component = animated[Component] || (animated[Component] = withAnimated(Component, hostConfig));
-    } else {
-      Component = Component[cacheKey] || (Component[cacheKey] = withAnimated(Component, hostConfig));
-    }
-
-    Component.displayName = `Animated(${displayName})`;
-    return Component;
-  };
-
-  react_spring_shared_esm_eachProp(components, (Component, key) => {
-    if (react_spring_shared_esm_is.arr(components)) {
-      key = getDisplayName(Component);
-    }
-
-    animated[key] = animated(Component);
-  });
-  return {
-    animated
-  };
-};
-
-const getDisplayName = arg => react_spring_shared_esm_is.str(arg) ? arg : arg && react_spring_shared_esm_is.str(arg.displayName) ? arg.displayName : react_spring_shared_esm_is.fun(arg) && arg.name || null;
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@react-spring/core/dist/react-spring-core.esm.js
-
-
-
-
-
-
-
-
-function react_spring_core_esm_extends() {
-  react_spring_core_esm_extends = Object.assign ? Object.assign.bind() : function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-  return react_spring_core_esm_extends.apply(this, arguments);
-}
-
-function callProp(value, ...args) {
-  return react_spring_shared_esm_is.fun(value) ? value(...args) : value;
-}
-const matchProp = (value, key) => value === true || !!(key && value && (react_spring_shared_esm_is.fun(value) ? value(key) : react_spring_shared_esm_toArray(value).includes(key)));
-const resolveProp = (prop, key) => react_spring_shared_esm_is.obj(prop) ? key && prop[key] : prop;
-const getDefaultProp = (props, key) => props.default === true ? props[key] : props.default ? props.default[key] : undefined;
-
-const noopTransform = value => value;
-
-const getDefaultProps = (props, transform = noopTransform) => {
-  let keys = DEFAULT_PROPS;
-
-  if (props.default && props.default !== true) {
-    props = props.default;
-    keys = Object.keys(props);
-  }
-
-  const defaults = {};
-
-  for (const key of keys) {
-    const value = transform(props[key], key);
-
-    if (!react_spring_shared_esm_is.und(value)) {
-      defaults[key] = value;
-    }
-  }
-
-  return defaults;
-};
-const DEFAULT_PROPS = ['config', 'onProps', 'onStart', 'onChange', 'onPause', 'onResume', 'onRest'];
-const RESERVED_PROPS = {
-  config: 1,
-  from: 1,
-  to: 1,
-  ref: 1,
-  loop: 1,
-  reset: 1,
-  pause: 1,
-  cancel: 1,
-  reverse: 1,
-  immediate: 1,
-  default: 1,
-  delay: 1,
-  onProps: 1,
-  onStart: 1,
-  onChange: 1,
-  onPause: 1,
-  onResume: 1,
-  onRest: 1,
-  onResolve: 1,
-  items: 1,
-  trail: 1,
-  sort: 1,
-  expires: 1,
-  initial: 1,
-  enter: 1,
-  update: 1,
-  leave: 1,
-  children: 1,
-  onDestroyed: 1,
-  keys: 1,
-  callId: 1,
-  parentId: 1
-};
-
-function getForwardProps(props) {
-  const forward = {};
-  let count = 0;
-  react_spring_shared_esm_eachProp(props, (value, prop) => {
-    if (!RESERVED_PROPS[prop]) {
-      forward[prop] = value;
-      count++;
-    }
-  });
-
-  if (count) {
-    return forward;
-  }
-}
-
-function inferTo(props) {
-  const to = getForwardProps(props);
-
-  if (to) {
-    const out = {
-      to
-    };
-    react_spring_shared_esm_eachProp(props, (val, key) => key in to || (out[key] = val));
-    return out;
-  }
-
-  return react_spring_core_esm_extends({}, props);
-}
-function computeGoal(value) {
-  value = getFluidValue(value);
-  return react_spring_shared_esm_is.arr(value) ? value.map(computeGoal) : isAnimatedString(value) ? globals.createStringInterpolator({
-    range: [0, 1],
-    output: [value, value]
-  })(1) : value;
-}
-function hasProps(props) {
-  for (const _ in props) return true;
-
-  return false;
-}
-function isAsyncTo(to) {
-  return react_spring_shared_esm_is.fun(to) || react_spring_shared_esm_is.arr(to) && react_spring_shared_esm_is.obj(to[0]);
-}
-function detachRefs(ctrl, ref) {
-  var _ctrl$ref;
-
-  (_ctrl$ref = ctrl.ref) == null ? void 0 : _ctrl$ref.delete(ctrl);
-  ref == null ? void 0 : ref.delete(ctrl);
-}
-function replaceRef(ctrl, ref) {
-  if (ref && ctrl.ref !== ref) {
-    var _ctrl$ref2;
-
-    (_ctrl$ref2 = ctrl.ref) == null ? void 0 : _ctrl$ref2.delete(ctrl);
-    ref.add(ctrl);
-    ctrl.ref = ref;
-  }
-}
-
-function useChain(refs, timeSteps, timeFrame = 1000) {
-  useIsomorphicLayoutEffect(() => {
-    if (timeSteps) {
-      let prevDelay = 0;
-      each(refs, (ref, i) => {
-        const controllers = ref.current;
-
-        if (controllers.length) {
-          let delay = timeFrame * timeSteps[i];
-          if (isNaN(delay)) delay = prevDelay;else prevDelay = delay;
-          each(controllers, ctrl => {
-            each(ctrl.queue, props => {
-              const memoizedDelayProp = props.delay;
-
-              props.delay = key => delay + callProp(memoizedDelayProp || 0, key);
-            });
-          });
-          ref.start();
-        }
-      });
-    } else {
-      let p = Promise.resolve();
-      each(refs, ref => {
-        const controllers = ref.current;
-
-        if (controllers.length) {
-          const queues = controllers.map(ctrl => {
-            const q = ctrl.queue;
-            ctrl.queue = [];
-            return q;
-          });
-          p = p.then(() => {
-            each(controllers, (ctrl, i) => each(queues[i] || [], update => ctrl.queue.push(update)));
-            return Promise.all(ref.start());
-          });
-        }
-      });
-    }
-  });
-}
-
-const config = {
-  default: {
-    tension: 170,
-    friction: 26
-  },
-  gentle: {
-    tension: 120,
-    friction: 14
-  },
-  wobbly: {
-    tension: 180,
-    friction: 12
-  },
-  stiff: {
-    tension: 210,
-    friction: 20
-  },
-  slow: {
-    tension: 280,
-    friction: 60
-  },
-  molasses: {
-    tension: 280,
-    friction: 120
-  }
-};
-const c1 = 1.70158;
-const c2 = c1 * 1.525;
-const c3 = c1 + 1;
-const c4 = 2 * Math.PI / 3;
-const c5 = 2 * Math.PI / 4.5;
-
-const bounceOut = x => {
-  const n1 = 7.5625;
-  const d1 = 2.75;
-
-  if (x < 1 / d1) {
-    return n1 * x * x;
-  } else if (x < 2 / d1) {
-    return n1 * (x -= 1.5 / d1) * x + 0.75;
-  } else if (x < 2.5 / d1) {
-    return n1 * (x -= 2.25 / d1) * x + 0.9375;
-  } else {
-    return n1 * (x -= 2.625 / d1) * x + 0.984375;
-  }
-};
-
-const easings = {
-  linear: x => x,
-  easeInQuad: x => x * x,
-  easeOutQuad: x => 1 - (1 - x) * (1 - x),
-  easeInOutQuad: x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2,
-  easeInCubic: x => x * x * x,
-  easeOutCubic: x => 1 - Math.pow(1 - x, 3),
-  easeInOutCubic: x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
-  easeInQuart: x => x * x * x * x,
-  easeOutQuart: x => 1 - Math.pow(1 - x, 4),
-  easeInOutQuart: x => x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2,
-  easeInQuint: x => x * x * x * x * x,
-  easeOutQuint: x => 1 - Math.pow(1 - x, 5),
-  easeInOutQuint: x => x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2,
-  easeInSine: x => 1 - Math.cos(x * Math.PI / 2),
-  easeOutSine: x => Math.sin(x * Math.PI / 2),
-  easeInOutSine: x => -(Math.cos(Math.PI * x) - 1) / 2,
-  easeInExpo: x => x === 0 ? 0 : Math.pow(2, 10 * x - 10),
-  easeOutExpo: x => x === 1 ? 1 : 1 - Math.pow(2, -10 * x),
-  easeInOutExpo: x => x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 : (2 - Math.pow(2, -20 * x + 10)) / 2,
-  easeInCirc: x => 1 - Math.sqrt(1 - Math.pow(x, 2)),
-  easeOutCirc: x => Math.sqrt(1 - Math.pow(x - 1, 2)),
-  easeInOutCirc: x => x < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2,
-  easeInBack: x => c3 * x * x * x - c1 * x * x,
-  easeOutBack: x => 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2),
-  easeInOutBack: x => x < 0.5 ? Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2) / 2 : (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2,
-  easeInElastic: x => x === 0 ? 0 : x === 1 ? 1 : -Math.pow(2, 10 * x - 10) * Math.sin((x * 10 - 10.75) * c4),
-  easeOutElastic: x => x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1,
-  easeInOutElastic: x => x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * c5)) / 2 : Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * c5) / 2 + 1,
-  easeInBounce: x => 1 - bounceOut(1 - x),
-  easeOutBounce: bounceOut,
-  easeInOutBounce: x => x < 0.5 ? (1 - bounceOut(1 - 2 * x)) / 2 : (1 + bounceOut(2 * x - 1)) / 2
-};
-
-const defaults = react_spring_core_esm_extends({}, config.default, {
-  mass: 1,
-  damping: 1,
-  easing: easings.linear,
-  clamp: false
-});
-
-class AnimationConfig {
-  constructor() {
-    this.tension = void 0;
-    this.friction = void 0;
-    this.frequency = void 0;
-    this.damping = void 0;
-    this.mass = void 0;
-    this.velocity = 0;
-    this.restVelocity = void 0;
-    this.precision = void 0;
-    this.progress = void 0;
-    this.duration = void 0;
-    this.easing = void 0;
-    this.clamp = void 0;
-    this.bounce = void 0;
-    this.decay = void 0;
-    this.round = void 0;
-    Object.assign(this, defaults);
-  }
-
-}
-function mergeConfig(config, newConfig, defaultConfig) {
-  if (defaultConfig) {
-    defaultConfig = react_spring_core_esm_extends({}, defaultConfig);
-    sanitizeConfig(defaultConfig, newConfig);
-    newConfig = react_spring_core_esm_extends({}, defaultConfig, newConfig);
-  }
-
-  sanitizeConfig(config, newConfig);
-  Object.assign(config, newConfig);
-
-  for (const key in defaults) {
-    if (config[key] == null) {
-      config[key] = defaults[key];
-    }
-  }
-
-  let {
-    mass,
-    frequency,
-    damping
-  } = config;
-
-  if (!react_spring_shared_esm_is.und(frequency)) {
-    if (frequency < 0.01) frequency = 0.01;
-    if (damping < 0) damping = 0;
-    config.tension = Math.pow(2 * Math.PI / frequency, 2) * mass;
-    config.friction = 4 * Math.PI * damping * mass / frequency;
-  }
-
-  return config;
-}
-
-function sanitizeConfig(config, props) {
-  if (!react_spring_shared_esm_is.und(props.decay)) {
-    config.duration = undefined;
-  } else {
-    const isTensionConfig = !react_spring_shared_esm_is.und(props.tension) || !react_spring_shared_esm_is.und(props.friction);
-
-    if (isTensionConfig || !react_spring_shared_esm_is.und(props.frequency) || !react_spring_shared_esm_is.und(props.damping) || !react_spring_shared_esm_is.und(props.mass)) {
-      config.duration = undefined;
-      config.decay = undefined;
-    }
-
-    if (isTensionConfig) {
-      config.frequency = undefined;
-    }
-  }
-}
-
-const emptyArray = [];
-class Animation {
-  constructor() {
-    this.changed = false;
-    this.values = emptyArray;
-    this.toValues = null;
-    this.fromValues = emptyArray;
-    this.to = void 0;
-    this.from = void 0;
-    this.config = new AnimationConfig();
-    this.immediate = false;
-  }
-
-}
-
-function scheduleProps(callId, {
-  key,
-  props,
-  defaultProps,
-  state,
-  actions
-}) {
-  return new Promise((resolve, reject) => {
-    var _props$cancel;
-
-    let delay;
-    let timeout;
-    let cancel = matchProp((_props$cancel = props.cancel) != null ? _props$cancel : defaultProps == null ? void 0 : defaultProps.cancel, key);
-
-    if (cancel) {
-      onStart();
-    } else {
-      if (!react_spring_shared_esm_is.und(props.pause)) {
-        state.paused = matchProp(props.pause, key);
-      }
-
-      let pause = defaultProps == null ? void 0 : defaultProps.pause;
-
-      if (pause !== true) {
-        pause = state.paused || matchProp(pause, key);
-      }
-
-      delay = callProp(props.delay || 0, key);
-
-      if (pause) {
-        state.resumeQueue.add(onResume);
-        actions.pause();
-      } else {
-        actions.resume();
-        onResume();
-      }
-    }
-
-    function onPause() {
-      state.resumeQueue.add(onResume);
-      state.timeouts.delete(timeout);
-      timeout.cancel();
-      delay = timeout.time - raf.now();
-    }
-
-    function onResume() {
-      if (delay > 0 && !globals.skipAnimation) {
-        state.delayed = true;
-        timeout = raf.setTimeout(onStart, delay);
-        state.pauseQueue.add(onPause);
-        state.timeouts.add(timeout);
-      } else {
-        onStart();
-      }
-    }
-
-    function onStart() {
-      if (state.delayed) {
-        state.delayed = false;
-      }
-
-      state.pauseQueue.delete(onPause);
-      state.timeouts.delete(timeout);
-
-      if (callId <= (state.cancelId || 0)) {
-        cancel = true;
-      }
-
-      try {
-        actions.start(react_spring_core_esm_extends({}, props, {
-          callId,
-          cancel
-        }), resolve);
-      } catch (err) {
-        reject(err);
-      }
-    }
-  });
-}
-
-const getCombinedResult = (target, results) => results.length == 1 ? results[0] : results.some(result => result.cancelled) ? getCancelledResult(target.get()) : results.every(result => result.noop) ? getNoopResult(target.get()) : getFinishedResult(target.get(), results.every(result => result.finished));
-const getNoopResult = value => ({
-  value,
-  noop: true,
-  finished: true,
-  cancelled: false
-});
-const getFinishedResult = (value, finished, cancelled = false) => ({
-  value,
-  finished,
-  cancelled
-});
-const getCancelledResult = value => ({
-  value,
-  cancelled: true,
-  finished: false
-});
-
-function runAsync(to, props, state, target) {
-  const {
-    callId,
-    parentId,
-    onRest
-  } = props;
-  const {
-    asyncTo: prevTo,
-    promise: prevPromise
-  } = state;
-
-  if (!parentId && to === prevTo && !props.reset) {
-    return prevPromise;
-  }
-
-  return state.promise = (async () => {
-    state.asyncId = callId;
-    state.asyncTo = to;
-    const defaultProps = getDefaultProps(props, (value, key) => key === 'onRest' ? undefined : value);
-    let preventBail;
-    let bail;
-    const bailPromise = new Promise((resolve, reject) => (preventBail = resolve, bail = reject));
-
-    const bailIfEnded = bailSignal => {
-      const bailResult = callId <= (state.cancelId || 0) && getCancelledResult(target) || callId !== state.asyncId && getFinishedResult(target, false);
-
-      if (bailResult) {
-        bailSignal.result = bailResult;
-        bail(bailSignal);
-        throw bailSignal;
-      }
-    };
-
-    const animate = (arg1, arg2) => {
-      const bailSignal = new BailSignal();
-      const skipAnimationSignal = new SkipAniamtionSignal();
-      return (async () => {
-        if (globals.skipAnimation) {
-          stopAsync(state);
-          skipAnimationSignal.result = getFinishedResult(target, false);
-          bail(skipAnimationSignal);
-          throw skipAnimationSignal;
-        }
-
-        bailIfEnded(bailSignal);
-        const props = react_spring_shared_esm_is.obj(arg1) ? react_spring_core_esm_extends({}, arg1) : react_spring_core_esm_extends({}, arg2, {
-          to: arg1
-        });
-        props.parentId = callId;
-        react_spring_shared_esm_eachProp(defaultProps, (value, key) => {
-          if (react_spring_shared_esm_is.und(props[key])) {
-            props[key] = value;
-          }
-        });
-        const result = await target.start(props);
-        bailIfEnded(bailSignal);
-
-        if (state.paused) {
-          await new Promise(resume => {
-            state.resumeQueue.add(resume);
-          });
-        }
-
-        return result;
-      })();
-    };
-
-    let result;
-
-    if (globals.skipAnimation) {
-      stopAsync(state);
-      return getFinishedResult(target, false);
-    }
-
-    try {
-      let animating;
-
-      if (react_spring_shared_esm_is.arr(to)) {
-        animating = (async queue => {
-          for (const props of queue) {
-            await animate(props);
-          }
-        })(to);
-      } else {
-        animating = Promise.resolve(to(animate, target.stop.bind(target)));
-      }
-
-      await Promise.all([animating.then(preventBail), bailPromise]);
-      result = getFinishedResult(target.get(), true, false);
-    } catch (err) {
-      if (err instanceof BailSignal) {
-        result = err.result;
-      } else if (err instanceof SkipAniamtionSignal) {
-        result = err.result;
-      } else {
-        throw err;
-      }
-    } finally {
-      if (callId == state.asyncId) {
-        state.asyncId = parentId;
-        state.asyncTo = parentId ? prevTo : undefined;
-        state.promise = parentId ? prevPromise : undefined;
-      }
-    }
-
-    if (react_spring_shared_esm_is.fun(onRest)) {
-      raf.batchedUpdates(() => {
-        onRest(result, target, target.item);
-      });
-    }
-
-    return result;
-  })();
-}
-function stopAsync(state, cancelId) {
-  flush(state.timeouts, t => t.cancel());
-  state.pauseQueue.clear();
-  state.resumeQueue.clear();
-  state.asyncId = state.asyncTo = state.promise = undefined;
-  if (cancelId) state.cancelId = cancelId;
-}
-class BailSignal extends Error {
-  constructor() {
-    super('An async animation has been interrupted. You see this error because you ' + 'forgot to use `await` or `.catch(...)` on its returned promise.');
-    this.result = void 0;
-  }
-
-}
-class SkipAniamtionSignal extends Error {
-  constructor() {
-    super('SkipAnimationSignal');
-    this.result = void 0;
-  }
-
-}
-
-const isFrameValue = value => value instanceof FrameValue;
-let nextId$1 = 1;
-class FrameValue extends FluidValue {
-  constructor(...args) {
-    super(...args);
-    this.id = nextId$1++;
-    this.key = void 0;
-    this._priority = 0;
-  }
-
-  get priority() {
-    return this._priority;
-  }
-
-  set priority(priority) {
-    if (this._priority != priority) {
-      this._priority = priority;
-
-      this._onPriorityChange(priority);
-    }
-  }
-
-  get() {
-    const node = getAnimated(this);
-    return node && node.getValue();
-  }
-
-  to(...args) {
-    return globals.to(this, args);
-  }
-
-  interpolate(...args) {
-    react_spring_shared_esm_deprecateInterpolate();
-    return globals.to(this, args);
-  }
-
-  toJSON() {
-    return this.get();
-  }
-
-  observerAdded(count) {
-    if (count == 1) this._attach();
-  }
-
-  observerRemoved(count) {
-    if (count == 0) this._detach();
-  }
-
-  _attach() {}
-
-  _detach() {}
-
-  _onChange(value, idle = false) {
-    callFluidObservers(this, {
-      type: 'change',
-      parent: this,
-      value,
-      idle
-    });
-  }
-
-  _onPriorityChange(priority) {
-    if (!this.idle) {
-      frameLoop.sort(this);
-    }
-
-    callFluidObservers(this, {
-      type: 'priority',
-      parent: this,
-      priority
-    });
-  }
-
-}
-
-const $P = Symbol.for('SpringPhase');
-const HAS_ANIMATED = 1;
-const IS_ANIMATING = 2;
-const IS_PAUSED = 4;
-const hasAnimated = target => (target[$P] & HAS_ANIMATED) > 0;
-const isAnimating = target => (target[$P] & IS_ANIMATING) > 0;
-const isPaused = target => (target[$P] & IS_PAUSED) > 0;
-const setActiveBit = (target, active) => active ? target[$P] |= IS_ANIMATING | HAS_ANIMATED : target[$P] &= ~IS_ANIMATING;
-const setPausedBit = (target, paused) => paused ? target[$P] |= IS_PAUSED : target[$P] &= ~IS_PAUSED;
-
-class SpringValue extends FrameValue {
-  constructor(arg1, arg2) {
-    super();
-    this.key = void 0;
-    this.animation = new Animation();
-    this.queue = void 0;
-    this.defaultProps = {};
-    this._state = {
-      paused: false,
-      delayed: false,
-      pauseQueue: new Set(),
-      resumeQueue: new Set(),
-      timeouts: new Set()
-    };
-    this._pendingCalls = new Set();
-    this._lastCallId = 0;
-    this._lastToId = 0;
-    this._memoizedDuration = 0;
-
-    if (!react_spring_shared_esm_is.und(arg1) || !react_spring_shared_esm_is.und(arg2)) {
-      const props = react_spring_shared_esm_is.obj(arg1) ? react_spring_core_esm_extends({}, arg1) : react_spring_core_esm_extends({}, arg2, {
-        from: arg1
-      });
-
-      if (react_spring_shared_esm_is.und(props.default)) {
-        props.default = true;
-      }
-
-      this.start(props);
-    }
-  }
-
-  get idle() {
-    return !(isAnimating(this) || this._state.asyncTo) || isPaused(this);
-  }
-
-  get goal() {
-    return getFluidValue(this.animation.to);
-  }
-
-  get velocity() {
-    const node = getAnimated(this);
-    return node instanceof AnimatedValue ? node.lastVelocity || 0 : node.getPayload().map(node => node.lastVelocity || 0);
-  }
-
-  get hasAnimated() {
-    return hasAnimated(this);
-  }
-
-  get isAnimating() {
-    return isAnimating(this);
-  }
-
-  get isPaused() {
-    return isPaused(this);
-  }
-
-  get isDelayed() {
-    return this._state.delayed;
-  }
-
-  advance(dt) {
-    let idle = true;
-    let changed = false;
-    const anim = this.animation;
-    let {
-      config,
-      toValues
-    } = anim;
-    const payload = getPayload(anim.to);
-
-    if (!payload && hasFluidValue(anim.to)) {
-      toValues = react_spring_shared_esm_toArray(getFluidValue(anim.to));
-    }
-
-    anim.values.forEach((node, i) => {
-      if (node.done) return;
-      const to = node.constructor == AnimatedString ? 1 : payload ? payload[i].lastPosition : toValues[i];
-      let finished = anim.immediate;
-      let position = to;
-
-      if (!finished) {
-        position = node.lastPosition;
-
-        if (config.tension <= 0) {
-          node.done = true;
-          return;
-        }
-
-        let elapsed = node.elapsedTime += dt;
-        const from = anim.fromValues[i];
-        const v0 = node.v0 != null ? node.v0 : node.v0 = react_spring_shared_esm_is.arr(config.velocity) ? config.velocity[i] : config.velocity;
-        let velocity;
-        const precision = config.precision || (from == to ? 0.005 : Math.min(1, Math.abs(to - from) * 0.001));
-
-        if (!react_spring_shared_esm_is.und(config.duration)) {
-          let p = 1;
-
-          if (config.duration > 0) {
-            if (this._memoizedDuration !== config.duration) {
-              this._memoizedDuration = config.duration;
-
-              if (node.durationProgress > 0) {
-                node.elapsedTime = config.duration * node.durationProgress;
-                elapsed = node.elapsedTime += dt;
-              }
-            }
-
-            p = (config.progress || 0) + elapsed / this._memoizedDuration;
-            p = p > 1 ? 1 : p < 0 ? 0 : p;
-            node.durationProgress = p;
-          }
-
-          position = from + config.easing(p) * (to - from);
-          velocity = (position - node.lastPosition) / dt;
-          finished = p == 1;
-        } else if (config.decay) {
-          const decay = config.decay === true ? 0.998 : config.decay;
-          const e = Math.exp(-(1 - decay) * elapsed);
-          position = from + v0 / (1 - decay) * (1 - e);
-          finished = Math.abs(node.lastPosition - position) <= precision;
-          velocity = v0 * e;
-        } else {
-          velocity = node.lastVelocity == null ? v0 : node.lastVelocity;
-          const restVelocity = config.restVelocity || precision / 10;
-          const bounceFactor = config.clamp ? 0 : config.bounce;
-          const canBounce = !react_spring_shared_esm_is.und(bounceFactor);
-          const isGrowing = from == to ? node.v0 > 0 : from < to;
-          let isMoving;
-          let isBouncing = false;
-          const step = 1;
-          const numSteps = Math.ceil(dt / step);
-
-          for (let n = 0; n < numSteps; ++n) {
-            isMoving = Math.abs(velocity) > restVelocity;
-
-            if (!isMoving) {
-              finished = Math.abs(to - position) <= precision;
-
-              if (finished) {
-                break;
-              }
-            }
-
-            if (canBounce) {
-              isBouncing = position == to || position > to == isGrowing;
-
-              if (isBouncing) {
-                velocity = -velocity * bounceFactor;
-                position = to;
-              }
-            }
-
-            const springForce = -config.tension * 0.000001 * (position - to);
-            const dampingForce = -config.friction * 0.001 * velocity;
-            const acceleration = (springForce + dampingForce) / config.mass;
-            velocity = velocity + acceleration * step;
-            position = position + velocity * step;
-          }
-        }
-
-        node.lastVelocity = velocity;
-
-        if (Number.isNaN(position)) {
-          console.warn(`Got NaN while animating:`, this);
-          finished = true;
-        }
-      }
-
-      if (payload && !payload[i].done) {
-        finished = false;
-      }
-
-      if (finished) {
-        node.done = true;
-      } else {
-        idle = false;
-      }
-
-      if (node.setValue(position, config.round)) {
-        changed = true;
-      }
-    });
-    const node = getAnimated(this);
-    const currVal = node.getValue();
-
-    if (idle) {
-      const finalVal = getFluidValue(anim.to);
-
-      if ((currVal !== finalVal || changed) && !config.decay) {
-        node.setValue(finalVal);
-
-        this._onChange(finalVal);
-      } else if (changed && config.decay) {
-        this._onChange(currVal);
-      }
-
-      this._stop();
-    } else if (changed) {
-      this._onChange(currVal);
-    }
-  }
-
-  set(value) {
-    raf.batchedUpdates(() => {
-      this._stop();
-
-      this._focus(value);
-
-      this._set(value);
-    });
-    return this;
-  }
-
-  pause() {
-    this._update({
-      pause: true
-    });
-  }
-
-  resume() {
-    this._update({
-      pause: false
-    });
-  }
-
-  finish() {
-    if (isAnimating(this)) {
-      const {
-        to,
-        config
-      } = this.animation;
-      raf.batchedUpdates(() => {
-        this._onStart();
-
-        if (!config.decay) {
-          this._set(to, false);
-        }
-
-        this._stop();
-      });
-    }
-
-    return this;
-  }
-
-  update(props) {
-    const queue = this.queue || (this.queue = []);
-    queue.push(props);
-    return this;
-  }
-
-  start(to, arg2) {
-    let queue;
-
-    if (!react_spring_shared_esm_is.und(to)) {
-      queue = [react_spring_shared_esm_is.obj(to) ? to : react_spring_core_esm_extends({}, arg2, {
-        to
-      })];
-    } else {
-      queue = this.queue || [];
-      this.queue = [];
-    }
-
-    return Promise.all(queue.map(props => {
-      const up = this._update(props);
-
-      return up;
-    })).then(results => getCombinedResult(this, results));
-  }
-
-  stop(cancel) {
-    const {
-      to
-    } = this.animation;
-
-    this._focus(this.get());
-
-    stopAsync(this._state, cancel && this._lastCallId);
-    raf.batchedUpdates(() => this._stop(to, cancel));
-    return this;
-  }
-
-  reset() {
-    this._update({
-      reset: true
-    });
-  }
-
-  eventObserved(event) {
-    if (event.type == 'change') {
-      this._start();
-    } else if (event.type == 'priority') {
-      this.priority = event.priority + 1;
-    }
-  }
-
-  _prepareNode(props) {
-    const key = this.key || '';
-    let {
-      to,
-      from
-    } = props;
-    to = react_spring_shared_esm_is.obj(to) ? to[key] : to;
-
-    if (to == null || isAsyncTo(to)) {
-      to = undefined;
-    }
-
-    from = react_spring_shared_esm_is.obj(from) ? from[key] : from;
-
-    if (from == null) {
-      from = undefined;
-    }
-
-    const range = {
-      to,
-      from
-    };
-
-    if (!hasAnimated(this)) {
-      if (props.reverse) [to, from] = [from, to];
-      from = getFluidValue(from);
-
-      if (!react_spring_shared_esm_is.und(from)) {
-        this._set(from);
-      } else if (!getAnimated(this)) {
-        this._set(to);
-      }
-    }
-
-    return range;
-  }
-
-  _update(_ref, isLoop) {
-    let props = react_spring_core_esm_extends({}, _ref);
-
-    const {
-      key,
-      defaultProps
-    } = this;
-    if (props.default) Object.assign(defaultProps, getDefaultProps(props, (value, prop) => /^on/.test(prop) ? resolveProp(value, key) : value));
-    mergeActiveFn(this, props, 'onProps');
-    sendEvent(this, 'onProps', props, this);
-
-    const range = this._prepareNode(props);
-
-    if (Object.isFrozen(this)) {
-      throw Error('Cannot animate a `SpringValue` object that is frozen. ' + 'Did you forget to pass your component to `animated(...)` before animating its props?');
-    }
-
-    const state = this._state;
-    return scheduleProps(++this._lastCallId, {
-      key,
-      props,
-      defaultProps,
-      state,
-      actions: {
-        pause: () => {
-          if (!isPaused(this)) {
-            setPausedBit(this, true);
-            flushCalls(state.pauseQueue);
-            sendEvent(this, 'onPause', getFinishedResult(this, checkFinished(this, this.animation.to)), this);
-          }
-        },
-        resume: () => {
-          if (isPaused(this)) {
-            setPausedBit(this, false);
-
-            if (isAnimating(this)) {
-              this._resume();
-            }
-
-            flushCalls(state.resumeQueue);
-            sendEvent(this, 'onResume', getFinishedResult(this, checkFinished(this, this.animation.to)), this);
-          }
-        },
-        start: this._merge.bind(this, range)
-      }
-    }).then(result => {
-      if (props.loop && result.finished && !(isLoop && result.noop)) {
-        const nextProps = createLoopUpdate(props);
-
-        if (nextProps) {
-          return this._update(nextProps, true);
-        }
-      }
-
-      return result;
-    });
-  }
-
-  _merge(range, props, resolve) {
-    if (props.cancel) {
-      this.stop(true);
-      return resolve(getCancelledResult(this));
-    }
-
-    const hasToProp = !react_spring_shared_esm_is.und(range.to);
-    const hasFromProp = !react_spring_shared_esm_is.und(range.from);
-
-    if (hasToProp || hasFromProp) {
-      if (props.callId > this._lastToId) {
-        this._lastToId = props.callId;
-      } else {
-        return resolve(getCancelledResult(this));
-      }
-    }
-
-    const {
-      key,
-      defaultProps,
-      animation: anim
-    } = this;
-    const {
-      to: prevTo,
-      from: prevFrom
-    } = anim;
-    let {
-      to = prevTo,
-      from = prevFrom
-    } = range;
-
-    if (hasFromProp && !hasToProp && (!props.default || react_spring_shared_esm_is.und(to))) {
-      to = from;
-    }
-
-    if (props.reverse) [to, from] = [from, to];
-    const hasFromChanged = !isEqual(from, prevFrom);
-
-    if (hasFromChanged) {
-      anim.from = from;
-    }
-
-    from = getFluidValue(from);
-    const hasToChanged = !isEqual(to, prevTo);
-
-    if (hasToChanged) {
-      this._focus(to);
-    }
-
-    const hasAsyncTo = isAsyncTo(props.to);
-    const {
-      config
-    } = anim;
-    const {
-      decay,
-      velocity
-    } = config;
-
-    if (hasToProp || hasFromProp) {
-      config.velocity = 0;
-    }
-
-    if (props.config && !hasAsyncTo) {
-      mergeConfig(config, callProp(props.config, key), props.config !== defaultProps.config ? callProp(defaultProps.config, key) : void 0);
-    }
-
-    let node = getAnimated(this);
-
-    if (!node || react_spring_shared_esm_is.und(to)) {
-      return resolve(getFinishedResult(this, true));
-    }
-
-    const reset = react_spring_shared_esm_is.und(props.reset) ? hasFromProp && !props.default : !react_spring_shared_esm_is.und(from) && matchProp(props.reset, key);
-    const value = reset ? from : this.get();
-    const goal = computeGoal(to);
-    const isAnimatable = react_spring_shared_esm_is.num(goal) || react_spring_shared_esm_is.arr(goal) || isAnimatedString(goal);
-    const immediate = !hasAsyncTo && (!isAnimatable || matchProp(defaultProps.immediate || props.immediate, key));
-
-    if (hasToChanged) {
-      const nodeType = getAnimatedType(to);
-
-      if (nodeType !== node.constructor) {
-        if (immediate) {
-          node = this._set(goal);
-        } else throw Error(`Cannot animate between ${node.constructor.name} and ${nodeType.name}, as the "to" prop suggests`);
-      }
-    }
-
-    const goalType = node.constructor;
-    let started = hasFluidValue(to);
-    let finished = false;
-
-    if (!started) {
-      const hasValueChanged = reset || !hasAnimated(this) && hasFromChanged;
-
-      if (hasToChanged || hasValueChanged) {
-        finished = isEqual(computeGoal(value), goal);
-        started = !finished;
-      }
-
-      if (!isEqual(anim.immediate, immediate) && !immediate || !isEqual(config.decay, decay) || !isEqual(config.velocity, velocity)) {
-        started = true;
-      }
-    }
-
-    if (finished && isAnimating(this)) {
-      if (anim.changed && !reset) {
-        started = true;
-      } else if (!started) {
-        this._stop(prevTo);
-      }
-    }
-
-    if (!hasAsyncTo) {
-      if (started || hasFluidValue(prevTo)) {
-        anim.values = node.getPayload();
-        anim.toValues = hasFluidValue(to) ? null : goalType == AnimatedString ? [1] : react_spring_shared_esm_toArray(goal);
-      }
-
-      if (anim.immediate != immediate) {
-        anim.immediate = immediate;
-
-        if (!immediate && !reset) {
-          this._set(prevTo);
-        }
-      }
-
-      if (started) {
-        const {
-          onRest
-        } = anim;
-        react_spring_shared_esm_each(ACTIVE_EVENTS, type => mergeActiveFn(this, props, type));
-        const result = getFinishedResult(this, checkFinished(this, prevTo));
-        flushCalls(this._pendingCalls, result);
-
-        this._pendingCalls.add(resolve);
-
-        if (anim.changed) raf.batchedUpdates(() => {
-          anim.changed = !reset;
-          onRest == null ? void 0 : onRest(result, this);
-
-          if (reset) {
-            callProp(defaultProps.onRest, result);
-          } else {
-            anim.onStart == null ? void 0 : anim.onStart(result, this);
-          }
-        });
-      }
-    }
-
-    if (reset) {
-      this._set(value);
-    }
-
-    if (hasAsyncTo) {
-      resolve(runAsync(props.to, props, this._state, this));
-    } else if (started) {
-      this._start();
-    } else if (isAnimating(this) && !hasToChanged) {
-      this._pendingCalls.add(resolve);
-    } else {
-      resolve(getNoopResult(value));
-    }
-  }
-
-  _focus(value) {
-    const anim = this.animation;
-
-    if (value !== anim.to) {
-      if (getFluidObservers(this)) {
-        this._detach();
-      }
-
-      anim.to = value;
-
-      if (getFluidObservers(this)) {
-        this._attach();
-      }
-    }
-  }
-
-  _attach() {
-    let priority = 0;
-    const {
-      to
-    } = this.animation;
-
-    if (hasFluidValue(to)) {
-      react_spring_shared_esm_addFluidObserver(to, this);
-
-      if (isFrameValue(to)) {
-        priority = to.priority + 1;
-      }
-    }
-
-    this.priority = priority;
-  }
-
-  _detach() {
-    const {
-      to
-    } = this.animation;
-
-    if (hasFluidValue(to)) {
-      removeFluidObserver(to, this);
-    }
-  }
-
-  _set(arg, idle = true) {
-    const value = getFluidValue(arg);
-
-    if (!react_spring_shared_esm_is.und(value)) {
-      const oldNode = getAnimated(this);
-
-      if (!oldNode || !isEqual(value, oldNode.getValue())) {
-        const nodeType = getAnimatedType(value);
-
-        if (!oldNode || oldNode.constructor != nodeType) {
-          setAnimated(this, nodeType.create(value));
-        } else {
-          oldNode.setValue(value);
-        }
-
-        if (oldNode) {
-          raf.batchedUpdates(() => {
-            this._onChange(value, idle);
-          });
-        }
-      }
-    }
-
-    return getAnimated(this);
-  }
-
-  _onStart() {
-    const anim = this.animation;
-
-    if (!anim.changed) {
-      anim.changed = true;
-      sendEvent(this, 'onStart', getFinishedResult(this, checkFinished(this, anim.to)), this);
-    }
-  }
-
-  _onChange(value, idle) {
-    if (!idle) {
-      this._onStart();
-
-      callProp(this.animation.onChange, value, this);
-    }
-
-    callProp(this.defaultProps.onChange, value, this);
-
-    super._onChange(value, idle);
-  }
-
-  _start() {
-    const anim = this.animation;
-    getAnimated(this).reset(getFluidValue(anim.to));
-
-    if (!anim.immediate) {
-      anim.fromValues = anim.values.map(node => node.lastPosition);
-    }
-
-    if (!isAnimating(this)) {
-      setActiveBit(this, true);
-
-      if (!isPaused(this)) {
-        this._resume();
-      }
-    }
-  }
-
-  _resume() {
-    if (globals.skipAnimation) {
-      this.finish();
-    } else {
-      frameLoop.start(this);
-    }
-  }
-
-  _stop(goal, cancel) {
-    if (isAnimating(this)) {
-      setActiveBit(this, false);
-      const anim = this.animation;
-      react_spring_shared_esm_each(anim.values, node => {
-        node.done = true;
-      });
-
-      if (anim.toValues) {
-        anim.onChange = anim.onPause = anim.onResume = undefined;
-      }
-
-      callFluidObservers(this, {
-        type: 'idle',
-        parent: this
-      });
-      const result = cancel ? getCancelledResult(this.get()) : getFinishedResult(this.get(), checkFinished(this, goal != null ? goal : anim.to));
-      flushCalls(this._pendingCalls, result);
-
-      if (anim.changed) {
-        anim.changed = false;
-        sendEvent(this, 'onRest', result, this);
-      }
-    }
-  }
-
-}
-
-function checkFinished(target, to) {
-  const goal = computeGoal(to);
-  const value = computeGoal(target.get());
-  return isEqual(value, goal);
-}
-
-function createLoopUpdate(props, loop = props.loop, to = props.to) {
-  let loopRet = callProp(loop);
-
-  if (loopRet) {
-    const overrides = loopRet !== true && inferTo(loopRet);
-    const reverse = (overrides || props).reverse;
-    const reset = !overrides || overrides.reset;
-    return createUpdate(react_spring_core_esm_extends({}, props, {
-      loop,
-      default: false,
-      pause: undefined,
-      to: !reverse || isAsyncTo(to) ? to : undefined,
-      from: reset ? props.from : undefined,
-      reset
-    }, overrides));
-  }
-}
-function createUpdate(props) {
-  const {
-    to,
-    from
-  } = props = inferTo(props);
-  const keys = new Set();
-  if (react_spring_shared_esm_is.obj(to)) findDefined(to, keys);
-  if (react_spring_shared_esm_is.obj(from)) findDefined(from, keys);
-  props.keys = keys.size ? Array.from(keys) : null;
-  return props;
-}
-function declareUpdate(props) {
-  const update = createUpdate(props);
-
-  if (is.und(update.default)) {
-    update.default = getDefaultProps(update);
-  }
-
-  return update;
-}
-
-function findDefined(values, keys) {
-  react_spring_shared_esm_eachProp(values, (value, key) => value != null && keys.add(key));
-}
-
-const ACTIVE_EVENTS = ['onStart', 'onRest', 'onChange', 'onPause', 'onResume'];
-
-function mergeActiveFn(target, props, type) {
-  target.animation[type] = props[type] !== getDefaultProp(props, type) ? resolveProp(props[type], target.key) : undefined;
-}
-
-function sendEvent(target, type, ...args) {
-  var _target$animation$typ, _target$animation, _target$defaultProps$, _target$defaultProps;
-
-  (_target$animation$typ = (_target$animation = target.animation)[type]) == null ? void 0 : _target$animation$typ.call(_target$animation, ...args);
-  (_target$defaultProps$ = (_target$defaultProps = target.defaultProps)[type]) == null ? void 0 : _target$defaultProps$.call(_target$defaultProps, ...args);
-}
-
-const BATCHED_EVENTS = ['onStart', 'onChange', 'onRest'];
-let nextId = 1;
-class Controller {
-  constructor(props, flush) {
-    this.id = nextId++;
-    this.springs = {};
-    this.queue = [];
-    this.ref = void 0;
-    this._flush = void 0;
-    this._initialProps = void 0;
-    this._lastAsyncId = 0;
-    this._active = new Set();
-    this._changed = new Set();
-    this._started = false;
-    this._item = void 0;
-    this._state = {
-      paused: false,
-      pauseQueue: new Set(),
-      resumeQueue: new Set(),
-      timeouts: new Set()
-    };
-    this._events = {
-      onStart: new Map(),
-      onChange: new Map(),
-      onRest: new Map()
-    };
-    this._onFrame = this._onFrame.bind(this);
-
-    if (flush) {
-      this._flush = flush;
-    }
-
-    if (props) {
-      this.start(react_spring_core_esm_extends({
-        default: true
-      }, props));
-    }
-  }
-
-  get idle() {
-    return !this._state.asyncTo && Object.values(this.springs).every(spring => {
-      return spring.idle && !spring.isDelayed && !spring.isPaused;
-    });
-  }
-
-  get item() {
-    return this._item;
-  }
-
-  set item(item) {
-    this._item = item;
-  }
-
-  get() {
-    const values = {};
-    this.each((spring, key) => values[key] = spring.get());
-    return values;
-  }
-
-  set(values) {
-    for (const key in values) {
-      const value = values[key];
-
-      if (!react_spring_shared_esm_is.und(value)) {
-        this.springs[key].set(value);
-      }
-    }
-  }
-
-  update(props) {
-    if (props) {
-      this.queue.push(createUpdate(props));
-    }
-
-    return this;
-  }
-
-  start(props) {
-    let {
-      queue
-    } = this;
-
-    if (props) {
-      queue = react_spring_shared_esm_toArray(props).map(createUpdate);
-    } else {
-      this.queue = [];
-    }
-
-    if (this._flush) {
-      return this._flush(this, queue);
-    }
-
-    prepareKeys(this, queue);
-    return flushUpdateQueue(this, queue);
-  }
-
-  stop(arg, keys) {
-    if (arg !== !!arg) {
-      keys = arg;
-    }
-
-    if (keys) {
-      const springs = this.springs;
-      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].stop(!!arg));
-    } else {
-      stopAsync(this._state, this._lastAsyncId);
-      this.each(spring => spring.stop(!!arg));
-    }
-
-    return this;
-  }
-
-  pause(keys) {
-    if (react_spring_shared_esm_is.und(keys)) {
-      this.start({
-        pause: true
-      });
-    } else {
-      const springs = this.springs;
-      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].pause());
-    }
-
-    return this;
-  }
-
-  resume(keys) {
-    if (react_spring_shared_esm_is.und(keys)) {
-      this.start({
-        pause: false
-      });
-    } else {
-      const springs = this.springs;
-      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].resume());
-    }
-
-    return this;
-  }
-
-  each(iterator) {
-    react_spring_shared_esm_eachProp(this.springs, iterator);
-  }
-
-  _onFrame() {
-    const {
-      onStart,
-      onChange,
-      onRest
-    } = this._events;
-    const active = this._active.size > 0;
-    const changed = this._changed.size > 0;
-
-    if (active && !this._started || changed && !this._started) {
-      this._started = true;
-      flush(onStart, ([onStart, result]) => {
-        result.value = this.get();
-        onStart(result, this, this._item);
-      });
-    }
-
-    const idle = !active && this._started;
-    const values = changed || idle && onRest.size ? this.get() : null;
-
-    if (changed && onChange.size) {
-      flush(onChange, ([onChange, result]) => {
-        result.value = values;
-        onChange(result, this, this._item);
-      });
-    }
-
-    if (idle) {
-      this._started = false;
-      flush(onRest, ([onRest, result]) => {
-        result.value = values;
-        onRest(result, this, this._item);
-      });
-    }
-  }
-
-  eventObserved(event) {
-    if (event.type == 'change') {
-      this._changed.add(event.parent);
-
-      if (!event.idle) {
-        this._active.add(event.parent);
-      }
-    } else if (event.type == 'idle') {
-      this._active.delete(event.parent);
-    } else return;
-
-    raf.onFrame(this._onFrame);
-  }
-
-}
-function flushUpdateQueue(ctrl, queue) {
-  return Promise.all(queue.map(props => flushUpdate(ctrl, props))).then(results => getCombinedResult(ctrl, results));
-}
-async function flushUpdate(ctrl, props, isLoop) {
-  const {
-    keys,
-    to,
-    from,
-    loop,
-    onRest,
-    onResolve
-  } = props;
-  const defaults = react_spring_shared_esm_is.obj(props.default) && props.default;
-
-  if (loop) {
-    props.loop = false;
-  }
-
-  if (to === false) props.to = null;
-  if (from === false) props.from = null;
-  const asyncTo = react_spring_shared_esm_is.arr(to) || react_spring_shared_esm_is.fun(to) ? to : undefined;
-
-  if (asyncTo) {
-    props.to = undefined;
-    props.onRest = undefined;
-
-    if (defaults) {
-      defaults.onRest = undefined;
-    }
-  } else {
-    react_spring_shared_esm_each(BATCHED_EVENTS, key => {
-      const handler = props[key];
-
-      if (react_spring_shared_esm_is.fun(handler)) {
-        const queue = ctrl['_events'][key];
-
-        props[key] = ({
-          finished,
-          cancelled
-        }) => {
-          const result = queue.get(handler);
-
-          if (result) {
-            if (!finished) result.finished = false;
-            if (cancelled) result.cancelled = true;
-          } else {
-            queue.set(handler, {
-              value: null,
-              finished: finished || false,
-              cancelled: cancelled || false
-            });
-          }
-        };
-
-        if (defaults) {
-          defaults[key] = props[key];
-        }
-      }
-    });
-  }
-
-  const state = ctrl['_state'];
-
-  if (props.pause === !state.paused) {
-    state.paused = props.pause;
-    flushCalls(props.pause ? state.pauseQueue : state.resumeQueue);
-  } else if (state.paused) {
-    props.pause = true;
-  }
-
-  const promises = (keys || Object.keys(ctrl.springs)).map(key => ctrl.springs[key].start(props));
-  const cancel = props.cancel === true || getDefaultProp(props, 'cancel') === true;
-
-  if (asyncTo || cancel && state.asyncId) {
-    promises.push(scheduleProps(++ctrl['_lastAsyncId'], {
-      props,
-      state,
-      actions: {
-        pause: react_spring_shared_esm_noop,
-        resume: react_spring_shared_esm_noop,
-
-        start(props, resolve) {
-          if (cancel) {
-            stopAsync(state, ctrl['_lastAsyncId']);
-            resolve(getCancelledResult(ctrl));
-          } else {
-            props.onRest = onRest;
-            resolve(runAsync(asyncTo, props, state, ctrl));
-          }
-        }
-
-      }
-    }));
-  }
-
-  if (state.paused) {
-    await new Promise(resume => {
-      state.resumeQueue.add(resume);
-    });
-  }
-
-  const result = getCombinedResult(ctrl, await Promise.all(promises));
-
-  if (loop && result.finished && !(isLoop && result.noop)) {
-    const nextProps = createLoopUpdate(props, loop, to);
-
-    if (nextProps) {
-      prepareKeys(ctrl, [nextProps]);
-      return flushUpdate(ctrl, nextProps, true);
-    }
-  }
-
-  if (onResolve) {
-    raf.batchedUpdates(() => onResolve(result, ctrl, ctrl.item));
-  }
-
-  return result;
-}
-function getSprings(ctrl, props) {
-  const springs = react_spring_core_esm_extends({}, ctrl.springs);
-
-  if (props) {
-    each(toArray(props), props => {
-      if (is.und(props.keys)) {
-        props = createUpdate(props);
-      }
-
-      if (!is.obj(props.to)) {
-        props = react_spring_core_esm_extends({}, props, {
-          to: undefined
-        });
-      }
-
-      prepareSprings(springs, props, key => {
-        return createSpring(key);
-      });
-    });
-  }
-
-  setSprings(ctrl, springs);
-  return springs;
-}
-function setSprings(ctrl, springs) {
-  eachProp(springs, (spring, key) => {
-    if (!ctrl.springs[key]) {
-      ctrl.springs[key] = spring;
-      addFluidObserver(spring, ctrl);
-    }
-  });
-}
-
-function createSpring(key, observer) {
-  const spring = new SpringValue();
-  spring.key = key;
-
-  if (observer) {
-    react_spring_shared_esm_addFluidObserver(spring, observer);
-  }
-
-  return spring;
-}
-
-function prepareSprings(springs, props, create) {
-  if (props.keys) {
-    react_spring_shared_esm_each(props.keys, key => {
-      const spring = springs[key] || (springs[key] = create(key));
-      spring['_prepareNode'](props);
-    });
-  }
-}
-
-function prepareKeys(ctrl, queue) {
-  react_spring_shared_esm_each(queue, props => {
-    prepareSprings(ctrl.springs, props, key => {
-      return createSpring(key, ctrl);
-    });
-  });
-}
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-const _excluded$3 = ["children"];
-const SpringContext = _ref => {
-  let {
-    children
-  } = _ref,
-      props = _objectWithoutPropertiesLoose(_ref, _excluded$3);
-
-  const inherited = (0,external_React_.useContext)(react_spring_core_esm_ctx);
-  const pause = props.pause || !!inherited.pause,
-        immediate = props.immediate || !!inherited.immediate;
-  props = useMemoOne(() => ({
-    pause,
-    immediate
-  }), [pause, immediate]);
-  const {
-    Provider
-  } = react_spring_core_esm_ctx;
-  return external_React_.createElement(Provider, {
-    value: props
-  }, children);
-};
-const react_spring_core_esm_ctx = makeContext(SpringContext, {});
-SpringContext.Provider = react_spring_core_esm_ctx.Provider;
-SpringContext.Consumer = react_spring_core_esm_ctx.Consumer;
-
-function makeContext(target, init) {
-  Object.assign(target, external_React_.createContext(init));
-  target.Provider._context = target;
-  target.Consumer._context = target;
-  return target;
-}
-
-const SpringRef = () => {
-  const current = [];
-
-  const SpringRef = function SpringRef(props) {
-    deprecateDirectCall();
-    const results = [];
-    each(current, (ctrl, i) => {
-      if (is.und(props)) {
-        results.push(ctrl.start());
-      } else {
-        const update = _getProps(props, ctrl, i);
-
-        if (update) {
-          results.push(ctrl.start(update));
-        }
-      }
-    });
-    return results;
-  };
-
-  SpringRef.current = current;
-
-  SpringRef.add = function (ctrl) {
-    if (!current.includes(ctrl)) {
-      current.push(ctrl);
-    }
-  };
-
-  SpringRef.delete = function (ctrl) {
-    const i = current.indexOf(ctrl);
-    if (~i) current.splice(i, 1);
-  };
-
-  SpringRef.pause = function () {
-    each(current, ctrl => ctrl.pause(...arguments));
-    return this;
-  };
-
-  SpringRef.resume = function () {
-    each(current, ctrl => ctrl.resume(...arguments));
-    return this;
-  };
-
-  SpringRef.set = function (values) {
-    each(current, ctrl => ctrl.set(values));
-  };
-
-  SpringRef.start = function (props) {
-    const results = [];
-    each(current, (ctrl, i) => {
-      if (is.und(props)) {
-        results.push(ctrl.start());
-      } else {
-        const update = this._getProps(props, ctrl, i);
-
-        if (update) {
-          results.push(ctrl.start(update));
-        }
-      }
-    });
-    return results;
-  };
-
-  SpringRef.stop = function () {
-    each(current, ctrl => ctrl.stop(...arguments));
-    return this;
-  };
-
-  SpringRef.update = function (props) {
-    each(current, (ctrl, i) => ctrl.update(this._getProps(props, ctrl, i)));
-    return this;
-  };
-
-  const _getProps = function _getProps(arg, ctrl, index) {
-    return is.fun(arg) ? arg(index, ctrl) : arg;
-  };
-
-  SpringRef._getProps = _getProps;
-  return SpringRef;
-};
-
-function useSprings(length, props, deps) {
-  const propsFn = is.fun(props) && props;
-  if (propsFn && !deps) deps = [];
-  const ref = useMemo(() => propsFn || arguments.length == 3 ? SpringRef() : void 0, []);
-  const layoutId = useRef(0);
-  const forceUpdate = useForceUpdate();
-  const state = useMemo(() => ({
-    ctrls: [],
-    queue: [],
-
-    flush(ctrl, updates) {
-      const springs = getSprings(ctrl, updates);
-      const canFlushSync = layoutId.current > 0 && !state.queue.length && !Object.keys(springs).some(key => !ctrl.springs[key]);
-      return canFlushSync ? flushUpdateQueue(ctrl, updates) : new Promise(resolve => {
-        setSprings(ctrl, springs);
-        state.queue.push(() => {
-          resolve(flushUpdateQueue(ctrl, updates));
-        });
-        forceUpdate();
-      });
-    }
-
-  }), []);
-  const ctrls = useRef([...state.ctrls]);
-  const updates = [];
-  const prevLength = usePrev(length) || 0;
-  useMemo(() => {
-    each(ctrls.current.slice(length, prevLength), ctrl => {
-      detachRefs(ctrl, ref);
-      ctrl.stop(true);
-    });
-    ctrls.current.length = length;
-    declareUpdates(prevLength, length);
-  }, [length]);
-  useMemo(() => {
-    declareUpdates(0, Math.min(prevLength, length));
-  }, deps);
-
-  function declareUpdates(startIndex, endIndex) {
-    for (let i = startIndex; i < endIndex; i++) {
-      const ctrl = ctrls.current[i] || (ctrls.current[i] = new Controller(null, state.flush));
-      const update = propsFn ? propsFn(i, ctrl) : props[i];
-
-      if (update) {
-        updates[i] = declareUpdate(update);
-      }
-    }
-  }
-
-  const springs = ctrls.current.map((ctrl, i) => getSprings(ctrl, updates[i]));
-  const context = useContext(SpringContext);
-  const prevContext = usePrev(context);
-  const hasContext = context !== prevContext && hasProps(context);
-  useIsomorphicLayoutEffect(() => {
-    layoutId.current++;
-    state.ctrls = ctrls.current;
-    const {
-      queue
-    } = state;
-
-    if (queue.length) {
-      state.queue = [];
-      each(queue, cb => cb());
-    }
-
-    each(ctrls.current, (ctrl, i) => {
-      ref == null ? void 0 : ref.add(ctrl);
-
-      if (hasContext) {
-        ctrl.start({
-          default: context
-        });
-      }
-
-      const update = updates[i];
-
-      if (update) {
-        replaceRef(ctrl, update.ref);
-
-        if (ctrl.ref) {
-          ctrl.queue.push(update);
-        } else {
-          ctrl.start(update);
-        }
-      }
-    });
-  });
-  useOnce(() => () => {
-    each(state.ctrls, ctrl => ctrl.stop(true));
-  });
-  const values = springs.map(x => react_spring_core_esm_extends({}, x));
-  return ref ? [values, ref] : values;
-}
-
-function useSpring(props, deps) {
-  const isFn = is.fun(props);
-  const [[values], ref] = useSprings(1, isFn ? props : [props], isFn ? deps || [] : deps);
-  return isFn || arguments.length == 2 ? [values, ref] : values;
-}
-
-const initSpringRef = () => SpringRef();
-
-const useSpringRef = () => useState(initSpringRef)[0];
-
-function useTrail(length, propsArg, deps) {
-  var _passedRef;
-
-  const propsFn = is.fun(propsArg) && propsArg;
-  if (propsFn && !deps) deps = [];
-  let reverse = true;
-  let passedRef = undefined;
-  const result = useSprings(length, (i, ctrl) => {
-    const props = propsFn ? propsFn(i, ctrl) : propsArg;
-    passedRef = props.ref;
-    reverse = reverse && props.reverse;
-    return props;
-  }, deps || [{}]);
-  const ref = (_passedRef = passedRef) != null ? _passedRef : result[1];
-  useIsomorphicLayoutEffect(() => {
-    each(ref.current, (ctrl, i) => {
-      const parent = ref.current[i + (reverse ? 1 : -1)];
-
-      if (parent) {
-        ctrl.start({
-          to: parent.springs
-        });
-      } else {
-        ctrl.start();
-      }
-    });
-  }, deps);
-
-  if (propsFn || arguments.length == 3) {
-    ref['_getProps'] = (propsArg, ctrl, i) => {
-      const props = is.fun(propsArg) ? propsArg(i, ctrl) : propsArg;
-
-      if (props) {
-        const parent = ref.current[i + (props.reverse ? 1 : -1)];
-        if (parent) props.to = parent.springs;
-        return props;
-      }
-    };
-
-    return result;
-  }
-
-  ref['start'] = propsArg => {
-    const results = [];
-    each(ref.current, (ctrl, i) => {
-      const props = is.fun(propsArg) ? propsArg(i, ctrl) : propsArg;
-      const parent = ref.current[i + (reverse ? 1 : -1)];
-
-      if (parent) {
-        results.push(ctrl.start(react_spring_core_esm_extends({}, props, {
-          to: parent.springs
-        })));
-      } else {
-        results.push(ctrl.start(react_spring_core_esm_extends({}, props)));
-      }
-    });
-    return results;
-  };
-
-  return result[0];
-}
-
-let TransitionPhase;
-
-(function (TransitionPhase) {
-  TransitionPhase["MOUNT"] = "mount";
-  TransitionPhase["ENTER"] = "enter";
-  TransitionPhase["UPDATE"] = "update";
-  TransitionPhase["LEAVE"] = "leave";
-})(TransitionPhase || (TransitionPhase = {}));
-
-function useTransition(data, props, deps) {
-  const propsFn = is.fun(props) && props;
-  const {
-    reset,
-    sort,
-    trail = 0,
-    expires = true,
-    exitBeforeEnter = false,
-    onDestroyed,
-    ref: propsRef,
-    config: propsConfig
-  } = propsFn ? propsFn() : props;
-  const ref = useMemo(() => propsFn || arguments.length == 3 ? SpringRef() : void 0, []);
-  const items = toArray(data);
-  const transitions = [];
-  const usedTransitions = useRef(null);
-  const prevTransitions = reset ? null : usedTransitions.current;
-  useIsomorphicLayoutEffect(() => {
-    usedTransitions.current = transitions;
-  });
-  useOnce(() => {
-    each(transitions, t => {
-      ref == null ? void 0 : ref.add(t.ctrl);
-      t.ctrl.ref = ref;
-    });
-    return () => {
-      each(usedTransitions.current, t => {
-        if (t.expired) {
-          clearTimeout(t.expirationId);
-        }
-
-        detachRefs(t.ctrl, ref);
-        t.ctrl.stop(true);
-      });
-    };
-  });
-  const keys = react_spring_core_esm_getKeys(items, propsFn ? propsFn() : props, prevTransitions);
-  const expired = reset && usedTransitions.current || [];
-  useIsomorphicLayoutEffect(() => each(expired, ({
-    ctrl,
-    item,
-    key
-  }) => {
-    detachRefs(ctrl, ref);
-    callProp(onDestroyed, item, key);
-  }));
-  const reused = [];
-  if (prevTransitions) each(prevTransitions, (t, i) => {
-    if (t.expired) {
-      clearTimeout(t.expirationId);
-      expired.push(t);
-    } else {
-      i = reused[i] = keys.indexOf(t.key);
-      if (~i) transitions[i] = t;
-    }
-  });
-  each(items, (item, i) => {
-    if (!transitions[i]) {
-      transitions[i] = {
-        key: keys[i],
-        item,
-        phase: TransitionPhase.MOUNT,
-        ctrl: new Controller()
-      };
-      transitions[i].ctrl.item = item;
-    }
-  });
-
-  if (reused.length) {
-    let i = -1;
-    const {
-      leave
-    } = propsFn ? propsFn() : props;
-    each(reused, (keyIndex, prevIndex) => {
-      const t = prevTransitions[prevIndex];
-
-      if (~keyIndex) {
-        i = transitions.indexOf(t);
-        transitions[i] = react_spring_core_esm_extends({}, t, {
-          item: items[keyIndex]
-        });
-      } else if (leave) {
-        transitions.splice(++i, 0, t);
-      }
-    });
-  }
-
-  if (is.fun(sort)) {
-    transitions.sort((a, b) => sort(a.item, b.item));
-  }
-
-  let delay = -trail;
-  const forceUpdate = useForceUpdate();
-  const defaultProps = getDefaultProps(props);
-  const changes = new Map();
-  const exitingTransitions = useRef(new Map());
-  const forceChange = useRef(false);
-  each(transitions, (t, i) => {
-    const key = t.key;
-    const prevPhase = t.phase;
-    const p = propsFn ? propsFn() : props;
-    let to;
-    let phase;
-    let propsDelay = callProp(p.delay || 0, key);
-
-    if (prevPhase == TransitionPhase.MOUNT) {
-      to = p.enter;
-      phase = TransitionPhase.ENTER;
-    } else {
-      const isLeave = keys.indexOf(key) < 0;
-
-      if (prevPhase != TransitionPhase.LEAVE) {
-        if (isLeave) {
-          to = p.leave;
-          phase = TransitionPhase.LEAVE;
-        } else if (to = p.update) {
-          phase = TransitionPhase.UPDATE;
-        } else return;
-      } else if (!isLeave) {
-        to = p.enter;
-        phase = TransitionPhase.ENTER;
-      } else return;
-    }
-
-    to = callProp(to, t.item, i);
-    to = is.obj(to) ? inferTo(to) : {
-      to
-    };
-
-    if (!to.config) {
-      const config = propsConfig || defaultProps.config;
-      to.config = callProp(config, t.item, i, phase);
-    }
-
-    delay += trail;
-
-    const payload = react_spring_core_esm_extends({}, defaultProps, {
-      delay: propsDelay + delay,
-      ref: propsRef,
-      immediate: p.immediate,
-      reset: false
-    }, to);
-
-    if (phase == TransitionPhase.ENTER && is.und(payload.from)) {
-      const _p = propsFn ? propsFn() : props;
-
-      const from = is.und(_p.initial) || prevTransitions ? _p.from : _p.initial;
-      payload.from = callProp(from, t.item, i);
-    }
-
-    const {
-      onResolve
-    } = payload;
-
-    payload.onResolve = result => {
-      callProp(onResolve, result);
-      const transitions = usedTransitions.current;
-      const t = transitions.find(t => t.key === key);
-      if (!t) return;
-
-      if (result.cancelled && t.phase != TransitionPhase.UPDATE) {
-        return;
-      }
-
-      if (t.ctrl.idle) {
-        const idle = transitions.every(t => t.ctrl.idle);
-
-        if (t.phase == TransitionPhase.LEAVE) {
-          const expiry = callProp(expires, t.item);
-
-          if (expiry !== false) {
-            const expiryMs = expiry === true ? 0 : expiry;
-            t.expired = true;
-
-            if (!idle && expiryMs > 0) {
-              if (expiryMs <= 0x7fffffff) t.expirationId = setTimeout(forceUpdate, expiryMs);
-              return;
-            }
-          }
-        }
-
-        if (idle && transitions.some(t => t.expired)) {
-          exitingTransitions.current.delete(t);
-
-          if (exitBeforeEnter) {
-            forceChange.current = true;
-          }
-
-          forceUpdate();
-        }
-      }
-    };
-
-    const springs = getSprings(t.ctrl, payload);
-
-    if (phase === TransitionPhase.LEAVE && exitBeforeEnter) {
-      exitingTransitions.current.set(t, {
-        phase,
-        springs,
-        payload
-      });
-    } else {
-      changes.set(t, {
-        phase,
-        springs,
-        payload
-      });
-    }
-  });
-  const context = useContext(SpringContext);
-  const prevContext = usePrev(context);
-  const hasContext = context !== prevContext && hasProps(context);
-  useIsomorphicLayoutEffect(() => {
-    if (hasContext) {
-      each(transitions, t => {
-        t.ctrl.start({
-          default: context
-        });
-      });
-    }
-  }, [context]);
-  each(changes, (_, t) => {
-    if (exitingTransitions.current.size) {
-      const ind = transitions.findIndex(state => state.key === t.key);
-      transitions.splice(ind, 1);
-    }
-  });
-  useIsomorphicLayoutEffect(() => {
-    each(exitingTransitions.current.size ? exitingTransitions.current : changes, ({
-      phase,
-      payload
-    }, t) => {
-      const {
-        ctrl
-      } = t;
-      t.phase = phase;
-      ref == null ? void 0 : ref.add(ctrl);
-
-      if (hasContext && phase == TransitionPhase.ENTER) {
-        ctrl.start({
-          default: context
-        });
-      }
-
-      if (payload) {
-        replaceRef(ctrl, payload.ref);
-
-        if ((ctrl.ref || ref) && !forceChange.current) {
-          ctrl.update(payload);
-        } else {
-          ctrl.start(payload);
-
-          if (forceChange.current) {
-            forceChange.current = false;
-          }
-        }
-      }
-    });
-  }, reset ? void 0 : deps);
-
-  const renderTransitions = render => React.createElement(React.Fragment, null, transitions.map((t, i) => {
-    const {
-      springs
-    } = changes.get(t) || t.ctrl;
-    const elem = render(react_spring_core_esm_extends({}, springs), t.item, t, i);
-    return elem && elem.type ? React.createElement(elem.type, react_spring_core_esm_extends({}, elem.props, {
-      key: is.str(t.key) || is.num(t.key) ? t.key : t.ctrl.id,
-      ref: elem.ref
-    })) : elem;
-  }));
-
-  return ref ? [renderTransitions, ref] : renderTransitions;
-}
-let nextKey = 1;
-
-function react_spring_core_esm_getKeys(items, {
-  key,
-  keys = key
-}, prevTransitions) {
-  if (keys === null) {
-    const reused = new Set();
-    return items.map(item => {
-      const t = prevTransitions && prevTransitions.find(t => t.item === item && t.phase !== TransitionPhase.LEAVE && !reused.has(t));
-
-      if (t) {
-        reused.add(t);
-        return t.key;
-      }
-
-      return nextKey++;
-    });
-  }
-
-  return is.und(keys) ? items : is.fun(keys) ? items.map(keys) : toArray(keys);
-}
-
-const _excluded$2 = (/* unused pure expression or super */ null && (["children"]));
-function Spring(_ref) {
-  let {
-    children
-  } = _ref,
-      props = _objectWithoutPropertiesLoose(_ref, _excluded$2);
-
-  return children(useSpring(props));
-}
-
-const _excluded$1 = (/* unused pure expression or super */ null && (["items", "children"]));
-function Trail(_ref) {
-  let {
-    items,
-    children
-  } = _ref,
-      props = _objectWithoutPropertiesLoose(_ref, _excluded$1);
-
-  const trails = useTrail(items.length, props);
-  return items.map((item, index) => {
-    const result = children(item, index);
-    return is.fun(result) ? result(trails[index]) : result;
-  });
-}
-
-const _excluded = (/* unused pure expression or super */ null && (["items", "children"]));
-function Transition(_ref) {
-  let {
-    items,
-    children
-  } = _ref,
-      props = _objectWithoutPropertiesLoose(_ref, _excluded);
-
-  return useTransition(items, props)(children);
-}
-
-class Interpolation extends FrameValue {
-  constructor(source, args) {
-    super();
-    this.key = void 0;
-    this.idle = true;
-    this.calc = void 0;
-    this._active = new Set();
-    this.source = source;
-    this.calc = createInterpolator(...args);
-
-    const value = this._get();
-
-    const nodeType = getAnimatedType(value);
-    setAnimated(this, nodeType.create(value));
-  }
-
-  advance(_dt) {
-    const value = this._get();
-
-    const oldValue = this.get();
-
-    if (!isEqual(value, oldValue)) {
-      getAnimated(this).setValue(value);
-
-      this._onChange(value, this.idle);
-    }
-
-    if (!this.idle && checkIdle(this._active)) {
-      becomeIdle(this);
-    }
-  }
-
-  _get() {
-    const inputs = react_spring_shared_esm_is.arr(this.source) ? this.source.map(getFluidValue) : react_spring_shared_esm_toArray(getFluidValue(this.source));
-    return this.calc(...inputs);
-  }
-
-  _start() {
-    if (this.idle && !checkIdle(this._active)) {
-      this.idle = false;
-      react_spring_shared_esm_each(getPayload(this), node => {
-        node.done = false;
-      });
-
-      if (globals.skipAnimation) {
-        raf.batchedUpdates(() => this.advance());
-        becomeIdle(this);
-      } else {
-        frameLoop.start(this);
-      }
-    }
-  }
-
-  _attach() {
-    let priority = 1;
-    react_spring_shared_esm_each(react_spring_shared_esm_toArray(this.source), source => {
-      if (hasFluidValue(source)) {
-        react_spring_shared_esm_addFluidObserver(source, this);
-      }
-
-      if (isFrameValue(source)) {
-        if (!source.idle) {
-          this._active.add(source);
-        }
-
-        priority = Math.max(priority, source.priority + 1);
-      }
-    });
-    this.priority = priority;
-
-    this._start();
-  }
-
-  _detach() {
-    react_spring_shared_esm_each(react_spring_shared_esm_toArray(this.source), source => {
-      if (hasFluidValue(source)) {
-        removeFluidObserver(source, this);
-      }
-    });
-
-    this._active.clear();
-
-    becomeIdle(this);
-  }
-
-  eventObserved(event) {
-    if (event.type == 'change') {
-      if (event.idle) {
-        this.advance();
-      } else {
-        this._active.add(event.parent);
-
-        this._start();
-      }
-    } else if (event.type == 'idle') {
-      this._active.delete(event.parent);
-    } else if (event.type == 'priority') {
-      this.priority = react_spring_shared_esm_toArray(this.source).reduce((highest, parent) => Math.max(highest, (isFrameValue(parent) ? parent.priority : 0) + 1), 0);
-    }
-  }
-
-}
-
-function isIdle(source) {
-  return source.idle !== false;
-}
-
-function checkIdle(active) {
-  return !active.size || Array.from(active).every(isIdle);
-}
-
-function becomeIdle(self) {
-  if (!self.idle) {
-    self.idle = true;
-    react_spring_shared_esm_each(getPayload(self), node => {
-      node.done = true;
-    });
-    callFluidObservers(self, {
-      type: 'idle',
-      parent: self
-    });
-  }
-}
-
-const react_spring_core_esm_to = (source, ...args) => new Interpolation(source, args);
-const react_spring_core_esm_interpolate = (source, ...args) => (deprecateInterpolate(), new Interpolation(source, args));
-
-globals.assign({
-  createStringInterpolator: createStringInterpolator,
-  to: (source, args) => new Interpolation(source, args)
-});
-const react_spring_core_esm_update = frameLoop.advance;
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@react-spring/web/dist/react-spring-web.esm.js
-
-
-
-
-
-
-function react_spring_web_esm_objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-const react_spring_web_esm_excluded$2 = ["style", "children", "scrollTop", "scrollLeft"];
-const isCustomPropRE = /^--/;
-
-function dangerousStyleValue(name, value) {
-  if (value == null || typeof value === 'boolean' || value === '') return '';
-  if (typeof value === 'number' && value !== 0 && !isCustomPropRE.test(name) && !(isUnitlessNumber.hasOwnProperty(name) && isUnitlessNumber[name])) return value + 'px';
-  return ('' + value).trim();
-}
-
-const attributeCache = {};
-function applyAnimatedValues(instance, props) {
-  if (!instance.nodeType || !instance.setAttribute) {
-    return false;
-  }
-
-  const isFilterElement = instance.nodeName === 'filter' || instance.parentNode && instance.parentNode.nodeName === 'filter';
-
-  const _ref = props,
-        {
-    style,
-    children,
-    scrollTop,
-    scrollLeft
-  } = _ref,
-        attributes = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded$2);
-
-  const values = Object.values(attributes);
-  const names = Object.keys(attributes).map(name => isFilterElement || instance.hasAttribute(name) ? name : attributeCache[name] || (attributeCache[name] = name.replace(/([A-Z])/g, n => '-' + n.toLowerCase())));
-
-  if (children !== void 0) {
-    instance.textContent = children;
-  }
-
-  for (let name in style) {
-    if (style.hasOwnProperty(name)) {
-      const value = dangerousStyleValue(name, style[name]);
-
-      if (isCustomPropRE.test(name)) {
-        instance.style.setProperty(name, value);
-      } else {
-        instance.style[name] = value;
-      }
-    }
-  }
-
-  names.forEach((name, i) => {
-    instance.setAttribute(name, values[i]);
-  });
-
-  if (scrollTop !== void 0) {
-    instance.scrollTop = scrollTop;
-  }
-
-  if (scrollLeft !== void 0) {
-    instance.scrollLeft = scrollLeft;
-  }
-}
-let isUnitlessNumber = {
-  animationIterationCount: true,
-  borderImageOutset: true,
-  borderImageSlice: true,
-  borderImageWidth: true,
-  boxFlex: true,
-  boxFlexGroup: true,
-  boxOrdinalGroup: true,
-  columnCount: true,
-  columns: true,
-  flex: true,
-  flexGrow: true,
-  flexPositive: true,
-  flexShrink: true,
-  flexNegative: true,
-  flexOrder: true,
-  gridRow: true,
-  gridRowEnd: true,
-  gridRowSpan: true,
-  gridRowStart: true,
-  gridColumn: true,
-  gridColumnEnd: true,
-  gridColumnSpan: true,
-  gridColumnStart: true,
-  fontWeight: true,
-  lineClamp: true,
-  lineHeight: true,
-  opacity: true,
-  order: true,
-  orphans: true,
-  tabSize: true,
-  widows: true,
-  zIndex: true,
-  zoom: true,
-  fillOpacity: true,
-  floodOpacity: true,
-  stopOpacity: true,
-  strokeDasharray: true,
-  strokeDashoffset: true,
-  strokeMiterlimit: true,
-  strokeOpacity: true,
-  strokeWidth: true
-};
-
-const prefixKey = (prefix, key) => prefix + key.charAt(0).toUpperCase() + key.substring(1);
-
-const prefixes = ['Webkit', 'Ms', 'Moz', 'O'];
-isUnitlessNumber = Object.keys(isUnitlessNumber).reduce((acc, prop) => {
-  prefixes.forEach(prefix => acc[prefixKey(prefix, prop)] = acc[prop]);
-  return acc;
-}, isUnitlessNumber);
-
-const react_spring_web_esm_excluded$1 = ["x", "y", "z"];
-const domTransforms = /^(matrix|translate|scale|rotate|skew)/;
-const pxTransforms = /^(translate)/;
-const degTransforms = /^(rotate|skew)/;
-
-const addUnit = (value, unit) => react_spring_shared_esm_is.num(value) && value !== 0 ? value + unit : value;
-
-const isValueIdentity = (value, id) => react_spring_shared_esm_is.arr(value) ? value.every(v => isValueIdentity(v, id)) : react_spring_shared_esm_is.num(value) ? value === id : parseFloat(value) === id;
-
-class AnimatedStyle extends AnimatedObject {
-  constructor(_ref) {
-    let {
-      x,
-      y,
-      z
-    } = _ref,
-        style = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded$1);
-
-    const inputs = [];
-    const transforms = [];
-
-    if (x || y || z) {
-      inputs.push([x || 0, y || 0, z || 0]);
-      transforms.push(xyz => [`translate3d(${xyz.map(v => addUnit(v, 'px')).join(',')})`, isValueIdentity(xyz, 0)]);
-    }
-
-    react_spring_shared_esm_eachProp(style, (value, key) => {
-      if (key === 'transform') {
-        inputs.push([value || '']);
-        transforms.push(transform => [transform, transform === '']);
-      } else if (domTransforms.test(key)) {
-        delete style[key];
-        if (react_spring_shared_esm_is.und(value)) return;
-        const unit = pxTransforms.test(key) ? 'px' : degTransforms.test(key) ? 'deg' : '';
-        inputs.push(react_spring_shared_esm_toArray(value));
-        transforms.push(key === 'rotate3d' ? ([x, y, z, deg]) => [`rotate3d(${x},${y},${z},${addUnit(deg, unit)})`, isValueIdentity(deg, 0)] : input => [`${key}(${input.map(v => addUnit(v, unit)).join(',')})`, isValueIdentity(input, key.startsWith('scale') ? 1 : 0)]);
-      }
-    });
-
-    if (inputs.length) {
-      style.transform = new FluidTransform(inputs, transforms);
-    }
-
-    super(style);
-  }
-
-}
-
-class FluidTransform extends FluidValue {
-  constructor(inputs, transforms) {
-    super();
-    this._value = null;
-    this.inputs = inputs;
-    this.transforms = transforms;
-  }
-
-  get() {
-    return this._value || (this._value = this._get());
-  }
-
-  _get() {
-    let transform = '';
-    let identity = true;
-    react_spring_shared_esm_each(this.inputs, (input, i) => {
-      const arg1 = getFluidValue(input[0]);
-      const [t, id] = this.transforms[i](react_spring_shared_esm_is.arr(arg1) ? arg1 : input.map(getFluidValue));
-      transform += ' ' + t;
-      identity = identity && id;
-    });
-    return identity ? 'none' : transform;
-  }
-
-  observerAdded(count) {
-    if (count == 1) react_spring_shared_esm_each(this.inputs, input => react_spring_shared_esm_each(input, value => hasFluidValue(value) && react_spring_shared_esm_addFluidObserver(value, this)));
-  }
-
-  observerRemoved(count) {
-    if (count == 0) react_spring_shared_esm_each(this.inputs, input => react_spring_shared_esm_each(input, value => hasFluidValue(value) && removeFluidObserver(value, this)));
-  }
-
-  eventObserved(event) {
-    if (event.type == 'change') {
-      this._value = null;
-    }
-
-    callFluidObservers(this, event);
-  }
-
-}
-
-const primitives = ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'big', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr', 'circle', 'clipPath', 'defs', 'ellipse', 'foreignObject', 'g', 'image', 'line', 'linearGradient', 'mask', 'path', 'pattern', 'polygon', 'polyline', 'radialGradient', 'rect', 'stop', 'svg', 'text', 'tspan'];
-
-const react_spring_web_esm_excluded = ["scrollTop", "scrollLeft"];
-globals.assign({
-  batchedUpdates: external_ReactDOM_namespaceObject.unstable_batchedUpdates,
-  createStringInterpolator: createStringInterpolator,
-  colors: colors
-});
-const host = createHost(primitives, {
-  applyAnimatedValues,
-  createAnimatedStyle: style => new AnimatedStyle(style),
-  getComponentProps: _ref => {
-    let props = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded);
-
-    return props;
-  }
-});
-const animated = host.animated;
-
-
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/layout/animation.js
-/**
- * External dependencies
- */
-
-
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/hooks/commands/use-set-command-context.js
 /**
  * WordPress dependencies
  */
-
-function getAbsolutePosition(element) {
-  return {
-    top: element.offsetTop,
-    left: element.offsetLeft
-  };
-}
-const ANIMATION_DURATION = 400;
-
-/**
- * Hook used to compute the styles required to move a div into a new position.
- *
- * The way this animation works is the following:
- *  - It first renders the element as if there was no animation.
- *  - It takes a snapshot of the position of the block to use it
- *    as a destination point for the animation.
- *  - It restores the element to the previous position using a CSS transform
- *  - It uses the "resetAnimation" flag to reset the animation
- *    from the beginning in order to animate to the new destination point.
- *
- * @param {Object} $1                          Options
- * @param {*}      $1.triggerAnimationOnChange Variable used to trigger the animation if it changes.
- */
-function useMovingAnimation({
-  triggerAnimationOnChange
-}) {
-  const ref = (0,external_wp_element_namespaceObject.useRef)();
-
-  // Whenever the trigger changes, we need to take a snapshot of the current
-  // position of the block to use it as a destination point for the animation.
-  const {
-    previous,
-    prevRect
-  } = (0,external_wp_element_namespaceObject.useMemo)(() => ({
-    previous: ref.current && getAbsolutePosition(ref.current),
-    prevRect: ref.current && ref.current.getBoundingClientRect()
-  }),
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  [triggerAnimationOnChange]);
-  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    if (!previous || !ref.current) {
-      return;
-    }
-
-    // We disable the animation if the user has a preference for reduced
-    // motion.
-    const disableAnimation = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (disableAnimation) {
-      return;
-    }
-    const controller = new Controller({
-      x: 0,
-      y: 0,
-      width: prevRect.width,
-      height: prevRect.height,
-      config: {
-        duration: ANIMATION_DURATION,
-        easing: easings.easeInOutQuint
-      },
-      onChange({
-        value
-      }) {
-        if (!ref.current) {
-          return;
-        }
-        let {
-          x,
-          y,
-          width,
-          height
-        } = value;
-        x = Math.round(x);
-        y = Math.round(y);
-        width = Math.round(width);
-        height = Math.round(height);
-        const finishedMoving = x === 0 && y === 0;
-        ref.current.style.transformOrigin = 'center center';
-        ref.current.style.transform = finishedMoving ? null // Set to `null` to explicitly remove the transform.
-        : `translate3d(${x}px,${y}px,0)`;
-        ref.current.style.width = finishedMoving ? null : `${width}px`;
-        ref.current.style.height = finishedMoving ? null : `${height}px`;
-      }
-    });
-    ref.current.style.transform = undefined;
-    const destination = ref.current.getBoundingClientRect();
-    const x = Math.round(prevRect.left - destination.left);
-    const y = Math.round(prevRect.top - destination.top);
-    const width = destination.width;
-    const height = destination.height;
-    controller.start({
-      x: 0,
-      y: 0,
-      width,
-      height,
-      from: {
-        x,
-        y,
-        width: prevRect.width,
-        height: prevRect.height
-      }
-    });
-    return () => {
-      controller.stop();
-      controller.set({
-        x: 0,
-        y: 0,
-        width: prevRect.width,
-        height: prevRect.height
-      });
-    };
-  }, [previous, prevRect]);
-  return ref;
-}
-/* harmony default export */ const animation = (useMovingAnimation);
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/save-hub/index.js
-/**
- * WordPress dependencies
- */
-
 
 
 
@@ -44303,166 +44272,29 @@ function useMovingAnimation({
  */
 
 
-
-function SaveHub() {
-  const {
-    isDisabled,
-    isSaving
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      __experimentalGetDirtyEntityRecords,
-      isSavingEntityRecord
-    } = select(external_wp_coreData_namespaceObject.store);
-    const dirtyEntityRecords = __experimentalGetDirtyEntityRecords();
-    const _isSaving = dirtyEntityRecords.some(record => isSavingEntityRecord(record.kind, record.name, record.key));
-    return {
-      isSaving: _isSaving,
-      isDisabled: _isSaving || !dirtyEntityRecords.length && !isPreviewingTheme()
-    };
-  }, []);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalHStack, {
-    className: "edit-site-save-hub",
-    alignment: "right",
-    spacing: 4,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveButton, {
-      className: "edit-site-save-hub__button",
-      variant: isDisabled ? null : 'primary',
-      showTooltip: false,
-      icon: isDisabled && !isSaving ? library_check : null,
-      showReviewMessage: true,
-      __next40pxDefaultSize: true
-    })
-  });
-}
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/layout/index.js
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const {
-  useCommands
-} = lock_unlock_unlock(external_wp_coreCommands_namespaceObject.privateApis);
 const {
   useCommandContext
 } = lock_unlock_unlock(external_wp_commands_namespaceObject.privateApis);
-const {
-  useGlobalStyle: layout_useGlobalStyle
-} = lock_unlock_unlock(external_wp_blockEditor_namespaceObject.privateApis);
-const {
-  NavigableRegion: layout_NavigableRegion
-} = lock_unlock_unlock(external_wp_editor_namespaceObject.privateApis);
-const layout_ANIMATION_DURATION = 0.3;
-function Layout() {
-  // This ensures the edited entity id and type are initialized properly.
-  useInitEditedEntityFromURL();
-  useSyncCanvasModeWithURL();
-  useCommands();
-  useEditModeCommands();
-  useCommonCommands();
-  const isMobileViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium', '<');
+
+/**
+ * React hook used to set the correct command context based on the current state.
+ */
+function useSetCommandContext() {
   const {
-    isDistractionFree,
-    hasFixedToolbar,
     hasBlockSelected,
-    canvasMode,
-    previousShortcut,
-    nextShortcut,
-    hasBlockBreadcrumbs
+    canvasMode
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getAllShortcutKeyCombinations
-    } = select(external_wp_keyboardShortcuts_namespaceObject.store);
     const {
       getCanvasMode
     } = lock_unlock_unlock(select(store));
+    const {
+      getBlockSelectionStart
+    } = select(external_wp_blockEditor_namespaceObject.store);
     return {
       canvasMode: getCanvasMode(),
-      previousShortcut: getAllShortcutKeyCombinations('core/editor/previous-region'),
-      nextShortcut: getAllShortcutKeyCombinations('core/editor/next-region'),
-      hasFixedToolbar: select(external_wp_preferences_namespaceObject.store).get('core', 'fixedToolbar'),
-      isDistractionFree: select(external_wp_preferences_namespaceObject.store).get('core', 'distractionFree'),
-      hasBlockBreadcrumbs: select(external_wp_preferences_namespaceObject.store).get('core', 'showBlockBreadcrumbs'),
-      hasBlockSelected: select(external_wp_blockEditor_namespaceObject.store).getBlockSelectionStart()
+      hasBlockSelected: getBlockSelectionStart()
     };
   }, []);
-  const navigateRegionsProps = (0,external_wp_components_namespaceObject.__unstableUseNavigateRegions)({
-    previous: previousShortcut,
-    next: nextShortcut
-  });
-  const disableMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
-  const [canvasResizer, canvasSize] = (0,external_wp_compose_namespaceObject.useResizeObserver)();
-  const [fullResizer] = (0,external_wp_compose_namespaceObject.useResizeObserver)();
-  const isEditorLoading = useIsSiteEditorLoading();
-  const [isResizableFrameOversized, setIsResizableFrameOversized] = (0,external_wp_element_namespaceObject.useState)(false);
-  const {
-    key: routeKey,
-    areas,
-    widths
-  } = useLayoutAreas();
-  const animationRef = animation({
-    triggerAnimationOnChange: canvasMode + '__' + routeKey
-  });
-
-  // This determines which animation variant should apply to the header.
-  // There is also a `isDistractionFreeHovering` state that gets priority
-  // when hovering the `edit-site-layout__header-container` in distraction
-  // free mode. It's set via framer and trickles down to all the children
-  // so they can use this variant state too.
-  //
-  // TODO: The issue with this is we want to have the hover state stick when hovering
-  // a popover opened via the header. We'll probably need to lift this state to
-  // handle it ourselves. Also, focusWithin the header needs to be handled.
-  let headerAnimationState;
-  if (canvasMode === 'view') {
-    // We need 'view' to always take priority so 'isDistractionFree'
-    // doesn't bleed over into the view (sidebar) state
-    headerAnimationState = 'view';
-  } else if (isDistractionFree) {
-    headerAnimationState = 'isDistractionFree';
-  } else {
-    headerAnimationState = canvasMode; // edit, view, init
-  }
-
   // Sets the right context for the command palette
   let commandContext = 'site-editor';
   if (canvasMode === 'edit') {
@@ -44472,125 +44304,6 @@ function Layout() {
     commandContext = 'block-selection-edit';
   }
   useCommandContext(commandContext);
-  const [backgroundColor] = layout_useGlobalStyle('color.background');
-  const [gradientValue] = layout_useGlobalStyle('color.gradient');
-
-  // Synchronizing the URL with the store value of canvasMode happens in an effect
-  // This condition ensures the component is only rendered after the synchronization happens
-  // which prevents any animations due to potential canvasMode value change.
-  if (canvasMode === 'init') {
-    return null;
-  }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_commands_namespaceObject.CommandMenu, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(register, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(global, {}), fullResizer, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      ...navigateRegionsProps,
-      ref: navigateRegionsProps.ref,
-      className: dist_clsx('edit-site-layout', navigateRegionsProps.className, {
-        'is-distraction-free': isDistractionFree && canvasMode === 'edit',
-        'is-full-canvas': canvasMode === 'edit',
-        'has-fixed-toolbar': hasFixedToolbar,
-        'is-block-toolbar-visible': hasBlockSelected,
-        'has-block-breadcrumbs': hasBlockBreadcrumbs && !isDistractionFree && canvasMode === 'edit'
-      }),
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableMotion.div, {
-        className: "edit-site-layout__header-container",
-        variants: {
-          isDistractionFree: {
-            opacity: 0,
-            transition: {
-              type: 'tween',
-              delay: 0.8,
-              delayChildren: 0.8
-            } // How long to wait before the header exits
-          },
-          isDistractionFreeHovering: {
-            opacity: 1,
-            transition: {
-              type: 'tween',
-              delay: 0.2,
-              delayChildren: 0.2
-            } // How long to wait before the header shows
-          },
-          view: {
-            opacity: 1
-          },
-          edit: {
-            opacity: 1
-          }
-        },
-        whileHover: isDistractionFree ? 'isDistractionFreeHovering' : undefined,
-        animate: headerAnimationState,
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(site_hub, {
-          isTransparent: isResizableFrameOversized,
-          className: "edit-site-layout__hub"
-        })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        className: "edit-site-layout__content",
-        children: [(!isMobileViewport || !areas.mobile) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(layout_NavigableRegion, {
-          ariaLabel: (0,external_wp_i18n_namespaceObject.__)('Navigation'),
-          className: "edit-site-layout__sidebar-region",
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableAnimatePresence, {
-            children: canvasMode === 'view' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__unstableMotion.div, {
-              initial: {
-                opacity: 0
-              },
-              animate: {
-                opacity: 1
-              },
-              exit: {
-                opacity: 0
-              },
-              transition: {
-                type: 'tween',
-                duration:
-                // Disable transition in mobile to emulate a full page transition.
-                disableMotion || isMobileViewport ? 0 : layout_ANIMATION_DURATION,
-                ease: 'easeOut'
-              },
-              className: "edit-site-layout__sidebar",
-              children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarContent, {
-                routeKey: routeKey,
-                children: areas.sidebar
-              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveHub, {})]
-            })
-          })
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.EditorSnackbars, {}), isMobileViewport && areas.mobile && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-          className: "edit-site-layout__mobile",
-          children: areas.mobile
-        }), !isMobileViewport && areas.content && canvasMode !== 'edit' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-          className: "edit-site-layout__area",
-          style: {
-            maxWidth: widths?.content
-          },
-          children: areas.content
-        }), !isMobileViewport && areas.preview && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-          className: "edit-site-layout__canvas-container",
-          children: [canvasResizer, !!canvasSize.width && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-            className: dist_clsx('edit-site-layout__canvas', {
-              'is-right-aligned': isResizableFrameOversized
-            }),
-            ref: animationRef,
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ErrorBoundary, {
-              children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(resizable_frame, {
-                isReady: !isEditorLoading,
-                isFullWidth: canvasMode === 'edit',
-                defaultSize: {
-                  width: canvasSize.width - 24 /* $canvas-padding */,
-                  height: canvasSize.height
-                },
-                isOversized: isResizableFrameOversized,
-                setIsOversized: setIsResizableFrameOversized,
-                innerContentStyle: {
-                  background: gradientValue !== null && gradientValue !== void 0 ? gradientValue : backgroundColor
-                },
-                children: areas.preview
-              })
-            })
-          })]
-        })]
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SavePanel, {})]
-    })]
-  });
 }
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/app/index.js
@@ -44612,12 +44325,28 @@ function Layout() {
 
 
 
+
+
+
+
+
 const {
   RouterProvider
 } = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
 const {
   GlobalStylesProvider
 } = lock_unlock_unlock(external_wp_editor_namespaceObject.privateApis);
+function AppLayout() {
+  // This ensures the edited entity id and type are initialized properly.
+  useInitEditedEntityFromURL();
+  useEditModeCommands();
+  useCommonCommands();
+  useSetCommandContext();
+  const route = useLayoutAreas();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Layout, {
+    route: route
+  });
+}
 function App() {
   const {
     createErrorNotice
@@ -44629,7 +44358,7 @@ function App() {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SlotFillProvider, {
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(GlobalStylesProvider, {
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.UnsavedChangesWarning, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(RouterProvider, {
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Layout, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_plugins_namespaceObject.PluginArea, {
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AppLayout, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_plugins_namespaceObject.PluginArea, {
           onError: onPluginAreaError
         })]
       })]
@@ -44682,6 +44411,76 @@ function PluginSidebarMoreMenuItem(props) {
   });
 }
 /* eslint-enable jsdoc/require-param */
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/posts-app/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+const {
+  RouterProvider: posts_app_RouterProvider
+} = lock_unlock_unlock(external_wp_router_namespaceObject.privateApis);
+const {
+  GlobalStylesProvider: posts_app_GlobalStylesProvider
+} = lock_unlock_unlock(external_wp_editor_namespaceObject.privateApis);
+const defaultRoute = {
+  key: 'index',
+  areas: {
+    sidebar: 'Empty Sidebar',
+    content: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Page, {
+      children: "Welcome to Posts"
+    }),
+    preview: undefined,
+    mobile: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Page, {
+      children: "Welcome to Posts"
+    })
+  }
+};
+function PostsApp() {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(posts_app_GlobalStylesProvider, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.UnsavedChangesWarning, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(posts_app_RouterProvider, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Layout, {
+        route: defaultRoute
+      })
+    })]
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/posts.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * Initializes the "Posts Dashboard"
+ * @param {string} id DOM element id.
+ */
+
+function initializePostsDashboard(id) {
+  if (false) {}
+  const target = document.getElementById(id);
+  const root = (0,external_wp_element_namespaceObject.createRoot)(target);
+  root.render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.StrictMode, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PostsApp, {})
+  }));
+  return root;
+}
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/index.js
 /**
@@ -44765,7 +44564,9 @@ function initializeEditor(id, settings) {
   // Prevent the default browser action for files dropped outside of dropzones.
   window.addEventListener('dragover', e => e.preventDefault(), false);
   window.addEventListener('drop', e => e.preventDefault(), false);
-  root.render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(App, {}));
+  root.render( /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.StrictMode, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(App, {})
+  }));
   return root;
 }
 function reinitializeEditor() {
@@ -44776,6 +44577,10 @@ function reinitializeEditor() {
 }
 
 
+
+
+// Temporary: While the posts dashboard is being iterated on
+// it's being built in the same package as the site editor.
 
 
 })();

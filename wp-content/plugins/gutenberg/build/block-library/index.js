@@ -5192,9 +5192,6 @@ function save_save({
     url,
     width
   } = attributes;
-  if (external_wp_blockEditor_namespaceObject.RichText.isEmpty(text)) {
-    return null;
-  }
   const TagName = tagName || 'a';
   const isButtonTag = 'button' === TagName;
   const buttonType = type || 'button';
@@ -9824,7 +9821,7 @@ function comment_date_edit_Edit({
   }
   let commentDate = date instanceof Date ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("time", {
     dateTime: (0,external_wp_date_namespaceObject.dateI18n)('c', date),
-    children: (0,external_wp_date_namespaceObject.dateI18n)(format || siteFormat, date)
+    children: format === 'human-diff' ? (0,external_wp_date_namespaceObject.humanTimeDiff)(date) : (0,external_wp_date_namespaceObject.dateI18n)(format || siteFormat, date)
   }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("time", {
     children: date
   });
@@ -16964,16 +16961,6 @@ const embed_variations_variations = [{
     responsive: true
   }
 }, {
-  name: 'slideshare',
-  title: 'Slideshare',
-  icon: embedContentIcon,
-  description: (0,external_wp_i18n_namespaceObject.__)('Embed Slideshare content.'),
-  patterns: [/^https?:\/\/(.+?\.)?slideshare\.net\/.+/i],
-  attributes: {
-    providerNameSlug: 'slideshare',
-    responsive: true
-  }
-}, {
   name: 'smugmug',
   title: 'SmugMug',
   icon: embedPhotoIcon,
@@ -21792,13 +21779,19 @@ class GalleryImage extends external_wp_element_namespaceObject.Component {
             icon: chevron_left,
             onClick: isFirstItem ? undefined : onMoveBackward,
             label: (0,external_wp_i18n_namespaceObject.__)('Move image backward'),
-            "aria-disabled": isFirstItem,
+            "aria-disabled": isFirstItem
+            // Disable reason: Truly disable when image is not selected.
+            // eslint-disable-next-line no-restricted-syntax
+            ,
             disabled: !isSelected
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
             icon: chevron_right,
             onClick: isLastItem ? undefined : onMoveForward,
             label: (0,external_wp_i18n_namespaceObject.__)('Move image forward'),
-            "aria-disabled": isLastItem,
+            "aria-disabled": isLastItem
+            // Disable reason: Truly disable when image is not selected.
+            // eslint-disable-next-line no-restricted-syntax
+            ,
             disabled: !isSelected
           })]
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.ButtonGroup, {
@@ -21806,12 +21799,18 @@ class GalleryImage extends external_wp_element_namespaceObject.Component {
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
             icon: library_edit,
             onClick: this.onEdit,
-            label: (0,external_wp_i18n_namespaceObject.__)('Replace image'),
+            label: (0,external_wp_i18n_namespaceObject.__)('Replace image')
+            // Disable reason: Truly disable when image is not selected.
+            // eslint-disable-next-line no-restricted-syntax
+            ,
             disabled: !isSelected
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
             icon: close_small,
             onClick: onRemove,
-            label: (0,external_wp_i18n_namespaceObject.__)('Remove image'),
+            label: (0,external_wp_i18n_namespaceObject.__)('Remove image')
+            // Disable reason: Truly disable when image is not selected.
+            // eslint-disable-next-line no-restricted-syntax
+            ,
             disabled: !isSelected
           })]
         }), !isEditing && (isSelected || caption) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.RichText, {
@@ -39275,6 +39274,7 @@ function ConvertToLinksModal({
         children: (0,external_wp_i18n_namespaceObject.__)('Cancel')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
         variant: "primary",
+        __experimentalIsFocusable: true,
         disabled: disabled,
         onClick: onClick,
         children: (0,external_wp_i18n_namespaceObject.__)('Edit')
@@ -39553,6 +39553,7 @@ function PageListEdit({
           children: convertDescription
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
           variant: "primary",
+          __experimentalIsFocusable: true,
           disabled: !hasResolvedPages,
           onClick: convertToNavigationLinks,
           children: (0,external_wp_i18n_namespaceObject.__)('Edit')
@@ -42177,11 +42178,23 @@ const post_content_metadata = {
     align: ["wide", "full"],
     html: false,
     layout: true,
+    background: {
+      backgroundImage: true,
+      backgroundSize: true,
+      __experimentalDefaultControls: {
+        backgroundImage: true
+      }
+    },
     dimensions: {
       minHeight: true
     },
     spacing: {
-      blockGap: true
+      blockGap: true,
+      padding: true,
+      __experimentalDefaultControls: {
+        margin: false,
+        padding: false
+      }
     },
     color: {
       gradients: true,
@@ -42281,7 +42294,7 @@ function PostDateEdit({
   let postDate = date ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("time", {
     dateTime: (0,external_wp_date_namespaceObject.dateI18n)('c', date),
     ref: setPopoverAnchor,
-    children: (0,external_wp_date_namespaceObject.dateI18n)(format || siteFormat, date)
+    children: format === 'human-diff' ? (0,external_wp_date_namespaceObject.humanTimeDiff)(date) : (0,external_wp_date_namespaceObject.dateI18n)(format || siteFormat, date)
   }) : dateLabel;
   if (isLink && date) {
     postDate = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
@@ -46219,6 +46232,13 @@ const pullquote_metadata = {
   supports: {
     anchor: true,
     align: ["left", "right", "wide", "full"],
+    background: {
+      backgroundImage: true,
+      backgroundSize: true,
+      __experimentalDefaultControls: {
+        backgroundImage: true
+      }
+    },
     color: {
       gradients: true,
       background: true,
@@ -46226,6 +46246,12 @@ const pullquote_metadata = {
       __experimentalDefaultControls: {
         background: true,
         text: true
+      }
+    },
+    dimensions: {
+      minHeight: true,
+      __experimentalDefaultControls: {
+        minHeight: false
       }
     },
     spacing: {
@@ -47361,22 +47387,22 @@ function EnhancedPaginationControl({
 
 
 
+
 const CreateNewPostLink = ({
-  attributes: {
-    query: {
-      postType
-    } = {}
-  } = {}
+  postType
 }) => {
-  if (!postType) {
-    return null;
-  }
   const newPostUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('post-new.php', {
     post_type: postType
   });
+  const addNewItemLabel = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getPostType
+    } = select(external_wp_coreData_namespaceObject.store);
+    return getPostType(postType)?.labels?.add_new_item;
+  }, [postType]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     className: "wp-block-query__create-new-link",
-    children: (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.__)('<a>Add new post</a>'),
+    children: (0,external_wp_element_namespaceObject.createInterpolateElement)('<a>' + addNewItemLabel + '</a>',
     // eslint-disable-next-line jsx-a11y/anchor-has-content
     {
       a: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
@@ -47495,9 +47521,9 @@ function QueryInspectorControls(props) {
   const showParentControl = isControlAllowed(allowedControls, 'parents') && isPostTypeHierarchical;
   const showFiltersPanel = showTaxControl || showAuthorControl || showSearchControl || showParentControl;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockInfo, {
+    children: [!!postType && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockInfo, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(create_new_post_link, {
-        ...props
+        postType: postType
       })
     }), showSettingsPanel && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.PanelBody, {
       title: (0,external_wp_i18n_namespaceObject.__)('Settings'),
@@ -50640,6 +50666,19 @@ const quote_metadata = {
   supports: {
     anchor: true,
     html: false,
+    background: {
+      backgroundImage: true,
+      backgroundSize: true,
+      __experimentalDefaultControls: {
+        backgroundImage: true
+      }
+    },
+    dimensions: {
+      minHeight: true,
+      __experimentalDefaultControls: {
+        minHeight: false
+      }
+    },
     __experimentalOnEnter: true,
     __experimentalOnMerge: true,
     typography: {
@@ -60219,8 +60258,8 @@ function TitleModal({
           children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
             variant: "primary",
             type: "submit",
+            __experimentalIsFocusable: true,
             disabled: !title.length,
-            "aria-disabled": !title.length,
             children: (0,external_wp_i18n_namespaceObject.__)('Create')
           })
         })]
@@ -61933,12 +61972,25 @@ const verse_metadata = {
   },
   supports: {
     anchor: true,
+    background: {
+      backgroundImage: true,
+      backgroundSize: true,
+      __experimentalDefaultControls: {
+        backgroundImage: true
+      }
+    },
     color: {
       gradients: true,
       link: true,
       __experimentalDefaultControls: {
         background: true,
         text: true
+      }
+    },
+    dimensions: {
+      minHeight: true,
+      __experimentalDefaultControls: {
+        minHeight: false
       }
     },
     typography: {
