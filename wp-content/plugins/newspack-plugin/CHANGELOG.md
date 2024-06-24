@@ -1,3 +1,24 @@
+## [4.3.3](https://github.com/Automattic/newspack-plugin/compare/v4.3.2...v4.3.3) (2024-06-24)
+
+
+### Bug Fixes
+
+* more namespacing ([#3195](https://github.com/Automattic/newspack-plugin/issues/3195)) ([d792503](https://github.com/Automattic/newspack-plugin/commit/d792503a827fe1952f6d7923dc1686ed988b3e11))
+
+## [4.3.2](https://github.com/Automattic/newspack-plugin/compare/v4.3.1...v4.3.2) (2024-06-24)
+
+
+### Bug Fixes
+
+* slash get_option ([#3194](https://github.com/Automattic/newspack-plugin/issues/3194)) ([2a3955e](https://github.com/Automattic/newspack-plugin/commit/2a3955ee98f7c46099a5d029822df4ad2098499a))
+
+## [4.3.1](https://github.com/Automattic/newspack-plugin/compare/v4.3.0...v4.3.1) (2024-06-24)
+
+
+### Bug Fixes
+
+* dont sync to ESP on staging sites ([#3192](https://github.com/Automattic/newspack-plugin/issues/3192)) ([07ae90f](https://github.com/Automattic/newspack-plugin/commit/07ae90f99249f67e6bdff90047a7977486355a0f))
+
 # [4.3.0](https://github.com/Automattic/newspack-plugin/compare/v4.2.0...v4.3.0) (2024-06-12)
 
 

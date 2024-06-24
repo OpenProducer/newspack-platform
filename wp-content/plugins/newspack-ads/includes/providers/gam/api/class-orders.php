@@ -9,11 +9,11 @@ namespace Newspack_Ads\Providers\GAM\Api;
 
 use Newspack_Ads\Providers\GAM\Api;
 use Newspack_Ads\Providers\GAM\Api\Api_Object;
-use Google\AdsApi\AdManager\Util\v202305\StatementBuilder;
-use Google\AdsApi\AdManager\v202305\ServiceFactory;
-use Google\AdsApi\AdManager\v202305\Order;
-use Google\AdsApi\AdManager\v202305\ArchiveOrders as ArchiveOrdersAction;
-use Google\AdsApi\AdManager\v202305\ApiException;
+use Google\AdsApi\AdManager\Util\v202405\StatementBuilder;
+use Google\AdsApi\AdManager\v202405\ServiceFactory;
+use Google\AdsApi\AdManager\v202405\Order;
+use Google\AdsApi\AdManager\v202405\ArchiveOrders as ArchiveOrdersAction;
+use Google\AdsApi\AdManager\v202405\ApiException;
 
 /**
  * Newspack Ads GAM Orders

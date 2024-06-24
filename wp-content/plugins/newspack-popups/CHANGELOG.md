@@ -1,3 +1,10 @@
+## [2.33.1](https://github.com/Automattic/newspack-popups/compare/v2.33.0...v2.33.1) (2024-06-18)
+
+
+### Bug Fixes
+
+* prevent prompt expiration with invalid expiration date ([#1318](https://github.com/Automattic/newspack-popups/issues/1318)) ([a83cf2a](https://github.com/Automattic/newspack-popups/commit/a83cf2af88feb1448b75313bb371b68e62898fc8))
+
 # [2.33.0](https://github.com/Automattic/newspack-popups/compare/v2.32.0...v2.33.0) (2024-06-12)
 
 
