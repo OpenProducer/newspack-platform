@@ -9,19 +9,19 @@ namespace Newspack_Ads\Providers\GAM\Api;
 
 use Newspack_Ads\Providers\GAM\Api;
 use Newspack_Ads\Providers\GAM\Api\Api_Object;
-use Google\AdsApi\AdManager\Util\v202305\StatementBuilder;
-use Google\AdsApi\AdManager\v202305\ServiceFactory;
-use Google\AdsApi\AdManager\v202305\InventoryService;
-use Google\AdsApi\AdManager\v202305\Size;
-use Google\AdsApi\AdManager\v202305\EnvironmentType;
-use Google\AdsApi\AdManager\v202305\AdUnit;
-use Google\AdsApi\AdManager\v202305\AdUnitParent;
-use Google\AdsApi\AdManager\v202305\AdUnitSize;
-use Google\AdsApi\AdManager\v202305\AdUnitTargetWindow;
-use Google\AdsApi\AdManager\v202305\ArchiveAdUnits as ArchiveAdUnitsAction;
-use Google\AdsApi\AdManager\v202305\ActivateAdUnits as ActivateAdUnitsAction;
-use Google\AdsApi\AdManager\v202305\DeactivateAdUnits as DeactivateAdUnitsAction;
-use Google\AdsApi\AdManager\v202305\ApiException;
+use Google\AdsApi\AdManager\Util\v202405\StatementBuilder;
+use Google\AdsApi\AdManager\v202405\ServiceFactory;
+use Google\AdsApi\AdManager\v202405\InventoryService;
+use Google\AdsApi\AdManager\v202405\Size;
+use Google\AdsApi\AdManager\v202405\EnvironmentType;
+use Google\AdsApi\AdManager\v202405\AdUnit;
+use Google\AdsApi\AdManager\v202405\AdUnitParent;
+use Google\AdsApi\AdManager\v202405\AdUnitSize;
+use Google\AdsApi\AdManager\v202405\AdUnitTargetWindow;
+use Google\AdsApi\AdManager\v202405\ArchiveAdUnits as ArchiveAdUnitsAction;
+use Google\AdsApi\AdManager\v202405\ActivateAdUnits as ActivateAdUnitsAction;
+use Google\AdsApi\AdManager\v202405\DeactivateAdUnits as DeactivateAdUnitsAction;
+use Google\AdsApi\AdManager\v202405\ApiException;
 
 /**
  * Newspack Ads GAM Ad Units

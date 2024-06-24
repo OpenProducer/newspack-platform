@@ -37,10 +37,16 @@ final class Newspack_Popups_Expiry {
 				'post_type'      => Newspack_Popups::NEWSPACK_POPUPS_CPT,
 				'posts_per_page' => -1,
 				'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					'relation' => 'AND',
 					[
 						'key'     => 'expiration_date',
 						'value'   => gmdate( 'Y-m-d H:i:s' ),
 						'compare' => '<=',
+					],
+					[
+						'key'     => 'expiration_date',
+						'compare' => 'REGEXP', // phpcs:ignore WordPressVIPMinimum.Performance.RegexpCompare.compare_compare
+						'value'   => '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}',
 					],
 				],
 			]
