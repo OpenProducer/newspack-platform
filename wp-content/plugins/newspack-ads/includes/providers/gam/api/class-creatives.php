@@ -9,10 +9,10 @@ namespace Newspack_Ads\Providers\GAM\Api;
 
 use Newspack_Ads\Providers\GAM\Api;
 use Newspack_Ads\Providers\GAM\Api\Api_Object;
-use Google\AdsApi\AdManager\Util\v202305\StatementBuilder;
-use Google\AdsApi\AdManager\v202305\ServiceFactory;
-use Google\AdsApi\AdManager\v202305\Creative;
-use Google\AdsApi\AdManager\v202305\Size;
+use Google\AdsApi\AdManager\Util\v202405\StatementBuilder;
+use Google\AdsApi\AdManager\v202405\ServiceFactory;
+use Google\AdsApi\AdManager\v202405\Creative;
+use Google\AdsApi\AdManager\v202405\Size;
 
 /**
  * Newspack Ads GAM Creatives

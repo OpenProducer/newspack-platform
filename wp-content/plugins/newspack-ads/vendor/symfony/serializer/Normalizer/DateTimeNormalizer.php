@@ -54,7 +54,7 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
      *
      * @throws InvalidArgumentException
      */
-    public function normalize($object, string $format = null, array $context = [])
+    public function normalize($object, ?string $format = null, array $context = [])
     {
         if (!$object instanceof \DateTimeInterface) {
             throw new InvalidArgumentException('The object must implement the "\DateTimeInterface".');
@@ -74,7 +74,7 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, string $format = null)
+    public function supportsNormalization($data, ?string $format = null)
     {
         return $data instanceof \DateTimeInterface;
     }
@@ -86,13 +86,10 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
      *
      * @throws NotNormalizableValueException
      */
-    public function denormalize($data, string $type, string $format = null, array $context = [])
+    public function denormalize($data, string $type, ?string $format = null, array $context = [])
     {
-        $dateTimeFormat = $context[self::FORMAT_KEY] ?? null;
-        $timezone = $this->getTimezone($context);
-
         if (\is_int($data) || \is_float($data)) {
-            switch ($dateTimeFormat) {
+            switch ($context[self::FORMAT_KEY] ?? $this->defaultContext[self::FORMAT_KEY] ?? null) {
                 case 'U': $data = sprintf('%d', $data); break;
                 case 'U.u': $data = sprintf('%.6F', $data); break;
             }
@@ -103,6 +100,9 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
         }
 
         try {
+            $timezone = $this->getTimezone($context);
+            $dateTimeFormat = $context[self::FORMAT_KEY] ?? null;
+
             if (null !== $dateTimeFormat) {
                 $object = \DateTime::class === $type ? \DateTime::createFromFormat($dateTimeFormat, $data, $timezone) : \DateTimeImmutable::createFromFormat($dateTimeFormat, $data, $timezone);
 
@@ -136,7 +136,7 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, string $type, string $format = null)
+    public function supportsDenormalization($data, string $type, ?string $format = null)
     {
         return isset(self::SUPPORTED_TYPES[$type]);
     }
