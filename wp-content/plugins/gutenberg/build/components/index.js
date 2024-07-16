@@ -45752,16 +45752,13 @@ function palette_edit_Option({
   canOnlyChangeValues,
   element,
   onChange,
-  isEditing,
-  onStartEditing,
   onRemove,
-  onStopEditing,
   popoverProps: receivedPopoverProps,
   slugPrefix,
   isGradient
 }) {
-  const focusOutsideProps = (0,external_wp_compose_namespaceObject.__experimentalUseFocusOutside)(onStopEditing);
   const value = isGradient ? element.gradient : element.color;
+  const [isEditingColor, setIsEditingColor] = (0,external_wp_element_namespaceObject.useState)(false);
 
   // Use internal state instead of a ref to make sure that the component
   // re-renders when the popover's anchor updates.
@@ -45772,22 +45769,25 @@ function palette_edit_Option({
     anchor: popoverAnchor
   }), [popoverAnchor, receivedPopoverProps]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(PaletteItem, {
-    className: isEditing ? 'is-selected' : undefined,
-    as: isEditing ? 'div' : 'button',
-    onClick: onStartEditing,
-    "aria-label": isEditing ? undefined : (0,external_wp_i18n_namespaceObject.sprintf)(
-    // translators: %s is a color or gradient name, e.g. "Red".
-    (0,external_wp_i18n_namespaceObject.__)('Edit: %s'), element.name.trim().length ? element.name : value),
     ref: setPopoverAnchor,
-    ...(isEditing ? {
-      ...focusOutsideProps
-    } : {}),
+    as: "div",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(h_stack_component, {
       justify: "flex-start",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IndicatorStyled, {
-        colorValue: value
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+        onClick: () => {
+          setIsEditingColor(true);
+        },
+        "aria-label": (0,external_wp_i18n_namespaceObject.sprintf)(
+        // translators: %s is a color or gradient name, e.g. "Red".
+        (0,external_wp_i18n_namespaceObject.__)('Edit: %s'), element.name.trim().length ? element.name : value),
+        style: {
+          padding: 0
+        },
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IndicatorStyled, {
+          colorValue: value
+        })
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_item_component, {
-        children: isEditing && !canOnlyChangeValues ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NameInput, {
+        children: !canOnlyChangeValues ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NameInput, {
           label: isGradient ? (0,external_wp_i18n_namespaceObject.__)('Gradient name') : (0,external_wp_i18n_namespaceObject.__)('Color name'),
           value: element.name,
           onChange: nextName => onChange({
@@ -45799,31 +45799,33 @@ function palette_edit_Option({
           children: element.name.trim().length ? element.name : /* Fall back to non-breaking space to maintain height */
           '\u00A0'
         })
-      }), isEditing && !canOnlyChangeValues && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_item_component, {
+      }), !canOnlyChangeValues && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_item_component, {
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(RemoveButton, {
           size: "small",
           icon: line_solid,
-          label: (0,external_wp_i18n_namespaceObject.__)('Remove color'),
+          label: (0,external_wp_i18n_namespaceObject.sprintf)(
+          // translators: %s is a color or gradient name, e.g. "Red".
+          (0,external_wp_i18n_namespaceObject.__)('Remove color: %s'), element.name.trim().length ? element.name : value),
           onClick: onRemove
         })
       })]
-    }), isEditing && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ColorPickerPopover, {
+    }), isEditingColor && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ColorPickerPopover, {
       isGradient: isGradient,
       onChange: onChange,
       element: element,
-      popoverProps: popoverProps
+      popoverProps: popoverProps,
+      onClose: () => setIsEditingColor(false)
     })]
   });
 }
 function PaletteEditListView({
   elements,
   onChange,
-  editingElement,
-  setEditingElement,
   canOnlyChangeValues,
   slugPrefix,
   isGradient,
-  popoverProps
+  popoverProps,
+  addColorRef
 }) {
   // When unmounting the component if there are empty elements (the user did not complete the insertion) clean them.
   const elementsReference = (0,external_wp_element_namespaceObject.useRef)();
@@ -45839,11 +45841,6 @@ function PaletteEditListView({
         isGradient: isGradient,
         canOnlyChangeValues: canOnlyChangeValues,
         element: element,
-        onStartEditing: () => {
-          if (editingElement !== index) {
-            setEditingElement(index);
-          }
-        },
         onChange: newElement => {
           debounceOnChange(elements.map((currentElement, currentIndex) => {
             if (currentIndex === index) {
@@ -45853,7 +45850,6 @@ function PaletteEditListView({
           }));
         },
         onRemove: () => {
-          setEditingElement(null);
           const newElements = elements.filter((_currentElement, currentIndex) => {
             if (currentIndex === index) {
               return false;
@@ -45861,12 +45857,7 @@ function PaletteEditListView({
             return true;
           });
           onChange(newElements.length ? newElements : undefined);
-        },
-        isEditing: index === editingElement,
-        onStopEditing: () => {
-          if (index === editingElement) {
-            setEditingElement(null);
-          }
+          addColorRef.current?.focus();
         },
         slugPrefix: slugPrefix,
         popoverProps: popoverProps
@@ -45926,6 +45917,7 @@ function PaletteEdit({
       setIsEditing(true);
     }
   }, [isGradient, elements]);
+  const addColorRef = (0,external_wp_element_namespaceObject.useRef)(null);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(PaletteEditStyles, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(h_stack_component, {
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PaletteHeading, {
@@ -45940,6 +45932,7 @@ function PaletteEdit({
           },
           children: (0,external_wp_i18n_namespaceObject.__)('Done')
         }), !canOnlyChangeValues && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+          ref: addColorRef,
           size: "small",
           isPressed: isAdding,
           icon: library_plus,
@@ -46014,11 +46007,10 @@ function PaletteEdit({
         // @ts-expect-error TODO: Don't know how to resolve
         ,
         onChange: onChange,
-        editingElement: editingElement,
-        setEditingElement: setEditingElement,
         slugPrefix: slugPrefix,
         isGradient: isGradient,
-        popoverProps: popoverProps
+        popoverProps: popoverProps,
+        addColorRef: addColorRef
       }), !isEditing && editingElement !== null && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ColorPickerPopover, {
         isGradient: isGradient,
         onClose: () => setEditingElement(null),
@@ -57783,81 +57775,6 @@ const upload = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
  */
 
 
-
-const drop_zone_backdrop = {
-  hidden: {
-    opacity: 0
-  },
-  show: {
-    opacity: 1,
-    transition: {
-      type: 'tween',
-      duration: 0.2,
-      delay: 0,
-      delayChildren: 0.1
-    }
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.2,
-      delayChildren: 0
-    }
-  }
-};
-const foreground = {
-  hidden: {
-    opacity: 0,
-    scale: 0.9
-  },
-  show: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.1
-    }
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.9
-  }
-};
-function DropIndicator({
-  label
-}) {
-  const disableMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
-  const children = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(motion.div, {
-    variants: drop_zone_backdrop,
-    initial: disableMotion ? 'show' : 'hidden',
-    animate: "show",
-    exit: disableMotion ? 'show' : 'exit',
-    className: "components-drop-zone__content"
-    // Without this, when this div is shown,
-    // Safari calls a onDropZoneLeave causing a loop because of this bug
-    // https://bugs.webkit.org/show_bug.cgi?id=66547
-    ,
-    style: {
-      pointerEvents: 'none'
-    },
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(motion.div, {
-      variants: foreground,
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
-        icon: library_upload,
-        className: "components-drop-zone__content-icon"
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-        className: "components-drop-zone__content-text",
-        children: label ? label : (0,external_wp_i18n_namespaceObject.__)('Drop files to upload')
-      })]
-    })
-  });
-  if (disableMotion) {
-    return children;
-  }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AnimatePresence, {
-    children: children
-  });
-}
-
 /**
  * `DropZone` is a component creating a drop zone area taking the full size of its parent element. It supports dropping files, HTML content or any other HTML drop event.
  *
@@ -57899,7 +57816,7 @@ function DropZoneComponent({
 
       /**
        * From Windows Chrome 96, the `event.dataTransfer` returns both file object and HTML.
-       * The order of the checks is important to recognise the HTML drop.
+       * The order of the checks is important to recognize the HTML drop.
        */
       if (html && onHTMLDrop) {
         onHTMLDrop(html);
@@ -57915,7 +57832,7 @@ function DropZoneComponent({
 
       /**
        * From Windows Chrome 96, the `event.dataTransfer` returns both file object and HTML.
-       * The order of the checks is important to recognise the HTML drop.
+       * The order of the checks is important to recognize the HTML drop.
        */
       if (event.dataTransfer?.types.includes('text/html')) {
         _type = 'html';
@@ -57940,6 +57857,8 @@ function DropZoneComponent({
   });
   const classes = dist_clsx('components-drop-zone', className, {
     'is-active': (isDraggingOverDocument || isDraggingOverElement) && (type === 'file' && onFilesDrop || type === 'html' && onHTMLDrop || type === 'default' && onDrop),
+    'has-dragged-out': !isDraggingOverElement,
+    // Keeping the following classnames for legacy purposes
     'is-dragging-over-document': isDraggingOverDocument,
     'is-dragging-over-element': isDraggingOverElement,
     [`is-dragging-${type}`]: !!type
@@ -57948,8 +57867,18 @@ function DropZoneComponent({
     ...restProps,
     ref: ref,
     className: classes,
-    children: isDraggingOverElement && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropIndicator, {
-      label: label
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "components-drop-zone__content",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        className: "components-drop-zone__content-inner",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
+          icon: library_upload,
+          className: "components-drop-zone__content-icon"
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "components-drop-zone__content-text",
+          children: label ? label : (0,external_wp_i18n_namespaceObject.__)('Drop files to upload')
+        })]
+      })
     })
   });
 }
@@ -73772,7 +73701,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/components');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/components');
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/private-apis.js
 /**

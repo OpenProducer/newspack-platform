@@ -363,31 +363,32 @@ class Donations {
 				return $ready;
 			}
 
-			$is_donation_product_valid = self::validate_donation_product();
-			if ( is_wp_error( $is_donation_product_valid ) ) {
-				return $is_donation_product_valid;
-			}
-
 			// Migrate legacy WC settings, stored as product meta.
 			$parent_product = self::get_parent_donation_product();
 			if ( $parent_product ) {
 				$suggested_amounts         = $parent_product->get_meta( 'newspack_donation_suggested_amount', true );
 				$untiered_suggested_amount = $parent_product->get_meta( 'newspack_donation_untiered_suggested_amount', true );
+				$parent_product_modified   = false;
 				if ( $suggested_amounts ) {
 					$legacy_settings['suggestedAmounts'] = $suggested_amounts;
 					$parent_product->delete_meta_data( 'newspack_donation_suggested_amount' );
+					$parent_product_modified = true;
 				}
 				if ( $untiered_suggested_amount ) {
 					$legacy_settings['suggestedAmountUntiered'] = $untiered_suggested_amount;
 					$parent_product->delete_meta_data( 'newspack_donation_untiered_suggested_amount' );
+					$parent_product_modified = true;
 				}
 				$tiered = $parent_product->get_meta( 'newspack_donation_is_tiered', true );
 
 				if ( ! empty( $tiered ) && is_int( intval( $tiered ) ) ) {
 					$legacy_settings['tiered'] = $tiered;
 					$parent_product->delete_meta_data( 'newspack_donation_is_tiered' );
+					$parent_product_modified = true;
 				}
-				$parent_product->save();
+				if ( $parent_product_modified ) {
+					$parent_product->save();
+				}
 			}
 		}
 
@@ -428,11 +429,6 @@ class Donations {
 			$parsed_settings['amounts'][ $frequency ] = array_map( 'floatval', $amounts );
 		}
 
-		// Ensure a minimum donation amount is set.
-		if ( ! isset( $saved_settings['minimumDonation'] ) && self::is_platform_wc() ) {
-			self::update_donation_product( [ 'minimumDonation' => $settings['minimumDonation'] ] );
-		}
-
 		$parsed_settings['platform']      = self::get_platform_slug();
 		$parsed_settings['billingFields'] = self::get_billing_fields();
 
@@ -460,10 +456,14 @@ class Donations {
 			if ( is_wp_error( $ready ) ) {
 				return $ready;
 			}
-			self::update_donation_product( $configuration );
+			$existing_configuration = self::get_donation_settings();
+
+			if ( isset( $args['saveDonationProduct'] ) && $args['saveDonationProduct'] === true ) {
+				self::update_donation_product( $configuration );
+			}
 
 			// Update the billing fields.
-			$billing_fields = $args['billingFields'];
+			$billing_fields = isset( $args['billingFields'] ) ? $args['billingFields'] : [];
 			if ( ! empty( $billing_fields ) ) {
 				$billing_fields = array_map( 'sanitize_text_field', $billing_fields );
 				self::update_billing_fields( $billing_fields );

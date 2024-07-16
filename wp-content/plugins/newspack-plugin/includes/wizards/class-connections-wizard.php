@@ -42,7 +42,7 @@ class Connections_Wizard extends Wizard {
 	}
 
 	/**
-	 * Enqueue Subscriptions Wizard scripts and styles.
+	 * Enqueue Connections Wizard scripts and styles.
 	 */
 	public function enqueue_scripts_and_styles() {
 		parent::enqueue_scripts_and_styles();
@@ -65,6 +65,7 @@ class Connections_Wizard extends Wizard {
 				'can_connect_google'   => OAuth::is_proxy_configured( 'google' ),
 				'can_connect_fivetran' => OAuth::is_proxy_configured( 'fivetran' ),
 				'can_use_webhooks'     => defined( 'NEWSPACK_EXPERIMENTAL_WEBHOOKS' ) && NEWSPACK_EXPERIMENTAL_WEBHOOKS,
+				'can_use_everlit'      => Everlit_Configuration_Manager::is_enabled(),
 			]
 		);
 		\wp_enqueue_script( 'newspack-connections-wizard' );

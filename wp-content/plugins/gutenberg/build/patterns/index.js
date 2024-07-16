@@ -254,7 +254,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/patterns');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/patterns');
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/store/index.js
 /**
@@ -560,6 +560,8 @@ function CreatePatternModal({
     title: modalTitle || defaultModalTitle,
     onRequestClose: restProps.onClose,
     overlayClassName: className,
+    focusOnMount: "firstContentElement",
+    size: "small",
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CreatePatternModalContents, {
       ...restProps
     })
@@ -818,6 +820,8 @@ function RenamePatternModal({
     title: (0,external_wp_i18n_namespaceObject.__)('Rename'),
     ...props,
     onRequestClose: onClose,
+    focusOnMount: "firstContentElement",
+    size: "small",
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("form", {
       onSubmit: onRename,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
@@ -940,6 +944,7 @@ function PatternConvertButton({
     // Hide when block doesn't support being made into a pattern.
     (0,external_wp_blocks_namespaceObject.hasBlockSupport)(block.name, 'reusable', true)) &&
     // Hide when current doesn't have permission to do that.
+    // Blocks refers to the wp_block post type, this checks the ability to create a post of that type.
     !!canUser('create', 'blocks');
     return _canConvert;
   }, [clientIds, rootClientId]);
@@ -1412,7 +1417,8 @@ function addBindings(bindings) {
 }
 function PatternOverridesControls({
   attributes,
-  setAttributes
+  setAttributes,
+  name: blockName
 }) {
   const controlId = (0,external_wp_element_namespaceObject.useId)();
   const [showAllowOverridesModal, setShowAllowOverridesModal] = (0,external_wp_element_namespaceObject.useState)(false);
@@ -1440,13 +1446,15 @@ function PatternOverridesControls({
   if (isConnectedToOtherSources) {
     return null;
   }
+  const hasUnsupportedImageAttributes = blockName === 'core/image' && (!!attributes.caption?.length || !!attributes.href?.length);
+  const helpText = hasUnsupportedImageAttributes ? (0,external_wp_i18n_namespaceObject.__)(`Overrides currently don't support image captions or links. Remove the caption or link first before enabling overrides.`) : (0,external_wp_i18n_namespaceObject.__)('Allow changes to this block throughout instances of this pattern.');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
       group: "advanced",
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
         id: controlId,
         label: (0,external_wp_i18n_namespaceObject.__)('Overrides'),
-        help: (0,external_wp_i18n_namespaceObject.__)('Allow changes to this block throughout instances of this pattern.'),
+        help: helpText,
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
           __next40pxDefaultSize: true,
           className: "pattern-overrides-control__allow-overrides-button",
@@ -1459,6 +1467,8 @@ function PatternOverridesControls({
               setShowAllowOverridesModal(true);
             }
           },
+          disabled: hasUnsupportedImageAttributes,
+          __experimentalIsFocusable: true,
           children: allowOverrides ? (0,external_wp_i18n_namespaceObject.__)('Disable overrides') : (0,external_wp_i18n_namespaceObject.__)('Enable overrides')
         })
       })

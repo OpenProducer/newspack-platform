@@ -52,11 +52,16 @@ class Block_Patterns {
 	 */
 	public static function get_block_patterns() {
 		return [
+			'registration-card'          => __( 'Registration Card', 'newspack' ),
+			'registration-card-compact'  => __( 'Registration Card (Compact)', 'newspack' ),
 			'registration-wall'          => __( 'Registration Wall', 'newspack' ),
 			'donation-wall'              => __( 'Donation Wall', 'newspack' ),
-			'pay-wall-one-tier'          => __( 'Pay Wall with One Tier', 'newspack' ),
-			'pay-wall-one-tier-metering' => __( 'Pay Wall with One Tier and Metering', 'newspack' ),
-			'pay-wall-two-tiers'         => __( 'Pay Wall with Two Tiers', 'newspack' ),
+			'pay-wall-one-tier'          => __( 'Paywall with One Tier', 'newspack' ),
+			'pay-wall-one-tier-metering' => __( 'Paywall with One Tier and Metering', 'newspack' ),
+			'pay-wall-two-tiers'         => __( 'Paywall with Two Tiers', 'newspack' ),
+			'pay-wall-two-tiers-alt'     => __( 'Paywall with Two Tiers (Alt)', 'newspack' ),
+			'pay-wall-three-tiers'       => __( 'Paywall with Three Tiers', 'newspack' ),
+			'pay-wall-three-tiers-alt'   => __( 'Paywall with Three Tiers (Alt)', 'newspack' ),
 		];
 	}
 
@@ -68,7 +73,7 @@ class Block_Patterns {
 		if ( ! class_exists( 'WC_Memberships' ) ) {
 			return false;
 		}
-		\register_block_pattern_category( 'newspack-memberships', [ 'label' => __( 'Memberships', 'newspack' ) ] );
+		\register_block_pattern_category( 'newspack-memberships', [ 'label' => __( 'Newspack Memberships', 'newspack' ) ] );
 		$patterns = self::get_block_patterns();
 		foreach ( $patterns as $slug => $title ) {
 			$path = __DIR__ . '/block-patterns/' . $slug . '.php';

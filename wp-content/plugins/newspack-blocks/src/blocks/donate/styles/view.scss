@@ -4,7 +4,7 @@
 @use './style-variations';
 
 .wpbnbd {
-	 &__button,
+	&__button,
 	.tab-container .freq-label {
 		border: 0 solid variables.$color__border;
 		background: colors.$color__background-body;

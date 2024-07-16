@@ -48,9 +48,21 @@ const AttributesLoader = ( { setAttributes, attributes }: ImageBlockTypes.Attrib
 		// Meta added, proceed
 		if ( Object.keys( meta ).length ) {
 			const { _media_credit, _media_credit_url, _navis_media_credit_org } = meta;
-			setAttributes( { meta: { _media_credit, _media_credit_url, _navis_media_credit_org } } );
+			// Only trigger if our meta has updated.
+			if (
+				_media_credit !== attributes?.meta?._media_credit ||
+				_media_credit_url !== attributes?.meta?._media_credit_url ||
+				_navis_media_credit_org !== attributes?.meta?._navis_media_credit_org
+			) {
+				setAttributes( { meta: { _media_credit, _media_credit_url, _navis_media_credit_org } } );
+			}
 		}
-	}, [ Object.keys( meta ).length ] );
+	}, [
+		meta,
+		attributes?.meta?._media_credit,
+		attributes?.meta?._media_credit_url,
+		attributes?.meta?._navis_media_credit_org,
+	] );
 
 	return <></>;
 };

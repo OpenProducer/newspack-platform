@@ -257,7 +257,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 
 const {
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/reusable-blocks');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/reusable-blocks');
 
 ;// CONCATENATED MODULE: ./packages/reusable-blocks/build-module/components/reusable-blocks-menu-items/reusable-block-convert-button.js
 /**
@@ -329,6 +329,7 @@ function ReusableBlockConvertButton({
     // Hide when block doesn't support being made reusable.
     (0,external_wp_blocks_namespaceObject.hasBlockSupport)(block.name, 'reusable', true)) &&
     // Hide when current doesn't have permission to do that.
+    // Blocks refers to the wp_block post type, this checks the ability to create a post of that type.
     !!canUser('create', 'blocks');
     return _canConvert;
   }, [clientIds, rootClientId]);

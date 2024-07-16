@@ -45,7 +45,7 @@ final class WooCommerce {
 	 *
 	 * @var string
 	 */
-	public $version = '9.0.2';
+	public $version = '9.1.2';
 
 	/**
 	 * WooCommerce Schema version.
@@ -682,6 +682,7 @@ final class WooCommerce {
 
 		if ( $this->is_request( 'cron' ) && 'yes' === get_option( 'woocommerce_allow_tracking', 'no' ) ) {
 			include_once WC_ABSPATH . 'includes/class-wc-tracker.php';
+			WC_Tracker::init();
 		}
 
 		$this->theme_support_includes();

@@ -14800,7 +14800,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/block-editor');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/block-editor');
 
 ;// CONCATENATED MODULE: ./packages/block-editor/build-module/store/constants.js
 const STORE_NAME = 'core/block-editor';
@@ -19381,7 +19381,7 @@ const __unstableSplitSelection = (blocks = []) => ({
       })
     }
   };
-  const tail = {
+  let tail = {
     ...blockB,
     // Only preserve the original client ID if the end is different.
     clientId: blockA.clientId === blockB.clientId ? (0,external_wp_blocks_namespaceObject.createBlock)(blockB.name).clientId : blockB.clientId,
@@ -19392,6 +19392,22 @@ const __unstableSplitSelection = (blocks = []) => ({
       })
     }
   };
+
+  // When splitting a block, attempt to convert the tail block to the
+  // default block type. For example, when splitting a heading block, the
+  // tail block will be converted to a paragraph block. Note that for
+  // blocks such as a list item and button, this will be skipped because
+  // the default block type cannot be inserted.
+  const defaultBlockName = (0,external_wp_blocks_namespaceObject.getDefaultBlockName)();
+  if (
+  // A block is only split when the selection is within the same
+  // block.
+  blockA.clientId === blockB.clientId && defaultBlockName && tail.name !== defaultBlockName && select.canInsertBlockType(defaultBlockName, anchorRootClientId)) {
+    const switched = (0,external_wp_blocks_namespaceObject.switchToBlockType)(tail, defaultBlockName);
+    if (switched?.length === 1) {
+      tail = switched[0];
+    }
+  }
   if (!blocks.length) {
     dispatch.replaceBlocks(select.getSelectedBlockClientIds(), [head, tail]);
     return;
@@ -21898,7 +21914,8 @@ function createBlockListBlockFilter(features) {
       const {
         hasSupport,
         attributeKeys = [],
-        useBlockProps
+        useBlockProps,
+        isMatch
       } = feature;
       const neededProps = {};
       for (const key of attributeKeys) {
@@ -21909,7 +21926,7 @@ function createBlockListBlockFilter(features) {
       if (
       // Skip rendering if none of the needed attributes are
       // set.
-      !Object.keys(neededProps).length || !hasSupport(props.name)) {
+      !Object.keys(neededProps).length || !hasSupport(props.name) || isMatch && !isMatch(neededProps)) {
         return null;
       }
       return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockPropsPure
@@ -24388,15 +24405,182 @@ function CoverContainer({
 }
 /* harmony default export */ const cover = ((0,external_wp_element_namespaceObject.forwardRef)(BlockPopoverCover));
 
-;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid-visualizer/utils.js
+;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid/utils.js
+function range(start, length) {
+  return Array.from({
+    length
+  }, (_, i) => start + i);
+}
+class GridRect {
+  constructor({
+    columnStart,
+    rowStart,
+    columnEnd,
+    rowEnd,
+    columnSpan,
+    rowSpan
+  } = {}) {
+    this.columnStart = columnStart !== null && columnStart !== void 0 ? columnStart : 1;
+    this.rowStart = rowStart !== null && rowStart !== void 0 ? rowStart : 1;
+    if (columnSpan !== undefined) {
+      this.columnEnd = this.columnStart + columnSpan - 1;
+    } else {
+      this.columnEnd = columnEnd !== null && columnEnd !== void 0 ? columnEnd : this.columnStart;
+    }
+    if (rowSpan !== undefined) {
+      this.rowEnd = this.rowStart + rowSpan - 1;
+    } else {
+      this.rowEnd = rowEnd !== null && rowEnd !== void 0 ? rowEnd : this.rowStart;
+    }
+  }
+  get columnSpan() {
+    return this.columnEnd - this.columnStart + 1;
+  }
+  get rowSpan() {
+    return this.rowEnd - this.rowStart + 1;
+  }
+  contains(column, row) {
+    return column >= this.columnStart && column <= this.columnEnd && row >= this.rowStart && row <= this.rowEnd;
+  }
+  containsRect(rect) {
+    return this.contains(rect.columnStart, rect.rowStart) && this.contains(rect.columnEnd, rect.rowEnd);
+  }
+  intersectsRect(rect) {
+    return this.columnStart <= rect.columnEnd && this.columnEnd >= rect.columnStart && this.rowStart <= rect.rowEnd && this.rowEnd >= rect.rowStart;
+  }
+}
 function getComputedCSS(element, property) {
   return element.ownerDocument.defaultView.getComputedStyle(element).getPropertyValue(property);
 }
 
-;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid-visualizer/grid-visualizer.js
+/**
+ * Given a grid-template-columns or grid-template-rows CSS property value, gets the start and end
+ * position in pixels of each grid track.
+ *
+ * https://css-tricks.com/snippets/css/complete-guide-grid/#aa-grid-track
+ *
+ * @param {string} template The grid-template-columns or grid-template-rows CSS property value.
+ *                          Only supports fixed sizes in pixels.
+ * @param {number} gap      The gap between grid tracks in pixels.
+ *
+ * @return {Array<{start: number, end: number}>} An array of objects with the start and end
+ *                                               position in pixels of each grid track.
+ */
+function getGridTracks(template, gap) {
+  const tracks = [];
+  for (const size of template.split(' ')) {
+    const previousTrack = tracks[tracks.length - 1];
+    const start = previousTrack ? previousTrack.end + gap : 0;
+    const end = start + parseFloat(size);
+    tracks.push({
+      start,
+      end
+    });
+  }
+  return tracks;
+}
+
+/**
+ * Given an array of grid tracks and a position in pixels, gets the index of the closest track to
+ * that position.
+ *
+ * https://css-tricks.com/snippets/css/complete-guide-grid/#aa-grid-track
+ *
+ * @param {Array<{start: number, end: number}>} tracks   An array of objects with the start and end
+ *                                                       position in pixels of each grid track.
+ * @param {number}                              position The position in pixels.
+ * @param {string}                              edge     The edge of the track to compare the
+ *                                                       position to. Either 'start' or 'end'.
+ *
+ * @return {number} The index of the closest track to the position. 0-based, unlike CSS grid which
+ *                  is 1-based.
+ */
+function getClosestTrack(tracks, position, edge = 'start') {
+  return tracks.reduce((closest, track, index) => Math.abs(track[edge] - position) < Math.abs(tracks[closest][edge] - position) ? index : closest, 0);
+}
+function getGridRect(gridElement, rect) {
+  const columnGap = parseFloat(getComputedCSS(gridElement, 'column-gap'));
+  const rowGap = parseFloat(getComputedCSS(gridElement, 'row-gap'));
+  const gridColumnTracks = getGridTracks(getComputedCSS(gridElement, 'grid-template-columns'), columnGap);
+  const gridRowTracks = getGridTracks(getComputedCSS(gridElement, 'grid-template-rows'), rowGap);
+  const columnStart = getClosestTrack(gridColumnTracks, rect.left) + 1;
+  const rowStart = getClosestTrack(gridRowTracks, rect.top) + 1;
+  const columnEnd = getClosestTrack(gridColumnTracks, rect.right, 'end') + 1;
+  const rowEnd = getClosestTrack(gridRowTracks, rect.bottom, 'end') + 1;
+  return new GridRect({
+    columnStart,
+    columnEnd,
+    rowStart,
+    rowEnd
+  });
+}
+function getGridItemRect(gridItemElement) {
+  return getGridRect(gridItemElement.parentElement, new window.DOMRect(gridItemElement.offsetLeft, gridItemElement.offsetTop, gridItemElement.offsetWidth, gridItemElement.offsetHeight));
+}
+function getGridInfo(gridElement) {
+  const gridTemplateColumns = getComputedCSS(gridElement, 'grid-template-columns');
+  const gridTemplateRows = getComputedCSS(gridElement, 'grid-template-rows');
+  const numColumns = gridTemplateColumns.split(' ').length;
+  const numRows = gridTemplateRows.split(' ').length;
+  const numItems = numColumns * numRows;
+  return {
+    numColumns,
+    numRows,
+    numItems,
+    currentColor: getComputedCSS(gridElement, 'color'),
+    style: {
+      gridTemplateColumns,
+      gridTemplateRows,
+      gap: getComputedCSS(gridElement, 'gap'),
+      padding: getComputedCSS(gridElement, 'padding')
+    }
+  };
+}
+
+;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid/use-get-number-of-blocks-before-cell.js
 /**
  * WordPress dependencies
  */
+
+
+/**
+ * Internal dependencies
+ */
+
+function useGetNumberOfBlocksBeforeCell(gridClientId, numColumns) {
+  const {
+    getBlockOrder,
+    getBlockAttributes
+  } = (0,external_wp_data_namespaceObject.useSelect)(store);
+  const getNumberOfBlocksBeforeCell = (column, row) => {
+    const targetIndex = (row - 1) * numColumns + column - 1;
+    let count = 0;
+    for (const clientId of getBlockOrder(gridClientId)) {
+      var _getBlockAttributes$s;
+      const {
+        columnStart,
+        rowStart
+      } = (_getBlockAttributes$s = getBlockAttributes(clientId).style?.layout) !== null && _getBlockAttributes$s !== void 0 ? _getBlockAttributes$s : {};
+      const cellIndex = (rowStart - 1) * numColumns + columnStart - 1;
+      if (cellIndex < targetIndex) {
+        count++;
+      }
+    }
+    return count;
+  };
+  return getNumberOfBlocksBeforeCell;
+}
+
+;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid/grid-visualizer.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
 
 
 
@@ -24408,34 +24592,38 @@ function getComputedCSS(element, property) {
 
 
 
+
 function GridVisualizer({
   clientId,
-  contentRef
+  contentRef,
+  parentLayout
 }) {
   const isDistractionFree = (0,external_wp_data_namespaceObject.useSelect)(select => select(store).getSettings().isDistractionFree, []);
-  const blockElement = useBlockElement(clientId);
-  if (isDistractionFree || !blockElement) {
+  const gridElement = useBlockElement(clientId);
+  if (isDistractionFree || !gridElement) {
     return null;
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(cover, {
-    className: "block-editor-grid-visualizer",
+  const isManualGrid = parentLayout?.columnCount && window.__experimentalEnableGridInteractivity;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridVisualizerGrid, {
     clientId: clientId,
-    __unstablePopoverSlot: "block-toolbar",
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridVisualizerGrid, {
-      ref: contentRef,
-      blockElement: blockElement
-    })
+    gridElement: gridElement,
+    isManualGrid: isManualGrid,
+    ref: contentRef
   });
 }
 const GridVisualizerGrid = (0,external_wp_element_namespaceObject.forwardRef)(({
-  blockElement
+  clientId,
+  gridElement,
+  isManualGrid
 }, ref) => {
-  const [gridInfo, setGridInfo] = (0,external_wp_element_namespaceObject.useState)(() => getGridInfo(blockElement));
+  const [gridInfo, setGridInfo] = (0,external_wp_element_namespaceObject.useState)(() => getGridInfo(gridElement));
+  const [isDroppingAllowed, setIsDroppingAllowed] = (0,external_wp_element_namespaceObject.useState)(false);
+  const [highlightedRect, setHighlightedRect] = (0,external_wp_element_namespaceObject.useState)(null);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     const observers = [];
-    for (const element of [blockElement, ...blockElement.children]) {
+    for (const element of [gridElement, ...gridElement.children]) {
       const observer = new window.ResizeObserver(() => {
-        setGridInfo(getGridInfo(blockElement));
+        setGridInfo(getGridInfo(gridElement));
       });
       observer.observe(element);
       observers.push(observer);
@@ -24445,37 +24633,316 @@ const GridVisualizerGrid = (0,external_wp_element_namespaceObject.forwardRef)(({
         observer.disconnect();
       }
     };
-  }, [blockElement]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-    ref: ref,
-    className: "block-editor-grid-visualizer__grid",
-    style: gridInfo.style,
-    children: Array.from({
-      length: gridInfo.numItems
-    }, (_, i) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "block-editor-grid-visualizer__item",
-      style: {
-        boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${gridInfo.currentColor} 20%, #0000)`
-      }
-    }, i))
+  }, [gridElement]);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    function onGlobalDrag() {
+      setIsDroppingAllowed(true);
+    }
+    function onGlobalDragEnd() {
+      setIsDroppingAllowed(false);
+    }
+    document.addEventListener('drag', onGlobalDrag);
+    document.addEventListener('dragend', onGlobalDragEnd);
+    return () => {
+      document.removeEventListener('drag', onGlobalDrag);
+      document.removeEventListener('dragend', onGlobalDragEnd);
+    };
+  }, []);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(cover, {
+    className: dist_clsx('block-editor-grid-visualizer', {
+      'is-dropping-allowed': isDroppingAllowed
+    }),
+    clientId: clientId,
+    __unstablePopoverSlot: "block-toolbar",
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      ref: ref,
+      className: "block-editor-grid-visualizer__grid",
+      style: gridInfo.style,
+      children: isManualGrid ? range(1, gridInfo.numRows).map(row => range(1, gridInfo.numColumns).map(column => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridVisualizerCell, {
+        color: gridInfo.currentColor,
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridVisualizerDropZone, {
+          column: column,
+          row: row,
+          gridClientId: clientId,
+          gridInfo: gridInfo,
+          highlightedRect: highlightedRect,
+          setHighlightedRect: setHighlightedRect
+        })
+      }, `${row}-${column}`))) : Array.from({
+        length: gridInfo.numItems
+      }, (_, i) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridVisualizerCell, {
+        color: gridInfo.currentColor
+      }, i))
+    })
   });
 });
-function getGridInfo(blockElement) {
-  const gridTemplateColumns = getComputedCSS(blockElement, 'grid-template-columns');
-  const gridTemplateRows = getComputedCSS(blockElement, 'grid-template-rows');
-  const numColumns = gridTemplateColumns.split(' ').length;
-  const numRows = gridTemplateRows.split(' ').length;
-  const numItems = numColumns * numRows;
-  return {
-    numItems,
-    currentColor: getComputedCSS(blockElement, 'color'),
+function GridVisualizerCell({
+  color,
+  children
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    className: "block-editor-grid-visualizer__cell",
     style: {
-      gridTemplateColumns,
-      gridTemplateRows,
-      gap: getComputedCSS(blockElement, 'gap'),
-      padding: getComputedCSS(blockElement, 'padding')
+      boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${color} 20%, #0000)`
+    },
+    children: children
+  });
+}
+function GridVisualizerDropZone({
+  column,
+  row,
+  gridClientId,
+  gridInfo,
+  highlightedRect,
+  setHighlightedRect
+}) {
+  var _highlightedRect$cont;
+  const {
+    getBlockAttributes
+  } = (0,external_wp_data_namespaceObject.useSelect)(store);
+  const {
+    updateBlockAttributes,
+    moveBlocksToPosition,
+    __unstableMarkNextChangeAsNotPersistent
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  const getNumberOfBlocksBeforeCell = useGetNumberOfBlocksBeforeCell(gridClientId, gridInfo.numColumns);
+  const ref = useDropZoneWithValidation({
+    validateDrag(srcClientId) {
+      const attributes = getBlockAttributes(srcClientId);
+      const rect = new GridRect({
+        columnStart: column,
+        rowStart: row,
+        columnSpan: attributes.style?.layout?.columnSpan,
+        rowSpan: attributes.style?.layout?.rowSpan
+      });
+      const isInBounds = new GridRect({
+        columnSpan: gridInfo.numColumns,
+        rowSpan: gridInfo.numRows
+      }).containsRect(rect);
+      return isInBounds;
+    },
+    onDragEnter(srcClientId) {
+      const attributes = getBlockAttributes(srcClientId);
+      setHighlightedRect(new GridRect({
+        columnStart: column,
+        rowStart: row,
+        columnSpan: attributes.style?.layout?.columnSpan,
+        rowSpan: attributes.style?.layout?.rowSpan
+      }));
+    },
+    onDragLeave() {
+      // onDragEnter can be called before onDragLeave if the user moves
+      // their mouse quickly, so only clear the highlight if it was set
+      // by this cell.
+      setHighlightedRect(prevHighlightedRect => prevHighlightedRect?.columnStart === column && prevHighlightedRect?.rowStart === row ? null : prevHighlightedRect);
+    },
+    onDrop(srcClientId) {
+      setHighlightedRect(null);
+      const attributes = getBlockAttributes(srcClientId);
+      updateBlockAttributes(srcClientId, {
+        style: {
+          ...attributes.style,
+          layout: {
+            ...attributes.style?.layout,
+            columnStart: column,
+            rowStart: row
+          }
+        }
+      });
+      __unstableMarkNextChangeAsNotPersistent();
+      moveBlocksToPosition([srcClientId], gridClientId, gridClientId, getNumberOfBlocksBeforeCell(column, row));
     }
-  };
+  });
+  const isHighlighted = (_highlightedRect$cont = highlightedRect?.contains(column, row)) !== null && _highlightedRect$cont !== void 0 ? _highlightedRect$cont : false;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    ref: ref,
+    className: dist_clsx('block-editor-grid-visualizer__drop-zone', {
+      'is-highlighted': isHighlighted
+    })
+  });
+}
+function useDropZoneWithValidation({
+  validateDrag,
+  onDragEnter,
+  onDragLeave,
+  onDrop
+}) {
+  const {
+    getDraggedBlockClientIds
+  } = (0,external_wp_data_namespaceObject.useSelect)(store);
+  return (0,external_wp_compose_namespaceObject.__experimentalUseDropZone)({
+    onDragEnter() {
+      const [srcClientId] = getDraggedBlockClientIds();
+      if (srcClientId && validateDrag(srcClientId)) {
+        onDragEnter(srcClientId);
+      }
+    },
+    onDragLeave() {
+      onDragLeave();
+    },
+    onDrop() {
+      const [srcClientId] = getDraggedBlockClientIds();
+      if (srcClientId && validateDrag(srcClientId)) {
+        onDrop(srcClientId);
+      }
+    }
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid/use-grid-layout-sync.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+function useGridLayoutSync({
+  clientId: gridClientId
+}) {
+  const {
+    gridLayout,
+    blockOrder
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    var _getBlockAttributes$l;
+    const {
+      getBlockAttributes,
+      getBlockOrder
+    } = select(store);
+    return {
+      gridLayout: (_getBlockAttributes$l = getBlockAttributes(gridClientId).layout) !== null && _getBlockAttributes$l !== void 0 ? _getBlockAttributes$l : {},
+      blockOrder: getBlockOrder(gridClientId)
+    };
+  }, [gridClientId]);
+  const {
+    getBlockAttributes
+  } = (0,external_wp_data_namespaceObject.useSelect)(store);
+  const {
+    updateBlockAttributes,
+    __unstableMarkNextChangeAsNotPersistent
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    const updates = {};
+    const {
+      columnCount,
+      rowCount = 2
+    } = gridLayout;
+    const isManualGrid = !!columnCount;
+    if (isManualGrid) {
+      const rects = [];
+      let cellsTaken = 0;
+
+      // Respect the position of blocks that already have a columnStart and rowStart value.
+      for (const clientId of blockOrder) {
+        const attributes = getBlockAttributes(clientId);
+        const {
+          columnStart,
+          rowStart,
+          columnSpan = 1,
+          rowSpan = 1
+        } = attributes.style?.layout || {};
+        cellsTaken += columnSpan * rowSpan;
+        if (!columnStart || !rowStart) {
+          continue;
+        }
+        rects.push(new GridRect({
+          columnStart,
+          rowStart,
+          columnSpan,
+          rowSpan
+        }));
+      }
+
+      // Ensure there's enough rows to fit all blocks.
+      const minimumNeededRows = Math.ceil(cellsTaken / columnCount);
+      if (rowCount < minimumNeededRows) {
+        updates[gridClientId] = {
+          layout: {
+            ...gridLayout,
+            rowCount: minimumNeededRows
+          }
+        };
+      }
+
+      // When in manual mode, ensure that every block has a columnStart and rowStart value.
+      for (const clientId of blockOrder) {
+        const attributes = getBlockAttributes(clientId);
+        const {
+          columnStart,
+          rowStart,
+          columnSpan,
+          rowSpan
+        } = attributes.style?.layout || {};
+        if (columnStart && rowStart) {
+          continue;
+        }
+        const [newColumnStart, newRowStart] = getFirstEmptyCell(rects, columnCount, minimumNeededRows, columnSpan, rowSpan);
+        rects.push(new GridRect({
+          columnStart: newColumnStart,
+          rowStart: newRowStart,
+          columnSpan,
+          rowSpan
+        }));
+        updates[clientId] = {
+          style: {
+            ...attributes.style,
+            layout: {
+              ...attributes.style?.layout,
+              columnStart: newColumnStart,
+              rowStart: newRowStart
+            }
+          }
+        };
+      }
+    } else {
+      // When in auto mode, remove all of the columnStart and rowStart values.
+      for (const clientId of blockOrder) {
+        const attributes = getBlockAttributes(clientId);
+        const {
+          columnStart,
+          rowStart,
+          ...layout
+        } = attributes.style?.layout || {};
+        // Only update attributes if columnStart or rowStart are set.
+        if (columnStart || rowStart) {
+          updates[clientId] = {
+            style: {
+              ...attributes.style,
+              layout
+            }
+          };
+        }
+      }
+    }
+    if (Object.keys(updates).length) {
+      __unstableMarkNextChangeAsNotPersistent();
+      updateBlockAttributes(Object.keys(updates), updates, /* uniqueByBlock: */true);
+    }
+  }, [
+  // Actual deps to sync:
+  gridClientId, gridLayout, blockOrder,
+  // Needed for linter:
+  __unstableMarkNextChangeAsNotPersistent, getBlockAttributes, updateBlockAttributes]);
+}
+function getFirstEmptyCell(rects, columnCount, rowCount, columnSpan = 1, rowSpan = 1) {
+  for (let row = 1; row <= rowCount; row++) {
+    for (let column = 1; column <= columnCount; column++) {
+      const rect = new GridRect({
+        columnStart: column,
+        rowStart: row,
+        columnSpan,
+        rowSpan
+      });
+      if (!rects.some(r => r.intersectsRect(rect))) {
+        return [column, row];
+      }
+    }
+  }
+  return [1, 1];
 }
 
 ;// CONCATENATED MODULE: ./packages/block-editor/build-module/layouts/grid.js
@@ -24568,8 +25035,12 @@ const units = [{
   toolBarControls: function GridLayoutToolbarControls({
     clientId
   }) {
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridVisualizer, {
-      clientId: clientId
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+      children: [window.__experimentalEnableGridInteractivity && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridLayoutSync, {
+        clientId: clientId
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridVisualizer, {
+        clientId: clientId
+      })]
     });
   },
   getLayoutStyle: function getLayoutStyle({
@@ -24701,12 +25172,9 @@ function GridLayoutColumnsAndRowsControl({
     columnCount = 3,
     rowCount
   } = layout;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("fieldset", {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl.VisualLabel, {
-        as: "legend",
-        children: (0,external_wp_i18n_namespaceObject.__)('Columns')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Flex, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("fieldset", {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Flex, {
         gap: 4,
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
           isBlock: true,
@@ -24725,12 +25193,22 @@ function GridLayoutColumnsAndRowsControl({
             },
             value: columnCount,
             min: 1,
-            label: (0,external_wp_i18n_namespaceObject.__)('Columns'),
-            hideLabelFromVision: true
+            label: (0,external_wp_i18n_namespaceObject.__)('Columns')
           })
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
           isBlock: true,
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.RangeControl, {
+          children: window.__experimentalEnableGridInteractivity && allowSizingOnChildren ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+            size: "__unstable-large",
+            onChange: value => {
+              onChange({
+                ...layout,
+                rowCount: value
+              });
+            },
+            value: rowCount,
+            min: 1,
+            label: (0,external_wp_i18n_namespaceObject.__)('Rows')
+          }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.RangeControl, {
             value: parseInt(columnCount, 10) // RangeControl can't deal with strings.
             ,
             onChange: value => onChange({
@@ -24744,46 +25222,8 @@ function GridLayoutColumnsAndRowsControl({
             hideLabelFromVision: true
           })
         })]
-      })]
-    }), allowSizingOnChildren && window.__experimentalEnableGridInteractivity && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("fieldset", {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl.VisualLabel, {
-        as: "legend",
-        children: (0,external_wp_i18n_namespaceObject.__)('Rows')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Flex, {
-        gap: 4,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
-          isBlock: true,
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
-            size: "__unstable-large",
-            onChange: value => {
-              onChange({
-                ...layout,
-                rowCount: value
-              });
-            },
-            value: rowCount,
-            min: 1,
-            label: (0,external_wp_i18n_namespaceObject.__)('Rows'),
-            hideLabelFromVision: true
-          })
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
-          isBlock: true,
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.RangeControl, {
-            value: parseInt(rowCount, 10) // RangeControl can't deal with strings.
-            ,
-            onChange: value => onChange({
-              ...layout,
-              rowCount: value
-            }),
-            min: 1,
-            max: 16,
-            withInputField: false,
-            label: (0,external_wp_i18n_namespaceObject.__)('Rows'),
-            hideLabelFromVision: true
-          })
-        })]
-      })]
-    })]
+      })
+    })
   });
 }
 
@@ -24818,10 +25258,11 @@ function GridLayoutTypeControl({
   };
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalToggleGroupControl, {
     __nextHasNoMarginBottom: true,
-    label: (0,external_wp_i18n_namespaceObject.__)('Type'),
+    label: (0,external_wp_i18n_namespaceObject.__)('Grid item position'),
     value: isManual,
     onChange: onChangeType,
     isBlock: true,
+    help: isManual === 'manual' ? (0,external_wp_i18n_namespaceObject.__)('Grid items can be manually placed in any position on the grid.') : (0,external_wp_i18n_namespaceObject.__)('Grid items are placed automatically depending on their order.'),
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControlOption, {
       value: "auto",
       label: (0,external_wp_i18n_namespaceObject.__)('Auto')
@@ -24830,6 +25271,9 @@ function GridLayoutTypeControl({
       label: (0,external_wp_i18n_namespaceObject.__)('Manual')
     }, "manual")]
   });
+}
+function GridLayoutSync(props) {
+  useGridLayoutSync(props);
 }
 
 ;// CONCATENATED MODULE: ./packages/block-editor/build-module/layouts/index.js
@@ -35182,6 +35626,13 @@ function HeightControl({
 
 
 
+/**
+ * Internal dependencies
+ */
+
+
+
+
 
 function helpText(selfStretch, parentLayout) {
   const {
@@ -35218,21 +35669,45 @@ function ChildLayoutControl({
   panelId
 }) {
   const {
-    selfStretch,
-    flexSize,
-    columnStart,
-    rowStart,
-    columnSpan,
-    rowSpan
-  } = childLayout;
-  const {
     type: parentType,
     default: {
       type: defaultParentType = 'default'
-    } = {},
-    orientation = 'horizontal'
+    } = {}
   } = parentLayout !== null && parentLayout !== void 0 ? parentLayout : {};
   const parentLayoutType = parentType || defaultParentType;
+  if (parentLayoutType === 'flex') {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexControls, {
+      childLayout: childLayout,
+      onChange: onChange,
+      parentLayout: parentLayout,
+      isShownByDefault: isShownByDefault,
+      panelId: panelId
+    });
+  } else if (parentLayoutType === 'grid') {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridControls, {
+      childLayout: childLayout,
+      onChange: onChange,
+      parentLayout: parentLayout,
+      isShownByDefault: isShownByDefault,
+      panelId: panelId
+    });
+  }
+  return null;
+}
+function FlexControls({
+  childLayout,
+  onChange,
+  parentLayout,
+  isShownByDefault,
+  panelId
+}) {
+  const {
+    selfStretch,
+    flexSize
+  } = childLayout;
+  const {
+    orientation = 'horizontal'
+  } = parentLayout !== null && parentLayout !== void 0 ? parentLayout : {};
   const hasFlexValue = () => !!selfStretch;
   const flexResetLabel = orientation === 'horizontal' ? (0,external_wp_i18n_namespaceObject.__)('Width') : (0,external_wp_i18n_namespaceObject.__)('Height');
   const resetFlex = () => {
@@ -35241,6 +35716,87 @@ function ChildLayoutControl({
       flexSize: undefined
     });
   };
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (selfStretch === 'fixed' && !flexSize) {
+      onChange({
+        ...childLayout,
+        selfStretch: 'fit'
+      });
+    }
+  }, []);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
+    as: external_wp_components_namespaceObject.__experimentalToolsPanelItem,
+    spacing: 2,
+    hasValue: hasFlexValue,
+    label: flexResetLabel,
+    onDeselect: resetFlex,
+    isShownByDefault: isShownByDefault,
+    panelId: panelId,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalToggleGroupControl, {
+      __nextHasNoMarginBottom: true,
+      size: "__unstable-large",
+      label: childLayoutOrientation(parentLayout),
+      value: selfStretch || 'fit',
+      help: helpText(selfStretch, parentLayout),
+      onChange: value => {
+        const newFlexSize = value !== 'fixed' ? null : flexSize;
+        onChange({
+          selfStretch: value,
+          flexSize: newFlexSize
+        });
+      },
+      isBlock: true,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControlOption, {
+        value: "fit",
+        label: (0,external_wp_i18n_namespaceObject.__)('Fit')
+      }, "fit"), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControlOption, {
+        value: "fill",
+        label: (0,external_wp_i18n_namespaceObject.__)('Fill')
+      }, "fill"), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControlOption, {
+        value: "fixed",
+        label: (0,external_wp_i18n_namespaceObject.__)('Fixed')
+      }, "fixed")]
+    }), selfStretch === 'fixed' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalUnitControl, {
+      size: "__unstable-large",
+      onChange: value => {
+        onChange({
+          selfStretch,
+          flexSize: value
+        });
+      },
+      value: flexSize
+    })]
+  });
+}
+function childLayoutOrientation(parentLayout) {
+  const {
+    orientation = 'horizontal'
+  } = parentLayout;
+  return orientation === 'horizontal' ? (0,external_wp_i18n_namespaceObject.__)('Width') : (0,external_wp_i18n_namespaceObject.__)('Height');
+}
+function GridControls({
+  childLayout,
+  onChange,
+  parentLayout,
+  isShownByDefault,
+  panelId
+}) {
+  const {
+    columnStart,
+    rowStart,
+    columnSpan,
+    rowSpan
+  } = childLayout;
+  const {
+    columnCount
+  } = parentLayout !== null && parentLayout !== void 0 ? parentLayout : {};
+  const gridColumnNumber = parseInt(columnCount, 10) || 3;
+  const rootClientId = (0,external_wp_data_namespaceObject.useSelect)(select => select(store).getBlockRootClientId(panelId));
+  const {
+    moveBlocksToPosition,
+    __unstableMarkNextChangeAsNotPersistent
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  const getNumberOfBlocksBeforeCell = useGetNumberOfBlocksBeforeCell(rootClientId, gridColumnNumber);
   const hasStartValue = () => !!columnStart || !!rowStart;
   const hasSpanValue = () => !!columnSpan || !!rowSpan;
   const resetGridStarts = () => {
@@ -35255,156 +35811,102 @@ function ChildLayoutControl({
       rowSpan: undefined
     });
   };
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (selfStretch === 'fixed' && !flexSize) {
-      onChange({
-        ...childLayout,
-        selfStretch: 'fit'
-      });
-    }
-  }, []);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [parentLayoutType === 'flex' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
       as: external_wp_components_namespaceObject.__experimentalToolsPanelItem,
-      spacing: 2,
-      hasValue: hasFlexValue,
-      label: flexResetLabel,
-      onDeselect: resetFlex,
+      hasValue: hasSpanValue,
+      label: (0,external_wp_i18n_namespaceObject.__)('Grid span'),
+      onDeselect: resetGridSpans,
       isShownByDefault: isShownByDefault,
       panelId: panelId,
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalToggleGroupControl, {
-        __nextHasNoMarginBottom: true,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
         size: "__unstable-large",
-        label: childLayoutOrientation(parentLayout),
-        value: selfStretch || 'fit',
-        help: helpText(selfStretch, parentLayout),
-        onChange: value => {
-          const newFlexSize = value !== 'fixed' ? null : flexSize;
-          onChange({
-            selfStretch: value,
-            flexSize: newFlexSize
-          });
-        },
-        isBlock: true,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControlOption, {
-          value: "fit",
-          label: (0,external_wp_i18n_namespaceObject.__)('Fit')
-        }, "fit"), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControlOption, {
-          value: "fill",
-          label: (0,external_wp_i18n_namespaceObject.__)('Fill')
-        }, "fill"), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControlOption, {
-          value: "fixed",
-          label: (0,external_wp_i18n_namespaceObject.__)('Fixed')
-        }, "fixed")]
-      }), selfStretch === 'fixed' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalUnitControl, {
-        size: "__unstable-large",
+        label: (0,external_wp_i18n_namespaceObject.__)('Column span'),
+        type: "number",
         onChange: value => {
           onChange({
-            selfStretch,
-            flexSize: value
+            columnStart,
+            rowStart,
+            rowSpan,
+            columnSpan: value
           });
         },
-        value: flexSize
+        value: columnSpan,
+        min: 1
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
+        size: "__unstable-large",
+        label: (0,external_wp_i18n_namespaceObject.__)('Row span'),
+        type: "number",
+        onChange: value => {
+          onChange({
+            columnStart,
+            rowStart,
+            columnSpan,
+            rowSpan: value
+          });
+        },
+        value: rowSpan,
+        min: 1
       })]
-    }), parentLayoutType === 'grid' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
-        as: external_wp_components_namespaceObject.__experimentalToolsPanelItem,
-        hasValue: hasSpanValue,
-        label: (0,external_wp_i18n_namespaceObject.__)('Grid span'),
-        onDeselect: resetGridSpans,
-        isShownByDefault: isShownByDefault,
-        panelId: panelId,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
+    }), window.__experimentalEnableGridInteractivity && columnCount &&
+    /*#__PURE__*/
+    // Use Flex with an explicit width on the FlexItem instead of HStack to
+    // work around an issue in webkit where inputs with a max attribute are
+    // sized incorrectly.
+    (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Flex, {
+      as: external_wp_components_namespaceObject.__experimentalToolsPanelItem,
+      hasValue: hasStartValue,
+      label: (0,external_wp_i18n_namespaceObject.__)('Grid placement'),
+      onDeselect: resetGridStarts,
+      isShownByDefault: false,
+      panelId: panelId,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
+        style: {
+          width: '50%'
+        },
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
           size: "__unstable-large",
-          label: (0,external_wp_i18n_namespaceObject.__)('Column span'),
+          label: (0,external_wp_i18n_namespaceObject.__)('Column'),
           type: "number",
           onChange: value => {
             onChange({
-              columnStart,
-              rowStart,
-              rowSpan,
-              columnSpan: value
-            });
-          },
-          value: columnSpan,
-          min: 1
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
-          size: "__unstable-large",
-          label: (0,external_wp_i18n_namespaceObject.__)('Row span'),
-          type: "number",
-          onChange: value => {
-            onChange({
-              columnStart,
+              columnStart: value,
               rowStart,
               columnSpan,
-              rowSpan: value
+              rowSpan
             });
+            __unstableMarkNextChangeAsNotPersistent();
+            moveBlocksToPosition([panelId], rootClientId, rootClientId, getNumberOfBlocksBeforeCell(value, rowStart));
           },
-          value: rowSpan,
-          min: 1
-        })]
-      }), window.__experimentalEnableGridInteractivity &&
-      /*#__PURE__*/
-      // Use Flex with an explicit width on the FlexItem instead of HStack to
-      // work around an issue in webkit where inputs with a max attribute are
-      // sized incorrectly.
-      (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Flex, {
-        as: external_wp_components_namespaceObject.__experimentalToolsPanelItem,
-        hasValue: hasStartValue,
-        label: (0,external_wp_i18n_namespaceObject.__)('Grid placement'),
-        onDeselect: resetGridStarts,
-        isShownByDefault: false,
-        panelId: panelId,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
-          style: {
-            width: '50%'
+          value: columnStart,
+          min: 1,
+          max: gridColumnNumber ? gridColumnNumber - (columnSpan !== null && columnSpan !== void 0 ? columnSpan : 1) + 1 : undefined
+        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
+        style: {
+          width: '50%'
+        },
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
+          size: "__unstable-large",
+          label: (0,external_wp_i18n_namespaceObject.__)('Row'),
+          type: "number",
+          onChange: value => {
+            onChange({
+              columnStart,
+              rowStart: value,
+              columnSpan,
+              rowSpan
+            });
+            __unstableMarkNextChangeAsNotPersistent();
+            moveBlocksToPosition([panelId], rootClientId, rootClientId, getNumberOfBlocksBeforeCell(columnStart, value));
           },
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
-            size: "__unstable-large",
-            label: (0,external_wp_i18n_namespaceObject.__)('Column'),
-            type: "number",
-            onChange: value => {
-              onChange({
-                columnStart: value,
-                rowStart,
-                columnSpan,
-                rowSpan
-              });
-            },
-            value: columnStart,
-            min: 1,
-            max: parentLayout?.columnCount ? parentLayout.columnCount - (columnSpan !== null && columnSpan !== void 0 ? columnSpan : 1) + 1 : undefined
-          })
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
-          style: {
-            width: '50%'
-          },
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
-            size: "__unstable-large",
-            label: (0,external_wp_i18n_namespaceObject.__)('Row'),
-            type: "number",
-            onChange: value => {
-              onChange({
-                columnStart,
-                rowStart: value,
-                columnSpan,
-                rowSpan
-              });
-            },
-            value: rowStart,
-            min: 1,
-            max: parentLayout?.rowCount ? parentLayout.rowCount - (rowSpan !== null && rowSpan !== void 0 ? rowSpan : 1) + 1 : undefined
-          })
-        })]
+          value: rowStart,
+          min: 1,
+          max: parentLayout?.rowCount ? parentLayout.rowCount - (rowSpan !== null && rowSpan !== void 0 ? rowSpan : 1) + 1 : undefined
+        })
       })]
     })]
   });
-}
-function childLayoutOrientation(parentLayout) {
-  const {
-    orientation = 'horizontal'
-  } = parentLayout;
-  return orientation === 'horizontal' ? (0,external_wp_i18n_namespaceObject.__)('Width') : (0,external_wp_i18n_namespaceObject.__)('Height');
 }
 
 ;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/dimensions-tool/aspect-ratio-tool.js
@@ -38585,6 +39087,7 @@ const toStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGapSuppor
     marginReset: true,
     presets: true,
     rootPadding: true,
+    variationStyles: false,
     ...styleOptions
   };
   const nodesWithStyles = getNodesWithStyles(tree, blockSelectors);
@@ -38622,8 +39125,8 @@ const toStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGapSuppor
       ruleset += `padding-right: 0; padding-left: 0; padding-top: var(--wp--style--root--padding-top); padding-bottom: var(--wp--style--root--padding-bottom) }
 				.has-global-padding { padding-right: var(--wp--style--root--padding-right); padding-left: var(--wp--style--root--padding-left); }
 				.has-global-padding > .alignfull { margin-right: calc(var(--wp--style--root--padding-right) * -1); margin-left: calc(var(--wp--style--root--padding-left) * -1); }
-				.has-global-padding :where(.has-global-padding:not(.wp-block-block, .alignfull, .alignwide)) { padding-right: 0; padding-left: 0; }
-				.has-global-padding :where(.has-global-padding:not(.wp-block-block, .alignfull, .alignwide)) > .alignfull { margin-left: 0; margin-right: 0;
+				.has-global-padding :where(:not(.alignfull.is-layout-flow) > .has-global-padding:not(.wp-block-block, .alignfull, .alignwide)) { padding-right: 0; padding-left: 0; }
+				.has-global-padding :where(:not(.alignfull.is-layout-flow) > .has-global-padding:not(.wp-block-block, .alignfull, .alignwide)) > .alignfull { margin-left: 0; margin-right: 0;
 				`;
     }
     ruleset += '}';
@@ -38682,7 +39185,7 @@ const toStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGapSuppor
       if (styles?.css) {
         ruleset += processCSSNesting(styles.css, `:root :where(${selector})`);
       }
-      if (styleVariationSelectors) {
+      if (options.variationStyles && styleVariationSelectors) {
         Object.entries(styleVariationSelectors).forEach(([styleVariationName, styleVariationSelector]) => {
           const styleVariations = styles?.variations?.[styleVariationName];
           if (styleVariations) {
@@ -38976,6 +39479,21 @@ function useGlobalStylesOutput(disableRootPadding = false) {
 
 
 
+const VARIATION_PREFIX = 'is-style-';
+function getVariationMatches(className) {
+  if (!className) {
+    return [];
+  }
+  return className.split(/\s+/).reduce((matches, name) => {
+    if (name.startsWith(VARIATION_PREFIX)) {
+      const match = name.slice(VARIATION_PREFIX.length);
+      if (match !== 'default') {
+        matches.push(match);
+      }
+    }
+    return matches;
+  }, []);
+}
 
 /**
  * Get the first block style variation that has been registered from the class string.
@@ -38988,12 +39506,11 @@ function useGlobalStylesOutput(disableRootPadding = false) {
 function getVariationNameFromClass(className, registeredStyles = []) {
   // The global flag affects how capturing groups work in JS. So the regex
   // below will only return full CSS classes not just the variation name.
-  const matches = className?.match(/\bis-style-(?!default)(\S+)\b/g);
+  const matches = getVariationMatches(className);
   if (!matches) {
     return null;
   }
-  for (const variationClass of matches) {
-    const variation = variationClass.substring(9); // Remove 'is-style-' prefix.
+  for (const variation of matches) {
     if (registeredStyles.some(style => style.name === variation)) {
       return variation;
     }
@@ -39052,7 +39569,7 @@ function block_style_variation_useBlockProps({
   } = (0,external_wp_data_namespaceObject.useSelect)(external_wp_blocks_namespaceObject.store);
   const registeredStyles = getBlockStyles(name);
   const variation = getVariationNameFromClass(className, registeredStyles);
-  const variationClass = `is-style-${variation}-${clientId}`;
+  const variationClass = `${VARIATION_PREFIX}${variation}-${clientId}`;
   const {
     settings,
     styles
@@ -39069,14 +39586,15 @@ function block_style_variation_useBlockProps({
     const hasBlockGapSupport = false;
     const hasFallbackGapSupport = true;
     const disableLayoutStyles = true;
-    const isTemplate = true;
-    return toStyles(variationConfig, blockSelectors, hasBlockGapSupport, hasFallbackGapSupport, disableLayoutStyles, isTemplate, {
+    const disableRootPadding = true;
+    return toStyles(variationConfig, blockSelectors, hasBlockGapSupport, hasFallbackGapSupport, disableLayoutStyles, disableRootPadding, {
       blockGap: false,
       blockStyles: true,
       layoutStyles: false,
       marginReset: false,
       presets: false,
-      rootPadding: false
+      rootPadding: false,
+      variationStyles: true
     });
   }, [variation, settings, styles, getBlockStyles, clientId]);
   useStyleOverride({
@@ -39095,6 +39613,9 @@ function block_style_variation_useBlockProps({
 /* harmony default export */ const block_style_variation = ({
   hasSupport: () => true,
   attributeKeys: ['className'],
+  isMatch: ({
+    className
+  }) => getVariationMatches(className).length > 0,
   useBlockProps: block_style_variation_useBlockProps
 });
 
@@ -39489,7 +40010,7 @@ const withLayoutStyles = (0,external_wp_compose_namespaceObject.createHigherOrde
 (0,external_wp_hooks_namespaceObject.addFilter)('blocks.registerBlockType', 'core/layout/addAttribute', layout_addAttribute);
 (0,external_wp_hooks_namespaceObject.addFilter)('editor.BlockListBlock', 'core/editor/layout/with-layout-styles', withLayoutStyles);
 
-;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid-visualizer/grid-item-resizer.js
+;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid/grid-item-resizer.js
 /**
  * WordPress dependencies
  */
@@ -39506,10 +40027,14 @@ const withLayoutStyles = (0,external_wp_compose_namespaceObject.createHigherOrde
 function GridItemResizer({
   clientId,
   bounds,
-  onChange
+  onChange,
+  parentLayout
 }) {
   const blockElement = useBlockElement(clientId);
   const rootBlockElement = blockElement?.parentElement;
+  const {
+    columnCount
+  } = parentLayout;
   if (!blockElement || !rootBlockElement) {
     return null;
   }
@@ -39518,7 +40043,8 @@ function GridItemResizer({
     bounds: bounds,
     blockElement: blockElement,
     rootBlockElement: rootBlockElement,
-    onChange: onChange
+    onChange: onChange,
+    isManualGrid: !!columnCount && window.__experimentalEnableGridInteractivity
   });
 }
 function GridItemResizerInner({
@@ -39526,7 +40052,8 @@ function GridItemResizerInner({
   bounds,
   blockElement,
   rootBlockElement,
-  onChange
+  onChange,
+  isManualGrid
 }) {
   const [resizeDirection, setResizeDirection] = (0,external_wp_element_namespaceObject.useState)(null);
   const [enableSide, setEnableSide] = (0,external_wp_element_namespaceObject.useState)({
@@ -39624,57 +40151,134 @@ function GridItemResizerInner({
         const rowEnd = getClosestTrack(gridRowTracks, rect.bottom, 'end') + 1;
         onChange({
           columnSpan: columnEnd - columnStart + 1,
-          rowSpan: rowEnd - rowStart + 1
+          rowSpan: rowEnd - rowStart + 1,
+          columnStart: isManualGrid ? columnStart : undefined,
+          rowStart: isManualGrid ? rowStart : undefined
         });
       }
     })
   });
 }
 
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/arrow-up.js
 /**
- * Given a grid-template-columns or grid-template-rows CSS property value, gets the start and end
- * position in pixels of each grid track.
- *
- * https://css-tricks.com/snippets/css/complete-guide-grid/#aa-grid-track
- *
- * @param {string} template The grid-template-columns or grid-template-rows CSS property value.
- *                          Only supports fixed sizes in pixels.
- * @param {number} gap      The gap between grid tracks in pixels.
- *
- * @return {Array<{start: number, end: number}>} An array of objects with the start and end
- *                                               position in pixels of each grid track.
+ * WordPress dependencies
  */
-function getGridTracks(template, gap) {
-  const tracks = [];
-  for (const size of template.split(' ')) {
-    const previousTrack = tracks[tracks.length - 1];
-    const start = previousTrack ? previousTrack.end + gap : 0;
-    const end = start + parseFloat(size);
-    tracks.push({
-      start,
-      end
-    });
-  }
-  return tracks;
-}
+
+
+const arrowUp = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M12 3.9 6.5 9.5l1 1 3.8-3.7V20h1.5V6.8l3.7 3.7 1-1z"
+  })
+});
+/* harmony default export */ const arrow_up = (arrowUp);
+
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/arrow-left.js
+/**
+ * WordPress dependencies
+ */
+
+
+const arrowLeft = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M20 11.2H6.8l3.7-3.7-1-1L3.9 12l5.6 5.5 1-1-3.7-3.7H20z"
+  })
+});
+/* harmony default export */ const arrow_left = (arrowLeft);
+
+;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/grid/grid-item-movers.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
 
 /**
- * Given an array of grid tracks and a position in pixels, gets the index of the closest track to
- * that position.
- *
- * https://css-tricks.com/snippets/css/complete-guide-grid/#aa-grid-track
- *
- * @param {Array<{start: number, end: number}>} tracks   An array of objects with the start and end
- *                                                       position in pixels of each grid track.
- * @param {number}                              position The position in pixels.
- * @param {string}                              edge     The edge of the track to compare the
- *                                                       position to. Either 'start' or 'end'.
- *
- * @return {number} The index of the closest track to the position. 0-based, unlike CSS grid which
- *                  is 1-based.
+ * Internal dependencies
  */
-function getClosestTrack(tracks, position, edge = 'start') {
-  return tracks.reduce((closest, track, index) => Math.abs(track[edge] - position) < Math.abs(tracks[closest][edge] - position) ? index : closest, 0);
+
+
+
+
+
+function GridItemMovers({
+  layout,
+  parentLayout,
+  onChange,
+  gridClientId,
+  blockClientId
+}) {
+  var _layout$columnStart, _layout$rowStart, _layout$columnSpan, _layout$rowSpan;
+  const {
+    moveBlocksToPosition,
+    __unstableMarkNextChangeAsNotPersistent
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  const columnStart = (_layout$columnStart = layout?.columnStart) !== null && _layout$columnStart !== void 0 ? _layout$columnStart : 1;
+  const rowStart = (_layout$rowStart = layout?.rowStart) !== null && _layout$rowStart !== void 0 ? _layout$rowStart : 1;
+  const columnSpan = (_layout$columnSpan = layout?.columnSpan) !== null && _layout$columnSpan !== void 0 ? _layout$columnSpan : 1;
+  const rowSpan = (_layout$rowSpan = layout?.rowSpan) !== null && _layout$rowSpan !== void 0 ? _layout$rowSpan : 1;
+  const columnEnd = columnStart + columnSpan - 1;
+  const rowEnd = rowStart + rowSpan - 1;
+  const columnCount = parentLayout?.columnCount;
+  const rowCount = parentLayout?.rowCount;
+  const columnCountNumber = parseInt(columnCount, 10);
+  const rowStartNumber = parseInt(rowStart, 10);
+  const columnStartNumber = parseInt(columnStart, 10);
+  const getNumberOfBlocksBeforeCell = useGetNumberOfBlocksBeforeCell(gridClientId, columnCountNumber);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(block_controls, {
+    group: "parent",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
+      icon: arrow_up,
+      label: (0,external_wp_i18n_namespaceObject.__)('Move block up'),
+      isDisabled: rowStart <= 1,
+      onClick: () => {
+        onChange({
+          rowStart: rowStart - 1
+        });
+        __unstableMarkNextChangeAsNotPersistent();
+        moveBlocksToPosition([blockClientId], gridClientId, gridClientId, getNumberOfBlocksBeforeCell(columnStartNumber, rowStartNumber - 1));
+      }
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
+      icon: arrow_down,
+      label: (0,external_wp_i18n_namespaceObject.__)('Move block down'),
+      isDisabled: rowCount && rowEnd >= rowCount,
+      onClick: () => {
+        onChange({
+          rowStart: rowStart + 1
+        });
+        __unstableMarkNextChangeAsNotPersistent();
+        moveBlocksToPosition([blockClientId], gridClientId, gridClientId, getNumberOfBlocksBeforeCell(columnStartNumber, rowStartNumber + 1));
+      }
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
+      icon: arrow_left,
+      label: (0,external_wp_i18n_namespaceObject.__)('Move block left'),
+      isDisabled: columnStart <= 1,
+      onClick: () => {
+        onChange({
+          columnStart: columnStartNumber - 1
+        });
+        __unstableMarkNextChangeAsNotPersistent();
+        moveBlocksToPosition([blockClientId], gridClientId, gridClientId, getNumberOfBlocksBeforeCell(columnStartNumber - 1, rowStartNumber));
+      }
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
+      icon: arrow_right,
+      label: (0,external_wp_i18n_namespaceObject.__)('Move block right'),
+      isDisabled: columnCount && columnEnd >= columnCount,
+      onClick: () => {
+        onChange({
+          columnStart: columnStartNumber + 1
+        });
+        __unstableMarkNextChangeAsNotPersistent();
+        moveBlocksToPosition([blockClientId], gridClientId, gridClientId, getNumberOfBlocksBeforeCell(columnStartNumber + 1, rowStartNumber));
+      }
+    })]
+  });
 }
 
 ;// CONCATENATED MODULE: ./packages/block-editor/build-module/hooks/layout-child.js
@@ -39811,10 +40415,12 @@ function ChildLayoutControlsPure({
   style,
   setAttributes
 }) {
+  const parentLayout = useLayout() || {};
   const {
     type: parentLayoutType = 'default',
-    allowSizingOnChildren = false
-  } = useLayout() || {};
+    allowSizingOnChildren = false,
+    columnCount
+  } = parentLayout;
   const rootClientId = (0,external_wp_data_namespaceObject.useSelect)(select => {
     return select(store).getBlockRootClientId(clientId);
   }, [clientId]);
@@ -39824,30 +40430,36 @@ function ChildLayoutControlsPure({
   if (parentLayoutType !== 'grid') {
     return null;
   }
+  const isManualGrid = !!columnCount;
+  function updateLayout(layout) {
+    setAttributes({
+      style: {
+        ...style,
+        layout: {
+          ...style?.layout,
+          ...layout
+        }
+      }
+    });
+  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridVisualizer, {
       clientId: rootClientId,
-      contentRef: setResizerBounds
+      contentRef: setResizerBounds,
+      parentLayout: parentLayout
     }), allowSizingOnChildren && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridItemResizer, {
       clientId: clientId
       // Don't allow resizing beyond the grid visualizer.
       ,
       bounds: resizerBounds,
-      onChange: ({
-        columnSpan,
-        rowSpan
-      }) => {
-        setAttributes({
-          style: {
-            ...style,
-            layout: {
-              ...style?.layout,
-              columnSpan,
-              rowSpan
-            }
-          }
-        });
-      }
+      onChange: updateLayout,
+      parentLayout: parentLayout
+    }), isManualGrid && window.__experimentalEnableGridInteractivity && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridItemMovers, {
+      layout: style?.layout,
+      parentLayout: parentLayout,
+      onChange: updateLayout,
+      gridClientId: rootClientId,
+      blockClientId: clientId
     })]
   });
 }
@@ -40092,7 +40704,6 @@ const lock_lock = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -40151,7 +40762,6 @@ function BlockLockModal({
     updateBlockAttributes
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
   const blockInformation = useBlockDisplayInformation(clientId);
-  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(BlockLockModal, 'block-editor-block-lock-modal__options-title');
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     setLock({
       move: !canMove,
@@ -40163,14 +40773,12 @@ function BlockLockModal({
   }, [canEdit, canMove, canRemove, allowsEditLocking]);
   const isAllChecked = Object.values(lock).every(Boolean);
   const isMixed = Object.values(lock).some(Boolean) && !isAllChecked;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Modal, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Modal, {
     title: (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: Name of the block. */
     (0,external_wp_i18n_namespaceObject.__)('Lock %s'), blockInformation.title),
     overlayClassName: "block-editor-block-lock-modal",
     onRequestClose: onClose,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-      children: (0,external_wp_i18n_namespaceObject.__)('Choose specific attributes to restrict or lock all available options.')
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("form", {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("form", {
       onSubmit: event => {
         event.preventDefault();
         updateBlockAttributes([clientId], {
@@ -40179,71 +40787,75 @@ function BlockLockModal({
         });
         onClose();
       },
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        role: "group",
-        "aria-labelledby": instanceId,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("fieldset", {
         className: "block-editor-block-lock-modal__options",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
-          __nextHasNoMarginBottom: true,
-          className: "block-editor-block-lock-modal__options-title",
-          label: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-            id: instanceId,
-            children: (0,external_wp_i18n_namespaceObject.__)('Lock all')
-          }),
-          checked: isAllChecked,
-          indeterminate: isMixed,
-          onChange: newValue => setLock({
-            move: newValue,
-            remove: newValue,
-            ...(allowsEditLocking ? {
-              edit: newValue
-            } : {})
-          })
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("ul", {
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("legend", {
+          children: (0,external_wp_i18n_namespaceObject.__)('Choose specific attributes to restrict or lock all available options.')
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
+          role: "list",
           className: "block-editor-block-lock-modal__checklist",
-          children: [allowsEditLocking && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
-            className: "block-editor-block-lock-modal__checklist-item",
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
             children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
               __nextHasNoMarginBottom: true,
-              label: (0,external_wp_i18n_namespaceObject.__)('Restrict editing'),
-              checked: !!lock.edit,
-              onChange: edit => setLock(prevLock => ({
-                ...prevLock,
-                edit
-              }))
-            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
-              className: "block-editor-block-lock-modal__lock-icon",
-              icon: lock.edit ? library_lock : library_unlock
+              className: "block-editor-block-lock-modal__options-all",
+              label: (0,external_wp_i18n_namespaceObject.__)('Lock all'),
+              checked: isAllChecked,
+              indeterminate: isMixed,
+              onChange: newValue => setLock({
+                move: newValue,
+                remove: newValue,
+                ...(allowsEditLocking ? {
+                  edit: newValue
+                } : {})
+              })
+            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("ul", {
+              role: "list",
+              className: "block-editor-block-lock-modal__checklist",
+              children: [allowsEditLocking && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
+                className: "block-editor-block-lock-modal__checklist-item",
+                children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
+                  __nextHasNoMarginBottom: true,
+                  label: (0,external_wp_i18n_namespaceObject.__)('Restrict editing'),
+                  checked: !!lock.edit,
+                  onChange: edit => setLock(prevLock => ({
+                    ...prevLock,
+                    edit
+                  }))
+                }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+                  className: "block-editor-block-lock-modal__lock-icon",
+                  icon: lock.edit ? library_lock : library_unlock
+                })]
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
+                className: "block-editor-block-lock-modal__checklist-item",
+                children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
+                  __nextHasNoMarginBottom: true,
+                  label: (0,external_wp_i18n_namespaceObject.__)('Disable movement'),
+                  checked: lock.move,
+                  onChange: move => setLock(prevLock => ({
+                    ...prevLock,
+                    move
+                  }))
+                }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+                  className: "block-editor-block-lock-modal__lock-icon",
+                  icon: lock.move ? library_lock : library_unlock
+                })]
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
+                className: "block-editor-block-lock-modal__checklist-item",
+                children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
+                  __nextHasNoMarginBottom: true,
+                  label: (0,external_wp_i18n_namespaceObject.__)('Prevent removal'),
+                  checked: lock.remove,
+                  onChange: remove => setLock(prevLock => ({
+                    ...prevLock,
+                    remove
+                  }))
+                }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+                  className: "block-editor-block-lock-modal__lock-icon",
+                  icon: lock.remove ? library_lock : library_unlock
+                })]
+              })]
             })]
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
-            className: "block-editor-block-lock-modal__checklist-item",
-            children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
-              __nextHasNoMarginBottom: true,
-              label: (0,external_wp_i18n_namespaceObject.__)('Disable movement'),
-              checked: lock.move,
-              onChange: move => setLock(prevLock => ({
-                ...prevLock,
-                move
-              }))
-            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
-              className: "block-editor-block-lock-modal__lock-icon",
-              icon: lock.move ? library_lock : library_unlock
-            })]
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
-            className: "block-editor-block-lock-modal__checklist-item",
-            children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
-              __nextHasNoMarginBottom: true,
-              label: (0,external_wp_i18n_namespaceObject.__)('Prevent removal'),
-              checked: lock.remove,
-              onChange: remove => setLock(prevLock => ({
-                ...prevLock,
-                remove
-              }))
-            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
-              className: "block-editor-block-lock-modal__lock-icon",
-              icon: lock.remove ? library_lock : library_unlock
-            })]
-          })]
+          })
         }), hasTemplateLock && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToggleControl, {
           __nextHasNoMarginBottom: true,
           className: "block-editor-block-lock-modal__template-lock",
@@ -40270,7 +40882,7 @@ function BlockLockModal({
           })
         })]
       })]
-    })]
+    })
   });
 }
 
@@ -58671,7 +59283,7 @@ function useInnerBlocksProps(props = {}, options = {}) {
     rootClientId: clientId,
     parentClientId
   });
-  const ref = (0,external_wp_compose_namespaceObject.useMergeRefs)([props.ref, __unstableDisableDropZone || isDropZoneDisabled ? null : blockDropZoneRef]);
+  const ref = (0,external_wp_compose_namespaceObject.useMergeRefs)([props.ref, __unstableDisableDropZone || isDropZoneDisabled || layout?.columnCount && window.__experimentalEnableGridInteractivity ? null : blockDropZoneRef]);
   const innerBlocksProps = {
     __experimentalCaptureToolbars,
     layout,
@@ -60094,14 +60706,17 @@ function BlockMover({
     rootClientId,
     isFirst,
     isLast,
-    orientation
+    orientation,
+    isManualGrid
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    var _getBlockAttributes;
     const {
       getBlockIndex,
       getBlockListSettings,
       canMoveBlocks,
       getBlockOrder,
-      getBlockRootClientId
+      getBlockRootClientId,
+      getBlockAttributes
     } = select(store);
     const normalizedClientIds = Array.isArray(clientIds) ? clientIds : [clientIds];
     const firstClientId = normalizedClientIds[0];
@@ -60109,18 +60724,21 @@ function BlockMover({
     const firstIndex = getBlockIndex(firstClientId);
     const lastIndex = getBlockIndex(normalizedClientIds[normalizedClientIds.length - 1]);
     const blockOrder = getBlockOrder(_rootClientId);
+    const {
+      layout = {}
+    } = (_getBlockAttributes = getBlockAttributes(_rootClientId)) !== null && _getBlockAttributes !== void 0 ? _getBlockAttributes : {};
     return {
       canMove: canMoveBlocks(clientIds),
       rootClientId: _rootClientId,
       isFirst: firstIndex === 0,
       isLast: lastIndex === blockOrder.length - 1,
-      orientation: getBlockListSettings(_rootClientId)?.orientation
+      orientation: getBlockListSettings(_rootClientId)?.orientation,
+      isManualGrid: layout.type === 'grid' && !!layout.columnCount && window.__experimentalEnableGridInteractivity
     };
   }, [clientIds]);
   if (!canMove || isFirst && isLast && !rootClientId) {
     return null;
   }
-  const dragHandleLabel = (0,external_wp_i18n_namespaceObject.__)('Drag');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.ToolbarGroup, {
     className: dist_clsx('block-editor-block-mover', {
       'is-horizontal': orientation === 'horizontal'
@@ -60132,14 +60750,14 @@ function BlockMover({
         icon: drag_handle,
         className: "block-editor-block-mover__drag-handle",
         "aria-hidden": "true",
-        label: dragHandleLabel
+        label: (0,external_wp_i18n_namespaceObject.__)('Drag')
         // Should not be able to tab to drag handle as this
         // button can only be used with a pointer device.
         ,
         tabIndex: "-1",
         ...draggableProps
       })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), !isManualGrid && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
       className: "block-editor-block-mover__move-button-container",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarItem, {
         children: itemProps => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockMoverUpButton, {
@@ -63026,7 +63644,9 @@ function Shuffle({
         // otherwise we may shuffle to pattern that will not allow to continue shuffling.
         pattern.blocks.length === 1 && pattern.categories?.some(category => {
           return categories.includes(category);
-        })
+        }) && (
+        // Check if the pattern is not a synced pattern.
+        pattern.syncStatus === 'unsynced' || !pattern.id)
       );
     });
   }, [categories, patterns]);
@@ -69472,7 +70092,6 @@ function AspectRatioDropdown({
     label: (0,external_wp_i18n_namespaceObject.__)('Aspect Ratio'),
     popoverProps: constants_POPOVER_PROPS,
     toggleProps: toggleProps,
-    className: "wp-block-image__aspect-ratio",
     children: ({
       onClose
     }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
@@ -73837,21 +74456,6 @@ function UnitControl({
     ...props
   });
 }
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/arrow-left.js
-/**
- * WordPress dependencies
- */
-
-
-const arrowLeft = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M20 11.2H6.8l3.7-3.7-1-1L3.9 12l5.6 5.5 1-1-3.7-3.7H20z"
-  })
-});
-/* harmony default export */ const arrow_left = (arrowLeft);
 
 ;// CONCATENATED MODULE: ./packages/block-editor/build-module/components/url-input/button.js
 /**

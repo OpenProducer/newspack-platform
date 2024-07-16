@@ -79,6 +79,7 @@ export type DonateBlockAttributes = OverridableConfiguration & {
 	layoutOption: 'frequency' | 'tiers';
 	// For tiers-based layout option.
 	tiersBasedOptions: [ TierBasedOptionValue, TierBasedOptionValue, TierBasedOptionValue ];
+	tierStyle: 'grid' | 'list';
 	// Manual mode enables block-level overrides of the global Donate settings.
 	manual: boolean;
 	// Post-checkout button option.

@@ -35,6 +35,13 @@ class Setup {
 			wp_set_current_user( $user_id );
 		}
 
+		// Set permalink structure to pretty links, unless already set.
+		if ( ! get_option( 'permalink_structure' ) ) {
+			global $wp_rewrite;
+			$wp_rewrite->set_permalink_structure( '/%year%/%monthnum%/%postname%/' );
+			$wp_rewrite->flush_rules(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rules_flush_rules
+		}
+
 		$user_name = wp_get_current_user()->user_login;
 
 		WP_CLI::line( "Logged in as $user_name" );

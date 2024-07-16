@@ -1,7 +1,7 @@
 @use '../../../shared/sass/variables';
 @use '../../../shared/sass/mixins';
 
-div.wp-block-columns {
+body:not( [class*="block-theme"] ) div.wp-block-columns {
 	gap: 32px;
 
 	&.is-style-borders {
@@ -21,13 +21,13 @@ div.wp-block-columns {
 
 .wp-block-columns {
 	@include mixins.media( tablet ) {
-		&.is-style-first-col-to-second .wp-block-column:nth-child( 2 ) {
+		&.is-style-first-col-to-second > .wp-block-column:nth-child( 2 ) {
 			order: -1;
 		}
 
 		&.is-style-first-col-to-third {
-			.wp-block-column:nth-child( 2 ),
-			.wp-block-column:nth-child( 3 ) {
+			> .wp-block-column:nth-child( 2 ),
+			> .wp-block-column:nth-child( 3 ) {
 				order: -1;
 			}
 		}
@@ -65,13 +65,13 @@ div.wp-block-columns {
 		@include mixins.media( tablet ) {
 			&.is-style-first-col-to-second,
 			&.is-style-first-col-to-third {
-				.wp-block-column:first-child::after {
+				> .wp-block-column:first-child::after {
 					display: none;
 				}
 			}
 
-			&.is-style-first-col-to-second .wp-block-column:nth-child( 2 )::after,
-			&.is-style-first-col-to-third .wp-block-column:nth-child( 3 )::after {
+			&.is-style-first-col-to-second > .wp-block-column:nth-child( 2 )::after,
+			&.is-style-first-col-to-third > .wp-block-column:nth-child( 3 )::after {
 				display: block;
 			}
 		}

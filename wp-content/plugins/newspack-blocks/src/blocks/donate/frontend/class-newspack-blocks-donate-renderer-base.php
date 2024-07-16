@@ -109,6 +109,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 
 		$is_tiers_based                        = $configuration['tiered'] && 'tiers' === $attributes['layoutOption'];
 		$configuration['is_tier_based_layout'] = $is_tiers_based;
+		$tier_style                            = $attributes['tierStyle'];
 
 		$frequencies = [
 			'once'  => __( 'One-time', 'newspack-blocks' ),
@@ -137,6 +138,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 			'wpbnbd--platform-' . $configuration['platform'],
 			$classname,
 			'wpbnbd-frequencies--' . count( $configuration['frequencies'] ),
+			$is_tiers_based ? 'wpbnbd--tier-style-' . $tier_style : null,
 		];
 
 		if ( ! Newspack_Blocks::can_use_name_your_price() ) {

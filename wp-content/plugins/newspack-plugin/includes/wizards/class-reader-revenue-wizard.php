@@ -286,16 +286,15 @@ class Reader_Revenue_Wizard extends Wizard {
 	 * @return WP_REST_Response Boolean success.
 	 */
 	public function api_update( $request ) {
-		$params   = $request->get_params();
-		$platform = $params['platform'];
-		Donations::set_platform_slug( $platform );
+		$params = $request->get_params();
+		Donations::set_platform_slug( $params['platform'] );
 
 		// Update NRH settings.
-		if ( 'nrh' === $platform ) {
+		if ( Donations::is_platform_nrh() ) {
 			NRH::update_settings( $params );
 		}
 
-		// Ensure that any Reader Revenue settings changed while the platform wasn't WC are persisted to WC products .
+		// Ensure that any Reader Revenue settings changed while the platform wasn't WC are persisted to WC products.
 		if ( Donations::is_platform_wc() ) {
 			Donations::update_donation_product( Donations::get_donation_settings() );
 		}

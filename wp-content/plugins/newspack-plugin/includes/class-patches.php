@@ -20,6 +20,7 @@ class Patches {
 		add_filter( 'wpseo_enhanced_slack_data', [ __CLASS__, 'use_cap_for_slack_preview' ] );
 		add_action( 'admin_menu', [ __CLASS__, 'add_patterns_menu_link' ] );
 		add_action( 'admin_menu', [ __CLASS__, 'add_pattern_categories_menu_link' ] );
+		add_action( 'admin_menu', [ __CLASS__, 'remove_core_patterns_menu_link' ] );
 		add_action( 'manage_edit-wp_block_columns', [ __CLASS__, 'add_custom_columns' ] );
 		add_action( 'manage_edit-wp_block_sortable_columns', [ __CLASS__, 'add_sortable_columns' ] );
 		add_action( 'manage_wp_block_posts_custom_column', [ __CLASS__, 'custom_column_content' ], 10, 2 );
@@ -116,6 +117,13 @@ class Patches {
 	 */
 	public static function add_pattern_categories_menu_link() {
 		add_submenu_page( 'edit.php', 'manage_pattern_categories', __( 'Pattern Categories', 'newspack-plugin' ), 'edit_posts', 'edit-tags.php?taxonomy=wp_pattern_category', '', 3 );
+	}
+
+	/**
+	 * Remove the Core Patterns link, which redirects to the Site Editor as of WordPress 6.6.
+	 */
+	public static function remove_core_patterns_menu_link() {
+		remove_submenu_page( 'themes.php', 'site-editor.php?path=/patterns' );
 	}
 
 	/**

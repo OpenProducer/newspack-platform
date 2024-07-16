@@ -201,7 +201,7 @@ const getPreviewPosts = ( attributes: HomepageArticlesAttributes ) =>
 
 type Select = ( namespace: string ) => {
 	// core/blocks-editor
-	getBlocks: () => Block[];
+	getBlocks: ( clientId?: string ) => Block[];
 	// core/editor
 	getEditedPostAttribute: ( attribute: string ) => Block[];
 	// core
@@ -222,12 +222,25 @@ export const postsBlockSelector = (
 		attributes,
 	}: { clientId: Block[ 'clientId' ]; attributes: HomepageArticlesAttributes }
 ): HomepageArticlesPropsFromDataSelector => {
-	const { getEditedPostAttribute } = select( 'core/editor' );
-	const editorBlocks = getEditedPostAttribute( 'blocks' ) || [];
 	const { getBlocks } = select( 'core/block-editor' );
-	const editorBlocksIds = getEditorBlocksIds( editorBlocks );
+	const { getEditedPostAttribute } = select( 'core/editor' );
+
+	const editorBlocks = getEditedPostAttribute( 'blocks' ) || [];
+	const allEditorBlocks = [];
+
+	for ( const block of editorBlocks ) {
+		// Get pattern blocks as well.
+		if ( block.name === 'core/block' ) {
+			allEditorBlocks.push( ...getBlocks( block.clientId ) );
+		} else {
+			allEditorBlocks.push( block );
+		}
+	}
+
+	const editorBlocksIds = getEditorBlocksIds( allEditorBlocks );
 	const blocks = getBlocks();
 	const isWidgetEditor = blocks.some( block => block.name === 'core/widget-area' );
+
 	// The block might be rendered in the block styles preview, not in the editor.
 	const isEditorBlock =
 		editorBlocksIds.length === 0 || editorBlocksIds.indexOf( clientId ) >= 0 || isWidgetEditor;

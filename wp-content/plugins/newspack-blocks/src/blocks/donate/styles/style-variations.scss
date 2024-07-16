@@ -785,25 +785,5 @@
 				}
 			}
 		}
-
-		&.list {
-			.wpbnbd__tiers {
-				&__tier {
-					margin: 0;
-					width: 100%;
-				}
-				
-				&__options {
-					display: grid;
-					gap: var( --newspack-ui-spacer-2, 12px );
-					margin: 0;
-					overflow: hidden;
-	
-					&__dots {
-						display: none;
-					}
-				}
-			}
-		}
 	}
 }

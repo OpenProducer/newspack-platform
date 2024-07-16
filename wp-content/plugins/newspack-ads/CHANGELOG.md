@@ -1,3 +1,16 @@
+# [2.1.0](https://github.com/Automattic/newspack-ads/compare/v2.0.2...v2.1.0) (2024-07-01)
+
+
+### Bug Fixes
+
+* **gam:** remove error message when using constant-contact-forms plugin ([#853](https://github.com/Automattic/newspack-ads/issues/853)) ([9205085](https://github.com/Automattic/newspack-ads/commit/92050854c13a165bf8d4d4df576cfce9293c5a41)), closes [/github.com/WebDevStudios/constant-contact-forms/blame/main/composer.lock#L214-L215](https://github.com//github.com/WebDevStudios/constant-contact-forms/blame/main/composer.lock/issues/L214-L215)
+* update newspack-scripts to v5.5.1 ([db724e4](https://github.com/Automattic/newspack-ads/commit/db724e47dbb0b80f0d88273cb0f30b5564381bb7))
+
+
+### Features
+
+* ensure regenerator-runtime is available (for WP 6.6) ([#866](https://github.com/Automattic/newspack-ads/issues/866)) ([b82977a](https://github.com/Automattic/newspack-ads/commit/b82977a0dd3ed55105fd092b87293248609da4c0))
+
 ## [2.0.2](https://github.com/Automattic/newspack-ads/compare/v2.0.1...v2.0.2) (2024-06-18)
 
 

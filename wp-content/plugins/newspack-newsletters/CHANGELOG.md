@@ -1,3 +1,10 @@
+# [2.18.0](https://github.com/Automattic/newspack-newsletters/compare/v2.17.1...v2.18.0) (2024-06-28)
+
+
+### Features
+
+* **mailchimp:** get historical usage reports ([a238312](https://github.com/Automattic/newspack-newsletters/commit/a2383120f053e7b79a67d2636dd8673f574899b7))
+
 ## [2.17.1](https://github.com/Automattic/newspack-newsletters/compare/v2.17.0...v2.17.1) (2024-06-17)
 
 
