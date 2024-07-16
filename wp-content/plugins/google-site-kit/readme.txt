@@ -2,9 +2,9 @@
 
 Contributors:      google
 Requires at least: 5.2
-Tested up to:      6.5
+Tested up to:      6.6
 Requires PHP:      7.4
-Stable tag:        1.129.1
+Stable tag:        1.131.0
 License:           Apache License 2.0
 License URI:       https://www.apache.org/licenses/LICENSE-2.0
 Tags:              google, search-console, analytics, adsense, pagespeed-insights
@@ -109,10 +109,28 @@ Please create a new topic on our [WordPress.org support forum](https://wordpress
 
 == Changelog ==
 
-= 1.129.1 =
+= 1.131.0 =
+
+**Enhanced**
+
+* Update margins for the Audience Segmentation widget's title. See [#8862](https://github.com/google/site-kit-wp/issues/8862).
+* Improve margins between "New" badge and text. See [#8861](https://github.com/google/site-kit-wp/issues/8861).
+* Add Reader Revenue Manager API functionality to retrieve publications. See [#8791](https://github.com/google/site-kit-wp/issues/8791).
+* Update the `useInViewSelect` hook to use dependencies. See [#8789](https://github.com/google/site-kit-wp/issues/8789).
+* Add Reader Revenue Module setup and settings view foundations. See [#8786](https://github.com/google/site-kit-wp/issues/8786).
+* Update Consent Mode to support additional consent types out of the box. See [#8385](https://github.com/google/site-kit-wp/issues/8385).
+* Detect WP Consent API plugin even when it's installed in a non-standard folder name. See [#8307](https://github.com/google/site-kit-wp/issues/8307).
+* Implement the loading state for the audience selection panel. See [#8162](https://github.com/google/site-kit-wp/issues/8162).
+* If an error occurs while loading the Audience Selection Panel, show it an an error state, with a notice that allows the data loading to be retried. See [#8161](https://github.com/google/site-kit-wp/issues/8161).
+* Handle errors in the Audience Segmentation setup flow, showing an error modal allowing the setup to be retried, or relevant permissions to be requested. See [#8134](https://github.com/google/site-kit-wp/issues/8134).
+
+**Changed**
+
+* Update `@wordpress/data` to version `4.27.3`, including a patch to avoid breaking changes. See [#8826](https://github.com/google/site-kit-wp/issues/8826).
 
 **Fixed**
 
-* Remove Ads module setup CTA banner from SK dashboard. See [#8902](https://github.com/google/site-kit-wp/issues/8902).
+* Fix bug that prevented Event Provider JavaScript files from loading. See [#8955](https://github.com/google/site-kit-wp/issues/8955).
+* Add a "Learn more" link for Enhanced Conversion Tracking. See [#8941](https://github.com/google/site-kit-wp/issues/8941).
 
 [See changelog for all versions](https://raw.githubusercontent.com/google/site-kit-wp/main/changelog.txt).

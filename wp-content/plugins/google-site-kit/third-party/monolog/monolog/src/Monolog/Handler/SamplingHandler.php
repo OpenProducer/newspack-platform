@@ -80,7 +80,7 @@ class SamplingHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      *
      * @return HandlerInterface
      */
-    public function getHandler(array $record = null)
+    public function getHandler(?array $record = null)
     {
         if (!$this->handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface) {
             $this->handler = ($this->handler)($record, $this);

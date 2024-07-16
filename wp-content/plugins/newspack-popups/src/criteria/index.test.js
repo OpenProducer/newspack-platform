@@ -104,6 +104,18 @@ describe( 'criteria matching', () => {
 		expect( criteria.matches( { value: '' } ) ).toEqual( false );
 		expect( criteria.matches( { value: [] } ) ).toEqual( false );
 	} );
+	it( 'should match "list__in" matching function with loose type comparison', () => {
+		setMatchingAttribute( criteriaId, () => 2 );
+		setMatchingFunction( criteriaId, 'list__in' );
+		const criteria = getCriteria( criteriaId );
+		expect( criteria.matches( { value: [ '1', '2' ] } ) ).toEqual( true );
+		expect( criteria.matches( { value: [ 1, 2 ] } ) ).toEqual( true );
+		expect( criteria.matches( { value: '1, 2' } ) ).toEqual( true );
+		expect( criteria.matches( { value: '2' } ) ).toEqual( true );
+		expect( criteria.matches( { value: [ 1 ] } ) ).toEqual( false );
+		expect( criteria.matches( { value: '1' } ) ).toEqual( false );
+		expect( criteria.matches( { value: 1 } ) ).toEqual( false );
+	} );
 	it( 'should match "list__not_in" matching function', () => {
 		setMatchingAttribute( criteriaId, () => 'bar' );
 		setMatchingFunction( criteriaId, 'list__not_in' );
@@ -127,6 +139,17 @@ describe( 'criteria matching', () => {
 		expect( criteria.matches( { value: [ 'fuu', 'baz' ] } ) ).toEqual( true );
 		expect( criteria.matches( { value: '' } ) ).toEqual( true );
 		expect( criteria.matches( { value: [] } ) ).toEqual( true );
+	} );
+	it( 'should match "list__not_in" matching function with loose type comparison', () => {
+		setMatchingAttribute( criteriaId, () => 2 );
+		setMatchingFunction( criteriaId, 'list__not_in' );
+		const criteria = getCriteria( criteriaId );
+		expect( criteria.matches( { value: [ '1', '2' ] } ) ).toEqual( false );
+		expect( criteria.matches( { value: [ 1, 2 ] } ) ).toEqual( false );
+		expect( criteria.matches( { value: '2' } ) ).toEqual( false );
+		expect( criteria.matches( { value: [ 1 ] } ) ).toEqual( true );
+		expect( criteria.matches( { value: '1' } ) ).toEqual( true );
+		expect( criteria.matches( { value: 1 } ) ).toEqual( true );
 	} );
 	it( 'should match custom matching function', () => {
 		setMatchingFunction( criteriaId, segmentConfig => {

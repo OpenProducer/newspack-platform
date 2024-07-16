@@ -22417,12 +22417,12 @@ async function fetchLinkSuggestions(search, searchOptions = {}, editorSettings =
  * @param search
  */
 function sortResults(results, search) {
-  const searchTokens = new Set(tokenize(search));
+  const searchTokens = tokenize(search);
   const scores = {};
   for (const result of results) {
     if (result.title) {
       const titleTokens = tokenize(result.title);
-      const matchingTokens = titleTokens.filter(token => searchTokens.has(token));
+      const matchingTokens = titleTokens.filter(titleToken => searchTokens.some(searchToken => titleToken.includes(searchToken)));
       scores[result.id] = matchingTokens.length / titleTokens.length;
     } else {
       scores[result.id] = 0;
@@ -23506,7 +23506,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/core-data');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/core-data');
 
 ;// CONCATENATED MODULE: external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];

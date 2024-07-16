@@ -8,6 +8,7 @@
 namespace Newspack;
 
 use WP_Error;
+use WP_Service_Worker_Scripts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,6 +26,9 @@ class PWA {
 
 		add_filter( 'wp_service_worker_navigation_caching', [ __CLASS__, 'increase_network_timeout' ] );
 		add_filter( 'wp_service_worker_error_messages', [ __CLASS__, 'error_messages' ] );
+
+		add_action( 'wp_front_service_worker', [ __CLASS__, 'bypass_service_worker' ], 100 );
+		add_action( 'wp_admin_service_worker', [ __CLASS__, 'bypass_service_worker' ], 100 );
 	}
 
 	/**
@@ -99,6 +103,17 @@ class PWA {
 			$messages['serverOffline'] = __( 'There has been a problem connecting with the server. Please check your internet connection or try again later.', 'newspack' );
 		}
 		return $messages;
+	}
+
+	/**
+	 * Temporary workaround to disable the offline post request handling script.
+	 * 
+	 * @param WP_Service_Worker_Scripts $scripts The service worker scripts.
+	 *
+	 * @see - https://github.com/GoogleChromeLabs/pwa-wp/issues/1106
+	 */
+	public static function bypass_service_worker( WP_Service_Worker_Scripts $scripts ) {
+		unset( $scripts->registered['wp-offline-post-request-handling'] );
 	}
 }
 PWA::init();

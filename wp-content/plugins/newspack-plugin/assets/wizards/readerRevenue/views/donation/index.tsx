@@ -10,6 +10,7 @@ import { ToggleControl, CheckboxControl } from '@wordpress/components';
  */
 import { MoneyInput } from '../../components';
 import {
+	ActionCard,
 	Button,
 	Card,
 	Grid,
@@ -78,7 +79,6 @@ type WizardData = {
 
 export const DonationAmounts = () => {
 	const wizardData = Wizard.useWizardData( 'reader-revenue' ) as WizardData;
-
 	const { updateWizardSettings } = useDispatch( Wizard.STORE_NAMESPACE );
 
 	if ( ! wizardData.donation_data || 'errors' in wizardData.donation_data ) {
@@ -110,20 +110,20 @@ export const DonationAmounts = () => {
 		<>
 			<Card headerActions noBorder>
 				<SectionHeader
-					title={ __( 'Suggested Donations', 'newspack' ) }
+					title={ __( 'Suggested Donations', 'newspack-plugin' ) }
 					description={ __(
 						'Set suggested donation amounts. These will be the default settings for the Donate block.',
-						'newspack'
+						'newspack-plugin'
 					) }
 					noMargin
 				/>
 				{ canUseNameYourPrice && (
 					<SelectControl
-						label={ __( 'Donation Type', 'newspack' ) }
+						label={ __( 'Donation Type', 'newspack-plugin' ) }
 						onChange={ () => changeHandler( [ 'tiered' ] )( ! tiered ) }
 						buttonOptions={ [
-							{ value: true, label: __( 'Tiered', 'newspack' ) },
-							{ value: false, label: __( 'Untiered', 'newspack' ) },
+							{ value: true, label: __( 'Tiered', 'newspack-plugin' ) },
+							{ value: false, label: __( 'Untiered', 'newspack-plugin' ) },
 						] }
 						buttonSmall
 						value={ tiered }
@@ -132,15 +132,15 @@ export const DonationAmounts = () => {
 				) }
 			</Card>
 			{ tiered ? (
-				<Grid columns={ 1 } gutter={ 16 }>
+				<Grid columns={ 1 }>
 					{ availableFrequencies.map( section => {
 						const isFrequencyDisabled = disabledFrequencies[ section.key ];
 						const isOneFrequencyActive =
 							Object.values( disabledFrequencies ).filter( Boolean ).length ===
 							FREQUENCY_SLUGS.length - 1;
 						return (
-							<Card isMedium key={ section.key }>
-								<Grid columns={ 1 } gutter={ 16 }>
+							<Card noBorder key={ section.key }>
+								<Grid columns={ 1 } gutter={ 8 }>
 									<ToggleControl
 										checked={ ! isFrequencyDisabled }
 										onChange={ () =>
@@ -160,7 +160,7 @@ export const DonationAmounts = () => {
 													amounts[ section.key ][ 0 ] < minimumDonationFloat
 														? __(
 																'Warning: suggested donations should be at least the minimum donation amount.',
-																'newspack'
+																'newspack-plugin'
 														  )
 														: null
 												}
@@ -175,7 +175,7 @@ export const DonationAmounts = () => {
 													amounts[ section.key ][ 1 ] < minimumDonationFloat
 														? __(
 																'Warning: suggested donations should be at least the minimum donation amount.',
-																'newspack'
+																'newspack-plugin'
 														  )
 														: null
 												}
@@ -190,7 +190,7 @@ export const DonationAmounts = () => {
 													amounts[ section.key ][ 2 ] < minimumDonationFloat
 														? __(
 																'Warning: suggested donations should be at least the minimum donation amount.',
-																'newspack'
+																'newspack-plugin'
 														  )
 														: null
 												}
@@ -206,73 +206,70 @@ export const DonationAmounts = () => {
 					} ) }
 				</Grid>
 			) : (
-				<Card isMedium>
-					<Grid columns={ 3 } rowGap={ 16 }>
-						{ availableFrequencies.map( section => {
-							const isFrequencyDisabled = disabledFrequencies[ section.key ];
-							const isOneFrequencyActive =
-								Object.values( disabledFrequencies ).filter( Boolean ).length ===
-								FREQUENCY_SLUGS.length - 1;
-							return (
-								<Grid columns={ 1 } gutter={ 16 } key={ section.key }>
-									<ToggleControl
-										checked={ ! isFrequencyDisabled }
-										onChange={ () =>
-											changeHandler( [ 'disabledFrequencies', section.key ] )(
-												! isFrequencyDisabled
-											)
-										}
-										label={ section.tieredLabel }
-										disabled={ ! isFrequencyDisabled && isOneFrequencyActive }
-									/>
-									{ ! isFrequencyDisabled && (
-										<MoneyInput
-											currencySymbol={ currencySymbol }
-											label={ section.staticLabel }
-											value={ amounts[ section.key ][ 3 ] }
-											min={ minimumDonationFloat }
-											error={
-												amounts[ section.key ][ 3 ] < minimumDonationFloat
-													? __(
-															'Warning: suggested donations should be at least the minimum donation amount.',
-															'newspack'
-													  )
-													: null
+				<Grid columns={ 1 }>
+					<Card noBorder>
+						<Grid columns={ 3 } rowGap={ 16 }>
+							{ availableFrequencies.map( section => {
+								const isFrequencyDisabled = disabledFrequencies[ section.key ];
+								const isOneFrequencyActive =
+									Object.values( disabledFrequencies ).filter( Boolean ).length ===
+									FREQUENCY_SLUGS.length - 1;
+								return (
+									<Grid columns={ 1 } gutter={ 16 } key={ section.key }>
+										<ToggleControl
+											checked={ ! isFrequencyDisabled }
+											onChange={ () =>
+												changeHandler( [ 'disabledFrequencies', section.key ] )(
+													! isFrequencyDisabled
+												)
 											}
-											onChange={ changeHandler( [ 'amounts', section.key, 3 ] ) }
-											key={ section.key }
+											label={ section.tieredLabel }
+											disabled={ ! isFrequencyDisabled && isOneFrequencyActive }
 										/>
-									) }
-								</Grid>
-							);
-						} ) }
-					</Grid>
-				</Card>
+										{ ! isFrequencyDisabled && (
+											<MoneyInput
+												currencySymbol={ currencySymbol }
+												label={ section.staticLabel }
+												value={ amounts[ section.key ][ 3 ] }
+												min={ minimumDonationFloat }
+												error={
+													amounts[ section.key ][ 3 ] < minimumDonationFloat
+														? __(
+																'Warning: suggested donations should be at least the minimum donation amount.',
+																'newspack-plugin'
+														  )
+														: null
+												}
+												onChange={ changeHandler( [ 'amounts', section.key, 3 ] ) }
+												key={ section.key }
+											/>
+										) }
+									</Grid>
+								);
+							} ) }
+						</Grid>
+					</Card>
+				</Grid>
 			) }
-			<Card headerActions noBorder>
-				<SectionHeader
-					title={ __( 'Minimum Donation', 'newspack' ) }
-					description={ __(
-						'Set minimum donation amount. Setting a reasonable minimum donation amount can help protect your site from bot attacks.',
-						'newspack'
-					) }
-					noMargin
-				/>
+			<Grid columns={ 3 }>
 				<TextControl
-					label={ __( 'Minimum donation', 'newspack' ) }
+					label={ __( 'Minimum donation', 'newspack-plugin' ) }
+					help={ __(
+						'Set minimum donation amount. Setting a reasonable minimum donation amount can help protect your site from bot attacks.',
+						'newspack-plugin'
+					) }
 					type="number"
 					min={ 1 }
 					value={ minimumDonationFloat }
 					onChange={ ( value: string ) => changeHandler( [ 'minimumDonation' ] )( value ) }
 				/>
-			</Card>
+			</Grid>
 		</>
 	);
 };
 
 const BillingFields = () => {
 	const wizardData = Wizard.useWizardData( 'reader-revenue' ) as WizardData;
-
 	const { updateWizardSettings } = useDispatch( Wizard.STORE_NAMESPACE );
 
 	if ( ! wizardData.donation_data || 'errors' in wizardData.donation_data ) {
@@ -299,10 +296,10 @@ const BillingFields = () => {
 		<>
 			<Card noBorder headerActions>
 				<SectionHeader
-					title={ __( 'Billing Fields', 'newspack' ) }
+					title={ __( 'Billing Fields', 'newspack-plugin' ) }
 					description={ __(
-						'Configure which billing fields should be rendered on the donation form.',
-						'newspack'
+						'Configure the billing fields shown in the modal checkout form.',
+						'newspack-plugin'
 					) }
 					noMargin
 				/>
@@ -332,9 +329,15 @@ const BillingFields = () => {
 
 const Donation = () => {
 	const wizardData = Wizard.useWizardData( 'reader-revenue' ) as WizardData;
-
 	const { saveWizardSettings } = useDispatch( Wizard.STORE_NAMESPACE );
-	const onSave = () =>
+	const onSaveDonationSettings = () =>
+		saveWizardSettings( {
+			slug: READER_REVENUE_WIZARD_SLUG,
+			section: 'donations',
+			payloadPath: [ 'donation_data' ],
+			auxData: { saveDonationProduct: true },
+		} );
+	const onSaveBillingFields = () =>
 		saveWizardSettings( {
 			slug: READER_REVENUE_WIZARD_SLUG,
 			section: 'donations',
@@ -343,45 +346,61 @@ const Donation = () => {
 
 	return (
 		<>
-			{ wizardData.donation_page && (
-				<>
-					<Card noBorder headerActions>
-						<h2>{ __( 'Donations Landing Page', 'newspack' ) }</h2>
-						<Button
-							variant="secondary"
-							isSmall
-							href={ wizardData.donation_page.editUrl }
-							onClick={ undefined }
-						>
-							{ __( 'Edit Page' ) }
-						</Button>
-					</Card>
-					{ 'publish' === wizardData.donation_page.status ? (
-						<Notice
-							isSuccess
-							noticeText={ __(
-								'Your donations landing page is set up and published.',
-								'newspack'
-							) }
-						/>
-					) : (
-						<Notice
-							isError
-							noticeText={ __(
-								"Your donations landing page has been created, but is not yet published. You can now edit it and publish when you're ready.",
-								'newspack'
-							) }
-						/>
-					) }
-				</>
-			) }
-			<DonationAmounts />
-			<BillingFields />
-			<div className="newspack-buttons-card">
-				<Button variant="primary" onClick={ onSave } href={ undefined }>
-					{ __( 'Save Settings' ) }
-				</Button>
-			</div>
+			<ActionCard
+				description={ __( 'Configure options for donations.', 'newspack-plugin' ) }
+				hasGreyHeader={ true }
+				isMedium
+				title={ __( 'Donation Settings', 'newspack-plugin' ) }
+				actionContent={
+					<Button variant="primary" onClick={ onSaveDonationSettings }>
+						{ __( 'Save Donation Settings', 'newspack-plugin' ) }
+					</Button>
+				}
+			>
+				{ wizardData.donation_page && (
+					<>
+						<Card noBorder headerActions>
+							<SectionHeader title={ __( 'Donations Landing Page', 'newspack-plugin' ) } noMargin />
+							<Button
+								variant="secondary"
+								isSmall
+								href={ wizardData.donation_page.editUrl }
+								onClick={ undefined }
+							>
+								{ __( 'Edit Page' ) }
+							</Button>
+						</Card>
+						{ 'publish' === wizardData.donation_page.status ? (
+							<Notice
+								isSuccess
+								noticeText={ __( 'Your donations landing page is published.', 'newspack-plugin' ) }
+							/>
+						) : (
+							<Notice
+								isError
+								noticeText={ __(
+									'Your donations landing page is not yet published.',
+									'newspack-plugin'
+								) }
+							/>
+						) }
+					</>
+				) }
+				<DonationAmounts />
+			</ActionCard>
+			<ActionCard
+				description={ __( 'Configure options for modal checkouts.', 'newspack-plugin' ) }
+				hasGreyHeader={ true }
+				isMedium
+				title={ __( 'Modal Checkout Settings', 'newspack-plugin' ) }
+				actionContent={
+					<Button variant="primary" onClick={ onSaveBillingFields }>
+						{ __( 'Save Modal Checkout Settings', 'newspack-plugin' ) }
+					</Button>
+				}
+			>
+				<BillingFields />
+			</ActionCard>
 		</>
 	);
 };

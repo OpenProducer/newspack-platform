@@ -44,6 +44,7 @@ return array(
     'Newspack\\Donations' => $baseDir . '/includes/class-donations.php',
     'Newspack\\Emails' => $baseDir . '/includes/emails/class-emails.php',
     'Newspack\\Engagement_Wizard' => $baseDir . '/includes/wizards/class-engagement-wizard.php',
+    'Newspack\\Everlit_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-everlit-configuration-manager.php',
     'Newspack\\Fivetran_Connection' => $baseDir . '/includes/oauth/class-fivetran-connection.php',
     'Newspack\\GoogleSiteKit' => $baseDir . '/includes/plugins/google-site-kit/class-googlesitekit.php',
     'Newspack\\GoogleSiteKitAnalytics' => $baseDir . '/includes/plugins/google-site-kit/class-googlesitekitanalytics.php',

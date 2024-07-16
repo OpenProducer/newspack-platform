@@ -175,7 +175,7 @@ class WooCommerce_Cover_Fees {
 								'I’d like to cover the %1$s transaction fee to ensure my full donation goes towards %2$s mission.',
 								'newspack-plugin'
 							),
-							esc_html( self::get_cart_fee_display_value() ),
+							wp_kses_post( self::get_cart_fee_display_value() ),
 							esc_html( self::get_possessive( get_option( 'blogname' ) ) )
 						);
 					}
@@ -241,9 +241,12 @@ class WooCommerce_Cover_Fees {
 	 */
 	public static function get_fee_display_value( $subtotal ) {
 		$total = self::get_total_with_fee( $subtotal );
-		// Just one decimal place, please.
-		$flat_percentage = (float) number_format( ( ( $total - $subtotal ) * 100 ) / $subtotal, 1 );
-		return $flat_percentage . '%';
+		if ( ! function_exists( 'wc_price' ) ) {
+			$donation_settings = Donations::get_donation_settings();
+			// Just one decimal place, please.
+			return $donation_settings['currencySymbol'] . ( (float) number_format( $total - $subtotal, 2 ) );
+		}
+		return \wc_price( $total - $subtotal );
 	}
 
 	/**

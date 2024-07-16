@@ -322,12 +322,13 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/edit-post');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/edit-post');
 
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/store/actions.js
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -607,13 +608,19 @@ const requestMetaBoxUpdates = () => async ({
     window.tinyMCE.triggerSave();
   }
 
+  // We gather the base form data.
+  const baseFormData = new window.FormData(document.querySelector('.metabox-base-form'));
+  const postId = baseFormData.get('post_ID');
+  const postType = baseFormData.get('post_type');
+
   // Additional data needed for backward compatibility.
   // If we do not provide this data, the post will be overridden with the default values.
-  const post = registry.select(external_wp_editor_namespaceObject.store).getCurrentPost();
+  // We cannot rely on getCurrentPost because right now on the editor we may be editing a pattern or a template.
+  // We need to retrieve the post that the base form data is referring to.
+  const post = registry.select(external_wp_coreData_namespaceObject.store).getEditedEntityRecord('postType', postType, postId);
   const additionalData = [post.comment_status ? ['comment_status', post.comment_status] : false, post.ping_status ? ['ping_status', post.ping_status] : false, post.sticky ? ['sticky', post.sticky] : false, post.author ? ['post_author', post.author] : false].filter(Boolean);
 
-  // We gather all the metaboxes locations data and the base form data.
-  const baseFormData = new window.FormData(document.querySelector('.metabox-base-form'));
+  // We gather all the metaboxes locations.
   const activeMetaBoxLocations = select.getActiveMetaBoxLocations();
   const formDataToMerge = [baseFormData, ...activeMetaBoxLocations.map(location => new window.FormData(getMetaBoxContainer(location)))];
 
@@ -3091,6 +3098,7 @@ function Layout({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -3099,6 +3107,7 @@ function Layout({
 const {
   PluginPostExcerpt
 } = unlock(external_wp_editor_namespaceObject.privateApis);
+const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
 const deprecateSlot = name => {
   external_wp_deprecated_default()(`wp.editPost.${name}`, {
     since: '6.6',
@@ -3111,6 +3120,9 @@ const deprecateSlot = name => {
  * @see PluginBlockSettingsMenuItem in @wordpress/editor package.
  */
 function PluginBlockSettingsMenuItem(props) {
+  if (isSiteEditor) {
+    return null;
+  }
   deprecateSlot('PluginBlockSettingsMenuItem');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginBlockSettingsMenuItem, {
     ...props
@@ -3121,6 +3133,9 @@ function PluginBlockSettingsMenuItem(props) {
  * @see PluginDocumentSettingPanel in @wordpress/editor package.
  */
 function PluginDocumentSettingPanel(props) {
+  if (isSiteEditor) {
+    return null;
+  }
   deprecateSlot('PluginDocumentSettingPanel');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginDocumentSettingPanel, {
     ...props
@@ -3131,6 +3146,9 @@ function PluginDocumentSettingPanel(props) {
  * @see PluginMoreMenuItem in @wordpress/editor package.
  */
 function PluginMoreMenuItem(props) {
+  if (isSiteEditor) {
+    return null;
+  }
   deprecateSlot('PluginMoreMenuItem');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginMoreMenuItem, {
     ...props
@@ -3141,6 +3159,9 @@ function PluginMoreMenuItem(props) {
  * @see PluginPrePublishPanel in @wordpress/editor package.
  */
 function PluginPrePublishPanel(props) {
+  if (isSiteEditor) {
+    return null;
+  }
   deprecateSlot('PluginPrePublishPanel');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginPrePublishPanel, {
     ...props
@@ -3151,6 +3172,9 @@ function PluginPrePublishPanel(props) {
  * @see PluginPostPublishPanel in @wordpress/editor package.
  */
 function PluginPostPublishPanel(props) {
+  if (isSiteEditor) {
+    return null;
+  }
   deprecateSlot('PluginPostPublishPanel');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginPostPublishPanel, {
     ...props
@@ -3161,6 +3185,9 @@ function PluginPostPublishPanel(props) {
  * @see PluginPostStatusInfo in @wordpress/editor package.
  */
 function PluginPostStatusInfo(props) {
+  if (isSiteEditor) {
+    return null;
+  }
   deprecateSlot('PluginPostStatusInfo');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginPostStatusInfo, {
     ...props
@@ -3171,6 +3198,9 @@ function PluginPostStatusInfo(props) {
  * @see PluginSidebar in @wordpress/editor package.
  */
 function PluginSidebar(props) {
+  if (isSiteEditor) {
+    return null;
+  }
   deprecateSlot('PluginSidebar');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginSidebar, {
     ...props
@@ -3181,6 +3211,9 @@ function PluginSidebar(props) {
  * @see PluginSidebarMoreMenuItem in @wordpress/editor package.
  */
 function PluginSidebarMoreMenuItem(props) {
+  if (isSiteEditor) {
+    return null;
+  }
   deprecateSlot('PluginSidebarMoreMenuItem');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginSidebarMoreMenuItem, {
     ...props
@@ -3191,6 +3224,9 @@ function PluginSidebarMoreMenuItem(props) {
  * @see PluginPostExcerpt in @wordpress/editor package.
  */
 function __experimentalPluginPostExcerpt() {
+  if (isSiteEditor) {
+    return null;
+  }
   external_wp_deprecated_default()('wp.editPost.__experimentalPluginPostExcerpt', {
     since: '6.6',
     hint: 'Core and custom panels can be access programmatically using their panel name.',

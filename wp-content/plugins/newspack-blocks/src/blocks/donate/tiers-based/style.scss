@@ -162,4 +162,24 @@
 			}
 		}
 	}
+
+	&.wpbnbd--tier-style-list {
+		.wpbnbd__tiers {			
+			&__options {
+				display: grid;
+				gap: var( --newspack-ui-spacer-2, 12px );
+				margin: 0 !important;
+				overflow: hidden;
+
+				&__dots {
+					display: none;
+				}
+			}
+
+			&__tier {
+				margin: 0 !important;
+				width: 100%;
+			}
+		}
+	}
 }

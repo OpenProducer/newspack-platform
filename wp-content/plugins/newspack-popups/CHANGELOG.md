@@ -1,3 +1,22 @@
+## [2.34.1](https://github.com/Automattic/newspack-popups/compare/v2.34.0...v2.34.1) (2024-07-12)
+
+
+### Bug Fixes
+
+* use loose type comparison for list__in and list__not_in ([#1326](https://github.com/Automattic/newspack-popups/issues/1326)) ([1872c96](https://github.com/Automattic/newspack-popups/commit/1872c961189ae58becbb12c637e3866e421f3779))
+
+# [2.34.0](https://github.com/Automattic/newspack-popups/compare/v2.33.1...v2.34.0) (2024-07-01)
+
+
+### Bug Fixes
+
+* update newspack-scripts to v5.5.1 ([#1320](https://github.com/Automattic/newspack-popups/issues/1320)) ([554ba18](https://github.com/Automattic/newspack-popups/commit/554ba186520ebf5566b204d162a6e22458c09080))
+
+
+### Features
+
+* ensure regenerator-runtime is available (for WP 6.6) ([8ee878e](https://github.com/Automattic/newspack-popups/commit/8ee878ede71517b270d8e164c6cef20c5af987be))
+
 ## [2.33.1](https://github.com/Automattic/newspack-popups/compare/v2.33.0...v2.33.1) (2024-06-18)
 
 

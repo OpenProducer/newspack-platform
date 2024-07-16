@@ -198,8 +198,6 @@ final class Idn
             $data = self::lookupCodePointStatus($codePoint, $useSTD3ASCIIRules);
             switch ($data['status']) {
                 case 'disallowed':
-                    $info->errors |= self::ERROR_DISALLOWED;
-                // no break.
                 case 'valid':
                     $str .= \mb_chr($codePoint, 'utf-8');
                     break;
@@ -207,7 +205,7 @@ final class Idn
                     // Do nothing.
                     break;
                 case 'mapped':
-                    $str .= $data['mapping'];
+                    $str .= $transitional && 0x1e9e === $codePoint ? 'ss' : $data['mapping'];
                     break;
                 case 'deviation':
                     $info->transitionalDifferent = \true;
@@ -247,6 +245,16 @@ final class Idn
         foreach ($labels as $i => $label) {
             $validationOptions = $options;
             if ('xn--' === \substr($label, 0, 4)) {
+                // Step 4.1. If the label contains any non-ASCII code point (i.e., a code point greater than U+007F),
+                // record that there was an error, and continue with the next label.
+                if (\preg_match('/[^\\x00-\\x7F]/', $label)) {
+                    $info->errors |= self::ERROR_PUNYCODE;
+                    continue;
+                }
+                // Step 4.2. Attempt to convert the rest of the label to Unicode according to Punycode [RFC3492]. If
+                // that conversion fails, record that there was an error, and continue
+                // with the next label. Otherwise replace the original label in the string by the results of the
+                // conversion.
                 try {
                     $label = self::punycodeDecode(\substr($label, 4));
                 } catch (\Exception $e) {
@@ -383,6 +391,8 @@ final class Idn
             if ('-' === \substr($label, -1, 1)) {
                 $info->errors |= self::ERROR_TRAILING_HYPHEN;
             }
+        } elseif ('xn--' === \substr($label, 0, 4)) {
+            $info->errors |= self::ERROR_PUNYCODE;
         }
         // Step 4. The label must not contain a U+002E (.) FULL STOP.
         if (\false !== \strpos($label, '.')) {

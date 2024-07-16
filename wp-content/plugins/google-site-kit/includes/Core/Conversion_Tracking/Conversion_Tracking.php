@@ -12,7 +12,9 @@ namespace Google\Site_Kit\Core\Conversion_Tracking;
 
 use Google\Site_Kit\Context;
 use Google\Site_Kit\Core\Conversion_Tracking\Conversion_Event_Providers\Contact_Form_7;
+use Google\Site_Kit\Core\Conversion_Tracking\Conversion_Event_Providers\Easy_Digital_Downloads;
 use Google\Site_Kit\Core\Conversion_Tracking\Conversion_Event_Providers\Mailchimp;
+use Google\Site_Kit\Core\Conversion_Tracking\Conversion_Event_Providers\Ninja_Forms;
 use Google\Site_Kit\Core\Conversion_Tracking\Conversion_Event_Providers\OptinMonster;
 use Google\Site_Kit\Core\Conversion_Tracking\Conversion_Event_Providers\PopupMaker;
 use Google\Site_Kit\Core\Conversion_Tracking\Conversion_Event_Providers\WooCommerce;
@@ -57,11 +59,14 @@ class Conversion_Tracking {
 	 * Supported conversion event providers.
 	 *
 	 * @since 1.126.0
+	 * @since 1.130.0 Added Ninja Forms class.
 	 * @var array
 	 */
 	public static $providers = array(
 		Contact_Form_7::CONVERSION_EVENT_PROVIDER_SLUG => Contact_Form_7::class,
+		Easy_Digital_Downloads::CONVERSION_EVENT_PROVIDER_SLUG => Easy_Digital_Downloads::class,
 		Mailchimp::CONVERSION_EVENT_PROVIDER_SLUG      => Mailchimp::class,
+		Ninja_Forms::CONVERSION_EVENT_PROVIDER_SLUG    => Ninja_Forms::class,
 		OptinMonster::CONVERSION_EVENT_PROVIDER_SLUG   => OptinMonster::class,
 		PopupMaker::CONVERSION_EVENT_PROVIDER_SLUG     => PopupMaker::class,
 		WooCommerce::CONVERSION_EVENT_PROVIDER_SLUG    => WooCommerce::class,
@@ -98,7 +103,7 @@ class Conversion_Tracking {
 
 		array_walk(
 			$active_providers,
-			function( Conversion_Events_Provider $active_provider ) {
+			function ( Conversion_Events_Provider $active_provider ) {
 				$active_provider->register_hooks();
 			}
 		);
@@ -120,7 +125,7 @@ class Conversion_Tracking {
 
 		array_walk(
 			$active_providers,
-			function( Conversion_Events_Provider $active_provider ) {
+			function ( Conversion_Events_Provider $active_provider ) {
 				$script_asset = $active_provider->register_script();
 				$script_asset->enqueue();
 			}
@@ -182,5 +187,4 @@ class Conversion_Tracking {
 
 		return $active_providers;
 	}
-
 }

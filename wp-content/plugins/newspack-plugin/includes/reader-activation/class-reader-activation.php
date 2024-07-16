@@ -121,8 +121,11 @@ final class Reader_Activation {
 		];
 
 		if ( Recaptcha::can_use_captcha() ) {
-			$script_dependencies[]           = Recaptcha::SCRIPT_HANDLE;
-			$script_data['captcha_site_key'] = Recaptcha::get_setting( 'site_key' );
+			$recaptcha_version                = Recaptcha::get_setting( 'version' );
+			$script_dependencies[]            = Recaptcha::SCRIPT_HANDLE;
+			if ( 'v3' === $recaptcha_version ) {
+				$script_data['captcha_site_key'] = Recaptcha::get_site_key();
+			}
 		}
 
 		/**
@@ -480,9 +483,9 @@ final class Reader_Activation {
 			],
 			'recaptcha'        => [
 				'active'       => method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha(),
-				'label'        => __( 'reCAPTCHA v3', 'newspack-plugin' ),
-				'description'  => __( 'Connecting to a Google reCAPTCHA v3 account enables enhanced anti-spam for all Newspack sign-up blocks.', 'newspack-plugin' ),
-				'instructions' => __( 'Enable reCAPTCHA v3 and enter your account credentials.', 'newspack-plugin' ),
+				'label'        => __( 'reCAPTCHA', 'newspack-plugin' ),
+				'description'  => __( 'Connecting to a Google reCAPTCHA account enables enhanced anti-spam for all Newspack sign-up blocks.', 'newspack-plugin' ),
+				'instructions' => __( 'Enable reCAPTCHA and enter your account credentials.', 'newspack-plugin' ),
 				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
 				'href'         => \admin_url( '/admin.php?page=newspack-connections-wizard&scrollTo=recaptcha' ),
 				'action_text'  => __( 'reCAPTCHA settings' ),
@@ -848,7 +851,9 @@ final class Reader_Activation {
 	 * Setup nav menu hooks.
 	 */
 	public static function setup_nav_menu() {
-		if ( ! self::get_setting( 'enabled_account_link' ) || ! self::is_woocommerce_active() ) {
+		// Not checking if the whole WC suite is active (self::is_woocommerce_active()),
+		// because only the main WooCommerce plugin is actually required for this to work.
+		if ( ! self::get_setting( 'enabled_account_link' ) || ! function_exists( 'WC' ) ) {
 			return;
 		}
 
@@ -1192,6 +1197,9 @@ final class Reader_Activation {
 						<div class="components-form__field" data-action="pwd">
 							<input name="password" type="password" placeholder="<?php \esc_attr_e( 'Enter your password', 'newspack-plugin' ); ?>" />
 						</div>
+						<?php if ( Recaptcha::can_use_captcha( 'v2' ) ) : ?>
+							<?php Recaptcha::render_recaptcha_v2_container(); ?>
+						<?php endif; ?>
 						<div class="<?php echo \esc_attr( $class( 'actions' ) ); ?>" data-action="pwd">
 							<div class="components-form__submit">
 								<button type="submit"><?php \esc_html_e( 'Sign in', 'newspack-plugin' ); ?></button>
@@ -1448,7 +1456,6 @@ final class Reader_Activation {
 		$redirect         = isset( $_POST['redirect'] ) ? \esc_url_raw( $_POST['redirect'] ) : '';
 		$lists            = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : [];
 		$honeypot         = isset( $_POST['email'] ) ? \sanitize_text_field( $_POST['email'] ) : '';
-		$captcha_token    = isset( $_POST['captcha_token'] ) ? \sanitize_text_field( $_POST['captcha_token'] ) : '';
 		// phpcs:enable
 
 		if ( ! empty( $current_page_url['path'] ) ) {
@@ -1465,9 +1472,9 @@ final class Reader_Activation {
 			);
 		}
 
-		// reCAPTCHA test.
-		if ( Recaptcha::can_use_captcha() ) {
-			$captcha_result = Recaptcha::verify_captcha( $captcha_token );
+		// reCAPTCHA test on account registration only.
+		if ( 'register' === $action && Recaptcha::can_use_captcha() ) {
+			$captcha_result = Recaptcha::verify_captcha();
 			if ( \is_wp_error( $captcha_result ) ) {
 				return self::send_auth_form_response( $captcha_result );
 			}

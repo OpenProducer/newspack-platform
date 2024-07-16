@@ -58,7 +58,7 @@ endif;
 			placeholder="<?php esc_attr_e( 'Your Name', 'newspack-plugin' ); ?>"
 			value="<?php echo ! Reader_Activation::reader_has_generic_display_name() ? \esc_attr( $user->display_name ) : ''; ?>"
 		/>
-		<span><em><?php esc_html_e( 'This is how your name is displayed publicly.', 'woocommerce' ); ?></em></span>
+		<span><em><?php esc_html_e( 'This is how your name is displayed publicly.', 'newspack-plugin' ); ?></em></span>
 	</p>
 
 	<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide mt0">

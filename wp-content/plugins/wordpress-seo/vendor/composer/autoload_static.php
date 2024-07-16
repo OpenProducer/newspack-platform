@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105
+class ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b
 {
     public static $files = array (
         '81db02b30f563b92907e271b66bd7559' => __DIR__ . '/..' . '/yoast/whip/src/Facades/wordpress.php',
@@ -468,54 +468,6 @@ class ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBag' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ParameterBag/ParameterBag.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBagInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ParameterBag/ParameterBagInterface.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ResettableContainerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ResettableContainerInterface.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Config\\AppConfigInterface' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Config/AppConfigInterface.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Config\\Config' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Config/Config.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Config\\DefaultAppConfig' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Config/DefaultAppConfig.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Config\\EnvironmentConfig' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Config/EnvironmentConfig.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Config\\OptionsConfig' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Config/OptionsConfig.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Config\\RoutesConfig' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Config/RoutesConfig.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Config\\ScriptsConfig' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Config/ScriptsConfig.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\AuthenticationController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/AuthenticationController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\CertificateController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/CertificateController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\IdentityController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/IdentityController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\NoticeController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/NoticeController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\PostEditorDataController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/PostEditorDataController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\PostEditorTimestampController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/PostEditorTimestampController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\RestApiController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/RestApiController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\SettingsController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/SettingsController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Controllers\\TimestampController' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Controllers/TimestampController.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\DataTransferObjects\\TimestampData' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/DataTransferObjects/TimestampData.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Exceptions\\ValidationException' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Exceptions/ValidationException.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\AdminHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/AdminHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\AppConfigHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/AppConfigHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\AssetHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/AssetHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\AuthenticationHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/AuthenticationHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\CertificateHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/CertificateHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\ClassicNoticeHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/ClassicNoticeHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\EnvironmentHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/EnvironmentHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\EscapeHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/EscapeHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\OptionsHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/OptionsHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\PostEditorHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/PostEditorHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\PostMetaHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/PostMetaHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\PostTypeHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/PostTypeHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\RedirectHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/RedirectHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\ReflectionHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/ReflectionHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\RestApiHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/RestApiHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\SanitizeHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/SanitizeHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\SchemaHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/SchemaHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\SettingsHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/SettingsHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\StringHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/StringHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\TimestampHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/TimestampHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Helpers\\TransientHelper' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Helpers/TransientHelper.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Support\\Api' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Support/Api.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Support\\Authentication' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Support/Authentication.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Support\\Loader' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Support/Loader.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Support\\Settings' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Support/Settings.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Support\\Template' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Support/Template.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Support\\Timestamp' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Support/Timestamp.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Translations\\DefaultTranslations' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Translations/DefaultTranslations.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\Translations\\TranslationsInterface' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/Translations/TranslationsInterface.php',
-        'YoastSEO_Vendor\\WordProof\\SDK\\WordPressSDK' => __DIR__ . '/../..' . '/vendor_prefixed/wordproof/wordpress-sdk/app/WordPressSDK.php',
         'Yoast\\WHIPv2\\Configuration' => __DIR__ . '/..' . '/yoast/whip/src/Configuration.php',
         'Yoast\\WHIPv2\\Exceptions\\EmptyProperty' => __DIR__ . '/..' . '/yoast/whip/src/Exceptions/EmptyProperty.php',
         'Yoast\\WHIPv2\\Exceptions\\InvalidOperatorType' => __DIR__ . '/..' . '/yoast/whip/src/Exceptions/InvalidOperatorType.php',
@@ -654,8 +606,8 @@ class ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\W3_Total_Cache_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/w3-total-cache-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\WPML_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/wpml-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\WPML_WPSEO_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/wpml-wpseo-conditional.php',
-        'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Wordproof_Integration_Active_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/wordproof-integration-active-conditional.php',
-        'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Wordproof_Plugin_Inactive_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/wordproof-plugin-inactive-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Wordproof_Integration_Active_Conditional' => __DIR__ . '/../..' . '/src/deprecated/src/conditionals/third-party/wordproof-integration-active-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Wordproof_Plugin_Inactive_Conditional' => __DIR__ . '/../..' . '/src/deprecated/src/conditionals/third-party/wordproof-plugin-inactive-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Traits\\Admin_Conditional_Trait' => __DIR__ . '/../..' . '/src/conditionals/traits/admin-conditional-trait.php',
         'Yoast\\WP\\SEO\\Conditionals\\Updated_Importer_Framework_Conditional' => __DIR__ . '/../..' . '/src/conditionals/updated-importer-framework-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\User_Can_Edit_Users_Conditional' => __DIR__ . '/../..' . '/src/conditionals/user-can-edit-users-conditional.php',
@@ -709,8 +661,8 @@ class ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105
         'Yoast\\WP\\SEO\\Config\\Schema_Types' => __DIR__ . '/../..' . '/src/config/schema-types.php',
         'Yoast\\WP\\SEO\\Config\\Wincher_Client' => __DIR__ . '/../..' . '/src/config/wincher-client.php',
         'Yoast\\WP\\SEO\\Config\\Wincher_PKCE_Provider' => __DIR__ . '/../..' . '/src/config/wincher-pkce-provider.php',
-        'Yoast\\WP\\SEO\\Config\\Wordproof_App_Config' => __DIR__ . '/../..' . '/src/config/wordproof-app-config.php',
-        'Yoast\\WP\\SEO\\Config\\Wordproof_Translations' => __DIR__ . '/../..' . '/src/config/wordproof-translations.php',
+        'Yoast\\WP\\SEO\\Config\\Wordproof_App_Config' => __DIR__ . '/../..' . '/src/deprecated/src/config/wordproof-app-config.php',
+        'Yoast\\WP\\SEO\\Config\\Wordproof_Translations' => __DIR__ . '/../..' . '/src/deprecated/src/config/wordproof-translations.php',
         'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Dismiss_Notifications' => __DIR__ . '/../..' . '/src/content-type-visibility/application/content-type-visibility-dismiss-notifications.php',
         'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Watcher_Actions' => __DIR__ . '/../..' . '/src/content-type-visibility/application/content-type-visibility-watcher-actions.php',
         'Yoast\\WP\\SEO\\Content_Type_Visibility\\User_Interface\\Content_Type_Visibility_Dismiss_New_Route' => __DIR__ . '/../..' . '/src/content-type-visibility/user-interface/content-type-visibility-dismiss-new-route.php',
@@ -826,7 +778,7 @@ class ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105
         'Yoast\\WP\\SEO\\Helpers\\Wincher_Helper' => __DIR__ . '/../..' . '/src/helpers/wincher-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper' => __DIR__ . '/../..' . '/src/helpers/woocommerce-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Wordpress_Helper' => __DIR__ . '/../..' . '/src/helpers/wordpress-helper.php',
-        'Yoast\\WP\\SEO\\Helpers\\Wordproof_Helper' => __DIR__ . '/../..' . '/src/helpers/wordproof-helper.php',
+        'Yoast\\WP\\SEO\\Helpers\\Wordproof_Helper' => __DIR__ . '/../..' . '/src/deprecated/src/helpers/wordproof-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Wpdb_Helper' => __DIR__ . '/../..' . '/src/helpers/wpdb-helper.php',
         'Yoast\\WP\\SEO\\Initializers\\Crawl_Cleanup_Permalinks' => __DIR__ . '/../..' . '/src/initializers/crawl-cleanup-permalinks.php',
         'Yoast\\WP\\SEO\\Initializers\\Disable_Core_Sitemaps' => __DIR__ . '/../..' . '/src/initializers/disable-core-sitemaps.php',
@@ -920,7 +872,7 @@ class ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\WooCommerce' => __DIR__ . '/../..' . '/src/integrations/third-party/woocommerce.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\WooCommerce_Post_Edit' => __DIR__ . '/../..' . '/src/integrations/third-party/woocommerce-post-edit.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Woocommerce_Permalinks' => __DIR__ . '/../..' . '/src/integrations/third-party/woocommerce-permalinks.php',
-        'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof' => __DIR__ . '/../..' . '/src/integrations/third-party/wordproof.php',
+        'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof' => __DIR__ . '/../..' . '/src/deprecated/src/integrations/third-party/wordproof.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof_Integration_Toggle' => __DIR__ . '/../..' . '/src/deprecated/src/integrations/third-party/wordproof-integration-toggle.php',
         'Yoast\\WP\\SEO\\Integrations\\Uninstall_Integration' => __DIR__ . '/../..' . '/src/integrations/uninstall-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Addon_Update_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/addon-update-watcher.php',
@@ -1163,9 +1115,9 @@ class ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitff1b348b805cf2dab7fc49512c0bb105::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -7,6 +7,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'activity-panels' => true,
 			'analytics' => true,
 			'product-block-editor' => true,
+			'experimental-blocks' => false,
 			'coupons' => true,
 			'core-profiler' => true,
 			'customize-store' => true,
@@ -20,7 +21,6 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'minified-js' => false,
 			'mobile-app-banner' => true,
 			'navigation' => true,
-			'new-product-management-experience' => false,
 			'onboarding' => true,
 			'onboarding-tasks' => true,
 			'pattern-toolkit-full-composability' => false,
@@ -29,6 +29,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'remote-inbox-notifications' => true,
 			'remote-free-extensions' => true,
 			'payment-gateway-suggestions' => true,
+			'printful' => false,
 			'settings' => false,
 			'shipping-label-banner' => true,
 			'subscriptions' => true,
@@ -38,7 +39,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'wc-pay-promotion' => true,
 			'wc-pay-welcome-page' => true,
 			'async-product-editor-category-field' => false,
-			'launch-your-store' => false,
+			'launch-your-store' => true,
 			'product-editor-template-system' => false,
 		);
 	}

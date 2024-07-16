@@ -17,6 +17,8 @@ defined( 'ABSPATH' ) || exit;
 class Co_Authors_Plus {
 	private static $live = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 	private static $verbose = true; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
+	private static $user_logins = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
+	private static $guest_author_ids = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 
 	/**
 	 * Migrate Co-Authors Plus guest authors to regular users.
@@ -29,6 +31,12 @@ class Co_Authors_Plus {
 	 * [--verbose]
 	 * : Produce more output.
 	 *
+	 * [--user_logins]
+	 * : Comma-separated list of user logins. If provided, only WP Users with these logins will be processed.
+	 *
+	 * [--guest_author_ids]
+	 * : Comma-separated list of Guest Author IDs. If provided, only Gues Authors with these IDs will be processed.
+	 *
 	 * @param array $args Positional arguments.
 	 * @param array $assoc_args Assoc arguments.
 	 * @return void
@@ -38,6 +46,8 @@ class Co_Authors_Plus {
 
 		self::$live = isset( $assoc_args['live'] ) ? true : false;
 		self::$verbose = isset( $assoc_args['verbose'] ) ? true : false;
+		self::$user_logins = isset( $assoc_args['user_logins'] ) ? explode( ',', $assoc_args['user_logins'] ) : false;
+		self::$guest_author_ids = isset( $assoc_args['guest_author_ids'] ) ? explode( ',', $assoc_args['guest_author_ids'] ) : false;
 
 		if ( self::$live ) {
 			WP_CLI::line( 'Live mode - data will be changed.' );
@@ -51,12 +61,68 @@ class Co_Authors_Plus {
 			WP_CLI::line( '' );
 		}
 
-		self::migrate_linked_guest_authors();
-		self::migrate_unlinked_guest_authors();
+		if ( self::$guest_author_ids === false ) {
+			self::migrate_linked_guest_authors();
+		} else {
+			WP_CLI::line( 'Skipping linked Guest Authors, since guest_author_ids argument was provided.' );
+		}
+		WP_CLI::line( '' );
+		if ( self::$user_logins === false ) {
+			self::migrate_unlinked_guest_authors();
+		} else {
+			WP_CLI::line( 'Skipping unlinked Guest Authors, since user_logins argument was provided.' );
+		}
 
 		WP_CLI::line( '' );
 	}
 
+	/**
+	 * Backfill Non-Editing Contributor role. Will add this role to any Subscriber/Customer
+	 * who has any posts assigned to them.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--live]
+	 * : Run the command in live mode, updating the subscriptions.
+	 *
+	 * @param array $args Positional arguments.
+	 * @param array $assoc_args Assoc arguments.
+	 * @return void
+	 */
+	public function backfill_non_editing_contributor( $args, $assoc_args ) {
+		WP_CLI::line( '' );
+
+		self::$live = isset( $assoc_args['live'] ) ? true : false;
+
+		if ( self::$live ) {
+			WP_CLI::line( 'Live mode - data will be changed.' );
+		} else {
+			WP_CLI::line( 'Dry run. Use --live flag to run in live mode.' );
+		}
+		WP_CLI::line( '' );
+
+		// Find all WP Users who have Subscriber or Customer role, and at least one post authored.
+		$users = get_users(
+			[
+				'role__in'     => [ 'subscriber', 'customer' ],
+				'role__not_in' => [ \Newspack\Co_Authors_Plus::CONTRIBUTOR_NO_EDIT_ROLE_NAME, 'administrator', 'editor', 'author', 'contributor' ],
+				'fields'       => 'ID',
+				'number'       => -1,
+			]
+		);
+		foreach ( $users as $user_id ) {
+			if ( count_user_posts( $user_id ) > 0 ) { // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.count_user_posts_count_user_posts
+				if ( self::$live ) {
+					WP_CLI::line( sprintf( 'Will add the Non-Editing Contributor role to user %d.', $user_id ) );
+					get_user_by( 'id', $user_id )->add_role( \Newspack\Co_Authors_Plus::CONTRIBUTOR_NO_EDIT_ROLE_NAME );
+				} else {
+					WP_CLI::line( sprintf( 'Would add the Non-Editing Contributor role to user %d.', $user_id ) );
+				}
+			}
+		}
+
+		WP_CLI::line( '' );
+	}
 
 	/**
 	 * Migrate unlinked guest authors to regular users.
@@ -65,25 +131,28 @@ class Co_Authors_Plus {
 	 * reassign the posts, and remove the guest author.
 	 */
 	private static function migrate_unlinked_guest_authors() {
-		$unlinked_guest_authors = get_posts(
-			[
-				'post_type'      => 'guest-author',
-				'posts_per_page' => -1,
-				'post_status'    => 'any',
-				'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					'relation' => 'OR',
-					[
-						'key'     => 'cap-linked_account',
-						'compare' => 'NOT EXISTS',
-					],
-					[
-						'key'     => 'cap-linked_account',
-						'compare' => '=',
-						'value'   => '',
-					],
+		$get_posts_args = [
+			'post_type'      => 'guest-author',
+			'posts_per_page' => -1,
+			'post_status'    => 'any',
+		];
+		if ( self::$guest_author_ids !== false && is_array( self::$guest_author_ids ) ) {
+			$get_posts_args['post__in'] = self::$guest_author_ids;
+		} else {
+			$get_posts_args['meta_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'relation' => 'OR',
+				[
+					'key'     => 'cap-linked_account',
+					'compare' => 'NOT EXISTS',
 				],
-			]
-		);
+				[
+					'key'     => 'cap-linked_account',
+					'compare' => '=',
+					'value'   => '',
+				],
+			];
+		}
+		$unlinked_guest_authors = get_posts( $get_posts_args );
 		WP_CLI::line( sprintf( 'Found %d guest author(s) not linked to any WP User.', count( $unlinked_guest_authors ) ) );
 
 		foreach ( $unlinked_guest_authors as $guest_author ) {
@@ -95,27 +164,40 @@ class Co_Authors_Plus {
 				get_post_meta( $guest_author->ID )
 			);
 			if ( self::$verbose ) {
-				WP_CLI::line( sprintf( 'Creating user %s from Guest Author #%d.', $post_meta['cap-display_name'], $guest_author->ID ) );
+				if ( self::$live ) {
+					WP_CLI::line( sprintf( 'Creating user %s from Guest Author #%d.', $post_meta['cap-display_name'], $guest_author->ID ) );
+				} else {
+					WP_CLI::line( sprintf( 'Would create user %s from Guest Author #%d.', $post_meta['cap-display_name'], $guest_author->ID ) );
+				}
 			}
 
 			$user_login = $post_meta['cap-user_login'];
 
 			$user_data = [
 				'user_login'      => $user_login,
-				'user_nicename'   => $post_meta['cap-user_login'],
-				'user_url'        => $post_meta['cap-website'],
+				'user_nicename'   => isset( $post_meta['cap-user_login'] ) ? $post_meta['cap-user_login'] : '',
+				'user_url'        => isset( $post_meta['cap-website'] ) ? $post_meta['cap-website'] : '',
 				'user_pass'       => wp_generate_password(),
 				'role'            => \Newspack\Co_Authors_Plus::CONTRIBUTOR_NO_EDIT_ROLE_NAME,
-				'user_email'      => $post_meta['cap-user_email'],
-				'display_name'    => $post_meta['cap-display_name'],
-				'first_name'      => $post_meta['cap-first_name'],
-				'last_name'       => $post_meta['cap-last_name'],
-				'description'     => $post_meta['cap-description'],
+				'display_name'    => isset( $post_meta['cap-display_name'] ) ? $post_meta['cap-display_name'] : '',
+				'first_name'      => isset( $post_meta['cap-first_name'] ) ? $post_meta['cap-first_name'] : '',
+				'last_name'       => isset( $post_meta['cap-last_name'] ) ? $post_meta['cap-last_name'] : '',
+				'description'     => isset( $post_meta['cap-description'] ) ? $post_meta['cap-description'] : '',
 				'user_registered' => $guest_author->post_date,
 				'meta_input'      => [
 					'_np_migrated_cap_guest_author' => $guest_author->ID,
 				],
 			];
+
+			if ( isset( $post_meta['cap-user_email'] ) && ! empty( $post_meta['cap-user_email'] ) ) {
+				$user_data['user_email'] = $post_meta['cap-user_email'];
+			} else {
+				$dummy_email = '_migrated-' . $guest_author->ID . '-' . $user_login . '@example.com';
+				$user_data['user_email'] = $dummy_email;
+				if ( self::$verbose ) {
+					WP_CLI::line( sprintf( 'Missing email for Guest Author, email address will be updated to %s.', $dummy_email ) );
+				}
+			}
 
 			$existing_user = get_user_by( 'login', $user_login );
 			if ( $existing_user !== false ) {
@@ -124,8 +206,23 @@ class Co_Authors_Plus {
 			}
 
 			foreach ( array_values( \Newspack\Authors_Custom_Fields::USER_META_NAMES ) as $meta_key ) {
-				$user_data['meta_input'][ $meta_key ] = $post_meta[ 'cap-' . $meta_key ];
+				if ( isset( $post_meta[ 'cap-' . $meta_key ] ) ) {
+					$user_data['meta_input'][ $meta_key ] = $post_meta[ 'cap-' . $meta_key ];
+				}
 			}
+
+			// Check if a user with this email address already exists (they might be a Subscriber).
+			$user = get_user_by( 'email', $user_data['user_email'] );
+			if ( $user !== false ) {
+				$new_email_address = '_migrated-' . $guest_author->ID . '-' . $user_data['user_email'];
+				if ( self::$verbose ) {
+					WP_CLI::line( sprintf( 'User with email %s already exists, email address will be updated to %s.', $user_data['user_email'], $new_email_address ) );
+				}
+				// Update the new user (non-editing contributor) email address.
+				// Since they won't need to log in, this email address does not have to be real.
+				$user_data['user_email'] = $new_email_address;
+			}
+
 			if ( self::$live ) {
 				$user_id = \wp_insert_user( $user_data );
 				if ( is_wp_error( $user_id ) ) {
@@ -147,21 +244,24 @@ class Co_Authors_Plus {
 	 * reassign the posts, and remove the guest author.
 	 */
 	private static function migrate_linked_guest_authors() {
+		$meta_query = is_array( self::$user_logins ) ? [
+			'key'     => 'cap-linked_account',
+			'compare' => 'IN',
+			'value'   => self::$user_logins,
+		] : [
+			'key'     => 'cap-linked_account',
+			'compare' => '!=',
+			'value'   => '',
+		];
 		$linked_guest_authors = get_posts(
 			[
 				'post_type'      => 'guest-author',
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
-				'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					[
-						'key'     => 'cap-linked_account',
-						'compare' => '!=',
-						'value'   => '',
-					],
-				],
+				'meta_query'     => [ $meta_query ], // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			]
 		);
-		WP_CLI::line( sprintf( 'Found %d guest author(s) linked to a WP User.', count( $linked_guest_authors ) ) );
+		WP_CLI::line( sprintf( 'Found %d guest author(s) linked to WP Users.', count( $linked_guest_authors ) ) );
 		foreach ( $linked_guest_authors as $guest_author ) {
 			WP_CLI::line( '' );
 			$linked_user_slug = get_post_meta( $guest_author->ID, 'cap-linked_account', true );
@@ -201,7 +301,7 @@ class Co_Authors_Plus {
 					if ( $result === true ) {
 						WP_CLI::success( 'Deleted the guest author and reassigned the posts.' );
 					} else {
-						WP_CLI::warning( 'Could not delete the guest author and reassign the posts: ' . $result->get_error_message() );
+						WP_CLI::warning( sprintf( 'Could not delete the guest author and reassign the posts: %s', $result->get_error_message() ) );
 					}
 				} else {
 					// Otherwise, only delete the Guest Author post and cache, leaving the term intact.
@@ -219,15 +319,18 @@ class Co_Authors_Plus {
 						]
 					);
 					if ( is_wp_error( $result ) ) {
-						WP_CLI::warning( 'Could not update the WP User CAP term: ' . $result->get_error_message() );
+						WP_CLI::warning( sprintf( 'Could not update the WP User CAP term: %s', $result->get_error_message() ) );
 					} else {
-						WP_CLI::success( sprintf( 'Updated the WP User CAP term %d.', $result['term_id'] ) );
+						WP_CLI::success( sprintf( 'Updated the WP User CAP term: %d.', $result['term_id'] ) );
 					}
 				}
 			}
 
 			self::assign_user_props( $guest_author_data, $user_id );
 			self::assign_user_meta( $guest_author, $user_id );
+
+			// Add the Non-Editing Contributor role.
+			$linked_user->add_role( \Newspack\Co_Authors_Plus::CONTRIBUTOR_NO_EDIT_ROLE_NAME );
 		}
 	}
 
@@ -242,7 +345,7 @@ class Co_Authors_Plus {
 		$result = wp_delete_post( $guest_author_id, true );
 		$coauthors_plus->guest_authors->delete_guest_author_cache( $guest_author_object );
 		if ( ! $result ) {
-			WP_CLI::warning( 'Could not delete the guest author post: ' . $result->get_error_message() );
+			WP_CLI::warning( sprintf( 'Could not delete the guest author post: %s', $result->get_error_message() ) );
 		} else {
 			WP_CLI::success( sprintf( 'Deleted the guest author post (#%d).', $guest_author_id ) );
 		}
@@ -371,7 +474,7 @@ class Co_Authors_Plus {
 		$avatar_id = media_sideload_image( $guest_author_featured_image_url, 0, null, 'id' );
 
 		if ( is_wp_error( $avatar_id ) ) {
-			WP_CLI::warning( 'Error sideloading avatar: ' . $avatar_id->get_error_message() );
+			WP_CLI::warning( sprintf( 'Error sideloading avatar: %s', $avatar_id->get_error_message() ) );
 			return false;
 		}
 		if ( is_int( $avatar_id ) ) {

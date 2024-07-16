@@ -30,7 +30,7 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	 * @param string $days_in_past_count How many days in the past to look for.
 	 * @return Newspack_Newsletters_Service_Provider_Usage_Report[] Usage reports.
 	 */
-	public static function get_list_activity_reports( $days_in_past_count = 1 ) {
+	private static function get_list_activity_reports( $days_in_past_count = 1 ) {
 		$mc_api = new Mailchimp( self::get_mc_instance()->api_key() );
 
 		$reports = [];
@@ -68,17 +68,18 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	}
 
 	/**
-	 * Creates a usage report.
+	 * Get usage reports for last n days.
 	 *
-	 * @return Newspack_Newsletters_Service_Provider_Usage_Report Usage report.
+	 * @param int $days_in_past How many days in past.
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report[] Usage reports.
 	 */
-	public static function get_usage_report() {
+	public static function get_usage_reports( $days_in_past ) {
 		// Start with lists activity reports. These are good for historical data and also will provide
 		// subscribes and unsubscribes data. However, in order to get recent
 		// sent/opens/clicks data, the campaign reports have to be used.
 		// It appears that the sent/opens/clicks data in the lists activity are only added after a
 		// delay of 2-3 days.
-		$reports = self::get_list_activity_reports( 1 );
+		$reports = self::get_list_activity_reports( $days_in_past );
 
 		$mc_api = new Mailchimp( self::get_mc_instance()->api_key() );
 
@@ -91,6 +92,9 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 				'type'            => 'regular', // Email campaigns.
 			]
 		);
+		if ( ! isset( $campaign_reports_response['reports'] ) ) {
+			return [ new Newspack_Newsletters_Service_Provider_Usage_Report() ];
+		}
 		// For each report, save the stats per-campaign.
 		foreach ( $campaign_reports_response['reports'] as $campaign_report ) {
 			$send_time = $campaign_report['send_time'];
@@ -134,6 +138,16 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 		// Save the recent response.
 		update_option( self::REPORTS_OPTION_NAME, $campaign_reports );
 
+		return $reports;
+	}
+
+	/**
+	 * Creates a usage report.
+	 *
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report Usage report.
+	 */
+	public static function get_usage_report() {
+		$reports = self::get_usage_reports( 1 );
 		return reset( $reports );
 	}
 }

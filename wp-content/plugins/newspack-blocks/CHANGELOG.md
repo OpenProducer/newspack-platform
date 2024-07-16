@@ -1,3 +1,37 @@
+# [3.5.0](https://github.com/Automattic/newspack-blocks/compare/v3.4.1...v3.5.0) (2024-07-15)
+
+
+### Bug Fixes
+
+* remove references to reCAPTCHA v3 (because we now support v2 too) ([#1744](https://github.com/Automattic/newspack-blocks/issues/1744)) ([b7fb752](https://github.com/Automattic/newspack-blocks/commit/b7fb752c4f5e903485939ccf025d0a7270c1e157))
+
+
+### Features
+
+* **checkout-button:** add wp-block-button to the wrapperclasses ([#1777](https://github.com/Automattic/newspack-blocks/issues/1777)) ([88bc28c](https://github.com/Automattic/newspack-blocks/commit/88bc28c70a3d214d38e05e50df403e0ac48dbf83))
+
+## [3.4.1](https://github.com/Automattic/newspack-blocks/compare/v3.4.0...v3.4.1) (2024-07-11)
+
+
+### Bug Fixes
+
+* account for patterns when rendering hpp in editor ([#1794](https://github.com/Automattic/newspack-blocks/issues/1794)) ([17556c2](https://github.com/Automattic/newspack-blocks/commit/17556c2cb4eeb718aecbbd7258a986dac06df5ef))
+
+# [3.4.0](https://github.com/Automattic/newspack-blocks/compare/v3.3.0...v3.4.0) (2024-07-01)
+
+
+### Bug Fixes
+
+* **block-styles:** columns shouldn't enforce gap for block themes ([#1770](https://github.com/Automattic/newspack-blocks/issues/1770)) ([05d4cc9](https://github.com/Automattic/newspack-blocks/commit/05d4cc9d08affbf9f8f15742a78c4109302f384a))
+* **block-styles:** make sure columns style targets direct children ([#1769](https://github.com/Automattic/newspack-blocks/issues/1769)) ([0eebe14](https://github.com/Automattic/newspack-blocks/commit/0eebe14d204480444ad81dd3acf7f5fd69361b30))
+* update newspack-scripts to v5.5.1 ([2a59c56](https://github.com/Automattic/newspack-blocks/commit/2a59c561b56ba7c032be1039f114746d9be67ec8))
+
+
+### Features
+
+* **donate:** add setting to change the style of tiered donations (grid or list) ([#1755](https://github.com/Automattic/newspack-blocks/issues/1755)) ([ce04cea](https://github.com/Automattic/newspack-blocks/commit/ce04ceab1e21a19d5be25d91abef06c87c2173c7))
+* ensure regenerator-runtime is available (for WP 6.6) ([#1778](https://github.com/Automattic/newspack-blocks/issues/1778)) ([42236d7](https://github.com/Automattic/newspack-blocks/commit/42236d7366bfd1ba97fa441c462a0e033efa69ad))
+
 # [3.3.0](https://github.com/Automattic/newspack-blocks/compare/v3.2.0...v3.3.0) (2024-06-12)
 
 

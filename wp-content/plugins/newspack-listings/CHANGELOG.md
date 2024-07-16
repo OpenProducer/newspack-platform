@@ -1,3 +1,10 @@
+# [2.16.0](https://github.com/Automattic/newspack-listings/compare/v2.15.0...v2.16.0) (2024-07-01)
+
+
+### Features
+
+* ensure regenerator-runtime is available (for WP 6.6) ([#459](https://github.com/Automattic/newspack-listings/issues/459)) ([58666bb](https://github.com/Automattic/newspack-listings/commit/58666bba68f5825a89b04bea3a45aca3f08d1a3f))
+
 # [2.15.0](https://github.com/Automattic/newspack-listings/compare/v2.14.1...v2.15.0) (2024-04-08)
 
 

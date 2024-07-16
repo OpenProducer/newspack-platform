@@ -188,7 +188,7 @@ class FingersCrossedHandler extends \Google\Site_Kit_Dependencies\Monolog\Handle
      *
      * @phpstan-param Record $record
      */
-    public function getHandler(array $record = null)
+    public function getHandler(?array $record = null)
     {
         if (!$this->handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface) {
             $this->handler = ($this->handler)($record, $this);

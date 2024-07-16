@@ -16,8 +16,9 @@ defined( 'ABSPATH' ) || exit;
  */
 class Memberships {
 
-	const GATE_CPT  = 'np_memberships_gate';
+	const GATE_CPT = 'np_memberships_gate';
 	const CRON_HOOK = 'np_memberships_fix_expired_memberships';
+	const SKIP_RESTRICTION_IN_RSS_OPTION_NAME = 'newspack_skip_content_restriction_in_rss_feeds';
 
 	/**
 	 * Whether the gate has been rendered in this execution.
@@ -47,6 +48,9 @@ class Memberships {
 		add_filter( 'wc_memberships_notice_html', [ __CLASS__, 'wc_memberships_notice_html' ], 100, 4 );
 		add_filter( 'wc_memberships_restricted_content_excerpt', [ __CLASS__, 'wc_memberships_excerpt' ], 100, 3 );
 		add_filter( 'wc_memberships_message_excerpt_apply_the_content_filter', '__return_false' );
+		add_filter( 'wc_memberships_admin_screen_ids', [ __CLASS__, 'admin_screens' ] );
+		add_filter( 'wc_memberships_general_settings', [ __CLASS__, 'wc_memberships_general_settings' ] );
+		add_filter( 'wc_memberships_is_post_public', [ __CLASS__, 'wc_memberships_is_post_public' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'render_overlay_gate' ], 1 );
 		add_action( 'wp_footer', [ __CLASS__, 'render_js' ] );
 		add_filter( 'newspack_popups_assess_has_disabled_popups', [ __CLASS__, 'disable_popups' ] );
@@ -997,6 +1001,63 @@ class Memberships {
 			remove_filter( 'the_content', [ $posts_restrictions_instance, 'handle_restricted_post_content_filtering' ], 999 );
 			remove_action( 'loop_start', [ $posts_restrictions_instance, 'display_restricted_taxonomy_term_notice' ], 1 );
 		}
+	}
+
+	/**
+	 * Admin meta boxes handling.
+	 *
+	 * @param array $screen_ids associative array organized by context.
+	 */
+	public static function admin_screens( $screen_ids ) {
+		$unrestrictable_post_types = [ 'partner_rss_feed' ];
+		$screen_ids['meta_boxes'] = array_filter(
+			$screen_ids['meta_boxes'],
+			function( $screen_id ) use ( $unrestrictable_post_types ) {
+				$allow_restrictions = true;
+				foreach ( $unrestrictable_post_types as $post_type ) {
+					// Use strpos instead of full string match, because each CPT get two items in this array:
+					// the `<CPT>` and `edit-<CPT>`.
+					if ( strpos( $screen_id, $post_type ) !== false ) {
+						$allow_restrictions = false;
+					}
+				}
+				return $allow_restrictions;
+			}
+		);
+		return $screen_ids;
+	}
+
+	/**
+	 * Check if the content should be restricted by WooCommerce Memberships.
+	 *
+	 * @param bool $is_public whether the post is public (default false unless explicitly marked as public by an admin).
+	 */
+	public static function wc_memberships_is_post_public( $is_public ) {
+		if ( is_feed() && 'yes' === get_option( self::SKIP_RESTRICTION_IN_RSS_OPTION_NAME ) ) {
+			return true;
+		}
+		return $is_public;
+	}
+
+	/**
+	 * Add a setting to skip content restrictions in RSS feeds.
+	 *
+	 * @param array $settings associative array of the plugin settings.
+	 */
+	public static function wc_memberships_general_settings( $settings ) {
+		$setting = [
+			'type'    => 'checkbox',
+			'id'      => self::SKIP_RESTRICTION_IN_RSS_OPTION_NAME,
+			'name'    => __( 'Skip content restriction in RSS feeds', 'newspack-plugin' ),
+			'desc'    =>
+				'<span class="show-if-hide-content-only-restriction-mode">' . __( 'If enabled, full content will be available in RSS feeds.', 'newspack-plugin' ) . '</span>',
+			'default' => 'no',
+		];
+
+		$position_of_show_excerpts_setting = array_search( 'wc_memberships_show_excerpts', array_column( $settings, 'id' ) );
+		return array_slice( $settings, 0, $position_of_show_excerpts_setting, true ) +
+			[ $setting['id'] => $setting ] +
+			array_slice( $settings, $position_of_show_excerpts_setting, null, true );
 	}
 }
 Memberships::init();

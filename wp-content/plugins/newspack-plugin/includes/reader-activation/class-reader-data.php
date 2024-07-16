@@ -433,7 +433,7 @@ final class Reader_Data {
 		$active_subscriptions = \wcs_get_subscriptions(
 			[
 				'customer_id'         => $data['user_id'],
-				'subscription_status' => WooCommerce_Connection::$active_subscription_statuses,
+				'subscription_status' => WooCommerce_Connection::ACTIVE_SUBSCRIPTION_STATUSES,
 			]
 		);
 
