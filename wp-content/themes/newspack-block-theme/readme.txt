@@ -1,14 +1,10 @@
 === Newspack Block Theme ===
 Contributors: Automattic
-Requires at least: 5.8
-Tested up to: 5.9
-Requires PHP: 5.7
+Requires at least: 6.5
+Tested up to: 6.6
+Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-
-== Description ==
-
-
 
 == Changelog ==
 
@@ -17,7 +13,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Copyright ==
 
-Newspack Block Theme WordPress Theme, (C) 2023 Automattic
+Newspack Block Theme WordPress Theme, (C) 2024 Automattic
 Newspack Block Theme is distributed under the terms of the GNU GPL.
 Newspack Block Theme is based on Block Canvas (https://github.com/Automattic/themes/tree/trunk/block-canvas), (C) Automattic, [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)
 
