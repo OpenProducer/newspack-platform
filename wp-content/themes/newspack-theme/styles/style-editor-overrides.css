@@ -155,10 +155,12 @@ body.newspack-single-column-template .wp-block .wp-block[data-align=right] {
 /** === Single Posts === */
 body.post-type-post .editor-post-title__block,
 body.post-type-post .edit-post-visual-editor__post-title-wrapper,
-body.post-type-post .editor-styles-wrapper h1.wp-block-post-title {
+body.post-type-post .editor-styles-wrapper h1.wp-block-post-title,
+body.post-type-post #newspack-post-subtitle-element {
   max-width: 1200px;
 }
-body.post-type-post .edit-post-visual-editor__post-title-wrapper {
+body.post-type-post .edit-post-visual-editor__post-title-wrapper,
+body.post-type-post #newspack-post-subtitle-element {
   margin-left: auto;
   margin-right: auto;
 }

@@ -117,7 +117,7 @@ final class Core {
 		if ( $metadata['name'] == 'core/search' ) {
 			$metadata['attributes']['buttonPosition']['default'] = 'button-inside';
 			$metadata['attributes']['buttonUseIcon']['default']  = true;
-			$metadata['attributes']['placeholder']['default']    = esc_html__( 'Search...', 'newspack-block-theme' );
+			$metadata['attributes']['placeholder']['default']    = esc_html__( 'Search posts, categories, authors, ...', 'newspack-block-theme' );
 			$metadata['attributes']['showLabel']['default']      = false;
 		}
 		if ( $metadata['name'] == 'core/navigation' ) {
@@ -137,6 +137,14 @@ final class Core {
 			array(
 				'label'       => __( 'Newspack Theme', 'newspack-block-theme' ),
 				'description' => __( 'Patterns bundled with the Newspack Block Theme.', 'newspack-block-theme' ),
+			)
+		);
+
+		register_block_pattern_category(
+			'newspack-block-theme-author-bio',
+			array(
+				'label'       => __( 'Newspack Theme - Author Bio', 'newspack-block-theme' ),
+				'description' => __( 'Patterns bundled with the Newspack Block Theme, specifically built for the author biography.', 'newspack-block-theme' ),
 			)
 		);
 
