@@ -42,6 +42,8 @@ final class Core {
 		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'theme_styles' ] );
 		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'editor_scripts' ] );
 		\add_filter( 'block_type_metadata', [ __CLASS__, 'block_variations' ] );
+		\add_filter( 'rest_dispatch_request', [ __CLASS__, 'restrict_patterns' ], 12, 3 );
+		\add_filter( 'should_load_remote_block_patterns', '__return_false' );
 		\add_action( 'init', [ __CLASS__, 'block_pattern_categories' ] );
 	}
 
@@ -127,6 +129,57 @@ final class Core {
 	}
 
 	/**
+	 * Restricts block editor patterns in the editor by removing support for all patterns from:
+	 *   - Dotcom and plugins like Jetpack or WooCommerce
+	 *   - Dotorg pattern directory except for theme patterns
+	 *
+	 * @link https://developer.wordpress.com/docs/developer-tools/block-patterns/disable-all-patterns/
+	 *
+	 * @since Newspack Block Theme 1.0
+	 *
+	 * @param mixed           $dispatch_result Dispatch result, will be used if not empty.
+	 * @param WP_REST_Request $request Request used to generate the response.
+	 * @param string          $route Route matched for the request.
+	 * @return mixed Dispatch result.
+	 */
+	public static function restrict_patterns( $dispatch_result, $request, $route ) {
+		// Define the slugs for patterns to whitelist.
+		$whitelisted_patterns = [
+			'newspack',
+			'publisher-media-kit',
+		];
+
+		if ( strpos( $route, '/wp/v2/block-patterns/patterns' ) === 0 ) {
+			$patterns = \WP_Block_Patterns_Registry::get_instance()->get_all_registered();
+
+			if ( ! empty( $patterns ) ) {
+				// Remove theme support for all patterns, except for the whitelisted ones.
+				foreach ( $patterns as $pattern ) {
+					$is_whitelisted = false;
+
+					// Check if the pattern's name starts with any of the whitelisted slugs.
+					foreach ( $whitelisted_patterns as $slug ) {
+						if ( strpos( $pattern['name'], $slug ) === 0 ) {
+							$is_whitelisted = true;
+							break;
+						}
+					}
+
+					// Unregister the pattern if it is not whitelisted.
+					if ( ! $is_whitelisted ) {
+						\unregister_block_pattern( $pattern['name'] );
+					}
+				}
+
+				// Remove theme support for Core patterns from the Dotorg pattern directory.
+				\remove_theme_support( 'core-block-patterns' );
+			}
+		}
+
+		return $dispatch_result;
+	}
+
+	/**
 	 * Add block pattern categories.
 	 *
 	 * @since Newspack Block Theme 1.0
@@ -145,6 +198,22 @@ final class Core {
 			array(
 				'label'       => __( 'Newspack Theme - Author Bio', 'newspack-block-theme' ),
 				'description' => __( 'Patterns bundled with the Newspack Block Theme, specifically built for the author biography.', 'newspack-block-theme' ),
+			)
+		);
+
+		register_block_pattern_category(
+			'newspack-block-theme-columns',
+			array(
+				'label'       => __( 'Newspack Theme - Columns', 'newspack-block-theme' ),
+				'description' => __( 'Patterns bundled with the Newspack Block Theme, specifically built for the columns to perfectly fit the grid.', 'newspack-block-theme' ),
+			)
+		);
+
+		register_block_pattern_category(
+			'newspack-block-theme-post-header',
+			array(
+				'label'       => __( 'Newspack Theme - Post Header', 'newspack-block-theme' ),
+				'description' => __( 'Patterns bundled with the Newspack Block Theme, specifically built for the post header.', 'newspack-block-theme' ),
 			)
 		);
 

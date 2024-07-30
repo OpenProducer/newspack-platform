@@ -1,3 +1,101 @@
+# [1.12.0](https://github.com/Automattic/newspack-block-theme/compare/v1.11.0...v1.12.0) (2024-07-30)
+
+
+### Bug Fixes
+
+* **buttons:** outline variations missing style with wp 6.6 ([#270](https://github.com/Automattic/newspack-block-theme/issues/270)) ([dabae5b](https://github.com/Automattic/newspack-block-theme/commit/dabae5b8fe6024d05b1f456350e3313ef073c5ed))
+* **navigation:** correct gap between items when using responsive nav ([#243](https://github.com/Automattic/newspack-block-theme/issues/243)) ([b707642](https://github.com/Automattic/newspack-block-theme/commit/b707642519c592f39f46b4755a736dabb558ef2b))
+* **newspack-grid:** adjust large and extra large screens ([#256](https://github.com/Automattic/newspack-block-theme/issues/256)) ([47b748c](https://github.com/Automattic/newspack-block-theme/commit/47b748c6e953ce10cf58988fda3fd1f35d4af105))
+* **search-results:** no results apply alignwide to homepage articles ([#242](https://github.com/Automattic/newspack-block-theme/issues/242)) ([315bc59](https://github.com/Automattic/newspack-block-theme/commit/315bc5957b834c773b3962af7bdcbc291e062a31))
+* sticky element with admin bar on small screens ([#238](https://github.com/Automattic/newspack-block-theme/issues/238)) ([2f2b056](https://github.com/Automattic/newspack-block-theme/commit/2f2b0563b476b3aafc07703a0e256dd5a28d295f))
+
+
+### Features
+
+* add 50/50 Image/Header single post template ([#268](https://github.com/Automattic/newspack-block-theme/issues/268)) ([a010920](https://github.com/Automattic/newspack-block-theme/commit/a010920985ff9cca02e5507770050d6a4a618df5))
+* add blank screenshot ([#252](https://github.com/Automattic/newspack-block-theme/issues/252)) ([8839ea5](https://github.com/Automattic/newspack-block-theme/commit/8839ea5c4e00b26c2f5d9d9b0c013f7c627d44f4))
+* add columns patterns ([#274](https://github.com/Automattic/newspack-block-theme/issues/274)) ([41290a7](https://github.com/Automattic/newspack-block-theme/commit/41290a70829967523198a08a643a82e3e2ab8631))
+* add drawer menu pattern; reorganise overlays ([#244](https://github.com/Automattic/newspack-block-theme/issues/244)) ([4cdb255](https://github.com/Automattic/newspack-block-theme/commit/4cdb2554f198d05fc0e575199165bfbb9aabf02b))
+* add footer patterns and update template part ([#177](https://github.com/Automattic/newspack-block-theme/issues/177)) ([615c2a2](https://github.com/Automattic/newspack-block-theme/commit/615c2a2d0ea5c36b214b6d4cf93af0822c998542))
+* add header desktop patterns ([#254](https://github.com/Automattic/newspack-block-theme/issues/254)) ([ff6d296](https://github.com/Automattic/newspack-block-theme/commit/ff6d29602537b592acc476c385b4181f284fd76e))
+* add header mobile patterns ([#255](https://github.com/Automattic/newspack-block-theme/issues/255)) ([e1f371d](https://github.com/Automattic/newspack-block-theme/commit/e1f371d04ed542c4626ff768e5f7d665777f1911))
+* add margin to alignleft and alignright elements ([#261](https://github.com/Automattic/newspack-block-theme/issues/261)) ([97140de](https://github.com/Automattic/newspack-block-theme/commit/97140dee8fd11700bb2898dd92936ef8afa26a40))
+* add optional mobile-only and desktop-only to fixed elements ([#246](https://github.com/Automattic/newspack-block-theme/issues/246)) ([2cdfc1b](https://github.com/Automattic/newspack-block-theme/commit/2cdfc1b9ad00df60f06068565687b71d84de45ec))
+* add sidebar grid layout ([#258](https://github.com/Automattic/newspack-block-theme/issues/258)) ([cb29dc6](https://github.com/Automattic/newspack-block-theme/commit/cb29dc6197e20a1313cc2a6e78ea7b3bb62e56c3))
+* add sidebar-contents template part and use it for single sidebar layout ([#276](https://github.com/Automattic/newspack-block-theme/issues/276)) ([488e43c](https://github.com/Automattic/newspack-block-theme/commit/488e43c3280ce58e8be69d3157188a2098ccadf2))
+* add support for yoast blocks (faq, how-to) ([#241](https://github.com/Automattic/newspack-block-theme/issues/241)) ([d63260a](https://github.com/Automattic/newspack-block-theme/commit/d63260a45bf08624e624628e3ee6d260c5fb3a2a))
+* add support for yoast breadcrumbs; move cap styles to subdirectory ([#239](https://github.com/Automattic/newspack-block-theme/issues/239)) ([463584e](https://github.com/Automattic/newspack-block-theme/commit/463584e0af35f074fe614ef3bd4749ef867d5c76))
+* **author-list:** add block styles ([#250](https://github.com/Automattic/newspack-block-theme/issues/250)) ([7acd4a3](https://github.com/Automattic/newspack-block-theme/commit/7acd4a36c7a05cc1c471d87a4a117c35a99f23cb))
+* **breadcrumbs:** ensure text and link colors are supported ([#240](https://github.com/Automattic/newspack-block-theme/issues/240)) ([fb3e939](https://github.com/Automattic/newspack-block-theme/commit/fb3e93921a67b99720d6ae0533d7d850f259f65c))
+* **button:** x-small size adjust min-height and border-radius for consistency with newspack-icon ([#271](https://github.com/Automattic/newspack-block-theme/issues/271)) ([5fa1f7c](https://github.com/Automattic/newspack-block-theme/commit/5fa1f7c2b796356e1e9292dca629ffb908803b43))
+* **footer:** add new pattern and adjust style 4 ([#269](https://github.com/Automattic/newspack-block-theme/issues/269)) ([9e826e9](https://github.com/Automattic/newspack-block-theme/commit/9e826e96f4acf11c07963003debee8e324f8f721))
+* **footer:** update credits ([#278](https://github.com/Automattic/newspack-block-theme/issues/278)) ([cec87b1](https://github.com/Automattic/newspack-block-theme/commit/cec87b18fbe31fe10389ed28955b26bd8973aa29))
+* **homepage-articles:** add transition to links ([#234](https://github.com/Automattic/newspack-block-theme/issues/234)) ([bdf924a](https://github.com/Automattic/newspack-block-theme/commit/bdf924af945517501c03bb5871033b88f5097ce0))
+* **navigation:** update hover style; remove underline and use color-mix instead ([#247](https://github.com/Automattic/newspack-block-theme/issues/247)) ([08994a3](https://github.com/Automattic/newspack-block-theme/commit/08994a3daf634c7c673543c8ec5b6c123cc94396))
+* **overlay:** update close button to 64px tall/wide ([#233](https://github.com/Automattic/newspack-block-theme/issues/233)) ([39e9dad](https://github.com/Automattic/newspack-block-theme/commit/39e9dad09d9f65824fb4895ce7c13581b44fe17a))
+* **patterns:** add 1 new footer pattern ([#257](https://github.com/Automattic/newspack-block-theme/issues/257)) ([758e38c](https://github.com/Automattic/newspack-block-theme/commit/758e38c62c53ee531c0d5c3541251a4f626cbd94))
+* **patterns:** improve columns preview; add 25/25/25/25 ([#275](https://github.com/Automattic/newspack-block-theme/issues/275)) ([0f5427f](https://github.com/Automattic/newspack-block-theme/commit/0f5427fb4230ec08bec07682a3d282c1d782caa3))
+* **post-carousel:** update style ([#249](https://github.com/Automattic/newspack-block-theme/issues/249)) ([d87ac30](https://github.com/Automattic/newspack-block-theme/commit/d87ac3073c3d8fecb61cbf94252bdcdd4b03c82f))
+* **post-meta:** update hover state ([#251](https://github.com/Automattic/newspack-block-theme/issues/251)) ([b1ba1d5](https://github.com/Automattic/newspack-block-theme/commit/b1ba1d56e41acf9263748bb9a8ad66ec7542580a))
+* reorganise header parts ([#253](https://github.com/Automattic/newspack-block-theme/issues/253)) ([14ee203](https://github.com/Automattic/newspack-block-theme/commit/14ee20376225a7e3840906287014c894e9413fd8))
+* **search:** update template part to match pagination with archive ([#279](https://github.com/Automattic/newspack-block-theme/issues/279)) ([6e3da20](https://github.com/Automattic/newspack-block-theme/commit/6e3da20874f92e3e59a451c7f38eedb80c7f053a))
+* simplify home and index templates to match page and archive; remove archive pattern ([#277](https://github.com/Automattic/newspack-block-theme/issues/277)) ([5d09c60](https://github.com/Automattic/newspack-block-theme/commit/5d09c60145bf659446fd142bc6a3064fd6ec013c))
+* update comments elements names ([#235](https://github.com/Automattic/newspack-block-theme/issues/235)) ([27e963e](https://github.com/Automattic/newspack-block-theme/commit/27e963eca74f5e2b51c6ff12becac42cb1ca2452))
+* update mobile menu elements names ([#237](https://github.com/Automattic/newspack-block-theme/issues/237)) ([a1f5070](https://github.com/Automattic/newspack-block-theme/commit/a1f50701bb0df40b6a54805b37b4f9b4984ee497))
+* update post header patterns; add wide option ([#267](https://github.com/Automattic/newspack-block-theme/issues/267)) ([1bd4d76](https://github.com/Automattic/newspack-block-theme/commit/1bd4d764ea32d9f15ec79aa5e68b078661618b41))
+* update post header to use pattern; introduce sidebar post template ([#262](https://github.com/Automattic/newspack-block-theme/issues/262)) ([ff015a1](https://github.com/Automattic/newspack-block-theme/commit/ff015a1bac53f3cdefb3f83f69e612b6fae63cae))
+* update post-content; adjust align left/right position ([#280](https://github.com/Automattic/newspack-block-theme/issues/280)) ([b1a5378](https://github.com/Automattic/newspack-block-theme/commit/b1a5378cd9dd5675e7da0675bfe2e2499a123253))
+* update search elements names ([#236](https://github.com/Automattic/newspack-block-theme/issues/236)) ([0f926d2](https://github.com/Automattic/newspack-block-theme/commit/0f926d2b28a4a5b68b53b180e1c0fd0d52c78da3))
+
+# [1.12.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.11.0...v1.12.0-alpha.1) (2024-07-19)
+
+
+### Bug Fixes
+
+* **buttons:** outline variations missing style with wp 6.6 ([#270](https://github.com/Automattic/newspack-block-theme/issues/270)) ([dabae5b](https://github.com/Automattic/newspack-block-theme/commit/dabae5b8fe6024d05b1f456350e3313ef073c5ed))
+* **navigation:** correct gap between items when using responsive nav ([#243](https://github.com/Automattic/newspack-block-theme/issues/243)) ([b707642](https://github.com/Automattic/newspack-block-theme/commit/b707642519c592f39f46b4755a736dabb558ef2b))
+* **newspack-grid:** adjust large and extra large screens ([#256](https://github.com/Automattic/newspack-block-theme/issues/256)) ([47b748c](https://github.com/Automattic/newspack-block-theme/commit/47b748c6e953ce10cf58988fda3fd1f35d4af105))
+* **search-results:** no results apply alignwide to homepage articles ([#242](https://github.com/Automattic/newspack-block-theme/issues/242)) ([315bc59](https://github.com/Automattic/newspack-block-theme/commit/315bc5957b834c773b3962af7bdcbc291e062a31))
+* sticky element with admin bar on small screens ([#238](https://github.com/Automattic/newspack-block-theme/issues/238)) ([2f2b056](https://github.com/Automattic/newspack-block-theme/commit/2f2b0563b476b3aafc07703a0e256dd5a28d295f))
+
+
+### Features
+
+* add 50/50 Image/Header single post template ([#268](https://github.com/Automattic/newspack-block-theme/issues/268)) ([a010920](https://github.com/Automattic/newspack-block-theme/commit/a010920985ff9cca02e5507770050d6a4a618df5))
+* add blank screenshot ([#252](https://github.com/Automattic/newspack-block-theme/issues/252)) ([8839ea5](https://github.com/Automattic/newspack-block-theme/commit/8839ea5c4e00b26c2f5d9d9b0c013f7c627d44f4))
+* add columns patterns ([#274](https://github.com/Automattic/newspack-block-theme/issues/274)) ([41290a7](https://github.com/Automattic/newspack-block-theme/commit/41290a70829967523198a08a643a82e3e2ab8631))
+* add drawer menu pattern; reorganise overlays ([#244](https://github.com/Automattic/newspack-block-theme/issues/244)) ([4cdb255](https://github.com/Automattic/newspack-block-theme/commit/4cdb2554f198d05fc0e575199165bfbb9aabf02b))
+* add footer patterns and update template part ([#177](https://github.com/Automattic/newspack-block-theme/issues/177)) ([615c2a2](https://github.com/Automattic/newspack-block-theme/commit/615c2a2d0ea5c36b214b6d4cf93af0822c998542))
+* add header desktop patterns ([#254](https://github.com/Automattic/newspack-block-theme/issues/254)) ([ff6d296](https://github.com/Automattic/newspack-block-theme/commit/ff6d29602537b592acc476c385b4181f284fd76e))
+* add header mobile patterns ([#255](https://github.com/Automattic/newspack-block-theme/issues/255)) ([e1f371d](https://github.com/Automattic/newspack-block-theme/commit/e1f371d04ed542c4626ff768e5f7d665777f1911))
+* add margin to alignleft and alignright elements ([#261](https://github.com/Automattic/newspack-block-theme/issues/261)) ([97140de](https://github.com/Automattic/newspack-block-theme/commit/97140dee8fd11700bb2898dd92936ef8afa26a40))
+* add optional mobile-only and desktop-only to fixed elements ([#246](https://github.com/Automattic/newspack-block-theme/issues/246)) ([2cdfc1b](https://github.com/Automattic/newspack-block-theme/commit/2cdfc1b9ad00df60f06068565687b71d84de45ec))
+* add sidebar grid layout ([#258](https://github.com/Automattic/newspack-block-theme/issues/258)) ([cb29dc6](https://github.com/Automattic/newspack-block-theme/commit/cb29dc6197e20a1313cc2a6e78ea7b3bb62e56c3))
+* add sidebar-contents template part and use it for single sidebar layout ([#276](https://github.com/Automattic/newspack-block-theme/issues/276)) ([488e43c](https://github.com/Automattic/newspack-block-theme/commit/488e43c3280ce58e8be69d3157188a2098ccadf2))
+* add support for yoast blocks (faq, how-to) ([#241](https://github.com/Automattic/newspack-block-theme/issues/241)) ([d63260a](https://github.com/Automattic/newspack-block-theme/commit/d63260a45bf08624e624628e3ee6d260c5fb3a2a))
+* add support for yoast breadcrumbs; move cap styles to subdirectory ([#239](https://github.com/Automattic/newspack-block-theme/issues/239)) ([463584e](https://github.com/Automattic/newspack-block-theme/commit/463584e0af35f074fe614ef3bd4749ef867d5c76))
+* **author-list:** add block styles ([#250](https://github.com/Automattic/newspack-block-theme/issues/250)) ([7acd4a3](https://github.com/Automattic/newspack-block-theme/commit/7acd4a36c7a05cc1c471d87a4a117c35a99f23cb))
+* **breadcrumbs:** ensure text and link colors are supported ([#240](https://github.com/Automattic/newspack-block-theme/issues/240)) ([fb3e939](https://github.com/Automattic/newspack-block-theme/commit/fb3e93921a67b99720d6ae0533d7d850f259f65c))
+* **button:** x-small size adjust min-height and border-radius for consistency with newspack-icon ([#271](https://github.com/Automattic/newspack-block-theme/issues/271)) ([5fa1f7c](https://github.com/Automattic/newspack-block-theme/commit/5fa1f7c2b796356e1e9292dca629ffb908803b43))
+* **footer:** add new pattern and adjust style 4 ([#269](https://github.com/Automattic/newspack-block-theme/issues/269)) ([9e826e9](https://github.com/Automattic/newspack-block-theme/commit/9e826e96f4acf11c07963003debee8e324f8f721))
+* **footer:** update credits ([#278](https://github.com/Automattic/newspack-block-theme/issues/278)) ([cec87b1](https://github.com/Automattic/newspack-block-theme/commit/cec87b18fbe31fe10389ed28955b26bd8973aa29))
+* **homepage-articles:** add transition to links ([#234](https://github.com/Automattic/newspack-block-theme/issues/234)) ([bdf924a](https://github.com/Automattic/newspack-block-theme/commit/bdf924af945517501c03bb5871033b88f5097ce0))
+* **navigation:** update hover style; remove underline and use color-mix instead ([#247](https://github.com/Automattic/newspack-block-theme/issues/247)) ([08994a3](https://github.com/Automattic/newspack-block-theme/commit/08994a3daf634c7c673543c8ec5b6c123cc94396))
+* **overlay:** update close button to 64px tall/wide ([#233](https://github.com/Automattic/newspack-block-theme/issues/233)) ([39e9dad](https://github.com/Automattic/newspack-block-theme/commit/39e9dad09d9f65824fb4895ce7c13581b44fe17a))
+* **patterns:** add 1 new footer pattern ([#257](https://github.com/Automattic/newspack-block-theme/issues/257)) ([758e38c](https://github.com/Automattic/newspack-block-theme/commit/758e38c62c53ee531c0d5c3541251a4f626cbd94))
+* **patterns:** improve columns preview; add 25/25/25/25 ([#275](https://github.com/Automattic/newspack-block-theme/issues/275)) ([0f5427f](https://github.com/Automattic/newspack-block-theme/commit/0f5427fb4230ec08bec07682a3d282c1d782caa3))
+* **post-carousel:** update style ([#249](https://github.com/Automattic/newspack-block-theme/issues/249)) ([d87ac30](https://github.com/Automattic/newspack-block-theme/commit/d87ac3073c3d8fecb61cbf94252bdcdd4b03c82f))
+* **post-meta:** update hover state ([#251](https://github.com/Automattic/newspack-block-theme/issues/251)) ([b1ba1d5](https://github.com/Automattic/newspack-block-theme/commit/b1ba1d56e41acf9263748bb9a8ad66ec7542580a))
+* reorganise header parts ([#253](https://github.com/Automattic/newspack-block-theme/issues/253)) ([14ee203](https://github.com/Automattic/newspack-block-theme/commit/14ee20376225a7e3840906287014c894e9413fd8))
+* **search:** update template part to match pagination with archive ([#279](https://github.com/Automattic/newspack-block-theme/issues/279)) ([6e3da20](https://github.com/Automattic/newspack-block-theme/commit/6e3da20874f92e3e59a451c7f38eedb80c7f053a))
+* simplify home and index templates to match page and archive; remove archive pattern ([#277](https://github.com/Automattic/newspack-block-theme/issues/277)) ([5d09c60](https://github.com/Automattic/newspack-block-theme/commit/5d09c60145bf659446fd142bc6a3064fd6ec013c))
+* update comments elements names ([#235](https://github.com/Automattic/newspack-block-theme/issues/235)) ([27e963e](https://github.com/Automattic/newspack-block-theme/commit/27e963eca74f5e2b51c6ff12becac42cb1ca2452))
+* update mobile menu elements names ([#237](https://github.com/Automattic/newspack-block-theme/issues/237)) ([a1f5070](https://github.com/Automattic/newspack-block-theme/commit/a1f50701bb0df40b6a54805b37b4f9b4984ee497))
+* update post header patterns; add wide option ([#267](https://github.com/Automattic/newspack-block-theme/issues/267)) ([1bd4d76](https://github.com/Automattic/newspack-block-theme/commit/1bd4d764ea32d9f15ec79aa5e68b078661618b41))
+* update post header to use pattern; introduce sidebar post template ([#262](https://github.com/Automattic/newspack-block-theme/issues/262)) ([ff015a1](https://github.com/Automattic/newspack-block-theme/commit/ff015a1bac53f3cdefb3f83f69e612b6fae63cae))
+* update post-content; adjust align left/right position ([#280](https://github.com/Automattic/newspack-block-theme/issues/280)) ([b1a5378](https://github.com/Automattic/newspack-block-theme/commit/b1a5378cd9dd5675e7da0675bfe2e2499a123253))
+* update search elements names ([#236](https://github.com/Automattic/newspack-block-theme/issues/236)) ([0f926d2](https://github.com/Automattic/newspack-block-theme/commit/0f926d2b28a4a5b68b53b180e1c0fd0d52c78da3))
+
 # [1.11.0](https://github.com/Automattic/newspack-block-theme/compare/v1.10.0...v1.11.0) (2024-07-15)
 
 
