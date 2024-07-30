@@ -45,6 +45,7 @@ final class Newspack_Newsletters_Editor {
 	 */
 	public function __construct() {
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
+		add_filter( 'block_editor_settings_all', [ __CLASS__, 'disable_autosave' ], 10, 2 );
 		add_action( 'the_post', [ __CLASS__, 'strip_editor_modifications' ] );
 		add_action( 'after_setup_theme', [ __CLASS__, 'newspack_font_sizes' ], 11 );
 		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
@@ -95,7 +96,7 @@ final class Newspack_Newsletters_Editor {
 	 *
 	 * @param int $post_id Optional post ID to check.
 	 */
-	private static function is_editing_email( $post_id = null ) {
+	public static function is_editing_email( $post_id = null ) {
 		$post_id = empty( $post_id ) ? get_the_ID() : $post_id;
 		return in_array( get_post_type( $post_id ), self::get_email_editor_cpts() );
 	}
@@ -126,6 +127,23 @@ final class Newspack_Newsletters_Editor {
 			);
 		}
 		return implode( "\n", $rules );
+	}
+
+	/**
+	 * Disable autosaving in the editor for newsletter posts.
+	 * For currently unknown reasons, autosaves for this CPT result in true saves
+	 * instead of creating an autosave revision, which could persist unintended changes.
+	 *
+	 * @param array                   $editor_settings      Default editor settings.
+	 * @param WP_Block_Editor_Context $block_editor_context The current block editor context.
+	 *
+	 * @return array
+	 */
+	public static function disable_autosave( $editor_settings, $block_editor_context ) {
+		if ( isset( $block_editor_context->post->post_type ) && Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT === $block_editor_context->post->post_type ) {
+			$editor_settings['autosaveInterval'] = 999999;
+		}
+		return $editor_settings;
 	}
 
 	/**
@@ -284,21 +302,34 @@ final class Newspack_Newsletters_Editor {
 		$mjml_handling_post_types = array_values( array_diff( self::get_email_editor_cpts(), [ Newspack_Newsletters_Ads::CPT ] ) );
 		$provider                 = Newspack_Newsletters::get_service_provider();
 		$conditional_tag_support  = false;
+		$error_message            = false;
+
 		if ( $provider && ( self::is_editing_newsletter() || self::is_editing_newsletter_ad() ) ) {
 			$conditional_tag_support = $provider::get_conditional_tag_support();
+
+			// Fetch async error messages to display on editor load.
+			$transient_name = $provider->get_transient_name( get_the_ID() );
+			$error_message  = get_transient( $transient_name );
 		}
+
 		$email_editor_data = [
-			'email_html_meta'          => Newspack_Newsletters::EMAIL_HTML_META,
-			'mjml_handling_post_types' => $mjml_handling_post_types,
-			'conditional_tag_support'  => $conditional_tag_support,
-			'sponsors_flag_hex'        => get_theme_mod( 'sponsored_flag_hex', '#FED850' ),
-			'sponsors_flag_text_color' => function_exists( 'newspack_get_color_contrast' ) ? newspack_get_color_contrast( \get_theme_mod( 'sponsored_flag_hex', '#FED850' ) ) : 'black',
-			'labels'                   => [
+			'email_html_meta'                => Newspack_Newsletters::EMAIL_HTML_META,
+			'mjml_handling_post_types'       => $mjml_handling_post_types,
+			'conditional_tag_support'        => $conditional_tag_support,
+			'sponsors_flag_hex'              => get_theme_mod( 'sponsored_flag_hex', '#FED850' ),
+			'sponsors_flag_text_color'       => function_exists( 'newspack_get_color_contrast' ) ? newspack_get_color_contrast( \get_theme_mod( 'sponsored_flag_hex', '#FED850' ) ) : 'black',
+			'labels'                         => [
 				'continue_reading_label' => __( 'Continue reading…', 'newspack-newsletters' ),
 				'byline_prefix_label'    => __( 'By ', 'newspack-newsletters' ),
 				'byline_connector_label' => __( 'and ', 'newspack-newsletters' ),
 			],
+			'supported_social_icon_services' => Newspack_Newsletters_Renderer::get_supported_social_icons_services(),
 		];
+
+		if ( $error_message ) {
+			$email_editor_data['error_message'] = $error_message;
+		}
+
 		if ( self::is_editing_email() ) {
 			wp_register_style(
 				'newspack-newsletters',

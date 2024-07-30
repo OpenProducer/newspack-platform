@@ -3011,10 +3011,13 @@ const getMergedAttributesWithPreview = (currentAttributes, preview, title, isRes
   };
 };
 
+;// CONCATENATED MODULE: external ["wp","compose"]
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/utils/hooks.js
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -3092,9 +3095,17 @@ function useUploadMediaFromBlobURL(args = {}) {
     });
   }, [getSettings]);
 }
+function useToolsPanelDropdownMenuProps() {
+  const isMobile = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium', '<');
+  return !isMobile ? {
+    popoverProps: {
+      placement: 'left-start',
+      // For non-mobile, inner sidebar width (248px) - button width (24px) - border (1px) + padding (16px) + spacing (20px)
+      offset: 259
+    }
+  } : {};
+}
 
-;// CONCATENATED MODULE: external ["wp","compose"]
-const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/caption.js
 /**
  * WordPress dependencies
@@ -3234,6 +3245,7 @@ function Caption({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -3259,9 +3271,9 @@ function AudioEdit({
     preload,
     src
   } = attributes;
-  const isTemporaryAudio = !id && (0,external_wp_blob_namespaceObject.isBlobURL)(src);
+  const [temporaryURL, setTemporaryURL] = (0,external_wp_element_namespaceObject.useState)(attributes.blob);
   useUploadMediaFromBlobURL({
-    url: src,
+    url: temporaryURL,
     allowedTypes: ALLOWED_MEDIA_TYPES,
     onChange: onSelectAudio,
     onError: onUploadError
@@ -3289,8 +3301,10 @@ function AudioEdit({
       }
       setAttributes({
         src: newSrc,
-        id: undefined
+        id: undefined,
+        blob: undefined
       });
+      setTemporaryURL();
     }
   }
   const {
@@ -3311,25 +3325,34 @@ function AudioEdit({
       setAttributes({
         src: undefined,
         id: undefined,
-        caption: undefined
+        caption: undefined,
+        blob: undefined
       });
+      setTemporaryURL();
       return;
     }
+    if ((0,external_wp_blob_namespaceObject.isBlobURL)(media.url)) {
+      setTemporaryURL(media.url);
+      return;
+    }
+
     // Sets the block's attribute and updates the edit component from the
     // selected media, then switches off the editing UI.
     setAttributes({
+      blob: undefined,
       src: media.url,
       id: media.id,
       caption: media.caption
     });
+    setTemporaryURL();
   }
   const classes = dist_clsx(className, {
-    'is-transient': isTemporaryAudio
+    'is-transient': !!temporaryURL
   });
   const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
     className: classes
   });
-  if (!src) {
+  if (!src && !temporaryURL) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       ...blockProps,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.MediaPlaceholder, {
@@ -3401,9 +3424,9 @@ function AudioEdit({
         isDisabled: !isSingleSelected,
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("audio", {
           controls: "controls",
-          src: src
+          src: src !== null && src !== void 0 ? src : temporaryURL
         })
-      }), isTemporaryAudio && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Spinner, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Caption, {
+      }), !!temporaryURL && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Spinner, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Caption, {
         attributes: attributes,
         setAttributes: setAttributes,
         isSelected: isSingleSelected,
@@ -3467,7 +3490,7 @@ const transforms = {
       // It's already done as part of the `componentDidMount`
       // in the audio block.
       const block = (0,external_wp_blocks_namespaceObject.createBlock)('core/audio', {
-        src: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
+        blob: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
       });
       return block;
     }
@@ -3547,6 +3570,10 @@ const audio_metadata = {
   keywords: ["music", "sound", "podcast", "recording"],
   textdomain: "default",
   attributes: {
+    blob: {
+      type: "string",
+      __experimentalRole: "local"
+    },
     src: {
       type: "string",
       source: "attribute",
@@ -16176,6 +16203,7 @@ function WpEmbedPreview({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -16232,11 +16260,10 @@ class EmbedPreview extends external_wp_element_namespaceObject.Component {
       interactive
     } = this.state;
     const html = 'photo' === type ? getPhotoHtml(preview) : preview.html;
-    const parsedHost = new URL(url).host.split('.');
-    const parsedHostBaseUrl = parsedHost.splice(parsedHost.length - 2, parsedHost.length - 1).join('.');
+    const embedSourceUrl = (0,external_wp_url_namespaceObject.getAuthority)(url);
     const iframeTitle = (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %s: host providing embed content e.g: www.youtube.com
-    (0,external_wp_i18n_namespaceObject.__)('Embedded content from %s'), parsedHostBaseUrl);
+    (0,external_wp_i18n_namespaceObject.__)('Embedded content from %s'), embedSourceUrl);
     const sandboxClassnames = dist_clsx(type, className, 'wp-block-embed__wrapper');
 
     // Disabled because the overlay div doesn't actually have a role or functionality
@@ -16279,7 +16306,7 @@ class EmbedPreview extends external_wp_element_namespaceObject.Component {
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
           className: "components-placeholder__error",
           children: (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: host providing embed content e.g: www.youtube.com */
-          (0,external_wp_i18n_namespaceObject.__)("Embedded content from %s can't be previewed in the editor."), parsedHostBaseUrl)
+          (0,external_wp_i18n_namespaceObject.__)("Embedded content from %s can't be previewed in the editor."), embedSourceUrl)
         })]
       }), (!external_wp_blockEditor_namespaceObject.RichText.isEmpty(caption) || isSelected) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.RichText, {
         identifier: "caption",
@@ -17859,6 +17886,7 @@ function FileEdit({
     displayPreview,
     previewHeight
   } = attributes;
+  const [temporaryURL, setTemporaryURL] = (0,external_wp_element_namespaceObject.useState)(attributes.blob);
   const {
     media
   } = (0,external_wp_data_namespaceObject.useSelect)(select => ({
@@ -17872,7 +17900,7 @@ function FileEdit({
     __unstableMarkNextChangeAsNotPersistent
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
   useUploadMediaFromBlobURL({
-    url: href,
+    url: temporaryURL,
     onChange: onSelectFile,
     onError: onUploadError
   });
@@ -17891,6 +17919,11 @@ function FileEdit({
   }, []);
   function onSelectFile(newMedia) {
     if (!newMedia || !newMedia.url) {
+      setTemporaryURL();
+      return;
+    }
+    if ((0,external_wp_blob_namespaceObject.isBlobURL)(newMedia.url)) {
+      setTemporaryURL(newMedia.url);
       return;
     }
     const isPdf = newMedia.url.endsWith('.pdf');
@@ -17901,8 +17934,10 @@ function FileEdit({
       id: newMedia.id,
       displayPreview: isPdf ? true : undefined,
       previewHeight: isPdf ? 600 : undefined,
-      fileId: `wp-block-file--media-${clientId}`
+      fileId: `wp-block-file--media-${clientId}`,
+      blob: undefined
     });
+    setTemporaryURL();
   }
   function onUploadError(message) {
     setAttributes({
@@ -17948,14 +17983,14 @@ function FileEdit({
   }
   const attachmentPage = media && media.link;
   const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
-    className: dist_clsx((0,external_wp_blob_namespaceObject.isBlobURL)(href) && (0,external_wp_components_namespaceObject.__unstableGetAnimateClassName)({
+    className: dist_clsx(!!temporaryURL && (0,external_wp_components_namespaceObject.__unstableGetAnimateClassName)({
       type: 'loading'
     }), {
-      'is-transient': (0,external_wp_blob_namespaceObject.isBlobURL)(href)
+      'is-transient': !!temporaryURL
     })
   });
   const displayPreviewInEditor = browserSupportsPdfs() && displayPreview;
-  if (!href) {
+  if (!href && !temporaryURL) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       ...blockProps,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.MediaPlaceholder, {
@@ -17975,7 +18010,7 @@ function FileEdit({
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FileBlockInspector, {
       hrefs: {
-        href,
+        href: href || temporaryURL,
         textLinkHref,
         attachmentPage
       },
@@ -18159,9 +18194,8 @@ const file_transforms_transforms = {
 
         // File will be uploaded in componentDidMount()
         blocks.push((0,external_wp_blocks_namespaceObject.createBlock)('core/file', {
-          href: blobURL,
-          fileName: file.name,
-          textLinkHref: blobURL
+          blob: blobURL,
+          fileName: file.name
         }));
       });
       return blocks;
@@ -18301,6 +18335,10 @@ const file_metadata = {
   attributes: {
     id: {
       type: "number"
+    },
+    blob: {
+      type: "string",
+      __experimentalRole: "local"
     },
     href: {
       type: "string"
@@ -19597,45 +19635,6 @@ const LINK_DESTINATION_ATTACHMENT = 'attachment';
 const LINK_DESTINATION_MEDIA_WP_CORE = 'file';
 const LINK_DESTINATION_ATTACHMENT_WP_CORE = 'post';
 
-;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/shared.js
-/**
- * WordPress dependencies
- */
-
-function defaultColumnsNumber(imageCount) {
-  return imageCount ? Math.min(3, imageCount) : 3;
-}
-const pickRelevantMediaFiles = (image, sizeSlug = 'large') => {
-  const imageProps = Object.fromEntries(Object.entries(image !== null && image !== void 0 ? image : {}).filter(([key]) => ['alt', 'id', 'link'].includes(key)));
-  imageProps.url = image?.sizes?.[sizeSlug]?.url || image?.media_details?.sizes?.[sizeSlug]?.source_url || image?.url || image?.source_url;
-  const fullUrl = image?.sizes?.full?.url || image?.media_details?.sizes?.full?.source_url;
-  if (fullUrl) {
-    imageProps.fullUrl = fullUrl;
-  }
-  return imageProps;
-};
-function getGalleryBlockV2Enabled() {
-  // We want to fail early here, at least during beta testing phase, to ensure
-  // there aren't instances where undefined values cause false negatives.
-  if (!window.wp || typeof window.wp.galleryBlockV2Enabled !== 'boolean') {
-    throw 'window.wp.galleryBlockV2Enabled is not defined';
-  }
-  return window.wp.galleryBlockV2Enabled;
-}
-
-/**
- * The new gallery block format is not compatible with the use_BalanceTags option
- * in WP versions <= 5.8 https://core.trac.wordpress.org/ticket/54130. The
- * window.wp.galleryBlockV2Enabled flag is set in lib/compat.php. This method
- * can be removed when minimum supported WP version >=5.9.
- */
-function isGalleryV2Enabled() {
-  if (external_wp_element_namespaceObject.Platform.isNative) {
-    return getGalleryBlockV2Enabled();
-  }
-  return true;
-}
-
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/deprecated.js
 /**
  * External dependencies
@@ -19651,7 +19650,6 @@ function isGalleryV2Enabled() {
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -20022,10 +20020,7 @@ const deprecated_v6 = {
     });
   },
   migrate(attributes) {
-    if (isGalleryV2Enabled()) {
-      return runV2Migration(attributes);
-    }
-    return attributes;
+    return runV2Migration(attributes);
   }
 };
 const deprecated_v5 = {
@@ -20113,21 +20108,7 @@ const deprecated_v5 = {
     return !linkTo || linkTo === 'attachment' || linkTo === 'media';
   },
   migrate(attributes) {
-    if (isGalleryV2Enabled()) {
-      return runV2Migration(attributes);
-    }
-    let linkTo = attributes.linkTo;
-    if (!attributes.linkTo) {
-      linkTo = 'none';
-    } else if (attributes.linkTo === 'attachment') {
-      linkTo = 'post';
-    } else if (attributes.linkTo === 'media') {
-      linkTo = 'file';
-    }
-    return {
-      ...attributes,
-      linkTo
-    };
+    return runV2Migration(attributes);
   },
   save({
     attributes
@@ -20254,17 +20235,7 @@ const deprecated_v4 = {
     return ids && ids.some(id => typeof id === 'string');
   },
   migrate(attributes) {
-    var _attributes$ids;
-    if (isGalleryV2Enabled()) {
-      return runV2Migration(attributes);
-    }
-    return {
-      ...attributes,
-      ids: ((_attributes$ids = attributes.ids) !== null && _attributes$ids !== void 0 ? _attributes$ids : []).map(id => {
-        const parsedId = parseInt(id, 10);
-        return Number.isInteger(parsedId) ? parsedId : null;
-      })
-    };
+    return runV2Migration(attributes);
   },
   save({
     attributes
@@ -20425,10 +20396,7 @@ const gallery_deprecated_v3 = {
     });
   },
   migrate(attributes) {
-    if (isGalleryV2Enabled()) {
-      return runV2Migration(attributes);
-    }
-    return attributes;
+    return runV2Migration(attributes);
   }
 };
 const gallery_deprecated_v2 = {
@@ -20491,21 +20459,7 @@ const gallery_deprecated_v2 = {
     }));
   },
   migrate(attributes) {
-    var _attributes$images;
-    if (isGalleryV2Enabled()) {
-      return runV2Migration(attributes);
-    }
-    return {
-      ...attributes,
-      ids: ((_attributes$images = attributes.images) !== null && _attributes$images !== void 0 ? _attributes$images : []).map(({
-        id
-      }) => {
-        if (!id) {
-          return null;
-        }
-        return parseInt(id, 10);
-      })
-    };
+    return runV2Migration(attributes);
   },
   supports: {
     align: true
@@ -20638,10 +20592,7 @@ const gallery_deprecated_v1 = {
     });
   },
   migrate(attributes) {
-    if (isGalleryV2Enabled()) {
-      return runV2Migration(attributes);
-    }
-    return attributes;
+    return runV2Migration(attributes);
   }
 };
 /* harmony default export */ const gallery_deprecated = ([deprecated_v7, deprecated_v6, deprecated_v5, deprecated_v4, gallery_deprecated_v3, gallery_deprecated_v2, gallery_deprecated_v1]);
@@ -20658,6 +20609,20 @@ const external_wp_viewport_namespaceObject = window["wp"]["viewport"];
 const sharedIcon = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockIcon, {
   icon: library_gallery
 });
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/shared.js
+function defaultColumnsNumber(imageCount) {
+  return imageCount ? Math.min(3, imageCount) : 3;
+}
+const pickRelevantMediaFiles = (image, sizeSlug = 'large') => {
+  const imageProps = Object.fromEntries(Object.entries(image !== null && image !== void 0 ? image : {}).filter(([key]) => ['alt', 'id', 'link'].includes(key)));
+  imageProps.url = image?.sizes?.[sizeSlug]?.url || image?.media_details?.sizes?.[sizeSlug]?.source_url || image?.url || image?.source_url;
+  const fullUrl = image?.sizes?.full?.url || image?.media_details?.sizes?.full?.source_url;
+  if (fullUrl) {
+    imageProps.fullUrl = fullUrl;
+  }
+  return imageProps;
+};
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/image/constants.js
 const constants_MIN_SIZE = 20;
@@ -21213,15 +21178,15 @@ function GalleryEdit(props) {
       id
     }) => id === file.id) : null;
     const mediaTypeSelector = nativeFileData ? nativeFileData?.media_type : file.type;
-    return edit_ALLOWED_MEDIA_TYPES.some(mediaType => mediaTypeSelector?.indexOf(mediaType) === 0) || file.url?.indexOf('blob:') === 0;
+    return edit_ALLOWED_MEDIA_TYPES.some(mediaType => mediaTypeSelector?.indexOf(mediaType) === 0) || file.blob;
   }
   function updateImages(selectedImages) {
     const newFileUploads = Object.prototype.toString.call(selectedImages) === '[object FileList]';
     const imageArray = newFileUploads ? Array.from(selectedImages).map(file => {
       if (!file.url) {
-        return pickRelevantMediaFiles({
-          url: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
-        });
+        return {
+          blob: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
+        };
       }
       return file;
     }) : selectedImages;
@@ -21233,9 +21198,9 @@ function GalleryEdit(props) {
     }
     const processedImages = imageArray.filter(file => file.url || isValidFileType(file)).map(file => {
       if (!file.url) {
-        return pickRelevantMediaFiles({
-          url: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
-        });
+        return {
+          blob: file.blob || (0,external_wp_blob_namespaceObject.createBlobURL)(file)
+        };
       }
       return file;
     });
@@ -21249,6 +21214,7 @@ function GalleryEdit(props) {
     const newBlocks = newImageList.map(image => {
       return (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
         id: image.id,
+        blob: image.blob,
         url: image.url,
         caption: image.caption,
         alt: image.alt
@@ -21489,971 +21455,9 @@ function GalleryEdit(props) {
     })]
   });
 }
-/* harmony default export */ const gallery_edit = ((0,external_wp_compose_namespaceObject.compose)([(0,external_wp_viewport_namespaceObject.withViewportMatch)({
+/* harmony default export */ const gallery_edit = ((0,external_wp_compose_namespaceObject.compose)([external_wp_components_namespaceObject.withNotices, (0,external_wp_viewport_namespaceObject.withViewportMatch)({
   isNarrow: '< small'
 })])(GalleryEdit));
-
-;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/v1/shared.js
-const shared_pickRelevantMediaFiles = (image, sizeSlug = 'large') => {
-  const imageProps = Object.fromEntries(Object.entries(image !== null && image !== void 0 ? image : {}).filter(([key]) => ['alt', 'id', 'link', 'caption'].includes(key)));
-  imageProps.url = image?.sizes?.[sizeSlug]?.url || image?.media_details?.sizes?.[sizeSlug]?.source_url || image?.url;
-  const fullUrl = image?.sizes?.full?.url || image?.media_details?.sizes?.full?.source_url;
-  if (fullUrl) {
-    imageProps.fullUrl = fullUrl;
-  }
-  return imageProps;
-};
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/image.js
-/**
- * WordPress dependencies
- */
-
-
-const image_image = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  viewBox: "0 0 24 24",
-  xmlns: "http://www.w3.org/2000/svg",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z"
-  })
-});
-/* harmony default export */ const library_image = (image_image);
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/chevron-left.js
-/**
- * WordPress dependencies
- */
-
-
-const chevronLeft = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M14.6 7l-1.2-1L8 12l5.4 6 1.2-1-4.6-5z"
-  })
-});
-/* harmony default export */ const chevron_left = (chevronLeft);
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/chevron-right.js
-/**
- * WordPress dependencies
- */
-
-
-const chevronRight = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M10.6 6L9.4 7l4.6 5-4.6 5 1.2 1 5.4-6z"
-  })
-});
-/* harmony default export */ const chevron_right = (chevronRight);
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/close-small.js
-/**
- * WordPress dependencies
- */
-
-
-const closeSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z"
-  })
-});
-/* harmony default export */ const close_small = (closeSmall);
-
-;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/v1/constants.js
-const v1_constants_LINK_DESTINATION_NONE = 'none';
-const v1_constants_LINK_DESTINATION_MEDIA = 'file';
-const v1_constants_LINK_DESTINATION_ATTACHMENT = 'post';
-
-;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/v1/gallery-image.js
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-const isTemporaryImage = (id, url) => !id && (0,external_wp_blob_namespaceObject.isBlobURL)(url);
-class GalleryImage extends external_wp_element_namespaceObject.Component {
-  constructor() {
-    super(...arguments);
-    this.onSelectImage = this.onSelectImage.bind(this);
-    this.onRemoveImage = this.onRemoveImage.bind(this);
-    this.bindContainer = this.bindContainer.bind(this);
-    this.onEdit = this.onEdit.bind(this);
-    this.onSelectImageFromLibrary = this.onSelectImageFromLibrary.bind(this);
-    this.onSelectCustomURL = this.onSelectCustomURL.bind(this);
-    this.state = {
-      isEditing: false
-    };
-  }
-  bindContainer(ref) {
-    this.container = ref;
-  }
-  onSelectImage() {
-    if (!this.props.isSelected) {
-      this.props.onSelect();
-    }
-  }
-  onRemoveImage(event) {
-    if (this.container === this.container.ownerDocument.activeElement && this.props.isSelected && [external_wp_keycodes_namespaceObject.BACKSPACE, external_wp_keycodes_namespaceObject.DELETE].indexOf(event.keyCode) !== -1) {
-      event.preventDefault();
-      this.props.onRemove();
-    }
-  }
-  onEdit() {
-    this.setState({
-      isEditing: true
-    });
-  }
-  componentDidUpdate() {
-    const {
-      image,
-      url,
-      __unstableMarkNextChangeAsNotPersistent
-    } = this.props;
-    if (image && !url) {
-      __unstableMarkNextChangeAsNotPersistent();
-      this.props.setAttributes({
-        url: image.source_url,
-        alt: image.alt_text
-      });
-    }
-  }
-  deselectOnBlur() {
-    this.props.onDeselect();
-  }
-  onSelectImageFromLibrary(media) {
-    const {
-      setAttributes,
-      id,
-      url,
-      alt,
-      caption,
-      sizeSlug
-    } = this.props;
-    if (!media || !media.url) {
-      return;
-    }
-    let mediaAttributes = shared_pickRelevantMediaFiles(media, sizeSlug);
-
-    // If the current image is temporary but an alt text was meanwhile
-    // written by the user, make sure the text is not overwritten.
-    if (isTemporaryImage(id, url)) {
-      if (alt) {
-        const {
-          alt: omittedAlt,
-          ...restMediaAttributes
-        } = mediaAttributes;
-        mediaAttributes = restMediaAttributes;
-      }
-    }
-
-    // If a caption text was meanwhile written by the user,
-    // make sure the text is not overwritten by empty captions.
-    if (caption && !mediaAttributes.caption) {
-      const {
-        caption: omittedCaption,
-        ...restMediaAttributes
-      } = mediaAttributes;
-      mediaAttributes = restMediaAttributes;
-    }
-    setAttributes(mediaAttributes);
-    this.setState({
-      isEditing: false
-    });
-  }
-  onSelectCustomURL(newURL) {
-    const {
-      setAttributes,
-      url
-    } = this.props;
-    if (newURL !== url) {
-      setAttributes({
-        url: newURL,
-        id: undefined
-      });
-      this.setState({
-        isEditing: false
-      });
-    }
-  }
-  render() {
-    const {
-      url,
-      alt,
-      id,
-      linkTo,
-      link,
-      isFirstItem,
-      isLastItem,
-      isSelected,
-      caption,
-      onRemove,
-      onMoveForward,
-      onMoveBackward,
-      setAttributes,
-      'aria-label': ariaLabel
-    } = this.props;
-    const {
-      isEditing
-    } = this.state;
-    let href;
-    switch (linkTo) {
-      case v1_constants_LINK_DESTINATION_MEDIA:
-        href = url;
-        break;
-      case v1_constants_LINK_DESTINATION_ATTACHMENT:
-        href = link;
-        break;
-    }
-    const img =
-    /*#__PURE__*/
-    // Disable reason: Image itself is not meant to be interactive, but should
-    // direct image selection and unfocus caption fields.
-    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-    (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("img", {
-        src: url,
-        alt: alt,
-        "data-id": id,
-        onKeyDown: this.onRemoveImage,
-        tabIndex: "0",
-        "aria-label": ariaLabel,
-        ref: this.bindContainer
-      }), (0,external_wp_blob_namespaceObject.isBlobURL)(url) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Spinner, {})]
-    })
-    /* eslint-enable jsx-a11y/no-noninteractive-element-interactions */;
-    const className = dist_clsx({
-      'is-selected': isSelected,
-      'is-transient': (0,external_wp_blob_namespaceObject.isBlobURL)(url)
-    });
-    return (
-      /*#__PURE__*/
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
-      (0,external_ReactJSXRuntime_namespaceObject.jsxs)("figure", {
-        className: className,
-        onClick: this.onSelectImage,
-        onFocus: this.onSelectImage,
-        children: [!isEditing && (href ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
-          href: href,
-          children: img
-        }) : img), isEditing && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.MediaPlaceholder, {
-          labels: {
-            title: (0,external_wp_i18n_namespaceObject.__)('Edit gallery image')
-          },
-          icon: library_image,
-          onSelect: this.onSelectImageFromLibrary,
-          onSelectURL: this.onSelectCustomURL,
-          accept: "image/*",
-          allowedTypes: ['image'],
-          value: {
-            id,
-            src: url
-          }
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.ButtonGroup, {
-          className: "block-library-gallery-item__inline-menu is-left",
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-            icon: chevron_left,
-            onClick: isFirstItem ? undefined : onMoveBackward,
-            label: (0,external_wp_i18n_namespaceObject.__)('Move image backward'),
-            "aria-disabled": isFirstItem
-            // Disable reason: Truly disable when image is not selected.
-            // eslint-disable-next-line no-restricted-syntax
-            ,
-            disabled: !isSelected
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-            icon: chevron_right,
-            onClick: isLastItem ? undefined : onMoveForward,
-            label: (0,external_wp_i18n_namespaceObject.__)('Move image forward'),
-            "aria-disabled": isLastItem
-            // Disable reason: Truly disable when image is not selected.
-            // eslint-disable-next-line no-restricted-syntax
-            ,
-            disabled: !isSelected
-          })]
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.ButtonGroup, {
-          className: "block-library-gallery-item__inline-menu is-right",
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-            icon: library_edit,
-            onClick: this.onEdit,
-            label: (0,external_wp_i18n_namespaceObject.__)('Replace image')
-            // Disable reason: Truly disable when image is not selected.
-            // eslint-disable-next-line no-restricted-syntax
-            ,
-            disabled: !isSelected
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-            icon: close_small,
-            onClick: onRemove,
-            label: (0,external_wp_i18n_namespaceObject.__)('Remove image')
-            // Disable reason: Truly disable when image is not selected.
-            // eslint-disable-next-line no-restricted-syntax
-            ,
-            disabled: !isSelected
-          })]
-        }), !isEditing && (isSelected || caption) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.RichText, {
-          tagName: "figcaption",
-          className: (0,external_wp_blockEditor_namespaceObject.__experimentalGetElementClassName)('caption'),
-          "aria-label": (0,external_wp_i18n_namespaceObject.__)('Image caption text'),
-          placeholder: isSelected ? (0,external_wp_i18n_namespaceObject.__)('Add caption') : null,
-          value: caption,
-          onChange: newCaption => setAttributes({
-            caption: newCaption
-          }),
-          inlineToolbar: true
-        })]
-      })
-    );
-  }
-}
-/* harmony default export */ const gallery_image = ((0,external_wp_compose_namespaceObject.compose)([(0,external_wp_data_namespaceObject.withSelect)((select, ownProps) => {
-  const {
-    getMedia
-  } = select(external_wp_coreData_namespaceObject.store);
-  const {
-    id
-  } = ownProps;
-  return {
-    image: id ? getMedia(parseInt(id, 10)) : null
-  };
-}), (0,external_wp_data_namespaceObject.withDispatch)(dispatch => {
-  const {
-    __unstableMarkNextChangeAsNotPersistent
-  } = dispatch(external_wp_blockEditor_namespaceObject.store);
-  return {
-    __unstableMarkNextChangeAsNotPersistent
-  };
-})])(GalleryImage));
-
-;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/v1/gallery.js
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-const gallery_Gallery = props => {
-  const {
-    attributes,
-    isSelected,
-    setAttributes,
-    selectedImage,
-    mediaPlaceholder,
-    onMoveBackward,
-    onMoveForward,
-    onRemoveImage,
-    onSelectImage,
-    onDeselectImage,
-    onSetImageAttributes,
-    insertBlocksAfter,
-    blockProps
-  } = props;
-  const {
-    align,
-    columns = defaultColumnsNumberV1(attributes),
-    caption,
-    imageCrop,
-    images
-  } = attributes;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("figure", {
-    ...blockProps,
-    className: dist_clsx(blockProps.className, {
-      [`align${align}`]: align,
-      [`columns-${columns}`]: columns,
-      'is-cropped': imageCrop
-    }),
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
-      className: "blocks-gallery-grid",
-      children: images.map((img, index) => {
-        const ariaLabel = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: 1: the order number of the image. 2: the total number of images. */
-        (0,external_wp_i18n_namespaceObject.__)('image %1$d of %2$d in gallery'), index + 1, images.length);
-        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("li", {
-          className: "blocks-gallery-item",
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(gallery_image, {
-            url: img.url,
-            alt: img.alt,
-            id: img.id,
-            isFirstItem: index === 0,
-            isLastItem: index + 1 === images.length,
-            isSelected: isSelected && selectedImage === index,
-            onMoveBackward: onMoveBackward(index),
-            onMoveForward: onMoveForward(index),
-            onRemove: onRemoveImage(index),
-            onSelect: onSelectImage(index),
-            onDeselect: onDeselectImage(index),
-            setAttributes: attrs => onSetImageAttributes(index, attrs),
-            caption: img.caption,
-            "aria-label": ariaLabel,
-            sizeSlug: attributes.sizeSlug
-          })
-        }, img.id ? `${img.id}-${index}` : img.url);
-      })
-    }), mediaPlaceholder, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(RichTextVisibilityHelper, {
-      isHidden: !isSelected && external_wp_blockEditor_namespaceObject.RichText.isEmpty(caption),
-      tagName: "figcaption",
-      className: dist_clsx('blocks-gallery-caption', (0,external_wp_blockEditor_namespaceObject.__experimentalGetElementClassName)('caption')),
-      "aria-label": (0,external_wp_i18n_namespaceObject.__)('Gallery caption text'),
-      placeholder: (0,external_wp_i18n_namespaceObject.__)('Write gallery caption…'),
-      value: caption,
-      onChange: value => setAttributes({
-        caption: value
-      }),
-      inlineToolbar: true,
-      __unstableOnSplitAtEnd: () => insertBlocksAfter((0,external_wp_blocks_namespaceObject.createBlock)((0,external_wp_blocks_namespaceObject.getDefaultBlockName)()))
-    })]
-  });
-};
-function RichTextVisibilityHelper({
-  isHidden,
-  ...richTextProps
-}) {
-  return isHidden ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.VisuallyHidden, {
-    as: external_wp_blockEditor_namespaceObject.RichText,
-    ...richTextProps
-  }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.RichText, {
-    ...richTextProps
-  });
-}
-/* harmony default export */ const v1_gallery = (gallery_Gallery);
-
-;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/v1/edit.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-
-
-
-const edit_MAX_COLUMNS = 8;
-const edit_linkOptions = [{
-  value: v1_constants_LINK_DESTINATION_ATTACHMENT,
-  label: (0,external_wp_i18n_namespaceObject.__)('Attachment Page')
-}, {
-  value: v1_constants_LINK_DESTINATION_MEDIA,
-  label: (0,external_wp_i18n_namespaceObject.__)('Media File')
-}, {
-  value: v1_constants_LINK_DESTINATION_NONE,
-  label: (0,external_wp_i18n_namespaceObject.__)('None')
-}];
-const v1_edit_ALLOWED_MEDIA_TYPES = ['image'];
-const edit_PLACEHOLDER_TEXT = external_wp_element_namespaceObject.Platform.select({
-  web: (0,external_wp_i18n_namespaceObject.__)('Drag images, upload new ones or select files from your library.'),
-  native: (0,external_wp_i18n_namespaceObject.__)('ADD MEDIA')
-});
-const edit_MOBILE_CONTROL_PROPS_RANGE_CONTROL = external_wp_element_namespaceObject.Platform.select({
-  web: {},
-  native: {
-    type: 'stepper'
-  }
-});
-function edit_GalleryEdit(props) {
-  const {
-    attributes,
-    clientId,
-    isSelected,
-    noticeUI,
-    noticeOperations,
-    onFocus
-  } = props;
-  const {
-    columns = defaultColumnsNumberV1(attributes),
-    imageCrop,
-    images,
-    linkTo,
-    sizeSlug
-  } = attributes;
-  const [selectedImage, setSelectedImage] = (0,external_wp_element_namespaceObject.useState)();
-  const [attachmentCaptions, setAttachmentCaptions] = (0,external_wp_element_namespaceObject.useState)();
-  const {
-    __unstableMarkNextChangeAsNotPersistent
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const {
-    imageSizes,
-    mediaUpload,
-    getMedia,
-    wasBlockJustInserted
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const settings = select(external_wp_blockEditor_namespaceObject.store).getSettings();
-    return {
-      imageSizes: settings.imageSizes,
-      mediaUpload: settings.mediaUpload,
-      getMedia: select(external_wp_coreData_namespaceObject.store).getMedia,
-      wasBlockJustInserted: select(external_wp_blockEditor_namespaceObject.store).wasBlockJustInserted(clientId, 'inserter_menu')
-    };
-  });
-  const resizedImages = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (isSelected) {
-      var _attributes$ids;
-      return ((_attributes$ids = attributes.ids) !== null && _attributes$ids !== void 0 ? _attributes$ids : []).reduce((currentResizedImages, id) => {
-        if (!id) {
-          return currentResizedImages;
-        }
-        const image = getMedia(id);
-        const sizes = imageSizes.reduce((currentSizes, size) => {
-          const defaultUrl = image?.sizes?.[size.slug]?.url;
-          const mediaDetailsUrl = image?.media_details?.sizes?.[size.slug]?.source_url;
-          return {
-            ...currentSizes,
-            [size.slug]: defaultUrl || mediaDetailsUrl
-          };
-        }, {});
-        return {
-          ...currentResizedImages,
-          [parseInt(id, 10)]: sizes
-        };
-      }, {});
-    }
-    return {};
-  }, [isSelected, attributes.ids, imageSizes]);
-  function onFocusGalleryCaption() {
-    setSelectedImage();
-  }
-  function setAttributes(newAttrs) {
-    if (newAttrs.ids) {
-      throw new Error('The "ids" attribute should not be changed directly. It is managed automatically when "images" attribute changes');
-    }
-    if (newAttrs.images) {
-      newAttrs = {
-        ...newAttrs,
-        // Unlike images[ n ].id which is a string, always ensure the
-        // ids array contains numbers as per its attribute type.
-        ids: newAttrs.images.map(({
-          id
-        }) => parseInt(id, 10))
-      };
-    }
-    props.setAttributes(newAttrs);
-  }
-  function onSelectImage(index) {
-    return () => {
-      setSelectedImage(index);
-    };
-  }
-  function onDeselectImage() {
-    return () => {
-      setSelectedImage();
-    };
-  }
-  function onMove(oldIndex, newIndex) {
-    const newImages = [...images];
-    newImages.splice(newIndex, 1, images[oldIndex]);
-    newImages.splice(oldIndex, 1, images[newIndex]);
-    setSelectedImage(newIndex);
-    setAttributes({
-      images: newImages
-    });
-  }
-  function onMoveForward(oldIndex) {
-    return () => {
-      if (oldIndex === images.length - 1) {
-        return;
-      }
-      onMove(oldIndex, oldIndex + 1);
-    };
-  }
-  function onMoveBackward(oldIndex) {
-    return () => {
-      if (oldIndex === 0) {
-        return;
-      }
-      onMove(oldIndex, oldIndex - 1);
-    };
-  }
-  function onRemoveImage(index) {
-    return () => {
-      const newImages = images.filter((img, i) => index !== i);
-      setSelectedImage();
-      setAttributes({
-        images: newImages,
-        columns: attributes.columns ? Math.min(newImages.length, attributes.columns) : attributes.columns
-      });
-    };
-  }
-  function selectCaption(newImage) {
-    // The image id in both the images and attachmentCaptions arrays is a
-    // string, so ensure comparison works correctly by converting the
-    // newImage.id to a string.
-    const newImageId = newImage.id.toString();
-    const currentImage = images.find(({
-      id
-    }) => id === newImageId);
-    const currentImageCaption = currentImage ? currentImage.caption : newImage.caption;
-    if (!attachmentCaptions) {
-      return currentImageCaption;
-    }
-    const attachment = attachmentCaptions.find(({
-      id
-    }) => id === newImageId);
-
-    // If the attachment caption is updated.
-    if (attachment && attachment.caption !== newImage.caption) {
-      return newImage.caption;
-    }
-    return currentImageCaption;
-  }
-  function onSelectImages(newImages) {
-    setAttachmentCaptions(newImages.map(newImage => ({
-      // Store the attachmentCaption id as a string for consistency
-      // with the type of the id in the images attribute.
-      id: newImage.id.toString(),
-      caption: newImage.caption
-    })));
-    setAttributes({
-      images: newImages.map(newImage => ({
-        ...shared_pickRelevantMediaFiles(newImage, sizeSlug),
-        caption: selectCaption(newImage, images, attachmentCaptions),
-        // The id value is stored in a data attribute, so when the
-        // block is parsed it's converted to a string. Converting
-        // to a string here ensures it's type is consistent.
-        id: newImage.id.toString()
-      })),
-      columns: attributes.columns ? Math.min(newImages.length, attributes.columns) : attributes.columns
-    });
-  }
-  function onUploadError(message) {
-    noticeOperations.removeAllNotices();
-    noticeOperations.createErrorNotice(message);
-  }
-  function setLinkTo(value) {
-    setAttributes({
-      linkTo: value
-    });
-  }
-  function setColumnsNumber(value) {
-    setAttributes({
-      columns: value
-    });
-  }
-  function toggleImageCrop() {
-    setAttributes({
-      imageCrop: !imageCrop
-    });
-  }
-  function getImageCropHelp(checked) {
-    return checked ? (0,external_wp_i18n_namespaceObject.__)('Thumbnails are cropped to align.') : (0,external_wp_i18n_namespaceObject.__)('Thumbnails are not cropped.');
-  }
-  function setImageAttributes(index, newAttributes) {
-    if (!images[index]) {
-      return;
-    }
-    setAttributes({
-      images: [...images.slice(0, index), {
-        ...images[index],
-        ...newAttributes
-      }, ...images.slice(index + 1)]
-    });
-  }
-  function getImagesSizeOptions() {
-    const resizedImageSizes = Object.values(resizedImages);
-    return imageSizes.filter(({
-      slug
-    }) => resizedImageSizes.some(sizes => sizes[slug])).map(({
-      name,
-      slug
-    }) => ({
-      value: slug,
-      label: name
-    }));
-  }
-  function updateImagesSize(newSizeSlug) {
-    const updatedImages = (images !== null && images !== void 0 ? images : []).map(image => {
-      if (!image.id) {
-        return image;
-      }
-      const url = resizedImages[parseInt(image.id, 10)]?.[newSizeSlug];
-      return {
-        ...image,
-        ...(url && {
-          url
-        })
-      };
-    });
-    setAttributes({
-      images: updatedImages,
-      sizeSlug: newSizeSlug
-    });
-  }
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (external_wp_element_namespaceObject.Platform.OS === 'web' && images && images.length > 0 && images.every(({
-      url
-    }) => (0,external_wp_blob_namespaceObject.isBlobURL)(url))) {
-      const filesList = images.map(({
-        url
-      }) => (0,external_wp_blob_namespaceObject.getBlobByURL)(url));
-      images.forEach(({
-        url
-      }) => (0,external_wp_blob_namespaceObject.revokeBlobURL)(url));
-      mediaUpload({
-        filesList,
-        onFileChange: onSelectImages,
-        allowedTypes: ['image']
-      });
-    }
-  }, []);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    // Deselect images when deselecting the block.
-    if (!isSelected) {
-      setSelectedImage();
-    }
-  }, [isSelected]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    // linkTo attribute must be saved so blocks don't break when changing
-    // image_default_link_type in options.php.
-    if (!linkTo) {
-      __unstableMarkNextChangeAsNotPersistent();
-      setAttributes({
-        linkTo: window?.wp?.media?.view?.settings?.defaultProps?.link || v1_constants_LINK_DESTINATION_NONE
-      });
-    }
-  }, [linkTo]);
-  const hasImages = !!images.length;
-  const hasImageIds = hasImages && images.some(image => !!image.id);
-  const mediaPlaceholder = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.MediaPlaceholder, {
-    addToGallery: hasImageIds,
-    isAppender: hasImages,
-    disableMediaButtons: hasImages && !isSelected,
-    icon: !hasImages && sharedIcon,
-    labels: {
-      title: !hasImages && (0,external_wp_i18n_namespaceObject.__)('Gallery'),
-      instructions: !hasImages && edit_PLACEHOLDER_TEXT
-    },
-    onSelect: onSelectImages,
-    accept: "image/*",
-    allowedTypes: v1_edit_ALLOWED_MEDIA_TYPES,
-    multiple: true,
-    value: hasImageIds ? images : {},
-    onError: onUploadError,
-    notices: hasImages ? undefined : noticeUI,
-    onFocus: onFocus,
-    autoOpenMediaUpload: !hasImages && isSelected && wasBlockJustInserted
-  });
-  const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)();
-  if (!hasImages) {
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.View, {
-      ...blockProps,
-      children: mediaPlaceholder
-    });
-  }
-  const imageSizeOptions = getImagesSizeOptions();
-  const shouldShowSizeOptions = hasImages && imageSizeOptions.length > 0;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.PanelBody, {
-        title: (0,external_wp_i18n_namespaceObject.__)('Settings'),
-        children: [images.length > 1 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.RangeControl, {
-          __nextHasNoMarginBottom: true,
-          label: (0,external_wp_i18n_namespaceObject.__)('Columns'),
-          value: columns,
-          onChange: setColumnsNumber,
-          min: 1,
-          max: Math.min(edit_MAX_COLUMNS, images.length),
-          ...edit_MOBILE_CONTROL_PROPS_RANGE_CONTROL,
-          required: true
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToggleControl, {
-          __nextHasNoMarginBottom: true,
-          label: (0,external_wp_i18n_namespaceObject.__)('Crop images'),
-          checked: !!imageCrop,
-          onChange: toggleImageCrop,
-          help: getImageCropHelp
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-          __nextHasNoMarginBottom: true,
-          label: (0,external_wp_i18n_namespaceObject.__)('Link to'),
-          value: linkTo,
-          onChange: setLinkTo,
-          options: edit_linkOptions,
-          hideCancelButton: true
-        }), shouldShowSizeOptions && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-          __nextHasNoMarginBottom: true,
-          label: (0,external_wp_i18n_namespaceObject.__)('Image size'),
-          value: sizeSlug,
-          options: imageSizeOptions,
-          onChange: updateImagesSize,
-          hideCancelButton: true
-        })]
-      })
-    }), noticeUI, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(v1_gallery, {
-      ...props,
-      selectedImage: selectedImage,
-      mediaPlaceholder: mediaPlaceholder,
-      onMoveBackward: onMoveBackward,
-      onMoveForward: onMoveForward,
-      onRemoveImage: onRemoveImage,
-      onSelectImage: onSelectImage,
-      onDeselectImage: onDeselectImage,
-      onSetImageAttributes: setImageAttributes,
-      blockProps: blockProps
-      // This prop is used by gallery.native.js.
-      ,
-      onFocusGalleryCaption: onFocusGalleryCaption
-    })]
-  });
-}
-/* harmony default export */ const v1_edit = ((0,external_wp_compose_namespaceObject.compose)([external_wp_components_namespaceObject.withNotices, (0,external_wp_viewport_namespaceObject.withViewportMatch)({
-  isNarrow: '< small'
-})])(edit_GalleryEdit));
-
-;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/edit-wrapper.js
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-/*
- * Using a wrapper around the logic to load the edit for v1 of Gallery block
- * or the refactored version with InnerBlocks. This is to prevent conditional
- * use of hooks lint errors if adding this logic to the top of the edit component.
- */
-
-function GalleryEditWrapper(props) {
-  if (!isGalleryV2Enabled()) {
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(v1_edit, {
-      ...props
-    });
-  }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(gallery_edit, {
-    ...props
-  });
-}
-/* harmony default export */ const edit_wrapper = ((0,external_wp_compose_namespaceObject.compose)([external_wp_components_namespaceObject.withNotices])(GalleryEditWrapper));
-
-;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/v1/save.js
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-function saveV1({
-  attributes
-}) {
-  const {
-    images,
-    columns = defaultColumnsNumberV1(attributes),
-    imageCrop,
-    caption,
-    linkTo
-  } = attributes;
-  const className = `columns-${columns} ${imageCrop ? 'is-cropped' : ''}`;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("figure", {
-    ...external_wp_blockEditor_namespaceObject.useBlockProps.save({
-      className
-    }),
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
-      className: "blocks-gallery-grid",
-      children: images.map(image => {
-        let href;
-        switch (linkTo) {
-          case v1_constants_LINK_DESTINATION_MEDIA:
-            href = image.fullUrl || image.url;
-            break;
-          case v1_constants_LINK_DESTINATION_ATTACHMENT:
-            href = image.link;
-            break;
-        }
-        const img = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("img", {
-          src: image.url,
-          alt: image.alt,
-          "data-id": image.id,
-          "data-full-url": image.fullUrl,
-          "data-link": image.link,
-          className: image.id ? `wp-image-${image.id}` : null
-        });
-        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("li", {
-          className: "blocks-gallery-item",
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("figure", {
-            children: [href ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
-              href: href,
-              children: img
-            }) : img, !external_wp_blockEditor_namespaceObject.RichText.isEmpty(image.caption) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.RichText.Content, {
-              tagName: "figcaption",
-              className: dist_clsx('blocks-gallery-item__caption', (0,external_wp_blockEditor_namespaceObject.__experimentalGetElementClassName)('caption')),
-              value: image.caption
-            })]
-          })
-        }, image.id || image.url);
-      })
-    }), !external_wp_blockEditor_namespaceObject.RichText.isEmpty(caption) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.RichText.Content, {
-      tagName: "figcaption",
-      className: dist_clsx('blocks-gallery-caption', (0,external_wp_blockEditor_namespaceObject.__experimentalGetElementClassName)('caption')),
-      value: caption
-    })]
-  });
-}
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/gallery/save.js
 /**
@@ -22466,21 +21470,10 @@ function saveV1({
  */
 
 
-/**
- * Internal dependencies
- */
-
-
-
 
 function saveWithInnerBlocks({
   attributes
 }) {
-  if (!isGalleryV2Enabled()) {
-    return saveV1({
-      attributes
-    });
-  }
   const {
     caption,
     columns,
@@ -22517,7 +21510,6 @@ function saveWithInnerBlocks({
  * Internal dependencies
  */
 
-
 const parseShortcodeIds = ids => {
   if (!ids) {
     return [];
@@ -22540,7 +21532,7 @@ const parseShortcodeIds = ids => {
  * @return   {Block}                 The transformed block.
  */
 function updateThirdPartyTransformToGallery(block) {
-  if (isGalleryV2Enabled() && block.name === 'core/gallery' && block.attributes?.images.length > 0) {
+  if (block.name === 'core/gallery' && block.attributes?.images.length > 0) {
     const innerBlocks = block.attributes.images.map(({
       url,
       id,
@@ -22618,36 +21610,16 @@ const gallery_transforms_transforms = {
       const validImages = attributes.filter(({
         url
       }) => url);
-      if (isGalleryV2Enabled()) {
-        const innerBlocks = validImages.map(image => {
-          // Gallery images can't currently be resized so make sure height and width are undefined.
-          image.width = undefined;
-          image.height = undefined;
-          return (0,external_wp_blocks_namespaceObject.createBlock)('core/image', image);
-        });
-        return (0,external_wp_blocks_namespaceObject.createBlock)('core/gallery', {
-          align,
-          sizeSlug
-        }, innerBlocks);
-      }
+      const innerBlocks = validImages.map(image => {
+        // Gallery images can't currently be resized so make sure height and width are undefined.
+        image.width = undefined;
+        image.height = undefined;
+        return (0,external_wp_blocks_namespaceObject.createBlock)('core/image', image);
+      });
       return (0,external_wp_blocks_namespaceObject.createBlock)('core/gallery', {
-        images: validImages.map(({
-          id,
-          url,
-          alt,
-          caption
-        }) => ({
-          id: id.toString(),
-          url,
-          alt,
-          caption
-        })),
-        ids: validImages.map(({
-          id
-        }) => parseInt(id, 10)),
         align,
         sizeSlug
-      });
+      }, innerBlocks);
     }
   }, {
     type: 'shortcode',
@@ -22693,49 +21665,21 @@ const gallery_transforms_transforms = {
       return files.length !== 1 && files.every(file => file.type.indexOf('image/') === 0);
     },
     transform(files) {
-      if (isGalleryV2Enabled()) {
-        const innerBlocks = files.map(file => (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
-          url: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
-        }));
-        return (0,external_wp_blocks_namespaceObject.createBlock)('core/gallery', {}, innerBlocks);
-      }
-      const block = (0,external_wp_blocks_namespaceObject.createBlock)('core/gallery', {
-        images: files.map(file => pickRelevantMediaFiles({
-          url: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
-        }))
-      });
-      return block;
+      const innerBlocks = files.map(file => (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
+        blob: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
+      }));
+      return (0,external_wp_blocks_namespaceObject.createBlock)('core/gallery', {}, innerBlocks);
     }
   }],
   to: [{
     type: 'block',
     blocks: ['core/image'],
     transform: ({
-      align,
-      images,
-      ids,
-      sizeSlug
+      align
     }, innerBlocks) => {
-      if (isGalleryV2Enabled()) {
-        if (innerBlocks.length > 0) {
-          return innerBlocks.map(({
-            attributes: {
-              url,
-              alt,
-              caption,
-              title,
-              href,
-              rel,
-              linkClass,
-              id,
-              sizeSlug: imageSizeSlug,
-              linkDestination,
-              linkTarget,
-              anchor,
-              className
-            }
-          }) => (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
-            align,
+      if (innerBlocks.length > 0) {
+        return innerBlocks.map(({
+          attributes: {
             url,
             alt,
             caption,
@@ -22749,24 +21693,22 @@ const gallery_transforms_transforms = {
             linkTarget,
             anchor,
             className
-          }));
-        }
-        return (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
-          align
-        });
-      }
-      if (images.length > 0) {
-        return images.map(({
-          url,
-          alt,
-          caption
-        }, index) => (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
-          id: ids[index],
+          }
+        }) => (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
+          align,
           url,
           alt,
           caption,
-          align,
-          sizeSlug
+          title,
+          href,
+          rel,
+          linkClass,
+          id,
+          sizeSlug: imageSizeSlug,
+          linkDestination,
+          linkTarget,
+          anchor,
+          className
         }));
       }
       return (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
@@ -22961,7 +21903,7 @@ const gallery_settings = {
     }]
   },
   transforms: gallery_transforms,
-  edit: edit_wrapper,
+  edit: gallery_edit,
   save: saveWithInnerBlocks,
   deprecated: gallery_deprecated
 };
@@ -23405,6 +22347,11 @@ function GroupPlaceHolder({
   const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
     className: 'wp-block-group__placeholder'
   });
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (variations && variations.length === 1) {
+      onSelect(variations[0]);
+    }
+  }, [onSelect, variations]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     ...blockProps,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Placeholder, {
@@ -23823,6 +22770,7 @@ const group_metadata = {
         text: true
       }
     },
+    shadow: true,
     spacing: {
       margin: ["top", "bottom"],
       padding: true,
@@ -25151,6 +24099,21 @@ const html_init = () => initBlock({
   settings: html_settings
 });
 
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/image.js
+/**
+ * WordPress dependencies
+ */
+
+
+const image_image = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z"
+  })
+});
+/* harmony default export */ const library_image = (image_image);
+
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/image/deprecated.js
 /**
  * External dependencies
@@ -26343,16 +25306,6 @@ const upload = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
 });
 /* harmony default export */ const library_upload = (upload);
 
-;// CONCATENATED MODULE: ./packages/block-library/build-module/utils/constants.js
-// The following dropdown menu props aim to provide a consistent offset and
-// placement for ToolsPanel menus for block controls to match color popovers.
-const TOOLSPANEL_DROPDOWNMENU_PROPS = {
-  popoverProps: {
-    placement: 'left-start',
-    offset: 259 // Inner sidebar width (248px) - button width (24px) - border (1px) + padding (16px) + spacing (20px)
-  }
-};
-
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/image/image.js
 /**
  * WordPress dependencies
@@ -26512,7 +25465,7 @@ function image_Image({
   const [externalBlob, setExternalBlob] = (0,external_wp_element_namespaceObject.useState)();
   const hasNonContentControls = blockEditingMode === 'default';
   const isContentOnlyMode = blockEditingMode === 'contentOnly';
-  const isResizable = allowResize && hasNonContentControls && !isWideAligned && isLargeViewport && parentLayoutType !== 'grid';
+  const isResizable = allowResize && hasNonContentControls && !isWideAligned && isLargeViewport;
   const imageSizeOptions = imageSizes.filter(({
     slug
   }) => image?.media_details?.sizes?.[slug]?.source_url).map(({
@@ -26683,6 +25636,7 @@ function image_Image({
   // remove that override, even if the lightbox UI is disabled in the settings.
   !!lightbox && lightbox?.enabled !== lightboxSetting?.enabled || lightboxSetting?.allowEditing;
   const lightboxChecked = !!lightbox?.enabled || !lightbox && !!lightboxSetting?.enabled;
+  const dropdownMenuProps = useToolsPanelDropdownMenuProps();
   const dimensionsControl = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DimensionsTool, {
     value: {
       width,
@@ -26715,6 +25669,21 @@ function image_Image({
     scaleOptions: scaleOptions,
     unitsOptions: dimensionsUnitsOptions
   });
+  const aspectRatioControl = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DimensionsTool, {
+    value: {
+      aspectRatio
+    },
+    onChange: ({
+      aspectRatio: newAspectRatio
+    }) => {
+      setAttributes({
+        aspectRatio: newAspectRatio,
+        scale: 'cover'
+      });
+    },
+    defaultAspectRatio: "auto",
+    tools: ['aspectRatio']
+  });
   const resetAll = () => {
     setAttributes({
       alt: undefined,
@@ -26729,8 +25698,8 @@ function image_Image({
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanel, {
       label: (0,external_wp_i18n_namespaceObject.__)('Settings'),
       resetAll: resetAll,
-      dropdownMenuProps: TOOLSPANEL_DROPDOWNMENU_PROPS,
-      children: isResizable && dimensionsControl
+      dropdownMenuProps: dropdownMenuProps,
+      children: isResizable && (parentLayoutType === 'grid' ? aspectRatioControl : dimensionsControl)
     })
   });
   const arePatternOverridesEnabled = metadata?.bindings?.__default?.source === 'core/pattern-overrides';
@@ -26750,14 +25719,11 @@ function image_Image({
       getBlockBindingsSource
     } = unlock(select(external_wp_blocks_namespaceObject.store));
     const {
-      getBlockParentsByBlockName
-    } = unlock(select(external_wp_blockEditor_namespaceObject.store));
-    const {
       url: urlBinding,
       alt: altBinding,
       title: titleBinding
     } = metadata?.bindings || {};
-    const hasParentPattern = getBlockParentsByBlockName(clientId, 'core/block').length > 0;
+    const hasParentPattern = !!context['pattern/overrides'];
     const urlBindingSource = getBlockBindingsSource(urlBinding?.source);
     const altBindingSource = getBlockBindingsSource(altBinding?.source);
     const titleBindingSource = getBlockBindingsSource(titleBinding?.source);
@@ -26790,7 +25756,7 @@ function image_Image({
       lockTitleControlsMessage: titleBindingSource?.label ? (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: Label of the bindings source. */
       (0,external_wp_i18n_namespaceObject.__)('Connected to %s'), titleBindingSource.label) : (0,external_wp_i18n_namespaceObject.__)('Connected to dynamic data')
     };
-  }, [clientId, isSingleSelected, metadata?.bindings]);
+  }, [arePatternOverridesEnabled, context, isSingleSelected, metadata?.bindings]);
   const showUrlInput = isSingleSelected && !isEditingImage && !lockHrefControls && !lockUrlControls;
   const showCoverControls = isSingleSelected && canInsertCover;
   const showBlockControls = showUrlInput || allowCrop || showCoverControls;
@@ -26922,7 +25888,7 @@ function image_Image({
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalToolsPanel, {
         label: (0,external_wp_i18n_namespaceObject.__)('Settings'),
         resetAll: resetAll,
-        dropdownMenuProps: TOOLSPANEL_DROPDOWNMENU_PROPS,
+        dropdownMenuProps: dropdownMenuProps,
         children: [isSingleSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
           label: (0,external_wp_i18n_namespaceObject.__)('Alternative text'),
           isShownByDefault: true,
@@ -26947,7 +25913,7 @@ function image_Image({
             }),
             __nextHasNoMarginBottom: true
           })
-        }), isResizable && dimensionsControl, !!imageSizeOptions.length && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResolutionTool, {
+        }), isResizable && (parentLayoutType === 'grid' ? aspectRatioControl : dimensionsControl), !!imageSizeOptions.length && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResolutionTool, {
           value: sizeSlug,
           onChange: updateImage,
           options: imageSizeOptions
@@ -27031,7 +25997,7 @@ function image_Image({
         borderProps: isRounded ? undefined : borderProps
       })
     });
-  } else if (!isResizable) {
+  } else if (!isResizable || parentLayoutType === 'grid') {
     img = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       style: {
         width,
@@ -27189,17 +26155,6 @@ const edit_pickRelevantMediaFiles = (image, size) => {
 };
 
 /**
- * Is the URL a temporary blob URL? A blob URL is one that is used temporarily
- * while the image is being uploaded and will not have an id yet allocated.
- *
- * @param {number=} id  The id of the image.
- * @param {string=} url The url of the image.
- *
- * @return {boolean} Is the URL a Blob URL
- */
-const edit_isTemporaryImage = (id, url) => !id && (0,external_wp_blob_namespaceObject.isBlobURL)(url);
-
-/**
  * Is the url for the image hosted externally. An externally hosted image has no
  * id and is not a blob url.
  *
@@ -27247,9 +26202,7 @@ function ImageEdit({
     align,
     metadata
   } = attributes;
-  const [temporaryURL, setTemporaryURL] = (0,external_wp_element_namespaceObject.useState)(() => {
-    return edit_isTemporaryImage(id, url) ? url : undefined;
-  });
+  const [temporaryURL, setTemporaryURL] = (0,external_wp_element_namespaceObject.useState)(attributes.blob);
   const altRef = (0,external_wp_element_namespaceObject.useRef)();
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     altRef.current = alt;
@@ -27286,9 +26239,9 @@ function ImageEdit({
     setAttributes({
       src: undefined,
       id: undefined,
-      url: undefined
+      url: undefined,
+      blob: undefined
     });
-    setTemporaryURL(undefined);
   }
   function onSelectImage(media) {
     if (!media || !media.url) {
@@ -27297,15 +26250,16 @@ function ImageEdit({
         alt: undefined,
         id: undefined,
         title: undefined,
-        caption: undefined
+        caption: undefined,
+        blob: undefined
       });
+      setTemporaryURL();
       return;
     }
     if ((0,external_wp_blob_namespaceObject.isBlobURL)(media.url)) {
       setTemporaryURL(media.url);
       return;
     }
-    setTemporaryURL();
     const {
       imageDefaultSize
     } = getSettings();
@@ -27379,22 +26333,26 @@ function ImageEdit({
     }
     mediaAttributes.href = href;
     setAttributes({
+      blob: undefined,
       ...mediaAttributes,
       ...additionalAttributes,
       linkDestination
     });
+    setTemporaryURL();
   }
   function onSelectURL(newURL) {
     if (newURL !== url) {
       setAttributes({
+        blob: undefined,
         url: newURL,
         id: undefined,
         sizeSlug: getSettings().imageDefaultSize
       });
+      setTemporaryURL();
     }
   }
   useUploadMediaFromBlobURL({
-    url,
+    url: temporaryURL,
     allowedTypes: constants_ALLOWED_MEDIA_TYPES,
     onChange: onSelectImage,
     onError: onUploadError
@@ -27410,7 +26368,7 @@ function ImageEdit({
   const borderProps = (0,external_wp_blockEditor_namespaceObject.__experimentalUseBorderProps)(attributes);
   const shadowProps = (0,external_wp_blockEditor_namespaceObject.__experimentalGetShadowClassesAndStyles)(attributes);
   const classes = dist_clsx(className, {
-    'is-transient': temporaryURL,
+    'is-transient': !!temporaryURL,
     'is-resized': !!width || !!height,
     [`size-${sizeSlug}`]: sizeSlug,
     'has-custom-border': !!borderProps.className || borderProps.style && Object.keys(borderProps.style).length > 0
@@ -27693,7 +26651,7 @@ const image_transforms_transforms = {
     transform(files) {
       const blocks = files.map(file => {
         return (0,external_wp_blocks_namespaceObject.createBlock)('core/image', {
-          url: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
+          blob: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
         });
       });
       return blocks;
@@ -27790,6 +26748,10 @@ const image_metadata = {
   keywords: ["img", "photo", "picture"],
   textdomain: "default",
   attributes: {
+    blob: {
+      type: "string",
+      __experimentalRole: "local"
+    },
     url: {
       type: "string",
       source: "attribute",
@@ -30424,7 +29386,14 @@ function useMerge(clientId, onMerge) {
         // list.
         const [nestedListClientId] = getBlockOrder(clientIdB);
         if (nestedListClientId) {
-          moveBlocksToPosition(getBlockOrder(nestedListClientId), nestedListClientId, getBlockRootClientId(clientIdA));
+          // If we are merging with the previous list item, and the
+          // previous list item does not have nested list, move the
+          // nested list to the previous list item.
+          if (getPreviousBlockClientId(clientIdB) === clientIdA && !getBlockOrder(clientIdA).length) {
+            moveBlocksToPosition([nestedListClientId], clientIdB, clientIdA);
+          } else {
+            moveBlocksToPosition(getBlockOrder(nestedListClientId), nestedListClientId, getBlockRootClientId(clientIdA));
+          }
         }
         mergeBlocks(clientIdA, clientIdB);
       });
@@ -30504,7 +29473,7 @@ function edit_IndentUI({
       icon: (0,external_wp_i18n_namespaceObject.isRTL)() ? format_indent_rtl : format_indent,
       title: (0,external_wp_i18n_namespaceObject.__)('Indent'),
       describedBy: (0,external_wp_i18n_namespaceObject.__)('Indent list item'),
-      isDisabled: !canIndent,
+      disabled: !canIndent,
       onClick: () => indentListItem()
     })]
   });
@@ -30620,8 +29589,15 @@ const list_item_metadata = {
   },
   supports: {
     className: false,
-    __experimentalSelector: ".wp-block-list > li",
     splitting: true,
+    color: {
+      gradients: true,
+      link: true,
+      __experimentalDefaultControls: {
+        background: true,
+        text: true
+      }
+    },
     spacing: {
       margin: true,
       padding: true,
@@ -30646,6 +29622,9 @@ const list_item_metadata = {
     interactivity: {
       clientNavigation: true
     }
+  },
+  selectors: {
+    root: ".wp-block-list > li"
   }
 };
 
@@ -30769,6 +29748,9 @@ const loginout_metadata = {
       type: "boolean",
       "default": true
     }
+  },
+  example: {
+    viewportWidth: 350
   },
   supports: {
     className: true,
@@ -32131,6 +31113,7 @@ function MediaTextEdit({
       mediaSizeSlug: newMediaSizeSlug
     });
   };
+  const dropdownMenuProps = useToolsPanelDropdownMenuProps();
   const mediaTextGeneralSettings = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalToolsPanel, {
     label: (0,external_wp_i18n_namespaceObject.__)('Settings'),
     resetAll: () => {
@@ -32143,7 +31126,7 @@ function MediaTextEdit({
         mediaSizeSlug: undefined
       });
     },
-    dropdownMenuProps: TOOLSPANEL_DROPDOWNMENU_PROPS,
+    dropdownMenuProps: dropdownMenuProps,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
       label: (0,external_wp_i18n_namespaceObject.__)('Media width'),
       isShownByDefault: true,
@@ -38396,7 +37379,7 @@ function NavigationSubmenuEdit({
           title: (0,external_wp_i18n_namespaceObject.__)('Convert to Link'),
           onClick: transformToLink,
           className: "wp-block-navigation__submenu__revert",
-          isDisabled: !canConvertToLink
+          disabled: !canConvertToLink
         })]
       })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
@@ -39277,7 +38260,7 @@ function ConvertToLinksModal({
         children: (0,external_wp_i18n_namespaceObject.__)('Cancel')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
         variant: "primary",
-        __experimentalIsFocusable: true,
+        accessibleWhenDisabled: true,
         disabled: disabled,
         onClick: onClick,
         children: (0,external_wp_i18n_namespaceObject.__)('Edit')
@@ -39556,7 +38539,7 @@ function PageListEdit({
           children: convertDescription
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
           variant: "primary",
-          __experimentalIsFocusable: true,
+          accessibleWhenDisabled: true,
           disabled: !hasResolvedPages,
           onClick: convertToNavigationLinks,
           children: (0,external_wp_i18n_namespaceObject.__)('Edit')
@@ -42177,6 +41160,9 @@ const post_content_metadata = {
   description: "Displays the contents of a post or page.",
   textdomain: "default",
   usesContext: ["postId", "postType", "queryId"],
+  example: {
+    viewportWidth: 350
+  },
   supports: {
     align: ["wide", "full"],
     html: false,
@@ -42325,7 +41311,9 @@ function PostDateEdit({
             currentDate: date,
             onChange: setDate,
             is12Hour: is12HourFormat(siteTimeFormat),
-            onClose: onClose
+            onClose: onClose,
+            dateOrder: /* translators: Order of day, month, and year. Available formats are 'dmy', 'mdy', and 'ymd'. */
+            (0,external_wp_i18n_namespaceObject._x)('dmy', 'date order')
           }),
           renderToggle: ({
             isOpen,
@@ -42829,6 +41817,9 @@ const post_excerpt_metadata = {
     }
   },
   usesContext: ["postId", "postType", "queryId"],
+  example: {
+    viewportWidth: 350
+  },
   supports: {
     html: false,
     color: {
@@ -45127,6 +44118,9 @@ const post_title_metadata = {
       "default": "_self"
     }
   },
+  example: {
+    viewportWidth: 350
+  },
   supports: {
     align: ["wide", "full"],
     html: false,
@@ -46752,7 +45746,6 @@ const useUnsupportedBlocks = clientId => {
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -46770,7 +45763,6 @@ function QueryToolbar({
   clientId
 }) {
   const hasPatterns = !!usePatterns(clientId, name).length;
-  const maxPageInputId = (0,external_wp_compose_namespaceObject.useInstanceId)(QueryToolbar, 'blocks-query-pagination-max-page-input');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [!query.inherit && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarGroup, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Dropdown, {
@@ -46783,65 +45775,60 @@ function QueryToolbar({
           onClick: onToggle
         }),
         renderContent: () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
-              __unstableInputWidth: "60px",
-              label: (0,external_wp_i18n_namespaceObject.__)('Items per Page'),
-              labelPosition: "edge",
-              min: 1,
-              max: 100,
-              onChange: value => {
-                if (isNaN(value) || value < 1 || value > 100) {
-                  return;
-                }
-                setQuery({
-                  perPage: value
-                });
-              },
-              step: "1",
-              value: query.perPage,
-              isDragEnabled: false
-            })
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
-              __unstableInputWidth: "60px",
-              label: (0,external_wp_i18n_namespaceObject.__)('Offset'),
-              labelPosition: "edge",
-              min: 0,
-              max: 100,
-              onChange: value => {
-                if (isNaN(value) || value < 0 || value > 100) {
-                  return;
-                }
-                setQuery({
-                  offset: value
-                });
-              },
-              step: "1",
-              value: query.offset,
-              isDragEnabled: false
-            })
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
-            id: maxPageInputId,
-            help: (0,external_wp_i18n_namespaceObject.__)('Limit the pages you want to show, even if the query has more results. To show all pages use 0 (zero).'),
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
-              id: maxPageInputId,
-              __unstableInputWidth: "60px",
-              label: (0,external_wp_i18n_namespaceObject.__)('Max page to show'),
-              labelPosition: "edge",
-              min: 0,
-              onChange: value => {
-                if (isNaN(value) || value < 0) {
-                  return;
-                }
-                setQuery({
-                  pages: value
-                });
-              },
-              step: "1",
-              value: query.pages,
-              isDragEnabled: false
-            })
+          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+            __unstableInputWidth: "60px",
+            className: "block-library-query-toolbar__popover-number-control",
+            label: (0,external_wp_i18n_namespaceObject.__)('Items per Page'),
+            labelPosition: "edge",
+            min: 1,
+            max: 100,
+            onChange: value => {
+              if (isNaN(value) || value < 1 || value > 100) {
+                return;
+              }
+              setQuery({
+                perPage: value
+              });
+            },
+            step: "1",
+            value: query.perPage,
+            isDragEnabled: false
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+            __unstableInputWidth: "60px",
+            className: "block-library-query-toolbar__popover-number-control",
+            label: (0,external_wp_i18n_namespaceObject.__)('Offset'),
+            labelPosition: "edge",
+            min: 0,
+            max: 100,
+            onChange: value => {
+              if (isNaN(value) || value < 0 || value > 100) {
+                return;
+              }
+              setQuery({
+                offset: value
+              });
+            },
+            step: "1",
+            value: query.offset,
+            isDragEnabled: false
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+            __unstableInputWidth: "60px",
+            className: "block-library-query-toolbar__popover-number-control",
+            label: (0,external_wp_i18n_namespaceObject.__)('Max pages to show'),
+            labelPosition: "edge",
+            min: 0,
+            onChange: value => {
+              if (isNaN(value) || value < 0) {
+                return;
+              }
+              setQuery({
+                pages: value
+              });
+            },
+            step: "1",
+            value: query.pages,
+            isDragEnabled: false,
+            help: (0,external_wp_i18n_namespaceObject.__)('Limit the pages you want to show, even if the query has more results. To show all pages use 0 (zero).')
           })]
         })
       })
@@ -47523,6 +46510,7 @@ function QueryInspectorControls(props) {
   const showSearchControl = isControlAllowed(allowedControls, 'search');
   const showParentControl = isControlAllowed(allowedControls, 'parents') && isPostTypeHierarchical;
   const showFiltersPanel = showTaxControl || showAuthorControl || showSearchControl || showParentControl;
+  const dropdownMenuProps = useToolsPanelDropdownMenuProps();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [!!postType && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockInfo, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(create_new_post_link, {
@@ -47586,7 +46574,7 @@ function QueryInspectorControls(props) {
         });
         setQuerySearch('');
       },
-      dropdownMenuProps: TOOLSPANEL_DROPDOWNMENU_PROPS,
+      dropdownMenuProps: dropdownMenuProps,
       children: [showTaxControl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
         label: (0,external_wp_i18n_namespaceObject.__)('Taxonomies'),
         hasValue: () => Object.values(taxQuery || {}).some(terms => !!terms.length),
@@ -48896,6 +47884,40 @@ const {
 const query_settings = {
   icon: library_loop,
   edit: query_edit,
+  example: {
+    viewportWidth: 650,
+    attributes: {
+      namespace: 'core/posts-list',
+      query: {
+        perPage: 4,
+        pages: 1,
+        offset: 0,
+        postType: 'post',
+        order: 'desc',
+        orderBy: 'date',
+        author: '',
+        search: '',
+        sticky: 'exclude',
+        inherit: false
+      }
+    },
+    innerBlocks: [{
+      name: 'core/post-template',
+      attributes: {
+        layout: {
+          type: 'grid',
+          columnCount: 2
+        }
+      },
+      innerBlocks: [{
+        name: 'core/post-title'
+      }, {
+        name: 'core/post-date'
+      }, {
+        name: 'core/post-excerpt'
+      }]
+    }]
+  },
   save: query_save_save,
   variations: query_variations,
   deprecated: query_deprecated
@@ -50992,7 +50014,6 @@ function ReusableBlockEdit({
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
           onClick: resetContent,
           disabled: !content,
-          __experimentalIsFocusable: true,
           children: (0,external_wp_i18n_namespaceObject.__)('Reset')
         })
       })
@@ -51152,8 +50173,12 @@ const block_metadata = {
       type: "number"
     },
     content: {
-      type: "object"
+      type: "object",
+      "default": {}
     }
+  },
+  providesContext: {
+    "pattern/overrides": "content"
   },
   supports: {
     customClassName: false,
@@ -55272,6 +54297,8 @@ const getNameBySite = name => {
 
 
 
+
+
 /**
  * Internal dependencies
  */
@@ -55283,16 +54310,25 @@ const SocialLinkURLPopover = ({
   url,
   setAttributes,
   setPopover,
-  popoverAnchor
+  popoverAnchor,
+  clientId
 }) => {
+  const {
+    removeBlock
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.URLPopover, {
     anchor: popoverAnchor,
-    onClose: () => setPopover(false),
+    "aria-label": (0,external_wp_i18n_namespaceObject.__)('Edit social link'),
+    onClose: () => {
+      setPopover(false);
+      popoverAnchor?.focus();
+    },
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("form", {
       className: "block-editor-url-popover__link-editor",
       onSubmit: event => {
         event.preventDefault();
         setPopover(false);
+        popoverAnchor?.focus();
       },
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
         className: "block-editor-url-input",
@@ -55305,7 +54341,13 @@ const SocialLinkURLPopover = ({
           placeholder: (0,external_wp_i18n_namespaceObject.__)('Enter social link'),
           label: (0,external_wp_i18n_namespaceObject.__)('Enter social link'),
           hideLabelFromVision: true,
-          disableSuggestions: true
+          disableSuggestions: true,
+          onKeyDown: event => {
+            if (!!url || event.defaultPrevented || ![external_wp_keycodes_namespaceObject.BACKSPACE, external_wp_keycodes_namespaceObject.DELETE].includes(event.keyCode)) {
+              return;
+            }
+            removeBlock(clientId);
+          }
         })
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
         icon: keyboard_return,
@@ -55319,7 +54361,8 @@ const SocialLinkEdit = ({
   attributes,
   context,
   isSelected,
-  setAttributes
+  setAttributes,
+  clientId
 }) => {
   const {
     url,
@@ -55365,8 +54408,8 @@ const SocialLinkEdit = ({
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.PanelRow, {
           children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.TextControl, {
             __nextHasNoMarginBottom: true,
-            label: (0,external_wp_i18n_namespaceObject.__)('Link text'),
-            help: (0,external_wp_i18n_namespaceObject.__)('The link text is visible when enabled from the parent Social Icons block.'),
+            label: (0,external_wp_i18n_namespaceObject.__)('Text'),
+            help: (0,external_wp_i18n_namespaceObject.__)('The text is visible when enabled from the parent Social Icons block.'),
             value: label,
             onChange: value => setAttributes({
               label: value
@@ -55391,6 +54434,7 @@ const SocialLinkEdit = ({
         className: "wp-block-social-link-anchor",
         ref: setPopoverAnchor,
         onClick: () => setPopover(true),
+        "aria-haspopup": "dialog",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconComponent, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
           className: dist_clsx('wp-block-social-link-label', {
             'screen-reader-text': !showLabels
@@ -55401,7 +54445,8 @@ const SocialLinkEdit = ({
         url: url,
         setAttributes: setAttributes,
         setPopover: setPopover,
-        popoverAnchor: popoverAnchor
+        popoverAnchor: popoverAnchor,
+        clientId: clientId
       })]
     })]
   });
@@ -57835,10 +56880,10 @@ function isEmptyRow(row) {
 
 
 
-
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -57882,7 +56927,6 @@ function TableEdit({
 }) {
   const {
     hasFixedLayout,
-    caption,
     head,
     foot
   } = attributes;
@@ -58251,21 +57295,7 @@ function TableEdit({
         ...borderProps.style
       },
       children: renderedSections
-    }), !isEmpty && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.RichText, {
-      identifier: "caption",
-      tagName: "figcaption",
-      className: (0,external_wp_blockEditor_namespaceObject.__experimentalGetElementClassName)('caption'),
-      "aria-label": (0,external_wp_i18n_namespaceObject.__)('Table caption text'),
-      placeholder: (0,external_wp_i18n_namespaceObject.__)('Add caption'),
-      value: caption,
-      onChange: value => setAttributes({
-        caption: value
-      })
-      // Deselect the selected table cell when the caption is focused.
-      ,
-      onFocus: () => setSelectedCell(),
-      __unstableOnSplitAtEnd: () => insertBlocksAfter((0,external_wp_blocks_namespaceObject.createBlock)((0,external_wp_blocks_namespaceObject.getDefaultBlockName)()))
-    }), isEmpty && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Placeholder, {
+    }), isEmpty ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Placeholder, {
       label: (0,external_wp_i18n_namespaceObject.__)('Table'),
       icon: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockIcon, {
         icon: block_table,
@@ -58300,6 +57330,12 @@ function TableEdit({
           children: (0,external_wp_i18n_namespaceObject.__)('Create Table')
         })]
       })
+    }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Caption, {
+      attributes: attributes,
+      setAttributes: setAttributes,
+      isSelected: isSelected,
+      insertBlocksAfter: insertBlocksAfter,
+      label: (0,external_wp_i18n_namespaceObject.__)('Table caption text')
     })]
   });
 }
@@ -59803,8 +58839,9 @@ function __await(v) {
 function __asyncGenerator(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g = generator.apply(thisArg, _arguments || []), i, q = [];
-  return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-  function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+  return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+  function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+  function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
   function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
   function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
   function fulfill(value) { resume("next", value); }
@@ -59870,16 +58907,18 @@ function __classPrivateFieldIn(state, receiver) {
 function __addDisposableResource(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-    var dispose;
+    var dispose, inner;
     if (async) {
-        if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
-        dispose = value[Symbol.asyncDispose];
+      if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+      dispose = value[Symbol.asyncDispose];
     }
     if (dispose === void 0) {
-        if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
-        dispose = value[Symbol.dispose];
+      if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+      dispose = value[Symbol.dispose];
+      if (async) inner = dispose;
     }
     if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+    if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
     env.stack.push({ value: value, dispose: dispose, async: async });
   }
   else if (async) {
@@ -60250,7 +59289,7 @@ function TitleModal({
           children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
             variant: "primary",
             type: "submit",
-            __experimentalIsFocusable: true,
+            accessibleWhenDisabled: true,
             disabled: !title.length,
             children: (0,external_wp_i18n_namespaceObject.__)('Create')
           })
@@ -62146,6 +61185,10 @@ const video_deprecated_metadata = {
       attribute: "preload",
       "default": "metadata"
     },
+    blob: {
+      type: "string",
+      __experimentalRole: "local"
+    },
     src: {
       type: "string",
       source: "attribute",
@@ -62679,9 +61722,9 @@ function VideoEdit({
     src,
     tracks
   } = attributes;
-  const isTemporaryVideo = !id && (0,external_wp_blob_namespaceObject.isBlobURL)(src);
+  const [temporaryURL, setTemporaryURL] = (0,external_wp_element_namespaceObject.useState)(attributes.blob);
   useUploadMediaFromBlobURL({
-    url: src,
+    url: temporaryURL,
     allowedTypes: video_edit_ALLOWED_MEDIA_TYPES,
     onChange: onSelectVideo,
     onError: onUploadError
@@ -62701,19 +61744,27 @@ function VideoEdit({
         src: undefined,
         id: undefined,
         poster: undefined,
-        caption: undefined
+        caption: undefined,
+        blob: undefined
       });
+      setTemporaryURL();
+      return;
+    }
+    if ((0,external_wp_blob_namespaceObject.isBlobURL)(media.url)) {
+      setTemporaryURL(media.url);
       return;
     }
 
     // Sets the block's attribute and updates the edit component from the
     // selected media.
     setAttributes({
+      blob: undefined,
       src: media.url,
       id: media.id,
       poster: media.image?.src !== media.icon ? media.image?.src : undefined,
       caption: media.caption
     });
+    setTemporaryURL();
   }
   function onSelectURL(newSrc) {
     if (newSrc !== src) {
@@ -62728,10 +61779,12 @@ function VideoEdit({
         return;
       }
       setAttributes({
+        blob: undefined,
         src: newSrc,
         id: undefined,
         poster: undefined
       });
+      setTemporaryURL();
     }
   }
   const {
@@ -62743,12 +61796,12 @@ function VideoEdit({
     });
   }
   const classes = dist_clsx(className, {
-    'is-transient': isTemporaryVideo
+    'is-transient': !!temporaryURL
   });
   const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
     className: classes
   });
-  if (!src) {
+  if (!src && !temporaryURL) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       ...blockProps,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.MediaPlaceholder, {
@@ -62846,13 +61899,13 @@ function VideoEdit({
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("video", {
           controls: controls,
           poster: poster,
-          src: src,
+          src: src || temporaryURL,
           ref: videoPlayer,
           children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Tracks, {
             tracks: tracks
           })
         })
-      }), isTemporaryVideo && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Spinner, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Caption, {
+      }), !!temporaryURL && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Spinner, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Caption, {
         attributes: attributes,
         setAttributes: setAttributes,
         isSelected: isSingleSelected,
@@ -62932,7 +61985,7 @@ const video_transforms_transforms = {
       // It's already done as part of the `componentDidMount`
       // in the video block
       const block = (0,external_wp_blocks_namespaceObject.createBlock)('core/video', {
-        src: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
+        blob: (0,external_wp_blob_namespaceObject.createBlobURL)(file)
       });
       return block;
     }
@@ -63087,6 +62140,10 @@ const video_metadata = {
       selector: "video",
       attribute: "preload",
       "default": "metadata"
+    },
+    blob: {
+      type: "string",
+      __experimentalRole: "local"
     },
     src: {
       type: "string",

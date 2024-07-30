@@ -25,7 +25,7 @@
 			<mj-preview><?php echo $preview_text; ?></mj-preview>
 		<?php endif; ?>
 	</mj-head>
-	<mj-body background-color="<?php echo $background_color; ?>">
+	<mj-body background-color="<?php echo $background_color; ?>" css-class="updated-<?php echo $updated; ?>">
 		<?php echo $body; ?>
 		<?php do_action( 'newspack_newsletters_editor_mjml_body', $post ); ?>
 	</mj-body>

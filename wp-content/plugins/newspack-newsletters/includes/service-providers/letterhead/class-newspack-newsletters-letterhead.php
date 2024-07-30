@@ -190,11 +190,11 @@ final class Newspack_Newsletters_Letterhead extends \Newspack_Newsletters_Servic
 	 * `save` is reserved for updating the corresponding email campaign when the WordPress
 	 * post is saved - if LH does this later : ).
 	 *
-	 * @param string  $post_id the WP Post Id.
-	 * @param WP_Post $post the whole WP Post for some reason.
-	 * @param bool    $update Whether this is an existing post being updated.
+	 * @param int   $meta_id Numeric ID of the meta field being updated.
+	 * @param int   $post_id The post ID for the meta field being updated.
+	 * @param mixed $meta_key The meta key being updated.
 	 */
-	public function save( $post_id, $post, $update ) {}
+	public function save( $meta_id, $post_id, $meta_key ) {}
 
 	/**
 	 * `send` will send the email - 🤞 one day.

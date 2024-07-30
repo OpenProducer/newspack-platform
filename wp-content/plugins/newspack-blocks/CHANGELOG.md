@@ -1,3 +1,10 @@
+# [3.6.0](https://github.com/Automattic/newspack-blocks/compare/v3.5.0...v3.6.0) (2024-07-30)
+
+
+### Features
+
+* **donate:** update modern style tiered ([#1790](https://github.com/Automattic/newspack-blocks/issues/1790)) ([54c5159](https://github.com/Automattic/newspack-blocks/commit/54c5159bf0385c58779a00ad87663af229b10ed1))
+
 # [3.5.0](https://github.com/Automattic/newspack-blocks/compare/v3.4.1...v3.5.0) (2024-07-15)
 
 

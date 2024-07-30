@@ -697,7 +697,7 @@ final class Newspack_Newsletters {
 			$post->post_title = $request['title'];
 		}
 		$post->post_content = $request['content'];
-		return \rest_ensure_response( [ 'mjml' => Newspack_Newsletters_Renderer::render_post_to_mjml( $post ) ] );
+		return \rest_ensure_response( Newspack_Newsletters_Renderer::render_post_to_mjml( $post ) );
 	}
 
 	/**

@@ -595,7 +595,15 @@
 				"elements": {
 					"link": {
 						"typography": {
-							"textDecoration": "underline"
+							"textDecoration": "none"
+						},
+						":hover": {
+							"color": {
+								"text": "color-mix(in srgb, currentcolor 65.5%, transparent) !important"
+							},
+							"typography": {
+								"textDecoration": "none"
+							}
 						}
 					}
 				},
@@ -711,8 +719,11 @@
 							"textDecoration": "none"
 						},
 						":hover": {
+							"color": {
+								"text": "var( --wp--preset--color--contrast-3 )"
+							},
 							"typography": {
-								"textDecoration": "underline"
+								"textDecoration": "none"
 							}
 						}
 					}
@@ -729,8 +740,11 @@
 							"text": "var( --wp--preset--color--contrast )"
 						},
 						":hover": {
+							"color": {
+								"text": "var( --wp--preset--color--contrast-3 )"
+							},
 							"typography": {
-								"textDecoration": "underline"
+								"textDecoration": "none"
 							}
 						},
 						"typography": {
@@ -1101,6 +1115,20 @@
 				"post"
 			],
 			"title": "Single - Full Width Image"
+		},
+		{
+			"name": "single/50-50-image",
+			"postTypes": [
+				"post"
+			],
+			"title": "Single - 50/50 Image/Header"
+		},
+		{
+			"name": "single/sidebar-layout",
+			"postTypes": [
+				"post"
+			],
+			"title": "Single - Sidebar Layout"
 		}
 	],
 	"templateParts": [
@@ -1110,19 +1138,19 @@
 			"title": "Header"
 		},
 		{
-			"area": "uncategorized",
-			"name": "mobile-header",
-			"title": "Mobile Header"
+			"area": "header",
+			"name": "header-desktop",
+			"title": "Header (Desktop)"
+		},
+		{
+			"area": "header",
+			"name": "header-mobile",
+			"title": "Header (Mobile)"
 		},
 		{
 			"area": "uncategorized",
-			"name": "mobile-sidebar",
-			"title": "Mobile Sidebar"
-		},
-		{
-			"area": "uncategorized",
-			"name": "desktop-header",
-			"title": "Desktop Header"
+			"name": "mobile-contents",
+			"title": "Mobile Menu Contents"
 		},
 		{
 			"area": "footer",

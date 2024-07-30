@@ -414,7 +414,7 @@
 		border-radius: var( --newspack-ui-border-radius-xs, 3px );
 	}
 
-	
+
 
 	.wpbnbd__button {
 		font-family: inherit;
@@ -438,7 +438,7 @@
 			grid-template-columns: repeat( 2, 1fr );
 			margin: var( --newspack-ui-spacer-2, 12px ) 0 0;
 			padding: var( --newspack-ui-spacer-5, 24px );
-		}	
+		}
 	}
 
 	&.wpbnbd--nyp-disabled .frequencies input[type='radio']:checked ~ .tiers {
@@ -473,18 +473,18 @@
 			margin-right: auto;
 			padding: calc( var( --newspack-ui-spacer-base, 8px ) / 2 );
 			width: min-content;
-	
+
 			&:has( :nth-child( 3 ) ) {
 				max-width: 300px;
 				width: 100%;
-	
+
 				.freq-label {
 					padding-left: calc( var( --newspack-ui-spacer-2, 12px ) - 1px );
 					padding-right: calc( var( --newspack-ui-spacer-2, 12px ) - 1px );
 					width: 100%;
 				}
 			}
-	
+
 			.freq-label {
 				border: 1px solid transparent;
 				background: transparent;
@@ -496,21 +496,21 @@
 				position: relative;
 				transition: all 125ms ease-in-out;
 				width: auto;
-	
+
 				&:hover {
-					color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );	
+					color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
 				}
-	
+
 				&:focus {
 					outline: none;
 					text-decoration: none;
 				}
-	
+
 				&:focus-visible {
 					outline: 2px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
 					outline-offset: 1px;
 				}
-	
+
 				&.wpbnbd__button--active {
 					background: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
 					border-color: var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 );
@@ -528,26 +528,26 @@
 				margin: var( --newspack-ui-spacer-2, 12px ) 0 0;
 				padding: var( --newspack-ui-spacer-5, 24px );
 			}
-	
+
 			.money-input {
 				left: 0;
 				right: 0;
 			}
-	
+
 			.donate-label {
 				display: block;
 				margin-bottom: var( --newspack-ui-spacer-base, 8px );
 			}
 		}
-	
+
 		&.tiered {
 			font-size: var( --newspack-ui-font-size-s, 16px );
 			line-height: var( --newspack-ui-line-height-s, 1.5 );
-	
+
 			.tiers {
 				color: var( --newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60 );
 				position: relative;
-	
+
 				.tier-label {
 					background: var( --newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10 );
 					border: 0;
@@ -559,12 +559,12 @@
 					padding: var( --newspack-ui-spacer-2, 12px ) var( --newspack-ui-spacer-5, 24px );
 					text-align: center;
 					transition: background 125ms ease-in-out, color 125ms ease-in-out;
-	
+
 					&:hover {
 						color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
 					}
 				}
-	
+
 				.odl {
 					bottom: calc( var( --newspack-ui-spacer-5, 24px ) + var( --newspack-ui-spacer-9, 48px ) + var( --newspack-ui-spacer-base, 8px ) );
 					color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
@@ -572,15 +572,15 @@
 					left: 0;
 					padding: 0 var( --newspack-ui-spacer-5, 24px );
 				}
-		
-				input.other-input {	
+
+				input.other-input {
 					&:checked {
 						+ label {
 							margin-bottom: calc( var( --newspack-ui-spacer-5, 24px ) + var( --newspack-ui-spacer-5, 24px ) + var( --newspack-ui-spacer-base, 8px ) + var( --newspack-ui-spacer-9, 48px ) );
 						}
 					}
 				}
-	
+
 				input[type='radio']:focus,
 				input[type='radio']:checked {
 					+ .tier-label {
@@ -589,13 +589,13 @@
 						outline: none;
 					}
 				}
-	
+
 				input[type='radio']:focus-visible + .tier-label {
 					outline: 2px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
 					outline-offset: 1px;
 				}
 			}
-	
+
 			.money-input {
 				bottom: var( --newspack-ui-spacer-5, 24px );
 				left: var( --newspack-ui-spacer-5, 24px );
@@ -687,10 +687,11 @@
 			}
 
 			&__heading {
+				align-self: flex-start;
 				font-family: inherit;
-				font-size: var( --newspack-ui-font-size-s, 16px );
-				font-weight: 600;
-				line-height: var( --newspack-ui-line-height-s, 1.5 );
+				font-size: var( --newspack-ui-font-size-m, clamp( 1.125rem,0.929rem + 0.402vw,1.25rem ) );
+				font-weight: 700;
+				line-height: var( --newspack-ui-line-height-m, 1.6 );
 			}
 
 			&__options {
@@ -715,11 +716,8 @@
 				&:not( #{&}--recommended ) {
 					button[type='submit'],
 					.submit-button {
-						border-color: var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 ) !important;
-
 						&:hover {
 							background: var( --newspack-ui-color-neutral-5, colors.$newspack-ui-color-neutral-5 ) !important;
-							border-color: var( --newspack-ui-color-neutral-40, colors.$newspack-ui-color-neutral-40 ) !important;
 							opacity: 1;
 						}
 					}
@@ -727,6 +725,9 @@
 			}
 
 			&__top {
+				align-items: center;
+				flex-wrap: wrap-reverse;
+				gap: calc( var( --newspack-ui-spacer-base, 8px ) / 2 ) var( --newspack-ui-spacer-3, 16px );
 				margin-bottom: calc( var( --newspack-ui-spacer-base, 8px ) / 2 );
 			}
 
@@ -740,6 +741,7 @@
 				height: auto;
 				line-height: var( --newspack-ui-line-height-xs, 1.4286 );
 				padding: calc( var( --newspack-ui-spacer-base, 8px ) * 0.25 ) calc( var( --newspack-ui-spacer-base, 8px ) * 0.75 );
+				word-break: break-word;
 			}
 
 			&__amount {
@@ -754,7 +756,8 @@
 				.amount {
 					color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
 					font-family: inherit;
-					font-size: var( --newspack-ui-font-size-l, clamp( 1.25rem, 0.857rem + 0.803vw, 1.5rem ) );
+					font-size: var( --newspack-ui-font-size-xl, clamp( 1.375rem, 0.394rem + 2.008vw, 2rem ) );
+					line-height: var( --newspack-ui-line-height-xl, 1.375 );
 				}
 			}
 
@@ -771,7 +774,7 @@
 				font-size: var( --newspack-ui-font-size-s, 16px );
 				font-weight: 600;
 				line-height: var( --newspack-ui-line-height-s, 1.5 );
-				margin: 0;
+				margin: auto 0 0;
 				padding: calc( var( --newspack-ui-spacer-2, 12px ) - 1px ) calc( var( --newspack-ui-spacer-5, 24px ) - 1px );
 				transition: background 125ms ease-in-out, border-color 125ms ease-in-out, opacity 125ms ease-in-out, outline 125ms ease-in-out;
 

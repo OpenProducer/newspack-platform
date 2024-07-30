@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b
+class ComposerStaticInit70f002e6fba16843936d47fc68eeae32
 {
     public static $files = array (
         '81db02b30f563b92907e271b66bd7559' => __DIR__ . '/..' . '/yoast/whip/src/Facades/wordpress.php',
@@ -669,10 +669,18 @@ class ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b
         'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context' => __DIR__ . '/../..' . '/src/context/meta-tags-context.php',
         'Yoast\\WP\\SEO\\Editors\\Application\\Analysis_Features\\Enabled_Analysis_Features_Repository' => __DIR__ . '/../..' . '/src/editors/application/analysis-features/enabled-analysis-features-repository.php',
         'Yoast\\WP\\SEO\\Editors\\Application\\Integrations\\Integration_Information_Repository' => __DIR__ . '/../..' . '/src/editors/application/integrations/integration-information-repository.php',
+        'Yoast\\WP\\SEO\\Editors\\Application\\Seo\\Post_Seo_Information_Repository' => __DIR__ . '/../..' . '/src/editors/application/seo/post-seo-information-repository.php',
+        'Yoast\\WP\\SEO\\Editors\\Application\\Seo\\Term_Seo_Information_Repository' => __DIR__ . '/../..' . '/src/editors/application/seo/term-seo-information-repository.php',
+        'Yoast\\WP\\SEO\\Editors\\Application\\Site\\Website_Information_Repository' => __DIR__ . '/../..' . '/src/editors/application/site/website-information-repository.php',
         'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Feature' => __DIR__ . '/../..' . '/src/editors/domain/analysis-features/analysis-feature.php',
         'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Feature_Interface' => __DIR__ . '/../..' . '/src/editors/domain/analysis-features/analysis-feature-interface.php',
         'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Features_List' => __DIR__ . '/../..' . '/src/editors/domain/analysis-features/analysis-features-list.php',
         'Yoast\\WP\\SEO\\Editors\\Domain\\Integrations\\Integration_Data_Provider_Interface' => __DIR__ . '/../..' . '/src/editors/domain/integrations/integration-data-provider-interface.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Seo\\Description' => __DIR__ . '/../..' . '/src/editors/domain/seo/description.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Seo\\Keyphrase' => __DIR__ . '/../..' . '/src/editors/domain/seo/keyphrase.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Seo\\Seo_Plugin_Data_Interface' => __DIR__ . '/../..' . '/src/editors/domain/seo/seo-plugin-data-interface.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Seo\\Social' => __DIR__ . '/../..' . '/src/editors/domain/seo/social.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Seo\\Title' => __DIR__ . '/../..' . '/src/editors/domain/seo/title.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Cornerstone_Content' => __DIR__ . '/../..' . '/src/editors/framework/cornerstone-content.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Inclusive_Language_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/inclusive-language-analysis.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Jetpack_Markdown' => __DIR__ . '/../..' . '/src/editors/framework/integrations/jetpack-markdown.php',
@@ -682,6 +690,23 @@ class ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b
         'Yoast\\WP\\SEO\\Editors\\Framework\\Keyphrase_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/keyphrase-analysis.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Previously_Used_Keyphrase' => __DIR__ . '/../..' . '/src/editors/framework/previously-used-keyphrase.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Readability_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/readability-analysis.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Description_Data_Provider_Interface' => __DIR__ . '/../..' . '/src/editors/framework/seo/description-data-provider-interface.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Keyphrase_Interface' => __DIR__ . '/../..' . '/src/editors/framework/seo/keyphrase-interface.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Posts\\Abstract_Post_Seo_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/posts/abstract-post-seo-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Posts\\Description_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/posts/description-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Posts\\Keyphrase_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/posts/keyphrase-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Posts\\Social_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/posts/social-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Posts\\Title_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/posts/title-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Social_Data_Provider_Interface' => __DIR__ . '/../..' . '/src/editors/framework/seo/social-data-provider-interface.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Terms\\Abstract_Term_Seo_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/terms/abstract-term-seo-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Terms\\Description_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/terms/description-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Terms\\Keyphrase_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/terms/keyphrase-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Terms\\Social_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/terms/social-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Terms\\Title_Data_Provider' => __DIR__ . '/../..' . '/src/editors/framework/seo/terms/title-data-provider.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Seo\\Title_Data_Provider_Interface' => __DIR__ . '/../..' . '/src/editors/framework/seo/title-data-provider-interface.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Site\\Base_Site_Information' => __DIR__ . '/../..' . '/src/editors/framework/site/base-site-information.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Site\\Post_Site_Information' => __DIR__ . '/../..' . '/src/editors/framework/site/post-site-information.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Site\\Term_Site_Information' => __DIR__ . '/../..' . '/src/editors/framework/site/term-site-information.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Word_Form_Recognition' => __DIR__ . '/../..' . '/src/editors/framework/word-form-recognition.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Activation_Error_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-activation-error-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Already_Installed_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-already-installed-exception.php',
@@ -1115,9 +1140,9 @@ class ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9aa6d23cd146ab5b95f041f237137b9b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit70f002e6fba16843936d47fc68eeae32::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit70f002e6fba16843936d47fc68eeae32::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit70f002e6fba16843936d47fc68eeae32::$classMap;
 
         }, null, ClassLoader::class);
     }
