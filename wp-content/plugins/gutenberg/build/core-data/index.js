@@ -1169,8 +1169,9 @@ function __await(v) {
 function __asyncGenerator(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g = generator.apply(thisArg, _arguments || []), i, q = [];
-  return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-  function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+  return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+  function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+  function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
   function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
   function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
   function fulfill(value) { resume("next", value); }
@@ -1236,16 +1237,18 @@ function __classPrivateFieldIn(state, receiver) {
 function __addDisposableResource(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-    var dispose;
+    var dispose, inner;
     if (async) {
-        if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
-        dispose = value[Symbol.asyncDispose];
+      if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+      dispose = value[Symbol.asyncDispose];
     }
     if (dispose === void 0) {
-        if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
-        dispose = value[Symbol.dispose];
+      if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+      dispose = value[Symbol.dispose];
+      if (async) inner = dispose;
     }
     if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+    if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
     env.stack.push({ value: value, dispose: dispose, async: async });
   }
   else if (async) {
@@ -18940,7 +18943,7 @@ const deleteEntityRecord = (kind, name, recordId, query, {
   const entityConfig = configs.find(config => config.kind === kind && config.name === name);
   let error;
   let deletedRecord = false;
-  if (!entityConfig || entityConfig?.__experimentalNoFetch) {
+  if (!entityConfig) {
     return;
   }
   const lock = await dispatch.__unstableAcquireStoreLock(STORE_NAME, ['entities', 'records', kind, name, recordId], {
@@ -19128,7 +19131,7 @@ const saveEntityRecord = (kind, name, record, {
 }) => {
   const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.kind === kind && config.name === name);
-  if (!entityConfig || entityConfig?.__experimentalNoFetch) {
+  if (!entityConfig) {
     return;
   }
   const entityIdKey = entityConfig.key || DEFAULT_ENTITY_KEY;
@@ -19315,10 +19318,10 @@ const __experimentalBatch = requests => async ({
 /**
  * Action triggered to save an entity record's edits.
  *
- * @param {string} kind     Kind of the entity.
- * @param {string} name     Name of the entity.
- * @param {Object} recordId ID of the record.
- * @param {Object} options  Saving options.
+ * @param {string}  kind     Kind of the entity.
+ * @param {string}  name     Name of the entity.
+ * @param {Object}  recordId ID of the record.
+ * @param {Object=} options  Saving options.
  */
 const saveEditedEntityRecord = (kind, name, recordId, options) => async ({
   select,
@@ -21257,7 +21260,9 @@ function getEntitiesByKind(state, kind) {
  *
  * @return Array of entities with config matching kind.
  */
-const getEntitiesConfig = (0,external_wp_data_namespaceObject.createSelector)((state, kind) => state.entities.config.filter(entity => entity.kind === kind), (state, kind) => state.entities.config);
+const getEntitiesConfig = (0,external_wp_data_namespaceObject.createSelector)((state, kind) => state.entities.config.filter(entity => entity.kind === kind), /* eslint-disable @typescript-eslint/no-unused-vars */
+(state, kind) => state.entities.config
+/* eslint-enable @typescript-eslint/no-unused-vars */);
 /**
  * Returns the entity config given its kind and name.
  *
@@ -21763,6 +21768,7 @@ function getLastEntityDeleteError(state, kind, name, recordId) {
   return state.entities.records?.[kind]?.[name]?.deleting?.[recordId]?.error;
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Returns the previous edit from the current undo offset
  * for the entity records edits history, if any.
@@ -21779,7 +21785,9 @@ function getUndoEdit(state) {
   });
   return undefined;
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Returns the next edit from the current undo offset
  * for the entity records edits history, if any.
@@ -21796,6 +21804,7 @@ function getRedoEdit(state) {
   });
   return undefined;
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 /**
  * Returns true if there is a previous edit from the current undo offset
@@ -22601,7 +22610,7 @@ const resolvers_getEntityRecord = (kind, name, key = '', query) => async ({
 }) => {
   const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
-  if (!entityConfig || entityConfig?.__experimentalNoFetch) {
+  if (!entityConfig) {
     return;
   }
   const lock = await dispatch.__unstableAcquireStoreLock(STORE_NAME, ['entities', 'records', kind, name, key], {
@@ -22703,7 +22712,7 @@ const resolvers_getEntityRecords = (kind, name, query = {}) => async ({
 }) => {
   const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
-  if (!entityConfig || entityConfig?.__experimentalNoFetch) {
+  if (!entityConfig) {
     return;
   }
   const lock = await dispatch.__unstableAcquireStoreLock(STORE_NAME, ['entities', 'records', kind, name], {
@@ -22882,9 +22891,11 @@ const resolvers_canUser = (requestedAction, resource, id) => async ({
   for (const [actionName, methodName] of Object.entries(methods)) {
     permissions[actionName] = allowedMethods.includes(methodName);
   }
-  for (const action of retrievedActions) {
-    dispatch.receiveUserPermission(`${action}/${resourcePath}`, permissions[action]);
-  }
+  registry.batch(() => {
+    for (const action of retrievedActions) {
+      dispatch.receiveUserPermission(`${action}/${resourcePath}`, permissions[action]);
+    }
+  });
 };
 
 /**
@@ -22988,11 +22999,16 @@ const resolvers_experimentalGetCurrentGlobalStylesId = () => async ({
     status: 'active'
   });
   const globalStylesURL = activeThemes?.[0]?._links?.['wp:user-global-styles']?.[0]?.href;
-  if (globalStylesURL) {
-    const globalStylesObject = await external_wp_apiFetch_default()({
-      url: globalStylesURL
-    });
-    dispatch.__experimentalReceiveCurrentGlobalStylesId(globalStylesObject.id);
+  if (!globalStylesURL) {
+    return;
+  }
+
+  // Regex matches the ID at the end of a URL or immediately before
+  // the query string.
+  const matches = globalStylesURL.match(/\/(\d+)(?:\?|$)/);
+  const id = matches ? Number(matches[1]) : null;
+  if (id) {
+    dispatch.__experimentalReceiveCurrentGlobalStylesId(id);
   }
 };
 const resolvers_experimentalGetCurrentThemeBaseGlobalStyles = () => async ({
@@ -23126,7 +23142,7 @@ const resolvers_getRevisions = (kind, name, recordKey, query = {}) => async ({
 }) => {
   const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
-  if (!entityConfig || entityConfig?.__experimentalNoFetch) {
+  if (!entityConfig) {
     return;
   }
   if (query._fields) {
@@ -23212,7 +23228,7 @@ const resolvers_getRevision = (kind, name, recordKey, revisionKey, query) => asy
 }) => {
   const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
-  if (!entityConfig || entityConfig?.__experimentalNoFetch) {
+  if (!entityConfig) {
     return;
   }
   if (query !== undefined && query._fields) {
@@ -23708,8 +23724,6 @@ const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 
 
 
-/** @typedef {import('@wordpress/blocks').WPBlock} WPBlock */
-
 const EMPTY_ARRAY = [];
 const EntityContext = (0,external_wp_element_namespaceObject.createContext)({});
 
@@ -23821,7 +23835,7 @@ const parsedBlocksCache = new WeakMap();
  * @param {Object} options
  * @param {string} [options.id] An entity ID to use instead of the context-provided one.
  *
- * @return {[WPBlock[], Function, Function]} The block array and setters.
+ * @return {[unknown[], Function, Function]} The block array and setters.
  */
 function useEntityBlockEditor(kind, name, {
   id: _id

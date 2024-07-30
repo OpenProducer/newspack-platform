@@ -11,13 +11,13 @@
 interface Newspack_Newsletters_WP_Hookable_Interface {
 
 	/**
-	 * Update ESP campaign after post save.
+	 * Update ESP campaign after email HTML post meta is saved.
 	 *
-	 * @param string   $post_id Numeric ID of the campaign.
-	 * @param \WP_Post $post The complete post object.
-	 * @param boolean  $update Whether this is an existing post being updated or not.
+	 * @param int   $meta_id Numeric ID of the meta field being updated.
+	 * @param int   $post_id The post ID for the meta field being updated.
+	 * @param mixed $meta_key The meta key being updated.
 	 */
-	public function save( $post_id, $post, $update );
+	public function save( $meta_id, $post_id, $meta_key );
 
 	/**
 	 * Send a campaign.

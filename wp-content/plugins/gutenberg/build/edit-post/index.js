@@ -1752,7 +1752,7 @@ function InitPatternModal() {
               variant: "primary",
               type: "submit",
               disabled: !title,
-              __experimentalIsFocusable: true,
+              accessibleWhenDisabled: true,
               children: (0,external_wp_i18n_namespaceObject.__)('Create')
             })
           })]
@@ -2145,7 +2145,7 @@ function CustomFieldsConfirmation({
       className: "edit-post-preferences-modal__custom-fields-confirmation-button",
       variant: "secondary",
       isBusy: isReloading,
-      __experimentalIsFocusable: true,
+      accessibleWhenDisabled: true,
       disabled: isReloading,
       onClick: () => {
         setIsReloading(true);
@@ -2911,7 +2911,9 @@ function useEditorStyles() {
     // bottom, there needs to be room to scroll up.
     if (!isZoomedOutView && !hasMetaBoxes && renderingMode === 'post-only' && !DESIGN_POST_TYPES.includes(postType)) {
       return [...baseStyles, {
-        css: 'body{padding-bottom: 40vh}'
+        // Should override global styles padding, so ensure 0-1-0
+        // specificity.
+        css: ':root :where(body){padding-bottom: 40vh}'
       }];
     }
     return baseStyles;
@@ -3257,7 +3259,8 @@ function __experimentalPluginPostExcerpt() {
 
 
 const {
-  BackButton: __experimentalMainDashboardButton
+  BackButton: __experimentalMainDashboardButton,
+  registerDefaultActions
 } = unlock(external_wp_editor_namespaceObject.privateApis);
 
 /**
@@ -3313,6 +3316,7 @@ function initializeEditor(id, postType, postId, settings, initialEdits) {
       enableFSEBlocks: settings.__unstableEnableFullSiteEditingBlocks
     });
   }
+  registerDefaultActions();
 
   // Show a console log warning if the browser is not in Standards rendering mode.
   const documentMode = document.compatMode === 'CSS1Compat' ? 'Standards' : 'Quirks';

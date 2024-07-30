@@ -211,6 +211,8 @@ const external_wp_router_namespaceObject = window["wp"]["router"];
 const external_wp_url_namespaceObject = window["wp"]["url"];
 ;// CONCATENATED MODULE: external ["wp","compose"]
 const external_wp_compose_namespaceObject = window["wp"]["compose"];
+;// CONCATENATED MODULE: external ["wp","htmlEntities"]
+const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
 ;// CONCATENATED MODULE: ./packages/core-commands/build-module/hooks.js
 /**
  * WordPress dependencies
@@ -258,6 +260,7 @@ function orderEntityRecordsBySearch(records = [], search = '') {
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -323,7 +326,7 @@ const getNavigationCommandLoaderPerPostType = postType => function useNavigation
       const command = {
         name: postType + '-' + record.id,
         searchLabel: record.title?.rendered + ' ' + record.id,
-        label: record.title?.rendered ? record.title?.rendered : (0,external_wp_i18n_namespaceObject.__)('(no title)'),
+        label: record.title?.rendered ? (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(record.title?.rendered) : (0,external_wp_i18n_namespaceObject.__)('(no title)'),
         icon: icons[postType]
       };
       if (postType === 'post' || postType === 'page' && !isBlockBasedTheme) {
@@ -517,7 +520,7 @@ function useSiteEditorBasicNavigationCommands() {
           close
         }) => {
           const args = {
-            post_type: 'page'
+            postType: 'page'
           };
           const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {

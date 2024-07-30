@@ -110,6 +110,10 @@ final class Newspack_Newsletters_Renderer {
 	 * @return string A value for the alt attribute.
 	 */
 	private static function get_image_alt( $attachment_id ) {
+		if ( ! $attachment_id ) {
+			return '';
+		}
+
 		$alt        = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 		$attachment = get_post( $attachment_id );
 
@@ -150,6 +154,30 @@ final class Newspack_Newsletters_Renderer {
 	}
 
 	/**
+	 * Get the colors of supported social icons.
+	 */
+	private static function get_social_icons_services_colors() {
+		return [
+			'facebook'  => '#1977f2',
+			'instagram' => '#f00075',
+			'linkedin'  => '#0577b5',
+			'tiktok'    => '#000000',
+			'tumblr'    => '#011835',
+			'twitter'   => '#21a1f3',
+			'x'         => '#000000',
+			'wordpress' => '#3499cd',
+			'youtube'   => '#ff0100',
+		];
+	}
+
+	/**
+	 * Get the list of supported social icon services.
+	 */
+	public static function get_supported_social_icons_services() {
+		return array_keys( self::get_social_icons_services_colors() );
+	}
+
+	/**
 	 * Get the social icon and color based on the block attributes.
 	 *
 	 * @param string $service_name The service name.
@@ -161,16 +189,7 @@ final class Newspack_Newsletters_Renderer {
 	 * ] The icon and color or empty array if service not found.
 	 */
 	private static function get_social_icon( $service_name, $block_attrs ) {
-		$services_colors = [
-			'facebook'  => '#1977f2',
-			'instagram' => '#f00075',
-			'linkedin'  => '#0577b5',
-			'tiktok'    => '#000000',
-			'tumblr'    => '#011835',
-			'twitter'   => '#21a1f3',
-			'wordpress' => '#3499cd',
-			'youtube'   => '#ff0100',
-		];
+		$services_colors = self::get_social_icons_services_colors();
 		if ( ! isset( $services_colors[ $service_name ] ) ) {
 			return [];
 		}
@@ -580,7 +599,7 @@ final class Newspack_Newsletters_Renderer {
 				$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
 				$img        = $dom->getElementsByTagName( 'img' )->item( 0 );
 				$img_src    = $img->getAttribute( 'src' );
-				$img_alt    = self::get_image_alt( $attrs['id'] );
+				$img_alt    = self::get_image_alt( $attrs['id'] ?? '' );
 				$figcaption = $dom->getElementsByTagName( 'figcaption' )->item( 0 );
 
 				$img_attrs = array(
@@ -1237,7 +1256,8 @@ final class Newspack_Newsletters_Renderer {
 			self::$font_body = 'Georgia';
 		}
 
-		$title = $post->post_title; // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
+		$updated = time();
+		$title   = $post->post_title; // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
 
 		/**
 		 * Generate a string of MJML as the body of the email. We include ads at this stage.

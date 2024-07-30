@@ -1412,15 +1412,14 @@ function ColorPicker({
     } = select(external_wp_blockEditor_namespaceObject.store);
     return (_getSettings$colors = getSettings().colors) !== null && _getSettings$colors !== void 0 ? _getSettings$colors : [];
   }, []);
-  const onColorChange = (0,external_wp_element_namespaceObject.useCallback)(color => {
-    onChange(setColors(value, name, colors, {
-      [property]: color
-    }));
-  }, [colors, onChange, property]);
   const activeColors = (0,external_wp_element_namespaceObject.useMemo)(() => getActiveColors(value, name, colors), [name, value, colors]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.ColorPalette, {
     value: activeColors[property],
-    onChange: onColorChange
+    onChange: color => {
+      onChange(setColors(value, name, colors, {
+        [property]: color
+      }));
+    }
   });
 }
 function InlineColorUI({
@@ -1518,9 +1517,7 @@ function TextColorEdit({
 }) {
   const [allowCustomControl, colors = EMPTY_ARRAY] = (0,external_wp_blockEditor_namespaceObject.useSettings)('color.custom', 'color.palette');
   const [isAddingColor, setIsAddingColor] = (0,external_wp_element_namespaceObject.useState)(false);
-  const enableIsAddingColor = (0,external_wp_element_namespaceObject.useCallback)(() => setIsAddingColor(true), [setIsAddingColor]);
-  const disableIsAddingColor = (0,external_wp_element_namespaceObject.useCallback)(() => setIsAddingColor(false), [setIsAddingColor]);
-  const colorIndicatorStyle = (0,external_wp_element_namespaceObject.useMemo)(() => fillComputedColors(contentRef.current, getActiveColors(value, text_color_name, colors)), [value, colors]);
+  const colorIndicatorStyle = (0,external_wp_element_namespaceObject.useMemo)(() => fillComputedColors(contentRef.current, getActiveColors(value, text_color_name, colors)), [contentRef, value, colors]);
   const hasColorsToChoose = colors.length || !allowCustomControl;
   if (!hasColorsToChoose && !isActive) {
     return null;
@@ -1536,11 +1533,11 @@ function TextColorEdit({
       title: text_color_title
       // If has no colors to choose but a color is active remove the color onClick.
       ,
-      onClick: hasColorsToChoose ? enableIsAddingColor : () => onChange((0,external_wp_richText_namespaceObject.removeFormat)(value, text_color_name)),
+      onClick: hasColorsToChoose ? () => setIsAddingColor(true) : () => onChange((0,external_wp_richText_namespaceObject.removeFormat)(value, text_color_name)),
       role: "menuitemcheckbox"
     }), isAddingColor && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InlineColorUI, {
       name: text_color_name,
-      onClose: disableIsAddingColor,
+      onClose: () => setIsAddingColor(false),
       activeAttributes: activeAttributes,
       value: value,
       onChange: onChange,

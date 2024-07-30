@@ -1,3 +1,95 @@
+# [2.21.0](https://github.com/Automattic/newspack-newsletters/compare/v2.20.4...v2.21.0) (2024-07-30)
+
+
+### Bug Fixes
+
+* error handling for Mailchimp `add_contact` method ([#1567](https://github.com/Automattic/newspack-newsletters/issues/1567)) ([eab0802](https://github.com/Automattic/newspack-newsletters/commit/eab08025540c43c07df2dd8bd434b11a049b9ec6))
+* nonexistent method, and don't remove the submit button (just the spinner) ([#1565](https://github.com/Automattic/newspack-newsletters/issues/1565)) ([c6bbc8b](https://github.com/Automattic/newspack-newsletters/commit/c6bbc8badddc1868a0ad9798eb11e989f4ce4742))
+* **recaptcha:** handle inactive recaptcha ([#1569](https://github.com/Automattic/newspack-newsletters/issues/1569)) ([dc72d91](https://github.com/Automattic/newspack-newsletters/commit/dc72d91c51311765a16b1f951f0663d0f6074ffc))
+
+
+### Features
+
+* **constant-contact:** enable subscription management in my account ([#1566](https://github.com/Automattic/newspack-newsletters/issues/1566)) ([cc79138](https://github.com/Automattic/newspack-newsletters/commit/cc79138969135c1df151a997716cd8aa2a05559f))
+
+## [2.20.4](https://github.com/Automattic/newspack-newsletters/compare/v2.20.3...v2.20.4) (2024-07-22)
+
+
+### Bug Fixes
+
+* avoid fatal when provider is manual ([b245716](https://github.com/Automattic/newspack-newsletters/commit/b24571600a34f91cb0f5be9714fe5db71f1e9c0a))
+
+## [2.20.3](https://github.com/Automattic/newspack-newsletters/compare/v2.20.2...v2.20.3) (2024-07-22)
+
+
+### Bug Fixes
+
+* sync newsletter campaigns on post meta update for all ESPs ([#1556](https://github.com/Automattic/newspack-newsletters/issues/1556)) ([6d028ff](https://github.com/Automattic/newspack-newsletters/commit/6d028ffc7e34101dd1fb30fd5c1d04736ce4ce78))
+
+## [2.20.2](https://github.com/Automattic/newspack-newsletters/compare/v2.20.1...v2.20.2) (2024-07-22)
+
+
+### Bug Fixes
+
+* **usage-reports:** fix MC usage reports backfill inflated counts ([#1554](https://github.com/Automattic/newspack-newsletters/issues/1554)) ([6befa73](https://github.com/Automattic/newspack-newsletters/commit/6befa73feda77c6fb43b78cfbc046584d6eac53f))
+
+## [2.20.1](https://github.com/Automattic/newspack-newsletters/compare/v2.20.0...v2.20.1) (2024-07-15)
+
+
+### Bug Fixes
+
+* refresh MJML on save for all newsletter editor CPTs ([#1570](https://github.com/Automattic/newspack-newsletters/issues/1570)) ([03a9365](https://github.com/Automattic/newspack-newsletters/commit/03a9365d995c8a01cda901b33e56be1e75ee0ed7))
+
+# [2.20.0](https://github.com/Automattic/newspack-newsletters/compare/v2.19.2...v2.20.0) (2024-07-15)
+
+
+### Bug Fixes
+
+* avoid fatal errors on usage reports ([#1548](https://github.com/Automattic/newspack-newsletters/issues/1548)) ([8afa6fb](https://github.com/Automattic/newspack-newsletters/commit/8afa6fb3f65cdb41b5fb1d1257581c7a15b54e3b))
+* ensure form_processed hook is always and correctly fired ([#1540](https://github.com/Automattic/newspack-newsletters/issues/1540)) ([e3f4268](https://github.com/Automattic/newspack-newsletters/commit/e3f4268e6fe28c1c645b428bfdb495d5e41dfb5a))
+* nonexistent method, and don't remove the submit button (just the spinner) ([#1565](https://github.com/Automattic/newspack-newsletters/issues/1565)) ([406c2f4](https://github.com/Automattic/newspack-newsletters/commit/406c2f49bc8b3366687460ff0eb1568566a7d2eb))
+* specifically set the subscription list colour ([#1535](https://github.com/Automattic/newspack-newsletters/issues/1535)) ([ae067c8](https://github.com/Automattic/newspack-newsletters/commit/ae067c8a2b400992225449f70c99095c9fbf88f9))
+
+
+### Features
+
+* add support for reCAPTCHA v2 ([#1514](https://github.com/Automattic/newspack-newsletters/issues/1514)) ([2f11748](https://github.com/Automattic/newspack-newsletters/commit/2f11748ac3469dce9eed62a1e4849fbca0eeb823))
+* **subscribe-block:** update error style; display state-bar only when selected ([#1545](https://github.com/Automattic/newspack-newsletters/issues/1545)) ([07b36bd](https://github.com/Automattic/newspack-newsletters/commit/07b36bd6c46e97e34975cfc693506c53d495968e))
+
+## [2.19.2](https://github.com/Automattic/newspack-newsletters/compare/v2.19.1...v2.19.2) (2024-07-10)
+
+
+### Bug Fixes
+
+* update header link selector for WP 6.6 ([#1561](https://github.com/Automattic/newspack-newsletters/issues/1561)) ([2282de7](https://github.com/Automattic/newspack-newsletters/commit/2282de7c9866d7df3b69fbb1f53510229f2eba0a))
+
+## [2.19.1](https://github.com/Automattic/newspack-newsletters/compare/v2.19.0...v2.19.1) (2024-07-09)
+
+
+### Bug Fixes
+
+* remove grid block from newsletters ([#1560](https://github.com/Automattic/newspack-newsletters/issues/1560)) ([e6cb287](https://github.com/Automattic/newspack-newsletters/commit/e6cb287e15a6c1b8395e5e91f2d95609cbf0db4b))
+
+# [2.19.0](https://github.com/Automattic/newspack-newsletters/compare/v2.18.0...v2.19.0) (2024-07-01)
+
+
+### Bug Fixes
+
+* disable autosaves for newsletters ([#1547](https://github.com/Automattic/newspack-newsletters/issues/1547)) ([2c5a48e](https://github.com/Automattic/newspack-newsletters/commit/2c5a48ef3ab79b4acbcb9c8bacdc3a2dd6572886))
+* do not refresh HTML on autosave, and refresh when other meta is saved ([#1543](https://github.com/Automattic/newspack-newsletters/issues/1543)) ([dc26cfd](https://github.com/Automattic/newspack-newsletters/commit/dc26cfd40d75b560893fcd38981a364239720535))
+* **email-rendering:** add side margin to list blocks ([#1517](https://github.com/Automattic/newspack-newsletters/issues/1517)) ([f348053](https://github.com/Automattic/newspack-newsletters/commit/f34805352ddb7980a02de85cf5050bc5a5dc1901))
+* refresh email MJML + HTML after save, and refresh for preview without saving ([#1526](https://github.com/Automattic/newspack-newsletters/issues/1526)) ([04457a4](https://github.com/Automattic/newspack-newsletters/commit/04457a4b6d4ff04c8ddd7b9ae32e702000493c4d))
+* **social-icons:** add x.com icon; filter social icons block icons ([#1516](https://github.com/Automattic/newspack-newsletters/issues/1516)) ([292a374](https://github.com/Automattic/newspack-newsletters/commit/292a3742464d5cdf04579bbad7e7d897813fdbb4))
+* **test-email:** remove multi-recipient help text if ESP is AC (no support) ([40fc90c](https://github.com/Automattic/newspack-newsletters/commit/40fc90c2c5c188baf45e60983ffa3051447d3310))
+* update newspack-scripts to v5.5.1 ([721d03c](https://github.com/Automattic/newspack-newsletters/commit/721d03c28a2997b2c233b409e1509ec162af6c4d))
+* **usage-reports:** handle no lists from MC ([#1505](https://github.com/Automattic/newspack-newsletters/issues/1505)) ([00ab5f4](https://github.com/Automattic/newspack-newsletters/commit/00ab5f41267e45fad5921304730cde1eaf754f03))
+
+
+### Features
+
+* add spinner to subscribe block submit button ([#1529](https://github.com/Automattic/newspack-newsletters/issues/1529)) ([d22c62c](https://github.com/Automattic/newspack-newsletters/commit/d22c62ced3b2aa3cdddc795eb0eb47d4fae84419))
+* ensure regenerator-runtime is available (for WP 6.6) ([#1536](https://github.com/Automattic/newspack-newsletters/issues/1536)) ([b45cbca](https://github.com/Automattic/newspack-newsletters/commit/b45cbcab4d73c5844edf8d1034b131d3d24c7714))
+
 # [2.18.0](https://github.com/Automattic/newspack-newsletters/compare/v2.17.1...v2.18.0) (2024-06-28)
 
 

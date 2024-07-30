@@ -29,7 +29,7 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 		$this->service    = 'campaign_monitor';
 		$this->controller = new Newspack_Newsletters_Campaign_Monitor_Controller( $this );
 
-		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
+		add_action( 'updated_post_meta', [ $this, 'save' ], 10, 4 );
 
 		parent::__construct( $this );
 	}
@@ -547,13 +547,13 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 	}
 
 	/**
-	 * On save.
+	 * Update ESP campaign after refreshing the email HTML, which is triggered by post save.
 	 *
-	 * @param string   $post_id Numeric ID of the campaign.
-	 * @param \WP_Post $post The complete post object.
-	 * @param boolean  $update Whether this is an existing post being updated or not.
+	 * @param int   $meta_id Numeric ID of the meta field being updated.
+	 * @param int   $post_id The post ID for the meta field being updated.
+	 * @param mixed $meta_key The meta key being updated.
 	 */
-	public function save( $post_id, $post, $update ) {
+	public function save( $meta_id, $post_id, $meta_key ) {
 		$this->retrieve( $post_id );
 		return $post_id;
 	}

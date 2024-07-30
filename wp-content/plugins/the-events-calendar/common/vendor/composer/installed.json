@@ -304,17 +304,17 @@
         },
         {
             "name": "stellarwp/assets",
-            "version": "1.2.6",
-            "version_normalized": "1.2.6.0",
+            "version": "1.2.7",
+            "version_normalized": "1.2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/assets.git",
-                "reference": "fa481491c8a2df1a4462154ef4d5ddc423c60ecd"
+                "reference": "be4448d4e54396b1dac5c3aef87a260e2311a20e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/assets/zipball/fa481491c8a2df1a4462154ef4d5ddc423c60ecd",
-                "reference": "fa481491c8a2df1a4462154ef4d5ddc423c60ecd",
+                "url": "https://api.github.com/repos/stellarwp/assets/zipball/be4448d4e54396b1dac5c3aef87a260e2311a20e",
+                "reference": "be4448d4e54396b1dac5c3aef87a260e2311a20e",
                 "shasum": ""
             },
             "require-dev": {
@@ -332,7 +332,7 @@
                 "symfony/string": "^5.4",
                 "szepeviktor/phpstan-wordpress": "^1.1"
             },
-            "time": "2024-06-14T16:59:38+00:00",
+            "time": "2024-07-13T22:33:19+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -357,7 +357,7 @@
             "description": "A library for managing asset registration and enqueuing in WordPress.",
             "support": {
                 "issues": "https://github.com/stellarwp/assets/issues",
-                "source": "https://github.com/stellarwp/assets/tree/1.2.6"
+                "source": "https://github.com/stellarwp/assets/tree/1.2.7"
             },
             "install-path": "../stellarwp/assets"
         },
@@ -413,17 +413,17 @@
         },
         {
             "name": "stellarwp/db",
-            "version": "1.1.0",
-            "version_normalized": "1.1.0.0",
+            "version": "1.1.1",
+            "version_normalized": "1.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/db.git",
-                "reference": "9c76724be8b60e76b7281118e4ccdf2cc129f257"
+                "reference": "cbaed00b77f212b791263689cb8a24cbdfdf2100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/db/zipball/9c76724be8b60e76b7281118e4ccdf2cc129f257",
-                "reference": "9c76724be8b60e76b7281118e4ccdf2cc129f257",
+                "url": "https://api.github.com/repos/stellarwp/db/zipball/cbaed00b77f212b791263689cb8a24cbdfdf2100",
+                "reference": "cbaed00b77f212b791263689cb8a24cbdfdf2100",
                 "shasum": ""
             },
             "require-dev": {
@@ -441,7 +441,7 @@
                 "symfony/string": "^5.4",
                 "szepeviktor/phpstan-wordpress": "^1.1"
             },
-            "time": "2023-11-14T12:37:35+00:00",
+            "time": "2024-06-06T20:03:23+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -466,7 +466,7 @@
             "description": "A WPDB wrapper and query builder library.",
             "support": {
                 "issues": "https://github.com/stellarwp/db/issues",
-                "source": "https://github.com/stellarwp/db/tree/1.1.0"
+                "source": "https://github.com/stellarwp/db/tree/1.1.1"
             },
             "install-path": "../stellarwp/db"
         },
@@ -533,12 +533,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/models.git",
-                "reference": "1e364cc54883ac43fc25f7fce652259439af0a89"
+                "reference": "7c21d232c06a6670e5845570945791f2887ead48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/models/zipball/1e364cc54883ac43fc25f7fce652259439af0a89",
-                "reference": "1e364cc54883ac43fc25f7fce652259439af0a89",
+                "url": "https://api.github.com/repos/stellarwp/models/zipball/7c21d232c06a6670e5845570945791f2887ead48",
+                "reference": "7c21d232c06a6670e5845570945791f2887ead48",
                 "shasum": ""
             },
             "require": {
@@ -556,7 +556,7 @@
                 "lucatume/wp-browser": "^3.0.14",
                 "phpunit/phpunit": "~6.0"
             },
-            "time": "2023-09-12T15:59:24+00:00",
+            "time": "2024-05-10T21:20:20+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
@@ -582,23 +582,23 @@
             ],
             "support": {
                 "issues": "https://github.com/stellarwp/models/issues",
-                "source": "https://github.com/stellarwp/models/tree/1.2.1"
+                "source": "https://github.com/stellarwp/models/tree/main"
             },
             "install-path": "../stellarwp/models"
         },
         {
             "name": "stellarwp/schema",
-            "version": "1.1.6",
-            "version_normalized": "1.1.6.0",
+            "version": "1.1.7",
+            "version_normalized": "1.1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/schema.git",
-                "reference": "afef7300c8d67d0362b8f8ced83cfd28c3467211"
+                "reference": "4dc49390f9c9babedb85f70574603c8a3971edd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/schema/zipball/afef7300c8d67d0362b8f8ced83cfd28c3467211",
-                "reference": "afef7300c8d67d0362b8f8ced83cfd28c3467211",
+                "url": "https://api.github.com/repos/stellarwp/schema/zipball/4dc49390f9c9babedb85f70574603c8a3971edd7",
+                "reference": "4dc49390f9c9babedb85f70574603c8a3971edd7",
                 "shasum": ""
             },
             "require": {
@@ -623,7 +623,7 @@
                 "symfony/string": "^5.4",
                 "szepeviktor/phpstan-wordpress": "^1.1"
             },
-            "time": "2024-01-09T13:56:29+00:00",
+            "time": "2024-06-06T17:01:03+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -644,7 +644,7 @@
             "description": "A library for simplifying the creation and updates of custom tables within WordPress.",
             "support": {
                 "issues": "https://github.com/stellarwp/schema/issues",
-                "source": "https://github.com/stellarwp/schema/tree/1.1.6"
+                "source": "https://github.com/stellarwp/schema/tree/1.1.7"
             },
             "install-path": "../stellarwp/schema"
         },

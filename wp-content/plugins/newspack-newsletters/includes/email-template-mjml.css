@@ -61,7 +61,7 @@ h6 {
 
 /* List */
 ul, ol {
-	margin: 12px 0;
+	margin: 12px 15px;
 	padding: 0;
 	list-style-position: inside;
 }
@@ -71,7 +71,7 @@ blockquote,
 .wp-block-quote {
 	background: transparent;
 	border-left: 0.25em solid;
-	margin: 0;
+	margin: 0 0 0 12px;
 	padding-left: 24px;
 }
 blockquote cite,

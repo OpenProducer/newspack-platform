@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2
+class ComposerStaticInitad1bb90c6cc207e3f6eb7c74ddedcde8
 {
     public static $prefixLengthsPsr4 = array (
         'l' => 
@@ -14,6 +14,7 @@ class ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2
         'T' => 
         array (
             'Tribe\\' => 6,
+            'TEC\\Event_Automator\\' => 20,
             'TEC\\Common\\' => 11,
         ),
         'S' => 
@@ -53,6 +54,10 @@ class ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2
         'Tribe\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/Tribe',
+        ),
+        'TEC\\Event_Automator\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Common/Event_Automator',
         ),
         'TEC\\Common\\' => 
         array (
@@ -134,6 +139,7 @@ class ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2
         'TEC\\Common\\Exceptions\\Container_Exception' => __DIR__ . '/../..' . '/src/Common/Exceptions/Container_Exception.php',
         'TEC\\Common\\Exceptions\\Not_Bound_Exception' => __DIR__ . '/../..' . '/src/Common/Exceptions/Not_Bound_Exception.php',
         'TEC\\Common\\Integrations\\Integration_Abstract' => __DIR__ . '/../..' . '/src/Common/Integrations/Integration_Abstract.php',
+        'TEC\\Common\\Integrations\\Plugin_Merge_Provider_Abstract' => __DIR__ . '/../..' . '/src/Common/Integrations/Plugin_Merge_Provider_Abstract.php',
         'TEC\\Common\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Common/Integrations/Provider.php',
         'TEC\\Common\\Integrations\\Traits\\Module_Integration' => __DIR__ . '/../..' . '/src/Common/Integrations/Traits/Module_Integration.php',
         'TEC\\Common\\Integrations\\Traits\\Plugin_Integration' => __DIR__ . '/../..' . '/src/Common/Integrations/Traits/Plugin_Integration.php',
@@ -155,6 +161,104 @@ class ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2
         'TEC\\Common\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Common/Telemetry/Provider.php',
         'TEC\\Common\\Telemetry\\Telemetry' => __DIR__ . '/../..' . '/src/Common/Telemetry/Telemetry.php',
         'TEC\\Common\\Translations_Loader' => __DIR__ . '/../..' . '/src/Common/Translations_Loader.php',
+        'TEC\\Event_Automator\\Admin\\Tabs\\Integrations' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Admin/Tabs/Integrations.php',
+        'TEC\\Event_Automator\\Admin\\Tabs\\Tabs_Provider' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Admin/Tabs/Tabs_Provider.php',
+        'TEC\\Event_Automator\\Hooks' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Hooks.php',
+        'TEC\\Event_Automator\\Integrations\\Admin\\Abstract_Dashboard' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Admin/Abstract_Dashboard.php',
+        'TEC\\Event_Automator\\Integrations\\Admin\\Abstract_Endpoints_Manager' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Admin/Abstract_Endpoints_Manager.php',
+        'TEC\\Event_Automator\\Integrations\\Assets' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Assets.php',
+        'TEC\\Event_Automator\\Integrations\\Connections\\Integration_AJAX' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Connections/Integration_AJAX.php',
+        'TEC\\Event_Automator\\Integrations\\Connections\\Integration_Connections' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Connections/Integration_Connections.php',
+        'TEC\\Event_Automator\\Integrations\\Connections\\Integration_Settings' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Connections/Integration_Settings.php',
+        'TEC\\Event_Automator\\Integrations\\Connections\\Integration_Template_Modifications' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Connections/Integration_Template_Modifications.php',
+        'TEC\\Event_Automator\\Integrations\\Connections\\Integration_Url' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Connections/Integration_Url.php',
+        'TEC\\Event_Automator\\Integrations\\REST\\V1\\Documentation\\Integration_Swagger_Documentation' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/REST/V1/Documentation/Integration_Swagger_Documentation.php',
+        'TEC\\Event_Automator\\Integrations\\REST\\V1\\Endpoints\\Queue\\Integration_REST_Endpoint' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/REST/V1/Endpoints/Queue/Integration_REST_Endpoint.php',
+        'TEC\\Event_Automator\\Integrations\\REST\\V1\\Interfaces\\REST_Endpoint_Interface' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/REST/V1/Interfaces/REST_Endpoint_Interface.php',
+        'TEC\\Event_Automator\\Integrations\\REST\\V1\\Utilities\\Action_Endpoints' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/REST/V1/Utilities/Action_Endpoints.php',
+        'TEC\\Event_Automator\\Integrations\\Trigger_Queue\\Integration_Trigger_Queue' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Integrations/Trigger_Queue/Integration_Trigger_Queue.php',
+        'TEC\\Event_Automator\\Plugin' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Plugin.php',
+        'TEC\\Event_Automator\\Plugin_Register' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Plugin_Register.php',
+        'TEC\\Event_Automator\\Power_Automate\\Actions' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Actions.php',
+        'TEC\\Event_Automator\\Power_Automate\\Admin\\Dashboard' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Admin/Dashboard.php',
+        'TEC\\Event_Automator\\Power_Automate\\Admin\\Endpoints_Manager' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Admin/Endpoints_Manager.php',
+        'TEC\\Event_Automator\\Power_Automate\\Api' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Api.php',
+        'TEC\\Event_Automator\\Power_Automate\\Power_Automate_Provider' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Power_Automate_Provider.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Documentation\\Swagger_Documentation' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Documentation/Swagger_Documentation.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Abstract_REST_Endpoint' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Abstract_REST_Endpoint.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Actions\\Create_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Actions/Create_Events.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Queue\\Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Queue/Attendees.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Queue\\Canceled_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Queue/Canceled_Events.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Queue\\Checkin' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Queue/Checkin.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Queue\\New_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Queue/New_Events.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Queue\\Orders' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Queue/Orders.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Queue\\Refunded_Orders' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Queue/Refunded_Orders.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Queue\\Updated_Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Queue/Updated_Attendees.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Endpoints\\Queue\\Updated_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Endpoints/Queue/Updated_Events.php',
+        'TEC\\Event_Automator\\Power_Automate\\REST\\V1\\Traits\\REST_Namespace' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/REST/V1/Traits/REST_Namespace.php',
+        'TEC\\Event_Automator\\Power_Automate\\Settings' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Settings.php',
+        'TEC\\Event_Automator\\Power_Automate\\Template_Modifications' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Template_Modifications.php',
+        'TEC\\Event_Automator\\Power_Automate\\Trigger_Queue\\Abstract_Trigger_Queue' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Trigger_Queue/Abstract_Trigger_Queue.php',
+        'TEC\\Event_Automator\\Power_Automate\\Triggers\\Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Triggers/Attendees.php',
+        'TEC\\Event_Automator\\Power_Automate\\Triggers\\Canceled_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Triggers/Canceled_Events.php',
+        'TEC\\Event_Automator\\Power_Automate\\Triggers\\Checkin' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Triggers/Checkin.php',
+        'TEC\\Event_Automator\\Power_Automate\\Triggers\\New_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Triggers/New_Events.php',
+        'TEC\\Event_Automator\\Power_Automate\\Triggers\\Orders' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Triggers/Orders.php',
+        'TEC\\Event_Automator\\Power_Automate\\Triggers\\Refunded_Orders' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Triggers/Refunded_Orders.php',
+        'TEC\\Event_Automator\\Power_Automate\\Triggers\\Updated_Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Triggers/Updated_Attendees.php',
+        'TEC\\Event_Automator\\Power_Automate\\Triggers\\Updated_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Triggers/Updated_Events.php',
+        'TEC\\Event_Automator\\Power_Automate\\Url' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Power_Automate/Url.php',
+        'TEC\\Event_Automator\\Service_Providers\\Context_Provider' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Service_Providers/Context_Provider.php',
+        'TEC\\Event_Automator\\Templates\\Admin_Template' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Templates/Admin_Template.php',
+        'TEC\\Event_Automator\\Traits\\Last_Access' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/Last_Access.php',
+        'TEC\\Event_Automator\\Traits\\Maps\\Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/Maps/Attendees.php',
+        'TEC\\Event_Automator\\Traits\\Maps\\Commerce\\EDD' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/Maps/Commerce/EDD.php',
+        'TEC\\Event_Automator\\Traits\\Maps\\Commerce\\Tickets_Commerce' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/Maps/Commerce/Tickets_Commerce.php',
+        'TEC\\Event_Automator\\Traits\\Maps\\Commerce\\WooCommerce' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/Maps/Commerce/WooCommerce.php',
+        'TEC\\Event_Automator\\Traits\\Maps\\Event' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/Maps/Event.php',
+        'TEC\\Event_Automator\\Traits\\Maps\\Ticket' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/Maps/Ticket.php',
+        'TEC\\Event_Automator\\Traits\\With_AJAX' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/With_AJAX.php',
+        'TEC\\Event_Automator\\Traits\\With_Nonce_Routes' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Traits/With_Nonce_Routes.php',
+        'TEC\\Event_Automator\\Updater' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Updater.php',
+        'TEC\\Event_Automator\\Zapier\\Abstract_API_Key_Api' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Abstract_API_Key_Api.php',
+        'TEC\\Event_Automator\\Zapier\\Actions' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Actions.php',
+        'TEC\\Event_Automator\\Zapier\\Admin\\Dashboard' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Admin/Dashboard.php',
+        'TEC\\Event_Automator\\Zapier\\Admin\\Endpoints_Manager' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Admin/Endpoints_Manager.php',
+        'TEC\\Event_Automator\\Zapier\\Api' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Api.php',
+        'TEC\\Event_Automator\\Zapier\\Assets' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Assets.php',
+        'TEC\\Event_Automator\\Zapier\\Privacy_Notice' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Privacy_Notice.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Documentation\\Swagger_Documentation' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Documentation/Swagger_Documentation.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Abstract_REST_Endpoint' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Abstract_REST_Endpoint.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Actions\\Create_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Actions/Create_Events.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Actions\\Find_Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Actions/Find_Attendees.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Actions\\Find_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Actions/Find_Events.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Actions\\Find_Tickets' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Actions/Find_Tickets.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Actions\\Update_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Actions/Update_Events.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Attendees.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Authorize' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Authorize.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Canceled_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Canceled_Events.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Checkin' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Checkin.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\New_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/New_Events.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Orders' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Orders.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Refunded_Orders' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Refunded_Orders.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Updated_Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Updated_Attendees.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Endpoints\\Updated_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Endpoints/Updated_Events.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Traits\\REST_Namespace' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Traits/REST_Namespace.php',
+        'TEC\\Event_Automator\\Zapier\\REST\\V1\\Utilities\\Action_Endpoints' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/REST/V1/Utilities/Action_Endpoints.php',
+        'TEC\\Event_Automator\\Zapier\\Settings' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Settings.php',
+        'TEC\\Event_Automator\\Zapier\\Template_Modifications' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Template_Modifications.php',
+        'TEC\\Event_Automator\\Zapier\\Traits\\Last_Access' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Traits/Last_Access.php',
+        'TEC\\Event_Automator\\Zapier\\Trigger_Queue\\Abstract_Trigger_Queue' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Trigger_Queue/Abstract_Trigger_Queue.php',
+        'TEC\\Event_Automator\\Zapier\\Triggers\\Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Triggers/Attendees.php',
+        'TEC\\Event_Automator\\Zapier\\Triggers\\Canceled_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Triggers/Canceled_Events.php',
+        'TEC\\Event_Automator\\Zapier\\Triggers\\Checkin' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Triggers/Checkin.php',
+        'TEC\\Event_Automator\\Zapier\\Triggers\\New_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Triggers/New_Events.php',
+        'TEC\\Event_Automator\\Zapier\\Triggers\\Orders' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Triggers/Orders.php',
+        'TEC\\Event_Automator\\Zapier\\Triggers\\Refunded_Orders' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Triggers/Refunded_Orders.php',
+        'TEC\\Event_Automator\\Zapier\\Triggers\\Updated_Attendees' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Triggers/Updated_Attendees.php',
+        'TEC\\Event_Automator\\Zapier\\Triggers\\Updated_Events' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Triggers/Updated_Events.php',
+        'TEC\\Event_Automator\\Zapier\\Url' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Url.php',
+        'TEC\\Event_Automator\\Zapier\\Zapier_Provider' => __DIR__ . '/../..' . '/src/Common/Event_Automator/Zapier/Zapier_Provider.php',
         'Tribe\\Admin\\Conditional_Content\\Black_Friday' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/Black_Friday.php',
         'Tribe\\Admin\\Conditional_Content\\Datetime_Conditional_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/Datetime_Conditional_Abstract.php',
         'Tribe\\Admin\\Conditional_Content\\End_Of_Year_Sale' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/End_Of_Year_Sale.php',
@@ -243,9 +347,9 @@ class ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8d1a6a11034c5373e397b6117a9821a2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitad1bb90c6cc207e3f6eb7c74ddedcde8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitad1bb90c6cc207e3f6eb7c74ddedcde8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitad1bb90c6cc207e3f6eb7c74ddedcde8::$classMap;
 
         }, null, ClassLoader::class);
     }

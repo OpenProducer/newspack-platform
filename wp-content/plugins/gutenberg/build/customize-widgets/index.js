@@ -1030,24 +1030,16 @@ function Header({
           icon: !(0,external_wp_i18n_namespaceObject.isRTL)() ? library_undo : library_redo
           /* translators: button label text should, if possible, be under 16 characters. */,
           label: (0,external_wp_i18n_namespaceObject.__)('Undo'),
-          shortcut: external_wp_keycodes_namespaceObject.displayShortcut.primary('z')
-          // If there are no undo levels we don't want to actually disable this
-          // button, because it will remove focus for keyboard users.
-          // See: https://github.com/WordPress/gutenberg/issues/3486
-          ,
-          "aria-disabled": !hasUndo,
+          shortcut: external_wp_keycodes_namespaceObject.displayShortcut.primary('z'),
+          disabled: !hasUndo,
           onClick: sidebar.undo,
           className: "customize-widgets-editor-history-button undo-button"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
           icon: !(0,external_wp_i18n_namespaceObject.isRTL)() ? library_redo : library_undo
           /* translators: button label text should, if possible, be under 16 characters. */,
           label: (0,external_wp_i18n_namespaceObject.__)('Redo'),
-          shortcut: shortcut
-          // If there are no undo levels we don't want to actually disable this
-          // button, because it will remove focus for keyboard users.
-          // See: https://github.com/WordPress/gutenberg/issues/3486
-          ,
-          "aria-disabled": !hasRedo,
+          shortcut: shortcut,
+          disabled: !hasRedo,
           onClick: sidebar.redo,
           className: "customize-widgets-editor-history-button redo-button"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
