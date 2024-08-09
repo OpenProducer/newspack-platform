@@ -510,7 +510,7 @@ __webpack_require__.d(__webpack_exports__, {
   useEntityProp: () => (/* reexport */ useEntityProp),
   useEntityRecord: () => (/* reexport */ useEntityRecord),
   useEntityRecords: () => (/* reexport */ useEntityRecords),
-  useResourcePermissions: () => (/* reexport */ useResourcePermissions)
+  useResourcePermissions: () => (/* reexport */ use_resource_permissions)
 });
 
 // NAMESPACE OBJECT: ./packages/core-data/build-module/actions.js
@@ -21140,6 +21140,31 @@ function isRawAttribute(entity, attribute) {
   return (entity.rawAttributes || []).includes(attribute);
 }
 
+;// CONCATENATED MODULE: ./packages/core-data/build-module/utils/user-permissions.js
+const ALLOWED_RESOURCE_ACTIONS = ['create', 'read', 'update', 'delete'];
+function getUserPermissionsFromResponse(response) {
+  const permissions = {};
+
+  // Optional chaining operator is used here because the API requests don't
+  // return the expected result in the React native version. Instead, API requests
+  // only return the result, without including response properties like the headers.
+  const allowedMethods = response.headers?.get('allow') || '';
+  const methods = {
+    create: 'POST',
+    read: 'GET',
+    update: 'PUT',
+    delete: 'DELETE'
+  };
+  for (const [actionName, methodName] of Object.entries(methods)) {
+    permissions[actionName] = allowedMethods.includes(methodName);
+  }
+  return permissions;
+}
+function getUserPermissionCacheKey(action, resource, id) {
+  const key = (typeof resource === 'object' ? [action, resource.kind, resource.name, resource.id] : [action, resource, id]).filter(Boolean).join('/');
+  return key;
+}
+
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/selectors.js
 /**
  * WordPress dependencies
@@ -21911,14 +21936,19 @@ function isPreviewEmbedFallback(state, url) {
  *
  * @param state    Data state.
  * @param action   Action to check. One of: 'create', 'read', 'update', 'delete'.
- * @param resource REST resource to check, e.g. 'media' or 'posts'.
+ * @param resource Entity resource to check. Accepts entity object `{ kind: 'root', name: 'media', id: 1 }`
+ *                 or REST base as a string - `media`.
  * @param id       Optional ID of the rest resource to check.
  *
  * @return Whether or not the user can perform the action,
  *                             or `undefined` if the OPTIONS request is still being made.
  */
 function canUser(state, action, resource, id) {
-  const key = [action, resource, id].filter(Boolean).join('/');
+  const isEntity = typeof resource === 'object';
+  if (isEntity && (!resource.kind || !resource.name)) {
+    return false;
+  }
+  const key = getUserPermissionCacheKey(action, resource, id);
   return state.userPermissions[key];
 }
 
@@ -21938,12 +21968,15 @@ function canUser(state, action, resource, id) {
  * or `undefined` if the OPTIONS request is still being made.
  */
 function canUserEditEntityRecord(state, kind, name, recordId) {
-  const entityConfig = getEntityConfig(state, kind, name);
-  if (!entityConfig) {
-    return false;
-  }
-  const resource = entityConfig.__unstable_rest_base;
-  return canUser(state, 'update', resource, recordId);
+  external_wp_deprecated_default()(`wp.data.select( 'core' ).canUserEditEntityRecord()`, {
+    since: '6.7',
+    alternative: `wp.data.select( 'core' ).canUser( 'update', { kind, name, id } )`
+  });
+  return canUser(state, 'update', {
+    kind,
+    name,
+    id: recordId
+  });
 }
 
 /**
@@ -22606,7 +22639,8 @@ const resolvers_getCurrentUser = () => async ({
  */
 const resolvers_getEntityRecord = (kind, name, key = '', query) => async ({
   select,
-  dispatch
+  dispatch,
+  registry
 }) => {
   const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
@@ -22678,10 +22712,28 @@ const resolvers_getEntityRecord = (kind, name, key = '', query) => async ({
           return;
         }
       }
-      const record = await external_wp_apiFetch_default()({
-        path
+      const response = await external_wp_apiFetch_default()({
+        path,
+        parse: false
       });
-      dispatch.receiveEntityRecords(kind, name, record, query);
+      const record = await response.json();
+      const permissions = getUserPermissionsFromResponse(response);
+      registry.batch(() => {
+        dispatch.receiveEntityRecords(kind, name, record, query);
+        for (const action of ALLOWED_RESOURCE_ACTIONS) {
+          const permissionKey = getUserPermissionCacheKey(action, {
+            kind,
+            name,
+            id: key
+          });
+          dispatch.receiveUserPermission(permissionKey, permissions[action]);
+          dispatch.finishResolution('canUser', [action, {
+            kind,
+            name,
+            id: key
+          }]);
+        }
+      });
     }
   } finally {
     dispatch.__unstableReleaseStoreLock(lock);
@@ -22771,16 +22823,7 @@ const resolvers_getEntityRecords = (kind, name, query = {}) => async ({
       if (!query?._fields && !query.context) {
         const key = entityConfig.key || DEFAULT_ENTITY_KEY;
         const resolutionsArgs = records.filter(record => record?.[key]).map(record => [kind, name, record[key]]);
-        dispatch({
-          type: 'START_RESOLUTIONS',
-          selectorName: 'getEntityRecord',
-          args: resolutionsArgs
-        });
-        dispatch({
-          type: 'FINISH_RESOLUTIONS',
-          selectorName: 'getEntityRecord',
-          args: resolutionsArgs
-        });
+        dispatch.finishResolutions('getEntityRecord', resolutionsArgs);
       }
       dispatch.__unstableReleaseStoreLock(lock);
     });
@@ -22835,26 +22878,39 @@ const resolvers_getEmbedPreview = url => async ({
  * Checks whether the current user can perform the given action on the given
  * REST resource.
  *
- * @param {string}  requestedAction Action to check. One of: 'create', 'read', 'update',
- *                                  'delete'.
- * @param {string}  resource        REST resource to check, e.g. 'media' or 'posts'.
- * @param {?string} id              ID of the rest resource to check.
+ * @param {string}        requestedAction Action to check. One of: 'create', 'read', 'update',
+ *                                        'delete'.
+ * @param {string|Object} resource        Entity resource to check. Accepts entity object `{ kind: 'root', name: 'media', id: 1 }`
+ *                                        or REST base as a string - `media`.
+ * @param {?string}       id              ID of the rest resource to check.
  */
 const resolvers_canUser = (requestedAction, resource, id) => async ({
   dispatch,
   registry
 }) => {
+  if (!ALLOWED_RESOURCE_ACTIONS.includes(requestedAction)) {
+    throw new Error(`'${requestedAction}' is not a valid action.`);
+  }
+  let resourcePath = null;
+  if (typeof resource === 'object') {
+    if (!resource.kind || !resource.name) {
+      throw new Error('The entity resource object is not valid.');
+    }
+    const configs = await dispatch(getOrLoadEntitiesConfig(resource.kind, resource.name));
+    const entityConfig = configs.find(config => config.name === resource.name && config.kind === resource.kind);
+    if (!entityConfig) {
+      return;
+    }
+    resourcePath = entityConfig.baseURL + (resource.id ? '/' + resource.id : '');
+  } else {
+    resourcePath = `/wp/v2/${resource}` + (id ? '/' + id : '');
+  }
   const {
     hasStartedResolution
   } = registry.select(STORE_NAME);
-  const resourcePath = id ? `${resource}/${id}` : resource;
-  const retrievedActions = ['create', 'read', 'update', 'delete'];
-  if (!retrievedActions.includes(requestedAction)) {
-    throw new Error(`'${requestedAction}' is not a valid action.`);
-  }
 
   // Prevent resolving the same resource twice.
-  for (const relatedAction of retrievedActions) {
+  for (const relatedAction of ALLOWED_RESOURCE_ACTIONS) {
     if (relatedAction === requestedAction) {
       continue;
     }
@@ -22866,7 +22922,7 @@ const resolvers_canUser = (requestedAction, resource, id) => async ({
   let response;
   try {
     response = await external_wp_apiFetch_default()({
-      path: `/wp/v2/${resourcePath}`,
+      path: resourcePath,
       method: 'OPTIONS',
       parse: false
     });
@@ -22875,25 +22931,16 @@ const resolvers_canUser = (requestedAction, resource, id) => async ({
     // 5xx). The previously determined isAllowed value will remain in the store.
     return;
   }
-
-  // Optional chaining operator is used here because the API requests don't
-  // return the expected result in the native version. Instead, API requests
-  // only return the result, without including response properties like the headers.
-  const allowHeader = response.headers?.get('allow');
-  const allowedMethods = allowHeader?.allow || allowHeader || '';
-  const permissions = {};
-  const methods = {
-    create: 'POST',
-    read: 'GET',
-    update: 'PUT',
-    delete: 'DELETE'
-  };
-  for (const [actionName, methodName] of Object.entries(methods)) {
-    permissions[actionName] = allowedMethods.includes(methodName);
-  }
+  const permissions = getUserPermissionsFromResponse(response);
   registry.batch(() => {
-    for (const action of retrievedActions) {
-      dispatch.receiveUserPermission(`${action}/${resourcePath}`, permissions[action]);
+    for (const action of ALLOWED_RESOURCE_ACTIONS) {
+      const key = getUserPermissionCacheKey(action, resource, id);
+      dispatch.receiveUserPermission(key, permissions[action]);
+
+      // Mark related action resolutions as finished.
+      if (action !== requestedAction) {
+        dispatch.finishResolution('canUser', [action, resource, id]);
+      }
     }
   });
 };
@@ -22909,13 +22956,11 @@ const resolvers_canUser = (requestedAction, resource, id) => async ({
 const resolvers_canUserEditEntityRecord = (kind, name, recordId) => async ({
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
-  const entityConfig = configs.find(config => config.name === name && config.kind === kind);
-  if (!entityConfig) {
-    return;
-  }
-  const resource = entityConfig.__unstable_rest_base;
-  await dispatch(resolvers_canUser('update', resource, recordId));
+  await dispatch(resolvers_canUser('update', {
+    kind,
+    name,
+    id: recordId
+  }));
 };
 
 /**
@@ -23195,16 +23240,8 @@ const resolvers_getRevisions = (kind, name, recordKey, query = {}) => async ({
     if (!query?._fields && !query.context) {
       const key = entityConfig.key || DEFAULT_ENTITY_KEY;
       const resolutionsArgs = records.filter(record => record[key]).map(record => [kind, name, recordKey, record[key]]);
-      dispatch({
-        type: 'START_RESOLUTIONS',
-        selectorName: 'getRevision',
-        args: resolutionsArgs
-      });
-      dispatch({
-        type: 'FINISH_RESOLUTIONS',
-        selectorName: 'getRevision',
-        args: resolutionsArgs
-      });
+      dispatch.startResolutions('getRevision', resolutionsArgs);
+      dispatch.finishResolutions('getRevision', resolutionsArgs);
     }
   }
 };
@@ -23526,187 +23563,12 @@ const {
 
 ;// CONCATENATED MODULE: external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: external ["wp","blocks"]
-const external_wp_blocks_namespaceObject = window["wp"]["blocks"];
-;// CONCATENATED MODULE: external ["wp","blockEditor"]
-const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
-;// CONCATENATED MODULE: ./packages/core-data/build-module/footnotes/get-rich-text-values-cached.js
+;// CONCATENATED MODULE: ./packages/core-data/build-module/entity-context.js
 /**
  * WordPress dependencies
  */
 
-
-/**
- * Internal dependencies
- */
-
-
-// TODO: The following line should have been:
-//
-//   const unlockedApis = unlock( blockEditorPrivateApis );
-//
-// But there are hidden circular dependencies in RNMobile code, specifically in
-// certain native components in the `components` package that depend on
-// `block-editor`. What follows is a workaround that defers the `unlock` call
-// to prevent native code from failing.
-//
-// Fix once https://github.com/WordPress/gutenberg/issues/52692 is closed.
-let unlockedApis;
-const cache = new WeakMap();
-function getRichTextValuesCached(block) {
-  if (!unlockedApis) {
-    unlockedApis = unlock(external_wp_blockEditor_namespaceObject.privateApis);
-  }
-  if (!cache.has(block)) {
-    const values = unlockedApis.getRichTextValues([block]);
-    cache.set(block, values);
-  }
-  return cache.get(block);
-}
-
-;// CONCATENATED MODULE: ./packages/core-data/build-module/footnotes/get-footnotes-order.js
-/**
- * Internal dependencies
- */
-
-const get_footnotes_order_cache = new WeakMap();
-function getBlockFootnotesOrder(block) {
-  if (!get_footnotes_order_cache.has(block)) {
-    const order = [];
-    for (const value of getRichTextValuesCached(block)) {
-      if (!value) {
-        continue;
-      }
-
-      // replacements is a sparse array, use forEach to skip empty slots.
-      value.replacements.forEach(({
-        type,
-        attributes
-      }) => {
-        if (type === 'core/footnote') {
-          order.push(attributes['data-fn']);
-        }
-      });
-    }
-    get_footnotes_order_cache.set(block, order);
-  }
-  return get_footnotes_order_cache.get(block);
-}
-function getFootnotesOrder(blocks) {
-  // We can only separate getting order from blocks at the root level. For
-  // deeper inner blocks, this will not work since it's possible to have both
-  // inner blocks and block attributes, so order needs to be computed from the
-  // Edit functions as a whole.
-  return blocks.flatMap(getBlockFootnotesOrder);
-}
-
-;// CONCATENATED MODULE: ./packages/core-data/build-module/footnotes/index.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-let oldFootnotes = {};
-function updateFootnotesFromMeta(blocks, meta) {
-  const output = {
-    blocks
-  };
-  if (!meta) {
-    return output;
-  }
-
-  // If meta.footnotes is empty, it means the meta is not registered.
-  if (meta.footnotes === undefined) {
-    return output;
-  }
-  const newOrder = getFootnotesOrder(blocks);
-  const footnotes = meta.footnotes ? JSON.parse(meta.footnotes) : [];
-  const currentOrder = footnotes.map(fn => fn.id);
-  if (currentOrder.join('') === newOrder.join('')) {
-    return output;
-  }
-  const newFootnotes = newOrder.map(fnId => footnotes.find(fn => fn.id === fnId) || oldFootnotes[fnId] || {
-    id: fnId,
-    content: ''
-  });
-  function updateAttributes(attributes) {
-    // Only attempt to update attributes, if attributes is an object.
-    if (!attributes || Array.isArray(attributes) || typeof attributes !== 'object') {
-      return attributes;
-    }
-    attributes = {
-      ...attributes
-    };
-    for (const key in attributes) {
-      const value = attributes[key];
-      if (Array.isArray(value)) {
-        attributes[key] = value.map(updateAttributes);
-        continue;
-      }
-
-      // To do, remove support for string values?
-      if (typeof value !== 'string' && !(value instanceof external_wp_richText_namespaceObject.RichTextData)) {
-        continue;
-      }
-      const richTextValue = typeof value === 'string' ? external_wp_richText_namespaceObject.RichTextData.fromHTMLString(value) : new external_wp_richText_namespaceObject.RichTextData(value);
-      richTextValue.replacements.forEach(replacement => {
-        if (replacement.type === 'core/footnote') {
-          const id = replacement.attributes['data-fn'];
-          const index = newOrder.indexOf(id);
-          // The innerHTML contains the count wrapped in a link.
-          const countValue = (0,external_wp_richText_namespaceObject.create)({
-            html: replacement.innerHTML
-          });
-          countValue.text = String(index + 1);
-          countValue.formats = Array.from({
-            length: countValue.text.length
-          }, () => countValue.formats[0]);
-          countValue.replacements = Array.from({
-            length: countValue.text.length
-          }, () => countValue.replacements[0]);
-          replacement.innerHTML = (0,external_wp_richText_namespaceObject.toHTMLString)({
-            value: countValue
-          });
-        }
-      });
-      attributes[key] = typeof value === 'string' ? richTextValue.toHTMLString() : richTextValue;
-    }
-    return attributes;
-  }
-  function updateBlocksAttributes(__blocks) {
-    return __blocks.map(block => {
-      return {
-        ...block,
-        attributes: updateAttributes(block.attributes),
-        innerBlocks: updateBlocksAttributes(block.innerBlocks)
-      };
-    });
-  }
-
-  // We need to go through all block attributes deeply and update the
-  // footnote anchor numbering (textContent) to match the new order.
-  const newBlocks = updateBlocksAttributes(blocks);
-  oldFootnotes = {
-    ...oldFootnotes,
-    ...footnotes.reduce((acc, fn) => {
-      if (!newOrder.includes(fn.id)) {
-        acc[fn.id] = fn;
-      }
-      return acc;
-    }, {})
-  };
-  return {
-    meta: {
-      ...meta,
-      footnotes: JSON.stringify(newFootnotes)
-    },
-    blocks: newBlocks
-  };
-}
+const EntityContext = (0,external_wp_element_namespaceObject.createContext)({});
 
 ;// CONCATENATED MODULE: external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
@@ -23716,16 +23578,10 @@ const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
  */
 
 
-
-
 /**
  * Internal dependencies
  */
 
-
-
-const EMPTY_ARRAY = [];
-const EntityContext = (0,external_wp_element_namespaceObject.createContext)({});
 
 /**
  * Context provider component for providing
@@ -23740,6 +23596,7 @@ const EntityContext = (0,external_wp_element_namespaceObject.createContext)({});
  * @return {Object} The provided children, wrapped with
  *                   the entity's context provider.
  */
+
 function EntityProvider({
   kind,
   type: name,
@@ -23758,181 +23615,6 @@ function EntityProvider({
     value: childContext,
     children: children
   });
-}
-
-/**
- * Hook that returns the ID for the nearest
- * provided entity of the specified type.
- *
- * @param {string} kind The entity kind.
- * @param {string} name The entity name.
- */
-function useEntityId(kind, name) {
-  const context = (0,external_wp_element_namespaceObject.useContext)(EntityContext);
-  return context?.[kind]?.[name];
-}
-
-/**
- * Hook that returns the value and a setter for the
- * specified property of the nearest provided
- * entity of the specified type.
- *
- * @param {string} kind  The entity kind.
- * @param {string} name  The entity name.
- * @param {string} prop  The property name.
- * @param {string} [_id] An entity ID to use instead of the context-provided one.
- *
- * @return {[*, Function, *]} An array where the first item is the
- *                            property value, the second is the
- *                            setter and the third is the full value
- * 							  object from REST API containing more
- * 							  information like `raw`, `rendered` and
- * 							  `protected` props.
- */
-function useEntityProp(kind, name, prop, _id) {
-  const providerId = useEntityId(kind, name);
-  const id = _id !== null && _id !== void 0 ? _id : providerId;
-  const {
-    value,
-    fullValue
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getEntityRecord,
-      getEditedEntityRecord
-    } = select(STORE_NAME);
-    const record = getEntityRecord(kind, name, id); // Trigger resolver.
-    const editedRecord = getEditedEntityRecord(kind, name, id);
-    return record && editedRecord ? {
-      value: editedRecord[prop],
-      fullValue: record[prop]
-    } : {};
-  }, [kind, name, id, prop]);
-  const {
-    editEntityRecord
-  } = (0,external_wp_data_namespaceObject.useDispatch)(STORE_NAME);
-  const setValue = (0,external_wp_element_namespaceObject.useCallback)(newValue => {
-    editEntityRecord(kind, name, id, {
-      [prop]: newValue
-    });
-  }, [editEntityRecord, kind, name, id, prop]);
-  return [value, setValue, fullValue];
-}
-const parsedBlocksCache = new WeakMap();
-
-/**
- * Hook that returns block content getters and setters for
- * the nearest provided entity of the specified type.
- *
- * The return value has the shape `[ blocks, onInput, onChange ]`.
- * `onInput` is for block changes that don't create undo levels
- * or dirty the post, non-persistent changes, and `onChange` is for
- * persistent changes. They map directly to the props of a
- * `BlockEditorProvider` and are intended to be used with it,
- * or similar components or hooks.
- *
- * @param {string} kind         The entity kind.
- * @param {string} name         The entity name.
- * @param {Object} options
- * @param {string} [options.id] An entity ID to use instead of the context-provided one.
- *
- * @return {[unknown[], Function, Function]} The block array and setters.
- */
-function useEntityBlockEditor(kind, name, {
-  id: _id
-} = {}) {
-  const providerId = useEntityId(kind, name);
-  const id = _id !== null && _id !== void 0 ? _id : providerId;
-  const {
-    getEntityRecord,
-    getEntityRecordEdits
-  } = (0,external_wp_data_namespaceObject.useSelect)(STORE_NAME);
-  const {
-    content,
-    editedBlocks,
-    meta
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    if (!id) {
-      return {};
-    }
-    const {
-      getEditedEntityRecord
-    } = select(STORE_NAME);
-    const editedRecord = getEditedEntityRecord(kind, name, id);
-    return {
-      editedBlocks: editedRecord.blocks,
-      content: editedRecord.content,
-      meta: editedRecord.meta
-    };
-  }, [kind, name, id]);
-  const {
-    __unstableCreateUndoLevel,
-    editEntityRecord
-  } = (0,external_wp_data_namespaceObject.useDispatch)(STORE_NAME);
-  const blocks = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (!id) {
-      return undefined;
-    }
-    if (editedBlocks) {
-      return editedBlocks;
-    }
-    if (!content || typeof content !== 'string') {
-      return EMPTY_ARRAY;
-    }
-
-    // If there's an edit, cache the parsed blocks by the edit.
-    // If not, cache by the original enity record.
-    const edits = getEntityRecordEdits(kind, name, id);
-    const isUnedited = !edits || !Object.keys(edits).length;
-    const cackeKey = isUnedited ? getEntityRecord(kind, name, id) : edits;
-    let _blocks = parsedBlocksCache.get(cackeKey);
-    if (!_blocks) {
-      _blocks = (0,external_wp_blocks_namespaceObject.parse)(content);
-      parsedBlocksCache.set(cackeKey, _blocks);
-    }
-    return _blocks;
-  }, [kind, name, id, editedBlocks, content, getEntityRecord, getEntityRecordEdits]);
-  const updateFootnotes = (0,external_wp_element_namespaceObject.useCallback)(_blocks => updateFootnotesFromMeta(_blocks, meta), [meta]);
-  const onChange = (0,external_wp_element_namespaceObject.useCallback)((newBlocks, options) => {
-    const noChange = blocks === newBlocks;
-    if (noChange) {
-      return __unstableCreateUndoLevel(kind, name, id);
-    }
-    const {
-      selection,
-      ...rest
-    } = options;
-
-    // We create a new function here on every persistent edit
-    // to make sure the edit makes the post dirty and creates
-    // a new undo level.
-    const edits = {
-      selection,
-      content: ({
-        blocks: blocksForSerialization = []
-      }) => (0,external_wp_blocks_namespaceObject.__unstableSerializeAndClean)(blocksForSerialization),
-      ...updateFootnotes(newBlocks)
-    };
-    editEntityRecord(kind, name, id, edits, {
-      isCached: false,
-      ...rest
-    });
-  }, [kind, name, id, blocks, updateFootnotes, __unstableCreateUndoLevel, editEntityRecord]);
-  const onInput = (0,external_wp_element_namespaceObject.useCallback)((newBlocks, options) => {
-    const {
-      selection,
-      ...rest
-    } = options;
-    const footnotesChanges = updateFootnotes(newBlocks);
-    const edits = {
-      selection,
-      ...footnotesChanges
-    };
-    editEntityRecord(kind, name, id, edits, {
-      isCached: true,
-      ...rest
-    });
-  }, [kind, name, id, updateFootnotes, editEntityRecord]);
-  return [blocks, onInput, onChange];
 }
 
 ;// CONCATENATED MODULE: ./node_modules/memize/dist/index.js
@@ -24397,7 +24079,7 @@ function __experimentalUseEntityRecord(kind, name, recordId, options) {
  */
 
 
-const use_entity_records_EMPTY_ARRAY = [];
+const EMPTY_ARRAY = [];
 
 /**
  * Resolves the specified entity records.
@@ -24454,7 +24136,7 @@ function useEntityRecords(kind, name, queryArgs = {}, options = {
     if (!options.enabled) {
       return {
         // Avoiding returning a new reference on every execution.
-        data: use_entity_records_EMPTY_ARRAY
+        data: EMPTY_ARRAY
       };
     }
     return query(store).getEntityRecords(kind, name, queryArgs);
@@ -24489,10 +24171,13 @@ function __experimentalUseEntityRecords(kind, name, queryArgs, options) {
   return useEntityRecords(kind, name, queryArgs, options);
 }
 
+;// CONCATENATED MODULE: external ["wp","warning"]
+const external_wp_warning_namespaceObject = window["wp"]["warning"];
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/hooks/use-resource-permissions.js
 /**
  * WordPress dependencies
  */
+
 
 
 /**
@@ -24511,15 +24196,17 @@ function __experimentalUseEntityRecords(kind, name, queryArgs, options) {
  *
  * @since 6.1.0 Introduced in WordPress core.
  *
- * @param    resource The resource in question, e.g. media.
- * @param    id       ID of a specific resource entry, if needed, e.g. 10.
+ * @param    resource Entity resource to check. Accepts entity object `{ kind: 'root', name: 'media', id: 1 }`
+ *                    or REST base as a string - `media`.
+ * @param    id       Optional ID of the resource to check, e.g. 10. Note: This argument is discouraged
+ *                    when using an entity object as a resource to check permissions and will be ignored.
  *
  * @example
  * ```js
  * import { useResourcePermissions } from '@wordpress/core-data';
  *
  * function PagesList() {
- *   const { canCreate, isResolving } = useResourcePermissions( 'pages' );
+ *   const { canCreate, isResolving } = useResourcePermissions( { kind: 'postType', name: 'page' } );
  *
  *   if ( isResolving ) {
  *     return 'Loading ...';
@@ -24547,7 +24234,7 @@ function __experimentalUseEntityRecords(kind, name, queryArgs, options) {
  *     canUpdate,
  *     canDelete,
  *     isResolving
- *   } = useResourcePermissions( 'pages', pageId );
+ *   } = useResourcePermissions( { kind: 'postType', name: 'page', id: pageId } );
  *
  *   if ( isResolving ) {
  *     return 'Loading ...';
@@ -24575,12 +24262,25 @@ function __experimentalUseEntityRecords(kind, name, queryArgs, options) {
  * @template IdType
  */
 function useResourcePermissions(resource, id) {
+  // Serialize `resource` to a string that can be safely used as a React dep.
+  // We can't just pass `resource` as one of the deps, because if it is passed
+  // as an object literal, then it will be a different object on each call even
+  // if the values remain the same.
+  const isEntity = typeof resource === 'object';
+  const resourceAsString = isEntity ? JSON.stringify(resource) : resource;
+  if (isEntity && typeof id !== 'undefined') {
+     false ? 0 : void 0;
+  }
   return useQuerySelect(resolve => {
+    const hasId = isEntity ? !!resource.id : !!id;
     const {
       canUser
     } = resolve(store);
-    const create = canUser('create', resource);
-    if (!id) {
+    const create = canUser('create', isEntity ? {
+      kind: resource.kind,
+      name: resource.name
+    } : resource);
+    if (!hasId) {
       const read = canUser('read', resource);
       const isResolving = create.isResolving || read.isResolving;
       const hasResolved = create.hasResolved && read.hasResolved;
@@ -24618,8 +24318,9 @@ function useResourcePermissions(resource, id) {
       canUpdate: hasResolved && update.data,
       canDelete: hasResolved && _delete.data
     };
-  }, [resource, id]);
+  }, [resourceAsString, id]);
 }
+/* harmony default export */ const use_resource_permissions = (useResourcePermissions);
 function __experimentalUseResourcePermissions(resource, id) {
   external_wp_deprecated_default()(`wp.data.__experimentalUseResourcePermissions`, {
     alternative: 'wp.data.useResourcePermissions',
@@ -24628,7 +24329,407 @@ function __experimentalUseResourcePermissions(resource, id) {
   return useResourcePermissions(resource, id);
 }
 
+;// CONCATENATED MODULE: external ["wp","blocks"]
+const external_wp_blocks_namespaceObject = window["wp"]["blocks"];
+;// CONCATENATED MODULE: ./packages/core-data/build-module/hooks/use-entity-id.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * Hook that returns the ID for the nearest
+ * provided entity of the specified type.
+ *
+ * @param {string} kind The entity kind.
+ * @param {string} name The entity name.
+ */
+function useEntityId(kind, name) {
+  const context = (0,external_wp_element_namespaceObject.useContext)(EntityContext);
+  return context?.[kind]?.[name];
+}
+
+;// CONCATENATED MODULE: external ["wp","blockEditor"]
+const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
+;// CONCATENATED MODULE: ./packages/core-data/build-module/footnotes/get-rich-text-values-cached.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+// TODO: The following line should have been:
+//
+//   const unlockedApis = unlock( blockEditorPrivateApis );
+//
+// But there are hidden circular dependencies in RNMobile code, specifically in
+// certain native components in the `components` package that depend on
+// `block-editor`. What follows is a workaround that defers the `unlock` call
+// to prevent native code from failing.
+//
+// Fix once https://github.com/WordPress/gutenberg/issues/52692 is closed.
+let unlockedApis;
+const cache = new WeakMap();
+function getRichTextValuesCached(block) {
+  if (!unlockedApis) {
+    unlockedApis = unlock(external_wp_blockEditor_namespaceObject.privateApis);
+  }
+  if (!cache.has(block)) {
+    const values = unlockedApis.getRichTextValues([block]);
+    cache.set(block, values);
+  }
+  return cache.get(block);
+}
+
+;// CONCATENATED MODULE: ./packages/core-data/build-module/footnotes/get-footnotes-order.js
+/**
+ * Internal dependencies
+ */
+
+const get_footnotes_order_cache = new WeakMap();
+function getBlockFootnotesOrder(block) {
+  if (!get_footnotes_order_cache.has(block)) {
+    const order = [];
+    for (const value of getRichTextValuesCached(block)) {
+      if (!value) {
+        continue;
+      }
+
+      // replacements is a sparse array, use forEach to skip empty slots.
+      value.replacements.forEach(({
+        type,
+        attributes
+      }) => {
+        if (type === 'core/footnote') {
+          order.push(attributes['data-fn']);
+        }
+      });
+    }
+    get_footnotes_order_cache.set(block, order);
+  }
+  return get_footnotes_order_cache.get(block);
+}
+function getFootnotesOrder(blocks) {
+  // We can only separate getting order from blocks at the root level. For
+  // deeper inner blocks, this will not work since it's possible to have both
+  // inner blocks and block attributes, so order needs to be computed from the
+  // Edit functions as a whole.
+  return blocks.flatMap(getBlockFootnotesOrder);
+}
+
+;// CONCATENATED MODULE: ./packages/core-data/build-module/footnotes/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+let oldFootnotes = {};
+function updateFootnotesFromMeta(blocks, meta) {
+  const output = {
+    blocks
+  };
+  if (!meta) {
+    return output;
+  }
+
+  // If meta.footnotes is empty, it means the meta is not registered.
+  if (meta.footnotes === undefined) {
+    return output;
+  }
+  const newOrder = getFootnotesOrder(blocks);
+  const footnotes = meta.footnotes ? JSON.parse(meta.footnotes) : [];
+  const currentOrder = footnotes.map(fn => fn.id);
+  if (currentOrder.join('') === newOrder.join('')) {
+    return output;
+  }
+  const newFootnotes = newOrder.map(fnId => footnotes.find(fn => fn.id === fnId) || oldFootnotes[fnId] || {
+    id: fnId,
+    content: ''
+  });
+  function updateAttributes(attributes) {
+    // Only attempt to update attributes, if attributes is an object.
+    if (!attributes || Array.isArray(attributes) || typeof attributes !== 'object') {
+      return attributes;
+    }
+    attributes = {
+      ...attributes
+    };
+    for (const key in attributes) {
+      const value = attributes[key];
+      if (Array.isArray(value)) {
+        attributes[key] = value.map(updateAttributes);
+        continue;
+      }
+
+      // To do, remove support for string values?
+      if (typeof value !== 'string' && !(value instanceof external_wp_richText_namespaceObject.RichTextData)) {
+        continue;
+      }
+      const richTextValue = typeof value === 'string' ? external_wp_richText_namespaceObject.RichTextData.fromHTMLString(value) : new external_wp_richText_namespaceObject.RichTextData(value);
+      richTextValue.replacements.forEach(replacement => {
+        if (replacement.type === 'core/footnote') {
+          const id = replacement.attributes['data-fn'];
+          const index = newOrder.indexOf(id);
+          // The innerHTML contains the count wrapped in a link.
+          const countValue = (0,external_wp_richText_namespaceObject.create)({
+            html: replacement.innerHTML
+          });
+          countValue.text = String(index + 1);
+          countValue.formats = Array.from({
+            length: countValue.text.length
+          }, () => countValue.formats[0]);
+          countValue.replacements = Array.from({
+            length: countValue.text.length
+          }, () => countValue.replacements[0]);
+          replacement.innerHTML = (0,external_wp_richText_namespaceObject.toHTMLString)({
+            value: countValue
+          });
+        }
+      });
+      attributes[key] = typeof value === 'string' ? richTextValue.toHTMLString() : richTextValue;
+    }
+    return attributes;
+  }
+  function updateBlocksAttributes(__blocks) {
+    return __blocks.map(block => {
+      return {
+        ...block,
+        attributes: updateAttributes(block.attributes),
+        innerBlocks: updateBlocksAttributes(block.innerBlocks)
+      };
+    });
+  }
+
+  // We need to go through all block attributes deeply and update the
+  // footnote anchor numbering (textContent) to match the new order.
+  const newBlocks = updateBlocksAttributes(blocks);
+  oldFootnotes = {
+    ...oldFootnotes,
+    ...footnotes.reduce((acc, fn) => {
+      if (!newOrder.includes(fn.id)) {
+        acc[fn.id] = fn;
+      }
+      return acc;
+    }, {})
+  };
+  return {
+    meta: {
+      ...meta,
+      footnotes: JSON.stringify(newFootnotes)
+    },
+    blocks: newBlocks
+  };
+}
+
+;// CONCATENATED MODULE: ./packages/core-data/build-module/hooks/use-entity-block-editor.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const use_entity_block_editor_EMPTY_ARRAY = [];
+const parsedBlocksCache = new WeakMap();
+
+/**
+ * Hook that returns block content getters and setters for
+ * the nearest provided entity of the specified type.
+ *
+ * The return value has the shape `[ blocks, onInput, onChange ]`.
+ * `onInput` is for block changes that don't create undo levels
+ * or dirty the post, non-persistent changes, and `onChange` is for
+ * persistent changes. They map directly to the props of a
+ * `BlockEditorProvider` and are intended to be used with it,
+ * or similar components or hooks.
+ *
+ * @param {string} kind         The entity kind.
+ * @param {string} name         The entity name.
+ * @param {Object} options
+ * @param {string} [options.id] An entity ID to use instead of the context-provided one.
+ *
+ * @return {[unknown[], Function, Function]} The block array and setters.
+ */
+function useEntityBlockEditor(kind, name, {
+  id: _id
+} = {}) {
+  const providerId = useEntityId(kind, name);
+  const id = _id !== null && _id !== void 0 ? _id : providerId;
+  const {
+    getEntityRecord,
+    getEntityRecordEdits
+  } = (0,external_wp_data_namespaceObject.useSelect)(STORE_NAME);
+  const {
+    content,
+    editedBlocks,
+    meta
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    if (!id) {
+      return {};
+    }
+    const {
+      getEditedEntityRecord
+    } = select(STORE_NAME);
+    const editedRecord = getEditedEntityRecord(kind, name, id);
+    return {
+      editedBlocks: editedRecord.blocks,
+      content: editedRecord.content,
+      meta: editedRecord.meta
+    };
+  }, [kind, name, id]);
+  const {
+    __unstableCreateUndoLevel,
+    editEntityRecord
+  } = (0,external_wp_data_namespaceObject.useDispatch)(STORE_NAME);
+  const blocks = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    if (!id) {
+      return undefined;
+    }
+    if (editedBlocks) {
+      return editedBlocks;
+    }
+    if (!content || typeof content !== 'string') {
+      return use_entity_block_editor_EMPTY_ARRAY;
+    }
+
+    // If there's an edit, cache the parsed blocks by the edit.
+    // If not, cache by the original enity record.
+    const edits = getEntityRecordEdits(kind, name, id);
+    const isUnedited = !edits || !Object.keys(edits).length;
+    const cackeKey = isUnedited ? getEntityRecord(kind, name, id) : edits;
+    let _blocks = parsedBlocksCache.get(cackeKey);
+    if (!_blocks) {
+      _blocks = (0,external_wp_blocks_namespaceObject.parse)(content);
+      parsedBlocksCache.set(cackeKey, _blocks);
+    }
+    return _blocks;
+  }, [kind, name, id, editedBlocks, content, getEntityRecord, getEntityRecordEdits]);
+  const updateFootnotes = (0,external_wp_element_namespaceObject.useCallback)(_blocks => updateFootnotesFromMeta(_blocks, meta), [meta]);
+  const onChange = (0,external_wp_element_namespaceObject.useCallback)((newBlocks, options) => {
+    const noChange = blocks === newBlocks;
+    if (noChange) {
+      return __unstableCreateUndoLevel(kind, name, id);
+    }
+    const {
+      selection,
+      ...rest
+    } = options;
+
+    // We create a new function here on every persistent edit
+    // to make sure the edit makes the post dirty and creates
+    // a new undo level.
+    const edits = {
+      selection,
+      content: ({
+        blocks: blocksForSerialization = []
+      }) => (0,external_wp_blocks_namespaceObject.__unstableSerializeAndClean)(blocksForSerialization),
+      ...updateFootnotes(newBlocks)
+    };
+    editEntityRecord(kind, name, id, edits, {
+      isCached: false,
+      ...rest
+    });
+  }, [kind, name, id, blocks, updateFootnotes, __unstableCreateUndoLevel, editEntityRecord]);
+  const onInput = (0,external_wp_element_namespaceObject.useCallback)((newBlocks, options) => {
+    const {
+      selection,
+      ...rest
+    } = options;
+    const footnotesChanges = updateFootnotes(newBlocks);
+    const edits = {
+      selection,
+      ...footnotesChanges
+    };
+    editEntityRecord(kind, name, id, edits, {
+      isCached: true,
+      ...rest
+    });
+  }, [kind, name, id, updateFootnotes, editEntityRecord]);
+  return [blocks, onInput, onChange];
+}
+
+;// CONCATENATED MODULE: ./packages/core-data/build-module/hooks/use-entity-prop.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Hook that returns the value and a setter for the
+ * specified property of the nearest provided
+ * entity of the specified type.
+ *
+ * @param {string} kind  The entity kind.
+ * @param {string} name  The entity name.
+ * @param {string} prop  The property name.
+ * @param {string} [_id] An entity ID to use instead of the context-provided one.
+ *
+ * @return {[*, Function, *]} An array where the first item is the
+ *                            property value, the second is the
+ *                            setter and the third is the full value
+ * 							  object from REST API containing more
+ * 							  information like `raw`, `rendered` and
+ * 							  `protected` props.
+ */
+function useEntityProp(kind, name, prop, _id) {
+  const providerId = useEntityId(kind, name);
+  const id = _id !== null && _id !== void 0 ? _id : providerId;
+  const {
+    value,
+    fullValue
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getEntityRecord,
+      getEditedEntityRecord
+    } = select(STORE_NAME);
+    const record = getEntityRecord(kind, name, id); // Trigger resolver.
+    const editedRecord = getEditedEntityRecord(kind, name, id);
+    return record && editedRecord ? {
+      value: editedRecord[prop],
+      fullValue: record[prop]
+    } : {};
+  }, [kind, name, id, prop]);
+  const {
+    editEntityRecord
+  } = (0,external_wp_data_namespaceObject.useDispatch)(STORE_NAME);
+  const setValue = (0,external_wp_element_namespaceObject.useCallback)(newValue => {
+    editEntityRecord(kind, name, id, {
+      [prop]: newValue
+    });
+  }, [editEntityRecord, kind, name, id, prop]);
+  return [value, setValue, fullValue];
+}
+
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/hooks/index.js
+
+
+
 
 
 

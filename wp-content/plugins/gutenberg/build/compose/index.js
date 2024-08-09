@@ -4888,7 +4888,7 @@ function useStateWithHistory(initialValue) {
 
 
 /**
- * @typedef {"huge" | "wide" | "large" | "medium" | "small" | "mobile"} WPBreakpoint
+ * @typedef {"xhuge" | "huge" | "wide" | "xlarge" | "large" | "medium" | "small" | "mobile"} WPBreakpoint
  */
 
 /**
@@ -4899,8 +4899,10 @@ function useStateWithHistory(initialValue) {
  * @type {Record<WPBreakpoint, number>}
  */
 const BREAKPOINTS = {
+  xhuge: 1920,
   huge: 1440,
   wide: 1280,
+  xlarge: 1080,
   large: 960,
   medium: 782,
   small: 600,

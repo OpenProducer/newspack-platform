@@ -213,16 +213,6 @@ const external_wp_url_namespaceObject = window["wp"]["url"];
 const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: external ["wp","htmlEntities"]
 const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
-;// CONCATENATED MODULE: ./packages/core-commands/build-module/hooks.js
-/**
- * WordPress dependencies
- */
-
-
-function useIsBlockBasedTheme() {
-  return (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme, []);
-}
-
 ;// CONCATENATED MODULE: external ["wp","privateApis"]
 const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 ;// CONCATENATED MODULE: ./packages/core-commands/build-module/lock-unlock.js
@@ -276,7 +266,6 @@ function orderEntityRecordsBySearch(records = [], search = '') {
  */
 
 
-
 const {
   useHistory
 } = unlock(external_wp_router_namespaceObject.privateApis);
@@ -299,7 +288,18 @@ const getNavigationCommandLoaderPerPostType = postType => function useNavigation
   search
 }) {
   const history = useHistory();
-  const isBlockBasedTheme = useIsBlockBasedTheme();
+  const {
+    isBlockBasedTheme,
+    canCreateTemplate
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    return {
+      isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
+      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('create', {
+        kind: 'postType',
+        name: 'wp_template'
+      })
+    };
+  }, []);
   const delayedSearch = useDebouncedValue(search);
   const {
     records,
@@ -329,7 +329,7 @@ const getNavigationCommandLoaderPerPostType = postType => function useNavigation
         label: record.title?.rendered ? (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(record.title?.rendered) : (0,external_wp_i18n_namespaceObject.__)('(no title)'),
         icon: icons[postType]
       };
-      if (postType === 'post' || postType === 'page' && !isBlockBasedTheme) {
+      if (!canCreateTemplate || postType === 'post' || postType === 'page' && !isBlockBasedTheme) {
         return {
           ...command,
           callback: ({
@@ -366,7 +366,7 @@ const getNavigationCommandLoaderPerPostType = postType => function useNavigation
         }
       };
     });
-  }, [records, isBlockBasedTheme, history]);
+  }, [canCreateTemplate, records, isBlockBasedTheme, history]);
   return {
     commands,
     isLoading
@@ -376,7 +376,18 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
   search
 }) {
   const history = useHistory();
-  const isBlockBasedTheme = useIsBlockBasedTheme();
+  const {
+    isBlockBasedTheme,
+    canCreateTemplate
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    return {
+      isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
+      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('create', {
+        kind: 'postType',
+        name: templateType
+      })
+    };
+  }, []);
   const {
     records,
     isLoading
@@ -402,7 +413,7 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
     return orderEntityRecordsBySearch(records, search).slice(0, 10);
   }, [records, search]);
   const commands = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (!isBlockBasedTheme && !templateType === 'wp_template_part') {
+    if (!canCreateTemplate || !isBlockBasedTheme && !templateType === 'wp_template_part') {
       return [];
     }
     const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
@@ -454,7 +465,7 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
       });
     }
     return result;
-  }, [isBlockBasedTheme, orderedRecords, history]);
+  }, [canCreateTemplate, isBlockBasedTheme, orderedRecords, history]);
   return {
     commands,
     isLoading
@@ -467,10 +478,18 @@ const useTemplatePartNavigationCommandLoader = getNavigationCommandLoaderPerTemp
 function useSiteEditorBasicNavigationCommands() {
   const history = useHistory();
   const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
-  const canCreateTemplate = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    return select(external_wp_coreData_namespaceObject.store).canUser('create', 'templates');
+  const {
+    isBlockBasedTheme,
+    canCreateTemplate
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    return {
+      isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
+      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('create', {
+        kind: 'postType',
+        name: 'wp_template'
+      })
+    };
   }, []);
-  const isBlockBasedTheme = useIsBlockBasedTheme();
   const commands = (0,external_wp_element_namespaceObject.useMemo)(() => {
     const result = [];
     if (canCreateTemplate && isBlockBasedTheme) {

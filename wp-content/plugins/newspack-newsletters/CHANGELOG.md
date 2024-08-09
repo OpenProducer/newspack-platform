@@ -1,3 +1,10 @@
+## [2.21.1](https://github.com/Automattic/newspack-newsletters/compare/v2.21.0...v2.21.1) (2024-08-01)
+
+
+### Bug Fixes
+
+* **layouts:** settings defaults from layout (mailchimp) ([766578a](https://github.com/Automattic/newspack-newsletters/commit/766578a8734f7f425567fb4c5553471e2c715623))
+
 # [2.21.0](https://github.com/Automattic/newspack-newsletters/compare/v2.20.4...v2.21.0) (2024-07-30)
 
 

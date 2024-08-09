@@ -3796,7 +3796,7 @@ const {
  * children components. Used along with the RegistryProvider.
  *
  * You can read more about the react context api here:
- * https://reactjs.org/docs/context.html#contextprovider
+ * https://react.dev/learn/passing-data-deeply-with-context#step-3-provide-the-context
  *
  * @example
  * ```js
