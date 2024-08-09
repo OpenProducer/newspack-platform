@@ -142,42 +142,6 @@ module.exports = deepmerge_1;
 
 /***/ }),
 
-/***/ 9214:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-var __webpack_unused_export__;
-/** @license React v17.0.2
- * react-is.production.min.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-var b=60103,c=60106,d=60107,e=60108,f=60114,g=60109,h=60110,k=60112,l=60113,m=60120,n=60115,p=60116,q=60121,r=60122,u=60117,v=60129,w=60131;
-if("function"===typeof Symbol&&Symbol.for){var x=Symbol.for;b=x("react.element");c=x("react.portal");d=x("react.fragment");e=x("react.strict_mode");f=x("react.profiler");g=x("react.provider");h=x("react.context");k=x("react.forward_ref");l=x("react.suspense");m=x("react.suspense_list");n=x("react.memo");p=x("react.lazy");q=x("react.block");r=x("react.server.block");u=x("react.fundamental");v=x("react.debug_trace_mode");w=x("react.legacy_hidden")}
-function y(a){if("object"===typeof a&&null!==a){var t=a.$$typeof;switch(t){case b:switch(a=a.type,a){case d:case f:case e:case l:case m:return a;default:switch(a=a&&a.$$typeof,a){case h:case k:case p:case n:case g:return a;default:return t}}case c:return t}}}var z=g,A=b,B=k,C=d,D=p,E=n,F=c,G=f,H=e,I=l;__webpack_unused_export__=h;__webpack_unused_export__=z;__webpack_unused_export__=A;__webpack_unused_export__=B;__webpack_unused_export__=C;__webpack_unused_export__=D;__webpack_unused_export__=E;__webpack_unused_export__=F;__webpack_unused_export__=G;__webpack_unused_export__=H;
-__webpack_unused_export__=I;__webpack_unused_export__=function(){return!1};__webpack_unused_export__=function(){return!1};__webpack_unused_export__=function(a){return y(a)===h};__webpack_unused_export__=function(a){return y(a)===g};__webpack_unused_export__=function(a){return"object"===typeof a&&null!==a&&a.$$typeof===b};__webpack_unused_export__=function(a){return y(a)===k};__webpack_unused_export__=function(a){return y(a)===d};__webpack_unused_export__=function(a){return y(a)===p};__webpack_unused_export__=function(a){return y(a)===n};
-__webpack_unused_export__=function(a){return y(a)===c};__webpack_unused_export__=function(a){return y(a)===f};__webpack_unused_export__=function(a){return y(a)===e};__webpack_unused_export__=function(a){return y(a)===l};__webpack_unused_export__=function(a){return"string"===typeof a||"function"===typeof a||a===d||a===f||a===v||a===e||a===l||a===m||a===w||"object"===typeof a&&null!==a&&(a.$$typeof===p||a.$$typeof===n||a.$$typeof===g||a.$$typeof===h||a.$$typeof===k||a.$$typeof===u||a.$$typeof===q||a[0]===r)?!0:!1};
-__webpack_unused_export__=y;
-
-
-/***/ }),
-
-/***/ 2797:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-if (true) {
-  /* unused reexport */ __webpack_require__(9214);
-} else {}
-
-
-/***/ }),
-
 /***/ 5619:
 /***/ ((module) => {
 
@@ -1128,118 +1092,6 @@ module.exports = hoistNonReactStatics;
 
 /***/ }),
 
-/***/ 5372:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactPropTypesSecret = __webpack_require__(9567);
-
-function emptyFunction() {}
-function emptyFunctionWithReset() {}
-emptyFunctionWithReset.resetWarningCache = emptyFunction;
-
-module.exports = function() {
-  function shim(props, propName, componentName, location, propFullName, secret) {
-    if (secret === ReactPropTypesSecret) {
-      // It is still safe when called from React.
-      return;
-    }
-    var err = new Error(
-      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-      'Use PropTypes.checkPropTypes() to call them. ' +
-      'Read more at http://fb.me/use-check-prop-types'
-    );
-    err.name = 'Invariant Violation';
-    throw err;
-  };
-  shim.isRequired = shim;
-  function getShim() {
-    return shim;
-  };
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-  var ReactPropTypes = {
-    array: shim,
-    bigint: shim,
-    bool: shim,
-    func: shim,
-    number: shim,
-    object: shim,
-    string: shim,
-    symbol: shim,
-
-    any: shim,
-    arrayOf: getShim,
-    element: shim,
-    elementType: shim,
-    instanceOf: getShim,
-    node: shim,
-    objectOf: getShim,
-    oneOf: getShim,
-    oneOfType: getShim,
-    shape: getShim,
-    exact: getShim,
-
-    checkPropTypes: emptyFunctionWithReset,
-    resetWarningCache: emptyFunction
-  };
-
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
-};
-
-
-/***/ }),
-
-/***/ 2652:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (false) { var throwOnDirectAccess, ReactIs; } else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(5372)();
-}
-
-
-/***/ }),
-
-/***/ 9567:
-/***/ ((module) => {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-module.exports = ReactPropTypesSecret;
-
-
-/***/ }),
-
 /***/ 4821:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -1937,7 +1789,7 @@ __webpack_require__.d(__webpack_exports__, {
   ColorPicker: () => (/* reexport */ LegacyAdapter),
   ComboboxControl: () => (/* reexport */ combobox_control),
   CustomGradientPicker: () => (/* reexport */ custom_gradient_picker),
-  CustomSelectControl: () => (/* reexport */ StableCustomSelectControl),
+  CustomSelectControl: () => (/* reexport */ custom_select_control),
   Dashicon: () => (/* reexport */ dashicon),
   DatePicker: () => (/* reexport */ date),
   DateTimePicker: () => (/* reexport */ build_module_date_time),
@@ -8537,8 +8389,8 @@ function getNodeScroll(element) {
     };
   }
   return {
-    scrollLeft: element.pageXOffset,
-    scrollTop: element.pageYOffset
+    scrollLeft: element.scrollX,
+    scrollTop: element.scrollY
   };
 }
 function getParentNode(node) {
@@ -30043,7 +29895,7 @@ const actions_fe213e88_esm_wheelAction = {
 
 
 
-function use_gesture_core_esm_objectWithoutPropertiesLoose(source, excluded) {
+function _objectWithoutPropertiesLoose(source, excluded) {
   if (source == null) return {};
   var target = {};
   var sourceKeys = Object.keys(source);
@@ -30058,7 +29910,7 @@ function use_gesture_core_esm_objectWithoutPropertiesLoose(source, excluded) {
 
 function _objectWithoutProperties(source, excluded) {
   if (source == null) return {};
-  var target = use_gesture_core_esm_objectWithoutPropertiesLoose(source, excluded);
+  var target = _objectWithoutPropertiesLoose(source, excluded);
   var key, i;
   if (Object.getOwnPropertySymbols) {
     var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
@@ -31502,6 +31354,7 @@ function button_useDeprecatedProps({
   isSmall,
   size,
   variant,
+  describedBy,
   ...otherProps
 }) {
   let computedSize = size;
@@ -31509,7 +31362,8 @@ function button_useDeprecatedProps({
   const newProps = {
     accessibleWhenDisabled: __experimentalIsFocusable,
     // @todo Mark `isPressed` as deprecated
-    'aria-pressed': isPressed
+    'aria-pressed': isPressed,
+    description: describedBy
   };
   if (isSmall) {
     var _computedSize;
@@ -31565,7 +31419,7 @@ function UnforwardedButton(props, ref) {
     size = 'default',
     text,
     variant,
-    describedBy,
+    description,
     ...buttonOrAnchorProps
   } = button_useDeprecatedProps(props);
   const {
@@ -31601,7 +31455,7 @@ function UnforwardedButton(props, ref) {
     'has-icon': !!icon
   });
   const trulyDisabled = disabled && !accessibleWhenDisabled;
-  const Tag = href !== undefined && !trulyDisabled ? 'a' : 'button';
+  const Tag = href !== undefined && !disabled ? 'a' : 'button';
   const buttonProps = Tag === 'button' ? {
     type: 'button',
     disabled: trulyDisabled,
@@ -31641,7 +31495,7 @@ function UnforwardedButton(props, ref) {
   !children?.length &&
   // The tooltip is not explicitly disabled.
   false !== showTooltip);
-  const descriptionId = describedBy ? instanceId : undefined;
+  const descriptionId = description ? instanceId : undefined;
   const describedById = additionalProps['aria-describedby'] || descriptionId;
   const commonProps = {
     className: classes,
@@ -31679,7 +31533,7 @@ function UnforwardedButton(props, ref) {
   // In order to make sure that the tooltip doesn't show when it shouldn't,
   // we don't pass the props to the `Tooltip` component.
   const tooltipProps = shouldShowTooltip ? {
-    text: children?.length && describedBy ? describedBy : label,
+    text: children?.length && description ? description : label,
     shortcut,
     placement: tooltipPosition &&
     // Convert legacy `position` values to be used with the new `placement` prop
@@ -31689,10 +31543,10 @@ function UnforwardedButton(props, ref) {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
       ...tooltipProps,
       children: element
-    }), describedBy && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(visually_hidden_component, {
+    }), description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(visually_hidden_component, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
         id: descriptionId,
-        children: describedBy
+        children: description
       })
     })]
   });
@@ -32957,7 +32811,7 @@ const close_close = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"
+    d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"
   })
 });
 /* harmony default export */ const library_close = (close_close);
@@ -35826,7 +35680,7 @@ const buttonView = ({
   isIcon,
   isPressed,
   size
-}) => /*#__PURE__*/emotion_react_browser_esm_css("align-items:center;appearance:none;background:transparent;border:none;border-radius:", config_values.controlBorderRadius, ";color:", COLORS.gray[700], ";fill:currentColor;cursor:pointer;display:flex;font-family:inherit;height:100%;justify-content:center;line-height:100%;outline:none;padding:0 12px;position:relative;text-align:center;@media not ( prefers-reduced-motion ){transition:background ", config_values.transitionDurationFast, " linear,color ", config_values.transitionDurationFast, " linear,font-weight 60ms linear;}user-select:none;width:100%;z-index:2;&::-moz-focus-inner{border:0;}&:active{background:", config_values.toggleGroupControlBackgroundColor, ";}", isDeselectable && deselectable, " ", isIcon && isIconStyles({
+}) => /*#__PURE__*/emotion_react_browser_esm_css("align-items:center;appearance:none;background:transparent;border:none;border-radius:", config_values.controlBorderRadius, ";color:", COLORS.gray[700], ";fill:currentColor;cursor:pointer;display:flex;font-family:inherit;height:100%;justify-content:center;line-height:100%;outline:none;padding:0 12px;position:relative;text-align:center;@media not ( prefers-reduced-motion ){transition:background ", config_values.transitionDurationFast, " linear,color ", config_values.transitionDurationFast, " linear,font-weight 60ms linear;}user-select:none;width:100%;z-index:2;&::-moz-focus-inner{border:0;}&[disabled]{opacity:0.4;cursor:default;}&:active{background:", config_values.toggleGroupControlBackgroundColor, ";}", isDeselectable && deselectable, " ", isIcon && isIconStyles({
   size
 }), " ", isPressed && pressed, ";" + ( true ? "" : 0),  true ? "" : 0);
 const pressed = /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.white, ";&:active{background:transparent;}" + ( true ? "" : 0),  true ? "" : 0);
@@ -35915,6 +35769,7 @@ function ToggleGroupControlOptionBase(props, forwardedRef) {
     children,
     showTooltip = false,
     onFocus: onFocusProp,
+    disabled,
     ...otherButtonProps
   } = buttonProps;
   const isPressed = toggleGroupControlContext.value === value;
@@ -35947,6 +35802,7 @@ function ToggleGroupControlOptionBase(props, forwardedRef) {
       text: otherButtonProps['aria-label'],
       children: isDeselectable ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
         ...commonProps,
+        disabled: disabled,
         onFocus: onFocusProp,
         "aria-pressed": isPressed,
         type: "button",
@@ -35955,6 +35811,7 @@ function ToggleGroupControlOptionBase(props, forwardedRef) {
           children: children
         })
       }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Radio, {
+        disabled: disabled,
         render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
           type: "button",
           ...commonProps,
@@ -36358,6 +36215,7 @@ const InputControlSuffixWrapper = contextConnect(UnconnectedInputControlSuffixWr
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/select-control/styles/select-control-styles.js
 
+function select_control_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
 /**
  * External dependencies
  */
@@ -36378,9 +36236,21 @@ const select_control_styles_disabledStyles = ({
   }
   return /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.ui.textDisabled, ";cursor:default;" + ( true ? "" : 0),  true ? "" : 0);
 };
+var select_control_styles_ref2 =  true ? {
+  name: "1lv1yo7",
+  styles: "display:inline-flex"
+} : 0;
+const inputBaseVariantStyles = ({
+  variant
+}) => {
+  if (variant === 'minimal') {
+    return select_control_styles_ref2;
+  }
+  return '';
+};
 const StyledInputBase = /*#__PURE__*/emotion_styled_base_browser_esm(input_base,  true ? {
   target: "e1mv6sxx3"
-} : 0)("color:", COLORS.theme.foreground, ";cursor:pointer;", select_control_styles_disabledStyles, ";" + ( true ? "" : 0));
+} : 0)("color:", COLORS.theme.foreground, ";cursor:pointer;", select_control_styles_disabledStyles, " ", inputBaseVariantStyles, ";" + ( true ? "" : 0));
 const select_control_styles_sizeStyles = ({
   __next40pxDefaultSize,
   multiple,
@@ -36455,13 +36325,25 @@ const overflowStyles = ({
     overflow: multiple ? 'auto' : 'hidden'
   };
 };
+var select_control_styles_ref =  true ? {
+  name: "n1jncc",
+  styles: "field-sizing:content"
+} : 0;
+const variantStyles = ({
+  variant
+}) => {
+  if (variant === 'minimal') {
+    return select_control_styles_ref;
+  }
+  return '';
+};
 
 // TODO: Resolve need to use &&& to increase specificity
 // https://github.com/WordPress/gutenberg/issues/18483
 
 const Select = /*#__PURE__*/emotion_styled_base_browser_esm("select",  true ? {
   target: "e1mv6sxx2"
-} : 0)("&&&{appearance:none;background:transparent;box-sizing:border-box;border:none;box-shadow:none!important;cursor:inherit;display:block;font-family:inherit;margin:0;width:100%;max-width:none;white-space:nowrap;text-overflow:ellipsis;", fontSizeStyles, ";", select_control_styles_sizeStyles, ";", sizePaddings, ";", overflowStyles, ";}" + ( true ? "" : 0));
+} : 0)("&&&{appearance:none;background:transparent;box-sizing:border-box;border:none;box-shadow:none!important;color:currentColor;cursor:inherit;display:block;font-family:inherit;margin:0;width:100%;max-width:none;white-space:nowrap;text-overflow:ellipsis;", fontSizeStyles, ";", select_control_styles_sizeStyles, ";", sizePaddings, ";", overflowStyles, " ", variantStyles, ";}" + ( true ? "" : 0));
 const DownArrowWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e1mv6sxx1"
 } : 0)("margin-inline-end:", space(-1), ";line-height:0;path{fill:currentColor;}" + ( true ? "" : 0));
@@ -36583,6 +36465,7 @@ function UnforwardedSelectControl(props, ref) {
     children,
     prefix,
     suffix,
+    variant = 'default',
     __next40pxDefaultSize = false,
     __nextHasNoMarginBottom = false,
     ...restProps
@@ -36621,11 +36504,14 @@ function UnforwardedSelectControl(props, ref) {
       disabled: disabled,
       hideLabelFromVision: hideLabelFromVision,
       id: id,
+      isBorderless: variant === 'minimal',
       label: label,
       size: size,
       suffix: suffix || !multiple && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(select_control_chevron_down, {}),
       prefix: prefix,
       labelPosition: labelPosition,
+      __unstableInputWidth: variant === 'minimal' ? 'auto' : undefined,
+      variant: variant,
       __next40pxDefaultSize: __next40pxDefaultSize,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Select, {
         ...restProps,
@@ -36639,6 +36525,7 @@ function UnforwardedSelectControl(props, ref) {
         ref: ref,
         selectSize: size,
         value: valueProp,
+        variant: variant,
         children: children || options.map((option, index) => {
           const key = option.id || `${option.label}-${option.value}-${index}`;
           return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("option", {
@@ -37549,6 +37436,7 @@ function UnforwardedRangeControl(props, forwardedRef) {
  *   const [ isChecked, setChecked ] = useState( true );
  *   return (
  *     <RangeControl
+ *       __nextHasNoMarginBottom
  *       help="Please select how transparent you would like this."
  *       initialPosition={50}
  *       label="Opacity"
@@ -38135,13 +38023,6 @@ const options = [{
   label: 'Hex',
   value: 'hex'
 }];
-
-// `isBorderless` is still experimental and not a public prop for InputControl yet.
-const BORDERLESS_SELECT_CONTROL_CONTEXT = {
-  InputBase: {
-    isBorderless: true
-  }
-};
 const UnconnectedColorPicker = (props, forwardedRef) => {
   const {
     enableAlpha = false,
@@ -38176,16 +38057,14 @@ const UnconnectedColorPicker = (props, forwardedRef) => {
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(AuxiliaryColorArtefactWrapper, {
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(AuxiliaryColorArtefactHStackHeader, {
         justify: "space-between",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ContextSystemProvider, {
-          value: BORDERLESS_SELECT_CONTROL_CONTEXT,
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_SelectControl, {
-            __nextHasNoMarginBottom: true,
-            options: options,
-            value: colorType,
-            onChange: nextColorType => setColorType(nextColorType),
-            label: (0,external_wp_i18n_namespaceObject.__)('Color format'),
-            hideLabelFromVision: true
-          })
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_SelectControl, {
+          __nextHasNoMarginBottom: true,
+          options: options,
+          value: colorType,
+          onChange: nextColorType => setColorType(nextColorType),
+          label: (0,external_wp_i18n_namespaceObject.__)('Color format'),
+          hideLabelFromVision: true,
+          variant: "minimal"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ColorCopyButton, {
           color: safeColordColor,
           colorType: copyFormat || colorType
@@ -43541,6 +43420,7 @@ const CardMedia = contextConnect(UnconnectedCardMedia, 'CardMedia');
  *   const [ isChecked, setChecked ] = useState( true );
  *   return (
  *     <CheckboxControl
+ *       __nextHasNoMarginBottom
  *       label="Is author"
  *       help="Is the user a author or not?"
  *       checked={ isChecked }
@@ -44942,7 +44822,7 @@ function MultipleOrigin({
     })
   });
 }
-function gradient_picker_Component(props) {
+function Component(props) {
   const {
     asButtons,
     loop,
@@ -45052,7 +44932,7 @@ function GradientPicker({
       __experimentalIsRenderedInSidebar: __experimentalIsRenderedInSidebar,
       value: value,
       onChange: onChange
-    }), (gradients.length > 0 || clearable) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(gradient_picker_Component, {
+    }), (gradients.length > 0 || clearable) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Component, {
       ...additionalProps,
       className: className,
       clearGradient: clearGradient,
@@ -46367,6 +46247,7 @@ const getIndexOfMatchingSuggestion = (selectedSuggestion, matchingSuggestions) =
  * 	const [ filteredOptions, setFilteredOptions ] = useState( options );
  * 	return (
  * 		<ComboboxControl
+ * 			__nextHasNoMarginBottom
  * 			label="Font Size"
  * 			value={ fontSize }
  * 			onChange={ setFontSize }
@@ -46517,6 +46398,13 @@ function ComboboxControl(props) {
     inputContainer.current?.focus();
   };
 
+  // Stop propagation of the keydown event when pressing Enter on the Reset
+  // button to prevent calling the onKeydown callback on the container div
+  // element which actually sets the selected suggestion.
+  const handleResetStopPropagation = event => {
+    event.stopPropagation();
+  };
+
   // Update current selections when the filter input changes.
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     const hasMatchingSuggestions = matchingSuggestions.length > 0;
@@ -46578,6 +46466,7 @@ function ComboboxControl(props) {
               ,
               disabled: !value,
               onClick: handleOnReset,
+              onKeyDown: handleResetStopPropagation,
               label: (0,external_wp_i18n_namespaceObject.__)('Reset')
             })
           })]
@@ -47336,4112 +47225,1672 @@ const UnconnectedConfirmDialog = (props, forwardedRef) => {
 const ConfirmDialog = contextConnect(UnconnectedConfirmDialog, 'ConfirmDialog');
 /* harmony default export */ const confirm_dialog_component = (ConfirmDialog);
 
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-function objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(r, e) {
-  if (null == r) return {};
-  var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (e.indexOf(n) >= 0) continue;
-    t[n] = r[n];
-  }
-  return t;
-}
-
-// EXTERNAL MODULE: ./node_modules/prop-types/index.js
-var prop_types = __webpack_require__(2652);
-var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
-// EXTERNAL MODULE: ./node_modules/downshift/node_modules/react-is/index.js
-var react_is = __webpack_require__(2797);
-;// CONCATENATED MODULE: ./node_modules/compute-scroll-into-view/dist/index.module.js
-function index_module_t(t){return null!=t&&"object"==typeof t&&1===t.nodeType}function index_module_e(t,e){return(!e||"hidden"!==t)&&"visible"!==t&&"clip"!==t}function index_module_n(t,n){if(t.clientHeight<t.scrollHeight||t.clientWidth<t.scrollWidth){var r=getComputedStyle(t,null);return index_module_e(r.overflowY,n)||index_module_e(r.overflowX,n)||function(t){var e=function(t){if(!t.ownerDocument||!t.ownerDocument.defaultView)return null;try{return t.ownerDocument.defaultView.frameElement}catch(t){return null}}(t);return!!e&&(e.clientHeight<t.scrollHeight||e.clientWidth<t.scrollWidth)}(t)}return!1}function index_module_r(t,e,n,r,i,o,l,d){return o<t&&l>e||o>t&&l<e?0:o<=t&&d<=n||l>=e&&d>=n?o-t-r:l>e&&d<n||o<t&&d>n?l-e+i:0}/* harmony default export */ function index_module(e,i){var o=window,l=i.scrollMode,d=i.block,u=i.inline,h=i.boundary,a=i.skipOverflowHiddenElements,c="function"==typeof h?h:function(t){return t!==h};if(!index_module_t(e))throw new TypeError("Invalid target");for(var f=document.scrollingElement||document.documentElement,s=[],p=e;index_module_t(p)&&c(p);){if((p=p.parentNode)===f){s.push(p);break}p===document.body&&index_module_n(p)&&!index_module_n(document.documentElement)||index_module_n(p,a)&&s.push(p)}for(var g=o.visualViewport?o.visualViewport.width:innerWidth,m=o.visualViewport?o.visualViewport.height:innerHeight,w=window.scrollX||pageXOffset,v=window.scrollY||pageYOffset,W=e.getBoundingClientRect(),b=W.height,H=W.width,y=W.top,M=W.right,E=W.bottom,V=W.left,x="start"===d||"nearest"===d?y:"end"===d?E:y+b/2,I="center"===u?V+H/2:"end"===u?M:V,C=[],T=0;T<s.length;T++){var k=s[T],B=k.getBoundingClientRect(),D=B.height,O=B.width,R=B.top,X=B.right,Y=B.bottom,L=B.left;if("if-needed"===l&&y>=0&&V>=0&&E<=m&&M<=g&&y>=R&&E<=Y&&V>=L&&M<=X)return C;var S=getComputedStyle(k),j=parseInt(S.borderLeftWidth,10),N=parseInt(S.borderTopWidth,10),q=parseInt(S.borderRightWidth,10),z=parseInt(S.borderBottomWidth,10),A=0,F=0,G="offsetWidth"in k?k.offsetWidth-k.clientWidth-j-q:0,J="offsetHeight"in k?k.offsetHeight-k.clientHeight-N-z:0;if(f===k)A="start"===d?x:"end"===d?x-m:"nearest"===d?index_module_r(v,v+m,m,N,z,v+x,v+x+b,b):x-m/2,F="start"===u?I:"center"===u?I-g/2:"end"===u?I-g:index_module_r(w,w+g,g,j,q,w+I,w+I+H,H),A=Math.max(0,A+v),F=Math.max(0,F+w);else{A="start"===d?x-R-N:"end"===d?x-Y+z+J:"nearest"===d?index_module_r(R,Y,D,N,z+J,x,x+b,b):x-(R+D/2)+J/2,F="start"===u?I-L-j:"center"===u?I-(L+O/2)+G/2:"end"===u?I-X+q+G:index_module_r(L,X,O,j,q+G,I,I+H,H);var K=k.scrollLeft,P=k.scrollTop;x+=P-(A=Math.max(0,Math.min(P+A,k.scrollHeight-D+J))),I+=K-(F=Math.max(0,Math.min(K+F,k.scrollWidth-O+G)))}C.push({el:k,top:A,left:F})}return C}
-
-;// CONCATENATED MODULE: ./node_modules/downshift/dist/downshift.esm.js
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/W76OTZCC.js
+"use client";
 
 
 
 
+// src/combobox/combobox-context.tsx
+
+var W76OTZCC_ctx = createStoreContext(
+  [PopoverContextProvider, CompositeContextProvider],
+  [PopoverScopedContextProvider, CompositeScopedContextProvider]
+);
+var useComboboxContext = W76OTZCC_ctx.useContext;
+var useComboboxScopedContext = W76OTZCC_ctx.useScopedContext;
+var useComboboxProviderContext = W76OTZCC_ctx.useProviderContext;
+var ComboboxContextProvider = W76OTZCC_ctx.ContextProvider;
+var ComboboxScopedContextProvider = W76OTZCC_ctx.ScopedContextProvider;
+var ComboboxItemValueContext = (0,external_React_.createContext)(
+  void 0
+);
+var ComboboxItemCheckedContext = (0,external_React_.createContext)(false);
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/core/esm/select/select-store.js
+"use client";
 
 
 
 
 
-var idCounter = 0;
-/**
- * Accepts a parameter and returns it if it's a function
- * or a noop function if it's not. This allows us to
- * accept a callback, but not worry about it if it's not
- * passed.
- * @param {Function} cb the callback
- * @return {Function} a function
- */
-
-function cbToCb(cb) {
-  return typeof cb === 'function' ? cb : downshift_esm_noop;
-}
-
-function downshift_esm_noop() {}
-/**
- * Scroll node into view if necessary
- * @param {HTMLElement} node the element that should scroll into view
- * @param {HTMLElement} menuNode the menu element of the component
- */
 
 
-function scrollIntoView(node, menuNode) {
-  if (!node) {
-    return;
-  }
 
-  var actions = index_module(node, {
-    boundary: menuNode,
-    block: 'nearest',
-    scrollMode: 'if-needed'
+
+
+
+// src/select/select-store.ts
+function createSelectStore(_a = {}) {
+  var _b = _a, {
+    combobox
+  } = _b, props = _4R3V3JGP_objRest(_b, [
+    "combobox"
+  ]);
+  const store = mergeStore(
+    props.store,
+    omit2(combobox, [
+      "value",
+      "items",
+      "renderedItems",
+      "baseElement",
+      "arrowElement",
+      "anchorElement",
+      "contentElement",
+      "popoverElement",
+      "disclosureElement"
+    ])
+  );
+  throwOnConflictingProps(props, store);
+  const syncState = store.getState();
+  const composite = createCompositeStore(_chunks_4R3V3JGP_spreadProps(_chunks_4R3V3JGP_spreadValues({}, props), {
+    store,
+    virtualFocus: defaultValue(
+      props.virtualFocus,
+      syncState.virtualFocus,
+      true
+    ),
+    includesBaseElement: defaultValue(
+      props.includesBaseElement,
+      syncState.includesBaseElement,
+      false
+    ),
+    activeId: defaultValue(
+      props.activeId,
+      syncState.activeId,
+      props.defaultActiveId,
+      null
+    ),
+    orientation: defaultValue(
+      props.orientation,
+      syncState.orientation,
+      "vertical"
+    )
+  }));
+  const popover = createPopoverStore(_chunks_4R3V3JGP_spreadProps(_chunks_4R3V3JGP_spreadValues({}, props), {
+    store,
+    placement: defaultValue(
+      props.placement,
+      syncState.placement,
+      "bottom-start"
+    )
+  }));
+  const initialValue = new String("");
+  const initialState = _chunks_4R3V3JGP_spreadProps(_chunks_4R3V3JGP_spreadValues(_chunks_4R3V3JGP_spreadValues({}, composite.getState()), popover.getState()), {
+    value: defaultValue(
+      props.value,
+      syncState.value,
+      props.defaultValue,
+      initialValue
+    ),
+    setValueOnMove: defaultValue(
+      props.setValueOnMove,
+      syncState.setValueOnMove,
+      false
+    ),
+    selectElement: defaultValue(syncState.selectElement, null),
+    labelElement: defaultValue(syncState.labelElement, null)
   });
-  actions.forEach(function (_ref) {
-    var el = _ref.el,
-        top = _ref.top,
-        left = _ref.left;
-    el.scrollTop = top;
-    el.scrollLeft = left;
-  });
-}
-/**
- * @param {HTMLElement} parent the parent node
- * @param {HTMLElement} child the child node
- * @return {Boolean} whether the parent is the child or the child is in the parent
- */
-
-
-function isOrContainsNode(parent, child) {
-  return parent === child || child instanceof Node && parent.contains && parent.contains(child);
-}
-/**
- * Simple debounce implementation. Will call the given
- * function once after the time given has passed since
- * it was last called.
- * @param {Function} fn the function to call after the time
- * @param {Number} time the time to wait
- * @return {Function} the debounced function
- */
-
-
-function debounce(fn, time) {
-  var timeoutId;
-
-  function cancel() {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-  }
-
-  function wrapper() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    cancel();
-    timeoutId = setTimeout(function () {
-      timeoutId = null;
-      fn.apply(void 0, args);
-    }, time);
-  }
-
-  wrapper.cancel = cancel;
-  return wrapper;
-}
-/**
- * This is intended to be used to compose event handlers.
- * They are executed in order until one of them sets
- * `event.preventDownshiftDefault = true`.
- * @param {...Function} fns the event handler functions
- * @return {Function} the event handler to add to an element
- */
-
-
-function callAllEventHandlers() {
-  for (var _len2 = arguments.length, fns = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-    fns[_key2] = arguments[_key2];
-  }
-
-  return function (event) {
-    for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-      args[_key3 - 1] = arguments[_key3];
-    }
-
-    return fns.some(function (fn) {
-      if (fn) {
-        fn.apply(void 0, [event].concat(args));
-      }
-
-      return event.preventDownshiftDefault || event.hasOwnProperty('nativeEvent') && event.nativeEvent.preventDownshiftDefault;
-    });
-  };
-}
-
-function handleRefs() {
-  for (var _len4 = arguments.length, refs = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-    refs[_key4] = arguments[_key4];
-  }
-
-  return function (node) {
-    refs.forEach(function (ref) {
-      if (typeof ref === 'function') {
-        ref(node);
-      } else if (ref) {
-        ref.current = node;
-      }
-    });
-  };
-}
-/**
- * This generates a unique ID for an instance of Downshift
- * @return {String} the unique ID
- */
-
-
-function generateId() {
-  return String(idCounter++);
-}
-/**
- * Resets idCounter to 0. Used for SSR.
- */
-
-
-function resetIdCounter() {
-  idCounter = 0;
-}
-/**
- * Default implementation for status message. Only added when menu is open.
- * Will specift if there are results in the list, and if so, how many,
- * and what keys are relevant.
- *
- * @param {Object} param the downshift state and other relevant properties
- * @return {String} the a11y status message
- */
-
-
-function getA11yStatusMessage(_ref2) {
-  var isOpen = _ref2.isOpen,
-      resultCount = _ref2.resultCount,
-      previousResultCount = _ref2.previousResultCount;
-
-  if (!isOpen) {
-    return '';
-  }
-
-  if (!resultCount) {
-    return 'No results are available.';
-  }
-
-  if (resultCount !== previousResultCount) {
-    return resultCount + " result" + (resultCount === 1 ? ' is' : 's are') + " available, use up and down arrow keys to navigate. Press Enter key to select.";
-  }
-
-  return '';
-}
-/**
- * Takes an argument and if it's an array, returns the first item in the array
- * otherwise returns the argument
- * @param {*} arg the maybe-array
- * @param {*} defaultValue the value if arg is falsey not defined
- * @return {*} the arg or it's first item
- */
-
-
-function unwrapArray(arg, defaultValue) {
-  arg = Array.isArray(arg) ?
-  /* istanbul ignore next (preact) */
-  arg[0] : arg;
-
-  if (!arg && defaultValue) {
-    return defaultValue;
-  } else {
-    return arg;
-  }
-}
-/**
- * @param {Object} element (P)react element
- * @return {Boolean} whether it's a DOM element
- */
-
-
-function isDOMElement(element) {
-
-
-  return typeof element.type === 'string';
-}
-/**
- * @param {Object} element (P)react element
- * @return {Object} the props
- */
-
-
-function getElementProps(element) {
-
-  return element.props;
-}
-/**
- * Throws a helpful error message for required properties. Useful
- * to be used as a default in destructuring or object params.
- * @param {String} fnName the function name
- * @param {String} propName the prop name
- */
-
-
-function requiredProp(fnName, propName) {
-  // eslint-disable-next-line no-console
-  console.error("The property \"" + propName + "\" is required in \"" + fnName + "\"");
-}
-
-var stateKeys = (/* unused pure expression or super */ null && (['highlightedIndex', 'inputValue', 'isOpen', 'selectedItem', 'type']));
-/**
- * @param {Object} state the state object
- * @return {Object} state that is relevant to downshift
- */
-
-function pickState(state) {
-  if (state === void 0) {
-    state = {};
-  }
-
-  var result = {};
-  stateKeys.forEach(function (k) {
-    if (state.hasOwnProperty(k)) {
-      result[k] = state[k];
-    }
-  });
-  return result;
-}
-/**
- * This will perform a shallow merge of the given state object
- * with the state coming from props
- * (for the controlled component scenario)
- * This is used in state updater functions so they're referencing
- * the right state regardless of where it comes from.
- *
- * @param {Object} state The state of the component/hook.
- * @param {Object} props The props that may contain controlled values.
- * @returns {Object} The merged controlled state.
- */
-
-
-function getState(state, props) {
-  return Object.keys(state).reduce(function (prevState, key) {
-    prevState[key] = isControlledProp(props, key) ? props[key] : state[key];
-    return prevState;
-  }, {});
-}
-/**
- * This determines whether a prop is a "controlled prop" meaning it is
- * state which is controlled by the outside of this component rather
- * than within this component.
- *
- * @param {Object} props The props that may contain controlled values.
- * @param {String} key the key to check
- * @return {Boolean} whether it is a controlled controlled prop
- */
-
-
-function isControlledProp(props, key) {
-  return props[key] !== undefined;
-}
-/**
- * Normalizes the 'key' property of a KeyboardEvent in IE/Edge
- * @param {Object} event a keyboardEvent object
- * @return {String} keyboard key
- */
-
-
-function normalizeArrowKey(event) {
-  var key = event.key,
-      keyCode = event.keyCode;
-  /* istanbul ignore next (ie) */
-
-  if (keyCode >= 37 && keyCode <= 40 && key.indexOf('Arrow') !== 0) {
-    return "Arrow" + key;
-  }
-
-  return key;
-}
-/**
- * Simple check if the value passed is object literal
- * @param {*} obj any things
- * @return {Boolean} whether it's object literal
- */
-
-
-function downshift_esm_isPlainObject(obj) {
-  return Object.prototype.toString.call(obj) === '[object Object]';
-}
-/**
- * Returns the new index in the list, in a circular way. If next value is out of bonds from the total,
- * it will wrap to either 0 or itemCount - 1.
- *
- * @param {number} moveAmount Number of positions to move. Negative to move backwards, positive forwards.
- * @param {number} baseIndex The initial position to move from.
- * @param {number} itemCount The total number of items.
- * @param {Function} getItemNodeFromIndex Used to check if item is disabled.
- * @param {boolean} circular Specify if navigation is circular. Default is true.
- * @returns {number} The new index after the move.
- */
-
-
-function getNextWrappingIndex(moveAmount, baseIndex, itemCount, getItemNodeFromIndex, circular) {
-  if (circular === void 0) {
-    circular = true;
-  }
-
-  if (itemCount === 0) {
-    return -1;
-  }
-
-  var itemsLastIndex = itemCount - 1;
-
-  if (typeof baseIndex !== 'number' || baseIndex < 0 || baseIndex >= itemCount) {
-    baseIndex = moveAmount > 0 ? -1 : itemsLastIndex + 1;
-  }
-
-  var newIndex = baseIndex + moveAmount;
-
-  if (newIndex < 0) {
-    newIndex = circular ? itemsLastIndex : 0;
-  } else if (newIndex > itemsLastIndex) {
-    newIndex = circular ? 0 : itemsLastIndex;
-  }
-
-  var nonDisabledNewIndex = getNextNonDisabledIndex(moveAmount, newIndex, itemCount, getItemNodeFromIndex, circular);
-
-  if (nonDisabledNewIndex === -1) {
-    return baseIndex >= itemCount ? -1 : baseIndex;
-  }
-
-  return nonDisabledNewIndex;
-}
-/**
- * Returns the next index in the list of an item that is not disabled.
- *
- * @param {number} moveAmount Number of positions to move. Negative to move backwards, positive forwards.
- * @param {number} baseIndex The initial position to move from.
- * @param {number} itemCount The total number of items.
- * @param {Function} getItemNodeFromIndex Used to check if item is disabled.
- * @param {boolean} circular Specify if navigation is circular. Default is true.
- * @returns {number} The new index. Returns baseIndex if item is not disabled. Returns next non-disabled item otherwise. If no non-disabled found it will return -1.
- */
-
-
-function getNextNonDisabledIndex(moveAmount, baseIndex, itemCount, getItemNodeFromIndex, circular) {
-  var currentElementNode = getItemNodeFromIndex(baseIndex);
-
-  if (!currentElementNode || !currentElementNode.hasAttribute('disabled')) {
-    return baseIndex;
-  }
-
-  if (moveAmount > 0) {
-    for (var index = baseIndex + 1; index < itemCount; index++) {
-      if (!getItemNodeFromIndex(index).hasAttribute('disabled')) {
-        return index;
-      }
-    }
-  } else {
-    for (var _index = baseIndex - 1; _index >= 0; _index--) {
-      if (!getItemNodeFromIndex(_index).hasAttribute('disabled')) {
-        return _index;
-      }
-    }
-  }
-
-  if (circular) {
-    return moveAmount > 0 ? getNextNonDisabledIndex(1, 0, itemCount, getItemNodeFromIndex, false) : getNextNonDisabledIndex(-1, itemCount - 1, itemCount, getItemNodeFromIndex, false);
-  }
-
-  return -1;
-}
-/**
- * Checks if event target is within the downshift elements.
- *
- * @param {EventTarget} target Target to check.
- * @param {HTMLElement[]} downshiftElements The elements that form downshift (list, toggle button etc).
- * @param {Document} document The document.
- * @param {boolean} checkActiveElement Whether to also check activeElement.
- *
- * @returns {boolean} Whether or not the target is within downshift elements.
- */
-
-
-function targetWithinDownshift(target, downshiftElements, document, checkActiveElement) {
-  if (checkActiveElement === void 0) {
-    checkActiveElement = true;
-  }
-
-  return downshiftElements.some(function (contextNode) {
-    return contextNode && (isOrContainsNode(contextNode, target) || checkActiveElement && isOrContainsNode(contextNode, document.activeElement));
-  });
-} // eslint-disable-next-line import/no-mutable-exports
-
-
-var validateControlledUnchanged = (/* unused pure expression or super */ null && (downshift_esm_noop));
-/* istanbul ignore next */
-
-if (false) {}
-
-var cleanupStatus = debounce(function (documentProp) {
-  getStatusDiv(documentProp).textContent = '';
-}, 500);
-/**
- * @param {String} status the status message
- * @param {Object} documentProp document passed by the user.
- */
-
-function setStatus(status, documentProp) {
-  var div = getStatusDiv(documentProp);
-
-  if (!status) {
-    return;
-  }
-
-  div.textContent = status;
-  cleanupStatus(documentProp);
-}
-/**
- * Get the status node or create it if it does not already exist.
- * @param {Object} documentProp document passed by the user.
- * @return {HTMLElement} the status node.
- */
-
-
-function getStatusDiv(documentProp) {
-  if (documentProp === void 0) {
-    documentProp = document;
-  }
-
-  var statusDiv = documentProp.getElementById('a11y-status-message');
-
-  if (statusDiv) {
-    return statusDiv;
-  }
-
-  statusDiv = documentProp.createElement('div');
-  statusDiv.setAttribute('id', 'a11y-status-message');
-  statusDiv.setAttribute('role', 'status');
-  statusDiv.setAttribute('aria-live', 'polite');
-  statusDiv.setAttribute('aria-relevant', 'additions text');
-  Object.assign(statusDiv.style, {
-    border: '0',
-    clip: 'rect(0 0 0 0)',
-    height: '1px',
-    margin: '-1px',
-    overflow: 'hidden',
-    padding: '0',
-    position: 'absolute',
-    width: '1px'
-  });
-  documentProp.body.appendChild(statusDiv);
-  return statusDiv;
-}
-
-var unknown =  false ? 0 : 0;
-var mouseUp =  false ? 0 : 1;
-var itemMouseEnter =  false ? 0 : 2;
-var keyDownArrowUp =  false ? 0 : 3;
-var keyDownArrowDown =  false ? 0 : 4;
-var keyDownEscape =  false ? 0 : 5;
-var keyDownEnter =  false ? 0 : 6;
-var keyDownHome =  false ? 0 : 7;
-var keyDownEnd =  false ? 0 : 8;
-var clickItem =  false ? 0 : 9;
-var blurInput =  false ? 0 : 10;
-var changeInput =  false ? 0 : 11;
-var keyDownSpaceButton =  false ? 0 : 12;
-var clickButton =  false ? 0 : 13;
-var blurButton =  false ? 0 : 14;
-var controlledPropUpdatedSelectedItem =  false ? 0 : 15;
-var touchEnd =  false ? 0 : 16;
-
-var stateChangeTypes = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  unknown: unknown,
-  mouseUp: mouseUp,
-  itemMouseEnter: itemMouseEnter,
-  keyDownArrowUp: keyDownArrowUp,
-  keyDownArrowDown: keyDownArrowDown,
-  keyDownEscape: keyDownEscape,
-  keyDownEnter: keyDownEnter,
-  keyDownHome: keyDownHome,
-  keyDownEnd: keyDownEnd,
-  clickItem: clickItem,
-  blurInput: blurInput,
-  changeInput: changeInput,
-  keyDownSpaceButton: keyDownSpaceButton,
-  clickButton: clickButton,
-  blurButton: blurButton,
-  controlledPropUpdatedSelectedItem: controlledPropUpdatedSelectedItem,
-  touchEnd: touchEnd
-});
-
-var Downshift = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {
-  var Downshift = /*#__PURE__*/function (_Component) {
-    _inheritsLoose(Downshift, _Component);
-
-    function Downshift(_props) {
-      var _this;
-
-      _this = _Component.call(this, _props) || this; // fancy destructuring + defaults + aliases
-      // this basically says each value of state should either be set to
-      // the initial value or the default value if the initial value is not provided
-
-      _this.id = _this.props.id || "downshift-" + generateId();
-      _this.menuId = _this.props.menuId || _this.id + "-menu";
-      _this.labelId = _this.props.labelId || _this.id + "-label";
-      _this.inputId = _this.props.inputId || _this.id + "-input";
-
-      _this.getItemId = _this.props.getItemId || function (index) {
-        return _this.id + "-item-" + index;
-      };
-
-      _this.input = null;
-      _this.items = [];
-      _this.itemCount = null;
-      _this.previousResultCount = 0;
-      _this.timeoutIds = [];
-
-      _this.internalSetTimeout = function (fn, time) {
-        var id = setTimeout(function () {
-          _this.timeoutIds = _this.timeoutIds.filter(function (i) {
-            return i !== id;
-          });
-          fn();
-        }, time);
-
-        _this.timeoutIds.push(id);
-      };
-
-      _this.setItemCount = function (count) {
-        _this.itemCount = count;
-      };
-
-      _this.unsetItemCount = function () {
-        _this.itemCount = null;
-      };
-
-      _this.setHighlightedIndex = function (highlightedIndex, otherStateToSet) {
-        if (highlightedIndex === void 0) {
-          highlightedIndex = _this.props.defaultHighlightedIndex;
-        }
-
-        if (otherStateToSet === void 0) {
-          otherStateToSet = {};
-        }
-
-        otherStateToSet = pickState(otherStateToSet);
-
-        _this.internalSetState(_extends({
-          highlightedIndex: highlightedIndex
-        }, otherStateToSet));
-      };
-
-      _this.clearSelection = function (cb) {
-        _this.internalSetState({
-          selectedItem: null,
-          inputValue: '',
-          highlightedIndex: _this.props.defaultHighlightedIndex,
-          isOpen: _this.props.defaultIsOpen
-        }, cb);
-      };
-
-      _this.selectItem = function (item, otherStateToSet, cb) {
-        otherStateToSet = pickState(otherStateToSet);
-
-        _this.internalSetState(_extends({
-          isOpen: _this.props.defaultIsOpen,
-          highlightedIndex: _this.props.defaultHighlightedIndex,
-          selectedItem: item,
-          inputValue: _this.props.itemToString(item)
-        }, otherStateToSet), cb);
-      };
-
-      _this.selectItemAtIndex = function (itemIndex, otherStateToSet, cb) {
-        var item = _this.items[itemIndex];
-
-        if (item == null) {
-          return;
-        }
-
-        _this.selectItem(item, otherStateToSet, cb);
-      };
-
-      _this.selectHighlightedItem = function (otherStateToSet, cb) {
-        return _this.selectItemAtIndex(_this.getState().highlightedIndex, otherStateToSet, cb);
-      };
-
-      _this.internalSetState = function (stateToSet, cb) {
-        var isItemSelected, onChangeArg;
-        var onStateChangeArg = {};
-        var isStateToSetFunction = typeof stateToSet === 'function'; // we want to call `onInputValueChange` before the `setState` call
-        // so someone controlling the `inputValue` state gets notified of
-        // the input change as soon as possible. This avoids issues with
-        // preserving the cursor position.
-        // See https://github.com/downshift-js/downshift/issues/217 for more info.
-
-        if (!isStateToSetFunction && stateToSet.hasOwnProperty('inputValue')) {
-          _this.props.onInputValueChange(stateToSet.inputValue, _extends({}, _this.getStateAndHelpers(), stateToSet));
-        }
-
-        return _this.setState(function (state) {
-          state = _this.getState(state);
-          var newStateToSet = isStateToSetFunction ? stateToSet(state) : stateToSet; // Your own function that could modify the state that will be set.
-
-          newStateToSet = _this.props.stateReducer(state, newStateToSet); // checks if an item is selected, regardless of if it's different from
-          // what was selected before
-          // used to determine if onSelect and onChange callbacks should be called
-
-          isItemSelected = newStateToSet.hasOwnProperty('selectedItem'); // this keeps track of the object we want to call with setState
-
-          var nextState = {}; // this is just used to tell whether the state changed
-          // and we're trying to update that state. OR if the selection has changed and we're
-          // trying to update the selection
-
-          if (isItemSelected && newStateToSet.selectedItem !== state.selectedItem) {
-            onChangeArg = newStateToSet.selectedItem;
-          }
-
-          newStateToSet.type = newStateToSet.type || unknown;
-          Object.keys(newStateToSet).forEach(function (key) {
-            // onStateChangeArg should only have the state that is
-            // actually changing
-            if (state[key] !== newStateToSet[key]) {
-              onStateChangeArg[key] = newStateToSet[key];
-            } // the type is useful for the onStateChangeArg
-            // but we don't actually want to set it in internal state.
-            // this is an undocumented feature for now... Not all internalSetState
-            // calls support it and I'm not certain we want them to yet.
-            // But it enables users controlling the isOpen state to know when
-            // the isOpen state changes due to mouseup events which is quite handy.
-
-
-            if (key === 'type') {
-              return;
-            }
-
-            newStateToSet[key]; // if it's coming from props, then we don't care to set it internally
-
-            if (!isControlledProp(_this.props, key)) {
-              nextState[key] = newStateToSet[key];
-            }
-          }); // if stateToSet is a function, then we weren't able to call onInputValueChange
-          // earlier, so we'll call it now that we know what the inputValue state will be.
-
-          if (isStateToSetFunction && newStateToSet.hasOwnProperty('inputValue')) {
-            _this.props.onInputValueChange(newStateToSet.inputValue, _extends({}, _this.getStateAndHelpers(), newStateToSet));
-          }
-
-          return nextState;
-        }, function () {
-          // call the provided callback if it's a function
-          cbToCb(cb)(); // only call the onStateChange and onChange callbacks if
-          // we have relevant information to pass them.
-
-          var hasMoreStateThanType = Object.keys(onStateChangeArg).length > 1;
-
-          if (hasMoreStateThanType) {
-            _this.props.onStateChange(onStateChangeArg, _this.getStateAndHelpers());
-          }
-
-          if (isItemSelected) {
-            _this.props.onSelect(stateToSet.selectedItem, _this.getStateAndHelpers());
-          }
-
-          if (onChangeArg !== undefined) {
-            _this.props.onChange(onChangeArg, _this.getStateAndHelpers());
-          } // this is currently undocumented and therefore subject to change
-          // We'll try to not break it, but just be warned.
-
-
-          _this.props.onUserAction(onStateChangeArg, _this.getStateAndHelpers());
-        });
-      };
-
-      _this.rootRef = function (node) {
-        return _this._rootNode = node;
-      };
-
-      _this.getRootProps = function (_temp, _temp2) {
-        var _extends2;
-
-        var _ref = _temp === void 0 ? {} : _temp,
-            _ref$refKey = _ref.refKey,
-            refKey = _ref$refKey === void 0 ? 'ref' : _ref$refKey,
-            ref = _ref.ref,
-            rest = _objectWithoutPropertiesLoose(_ref, ["refKey", "ref"]);
-
-        var _ref2 = _temp2 === void 0 ? {} : _temp2,
-            _ref2$suppressRefErro = _ref2.suppressRefError,
-            suppressRefError = _ref2$suppressRefErro === void 0 ? false : _ref2$suppressRefErro;
-
-        // this is used in the render to know whether the user has called getRootProps.
-        // It uses that to know whether to apply the props automatically
-        _this.getRootProps.called = true;
-        _this.getRootProps.refKey = refKey;
-        _this.getRootProps.suppressRefError = suppressRefError;
-
-        var _this$getState = _this.getState(),
-            isOpen = _this$getState.isOpen;
-
-        return _extends((_extends2 = {}, _extends2[refKey] = handleRefs(ref, _this.rootRef), _extends2.role = 'combobox', _extends2['aria-expanded'] = isOpen, _extends2['aria-haspopup'] = 'listbox', _extends2['aria-owns'] = isOpen ? _this.menuId : null, _extends2['aria-labelledby'] = _this.labelId, _extends2), rest);
-      };
-
-      _this.keyDownHandlers = {
-        ArrowDown: function ArrowDown(event) {
-          var _this2 = this;
-
-          event.preventDefault();
-
-          if (this.getState().isOpen) {
-            var amount = event.shiftKey ? 5 : 1;
-            this.moveHighlightedIndex(amount, {
-              type: keyDownArrowDown
-            });
-          } else {
-            this.internalSetState({
-              isOpen: true,
-              type: keyDownArrowDown
-            }, function () {
-              var itemCount = _this2.getItemCount();
-
-              if (itemCount > 0) {
-                var _this2$getState = _this2.getState(),
-                    highlightedIndex = _this2$getState.highlightedIndex;
-
-                var nextHighlightedIndex = getNextWrappingIndex(1, highlightedIndex, itemCount, function (index) {
-                  return _this2.getItemNodeFromIndex(index);
-                });
-
-                _this2.setHighlightedIndex(nextHighlightedIndex, {
-                  type: keyDownArrowDown
-                });
-              }
-            });
-          }
-        },
-        ArrowUp: function ArrowUp(event) {
-          var _this3 = this;
-
-          event.preventDefault();
-
-          if (this.getState().isOpen) {
-            var amount = event.shiftKey ? -5 : -1;
-            this.moveHighlightedIndex(amount, {
-              type: keyDownArrowUp
-            });
-          } else {
-            this.internalSetState({
-              isOpen: true,
-              type: keyDownArrowUp
-            }, function () {
-              var itemCount = _this3.getItemCount();
-
-              if (itemCount > 0) {
-                var _this3$getState = _this3.getState(),
-                    highlightedIndex = _this3$getState.highlightedIndex;
-
-                var nextHighlightedIndex = getNextWrappingIndex(-1, highlightedIndex, itemCount, function (index) {
-                  return _this3.getItemNodeFromIndex(index);
-                });
-
-                _this3.setHighlightedIndex(nextHighlightedIndex, {
-                  type: keyDownArrowUp
-                });
-              }
-            });
-          }
-        },
-        Enter: function Enter(event) {
-          if (event.which === 229) {
-            return;
-          }
-
-          var _this$getState2 = this.getState(),
-              isOpen = _this$getState2.isOpen,
-              highlightedIndex = _this$getState2.highlightedIndex;
-
-          if (isOpen && highlightedIndex != null) {
-            event.preventDefault();
-            var item = this.items[highlightedIndex];
-            var itemNode = this.getItemNodeFromIndex(highlightedIndex);
-
-            if (item == null || itemNode && itemNode.hasAttribute('disabled')) {
-              return;
-            }
-
-            this.selectHighlightedItem({
-              type: keyDownEnter
-            });
-          }
-        },
-        Escape: function Escape(event) {
-          event.preventDefault();
-          this.reset(_extends({
-            type: keyDownEscape
-          }, !this.state.isOpen && {
-            selectedItem: null,
-            inputValue: ''
-          }));
-        }
-      };
-      _this.buttonKeyDownHandlers = _extends({}, _this.keyDownHandlers, {
-        ' ': function _(event) {
-          event.preventDefault();
-          this.toggleMenu({
-            type: keyDownSpaceButton
-          });
-        }
-      });
-      _this.inputKeyDownHandlers = _extends({}, _this.keyDownHandlers, {
-        Home: function Home(event) {
-          var _this4 = this;
-
-          var _this$getState3 = this.getState(),
-              isOpen = _this$getState3.isOpen;
-
-          if (!isOpen) {
-            return;
-          }
-
-          event.preventDefault();
-          var itemCount = this.getItemCount();
-
-          if (itemCount <= 0 || !isOpen) {
-            return;
-          } // get next non-disabled starting downwards from 0 if that's disabled.
-
-
-          var newHighlightedIndex = getNextNonDisabledIndex(1, 0, itemCount, function (index) {
-            return _this4.getItemNodeFromIndex(index);
-          }, false);
-          this.setHighlightedIndex(newHighlightedIndex, {
-            type: keyDownHome
-          });
-        },
-        End: function End(event) {
-          var _this5 = this;
-
-          var _this$getState4 = this.getState(),
-              isOpen = _this$getState4.isOpen;
-
-          if (!isOpen) {
-            return;
-          }
-
-          event.preventDefault();
-          var itemCount = this.getItemCount();
-
-          if (itemCount <= 0 || !isOpen) {
-            return;
-          } // get next non-disabled starting upwards from last index if that's disabled.
-
-
-          var newHighlightedIndex = getNextNonDisabledIndex(-1, itemCount - 1, itemCount, function (index) {
-            return _this5.getItemNodeFromIndex(index);
-          }, false);
-          this.setHighlightedIndex(newHighlightedIndex, {
-            type: keyDownEnd
-          });
-        }
-      });
-
-      _this.getToggleButtonProps = function (_temp3) {
-        var _ref3 = _temp3 === void 0 ? {} : _temp3,
-            onClick = _ref3.onClick,
-            onPress = _ref3.onPress,
-            onKeyDown = _ref3.onKeyDown,
-            onKeyUp = _ref3.onKeyUp,
-            onBlur = _ref3.onBlur,
-            rest = _objectWithoutPropertiesLoose(_ref3, ["onClick", "onPress", "onKeyDown", "onKeyUp", "onBlur"]);
-
-        var _this$getState5 = _this.getState(),
-            isOpen = _this$getState5.isOpen;
-
-        var enabledEventHandlers =  {
-          onClick: callAllEventHandlers(onClick, _this.buttonHandleClick),
-          onKeyDown: callAllEventHandlers(onKeyDown, _this.buttonHandleKeyDown),
-          onKeyUp: callAllEventHandlers(onKeyUp, _this.buttonHandleKeyUp),
-          onBlur: callAllEventHandlers(onBlur, _this.buttonHandleBlur)
-        };
-        var eventHandlers = rest.disabled ? {} : enabledEventHandlers;
-        return _extends({
-          type: 'button',
-          role: 'button',
-          'aria-label': isOpen ? 'close menu' : 'open menu',
-          'aria-haspopup': true,
-          'data-toggle': true
-        }, eventHandlers, rest);
-      };
-
-      _this.buttonHandleKeyUp = function (event) {
-        // Prevent click event from emitting in Firefox
-        event.preventDefault();
-      };
-
-      _this.buttonHandleKeyDown = function (event) {
-        var key = normalizeArrowKey(event);
-
-        if (_this.buttonKeyDownHandlers[key]) {
-          _this.buttonKeyDownHandlers[key].call(_assertThisInitialized(_this), event);
-        }
-      };
-
-      _this.buttonHandleClick = function (event) {
-        event.preventDefault(); // handle odd case for Safari and Firefox which
-        // don't give the button the focus properly.
-
-        /* istanbul ignore if (can't reasonably test this) */
-
-        if ( _this.props.environment.document.activeElement === _this.props.environment.document.body) {
-          event.target.focus();
-        } // to simplify testing components that use downshift, we'll not wrap this in a setTimeout
-        // if the NODE_ENV is test. With the proper build system, this should be dead code eliminated
-        // when building for production and should therefore have no impact on production code.
-
-
-        if (false) {} else {
-          // Ensure that toggle of menu occurs after the potential blur event in iOS
-          _this.internalSetTimeout(function () {
-            return _this.toggleMenu({
-              type: clickButton
-            });
-          });
-        }
-      };
-
-      _this.buttonHandleBlur = function (event) {
-        var blurTarget = event.target; // Save blur target for comparison with activeElement later
-        // Need setTimeout, so that when the user presses Tab, the activeElement is the next focused element, not body element
-
-        _this.internalSetTimeout(function () {
-          if (!_this.isMouseDown && (_this.props.environment.document.activeElement == null || _this.props.environment.document.activeElement.id !== _this.inputId) && _this.props.environment.document.activeElement !== blurTarget // Do nothing if we refocus the same element again (to solve issue in Safari on iOS)
-          ) {
-              _this.reset({
-                type: blurButton
-              });
-            }
-        });
-      };
-
-      _this.getLabelProps = function (props) {
-        return _extends({
-          htmlFor: _this.inputId,
-          id: _this.labelId
-        }, props);
-      };
-
-      _this.getInputProps = function (_temp4) {
-        var _ref4 = _temp4 === void 0 ? {} : _temp4,
-            onKeyDown = _ref4.onKeyDown,
-            onBlur = _ref4.onBlur,
-            onChange = _ref4.onChange,
-            onInput = _ref4.onInput,
-            onChangeText = _ref4.onChangeText,
-            rest = _objectWithoutPropertiesLoose(_ref4, ["onKeyDown", "onBlur", "onChange", "onInput", "onChangeText"]);
-
-        var onChangeKey;
-        var eventHandlers = {};
-        /* istanbul ignore next (preact) */
-
-        {
-          onChangeKey = 'onChange';
-        }
-
-        var _this$getState6 = _this.getState(),
-            inputValue = _this$getState6.inputValue,
-            isOpen = _this$getState6.isOpen,
-            highlightedIndex = _this$getState6.highlightedIndex;
-
-        if (!rest.disabled) {
-          var _eventHandlers;
-
-          eventHandlers = (_eventHandlers = {}, _eventHandlers[onChangeKey] = callAllEventHandlers(onChange, onInput, _this.inputHandleChange), _eventHandlers.onKeyDown = callAllEventHandlers(onKeyDown, _this.inputHandleKeyDown), _eventHandlers.onBlur = callAllEventHandlers(onBlur, _this.inputHandleBlur), _eventHandlers);
-        }
-
-        return _extends({
-          'aria-autocomplete': 'list',
-          'aria-activedescendant': isOpen && typeof highlightedIndex === 'number' && highlightedIndex >= 0 ? _this.getItemId(highlightedIndex) : null,
-          'aria-controls': isOpen ? _this.menuId : null,
-          'aria-labelledby': _this.labelId,
-          // https://developer.mozilla.org/en-US/docs/Web/Security/Securing_your_site/Turning_off_form_autocompletion
-          // revert back since autocomplete="nope" is ignored on latest Chrome and Opera
-          autoComplete: 'off',
-          value: inputValue,
-          id: _this.inputId
-        }, eventHandlers, rest);
-      };
-
-      _this.inputHandleKeyDown = function (event) {
-        var key = normalizeArrowKey(event);
-
-        if (key && _this.inputKeyDownHandlers[key]) {
-          _this.inputKeyDownHandlers[key].call(_assertThisInitialized(_this), event);
-        }
-      };
-
-      _this.inputHandleChange = function (event) {
-        _this.internalSetState({
-          type: changeInput,
-          isOpen: true,
-          inputValue:  event.target.value,
-          highlightedIndex: _this.props.defaultHighlightedIndex
-        });
-      };
-
-      _this.inputHandleBlur = function () {
-        // Need setTimeout, so that when the user presses Tab, the activeElement is the next focused element, not the body element
-        _this.internalSetTimeout(function () {
-          var downshiftButtonIsActive = _this.props.environment.document && !!_this.props.environment.document.activeElement && !!_this.props.environment.document.activeElement.dataset && _this.props.environment.document.activeElement.dataset.toggle && _this._rootNode && _this._rootNode.contains(_this.props.environment.document.activeElement);
-
-          if (!_this.isMouseDown && !downshiftButtonIsActive) {
-            _this.reset({
-              type: blurInput
-            });
-          }
-        });
-      };
-
-      _this.menuRef = function (node) {
-        _this._menuNode = node;
-      };
-
-      _this.getMenuProps = function (_temp5, _temp6) {
-        var _extends3;
-
-        var _ref5 = _temp5 === void 0 ? {} : _temp5,
-            _ref5$refKey = _ref5.refKey,
-            refKey = _ref5$refKey === void 0 ? 'ref' : _ref5$refKey,
-            ref = _ref5.ref,
-            props = _objectWithoutPropertiesLoose(_ref5, ["refKey", "ref"]);
-
-        var _ref6 = _temp6 === void 0 ? {} : _temp6,
-            _ref6$suppressRefErro = _ref6.suppressRefError,
-            suppressRefError = _ref6$suppressRefErro === void 0 ? false : _ref6$suppressRefErro;
-
-        _this.getMenuProps.called = true;
-        _this.getMenuProps.refKey = refKey;
-        _this.getMenuProps.suppressRefError = suppressRefError;
-        return _extends((_extends3 = {}, _extends3[refKey] = handleRefs(ref, _this.menuRef), _extends3.role = 'listbox', _extends3['aria-labelledby'] = props && props['aria-label'] ? null : _this.labelId, _extends3.id = _this.menuId, _extends3), props);
-      };
-
-      _this.getItemProps = function (_temp7) {
-        var _enabledEventHandlers;
-
-        var _ref7 = _temp7 === void 0 ? {} : _temp7,
-            onMouseMove = _ref7.onMouseMove,
-            onMouseDown = _ref7.onMouseDown,
-            onClick = _ref7.onClick,
-            onPress = _ref7.onPress,
-            index = _ref7.index,
-            _ref7$item = _ref7.item,
-            item = _ref7$item === void 0 ?  true ?
-        /* istanbul ignore next */
-        undefined : 0 : _ref7$item,
-            rest = _objectWithoutPropertiesLoose(_ref7, ["onMouseMove", "onMouseDown", "onClick", "onPress", "index", "item"]);
-
-        if (index === undefined) {
-          _this.items.push(item);
-
-          index = _this.items.indexOf(item);
-        } else {
-          _this.items[index] = item;
-        }
-
-        var onSelectKey =  'onClick';
-        var customClickHandler =  onClick;
-        var enabledEventHandlers = (_enabledEventHandlers = {
-          // onMouseMove is used over onMouseEnter here. onMouseMove
-          // is only triggered on actual mouse movement while onMouseEnter
-          // can fire on DOM changes, interrupting keyboard navigation
-          onMouseMove: callAllEventHandlers(onMouseMove, function () {
-            if (index === _this.getState().highlightedIndex) {
-              return;
-            }
-
-            _this.setHighlightedIndex(index, {
-              type: itemMouseEnter
-            }); // We never want to manually scroll when changing state based
-            // on `onMouseMove` because we will be moving the element out
-            // from under the user which is currently scrolling/moving the
-            // cursor
-
-
-            _this.avoidScrolling = true;
-
-            _this.internalSetTimeout(function () {
-              return _this.avoidScrolling = false;
-            }, 250);
-          }),
-          onMouseDown: callAllEventHandlers(onMouseDown, function (event) {
-            // This prevents the activeElement from being changed
-            // to the item so it can remain with the current activeElement
-            // which is a more common use case.
-            event.preventDefault();
-          })
-        }, _enabledEventHandlers[onSelectKey] = callAllEventHandlers(customClickHandler, function () {
-          _this.selectItemAtIndex(index, {
-            type: clickItem
-          });
-        }), _enabledEventHandlers); // Passing down the onMouseDown handler to prevent redirect
-        // of the activeElement if clicking on disabled items
-
-        var eventHandlers = rest.disabled ? {
-          onMouseDown: enabledEventHandlers.onMouseDown
-        } : enabledEventHandlers;
-        return _extends({
-          id: _this.getItemId(index),
-          role: 'option',
-          'aria-selected': _this.getState().highlightedIndex === index
-        }, eventHandlers, rest);
-      };
-
-      _this.clearItems = function () {
-        _this.items = [];
-      };
-
-      _this.reset = function (otherStateToSet, cb) {
-        if (otherStateToSet === void 0) {
-          otherStateToSet = {};
-        }
-
-        otherStateToSet = pickState(otherStateToSet);
-
-        _this.internalSetState(function (_ref8) {
-          var selectedItem = _ref8.selectedItem;
-          return _extends({
-            isOpen: _this.props.defaultIsOpen,
-            highlightedIndex: _this.props.defaultHighlightedIndex,
-            inputValue: _this.props.itemToString(selectedItem)
-          }, otherStateToSet);
-        }, cb);
-      };
-
-      _this.toggleMenu = function (otherStateToSet, cb) {
-        if (otherStateToSet === void 0) {
-          otherStateToSet = {};
-        }
-
-        otherStateToSet = pickState(otherStateToSet);
-
-        _this.internalSetState(function (_ref9) {
-          var isOpen = _ref9.isOpen;
-          return _extends({
-            isOpen: !isOpen
-          }, isOpen && {
-            highlightedIndex: _this.props.defaultHighlightedIndex
-          }, otherStateToSet);
-        }, function () {
-          var _this$getState7 = _this.getState(),
-              isOpen = _this$getState7.isOpen,
-              highlightedIndex = _this$getState7.highlightedIndex;
-
-          if (isOpen) {
-            if (_this.getItemCount() > 0 && typeof highlightedIndex === 'number') {
-              _this.setHighlightedIndex(highlightedIndex, otherStateToSet);
-            }
-          }
-
-          cbToCb(cb)();
-        });
-      };
-
-      _this.openMenu = function (cb) {
-        _this.internalSetState({
-          isOpen: true
-        }, cb);
-      };
-
-      _this.closeMenu = function (cb) {
-        _this.internalSetState({
-          isOpen: false
-        }, cb);
-      };
-
-      _this.updateStatus = debounce(function () {
-        var state = _this.getState();
-
-        var item = _this.items[state.highlightedIndex];
-
-        var resultCount = _this.getItemCount();
-
-        var status = _this.props.getA11yStatusMessage(_extends({
-          itemToString: _this.props.itemToString,
-          previousResultCount: _this.previousResultCount,
-          resultCount: resultCount,
-          highlightedItem: item
-        }, state));
-
-        _this.previousResultCount = resultCount;
-        setStatus(status, _this.props.environment.document);
-      }, 200);
-
-      var _this$props = _this.props,
-          defaultHighlightedIndex = _this$props.defaultHighlightedIndex,
-          _this$props$initialHi = _this$props.initialHighlightedIndex,
-          _highlightedIndex = _this$props$initialHi === void 0 ? defaultHighlightedIndex : _this$props$initialHi,
-          defaultIsOpen = _this$props.defaultIsOpen,
-          _this$props$initialIs = _this$props.initialIsOpen,
-          _isOpen = _this$props$initialIs === void 0 ? defaultIsOpen : _this$props$initialIs,
-          _this$props$initialIn = _this$props.initialInputValue,
-          _inputValue = _this$props$initialIn === void 0 ? '' : _this$props$initialIn,
-          _this$props$initialSe = _this$props.initialSelectedItem,
-          _selectedItem = _this$props$initialSe === void 0 ? null : _this$props$initialSe;
-
-      var _state = _this.getState({
-        highlightedIndex: _highlightedIndex,
-        isOpen: _isOpen,
-        inputValue: _inputValue,
-        selectedItem: _selectedItem
-      });
-
-      if (_state.selectedItem != null && _this.props.initialInputValue === undefined) {
-        _state.inputValue = _this.props.itemToString(_state.selectedItem);
-      }
-
-      _this.state = _state;
-      return _this;
-    }
-
-    var _proto = Downshift.prototype;
-
-    /**
-     * Clear all running timeouts
-     */
-    _proto.internalClearTimeouts = function internalClearTimeouts() {
-      this.timeoutIds.forEach(function (id) {
-        clearTimeout(id);
-      });
-      this.timeoutIds = [];
-    }
-    /**
-     * Gets the state based on internal state or props
-     * If a state value is passed via props, then that
-     * is the value given, otherwise it's retrieved from
-     * stateToMerge
-     *
-     * @param {Object} stateToMerge defaults to this.state
-     * @return {Object} the state
-     */
-    ;
-
-    _proto.getState = function getState$1(stateToMerge) {
-      if (stateToMerge === void 0) {
-        stateToMerge = this.state;
-      }
-
-      return getState(stateToMerge, this.props);
-    };
-
-    _proto.getItemCount = function getItemCount() {
-      // things read better this way. They're in priority order:
-      // 1. `this.itemCount`
-      // 2. `this.props.itemCount`
-      // 3. `this.items.length`
-      var itemCount = this.items.length;
-
-      if (this.itemCount != null) {
-        itemCount = this.itemCount;
-      } else if (this.props.itemCount !== undefined) {
-        itemCount = this.props.itemCount;
-      }
-
-      return itemCount;
-    };
-
-    _proto.getItemNodeFromIndex = function getItemNodeFromIndex(index) {
-      return this.props.environment.document.getElementById(this.getItemId(index));
-    };
-
-    _proto.scrollHighlightedItemIntoView = function scrollHighlightedItemIntoView() {
-      /* istanbul ignore else (react-native) */
-      {
-        var node = this.getItemNodeFromIndex(this.getState().highlightedIndex);
-        this.props.scrollIntoView(node, this._menuNode);
-      }
-    };
-
-    _proto.moveHighlightedIndex = function moveHighlightedIndex(amount, otherStateToSet) {
-      var _this6 = this;
-
-      var itemCount = this.getItemCount();
-
-      var _this$getState8 = this.getState(),
-          highlightedIndex = _this$getState8.highlightedIndex;
-
-      if (itemCount > 0) {
-        var nextHighlightedIndex = getNextWrappingIndex(amount, highlightedIndex, itemCount, function (index) {
-          return _this6.getItemNodeFromIndex(index);
-        });
-        this.setHighlightedIndex(nextHighlightedIndex, otherStateToSet);
-      }
-    };
-
-    _proto.getStateAndHelpers = function getStateAndHelpers() {
-      var _this$getState9 = this.getState(),
-          highlightedIndex = _this$getState9.highlightedIndex,
-          inputValue = _this$getState9.inputValue,
-          selectedItem = _this$getState9.selectedItem,
-          isOpen = _this$getState9.isOpen;
-
-      var itemToString = this.props.itemToString;
-      var id = this.id;
-      var getRootProps = this.getRootProps,
-          getToggleButtonProps = this.getToggleButtonProps,
-          getLabelProps = this.getLabelProps,
-          getMenuProps = this.getMenuProps,
-          getInputProps = this.getInputProps,
-          getItemProps = this.getItemProps,
-          openMenu = this.openMenu,
-          closeMenu = this.closeMenu,
-          toggleMenu = this.toggleMenu,
-          selectItem = this.selectItem,
-          selectItemAtIndex = this.selectItemAtIndex,
-          selectHighlightedItem = this.selectHighlightedItem,
-          setHighlightedIndex = this.setHighlightedIndex,
-          clearSelection = this.clearSelection,
-          clearItems = this.clearItems,
-          reset = this.reset,
-          setItemCount = this.setItemCount,
-          unsetItemCount = this.unsetItemCount,
-          setState = this.internalSetState;
-      return {
-        // prop getters
-        getRootProps: getRootProps,
-        getToggleButtonProps: getToggleButtonProps,
-        getLabelProps: getLabelProps,
-        getMenuProps: getMenuProps,
-        getInputProps: getInputProps,
-        getItemProps: getItemProps,
-        // actions
-        reset: reset,
-        openMenu: openMenu,
-        closeMenu: closeMenu,
-        toggleMenu: toggleMenu,
-        selectItem: selectItem,
-        selectItemAtIndex: selectItemAtIndex,
-        selectHighlightedItem: selectHighlightedItem,
-        setHighlightedIndex: setHighlightedIndex,
-        clearSelection: clearSelection,
-        clearItems: clearItems,
-        setItemCount: setItemCount,
-        unsetItemCount: unsetItemCount,
-        setState: setState,
-        // props
-        itemToString: itemToString,
-        // derived
-        id: id,
-        // state
-        highlightedIndex: highlightedIndex,
-        inputValue: inputValue,
-        isOpen: isOpen,
-        selectedItem: selectedItem
-      };
-    } //////////////////////////// ROOT
-    ;
-
-    _proto.componentDidMount = function componentDidMount() {
-      var _this7 = this;
-
-      /* istanbul ignore if (react-native) */
-      if (false) {}
-      /* istanbul ignore if (react-native) */
-
-
-      {
-        // this.isMouseDown helps us track whether the mouse is currently held down.
-        // This is useful when the user clicks on an item in the list, but holds the mouse
-        // down long enough for the list to disappear (because the blur event fires on the input)
-        // this.isMouseDown is used in the blur handler on the input to determine whether the blur event should
-        // trigger hiding the menu.
-        var onMouseDown = function onMouseDown() {
-          _this7.isMouseDown = true;
-        };
-
-        var onMouseUp = function onMouseUp(event) {
-          _this7.isMouseDown = false; // if the target element or the activeElement is within a downshift node
-          // then we don't want to reset downshift
-
-          var contextWithinDownshift = targetWithinDownshift(event.target, [_this7._rootNode, _this7._menuNode], _this7.props.environment.document);
-
-          if (!contextWithinDownshift && _this7.getState().isOpen) {
-            _this7.reset({
-              type: mouseUp
-            }, function () {
-              return _this7.props.onOuterClick(_this7.getStateAndHelpers());
-            });
-          }
-        }; // Touching an element in iOS gives focus and hover states, but touching out of
-        // the element will remove hover, and persist the focus state, resulting in the
-        // blur event not being triggered.
-        // this.isTouchMove helps us track whether the user is tapping or swiping on a touch screen.
-        // If the user taps outside of Downshift, the component should be reset,
-        // but not if the user is swiping
-
-
-        var onTouchStart = function onTouchStart() {
-          _this7.isTouchMove = false;
-        };
-
-        var onTouchMove = function onTouchMove() {
-          _this7.isTouchMove = true;
-        };
-
-        var onTouchEnd = function onTouchEnd(event) {
-          var contextWithinDownshift = targetWithinDownshift(event.target, [_this7._rootNode, _this7._menuNode], _this7.props.environment.document, false);
-
-          if (!_this7.isTouchMove && !contextWithinDownshift && _this7.getState().isOpen) {
-            _this7.reset({
-              type: touchEnd
-            }, function () {
-              return _this7.props.onOuterClick(_this7.getStateAndHelpers());
-            });
-          }
-        };
-
-        var environment = this.props.environment;
-        environment.addEventListener('mousedown', onMouseDown);
-        environment.addEventListener('mouseup', onMouseUp);
-        environment.addEventListener('touchstart', onTouchStart);
-        environment.addEventListener('touchmove', onTouchMove);
-        environment.addEventListener('touchend', onTouchEnd);
-
-        this.cleanup = function () {
-          _this7.internalClearTimeouts();
-
-          _this7.updateStatus.cancel();
-
-          environment.removeEventListener('mousedown', onMouseDown);
-          environment.removeEventListener('mouseup', onMouseUp);
-          environment.removeEventListener('touchstart', onTouchStart);
-          environment.removeEventListener('touchmove', onTouchMove);
-          environment.removeEventListener('touchend', onTouchEnd);
-        };
-      }
-    };
-
-    _proto.shouldScroll = function shouldScroll(prevState, prevProps) {
-      var _ref10 = this.props.highlightedIndex === undefined ? this.getState() : this.props,
-          currentHighlightedIndex = _ref10.highlightedIndex;
-
-      var _ref11 = prevProps.highlightedIndex === undefined ? prevState : prevProps,
-          prevHighlightedIndex = _ref11.highlightedIndex;
-
-      var scrollWhenOpen = currentHighlightedIndex && this.getState().isOpen && !prevState.isOpen;
-      var scrollWhenNavigating = currentHighlightedIndex !== prevHighlightedIndex;
-      return scrollWhenOpen || scrollWhenNavigating;
-    };
-
-    _proto.componentDidUpdate = function componentDidUpdate(prevProps, prevState) {
-      if (false) {}
-
-      if (isControlledProp(this.props, 'selectedItem') && this.props.selectedItemChanged(prevProps.selectedItem, this.props.selectedItem)) {
-        this.internalSetState({
-          type: controlledPropUpdatedSelectedItem,
-          inputValue: this.props.itemToString(this.props.selectedItem)
-        });
-      }
-
-      if (!this.avoidScrolling && this.shouldScroll(prevState, prevProps)) {
-        this.scrollHighlightedItemIntoView();
-      }
-      /* istanbul ignore else (react-native) */
-
-
-      {
-        this.updateStatus();
-      }
-    };
-
-    _proto.componentWillUnmount = function componentWillUnmount() {
-      this.cleanup(); // avoids memory leak
-    };
-
-    _proto.render = function render() {
-      var children = unwrapArray(this.props.children, downshift_esm_noop); // because the items are rerendered every time we call the children
-      // we clear this out each render and it will be populated again as
-      // getItemProps is called.
-
-      this.clearItems(); // we reset this so we know whether the user calls getRootProps during
-      // this render. If they do then we don't need to do anything,
-      // if they don't then we need to clone the element they return and
-      // apply the props for them.
-
-      this.getRootProps.called = false;
-      this.getRootProps.refKey = undefined;
-      this.getRootProps.suppressRefError = undefined; // we do something similar for getMenuProps
-
-      this.getMenuProps.called = false;
-      this.getMenuProps.refKey = undefined;
-      this.getMenuProps.suppressRefError = undefined; // we do something similar for getLabelProps
-
-      this.getLabelProps.called = false; // and something similar for getInputProps
-
-      this.getInputProps.called = false;
-      var element = unwrapArray(children(this.getStateAndHelpers()));
-
-      if (!element) {
-        return null;
-      }
-
-      if (this.getRootProps.called || this.props.suppressRefError) {
-        if (false) {}
-
-        return element;
-      } else if (isDOMElement(element)) {
-        // they didn't apply the root props, but we can clone
-        // this and apply the props ourselves
-        return /*#__PURE__*/cloneElement(element, this.getRootProps(getElementProps(element)));
-      }
-      /* istanbul ignore else */
-
-
-      if (false) {}
-      /* istanbul ignore next */
-
-
-      return undefined;
-    };
-
-    return Downshift;
-  }(Component);
-
-  Downshift.defaultProps = {
-    defaultHighlightedIndex: null,
-    defaultIsOpen: false,
-    getA11yStatusMessage: getA11yStatusMessage,
-    itemToString: function itemToString(i) {
-      if (i == null) {
-        return '';
-      }
-
-      if (false) {}
-
-      return String(i);
-    },
-    onStateChange: downshift_esm_noop,
-    onInputValueChange: downshift_esm_noop,
-    onUserAction: downshift_esm_noop,
-    onChange: downshift_esm_noop,
-    onSelect: downshift_esm_noop,
-    onOuterClick: downshift_esm_noop,
-    selectedItemChanged: function selectedItemChanged(prevItem, item) {
-      return prevItem !== item;
-    },
-    environment: typeof window === 'undefined'
-    /* istanbul ignore next (ssr) */
-    ? {} : window,
-    stateReducer: function stateReducer(state, stateToSet) {
-      return stateToSet;
-    },
-    suppressRefError: false,
-    scrollIntoView: scrollIntoView
-  };
-  Downshift.stateChangeTypes = stateChangeTypes;
-  return Downshift;
-}()));
-
- false ? 0 : void 0;
-
-function validateGetMenuPropsCalledCorrectly(node, _ref12) {
-  var refKey = _ref12.refKey;
-
-  if (!node) {
-    // eslint-disable-next-line no-console
-    console.error("downshift: The ref prop \"" + refKey + "\" from getMenuProps was not applied correctly on your menu element.");
-  }
-}
-
-function validateGetRootPropsCalledCorrectly(element, _ref13) {
-  var refKey = _ref13.refKey;
-  var refKeySpecified = refKey !== 'ref';
-  var isComposite = !isDOMElement(element);
-
-  if (isComposite && !refKeySpecified && !isForwardRef(element)) {
-    // eslint-disable-next-line no-console
-    console.error('downshift: You returned a non-DOM element. You must specify a refKey in getRootProps');
-  } else if (!isComposite && refKeySpecified) {
-    // eslint-disable-next-line no-console
-    console.error("downshift: You returned a DOM element. You should not specify a refKey in getRootProps. You specified \"" + refKey + "\"");
-  }
-
-  if (!isForwardRef(element) && !getElementProps(element)[refKey]) {
-    // eslint-disable-next-line no-console
-    console.error("downshift: You must apply the ref prop \"" + refKey + "\" from getRootProps onto your root element.");
-  }
-}
-
-var dropdownDefaultStateValues = {
-  highlightedIndex: -1,
-  isOpen: false,
-  selectedItem: null,
-  inputValue: ''
-};
-
-function callOnChangeProps(action, state, newState) {
-  var props = action.props,
-      type = action.type;
-  var changes = {};
-  Object.keys(state).forEach(function (key) {
-    invokeOnChangeHandler(key, action, state, newState);
-
-    if (newState[key] !== state[key]) {
-      changes[key] = newState[key];
-    }
-  });
-
-  if (props.onStateChange && Object.keys(changes).length) {
-    props.onStateChange(extends_extends({
-      type: type
-    }, changes));
-  }
-}
-
-function invokeOnChangeHandler(key, action, state, newState) {
-  var props = action.props,
-      type = action.type;
-  var handler = "on" + capitalizeString(key) + "Change";
-
-  if (props[handler] && newState[key] !== undefined && newState[key] !== state[key]) {
-    props[handler](extends_extends({
-      type: type
-    }, newState));
-  }
-}
-/**
- * Default state reducer that returns the changes.
- *
- * @param {Object} s state.
- * @param {Object} a action with changes.
- * @returns {Object} changes.
- */
-
-
-function stateReducer(s, a) {
-  return a.changes;
-}
-/**
- * Returns a message to be added to aria-live region when item is selected.
- *
- * @param {Object} selectionParameters Parameters required to build the message.
- * @returns {string} The a11y message.
- */
-
-
-function getA11ySelectionMessage(selectionParameters) {
-  var selectedItem = selectionParameters.selectedItem,
-      itemToStringLocal = selectionParameters.itemToString;
-  return selectedItem ? itemToStringLocal(selectedItem) + " has been selected." : '';
-}
-/**
- * Debounced call for updating the a11y message.
- */
-
-
-var updateA11yStatus = debounce(function (getA11yMessage, document) {
-  setStatus(getA11yMessage(), document);
-}, 200); // istanbul ignore next
-
-var downshift_esm_useIsomorphicLayoutEffect = typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined' ? external_React_.useLayoutEffect : external_React_.useEffect;
-
-function useElementIds(_ref) {
-  var _ref$id = _ref.id,
-      id = _ref$id === void 0 ? "downshift-" + generateId() : _ref$id,
-      labelId = _ref.labelId,
-      menuId = _ref.menuId,
-      getItemId = _ref.getItemId,
-      toggleButtonId = _ref.toggleButtonId,
-      inputId = _ref.inputId;
-  var elementIdsRef = (0,external_React_.useRef)({
-    labelId: labelId || id + "-label",
-    menuId: menuId || id + "-menu",
-    getItemId: getItemId || function (index) {
-      return id + "-item-" + index;
-    },
-    toggleButtonId: toggleButtonId || id + "-toggle-button",
-    inputId: inputId || id + "-input"
-  });
-  return elementIdsRef.current;
-}
-
-function getItemIndex(index, item, items) {
-  if (index !== undefined) {
-    return index;
-  }
-
-  if (items.length === 0) {
-    return -1;
-  }
-
-  return items.indexOf(item);
-}
-
-function itemToString(item) {
-  return item ? String(item) : '';
-}
-
-function isAcceptedCharacterKey(key) {
-  return /^\S{1}$/.test(key);
-}
-
-function capitalizeString(string) {
-  return "" + string.slice(0, 1).toUpperCase() + string.slice(1);
-}
-
-function downshift_esm_useLatestRef(val) {
-  var ref = (0,external_React_.useRef)(val); // technically this is not "concurrent mode safe" because we're manipulating
-  // the value during render (so it's not idempotent). However, the places this
-  // hook is used is to support memoizing callbacks which will be called
-  // *during* render, so we need the latest values *during* render.
-  // If not for this, then we'd probably want to use useLayoutEffect instead.
-
-  ref.current = val;
-  return ref;
-}
-/**
- * Computes the controlled state using a the previous state, props,
- * two reducers, one from downshift and an optional one from the user.
- * Also calls the onChange handlers for state values that have changed.
- *
- * @param {Function} reducer Reducer function from downshift.
- * @param {Object} initialState Initial state of the hook.
- * @param {Object} props The hook props.
- * @returns {Array} An array with the state and an action dispatcher.
- */
-
-
-function useEnhancedReducer(reducer, initialState, props) {
-  var prevStateRef = (0,external_React_.useRef)();
-  var actionRef = (0,external_React_.useRef)();
-  var enhancedReducer = (0,external_React_.useCallback)(function (state, action) {
-    actionRef.current = action;
-    state = getState(state, action.props);
-    var changes = reducer(state, action);
-    var newState = action.props.stateReducer(state, extends_extends({}, action, {
-      changes: changes
-    }));
-    return newState;
-  }, [reducer]);
-
-  var _useReducer = (0,external_React_.useReducer)(enhancedReducer, initialState),
-      state = _useReducer[0],
-      dispatch = _useReducer[1];
-
-  var propsRef = downshift_esm_useLatestRef(props);
-  var dispatchWithProps = (0,external_React_.useCallback)(function (action) {
-    return dispatch(extends_extends({
-      props: propsRef.current
-    }, action));
-  }, [propsRef]);
-  var action = actionRef.current;
-  (0,external_React_.useEffect)(function () {
-    if (action && prevStateRef.current && prevStateRef.current !== state) {
-      callOnChangeProps(action, getState(prevStateRef.current, action.props), state);
-    }
-
-    prevStateRef.current = state;
-  }, [state, props, action]);
-  return [state, dispatchWithProps];
-}
-/**
- * Wraps the useEnhancedReducer and applies the controlled prop values before
- * returning the new state.
- *
- * @param {Function} reducer Reducer function from downshift.
- * @param {Object} initialState Initial state of the hook.
- * @param {Object} props The hook props.
- * @returns {Array} An array with the state and an action dispatcher.
- */
-
-
-function useControlledReducer(reducer, initialState, props) {
-  var _useEnhancedReducer = useEnhancedReducer(reducer, initialState, props),
-      state = _useEnhancedReducer[0],
-      dispatch = _useEnhancedReducer[1];
-
-  return [getState(state, props), dispatch];
-}
-
-var defaultProps = {
-  itemToString: itemToString,
-  stateReducer: stateReducer,
-  getA11ySelectionMessage: getA11ySelectionMessage,
-  scrollIntoView: scrollIntoView,
-  circularNavigation: false,
-  environment: typeof window === 'undefined'
-  /* istanbul ignore next (ssr) */
-  ? {} : window
-};
-
-function getDefaultValue(props, propKey, defaultStateValues) {
-  if (defaultStateValues === void 0) {
-    defaultStateValues = dropdownDefaultStateValues;
-  }
-
-  var defaultPropKey = "default" + capitalizeString(propKey);
-
-  if (defaultPropKey in props) {
-    return props[defaultPropKey];
-  }
-
-  return defaultStateValues[propKey];
-}
-
-function getInitialValue(props, propKey, defaultStateValues) {
-  if (defaultStateValues === void 0) {
-    defaultStateValues = dropdownDefaultStateValues;
-  }
-
-  if (propKey in props) {
-    return props[propKey];
-  }
-
-  var initialPropKey = "initial" + capitalizeString(propKey);
-
-  if (initialPropKey in props) {
-    return props[initialPropKey];
-  }
-
-  return getDefaultValue(props, propKey, defaultStateValues);
-}
-
-function getInitialState(props) {
-  var selectedItem = getInitialValue(props, 'selectedItem');
-  var isOpen = getInitialValue(props, 'isOpen');
-  var highlightedIndex = getInitialValue(props, 'highlightedIndex');
-  var inputValue = getInitialValue(props, 'inputValue');
-  return {
-    highlightedIndex: highlightedIndex < 0 && selectedItem && isOpen ? props.items.indexOf(selectedItem) : highlightedIndex,
-    isOpen: isOpen,
-    selectedItem: selectedItem,
-    inputValue: inputValue
-  };
-}
-
-function getHighlightedIndexOnOpen(props, state, offset, getItemNodeFromIndex) {
-  var items = props.items,
-      initialHighlightedIndex = props.initialHighlightedIndex,
-      defaultHighlightedIndex = props.defaultHighlightedIndex;
-  var selectedItem = state.selectedItem,
-      highlightedIndex = state.highlightedIndex;
-
-  if (items.length === 0) {
-    return -1;
-  } // initialHighlightedIndex will give value to highlightedIndex on initial state only.
-
-
-  if (initialHighlightedIndex !== undefined && highlightedIndex === initialHighlightedIndex) {
-    return initialHighlightedIndex;
-  }
-
-  if (defaultHighlightedIndex !== undefined) {
-    return defaultHighlightedIndex;
-  }
-
-  if (selectedItem) {
-    if (offset === 0) {
-      return items.indexOf(selectedItem);
-    }
-
-    return getNextWrappingIndex(offset, items.indexOf(selectedItem), items.length, getItemNodeFromIndex, false);
-  }
-
-  if (offset === 0) {
-    return -1;
-  }
-
-  return offset < 0 ? items.length - 1 : 0;
-}
-/**
- * Reuse the movement tracking of mouse and touch events.
- *
- * @param {boolean} isOpen Whether the dropdown is open or not.
- * @param {Array<Object>} downshiftElementRefs Downshift element refs to track movement (toggleButton, menu etc.)
- * @param {Object} environment Environment where component/hook exists.
- * @param {Function} handleBlur Handler on blur from mouse or touch.
- * @returns {Object} Ref containing whether mouseDown or touchMove event is happening
- */
-
-
-function useMouseAndTouchTracker(isOpen, downshiftElementRefs, environment, handleBlur) {
-  var mouseAndTouchTrackersRef = (0,external_React_.useRef)({
-    isMouseDown: false,
-    isTouchMove: false
-  });
-  (0,external_React_.useEffect)(function () {
-    // The same strategy for checking if a click occurred inside or outside downsift
-    // as in downshift.js.
-    var onMouseDown = function onMouseDown() {
-      mouseAndTouchTrackersRef.current.isMouseDown = true;
-    };
-
-    var onMouseUp = function onMouseUp(event) {
-      mouseAndTouchTrackersRef.current.isMouseDown = false;
-
-      if (isOpen && !targetWithinDownshift(event.target, downshiftElementRefs.map(function (ref) {
-        return ref.current;
-      }), environment.document)) {
-        handleBlur();
-      }
-    };
-
-    var onTouchStart = function onTouchStart() {
-      mouseAndTouchTrackersRef.current.isTouchMove = false;
-    };
-
-    var onTouchMove = function onTouchMove() {
-      mouseAndTouchTrackersRef.current.isTouchMove = true;
-    };
-
-    var onTouchEnd = function onTouchEnd(event) {
-      if (isOpen && !mouseAndTouchTrackersRef.current.isTouchMove && !targetWithinDownshift(event.target, downshiftElementRefs.map(function (ref) {
-        return ref.current;
-      }), environment.document, false)) {
-        handleBlur();
-      }
-    };
-
-    environment.addEventListener('mousedown', onMouseDown);
-    environment.addEventListener('mouseup', onMouseUp);
-    environment.addEventListener('touchstart', onTouchStart);
-    environment.addEventListener('touchmove', onTouchMove);
-    environment.addEventListener('touchend', onTouchEnd);
-    return function cleanup() {
-      environment.removeEventListener('mousedown', onMouseDown);
-      environment.removeEventListener('mouseup', onMouseUp);
-      environment.removeEventListener('touchstart', onTouchStart);
-      environment.removeEventListener('touchmove', onTouchMove);
-      environment.removeEventListener('touchend', onTouchEnd);
-    }; // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, environment]);
-  return mouseAndTouchTrackersRef;
-}
-/* istanbul ignore next */
-// eslint-disable-next-line import/no-mutable-exports
-
-
-var useGetterPropsCalledChecker = function useGetterPropsCalledChecker() {
-  return downshift_esm_noop;
-};
-/**
- * Custom hook that checks if getter props are called correctly.
- *
- * @param  {...any} propKeys Getter prop names to be handled.
- * @returns {Function} Setter function called inside getter props to set call information.
- */
-
-/* istanbul ignore next */
-
-
-if (false) {}
-
-function useA11yMessageSetter(getA11yMessage, dependencyArray, _ref2) {
-  var isInitialMount = _ref2.isInitialMount,
-      highlightedIndex = _ref2.highlightedIndex,
-      items = _ref2.items,
-      environment = _ref2.environment,
-      rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref2, ["isInitialMount", "highlightedIndex", "items", "environment"]);
-
-  // Sets a11y status message on changes in state.
-  (0,external_React_.useEffect)(function () {
-    if (isInitialMount) {
-      return;
-    }
-
-    updateA11yStatus(function () {
-      return getA11yMessage(extends_extends({
-        highlightedIndex: highlightedIndex,
-        highlightedItem: items[highlightedIndex],
-        resultCount: items.length
-      }, rest));
-    }, environment.document); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, dependencyArray);
-}
-
-function useScrollIntoView(_ref3) {
-  var highlightedIndex = _ref3.highlightedIndex,
-      isOpen = _ref3.isOpen,
-      itemRefs = _ref3.itemRefs,
-      getItemNodeFromIndex = _ref3.getItemNodeFromIndex,
-      menuElement = _ref3.menuElement,
-      scrollIntoViewProp = _ref3.scrollIntoView;
-  // used not to scroll on highlight by mouse.
-  var shouldScrollRef = (0,external_React_.useRef)(true); // Scroll on highlighted item if change comes from keyboard.
-
-  downshift_esm_useIsomorphicLayoutEffect(function () {
-    if (highlightedIndex < 0 || !isOpen || !Object.keys(itemRefs.current).length) {
-      return;
-    }
-
-    if (shouldScrollRef.current === false) {
-      shouldScrollRef.current = true;
-    } else {
-      scrollIntoViewProp(getItemNodeFromIndex(highlightedIndex), menuElement);
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-
-  }, [highlightedIndex]);
-  return shouldScrollRef;
-} // eslint-disable-next-line import/no-mutable-exports
-
-
-var useControlPropsValidator = downshift_esm_noop;
-/* istanbul ignore next */
-
-if (false) {}
-
-/* eslint-disable complexity */
-
-function downshiftCommonReducer(state, action, stateChangeTypes) {
-  var type = action.type,
-      props = action.props;
-  var changes;
-
-  switch (type) {
-    case stateChangeTypes.ItemMouseMove:
-      changes = {
-        highlightedIndex: action.index
-      };
-      break;
-
-    case stateChangeTypes.MenuMouseLeave:
-      changes = {
-        highlightedIndex: -1
-      };
-      break;
-
-    case stateChangeTypes.ToggleButtonClick:
-    case stateChangeTypes.FunctionToggleMenu:
-      changes = {
-        isOpen: !state.isOpen,
-        highlightedIndex: state.isOpen ? -1 : getHighlightedIndexOnOpen(props, state, 0)
-      };
-      break;
-
-    case stateChangeTypes.FunctionOpenMenu:
-      changes = {
-        isOpen: true,
-        highlightedIndex: getHighlightedIndexOnOpen(props, state, 0)
-      };
-      break;
-
-    case stateChangeTypes.FunctionCloseMenu:
-      changes = {
-        isOpen: false
-      };
-      break;
-
-    case stateChangeTypes.FunctionSetHighlightedIndex:
-      changes = {
-        highlightedIndex: action.highlightedIndex
-      };
-      break;
-
-    case stateChangeTypes.FunctionSetInputValue:
-      changes = {
-        inputValue: action.inputValue
-      };
-      break;
-
-    case stateChangeTypes.FunctionReset:
-      changes = {
-        highlightedIndex: getDefaultValue(props, 'highlightedIndex'),
-        isOpen: getDefaultValue(props, 'isOpen'),
-        selectedItem: getDefaultValue(props, 'selectedItem'),
-        inputValue: getDefaultValue(props, 'inputValue')
-      };
-      break;
-
-    default:
-      throw new Error('Reducer called without proper action type.');
-  }
-
-  return extends_extends({}, state, changes);
-}
-/* eslint-enable complexity */
-
-function getItemIndexByCharacterKey(keysSoFar, highlightedIndex, items, itemToString, getItemNodeFromIndex) {
-  var lowerCasedKeysSoFar = keysSoFar.toLowerCase();
-
-  for (var index = 0; index < items.length; index++) {
-    var offsetIndex = (index + highlightedIndex + 1) % items.length;
-
-    if (itemToString(items[offsetIndex]).toLowerCase().startsWith(lowerCasedKeysSoFar)) {
-      var element = getItemNodeFromIndex(offsetIndex);
-
-      if (!(element && element.hasAttribute('disabled'))) {
-        return offsetIndex;
-      }
-    }
-  }
-
-  return highlightedIndex;
-}
-
-var propTypes = {
-  items: (prop_types_default()).array.isRequired,
-  itemToString: (prop_types_default()).func,
-  getA11yStatusMessage: (prop_types_default()).func,
-  getA11ySelectionMessage: (prop_types_default()).func,
-  circularNavigation: (prop_types_default()).bool,
-  highlightedIndex: (prop_types_default()).number,
-  defaultHighlightedIndex: (prop_types_default()).number,
-  initialHighlightedIndex: (prop_types_default()).number,
-  isOpen: (prop_types_default()).bool,
-  defaultIsOpen: (prop_types_default()).bool,
-  initialIsOpen: (prop_types_default()).bool,
-  selectedItem: (prop_types_default()).any,
-  initialSelectedItem: (prop_types_default()).any,
-  defaultSelectedItem: (prop_types_default()).any,
-  id: (prop_types_default()).string,
-  labelId: (prop_types_default()).string,
-  menuId: (prop_types_default()).string,
-  getItemId: (prop_types_default()).func,
-  toggleButtonId: (prop_types_default()).string,
-  stateReducer: (prop_types_default()).func,
-  onSelectedItemChange: (prop_types_default()).func,
-  onHighlightedIndexChange: (prop_types_default()).func,
-  onStateChange: (prop_types_default()).func,
-  onIsOpenChange: (prop_types_default()).func,
-  environment: prop_types_default().shape({
-    addEventListener: (prop_types_default()).func,
-    removeEventListener: (prop_types_default()).func,
-    document: prop_types_default().shape({
-      getElementById: (prop_types_default()).func,
-      activeElement: (prop_types_default()).any,
-      body: (prop_types_default()).any
-    })
-  })
-};
-/**
- * Default implementation for status message. Only added when menu is open.
- * Will specift if there are results in the list, and if so, how many,
- * and what keys are relevant.
- *
- * @param {Object} param the downshift state and other relevant properties
- * @return {String} the a11y status message
- */
-
-function getA11yStatusMessage$1(_ref) {
-  var isOpen = _ref.isOpen,
-      resultCount = _ref.resultCount,
-      previousResultCount = _ref.previousResultCount;
-
-  if (!isOpen) {
-    return '';
-  }
-
-  if (!resultCount) {
-    return 'No results are available.';
-  }
-
-  if (resultCount !== previousResultCount) {
-    return resultCount + " result" + (resultCount === 1 ? ' is' : 's are') + " available, use up and down arrow keys to navigate. Press Enter or Space Bar keys to select.";
-  }
-
-  return '';
-}
-
-var defaultProps$1 = extends_extends({}, defaultProps, {
-  getA11yStatusMessage: getA11yStatusMessage$1
-}); // eslint-disable-next-line import/no-mutable-exports
-
-
-var validatePropTypes = downshift_esm_noop;
-/* istanbul ignore next */
-
-if (false) {}
-
-var MenuKeyDownArrowDown =  false ? 0 : 0;
-var MenuKeyDownArrowUp =  false ? 0 : 1;
-var MenuKeyDownEscape =  false ? 0 : 2;
-var MenuKeyDownHome =  false ? 0 : 3;
-var MenuKeyDownEnd =  false ? 0 : 4;
-var MenuKeyDownEnter =  false ? 0 : 5;
-var MenuKeyDownSpaceButton =  false ? 0 : 6;
-var MenuKeyDownCharacter =  false ? 0 : 7;
-var MenuBlur =  false ? 0 : 8;
-var MenuMouseLeave =  false ? 0 : 9;
-var ItemMouseMove =  false ? 0 : 10;
-var ItemClick =  false ? 0 : 11;
-var ToggleButtonClick =  false ? 0 : 12;
-var ToggleButtonKeyDownArrowDown =  false ? 0 : 13;
-var ToggleButtonKeyDownArrowUp =  false ? 0 : 14;
-var ToggleButtonKeyDownCharacter =  false ? 0 : 15;
-var FunctionToggleMenu =  false ? 0 : 16;
-var FunctionOpenMenu =  false ? 0 : 17;
-var FunctionCloseMenu =  false ? 0 : 18;
-var FunctionSetHighlightedIndex =  false ? 0 : 19;
-var FunctionSelectItem =  false ? 0 : 20;
-var FunctionSetInputValue =  false ? 0 : 21;
-var FunctionReset =  false ? 0 : 22;
-
-var stateChangeTypes$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  MenuKeyDownArrowDown: MenuKeyDownArrowDown,
-  MenuKeyDownArrowUp: MenuKeyDownArrowUp,
-  MenuKeyDownEscape: MenuKeyDownEscape,
-  MenuKeyDownHome: MenuKeyDownHome,
-  MenuKeyDownEnd: MenuKeyDownEnd,
-  MenuKeyDownEnter: MenuKeyDownEnter,
-  MenuKeyDownSpaceButton: MenuKeyDownSpaceButton,
-  MenuKeyDownCharacter: MenuKeyDownCharacter,
-  MenuBlur: MenuBlur,
-  MenuMouseLeave: MenuMouseLeave,
-  ItemMouseMove: ItemMouseMove,
-  ItemClick: ItemClick,
-  ToggleButtonClick: ToggleButtonClick,
-  ToggleButtonKeyDownArrowDown: ToggleButtonKeyDownArrowDown,
-  ToggleButtonKeyDownArrowUp: ToggleButtonKeyDownArrowUp,
-  ToggleButtonKeyDownCharacter: ToggleButtonKeyDownCharacter,
-  FunctionToggleMenu: FunctionToggleMenu,
-  FunctionOpenMenu: FunctionOpenMenu,
-  FunctionCloseMenu: FunctionCloseMenu,
-  FunctionSetHighlightedIndex: FunctionSetHighlightedIndex,
-  FunctionSelectItem: FunctionSelectItem,
-  FunctionSetInputValue: FunctionSetInputValue,
-  FunctionReset: FunctionReset
-});
-
-/* eslint-disable complexity */
-
-function downshiftSelectReducer(state, action) {
-  var type = action.type,
-      props = action.props,
-      shiftKey = action.shiftKey;
-  var changes;
-
-  switch (type) {
-    case ItemClick:
-      changes = {
-        isOpen: getDefaultValue(props, 'isOpen'),
-        highlightedIndex: getDefaultValue(props, 'highlightedIndex'),
-        selectedItem: props.items[action.index]
-      };
-      break;
-
-    case ToggleButtonKeyDownCharacter:
-      {
-        var lowercasedKey = action.key;
-        var inputValue = "" + state.inputValue + lowercasedKey;
-        var itemIndex = getItemIndexByCharacterKey(inputValue, state.selectedItem ? props.items.indexOf(state.selectedItem) : -1, props.items, props.itemToString, action.getItemNodeFromIndex);
-        changes = extends_extends({
-          inputValue: inputValue
-        }, itemIndex >= 0 && {
-          selectedItem: props.items[itemIndex]
-        });
-      }
-      break;
-
-    case ToggleButtonKeyDownArrowDown:
-      changes = {
-        highlightedIndex: getHighlightedIndexOnOpen(props, state, 1, action.getItemNodeFromIndex),
-        isOpen: true
-      };
-      break;
-
-    case ToggleButtonKeyDownArrowUp:
-      changes = {
-        highlightedIndex: getHighlightedIndexOnOpen(props, state, -1, action.getItemNodeFromIndex),
-        isOpen: true
-      };
-      break;
-
-    case MenuKeyDownEnter:
-    case MenuKeyDownSpaceButton:
-      changes = extends_extends({
-        isOpen: getDefaultValue(props, 'isOpen'),
-        highlightedIndex: getDefaultValue(props, 'highlightedIndex')
-      }, state.highlightedIndex >= 0 && {
-        selectedItem: props.items[state.highlightedIndex]
-      });
-      break;
-
-    case MenuKeyDownHome:
-      changes = {
-        highlightedIndex: getNextNonDisabledIndex(1, 0, props.items.length, action.getItemNodeFromIndex, false)
-      };
-      break;
-
-    case MenuKeyDownEnd:
-      changes = {
-        highlightedIndex: getNextNonDisabledIndex(-1, props.items.length - 1, props.items.length, action.getItemNodeFromIndex, false)
-      };
-      break;
-
-    case MenuKeyDownEscape:
-      changes = {
-        isOpen: false,
-        highlightedIndex: -1
-      };
-      break;
-
-    case MenuBlur:
-      changes = {
-        isOpen: false,
-        highlightedIndex: -1
-      };
-      break;
-
-    case MenuKeyDownCharacter:
-      {
-        var _lowercasedKey = action.key;
-
-        var _inputValue = "" + state.inputValue + _lowercasedKey;
-
-        var highlightedIndex = getItemIndexByCharacterKey(_inputValue, state.highlightedIndex, props.items, props.itemToString, action.getItemNodeFromIndex);
-        changes = extends_extends({
-          inputValue: _inputValue
-        }, highlightedIndex >= 0 && {
-          highlightedIndex: highlightedIndex
-        });
-      }
-      break;
-
-    case MenuKeyDownArrowDown:
-      changes = {
-        highlightedIndex: getNextWrappingIndex(shiftKey ? 5 : 1, state.highlightedIndex, props.items.length, action.getItemNodeFromIndex, props.circularNavigation)
-      };
-      break;
-
-    case MenuKeyDownArrowUp:
-      changes = {
-        highlightedIndex: getNextWrappingIndex(shiftKey ? -5 : -1, state.highlightedIndex, props.items.length, action.getItemNodeFromIndex, props.circularNavigation)
-      };
-      break;
-
-    case FunctionSelectItem:
-      changes = {
-        selectedItem: action.selectedItem
-      };
-      break;
-
-    default:
-      return downshiftCommonReducer(state, action, stateChangeTypes$1);
-  }
-
-  return extends_extends({}, state, changes);
-}
-/* eslint-enable complexity */
-
-useSelect.stateChangeTypes = stateChangeTypes$1;
-
-function useSelect(userProps) {
-  if (userProps === void 0) {
-    userProps = {};
-  }
-
-  validatePropTypes(userProps, useSelect); // Props defaults and destructuring.
-
-  var props = extends_extends({}, defaultProps$1, userProps);
-
-  var items = props.items,
-      scrollIntoView = props.scrollIntoView,
-      environment = props.environment,
-      initialIsOpen = props.initialIsOpen,
-      defaultIsOpen = props.defaultIsOpen,
-      itemToString = props.itemToString,
-      getA11ySelectionMessage = props.getA11ySelectionMessage,
-      getA11yStatusMessage = props.getA11yStatusMessage; // Initial state depending on controlled props.
-
-  var initialState = getInitialState(props);
-
-  var _useControlledReducer = useControlledReducer(downshiftSelectReducer, initialState, props),
-      state = _useControlledReducer[0],
-      dispatch = _useControlledReducer[1];
-
-  var isOpen = state.isOpen,
-      highlightedIndex = state.highlightedIndex,
-      selectedItem = state.selectedItem,
-      inputValue = state.inputValue; // Element efs.
-
-  var toggleButtonRef = (0,external_React_.useRef)(null);
-  var menuRef = (0,external_React_.useRef)(null);
-  var itemRefs = (0,external_React_.useRef)({}); // used not to trigger menu blur action in some scenarios.
-
-  var shouldBlurRef = (0,external_React_.useRef)(true); // used to keep the inputValue clearTimeout object between renders.
-
-  var clearTimeoutRef = (0,external_React_.useRef)(null); // prevent id re-generation between renders.
-
-  var elementIds = useElementIds(props); // used to keep track of how many items we had on previous cycle.
-
-  var previousResultCountRef = (0,external_React_.useRef)();
-  var isInitialMountRef = (0,external_React_.useRef)(true); // utility callback to get item element.
-
-  var latest = downshift_esm_useLatestRef({
-    state: state,
-    props: props
-  }); // Some utils.
-
-  var getItemNodeFromIndex = (0,external_React_.useCallback)(function (index) {
-    return itemRefs.current[elementIds.getItemId(index)];
-  }, [elementIds]); // Effects.
-  // Sets a11y status message on changes in state.
-
-  useA11yMessageSetter(getA11yStatusMessage, [isOpen, highlightedIndex, inputValue, items], extends_extends({
-    isInitialMount: isInitialMountRef.current,
-    previousResultCount: previousResultCountRef.current,
-    items: items,
-    environment: environment,
-    itemToString: itemToString
-  }, state)); // Sets a11y status message on changes in selectedItem.
-
-  useA11yMessageSetter(getA11ySelectionMessage, [selectedItem], extends_extends({
-    isInitialMount: isInitialMountRef.current,
-    previousResultCount: previousResultCountRef.current,
-    items: items,
-    environment: environment,
-    itemToString: itemToString
-  }, state)); // Scroll on highlighted item if change comes from keyboard.
-
-  var shouldScrollRef = useScrollIntoView({
-    menuElement: menuRef.current,
-    highlightedIndex: highlightedIndex,
-    isOpen: isOpen,
-    itemRefs: itemRefs,
-    scrollIntoView: scrollIntoView,
-    getItemNodeFromIndex: getItemNodeFromIndex
-  }); // Sets cleanup for the keysSoFar after 500ms.
-
-  (0,external_React_.useEffect)(function () {
-    // init the clean function here as we need access to dispatch.
-    if (isInitialMountRef.current) {
-      clearTimeoutRef.current = debounce(function (outerDispatch) {
-        outerDispatch({
-          type: FunctionSetInputValue,
-          inputValue: ''
-        });
-      }, 500);
-    }
-
-    if (!inputValue) {
-      return;
-    }
-
-    clearTimeoutRef.current(dispatch);
-  }, [dispatch, inputValue]);
-  useControlPropsValidator({
-    isInitialMount: isInitialMountRef.current,
-    props: props,
-    state: state
-  });
-  /* Controls the focus on the menu or the toggle button. */
-
-  (0,external_React_.useEffect)(function () {
-    // Don't focus menu on first render.
-    if (isInitialMountRef.current) {
-      // Unless it was initialised as open.
-      if ((initialIsOpen || defaultIsOpen || isOpen) && menuRef.current) {
-        menuRef.current.focus();
-      }
-
-      return;
-    } // Focus menu on open.
-
-
-    if (isOpen) {
-      // istanbul ignore else
-      if (menuRef.current) {
-        menuRef.current.focus();
-      }
-
-      return;
-    } // Focus toggleButton on close, but not if it was closed with (Shift+)Tab.
-
-
-    if (environment.document.activeElement === menuRef.current) {
-      // istanbul ignore else
-      if (toggleButtonRef.current) {
-        shouldBlurRef.current = false;
-        toggleButtonRef.current.focus();
-      }
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-
-  }, [isOpen]);
-  (0,external_React_.useEffect)(function () {
-    if (isInitialMountRef.current) {
-      return;
-    }
-
-    previousResultCountRef.current = items.length;
-  }); // Add mouse/touch events to document.
-
-  var mouseAndTouchTrackersRef = useMouseAndTouchTracker(isOpen, [menuRef, toggleButtonRef], environment, function () {
-    dispatch({
-      type: MenuBlur
-    });
-  });
-  var setGetterPropCallInfo = useGetterPropsCalledChecker('getMenuProps', 'getToggleButtonProps'); // Make initial ref false.
-
-  (0,external_React_.useEffect)(function () {
-    isInitialMountRef.current = false;
-  }, []); // Reset itemRefs on close.
-
-  (0,external_React_.useEffect)(function () {
-    if (!isOpen) {
-      itemRefs.current = {};
-    }
-  }, [isOpen]); // Event handler functions.
-
-  var toggleButtonKeyDownHandlers = (0,external_React_.useMemo)(function () {
-    return {
-      ArrowDown: function ArrowDown(event) {
-        event.preventDefault();
-        dispatch({
-          type: ToggleButtonKeyDownArrowDown,
-          getItemNodeFromIndex: getItemNodeFromIndex,
-          shiftKey: event.shiftKey
-        });
-      },
-      ArrowUp: function ArrowUp(event) {
-        event.preventDefault();
-        dispatch({
-          type: ToggleButtonKeyDownArrowUp,
-          getItemNodeFromIndex: getItemNodeFromIndex,
-          shiftKey: event.shiftKey
-        });
-      }
-    };
-  }, [dispatch, getItemNodeFromIndex]);
-  var menuKeyDownHandlers = (0,external_React_.useMemo)(function () {
-    return {
-      ArrowDown: function ArrowDown(event) {
-        event.preventDefault();
-        dispatch({
-          type: MenuKeyDownArrowDown,
-          getItemNodeFromIndex: getItemNodeFromIndex,
-          shiftKey: event.shiftKey
-        });
-      },
-      ArrowUp: function ArrowUp(event) {
-        event.preventDefault();
-        dispatch({
-          type: MenuKeyDownArrowUp,
-          getItemNodeFromIndex: getItemNodeFromIndex,
-          shiftKey: event.shiftKey
-        });
-      },
-      Home: function Home(event) {
-        event.preventDefault();
-        dispatch({
-          type: MenuKeyDownHome,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      },
-      End: function End(event) {
-        event.preventDefault();
-        dispatch({
-          type: MenuKeyDownEnd,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      },
-      Escape: function Escape() {
-        dispatch({
-          type: MenuKeyDownEscape
-        });
-      },
-      Enter: function Enter(event) {
-        event.preventDefault();
-        dispatch({
-          type: MenuKeyDownEnter
-        });
-      },
-      ' ': function _(event) {
-        event.preventDefault();
-        dispatch({
-          type: MenuKeyDownSpaceButton
-        });
-      }
-    };
-  }, [dispatch, getItemNodeFromIndex]); // Action functions.
-
-  var toggleMenu = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionToggleMenu
-    });
-  }, [dispatch]);
-  var closeMenu = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionCloseMenu
-    });
-  }, [dispatch]);
-  var openMenu = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionOpenMenu
-    });
-  }, [dispatch]);
-  var setHighlightedIndex = (0,external_React_.useCallback)(function (newHighlightedIndex) {
-    dispatch({
-      type: FunctionSetHighlightedIndex,
-      highlightedIndex: newHighlightedIndex
-    });
-  }, [dispatch]);
-  var selectItem = (0,external_React_.useCallback)(function (newSelectedItem) {
-    dispatch({
-      type: FunctionSelectItem,
-      selectedItem: newSelectedItem
-    });
-  }, [dispatch]);
-  var reset = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionReset
-    });
-  }, [dispatch]);
-  var setInputValue = (0,external_React_.useCallback)(function (newInputValue) {
-    dispatch({
-      type: FunctionSetInputValue,
-      inputValue: newInputValue
-    });
-  }, [dispatch]); // Getter functions.
-
-  var getLabelProps = (0,external_React_.useCallback)(function (labelProps) {
-    return extends_extends({
-      id: elementIds.labelId,
-      htmlFor: elementIds.toggleButtonId
-    }, labelProps);
-  }, [elementIds]);
-  var getMenuProps = (0,external_React_.useCallback)(function (_temp, _temp2) {
-    var _extends2;
-
-    var _ref = _temp === void 0 ? {} : _temp,
-        onMouseLeave = _ref.onMouseLeave,
-        _ref$refKey = _ref.refKey,
-        refKey = _ref$refKey === void 0 ? 'ref' : _ref$refKey,
-        onKeyDown = _ref.onKeyDown,
-        onBlur = _ref.onBlur,
-        ref = _ref.ref,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref, ["onMouseLeave", "refKey", "onKeyDown", "onBlur", "ref"]);
-
-    var _ref2 = _temp2 === void 0 ? {} : _temp2,
-        _ref2$suppressRefErro = _ref2.suppressRefError,
-        suppressRefError = _ref2$suppressRefErro === void 0 ? false : _ref2$suppressRefErro;
-
-    var latestState = latest.current.state;
-
-    var menuHandleKeyDown = function menuHandleKeyDown(event) {
-      var key = normalizeArrowKey(event);
-
-      if (key && menuKeyDownHandlers[key]) {
-        menuKeyDownHandlers[key](event);
-      } else if (isAcceptedCharacterKey(key)) {
-        dispatch({
-          type: MenuKeyDownCharacter,
-          key: key,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      }
-    };
-
-    var menuHandleBlur = function menuHandleBlur() {
-      // if the blur was a result of selection, we don't trigger this action.
-      if (shouldBlurRef.current === false) {
-        shouldBlurRef.current = true;
+  const select = createStore(initialState, composite, popover, store);
+  setup(
+    select,
+    () => sync(select, ["value", "items"], (state) => {
+      if (state.value !== initialValue)
         return;
-      }
-
-      var shouldBlur = !mouseAndTouchTrackersRef.current.isMouseDown;
-      /* istanbul ignore else */
-
-      if (shouldBlur) {
-        dispatch({
-          type: MenuBlur
-        });
-      }
-    };
-
-    var menuHandleMouseLeave = function menuHandleMouseLeave() {
-      dispatch({
-        type: MenuMouseLeave
-      });
-    };
-
-    setGetterPropCallInfo('getMenuProps', suppressRefError, refKey, menuRef);
-    return extends_extends((_extends2 = {}, _extends2[refKey] = handleRefs(ref, function (menuNode) {
-      menuRef.current = menuNode;
-    }), _extends2.id = elementIds.menuId, _extends2.role = 'listbox', _extends2['aria-labelledby'] = elementIds.labelId, _extends2.tabIndex = -1, _extends2), latestState.isOpen && latestState.highlightedIndex > -1 && {
-      'aria-activedescendant': elementIds.getItemId(latestState.highlightedIndex)
-    }, {
-      onMouseLeave: callAllEventHandlers(onMouseLeave, menuHandleMouseLeave),
-      onKeyDown: callAllEventHandlers(onKeyDown, menuHandleKeyDown),
-      onBlur: callAllEventHandlers(onBlur, menuHandleBlur)
-    }, rest);
-  }, [dispatch, latest, menuKeyDownHandlers, mouseAndTouchTrackersRef, setGetterPropCallInfo, elementIds, getItemNodeFromIndex]);
-  var getToggleButtonProps = (0,external_React_.useCallback)(function (_temp3, _temp4) {
-    var _extends3;
-
-    var _ref3 = _temp3 === void 0 ? {} : _temp3,
-        onClick = _ref3.onClick,
-        onKeyDown = _ref3.onKeyDown,
-        _ref3$refKey = _ref3.refKey,
-        refKey = _ref3$refKey === void 0 ? 'ref' : _ref3$refKey,
-        ref = _ref3.ref,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref3, ["onClick", "onKeyDown", "refKey", "ref"]);
-
-    var _ref4 = _temp4 === void 0 ? {} : _temp4,
-        _ref4$suppressRefErro = _ref4.suppressRefError,
-        suppressRefError = _ref4$suppressRefErro === void 0 ? false : _ref4$suppressRefErro;
-
-    var toggleButtonHandleClick = function toggleButtonHandleClick() {
-      dispatch({
-        type: ToggleButtonClick
-      });
-    };
-
-    var toggleButtonHandleKeyDown = function toggleButtonHandleKeyDown(event) {
-      var key = normalizeArrowKey(event);
-
-      if (key && toggleButtonKeyDownHandlers[key]) {
-        toggleButtonKeyDownHandlers[key](event);
-      } else if (isAcceptedCharacterKey(key)) {
-        dispatch({
-          type: ToggleButtonKeyDownCharacter,
-          key: key,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      }
-    };
-
-    var toggleProps = extends_extends((_extends3 = {}, _extends3[refKey] = handleRefs(ref, function (toggleButtonNode) {
-      toggleButtonRef.current = toggleButtonNode;
-    }), _extends3.id = elementIds.toggleButtonId, _extends3['aria-haspopup'] = 'listbox', _extends3['aria-expanded'] = latest.current.state.isOpen, _extends3['aria-labelledby'] = elementIds.labelId + " " + elementIds.toggleButtonId, _extends3), rest);
-
-    if (!rest.disabled) {
-      toggleProps.onClick = callAllEventHandlers(onClick, toggleButtonHandleClick);
-      toggleProps.onKeyDown = callAllEventHandlers(onKeyDown, toggleButtonHandleKeyDown);
-    }
-
-    setGetterPropCallInfo('getToggleButtonProps', suppressRefError, refKey, toggleButtonRef);
-    return toggleProps;
-  }, [dispatch, latest, toggleButtonKeyDownHandlers, setGetterPropCallInfo, elementIds, getItemNodeFromIndex]);
-  var getItemProps = (0,external_React_.useCallback)(function (_temp5) {
-    var _extends4;
-
-    var _ref5 = _temp5 === void 0 ? {} : _temp5,
-        item = _ref5.item,
-        index = _ref5.index,
-        onMouseMove = _ref5.onMouseMove,
-        onClick = _ref5.onClick,
-        _ref5$refKey = _ref5.refKey,
-        refKey = _ref5$refKey === void 0 ? 'ref' : _ref5$refKey,
-        ref = _ref5.ref,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref5, ["item", "index", "onMouseMove", "onClick", "refKey", "ref"]);
-
-    var _latest$current = latest.current,
-        latestState = _latest$current.state,
-        latestProps = _latest$current.props;
-
-    var itemHandleMouseMove = function itemHandleMouseMove() {
-      if (index === latestState.highlightedIndex) {
+      if (!state.items.length)
         return;
-      }
-
-      shouldScrollRef.current = false;
-      dispatch({
-        type: ItemMouseMove,
-        index: index
-      });
-    };
-
-    var itemHandleClick = function itemHandleClick() {
-      dispatch({
-        type: ItemClick,
-        index: index
-      });
-    };
-
-    var itemIndex = getItemIndex(index, item, latestProps.items);
-
-    if (itemIndex < 0) {
-      throw new Error('Pass either item or item index in getItemProps!');
-    }
-
-    var itemProps = extends_extends((_extends4 = {
-      role: 'option',
-      'aria-selected': "" + (itemIndex === latestState.highlightedIndex),
-      id: elementIds.getItemId(itemIndex)
-    }, _extends4[refKey] = handleRefs(ref, function (itemNode) {
-      if (itemNode) {
-        itemRefs.current[elementIds.getItemId(itemIndex)] = itemNode;
-      }
-    }), _extends4), rest);
-
-    if (!rest.disabled) {
-      itemProps.onMouseMove = callAllEventHandlers(onMouseMove, itemHandleMouseMove);
-      itemProps.onClick = callAllEventHandlers(onClick, itemHandleClick);
-    }
-
-    return itemProps;
-  }, [dispatch, latest, shouldScrollRef, elementIds]);
-  return {
-    // prop getters.
-    getToggleButtonProps: getToggleButtonProps,
-    getLabelProps: getLabelProps,
-    getMenuProps: getMenuProps,
-    getItemProps: getItemProps,
-    // actions.
-    toggleMenu: toggleMenu,
-    openMenu: openMenu,
-    closeMenu: closeMenu,
-    setHighlightedIndex: setHighlightedIndex,
-    selectItem: selectItem,
-    reset: reset,
-    setInputValue: setInputValue,
-    // state.
-    highlightedIndex: highlightedIndex,
-    isOpen: isOpen,
-    selectedItem: selectedItem,
-    inputValue: inputValue
-  };
-}
-
-var InputKeyDownArrowDown =  false ? 0 : 0;
-var InputKeyDownArrowUp =  false ? 0 : 1;
-var InputKeyDownEscape =  false ? 0 : 2;
-var InputKeyDownHome =  false ? 0 : 3;
-var InputKeyDownEnd =  false ? 0 : 4;
-var InputKeyDownEnter =  false ? 0 : 5;
-var InputChange =  false ? 0 : 6;
-var InputBlur =  false ? 0 : 7;
-var MenuMouseLeave$1 =  false ? 0 : 8;
-var ItemMouseMove$1 =  false ? 0 : 9;
-var ItemClick$1 =  false ? 0 : 10;
-var ToggleButtonClick$1 =  false ? 0 : 11;
-var FunctionToggleMenu$1 =  false ? 0 : 12;
-var FunctionOpenMenu$1 =  false ? 0 : 13;
-var FunctionCloseMenu$1 =  false ? 0 : 14;
-var FunctionSetHighlightedIndex$1 =  false ? 0 : 15;
-var FunctionSelectItem$1 =  false ? 0 : 16;
-var FunctionSetInputValue$1 =  false ? 0 : 17;
-var FunctionReset$1 =  false ? 0 : 18;
-var ControlledPropUpdatedSelectedItem =  false ? 0 : 19;
-
-var stateChangeTypes$2 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  InputKeyDownArrowDown: InputKeyDownArrowDown,
-  InputKeyDownArrowUp: InputKeyDownArrowUp,
-  InputKeyDownEscape: InputKeyDownEscape,
-  InputKeyDownHome: InputKeyDownHome,
-  InputKeyDownEnd: InputKeyDownEnd,
-  InputKeyDownEnter: InputKeyDownEnter,
-  InputChange: InputChange,
-  InputBlur: InputBlur,
-  MenuMouseLeave: MenuMouseLeave$1,
-  ItemMouseMove: ItemMouseMove$1,
-  ItemClick: ItemClick$1,
-  ToggleButtonClick: ToggleButtonClick$1,
-  FunctionToggleMenu: FunctionToggleMenu$1,
-  FunctionOpenMenu: FunctionOpenMenu$1,
-  FunctionCloseMenu: FunctionCloseMenu$1,
-  FunctionSetHighlightedIndex: FunctionSetHighlightedIndex$1,
-  FunctionSelectItem: FunctionSelectItem$1,
-  FunctionSetInputValue: FunctionSetInputValue$1,
-  FunctionReset: FunctionReset$1,
-  ControlledPropUpdatedSelectedItem: ControlledPropUpdatedSelectedItem
-});
-
-function getInitialState$1(props) {
-  var initialState = getInitialState(props);
-  var selectedItem = initialState.selectedItem;
-  var inputValue = initialState.inputValue;
-
-  if (inputValue === '' && selectedItem && props.defaultInputValue === undefined && props.initialInputValue === undefined && props.inputValue === undefined) {
-    inputValue = props.itemToString(selectedItem);
-  }
-
-  return extends_extends({}, initialState, {
-    inputValue: inputValue
-  });
-}
-
-var propTypes$1 = {
-  items: (prop_types_default()).array.isRequired,
-  itemToString: (prop_types_default()).func,
-  getA11yStatusMessage: (prop_types_default()).func,
-  getA11ySelectionMessage: (prop_types_default()).func,
-  circularNavigation: (prop_types_default()).bool,
-  highlightedIndex: (prop_types_default()).number,
-  defaultHighlightedIndex: (prop_types_default()).number,
-  initialHighlightedIndex: (prop_types_default()).number,
-  isOpen: (prop_types_default()).bool,
-  defaultIsOpen: (prop_types_default()).bool,
-  initialIsOpen: (prop_types_default()).bool,
-  selectedItem: (prop_types_default()).any,
-  initialSelectedItem: (prop_types_default()).any,
-  defaultSelectedItem: (prop_types_default()).any,
-  inputValue: (prop_types_default()).string,
-  defaultInputValue: (prop_types_default()).string,
-  initialInputValue: (prop_types_default()).string,
-  id: (prop_types_default()).string,
-  labelId: (prop_types_default()).string,
-  menuId: (prop_types_default()).string,
-  getItemId: (prop_types_default()).func,
-  inputId: (prop_types_default()).string,
-  toggleButtonId: (prop_types_default()).string,
-  stateReducer: (prop_types_default()).func,
-  onSelectedItemChange: (prop_types_default()).func,
-  onHighlightedIndexChange: (prop_types_default()).func,
-  onStateChange: (prop_types_default()).func,
-  onIsOpenChange: (prop_types_default()).func,
-  onInputValueChange: (prop_types_default()).func,
-  environment: prop_types_default().shape({
-    addEventListener: (prop_types_default()).func,
-    removeEventListener: (prop_types_default()).func,
-    document: prop_types_default().shape({
-      getElementById: (prop_types_default()).func,
-      activeElement: (prop_types_default()).any,
-      body: (prop_types_default()).any
+      const item = state.items.find(
+        (item2) => !item2.disabled && item2.value != null
+      );
+      if ((item == null ? void 0 : item.value) == null)
+        return;
+      select.setState("value", item.value);
     })
-  })
-};
-/**
- * The useCombobox version of useControlledReducer, which also
- * checks if the controlled prop selectedItem changed between
- * renders. If so, it will also update inputValue with its
- * string equivalent. It uses the common useEnhancedReducer to
- * compute the rest of the state.
- *
- * @param {Function} reducer Reducer function from downshift.
- * @param {Object} initialState Initial state of the hook.
- * @param {Object} props The hook props.
- * @returns {Array} An array with the state and an action dispatcher.
- */
-
-function useControlledReducer$1(reducer, initialState, props) {
-  var previousSelectedItemRef = (0,external_React_.useRef)();
-
-  var _useEnhancedReducer = useEnhancedReducer(reducer, initialState, props),
-      state = _useEnhancedReducer[0],
-      dispatch = _useEnhancedReducer[1]; // ToDo: if needed, make same approach as selectedItemChanged from Downshift.
-
-
-  (0,external_React_.useEffect)(function () {
-    if (isControlledProp(props, 'selectedItem')) {
-      if (previousSelectedItemRef.current !== props.selectedItem) {
-        dispatch({
-          type: ControlledPropUpdatedSelectedItem,
-          inputValue: props.itemToString(props.selectedItem)
-        });
-      }
-
-      previousSelectedItemRef.current = state.selectedItem === previousSelectedItemRef.current ? props.selectedItem : state.selectedItem;
-    }
+  );
+  setup(
+    select,
+    () => sync(select, ["mounted", "items", "value"], (state) => {
+      if (combobox)
+        return;
+      if (state.mounted)
+        return;
+      const values = toArray(state.value);
+      const lastValue = values[values.length - 1];
+      if (lastValue == null)
+        return;
+      const item = state.items.find(
+        (item2) => !item2.disabled && item2.value === lastValue
+      );
+      if (!item)
+        return;
+      select.setState("activeId", item.id);
+    })
+  );
+  setup(
+    select,
+    () => batch(select, ["setValueOnMove", "moves"], (state) => {
+      const { mounted, value, activeId } = select.getState();
+      if (!state.setValueOnMove && mounted)
+        return;
+      if (Array.isArray(value))
+        return;
+      if (!state.moves)
+        return;
+      if (!activeId)
+        return;
+      const item = composite.item(activeId);
+      if (!item || item.disabled || item.value == null)
+        return;
+      select.setState("value", item.value);
+    })
+  );
+  return _chunks_4R3V3JGP_spreadProps(_chunks_4R3V3JGP_spreadValues(_chunks_4R3V3JGP_spreadValues(_chunks_4R3V3JGP_spreadValues({}, composite), popover), select), {
+    combobox,
+    setValue: (value) => select.setState("value", value),
+    setSelectElement: (element) => select.setState("selectElement", element),
+    setLabelElement: (element) => select.setState("labelElement", element)
   });
-  return [getState(state, props), dispatch];
-} // eslint-disable-next-line import/no-mutable-exports
+}
 
 
-var validatePropTypes$1 = downshift_esm_noop;
-/* istanbul ignore next */
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/FMVHAVXA.js
+"use client";
 
+
+
+
+
+
+
+// src/select/select-store.ts
+
+function useSelectStoreProps(store, update, props) {
+  useUpdateEffect(update, [props.combobox]);
+  store = useCompositeStoreProps(store, update, props);
+  store = usePopoverStoreProps(store, update, props);
+  useStoreProps(store, props, "value", "setValue");
+  useStoreProps(store, props, "setValueOnMove");
+  return Object.assign(store, { combobox: props.combobox });
+}
+function useSelectStore(props = {}) {
+  const combobox = useComboboxProviderContext();
+  props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
+    combobox: props.combobox !== void 0 ? props.combobox : combobox
+  });
+  const [store, update] = EKQEJRUF_useStore(createSelectStore, props);
+  return useSelectStoreProps(store, update, props);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/5HVNGX6D.js
+"use client";
+
+
+
+
+// src/select/select-context.tsx
+
+var _5HVNGX6D_ctx = createStoreContext(
+  [PopoverContextProvider, CompositeContextProvider],
+  [PopoverScopedContextProvider, CompositeScopedContextProvider]
+);
+var useSelectContext = _5HVNGX6D_ctx.useContext;
+var useSelectScopedContext = _5HVNGX6D_ctx.useScopedContext;
+var useSelectProviderContext = _5HVNGX6D_ctx.useProviderContext;
+var SelectContextProvider = _5HVNGX6D_ctx.ContextProvider;
+var SelectScopedContextProvider = _5HVNGX6D_ctx.ScopedContextProvider;
+var SelectItemCheckedContext = (0,external_React_.createContext)(false);
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select-label.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+// src/select/select-label.ts
+
+var useSelectLabel = createHook(
+  (_a) => {
+    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+    const context = useSelectProviderContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const id = useId(props.id);
+    const onClickProp = props.onClick;
+    const onClick = useEvent((event) => {
+      onClickProp == null ? void 0 : onClickProp(event);
+      if (event.defaultPrevented)
+        return;
+      queueMicrotask(() => {
+        const select = store == null ? void 0 : store.getState().selectElement;
+        select == null ? void 0 : select.focus();
+        select == null ? void 0 : select.click();
+      });
+    });
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
+      id
+    }, props), {
+      ref: useMergeRefs(store.setLabelElement, props.ref),
+      onClick,
+      style: _4R3V3JGP_spreadValues({
+        cursor: "default"
+      }, props.style)
+    });
+    return props;
+  }
+);
+var SelectLabel = createMemoComponent((props) => {
+  const htmlProps = useSelectLabel(props);
+  return _3ORBWXWF_createElement("div", htmlProps);
+});
 if (false) {}
 
-var defaultProps$2 = extends_extends({}, defaultProps, {
-  getA11yStatusMessage: getA11yStatusMessage,
-  circularNavigation: true
-});
 
-/* eslint-disable complexity */
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/VDNZBO4W.js
+"use client";
 
-function downshiftUseComboboxReducer(state, action) {
-  var type = action.type,
-      props = action.props,
-      shiftKey = action.shiftKey;
-  var changes;
 
-  switch (type) {
-    case ItemClick$1:
-      changes = {
-        isOpen: getDefaultValue(props, 'isOpen'),
-        highlightedIndex: getDefaultValue(props, 'highlightedIndex'),
-        selectedItem: props.items[action.index],
-        inputValue: props.itemToString(props.items[action.index])
-      };
-      break;
 
-    case InputKeyDownArrowDown:
-      if (state.isOpen) {
-        changes = {
-          highlightedIndex: getNextWrappingIndex(shiftKey ? 5 : 1, state.highlightedIndex, props.items.length, action.getItemNodeFromIndex, props.circularNavigation)
-        };
-      } else {
-        changes = {
-          highlightedIndex: getHighlightedIndexOnOpen(props, state, 1, action.getItemNodeFromIndex),
-          isOpen: props.items.length >= 0
-        };
-      }
 
-      break;
 
-    case InputKeyDownArrowUp:
-      if (state.isOpen) {
-        changes = {
-          highlightedIndex: getNextWrappingIndex(shiftKey ? -5 : -1, state.highlightedIndex, props.items.length, action.getItemNodeFromIndex, props.circularNavigation)
-        };
-      } else {
-        changes = {
-          highlightedIndex: getHighlightedIndexOnOpen(props, state, -1, action.getItemNodeFromIndex),
-          isOpen: props.items.length >= 0
-        };
-      }
+// src/button/button.ts
 
-      break;
 
-    case InputKeyDownEnter:
-      changes = extends_extends({}, state.isOpen && state.highlightedIndex >= 0 && {
-        selectedItem: props.items[state.highlightedIndex],
-        isOpen: getDefaultValue(props, 'isOpen'),
-        highlightedIndex: getDefaultValue(props, 'highlightedIndex'),
-        inputValue: props.itemToString(props.items[state.highlightedIndex])
-      });
-      break;
-
-    case InputKeyDownEscape:
-      changes = extends_extends({
-        isOpen: false,
-        highlightedIndex: -1
-      }, !state.isOpen && {
-        selectedItem: null,
-        inputValue: ''
-      });
-      break;
-
-    case InputKeyDownHome:
-      changes = {
-        highlightedIndex: getNextNonDisabledIndex(1, 0, props.items.length, action.getItemNodeFromIndex, false)
-      };
-      break;
-
-    case InputKeyDownEnd:
-      changes = {
-        highlightedIndex: getNextNonDisabledIndex(-1, props.items.length - 1, props.items.length, action.getItemNodeFromIndex, false)
-      };
-      break;
-
-    case InputBlur:
-      changes = extends_extends({
-        isOpen: false,
-        highlightedIndex: -1
-      }, state.highlightedIndex >= 0 && action.selectItem && {
-        selectedItem: props.items[state.highlightedIndex],
-        inputValue: props.itemToString(props.items[state.highlightedIndex])
-      });
-      break;
-
-    case InputChange:
-      changes = {
-        isOpen: true,
-        highlightedIndex: getDefaultValue(props, 'highlightedIndex'),
-        inputValue: action.inputValue
-      };
-      break;
-
-    case FunctionSelectItem$1:
-      changes = {
-        selectedItem: action.selectedItem,
-        inputValue: props.itemToString(action.selectedItem)
-      };
-      break;
-
-    case ControlledPropUpdatedSelectedItem:
-      changes = {
-        inputValue: action.inputValue
-      };
-      break;
-
-    default:
-      return downshiftCommonReducer(state, action, stateChangeTypes$2);
-  }
-
-  return extends_extends({}, state, changes);
-}
-/* eslint-enable complexity */
-
-useCombobox.stateChangeTypes = stateChangeTypes$2;
-
-function useCombobox(userProps) {
-  if (userProps === void 0) {
-    userProps = {};
-  }
-
-  validatePropTypes$1(userProps, useCombobox); // Props defaults and destructuring.
-
-  var props = extends_extends({}, defaultProps$2, userProps);
-
-  var initialIsOpen = props.initialIsOpen,
-      defaultIsOpen = props.defaultIsOpen,
-      items = props.items,
-      scrollIntoView = props.scrollIntoView,
-      environment = props.environment,
-      getA11yStatusMessage = props.getA11yStatusMessage,
-      getA11ySelectionMessage = props.getA11ySelectionMessage,
-      itemToString = props.itemToString; // Initial state depending on controlled props.
-
-  var initialState = getInitialState$1(props);
-
-  var _useControlledReducer = useControlledReducer$1(downshiftUseComboboxReducer, initialState, props),
-      state = _useControlledReducer[0],
-      dispatch = _useControlledReducer[1];
-
-  var isOpen = state.isOpen,
-      highlightedIndex = state.highlightedIndex,
-      selectedItem = state.selectedItem,
-      inputValue = state.inputValue; // Element refs.
-
-  var menuRef = (0,external_React_.useRef)(null);
-  var itemRefs = (0,external_React_.useRef)({});
-  var inputRef = (0,external_React_.useRef)(null);
-  var toggleButtonRef = (0,external_React_.useRef)(null);
-  var comboboxRef = (0,external_React_.useRef)(null);
-  var isInitialMountRef = (0,external_React_.useRef)(true); // prevent id re-generation between renders.
-
-  var elementIds = useElementIds(props); // used to keep track of how many items we had on previous cycle.
-
-  var previousResultCountRef = (0,external_React_.useRef)(); // utility callback to get item element.
-
-  var latest = downshift_esm_useLatestRef({
-    state: state,
-    props: props
-  });
-  var getItemNodeFromIndex = (0,external_React_.useCallback)(function (index) {
-    return itemRefs.current[elementIds.getItemId(index)];
-  }, [elementIds]); // Effects.
-  // Sets a11y status message on changes in state.
-
-  useA11yMessageSetter(getA11yStatusMessage, [isOpen, highlightedIndex, inputValue, items], extends_extends({
-    isInitialMount: isInitialMountRef.current,
-    previousResultCount: previousResultCountRef.current,
-    items: items,
-    environment: environment,
-    itemToString: itemToString
-  }, state)); // Sets a11y status message on changes in selectedItem.
-
-  useA11yMessageSetter(getA11ySelectionMessage, [selectedItem], extends_extends({
-    isInitialMount: isInitialMountRef.current,
-    previousResultCount: previousResultCountRef.current,
-    items: items,
-    environment: environment,
-    itemToString: itemToString
-  }, state)); // Scroll on highlighted item if change comes from keyboard.
-
-  var shouldScrollRef = useScrollIntoView({
-    menuElement: menuRef.current,
-    highlightedIndex: highlightedIndex,
-    isOpen: isOpen,
-    itemRefs: itemRefs,
-    scrollIntoView: scrollIntoView,
-    getItemNodeFromIndex: getItemNodeFromIndex
-  });
-  useControlPropsValidator({
-    isInitialMount: isInitialMountRef.current,
-    props: props,
-    state: state
-  }); // Focus the input on first render if required.
-
-  (0,external_React_.useEffect)(function () {
-    var focusOnOpen = initialIsOpen || defaultIsOpen || isOpen;
-
-    if (focusOnOpen && inputRef.current) {
-      inputRef.current.focus();
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-
+var useButton = createHook((props) => {
+  const ref = (0,external_React_.useRef)(null);
+  const tagName = useTagName(ref, props.as || "button");
+  const [isNativeButton, setIsNativeButton] = (0,external_React_.useState)(
+    () => !!tagName && isButton({ tagName, type: props.type })
+  );
+  (0,external_React_.useEffect)(() => {
+    if (!ref.current)
+      return;
+    setIsNativeButton(isButton(ref.current));
   }, []);
-  (0,external_React_.useEffect)(function () {
-    if (isInitialMountRef.current) {
-      return;
-    }
-
-    previousResultCountRef.current = items.length;
-  }); // Add mouse/touch events to document.
-
-  var mouseAndTouchTrackersRef = useMouseAndTouchTracker(isOpen, [comboboxRef, menuRef, toggleButtonRef], environment, function () {
-    dispatch({
-      type: InputBlur,
-      selectItem: false
-    });
+  props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
+    role: !isNativeButton && tagName !== "a" ? "button" : void 0
+  }, props), {
+    ref: useMergeRefs(ref, props.ref)
   });
-  var setGetterPropCallInfo = useGetterPropsCalledChecker('getInputProps', 'getComboboxProps', 'getMenuProps'); // Make initial ref false.
-
-  (0,external_React_.useEffect)(function () {
-    isInitialMountRef.current = false;
-  }, []); // Reset itemRefs on close.
-
-  (0,external_React_.useEffect)(function () {
-    if (!isOpen) {
-      itemRefs.current = {};
-    }
-  }, [isOpen]);
-  /* Event handler functions */
-
-  var inputKeyDownHandlers = (0,external_React_.useMemo)(function () {
-    return {
-      ArrowDown: function ArrowDown(event) {
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownArrowDown,
-          shiftKey: event.shiftKey,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      },
-      ArrowUp: function ArrowUp(event) {
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownArrowUp,
-          shiftKey: event.shiftKey,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      },
-      Home: function Home(event) {
-        if (!latest.current.state.isOpen) {
-          return;
-        }
-
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownHome,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      },
-      End: function End(event) {
-        if (!latest.current.state.isOpen) {
-          return;
-        }
-
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownEnd,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      },
-      Escape: function Escape() {
-        var latestState = latest.current.state;
-
-        if (latestState.isOpen || latestState.inputValue || latestState.selectedItem || latestState.highlightedIndex > -1) {
-          dispatch({
-            type: InputKeyDownEscape
-          });
-        }
-      },
-      Enter: function Enter(event) {
-        var latestState = latest.current.state; // if closed or no highlighted index, do nothing.
-
-        if (!latestState.isOpen || latestState.highlightedIndex < 0 || event.which === 229 // if IME composing, wait for next Enter keydown event.
-        ) {
-            return;
-          }
-
-        event.preventDefault();
-        dispatch({
-          type: InputKeyDownEnter,
-          getItemNodeFromIndex: getItemNodeFromIndex
-        });
-      }
-    };
-  }, [dispatch, latest, getItemNodeFromIndex]); // Getter props.
-
-  var getLabelProps = (0,external_React_.useCallback)(function (labelProps) {
-    return extends_extends({
-      id: elementIds.labelId,
-      htmlFor: elementIds.inputId
-    }, labelProps);
-  }, [elementIds]);
-  var getMenuProps = (0,external_React_.useCallback)(function (_temp, _temp2) {
-    var _extends2;
-
-    var _ref = _temp === void 0 ? {} : _temp,
-        onMouseLeave = _ref.onMouseLeave,
-        _ref$refKey = _ref.refKey,
-        refKey = _ref$refKey === void 0 ? 'ref' : _ref$refKey,
-        ref = _ref.ref,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref, ["onMouseLeave", "refKey", "ref"]);
-
-    var _ref2 = _temp2 === void 0 ? {} : _temp2,
-        _ref2$suppressRefErro = _ref2.suppressRefError,
-        suppressRefError = _ref2$suppressRefErro === void 0 ? false : _ref2$suppressRefErro;
-
-    setGetterPropCallInfo('getMenuProps', suppressRefError, refKey, menuRef);
-    return extends_extends((_extends2 = {}, _extends2[refKey] = handleRefs(ref, function (menuNode) {
-      menuRef.current = menuNode;
-    }), _extends2.id = elementIds.menuId, _extends2.role = 'listbox', _extends2['aria-labelledby'] = elementIds.labelId, _extends2.onMouseLeave = callAllEventHandlers(onMouseLeave, function () {
-      dispatch({
-        type: MenuMouseLeave$1
-      });
-    }), _extends2), rest);
-  }, [dispatch, setGetterPropCallInfo, elementIds]);
-  var getItemProps = (0,external_React_.useCallback)(function (_temp3) {
-    var _extends3, _ref4;
-
-    var _ref3 = _temp3 === void 0 ? {} : _temp3,
-        item = _ref3.item,
-        index = _ref3.index,
-        _ref3$refKey = _ref3.refKey,
-        refKey = _ref3$refKey === void 0 ? 'ref' : _ref3$refKey,
-        ref = _ref3.ref,
-        onMouseMove = _ref3.onMouseMove,
-        onClick = _ref3.onClick,
-        onPress = _ref3.onPress,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref3, ["item", "index", "refKey", "ref", "onMouseMove", "onClick", "onPress"]);
-
-    var _latest$current = latest.current,
-        latestProps = _latest$current.props,
-        latestState = _latest$current.state;
-    var itemIndex = getItemIndex(index, item, latestProps.items);
-
-    if (itemIndex < 0) {
-      throw new Error('Pass either item or item index in getItemProps!');
-    }
-
-    var onSelectKey =  'onClick';
-    var customClickHandler =  onClick;
-
-    var itemHandleMouseMove = function itemHandleMouseMove() {
-      if (index === latestState.highlightedIndex) {
-        return;
-      }
-
-      shouldScrollRef.current = false;
-      dispatch({
-        type: ItemMouseMove$1,
-        index: index
-      });
-    };
-
-    var itemHandleClick = function itemHandleClick() {
-      dispatch({
-        type: ItemClick$1,
-        index: index
-      });
-
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    };
-
-    return extends_extends((_extends3 = {}, _extends3[refKey] = handleRefs(ref, function (itemNode) {
-      if (itemNode) {
-        itemRefs.current[elementIds.getItemId(itemIndex)] = itemNode;
-      }
-    }), _extends3.role = 'option', _extends3['aria-selected'] = "" + (itemIndex === latestState.highlightedIndex), _extends3.id = elementIds.getItemId(itemIndex), _extends3), !rest.disabled && (_ref4 = {
-      onMouseMove: callAllEventHandlers(onMouseMove, itemHandleMouseMove)
-    }, _ref4[onSelectKey] = callAllEventHandlers(customClickHandler, itemHandleClick), _ref4), rest);
-  }, [dispatch, latest, shouldScrollRef, elementIds]);
-  var getToggleButtonProps = (0,external_React_.useCallback)(function (_temp4) {
-    var _extends4;
-
-    var _ref5 = _temp4 === void 0 ? {} : _temp4,
-        onClick = _ref5.onClick,
-        onPress = _ref5.onPress,
-        _ref5$refKey = _ref5.refKey,
-        refKey = _ref5$refKey === void 0 ? 'ref' : _ref5$refKey,
-        ref = _ref5.ref,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref5, ["onClick", "onPress", "refKey", "ref"]);
-
-    var toggleButtonHandleClick = function toggleButtonHandleClick() {
-      dispatch({
-        type: ToggleButtonClick$1
-      });
-
-      if (!latest.current.state.isOpen && inputRef.current) {
-        inputRef.current.focus();
-      }
-    };
-
-    return extends_extends((_extends4 = {}, _extends4[refKey] = handleRefs(ref, function (toggleButtonNode) {
-      toggleButtonRef.current = toggleButtonNode;
-    }), _extends4.id = elementIds.toggleButtonId, _extends4.tabIndex = -1, _extends4), !rest.disabled && extends_extends({},  {
-      onClick: callAllEventHandlers(onClick, toggleButtonHandleClick)
-    }), rest);
-  }, [dispatch, latest, elementIds]);
-  var getInputProps = (0,external_React_.useCallback)(function (_temp5, _temp6) {
-    var _extends5;
-
-    var _ref6 = _temp5 === void 0 ? {} : _temp5,
-        onKeyDown = _ref6.onKeyDown,
-        onChange = _ref6.onChange,
-        onInput = _ref6.onInput,
-        onBlur = _ref6.onBlur,
-        onChangeText = _ref6.onChangeText,
-        _ref6$refKey = _ref6.refKey,
-        refKey = _ref6$refKey === void 0 ? 'ref' : _ref6$refKey,
-        ref = _ref6.ref,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref6, ["onKeyDown", "onChange", "onInput", "onBlur", "onChangeText", "refKey", "ref"]);
-
-    var _ref7 = _temp6 === void 0 ? {} : _temp6,
-        _ref7$suppressRefErro = _ref7.suppressRefError,
-        suppressRefError = _ref7$suppressRefErro === void 0 ? false : _ref7$suppressRefErro;
-
-    setGetterPropCallInfo('getInputProps', suppressRefError, refKey, inputRef);
-    var latestState = latest.current.state;
-
-    var inputHandleKeyDown = function inputHandleKeyDown(event) {
-      var key = normalizeArrowKey(event);
-
-      if (key && inputKeyDownHandlers[key]) {
-        inputKeyDownHandlers[key](event);
-      }
-    };
-
-    var inputHandleChange = function inputHandleChange(event) {
-      dispatch({
-        type: InputChange,
-        inputValue:  event.target.value
-      });
-    };
-
-    var inputHandleBlur = function inputHandleBlur() {
-      /* istanbul ignore else */
-      if (latestState.isOpen && !mouseAndTouchTrackersRef.current.isMouseDown) {
-        dispatch({
-          type: InputBlur,
-          selectItem: true
-        });
-      }
-    };
-    /* istanbul ignore next (preact) */
-
-
-    var onChangeKey =  'onChange';
-    var eventHandlers = {};
-
-    if (!rest.disabled) {
-      var _eventHandlers;
-
-      eventHandlers = (_eventHandlers = {}, _eventHandlers[onChangeKey] = callAllEventHandlers(onChange, onInput, inputHandleChange), _eventHandlers.onKeyDown = callAllEventHandlers(onKeyDown, inputHandleKeyDown), _eventHandlers.onBlur = callAllEventHandlers(onBlur, inputHandleBlur), _eventHandlers);
-    }
-
-    return extends_extends((_extends5 = {}, _extends5[refKey] = handleRefs(ref, function (inputNode) {
-      inputRef.current = inputNode;
-    }), _extends5.id = elementIds.inputId, _extends5['aria-autocomplete'] = 'list', _extends5['aria-controls'] = elementIds.menuId, _extends5), latestState.isOpen && latestState.highlightedIndex > -1 && {
-      'aria-activedescendant': elementIds.getItemId(latestState.highlightedIndex)
-    }, {
-      'aria-labelledby': elementIds.labelId,
-      // https://developer.mozilla.org/en-US/docs/Web/Security/Securing_your_site/Turning_off_form_autocompletion
-      // revert back since autocomplete="nope" is ignored on latest Chrome and Opera
-      autoComplete: 'off',
-      value: latestState.inputValue
-    }, eventHandlers, rest);
-  }, [dispatch, inputKeyDownHandlers, latest, mouseAndTouchTrackersRef, setGetterPropCallInfo, elementIds]);
-  var getComboboxProps = (0,external_React_.useCallback)(function (_temp7, _temp8) {
-    var _extends6;
-
-    var _ref8 = _temp7 === void 0 ? {} : _temp7,
-        _ref8$refKey = _ref8.refKey,
-        refKey = _ref8$refKey === void 0 ? 'ref' : _ref8$refKey,
-        ref = _ref8.ref,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref8, ["refKey", "ref"]);
-
-    var _ref9 = _temp8 === void 0 ? {} : _temp8,
-        _ref9$suppressRefErro = _ref9.suppressRefError,
-        suppressRefError = _ref9$suppressRefErro === void 0 ? false : _ref9$suppressRefErro;
-
-    setGetterPropCallInfo('getComboboxProps', suppressRefError, refKey, comboboxRef);
-    return extends_extends((_extends6 = {}, _extends6[refKey] = handleRefs(ref, function (comboboxNode) {
-      comboboxRef.current = comboboxNode;
-    }), _extends6.role = 'combobox', _extends6['aria-haspopup'] = 'listbox', _extends6['aria-owns'] = elementIds.menuId, _extends6['aria-expanded'] = latest.current.state.isOpen, _extends6), rest);
-  }, [latest, setGetterPropCallInfo, elementIds]); // returns
-
-  var toggleMenu = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionToggleMenu$1
-    });
-  }, [dispatch]);
-  var closeMenu = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionCloseMenu$1
-    });
-  }, [dispatch]);
-  var openMenu = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionOpenMenu$1
-    });
-  }, [dispatch]);
-  var setHighlightedIndex = (0,external_React_.useCallback)(function (newHighlightedIndex) {
-    dispatch({
-      type: FunctionSetHighlightedIndex$1,
-      highlightedIndex: newHighlightedIndex
-    });
-  }, [dispatch]);
-  var selectItem = (0,external_React_.useCallback)(function (newSelectedItem) {
-    dispatch({
-      type: FunctionSelectItem$1,
-      selectedItem: newSelectedItem
-    });
-  }, [dispatch]);
-  var setInputValue = (0,external_React_.useCallback)(function (newInputValue) {
-    dispatch({
-      type: FunctionSetInputValue$1,
-      inputValue: newInputValue
-    });
-  }, [dispatch]);
-  var reset = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionReset$1
-    });
-  }, [dispatch]);
-  return {
-    // prop getters.
-    getItemProps: getItemProps,
-    getLabelProps: getLabelProps,
-    getMenuProps: getMenuProps,
-    getInputProps: getInputProps,
-    getComboboxProps: getComboboxProps,
-    getToggleButtonProps: getToggleButtonProps,
-    // actions.
-    toggleMenu: toggleMenu,
-    openMenu: openMenu,
-    closeMenu: closeMenu,
-    setHighlightedIndex: setHighlightedIndex,
-    setInputValue: setInputValue,
-    selectItem: selectItem,
-    reset: reset,
-    // state.
-    highlightedIndex: highlightedIndex,
-    isOpen: isOpen,
-    selectedItem: selectedItem,
-    inputValue: inputValue
-  };
-}
-
-var defaultStateValues = {
-  activeIndex: -1,
-  selectedItems: []
-};
-/**
- * Returns the initial value for a state key in the following order:
- * 1. controlled prop, 2. initial prop, 3. default prop, 4. default
- * value from Downshift.
- *
- * @param {Object} props Props passed to the hook.
- * @param {string} propKey Props key to generate the value for.
- * @returns {any} The initial value for that prop.
- */
-
-function getInitialValue$1(props, propKey) {
-  return getInitialValue(props, propKey, defaultStateValues);
-}
-/**
- * Returns the default value for a state key in the following order:
- * 1. controlled prop, 2. default prop, 3. default value from Downshift.
- *
- * @param {Object} props Props passed to the hook.
- * @param {string} propKey Props key to generate the value for.
- * @returns {any} The initial value for that prop.
- */
-
-
-function getDefaultValue$1(props, propKey) {
-  return getDefaultValue(props, propKey, defaultStateValues);
-}
-/**
- * Gets the initial state based on the provided props. It uses initial, default
- * and controlled props related to state in order to compute the initial value.
- *
- * @param {Object} props Props passed to the hook.
- * @returns {Object} The initial state.
- */
-
-
-function getInitialState$2(props) {
-  var activeIndex = getInitialValue$1(props, 'activeIndex');
-  var selectedItems = getInitialValue$1(props, 'selectedItems');
-  return {
-    activeIndex: activeIndex,
-    selectedItems: selectedItems
-  };
-}
-/**
- * Returns true if dropdown keydown operation is permitted. Should not be
- * allowed on keydown with modifier keys (ctrl, alt, shift, meta), on
- * input element with text content that is either highlighted or selection
- * cursor is not at the starting position.
- *
- * @param {KeyboardEvent} event The event from keydown.
- * @returns {boolean} Whether the operation is allowed.
- */
-
-
-function isKeyDownOperationPermitted(event) {
-  if (event.shiftKey || event.metaKey || event.ctrlKey || event.altKey) {
-    return false;
-  }
-
-  var element = event.target;
-
-  if (element instanceof HTMLInputElement && // if element is a text input
-  element.value !== '' && ( // and we have text in it
-  // and cursor is either not at the start or is currently highlighting text.
-  element.selectionStart !== 0 || element.selectionEnd !== 0)) {
-    return false;
-  }
-
-  return true;
-}
-/**
- * Returns a message to be added to aria-live region when item is removed.
- *
- * @param {Object} selectionParameters Parameters required to build the message.
- * @returns {string} The a11y message.
- */
-
-
-function getA11yRemovalMessage(selectionParameters) {
-  var removedSelectedItem = selectionParameters.removedSelectedItem,
-      itemToStringLocal = selectionParameters.itemToString;
-  return itemToStringLocal(removedSelectedItem) + " has been removed.";
-}
-
-var propTypes$2 = {
-  selectedItems: (prop_types_default()).array,
-  initialSelectedItems: (prop_types_default()).array,
-  defaultSelectedItems: (prop_types_default()).array,
-  itemToString: (prop_types_default()).func,
-  getA11yRemovalMessage: (prop_types_default()).func,
-  stateReducer: (prop_types_default()).func,
-  activeIndex: (prop_types_default()).number,
-  initialActiveIndex: (prop_types_default()).number,
-  defaultActiveIndex: (prop_types_default()).number,
-  onActiveIndexChange: (prop_types_default()).func,
-  onSelectedItemsChange: (prop_types_default()).func,
-  keyNavigationNext: (prop_types_default()).string,
-  keyNavigationPrevious: (prop_types_default()).string,
-  environment: prop_types_default().shape({
-    addEventListener: (prop_types_default()).func,
-    removeEventListener: (prop_types_default()).func,
-    document: prop_types_default().shape({
-      getElementById: (prop_types_default()).func,
-      activeElement: (prop_types_default()).any,
-      body: (prop_types_default()).any
-    })
-  })
-};
-var defaultProps$3 = {
-  itemToString: defaultProps.itemToString,
-  stateReducer: defaultProps.stateReducer,
-  environment: defaultProps.environment,
-  getA11yRemovalMessage: getA11yRemovalMessage,
-  keyNavigationNext: 'ArrowRight',
-  keyNavigationPrevious: 'ArrowLeft'
-}; // eslint-disable-next-line import/no-mutable-exports
-
-var validatePropTypes$2 = downshift_esm_noop;
-/* istanbul ignore next */
-
+  props = useCommand(props);
+  return props;
+});
+var VDNZBO4W_Button = createComponent((props) => {
+  const htmlProps = useButton(props);
+  return _3ORBWXWF_createElement("button", htmlProps);
+});
 if (false) {}
 
-var SelectedItemClick =  false ? 0 : 0;
-var SelectedItemKeyDownDelete =  false ? 0 : 1;
-var SelectedItemKeyDownBackspace =  false ? 0 : 2;
-var SelectedItemKeyDownNavigationNext =  false ? 0 : 3;
-var SelectedItemKeyDownNavigationPrevious =  false ? 0 : 4;
-var DropdownKeyDownNavigationPrevious =  false ? 0 : 5;
-var DropdownKeyDownBackspace =  false ? 0 : 6;
-var DropdownClick =  false ? 0 : 7;
-var FunctionAddSelectedItem =  false ? 0 : 8;
-var FunctionRemoveSelectedItem =  false ? 0 : 9;
-var FunctionSetSelectedItems =  false ? 0 : 10;
-var FunctionSetActiveIndex =  false ? 0 : 11;
-var FunctionReset$2 =  false ? 0 : 12;
 
-var stateChangeTypes$3 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  SelectedItemClick: SelectedItemClick,
-  SelectedItemKeyDownDelete: SelectedItemKeyDownDelete,
-  SelectedItemKeyDownBackspace: SelectedItemKeyDownBackspace,
-  SelectedItemKeyDownNavigationNext: SelectedItemKeyDownNavigationNext,
-  SelectedItemKeyDownNavigationPrevious: SelectedItemKeyDownNavigationPrevious,
-  DropdownKeyDownNavigationPrevious: DropdownKeyDownNavigationPrevious,
-  DropdownKeyDownBackspace: DropdownKeyDownBackspace,
-  DropdownClick: DropdownClick,
-  FunctionAddSelectedItem: FunctionAddSelectedItem,
-  FunctionRemoveSelectedItem: FunctionRemoveSelectedItem,
-  FunctionSetSelectedItems: FunctionSetSelectedItems,
-  FunctionSetActiveIndex: FunctionSetActiveIndex,
-  FunctionReset: FunctionReset$2
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/BHEJ6NUH.js
+"use client";
+
+
+
+
+
+
+// src/disclosure/disclosure.ts
+
+
+var BHEJ6NUH_symbol = Symbol("disclosure");
+var useDisclosure = createHook(
+  (_a) => {
+    var _b = _a, { store, toggleOnClick = true } = _b, props = __objRest(_b, ["store", "toggleOnClick"]);
+    const context = useDisclosureProviderContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const ref = (0,external_React_.useRef)(null);
+    const [expanded, setExpanded] = (0,external_React_.useState)(false);
+    const disclosureElement = store.useState("disclosureElement");
+    const open = store.useState("open");
+    (0,external_React_.useEffect)(() => {
+      let isCurrentDisclosure = disclosureElement === ref.current;
+      if (!(disclosureElement == null ? void 0 : disclosureElement.isConnected)) {
+        store == null ? void 0 : store.setDisclosureElement(ref.current);
+        isCurrentDisclosure = true;
+      }
+      setExpanded(open && isCurrentDisclosure);
+    }, [disclosureElement, store, open]);
+    const onClickProp = props.onClick;
+    const toggleOnClickProp = useBooleanEvent(toggleOnClick);
+    const [isDuplicate, metadataProps] = useMetadataProps(props, BHEJ6NUH_symbol, true);
+    const onClick = useEvent((event) => {
+      onClickProp == null ? void 0 : onClickProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (isDuplicate)
+        return;
+      if (!toggleOnClickProp(event))
+        return;
+      store == null ? void 0 : store.setDisclosureElement(event.currentTarget);
+      store == null ? void 0 : store.toggle();
+    });
+    const contentElement = store.useState("contentElement");
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues(_4R3V3JGP_spreadValues({
+      "aria-expanded": expanded,
+      "aria-controls": contentElement == null ? void 0 : contentElement.id
+    }, metadataProps), props), {
+      ref: useMergeRefs(ref, props.ref),
+      onClick
+    });
+    props = useButton(props);
+    return props;
+  }
+);
+var Disclosure = createComponent((props) => {
+  const htmlProps = useDisclosure(props);
+  return _3ORBWXWF_createElement("button", htmlProps);
 });
+if (false) {}
 
-/* eslint-disable complexity */
 
-function downshiftMultipleSelectionReducer(state, action) {
-  var type = action.type,
-      index = action.index,
-      props = action.props,
-      selectedItem = action.selectedItem;
-  var activeIndex = state.activeIndex,
-      selectedItems = state.selectedItems;
-  var changes;
 
-  switch (type) {
-    case SelectedItemClick:
-      changes = {
-        activeIndex: index
-      };
-      break;
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/H3TG2CZP.js
+"use client";
 
-    case SelectedItemKeyDownNavigationPrevious:
-      changes = {
-        activeIndex: activeIndex - 1 < 0 ? 0 : activeIndex - 1
-      };
-      break;
 
-    case SelectedItemKeyDownNavigationNext:
-      changes = {
-        activeIndex: activeIndex + 1 >= selectedItems.length ? -1 : activeIndex + 1
-      };
-      break;
 
-    case SelectedItemKeyDownBackspace:
-    case SelectedItemKeyDownDelete:
-      {
-        var newActiveIndex = activeIndex;
 
-        if (selectedItems.length === 1) {
-          newActiveIndex = -1;
-        } else if (activeIndex === selectedItems.length - 1) {
-          newActiveIndex = selectedItems.length - 2;
-        }
 
-        changes = extends_extends({
-          selectedItems: [].concat(selectedItems.slice(0, activeIndex), selectedItems.slice(activeIndex + 1))
-        }, {
-          activeIndex: newActiveIndex
-        });
-        break;
-      }
+// src/dialog/dialog-disclosure.ts
 
-    case DropdownKeyDownNavigationPrevious:
-      changes = {
-        activeIndex: selectedItems.length - 1
-      };
-      break;
 
-    case DropdownKeyDownBackspace:
-      changes = {
-        selectedItems: selectedItems.slice(0, selectedItems.length - 1)
-      };
-      break;
-
-    case FunctionAddSelectedItem:
-      changes = {
-        selectedItems: [].concat(selectedItems, [selectedItem])
-      };
-      break;
-
-    case DropdownClick:
-      changes = {
-        activeIndex: -1
-      };
-      break;
-
-    case FunctionRemoveSelectedItem:
-      {
-        var _newActiveIndex = activeIndex;
-        var selectedItemIndex = selectedItems.indexOf(selectedItem);
-
-        if (selectedItems.length === 1) {
-          _newActiveIndex = -1;
-        } else if (selectedItemIndex === selectedItems.length - 1) {
-          _newActiveIndex = selectedItems.length - 2;
-        }
-
-        changes = extends_extends({
-          selectedItems: [].concat(selectedItems.slice(0, selectedItemIndex), selectedItems.slice(selectedItemIndex + 1))
-        }, {
-          activeIndex: _newActiveIndex
-        });
-        break;
-      }
-
-    case FunctionSetSelectedItems:
-      {
-        var newSelectedItems = action.selectedItems;
-        changes = {
-          selectedItems: newSelectedItems
-        };
-        break;
-      }
-
-    case FunctionSetActiveIndex:
-      {
-        var _newActiveIndex2 = action.activeIndex;
-        changes = {
-          activeIndex: _newActiveIndex2
-        };
-        break;
-      }
-
-    case FunctionReset$2:
-      changes = {
-        activeIndex: getDefaultValue$1(props, 'activeIndex'),
-        selectedItems: getDefaultValue$1(props, 'selectedItems')
-      };
-      break;
-
-    default:
-      throw new Error('Reducer called without proper action type.');
+var useDialogDisclosure = createHook(
+  (_a) => {
+    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+    const context = useDialogProviderContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const contentElement = store.useState("contentElement");
+    props = _4R3V3JGP_spreadValues({
+      "aria-haspopup": getPopupRole(contentElement, "dialog")
+    }, props);
+    props = useDisclosure(_4R3V3JGP_spreadValues({ store }, props));
+    return props;
   }
+);
+var DialogDisclosure = createComponent(
+  (props) => {
+    const htmlProps = useDialogDisclosure(props);
+    return _3ORBWXWF_createElement("button", htmlProps);
+  }
+);
+if (false) {}
 
-  return extends_extends({}, state, changes);
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/JCH6MLL2.js
+"use client";
+
+
+
+
+
+// src/popover/popover-anchor.ts
+var usePopoverAnchor = createHook(
+  (_a) => {
+    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+    const context = usePopoverProviderContext();
+    store = store || context;
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
+      ref: useMergeRefs(store == null ? void 0 : store.setAnchorElement, props.ref)
+    });
+    return props;
+  }
+);
+var PopoverAnchor = createComponent((props) => {
+  const htmlProps = usePopoverAnchor(props);
+  return _3ORBWXWF_createElement("div", htmlProps);
+});
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/4ZEZYKUR.js
+"use client";
+
+
+
+
+
+
+
+// src/popover/popover-disclosure.tsx
+
+
+var usePopoverDisclosure = createHook(
+  (_a) => {
+    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+    const context = usePopoverProviderContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const onClickProp = props.onClick;
+    const onClick = useEvent((event) => {
+      store == null ? void 0 : store.setAnchorElement(event.currentTarget);
+      onClickProp == null ? void 0 : onClickProp(event);
+    });
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(PopoverScopedContextProvider, { value: store, children: element }),
+      [store]
+    );
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
+      onClick
+    });
+    props = usePopoverAnchor(_4R3V3JGP_spreadValues({ store }, props));
+    props = useDialogDisclosure(_4R3V3JGP_spreadValues({ store }, props));
+    return props;
+  }
+);
+var PopoverDisclosure = createComponent(
+  (props) => {
+    const htmlProps = usePopoverDisclosure(props);
+    return _3ORBWXWF_createElement("button", htmlProps);
+  }
+);
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/JHO32H4J.js
+"use client";
+
+
+
+
+// src/popover/popover-disclosure-arrow.tsx
+
+
+
+var pointsMap = {
+  top: "4,10 8,6 12,10",
+  right: "6,4 10,8 6,12",
+  bottom: "4,6 8,10 12,6",
+  left: "10,4 6,8 10,12"
+};
+var usePopoverDisclosureArrow = createHook(
+  (_a) => {
+    var _b = _a, { store, placement } = _b, props = __objRest(_b, ["store", "placement"]);
+    const context = usePopoverContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const position = store.useState((state) => placement || state.placement);
+    const dir = position.split("-")[0];
+    const points = pointsMap[dir];
+    const children = (0,external_React_.useMemo)(
+      () => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(
+        "svg",
+        {
+          display: "block",
+          fill: "none",
+          stroke: "currentColor",
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          strokeWidth: "1.5pt",
+          viewBox: "0 0 16 16",
+          height: "1em",
+          width: "1em",
+          children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)("polyline", { points })
+        }
+      ),
+      [points]
+    );
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
+      children,
+      "aria-hidden": true
+    }, props), {
+      style: _4R3V3JGP_spreadValues({
+        width: "1em",
+        height: "1em",
+        pointerEvents: "none"
+      }, props.style)
+    });
+    return props;
+  }
+);
+var PopoverDisclosureArrow = createComponent((props) => {
+  const htmlProps = usePopoverDisclosureArrow(props);
+  return _3ORBWXWF_createElement("span", htmlProps);
+});
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/NUNVG4IK.js
+"use client";
+
+
+
+
+
+// src/select/select-arrow.ts
+var useSelectArrow = createHook(
+  (_a) => {
+    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+    const context = useSelectContext();
+    store = store || context;
+    props = usePopoverDisclosureArrow(_4R3V3JGP_spreadValues({ store }, props));
+    return props;
+  }
+);
+var SelectArrow = createComponent((props) => {
+  const htmlProps = useSelectArrow(props);
+  return _3ORBWXWF_createElement("span", htmlProps);
+});
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/346FK57L.js
+"use client";
+
+
+
+
+
+
+// src/composite/composite-typeahead.ts
+
+
+
+
+var chars = "";
+function clearChars() {
+  chars = "";
 }
-
-useMultipleSelection.stateChangeTypes = stateChangeTypes$3;
-
-function useMultipleSelection(userProps) {
-  if (userProps === void 0) {
-    userProps = {};
+function isValidTypeaheadEvent(event) {
+  const target = event.target;
+  if (target && DLOEKDPY_isTextField(target))
+    return false;
+  if (event.key === " " && chars.length)
+    return true;
+  return event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey && /^[\p{Letter}\p{Number}]$/u.test(event.key);
+}
+function isSelfTargetOrItem(event, items) {
+  if (isSelfTarget(event))
+    return true;
+  const target = event.target;
+  if (!target)
+    return false;
+  const isItem = items.some((item) => item.element === target);
+  return isItem;
+}
+function _346FK57L_getEnabledItems(items) {
+  return items.filter((item) => !item.disabled);
+}
+function itemTextStartsWith(item, text) {
+  var _a;
+  const itemText = ((_a = item.element) == null ? void 0 : _a.textContent) || item.children;
+  if (!itemText)
+    return false;
+  return normalizeString(itemText).trim().toLowerCase().startsWith(text.toLowerCase());
+}
+function getSameInitialItems(items, char, activeId) {
+  if (!activeId)
+    return items;
+  const activeItem = items.find((item) => item.id === activeId);
+  if (!activeItem)
+    return items;
+  if (!itemTextStartsWith(activeItem, char))
+    return items;
+  if (chars !== char && itemTextStartsWith(activeItem, chars))
+    return items;
+  chars = char;
+  return flipItems(
+    items.filter((item) => itemTextStartsWith(item, chars)),
+    activeId
+  ).filter((item) => item.id !== activeId);
+}
+var useCompositeTypeahead = createHook(
+  (_a) => {
+    var _b = _a, { store, typeahead = true } = _b, props = __objRest(_b, ["store", "typeahead"]);
+    const context = useCompositeContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const onKeyDownCaptureProp = props.onKeyDownCapture;
+    const cleanupTimeoutRef = (0,external_React_.useRef)(0);
+    const onKeyDownCapture = useEvent(
+      (event) => {
+        onKeyDownCaptureProp == null ? void 0 : onKeyDownCaptureProp(event);
+        if (event.defaultPrevented)
+          return;
+        if (!typeahead)
+          return;
+        if (!store)
+          return;
+        const { items, activeId } = store.getState();
+        if (!isValidTypeaheadEvent(event))
+          return clearChars();
+        let enabledItems = _346FK57L_getEnabledItems(items);
+        if (!isSelfTargetOrItem(event, enabledItems))
+          return clearChars();
+        event.preventDefault();
+        window.clearTimeout(cleanupTimeoutRef.current);
+        cleanupTimeoutRef.current = window.setTimeout(() => {
+          chars = "";
+        }, 500);
+        const char = event.key.toLowerCase();
+        chars += char;
+        enabledItems = getSameInitialItems(enabledItems, char, activeId);
+        const item = enabledItems.find(
+          (item2) => itemTextStartsWith(item2, chars)
+        );
+        if (item) {
+          store.move(item.id);
+        } else {
+          clearChars();
+        }
+      }
+    );
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
+      onKeyDownCapture
+    });
+    return props;
   }
+);
+var CompositeTypeahead = createComponent(
+  (props) => {
+    const htmlProps = useCompositeTypeahead(props);
+    return _3ORBWXWF_createElement("div", htmlProps);
+  }
+);
+if (false) {}
 
-  validatePropTypes$2(userProps, useMultipleSelection); // Props defaults and destructuring.
 
-  var props = extends_extends({}, defaultProps$3, userProps);
 
-  var getA11yRemovalMessage = props.getA11yRemovalMessage,
-      itemToString = props.itemToString,
-      environment = props.environment,
-      keyNavigationNext = props.keyNavigationNext,
-      keyNavigationPrevious = props.keyNavigationPrevious; // Reducer init.
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select.js
+"use client";
 
-  var _useControlledReducer = useControlledReducer(downshiftMultipleSelectionReducer, getInitialState$2(props), props),
-      state = _useControlledReducer[0],
-      dispatch = _useControlledReducer[1];
 
-  var activeIndex = state.activeIndex,
-      selectedItems = state.selectedItems; // Refs.
 
-  var isInitialMountRef = (0,external_React_.useRef)(true);
-  var dropdownRef = (0,external_React_.useRef)(null);
-  var previousSelectedItemsRef = (0,external_React_.useRef)(selectedItems);
-  var selectedItemRefs = (0,external_React_.useRef)();
-  selectedItemRefs.current = [];
-  var latest = downshift_esm_useLatestRef({
-    state: state,
-    props: props
-  }); // Effects.
 
-  /* Sets a11y status message on changes in selectedItem. */
 
-  (0,external_React_.useEffect)(function () {
-    if (isInitialMountRef.current) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/select/select.tsx
+
+
+
+
+
+
+function getSelectedValues(select) {
+  return Array.from(select.selectedOptions).map((option) => option.value);
+}
+function nextWithValue(store, next) {
+  return () => {
+    const nextId = next();
+    if (!nextId)
       return;
+    let i = 0;
+    let nextItem = store.item(nextId);
+    const firstItem = nextItem;
+    while (nextItem && nextItem.value == null) {
+      const nextId2 = next(++i);
+      if (!nextId2)
+        return;
+      nextItem = store.item(nextId2);
+      if (nextItem === firstItem)
+        break;
     }
-
-    if (selectedItems.length < previousSelectedItemsRef.current.length) {
-      var removedSelectedItem = previousSelectedItemsRef.current.find(function (item) {
-        return selectedItems.indexOf(item) < 0;
-      });
-      setStatus(getA11yRemovalMessage({
-        itemToString: itemToString,
-        resultCount: selectedItems.length,
-        removedSelectedItem: removedSelectedItem,
-        activeIndex: activeIndex,
-        activeSelectedItem: selectedItems[activeIndex]
-      }), environment.document);
-    }
-
-    previousSelectedItemsRef.current = selectedItems; // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedItems.length]); // Sets focus on active item.
-
-  (0,external_React_.useEffect)(function () {
-    if (isInitialMountRef.current) {
-      return;
-    }
-
-    if (activeIndex === -1 && dropdownRef.current) {
-      dropdownRef.current.focus();
-    } else if (selectedItemRefs.current[activeIndex]) {
-      selectedItemRefs.current[activeIndex].focus();
-    }
-  }, [activeIndex]);
-  useControlPropsValidator({
-    isInitialMount: isInitialMountRef.current,
-    props: props,
-    state: state
-  });
-  var setGetterPropCallInfo = useGetterPropsCalledChecker('getDropdownProps'); // Make initial ref false.
-
-  (0,external_React_.useEffect)(function () {
-    isInitialMountRef.current = false;
-  }, []); // Event handler functions.
-
-  var selectedItemKeyDownHandlers = (0,external_React_.useMemo)(function () {
-    var _ref;
-
-    return _ref = {}, _ref[keyNavigationPrevious] = function () {
-      dispatch({
-        type: SelectedItemKeyDownNavigationPrevious
-      });
-    }, _ref[keyNavigationNext] = function () {
-      dispatch({
-        type: SelectedItemKeyDownNavigationNext
-      });
-    }, _ref.Delete = function Delete() {
-      dispatch({
-        type: SelectedItemKeyDownDelete
-      });
-    }, _ref.Backspace = function Backspace() {
-      dispatch({
-        type: SelectedItemKeyDownBackspace
-      });
-    }, _ref;
-  }, [dispatch, keyNavigationNext, keyNavigationPrevious]);
-  var dropdownKeyDownHandlers = (0,external_React_.useMemo)(function () {
-    var _ref2;
-
-    return _ref2 = {}, _ref2[keyNavigationPrevious] = function (event) {
-      if (isKeyDownOperationPermitted(event)) {
-        dispatch({
-          type: DropdownKeyDownNavigationPrevious
-        });
-      }
-    }, _ref2.Backspace = function Backspace(event) {
-      if (isKeyDownOperationPermitted(event)) {
-        dispatch({
-          type: DropdownKeyDownBackspace
-        });
-      }
-    }, _ref2;
-  }, [dispatch, keyNavigationPrevious]); // Getter props.
-
-  var getSelectedItemProps = (0,external_React_.useCallback)(function (_temp) {
-    var _extends2;
-
-    var _ref3 = _temp === void 0 ? {} : _temp,
-        _ref3$refKey = _ref3.refKey,
-        refKey = _ref3$refKey === void 0 ? 'ref' : _ref3$refKey,
-        ref = _ref3.ref,
-        onClick = _ref3.onClick,
-        onKeyDown = _ref3.onKeyDown,
-        selectedItem = _ref3.selectedItem,
-        index = _ref3.index,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref3, ["refKey", "ref", "onClick", "onKeyDown", "selectedItem", "index"]);
-
-    var latestState = latest.current.state;
-    var itemIndex = getItemIndex(index, selectedItem, latestState.selectedItems);
-
-    if (itemIndex < 0) {
-      throw new Error('Pass either selectedItem or index in getSelectedItemProps!');
-    }
-
-    var selectedItemHandleClick = function selectedItemHandleClick() {
-      dispatch({
-        type: SelectedItemClick,
-        index: index
-      });
-    };
-
-    var selectedItemHandleKeyDown = function selectedItemHandleKeyDown(event) {
-      var key = normalizeArrowKey(event);
-
-      if (key && selectedItemKeyDownHandlers[key]) {
-        selectedItemKeyDownHandlers[key](event);
-      }
-    };
-
-    return extends_extends((_extends2 = {}, _extends2[refKey] = handleRefs(ref, function (selectedItemNode) {
-      if (selectedItemNode) {
-        selectedItemRefs.current.push(selectedItemNode);
-      }
-    }), _extends2.tabIndex = index === latestState.activeIndex ? 0 : -1, _extends2.onClick = callAllEventHandlers(onClick, selectedItemHandleClick), _extends2.onKeyDown = callAllEventHandlers(onKeyDown, selectedItemHandleKeyDown), _extends2), rest);
-  }, [dispatch, latest, selectedItemKeyDownHandlers]);
-  var getDropdownProps = (0,external_React_.useCallback)(function (_temp2, _temp3) {
-    var _extends3;
-
-    var _ref4 = _temp2 === void 0 ? {} : _temp2,
-        _ref4$refKey = _ref4.refKey,
-        refKey = _ref4$refKey === void 0 ? 'ref' : _ref4$refKey,
-        ref = _ref4.ref,
-        onKeyDown = _ref4.onKeyDown,
-        onClick = _ref4.onClick,
-        _ref4$preventKeyActio = _ref4.preventKeyAction,
-        preventKeyAction = _ref4$preventKeyActio === void 0 ? false : _ref4$preventKeyActio,
-        rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref4, ["refKey", "ref", "onKeyDown", "onClick", "preventKeyAction"]);
-
-    var _ref5 = _temp3 === void 0 ? {} : _temp3,
-        _ref5$suppressRefErro = _ref5.suppressRefError,
-        suppressRefError = _ref5$suppressRefErro === void 0 ? false : _ref5$suppressRefErro;
-
-    setGetterPropCallInfo('getDropdownProps', suppressRefError, refKey, dropdownRef);
-
-    var dropdownHandleKeyDown = function dropdownHandleKeyDown(event) {
-      var key = normalizeArrowKey(event);
-
-      if (key && dropdownKeyDownHandlers[key]) {
-        dropdownKeyDownHandlers[key](event);
-      }
-    };
-
-    var dropdownHandleClick = function dropdownHandleClick() {
-      dispatch({
-        type: DropdownClick
-      });
-    };
-
-    return extends_extends((_extends3 = {}, _extends3[refKey] = handleRefs(ref, function (dropdownNode) {
-      if (dropdownNode) {
-        dropdownRef.current = dropdownNode;
-      }
-    }), _extends3), !preventKeyAction && {
-      onKeyDown: callAllEventHandlers(onKeyDown, dropdownHandleKeyDown),
-      onClick: callAllEventHandlers(onClick, dropdownHandleClick)
-    }, rest);
-  }, [dispatch, dropdownKeyDownHandlers, setGetterPropCallInfo]); // returns
-
-  var addSelectedItem = (0,external_React_.useCallback)(function (selectedItem) {
-    dispatch({
-      type: FunctionAddSelectedItem,
-      selectedItem: selectedItem
-    });
-  }, [dispatch]);
-  var removeSelectedItem = (0,external_React_.useCallback)(function (selectedItem) {
-    dispatch({
-      type: FunctionRemoveSelectedItem,
-      selectedItem: selectedItem
-    });
-  }, [dispatch]);
-  var setSelectedItems = (0,external_React_.useCallback)(function (newSelectedItems) {
-    dispatch({
-      type: FunctionSetSelectedItems,
-      selectedItems: newSelectedItems
-    });
-  }, [dispatch]);
-  var setActiveIndex = (0,external_React_.useCallback)(function (newActiveIndex) {
-    dispatch({
-      type: FunctionSetActiveIndex,
-      activeIndex: newActiveIndex
-    });
-  }, [dispatch]);
-  var reset = (0,external_React_.useCallback)(function () {
-    dispatch({
-      type: FunctionReset$2
-    });
-  }, [dispatch]);
-  return {
-    getSelectedItemProps: getSelectedItemProps,
-    getDropdownProps: getDropdownProps,
-    addSelectedItem: addSelectedItem,
-    removeSelectedItem: removeSelectedItem,
-    setSelectedItems: setSelectedItems,
-    setActiveIndex: setActiveIndex,
-    reset: reset,
-    selectedItems: selectedItems,
-    activeIndex: activeIndex
+    return nextItem == null ? void 0 : nextItem.id;
   };
 }
+var useSelect = createHook(
+  (_a) => {
+    var _b = _a, {
+      store,
+      name,
+      form,
+      required,
+      showOnKeyDown = true,
+      moveOnKeyDown = true,
+      toggleOnClick = false,
+      toggleOnPress = !toggleOnClick
+    } = _b, props = __objRest(_b, [
+      "store",
+      "name",
+      "form",
+      "required",
+      "showOnKeyDown",
+      "moveOnKeyDown",
+      "toggleOnClick",
+      "toggleOnPress"
+    ]);
+    const context = useSelectProviderContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    toggleOnPress = toggleOnClick ? false : toggleOnPress;
+    const onKeyDownProp = props.onKeyDown;
+    const showOnKeyDownProp = useBooleanEvent(showOnKeyDown);
+    const moveOnKeyDownProp = useBooleanEvent(moveOnKeyDown);
+    const toggleOnPressProp = useBooleanEvent(toggleOnPress);
+    const placement = store.useState("placement");
+    const dir = placement.split("-")[0];
+    const value = store.useState("value");
+    const multiSelectable = Array.isArray(value);
+    const onKeyDown = useEvent((event) => {
+      var _a2;
+      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!store)
+        return;
+      const { orientation, items: items2, activeId } = store.getState();
+      if (event.key === " " || event.key === "Enter") {
+        if (toggleOnPressProp(event)) {
+          event.preventDefault();
+          store.toggle();
+        }
+      }
+      const isVertical = orientation !== "horizontal";
+      const isHorizontal = orientation !== "vertical";
+      const isGrid = !!((_a2 = items2.find(
+        (item) => !item.disabled && item.value != null
+      )) == null ? void 0 : _a2.rowId);
+      const moveKeyMap = {
+        ArrowUp: (isGrid || isVertical) && nextWithValue(store, store.up),
+        ArrowRight: (isGrid || isHorizontal) && nextWithValue(store, store.next),
+        ArrowDown: (isGrid || isVertical) && nextWithValue(store, store.down),
+        ArrowLeft: (isGrid || isHorizontal) && nextWithValue(store, store.previous)
+      };
+      const getId = moveKeyMap[event.key];
+      if (getId && moveOnKeyDownProp(event)) {
+        event.preventDefault();
+        store.move(getId());
+      }
+      const isTopOrBottom = dir === "top" || dir === "bottom";
+      const isLeft = dir === "left";
+      const isRight = dir === "right";
+      const canShowKeyMap = {
+        ArrowDown: isTopOrBottom,
+        ArrowUp: isTopOrBottom,
+        ArrowLeft: isLeft,
+        ArrowRight: isRight
+      };
+      const canShow = canShowKeyMap[event.key];
+      if (canShow && showOnKeyDownProp(event)) {
+        event.preventDefault();
+        store.move(activeId);
+        queueBeforeEvent(event.currentTarget, "keyup", store.show);
+      }
+    });
+    const onMouseDownProp = props.onMouseDown;
+    const onMouseDown = useEvent((event) => {
+      onMouseDownProp == null ? void 0 : onMouseDownProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (event.button)
+        return;
+      if (event.ctrlKey)
+        return;
+      if (!toggleOnPressProp(event))
+        return;
+      const element = event.currentTarget;
+      queueBeforeEvent(element, "focusin", () => {
+        store == null ? void 0 : store.setDisclosureElement(element);
+        store == null ? void 0 : store.toggle();
+      });
+    });
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectScopedContextProvider, { value: store, children: element }),
+      [store]
+    );
+    const [autofill, setAutofill] = (0,external_React_.useState)(false);
+    const nativeSelectChangedRef = (0,external_React_.useRef)(false);
+    (0,external_React_.useEffect)(() => {
+      const nativeSelectChanged = nativeSelectChangedRef.current;
+      nativeSelectChangedRef.current = false;
+      if (nativeSelectChanged)
+        return;
+      setAutofill(false);
+    }, [value]);
+    const labelId = store.useState((state) => {
+      var _a2;
+      return (_a2 = state.labelElement) == null ? void 0 : _a2.id;
+    });
+    const label = props["aria-label"];
+    const labelledBy = props["aria-labelledby"] || labelId;
+    const items = store.useState("items");
+    const values = (0,external_React_.useMemo)(
+      // Filter out items without value and duplicate values.
+      () => [...new Set(items.map((i) => i.value).filter((v) => v != null))],
+      [items]
+    );
+    props = useWrapElement(
+      props,
+      (element) => {
+        if (!name)
+          return element;
+        return /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, { children: [
+          /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsxs)(
+            "select",
+            {
+              style: {
+                border: 0,
+                clip: "rect(0 0 0 0)",
+                height: "1px",
+                margin: "-1px",
+                overflow: "hidden",
+                padding: 0,
+                position: "absolute",
+                whiteSpace: "nowrap",
+                width: "1px"
+              },
+              tabIndex: -1,
+              "aria-hidden": true,
+              "aria-label": label,
+              "aria-labelledby": labelledBy,
+              name,
+              form,
+              required,
+              value,
+              multiple: multiSelectable,
+              onFocus: () => {
+                var _a2;
+                return (_a2 = store == null ? void 0 : store.getState().selectElement) == null ? void 0 : _a2.focus();
+              },
+              onChange: (event) => {
+                nativeSelectChangedRef.current = true;
+                setAutofill(true);
+                store == null ? void 0 : store.setValue(
+                  multiSelectable ? getSelectedValues(event.target) : event.target.value
+                );
+              },
+              children: [
+                toArray(value).map((value2) => {
+                  if (value2 == null)
+                    return null;
+                  if (values.includes(value2))
+                    return null;
+                  return /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)("option", { value: value2, children: value2 }, value2);
+                }),
+                values.map((value2) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)("option", { value: value2, children: value2 }, value2))
+              ]
+            }
+          ),
+          element
+        ] });
+      },
+      [
+        store,
+        label,
+        labelledBy,
+        name,
+        form,
+        required,
+        value,
+        multiSelectable,
+        values
+      ]
+    );
+    const children = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, { children: [
+      value,
+      /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectArrow, {})
+    ] });
+    const contentElement = store.useState("contentElement");
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
+      role: "combobox",
+      "aria-autocomplete": "none",
+      "aria-labelledby": labelId,
+      "aria-haspopup": getPopupRole(contentElement, "listbox"),
+      "data-autofill": autofill ? "" : void 0,
+      "data-name": name,
+      children
+    }, props), {
+      ref: useMergeRefs(store.setSelectElement, props.ref),
+      onKeyDown,
+      onMouseDown
+    });
+    props = usePopoverDisclosure(_4R3V3JGP_spreadValues({ store, toggleOnClick }, props));
+    props = useCompositeTypeahead(_4R3V3JGP_spreadValues({ store }, props));
+    return props;
+  }
+);
+var select_Select = createComponent((props) => {
+  const htmlProps = useSelect(props);
+  return _3ORBWXWF_createElement("button", htmlProps);
+});
+if (false) {}
 
-/* harmony default export */ const downshift_esm = ((/* unused pure expression or super */ null && (Downshift)));
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/SU2GU5JB.js
+"use client";
 
 
-;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control/index.js
-// @ts-nocheck
+
+
+
+
+
+
+// src/select/select-list.tsx
+
+
+
+
+var useSelectList = createHook(
+  (_a) => {
+    var _b = _a, {
+      store,
+      resetOnEscape = true,
+      hideOnEnter = true,
+      focusOnMove = true,
+      composite,
+      alwaysVisible
+    } = _b, props = __objRest(_b, [
+      "store",
+      "resetOnEscape",
+      "hideOnEnter",
+      "focusOnMove",
+      "composite",
+      "alwaysVisible"
+    ]);
+    const context = useSelectProviderContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const ref = (0,external_React_.useRef)(null);
+    const id = useId(props.id);
+    const value = store.useState("value");
+    const multiSelectable = Array.isArray(value);
+    const [defaultValue, setDefaultValue] = (0,external_React_.useState)(value);
+    const mounted = store.useState("mounted");
+    (0,external_React_.useEffect)(() => {
+      if (mounted)
+        return;
+      setDefaultValue(value);
+    }, [mounted, value]);
+    resetOnEscape = resetOnEscape && !multiSelectable;
+    const onKeyDownProp = props.onKeyDown;
+    const resetOnEscapeProp = useBooleanEvent(resetOnEscape);
+    const hideOnEnterProp = useBooleanEvent(hideOnEnter);
+    const onKeyDown = useEvent((event) => {
+      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (event.key === "Escape" && resetOnEscapeProp(event)) {
+        store == null ? void 0 : store.setValue(defaultValue);
+      }
+      if (event.key === " " || event.key === "Enter") {
+        if (isSelfTarget(event) && hideOnEnterProp(event)) {
+          event.preventDefault();
+          store == null ? void 0 : store.hide();
+        }
+      }
+    });
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectScopedContextProvider, { value: store, children: element }),
+      [store]
+    );
+    const labelId = store.useState((state) => {
+      var _a2;
+      return (_a2 = state.labelElement) == null ? void 0 : _a2.id;
+    });
+    const hasCombobox = !!store.combobox;
+    composite = composite != null ? composite : !hasCombobox;
+    if (composite) {
+      props = _4R3V3JGP_spreadValues({ role: "listbox" }, props);
+    }
+    const role = useAttribute(ref, "role", props.role);
+    const isCompositeRole = role === "listbox" || role === "menu" || role === "tree" || role === "grid";
+    const ariaMultiSelectable = composite || isCompositeRole ? multiSelectable || void 0 : void 0;
+    const hidden = isHidden(mounted, props.hidden, alwaysVisible);
+    const style = hidden ? _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props.style), { display: "none" }) : props.style;
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
+      id,
+      "aria-labelledby": labelId,
+      "aria-multiselectable": ariaMultiSelectable,
+      hidden
+    }, props), {
+      ref: useMergeRefs(id ? store.setContentElement : null, ref, props.ref),
+      style,
+      onKeyDown
+    });
+    props = useComposite(_4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({ store }, props), { composite }));
+    props = useCompositeTypeahead(_4R3V3JGP_spreadValues({ store, typeahead: !hasCombobox }, props));
+    return props;
+  }
+);
+var SelectList = createComponent((props) => {
+  const htmlProps = useSelectList(props);
+  return _3ORBWXWF_createElement("div", htmlProps);
+});
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select-popover.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/select/select-popover.ts
+var useSelectPopover = createHook(
+  (_a) => {
+    var _b = _a, { store, alwaysVisible } = _b, props = __objRest(_b, ["store", "alwaysVisible"]);
+    const context = useSelectProviderContext();
+    store = store || context;
+    props = useSelectList(_4R3V3JGP_spreadValues({ store, alwaysVisible }, props));
+    props = usePopover(_4R3V3JGP_spreadValues({ store, alwaysVisible }, props));
+    return props;
+  }
+);
+var SelectPopover = createDialogComponent(
+  createComponent((props) => {
+    const htmlProps = useSelectPopover(props);
+    return _3ORBWXWF_createElement("div", htmlProps);
+  }),
+  useSelectProviderContext
+);
+if (false) {}
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/G6ONQ5EH.js
+"use client";
+
+
+
+
+
+// src/composite/composite-hover.ts
+
+
+
+
+function getMouseDestination(event) {
+  const relatedTarget = event.relatedTarget;
+  if ((relatedTarget == null ? void 0 : relatedTarget.nodeType) === Node.ELEMENT_NODE) {
+    return relatedTarget;
+  }
+  return null;
+}
+function hoveringInside(event) {
+  const nextElement = getMouseDestination(event);
+  if (!nextElement)
+    return false;
+  return contains(event.currentTarget, nextElement);
+}
+var G6ONQ5EH_symbol = Symbol("composite-hover");
+function movingToAnotherItem(event) {
+  let dest = getMouseDestination(event);
+  if (!dest)
+    return false;
+  do {
+    if (I2VQ3XGR_hasOwnProperty(dest, G6ONQ5EH_symbol) && dest[G6ONQ5EH_symbol])
+      return true;
+    dest = dest.parentElement;
+  } while (dest);
+  return false;
+}
+var useCompositeHover = createHook(
+  (_a) => {
+    var _b = _a, {
+      store,
+      focusOnHover = true,
+      blurOnHoverEnd = !!focusOnHover
+    } = _b, props = __objRest(_b, [
+      "store",
+      "focusOnHover",
+      "blurOnHoverEnd"
+    ]);
+    const context = useCompositeContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const isMouseMoving = useIsMouseMoving();
+    const onMouseMoveProp = props.onMouseMove;
+    const focusOnHoverProp = useBooleanEvent(focusOnHover);
+    const onMouseMove = useEvent((event) => {
+      onMouseMoveProp == null ? void 0 : onMouseMoveProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!isMouseMoving())
+        return;
+      if (!focusOnHoverProp(event))
+        return;
+      if (!hasFocusWithin(event.currentTarget)) {
+        const baseElement = store == null ? void 0 : store.getState().baseElement;
+        if (baseElement && !hasFocus(baseElement)) {
+          baseElement.focus();
+        }
+      }
+      store == null ? void 0 : store.setActiveId(event.currentTarget.id);
+    });
+    const onMouseLeaveProp = props.onMouseLeave;
+    const blurOnHoverEndProp = useBooleanEvent(blurOnHoverEnd);
+    const onMouseLeave = useEvent((event) => {
+      var _a2;
+      onMouseLeaveProp == null ? void 0 : onMouseLeaveProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!isMouseMoving())
+        return;
+      if (hoveringInside(event))
+        return;
+      if (movingToAnotherItem(event))
+        return;
+      if (!focusOnHoverProp(event))
+        return;
+      if (!blurOnHoverEndProp(event))
+        return;
+      store == null ? void 0 : store.setActiveId(null);
+      (_a2 = store == null ? void 0 : store.getState().baseElement) == null ? void 0 : _a2.focus();
+    });
+    const ref = (0,external_React_.useCallback)((element) => {
+      if (!element)
+        return;
+      element[G6ONQ5EH_symbol] = true;
+    }, []);
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
+      ref: useMergeRefs(ref, props.ref),
+      onMouseMove,
+      onMouseLeave
+    });
+    return props;
+  }
+);
+var CompositeHover = createMemoComponent(
+  (props) => {
+    const htmlProps = useCompositeHover(props);
+    return _3ORBWXWF_createElement("div", htmlProps);
+  }
+);
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select-item.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/select/select-item.tsx
+
+
+
+
+
+function isSelected(storeValue, itemValue) {
+  if (itemValue == null)
+    return;
+  if (storeValue == null)
+    return false;
+  if (Array.isArray(storeValue)) {
+    return storeValue.includes(itemValue);
+  }
+  return storeValue === itemValue;
+}
+var useSelectItem = createHook(
+  (_a) => {
+    var _b = _a, {
+      store,
+      value,
+      getItem: getItemProp,
+      hideOnClick,
+      setValueOnClick = value != null,
+      preventScrollOnKeyDown = true,
+      focusOnHover = true
+    } = _b, props = __objRest(_b, [
+      "store",
+      "value",
+      "getItem",
+      "hideOnClick",
+      "setValueOnClick",
+      "preventScrollOnKeyDown",
+      "focusOnHover"
+    ]);
+    var _a2;
+    const context = useSelectScopedContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const id = useId(props.id);
+    const disabled = disabledFromProps(props);
+    const getItem = (0,external_React_.useCallback)(
+      (item) => {
+        const nextItem = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, item), {
+          value: disabled ? void 0 : value,
+          children: value
+        });
+        if (getItemProp) {
+          return getItemProp(nextItem);
+        }
+        return nextItem;
+      },
+      [disabled, value, getItemProp]
+    );
+    const multiSelectable = store.useState(
+      (state) => Array.isArray(state.value)
+    );
+    hideOnClick = hideOnClick != null ? hideOnClick : value != null && !multiSelectable;
+    const onClickProp = props.onClick;
+    const setValueOnClickProp = useBooleanEvent(setValueOnClick);
+    const hideOnClickProp = useBooleanEvent(hideOnClick);
+    const onClick = useEvent((event) => {
+      onClickProp == null ? void 0 : onClickProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (isDownloading(event))
+        return;
+      if (isOpeningInNewTab(event))
+        return;
+      if (setValueOnClickProp(event) && value != null) {
+        store == null ? void 0 : store.setValue((prevValue) => {
+          if (!Array.isArray(prevValue))
+            return value;
+          if (prevValue.includes(value)) {
+            return prevValue.filter((v) => v !== value);
+          }
+          return [...prevValue, value];
+        });
+      }
+      if (hideOnClickProp(event)) {
+        store == null ? void 0 : store.hide();
+      }
+    });
+    const selected = store.useState((state) => isSelected(state.value, value));
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectItemCheckedContext.Provider, { value: selected != null ? selected : false, children: element }),
+      [selected]
+    );
+    const contentElement = store.useState("contentElement");
+    const autoFocus = store.useState((state) => {
+      if (state.activeId !== id && (store == null ? void 0 : store.item(state.activeId)))
+        return false;
+      if (state.value == null)
+        return false;
+      if (value == null)
+        return false;
+      if (Array.isArray(state.value)) {
+        return state.value[state.value.length - 1] === value;
+      }
+      return state.value === value;
+    });
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
+      id,
+      role: getPopupItemRole(contentElement),
+      "aria-selected": selected,
+      children: value
+    }, props), {
+      autoFocus: (_a2 = props.autoFocus) != null ? _a2 : autoFocus,
+      onClick
+    });
+    props = useCompositeItem(_4R3V3JGP_spreadValues({
+      store,
+      getItem,
+      preventScrollOnKeyDown
+    }, props));
+    const focusOnHoverProp = useBooleanEvent(focusOnHover);
+    props = useCompositeHover(_4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
+      store
+    }, props), {
+      // We have to disable focusOnHover when the popup is closed, otherwise
+      // the active item will change to null (the container) when the popup is
+      // closed by clicking on an item.
+      focusOnHover: (event) => {
+        if (!focusOnHoverProp(event))
+          return false;
+        const state = store == null ? void 0 : store.getState();
+        return !!(state == null ? void 0 : state.open);
+      }
+    }));
+    return props;
+  }
+);
+var SelectItem = createMemoComponent((props) => {
+  const htmlProps = useSelectItem(props);
+  return _3ORBWXWF_createElement("div", htmlProps);
+});
+if (false) {}
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/6XBVQI3K.js
+"use client";
+
+// src/checkbox/checkbox-checked-context.ts
+
+var CheckboxCheckedContext = (0,external_React_.createContext)(false);
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/MW2F7SEA.js
+"use client";
+
+
+
+
+// src/checkbox/checkbox-check.tsx
+
+
+var checkmark = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(
+  "svg",
+  {
+    display: "block",
+    fill: "none",
+    stroke: "currentColor",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    strokeWidth: "1.5pt",
+    viewBox: "0 0 16 16",
+    height: "1em",
+    width: "1em",
+    children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)("polyline", { points: "4,8 7,12 12,4" })
+  }
+);
+function getChildren(props) {
+  if (props.checked) {
+    return props.children || checkmark;
+  }
+  if (typeof props.children === "function") {
+    return props.children;
+  }
+  return null;
+}
+var useCheckboxCheck = createHook(
+  (_a) => {
+    var _b = _a, { store, checked } = _b, props = __objRest(_b, ["store", "checked"]);
+    const context = (0,external_React_.useContext)(CheckboxCheckedContext);
+    checked = checked != null ? checked : context;
+    const children = getChildren({ checked, children: props.children });
+    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
+      "aria-hidden": true
+    }, props), {
+      children,
+      style: _4R3V3JGP_spreadValues({
+        width: "1em",
+        height: "1em",
+        pointerEvents: "none"
+      }, props.style)
+    });
+    return props;
+  }
+);
+var CheckboxCheck = createComponent((props) => {
+  const htmlProps = useCheckboxCheck(props);
+  return _3ORBWXWF_createElement("span", htmlProps);
+});
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select-item-check.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/select/select-item-check.ts
+
+var useSelectItemCheck = createHook(
+  (_a) => {
+    var _b = _a, { store, checked } = _b, props = __objRest(_b, ["store", "checked"]);
+    const context = (0,external_React_.useContext)(SelectItemCheckedContext);
+    checked = checked != null ? checked : context;
+    props = useCheckboxCheck(_4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), { checked }));
+    return props;
+  }
+);
+var SelectItemCheck = createComponent(
+  (props) => {
+    const htmlProps = useSelectItemCheck(props);
+    return _3ORBWXWF_createElement("span", htmlProps);
+  }
+);
+if (false) {}
+
+
+;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control-v2/styles.js
+
+function custom_select_control_v2_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
 /**
  * External dependencies
  */
 
 
+/**
+ * Internal dependencies
+ */
+
+
+
+
+// TODO: extract to common utils and apply to relevant components
+const ANIMATION_PARAMS = {
+  SLIDE_AMOUNT: '2px',
+  DURATION: '400ms',
+  EASING: 'cubic-bezier( 0.16, 1, 0.3, 1 )'
+};
+const INLINE_PADDING = {
+  compact: 8,
+  // space(2)
+  small: 8,
+  // space(2)
+  default: 16 // space(4)
+};
+const getSelectSize = (size, heightProperty) => {
+  const sizes = {
+    compact: {
+      [heightProperty]: 32,
+      paddingInlineStart: INLINE_PADDING.compact,
+      paddingInlineEnd: INLINE_PADDING.compact + chevronIconSize
+    },
+    default: {
+      [heightProperty]: 40,
+      paddingInlineStart: INLINE_PADDING.default,
+      paddingInlineEnd: INLINE_PADDING.default + chevronIconSize
+    },
+    small: {
+      [heightProperty]: 24,
+      paddingInlineStart: INLINE_PADDING.small,
+      paddingInlineEnd: INLINE_PADDING.small + chevronIconSize
+    }
+  };
+  return sizes[size] || sizes.default;
+};
+const getSelectItemSize = size => {
+  // Used to visually align the checkmark with the chevron
+  const checkmarkCorrection = 6;
+  const sizes = {
+    compact: {
+      paddingInlineStart: INLINE_PADDING.compact,
+      paddingInlineEnd: INLINE_PADDING.compact - checkmarkCorrection
+    },
+    default: {
+      paddingInlineStart: INLINE_PADDING.default,
+      paddingInlineEnd: INLINE_PADDING.default - checkmarkCorrection
+    },
+    small: {
+      paddingInlineStart: INLINE_PADDING.small,
+      paddingInlineEnd: INLINE_PADDING.small - checkmarkCorrection
+    }
+  };
+  return sizes[size] || sizes.default;
+};
+const styles_Select = /*#__PURE__*/emotion_styled_base_browser_esm(select_Select,  true ? {
+  // Do not forward `hasCustomRenderProp` to the underlying Ariakit.Select component
+  shouldForwardProp: prop => prop !== 'hasCustomRenderProp',
+  target: "e1p3eej77"
+} : 0)(({
+  size,
+  hasCustomRenderProp
+}) => /*#__PURE__*/emotion_react_browser_esm_css("display:block;background-color:", COLORS.theme.background, ";border:none;color:", COLORS.theme.foreground, ";cursor:pointer;font-family:inherit;text-align:start;user-select:none;width:100%;&[data-focus-visible]{outline:none;}", getSelectSize(size, hasCustomRenderProp ? 'minHeight' : 'height'), " ", !hasCustomRenderProp && truncateStyles, " ", fontSizeStyles({
+  inputSize: size
+}), ";" + ( true ? "" : 0),  true ? "" : 0),  true ? "" : 0);
+const slideDownAndFade = emotion_react_browser_esm_keyframes({
+  '0%': {
+    opacity: 0,
+    transform: `translateY(-${ANIMATION_PARAMS.SLIDE_AMOUNT})`
+  },
+  '100%': {
+    opacity: 1,
+    transform: 'translateY(0)'
+  }
+});
+const styles_SelectPopover = /*#__PURE__*/emotion_styled_base_browser_esm(SelectPopover,  true ? {
+  target: "e1p3eej76"
+} : 0)("display:flex;flex-direction:column;background-color:", COLORS.theme.background, ";border-radius:2px;border:1px solid ", COLORS.theme.foreground, ";z-index:1000000;max-height:min( var( --popover-available-height, 400px ), 400px );overflow:auto;overscroll-behavior:contain;min-width:min-content;animation-duration:", ANIMATION_PARAMS.DURATION, ";animation-timing-function:", ANIMATION_PARAMS.EASING, ";animation-name:", slideDownAndFade, ";will-change:transform,opacity;@media ( prefers-reduced-motion ){animation-duration:0s;}&[data-focus-visible]{outline:none;}" + ( true ? "" : 0));
+const styles_SelectItem = /*#__PURE__*/emotion_styled_base_browser_esm(SelectItem,  true ? {
+  target: "e1p3eej75"
+} : 0)(({
+  size
+}) => /*#__PURE__*/emotion_react_browser_esm_css("cursor:default;display:flex;align-items:center;justify-content:space-between;font-size:", config_values.fontSize, ";line-height:28px;padding-block:", space(2), ";scroll-margin:", space(1), ";user-select:none;&[aria-disabled='true']{cursor:not-allowed;}&[data-active-item]{background-color:", COLORS.theme.gray[300], ";}", getSelectItemSize(size), ";" + ( true ? "" : 0),  true ? "" : 0),  true ? "" : 0);
+const truncateStyles =  true ? {
+  name: "1h52dri",
+  styles: "overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+} : 0;
+const SelectedExperimentalHintWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1p3eej74"
+} : 0)(truncateStyles, ";" + ( true ? "" : 0));
+const SelectedExperimentalHintItem = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
+  target: "e1p3eej73"
+} : 0)("color:", COLORS.theme.gray[600], ";margin-inline-start:", space(2), ";" + ( true ? "" : 0));
+const WithHintItemWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1p3eej72"
+} : 0)("display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;flex:1;column-gap:", space(4), ";" + ( true ? "" : 0));
+const WithHintItemHint = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
+  target: "e1p3eej71"
+} : 0)("color:", COLORS.theme.gray[600], ";text-align:initial;line-height:", config_values.fontLineHeightBase, ";padding-inline-end:", space(1), ";margin-block:", space(1), ";" + ( true ? "" : 0));
+const SelectedItemCheck = /*#__PURE__*/emotion_styled_base_browser_esm(SelectItemCheck,  true ? {
+  target: "e1p3eej70"
+} : 0)("display:flex;align-items:center;margin-inline-start:", space(2), ";align-self:start;margin-block-start:2px;font-size:0;", WithHintItemWrapper, "~&,&:not(:empty){font-size:24px;}" + ( true ? "" : 0));
+
+;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control-v2/custom-select.js
+/**
+ * External dependencies
+ */
+
 
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -51455,175 +48904,283 @@ function useMultipleSelection(userProps) {
 
 
 
-
-const custom_select_control_itemToString = item => item?.name;
-// This is needed so that in Windows, where
-// the menu does not necessarily open on
-// key up/down, you can still switch between
-// options with the menu closed.
-const custom_select_control_stateReducer = ({
-  selectedItem
-}, {
-  type,
-  changes,
-  props: {
-    items
+const CustomSelectContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
+function defaultRenderSelectedValue(value) {
+  const isValueEmpty = Array.isArray(value) ? value.length === 0 : value === undefined || value === null;
+  if (isValueEmpty) {
+    return (0,external_wp_i18n_namespaceObject.__)('Select an item');
   }
+  if (Array.isArray(value)) {
+    return value.length === 1 ? value[0] :
+    // translators: %s: number of items selected (it will always be 2 or more items)
+    (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('%s items selected'), value.length);
+  }
+  return value;
+}
+const CustomSelectButton = ({
+  renderSelectedValue,
+  size = 'default',
+  store,
+  ...restProps
 }) => {
-  switch (type) {
-    case useSelect.stateChangeTypes.ToggleButtonKeyDownArrowDown:
-      // If we already have a selected item, try to select the next one,
-      // without circular navigation. Otherwise, select the first item.
-      return {
-        selectedItem: items[selectedItem ? Math.min(items.indexOf(selectedItem) + 1, items.length - 1) : 0]
-      };
-    case useSelect.stateChangeTypes.ToggleButtonKeyDownArrowUp:
-      // If we already have a selected item, try to select the previous one,
-      // without circular navigation. Otherwise, select the last item.
-      return {
-        selectedItem: items[selectedItem ? Math.max(items.indexOf(selectedItem) - 1, 0) : items.length - 1]
-      };
-    default:
-      return changes;
-  }
+  const {
+    value: currentValue
+  } = store.useState();
+  const computedRenderSelectedValue = (0,external_wp_element_namespaceObject.useMemo)(() => renderSelectedValue !== null && renderSelectedValue !== void 0 ? renderSelectedValue : defaultRenderSelectedValue, [renderSelectedValue]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_Select, {
+    ...restProps,
+    size: size,
+    hasCustomRenderProp: !!renderSelectedValue,
+    store: store,
+    children: computedRenderSelectedValue(currentValue)
+  });
 };
-function CustomSelectControl(props) {
+function _CustomSelect(props) {
   const {
-    /** Start opting into the larger default height that will become the default size in a future version. */
-    __next40pxDefaultSize = false,
-    className,
-    hideLabelFromVision,
+    children,
+    hideLabelFromVision = false,
     label,
-    describedBy,
-    options: items,
-    onChange: onSelectedItemChange,
-    /** @type {import('../select-control/types').SelectControlProps.size} */
-    size = 'default',
-    value: _selectedItem,
-    onMouseOver,
-    onMouseOut,
-    onFocus,
-    onBlur,
-    __experimentalShowSelectedHint = false
-  } = useDeprecated36pxDefaultSizeProp(props);
-  const {
-    getLabelProps,
-    getToggleButtonProps,
-    getMenuProps,
-    getItemProps,
-    isOpen,
-    highlightedIndex,
-    selectedItem
-  } = useSelect({
-    initialSelectedItem: items[0],
-    items,
-    itemToString: custom_select_control_itemToString,
-    onSelectedItemChange,
-    ...(typeof _selectedItem !== 'undefined' && _selectedItem !== null ? {
-      selectedItem: _selectedItem
-    } : undefined),
-    stateReducer: custom_select_control_stateReducer
-  });
-  function getDescribedBy() {
-    if (describedBy) {
-      return describedBy;
+    size,
+    store,
+    className,
+    isLegacy = false,
+    ...restProps
+  } = props;
+  const onSelectPopoverKeyDown = (0,external_wp_element_namespaceObject.useCallback)(e => {
+    if (isLegacy) {
+      e.stopPropagation();
     }
-    if (!selectedItem) {
-      return (0,external_wp_i18n_namespaceObject.__)('No selection');
-    }
-
-    // translators: %s: The selected option.
-    return (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Currently selected: %s'), selectedItem.name);
-  }
-  let menuProps = getMenuProps({
-    className: 'components-custom-select-control__menu',
-    'aria-hidden': !isOpen
-  });
-  const onKeyDownHandler = (0,external_wp_element_namespaceObject.useCallback)(e => {
-    e.stopPropagation();
-    menuProps?.onKeyDown?.(e);
-  }, [menuProps]);
-
-  // We need this here, because the null active descendant is not fully ARIA compliant.
-  if (menuProps['aria-activedescendant']?.startsWith('downshift-null')) {
-    const {
-      'aria-activedescendant': ariaActivedescendant,
-      ...restMenuProps
-    } = menuProps;
-    menuProps = restMenuProps;
-  }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-    className: dist_clsx('components-custom-select-control', className),
-    children: [hideLabelFromVision ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(visually_hidden_component, {
-      as: "label",
-      ...getLabelProps(),
-      children: label
-    }) :
+  }, [isLegacy]);
+  const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    store,
+    size
+  }), [store, size]);
+  return (
     /*#__PURE__*/
-    /* eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for */
-    (0,external_ReactJSXRuntime_namespaceObject.jsx)(StyledLabel, {
-      ...getLabelProps({
-        className: 'components-custom-select-control__label'
-      }),
-      children: label
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(input_base, {
-      __next40pxDefaultSize: __next40pxDefaultSize,
-      size: size,
-      suffix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(select_control_chevron_down, {}),
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Select, {
-        onMouseOver: onMouseOver,
-        onMouseOut: onMouseOut,
-        as: "button",
-        onFocus: onFocus,
-        onBlur: onBlur,
-        selectSize: size,
-        __next40pxDefaultSize: __next40pxDefaultSize,
-        ...getToggleButtonProps({
-          // This is needed because some speech recognition software don't support `aria-labelledby`.
-          'aria-label': label,
-          'aria-labelledby': undefined,
-          className: 'components-custom-select-control__button',
-          describedBy: getDescribedBy()
+    // Where should `restProps` be forwarded to?
+    (0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: className,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectLabel, {
+        store: store,
+        render: hideLabelFromVision ?
+        /*#__PURE__*/
+        // @ts-expect-error `children` are passed via the render prop
+        (0,external_ReactJSXRuntime_namespaceObject.jsx)(visually_hidden_component, {}) :
+        /*#__PURE__*/
+        // @ts-expect-error `children` are passed via the render prop
+        (0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control.VisualLabel, {
+          as: "div"
         }),
-        children: [custom_select_control_itemToString(selectedItem), __experimentalShowSelectedHint && selectedItem.__experimentalHint && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-          className: "components-custom-select-control__hint",
-          children: selectedItem.__experimentalHint
+        children: label
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(input_base, {
+        __next40pxDefaultSize: true,
+        size: size,
+        suffix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(select_control_chevron_down, {}),
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomSelectButton, {
+          ...restProps,
+          size: size,
+          store: store
+          // Match legacy behavior (move selection rather than open the popover)
+          ,
+          showOnKeyDown: !isLegacy
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_SelectPopover, {
+          gutter: 12,
+          store: store,
+          sameWidth: true,
+          slide: false,
+          onKeyDown: onSelectPopoverKeyDown
+          // Match legacy behavior
+          ,
+          flip: !isLegacy,
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomSelectContext.Provider, {
+            value: contextValue,
+            children: children
+          })
         })]
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "components-custom-select-control__menu-wrapper",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
-          ...menuProps,
-          onKeyDown: onKeyDownHandler,
-          children: isOpen && items.map((item, index) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
-            ...getItemProps({
-              item,
-              index,
-              className: dist_clsx(item.className, 'components-custom-select-control__item', {
-                'is-highlighted': index === highlightedIndex,
-                'has-hint': !!item.__experimentalHint,
-                'is-next-40px-default-size': __next40pxDefaultSize
-              }),
-              style: item.style
-            }),
-            children: [item.name, item.__experimentalHint && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-              className: "components-custom-select-control__item-hint",
-              children: item.__experimentalHint
-            }), item === selectedItem && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
-              icon: library_check,
-              className: "components-custom-select-control__item-icon"
-            })]
-          }, item.key))
-        })
       })]
+    })
+  );
+}
+/* harmony default export */ const custom_select = (_CustomSelect);
+
+;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control-v2/item.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+function CustomSelectItem({
+  children,
+  ...props
+}) {
+  var _customSelectContext$;
+  const customSelectContext = (0,external_wp_element_namespaceObject.useContext)(CustomSelectContext);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_SelectItem, {
+    store: customSelectContext?.store,
+    size: (_customSelectContext$ = customSelectContext?.size) !== null && _customSelectContext$ !== void 0 ? _customSelectContext$ : 'default',
+    ...props,
+    children: [children !== null && children !== void 0 ? children : props.value, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectedItemCheck, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
+        icon: library_check
+      })
     })]
   });
 }
-function StableCustomSelectControl(props) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomSelectControl, {
-    ...props,
-    __experimentalShowSelectedHint: false
+CustomSelectItem.displayName = 'CustomSelectControlV2.Item';
+/* harmony default export */ const custom_select_control_v2_item = (CustomSelectItem);
+
+;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control/index.js
+/**
+ * External dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+function custom_select_control_useDeprecatedProps({
+  __experimentalShowSelectedHint,
+  ...otherProps
+}) {
+  return {
+    showSelectedHint: __experimentalShowSelectedHint,
+    ...otherProps
+  };
+}
+
+// The removal of `__experimentalHint` in favour of `hint` doesn't happen in
+// the `useDeprecatedProps` hook in order not to break consumers that rely
+// on object identity (see https://github.com/WordPress/gutenberg/pull/63248#discussion_r1672213131)
+function applyOptionDeprecations({
+  __experimentalHint,
+  ...rest
+}) {
+  return {
+    hint: __experimentalHint,
+    ...rest
+  };
+}
+function CustomSelectControl(props) {
+  const {
+    __next40pxDefaultSize = false,
+    describedBy,
+    options,
+    onChange,
+    size = 'default',
+    value,
+    className: classNameProp,
+    showSelectedHint = false,
+    ...restProps
+  } = custom_select_control_useDeprecatedProps(props);
+
+  // Forward props + store from v2 implementation
+  const store = useSelectStore({
+    async setValue(nextValue) {
+      const nextOption = options.find(item => item.name === nextValue);
+      if (!onChange || !nextOption) {
+        return;
+      }
+
+      // Executes the logic in a microtask after the popup is closed.
+      // This is simply to ensure the isOpen state matches the one from the
+      // previous legacy implementation.
+      await Promise.resolve();
+      const state = store.getState();
+      const changeObject = {
+        highlightedIndex: state.renderedItems.findIndex(item => item.value === nextValue),
+        inputValue: '',
+        isOpen: state.open,
+        selectedItem: nextOption,
+        type: ''
+      };
+      onChange(changeObject);
+    },
+    value: value?.name,
+    // Setting the first option as a default value when no value is provided
+    // is already done natively by the underlying Ariakit component,
+    // but doing this explicitly avoids the `onChange` callback from firing
+    // on initial render, thus making this implementation closer to the v1.
+    defaultValue: options[0]?.name
+  });
+  const children = options.map(applyOptionDeprecations).map(({
+    name,
+    key,
+    hint,
+    style,
+    className
+  }) => {
+    const withHint = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(WithHintItemWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        children: name
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WithHintItemHint, {
+        // Keeping the classname for legacy reasons
+        className: "components-custom-select-control__item-hint",
+        children: hint
+      })]
+    });
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(custom_select_control_v2_item, {
+      value: name,
+      children: hint ? withHint : name,
+      style: style,
+      className: dist_clsx(className,
+      // Keeping the classnames for legacy reasons
+      'components-custom-select-control__item', {
+        'has-hint': hint
+      })
+    }, key);
+  });
+  const renderSelectedValueHint = () => {
+    const {
+      value: currentValue
+    } = store.getState();
+    const selectedOptionHint = options?.map(applyOptionDeprecations)?.find(({
+      name
+    }) => currentValue === name)?.hint;
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(SelectedExperimentalHintWrapper, {
+      children: [currentValue, selectedOptionHint && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectedExperimentalHintItem, {
+        // Keeping the classname for legacy reasons
+        className: "components-custom-select-control__hint",
+        children: selectedOptionHint
+      })]
+    });
+  };
+  const translatedSize = (() => {
+    if (__next40pxDefaultSize && size === 'default' || size === '__unstable-large') {
+      return 'default';
+    }
+    if (!__next40pxDefaultSize && size === 'default') {
+      return 'compact';
+    }
+    return size;
+  })();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(custom_select, {
+    "aria-describedby": describedBy,
+    renderSelectedValue: showSelectedHint ? renderSelectedValueHint : undefined,
+    size: translatedSize,
+    store: store,
+    className: dist_clsx(
+    // Keeping the classname for legacy reasons
+    'components-custom-select-control', classNameProp),
+    isLegacy: true,
+    ...restProps,
+    children: children
   });
 }
+/* harmony default export */ const custom_select_control = (CustomSelectControl);
 
 ;// CONCATENATED MODULE: ./node_modules/use-lilius/build/index.es.js
 
@@ -58920,6 +56477,7 @@ const GRID_OVERLAY_TIMEOUT = 600;
  * 	return (
  * 		<>
  * 			<FocalPointPicker
+ *        __nextHasNoMarginBottom
  * 				url={ url }
  * 				value={ focalPoint }
  * 				onDragStart={ setFocalPoint }
@@ -59266,1922 +56824,6 @@ const HeaderHint = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? 
   target: "e8tqeku0"
 } : 0)("color:", COLORS.gray[700], ";" + ( true ? "" : 0));
 
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/W76OTZCC.js
-"use client";
-
-
-
-
-// src/combobox/combobox-context.tsx
-
-var W76OTZCC_ctx = createStoreContext(
-  [PopoverContextProvider, CompositeContextProvider],
-  [PopoverScopedContextProvider, CompositeScopedContextProvider]
-);
-var useComboboxContext = W76OTZCC_ctx.useContext;
-var useComboboxScopedContext = W76OTZCC_ctx.useScopedContext;
-var useComboboxProviderContext = W76OTZCC_ctx.useProviderContext;
-var ComboboxContextProvider = W76OTZCC_ctx.ContextProvider;
-var ComboboxScopedContextProvider = W76OTZCC_ctx.ScopedContextProvider;
-var ComboboxItemValueContext = (0,external_React_.createContext)(
-  void 0
-);
-var ComboboxItemCheckedContext = (0,external_React_.createContext)(false);
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/core/esm/select/select-store.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-// src/select/select-store.ts
-function createSelectStore(_a = {}) {
-  var _b = _a, {
-    combobox
-  } = _b, props = _4R3V3JGP_objRest(_b, [
-    "combobox"
-  ]);
-  const store = mergeStore(
-    props.store,
-    omit2(combobox, [
-      "value",
-      "items",
-      "renderedItems",
-      "baseElement",
-      "arrowElement",
-      "anchorElement",
-      "contentElement",
-      "popoverElement",
-      "disclosureElement"
-    ])
-  );
-  throwOnConflictingProps(props, store);
-  const syncState = store.getState();
-  const composite = createCompositeStore(_chunks_4R3V3JGP_spreadProps(_chunks_4R3V3JGP_spreadValues({}, props), {
-    store,
-    virtualFocus: defaultValue(
-      props.virtualFocus,
-      syncState.virtualFocus,
-      true
-    ),
-    includesBaseElement: defaultValue(
-      props.includesBaseElement,
-      syncState.includesBaseElement,
-      false
-    ),
-    activeId: defaultValue(
-      props.activeId,
-      syncState.activeId,
-      props.defaultActiveId,
-      null
-    ),
-    orientation: defaultValue(
-      props.orientation,
-      syncState.orientation,
-      "vertical"
-    )
-  }));
-  const popover = createPopoverStore(_chunks_4R3V3JGP_spreadProps(_chunks_4R3V3JGP_spreadValues({}, props), {
-    store,
-    placement: defaultValue(
-      props.placement,
-      syncState.placement,
-      "bottom-start"
-    )
-  }));
-  const initialValue = new String("");
-  const initialState = _chunks_4R3V3JGP_spreadProps(_chunks_4R3V3JGP_spreadValues(_chunks_4R3V3JGP_spreadValues({}, composite.getState()), popover.getState()), {
-    value: defaultValue(
-      props.value,
-      syncState.value,
-      props.defaultValue,
-      initialValue
-    ),
-    setValueOnMove: defaultValue(
-      props.setValueOnMove,
-      syncState.setValueOnMove,
-      false
-    ),
-    selectElement: defaultValue(syncState.selectElement, null),
-    labelElement: defaultValue(syncState.labelElement, null)
-  });
-  const select = createStore(initialState, composite, popover, store);
-  setup(
-    select,
-    () => sync(select, ["value", "items"], (state) => {
-      if (state.value !== initialValue)
-        return;
-      if (!state.items.length)
-        return;
-      const item = state.items.find(
-        (item2) => !item2.disabled && item2.value != null
-      );
-      if ((item == null ? void 0 : item.value) == null)
-        return;
-      select.setState("value", item.value);
-    })
-  );
-  setup(
-    select,
-    () => sync(select, ["mounted", "items", "value"], (state) => {
-      if (combobox)
-        return;
-      if (state.mounted)
-        return;
-      const values = toArray(state.value);
-      const lastValue = values[values.length - 1];
-      if (lastValue == null)
-        return;
-      const item = state.items.find(
-        (item2) => !item2.disabled && item2.value === lastValue
-      );
-      if (!item)
-        return;
-      select.setState("activeId", item.id);
-    })
-  );
-  setup(
-    select,
-    () => batch(select, ["setValueOnMove", "moves"], (state) => {
-      const { mounted, value, activeId } = select.getState();
-      if (!state.setValueOnMove && mounted)
-        return;
-      if (Array.isArray(value))
-        return;
-      if (!state.moves)
-        return;
-      if (!activeId)
-        return;
-      const item = composite.item(activeId);
-      if (!item || item.disabled || item.value == null)
-        return;
-      select.setState("value", item.value);
-    })
-  );
-  return _chunks_4R3V3JGP_spreadProps(_chunks_4R3V3JGP_spreadValues(_chunks_4R3V3JGP_spreadValues(_chunks_4R3V3JGP_spreadValues({}, composite), popover), select), {
-    combobox,
-    setValue: (value) => select.setState("value", value),
-    setSelectElement: (element) => select.setState("selectElement", element),
-    setLabelElement: (element) => select.setState("labelElement", element)
-  });
-}
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/FMVHAVXA.js
-"use client";
-
-
-
-
-
-
-
-// src/select/select-store.ts
-
-function useSelectStoreProps(store, update, props) {
-  useUpdateEffect(update, [props.combobox]);
-  store = useCompositeStoreProps(store, update, props);
-  store = usePopoverStoreProps(store, update, props);
-  useStoreProps(store, props, "value", "setValue");
-  useStoreProps(store, props, "setValueOnMove");
-  return Object.assign(store, { combobox: props.combobox });
-}
-function useSelectStore(props = {}) {
-  const combobox = useComboboxProviderContext();
-  props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
-    combobox: props.combobox !== void 0 ? props.combobox : combobox
-  });
-  const [store, update] = EKQEJRUF_useStore(createSelectStore, props);
-  return useSelectStoreProps(store, update, props);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/5HVNGX6D.js
-"use client";
-
-
-
-
-// src/select/select-context.tsx
-
-var _5HVNGX6D_ctx = createStoreContext(
-  [PopoverContextProvider, CompositeContextProvider],
-  [PopoverScopedContextProvider, CompositeScopedContextProvider]
-);
-var useSelectContext = _5HVNGX6D_ctx.useContext;
-var useSelectScopedContext = _5HVNGX6D_ctx.useScopedContext;
-var useSelectProviderContext = _5HVNGX6D_ctx.useProviderContext;
-var SelectContextProvider = _5HVNGX6D_ctx.ContextProvider;
-var SelectScopedContextProvider = _5HVNGX6D_ctx.ScopedContextProvider;
-var SelectItemCheckedContext = (0,external_React_.createContext)(false);
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select-label.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-// src/select/select-label.ts
-
-var useSelectLabel = createHook(
-  (_a) => {
-    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-    const context = useSelectProviderContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const id = useId(props.id);
-    const onClickProp = props.onClick;
-    const onClick = useEvent((event) => {
-      onClickProp == null ? void 0 : onClickProp(event);
-      if (event.defaultPrevented)
-        return;
-      queueMicrotask(() => {
-        const select = store == null ? void 0 : store.getState().selectElement;
-        select == null ? void 0 : select.focus();
-        select == null ? void 0 : select.click();
-      });
-    });
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
-      id
-    }, props), {
-      ref: useMergeRefs(store.setLabelElement, props.ref),
-      onClick,
-      style: _4R3V3JGP_spreadValues({
-        cursor: "default"
-      }, props.style)
-    });
-    return props;
-  }
-);
-var SelectLabel = createMemoComponent((props) => {
-  const htmlProps = useSelectLabel(props);
-  return _3ORBWXWF_createElement("div", htmlProps);
-});
-if (false) {}
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/VDNZBO4W.js
-"use client";
-
-
-
-
-
-// src/button/button.ts
-
-
-var useButton = createHook((props) => {
-  const ref = (0,external_React_.useRef)(null);
-  const tagName = useTagName(ref, props.as || "button");
-  const [isNativeButton, setIsNativeButton] = (0,external_React_.useState)(
-    () => !!tagName && isButton({ tagName, type: props.type })
-  );
-  (0,external_React_.useEffect)(() => {
-    if (!ref.current)
-      return;
-    setIsNativeButton(isButton(ref.current));
-  }, []);
-  props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
-    role: !isNativeButton && tagName !== "a" ? "button" : void 0
-  }, props), {
-    ref: useMergeRefs(ref, props.ref)
-  });
-  props = useCommand(props);
-  return props;
-});
-var VDNZBO4W_Button = createComponent((props) => {
-  const htmlProps = useButton(props);
-  return _3ORBWXWF_createElement("button", htmlProps);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/BHEJ6NUH.js
-"use client";
-
-
-
-
-
-
-// src/disclosure/disclosure.ts
-
-
-var BHEJ6NUH_symbol = Symbol("disclosure");
-var useDisclosure = createHook(
-  (_a) => {
-    var _b = _a, { store, toggleOnClick = true } = _b, props = __objRest(_b, ["store", "toggleOnClick"]);
-    const context = useDisclosureProviderContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const ref = (0,external_React_.useRef)(null);
-    const [expanded, setExpanded] = (0,external_React_.useState)(false);
-    const disclosureElement = store.useState("disclosureElement");
-    const open = store.useState("open");
-    (0,external_React_.useEffect)(() => {
-      let isCurrentDisclosure = disclosureElement === ref.current;
-      if (!(disclosureElement == null ? void 0 : disclosureElement.isConnected)) {
-        store == null ? void 0 : store.setDisclosureElement(ref.current);
-        isCurrentDisclosure = true;
-      }
-      setExpanded(open && isCurrentDisclosure);
-    }, [disclosureElement, store, open]);
-    const onClickProp = props.onClick;
-    const toggleOnClickProp = useBooleanEvent(toggleOnClick);
-    const [isDuplicate, metadataProps] = useMetadataProps(props, BHEJ6NUH_symbol, true);
-    const onClick = useEvent((event) => {
-      onClickProp == null ? void 0 : onClickProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (isDuplicate)
-        return;
-      if (!toggleOnClickProp(event))
-        return;
-      store == null ? void 0 : store.setDisclosureElement(event.currentTarget);
-      store == null ? void 0 : store.toggle();
-    });
-    const contentElement = store.useState("contentElement");
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues(_4R3V3JGP_spreadValues({
-      "aria-expanded": expanded,
-      "aria-controls": contentElement == null ? void 0 : contentElement.id
-    }, metadataProps), props), {
-      ref: useMergeRefs(ref, props.ref),
-      onClick
-    });
-    props = useButton(props);
-    return props;
-  }
-);
-var Disclosure = createComponent((props) => {
-  const htmlProps = useDisclosure(props);
-  return _3ORBWXWF_createElement("button", htmlProps);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/H3TG2CZP.js
-"use client";
-
-
-
-
-
-// src/dialog/dialog-disclosure.ts
-
-
-var useDialogDisclosure = createHook(
-  (_a) => {
-    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-    const context = useDialogProviderContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const contentElement = store.useState("contentElement");
-    props = _4R3V3JGP_spreadValues({
-      "aria-haspopup": getPopupRole(contentElement, "dialog")
-    }, props);
-    props = useDisclosure(_4R3V3JGP_spreadValues({ store }, props));
-    return props;
-  }
-);
-var DialogDisclosure = createComponent(
-  (props) => {
-    const htmlProps = useDialogDisclosure(props);
-    return _3ORBWXWF_createElement("button", htmlProps);
-  }
-);
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/JCH6MLL2.js
-"use client";
-
-
-
-
-
-// src/popover/popover-anchor.ts
-var usePopoverAnchor = createHook(
-  (_a) => {
-    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-    const context = usePopoverProviderContext();
-    store = store || context;
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
-      ref: useMergeRefs(store == null ? void 0 : store.setAnchorElement, props.ref)
-    });
-    return props;
-  }
-);
-var PopoverAnchor = createComponent((props) => {
-  const htmlProps = usePopoverAnchor(props);
-  return _3ORBWXWF_createElement("div", htmlProps);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/4ZEZYKUR.js
-"use client";
-
-
-
-
-
-
-
-// src/popover/popover-disclosure.tsx
-
-
-var usePopoverDisclosure = createHook(
-  (_a) => {
-    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-    const context = usePopoverProviderContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const onClickProp = props.onClick;
-    const onClick = useEvent((event) => {
-      store == null ? void 0 : store.setAnchorElement(event.currentTarget);
-      onClickProp == null ? void 0 : onClickProp(event);
-    });
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(PopoverScopedContextProvider, { value: store, children: element }),
-      [store]
-    );
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
-      onClick
-    });
-    props = usePopoverAnchor(_4R3V3JGP_spreadValues({ store }, props));
-    props = useDialogDisclosure(_4R3V3JGP_spreadValues({ store }, props));
-    return props;
-  }
-);
-var PopoverDisclosure = createComponent(
-  (props) => {
-    const htmlProps = usePopoverDisclosure(props);
-    return _3ORBWXWF_createElement("button", htmlProps);
-  }
-);
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/JHO32H4J.js
-"use client";
-
-
-
-
-// src/popover/popover-disclosure-arrow.tsx
-
-
-
-var pointsMap = {
-  top: "4,10 8,6 12,10",
-  right: "6,4 10,8 6,12",
-  bottom: "4,6 8,10 12,6",
-  left: "10,4 6,8 10,12"
-};
-var usePopoverDisclosureArrow = createHook(
-  (_a) => {
-    var _b = _a, { store, placement } = _b, props = __objRest(_b, ["store", "placement"]);
-    const context = usePopoverContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const position = store.useState((state) => placement || state.placement);
-    const dir = position.split("-")[0];
-    const points = pointsMap[dir];
-    const children = (0,external_React_.useMemo)(
-      () => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(
-        "svg",
-        {
-          display: "block",
-          fill: "none",
-          stroke: "currentColor",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: "1.5pt",
-          viewBox: "0 0 16 16",
-          height: "1em",
-          width: "1em",
-          children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)("polyline", { points })
-        }
-      ),
-      [points]
-    );
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
-      children,
-      "aria-hidden": true
-    }, props), {
-      style: _4R3V3JGP_spreadValues({
-        width: "1em",
-        height: "1em",
-        pointerEvents: "none"
-      }, props.style)
-    });
-    return props;
-  }
-);
-var PopoverDisclosureArrow = createComponent((props) => {
-  const htmlProps = usePopoverDisclosureArrow(props);
-  return _3ORBWXWF_createElement("span", htmlProps);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/NUNVG4IK.js
-"use client";
-
-
-
-
-
-// src/select/select-arrow.ts
-var useSelectArrow = createHook(
-  (_a) => {
-    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-    const context = useSelectContext();
-    store = store || context;
-    props = usePopoverDisclosureArrow(_4R3V3JGP_spreadValues({ store }, props));
-    return props;
-  }
-);
-var SelectArrow = createComponent((props) => {
-  const htmlProps = useSelectArrow(props);
-  return _3ORBWXWF_createElement("span", htmlProps);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/346FK57L.js
-"use client";
-
-
-
-
-
-
-// src/composite/composite-typeahead.ts
-
-
-
-
-var chars = "";
-function clearChars() {
-  chars = "";
-}
-function isValidTypeaheadEvent(event) {
-  const target = event.target;
-  if (target && DLOEKDPY_isTextField(target))
-    return false;
-  if (event.key === " " && chars.length)
-    return true;
-  return event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey && /^[\p{Letter}\p{Number}]$/u.test(event.key);
-}
-function isSelfTargetOrItem(event, items) {
-  if (isSelfTarget(event))
-    return true;
-  const target = event.target;
-  if (!target)
-    return false;
-  const isItem = items.some((item) => item.element === target);
-  return isItem;
-}
-function _346FK57L_getEnabledItems(items) {
-  return items.filter((item) => !item.disabled);
-}
-function itemTextStartsWith(item, text) {
-  var _a;
-  const itemText = ((_a = item.element) == null ? void 0 : _a.textContent) || item.children;
-  if (!itemText)
-    return false;
-  return normalizeString(itemText).trim().toLowerCase().startsWith(text.toLowerCase());
-}
-function getSameInitialItems(items, char, activeId) {
-  if (!activeId)
-    return items;
-  const activeItem = items.find((item) => item.id === activeId);
-  if (!activeItem)
-    return items;
-  if (!itemTextStartsWith(activeItem, char))
-    return items;
-  if (chars !== char && itemTextStartsWith(activeItem, chars))
-    return items;
-  chars = char;
-  return flipItems(
-    items.filter((item) => itemTextStartsWith(item, chars)),
-    activeId
-  ).filter((item) => item.id !== activeId);
-}
-var useCompositeTypeahead = createHook(
-  (_a) => {
-    var _b = _a, { store, typeahead = true } = _b, props = __objRest(_b, ["store", "typeahead"]);
-    const context = useCompositeContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const onKeyDownCaptureProp = props.onKeyDownCapture;
-    const cleanupTimeoutRef = (0,external_React_.useRef)(0);
-    const onKeyDownCapture = useEvent(
-      (event) => {
-        onKeyDownCaptureProp == null ? void 0 : onKeyDownCaptureProp(event);
-        if (event.defaultPrevented)
-          return;
-        if (!typeahead)
-          return;
-        if (!store)
-          return;
-        const { items, activeId } = store.getState();
-        if (!isValidTypeaheadEvent(event))
-          return clearChars();
-        let enabledItems = _346FK57L_getEnabledItems(items);
-        if (!isSelfTargetOrItem(event, enabledItems))
-          return clearChars();
-        event.preventDefault();
-        window.clearTimeout(cleanupTimeoutRef.current);
-        cleanupTimeoutRef.current = window.setTimeout(() => {
-          chars = "";
-        }, 500);
-        const char = event.key.toLowerCase();
-        chars += char;
-        enabledItems = getSameInitialItems(enabledItems, char, activeId);
-        const item = enabledItems.find(
-          (item2) => itemTextStartsWith(item2, chars)
-        );
-        if (item) {
-          store.move(item.id);
-        } else {
-          clearChars();
-        }
-      }
-    );
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
-      onKeyDownCapture
-    });
-    return props;
-  }
-);
-var CompositeTypeahead = createComponent(
-  (props) => {
-    const htmlProps = useCompositeTypeahead(props);
-    return _3ORBWXWF_createElement("div", htmlProps);
-  }
-);
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/select/select.tsx
-
-
-
-
-
-
-function getSelectedValues(select) {
-  return Array.from(select.selectedOptions).map((option) => option.value);
-}
-function nextWithValue(store, next) {
-  return () => {
-    const nextId = next();
-    if (!nextId)
-      return;
-    let i = 0;
-    let nextItem = store.item(nextId);
-    const firstItem = nextItem;
-    while (nextItem && nextItem.value == null) {
-      const nextId2 = next(++i);
-      if (!nextId2)
-        return;
-      nextItem = store.item(nextId2);
-      if (nextItem === firstItem)
-        break;
-    }
-    return nextItem == null ? void 0 : nextItem.id;
-  };
-}
-var select_useSelect = createHook(
-  (_a) => {
-    var _b = _a, {
-      store,
-      name,
-      form,
-      required,
-      showOnKeyDown = true,
-      moveOnKeyDown = true,
-      toggleOnClick = false,
-      toggleOnPress = !toggleOnClick
-    } = _b, props = __objRest(_b, [
-      "store",
-      "name",
-      "form",
-      "required",
-      "showOnKeyDown",
-      "moveOnKeyDown",
-      "toggleOnClick",
-      "toggleOnPress"
-    ]);
-    const context = useSelectProviderContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    toggleOnPress = toggleOnClick ? false : toggleOnPress;
-    const onKeyDownProp = props.onKeyDown;
-    const showOnKeyDownProp = useBooleanEvent(showOnKeyDown);
-    const moveOnKeyDownProp = useBooleanEvent(moveOnKeyDown);
-    const toggleOnPressProp = useBooleanEvent(toggleOnPress);
-    const placement = store.useState("placement");
-    const dir = placement.split("-")[0];
-    const value = store.useState("value");
-    const multiSelectable = Array.isArray(value);
-    const onKeyDown = useEvent((event) => {
-      var _a2;
-      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!store)
-        return;
-      const { orientation, items: items2, activeId } = store.getState();
-      if (event.key === " " || event.key === "Enter") {
-        if (toggleOnPressProp(event)) {
-          event.preventDefault();
-          store.toggle();
-        }
-      }
-      const isVertical = orientation !== "horizontal";
-      const isHorizontal = orientation !== "vertical";
-      const isGrid = !!((_a2 = items2.find(
-        (item) => !item.disabled && item.value != null
-      )) == null ? void 0 : _a2.rowId);
-      const moveKeyMap = {
-        ArrowUp: (isGrid || isVertical) && nextWithValue(store, store.up),
-        ArrowRight: (isGrid || isHorizontal) && nextWithValue(store, store.next),
-        ArrowDown: (isGrid || isVertical) && nextWithValue(store, store.down),
-        ArrowLeft: (isGrid || isHorizontal) && nextWithValue(store, store.previous)
-      };
-      const getId = moveKeyMap[event.key];
-      if (getId && moveOnKeyDownProp(event)) {
-        event.preventDefault();
-        store.move(getId());
-      }
-      const isTopOrBottom = dir === "top" || dir === "bottom";
-      const isLeft = dir === "left";
-      const isRight = dir === "right";
-      const canShowKeyMap = {
-        ArrowDown: isTopOrBottom,
-        ArrowUp: isTopOrBottom,
-        ArrowLeft: isLeft,
-        ArrowRight: isRight
-      };
-      const canShow = canShowKeyMap[event.key];
-      if (canShow && showOnKeyDownProp(event)) {
-        event.preventDefault();
-        store.move(activeId);
-        queueBeforeEvent(event.currentTarget, "keyup", store.show);
-      }
-    });
-    const onMouseDownProp = props.onMouseDown;
-    const onMouseDown = useEvent((event) => {
-      onMouseDownProp == null ? void 0 : onMouseDownProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (event.button)
-        return;
-      if (event.ctrlKey)
-        return;
-      if (!toggleOnPressProp(event))
-        return;
-      const element = event.currentTarget;
-      queueBeforeEvent(element, "focusin", () => {
-        store == null ? void 0 : store.setDisclosureElement(element);
-        store == null ? void 0 : store.toggle();
-      });
-    });
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectScopedContextProvider, { value: store, children: element }),
-      [store]
-    );
-    const [autofill, setAutofill] = (0,external_React_.useState)(false);
-    const nativeSelectChangedRef = (0,external_React_.useRef)(false);
-    (0,external_React_.useEffect)(() => {
-      const nativeSelectChanged = nativeSelectChangedRef.current;
-      nativeSelectChangedRef.current = false;
-      if (nativeSelectChanged)
-        return;
-      setAutofill(false);
-    }, [value]);
-    const labelId = store.useState((state) => {
-      var _a2;
-      return (_a2 = state.labelElement) == null ? void 0 : _a2.id;
-    });
-    const label = props["aria-label"];
-    const labelledBy = props["aria-labelledby"] || labelId;
-    const items = store.useState("items");
-    const values = (0,external_React_.useMemo)(
-      // Filter out items without value and duplicate values.
-      () => [...new Set(items.map((i) => i.value).filter((v) => v != null))],
-      [items]
-    );
-    props = useWrapElement(
-      props,
-      (element) => {
-        if (!name)
-          return element;
-        return /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, { children: [
-          /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsxs)(
-            "select",
-            {
-              style: {
-                border: 0,
-                clip: "rect(0 0 0 0)",
-                height: "1px",
-                margin: "-1px",
-                overflow: "hidden",
-                padding: 0,
-                position: "absolute",
-                whiteSpace: "nowrap",
-                width: "1px"
-              },
-              tabIndex: -1,
-              "aria-hidden": true,
-              "aria-label": label,
-              "aria-labelledby": labelledBy,
-              name,
-              form,
-              required,
-              value,
-              multiple: multiSelectable,
-              onFocus: () => {
-                var _a2;
-                return (_a2 = store == null ? void 0 : store.getState().selectElement) == null ? void 0 : _a2.focus();
-              },
-              onChange: (event) => {
-                nativeSelectChangedRef.current = true;
-                setAutofill(true);
-                store == null ? void 0 : store.setValue(
-                  multiSelectable ? getSelectedValues(event.target) : event.target.value
-                );
-              },
-              children: [
-                toArray(value).map((value2) => {
-                  if (value2 == null)
-                    return null;
-                  if (values.includes(value2))
-                    return null;
-                  return /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)("option", { value: value2, children: value2 }, value2);
-                }),
-                values.map((value2) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)("option", { value: value2, children: value2 }, value2))
-              ]
-            }
-          ),
-          element
-        ] });
-      },
-      [
-        store,
-        label,
-        labelledBy,
-        name,
-        form,
-        required,
-        value,
-        multiSelectable,
-        values
-      ]
-    );
-    const children = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, { children: [
-      value,
-      /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectArrow, {})
-    ] });
-    const contentElement = store.useState("contentElement");
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
-      role: "combobox",
-      "aria-autocomplete": "none",
-      "aria-labelledby": labelId,
-      "aria-haspopup": getPopupRole(contentElement, "listbox"),
-      "data-autofill": autofill ? "" : void 0,
-      "data-name": name,
-      children
-    }, props), {
-      ref: useMergeRefs(store.setSelectElement, props.ref),
-      onKeyDown,
-      onMouseDown
-    });
-    props = usePopoverDisclosure(_4R3V3JGP_spreadValues({ store, toggleOnClick }, props));
-    props = useCompositeTypeahead(_4R3V3JGP_spreadValues({ store }, props));
-    return props;
-  }
-);
-var select_Select = createComponent((props) => {
-  const htmlProps = select_useSelect(props);
-  return _3ORBWXWF_createElement("button", htmlProps);
-});
-if (false) {}
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/SU2GU5JB.js
-"use client";
-
-
-
-
-
-
-
-
-// src/select/select-list.tsx
-
-
-
-
-var useSelectList = createHook(
-  (_a) => {
-    var _b = _a, {
-      store,
-      resetOnEscape = true,
-      hideOnEnter = true,
-      focusOnMove = true,
-      composite,
-      alwaysVisible
-    } = _b, props = __objRest(_b, [
-      "store",
-      "resetOnEscape",
-      "hideOnEnter",
-      "focusOnMove",
-      "composite",
-      "alwaysVisible"
-    ]);
-    const context = useSelectProviderContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const ref = (0,external_React_.useRef)(null);
-    const id = useId(props.id);
-    const value = store.useState("value");
-    const multiSelectable = Array.isArray(value);
-    const [defaultValue, setDefaultValue] = (0,external_React_.useState)(value);
-    const mounted = store.useState("mounted");
-    (0,external_React_.useEffect)(() => {
-      if (mounted)
-        return;
-      setDefaultValue(value);
-    }, [mounted, value]);
-    resetOnEscape = resetOnEscape && !multiSelectable;
-    const onKeyDownProp = props.onKeyDown;
-    const resetOnEscapeProp = useBooleanEvent(resetOnEscape);
-    const hideOnEnterProp = useBooleanEvent(hideOnEnter);
-    const onKeyDown = useEvent((event) => {
-      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (event.key === "Escape" && resetOnEscapeProp(event)) {
-        store == null ? void 0 : store.setValue(defaultValue);
-      }
-      if (event.key === " " || event.key === "Enter") {
-        if (isSelfTarget(event) && hideOnEnterProp(event)) {
-          event.preventDefault();
-          store == null ? void 0 : store.hide();
-        }
-      }
-    });
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectScopedContextProvider, { value: store, children: element }),
-      [store]
-    );
-    const labelId = store.useState((state) => {
-      var _a2;
-      return (_a2 = state.labelElement) == null ? void 0 : _a2.id;
-    });
-    const hasCombobox = !!store.combobox;
-    composite = composite != null ? composite : !hasCombobox;
-    if (composite) {
-      props = _4R3V3JGP_spreadValues({ role: "listbox" }, props);
-    }
-    const role = useAttribute(ref, "role", props.role);
-    const isCompositeRole = role === "listbox" || role === "menu" || role === "tree" || role === "grid";
-    const ariaMultiSelectable = composite || isCompositeRole ? multiSelectable || void 0 : void 0;
-    const hidden = isHidden(mounted, props.hidden, alwaysVisible);
-    const style = hidden ? _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props.style), { display: "none" }) : props.style;
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
-      id,
-      "aria-labelledby": labelId,
-      "aria-multiselectable": ariaMultiSelectable,
-      hidden
-    }, props), {
-      ref: useMergeRefs(id ? store.setContentElement : null, ref, props.ref),
-      style,
-      onKeyDown
-    });
-    props = useComposite(_4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({ store }, props), { composite }));
-    props = useCompositeTypeahead(_4R3V3JGP_spreadValues({ store, typeahead: !hasCombobox }, props));
-    return props;
-  }
-);
-var SelectList = createComponent((props) => {
-  const htmlProps = useSelectList(props);
-  return _3ORBWXWF_createElement("div", htmlProps);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select-popover.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/select/select-popover.ts
-var useSelectPopover = createHook(
-  (_a) => {
-    var _b = _a, { store, alwaysVisible } = _b, props = __objRest(_b, ["store", "alwaysVisible"]);
-    const context = useSelectProviderContext();
-    store = store || context;
-    props = useSelectList(_4R3V3JGP_spreadValues({ store, alwaysVisible }, props));
-    props = usePopover(_4R3V3JGP_spreadValues({ store, alwaysVisible }, props));
-    return props;
-  }
-);
-var SelectPopover = createDialogComponent(
-  createComponent((props) => {
-    const htmlProps = useSelectPopover(props);
-    return _3ORBWXWF_createElement("div", htmlProps);
-  }),
-  useSelectProviderContext
-);
-if (false) {}
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/G6ONQ5EH.js
-"use client";
-
-
-
-
-
-// src/composite/composite-hover.ts
-
-
-
-
-function getMouseDestination(event) {
-  const relatedTarget = event.relatedTarget;
-  if ((relatedTarget == null ? void 0 : relatedTarget.nodeType) === Node.ELEMENT_NODE) {
-    return relatedTarget;
-  }
-  return null;
-}
-function hoveringInside(event) {
-  const nextElement = getMouseDestination(event);
-  if (!nextElement)
-    return false;
-  return contains(event.currentTarget, nextElement);
-}
-var G6ONQ5EH_symbol = Symbol("composite-hover");
-function movingToAnotherItem(event) {
-  let dest = getMouseDestination(event);
-  if (!dest)
-    return false;
-  do {
-    if (I2VQ3XGR_hasOwnProperty(dest, G6ONQ5EH_symbol) && dest[G6ONQ5EH_symbol])
-      return true;
-    dest = dest.parentElement;
-  } while (dest);
-  return false;
-}
-var useCompositeHover = createHook(
-  (_a) => {
-    var _b = _a, {
-      store,
-      focusOnHover = true,
-      blurOnHoverEnd = !!focusOnHover
-    } = _b, props = __objRest(_b, [
-      "store",
-      "focusOnHover",
-      "blurOnHoverEnd"
-    ]);
-    const context = useCompositeContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const isMouseMoving = useIsMouseMoving();
-    const onMouseMoveProp = props.onMouseMove;
-    const focusOnHoverProp = useBooleanEvent(focusOnHover);
-    const onMouseMove = useEvent((event) => {
-      onMouseMoveProp == null ? void 0 : onMouseMoveProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!isMouseMoving())
-        return;
-      if (!focusOnHoverProp(event))
-        return;
-      if (!hasFocusWithin(event.currentTarget)) {
-        const baseElement = store == null ? void 0 : store.getState().baseElement;
-        if (baseElement && !hasFocus(baseElement)) {
-          baseElement.focus();
-        }
-      }
-      store == null ? void 0 : store.setActiveId(event.currentTarget.id);
-    });
-    const onMouseLeaveProp = props.onMouseLeave;
-    const blurOnHoverEndProp = useBooleanEvent(blurOnHoverEnd);
-    const onMouseLeave = useEvent((event) => {
-      var _a2;
-      onMouseLeaveProp == null ? void 0 : onMouseLeaveProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!isMouseMoving())
-        return;
-      if (hoveringInside(event))
-        return;
-      if (movingToAnotherItem(event))
-        return;
-      if (!focusOnHoverProp(event))
-        return;
-      if (!blurOnHoverEndProp(event))
-        return;
-      store == null ? void 0 : store.setActiveId(null);
-      (_a2 = store == null ? void 0 : store.getState().baseElement) == null ? void 0 : _a2.focus();
-    });
-    const ref = (0,external_React_.useCallback)((element) => {
-      if (!element)
-        return;
-      element[G6ONQ5EH_symbol] = true;
-    }, []);
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), {
-      ref: useMergeRefs(ref, props.ref),
-      onMouseMove,
-      onMouseLeave
-    });
-    return props;
-  }
-);
-var CompositeHover = createMemoComponent(
-  (props) => {
-    const htmlProps = useCompositeHover(props);
-    return _3ORBWXWF_createElement("div", htmlProps);
-  }
-);
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select-item.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/select/select-item.tsx
-
-
-
-
-
-function isSelected(storeValue, itemValue) {
-  if (itemValue == null)
-    return;
-  if (storeValue == null)
-    return false;
-  if (Array.isArray(storeValue)) {
-    return storeValue.includes(itemValue);
-  }
-  return storeValue === itemValue;
-}
-var useSelectItem = createHook(
-  (_a) => {
-    var _b = _a, {
-      store,
-      value,
-      getItem: getItemProp,
-      hideOnClick,
-      setValueOnClick = value != null,
-      preventScrollOnKeyDown = true,
-      focusOnHover = true
-    } = _b, props = __objRest(_b, [
-      "store",
-      "value",
-      "getItem",
-      "hideOnClick",
-      "setValueOnClick",
-      "preventScrollOnKeyDown",
-      "focusOnHover"
-    ]);
-    var _a2;
-    const context = useSelectScopedContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const id = useId(props.id);
-    const disabled = disabledFromProps(props);
-    const getItem = (0,external_React_.useCallback)(
-      (item) => {
-        const nextItem = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, item), {
-          value: disabled ? void 0 : value,
-          children: value
-        });
-        if (getItemProp) {
-          return getItemProp(nextItem);
-        }
-        return nextItem;
-      },
-      [disabled, value, getItemProp]
-    );
-    const multiSelectable = store.useState(
-      (state) => Array.isArray(state.value)
-    );
-    hideOnClick = hideOnClick != null ? hideOnClick : value != null && !multiSelectable;
-    const onClickProp = props.onClick;
-    const setValueOnClickProp = useBooleanEvent(setValueOnClick);
-    const hideOnClickProp = useBooleanEvent(hideOnClick);
-    const onClick = useEvent((event) => {
-      onClickProp == null ? void 0 : onClickProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (isDownloading(event))
-        return;
-      if (isOpeningInNewTab(event))
-        return;
-      if (setValueOnClickProp(event) && value != null) {
-        store == null ? void 0 : store.setValue((prevValue) => {
-          if (!Array.isArray(prevValue))
-            return value;
-          if (prevValue.includes(value)) {
-            return prevValue.filter((v) => v !== value);
-          }
-          return [...prevValue, value];
-        });
-      }
-      if (hideOnClickProp(event)) {
-        store == null ? void 0 : store.hide();
-      }
-    });
-    const selected = store.useState((state) => isSelected(state.value, value));
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectItemCheckedContext.Provider, { value: selected != null ? selected : false, children: element }),
-      [selected]
-    );
-    const contentElement = store.useState("contentElement");
-    const autoFocus = store.useState((state) => {
-      if (state.activeId !== id && (store == null ? void 0 : store.item(state.activeId)))
-        return false;
-      if (state.value == null)
-        return false;
-      if (value == null)
-        return false;
-      if (Array.isArray(state.value)) {
-        return state.value[state.value.length - 1] === value;
-      }
-      return state.value === value;
-    });
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
-      id,
-      role: getPopupItemRole(contentElement),
-      "aria-selected": selected,
-      children: value
-    }, props), {
-      autoFocus: (_a2 = props.autoFocus) != null ? _a2 : autoFocus,
-      onClick
-    });
-    props = useCompositeItem(_4R3V3JGP_spreadValues({
-      store,
-      getItem,
-      preventScrollOnKeyDown
-    }, props));
-    const focusOnHoverProp = useBooleanEvent(focusOnHover);
-    props = useCompositeHover(_4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
-      store
-    }, props), {
-      // We have to disable focusOnHover when the popup is closed, otherwise
-      // the active item will change to null (the container) when the popup is
-      // closed by clicking on an item.
-      focusOnHover: (event) => {
-        if (!focusOnHoverProp(event))
-          return false;
-        const state = store == null ? void 0 : store.getState();
-        return !!(state == null ? void 0 : state.open);
-      }
-    }));
-    return props;
-  }
-);
-var SelectItem = createMemoComponent((props) => {
-  const htmlProps = useSelectItem(props);
-  return _3ORBWXWF_createElement("div", htmlProps);
-});
-if (false) {}
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/6XBVQI3K.js
-"use client";
-
-// src/checkbox/checkbox-checked-context.ts
-
-var CheckboxCheckedContext = (0,external_React_.createContext)(false);
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/MW2F7SEA.js
-"use client";
-
-
-
-
-// src/checkbox/checkbox-check.tsx
-
-
-var checkmark = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(
-  "svg",
-  {
-    display: "block",
-    fill: "none",
-    stroke: "currentColor",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: "1.5pt",
-    viewBox: "0 0 16 16",
-    height: "1em",
-    width: "1em",
-    children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)("polyline", { points: "4,8 7,12 12,4" })
-  }
-);
-function getChildren(props) {
-  if (props.checked) {
-    return props.children || checkmark;
-  }
-  if (typeof props.children === "function") {
-    return props.children;
-  }
-  return null;
-}
-var useCheckboxCheck = createHook(
-  (_a) => {
-    var _b = _a, { store, checked } = _b, props = __objRest(_b, ["store", "checked"]);
-    const context = (0,external_React_.useContext)(CheckboxCheckedContext);
-    checked = checked != null ? checked : context;
-    const children = getChildren({ checked, children: props.children });
-    props = _4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({
-      "aria-hidden": true
-    }, props), {
-      children,
-      style: _4R3V3JGP_spreadValues({
-        width: "1em",
-        height: "1em",
-        pointerEvents: "none"
-      }, props.style)
-    });
-    return props;
-  }
-);
-var CheckboxCheck = createComponent((props) => {
-  const htmlProps = useCheckboxCheck(props);
-  return _3ORBWXWF_createElement("span", htmlProps);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/select/select-item-check.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/select/select-item-check.ts
-
-var useSelectItemCheck = createHook(
-  (_a) => {
-    var _b = _a, { store, checked } = _b, props = __objRest(_b, ["store", "checked"]);
-    const context = (0,external_React_.useContext)(SelectItemCheckedContext);
-    checked = checked != null ? checked : context;
-    props = useCheckboxCheck(_4R3V3JGP_spreadProps(_4R3V3JGP_spreadValues({}, props), { checked }));
-    return props;
-  }
-);
-var SelectItemCheck = createComponent(
-  (props) => {
-    const htmlProps = useSelectItemCheck(props);
-    return _3ORBWXWF_createElement("span", htmlProps);
-  }
-);
-if (false) {}
-
-
-;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control-v2/styles.js
-
-function custom_select_control_v2_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
-/**
- * External dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-const INLINE_PADDING = {
-  compact: 8,
-  // space(2)
-  small: 8,
-  // space(2)
-  default: 16 // space(4)
-};
-const getSelectSize = (size, heightProperty) => {
-  const sizes = {
-    compact: {
-      [heightProperty]: 32,
-      paddingInlineStart: INLINE_PADDING.compact,
-      paddingInlineEnd: INLINE_PADDING.compact + chevronIconSize
-    },
-    default: {
-      [heightProperty]: 40,
-      paddingInlineStart: INLINE_PADDING.default,
-      paddingInlineEnd: INLINE_PADDING.default + chevronIconSize
-    },
-    small: {
-      [heightProperty]: 24,
-      paddingInlineStart: INLINE_PADDING.small,
-      paddingInlineEnd: INLINE_PADDING.small + chevronIconSize
-    }
-  };
-  return sizes[size] || sizes.default;
-};
-const getSelectItemSize = size => {
-  // Used to visually align the checkmark with the chevron
-  const checkmarkCorrection = 6;
-  const sizes = {
-    compact: {
-      paddingInlineStart: INLINE_PADDING.compact,
-      paddingInlineEnd: INLINE_PADDING.compact - checkmarkCorrection
-    },
-    default: {
-      paddingInlineStart: INLINE_PADDING.default,
-      paddingInlineEnd: INLINE_PADDING.default - checkmarkCorrection
-    },
-    small: {
-      paddingInlineStart: INLINE_PADDING.small,
-      paddingInlineEnd: INLINE_PADDING.small - checkmarkCorrection
-    }
-  };
-  return sizes[size] || sizes.default;
-};
-const styles_Select = /*#__PURE__*/emotion_styled_base_browser_esm(select_Select,  true ? {
-  // Do not forward `hasCustomRenderProp` to the underlying Ariakit.Select component
-  shouldForwardProp: prop => prop !== 'hasCustomRenderProp',
-  target: "e1p3eej77"
-} : 0)(({
-  size,
-  hasCustomRenderProp
-}) => /*#__PURE__*/emotion_react_browser_esm_css("display:block;background-color:", COLORS.theme.background, ";border:none;color:", COLORS.theme.foreground, ";cursor:pointer;font-family:inherit;text-align:start;user-select:none;width:100%;&[data-focus-visible]{outline:none;}", getSelectSize(size, hasCustomRenderProp ? 'minHeight' : 'height'), " ", !hasCustomRenderProp && truncateStyles, " ", fontSizeStyles({
-  inputSize: size
-}), ";" + ( true ? "" : 0),  true ? "" : 0),  true ? "" : 0);
-const styles_SelectPopover = /*#__PURE__*/emotion_styled_base_browser_esm(SelectPopover,  true ? {
-  target: "e1p3eej76"
-} : 0)("display:flex;flex-direction:column;background-color:", COLORS.theme.background, ";border-radius:2px;border:1px solid ", COLORS.theme.foreground, ";z-index:1000000;max-height:min( var( --popover-available-height, 400px ), 400px );overflow:auto;overscroll-behavior:contain;min-width:min-content;&[data-focus-visible]{outline:none;}" + ( true ? "" : 0));
-const styles_SelectItem = /*#__PURE__*/emotion_styled_base_browser_esm(SelectItem,  true ? {
-  target: "e1p3eej75"
-} : 0)(({
-  size
-}) => /*#__PURE__*/emotion_react_browser_esm_css("cursor:default;display:flex;align-items:center;justify-content:space-between;font-size:", config_values.fontSize, ";line-height:28px;padding-block:", space(2), ";scroll-margin:", space(1), ";user-select:none;&[aria-disabled='true']{cursor:not-allowed;}&[data-active-item]{background-color:", COLORS.theme.gray[300], ";}", getSelectItemSize(size), ";" + ( true ? "" : 0),  true ? "" : 0),  true ? "" : 0);
-const truncateStyles =  true ? {
-  name: "1h52dri",
-  styles: "overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
-} : 0;
-const SelectedExperimentalHintWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e1p3eej74"
-} : 0)(truncateStyles, ";" + ( true ? "" : 0));
-const SelectedExperimentalHintItem = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "e1p3eej73"
-} : 0)("color:", COLORS.theme.gray[600], ";margin-inline-start:", space(2), ";" + ( true ? "" : 0));
-const WithHintItemWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e1p3eej72"
-} : 0)("display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;flex:1;column-gap:", space(4), ";" + ( true ? "" : 0));
-const WithHintItemHint = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "e1p3eej71"
-} : 0)("color:", COLORS.theme.gray[600], ";text-align:initial;line-height:", config_values.fontLineHeightBase, ";padding-inline-end:", space(1), ";margin-block:", space(1), ";" + ( true ? "" : 0));
-const SelectedItemCheck = /*#__PURE__*/emotion_styled_base_browser_esm(SelectItemCheck,  true ? {
-  target: "e1p3eej70"
-} : 0)("display:flex;align-items:center;margin-inline-start:", space(2), ";align-self:start;margin-block-start:2px;font-size:0;", WithHintItemWrapper, "~&,&:not(:empty){font-size:24px;}" + ( true ? "" : 0));
-
-;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control-v2/custom-select.js
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-
-
-const CustomSelectContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
-function defaultRenderSelectedValue(value) {
-  const isValueEmpty = Array.isArray(value) ? value.length === 0 : value === undefined || value === null;
-  if (isValueEmpty) {
-    return (0,external_wp_i18n_namespaceObject.__)('Select an item');
-  }
-  if (Array.isArray(value)) {
-    return value.length === 1 ? value[0] :
-    // translators: %s: number of items selected (it will always be 2 or more items)
-    (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('%s items selected'), value.length);
-  }
-  return value;
-}
-const CustomSelectButton = ({
-  renderSelectedValue,
-  size = 'default',
-  store,
-  ...restProps
-}) => {
-  const {
-    value: currentValue
-  } = store.useState();
-  const computedRenderSelectedValue = (0,external_wp_element_namespaceObject.useMemo)(() => renderSelectedValue !== null && renderSelectedValue !== void 0 ? renderSelectedValue : defaultRenderSelectedValue, [renderSelectedValue]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_Select, {
-    ...restProps,
-    size: size,
-    hasCustomRenderProp: !!renderSelectedValue,
-    store: store,
-    children: computedRenderSelectedValue(currentValue)
-  });
-};
-function _CustomSelect(props) {
-  const {
-    children,
-    hideLabelFromVision = false,
-    label,
-    size,
-    store,
-    className,
-    isLegacy = false,
-    ...restProps
-  } = props;
-  const onSelectPopoverKeyDown = (0,external_wp_element_namespaceObject.useCallback)(e => {
-    if (isLegacy) {
-      e.stopPropagation();
-    }
-  }, [isLegacy]);
-  const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
-    store,
-    size
-  }), [store, size]);
-  return (
-    /*#__PURE__*/
-    // Where should `restProps` be forwarded to?
-    (0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: className,
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectLabel, {
-        store: store,
-        render: hideLabelFromVision ?
-        /*#__PURE__*/
-        // @ts-expect-error `children` are passed via the render prop
-        (0,external_ReactJSXRuntime_namespaceObject.jsx)(visually_hidden_component, {}) :
-        /*#__PURE__*/
-        // @ts-expect-error `children` are passed via the render prop
-        (0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control.VisualLabel, {
-          as: "div"
-        }),
-        children: label
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(input_base, {
-        __next40pxDefaultSize: true,
-        size: size,
-        suffix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(select_control_chevron_down, {}),
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomSelectButton, {
-          ...restProps,
-          size: size,
-          store: store
-          // Match legacy behavior (move selection rather than open the popover)
-          ,
-          showOnKeyDown: !isLegacy
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_SelectPopover, {
-          gutter: 12,
-          store: store,
-          sameWidth: true,
-          slide: false,
-          onKeyDown: onSelectPopoverKeyDown,
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomSelectContext.Provider, {
-            value: contextValue,
-            children: children
-          })
-        })]
-      })]
-    })
-  );
-}
-/* harmony default export */ const custom_select = (_CustomSelect);
-
-;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control-v2/item.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-function CustomSelectItem({
-  children,
-  ...props
-}) {
-  var _customSelectContext$;
-  const customSelectContext = (0,external_wp_element_namespaceObject.useContext)(CustomSelectContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_SelectItem, {
-    store: customSelectContext?.store,
-    size: (_customSelectContext$ = customSelectContext?.size) !== null && _customSelectContext$ !== void 0 ? _customSelectContext$ : 'default',
-    ...props,
-    children: [children !== null && children !== void 0 ? children : props.value, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectedItemCheck, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
-        icon: library_check
-      })
-    })]
-  });
-}
-CustomSelectItem.displayName = 'CustomSelectControlV2.Item';
-/* harmony default export */ const custom_select_control_v2_item = (CustomSelectItem);
-
-;// CONCATENATED MODULE: ./packages/components/build-module/custom-select-control-v2/legacy-component/index.js
-/**
- * External dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-function legacy_component_CustomSelectControl(props) {
-  const {
-    __experimentalShowSelectedHint = false,
-    __next40pxDefaultSize = false,
-    describedBy,
-    options,
-    onChange,
-    size = 'default',
-    value,
-    className: classNameProp,
-    ...restProps
-  } = props;
-
-  // Forward props + store from v2 implementation
-  const store = useSelectStore({
-    async setValue(nextValue) {
-      const nextOption = options.find(item => item.name === nextValue);
-      if (!onChange || !nextOption) {
-        return;
-      }
-
-      // Executes the logic in a microtask after the popup is closed.
-      // This is simply to ensure the isOpen state matches that in Downshift.
-      await Promise.resolve();
-      const state = store.getState();
-      const changeObject = {
-        highlightedIndex: state.renderedItems.findIndex(item => item.value === nextValue),
-        inputValue: '',
-        isOpen: state.open,
-        selectedItem: nextOption,
-        type: ''
-      };
-      onChange(changeObject);
-    },
-    value: value?.name,
-    // Setting the first option as a default value when no value is provided
-    // is already done natively by the underlying Ariakit component,
-    // but doing this explicitly avoids the `onChange` callback from firing
-    // on initial render, thus making this implementation closer to the v1.
-    defaultValue: options[0]?.name
-  });
-  const children = options.map(({
-    name,
-    key,
-    __experimentalHint,
-    style,
-    className
-  }) => {
-    const withHint = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(WithHintItemWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-        children: name
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WithHintItemHint, {
-        children: __experimentalHint
-      })]
-    });
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(custom_select_control_v2_item, {
-      value: name,
-      children: __experimentalHint ? withHint : name,
-      style: style,
-      className: dist_clsx(
-      // TODO: Legacy classname. Add V1 styles are removed from the codebase
-      // 'components-custom-select-control__item',
-      className
-      // TODO: Legacy classname. Add V1 styles are removed from the codebase
-      // {
-      // 	'has-hint': __experimentalHint,
-      // }
-      )
-    }, key);
-  });
-  const renderSelectedValueHint = () => {
-    const {
-      value: currentValue
-    } = store.getState();
-    const currentHint = options?.find(({
-      name
-    }) => currentValue === name);
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(SelectedExperimentalHintWrapper, {
-      children: [currentValue, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectedExperimentalHintItem, {
-        children: currentHint?.__experimentalHint
-      })]
-    });
-  };
-  const translatedSize = (() => {
-    if (__next40pxDefaultSize && size === 'default' || size === '__unstable-large') {
-      return 'default';
-    }
-    if (!__next40pxDefaultSize && size === 'default') {
-      return 'compact';
-    }
-    return size;
-  })();
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(custom_select, {
-    "aria-describedby": describedBy,
-    renderSelectedValue: __experimentalShowSelectedHint ? renderSelectedValueHint : undefined,
-    size: translatedSize,
-    store: store,
-    className: dist_clsx(
-    // TODO: Legacy classname. Add V1 styles are removed from the codebase
-    // 'components-custom-select-control',
-    classNameProp),
-    isLegacy: true,
-    ...restProps,
-    children: children
-  });
-}
-/* harmony default export */ const legacy_component = (legacy_component_CustomSelectControl);
-
 ;// CONCATENATED MODULE: ./packages/components/build-module/font-size-picker/font-size-picker-select.js
 /**
  * WordPress dependencies
@@ -61230,11 +56872,11 @@ const FontSizePickerSelect = props => {
       key: fontSize.slug,
       name: fontSize.name || fontSize.slug,
       value: fontSize.size,
-      __experimentalHint: hint
+      hint
     };
   }), ...(disableCustomFontSizes ? [] : [CUSTOM_OPTION])];
   const selectedOption = value ? (_options$find = options.find(option => option.value === value)) !== null && _options$find !== void 0 ? _options$find : CUSTOM_OPTION : DEFAULT_OPTION;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(legacy_component, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(custom_select_control, {
     __next40pxDefaultSize: __next40pxDefaultSize,
     className: "components-font-size-picker__select",
     label: (0,external_wp_i18n_namespaceObject.__)('Font size'),
@@ -61244,7 +56886,7 @@ const FontSizePickerSelect = props => {
     (0,external_wp_i18n_namespaceObject.__)('Currently selected font size: %s'), selectedOption.name),
     options: options,
     value: selectedOption,
-    __experimentalShowSelectedHint: true,
+    showSelectedHint: true,
     onChange: ({
       selectedItem
     }) => {
@@ -61407,6 +57049,7 @@ const FontSizePickerToggleGroup = props => {
 
 
 const DEFAULT_UNITS = ['px', 'em', 'rem', 'vw', 'vh'];
+const MAX_TOGGLE_GROUP_SIZES = 5;
 const UnforwardedFontSizePicker = (props, ref) => {
   const {
     __next40pxDefaultSize = false,
@@ -61423,26 +57066,37 @@ const UnforwardedFontSizePicker = (props, ref) => {
   const units = useCustomUnits({
     availableUnits: unitsProp
   });
-  const shouldUseSelectControl = fontSizes.length > 5;
   const selectedFontSize = fontSizes.find(fontSize => fontSize.size === value);
   const isCustomValue = !!value && !selectedFontSize;
-  const [showCustomValueControl, setShowCustomValueControl] = (0,external_wp_element_namespaceObject.useState)(!disableCustomFontSizes && isCustomValue);
+
+  // Initially request a custom picker if the value is not from the predef list.
+  const [userRequestedCustom, setUserRequestedCustom] = (0,external_wp_element_namespaceObject.useState)(isCustomValue);
+  let currentPickerType;
+  if (!disableCustomFontSizes && userRequestedCustom) {
+    // While showing the custom value picker, switch back to predef only if
+    // `disableCustomFontSizes` is set to `true`.
+    currentPickerType = 'custom';
+  } else {
+    currentPickerType = fontSizes.length > MAX_TOGGLE_GROUP_SIZES ? 'select' : 'togglegroup';
+  }
   const headerHint = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (showCustomValueControl) {
-      return (0,external_wp_i18n_namespaceObject.__)('Custom');
-    }
-    if (!shouldUseSelectControl) {
-      if (selectedFontSize) {
-        return selectedFontSize.name || T_SHIRT_NAMES[fontSizes.indexOf(selectedFontSize)];
-      }
-      return '';
-    }
-    const commonUnit = getCommonSizeUnit(fontSizes);
-    if (commonUnit) {
-      return `(${commonUnit})`;
+    switch (currentPickerType) {
+      case 'custom':
+        return (0,external_wp_i18n_namespaceObject.__)('Custom');
+      case 'togglegroup':
+        if (selectedFontSize) {
+          return selectedFontSize.name || T_SHIRT_NAMES[fontSizes.indexOf(selectedFontSize)];
+        }
+        break;
+      case 'select':
+        const commonUnit = getCommonSizeUnit(fontSizes);
+        if (commonUnit) {
+          return `(${commonUnit})`;
+        }
+        break;
     }
     return '';
-  }, [showCustomValueControl, shouldUseSelectControl, selectedFontSize, fontSizes]);
+  }, [currentPickerType, selectedFontSize, fontSizes]);
   if (fontSizes.length === 0 && disableCustomFontSizes) {
     return null;
   }
@@ -61470,17 +57124,15 @@ const UnforwardedFontSizePicker = (props, ref) => {
             children: headerHint
           })]
         }), !disableCustomFontSizes && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HeaderToggle, {
-          label: showCustomValueControl ? (0,external_wp_i18n_namespaceObject.__)('Use size preset') : (0,external_wp_i18n_namespaceObject.__)('Set custom size'),
+          label: currentPickerType === 'custom' ? (0,external_wp_i18n_namespaceObject.__)('Use size preset') : (0,external_wp_i18n_namespaceObject.__)('Set custom size'),
           icon: library_settings,
-          onClick: () => {
-            setShowCustomValueControl(!showCustomValueControl);
-          },
-          isPressed: showCustomValueControl,
+          onClick: () => setUserRequestedCustom(!userRequestedCustom),
+          isPressed: currentPickerType === 'custom',
           size: "small"
         })]
       })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      children: [!!fontSizes.length && shouldUseSelectControl && !showCustomValueControl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(font_size_picker_select, {
+      children: [currentPickerType === 'select' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(font_size_picker_select, {
         __next40pxDefaultSize: __next40pxDefaultSize,
         fontSizes: fontSizes,
         value: value,
@@ -61493,8 +57145,8 @@ const UnforwardedFontSizePicker = (props, ref) => {
             onChange?.(hasUnits ? newValue : Number(newValue), fontSizes.find(fontSize => fontSize.size === newValue));
           }
         },
-        onSelectCustom: () => setShowCustomValueControl(true)
-      }), !shouldUseSelectControl && !showCustomValueControl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(font_size_picker_toggle_group, {
+        onSelectCustom: () => setUserRequestedCustom(true)
+      }), currentPickerType === 'togglegroup' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(font_size_picker_toggle_group, {
         fontSizes: fontSizes,
         value: value,
         __next40pxDefaultSize: __next40pxDefaultSize,
@@ -61506,7 +57158,7 @@ const UnforwardedFontSizePicker = (props, ref) => {
             onChange?.(hasUnits ? newValue : Number(newValue), fontSizes.find(fontSize => fontSize.size === newValue));
           }
         }
-      }), !disableCustomFontSizes && showCustomValueControl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(flex_component, {
+      }), currentPickerType === 'custom' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(flex_component, {
         className: "components-font-size-picker__custom-size-control",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_item_component, {
           isBlock: true,
@@ -61517,6 +57169,7 @@ const UnforwardedFontSizePicker = (props, ref) => {
             hideLabelFromVision: true,
             value: value,
             onChange: newValue => {
+              setUserRequestedCustom(true);
               if (newValue === undefined) {
                 onChange?.(undefined);
               } else {
@@ -61542,6 +57195,7 @@ const UnforwardedFontSizePicker = (props, ref) => {
               initialPosition: fallbackFontSize,
               withInputField: false,
               onChange: newValue => {
+                setUserRequestedCustom(true);
                 if (newValue === undefined) {
                   onChange?.(undefined);
                 } else if (hasUnits) {
@@ -61824,6 +57478,7 @@ const TokensAndInputWrapperFlex = /*#__PURE__*/emotion_styled_base_browser_esm(f
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -61884,6 +57539,13 @@ function FormTokenField(props) {
     __nextHasNoMarginBottom = false,
     tokenizeOnBlur = false
   } = useDeprecated36pxDefaultSizeProp(props);
+  if (!__nextHasNoMarginBottom) {
+    external_wp_deprecated_default()('Bottom margin styles for wp.components.FormTokenField', {
+      since: '6.7',
+      version: '7.0',
+      hint: 'Set the `__nextHasNoMarginBottom` prop to true to start opting into the new styles, which will become the default in a future version.'
+    });
+  }
   const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(FormTokenField);
 
   // We reset to these initial values again in the onBlur
@@ -66417,6 +62079,7 @@ function getSelectOptions(tree, level = 0) {
  *
  * 	return (
  * 		<TreeSelect
+ *      __nextHasNoMarginBottom
  * 			label="Parent page"
  * 			noOptionLabel="No parent page"
  * 			onChange={ ( newPage ) => setPage( newPage ) }
@@ -66876,7 +62539,7 @@ function RadioControl(props) {
     help: help,
     className: dist_clsx(className, 'components-radio-control'),
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(v_stack_component, {
-      spacing: 3,
+      spacing: 2,
       children: options.map((option, index) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "components-radio-control__option",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
@@ -69708,6 +65371,7 @@ function UnforwardedTextareaControl(props, ref) {
  *
  *   return (
  *     <TextareaControl
+ *       __nextHasNoMarginBottom
  *       label="Text"
  *       help="Enter some text"
  *       value={ text }
@@ -69813,6 +65477,7 @@ function Tip(props) {
 
 
 
+
 /**
  * WordPress dependencies
  */
@@ -69887,12 +65552,15 @@ function ToggleControl({
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control, {
     id: id,
-    help: helpLabel,
+    help: helpLabel && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "components-toggle-control__help",
+      children: helpLabel
+    }),
     className: classes,
     __nextHasNoMarginBottom: true,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(h_stack_component, {
       justify: "flex-start",
-      spacing: 3,
+      spacing: 2,
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(form_toggle, {
         id: id,
         checked: checked,
@@ -69903,7 +65571,9 @@ function ToggleControl({
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_block_component, {
         as: "label",
         htmlFor: id,
-        className: "components-toggle-control__label",
+        className: dist_clsx('components-toggle-control__label', {
+          'is-disabled': disabled
+        }),
         children: label
       })]
     })
@@ -70868,7 +66538,7 @@ const component_ToolsPanelHeader = (props, forwardedRef) => {
       },
       toggleProps: {
         size: 'small',
-        describedBy: dropdownMenuDescriptionText
+        description: dropdownMenuDescriptionText
       },
       children: () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(menu_group, {
@@ -74171,7 +69841,7 @@ function dropdown_menu_v2_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You 
 
 
 
-const ANIMATION_PARAMS = {
+const styles_ANIMATION_PARAMS = {
   SLIDE_AMOUNT: '2px',
   DURATION: '400ms',
   EASING: 'cubic-bezier( 0.16, 1, 0.3, 1 )'
@@ -74193,7 +69863,7 @@ const GRID_TEMPLATE_COLS = 'minmax( 0, max-content ) 1fr';
 const slideUpAndFade = emotion_react_browser_esm_keyframes({
   '0%': {
     opacity: 0,
-    transform: `translateY(${ANIMATION_PARAMS.SLIDE_AMOUNT})`
+    transform: `translateY(${styles_ANIMATION_PARAMS.SLIDE_AMOUNT})`
   },
   '100%': {
     opacity: 1,
@@ -74203,17 +69873,17 @@ const slideUpAndFade = emotion_react_browser_esm_keyframes({
 const slideRightAndFade = emotion_react_browser_esm_keyframes({
   '0%': {
     opacity: 0,
-    transform: `translateX(-${ANIMATION_PARAMS.SLIDE_AMOUNT})`
+    transform: `translateX(-${styles_ANIMATION_PARAMS.SLIDE_AMOUNT})`
   },
   '100%': {
     opacity: 1,
     transform: 'translateX(0)'
   }
 });
-const slideDownAndFade = emotion_react_browser_esm_keyframes({
+const styles_slideDownAndFade = emotion_react_browser_esm_keyframes({
   '0%': {
     opacity: 0,
-    transform: `translateY(-${ANIMATION_PARAMS.SLIDE_AMOUNT})`
+    transform: `translateY(-${styles_ANIMATION_PARAMS.SLIDE_AMOUNT})`
   },
   '100%': {
     opacity: 1,
@@ -74223,7 +69893,7 @@ const slideDownAndFade = emotion_react_browser_esm_keyframes({
 const slideLeftAndFade = emotion_react_browser_esm_keyframes({
   '0%': {
     opacity: 0,
-    transform: `translateX(${ANIMATION_PARAMS.SLIDE_AMOUNT})`
+    transform: `translateX(${styles_ANIMATION_PARAMS.SLIDE_AMOUNT})`
   },
   '100%': {
     opacity: 1,
@@ -74232,7 +69902,7 @@ const slideLeftAndFade = emotion_react_browser_esm_keyframes({
 });
 const dropdown_menu_v2_styles_DropdownMenu = /*#__PURE__*/emotion_styled_base_browser_esm(Menu,  true ? {
   target: "e1kdzosf12"
-} : 0)("position:relative;z-index:1000000;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";grid-template-rows:auto;box-sizing:border-box;min-width:160px;max-width:320px;max-height:var( --popover-available-height );padding:", CONTENT_WRAPPER_PADDING, ";background-color:", COLORS.ui.background, ";border-radius:4px;", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? TOOLBAR_VARIANT_BOX_SHADOW : DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;animation-duration:", ANIMATION_PARAMS.DURATION, ";animation-timing-function:", ANIMATION_PARAMS.EASING, ";will-change:transform,opacity;animation-name:", slideDownAndFade, ";&[data-side='right']{animation-name:", slideLeftAndFade, ";}&[data-side='bottom']{animation-name:", slideUpAndFade, ";}&[data-side='left']{animation-name:", slideRightAndFade, ";}@media ( prefers-reduced-motion ){animation-duration:0s;}" + ( true ? "" : 0));
+} : 0)("position:relative;z-index:1000000;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";grid-template-rows:auto;box-sizing:border-box;min-width:160px;max-width:320px;max-height:var( --popover-available-height );padding:", CONTENT_WRAPPER_PADDING, ";background-color:", COLORS.ui.background, ";border-radius:4px;", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? TOOLBAR_VARIANT_BOX_SHADOW : DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;animation-duration:", styles_ANIMATION_PARAMS.DURATION, ";animation-timing-function:", styles_ANIMATION_PARAMS.EASING, ";will-change:transform,opacity;animation-name:", styles_slideDownAndFade, ";&[data-side='left']{animation-name:", slideLeftAndFade, ";}&[data-side='up']{animation-name:", slideUpAndFade, ";}&[data-side='right']{animation-name:", slideRightAndFade, ";}@media ( prefers-reduced-motion ){animation-duration:0s;}" + ( true ? "" : 0));
 const baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;position:relative;min-height:", space(10), ";box-sizing:border-box;grid-column:1/-1;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";align-items:center;@supports ( grid-template-columns: subgrid ){grid-template-columns:subgrid;}font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.gray[900], ";border-radius:", config_values.radiusBlockUi, ";padding-block:", ITEM_PADDING_BLOCK, ";padding-inline:", ITEM_PADDING_INLINE, ";scroll-margin:", CONTENT_WRAPPER_PADDING, ";user-select:none;outline:none;&[aria-disabled='true']{color:", COLORS.ui.textDisabled, ";cursor:not-allowed;}&[data-active-item]:not( [data-focus-visible] ):not(\n\t\t\t[aria-disabled='true']\n\t\t){background-color:", COLORS.theme.accent, ";color:", COLORS.white, ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px ", COLORS.theme.accent, ";outline:2px solid transparent;}&:active,&[data-active]{}", dropdown_menu_v2_styles_DropdownMenu, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{background-color:", COLORS.gray[100], ";color:", COLORS.gray[900], ";}svg{fill:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
 const styles_DropdownMenuItem = /*#__PURE__*/emotion_styled_base_browser_esm(Y6467XPW_MenuItem,  true ? {
   target: "e1kdzosf11"
@@ -74764,7 +70434,7 @@ const TabListWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true
 } : 0)("position:relative;display:flex;align-items:stretch;flex-direction:row;text-align:center;&[aria-orientation='vertical']{flex-direction:column;text-align:start;}@media not ( prefers-reduced-motion: reduce ){&.is-animation-enabled::after{transition-property:left,top,width,height;transition-duration:0.2s;transition-timing-function:ease-out;}}&::after{content:'';position:absolute;pointer-events:none;outline:2px solid transparent;outline-offset:-1px;}&:not( [aria-orientation='vertical'] )::after{bottom:0;left:var( --indicator-left );width:var( --indicator-width );height:0;border-bottom:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";}&[aria-orientation='vertical']::after{z-index:-1;left:0;width:100%;top:var( --indicator-top );height:var( --indicator-height );background-color:", COLORS.theme.gray[100], ";}" + ( true ? "" : 0));
 const styles_Tab = /*#__PURE__*/emotion_styled_base_browser_esm(Tab,  true ? {
   target: "enfox0g1"
-} : 0)("&{display:inline-flex;align-items:center;position:relative;border-radius:0;min-height:", space(12), ";height:auto;background:transparent;border:none;box-shadow:none;cursor:pointer;line-height:1.2;padding:", space(4), ";margin-left:0;font-weight:500;text-align:inherit;&[aria-disabled='true']{cursor:default;opacity:0.3;}&:hover{color:", COLORS.theme.accent, ";}&:focus:not( :disabled ){position:relative;box-shadow:none;outline:none;}&::before{content:'';position:absolute;top:", space(3), ";right:", space(3), ";bottom:", space(3), ";left:", space(3), ";pointer-events:none;outline:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";border-radius:2px;opacity:0;@media not ( prefers-reduced-motion ){transition:opacity 0.1s linear;}}&:focus-visible::before{opacity:1;}}" + ( true ? "" : 0));
+} : 0)("&{display:inline-flex;align-items:center;position:relative;border-radius:0;min-height:", space(12), ";height:auto;background:transparent;border:none;box-shadow:none;cursor:pointer;line-height:1.2;padding:", space(4), ";margin-left:0;font-weight:500;text-align:inherit;hyphens:auto;color:", COLORS.theme.foreground, ";&[aria-disabled='true']{cursor:default;color:", COLORS.ui.textDisabled, ";}&:not( [aria-disabled='true'] ):hover{color:", COLORS.theme.accent, ";}&:focus:not( :disabled ){position:relative;box-shadow:none;outline:none;}&::before{content:'';position:absolute;top:", space(3), ";right:", space(3), ";bottom:", space(3), ";left:", space(3), ";pointer-events:none;outline:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";border-radius:2px;opacity:0;@media not ( prefers-reduced-motion ){transition:opacity 0.1s linear;}}&:focus-visible::before{opacity:1;}}[aria-orientation='vertical'] &{min-height:", space(10), ";}" + ( true ? "" : 0));
 const styles_TabPanel = /*#__PURE__*/emotion_styled_base_browser_esm(TabPanel,  true ? {
   target: "enfox0g0"
 } : 0)("&:focus{box-shadow:none;outline:none;}&:focus-visible{border-radius:2px;box-shadow:0 0 0 var( --wp-admin-border-width-focus ) ", COLORS.theme.accent, ";outline:2px solid transparent;outline-offset:0;}" + ( true ? "" : 0));
@@ -74812,28 +70482,12 @@ const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab(
   });
 });
 
-;// CONCATENATED MODULE: ./packages/components/build-module/tabs/tablist.js
-/**
- * External dependencies
- */
-
-
+;// CONCATENATED MODULE: ./packages/components/build-module/utils/hooks/use-event.js
+/* eslint-disable jsdoc/require-param */
 /**
  * WordPress dependencies
  */
 
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-// TODO: move these into a separate utility file, for use in other components
-// such as ToggleGroupControl.
 
 /**
  * Any function.
@@ -74853,7 +70507,7 @@ const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab(
  * }
  * ```
  */
-function tablist_useEvent(callback) {
+function use_event_useEvent(callback) {
   const ref = (0,external_wp_element_namespaceObject.useRef)(() => {
     throw new Error('Cannot call an event handler while rendering.');
   });
@@ -74862,53 +70516,69 @@ function tablist_useEvent(callback) {
   });
   return (0,external_wp_element_namespaceObject.useCallback)((...args) => ref.current?.(...args), []);
 }
+/* eslint-enable jsdoc/require-param */
 
+;// CONCATENATED MODULE: ./packages/components/build-module/utils/element-rect.js
+/* eslint-disable jsdoc/require-param */
 /**
- * `useResizeObserver` options.
+ * WordPress dependencies
  */
 
 /**
- * Fires `onResize` when the target element is resized.
+ * Internal dependencies
+ */
+
+
+/**
+ * `useTrackElementRectUpdates` options.
+ */
+
+/**
+ * Tracks an element's "rect" (size and position) and fires `onRect` for all
+ * of its discrete values. The element can be changed dynamically and **it
+ * must not be stored in a ref**. Instead, it should be stored in a React
+ * state or equivalent.
  *
- * **The element must not be stored in a ref**, else it won't be observed
- * or updated. Instead, it should be stored in a React state or equivalent.
+ * By default, `onRect` is called initially for the target element (including
+ * when the target element changes), not only on size or position updates.
+ * This allows consumers of the hook to always be in sync with all rect values
+ * of the target element throughout its lifetime. This behavior can be
+ * disabled by setting the `fireOnElementInit` option to `false`.
  *
- * It sets up a `ResizeObserver` that tracks the element under the hood. The
+ * Under the hood, it sets up a `ResizeObserver` that tracks the element. The
  * target element can be changed dynamically, and the observer will be
  * updated accordingly.
- *
- * By default, `onResize` is called when the observer is set up, in addition
- * to when the element is resized. This behavior can be disabled with the
- * `fireOnObserve` option.
  *
  * @example
  *
  * ```tsx
  * const [ targetElement, setTargetElement ] = useState< HTMLElement | null >();
  *
- * useResizeObserver( targetElement, ( element ) => {
+ * useTrackElementRectUpdates( targetElement, ( element ) => {
  *   console.log( 'Element resized:', element );
  * } );
  *
  * <div ref={ setTargetElement } />;
  * ```
  */
-function useResizeObserver(
+function useTrackElementRectUpdates(
 /**
  * The target element to observe. It can be changed dynamically.
  */
 targetElement,
 /**
  * Callback to fire when the element is resized. It will also be
- * called when the observer is set up, unless `fireOnObserve` is
+ * called when the observer is set up, unless `fireOnElementInit` is
  * set to `false`.
  */
-onResize, {
-  fireOnObserve = true
+onRect, {
+  fireOnElementInit = true
 } = {}) {
-  const onResizeEvent = tablist_useEvent(onResize);
+  const onRectEvent = use_event_useEvent(onRect);
   const observedElementRef = (0,external_wp_element_namespaceObject.useRef)();
   const resizeObserverRef = (0,external_wp_element_namespaceObject.useRef)();
+
+  // TODO: could this be a layout effect?
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (targetElement === observedElementRef.current) {
       return;
@@ -74917,9 +70587,9 @@ onResize, {
 
     // Set up a ResizeObserver.
     if (!resizeObserverRef.current) {
-      resizeObserverRef.current = new ResizeObserver(() => {
+      resizeObserverRef.current = new ResizeObserver(entries => {
         if (observedElementRef.current) {
-          onResizeEvent(observedElementRef.current);
+          onRectEvent(observedElementRef.current, entries);
         }
       });
     }
@@ -74929,8 +70599,10 @@ onResize, {
 
     // Observe new element.
     if (targetElement) {
-      if (fireOnObserve) {
-        onResizeEvent(targetElement);
+      if (fireOnElementInit) {
+        // TODO: investigate if this can be removed,
+        // see: https://stackoverflow.com/a/60026394
+        onRectEvent(targetElement);
       }
       resizeObserver.observe(targetElement);
     }
@@ -74940,7 +70612,7 @@ onResize, {
         resizeObserver.unobserve(observedElementRef.current);
       }
     };
-  }, [fireOnObserve, onResizeEvent, targetElement]);
+  }, [fireOnElementInit, onRectEvent, targetElement]);
 }
 
 /**
@@ -74988,9 +70660,22 @@ function getElementOffsetRect(element) {
  */
 function useTrackElementOffsetRect(targetElement) {
   const [indicatorPosition, setIndicatorPosition] = (0,external_wp_element_namespaceObject.useState)(NULL_ELEMENT_OFFSET_RECT);
-  useResizeObserver(targetElement, element => setIndicatorPosition(getElementOffsetRect(element)));
+  useTrackElementRectUpdates(targetElement, element => setIndicatorPosition(getElementOffsetRect(element)));
   return indicatorPosition;
 }
+
+/* eslint-enable jsdoc/require-param */
+
+;// CONCATENATED MODULE: ./packages/components/build-module/utils/hooks/use-on-value-update.js
+/* eslint-disable jsdoc/require-param */
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
 
 /**
  * Context object for the `onUpdate` callback of `useOnValueUpdate`.
@@ -75009,7 +70694,7 @@ value,
  */
 onUpdate) {
   const previousValueRef = (0,external_wp_element_namespaceObject.useRef)(value);
-  const updateCallbackEvent = tablist_useEvent(onUpdate);
+  const updateCallbackEvent = use_event_useEvent(onUpdate);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (previousValueRef.current !== value) {
       updateCallbackEvent({
@@ -75019,6 +70704,30 @@ onUpdate) {
     }
   }, [updateCallbackEvent, value]);
 }
+/* eslint-enable jsdoc/require-param */
+
+;// CONCATENATED MODULE: ./packages/components/build-module/tabs/tablist.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
 const TabList = (0,external_wp_element_namespaceObject.forwardRef)(function TabList({
   children,
   ...otherProps
@@ -75326,8 +71035,6 @@ const {
 
 
 
-
-
 const privateApis = {};
 lock(privateApis, {
   CompositeV2: Composite,
@@ -75335,8 +71042,6 @@ lock(privateApis, {
   CompositeItemV2: CompositeItem,
   CompositeRowV2: CompositeRow,
   useCompositeStoreV2: useCompositeStore,
-  CustomSelectControlV2Legacy: legacy_component,
-  CustomSelectControl: CustomSelectControl,
   __experimentalPopoverLegacyPositionToPlacement: positionToPlacement,
   createPrivateSlotFill: createPrivateSlotFill,
   ComponentsContext: ComponentsContext,

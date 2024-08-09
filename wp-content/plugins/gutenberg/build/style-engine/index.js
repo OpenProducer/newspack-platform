@@ -866,7 +866,13 @@ const backgroundSize = {
     return generateRule(style, options, ['background', 'backgroundSize'], 'backgroundSize');
   }
 };
-/* harmony default export */ const styles_background = ([backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize]);
+const backgroundAttachment = {
+  name: 'backgroundAttachment',
+  generate: (style, options) => {
+    return generateRule(style, options, ['background', 'backgroundAttachment'], 'backgroundAttachment');
+  }
+};
+/* harmony default export */ const styles_background = ([backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, backgroundAttachment]);
 
 ;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/shadow/index.js
 /**

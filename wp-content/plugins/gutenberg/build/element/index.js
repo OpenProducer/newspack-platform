@@ -588,7 +588,7 @@ function closeOuterElement(endOffset) {
 
 
 /**
- * @see https://reactjs.org/docs/hooks-reference.html#useeffect
+ * @see https://react.dev/reference/react/useEffect
  */
 
 

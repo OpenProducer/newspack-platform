@@ -370,6 +370,7 @@ class Cached_Container extends Container
             'yoast\\wp\\seo\\integrations\\watchers\\search_engines_discouraged_watcher' => 'Yoast\\WP\\SEO\\Integrations\\Watchers\\Search_Engines_Discouraged_Watcher',
             'yoast\\wp\\seo\\integrations\\watchers\\woocommerce_beta_editor_watcher' => 'Yoast\\WP\\SEO\\Integrations\\Watchers\\Woocommerce_Beta_Editor_Watcher',
             'yoast\\wp\\seo\\integrations\\xmlrpc' => 'Yoast\\WP\\SEO\\Integrations\\XMLRPC',
+            'yoast\\wp\\seo\\introductions\\application\\ai_generate_titles_and_descriptions_introduction_upsell' => 'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell',
             'yoast\\wp\\seo\\introductions\\application\\introductions_collector' => 'Yoast\\WP\\SEO\\Introductions\\Application\\Introductions_Collector',
             'yoast\\wp\\seo\\introductions\\infrastructure\\wistia_embed_permission_repository' => 'Yoast\\WP\\SEO\\Introductions\\Infrastructure\\Wistia_Embed_Permission_Repository',
             'yoast\\wp\\seo\\introductions\\user_interface\\introductions_integration' => 'Yoast\\WP\\SEO\\Introductions\\User_Interface\\Introductions_Integration',
@@ -799,6 +800,7 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Integrations\\Watchers\\Search_Engines_Discouraged_Watcher' => 'getSearchEnginesDiscouragedWatcherService',
             'Yoast\\WP\\SEO\\Integrations\\Watchers\\Woocommerce_Beta_Editor_Watcher' => 'getWoocommerceBetaEditorWatcherService',
             'Yoast\\WP\\SEO\\Integrations\\XMLRPC' => 'getXMLRPCService',
+            'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell' => 'getAiGenerateTitlesAndDescriptionsIntroductionUpsellService',
             'Yoast\\WP\\SEO\\Introductions\\Application\\Introductions_Collector' => 'getIntroductionsCollectorService',
             'Yoast\\WP\\SEO\\Introductions\\Infrastructure\\Wistia_Embed_Permission_Repository' => 'getWistiaEmbedPermissionRepositoryService',
             'Yoast\\WP\\SEO\\Introductions\\User_Interface\\Introductions_Integration' => 'getIntroductionsIntegrationService',
@@ -929,7 +931,7 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Editors\\Framework\\Site\\Post_Site_Information' => true,
             'Yoast\\WP\\SEO\\Editors\\Framework\\Site\\Term_Site_Information' => true,
             'Yoast\\WP\\SEO\\Editors\\Framework\\Word_Form_Recognition' => true,
-            'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell' => true,
+            'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Fix_Assessments_Upsell' => true,
             'Yoast\\WP\\SEO\\Introductions\\Application\\Introductions_Collector' => true,
             'Yoast\\WP\\SEO\\Introductions\\Domain\\Introduction_Interface' => true,
             'Yoast\\WP\\SEO\\Introductions\\Domain\\Introduction_Item' => true,
@@ -4760,6 +4762,20 @@ class Cached_Container extends Container
     }
 
     /**
+     * Gets the public 'Yoast\WP\SEO\Introductions\Application\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Introductions\Application\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell
+     *
+     * @deprecated Yoast\WP\SEO\Introductions\Application\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell is deprecated since version 23.2!
+     */
+    protected function getAiGenerateTitlesAndDescriptionsIntroductionUpsellService()
+    {
+        @trigger_error('Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell is deprecated since version 23.2!', E_USER_DEPRECATED);
+
+        return $this->services['Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell'] = new \Yoast\WP\SEO\Introductions\Application\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell(${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] = new \Yoast\WP\SEO\Helpers\Product_Helper())) && false ?: '_'}, ${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())) && false ?: '_'});
+    }
+
+    /**
      * Gets the public 'Yoast\WP\SEO\Introductions\Infrastructure\Wistia_Embed_Permission_Repository' shared autowired service.
      *
      * @return \Yoast\WP\SEO\Introductions\Infrastructure\Wistia_Embed_Permission_Repository
@@ -5836,6 +5852,6 @@ class Cached_Container extends Container
      */
     protected function getIntroductionsCollectorService()
     {
-        return $this->services['Yoast\\WP\\SEO\\Introductions\\Application\\Introductions_Collector'] = new \Yoast\WP\SEO\Introductions\Application\Introductions_Collector(new \Yoast\WP\SEO\Introductions\Application\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell(${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] = new \Yoast\WP\SEO\Helpers\Product_Helper())) && false ?: '_'}, ${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())) && false ?: '_'}));
+        return $this->services['Yoast\\WP\\SEO\\Introductions\\Application\\Introductions_Collector'] = new \Yoast\WP\SEO\Introductions\Application\Introductions_Collector(new \Yoast\WP\SEO\Introductions\Application\Ai_Fix_Assessments_Upsell(${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())) && false ?: '_'}, ${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] = new \Yoast\WP\SEO\Helpers\Product_Helper())) && false ?: '_'}));
     }
 }

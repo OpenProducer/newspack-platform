@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit70f002e6fba16843936d47fc68eeae32
+class ComposerStaticInit7699f031d1d6c50ede450f58e2ed6b8e
 {
     public static $files = array (
         '81db02b30f563b92907e271b66bd7559' => __DIR__ . '/..' . '/yoast/whip/src/Facades/wordpress.php',
@@ -926,7 +926,8 @@ class ComposerStaticInit70f002e6fba16843936d47fc68eeae32
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Search_Engines_Discouraged_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/search-engines-discouraged-watcher.php',
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Woocommerce_Beta_Editor_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/woocommerce-beta-editor-watcher.php',
         'Yoast\\WP\\SEO\\Integrations\\XMLRPC' => __DIR__ . '/../..' . '/src/integrations/xmlrpc.php',
-        'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell' => __DIR__ . '/../..' . '/src/introductions/application/ai-generate-titles-and-descriptions-introduction-upsell.php',
+        'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Fix_Assessments_Upsell' => __DIR__ . '/../..' . '/src/introductions/application/ai-fix-assessments-upsell.php',
+        'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell' => __DIR__ . '/../..' . '/src/deprecated/src/introductions/application/ai-generate-titles-and-descriptions-introduction-upsell.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Current_Page_Trait' => __DIR__ . '/../..' . '/src/introductions/application/current-page-trait.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Introductions_Collector' => __DIR__ . '/../..' . '/src/introductions/application/introductions-collector.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\User_Allowed_Trait' => __DIR__ . '/../..' . '/src/introductions/application/user-allowed-trait.php',
@@ -1140,9 +1141,9 @@ class ComposerStaticInit70f002e6fba16843936d47fc68eeae32
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit70f002e6fba16843936d47fc68eeae32::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit70f002e6fba16843936d47fc68eeae32::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit70f002e6fba16843936d47fc68eeae32::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7699f031d1d6c50ede450f58e2ed6b8e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7699f031d1d6c50ede450f58e2ed6b8e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7699f031d1d6c50ede450f58e2ed6b8e::$classMap;
 
         }, null, ClassLoader::class);
     }

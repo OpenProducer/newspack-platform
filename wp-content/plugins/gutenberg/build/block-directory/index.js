@@ -292,11 +292,11 @@ function getInstalledBlockTypes(state) {
  *
  * @return {Array} Block type items.
  */
-const getNewBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => state => {
+const getNewBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)(state => {
   const usedBlockTree = select(external_wp_blockEditor_namespaceObject.store).getBlocks();
   const installedBlockTypes = getInstalledBlockTypes(state);
   return installedBlockTypes.filter(blockType => hasBlockType(blockType, usedBlockTree));
-});
+}, state => [getInstalledBlockTypes(state), select(external_wp_blockEditor_namespaceObject.store).getBlocks()]));
 
 /**
  * Returns the block types that have been installed on the server but are not
@@ -306,11 +306,11 @@ const getNewBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelec
  *
  * @return {Array} Block type items.
  */
-const getUnusedBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => state => {
+const getUnusedBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)(state => {
   const usedBlockTree = select(external_wp_blockEditor_namespaceObject.store).getBlocks();
   const installedBlockTypes = getInstalledBlockTypes(state);
   return installedBlockTypes.filter(blockType => !hasBlockType(blockType, usedBlockTree));
-});
+}, state => [getInstalledBlockTypes(state), select(external_wp_blockEditor_namespaceObject.store).getBlocks()]));
 
 /**
  * Returns true if a block plugin install is in progress.
@@ -2025,10 +2025,10 @@ function CompactList({
 }
 
 ;// CONCATENATED MODULE: ./packages/block-directory/build-module/plugins/installed-blocks-pre-publish-panel/index.js
-var _window$wp$editor;
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -2039,19 +2039,13 @@ var _window$wp$editor;
 
 
 
-// We shouldn't import the editor package directly
-// because it would include the wp-editor in all pages loading the block-directory script.
 
-
-const {
-  PluginPrePublishPanel
-} = (_window$wp$editor = window?.wp?.editor) !== null && _window$wp$editor !== void 0 ? _window$wp$editor : {};
 function InstalledBlocksPrePublishPanel() {
   const newBlockTypes = (0,external_wp_data_namespaceObject.useSelect)(select => select(store).getNewBlockTypes(), []);
   if (!newBlockTypes.length) {
     return null;
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(PluginPrePublishPanel, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_editor_namespaceObject.PluginPrePublishPanel, {
     icon: block_default,
     title: (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %d: number of blocks (number).
