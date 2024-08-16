@@ -1723,6 +1723,7 @@ function InitPatternModal() {
             __nextHasNoMarginBottom: true,
             __next40pxDefaultSize: true
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToggleControl, {
+            __nextHasNoMarginBottom: true,
             label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'pattern (singular)'),
             help: (0,external_wp_i18n_namespaceObject.__)('Sync this pattern across multiple locations.'),
             checked: !syncType,
@@ -3251,7 +3252,6 @@ function __experimentalPluginPostExcerpt() {
 
 const {
   BackButton: __experimentalMainDashboardButton,
-  registerDefaultActions,
   registerCoreBlockBindingsSources,
   bootstrapBlockBindingsSourcesFromServer
 } = unlock(external_wp_editor_namespaceObject.privateApis);
@@ -3311,7 +3311,6 @@ function initializeEditor(id, postType, postId, settings, initialEdits) {
       enableFSEBlocks: settings.__unstableEnableFullSiteEditingBlocks
     });
   }
-  registerDefaultActions();
 
   // Show a console log warning if the browser is not in Standards rendering mode.
   const documentMode = document.compatMode === 'CSS1Compat' ? 'Standards' : 'Quirks';

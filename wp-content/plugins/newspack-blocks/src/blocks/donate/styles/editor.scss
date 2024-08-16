@@ -1,9 +1,9 @@
-@use '~@wordpress/base-styles/colors' as wp-colors;
-@use '../../../shared/sass/colors';
-@use '../../../shared/sass/variables';
+@use "~@wordpress/base-styles/colors" as wp-colors;
+@use "../../../shared/sass/colors";
+@use "../../../shared/sass/variables";
 
-@use '../frequency-based/style' as frequency-based;
-@use '../tiers-based/style' as tiers-based;
+@use "../frequency-based/style" as frequency-based;
+@use "../tiers-based/style" as tiers-based;
 
 .wp-block-newspack-blocks-donate {
 	&__tier--frequency {
@@ -36,16 +36,16 @@
 
 	button,
 	.submit-button {
-		font-family: var( --newspack-theme-font-heading );
+		font-family: var(--newspack-theme-font-heading);
 		font-size: variables.$font__size-sm;
 		font-weight: bold;
 		outline: none;
 
-		&[type='submit'] {
+		&[type="submit"] {
 			border: none;
 		}
 	}
-	button[type='submit'],
+	button[type="submit"],
 	.submit-button {
 		border-radius: 5px;
 		box-sizing: border-box;
@@ -59,7 +59,7 @@
 .wp-block-newspack-blocks-donate.wpbnbd--frequency-based.tiered {
 	.tiers {
 		input.frequency-input {
-			~ input[type='number'] {
+			~ input[type="number"] {
 				position: absolute;
 				max-width: 81px;
 				top: -31px;
@@ -68,7 +68,7 @@
 				display: none;
 			}
 
-			&:checked ~ input[type='number'] {
+			&:checked ~ input[type="number"] {
 				display: flex;
 			}
 		}
@@ -76,11 +76,10 @@
 }
 
 .block-editor-block-list__layout
-	.block-editor-block-list__block
-	.wp-block-newspack-blocks-donate.tiered.is-style-minimal
-	.wp-block-newspack-blocks-donate__tiers
-	input[type='radio']:checked
-	+ .tier-select-label {
+.block-editor-block-list__block
+.wp-block-newspack-blocks-donate.tiered.is-style-minimal
+.wp-block-newspack-blocks-donate__tiers
+input[type="radio"]:checked + .tier-select-label {
 	background: transparent;
 	color: colors.$color__text-main;
 }
@@ -115,7 +114,7 @@
 	&__layout-selector {
 		display: grid;
 		gap: 8px;
-		grid-template-columns: repeat( 2, 1fr );
+		grid-template-columns: repeat(2, 1fr);
 		margin-bottom: 1.8em;
 
 		.components-button {
@@ -210,7 +209,7 @@
 		.components-button {
 			padding: 11px 13px;
 			text-decoration: none;
-			&:not( .is-destructive ) {
+			&:not(.is-destructive) {
 				color: wp-colors.$gray-900;
 			}
 			&:focus {

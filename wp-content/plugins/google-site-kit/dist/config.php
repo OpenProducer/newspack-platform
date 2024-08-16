@@ -7,5 +7,5 @@
  */
 
 return array(
-	'features' => array( 'adsPax','audienceSegmentation','consentModeSwitzerland','conversionInfra','gm3Components','privacySandboxModule','rrmModule' ),
+	'features' => array( 'adsPax','audienceSegmentation','conversionInfra','gm3Components','privacySandboxModule','rrmModule' ),
 );

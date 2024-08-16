@@ -7,8 +7,8 @@
 
 namespace Newspack_Listings\Utils;
 
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Featured;
+use Newspack_Listings\Core;
+use Newspack_Listings\Featured;
 
 /**
  * Sanitize an array of text or number values.
@@ -20,12 +20,10 @@ function sanitize_array( $array ) {
 	foreach ( $array as $key => $value ) {
 		if ( is_array( $value ) ) {
 			$value = sanitize_array( $value );
-		} else {
-			if ( is_string( $value ) ) {
+		} elseif ( is_string( $value ) ) {
 				$value = sanitize_text_field( $value );
-			} else {
-				$value = floatval( $value );
-			}
+		} else {
+			$value = floatval( $value );
 		}
 	}
 
@@ -548,7 +546,7 @@ function execute_callback_with_paged_query( $query_args = [], $callback = null )
 	// If there were more than 1 page of results, repeat with subsequent pages until all posts are processed.
 	if ( $current_page < $number_of_pages ) {
 		while ( $current_page < $number_of_pages ) {
-			$current_page        ++;
+			$current_page++;
 			$query_args['paged'] = $current_page;
 			$results             = new \WP_Query( $query_args );
 			$total_results       = array_merge( $total_results, $results->posts );

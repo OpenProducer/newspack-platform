@@ -109,6 +109,34 @@ final class Newspack_Newsletters {
 	}
 
 	/**
+	 * In preparation for deprecating support for Campaign Monitor, locks support behind an environment flag.
+	 *
+	 * @return array
+	 */
+	public static function get_supported_providers() {
+		$supported_providers = array_keys( self::REGISTERED_PROVIDERS );
+
+		// Add support for manual/other.
+		$supported_providers[] = 'manual';
+
+		// Remove support for Campaign Monitor if we don't have the required environment flag.
+		if ( 'campaign_monitor' !== self::service_provider() && ( ! defined( 'NEWSPACK_NEWSLETTERS_SUPPORT_DEPRECATED_CAMPAIGN_MONITOR' ) || ! NEWSPACK_NEWSLETTERS_SUPPORT_DEPRECATED_CAMPAIGN_MONITOR ) ) {
+			$supported_providers = array_diff( $supported_providers, [ 'campaign_monitor' ] );
+		}
+
+		return $supported_providers;
+	}
+
+	/**
+	 * Should we show a warning about the coming deprecation of Campaign Monitor?
+	 *
+	 * @return bool
+	 */
+	public static function should_deprecate_campaign_monitor() {
+		return 'campaign_monitor' === self::service_provider();
+	}
+
+	/**
 	 * Set service provider.
 	 *
 	 * @param string $service_provider Service provider slug.
@@ -723,6 +751,9 @@ final class Newspack_Newsletters {
 	 * @param int $id Post ID.
 	 */
 	public static function validate_newsletter_id( $id ) {
+		if ( ! $id ) {
+			return false;
+		}
 		return self::NEWSPACK_NEWSLETTERS_CPT === get_post_type( $id );
 	}
 

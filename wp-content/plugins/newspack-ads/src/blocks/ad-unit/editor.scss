@@ -1,4 +1,4 @@
-@use '~@wordpress/base-styles/colors' as wp-colors;
+@use "~@wordpress/base-styles/colors" as wp-colors;
 
 .editor-styles-wrapper {
 	.newspack-ads-ad-block {
@@ -10,8 +10,16 @@
 		align-items: center;
 		box-sizing: content-box;
 		display: flex;
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu,
-			Cantarell, 'Helvetica Neue', sans-serif;
+		font-family:
+			-apple-system,
+			BlinkMacSystemFont,
+			"Segoe UI",
+			Roboto,
+			Oxygen-Sans,
+			Ubuntu,
+			Cantarell,
+			"Helvetica Neue",
+			sans-serif;
 		justify-content: center;
 		margin: auto;
 		padding: 16px;
@@ -24,17 +32,17 @@
 			position: absolute;
 			rect {
 				fill: white;
-				stroke: rgba( wp-colors.$gray-900, 0.4 );
+				stroke: rgba(wp-colors.$gray-900, 0.4);
 				stroke-width: 1px;
 			}
 			line {
-				stroke: rgba( wp-colors.$gray-900, 0.4 );
+				stroke: rgba(wp-colors.$gray-900, 0.4);
 				stroke-width: 1px;
 			}
 		}
 		.newspack-ads-ad-block-ad-label {
 			background: white;
-			border: 1px dashed rgba( wp-colors.$gray-900, 0.4 );
+			border: 1px dashed rgba(wp-colors.$gray-900, 0.4);
 			color: wp-colors.$gray-900;
 			font-size: 10px;
 			line-height: 1.6;

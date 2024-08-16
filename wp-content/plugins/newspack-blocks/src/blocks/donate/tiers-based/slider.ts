@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 
 import type { Configuration } from './types';
 

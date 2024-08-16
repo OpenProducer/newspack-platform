@@ -300,9 +300,7 @@ class Edit extends Component {
 														) }
 														{ showCategory &&
 															( ! post.newspack_post_sponsors ||
-																post.newspack_sponsors_show_categories ) && (
-																<RawHTML>{ decodeEntities( post.newspack_category_info ) }</RawHTML>
-															) }
+																post.newspack_sponsors_show_categories ) && ( <RawHTML>{ decodeEntities( post.newspack_category_info ) }</RawHTML> ) }
 													</div>
 												) }
 												{ showTitle && (
@@ -431,13 +429,12 @@ class Edit extends Component {
 							help={
 								'cover' === imageFit
 									? __(
-											'The image will fill the entire slide and will be cropped if necessary.',
-											'newspack-popups'
-									  )
-									: __(
-											'The image will be resized to fit inside the slide without being cropped.',
-											'newspack-popups'
-									  )
+										'The image will fill the entire slide and will be cropped if necessary.',
+										'newspack-popups'
+									) : __(
+										'The image will be resized to fit inside the slide without being cropped.',
+										'newspack-popups'
+									)
 							}
 							id="newspack-blocks__blocks__image-fit-control"
 						>

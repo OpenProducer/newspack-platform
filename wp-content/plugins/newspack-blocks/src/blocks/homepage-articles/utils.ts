@@ -89,23 +89,22 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 	const criteria: PostsQuery = pickBy(
 		isSpecificPostModeActive
 			? {
-					include: cleanPosts,
-					postsToShow: specificPosts.length,
-					postType,
-			  }
-			: {
-					postsToShow,
-					categories: validateAttributeCollection( categories ),
-					includeSubcategories,
-					authors: validateAttributeCollection( authors ),
-					tags: validateAttributeCollection( tags ),
-					tagExclusions: validateAttributeCollection( tagExclusions ),
-					categoryExclusions: validateAttributeCollection( categoryExclusions ),
-					customTaxonomyExclusions,
-					customTaxonomies,
-					postType,
-					includedPostStatuses,
-			  },
+				include: cleanPosts,
+				postsToShow: specificPosts.length,
+				postType,
+			} : {
+				postsToShow,
+				categories: validateAttributeCollection( categories ),
+				includeSubcategories,
+				authors: validateAttributeCollection( authors ),
+				tags: validateAttributeCollection( tags ),
+				tagExclusions: validateAttributeCollection( tagExclusions ),
+				categoryExclusions: validateAttributeCollection( categoryExclusions ),
+				customTaxonomyExclusions,
+				customTaxonomies,
+				postType,
+				includedPostStatuses,
+			},
 		( value: unknown ) => ! isUndefined( value )
 	);
 	criteria.excerptLength = excerptLength;
@@ -253,8 +252,7 @@ export const postsBlockSelector = (
 		topBlocksClientIdsInOrder: blocks.map( block => block.clientId ),
 		latestPosts: isEditorBlock
 			? getPosts( { clientId } )
-			: // For block preview, display static content.
-			  getPreviewPosts( attributes ),
+			: getPreviewPosts( attributes ), // For block preview, display static content.
 	};
 
 	return props;
@@ -269,6 +267,7 @@ export const postsBlockDispatch = (
 ) => {
 	return {
 		// Only editor blocks can trigger reflows.
+		// @ts-ignore It's a string.
 		triggerReflow: isEditorBlock ? dispatch( STORE_NAMESPACE ).reflow : () => undefined,
 	};
 };

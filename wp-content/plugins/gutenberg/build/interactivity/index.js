@@ -42,7 +42,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 ;// CONCATENATED MODULE: ./packages/interactivity/node_modules/preact/dist/preact.module.js
-var preact_module_n,l,preact_module_u,preact_module_t,i,preact_module_o,r,preact_module_f,preact_module_e,preact_module_c={},s=[],a=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i,h=Array.isArray;function v(n,l){for(var u in l)n[u]=l[u];return n}function p(n){var l=n.parentNode;l&&l.removeChild(n)}function y(l,u,t){var i,o,r,f={};for(r in u)"key"==r?i=u[r]:"ref"==r?o=u[r]:f[r]=u[r];if(arguments.length>2&&(f.children=arguments.length>3?preact_module_n.call(arguments,2):t),"function"==typeof l&&null!=l.defaultProps)for(r in l.defaultProps)void 0===f[r]&&(f[r]=l.defaultProps[r]);return d(l,f,i,o,null)}function d(n,t,i,o,r){var f={type:n,props:t,key:i,ref:o,__k:null,__:null,__b:0,__e:null,__d:void 0,__c:null,constructor:void 0,__v:null==r?++preact_module_u:r,__i:-1,__u:0};return null==r&&null!=l.vnode&&l.vnode(f),f}function _(){return{current:null}}function g(n){return n.children}function b(n,l){this.props=n,this.context=l}function m(n,l){if(null==l)return n.__?m(n.__,n.__i+1):null;for(var u;l<n.__k.length;l++)if(null!=(u=n.__k[l])&&null!=u.__e)return u.__e;return"function"==typeof n.type?m(n):null}function k(n){var l,u;if(null!=(n=n.__)&&null!=n.__c){for(n.__e=n.__c.base=null,l=0;l<n.__k.length;l++)if(null!=(u=n.__k[l])&&null!=u.__e){n.__e=n.__c.base=u.__e;break}return k(n)}}function w(n){(!n.__d&&(n.__d=!0)&&i.push(n)&&!x.__r++||preact_module_o!==l.debounceRendering)&&((preact_module_o=l.debounceRendering)||r)(x)}function x(){var n,u,t,o,r,e,c,s,a;for(i.sort(preact_module_f);n=i.shift();)n.__d&&(u=i.length,o=void 0,e=(r=(t=n).__v).__e,s=[],a=[],(c=t.__P)&&((o=v({},r)).__v=r.__v+1,l.vnode&&l.vnode(o),L(c,o,r,t.__n,void 0!==c.ownerSVGElement,32&r.__u?[e]:null,s,null==e?m(r):e,!!(32&r.__u),a),o.__.__k[o.__i]=o,M(s,o,a),o.__e!=e&&k(o)),i.length>u&&i.sort(preact_module_f));x.__r=0}function C(n,l,u,t,i,o,r,f,e,a,h){var v,p,y,d,_,g=t&&t.__k||s,b=l.length;for(u.__d=e,P(u,l,g),e=u.__d,v=0;v<b;v++)null!=(y=u.__k[v])&&"boolean"!=typeof y&&"function"!=typeof y&&(p=-1===y.__i?preact_module_c:g[y.__i]||preact_module_c,y.__i=v,L(n,y,p,i,o,r,f,e,a,h),d=y.__e,y.ref&&p.ref!=y.ref&&(p.ref&&z(p.ref,null,y),h.push(y.ref,y.__c||d,y)),null==_&&null!=d&&(_=d),65536&y.__u||p.__k===y.__k?e=S(y,e,n):"function"==typeof y.type&&void 0!==y.__d?e=y.__d:d&&(e=d.nextSibling),y.__d=void 0,y.__u&=-196609);u.__d=e,u.__e=_}function P(n,l,u){var t,i,o,r,f,e=l.length,c=u.length,s=c,a=0;for(n.__k=[],t=0;t<e;t++)null!=(i=n.__k[t]=null==(i=l[t])||"boolean"==typeof i||"function"==typeof i?null:"string"==typeof i||"number"==typeof i||"bigint"==typeof i||i.constructor==String?d(null,i,null,null,i):h(i)?d(g,{children:i},null,null,null):void 0===i.constructor&&i.__b>0?d(i.type,i.props,i.key,i.ref?i.ref:null,i.__v):i)?(i.__=n,i.__b=n.__b+1,f=H(i,u,r=t+a,s),i.__i=f,o=null,-1!==f&&(s--,(o=u[f])&&(o.__u|=131072)),null==o||null===o.__v?(-1==f&&a--,"function"!=typeof i.type&&(i.__u|=65536)):f!==r&&(f===r+1?a++:f>r?s>e-r?a+=f-r:a--:a=f<r&&f==r-1?f-r:0,f!==t+a&&(i.__u|=65536))):(o=u[t])&&null==o.key&&o.__e&&(o.__e==n.__d&&(n.__d=m(o)),N(o,o,!1),u[t]=null,s--);if(s)for(t=0;t<c;t++)null!=(o=u[t])&&0==(131072&o.__u)&&(o.__e==n.__d&&(n.__d=m(o)),N(o,o))}function S(n,l,u){var t,i;if("function"==typeof n.type){for(t=n.__k,i=0;t&&i<t.length;i++)t[i]&&(t[i].__=n,l=S(t[i],l,u));return l}return n.__e!=l&&(u.insertBefore(n.__e,l||null),l=n.__e),l&&l.nextSibling}function $(n,l){return l=l||[],null==n||"boolean"==typeof n||(h(n)?n.some(function(n){$(n,l)}):l.push(n)),l}function H(n,l,u,t){var i=n.key,o=n.type,r=u-1,f=u+1,e=l[u];if(null===e||e&&i==e.key&&o===e.type)return u;if(t>(null!=e&&0==(131072&e.__u)?1:0))for(;r>=0||f<l.length;){if(r>=0){if((e=l[r])&&0==(131072&e.__u)&&i==e.key&&o===e.type)return r;r--}if(f<l.length){if((e=l[f])&&0==(131072&e.__u)&&i==e.key&&o===e.type)return f;f++}}return-1}function I(n,l,u){"-"===l[0]?n.setProperty(l,null==u?"":u):n[l]=null==u?"":"number"!=typeof u||a.test(l)?u:u+"px"}function T(n,l,u,t,i){var o;n:if("style"===l)if("string"==typeof u)n.style.cssText=u;else{if("string"==typeof t&&(n.style.cssText=t=""),t)for(l in t)u&&l in u||I(n.style,l,"");if(u)for(l in u)t&&u[l]===t[l]||I(n.style,l,u[l])}else if("o"===l[0]&&"n"===l[1])o=l!==(l=l.replace(/(PointerCapture)$|Capture$/,"$1")),l=l.toLowerCase()in n?l.toLowerCase().slice(2):l.slice(2),n.l||(n.l={}),n.l[l+o]=u,u?t?u.u=t.u:(u.u=Date.now(),n.addEventListener(l,o?D:A,o)):n.removeEventListener(l,o?D:A,o);else{if(i)l=l.replace(/xlink(H|:h)/,"h").replace(/sName$/,"s");else if("width"!==l&&"height"!==l&&"href"!==l&&"list"!==l&&"form"!==l&&"tabIndex"!==l&&"download"!==l&&"rowSpan"!==l&&"colSpan"!==l&&"role"!==l&&l in n)try{n[l]=null==u?"":u;break n}catch(n){}"function"==typeof u||(null==u||!1===u&&"-"!==l[4]?n.removeAttribute(l):n.setAttribute(l,u))}}function A(n){var u=this.l[n.type+!1];if(n.t){if(n.t<=u.u)return}else n.t=Date.now();return u(l.event?l.event(n):n)}function D(n){return this.l[n.type+!0](l.event?l.event(n):n)}function L(n,u,t,i,o,r,f,e,c,s){var a,p,y,d,_,m,k,w,x,P,S,$,H,I,T,A=u.type;if(void 0!==u.constructor)return null;128&t.__u&&(c=!!(32&t.__u),r=[e=u.__e=t.__e]),(a=l.__b)&&a(u);n:if("function"==typeof A)try{if(w=u.props,x=(a=A.contextType)&&i[a.__c],P=a?x?x.props.value:a.__:i,t.__c?k=(p=u.__c=t.__c).__=p.__E:("prototype"in A&&A.prototype.render?u.__c=p=new A(w,P):(u.__c=p=new b(w,P),p.constructor=A,p.render=O),x&&x.sub(p),p.props=w,p.state||(p.state={}),p.context=P,p.__n=i,y=p.__d=!0,p.__h=[],p._sb=[]),null==p.__s&&(p.__s=p.state),null!=A.getDerivedStateFromProps&&(p.__s==p.state&&(p.__s=v({},p.__s)),v(p.__s,A.getDerivedStateFromProps(w,p.__s))),d=p.props,_=p.state,p.__v=u,y)null==A.getDerivedStateFromProps&&null!=p.componentWillMount&&p.componentWillMount(),null!=p.componentDidMount&&p.__h.push(p.componentDidMount);else{if(null==A.getDerivedStateFromProps&&w!==d&&null!=p.componentWillReceiveProps&&p.componentWillReceiveProps(w,P),!p.__e&&(null!=p.shouldComponentUpdate&&!1===p.shouldComponentUpdate(w,p.__s,P)||u.__v===t.__v)){for(u.__v!==t.__v&&(p.props=w,p.state=p.__s,p.__d=!1),u.__e=t.__e,u.__k=t.__k,u.__k.forEach(function(n){n&&(n.__=u)}),S=0;S<p._sb.length;S++)p.__h.push(p._sb[S]);p._sb=[],p.__h.length&&f.push(p);break n}null!=p.componentWillUpdate&&p.componentWillUpdate(w,p.__s,P),null!=p.componentDidUpdate&&p.__h.push(function(){p.componentDidUpdate(d,_,m)})}if(p.context=P,p.props=w,p.__P=n,p.__e=!1,$=l.__r,H=0,"prototype"in A&&A.prototype.render){for(p.state=p.__s,p.__d=!1,$&&$(u),a=p.render(p.props,p.state,p.context),I=0;I<p._sb.length;I++)p.__h.push(p._sb[I]);p._sb=[]}else do{p.__d=!1,$&&$(u),a=p.render(p.props,p.state,p.context),p.state=p.__s}while(p.__d&&++H<25);p.state=p.__s,null!=p.getChildContext&&(i=v(v({},i),p.getChildContext())),y||null==p.getSnapshotBeforeUpdate||(m=p.getSnapshotBeforeUpdate(d,_)),C(n,h(T=null!=a&&a.type===g&&null==a.key?a.props.children:a)?T:[T],u,t,i,o,r,f,e,c,s),p.base=u.__e,u.__u&=-161,p.__h.length&&f.push(p),k&&(p.__E=p.__=null)}catch(n){u.__v=null,c||null!=r?(u.__e=e,u.__u|=c?160:32,r[r.indexOf(e)]=null):(u.__e=t.__e,u.__k=t.__k),l.__e(n,u,t)}else null==r&&u.__v===t.__v?(u.__k=t.__k,u.__e=t.__e):u.__e=j(t.__e,u,t,i,o,r,f,c,s);(a=l.diffed)&&a(u)}function M(n,u,t){u.__d=void 0;for(var i=0;i<t.length;i++)z(t[i],t[++i],t[++i]);l.__c&&l.__c(u,n),n.some(function(u){try{n=u.__h,u.__h=[],n.some(function(n){n.call(u)})}catch(n){l.__e(n,u.__v)}})}function j(l,u,t,i,o,r,f,e,s){var a,v,y,d,_,g,b,k=t.props,w=u.props,x=u.type;if("svg"===x&&(o=!0),null!=r)for(a=0;a<r.length;a++)if((_=r[a])&&"setAttribute"in _==!!x&&(x?_.localName===x:3===_.nodeType)){l=_,r[a]=null;break}if(null==l){if(null===x)return document.createTextNode(w);l=o?document.createElementNS("http://www.w3.org/2000/svg",x):document.createElement(x,w.is&&w),r=null,e=!1}if(null===x)k===w||e&&l.data===w||(l.data=w);else{if(r=r&&preact_module_n.call(l.childNodes),k=t.props||preact_module_c,!e&&null!=r)for(k={},a=0;a<l.attributes.length;a++)k[(_=l.attributes[a]).name]=_.value;for(a in k)_=k[a],"children"==a||("dangerouslySetInnerHTML"==a?y=_:"key"===a||a in w||T(l,a,null,_,o));for(a in w)_=w[a],"children"==a?d=_:"dangerouslySetInnerHTML"==a?v=_:"value"==a?g=_:"checked"==a?b=_:"key"===a||e&&"function"!=typeof _||k[a]===_||T(l,a,_,k[a],o);if(v)e||y&&(v.__html===y.__html||v.__html===l.innerHTML)||(l.innerHTML=v.__html),u.__k=[];else if(y&&(l.innerHTML=""),C(l,h(d)?d:[d],u,t,i,o&&"foreignObject"!==x,r,f,r?r[0]:t.__k&&m(t,0),e,s),null!=r)for(a=r.length;a--;)null!=r[a]&&p(r[a]);e||(a="value",void 0!==g&&(g!==l[a]||"progress"===x&&!g||"option"===x&&g!==k[a])&&T(l,a,g,k[a],!1),a="checked",void 0!==b&&b!==l[a]&&T(l,a,b,k[a],!1))}return l}function z(n,u,t){try{"function"==typeof n?n(u):n.current=u}catch(n){l.__e(n,t)}}function N(n,u,t){var i,o;if(l.unmount&&l.unmount(n),(i=n.ref)&&(i.current&&i.current!==n.__e||z(i,null,u)),null!=(i=n.__c)){if(i.componentWillUnmount)try{i.componentWillUnmount()}catch(n){l.__e(n,u)}i.base=i.__P=null,n.__c=void 0}if(i=n.__k)for(o=0;o<i.length;o++)i[o]&&N(i[o],u,t||"function"!=typeof n.type);t||null==n.__e||p(n.__e),n.__=n.__e=n.__d=void 0}function O(n,l,u){return this.constructor(n,u)}function q(u,t,i){var o,r,f,e;l.__&&l.__(u,t),r=(o="function"==typeof i)?null:i&&i.__k||t.__k,f=[],e=[],L(t,u=(!o&&i||t).__k=y(g,null,[u]),r||preact_module_c,preact_module_c,void 0!==t.ownerSVGElement,!o&&i?[i]:r?null:t.firstChild?preact_module_n.call(t.childNodes):null,f,!o&&i?i:r?r.__e:t.firstChild,o,e),M(f,u,e)}function B(n,l){q(n,l,B)}function E(l,u,t){var i,o,r,f,e=v({},l.props);for(r in l.type&&l.type.defaultProps&&(f=l.type.defaultProps),u)"key"==r?i=u[r]:"ref"==r?o=u[r]:e[r]=void 0===u[r]&&void 0!==f?f[r]:u[r];return arguments.length>2&&(e.children=arguments.length>3?preact_module_n.call(arguments,2):t),d(l.type,e,i||l.key,o||l.ref,null)}function F(n,l){var u={__c:l="__cC"+preact_module_e++,__:n,Consumer:function(n,l){return n.children(l)},Provider:function(n){var u,t;return this.getChildContext||(u=[],(t={})[l]=this,this.getChildContext=function(){return t},this.shouldComponentUpdate=function(n){this.props.value!==n.value&&u.some(function(n){n.__e=!0,w(n)})},this.sub=function(n){u.push(n);var l=n.componentWillUnmount;n.componentWillUnmount=function(){u.splice(u.indexOf(n),1),l&&l.call(n)}}),n.children}};return u.Provider.__=u.Consumer.contextType=u}preact_module_n=s.slice,l={__e:function(n,l,u,t){for(var i,o,r;l=l.__;)if((i=l.__c)&&!i.__)try{if((o=i.constructor)&&null!=o.getDerivedStateFromError&&(i.setState(o.getDerivedStateFromError(n)),r=i.__d),null!=i.componentDidCatch&&(i.componentDidCatch(n,t||{}),r=i.__d),r)return i.__E=i}catch(l){n=l}throw n}},preact_module_u=0,preact_module_t=function(n){return null!=n&&null==n.constructor},b.prototype.setState=function(n,l){var u;u=null!=this.__s&&this.__s!==this.state?this.__s:this.__s=v({},this.state),"function"==typeof n&&(n=n(v({},u),this.props)),n&&v(u,n),null!=n&&this.__v&&(l&&this._sb.push(l),w(this))},b.prototype.forceUpdate=function(n){this.__v&&(this.__e=!0,n&&this.__h.push(n),w(this))},b.prototype.render=g,i=[],r="function"==typeof Promise?Promise.prototype.then.bind(Promise.resolve()):setTimeout,preact_module_f=function(n,l){return n.__v.__b-l.__v.__b},x.__r=0,preact_module_e=0;
+var preact_module_n,l,preact_module_u,preact_module_t,i,preact_module_o,r,preact_module_f,e,preact_module_c={},s=[],a=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i,h=Array.isArray;function v(n,l){for(var u in l)n[u]=l[u];return n}function p(n){var l=n.parentNode;l&&l.removeChild(n)}function y(l,u,t){var i,o,r,f={};for(r in u)"key"==r?i=u[r]:"ref"==r?o=u[r]:f[r]=u[r];if(arguments.length>2&&(f.children=arguments.length>3?preact_module_n.call(arguments,2):t),"function"==typeof l&&null!=l.defaultProps)for(r in l.defaultProps)void 0===f[r]&&(f[r]=l.defaultProps[r]);return d(l,f,i,o,null)}function d(n,t,i,o,r){var f={type:n,props:t,key:i,ref:o,__k:null,__:null,__b:0,__e:null,__d:void 0,__c:null,constructor:void 0,__v:null==r?++preact_module_u:r,__i:-1,__u:0};return null==r&&null!=l.vnode&&l.vnode(f),f}function _(){return{current:null}}function g(n){return n.children}function b(n,l){this.props=n,this.context=l}function m(n,l){if(null==l)return n.__?m(n.__,n.__i+1):null;for(var u;l<n.__k.length;l++)if(null!=(u=n.__k[l])&&null!=u.__e)return u.__e;return"function"==typeof n.type?m(n):null}function k(n){var l,u;if(null!=(n=n.__)&&null!=n.__c){for(n.__e=n.__c.base=null,l=0;l<n.__k.length;l++)if(null!=(u=n.__k[l])&&null!=u.__e){n.__e=n.__c.base=u.__e;break}return k(n)}}function w(n){(!n.__d&&(n.__d=!0)&&i.push(n)&&!x.__r++||preact_module_o!==l.debounceRendering)&&((preact_module_o=l.debounceRendering)||r)(x)}function x(){var n,u,t,o,r,e,c,s,a;for(i.sort(preact_module_f);n=i.shift();)n.__d&&(u=i.length,o=void 0,e=(r=(t=n).__v).__e,s=[],a=[],(c=t.__P)&&((o=v({},r)).__v=r.__v+1,l.vnode&&l.vnode(o),L(c,o,r,t.__n,void 0!==c.ownerSVGElement,32&r.__u?[e]:null,s,null==e?m(r):e,!!(32&r.__u),a),o.__.__k[o.__i]=o,M(s,o,a),o.__e!=e&&k(o)),i.length>u&&i.sort(preact_module_f));x.__r=0}function C(n,l,u,t,i,o,r,f,e,a,h){var v,p,y,d,_,g=t&&t.__k||s,b=l.length;for(u.__d=e,P(u,l,g),e=u.__d,v=0;v<b;v++)null!=(y=u.__k[v])&&"boolean"!=typeof y&&"function"!=typeof y&&(p=-1===y.__i?preact_module_c:g[y.__i]||preact_module_c,y.__i=v,L(n,y,p,i,o,r,f,e,a,h),d=y.__e,y.ref&&p.ref!=y.ref&&(p.ref&&z(p.ref,null,y),h.push(y.ref,y.__c||d,y)),null==_&&null!=d&&(_=d),65536&y.__u||p.__k===y.__k?e=S(y,e,n):"function"==typeof y.type&&void 0!==y.__d?e=y.__d:d&&(e=d.nextSibling),y.__d=void 0,y.__u&=-196609);u.__d=e,u.__e=_}function P(n,l,u){var t,i,o,r,f,e=l.length,c=u.length,s=c,a=0;for(n.__k=[],t=0;t<e;t++)null!=(i=n.__k[t]=null==(i=l[t])||"boolean"==typeof i||"function"==typeof i?null:"string"==typeof i||"number"==typeof i||"bigint"==typeof i||i.constructor==String?d(null,i,null,null,i):h(i)?d(g,{children:i},null,null,null):void 0===i.constructor&&i.__b>0?d(i.type,i.props,i.key,i.ref?i.ref:null,i.__v):i)?(i.__=n,i.__b=n.__b+1,f=H(i,u,r=t+a,s),i.__i=f,o=null,-1!==f&&(s--,(o=u[f])&&(o.__u|=131072)),null==o||null===o.__v?(-1==f&&a--,"function"!=typeof i.type&&(i.__u|=65536)):f!==r&&(f===r+1?a++:f>r?s>e-r?a+=f-r:a--:a=f<r&&f==r-1?f-r:0,f!==t+a&&(i.__u|=65536))):(o=u[t])&&null==o.key&&o.__e&&(o.__e==n.__d&&(n.__d=m(o)),N(o,o,!1),u[t]=null,s--);if(s)for(t=0;t<c;t++)null!=(o=u[t])&&0==(131072&o.__u)&&(o.__e==n.__d&&(n.__d=m(o)),N(o,o))}function S(n,l,u){var t,i;if("function"==typeof n.type){for(t=n.__k,i=0;t&&i<t.length;i++)t[i]&&(t[i].__=n,l=S(t[i],l,u));return l}return n.__e!=l&&(u.insertBefore(n.__e,l||null),l=n.__e),l&&l.nextSibling}function $(n,l){return l=l||[],null==n||"boolean"==typeof n||(h(n)?n.some(function(n){$(n,l)}):l.push(n)),l}function H(n,l,u,t){var i=n.key,o=n.type,r=u-1,f=u+1,e=l[u];if(null===e||e&&i==e.key&&o===e.type)return u;if(t>(null!=e&&0==(131072&e.__u)?1:0))for(;r>=0||f<l.length;){if(r>=0){if((e=l[r])&&0==(131072&e.__u)&&i==e.key&&o===e.type)return r;r--}if(f<l.length){if((e=l[f])&&0==(131072&e.__u)&&i==e.key&&o===e.type)return f;f++}}return-1}function I(n,l,u){"-"===l[0]?n.setProperty(l,null==u?"":u):n[l]=null==u?"":"number"!=typeof u||a.test(l)?u:u+"px"}function T(n,l,u,t,i){var o;n:if("style"===l)if("string"==typeof u)n.style.cssText=u;else{if("string"==typeof t&&(n.style.cssText=t=""),t)for(l in t)u&&l in u||I(n.style,l,"");if(u)for(l in u)t&&u[l]===t[l]||I(n.style,l,u[l])}else if("o"===l[0]&&"n"===l[1])o=l!==(l=l.replace(/(PointerCapture)$|Capture$/,"$1")),l=l.toLowerCase()in n?l.toLowerCase().slice(2):l.slice(2),n.l||(n.l={}),n.l[l+o]=u,u?t?u.u=t.u:(u.u=Date.now(),n.addEventListener(l,o?D:A,o)):n.removeEventListener(l,o?D:A,o);else{if(i)l=l.replace(/xlink(H|:h)/,"h").replace(/sName$/,"s");else if("width"!==l&&"height"!==l&&"href"!==l&&"list"!==l&&"form"!==l&&"tabIndex"!==l&&"download"!==l&&"rowSpan"!==l&&"colSpan"!==l&&"role"!==l&&l in n)try{n[l]=null==u?"":u;break n}catch(n){}"function"==typeof u||(null==u||!1===u&&"-"!==l[4]?n.removeAttribute(l):n.setAttribute(l,u))}}function A(n){var u=this.l[n.type+!1];if(n.t){if(n.t<=u.u)return}else n.t=Date.now();return u(l.event?l.event(n):n)}function D(n){return this.l[n.type+!0](l.event?l.event(n):n)}function L(n,u,t,i,o,r,f,e,c,s){var a,p,y,d,_,m,k,w,x,P,S,$,H,I,T,A=u.type;if(void 0!==u.constructor)return null;128&t.__u&&(c=!!(32&t.__u),r=[e=u.__e=t.__e]),(a=l.__b)&&a(u);n:if("function"==typeof A)try{if(w=u.props,x=(a=A.contextType)&&i[a.__c],P=a?x?x.props.value:a.__:i,t.__c?k=(p=u.__c=t.__c).__=p.__E:("prototype"in A&&A.prototype.render?u.__c=p=new A(w,P):(u.__c=p=new b(w,P),p.constructor=A,p.render=O),x&&x.sub(p),p.props=w,p.state||(p.state={}),p.context=P,p.__n=i,y=p.__d=!0,p.__h=[],p._sb=[]),null==p.__s&&(p.__s=p.state),null!=A.getDerivedStateFromProps&&(p.__s==p.state&&(p.__s=v({},p.__s)),v(p.__s,A.getDerivedStateFromProps(w,p.__s))),d=p.props,_=p.state,p.__v=u,y)null==A.getDerivedStateFromProps&&null!=p.componentWillMount&&p.componentWillMount(),null!=p.componentDidMount&&p.__h.push(p.componentDidMount);else{if(null==A.getDerivedStateFromProps&&w!==d&&null!=p.componentWillReceiveProps&&p.componentWillReceiveProps(w,P),!p.__e&&(null!=p.shouldComponentUpdate&&!1===p.shouldComponentUpdate(w,p.__s,P)||u.__v===t.__v)){for(u.__v!==t.__v&&(p.props=w,p.state=p.__s,p.__d=!1),u.__e=t.__e,u.__k=t.__k,u.__k.forEach(function(n){n&&(n.__=u)}),S=0;S<p._sb.length;S++)p.__h.push(p._sb[S]);p._sb=[],p.__h.length&&f.push(p);break n}null!=p.componentWillUpdate&&p.componentWillUpdate(w,p.__s,P),null!=p.componentDidUpdate&&p.__h.push(function(){p.componentDidUpdate(d,_,m)})}if(p.context=P,p.props=w,p.__P=n,p.__e=!1,$=l.__r,H=0,"prototype"in A&&A.prototype.render){for(p.state=p.__s,p.__d=!1,$&&$(u),a=p.render(p.props,p.state,p.context),I=0;I<p._sb.length;I++)p.__h.push(p._sb[I]);p._sb=[]}else do{p.__d=!1,$&&$(u),a=p.render(p.props,p.state,p.context),p.state=p.__s}while(p.__d&&++H<25);p.state=p.__s,null!=p.getChildContext&&(i=v(v({},i),p.getChildContext())),y||null==p.getSnapshotBeforeUpdate||(m=p.getSnapshotBeforeUpdate(d,_)),C(n,h(T=null!=a&&a.type===g&&null==a.key?a.props.children:a)?T:[T],u,t,i,o,r,f,e,c,s),p.base=u.__e,u.__u&=-161,p.__h.length&&f.push(p),k&&(p.__E=p.__=null)}catch(n){u.__v=null,c||null!=r?(u.__e=e,u.__u|=c?160:32,r[r.indexOf(e)]=null):(u.__e=t.__e,u.__k=t.__k),l.__e(n,u,t)}else null==r&&u.__v===t.__v?(u.__k=t.__k,u.__e=t.__e):u.__e=j(t.__e,u,t,i,o,r,f,c,s);(a=l.diffed)&&a(u)}function M(n,u,t){u.__d=void 0;for(var i=0;i<t.length;i++)z(t[i],t[++i],t[++i]);l.__c&&l.__c(u,n),n.some(function(u){try{n=u.__h,u.__h=[],n.some(function(n){n.call(u)})}catch(n){l.__e(n,u.__v)}})}function j(l,u,t,i,o,r,f,e,s){var a,v,y,d,_,g,b,k=t.props,w=u.props,x=u.type;if("svg"===x&&(o=!0),null!=r)for(a=0;a<r.length;a++)if((_=r[a])&&"setAttribute"in _==!!x&&(x?_.localName===x:3===_.nodeType)){l=_,r[a]=null;break}if(null==l){if(null===x)return document.createTextNode(w);l=o?document.createElementNS("http://www.w3.org/2000/svg",x):document.createElement(x,w.is&&w),r=null,e=!1}if(null===x)k===w||e&&l.data===w||(l.data=w);else{if(r=r&&preact_module_n.call(l.childNodes),k=t.props||preact_module_c,!e&&null!=r)for(k={},a=0;a<l.attributes.length;a++)k[(_=l.attributes[a]).name]=_.value;for(a in k)_=k[a],"children"==a||("dangerouslySetInnerHTML"==a?y=_:"key"===a||a in w||T(l,a,null,_,o));for(a in w)_=w[a],"children"==a?d=_:"dangerouslySetInnerHTML"==a?v=_:"value"==a?g=_:"checked"==a?b=_:"key"===a||e&&"function"!=typeof _||k[a]===_||T(l,a,_,k[a],o);if(v)e||y&&(v.__html===y.__html||v.__html===l.innerHTML)||(l.innerHTML=v.__html),u.__k=[];else if(y&&(l.innerHTML=""),C(l,h(d)?d:[d],u,t,i,o&&"foreignObject"!==x,r,f,r?r[0]:t.__k&&m(t,0),e,s),null!=r)for(a=r.length;a--;)null!=r[a]&&p(r[a]);e||(a="value",void 0!==g&&(g!==l[a]||"progress"===x&&!g||"option"===x&&g!==k[a])&&T(l,a,g,k[a],!1),a="checked",void 0!==b&&b!==l[a]&&T(l,a,b,k[a],!1))}return l}function z(n,u,t){try{"function"==typeof n?n(u):n.current=u}catch(n){l.__e(n,t)}}function N(n,u,t){var i,o;if(l.unmount&&l.unmount(n),(i=n.ref)&&(i.current&&i.current!==n.__e||z(i,null,u)),null!=(i=n.__c)){if(i.componentWillUnmount)try{i.componentWillUnmount()}catch(n){l.__e(n,u)}i.base=i.__P=null,n.__c=void 0}if(i=n.__k)for(o=0;o<i.length;o++)i[o]&&N(i[o],u,t||"function"!=typeof n.type);t||null==n.__e||p(n.__e),n.__=n.__e=n.__d=void 0}function O(n,l,u){return this.constructor(n,u)}function q(u,t,i){var o,r,f,e;l.__&&l.__(u,t),r=(o="function"==typeof i)?null:i&&i.__k||t.__k,f=[],e=[],L(t,u=(!o&&i||t).__k=y(g,null,[u]),r||preact_module_c,preact_module_c,void 0!==t.ownerSVGElement,!o&&i?[i]:r?null:t.firstChild?preact_module_n.call(t.childNodes):null,f,!o&&i?i:r?r.__e:t.firstChild,o,e),M(f,u,e)}function B(n,l){q(n,l,B)}function E(l,u,t){var i,o,r,f,e=v({},l.props);for(r in l.type&&l.type.defaultProps&&(f=l.type.defaultProps),u)"key"==r?i=u[r]:"ref"==r?o=u[r]:e[r]=void 0===u[r]&&void 0!==f?f[r]:u[r];return arguments.length>2&&(e.children=arguments.length>3?preact_module_n.call(arguments,2):t),d(l.type,e,i||l.key,o||l.ref,null)}function F(n,l){var u={__c:l="__cC"+e++,__:n,Consumer:function(n,l){return n.children(l)},Provider:function(n){var u,t;return this.getChildContext||(u=[],(t={})[l]=this,this.getChildContext=function(){return t},this.shouldComponentUpdate=function(n){this.props.value!==n.value&&u.some(function(n){n.__e=!0,w(n)})},this.sub=function(n){u.push(n);var l=n.componentWillUnmount;n.componentWillUnmount=function(){u.splice(u.indexOf(n),1),l&&l.call(n)}}),n.children}};return u.Provider.__=u.Consumer.contextType=u}preact_module_n=s.slice,l={__e:function(n,l,u,t){for(var i,o,r;l=l.__;)if((i=l.__c)&&!i.__)try{if((o=i.constructor)&&null!=o.getDerivedStateFromError&&(i.setState(o.getDerivedStateFromError(n)),r=i.__d),null!=i.componentDidCatch&&(i.componentDidCatch(n,t||{}),r=i.__d),r)return i.__E=i}catch(l){n=l}throw n}},preact_module_u=0,preact_module_t=function(n){return null!=n&&null==n.constructor},b.prototype.setState=function(n,l){var u;u=null!=this.__s&&this.__s!==this.state?this.__s:this.__s=v({},this.state),"function"==typeof n&&(n=n(v({},u),this.props)),n&&v(u,n),null!=n&&this.__v&&(l&&this._sb.push(l),w(this))},b.prototype.forceUpdate=function(n){this.__v&&(this.__e=!0,n&&this.__h.push(n),w(this))},b.prototype.render=g,i=[],r="function"==typeof Promise?Promise.prototype.then.bind(Promise.resolve()):setTimeout,preact_module_f=function(n,l){return n.__v.__b-l.__v.__b},x.__r=0,e=0;
 //# sourceMappingURL=preact.module.js.map
 
 ;// CONCATENATED MODULE: ./packages/interactivity/node_modules/preact/hooks/dist/hooks.module.js
@@ -55,10 +55,163 @@ function signals_core_module_i(){throw new Error("Cycle detected")}function sign
 ;// CONCATENATED MODULE: ./packages/interactivity/node_modules/@preact/signals/dist/signals.module.js
 var signals_module_v,signals_module_s;function signals_module_l(n,i){l[n]=i.bind(null,l[n]||function(){})}function signals_module_d(n){if(signals_module_s)signals_module_s();signals_module_s=n&&n.S()}function signals_module_p(n){var r=this,f=n.data,o=useSignal(f);o.value=f;var e=hooks_module_F(function(){var n=r.__v;while(n=n.__)if(n.__c){n.__c.__$f|=4;break}r.__$u.c=function(){var n;if(!preact_module_t(e.peek())&&3===(null==(n=r.base)?void 0:n.nodeType))r.base.data=e.peek();else{r.__$f|=1;r.setState({})}};return signals_core_module_(function(){var n=o.value.value;return 0===n?0:!0===n?"":n||""})},[]);return e.value}signals_module_p.displayName="_st";Object.defineProperties(signals_core_module_c.prototype,{constructor:{configurable:!0,value:void 0},type:{configurable:!0,value:signals_module_p},props:{configurable:!0,get:function(){return{data:this}}},__b:{configurable:!0,value:1}});signals_module_l("__b",function(n,r){if("string"==typeof r.type){var i,t=r.props;for(var f in t)if("children"!==f){var o=t[f];if(o instanceof signals_core_module_c){if(!i)r.__np=i={};i[f]=o;t[f]=o.peek()}}}n(r)});signals_module_l("__r",function(n,r){signals_module_d();var i,t=r.__c;if(t){t.__$f&=-2;if(void 0===(i=t.__$u))t.__$u=i=function(n){var r;signals_core_module_E(function(){r=this});r.c=function(){t.__$f|=1;t.setState({})};return r}()}signals_module_v=t;signals_module_d(i);n(r)});signals_module_l("__e",function(n,r,i,t){signals_module_d();signals_module_v=void 0;n(r,i,t)});signals_module_l("diffed",function(n,r){signals_module_d();signals_module_v=void 0;var i;if("string"==typeof r.type&&(i=r.__e)){var t=r.__np,f=r.props;if(t){var o=i.U;if(o)for(var e in o){var u=o[e];if(void 0!==u&&!(e in t)){u.d();o[e]=void 0}}else i.U=o={};for(var a in t){var c=o[a],s=t[a];if(void 0===c){c=signals_module_(i,a,s,f);o[a]=c}else c.o(s,f)}}}n(r)});function signals_module_(n,r,i,t){var f=r in n&&void 0===n.ownerSVGElement,o=signals_core_module_d(i);return{o:function(n,r){o.value=n;t=r},d:signals_core_module_E(function(){var i=o.value.value;if(t[r]!==i){t[r]=i;if(f)n[r]=i;else if(i)n.setAttribute(r,i);else n.removeAttribute(r)}})}}signals_module_l("unmount",function(n,r){if("string"==typeof r.type){var i=r.__e;if(i){var t=i.U;if(t){i.U=void 0;for(var f in t){var o=t[f];if(o)o.d()}}}}else{var e=r.__c;if(e){var u=e.__$u;if(u){e.__$u=void 0;u.d()}}}n(r)});signals_module_l("__h",function(n,r,i,t){if(t<3||9===t)r.__$f|=2;n(r,i,t)});b.prototype.shouldComponentUpdate=function(n,r){var i=this.__$u;if(!(i&&void 0!==i.s||4&this.__$f))return!0;if(3&this.__$f)return!0;for(var t in r)return!0;for(var f in n)if("__source"!==f&&n[f]!==this.props[f])return!0;for(var o in this.props)if(!(o in n))return!0;return!1};function useSignal(n){return hooks_module_F(function(){return signals_core_module_d(n)},[])}function useComputed(n){var r=f(n);r.current=n;signals_module_v.__$f|=4;return t(function(){return u(function(){return r.current()})},[])}function useSignalEffect(n){var r=f(n);r.current=n;o(function(){return c(function(){return r.current()})},[])}//# sourceMappingURL=signals.module.js.map
 
-;// CONCATENATED MODULE: ./packages/interactivity/node_modules/deepsignal/dist/deepsignal.module.js
-var deepsignal_module_a=new WeakMap,deepsignal_module_o=new WeakMap,deepsignal_module_s=new WeakMap,deepsignal_module_u=new WeakSet,deepsignal_module_c=new WeakMap,deepsignal_module_i=/^\$/,deepsignal_module_f=Object.getOwnPropertyDescriptor,deepsignal_module_l=!1,deepsignal_module_g=function(e){if(!R(e))throw new Error("This object can't be observed.");return deepsignal_module_o.has(e)||deepsignal_module_o.set(e,deepsignal_module_h(e,deepsignal_module_w)),deepsignal_module_o.get(e)},deepsignal_module_p=function(e,t){deepsignal_module_l=!0;var r=e[t];try{deepsignal_module_l=!1}catch(e){}return r},deepsignal_module_h=function(e,t){var r=new Proxy(e,t);return deepsignal_module_u.add(r),r},deepsignal_module_y=function(){throw new Error("Don't mutate the signals directly.")},deepsignal_module_v=function(e){return function(t,u,c){var g;if(deepsignal_module_l)return Reflect.get(t,u,c);var p=e||"$"===u[0];if(!e&&p&&Array.isArray(t)){if("$"===u)return deepsignal_module_s.has(t)||deepsignal_module_s.set(t,deepsignal_module_h(t,deepsignal_module_m)),deepsignal_module_s.get(t);p="$length"===u}deepsignal_module_a.has(c)||deepsignal_module_a.set(c,new Map);var y=deepsignal_module_a.get(c),v=p?u.replace(deepsignal_module_i,""):u;if(y.has(v)||"function"!=typeof(null==(g=deepsignal_module_f(t,v))?void 0:g.get)){var d=Reflect.get(t,v,c);if(p&&"function"==typeof d)return;if("symbol"==typeof v&&deepsignal_module_b.has(v))return d;y.has(v)||(R(d)&&(deepsignal_module_o.has(d)||deepsignal_module_o.set(d,deepsignal_module_h(d,deepsignal_module_w)),d=deepsignal_module_o.get(d)),y.set(v,signals_core_module_d(d)))}else y.set(v,signals_core_module_(function(){return Reflect.get(t,v,c)}));return p?y.get(v):y.get(v).value}},deepsignal_module_w={get:deepsignal_module_v(!1),set:function(e,n,s,u){var l;if("function"==typeof(null==(l=deepsignal_module_f(e,n))?void 0:l.set))return Reflect.set(e,n,s,u);deepsignal_module_a.has(u)||deepsignal_module_a.set(u,new Map);var g=deepsignal_module_a.get(u);if("$"===n[0]){s instanceof signals_core_module_c||deepsignal_module_y();var p=n.replace(deepsignal_module_i,"");return g.set(p,s),Reflect.set(e,p,s.peek(),u)}var v=s;R(s)&&(deepsignal_module_o.has(s)||deepsignal_module_o.set(s,deepsignal_module_h(s,deepsignal_module_w)),v=deepsignal_module_o.get(s));var m=!(n in e),b=Reflect.set(e,n,s,u);return g.has(n)?g.get(n).value=v:g.set(n,signals_core_module_d(v)),m&&deepsignal_module_c.has(e)&&deepsignal_module_c.get(e).value++,Array.isArray(e)&&g.has("length")&&(g.get("length").value=e.length),b},deleteProperty:function(e,t){"$"===t[0]&&deepsignal_module_y();var r=deepsignal_module_a.get(deepsignal_module_o.get(e)),n=Reflect.deleteProperty(e,t);return r&&r.has(t)&&(r.get(t).value=void 0),deepsignal_module_c.has(e)&&deepsignal_module_c.get(e).value++,n},ownKeys:function(e){return deepsignal_module_c.has(e)||deepsignal_module_c.set(e,signals_core_module_d(0)),deepsignal_module_c._=deepsignal_module_c.get(e).value,Reflect.ownKeys(e)}},deepsignal_module_m={get:deepsignal_module_v(!0),set:deepsignal_module_y,deleteProperty:deepsignal_module_y},deepsignal_module_b=new Set(Object.getOwnPropertyNames(Symbol).map(function(e){return Symbol[e]}).filter(function(e){return"symbol"==typeof e})),deepsignal_module_d=new Set([Object,Array]),R=function(e){return"object"==typeof e&&null!==e&&(!("function"==typeof e.constructor&&e.constructor.name in globalThis&&globalThis[e.constructor.name]===e.constructor)||deepsignal_module_d.has(e.constructor))&&!deepsignal_module_u.has(e)},deepsignal_module_k=function(t){return e(function(){return deepsignal_module_g(t)},[])};//# sourceMappingURL=deepsignal.module.js.map
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/proxies/registry.js
+/**
+ * Proxies for each object.
+ */
+const objToProxy = new WeakMap();
 
-;// CONCATENATED MODULE: ./packages/interactivity/build-module/store.js
+/**
+ * Namespaces for each created proxy.
+ */
+const proxyToNs = new WeakMap();
+
+/**
+ * Object types that can be proxied.
+ */
+const supported = new Set([Object, Array]);
+
+/**
+ * Returns a proxy to the passed object with the given handlers, assigning the
+ * specified namespace to it. If a proxy for the passed object was created
+ * before, that proxy is returned.
+ *
+ * @param namespace The namespace that will be associated to this proxy.
+ * @param obj       The object to proxify.
+ * @param handlers  Handlers that the proxy will use.
+ *
+ * @throws Error if the object cannot be proxified. Use {@link shouldProxy} to
+ *         check if a proxy can be created for a specific object.
+ *
+ * @return The created proxy.
+ */
+const createProxy = (namespace, obj, handlers) => {
+  if (!shouldProxy(obj)) {
+    throw Error('This object cannot be proxified.');
+  }
+  if (!objToProxy.has(obj)) {
+    const proxy = new Proxy(obj, handlers);
+    objToProxy.set(obj, proxy);
+    proxyToNs.set(proxy, namespace);
+  }
+  return objToProxy.get(obj);
+};
+
+/**
+ * Returns the proxy for the given object. If there is no associated proxy, the
+ * function returns `undefined`.
+ *
+ * @param obj Object from which to know the proxy.
+ * @return Associated proxy or `undefined`.
+ */
+const getProxyFromObject = obj => objToProxy.get(obj);
+
+/**
+ * Gets the namespace associated with the given proxy.
+ *
+ * Proxies have a namespace assigned upon creation. See {@link createProxy}.
+ *
+ * @param proxy Proxy.
+ * @return Namespace.
+ */
+const getNamespaceFromProxy = proxy => proxyToNs.get(proxy);
+
+/**
+ * Checks if a given object can be proxied.
+ *
+ * @param candidate Object to know whether it can be proxied.
+ * @return True if the passed instance can be proxied.
+ */
+const shouldProxy = candidate => {
+  if (typeof candidate !== 'object' || candidate === null) {
+    return false;
+  }
+  return !proxyToNs.has(candidate) && supported.has(candidate.constructor);
+};
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/namespaces.js
+const namespaceStack = [];
+const getNamespace = () => namespaceStack.slice(-1)[0];
+const setNamespace = namespace => {
+  namespaceStack.push(namespace);
+};
+const resetNamespace = () => {
+  namespaceStack.pop();
+};
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/scopes.js
+/**
+ * External dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+// Store stacks for the current scope and the default namespaces and export APIs
+// to interact with them.
+const scopeStack = [];
+const getScope = () => scopeStack.slice(-1)[0];
+const setScope = scope => {
+  scopeStack.push(scope);
+};
+const resetScope = () => {
+  scopeStack.pop();
+};
+
+// Wrap the element props to prevent modifications.
+const immutableMap = new WeakMap();
+const immutableError = () => {
+  throw new Error('Please use `data-wp-bind` to modify the attributes of an element.');
+};
+const immutableHandlers = {
+  get(target, key, receiver) {
+    const value = Reflect.get(target, key, receiver);
+    return !!value && typeof value === 'object' ? deepImmutable(value) : value;
+  },
+  set: immutableError,
+  deleteProperty: immutableError
+};
+const deepImmutable = target => {
+  if (!immutableMap.has(target)) {
+    immutableMap.set(target, new Proxy(target, immutableHandlers));
+  }
+  return immutableMap.get(target);
+};
+
+/**
+ * Retrieves the context inherited by the element evaluating a function from the
+ * store. The returned value depends on the element and the namespace where the
+ * function calling `getContext()` exists.
+ *
+ * @param namespace Store namespace. By default, the namespace where the calling
+ *                  function exists is used.
+ * @return The context content.
+ */
+const getContext = namespace => {
+  const scope = getScope();
+  if (false) {}
+  return scope.context[namespace || getNamespace()];
+};
+
+/**
+ * Retrieves a representation of the element where a function from the store
+ * is being evalutated. Such representation is read-only, and contains a
+ * reference to the DOM element, its props and a local reactive state.
+ *
+ * @return Element representation.
+ */
+const getElement = () => {
+  const scope = getScope();
+  if (false) {}
+  const {
+    ref,
+    attributes
+  } = scope;
+  return Object.freeze({
+    ref: ref.current,
+    attributes: deepImmutable(attributes)
+  });
+};
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/utils.js
 /**
  * External dependencies
  */
@@ -69,144 +222,756 @@ var deepsignal_module_a=new WeakMap,deepsignal_module_o=new WeakMap,deepsignal_m
  * Internal dependencies
  */
 
-const isObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
-const deepMerge = (target, source) => {
-  if (isObject(target) && isObject(source)) {
+
+/**
+ * Executes a callback function after the next frame is rendered.
+ *
+ * @param callback The callback function to be executed.
+ * @return A promise that resolves after the callback function is executed.
+ */
+const afterNextFrame = callback => {
+  return new Promise(resolve => {
+    const done = () => {
+      clearTimeout(timeout);
+      window.cancelAnimationFrame(raf);
+      setTimeout(() => {
+        callback();
+        resolve();
+      });
+    };
+    const timeout = setTimeout(done, 100);
+    const raf = window.requestAnimationFrame(done);
+  });
+};
+
+/**
+ * Returns a promise that resolves after yielding to main.
+ *
+ * @return Promise
+ */
+const splitTask = () => {
+  return new Promise(resolve => {
+    // TODO: Use scheduler.yield() when available.
+    setTimeout(resolve, 0);
+  });
+};
+
+/**
+ * Creates a Flusher object that can be used to flush computed values and notify listeners.
+ *
+ * Using the mangled properties:
+ * this.c: this._callback
+ * this.x: this._compute
+ * https://github.com/preactjs/signals/blob/main/mangle.json
+ *
+ * @param compute The function that computes the value to be flushed.
+ * @param notify  The function that notifies listeners when the value is flushed.
+ * @return The Flusher object with `flush` and `dispose` properties.
+ */
+function createFlusher(compute, notify) {
+  let flush = () => undefined;
+  const dispose = signals_core_module_E(function () {
+    flush = this.c.bind(this);
+    this.x = compute;
+    this.c = notify;
+    return compute();
+  });
+  return {
+    flush,
+    dispose
+  };
+}
+
+/**
+ * Custom hook that executes a callback function whenever a signal is triggered.
+ * Version of `useSignalEffect` with a `useEffect`-like execution. This hook
+ * implementation comes from this PR, but we added short-cirtuiting to avoid
+ * infinite loops: https://github.com/preactjs/signals/pull/290
+ *
+ * @param callback The callback function to be executed.
+ */
+function utils_useSignalEffect(callback) {
+  hooks_module_p(() => {
+    let eff = null;
+    let isExecuting = false;
+    const notify = async () => {
+      if (eff && !isExecuting) {
+        isExecuting = true;
+        await afterNextFrame(eff.flush);
+        isExecuting = false;
+      }
+    };
+    eff = createFlusher(callback, notify);
+    return eff.dispose;
+  }, []);
+}
+
+/**
+ * Returns the passed function wrapped with the current scope so it is
+ * accessible whenever the function runs. This is primarily to make the scope
+ * available inside hook callbacks.
+ *
+ * Asyncronous functions should use generators that yield promises instead of awaiting them.
+ * See the documentation for details: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-interactivity/packages-interactivity-api-reference/#the-store
+ *
+ * @param func The passed function.
+ * @return The wrapped function.
+ */
+
+function withScope(func) {
+  const scope = getScope();
+  const ns = getNamespace();
+  if (func?.constructor?.name === 'GeneratorFunction') {
+    return async (...args) => {
+      const gen = func(...args);
+      let value;
+      let it;
+      while (true) {
+        setNamespace(ns);
+        setScope(scope);
+        try {
+          it = gen.next(value);
+        } finally {
+          resetScope();
+          resetNamespace();
+        }
+        try {
+          value = await it.value;
+        } catch (e) {
+          setNamespace(ns);
+          setScope(scope);
+          gen.throw(e);
+        } finally {
+          resetScope();
+          resetNamespace();
+        }
+        if (it.done) {
+          break;
+        }
+      }
+      return value;
+    };
+  }
+  return (...args) => {
+    setNamespace(ns);
+    setScope(scope);
+    try {
+      return func(...args);
+    } finally {
+      resetNamespace();
+      resetScope();
+    }
+  };
+}
+
+/**
+ * Accepts a function that contains imperative code which runs whenever any of
+ * the accessed _reactive_ properties (e.g., values from the global state or the
+ * context) is modified.
+ *
+ * This hook makes the element's scope available so functions like
+ * `getElement()` and `getContext()` can be used inside the passed callback.
+ *
+ * @param callback The hook callback.
+ */
+function useWatch(callback) {
+  utils_useSignalEffect(withScope(callback));
+}
+
+/**
+ * Accepts a function that contains imperative code which runs only after the
+ * element's first render, mainly useful for intialization logic.
+ *
+ * This hook makes the element's scope available so functions like
+ * `getElement()` and `getContext()` can be used inside the passed callback.
+ *
+ * @param callback The hook callback.
+ */
+function useInit(callback) {
+  hooks_module_p(withScope(callback), []);
+}
+
+/**
+ * Accepts a function that contains imperative, possibly effectful code. The
+ * effects run after browser paint, without blocking it.
+ *
+ * This hook is equivalent to Preact's `useEffect` and makes the element's scope
+ * available so functions like `getElement()` and `getContext()` can be used
+ * inside the passed callback.
+ *
+ * @param callback Imperative function that can return a cleanup
+ *                 function.
+ * @param inputs   If present, effect will only activate if the
+ *                 values in the list change (using `===`).
+ */
+function useEffect(callback, inputs) {
+  hooks_module_p(withScope(callback), inputs);
+}
+
+/**
+ * Accepts a function that contains imperative, possibly effectful code. Use
+ * this to read layout from the DOM and synchronously re-render.
+ *
+ * This hook is equivalent to Preact's `useLayoutEffect` and makes the element's
+ * scope available so functions like `getElement()` and `getContext()` can be
+ * used inside the passed callback.
+ *
+ * @param callback Imperative function that can return a cleanup
+ *                 function.
+ * @param inputs   If present, effect will only activate if the
+ *                 values in the list change (using `===`).
+ */
+function useLayoutEffect(callback, inputs) {
+  hooks_module_y(withScope(callback), inputs);
+}
+
+/**
+ * Returns a memoized version of the callback that only changes if one of the
+ * inputs has changed (using `===`).
+ *
+ * This hook is equivalent to Preact's `useCallback` and makes the element's
+ * scope available so functions like `getElement()` and `getContext()` can be
+ * used inside the passed callback.
+ *
+ * @param callback Callback function.
+ * @param inputs   If present, the callback will only be updated if the
+ *                 values in the list change (using `===`).
+ *
+ * @return The callback function.
+ */
+function useCallback(callback, inputs) {
+  return hooks_module_T(withScope(callback), inputs);
+}
+
+/**
+ * Pass a factory function and an array of inputs. `useMemo` will only recompute
+ * the memoized value when one of the inputs has changed.
+ *
+ * This hook is equivalent to Preact's `useMemo` and makes the element's scope
+ * available so functions like `getElement()` and `getContext()` can be used
+ * inside the passed factory function.
+ *
+ * @param factory Factory function that returns that value for memoization.
+ * @param inputs  If present, the factory will only be run to recompute if
+ *                the values in the list change (using `===`).
+ *
+ * @return The memoized value.
+ */
+function useMemo(factory, inputs) {
+  return hooks_module_F(withScope(factory), inputs);
+}
+
+/**
+ * Creates a root fragment by replacing a node or an array of nodes in a parent element.
+ * For wrapperless hydration.
+ * See https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
+ *
+ * @param parent      The parent element where the nodes will be replaced.
+ * @param replaceNode The node or array of nodes to replace in the parent element.
+ * @return The created root fragment.
+ */
+const createRootFragment = (parent, replaceNode) => {
+  replaceNode = [].concat(replaceNode);
+  const sibling = replaceNode[replaceNode.length - 1].nextSibling;
+  function insert(child, root) {
+    parent.insertBefore(child, root || sibling);
+  }
+  return parent.__k = {
+    nodeType: 1,
+    parentNode: parent,
+    firstChild: replaceNode[0],
+    childNodes: replaceNode,
+    insertBefore: insert,
+    appendChild: insert,
+    removeChild(c) {
+      parent.removeChild(c);
+    }
+  };
+};
+
+/**
+ * Transforms a kebab-case string to camelCase.
+ *
+ * @param str The kebab-case string to transform to camelCase.
+ * @return The transformed camelCase string.
+ */
+function kebabToCamelCase(str) {
+  return str.replace(/^-+|-+$/g, '').toLowerCase().replace(/-([a-z])/g, function (_match, group1) {
+    return group1.toUpperCase();
+  });
+}
+const logged = new Set();
+
+/**
+ * Shows a warning with `message` if environment is not `production`.
+ *
+ * Based on the `@wordpress/warning` package.
+ *
+ * @param message Message to show in the warning.
+ */
+const warn = message => {
+  if (false) {}
+};
+
+/**
+ * Checks if the passed `candidate` is a plain object with just the `Object`
+ * prototype.
+ *
+ * @param candidate The item to check.
+ * @return Whether `candidate` is a plain object.
+ */
+const isPlainObject = candidate => Boolean(candidate && typeof candidate === 'object' && candidate.constructor === Object);
+const deepMerge = (target, source, override = true) => {
+  if (isPlainObject(target) && isPlainObject(source)) {
     for (const key in source) {
-      const getter = Object.getOwnPropertyDescriptor(source, key)?.get;
-      if (typeof getter === 'function') {
-        Object.defineProperty(target, key, {
-          get: getter
-        });
-      } else if (isObject(source[key])) {
+      const desc = Object.getOwnPropertyDescriptor(source, key);
+      if (typeof desc?.get === 'function' || typeof desc?.set === 'function') {
+        if (override || !(key in target)) {
+          Object.defineProperty(target, key, {
+            ...desc,
+            configurable: true,
+            enumerable: true
+          });
+        }
+      } else if (isPlainObject(source[key])) {
         if (!target[key]) {
           target[key] = {};
         }
-        deepMerge(target[key], source[key]);
-      } else {
-        try {
-          target[key] = source[key];
-        } catch (e) {
-          // Assignemnts fail for properties that are only getters.
-          // When that's the case, the assignment is simply ignored.
-        }
+        deepMerge(target[key], source[key], override);
+      } else if (override || !(key in target)) {
+        Object.defineProperty(target, key, desc);
       }
     }
   }
 };
-const stores = new Map();
-const rawStores = new Map();
-const storeLocks = new Map();
-const storeConfigs = new Map();
-const objToProxy = new WeakMap();
-const proxyToNs = new WeakMap();
-const scopeToGetters = new WeakMap();
-const proxify = (obj, ns) => {
-  if (!objToProxy.has(obj)) {
-    const proxy = new Proxy(obj, handlers);
-    objToProxy.set(obj, proxy);
-    proxyToNs.set(proxy, ns);
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/proxies/signals.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+/**
+ * Identifier for property computeds not associated to any scope.
+ */
+const NO_SCOPE = Symbol();
+
+/**
+ * Structure that manages reactivity for a property in a state object. It uses
+ * signals to keep track of property value or getter modifications.
+ */
+class PropSignal {
+  /**
+   * Proxy that holds the property this PropSignal is associated with.
+   */
+
+  /**
+   * Relation of computeds by scope. These computeds are read-only signals
+   * that depend on whether the property is a value or a getter and,
+   * therefore, can return different values depending on the scope in which
+   * the getter is accessed.
+   */
+
+  /**
+   * Signal with the value assigned to the related property.
+   */
+
+  /**
+   * Signal with the getter assigned to the related property.
+   */
+
+  /**
+   * Structure that manages reactivity for a property in a state object, using
+   * signals to keep track of property value or getter modifications.
+   *
+   * @param owner Proxy that holds the property this instance is associated
+   *              with.
+   */
+  constructor(owner) {
+    this.owner = owner;
+    this.computedsByScope = new WeakMap();
   }
-  return objToProxy.get(obj);
-};
-const handlers = {
-  get: (target, key, receiver) => {
-    const ns = proxyToNs.get(receiver);
 
-    // Check if the property is a getter and we are inside an scope. If that is
-    // the case, we clone the getter to avoid overwriting the scoped
-    // dependencies of the computed each time that getter runs.
-    const getter = Object.getOwnPropertyDescriptor(target, key)?.get;
-    if (getter) {
-      const scope = getScope();
-      if (scope) {
-        const getters = scopeToGetters.get(scope) || scopeToGetters.set(scope, new Map()).get(scope);
-        if (!getters.has(getter)) {
-          getters.set(getter, signals_core_module_(() => {
-            setNamespace(ns);
-            setScope(scope);
-            try {
-              return getter.call(target);
-            } finally {
-              resetScope();
-              resetNamespace();
-            }
-          }));
-        }
-        return getters.get(getter).value;
-      }
+  /**
+   * Changes the internal value. If a getter was set before, it is set to
+   * `undefined`.
+   *
+   * @param value New value.
+   */
+  setValue(value) {
+    this.update({
+      value
+    });
+  }
+
+  /**
+   * Changes the internal getter. If a value was set before, it is set to
+   * `undefined`.
+   *
+   * @param getter New getter.
+   */
+  setGetter(getter) {
+    this.update({
+      get: getter
+    });
+  }
+
+  /**
+   * Returns the computed that holds the result of evaluating the prop in the
+   * current scope.
+   *
+   * These computeds are read-only signals that depend on whether the property
+   * is a value or a getter and, therefore, can return different values
+   * depending on the scope in which the getter is accessed.
+   *
+   * @return Computed that depends on the scope.
+   */
+  getComputed() {
+    const scope = getScope() || NO_SCOPE;
+    if (!this.valueSignal && !this.getterSignal) {
+      this.update({});
     }
-    const result = Reflect.get(target, key);
-
-    // Check if the proxy is the store root and no key with that name exist. In
-    // that case, return an empty object for the requested key.
-    if (typeof result === 'undefined' && receiver === stores.get(ns)) {
-      const obj = {};
-      Reflect.set(target, key, obj);
-      return proxify(obj, ns);
-    }
-
-    // Check if the property is a generator. If it is, we turn it into an
-    // asynchronous function where we restore the default namespace and scope
-    // each time it awaits/yields.
-    if (result?.constructor?.name === 'GeneratorFunction') {
-      return async (...args) => {
-        const scope = getScope();
-        const gen = result(...args);
-        let value;
-        let it;
-        while (true) {
-          setNamespace(ns);
-          setScope(scope);
-          try {
-            it = gen.next(value);
-          } finally {
-            resetScope();
-            resetNamespace();
-          }
-          try {
-            value = await it.value;
-          } catch (e) {
-            setNamespace(ns);
-            setScope(scope);
-            gen.throw(e);
-          } finally {
-            resetScope();
-            resetNamespace();
-          }
-          if (it.done) {
-            break;
-          }
-        }
-        return value;
+    if (!this.computedsByScope.has(scope)) {
+      const callback = () => {
+        const getter = this.getterSignal?.value;
+        return getter ? getter.call(this.owner) : this.valueSignal?.value;
       };
+      setNamespace(getNamespaceFromProxy(this.owner));
+      this.computedsByScope.set(scope, signals_core_module_(withScope(callback)));
+      resetNamespace();
+    }
+    return this.computedsByScope.get(scope);
+  }
+
+  /**
+   *  Update the internal signals for the value and the getter of the
+   *  corresponding prop.
+   *
+   * @param param0
+   * @param param0.get   New getter.
+   * @param param0.value New value.
+   */
+  update({
+    get,
+    value
+  }) {
+    if (!this.valueSignal) {
+      this.valueSignal = signals_core_module_d(value);
+      this.getterSignal = signals_core_module_d(get);
+    } else if (value !== this.valueSignal.peek() || get !== this.getterSignal.peek()) {
+      signals_core_module_r(() => {
+        this.valueSignal.value = value;
+        this.getterSignal.value = get;
+      });
+    }
+  }
+}
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/proxies/state.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+/**
+ * Set of built-in symbols.
+ */
+const wellKnownSymbols = new Set(Object.getOwnPropertyNames(Symbol).map(key => Symbol[key]).filter(value => typeof value === 'symbol'));
+
+/**
+ * Relates each proxy with a map of {@link PropSignal} instances, representing
+ * the proxy's accessed properties.
+ */
+const proxyToProps = new WeakMap();
+
+/**
+ * Returns the {@link PropSignal | `PropSignal`} instance associated with the
+ * specified prop in the passed proxy.
+ *
+ * The `PropSignal` instance is generated if it doesn't exist yet, using the
+ * `initial` parameter to initialize the internal signals.
+ *
+ * @param proxy   Proxy of a state object or array.
+ * @param key     The property key.
+ * @param initial Initial data for the `PropSignal` instance.
+ * @return The `PropSignal` instance.
+ */
+const getPropSignal = (proxy, key, initial) => {
+  if (!proxyToProps.has(proxy)) {
+    proxyToProps.set(proxy, new Map());
+  }
+  key = typeof key === 'number' ? `${key}` : key;
+  const props = proxyToProps.get(proxy);
+  if (!props.has(key)) {
+    const ns = getNamespaceFromProxy(proxy);
+    const prop = new PropSignal(proxy);
+    props.set(key, prop);
+    if (initial) {
+      const {
+        get,
+        value
+      } = initial;
+      if (get) {
+        prop.setGetter(get);
+      } else {
+        prop.setValue(shouldProxy(value) ? proxifyState(ns, value) : value);
+      }
+    }
+  }
+  return props.get(key);
+};
+
+/**
+ * Relates each proxied object (i.e., the original object) with a signal that
+ * tracks changes in the number of properties.
+ */
+const objToIterable = new WeakMap();
+
+/**
+ * When this flag is `true`, it avoids any signal subscription, overriding state
+ * props' "reactive" behavior.
+ */
+let peeking = false;
+
+/**
+ * Handlers for reactive objects and arrays in the state.
+ */
+const stateHandlers = {
+  get(target, key, receiver) {
+    /*
+     * The property should not be reactive for the following cases:
+     * 1. While using the `peek` function to read the property.
+     * 2. The property exists but comes from the Object or Array prototypes.
+     * 3. The property key is a known symbol.
+     */
+    if (peeking || !target.hasOwnProperty(key) && key in target || typeof key === 'symbol' && wellKnownSymbols.has(key)) {
+      return Reflect.get(target, key, receiver);
     }
 
-    // Check if the property is a synchronous function. If it is, set the
-    // default namespace. Synchronous functions always run in the proper scope,
-    // which is set by the Directives component.
+    // At this point, the property should be reactive.
+    const desc = Object.getOwnPropertyDescriptor(target, key);
+    const prop = getPropSignal(receiver, key, desc);
+    const result = prop.getComputed().value;
+
+    /*
+     * Check if the property is a synchronous function. If it is, set the
+     * default namespace. Synchronous functions always run in the proper scope,
+     * which is set by the Directives component.
+     */
     if (typeof result === 'function') {
+      const ns = getNamespaceFromProxy(receiver);
       return (...args) => {
         setNamespace(ns);
         try {
-          return result(...args);
+          return result.call(receiver, ...args);
         } finally {
           resetNamespace();
         }
       };
     }
+    return result;
+  },
+  set(target, key, value, receiver) {
+    setNamespace(getNamespaceFromProxy(receiver));
+    try {
+      return Reflect.set(target, key, value, receiver);
+    } finally {
+      resetNamespace();
+    }
+  },
+  defineProperty(target, key, desc) {
+    const isNew = !(key in target);
+    const result = Reflect.defineProperty(target, key, desc);
+    if (result) {
+      const receiver = getProxyFromObject(target);
+      const prop = getPropSignal(receiver, key);
+      const {
+        get,
+        value
+      } = desc;
+      if (get) {
+        prop.setGetter(get);
+      } else {
+        const ns = getNamespaceFromProxy(receiver);
+        prop.setValue(shouldProxy(value) ? proxifyState(ns, value) : value);
+      }
+      if (isNew && objToIterable.has(target)) {
+        objToIterable.get(target).value++;
+      }
 
-    // Check if the property is an object. If it is, proxyify it.
-    if (isObject(result)) {
-      return proxify(result, ns);
+      /*
+       * Modify the `length` property value only if the related
+       * `PropSignal` exists, which means that there are subscriptions to
+       * this property.
+       */
+      if (Array.isArray(target) && proxyToProps.get(receiver)?.has('length')) {
+        const length = getPropSignal(receiver, 'length');
+        length.setValue(target.length);
+      }
     }
     return result;
   },
-  // Prevents passing the current proxy as the receiver to the deepSignal.
-  set(target, key, value) {
-    return Reflect.set(target, key, value);
+  deleteProperty(target, key) {
+    const result = Reflect.deleteProperty(target, key);
+    if (result) {
+      const prop = getPropSignal(getProxyFromObject(target), key);
+      prop.setValue(undefined);
+      if (objToIterable.has(target)) {
+        objToIterable.get(target).value++;
+      }
+    }
+    return result;
+  },
+  ownKeys(target) {
+    if (!objToIterable.has(target)) {
+      objToIterable.set(target, signals_core_module_d(0));
+    }
+    /*
+     *This subscribes to the signal while preventing the minifier from
+     * deleting this line in production.
+     */
+    objToIterable._ = objToIterable.get(target).value;
+    return Reflect.ownKeys(target);
   }
 };
+
+/**
+ * Returns the proxy associated with the given state object, creating it if it
+ * does not exist.
+ *
+ * @param namespace The namespace that will be associated to this proxy.
+ * @param obj       The object to proxify.
+ *
+ * @throws Error if the object cannot be proxified. Use {@link shouldProxy} to
+ *         check if a proxy can be created for a specific object.
+ *
+ * @return The associated proxy.
+ */
+const proxifyState = (namespace, obj) => createProxy(namespace, obj, stateHandlers);
+
+/**
+ * Reads the value of the specified property without subscribing to it.
+ *
+ * @param obj The object to read the property from.
+ * @param key The property key.
+ * @return The property value.
+ */
+const peek = (obj, key) => {
+  peeking = true;
+  try {
+    return obj[key];
+  } finally {
+    peeking = false;
+  }
+};
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/proxies/store.js
+/**
+ * Internal dependencies
+ */
+
+/**
+ * External dependencies
+ */
+
+
+
+/**
+ * Identifies the store proxies handling the root objects of each store.
+ */
+const storeRoots = new WeakSet();
+
+/**
+ * Handlers for store proxies.
+ */
+const storeHandlers = {
+  get: (target, key, receiver) => {
+    const result = Reflect.get(target, key);
+    const ns = getNamespaceFromProxy(receiver);
+
+    /*
+     * Check if the proxy is the store root and no key with that name exist. In
+     * that case, return an empty object for the requested key.
+     */
+    if (typeof result === 'undefined' && storeRoots.has(receiver)) {
+      const obj = {};
+      Reflect.set(target, key, obj);
+      return proxifyStore(ns, obj, false);
+    }
+
+    /*
+     * Check if the property is a function. If it is, add the store
+     * namespace to the stack and wrap the function with the current scope.
+     * The `withScope` util handles both synchronous functions and generator
+     * functions.
+     */
+    if (typeof result === 'function') {
+      setNamespace(ns);
+      const scoped = withScope(result);
+      resetNamespace();
+      return scoped;
+    }
+
+    // Check if the property is an object. If it is, proxyify it.
+    if (isPlainObject(result) && shouldProxy(result)) {
+      return proxifyStore(ns, result, false);
+    }
+    return result;
+  }
+};
+
+/**
+ * Returns the proxy associated with the given store object, creating it if it
+ * does not exist.
+ *
+ * @param namespace The namespace that will be associated to this proxy.
+ * @param obj       The object to proxify.
+ *
+ * @param isRoot    Whether the passed object is the store root object.
+ * @throws Error if the object cannot be proxified. Use {@link shouldProxy} to
+ *         check if a proxy can be created for a specific object.
+ *
+ * @return The associated proxy.
+ */
+const proxifyStore = (namespace, obj, isRoot = true) => {
+  const proxy = createProxy(namespace, obj, storeHandlers);
+  if (proxy && isRoot) {
+    storeRoots.add(proxy);
+  }
+  return proxy;
+};
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/proxies/index.js
+/**
+ * Internal dependencies
+ */
+
+
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/store.js
+/**
+ * Internal dependencies
+ */
+
+/**
+ * External dependencies
+ */
+
+
+const stores = new Map();
+const rawStores = new Map();
+const storeLocks = new Map();
+const storeConfigs = new Map();
 
 /**
  * Get the defined config for the store with the passed namespace.
@@ -277,13 +1042,12 @@ function store(namespace, {
       storeLocks.set(namespace, lock);
     }
     const rawStore = {
-      state: deepsignal_module_g(isObject(state) ? state : {}),
+      state: proxifyState(namespace, isPlainObject(state) ? state : {}),
       ...block
     };
-    const proxiedStore = new Proxy(rawStore, handlers);
+    const proxifiedStore = proxifyStore(namespace, rawStore);
     rawStores.set(namespace, rawStore);
-    stores.set(namespace, proxiedStore);
-    proxyToNs.set(proxiedStore, namespace);
+    stores.set(namespace, proxifiedStore);
   } else {
     // Lock the store if it wasn't locked yet and the passed lock is
     // different from the universal unlock. If no lock is given, the store
@@ -307,7 +1071,7 @@ function store(namespace, {
   }
   return stores.get(namespace);
 }
-const parseInitialData = (dom = document) => {
+const parseServerData = (dom = document) => {
   var _dom$getElementById;
   const jsonDataScriptTag =
   // Preferred Script Module data passing form
@@ -321,17 +1085,16 @@ const parseInitialData = (dom = document) => {
   }
   return {};
 };
-const populateInitialData = data => {
-  if (isObject(data?.state)) {
+const populateServerData = data => {
+  if (isPlainObject(data?.state)) {
     Object.entries(data.state).forEach(([namespace, state]) => {
-      store(namespace, {
-        state
-      }, {
+      const st = store(namespace, {}, {
         lock: universalUnlock
       });
+      deepMerge(st.state, state, false);
     });
   }
-  if (isObject(data?.config)) {
+  if (isPlainObject(data?.config)) {
     Object.entries(data.config).forEach(([namespace, config]) => {
       storeConfigs.set(namespace, config);
     });
@@ -339,8 +1102,8 @@ const populateInitialData = data => {
 };
 
 // Parse and populate the initial state and config.
-const data = parseInitialData();
-populateInitialData(data);
+const data = parseServerData();
+populateServerData(data);
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/hooks.js
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -355,79 +1118,9 @@ populateInitialData(data);
  */
 
 
+
 // Main context.
 const context = F({});
-
-// Wrap the element props to prevent modifications.
-const immutableMap = new WeakMap();
-const immutableError = () => {
-  throw new Error('Please use `data-wp-bind` to modify the attributes of an element.');
-};
-const immutableHandlers = {
-  get(target, key, receiver) {
-    const value = Reflect.get(target, key, receiver);
-    return !!value && typeof value === 'object' ? deepImmutable(value) : value;
-  },
-  set: immutableError,
-  deleteProperty: immutableError
-};
-const deepImmutable = target => {
-  if (!immutableMap.has(target)) {
-    immutableMap.set(target, new Proxy(target, immutableHandlers));
-  }
-  return immutableMap.get(target);
-};
-
-// Store stacks for the current scope and the default namespaces and export APIs
-// to interact with them.
-const scopeStack = [];
-const namespaceStack = [];
-
-/**
- * Retrieves the context inherited by the element evaluating a function from the
- * store. The returned value depends on the element and the namespace where the
- * function calling `getContext()` exists.
- *
- * @param namespace Store namespace. By default, the namespace where the calling
- *                  function exists is used.
- * @return The context content.
- */
-const getContext = namespace => getScope()?.context[namespace || getNamespace()];
-
-/**
- * Retrieves a representation of the element where a function from the store
- * is being evalutated. Such representation is read-only, and contains a
- * reference to the DOM element, its props and a local reactive state.
- *
- * @return Element representation.
- */
-const getElement = () => {
-  if (!getScope()) {
-    throw Error('Cannot call `getElement()` outside getters and actions used by directives.');
-  }
-  const {
-    ref,
-    attributes
-  } = getScope();
-  return Object.freeze({
-    ref: ref.current,
-    attributes: deepImmutable(attributes)
-  });
-};
-const getScope = () => scopeStack.slice(-1)[0];
-const setScope = scope => {
-  scopeStack.push(scope);
-};
-const resetScope = () => {
-  scopeStack.pop();
-};
-const getNamespace = () => namespaceStack.slice(-1)[0];
-const setNamespace = namespace => {
-  namespaceStack.push(namespace);
-};
-const resetNamespace = () => {
-  namespaceStack.pop();
-};
 
 // WordPress Directives.
 const directiveCallbacks = {};
@@ -653,301 +1346,6 @@ l.vnode = vnode => {
     old(vnode);
   }
 };
-;// CONCATENATED MODULE: ./packages/interactivity/build-module/utils.js
-/**
- * External dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-/**
- * Executes a callback function after the next frame is rendered.
- *
- * @param callback The callback function to be executed.
- * @return A promise that resolves after the callback function is executed.
- */
-const afterNextFrame = callback => {
-  return new Promise(resolve => {
-    const done = () => {
-      clearTimeout(timeout);
-      window.cancelAnimationFrame(raf);
-      setTimeout(() => {
-        callback();
-        resolve();
-      });
-    };
-    const timeout = setTimeout(done, 100);
-    const raf = window.requestAnimationFrame(done);
-  });
-};
-
-/**
- * Returns a promise that resolves after yielding to main.
- *
- * @return Promise
- */
-const splitTask = () => {
-  return new Promise(resolve => {
-    // TODO: Use scheduler.yield() when available.
-    setTimeout(resolve, 0);
-  });
-};
-
-/**
- * Creates a Flusher object that can be used to flush computed values and notify listeners.
- *
- * Using the mangled properties:
- * this.c: this._callback
- * this.x: this._compute
- * https://github.com/preactjs/signals/blob/main/mangle.json
- *
- * @param compute The function that computes the value to be flushed.
- * @param notify  The function that notifies listeners when the value is flushed.
- * @return The Flusher object with `flush` and `dispose` properties.
- */
-function createFlusher(compute, notify) {
-  let flush = () => undefined;
-  const dispose = signals_core_module_E(function () {
-    flush = this.c.bind(this);
-    this.x = compute;
-    this.c = notify;
-    return compute();
-  });
-  return {
-    flush,
-    dispose
-  };
-}
-
-/**
- * Custom hook that executes a callback function whenever a signal is triggered.
- * Version of `useSignalEffect` with a `useEffect`-like execution. This hook
- * implementation comes from this PR, but we added short-cirtuiting to avoid
- * infinite loops: https://github.com/preactjs/signals/pull/290
- *
- * @param callback The callback function to be executed.
- */
-function utils_useSignalEffect(callback) {
-  hooks_module_p(() => {
-    let eff = null;
-    let isExecuting = false;
-    const notify = async () => {
-      if (eff && !isExecuting) {
-        isExecuting = true;
-        await afterNextFrame(eff.flush);
-        isExecuting = false;
-      }
-    };
-    eff = createFlusher(callback, notify);
-    return eff.dispose;
-  }, []);
-}
-
-/**
- * Returns the passed function wrapped with the current scope so it is
- * accessible whenever the function runs. This is primarily to make the scope
- * available inside hook callbacks.
- *
- * Asyncronous functions should use generators that yield promises instead of awaiting them.
- * See the documentation for details: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-interactivity/packages-interactivity-api-reference/#the-store
- *
- * @param func The passed function.
- * @return The wrapped function.
- */
-
-function withScope(func) {
-  const scope = getScope();
-  const ns = getNamespace();
-  if (func?.constructor?.name === 'GeneratorFunction') {
-    return async (...args) => {
-      const gen = func(...args);
-      let value;
-      let it;
-      while (true) {
-        setNamespace(ns);
-        setScope(scope);
-        try {
-          it = gen.next(value);
-        } finally {
-          resetNamespace();
-          resetScope();
-        }
-        try {
-          value = await it.value;
-        } catch (e) {
-          gen.throw(e);
-        }
-        if (it.done) {
-          break;
-        }
-      }
-      return value;
-    };
-  }
-  return (...args) => {
-    setNamespace(ns);
-    setScope(scope);
-    try {
-      return func(...args);
-    } finally {
-      resetNamespace();
-      resetScope();
-    }
-  };
-}
-
-/**
- * Accepts a function that contains imperative code which runs whenever any of
- * the accessed _reactive_ properties (e.g., values from the global state or the
- * context) is modified.
- *
- * This hook makes the element's scope available so functions like
- * `getElement()` and `getContext()` can be used inside the passed callback.
- *
- * @param callback The hook callback.
- */
-function useWatch(callback) {
-  utils_useSignalEffect(withScope(callback));
-}
-
-/**
- * Accepts a function that contains imperative code which runs only after the
- * element's first render, mainly useful for intialization logic.
- *
- * This hook makes the element's scope available so functions like
- * `getElement()` and `getContext()` can be used inside the passed callback.
- *
- * @param callback The hook callback.
- */
-function useInit(callback) {
-  hooks_module_p(withScope(callback), []);
-}
-
-/**
- * Accepts a function that contains imperative, possibly effectful code. The
- * effects run after browser paint, without blocking it.
- *
- * This hook is equivalent to Preact's `useEffect` and makes the element's scope
- * available so functions like `getElement()` and `getContext()` can be used
- * inside the passed callback.
- *
- * @param callback Imperative function that can return a cleanup
- *                 function.
- * @param inputs   If present, effect will only activate if the
- *                 values in the list change (using `===`).
- */
-function useEffect(callback, inputs) {
-  hooks_module_p(withScope(callback), inputs);
-}
-
-/**
- * Accepts a function that contains imperative, possibly effectful code. Use
- * this to read layout from the DOM and synchronously re-render.
- *
- * This hook is equivalent to Preact's `useLayoutEffect` and makes the element's
- * scope available so functions like `getElement()` and `getContext()` can be
- * used inside the passed callback.
- *
- * @param callback Imperative function that can return a cleanup
- *                 function.
- * @param inputs   If present, effect will only activate if the
- *                 values in the list change (using `===`).
- */
-function useLayoutEffect(callback, inputs) {
-  hooks_module_y(withScope(callback), inputs);
-}
-
-/**
- * Returns a memoized version of the callback that only changes if one of the
- * inputs has changed (using `===`).
- *
- * This hook is equivalent to Preact's `useCallback` and makes the element's
- * scope available so functions like `getElement()` and `getContext()` can be
- * used inside the passed callback.
- *
- * @param callback Callback function.
- * @param inputs   If present, the callback will only be updated if the
- *                 values in the list change (using `===`).
- *
- * @return The callback function.
- */
-function useCallback(callback, inputs) {
-  return hooks_module_T(withScope(callback), inputs);
-}
-
-/**
- * Pass a factory function and an array of inputs. `useMemo` will only recompute
- * the memoized value when one of the inputs has changed.
- *
- * This hook is equivalent to Preact's `useMemo` and makes the element's scope
- * available so functions like `getElement()` and `getContext()` can be used
- * inside the passed factory function.
- *
- * @param factory Factory function that returns that value for memoization.
- * @param inputs  If present, the factory will only be run to recompute if
- *                the values in the list change (using `===`).
- *
- * @return The memoized value.
- */
-function useMemo(factory, inputs) {
-  return hooks_module_F(withScope(factory), inputs);
-}
-
-/**
- * Creates a root fragment by replacing a node or an array of nodes in a parent element.
- * For wrapperless hydration.
- * See https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
- *
- * @param parent      The parent element where the nodes will be replaced.
- * @param replaceNode The node or array of nodes to replace in the parent element.
- * @return The created root fragment.
- */
-const createRootFragment = (parent, replaceNode) => {
-  replaceNode = [].concat(replaceNode);
-  const sibling = replaceNode[replaceNode.length - 1].nextSibling;
-  function insert(child, root) {
-    parent.insertBefore(child, root || sibling);
-  }
-  return parent.__k = {
-    nodeType: 1,
-    parentNode: parent,
-    firstChild: replaceNode[0],
-    childNodes: replaceNode,
-    insertBefore: insert,
-    appendChild: insert,
-    removeChild(c) {
-      parent.removeChild(c);
-    }
-  };
-};
-
-/**
- * Transforms a kebab-case string to camelCase.
- *
- * @param str The kebab-case string to transform to camelCase.
- * @return The transformed camelCase string.
- */
-function kebabToCamelCase(str) {
-  return str.replace(/^-+|-+$/g, '').toLowerCase().replace(/-([a-z])/g, function (_match, group1) {
-    return group1.toUpperCase();
-  });
-}
-const logged = new Set();
-
-/**
- * Shows a warning with `message` if environment is not `production`.
- *
- * Based on the `@wordpress/warning` package.
- *
- * @param message Message to show in the warning.
- */
-const warn = message => {
-  if (false) {}
-};
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/directives.js
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -957,11 +1355,15 @@ const warn = message => {
  */
 
 
+/**
+ * Internal dependencies
+ */
 
 
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -972,7 +1374,6 @@ const contextAssignedObjects = new WeakMap();
 const contextObjectToProxy = new WeakMap();
 const contextProxyToObject = new WeakMap();
 const contextObjectToFallback = new WeakMap();
-const isPlainObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
 const descriptor = Reflect.getOwnPropertyDescriptor;
 
 /**
@@ -1005,8 +1406,8 @@ const proxifyContext = (current, inherited = {}) => {
         }
 
         // Proxify plain objects that were not directly assigned.
-        if (k in target && !contextAssignedObjects.get(target)?.has(k) && isPlainObject(deepsignal_module_p(target, k))) {
-          return proxifyContext(currentProp, fallback[k]);
+        if (k in target && !contextAssignedObjects.get(target)?.has(k) && isPlainObject(currentProp)) {
+          return proxifyContext(currentProp);
         }
 
         // Return the stored proxy for `currentProp` when it exists.
@@ -1059,16 +1460,16 @@ const proxifyContext = (current, inherited = {}) => {
 };
 
 /**
- * Recursively update values within a deepSignal object.
+ * Recursively update values within a context object.
  *
- * @param target A deepSignal instance.
+ * @param target A context instance.
  * @param source Object with properties to update in `target`.
  */
-const updateSignals = (target, source) => {
+const updateContext = (target, source) => {
   for (const k in source) {
-    if (isPlainObject(deepsignal_module_p(target, k)) && isPlainObject(deepsignal_module_p(source, k))) {
-      updateSignals(target[`$${k}`].peek(), source[k]);
-    } else {
+    if (isPlainObject(peek(target, k)) && isPlainObject(source[k])) {
+      updateContext(peek(target, k), source[k]);
+    } else if (!(k in target)) {
       target[k] = source[k];
     }
   }
@@ -1175,9 +1576,7 @@ const getGlobalAsyncEventDirective = type => {
 };
 /* harmony default export */ const directives = (() => {
   // data-wp-context
-  directive('context',
-  // @ts-ignore-next-line
-  ({
+  directive('context', ({
     directives: {
       context
     },
@@ -1189,11 +1588,14 @@ const getGlobalAsyncEventDirective = type => {
     const {
       Provider
     } = inheritedContext;
-    const inheritedValue = hooks_module_q(inheritedContext);
-    const currentValue = hooks_module_(deepsignal_module_g({}));
     const defaultEntry = context.find(({
       suffix
     }) => suffix === 'default');
+    const inheritedValue = hooks_module_q(inheritedContext);
+    const ns = defaultEntry.namespace;
+    const currentValue = hooks_module_({
+      [ns]: proxifyState(ns, {})
+    });
 
     // No change should be made if `defaultEntry` does not exist.
     const contextStack = hooks_module_F(() => {
@@ -1206,11 +1608,10 @@ const getGlobalAsyncEventDirective = type => {
         if (!isPlainObject(value)) {
           warn(`The value of data-wp-context in "${namespace}" store must be a valid stringified JSON object.`);
         }
-        updateSignals(currentValue.current, {
-          [namespace]: deepClone(value)
-        });
+        updateContext(currentValue.current[namespace], deepClone(value));
+        currentValue.current[namespace] = proxifyContext(currentValue.current[namespace], inheritedValue[namespace]);
       }
-      return proxifyContext(currentValue.current, inheritedValue);
+      return currentValue.current;
     }, [defaultEntry, inheritedValue]);
     return y(Provider, {
       value: contextStack
@@ -1227,7 +1628,17 @@ const getGlobalAsyncEventDirective = type => {
     evaluate
   }) => {
     watch.forEach(entry => {
-      useWatch(() => evaluate(entry));
+      useWatch(() => {
+        let start;
+        if (true) {
+          if (false) {}
+        }
+        const result = evaluate(entry);
+        if (true) {
+          if (false) {}
+        }
+        return result;
+      });
     });
   });
 
@@ -1240,7 +1651,17 @@ const getGlobalAsyncEventDirective = type => {
   }) => {
     init.forEach(entry => {
       // TODO: Replace with useEffect to prevent unneeded scopes.
-      useInit(() => evaluate(entry));
+      useInit(() => {
+        let start;
+        if (true) {
+          if (false) {}
+        }
+        const result = evaluate(entry);
+        if (true) {
+          if (false) {}
+        }
+        return result;
+      });
     });
   });
 
@@ -1269,7 +1690,14 @@ const getGlobalAsyncEventDirective = type => {
           if (existingHandler) {
             existingHandler(event);
           }
+          let start;
+          if (true) {
+            if (false) {}
+          }
           evaluate(entry, event);
+          if (true) {
+            if (false) {}
+          }
         });
       };
     });
@@ -1533,10 +1961,11 @@ const getGlobalAsyncEventDirective = type => {
     const list = evaluate(entry);
     return list.map(item => {
       const itemProp = suffix === 'default' ? 'item' : kebabToCamelCase(suffix);
-      const itemContext = deepsignal_module_g({
-        [namespace]: {}
-      });
-      const mergedContext = proxifyContext(itemContext, inheritedValue);
+      const itemContext = proxifyContext(proxifyState(namespace, {}), inheritedValue[namespace]);
+      const mergedContext = {
+        ...inheritedValue,
+        [namespace]: itemContext
+      };
 
       // Set the item after proxifying the context.
       mergedContext[namespace][itemProp] = item;
@@ -1579,7 +2008,7 @@ const currentNamespace = () => {
   var _namespaces;
   return (_namespaces = namespaces[namespaces.length - 1]) !== null && _namespaces !== void 0 ? _namespaces : null;
 };
-const vdom_isObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
+const isObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
 
 // Regular expression for directive parsing.
 const directiveParser = new RegExp(`^data-${directivePrefix}-` +
@@ -1657,7 +2086,7 @@ function toVdom(root) {
           let value = (_regexResult$2 = regexResult?.[2]) !== null && _regexResult$2 !== void 0 ? _regexResult$2 : attributeValue;
           try {
             const parsedValue = JSON.parse(value);
-            value = vdom_isObject(parsedValue) ? parsedValue : value;
+            value = isObject(parsedValue) ? parsedValue : value;
           } catch {}
           if (attributeName === islandAttr) {
             island = true;
@@ -1778,10 +2207,11 @@ const init = async () => {
 
 
 
-
 /**
  * Internal dependencies
  */
+
+
 
 
 
@@ -1805,18 +2235,16 @@ const privateApis = lock => {
       h: y,
       cloneElement: E,
       render: q,
-      deepSignal: deepsignal_module_g,
-      parseInitialData: parseInitialData,
-      populateInitialData: populateInitialData,
+      proxifyState: proxifyState,
+      parseServerData: parseServerData,
+      populateServerData: populateServerData,
       batch: signals_core_module_r
     };
   }
   throw new Error('Forbidden access.');
 };
-document.addEventListener('DOMContentLoaded', async () => {
-  directives();
-  await init();
-});
+directives();
+init();
 var __webpack_exports__getConfig = __webpack_exports__.iE;
 var __webpack_exports__getContext = __webpack_exports__.fw;
 var __webpack_exports__getElement = __webpack_exports__.sb;

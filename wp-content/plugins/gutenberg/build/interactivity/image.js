@@ -204,7 +204,7 @@ const {
   },
   callbacks: {
     setOverlayStyles() {
-      if (!state.currentImage.imageRef) {
+      if (!state.overlayEnabled) {
         return;
       }
       let {

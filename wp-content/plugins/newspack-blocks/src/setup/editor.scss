@@ -1,4 +1,4 @@
-@use '~@wordpress/base-styles/colors';
+@use "~@wordpress/base-styles/colors";
 
 .editor-styles-wrapper {
 	.block-editor-block-patterns-list__item {
@@ -12,8 +12,16 @@
 		background-color: white;
 		border-radius: 2px;
 		box-shadow: inset 0 0 0 1px colors.$gray-900;
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu,
-			Cantarell, 'Helvetica Neue', sans-serif;
+		font-family:
+			-apple-system,
+			BlinkMacSystemFont,
+			"Segoe UI",
+			Roboto,
+			Oxygen-Sans,
+			Ubuntu,
+			Cantarell,
+			"Helvetica Neue",
+			sans-serif;
 		margin-top: 0;
 		padding: 1em;
 		p {
