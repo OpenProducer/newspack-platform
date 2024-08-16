@@ -66,48 +66,52 @@ const Order = ( {
 		}
 	};
 
-	useEffect( async () => {
-		setInFlight( true );
-		try {
-			setBidders( await apiFetch( { path: '/newspack-ads/v1/bidders' } ) );
-		} catch ( err ) {
-			setError( err );
-		}
-		if ( orderId ) {
+	useEffect( () => {
+		const setBiddersOnOrderId = async () => {
+			setInFlight( true );
+			try {
+				setBidders( await apiFetch( { path: '/newspack-ads/v1/bidders' } ) );
+			} catch ( err ) {
+				setError( err );
+			}
+			if ( orderId ) {
 			// Fetch order.
-			try {
-				const data = await apiFetch( {
-					path: `/newspack-ads/v1/bidding/gam/order?id=${ orderId }`,
-					method: 'GET',
-				} );
+				try {
+					const data = await apiFetch( {
+						path: `/newspack-ads/v1/bidding/gam/order?id=${ orderId }`,
+						method: 'GET',
+					} );
+					setConfig( {
+						orderId: data.order_id,
+						name: data.order_name,
+						revenueShare: data.revenue_share,
+						bidders: data.bidders,
+					} );
+					setOrder( data );
+				} catch ( err ) {
+					setError( err );
+				}
+				// Fetch LICA config.
+				try {
+					const licaConfig = await fetchLicaConfig( orderId );
+					const batches = Math.ceil( licaConfig.length / lica_batch_size );
+					setTotalBatches( batches );
+					setTotalSteps( 3 + batches );
+				} catch ( err ) {
+					setError( err );
+				}
+			} else {
 				setConfig( {
-					orderId: data.order_id,
-					name: data.order_name,
-					revenueShare: data.revenue_share,
-					bidders: data.bidders,
+					orderId: null,
+					name: defaultName,
+					revenueShare: 0,
+					bidders: [],
 				} );
-				setOrder( data );
-			} catch ( err ) {
-				setError( err );
 			}
-			// Fetch LICA config.
-			try {
-				const licaConfig = await fetchLicaConfig( orderId );
-				const batches = Math.ceil( licaConfig.length / lica_batch_size );
-				setTotalBatches( batches );
-				setTotalSteps( 3 + batches );
-			} catch ( err ) {
-				setError( err );
-			}
-		} else {
-			setConfig( {
-				orderId: null,
-				name: defaultName,
-				revenueShare: 0,
-				bidders: [],
-			} );
-		}
-		setInFlight( false );
+			setInFlight( false );
+		};
+
+		setBiddersOnOrderId();
 	}, [ orderId ] );
 
 	useEffect( () => {
@@ -174,14 +178,18 @@ const Order = ( {
 				setLastAttempt( false );
 				setOrder( null );
 				setConfig( { ...config, orderId: null } );
-				if ( typeof onUnrecoverable === 'function' ) await onUnrecoverable( pendingOrder, err );
+				if ( typeof onUnrecoverable === 'function' ) {
+					await onUnrecoverable( pendingOrder, err );
+				}
 			} else {
 				// Make it fail unrecoverably if it fails on next attempt.
 				if ( pendingOrder?.order_id ) {
 					setLastAttempt( true );
 				}
 				setError( err );
-				if ( typeof onError === 'function' ) await onError( err );
+				if ( typeof onError === 'function' ) {
+					await onError( err );
+				}
 			}
 		} finally {
 			setStep( 0 );
@@ -208,9 +216,13 @@ const Order = ( {
 			setOrder( data );
 		} catch ( err ) {
 			setError( err );
-			if ( typeof onError === 'function' ) await onError( err );
+			if ( typeof onError === 'function' ) {
+				await onError( err );
+			}
 		} finally {
-			if ( typeof onSuccess === 'function' ) await onSuccess( data );
+			if ( typeof onSuccess === 'function' ) {
+				await onSuccess( data );
+			}
 			setInFlight( false );
 		}
 	};

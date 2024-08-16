@@ -9,9 +9,9 @@
 
 namespace Newspack_Listings;
 
-use \WP_CLI;
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Importer_Utils;
+use WP_CLI;
+use Newspack_Listings\Core;
+use Newspack_Listings\Importer_Utils;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -276,7 +276,7 @@ final class Importer {
 
 		@ini_set( 'auto_detect_line_endings', true ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
-		if ( $file_path && ( $file_handle = fopen( $file_path, 'r' ) ) !== false ) { // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure, WordPress.WP.AlternativeFunctions.file_system_read_fopen
+		if ( $file_path && ( $file_handle = fopen( $file_path, 'r' ) ) !== false ) { // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure, WordPress.WP.AlternativeFunctions.file_system_read_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 			$data           = [];
 			$all_terms      = [];
 			$column_headers = fgetcsv( $file_handle, 0 );
@@ -433,7 +433,7 @@ final class Importer {
 
 		@ini_set( 'auto_detect_line_endings', true ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
-		if ( $file_path && ( $file_handle = fopen( $file_path, 'r' ) ) !== false ) { // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure, WordPress.WP.AlternativeFunctions.file_system_read_fopen
+		if ( $file_path && ( $file_handle = fopen( $file_path, 'r' ) ) !== false ) { // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure, WordPress.WP.AlternativeFunctions.file_system_read_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 			$data           = [];
 			$column_headers = fgetcsv( $file_handle, 0 );
 
@@ -465,6 +465,30 @@ final class Importer {
 	}
 
 	/**
+	 * Query a post by its title.
+	 *
+	 * @param string $title The post title.
+	 * @param string $post_type The post type to query.
+	 *
+	 * @return WP_Post|null The post object if found, null otherwise.
+	 */
+	public static function get_post_by_title( $title, $post_type = 'post' ) {
+		$posts = get_posts(
+			[
+				'post_type'      => $post_type,
+				'posts_per_page' => 1,
+				'title'          => $title,
+			]
+		);
+
+		if ( empty( $posts ) ) {
+			return null;
+		}
+
+		return reset( $posts );
+	}
+
+	/**
 	 * Given CSV row data, create a listing post.
 	 *
 	 * @param object $data Row data in associative array format, keyed by column header name.
@@ -475,9 +499,7 @@ final class Importer {
 		$field_map           = NEWSPACK_LISTINGS_IMPORT_MAPPING; // Defined in config file.
 		$separator           = NEWSPACK_LISTINGS_IMPORT_SEPARATOR; // Defined in config file.
 		$post_type_to_create = self::get_post_type_mapping( $data );
-		$existing_post       = function_exists( 'wpcom_vip_get_page_by_title' ) ?
-			wpcom_vip_get_page_by_title( $data['post_title'], OBJECT, $post_type_to_create ) :
-			get_page_by_title( $data['post_title'], OBJECT, $post_type_to_create ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.get_page_by_title_get_page_by_title
+		$existing_post       = self::get_post_by_title( $data['post_title'], $post_type_to_create );
 
 		if ( 'update' === self::$skip && $existing_post ) {
 			WP_CLI::log(
@@ -850,9 +872,7 @@ final class Importer {
 		foreach ( $images as $image ) {
 			$image_path     = self::$import_dir . '/images/' . $image;
 			$image_name     = basename( $image_path );
-			$existing_image = function_exists( 'wpcom_vip_get_page_by_title' ) ?
-				wpcom_vip_get_page_by_title( $image_name, OBJECT, 'attachment' ) :
-				get_page_by_title( $image_name, OBJECT, 'attachment' ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.get_page_by_title_get_page_by_title
+			$existing_image = self::get_post_by_title( $image_name, 'attachment' );
 
 			// If an attachment for this image already exists in the Media Library, use that.
 			if ( $existing_image ) {

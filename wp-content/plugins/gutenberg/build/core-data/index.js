@@ -504,6 +504,7 @@ __webpack_require__.d(__webpack_exports__, {
   __experimentalUseEntityRecords: () => (/* reexport */ __experimentalUseEntityRecords),
   __experimentalUseResourcePermissions: () => (/* reexport */ __experimentalUseResourcePermissions),
   fetchBlockPatterns: () => (/* reexport */ fetchBlockPatterns),
+  privateApis: () => (/* reexport */ privateApis),
   store: () => (/* binding */ store),
   useEntityBlockEditor: () => (/* reexport */ useEntityBlockEditor),
   useEntityId: () => (/* reexport */ useEntityId),
@@ -607,6 +608,8 @@ var private_selectors_namespaceObject = {};
 __webpack_require__.r(private_selectors_namespaceObject);
 __webpack_require__.d(private_selectors_namespaceObject, {
   getBlockPatternsForPostType: () => (getBlockPatternsForPostType),
+  getEntityRecordPermissions: () => (getEntityRecordPermissions),
+  getEntityRecordsPermissions: () => (getEntityRecordsPermissions),
   getNavigationFallbackId: () => (getNavigationFallbackId),
   getUndoManager: () => (getUndoManager)
 });
@@ -18860,7 +18863,7 @@ function __experimentalReceiveThemeGlobalStyleVariations(stylesheet, variations)
 /**
  * Returns an action object used in signalling that the index has been received.
  *
- * @deprecated since WP 5.9, this is not useful anymore, use the selector direclty.
+ * @deprecated since WP 5.9, this is not useful anymore, use the selector directly.
  *
  * @return {Object} Action object.
  */
@@ -22268,6 +22271,39 @@ const getBlockPatternsForPostType = (0,external_wp_data_namespaceObject.createRe
   postTypes
 }) => !postTypes || Array.isArray(postTypes) && postTypes.includes(postType)), () => [select(STORE_NAME).getBlockPatterns()]));
 
+/**
+ * Returns the entity records permissions for the given entity record ids.
+ */
+const getEntityRecordsPermissions = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)((state, kind, name, ids) => {
+  const normalizedIds = Array.isArray(ids) ? ids : [ids];
+  return normalizedIds.map(id => ({
+    delete: select(STORE_NAME).canUser('delete', {
+      kind,
+      name,
+      id
+    }),
+    update: select(STORE_NAME).canUser('update', {
+      kind,
+      name,
+      id
+    })
+  }));
+}, state => [state.userPermissions]));
+
+/**
+ * Returns the entity record permissions for the given entity record id.
+ *
+ * @param state Data state.
+ * @param kind  Entity kind.
+ * @param name  Entity name.
+ * @param id    Entity record id.
+ *
+ * @return The entity record permissions.
+ */
+function getEntityRecordPermissions(state, kind, name, id) {
+  return getEntityRecordsPermissions(state, kind, name, id)[0];
+}
+
 ;// CONCATENATED MODULE: ./node_modules/camel-case/dist.es2015/index.js
 
 
@@ -23551,7 +23587,7 @@ function createLocksActions() {
 
 ;// CONCATENATED MODULE: external ["wp","privateApis"]
 const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// CONCATENATED MODULE: ./packages/core-data/build-module/private-apis.js
+;// CONCATENATED MODULE: ./packages/core-data/build-module/lock-unlock.js
 /**
  * WordPress dependencies
  */
@@ -24074,9 +24110,11 @@ function __experimentalUseEntityRecord(kind, name, recordId, options) {
 
 
 
+
 /**
  * Internal dependencies
  */
+
 
 
 const EMPTY_ARRAY = [];
@@ -24169,6 +24207,42 @@ function __experimentalUseEntityRecords(kind, name, queryArgs, options) {
     since: '6.1'
   });
   return useEntityRecords(kind, name, queryArgs, options);
+}
+function useEntityRecordsWithPermissions(kind, name, queryArgs = {}, options = {
+  enabled: true
+}) {
+  const entityConfig = (0,external_wp_data_namespaceObject.useSelect)(select => select(store).getEntityConfig(kind, name), [kind, name]);
+  const {
+    records: data,
+    ...ret
+  } = useEntityRecords(kind, name, queryArgs, options);
+  const ids = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    var _data$map;
+    return (_data$map = data?.map(
+    // @ts-ignore
+    record => {
+      var _entityConfig$key;
+      return record[(_entityConfig$key = entityConfig?.key) !== null && _entityConfig$key !== void 0 ? _entityConfig$key : 'id'];
+    })) !== null && _data$map !== void 0 ? _data$map : [];
+  }, [data, entityConfig?.key]);
+  const permissions = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getEntityRecordsPermissions
+    } = unlock(select(store));
+    return getEntityRecordsPermissions(kind, name, ids);
+  }, [ids, kind, name]);
+  const dataWithPermissions = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    var _data$map2;
+    return (_data$map2 = data?.map((record, index) => ({
+      // @ts-ignore
+      ...record,
+      permissions: permissions[index]
+    }))) !== null && _data$map2 !== void 0 ? _data$map2 : [];
+  }, [data, permissions]);
+  return {
+    records: dataWithPermissions,
+    ...ret
+  };
 }
 
 ;// CONCATENATED MODULE: external ["wp","warning"]
@@ -24734,6 +24808,17 @@ function useEntityProp(kind, name, prop, _id) {
 
 
 
+;// CONCATENATED MODULE: ./packages/core-data/build-module/private-apis.js
+/**
+ * Internal dependencies
+ */
+
+
+const privateApis = {};
+lock(privateApis, {
+  useEntityRecordsWithPermissions: useEntityRecordsWithPermissions
+});
+
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/index.js
 /**
  * WordPress dependencies
@@ -24818,6 +24903,7 @@ const storeConfig = () => ({
 const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, storeConfig());
 unlock(store).registerPrivateSelectors(private_selectors_namespaceObject);
 (0,external_wp_data_namespaceObject.register)(store); // Register store after unlocking private selectors to allow resolvers to use them.
+
 
 
 

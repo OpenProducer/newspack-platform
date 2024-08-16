@@ -1,5 +1,5 @@
-@use '../../shared/sass/variables';
-@use '../../shared/sass/mixins';
+@use "../../shared/sass/variables";
+@use "../../shared/sass/mixins";
 
 .wp-block-newspack-blocks-author-profile {
 	@include mixins.media( mobile ) {

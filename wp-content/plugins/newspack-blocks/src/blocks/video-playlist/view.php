@@ -179,7 +179,7 @@ function newspack_blocks_get_video_playlist_html( $videos, $args = array() ) {
 	?>
 	<figure class='<?php echo esc_attr( implode( ' ', $classes ) ); ?>'>
 		<div class='wp-block-embed__wrapper'>
-			<iframe width='960' height='540' src='<?php echo esc_attr( $url ); ?>' frameborder='0' allowfullscreen allow="autoplay; encrypted-media"></iframe>
+			<iframe width='960' height='540' src='<?php echo esc_url( $url ); ?>' frameborder='0' allowfullscreen allow="autoplay; encrypted-media"></iframe>
 		</div>
 	</figure>
 	<?php

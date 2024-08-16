@@ -7,8 +7,8 @@
 
 namespace Newspack_Listings;
 
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Utils;
+use Newspack_Listings\Core;
+use Newspack_Listings\Utils;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -161,7 +161,7 @@ final class Featured {
 		// If there were more than 1 page of results, repeat with subsequent pages until all posts are processed.
 		if ( 1 < $number_of_pages ) {
 			while ( $current_page < $number_of_pages ) {
-				$current_page  ++;
+				$current_page++;
 				$args['paged'] = $current_page;
 				$results       = new \WP_Query( $args );
 

@@ -1,7 +1,7 @@
-@use '../../../shared/sass/variables';
-@use '../../../shared/sass/mixins';
+@use "../../../shared/sass/variables";
+@use "../../../shared/sass/mixins";
 
-body:not( [class*="block-theme"] ) div.wp-block-columns {
+body:not([class*="block-theme"]) div.wp-block-columns {
 	gap: 32px;
 
 	&.is-style-borders {
@@ -21,13 +21,13 @@ body:not( [class*="block-theme"] ) div.wp-block-columns {
 
 .wp-block-columns {
 	@include mixins.media( tablet ) {
-		&.is-style-first-col-to-second > .wp-block-column:nth-child( 2 ) {
+		&.is-style-first-col-to-second > .wp-block-column:nth-child(2) {
 			order: -1;
 		}
 
 		&.is-style-first-col-to-third {
-			> .wp-block-column:nth-child( 2 ),
-			> .wp-block-column:nth-child( 3 ) {
+			> .wp-block-column:nth-child(2),
+			> .wp-block-column:nth-child(3) {
 				order: -1;
 			}
 		}
@@ -41,7 +41,7 @@ body:not( [class*="block-theme"] ) div.wp-block-columns {
 				border: 0 solid variables.$color__border;
 				border-top-width: 1px;
 				bottom: -32px;
-				content: '';
+				content: "";
 				left: 0;
 				position: absolute;
 				right: 0;
@@ -70,8 +70,8 @@ body:not( [class*="block-theme"] ) div.wp-block-columns {
 				}
 			}
 
-			&.is-style-first-col-to-second > .wp-block-column:nth-child( 2 )::after,
-			&.is-style-first-col-to-third > .wp-block-column:nth-child( 3 )::after {
+			&.is-style-first-col-to-second > .wp-block-column:nth-child(2)::after,
+			&.is-style-first-col-to-third > .wp-block-column:nth-child(3)::after {
 				display: block;
 			}
 		}
@@ -98,8 +98,8 @@ body:not( [class*="block-theme"] ) div.wp-block-columns {
 				}
 			}
 
-			&.is-style-first-col-to-second > .wp-block-column:nth-child( 2 )::after,
-			&.is-style-first-col-to-third > .wp-block-column:nth-child( 3 )::after {
+			&.is-style-first-col-to-second > .wp-block-column:nth-child(2)::after,
+			&.is-style-first-col-to-third > .wp-block-column:nth-child(3)::after {
 				display: block;
 			}
 		}
@@ -114,8 +114,8 @@ body:not( [class*="block-theme"] ) div.wp-block-columns {
 /* stylelint-disable no-duplicate-selectors  */
 .wp-block-columns {
 	&.is-not-stacked-on-mobile,
-	&:not( .is-not-stacked-on-mobile ) {
-		> .wp-block-column:not( :first-child ) {
+	&:not(.is-not-stacked-on-mobile) {
+		> .wp-block-column:not(:first-child) {
 			margin-left: 0;
 		}
 	}
@@ -123,7 +123,7 @@ body:not( [class*="block-theme"] ) div.wp-block-columns {
 /* stylelint-enable */
 
 @media ( min-width: 600px ) and ( max-width: 781px ) {
-	.wp-block-columns:not( .is-not-stacked-on-mobile ) > .wp-block-column:not( :only-child ) {
+	.wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column:not(:only-child) {
 		flex-basis: unset !important;
 		flex-grow: 1;
 	}

@@ -93,11 +93,11 @@ const PlacementControl = ( {
 				! value.ad_unit || ! unit || supported
 					? null
 					: sprintf(
-							// Translators: Ad bidder name.
-							__( '%s does not support the selected ad unit sizes.', 'newspack' ),
-							bidder.name,
-							''
-					  );
+						// Translators: Ad bidder name.
+						__( '%s does not support the selected ad unit sizes.', 'newspack' ),
+						bidder.name,
+						''
+					);
 		} );
 		setBiddersErrors( errors );
 	}, [ providers, value.ad_unit ] );

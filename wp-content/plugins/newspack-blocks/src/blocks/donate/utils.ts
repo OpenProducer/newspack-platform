@@ -67,8 +67,11 @@ export const getFrequencyLabel = (
 			const frequencyString =
 				frequencySlug === 'once'
 					? frequencySlug
-					: // Translators: %s is the %s is the frequency.
-					  sprintf( __( 'per %s', 'newspack-blocks' ), frequencySlug );
+					: sprintf(
+						// Translators: %s is the %s is the frequency.
+						__( 'per %s', 'newspack-blocks' ),
+						frequencySlug
+					);
 
 			const formattedPrice =
 				'<span class="price-amount">' +
@@ -92,10 +95,10 @@ export const getFrequencyLabel = (
 				? ''
 				: __( ' once', 'newspack-blocks' )
 			: sprintf(
-					// Translators: %s is the frequency (e.g. per month, per year).
-					_x( ' per %s', 'per `Frequency`', 'newspack-blocks' ),
-					frequencySlug
-			  );
+				// Translators: %s is the frequency (e.g. per month, per year).
+				_x( ' per %s', 'per `Frequency`', 'newspack-blocks' ),
+				frequencySlug
+			);
 
 	return template
 		.replace( 'AMOUNT_PLACEHOLDER', formattedAmount )

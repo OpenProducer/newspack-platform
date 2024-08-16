@@ -7,9 +7,9 @@
 
 namespace Newspack_Listings\Self_Serve_Block;
 
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Products as Products;
-use \Newspack_Listings\Utils;
+use Newspack_Listings\Core;
+use Newspack_Listings\Products;
+use Newspack_Listings\Utils;
 
 /**
  * Dynamic block registration.

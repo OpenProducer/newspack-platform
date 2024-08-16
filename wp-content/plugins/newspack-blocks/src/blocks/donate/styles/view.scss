@@ -1,7 +1,7 @@
-@use '../../../shared/sass/colors';
-@use '../../../shared/sass/variables';
+@use "../../../shared/sass/colors";
+@use "../../../shared/sass/variables";
 
-@use './style-variations';
+@use "./style-variations";
 
 .wpbnbd {
 	&__button,
@@ -27,7 +27,7 @@
 	.woocommerce-Price-amount,
 	.price-amount {
 		display: inline;
-		font-family: var(--newspack-theme-font-heading, sans-serif );
+		font-family: var(--newspack-theme-font-heading, sans-serif);
 		font-size: 29px;
 		font-weight: 700;
 	}

@@ -611,18 +611,18 @@ class Newspack_Blocks {
 			'is_newspack_query'   => true,
 		);
 		if ( $specific_mode && $specific_posts ) {
-			$args['nopaging'] = true;
-			$args['post__in'] = $specific_posts;
-			$args['orderby']  = 'post__in';
+			$args['posts_per_page'] = count( $specific_posts );
+			$args['post__in']       = $specific_posts;
+			$args['orderby']        = 'post__in';
 		} else {
 			$args['posts_per_page'] = $posts_to_show;
 			if ( ! self::should_deduplicate_block( $attributes ) ) {
-				$args['post__not_in'] = [ get_the_ID() ];
+				$args['post__not_in'] = [ get_the_ID() ]; // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
 			} else {
 				if ( count( $newspack_blocks_all_specific_posts_ids ) ) {
-					$args['post__not_in'] = $newspack_blocks_all_specific_posts_ids;
+					$args['post__not_in'] = $newspack_blocks_all_specific_posts_ids; // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
 				}
-				$args['post__not_in'] = array_merge(
+				$args['post__not_in'] = array_merge( // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
 					$args['post__not_in'] ?? [],
 					array_keys( $newspack_blocks_post_id ),
 					get_the_ID() ? [ get_the_ID() ] : []

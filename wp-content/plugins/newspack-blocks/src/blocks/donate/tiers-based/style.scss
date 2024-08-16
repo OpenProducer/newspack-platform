@@ -1,5 +1,5 @@
-@use '../../../shared/sass/colors';
-@use '../../../shared/sass/variables';
+@use "../../../shared/sass/colors";
+@use "../../../shared/sass/variables";
 
 .wpbnbd--tiers-based {
 	.wpbnbd {
@@ -100,7 +100,7 @@
 			&__amount {
 				margin-bottom: 16px;
 			}
-			button[type='submit'],
+			button[type="submit"],
 			.submit-button {
 				border-radius: 3px;
 				border: 2px solid;
@@ -164,10 +164,10 @@
 	}
 
 	&.wpbnbd--tier-style-list {
-		.wpbnbd__tiers {			
+		.wpbnbd__tiers {
 			&__options {
 				display: grid;
-				gap: var( --newspack-ui-spacer-2, 12px );
+				gap: var(--newspack-ui-spacer-2, 12px);
 				margin: 0 !important;
 				overflow: hidden;
 

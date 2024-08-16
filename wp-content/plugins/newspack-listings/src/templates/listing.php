@@ -6,8 +6,8 @@
  * @package WordPress
  */
 
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Utils;
+use Newspack_Listings\Core;
+use Newspack_Listings\Utils;
 
 call_user_func(
 	function( $data ) {
@@ -77,7 +77,7 @@ call_user_func(
 								echo esc_html( ', ' );
 							}
 
-							$category_index ++;
+							$category_index++;
 						}
 						?>
 					</div>
@@ -180,7 +180,7 @@ call_user_func(
 									echo esc_html( ', ' );
 								}
 
-								$tag_index ++;
+								$tag_index++;
 							}
 							?>
 						</p>

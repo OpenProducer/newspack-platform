@@ -1,3 +1,76 @@
+# [4.0.0](https://github.com/Automattic/newspack-blocks/compare/v3.6.1...v4.0.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* update dependencies to support `@wordpress/scripts` ([#1774](https://github.com/Automattic/newspack-blocks/issues/1774)) ([fb239f5](https://github.com/Automattic/newspack-blocks/commit/fb239f5684f1693da4d5f0d2c6544cf75ea9c141))
+
+
+### BREAKING CHANGES
+
+* Updates dependencies for compatibility with WordPress 6.6.*, but breaks JS in WordPress 6.5.* and below. If you need support for WP 6.5.*, please do not upgrade to this new major version.
+
+* chore: refactor for dependency updates in newspack-scripts
+
+* chore: proxy stylelint from newspack-scripts
+
+* refactor: use proxy script for eslint and stylelint scripts
+
+* fix: peer dependency conflicct
+
+* fix: peer dependency conflicts
+
+* fix: config conflicts
+
+* fix: remove proxy scripts
+
+* chore: test commitlint script
+
+* fix: make everything work good
+
+* fix: stylelint scripts
+
+* fix: start command
+
+* chore: update newspack-scripts to v5.6.0-alpha.3
+
+* chore: remove ajv dependency
+
+* chore: clear TS errors
+
+* fix: reformat scss
+
+* chore: update newspack-scripts to v5.6.0-alpha.4
+
+* fix: add missing Prettier config files
+
+* chore: update newspack-scripts to 5.6.0-alpha.5
+
+* chore: update newspack-scripts to v5.6.0-alpha.7
+
+* fix: add fix:js script; temporarily remove format:js
+
+* chore: update newspack-scripts to v5.6.0-alpha.8
+
+* fix: composer.lock
+
+* chore: restore format:js script
+
+* chore: add NPM scripts for PHP
+
+* chore: fixes for PHPCS errors
+
+* chore: update newspack-components to v3.0.0
+
+* chore: bump newspack-scripts to v5.5.2
+
+## [3.6.1](https://github.com/Automattic/newspack-blocks/compare/v3.6.0...v3.6.1) (2024-08-12)
+
+
+### Bug Fixes
+
+* **wc-subs-limiting:** handle not-logged-in user ([#1816](https://github.com/Automattic/newspack-blocks/issues/1816)) ([d85a818](https://github.com/Automattic/newspack-blocks/commit/d85a8188515cf1e90256b7ecb2b3dbdb5e83ec10))
+
 # [3.6.0](https://github.com/Automattic/newspack-blocks/compare/v3.5.0...v3.6.0) (2024-07-30)
 
 

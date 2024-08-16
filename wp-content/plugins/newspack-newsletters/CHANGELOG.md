@@ -1,3 +1,62 @@
+# [3.0.0](https://github.com/Automattic/newspack-newsletters/compare/v2.21.2...v3.0.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* check for valid ID before post type check ([#1610](https://github.com/Automattic/newspack-newsletters/issues/1610)) ([96e21bc](https://github.com/Automattic/newspack-newsletters/commit/96e21bce7cb5beba199144a473fabb6c4169eb10))
+* update dependencies to support `@wordpress/scripts` ([#1530](https://github.com/Automattic/newspack-newsletters/issues/1530)) ([2d732f2](https://github.com/Automattic/newspack-newsletters/commit/2d732f21b192ad9151167f93a543c755cd2fa4a1))
+
+
+### Features
+
+* **campaign-monitor:** deprecation warning and environment constant for CM ([#1579](https://github.com/Automattic/newspack-newsletters/issues/1579)) ([e0374ac](https://github.com/Automattic/newspack-newsletters/commit/e0374ac025bcbb9cdcf3f706c45e4ce31a64ee81))
+
+
+### BREAKING CHANGES
+
+* Updates dependencies for compatibility with WordPress 6.6.*, but breaks JS in WordPress 6.5.* and below. If you need support for WP 6.5.*, please do not upgrade to this new major version.
+
+* chore: refactor for updating dependencies in newspack-scripts
+
+* refactor: use proxy script for eslint and stylelint scripts
+
+* fix: peer dependency conflicts
+
+* chore: update newspack-scripts to v5.6.0-alpha.3
+
+* chore: remove ajv dependency
+
+* chore: update lint-staged
+
+* chore: add .stylelintrc.js
+
+* chore: update newspack-scripts to v5.6.0-alpha.4
+
+* fix: package-lock.json
+
+* fix: reformat SCSS
+
+* fix: add missing Prettier config files
+
+* chore: update newspack-scripts to 5.6.0-alpha.5
+
+* chore: update newspack-scripts to v5.6.0-alpha.7
+
+* chore: update newspack-scripts to v5.6.0-alpha.8
+
+* chore: add NPM scripts for PHP
+
+* chore: update newspack-components to v3.0.0
+
+* chore: bump newspack-scripts to v5.5.2
+
+## [2.21.2](https://github.com/Automattic/newspack-newsletters/compare/v2.21.1...v2.21.2) (2024-08-12)
+
+
+### Bug Fixes
+
+* **data-report:** handle missing days in the data report ([#1591](https://github.com/Automattic/newspack-newsletters/issues/1591)) ([fa87cea](https://github.com/Automattic/newspack-newsletters/commit/fa87cea9fd0136b9dd33581ee77c6a8aa0b4377d))
+
 ## [2.21.1](https://github.com/Automattic/newspack-newsletters/compare/v2.21.0...v2.21.1) (2024-08-01)
 
 

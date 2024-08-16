@@ -1,4 +1,4 @@
-@use '../shared/sass/colors';
+@use "../shared/sass/colors";
 
 /* stylelint-disable-next-line */
 .newspack-modal-checkout {
@@ -23,7 +23,7 @@
 			margin: 0;
 			> span {
 				color: inherit;
-				font-size: clamp( 1.75rem, 1.75rem + ( ( 1vw - 0.48rem ) * 0.962 ), 2.25rem );
+				font-size: clamp(1.75rem, 1.75rem + ((1vw - 0.48rem) * 0.962), 2.25rem);
 				font-weight: bold;
 				line-height: 1.434;
 			}
@@ -65,12 +65,12 @@
 			justify-content: space-between;
 		}
 		p {
-			font-size: clamp( 0.75rem, 0.75rem + ( ( 1vw - 0.48rem ) * 0.481 ), 1rem );
+			font-size: clamp(0.75rem, 0.75rem + ((1vw - 0.48rem) * 0.481), 1rem);
 			margin: 16px 0 0;
 		}
 		.edit-billing-link {
 			color: colors.$color__text-light;
-			font-size: clamp( 0.75rem, 0.75rem + ( ( 1vw - 0.48rem ) * 0.481 ), 1rem );
+			font-size: clamp(0.75rem, 0.75rem + ((1vw - 0.48rem) * 0.481), 1rem);
 			display: inline-block;
 			text-decoration: underline;
 			&:focus,
@@ -109,8 +109,8 @@
 		#payment button#place_order {
 			margin-bottom: 0;
 		}
-		.checkout-billing button[type='submit'],
-		button[name='woocommerce_checkout_place_order'],
+		.checkout-billing button[type="submit"],
+		button[name="woocommerce_checkout_place_order"],
 		button.modal-continue {
 			display: block;
 			width: 100%;
@@ -118,7 +118,7 @@
 	}
 	.form-row-first,
 	.form-row-last {
-		width: calc( 50% - 8px );
+		width: calc(50% - 8px);
 	}
 	.form-row-wide + .form-row-first,
 	.form-row-wide + .form-row-first + .form-row-last,
@@ -151,7 +151,7 @@
 			display: flex;
 			margin: 8px 0;
 			align-items: flex-start;
-			input[type='checkbox'] {
+			input[type="checkbox"] {
 				margin-right: 8px;
 			}
 		}
@@ -163,13 +163,13 @@
 		border-radius: 3px;
 		margin: 0;
 	}
-	.woocommerce-notices-wrapper:not( :empty ) {
+	.woocommerce-notices-wrapper:not(:empty) {
 		margin-bottom: 32px;
 	}
 	.woocommerce-privacy-policy-text {
 		color: colors.$color__text-light;
 		p {
-			font-size: clamp( 0.75rem, 0.75rem + ( ( 1vw - 0.48rem ) * 0.481 ), 1rem );
+			font-size: clamp(0.75rem, 0.75rem + ((1vw - 0.48rem) * 0.481), 1rem);
 			margin: 0;
 		}
 	}
@@ -186,17 +186,17 @@
 			animation-delay: 1s;
 			animation-fill-mode: forwards;
 			background-color: colors.$color__success;
-			background-image: url( "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z' fill='white'/%3E%3C/svg%3E" );
+			background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z" fill="white"/%3E%3C/svg%3E');
 			background-position: 50% 50%;
 			background-repeat: no-repeat;
 			background-size: 24px;
 			border-radius: 50%;
-			content: '';
+			content: "";
 			display: block;
 			height: 40px;
 			margin-bottom: 16px;
 			padding: 8px;
-			transform: scale( 0 );
+			transform: scale(0);
 			width: 40px;
 		}
 		+ .woocommerce-info {
@@ -224,7 +224,7 @@
 			border: 2px solid colors.$color__background-body;
 			border-top-color: colors.$color__text-light;
 			border-radius: 50%;
-			content: '';
+			content: "";
 			display: block;
 			height: 25px;
 			width: 25px;
@@ -257,14 +257,14 @@
 		padding: 12px;
 		cursor: pointer;
 	}
-	input[type='checkbox'] {
+	input[type="checkbox"] {
 		padding: 10px;
 		margin-top: 18px;
 		margin-right: 19px;
 		margin-left: 20px;
 		border-radius: 5px;
 	}
-	input[type='submit'],
+	input[type="submit"],
 	&__button {
 		margin-top: 25px;
 		width: 100%;
@@ -275,12 +275,12 @@
 
 @keyframes bounce {
 	0% {
-		transform: scale( 0 );
+		transform: scale(0);
 	}
 	90% {
-		transform: scale( 1.4 );
+		transform: scale(1.4);
 	}
 	100% {
-		transform: scale( 1 );
+		transform: scale(1);
 	}
 }

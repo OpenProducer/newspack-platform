@@ -6,9 +6,9 @@
  * @package WordPress
  */
 
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Utils;
-use \Newspack_Listings\Settings;
+use Newspack_Listings\Core;
+use Newspack_Listings\Utils;
+use Newspack_Listings\Settings;
 
 call_user_func(
 	function( $data ) {

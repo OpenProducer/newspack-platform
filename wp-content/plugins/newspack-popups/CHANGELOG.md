@@ -1,3 +1,57 @@
+# [3.0.0](https://github.com/Automattic/newspack-popups/compare/v2.34.1...v3.0.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* update dependencies to support `@wordpress/scripts` ([#1316](https://github.com/Automattic/newspack-popups/issues/1316)) ([a541907](https://github.com/Automattic/newspack-popups/commit/a541907351b03368df1c1810ae8ed6abae8d4987))
+
+
+### BREAKING CHANGES
+
+* Updates dependencies for compatibility with WordPress 6.6.*, but breaks JS in WordPress 6.5.* and below. If you need support for WP 6.5.*, please do not upgrade to this new major version.
+
+* chore: refactor for updating dependencies in newspack-scripts
+
+* chore: update NPM version to lts/*
+
+* chore: update package-lock.json
+
+* refactor: use proxy script for eslint and stylelint scripts
+
+* fix: peer dependencies
+
+* deps: newspack-scripts@5.6.0-alpha.1; remove ajv
+
+* deps: update lint-staged (4066519d9c0f43aacb6961efa403994a4d8dd7a2)
+
+* chore: update newspack-scripts to v5.6.0-alpha.3
+
+* chore: add .stylelintrc.js
+
+* fix: remove outdated "main" entrypoint from package.json
+
+* chore: update newspack-scripts to v5.6.0-alpha.4
+
+* fix: add missing Prettier config files
+
+* chore: update newspack-scripts to 5.6.0-alpha.5
+
+* fix: stylelint scripts with newspack-scripts@5.6.0-alpha.6
+
+* fix: stylelint version with newspack-scripts@5.6.0-alpha.7
+
+* fix: reformat SCSS
+
+* chore: update newspack-scripts to v5.6.0-alpha.8
+
+* chore: update .blog URL
+
+* chore: add NPM scripts for PHP
+
+* chore: update newspack-components to v3.0.0
+
+* chore: bump newspack-scripts to v5.5.2
+
 ## [2.34.1](https://github.com/Automattic/newspack-popups/compare/v2.34.0...v2.34.1) (2024-07-12)
 
 

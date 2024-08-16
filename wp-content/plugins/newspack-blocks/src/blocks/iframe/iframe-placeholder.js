@@ -141,10 +141,9 @@ const IframePlaceholder = ( {
 				),
 				newspack_blocks_data?.iframe_can_upload_archives || false
 					? __(
-							'embed from a URL, or upload a .zip archive containing HTML assets',
-							'newspack-blocks'
-					  )
-					: __( 'or embed from a URL', 'newspack-blocks' )
+						'embed from a URL, or upload a .zip archive containing HTML assets',
+						'newspack-blocks'
+					) : __( 'or embed from a URL', 'newspack-blocks' )
 			) }
 		>
 			{ error && (

@@ -1488,7 +1488,7 @@ function InterfaceSkeleton({
             ariaLabel: mergedLabels.secondarySidebar,
             as: external_wp_components_namespaceObject.__unstableMotion.div,
             initial: "closed",
-            animate: isMobileViewport ? 'mobileOpen' : 'open',
+            animate: "open",
             exit: "closed",
             variants: {
               open: {
@@ -1496,19 +1496,25 @@ function InterfaceSkeleton({
               },
               closed: {
                 width: 0
-              },
-              mobileOpen: {
-                width: '100vw'
               }
             },
             transition: defaultTransition,
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__unstableMotion.div, {
               style: {
                 position: 'absolute',
                 width: isMobileViewport ? '100vw' : 'fit-content',
                 height: '100%',
-                right: 0
+                left: 0
               },
+              variants: {
+                open: {
+                  x: 0
+                },
+                closed: {
+                  x: '-100%'
+                }
+              },
+              transition: defaultTransition,
               children: [secondarySidebarResizeListener, secondarySidebar]
             })
           })

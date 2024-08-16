@@ -1,3 +1,63 @@
+## [3.0.1](https://github.com/Automattic/newspack-ads/compare/v3.0.0...v3.0.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* **gam:** add 1x1 size to all viewports ([#888](https://github.com/Automattic/newspack-ads/issues/888)) ([a99494a](https://github.com/Automattic/newspack-ads/commit/a99494a854855a3fd1388d7821db7aeef549adb9))
+
+# [3.0.0](https://github.com/Automattic/newspack-ads/compare/v2.1.0...v3.0.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* update dependencies to support `@wordpress/scripts` ([#860](https://github.com/Automattic/newspack-ads/issues/860)) ([8e9e839](https://github.com/Automattic/newspack-ads/commit/8e9e8390c4d4995122318cfe5bd306514900b12c))
+
+
+### Features
+
+* **GAM:** add Complianz consent integration to ad targeting ([#876](https://github.com/Automattic/newspack-ads/issues/876)) ([a95aebe](https://github.com/Automattic/newspack-ads/commit/a95aebe6a6582d0e97c2f2245d1d3e3b7d15dabc))
+
+
+### BREAKING CHANGES
+
+* Updates dependencies for compatibility with WordPress 6.6.*, but breaks JS in WordPress 6.5.* and below. If you need support for WP 6.5.*, please do not upgrade to this new major version.
+
+* fix: update deprecated v202305 GAM API to v202405
+
+* fix: update composer platform dependency
+
+* fix: less specific PHP version
+
+* fix: lower PHP version
+
+* chore: refactor for newspack-scripts dependency updates
+
+* chore: changes for linting errors
+
+* refactor: use proxy script for eslint and stylelint scripts
+
+* chore: update newspack-scripts to v5.6.0-alpha.3
+
+* chore: add .stylelintrc.js
+
+* chore: update newspack-scripts to v5.6.0-alpha.4
+
+* fix: add missing Prettier config files
+
+* fix: reformat SCSS
+
+* chore: update newspack-scripts to 5.6.0-alpha.5
+
+* chore: update newspack-scripts to v5.6.0-alpha.7
+
+* chore: update newspack-scripts to v5.6.0-alpha.8
+
+* chore: add NPM scripts for PHP
+
+* chore: update newspack-components to v3.0.0
+
+* chore: bump newspack-scripts to v5.5.2
+
 # [2.1.0](https://github.com/Automattic/newspack-ads/compare/v2.0.2...v2.1.0) (2024-07-01)
 
 

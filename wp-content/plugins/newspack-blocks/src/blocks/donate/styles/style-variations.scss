@@ -1,6 +1,6 @@
-@use '../../../shared/sass/colors';
-@use '../../../shared/sass/mixins';
-@use '../../../shared/sass/variables';
+@use "../../../shared/sass/colors";
+@use "../../../shared/sass/mixins";
+@use "../../../shared/sass/variables";
 
 /* Default Style */
 
@@ -33,10 +33,10 @@
 	}
 
 	&.wpbnbd-frequencies {
-		&--2 .tab-container .freq-label:nth-of-type( 2 ) {
+		&--2 .tab-container .freq-label:nth-of-type(2) {
 			border-left-width: 1px;
 		}
-		&--3 .tab-container .freq-label:nth-of-type( 2 ) {
+		&--3 .tab-container .freq-label:nth-of-type(2) {
 			border-left-width: 1px;
 			border-right-width: 1px;
 		}
@@ -56,7 +56,7 @@
 	.money-input {
 		max-width: 100%;
 
-		input[type='number'] {
+		input[type="number"] {
 			max-width: 100%;
 			width: 100%;
 		}
@@ -123,17 +123,17 @@
 	.tab-container {
 		.freq-label {
 			border-width: 1px;
-			padding: calc( 0.57rem + 1px ) 0.5rem;
+			padding: calc(0.57rem + 1px) 0.5rem;
 			position: relative;
 			@include mixins.media( mobile ) {
-				padding: calc( 0.57rem + 1px ) 0.76rem;
+				padding: calc(0.57rem + 1px) 0.76rem;
 			}
 
 			&.wpbnbd__button--active {
 				color: colors.$color__text-main;
 				&::after {
 					box-sizing: content-box;
-					content: '';
+					content: "";
 					display: block;
 					inset: 0.19rem;
 					position: absolute;
@@ -147,14 +147,14 @@
 	}
 
 	// Show/hide the tab content.
-	.frequencies input[type='radio']:checked ~ .tiers {
+	.frequencies input[type="radio"]:checked ~ .tiers {
 		display: grid;
 		grid-gap: 0.28rem;
-		grid-template-columns: repeat( 2, 1fr );
+		grid-template-columns: repeat(2, 1fr);
 		margin: 1.12rem;
 
 		@include mixins.media( mobile ) {
-			grid-template-columns: repeat( 4, 1fr );
+			grid-template-columns: repeat(4, 1fr);
 			grid-gap: 0.56rem;
 		}
 	}
@@ -164,13 +164,13 @@
 			border-top-left-radius: 0;
 			border-top-right-radius: 0;
 			margin: 0 -1px -1px;
-			width: calc( 100% + 2px );
+			width: calc(100% + 2px);
 		}
 	}
 
 	@include mixins.media( mobile ) {
-		&.wpbnbd--nyp-disabled .frequencies input[type='radio']:checked ~ .tiers {
-			grid-template-columns: repeat( 3, 1fr );
+		&.wpbnbd--nyp-disabled .frequencies input[type="radio"]:checked ~ .tiers {
+			grid-template-columns: repeat(3, 1fr);
 		}
 	}
 }
@@ -191,7 +191,7 @@
 	.money-input {
 		max-width: 100%;
 
-		input[type='number'] {
+		input[type="number"] {
 			max-width: 100%;
 			width: 100%;
 		}
@@ -214,7 +214,7 @@
 				flex-basis: 100%;
 				&::after {
 					position: absolute;
-					content: '';
+					content: "";
 					display: block;
 					height: 1px;
 					background: variables.$color__border;
@@ -257,7 +257,7 @@
 					border: 1px solid variables.$color__border;
 					border-radius: 100%;
 					box-shadow: inset 0 0 0 3px white;
-					content: '';
+					content: "";
 					display: block;
 					height: 20px;
 					padding: 3px;
@@ -269,7 +269,7 @@
 				}
 			}
 
-			input[type='radio']:checked + .tier-select-label {
+			input[type="radio"]:checked + .tier-select-label {
 				background: none;
 				color: inherit;
 
@@ -311,7 +311,7 @@
 	}
 
 	.frequency {
-		input[type='radio']:checked {
+		input[type="radio"]:checked {
 			~ .tiers {
 				display: flex;
 				flex-wrap: wrap;
@@ -322,19 +322,19 @@
 				@include mixins.media( mobile ) {
 					display: grid;
 					grid-gap: 0.56rem;
-					grid-template-columns: repeat( 4, 1fr );
+					grid-template-columns: repeat(4, 1fr);
 				}
 			}
 		}
 	}
-	button[type='submit'] {
+	button[type="submit"] {
 		margin: 0 auto;
 		min-width: 50%;
 	}
 
 	@include mixins.media( mobile ) {
-		&.wpbnbd--nyp-disabled .frequency input[type='radio']:checked ~ .tiers {
-			grid-template-columns: repeat( 3, 1fr );
+		&.wpbnbd--nyp-disabled .frequency input[type="radio"]:checked ~ .tiers {
+			grid-template-columns: repeat(3, 1fr);
 		}
 	}
 }
@@ -344,76 +344,75 @@
 .wpbnbd.is-style-modern {
 	background: none;
 	border: none;
-	font-family: var( --newspack-ui-font-family, system-ui, sans-serif );
-	font-size: var( --newspack-ui-font-size-s, 16px );
-	line-height: var( --newspack-ui-line-height-s, 1.5 );
+	font-family: var(--newspack-ui-font-family, system-ui, sans-serif);
+	font-size: var(--newspack-ui-font-size-s, 16px);
+	line-height: var(--newspack-ui-line-height-s, 1.5);
 	position: relative;
 
 	.thanks {
-		background: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
-		border: 1px solid var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 );
+		background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+		border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
 		border-bottom: 0;
 		border-top: 0;
-		color: var( --newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60 );
-		font-size: var( --newspack-ui-font-size-s, 16px );
-		line-height: var( --newspack-ui-line-height-s, 1.5 );
+		color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+		font-size: var(--newspack-ui-font-size-s, 16px);
+		line-height: var(--newspack-ui-line-height-s, 1.5);
 		margin: 0;
-		padding: 0 var( --newspack-ui-spacer-5, 24px ) var( --newspack-ui-spacer-5, 24px );
+		padding: 0 var(--newspack-ui-spacer-5, 24px) var(--newspack-ui-spacer-5, 24px);
 	}
 
 	.money-input {
-		border-color: var( --newspack-ui-color-input-border, colors.$newspack-ui-color-neutral-40 );
-		color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
-		font-size: var( --newspack-ui-font-size-s, 16px );
-		left: var( --newspack-ui-spacer-5, 24px );
-		line-height: var( --newspack-ui-line-height-s, 1.5 );
+		border-color: var(--newspack-ui-color-input-border, colors.$newspack-ui-color-neutral-40);
+		color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+		font-size: var(--newspack-ui-font-size-s, 16px);
+		left: var(--newspack-ui-spacer-5, 24px);
+		line-height: var(--newspack-ui-line-height-s, 1.5);
 		max-width: 100%;
 		overflow: hidden;
-		right: var( --newspack-ui-spacer-5, 24px );
+		right: var(--newspack-ui-spacer-5, 24px);
 		transition: border-color 125ms ease-in-out, outline 125ms ease-in-out;
 
 		&:focus-within {
-			border-color: var( --newspack-ui-color-input-border-focus, colors.$newspack-ui-color-neutral-90 );
-			outline: 2px solid var( --newspack-ui-color-input-border-focus, colors.$newspack-ui-color-neutral-90 );
+			border-color: var(--newspack-ui-color-input-border-focus, colors.$newspack-ui-color-neutral-90);
+			outline: 2px solid var(--newspack-ui-color-input-border-focus, colors.$newspack-ui-color-neutral-90);
 			outline-offset: -1px;
 		}
 
 		.currency {
-			background: var( --newspack-ui-color-neutral-5, colors.$newspack-ui-color-neutral-5 );
-			font-size: var( --newspack-ui-font-size-xs, 14px );
+			background: var(--newspack-ui-color-neutral-5, colors.$newspack-ui-color-neutral-5);
+			font-size: var(--newspack-ui-font-size-xs, 14px);
 			font-weight: 600;
-			line-height: var( --newspack-ui-spacer-9, 48px );
+			line-height: var(--newspack-ui-spacer-9, 48px);
 			margin: 0;
 			padding: 0;
 			text-align: center;
-			width: var( --newspack-ui-spacer-9, 48px );
+			width: var(--newspack-ui-spacer-9, 48px);
 		}
 
-		input[type='number'] {
+		input[type="number"] {
 			font-family: inherit;
 			font-size: inherit;
 			font-weight: 400;
 			line-height: inherit;
 			max-width: 100%;
-			padding: calc( var( --newspack-ui-spacer-2, 12px ) - 1px );
+			padding: calc(var(--newspack-ui-spacer-2, 12px) - 1px);
 			width: 100%;
 		}
 	}
 
 	.tab-container .freq-label,
 	.wpbnbd__tiers__selection {
-		background: var( --newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10 );
+		background: var(--newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10);
 		border: none;
 	}
 
 	.wpbnbd__tiers .wpbnbd__button--active,
 	// Frequency-based version.
 	.tab-container .freq-label.wpbnbd__button--active::after {
-		background: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
-		border: 1px solid var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 );
-		border-radius: var( --newspack-ui-border-radius-xs, 3px );
+		background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+		border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+		border-radius: var(--newspack-ui-border-radius-xs, 3px);
 	}
-
 
 
 	.wpbnbd__button {
@@ -425,40 +424,40 @@
 
 	.frequencies {
 		font-family: inherit;
-		font-size: var( --newspack-ui-font-size-s, 16px );
-		line-height: var( --newspack-ui-line-height-s, 1.5 );
+		font-size: var(--newspack-ui-font-size-s, 16px);
+		line-height: var(--newspack-ui-line-height-s, 1.5);
 
-		input[type='radio']:checked ~ .tiers {
-			background: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
-			border: 1px solid var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 );
+		input[type="radio"]:checked ~ .tiers {
+			background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+			border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
 			border-bottom: 0;
-			border-radius: var( --newspack-ui-border-radius-m, 6px ) var( --newspack-ui-border-radius-m, 6px ) 0 0;
+			border-radius: var(--newspack-ui-border-radius-m, 6px) var(--newspack-ui-border-radius-m, 6px) 0 0;
 			display: grid;
-			gap: calc( var( --newspack-ui-spacer-base, 8px ) / 2 );
-			grid-template-columns: repeat( 2, 1fr );
-			margin: var( --newspack-ui-spacer-2, 12px ) 0 0;
-			padding: var( --newspack-ui-spacer-5, 24px );
+			gap: calc(var(--newspack-ui-spacer-base, 8px) / 2);
+			grid-template-columns: repeat(2, 1fr);
+			margin: var(--newspack-ui-spacer-2, 12px) 0 0;
+			padding: var(--newspack-ui-spacer-5, 24px);
 		}
 	}
 
-	&.wpbnbd--nyp-disabled .frequencies input[type='radio']:checked ~ .tiers {
-		grid-template-columns: repeat( 3, 1fr );
+	&.wpbnbd--nyp-disabled .frequencies input[type="radio"]:checked ~ .tiers {
+		grid-template-columns: repeat(3, 1fr);
 	}
 
 	// Layout: Frequency
 	&.wpbnbd--frequency-based {
 		form {
 			&::after {
-				background: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
-				border: 1px solid var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 );
-				border-radius: 0 0 var( --newspack-ui-border-radius-m, 6px ) var( --newspack-ui-border-radius-m, 6px );
+				background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+				border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+				border-radius: 0 0 var(--newspack-ui-border-radius-m, 6px) var(--newspack-ui-border-radius-m, 6px);
 				border-top: 0;
 				bottom: 0;
 				box-sizing: border-box;
-				content: '';
+				content: "";
 				display: block;
-				font-size: var( --newspack-ui-font-size-s, 16px );
-				height: calc( var( --newspack-ui-spacer-5, 24px ) + var( --newspack-ui-spacer-2, 12px ) + 1.5em + var( --newspack-ui-spacer-2, 12px ) + var( --newspack-ui-spacer-5, 24px ) );
+				font-size: var(--newspack-ui-font-size-s, 16px);
+				height: calc(var(--newspack-ui-spacer-5, 24px) + var(--newspack-ui-spacer-2, 12px) + 1.5em + var(--newspack-ui-spacer-2, 12px) + var(--newspack-ui-spacer-5, 24px));
 				position: absolute;
 				width: 100%;
 				z-index: 0;
@@ -466,21 +465,21 @@
 		}
 
 		.tab-container {
-			background: var( --newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10 );
-			border-radius: var( --newspack-ui-border-radius-m, 6px );
-			gap: calc( var( --newspack-ui-spacer-base, 8px ) / 2 );
+			background: var(--newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10);
+			border-radius: var(--newspack-ui-border-radius-m, 6px);
+			gap: calc(var(--newspack-ui-spacer-base, 8px) / 2);
 			margin-left: auto;
 			margin-right: auto;
-			padding: calc( var( --newspack-ui-spacer-base, 8px ) / 2 );
+			padding: calc(var(--newspack-ui-spacer-base, 8px) / 2);
 			width: min-content;
 
-			&:has( :nth-child( 3 ) ) {
+			&:has(:nth-child(3)) {
 				max-width: 300px;
 				width: 100%;
 
 				.freq-label {
-					padding-left: calc( var( --newspack-ui-spacer-2, 12px ) - 1px );
-					padding-right: calc( var( --newspack-ui-spacer-2, 12px ) - 1px );
+					padding-left: calc(var(--newspack-ui-spacer-2, 12px) - 1px);
+					padding-right: calc(var(--newspack-ui-spacer-2, 12px) - 1px);
 					width: 100%;
 				}
 			}
@@ -488,17 +487,17 @@
 			.freq-label {
 				border: 1px solid transparent;
 				background: transparent;
-				border-radius: var( --newspack-ui-border-radius-xs, 3px );
-				color: var( --newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60 );
-				font-size: var( --newspack-ui-font-size-xs, 14px );
-				line-height: var( --newspack-ui-spacer-5, 24px );
-				padding: calc( var( --newspack-ui-spacer-base, 8px ) - 1px ) calc( var( --newspack-ui-spacer-3, 16px ) - 1px );
+				border-radius: var(--newspack-ui-border-radius-xs, 3px);
+				color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+				font-size: var(--newspack-ui-font-size-xs, 14px);
+				line-height: var(--newspack-ui-spacer-5, 24px);
+				padding: calc(var(--newspack-ui-spacer-base, 8px) - 1px) calc(var(--newspack-ui-spacer-3, 16px) - 1px);
 				position: relative;
 				transition: all 125ms ease-in-out;
 				width: auto;
 
 				&:hover {
-					color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+					color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 				}
 
 				&:focus {
@@ -507,26 +506,26 @@
 				}
 
 				&:focus-visible {
-					outline: 2px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+					outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 					outline-offset: 1px;
 				}
 
 				&.wpbnbd__button--active {
-					background: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
-					border-color: var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 );
-					color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+					background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+					border-color: var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+					color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 				}
 			}
 		}
 
 		&.untiered {
 			.input-container {
-				background: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
-				border: 1px solid var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 );
+				background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+				border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
 				border-bottom: 0;
-				border-radius: var( --newspack-ui-border-radius-m, 6px ) var( --newspack-ui-border-radius-m, 6px ) 0 0;
-				margin: var( --newspack-ui-spacer-2, 12px ) 0 0;
-				padding: var( --newspack-ui-spacer-5, 24px );
+				border-radius: var(--newspack-ui-border-radius-m, 6px) var(--newspack-ui-border-radius-m, 6px) 0 0;
+				margin: var(--newspack-ui-spacer-2, 12px) 0 0;
+				padding: var(--newspack-ui-spacer-5, 24px);
 			}
 
 			.money-input {
@@ -536,89 +535,89 @@
 
 			.donate-label {
 				display: block;
-				margin-bottom: var( --newspack-ui-spacer-base, 8px );
+				margin-bottom: var(--newspack-ui-spacer-base, 8px);
 			}
 		}
 
 		&.tiered {
-			font-size: var( --newspack-ui-font-size-s, 16px );
-			line-height: var( --newspack-ui-line-height-s, 1.5 );
+			font-size: var(--newspack-ui-font-size-s, 16px);
+			line-height: var(--newspack-ui-line-height-s, 1.5);
 
 			.tiers {
-				color: var( --newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60 );
+				color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
 				position: relative;
 
 				.tier-label {
-					background: var( --newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10 );
+					background: var(--newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10);
 					border: 0;
-					border-radius: var( --newspack-ui-border-radius-s, 4px );
+					border-radius: var(--newspack-ui-border-radius-s, 4px);
 					color: inherit;
 					font-family: inherit;
 					font-weight: 600;
 					margin: 0;
-					padding: var( --newspack-ui-spacer-2, 12px ) var( --newspack-ui-spacer-5, 24px );
+					padding: var(--newspack-ui-spacer-2, 12px) var(--newspack-ui-spacer-5, 24px);
 					text-align: center;
 					transition: background 125ms ease-in-out, color 125ms ease-in-out;
 
 					&:hover {
-						color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+						color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 					}
 				}
 
 				.odl {
-					bottom: calc( var( --newspack-ui-spacer-5, 24px ) + var( --newspack-ui-spacer-9, 48px ) + var( --newspack-ui-spacer-base, 8px ) );
-					color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+					bottom: calc(var(--newspack-ui-spacer-5, 24px) + var(--newspack-ui-spacer-9, 48px) + var(--newspack-ui-spacer-base, 8px));
+					color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 					font-weight: 600;
 					left: 0;
-					padding: 0 var( --newspack-ui-spacer-5, 24px );
+					padding: 0 var(--newspack-ui-spacer-5, 24px);
 				}
 
 				input.other-input {
 					&:checked {
 						+ label {
-							margin-bottom: calc( var( --newspack-ui-spacer-5, 24px ) + var( --newspack-ui-spacer-5, 24px ) + var( --newspack-ui-spacer-base, 8px ) + var( --newspack-ui-spacer-9, 48px ) );
+							margin-bottom: calc(var(--newspack-ui-spacer-5, 24px) + var(--newspack-ui-spacer-5, 24px) + var(--newspack-ui-spacer-base, 8px) + var(--newspack-ui-spacer-9, 48px));
 						}
 					}
 				}
 
-				input[type='radio']:focus,
-				input[type='radio']:checked {
+				input[type="radio"]:focus,
+				input[type="radio"]:checked {
 					+ .tier-label {
-						background: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
-						color: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
+						background: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+						color: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
 						outline: none;
 					}
 				}
 
-				input[type='radio']:focus-visible + .tier-label {
-					outline: 2px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+				input[type="radio"]:focus-visible + .tier-label {
+					outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 					outline-offset: 1px;
 				}
 			}
 
 			.money-input {
-				bottom: var( --newspack-ui-spacer-5, 24px );
-				left: var( --newspack-ui-spacer-5, 24px );
-				right: var( --newspack-ui-spacer-5, 24px );
+				bottom: var(--newspack-ui-spacer-5, 24px);
+				left: var(--newspack-ui-spacer-5, 24px);
+				right: var(--newspack-ui-spacer-5, 24px);
 			}
 		}
 
 		button,
 		.submit-button {
 			font-family: inherit;
-			font-size: var( --newspack-ui-font-size-s, 16px );
+			font-size: var(--newspack-ui-font-size-s, 16px);
 			font-weight: 600;
-			line-height: var( --newspack-ui-line-height-s, 1.5 );
+			line-height: var(--newspack-ui-line-height-s, 1.5);
 			margin: 0;
 		}
 
 		button[type="submit"],
 		.submit-button {
-			margin: 0 calc( 1px + var( --newspack-ui-spacer-5, 24px ) ) calc( 1px + var( --newspack-ui-spacer-5, 24px ) );
+			margin: 0 calc(1px + var(--newspack-ui-spacer-5, 24px)) calc(1px + var(--newspack-ui-spacer-5, 24px));
 			position: relative;
-			padding: var( --newspack-ui-spacer-2, 12px ) var( --newspack-ui-spacer-5, 24px );
+			padding: var(--newspack-ui-spacer-2, 12px) var(--newspack-ui-spacer-5, 24px);
 			transition: opacity 125ms ease-in-out, outline 125ms ease-in-out;
-			width: calc( 100% - 2 * var( --newspack-ui-spacer-5, 24px ) - 2px );
+			width: calc(100% - 2 * var(--newspack-ui-spacer-5, 24px) - 2px);
 			z-index: 1;
 
 			&:disabled {
@@ -630,7 +629,7 @@
 			}
 
 			&:focus {
-				outline: 2px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+				outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 				outline-offset: 1px;
 			}
 		}
@@ -638,41 +637,41 @@
 
 	// Layout: Tiers
 	&.wpbnbd--tiers-based {
-		color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+		color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 
 		.wpbnbd__tiers {
 			&__selection {
-				border-radius: var( --newspack-ui-border-radius-m, 6px );
-				gap: calc( var( --newspack-ui-spacer-base, 8px ) / 2 );
-				margin: 0 auto var( --newspack-ui-spacer-2, 12px );
-				padding: calc( var( --newspack-ui-spacer-base, 8px ) / 2 );
+				border-radius: var(--newspack-ui-border-radius-m, 6px);
+				gap: calc(var(--newspack-ui-spacer-base, 8px) / 2);
+				margin: 0 auto var(--newspack-ui-spacer-2, 12px);
+				padding: calc(var(--newspack-ui-spacer-base, 8px) / 2);
 				width: min-content;
 
-				&:has( :nth-child( 3 ) ) {
+				&:has(:nth-child(3)) {
 					max-width: 300px;
 					width: 100%;
 
 					> .wpbnbd__button {
-						padding-left: calc( var( --newspack-ui-spacer-2, 12px ) - 1px );
-						padding-right: calc( var( --newspack-ui-spacer-2, 12px ) - 1px );
+						padding-left: calc(var(--newspack-ui-spacer-2, 12px) - 1px);
+						padding-right: calc(var(--newspack-ui-spacer-2, 12px) - 1px);
 						width: 100%;
 					}
 				}
 
 				.wpbnbd__button {
-					border-radius: var( --newspack-ui-border-radius-xs, 3px );
-					color: var( --newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60 );
-					font-size: var( --newspack-ui-font-size-xs, 14px );
+					border-radius: var(--newspack-ui-border-radius-xs, 3px);
+					color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+					font-size: var(--newspack-ui-font-size-xs, 14px);
 					font-weight: 600;
-					line-height: var( --newspack-ui-spacer-5, 24px );
+					line-height: var(--newspack-ui-spacer-5, 24px);
 					overflow: hidden;
-					padding: calc( var( --newspack-ui-spacer-base, 8px ) - 1px ) calc( var( --newspack-ui-spacer-3, 16px ) - 1px );
+					padding: calc(var(--newspack-ui-spacer-base, 8px) - 1px) calc(var(--newspack-ui-spacer-3, 16px) - 1px);
 					transition: all 125ms ease-in-out;
 					width: auto;
 
 					&:hover,
 					&--active {
-						color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+						color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 					}
 
 					&:focus {
@@ -680,7 +679,7 @@
 					}
 
 					&:focus-visible {
-						outline: 2px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+						outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 						outline-offset: 1px;
 					}
 				}
@@ -689,35 +688,35 @@
 			&__heading {
 				align-self: flex-start;
 				font-family: inherit;
-				font-size: var( --newspack-ui-font-size-m, clamp( 1.125rem,0.929rem + 0.402vw,1.25rem ) );
+				font-size: var(--newspack-ui-font-size-m, clamp(1.125rem, 0.929rem + 0.402vw, 1.25rem));
 				font-weight: 700;
-				line-height: var( --newspack-ui-line-height-m, 1.6 );
+				line-height: var(--newspack-ui-line-height-m, 1.6);
 			}
 
 			&__options {
-				margin-left: calc( var( --newspack-ui-spacer-2, 12px ) / -2 );
-				margin-right: calc( var( --newspack-ui-spacer-2, 12px ) / -2 );
+				margin-left: calc(var(--newspack-ui-spacer-2, 12px) / -2);
+				margin-right: calc(var(--newspack-ui-spacer-2, 12px) / -2);
 			}
 
 			&__tier {
-				background: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
-				border-color: var( --newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30 );
-				border-radius: var( --newspack-ui-border-radius-m, 6px );
-				margin-left: calc( var( --newspack-ui-spacer-2, 12px ) / 2 );
-				margin-right: calc( var( --newspack-ui-spacer-2, 12px ) / 2 );
-				padding: var( --newspack-ui-spacer-5, 24px );
+				background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+				border-color: var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+				border-radius: var(--newspack-ui-border-radius-m, 6px);
+				margin-left: calc(var(--newspack-ui-spacer-2, 12px) / 2);
+				margin-right: calc(var(--newspack-ui-spacer-2, 12px) / 2);
+				padding: var(--newspack-ui-spacer-5, 24px);
 
 				&--recommended {
-					border: 1px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
-					outline: 1px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+					border: 1px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					outline: 1px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 					outline-offset: -2px;
 				}
 
 				&:not( #{&}--recommended ) {
-					button[type='submit'],
+					button[type="submit"],
 					.submit-button {
 						&:hover {
-							background: var( --newspack-ui-color-neutral-5, colors.$newspack-ui-color-neutral-5 ) !important;
+							background: var(--newspack-ui-color-neutral-5, colors.$newspack-ui-color-neutral-5) !important;
 							opacity: 1;
 						}
 					}
@@ -727,55 +726,55 @@
 			&__top {
 				align-items: center;
 				flex-wrap: wrap-reverse;
-				gap: calc( var( --newspack-ui-spacer-base, 8px ) / 2 ) var( --newspack-ui-spacer-3, 16px );
-				margin-bottom: calc( var( --newspack-ui-spacer-base, 8px ) / 2 );
+				gap: calc(var(--newspack-ui-spacer-base, 8px) / 2) var(--newspack-ui-spacer-3, 16px);
+				margin-bottom: calc(var(--newspack-ui-spacer-base, 8px) / 2);
 			}
 
 			&__recommend-label {
-				background: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
-				border-radius: var( --newspack-ui-border-radius-2xs, 2px );
-				color: var( --newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0 );
+				background: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+				border-radius: var(--newspack-ui-border-radius-2xs, 2px);
+				color: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
 				font-family: inherit;
-				font-size: var( --newspack-ui-font-size-xs, 14px );
+				font-size: var(--newspack-ui-font-size-xs, 14px);
 				font-weight: 600;
 				height: auto;
-				line-height: var( --newspack-ui-line-height-xs, 1.4286 );
-				padding: calc( var( --newspack-ui-spacer-base, 8px ) * 0.25 ) calc( var( --newspack-ui-spacer-base, 8px ) * 0.75 );
+				line-height: var(--newspack-ui-line-height-xs, 1.4286);
+				padding: calc(var(--newspack-ui-spacer-base, 8px) * 0.25) calc(var(--newspack-ui-spacer-base, 8px) * 0.75);
 				word-break: break-word;
 			}
 
 			&__amount {
-				margin-bottom: var( --newspack-ui-spacer-5, 24px );
+				margin-bottom: var(--newspack-ui-spacer-5, 24px);
 
 				&__value {
-					color: var( --newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60 );
-					font-size: var( --newspack-ui-font-size-2xs, 12px );
-					line-height: var( --newspack-ui-line-height-2xs, 1.3333 );
+					color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+					font-size: var(--newspack-ui-font-size-2xs, 12px);
+					line-height: var(--newspack-ui-line-height-2xs, 1.3333);
 				}
 
 				.amount {
-					color: var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+					color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 					font-family: inherit;
-					font-size: var( --newspack-ui-font-size-xl, clamp( 1.375rem, 0.394rem + 2.008vw, 2rem ) );
-					line-height: var( --newspack-ui-line-height-xl, 1.375 );
+					font-size: var(--newspack-ui-font-size-xl, clamp(1.375rem, 0.394rem + 2.008vw, 2rem));
+					line-height: var(--newspack-ui-line-height-xl, 1.375);
 				}
 			}
 
 			&__description {
-				font-size: var( --newspack-ui-font-size-xs, 14px );
-				line-height: var( --newspack-ui-line-height-xs, 1.4286 );
-				margin: var( --newspack-ui-spacer-5, 24px ) 0 0;
+				font-size: var(--newspack-ui-font-size-xs, 14px);
+				line-height: var(--newspack-ui-line-height-xs, 1.4286);
+				margin: var(--newspack-ui-spacer-5, 24px) 0 0;
 			}
 
-			button[type='submit'],
+			button[type="submit"],
 			.submit-button {
 				border-width: 1px;
 				font-family: inherit;
-				font-size: var( --newspack-ui-font-size-s, 16px );
+				font-size: var(--newspack-ui-font-size-s, 16px);
 				font-weight: 600;
-				line-height: var( --newspack-ui-line-height-s, 1.5 );
+				line-height: var(--newspack-ui-line-height-s, 1.5);
 				margin: auto 0 0;
-				padding: calc( var( --newspack-ui-spacer-2, 12px ) - 1px ) calc( var( --newspack-ui-spacer-5, 24px ) - 1px );
+				padding: calc(var(--newspack-ui-spacer-2, 12px) - 1px) calc(var(--newspack-ui-spacer-5, 24px) - 1px);
 				transition: background 125ms ease-in-out, border-color 125ms ease-in-out, opacity 125ms ease-in-out, outline 125ms ease-in-out;
 
 				&:hover {
@@ -783,7 +782,7 @@
 				}
 
 				&:focus {
-					outline: 2px solid var( --newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90 );
+					outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 					outline-offset: 1px;
 				}
 			}

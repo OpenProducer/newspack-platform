@@ -133,6 +133,7 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 											name={ `donation_value_${ frequencySlug }` }
 											defaultChecked={ true }
 										/>
+										{ /* eslint-disable jsx-a11y/label-has-associated-control */ }
 										<label
 											className="tier-select-label tier-label"
 											htmlFor={ `newspack-${ frequencySlug }-${ uid }-untiered-input` }

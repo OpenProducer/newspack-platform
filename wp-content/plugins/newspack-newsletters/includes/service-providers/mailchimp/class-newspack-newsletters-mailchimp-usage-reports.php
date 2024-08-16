@@ -74,16 +74,22 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 			$report = new Newspack_Newsletters_Service_Provider_Usage_Report();
 			$report->set_date( gmdate( 'Y-m-d', strtotime( "-$day_index day" ) ) );
 
+			$report_updated = false;
 			foreach ( $lists['lists'] as $list_data ) {
 				$report->total_contacts += $list_data['stats']['member_count'];
-				$list_activity_for_day = $list_data['activity'][ $day_index ];
-				$report->emails_sent += $list_activity_for_day['emails_sent'];
-				$report->opens += $list_activity_for_day['unique_opens'];
-				$report->clicks += $list_activity_for_day['recipient_clicks'];
-				$report->subscribes += $list_activity_for_day['subs'];
-				$report->unsubscribes += $list_activity_for_day['unsubs'];
+				if ( isset( $list_data['activity'][ $day_index ] ) ) {
+					$list_activity_for_day = $list_data['activity'][ $day_index ];
+					$report->emails_sent += $list_activity_for_day['emails_sent'];
+					$report->opens += $list_activity_for_day['unique_opens'];
+					$report->clicks += $list_activity_for_day['recipient_clicks'];
+					$report->subscribes += $list_activity_for_day['subs'];
+					$report->unsubscribes += $list_activity_for_day['unsubs'];
+					$report_updated = true;
+				}
 			}
-			$reports[] = $report;
+			if ( $report_updated ) {
+				$reports[] = $report;
+			}
 		}
 
 		return $reports;
