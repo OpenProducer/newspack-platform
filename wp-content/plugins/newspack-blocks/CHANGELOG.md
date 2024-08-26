@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/Automattic/newspack-blocks/compare/v4.0.0...v4.0.1) (2024-08-21)
+
+
+### Bug Fixes
+
+* **homepage-posts:** exclude current post only on posts and pages ([3259da8](https://github.com/Automattic/newspack-blocks/commit/3259da85cba03818b3f94901a1c74d85279c443e))
+
 # [4.0.0](https://github.com/Automattic/newspack-blocks/compare/v3.6.1...v4.0.0) (2024-08-13)
 
 

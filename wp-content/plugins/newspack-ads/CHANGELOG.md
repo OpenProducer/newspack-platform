@@ -1,3 +1,10 @@
+## [3.0.2](https://github.com/Automattic/newspack-ads/compare/v3.0.1...v3.0.2) (2024-08-19)
+
+
+### Bug Fixes
+
+* add 1x1 size to all viewports for ad units that supports it ([#891](https://github.com/Automattic/newspack-ads/issues/891)) ([0b26934](https://github.com/Automattic/newspack-ads/commit/0b2693481ca54e1e7ecf19aeac0c4e85f639062a))
+
 ## [3.0.1](https://github.com/Automattic/newspack-ads/compare/v3.0.0...v3.0.1) (2024-08-15)
 
 

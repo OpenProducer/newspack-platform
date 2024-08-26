@@ -622,10 +622,11 @@ class Newspack_Blocks {
 				if ( count( $newspack_blocks_all_specific_posts_ids ) ) {
 					$args['post__not_in'] = $newspack_blocks_all_specific_posts_ids; // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
 				}
+				$current_post_id = get_the_ID();
 				$args['post__not_in'] = array_merge( // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
 					$args['post__not_in'] ?? [],
 					array_keys( $newspack_blocks_post_id ),
-					get_the_ID() ? [ get_the_ID() ] : []
+					is_singular() && $current_post_id ? [ $current_post_id ] : []
 				);
 			}
 			if ( $categories && count( $categories ) ) {

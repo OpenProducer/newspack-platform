@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/Automattic/newspack-newsletters/compare/v3.0.0...v3.0.1) (2024-08-19)
+
+
+### Bug Fixes
+
+* **mailchimp:** selecting mailchimp segments with groups ([#1600](https://github.com/Automattic/newspack-newsletters/issues/1600)) ([a698aaa](https://github.com/Automattic/newspack-newsletters/commit/a698aaa2940a425416324fd7f0266eedc22dc2b1))
+
 # [3.0.0](https://github.com/Automattic/newspack-newsletters/compare/v2.21.2...v3.0.0) (2024-08-13)
 
 
