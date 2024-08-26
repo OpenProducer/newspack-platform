@@ -931,7 +931,7 @@ final class Modal_Checkout {
 			if ( empty( $signup_data['lists'] ) ) {
 				return new \WP_Error( 'newspack_no_lists_selected', __( 'No lists selected.', 'newspack-blocks' ) );
 			} else {
-				$result = \Newspack_Newsletters_Subscription::add_contact(
+				$result = \Newspack_Newsletters_Contacts::subscribe(
 					[
 						'email'    => $signup_data['email'],
 						'metadata' => [
@@ -939,7 +939,9 @@ final class Modal_Checkout {
 							'newsletters_subscription_method' => 'post-checkout',
 						],
 					],
-					$signup_data['lists']
+					$signup_data['lists'],
+					false,
+					'Contact subscribed to newsletters from the post-checkout modal'
 				);
 				if ( \is_wp_error( $result ) ) {
 					return $result;
