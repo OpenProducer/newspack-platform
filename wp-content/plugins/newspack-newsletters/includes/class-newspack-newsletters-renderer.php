@@ -1266,6 +1266,9 @@ final class Newspack_Newsletters_Renderer {
 		$background_color = get_post_meta( $post->ID, 'background_color', true );
 		$preview_text     = get_post_meta( $post->ID, 'preview_text', true );
 		$custom_css       = get_post_meta( $post->ID, 'custom_css', true );
+		if ( ! $preview_text ) {
+			$preview_text = wp_trim_words( wp_strip_all_tags( $body ), 60 );
+		}
 		if ( ! $background_color ) {
 			$background_color = '#ffffff';
 		}

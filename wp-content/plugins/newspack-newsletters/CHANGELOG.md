@@ -1,3 +1,17 @@
+# [3.1.0](https://github.com/Automattic/newspack-newsletters/compare/v3.0.1...v3.1.0) (2024-08-26)
+
+
+### Bug Fixes
+
+* add preview text fallback to make sure HTML is removed ([b4de251](https://github.com/Automattic/newspack-newsletters/commit/b4de25185894d88b51ea7c1fe7a8c2918c12ce18))
+* human-readable timestamp of sent newsletters ([#1590](https://github.com/Automattic/newspack-newsletters/issues/1590)) ([c3ddd29](https://github.com/Automattic/newspack-newsletters/commit/c3ddd29b667151b88402931249c6c2939746836e))
+* **subscription-block:** remove default list when misconfigured ([#1608](https://github.com/Automattic/newspack-newsletters/issues/1608)) ([6d0b440](https://github.com/Automattic/newspack-newsletters/commit/6d0b440d71bf09275ada4b0e15faf2781dd6f823))
+
+
+### Features
+
+* consolidate data flows ([#1602](https://github.com/Automattic/newspack-newsletters/issues/1602)) ([dd56ab8](https://github.com/Automattic/newspack-newsletters/commit/dd56ab89c8a03c7bfb4c3abd1c31b8cb66a0c89f)), closes [#1567](https://github.com/Automattic/newspack-newsletters/issues/1567) [#1593](https://github.com/Automattic/newspack-newsletters/issues/1593) [#1601](https://github.com/Automattic/newspack-newsletters/issues/1601)
+
 ## [3.0.1](https://github.com/Automattic/newspack-newsletters/compare/v3.0.0...v3.0.1) (2024-08-19)
 
 

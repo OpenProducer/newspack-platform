@@ -1,6 +1,6 @@
 === Newspack Newsletters ===
 Contributors: automattic, rabberson, adamboro, thomasguillot, dkoo, laurelfulford, claudiulodro, iuravic, jboydston
-Requires at least: 5.3
+Requires at least: 6.6
 Tested up to: 6.4.3
 Requires PHP: 7.4
 Stable tag: trunk

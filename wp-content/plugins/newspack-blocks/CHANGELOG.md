@@ -1,3 +1,15 @@
+# [4.1.0](https://github.com/Automattic/newspack-blocks/compare/v4.0.1...v4.1.0) (2024-08-26)
+
+
+### Bug Fixes
+
+* **homepage-posts:** honor allowing duplicates in load-more ([5ccecbd](https://github.com/Automattic/newspack-blocks/commit/5ccecbd86129e870a183dcb4fe65c18e412a1f48))
+
+
+### Features
+
+* consolidate data flows ([#1836](https://github.com/Automattic/newspack-blocks/issues/1836)) ([ee35511](https://github.com/Automattic/newspack-blocks/commit/ee355117b7c7ba9bee32cfd0e5402cc928559c75)), closes [#1804](https://github.com/Automattic/newspack-blocks/issues/1804) [#1827](https://github.com/Automattic/newspack-blocks/issues/1827)
+
 ## [4.0.1](https://github.com/Automattic/newspack-blocks/compare/v4.0.0...v4.0.1) (2024-08-21)
 
 

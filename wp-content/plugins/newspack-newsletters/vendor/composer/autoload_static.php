@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitda52159b012ffea454a650b817edfe61
+class ComposerStaticInit96ba506dcf741b0519b614c2d4f3e4d0
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -59,6 +59,7 @@ class ComposerStaticInitda52159b012ffea454a650b817edfe61
         'Newspack_Newsletters_Constant_Contact_Controller' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-controller.php',
         'Newspack_Newsletters_Constant_Contact_SDK' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-sdk.php',
         'Newspack_Newsletters_Constant_Contact_Usage_Reports' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-usage-reports.php',
+        'Newspack_Newsletters_Contacts' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-contacts.php',
         'Newspack_Newsletters_ESP_API_Interface' => __DIR__ . '/../..' . '/includes/service-providers/interface-newspack-newsletters-esp-service.php',
         'Newspack_Newsletters_Editor' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-editor.php',
         'Newspack_Newsletters_Embed' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-embed.php',
@@ -71,6 +72,7 @@ class ComposerStaticInitda52159b012ffea454a650b817edfe61
         'Newspack_Newsletters_Mailchimp_Cached_Data' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-cached-data.php',
         'Newspack_Newsletters_Mailchimp_Controller' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-controller.php',
         'Newspack_Newsletters_Mailchimp_Groups' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-groups.php',
+        'Newspack_Newsletters_Mailchimp_Notes' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-notes.php',
         'Newspack_Newsletters_Mailchimp_Usage_Reports' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-usage-reports.php',
         'Newspack_Newsletters_Quick_Edit' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-quick-edit.php',
         'Newspack_Newsletters_Renderer' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-renderer.php',
@@ -86,9 +88,9 @@ class ComposerStaticInitda52159b012ffea454a650b817edfe61
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitda52159b012ffea454a650b817edfe61::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitda52159b012ffea454a650b817edfe61::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitda52159b012ffea454a650b817edfe61::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit96ba506dcf741b0519b614c2d4f3e4d0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit96ba506dcf741b0519b614c2d4f3e4d0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit96ba506dcf741b0519b614c2d4f3e4d0::$classMap;
 
         }, null, ClassLoader::class);
     }

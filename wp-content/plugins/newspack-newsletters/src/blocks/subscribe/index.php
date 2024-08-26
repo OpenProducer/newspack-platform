@@ -115,10 +115,6 @@ function render_block( $attrs ) {
 	$list_map        = array_flip( $lists );
 	$available_lists = array_values( array_intersect( $attrs['lists'], $lists ) );
 
-	if ( empty( $available_lists ) ) {
-		$available_lists = [ $lists[0] ];
-	}
-
 	/**
 	 * Filters the lists that are about to be displayed in the Subscription block
 	 *
@@ -498,14 +494,15 @@ function process_form() {
 		\Newspack\Reader_Activation::register_reader( $email, $name, true, $metadata );
 	}
 
-	$result = \Newspack_Newsletters_Subscription::add_contact(
+	$result = \Newspack_Newsletters_Contacts::subscribe(
 		[
 			'name'     => $name ?? null,
 			'email'    => $email,
 			'metadata' => $metadata,
 		],
 		$lists,
-		true // Async.
+		true, // Async.
+		'User subscribed via Newsletters Subscription block'
 	);
 
 	/**

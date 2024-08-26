@@ -24,7 +24,7 @@ class Newspack_Newsletters_Subscription {
 	const WC_ENDPOINT         = 'newsletters';
 	const SUBSCRIPTION_UPDATE = 'newspack_newsletters_subscription';
 
-	const ASYNC_ACTION = 'newspack_newsletters_subscription_add_contact';
+	const ASYNC_ACTION = 'newspack_newsletters_subscription_subscribe_contact';
 
 	const SUBSCRIPTION_INTENT_CPT = 'np_nl_sub_intent';
 
@@ -34,7 +34,6 @@ class Newspack_Newsletters_Subscription {
 	public static function init() {
 		add_action( 'rest_api_init', [ __CLASS__, 'register_api_endpoints' ] );
 		add_action( 'newspack_registered_reader', [ __CLASS__, 'newspack_registered_reader' ], 10, 5 );
-		add_action( 'delete_user', [ __CLASS__, 'delete_user' ], 10, 3 );
 
 		/** User email verification for subscription management. */
 		add_action( 'resetpass_form', [ __CLASS__, 'set_current_user_email_verified' ] );
@@ -357,125 +356,50 @@ class Newspack_Newsletters_Subscription {
 	 * @return array|WP_Error|true Contact data if it was added, or error otherwise. True if async.
 	 */
 	public static function add_contact( $contact, $lists = false, $async = false ) {
-		if ( ! is_array( $lists ) && false !== $lists ) {
-			$lists = [ $lists ];
-		}
-
-		/**
-		 * Trigger an action before contact adding.
-		 *
-		 * @param string[]|false $lists    Array of list IDs the contact will be subscribed to, or false.
-		 * @param array          $contact  {
-		 *          Contact information.
-		 *
-		 *    @type string   $email    Contact email address.
-		 *    @type string   $name     Contact name. Optional.
-		 *    @type string[] $metadata Contact additional metadata. Optional.
-		 * }
-		 */
-		do_action( 'newspack_newsletters_pre_add_contact', $lists, $contact );
-
-		$provider = Newspack_Newsletters::get_service_provider();
-		if ( empty( $provider ) ) {
-			return new WP_Error( 'newspack_newsletters_invalid_provider', __( 'Provider is not set.' ) );
-		}
-
-		if ( false !== $lists ) {
-			Newspack_Newsletters_Logger::log( 'Adding contact to list(s): ' . implode( ', ', $lists ) . '. Provider is ' . $provider->service . '.' );
-		} else {
-			Newspack_Newsletters_Logger::log( 'Adding contact without lists. Provider is ' . $provider->service . '.' );
-		}
-
-		$existing_contact                 = self::get_contact_data( $contact['email'], true );
-		$contact['existing_contact_data'] = \is_wp_error( $existing_contact ) ? false : $existing_contact;
-		$is_updating                      = \is_wp_error( $existing_contact ) ? false : true;
-
-		/**
-		 * Filters the contact before passing on to the API.
-		 *
-		 * @param array          $contact           {
-		 *          Contact information.
-		 *
-		 *    @type string   $email                 Contact email address.
-		 *    @type string   $name                  Contact name. Optional.
-		 *    @type string   $existing_contact_data Existing contact data, if updating a contact. The hook will be also called when
-		 *    @type string[] $metadata              Contact additional metadata. Optional.
-		 * }
-		 * @param string[]|false $selected_list_ids Array of list IDs the contact will be subscribed to, or false.
-		 * @param string         $provider          The provider name.
-		 */
-		$contact = apply_filters( 'newspack_newsletters_contact_data', $contact, $lists, $provider->service );
-
-		if ( isset( $contact['metadata'] ) ) {
-			Newspack_Newsletters_Logger::log( 'Adding contact with metadata key(s): ' . implode( ', ', array_keys( $contact['metadata'] ) ) . '.' );
-		}
-
-		if ( ! isset( $contact['metadata'] ) ) {
-			$contact['metadata'] = [];
-		}
-		$contact['metadata']['origin_newspack'] = '1';
-
-		/**
-		 * Filters the contact selected lists before passing on to the API.
-		 *
-		 * @param string[]|false $lists    Array of list IDs the contact will be subscribed to, or false.
-		 * @param array          $contact  {
-		 *          Contact information.
-		 *
-		 *    @type string   $email    Contact email address.
-		 *    @type string   $name     Contact name. Optional.
-		 *    @type string[] $metadata Contact additional metadata. Optional.
-		 * }
-		 * @param string         $provider          The provider name.
-		 */
-		$lists = apply_filters( 'newspack_newsletters_contact_lists', $lists, $contact, $provider->service );
-
-		if ( true !== $async ) {
-			return self::add_contact_to_provider( $contact, $lists, $is_updating );
-		} else {
-			$intent_id = self::add_subscription_intent( $contact, $lists, $is_updating );
-			$nonce     = wp_create_nonce( self::ASYNC_ACTION );
-			$url       = admin_url( 'admin-ajax.php?action=' . self::ASYNC_ACTION . '&nonce=' . $nonce );
-			$args      = [
-				'timeout'   => 0.01,
-				'blocking'  => false,
-				'cookies'   => $_COOKIE, // phpcs:ignore
-				'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
-				'body'      => [
-					'action_name' => self::ASYNC_ACTION,
-					'intent_id'   => $intent_id,
-				],
-			];
-			wp_remote_post( $url, $args );
-			return true;
-		}
+		_deprecated_function( __METHOD__, '2.21', 'Newspack_Newsletters_Contacts::subscribe' );
+		return Newspack_Newsletters_Contacts::subscribe( $contact, $lists, $async, 'deprecated' );
 	}
 
 	/**
-	 * Register a subscription intent.
+	 * Register a subscription intent and dispatches a async request to process it.
 	 *
-	 * @param array $contact     Contact information.
-	 * @param array $lists       Array of list IDs to subscribe the contact to.
-	 * @param bool  $is_updating Whether the contact is being updated. If false, the contact is being created.
+	 * @param array  $contact     Contact information.
+	 * @param array  $lists       Array of list IDs to subscribe the contact to.
+	 * @param string $context Context of the update for logging purposes.
 	 *
 	 * @return int|WP_Error Subscription intent ID or error.
 	 */
-	private static function add_subscription_intent( $contact, $lists, $is_updating ) {
+	public static function add_subscription_intent( $contact, $lists, $context = '' ) {
 		$intent_id = \wp_insert_post(
 			[
 				'post_type'   => self::SUBSCRIPTION_INTENT_CPT,
 				'post_status' => 'publish',
 				'meta_input'  => [
-					'contact'     => $contact,
-					'lists'       => $lists,
-					'is_updating' => $is_updating,
-					'errors'      => [],
+					'contact' => $contact,
+					'lists'   => $lists,
+					'errors'  => [],
+					'context' => $context,
 				],
 			]
 		);
 		if ( is_wp_error( $intent_id ) ) {
 			Newspack_Newsletters_Logger::log( 'Error adding subscription intent: ' . $intent_id->get_error_message() );
 		}
+
+		$nonce     = wp_create_nonce( self::ASYNC_ACTION );
+		$url       = admin_url( 'admin-ajax.php?action=' . self::ASYNC_ACTION . '&nonce=' . $nonce );
+		$args      = [
+			'timeout'   => 0.01,
+			'blocking'  => false,
+			'cookies'   => $_COOKIE, // phpcs:ignore
+			'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
+			'body'      => [
+				'action_name' => self::ASYNC_ACTION,
+				'intent_id'   => $intent_id,
+			],
+		];
+		wp_remote_post( $url, $args );
+
 		return $intent_id;
 	}
 
@@ -496,11 +420,11 @@ class Newspack_Newsletters_Subscription {
 			return false;
 		}
 		return [
-			'id'          => $intent->ID,
-			'contact'     => get_post_meta( $intent->ID, 'contact', true ),
-			'lists'       => get_post_meta( $intent->ID, 'lists', true ),
-			'is_updating' => get_post_meta( $intent->ID, 'is_updating', true ),
-			'errors'      => get_post_meta( $intent->ID, 'errors', true ),
+			'id'      => $intent->ID,
+			'contact' => get_post_meta( $intent->ID, 'contact', true ),
+			'lists'   => get_post_meta( $intent->ID, 'lists', true ),
+			'errors'  => get_post_meta( $intent->ID, 'errors', true ),
+			'context' => get_post_meta( $intent->ID, 'context', true ),
 		];
 	}
 
@@ -537,6 +461,11 @@ class Newspack_Newsletters_Subscription {
 				]
 			);
 		}
+
+		$provider = Newspack_Newsletters::get_service_provider();
+		if ( empty( $provider ) ) {
+			return;
+		}
 		foreach ( $intents as $intent ) {
 			if ( empty( $intent ) ) {
 				continue;
@@ -549,11 +478,13 @@ class Newspack_Newsletters_Subscription {
 				self::remove_subscription_intent( $intent['id'] );
 				continue;
 			}
-			$contact     = $intent['contact'];
-			$email       = $contact['email'];
-			$lists       = $intent['lists'];
-			$is_updating = $intent['is_updating'];
-			$result      = self::add_contact_to_provider( $contact, $lists, $is_updating );
+
+			$contact = $intent['contact'];
+			$email   = $contact['email'];
+			$lists   = $intent['lists'];
+			$context = $intent['context'];
+
+			$result = Newspack_Newsletters_Contacts::subscribe( $contact, $lists, false, $context . ' (ASYNC)' );
 
 			$user = get_user_by( 'email', $email );
 			if ( \is_wp_error( $result ) ) {
@@ -619,78 +550,6 @@ class Newspack_Newsletters_Subscription {
 	}
 
 	/**
-	 * Internal method to add a contact to lists. Should be called by the
-	 * `add_contact` method or `handle_async_subscribe` for the async strategy.
-	 *
-	 * @param array $contact     Contact information.
-	 * @param array $lists       Array of list IDs to subscribe the contact to.
-	 * @param bool  $is_updating Whether the contact is being updated. If false, the contact is being created.
-	 *
-	 * @return array|WP_Error Contact data if it was added, or error otherwise.
-	 */
-	private static function add_contact_to_provider( $contact, $lists = [], $is_updating = false ) {
-		$provider = Newspack_Newsletters::get_service_provider();
-		$errors   = new WP_Error();
-		$result   = [];
-
-		try {
-			if ( method_exists( $provider, 'add_contact_with_groups_and_tags' ) ) {
-				$result = $provider->add_contact_with_groups_and_tags( $contact, $lists );
-			} elseif ( empty( $lists ) ) {
-				$result = $provider->add_contact( $contact );
-			} else {
-				foreach ( $lists as $list_id ) {
-					$result = $provider->add_contact( $contact, $list_id );
-				}
-			}
-		} catch ( \Exception $e ) {
-			$errors->add( 'newspack_newsletters_subscription_add_contact', $e->getMessage() );
-		}
-
-		if ( is_wp_error( $result ) ) {
-			$errors->add( $result->get_error_code(), $result->get_error_message() );
-		}
-
-		// Handle local lists feature.
-		foreach ( $lists as $list_id ) {
-			try {
-				$provider->add_contact_handling_local_list( $contact, $list_id );
-			} catch ( \Exception $e ) {
-				$errors->add( 'newspack_newsletters_subscription_handling_local_list', $e->getMessage() );
-			}
-		}
-
-		/**
-		 * Fires after a contact is added.
-		 *
-		 * @param string              $provider The provider name.
-		 * @param array               $contact  {
-		 *    Contact information.
-		 *
-		 *    @type string   $email    Contact email address.
-		 *    @type string   $name     Contact name. Optional.
-		 *    @type string[] $metadata Contact additional metadata. Optional.
-		 * }
-		 * @param string[]|false      $lists    Array of list IDs to subscribe the contact to.
-		 * @param array|WP_Error      $result   Array with data if the contact was added or error if failed.
-		 * @param bool                $is_updating Whether the contact is being updated. If false, the contact is being created.
-		 */
-		do_action( 'newspack_newsletters_add_contact', $provider->service, $contact, $lists, $result, $is_updating );
-
-		// Remove any existing subscription error message.
-		if ( ! $errors->has_errors() ) {
-			$user = get_user_by( 'email', $contact['email'] );
-			if ( $user ) {
-				delete_user_meta( $user->ID, 'newspack_newsletters_subscription_error' );
-			}
-		} else {
-			return $errors;
-		}
-
-		return $result;
-	}
-
-	/**
 	 * Permanently delete a user subscription.
 	 *
 	 * @param int $user_id User ID.
@@ -698,22 +557,8 @@ class Newspack_Newsletters_Subscription {
 	 * @return bool|WP_Error Whether the contact was deleted or error.
 	 */
 	public static function delete_user_subscription( $user_id ) {
-		$user = get_user_by( 'id', $user_id );
-		if ( ! $user ) {
-			return new WP_Error( 'newspack_newsletters_invalid_user', __( 'Invalid user.' ) );
-		}
-		/** Only delete if email ownership is verified. */
-		if ( ! self::is_email_verified( $user_id ) ) {
-			return new \WP_Error( 'newspack_newsletters_email_not_verified', __( 'Email ownership is not verified.' ) );
-		}
-		$provider = Newspack_Newsletters::get_service_provider();
-		if ( empty( $provider ) ) {
-			return new WP_Error( 'newspack_newsletters_invalid_provider', __( 'Provider is not set.' ) );
-		}
-		if ( ! method_exists( $provider, 'delete_contact' ) ) {
-			return new WP_Error( 'newspack_newsletters_invalid_provider_method', __( 'Provider does not support deleting user subscriptions.' ) );
-		}
-		return $provider->delete_contact( $user->user_email );
+		_deprecated_function( __METHOD__, '2.21', 'Newspack_Newsletters_Contacts::delete' );
+		return Newspack_Newsletters_Contacts::delete( $user_id );
 	}
 
 	/**
@@ -742,43 +587,19 @@ class Newspack_Newsletters_Subscription {
 
 		// Adding is actually upserting, so no need to check if the hook is called for an existing user.
 		try {
-			self::add_contact(
+			Newspack_Newsletters_Contacts::subscribe(
 				[
 					'email'    => $email,
 					'metadata' => $metadata,
 				],
 				$lists,
-				true // Async.
+				true, // Async.
+				'Reader registration hook on Newsletters plugin'
 			);
 		} catch ( \Exception $e ) {
 			// Avoid breaking the registration process.
 			Newspack_Newsletters_Logger::log( 'Error adding contact: ' . $e->getMessage() );
 		}
-	}
-
-	/**
-	 * Delete a contact from ESP when a reader is deleted.
-	 *
-	 * @param int      $user_id  ID of the user to delete.
-	 * @param int|null $reassign ID of the user to reassign posts and links to.
-	 *                           Default null, for no reassignment.
-	 * @param WP_User  $user     WP_User object of the user to delete.
-	 *
-	 * @return bool|WP_Error Whether the contact was deleted or error.
-	 */
-	public static function delete_user( $user_id, $reassign, $user ) {
-		if ( ! class_exists( '\Newspack\Reader_Activation' ) || ! \Newspack\Reader_Activation::is_user_reader( $user ) ) {
-			return;
-		}
-		$sync = \Newspack\Reader_Activation::get_setting( 'sync_esp' );
-		if ( ! $sync ) {
-			return;
-		}
-		$sync_delete = \Newspack\Reader_Activation::get_setting( 'sync_esp_delete' );
-		if ( ! $sync_delete ) {
-			return;
-		}
-		return self::delete_user_subscription( $user_id );
 	}
 
 	/**
@@ -793,41 +614,8 @@ class Newspack_Newsletters_Subscription {
 	 * @return bool|WP_Error Whether the contact was updated or error.
 	 */
 	private static function update_contact_lists( $email, $lists = [] ) {
-		if ( ! self::has_subscription_management() ) {
-			return new WP_Error( 'newspack_newsletters_not_supported', __( 'Not supported for this provider', 'newspack-newsletters' ) );
-		}
-		$provider = Newspack_Newsletters::get_service_provider();
-
-		Newspack_Newsletters_Logger::log( 'Updating lists of a contact. List selection: ' . implode( ', ', $lists ) . '. Provider is ' . $provider->service . '.' );
-
-		/** Determine lists to add/remove from existing list config. */
-		$lists_config    = self::get_lists_config();
-		$lists_to_add    = array_intersect( array_keys( $lists_config ), $lists );
-		$lists_to_remove = array_diff( array_keys( $lists_config ), $lists );
-
-		/** Clean up lists to add/remove from contact's existing data. */
-		$current_lists   = self::get_contact_lists( $email );
-		$lists_to_add    = array_diff( $lists_to_add, $current_lists );
-		$lists_to_remove = array_intersect( $current_lists, $lists_to_remove );
-
-		if ( empty( $lists_to_add ) && empty( $lists_to_remove ) ) {
-			return false;
-		}
-
-		$result = $provider->update_contact_lists_handling_local( $email, $lists_to_add, $lists_to_remove );
-
-		/**
-		 * Fires after a contact's lists are updated.
-		 *
-		 * @param string        $provider        The provider name.
-		 * @param string        $email           Contact email address.
-		 * @param string[]      $lists_to_add    Array of list IDs to subscribe the contact to.
-		 * @param string[]      $lists_to_remove Array of list IDs to remove the contact from.
-		 * @param bool|WP_Error $result          True if the contact was updated or error if failed.
-		 */
-		do_action( 'newspack_newsletters_update_contact_lists', $provider->service, $email, $lists_to_add, $lists_to_remove, $result );
-
-		return $result;
+		_deprecated_function( __METHOD__, '2.21', 'Newspack_Newsletters_Contacts::update_lists' );
+		return Newspack_Newsletters_Contacts::update_lists( $email, $lists, 'deprecated' );
 	}
 
 	/**
@@ -842,6 +630,40 @@ class Newspack_Newsletters_Subscription {
 			return new WP_Error( 'newspack_newsletters_not_supported', __( 'Not supported for this provider', 'newspack-newsletters' ) );
 		}
 		return Newspack_Newsletters::get_service_provider()->get_contact_combined_lists( $email );
+	}
+
+	/**
+	 * Whether the contact is a newsletter subscriber.
+	 *
+	 * This method will only check against the subscription lists configured in
+	 * the plugin, not all lists in the ESP.
+	 *
+	 * @param string $email The contact email.
+	 *
+	 * @return bool|WP_Error Whether the contact is a newsletter subscriber or error.
+	 */
+	public static function is_newsletter_subscriber( $email ) {
+		$list_config = self::get_lists_config();
+		if ( is_wp_error( $list_config ) ) {
+			return $list_config;
+		}
+		if ( empty( $list_config ) ) {
+			return false;
+		}
+		$lists = self::get_contact_lists( $email );
+		if ( is_wp_error( $lists ) ) {
+			return $lists;
+		}
+		if ( empty( $lists ) ) {
+			return false;
+		}
+		$lists = array_flip( $lists );
+		foreach ( $list_config as $list ) {
+			if ( isset( $lists[ $list['id'] ] ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -1225,7 +1047,11 @@ class Newspack_Newsletters_Subscription {
 		} else {
 			$email  = get_userdata( get_current_user_id() )->user_email;
 			$lists  = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : [];
-			$result = self::update_contact_lists( $email, $lists );
+			if ( false === self::is_newsletter_subscriber( $email ) ) {
+				$result = Newspack_Newsletters_Contacts::subscribe( [ 'email' => $email ], $lists, false, 'User subscribed on My Account page' );
+			} else {
+				$result = Newspack_Newsletters_Contacts::update_lists( $email, $lists, 'User updated their subscriptions on My Account page' );
+			}
 			if ( is_wp_error( $result ) ) {
 				wc_add_notice( $result->get_error_message(), 'error' );
 			} elseif ( false === $result ) {
