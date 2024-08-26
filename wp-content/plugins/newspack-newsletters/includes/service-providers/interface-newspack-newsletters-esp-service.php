@@ -178,4 +178,13 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error
 	 */
 	public function get_usage_report();
+
+	/**
+	 * Get transient name for async error messages.
+	 *
+	 * @param int $post_id The post ID.
+	 *
+	 * @return string The transient name.
+	 */
+	public function get_transient_name( $post_id );
 }

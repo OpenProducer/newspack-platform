@@ -1,0 +1,22 @@
+{
+  "name": "newspack-listings/price",
+  "category": "newspack",
+  "attributes": {
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "currency": {
+      "type": "string",
+      "default": ""
+    },
+    "formattedPrice": {
+      "type": "string",
+      "default": ""
+    },
+    "showDecimals": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

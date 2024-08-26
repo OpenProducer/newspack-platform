@@ -1,10 +1,10 @@
-@use '../../../shared/sass/colors';
-@use '../../../shared/sass/variables';
+@use "../../../shared/sass/colors";
+@use "../../../shared/sass/variables";
 
-@use './style-variations';
+@use "./style-variations";
 
 .wpbnbd {
-	 &__button,
+	&__button,
 	.tab-container .freq-label {
 		border: 0 solid variables.$color__border;
 		background: colors.$color__background-body;
@@ -27,7 +27,7 @@
 	.woocommerce-Price-amount,
 	.price-amount {
 		display: inline;
-		font-family: var(--newspack-theme-font-heading, sans-serif );
+		font-family: var(--newspack-theme-font-heading, sans-serif);
 		font-size: 29px;
 		font-weight: 700;
 	}

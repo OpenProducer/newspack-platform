@@ -1,7 +1,8 @@
 <?php
 /**
  * Jetpack compatibility file.
- * See: http://jetpack.com/
+ *
+ * @link http://jetpack.com/
  *
  * @package Newspack_Block_Theme
  */

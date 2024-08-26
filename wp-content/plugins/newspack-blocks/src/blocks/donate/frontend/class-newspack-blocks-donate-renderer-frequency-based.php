@@ -122,7 +122,7 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 			?>
 		<div
 			class="untiered <?php echo esc_html( $configuration['container_classnames'] ); ?>"
-			id="<?php echo esc_html( $configuration['uid'] ); ?>"
+			id="<?php echo esc_attr( $configuration['uid'] ); ?>"
 		>
 			<form>
 				<?php echo self::render_hidden_form_inputs( $attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -200,7 +200,7 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 
 		<div
 			class="tiered <?php echo esc_html( $configuration['container_classnames'] ); ?>"
-			id="<?php echo esc_html( $configuration['uid'] ); ?>"
+			id="<?php echo esc_attr( $configuration['uid'] ); ?>"
 		>
 			<form>
 				<?php echo self::render_hidden_form_inputs( $attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

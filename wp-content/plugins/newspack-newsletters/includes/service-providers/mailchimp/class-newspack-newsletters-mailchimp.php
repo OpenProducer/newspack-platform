@@ -55,7 +55,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		$this->controller = new Newspack_Newsletters_Mailchimp_Controller( $this );
 		Newspack_Newsletters_Mailchimp_Cached_Data::init();
 
-		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
+		add_action( 'updated_post_meta', [ $this, 'save' ], 10, 4 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
 		add_filter( 'newspack_newsletters_process_link', [ $this, 'process_link' ], 10, 2 );
 
@@ -777,6 +777,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 * @throws Exception Error message.
 	 */
 	public function sync( $post ) {
+		// Clear prior error messages.
+		$transient_name = $this->get_transient_name( $post->ID );
+		delete_transient( $transient_name );
 		try {
 			$api_key = $this->api_key();
 			if ( ! $api_key ) {
@@ -847,25 +850,30 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				'content_result'  => $content_result,
 			];
 		} catch ( Exception $e ) {
-			$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-			set_transient( $transient, $e->getMessage(), 45 );
+			set_transient( $transient_name, __( 'Error syncing with ESP. ', 'newspack-newsletters' ) . $e->getMessage(), 45 );
 			return new WP_Error( 'newspack_newsletters_mailchimp_error', $e->getMessage() );
 		}
 	}
 
 	/**
-	 * Update ESP campaign after post save.
+	 * Update ESP campaign after refreshing the email HTML, which is triggered by post save.
 	 *
-	 * @param string  $post_id Numeric ID of the campaign.
-	 * @param WP_Post $post The complete post object.
-	 * @param boolean $update Whether this is an existing post being updated or not.
+	 * @param int   $meta_id Numeric ID of the meta field being updated.
+	 * @param int   $post_id The post ID for the meta field being updated.
+	 * @param mixed $meta_key The meta key being updated.
 	 */
-	public function save( $post_id, $post, $update ) {
-		$status = get_post_status( $post_id );
-		if ( 'trash' === $status ) {
+	public function save( $meta_id, $post_id, $meta_key ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		if ( Newspack_Newsletters::EMAIL_HTML_META !== $meta_key ) {
+			return;
+		}
+		$post = get_post( $post_id );
+		if ( ! Newspack_Newsletters_Editor::is_editing_email( $post_id ) ) {
+			return;
+		}
+		if ( 'trash' === $post->post_status ) {
 			return;
 		}
 		$this->sync( $post );
@@ -1196,7 +1204,12 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		}
 
 		foreach ( $by_list as $list_id => $sublists ) {
-			$results[] = $this->add_contact( $contact, $list_id, $sublists );
+			$result = $this->add_contact( $contact, $list_id, $sublists );
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+
+			$results[] = $result;
 		}
 		return $results;
 	}

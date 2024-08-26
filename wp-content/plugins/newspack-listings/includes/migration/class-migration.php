@@ -7,8 +7,8 @@
 
 namespace Newspack_Listings;
 
-use \WP_CLI;
-use \Newspack_Listings\Core;
+use WP_CLI;
+use Newspack_Listings\Core;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -75,13 +75,16 @@ const HeaderBiddingGAM = () => {
 			: __( 'There are no orders configured.', 'newspack-ads' );
 	};
 
-	useEffect( async () => {
-		await fetchOrders();
-		try {
-			setBidders( await apiFetch( { path: '/newspack-ads/v1/bidders' } ) );
-		} catch ( err ) {
-			setError( err );
-		}
+	useEffect( () => {
+		const setBiddersOnInit = async () => {
+			await fetchOrders();
+			try {
+				setBidders( await apiFetch( { path: '/newspack-ads/v1/bidders' } ) );
+			} catch ( err ) {
+				setError( err );
+			}
+		};
+		setBiddersOnInit();
 	}, [] );
 
 	useEffect( () => {
@@ -126,16 +129,15 @@ const HeaderBiddingGAM = () => {
 							<span className="newspack-ads__header-bidding-gam__order-description">
 								{ activeOrders.length
 									? sprintf(
-											// Translators: Number of line items in the order.
-											_n(
-												'There is %s available order.',
-												'There are %s available orders.',
-												activeOrders.length,
-												'newspack-ads'
-											),
-											activeOrders.length
-									  )
-									: getMissingOrderMessage() }
+										// Translators: Number of line items in the order.
+										_n(
+											'There is %s available order.',
+											'There are %s available orders.',
+											activeOrders.length,
+											'newspack-ads'
+										),
+										activeOrders.length
+									) : getMissingOrderMessage() }
 							</span>
 						) }
 					</Fragment>
@@ -169,8 +171,8 @@ const HeaderBiddingGAM = () => {
 													__( 'Bidders: %s', 'newspack-ads' ),
 													order.bidders?.length
 														? order.bidders
-																.map( bidderKey => bidders[ bidderKey ]?.name || bidderKey )
-																.join( ', ' )
+															.map( bidderKey => bidders[ bidderKey ]?.name || bidderKey )
+															.join( ', ' )
 														: __( 'any', 'newspack-ads' )
 												) }
 											</span>

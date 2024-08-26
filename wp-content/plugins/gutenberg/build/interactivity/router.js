@@ -132,8 +132,8 @@ const {
   initialVdom,
   toVdom,
   render,
-  parseInitialData,
-  populateInitialData,
+  parseServerData,
+  populateServerData,
   batch
 } = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.privateApis)('I acknowledge that using private APIs means my theme or plugin will inevitably break in the next version of WordPress.');
 // Check if the navigation mode is full page or region based.
@@ -192,7 +192,7 @@ const regionsToVdom = async (dom, {
     });
   }
   const title = dom.querySelector('title')?.innerText;
-  const initialData = parseInitialData(dom);
+  const initialData = parseServerData(dom);
   return {
     regions,
     head,
@@ -213,7 +213,7 @@ const renderRegions = page => {
       }
     }
     if (navigationMode === 'regionBased') {
-      populateInitialData(page.initialData);
+      populateServerData(page.initialData);
       const attrName = `data-${directivePrefix}-router-region`;
       document.querySelectorAll(`[${attrName}]`).forEach(region => {
         const id = region.getAttribute(attrName);

@@ -35,7 +35,7 @@ trait WhereClause {
 
 	/**
 	 * @param  string|Closure|null  $column  The Closure will receive a StellarWP\DB\QueryBuilder\WhereQueryBuilder instance
-	 * @param  string|Closure|array|null  $value  The Closure will receive a StellarWP\DB\QueryBuilder\QueryBuilder instance
+	 * @param  string|Closure|array|null|mixed  $value  The Closure will receive a StellarWP\DB\QueryBuilder\QueryBuilder instance
 	 * @param  string  $comparisonOperator
 	 * @param  string  $logicalOperator
 	 *
@@ -85,7 +85,7 @@ trait WhereClause {
 
 	/**
 	 * @param  string|Closure|null  $column  The closure will receive a StellarWP\DB\QueryBuilder\WhereQueryBuilder instance
-	 * @param  string|Closure|array|null  $value  The closure will receive a StellarWP\DB\QueryBuilder\QueryBuilder instance
+	 * @param  string|Closure|array|null|mixed  $value  The closure will receive a StellarWP\DB\QueryBuilder\QueryBuilder instance
 	 * @param  string  $comparisonOperator
 	 *
 	 * @return $this
@@ -101,7 +101,7 @@ trait WhereClause {
 
 	/**
 	 * @param  string|Closure  $column
-	 * @param  string|Closure|array|null  $value
+	 * @param  string|Closure|array|null|mixed  $value
 	 * @param  string  $comparisonOperator
 	 *
 	 * @return $this
@@ -261,7 +261,7 @@ trait WhereClause {
 
 	/**
 	 * @param  string  $column
-	 * @param  string  $value
+	 * @param  mixed  $value
 	 *
 	 * @return $this
 	 */
@@ -275,7 +275,7 @@ trait WhereClause {
 
 	/**
 	 * @param  string  $column
-	 * @param  string  $value
+	 * @param  mixed  $value
 	 *
 	 * @return $this
 	 */

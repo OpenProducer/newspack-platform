@@ -516,7 +516,7 @@ Details of the error message: "%3$s"
 		$contact = $this->get_contact_data( $email );
 		if ( is_wp_error( $contact ) ) {
 			// Create contact.
-			// Use  Newspack_Newsletters_Subscription::add_contact to trigger hooks and call add_contact_handling_local_list if needed.
+			// Use Newspack_Newsletters_Subscription::add_contact to trigger hooks and call add_contact_handling_local_list if needed.
 			$result = Newspack_Newsletters_Subscription::add_contact( [ 'email' => $email ], $lists_to_add );
 			if ( is_wp_error( $result ) ) {
 				return $result;
@@ -798,5 +798,16 @@ Details of the error message: "%3$s"
 	 */
 	public function get_usage_report() {
 		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
+	 * Get transient name for async error messages.
+	 *
+	 * @param int $post_id The post ID.
+	 *
+	 * @return string The transient name.
+	 */
+	public function get_transient_name( $post_id ) {
+		return sprintf( 'newspack_newsletters_error_%s_%s', $post_id, get_current_user_id() );
 	}
 }

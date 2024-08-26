@@ -530,7 +530,7 @@ class Asset {
 	 * @return static
 	 */
 	public function add_localize_script( string $object_name, $data ) {
-		if ( str_contains( $object_name, '.' ) ) {
+		if ( strpos( $object_name, '.' ) !== false ) {
 			$this->custom_localize_script_objects[] = [ $object_name, $data ];
 		} else {
 			$this->wp_localize_script_objects[ $object_name ] = $data;

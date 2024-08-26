@@ -127,9 +127,9 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 		ob_start();
 		?>
 		<div
-			class="<?php echo esc_html( $configuration['container_classnames'] ); ?>"
-			id="<?php echo esc_html( $configuration['uid'] ); ?>"
-			data-tiers-based-config="<?php echo esc_html( htmlspecialchars( wp_json_encode( $configuration_for_tiers_based ), ENT_QUOTES, 'UTF-8' ) ); ?>"
+			class="<?php echo esc_attr( $configuration['container_classnames'] ); ?>"
+			id="<?php echo esc_attr( $configuration['uid'] ); ?>"
+			data-tiers-based-config="<?php echo esc_attr( htmlspecialchars( wp_json_encode( $configuration_for_tiers_based ), ENT_QUOTES, 'UTF-8' ) ); ?>"
 		>
 			<form data-is-init-form>
 				<div class="wpbnbd__tiers__view">

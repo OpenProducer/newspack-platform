@@ -105,13 +105,12 @@ const TierBasedLayout = ( props: ComponentProps ) => {
 									borderColor: attributes.buttonColor,
 									...( isAnyRecommended && ! recommendLabel
 										? {
-												backgroundColor: 'transparent',
-												color: attributes.buttonColor,
-										  }
-										: {
-												backgroundColor: attributes.buttonColor,
-												color: getColorForContrast( attributes.buttonColor ),
-										  } ),
+											backgroundColor: 'transparent',
+											color: attributes.buttonColor,
+										} : {
+											backgroundColor: attributes.buttonColor,
+											color: getColorForContrast( attributes.buttonColor ),
+										} ),
 								} }
 							>
 								<RichText

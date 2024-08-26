@@ -9,18 +9,19 @@
  * @package Newspack_Block_Theme
  */
 
+$registry = WP_Block_Type_Registry::get_instance();
 ?>
 <!-- wp:group {"metadata":{"name":"Post Meta"},"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"className":"post-meta","layout":{"type":"constrained"}} -->
 <div class="wp-block-group post-meta">
-	
+
 <!-- wp:group {"lock":{"move":false,"remove":true},"metadata":{"name":"Meta"},"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"center","verticalAlignment":"center"}} -->
 <div class="wp-block-group">
-	
-<?php if ( class_exists( 'CoAuthors_Guest_Authors' ) ) : ?>
+
+<?php if ( $registry->get_registered( 'co-authors-plus/coauthors' ) ) : ?>
 
 	<!-- wp:group {"templateLock":"all","lock":{"move":true,"remove":true},"metadata":{"name":"Avatar + Byline"},"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 	<div class="wp-block-group">
-	
+
 	<!-- wp:co-authors-plus/coauthors {"layout":{"type":"flex","orientation":"horizontal"},"prefix":"","style":{"spacing":{"blockGap":"0"}},"className":"cap-avatar"} -->
 	<div class="wp-block-co-authors-plus-coauthors cap-avatar"><!-- wp:co-authors-plus/avatar /--></div>
 	<!-- /wp:co-authors-plus/coauthors -->
@@ -45,7 +46,7 @@
 <!-- wp:post-date {"lock":{"move":true,"remove":true}} /--></div>
 <!-- /wp:group -->
 
-<?php if ( function_exists( 'sharing_display' ) ) : ?>
+<?php if ( $registry->get_registered( 'jetpack/sharing-buttons' ) ) : ?>
 
 <!-- wp:jetpack/sharing-buttons {"styleType":"icon","layout":{"type":"flex","justifyContent":"center"}} -->
 <ul class="wp-block-jetpack-sharing-buttons has-normal-icon-size jetpack-sharing-buttons__services-list" id="jetpack-sharing-serivces-list">

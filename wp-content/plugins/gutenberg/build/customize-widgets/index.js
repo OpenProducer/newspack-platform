@@ -1030,24 +1030,16 @@ function Header({
           icon: !(0,external_wp_i18n_namespaceObject.isRTL)() ? library_undo : library_redo
           /* translators: button label text should, if possible, be under 16 characters. */,
           label: (0,external_wp_i18n_namespaceObject.__)('Undo'),
-          shortcut: external_wp_keycodes_namespaceObject.displayShortcut.primary('z')
-          // If there are no undo levels we don't want to actually disable this
-          // button, because it will remove focus for keyboard users.
-          // See: https://github.com/WordPress/gutenberg/issues/3486
-          ,
-          "aria-disabled": !hasUndo,
+          shortcut: external_wp_keycodes_namespaceObject.displayShortcut.primary('z'),
+          disabled: !hasUndo,
           onClick: sidebar.undo,
           className: "customize-widgets-editor-history-button undo-button"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
           icon: !(0,external_wp_i18n_namespaceObject.isRTL)() ? library_redo : library_undo
           /* translators: button label text should, if possible, be under 16 characters. */,
           label: (0,external_wp_i18n_namespaceObject.__)('Redo'),
-          shortcut: shortcut
-          // If there are no undo levels we don't want to actually disable this
-          // button, because it will remove focus for keyboard users.
-          // See: https://github.com/WordPress/gutenberg/issues/3486
-          ,
-          "aria-disabled": !hasRedo,
+          shortcut: shortcut,
+          disabled: !hasRedo,
           onClick: sidebar.redo,
           className: "customize-widgets-editor-history-button redo-button"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
@@ -1445,7 +1437,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/customize-widgets');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/customize-widgets');
 
 ;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/components/sidebar-block-editor/sidebar-editor-provider.js
 /**
@@ -1704,7 +1696,10 @@ function SidebarBlockEditor({
       get
     } = select(external_wp_preferences_namespaceObject.store);
     return {
-      hasUploadPermissions: (_select$canUser = select(external_wp_coreData_namespaceObject.store).canUser('create', 'media')) !== null && _select$canUser !== void 0 ? _select$canUser : true,
+      hasUploadPermissions: (_select$canUser = select(external_wp_coreData_namespaceObject.store).canUser('create', {
+        kind: 'root',
+        name: 'media'
+      })) !== null && _select$canUser !== void 0 ? _select$canUser : true,
       isFixedToolbarActive: !!get('core/customize-widgets', 'fixedToolbar'),
       keepCaretInsideBlock: !!get('core/customize-widgets', 'keepCaretInsideBlock'),
       isWelcomeGuideActive: !!get('core/customize-widgets', 'welcomeGuide')
@@ -2611,7 +2606,7 @@ const withMoveToSidebarToolbarItem = (0,external_wp_compose_namespaceObject.crea
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockEdit, {
       ...props
-    }), hasMultipleSidebars && canInsertBlockInSidebar && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockControls, {
+    }, "edit"), hasMultipleSidebars && canInsertBlockInSidebar && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockControls, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_widgets_namespaceObject.MoveToWidgetArea, {
         widgetAreas: sidebarControls.map(sidebarControl => ({
           id: sidebarControl.id,
@@ -2654,7 +2649,7 @@ const withWideWidgetDisplay = (0,external_wp_compose_namespaceObject.createHighe
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockEdit, {
     ...props,
     isWide: isWide
-  });
+  }, "edit");
 }, 'withWideWidgetDisplay');
 (0,external_wp_hooks_namespaceObject.addFilter)('editor.BlockEdit', 'core/customize-widgets/wide-widget-display', withWideWidgetDisplay);
 

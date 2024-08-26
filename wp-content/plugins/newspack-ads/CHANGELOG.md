@@ -1,3 +1,83 @@
+## [3.0.2](https://github.com/Automattic/newspack-ads/compare/v3.0.1...v3.0.2) (2024-08-19)
+
+
+### Bug Fixes
+
+* add 1x1 size to all viewports for ad units that supports it ([#891](https://github.com/Automattic/newspack-ads/issues/891)) ([0b26934](https://github.com/Automattic/newspack-ads/commit/0b2693481ca54e1e7ecf19aeac0c4e85f639062a))
+
+## [3.0.1](https://github.com/Automattic/newspack-ads/compare/v3.0.0...v3.0.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* **gam:** add 1x1 size to all viewports ([#888](https://github.com/Automattic/newspack-ads/issues/888)) ([a99494a](https://github.com/Automattic/newspack-ads/commit/a99494a854855a3fd1388d7821db7aeef549adb9))
+
+# [3.0.0](https://github.com/Automattic/newspack-ads/compare/v2.1.0...v3.0.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* update dependencies to support `@wordpress/scripts` ([#860](https://github.com/Automattic/newspack-ads/issues/860)) ([8e9e839](https://github.com/Automattic/newspack-ads/commit/8e9e8390c4d4995122318cfe5bd306514900b12c))
+
+
+### Features
+
+* **GAM:** add Complianz consent integration to ad targeting ([#876](https://github.com/Automattic/newspack-ads/issues/876)) ([a95aebe](https://github.com/Automattic/newspack-ads/commit/a95aebe6a6582d0e97c2f2245d1d3e3b7d15dabc))
+
+
+### BREAKING CHANGES
+
+* Updates dependencies for compatibility with WordPress 6.6.*, but breaks JS in WordPress 6.5.* and below. If you need support for WP 6.5.*, please do not upgrade to this new major version.
+
+* fix: update deprecated v202305 GAM API to v202405
+
+* fix: update composer platform dependency
+
+* fix: less specific PHP version
+
+* fix: lower PHP version
+
+* chore: refactor for newspack-scripts dependency updates
+
+* chore: changes for linting errors
+
+* refactor: use proxy script for eslint and stylelint scripts
+
+* chore: update newspack-scripts to v5.6.0-alpha.3
+
+* chore: add .stylelintrc.js
+
+* chore: update newspack-scripts to v5.6.0-alpha.4
+
+* fix: add missing Prettier config files
+
+* fix: reformat SCSS
+
+* chore: update newspack-scripts to 5.6.0-alpha.5
+
+* chore: update newspack-scripts to v5.6.0-alpha.7
+
+* chore: update newspack-scripts to v5.6.0-alpha.8
+
+* chore: add NPM scripts for PHP
+
+* chore: update newspack-components to v3.0.0
+
+* chore: bump newspack-scripts to v5.5.2
+
+# [2.1.0](https://github.com/Automattic/newspack-ads/compare/v2.0.2...v2.1.0) (2024-07-01)
+
+
+### Bug Fixes
+
+* **gam:** remove error message when using constant-contact-forms plugin ([#853](https://github.com/Automattic/newspack-ads/issues/853)) ([9205085](https://github.com/Automattic/newspack-ads/commit/92050854c13a165bf8d4d4df576cfce9293c5a41)), closes [/github.com/WebDevStudios/constant-contact-forms/blame/main/composer.lock#L214-L215](https://github.com//github.com/WebDevStudios/constant-contact-forms/blame/main/composer.lock/issues/L214-L215)
+* update newspack-scripts to v5.5.1 ([db724e4](https://github.com/Automattic/newspack-ads/commit/db724e47dbb0b80f0d88273cb0f30b5564381bb7))
+
+
+### Features
+
+* ensure regenerator-runtime is available (for WP 6.6) ([#866](https://github.com/Automattic/newspack-ads/issues/866)) ([b82977a](https://github.com/Automattic/newspack-ads/commit/b82977a0dd3ed55105fd092b87293248609da4c0))
+
 ## [2.0.2](https://github.com/Automattic/newspack-ads/compare/v2.0.1...v2.0.2) (2024-06-18)
 
 

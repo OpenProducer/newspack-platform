@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+
 /**
  * Common matching functions that can be used by criteria.
  */
@@ -22,9 +24,9 @@ export default {
 			return false;
 		}
 		if ( Array.isArray( criteria.value ) ) {
-			return criteria.value.some( value => list.includes( value ) );
+			return criteria.value.some( value => list.some( configValue => configValue == value ) );
 		}
-		if ( ! criteria.value || ! list.includes( criteria.value ) ) {
+		if ( ! criteria.value || ! list.some( configValue => configValue == criteria.value ) ) {
 			return false;
 		}
 		return true;
@@ -45,9 +47,9 @@ export default {
 			return true;
 		}
 		if ( Array.isArray( criteria.value ) ) {
-			return ! criteria.value.some( value => list.includes( value ) );
+			return ! criteria.value.some( value => list.some( configValue => configValue == value ) );
 		}
-		if ( ! criteria.value || ! list.includes( criteria.value ) ) {
+		if ( ! criteria.value || ! list.some( configValue => configValue == criteria.value ) ) {
 			return true;
 		}
 		return false;

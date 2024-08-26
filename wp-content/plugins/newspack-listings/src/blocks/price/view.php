@@ -7,8 +7,8 @@
 
 namespace Newspack_Listings\Price_Block;
 
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Utils;
+use Newspack_Listings\Core;
+use Newspack_Listings\Utils;
 
 /**
  * Dynamic block registration.

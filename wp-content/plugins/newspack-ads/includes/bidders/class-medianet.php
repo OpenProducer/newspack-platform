@@ -6,7 +6,7 @@
  * Ads plugin. For additional partners you must recompile Prebid.js and replace
  * the `newspack-ads-prebid` enqueued script.
  *
- * See Newspack_Ads_Bidding::enqueue_scripts() and 
+ * See Newspack_Ads_Bidding::enqueue_scripts() and
  * `newspack-ads/src/prebid/index.js` for additional reference.
  *
  * More information on Prebid.js: https://github.com/prebid/Prebid.js/

@@ -9,9 +9,9 @@
 
 namespace Newspack_Listings;
 
-use \Newspack_Listings\Settings;
-use \Newspack_Listings\Products;
-use \Newspack_Listings\Utils;
+use Newspack_Listings\Settings;
+use Newspack_Listings\Products;
+use Newspack_Listings\Utils;
 
 defined( 'ABSPATH' ) || exit;
 

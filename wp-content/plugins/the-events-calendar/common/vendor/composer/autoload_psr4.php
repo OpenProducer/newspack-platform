@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'lucatume\\DI52\\' => array($vendorDir . '/lucatume/di52/src'),
     'Tribe\\' => array($baseDir . '/src/Tribe'),
+    'TEC\\Event_Automator\\' => array($baseDir . '/src/Common/Event_Automator'),
     'TEC\\Common\\' => array($baseDir . '/src/Common'),
     'StellarWP\\Telemetry\\Views_Dir\\' => array($vendorDir . '/stellarwp/telemetry/src/views'),
     'StellarWP\\Telemetry\\Assets_Dir\\' => array($vendorDir . '/stellarwp/telemetry/src/resources'),

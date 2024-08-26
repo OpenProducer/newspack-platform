@@ -342,9 +342,13 @@ class Image_CDN_Core {
 			'/\.cdninstagram\.com$/',
 			'/^(commons|upload)\.wikimedia\.org$/',
 			'/\.wikipedia\.org$/',
+			'/^m\.media-amazon\.com$/',
 		);
 
 		$host = wp_parse_url( $image_url, PHP_URL_HOST );
+		if ( ! $host ) {
+			return $skip;
+		}
 
 		foreach ( $banned_host_patterns as $banned_host_pattern ) {
 			if ( 1 === preg_match( $banned_host_pattern, $host ) ) {

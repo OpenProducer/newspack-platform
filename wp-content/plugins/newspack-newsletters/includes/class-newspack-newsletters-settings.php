@@ -42,7 +42,7 @@ class Newspack_Newsletters_Settings {
 	}
 
 	/**
-	 * Retreives list of settings.
+	 * Retrieves list of settings.
 	 *
 	 * @return array Settings list.
 	 */
@@ -183,13 +183,30 @@ class Newspack_Newsletters_Settings {
 			);
 		}
 
-		$settings_list = array_map(
-			function ( $item ) {
+		// Filter out options related to unsupported providers.
+		$supported_providers = Newspack_Newsletters::get_supported_providers();
+		$settings_list       = array_reduce(
+			$settings_list,
+			function ( $acc, $item ) use ( $supported_providers ) {
+				if ( ! empty( $item['provider'] ) && ! in_array( $item['provider'], $supported_providers, true ) ) {
+					return $acc;
+				}
+				if ( 'select' === $item['type'] && ! empty( $item['options'] ) ) {
+					$item['options'] = array_values(
+						array_filter(
+							$item['options'],
+							function ( $option ) use ( $supported_providers ) {
+								return ! $option['value'] || in_array( $option['value'], $supported_providers, true );
+							}
+						)
+					);
+				}
 				$default       = ! empty( $item['default'] ) ? $item['default'] : false;
 				$item['value'] = get_option( $item['key'], $default );
-				return $item;
+				$acc[]         = $item;
+				return $acc;
 			},
-			$settings_list
+			[]
 		);
 
 		return $settings_list;
@@ -216,6 +233,12 @@ class Newspack_Newsletters_Settings {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Newsletters Settings', 'newspack-newsletters' ); ?></h1>
+			<?php if ( Newspack_Newsletters::should_deprecate_campaign_monitor() ) : ?>
+			<div class="newspack-newsletters-oauth notice notice-warning">
+				<h2><?php esc_html_e( 'Campaign Monitor support will be deprecated', 'newspack-newsletters' ); ?></h2>
+				<p><?php esc_html_e( 'Please connect a different service provider to ensure continued support.', 'newspack-newsletters' ); ?></p>
+			</div>
+			<?php endif; ?>
 			<form method="post" action="options.php">
 				<?php
 				self::render_oauth_authorization();

@@ -52,6 +52,10 @@
 			"type": "string",
 			"default": "frequency"
 		},
+		"tierStyle": {
+			"type": "string",
+			"default": "grid"
+		},
 		"useModalCheckout": {
 			"type": "boolean",
 			"default": true

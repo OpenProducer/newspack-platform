@@ -161,13 +161,13 @@ export default function createSwiper( els, config = {} ) {
 						escapeHTML(
 							`${ currentSlide.innerText },
 							${
-								alt
-									? /* translators: the title of the image. */ sprintf(
-											__( 'Image: %s, ', 'newspack-blocks' ),
-											alt
-									  )
-									: ''
-							}
+	alt
+		? /* translators: the title of the image. */ sprintf(
+			__( 'Image: %s, ', 'newspack-blocks' ),
+			alt
+		)
+		: ''
+}
 							${ slideInfo }`
 						),
 						'assertive'

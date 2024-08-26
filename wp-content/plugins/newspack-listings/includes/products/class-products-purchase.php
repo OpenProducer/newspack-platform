@@ -10,10 +10,10 @@
 
 namespace Newspack_Listings;
 
-use \Newspack_Listings\Settings;
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Block_Patterns;
-use \Newspack_Listings\Featured;
+use Newspack_Listings\Settings;
+use Newspack_Listings\Core;
+use Newspack_Listings\Block_Patterns;
+use Newspack_Listings\Featured;
 
 defined( 'ABSPATH' ) || exit;
 

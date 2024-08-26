@@ -38,7 +38,7 @@ abstract class Product {
 	 *
 	 * @var string|string[]
 	 */
-	protected static $plugin_filename = null;
+	public static $plugin_filename = null;
 
 	/**
 	 * The slug of the plugin associated with this product. If not defined, it will default to the Jetpack plugin
@@ -432,10 +432,34 @@ abstract class Product {
 	 * return all the products it contains.
 	 * Empty array by default.
 	 *
-	 * @return Array Product slugs
+	 * @return array Product slugs
 	 */
 	public static function get_supported_products() {
 		return array();
+	}
+
+	/**
+	 * Determine if the product is owned or not
+	 * An owned product is defined as a product that is any of the following
+	 * - Active
+	 * - Has historically been active
+	 * - The user has a plan that includes the product
+	 * - The user has the standalone plugin for the product installed
+	 *
+	 * @return boolean
+	 */
+	public static function is_owned() {
+		$historically_active_modules = Jetpack_Options::get_option( 'historically_active_modules', array() );
+		$standalone_info             = static::get_standalone_info();
+		if ( ( static::is_active() && Jetpack_Options::get_option( 'id' ) ) ||
+			$standalone_info['is_standalone_installed'] ||
+			in_array( static::$slug, $historically_active_modules, true ) ||
+			static::has_any_plan_for_product()
+		) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -445,48 +469,48 @@ abstract class Product {
 	 */
 	public static function get_status() {
 		if ( ! static::is_plugin_installed() ) {
-			$status = 'plugin_absent';
+			$status = Products::STATUS_PLUGIN_ABSENT;
 			if ( static::has_paid_plan_for_product() ) {
-				$status = 'plugin_absent_with_plan';
+				$status = Products::STATUS_PLUGIN_ABSENT_WITH_PLAN;
 			}
 		} elseif ( static::is_active() ) {
-			$status = 'active';
+			$status = Products::STATUS_ACTIVE;
 			// We only consider missing site & user connection an error when the Product is active.
 			if ( static::$requires_site_connection && ! ( new Connection_Manager() )->is_connected() ) {
 				// Site has never been connected before
-				if ( ! \Jetpack_Options::get_option( 'id' ) ) {
-					$status = 'needs_first_site_connection';
+				if ( ! Jetpack_Options::get_option( 'id' ) && ! static::is_owned() ) {
+					$status = Products::STATUS_NEEDS_FIRST_SITE_CONNECTION;
 				} else {
-					$status = 'site_connection_error';
+					$status = Products::STATUS_SITE_CONNECTION_ERROR;
 				}
 			} elseif ( static::$requires_user_connection && ! ( new Connection_Manager() )->has_connected_owner() ) {
-				$status = 'user_connection_error';
+				$status = Products::STATUS_USER_CONNECTION_ERROR;
 			} elseif ( static::is_upgradable() ) {
-				$status = 'can_upgrade';
+				$status = Products::STATUS_CAN_UPGRADE;
 			}
 			// Check specifically for inactive modules, which will prevent a product from being active
 		} elseif ( static::$module_name && ! static::is_module_active() ) {
-			$status = 'module_disabled';
+			$status = Products::STATUS_MODULE_DISABLED;
 			// If there is not a plan associated with the disabled module, encourage a plan first
 			// Getting a plan set up should help resolve any connection issues
 			// However if the standalone plugin for this product is active, then we will defer to showing errors that prevent the module from being active
 			// This is because if a standalone plugin is installed, we expect the product to not show as "inactive" on My Jetpack
 			if ( static::$requires_plan || ( ! static::has_any_plan_for_product() && static::$has_standalone_plugin && ! self::is_plugin_active() ) ) {
-				$status = static::$has_free_offering ? 'needs_purchase_or_free' : 'needs_purchase';
+				$status = static::is_owned() && static::$has_free_offering && ! static::$requires_plan ? Products::STATUS_NEEDS_ACTIVATION : Products::STATUS_NEEDS_PLAN;
 			} elseif ( static::$requires_site_connection && ! ( new Connection_Manager() )->is_connected() ) {
-				// Site has never been connected before
-				if ( ! \Jetpack_Options::get_option( 'id' ) ) {
-					$status = 'needs_first_site_connection';
+				// Site has never been connected before and product is not owned
+				if ( ! Jetpack_Options::get_option( 'id' ) && ! static::is_owned() ) {
+					$status = Products::STATUS_NEEDS_FIRST_SITE_CONNECTION;
 				} else {
-					$status = 'site_connection_error';
+					$status = Products::STATUS_SITE_CONNECTION_ERROR;
 				}
 			} elseif ( static::$requires_user_connection && ! ( new Connection_Manager() )->has_connected_owner() ) {
-				$status = 'user_connection_error';
+				$status = Products::STATUS_USER_CONNECTION_ERROR;
 			}
 		} elseif ( ! static::has_any_plan_for_product() ) {
-			$status = static::$has_free_offering ? 'needs_purchase_or_free' : 'needs_purchase';
+			$status = static::is_owned() && static::$has_free_offering && ! static::$requires_plan ? Products::STATUS_NEEDS_ACTIVATION : Products::STATUS_NEEDS_PLAN;
 		} else {
-			$status = 'inactive';
+			$status = Products::STATUS_INACTIVE;
 		}
 		return $status;
 	}

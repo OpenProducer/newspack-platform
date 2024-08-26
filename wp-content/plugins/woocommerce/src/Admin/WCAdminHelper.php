@@ -155,7 +155,6 @@ class WCAdminHelper {
 			'shop'        => wc_get_page_id( 'shop' ),
 			'cart'        => wc_get_page_id( 'cart' ),
 			'checkout'    => wc_get_page_id( 'checkout' ),
-			'privacy'     => wc_privacy_policy_page_id(),
 			'terms'       => wc_terms_and_conditions_page_id(),
 			'coming_soon' => wc_get_page_id( 'coming_soon' ),
 		);
@@ -167,6 +166,18 @@ class WCAdminHelper {
 		 * @param array $store_pages The store pages array. The keys are the page slugs and the values are the page IDs.
 		 */
 		$store_pages = apply_filters( 'woocommerce_store_pages', $store_pages );
+
+		// If the shop page is not set, we will still show the product archive page.
+		// Therefore, we need to check if the URL is a product archive page when the shop page is not set.
+		if ( $store_pages['shop'] <= 0 ) {
+			$product_post_archive_link = get_post_type_archive_link( 'product' );
+
+			if ( is_string( $product_post_archive_link ) &&
+				0 === strpos( $normalized_path, self::get_normalized_url_path( $product_post_archive_link ) )
+			) {
+				return true;
+			}
+		}
 
 		foreach ( $store_pages as $page => $page_id ) {
 			if ( 0 >= $page_id ) {

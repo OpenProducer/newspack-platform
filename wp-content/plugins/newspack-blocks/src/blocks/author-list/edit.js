@@ -138,12 +138,12 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 									'all' === authorType
 										? __( 'Both guest authors and WP users', 'newspack-blocks' )
 										: sprintf(
-												// translators: currently selected author type option.
-												__( '%s only', 'newspack-blocks' ),
-												'guest-authors' === authorType
-													? __( 'Guest authors', 'newspack-blocks' )
-													: __( 'WP users', 'newspack-blocks' )
-										  )
+											// translators: currently selected author type option.
+											__( '%s only', 'newspack-blocks' ),
+											'guest-authors' === authorType
+												? __( 'Guest authors', 'newspack-blocks' )
+												: __( 'WP users', 'newspack-blocks' )
+										)
 								) }
 								selected={ authorType || 'all' }
 								options={ [

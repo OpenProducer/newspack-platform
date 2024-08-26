@@ -43,7 +43,7 @@ export default function save( { attributes, className } ) {
 		...spacingProps.style,
 	};
 
-	const wrapperClasses = classnames( className, {
+	const wrapperClasses = classnames( className, 'wp-block-button', {
 		[ `has-custom-font-size` ]: fontSize || style?.typography?.fontSize,
 		[ `has-custom-width wp-block-button__width-${ width }` ]: width,
 	} );

@@ -46,7 +46,7 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 						'author_types'  => [
 							'sanitize_callback' => 'WP_REST_Newspack_Author_List_Controller::sanitize_array',
 						],
-						'exclude'       => [
+						'exclude'       => [ // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 							'sanitize_callback' => 'WP_REST_Newspack_Author_List_Controller::sanitize_array',
 						],
 						'exclude_empty' => [
@@ -199,7 +199,7 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 			];
 
 			if ( ! empty( $options['exclude'] ) ) {
-				$guest_author_args['post__not_in'] = array_values(
+				$guest_author_args['post__not_in'] = array_values( // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
 					array_map(
 						function( $item ) {
 							return isset( $item['value'] ) ? $item['value'] : $item;

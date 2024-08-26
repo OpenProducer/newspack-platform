@@ -7,8 +7,8 @@
 
 namespace Newspack_Listings;
 
-use \Newspack_Listings\Core;
-use \Newspack_Listings\Products;
+use Newspack_Listings\Core;
+use Newspack_Listings\Products;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -374,7 +374,7 @@ final class Settings {
 			if ( $is_permalink_option ) {
 				add_action( 'update_option_' . $setting['key'], [ __CLASS__, 'flush_permalinks' ], 10, 3 );
 			}
-		};
+		}
 	}
 
 	/**

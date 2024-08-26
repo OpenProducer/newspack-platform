@@ -1,6 +1,6 @@
-@use '../../../shared/sass/colors';
-@use '../../../shared/sass/mixins';
-@use '../../../shared/sass/variables';
+@use "../../../shared/sass/colors";
+@use "../../../shared/sass/mixins";
+@use "../../../shared/sass/variables";
 
 .wpbnbd--frequency-based {
 	background: colors.$color__background-body;
@@ -10,13 +10,13 @@
 	width: 100%;
 
 	// Hide some radio buttons absolutely.
-	input[type='radio'] {
+	input[type="radio"] {
 		position: absolute;
 		left: -99999em;
 
 		// And hide the ones being replaced by tabs completely.
-		&[name='donation_frequency'],
-		&[name='donation_frequency'] + label {
+		&[name="donation_frequency"],
+		&[name="donation_frequency"] + label {
 			display: none;
 		}
 	}
@@ -98,7 +98,7 @@
 			}
 		}
 
-		input[type='radio'] {
+		input[type="radio"] {
 			&:focus + .tier-label {
 				background: colors.$color__background-screen;
 				outline: 1px dotted currentcolor;
@@ -117,13 +117,12 @@
 			font-weight: bold;
 			left: 0.38rem;
 			position: absolute;
-			bottom: calc( 1.6em + 1.1rem + 2px );
+			bottom: calc(1.6em + 1.1rem + 2px);
 		}
 
 		input.other-input {
 			~ .money-input,
-			// other-donate-label
-			~ .odl {
+			~ .odl { // other-donate-label
 				display: none;
 			}
 
@@ -136,7 +135,7 @@
 			}
 
 			&:checked + label {
-				margin-bottom: calc( 3.2em + 1.86rem + 2px );
+				margin-bottom: calc(3.2em + 1.86rem + 2px);
 			}
 		}
 	}
@@ -163,7 +162,7 @@
 		}
 	}
 
-	input[type='radio']:checked ~ .input-container {
+	input[type="radio"]:checked ~ .input-container {
 		display: block;
 	}
 }
@@ -179,7 +178,7 @@
 
 	&:focus-within {
 		border-color: colors.$color__text-input-focus;
-		outline: thin solid rgba( colors.$color__text-input-focus, 0.15 );
+		outline: thin solid rgba(colors.$color__text-input-focus, 0.15);
 		outline-offset: -4px;
 	}
 
@@ -189,7 +188,7 @@
 		padding-left: 0.5em;
 	}
 
-	input[type='number'] {
+	input[type="number"] {
 		border: none;
 		outline: none;
 		box-shadow: none;
@@ -213,7 +212,7 @@
 		}
 	}
 
-	.frequency input[type='radio']:checked ~ .tiers {
+	.frequency input[type="radio"]:checked ~ .tiers {
 		display: flex;
 	}
 

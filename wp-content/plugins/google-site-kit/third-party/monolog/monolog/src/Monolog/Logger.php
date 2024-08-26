@@ -277,7 +277,7 @@ class Logger implements \Google\Site_Kit_Dependencies\Psr\Log\LoggerInterface, \
      *
      * @phpstan-param Level $level
      */
-    public function addRecord(int $level, string $message, array $context = [], \Google\Site_Kit_Dependencies\Monolog\DateTimeImmutable $datetime = null) : bool
+    public function addRecord(int $level, string $message, array $context = [], ?\Google\Site_Kit_Dependencies\Monolog\DateTimeImmutable $datetime = null) : bool
     {
         if (isset(self::RFC_5424_LEVELS[$level])) {
             $level = self::RFC_5424_LEVELS[$level];

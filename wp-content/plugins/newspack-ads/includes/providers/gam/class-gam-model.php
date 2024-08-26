@@ -826,6 +826,11 @@ final class GAM_Model {
 		$size_map = [];
 		foreach ( $viewports as $viewport_width ) {
 			foreach ( $sizes as $size ) {
+				// If size is 1x1, we want it in all viewports.
+				if ( 1 === $size[0] && 1 === $size[1] ) {
+					$size_map[ $viewport_width ][] = $size;
+					continue;
+				}
 				$is_in_viewport     = $size[0] <= $viewport_width;
 				$is_above_threshold = false !== $width_threshold && $width_threshold <= $size[0];
 				if ( 0 === $size[0] ) {
@@ -855,11 +860,6 @@ final class GAM_Model {
 			$sizes = $ad_unit['sizes'];
 		}
 
-		// Ensure that 1x1 is always available.
-		if ( ! in_array( [ 1, 1 ], $sizes, true ) ) {
-			$sizes[] = [ 1, 1 ];
-		}
-
 		/**
 		 * Filters the ad unit size map difference ratio.
 		 *
@@ -878,6 +878,8 @@ final class GAM_Model {
 		 */
 		$width_threshold = apply_filters( 'newspack_ads_gam_size_map_width_threshold', 600, $ad_unit, $sizes );
 
+		$size_map = self::get_responsive_size_map( $sizes, $width_diff_ratio, $width_threshold );
+
 		/**
 		 * Filters the ad unit size map rules.
 		 *
@@ -885,14 +887,7 @@ final class GAM_Model {
 		 * @param array   $ad_unit  The ad unit config.
 		 * @param array[] $sizes    The sizes being used.
 		 */
-		$size_map = apply_filters(
-			'newspack_ads_gam_size_map',
-			self::get_responsive_size_map( $sizes, $width_diff_ratio, $width_threshold ),
-			$ad_unit,
-			$sizes
-		);
-
-		return $size_map;
+		return apply_filters( 'newspack_ads_gam_size_map', $size_map, $ad_unit, $sizes );
 	}
 
 	/**

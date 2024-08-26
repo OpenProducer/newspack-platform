@@ -103,7 +103,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 				throw new Exception( $response->get_error_message() );
 			}
 			$body = json_decode( $response['body'] );
-			if ( ! in_array( wp_remote_retrieve_response_code( $response ), [ 200, 201 ] ) ) {
+			if ( ! in_array( wp_remote_retrieve_response_code( $response ), [ 200, 201, 202, 204 ] ) ) { // phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar Constant Contact API response codes. See: https://developer.constantcontact.com/api_guide/glossary_responses.html
 				if ( is_array( $body ) && isset( $body[0], $body[0]->error_message ) ) {
 					throw new Exception( $body[0]->error_message );
 				} elseif ( is_object( $body ) && isset( $body->error_message ) ) {
@@ -405,12 +405,11 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	 * @return object Updated campaign data.
 	 */
 	public function update_campaign_name( $campaign_id, $name ) {
-		$campaign = $this->request(
+		return $this->request(
 			'PATCH',
 			'emails/' . $this->parse_campaign_id( $campaign_id ),
 			[ 'body' => wp_json_encode( [ 'name' => $name ] ) ]
 		);
-		return $this->get_campaign( $campaign->campaign_id );
 	}
 
 	/**
@@ -490,17 +489,21 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	 * @return object|false Contact or false if not found.
 	 */
 	public function get_contact( $email_address ) {
-		$res = $this->request(
-			'GET',
-			'contacts',
-			[
-				'query' => [
-					'email'   => $email_address,
-					'status'  => 'all',
-					'include' => 'custom_fields,list_memberships,taggings',
-				],
-			]
-		);
+		try {
+			$res = $this->request(
+				'GET',
+				'contacts',
+				[
+					'query' => [
+						'email'   => $email_address,
+						'status'  => 'all',
+						'include' => 'custom_fields,list_memberships,taggings',
+					],
+				]
+			);
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletter_error_get_contact', $e->getMessage() );
+		}
 		if ( empty( $res->contacts ) ) {
 			return false;
 		}
@@ -597,6 +600,33 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	}
 
 	/**
+	 * Remove one or more contacts from one or more lists.
+	 *
+	 * @param string[] $contact_ids Contact IDs.
+	 * @param string[] $list_ids List IDs.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function remove_contacts_from_lists( $contact_ids, $list_ids ) {
+		$body = [
+			'source'   => [
+				'contact_ids' => $contact_ids,
+			],
+			'list_ids' => $list_ids,
+		];
+		try {
+			$res = $this->request(
+				'POST',
+				'/activities/remove_list_memberships',
+				[ 'body' => wp_json_encode( $body ) ]
+			);
+			return $res;
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletter_error_removing_contact_from_lists', $e->getMessage() );
+		}
+	}
+
+	/**
 	 * Create or update a contact
 	 *
 	 * @param string $email_address Email address.
@@ -609,7 +639,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	 *   @type string[] $custom_fields Custom field values keyed by their label.
 	 * }
 	 *
-	 * @return array Created contact data.
+	 * @return WP_Error|object|false Created contact data or false.
 	 */
 	public function upsert_contact( $email_address, $data = [] ) {
 		$contact = $this->get_contact( $email_address );
@@ -668,11 +698,17 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 				$body['taggings'] = $data['taggings'];
 			}
 		}
-		$res = $this->request(
-			$contact ? 'PUT' : 'POST',
-			$contact ? 'contacts/' . $contact->contact_id : 'contacts',
-			[ 'body' => wp_json_encode( $body ) ]
-		);
+
+		try {
+			$res = $this->request(
+				$contact ? 'PUT' : 'POST',
+				$contact ? 'contacts/' . $contact->contact_id : 'contacts',
+				[ 'body' => wp_json_encode( $body ) ]
+			);
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletter_error_upserting_contact', $e->getMessage() );
+		}
+
 		return $this->get_contact( $email_address );
 	}
 

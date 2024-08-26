@@ -254,7 +254,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/patterns');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/patterns');
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/store/index.js
 /**
@@ -560,6 +560,8 @@ function CreatePatternModal({
     title: modalTitle || defaultModalTitle,
     onRequestClose: restProps.onClose,
     overlayClassName: className,
+    focusOnMount: "firstContentElement",
+    size: "small",
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CreatePatternModalContents, {
       ...restProps
     })
@@ -633,6 +635,7 @@ function CreatePatternModalContents({
         onChange: setCategoryTerms,
         categoryMap: categoryMap
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToggleControl, {
+        __nextHasNoMarginBottom: true,
         label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'pattern (singular)'),
         help: (0,external_wp_i18n_namespaceObject.__)('Sync this pattern across multiple locations.'),
         checked: syncType === PATTERN_SYNC_TYPES.full,
@@ -818,6 +821,8 @@ function RenamePatternModal({
     title: (0,external_wp_i18n_namespaceObject.__)('Rename'),
     ...props,
     onRequestClose: onClose,
+    focusOnMount: "firstContentElement",
+    size: "small",
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("form", {
       onSubmit: onRename,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
@@ -940,7 +945,11 @@ function PatternConvertButton({
     // Hide when block doesn't support being made into a pattern.
     (0,external_wp_blocks_namespaceObject.hasBlockSupport)(block.name, 'reusable', true)) &&
     // Hide when current doesn't have permission to do that.
-    !!canUser('create', 'blocks');
+    // Blocks refers to the wp_block post type, this checks the ability to create a post of that type.
+    !!canUser('create', {
+      kind: 'postType',
+      name: 'wp_block'
+    });
     return _canConvert;
   }, [clientIds, rootClientId]);
   const {
@@ -1034,12 +1043,19 @@ function PatternsManageButton({
     const reusableBlock = getBlock(clientId);
     return {
       canRemove: canRemoveBlock(clientId),
-      isVisible: !!reusableBlock && (0,external_wp_blocks_namespaceObject.isReusableBlock)(reusableBlock) && !!canUser('update', 'blocks', reusableBlock.attributes.ref),
+      isVisible: !!reusableBlock && (0,external_wp_blocks_namespaceObject.isReusableBlock)(reusableBlock) && !!canUser('update', {
+        kind: 'postType',
+        name: 'wp_block',
+        id: reusableBlock.attributes.ref
+      }),
       innerBlockCount: getBlockCount(clientId),
       // The site editor and templates both check whether the user
       // has edit_theme_options capabilities. We can leverage that here
       // and omit the manage patterns link if the user can't access it.
-      managePatternsUrl: canUser('create', 'templates') ? (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+      managePatternsUrl: canUser('create', {
+        kind: 'postType',
+        name: 'wp_template'
+      }) ? (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
         path: '/patterns'
       }) : (0,external_wp_url_namespaceObject.addQueryArgs)('edit.php', {
         post_type: 'wp_block'
@@ -1412,14 +1428,15 @@ function addBindings(bindings) {
 }
 function PatternOverridesControls({
   attributes,
-  setAttributes
+  setAttributes,
+  name: blockName
 }) {
   const controlId = (0,external_wp_element_namespaceObject.useId)();
   const [showAllowOverridesModal, setShowAllowOverridesModal] = (0,external_wp_element_namespaceObject.useState)(false);
   const [showDisallowOverridesModal, setShowDisallowOverridesModal] = (0,external_wp_element_namespaceObject.useState)(false);
   const hasName = !!attributes.metadata?.name;
   const defaultBindings = attributes.metadata?.bindings?.__default;
-  const allowOverrides = hasName && defaultBindings?.source === PATTERN_OVERRIDES_BINDING_SOURCE;
+  const hasOverrides = hasName && defaultBindings?.source === PATTERN_OVERRIDES_BINDING_SOURCE;
   const isConnectedToOtherSources = defaultBindings?.source && defaultBindings.source !== PATTERN_OVERRIDES_BINDING_SOURCE;
   function updateBindings(isChecked, customName) {
     const prevBindings = attributes?.metadata?.bindings;
@@ -1440,26 +1457,30 @@ function PatternOverridesControls({
   if (isConnectedToOtherSources) {
     return null;
   }
+  const hasUnsupportedImageAttributes = blockName === 'core/image' && (!!attributes.caption?.length || !!attributes.href?.length);
+  const helpText = !hasOverrides && hasUnsupportedImageAttributes ? (0,external_wp_i18n_namespaceObject.__)(`Overrides currently don't support image captions or links. Remove the caption or link first before enabling overrides.`) : (0,external_wp_i18n_namespaceObject.__)('Allow changes to this block throughout instances of this pattern.');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
       group: "advanced",
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
         id: controlId,
         label: (0,external_wp_i18n_namespaceObject.__)('Overrides'),
-        help: (0,external_wp_i18n_namespaceObject.__)('Allow changes to this block throughout instances of this pattern.'),
+        help: helpText,
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
           __next40pxDefaultSize: true,
           className: "pattern-overrides-control__allow-overrides-button",
           variant: "secondary",
           "aria-haspopup": "dialog",
           onClick: () => {
-            if (allowOverrides) {
+            if (hasOverrides) {
               setShowDisallowOverridesModal(true);
             } else {
               setShowAllowOverridesModal(true);
             }
           },
-          children: allowOverrides ? (0,external_wp_i18n_namespaceObject.__)('Disable overrides') : (0,external_wp_i18n_namespaceObject.__)('Enable overrides')
+          disabled: !hasOverrides && hasUnsupportedImageAttributes,
+          accessibleWhenDisabled: true,
+          children: hasOverrides ? (0,external_wp_i18n_namespaceObject.__)('Disable overrides') : (0,external_wp_i18n_namespaceObject.__)('Enable overrides')
         })
       })
     }), showAllowOverridesModal && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AllowOverridesModal, {
@@ -1536,13 +1557,11 @@ function ResetOverridesControl(props) {
       [CONTENT]: newOverrides
     });
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockControls, {
-    group: "other",
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.__unstableBlockToolbarLastItem, {
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarGroup, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
         onClick: onClick,
         disabled: !isOverriden,
-        __experimentalIsFocusable: true,
         children: (0,external_wp_i18n_namespaceObject.__)('Reset')
       })
     })
@@ -1646,7 +1665,7 @@ function PatternOverridesToolbarIndicator({
         })
       }),
       toggleProps: {
-        describedBy: blockDescription,
+        description: blockDescription,
         ...toggleProps
       },
       menuProps: {

@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.89.0
+Version: 2.0.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -24,16 +24,16 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   --newspack-theme-color-primary: #36f;
   --newspack-theme-color-primary-variation: #2240d5;
   --newspack-theme-color-secondary: #555;
-  --newspack-theme-color-secondary-variation: #3E3E3E;
+  --newspack-theme-color-secondary-variation: #3e3e3e;
   --newspack-theme-color-highlight: #fed850;
   --newspack-theme-color-primary-darken-5: #1a53ff;
   --newspack-theme-color-primary-darken-10: #0040ff;
-  --newspack-theme-color-primary-against-white: var( --newspack-theme-color-primary );
-  --newspack-theme-color-secondary-against-white: var( --newspack-theme-color-secondary );
+  --newspack-theme-color-primary-against-white: var(--newspack-theme-color-primary);
+  --newspack-theme-color-secondary-against-white: var(--newspack-theme-color-secondary);
   --newspack-theme-color-against-primary: #fff;
   --newspack-theme-color-against-secondary: #fff;
   --newspack-theme-color-bg-body: #fff;
-  --newspack-theme-color-bg-input: var( --newspack-theme-color-bg-body );
+  --newspack-theme-color-bg-input: var(--newspack-theme-color-bg-body);
   --newspack-theme-color-bg-light: #f0f0f0;
   --newspack-theme-color-bg-button-hover: #111;
   --newspack-theme-color-bg-pre: #eee;
@@ -43,10 +43,10 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   --newspack-theme-color-bg-dark-darken-5: #262626;
   --newspack-theme-color-text-main: #111;
   --newspack-theme-color-text-light: #515151;
-  --newspack-theme-color-text-hover: var( --newspack-theme-color-bg-dark-lighten-5 );
+  --newspack-theme-color-text-hover: var(--newspack-theme-color-bg-dark-lighten-5);
   --newspack-theme-color-text-screen: #21759b;
-  --newspack-theme-color-link: var( --newspack-theme-color-secondary );
-  --newspack-theme-color-link-hover: var( --newspack-theme-color-secondary-variation-against-white );
+  --newspack-theme-color-link: var(--newspack-theme-color-secondary);
+  --newspack-theme-color-link-hover: var(--newspack-theme-color-secondary-variation-against-white);
   --newspack-theme-color-border: #ccc;
   --newspack-theme-color-border-light: #e0e0e0;
   --newspack-theme-color-alert-yellow: #f0b849;
@@ -56,23 +56,33 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 
 :root {
   --newspack-theme-font-body: georgia, garamond, "Times New Roman", serif;
-  --newspack-theme-font-heading: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen",
-  	"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --newspack-theme-font-heading:
+  	-apple-system,
+  	blinkmacsystemfont,
+  	"Segoe UI",
+  	"Roboto",
+  	"Oxygen",
+  	"Ubuntu",
+  	"Cantarell",
+  	"Fira Sans",
+  	"Droid Sans",
+  	"Helvetica Neue",
+  	sans-serif;
   --newspack-theme-font-code: menlo, monaco, consolas, lucida console, monospace;
   --newspack-theme-font-pre: "Courier 10 Pitch", courier, monospace;
   --newspack-theme-font-size-base: 20px;
   --newspack-theme-font-size-base-sm: 18px;
   --newspack-theme-font-size-ratio: 1.125;
-  --newspack-theme-font-size-xxs: calc( 1em * 0.6 );
-  --newspack-theme-font-size-xs: calc( 1em * 0.7 );
-  --newspack-theme-font-size-sm: calc( 1em * 0.8 );
-  --newspack-theme-font-size-md: calc( 1em * 1.2 );
-  --newspack-theme-font-size-lg: calc( 1em * 1.4 );
-  --newspack-theme-font-size-xl: calc( 1em * 1.8 );
-  --newspack-theme-font-size-xxl: calc( 1em * 2.2 );
-  --newspack-theme-font-size-xxxl: calc( 1em * 2.8 );
-  --newspack-theme-font-size-xxxxl: calc( 1em * 3.2 );
-  --newspack-theme-font-size-xxxxxl: calc( 1em * 4 );
+  --newspack-theme-font-size-xxs: calc(1em * 0.6);
+  --newspack-theme-font-size-xs: calc(1em * 0.7);
+  --newspack-theme-font-size-sm: calc(1em * 0.8);
+  --newspack-theme-font-size-md: calc(1em * 1.2);
+  --newspack-theme-font-size-lg: calc(1em * 1.4);
+  --newspack-theme-font-size-xl: calc(1em * 1.8);
+  --newspack-theme-font-size-xxl: calc(1em * 2.2);
+  --newspack-theme-font-size-xxxl: calc(1em * 2.8);
+  --newspack-theme-font-size-xxxxl: calc(1em * 3.2);
+  --newspack-theme-font-size-xxxxxl: calc(1em * 4);
   --newspack-theme-font-line-height-body: 1.6;
   --newspack-theme-font-line-height-heading: 1.2;
 }
@@ -110,10 +120,10 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 
 /* Mixins */
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
@@ -123,10 +133,10 @@ body {
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 /* Normalize */
@@ -475,10 +485,10 @@ textarea {
 
 /* Mixins */
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
@@ -488,10 +498,10 @@ body {
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 .comment-metadata,
@@ -820,10 +830,10 @@ hr {
 }
 
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 ul,
@@ -837,6 +847,27 @@ ul {
 
 ul ul {
   list-style-type: circle;
+}
+
+ul.is-style-checked {
+  list-style-type: none;
+  padding-left: calc(24px + 0.25em);
+}
+
+ul.is-style-checked li {
+  position: relative;
+}
+
+ul.is-style-checked li::before {
+  background: currentcolor;
+  clip-path: polygon(69.5833% 29.5834%, 43.3333% 65%, 29.5833% 54.5834%, 25.8333% 59.5834%, 44.5833% 73.75%, 74.5833% 33.3334%, 69.5833% 29.5834%);
+  content: "";
+  display: block;
+  height: 24px;
+  left: calc(-24px - 0.25em);
+  position: absolute;
+  top: calc((1em * var(--newspack-theme-font-line-height-body) - 24px) / 2);
+  width: 24px;
 }
 
 ol {
@@ -878,10 +909,10 @@ blockquote cite {
 }
 
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 table {
@@ -5284,6 +5315,9 @@ p.has-background {
   padding-left: 1rem;
   padding-right: 1rem;
 }
+.wp-block-columns .wp-block-column.is-style-rounded {
+  border-radius: 6px;
+}
 .wp-block-columns .wp-block-column > * {
   margin-bottom: 32px;
   margin-top: 32px;
@@ -5952,6 +5986,9 @@ hr.has-background.is-style-dots::before {
     width: 400px !important;
   }
 }
+.wp-block-group > .wp-block-group-is-layout-grid > * {
+  margin: 0;
+}
 
 @media only screen and (min-width: 600px) {
   .entry .entry-content > .wp-block-group.alignleft:not(:first-child),
@@ -5973,8 +6010,8 @@ hr.has-background.is-style-dots::before {
   }
 }
 
-.wp-block-group.has-background + .wp-block-group.has-background,
-[id=pico] > .wp-block-group.has-background + .wp-block-group.has-background {
+.wp-block-group.has-background.alignfull + .wp-block-group.has-background.alignfull,
+[id=pico] > .wp-block-group.has-background.alignfull + .wp-block-group.has-background.alignfull {
   margin-top: -32px;
 }
 
@@ -6138,6 +6175,14 @@ hr.has-background.is-style-dots::before {
   color: inherit;
 }
 
+.has-xx-small-font-size {
+  font-size: var(--newspack-theme-font-size-xxs);
+}
+
+.has-x-small-font-size {
+  font-size: var(--newspack-theme-font-size-xs);
+}
+
 .has-small-font-size {
   font-size: var(--newspack-theme-font-size-sm);
 }
@@ -6151,7 +6196,11 @@ hr.has-background.is-style-dots::before {
 }
 
 .has-huge-font-size,
-.has-x-large-font-size {
+.has-x-large-font-size,
+.has-xx-large-font-size,
+.has-xxx-large-font-size,
+.has-xxxx-large-font-size,
+.has-xxxxx-large-font-size {
   font-size: var(--newspack-theme-font-size-xl);
 }
 
@@ -6160,10 +6209,48 @@ hr.has-background.is-style-dots::before {
     font-size: var(--newspack-theme-font-size-xl);
   }
   .has-huge-font-size,
-  .has-x-large-font-size {
+  .has-x-large-font-size,
+  .has-xx-large-font-size {
     font-size: var(--newspack-theme-font-size-xxl);
   }
+  .has-xxx-large-font-size {
+    font-size: var(--newspack-theme-font-size-xxxl);
+  }
+  .has-xxxx-large-font-size {
+    font-size: var(--newspack-theme-font-size-xxxxl);
+  }
+  .has-xxxxx-large-font-size {
+    font-size: var(--newspack-theme-font-size-xxxxxl);
+  }
 }
+.has-accent-background-color,
+.has-accent-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-accent-background-color,
+.wp-block-pullquote.has-accent-background-color,
+.is-style-outline .wp-block-button__link.has-accent-background-color:not(:hover),
+.wp-block-navigation-item.has-accent-background-color,
+.wp-block-search__button.has-accent-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-accent-background-color {
+  background-color: var(--newspack-theme-color-primary);
+}
+
+.has-accent-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-accent-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-accent-color p,
+.wp-block-button__link.has-accent-color,
+.wp-block-button__link.has-accent-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-accent-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-accent-color:not(:hover),
+.wp-block-search__button.has-accent-color,
+.newspack-newsletters-subscribe input[type=submit].has-accent-color {
+  color: var(--newspack-theme-color-primary);
+}
+
+.has-accent-border-color,
+.wp-block-pullquote.has-accent-border-color {
+  border-color: var(--newspack-theme-color-primary);
+}
+
 .has-primary-background-color,
 .has-primary-background-color.has-background-dim,
 .wp-block-pullquote.is-style-solid-color.has-primary-background-color,
@@ -6218,6 +6305,34 @@ hr.has-background.is-style-dots::before {
 .has-primary-variation-border-color,
 .wp-block-pullquote.has-primary-variation-border-color {
   border-color: var(--newspack-theme-color-primary-variation);
+}
+
+.has-accent-2-background-color,
+.has-accent-2-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-accent-2-background-color,
+.wp-block-pullquote.has-accent-2-background-color,
+.is-style-outline .wp-block-button__link.has-accent-2-background-color:not(:hover),
+.wp-block-navigation-item.has-accent-2-background-color,
+.wp-block-search__button.has-accent-2-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-accent-2-background-color {
+  background-color: var(--newspack-theme-color-secondary);
+}
+
+.has-accent-2-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-accent-2-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-accent-2-color p,
+.wp-block-button__link.has-accent-2-color,
+.wp-block-button__link.has-accent-2-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-accent-2-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-accent-2-color:not(:hover),
+.wp-block-search__button.has-accent-2-color,
+.newspack-newsletters-subscribe input[type=submit].has-accent-2-color {
+  color: var(--newspack-theme-color-secondary);
+}
+
+.has-accent-2-border-color,
+.wp-block-pullquote.has-accent-2-border-color {
+  border-color: var(--newspack-theme-color-secondary);
 }
 
 .has-secondary-background-color,
@@ -6276,6 +6391,34 @@ hr.has-background.is-style-dots::before {
   border-color: var(--newspack-theme-color-secondary-variation);
 }
 
+.has-contrast-background-color,
+.has-contrast-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-contrast-background-color,
+.wp-block-pullquote.has-contrast-background-color,
+.is-style-outline .wp-block-button__link.has-contrast-background-color:not(:hover),
+.wp-block-navigation-item.has-contrast-background-color,
+.wp-block-search__button.has-contrast-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-contrast-background-color {
+  background-color: #111;
+}
+
+.has-contrast-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-contrast-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-contrast-color p,
+.wp-block-button__link.has-contrast-color,
+.wp-block-button__link.has-contrast-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-contrast-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-contrast-color:not(:hover),
+.wp-block-search__button.has-contrast-color,
+.newspack-newsletters-subscribe input[type=submit].has-contrast-color {
+  color: #111;
+}
+
+.has-contrast-border-color,
+.wp-block-pullquote.has-contrast-border-color {
+  border-color: #111;
+}
+
 .has-dark-gray-background-color,
 .has-dark-gray-background-color.has-background-dim,
 .wp-block-pullquote.is-style-solid-color.has-dark-gray-background-color,
@@ -6302,6 +6445,62 @@ hr.has-background.is-style-dots::before {
 .has-dark-gray-border-color,
 .wp-block-pullquote.has-dark-gray-border-color {
   border-color: #111;
+}
+
+.has-contrast-2-background-color,
+.has-contrast-2-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-contrast-2-background-color,
+.wp-block-pullquote.has-contrast-2-background-color,
+.is-style-outline .wp-block-button__link.has-contrast-2-background-color:not(:hover),
+.wp-block-navigation-item.has-contrast-2-background-color,
+.wp-block-search__button.has-contrast-2-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-contrast-2-background-color {
+  background-color: var(--newspack-theme-color-bg-dark);
+}
+
+.has-contrast-2-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-contrast-2-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-contrast-2-color p,
+.wp-block-button__link.has-contrast-2-color,
+.wp-block-button__link.has-contrast-2-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-contrast-2-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-contrast-2-color:not(:hover),
+.wp-block-search__button.has-contrast-2-color,
+.newspack-newsletters-subscribe input[type=submit].has-contrast-2-color {
+  color: var(--newspack-theme-color-bg-dark);
+}
+
+.has-contrast-2-border-color,
+.wp-block-pullquote.has-contrast-2-border-color {
+  border-color: var(--newspack-theme-color-bg-dark);
+}
+
+.has-contrast-3-background-color,
+.has-contrast-3-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-contrast-3-background-color,
+.wp-block-pullquote.has-contrast-3-background-color,
+.is-style-outline .wp-block-button__link.has-contrast-3-background-color:not(:hover),
+.wp-block-navigation-item.has-contrast-3-background-color,
+.wp-block-search__button.has-contrast-3-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-contrast-3-background-color {
+  background-color: #767676;
+}
+
+.has-contrast-3-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-contrast-3-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-contrast-3-color p,
+.wp-block-button__link.has-contrast-3-color,
+.wp-block-button__link.has-contrast-3-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-contrast-3-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-contrast-3-color:not(:hover),
+.wp-block-search__button.has-contrast-3-color,
+.newspack-newsletters-subscribe input[type=submit].has-contrast-3-color {
+  color: #767676;
+}
+
+.has-contrast-3-border-color,
+.wp-block-pullquote.has-contrast-3-border-color {
+  border-color: #767676;
 }
 
 .has-medium-gray-background-color,
@@ -6332,6 +6531,118 @@ hr.has-background.is-style-dots::before {
   border-color: #767676;
 }
 
+.has-base-5-background-color,
+.has-base-5-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-base-5-background-color,
+.wp-block-pullquote.has-base-5-background-color,
+.is-style-outline .wp-block-button__link.has-base-5-background-color:not(:hover),
+.wp-block-navigation-item.has-base-5-background-color,
+.wp-block-search__button.has-base-5-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-5-background-color {
+  background-color: var(--newspack-theme-color-text-light);
+}
+
+.has-base-5-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-5-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-5-color p,
+.wp-block-button__link.has-base-5-color,
+.wp-block-button__link.has-base-5-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-base-5-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-base-5-color:not(:hover),
+.wp-block-search__button.has-base-5-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-5-color {
+  color: var(--newspack-theme-color-text-light);
+}
+
+.has-base-5-border-color,
+.wp-block-pullquote.has-base-5-border-color {
+  border-color: var(--newspack-theme-color-text-light);
+}
+
+.has-base-4-background-color,
+.has-base-4-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-base-4-background-color,
+.wp-block-pullquote.has-base-4-background-color,
+.is-style-outline .wp-block-button__link.has-base-4-background-color:not(:hover),
+.wp-block-navigation-item.has-base-4-background-color,
+.wp-block-search__button.has-base-4-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-4-background-color {
+  background-color: var(--newspack-theme-color-border);
+}
+
+.has-base-4-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-4-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-4-color p,
+.wp-block-button__link.has-base-4-color,
+.wp-block-button__link.has-base-4-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-base-4-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-base-4-color:not(:hover),
+.wp-block-search__button.has-base-4-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-4-color {
+  color: var(--newspack-theme-color-border);
+}
+
+.has-base-4-border-color,
+.wp-block-pullquote.has-base-4-border-color {
+  border-color: var(--newspack-theme-color-border);
+}
+
+.has-base-3-background-color,
+.has-base-3-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-base-3-background-color,
+.wp-block-pullquote.has-base-3-background-color,
+.is-style-outline .wp-block-button__link.has-base-3-background-color:not(:hover),
+.wp-block-navigation-item.has-base-3-background-color,
+.wp-block-search__button.has-base-3-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-3-background-color {
+  background-color: var(--newspack-theme-color-border-light);
+}
+
+.has-base-3-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-3-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-3-color p,
+.wp-block-button__link.has-base-3-color,
+.wp-block-button__link.has-base-3-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-base-3-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-base-3-color:not(:hover),
+.wp-block-search__button.has-base-3-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-3-color {
+  color: var(--newspack-theme-color-border-light);
+}
+
+.has-base-3-border-color,
+.wp-block-pullquote.has-base-3-border-color {
+  border-color: var(--newspack-theme-color-border-light);
+}
+
+.has-base-2-background-color,
+.has-base-2-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-base-2-background-color,
+.wp-block-pullquote.has-base-2-background-color,
+.is-style-outline .wp-block-button__link.has-base-2-background-color:not(:hover),
+.wp-block-navigation-item.has-base-2-background-color,
+.wp-block-search__button.has-base-2-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-2-background-color {
+  background-color: #eee;
+}
+
+.has-base-2-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-2-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-2-color p,
+.wp-block-button__link.has-base-2-color,
+.wp-block-button__link.has-base-2-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-base-2-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-base-2-color:not(:hover),
+.wp-block-search__button.has-base-2-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-2-color {
+  color: #eee;
+}
+
+.has-base-2-border-color,
+.wp-block-pullquote.has-base-2-border-color {
+  border-color: #eee;
+}
+
 .has-light-gray-background-color,
 .has-light-gray-background-color.has-background-dim,
 .wp-block-pullquote.is-style-solid-color.has-light-gray-background-color,
@@ -6358,6 +6669,34 @@ hr.has-background.is-style-dots::before {
 .has-light-gray-border-color,
 .wp-block-pullquote.has-light-gray-border-color {
   border-color: #eee;
+}
+
+.has-base-background-color,
+.has-base-background-color.has-background-dim,
+.wp-block-pullquote.is-style-solid-color.has-base-background-color,
+.wp-block-pullquote.has-base-background-color,
+.is-style-outline .wp-block-button__link.has-base-background-color:not(:hover),
+.wp-block-navigation-item.has-base-background-color,
+.wp-block-search__button.has-base-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-background-color {
+  background-color: #fff;
+}
+
+.has-base-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-color,
+.wp-block-pullquote.is-style-solid-color blockquote.has-base-color p,
+.wp-block-button__link.has-base-color,
+.wp-block-button__link.has-base-color:visited:not(:hover),
+.is-style-outline .wp-block-button__link.has-base-color:not(:hover),
+.wp-block-button__link.is-style-outline.has-base-color:not(:hover),
+.wp-block-search__button.has-base-color,
+.newspack-newsletters-subscribe input[type=submit].has-base-color {
+  color: #fff;
+}
+
+.has-base-border-color,
+.wp-block-pullquote.has-base-border-color {
+  border-color: #fff;
 }
 
 .has-white-background-color,
@@ -6802,10 +7141,10 @@ hr.has-background.is-style-dots::before {
 -------------------------------------------------------------- */
 /* Mixins */
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
@@ -6815,10 +7154,10 @@ body {
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 .newspack-pattern {
@@ -7259,10 +7598,10 @@ svg {
 ## Captions
 -------------------------------------------------------------- */
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 .wp-caption {
@@ -7356,10 +7695,10 @@ figcaption,
 ## Galleries
 -------------------------------------------------------------- */
 body {
-  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
-  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
-  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
-  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+  --wp--preset--spacing--50: clamp(1.25rem, 1rem + 0.8333vw, 1.5rem);
+  --wp--preset--spacing--60: clamp(1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp(1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 .gallery {
@@ -7638,6 +7977,21 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   position: relative;
   top: 0.05em;
   width: 0.5em;
+}
+
+/* Newspack Publisher Media Kit */
+.publisher-media-kit__wrapper.wp-block-group > .wp-block-group__inner-container > * {
+  margin-bottom: var(--wp--preset--spacing--80);
+  margin-top: var(--wp--preset--spacing--80);
+}
+.publisher-media-kit__wrapper.wp-block-group > .wp-block-group__inner-container > *:first-child {
+  margin-top: 0;
+}
+.publisher-media-kit__wrapper.wp-block-group > .wp-block-group__inner-container > *:last-child {
+  margin-bottom: 0;
+}
+.page-template-no-header-footer-php .publisher-media-kit__wrapper.wp-block-group > .wp-block-group__inner-container > *:last-child {
+  margin-bottom: var(--wp--preset--spacing--80);
 }
 
 .h-sb .top-header-contain,

@@ -660,8 +660,6 @@ class Newspack_Newsletters_Subscription {
 			}
 		}
 
-		$result = $errors->has_errors() ? $errors : $result;
-
 		/**
 		 * Fires after a contact is added.
 		 *
@@ -680,11 +678,13 @@ class Newspack_Newsletters_Subscription {
 		do_action( 'newspack_newsletters_add_contact', $provider->service, $contact, $lists, $result, $is_updating );
 
 		// Remove any existing subscription error message.
-		if ( ! is_wp_error( $result ) ) {
+		if ( ! $errors->has_errors() ) {
 			$user = get_user_by( 'email', $contact['email'] );
 			if ( $user ) {
 				delete_user_meta( $user->ID, 'newspack_newsletters_subscription_error' );
 			}
+		} else {
+			return $errors;
 		}
 
 		return $result;
@@ -1152,7 +1152,6 @@ class Newspack_Newsletters_Subscription {
 				 * @param array|WP_Error $lists_config Associative array with list configuration keyed by list ID or WP_Error.
 				 */
 				$list_config  = apply_filters( 'newspack_newsletters_manage_newsletters_available_lists', self::get_lists_config() );
-				$list_map     = [];
 				$user_lists   = array_flip( self::get_contact_lists( $email ) );
 				$intent_error = self::get_user_subscription_intent_error( $user_id );
 				if ( $intent_error ) :

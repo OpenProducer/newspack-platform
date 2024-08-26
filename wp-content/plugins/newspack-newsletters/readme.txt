@@ -4,11 +4,11 @@ Requires at least: 5.3
 Tested up to: 6.4.3
 Requires PHP: 7.4
 Stable tag: trunk
-Tags: newsletters, Newspack, WordPress.com, Mailchimp, Constant Contact, Campaign Monitor
+Tags: newsletters, Newspack, Mailchimp, Active Campaign, Constant Contact
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Create email newsletters with the Gutenberg editor and distribute them with your ActiveCampaign, Campaign Monitor, Constant Contact, or Mailchimp mailing lists.
+Create email newsletters with the Gutenberg editor and distribute them with your favorite ESP mailing lists.
 
 == Description ==
 Create email newsletters with the Gutenberg editor and send them via ActiveCampaign, Campaign Monitor, Constant Contact, or Mailchimp, all without leaving WP Admin! Newspack Newsletters lets you build eye-catching newsletters using the WordPress editing tools you’re already familiar with, and lets you save drafts, create reusable layouts, send to your existing mailing list, and also publish them to your website.

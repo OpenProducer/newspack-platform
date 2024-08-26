@@ -89,23 +89,22 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 	const criteria: PostsQuery = pickBy(
 		isSpecificPostModeActive
 			? {
-					include: cleanPosts,
-					postsToShow: specificPosts.length,
-					postType,
-			  }
-			: {
-					postsToShow,
-					categories: validateAttributeCollection( categories ),
-					includeSubcategories,
-					authors: validateAttributeCollection( authors ),
-					tags: validateAttributeCollection( tags ),
-					tagExclusions: validateAttributeCollection( tagExclusions ),
-					categoryExclusions: validateAttributeCollection( categoryExclusions ),
-					customTaxonomyExclusions,
-					customTaxonomies,
-					postType,
-					includedPostStatuses,
-			  },
+				include: cleanPosts,
+				postsToShow: specificPosts.length,
+				postType,
+			} : {
+				postsToShow,
+				categories: validateAttributeCollection( categories ),
+				includeSubcategories,
+				authors: validateAttributeCollection( authors ),
+				tags: validateAttributeCollection( tags ),
+				tagExclusions: validateAttributeCollection( tagExclusions ),
+				categoryExclusions: validateAttributeCollection( categoryExclusions ),
+				customTaxonomyExclusions,
+				customTaxonomies,
+				postType,
+				includedPostStatuses,
+			},
 		( value: unknown ) => ! isUndefined( value )
 	);
 	criteria.excerptLength = excerptLength;
@@ -201,7 +200,7 @@ const getPreviewPosts = ( attributes: HomepageArticlesAttributes ) =>
 
 type Select = ( namespace: string ) => {
 	// core/blocks-editor
-	getBlocks: () => Block[];
+	getBlocks: ( clientId?: string ) => Block[];
 	// core/editor
 	getEditedPostAttribute: ( attribute: string ) => Block[];
 	// core
@@ -222,12 +221,25 @@ export const postsBlockSelector = (
 		attributes,
 	}: { clientId: Block[ 'clientId' ]; attributes: HomepageArticlesAttributes }
 ): HomepageArticlesPropsFromDataSelector => {
-	const { getEditedPostAttribute } = select( 'core/editor' );
-	const editorBlocks = getEditedPostAttribute( 'blocks' ) || [];
 	const { getBlocks } = select( 'core/block-editor' );
-	const editorBlocksIds = getEditorBlocksIds( editorBlocks );
+	const { getEditedPostAttribute } = select( 'core/editor' );
+
+	const editorBlocks = getEditedPostAttribute( 'blocks' ) || [];
+	const allEditorBlocks = [];
+
+	for ( const block of editorBlocks ) {
+		// Get pattern blocks as well.
+		if ( block.name === 'core/block' ) {
+			allEditorBlocks.push( ...getBlocks( block.clientId ) );
+		} else {
+			allEditorBlocks.push( block );
+		}
+	}
+
+	const editorBlocksIds = getEditorBlocksIds( allEditorBlocks );
 	const blocks = getBlocks();
 	const isWidgetEditor = blocks.some( block => block.name === 'core/widget-area' );
+
 	// The block might be rendered in the block styles preview, not in the editor.
 	const isEditorBlock =
 		editorBlocksIds.length === 0 || editorBlocksIds.indexOf( clientId ) >= 0 || isWidgetEditor;
@@ -240,8 +252,7 @@ export const postsBlockSelector = (
 		topBlocksClientIdsInOrder: blocks.map( block => block.clientId ),
 		latestPosts: isEditorBlock
 			? getPosts( { clientId } )
-			: // For block preview, display static content.
-			  getPreviewPosts( attributes ),
+			: getPreviewPosts( attributes ), // For block preview, display static content.
 	};
 
 	return props;
@@ -256,6 +267,7 @@ export const postsBlockDispatch = (
 ) => {
 	return {
 		// Only editor blocks can trigger reflows.
+		// @ts-ignore It's a string.
 		triggerReflow: isEditorBlock ? dispatch( STORE_NAMESPACE ).reflow : () => undefined,
 	};
 };

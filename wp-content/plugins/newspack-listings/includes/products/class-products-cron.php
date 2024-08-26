@@ -8,8 +8,8 @@
 
 namespace Newspack_Listings;
 
-use \Newspack_Listings\Settings;
-use \Newspack_Listings\Core;
+use Newspack_Listings\Settings;
+use Newspack_Listings\Core;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -49,10 +49,9 @@ final class Products_Cron extends Products {
 			if ( ! wp_next_scheduled( $this->cron_hook ) ) {
 				wp_schedule_event( Utils\get_next_midnight(), 'daily', $this->cron_hook );
 			}
-		} else {
-			if ( wp_next_scheduled( $this->cron_hook ) ) {
+		} elseif ( wp_next_scheduled( $this->cron_hook ) ) {
 				$this->cron_deactivate(); // If the option has been updated to 0, no need to run the cron job.
-			}
+
 		}
 	}
 

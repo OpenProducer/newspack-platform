@@ -1,1 +1,1 @@
-:root :where(.wp-block-site-title a){color:inherit}
+.wp-block-site-title{box-sizing:border-box}.wp-block-site-title :where(a){color:inherit}

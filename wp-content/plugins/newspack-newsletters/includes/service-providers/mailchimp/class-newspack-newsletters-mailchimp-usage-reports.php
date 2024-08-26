@@ -25,17 +25,39 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	}
 
 	/**
-	 * Get list activity reports for a specific timeframe between n days in past and yesterday.
+	 * Retrieves an instance of the Mailchimp api
+	 *
+	 * @return DrewM\MailChimp\MailChimp|WP_Error
+	 */
+	private static function get_mc_api() {
+		try {
+			return new Mailchimp( self::get_mc_instance()->api_key() );
+		} catch ( Exception $e ) {
+			return new WP_Error(
+				'newspack_newsletters_mailchimp_error',
+				$e->getMessage()
+			);
+		}
+	}
+
+	/**
+	 * Get list activity reports for the timeframe between n days in past and yesterday.
 	 *
 	 * @param string $days_in_past_count How many days in the past to look for.
-	 * @return Newspack_Newsletters_Service_Provider_Usage_Report[] Usage reports.
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report[]|WP_Error Usage reports.
 	 */
-	public static function get_list_activity_reports( $days_in_past_count = 1 ) {
-		$mc_api = new Mailchimp( self::get_mc_instance()->api_key() );
+	private static function get_list_activity_reports( $days_in_past_count = 1 ) {
+		$mc_api = self::get_mc_api();
+
+		if ( is_wp_error( $mc_api ) ) {
+			return $mc_api;
+		}
 
 		$reports = [];
 		$lists  = $mc_api->get( 'lists', [ 'count' => 1000 ] );
-		$lists_activity_reports = [];
+		if ( ! isset( $lists['lists'] ) ) {
+			return $reports;
+		}
 
 		foreach ( $lists['lists'] as &$list ) {
 			// Get daily activity for each list.
@@ -52,45 +74,61 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 			$report = new Newspack_Newsletters_Service_Provider_Usage_Report();
 			$report->set_date( gmdate( 'Y-m-d', strtotime( "-$day_index day" ) ) );
 
+			$report_updated = false;
 			foreach ( $lists['lists'] as $list_data ) {
 				$report->total_contacts += $list_data['stats']['member_count'];
-				$list_activity_for_day = $list_data['activity'][ $day_index ];
-				$report->emails_sent += $list_activity_for_day['emails_sent'];
-				$report->opens += $list_activity_for_day['unique_opens'];
-				$report->clicks += $list_activity_for_day['recipient_clicks'];
-				$report->subscribes += $list_activity_for_day['subs'];
-				$report->unsubscribes += $list_activity_for_day['unsubs'];
+				if ( isset( $list_data['activity'][ $day_index ] ) ) {
+					$list_activity_for_day = $list_data['activity'][ $day_index ];
+					$report->emails_sent += $list_activity_for_day['emails_sent'];
+					$report->opens += $list_activity_for_day['unique_opens'];
+					$report->clicks += $list_activity_for_day['recipient_clicks'];
+					$report->subscribes += $list_activity_for_day['subs'];
+					$report->unsubscribes += $list_activity_for_day['unsubs'];
+					$report_updated = true;
+				}
 			}
-			$reports[] = $report;
+			if ( $report_updated ) {
+				$reports[] = $report;
+			}
 		}
 
 		return $reports;
 	}
 
 	/**
-	 * Creates a usage report.
+	 * Get usage reports for last n days.
 	 *
-	 * @return Newspack_Newsletters_Service_Provider_Usage_Report Usage report.
+	 * @param int $days_in_past How many days in past.
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report[] Usage reports.
 	 */
-	public static function get_usage_report() {
+	public static function get_usage_reports( $days_in_past ) {
+
+		// Check and bail early if MC is misconfigured.
+		$mc_api = self::get_mc_api();
+		if ( is_wp_error( $mc_api ) ) {
+			return $mc_api;
+		}
+
 		// Start with lists activity reports. These are good for historical data and also will provide
 		// subscribes and unsubscribes data. However, in order to get recent
 		// sent/opens/clicks data, the campaign reports have to be used.
 		// It appears that the sent/opens/clicks data in the lists activity are only added after a
 		// delay of 2-3 days.
-		$reports = self::get_list_activity_reports( 1 );
-
-		$mc_api = new Mailchimp( self::get_mc_instance()->api_key() );
+		$reports = self::get_list_activity_reports( $days_in_past );
 
 		$campaign_reports = [];
+		// Look at reports for campaigns sent at most two weeks ago, unless $days_in_past is larger.
+		$campaign_reports_cutoff = $days_in_past > 14 ? $days_in_past : 14;
 		$campaign_reports_response = $mc_api->get(
 			'reports',
 			[
-				// Look at reports for campaigns sent at most two weeks ago.
-				'since_send_time' => gmdate( 'Y-m-d H:i:s', strtotime( '-14 day' ) ),
+				'since_send_time' => gmdate( 'Y-m-d H:i:s', strtotime( '-' . $campaign_reports_cutoff . 'days' ) ),
 				'type'            => 'regular', // Email campaigns.
 			]
 		);
+		if ( ! isset( $campaign_reports_response['reports'] ) ) {
+			return [ new Newspack_Newsletters_Service_Provider_Usage_Report() ];
+		}
 		// For each report, save the stats per-campaign.
 		foreach ( $campaign_reports_response['reports'] as $campaign_report ) {
 			$send_time = $campaign_report['send_time'];
@@ -113,20 +151,21 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 		$saved_reports = get_option( self::REPORTS_OPTION_NAME, [] );
 
 		foreach ( $reports as $report ) {
-			$report_date = $report->get_date();
+			$report_start_date = $report->get_date();
+			$report_end_date = gmdate( 'Y-m-d', strtotime( $report_start_date ) + DAY_IN_SECONDS );
 			foreach ( $campaign_reports as $campaign_id => $campaign_report ) {
-				if ( $campaign_report['send_time'] >= $report_date ) {
-					// If the campaign was sent in the last 24h, no need to look up historical data.
-					$report->emails_sent += $campaign_report['emails_sent'];
-					$report->opens += $campaign_report['opens'];
-					$report->clicks += $campaign_report['clicks'];
-				} elseif ( isset( $saved_reports[ $campaign_id ] ) ) {
-					// If the campaign was sent earlier than the last 24h, look up historical data
-					// to substract from new data.
-					$previous_report = $saved_reports[ $campaign_id ];
-					$report->emails_sent += $campaign_report['emails_sent'] - $previous_report['emails_sent'];
-					$report->opens += $campaign_report['opens'] - $previous_report['opens'];
-					$report->clicks += $campaign_report['clicks'] - $previous_report['clicks'];
+				// If the campaign report matches the report timeframe, fill in the data if it's missing.
+				if ( $campaign_report['send_time'] >= $report_start_date && $campaign_report['send_time'] < $report_end_date ) {
+					$previous_report = isset( $saved_reports[ $campaign_id ] ) ? $saved_reports[ $campaign_id ] : false;
+					foreach ( [ 'emails_sent', 'opens', 'clicks' ] as $field ) {
+						// Only fill in the field if the value in the initial report is missing.
+						if ( $report->$field === 0 ) {
+							$report->$field += $campaign_report[ $field ];
+							if ( $previous_report ) {
+								$report->$field -= $previous_report[ $field ];
+							}
+						}
+					}
 				}
 			}
 		}
@@ -134,6 +173,16 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 		// Save the recent response.
 		update_option( self::REPORTS_OPTION_NAME, $campaign_reports );
 
+		return $reports;
+	}
+
+	/**
+	 * Creates a usage report.
+	 *
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report Usage report.
+	 */
+	public static function get_usage_report() {
+		$reports = self::get_usage_reports( 1 );
 		return reset( $reports );
 	}
 }

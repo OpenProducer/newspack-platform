@@ -101,6 +101,7 @@ final class Core {
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-placements.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-sidebar-placements.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/integrations/class-scaip.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/integrations/class-complianz.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/integrations/class-ad-refresh-control.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-blocks.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-widget.php';

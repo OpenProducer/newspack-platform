@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
+class ComposerStaticInitaf65b88dc513654448dc0c9e151257f0
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -213,6 +213,7 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
         'TEC\\Events\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Events/Site_Health/Provider.php',
         'TEC\\Events\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Events/Telemetry/Provider.php',
         'TEC\\Events\\Telemetry\\Telemetry' => __DIR__ . '/../..' . '/src/Events/Telemetry/Telemetry.php',
+        'TEC\\Events\\Traits\\Development_Mode' => __DIR__ . '/../..' . '/src/Events/Traits/Development_Mode.php',
         'TEC\\Events\\Views\\Modifiers\\Hide_End_Time_Modifier' => __DIR__ . '/../..' . '/src/Events/Views/Modifiers/Hide_End_Time_Modifier.php',
         'TEC\\Events\\Views\\Modifiers\\Visibility_Modifier_Abstract' => __DIR__ . '/../..' . '/src/Events/Views/Modifiers/Visibility_Modifier_Abstract.php',
         'Tribe\\Events\\Admin\\Filter_Bar\\Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Filter_Bar/Provider.php',
@@ -272,6 +273,7 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
         'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Month_View' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Section/Month_View.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Single_Event' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Section/Single_Event.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Service_Provider.php',
+        'Tribe\\Events\\Views\\V2\\Hide_End_Time_Provider' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Hide_End_Time_Provider.php',
         'Tribe\\Events\\Views\\V2\\Hooks' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Hooks.php',
         'Tribe\\Events\\Views\\V2\\Implementation_Error' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Implementation_Error.php',
         'Tribe\\Events\\Views\\V2\\Index' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Index.php',
@@ -348,9 +350,9 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitaf65b88dc513654448dc0c9e151257f0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitaf65b88dc513654448dc0c9e151257f0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitaf65b88dc513654448dc0c9e151257f0::$classMap;
 
         }, null, ClassLoader::class);
     }

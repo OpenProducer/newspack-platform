@@ -38,7 +38,9 @@ const OrderPopover = ( { disabled = false, isDraft, onEdit, onArchive, gamLink }
 					</MenuItem>
 					<MenuItem
 						onClick={ () => {
-							if ( typeof onEdit === 'function' ) onEdit();
+							if ( typeof onEdit === 'function' ) {
+								onEdit();
+							}
 						} }
 						className="newspack-button"
 					>
@@ -47,7 +49,9 @@ const OrderPopover = ( { disabled = false, isDraft, onEdit, onArchive, gamLink }
 					{ isDraft && (
 						<MenuItem
 							onClick={ () => {
-								if ( typeof onArchive === 'function' ) onArchive();
+								if ( typeof onArchive === 'function' ) {
+									onArchive();
+								}
 							} }
 							className="newspack-button"
 						>

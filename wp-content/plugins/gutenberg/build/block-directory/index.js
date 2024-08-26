@@ -292,11 +292,11 @@ function getInstalledBlockTypes(state) {
  *
  * @return {Array} Block type items.
  */
-const getNewBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => state => {
+const getNewBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)(state => {
   const usedBlockTree = select(external_wp_blockEditor_namespaceObject.store).getBlocks();
   const installedBlockTypes = getInstalledBlockTypes(state);
   return installedBlockTypes.filter(blockType => hasBlockType(blockType, usedBlockTree));
-});
+}, state => [getInstalledBlockTypes(state), select(external_wp_blockEditor_namespaceObject.store).getBlocks()]));
 
 /**
  * Returns the block types that have been installed on the server but are not
@@ -306,11 +306,11 @@ const getNewBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelec
  *
  * @return {Array} Block type items.
  */
-const getUnusedBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => state => {
+const getUnusedBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)(state => {
   const usedBlockTree = select(external_wp_blockEditor_namespaceObject.store).getBlocks();
   const installedBlockTypes = getInstalledBlockTypes(state);
   return installedBlockTypes.filter(blockType => !hasBlockType(blockType, usedBlockTree));
-});
+}, state => [getInstalledBlockTypes(state), select(external_wp_blockEditor_namespaceObject.store).getBlocks()]));
 
 /**
  * Returns true if a block plugin install is in progress.
@@ -936,8 +936,9 @@ function __await(v) {
 function __asyncGenerator(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g = generator.apply(thisArg, _arguments || []), i, q = [];
-  return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-  function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+  return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+  function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+  function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
   function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
   function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
   function fulfill(value) { resume("next", value); }
@@ -1003,16 +1004,18 @@ function __classPrivateFieldIn(state, receiver) {
 function __addDisposableResource(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-    var dispose;
+    var dispose, inner;
     if (async) {
-        if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
-        dispose = value[Symbol.asyncDispose];
+      if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+      dispose = value[Symbol.asyncDispose];
     }
     if (dispose === void 0) {
-        if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
-        dispose = value[Symbol.dispose];
+      if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+      dispose = value[Symbol.dispose];
+      if (async) inner = dispose;
     }
     if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+    if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
     env.stack.push({ value: value, dispose: dispose, async: async });
   }
   else if (async) {
@@ -1515,7 +1518,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/block-directory');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/block-directory');
 
 ;// CONCATENATED MODULE: ./packages/block-directory/build-module/components/downloadable-block-list-item/index.js
 /**
@@ -1614,7 +1617,7 @@ function DownloadableBlockListItem({
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(CompositeItem, {
     render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-      __experimentalIsFocusable: true,
+      accessibleWhenDisabled: true,
       type: "button",
       role: "option",
       className: "block-directory-downloadable-block-list-item",
@@ -2022,10 +2025,10 @@ function CompactList({
 }
 
 ;// CONCATENATED MODULE: ./packages/block-directory/build-module/plugins/installed-blocks-pre-publish-panel/index.js
-var _window$wp$editor;
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -2036,19 +2039,13 @@ var _window$wp$editor;
 
 
 
-// We shouldn't import the editor package directly
-// because it would include the wp-editor in all pages loading the block-directory script.
 
-
-const {
-  PluginPrePublishPanel
-} = (_window$wp$editor = window?.wp?.editor) !== null && _window$wp$editor !== void 0 ? _window$wp$editor : {};
 function InstalledBlocksPrePublishPanel() {
   const newBlockTypes = (0,external_wp_data_namespaceObject.useSelect)(select => select(store).getNewBlockTypes(), []);
   if (!newBlockTypes.length) {
     return null;
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(PluginPrePublishPanel, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_editor_namespaceObject.PluginPrePublishPanel, {
     icon: block_default,
     title: (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %d: number of blocks (number).
@@ -2100,7 +2097,7 @@ function InstallButton({
         }
       }
     }),
-    __experimentalIsFocusable: true,
+    accessibleWhenDisabled: true,
     disabled: isInstallingBlock,
     isBusy: isInstallingBlock,
     variant: "primary",
