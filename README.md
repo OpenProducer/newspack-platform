@@ -25,16 +25,26 @@
 - **Show Episodes:** Utilize a dedicated post type for adding and displaying show episodes, making it easy to organize and showcase your content.
 - **Host and Producer Profiles:** Publish and display individual profiles for hosts and producers, highlighting their roles and contributions to the station.
 
-## How to Install Newspack on Your Site
+## Branches
 
-If you'd like to install Newspack on your self-hosted site or want to try Newspack out, the easiest way to do so is to [enable the Newspack plugin](https://github.com/Automattic/newspack-plugin/) and [the latest theme release](https://github.com/Automattic/newspack-theme/). To take full advantage of Newspack, the plugin and theme should be run together, but each should also work fine individually.
+The branches for OpenProducer's Newspack platform include:
 
-## Contributing to Newspack
+### Master Branch:
+- **URL:** [Master Branch](https://github.com/OpenProducer/newspack-platform)
+- This is the main branch of OpenProducer's Newspack platform.
 
-If you have a patch or have stumbled upon an issue with the Newspack plugin/theme, you can contribute this back to the code. [Please read the Newspack contributor guidelines for more information on how you can do this.](https://github.com/Automattic/newspack-plugin/blob/master/.github/CONTRIBUTING.md)
+### Radio Branch:
+- **URL:** [Radio Branch](https://github.com/OpenProducer/newspack-platform/tree/radio)
+- This branch focuses on custom radio features within the Newspack platform.
 
-## Support or Questions
+### Podcast Branch:
+- **URL:** [Podcast Branch](https://github.com/OpenProducer/newspack-platform/tree/podcast)
+- This branch focuses on custom podcasting features within the Newspack platform.
 
-This repository is not suitable for support or general questions about Newspack. Please only use the Newspack issue trackers for bug reports and feature requests, following [the contribution guidelines](https://github.com/Automattic/newspack-plugin/blob/master/.github/CONTRIBUTING.md).
+## Support Our Work
 
-Support requests in issues on the Newspack repository will be closed on sight.
+Your financial contributions are vital in enabling OpenProducer to continue enhancing and sustaining the Newspack platform. Through your support, we can make meaningful advancements in the following areas:
+
+- **Open Source Innovation:** We develop custom themes, blocks, patterns, plugins, and integrations tailored to meet the evolving needs of diverse industries. These contributions ensure that Newspack remains adaptable, relevant, and powerful across various market segments.
+- **Educational Resources:** We provide comprehensive documentation, tutorials, and training resources to empower Newspack users, whether through virtual sessions or in-person workshops. These resources help users maximize the potential of the platform, ensuring they have the knowledge and tools to succeed.
+- **Community Engagement:** We lead and participate in community-driven events, including hackathons and fundraisers, to foster a vibrant and dynamic Newspack community. These initiatives not only encourage collaboration and innovation but also help identify and onboard new talent, ensuring the community continues to grow and thrive.
