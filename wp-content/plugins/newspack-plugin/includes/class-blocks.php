@@ -38,7 +38,7 @@ final class Blocks {
 			'newspack-blocks',
 			'newspack_blocks',
 			[
-				'has_newsletters'         => method_exists( 'Newspack_Newsletters_Subscription', 'add_contact' ),
+				'has_newsletters'         => class_exists( 'Newspack_Newsletters_Subscription' ),
 				'has_reader_activation'   => Reader_Activation::is_enabled(),
 				'newsletters_url'         => Wizards::get_wizard( 'engagement' )->newsletters_settings_url(),
 				'has_google_oauth'        => Google_OAuth::is_oauth_configured(),

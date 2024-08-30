@@ -1083,9 +1083,11 @@ const getEditedPostTemplateId = (0,external_wp_data_namespaceObject.createRegist
   } else {
     slugToCheck = postType === 'page' ? 'page' : `single-${postType}`;
   }
-  return select(external_wp_coreData_namespaceObject.store).getDefaultTemplateId({
-    slug: slugToCheck
-  });
+  if (postType) {
+    return select(external_wp_coreData_namespaceObject.store).getDefaultTemplateId({
+      slug: slugToCheck
+    });
+  }
 });
 
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/store/selectors.js
@@ -2440,12 +2442,13 @@ function WelcomeGuideDefault() {
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h1", {
           className: "edit-post-welcome-guide__heading",
           children: (0,external_wp_i18n_namespaceObject.__)('Learn how to use the block editor')
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("p", {
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
           className: "edit-post-welcome-guide__text",
-          children: [(0,external_wp_i18n_namespaceObject.__)('New to the block editor? Want to learn more about using it? '), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ExternalLink, {
-            href: (0,external_wp_i18n_namespaceObject.__)('https://wordpress.org/documentation/article/wordpress-block-editor/'),
-            children: (0,external_wp_i18n_namespaceObject.__)("Here's a detailed guide.")
-          })]
+          children: (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.__)("New to the block editor? Want to learn more about using it? <a>Here's a detailed guide.</a>"), {
+            a: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ExternalLink, {
+              href: (0,external_wp_i18n_namespaceObject.__)('https://wordpress.org/documentation/article/wordpress-block-editor/')
+            })
+          })
         })]
       })
     }]
@@ -2665,6 +2668,7 @@ function usePaddingAppender() {
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -2675,12 +2679,16 @@ function useShouldIframe() {
     isBlockBasedTheme,
     hasV3BlocksOnly,
     isEditingTemplate,
-    hasMetaBoxes
+    hasMetaBoxes,
+    isZoomOutMode
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getEditorSettings,
       getCurrentPostType
     } = select(external_wp_editor_namespaceObject.store);
+    const {
+      __unstableGetEditorMode
+    } = select(external_wp_blockEditor_namespaceObject.store);
     const {
       getBlockTypes
     } = select(external_wp_blocks_namespaceObject.store);
@@ -2691,10 +2699,11 @@ function useShouldIframe() {
         return type.apiVersion >= 3;
       }),
       isEditingTemplate: getCurrentPostType() === 'wp_template',
-      hasMetaBoxes: select(store).hasMetaBoxes()
+      hasMetaBoxes: select(store).hasMetaBoxes(),
+      isZoomOutMode: __unstableGetEditorMode() === 'zoom-out'
     };
   }, []);
-  return (hasV3BlocksOnly || isGutenbergPlugin && isBlockBasedTheme) && !hasMetaBoxes || isEditingTemplate;
+  return (hasV3BlocksOnly || isGutenbergPlugin && isBlockBasedTheme) && !hasMetaBoxes || isEditingTemplate || isZoomOutMode;
 }
 
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/hooks/use-navigate-to-entity-record.js

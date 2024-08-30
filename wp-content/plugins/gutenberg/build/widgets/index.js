@@ -154,7 +154,10 @@ function WidgetTypeSelector({
   if (widgetTypes.length === 0) {
     return (0,external_wp_i18n_namespaceObject.__)('There are no widgets available.');
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl
+  // TODO: Switch to `true` (40px size) if possible
+  , {
+    __next40pxDefaultSize: false,
     __nextHasNoMarginBottom: true,
     label: (0,external_wp_i18n_namespaceObject.__)('Select a legacy widget to display:'),
     value: selectedId !== null && selectedId !== void 0 ? selectedId : '',

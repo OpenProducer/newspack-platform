@@ -192,7 +192,7 @@ class Co_Authors_Plus {
 			if ( isset( $post_meta['cap-user_email'] ) && ! empty( $post_meta['cap-user_email'] ) ) {
 				$user_data['user_email'] = $post_meta['cap-user_email'];
 			} else {
-				$dummy_email = '_migrated-' . $guest_author->ID . '-' . $user_login . '@example.com';
+				$dummy_email = \Newspack\Guest_Contributor_Role::get_dummy_email_address( '_migrated-' . $guest_author->ID . '-' . $user_login );
 				$user_data['user_email'] = $dummy_email;
 				if ( self::$verbose ) {
 					WP_CLI::line( sprintf( 'Missing email for Guest Author, email address will be updated to %s.', $dummy_email ) );
