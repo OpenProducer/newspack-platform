@@ -137,6 +137,11 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 			wp_list_pluck( $this->get_attribute_schema(), 'default' )
 		);
 
+		$deduplicate = $request->get_param( 'deduplicate' ) ?? 1;
+		if ( ! $deduplicate ) {
+			$exclude_ids = [];
+		}
+
 		$article_query_args = Newspack_Blocks::build_articles_query( $attributes, apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/homepage-articles' ) );
 
 		// If using exclude_ids, don't worry about pagination. Just get the next postsToShow number of results without the excluded posts. Otherwise, use standard WP pagination.

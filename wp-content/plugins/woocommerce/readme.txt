@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online
 Requires at least: 6.5
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 9.2.1
+Stable tag: 9.2.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -169,12 +169,11 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 9.2.2 2024-08-22 =
+= 9.2.3 2024-08-26 =
 
 **WooCommerce**
 
-* Fix - Revert PR#48731 to address possible issues with plugins using WC's bundled select2 package. [#50854](https://github.com/woocommerce/woocommerce/pull/50854)
-* Fix - Partially revert PR#48709 as it could cause issues for some users of the REST API system_status endpoint. [#50881](https://github.com/woocommerce/woocommerce/pull/50881)
+* Fix - Ensure translation is fully loaded for certain parts of Checkout block. [#50892](https://github.com/woocommerce/woocommerce/pull/50892)
 
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

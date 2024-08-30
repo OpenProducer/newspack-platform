@@ -940,9 +940,9 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		$contact_data = $this->get_contact_data( $email );
 		if ( is_wp_error( $contact_data ) ) {
 			/** Create contact */
-			// Call Newspack_Newsletters_Subscription's method (not the provider's directly),
+			// Call Newspack_Newsletters_Contacts's method (not the provider's directly),
 			// so the appropriate hooks are called.
-			$contact_data = Newspack_Newsletters_Subscription::add_contact( [ 'email' => $email ] );
+			$contact_data = Newspack_Newsletters_Contacts::upsert( [ 'email' => $email ] );
 			if ( is_wp_error( $contact_data ) ) {
 				return $contact_data;
 			}
