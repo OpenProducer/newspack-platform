@@ -37,26 +37,29 @@ class ActiveCampaign extends Connector {
 			'active_campaign' === \Newspack_Newsletters::service_provider()
 		) {
 			Data_Events::register_handler( [ __CLASS__, 'reader_registered' ], 'reader_registered' );
+			Data_Events::register_handler( [ __CLASS__, 'reader_deleted' ], 'reader_deleted' );
 			Data_Events::register_handler( [ __CLASS__, 'reader_logged_in' ], 'reader_logged_in' );
 			Data_Events::register_handler( [ __CLASS__, 'order_completed' ], 'order_completed' );
 			Data_Events::register_handler( [ __CLASS__, 'subscription_updated' ], 'donation_subscription_changed' );
 			Data_Events::register_handler( [ __CLASS__, 'subscription_updated' ], 'product_subscription_changed' );
 			Data_Events::register_handler( [ __CLASS__, 'newsletter_updated' ], 'newsletter_subscribed' );
 			Data_Events::register_handler( [ __CLASS__, 'newsletter_updated' ], 'newsletter_updated' );
+			Data_Events::register_handler( [ __CLASS__, 'network_new_reader' ], 'network_new_reader' );
 		}
 	}
 
 	/**
 	 * Upsert the contact.
 	 *
-	 * @param array $contact Contact info to sync to ESP.
+	 * @param array  $contact Contact info to sync to ESP.
+	 * @param string $context Context of the update for logging purposes.
 	 */
-	public static function put( $contact ) {
+	protected static function put( $contact, $context ) {
 		$master_list_id = Reader_Activation::get_setting( 'active_campaign_master_list' );
 		if ( ! $master_list_id ) {
 			return;
 		}
-		return \Newspack_Newsletters_Subscription::add_contact( $contact, $master_list_id );
+		return \Newspack_Newsletters_Contacts::upsert( $contact, $master_list_id, $context );
 	}
 
 	/**
@@ -100,7 +103,7 @@ class ActiveCampaign extends Connector {
 			'email'    => $data['email'],
 			'metadata' => $metadata,
 		];
-		self::put( $contact );
+		self::put( $contact, 'Updating the account and newsletter_selection fields after a change in the subscription lists.' );
 	}
 }
 new ActiveCampaign();

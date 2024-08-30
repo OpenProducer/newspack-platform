@@ -1408,24 +1408,10 @@ function DisallowOverridesModal({
 
 
 
-function removeBindings(bindings) {
-  let updatedBindings = {
-    ...bindings
-  };
-  delete updatedBindings.__default;
-  if (!Object.keys(updatedBindings).length) {
-    updatedBindings = undefined;
-  }
-  return updatedBindings;
-}
-function addBindings(bindings) {
-  return {
-    ...bindings,
-    __default: {
-      source: PATTERN_OVERRIDES_BINDING_SOURCE
-    }
-  };
-}
+
+const {
+  useBlockBindingsUtils
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function PatternOverridesControls({
   attributes,
   setAttributes,
@@ -1438,18 +1424,22 @@ function PatternOverridesControls({
   const defaultBindings = attributes.metadata?.bindings?.__default;
   const hasOverrides = hasName && defaultBindings?.source === PATTERN_OVERRIDES_BINDING_SOURCE;
   const isConnectedToOtherSources = defaultBindings?.source && defaultBindings.source !== PATTERN_OVERRIDES_BINDING_SOURCE;
+  const {
+    updateBlockBindings
+  } = useBlockBindingsUtils();
   function updateBindings(isChecked, customName) {
-    const prevBindings = attributes?.metadata?.bindings;
-    const updatedBindings = isChecked ? addBindings(prevBindings) : removeBindings(prevBindings);
-    const updatedMetadata = {
-      ...attributes.metadata,
-      bindings: updatedBindings
-    };
     if (customName) {
-      updatedMetadata.name = customName;
+      setAttributes({
+        metadata: {
+          ...attributes.metadata,
+          name: customName
+        }
+      });
     }
-    setAttributes({
-      metadata: updatedMetadata
+    updateBlockBindings({
+      __default: isChecked ? {
+        source: PATTERN_OVERRIDES_BINDING_SOURCE
+      } : undefined
     });
   }
 
@@ -1463,6 +1453,7 @@ function PatternOverridesControls({
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
       group: "advanced",
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
+        __nextHasNoMarginBottom: true,
         id: controlId,
         label: (0,external_wp_i18n_namespaceObject.__)('Overrides'),
         help: helpText,

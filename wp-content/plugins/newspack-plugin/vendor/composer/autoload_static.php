@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2994ba7886647284044ba5964deb74e1
+class ComposerStaticInit8dd227660f8d42cf2d6a7c5c2b6cefbb
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -102,7 +102,6 @@ class ComposerStaticInit2994ba7886647284044ba5964deb74e1
         'Newspack\\CLI\\RAS' => __DIR__ . '/../..' . '/includes/cli/class-ras.php',
         'Newspack\\CLI\\Setup' => __DIR__ . '/../..' . '/includes/cli/class-setup.php',
         'Newspack\\Category_Pager' => __DIR__ . '/../..' . '/includes/class-category-pager.php',
-        'Newspack\\Co_Authors_Plus' => __DIR__ . '/../..' . '/includes/plugins/class-co-authors-plus.php',
         'Newspack\\Components_Demo' => __DIR__ . '/../..' . '/includes/wizards/class-components-demo.php',
         'Newspack\\Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-manager.php',
         'Newspack\\Configuration_Managers' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-managers.php',
@@ -131,6 +130,7 @@ class ComposerStaticInit2994ba7886647284044ba5964deb74e1
         'Newspack\\Google_OAuth' => __DIR__ . '/../..' . '/includes/oauth/class-google-oauth.php',
         'Newspack\\Google_Services_Connection' => __DIR__ . '/../..' . '/includes/oauth/class-google-services-connection.php',
         'Newspack\\GravityForms' => __DIR__ . '/../..' . '/includes/plugins/class-gravityforms.php',
+        'Newspack\\Guest_Contributor_Role' => __DIR__ . '/../..' . '/includes/plugins/co-authors-plus/class-guest-contributor-role.php',
         'Newspack\\Handoff_Banner' => __DIR__ . '/../..' . '/includes/class-handoff-banner.php',
         'Newspack\\Health_Check_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-health-check-wizard.php',
         'Newspack\\Jetpack' => __DIR__ . '/../..' . '/includes/plugins/class-jetpack.php',
@@ -179,6 +179,7 @@ class ComposerStaticInit2994ba7886647284044ba5964deb74e1
         'Newspack\\Revisions_Control' => __DIR__ . '/../..' . '/includes/revisions-control/class-revisions-control.php',
         'Newspack\\SEO_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-seo-wizard.php',
         'Newspack\\Salesforce' => __DIR__ . '/../..' . '/includes/class-salesforce.php',
+        'Newspack\\Search_Authors_Limit' => __DIR__ . '/../..' . '/includes/plugins/co-authors-plus/class-search-authors-limit.php',
         'Newspack\\Settings' => __DIR__ . '/../..' . '/includes/wizards/class-settings.php',
         'Newspack\\Setup_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-setup-wizard.php',
         'Newspack\\Site_Design_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-site-design-wizard.php',
@@ -189,6 +190,7 @@ class ComposerStaticInit2994ba7886647284044ba5964deb74e1
         'Newspack\\Starter_Content_WordPress' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-wordpress.php',
         'Newspack\\Stripe_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-connection.php',
         'Newspack\\Syndication_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-syndication-wizard.php',
+        'Newspack\\Teams_For_Memberships' => __DIR__ . '/../..' . '/includes/plugins/class-teams-for-memberships.php',
         'Newspack\\Theme_Manager' => __DIR__ . '/../..' . '/includes/class-theme-manager.php',
         'Newspack\\Twitter_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-twitter-pixel.php',
         'Newspack\\Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-wizard.php',
@@ -207,9 +209,9 @@ class ComposerStaticInit2994ba7886647284044ba5964deb74e1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2994ba7886647284044ba5964deb74e1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2994ba7886647284044ba5964deb74e1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2994ba7886647284044ba5964deb74e1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8dd227660f8d42cf2d6a7c5c2b6cefbb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8dd227660f8d42cf2d6a7c5c2b6cefbb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8dd227660f8d42cf2d6a7c5c2b6cefbb::$classMap;
 
         }, null, ClassLoader::class);
     }

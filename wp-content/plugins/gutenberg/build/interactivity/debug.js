@@ -569,7 +569,7 @@ const deepMerge = (target, source, override = true) => {
 /**
  * Identifier for property computeds not associated to any scope.
  */
-const NO_SCOPE = Symbol();
+const NO_SCOPE = {};
 
 /**
  * Structure that manages reactivity for a property in a state object. It uses
@@ -1600,12 +1600,13 @@ const getGlobalAsyncEventDirective = type => {
     }) => suffix === 'default');
     const inheritedValue = hooks_module_q(inheritedContext);
     const ns = defaultEntry.namespace;
-    const currentValue = hooks_module_({
-      [ns]: proxifyState(ns, {})
-    });
+    const currentValue = hooks_module_(proxifyState(ns, {}));
 
     // No change should be made if `defaultEntry` does not exist.
     const contextStack = hooks_module_F(() => {
+      const result = {
+        ...inheritedValue
+      };
       if (defaultEntry) {
         const {
           namespace,
@@ -1615,10 +1616,11 @@ const getGlobalAsyncEventDirective = type => {
         if (!isPlainObject(value)) {
           warn(`The value of data-wp-context in "${namespace}" store must be a valid stringified JSON object.`);
         }
-        updateContext(currentValue.current[namespace], deepClone(value));
-        currentValue.current[namespace] = proxifyContext(currentValue.current[namespace], inheritedValue[namespace]);
+        updateContext(currentValue.current, deepClone(value));
+        currentValue.current = proxifyContext(currentValue.current, inheritedValue[namespace]);
+        result[namespace] = currentValue.current;
       }
-      return currentValue.current;
+      return result;
     }, [defaultEntry, inheritedValue]);
     return y(Provider, {
       value: contextStack

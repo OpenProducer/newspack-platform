@@ -9,6 +9,7 @@ namespace Newspack\Data_Events\Connectors;
 
 use Newspack\Newspack_Newsletters;
 use Newspack\WooCommerce_Connection;
+use Newspack_Newsletters_Contacts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -50,7 +51,7 @@ abstract class Connector {
 			'metadata' => $metadata,
 		];
 
-		static::put( $contact );
+		static::put( $contact, 'RAS Reader registration' );
 	}
 
 	/**
@@ -74,7 +75,7 @@ abstract class Connector {
 
 		$contact = WooCommerce_Connection::get_contact_from_customer( $customer );
 
-		static::put( $contact );
+		static::put( $contact, 'RAS Reader login' );
 	}
 
 	/**
@@ -102,7 +103,7 @@ abstract class Connector {
 			return;
 		}
 
-		static::put( $contact );
+		static::put( $contact, 'RAS Order completed' );
 	}
 
 	/**
@@ -123,6 +124,52 @@ abstract class Connector {
 			return;
 		}
 
-		static::put( $contact );
+		static::put( $contact, sprintf( 'RAS Woo Subscription updated. Status changed from %s to %s', $data['status_before'], $data['status_after'] ) );
+	}
+
+	/**
+	 * Handle a user deletion.
+	 *
+	 * @param int   $timestamp Timestamp of the event.
+	 * @param array $data      Data associated with the event.
+	 * @param int   $client_id ID of the client that triggered the event.
+	 */
+	public static function reader_deleted( $timestamp, $data, $client_id ) {
+		if ( true === \Newspack\Reader_Activation::get_setting( 'sync_esp_delete' ) ) {
+			return Newspack_Newsletters_Contacts::delete( $data['user_id'], 'RAS Reader deleted' );
+		}
+	}
+
+	/**
+	 * Handle a a new network added in the Newspack Network plugin.
+	 *
+	 * @param int   $timestamp Timestamp of the event.
+	 * @param array $data      Data associated with the event.
+	 * @param int   $client_id ID of the client that triggered the event.
+	 */
+	public static function network_new_reader( $timestamp, $data, $client_id ) {
+		$user_id = $data['user_id'];
+		$registration_site = $data['registration_site'];
+
+		$contact = WooCommerce_Connection::get_contact_from_customer( new \WC_Customer( $user_id ) );
+
+		if ( ! $contact ) {
+			return;
+		}
+
+		// Ensure email is set as the user probably won't have a billing email.
+		if ( empty( $contact['email'] ) ) {
+			$user = get_userdata( $user_id );
+			$contact['email'] = $user->user_email;
+		}
+
+		if ( empty( $contact['metadata'] ) ) {
+			$contact['metadata'] = [];
+		}
+
+		$contact['metadata']['network_registration_site'] = $registration_site;
+
+		$site_url = get_site_url();
+		static::put( $contact, sprintf( 'RAS Newspack Network: User propagated from another site in the network. Propagated from %s to %s.', $registration_site, $site_url ) );
 	}
 }
