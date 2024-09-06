@@ -99,7 +99,7 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	 * Get usage reports for last n days.
 	 *
 	 * @param int $days_in_past How many days in past.
-	 * @return Newspack_Newsletters_Service_Provider_Usage_Report[] Usage reports.
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report[]|WP_Error Usage reports or error.
 	 */
 	public static function get_usage_reports( $days_in_past ) {
 
@@ -179,10 +179,13 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	/**
 	 * Creates a usage report.
 	 *
-	 * @return Newspack_Newsletters_Service_Provider_Usage_Report Usage report.
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error Usage report or error.
 	 */
 	public static function get_usage_report() {
 		$reports = self::get_usage_reports( 1 );
+		if ( \is_wp_error( $reports ) ) {
+			return $reports;
+		}
 		return reset( $reports );
 	}
 }
