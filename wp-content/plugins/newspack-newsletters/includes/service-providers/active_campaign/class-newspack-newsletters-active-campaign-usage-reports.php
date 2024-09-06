@@ -144,10 +144,14 @@ class Newspack_Newsletters_Active_Campaign_Usage_Reports {
 	 */
 	private function get_campaign_data( $last_n_days ) {
 		$last_campaigns_data = get_option( self::LAST_CAMPAIGNS_DATA_OPTION_NAME );
-		$campaigns_data      = self::get_default_campaign_data();
 
 		$current_campaign_data = $this->get_current_campaign_data( $last_n_days );
+		if ( \is_wp_error( $current_campaign_data ) ) {
+			return $current_campaign_data;
+		}
 		update_option( self::LAST_CAMPAIGNS_DATA_OPTION_NAME, $current_campaign_data );
+
+		$campaigns_data = self::get_default_campaign_data();
 
 		if ( ! $last_campaigns_data ) {
 			// No data about campaigns yet, so there is nothing to compare the new data with.

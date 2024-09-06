@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/Automattic/newspack-newsletters/compare/v3.1.0...v3.1.1) (2024-09-04)
+
+
+### Bug Fixes
+
+* error handling, tests, CI builds ([#1641](https://github.com/Automattic/newspack-newsletters/issues/1641), [#1642](https://github.com/Automattic/newspack-newsletters/issues/1642)) ([791fdc3](https://github.com/Automattic/newspack-newsletters/commit/791fdc3f8dc2c32ccafe7acea0413acf1440c1bd))
+
 # [3.1.0](https://github.com/Automattic/newspack-newsletters/compare/v3.0.1...v3.1.0) (2024-08-26)
 
 
