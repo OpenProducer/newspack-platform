@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/Automattic/newspack-popups/compare/v3.0.0...v3.0.1) (2024-09-04)
+
+
+### Bug Fixes
+
+* **segmentation:** handle bad MC API key ([aecc659](https://github.com/Automattic/newspack-popups/commit/aecc6591d57b1a6b560c264ba7145e95434ae7ff))
+
 # [3.0.0](https://github.com/Automattic/newspack-popups/compare/v2.34.1...v3.0.0) (2024-08-13)
 
 

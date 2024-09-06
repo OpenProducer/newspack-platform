@@ -194,9 +194,6 @@ final class Newspack_Popups_Segmentation {
 	 * @param array $data      Data associated with the event.
 	 */
 	public static function reader_logged_in( $timestamp, $data ) {
-		$user_id = $data['user_id'];
-		$email   = $data['email'];
-
 		// See newspack-newsletters/includes/class-newspack-newsletters.php:827.
 		$api_key = \get_option( 'newspack_mailchimp_api_key', false );
 
@@ -204,8 +201,16 @@ final class Newspack_Popups_Segmentation {
 			return;
 		}
 
-		$mailchimp = new Mailchimp( $api_key );
-		$contacts  = $mailchimp->get(
+		try {
+			$mailchimp = new Mailchimp( $api_key );
+		} catch ( \Exception $th ) {
+			return;
+		}
+
+		$user_id = $data['user_id'];
+		$email   = $data['email'];
+
+		$contacts = $mailchimp->get(
 			'search-members',
 			[
 				'fields' => [ 'members.email_address', 'members.merge_fields' ],
