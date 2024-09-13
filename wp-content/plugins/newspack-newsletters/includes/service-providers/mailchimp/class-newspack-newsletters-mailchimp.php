@@ -1236,12 +1236,14 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 * by sarching for existing merge fields and creating new ones as needed.
 	 *
 	 * @param string $audience_id Audience ID.
-	 * @param array  $data        The contact metadata.
+	 * @param array  $contact     The contact.
 	 *
 	 * @return array Merge fields.
 	 */
-	private function prepare_merge_fields( $audience_id, $data ) {
+	private function prepare_merge_fields( $audience_id, $contact ) {
+		$mc           = new Mailchimp( $this->api_key() );
 		$merge_fields = [];
+		$data         = $contact['metadata'];
 
 		// Strip arrays.
 		$data = array_filter(
@@ -1253,14 +1255,27 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 		// Get and match existing merge fields.
 		try {
-			$existing_fields = Newspack_Newsletters_Mailchimp_Cached_Data::get_merge_fields( $audience_id );
+			$existing_fields = $mc->get(
+				"lists/$audience_id/merge-fields",
+				[
+					'count' => 1000,
+				],
+				60
+			)['merge_fields'];
 		} catch ( \Exception $e ) {
-			Newspack_Newsletters_Logger::log(
-				sprintf(
-					// Translators: %1$s is the error message.
-					__( 'Error getting merge fields: %1$s', 'newspack-newsletters' ),
-					$existing_fields->get_error_message()
-				)
+			do_action(
+				'newspack_log',
+				'newspack_mailchimp_prepare_merge_fields',
+				sprintf( 'Error getting merge fields: %s', $e->getMessage() ),
+				[
+					'type'       => 'error',
+					'data'       => [
+						'audience_id' => $audience_id,
+						'error'       => $e->getMessage(),
+					],
+					'user_email' => $contact['email'],
+					'file'       => 'newspack_mailchimp',
+				]
 			);
 			return [];
 		}
@@ -1282,13 +1297,19 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			if ( ! isset( $list_merge_fields[ $field['name'] ] ) ) {
 				$list_merge_fields[ $field['name'] ] = $field['tag'];
 			} else {
-				Newspack_Newsletters_Logger::log(
-					sprintf(
-						// Translators: %1$s is the merge field name, %2$s is the field's unique tag.
-						__( 'Warning: Duplicate merge field %1$s found with tag %2$s.', 'newspack-newsletters' ),
-						$field['name'],
-						$field['tag']
-					)
+				do_action(
+					'newspack_log',
+					'newspack_mailchimp_prepare_merge_fields',
+					sprintf( 'Duplicate merge field %1$s found with tag %2$s.', $field['name'], $field['tag'] ),
+					[
+						'type'       => 'error',
+						'data'       => [
+							'audience_id' => $audience_id,
+							'field'       => $field,
+						],
+						'user_email' => $contact['email'],
+						'file'       => 'newspack_mailchimp',
+					]
 				);
 			}
 		}
@@ -1303,35 +1324,46 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 		// Create remaining fields.
 		$remaining_fields = array_keys( $data );
-		$mc             = new Mailchimp( $this->api_key() );
 		foreach ( $remaining_fields as $field_name ) {
-			$created_field = $mc->post(
-				"lists/$audience_id/merge-fields",
+			$field_data = [
+				'name' => $field_name,
+				'type' => $this->get_merge_field_type( $data[ $field_name ] ),
+			];
+			$created_field = $mc->post( "lists/$audience_id/merge-fields", $field_data );
+			if ( empty( $created_field['merge_id'] ) ) {
+				$message = sprintf(
+					// Translators: %1$s is the merge field key, %2$s is the error message.
+					__( 'Failed to create merge field %1$s. Error response: %2$s', 'newspack-newsletters' ),
+					$field_name,
+					$created_field['detail'] ?? 'Unknown error'
+				);
+			} else {
+				$message = sprintf(
+					// Translators: %1$s is the merge field key, %2$s is the merge field tag.
+					__( 'Created merge field %1$s with tag %2$s.', 'newspack-newsletters' ),
+					$field_name,
+					$created_field['tag']
+				);
+			}
+			do_action(
+				'newspack_log',
+				'newspack_mailchimp_prepare_merge_fields',
+				$message,
 				[
-					'name' => $field_name,
-					'type' => $this->get_merge_field_type( $data[ $field_name ] ),
+					'type'       => empty( $created_field['merge_id'] ) ? 'error' : 'debug',
+					'data'       => [
+						'audience_id'   => $audience_id,
+						'field_data'    => $field_data,
+						'created_field' => $created_field,
+					],
+					'user_email' => $contact['email'],
+					'file'       => 'newspack_mailchimp',
 				]
 			);
-			// Skip field if it failed to create.
-			if ( empty( $created_field['merge_id'] ) ) {
-				Newspack_Newsletters_Logger::log(
-					sprintf(
-					// Translators: %1$s is the merge field key, %2$s is the error message.
-						__( 'Failed to create merge field %1$s. Error response: %2$s', 'newspack-newsletters' ),
-						$field_name,
-						$created_field['detail'] ?? 'Unknown error'
-					)
-				);
-				continue;
+			// Add the field to the merge fields array if it was created.
+			if ( ! empty( $created_field['merge_id'] ) ) {
+				$merge_fields[ $created_field['tag'] ] = $data[ $field_name ];
 			}
-			Newspack_Newsletters_Logger::log(
-				sprintf(
-					// Translators: %1$s is the merge field key, %2$s is the error message.
-					__( 'Created merge field %1$s.', 'newspack-newsletters' ),
-					$field_name
-				)
-			);
-			$merge_fields[ $created_field['tag'] ] = $data[ $field_name ];
 		}
 
 		return $merge_fields;
@@ -1388,7 +1420,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			$mc = new Mailchimp( $this->api_key() );
 
 			if ( isset( $contact['metadata'] ) && is_array( $contact['metadata'] ) && ! empty( $contact['metadata'] ) ) {
-				$merge_fields = $this->prepare_merge_fields( $list_id, $contact['metadata'] );
+				$merge_fields = $this->prepare_merge_fields( $list_id, $contact );
 				if ( ! empty( $merge_fields ) ) {
 					$update_payload['merge_fields'] = $merge_fields;
 				}

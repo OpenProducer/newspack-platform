@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online
 Requires at least: 6.5
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 9.2.2
+Stable tag: 9.2.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -169,11 +169,8 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 9.2.3 2024-08-26 =
+= 9.3.1 2024-09-12 =
 
-**WooCommerce**
-
-* Fix - Ensure translation is fully loaded for certain parts of Checkout block. [#50892](https://github.com/woocommerce/woocommerce/pull/50892)
-
+* Tweak - Disable remote logging feature by default [#51312](https://github.com/woocommerce/woocommerce/pull/51312)
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).
