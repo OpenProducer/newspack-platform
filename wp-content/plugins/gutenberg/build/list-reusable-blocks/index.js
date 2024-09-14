@@ -722,7 +722,10 @@ function ImportForm({
       id: inputId,
       type: "file",
       onChange: onChangeFile
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+    // TODO: Switch to `true` (40px size) if possible
+    , {
+      __next40pxDefaultSize: false,
       type: "submit",
       isBusy: isLoading,
       accessibleWhenDisabled: true,
@@ -759,7 +762,10 @@ function ImportDropdown({
     renderToggle: ({
       isOpen,
       onToggle
-    }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+    // TODO: Switch to `true` (40px size) if possible
+    , {
+      __next40pxDefaultSize: false,
       "aria-expanded": isOpen,
       onClick: onToggle,
       variant: "primary",

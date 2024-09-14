@@ -292,7 +292,10 @@ function FullscreenModeClose({
   const buttonLabel = (_postType$labels$view = postType?.labels?.view_items) !== null && _postType$labels$view !== void 0 ? _postType$labels$view : (0,external_wp_i18n_namespaceObject.__)('Back');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableMotion.div, {
     whileHover: "expand",
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+    // TODO: Switch to `true` (40px size) if possible
+    , {
+      __next40pxDefaultSize: false,
       className: classes,
       href: buttonHref,
       label: buttonLabel,
@@ -412,15 +415,15 @@ const useUpdatePostLinkListener = () => {
   } = (0,external_wp_data_namespaceObject.useSelect)(select => ({
     newPermalink: select(external_wp_editor_namespaceObject.store).getCurrentPost().link
   }), []);
-  const nodeToUpdate = (0,external_wp_element_namespaceObject.useRef)();
+  const nodeToUpdateRef = (0,external_wp_element_namespaceObject.useRef)();
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    nodeToUpdate.current = document.querySelector(VIEW_AS_PREVIEW_LINK_SELECTOR) || document.querySelector(VIEW_AS_LINK_SELECTOR);
+    nodeToUpdateRef.current = document.querySelector(VIEW_AS_PREVIEW_LINK_SELECTOR) || document.querySelector(VIEW_AS_LINK_SELECTOR);
   }, []);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (!newPermalink || !nodeToUpdate.current) {
+    if (!newPermalink || !nodeToUpdateRef.current) {
       return;
     }
-    nodeToUpdate.current.setAttribute('href', newPermalink);
+    nodeToUpdateRef.current.setAttribute('href', newPermalink);
   }, [newPermalink]);
 };
 
@@ -1048,14 +1051,14 @@ const getEditedPostTemplateId = (0,external_wp_data_namespaceObject.createRegist
     slug
   } = select(external_wp_editor_namespaceObject.store).getCurrentPost();
   const {
-    getSite,
+    getEntityRecord,
     getEntityRecords,
     canUser
   } = select(external_wp_coreData_namespaceObject.store);
   const siteSettings = canUser('read', {
     kind: 'root',
     name: 'site'
-  }) ? getSite() : undefined;
+  }) ? getEntityRecord('root', 'site') : undefined;
   // First check if the current page is set as the posts page.
   const isPostsPage = +postId === siteSettings?.page_for_posts;
   if (isPostsPage) {
@@ -1734,7 +1737,10 @@ function InitPatternModal() {
             }
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalHStack, {
             justify: "right",
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+            // TODO: Switch to `true` (40px size) if possible
+            , {
+              __next40pxDefaultSize: false,
               variant: "primary",
               type: "submit",
               disabled: !title,
@@ -2130,7 +2136,10 @@ function CustomFieldsConfirmation({
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
       className: "edit-post-preferences-modal__custom-fields-confirmation-message",
       children: (0,external_wp_i18n_namespaceObject.__)('A page reload is required for this change. Make sure your content is saved before reloading.')
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+    // TODO: Switch to `true` (40px size) if possible
+    , {
+      __next40pxDefaultSize: false,
       className: "edit-post-preferences-modal__custom-fields-confirmation-button",
       variant: "secondary",
       isBusy: isReloading,
@@ -2620,8 +2629,8 @@ function usePaddingAppender() {
       const {
         defaultView
       } = ownerDocument;
-      const paddingBottom = defaultView.parseInt(defaultView.getComputedStyle(node).paddingBottom, 10);
-      if (!paddingBottom) {
+      const pseudoHeight = defaultView.parseInt(defaultView.getComputedStyle(node, ':after').height, 10);
+      if (!pseudoHeight) {
         return;
       }
 
@@ -2634,20 +2643,15 @@ function usePaddingAppender() {
       if (event.clientY < lastChildRect.bottom) {
         return;
       }
-      event.preventDefault();
+      event.stopPropagation();
       const blockOrder = registry.select(external_wp_blockEditor_namespaceObject.store).getBlockOrder('');
       const lastBlockClientId = blockOrder[blockOrder.length - 1];
-
-      // Do nothing when only default block appender is present.
-      if (!lastBlockClientId) {
-        return;
-      }
       const lastBlock = registry.select(external_wp_blockEditor_namespaceObject.store).getBlock(lastBlockClientId);
       const {
         selectBlock,
         insertDefaultBlock
       } = registry.dispatch(external_wp_blockEditor_namespaceObject.store);
-      if ((0,external_wp_blocks_namespaceObject.isUnmodifiedDefaultBlock)(lastBlock)) {
+      if (lastBlock && (0,external_wp_blocks_namespaceObject.isUnmodifiedDefaultBlock)(lastBlock)) {
         selectBlock(lastBlockClientId);
       } else {
         insertDefaultBlock();
@@ -2858,7 +2862,6 @@ function useEditorStyles() {
     hasThemeStyleSupport,
     editorSettings,
     isZoomedOutView,
-    hasMetaBoxes,
     renderingMode,
     postType
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
@@ -2874,7 +2877,6 @@ function useEditorStyles() {
       hasThemeStyleSupport: select(store).isFeatureActive('themeStyles'),
       editorSettings: select(external_wp_editor_namespaceObject.store).getEditorSettings(),
       isZoomedOutView: __unstableGetEditorMode() === 'zoom-out',
-      hasMetaBoxes: select(store).hasMetaBoxes(),
       renderingMode: getRenderingMode(),
       postType: _postType
     };
@@ -2904,13 +2906,11 @@ function useEditorStyles() {
     }
     const baseStyles = hasThemeStyles ? (_editorSettings$style3 = editorSettings.styles) !== null && _editorSettings$style3 !== void 0 ? _editorSettings$style3 : [] : defaultEditorStyles;
 
-    // Add a constant padding for the typewriter effect. When typing at the
-    // bottom, there needs to be room to scroll up.
-    if (!isZoomedOutView && !hasMetaBoxes && renderingMode === 'post-only' && !DESIGN_POST_TYPES.includes(postType)) {
+    // Add a space for the typewriter effect. When typing in the last block,
+    // there needs to be room to scroll up.
+    if (!isZoomedOutView && renderingMode === 'post-only' && !DESIGN_POST_TYPES.includes(postType)) {
       return [...baseStyles, {
-        // Should override global styles padding, so ensure 0-1-0
-        // specificity.
-        css: ':root :where(body){padding-bottom: 40vh}'
+        css: ':root :where(.editor-styles-wrapper)::after {content: ""; display: block; height: 40vh;}'
       }];
     }
     return baseStyles;

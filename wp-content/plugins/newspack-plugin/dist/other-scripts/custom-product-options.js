@@ -1,1 +1,0 @@
-(()=>{var i;(i=jQuery)&&i("#variable_product_options").on("change","input.variable_is_virtual",(function(r){i(r.currentTarget).closest(".woocommerce_variation").find(".show_if_variation_virtual").hide(),i(r.currentTarget).is(":checked")&&i(r.currentTarget).closest(".woocommerce_variation").find(".show_if_variation_virtual").show()}))})();

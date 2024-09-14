@@ -68,6 +68,7 @@ var signals_module_v,signals_module_s;function signals_module_l(n,i){preact_modu
  * Proxies for each object.
  */
 const objToProxy = new WeakMap();
+const proxyToObj = new WeakMap();
 
 /**
  * Namespaces for each created proxy.
@@ -100,6 +101,7 @@ const createProxy = (namespace, obj, handlers) => {
   if (!objToProxy.has(obj)) {
     const proxy = new Proxy(obj, handlers);
     objToProxy.set(obj, proxy);
+    proxyToObj.set(proxy, obj);
     proxyToNs.set(proxy, namespace);
   }
   return objToProxy.get(obj);
@@ -136,6 +138,15 @@ const shouldProxy = candidate => {
   }
   return !proxyToNs.has(candidate) && supported.has(candidate.constructor);
 };
+
+/**
+ * Returns the target object for the passed proxy. If the passed object is not a registered proxy, the
+ * function returns `undefined`.
+ *
+ * @param proxy Proxy from which to know the target.
+ * @return The target object or `undefined`.
+ */
+const getObjectFromProxy = proxy => proxyToObj.get(proxy);
 ;// CONCATENATED MODULE: ./packages/interactivity/src/namespaces.ts
 const namespaceStack = [];
 const getNamespace = () => namespaceStack.slice(-1)[0];
@@ -529,29 +540,6 @@ const warn = message => {
  * @return Whether `candidate` is a plain object.
  */
 const isPlainObject = candidate => Boolean(candidate && typeof candidate === 'object' && candidate.constructor === Object);
-const deepMerge = (target, source, override = true) => {
-  if (isPlainObject(target) && isPlainObject(source)) {
-    for (const key in source) {
-      const desc = Object.getOwnPropertyDescriptor(source, key);
-      if (typeof desc?.get === 'function' || typeof desc?.set === 'function') {
-        if (override || !(key in target)) {
-          Object.defineProperty(target, key, {
-            ...desc,
-            configurable: true,
-            enumerable: true
-          });
-        }
-      } else if (isPlainObject(source[key])) {
-        if (!target[key]) {
-          target[key] = {};
-        }
-        deepMerge(target[key], source[key], override);
-      } else if (override || !(key in target)) {
-        Object.defineProperty(target, key, desc);
-      }
-    }
-  }
-};
 ;// CONCATENATED MODULE: ./packages/interactivity/src/proxies/signals.ts
 /**
  * External dependencies
@@ -694,6 +682,7 @@ class PropSignal {
 
 
 
+
 /**
  * Set of built-in symbols.
  */
@@ -704,6 +693,16 @@ const wellKnownSymbols = new Set(Object.getOwnPropertyNames(Symbol).map(key => S
  * the proxy's accessed properties.
  */
 const proxyToProps = new WeakMap();
+
+/**
+ *  Checks wether a {@link PropSignal | `PropSignal`} instance exists for the
+ *  given property in the passed proxy.
+ *
+ * @param proxy Proxy of a state object or array.
+ * @param key   The property key.
+ * @return `true` when it exists; false otherwise.
+ */
+const hasPropSignal = (proxy, key) => proxyToProps.has(proxy) && proxyToProps.get(proxy).has(key);
 
 /**
  * Returns the {@link PropSignal | `PropSignal`} instance associated with the
@@ -885,6 +884,64 @@ const peek = (obj, key) => {
     peeking = false;
   }
 };
+
+/**
+ * Internal recursive implementation for {@link deepMerge | `deepMerge`}.
+ *
+ * @param target   The target object.
+ * @param source   The source object containing new values and props.
+ * @param override Whether existing props should be overwritten or not (`true`
+ *                 by default).
+ */
+const deepMergeRecursive = (target, source, override = true) => {
+  if (isPlainObject(target) && isPlainObject(source)) {
+    for (const key in source) {
+      const desc = Object.getOwnPropertyDescriptor(source, key);
+      if (typeof desc?.get === 'function' || typeof desc?.set === 'function') {
+        if (override || !(key in target)) {
+          Object.defineProperty(target, key, {
+            ...desc,
+            configurable: true,
+            enumerable: true
+          });
+          const proxy = getProxyFromObject(target);
+          if (desc?.get && proxy && hasPropSignal(proxy, key)) {
+            const propSignal = getPropSignal(proxy, key);
+            propSignal.setGetter(desc.get);
+          }
+        }
+      } else if (isPlainObject(source[key])) {
+        if (!(key in target)) {
+          target[key] = {};
+        }
+        deepMergeRecursive(target[key], source[key], override);
+      } else if (override || !(key in target)) {
+        Object.defineProperty(target, key, desc);
+        const proxy = getProxyFromObject(target);
+        if (desc?.value && proxy && hasPropSignal(proxy, key)) {
+          const propSignal = getPropSignal(proxy, key);
+          propSignal.setValue(desc.value);
+        }
+      }
+    }
+  }
+};
+
+/**
+ * Recursively update prop values inside the passed `target` and nested plain
+ * objects, using the values present in `source`. References to plain objects
+ * are kept, only updating props containing primitives or arrays. Arrays are
+ * replaced instead of merged or concatenated.
+ *
+ * If the `override` parameter is set to `false`, then all values in `target`
+ * are preserved, and only new properties from `source` are added.
+ *
+ * @param target   The target object.
+ * @param source   The source object containing new values and props.
+ * @param override Whether existing props should be overwritten or not (`true`
+ *                 by default).
+ */
+const deepMerge = (target, source, override = true) => signals_core_module_r(() => deepMergeRecursive(getObjectFromProxy(target) || target, source, override));
 ;// CONCATENATED MODULE: ./packages/interactivity/src/proxies/store.ts
 /**
  * Internal dependencies
@@ -1617,8 +1674,7 @@ const getGlobalAsyncEventDirective = type => {
           warn(`The value of data-wp-context in "${namespace}" store must be a valid stringified JSON object.`);
         }
         updateContext(currentValue.current, deepClone(value));
-        currentValue.current = proxifyContext(currentValue.current, inheritedValue[namespace]);
-        result[namespace] = currentValue.current;
+        result[namespace] = proxifyContext(currentValue.current, inheritedValue[namespace]);
       }
       return result;
     }, [defaultEntry, inheritedValue]);

@@ -3563,16 +3563,16 @@ function CommandMenuLoaderWrapper({
   // the CommandMenuLoaderWrapper component need to be
   // remounted on each hook prop change
   // We use the key state to make sure we do that properly.
-  const currentLoader = (0,external_wp_element_namespaceObject.useRef)(hook);
+  const currentLoaderRef = (0,external_wp_element_namespaceObject.useRef)(hook);
   const [key, setKey] = (0,external_wp_element_namespaceObject.useState)(0);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (currentLoader.current !== hook) {
-      currentLoader.current = hook;
+    if (currentLoaderRef.current !== hook) {
+      currentLoaderRef.current = hook;
       setKey(prevKey => prevKey + 1);
     }
   }, [hook]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CommandMenuLoader, {
-    hook: currentLoader.current,
+    hook: currentLoaderRef.current,
     search: search,
     setLoader: setLoader,
     close: close
@@ -3853,9 +3853,9 @@ function useCommand(command) {
     registerCommand,
     unregisterCommand
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
-  const currentCallback = (0,external_wp_element_namespaceObject.useRef)(command.callback);
+  const currentCallbackRef = (0,external_wp_element_namespaceObject.useRef)(command.callback);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    currentCallback.current = command.callback;
+    currentCallbackRef.current = command.callback;
   }, [command.callback]);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (command.disabled) {
@@ -3867,7 +3867,7 @@ function useCommand(command) {
       label: command.label,
       searchLabel: command.searchLabel,
       icon: command.icon,
-      callback: (...args) => currentCallback.current(...args)
+      callback: (...args) => currentCallbackRef.current(...args)
     });
     return () => {
       unregisterCommand(command.name);

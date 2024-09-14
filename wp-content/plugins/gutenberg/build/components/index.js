@@ -1768,6 +1768,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
+  AlignmentMatrixControl: () => (/* reexport */ alignment_matrix_control),
   AnglePickerControl: () => (/* reexport */ angle_picker_control),
   Animate: () => (/* reexport */ animate),
   Autocomplete: () => (/* reexport */ Autocomplete),
@@ -1897,11 +1898,11 @@ __webpack_require__.d(__webpack_exports__, {
   __experimentalNavigationGroup: () => (/* reexport */ group),
   __experimentalNavigationItem: () => (/* reexport */ navigation_item),
   __experimentalNavigationMenu: () => (/* reexport */ navigation_menu),
-  __experimentalNavigatorBackButton: () => (/* reexport */ navigator_back_button_component),
-  __experimentalNavigatorButton: () => (/* reexport */ navigator_button_component),
-  __experimentalNavigatorProvider: () => (/* reexport */ navigator_provider_component),
-  __experimentalNavigatorScreen: () => (/* reexport */ navigator_screen_component),
-  __experimentalNavigatorToParentButton: () => (/* reexport */ navigator_to_parent_button_component),
+  __experimentalNavigatorBackButton: () => (/* reexport */ NavigatorBackButton),
+  __experimentalNavigatorButton: () => (/* reexport */ NavigatorButton),
+  __experimentalNavigatorProvider: () => (/* reexport */ NavigatorProvider),
+  __experimentalNavigatorScreen: () => (/* reexport */ NavigatorScreen),
+  __experimentalNavigatorToParentButton: () => (/* reexport */ NavigatorToParentButton),
   __experimentalNumberControl: () => (/* reexport */ number_control),
   __experimentalPaletteEdit: () => (/* reexport */ palette_edit),
   __experimentalParseQuantityAndUnitFromRawValue: () => (/* reexport */ parseQuantityAndUnitFromRawValue),
@@ -1926,7 +1927,7 @@ __webpack_require__.d(__webpack_exports__, {
   __experimentalTruncate: () => (/* reexport */ truncate_component),
   __experimentalUnitControl: () => (/* reexport */ unit_control),
   __experimentalUseCustomUnits: () => (/* reexport */ useCustomUnits),
-  __experimentalUseNavigator: () => (/* reexport */ use_navigator),
+  __experimentalUseNavigator: () => (/* reexport */ useNavigator),
   __experimentalUseSlot: () => (/* reexport */ useSlot),
   __experimentalUseSlotFills: () => (/* reexport */ useSlotFills),
   __experimentalVStack: () => (/* reexport */ v_stack_component),
@@ -1934,8 +1935,8 @@ __webpack_require__.d(__webpack_exports__, {
   __experimentalZStack: () => (/* reexport */ z_stack_component),
   __unstableAnimatePresence: () => (/* reexport */ AnimatePresence),
   __unstableComposite: () => (/* reexport */ legacy_Composite),
-  __unstableCompositeGroup: () => (/* reexport */ CompositeGroup),
-  __unstableCompositeItem: () => (/* reexport */ CompositeItem),
+  __unstableCompositeGroup: () => (/* reexport */ legacy_CompositeGroup),
+  __unstableCompositeItem: () => (/* reexport */ legacy_CompositeItem),
   __unstableDisclosureContent: () => (/* reexport */ disclosure_DisclosureContent),
   __unstableGetAnimateClassName: () => (/* reexport */ getAnimateClassName),
   __unstableMotion: () => (/* reexport */ motion),
@@ -1984,6 +1985,12 @@ __webpack_require__.d(toggle_group_control_option_base_styles_namespaceObject, {
 const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// CONCATENATED MODULE: ./node_modules/clsx/dist/clsx.mjs
 function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e)){var o=e.length;for(t=0;t<o;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f)}else for(f in e)e[f]&&(n&&(n+=" "),n+=f);return n}function clsx(){for(var e,t,f=0,n="",o=arguments.length;f<o;f++)(e=arguments[f])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}/* harmony default export */ const dist_clsx = (clsx);
+;// CONCATENATED MODULE: external ["wp","i18n"]
+const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+;// CONCATENATED MODULE: external ["wp","compose"]
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
+;// CONCATENATED MODULE: external ["wp","element"]
+const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/3YLGPPWQ.js
 "use client";
 var __defProp = Object.defineProperty;
@@ -3088,10 +3095,6 @@ function _2GXGCHW6_useStore(createStore, props) {
 
 
 
-;// CONCATENATED MODULE: external ["wp","i18n"]
-const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// CONCATENATED MODULE: external ["wp","compose"]
-const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/TCAGH6BH.js
 "use client";
 
@@ -3632,12 +3635,79 @@ function useCompositeStore(props = {}) {
 
 
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/7HVFURXT.js
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/5VQZOHHZ.js
 "use client";
 
-// src/group/group-label-context.tsx
+// src/composite/utils.ts
 
-var GroupLabelContext = (0,external_React_.createContext)(void 0);
+var _5VQZOHHZ_NULL_ITEM = { id: null };
+function _5VQZOHHZ_flipItems(items, activeId, shouldInsertNullItem = false) {
+  const index = items.findIndex((item) => item.id === activeId);
+  return [
+    ...items.slice(index + 1),
+    ...shouldInsertNullItem ? [_5VQZOHHZ_NULL_ITEM] : [],
+    ...items.slice(0, index)
+  ];
+}
+function _5VQZOHHZ_findFirstEnabledItem(items, excludeId) {
+  return items.find((item) => {
+    if (excludeId) {
+      return !item.disabled && item.id !== excludeId;
+    }
+    return !item.disabled;
+  });
+}
+function getEnabledItem(store, id) {
+  if (!id) return null;
+  return store.item(id) || null;
+}
+function _5VQZOHHZ_groupItemsByRows(items) {
+  const rows = [];
+  for (const item of items) {
+    const row = rows.find((currentRow) => {
+      var _a;
+      return ((_a = currentRow[0]) == null ? void 0 : _a.rowId) === item.rowId;
+    });
+    if (row) {
+      row.push(item);
+    } else {
+      rows.push([item]);
+    }
+  }
+  return rows;
+}
+function selectTextField(element, collapseToEnd = false) {
+  if (isTextField(element)) {
+    element.setSelectionRange(
+      collapseToEnd ? element.value.length : 0,
+      element.value.length
+    );
+  } else if (element.isContentEditable) {
+    const selection = getDocument(element).getSelection();
+    selection == null ? void 0 : selection.selectAllChildren(element);
+    if (collapseToEnd) {
+      selection == null ? void 0 : selection.collapseToEnd();
+    }
+  }
+}
+var FOCUS_SILENTLY = Symbol("FOCUS_SILENTLY");
+function focusSilently(element) {
+  element[FOCUS_SILENTLY] = true;
+  element.focus({ preventScroll: true });
+}
+function silentlyFocused(element) {
+  const isSilentlyFocused = element[FOCUS_SILENTLY];
+  delete element[FOCUS_SILENTLY];
+  return isSilentlyFocused;
+}
+function isItem(store, element, exclude) {
+  if (!element) return false;
+  if (element === exclude) return false;
+  const item = store.item(element.id);
+  if (!item) return false;
+  if (exclude && item.element === exclude) return false;
+  return true;
+}
 
 
 
@@ -3725,115 +3795,6 @@ function createStoreContext(providers = [], scopedProviders = []) {
 
 
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/ZPO4YZYE.js
-"use client";
-
-
-
-
-
-// src/group/group.tsx
-
-
-
-var TagName = "div";
-var useGroup = createHook(
-  function useGroup2(props) {
-    const [labelId, setLabelId] = (0,external_React_.useState)();
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(GroupLabelContext.Provider, { value: setLabelId, children: element }),
-      []
-    );
-    props = _3YLGPPWQ_spreadValues({
-      role: "group",
-      "aria-labelledby": labelId
-    }, props);
-    return removeUndefinedValues(props);
-  }
-);
-var Group = forwardRef2(function Group2(props) {
-  const htmlProps = useGroup(props);
-  return HKOOKEDE_createElement(TagName, htmlProps);
-});
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/IEKMDIUY.js
-"use client";
-
-
-
-
-// src/composite/composite-group.tsx
-var IEKMDIUY_TagName = "div";
-var useCompositeGroup = createHook(
-  function useCompositeGroup2(_a) {
-    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-    props = useGroup(props);
-    return props;
-  }
-);
-var IEKMDIUY_CompositeGroup = forwardRef2(function CompositeGroup2(props) {
-  const htmlProps = useCompositeGroup(props);
-  return HKOOKEDE_createElement(IEKMDIUY_TagName, htmlProps);
-});
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/IGFP5YPG.js
-"use client";
-
-
-
-
-
-// src/group/group-label.tsx
-
-
-var IGFP5YPG_TagName = "div";
-var useGroupLabel = createHook(
-  function useGroupLabel2(props) {
-    const setLabelId = (0,external_React_.useContext)(GroupLabelContext);
-    const id = useId(props.id);
-    useSafeLayoutEffect(() => {
-      setLabelId == null ? void 0 : setLabelId(id);
-      return () => setLabelId == null ? void 0 : setLabelId(void 0);
-    }, [setLabelId, id]);
-    props = _3YLGPPWQ_spreadValues({
-      id,
-      "aria-hidden": true
-    }, props);
-    return removeUndefinedValues(props);
-  }
-);
-var GroupLabel = forwardRef2(function GroupLabel2(props) {
-  const htmlProps = useGroupLabel(props);
-  return HKOOKEDE_createElement(IGFP5YPG_TagName, htmlProps);
-});
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/Y2MAXF6C.js
-"use client";
-
-
-
-
-// src/composite/composite-group-label.tsx
-var Y2MAXF6C_TagName = "div";
-var useCompositeGroupLabel = createHook(function useCompositeGroupLabel2(_a) {
-  var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-  props = useGroupLabel(props);
-  return props;
-});
-var Y2MAXF6C_CompositeGroupLabel = forwardRef2(function CompositeGroupLabel2(props) {
-  const htmlProps = useCompositeGroupLabel(props);
-  return HKOOKEDE_createElement(Y2MAXF6C_TagName, htmlProps);
-});
-
-
-
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/FMYQNSCK.js
 "use client";
 
@@ -3848,53 +3809,28 @@ var CollectionScopedContextProvider = ctx.ScopedContextProvider;
 
 
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/PLQDTVXM.js
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/WENSINUV.js
 "use client";
 
 
 
+// src/composite/composite-context.tsx
 
-
-// src/collection/collection-item.tsx
-
-
-var PLQDTVXM_TagName = "div";
-var useCollectionItem = createHook(
-  function useCollectionItem2(_a) {
-    var _b = _a, {
-      store,
-      shouldRegisterItem = true,
-      getItem = identity,
-      element: element
-    } = _b, props = __objRest(_b, [
-      "store",
-      "shouldRegisterItem",
-      "getItem",
-      // @ts-expect-error This prop may come from a collection renderer.
-      "element"
-    ]);
-    const context = useCollectionContext();
-    store = store || context;
-    const id = useId(props.id);
-    const ref = (0,external_React_.useRef)(element);
-    (0,external_React_.useEffect)(() => {
-      const element2 = ref.current;
-      if (!id) return;
-      if (!element2) return;
-      if (!shouldRegisterItem) return;
-      const item = getItem({ id, element: element2 });
-      return store == null ? void 0 : store.renderItem(item);
-    }, [id, shouldRegisterItem, getItem, store]);
-    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
-      ref: useMergeRefs(ref, props.ref)
-    });
-    return removeUndefinedValues(props);
-  }
+var WENSINUV_ctx = createStoreContext(
+  [CollectionContextProvider],
+  [CollectionScopedContextProvider]
 );
-var CollectionItem = forwardRef2(function CollectionItem2(props) {
-  const htmlProps = useCollectionItem(props);
-  return HKOOKEDE_createElement(PLQDTVXM_TagName, htmlProps);
-});
+var useCompositeContext = WENSINUV_ctx.useContext;
+var useCompositeScopedContext = WENSINUV_ctx.useScopedContext;
+var useCompositeProviderContext = WENSINUV_ctx.useProviderContext;
+var CompositeContextProvider = WENSINUV_ctx.ContextProvider;
+var CompositeScopedContextProvider = WENSINUV_ctx.ScopedContextProvider;
+var CompositeItemContext = (0,external_React_.createContext)(
+  void 0
+);
+var CompositeRowContext = (0,external_React_.createContext)(
+  void 0
+);
 
 
 
@@ -4130,7 +4066,7 @@ function focusIntoView(element, options) {
 
 
 
-var HGZKAGPL_TagName = "div";
+var TagName = "div";
 var isSafariBrowser = isSafari();
 var alwaysFocusVisibleInputTypes = [
   "text",
@@ -4415,7 +4351,663 @@ var useFocusable = createHook(
 );
 var Focusable = forwardRef2(function Focusable2(props) {
   const htmlProps = useFocusable(props);
-  return HKOOKEDE_createElement(HGZKAGPL_TagName, htmlProps);
+  return HKOOKEDE_createElement(TagName, htmlProps);
+});
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/TW35PKTK.js
+"use client";
+
+
+
+
+
+
+
+// src/composite/composite.tsx
+
+
+
+
+
+
+
+var TW35PKTK_TagName = "div";
+function isGrid(items) {
+  return items.some((item) => !!item.rowId);
+}
+function isPrintableKey(event) {
+  const target = event.target;
+  if (target && !isTextField(target)) return false;
+  return event.key.length === 1 && !event.ctrlKey && !event.metaKey;
+}
+function isModifierKey(event) {
+  return event.key === "Shift" || event.key === "Control" || event.key === "Alt" || event.key === "Meta";
+}
+function useKeyboardEventProxy(store, onKeyboardEvent, previousElementRef) {
+  return useEvent((event) => {
+    var _a;
+    onKeyboardEvent == null ? void 0 : onKeyboardEvent(event);
+    if (event.defaultPrevented) return;
+    if (event.isPropagationStopped()) return;
+    if (!isSelfTarget(event)) return;
+    if (isModifierKey(event)) return;
+    if (isPrintableKey(event)) return;
+    const state = store.getState();
+    const activeElement = (_a = getEnabledItem(store, state.activeId)) == null ? void 0 : _a.element;
+    if (!activeElement) return;
+    const _b = event, { view } = _b, eventInit = __objRest(_b, ["view"]);
+    const previousElement = previousElementRef == null ? void 0 : previousElementRef.current;
+    if (activeElement !== previousElement) {
+      activeElement.focus();
+    }
+    if (!fireKeyboardEvent(activeElement, event.type, eventInit)) {
+      event.preventDefault();
+    }
+    if (event.currentTarget.contains(activeElement)) {
+      event.stopPropagation();
+    }
+  });
+}
+function findFirstEnabledItemInTheLastRow(items) {
+  return _5VQZOHHZ_findFirstEnabledItem(
+    flatten2DArray(reverseArray(_5VQZOHHZ_groupItemsByRows(items)))
+  );
+}
+function useScheduleFocus(store) {
+  const [scheduled, setScheduled] = (0,external_React_.useState)(false);
+  const schedule = (0,external_React_.useCallback)(() => setScheduled(true), []);
+  const activeItem = store.useState(
+    (state) => getEnabledItem(store, state.activeId)
+  );
+  (0,external_React_.useEffect)(() => {
+    const activeElement = activeItem == null ? void 0 : activeItem.element;
+    if (!scheduled) return;
+    if (!activeElement) return;
+    setScheduled(false);
+    activeElement.focus({ preventScroll: true });
+  }, [activeItem, scheduled]);
+  return schedule;
+}
+var useComposite = createHook(
+  function useComposite2(_a) {
+    var _b = _a, {
+      store,
+      composite = true,
+      focusOnMove = composite,
+      moveOnKeyPress = true
+    } = _b, props = __objRest(_b, [
+      "store",
+      "composite",
+      "focusOnMove",
+      "moveOnKeyPress"
+    ]);
+    const context = useCompositeProviderContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const ref = (0,external_React_.useRef)(null);
+    const previousElementRef = (0,external_React_.useRef)(null);
+    const scheduleFocus = useScheduleFocus(store);
+    const moves = store.useState("moves");
+    const [, setBaseElement] = useTransactionState(
+      composite ? store.setBaseElement : null
+    );
+    (0,external_React_.useEffect)(() => {
+      var _a2;
+      if (!store) return;
+      if (!moves) return;
+      if (!composite) return;
+      if (!focusOnMove) return;
+      const { activeId: activeId2 } = store.getState();
+      const itemElement = (_a2 = getEnabledItem(store, activeId2)) == null ? void 0 : _a2.element;
+      if (!itemElement) return;
+      focusIntoView(itemElement);
+    }, [store, moves, composite, focusOnMove]);
+    useSafeLayoutEffect(() => {
+      if (!store) return;
+      if (!moves) return;
+      if (!composite) return;
+      const { baseElement, activeId: activeId2 } = store.getState();
+      const isSelfAcive = activeId2 === null;
+      if (!isSelfAcive) return;
+      if (!baseElement) return;
+      const previousElement = previousElementRef.current;
+      previousElementRef.current = null;
+      if (previousElement) {
+        fireBlurEvent(previousElement, { relatedTarget: baseElement });
+      }
+      if (!hasFocus(baseElement)) {
+        baseElement.focus();
+      }
+    }, [store, moves, composite]);
+    const activeId = store.useState("activeId");
+    const virtualFocus = store.useState("virtualFocus");
+    useSafeLayoutEffect(() => {
+      var _a2;
+      if (!store) return;
+      if (!composite) return;
+      if (!virtualFocus) return;
+      const previousElement = previousElementRef.current;
+      previousElementRef.current = null;
+      if (!previousElement) return;
+      const activeElement = (_a2 = getEnabledItem(store, activeId)) == null ? void 0 : _a2.element;
+      const relatedTarget = activeElement || getActiveElement(previousElement);
+      if (relatedTarget === previousElement) return;
+      fireBlurEvent(previousElement, { relatedTarget });
+    }, [store, activeId, virtualFocus, composite]);
+    const onKeyDownCapture = useKeyboardEventProxy(
+      store,
+      props.onKeyDownCapture,
+      previousElementRef
+    );
+    const onKeyUpCapture = useKeyboardEventProxy(
+      store,
+      props.onKeyUpCapture,
+      previousElementRef
+    );
+    const onFocusCaptureProp = props.onFocusCapture;
+    const onFocusCapture = useEvent((event) => {
+      onFocusCaptureProp == null ? void 0 : onFocusCaptureProp(event);
+      if (event.defaultPrevented) return;
+      if (!store) return;
+      const { virtualFocus: virtualFocus2 } = store.getState();
+      if (!virtualFocus2) return;
+      const previousActiveElement = event.relatedTarget;
+      const isSilentlyFocused = silentlyFocused(event.currentTarget);
+      if (isSelfTarget(event) && isSilentlyFocused) {
+        event.stopPropagation();
+        previousElementRef.current = previousActiveElement;
+      }
+    });
+    const onFocusProp = props.onFocus;
+    const onFocus = useEvent((event) => {
+      onFocusProp == null ? void 0 : onFocusProp(event);
+      if (event.defaultPrevented) return;
+      if (!composite) return;
+      if (!store) return;
+      const { relatedTarget } = event;
+      const { virtualFocus: virtualFocus2 } = store.getState();
+      if (virtualFocus2) {
+        if (isSelfTarget(event) && !isItem(store, relatedTarget)) {
+          queueMicrotask(scheduleFocus);
+        }
+      } else if (isSelfTarget(event)) {
+        store.setActiveId(null);
+      }
+    });
+    const onBlurCaptureProp = props.onBlurCapture;
+    const onBlurCapture = useEvent((event) => {
+      var _a2;
+      onBlurCaptureProp == null ? void 0 : onBlurCaptureProp(event);
+      if (event.defaultPrevented) return;
+      if (!store) return;
+      const { virtualFocus: virtualFocus2, activeId: activeId2 } = store.getState();
+      if (!virtualFocus2) return;
+      const activeElement = (_a2 = getEnabledItem(store, activeId2)) == null ? void 0 : _a2.element;
+      const nextActiveElement = event.relatedTarget;
+      const nextActiveElementIsItem = isItem(store, nextActiveElement);
+      const previousElement = previousElementRef.current;
+      previousElementRef.current = null;
+      if (isSelfTarget(event) && nextActiveElementIsItem) {
+        if (nextActiveElement === activeElement) {
+          if (previousElement && previousElement !== nextActiveElement) {
+            fireBlurEvent(previousElement, event);
+          }
+        } else if (activeElement) {
+          fireBlurEvent(activeElement, event);
+        } else if (previousElement) {
+          fireBlurEvent(previousElement, event);
+        }
+        event.stopPropagation();
+      } else {
+        const targetIsItem = isItem(store, event.target);
+        if (!targetIsItem && activeElement) {
+          fireBlurEvent(activeElement, event);
+        }
+      }
+    });
+    const onKeyDownProp = props.onKeyDown;
+    const moveOnKeyPressProp = useBooleanEvent(moveOnKeyPress);
+    const onKeyDown = useEvent((event) => {
+      var _a2;
+      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
+      if (event.defaultPrevented) return;
+      if (!store) return;
+      if (!isSelfTarget(event)) return;
+      const { orientation, items, renderedItems, activeId: activeId2 } = store.getState();
+      const activeItem = getEnabledItem(store, activeId2);
+      if ((_a2 = activeItem == null ? void 0 : activeItem.element) == null ? void 0 : _a2.isConnected) return;
+      const isVertical = orientation !== "horizontal";
+      const isHorizontal = orientation !== "vertical";
+      const grid = isGrid(renderedItems);
+      const isHorizontalKey = event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "Home" || event.key === "End";
+      if (isHorizontalKey && isTextField(event.currentTarget)) return;
+      const up = () => {
+        if (grid) {
+          const item = items && findFirstEnabledItemInTheLastRow(items);
+          return item == null ? void 0 : item.id;
+        }
+        return store == null ? void 0 : store.last();
+      };
+      const keyMap = {
+        ArrowUp: (grid || isVertical) && up,
+        ArrowRight: (grid || isHorizontal) && store.first,
+        ArrowDown: (grid || isVertical) && store.first,
+        ArrowLeft: (grid || isHorizontal) && store.last,
+        Home: store.first,
+        End: store.last,
+        PageUp: store.first,
+        PageDown: store.last
+      };
+      const action = keyMap[event.key];
+      if (action) {
+        const id = action();
+        if (id !== void 0) {
+          if (!moveOnKeyPressProp(event)) return;
+          event.preventDefault();
+          store.move(id);
+        }
+      }
+    });
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(CompositeContextProvider, { value: store, children: element }),
+      [store]
+    );
+    const activeDescendant = store.useState((state) => {
+      var _a2;
+      if (!store) return;
+      if (!composite) return;
+      if (!state.virtualFocus) return;
+      return (_a2 = getEnabledItem(store, state.activeId)) == null ? void 0 : _a2.id;
+    });
+    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
+      "aria-activedescendant": activeDescendant
+    }, props), {
+      ref: useMergeRefs(ref, setBaseElement, props.ref),
+      onKeyDownCapture,
+      onKeyUpCapture,
+      onFocusCapture,
+      onFocus,
+      onBlurCapture,
+      onKeyDown
+    });
+    const focusable = store.useState(
+      (state) => composite && (state.virtualFocus || state.activeId === null)
+    );
+    props = useFocusable(_3YLGPPWQ_spreadValues({ focusable }, props));
+    return props;
+  }
+);
+var TW35PKTK_Composite = forwardRef2(function Composite2(props) {
+  const htmlProps = useComposite(props);
+  return HKOOKEDE_createElement(TW35PKTK_TagName, htmlProps);
+});
+
+
+
+;// CONCATENATED MODULE: ./packages/components/build-module/composite/context.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+const CompositeContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
+const context_useCompositeContext = () => (0,external_wp_element_namespaceObject.useContext)(CompositeContext);
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/7HVFURXT.js
+"use client";
+
+// src/group/group-label-context.tsx
+
+var GroupLabelContext = (0,external_React_.createContext)(void 0);
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/ZPO4YZYE.js
+"use client";
+
+
+
+
+
+// src/group/group.tsx
+
+
+
+var ZPO4YZYE_TagName = "div";
+var useGroup = createHook(
+  function useGroup2(props) {
+    const [labelId, setLabelId] = (0,external_React_.useState)();
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(GroupLabelContext.Provider, { value: setLabelId, children: element }),
+      []
+    );
+    props = _3YLGPPWQ_spreadValues({
+      role: "group",
+      "aria-labelledby": labelId
+    }, props);
+    return removeUndefinedValues(props);
+  }
+);
+var Group = forwardRef2(function Group2(props) {
+  const htmlProps = useGroup(props);
+  return HKOOKEDE_createElement(ZPO4YZYE_TagName, htmlProps);
+});
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/IEKMDIUY.js
+"use client";
+
+
+
+
+// src/composite/composite-group.tsx
+var IEKMDIUY_TagName = "div";
+var useCompositeGroup = createHook(
+  function useCompositeGroup2(_a) {
+    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+    props = useGroup(props);
+    return props;
+  }
+);
+var IEKMDIUY_CompositeGroup = forwardRef2(function CompositeGroup2(props) {
+  const htmlProps = useCompositeGroup(props);
+  return HKOOKEDE_createElement(IEKMDIUY_TagName, htmlProps);
+});
+
+
+
+;// CONCATENATED MODULE: ./packages/components/build-module/composite/group.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const CompositeGroup = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeGroup(props, ref) {
+  const context = context_useCompositeContext();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IEKMDIUY_CompositeGroup, {
+    store: context?.store,
+    ...props,
+    ref: ref
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/IGFP5YPG.js
+"use client";
+
+
+
+
+
+// src/group/group-label.tsx
+
+
+var IGFP5YPG_TagName = "div";
+var useGroupLabel = createHook(
+  function useGroupLabel2(props) {
+    const setLabelId = (0,external_React_.useContext)(GroupLabelContext);
+    const id = useId(props.id);
+    useSafeLayoutEffect(() => {
+      setLabelId == null ? void 0 : setLabelId(id);
+      return () => setLabelId == null ? void 0 : setLabelId(void 0);
+    }, [setLabelId, id]);
+    props = _3YLGPPWQ_spreadValues({
+      id,
+      "aria-hidden": true
+    }, props);
+    return removeUndefinedValues(props);
+  }
+);
+var GroupLabel = forwardRef2(function GroupLabel2(props) {
+  const htmlProps = useGroupLabel(props);
+  return HKOOKEDE_createElement(IGFP5YPG_TagName, htmlProps);
+});
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/Y2MAXF6C.js
+"use client";
+
+
+
+
+// src/composite/composite-group-label.tsx
+var Y2MAXF6C_TagName = "div";
+var useCompositeGroupLabel = createHook(function useCompositeGroupLabel2(_a) {
+  var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+  props = useGroupLabel(props);
+  return props;
+});
+var Y2MAXF6C_CompositeGroupLabel = forwardRef2(function CompositeGroupLabel2(props) {
+  const htmlProps = useCompositeGroupLabel(props);
+  return HKOOKEDE_createElement(Y2MAXF6C_TagName, htmlProps);
+});
+
+
+
+;// CONCATENATED MODULE: ./packages/components/build-module/composite/group-label.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const CompositeGroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeGroupLabel(props, ref) {
+  const context = context_useCompositeContext();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Y2MAXF6C_CompositeGroupLabel, {
+    store: context?.store,
+    ...props,
+    ref: ref
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/OBZMLI6J.js
+"use client";
+
+
+
+
+
+// src/composite/composite-hover.tsx
+
+
+
+
+var OBZMLI6J_TagName = "div";
+function getMouseDestination(event) {
+  const relatedTarget = event.relatedTarget;
+  if ((relatedTarget == null ? void 0 : relatedTarget.nodeType) === Node.ELEMENT_NODE) {
+    return relatedTarget;
+  }
+  return null;
+}
+function hoveringInside(event) {
+  const nextElement = getMouseDestination(event);
+  if (!nextElement) return false;
+  return contains(event.currentTarget, nextElement);
+}
+var symbol = Symbol("composite-hover");
+function movingToAnotherItem(event) {
+  let dest = getMouseDestination(event);
+  if (!dest) return false;
+  do {
+    if (PBFD2E7P_hasOwnProperty(dest, symbol) && dest[symbol]) return true;
+    dest = dest.parentElement;
+  } while (dest);
+  return false;
+}
+var useCompositeHover = createHook(
+  function useCompositeHover2(_a) {
+    var _b = _a, {
+      store,
+      focusOnHover = true,
+      blurOnHoverEnd = !!focusOnHover
+    } = _b, props = __objRest(_b, [
+      "store",
+      "focusOnHover",
+      "blurOnHoverEnd"
+    ]);
+    const context = useCompositeContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const isMouseMoving = useIsMouseMoving();
+    const onMouseMoveProp = props.onMouseMove;
+    const focusOnHoverProp = useBooleanEvent(focusOnHover);
+    const onMouseMove = useEvent((event) => {
+      onMouseMoveProp == null ? void 0 : onMouseMoveProp(event);
+      if (event.defaultPrevented) return;
+      if (!isMouseMoving()) return;
+      if (!focusOnHoverProp(event)) return;
+      if (!hasFocusWithin(event.currentTarget)) {
+        const baseElement = store == null ? void 0 : store.getState().baseElement;
+        if (baseElement && !hasFocus(baseElement)) {
+          baseElement.focus();
+        }
+      }
+      store == null ? void 0 : store.setActiveId(event.currentTarget.id);
+    });
+    const onMouseLeaveProp = props.onMouseLeave;
+    const blurOnHoverEndProp = useBooleanEvent(blurOnHoverEnd);
+    const onMouseLeave = useEvent((event) => {
+      var _a2;
+      onMouseLeaveProp == null ? void 0 : onMouseLeaveProp(event);
+      if (event.defaultPrevented) return;
+      if (!isMouseMoving()) return;
+      if (hoveringInside(event)) return;
+      if (movingToAnotherItem(event)) return;
+      if (!focusOnHoverProp(event)) return;
+      if (!blurOnHoverEndProp(event)) return;
+      store == null ? void 0 : store.setActiveId(null);
+      (_a2 = store == null ? void 0 : store.getState().baseElement) == null ? void 0 : _a2.focus();
+    });
+    const ref = (0,external_React_.useCallback)((element) => {
+      if (!element) return;
+      element[symbol] = true;
+    }, []);
+    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
+      ref: useMergeRefs(ref, props.ref),
+      onMouseMove,
+      onMouseLeave
+    });
+    return removeUndefinedValues(props);
+  }
+);
+var OBZMLI6J_CompositeHover = memo2(
+  forwardRef2(function CompositeHover2(props) {
+    const htmlProps = useCompositeHover(props);
+    return HKOOKEDE_createElement(OBZMLI6J_TagName, htmlProps);
+  })
+);
+
+
+
+;// CONCATENATED MODULE: ./packages/components/build-module/composite/hover.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const CompositeHover = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeHover(props, ref) {
+  const context = context_useCompositeContext();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OBZMLI6J_CompositeHover, {
+    store: context?.store,
+    ...props,
+    ref: ref
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/PLQDTVXM.js
+"use client";
+
+
+
+
+
+// src/collection/collection-item.tsx
+
+
+var PLQDTVXM_TagName = "div";
+var useCollectionItem = createHook(
+  function useCollectionItem2(_a) {
+    var _b = _a, {
+      store,
+      shouldRegisterItem = true,
+      getItem = identity,
+      element: element
+    } = _b, props = __objRest(_b, [
+      "store",
+      "shouldRegisterItem",
+      "getItem",
+      // @ts-expect-error This prop may come from a collection renderer.
+      "element"
+    ]);
+    const context = useCollectionContext();
+    store = store || context;
+    const id = useId(props.id);
+    const ref = (0,external_React_.useRef)(element);
+    (0,external_React_.useEffect)(() => {
+      const element2 = ref.current;
+      if (!id) return;
+      if (!element2) return;
+      if (!shouldRegisterItem) return;
+      const item = getItem({ id, element: element2 });
+      return store == null ? void 0 : store.renderItem(item);
+    }, [id, shouldRegisterItem, getItem, store]);
+    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
+      ref: useMergeRefs(ref, props.ref)
+    });
+    return removeUndefinedValues(props);
+  }
+);
+var CollectionItem = forwardRef2(function CollectionItem2(props) {
+  const htmlProps = useCollectionItem(props);
+  return HKOOKEDE_createElement(PLQDTVXM_TagName, htmlProps);
 });
 
 
@@ -4445,7 +5037,7 @@ function isNativeClick(event) {
   }
   return false;
 }
-var symbol = Symbol("command");
+var NAXN2XAB_symbol = Symbol("command");
 var useCommand = createHook(
   function useCommand2(_a) {
     var _b = _a, { clickOnEnter = true, clickOnSpace = true } = _b, props = __objRest(_b, ["clickOnEnter", "clickOnSpace"]);
@@ -4462,7 +5054,7 @@ var useCommand = createHook(
     const [active, setActive] = (0,external_React_.useState)(false);
     const activeRef = (0,external_React_.useRef)(false);
     const disabled = disabledFromProps(props);
-    const [isDuplicate, metadataProps] = useMetadataProps(props, symbol, true);
+    const [isDuplicate, metadataProps] = useMetadataProps(props, NAXN2XAB_symbol, true);
     const onKeyDownProp = props.onKeyDown;
     const onKeyDown = useEvent((event) => {
       onKeyDownProp == null ? void 0 : onKeyDownProp(event);
@@ -4538,107 +5130,6 @@ var Command = forwardRef2(function Command2(props) {
   const htmlProps = useCommand(props);
   return HKOOKEDE_createElement(NAXN2XAB_TagName, htmlProps);
 });
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/5VQZOHHZ.js
-"use client";
-
-// src/composite/utils.ts
-
-var _5VQZOHHZ_NULL_ITEM = { id: null };
-function _5VQZOHHZ_flipItems(items, activeId, shouldInsertNullItem = false) {
-  const index = items.findIndex((item) => item.id === activeId);
-  return [
-    ...items.slice(index + 1),
-    ...shouldInsertNullItem ? [_5VQZOHHZ_NULL_ITEM] : [],
-    ...items.slice(0, index)
-  ];
-}
-function _5VQZOHHZ_findFirstEnabledItem(items, excludeId) {
-  return items.find((item) => {
-    if (excludeId) {
-      return !item.disabled && item.id !== excludeId;
-    }
-    return !item.disabled;
-  });
-}
-function getEnabledItem(store, id) {
-  if (!id) return null;
-  return store.item(id) || null;
-}
-function _5VQZOHHZ_groupItemsByRows(items) {
-  const rows = [];
-  for (const item of items) {
-    const row = rows.find((currentRow) => {
-      var _a;
-      return ((_a = currentRow[0]) == null ? void 0 : _a.rowId) === item.rowId;
-    });
-    if (row) {
-      row.push(item);
-    } else {
-      rows.push([item]);
-    }
-  }
-  return rows;
-}
-function selectTextField(element, collapseToEnd = false) {
-  if (isTextField(element)) {
-    element.setSelectionRange(
-      collapseToEnd ? element.value.length : 0,
-      element.value.length
-    );
-  } else if (element.isContentEditable) {
-    const selection = getDocument(element).getSelection();
-    selection == null ? void 0 : selection.selectAllChildren(element);
-    if (collapseToEnd) {
-      selection == null ? void 0 : selection.collapseToEnd();
-    }
-  }
-}
-var FOCUS_SILENTLY = Symbol("FOCUS_SILENTLY");
-function focusSilently(element) {
-  element[FOCUS_SILENTLY] = true;
-  element.focus({ preventScroll: true });
-}
-function silentlyFocused(element) {
-  const isSilentlyFocused = element[FOCUS_SILENTLY];
-  delete element[FOCUS_SILENTLY];
-  return isSilentlyFocused;
-}
-function isItem(store, element, exclude) {
-  if (!element) return false;
-  if (element === exclude) return false;
-  const item = store.item(element.id);
-  if (!item) return false;
-  if (exclude && item.element === exclude) return false;
-  return true;
-}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/WENSINUV.js
-"use client";
-
-
-
-// src/composite/composite-context.tsx
-
-var WENSINUV_ctx = createStoreContext(
-  [CollectionContextProvider],
-  [CollectionScopedContextProvider]
-);
-var useCompositeContext = WENSINUV_ctx.useContext;
-var useCompositeScopedContext = WENSINUV_ctx.useScopedContext;
-var useCompositeProviderContext = WENSINUV_ctx.useProviderContext;
-var CompositeContextProvider = WENSINUV_ctx.ContextProvider;
-var CompositeScopedContextProvider = WENSINUV_ctx.ScopedContextProvider;
-var CompositeItemContext = (0,external_React_.createContext)(
-  void 0
-);
-var CompositeRowContext = (0,external_React_.createContext)(
-  void 0
-);
 
 
 
@@ -4948,6 +5439,32 @@ var _3CCTMYB6_CompositeItem = memo2(
 
 
 
+;// CONCATENATED MODULE: ./packages/components/build-module/composite/item.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const CompositeItem = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeItem(props, ref) {
+  const context = context_useCompositeContext();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_3CCTMYB6_CompositeItem, {
+    store: context?.store,
+    ...props,
+    ref: ref
+  });
+});
+
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/6BE7QOX5.js
 "use client";
 
@@ -5001,108 +5518,31 @@ var _6BE7QOX5_CompositeRow = forwardRef2(function CompositeRow2(props) {
 
 
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/OBZMLI6J.js
-"use client";
+;// CONCATENATED MODULE: ./packages/components/build-module/composite/row.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
 
 
 
-
-
-// src/composite/composite-hover.tsx
-
-
-
-
-var OBZMLI6J_TagName = "div";
-function getMouseDestination(event) {
-  const relatedTarget = event.relatedTarget;
-  if ((relatedTarget == null ? void 0 : relatedTarget.nodeType) === Node.ELEMENT_NODE) {
-    return relatedTarget;
-  }
-  return null;
-}
-function hoveringInside(event) {
-  const nextElement = getMouseDestination(event);
-  if (!nextElement) return false;
-  return contains(event.currentTarget, nextElement);
-}
-var OBZMLI6J_symbol = Symbol("composite-hover");
-function movingToAnotherItem(event) {
-  let dest = getMouseDestination(event);
-  if (!dest) return false;
-  do {
-    if (PBFD2E7P_hasOwnProperty(dest, OBZMLI6J_symbol) && dest[OBZMLI6J_symbol]) return true;
-    dest = dest.parentElement;
-  } while (dest);
-  return false;
-}
-var useCompositeHover = createHook(
-  function useCompositeHover2(_a) {
-    var _b = _a, {
-      store,
-      focusOnHover = true,
-      blurOnHoverEnd = !!focusOnHover
-    } = _b, props = __objRest(_b, [
-      "store",
-      "focusOnHover",
-      "blurOnHoverEnd"
-    ]);
-    const context = useCompositeContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const isMouseMoving = useIsMouseMoving();
-    const onMouseMoveProp = props.onMouseMove;
-    const focusOnHoverProp = useBooleanEvent(focusOnHover);
-    const onMouseMove = useEvent((event) => {
-      onMouseMoveProp == null ? void 0 : onMouseMoveProp(event);
-      if (event.defaultPrevented) return;
-      if (!isMouseMoving()) return;
-      if (!focusOnHoverProp(event)) return;
-      if (!hasFocusWithin(event.currentTarget)) {
-        const baseElement = store == null ? void 0 : store.getState().baseElement;
-        if (baseElement && !hasFocus(baseElement)) {
-          baseElement.focus();
-        }
-      }
-      store == null ? void 0 : store.setActiveId(event.currentTarget.id);
-    });
-    const onMouseLeaveProp = props.onMouseLeave;
-    const blurOnHoverEndProp = useBooleanEvent(blurOnHoverEnd);
-    const onMouseLeave = useEvent((event) => {
-      var _a2;
-      onMouseLeaveProp == null ? void 0 : onMouseLeaveProp(event);
-      if (event.defaultPrevented) return;
-      if (!isMouseMoving()) return;
-      if (hoveringInside(event)) return;
-      if (movingToAnotherItem(event)) return;
-      if (!focusOnHoverProp(event)) return;
-      if (!blurOnHoverEndProp(event)) return;
-      store == null ? void 0 : store.setActiveId(null);
-      (_a2 = store == null ? void 0 : store.getState().baseElement) == null ? void 0 : _a2.focus();
-    });
-    const ref = (0,external_React_.useCallback)((element) => {
-      if (!element) return;
-      element[OBZMLI6J_symbol] = true;
-    }, []);
-    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
-      ref: useMergeRefs(ref, props.ref),
-      onMouseMove,
-      onMouseLeave
-    });
-    return removeUndefinedValues(props);
-  }
-);
-var OBZMLI6J_CompositeHover = memo2(
-  forwardRef2(function CompositeHover2(props) {
-    const htmlProps = useCompositeHover(props);
-    return HKOOKEDE_createElement(OBZMLI6J_TagName, htmlProps);
-  })
-);
-
-
+const CompositeRow = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeRow(props, ref) {
+  const context = context_useCompositeContext();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_6BE7QOX5_CompositeRow, {
+    store: context?.store,
+    ...props,
+    ref: ref
+  });
+});
 
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/DS36B3MQ.js
 "use client";
@@ -5208,303 +5648,12 @@ var DS36B3MQ_CompositeTypeahead = forwardRef2(function CompositeTypeahead2(props
 
 
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/TW35PKTK.js
-"use client";
+;// CONCATENATED MODULE: ./packages/components/build-module/composite/typeahead.js
+/**
+ * External dependencies
+ */
 
 
-
-
-
-
-
-// src/composite/composite.tsx
-
-
-
-
-
-
-
-var TW35PKTK_TagName = "div";
-function isGrid(items) {
-  return items.some((item) => !!item.rowId);
-}
-function isPrintableKey(event) {
-  const target = event.target;
-  if (target && !isTextField(target)) return false;
-  return event.key.length === 1 && !event.ctrlKey && !event.metaKey;
-}
-function isModifierKey(event) {
-  return event.key === "Shift" || event.key === "Control" || event.key === "Alt" || event.key === "Meta";
-}
-function useKeyboardEventProxy(store, onKeyboardEvent, previousElementRef) {
-  return useEvent((event) => {
-    var _a;
-    onKeyboardEvent == null ? void 0 : onKeyboardEvent(event);
-    if (event.defaultPrevented) return;
-    if (event.isPropagationStopped()) return;
-    if (!isSelfTarget(event)) return;
-    if (isModifierKey(event)) return;
-    if (isPrintableKey(event)) return;
-    const state = store.getState();
-    const activeElement = (_a = getEnabledItem(store, state.activeId)) == null ? void 0 : _a.element;
-    if (!activeElement) return;
-    const _b = event, { view } = _b, eventInit = __objRest(_b, ["view"]);
-    const previousElement = previousElementRef == null ? void 0 : previousElementRef.current;
-    if (activeElement !== previousElement) {
-      activeElement.focus();
-    }
-    if (!fireKeyboardEvent(activeElement, event.type, eventInit)) {
-      event.preventDefault();
-    }
-    if (event.currentTarget.contains(activeElement)) {
-      event.stopPropagation();
-    }
-  });
-}
-function findFirstEnabledItemInTheLastRow(items) {
-  return _5VQZOHHZ_findFirstEnabledItem(
-    flatten2DArray(reverseArray(_5VQZOHHZ_groupItemsByRows(items)))
-  );
-}
-function useScheduleFocus(store) {
-  const [scheduled, setScheduled] = (0,external_React_.useState)(false);
-  const schedule = (0,external_React_.useCallback)(() => setScheduled(true), []);
-  const activeItem = store.useState(
-    (state) => getEnabledItem(store, state.activeId)
-  );
-  (0,external_React_.useEffect)(() => {
-    const activeElement = activeItem == null ? void 0 : activeItem.element;
-    if (!scheduled) return;
-    if (!activeElement) return;
-    setScheduled(false);
-    activeElement.focus({ preventScroll: true });
-  }, [activeItem, scheduled]);
-  return schedule;
-}
-var useComposite = createHook(
-  function useComposite2(_a) {
-    var _b = _a, {
-      store,
-      composite = true,
-      focusOnMove = composite,
-      moveOnKeyPress = true
-    } = _b, props = __objRest(_b, [
-      "store",
-      "composite",
-      "focusOnMove",
-      "moveOnKeyPress"
-    ]);
-    const context = useCompositeProviderContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const ref = (0,external_React_.useRef)(null);
-    const previousElementRef = (0,external_React_.useRef)(null);
-    const scheduleFocus = useScheduleFocus(store);
-    const moves = store.useState("moves");
-    const [, setBaseElement] = useTransactionState(
-      composite ? store.setBaseElement : null
-    );
-    (0,external_React_.useEffect)(() => {
-      var _a2;
-      if (!store) return;
-      if (!moves) return;
-      if (!composite) return;
-      if (!focusOnMove) return;
-      const { activeId: activeId2 } = store.getState();
-      const itemElement = (_a2 = getEnabledItem(store, activeId2)) == null ? void 0 : _a2.element;
-      if (!itemElement) return;
-      focusIntoView(itemElement);
-    }, [store, moves, composite, focusOnMove]);
-    useSafeLayoutEffect(() => {
-      if (!store) return;
-      if (!moves) return;
-      if (!composite) return;
-      const { baseElement, activeId: activeId2 } = store.getState();
-      const isSelfAcive = activeId2 === null;
-      if (!isSelfAcive) return;
-      if (!baseElement) return;
-      const previousElement = previousElementRef.current;
-      previousElementRef.current = null;
-      if (previousElement) {
-        fireBlurEvent(previousElement, { relatedTarget: baseElement });
-      }
-      if (!hasFocus(baseElement)) {
-        baseElement.focus();
-      }
-    }, [store, moves, composite]);
-    const activeId = store.useState("activeId");
-    const virtualFocus = store.useState("virtualFocus");
-    useSafeLayoutEffect(() => {
-      var _a2;
-      if (!store) return;
-      if (!composite) return;
-      if (!virtualFocus) return;
-      const previousElement = previousElementRef.current;
-      previousElementRef.current = null;
-      if (!previousElement) return;
-      const activeElement = (_a2 = getEnabledItem(store, activeId)) == null ? void 0 : _a2.element;
-      const relatedTarget = activeElement || getActiveElement(previousElement);
-      if (relatedTarget === previousElement) return;
-      fireBlurEvent(previousElement, { relatedTarget });
-    }, [store, activeId, virtualFocus, composite]);
-    const onKeyDownCapture = useKeyboardEventProxy(
-      store,
-      props.onKeyDownCapture,
-      previousElementRef
-    );
-    const onKeyUpCapture = useKeyboardEventProxy(
-      store,
-      props.onKeyUpCapture,
-      previousElementRef
-    );
-    const onFocusCaptureProp = props.onFocusCapture;
-    const onFocusCapture = useEvent((event) => {
-      onFocusCaptureProp == null ? void 0 : onFocusCaptureProp(event);
-      if (event.defaultPrevented) return;
-      if (!store) return;
-      const { virtualFocus: virtualFocus2 } = store.getState();
-      if (!virtualFocus2) return;
-      const previousActiveElement = event.relatedTarget;
-      const isSilentlyFocused = silentlyFocused(event.currentTarget);
-      if (isSelfTarget(event) && isSilentlyFocused) {
-        event.stopPropagation();
-        previousElementRef.current = previousActiveElement;
-      }
-    });
-    const onFocusProp = props.onFocus;
-    const onFocus = useEvent((event) => {
-      onFocusProp == null ? void 0 : onFocusProp(event);
-      if (event.defaultPrevented) return;
-      if (!composite) return;
-      if (!store) return;
-      const { relatedTarget } = event;
-      const { virtualFocus: virtualFocus2 } = store.getState();
-      if (virtualFocus2) {
-        if (isSelfTarget(event) && !isItem(store, relatedTarget)) {
-          queueMicrotask(scheduleFocus);
-        }
-      } else if (isSelfTarget(event)) {
-        store.setActiveId(null);
-      }
-    });
-    const onBlurCaptureProp = props.onBlurCapture;
-    const onBlurCapture = useEvent((event) => {
-      var _a2;
-      onBlurCaptureProp == null ? void 0 : onBlurCaptureProp(event);
-      if (event.defaultPrevented) return;
-      if (!store) return;
-      const { virtualFocus: virtualFocus2, activeId: activeId2 } = store.getState();
-      if (!virtualFocus2) return;
-      const activeElement = (_a2 = getEnabledItem(store, activeId2)) == null ? void 0 : _a2.element;
-      const nextActiveElement = event.relatedTarget;
-      const nextActiveElementIsItem = isItem(store, nextActiveElement);
-      const previousElement = previousElementRef.current;
-      previousElementRef.current = null;
-      if (isSelfTarget(event) && nextActiveElementIsItem) {
-        if (nextActiveElement === activeElement) {
-          if (previousElement && previousElement !== nextActiveElement) {
-            fireBlurEvent(previousElement, event);
-          }
-        } else if (activeElement) {
-          fireBlurEvent(activeElement, event);
-        } else if (previousElement) {
-          fireBlurEvent(previousElement, event);
-        }
-        event.stopPropagation();
-      } else {
-        const targetIsItem = isItem(store, event.target);
-        if (!targetIsItem && activeElement) {
-          fireBlurEvent(activeElement, event);
-        }
-      }
-    });
-    const onKeyDownProp = props.onKeyDown;
-    const moveOnKeyPressProp = useBooleanEvent(moveOnKeyPress);
-    const onKeyDown = useEvent((event) => {
-      var _a2;
-      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
-      if (event.defaultPrevented) return;
-      if (!store) return;
-      if (!isSelfTarget(event)) return;
-      const { orientation, items, renderedItems, activeId: activeId2 } = store.getState();
-      const activeItem = getEnabledItem(store, activeId2);
-      if ((_a2 = activeItem == null ? void 0 : activeItem.element) == null ? void 0 : _a2.isConnected) return;
-      const isVertical = orientation !== "horizontal";
-      const isHorizontal = orientation !== "vertical";
-      const grid = isGrid(renderedItems);
-      const isHorizontalKey = event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "Home" || event.key === "End";
-      if (isHorizontalKey && isTextField(event.currentTarget)) return;
-      const up = () => {
-        if (grid) {
-          const item = items && findFirstEnabledItemInTheLastRow(items);
-          return item == null ? void 0 : item.id;
-        }
-        return store == null ? void 0 : store.last();
-      };
-      const keyMap = {
-        ArrowUp: (grid || isVertical) && up,
-        ArrowRight: (grid || isHorizontal) && store.first,
-        ArrowDown: (grid || isVertical) && store.first,
-        ArrowLeft: (grid || isHorizontal) && store.last,
-        Home: store.first,
-        End: store.last,
-        PageUp: store.first,
-        PageDown: store.last
-      };
-      const action = keyMap[event.key];
-      if (action) {
-        const id = action();
-        if (id !== void 0) {
-          if (!moveOnKeyPressProp(event)) return;
-          event.preventDefault();
-          store.move(id);
-        }
-      }
-    });
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(CompositeContextProvider, { value: store, children: element }),
-      [store]
-    );
-    const activeDescendant = store.useState((state) => {
-      var _a2;
-      if (!store) return;
-      if (!composite) return;
-      if (!state.virtualFocus) return;
-      return (_a2 = getEnabledItem(store, state.activeId)) == null ? void 0 : _a2.id;
-    });
-    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
-      "aria-activedescendant": activeDescendant
-    }, props), {
-      ref: useMergeRefs(ref, setBaseElement, props.ref),
-      onKeyDownCapture,
-      onKeyUpCapture,
-      onFocusCapture,
-      onFocus,
-      onBlurCapture,
-      onKeyDown
-    });
-    const focusable = store.useState(
-      (state) => composite && (state.virtualFocus || state.activeId === null)
-    );
-    props = useFocusable(_3YLGPPWQ_spreadValues({ focusable }, props));
-    return props;
-  }
-);
-var TW35PKTK_Composite = forwardRef2(function Composite2(props) {
-  const htmlProps = useComposite(props);
-  return HKOOKEDE_createElement(TW35PKTK_TagName, htmlProps);
-});
-
-
-
-;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: ./packages/components/build-module/composite/context.js
 /**
  * WordPress dependencies
  */
@@ -5514,8 +5663,16 @@ const external_wp_element_namespaceObject = window["wp"]["element"];
  * Internal dependencies
  */
 
-const CompositeContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
-const context_useCompositeContext = () => (0,external_wp_element_namespaceObject.useContext)(CompositeContext);
+
+
+const CompositeTypeahead = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeTypeahead(props, ref) {
+  const context = context_useCompositeContext();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DS36B3MQ_CompositeTypeahead, {
+    store: context?.store,
+    ...props,
+    ref: ref
+  });
+});
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/composite/index.js
 /**
@@ -5544,94 +5701,11 @@ const context_useCompositeContext = () => (0,external_wp_element_namespaceObject
 
 
 
-/**
- * Creates a composite store.
- *
- * @example
- * ```jsx
- * import { Composite, useCompositeStore } from '@wordpress/components';
- *
- * const store = useCompositeStore();
- * <Composite store={store}>
- *   <Composite.Item>Item</Composite.Item>
- *   <Composite.Item>Item</Composite.Item>
- *   <Composite.Item>Item</Composite.Item>
- * </Composite>
- * ```
- */
-function composite_useCompositeStore({
-  focusLoop = false,
-  focusWrap = false,
-  focusShift = false,
-  virtualFocus = false,
-  orientation = 'both',
-  rtl = false,
-  ...props
-} = {}) {
-  return useCompositeStore({
-    focusLoop,
-    focusWrap,
-    focusShift,
-    virtualFocus,
-    orientation,
-    rtl,
-    ...props
-  });
-}
-const composite_Group = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeGroup(props, ref) {
-  const context = context_useCompositeContext();
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IEKMDIUY_CompositeGroup, {
-    store: context?.store,
-    ...props,
-    ref: ref
-  });
-});
-composite_Group.displayName = 'Composite.Group';
-const composite_GroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeGroupLabel(props, ref) {
-  const context = context_useCompositeContext();
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Y2MAXF6C_CompositeGroupLabel, {
-    store: context?.store,
-    ...props,
-    ref: ref
-  });
-});
-composite_GroupLabel.displayName = 'Composite.GroupLabel';
-const Item = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeItem(props, ref) {
-  const context = context_useCompositeContext();
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_3CCTMYB6_CompositeItem, {
-    store: context?.store,
-    ...props,
-    ref: ref
-  });
-});
-Item.displayName = 'Composite.Item';
-const Row = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeRow(props, ref) {
-  const context = context_useCompositeContext();
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_6BE7QOX5_CompositeRow, {
-    store: context?.store,
-    ...props,
-    ref: ref
-  });
-});
-Row.displayName = 'Composite.Row';
-const Hover = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeHover(props, ref) {
-  const context = context_useCompositeContext();
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OBZMLI6J_CompositeHover, {
-    store: context?.store,
-    ...props,
-    ref: ref
-  });
-});
-Hover.displayName = 'Composite.Hover';
-const Typeahead = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeTypeahead(props, ref) {
-  const context = context_useCompositeContext();
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DS36B3MQ_CompositeTypeahead, {
-    store: context?.store,
-    ...props,
-    ref: ref
-  });
-});
-Typeahead.displayName = 'Composite.Typeahead';
+
+
+
+
+
 
 /**
  * Renders a widget based on the WAI-ARIA [`composite`](https://w3c.github.io/aria/#composite)
@@ -5650,11 +5724,36 @@ Typeahead.displayName = 'Composite.Typeahead';
  * ```
  */
 const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRef)(function Composite({
+  // Composite store props
+  activeId,
+  defaultActiveId,
+  setActiveId,
+  focusLoop = false,
+  focusWrap = false,
+  focusShift = false,
+  virtualFocus = false,
+  orientation = 'both',
+  rtl = false,
+  // Composite component props
   children,
-  store,
   disabled = false,
+  // To be removed
+  store: storeProp,
+  // Rest props
   ...props
 }, ref) {
+  const newStore = useCompositeStore({
+    activeId,
+    defaultActiveId,
+    setActiveId,
+    focusLoop,
+    focusWrap,
+    focusShift,
+    virtualFocus,
+    orientation,
+    rtl
+  });
+  const store = storeProp || newStore;
   const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     store
   }), [store]);
@@ -5669,7 +5768,6 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
     })
   });
 }), {
-  displayName: 'Composite',
   /**
    * Renders a group element for composite items.
    *
@@ -5687,7 +5785,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    * </Composite>
    * ```
    */
-  Group: composite_Group,
+  Group: Object.assign(CompositeGroup, {
+    displayName: 'Composite.Group'
+  }),
   /**
    * Renders a label in a composite group. This component must be wrapped with
    * `Composite.Group` so the `aria-labelledby` prop is properly set on the
@@ -5707,7 +5807,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    * </Composite>
    * ```
    */
-  GroupLabel: composite_GroupLabel,
+  GroupLabel: Object.assign(CompositeGroupLabel, {
+    displayName: 'Composite.GroupLabel'
+  }),
   /**
    * Renders a composite item.
    *
@@ -5723,7 +5825,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    * </Composite>
    * ```
    */
-  Item,
+  Item: Object.assign(CompositeItem, {
+    displayName: 'Composite.Item'
+  }),
   /**
    * Renders a composite row. Wrapping `Composite.Item` elements within
    * `Composite.Row` will create a two-dimensional composite widget, such as a
@@ -5748,7 +5852,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    * </Composite>
    * ```
    */
-  Row,
+  Row: Object.assign(CompositeRow, {
+    displayName: 'Composite.Row'
+  }),
   /**
    * Renders an element in a composite widget that receives focus on mouse move
    * and loses focus to the composite base element on mouse leave. This should
@@ -5769,7 +5875,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    * </Composite>
    * ```
    */
-  Hover,
+  Hover: Object.assign(CompositeHover, {
+    displayName: 'Composite.Hover'
+  }),
   /**
    * Renders a component that adds typeahead functionality to composite
    * components. Hitting printable character keys will move focus to the next
@@ -5786,7 +5894,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    * </Composite>
    * ```
    */
-  Typeahead,
+  Typeahead: Object.assign(CompositeTypeahead, {
+    displayName: 'Composite.Typeahead'
+  }),
   /**
    * The React context used by the composite components. It can be used by
    * to access the composite store, and to forward the context when composite
@@ -5801,7 +5911,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    * const compositeContext = useContext( Composite.Context );
    * ```
    */
-  Context: CompositeContext
+  Context: Object.assign(CompositeContext, {
+    displayName: 'Composite.Context'
+  })
 });
 
 ;// CONCATENATED MODULE: ./node_modules/@ariakit/core/esm/__chunks/6E4KKOSB.js
@@ -11512,12 +11624,12 @@ function isPlainObject(o) {
  * @param {import('react').DependencyList} deps
  */
 function use_update_effect_useUpdateEffect(effect, deps) {
-  const mounted = (0,external_wp_element_namespaceObject.useRef)(false);
+  const mountedRef = (0,external_wp_element_namespaceObject.useRef)(false);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (mounted.current) {
+    if (mountedRef.current) {
       return effect();
     }
-    mounted.current = true;
+    mountedRef.current = true;
     return undefined;
     // Disable reasons:
     // 1. This hook needs to pass a dep list that isn't an array literal
@@ -11526,7 +11638,7 @@ function use_update_effect_useUpdateEffect(effect, deps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
   (0,external_wp_element_namespaceObject.useEffect)(() => () => {
-    mounted.current = false;
+    mountedRef.current = false;
   }, []);
 }
 /* harmony default export */ const use_update_effect = (use_update_effect_useUpdateEffect);
@@ -15522,13 +15634,15 @@ const COLORS = Object.freeze({
 
 
 const CONTROL_HEIGHT = '36px';
-const CONTROL_PADDING_X = '12px';
 const CONTROL_PROPS = {
   controlSurfaceColor: COLORS.white,
   controlTextActiveColor: COLORS.theme.accent,
-  controlPaddingX: CONTROL_PADDING_X,
-  controlPaddingXLarge: `calc(${CONTROL_PADDING_X} * 1.3334)`,
-  controlPaddingXSmall: `calc(${CONTROL_PADDING_X} / 1.3334)`,
+  // These values should be shared with TextControl.
+  controlPaddingX: 12,
+  controlPaddingXSmall: 8,
+  controlPaddingXLarge: 12 * 1.3334,
+  // TODO: Deprecate
+
   controlBackgroundColor: COLORS.white,
   controlBoxShadow: 'transparent',
   controlBoxShadowFocus: `0 0 0 0.5px ${COLORS.theme.accent}`,
@@ -15605,7 +15719,7 @@ const TOGGLE_GROUP_CONTROL_PROPS = {
   transitionTimingFunctionControl: 'cubic-bezier(0.12, 0.8, 0.32, 1)'
 }));
 
-;// CONCATENATED MODULE: ./packages/components/build-module/alignment-matrix-control/styles/alignment-matrix-control-styles.js
+;// CONCATENATED MODULE: ./packages/components/build-module/alignment-matrix-control/styles.js
 
 function _EMOTION_STRINGIFIED_CSS_ERROR__() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
 /**
@@ -15618,43 +15732,36 @@ function _EMOTION_STRINGIFIED_CSS_ERROR__() { return "You have tried to stringif
  * Internal dependencies
  */
 
-const rootBase = () => {
-  return /*#__PURE__*/emotion_react_browser_esm_css("border-radius:", config_values.radiusMedium, ";box-sizing:border-box;direction:ltr;display:grid;grid-template-columns:repeat( 3, 1fr );outline:none;" + ( true ? "" : 0),  true ? "" : 0);
-};
-const rootSize = ({
+// Grid structure
+
+const rootBase = ({
   size = 92
-}) => {
-  return /*#__PURE__*/emotion_react_browser_esm_css("grid-template-rows:repeat( 3, calc( ", size, "px / 3 ) );width:", size, "px;" + ( true ? "" : 0),  true ? "" : 0);
-};
-const Root = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "ecapk1j3"
-} : 0)(rootBase, ";border:1px solid transparent;cursor:pointer;grid-template-columns:auto;", rootSize, ";" + ( true ? "" : 0));
-const alignment_matrix_control_styles_Row = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "ecapk1j2"
+}) => /*#__PURE__*/emotion_react_browser_esm_css("direction:ltr;display:grid;grid-template-columns:repeat( 3, 1fr );grid-template-rows:repeat( 3, 1fr );box-sizing:border-box;width:", size, "px;aspect-ratio:1;border-radius:", config_values.radiusMedium, ";outline:none;" + ( true ? "" : 0),  true ? "" : 0);
+var _ref =  true ? {
+  name: "e0dnmk",
+  styles: "cursor:pointer"
+} : 0;
+const GridContainer = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1r95csn3"
+} : 0)(rootBase, " border:1px solid transparent;", props => props.disablePointerEvents ? /*#__PURE__*/emotion_react_browser_esm_css( true ? "" : 0,  true ? "" : 0) : _ref, ";" + ( true ? "" : 0));
+const GridRow = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1r95csn2"
 } : 0)( true ? {
-  name: "1x5gbbj",
-  styles: "box-sizing:border-box;display:grid;grid-template-columns:repeat( 3, 1fr )"
+  name: "1fbxn64",
+  styles: "grid-column:1/-1;box-sizing:border-box;display:grid;grid-template-columns:repeat( 3, 1fr )"
 } : 0);
-const pointActive = ({
-  isActive
-}) => {
-  const boxShadow = isActive ? `0 0 0 2px ${COLORS.gray[900]}` : null;
-  const pointColor = isActive ? COLORS.gray[900] : COLORS.gray[400];
-  const pointColorHover = isActive ? COLORS.gray[900] : COLORS.theme.accent;
-  return /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", boxShadow, ";color:", pointColor, ";*:hover>&{color:", pointColorHover, ";}" + ( true ? "" : 0),  true ? "" : 0);
-};
-const pointBase = props => {
-  return /*#__PURE__*/emotion_react_browser_esm_css("background:currentColor;box-sizing:border-box;display:grid;margin:auto;@media not ( prefers-reduced-motion ){transition:all 120ms linear;}", pointActive(props), ";" + ( true ? "" : 0),  true ? "" : 0);
-};
-const Point = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "ecapk1j1"
-} : 0)("height:6px;width:6px;", pointBase, ";" + ( true ? "" : 0));
+
+// Cell
 const Cell = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "ecapk1j0"
+  target: "e1r95csn1"
 } : 0)( true ? {
-  name: "rjf3ub",
-  styles: "appearance:none;border:none;box-sizing:border-box;margin:0;display:flex;position:relative;outline:none;align-items:center;justify-content:center;padding:0"
+  name: "e2kws5",
+  styles: "position:relative;display:flex;align-items:center;justify-content:center;box-sizing:border-box;margin:0;padding:0;appearance:none;border:none;outline:none"
 } : 0);
+const POINT_SIZE = 6;
+const Point = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
+  target: "e1r95csn0"
+} : 0)("display:block;contain:strict;box-sizing:border-box;width:", POINT_SIZE, "px;aspect-ratio:1;margin:auto;color:", COLORS.theme.gray[400], ";border:", POINT_SIZE / 2, "px solid currentColor;", Cell, "[data-active-item] &{color:", COLORS.gray[900], ";transform:scale( calc( 5 / 3 ) );}", Cell, ":not([data-active-item]):hover &{color:", COLORS.theme.accent, ";}", Cell, "[data-focus-visible] &{outline:1px solid ", COLORS.theme.accent, ";outline-offset:1px;}@media not ( prefers-reduced-motion ){transition-property:color,transform;transition-duration:120ms;transition-timing-function:linear;}" + ( true ? "" : 0));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/alignment-matrix-control/cell.js
 /**
@@ -15673,13 +15780,11 @@ const Cell = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
 
 function cell_Cell({
   id,
-  isActive = false,
   value,
   ...props
 }) {
-  const tooltipText = ALIGNMENT_LABEL[value];
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-    text: tooltipText,
+    text: ALIGNMENT_LABEL[value],
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Composite.Item, {
       id: id,
       render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Cell, {
@@ -15689,62 +15794,11 @@ function cell_Cell({
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(visually_hidden_component, {
         children: value
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Point, {
-        isActive: isActive,
         role: "presentation"
       })]
     })
   });
 }
-
-;// CONCATENATED MODULE: ./packages/components/build-module/alignment-matrix-control/styles/alignment-matrix-control-icon-styles.js
-
-function alignment_matrix_control_icon_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
-/**
- * External dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-const alignment_matrix_control_icon_styles_rootSize = () => {
-  const padding = 1.5;
-  const size = 24;
-  return /*#__PURE__*/emotion_react_browser_esm_css({
-    gridTemplateRows: `repeat( 3, calc( ${size - padding * 2}px / 3))`,
-    padding,
-    maxHeight: size,
-    maxWidth: size
-  },  true ? "" : 0,  true ? "" : 0);
-};
-const rootPointerEvents = ({
-  disablePointerEvents
-}) => {
-  return /*#__PURE__*/emotion_react_browser_esm_css({
-    pointerEvents: disablePointerEvents ? 'none' : undefined
-  },  true ? "" : 0,  true ? "" : 0);
-};
-const Wrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "erowt52"
-} : 0)( true ? {
-  name: "ogl07i",
-  styles: "box-sizing:border-box;padding:2px"
-} : 0);
-const alignment_matrix_control_icon_styles_Root = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "erowt51"
-} : 0)("transform-origin:top left;height:100%;width:100%;", rootBase, ";", alignment_matrix_control_icon_styles_rootSize, ";", rootPointerEvents, ";" + ( true ? "" : 0));
-const alignment_matrix_control_icon_styles_pointActive = ({
-  isActive
-}) => {
-  const boxShadow = isActive ? `0 0 0 1px currentColor` : null;
-  return /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", boxShadow, ";color:currentColor;*:hover>&{color:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
-};
-const alignment_matrix_control_icon_styles_Point = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "erowt50"
-} : 0)("height:2px;width:2px;", pointBase, ";", alignment_matrix_control_icon_styles_pointActive, ";" + ( true ? "" : 0));
-const alignment_matrix_control_icon_styles_Cell = Cell;
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/alignment-matrix-control/icon.js
 /**
@@ -15753,39 +15807,51 @@ const alignment_matrix_control_icon_styles_Cell = Cell;
 
 
 /**
+ * WordPress dependencies
+ */
+
+
+/**
  * Internal dependencies
  */
 
 
-
 const BASE_SIZE = 24;
+const GRID_CELL_SIZE = 7;
+const GRID_PADDING = (BASE_SIZE - 3 * GRID_CELL_SIZE) / 2;
+const DOT_SIZE = 2;
+const DOT_SIZE_SELECTED = 4;
 function AlignmentMatrixControlIcon({
   className,
   disablePointerEvents = true,
-  size = BASE_SIZE,
+  size,
+  width,
+  height,
   style = {},
   value = 'center',
   ...props
 }) {
-  const alignIndex = getAlignmentIndex(value);
-  const scale = (size / BASE_SIZE).toFixed(2);
-  const classes = dist_clsx('component-alignment-matrix-control-icon', className);
-  const styles = {
-    ...style,
-    transform: `scale(${scale})`
-  };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(alignment_matrix_control_icon_styles_Root, {
-    ...props,
-    className: classes,
-    disablePointerEvents: disablePointerEvents,
+  var _ref, _ref2;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: `0 0 ${BASE_SIZE} ${BASE_SIZE}`,
+    width: (_ref = size !== null && size !== void 0 ? size : width) !== null && _ref !== void 0 ? _ref : BASE_SIZE,
+    height: (_ref2 = size !== null && size !== void 0 ? size : height) !== null && _ref2 !== void 0 ? _ref2 : BASE_SIZE,
     role: "presentation",
-    style: styles,
+    className: dist_clsx('component-alignment-matrix-control-icon', className),
+    style: {
+      pointerEvents: disablePointerEvents ? 'none' : undefined,
+      ...style
+    },
+    ...props,
     children: ALIGNMENTS.map((align, index) => {
-      const isActive = alignIndex === index;
-      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(alignment_matrix_control_icon_styles_Cell, {
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(alignment_matrix_control_icon_styles_Point, {
-          isActive: isActive
-        })
+      const dotSize = getAlignmentIndex(value) === index ? DOT_SIZE_SELECTED : DOT_SIZE;
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Rect, {
+        x: GRID_PADDING + index % 3 * GRID_CELL_SIZE + (GRID_CELL_SIZE - dotSize) / 2,
+        y: GRID_PADDING + Math.floor(index / 3) * GRID_CELL_SIZE + (GRID_CELL_SIZE - dotSize) / 2,
+        width: dotSize,
+        height: dotSize,
+        fill: "currentColor"
       }, align);
     })
   });
@@ -15798,10 +15864,10 @@ function AlignmentMatrixControlIcon({
  */
 
 
-
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -15814,12 +15880,54 @@ function AlignmentMatrixControlIcon({
 
 
 
+function UnforwardedAlignmentMatrixControl({
+  className,
+  id,
+  label = (0,external_wp_i18n_namespaceObject.__)('Alignment Matrix Control'),
+  defaultValue = 'center center',
+  value,
+  onChange,
+  width = 92,
+  ...props
+}) {
+  const baseId = (0,external_wp_compose_namespaceObject.useInstanceId)(UnforwardedAlignmentMatrixControl, 'alignment-matrix-control', id);
+  const setActiveId = (0,external_wp_element_namespaceObject.useCallback)(nextActiveId => {
+    const nextValue = getItemValue(baseId, nextActiveId);
+    if (nextValue) {
+      onChange?.(nextValue);
+    }
+  }, [baseId, onChange]);
+  const classes = dist_clsx('component-alignment-matrix-control', className);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Composite, {
+    defaultActiveId: getItemId(baseId, defaultValue),
+    activeId: getItemId(baseId, value),
+    setActiveId: setActiveId,
+    rtl: (0,external_wp_i18n_namespaceObject.isRTL)(),
+    render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridContainer, {
+      ...props,
+      "aria-label": label,
+      className: classes,
+      id: baseId,
+      role: "grid",
+      size: width
+    }),
+    children: GRID.map((cells, index) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Composite.Row, {
+      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GridRow, {
+        role: "row"
+      }),
+      children: cells.map(cell => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(cell_Cell, {
+        id: getItemId(baseId, cell),
+        value: cell
+      }, cell))
+    }, index))
+  });
+}
+
 /**
- *
  * AlignmentMatrixControl components enable adjustments to horizontal and vertical alignments for UI.
  *
  * ```jsx
- * import { __experimentalAlignmentMatrixControl as AlignmentMatrixControl } from '@wordpress/components';
+ * import { AlignmentMatrixControl } from '@wordpress/components';
  * import { useState } from '@wordpress/element';
  *
  * const Example = () => {
@@ -15834,57 +15942,20 @@ function AlignmentMatrixControlIcon({
  * };
  * ```
  */
-function AlignmentMatrixControl({
-  className,
-  id,
-  label = (0,external_wp_i18n_namespaceObject.__)('Alignment Matrix Control'),
-  defaultValue = 'center center',
-  value,
-  onChange,
-  width = 92,
-  ...props
-}) {
-  const baseId = (0,external_wp_compose_namespaceObject.useInstanceId)(AlignmentMatrixControl, 'alignment-matrix-control', id);
-  const compositeStore = composite_useCompositeStore({
-    defaultActiveId: getItemId(baseId, defaultValue),
-    activeId: getItemId(baseId, value),
-    setActiveId: nextActiveId => {
-      const nextValue = getItemValue(baseId, nextActiveId);
-      if (nextValue) {
-        onChange?.(nextValue);
-      }
-    },
-    rtl: (0,external_wp_i18n_namespaceObject.isRTL)()
-  });
-  const activeId = useStoreState(compositeStore, 'activeId');
-  const classes = dist_clsx('component-alignment-matrix-control', className);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Composite, {
-    store: compositeStore,
-    render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Root, {
-      ...props,
-      "aria-label": label,
-      className: classes,
-      id: baseId,
-      role: "grid",
-      size: width
-    }),
-    children: GRID.map((cells, index) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Composite.Row, {
-      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(alignment_matrix_control_styles_Row, {
-        role: "row"
-      }),
-      children: cells.map(cell => {
-        const cellId = getItemId(baseId, cell);
-        const isActive = cellId === activeId;
-        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(cell_Cell, {
-          id: cellId,
-          isActive: isActive,
-          value: cell
-        }, cell);
-      })
-    }, index))
-  });
-}
-AlignmentMatrixControl.Icon = icon;
+const AlignmentMatrixControl = Object.assign(UnforwardedAlignmentMatrixControl, {
+  /**
+   * Render an alignment matrix as an icon.
+   *
+   * ```jsx
+   * import { AlignmentMatrixControl } from '@wordpress/components';
+   *
+   * <Icon icon={<AlignmentMatrixControl.Icon value="top left" />} />
+   * ```
+   */
+  Icon: Object.assign(icon, {
+    displayName: 'AlignmentMatrixControl.Icon'
+  })
+});
 /* harmony default export */ const alignment_matrix_control = (AlignmentMatrixControl);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/animate/index.js
@@ -27025,7 +27096,7 @@ const Flex =  true ? {
   name: "zjik7",
   styles: "display:flex"
 } : 0;
-const styles_Item =  true ? {
+const Item =  true ? {
   name: "qgaee5",
   styles: "display:block;max-height:100%;max-width:100%;min-height:0;min-width:0"
 } : 0;
@@ -27225,7 +27296,7 @@ function useFlexItem(props) {
     display: displayProp || contextDisplay
   },  true ? "" : 0,  true ? "" : 0);
   const cx = useCx();
-  const classes = cx(styles_Item, sx.Base, isBlock && block, className);
+  const classes = cx(Item, sx.Base, isBlock && block, className);
   return {
     ...otherProps,
     className: classes
@@ -28146,7 +28217,7 @@ function hook_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to strin
 
 
 
-var _ref =  true ? {
+var hook_ref =  true ? {
   name: "50zrmy",
   styles: "text-transform:uppercase"
 } : 0;
@@ -28206,7 +28277,7 @@ function useText(props) {
       letterSpacing,
       textAlign: align
     },  true ? "" : 0,  true ? "" : 0);
-    sx.upperCase = _ref;
+    sx.upperCase = hook_ref;
     sx.optimalTextColor = null;
     if (optimizeReadabilityFor) {
       const isOptimalTextColorDark = getOptimalTextShade(optimizeReadabilityFor) === 'dark';
@@ -28327,15 +28398,14 @@ function input_control_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You hav
 
 
 
-
 const Prefix = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "em5sgkm7"
+  target: "em5sgkm8"
 } : 0)( true ? {
   name: "pvvbxf",
   styles: "box-sizing:border-box;display:block"
 } : 0);
 const Suffix = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "em5sgkm6"
+  target: "em5sgkm7"
 } : 0)( true ? {
   name: "jgf79h",
   styles: "align-items:center;align-self:stretch;box-sizing:border-box;display:flex"
@@ -28353,13 +28423,13 @@ const backdropBorderColor = ({
   return COLORS.ui.border;
 };
 const BackdropUI = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "em5sgkm5"
+  target: "em5sgkm6"
 } : 0)("&&&{box-sizing:border-box;border-color:", backdropBorderColor, ";border-radius:inherit;border-style:solid;border-width:1px;bottom:0;left:0;margin:0;padding:0;pointer-events:none;position:absolute;right:0;top:0;", rtl({
   paddingLeft: 2
 }), ";}" + ( true ? "" : 0));
-const input_control_styles_Root = /*#__PURE__*/emotion_styled_base_browser_esm(flex_component,  true ? {
-  target: "em5sgkm4"
-} : 0)("box-sizing:border-box;position:relative;border-radius:2px;padding-top:0;&:focus-within:not( :has( :is( ", Prefix, ", ", Suffix, " ):focus-within ) ){", BackdropUI, "{border-color:", COLORS.ui.borderFocus, ";box-shadow:", config_values.controlBoxShadowFocus, ";outline:2px solid transparent;outline-offset:-2px;}}" + ( true ? "" : 0));
+const Root = /*#__PURE__*/emotion_styled_base_browser_esm(flex_component,  true ? {
+  target: "em5sgkm5"
+} : 0)("box-sizing:border-box;position:relative;border-radius:", config_values.radiusSmall, ";padding-top:0;&:focus-within:not( :has( :is( ", Prefix, ", ", Suffix, " ):focus-within ) ){", BackdropUI, "{border-color:", COLORS.ui.borderFocus, ";box-shadow:", config_values.controlBoxShadowFocus, ";outline:2px solid transparent;outline-offset:-2px;}}" + ( true ? "" : 0));
 const containerDisabledStyles = ({
   disabled
 }) => {
@@ -28392,7 +28462,7 @@ const containerWidthStyles = ({
   },  true ? "" : 0,  true ? "" : 0);
 };
 const Container = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "em5sgkm3"
+  target: "em5sgkm4"
 } : 0)("align-items:center;box-sizing:border-box;border-radius:inherit;display:flex;flex:1;position:relative;", containerDisabledStyles, " ", containerWidthStyles, ";" + ( true ? "" : 0));
 const disabledStyles = ({
   disabled
@@ -28430,29 +28500,29 @@ const getSizeConfig = ({
       height: 40,
       lineHeight: 1,
       minHeight: 40,
-      paddingLeft: space(4),
-      paddingRight: space(4)
+      paddingLeft: config_values.controlPaddingX,
+      paddingRight: config_values.controlPaddingX
     },
     small: {
       height: 24,
       lineHeight: 1,
       minHeight: 24,
-      paddingLeft: space(2),
-      paddingRight: space(2)
+      paddingLeft: config_values.controlPaddingXSmall,
+      paddingRight: config_values.controlPaddingXSmall
     },
     compact: {
       height: 32,
       lineHeight: 1,
       minHeight: 32,
-      paddingLeft: space(2),
-      paddingRight: space(2)
+      paddingLeft: config_values.controlPaddingXSmall,
+      paddingRight: config_values.controlPaddingXSmall
     },
     '__unstable-large': {
       height: 40,
       lineHeight: 1,
       minHeight: 40,
-      paddingLeft: space(4),
-      paddingRight: space(4)
+      paddingLeft: config_values.controlPaddingX,
+      paddingRight: config_values.controlPaddingX
     }
   };
   if (!__next40pxDefaultSize) {
@@ -28491,21 +28561,49 @@ const dragStyles = ({
 // https://github.com/WordPress/gutenberg/issues/18483
 
 const Input = /*#__PURE__*/emotion_styled_base_browser_esm("input",  true ? {
-  target: "em5sgkm2"
+  target: "em5sgkm3"
 } : 0)("&&&{background-color:transparent;box-sizing:border-box;border:none;box-shadow:none!important;color:", COLORS.theme.foreground, ";display:block;font-family:inherit;margin:0;outline:none;width:100%;", dragStyles, " ", disabledStyles, " ", fontSizeStyles, " ", sizeStyles, " ", customPaddings, " &::-webkit-input-placeholder{line-height:normal;}}" + ( true ? "" : 0));
 const BaseLabel = /*#__PURE__*/emotion_styled_base_browser_esm(text_component,  true ? {
-  target: "em5sgkm1"
+  target: "em5sgkm2"
 } : 0)("&&&{", baseLabelTypography, ";box-sizing:border-box;display:block;padding-top:0;padding-bottom:0;max-width:100%;z-index:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}" + ( true ? "" : 0));
 const Label = props => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BaseLabel, {
   ...props,
   as: "label"
 });
 const LabelWrapper = /*#__PURE__*/emotion_styled_base_browser_esm(flex_item_component,  true ? {
-  target: "em5sgkm0"
+  target: "em5sgkm1"
 } : 0)( true ? {
   name: "1b6uupn",
   styles: "max-width:calc( 100% - 10px )"
 } : 0);
+const prefixSuffixWrapperStyles = ({
+  variant = 'default',
+  size,
+  __next40pxDefaultSize,
+  isPrefix
+}) => {
+  const {
+    paddingLeft: padding
+  } = getSizeConfig({
+    inputSize: size,
+    __next40pxDefaultSize
+  });
+  const paddingProperty = isPrefix ? 'paddingInlineStart' : 'paddingInlineEnd';
+  if (variant === 'default') {
+    return /*#__PURE__*/emotion_react_browser_esm_css({
+      [paddingProperty]: padding
+    },  true ? "" : 0,  true ? "" : 0);
+  }
+
+  // If variant is 'icon' or 'control'
+  return /*#__PURE__*/emotion_react_browser_esm_css({
+    display: 'flex',
+    [paddingProperty]: padding - 4
+  },  true ? "" : 0,  true ? "" : 0);
+};
+const PrefixSuffixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "em5sgkm0"
+} : 0)(prefixSuffixWrapperStyles, ";" + ( true ? "" : 0));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/input-control/backdrop.js
 /**
@@ -28642,27 +28740,22 @@ function InputBase(props, ref) {
   } = useDeprecated36pxDefaultSizeProp(useContextSystem(props, 'InputBase'));
   const id = useUniqueId(idProp);
   const hideLabel = hideLabelFromVision || !label;
-  const {
-    paddingLeft,
-    paddingRight
-  } = getSizeConfig({
-    inputSize: size,
-    __next40pxDefaultSize
-  });
   const prefixSuffixContextValue = (0,external_wp_element_namespaceObject.useMemo)(() => {
     return {
       InputControlPrefixWrapper: {
-        paddingLeft
+        __next40pxDefaultSize,
+        size
       },
       InputControlSuffixWrapper: {
-        paddingRight
+        __next40pxDefaultSize,
+        size
       }
     };
-  }, [paddingLeft, paddingRight]);
+  }, [__next40pxDefaultSize, size]);
   return (
     /*#__PURE__*/
     // @ts-expect-error The `direction` prop from Flex (FlexDirection) conflicts with legacy SVGAttributes `direction` (string) that come from React intrinsic prop definitions.
-    (0,external_ReactJSXRuntime_namespaceObject.jsxs)(input_control_styles_Root, {
+    (0,external_ReactJSXRuntime_namespaceObject.jsxs)(Root, {
       ...restProps,
       ...getUIFlexProps(labelPosition),
       className: className,
@@ -30605,7 +30698,7 @@ function useDragCursor(isDragging, dragDirection) {
   return dragCursor;
 }
 function useDraft(props) {
-  const refPreviousValue = (0,external_wp_element_namespaceObject.useRef)(props.value);
+  const previousValueRef = (0,external_wp_element_namespaceObject.useRef)(props.value);
   const [draft, setDraft] = (0,external_wp_element_namespaceObject.useState)({});
   const value = draft.value !== undefined ? draft.value : props.value;
 
@@ -30615,8 +30708,8 @@ function useDraft(props) {
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     const {
       current: previousValue
-    } = refPreviousValue;
-    refPreviousValue.current = props.value;
+    } = previousValueRef;
+    previousValueRef.current = props.value;
     if (draft.value !== undefined && !draft.isStale) {
       setDraft({
         ...draft,
@@ -30863,8 +30956,8 @@ function useInputControlStateReducer(stateReducer = initialStateReducer, initial
   const pressUp = createKeyEvent(PRESS_UP);
   const pressDown = createKeyEvent(PRESS_DOWN);
   const pressEnter = createKeyEvent(PRESS_ENTER);
-  const currentState = (0,external_wp_element_namespaceObject.useRef)(state);
-  const refProps = (0,external_wp_element_namespaceObject.useRef)({
+  const currentStateRef = (0,external_wp_element_namespaceObject.useRef)(state);
+  const refPropsRef = (0,external_wp_element_namespaceObject.useRef)({
     value: initialState.value,
     onChangeHandler
   });
@@ -30872,8 +30965,8 @@ function useInputControlStateReducer(stateReducer = initialStateReducer, initial
   // Freshens refs to props and state so that subsequent effects have access
   // to their latest values without their changes causing effect runs.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    currentState.current = state;
-    refProps.current = {
+    currentStateRef.current = state;
+    refPropsRef.current = {
       value: initialState.value,
       onChangeHandler
     };
@@ -30881,17 +30974,17 @@ function useInputControlStateReducer(stateReducer = initialStateReducer, initial
 
   // Propagates the latest state through onChange.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    if (currentState.current._event !== undefined && state.value !== refProps.current.value && !state.isDirty) {
+    if (currentStateRef.current._event !== undefined && state.value !== refPropsRef.current.value && !state.isDirty) {
       var _state$value;
-      refProps.current.onChangeHandler((_state$value = state.value) !== null && _state$value !== void 0 ? _state$value : '', {
-        event: currentState.current._event
+      refPropsRef.current.onChangeHandler((_state$value = state.value) !== null && _state$value !== void 0 ? _state$value : '', {
+        event: currentStateRef.current._event
       });
     }
   }, [state.value, state.isDirty]);
 
   // Updates the state from props.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    if (initialState.value !== currentState.current.value && !currentState.current.isDirty) {
+    if (initialState.value !== currentStateRef.current.value && !currentStateRef.current.isDirty) {
       var _initialState$value;
       dispatch({
         type: CONTROL,
@@ -31196,7 +31289,7 @@ function base_control_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have
  */
 
 
-const base_control_styles_Wrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+const Wrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "ej5x27r4"
 } : 0)("font-family:", font('default.fontFamily'), ";font-size:", font('default.fontSize'), ";", boxSizingReset, ";" + ( true ? "" : 0));
 const deprecatedMarginField = ({
@@ -31265,7 +31358,7 @@ const UnconnectedBaseControl = props => {
       hint: 'Set the `__nextHasNoMarginBottom` prop to true to start opting into the new styles, which will become the default in a future version.'
     });
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(base_control_styles_Wrapper, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Wrapper, {
     className: className,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(StyledField, {
       className: "components-base-control__field"
@@ -31447,8 +31540,8 @@ function UnforwardedInputControl(props, ref) {
         isPressEnterToChange: isPressEnterToChange,
         onKeyDown: onKeyDown,
         onValidate: onValidate,
-        paddingInlineStart: prefix ? space(2) : undefined,
-        paddingInlineEnd: suffix ? space(2) : undefined,
+        paddingInlineStart: prefix ? space(1) : undefined,
+        paddingInlineEnd: suffix ? space(1) : undefined,
         ref: ref,
         size: size,
         stateReducer: stateReducer,
@@ -32458,14 +32551,14 @@ function AngleCircle({
   ...props
 }) {
   const angleCircleRef = (0,external_wp_element_namespaceObject.useRef)(null);
-  const angleCircleCenter = (0,external_wp_element_namespaceObject.useRef)();
-  const previousCursorValue = (0,external_wp_element_namespaceObject.useRef)();
+  const angleCircleCenterRef = (0,external_wp_element_namespaceObject.useRef)();
+  const previousCursorValueRef = (0,external_wp_element_namespaceObject.useRef)();
   const setAngleCircleCenter = () => {
     if (angleCircleRef.current === null) {
       return;
     }
     const rect = angleCircleRef.current.getBoundingClientRect();
-    angleCircleCenter.current = {
+    angleCircleCenterRef.current = {
       x: rect.x + rect.width / 2,
       y: rect.y + rect.height / 2
     };
@@ -32480,11 +32573,11 @@ function AngleCircle({
     event.preventDefault();
     // Input control needs to lose focus and by preventDefault above, it doesn't.
     event.target?.focus();
-    if (angleCircleCenter.current !== undefined && onChange !== undefined) {
+    if (angleCircleCenterRef.current !== undefined && onChange !== undefined) {
       const {
         x: centerX,
         y: centerY
-      } = angleCircleCenter.current;
+      } = angleCircleCenterRef.current;
       onChange(getAngle(centerX, centerY, event.clientX, event.clientY));
     }
   };
@@ -32501,13 +32594,13 @@ function AngleCircle({
   });
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (isDragging) {
-      if (previousCursorValue.current === undefined) {
-        previousCursorValue.current = document.body.style.cursor;
+      if (previousCursorValueRef.current === undefined) {
+        previousCursorValueRef.current = document.body.style.cursor;
       }
       document.body.style.cursor = 'grabbing';
     } else {
-      document.body.style.cursor = previousCursorValue.current || '';
-      previousCursorValue.current = undefined;
+      document.body.style.cursor = previousCursorValueRef.current || '';
+      previousCursorValueRef.current = undefined;
     }
   }, [isDragging]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CircleRoot, {
@@ -33576,15 +33669,15 @@ function StyleProvider(props) {
 
 function fill_useForceUpdate() {
   const [, setState] = (0,external_wp_element_namespaceObject.useState)({});
-  const mounted = (0,external_wp_element_namespaceObject.useRef)(true);
+  const mountedRef = (0,external_wp_element_namespaceObject.useRef)(true);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    mounted.current = true;
+    mountedRef.current = true;
     return () => {
-      mounted.current = false;
+      mountedRef.current = false;
     };
   }, []);
   return () => {
-    if (mounted.current) {
+    if (mountedRef.current) {
       setState({});
     }
   };
@@ -35482,20 +35575,20 @@ const useToggleGroupControlContext = () => (0,external_wp_element_namespaceObjec
  * @param valueProp The received `value`
  */
 function useComputeControlledOrUncontrolledValue(valueProp) {
-  const isInitialRender = (0,external_wp_element_namespaceObject.useRef)(true);
+  const isInitialRenderRef = (0,external_wp_element_namespaceObject.useRef)(true);
   const prevValueProp = (0,external_wp_compose_namespaceObject.usePrevious)(valueProp);
-  const prevIsControlled = (0,external_wp_element_namespaceObject.useRef)(false);
+  const prevIsControlledRef = (0,external_wp_element_namespaceObject.useRef)(false);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
+    if (isInitialRenderRef.current) {
+      isInitialRenderRef.current = false;
     }
   }, []);
 
   // Assume the component is being used in controlled mode on the first re-render
   // that has a different `valueProp` from the previous render.
-  const isControlled = prevIsControlled.current || !isInitialRender.current && prevValueProp !== valueProp;
+  const isControlled = prevIsControlledRef.current || !isInitialRenderRef.current && prevValueProp !== valueProp;
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    prevIsControlled.current = isControlled;
+    prevIsControlledRef.current = isControlled;
   }, [isControlled]);
   if (isControlled) {
     // When in controlled mode, use `''` instead of `undefined`
@@ -36465,10 +36558,10 @@ const Dropdown = contextConnect(UnconnectedDropdown, 'Dropdown');
 
 
 
+
 function UnconnectedInputControlSuffixWrapper(props, forwardedRef) {
   const derivedProps = useContextSystem(props, 'InputControlSuffixWrapper');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
-    marginBottom: 0,
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PrefixSuffixWrapper, {
     ...derivedProps,
     ref: forwardedRef
   });
@@ -36579,10 +36672,10 @@ const sizePaddings = ({
   selectSize = 'default'
 }) => {
   const padding = {
-    default: 16,
-    small: 8,
-    compact: 8,
-    '__unstable-large': 16
+    default: config_values.controlPaddingX,
+    small: config_values.controlPaddingXSmall,
+    compact: config_values.controlPaddingXSmall,
+    '__unstable-large': config_values.controlPaddingX
   };
   if (!__next40pxDefaultSize) {
     padding.default = padding.compact;
@@ -37074,7 +37167,7 @@ const railBackgroundColor = ({
 };
 const Rail = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk10"
-} : 0)("background-color:", COLORS.gray[300], ";left:0;pointer-events:none;right:0;display:block;height:", railHeight, "px;position:absolute;margin-top:", (rangeHeightValue - railHeight) / 2, "px;top:0;border-radius:", railHeight, "px;", railBackgroundColor, ";" + ( true ? "" : 0));
+} : 0)("background-color:", COLORS.gray[300], ";left:0;pointer-events:none;right:0;display:block;height:", railHeight, "px;position:absolute;margin-top:", (rangeHeightValue - railHeight) / 2, "px;top:0;border-radius:", config_values.radiusFull, ";", railBackgroundColor, ";" + ( true ? "" : 0));
 const trackBackgroundColor = ({
   disabled,
   trackColor
@@ -37089,7 +37182,7 @@ const trackBackgroundColor = ({
 };
 const Track = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk9"
-} : 0)("background-color:currentColor;border-radius:", railHeight, "px;height:", railHeight, "px;pointer-events:none;display:block;position:absolute;margin-top:", (rangeHeightValue - railHeight) / 2, "px;top:0;", trackBackgroundColor, ";" + ( true ? "" : 0));
+} : 0)("background-color:currentColor;border-radius:", config_values.radiusFull, ";height:", railHeight, "px;pointer-events:none;display:block;position:absolute;margin-top:", (rangeHeightValue - railHeight) / 2, "px;top:0;", trackBackgroundColor, ";" + ( true ? "" : 0));
 const MarksWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk8"
 } : 0)( true ? {
@@ -37132,7 +37225,7 @@ const thumbColor = ({
 }) => disabled ? /*#__PURE__*/emotion_react_browser_esm_css("background-color:", COLORS.gray[400], ";" + ( true ? "" : 0),  true ? "" : 0) : /*#__PURE__*/emotion_react_browser_esm_css("background-color:", COLORS.theme.accent, ";" + ( true ? "" : 0),  true ? "" : 0);
 const ThumbWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk5"
-} : 0)("align-items:center;display:flex;height:", thumbSize, "px;justify-content:center;margin-top:", (rangeHeightValue - thumbSize) / 2, "px;outline:0;pointer-events:none;position:absolute;top:0;user-select:none;width:", thumbSize, "px;border-radius:50%;", thumbColor, ";", rtl({
+} : 0)("align-items:center;display:flex;height:", thumbSize, "px;justify-content:center;margin-top:", (rangeHeightValue - thumbSize) / 2, "px;outline:0;pointer-events:none;position:absolute;top:0;user-select:none;width:", thumbSize, "px;border-radius:", config_values.radiusRound, ";", thumbColor, ";", rtl({
   marginLeft: -10
 }), ";", rtl({
   transform: 'translateX( 4.5px )'
@@ -37142,11 +37235,11 @@ const ThumbWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true 
 const thumbFocus = ({
   isFocused
 }) => {
-  return isFocused ? /*#__PURE__*/emotion_react_browser_esm_css("&::before{content:' ';position:absolute;background-color:", COLORS.theme.accent, ";opacity:0.4;border-radius:50%;height:", thumbSize + 8, "px;width:", thumbSize + 8, "px;top:-4px;left:-4px;}" + ( true ? "" : 0),  true ? "" : 0) : '';
+  return isFocused ? /*#__PURE__*/emotion_react_browser_esm_css("&::before{content:' ';position:absolute;background-color:", COLORS.theme.accent, ";opacity:0.4;border-radius:", config_values.radiusRound, ";height:", thumbSize + 8, "px;width:", thumbSize + 8, "px;top:-4px;left:-4px;}" + ( true ? "" : 0),  true ? "" : 0) : '';
 };
 const Thumb = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk4"
-} : 0)("align-items:center;border-radius:50%;height:100%;outline:0;position:absolute;user-select:none;width:100%;", thumbColor, ";", thumbFocus, ";" + ( true ? "" : 0));
+} : 0)("align-items:center;border-radius:", config_values.radiusRound, ";height:100%;outline:0;position:absolute;user-select:none;width:100%;", thumbColor, ";", thumbFocus, ";" + ( true ? "" : 0));
 const InputRange = /*#__PURE__*/emotion_styled_base_browser_esm("input",  true ? {
   target: "e1epgpqk3"
 } : 0)("box-sizing:border-box;cursor:pointer;display:block;height:100%;left:0;margin:0 -", thumbSize / 2, "px;opacity:0;outline:none;position:absolute;right:0;top:0;width:calc( 100% + ", thumbSize, "px );" + ( true ? "" : 0));
@@ -37176,7 +37269,7 @@ const tooltipPosition = ({
 };
 const range_control_styles_Tooltip = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk2"
-} : 0)("background:rgba( 0, 0, 0, 0.8 );border-radius:2px;color:white;display:inline-block;font-size:12px;min-width:32px;opacity:0;padding:4px 8px;pointer-events:none;position:absolute;text-align:center;user-select:none;line-height:1.4;@media not ( prefers-reduced-motion ){transition:opacity 120ms ease;}", tooltipShow, ";", tooltipPosition, ";", rtl({
+} : 0)("background:rgba( 0, 0, 0, 0.8 );border-radius:", config_values.radiusSmall, ";color:white;display:inline-block;font-size:12px;min-width:32px;opacity:0;padding:4px 8px;pointer-events:none;position:absolute;text-align:center;user-select:none;line-height:1.4;@media not ( prefers-reduced-motion ){transition:opacity 120ms ease;}", tooltipShow, ";", tooltipPosition, ";", rtl({
   transform: 'translateX(-50%)'
 }, {
   transform: 'translateX(50%)'
@@ -37811,7 +37904,7 @@ const ColorInputWrapper = /*#__PURE__*/emotion_styled_base_browser_esm(flex_comp
 } : 0)("padding-top:", space(4), ";padding-left:", space(4), ";padding-right:", space(3), ";padding-bottom:", space(5), ";" + ( true ? "" : 0));
 const ColorfulWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "ez9hsf41"
-} : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:16px;margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
+} : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:", config_values.radiusFull, ";margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
 const CopyButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_button,  true ? {
   target: "ez9hsf40"
 } : 0)("&&&&&{min-width:", space(6), ";padding:0;>svg{margin-right:0;}}" + ( true ? "" : 0));
@@ -37854,7 +37947,7 @@ const ColorCopyButton = props => {
     colorType
   } = props;
   const [copiedColor, setCopiedColor] = (0,external_wp_element_namespaceObject.useState)(null);
-  const copyTimer = (0,external_wp_element_namespaceObject.useRef)();
+  const copyTimerRef = (0,external_wp_element_namespaceObject.useRef)();
   const copyRef = (0,external_wp_compose_namespaceObject.useCopyToClipboard)(() => {
     switch (colorType) {
       case 'hsl':
@@ -37872,20 +37965,20 @@ const ColorCopyButton = props => {
         }
     }
   }, () => {
-    if (copyTimer.current) {
-      clearTimeout(copyTimer.current);
+    if (copyTimerRef.current) {
+      clearTimeout(copyTimerRef.current);
     }
     setCopiedColor(color.toHex());
-    copyTimer.current = setTimeout(() => {
+    copyTimerRef.current = setTimeout(() => {
       setCopiedColor(null);
-      copyTimer.current = undefined;
+      copyTimerRef.current = undefined;
     }, 3000);
   });
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    // Clear copyTimer on component unmount.
+    // Clear copyTimerRef on component unmount.
     return () => {
-      if (copyTimer.current) {
-        clearTimeout(copyTimer.current);
+      if (copyTimerRef.current) {
+        clearTimeout(copyTimerRef.current);
       }
     };
   }, []);
@@ -37902,11 +37995,49 @@ const ColorCopyButton = props => {
   });
 };
 
-;// CONCATENATED MODULE: ./packages/components/build-module/color-picker/input-with-slider.js
+;// CONCATENATED MODULE: ./packages/components/build-module/input-control/input-prefix-wrapper.js
+/**
+ * External dependencies
+ */
+
 /**
  * Internal dependencies
  */
 
+
+
+
+function UnconnectedInputControlPrefixWrapper(props, forwardedRef) {
+  const derivedProps = useContextSystem(props, 'InputControlPrefixWrapper');
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PrefixSuffixWrapper, {
+    ...derivedProps,
+    isPrefix: true,
+    ref: forwardedRef
+  });
+}
+
+/**
+ * A convenience wrapper for the `prefix` when you want to apply
+ * standard padding in accordance with the size variant.
+ *
+ * ```jsx
+ * import {
+ *   __experimentalInputControl as InputControl,
+ *   __experimentalInputControlPrefixWrapper as InputControlPrefixWrapper,
+ * } from '@wordpress/components';
+ *
+ * <InputControl
+ *   prefix={<InputControlPrefixWrapper>@</InputControlPrefixWrapper>}
+ * />
+ * ```
+ */
+const InputControlPrefixWrapper = contextConnect(UnconnectedInputControlPrefixWrapper, 'InputControlPrefixWrapper');
+/* harmony default export */ const input_prefix_wrapper = (InputControlPrefixWrapper);
+
+;// CONCATENATED MODULE: ./packages/components/build-module/color-picker/input-with-slider.js
+/**
+ * Internal dependencies
+ */
 
 
 
@@ -37942,12 +38073,12 @@ const InputWithSlider = ({
       hideLabelFromVision: true,
       value: value,
       onChange: onNumberControlChange,
-      prefix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
-        as: text_component,
-        paddingLeft: space(4),
-        color: COLORS.theme.accent,
-        lineHeight: 1,
-        children: abbreviation
+      prefix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(input_prefix_wrapper, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(text_component, {
+          color: COLORS.theme.accent,
+          lineHeight: 1,
+          children: abbreviation
+        })
       }),
       spinControls: "none",
       size: "__unstable-large"
@@ -38171,7 +38302,6 @@ const HslInput = ({
 
 
 
-
 const HexInput = ({
   color,
   onChange,
@@ -38198,12 +38328,12 @@ const HexInput = ({
     };
   };
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InputControl, {
-    prefix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
-      as: text_component,
-      marginLeft: space(4),
-      color: COLORS.theme.accent,
-      lineHeight: 1,
-      children: "#"
+    prefix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(input_prefix_wrapper, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(text_component, {
+        color: COLORS.theme.accent,
+        lineHeight: 1,
+        children: "#"
+      })
     }),
     value: color.toHex().slice(1).toUpperCase(),
     onChange: handleChange,
@@ -38514,7 +38644,6 @@ const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
  * External dependencies
  */
 
-
 /**
  * WordPress dependencies
  */
@@ -38547,13 +38676,20 @@ function UnforwardedOptionAsOption(props, forwardedRef) {
   const {
     id,
     isSelected,
-    compositeStore,
     ...additionalProps
   } = props;
-  const activeId = useStoreState(compositeStore, 'activeId');
-  if (isSelected && !activeId) {
-    compositeStore.setActiveId(id);
-  }
+  const {
+    setActiveId,
+    activeId
+  } = (0,external_wp_element_namespaceObject.useContext)(CircularOptionPickerContext);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (isSelected && !activeId) {
+      // The setTimeout call is necessary to make sure that this update
+      // doesn't get overridden by `Composite`'s internal logic, which picks
+      // an initial active item if one is not specifically set.
+      window.setTimeout(() => setActiveId?.(id), 0);
+    }
+  }, [isSelected, setActiveId, activeId, id]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Composite.Item, {
     render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
       ...additionalProps,
@@ -38574,7 +38710,7 @@ function Option({
 }) {
   const {
     baseId,
-    compositeStore
+    setActiveId
   } = (0,external_wp_element_namespaceObject.useContext)(CircularOptionPickerContext);
   const id = (0,external_wp_compose_namespaceObject.useInstanceId)(Option, baseId || 'components-circular-option-picker__option');
   const commonProps = {
@@ -38582,9 +38718,9 @@ function Option({
     className: 'components-circular-option-picker__option',
     ...additionalProps
   };
-  const optionControl = compositeStore ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OptionAsOption, {
+  const isListbox = setActiveId !== undefined;
+  const optionControl = isListbox ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OptionAsOption, {
     ...commonProps,
-    compositeStore: compositeStore,
     isSelected: isSelected
   }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OptionAsButton, {
     ...commonProps,
@@ -38685,6 +38821,7 @@ function ButtonAction({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -38751,23 +38888,24 @@ function ListboxCircularOptionPicker(props) {
     children,
     ...additionalProps
   } = props;
-  const compositeStore = composite_useCompositeStore({
-    focusLoop: loop,
-    rtl: (0,external_wp_i18n_namespaceObject.isRTL)()
-  });
-  const compositeContext = {
+  const [activeId, setActiveId] = (0,external_wp_element_namespaceObject.useState)(undefined);
+  const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     baseId,
-    compositeStore
-  };
+    activeId,
+    setActiveId
+  }), [baseId, activeId, setActiveId]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     className: className,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(CircularOptionPickerContext.Provider, {
-      value: compositeContext,
+      value: contextValue,
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Composite, {
         ...additionalProps,
         id: baseId,
-        store: compositeStore,
+        focusLoop: loop,
+        rtl: (0,external_wp_i18n_namespaceObject.isRTL)(),
         role: "listbox",
+        activeId: activeId,
+        setActiveId: setActiveId,
         children: options
       }), children, actions]
     })
@@ -38781,13 +38919,14 @@ function ButtonsCircularOptionPicker(props) {
     baseId,
     ...additionalProps
   } = props;
+  const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    baseId
+  }), [baseId]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     ...additionalProps,
     id: baseId,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(CircularOptionPickerContext.Provider, {
-      value: {
-        baseId
-      },
+      value: contextValue,
       children: [options, children, actions]
     })
   });
@@ -39189,8 +39328,7 @@ const isMultiplePaletteArray = arr => {
  * @return The background color value computed from a element.
  */
 const normalizeColorValue = (value, element) => {
-  const valueIsSimpleColor = value ? isSimpleCSSColor(value) : false;
-  if (valueIsSimpleColor || element === null) {
+  if (!value || !element || isSimpleCSSColor(value)) {
     return value;
   }
   const {
@@ -39526,7 +39664,7 @@ const baseUnitLabelStyles = ({
 }) => {
   const sizes = {
     small: /*#__PURE__*/emotion_react_browser_esm_css("box-sizing:border-box;padding:2px 1px;width:20px;font-size:8px;line-height:1;letter-spacing:-0.5px;text-transform:uppercase;text-align-last:center;&:not( :disabled ){color:", COLORS.gray[800], ";}" + ( true ? "" : 0),  true ? "" : 0),
-    default: /*#__PURE__*/emotion_react_browser_esm_css("box-sizing:border-box;min-width:24px;max-width:48px;height:24px;margin-inline-end:", space(2), ";padding:", space(1), ";font-size:13px;line-height:1;text-align-last:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;&:not( :disabled ){color:", COLORS.theme.accent, ";}" + ( true ? "" : 0),  true ? "" : 0)
+    default: /*#__PURE__*/emotion_react_browser_esm_css("box-sizing:border-box;min-width:24px;max-width:48px;height:24px;margin-inline-end:", space(2), ";padding:", space(1), ";font-size:13px;line-height:1;text-align-last:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;field-sizing:content;&:not( :disabled ){color:", COLORS.theme.accent, ";}" + ( true ? "" : 0),  true ? "" : 0)
   };
   return sizes[selectSize];
 };
@@ -39541,7 +39679,7 @@ const unitSelectSizes = ({
       borderTopLeftRadius: 0,
       borderBottomLeftRadius: 0
     })(), " &:not(:disabled):hover{background-color:", COLORS.gray[100], ";}&:focus{border:1px solid ", COLORS.ui.borderFocus, ";box-shadow:inset 0 0 0 ", config_values.borderWidth + ' ' + COLORS.ui.borderFocus, ";outline-offset:0;outline:2px solid transparent;z-index:1;}" + ( true ? "" : 0),  true ? "" : 0),
-    default: /*#__PURE__*/emotion_react_browser_esm_css("display:flex;justify-content:center;align-items:center;&:where( :not( :disabled ) ):hover{box-shadow:inset 0 0 0 ", config_values.borderWidth + ' ' + COLORS.ui.borderFocus, ";outline:", config_values.borderWidth, " solid transparent;}&:focus{box-shadow:0 0 0 ", config_values.borderWidthFocus + ' ' + COLORS.ui.borderFocus, ";outline:", config_values.borderWidthFocus, " solid transparent;}" + ( true ? "" : 0),  true ? "" : 0)
+    default: /*#__PURE__*/emotion_react_browser_esm_css("display:flex;justify-content:center;align-items:center;&:where( :not( :disabled ) ):hover{box-shadow:0 0 0 ", config_values.borderWidth + ' ' + COLORS.ui.borderFocus, ";outline:", config_values.borderWidth, " solid transparent;}&:focus{box-shadow:0 0 0 ", config_values.borderWidthFocus + ' ' + COLORS.ui.borderFocus, ";outline:", config_values.borderWidthFocus, " solid transparent;}" + ( true ? "" : 0),  true ? "" : 0)
   };
   return sizes[selectSize];
 };
@@ -40687,6 +40825,7 @@ function useBorderControl(props) {
 
 
 
+
 const BorderLabel = props => {
   const {
     label,
@@ -40743,19 +40882,23 @@ const UnconnectedBorderControl = (props, forwardedRef) => {
       spacing: 4,
       className: innerWrapperClassName,
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(unit_control, {
-        prefix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(border_control_dropdown_component, {
-          border: border,
-          colors: colors,
-          __unstablePopoverProps: __unstablePopoverProps,
-          disableCustomColors: disableCustomColors,
-          enableAlpha: enableAlpha,
-          enableStyle: enableStyle,
-          isStyleSettable: isStyleSettable,
-          onChange: onBorderChange,
-          previousStyleSelection: previousStyleSelection,
-          showDropdownHeader: showDropdownHeader,
-          __experimentalIsRenderedInSidebar: __experimentalIsRenderedInSidebar,
-          size: size
+        prefix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
+          marginRight: 1,
+          marginBottom: 0,
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(border_control_dropdown_component, {
+            border: border,
+            colors: colors,
+            __unstablePopoverProps: __unstablePopoverProps,
+            disableCustomColors: disableCustomColors,
+            enableAlpha: enableAlpha,
+            enableStyle: enableStyle,
+            isStyleSettable: isStyleSettable,
+            onChange: onBorderChange,
+            previousStyleSelection: previousStyleSelection,
+            showDropdownHeader: showDropdownHeader,
+            __experimentalIsRenderedInSidebar: __experimentalIsRenderedInSidebar,
+            size: size
+          })
         }),
         label: (0,external_wp_i18n_namespaceObject.__)('Border width'),
         hideLabelFromVision: true,
@@ -43865,19 +44008,19 @@ function ClipboardButton({
     since: '5.8',
     alternative: 'wp.compose.useCopyToClipboard'
   });
-  const timeoutId = (0,external_wp_element_namespaceObject.useRef)();
+  const timeoutIdRef = (0,external_wp_element_namespaceObject.useRef)();
   const ref = (0,external_wp_compose_namespaceObject.useCopyToClipboard)(text, () => {
     onCopy();
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
+    if (timeoutIdRef.current) {
+      clearTimeout(timeoutIdRef.current);
     }
     if (onFinishCopy) {
-      timeoutId.current = setTimeout(() => onFinishCopy(), TIMEOUT);
+      timeoutIdRef.current = setTimeout(() => onFinishCopy(), TIMEOUT);
     }
   });
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
+    if (timeoutIdRef.current) {
+      clearTimeout(timeoutIdRef.current);
     }
   }, []);
   const classes = dist_clsx('components-clipboard-button', className);
@@ -43955,9 +44098,9 @@ const paddingY = `calc((${config_values.controlHeight} - ${baseFontHeight} - 2px
 const paddingYSmall = `calc((${config_values.controlHeightSmall} - ${baseFontHeight} - 2px) / 2)`;
 const paddingYLarge = `calc((${config_values.controlHeightLarge} - ${baseFontHeight} - 2px) / 2)`;
 const itemSizes = {
-  small: /*#__PURE__*/emotion_react_browser_esm_css("padding:", paddingYSmall, " ", config_values.controlPaddingXSmall, ";" + ( true ? "" : 0),  true ? "" : 0),
-  medium: /*#__PURE__*/emotion_react_browser_esm_css("padding:", paddingY, " ", config_values.controlPaddingX, ";" + ( true ? "" : 0),  true ? "" : 0),
-  large: /*#__PURE__*/emotion_react_browser_esm_css("padding:", paddingYLarge, " ", config_values.controlPaddingXLarge, ";" + ( true ? "" : 0),  true ? "" : 0)
+  small: /*#__PURE__*/emotion_react_browser_esm_css("padding:", paddingYSmall, " ", config_values.controlPaddingXSmall, "px;" + ( true ? "" : 0),  true ? "" : 0),
+  medium: /*#__PURE__*/emotion_react_browser_esm_css("padding:", paddingY, " ", config_values.controlPaddingX, "px;" + ( true ? "" : 0),  true ? "" : 0),
+  large: /*#__PURE__*/emotion_react_browser_esm_css("padding:", paddingYLarge, " ", config_values.controlPaddingXLarge, "px;" + ( true ? "" : 0),  true ? "" : 0)
 };
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/item-group/item-group/hook.js
@@ -44323,9 +44466,9 @@ function ControlPoints({
   onStopControlPointChange,
   __experimentalIsRenderedInSidebar
 }) {
-  const controlPointMoveState = (0,external_wp_element_namespaceObject.useRef)();
+  const controlPointMoveStateRef = (0,external_wp_element_namespaceObject.useRef)();
   const onMouseMove = event => {
-    if (controlPointMoveState.current === undefined || gradientPickerDomRef.current === null) {
+    if (controlPointMoveStateRef.current === undefined || gradientPickerDomRef.current === null) {
       return;
     }
     const relativePosition = getHorizontalRelativeGradientPosition(event.clientX, gradientPickerDomRef.current);
@@ -44333,18 +44476,18 @@ function ControlPoints({
       initialPosition,
       index,
       significantMoveHappened
-    } = controlPointMoveState.current;
+    } = controlPointMoveStateRef.current;
     if (!significantMoveHappened && Math.abs(initialPosition - relativePosition) >= MINIMUM_SIGNIFICANT_MOVE) {
-      controlPointMoveState.current.significantMoveHappened = true;
+      controlPointMoveStateRef.current.significantMoveHappened = true;
     }
     onChange(updateControlPointPosition(controlPoints, index, relativePosition));
   };
   const cleanEventListeners = () => {
-    if (window && window.removeEventListener && controlPointMoveState.current && controlPointMoveState.current.listenersActivated) {
+    if (window && window.removeEventListener && controlPointMoveStateRef.current && controlPointMoveStateRef.current.listenersActivated) {
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', cleanEventListeners);
       onStopControlPointChange();
-      controlPointMoveState.current.listenersActivated = false;
+      controlPointMoveStateRef.current.listenersActivated = false;
     }
   };
 
@@ -44369,7 +44512,7 @@ function ControlPoints({
           onToggle
         }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlPointButton, {
           onClick: () => {
-            if (controlPointMoveState.current && controlPointMoveState.current.significantMoveHappened) {
+            if (controlPointMoveStateRef.current && controlPointMoveStateRef.current.significantMoveHappened) {
               return;
             }
             if (isOpen) {
@@ -44381,7 +44524,7 @@ function ControlPoints({
           },
           onMouseDown: () => {
             if (window && window.addEventListener) {
-              controlPointMoveState.current = {
+              controlPointMoveStateRef.current = {
                 initialPosition,
                 index,
                 significantMoveHappened: false,
@@ -46055,9 +46198,9 @@ function PaletteEditListView({
   addColorRef
 }) {
   // When unmounting the component if there are empty elements (the user did not complete the insertion) clean them.
-  const elementsReference = (0,external_wp_element_namespaceObject.useRef)();
+  const elementsReferenceRef = (0,external_wp_element_namespaceObject.useRef)();
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    elementsReference.current = elements;
+    elementsReferenceRef.current = elements;
   }, [elements]);
   const debounceOnChange = (0,external_wp_compose_namespaceObject.useDebounce)(onChange, 100);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(v_stack_component, {
@@ -46820,6 +46963,53 @@ function ComboboxControl(props) {
 }
 /* harmony default export */ const combobox_control = (ComboboxControl);
 
+;// CONCATENATED MODULE: ./packages/components/build-module/composite/store.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+// Props are already documented in TypeScript types.
+// eslint-disable-next-line jsdoc/require-param
+/**
+ * Creates a composite store.
+ *
+ * @example
+ * ```jsx
+ * import { Composite, useCompositeStore } from '@wordpress/components';
+ *
+ * const store = useCompositeStore();
+ * <Composite store={store}>
+ *   <Composite.Item>Item</Composite.Item>
+ *   <Composite.Item>Item</Composite.Item>
+ *   <Composite.Item>Item</Composite.Item>
+ * </Composite>
+ * ```
+ */
+function store_useCompositeStore({
+  focusLoop = false,
+  focusWrap = false,
+  focusShift = false,
+  virtualFocus = false,
+  orientation = 'both',
+  rtl = false,
+  ...props
+} = {}) {
+  return useCompositeStore({
+    focusLoop,
+    focusWrap,
+    focusShift,
+    virtualFocus,
+    orientation,
+    rtl,
+    ...props
+  });
+}
+
 ;// CONCATENATED MODULE: ./packages/components/build-module/composite/legacy/index.js
 /**
  * Composite is a component that may contain navigable items represented by
@@ -46844,6 +47034,7 @@ function ComboboxControl(props) {
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -46917,8 +47108,8 @@ const unproxiedCompositeGroup = (0,external_wp_element_namespaceObject.forwardRe
 const legacy_Composite = proxyComposite(Composite, {
   baseId: 'id'
 });
-const CompositeGroup = proxyComposite(unproxiedCompositeGroup);
-const CompositeItem = proxyComposite(Composite.Item, {
+const legacy_CompositeGroup = proxyComposite(unproxiedCompositeGroup);
+const legacy_CompositeItem = proxyComposite(Composite.Item, {
   focusable: 'accessibleWhenDisabled'
 });
 function useCompositeState(legacyStateOptions = {}) {
@@ -46935,7 +47126,7 @@ function useCompositeState(legacyStateOptions = {}) {
   } = legacyStateOptions;
   return {
     baseId: (0,external_wp_compose_namespaceObject.useInstanceId)(legacy_Composite, 'composite', baseId),
-    store: composite_useCompositeStore({
+    store: store_useCompositeStore({
       defaultActiveId,
       rtl,
       orientation,
@@ -47106,9 +47297,9 @@ function UnforwardedModal(props, forwardedRef) {
   }, []);
 
   // Keeps a fresh ref for the subsequent effect.
-  const refOnRequestClose = (0,external_wp_element_namespaceObject.useRef)();
+  const onRequestCloseRef = (0,external_wp_element_namespaceObject.useRef)();
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    refOnRequestClose.current = onRequestClose;
+    onRequestCloseRef.current = onRequestClose;
   }, [onRequestClose]);
 
   // The list of `onRequestClose` callbacks of open (non-nested) Modals. Only
@@ -47121,10 +47312,10 @@ function UnforwardedModal(props, forwardedRef) {
   // onRequestClose for any prior and/or nested modals as applicable.
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     // add this modal instance to the dismissers set
-    dismissers.add(refOnRequestClose);
+    dismissers.add(onRequestCloseRef);
     // request that all the other modals close themselves
     for (const dismisser of dismissers) {
-      if (dismisser !== refOnRequestClose) {
+      if (dismisser !== onRequestCloseRef) {
         dismisser.current?.();
       }
     }
@@ -47134,7 +47325,7 @@ function UnforwardedModal(props, forwardedRef) {
         dismisser.current?.();
       }
       // remove this modal instance from the dismissers set
-      dismissers.delete(refOnRequestClose);
+      dismissers.delete(onRequestCloseRef);
     };
   }, [dismissers, nestedDismissers]);
 
@@ -48794,11 +48985,9 @@ const ANIMATION_PARAMS = {
   EASING: 'cubic-bezier( 0.16, 1, 0.3, 1 )'
 };
 const INLINE_PADDING = {
-  compact: 8,
-  // space(2)
-  small: 8,
-  // space(2)
-  default: 16 // space(4)
+  compact: config_values.controlPaddingXSmall,
+  small: config_values.controlPaddingXSmall,
+  default: config_values.controlPaddingX
 };
 const getSelectSize = (size, heightProperty) => {
   const sizes = {
@@ -48861,7 +49050,7 @@ const slideDownAndFade = emotion_react_browser_esm_keyframes({
 });
 const styles_SelectPopover = /*#__PURE__*/emotion_styled_base_browser_esm(SelectPopover,  true ? {
   target: "e1p3eej76"
-} : 0)("display:flex;flex-direction:column;background-color:", COLORS.theme.background, ";border-radius:2px;border:1px solid ", COLORS.theme.foreground, ";z-index:1000000;max-height:min( var( --popover-available-height, 400px ), 400px );overflow:auto;overscroll-behavior:contain;min-width:min-content;&[data-open]{@media not ( prefers-reduced-motion ){animation-duration:", ANIMATION_PARAMS.DURATION, ";animation-timing-function:", ANIMATION_PARAMS.EASING, ";animation-name:", slideDownAndFade, ";will-change:transform,opacity;}}&[data-focus-visible]{outline:none;}" + ( true ? "" : 0));
+} : 0)("display:flex;flex-direction:column;background-color:", COLORS.theme.background, ";border-radius:", config_values.radiusSmall, ";border:1px solid ", COLORS.theme.foreground, ";z-index:1000000;max-height:min( var( --popover-available-height, 400px ), 400px );overflow:auto;overscroll-behavior:contain;min-width:min-content;&[data-open]{@media not ( prefers-reduced-motion ){animation-duration:", ANIMATION_PARAMS.DURATION, ";animation-timing-function:", ANIMATION_PARAMS.EASING, ";animation-name:", slideDownAndFade, ";will-change:transform,opacity;}}&[data-focus-visible]{outline:none;}" + ( true ? "" : 0));
 const styles_SelectItem = /*#__PURE__*/emotion_styled_base_browser_esm(SelectItem,  true ? {
   target: "e1p3eej75"
 } : 0)(({
@@ -53809,7 +53998,7 @@ const DayButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_butt
 		justify-self: end;
 		`, " ", props => props.disabled && `
 		pointer-events: none;
-		`, " &&&{border-radius:100%;height:", space(7), ";width:", space(7), ";", props => props.isSelected && `
+		`, " &&&{border-radius:", config_values.radiusRound, ";height:", space(7), ";width:", space(7), ";", props => props.isSelected && `
 			background: ${COLORS.theme.accent};
 			color: ${COLORS.white};
 			`, " ", props => !props.isSelected && props.isToday && `
@@ -53817,7 +54006,7 @@ const DayButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_butt
 			`, ";}", props => props.hasEvents && `
 		::before {
 			background: ${props.isSelected ? COLORS.white : COLORS.theme.accent};
-			border-radius: 2px;
+			border-radius: ${config_values.radiusRound};
 			bottom: 2px;
 			content: " ";
 			height: 4px;
@@ -54458,6 +54647,64 @@ const timezone_TimeZone = () => {
 };
 /* harmony default export */ const timezone = (timezone_TimeZone);
 
+;// CONCATENATED MODULE: ./packages/components/build-module/toggle-group-control/toggle-group-control-option/component.js
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function UnforwardedToggleGroupControlOption(props, ref) {
+  const {
+    label,
+    ...restProps
+  } = props;
+  const optionLabel = restProps['aria-label'] || label;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(toggle_group_control_option_base_component, {
+    ...restProps,
+    "aria-label": optionLabel,
+    ref: ref,
+    children: label
+  });
+}
+
+/**
+ * `ToggleGroupControlOption` is a form component and is meant to be used as a
+ * child of `ToggleGroupControl`.
+ *
+ * ```jsx
+ * import {
+ *   __experimentalToggleGroupControl as ToggleGroupControl,
+ *   __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+ * } from '@wordpress/components';
+ *
+ * function Example() {
+ *   return (
+ *     <ToggleGroupControl
+ *       label="my label"
+ *       value="vertical"
+ *       isBlock
+ *       __nextHasNoMarginBottom
+ *     >
+ *       <ToggleGroupControlOption value="horizontal" label="Horizontal" />
+ *       <ToggleGroupControlOption value="vertical" label="Vertical" />
+ *     </ToggleGroupControl>
+ *   );
+ * }
+ * ```
+ */
+const ToggleGroupControlOption = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedToggleGroupControlOption);
+/* harmony default export */ const toggle_group_control_option_component = (ToggleGroupControlOption);
+
 ;// CONCATENATED MODULE: ./packages/components/build-module/date-time/time/time-input/index.js
 /**
  * External dependencies
@@ -54473,7 +54720,6 @@ const timezone_TimeZone = () => {
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -54586,23 +54832,22 @@ function TimeInput({
           __unstableStateReducer: buildPadInputStateReducer(2),
           ...minutesProps
         })]
-      }), is12Hour && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(button_group, {
-        className: "components-datetime__time-field components-datetime__time-field-am-pm" // Unused, for backwards compatibility.
-        ,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-          className: "components-datetime__time-am-button" // Unused, for backwards compatibility.
-          ,
-          variant: dayPeriod === 'AM' ? 'primary' : 'secondary',
-          __next40pxDefaultSize: true,
-          onClick: buildAmPmChangeCallback('AM'),
-          children: (0,external_wp_i18n_namespaceObject.__)('AM')
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-          className: "components-datetime__time-pm-button" // Unused, for backwards compatibility.
-          ,
-          variant: dayPeriod === 'PM' ? 'primary' : 'secondary',
-          __next40pxDefaultSize: true,
-          onClick: buildAmPmChangeCallback('PM'),
-          children: (0,external_wp_i18n_namespaceObject.__)('PM')
+      }), is12Hour && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(toggle_group_control_component, {
+        __next40pxDefaultSize: true,
+        __nextHasNoMarginBottom: true,
+        isBlock: true,
+        label: (0,external_wp_i18n_namespaceObject.__)('Select AM or PM'),
+        hideLabelFromVision: true,
+        value: dayPeriod,
+        onChange: newValue => {
+          buildAmPmChangeCallback(newValue)();
+        },
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(toggle_group_control_option_component, {
+          value: "AM",
+          label: (0,external_wp_i18n_namespaceObject.__)('AM')
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(toggle_group_control_option_component, {
+          value: "PM",
+          label: (0,external_wp_i18n_namespaceObject.__)('PM')
         })]
       })]
     })]
@@ -55062,6 +55307,7 @@ const findSizeBySlug = (sizes, slug) => sizes.find(size => slug === size.slug);
 
 
 
+
 const dimension_control_CONTEXT_VALUE = {
   BaseControl: {
     // Temporary during deprecation grace period: Overrides the underlying `__associatedWPComponentName`
@@ -55075,7 +55321,7 @@ const dimension_control_CONTEXT_VALUE = {
 /**
  * `DimensionControl` is a component designed to provide a UI to control spacing and/or dimensions.
  *
- * This feature is still experimental. “Experimental” means this is an early implementation subject to drastic and breaking changes.
+ * @deprecated
  *
  * ```jsx
  * import { __experimentalDimensionControl as DimensionControl } from '@wordpress/components';
@@ -55107,6 +55353,10 @@ function DimensionControl(props) {
     onChange,
     className = ''
   } = props;
+  external_wp_deprecated_default()('wp.components.DimensionControl', {
+    since: '6.7',
+    version: '7.0'
+  });
   const onChangeSpacingSize = val => {
     const theSize = findSizeBySlug(sizes, val);
     if (!theSize || value === theSize.slug) {
@@ -55348,7 +55598,7 @@ function Draggable({
   __experimentalDragComponent: dragComponent
 }) {
   const dragComponentRef = (0,external_wp_element_namespaceObject.useRef)(null);
-  const cleanup = (0,external_wp_element_namespaceObject.useRef)(() => {});
+  const cleanupRef = (0,external_wp_element_namespaceObject.useRef)(() => {});
 
   /**
    * Removes the element clone, resets cursor, and removes drag listener.
@@ -55357,7 +55607,7 @@ function Draggable({
    */
   function end(event) {
     event.preventDefault();
-    cleanup.current();
+    cleanupRef.current();
     if (onDragEnd) {
       onDragEnd(event);
     }
@@ -55471,7 +55721,7 @@ function Draggable({
     if (onDragStart) {
       onDragStart(event);
     }
-    cleanup.current = () => {
+    cleanupRef.current = () => {
       // Remove drag clone.
       if (cloneWrapper && cloneWrapper.parentNode) {
         cloneWrapper.parentNode.removeChild(cloneWrapper);
@@ -55486,7 +55736,7 @@ function Draggable({
     };
   }
   (0,external_wp_element_namespaceObject.useEffect)(() => () => {
-    cleanup.current();
+    cleanupRef.current();
   }, []);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [children({
@@ -56373,9 +56623,13 @@ function FocalPointUnitControl(props) {
  * External dependencies
  */
 
+/**
+ * Internal dependencies
+ */
+
 const PointerCircle = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e19snlhg0"
-} : 0)("background-color:transparent;cursor:grab;height:40px;margin:-20px 0 0 -20px;position:absolute;user-select:none;width:40px;will-change:transform;z-index:10000;background:rgba( 255, 255, 255, 0.4 );border:1px solid rgba( 255, 255, 255, 0.4 );border-radius:50%;backdrop-filter:blur( 16px ) saturate( 180% );box-shadow:rgb( 0 0 0 / 10% ) 0px 0px 8px;@media not ( prefers-reduced-motion ){transition:transform 100ms linear;}", ({
+} : 0)("background-color:transparent;cursor:grab;height:40px;margin:-20px 0 0 -20px;position:absolute;user-select:none;width:40px;will-change:transform;z-index:10000;background:rgba( 255, 255, 255, 0.4 );border:1px solid rgba( 255, 255, 255, 0.4 );border-radius:", config_values.radiusRound, ";backdrop-filter:blur( 16px ) saturate( 180% );box-shadow:rgb( 0 0 0 / 10% ) 0px 0px 8px;@media not ( prefers-reduced-motion ){transition:transform 100ms linear;}", ({
   isDragging
 }) => isDragging && `
 			box-shadow: rgb( 0 0 0 / 12% ) 0px 0px 10px;
@@ -56979,64 +57233,6 @@ const FontSizePickerSelect = props => {
   });
 };
 /* harmony default export */ const font_size_picker_select = (FontSizePickerSelect);
-
-;// CONCATENATED MODULE: ./packages/components/build-module/toggle-group-control/toggle-group-control-option/component.js
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-function UnforwardedToggleGroupControlOption(props, ref) {
-  const {
-    label,
-    ...restProps
-  } = props;
-  const optionLabel = restProps['aria-label'] || label;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(toggle_group_control_option_base_component, {
-    ...restProps,
-    "aria-label": optionLabel,
-    ref: ref,
-    children: label
-  });
-}
-
-/**
- * `ToggleGroupControlOption` is a form component and is meant to be used as a
- * child of `ToggleGroupControl`.
- *
- * ```jsx
- * import {
- *   __experimentalToggleGroupControl as ToggleGroupControl,
- *   __experimentalToggleGroupControlOption as ToggleGroupControlOption,
- * } from '@wordpress/components';
- *
- * function Example() {
- *   return (
- *     <ToggleGroupControl
- *       label="my label"
- *       value="vertical"
- *       isBlock
- *       __nextHasNoMarginBottom
- *     >
- *       <ToggleGroupControlOption value="horizontal" label="Horizontal" />
- *       <ToggleGroupControlOption value="vertical" label="Vertical" />
- *     </ToggleGroupControl>
- *   );
- * }
- * ```
- */
-const ToggleGroupControlOption = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedToggleGroupControlOption);
-/* harmony default export */ const toggle_group_control_option_component = (ToggleGroupControlOption);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/font-size-picker/constants.js
 /**
@@ -58475,44 +58671,6 @@ function UnconnectedItem(props, forwardedRef) {
 const component_Item = contextConnect(UnconnectedItem, 'Item');
 /* harmony default export */ const item_component = (component_Item);
 
-;// CONCATENATED MODULE: ./packages/components/build-module/input-control/input-prefix-wrapper.js
-/**
- * External dependencies
- */
-
-/**
- * Internal dependencies
- */
-
-
-
-function UnconnectedInputControlPrefixWrapper(props, forwardedRef) {
-  const derivedProps = useContextSystem(props, 'InputControlPrefixWrapper');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
-    marginBottom: 0,
-    ...derivedProps,
-    ref: forwardedRef
-  });
-}
-
-/**
- * A convenience wrapper for the `prefix` when you want to apply
- * standard padding in accordance with the size variant.
- *
- * ```jsx
- * import {
- *   __experimentalInputControl as InputControl,
- *   __experimentalInputControlPrefixWrapper as InputControlPrefixWrapper,
- * } from '@wordpress/components';
- *
- * <InputControl
- *   prefix={<InputControlPrefixWrapper>@</InputControlPrefixWrapper>}
- * />
- * ```
- */
-const InputControlPrefixWrapper = contextConnect(UnconnectedInputControlPrefixWrapper, 'InputControlPrefixWrapper');
-/* harmony default export */ const input_prefix_wrapper = (InputControlPrefixWrapper);
-
 ;// CONCATENATED MODULE: ./packages/components/build-module/keyboard-shortcuts/index.js
 /**
  * WordPress dependencies
@@ -59022,7 +59180,7 @@ const GroupTitleUI = /*#__PURE__*/emotion_styled_base_browser_esm(heading_compon
 } : 0)("min-height:", space(12), ";align-items:center;color:inherit;display:flex;justify-content:space-between;margin-bottom:", space(2), ";padding:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? `${space(1)} ${space(4)} ${space(1)} ${space(2)}` : `${space(1)} ${space(2)} ${space(1)} ${space(4)}`, ";" + ( true ? "" : 0));
 const ItemBaseUI = /*#__PURE__*/emotion_styled_base_browser_esm("li",  true ? {
   target: "eeiismy4"
-} : 0)("border-radius:2px;color:inherit;margin-bottom:0;>button,>a.components-button,>a{width:100%;color:inherit;opacity:0.7;padding:", space(2), " ", space(4), ";", rtl({
+} : 0)("border-radius:", config_values.radiusSmall, ";color:inherit;margin-bottom:0;>button,>a.components-button,>a{width:100%;color:inherit;opacity:0.7;padding:", space(2), " ", space(4), ";", rtl({
   textAlign: 'left'
 }, {
   textAlign: 'right'
@@ -59035,7 +59193,7 @@ const ItemIconUI = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? 
 } : 0)("display:flex;margin-right:", space(2), ";" + ( true ? "" : 0));
 const ItemBadgeUI = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "eeiismy1"
-} : 0)("margin-left:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? '0' : space(2), ";margin-right:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? space(2) : '0', ";display:inline-flex;padding:", space(1), " ", space(3), ";border-radius:2px;@keyframes fade-in{from{opacity:0;}to{opacity:1;}}@media not ( prefers-reduced-motion ){animation:fade-in 250ms ease-out;}" + ( true ? "" : 0));
+} : 0)("margin-left:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? '0' : space(2), ";margin-right:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? space(2) : '0', ";display:inline-flex;padding:", space(1), " ", space(3), ";border-radius:", config_values.radiusSmall, ";@keyframes fade-in{from{opacity:0;}to{opacity:1;}}@media not ( prefers-reduced-motion ){animation:fade-in 250ms ease-out;}" + ( true ? "" : 0));
 const ItemTitleUI = /*#__PURE__*/emotion_styled_base_browser_esm(text_component,  true ? {
   target: "eeiismy0"
 } : 0)(() => (0,external_wp_i18n_namespaceObject.isRTL)() ? 'margin-left: auto;' : 'margin-right: auto;', " font-size:14px;line-height:20px;color:inherit;" + ( true ? "" : 0));
@@ -59252,10 +59410,10 @@ function Navigation({
   };
 
   // Used to prevent the sliding animation on mount
-  const isMounted = (0,external_wp_element_namespaceObject.useRef)(false);
+  const isMountedRef = (0,external_wp_element_namespaceObject.useRef)(false);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
     }
   }, []);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
@@ -59281,7 +59439,7 @@ function Navigation({
     className: classes,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: animateClassName ? dist_clsx({
-        [animateClassName]: isMounted.current && slideOrigin
+        [animateClassName]: isMountedRef.current && slideOrigin
       }) : undefined,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NavigationContext.Provider, {
         value: context,
@@ -60737,6 +60895,7 @@ const navigatorScreen = props => /*#__PURE__*/emotion_react_browser_esm_css("ove
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -60749,10 +60908,13 @@ const navigatorScreen = props => /*#__PURE__*/emotion_react_browser_esm_css("ove
 
 
 
-const MAX_HISTORY_LENGTH = 50;
 function addScreen({
   screens
 }, screen) {
+  if (screens.some(s => s.path === screen.path)) {
+     false ? 0 : void 0;
+    return screens;
+  }
   return [...screens, screen];
 }
 function removeScreen({
@@ -60760,72 +60922,89 @@ function removeScreen({
 }, screen) {
   return screens.filter(s => s.id !== screen.id);
 }
-function goBack({
-  locationHistory
-}) {
-  if (locationHistory.length <= 1) {
-    return locationHistory;
-  }
-  return [...locationHistory.slice(0, -2), {
-    ...locationHistory[locationHistory.length - 2],
-    isBack: true,
-    hasRestoredFocus: false
-  }];
-}
 function goTo(state, path, options = {}) {
+  var _focusSelectorsCopy2;
   const {
-    locationHistory
+    focusSelectors
   } = state;
+  const currentLocation = {
+    ...state.currentLocation,
+    isInitial: false
+  };
   const {
-    focusTargetSelector,
+    // Default assignments
     isBack = false,
     skipFocus = false,
-    replace = false,
+    // Extract to avoid forwarding
+    replace,
+    focusTargetSelector,
+    // Rest
     ...restOptions
   } = options;
-  const isNavigatingToSamePath = locationHistory.length > 0 && locationHistory[locationHistory.length - 1].path === path;
-  if (isNavigatingToSamePath) {
-    return locationHistory;
+  if (currentLocation.path === path) {
+    return {
+      currentLocation,
+      focusSelectors
+    };
   }
-  const isNavigatingToPreviousPath = isBack && locationHistory.length > 1 && locationHistory[locationHistory.length - 2].path === path;
-  if (isNavigatingToPreviousPath) {
-    return goBack(state);
+  let focusSelectorsCopy;
+  function getFocusSelectorsCopy() {
+    var _focusSelectorsCopy;
+    focusSelectorsCopy = (_focusSelectorsCopy = focusSelectorsCopy) !== null && _focusSelectorsCopy !== void 0 ? _focusSelectorsCopy : new Map(state.focusSelectors);
+    return focusSelectorsCopy;
   }
-  const newLocation = {
-    ...restOptions,
-    path,
-    isBack,
-    hasRestoredFocus: false,
-    skipFocus
+
+  // Set a focus selector that will be used when navigating
+  // back to the current location.
+  if (focusTargetSelector && currentLocation.path) {
+    getFocusSelectorsCopy().set(currentLocation.path, focusTargetSelector);
+  }
+
+  // Get the focus selector for the new location.
+  let currentFocusSelector;
+  if (focusSelectors.get(path)) {
+    if (isBack) {
+      // Use the found focus selector only when navigating back.
+      currentFocusSelector = focusSelectors.get(path);
+    }
+    // Make a copy of the focusSelectors map to remove the focus selector
+    // only if necessary (ie. a focus selector was found).
+    getFocusSelectorsCopy().delete(path);
+  }
+  return {
+    currentLocation: {
+      ...restOptions,
+      path,
+      isBack,
+      hasRestoredFocus: false,
+      focusTargetSelector: currentFocusSelector,
+      skipFocus
+    },
+    focusSelectors: (_focusSelectorsCopy2 = focusSelectorsCopy) !== null && _focusSelectorsCopy2 !== void 0 ? _focusSelectorsCopy2 : focusSelectors
   };
-  if (locationHistory.length === 0) {
-    return replace ? [] : [newLocation];
-  }
-  const newLocationHistory = locationHistory.slice(locationHistory.length > MAX_HISTORY_LENGTH - 1 ? 1 : 0, -1);
-  if (!replace) {
-    newLocationHistory.push(
-    // Assign `focusTargetSelector` to the previous location in history
-    // (the one we just navigated from).
-    {
-      ...locationHistory[locationHistory.length - 1],
-      focusTargetSelector
-    });
-  }
-  newLocationHistory.push(newLocation);
-  return newLocationHistory;
 }
 function goToParent(state, options = {}) {
   const {
-    locationHistory,
-    screens
+    screens,
+    focusSelectors
   } = state;
-  const currentPath = locationHistory[locationHistory.length - 1].path;
+  const currentLocation = {
+    ...state.currentLocation,
+    isInitial: false
+  };
+  const currentPath = currentLocation.path;
   if (currentPath === undefined) {
-    return locationHistory;
+    return {
+      currentLocation,
+      focusSelectors
+    };
   }
   const parentPath = findParent(currentPath, screens);
   if (parentPath === undefined) {
-    return locationHistory;
+    return {
+      currentLocation,
+      focusSelectors
+    };
   }
   return goTo(state, parentPath, {
     ...options,
@@ -60835,8 +61014,10 @@ function goToParent(state, options = {}) {
 function routerReducer(state, action) {
   let {
     screens,
-    locationHistory,
-    matchedPath
+    currentLocation,
+    matchedPath,
+    focusSelectors,
+    ...restState
   } = state;
   switch (action.type) {
     case 'add':
@@ -60846,20 +61027,26 @@ function routerReducer(state, action) {
       screens = removeScreen(state, action.screen);
       break;
     case 'goto':
-      locationHistory = goTo(state, action.path, action.options);
+      ({
+        currentLocation,
+        focusSelectors
+      } = goTo(state, action.path, action.options));
       break;
     case 'gotoparent':
-      locationHistory = goToParent(state, action.options);
+      ({
+        currentLocation,
+        focusSelectors
+      } = goToParent(state, action.options));
       break;
   }
 
   // Return early in case there is no change
-  if (screens === state.screens && locationHistory === state.locationHistory) {
+  if (screens === state.screens && currentLocation === state.currentLocation) {
     return state;
   }
 
   // Compute the matchedPath
-  const currentPath = locationHistory.length > 0 ? locationHistory[locationHistory.length - 1].path : undefined;
+  const currentPath = currentLocation.path;
   matchedPath = currentPath !== undefined ? patternMatch(currentPath, screens) : undefined;
 
   // If the new match is the same as the previous match,
@@ -60868,24 +61055,29 @@ function routerReducer(state, action) {
     matchedPath = state.matchedPath;
   }
   return {
+    ...restState,
     screens,
-    locationHistory,
-    matchedPath
+    currentLocation,
+    matchedPath,
+    focusSelectors
   };
 }
 function UnconnectedNavigatorProvider(props, forwardedRef) {
   const {
-    initialPath,
+    initialPath: initialPathProp,
     children,
     className,
     ...otherProps
   } = useContextSystem(props, 'NavigatorProvider');
-  const [routerState, dispatch] = (0,external_wp_element_namespaceObject.useReducer)(routerReducer, initialPath, path => ({
+  const [routerState, dispatch] = (0,external_wp_element_namespaceObject.useReducer)(routerReducer, initialPathProp, path => ({
     screens: [],
-    locationHistory: [{
-      path
-    }],
-    matchedPath: undefined
+    currentLocation: {
+      path,
+      isInitial: true
+    },
+    matchedPath: undefined,
+    focusSelectors: new Map(),
+    initialPath: initialPathProp
   }));
 
   // The methods are constant forever, create stable references to them.
@@ -60922,21 +61114,18 @@ function UnconnectedNavigatorProvider(props, forwardedRef) {
     })
   }), []);
   const {
-    locationHistory,
+    currentLocation,
     matchedPath
   } = routerState;
   const navigatorContextValue = (0,external_wp_element_namespaceObject.useMemo)(() => {
     var _matchedPath$params;
     return {
-      location: {
-        ...locationHistory[locationHistory.length - 1],
-        isInitial: locationHistory.length === 1
-      },
+      location: currentLocation,
       params: (_matchedPath$params = matchedPath?.params) !== null && _matchedPath$params !== void 0 ? _matchedPath$params : {},
       match: matchedPath?.id,
       ...methods
     };
-  }, [locationHistory, matchedPath, methods]);
+  }, [currentLocation, matchedPath, methods]);
   const cx = useCx();
   const classes = (0,external_wp_element_namespaceObject.useMemo)(() => cx(navigatorProviderWrapper, className), [className, cx]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(component, {
@@ -60984,7 +61173,7 @@ function UnconnectedNavigatorProvider(props, forwardedRef) {
  * ```
  */
 const NavigatorProvider = contextConnect(UnconnectedNavigatorProvider, 'NavigatorProvider');
-/* harmony default export */ const navigator_provider_component = (NavigatorProvider);
+/* harmony default export */ const navigator_provider_component = ((/* unused pure expression or super */ null && (NavigatorProvider)));
 
 ;// CONCATENATED MODULE: external ["wp","escapeHtml"]
 const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
@@ -61132,7 +61321,7 @@ function UnconnectedNavigatorScreen(props, forwardedRef) {
  * ```
  */
 const NavigatorScreen = contextConnect(UnconnectedNavigatorScreen, 'NavigatorScreen');
-/* harmony default export */ const navigator_screen_component = (NavigatorScreen);
+/* harmony default export */ const navigator_screen_component = ((/* unused pure expression or super */ null && (NavigatorScreen)));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/navigator/use-navigator.js
 /**
@@ -61163,7 +61352,6 @@ function useNavigator() {
     params
   };
 }
-/* harmony default export */ const use_navigator = (useNavigator);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/navigator/navigator-button/hook.js
 /**
@@ -61191,7 +61379,7 @@ function useNavigatorButton(props) {
   const escapedPath = (0,external_wp_escapeHtml_namespaceObject.escapeAttribute)(path);
   const {
     goTo
-  } = use_navigator();
+  } = useNavigator();
   const handleClick = (0,external_wp_element_namespaceObject.useCallback)(e => {
     e.preventDefault();
     goTo(escapedPath, {
@@ -61262,7 +61450,7 @@ function UnconnectedNavigatorButton(props, forwardedRef) {
  * ```
  */
 const NavigatorButton = contextConnect(UnconnectedNavigatorButton, 'NavigatorButton');
-/* harmony default export */ const navigator_button_component = (NavigatorButton);
+/* harmony default export */ const navigator_button_component = ((/* unused pure expression or super */ null && (NavigatorButton)));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/navigator/navigator-back-button/hook.js
 /**
@@ -61285,7 +61473,7 @@ function useNavigatorBackButton(props) {
   } = useContextSystem(props, 'NavigatorBackButton');
   const {
     goBack
-  } = use_navigator();
+  } = useNavigator();
   const handleClick = (0,external_wp_element_namespaceObject.useCallback)(e => {
     e.preventDefault();
     goBack();
@@ -61354,7 +61542,7 @@ function UnconnectedNavigatorBackButton(props, forwardedRef) {
  * ```
  */
 const NavigatorBackButton = contextConnect(UnconnectedNavigatorBackButton, 'NavigatorBackButton');
-/* harmony default export */ const navigator_back_button_component = (NavigatorBackButton);
+/* harmony default export */ const navigator_back_button_component = ((/* unused pure expression or super */ null && (NavigatorBackButton)));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/navigator/navigator-to-parent-button/component.js
 /**
@@ -61373,7 +61561,7 @@ function UnconnectedNavigatorToParentButton(props, forwardedRef) {
     since: '6.7',
     alternative: 'wp.components.NavigatorBackButton'
   });
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(navigator_back_button_component, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NavigatorBackButton, {
     ref: forwardedRef,
     ...props
   });
@@ -61386,7 +61574,7 @@ function UnconnectedNavigatorToParentButton(props, forwardedRef) {
  * @deprecated
  */
 const NavigatorToParentButton = contextConnect(UnconnectedNavigatorToParentButton, 'NavigatorToParentButton');
-/* harmony default export */ const navigator_to_parent_button_component = (NavigatorToParentButton);
+/* harmony default export */ const navigator_to_parent_button_component = ((/* unused pure expression or super */ null && (NavigatorToParentButton)));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/notice/index.js
 /**
@@ -63767,7 +63955,7 @@ const TooltipWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true
 } : 0);
 const resize_tooltip_styles_Tooltip = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e1wq7y4k1"
-} : 0)("background:", COLORS.theme.foreground, ";border-radius:2px;box-sizing:border-box;font-family:", font('default.fontFamily'), ";font-size:12px;color:", COLORS.theme.foregroundInverted, ";padding:4px 8px;position:relative;" + ( true ? "" : 0));
+} : 0)("background:", COLORS.theme.foreground, ";border-radius:", config_values.radiusSmall, ";box-sizing:border-box;font-family:", font('default.fontFamily'), ";font-size:12px;color:", COLORS.theme.foregroundInverted, ";padding:4px 8px;position:relative;" + ( true ? "" : 0));
 
 // TODO: Resolve need to use &&& to increase specificity
 // https://github.com/WordPress/gutenberg/issues/18483
@@ -64366,12 +64554,12 @@ function UnforwardedSnackbar({
 
   // The `onDismiss/onRemove` can have unstable references,
   // trigger side-effect cleanup, and reset timers.
-  const callbackRefs = (0,external_wp_element_namespaceObject.useRef)({
+  const callbacksRef = (0,external_wp_element_namespaceObject.useRef)({
     onDismiss,
     onRemove
   });
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    callbackRefs.current = {
+    callbacksRef.current = {
       onDismiss,
       onRemove
     };
@@ -64380,8 +64568,8 @@ function UnforwardedSnackbar({
     // Only set up the timeout dismiss if we're not explicitly dismissing.
     const timeoutHandle = setTimeout(() => {
       if (!explicitDismiss) {
-        callbackRefs.current.onDismiss?.();
-        callbackRefs.current.onRemove?.();
+        callbacksRef.current.onDismiss?.();
+        callbacksRef.current.onRemove?.();
       }
     }, NOTICE_TIMEOUT);
     return () => clearTimeout(timeoutHandle);
@@ -66520,7 +66708,7 @@ const ToolsPanelHeading =  true ? {
   name: "1pmxm02",
   styles: "font-size:inherit;font-weight:500;line-height:normal;&&{margin:0;}"
 } : 0;
-const ToolsPanelItem = /*#__PURE__*/emotion_react_browser_esm_css(toolsPanelGrid.item.fullWidth, "&>div,&>fieldset{padding-bottom:0;margin-bottom:0;max-width:100%;}&& ", base_control_styles_Wrapper, "{margin-bottom:0;", StyledField, ":last-child{margin-bottom:0;}}", StyledHelp, "{margin-bottom:0;}&& ", LabelWrapper, "{label{line-height:1.4em;}}" + ( true ? "" : 0),  true ? "" : 0);
+const ToolsPanelItem = /*#__PURE__*/emotion_react_browser_esm_css(toolsPanelGrid.item.fullWidth, "&>div,&>fieldset{padding-bottom:0;margin-bottom:0;max-width:100%;}&& ", Wrapper, "{margin-bottom:0;", StyledField, ":last-child{margin-bottom:0;}}", StyledHelp, "{margin-bottom:0;}&& ", LabelWrapper, "{label{line-height:1.4em;}}" + ( true ? "" : 0),  true ? "" : 0);
 const ToolsPanelItemPlaceholder =  true ? {
   name: "eivff4",
   styles: "display:none"
@@ -66875,16 +67063,16 @@ function useToolsPanel(props) {
     __experimentalLastVisibleItemClass,
     ...otherProps
   } = useContextSystem(props, 'ToolsPanel');
-  const isResetting = (0,external_wp_element_namespaceObject.useRef)(false);
-  const wasResetting = isResetting.current;
+  const isResettingRef = (0,external_wp_element_namespaceObject.useRef)(false);
+  const wasResetting = isResettingRef.current;
 
-  // `isResetting` is cleared via this hook to effectively batch together
+  // `isResettingRef` is cleared via this hook to effectively batch together
   // the resetAll task. Without this, the flag is cleared after the first
   // control updates and forces a rerender with subsequent controls then
   // believing they need to reset, unfortunately using stale data.
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (wasResetting) {
-      isResetting.current = false;
+      isResettingRef.current = false;
     }
   }, [wasResetting]);
 
@@ -67017,7 +67205,7 @@ function useToolsPanel(props) {
   // Resets display of children and executes resetAll callback if available.
   const resetAllItems = (0,external_wp_element_namespaceObject.useCallback)(() => {
     if (typeof resetAll === 'function') {
-      isResetting.current = true;
+      isResettingRef.current = true;
       resetAll(resetAllFilters);
     }
 
@@ -67046,7 +67234,7 @@ function useToolsPanel(props) {
     firstDisplayedItem,
     flagItemCustomization,
     hasMenuItems: !!panelItems.length,
-    isResetting: isResetting.current,
+    isResetting: isResettingRef.current,
     lastDisplayedItem,
     menuItems,
     panelId,
@@ -68548,41 +68736,6 @@ var MenuItemCheckedContext = (0,external_React_.createContext)(
 
 
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-item-check.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/menu/menu-item-check.tsx
-
-var menu_item_check_TagName = "span";
-var useMenuItemCheck = createHook(
-  function useMenuItemCheck2(_a) {
-    var _b = _a, { store, checked } = _b, props = __objRest(_b, ["store", "checked"]);
-    const context = (0,external_React_.useContext)(MenuItemCheckedContext);
-    checked = checked != null ? checked : context;
-    props = useCheckboxCheck(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), { checked }));
-    return props;
-  }
-);
-var MenuItemCheck = forwardRef2(function MenuItemCheck2(props) {
-  const htmlProps = useMenuItemCheck(props);
-  return HKOOKEDE_createElement(menu_item_check_TagName, htmlProps);
-});
-
-
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/WSQNIDGC.js
 "use client";
 
@@ -68960,21 +69113,6 @@ var MenuButton = forwardRef2(function MenuButton2(props) {
 });
 
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/chevron-right-small.js
-/**
- * WordPress dependencies
- */
-
-
-const chevronRightSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M10.8622 8.04053L14.2805 12.0286L10.8622 16.0167L9.72327 15.0405L12.3049 12.0286L9.72327 9.01672L10.8622 8.04053Z"
-  })
-});
-/* harmony default export */ const chevron_right_small = (chevronRightSmall);
-
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/ULASSYJG.js
 "use client";
 
@@ -69320,6 +69458,21 @@ var Menu = createDialogComponent(
   useMenuProviderContext
 );
 
+
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/chevron-right-small.js
+/**
+ * WordPress dependencies
+ */
+
+
+const chevronRightSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M10.8622 8.04053L14.2805 12.0286L10.8622 16.0167L9.72327 15.0405L12.3049 12.0286L9.72327 9.01672L10.8622 8.04053Z"
+  })
+});
+/* harmony default export */ const chevron_right_small = (chevronRightSmall);
 
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/B6XZVSMQ.js
 "use client";
@@ -69914,6 +70067,30 @@ var menu_group_MenuGroup = forwardRef2(function MenuGroup2(props) {
 });
 
 
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-group-label.js
+"use client";
+
+
+
+
+
+
+
+
+// src/menu/menu-group-label.tsx
+var menu_group_label_TagName = "div";
+var useMenuGroupLabel = createHook(
+  function useMenuGroupLabel2(props) {
+    props = useCompositeGroupLabel(props);
+    return props;
+  }
+);
+var MenuGroupLabel = forwardRef2(function MenuGroupLabel2(props) {
+  const htmlProps = useMenuGroupLabel(props);
+  return HKOOKEDE_createElement(menu_group_label_TagName, htmlProps);
+});
+
+
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/WEEEI3KU.js
 "use client";
 
@@ -69995,9 +70172,13 @@ function dropdown_menu_v2_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You 
 
 
 const styles_ANIMATION_PARAMS = {
-  SLIDE_AMOUNT: '2px',
-  DURATION: '400ms',
-  EASING: 'cubic-bezier( 0.16, 1, 0.3, 1 )'
+  SCALE_AMOUNT_OUTER: 0.82,
+  SCALE_AMOUNT_CONTENT: 0.9,
+  DURATION: {
+    IN: '400ms',
+    OUT: '200ms'
+  },
+  EASING: 'cubic-bezier(0.33, 0, 0, 1)'
 };
 const CONTENT_WRAPPER_PADDING = space(1);
 const ITEM_PADDING_BLOCK = space(2);
@@ -70015,77 +70196,43 @@ const TOOLBAR_VARIANT_BORDER_COLOR = COLORS.theme.foreground;
 const DEFAULT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${DEFAULT_BORDER_COLOR}, ${config_values.elevationXSmall}`;
 const TOOLBAR_VARIANT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${TOOLBAR_VARIANT_BORDER_COLOR}`;
 const GRID_TEMPLATE_COLS = 'minmax( 0, max-content ) 1fr';
-const slideUpAndFade = emotion_react_browser_esm_keyframes({
-  '0%': {
-    opacity: 0,
-    transform: `translateY(${styles_ANIMATION_PARAMS.SLIDE_AMOUNT})`
-  },
-  '100%': {
-    opacity: 1,
-    transform: 'translateY(0)'
-  }
-});
-const slideRightAndFade = emotion_react_browser_esm_keyframes({
-  '0%': {
-    opacity: 0,
-    transform: `translateX(-${styles_ANIMATION_PARAMS.SLIDE_AMOUNT})`
-  },
-  '100%': {
-    opacity: 1,
-    transform: 'translateX(0)'
-  }
-});
-const styles_slideDownAndFade = emotion_react_browser_esm_keyframes({
-  '0%': {
-    opacity: 0,
-    transform: `translateY(-${styles_ANIMATION_PARAMS.SLIDE_AMOUNT})`
-  },
-  '100%': {
-    opacity: 1,
-    transform: 'translateY(0)'
-  }
-});
-const slideLeftAndFade = emotion_react_browser_esm_keyframes({
-  '0%': {
-    opacity: 0,
-    transform: `translateX(${styles_ANIMATION_PARAMS.SLIDE_AMOUNT})`
-  },
-  '100%': {
-    opacity: 1,
-    transform: 'translateX(0)'
-  }
-});
-const dropdown_menu_v2_styles_DropdownMenu = /*#__PURE__*/emotion_styled_base_browser_esm(Menu,  true ? {
-  target: "e1kdzosf12"
-} : 0)("position:relative;z-index:1000000;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";grid-template-rows:auto;box-sizing:border-box;min-width:160px;max-width:320px;max-height:var( --popover-available-height );padding:", CONTENT_WRAPPER_PADDING, ";background-color:", COLORS.ui.background, ";border-radius:", config_values.radiusMedium, ";", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? TOOLBAR_VARIANT_BOX_SHADOW : DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;&[data-open]{@media not ( prefers-reduced-motion ){animation-duration:", styles_ANIMATION_PARAMS.DURATION, ";animation-timing-function:", styles_ANIMATION_PARAMS.EASING, ";will-change:transform,opacity;animation-name:", styles_slideDownAndFade, ";&[data-side='left']{animation-name:", slideLeftAndFade, ";}&[data-side='up']{animation-name:", slideUpAndFade, ";}&[data-side='right']{animation-name:", slideRightAndFade, ";}}}" + ( true ? "" : 0));
-const baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;position:relative;min-height:", space(10), ";box-sizing:border-box;grid-column:1/-1;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";align-items:center;@supports ( grid-template-columns: subgrid ){grid-template-columns:subgrid;}font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.theme.foreground, ";border-radius:", config_values.radiusSmall, ";padding-block:", ITEM_PADDING_BLOCK, ";padding-inline:", ITEM_PADDING_INLINE, ";scroll-margin:", CONTENT_WRAPPER_PADDING, ";user-select:none;outline:none;&[aria-disabled='true']{color:", COLORS.ui.textDisabled, ";cursor:not-allowed;}&[data-active-item]:not( [data-focus-visible] ):not(\n\t\t\t[aria-disabled='true']\n\t\t){background-color:", COLORS.theme.accent, ";color:", COLORS.white, ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px ", COLORS.theme.accent, ";outline:2px solid transparent;}&:active,&[data-active]{}", dropdown_menu_v2_styles_DropdownMenu, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{background-color:", LIGHT_BACKGROUND_COLOR, ";color:", COLORS.theme.foreground, ";}svg{fill:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
+const MenuPopoverOuterWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1kdzosf14"
+} : 0)("position:relative;background-color:", COLORS.ui.background, ";border-radius:", config_values.radiusMedium, ";", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? TOOLBAR_VARIANT_BOX_SHADOW : DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overflow:hidden;@media not ( prefers-reduced-motion ){transition-property:transform,opacity;transition-timing-function:", styles_ANIMATION_PARAMS.EASING, ";transition-duration:", styles_ANIMATION_PARAMS.DURATION.IN, ";will-change:transform,opacity;opacity:0;&:has( [data-enter] ){opacity:1;}&:has( [data-leave] ){transition-duration:", styles_ANIMATION_PARAMS.DURATION.OUT, ";}&:has( [data-side='bottom'] ),&:has( [data-side='top'] ){transform:scaleY( ", styles_ANIMATION_PARAMS.SCALE_AMOUNT_OUTER, " );}&:has( [data-side='bottom'] ){transform-origin:top;}&:has( [data-side='top'] ){transform-origin:bottom;}&:has( [data-enter][data-side='bottom'] ),&:has( [data-enter][data-side='top'] ),&:has( [data-leave][data-side='bottom'] ),&:has( [data-leave][data-side='top'] ){transform:scaleY( 1 );}}" + ( true ? "" : 0));
+const MenuPopoverInnerWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1kdzosf13"
+} : 0)("position:relative;z-index:1000000;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";grid-template-rows:auto;box-sizing:border-box;min-width:160px;max-width:320px;max-height:var( --popover-available-height );padding:", CONTENT_WRAPPER_PADDING, ";overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;@media not ( prefers-reduced-motion ){transition:inherit;transform-origin:inherit;&[data-side='bottom'],&[data-side='top']{transform:scaleY(\n\t\t\t\tcalc(\n\t\t\t\t\t1 / ", styles_ANIMATION_PARAMS.SCALE_AMOUNT_OUTER, " *\n\t\t\t\t\t\t", styles_ANIMATION_PARAMS.SCALE_AMOUNT_CONTENT, "\n\t\t\t\t)\n\t\t\t);}&[data-enter][data-side='bottom'],&[data-enter][data-side='top'],&[data-leave][data-side='bottom'],&[data-leave][data-side='top']{transform:scaleY( 1 );}}" + ( true ? "" : 0));
+const baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;position:relative;min-height:", space(10), ";box-sizing:border-box;grid-column:1/-1;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";align-items:center;@supports ( grid-template-columns: subgrid ){grid-template-columns:subgrid;}font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.theme.foreground, ";border-radius:", config_values.radiusSmall, ";padding-block:", ITEM_PADDING_BLOCK, ";padding-inline:", ITEM_PADDING_INLINE, ";scroll-margin:", CONTENT_WRAPPER_PADDING, ";user-select:none;outline:none;&[aria-disabled='true']{color:", COLORS.ui.textDisabled, ";cursor:not-allowed;}&[data-active-item]:not( [data-focus-visible] ):not(\n\t\t\t[aria-disabled='true']\n\t\t){background-color:", COLORS.theme.accent, ";color:", COLORS.white, ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px ", COLORS.theme.accent, ";outline:2px solid transparent;}&:active,&[data-active]{}", MenuPopoverInnerWrapper, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{background-color:", LIGHT_BACKGROUND_COLOR, ";color:", COLORS.theme.foreground, ";}svg{fill:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
 const styles_DropdownMenuItem = /*#__PURE__*/emotion_styled_base_browser_esm(B6XZVSMQ_MenuItem,  true ? {
-  target: "e1kdzosf11"
+  target: "e1kdzosf12"
 } : 0)(baseItem, ";" + ( true ? "" : 0));
 const styles_DropdownMenuCheckboxItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemCheckbox,  true ? {
-  target: "e1kdzosf10"
+  target: "e1kdzosf11"
 } : 0)(baseItem, ";" + ( true ? "" : 0));
 const styles_DropdownMenuRadioItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemRadio,  true ? {
-  target: "e1kdzosf9"
+  target: "e1kdzosf10"
 } : 0)(baseItem, ";" + ( true ? "" : 0));
 const ItemPrefixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "e1kdzosf8"
+  target: "e1kdzosf9"
 } : 0)("grid-column:1;", styles_DropdownMenuCheckboxItem, ">&,", styles_DropdownMenuRadioItem, ">&{min-width:", space(6), ";}", styles_DropdownMenuCheckboxItem, ">&,", styles_DropdownMenuRadioItem, ">&,&:not( :empty ){margin-inline-end:", space(2), ";}display:flex;align-items:center;justify-content:center;color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] )>&,[aria-disabled='true']>&{color:inherit;}" + ( true ? "" : 0));
 const DropdownMenuItemContentWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e1kdzosf7"
+  target: "e1kdzosf8"
 } : 0)("grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:", space(3), ";pointer-events:none;" + ( true ? "" : 0));
 const DropdownMenuItemChildrenWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e1kdzosf6"
+  target: "e1kdzosf7"
 } : 0)("flex:1;display:inline-flex;flex-direction:column;gap:", space(1), ";" + ( true ? "" : 0));
 const ItemSuffixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "e1kdzosf5"
-} : 0)("flex:0 1 fit-content;min-width:0;width:fit-content;display:flex;align-items:center;justify-content:center;gap:", space(3), ";color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] ) *:not(", dropdown_menu_v2_styles_DropdownMenu, ") &,[aria-disabled='true'] *:not(", dropdown_menu_v2_styles_DropdownMenu, ") &{color:inherit;}" + ( true ? "" : 0));
+  target: "e1kdzosf6"
+} : 0)("flex:0 1 fit-content;min-width:0;width:fit-content;display:flex;align-items:center;justify-content:center;gap:", space(3), ";color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] ) *:not(", MenuPopoverInnerWrapper, ") &,[aria-disabled='true'] *:not(", MenuPopoverInnerWrapper, ") &{color:inherit;}" + ( true ? "" : 0));
 const styles_DropdownMenuGroup = /*#__PURE__*/emotion_styled_base_browser_esm(menu_group_MenuGroup,  true ? {
-  target: "e1kdzosf4"
+  target: "e1kdzosf5"
 } : 0)( true ? {
   name: "49aokf",
   styles: "display:contents"
 } : 0);
+const DropdownMenuGroupLabel = /*#__PURE__*/emotion_styled_base_browser_esm(MenuGroupLabel,  true ? {
+  target: "e1kdzosf4"
+} : 0)("grid-column:1/-1;padding-block-start:", space(3), ";padding-block-end:", space(2), ";padding-inline:", ITEM_PADDING_INLINE, ";" + ( true ? "" : 0));
 const styles_DropdownMenuSeparator = /*#__PURE__*/emotion_styled_base_browser_esm(MenuSeparator,  true ? {
   target: "e1kdzosf3"
 } : 0)("grid-column:1/-1;border:none;height:", config_values.borderWidth, ";background-color:", props => props.variant === 'toolbar' ? TOOLBAR_VARIANT_BORDER_COLOR : DIVIDER_COLOR, ";margin-block:", space(2), ";margin-inline:", ITEM_PADDING_INLINE, ";outline:2px solid transparent;" + ( true ? "" : 0));
@@ -70101,7 +70248,376 @@ const styles_DropdownMenuItemLabel = /*#__PURE__*/emotion_styled_base_browser_es
 } : 0)("font-size:", font('default.fontSize'), ";line-height:20px;color:inherit;" + ( true ? "" : 0));
 const styles_DropdownMenuItemHelpText = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
   target: "e1kdzosf0"
-} : 0)("font-size:", font('helpText.fontSize'), ";line-height:16px;color:", LIGHTER_TEXT_COLOR, ";word-break:break-all;[data-active-item]:not( [data-focus-visible] ) *:not( ", dropdown_menu_v2_styles_DropdownMenu, " ) &,[aria-disabled='true'] *:not( ", dropdown_menu_v2_styles_DropdownMenu, " ) &{color:inherit;}" + ( true ? "" : 0));
+} : 0)("font-size:", font('helpText.fontSize'), ";line-height:16px;color:", LIGHTER_TEXT_COLOR, ";word-break:break-all;[data-active-item]:not( [data-focus-visible] ) *:not( ", MenuPopoverInnerWrapper, " ) &,[aria-disabled='true'] *:not( ", MenuPopoverInnerWrapper, " ) &{color:inherit;}" + ( true ? "" : 0));
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/context.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+const DropdownMenuContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/use-temporary-focus-visible-fix.js
+/**
+ * WordPress dependencies
+ */
+
+function useTemporaryFocusVisibleFix({
+  onBlur: onBlurProp
+}) {
+  const [focusVisible, setFocusVisible] = (0,external_wp_element_namespaceObject.useState)(false);
+  return {
+    'data-focus-visible': focusVisible || undefined,
+    onFocusVisible: () => {
+      (0,external_wp_element_namespaceObject.flushSync)(() => setFocusVisible(true));
+    },
+    onBlur: event => {
+      onBlurProp?.(event);
+      setFocusVisible(false);
+    }
+  };
+}
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/item.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+const DropdownMenuItem = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuItem({
+  prefix,
+  suffix,
+  children,
+  onBlur,
+  hideOnClick = true,
+  ...props
+}, ref) {
+  // TODO: Remove when https://github.com/ariakit/ariakit/issues/4083 is fixed
+  const focusVisibleFixProps = useTemporaryFocusVisibleFix({
+    onBlur
+  });
+  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_DropdownMenuItem, {
+    ref: ref,
+    ...props,
+    ...focusVisibleFixProps,
+    accessibleWhenDisabled: true,
+    hideOnClick: hideOnClick,
+    store: dropdownMenuContext?.store,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {
+      children: prefix
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(DropdownMenuItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropdownMenuItemChildrenWrapper, {
+        children: children
+      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
+        children: suffix
+      })]
+    })]
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-item-check.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/menu/menu-item-check.tsx
+
+var menu_item_check_TagName = "span";
+var useMenuItemCheck = createHook(
+  function useMenuItemCheck2(_a) {
+    var _b = _a, { store, checked } = _b, props = __objRest(_b, ["store", "checked"]);
+    const context = (0,external_React_.useContext)(MenuItemCheckedContext);
+    checked = checked != null ? checked : context;
+    props = useCheckboxCheck(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), { checked }));
+    return props;
+  }
+);
+var MenuItemCheck = forwardRef2(function MenuItemCheck2(props) {
+  const htmlProps = useMenuItemCheck(props);
+  return HKOOKEDE_createElement(menu_item_check_TagName, htmlProps);
+});
+
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/checkbox-item.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+const DropdownMenuCheckboxItem = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuCheckboxItem({
+  suffix,
+  children,
+  onBlur,
+  hideOnClick = false,
+  ...props
+}, ref) {
+  // TODO: Remove when https://github.com/ariakit/ariakit/issues/4083 is fixed
+  const focusVisibleFixProps = useTemporaryFocusVisibleFix({
+    onBlur
+  });
+  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_DropdownMenuCheckboxItem, {
+    ref: ref,
+    ...props,
+    ...focusVisibleFixProps,
+    accessibleWhenDisabled: true,
+    hideOnClick: hideOnClick,
+    store: dropdownMenuContext?.store,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheck, {
+      store: dropdownMenuContext?.store,
+      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {})
+      // Override some ariakit inline styles
+      ,
+      style: {
+        width: 'auto',
+        height: 'auto'
+      },
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
+        icon: library_check,
+        size: 24
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(DropdownMenuItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropdownMenuItemChildrenWrapper, {
+        children: children
+      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
+        children: suffix
+      })]
+    })]
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/radio-item.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
+const radioCheck = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Circle, {
+    cx: 12,
+    cy: 12,
+    r: 3
+  })
+});
+const DropdownMenuRadioItem = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuRadioItem({
+  suffix,
+  children,
+  onBlur,
+  hideOnClick = false,
+  ...props
+}, ref) {
+  // TODO: Remove when https://github.com/ariakit/ariakit/issues/4083 is fixed
+  const focusVisibleFixProps = useTemporaryFocusVisibleFix({
+    onBlur
+  });
+  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_DropdownMenuRadioItem, {
+    ref: ref,
+    ...props,
+    ...focusVisibleFixProps,
+    accessibleWhenDisabled: true,
+    hideOnClick: hideOnClick,
+    store: dropdownMenuContext?.store,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheck, {
+      store: dropdownMenuContext?.store,
+      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {})
+      // Override some ariakit inline styles
+      ,
+      style: {
+        width: 'auto',
+        height: 'auto'
+      },
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
+        icon: radioCheck,
+        size: 24
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(DropdownMenuItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropdownMenuItemChildrenWrapper, {
+        children: children
+      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
+        children: suffix
+      })]
+    })]
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/group.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const DropdownMenuGroup = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuGroup(props, ref) {
+  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_DropdownMenuGroup, {
+    ref: ref,
+    ...props,
+    store: dropdownMenuContext?.store
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/group-label.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+const group_label_DropdownMenuGroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuGroup(props, ref) {
+  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropdownMenuGroupLabel, {
+    ref: ref,
+    render:
+    /*#__PURE__*/
+    // @ts-expect-error The `children` prop is passed
+    (0,external_ReactJSXRuntime_namespaceObject.jsx)(text_component, {
+      upperCase: true,
+      variant: "muted",
+      size: "11px",
+      weight: 500,
+      lineHeight: "16px"
+    }),
+    ...props,
+    store: dropdownMenuContext?.store
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/separator.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const DropdownMenuSeparator = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuSeparator(props, ref) {
+  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_DropdownMenuSeparator, {
+    ref: ref,
+    ...props,
+    store: dropdownMenuContext?.store,
+    variant: dropdownMenuContext?.variant
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/item-label.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const DropdownMenuItemLabel = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuItemLabel(props, ref) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_DropdownMenuItemLabel, {
+    numberOfLines: 1,
+    ref: ref,
+    ...props
+  });
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/item-help-text.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const DropdownMenuItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuItemHelpText(props, ref) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_DropdownMenuItemHelpText, {
+    numberOfLines: 2,
+    ref: ref,
+    ...props
+  });
+});
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2/index.js
 /**
@@ -70117,7 +70633,6 @@ const styles_DropdownMenuItemHelpText = /*#__PURE__*/emotion_styled_base_browser
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -70127,119 +70642,14 @@ const styles_DropdownMenuItemHelpText = /*#__PURE__*/emotion_styled_base_browser
 
 
 
-const DropdownMenuContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
-const DropdownMenuItem = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuItem({
-  prefix,
-  suffix,
-  children,
-  hideOnClick = true,
-  ...props
-}, ref) {
-  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_DropdownMenuItem, {
-    ref: ref,
-    ...props,
-    accessibleWhenDisabled: true,
-    hideOnClick: hideOnClick,
-    store: dropdownMenuContext?.store,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {
-      children: prefix
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(DropdownMenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropdownMenuItemChildrenWrapper, {
-        children: children
-      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
-        children: suffix
-      })]
-    })]
-  });
-});
-const DropdownMenuCheckboxItem = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuCheckboxItem({
-  suffix,
-  children,
-  hideOnClick = false,
-  ...props
-}, ref) {
-  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_DropdownMenuCheckboxItem, {
-    ref: ref,
-    ...props,
-    accessibleWhenDisabled: true,
-    hideOnClick: hideOnClick,
-    store: dropdownMenuContext?.store,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheck, {
-      store: dropdownMenuContext?.store,
-      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {})
-      // Override some ariakit inline styles
-      ,
-      style: {
-        width: 'auto',
-        height: 'auto'
-      },
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_icon, {
-        icon: library_check,
-        size: 24
-      })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(DropdownMenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropdownMenuItemChildrenWrapper, {
-        children: children
-      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
-        children: suffix
-      })]
-    })]
-  });
-});
-const radioCheck = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Circle, {
-    cx: 12,
-    cy: 12,
-    r: 3
-  })
-});
-const DropdownMenuRadioItem = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuRadioItem({
-  suffix,
-  children,
-  hideOnClick = false,
-  ...props
-}, ref) {
-  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_DropdownMenuRadioItem, {
-    ref: ref,
-    ...props,
-    accessibleWhenDisabled: true,
-    hideOnClick: hideOnClick,
-    store: dropdownMenuContext?.store,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheck, {
-      store: dropdownMenuContext?.store,
-      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {})
-      // Override some ariakit inline styles
-      ,
-      style: {
-        width: 'auto',
-        height: 'auto'
-      },
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_icon, {
-        icon: radioCheck,
-        size: 24
-      })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(DropdownMenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropdownMenuItemChildrenWrapper, {
-        children: children
-      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
-        children: suffix
-      })]
-    })]
-  });
-});
-const DropdownMenuGroup = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuGroup(props, ref) {
-  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_DropdownMenuGroup, {
-    ref: ref,
-    ...props,
-    store: dropdownMenuContext?.store
-  });
-});
+
+
+
+
+
+
+
+
 const dropdown_menu_v2_UnconnectedDropdownMenu = (props, ref) => {
   var _props$placement;
   const {
@@ -70292,7 +70702,9 @@ const dropdown_menu_v2_UnconnectedDropdownMenu = (props, ref) => {
   }), [dropdownMenuStore, variant]);
 
   // Extract the side from the applied placement — useful for animations.
-  const appliedPlacementSide = useStoreState(dropdownMenuStore, 'placement').split('-')[0];
+  // Using `currentPlacement` instead of `placement` to make sure that we
+  // use the final computed placement (including "flips" etc).
+  const appliedPlacementSide = useStoreState(dropdownMenuStore, 'currentPlacement').split('-')[0];
   if (dropdownMenuStore.parent && !((0,external_wp_element_namespaceObject.isValidElement)(trigger) && DropdownMenuItem === trigger.type)) {
     // eslint-disable-next-line no-console
     console.warn('For nested DropdownMenus, the `trigger` should always be a `DropdownMenuItem`.');
@@ -70325,7 +70737,7 @@ const dropdown_menu_v2_UnconnectedDropdownMenu = (props, ref) => {
           })]
         })
       }) : trigger
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dropdown_menu_v2_styles_DropdownMenu, {
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Menu, {
       ...otherProps,
       modal: modal,
       store: dropdownMenuStore
@@ -70339,10 +70751,21 @@ const dropdown_menu_v2_UnconnectedDropdownMenu = (props, ref) => {
       shift: shift !== null && shift !== void 0 ? shift : dropdownMenuStore.parent ? -4 : 0,
       hideOnHoverOutside: false,
       "data-side": appliedPlacementSide,
-      variant: variant,
       wrapperProps: wrapperProps,
       hideOnEscape: hideOnEscape,
       unmountOnHide: true,
+      render: renderProps =>
+      /*#__PURE__*/
+      // Two wrappers are needed for the entry animation, where the menu
+      // container scales with a different factor than its contents.
+      // The {...renderProps} are passed to the inner wrapper, so that the
+      // menu element is the direct parent of the menu item elements.
+      (0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuPopoverOuterWrapper, {
+        variant: variant,
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuPopoverInnerWrapper, {
+          ...renderProps
+        })
+      }),
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DropdownMenuContext.Provider, {
         value: contextValue,
         children: children
@@ -70350,30 +70773,36 @@ const dropdown_menu_v2_UnconnectedDropdownMenu = (props, ref) => {
     })]
   });
 };
-const dropdown_menu_v2_DropdownMenu = contextConnect(dropdown_menu_v2_UnconnectedDropdownMenu, 'DropdownMenu');
-const DropdownMenuSeparator = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuSeparator(props, ref) {
-  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_DropdownMenuSeparator, {
-    ref: ref,
-    ...props,
-    store: dropdownMenuContext?.store,
-    variant: dropdownMenuContext?.variant
-  });
+const DropdownMenuV2 = Object.assign(contextConnect(dropdown_menu_v2_UnconnectedDropdownMenu, 'DropdownMenu'), {
+  Context: Object.assign(DropdownMenuContext, {
+    displayName: 'DropdownMenuV2.Context'
+  }),
+  Item: Object.assign(DropdownMenuItem, {
+    displayName: 'DropdownMenuV2.Item'
+  }),
+  RadioItem: Object.assign(DropdownMenuRadioItem, {
+    displayName: 'DropdownMenuV2.RadioItem'
+  }),
+  CheckboxItem: Object.assign(DropdownMenuCheckboxItem, {
+    displayName: 'DropdownMenuV2.CheckboxItem'
+  }),
+  Group: Object.assign(DropdownMenuGroup, {
+    displayName: 'DropdownMenuV2.Group'
+  }),
+  GroupLabel: Object.assign(group_label_DropdownMenuGroupLabel, {
+    displayName: 'DropdownMenuV2.GroupLabel'
+  }),
+  Separator: Object.assign(DropdownMenuSeparator, {
+    displayName: 'DropdownMenuV2.Separator'
+  }),
+  ItemLabel: Object.assign(DropdownMenuItemLabel, {
+    displayName: 'DropdownMenuV2.ItemLabel'
+  }),
+  ItemHelpText: Object.assign(DropdownMenuItemHelpText, {
+    displayName: 'DropdownMenuV2.ItemHelpText'
+  })
 });
-const DropdownMenuItemLabel = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuItemLabel(props, ref) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_DropdownMenuItemLabel, {
-    numberOfLines: 1,
-    ref: ref,
-    ...props
-  });
-});
-const DropdownMenuItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuItemHelpText(props, ref) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_DropdownMenuItemHelpText, {
-    numberOfLines: 2,
-    ref: ref,
-    ...props
-  });
-});
+/* harmony default export */ const dropdown_menu_v2 = ((/* unused pure expression or super */ null && (DropdownMenuV2)));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/theme/styles.js
 
@@ -70590,10 +71019,10 @@ const TabListWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true
 } : 0)("position:relative;display:flex;align-items:stretch;flex-direction:row;text-align:center;&[aria-orientation='vertical']{flex-direction:column;text-align:start;}@media not ( prefers-reduced-motion: reduce ){&.is-animation-enabled::after{transition-property:left,top,width,height;transition-duration:0.2s;transition-timing-function:ease-out;}}&::after{content:'';position:absolute;pointer-events:none;outline:2px solid transparent;outline-offset:-1px;}&:not( [aria-orientation='vertical'] )::after{bottom:0;left:var( --indicator-left );width:var( --indicator-width );height:0;border-bottom:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";}&[aria-orientation='vertical']::after{z-index:-1;left:0;width:100%;top:var( --indicator-top );height:var( --indicator-height );background-color:", COLORS.theme.gray[100], ";}" + ( true ? "" : 0));
 const styles_Tab = /*#__PURE__*/emotion_styled_base_browser_esm(Tab,  true ? {
   target: "enfox0g1"
-} : 0)("&{display:inline-flex;align-items:center;position:relative;border-radius:0;min-height:", space(12), ";height:auto;background:transparent;border:none;box-shadow:none;cursor:pointer;line-height:1.2;padding:", space(4), ";margin-left:0;font-weight:500;text-align:inherit;hyphens:auto;color:", COLORS.theme.foreground, ";&[aria-disabled='true']{cursor:default;color:", COLORS.ui.textDisabled, ";}&:not( [aria-disabled='true'] ):hover{color:", COLORS.theme.accent, ";}&:focus:not( :disabled ){position:relative;box-shadow:none;outline:none;}&::before{content:'';position:absolute;top:", space(3), ";right:", space(3), ";bottom:", space(3), ";left:", space(3), ";pointer-events:none;outline:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";border-radius:2px;opacity:0;@media not ( prefers-reduced-motion ){transition:opacity 0.1s linear;}}&:focus-visible::before{opacity:1;}}[aria-orientation='vertical'] &{min-height:", space(10), ";}" + ( true ? "" : 0));
+} : 0)("&{display:inline-flex;align-items:center;position:relative;border-radius:0;min-height:", space(12), ";height:auto;background:transparent;border:none;box-shadow:none;cursor:pointer;line-height:1.2;padding:", space(4), ";margin-left:0;font-weight:500;text-align:inherit;hyphens:auto;color:", COLORS.theme.foreground, ";&[aria-disabled='true']{cursor:default;color:", COLORS.ui.textDisabled, ";}&:not( [aria-disabled='true'] ):hover{color:", COLORS.theme.accent, ";}&:focus:not( :disabled ){position:relative;box-shadow:none;outline:none;}&::before{content:'';position:absolute;top:", space(3), ";right:", space(3), ";bottom:", space(3), ";left:", space(3), ";pointer-events:none;outline:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";border-radius:", config_values.radiusSmall, ";opacity:0;@media not ( prefers-reduced-motion ){transition:opacity 0.1s linear;}}&:focus-visible::before{opacity:1;}}[aria-orientation='vertical'] &{min-height:", space(10), ";}" + ( true ? "" : 0));
 const styles_TabPanel = /*#__PURE__*/emotion_styled_base_browser_esm(TabPanel,  true ? {
   target: "enfox0g0"
-} : 0)("&:focus{box-shadow:none;outline:none;}&:focus-visible{border-radius:2px;box-shadow:0 0 0 var( --wp-admin-border-width-focus ) ", COLORS.theme.accent, ";outline:2px solid transparent;outline-offset:0;}" + ( true ? "" : 0));
+} : 0)("&:focus{box-shadow:none;outline:none;}&:focus-visible{box-shadow:0 0 0 var( --wp-admin-border-width-focus ) ", COLORS.theme.accent, ";outline:2px solid transparent;outline-offset:0;}" + ( true ? "" : 0));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/tabs/tab.js
 /**
@@ -71054,9 +71483,9 @@ function Tabs({
   // Keep track of whether tabs have been populated. This is used to prevent
   // certain effects from firing too early while tab data and relevant
   // variables are undefined during the initial render.
-  const tabsHavePopulated = (0,external_wp_element_namespaceObject.useRef)(false);
+  const tabsHavePopulatedRef = (0,external_wp_element_namespaceObject.useRef)(false);
   if (items.length > 0) {
-    tabsHavePopulated.current = true;
+    tabsHavePopulatedRef.current = true;
   }
   const selectedTab = items.find(item => item.id === selectedId);
   const firstEnabledTab = items.find(item => {
@@ -71089,7 +71518,7 @@ function Tabs({
       }
       if (firstEnabledTab) {
         setSelectedId(firstEnabledTab.id);
-      } else if (tabsHavePopulated.current) {
+      } else if (tabsHavePopulatedRef.current) {
         setSelectedId(null);
       }
     }
@@ -71128,7 +71557,7 @@ function Tabs({
 
     // Once the tabs have populated, if the `selectedTabId` still can't be
     // found, clear the selection.
-    if (tabsHavePopulated.current && !!selectedTabId && !selectedTab) {
+    if (tabsHavePopulatedRef.current && !!selectedTabId && !selectedTab) {
       setSelectedId(null);
     }
   }, [isControlled, selectedTab, selectedTabId, setSelectedId]);
@@ -71198,26 +71627,22 @@ const {
 
 
 
+
 const privateApis = {};
 lock(privateApis, {
   CompositeV2: Composite,
   CompositeGroupV2: Composite.Group,
   CompositeItemV2: Composite.Item,
   CompositeRowV2: Composite.Row,
-  useCompositeStoreV2: composite_useCompositeStore,
+  CompositeTypeaheadV2: Composite.Typeahead,
+  CompositeHoverV2: Composite.Hover,
+  useCompositeStoreV2: store_useCompositeStore,
   __experimentalPopoverLegacyPositionToPlacement: positionToPlacement,
   createPrivateSlotFill: createPrivateSlotFill,
   ComponentsContext: ComponentsContext,
   Tabs: tabs,
   Theme: theme,
-  DropdownMenuV2: dropdown_menu_v2_DropdownMenu,
-  DropdownMenuGroupV2: DropdownMenuGroup,
-  DropdownMenuItemV2: DropdownMenuItem,
-  DropdownMenuCheckboxItemV2: DropdownMenuCheckboxItem,
-  DropdownMenuRadioItemV2: DropdownMenuRadioItem,
-  DropdownMenuSeparatorV2: DropdownMenuSeparator,
-  DropdownMenuItemLabelV2: DropdownMenuItemLabel,
-  DropdownMenuItemHelpTextV2: DropdownMenuItemHelpText,
+  DropdownMenuV2: DropdownMenuV2,
   kebabCase: kebabCase
 });
 

@@ -1,3 +1,24 @@
+## [3.1.4](https://github.com/Automattic/newspack-newsletters/compare/v3.1.3...v3.1.4) (2024-09-12)
+
+
+### Bug Fixes
+
+* handle encoded URLs and block patterns in redirect check ([#1635](https://github.com/Automattic/newspack-newsletters/issues/1635)) ([2fa5d16](https://github.com/Automattic/newspack-newsletters/commit/2fa5d166e3794abdb5242a5e82ed0528f14eaaba))
+
+## [3.1.3](https://github.com/Automattic/newspack-newsletters/compare/v3.1.2...v3.1.3) (2024-09-12)
+
+
+### Bug Fixes
+
+* active campaign usage report, fetch campaigns in batches ([#1649](https://github.com/Automattic/newspack-newsletters/issues/1649)) ([e8a4155](https://github.com/Automattic/newspack-newsletters/commit/e8a415534f7a2db0c7a308c47792d9583af7cc0a))
+
+## [3.1.2](https://github.com/Automattic/newspack-newsletters/compare/v3.1.1...v3.1.2) (2024-09-09)
+
+
+### Bug Fixes
+
+* **mailchimp:** remove cache and improve logs when preparing merge fields ([029d92c](https://github.com/Automattic/newspack-newsletters/commit/029d92cae324525758e0c134454c2c2a13721776))
+
 ## [3.1.1](https://github.com/Automattic/newspack-newsletters/compare/v3.1.0...v3.1.1) (2024-09-04)
 
 
