@@ -1151,8 +1151,8 @@ function ComplementaryAreaFill({
   });
 }
 function useAdjustComplementaryListener(scope, identifier, activeArea, isActive, isSmall) {
-  const previousIsSmall = (0,external_wp_element_namespaceObject.useRef)(false);
-  const shouldOpenWhenNotSmall = (0,external_wp_element_namespaceObject.useRef)(false);
+  const previousIsSmallRef = (0,external_wp_element_namespaceObject.useRef)(false);
+  const shouldOpenWhenNotSmallRef = (0,external_wp_element_namespaceObject.useRef)(false);
   const {
     enableComplementaryArea,
     disableComplementaryArea
@@ -1160,29 +1160,29 @@ function useAdjustComplementaryListener(scope, identifier, activeArea, isActive,
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     // If the complementary area is active and the editor is switching from
     // a big to a small window size.
-    if (isActive && isSmall && !previousIsSmall.current) {
+    if (isActive && isSmall && !previousIsSmallRef.current) {
       disableComplementaryArea(scope);
       // Flag the complementary area to be reopened when the window size
       // goes from small to big.
-      shouldOpenWhenNotSmall.current = true;
+      shouldOpenWhenNotSmallRef.current = true;
     } else if (
     // If there is a flag indicating the complementary area should be
     // enabled when we go from small to big window size and we are going
     // from a small to big window size.
-    shouldOpenWhenNotSmall.current && !isSmall && previousIsSmall.current) {
+    shouldOpenWhenNotSmallRef.current && !isSmall && previousIsSmallRef.current) {
       // Remove the flag indicating the complementary area should be
       // enabled.
-      shouldOpenWhenNotSmall.current = false;
+      shouldOpenWhenNotSmallRef.current = false;
       enableComplementaryArea(scope, identifier);
     } else if (
     // If the flag is indicating the current complementary should be
     // reopened but another complementary area becomes active, remove
     // the flag.
-    shouldOpenWhenNotSmall.current && activeArea && activeArea !== identifier) {
-      shouldOpenWhenNotSmall.current = false;
+    shouldOpenWhenNotSmallRef.current && activeArea && activeArea !== identifier) {
+      shouldOpenWhenNotSmallRef.current = false;
     }
-    if (isSmall !== previousIsSmall.current) {
-      previousIsSmall.current = isSmall;
+    if (isSmall !== previousIsSmallRef.current) {
+      previousIsSmallRef.current = isSmall;
     }
   }, [isActive, isSmall, scope, identifier, activeArea, disableComplementaryArea, enableComplementaryArea]);
 }
@@ -1468,10 +1468,10 @@ function InterfaceSkeleton({
           as: external_wp_components_namespaceObject.__unstableMotion.div,
           className: "interface-interface-skeleton__header",
           "aria-label": mergedLabels.header,
-          initial: isDistractionFree ? 'distractionFreeHidden' : 'hidden',
-          whileHover: isDistractionFree ? 'distractionFreeHover' : 'visible',
-          animate: isDistractionFree ? 'distractionFreeDisabled' : 'visible',
-          exit: isDistractionFree ? 'distractionFreeHidden' : 'hidden',
+          initial: isDistractionFree && !isMobileViewport ? 'distractionFreeHidden' : 'hidden',
+          whileHover: isDistractionFree && !isMobileViewport ? 'distractionFreeHover' : 'visible',
+          animate: isDistractionFree && !isMobileViewport ? 'distractionFreeDisabled' : 'visible',
+          exit: isDistractionFree && !isMobileViewport ? 'distractionFreeHidden' : 'hidden',
           variants: headerVariants,
           transition: defaultTransition,
           children: header
@@ -2810,7 +2810,10 @@ function CopyButton({
   children
 }) {
   const ref = (0,external_wp_compose_namespaceObject.useCopyToClipboard)(text);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+  // TODO: Switch to `true` (40px size) if possible
+  , {
+    __next40pxDefaultSize: false,
     variant: "secondary",
     ref: ref,
     children: children
@@ -3266,7 +3269,10 @@ function WidgetAreas({
           }
         }), widgetAreas?.length === 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
           children: (0,external_wp_i18n_namespaceObject.__)('Your theme does not contain any Widget Areas.')
-        }), !selectedWidgetArea && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        }), !selectedWidgetArea && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+        // TODO: Switch to `true` (40px size) if possible
+        , {
+          __next40pxDefaultSize: false,
           href: (0,external_wp_url_namespaceObject.addQueryArgs)('customize.php', {
             'autofocus[panel]': 'widgets',
             return: window.location.pathname
@@ -4309,7 +4315,7 @@ function WidgetAreasBlockEditorContent({
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_blockEditor_namespaceObject.BlockTools, {
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(keyboard_shortcuts, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.__unstableEditorStyles, {
         styles: styles,
-        scope: ".editor-styles-wrapper"
+        scope: ":where(.editor-styles-wrapper)"
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockSelectionClearer, {
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.WritingFlow, {
           children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockList, {
@@ -4435,7 +4441,10 @@ function InserterSidebar() {
     className: "edit-widgets-layout__inserter-panel",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TagName, {
       className: "edit-widgets-layout__inserter-panel-header",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+      // TODO: Switch to `true` (40px size) if possible
+      , {
+        __next40pxDefaultSize: false,
         icon: library_close,
         onClick: closeInserter,
         label: (0,external_wp_i18n_namespaceObject.__)('Close block inserter')
@@ -4507,7 +4516,10 @@ function ListViewSidebar() {
         className: "edit-widgets-editor__list-view-panel-header",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("strong", {
           children: (0,external_wp_i18n_namespaceObject.__)('List View')
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
+        // TODO: Switch to `true` (40px size) if possible
+        , {
+          __next40pxDefaultSize: false,
           icon: close_small,
           label: (0,external_wp_i18n_namespaceObject.__)('Close'),
           onClick: closeListView
