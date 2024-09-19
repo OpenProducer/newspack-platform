@@ -124,7 +124,7 @@ final class Modal_Checkout {
 	 * Change the post-transaction return URL.
 	 * This is specifically for non-redirect-based flows, such as Apple Pay.
 	 *
-	 * @param array $result The return payload for a successfull transaction.
+	 * @param array $result The return payload for a successful transaction.
 	 */
 	public static function woocommerce_payment_successful_result( $result ) {
 		$order_id           = $result['order_id'];
@@ -134,24 +134,21 @@ final class Modal_Checkout {
 			return $result;
 		}
 
-		$originating_from_modal = ! empty( $order->get_meta( '_newspack_modal_checkout_url' ) );
-		if ( $originating_from_modal ) {
-			$modal_checkout_url_query = \wp_parse_url( $modal_checkout_url, PHP_URL_QUERY );
-			\wp_parse_str( $modal_checkout_url_query, $modal_checkout_url_query_params );
-			$passed_params_names = [ 'modal_checkout', 'after_success_behavior', 'after_success_url', 'after_success_button_label' ];
-			// Pick passed params from the query params.
-			$passed_params = array_intersect_key( $modal_checkout_url_query_params, array_flip( $passed_params_names ) );
+		$modal_checkout_url_query = \wp_parse_url( $modal_checkout_url, PHP_URL_QUERY );
+		\wp_parse_str( $modal_checkout_url_query, $modal_checkout_url_query_params );
+		$passed_params_names = [ 'modal_checkout', 'after_success_behavior', 'after_success_url', 'after_success_button_label' ];
+		// Pick passed params from the query params.
+		$passed_params = array_intersect_key( $modal_checkout_url_query_params, array_flip( $passed_params_names ) );
 
-			$result['redirect'] = \add_query_arg(
-				array_merge(
-					$passed_params,
-					[
-						'order_id' => $order_id,
-					]
-				),
-				$result['redirect']
-			);
-		}
+		$result['redirect'] = \add_query_arg(
+			array_merge(
+				$passed_params,
+				[
+					'order_id' => $order_id,
+				]
+			),
+			$result['redirect']
+		);
 		return $result;
 	}
 
@@ -1077,6 +1074,10 @@ final class Modal_Checkout {
 	 * Is this request using the modal checkout?
 	 */
 	public static function is_modal_checkout() {
+		// Until we use the modal checkout flow from My Account, we don't want to show the modal checkout thank you template for checkouts originating from My Account.
+		if ( method_exists( 'Newspack\WooCommerce_My_Account', 'is_from_my_account' ) && \Newspack\WooCommerce_My_Account::is_from_my_account() ) {
+			return false;
+		}
 
 		$is_modal_checkout = isset( $_REQUEST['modal_checkout'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! $is_modal_checkout && isset( $_REQUEST['post_data'] ) && is_string( $_REQUEST['post_data'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended

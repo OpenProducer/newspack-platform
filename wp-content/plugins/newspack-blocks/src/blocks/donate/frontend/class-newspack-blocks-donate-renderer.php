@@ -14,12 +14,6 @@ require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/donate/frontend/class-new
  * Server-side rendering of the `newspack-blocks/donate` block.
  */
 class Newspack_Blocks_Donate_Renderer {
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		add_filter( 'woocommerce_checkout_fields', [ __CLASS__, 'woocommerce_checkout_fields' ] );
-	}
 
 	/**
 	 * Get the keys of the billing fields to render for logged out users.
@@ -38,34 +32,6 @@ class Newspack_Blocks_Donate_Renderer {
 		 * @param array $fields Billing fields.
 		 */
 		return apply_filters( 'newspack_blocks_donate_billing_fields_keys', $fields );
-	}
-
-	/**
-	 * Modify fields for modal checkout.
-	 *
-	 * @param array $fields Checkout fields.
-	 *
-	 * @return array
-	 */
-	public static function woocommerce_checkout_fields( $fields ) {
-		if ( ! class_exists( 'Newspack\Donations' ) || ! method_exists( 'Newspack\Donations', 'is_donation_cart' ) ) {
-			return $fields;
-		}
-		if ( ! \Newspack\Donations::is_donation_cart() ) {
-			return $fields;
-		}
-		$billing_fields = self::get_billing_fields_keys();
-		if ( empty( $billing_fields ) ) {
-			return $fields;
-		}
-		$billing_keys = array_keys( $fields['billing'] );
-		foreach ( $billing_keys as $key ) {
-			if ( in_array( $key, $billing_fields, true ) ) {
-				continue;
-			}
-			unset( $fields['billing'][ $key ] );
-		}
-		return $fields;
 	}
 
 	/**

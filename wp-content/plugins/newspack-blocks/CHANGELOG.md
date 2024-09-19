@@ -1,3 +1,17 @@
+## [4.1.2](https://github.com/Automattic/newspack-blocks/compare/v4.1.1...v4.1.2) (2024-09-17)
+
+
+### Bug Fixes
+
+* **modal-checkout:** tweak HTML to satisfy Woo Payments field validation ([#1883](https://github.com/Automattic/newspack-blocks/issues/1883)) ([16b5e9d](https://github.com/Automattic/newspack-blocks/commit/16b5e9db840d7dfccd064776285221c66d92e7f2))
+
+## [4.1.1](https://github.com/Automattic/newspack-blocks/compare/v4.1.0...v4.1.1) (2024-09-16)
+
+
+### Bug Fixes
+
+* support new is_my_account() method from main plugin ([#1869](https://github.com/Automattic/newspack-blocks/issues/1869)) ([b9a3aba](https://github.com/Automattic/newspack-blocks/commit/b9a3aba064073f97bca5e08dd96ff450fe287faf))
+
 # [4.1.0](https://github.com/Automattic/newspack-blocks/compare/v4.0.1...v4.1.0) (2024-08-26)
 
 
