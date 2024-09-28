@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit539c838c762ab459bb7cfb10d25ade08
+class ComposerStaticInit4546fa5ed1c769f4a490834c8204549f
 {
     public static $files = array (
         '81db02b30f563b92907e271b66bd7559' => __DIR__ . '/..' . '/yoast/whip/src/Facades/wordpress.php',
@@ -572,6 +572,7 @@ class ComposerStaticInit539c838c762ab459bb7cfb10d25ade08
         'Yoast\\WP\\SEO\\Conditionals\\Admin\\Yoast_Admin_Conditional' => __DIR__ . '/../..' . '/src/conditionals/admin/yoast-admin-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional' => __DIR__ . '/../..' . '/src/conditionals/admin-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Attachment_Redirections_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/attachment-redirections-enabled-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Check_Required_Version_Conditional' => __DIR__ . '/../..' . '/src/conditionals/check-required-version-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Conditional' => __DIR__ . '/../..' . '/src/conditionals/conditional-interface.php',
         'Yoast\\WP\\SEO\\Conditionals\\Deactivating_Yoast_Seo_Conditional' => __DIR__ . '/../..' . '/src/conditionals/deactivating-yoast-seo-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Development_Conditional' => __DIR__ . '/../..' . '/src/conditionals/development-conditional.php',
@@ -810,6 +811,7 @@ class ComposerStaticInit539c838c762ab459bb7cfb10d25ade08
         'Yoast\\WP\\SEO\\Initializers\\Disable_Core_Sitemaps' => __DIR__ . '/../..' . '/src/initializers/disable-core-sitemaps.php',
         'Yoast\\WP\\SEO\\Initializers\\Initializer_Interface' => __DIR__ . '/../..' . '/src/initializers/initializer-interface.php',
         'Yoast\\WP\\SEO\\Initializers\\Migration_Runner' => __DIR__ . '/../..' . '/src/initializers/migration-runner.php',
+        'Yoast\\WP\\SEO\\Initializers\\Plugin_Headers' => __DIR__ . '/../..' . '/src/initializers/plugin-headers.php',
         'Yoast\\WP\\SEO\\Initializers\\Woocommerce' => __DIR__ . '/../..' . '/src/initializers/woocommerce.php',
         'Yoast\\WP\\SEO\\Integrations\\Abstract_Exclude_Post_Type' => __DIR__ . '/../..' . '/src/integrations/abstract-exclude-post-type.php',
         'Yoast\\WP\\SEO\\Integrations\\Academy_Integration' => __DIR__ . '/../..' . '/src/integrations/academy-integration.php',
@@ -818,6 +820,7 @@ class ComposerStaticInit539c838c762ab459bb7cfb10d25ade08
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Addon_Installation\\Installation_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/addon-installation/installation-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Admin_Columns_Cache_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/admin-columns-cache-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Background_Indexing_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/background-indexing-integration.php',
+        'Yoast\\WP\\SEO\\Integrations\\Admin\\Check_Required_Version' => __DIR__ . '/../..' . '/src/integrations/admin/check-required-version.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Crawl_Settings_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/crawl-settings-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Cron_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/cron-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Deactivated_Premium_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/deactivated-premium-integration.php',
@@ -1142,9 +1145,9 @@ class ComposerStaticInit539c838c762ab459bb7cfb10d25ade08
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit539c838c762ab459bb7cfb10d25ade08::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit539c838c762ab459bb7cfb10d25ade08::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit539c838c762ab459bb7cfb10d25ade08::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4546fa5ed1c769f4a490834c8204549f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4546fa5ed1c769f4a490834c8204549f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4546fa5ed1c769f4a490834c8204549f::$classMap;
 
         }, null, ClassLoader::class);
     }

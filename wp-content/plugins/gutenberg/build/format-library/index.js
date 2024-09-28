@@ -996,6 +996,13 @@ function link_Edit({
           url: `mailto:${text}`
         }
       }));
+    } else if (!isActive && text && (0,external_wp_url_namespaceObject.isPhoneNumber)(text)) {
+      onChange((0,external_wp_richText_namespaceObject.applyFormat)(value, {
+        type: link_name,
+        attributes: {
+          url: `tel:${text.replace(/\D/g, '')}`
+        }
+      }));
     } else {
       if (target) {
         setOpenedBy({

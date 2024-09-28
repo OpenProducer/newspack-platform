@@ -2810,10 +2810,8 @@ function CopyButton({
   children
 }) {
   const ref = (0,external_wp_compose_namespaceObject.useCopyToClipboard)(text);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
-  // TODO: Switch to `true` (40px size) if possible
-  , {
-    __next40pxDefaultSize: false,
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
     variant: "secondary",
     ref: ref,
     children: children
@@ -3269,10 +3267,8 @@ function WidgetAreas({
           }
         }), widgetAreas?.length === 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
           children: (0,external_wp_i18n_namespaceObject.__)('Your theme does not contain any Widget Areas.')
-        }), !selectedWidgetArea && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
-        // TODO: Switch to `true` (40px size) if possible
-        , {
-          __next40pxDefaultSize: false,
+        }), !selectedWidgetArea && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          __next40pxDefaultSize: true,
           href: (0,external_wp_url_namespaceObject.addQueryArgs)('customize.php', {
             'autofocus[panel]': 'widgets',
             return: window.location.pathname
@@ -4222,9 +4218,9 @@ function Header() {
         })]
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "edit-widgets-header__actions",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(save_button, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(pinned_items.Slot, {
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(pinned_items.Slot, {
           scope: "core/edit-widgets"
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MoreMenu, {})]
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(save_button, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MoreMenu, {})]
       })]
     })
   });
@@ -4441,10 +4437,8 @@ function InserterSidebar() {
     className: "edit-widgets-layout__inserter-panel",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TagName, {
       className: "edit-widgets-layout__inserter-panel-header",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
-      // TODO: Switch to `true` (40px size) if possible
-      , {
-        __next40pxDefaultSize: false,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        __next40pxDefaultSize: true,
         icon: library_close,
         onClick: closeInserter,
         label: (0,external_wp_i18n_namespaceObject.__)('Close block inserter')
@@ -4516,10 +4510,8 @@ function ListViewSidebar() {
         className: "edit-widgets-editor__list-view-panel-header",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("strong", {
           children: (0,external_wp_i18n_namespaceObject.__)('List View')
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button
-        // TODO: Switch to `true` (40px size) if possible
-        , {
-          __next40pxDefaultSize: false,
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          __next40pxDefaultSize: true,
           icon: close_small,
           label: (0,external_wp_i18n_namespaceObject.__)('Close'),
           onClick: closeListView

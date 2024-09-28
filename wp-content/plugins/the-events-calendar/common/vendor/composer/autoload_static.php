@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite624eb39c73557010857f1f3e863eac5
+class ComposerStaticInitbe6d00322c83caee63872c2b0f55033d
 {
     public static $prefixLengthsPsr4 = array (
         'l' => 
@@ -127,6 +127,27 @@ class ComposerStaticInite624eb39c73557010857f1f3e863eac5
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TEC\\Common\\Admin\\Entities\\Base_Entity' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Base_Entity.php',
+        'TEC\\Common\\Admin\\Entities\\Br' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Br.php',
+        'TEC\\Common\\Admin\\Entities\\Container' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Container.php',
+        'TEC\\Common\\Admin\\Entities\\Div' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Div.php',
+        'TEC\\Common\\Admin\\Entities\\Element' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Element.php',
+        'TEC\\Common\\Admin\\Entities\\Element_With_Children' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Element_With_Children.php',
+        'TEC\\Common\\Admin\\Entities\\Field_Wrapper' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Field_Wrapper.php',
+        'TEC\\Common\\Admin\\Entities\\H2' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/H2.php',
+        'TEC\\Common\\Admin\\Entities\\H3' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/H3.php',
+        'TEC\\Common\\Admin\\Entities\\Heading' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Heading.php',
+        'TEC\\Common\\Admin\\Entities\\Image' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Image.php',
+        'TEC\\Common\\Admin\\Entities\\Link' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Link.php',
+        'TEC\\Common\\Admin\\Entities\\List_Item' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/List_Item.php',
+        'TEC\\Common\\Admin\\Entities\\Paragraph' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Paragraph.php',
+        'TEC\\Common\\Admin\\Entities\\Plain_Text' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Plain_Text.php',
+        'TEC\\Common\\Admin\\Entities\\Separator' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Separator.php',
+        'TEC\\Common\\Admin\\Entities\\Unordered_List' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Unordered_List.php',
+        'TEC\\Common\\Admin\\Entities\\Validate_Elements' => __DIR__ . '/../..' . '/src/Common/Admin/Entities/Validate_Elements.php',
+        'TEC\\Common\\Admin\\Section' => __DIR__ . '/../..' . '/src/Common/Admin/Section.php',
+        'TEC\\Common\\Admin\\Settings_Section' => __DIR__ . '/../..' . '/src/Common/Admin/Settings_Section.php',
+        'TEC\\Common\\Admin\\Settings_Sidebar' => __DIR__ . '/../..' . '/src/Common/Admin/Settings_Sidebar.php',
         'TEC\\Common\\Configuration\\Configuration' => __DIR__ . '/../..' . '/src/Common/Configuration/Configuration.php',
         'TEC\\Common\\Configuration\\Configuration_Loader' => __DIR__ . '/../..' . '/src/Common/Configuration/Configuration_Loader.php',
         'TEC\\Common\\Configuration\\Configuration_Provider_Interface' => __DIR__ . '/../..' . '/src/Common/Configuration/Configuration_Provider_Interface.php',
@@ -311,6 +332,7 @@ class ComposerStaticInite624eb39c73557010857f1f3e863eac5
         'Tribe\\Shortcode\\Shortcode_Interface' => __DIR__ . '/../..' . '/src/Tribe/Shortcode/Shortcode_Interface.php',
         'Tribe\\Shortcode\\Utils' => __DIR__ . '/../..' . '/src/Tribe/Shortcode/Utils.php',
         'Tribe\\Tooltip\\View' => __DIR__ . '/../..' . '/src/Tribe/Tooltip/View.php',
+        'Tribe\\Traits\\Array_Access' => __DIR__ . '/../..' . '/src/Tribe/Traits/Array_Access.php',
         'Tribe\\Traits\\Cache_User' => __DIR__ . '/../..' . '/src/Tribe/Traits/Cache_User.php',
         'Tribe\\Traits\\With_DB_Lock' => __DIR__ . '/../..' . '/src/Tribe/Traits/With_DB_Lock.php',
         'Tribe\\Traits\\With_Meta_Updates_Handling' => __DIR__ . '/../..' . '/src/Tribe/Traits/With_Meta_Updates_Handling.php',
@@ -347,9 +369,9 @@ class ComposerStaticInite624eb39c73557010857f1f3e863eac5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite624eb39c73557010857f1f3e863eac5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite624eb39c73557010857f1f3e863eac5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite624eb39c73557010857f1f3e863eac5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbe6d00322c83caee63872c2b0f55033d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbe6d00322c83caee63872c2b0f55033d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbe6d00322c83caee63872c2b0f55033d::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -2108,6 +2108,7 @@ __webpack_require__.d(__webpack_exports__, {
   useDebounce: () => (/* reexport */ useDebounce),
   useDebouncedInput: () => (/* reexport */ useDebouncedInput),
   useDisabled: () => (/* reexport */ useDisabled),
+  useEvent: () => (/* reexport */ useEvent),
   useFocusOnMount: () => (/* reexport */ useFocusOnMount),
   useFocusReturn: () => (/* reexport */ use_focus_return),
   useFocusableIframe: () => (/* reexport */ useFocusableIframe),
@@ -3820,16 +3821,16 @@ function useFocusOnMount(focusOnMount = 'firstElement') {
     if (node.contains((_node$ownerDocument$a = node.ownerDocument?.activeElement) !== null && _node$ownerDocument$a !== void 0 ? _node$ownerDocument$a : null)) {
       return;
     }
-    if (focusOnMountRef.current === 'firstElement') {
-      timerIdRef.current = setTimeout(() => {
-        const firstTabbable = external_wp_dom_namespaceObject.focus.tabbable.find(node)[0];
-        if (firstTabbable) {
-          setFocus(firstTabbable);
-        }
-      }, 0);
+    if (focusOnMountRef.current !== 'firstElement') {
+      setFocus(node);
       return;
     }
-    setFocus(node);
+    timerIdRef.current = setTimeout(() => {
+      const firstTabbable = external_wp_dom_namespaceObject.focus.tabbable.find(node)[0];
+      if (firstTabbable) {
+        setFocus(firstTabbable);
+      }
+    }, 0);
     return () => {
       if (timerIdRef.current) {
         clearTimeout(timerIdRef.current);
@@ -4339,6 +4340,52 @@ function useDisabled({
       updates.forEach(update => update());
     };
   }, [isDisabledProp]);
+}
+
+;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-event/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Any function.
+ */
+
+/**
+ * Creates a stable callback function that has access to the latest state and
+ * can be used within event handlers and effect callbacks. Throws when used in
+ * the render phase.
+ *
+ * @param callback The callback function to wrap.
+ *
+ * @example
+ *
+ * ```tsx
+ * function Component( props ) {
+ *   const onClick = useEvent( props.onClick );
+ *   useEffect( () => {
+ *     onClick();
+ *     // Won't trigger the effect again when props.onClick is updated.
+ *   }, [ onClick ] );
+ *   // Won't re-render Button when props.onClick is updated (if `Button` is
+ *   // wrapped in `React.memo`).
+ *   return <Button onClick={ onClick } />;
+ * }
+ * ```
+ */
+function useEvent(
+/**
+ * The callback function to wrap.
+ */
+callback) {
+  const ref = (0,external_wp_element_namespaceObject.useRef)(() => {
+    throw new Error('Callbacks created with `useEvent` cannot be called during rendering.');
+  });
+  (0,external_wp_element_namespaceObject.useInsertionEffect)(() => {
+    ref.current = callback;
+  });
+  return (0,external_wp_element_namespaceObject.useCallback)((...args) => ref.current?.(...args), []);
 }
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-isomorphic-layout-effect/index.js
@@ -4961,13 +5008,17 @@ const useViewportMatch = (breakpoint, operator = '>=') => {
 useViewportMatch.__experimentalWidthProvider = ViewportMatchWidthContext.Provider;
 /* harmony default export */ const use_viewport_match = (useViewportMatch);
 
-;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-resize-observer/index.js
+;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-resize-observer/_legacy/index.js
 /**
  * External dependencies
  */
 
 /**
  * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
  */
 
 
@@ -5034,24 +5085,10 @@ const RESIZE_ELEMENT_STYLES = {
 function ResizeElement({
   onResize
 }) {
-  const resizeElementRef = (0,external_wp_element_namespaceObject.useRef)(null);
-  const resizeCallbackRef = (0,external_wp_element_namespaceObject.useRef)(onResize);
-  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    resizeCallbackRef.current = onResize;
-  }, [onResize]);
-  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    const resizeElement = resizeElementRef.current;
-    const resizeObserver = new ResizeObserver(entries => {
-      for (const entry of entries) {
-        const newSize = extractSize(entry);
-        resizeCallbackRef.current(newSize);
-      }
-    });
-    resizeObserver.observe(resizeElement);
-    return () => {
-      resizeObserver.unobserve(resizeElement);
-    };
-  }, []);
+  const resizeElementRef = useResizeObserver(entries => {
+    const newSize = extractSize(entries.at(-1)); // Entries are never empty.
+    onResize(newSize);
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     ref: resizeElementRef,
     style: RESIZE_ELEMENT_STYLES,
@@ -5085,7 +5122,7 @@ const NULL_SIZE = {
  * };
  * ```
  */
-function useResizeObserver() {
+function useLegacyResizeObserver() {
   const [size, setSize] = (0,external_wp_element_namespaceObject.useState)(NULL_SIZE);
 
   // Using a ref to track the previous width / height to avoid unnecessary renders.
@@ -5100,6 +5137,108 @@ function useResizeObserver() {
     onResize: handleResize
   });
   return [resizeElement, size];
+}
+
+;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-resize-observer/index.js
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * External dependencies
+ */
+
+// This is the current implementation of `useResizeObserver`.
+//
+// The legacy implementation is still supported for backwards compatibility.
+// This is achieved by overloading the exported function with both signatures,
+// and detecting which API is being used at runtime.
+function _useResizeObserver(callback, resizeObserverOptions = {}) {
+  const callbackEvent = useEvent(callback);
+  const observedElementRef = (0,external_wp_element_namespaceObject.useRef)();
+  const resizeObserverRef = (0,external_wp_element_namespaceObject.useRef)();
+  return useEvent(element => {
+    var _resizeObserverRef$cu;
+    if (element === observedElementRef.current) {
+      return;
+    }
+    observedElementRef.current = element;
+
+    // Set up `ResizeObserver`.
+    (_resizeObserverRef$cu = resizeObserverRef.current) !== null && _resizeObserverRef$cu !== void 0 ? _resizeObserverRef$cu : resizeObserverRef.current = new ResizeObserver(callbackEvent);
+    const {
+      current: resizeObserver
+    } = resizeObserverRef;
+
+    // Unobserve previous element.
+    if (observedElementRef.current) {
+      resizeObserver.unobserve(observedElementRef.current);
+    }
+
+    // Observe new element.
+    if (element) {
+      resizeObserver.observe(element, resizeObserverOptions);
+    }
+  });
+}
+
+/**
+ * Sets up a [`ResizeObserver`](https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API)
+ * for an HTML or SVG element.
+ *
+ * Pass the returned setter as a callback ref to the React element you want
+ * to observe, or use it in layout effects for advanced use cases.
+ *
+ * @example
+ *
+ * ```tsx
+ * const setElement = useResizeObserver(
+ * 	( resizeObserverEntries ) => console.log( resizeObserverEntries ),
+ * 	{ box: 'border-box' }
+ * );
+ * <div ref={ setElement } />;
+ *
+ * // The setter can be used in other ways, for example:
+ * useLayoutEffect( () => {
+ * 	setElement( document.querySelector( `data-element-id="${ elementId }"` ) );
+ * }, [ elementId ] );
+ * ```
+ *
+ * @param callback The `ResizeObserver` callback - [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver/ResizeObserver#callback).
+ * @param options  Options passed to `ResizeObserver.observe` when called - [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver/observe#options). Changes will be ignored.
+ */
+
+/**
+ * **This is a legacy API and should not be used.**
+ *
+ * @deprecated Use the other `useResizeObserver` API instead: `const ref = useResizeObserver( ( entries ) => { ... } )`.
+ *
+ * Hook which allows to listen to the resize event of any target element when it changes size.
+ * _Note: `useResizeObserver` will report `null` sizes until after first render.
+ *
+ * @example
+ *
+ * ```js
+ * const App = () => {
+ * 	const [ resizeListener, sizes ] = useResizeObserver();
+ *
+ * 	return (
+ * 		<div>
+ * 			{ resizeListener }
+ * 			Your content here
+ * 		</div>
+ * 	);
+ * };
+ * ```
+ */
+
+function useResizeObserver(callback, options = {}) {
+  return callback ? _useResizeObserver(callback, options) : useLegacyResizeObserver();
 }
 
 ;// CONCATENATED MODULE: external ["wp","priorityQueue"]
@@ -5503,6 +5642,7 @@ function useDropZone({
       // zone.
       // Note: This is not entirely reliable in Safari due to this bug
       // https://bugs.webkit.org/show_bug.cgi?id=66547
+
       if (isElementInZone(event.relatedTarget)) {
         return;
       }
@@ -5796,6 +5936,7 @@ function useObservableValue(map, name) {
 
 
 // Hooks.
+
 
 
 

@@ -137,7 +137,13 @@ class Config {
 	 * @return void
 	 */
 	public static function set_path( string $path ) {
-		$plugins_content_dir_position = strpos( $path, WP_PLUGIN_DIR );
+		$plugin_dir = WP_PLUGIN_DIR;
+
+		if ( DIRECTORY_SEPARATOR !== '/' ) {
+			$plugin_dir = str_replace( DIRECTORY_SEPARATOR, '/', $plugin_dir );
+		}
+
+		$plugins_content_dir_position = strpos( $path, $plugin_dir );
 		$themes_content_dir_position  = strpos( $path, get_theme_root() );
 
 		if (
@@ -145,7 +151,7 @@ class Config {
 			&& $themes_content_dir_position === false
 		) {
 			// Default to plugins.
-			$path = WP_PLUGIN_DIR . $path;
+			$path = $plugin_dir . $path;
 		} elseif ( $plugins_content_dir_position !== false ) {
 			$path = substr( $path, $plugins_content_dir_position );
 		} elseif ( $themes_content_dir_position !== false ) {
