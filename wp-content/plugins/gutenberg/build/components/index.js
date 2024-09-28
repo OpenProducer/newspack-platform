@@ -1789,6 +1789,7 @@ __webpack_require__.d(__webpack_exports__, {
   ColorPalette: () => (/* reexport */ color_palette),
   ColorPicker: () => (/* reexport */ LegacyAdapter),
   ComboboxControl: () => (/* reexport */ combobox_control),
+  Composite: () => (/* reexport */ Composite),
   CustomGradientPicker: () => (/* reexport */ custom_gradient_picker),
   CustomSelectControl: () => (/* reexport */ custom_select_control),
   Dashicon: () => (/* reexport */ dashicon),
@@ -4660,7 +4661,7 @@ var TW35PKTK_Composite = forwardRef2(function Composite2(props) {
  * Internal dependencies
  */
 
-const CompositeContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
+const CompositeContext = (0,external_wp_element_namespaceObject.createContext)({});
 const context_useCompositeContext = () => (0,external_wp_element_namespaceObject.useContext)(CompositeContext);
 
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/7HVFURXT.js
@@ -4748,7 +4749,7 @@ var IEKMDIUY_CompositeGroup = forwardRef2(function CompositeGroup2(props) {
 const CompositeGroup = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeGroup(props, ref) {
   const context = context_useCompositeContext();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IEKMDIUY_CompositeGroup, {
-    store: context?.store,
+    store: context.store,
     ...props,
     ref: ref
   });
@@ -4827,7 +4828,7 @@ var Y2MAXF6C_CompositeGroupLabel = forwardRef2(function CompositeGroupLabel2(pro
 const CompositeGroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeGroupLabel(props, ref) {
   const context = context_useCompositeContext();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Y2MAXF6C_CompositeGroupLabel, {
-    store: context?.store,
+    store: context.store,
     ...props,
     ref: ref
   });
@@ -4956,7 +4957,7 @@ var OBZMLI6J_CompositeHover = memo2(
 const CompositeHover = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeHover(props, ref) {
   const context = context_useCompositeContext();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OBZMLI6J_CompositeHover, {
-    store: context?.store,
+    store: context.store,
     ...props,
     ref: ref
   });
@@ -5459,7 +5460,7 @@ var _3CCTMYB6_CompositeItem = memo2(
 const CompositeItem = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeItem(props, ref) {
   const context = context_useCompositeContext();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_3CCTMYB6_CompositeItem, {
-    store: context?.store,
+    store: context.store,
     ...props,
     ref: ref
   });
@@ -5538,7 +5539,7 @@ var _6BE7QOX5_CompositeRow = forwardRef2(function CompositeRow2(props) {
 const CompositeRow = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeRow(props, ref) {
   const context = context_useCompositeContext();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_6BE7QOX5_CompositeRow, {
-    store: context?.store,
+    store: context.store,
     ...props,
     ref: ref
   });
@@ -5668,7 +5669,7 @@ var DS36B3MQ_CompositeTypeahead = forwardRef2(function CompositeTypeahead2(props
 const CompositeTypeahead = (0,external_wp_element_namespaceObject.forwardRef)(function CompositeTypeahead(props, ref) {
   const context = context_useCompositeContext();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DS36B3MQ_CompositeTypeahead, {
-    store: context?.store,
+    store: context.store,
     ...props,
     ref: ref
   });
@@ -5695,6 +5696,7 @@ const CompositeTypeahead = (0,external_wp_element_namespaceObject.forwardRef)(fu
  */
 
 
+
 /**
  * Internal dependencies
  */
@@ -5714,10 +5716,9 @@ const CompositeTypeahead = (0,external_wp_element_namespaceObject.forwardRef)(fu
  *
  * @example
  * ```jsx
- * import { Composite, useCompositeStore } from '@wordpress/components';
+ * import { Composite } from '@wordpress/components';
  *
- * const store = useCompositeStore();
- * <Composite store={store}>
+ * <Composite>
  *   <Composite.Item>Item 1</Composite.Item>
  *   <Composite.Item>Item 2</Composite.Item>
  * </Composite>
@@ -5733,16 +5734,14 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
   focusShift = false,
   virtualFocus = false,
   orientation = 'both',
-  rtl = false,
+  rtl = (0,external_wp_i18n_namespaceObject.isRTL)(),
   // Composite component props
   children,
   disabled = false,
-  // To be removed
-  store: storeProp,
   // Rest props
   ...props
 }, ref) {
-  const newStore = useCompositeStore({
+  const store = useCompositeStore({
     activeId,
     defaultActiveId,
     setActiveId,
@@ -5753,7 +5752,6 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
     orientation,
     rtl
   });
-  const store = storeProp || newStore;
   const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     store
   }), [store]);
@@ -5773,10 +5771,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    *
    * @example
    * ```jsx
-   * import { Composite, useCompositeStore } from '@wordpress/components';
+   * import { Composite } from '@wordpress/components';
    *
-   * const store = useCompositeStore();
-   * <Composite store={store}>
+   * <Composite>
    *   <Composite.Group>
    *     <Composite.GroupLabel>Label</Composite.GroupLabel>
    *     <Composite.Item>Item 1</Composite.Item>
@@ -5795,10 +5792,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    *
    * @example
    * ```jsx
-   * import { Composite, useCompositeStore } from '@wordpress/components';
+   * import { Composite } from '@wordpress/components';
    *
-   * const store = useCompositeStore();
-   * <Composite store={store}>
+   * <Composite>
    *   <Composite.Group>
    *     <Composite.GroupLabel>Label</Composite.GroupLabel>
    *     <Composite.Item>Item 1</Composite.Item>
@@ -5815,10 +5811,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    *
    * @example
    * ```jsx
-   * import { Composite, useCompositeStore } from '@wordpress/components';
+   * import { Composite } from '@wordpress/components';
    *
-   * const store = useCompositeStore();
-   * <Composite store={store}>
+   * <Composite>
    *   <Composite.Item>Item 1</Composite.Item>
    *   <Composite.Item>Item 2</Composite.Item>
    *   <Composite.Item>Item 3</Composite.Item>
@@ -5835,10 +5830,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    *
    * @example
    * ```jsx
-   * import { Composite, useCompositeStore } from '@wordpress/components';
+   * import { Composite } from '@wordpress/components';
    *
-   * const store = useCompositeStore();
-   * <Composite store={store}>
+   * <Composite>
    *   <Composite.Row>
    *     <Composite.Item>Item 1.1</Composite.Item>
    *     <Composite.Item>Item 1.2</Composite.Item>
@@ -5862,10 +5856,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    *
    * @example
    * ```jsx
-   * import { Composite, useCompositeStore } from '@wordpress/components';
+   * import { Composite } from '@wordpress/components';
    *
-   * const store = useCompositeStore();
-   * <Composite store={store}>
+   * <Composite>
    *   <Composite.Hover render={ <Composite.Item /> }>
    *     Item 1
    *   </Composite.Hover>
@@ -5885,10 +5878,9 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
    *
    * @example
    * ```jsx
-   * import { Composite, useCompositeStore } from '@wordpress/components';
+   * import { Composite } from '@wordpress/components';
    *
-   * const store = useCompositeStore();
-   * <Composite store={store} render={ <CompositeTypeahead /> }>
+   * <Composite render={ <CompositeTypeahead /> }>
    *   <Composite.Item>Item 1</Composite.Item>
    *   <Composite.Item>Item 2</Composite.Item>
    * </Composite>
@@ -15694,15 +15686,14 @@ const TOGGLE_GROUP_CONTROL_PROPS = {
   fontWeight: 'normal',
   fontWeightHeading: '600',
   gridBase: '4px',
-  cardBorderRadius: '2px',
   cardPaddingXSmall: `${space(2)}`,
   cardPaddingSmall: `${space(4)}`,
   cardPaddingMedium: `${space(4)} ${space(6)}`,
   cardPaddingLarge: `${space(6)} ${space(8)}`,
-  elevationXSmall: `0 0.7px 1px rgba(0, 0, 0, 0.1), 0 1.2px 1.7px -0.2px rgba(0, 0, 0, 0.1), 0 2.3px 3.3px -0.5px rgba(0, 0, 0, 0.1)`,
-  elevationSmall: `0 0.7px 1px 0 rgba(0, 0, 0, 0.12), 0 2.2px 3.7px -0.2px rgba(0, 0, 0, 0.12), 0 5.3px 7.3px -0.5px rgba(0, 0, 0, 0.12)`,
-  elevationMedium: `0 0.7px 1px 0 rgba(0, 0, 0, 0.14), 0 4.2px 5.7px -0.2px rgba(0, 0, 0, 0.14), 0 7.3px 9.3px -0.5px rgba(0, 0, 0, 0.14)`,
-  elevationLarge: `0 0.7px 1px rgba(0, 0, 0, 0.15), 0 2.7px 3.8px -0.2px rgba(0, 0, 0, 0.15), 0 5.5px 7.8px -0.3px rgba(0, 0, 0, 0.15), 0.1px 11.5px 16.4px -0.5px rgba(0, 0, 0, 0.15)`,
+  elevationXSmall: `0 1px 1px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02), 0 3px 3px rgba(0, 0, 0, 0.02), 0 4px 4px rgba(0, 0, 0, 0.01)`,
+  elevationSmall: `0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 3px rgba(0, 0, 0, 0.04), 0 6px 6px rgba(0, 0, 0, 0.03), 0 8px 8px rgba(0, 0, 0, 0.02)`,
+  elevationMedium: `0 2px 3px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 0.04), 0 12px 12px rgba(0, 0, 0, 0.03), 0 16px 16px rgba(0, 0, 0, 0.02)`,
+  elevationLarge: `0 5px 15px rgba(0, 0, 0, 0.08), 0 15px 27px rgba(0, 0, 0, 0.07), 0 30px 36px rgba(0, 0, 0, 0.04), 0 50px 43px rgba(0, 0, 0, 0.02)`,
   surfaceBackgroundColor: COLORS.white,
   surfaceBackgroundSubtleColor: '#F3F3F3',
   surfaceBackgroundTintColor: '#F5F5F5',
@@ -34026,6 +34017,7 @@ function Provider({
     })
   });
 }
+Provider.displayName = 'SlotFillProvider';
 function createSlotFill(key) {
   const baseName = typeof key === 'symbol' ? key.description : key;
   const FillComponent = props => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(slot_fill_Fill, {
@@ -37239,7 +37231,7 @@ const thumbFocus = ({
 };
 const Thumb = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk4"
-} : 0)("align-items:center;border-radius:", config_values.radiusRound, ";height:100%;outline:0;position:absolute;user-select:none;width:100%;", thumbColor, ";", thumbFocus, ";" + ( true ? "" : 0));
+} : 0)("align-items:center;border-radius:", config_values.radiusRound, ";height:100%;outline:0;position:absolute;user-select:none;width:100%;box-shadow:", config_values.elevationXSmall, ";", thumbColor, ";", thumbFocus, ";" + ( true ? "" : 0));
 const InputRange = /*#__PURE__*/emotion_styled_base_browser_esm("input",  true ? {
   target: "e1epgpqk3"
 } : 0)("box-sizing:border-box;cursor:pointer;display:block;height:100%;left:0;margin:0 -", thumbSize / 2, "px;opacity:0;outline:none;position:absolute;right:0;top:0;width:calc( 100% + ", thumbSize, "px );" + ( true ? "" : 0));
@@ -42142,7 +42134,7 @@ function isValuesMixed(values = {}, selectedUnits, sides = ALL_SIDES) {
  * @return  Whether values are mixed.
  */
 function isValuesDefined(values) {
-  return values !== undefined && Object.values(values).filter(
+  return values && Object.values(values).filter(
   // Switching units when input is empty causes values only
   // containing units. This gives false positive on mixed values
   // unless filtered.
@@ -42276,7 +42268,7 @@ function AllInputControl({
     const newUnits = applyValueToSides(selectedUnits, unit, sides);
     setSelectedUnits(newUnits);
   };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(h_stack_component, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(StyledUnitControl, {
       ...props,
       __next40pxDefaultSize: __next40pxDefaultSize,
@@ -42941,7 +42933,7 @@ function card_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried t
 // (as opposed to the `border` property), the value of the border radius needs
 // to be adjusted by removing 1px (this is because the `box-shadow` renders
 // as an "outer radius").
-const adjustedBorderRadius = `calc(${config_values.cardBorderRadius} - 1px)`;
+const adjustedBorderRadius = `calc(${config_values.radiusLarge} - 1px)`;
 const Card = /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:0 0 0 1px ", config_values.surfaceBorderColor, ";outline:none;" + ( true ? "" : 0),  true ? "" : 0);
 const Header =  true ? {
   name: "1showjb",
@@ -43194,7 +43186,7 @@ function UnconnectedCard(props, forwardedRef) {
     size,
     ...otherProps
   } = useCard(props);
-  const elevationBorderRadius = isRounded ? config_values.cardBorderRadius : 0;
+  const elevationBorderRadius = isRounded ? config_values.radiusLarge : 0;
   const cx = useCx();
   const elevationClassName = (0,external_wp_element_namespaceObject.useMemo)(() => cx( /*#__PURE__*/emotion_react_browser_esm_css({
     borderRadius: elevationBorderRadius
@@ -46751,7 +46743,8 @@ function ComboboxControl(props) {
       selected: (0,external_wp_i18n_namespaceObject.__)('Item selected.')
     },
     __experimentalRenderItem,
-    expandOnFocus = true
+    expandOnFocus = true,
+    placeholder
   } = useDeprecated36pxDefaultSizeProp(props);
   const [value, setValue] = useControlledValue({
     value: valueProp,
@@ -46917,6 +46910,7 @@ function ComboboxControl(props) {
               className: "components-combobox-control__input",
               instanceId: instanceId,
               ref: inputContainer,
+              placeholder: placeholder,
               value: isExpanded ? inputValue : currentLabel,
               onFocus: onFocus,
               onBlur: onBlur,
@@ -46963,53 +46957,6 @@ function ComboboxControl(props) {
 }
 /* harmony default export */ const combobox_control = (ComboboxControl);
 
-;// CONCATENATED MODULE: ./packages/components/build-module/composite/store.js
-/**
- * External dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-// Props are already documented in TypeScript types.
-// eslint-disable-next-line jsdoc/require-param
-/**
- * Creates a composite store.
- *
- * @example
- * ```jsx
- * import { Composite, useCompositeStore } from '@wordpress/components';
- *
- * const store = useCompositeStore();
- * <Composite store={store}>
- *   <Composite.Item>Item</Composite.Item>
- *   <Composite.Item>Item</Composite.Item>
- *   <Composite.Item>Item</Composite.Item>
- * </Composite>
- * ```
- */
-function store_useCompositeStore({
-  focusLoop = false,
-  focusWrap = false,
-  focusShift = false,
-  virtualFocus = false,
-  orientation = 'both',
-  rtl = false,
-  ...props
-} = {}) {
-  return useCompositeStore({
-    focusLoop,
-    focusWrap,
-    focusShift,
-    virtualFocus,
-    orientation,
-    rtl,
-    ...props
-  });
-}
-
 ;// CONCATENATED MODULE: ./packages/components/build-module/composite/legacy/index.js
 /**
  * Composite is a component that may contain navigable items represented by
@@ -47027,15 +46974,20 @@ function store_useCompositeStore({
  */
 
 /**
+ * External dependencies
+ */
+
+
+/**
  * WordPress dependencies
  */
+
+
 
 
 /**
  * Internal dependencies
  */
-
-
 
 
 // Legacy composite components can either provide state through a
@@ -47063,9 +47015,20 @@ function mapLegacyStatePropsToComponentProps(legacyProps) {
   }
   return legacyProps;
 }
+const LEGACY_TO_NEW_DISPLAY_NAME = {
+  __unstableComposite: 'Composite',
+  __unstableCompositeGroup: 'Composite.Group or Composite.Row',
+  __unstableCompositeItem: 'Composite.Item',
+  __unstableUseCompositeState: 'Composite'
+};
 function proxyComposite(ProxiedComponent, propMap = {}) {
-  const displayName = ProxiedComponent.displayName;
+  var _ProxiedComponent$dis;
+  const displayName = (_ProxiedComponent$dis = ProxiedComponent.displayName) !== null && _ProxiedComponent$dis !== void 0 ? _ProxiedComponent$dis : '';
   const Component = legacyProps => {
+    external_wp_deprecated_default()(`wp.components.${displayName}`, {
+      since: '6.7',
+      alternative: LEGACY_TO_NEW_DISPLAY_NAME.hasOwnProperty(displayName) ? LEGACY_TO_NEW_DISPLAY_NAME[displayName] : undefined
+    });
     const {
       store,
       ...rest
@@ -47094,7 +47057,7 @@ function proxyComposite(ProxiedComponent, propMap = {}) {
 // `CompositeRow`, but this has been split into two different
 // components. We handle that difference by checking on the
 // provided role, and returning the appropriate component.
-const unproxiedCompositeGroup = (0,external_wp_element_namespaceObject.forwardRef)(({
+const UnproxiedCompositeGroup = (0,external_wp_element_namespaceObject.forwardRef)(({
   role,
   ...props
 }, ref) => {
@@ -47105,14 +47068,46 @@ const unproxiedCompositeGroup = (0,external_wp_element_namespaceObject.forwardRe
     ...props
   });
 });
-const legacy_Composite = proxyComposite(Composite, {
+
+/**
+ * _Note: please use the `Composite` component instead._
+ *
+ * @deprecated
+ */
+const legacy_Composite = proxyComposite(Object.assign(Composite, {
+  displayName: '__unstableComposite'
+}), {
   baseId: 'id'
 });
-const legacy_CompositeGroup = proxyComposite(unproxiedCompositeGroup);
-const legacy_CompositeItem = proxyComposite(Composite.Item, {
+/**
+ * _Note: please use the `Composite.Row` or `Composite.Group` components instead._
+ *
+ * @deprecated
+ */
+const legacy_CompositeGroup = proxyComposite(Object.assign(UnproxiedCompositeGroup, {
+  displayName: '__unstableCompositeGroup'
+}));
+/**
+ * _Note: please use the `Composite.Item` component instead._
+ *
+ * @deprecated
+ */
+const legacy_CompositeItem = proxyComposite(Object.assign(Composite.Item, {
+  displayName: '__unstableCompositeItem'
+}), {
   focusable: 'accessibleWhenDisabled'
 });
+
+/**
+ * _Note: please use the `Composite` component instead._
+ *
+ * @deprecated
+ */
 function useCompositeState(legacyStateOptions = {}) {
+  external_wp_deprecated_default()(`wp.components.__unstableUseCompositeState`, {
+    since: '6.7',
+    alternative: LEGACY_TO_NEW_DISPLAY_NAME.__unstableUseCompositeState
+  });
   const {
     baseId,
     currentId: defaultActiveId,
@@ -47126,7 +47121,7 @@ function useCompositeState(legacyStateOptions = {}) {
   } = legacyStateOptions;
   return {
     baseId: (0,external_wp_compose_namespaceObject.useInstanceId)(legacy_Composite, 'composite', baseId),
-    store: store_useCompositeStore({
+    store: useCompositeStore({
       defaultActiveId,
       rtl,
       orientation,
@@ -47194,10 +47189,80 @@ function unmodalize() {
   }
 }
 
+;// CONCATENATED MODULE: ./packages/components/build-module/modal/use-modal-exit-animation.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+// Animation duration (ms) extracted to JS in order to be used on a setTimeout.
+const FRAME_ANIMATION_DURATION = config_values.transitionDuration;
+const FRAME_ANIMATION_DURATION_NUMBER = Number.parseInt(config_values.transitionDuration);
+const EXIT_ANIMATION_NAME = 'components-modal__disappear-animation';
+function useModalExitAnimation() {
+  const frameRef = (0,external_wp_element_namespaceObject.useRef)();
+  const [isAnimatingOut, setIsAnimatingOut] = (0,external_wp_element_namespaceObject.useState)(false);
+  const isReducedMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
+  const closeModal = (0,external_wp_element_namespaceObject.useCallback)(() => new Promise(closeModalResolve => {
+    // Grab a "stable" reference of the frame element, since
+    // the value held by the react ref might change at runtime.
+    const frameEl = frameRef.current;
+    if (isReducedMotion) {
+      closeModalResolve();
+      return;
+    }
+    if (!frameEl) {
+       false ? 0 : void 0;
+      closeModalResolve();
+      return;
+    }
+    let handleAnimationEnd;
+    const startAnimation = () => new Promise(animationResolve => {
+      handleAnimationEnd = e => {
+        if (e.animationName === EXIT_ANIMATION_NAME) {
+          animationResolve();
+        }
+      };
+      frameEl.addEventListener('animationend', handleAnimationEnd);
+      setIsAnimatingOut(true);
+    });
+    const animationTimeout = () => new Promise(timeoutResolve => {
+      setTimeout(() => timeoutResolve(),
+      // Allow an extra 20% of the animation duration for the
+      // animationend event to fire, in case the animation frame is
+      // slightly delayes by some other events in the event loop.
+      FRAME_ANIMATION_DURATION_NUMBER * 1.2);
+    });
+    Promise.race([startAnimation(), animationTimeout()]).then(() => {
+      if (handleAnimationEnd) {
+        frameEl.removeEventListener('animationend', handleAnimationEnd);
+      }
+      setIsAnimatingOut(false);
+      closeModalResolve();
+    });
+  }), [isReducedMotion]);
+  return {
+    overlayClassname: isAnimatingOut ? 'is-animating-out' : undefined,
+    frameRef,
+    frameStyle: {
+      '--modal-frame-animation-duration': `${FRAME_ANIMATION_DURATION}`
+    },
+    closeModal
+  };
+}
+
 ;// CONCATENATED MODULE: ./packages/components/build-module/modal/index.js
 /**
  * External dependencies
  */
+
 
 /**
  * WordPress dependencies
@@ -47216,7 +47281,10 @@ function unmodalize() {
 
 
 
+
+
 // Used to track and dismiss the prior modal when another opens unless nested.
+
 
 
 const ModalContext = (0,external_wp_element_namespaceObject.createContext)(new Set());
@@ -47242,7 +47310,7 @@ function UnforwardedModal(props, forwardedRef) {
     closeButtonLabel,
     children,
     style,
-    overlayClassName,
+    overlayClassName: overlayClassnameProp,
     className,
     contentLabel,
     onKeyDown,
@@ -47346,6 +47414,12 @@ function UnforwardedModal(props, forwardedRef) {
       }
     };
   }, [bodyOpenClassName]);
+  const {
+    closeModal,
+    frameRef,
+    frameStyle,
+    overlayClassname
+  } = useModalExitAnimation();
 
   // Calls the isContentScrollable callback when the Modal children container resizes.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
@@ -47362,9 +47436,7 @@ function UnforwardedModal(props, forwardedRef) {
   function handleEscapeKeyDown(event) {
     if (shouldCloseOnEsc && (event.code === 'Escape' || event.key === 'Escape') && !event.defaultPrevented) {
       event.preventDefault();
-      if (onRequestClose) {
-        onRequestClose(event);
-      }
+      closeModal().then(() => onRequestClose(event));
     }
   }
   const onContentContainerScroll = (0,external_wp_element_namespaceObject.useCallback)(e => {
@@ -47398,7 +47470,7 @@ function UnforwardedModal(props, forwardedRef) {
       const isSameTarget = target === pressTarget;
       pressTarget = null;
       if (button === 0 && isSameTarget) {
-        onRequestClose();
+        closeModal().then(() => onRequestClose());
       }
     }
   };
@@ -47407,15 +47479,18 @@ function UnforwardedModal(props, forwardedRef) {
   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
   (0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([ref, forwardedRef]),
-    className: dist_clsx('components-modal__screen-overlay', overlayClassName),
+    className: dist_clsx('components-modal__screen-overlay', overlayClassname, overlayClassnameProp),
     onKeyDown: withIgnoreIMEEvents(handleEscapeKeyDown),
     ...(shouldCloseOnClickOutside ? overlayPressHandlers : {}),
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(style_provider, {
       document: document,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
         className: dist_clsx('components-modal__frame', sizeClass, className),
-        style: style,
-        ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([constrainedTabbingRef, focusReturnRef, focusOnMount !== 'firstContentElement' ? focusOnMountRef : null]),
+        style: {
+          ...frameStyle,
+          ...style
+        },
+        ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([frameRef, constrainedTabbingRef, focusReturnRef, focusOnMount !== 'firstContentElement' ? focusOnMountRef : null]),
         role: role,
         "aria-label": contentLabel,
         "aria-labelledby": contentLabel ? undefined : headingId,
@@ -47446,10 +47521,16 @@ function UnforwardedModal(props, forwardedRef) {
                 className: "components-modal__header-heading",
                 children: title
               })]
-            }), headerActions, isDismissible && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-              onClick: onRequestClose,
-              icon: library_close,
-              label: closeButtonLabel || (0,external_wp_i18n_namespaceObject.__)('Close')
+            }), headerActions, isDismissible && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+              children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
+                marginBottom: 0,
+                marginLeft: 3
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+                size: "small",
+                onClick: event => closeModal().then(() => onRequestClose(event)),
+                icon: library_close,
+                label: closeButtonLabel || (0,external_wp_i18n_namespaceObject.__)('Close')
+              })]
             })]
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
             ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([childrenContainerRef, focusOnMount === 'firstContentElement' ? focusOnMountRef : null]),
@@ -49050,7 +49131,7 @@ const slideDownAndFade = emotion_react_browser_esm_keyframes({
 });
 const styles_SelectPopover = /*#__PURE__*/emotion_styled_base_browser_esm(SelectPopover,  true ? {
   target: "e1p3eej76"
-} : 0)("display:flex;flex-direction:column;background-color:", COLORS.theme.background, ";border-radius:", config_values.radiusSmall, ";border:1px solid ", COLORS.theme.foreground, ";z-index:1000000;max-height:min( var( --popover-available-height, 400px ), 400px );overflow:auto;overscroll-behavior:contain;min-width:min-content;&[data-open]{@media not ( prefers-reduced-motion ){animation-duration:", ANIMATION_PARAMS.DURATION, ";animation-timing-function:", ANIMATION_PARAMS.EASING, ";animation-name:", slideDownAndFade, ";will-change:transform,opacity;}}&[data-focus-visible]{outline:none;}" + ( true ? "" : 0));
+} : 0)("display:flex;flex-direction:column;background-color:", COLORS.theme.background, ";border-radius:", config_values.radiusSmall, ";border:1px solid ", COLORS.theme.foreground, ";box-shadow:", config_values.elevationMedium, ";z-index:1000000;max-height:min( var( --popover-available-height, 400px ), 400px );overflow:auto;overscroll-behavior:contain;min-width:min-content;&[data-open]{@media not ( prefers-reduced-motion ){animation-duration:", ANIMATION_PARAMS.DURATION, ";animation-timing-function:", ANIMATION_PARAMS.EASING, ";animation-name:", slideDownAndFade, ";will-change:transform,opacity;}}&[data-focus-visible]{outline:none;}" + ( true ? "" : 0));
 const styles_SelectItem = /*#__PURE__*/emotion_styled_base_browser_esm(SelectItem,  true ? {
   target: "e1p3eej75"
 } : 0)(({
@@ -49401,9 +49482,7 @@ function CustomSelectControl(props) {
 }
 /* harmony default export */ const custom_select_control = (CustomSelectControl);
 
-;// CONCATENATED MODULE: ./node_modules/use-lilius/build/index.es.js
-
-
+;// CONCATENATED MODULE: ./node_modules/date-fns/toDate.mjs
 /**
  * @name toDate
  * @category Common Helpers
@@ -49460,6 +49539,42 @@ function toDate(argument) {
   }
 }
 
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_toDate = ((/* unused pure expression or super */ null && (toDate)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/startOfDay.mjs
+
+
+/**
+ * @name startOfDay
+ * @category Day Helpers
+ * @summary Return the start of a day for the given date.
+ *
+ * @description
+ * Return the start of a day for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The original date
+ *
+ * @returns The start of a day
+ *
+ * @example
+ * // The start of a day for 2 September 2014 11:55:00:
+ * const result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Tue Sep 02 2014 00:00:00
+ */
+function startOfDay(date) {
+  const _date = toDate(date);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfDay = ((/* unused pure expression or super */ null && (startOfDay)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/constructFrom.mjs
 /**
  * @name constructFrom
  * @category Generic Helpers
@@ -49498,36 +49613,12 @@ function constructFrom(date, value) {
   }
 }
 
-/**
- * @name addDays
- * @category Day Helpers
- * @summary Add the specified number of days to the given date.
- *
- * @description
- * Add the specified number of days to the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param amount - The amount of days to be added.
- *
- * @returns The new date with the days added
- *
- * @example
- * // Add 10 days to 1 September 2014:
- * const result = addDays(new Date(2014, 8, 1), 10)
- * //=> Thu Sep 11 2014 00:00:00
- */
-function addDays(date, amount) {
-  const _date = toDate(date);
-  if (isNaN(amount)) return constructFrom(date, NaN);
-  if (!amount) {
-    // If 0 days, no-op to avoid changing times in the hour before end of DST
-    return _date;
-  }
-  _date.setDate(_date.getDate() + amount);
-  return _date;
-}
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_constructFrom = ((/* unused pure expression or super */ null && (constructFrom)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/addMonths.mjs
+
+
 
 /**
  * @name addMonths
@@ -49594,701 +49685,11 @@ function addMonths(date, amount) {
   }
 }
 
-let index_es_defaultOptions = {};
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_addMonths = ((/* unused pure expression or super */ null && (addMonths)));
 
-function getDefaultOptions() {
-  return index_es_defaultOptions;
-}
+;// CONCATENATED MODULE: ./node_modules/date-fns/subMonths.mjs
 
-/**
- * The {@link startOfWeek} function options.
- */
-
-/**
- * @name startOfWeek
- * @category Week Helpers
- * @summary Return the start of a week for the given date.
- *
- * @description
- * Return the start of a week for the given date.
- * The result will be in the local timezone.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The original date
- * @param options - An object with options
- *
- * @returns The start of a week
- *
- * @example
- * // The start of a week for 2 September 2014 11:55:00:
- * const result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0))
- * //=> Sun Aug 31 2014 00:00:00
- *
- * @example
- * // If the week starts on Monday, the start of the week for 2 September 2014 11:55:00:
- * const result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0), { weekStartsOn: 1 })
- * //=> Mon Sep 01 2014 00:00:00
- */
-function startOfWeek(date, options) {
-  const defaultOptions = getDefaultOptions();
-  const weekStartsOn =
-    options?.weekStartsOn ??
-    options?.locale?.options?.weekStartsOn ??
-    defaultOptions.weekStartsOn ??
-    defaultOptions.locale?.options?.weekStartsOn ??
-    0;
-
-  const _date = toDate(date);
-  const day = _date.getDay();
-  const diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
-
-  _date.setDate(_date.getDate() - diff);
-  _date.setHours(0, 0, 0, 0);
-  return _date;
-}
-
-/**
- * @name startOfDay
- * @category Day Helpers
- * @summary Return the start of a day for the given date.
- *
- * @description
- * Return the start of a day for the given date.
- * The result will be in the local timezone.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The original date
- *
- * @returns The start of a day
- *
- * @example
- * // The start of a day for 2 September 2014 11:55:00:
- * const result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
- * //=> Tue Sep 02 2014 00:00:00
- */
-function startOfDay(date) {
-  const _date = toDate(date);
-  _date.setHours(0, 0, 0, 0);
-  return _date;
-}
-
-/**
- * @name addWeeks
- * @category Week Helpers
- * @summary Add the specified number of weeks to the given date.
- *
- * @description
- * Add the specified number of week to the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param amount - The amount of weeks to be added.
- *
- * @returns The new date with the weeks added
- *
- * @example
- * // Add 4 weeks to 1 September 2014:
- * const result = addWeeks(new Date(2014, 8, 1), 4)
- * //=> Mon Sep 29 2014 00:00:00
- */
-function addWeeks(date, amount) {
-  const days = amount * 7;
-  return addDays(date, days);
-}
-
-/**
- * @name addYears
- * @category Year Helpers
- * @summary Add the specified number of years to the given date.
- *
- * @description
- * Add the specified number of years to the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param amount - The amount of years to be added.
- *
- * @returns The new date with the years added
- *
- * @example
- * // Add 5 years to 1 September 2014:
- * const result = addYears(new Date(2014, 8, 1), 5)
- * //=> Sun Sep 01 2019 00:00:00
- */
-function addYears(date, amount) {
-  return addMonths(date, amount * 12);
-}
-
-/**
- * @name endOfMonth
- * @category Month Helpers
- * @summary Return the end of a month for the given date.
- *
- * @description
- * Return the end of a month for the given date.
- * The result will be in the local timezone.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The original date
- *
- * @returns The end of a month
- *
- * @example
- * // The end of a month for 2 September 2014 11:55:00:
- * const result = endOfMonth(new Date(2014, 8, 2, 11, 55, 0))
- * //=> Tue Sep 30 2014 23:59:59.999
- */
-function endOfMonth(date) {
-  const _date = toDate(date);
-  const month = _date.getMonth();
-  _date.setFullYear(_date.getFullYear(), month + 1, 0);
-  _date.setHours(23, 59, 59, 999);
-  return _date;
-}
-
-/**
- * The {@link eachDayOfInterval} function options.
- */
-
-/**
- * @name eachDayOfInterval
- * @category Interval Helpers
- * @summary Return the array of dates within the specified time interval.
- *
- * @description
- * Return the array of dates within the specified time interval.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param interval - The interval.
- * @param options - An object with options.
- *
- * @returns The array with starts of days from the day of the interval start to the day of the interval end
- *
- * @example
- * // Each day between 6 October 2014 and 10 October 2014:
- * const result = eachDayOfInterval({
- *   start: new Date(2014, 9, 6),
- *   end: new Date(2014, 9, 10)
- * })
- * //=> [
- * //   Mon Oct 06 2014 00:00:00,
- * //   Tue Oct 07 2014 00:00:00,
- * //   Wed Oct 08 2014 00:00:00,
- * //   Thu Oct 09 2014 00:00:00,
- * //   Fri Oct 10 2014 00:00:00
- * // ]
- */
-function eachDayOfInterval(interval, options) {
-  const startDate = toDate(interval.start);
-  const endDate = toDate(interval.end);
-
-  let reversed = +startDate > +endDate;
-  const endTime = reversed ? +startDate : +endDate;
-  const currentDate = reversed ? endDate : startDate;
-  currentDate.setHours(0, 0, 0, 0);
-
-  let step = options?.step ?? 1;
-  if (!step) return [];
-  if (step < 0) {
-    step = -step;
-    reversed = !reversed;
-  }
-
-  const dates = [];
-
-  while (+currentDate <= endTime) {
-    dates.push(toDate(currentDate));
-    currentDate.setDate(currentDate.getDate() + step);
-    currentDate.setHours(0, 0, 0, 0);
-  }
-
-  return reversed ? dates.reverse() : dates;
-}
-
-/**
- * The {@link eachMonthOfInterval} function options.
- */
-
-/**
- * @name eachMonthOfInterval
- * @category Interval Helpers
- * @summary Return the array of months within the specified time interval.
- *
- * @description
- * Return the array of months within the specified time interval.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param interval - The interval
- *
- * @returns The array with starts of months from the month of the interval start to the month of the interval end
- *
- * @example
- * // Each month between 6 February 2014 and 10 August 2014:
- * const result = eachMonthOfInterval({
- *   start: new Date(2014, 1, 6),
- *   end: new Date(2014, 7, 10)
- * })
- * //=> [
- * //   Sat Feb 01 2014 00:00:00,
- * //   Sat Mar 01 2014 00:00:00,
- * //   Tue Apr 01 2014 00:00:00,
- * //   Thu May 01 2014 00:00:00,
- * //   Sun Jun 01 2014 00:00:00,
- * //   Tue Jul 01 2014 00:00:00,
- * //   Fri Aug 01 2014 00:00:00
- * // ]
- */
-function eachMonthOfInterval(interval, options) {
-  const startDate = toDate(interval.start);
-  const endDate = toDate(interval.end);
-
-  let reversed = +startDate > +endDate;
-  const endTime = reversed ? +startDate : +endDate;
-  const currentDate = reversed ? endDate : startDate;
-  currentDate.setHours(0, 0, 0, 0);
-  currentDate.setDate(1);
-
-  let step = options?.step ?? 1;
-  if (!step) return [];
-  if (step < 0) {
-    step = -step;
-    reversed = !reversed;
-  }
-
-  const dates = [];
-
-  while (+currentDate <= endTime) {
-    dates.push(toDate(currentDate));
-    currentDate.setMonth(currentDate.getMonth() + step);
-  }
-
-  return reversed ? dates.reverse() : dates;
-}
-
-/**
- * The {@link eachWeekOfInterval} function options.
- */
-
-/**
- * @name eachWeekOfInterval
- * @category Interval Helpers
- * @summary Return the array of weeks within the specified time interval.
- *
- * @description
- * Return the array of weeks within the specified time interval.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param interval - The interval.
- * @param options - An object with options.
- *
- * @returns The array with starts of weeks from the week of the interval start to the week of the interval end
- *
- * @example
- * // Each week within interval 6 October 2014 - 23 November 2014:
- * const result = eachWeekOfInterval({
- *   start: new Date(2014, 9, 6),
- *   end: new Date(2014, 10, 23)
- * })
- * //=> [
- * //   Sun Oct 05 2014 00:00:00,
- * //   Sun Oct 12 2014 00:00:00,
- * //   Sun Oct 19 2014 00:00:00,
- * //   Sun Oct 26 2014 00:00:00,
- * //   Sun Nov 02 2014 00:00:00,
- * //   Sun Nov 09 2014 00:00:00,
- * //   Sun Nov 16 2014 00:00:00,
- * //   Sun Nov 23 2014 00:00:00
- * // ]
- */
-function eachWeekOfInterval(interval, options) {
-  const startDate = toDate(interval.start);
-  const endDate = toDate(interval.end);
-
-  let reversed = +startDate > +endDate;
-  const startDateWeek = reversed
-    ? startOfWeek(endDate, options)
-    : startOfWeek(startDate, options);
-  const endDateWeek = reversed
-    ? startOfWeek(startDate, options)
-    : startOfWeek(endDate, options);
-
-  // Some timezones switch DST at midnight, making start of day unreliable in these timezones, 3pm is a safe bet
-  startDateWeek.setHours(15);
-  endDateWeek.setHours(15);
-
-  const endTime = +endDateWeek.getTime();
-  let currentDate = startDateWeek;
-
-  let step = options?.step ?? 1;
-  if (!step) return [];
-  if (step < 0) {
-    step = -step;
-    reversed = !reversed;
-  }
-
-  const dates = [];
-
-  while (+currentDate <= endTime) {
-    currentDate.setHours(0);
-    dates.push(toDate(currentDate));
-    currentDate = addWeeks(currentDate, step);
-    currentDate.setHours(15);
-  }
-
-  return reversed ? dates.reverse() : dates;
-}
-
-/**
- * @name startOfMonth
- * @category Month Helpers
- * @summary Return the start of a month for the given date.
- *
- * @description
- * Return the start of a month for the given date.
- * The result will be in the local timezone.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The original date
- *
- * @returns The start of a month
- *
- * @example
- * // The start of a month for 2 September 2014 11:55:00:
- * const result = startOfMonth(new Date(2014, 8, 2, 11, 55, 0))
- * //=> Mon Sep 01 2014 00:00:00
- */
-function startOfMonth(date) {
-  const _date = toDate(date);
-  _date.setDate(1);
-  _date.setHours(0, 0, 0, 0);
-  return _date;
-}
-
-/**
- * The {@link endOfWeek} function options.
- */
-
-/**
- * @name endOfWeek
- * @category Week Helpers
- * @summary Return the end of a week for the given date.
- *
- * @description
- * Return the end of a week for the given date.
- * The result will be in the local timezone.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The original date
- * @param options - An object with options
- *
- * @returns The end of a week
- *
- * @example
- * // The end of a week for 2 September 2014 11:55:00:
- * const result = endOfWeek(new Date(2014, 8, 2, 11, 55, 0))
- * //=> Sat Sep 06 2014 23:59:59.999
- *
- * @example
- * // If the week starts on Monday, the end of the week for 2 September 2014 11:55:00:
- * const result = endOfWeek(new Date(2014, 8, 2, 11, 55, 0), { weekStartsOn: 1 })
- * //=> Sun Sep 07 2014 23:59:59.999
- */
-function endOfWeek(date, options) {
-  const defaultOptions = getDefaultOptions();
-  const weekStartsOn =
-    options?.weekStartsOn ??
-    options?.locale?.options?.weekStartsOn ??
-    defaultOptions.weekStartsOn ??
-    defaultOptions.locale?.options?.weekStartsOn ??
-    0;
-
-  const _date = toDate(date);
-  const day = _date.getDay();
-  const diff = (day < weekStartsOn ? -7 : 0) + 6 - (day - weekStartsOn);
-
-  _date.setDate(_date.getDate() + diff);
-  _date.setHours(23, 59, 59, 999);
-  return _date;
-}
-
-/**
- * @name getDaysInMonth
- * @category Month Helpers
- * @summary Get the number of days in a month of the given date.
- *
- * @description
- * Get the number of days in a month of the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The given date
- *
- * @returns The number of days in a month
- *
- * @example
- * // How many days are in February 2000?
- * const result = getDaysInMonth(new Date(2000, 1))
- * //=> 29
- */
-function getDaysInMonth(date) {
-  const _date = toDate(date);
-  const year = _date.getFullYear();
-  const monthIndex = _date.getMonth();
-  const lastDayOfMonth = constructFrom(date, 0);
-  lastDayOfMonth.setFullYear(year, monthIndex + 1, 0);
-  lastDayOfMonth.setHours(0, 0, 0, 0);
-  return lastDayOfMonth.getDate();
-}
-
-/**
- * @name isAfter
- * @category Common Helpers
- * @summary Is the first date after the second one?
- *
- * @description
- * Is the first date after the second one?
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date that should be after the other one to return true
- * @param dateToCompare - The date to compare with
- *
- * @returns The first date is after the second date
- *
- * @example
- * // Is 10 July 1989 after 11 February 1987?
- * const result = isAfter(new Date(1989, 6, 10), new Date(1987, 1, 11))
- * //=> true
- */
-function isAfter(date, dateToCompare) {
-  const _date = toDate(date);
-  const _dateToCompare = toDate(dateToCompare);
-  return _date.getTime() > _dateToCompare.getTime();
-}
-
-/**
- * @name isBefore
- * @category Common Helpers
- * @summary Is the first date before the second one?
- *
- * @description
- * Is the first date before the second one?
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date that should be before the other one to return true
- * @param dateToCompare - The date to compare with
- *
- * @returns The first date is before the second date
- *
- * @example
- * // Is 10 July 1989 before 11 February 1987?
- * const result = isBefore(new Date(1989, 6, 10), new Date(1987, 1, 11))
- * //=> false
- */
-function isBefore(date, dateToCompare) {
-  const _date = toDate(date);
-  const _dateToCompare = toDate(dateToCompare);
-  return +_date < +_dateToCompare;
-}
-
-/**
- * @name isEqual
- * @category Common Helpers
- * @summary Are the given dates equal?
- *
- * @description
- * Are the given dates equal?
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param dateLeft - The first date to compare
- * @param dateRight - The second date to compare
- *
- * @returns The dates are equal
- *
- * @example
- * // Are 2 July 2014 06:30:45.000 and 2 July 2014 06:30:45.500 equal?
- * const result = isEqual(
- *   new Date(2014, 6, 2, 6, 30, 45, 0),
- *   new Date(2014, 6, 2, 6, 30, 45, 500)
- * )
- * //=> false
- */
-function isEqual(leftDate, rightDate) {
-  const _dateLeft = toDate(leftDate);
-  const _dateRight = toDate(rightDate);
-  return +_dateLeft === +_dateRight;
-}
-
-/**
- * @name setMonth
- * @category Month Helpers
- * @summary Set the month to the given date.
- *
- * @description
- * Set the month to the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param month - The month index to set (0-11)
- *
- * @returns The new date with the month set
- *
- * @example
- * // Set February to 1 September 2014:
- * const result = setMonth(new Date(2014, 8, 1), 1)
- * //=> Sat Feb 01 2014 00:00:00
- */
-function setMonth(date, month) {
-  const _date = toDate(date);
-  const year = _date.getFullYear();
-  const day = _date.getDate();
-
-  const dateWithDesiredMonth = constructFrom(date, 0);
-  dateWithDesiredMonth.setFullYear(year, month, 15);
-  dateWithDesiredMonth.setHours(0, 0, 0, 0);
-  const daysInMonth = getDaysInMonth(dateWithDesiredMonth);
-  // Set the last day of the new month
-  // if the original date was the last day of the longer month
-  _date.setMonth(month, Math.min(day, daysInMonth));
-  return _date;
-}
-
-/**
- * @name set
- * @category Common Helpers
- * @summary Set date values to a given date.
- *
- * @description
- * Set date values to a given date.
- *
- * Sets time values to date from object `values`.
- * A value is not set if it is undefined or null or doesn't exist in `values`.
- *
- * Note about bundle size: `set` does not internally use `setX` functions from date-fns but instead opts
- * to use native `Date#setX` methods. If you use this function, you may not want to include the
- * other `setX` functions that date-fns provides if you are concerned about the bundle size.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param values - The date values to be set
- *
- * @returns The new date with options set
- *
- * @example
- * // Transform 1 September 2014 into 20 October 2015 in a single line:
- * const result = set(new Date(2014, 8, 20), { year: 2015, month: 9, date: 20 })
- * //=> Tue Oct 20 2015 00:00:00
- *
- * @example
- * // Set 12 PM to 1 September 2014 01:23:45 to 1 September 2014 12:00:00:
- * const result = set(new Date(2014, 8, 1, 1, 23, 45), { hours: 12 })
- * //=> Mon Sep 01 2014 12:23:45
- */
-
-function set(date, values) {
-  let _date = toDate(date);
-
-  // Check if date is Invalid Date because Date.prototype.setFullYear ignores the value of Invalid Date
-  if (isNaN(+_date)) {
-    return constructFrom(date, NaN);
-  }
-
-  if (values.year != null) {
-    _date.setFullYear(values.year);
-  }
-
-  if (values.month != null) {
-    _date = setMonth(_date, values.month);
-  }
-
-  if (values.date != null) {
-    _date.setDate(values.date);
-  }
-
-  if (values.hours != null) {
-    _date.setHours(values.hours);
-  }
-
-  if (values.minutes != null) {
-    _date.setMinutes(values.minutes);
-  }
-
-  if (values.seconds != null) {
-    _date.setSeconds(values.seconds);
-  }
-
-  if (values.milliseconds != null) {
-    _date.setMilliseconds(values.milliseconds);
-  }
-
-  return _date;
-}
-
-/**
- * @name setYear
- * @category Year Helpers
- * @summary Set the year to the given date.
- *
- * @description
- * Set the year to the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param year - The year of the new date
- *
- * @returns The new date with the year set
- *
- * @example
- * // Set year 2013 to 1 September 2014:
- * const result = setYear(new Date(2014, 8, 1), 2013)
- * //=> Sun Sep 01 2013 00:00:00
- */
-function setYear(date, year) {
-  const _date = toDate(date);
-
-  // Check if date is Invalid Date because Date.prototype.setFullYear ignores the value of Invalid Date
-  if (isNaN(+_date)) {
-    return constructFrom(date, NaN);
-  }
-
-  _date.setFullYear(year);
-  return _date;
-}
-
-/**
- * @name startOfToday
- * @category Day Helpers
- * @summary Return the start of today.
- * @pure false
- *
- * @description
- * Return the start of today.
- *
- * @returns The start of today
- *
- * @example
- * // If today is 6 October 2014:
- * const result = startOfToday()
- * //=> Mon Oct 6 2014 00:00:00
- */
-function startOfToday() {
-  return startOfDay(Date.now());
-}
 
 /**
  * @name subMonths
@@ -50314,383 +49715,8 @@ function subMonths(date, amount) {
   return addMonths(date, -amount);
 }
 
-/**
- * @name subYears
- * @category Year Helpers
- * @summary Subtract the specified number of years from the given date.
- *
- * @description
- * Subtract the specified number of years from the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param amount - The amount of years to be subtracted.
- *
- * @returns The new date with the years subtracted
- *
- * @example
- * // Subtract 5 years from 1 September 2014:
- * const result = subYears(new Date(2014, 8, 1), 5)
- * //=> Tue Sep 01 2009 00:00:00
- */
-function subYears(date, amount) {
-  return addYears(date, -amount);
-}
-
-var Month;
-(function (Month) {
-    Month[Month["JANUARY"] = 0] = "JANUARY";
-    Month[Month["FEBRUARY"] = 1] = "FEBRUARY";
-    Month[Month["MARCH"] = 2] = "MARCH";
-    Month[Month["APRIL"] = 3] = "APRIL";
-    Month[Month["MAY"] = 4] = "MAY";
-    Month[Month["JUNE"] = 5] = "JUNE";
-    Month[Month["JULY"] = 6] = "JULY";
-    Month[Month["AUGUST"] = 7] = "AUGUST";
-    Month[Month["SEPTEMBER"] = 8] = "SEPTEMBER";
-    Month[Month["OCTOBER"] = 9] = "OCTOBER";
-    Month[Month["NOVEMBER"] = 10] = "NOVEMBER";
-    Month[Month["DECEMBER"] = 11] = "DECEMBER";
-})(Month || (Month = {}));
-var Day;
-(function (Day) {
-    Day[Day["SUNDAY"] = 0] = "SUNDAY";
-    Day[Day["MONDAY"] = 1] = "MONDAY";
-    Day[Day["TUESDAY"] = 2] = "TUESDAY";
-    Day[Day["WEDNESDAY"] = 3] = "WEDNESDAY";
-    Day[Day["THURSDAY"] = 4] = "THURSDAY";
-    Day[Day["FRIDAY"] = 5] = "FRIDAY";
-    Day[Day["SATURDAY"] = 6] = "SATURDAY";
-})(Day || (Day = {}));
-var inRange = function (date, min, max) {
-    return (isEqual(date, min) || isAfter(date, min)) && (isEqual(date, max) || isBefore(date, max));
-};
-var index_es_clearTime = function (date) { return set(date, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }); };
-var useLilius = function (_a) {
-    var _b = _a === void 0 ? {} : _a, _c = _b.weekStartsOn, weekStartsOn = _c === void 0 ? Day.SUNDAY : _c, _d = _b.viewing, initialViewing = _d === void 0 ? new Date() : _d, _e = _b.selected, initialSelected = _e === void 0 ? [] : _e, _f = _b.numberOfMonths, numberOfMonths = _f === void 0 ? 1 : _f;
-    var _g = (0,external_React_.useState)(initialViewing), viewing = _g[0], setViewing = _g[1];
-    var viewToday = (0,external_React_.useCallback)(function () { return setViewing(startOfToday()); }, [setViewing]);
-    var viewMonth = (0,external_React_.useCallback)(function (month) { return setViewing(function (v) { return setMonth(v, month); }); }, []);
-    var viewPreviousMonth = (0,external_React_.useCallback)(function () { return setViewing(function (v) { return subMonths(v, 1); }); }, []);
-    var viewNextMonth = (0,external_React_.useCallback)(function () { return setViewing(function (v) { return addMonths(v, 1); }); }, []);
-    var viewYear = (0,external_React_.useCallback)(function (year) { return setViewing(function (v) { return setYear(v, year); }); }, []);
-    var viewPreviousYear = (0,external_React_.useCallback)(function () { return setViewing(function (v) { return subYears(v, 1); }); }, []);
-    var viewNextYear = (0,external_React_.useCallback)(function () { return setViewing(function (v) { return addYears(v, 1); }); }, []);
-    var _h = (0,external_React_.useState)(initialSelected.map(index_es_clearTime)), selected = _h[0], setSelected = _h[1];
-    var clearSelected = function () { return setSelected([]); };
-    var isSelected = (0,external_React_.useCallback)(function (date) { return selected.findIndex(function (s) { return isEqual(s, date); }) > -1; }, [selected]);
-    var select = (0,external_React_.useCallback)(function (date, replaceExisting) {
-        if (replaceExisting) {
-            setSelected(Array.isArray(date) ? date : [date]);
-        }
-        else {
-            setSelected(function (selectedItems) { return selectedItems.concat(Array.isArray(date) ? date : [date]); });
-        }
-    }, []);
-    var deselect = (0,external_React_.useCallback)(function (date) {
-        return setSelected(function (selectedItems) {
-            return Array.isArray(date)
-                ? selectedItems.filter(function (s) { return !date.map(function (d) { return d.getTime(); }).includes(s.getTime()); })
-                : selectedItems.filter(function (s) { return !isEqual(s, date); });
-        });
-    }, []);
-    var toggle = (0,external_React_.useCallback)(function (date, replaceExisting) { return (isSelected(date) ? deselect(date) : select(date, replaceExisting)); }, [deselect, isSelected, select]);
-    var selectRange = (0,external_React_.useCallback)(function (start, end, replaceExisting) {
-        if (replaceExisting) {
-            setSelected(eachDayOfInterval({ start: start, end: end }));
-        }
-        else {
-            setSelected(function (selectedItems) { return selectedItems.concat(eachDayOfInterval({ start: start, end: end })); });
-        }
-    }, []);
-    var deselectRange = (0,external_React_.useCallback)(function (start, end) {
-        setSelected(function (selectedItems) {
-            return selectedItems.filter(function (s) {
-                return !eachDayOfInterval({ start: start, end: end })
-                    .map(function (d) { return d.getTime(); })
-                    .includes(s.getTime());
-            });
-        });
-    }, []);
-    var calendar = (0,external_React_.useMemo)(function () {
-        return eachMonthOfInterval({
-            start: startOfMonth(viewing),
-            end: endOfMonth(addMonths(viewing, numberOfMonths - 1)),
-        }).map(function (month) {
-            return eachWeekOfInterval({
-                start: startOfMonth(month),
-                end: endOfMonth(month),
-            }, { weekStartsOn: weekStartsOn }).map(function (week) {
-                return eachDayOfInterval({
-                    start: startOfWeek(week, { weekStartsOn: weekStartsOn }),
-                    end: endOfWeek(week, { weekStartsOn: weekStartsOn }),
-                });
-            });
-        });
-    }, [viewing, weekStartsOn, numberOfMonths]);
-    return {
-        clearTime: index_es_clearTime,
-        inRange: inRange,
-        viewing: viewing,
-        setViewing: setViewing,
-        viewToday: viewToday,
-        viewMonth: viewMonth,
-        viewPreviousMonth: viewPreviousMonth,
-        viewNextMonth: viewNextMonth,
-        viewYear: viewYear,
-        viewPreviousYear: viewPreviousYear,
-        viewNextYear: viewNextYear,
-        selected: selected,
-        setSelected: setSelected,
-        clearSelected: clearSelected,
-        isSelected: isSelected,
-        select: select,
-        deselect: deselect,
-        toggle: toggle,
-        selectRange: selectRange,
-        deselectRange: deselectRange,
-        calendar: calendar,
-    };
-};
-
-
-
-;// CONCATENATED MODULE: ./node_modules/date-fns/toDate.mjs
-/**
- * @name toDate
- * @category Common Helpers
- * @summary Convert the given argument to an instance of Date.
- *
- * @description
- * Convert the given argument to an instance of Date.
- *
- * If the argument is an instance of Date, the function returns its clone.
- *
- * If the argument is a number, it is treated as a timestamp.
- *
- * If the argument is none of the above, the function returns Invalid Date.
- *
- * **Note**: *all* Date arguments passed to any *date-fns* function is processed by `toDate`.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param argument - The value to convert
- *
- * @returns The parsed date in the local time zone
- *
- * @example
- * // Clone the date:
- * const result = toDate(new Date(2014, 1, 11, 11, 30, 30))
- * //=> Tue Feb 11 2014 11:30:30
- *
- * @example
- * // Convert the timestamp to date:
- * const result = toDate(1392098430000)
- * //=> Tue Feb 11 2014 11:30:30
- */
-function toDate_toDate(argument) {
-  const argStr = Object.prototype.toString.call(argument);
-
-  // Clone the date
-  if (
-    argument instanceof Date ||
-    (typeof argument === "object" && argStr === "[object Date]")
-  ) {
-    // Prevent the date to lose the milliseconds when passed to new Date() in IE10
-    return new argument.constructor(+argument);
-  } else if (
-    typeof argument === "number" ||
-    argStr === "[object Number]" ||
-    typeof argument === "string" ||
-    argStr === "[object String]"
-  ) {
-    // TODO: Can we get rid of as?
-    return new Date(argument);
-  } else {
-    // TODO: Can we get rid of as?
-    return new Date(NaN);
-  }
-}
-
 // Fallback for modularized imports:
-/* harmony default export */ const date_fns_toDate = ((/* unused pure expression or super */ null && (toDate_toDate)));
-
-;// CONCATENATED MODULE: ./node_modules/date-fns/startOfDay.mjs
-
-
-/**
- * @name startOfDay
- * @category Day Helpers
- * @summary Return the start of a day for the given date.
- *
- * @description
- * Return the start of a day for the given date.
- * The result will be in the local timezone.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The original date
- *
- * @returns The start of a day
- *
- * @example
- * // The start of a day for 2 September 2014 11:55:00:
- * const result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
- * //=> Tue Sep 02 2014 00:00:00
- */
-function startOfDay_startOfDay(date) {
-  const _date = toDate_toDate(date);
-  _date.setHours(0, 0, 0, 0);
-  return _date;
-}
-
-// Fallback for modularized imports:
-/* harmony default export */ const date_fns_startOfDay = ((/* unused pure expression or super */ null && (startOfDay_startOfDay)));
-
-;// CONCATENATED MODULE: ./node_modules/date-fns/constructFrom.mjs
-/**
- * @name constructFrom
- * @category Generic Helpers
- * @summary Constructs a date using the reference date and the value
- *
- * @description
- * The function constructs a new date using the constructor from the reference
- * date and the given value. It helps to build generic functions that accept
- * date extensions.
- *
- * It defaults to `Date` if the passed reference date is a number or a string.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The reference date to take constructor from
- * @param value - The value to create the date
- *
- * @returns Date initialized using the given date and value
- *
- * @example
- * import { constructFrom } from 'date-fns'
- *
- * // A function that clones a date preserving the original type
- * function cloneDate<DateType extends Date(date: DateType): DateType {
- *   return constructFrom(
- *     date, // Use contrustor from the given date
- *     date.getTime() // Use the date value to create a new date
- *   )
- * }
- */
-function constructFrom_constructFrom(date, value) {
-  if (date instanceof Date) {
-    return new date.constructor(value);
-  } else {
-    return new Date(value);
-  }
-}
-
-// Fallback for modularized imports:
-/* harmony default export */ const date_fns_constructFrom = ((/* unused pure expression or super */ null && (constructFrom_constructFrom)));
-
-;// CONCATENATED MODULE: ./node_modules/date-fns/addMonths.mjs
-
-
-
-/**
- * @name addMonths
- * @category Month Helpers
- * @summary Add the specified number of months to the given date.
- *
- * @description
- * Add the specified number of months to the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param amount - The amount of months to be added.
- *
- * @returns The new date with the months added
- *
- * @example
- * // Add 5 months to 1 September 2014:
- * const result = addMonths(new Date(2014, 8, 1), 5)
- * //=> Sun Feb 01 2015 00:00:00
- *
- * // Add one month to 30 January 2023:
- * const result = addMonths(new Date(2023, 0, 30), 1)
- * //=> Tue Feb 28 2023 00:00:00
- */
-function addMonths_addMonths(date, amount) {
-  const _date = toDate_toDate(date);
-  if (isNaN(amount)) return constructFrom_constructFrom(date, NaN);
-  if (!amount) {
-    // If 0 months, no-op to avoid changing times in the hour before end of DST
-    return _date;
-  }
-  const dayOfMonth = _date.getDate();
-
-  // The JS Date object supports date math by accepting out-of-bounds values for
-  // month, day, etc. For example, new Date(2020, 0, 0) returns 31 Dec 2019 and
-  // new Date(2020, 13, 1) returns 1 Feb 2021.  This is *almost* the behavior we
-  // want except that dates will wrap around the end of a month, meaning that
-  // new Date(2020, 13, 31) will return 3 Mar 2021 not 28 Feb 2021 as desired. So
-  // we'll default to the end of the desired month by adding 1 to the desired
-  // month and using a date of 0 to back up one day to the end of the desired
-  // month.
-  const endOfDesiredMonth = constructFrom_constructFrom(date, _date.getTime());
-  endOfDesiredMonth.setMonth(_date.getMonth() + amount + 1, 0);
-  const daysInMonth = endOfDesiredMonth.getDate();
-  if (dayOfMonth >= daysInMonth) {
-    // If we're already at the end of the month, then this is the correct date
-    // and we're done.
-    return endOfDesiredMonth;
-  } else {
-    // Otherwise, we now know that setting the original day-of-month value won't
-    // cause an overflow, so set the desired day-of-month. Note that we can't
-    // just set the date of `endOfDesiredMonth` because that object may have had
-    // its time changed in the unusual case where where a DST transition was on
-    // the last day of the month and its local time was in the hour skipped or
-    // repeated next to a DST transition.  So we use `date` instead which is
-    // guaranteed to still have the original time.
-    _date.setFullYear(
-      endOfDesiredMonth.getFullYear(),
-      endOfDesiredMonth.getMonth(),
-      dayOfMonth,
-    );
-    return _date;
-  }
-}
-
-// Fallback for modularized imports:
-/* harmony default export */ const date_fns_addMonths = ((/* unused pure expression or super */ null && (addMonths_addMonths)));
-
-;// CONCATENATED MODULE: ./node_modules/date-fns/subMonths.mjs
-
-
-/**
- * @name subMonths
- * @category Month Helpers
- * @summary Subtract the specified number of months from the given date.
- *
- * @description
- * Subtract the specified number of months from the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param amount - The amount of months to be subtracted.
- *
- * @returns The new date with the months subtracted
- *
- * @example
- * // Subtract 5 months from 1 February 2015:
- * const result = subMonths(new Date(2015, 1, 1), 5)
- * //=> Mon Sep 01 2014 00:00:00
- */
-function subMonths_subMonths(date, amount) {
-  return addMonths_addMonths(date, -amount);
-}
-
-// Fallback for modularized imports:
-/* harmony default export */ const date_fns_subMonths = ((/* unused pure expression or super */ null && (subMonths_subMonths)));
+/* harmony default export */ const date_fns_subMonths = ((/* unused pure expression or super */ null && (subMonths)));
 
 ;// CONCATENATED MODULE: ./node_modules/date-fns/locale/en-US/_lib/formatDistance.mjs
 const formatDistanceLocale = {
@@ -51363,7 +50389,7 @@ const enUS = {
 ;// CONCATENATED MODULE: ./node_modules/date-fns/_lib/defaultOptions.mjs
 let defaultOptions_defaultOptions = {};
 
-function defaultOptions_getDefaultOptions() {
+function getDefaultOptions() {
   return defaultOptions_defaultOptions;
 }
 
@@ -51591,7 +50617,7 @@ const secondsInQuarter = secondsInMonth * 3;
  * This function returns the timezone offset in milliseconds that takes seconds in account.
  */
 function getTimezoneOffsetInMilliseconds(date) {
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   const utcDate = new Date(
     Date.UTC(
       _date.getFullYear(),
@@ -51645,8 +50671,8 @@ function getTimezoneOffsetInMilliseconds(date) {
  * //=> 1
  */
 function differenceInCalendarDays(dateLeft, dateRight) {
-  const startOfDayLeft = startOfDay_startOfDay(dateLeft);
-  const startOfDayRight = startOfDay_startOfDay(dateRight);
+  const startOfDayLeft = startOfDay(dateLeft);
+  const startOfDayRight = startOfDay(dateRight);
 
   const timestampLeft =
     +startOfDayLeft - getTimezoneOffsetInMilliseconds(startOfDayLeft);
@@ -51687,8 +50713,8 @@ function differenceInCalendarDays(dateLeft, dateRight) {
  * //=> Wed Jan 01 2014 00:00:00
  */
 function startOfYear(date) {
-  const cleanDate = toDate_toDate(date);
-  const _date = constructFrom_constructFrom(date, 0);
+  const cleanDate = toDate(date);
+  const _date = constructFrom(date, 0);
   _date.setFullYear(cleanDate.getFullYear(), 0, 1);
   _date.setHours(0, 0, 0, 0);
   return _date;
@@ -51722,7 +50748,7 @@ function startOfYear(date) {
  * //=> 183
  */
 function getDayOfYear(date) {
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   const diff = differenceInCalendarDays(_date, startOfYear(_date));
   const dayOfYear = diff + 1;
   return dayOfYear;
@@ -51765,8 +50791,8 @@ function getDayOfYear(date) {
  * const result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0), { weekStartsOn: 1 })
  * //=> Mon Sep 01 2014 00:00:00
  */
-function startOfWeek_startOfWeek(date, options) {
-  const defaultOptions = defaultOptions_getDefaultOptions();
+function startOfWeek(date, options) {
+  const defaultOptions = getDefaultOptions();
   const weekStartsOn =
     options?.weekStartsOn ??
     options?.locale?.options?.weekStartsOn ??
@@ -51774,7 +50800,7 @@ function startOfWeek_startOfWeek(date, options) {
     defaultOptions.locale?.options?.weekStartsOn ??
     0;
 
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   const day = _date.getDay();
   const diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
 
@@ -51784,7 +50810,7 @@ function startOfWeek_startOfWeek(date, options) {
 }
 
 // Fallback for modularized imports:
-/* harmony default export */ const date_fns_startOfWeek = ((/* unused pure expression or super */ null && (startOfWeek_startOfWeek)));
+/* harmony default export */ const date_fns_startOfWeek = ((/* unused pure expression or super */ null && (startOfWeek)));
 
 ;// CONCATENATED MODULE: ./node_modules/date-fns/startOfISOWeek.mjs
 
@@ -51812,7 +50838,7 @@ function startOfWeek_startOfWeek(date, options) {
  * //=> Mon Sep 01 2014 00:00:00
  */
 function startOfISOWeek(date) {
-  return startOfWeek_startOfWeek(date, { weekStartsOn: 1 });
+  return startOfWeek(date, { weekStartsOn: 1 });
 }
 
 // Fallback for modularized imports:
@@ -51846,15 +50872,15 @@ function startOfISOWeek(date) {
  * //=> 2004
  */
 function getISOWeekYear(date) {
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   const year = _date.getFullYear();
 
-  const fourthOfJanuaryOfNextYear = constructFrom_constructFrom(date, 0);
+  const fourthOfJanuaryOfNextYear = constructFrom(date, 0);
   fourthOfJanuaryOfNextYear.setFullYear(year + 1, 0, 4);
   fourthOfJanuaryOfNextYear.setHours(0, 0, 0, 0);
   const startOfNextYear = startOfISOWeek(fourthOfJanuaryOfNextYear);
 
-  const fourthOfJanuaryOfThisYear = constructFrom_constructFrom(date, 0);
+  const fourthOfJanuaryOfThisYear = constructFrom(date, 0);
   fourthOfJanuaryOfThisYear.setFullYear(year, 0, 4);
   fourthOfJanuaryOfThisYear.setHours(0, 0, 0, 0);
   const startOfThisYear = startOfISOWeek(fourthOfJanuaryOfThisYear);
@@ -51901,7 +50927,7 @@ function getISOWeekYear(date) {
  */
 function startOfISOWeekYear(date) {
   const year = getISOWeekYear(date);
-  const fourthOfJanuary = constructFrom_constructFrom(date, 0);
+  const fourthOfJanuary = constructFrom(date, 0);
   fourthOfJanuary.setFullYear(year, 0, 4);
   fourthOfJanuary.setHours(0, 0, 0, 0);
   return startOfISOWeek(fourthOfJanuary);
@@ -51938,7 +50964,7 @@ function startOfISOWeekYear(date) {
  * //=> 53
  */
 function getISOWeek(date) {
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   const diff = +startOfISOWeek(_date) - +startOfISOWeekYear(_date);
 
   // Round the number of weeks to the nearest integer because the number of
@@ -51997,10 +51023,10 @@ function getISOWeek(date) {
  * //=> 2004
  */
 function getWeekYear(date, options) {
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   const year = _date.getFullYear();
 
-  const defaultOptions = defaultOptions_getDefaultOptions();
+  const defaultOptions = getDefaultOptions();
   const firstWeekContainsDate =
     options?.firstWeekContainsDate ??
     options?.locale?.options?.firstWeekContainsDate ??
@@ -52008,15 +51034,15 @@ function getWeekYear(date, options) {
     defaultOptions.locale?.options?.firstWeekContainsDate ??
     1;
 
-  const firstWeekOfNextYear = constructFrom_constructFrom(date, 0);
+  const firstWeekOfNextYear = constructFrom(date, 0);
   firstWeekOfNextYear.setFullYear(year + 1, 0, firstWeekContainsDate);
   firstWeekOfNextYear.setHours(0, 0, 0, 0);
-  const startOfNextYear = startOfWeek_startOfWeek(firstWeekOfNextYear, options);
+  const startOfNextYear = startOfWeek(firstWeekOfNextYear, options);
 
-  const firstWeekOfThisYear = constructFrom_constructFrom(date, 0);
+  const firstWeekOfThisYear = constructFrom(date, 0);
   firstWeekOfThisYear.setFullYear(year, 0, firstWeekContainsDate);
   firstWeekOfThisYear.setHours(0, 0, 0, 0);
-  const startOfThisYear = startOfWeek_startOfWeek(firstWeekOfThisYear, options);
+  const startOfThisYear = startOfWeek(firstWeekOfThisYear, options);
 
   if (_date.getTime() >= startOfNextYear.getTime()) {
     return year + 1;
@@ -52077,7 +51103,7 @@ function getWeekYear(date, options) {
  * //=> Mon Jan 03 2005 00:00:00
  */
 function startOfWeekYear(date, options) {
-  const defaultOptions = defaultOptions_getDefaultOptions();
+  const defaultOptions = getDefaultOptions();
   const firstWeekContainsDate =
     options?.firstWeekContainsDate ??
     options?.locale?.options?.firstWeekContainsDate ??
@@ -52086,10 +51112,10 @@ function startOfWeekYear(date, options) {
     1;
 
   const year = getWeekYear(date, options);
-  const firstWeek = constructFrom_constructFrom(date, 0);
+  const firstWeek = constructFrom(date, 0);
   firstWeek.setFullYear(year, 0, firstWeekContainsDate);
   firstWeek.setHours(0, 0, 0, 0);
-  const _date = startOfWeek_startOfWeek(firstWeek, options);
+  const _date = startOfWeek(firstWeek, options);
   return _date;
 }
 
@@ -52144,8 +51170,8 @@ function startOfWeekYear(date, options) {
  */
 
 function getWeek(date, options) {
-  const _date = toDate_toDate(date);
-  const diff = +startOfWeek_startOfWeek(_date, options) - +startOfWeekYear(_date, options);
+  const _date = toDate(date);
+  const diff = +startOfWeek(_date, options) - +startOfWeekYear(_date, options);
 
   // Round the number of weeks to the nearest integer because the number of
   // milliseconds in a week is not constant (e.g. it's different in the week of
@@ -53211,7 +52237,7 @@ function isValid(date) {
   if (!isDate(date) && typeof date !== "number") {
     return false;
   }
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   return !isNaN(Number(_date));
 }
 
@@ -53546,7 +52572,7 @@ const unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * //=> "3 o'clock"
  */
 function format(date, formatStr, options) {
-  const defaultOptions = defaultOptions_getDefaultOptions();
+  const defaultOptions = getDefaultOptions();
   const locale = options?.locale ?? defaultOptions.locale ?? enUS;
 
   const firstWeekContainsDate =
@@ -53563,7 +52589,7 @@ function format(date, formatStr, options) {
     defaultOptions.locale?.options?.weekStartsOn ??
     0;
 
-  const originalDate = toDate_toDate(date);
+  const originalDate = toDate(date);
 
   if (!isValid(originalDate)) {
     throw new RangeError("Invalid time value");
@@ -53681,8 +52707,8 @@ function cleanEscapedString(input) {
  * //=> false
  */
 function isSameMonth(dateLeft, dateRight) {
-  const _dateLeft = toDate_toDate(dateLeft);
-  const _dateRight = toDate_toDate(dateRight);
+  const _dateLeft = toDate(dateLeft);
+  const _dateRight = toDate(dateRight);
   return (
     _dateLeft.getFullYear() === _dateRight.getFullYear() &&
     _dateLeft.getMonth() === _dateRight.getMonth()
@@ -53718,14 +52744,14 @@ function isSameMonth(dateLeft, dateRight) {
  * )
  * //=> false
  */
-function isEqual_isEqual(leftDate, rightDate) {
-  const _dateLeft = toDate_toDate(leftDate);
-  const _dateRight = toDate_toDate(rightDate);
+function isEqual(leftDate, rightDate) {
+  const _dateLeft = toDate(leftDate);
+  const _dateRight = toDate(rightDate);
   return +_dateLeft === +_dateRight;
 }
 
 // Fallback for modularized imports:
-/* harmony default export */ const date_fns_isEqual = ((/* unused pure expression or super */ null && (isEqual_isEqual)));
+/* harmony default export */ const date_fns_isEqual = ((/* unused pure expression or super */ null && (isEqual)));
 
 ;// CONCATENATED MODULE: ./node_modules/date-fns/isSameDay.mjs
 
@@ -53761,8 +52787,8 @@ function isEqual_isEqual(leftDate, rightDate) {
  * //=> false
  */
 function isSameDay(dateLeft, dateRight) {
-  const dateLeftStartOfDay = startOfDay_startOfDay(dateLeft);
-  const dateRightStartOfDay = startOfDay_startOfDay(dateRight);
+  const dateLeftStartOfDay = startOfDay(dateLeft);
+  const dateRightStartOfDay = startOfDay(dateRight);
 
   return +dateLeftStartOfDay === +dateRightStartOfDay;
 }
@@ -53794,9 +52820,9 @@ function isSameDay(dateLeft, dateRight) {
  * const result = addDays(new Date(2014, 8, 1), 10)
  * //=> Thu Sep 11 2014 00:00:00
  */
-function addDays_addDays(date, amount) {
-  const _date = toDate_toDate(date);
-  if (isNaN(amount)) return constructFrom_constructFrom(date, NaN);
+function addDays(date, amount) {
+  const _date = toDate(date);
+  if (isNaN(amount)) return constructFrom(date, NaN);
   if (!amount) {
     // If 0 days, no-op to avoid changing times in the hour before end of DST
     return _date;
@@ -53806,7 +52832,7 @@ function addDays_addDays(date, amount) {
 }
 
 // Fallback for modularized imports:
-/* harmony default export */ const date_fns_addDays = ((/* unused pure expression or super */ null && (addDays_addDays)));
+/* harmony default export */ const date_fns_addDays = ((/* unused pure expression or super */ null && (addDays)));
 
 ;// CONCATENATED MODULE: ./node_modules/date-fns/addWeeks.mjs
 
@@ -53831,13 +52857,13 @@ function addDays_addDays(date, amount) {
  * const result = addWeeks(new Date(2014, 8, 1), 4)
  * //=> Mon Sep 29 2014 00:00:00
  */
-function addWeeks_addWeeks(date, amount) {
+function addWeeks(date, amount) {
   const days = amount * 7;
-  return addDays_addDays(date, days);
+  return addDays(date, days);
 }
 
 // Fallback for modularized imports:
-/* harmony default export */ const date_fns_addWeeks = ((/* unused pure expression or super */ null && (addWeeks_addWeeks)));
+/* harmony default export */ const date_fns_addWeeks = ((/* unused pure expression or super */ null && (addWeeks)));
 
 ;// CONCATENATED MODULE: ./node_modules/date-fns/subWeeks.mjs
 
@@ -53863,7 +52889,7 @@ function addWeeks_addWeeks(date, amount) {
  * //=> Mon Aug 04 2014 00:00:00
  */
 function subWeeks(date, amount) {
-  return addWeeks_addWeeks(date, -amount);
+  return addWeeks(date, -amount);
 }
 
 // Fallback for modularized imports:
@@ -53903,8 +52929,8 @@ function subWeeks(date, amount) {
  * const result = endOfWeek(new Date(2014, 8, 2, 11, 55, 0), { weekStartsOn: 1 })
  * //=> Sun Sep 07 2014 23:59:59.999
  */
-function endOfWeek_endOfWeek(date, options) {
-  const defaultOptions = defaultOptions_getDefaultOptions();
+function endOfWeek(date, options) {
+  const defaultOptions = getDefaultOptions();
   const weekStartsOn =
     options?.weekStartsOn ??
     options?.locale?.options?.weekStartsOn ??
@@ -53912,7 +52938,7 @@ function endOfWeek_endOfWeek(date, options) {
     defaultOptions.locale?.options?.weekStartsOn ??
     0;
 
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   const day = _date.getDay();
   const diff = (day < weekStartsOn ? -7 : 0) + 6 - (day - weekStartsOn);
 
@@ -53922,7 +52948,7 @@ function endOfWeek_endOfWeek(date, options) {
 }
 
 // Fallback for modularized imports:
-/* harmony default export */ const date_fns_endOfWeek = ((/* unused pure expression or super */ null && (endOfWeek_endOfWeek)));
+/* harmony default export */ const date_fns_endOfWeek = ((/* unused pure expression or super */ null && (endOfWeek)));
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/arrow-right.js
 /**
@@ -53956,9 +52982,797 @@ const arrowLeft = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(
 
 ;// CONCATENATED MODULE: external ["wp","date"]
 const external_wp_date_namespaceObject = window["wp"]["date"];
+;// CONCATENATED MODULE: ./node_modules/date-fns/isAfter.mjs
+
+
+/**
+ * @name isAfter
+ * @category Common Helpers
+ * @summary Is the first date after the second one?
+ *
+ * @description
+ * Is the first date after the second one?
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date that should be after the other one to return true
+ * @param dateToCompare - The date to compare with
+ *
+ * @returns The first date is after the second date
+ *
+ * @example
+ * // Is 10 July 1989 after 11 February 1987?
+ * const result = isAfter(new Date(1989, 6, 10), new Date(1987, 1, 11))
+ * //=> true
+ */
+function isAfter(date, dateToCompare) {
+  const _date = toDate(date);
+  const _dateToCompare = toDate(dateToCompare);
+  return _date.getTime() > _dateToCompare.getTime();
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_isAfter = ((/* unused pure expression or super */ null && (isAfter)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/isBefore.mjs
+
+
+/**
+ * @name isBefore
+ * @category Common Helpers
+ * @summary Is the first date before the second one?
+ *
+ * @description
+ * Is the first date before the second one?
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date that should be before the other one to return true
+ * @param dateToCompare - The date to compare with
+ *
+ * @returns The first date is before the second date
+ *
+ * @example
+ * // Is 10 July 1989 before 11 February 1987?
+ * const result = isBefore(new Date(1989, 6, 10), new Date(1987, 1, 11))
+ * //=> false
+ */
+function isBefore(date, dateToCompare) {
+  const _date = toDate(date);
+  const _dateToCompare = toDate(dateToCompare);
+  return +_date < +_dateToCompare;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_isBefore = ((/* unused pure expression or super */ null && (isBefore)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/getDaysInMonth.mjs
+
+
+
+/**
+ * @name getDaysInMonth
+ * @category Month Helpers
+ * @summary Get the number of days in a month of the given date.
+ *
+ * @description
+ * Get the number of days in a month of the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The given date
+ *
+ * @returns The number of days in a month
+ *
+ * @example
+ * // How many days are in February 2000?
+ * const result = getDaysInMonth(new Date(2000, 1))
+ * //=> 29
+ */
+function getDaysInMonth(date) {
+  const _date = toDate(date);
+  const year = _date.getFullYear();
+  const monthIndex = _date.getMonth();
+  const lastDayOfMonth = constructFrom(date, 0);
+  lastDayOfMonth.setFullYear(year, monthIndex + 1, 0);
+  lastDayOfMonth.setHours(0, 0, 0, 0);
+  return lastDayOfMonth.getDate();
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_getDaysInMonth = ((/* unused pure expression or super */ null && (getDaysInMonth)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/setMonth.mjs
+
+
+
+
+/**
+ * @name setMonth
+ * @category Month Helpers
+ * @summary Set the month to the given date.
+ *
+ * @description
+ * Set the month to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date to be changed
+ * @param month - The month index to set (0-11)
+ *
+ * @returns The new date with the month set
+ *
+ * @example
+ * // Set February to 1 September 2014:
+ * const result = setMonth(new Date(2014, 8, 1), 1)
+ * //=> Sat Feb 01 2014 00:00:00
+ */
+function setMonth(date, month) {
+  const _date = toDate(date);
+  const year = _date.getFullYear();
+  const day = _date.getDate();
+
+  const dateWithDesiredMonth = constructFrom(date, 0);
+  dateWithDesiredMonth.setFullYear(year, month, 15);
+  dateWithDesiredMonth.setHours(0, 0, 0, 0);
+  const daysInMonth = getDaysInMonth(dateWithDesiredMonth);
+  // Set the last day of the new month
+  // if the original date was the last day of the longer month
+  _date.setMonth(month, Math.min(day, daysInMonth));
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_setMonth = ((/* unused pure expression or super */ null && (setMonth)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/set.mjs
+
+
+
+
+/**
+ * @name set
+ * @category Common Helpers
+ * @summary Set date values to a given date.
+ *
+ * @description
+ * Set date values to a given date.
+ *
+ * Sets time values to date from object `values`.
+ * A value is not set if it is undefined or null or doesn't exist in `values`.
+ *
+ * Note about bundle size: `set` does not internally use `setX` functions from date-fns but instead opts
+ * to use native `Date#setX` methods. If you use this function, you may not want to include the
+ * other `setX` functions that date-fns provides if you are concerned about the bundle size.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date to be changed
+ * @param values - The date values to be set
+ *
+ * @returns The new date with options set
+ *
+ * @example
+ * // Transform 1 September 2014 into 20 October 2015 in a single line:
+ * const result = set(new Date(2014, 8, 20), { year: 2015, month: 9, date: 20 })
+ * //=> Tue Oct 20 2015 00:00:00
+ *
+ * @example
+ * // Set 12 PM to 1 September 2014 01:23:45 to 1 September 2014 12:00:00:
+ * const result = set(new Date(2014, 8, 1, 1, 23, 45), { hours: 12 })
+ * //=> Mon Sep 01 2014 12:23:45
+ */
+
+function set(date, values) {
+  let _date = toDate(date);
+
+  // Check if date is Invalid Date because Date.prototype.setFullYear ignores the value of Invalid Date
+  if (isNaN(+_date)) {
+    return constructFrom(date, NaN);
+  }
+
+  if (values.year != null) {
+    _date.setFullYear(values.year);
+  }
+
+  if (values.month != null) {
+    _date = setMonth(_date, values.month);
+  }
+
+  if (values.date != null) {
+    _date.setDate(values.date);
+  }
+
+  if (values.hours != null) {
+    _date.setHours(values.hours);
+  }
+
+  if (values.minutes != null) {
+    _date.setMinutes(values.minutes);
+  }
+
+  if (values.seconds != null) {
+    _date.setSeconds(values.seconds);
+  }
+
+  if (values.milliseconds != null) {
+    _date.setMilliseconds(values.milliseconds);
+  }
+
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_set = ((/* unused pure expression or super */ null && (set)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/startOfToday.mjs
+
+
+/**
+ * @name startOfToday
+ * @category Day Helpers
+ * @summary Return the start of today.
+ * @pure false
+ *
+ * @description
+ * Return the start of today.
+ *
+ * @returns The start of today
+ *
+ * @example
+ * // If today is 6 October 2014:
+ * const result = startOfToday()
+ * //=> Mon Oct 6 2014 00:00:00
+ */
+function startOfToday() {
+  return startOfDay(Date.now());
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfToday = ((/* unused pure expression or super */ null && (startOfToday)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/setYear.mjs
+
+
+
+/**
+ * @name setYear
+ * @category Year Helpers
+ * @summary Set the year to the given date.
+ *
+ * @description
+ * Set the year to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date to be changed
+ * @param year - The year of the new date
+ *
+ * @returns The new date with the year set
+ *
+ * @example
+ * // Set year 2013 to 1 September 2014:
+ * const result = setYear(new Date(2014, 8, 1), 2013)
+ * //=> Sun Sep 01 2013 00:00:00
+ */
+function setYear(date, year) {
+  const _date = toDate(date);
+
+  // Check if date is Invalid Date because Date.prototype.setFullYear ignores the value of Invalid Date
+  if (isNaN(+_date)) {
+    return constructFrom(date, NaN);
+  }
+
+  _date.setFullYear(year);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_setYear = ((/* unused pure expression or super */ null && (setYear)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/addYears.mjs
+
+
+/**
+ * @name addYears
+ * @category Year Helpers
+ * @summary Add the specified number of years to the given date.
+ *
+ * @description
+ * Add the specified number of years to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of years to be added.
+ *
+ * @returns The new date with the years added
+ *
+ * @example
+ * // Add 5 years to 1 September 2014:
+ * const result = addYears(new Date(2014, 8, 1), 5)
+ * //=> Sun Sep 01 2019 00:00:00
+ */
+function addYears(date, amount) {
+  return addMonths(date, amount * 12);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_addYears = ((/* unused pure expression or super */ null && (addYears)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/subYears.mjs
+
+
+/**
+ * @name subYears
+ * @category Year Helpers
+ * @summary Subtract the specified number of years from the given date.
+ *
+ * @description
+ * Subtract the specified number of years from the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of years to be subtracted.
+ *
+ * @returns The new date with the years subtracted
+ *
+ * @example
+ * // Subtract 5 years from 1 September 2014:
+ * const result = subYears(new Date(2014, 8, 1), 5)
+ * //=> Tue Sep 01 2009 00:00:00
+ */
+function subYears(date, amount) {
+  return addYears(date, -amount);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_subYears = ((/* unused pure expression or super */ null && (subYears)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/eachDayOfInterval.mjs
+
+
+/**
+ * The {@link eachDayOfInterval} function options.
+ */
+
+/**
+ * @name eachDayOfInterval
+ * @category Interval Helpers
+ * @summary Return the array of dates within the specified time interval.
+ *
+ * @description
+ * Return the array of dates within the specified time interval.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param interval - The interval.
+ * @param options - An object with options.
+ *
+ * @returns The array with starts of days from the day of the interval start to the day of the interval end
+ *
+ * @example
+ * // Each day between 6 October 2014 and 10 October 2014:
+ * const result = eachDayOfInterval({
+ *   start: new Date(2014, 9, 6),
+ *   end: new Date(2014, 9, 10)
+ * })
+ * //=> [
+ * //   Mon Oct 06 2014 00:00:00,
+ * //   Tue Oct 07 2014 00:00:00,
+ * //   Wed Oct 08 2014 00:00:00,
+ * //   Thu Oct 09 2014 00:00:00,
+ * //   Fri Oct 10 2014 00:00:00
+ * // ]
+ */
+function eachDayOfInterval(interval, options) {
+  const startDate = toDate(interval.start);
+  const endDate = toDate(interval.end);
+
+  let reversed = +startDate > +endDate;
+  const endTime = reversed ? +startDate : +endDate;
+  const currentDate = reversed ? endDate : startDate;
+  currentDate.setHours(0, 0, 0, 0);
+
+  let step = options?.step ?? 1;
+  if (!step) return [];
+  if (step < 0) {
+    step = -step;
+    reversed = !reversed;
+  }
+
+  const dates = [];
+
+  while (+currentDate <= endTime) {
+    dates.push(toDate(currentDate));
+    currentDate.setDate(currentDate.getDate() + step);
+    currentDate.setHours(0, 0, 0, 0);
+  }
+
+  return reversed ? dates.reverse() : dates;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_eachDayOfInterval = ((/* unused pure expression or super */ null && (eachDayOfInterval)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/eachMonthOfInterval.mjs
+
+
+/**
+ * The {@link eachMonthOfInterval} function options.
+ */
+
+/**
+ * @name eachMonthOfInterval
+ * @category Interval Helpers
+ * @summary Return the array of months within the specified time interval.
+ *
+ * @description
+ * Return the array of months within the specified time interval.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param interval - The interval
+ *
+ * @returns The array with starts of months from the month of the interval start to the month of the interval end
+ *
+ * @example
+ * // Each month between 6 February 2014 and 10 August 2014:
+ * const result = eachMonthOfInterval({
+ *   start: new Date(2014, 1, 6),
+ *   end: new Date(2014, 7, 10)
+ * })
+ * //=> [
+ * //   Sat Feb 01 2014 00:00:00,
+ * //   Sat Mar 01 2014 00:00:00,
+ * //   Tue Apr 01 2014 00:00:00,
+ * //   Thu May 01 2014 00:00:00,
+ * //   Sun Jun 01 2014 00:00:00,
+ * //   Tue Jul 01 2014 00:00:00,
+ * //   Fri Aug 01 2014 00:00:00
+ * // ]
+ */
+function eachMonthOfInterval(interval, options) {
+  const startDate = toDate(interval.start);
+  const endDate = toDate(interval.end);
+
+  let reversed = +startDate > +endDate;
+  const endTime = reversed ? +startDate : +endDate;
+  const currentDate = reversed ? endDate : startDate;
+  currentDate.setHours(0, 0, 0, 0);
+  currentDate.setDate(1);
+
+  let step = options?.step ?? 1;
+  if (!step) return [];
+  if (step < 0) {
+    step = -step;
+    reversed = !reversed;
+  }
+
+  const dates = [];
+
+  while (+currentDate <= endTime) {
+    dates.push(toDate(currentDate));
+    currentDate.setMonth(currentDate.getMonth() + step);
+  }
+
+  return reversed ? dates.reverse() : dates;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_eachMonthOfInterval = ((/* unused pure expression or super */ null && (eachMonthOfInterval)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/startOfMonth.mjs
+
+
+/**
+ * @name startOfMonth
+ * @category Month Helpers
+ * @summary Return the start of a month for the given date.
+ *
+ * @description
+ * Return the start of a month for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The original date
+ *
+ * @returns The start of a month
+ *
+ * @example
+ * // The start of a month for 2 September 2014 11:55:00:
+ * const result = startOfMonth(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Mon Sep 01 2014 00:00:00
+ */
+function startOfMonth(date) {
+  const _date = toDate(date);
+  _date.setDate(1);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfMonth = ((/* unused pure expression or super */ null && (startOfMonth)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/endOfMonth.mjs
+
+
+/**
+ * @name endOfMonth
+ * @category Month Helpers
+ * @summary Return the end of a month for the given date.
+ *
+ * @description
+ * Return the end of a month for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The original date
+ *
+ * @returns The end of a month
+ *
+ * @example
+ * // The end of a month for 2 September 2014 11:55:00:
+ * const result = endOfMonth(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Tue Sep 30 2014 23:59:59.999
+ */
+function endOfMonth(date) {
+  const _date = toDate(date);
+  const month = _date.getMonth();
+  _date.setFullYear(_date.getFullYear(), month + 1, 0);
+  _date.setHours(23, 59, 59, 999);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_endOfMonth = ((/* unused pure expression or super */ null && (endOfMonth)));
+
+;// CONCATENATED MODULE: ./node_modules/date-fns/eachWeekOfInterval.mjs
+
+
+
+
+/**
+ * The {@link eachWeekOfInterval} function options.
+ */
+
+/**
+ * @name eachWeekOfInterval
+ * @category Interval Helpers
+ * @summary Return the array of weeks within the specified time interval.
+ *
+ * @description
+ * Return the array of weeks within the specified time interval.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param interval - The interval.
+ * @param options - An object with options.
+ *
+ * @returns The array with starts of weeks from the week of the interval start to the week of the interval end
+ *
+ * @example
+ * // Each week within interval 6 October 2014 - 23 November 2014:
+ * const result = eachWeekOfInterval({
+ *   start: new Date(2014, 9, 6),
+ *   end: new Date(2014, 10, 23)
+ * })
+ * //=> [
+ * //   Sun Oct 05 2014 00:00:00,
+ * //   Sun Oct 12 2014 00:00:00,
+ * //   Sun Oct 19 2014 00:00:00,
+ * //   Sun Oct 26 2014 00:00:00,
+ * //   Sun Nov 02 2014 00:00:00,
+ * //   Sun Nov 09 2014 00:00:00,
+ * //   Sun Nov 16 2014 00:00:00,
+ * //   Sun Nov 23 2014 00:00:00
+ * // ]
+ */
+function eachWeekOfInterval(interval, options) {
+  const startDate = toDate(interval.start);
+  const endDate = toDate(interval.end);
+
+  let reversed = +startDate > +endDate;
+  const startDateWeek = reversed
+    ? startOfWeek(endDate, options)
+    : startOfWeek(startDate, options);
+  const endDateWeek = reversed
+    ? startOfWeek(startDate, options)
+    : startOfWeek(endDate, options);
+
+  // Some timezones switch DST at midnight, making start of day unreliable in these timezones, 3pm is a safe bet
+  startDateWeek.setHours(15);
+  endDateWeek.setHours(15);
+
+  const endTime = +endDateWeek.getTime();
+  let currentDate = startDateWeek;
+
+  let step = options?.step ?? 1;
+  if (!step) return [];
+  if (step < 0) {
+    step = -step;
+    reversed = !reversed;
+  }
+
+  const dates = [];
+
+  while (+currentDate <= endTime) {
+    currentDate.setHours(0);
+    dates.push(toDate(currentDate));
+    currentDate = addWeeks(currentDate, step);
+    currentDate.setHours(15);
+  }
+
+  return reversed ? dates.reverse() : dates;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_eachWeekOfInterval = ((/* unused pure expression or super */ null && (eachWeekOfInterval)));
+
+;// CONCATENATED MODULE: ./packages/components/build-module/date-time/date/use-lilius/index.js
+/**
+ * This source is a local copy of the use-lilius library, since the original
+ * library is not actively maintained.
+ * @see https://github.com/WordPress/gutenberg/discussions/64968
+ *
+ * use-lilius@2.0.5
+ * https://github.com/Avarios/use-lilius
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2021-Present Danny Tatom
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+let Month = /*#__PURE__*/function (Month) {
+  Month[Month["JANUARY"] = 0] = "JANUARY";
+  Month[Month["FEBRUARY"] = 1] = "FEBRUARY";
+  Month[Month["MARCH"] = 2] = "MARCH";
+  Month[Month["APRIL"] = 3] = "APRIL";
+  Month[Month["MAY"] = 4] = "MAY";
+  Month[Month["JUNE"] = 5] = "JUNE";
+  Month[Month["JULY"] = 6] = "JULY";
+  Month[Month["AUGUST"] = 7] = "AUGUST";
+  Month[Month["SEPTEMBER"] = 8] = "SEPTEMBER";
+  Month[Month["OCTOBER"] = 9] = "OCTOBER";
+  Month[Month["NOVEMBER"] = 10] = "NOVEMBER";
+  Month[Month["DECEMBER"] = 11] = "DECEMBER";
+  return Month;
+}({});
+let Day = /*#__PURE__*/function (Day) {
+  Day[Day["SUNDAY"] = 0] = "SUNDAY";
+  Day[Day["MONDAY"] = 1] = "MONDAY";
+  Day[Day["TUESDAY"] = 2] = "TUESDAY";
+  Day[Day["WEDNESDAY"] = 3] = "WEDNESDAY";
+  Day[Day["THURSDAY"] = 4] = "THURSDAY";
+  Day[Day["FRIDAY"] = 5] = "FRIDAY";
+  Day[Day["SATURDAY"] = 6] = "SATURDAY";
+  return Day;
+}({});
+const inRange = (date, min, max) => (isEqual(date, min) || isAfter(date, min)) && (isEqual(date, max) || isBefore(date, max));
+const use_lilius_clearTime = date => set(date, {
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+  milliseconds: 0
+});
+const useLilius = ({
+  weekStartsOn = Day.SUNDAY,
+  viewing: initialViewing = new Date(),
+  selected: initialSelected = [],
+  numberOfMonths = 1
+} = {}) => {
+  const [viewing, setViewing] = (0,external_wp_element_namespaceObject.useState)(initialViewing);
+  const viewToday = (0,external_wp_element_namespaceObject.useCallback)(() => setViewing(startOfToday()), [setViewing]);
+  const viewMonth = (0,external_wp_element_namespaceObject.useCallback)(month => setViewing(v => setMonth(v, month)), []);
+  const viewPreviousMonth = (0,external_wp_element_namespaceObject.useCallback)(() => setViewing(v => subMonths(v, 1)), []);
+  const viewNextMonth = (0,external_wp_element_namespaceObject.useCallback)(() => setViewing(v => addMonths(v, 1)), []);
+  const viewYear = (0,external_wp_element_namespaceObject.useCallback)(year => setViewing(v => setYear(v, year)), []);
+  const viewPreviousYear = (0,external_wp_element_namespaceObject.useCallback)(() => setViewing(v => subYears(v, 1)), []);
+  const viewNextYear = (0,external_wp_element_namespaceObject.useCallback)(() => setViewing(v => addYears(v, 1)), []);
+  const [selected, setSelected] = (0,external_wp_element_namespaceObject.useState)(initialSelected.map(use_lilius_clearTime));
+  const clearSelected = () => setSelected([]);
+  const isSelected = (0,external_wp_element_namespaceObject.useCallback)(date => selected.findIndex(s => isEqual(s, date)) > -1, [selected]);
+  const select = (0,external_wp_element_namespaceObject.useCallback)((date, replaceExisting) => {
+    if (replaceExisting) {
+      setSelected(Array.isArray(date) ? date : [date]);
+    } else {
+      setSelected(selectedItems => selectedItems.concat(Array.isArray(date) ? date : [date]));
+    }
+  }, []);
+  const deselect = (0,external_wp_element_namespaceObject.useCallback)(date => setSelected(selectedItems => Array.isArray(date) ? selectedItems.filter(s => !date.map(d => d.getTime()).includes(s.getTime())) : selectedItems.filter(s => !isEqual(s, date))), []);
+  const toggle = (0,external_wp_element_namespaceObject.useCallback)((date, replaceExisting) => isSelected(date) ? deselect(date) : select(date, replaceExisting), [deselect, isSelected, select]);
+  const selectRange = (0,external_wp_element_namespaceObject.useCallback)((start, end, replaceExisting) => {
+    if (replaceExisting) {
+      setSelected(eachDayOfInterval({
+        start,
+        end
+      }));
+    } else {
+      setSelected(selectedItems => selectedItems.concat(eachDayOfInterval({
+        start,
+        end
+      })));
+    }
+  }, []);
+  const deselectRange = (0,external_wp_element_namespaceObject.useCallback)((start, end) => {
+    setSelected(selectedItems => selectedItems.filter(s => !eachDayOfInterval({
+      start,
+      end
+    }).map(d => d.getTime()).includes(s.getTime())));
+  }, []);
+  const calendar = (0,external_wp_element_namespaceObject.useMemo)(() => eachMonthOfInterval({
+    start: startOfMonth(viewing),
+    end: endOfMonth(addMonths(viewing, numberOfMonths - 1))
+  }).map(month => eachWeekOfInterval({
+    start: startOfMonth(month),
+    end: endOfMonth(month)
+  }, {
+    weekStartsOn
+  }).map(week => eachDayOfInterval({
+    start: startOfWeek(week, {
+      weekStartsOn
+    }),
+    end: endOfWeek(week, {
+      weekStartsOn
+    })
+  }))), [viewing, weekStartsOn, numberOfMonths]);
+  return {
+    clearTime: use_lilius_clearTime,
+    inRange,
+    viewing,
+    setViewing,
+    viewToday,
+    viewMonth,
+    viewPreviousMonth,
+    viewNextMonth,
+    viewYear,
+    viewPreviousYear,
+    viewNextYear,
+    selected,
+    setSelected,
+    clearSelected,
+    isSelected,
+    select,
+    deselect,
+    toggle,
+    selectRange,
+    deselectRange,
+    calendar
+  };
+};
+
 ;// CONCATENATED MODULE: ./packages/components/build-module/date-time/date/styles.js
 
-function date_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
 /**
  * External dependencies
  */
@@ -53973,10 +53787,7 @@ function date_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried t
 
 const styles_Wrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e105ri6r5"
-} : 0)( true ? {
-  name: "1khn195",
-  styles: "box-sizing:border-box"
-} : 0);
+} : 0)(boxSizingReset, ";" + ( true ? "" : 0));
 const Navigator = /*#__PURE__*/emotion_styled_base_browser_esm(h_stack_component,  true ? {
   target: "e105ri6r4"
 } : 0)("margin-bottom:", space(4), ";" + ( true ? "" : 0));
@@ -53988,7 +53799,7 @@ const Calendar = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
 } : 0)("column-gap:", space(2), ";display:grid;grid-template-columns:0.5fr repeat( 5, 1fr ) 0.5fr;justify-items:center;row-gap:", space(2), ";" + ( true ? "" : 0));
 const DayOfWeek = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e105ri6r1"
-} : 0)("color:", COLORS.gray[700], ";font-size:", config_values.fontSize, ";line-height:", config_values.fontLineHeightBase, ";&:nth-of-type( 1 ){justify-self:start;}&:nth-of-type( 7 ){justify-self:end;}" + ( true ? "" : 0));
+} : 0)("color:", COLORS.theme.gray[700], ";font-size:", config_values.fontSize, ";line-height:", config_values.fontLineHeightBase, ";&:nth-of-type( 1 ){justify-self:start;}&:nth-of-type( 7 ){justify-self:end;}" + ( true ? "" : 0));
 const DayButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_button,  true ? {
   shouldForwardProp: prop => !['column', 'isSelected', 'isToday', 'hasEvents'].includes(prop),
   target: "e105ri6r0"
@@ -53999,21 +53810,37 @@ const DayButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_butt
 		`, " ", props => props.disabled && `
 		pointer-events: none;
 		`, " &&&{border-radius:", config_values.radiusRound, ";height:", space(7), ";width:", space(7), ";", props => props.isSelected && `
-			background: ${COLORS.theme.accent};
-			color: ${COLORS.white};
+				background: ${COLORS.theme.accent};
+
+				&,
+				&:hover:not(:disabled, [aria-disabled=true]) {
+					color: ${COLORS.theme.accentInverted};
+				}
+
+				&:focus:not(:disabled),
+				&:focus:not(:disabled) {
+					border: ${config_values.borderWidthFocus} solid currentColor;
+				}
+
+				/* Highlight the selected day for high-contrast mode */
+				&::after {
+					content: '';
+					position: absolute;
+					pointer-events: none;
+					inset: 0;
+					border-radius: inherit;
+					border: 1px solid transparent;
+				}
 			`, " ", props => !props.isSelected && props.isToday && `
-			background: ${COLORS.gray[200]};
+			background: ${COLORS.theme.gray[200]};
 			`, ";}", props => props.hasEvents && `
 		::before {
-			background: ${props.isSelected ? COLORS.white : COLORS.theme.accent};
+			border: 2px solid ${props.isSelected ? COLORS.theme.accentInverted : COLORS.theme.accent};
 			border-radius: ${config_values.radiusRound};
-			bottom: 2px;
 			content: " ";
-			height: 4px;
 			left: 50%;
-			margin-left: -2px;
 			position: absolute;
-			width: 4px;
+			transform: translate(-50%, 9px);
 		}
 		`, ";" + ( true ? "" : 0));
 
@@ -54039,7 +53866,7 @@ function inputToDate(input) {
   if (typeof input === 'string') {
     return new Date(input);
   }
-  return toDate_toDate(input);
+  return toDate(input);
 }
 
 /**
@@ -54105,7 +53932,6 @@ const TIMEZONELESS_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
  * External dependencies
  */
 
-
 /**
  * WordPress dependencies
  */
@@ -54162,14 +53988,14 @@ function DatePicker({
     viewPreviousMonth,
     viewNextMonth
   } = useLilius({
-    selected: [startOfDay_startOfDay(date)],
-    viewing: startOfDay_startOfDay(date),
+    selected: [startOfDay(date)],
+    viewing: startOfDay(date),
     weekStartsOn
   });
 
   // Used to implement a roving tab index. Tracks the day that receives focus
   // when the user tabs into the calendar.
-  const [focusable, setFocusable] = (0,external_wp_element_namespaceObject.useState)(startOfDay_startOfDay(date));
+  const [focusable, setFocusable] = (0,external_wp_element_namespaceObject.useState)(startOfDay(date));
 
   // Allows us to only programmatically focus() a day when focus was already
   // within the calendar. This stops us stealing focus from e.g. a TimePicker
@@ -54180,9 +54006,9 @@ function DatePicker({
   const [prevCurrentDate, setPrevCurrentDate] = (0,external_wp_element_namespaceObject.useState)(currentDate);
   if (currentDate !== prevCurrentDate) {
     setPrevCurrentDate(currentDate);
-    setSelected([startOfDay_startOfDay(date)]);
-    setViewing(startOfDay_startOfDay(date));
-    setFocusable(startOfDay_startOfDay(date));
+    setSelected([startOfDay(date)]);
+    setViewing(startOfDay(date));
+    setFocusable(startOfDay(date));
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_Wrapper, {
     className: "components-datetime__date",
@@ -54195,8 +54021,8 @@ function DatePicker({
         "aria-label": (0,external_wp_i18n_namespaceObject.__)('View previous month'),
         onClick: () => {
           viewPreviousMonth();
-          setFocusable(subMonths_subMonths(focusable, 1));
-          onMonthPreviewed?.(format(subMonths_subMonths(viewing, 1), TIMEZONELESS_FORMAT));
+          setFocusable(subMonths(focusable, 1));
+          onMonthPreviewed?.(format(subMonths(viewing, 1), TIMEZONELESS_FORMAT));
         }
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(NavigatorHeading, {
         level: 3,
@@ -54209,8 +54035,8 @@ function DatePicker({
         "aria-label": (0,external_wp_i18n_namespaceObject.__)('View next month'),
         onClick: () => {
           viewNextMonth();
-          setFocusable(addMonths_addMonths(focusable, 1));
-          onMonthPreviewed?.(format(addMonths_addMonths(viewing, 1), TIMEZONELESS_FORMAT));
+          setFocusable(addMonths(focusable, 1));
+          onMonthPreviewed?.(format(addMonths(viewing, 1), TIMEZONELESS_FORMAT));
         }
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Calendar, {
@@ -54226,7 +54052,7 @@ function DatePicker({
           day: day,
           column: index + 1,
           isSelected: isSelected(day),
-          isFocusable: isEqual_isEqual(day, focusable),
+          isFocusable: isEqual(day, focusable),
           isFocusAllowed: isFocusWithinCalendar,
           isToday: isSameDay(day, new Date()),
           isInvalid: isInvalidDate ? isInvalidDate(day) : false,
@@ -54241,28 +54067,28 @@ function DatePicker({
           onKeyDown: event => {
             let nextFocusable;
             if (event.key === 'ArrowLeft') {
-              nextFocusable = addDays_addDays(day, (0,external_wp_i18n_namespaceObject.isRTL)() ? 1 : -1);
+              nextFocusable = addDays(day, (0,external_wp_i18n_namespaceObject.isRTL)() ? 1 : -1);
             }
             if (event.key === 'ArrowRight') {
-              nextFocusable = addDays_addDays(day, (0,external_wp_i18n_namespaceObject.isRTL)() ? -1 : 1);
+              nextFocusable = addDays(day, (0,external_wp_i18n_namespaceObject.isRTL)() ? -1 : 1);
             }
             if (event.key === 'ArrowUp') {
               nextFocusable = subWeeks(day, 1);
             }
             if (event.key === 'ArrowDown') {
-              nextFocusable = addWeeks_addWeeks(day, 1);
+              nextFocusable = addWeeks(day, 1);
             }
             if (event.key === 'PageUp') {
-              nextFocusable = subMonths_subMonths(day, 1);
+              nextFocusable = subMonths(day, 1);
             }
             if (event.key === 'PageDown') {
-              nextFocusable = addMonths_addMonths(day, 1);
+              nextFocusable = addMonths(day, 1);
             }
             if (event.key === 'Home') {
-              nextFocusable = startOfWeek_startOfWeek(day);
+              nextFocusable = startOfWeek(day);
             }
             if (event.key === 'End') {
-              nextFocusable = startOfDay_startOfDay(endOfWeek_endOfWeek(day));
+              nextFocusable = startOfDay(endOfWeek(day));
             }
             if (nextFocusable) {
               event.preventDefault();
@@ -54365,172 +54191,13 @@ function getDayLabel(date, isSelected, numEvents) {
  * //=> Mon Dec 01 2014 22:15:00
  */
 function startOfMinute(date) {
-  const _date = toDate_toDate(date);
+  const _date = toDate(date);
   _date.setSeconds(0, 0);
   return _date;
 }
 
 // Fallback for modularized imports:
 /* harmony default export */ const date_fns_startOfMinute = ((/* unused pure expression or super */ null && (startOfMinute)));
-
-;// CONCATENATED MODULE: ./node_modules/date-fns/getDaysInMonth.mjs
-
-
-
-/**
- * @name getDaysInMonth
- * @category Month Helpers
- * @summary Get the number of days in a month of the given date.
- *
- * @description
- * Get the number of days in a month of the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The given date
- *
- * @returns The number of days in a month
- *
- * @example
- * // How many days are in February 2000?
- * const result = getDaysInMonth(new Date(2000, 1))
- * //=> 29
- */
-function getDaysInMonth_getDaysInMonth(date) {
-  const _date = toDate_toDate(date);
-  const year = _date.getFullYear();
-  const monthIndex = _date.getMonth();
-  const lastDayOfMonth = constructFrom_constructFrom(date, 0);
-  lastDayOfMonth.setFullYear(year, monthIndex + 1, 0);
-  lastDayOfMonth.setHours(0, 0, 0, 0);
-  return lastDayOfMonth.getDate();
-}
-
-// Fallback for modularized imports:
-/* harmony default export */ const date_fns_getDaysInMonth = ((/* unused pure expression or super */ null && (getDaysInMonth_getDaysInMonth)));
-
-;// CONCATENATED MODULE: ./node_modules/date-fns/setMonth.mjs
-
-
-
-
-/**
- * @name setMonth
- * @category Month Helpers
- * @summary Set the month to the given date.
- *
- * @description
- * Set the month to the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param month - The month index to set (0-11)
- *
- * @returns The new date with the month set
- *
- * @example
- * // Set February to 1 September 2014:
- * const result = setMonth(new Date(2014, 8, 1), 1)
- * //=> Sat Feb 01 2014 00:00:00
- */
-function setMonth_setMonth(date, month) {
-  const _date = toDate_toDate(date);
-  const year = _date.getFullYear();
-  const day = _date.getDate();
-
-  const dateWithDesiredMonth = constructFrom_constructFrom(date, 0);
-  dateWithDesiredMonth.setFullYear(year, month, 15);
-  dateWithDesiredMonth.setHours(0, 0, 0, 0);
-  const daysInMonth = getDaysInMonth_getDaysInMonth(dateWithDesiredMonth);
-  // Set the last day of the new month
-  // if the original date was the last day of the longer month
-  _date.setMonth(month, Math.min(day, daysInMonth));
-  return _date;
-}
-
-// Fallback for modularized imports:
-/* harmony default export */ const date_fns_setMonth = ((/* unused pure expression or super */ null && (setMonth_setMonth)));
-
-;// CONCATENATED MODULE: ./node_modules/date-fns/set.mjs
-
-
-
-
-/**
- * @name set
- * @category Common Helpers
- * @summary Set date values to a given date.
- *
- * @description
- * Set date values to a given date.
- *
- * Sets time values to date from object `values`.
- * A value is not set if it is undefined or null or doesn't exist in `values`.
- *
- * Note about bundle size: `set` does not internally use `setX` functions from date-fns but instead opts
- * to use native `Date#setX` methods. If you use this function, you may not want to include the
- * other `setX` functions that date-fns provides if you are concerned about the bundle size.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param values - The date values to be set
- *
- * @returns The new date with options set
- *
- * @example
- * // Transform 1 September 2014 into 20 October 2015 in a single line:
- * const result = set(new Date(2014, 8, 20), { year: 2015, month: 9, date: 20 })
- * //=> Tue Oct 20 2015 00:00:00
- *
- * @example
- * // Set 12 PM to 1 September 2014 01:23:45 to 1 September 2014 12:00:00:
- * const result = set(new Date(2014, 8, 1, 1, 23, 45), { hours: 12 })
- * //=> Mon Sep 01 2014 12:23:45
- */
-
-function set_set(date, values) {
-  let _date = toDate_toDate(date);
-
-  // Check if date is Invalid Date because Date.prototype.setFullYear ignores the value of Invalid Date
-  if (isNaN(+_date)) {
-    return constructFrom_constructFrom(date, NaN);
-  }
-
-  if (values.year != null) {
-    _date.setFullYear(values.year);
-  }
-
-  if (values.month != null) {
-    _date = setMonth_setMonth(_date, values.month);
-  }
-
-  if (values.date != null) {
-    _date.setDate(values.date);
-  }
-
-  if (values.hours != null) {
-    _date.setHours(values.hours);
-  }
-
-  if (values.minutes != null) {
-    _date.setMinutes(values.minutes);
-  }
-
-  if (values.seconds != null) {
-    _date.setSeconds(values.seconds);
-  }
-
-  if (values.milliseconds != null) {
-    _date.setMilliseconds(values.milliseconds);
-  }
-
-  return _date;
-}
-
-// Fallback for modularized imports:
-/* harmony default export */ const date_fns_set = ((/* unused pure expression or super */ null && (set_set)));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/date-time/time/styles.js
 
@@ -54981,7 +54648,7 @@ function TimePicker({
 
       // We can safely assume value is a number if target is valid.
       const numberValue = Number(value);
-      const newDate = set_set(date, {
+      const newDate = set(date, {
         [method]: numberValue
       });
       setDate(newDate);
@@ -54993,7 +54660,7 @@ function TimePicker({
     hours: newHours,
     minutes: newMinutes
   }) => {
-    const newDate = set_set(date, {
+    const newDate = set(date, {
       hours: newHours,
       minutes: newMinutes
     });
@@ -55028,7 +54695,7 @@ function TimePicker({
       value: month,
       options: monthOptions,
       onChange: value => {
-        const newDate = setMonth_setMonth(date, Number(value) - 1);
+        const newDate = setMonth(date, Number(value) - 1);
         setDate(newDate);
         onChange?.(format(newDate, TIMEZONELESS_FORMAT));
       }
@@ -61191,6 +60858,7 @@ const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -61202,6 +60870,9 @@ const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 
 
 function UnconnectedNavigatorScreen(props, forwardedRef) {
+  if (!/^\//.test(props.path)) {
+     false ? 0 : void 0;
+  }
   const screenId = (0,external_wp_element_namespaceObject.useId)();
   const {
     children,
@@ -70193,7 +69864,7 @@ const DIVIDER_COLOR = COLORS.theme.gray[200];
 const LIGHTER_TEXT_COLOR = COLORS.theme.gray[700];
 const LIGHT_BACKGROUND_COLOR = COLORS.theme.gray[100];
 const TOOLBAR_VARIANT_BORDER_COLOR = COLORS.theme.foreground;
-const DEFAULT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${DEFAULT_BORDER_COLOR}, ${config_values.elevationXSmall}`;
+const DEFAULT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${DEFAULT_BORDER_COLOR}, ${config_values.elevationMedium}`;
 const TOOLBAR_VARIANT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${TOOLBAR_VARIANT_BORDER_COLOR}`;
 const GRID_TEMPLATE_COLS = 'minmax( 0, max-content ) 1fr';
 const MenuPopoverOuterWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
@@ -71016,7 +70687,7 @@ const useTabsContext = () => (0,external_wp_element_namespaceObject.useContext)(
 
 const TabListWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "enfox0g2"
-} : 0)("position:relative;display:flex;align-items:stretch;flex-direction:row;text-align:center;&[aria-orientation='vertical']{flex-direction:column;text-align:start;}@media not ( prefers-reduced-motion: reduce ){&.is-animation-enabled::after{transition-property:left,top,width,height;transition-duration:0.2s;transition-timing-function:ease-out;}}&::after{content:'';position:absolute;pointer-events:none;outline:2px solid transparent;outline-offset:-1px;}&:not( [aria-orientation='vertical'] )::after{bottom:0;left:var( --indicator-left );width:var( --indicator-width );height:0;border-bottom:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";}&[aria-orientation='vertical']::after{z-index:-1;left:0;width:100%;top:var( --indicator-top );height:var( --indicator-height );background-color:", COLORS.theme.gray[100], ";}" + ( true ? "" : 0));
+} : 0)("position:relative;display:flex;align-items:stretch;flex-direction:row;text-align:center;&[aria-orientation='vertical']{flex-direction:column;text-align:start;}@media not ( prefers-reduced-motion ){&.is-animation-enabled::after{transition-property:transform;transition-duration:0.2s;transition-timing-function:ease-out;}}--direction-factor:1;--direction-origin-x:left;--indicator-start:var( --indicator-left );&:dir( rtl ){--direction-factor:-1;--direction-origin-x:right;--indicator-start:var( --indicator-right );}&::after{content:'';position:absolute;pointer-events:none;transform-origin:var( --direction-origin-x ) top;outline:2px solid transparent;outline-offset:-1px;}--antialiasing-factor:100;&:not( [aria-orientation='vertical'] ){&::after{bottom:0;height:0;width:calc( var( --antialiasing-factor ) * 1px );transform:translateX(\n\t\t\t\t\tcalc(\n\t\t\t\t\t\tvar( --indicator-start ) * var( --direction-factor ) *\n\t\t\t\t\t\t\t1px\n\t\t\t\t\t)\n\t\t\t\t) scaleX(\n\t\t\t\t\tcalc(\n\t\t\t\t\t\tvar( --indicator-width ) / var( --antialiasing-factor )\n\t\t\t\t\t)\n\t\t\t\t);border-bottom:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";}}&[aria-orientation='vertical']::after{z-index:-1;top:0;left:0;width:100%;height:calc( var( --antialiasing-factor ) * 1px );transform:translateY( calc( var( --indicator-top ) * 1px ) ) scaleY(\n\t\t\t\tcalc( var( --indicator-height ) / var( --antialiasing-factor ) )\n\t\t\t);background-color:", COLORS.theme.gray[100], ";}" + ( true ? "" : 0));
 const styles_Tab = /*#__PURE__*/emotion_styled_base_browser_esm(Tab,  true ? {
   target: "enfox0g1"
 } : 0)("&{display:inline-flex;align-items:center;position:relative;border-radius:0;min-height:", space(12), ";height:auto;background:transparent;border:none;box-shadow:none;cursor:pointer;line-height:1.2;padding:", space(4), ";margin-left:0;font-weight:500;text-align:inherit;hyphens:auto;color:", COLORS.theme.foreground, ";&[aria-disabled='true']{cursor:default;color:", COLORS.ui.textDisabled, ";}&:not( [aria-disabled='true'] ):hover{color:", COLORS.theme.accent, ";}&:focus:not( :disabled ){position:relative;box-shadow:none;outline:none;}&::before{content:'';position:absolute;top:", space(3), ";right:", space(3), ";bottom:", space(3), ";left:", space(3), ";pointer-events:none;outline:var( --wp-admin-border-width-focus ) solid ", COLORS.theme.accent, ";border-radius:", config_values.radiusSmall, ";opacity:0;@media not ( prefers-reduced-motion ){transition:opacity 0.1s linear;}}&:focus-visible::before{opacity:1;}}[aria-orientation='vertical'] &{min-height:", space(10), ";}" + ( true ? "" : 0));
@@ -71109,96 +70780,11 @@ function use_event_useEvent(callback) {
  * WordPress dependencies
  */
 
+
 /**
  * Internal dependencies
  */
 
-
-/**
- * `useTrackElementRectUpdates` options.
- */
-
-/**
- * Tracks an element's "rect" (size and position) and fires `onRect` for all
- * of its discrete values. The element can be changed dynamically and **it
- * must not be stored in a ref**. Instead, it should be stored in a React
- * state or equivalent.
- *
- * By default, `onRect` is called initially for the target element (including
- * when the target element changes), not only on size or position updates.
- * This allows consumers of the hook to always be in sync with all rect values
- * of the target element throughout its lifetime. This behavior can be
- * disabled by setting the `fireOnElementInit` option to `false`.
- *
- * Under the hood, it sets up a `ResizeObserver` that tracks the element. The
- * target element can be changed dynamically, and the observer will be
- * updated accordingly.
- *
- * @example
- *
- * ```tsx
- * const [ targetElement, setTargetElement ] = useState< HTMLElement | null >();
- *
- * useTrackElementRectUpdates( targetElement, ( element ) => {
- *   console.log( 'Element resized:', element );
- * } );
- *
- * <div ref={ setTargetElement } />;
- * ```
- */
-function useTrackElementRectUpdates(
-/**
- * The target element to observe. It can be changed dynamically.
- */
-targetElement,
-/**
- * Callback to fire when the element is resized. It will also be
- * called when the observer is set up, unless `fireOnElementInit` is
- * set to `false`.
- */
-onRect, {
-  fireOnElementInit = true
-} = {}) {
-  const onRectEvent = use_event_useEvent(onRect);
-  const observedElementRef = (0,external_wp_element_namespaceObject.useRef)();
-  const resizeObserverRef = (0,external_wp_element_namespaceObject.useRef)();
-
-  // TODO: could this be a layout effect?
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (targetElement === observedElementRef.current) {
-      return;
-    }
-    observedElementRef.current = targetElement;
-
-    // Set up a ResizeObserver.
-    if (!resizeObserverRef.current) {
-      resizeObserverRef.current = new ResizeObserver(entries => {
-        if (observedElementRef.current) {
-          onRectEvent(observedElementRef.current, entries);
-        }
-      });
-    }
-    const {
-      current: resizeObserver
-    } = resizeObserverRef;
-
-    // Observe new element.
-    if (targetElement) {
-      if (fireOnElementInit) {
-        // TODO: investigate if this can be removed,
-        // see: https://stackoverflow.com/a/60026394
-        onRectEvent(targetElement);
-      }
-      resizeObserver.observe(targetElement);
-    }
-    return () => {
-      // Unobserve previous element.
-      if (observedElementRef.current) {
-        resizeObserver.unobserve(observedElementRef.current);
-      }
-    };
-  }, [fireOnElementInit, onRectEvent, targetElement]);
-}
 
 /**
  * The position and dimensions of an element, relative to its offset parent.
@@ -71208,44 +70794,98 @@ onRect, {
  * An `ElementOffsetRect` object with all values set to zero.
  */
 const NULL_ELEMENT_OFFSET_RECT = {
-  left: 0,
   top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
   width: 0,
   height: 0
 };
 
 /**
  * Returns the position and dimensions of an element, relative to its offset
- * parent. This is useful in contexts where `getBoundingClientRect` is not
- * suitable, such as when the element is transformed.
+ * parent, with subpixel precision. Values reflect the real measures before any
+ * potential scaling distortions along the X and Y axes.
  *
- * **Note:** the `left` and `right` values are adjusted due to a limitation
- * in the way the browser calculates the offset position of the element,
- * which can cause unwanted scrollbars to appear. This adjustment makes the
- * values potentially inaccurate within a range of 1 pixel.
+ * Useful in contexts where plain `getBoundingClientRect` calls or `ResizeObserver`
+ * entries are not suitable, such as when the element is transformed, and when
+ * `element.offset<Top|Left|Width|Height>` methods are not precise enough.
+ *
+ * **Note:** in some contexts, like when the scale is 0, this method will fail
+ * because it's impossible to calculate a scaling ratio. When that happens, it
+ * will return `undefined`.
  */
 function getElementOffsetRect(element) {
+  var _element$offsetParent;
+  // Position and dimension values computed with `getBoundingClientRect` have
+  // subpixel precision, but are affected by distortions since they represent
+  // the "real" measures, or in other words, the actual final values as rendered
+  // by the browser.
+  const rect = element.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) {
+    return;
+  }
+  const offsetParentRect = (_element$offsetParent = element.offsetParent?.getBoundingClientRect()) !== null && _element$offsetParent !== void 0 ? _element$offsetParent : NULL_ELEMENT_OFFSET_RECT;
+
+  // Computed widths and heights have subpixel precision, and are not affected
+  // by distortions.
+  const computedWidth = parseFloat(getComputedStyle(element).width);
+  const computedHeight = parseFloat(getComputedStyle(element).height);
+
+  // We can obtain the current scale factor for the element by comparing "computed"
+  // dimensions with the "real" ones.
+  const scaleX = computedWidth / rect.width;
+  const scaleY = computedHeight / rect.height;
   return {
-    // The adjustments mentioned in the documentation above are necessary
-    // because `offsetLeft` and `offsetTop` are rounded to the nearest pixel,
-    // which can result in a position mismatch that causes unwanted overflow.
-    // For context, see: https://github.com/WordPress/gutenberg/pull/61979
-    left: Math.max(element.offsetLeft - 1, 0),
-    top: Math.max(element.offsetTop - 1, 0),
-    // This is a workaround to obtain these values with a sub-pixel precision,
-    // since `offsetWidth` and `offsetHeight` are rounded to the nearest pixel.
-    width: parseFloat(getComputedStyle(element).width),
-    height: parseFloat(getComputedStyle(element).height)
+    // To obtain the adjusted values for the position:
+    // 1. Compute the element's position relative to the offset parent.
+    // 2. Correct for the scale factor.
+    top: (rect.top - offsetParentRect?.top) * scaleY,
+    right: (offsetParentRect?.right - rect.right) * scaleX,
+    bottom: (offsetParentRect?.bottom - rect.bottom) * scaleY,
+    left: (rect.left - offsetParentRect?.left) * scaleX,
+    // Computed dimensions don't need any adjustments.
+    width: computedWidth,
+    height: computedHeight
   };
 }
+const POLL_RATE = 100;
 
 /**
  * Tracks the position and dimensions of an element, relative to its offset
  * parent. The element can be changed dynamically.
+ *
+ * **Note:** sometimes, the measurement will fail (see `getElementOffsetRect`'s
+ * documentation for more details). When that happens, this hook will attempt
+ * to measure again after a frame, and if that fails, it will poll every 100
+ * milliseconds until it succeeds.
  */
 function useTrackElementOffsetRect(targetElement) {
   const [indicatorPosition, setIndicatorPosition] = (0,external_wp_element_namespaceObject.useState)(NULL_ELEMENT_OFFSET_RECT);
-  useTrackElementRectUpdates(targetElement, element => setIndicatorPosition(getElementOffsetRect(element)));
+  const intervalRef = (0,external_wp_element_namespaceObject.useRef)();
+  const measure = use_event_useEvent(() => {
+    if (targetElement) {
+      const elementOffsetRect = getElementOffsetRect(targetElement);
+      if (elementOffsetRect) {
+        setIndicatorPosition(elementOffsetRect);
+        clearInterval(intervalRef.current);
+        return true;
+      }
+    } else {
+      clearInterval(intervalRef.current);
+    }
+    return false;
+  });
+  const setElement = (0,external_wp_compose_namespaceObject.useResizeObserver)(() => {
+    if (!measure()) {
+      requestAnimationFrame(() => {
+        if (!measure()) {
+          intervalRef.current = setInterval(measure, POLL_RATE);
+        }
+      });
+    }
+  });
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => setElement(targetElement), [setElement, targetElement]);
   return indicatorPosition;
 }
 
@@ -71366,10 +71006,11 @@ const TabList = (0,external_wp_element_namespaceObject.forwardRef)(function TabL
     onBlur: onBlur,
     ...otherProps,
     style: {
-      '--indicator-left': `${indicatorPosition.left}px`,
-      '--indicator-top': `${indicatorPosition.top}px`,
-      '--indicator-width': `${indicatorPosition.width}px`,
-      '--indicator-height': `${indicatorPosition.height}px`,
+      '--indicator-top': indicatorPosition.top,
+      '--indicator-right': indicatorPosition.right,
+      '--indicator-left': indicatorPosition.left,
+      '--indicator-width': indicatorPosition.width,
+      '--indicator-height': indicatorPosition.height,
       ...otherProps.style
     },
     className: dist_clsx(animationEnabled ? 'is-animation-enabled' : '', otherProps.className),
@@ -71626,17 +71267,8 @@ const {
 
 
 
-
-
 const privateApis = {};
 lock(privateApis, {
-  CompositeV2: Composite,
-  CompositeGroupV2: Composite.Group,
-  CompositeItemV2: Composite.Item,
-  CompositeRowV2: Composite.Row,
-  CompositeTypeaheadV2: Composite.Typeahead,
-  CompositeHoverV2: Composite.Hover,
-  useCompositeStoreV2: store_useCompositeStore,
   __experimentalPopoverLegacyPositionToPlacement: positionToPlacement,
   createPrivateSlotFill: createPrivateSlotFill,
   ComponentsContext: ComponentsContext,
@@ -71651,6 +71283,7 @@ lock(privateApis, {
 
 
 // Components.
+
 
 
 

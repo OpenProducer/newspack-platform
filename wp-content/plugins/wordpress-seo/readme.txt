@@ -5,7 +5,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
 Tested up to: 6.6
-Stable tag: 23.4
+Stable tag: 23.5
 Requires PHP: 7.2.5
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -32,7 +32,7 @@ Yoast SEO offers comprehensive analysis tools that help elevate your content's S
 
 **Premium Yoast AI features** Get suggestions for your titles and descriptions at the click of a button. The [Yoast AI features](https://yoa.st/51c) save you time and optimize for higher click-through-rates.
 
-* Yoast AI Generate enables users to generate meta descriptions and titles for your pages, blog posts and social posts. Great! Even better, when you also have [Yoast WooCommerce SEO](https://yoa.st/3rh), you can recieve suggestions for product SEO titles and descriptions too! The best part, if you don't like the 5 suggestions, you can generate five more at a click. 
+* Yoast AI Generate enables users to generate meta descriptions and titles for your pages, blog posts and social posts. Great! Even better, when you also have [Yoast WooCommerce SEO](https://yoa.st/3rh), you can receive suggestions for product SEO titles and descriptions too! The best part, if you don't like the 5 suggestions, you can generate five more at a click.
 * Yoast AI Optimize helps you optimize existing content for search engines. Optimize three of the assessments in the Yoast SEO Analysis; Keyphrase in introduction, Keyphrase distribution and Keyphrase density, with easy dismiss or apply options.
 
 
@@ -274,6 +274,21 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
+= 23.5 =
+
+Release date: 2024-09-24
+
+Yoast SEO 23.5 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/release-24-9-24).
+
+#### Enhancements
+
+* Improves analysis score feedback labels in the publish sections.
+* Improves our integration with cache plugins by preventing flushing their cache when not needed.
+
+#### Bugfixes
+
+* Fixes a bug where Arabic keyphrases containing certain function words were not correctly matched.
+
 = 23.4 =
 
 Release date: 2024-09-03
@@ -286,6 +301,7 @@ Yoast SEO 23.4 brings more enhancements and bugfixes. [Find more information abo
 * Adds _так_ to the words recognized by the _transition words_ assessment in Russian. Props to @pavelmai83.
 * Improves the schema output by following the specification for the _SearchAction_ more strictly.
 * Re-enables the script concatenation that was disabled to prevent a bug with WordPress 5.5.
+* Improves the look of the Yoast SEO metabox in the block editor by centering it and making it stand out more by using a background color.
 
 #### Bugfixes
 
@@ -302,16 +318,6 @@ Yoast SEO 23.4 brings more enhancements and bugfixes. [Find more information abo
 * Deprecates the `Disable_Concatenate_Scripts_Integration` class.
 * Deprecates the `Duplicate_Post_Integration` class.
 * Deprecates the `WPSEO_Admin_User_Profile::user_profile()` method and the `admin/views/user-profile.php` file.
-
-= 23.3 =
-
-Release date: 2024-08-20
-
-Yoast SEO 23.3 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/release-20-8-24).
-
-#### Other
-
-* This release only contains non-user-facing maintenance changes.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).
