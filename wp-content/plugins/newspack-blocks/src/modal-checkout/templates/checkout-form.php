@@ -128,7 +128,10 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 					</select>
 					<span id="select2-billing_state-container" style="display:none;"></span>
 				<?php else : ?>
-					<input type="hidden" id="<?php echo esc_attr( 'billing_' . $key ); ?>" name="<?php echo esc_attr( 'billing_' . $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+					<?php // Satisfy HTML structure for Woo Payments field validation. ?>
+					<span class="form-row" style="display:none;">
+						<input type="hidden" id="<?php echo esc_attr( 'billing_' . $key ); ?>" name="<?php echo esc_attr( 'billing_' . $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+					</span>
 				<?php endif; ?>
 			<?php endforeach; ?>
 

@@ -612,7 +612,15 @@ __webpack_require__.d(private_selectors_namespaceObject, {
   getEntityRecordPermissions: () => (getEntityRecordPermissions),
   getEntityRecordsPermissions: () => (getEntityRecordsPermissions),
   getNavigationFallbackId: () => (getNavigationFallbackId),
+  getRegisteredPostMeta: () => (getRegisteredPostMeta),
   getUndoManager: () => (getUndoManager)
+});
+
+// NAMESPACE OBJECT: ./packages/core-data/build-module/private-actions.js
+var private_actions_namespaceObject = {};
+__webpack_require__.r(private_actions_namespaceObject);
+__webpack_require__.d(private_actions_namespaceObject, {
+  receiveRegisteredPostMeta: () => (receiveRegisteredPostMeta)
 });
 
 // NAMESPACE OBJECT: ./packages/core-data/build-module/resolvers.js
@@ -640,6 +648,7 @@ __webpack_require__.d(resolvers_namespaceObject, {
   getEntityRecords: () => (resolvers_getEntityRecords),
   getNavigationFallbackId: () => (resolvers_getNavigationFallbackId),
   getRawEntityRecord: () => (resolvers_getRawEntityRecord),
+  getRegisteredPostMeta: () => (resolvers_getRegisteredPostMeta),
   getRevision: () => (resolvers_getRevision),
   getRevisions: () => (resolvers_getRevisions),
   getThemeSupports: () => (resolvers_getThemeSupports),
@@ -17532,6 +17541,7 @@ const applyAwarenessUpdate = (awareness, update, origin) => {
 }
 
 ;// CONCATENATED MODULE: ./packages/sync/build-module/y-webrtc/crypto.js
+/* wp:polyfill */
 // File copied as is from the y-webrtc package.
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable eslint-comments/no-unlimited-disable */
@@ -17631,6 +17641,7 @@ const decrypt = (data, key) => {
 const decryptJson = (data, key) => decrypt(data, key).then(decryptedValue => readAny(createDecoder(new Uint8Array(decryptedValue))));
 
 ;// CONCATENATED MODULE: ./packages/sync/build-module/y-webrtc/y-webrtc.js
+/* wp:polyfill */
 // File copied as is from the y-webrtc package with only exports
 // added to the following vars/functions: signalingConns,rooms, publishSignalingMessage, log.
 /* eslint-disable eslint-comments/disable-enable-pair */
@@ -18317,6 +18328,7 @@ class WebrtcProvider extends observable_Observable {
 }
 
 ;// CONCATENATED MODULE: ./packages/sync/build-module/webrtc-http-stream-signaling.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -20985,6 +20997,25 @@ function defaultTemplates(state = {}, action) {
   }
   return state;
 }
+
+/**
+ * Reducer returning an object of registered post meta.
+ *
+ * @param {Object} state  Current state.
+ * @param {Object} action Dispatched action.
+ *
+ * @return {Object} Updated state.
+ */
+function registeredPostMeta(state = {}, action) {
+  switch (action.type) {
+    case 'RECEIVE_REGISTERED_POST_META':
+      return {
+        ...state,
+        [action.postType]: action.registeredPostMeta
+      };
+  }
+  return state;
+}
 /* harmony default export */ const build_module_reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
   terms,
   users,
@@ -21005,7 +21036,8 @@ function defaultTemplates(state = {}, action) {
   blockPatternCategories,
   userPatternCategories,
   navigationFallbackId,
-  defaultTemplates
+  defaultTemplates,
+  registeredPostMeta
 }));
 
 // EXTERNAL MODULE: ./node_modules/equivalent-key-map/equivalent-key-map.js
@@ -22330,6 +22362,37 @@ function getEntityRecordPermissions(state, kind, name, id) {
   return getEntityRecordsPermissions(state, kind, name, id)[0];
 }
 
+/**
+ * Returns the registered post meta fields for a given post type.
+ *
+ * @param state    Data state.
+ * @param postType Post type.
+ *
+ * @return Registered post meta fields.
+ */
+function getRegisteredPostMeta(state, postType) {
+  var _state$registeredPost;
+  return (_state$registeredPost = state.registeredPostMeta?.[postType]) !== null && _state$registeredPost !== void 0 ? _state$registeredPost : {};
+}
+
+;// CONCATENATED MODULE: ./packages/core-data/build-module/private-actions.js
+/**
+ * Returns an action object used in signalling that the registered post meta
+ * fields for a post type have been received.
+ *
+ * @param {string} postType           Post type slug.
+ * @param {Object} registeredPostMeta Registered post meta.
+ *
+ * @return {Object} Action object.
+ */
+function receiveRegisteredPostMeta(postType, registeredPostMeta) {
+  return {
+    type: 'RECEIVE_REGISTERED_POST_META',
+    postType,
+    registeredPostMeta
+  };
+}
+
 ;// CONCATENATED MODULE: ./node_modules/camel-case/dist.es2015/index.js
 
 
@@ -23158,7 +23221,7 @@ const resolvers_experimentalGetCurrentThemeBaseGlobalStyles = () => async ({
 }) => {
   const currentTheme = await resolveSelect.getCurrentTheme();
   const themeGlobalStyles = await external_wp_apiFetch_default()({
-    path: `/wp/v2/global-styles/themes/${currentTheme.stylesheet}`
+    path: `/wp/v2/global-styles/themes/${currentTheme.stylesheet}?context=view`
   });
   dispatch.__experimentalReceiveThemeBaseGlobalStyles(currentTheme.stylesheet, themeGlobalStyles);
 };
@@ -23168,7 +23231,7 @@ const resolvers_experimentalGetCurrentThemeGlobalStylesVariations = () => async 
 }) => {
   const currentTheme = await resolveSelect.getCurrentTheme();
   const variations = await external_wp_apiFetch_default()({
-    path: `/wp/v2/global-styles/themes/${currentTheme.stylesheet}/variations`
+    path: `/wp/v2/global-styles/themes/${currentTheme.stylesheet}/variations?context=view`
   });
   dispatch.__experimentalReceiveThemeGlobalStyleVariations(currentTheme.stylesheet, variations);
 };
@@ -23235,7 +23298,8 @@ const resolvers_getUserPatternCategories = () => async ({
 };
 const resolvers_getNavigationFallbackId = () => async ({
   dispatch,
-  select
+  select,
+  registry
 }) => {
   const fallback = await external_wp_apiFetch_default()({
     path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp-block-editor/v1/navigation-fallback', {
@@ -23243,8 +23307,12 @@ const resolvers_getNavigationFallbackId = () => async ({
     })
   });
   const record = fallback?._embedded?.self;
-  dispatch.receiveNavigationFallbackId(fallback?.id);
-  if (record) {
+  registry.batch(() => {
+    dispatch.receiveNavigationFallbackId(fallback?.id);
+    if (!record) {
+      return;
+    }
+
     // If the fallback is already in the store, don't invalidate navigation queries.
     // Otherwise, invalidate the cache for the scenario where there were no Navigation
     // posts in the state and the fallback created one.
@@ -23254,7 +23322,7 @@ const resolvers_getNavigationFallbackId = () => async ({
 
     // Resolve to avoid further network requests.
     dispatch.finishResolution('getEntityRecord', ['postType', 'wp_navigation', fallback.id]);
-  }
+  });
 };
 const resolvers_getDefaultTemplateId = query => async ({
   dispatch
@@ -23279,7 +23347,8 @@ const resolvers_getDefaultTemplateId = query => async ({
  *                                     fields, fields must always include the ID.
  */
 const resolvers_getRevisions = (kind, name, recordKey, query = {}) => async ({
-  dispatch
+  dispatch,
+  registry
 }) => {
   const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
@@ -23329,16 +23398,17 @@ const resolvers_getRevisions = (kind, name, recordKey, query = {}) => async ({
         return record;
       });
     }
-    dispatch.receiveRevisions(kind, name, recordKey, records, query, false, meta);
+    registry.batch(() => {
+      dispatch.receiveRevisions(kind, name, recordKey, records, query, false, meta);
 
-    // When requesting all fields, the list of results can be used to
-    // resolve the `getRevision` selector in addition to `getRevisions`.
-    if (!query?._fields && !query.context) {
-      const key = entityConfig.key || DEFAULT_ENTITY_KEY;
-      const resolutionsArgs = records.filter(record => record[key]).map(record => [kind, name, recordKey, record[key]]);
-      dispatch.startResolutions('getRevision', resolutionsArgs);
-      dispatch.finishResolutions('getRevision', resolutionsArgs);
-    }
+      // When requesting all fields, the list of results can be used to
+      // resolve the `getRevision` selector in addition to `getRevisions`.
+      if (!query?._fields && !query.context) {
+        const key = entityConfig.key || DEFAULT_ENTITY_KEY;
+        const resolutionsArgs = records.filter(record => record[key]).map(record => [kind, name, recordKey, record[key]]);
+        dispatch.finishResolutions('getRevision', resolutionsArgs);
+      }
+    });
   }
 };
 
@@ -23385,6 +23455,34 @@ const resolvers_getRevision = (kind, name, recordKey, revisionKey, query) => asy
   }
   if (record) {
     dispatch.receiveRevisions(kind, name, recordKey, record, query);
+  }
+};
+
+/**
+ * Requests a specific post type options from the REST API.
+ *
+ * @param {string} postType Post type slug.
+ */
+const resolvers_getRegisteredPostMeta = postType => async ({
+  dispatch,
+  resolveSelect
+}) => {
+  let options;
+  try {
+    const {
+      rest_namespace: restNamespace = 'wp/v2',
+      rest_base: restBase
+    } = (await resolveSelect.getPostType(postType)) || {};
+    options = await external_wp_apiFetch_default()({
+      path: `${restNamespace}/${restBase}/?context=edit`,
+      method: 'OPTIONS'
+    });
+  } catch (error) {
+    // Do nothing if the request comes back with an API error.
+    return;
+  }
+  if (options) {
+    dispatch.receiveRegisteredPostMeta(postType, options?.schema?.properties?.meta?.properties);
   }
 };
 
@@ -24902,6 +25000,7 @@ lock(privateApis, {
 
 
 
+
 // The entity selectors/resolvers and actions are shortcuts to their generic equivalents
 // (getEntityRecord, getEntityRecords, updateEntityRecord, updateEntityRecords)
 // Instead of getEntityRecord, the consumer could use more user-friendly named selector: getPostType, getTaxonomy...
@@ -24966,6 +25065,7 @@ const storeConfig = () => ({
  */
 const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, storeConfig());
 unlock(store).registerPrivateSelectors(private_selectors_namespaceObject);
+unlock(store).registerPrivateActions(private_actions_namespaceObject);
 (0,external_wp_data_namespaceObject.register)(store); // Register store after unlocking private selectors to allow resolvers to use them.
 
 

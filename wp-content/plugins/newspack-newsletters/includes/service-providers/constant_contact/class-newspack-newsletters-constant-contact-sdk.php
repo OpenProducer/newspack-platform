@@ -86,6 +86,9 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 		}
 		$url = $this->base_uri . $path;
 		if ( isset( $options['query'] ) ) {
+			foreach ( $options['query'] as $key => $value ) {
+				$options['query'][ $key ] = urlencode( $value );
+			}
 			$url = add_query_arg( $options['query'], $url );
 			unset( $options['query'] );
 		}
