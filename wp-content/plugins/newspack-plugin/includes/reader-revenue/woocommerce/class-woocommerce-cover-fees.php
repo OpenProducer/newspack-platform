@@ -269,9 +269,12 @@ class WooCommerce_Cover_Fees {
 	 * @return string
 	 */
 	public static function get_fee_percentage( $subtotal ) {
-		$total = self::get_total_with_fee( $subtotal );
-		// Just one decimal place, please.
-		$flat_percentage = (float) number_format( ( ( $total - $subtotal ) * 100 ) / $subtotal, 1 );
+		$flat_percentage = 0;
+		if ( is_numeric( $subtotal ) && (float) $subtotal > 0 ) {
+			$total = self::get_total_with_fee( $subtotal );
+			// Just one decimal place, please.
+			$flat_percentage = (float) number_format( ( ( $total - $subtotal ) * 100 ) / $subtotal, 1 );
+		}
 		return $flat_percentage . '%';
 	}
 
