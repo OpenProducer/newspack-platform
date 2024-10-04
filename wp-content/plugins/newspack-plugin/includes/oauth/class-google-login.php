@@ -107,7 +107,7 @@ class Google_Login {
 		);
 		if ( is_wp_error( $url ) ) {
 			/* translators: %s is the error message */
-			self::handle_error( sprintf( __( 'Failed to get Google OAuth URL: %s', 'newspack-plugin' ), $url->get_error_message() ) );
+			self::handle_error( sprintf( __( 'Failed to get Google OAuth URL: %s', 'newspack-plugin' ), $url->get_error_message() ), [ 'csrf_token' => $csrf_token ] );
 			return $url;
 		}
 		return rest_ensure_response( $url );
@@ -136,15 +136,27 @@ class Google_Login {
 		$saved_csrf_token = OAuth::retrieve_csrf_token( self::CSRF_TOKEN_NAMESPACE );
 
 		if ( $_REQUEST['csrf_token'] !== $saved_csrf_token ) {
-			/* translators: %s is a unique user id */
-			self::handle_error( sprintf( __( 'CSRF token verification failed for id: %s', 'newspack-plugin' ), OAuth::get_unique_id() ) );
+			self::handle_error(
+				/* translators: %s is a unique user id */
+				sprintf( __( 'CSRF token verification failed for id: %s', 'newspack-plugin' ), OAuth::get_unique_id() ),
+				[
+					'saved_csrf_token'   => $saved_csrf_token,
+					'request_csrf_token' => sanitize_text_field( $_REQUEST['csrf_token'] ),
+				]
+			);
 			\wp_die( \esc_html__( 'Authentication failed.', 'newspack-plugin' ) );
 		}
 
 		$user_email = Google_OAuth::validate_token_and_get_email_address( sanitize_text_field( $_REQUEST['access_token'] ), self::REQUIRED_SCOPES );
 		if ( is_wp_error( $user_email ) ) {
-			/* translators: %s is the error message */
-			self::handle_error( sprintf( __( 'Failed validating user: %s', 'newspack-plugin' ), $user_email->get_error_message() ) );
+			self::handle_error(
+				/* translators: %s is the error message */
+				sprintf( __( 'Failed validating user: %s', 'newspack-plugin' ), $user_email->get_error_message() ),
+				[
+					'email'      => $user_email,
+					'csrf_token' => $saved_csrf_token,
+				]
+			);
 			\wp_die( \esc_html__( 'Authentication failed.', 'newspack-plugin' ) );
 		}
 
@@ -155,8 +167,14 @@ class Google_Login {
 		$set_transient_result = OAuth_Transients::set( $uid, 'email', $user_email );
 		// If transient setting failed, the email address will not be available for the registration endpoint.
 		if ( $set_transient_result === false ) {
-			/* translators: %s is a unique user id */
-			self::handle_error( sprintf( __( 'Failed setting email transient for id: %s', 'newspack-plugin' ), $uid ) );
+			self::handle_error(
+				/* translators: %s is a unique user id */
+				sprintf( __( 'Failed setting email transient for id: %s', 'newspack-plugin' ), $uid ),
+				[
+					'email'      => $user_email,
+					'csrf_token' => $saved_csrf_token,
+				]
+			);
 			\wp_die( \esc_html__( 'Authentication failed.', 'newspack-plugin' ) );
 		}
 
@@ -175,26 +193,40 @@ class Google_Login {
 	 * Handle issue.
 	 *
 	 * @param string $message The message to log.
+	 * @param string $error_data Additional data to log.
 	 */
-	private static function handle_error( $message ) {
+	private static function handle_error( $message, $error_data = [] ) {
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
+		$data = [
+			'uid'          => OAuth::get_unique_id(),
+			'user_agent'   => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : 'N/A',
+			'referrer'     => isset( $_SERVER['HTTP_REFERER'] ) ? esc_url( $_SERVER['HTTP_REFERER'] ) : 'N/A',
+			'request_time' => isset( $_SERVER['REQUEST_TIME'] ) ? gmdate( 'Y-m-d\TH:i:s', intval( $_SERVER['REQUEST_TIME'] ) ) : 'N/A',
+		];
+		// phpcs:enable
+		$data = array_merge( $data, $error_data );
+
 		Logger::error(
 			sprintf(
 				// Translators: %1$s is the error message, %2$s is the user agent.
 				__( '%1$s | Details: %2$s', 'newspack-plugin' ),
 				$message,
-				\wp_json_encode(
-					[
-						'user_agent'   => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : 'N/A',
-						'referrer'     => isset( $_SERVER['HTTP_REFERER'] ) ? esc_url( $_SERVER['HTTP_REFERER'] ) : 'N/A',
-						'request_time' => isset( $_SERVER['REQUEST_TIME'] ) ? gmdate( 'Y-m-d\TH:i:s', intval( $_SERVER['REQUEST_TIME'] ) ) : 'N/A',
-					],
-					JSON_PRETTY_PRINT
-				)
+				\wp_json_encode( $data, JSON_PRETTY_PRINT )
 			)
 		);
-		// phpcs:enable
 		do_action( 'newspack_google_login_error', new WP_Error( 'newspack_google_login', $message ) );
+
+		do_action(
+			'newspack_log',
+			'newspack_google_login',
+			$message,
+			[
+				'type'       => 'error',
+				'data'       => $data,
+				'user_email' => $data['email'] ?? '',
+				'file'       => 'newspack_google_login',
+			]
+		);
 	}
 
 	/**
@@ -216,6 +248,20 @@ class Google_Login {
 		}
 		$metadata['registration_method'] = 'google';
 		if ( $email ) {
+			do_action(
+				'newspack_log',
+				'newspack_google_login',
+				'Google Login Success',
+				[
+					'type'       => 'debug',
+					'data'       => [
+						'uid' => OAuth::get_unique_id(),
+					],
+					'user_email' => $email,
+					'file'       => 'newspack_google_login',
+				]
+			);
+
 			$existing_user = \get_user_by( 'email', $email );
 			$message       = __( 'Thank you for registering!', 'newspack-plugin' );
 			$data          = [

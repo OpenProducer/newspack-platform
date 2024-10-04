@@ -1,3 +1,43 @@
+# [5.4.0](https://github.com/Automattic/newspack-plugin/compare/v5.3.14...v5.4.0) (2024-10-03)
+
+
+### Bug Fixes
+
+* update community placeholder and add help docs ([26dfda2](https://github.com/Automattic/newspack-plugin/commit/26dfda218ca876c5379cbb6cc4d28eba2f5b982a))
+
+
+### Features
+
+* add elections block patterns ([de84fee](https://github.com/Automattic/newspack-plugin/commit/de84fee4c11184bda2a5ccbdc7a9f563fbec16fc))
+
+## [5.3.14](https://github.com/Automattic/newspack-plugin/compare/v5.3.13...v5.3.14) (2024-10-03)
+
+
+### Bug Fixes
+
+* cache bust the /login/google API request ([ee92ded](https://github.com/Automattic/newspack-plugin/commit/ee92dedfdd365c7c69b877cd98cad15f976b6627))
+
+## [5.3.13](https://github.com/Automattic/newspack-plugin/compare/v5.3.12...v5.3.13) (2024-10-02)
+
+
+### Bug Fixes
+
+* **oauth:** tweak precision of success google auth log ([#3453](https://github.com/Automattic/newspack-plugin/issues/3453)) ([bed1e67](https://github.com/Automattic/newspack-plugin/commit/bed1e673be1e48444ad09680647f9f0fd80472ba))
+
+## [5.3.12](https://github.com/Automattic/newspack-plugin/compare/v5.3.11...v5.3.12) (2024-10-01)
+
+
+### Bug Fixes
+
+* handle zero cover fee percentage ([#3452](https://github.com/Automattic/newspack-plugin/issues/3452)) ([742b378](https://github.com/Automattic/newspack-plugin/commit/742b378d0399ab9359e82ad7aa4d999d78566ebd))
+
+## [5.3.11](https://github.com/Automattic/newspack-plugin/compare/v5.3.10...v5.3.11) (2024-10-01)
+
+
+### Bug Fixes
+
+* **oauth:** validate ID, prevent early deletion and improve logs ([#3450](https://github.com/Automattic/newspack-plugin/issues/3450)) ([763848e](https://github.com/Automattic/newspack-plugin/commit/763848e38f3eec3dbc6107cbed29277cdba4c040))
+
 ## [5.3.10](https://github.com/Automattic/newspack-plugin/compare/v5.3.9...v5.3.10) (2024-09-17)
 
 

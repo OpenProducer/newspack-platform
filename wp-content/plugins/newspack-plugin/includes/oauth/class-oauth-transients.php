@@ -38,7 +38,7 @@ class OAuth_Transients {
 		if ( defined( 'NEWSPACK_CRON_DISABLE' ) && is_array( NEWSPACK_CRON_DISABLE ) && in_array( self::CRON_HOOK, NEWSPACK_CRON_DISABLE, true ) ) {
 			self::cron_deactivate();
 		} elseif ( ! \wp_next_scheduled( self::CRON_HOOK ) ) {
-				\wp_schedule_event( time(), 'weekly', self::CRON_HOOK );
+				\wp_schedule_event( time(), 'hourly', self::CRON_HOOK );
 		}
 	}
 
@@ -106,12 +106,17 @@ class OAuth_Transients {
 	 * @param string $id The reader's unique ID.
 	 * @param string $scope The scope of the data to get.
 	 * @param string $field_to_get The column to get. Defaults to 'value'.
+	 * @param bool   $delete Whether to delete the row after getting the value.
 	 *
 	 * @return mixed The value of the data, or false if not found.
 	 */
-	public static function get( $id, $scope, $field_to_get = 'value' ) {
+	public static function get( $id, $scope, $field_to_get = 'value', $delete = true ) {
 		global $wpdb;
 		$table_name = self::get_table_name();
+
+		if ( empty( $id ) ) {
+			return false;
+		}
 
 		$value = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
@@ -124,7 +129,7 @@ class OAuth_Transients {
 		);
 
 		// Burn after reading.
-		if ( ! empty( $value ) && ( ! defined( 'NEWSPACK_OAUTH_TRANSIENTS_DEBUG' ) || ! NEWSPACK_OAUTH_TRANSIENTS_DEBUG ) ) {
+		if ( $delete && ! empty( $value ) && ( ! defined( 'NEWSPACK_OAUTH_TRANSIENTS_DEBUG' ) || ! NEWSPACK_OAUTH_TRANSIENTS_DEBUG ) ) {
 			self::delete( $id, $scope );
 		}
 
@@ -165,9 +170,13 @@ class OAuth_Transients {
 	 * @return mixed The value if it was set, false otherwise.
 	 */
 	public static function set( $id, $scope, $value ) {
+		if ( empty( $id ) ) {
+			return false;
+		}
+
 		global $wpdb;
 
-		$existing = self::get( $id, $scope );
+		$existing = self::get( $id, $scope, 'value', false );
 		if ( $existing ) {
 			return $existing;
 		}
@@ -202,7 +211,7 @@ class OAuth_Transients {
 	public static function cleanup() {
 		global $wpdb;
 		$table_name = self::get_table_name();
-		$wpdb->query( "DELETE FROM $table_name WHERE created_at < now() - interval 30 MINUTE LIMIT 1000" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "DELETE FROM $table_name WHERE created_at < utc_timestamp() - interval 30 MINUTE LIMIT 1000" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 }
 

@@ -70,6 +70,7 @@ return array(
     'Newspack\\NRH' => $baseDir . '/includes/class-nrh.php',
     'Newspack\\Newspack' => $baseDir . '/includes/class-newspack.php',
     'Newspack\\Newspack_Ads_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-newspack-ads-configuration-manager.php',
+    'Newspack\\Newspack_Elections' => $baseDir . '/includes/plugins/class-newspack-elections.php',
     'Newspack\\Newspack_Image_Credits' => $baseDir . '/includes/class-newspack-image-credits.php',
     'Newspack\\Newspack_Newsletters' => $baseDir . '/includes/plugins/class-newspack-newsletters.php',
     'Newspack\\Newspack_Newsletters_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-newspack-newsletters-configuration-manager.php',

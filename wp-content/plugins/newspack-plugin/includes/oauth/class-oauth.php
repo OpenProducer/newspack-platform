@@ -48,6 +48,11 @@ class OAuth {
 	public static function generate_csrf_token( $namespace ) {
 		$csrf_token = wp_generate_password( 40, false );
 		$transient_scope = self::CSRF_TOKEN_TRANSIENT_SCOPE_PREFIX . $namespace;
+		$unique_id = self::get_unique_id();
+		if ( ! $unique_id ) {
+			Logger::log( sprintf( 'Unable to get unique ID for CSRF token with "%s" namespace.', $namespace ) );
+			return false;
+		}
 		return OAuth_Transients::set( self::get_unique_id(), $transient_scope, $csrf_token );
 	}
 
