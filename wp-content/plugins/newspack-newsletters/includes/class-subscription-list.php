@@ -20,6 +20,8 @@ defined( 'ABSPATH' ) || exit;
  */
 class Subscription_List {
 
+	use \Newspack_Newsletters_Mailchimp_Subscription_List_Trait;
+
 	/**
 	 * Hold the WP_Post object associated with this List.
 	 *
@@ -33,9 +35,9 @@ class Subscription_List {
 	const META_KEY = 'newspack_nl_provider_settings';
 
 	/**
-	 * The prefix used to build the form iD
+	 * The prefix used to build the Public iD
 	 */
-	const FORM_ID_PREFIX = 'newspack-';
+	const PUBLIC_ID_PREFIX = 'newspack-';
 
 	/**
 	 * The post meta key used to mark a list as local
@@ -63,30 +65,30 @@ class Subscription_List {
 	const SUBSCRIBER_COUNT_META = '_subscriber_count';
 
 	/**
-	 * Checks if a string $id is in the format of a local Subscription List Form ID
+	 * Checks if a string $id is in the format of a local Subscription List Public ID
 	 *
-	 * @see self::get_form_id
+	 * @see self::get_public_id
 	 * @param string $id The ID to be checked.
 	 * @return boolean
 	 */
-	public static function is_local_form_id( $id ) {
-		return (bool) self::get_id_from_local_form_id( $id );
+	public static function is_local_public_id( $id ) {
+		return (bool) self::get_id_from_local_public_id( $id );
 	}
 
 	/**
-	 * Extracts the numeric ID from a properly formatted Form ID
+	 * Extracts the numeric ID from a properly formatted Public ID
 	 *
-	 * @see self::get_form_id
-	 * @param string $form_id The Form id.
+	 * @see self::get_public_id
+	 * @param string $public_id The Public id.
 	 * @return ?int The ID on success, NULL on failure
 	 */
-	public static function get_id_from_local_form_id( $form_id ) {
-		if ( ! is_string( $form_id ) ) {
+	public static function get_id_from_local_public_id( $public_id ) {
+		if ( ! is_string( $public_id ) ) {
 			return;
 		}
 		$search = preg_match(
-			'/^' . self::FORM_ID_PREFIX . '([0-9]+)$/',
-			$form_id,
+			'/^' . self::PUBLIC_ID_PREFIX . '([0-9]+)$/',
+			$public_id,
 			$matches
 		);
 		if ( $search && ! empty( $matches[1] ) ) {
@@ -95,22 +97,22 @@ class Subscription_List {
 	}
 
 	/**
-	 * Gets a Subscription List object by its form_id
+	 * Gets a Subscription List object by its public_id
 	 *
-	 * @param string $form_id The list's form ID.
+	 * @param string $public_id The list's public ID.
 	 * @return ?Subscription_List
 	 */
-	public static function from_form_id( $form_id ) {
-		$form_id = (string) $form_id;
-		if ( self::is_local_form_id( $form_id ) ) {
-			$post_id = self::get_id_from_local_form_id( $form_id );
+	public static function from_public_id( $public_id ) {
+		$public_id = (string) $public_id;
+		if ( self::is_local_public_id( $public_id ) ) {
+			$post_id = self::get_id_from_local_public_id( $public_id );
 			try {
 				return new self( $post_id );
 			} catch ( \InvalidArgumentException $e ) {
 				return;
 			}
 		}
-		return self::from_remote_id( $form_id );
+		return self::from_remote_id( $public_id );
 	}
 
 	/**
@@ -166,15 +168,15 @@ class Subscription_List {
 	}
 
 	/**
-	 * Returns the Form ID for this List
+	 * Returns the Public ID for this List
 	 *
-	 * Form ID is the ID that will represent this list in all UI forms across the application
+	 * Public ID is the ID that will represent this list in all UI forms across the application
 	 *
 	 * @return string
 	 */
-	public function get_form_id() {
+	public function get_public_id() {
 		if ( $this->is_local() ) {
-			return self::FORM_ID_PREFIX . $this->get_id();
+			return self::PUBLIC_ID_PREFIX . $this->get_id();
 		}
 		return $this->get_remote_id();
 	}
@@ -225,7 +227,7 @@ class Subscription_List {
 	public function get_type_label() {
 		$provider = Newspack_Newsletters::get_service_provider();
 		if ( ! empty( $provider ) ) {
-			return $this->is_local() ? $provider::label( 'local_list_explanation', $this->get_form_id() ) : $provider::label( 'list_explanation', $this->get_form_id() );
+			return $this->is_local() ? $provider::label( 'local_list_explanation', $this->get_public_id() ) : $provider::label( 'list_explanation', $this->get_public_id() );
 		}
 		return '';
 	}
@@ -537,7 +539,7 @@ class Subscription_List {
 	 */
 	public function to_array() {
 		return [
-			'id'          => $this->get_form_id(),
+			'id'          => $this->get_public_id(),
 			'db_id'       => $this->get_id(),
 			'title'       => $this->get_title(),
 			'name'        => $this->get_title(),

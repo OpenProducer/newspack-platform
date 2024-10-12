@@ -659,6 +659,24 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			return $campaign;
 		}
 		add_post_meta( $post_id, 'ac_test_campaign', $campaign['id'] );
+
+		/** Get the latest message ID from the temporary campaign. */
+		$campaign_data = $this->api_v1_request(
+			'campaign_list',
+			'GET',
+			[
+				'query' => [
+					'action' => 'test',
+					'ids'    => $campaign['id'],
+				],
+			]
+		);
+		if ( is_wp_error( $campaign_data ) ) {
+			return $campaign_data;
+		}
+		$campaign_messages = explode( ',', $campaign_data[0]['messageslist'] ); 
+		$message_id        = ! empty( $campaign_messages ) ? reset( $campaign_messages ) : 0;
+
 		$test_result = $this->api_v1_request(
 			'campaign_send',
 			'GET',
@@ -667,7 +685,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 					'type'       => 'html',
 					'action'     => 'test',
 					'campaignid' => $campaign['id'],
-					'messageid'  => $sync_result['message_id'],
+					'messageid'  => $message_id,
 					'email'      => implode( ',', $emails ),
 				],
 			]

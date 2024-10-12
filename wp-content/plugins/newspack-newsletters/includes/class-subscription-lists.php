@@ -464,7 +464,7 @@ class Subscription_Lists {
 
 		$subscriber_count = ! empty( $list['subscriber_count'] ) ? (int) $list['subscriber_count'] : 0;
 		$subscriber_count = ! empty( $list['member_count'] ) ? (int) $list['member_count'] : 0; // Tags have member_count instead of subscriber_count.
-		$saved_list       = Subscription_List::from_form_id( $list['id'] );
+		$saved_list       = Subscription_List::from_public_id( $list['id'] );
 		if ( $saved_list ) {
 			// Update remote name, in case it's changed in the ESP.
 			$saved_list->set_remote_name( $list['title'] );
@@ -551,9 +551,9 @@ class Subscription_Lists {
 		$existing_ids = [];
 
 		foreach ( $lists as $list ) {
-			if ( Subscription_List::is_local_form_id( $list['id'] ) ) {
+			if ( Subscription_List::is_local_public_id( $list['id'] ) ) {
 				// Local lists will be fetched here.
-				$stored_list = Subscription_List::from_form_id( $list['id'] );
+				$stored_list = Subscription_List::from_public_id( $list['id'] );
 			} else {
 				// Remote lists will be either fetched or created here.
 				$stored_list = self::get_or_create_remote_list( $list );
@@ -667,7 +667,7 @@ class Subscription_Lists {
 
 			foreach ( $lists as $list_id => $list ) {
 
-				if ( Subscription_List::is_local_form_id( $list_id ) ) {
+				if ( Subscription_List::is_local_public_id( $list_id ) ) {
 					continue;
 				}
 

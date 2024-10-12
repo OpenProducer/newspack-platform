@@ -1,3 +1,31 @@
+## [4.2.2](https://github.com/Automattic/newspack-blocks/compare/v4.2.1...v4.2.2) (2024-10-11)
+
+
+### Bug Fixes
+
+* **block-caching:** only serve from cache if all blocks are cached ([#1899](https://github.com/Automattic/newspack-blocks/issues/1899)) ([fb64d0c](https://github.com/Automattic/newspack-blocks/commit/fb64d0ca4ffc2f16870bcc51db83f090054a5d26))
+
+## [4.2.1](https://github.com/Automattic/newspack-blocks/compare/v4.2.0...v4.2.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* re-add block caching ([937ca53](https://github.com/Automattic/newspack-blocks/commit/937ca530fa46e3e404425eb0b8e1e40dea672a69))
+
+# [4.2.0](https://github.com/Automattic/newspack-blocks/compare/v4.1.2...v4.2.0) (2024-10-08)
+
+
+### Bug Fixes
+
+* we know how long the cache is ([ec5083d](https://github.com/Automattic/newspack-blocks/commit/ec5083d233a2c2b534efd08b669d2274e8f3b570))
+
+
+### Features
+
+* block caching ([62ba143](https://github.com/Automattic/newspack-blocks/commit/62ba1439e420420cca940fab9c863d58fc2d0b70))
+* **homepage-posts:** add a show-full-content attribute ([#1886](https://github.com/Automattic/newspack-blocks/issues/1886)) ([09619a9](https://github.com/Automattic/newspack-blocks/commit/09619a992d46b332e1b6358e7021cc5d4ce90d3b))
+* **homepage-posts:** infinite scroll ([#1845](https://github.com/Automattic/newspack-blocks/issues/1845)) ([f5f1c20](https://github.com/Automattic/newspack-blocks/commit/f5f1c20c9033b9de116c96f1579417fe52060631))
+
 ## [4.1.2](https://github.com/Automattic/newspack-blocks/compare/v4.1.1...v4.1.2) (2024-09-17)
 
 

@@ -10,11 +10,19 @@
 			"type": "boolean",
 			"default": true
 		},
+		"showFullContent": {
+			"type": "boolean",
+			"default": false
+		},
 		"excerptLength": {
 			"type": "number",
 			"default": 55
 		},
 		"showReadMore": {
+			"type": "boolean",
+			"default": false
+		},
+		"infiniteScroll": {
 			"type": "boolean",
 			"default": false
 		},
@@ -214,9 +222,7 @@
 		},
 		"postType": {
 			"type": "array",
-			"default": [
-				"post"
-			],
+			"default": ["post"],
 			"items": {
 				"type": "string"
 			}
@@ -227,9 +233,7 @@
 		},
 		"includedPostStatuses": {
 			"type": "array",
-			"default": [
-				"publish"
-			],
+			"default": ["publish"],
 			"items": {
 				"type": "string"
 			}

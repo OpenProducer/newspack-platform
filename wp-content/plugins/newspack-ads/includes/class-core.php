@@ -38,7 +38,6 @@ final class Core {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->define_constants();
 		$this->includes();
 
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
@@ -71,14 +70,6 @@ final class Core {
 	}
 
 	/**
-	 * Define Constants.
-	 */
-	private function define_constants() {
-		define( 'NEWSPACK_ADS_VERSION', '1.0.0' );
-		define( 'NEWSPACK_ADS_ABSPATH', dirname( NEWSPACK_ADS_PLUGIN_FILE ) . '/' );
-	}
-
-	/**
 	 * Include required core files used in admin and on the frontend.
 	 * e.g. include_once NEWSPACK_ADS_ABSPATH . 'includes/foo.php';
 	 */
@@ -103,10 +94,13 @@ final class Core {
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/integrations/class-scaip.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/integrations/class-complianz.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/integrations/class-ad-refresh-control.php';
-		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-blocks.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/blocks/class-ad-unit-block.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/blocks/class-tabs-block.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/blocks/class-tabs-item-block.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-widget.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/customizer/class-customizer.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-suppression.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/media-kit/class-media-kit.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/functions.php';
 	}
 

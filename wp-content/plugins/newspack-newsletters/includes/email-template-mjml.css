@@ -63,7 +63,9 @@ h6 {
 ul, ol {
 	margin: 12px 15px;
 	padding: 0;
-	list-style-position: inside;
+}
+li {
+	margin-left: 0.7em;
 }
 
 /* Quote */

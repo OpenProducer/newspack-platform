@@ -305,8 +305,7 @@ const {
     url: window.location.href,
     navigation: {
       hasStarted: false,
-      hasFinished: false,
-      message: ''
+      hasFinished: false
     }
   },
   actions: {
@@ -455,22 +454,26 @@ function a11ySpeak(messageKey) {
       } catch {}
     } else {
       // Fallback to localized strings from Interactivity API state.
+      // @todo This block is for Core < 6.7.0. Remove when support is dropped.
+
+      // @ts-expect-error
       if (state.navigation.texts?.loading) {
+        // @ts-expect-error
         navigationTexts.loading = state.navigation.texts.loading;
       }
+      // @ts-expect-error
       if (state.navigation.texts?.loaded) {
+        // @ts-expect-error
         navigationTexts.loaded = state.navigation.texts.loaded;
       }
     }
   }
   const message = navigationTexts[messageKey];
-  if (true) {
-    Promise.resolve(/* import() */).then(__webpack_require__.bind(__webpack_require__, 105)).then(({
-      speak
-    }) => speak(message),
-    // Ignore failures to load the a11y module.
-    () => {});
-  } else {}
+  Promise.resolve(/* import() */).then(__webpack_require__.bind(__webpack_require__, 105)).then(({
+    speak
+  }) => speak(message),
+  // Ignore failures to load the a11y module.
+  () => {});
 }
 
 // Add click and prefetch to all links.
