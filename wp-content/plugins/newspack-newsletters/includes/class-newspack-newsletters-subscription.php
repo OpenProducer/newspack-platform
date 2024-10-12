@@ -239,7 +239,7 @@ class Newspack_Newsletters_Subscription {
 			if ( ! $list->is_active() ) {
 				continue;
 			}
-			$active_lists[ $list->get_form_id() ] = $list->to_array();
+			$active_lists[ $list->get_public_id() ] = $list->to_array();
 		}
 
 		return $active_lists;

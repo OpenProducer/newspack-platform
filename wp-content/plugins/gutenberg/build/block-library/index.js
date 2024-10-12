@@ -2357,7 +2357,8 @@ const {
 
 const avatar_settings = {
   icon: comment_author_avatar,
-  edit: Edit
+  edit: Edit,
+  example: {}
 };
 const avatar_init = () => initBlock({
   name: avatar_name,
@@ -2685,21 +2686,21 @@ const util_metadata = {
   attributes: {
     url: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     caption: {
       type: "rich-text",
       source: "rich-text",
       selector: "figcaption",
-      __experimentalRole: "content"
+      role: "content"
     },
     type: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     providerNameSlug: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     allowResponsive: {
       type: "boolean",
@@ -2708,12 +2709,12 @@ const util_metadata = {
     responsive: {
       type: "boolean",
       "default": false,
-      __experimentalRole: "content"
+      role: "content"
     },
     previewable: {
       type: "boolean",
       "default": true,
-      __experimentalRole: "content"
+      role: "content"
     }
   },
   supports: {
@@ -3581,24 +3582,24 @@ const audio_metadata = {
   attributes: {
     blob: {
       type: "string",
-      __experimentalRole: "local"
+      role: "local"
     },
     src: {
       type: "string",
       source: "attribute",
       selector: "audio",
       attribute: "src",
-      __experimentalRole: "content"
+      role: "content"
     },
     caption: {
       type: "rich-text",
       source: "rich-text",
       selector: "figcaption",
-      __experimentalRole: "content"
+      role: "content"
     },
     id: {
       type: "number",
-      __experimentalRole: "content"
+      role: "content"
     },
     autoplay: {
       type: "boolean",
@@ -4904,7 +4905,6 @@ const linkOff = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ex
 
 
 
-
 /**
  * WordPress dependencies
  */
@@ -5088,7 +5088,7 @@ function ButtonEdit(props) {
     if (!isSelected) {
       return {};
     }
-    const blockBindingsSource = unlock(select(external_wp_blocks_namespaceObject.store)).getBlockBindingsSource(metadata?.bindings?.url?.source);
+    const blockBindingsSource = (0,external_wp_blocks_namespaceObject.getBlockBindingsSource)(metadata?.bindings?.url?.source);
     return {
       lockUrlControls: !!metadata?.bindings?.url && !blockBindingsSource?.canUserEditValue?.({
         select,
@@ -5317,34 +5317,34 @@ const button_metadata = {
       source: "attribute",
       selector: "a",
       attribute: "href",
-      __experimentalRole: "content"
+      role: "content"
     },
     title: {
       type: "string",
       source: "attribute",
       selector: "a,button",
       attribute: "title",
-      __experimentalRole: "content"
+      role: "content"
     },
     text: {
       type: "rich-text",
       source: "rich-text",
       selector: "a,button",
-      __experimentalRole: "content"
+      role: "content"
     },
     linkTarget: {
       type: "string",
       source: "attribute",
       selector: "a",
       attribute: "target",
-      __experimentalRole: "content"
+      role: "content"
     },
     rel: {
       type: "string",
       source: "attribute",
       selector: "a",
       attribute: "rel",
-      __experimentalRole: "content"
+      role: "content"
     },
     placeholder: {
       type: "string"
@@ -6435,7 +6435,7 @@ const categories_metadata = {
     },
     label: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     showLabel: {
       type: "boolean",
@@ -9754,7 +9754,8 @@ const {
 const comment_author_name_settings = {
   icon: comment_author_name,
   edit: comment_author_name_edit_Edit,
-  deprecated: comment_author_name_deprecated
+  deprecated: comment_author_name_deprecated,
+  example: {}
 };
 const comment_author_name_init = () => initBlock({
   name: comment_author_name_name,
@@ -9931,7 +9932,8 @@ const {
 
 const comment_content_settings = {
   icon: comment_content,
-  edit: comment_content_edit_Edit
+  edit: comment_content_edit_Edit,
+  example: {}
 };
 const comment_content_init = () => initBlock({
   name: comment_content_name,
@@ -10177,7 +10179,8 @@ const {
 const comment_date_settings = {
   icon: post_date,
   edit: comment_date_edit_Edit,
-  deprecated: comment_date_deprecated
+  deprecated: comment_date_deprecated,
+  example: {}
 };
 const comment_date_init = () => initBlock({
   name: comment_date_name,
@@ -10343,7 +10346,8 @@ const {
 
 const comment_edit_link_settings = {
   icon: comment_edit_link,
-  edit: comment_edit_link_edit_Edit
+  edit: comment_edit_link_edit_Edit,
+  example: {}
 };
 const comment_edit_link_init = () => initBlock({
   name: comment_edit_link_name,
@@ -10499,7 +10503,8 @@ const {
 
 const comment_reply_link_settings = {
   edit: comment_reply_link_edit,
-  icon: comment_reply_link
+  icon: comment_reply_link,
+  example: {}
 };
 const comment_reply_link_init = () => initBlock({
   name: comment_reply_link_name,
@@ -11123,6 +11128,11 @@ const comments_pagination_previous_metadata = {
       type: "string"
     }
   },
+  example: {
+    attributes: {
+      label: "Comments Previous Page"
+    }
+  },
   usesContext: ["postId", "comments/paginationArrow"],
   supports: {
     reusable: false,
@@ -11474,6 +11484,11 @@ const comments_pagination_next_metadata = {
       type: "string"
     }
   },
+  example: {
+    attributes: {
+      label: "Comments Next Page"
+    }
+  },
   usesContext: ["postId", "comments/paginationArrow"],
   supports: {
     reusable: false,
@@ -11633,7 +11648,8 @@ const {
 
 const comments_pagination_numbers_settings = {
   icon: query_pagination_numbers,
-  edit: CommentsPaginationNumbersEdit
+  edit: CommentsPaginationNumbersEdit,
+  example: {}
 };
 const comments_pagination_numbers_init = () => initBlock({
   name: comments_pagination_numbers_name,
@@ -12007,7 +12023,8 @@ const {
 const comments_title_settings = {
   icon: library_title,
   edit: comments_title_edit_Edit,
-  deprecated: comments_title_deprecated
+  deprecated: comments_title_deprecated,
+  example: {}
 };
 const comments_title_init = () => initBlock({
   name: comments_title_name,
@@ -14907,6 +14924,8 @@ function CoverEdit({
   const isUploadingMedia = isTemporaryMedia(id, url);
   const isImageBackground = IMAGE_BACKGROUND_TYPE === backgroundType;
   const isVideoBackground = VIDEO_BACKGROUND_TYPE === backgroundType;
+  const blockEditingMode = (0,external_wp_blockEditor_namespaceObject.useBlockEditingMode)();
+  const hasNonContentControls = blockEditingMode === 'default';
   const [resizeListener, {
     height,
     width
@@ -15037,7 +15056,7 @@ function CoverEdit({
   };
   if (!useFeaturedImage && !hasInnerBlocks && !hasBackground) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-      children: [blockControls, inspectorControls, isSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResizableCoverPopover, {
+      children: [blockControls, inspectorControls, hasNonContentControls && isSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResizableCoverPopover, {
         ...resizableCoverProps
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(TagName, {
         ...blockProps,
@@ -15131,7 +15150,7 @@ function CoverEdit({
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
         ...innerBlocksProps
       })]
-    }), isSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResizableCoverPopover, {
+    }), hasNonContentControls && isSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResizableCoverPopover, {
       ...resizableCoverProps
     })]
   });
@@ -16872,21 +16891,21 @@ const transforms_metadata = {
   attributes: {
     url: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     caption: {
       type: "rich-text",
       source: "rich-text",
       selector: "figcaption",
-      __experimentalRole: "content"
+      role: "content"
     },
     type: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     providerNameSlug: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     allowResponsive: {
       type: "boolean",
@@ -16895,12 +16914,12 @@ const transforms_metadata = {
     responsive: {
       type: "boolean",
       "default": false,
-      __experimentalRole: "content"
+      role: "content"
     },
     previewable: {
       type: "boolean",
       "default": true,
-      __experimentalRole: "content"
+      role: "content"
     }
   },
   supports: {
@@ -17375,21 +17394,21 @@ const embed_deprecated_metadata = {
   attributes: {
     url: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     caption: {
       type: "rich-text",
       source: "rich-text",
       selector: "figcaption",
-      __experimentalRole: "content"
+      role: "content"
     },
     type: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     providerNameSlug: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     allowResponsive: {
       type: "boolean",
@@ -17398,12 +17417,12 @@ const embed_deprecated_metadata = {
     responsive: {
       type: "boolean",
       "default": false,
-      __experimentalRole: "content"
+      role: "content"
     },
     previewable: {
       type: "boolean",
       "default": true,
-      __experimentalRole: "content"
+      role: "content"
     }
   },
   supports: {
@@ -17510,21 +17529,21 @@ const embed_metadata = {
   attributes: {
     url: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     caption: {
       type: "rich-text",
       source: "rich-text",
       selector: "figcaption",
-      __experimentalRole: "content"
+      role: "content"
     },
     type: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     providerNameSlug: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     allowResponsive: {
       type: "boolean",
@@ -17533,12 +17552,12 @@ const embed_metadata = {
     responsive: {
       type: "boolean",
       "default": false,
-      __experimentalRole: "content"
+      role: "content"
     },
     previewable: {
       type: "boolean",
       "default": true,
-      __experimentalRole: "content"
+      role: "content"
     }
   },
   supports: {
@@ -18602,10 +18621,11 @@ const file_metadata = {
     },
     blob: {
       type: "string",
-      __experimentalRole: "local"
+      role: "local"
     },
     href: {
-      type: "string"
+      type: "string",
+      role: "content"
     },
     fileId: {
       type: "string",
@@ -18616,13 +18636,15 @@ const file_metadata = {
     fileName: {
       type: "rich-text",
       source: "rich-text",
-      selector: "a:not([download])"
+      selector: "a:not([download])",
+      role: "content"
     },
     textLinkHref: {
       type: "string",
       source: "attribute",
       selector: "a:not([download])",
-      attribute: "href"
+      attribute: "href",
+      role: "content"
     },
     textLinkTarget: {
       type: "string",
@@ -18637,7 +18659,8 @@ const file_metadata = {
     downloadButtonText: {
       type: "rich-text",
       source: "rich-text",
-      selector: "a[download]"
+      selector: "a[download]",
+      role: "content"
     },
     displayPreview: {
       type: "boolean"
@@ -19118,7 +19141,7 @@ const form_input_deprecated_v2 = {
       default: 'Label',
       selector: '.wp-block-form-input__label-content',
       source: 'html',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     inlineLabel: {
       type: 'boolean',
@@ -19136,7 +19159,7 @@ const form_input_deprecated_v2 = {
       selector: '.wp-block-form-input__input',
       source: 'attribute',
       attribute: 'placeholder',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     value: {
       type: 'string',
@@ -19233,7 +19256,7 @@ const form_input_deprecated_v1 = {
       default: 'Label',
       selector: '.wp-block-form-input__label-content',
       source: 'html',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     inlineLabel: {
       type: 'boolean',
@@ -19251,7 +19274,7 @@ const form_input_deprecated_v1 = {
       selector: '.wp-block-form-input__input',
       source: 'attribute',
       attribute: 'placeholder',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     value: {
       type: 'string',
@@ -19679,7 +19702,7 @@ const form_input_metadata = {
       "default": "Label",
       selector: ".wp-block-form-input__label-content",
       source: "rich-text",
-      __experimentalRole: "content"
+      role: "content"
     },
     inlineLabel: {
       type: "boolean",
@@ -19697,7 +19720,7 @@ const form_input_metadata = {
       selector: ".wp-block-form-input__input",
       source: "attribute",
       attribute: "placeholder",
-      __experimentalRole: "content"
+      role: "content"
     },
     value: {
       type: "string",
@@ -23692,7 +23715,7 @@ const heading_deprecated_v5 = {
       source: 'html',
       selector: 'h1,h2,h3,h4,h5,h6',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     level: {
       type: 'number',
@@ -24106,7 +24129,7 @@ const heading_metadata = {
       type: "rich-text",
       source: "rich-text",
       selector: "h1,h2,h3,h4,h5,h6",
-      __experimentalRole: "content"
+      role: "content"
     },
     level: {
       type: "number",
@@ -25201,7 +25224,7 @@ const image_deprecated_v6 = {
       source: 'attribute',
       selector: 'img',
       attribute: 'src',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     alt: {
       type: 'string',
@@ -25209,27 +25232,27 @@ const image_deprecated_v6 = {
       selector: 'img',
       attribute: 'alt',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     caption: {
       type: 'string',
       source: 'html',
       selector: 'figcaption',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     title: {
       type: 'string',
       source: 'attribute',
       selector: 'img',
       attribute: 'title',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     href: {
       type: 'string',
       source: 'attribute',
       selector: 'figure > a',
       attribute: 'href',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     rel: {
       type: 'string',
@@ -25245,7 +25268,7 @@ const image_deprecated_v6 = {
     },
     id: {
       type: 'number',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     width: {
       type: 'number'
@@ -25387,7 +25410,7 @@ const image_deprecated_v7 = {
       source: 'attribute',
       selector: 'img',
       attribute: 'src',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     alt: {
       type: 'string',
@@ -25395,27 +25418,27 @@ const image_deprecated_v7 = {
       selector: 'img',
       attribute: 'alt',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     caption: {
       type: 'string',
       source: 'html',
       selector: 'figcaption',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     title: {
       type: 'string',
       source: 'attribute',
       selector: 'img',
       attribute: 'title',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     href: {
       type: 'string',
       source: 'attribute',
       selector: 'figure > a',
       attribute: 'href',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     rel: {
       type: 'string',
@@ -25431,7 +25454,7 @@ const image_deprecated_v7 = {
     },
     id: {
       type: 'number',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     width: {
       type: 'number'
@@ -25570,7 +25593,7 @@ const deprecated_v8 = {
       source: 'attribute',
       selector: 'img',
       attribute: 'src',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     alt: {
       type: 'string',
@@ -25578,27 +25601,27 @@ const deprecated_v8 = {
       selector: 'img',
       attribute: 'alt',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     caption: {
       type: 'string',
       source: 'html',
       selector: 'figcaption',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     title: {
       type: 'string',
       source: 'attribute',
       selector: 'img',
       attribute: 'title',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     href: {
       type: 'string',
       source: 'attribute',
       selector: 'figure > a',
       attribute: 'href',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     rel: {
       type: 'string',
@@ -25614,7 +25637,7 @@ const deprecated_v8 = {
     },
     id: {
       type: 'number',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     width: {
       type: 'string'
@@ -26242,17 +26265,14 @@ function image_Image({
       return {};
     }
     const {
-      getBlockBindingsSource
-    } = unlock(select(external_wp_blocks_namespaceObject.store));
-    const {
       url: urlBinding,
       alt: altBinding,
       title: titleBinding
     } = metadata?.bindings || {};
     const hasParentPattern = !!context['pattern/overrides'];
-    const urlBindingSource = getBlockBindingsSource(urlBinding?.source);
-    const altBindingSource = getBlockBindingsSource(altBinding?.source);
-    const titleBindingSource = getBlockBindingsSource(titleBinding?.source);
+    const urlBindingSource = (0,external_wp_blocks_namespaceObject.getBlockBindingsSource)(urlBinding?.source);
+    const altBindingSource = (0,external_wp_blocks_namespaceObject.getBlockBindingsSource)(altBinding?.source);
+    const titleBindingSource = (0,external_wp_blocks_namespaceObject.getBlockBindingsSource)(titleBinding?.source);
     return {
       lockUrlControls: !!urlBinding && !urlBindingSource?.canUserEditValue?.({
         select,
@@ -26725,7 +26745,6 @@ function useMaxWidthObserver() {
 
 
 
-
 /**
  * Module constants
  */
@@ -27013,7 +27032,7 @@ function ImageEdit({
     if (!isSingleSelected) {
       return {};
     }
-    const blockBindingsSource = unlock(select(external_wp_blocks_namespaceObject.store)).getBlockBindingsSource(metadata?.bindings?.url?.source);
+    const blockBindingsSource = (0,external_wp_blocks_namespaceObject.getBlockBindingsSource)(metadata?.bindings?.url?.source);
     return {
       lockUrlControls: !!metadata?.bindings?.url && !blockBindingsSource?.canUserEditValue?.({
         select,
@@ -27373,14 +27392,14 @@ const image_metadata = {
   attributes: {
     blob: {
       type: "string",
-      __experimentalRole: "local"
+      role: "local"
     },
     url: {
       type: "string",
       source: "attribute",
       selector: "img",
       attribute: "src",
-      __experimentalRole: "content"
+      role: "content"
     },
     alt: {
       type: "string",
@@ -27388,13 +27407,13 @@ const image_metadata = {
       selector: "img",
       attribute: "alt",
       "default": "",
-      __experimentalRole: "content"
+      role: "content"
     },
     caption: {
       type: "rich-text",
       source: "rich-text",
       selector: "figcaption",
-      __experimentalRole: "content"
+      role: "content"
     },
     lightbox: {
       type: "object",
@@ -27407,14 +27426,14 @@ const image_metadata = {
       source: "attribute",
       selector: "img",
       attribute: "title",
-      __experimentalRole: "content"
+      role: "content"
     },
     href: {
       type: "string",
       source: "attribute",
       selector: "figure > a",
       attribute: "href",
-      __experimentalRole: "content"
+      role: "content"
     },
     rel: {
       type: "string",
@@ -27430,7 +27449,7 @@ const image_metadata = {
     },
     id: {
       type: "number",
-      __experimentalRole: "content"
+      role: "content"
     },
     width: {
       type: "string"
@@ -28713,7 +28732,7 @@ const v0 = {
     ordered: {
       type: 'boolean',
       default: false,
-      __experimentalRole: 'content'
+      role: 'content'
     },
     values: {
       type: 'string',
@@ -28722,7 +28741,7 @@ const v0 = {
       multiline: 'li',
       __unstableMultilineWrapperTags: ['ol', 'ul'],
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     type: {
       type: 'string'
@@ -28787,7 +28806,7 @@ const list_deprecated_v1 = {
     ordered: {
       type: 'boolean',
       default: false,
-      __experimentalRole: 'content'
+      role: 'content'
     },
     values: {
       type: 'string',
@@ -28796,7 +28815,7 @@ const list_deprecated_v1 = {
       multiline: 'li',
       __unstableMultilineWrapperTags: ['ol', 'ul'],
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     type: {
       type: 'string'
@@ -28870,7 +28889,7 @@ const list_deprecated_v2 = {
     ordered: {
       type: 'boolean',
       default: false,
-      __experimentalRole: 'content'
+      role: 'content'
     },
     values: {
       type: 'string',
@@ -28879,7 +28898,7 @@ const list_deprecated_v2 = {
       multiline: 'li',
       __unstableMultilineWrapperTags: ['ol', 'ul'],
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     type: {
       type: 'string'
@@ -28963,7 +28982,7 @@ const list_deprecated_v3 = {
     ordered: {
       type: 'boolean',
       default: false,
-      __experimentalRole: 'content'
+      role: 'content'
     },
     values: {
       type: 'string',
@@ -28972,7 +28991,7 @@ const list_deprecated_v3 = {
       multiline: 'li',
       __unstableMultilineWrapperTags: ['ol', 'ul'],
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     type: {
       type: 'string'
@@ -29590,7 +29609,7 @@ const list_metadata = {
     ordered: {
       type: "boolean",
       "default": false,
-      __experimentalRole: "content"
+      role: "content"
     },
     values: {
       type: "string",
@@ -29599,7 +29618,7 @@ const list_metadata = {
       multiline: "li",
       __unstableMultilineWrapperTags: ["ol", "ul"],
       "default": "",
-      __experimentalRole: "content"
+      role: "content"
     },
     type: {
       type: "string"
@@ -30317,7 +30336,7 @@ const list_item_metadata = {
       type: "rich-text",
       source: "rich-text",
       selector: "li",
-      __experimentalRole: "content"
+      role: "content"
     }
   },
   supports: {
@@ -30733,29 +30752,29 @@ const v6Attributes = {
     selector: 'figure img',
     attribute: 'alt',
     default: '',
-    __experimentalRole: 'content'
+    role: 'content'
   },
   mediaId: {
     type: 'number',
-    __experimentalRole: 'content'
+    role: 'content'
   },
   mediaUrl: {
     type: 'string',
     source: 'attribute',
     selector: 'figure video,figure img',
     attribute: 'src',
-    __experimentalRole: 'content'
+    role: 'content'
   },
   href: {
     type: 'string',
     source: 'attribute',
     selector: 'figure a',
     attribute: 'href',
-    __experimentalRole: 'content'
+    role: 'content'
   },
   mediaType: {
     type: 'string',
-    __experimentalRole: 'content'
+    role: 'content'
   }
 };
 const v7Attributes = {
@@ -32538,7 +32557,7 @@ const media_text_metadata = {
       selector: "figure img",
       attribute: "alt",
       "default": "",
-      __experimentalRole: "content"
+      role: "content"
     },
     mediaPosition: {
       type: "string",
@@ -32546,14 +32565,14 @@ const media_text_metadata = {
     },
     mediaId: {
       type: "number",
-      __experimentalRole: "content"
+      role: "content"
     },
     mediaUrl: {
       type: "string",
       source: "attribute",
       selector: "figure video,figure img",
       attribute: "src",
-      __experimentalRole: "content"
+      role: "content"
     },
     mediaLink: {
       type: "string"
@@ -32572,7 +32591,7 @@ const media_text_metadata = {
       source: "attribute",
       selector: "figure a",
       attribute: "href",
-      __experimentalRole: "content"
+      role: "content"
     },
     rel: {
       type: "string",
@@ -32588,7 +32607,7 @@ const media_text_metadata = {
     },
     mediaType: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     mediaWidth: {
       type: "number",
@@ -40450,7 +40469,7 @@ const {
       type: "rich-text",
       source: "rich-text",
       selector: "p",
-      __experimentalRole: "content"
+      role: "content"
     },
     dropCap: {
       type: "boolean",
@@ -40572,7 +40591,7 @@ const paragraph_metadata = {
       type: "rich-text",
       source: "rich-text",
       selector: "p",
-      __experimentalRole: "content"
+      role: "content"
     },
     dropCap: {
       type: "boolean",
@@ -43942,7 +43961,13 @@ const post_navigation_link_variations_variations = [{
   attributes: {
     type: 'next'
   },
-  scope: ['inserter', 'transform']
+  scope: ['inserter', 'transform'],
+  example: {
+    attributes: {
+      label: 'Next post',
+      arrow: 'arrow'
+    }
+  }
 }, {
   name: 'post-previous',
   title: (0,external_wp_i18n_namespaceObject.__)('Previous post'),
@@ -43951,7 +43976,13 @@ const post_navigation_link_variations_variations = [{
   attributes: {
     type: 'previous'
   },
-  scope: ['inserter', 'transform']
+  scope: ['inserter', 'transform'],
+  example: {
+    attributes: {
+      label: 'Previous post',
+      arrow: 'arrow'
+    }
+  }
 }];
 
 /**
@@ -44006,6 +44037,12 @@ const post_navigation_link_metadata = {
     taxonomy: {
       type: "string",
       "default": ""
+    }
+  },
+  example: {
+    attributes: {
+      label: "Next post",
+      arrow: "arrow"
     }
   },
   usesContext: ["postType"],
@@ -44935,7 +44972,8 @@ const {
 
 const post_time_to_read_settings = {
   icon: icon,
-  edit: post_time_to_read_edit
+  edit: post_time_to_read_edit,
+  example: {}
 };
 const post_time_to_read_init = () => initBlock({
   name: post_time_to_read_name,
@@ -45429,7 +45467,7 @@ const preformatted_metadata = {
       source: "rich-text",
       selector: "pre",
       __unstablePreserveWhiteSpace: true,
-      __experimentalRole: "content"
+      role: "content"
     }
   },
   supports: {
@@ -45593,14 +45631,14 @@ const pullquote_deprecated_v5 = {
       source: 'html',
       selector: 'blockquote',
       multiline: 'p',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     citation: {
       type: 'string',
       source: 'html',
       selector: 'cite',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     textAlign: {
       type: 'string'
@@ -46340,13 +46378,13 @@ const pullquote_metadata = {
       type: "rich-text",
       source: "rich-text",
       selector: "p",
-      __experimentalRole: "content"
+      role: "content"
     },
     citation: {
       type: "rich-text",
       source: "rich-text",
       selector: "cite",
-      __experimentalRole: "content"
+      role: "content"
     },
     textAlign: {
       type: "string"
@@ -47580,7 +47618,7 @@ const PerPageControl = ({
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.RangeControl, {
     __next40pxDefaultSize: true,
     __nextHasNoMarginBottom: true,
-    label: (0,external_wp_i18n_namespaceObject.__)('Posts per page'),
+    label: (0,external_wp_i18n_namespaceObject.__)('Items per page'),
     min: MIN_POSTS_PER_PAGE,
     max: MAX_POSTS_PER_PAGE,
     onChange: newPerPage => {
@@ -47640,7 +47678,7 @@ const PagesControl = ({
 }) => {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
     __next40pxDefaultSize: true,
-    label: (0,external_wp_i18n_namespaceObject.__)('Max pages'),
+    label: (0,external_wp_i18n_namespaceObject.__)('Max pages to show'),
     value: pages,
     min: 0,
     onChange: newPages => {
@@ -47880,7 +47918,7 @@ function QueryInspectorControls(props) {
       },
       dropdownMenuProps: dropdownMenuProps,
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
-        label: (0,external_wp_i18n_namespaceObject.__)('Items'),
+        label: (0,external_wp_i18n_namespaceObject.__)('Items per page'),
         hasValue: () => perPage > 0,
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(per_page_control, {
           perPage: perPage,
@@ -47898,7 +47936,7 @@ function QueryInspectorControls(props) {
           onChange: setQuery
         })
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
-        label: (0,external_wp_i18n_namespaceObject.__)('Max Pages to Show'),
+        label: (0,external_wp_i18n_namespaceObject.__)('Max pages to show'),
         hasValue: () => pages > 0,
         onDeselect: () => setQuery({
           pages: 0
@@ -49158,6 +49196,7 @@ const query_metadata = {
   title: "Query Loop",
   category: "theme",
   description: "An advanced block that allows displaying post types based on different query parameters and visual configurations.",
+  keywords: ["posts", "list", "blog", "blogs", "custom post types"],
   textdomain: "default",
   attributes: {
     queryId: {
@@ -49314,6 +49353,14 @@ const query_no_results_metadata = {
   parent: ["core/query"],
   textdomain: "default",
   usesContext: ["queryId", "query"],
+  example: {
+    innerBlocks: [{
+      name: "core/paragraph",
+      attributes: {
+        content: "No posts were found."
+      }
+    }]
+  },
   supports: {
     align: true,
     reusable: false,
@@ -49859,7 +49906,8 @@ const {
 
 const query_pagination_numbers_settings = {
   icon: query_pagination_numbers,
-  edit: QueryPaginationNumbersEdit
+  edit: QueryPaginationNumbersEdit,
+  example: {}
 };
 const query_pagination_numbers_init = () => initBlock({
   name: query_pagination_numbers_name,
@@ -50336,6 +50384,11 @@ const query_title_metadata = {
       "default": true
     }
   },
+  example: {
+    attributes: {
+      type: "search"
+    }
+  },
   supports: {
     align: ["wide", "full"],
     html: false,
@@ -50485,14 +50538,14 @@ const quote_deprecated_v4 = {
       selector: 'blockquote',
       multiline: 'p',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     citation: {
       type: 'string',
       source: 'html',
       selector: 'cite',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     align: {
       type: 'string'
@@ -50560,14 +50613,14 @@ const quote_deprecated_v3 = {
       selector: 'blockquote',
       multiline: 'p',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     citation: {
       type: 'string',
       source: 'html',
       selector: 'cite',
       default: '',
-      __experimentalRole: 'content'
+      role: 'content'
     },
     align: {
       type: 'string'
@@ -51118,13 +51171,13 @@ const quote_metadata = {
       selector: "blockquote",
       multiline: "p",
       "default": "",
-      __experimentalRole: "content"
+      role: "content"
     },
     citation: {
       type: "rich-text",
       source: "rich-text",
       selector: "cite",
-      __experimentalRole: "content"
+      role: "content"
     },
     textAlign: {
       type: "string"
@@ -51413,15 +51466,12 @@ function ReusableBlockEdit({
       getSettings,
       getBlockEditingMode
     } = select(external_wp_blockEditor_namespaceObject.store);
-    const {
-      getBlockBindingsSource
-    } = unlock(select(external_wp_blocks_namespaceObject.store));
     // For editing link to the site editor if the theme and user permissions support it.
     return {
       innerBlocks: getBlocks(patternClientId),
       onNavigateToEntityRecord: getSettings().onNavigateToEntityRecord,
       editingMode: getBlockEditingMode(patternClientId),
-      hasPatternOverridesSource: !!getBlockBindingsSource('core/pattern-overrides')
+      hasPatternOverridesSource: !!(0,external_wp_blocks_namespaceObject.getBlockBindingsSource)('core/pattern-overrides')
     };
   }, [patternClientId]);
 
@@ -52547,9 +52597,9 @@ function SearchEdit({
             max: utils_isPercentageUnit(widthUnit) ? 100 : undefined,
             step: 1,
             onChange: newWidth => {
-              const filteredWidth = widthUnit === '%' && parseInt(newWidth, 10) > 100 ? 100 : newWidth;
+              const parsedNewWidth = newWidth === '' ? undefined : parseInt(newWidth, 10);
               setAttributes({
-                width: parseInt(filteredWidth, 10)
+                width: parsedNewWidth
               });
             },
             onUnitChange: newUnit => {
@@ -52647,7 +52697,8 @@ function SearchEdit({
       style: typographyProps.style
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.ResizableBox, {
       size: {
-        width: `${width}${widthUnit}`
+        width: width === undefined ? 'auto' : `${width}${widthUnit}`,
+        height: 'auto'
       },
       className: dist_clsx('wp-block-search__inside-wrapper', isButtonPositionInside ? borderProps.className : undefined),
       style: getWrapperStyles(),
@@ -52712,7 +52763,7 @@ const search_metadata = {
   attributes: {
     label: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     showLabel: {
       type: "boolean",
@@ -52721,7 +52772,7 @@ const search_metadata = {
     placeholder: {
       type: "string",
       "default": "",
-      __experimentalRole: "content"
+      role: "content"
     },
     width: {
       type: "number"
@@ -52731,7 +52782,7 @@ const search_metadata = {
     },
     buttonText: {
       type: "string",
-      __experimentalRole: "content"
+      role: "content"
     },
     buttonPosition: {
       type: "string",
@@ -53804,8 +53855,8 @@ function LogoEdit({
     }
   }, [logoUrl, temporaryURL]);
   if (!!logoUrl || !!temporaryURL) {
-    logoImage = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SiteLogo, {
+    logoImage = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SiteLogo, {
         alt: alt,
         attributes: attributes,
         className: className,
@@ -53818,7 +53869,9 @@ function LogoEdit({
         setIcon: setIcon,
         iconId: siteIconId,
         canUserEdit: canUserEdit
-      })
+      }), canUserEdit && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.DropZone, {
+        onFilesDrop: onFilesDrop
+      })]
     });
   }
   const placeholder = content => {
@@ -59869,7 +59922,48 @@ const table_of_contents_metadata = {
       }
     }
   },
-  example: {},
+  example: {
+    innerBlocks: [{
+      name: "core/heading",
+      attributes: {
+        level: 2,
+        content: "Heading"
+      }
+    }, {
+      name: "core/heading",
+      attributes: {
+        level: 3,
+        content: "Subheading"
+      }
+    }, {
+      name: "core/heading",
+      attributes: {
+        level: 2,
+        content: "Heading"
+      }
+    }, {
+      name: "core/heading",
+      attributes: {
+        level: 3,
+        content: "Subheading"
+      }
+    }],
+    attributes: {
+      headings: [{
+        content: "Heading",
+        level: 2
+      }, {
+        content: "Subheading",
+        level: 3
+      }, {
+        content: "Heading",
+        level: 2
+      }, {
+        content: "Subheading",
+        level: 3
+      }]
+    }
+  },
   style: "wp-block-table-of-contents"
 };
 
@@ -62173,7 +62267,8 @@ const {
 
 const term_description_settings = {
   icon: term_description,
-  edit: TermDescriptionEdit
+  edit: TermDescriptionEdit,
+  example: {}
 };
 const term_description_init = () => initBlock({
   name: term_description_name,
@@ -62440,7 +62535,7 @@ const verse_deprecated_v2 = {
       selector: 'pre',
       default: '',
       __unstablePreserveWhiteSpace: true,
-      __experimentalRole: 'content'
+      role: 'content'
     },
     textAlign: {
       type: 'string'
@@ -62640,7 +62735,7 @@ const verse_metadata = {
       source: "rich-text",
       selector: "pre",
       __unstablePreserveWhiteSpace: true,
-      __experimentalRole: "content"
+      role: "content"
     },
     textAlign: {
       type: "string"
@@ -62792,7 +62887,7 @@ const video_deprecated_metadata = {
       type: "rich-text",
       source: "rich-text",
       selector: "figcaption",
-      __experimentalRole: "content"
+      role: "content"
     },
     controls: {
       type: "boolean",
@@ -62803,7 +62898,7 @@ const video_deprecated_metadata = {
     },
     id: {
       type: "number",
-      __experimentalRole: "content"
+      role: "content"
     },
     loop: {
       type: "boolean",
@@ -62832,14 +62927,14 @@ const video_deprecated_metadata = {
     },
     blob: {
       type: "string",
-      __experimentalRole: "local"
+      role: "local"
     },
     src: {
       type: "string",
       source: "attribute",
       selector: "video",
       attribute: "src",
-      __experimentalRole: "content"
+      role: "content"
     },
     playsInline: {
       type: "boolean",
@@ -62848,7 +62943,7 @@ const video_deprecated_metadata = {
       attribute: "playsinline"
     },
     tracks: {
-      __experimentalRole: "content",
+      role: "content",
       type: "array",
       items: {
         type: "object"
@@ -63762,7 +63857,7 @@ const video_metadata = {
       type: "rich-text",
       source: "rich-text",
       selector: "figcaption",
-      __experimentalRole: "content"
+      role: "content"
     },
     controls: {
       type: "boolean",
@@ -63773,7 +63868,7 @@ const video_metadata = {
     },
     id: {
       type: "number",
-      __experimentalRole: "content"
+      role: "content"
     },
     loop: {
       type: "boolean",
@@ -63802,14 +63897,14 @@ const video_metadata = {
     },
     blob: {
       type: "string",
-      __experimentalRole: "local"
+      role: "local"
     },
     src: {
       type: "string",
       source: "attribute",
       selector: "video",
       attribute: "src",
-      __experimentalRole: "content"
+      role: "content"
     },
     playsInline: {
       type: "boolean",
@@ -63818,7 +63913,7 @@ const video_metadata = {
       attribute: "playsinline"
     },
     tracks: {
-      __experimentalRole: "content",
+      role: "content",
       type: "array",
       items: {
         type: "object"

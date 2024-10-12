@@ -93,7 +93,7 @@ class Woocommerce_Memberships {
 		$lists = array_filter(
 			$lists,
 			function ( $list ) {
-				$list_object = Subscription_List::from_form_id( $list );
+				$list_object = Subscription_List::from_public_id( $list );
 				if ( ! $list_object ) {
 					return false;
 				}
@@ -195,7 +195,7 @@ class Woocommerce_Memberships {
 			foreach ( $object_ids as $object_id ) {
 				try {
 					$subscription_list = new Subscription_List( $object_id );
-					$lists_to_remove[] = $subscription_list->get_form_id();
+					$lists_to_remove[] = $subscription_list->get_public_id();
 				} catch ( \InvalidArgumentException $e ) {
 					continue;
 				}
@@ -302,7 +302,7 @@ class Woocommerce_Memberships {
 			foreach ( $object_ids as $object_id ) {
 				try {
 					$subscription_list = new Subscription_List( $object_id );
-					$list_id           = $subscription_list->get_form_id();
+					$list_id           = $subscription_list->get_public_id();
 
 					$lists_to_add[] = $list_id;
 				} catch ( \InvalidArgumentException $e ) {

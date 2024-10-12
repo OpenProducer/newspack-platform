@@ -101,7 +101,7 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 	 * @return true|WP_Error
 	 */
 	public function remove_esp_local_list_from_contact( $email, $esp_local_list, $list_id = null ) {
-		return $this->remove_group_or_tag_from_contact( $email, $esp_local_list, $list_id );
+		return $this->remove_group_from_contact( $email, $esp_local_list, $list_id );
 	}
 
 	/**
@@ -329,41 +329,23 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 	 * Remove a group from a contact
 	 *
 	 * @param string $email The contact email.
-	 * @param string $sublist_id The group or tag ID.
+	 * @param string $group_id The group ID.
 	 * @param string $list_id The List ID.
-	 * @param string $list_type The type of sublist: 'group' or 'tag'.
-	 *
 	 * @return true|WP_Error
 	 */
-	public function remove_group_or_tag_from_contact( $email, $sublist_id, $list_id = null, $list_type = 'group' ) {
+	public function remove_group_from_contact( $email, $group_id, $list_id = null ) {
 		$existing_contact = $this->get_contact_data( $email );
 		if ( is_wp_error( $existing_contact ) ) {
 			return $existing_contact;
 		}
 
-		$mc = new Mailchimp( $this->api_key() );
-		if ( 'group' === $list_type ) {
-			$added = $mc->put(
-				sprintf( 'lists/%s/members/%s', $list_id, $existing_contact['id'] ),
-				[
-					'interests' => [ $sublist_id => false ],
-				]
-			);
-		} elseif ( 'tag' === $list_type ) {
-			$subscription_list = Subscription_List::from_remote_id( "$list_type-$sublist_id-$list_id" );
-			$remote_tag_name   = $subscription_list->get_remote_name();
-			$added = $mc->post(
-				sprintf( 'lists/%s/members/%s/tags', $list_id, $existing_contact['id'] ),
-				[
-					'tags' => [
-						[
-							'name'   => $remote_tag_name,
-							'status' => 'inactive',
-						],
-					],
-				]
-			);
-		}
+		$mc    = new Mailchimp( $this->api_key() );
+		$added = $mc->put(
+			sprintf( 'lists/%s/members/%s', $list_id, $existing_contact['id'] ),
+			[
+				'interests' => [ $group_id => false ],
+			]
+		);
 
 		if ( is_array( $added ) && ! empty( $added['status'] ) ) {
 			return true;

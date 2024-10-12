@@ -161,6 +161,7 @@ const generatePreviewPost = ( id: PostId ) => {
 		excerpt: {
 			rendered: '<p>' + __( 'The post excerpt.', 'newspack-blocks' ) + '</p>',
 		},
+		full_content: __('Full post content.', 'newspack-blocks'),
 		post_link: '/',
 		featured_media: '1',
 		id,

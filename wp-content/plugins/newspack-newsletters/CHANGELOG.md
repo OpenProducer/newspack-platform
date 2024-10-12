@@ -1,3 +1,32 @@
+# [3.2.0](https://github.com/Automattic/newspack-newsletters/compare/v3.1.7...v3.2.0) (2024-10-08)
+
+
+### Bug Fixes
+
+* a typo that came after a refactor ([#1656](https://github.com/Automattic/newspack-newsletters/issues/1656)) ([0ae5b61](https://github.com/Automattic/newspack-newsletters/commit/0ae5b615e2123ca94ca84f795caaedbf2e4afc8b))
+* dont send metadata on subscribe ([#1648](https://github.com/Automattic/newspack-newsletters/issues/1648)) ([5b4a059](https://github.com/Automattic/newspack-newsletters/commit/5b4a0591bf91e82c9a9e83c19275c588c9a2426e))
+* handle missing Mailchimp API key ([83a0d6f](https://github.com/Automattic/newspack-newsletters/commit/83a0d6f124dd7ed6d4accadaf8403453384b11a8))
+* **mailchimp:** allow contacts to resubscribe after unsubscribing ([#1654](https://github.com/Automattic/newspack-newsletters/issues/1654)) ([b76dbc2](https://github.com/Automattic/newspack-newsletters/commit/b76dbc2fefc67244084a060908abcf86bc11e70d))
+* **phpcs:** specify path in custom ruleset ref ([#1637](https://github.com/Automattic/newspack-newsletters/issues/1637)) ([28f5b50](https://github.com/Automattic/newspack-newsletters/commit/28f5b509c7eedaa64db283539d604154cca8ce8a))
+
+
+### Features
+
+* **mailchimp:** parse contact name into merge fields ([#1628](https://github.com/Automattic/newspack-newsletters/issues/1628)) ([aeba65a](https://github.com/Automattic/newspack-newsletters/commit/aeba65aaefbf4aaf29ff18914f94d060d407fa14))
+* **styling:** list styles ([e9ea4dd](https://github.com/Automattic/newspack-newsletters/commit/e9ea4dddd18671606fee38bb7affad51a4cbe69f)), closes [#1335](https://github.com/Automattic/newspack-newsletters/issues/1335)
+
+
+### Reverts
+
+* "chore(deps-dev): bump @wordpress/browserslist-config from 6.5.0 to 6.6.0" ([f08f271](https://github.com/Automattic/newspack-newsletters/commit/f08f271582750069cd38783f524dfdc9fd5d002e))
+
+## [3.1.7](https://github.com/Automattic/newspack-newsletters/compare/v3.1.6...v3.1.7) (2024-10-08)
+
+
+### Bug Fixes
+
+* dynamically fetch message ID in tests ([#1666](https://github.com/Automattic/newspack-newsletters/issues/1666)) ([fd31f61](https://github.com/Automattic/newspack-newsletters/commit/fd31f61c8393ffe69f1c41ab874b0f6fb8f36cc7))
+
 ## [3.1.6](https://github.com/Automattic/newspack-newsletters/compare/v3.1.5...v3.1.6) (2024-09-18)
 
 

@@ -1,3 +1,24 @@
+## [3.2.1](https://github.com/Automattic/newspack-ads/compare/v3.2.0...v3.2.1) (2024-10-11)
+
+
+### Bug Fixes
+
+* disappearing inline block appender ([d36a788](https://github.com/Automattic/newspack-ads/commit/d36a7884a6b5189004bec2f0f2d096a1099b3cbb))
+
+# [3.2.0](https://github.com/Automattic/newspack-ads/compare/v3.1.0...v3.2.0) (2024-10-09)
+
+
+### Features
+
+* **media-kit:** expose method; add get_page_status method ([#908](https://github.com/Automattic/newspack-ads/issues/908)) ([36f3af5](https://github.com/Automattic/newspack-ads/commit/36f3af539d7b962a940ef81e792024014e71dbb1))
+
+# [3.1.0](https://github.com/Automattic/newspack-ads/compare/v3.0.2...v3.1.0) (2024-10-08)
+
+
+### Features
+
+* **media-kit:** add media kit (from publisher-media-kit plugin) ([#894](https://github.com/Automattic/newspack-ads/issues/894)) ([8c46acf](https://github.com/Automattic/newspack-ads/commit/8c46acf94d6dae77585df44d48374d9bc93a78e1))
+
 ## [3.0.2](https://github.com/Automattic/newspack-ads/compare/v3.0.1...v3.0.2) (2024-08-19)
 
 

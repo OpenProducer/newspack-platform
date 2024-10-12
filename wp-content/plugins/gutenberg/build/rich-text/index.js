@@ -987,7 +987,7 @@ function toTree({
 /**
  * Create an HTML string from a Rich Text value.
  *
- * @param {Object}        $1                      Named argements.
+ * @param {Object}        $1                      Named arguments.
  * @param {RichTextValue} $1.value                Rich text value.
  * @param {boolean}       [$1.preserveWhiteSpace] Preserves newlines if true.
  *
@@ -1517,7 +1517,7 @@ function removeReservedCharacters(string) {
 /**
  * Creates a Rich Text value from a DOM element and range.
  *
- * @param {Object}  $1                  Named argements.
+ * @param {Object}  $1                  Named arguments.
  * @param {Element} [$1.element]        Element to create value from.
  * @param {Range}   [$1.range]          Range to create value from.
  * @param {boolean} [$1.isEditableTree]
@@ -1659,7 +1659,7 @@ function createFromElement({
 /**
  * Gets the attributes of an element in object shape.
  *
- * @param {Object}  $1         Named argements.
+ * @param {Object}  $1         Named arguments.
  * @param {Element} $1.element Element to get attributes from.
  *
  * @return {Object|void} Attribute object or `undefined` if the element has no
@@ -3057,23 +3057,12 @@ function useBoundaryStyle({
 /* harmony default export */ const copy_handler = (props => element => {
   function onCopy(event) {
     const {
-      record,
-      createRecord,
-      handleChange
+      record
     } = props.current;
     const {
       ownerDocument
     } = element;
-    const {
-      defaultView
-    } = ownerDocument;
-    const {
-      anchorNode,
-      focusNode,
-      isCollapsed
-    } = defaultView.getSelection();
-    const containsSelection = element.contains(anchorNode) && element.contains(focusNode);
-    if (isCollapsed || !containsSelection) {
+    if (isCollapsed(record.current) || !element.contains(ownerDocument.activeElement)) {
       return;
     }
     const selectedRecord = slice(record.current);
@@ -3086,7 +3075,7 @@ function useBoundaryStyle({
     event.clipboardData.setData('rich-text', 'true');
     event.preventDefault();
     if (event.type === 'cut') {
-      handleChange(remove_remove(createRecord()));
+      ownerDocument.execCommand('delete');
     }
   }
   const {
@@ -3458,12 +3447,12 @@ function fixPlaceholderSelection(defaultView) {
     if (element.contentEditable !== 'true') {
       return;
     }
-    const {
-      anchorNode,
-      focusNode
-    } = defaultView.getSelection();
-    const containsSelection = element.contains(anchorNode) && element.contains(focusNode) && ownerDocument.activeElement.contains(element);
-    if (!containsSelection) {
+
+    // Ensure the active element is the rich text element.
+    if (ownerDocument.activeElement !== element) {
+      // If it is not, we can stop listening for selection changes. We
+      // resume listening when the element is focused.
+      ownerDocument.removeEventListener('selectionchange', handleSelectionChange);
       return;
     }
 
@@ -3585,7 +3574,6 @@ function fixPlaceholderSelection(defaultView) {
     element.removeEventListener('compositionstart', onCompositionStart);
     element.removeEventListener('compositionend', onCompositionEnd);
     element.removeEventListener('focus', onFocus);
-    ownerDocument.removeEventListener('selectionchange', handleSelectionChange);
   };
 });
 

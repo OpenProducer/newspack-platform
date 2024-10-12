@@ -15,29 +15,9 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Core {
 	/**
-	 * The single instance of the class.
-	 *
-	 * @var Core
+	 * Initializer.
 	 */
-	protected static $instance = null;
-
-	/**
-	 * Main Core instance.
-	 * Ensures only one instance of Core is loaded or can be loaded.
-	 *
-	 * @return Core - Main instance.
-	 */
-	public static function instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
+	public static function init() {
 		\add_action( 'after_setup_theme', [ __CLASS__, 'theme_support' ] );
 		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'theme_styles' ] );
 		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'editor_scripts' ] );
@@ -227,4 +207,4 @@ final class Core {
 	}
 }
 
-Core::instance();
+Core::init();

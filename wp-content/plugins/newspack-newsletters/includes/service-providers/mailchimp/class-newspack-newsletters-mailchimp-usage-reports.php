@@ -16,22 +16,13 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	const REPORTS_OPTION_NAME = 'newspack_newsletters_mailchimp_usage_reports';
 
 	/**
-	 * Retrieves the main Mailchimp instance
-	 *
-	 * @return Newspack_Newsletters_Mailchimp
-	 */
-	private static function get_mc_instance() {
-		return Newspack_Newsletters_Mailchimp::instance();
-	}
-
-	/**
 	 * Retrieves an instance of the Mailchimp api
 	 *
 	 * @return DrewM\MailChimp\MailChimp|WP_Error
 	 */
 	private static function get_mc_api() {
 		try {
-			return new Mailchimp( self::get_mc_instance()->api_key() );
+			return new Mailchimp( Newspack_Newsletters_Mailchimp::instance()->api_key() );
 		} catch ( Exception $e ) {
 			return new WP_Error(
 				'newspack_newsletters_mailchimp_error',

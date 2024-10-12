@@ -383,8 +383,12 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 		<?php
 
 		if ( $has_more_button ) :
+			$load_more = '';
+			if ( (bool) $attributes['infiniteScroll'] ) {
+				$load_more = 'data-infinite-scroll="true"';
+			}
 			?>
-			<button type="button" class="wp-block-button__link" data-next="<?php echo esc_url( $articles_rest_url ); ?>">
+			<button type="button" class="wp-block-button__link" <?php echo esc_attr( $load_more ); ?> data-next="<?php echo esc_url( $articles_rest_url ); ?>">
 				<span class="label">
 					<?php
 					if ( ! empty( $attributes['moreButtonText'] ) ) {

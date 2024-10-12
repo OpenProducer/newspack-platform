@@ -1156,6 +1156,16 @@
 			"area": "footer",
 			"name": "footer",
 			"title": "Footer"
+		},
+    {
+			"area": "footer",
+			"name": "footer-desktop",
+			"title": "Footer (Desktop)"
+		},
+		{
+			"area": "footer",
+			"name": "footer-mobile",
+			"title": "Footer (Mobile)"
 		}
 	],
 	"version": 2,

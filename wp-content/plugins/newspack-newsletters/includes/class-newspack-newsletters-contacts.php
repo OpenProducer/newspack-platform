@@ -9,6 +9,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+use Newspack\Newsletters\Subscription_List;
+
 /**
  * Class Newspack_Newsletters_Contacts
  */
@@ -50,7 +52,17 @@ class Newspack_Newsletters_Contacts {
 		$existing_contact = Newspack_Newsletters_Subscription::get_contact_data( $contact['email'], true );
 		$is_updating      = \is_wp_error( $existing_contact ) ? false : true;
 
-		$result = self::upsert( $contact, $lists, $context, $existing_contact );
+		// When subscribing, we only want to keep the status and name metadata.
+		// Additional metadata can only be added when upserting a contact.
+		// This method is specific for handling Newsletter subscription, in which case there is no additional metadata being passed.
+		// Any additional metadata will be passes to the logs and filters though, so other actions can act upon it.
+		$accepted_metadata = [ 'status', 'name' ];
+		$subscribe_contact = $contact;
+		if ( ! empty( $subscribe_contact['metadata'] ) ) {
+			$subscribe_contact['metadata'] = array_intersect_key( $subscribe_contact['metadata'], array_flip( $accepted_metadata ) );
+		}
+
+		$result = self::upsert( $subscribe_contact, $lists, $context, $existing_contact );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -172,31 +184,25 @@ class Newspack_Newsletters_Contacts {
 
 		$errors = new WP_Error();
 		$result = [];
-		try {
-			if ( method_exists( $provider, 'add_contact_with_groups_and_tags' ) ) {
-				$result = $provider->add_contact_with_groups_and_tags( $contact, $lists );
-			} elseif ( empty( $lists ) ) {
-				$result = $provider->add_contact( $contact );
-			} else {
-				foreach ( $lists as $list_id ) {
-					$result = $provider->add_contact( $contact, $list_id );
-				}
+
+		$lists_objects = [];
+		foreach ( $lists as $list_id ) {
+			$list_obj = Subscription_List::from_public_id( $list_id );
+			if ( ! $list_obj ) {
+				$errors->add( 'newspack_newsletters_invalid_list', 'Invalid list ID: ' . $list_id );
+				continue;
 			}
+			$lists_objects[] = $list_obj;
+		}
+
+		try {
+			$result = $provider->upsert_contact( $contact, $lists_objects );
 		} catch ( \Exception $e ) {
 			$errors->add( 'newspack_newsletters_subscription_add_contact', $e->getMessage() );
 		}
 
 		if ( is_wp_error( $result ) ) {
 			$errors->add( $result->get_error_code(), $result->get_error_message() );
-		}
-
-		// Handle local lists feature.
-		foreach ( $lists as $list_id ) {
-			try {
-				$provider->add_contact_handling_local_list( $contact, $list_id );
-			} catch ( \Exception $e ) {
-				$errors->add( 'newspack_newsletters_subscription_handling_local_list', $e->getMessage() );
-			}
 		}
 
 		/**

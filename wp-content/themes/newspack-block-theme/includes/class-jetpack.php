@@ -16,29 +16,9 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Jetpack {
 	/**
-	 * The single instance of the class.
-	 *
-	 * @var Jetpack
+	 * Initializer.
 	 */
-	protected static $instance = null;
-
-	/**
-	 * Main Jetpack instance.
-	 * Ensures only one instance of Jetpack is loaded or can be loaded.
-	 *
-	 * @return Jetpack - Main instance.
-	 */
-	public static function instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
+	public static function init() {
 		\add_action( 'after_setup_theme', [ __CLASS__, 'theme_support' ] );
 		\add_filter( 'sharing_show', '__return_false' );
 		\add_filter( 'sharing_enqueue_scripts', '__return_false' );
@@ -57,5 +37,4 @@ final class Jetpack {
 		\add_theme_support( 'jetpack-geo-location' );
 	}
 }
-
-Jetpack::instance();
+Jetpack::init();

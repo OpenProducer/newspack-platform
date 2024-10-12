@@ -12,7 +12,7 @@ use Newspack_Ads\Providers;
 use Newspack_Ads\Providers\GAM_Model;
 
 /**
- * Newspack Ads Blocks Management
+ * Newspack Ads Widget
  */
 final class Widget extends \WP_Widget {
 

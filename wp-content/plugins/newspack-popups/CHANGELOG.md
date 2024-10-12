@@ -1,3 +1,18 @@
+# [3.1.0](https://github.com/Automattic/newspack-popups/compare/v3.0.1...v3.1.0) (2024-10-08)
+
+
+### Bug Fixes
+
+* check for non-preview logged in user on account criteria ([#1347](https://github.com/Automattic/newspack-popups/issues/1347)) ([9f6f062](https://github.com/Automattic/newspack-popups/commit/9f6f062a9b121e626fca8043c97935b9493ea78a))
+* prioritize ras overlays for delayed prompts ([21c3091](https://github.com/Automattic/newspack-popups/commit/21c30910affecefe0ce137cc9f3f6f5d00c2ce39))
+* prioritize ras overlays for delayed prompts [#1341](https://github.com/Automattic/newspack-popups/issues/1341)  ([c0027d1](https://github.com/Automattic/newspack-popups/commit/c0027d1b28e5a503133898f33d55e8e3b377d635))
+* verify delayed prompt can still be displayed before showing ([#1344](https://github.com/Automattic/newspack-popups/issues/1344)) ([235f36b](https://github.com/Automattic/newspack-popups/commit/235f36b4915177da4b2a7a438cc2a29b79a376c5))
+
+
+### Features
+
+* store prompt activation date ([#1340](https://github.com/Automattic/newspack-popups/issues/1340)) ([2c11424](https://github.com/Automattic/newspack-popups/commit/2c114246949b394e8307c5e53e608b173d55c8e4))
+
 ## [3.0.1](https://github.com/Automattic/newspack-popups/compare/v3.0.0...v3.0.1) (2024-09-04)
 
 

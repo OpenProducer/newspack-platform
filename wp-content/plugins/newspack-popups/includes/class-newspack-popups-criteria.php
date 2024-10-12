@@ -62,7 +62,8 @@ final class Newspack_Popups_Criteria {
 			self::SCRIPT_HANDLE,
 			'newspackPopupsCriteria',
 			[
-				'config' => self::get_criteria_config(),
+				'is_non_preview_user' => is_user_logged_in() && ! Newspack_Popups::is_user_admin(),
+				'config'              => self::get_criteria_config(),
 			]
 		);
 	}

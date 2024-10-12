@@ -558,36 +558,71 @@ Error message(s) received:
 	}
 
 	/**
-	 * Handle adding to local lists.
-	 * If the $list_id is a local list, a tag will be added to the contact.
+	 * Upserts a contact to the ESP using the provider specific methods.
 	 *
-	 * @param array  $contact      {
-	 *    Contact data.
+	 * Note: Mailchimp overrides this method.
+	 *
+	 * @param array               $contact      {
+	 *               Contact data.
 	 *
 	 *    @type string   $email    Contact email address.
 	 *    @type string   $name     Contact name. Optional.
 	 *    @type string[] $metadata Contact additional metadata. Optional.
 	 * }
-	 * @param string $list_id      List to add the contact to.
+	 * @param Subscription_List[] $lists The lists.
+	 * @return array|WP_Error Contact data if it was added, or error otherwise.
+	 */
+	public function upsert_contact( $contact, $lists ) {
+
+		if ( empty( $lists ) ) {
+			return $this->add_contact( $contact );
+		}
+
+		foreach ( $lists as $list ) {
+			if ( $list->is_local() ) {
+				$result = $this->add_contact_to_local_list( $contact, $list );
+			} else {
+				$result = $this->add_contact( $contact, $list->get_public_id() );
+			}
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+		}
+
+		// on success, return the last result.
+		return $result;
+	}
+
+	/**
+	 * Handle adding to local lists.
+	 * If the $list_id is a local list, a tag will be added to the contact.
+	 *
+	 * @param array             $contact      {
+	 *               Contact data.
+	 *
+	 *    @type string   $email    Contact email address.
+	 *    @type string   $name     Contact name. Optional.
+	 *    @type string[] $metadata Contact additional metadata. Optional.
+	 * }
+	 * @param Subscription_List $list      The list object.
 	 *
 	 * @return true|WP_Error True or error.
 	 */
-	public function add_contact_handling_local_list( $contact, $list_id ) {
+	protected function add_contact_to_local_list( $contact, Subscription_List $list ) {
 		if ( ! static::$support_local_lists ) {
 			return true;
 		}
-		if ( Subscription_List::is_local_form_id( $list_id ) ) {
-			try {
-				$list = Subscription_List::from_form_id( $list_id );
-				if ( ! $list->is_configured_for_provider( $this->service ) ) {
-					return new WP_Error( "List $list_id not properly configured for the provider" );
-				}
-				$list_settings = $list->get_provider_settings( $this->service );
-				return $this->add_esp_local_list_to_contact( $contact['email'], $list_settings['tag_id'], $list_settings['list'] );
-			} catch ( \InvalidArgumentException $e ) {
-				return new WP_Error( "List $list_id not found" );
-			}
+
+		if ( ! $list->is_local() ) {
+			return new WP_Error( 'newspack_newsletters_list_not_local', "List {$list->get_public_id()} is not a local list" );
 		}
+
+		if ( ! $list->is_configured_for_provider( $this->service ) ) {
+			return new WP_Error( 'newspack_newsletters_list_not_configured_for_provider', "List $list_id not properly configured for the provider" );
+		}
+
+		$list_settings = $list->get_provider_settings( $this->service );
+		return $this->add_esp_local_list_to_contact( $contact['email'], $list_settings['tag_id'], $list_settings['list'] );
 	}
 
 	/**
@@ -634,11 +669,11 @@ Error message(s) received:
 	 * @param string $action The action to be performed. add or remove.
 	 * @return array|WP_Error The remaining lists that were not handled by this method, because they are not local lists.
 	 */
-	public function update_contact_local_lists( $email, $lists = [], $action = 'add' ) {
+	protected function update_contact_local_lists( $email, $lists = [], $action = 'add' ) {
 		foreach ( $lists as $key => $list_id ) {
-			if ( Subscription_List::is_local_form_id( $list_id ) ) {
+			if ( Subscription_List::is_local_public_id( $list_id ) ) {
 				try {
-					$list = Subscription_List::from_form_id( $list_id );
+					$list = Subscription_List::from_public_id( $list_id );
 
 					if ( ! $list->is_configured_for_provider( $this->service ) ) {
 						return new WP_Error( 'List not properly configured for the provider' );
@@ -680,7 +715,7 @@ Error message(s) received:
 			}
 			$list_settings = $list->get_provider_settings( $this->service );
 			if ( in_array( $list_settings['tag_id'], $tags, false ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
-				$ids[] = $list->get_form_id();
+				$ids[] = $list->get_public_id();
 			}
 		}
 		return $ids;
