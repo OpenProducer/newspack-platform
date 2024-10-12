@@ -1,7 +1,7 @@
 <?php
 /**
- * Title: Footer - Style 1
- * Slug: newspack-block-theme/footer-style-1
+ * Title: Footer (Desktop) - Style 1
+ * Slug: newspack-block-theme/footer-desktop-style-1
  * Inserter: no
  * Block Types: core/template-part/footer
  *

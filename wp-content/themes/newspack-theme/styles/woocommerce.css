@@ -1627,7 +1627,6 @@ table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total
 .logged-in.page-template-single-feature.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a {
   background: var(--newspack-theme-color-primary);
   color: var(--newspack-theme-color-against-primary);
-  pointer-events: none;
 }
 .logged-in.page-template-single-wide.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a:focus-visible,
 .logged-in.page-template-single-feature.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a:focus-visible {

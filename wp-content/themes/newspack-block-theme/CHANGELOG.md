@@ -1,3 +1,17 @@
+# [1.13.0](https://github.com/Automattic/newspack-block-theme/compare/v1.12.0...v1.13.0) (2024-10-08)
+
+
+### Features
+
+* **footer:** update template part to use desktop and mobile parts ([#282](https://github.com/Automattic/newspack-block-theme/issues/282)) ([f1ea195](https://github.com/Automattic/newspack-block-theme/commit/f1ea1956e8cbbd521bf6eacb38941dfec2b2167d))
+
+# [1.13.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.12.0...v1.13.0-alpha.1) (2024-08-29)
+
+
+### Features
+
+* **footer:** update template part to use desktop and mobile parts ([#282](https://github.com/Automattic/newspack-block-theme/issues/282)) ([f1ea195](https://github.com/Automattic/newspack-block-theme/commit/f1ea1956e8cbbd521bf6eacb38941dfec2b2167d))
+
 # [1.12.0](https://github.com/Automattic/newspack-block-theme/compare/v1.11.0...v1.12.0) (2024-07-30)
 
 
