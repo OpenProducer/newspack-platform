@@ -75,19 +75,9 @@ final class Newspack_Newsletters_Ads {
 			[
 				'callback'            => [ __CLASS__, 'get_ads_config' ],
 				'methods'             => 'GET',
-				'permission_callback' => [ __CLASS__, 'permission_callback' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
 			]
 		);
-	}
-
-	/**
-	 * Check capabilities for using the API for authoring tasks.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return bool|WP_Error
-	 */
-	public static function permission_callback( $request ) {
-		return current_user_can( 'edit_posts' );
 	}
 
 	/**

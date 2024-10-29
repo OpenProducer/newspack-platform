@@ -51,17 +51,6 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	public function retrieve( $post_id );
 
 	/**
-	 * Set sender data.
-	 *
-	 * @param string $post_id   Numeric ID of the campaign.
-	 * @param string $from_name Sender name.
-	 * @param string $reply_to  Reply to email address.
-	 *
-	 * @return array|WP_Error API Response or error.
-	 */
-	public function sender( $post_id, $from_name, $reply_to );
-
-	/**
 	 * Send test email or emails.
 	 *
 	 * @param integer $post_id Numeric ID of the Newsletter post.
@@ -86,6 +75,16 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	 * @return array|WP_Error API Response or error.
 	 */
 	public function get_lists();
+
+	/**
+	 * Get the ESP's available lists and sublists, reformatted as Send_List items or an array of config data.
+	 *
+	 * @param array   $args Array of search args. See Send_Lists::get_default_args() for supported params and default values.
+	 * @param boolean $to_array If true, convert Send_List objects to arrays before returning.
+	 *
+	 * @return Send_List[]|array|WP_Error Array of Send_List objects or arrays on success, or WP_Error object on failure.
+	 */
+	public function get_send_lists( $args, $to_array = false );
 
 	/**
 	 * Add contact to a list.

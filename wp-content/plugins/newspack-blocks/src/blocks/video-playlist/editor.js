@@ -4,4 +4,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { name, settings } from '.';
 
-registerBlockType( `newspack-blocks/${ name }`, settings );
+if ( window.newspack_blocks_data?.can_use_video_playlist ) {
+	registerBlockType( `newspack-blocks/${ name }`, settings );
+}

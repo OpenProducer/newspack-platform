@@ -54,7 +54,7 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'verify_token' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
 			]
 		);
 		\register_rest_route(
@@ -63,7 +63,7 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_retrieve' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
 				'args'                => [
 					'id' => [
 						'sanitize_callback' => 'absint',
@@ -78,7 +78,7 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_test' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
 				'args'                => [
 					'id'         => [
 						'sanitize_callback' => 'absint',
@@ -86,99 +86,6 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 					],
 					'test_email' => [
 						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/sender',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_sender' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'        => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'from_name' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'reply_to'  => [
-						'sanitize_callback' => 'sanitize_email',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/list/(?P<list_id>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_list' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'      => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'list_id' => [
-						'sanitize_callback' => 'esc_attr',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/list/(?P<list_id>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::DELETABLE,
-				'callback'            => [ $this, 'api_list' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'      => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'list_id' => [
-						'sanitize_callback' => 'esc_attr',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/segment/(?P<segment_id>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_segment' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'         => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'segment_id' => [
-						'sanitize_callback' => 'esc_attr',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/segment/',
-			[
-				'methods'             => \WP_REST_Server::DELETABLE,
-				'callback'            => [ $this, 'api_segment' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'         => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'segment_id' => [
-						'sanitize_callback' => 'esc_attr',
 					],
 				],
 			]
@@ -222,62 +129,6 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 			$request['id'],
 			$emails
 		);
-		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Set the sender name and email for the campaign.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return WP_REST_Response|mixed API response or error.
-	 */
-	public function api_sender( $request ) {
-		$response = $this->service_provider->sender(
-			$request['id'],
-			$request['from_name'],
-			$request['reply_to']
-		);
-		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Set list for a campaign.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return WP_REST_Response|mixed API response or error.
-	 */
-	public function api_list( $request ) {
-		if ( 'DELETE' === $request->get_method() ) {
-			$response = $this->service_provider->unset_list(
-				$request['id'],
-				$request['list_id']
-			);
-		} else {
-			$response = $this->service_provider->list(
-				$request['id'],
-				$request['list_id']
-			);
-		}
-		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Set segment for a campaign.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return WP_REST_Response|mixed API response or error.
-	 */
-	public function api_segment( $request ) {
-		if ( 'DELETE' === $request->get_method() ) {
-			$response = $this->service_provider->unset_segment(
-				$request['id']
-			);
-		} else {
-			$response = $this->service_provider->set_segment(
-				$request['id'],
-				$request['segment_id']
-			);
-		}
 		return self::get_api_response( $response );
 	}
 }

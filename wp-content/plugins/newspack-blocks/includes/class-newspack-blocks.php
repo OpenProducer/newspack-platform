@@ -241,6 +241,7 @@ class Newspack_Blocks {
 				'custom_taxonomies'          => self::get_custom_taxonomies(),
 				'can_use_name_your_price'    => self::can_use_name_your_price(),
 				'tier_amounts_template'      => self::get_formatted_amount(),
+				'can_use_video_playlist'     => self::can_use_video_playlist_block(),
 			];
 
 			if ( class_exists( 'WP_REST_Newspack_Author_List_Controller' ) ) {
@@ -1642,6 +1643,30 @@ class Newspack_Blocks {
 		);
 
 		return $combined_caption;
+	}
+
+	/**
+	 * Check if the current site can use the Video Playlist block.
+	 * If the block doesn't already exist in site content, it won't be registered.
+	 */
+	public static function can_use_video_playlist_block() {
+		// Check if the block exists in any content on the site.
+		$existing_blocks = new WP_Query(
+			[
+				'fields'         => 'ids',
+				'post_type'      => 'any',
+				'post_status'    => 'publish',
+				's'              => 'newspack-blocks/youtube-video-playlist',
+				'posts_per_page' => 1,
+			]
+		);
+
+		// Don't register the block if it's not already on the site.
+		if ( 0 < $existing_blocks->found_posts ) {
+			return true;
+		}
+
+		return false;
 	}
 }
 Newspack_Blocks::init();

@@ -17,7 +17,7 @@ abstract class Newspack_Newsletters_Service_Provider_Controller extends \WP_REST
 	 *
 	 * @var Newspack_Newsletters_Service_Provider $service_provider
 	 */
-	private $service_provider;
+	protected $service_provider;
 
 	/**
 	 * Newspack_Newsletters_Service_Provider_Controller constructor.
@@ -32,7 +32,35 @@ abstract class Newspack_Newsletters_Service_Provider_Controller extends \WP_REST
 	 * Endpoints common to all ESP Service Providers.
 	 */
 	public function register_routes() {
-		// Currently empty. Add endpoints common to all the ESP Service Providers.
+		\register_rest_route(
+			Newspack_Newsletters::API_NAMESPACE,
+			'(?P<id>[\a-z]+)/sync-error',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'api_get_sync_error' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
+				'args'                => [
+					'id' => [
+						'sanitize_callback' => 'absint',
+						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
+					],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Retrieve the sync error.
+	 *
+	 * @param WP_REST_Request $request API request object.
+	 * @return WP_REST_Response|mixed API response or error.
+	 */
+	public function api_get_sync_error( $request ) {
+		$transient_name = $this->service_provider->get_transient_name( $request['id'] );
+		$error_message  = get_transient( $transient_name );
+		// Delete the transient after reading it.
+		delete_transient( $transient_name );
+		return self::get_api_response( [ 'message' => $error_message ] );
 	}
 
 	/**

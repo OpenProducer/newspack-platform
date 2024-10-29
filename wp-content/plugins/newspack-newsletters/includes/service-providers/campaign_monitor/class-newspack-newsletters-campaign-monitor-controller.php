@@ -18,105 +18,8 @@ class Newspack_Newsletters_Campaign_Monitor_Controller extends Newspack_Newslett
 	 */
 	public function __construct( $campaign_monitor ) {
 		$this->service_provider = $campaign_monitor;
-		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 		parent::__construct( $campaign_monitor );
-	}
-
-	/**
-	 * Register custom fields.
-	 */
-	public static function register_meta() {
-		\register_meta(
-			'post',
-			'cm_list_id',
-			[
-				'object_subtype' => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'cm_segment_id',
-			[
-				'object_subtype' => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'cm_send_mode',
-			[
-				'object_subtype' => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'cm_from_name',
-			[
-				'object_subtype' => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'cm_from_email',
-			[
-				'object_subtype' => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'cm_preview_text',
-			[
-				'object_subtype' => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
 	}
 
 	/**
@@ -134,7 +37,7 @@ class Newspack_Newsletters_Campaign_Monitor_Controller extends Newspack_Newslett
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_retrieve' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
 				'args'                => [
 					'id' => [
 						'sanitize_callback' => 'absint',
@@ -145,20 +48,11 @@ class Newspack_Newsletters_Campaign_Monitor_Controller extends Newspack_Newslett
 		);
 		\register_rest_route(
 			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<public_id>[\a-z]+)/content',
-			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'api_content' ],
-				'permission_callback' => '__return_true',
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
 			'(?P<id>[\a-z]+)/test',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_test' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
 				'args'                => [
 					'id'         => [
 						'sanitize_callback' => 'absint',
@@ -200,26 +94,5 @@ class Newspack_Newsletters_Campaign_Monitor_Controller extends Newspack_Newslett
 			$emails
 		);
 		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Get raw HTML for a campaign. Required for the Campaign Monitor API.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return void|WP_Error
-	 */
-	public function api_content( $request ) {
-		$response = $this->service_provider->content(
-			$request['public_id']
-		);
-
-		if ( is_wp_error( $response ) ) {
-			return self::get_api_response( $response );
-		}
-
-		header( 'Content-Type: text/html; charset=UTF-8' );
-
-		echo $response; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		exit();
 	}
 }

@@ -1,3 +1,25 @@
+# [3.3.0](https://github.com/Automattic/newspack-newsletters/compare/v3.2.1...v3.3.0) (2024-10-28)
+
+
+### Bug Fixes
+
+* bugs from Newsletters editor data refactor ([#1671](https://github.com/Automattic/newspack-newsletters/issues/1671)) ([f2917ec](https://github.com/Automattic/newspack-newsletters/commit/f2917ec2a2cf37caa222b03725860a11211b6213))
+* fetching and display of sync errors after saving ([#1670](https://github.com/Automattic/newspack-newsletters/issues/1670)) ([cdf2e24](https://github.com/Automattic/newspack-newsletters/commit/cdf2e24b24cc431ee43f917b6a82e2c4cecfc417))
+* ignore (but log) local list errors when updating contact lists ([#1664](https://github.com/Automattic/newspack-newsletters/issues/1664)) ([3255f0b](https://github.com/Automattic/newspack-newsletters/commit/3255f0b9e292175337b06b0e8b8b63ff7ab1969b))
+* **mailchimp:** unsetting sublists in synced campaign ([#1673](https://github.com/Automattic/newspack-newsletters/issues/1673)) ([57d83fc](https://github.com/Automattic/newspack-newsletters/commit/57d83fc791dc2b42dadf9dee4ee7ebe6a6866bd9))
+
+
+### Features
+
+* disable newsletter tracking ([#1674](https://github.com/Automattic/newspack-newsletters/issues/1674)) ([c0de01a](https://github.com/Automattic/newspack-newsletters/commit/c0de01a4e947a822b7fd1074af4cf9c19de7e75b))
+
+## [3.2.1](https://github.com/Automattic/newspack-newsletters/compare/v3.2.0...v3.2.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* adjust nonce logic ([5da024d](https://github.com/Automattic/newspack-newsletters/commit/5da024dae55da707f1081dbfddee6693bce9ec39))
+
 # [3.2.0](https://github.com/Automattic/newspack-newsletters/compare/v3.1.7...v3.2.0) (2024-10-08)
 
 

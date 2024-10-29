@@ -77,7 +77,7 @@ final class Newspack_Newsletters_Layouts {
 		\register_meta( 'post', 'font_body', $meta_default_params );
 		\register_meta( 'post', 'background_color', $meta_default_params );
 		\register_meta( 'post', 'custom_css', $meta_default_params );
-		\register_meta( 'post', 'layout_defaults', $meta_default_params );
+		\register_meta( 'post', 'campaign_defaults', $meta_default_params );
 	}
 
 	/**
@@ -190,6 +190,69 @@ final class Newspack_Newsletters_Layouts {
 			}
 		}
 		return $layouts;
+	}
+
+	/**
+	 * Get all layouts.
+	 */
+	public static function get_layouts() {
+		$layouts_query = new WP_Query(
+			[
+				'post_type'      => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
+				'posts_per_page' => -1,
+			]
+		);
+		$user_layouts  = array_map(
+			function ( $post ) {
+				$post->meta = [
+					'background_color'  => get_post_meta( $post->ID, 'background_color', true ),
+					'font_body'         => get_post_meta( $post->ID, 'font_body', true ),
+					'font_header'       => get_post_meta( $post->ID, 'font_header', true ),
+					'custom_css'        => get_post_meta( $post->ID, 'custom_css', true ),
+					'campaign_defaults' => get_post_meta( $post->ID, 'campaign_defaults', true ),
+				];
+
+				// Migrate layout defaults from legacy meta, if it exists.
+				$campaign_defaults = $post->meta['campaign_defaults'];
+				$legacy_meta       = json_decode( get_post_meta( $post->ID, 'layout_defaults', true ), true );
+				if ( empty( $campaign_defaults ) && ! empty( $legacy_meta ) ) {
+					$campaign_defaults = [];
+					if ( ! empty( $legacy_meta['senderName'] ) ) {
+						$campaign_defaults['senderName'] = $legacy_meta['senderName'];
+					}
+					if ( ! empty( $legacy_meta['senderEmail'] ) ) {
+						$campaign_defaults['senderEmail'] = $legacy_meta['senderEmail'];
+					}
+					$provider      = Newspack_Newsletters::get_service_provider();
+					$campaign_info = $provider->extract_campaign_info( $legacy_meta['newsletterData'] ?? null );
+					if ( ! empty( $campaign_info['list_id'] ) ) {
+						$campaign_defaults['send_list_id'] = $campaign_info['list_id'];
+					}
+					if ( ! empty( $campaign_info['sublist_id'] ) ) {
+						$campaign_defaults['send_sublist_id'] = $campaign_info['sublist_id'];
+					}
+					if ( ! empty( $campaign_info['senderName'] ) ) {
+						$campaign_defaults['senderName'] = $campaign_info['senderName'];
+					}
+					if ( ! empty( $campaign_info['senderEmail'] ) ) {
+						$campaign_defaults['senderEmail'] = $campaign_info['senderEmail'];
+					}
+					if ( ! empty( $campaign_defaults ) ) {
+						$campaign_defaults = wp_json_encode( $campaign_defaults );
+						update_post_meta( $post->ID, 'campaign_defaults', $campaign_defaults );
+						$post->meta['campaign_defaults'] = $campaign_defaults;
+					}
+				}
+
+				return $post;
+			},
+			$layouts_query->get_posts()
+		);
+		return array_merge(
+			$user_layouts,
+			self::get_default_layouts(),
+			apply_filters( 'newspack_newsletters_templates', [] )
+		);
 	}
 }
 Newspack_Newsletters_Layouts::instance();

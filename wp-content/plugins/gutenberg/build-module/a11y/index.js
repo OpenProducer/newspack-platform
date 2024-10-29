@@ -24,11 +24,11 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  c: () => (/* binding */ setup),
-  D: () => (/* reexport */ speak)
+  m: () => (/* binding */ setup),
+  L: () => (/* reexport */ speak)
 });
 
-;// CONCATENATED MODULE: ./packages/a11y/build-module/shared/clear.js
+;// ./packages/a11y/build-module/shared/clear.js
 /**
  * Clears the a11y-speak-region elements and hides the explanatory text.
  */
@@ -45,7 +45,7 @@ function clear() {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/a11y/build-module/shared/filter-message.js
+;// ./packages/a11y/build-module/shared/filter-message.js
 let previousMessage = '';
 
 /**
@@ -76,7 +76,7 @@ function filterMessage(message) {
   return message;
 }
 
-;// CONCATENATED MODULE: ./packages/a11y/build-module/shared/index.js
+;// ./packages/a11y/build-module/shared/index.js
 /**
  * Internal dependencies
  */
@@ -126,7 +126,7 @@ function speak(message, ariaLive) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/a11y/build-module/module/index.js
+;// ./packages/a11y/build-module/module/index.js
 /**
  * Internal dependencies
  */
@@ -139,6 +139,6 @@ function speak(message, ariaLive) {
  */
 const setup = () => {};
 
-var __webpack_exports__setup = __webpack_exports__.c;
-var __webpack_exports__speak = __webpack_exports__.D;
+var __webpack_exports__setup = __webpack_exports__.m;
+var __webpack_exports__speak = __webpack_exports__.L;
 export { __webpack_exports__setup as setup, __webpack_exports__speak as speak };

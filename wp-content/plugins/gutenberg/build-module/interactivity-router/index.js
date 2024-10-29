@@ -1,13 +1,19 @@
 import * as __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__ from "@wordpress/interactivity";
 /******/ var __webpack_modules__ = ({
 
-/***/ 343:
+/***/ 195:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   B: () => (/* binding */ updateHead),
-/* harmony export */   J: () => (/* binding */ fetchHeadAssets)
+/* harmony export */   Ub: () => (/* binding */ fetchHeadAssets),
+/* harmony export */   ed: () => (/* binding */ headElements),
+/* harmony export */   yp: () => (/* binding */ updateHead)
 /* harmony export */ });
+/**
+ * The cache of prefetched stylesheets and scripts.
+ */
+const headElements = new Map();
+
 /**
  * Helper to update only the necessary tags in the head.
  *
@@ -37,6 +43,11 @@ const updateHead = async newHead => {
       toRemove.push(child);
     }
   }
+  await Promise.all([...headElements.entries()].filter(([, {
+    tag
+  }]) => tag.nodeName === 'SCRIPT').map(async ([url]) => {
+    await import(/* webpackIgnore: true */url);
+  }));
 
   // Prepare new assets.
   const toAppend = [...newHeadMap.values()];
@@ -50,73 +61,70 @@ const updateHead = async newHead => {
  * Fetches and processes head assets (stylesheets and scripts) from a specified document.
  *
  * @async
- * @param doc               The document from which to fetch head assets. It should support standard DOM querying methods.
- * @param headElements      A map of head elements to modify tracking the URLs of already processed assets to avoid duplicates.
- * @param headElements.tag
- * @param headElements.text
+ * @param doc The document from which to fetch head assets. It should support standard DOM querying methods.
  *
  * @return Returns an array of HTML elements representing the head assets.
  */
-const fetchHeadAssets = async (doc, headElements) => {
+const fetchHeadAssets = async doc => {
   const headTags = [];
-  const assets = [{
-    tagName: 'style',
-    selector: 'link[rel=stylesheet]',
-    attribute: 'href'
-  }, {
-    tagName: 'script',
-    selector: 'script[src]',
-    attribute: 'src'
-  }];
-  for (const asset of assets) {
-    const {
-      tagName,
-      selector,
-      attribute
-    } = asset;
-    const tags = doc.querySelectorAll(selector);
 
-    // Use Promise.all to wait for fetch to complete
-    await Promise.all(Array.from(tags).map(async tag => {
-      const attributeValue = tag.getAttribute(attribute);
-      if (!headElements.has(attributeValue)) {
-        try {
-          const response = await fetch(attributeValue);
-          const text = await response.text();
-          headElements.set(attributeValue, {
-            tag,
-            text
-          });
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error(e);
-        }
+  // We only want to fetch module scripts because regular scripts (without
+  // `async` or `defer` attributes) can depend on the execution of other scripts.
+  // Scripts found in the head are blocking and must be executed in order.
+  const scripts = doc.querySelectorAll('script[type="module"][src]');
+  scripts.forEach(script => {
+    const src = script.getAttribute('src');
+    if (!headElements.has(src)) {
+      // add the <link> elements to prefetch the module scripts
+      const link = doc.createElement('link');
+      link.rel = 'modulepreload';
+      link.href = src;
+      document.head.append(link);
+      headElements.set(src, {
+        tag: script
+      });
+    }
+  });
+  const stylesheets = doc.querySelectorAll('link[rel=stylesheet]');
+  await Promise.all(Array.from(stylesheets).map(async tag => {
+    const href = tag.getAttribute('href');
+    if (!href) {
+      return;
+    }
+    if (!headElements.has(href)) {
+      try {
+        const response = await fetch(href);
+        const text = await response.text();
+        headElements.set(href, {
+          tag,
+          text
+        });
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
       }
-      const headElement = headElements.get(attributeValue);
-      const element = doc.createElement(tagName);
-      element.innerText = headElement.text;
-      for (const attr of headElement.tag.attributes) {
-        element.setAttribute(attr.name, attr.value);
-      }
-      headTags.push(element);
-    }));
-  }
+    }
+    const headElement = headElements.get(href);
+    const styleElement = doc.createElement('style');
+    styleElement.textContent = headElement.text;
+    headTags.push(styleElement);
+  }));
   return [doc.querySelector('title'), ...doc.querySelectorAll('style'), ...headTags];
 };
 
 
 /***/ }),
 
-/***/ 126:
+/***/ 873:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   N: () => (/* binding */ actions),
-/* harmony export */   S: () => (/* binding */ state)
+/* harmony export */   o: () => (/* binding */ actions),
+/* harmony export */   w: () => (/* binding */ state)
 /* harmony export */ });
-/* harmony import */ var _wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(998);
-/* harmony import */ var _head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(343);
+/* harmony import */ var _wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(833);
+/* harmony import */ var _head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(195);
 var _getConfig$navigation;
 /**
  * WordPress dependencies
@@ -142,7 +150,6 @@ const navigationMode = (_getConfig$navigation = (0,_wordpress_interactivity__WEB
 
 // The cache of visited and prefetched pages, stylesheets and scripts.
 const pages = new Map();
-const headElements = new Map();
 
 // Helper to remove domain and hash from the URL. We are only interesting in
 // caching the path and the query.
@@ -181,7 +188,7 @@ const regionsToVdom = async (dom, {
   let head;
   if (true) {
     if (navigationMode === 'fullPage') {
-      head = await (0,_head__WEBPACK_IMPORTED_MODULE_1__/* .fetchHeadAssets */ .J)(dom, headElements);
+      head = await (0,_head__WEBPACK_IMPORTED_MODULE_1__/* .fetchHeadAssets */ .Ub)(dom);
       regions.body = vdom ? vdom.get(document.body) : toVdom(dom.body);
     }
   }
@@ -203,29 +210,32 @@ const regionsToVdom = async (dom, {
 };
 
 // Render all interactive regions contained in the given page.
-const renderRegions = page => {
-  batch(() => {
-    if (true) {
-      if (navigationMode === 'fullPage') {
-        // Once this code is tested and more mature, the head should be updated for region based navigation as well.
-        (0,_head__WEBPACK_IMPORTED_MODULE_1__/* .updateHead */ .B)(page.head);
-        const fragment = getRegionRootFragment(document.body);
+const renderRegions = async page => {
+  if (true) {
+    if (navigationMode === 'fullPage') {
+      // Once this code is tested and more mature, the head should be updated for region based navigation as well.
+      await (0,_head__WEBPACK_IMPORTED_MODULE_1__/* .updateHead */ .yp)(page.head);
+      const fragment = getRegionRootFragment(document.body);
+      batch(() => {
+        populateServerData(page.initialData);
         render(page.regions.body, fragment);
-      }
+      });
     }
-    if (navigationMode === 'regionBased') {
+  }
+  if (navigationMode === 'regionBased') {
+    const attrName = `data-${directivePrefix}-router-region`;
+    batch(() => {
       populateServerData(page.initialData);
-      const attrName = `data-${directivePrefix}-router-region`;
       document.querySelectorAll(`[${attrName}]`).forEach(region => {
         const id = region.getAttribute(attrName);
         const fragment = getRegionRootFragment(region);
         render(page.regions[id], fragment);
       });
-    }
-    if (page.title) {
-      document.title = page.title;
-    }
-  });
+    });
+  }
+  if (page.title) {
+    document.title = page.title;
+  }
 };
 
 /**
@@ -249,7 +259,7 @@ window.addEventListener('popstate', async () => {
   const pagePath = getPagePath(window.location.href); // Remove hash.
   const page = pages.has(pagePath) && (await pages.get(pagePath));
   if (page) {
-    renderRegions(page);
+    await renderRegions(page);
     // Update the URL in the state.
     state.url = window.location.href;
   } else {
@@ -263,13 +273,12 @@ window.addEventListener('popstate', async () => {
 if (true) {
   if (navigationMode === 'fullPage') {
     // Cache the scripts. Has to be called before fetching the assets.
-    [].map.call(document.querySelectorAll('script[src]'), script => {
-      headElements.set(script.getAttribute('src'), {
-        tag: script,
-        text: script.textContent
+    [].map.call(document.querySelectorAll('script[type="module"][src]'), script => {
+      _head__WEBPACK_IMPORTED_MODULE_1__/* .headElements */ .ed.set(script.getAttribute('src'), {
+        tag: script
       });
     });
-    await (0,_head__WEBPACK_IMPORTED_MODULE_1__/* .fetchHeadAssets */ .J)(document, headElements);
+    await (0,_head__WEBPACK_IMPORTED_MODULE_1__/* .fetchHeadAssets */ .Ub)(document);
   }
 }
 pages.set(getPagePath(window.location.href), Promise.resolve(regionsToVdom(document, {
@@ -469,7 +478,7 @@ function a11ySpeak(messageKey) {
     }
   }
   const message = navigationTexts[messageKey];
-  Promise.resolve(/* import() */).then(__webpack_require__.bind(__webpack_require__, 105)).then(({
+  Promise.resolve(/* import() */).then(__webpack_require__.bind(__webpack_require__, 317)).then(({
     speak
   }) => speak(message),
   // Ignore failures to load the a11y module.
@@ -504,19 +513,21 @@ __webpack_async_result__();
 
 /***/ }),
 
-/***/ 105:
+/***/ 317:
 /***/ ((module) => {
 
 module.exports = import("@wordpress/a11y");;
 
 /***/ }),
 
-/***/ 998:
+/***/ 833:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var x = y => { var x = {}; __webpack_require__.d(x, y); return x; }
-var y = x => () => x
-module.exports = x({ ["getConfig"]: () => __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__.getConfig, ["privateApis"]: () => __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__.privateApis, ["store"]: () => __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__.store });
+var x = (y) => {
+	var x = {}; __webpack_require__.d(x, y); return x
+} 
+var y = (x) => (() => (x))
+module.exports = x({ ["getConfig"]: () => (__WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__.getConfig), ["privateApis"]: () => (__WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__.privateApis), ["store"]: () => (__WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__.store) });
 
 /***/ })
 
@@ -638,9 +649,9 @@ module.exports = x({ ["getConfig"]: () => __WEBPACK_EXTERNAL_MODULE__wordpress_i
 /******/ // startup
 /******/ // Load entry module and return exports
 /******/ // This entry module used 'module' so it can't be inlined
-/******/ var __webpack_exports__ = __webpack_require__(126);
+/******/ var __webpack_exports__ = __webpack_require__(873);
 /******/ __webpack_exports__ = await __webpack_exports__;
-/******/ var __webpack_exports__actions = __webpack_exports__.N;
-/******/ var __webpack_exports__state = __webpack_exports__.S;
+/******/ var __webpack_exports__actions = __webpack_exports__.o;
+/******/ var __webpack_exports__state = __webpack_exports__.w;
 /******/ export { __webpack_exports__actions as actions, __webpack_exports__state as state };
 /******/ 

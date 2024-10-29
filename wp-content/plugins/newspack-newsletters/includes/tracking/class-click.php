@@ -116,7 +116,7 @@ final class Click {
 	 * @return void
 	 */
 	public static function track_click( $newsletter_id, $email_address, $url ) {
-		if ( ! $newsletter_id || ! $email_address ) {
+		if ( ! $newsletter_id || ! $email_address || ! Admin::is_tracking_click_enabled() ) {
 			return;
 		}
 

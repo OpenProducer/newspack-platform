@@ -2,21 +2,21 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 4470:
+/***/ 4140:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
-var m = __webpack_require__(1850);
+var m = __webpack_require__(5795);
 if (true) {
-  exports.s = m.createRoot;
-  exports.a = m.hydrateRoot;
+  exports.H = m.createRoot;
+  exports.c = m.hydrateRoot;
 } else { var i; }
 
 
 /***/ }),
 
-/***/ 1850:
+/***/ 5795:
 /***/ ((module) => {
 
 module.exports = window["ReactDOM"];
@@ -80,8 +80,6 @@ module.exports = window["ReactDOM"];
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
@@ -102,12 +100,12 @@ __webpack_require__.d(__webpack_exports__, {
   createInterpolateElement: () => (/* reexport */ create_interpolate_element),
   createPortal: () => (/* reexport */ external_ReactDOM_.createPortal),
   createRef: () => (/* reexport */ external_React_namespaceObject.createRef),
-  createRoot: () => (/* reexport */ client/* createRoot */.s),
+  createRoot: () => (/* reexport */ client/* createRoot */.H),
   findDOMNode: () => (/* reexport */ external_ReactDOM_.findDOMNode),
   flushSync: () => (/* reexport */ external_ReactDOM_.flushSync),
   forwardRef: () => (/* reexport */ external_React_namespaceObject.forwardRef),
   hydrate: () => (/* reexport */ external_ReactDOM_.hydrate),
-  hydrateRoot: () => (/* reexport */ client/* hydrateRoot */.a),
+  hydrateRoot: () => (/* reexport */ client/* hydrateRoot */.c),
   isEmptyElement: () => (/* reexport */ isEmptyElement),
   isValidElement: () => (/* reexport */ external_React_namespaceObject.isValidElement),
   lazy: () => (/* reexport */ external_React_namespaceObject.lazy),
@@ -134,9 +132,9 @@ __webpack_require__.d(__webpack_exports__, {
   useTransition: () => (/* reexport */ external_React_namespaceObject.useTransition)
 });
 
-;// CONCATENATED MODULE: external "React"
+;// external "React"
 const external_React_namespaceObject = window["React"];
-;// CONCATENATED MODULE: ./packages/element/build-module/create-interpolate-element.js
+;// ./packages/element/build-module/create-interpolate-element.js
 /**
  * Internal dependencies
  */
@@ -446,7 +444,7 @@ function closeOuterElement(endOffset) {
 }
 /* harmony default export */ const create_interpolate_element = (createInterpolateElement);
 
-;// CONCATENATED MODULE: ./packages/element/build-module/react.js
+;// ./packages/element/build-module/react.js
 /**
  * External dependencies
  */
@@ -724,10 +722,10 @@ function switchChildrenNodeName(children, nodeName) {
 }
 
 // EXTERNAL MODULE: external "ReactDOM"
-var external_ReactDOM_ = __webpack_require__(1850);
+var external_ReactDOM_ = __webpack_require__(5795);
 // EXTERNAL MODULE: ./node_modules/react-dom/client.js
-var client = __webpack_require__(4470);
-;// CONCATENATED MODULE: ./packages/element/build-module/react-platform.js
+var client = __webpack_require__(4140);
+;// ./packages/element/build-module/react-platform.js
 /**
  * External dependencies
  */
@@ -799,7 +797,7 @@ var client = __webpack_require__(4470);
  */
 
 
-;// CONCATENATED MODULE: ./packages/element/build-module/utils.js
+;// ./packages/element/build-module/utils.js
 /**
  * Checks if the provided WP element is empty.
  *
@@ -816,7 +814,7 @@ const isEmptyElement = element => {
   return !element;
 };
 
-;// CONCATENATED MODULE: ./packages/element/build-module/platform.js
+;// ./packages/element/build-module/platform.js
 /**
  * Parts of this source were derived and modified from react-native-web,
  * released under the MIT license.
@@ -851,7 +849,7 @@ const Platform = {
  */
 /* harmony default export */ const platform = (Platform);
 
-;// CONCATENATED MODULE: ./node_modules/is-plain-object/dist/is-plain-object.mjs
+;// ./node_modules/is-plain-object/dist/is-plain-object.mjs
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
@@ -887,7 +885,7 @@ function isPlainObject(o) {
 
 
 
-;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.mjs
+;// ./node_modules/tslib/tslib.es6.mjs
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -902,7 +900,7 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise, SuppressedError, Symbol */
+/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
 
 var extendStatics = function(d, b) {
   extendStatics = Object.setPrototypeOf ||
@@ -1013,8 +1011,8 @@ function __awaiter(thisArg, _arguments, P, generator) {
 }
 
 function __generator(thisArg, body) {
-  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-  return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+  return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
   function verb(n) { return function (v) { return step([n, v]); }; }
   function step(op) {
       if (f) throw new TypeError("Generator is already executing.");
@@ -1118,7 +1116,7 @@ function __await(v) {
 function __asyncGenerator(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g = generator.apply(thisArg, _arguments || []), i, q = [];
-  return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+  return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
   function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
   function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
   function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
@@ -1216,17 +1214,22 @@ function __disposeResources(env) {
     env.error = env.hasError ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
     env.hasError = true;
   }
+  var r, s = 0;
   function next() {
-    while (env.stack.length) {
-      var rec = env.stack.pop();
+    while (r = env.stack.pop()) {
       try {
-        var result = rec.dispose && rec.dispose.call(rec.value);
-        if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+        if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+        if (r.dispose) {
+          var result = r.dispose.call(r.value);
+          if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+        }
+        else s |= 1;
       }
       catch (e) {
-          fail(e);
+        fail(e);
       }
     }
+    if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
     if (env.hasError) throw env.error;
   }
   return next();
@@ -1262,7 +1265,7 @@ function __disposeResources(env) {
   __disposeResources,
 });
 
-;// CONCATENATED MODULE: ./node_modules/lower-case/dist.es2015/index.js
+;// ./node_modules/lower-case/dist.es2015/index.js
 /**
  * Source: ftp://ftp.unicode.org/Public/UCD/latest/ucd/SpecialCasing.txt
  */
@@ -1311,7 +1314,7 @@ function lowerCase(str) {
     return str.toLowerCase();
 }
 
-;// CONCATENATED MODULE: ./node_modules/no-case/dist.es2015/index.js
+;// ./node_modules/no-case/dist.es2015/index.js
 
 // Support camel case ("camelCase" -> "camel Case" and "CAMELCase" -> "CAMEL Case").
 var DEFAULT_SPLIT_REGEXP = [/([a-z0-9])([A-Z])/g, /([A-Z])([A-Z][a-z])/g];
@@ -1343,7 +1346,7 @@ function replace(input, re, value) {
     return re.reduce(function (input, re) { return input.replace(re, value); }, input);
 }
 
-;// CONCATENATED MODULE: ./node_modules/dot-case/dist.es2015/index.js
+;// ./node_modules/dot-case/dist.es2015/index.js
 
 
 function dotCase(input, options) {
@@ -1351,7 +1354,7 @@ function dotCase(input, options) {
     return noCase(input, __assign({ delimiter: "." }, options));
 }
 
-;// CONCATENATED MODULE: ./node_modules/param-case/dist.es2015/index.js
+;// ./node_modules/param-case/dist.es2015/index.js
 
 
 function paramCase(input, options) {
@@ -1359,9 +1362,9 @@ function paramCase(input, options) {
     return dotCase(input, __assign({ delimiter: "-" }, options));
 }
 
-;// CONCATENATED MODULE: external ["wp","escapeHtml"]
+;// external ["wp","escapeHtml"]
 const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
-;// CONCATENATED MODULE: ./packages/element/build-module/raw-html.js
+;// ./packages/element/build-module/raw-html.js
 /**
  * Internal dependencies
  */
@@ -1404,7 +1407,8 @@ function RawHTML({
   });
 }
 
-;// CONCATENATED MODULE: ./packages/element/build-module/serialize.js
+;// ./packages/element/build-module/serialize.js
+/* wp:polyfill */
 /**
  * Parts of this source were derived and modified from fast-react-render,
  * released under the MIT license.
@@ -1782,7 +1786,7 @@ function renderNativeComponent(type, props, context, legacyContext = {}) {
  * @return {string} Serialized element
  */
 function renderComponent(Component, props, context, legacyContext = {}) {
-  const instance = new ( /** @type {import('react').ComponentClass} */
+  const instance = new (/** @type {import('react').ComponentClass} */
   Component)(props, legacyContext);
   if (typeof
   // Ignore reason: Current prettier reformats parens and mangles type assertion
@@ -1897,7 +1901,7 @@ function renderStyle(style) {
 }
 /* harmony default export */ const serialize = (renderElement);
 
-;// CONCATENATED MODULE: ./packages/element/build-module/index.js
+;// ./packages/element/build-module/index.js
 
 
 
@@ -1905,8 +1909,6 @@ function renderStyle(style) {
 
 
 
-
-})();
 
 (window.wp = window.wp || {}).element = __webpack_exports__;
 /******/ })()

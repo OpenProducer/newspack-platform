@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit965532c538535524c81c6eae829a57f3
+class ComposerStaticInit7f16c601813b7d03288622835ff80635
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -37,6 +37,8 @@ class ComposerStaticInit965532c538535524c81c6eae829a57f3
         'CS_REST_Transactional_SmartEmail' => __DIR__ . '/..' . '/campaignmonitor/createsend-php/csrest_transactional_smartemail.php',
         'CS_REST_Transactional_Timeline' => __DIR__ . '/..' . '/campaignmonitor/createsend-php/csrest_transactional_timeline.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Newspack\\Newsletters\\Send_List' => __DIR__ . '/../..' . '/includes/class-send-list.php',
+        'Newspack\\Newsletters\\Send_Lists' => __DIR__ . '/../..' . '/includes/class-send-lists.php',
         'Newspack\\Newsletters\\Subscription_List' => __DIR__ . '/../..' . '/includes/class-subscription-list.php',
         'Newspack\\Newsletters\\Subscription_Lists' => __DIR__ . '/../..' . '/includes/class-subscription-lists.php',
         'Newspack_Newsletters' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters.php',
@@ -89,9 +91,9 @@ class ComposerStaticInit965532c538535524c81c6eae829a57f3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit965532c538535524c81c6eae829a57f3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit965532c538535524c81c6eae829a57f3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit965532c538535524c81c6eae829a57f3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7f16c601813b7d03288622835ff80635::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7f16c601813b7d03288622835ff80635::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7f16c601813b7d03288622835ff80635::$classMap;
 
         }, null, ClassLoader::class);
     }

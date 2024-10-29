@@ -44,7 +44,7 @@ __webpack_require__.d(__webpack_exports__, {
   getCSSValueFromRawStyle: () => (/* reexport */ getCSSValueFromRawStyle)
 });
 
-;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.mjs
+;// ./node_modules/tslib/tslib.es6.mjs
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -59,7 +59,7 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise, SuppressedError, Symbol */
+/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
 
 var extendStatics = function(d, b) {
   extendStatics = Object.setPrototypeOf ||
@@ -170,8 +170,8 @@ function __awaiter(thisArg, _arguments, P, generator) {
 }
 
 function __generator(thisArg, body) {
-  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-  return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+  return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
   function verb(n) { return function (v) { return step([n, v]); }; }
   function step(op) {
       if (f) throw new TypeError("Generator is already executing.");
@@ -275,7 +275,7 @@ function __await(v) {
 function __asyncGenerator(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g = generator.apply(thisArg, _arguments || []), i, q = [];
-  return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+  return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
   function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
   function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
   function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
@@ -373,17 +373,22 @@ function __disposeResources(env) {
     env.error = env.hasError ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
     env.hasError = true;
   }
+  var r, s = 0;
   function next() {
-    while (env.stack.length) {
-      var rec = env.stack.pop();
+    while (r = env.stack.pop()) {
       try {
-        var result = rec.dispose && rec.dispose.call(rec.value);
-        if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+        if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+        if (r.dispose) {
+          var result = r.dispose.call(r.value);
+          if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+        }
+        else s |= 1;
       }
       catch (e) {
-          fail(e);
+        fail(e);
       }
     }
+    if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
     if (env.hasError) throw env.error;
   }
   return next();
@@ -419,7 +424,7 @@ function __disposeResources(env) {
   __disposeResources,
 });
 
-;// CONCATENATED MODULE: ./node_modules/lower-case/dist.es2015/index.js
+;// ./node_modules/lower-case/dist.es2015/index.js
 /**
  * Source: ftp://ftp.unicode.org/Public/UCD/latest/ucd/SpecialCasing.txt
  */
@@ -468,7 +473,7 @@ function lowerCase(str) {
     return str.toLowerCase();
 }
 
-;// CONCATENATED MODULE: ./node_modules/no-case/dist.es2015/index.js
+;// ./node_modules/no-case/dist.es2015/index.js
 
 // Support camel case ("camelCase" -> "camel Case" and "CAMELCase" -> "CAMEL Case").
 var DEFAULT_SPLIT_REGEXP = [/([a-z0-9])([A-Z])/g, /([A-Z])([A-Z][a-z])/g];
@@ -500,7 +505,7 @@ function replace(input, re, value) {
     return re.reduce(function (input, re) { return input.replace(re, value); }, input);
 }
 
-;// CONCATENATED MODULE: ./node_modules/dot-case/dist.es2015/index.js
+;// ./node_modules/dot-case/dist.es2015/index.js
 
 
 function dotCase(input, options) {
@@ -508,7 +513,7 @@ function dotCase(input, options) {
     return noCase(input, __assign({ delimiter: "." }, options));
 }
 
-;// CONCATENATED MODULE: ./node_modules/param-case/dist.es2015/index.js
+;// ./node_modules/param-case/dist.es2015/index.js
 
 
 function paramCase(input, options) {
@@ -516,12 +521,12 @@ function paramCase(input, options) {
     return dotCase(input, __assign({ delimiter: "-" }, options));
 }
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/constants.js
+;// ./packages/style-engine/build-module/styles/constants.js
 const VARIABLE_REFERENCE_PREFIX = 'var:';
 const VARIABLE_PATH_SEPARATOR_TOKEN_ATTRIBUTE = '|';
 const VARIABLE_PATH_SEPARATOR_TOKEN_STYLE = '--';
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/utils.js
+;// ./packages/style-engine/build-module/styles/utils.js
 /**
  * External dependencies
  */
@@ -685,7 +690,7 @@ function safeDecodeURI(uri) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/border/index.js
+;// ./packages/style-engine/build-module/styles/border/index.js
 /**
  * Internal dependencies
  */
@@ -757,7 +762,7 @@ const borderLeft = {
 };
 /* harmony default export */ const border = ([color, borderStyle, width, radius, borderTop, borderRight, borderBottom, borderLeft]);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/color/background.js
+;// ./packages/style-engine/build-module/styles/color/background.js
 /**
  * Internal dependencies
  */
@@ -771,7 +776,7 @@ const background = {
 };
 /* harmony default export */ const color_background = (background);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/color/gradient.js
+;// ./packages/style-engine/build-module/styles/color/gradient.js
 /**
  * Internal dependencies
  */
@@ -785,7 +790,7 @@ const gradient = {
 };
 /* harmony default export */ const color_gradient = (gradient);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/color/text.js
+;// ./packages/style-engine/build-module/styles/color/text.js
 /**
  * Internal dependencies
  */
@@ -799,7 +804,7 @@ const text_text = {
 };
 /* harmony default export */ const color_text = (text_text);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/color/index.js
+;// ./packages/style-engine/build-module/styles/color/index.js
 /**
  * Internal dependencies
  */
@@ -808,7 +813,7 @@ const text_text = {
 
 /* harmony default export */ const styles_color = ([color_text, color_gradient, color_background]);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/dimensions/index.js
+;// ./packages/style-engine/build-module/styles/dimensions/index.js
 /**
  * Internal dependencies
  */
@@ -828,7 +833,7 @@ const aspectRatio = {
 };
 /* harmony default export */ const dimensions = ([minHeight, aspectRatio]);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/background/index.js
+;// ./packages/style-engine/build-module/styles/background/index.js
 /**
  * Internal dependencies
  */
@@ -881,7 +886,7 @@ const backgroundAttachment = {
 };
 /* harmony default export */ const styles_background = ([backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, backgroundAttachment]);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/shadow/index.js
+;// ./packages/style-engine/build-module/styles/shadow/index.js
 /**
  * Internal dependencies
  */
@@ -895,7 +900,7 @@ const shadow = {
 };
 /* harmony default export */ const styles_shadow = ([shadow]);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/outline/index.js
+;// ./packages/style-engine/build-module/styles/outline/index.js
 /**
  * Internal dependencies
  */
@@ -927,7 +932,7 @@ const outline_width = {
 };
 /* harmony default export */ const outline = ([outline_color, outlineStyle, offset, outline_width]);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/spacing/padding.js
+;// ./packages/style-engine/build-module/styles/spacing/padding.js
 /**
  * Internal dependencies
  */
@@ -944,7 +949,7 @@ const padding = {
 };
 /* harmony default export */ const spacing_padding = (padding);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/spacing/margin.js
+;// ./packages/style-engine/build-module/styles/spacing/margin.js
 /**
  * Internal dependencies
  */
@@ -961,7 +966,7 @@ const margin = {
 };
 /* harmony default export */ const spacing_margin = (margin);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/spacing/index.js
+;// ./packages/style-engine/build-module/styles/spacing/index.js
 /**
  * Internal dependencies
  */
@@ -969,7 +974,7 @@ const margin = {
 
 /* harmony default export */ const spacing = ([spacing_margin, spacing_padding]);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/typography/index.js
+;// ./packages/style-engine/build-module/styles/typography/index.js
 /**
  * Internal dependencies
  */
@@ -1037,7 +1042,7 @@ const writingMode = {
 };
 /* harmony default export */ const typography = ([fontFamily, fontSize, fontStyle, fontWeight, letterSpacing, lineHeight, textColumns, textDecoration, textTransform, writingMode]);
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/index.js
+;// ./packages/style-engine/build-module/styles/index.js
 /**
  * Internal dependencies
  */
@@ -1051,7 +1056,7 @@ const writingMode = {
 
 const styleDefinitions = [...border, ...styles_color, ...dimensions, ...outline, ...spacing, ...typography, ...styles_shadow, ...styles_background];
 
-;// CONCATENATED MODULE: ./packages/style-engine/build-module/index.js
+;// ./packages/style-engine/build-module/index.js
 /**
  * External dependencies
  */

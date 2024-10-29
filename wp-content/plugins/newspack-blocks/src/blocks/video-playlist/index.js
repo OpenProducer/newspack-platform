@@ -15,7 +15,7 @@ import edit from './edit';
 import './editor.scss';
 
 export const name = 'youtube-video-playlist';
-export const title = __( 'YouTube Video Playlist', 'newspack-blocks' );
+export const title = __( 'YouTube Video Playlist (DEPRECATED)', 'newspack-blocks' );
 
 export const icon = (
 	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

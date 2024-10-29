@@ -148,6 +148,11 @@ final class Pixel {
 	 * @return void
 	 */
 	public static function track_seen( $newsletter_id, $tracking_id, $email_address ) {
+
+		if ( ! Admin::is_tracking_pixel_enabled() ) {
+			return;
+		}
+
 		$newsletter_tracking_id = \get_post_meta( $newsletter_id, 'tracking_id', true );
 
 		// Bail if tracking ID mismatch.
