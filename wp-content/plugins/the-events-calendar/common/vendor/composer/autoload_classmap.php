@@ -7,8 +7,13 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'TEC\\Common\\Admin\\Conditional_Content\\Black_Friday' => $baseDir . '/src/Common/Admin/Conditional_Content/Black_Friday.php',
+    'TEC\\Common\\Admin\\Conditional_Content\\Controller' => $baseDir . '/src/Common/Admin/Conditional_Content/Controller.php',
+    'TEC\\Common\\Admin\\Conditional_Content\\Datetime_Conditional_Abstract' => $baseDir . '/src/Common/Admin/Conditional_Content/Datetime_Conditional_Abstract.php',
+    'TEC\\Common\\Admin\\Conditional_Content\\Dismissible_Trait' => $baseDir . '/src/Common/Admin/Conditional_Content/Dismissible_Trait.php',
     'TEC\\Common\\Admin\\Entities\\Base_Entity' => $baseDir . '/src/Common/Admin/Entities/Base_Entity.php',
     'TEC\\Common\\Admin\\Entities\\Br' => $baseDir . '/src/Common/Admin/Entities/Br.php',
+    'TEC\\Common\\Admin\\Entities\\Button' => $baseDir . '/src/Common/Admin/Entities/Button.php',
     'TEC\\Common\\Admin\\Entities\\Container' => $baseDir . '/src/Common/Admin/Entities/Container.php',
     'TEC\\Common\\Admin\\Entities\\Div' => $baseDir . '/src/Common/Admin/Entities/Div.php',
     'TEC\\Common\\Admin\\Entities\\Element' => $baseDir . '/src/Common/Admin/Entities/Element.php',
@@ -28,6 +33,7 @@ return array(
     'TEC\\Common\\Admin\\Section' => $baseDir . '/src/Common/Admin/Section.php',
     'TEC\\Common\\Admin\\Settings_Section' => $baseDir . '/src/Common/Admin/Settings_Section.php',
     'TEC\\Common\\Admin\\Settings_Sidebar' => $baseDir . '/src/Common/Admin/Settings_Sidebar.php',
+    'TEC\\Common\\Admin\\Settings_Sidebar_Section' => $baseDir . '/src/Common/Admin/Settings_Sidebar_Section.php',
     'TEC\\Common\\Configuration\\Configuration' => $baseDir . '/src/Common/Configuration/Configuration.php',
     'TEC\\Common\\Configuration\\Configuration_Loader' => $baseDir . '/src/Common/Configuration/Configuration_Loader.php',
     'TEC\\Common\\Configuration\\Configuration_Provider_Interface' => $baseDir . '/src/Common/Configuration/Configuration_Provider_Interface.php',

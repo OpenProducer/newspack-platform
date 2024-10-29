@@ -180,7 +180,7 @@ function render_block( $attrs ) {
 	>
 		<?php if ( ! $subscribed ) : ?>
 			<form id="<?php echo esc_attr( get_form_id() ); ?>">
-				<?php \wp_nonce_field( FORM_ACTION, FORM_ACTION ); ?>
+				<input type="hidden" name="<?php echo esc_attr( FORM_ACTION ); ?>" value="1" />
 				<?php
 				/**
 				 * Action to add custom fields before the form fields of the Newsletter Subscription block.
@@ -433,17 +433,13 @@ function send_form_response( $data ) {
  * Process newsletter signup form.
  */
 function process_form() {
-	if ( ! isset( $_REQUEST[ FORM_ACTION ] ) ) {
+	if ( ! isset( $_REQUEST[ FORM_ACTION ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;
 	}
 
-	if ( ! \wp_verify_nonce( \sanitize_text_field( $_REQUEST[ FORM_ACTION ] ), FORM_ACTION ) ) {
-		return send_form_response( new \WP_Error( 'invalid_nonce', __( 'Invalid request.', 'newspack-newsletters' ) ) );
-	}
-
 	// Honeypot trap.
-	if ( ! empty( $_REQUEST['email'] ) ) {
-		return send_form_response( [ 'email' => \sanitize_email( $_REQUEST['email'] ) ] );
+	if ( ! empty( $_REQUEST['email'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return send_form_response( [ 'email' => \sanitize_email( $_REQUEST['email'] ) ] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
 	// reCAPTCHA test.
@@ -454,26 +450,26 @@ function process_form() {
 		}
 	}
 
-	if ( ! isset( $_REQUEST['npe'] ) || empty( $_REQUEST['npe'] ) ) {
+	if ( ! isset( $_REQUEST['npe'] ) || empty( $_REQUEST['npe'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return send_form_response( new \WP_Error( 'invalid_email', __( 'You must enter a valid email address.', 'newspack-newsletters' ) ) );
 	}
 
-	if ( ! isset( $_REQUEST['lists'] ) || ! is_array( $_REQUEST['lists'] ) || empty( $_REQUEST['lists'] ) ) {
+	if ( ! isset( $_REQUEST['lists'] ) || ! is_array( $_REQUEST['lists'] ) || empty( $_REQUEST['lists'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return send_form_response( new \WP_Error( 'no_lists', __( 'You must select a list.', 'newspack-newsletters' ) ) );
 	}
 
 	// The "true" email address field is called `npe` due to the honeypot strategy.
-	$last_name = isset( $_REQUEST['last_name'] ) ? \sanitize_text_field( $_REQUEST['last_name'] ) : '';
+	$last_name = isset( $_REQUEST['last_name'] ) ? \sanitize_text_field( $_REQUEST['last_name'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$name      = trim(
 		sprintf(
 			'%s %s',
-			isset( $_REQUEST['name'] ) ? \sanitize_text_field( $_REQUEST['name'] ) : '',
+			isset( $_REQUEST['name'] ) ? \sanitize_text_field( $_REQUEST['name'] ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$last_name
 		)
 	);
-	$email     = \sanitize_email( $_REQUEST['npe'] );
-	$lists     = array_map( 'sanitize_text_field', $_REQUEST['lists'] );
-	$popup_id  = isset( $_REQUEST['newspack_popup_id'] ) ? (int) $_REQUEST['newspack_popup_id'] : false;
+	$email     = \sanitize_email( $_REQUEST['npe'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$lists     = array_map( 'sanitize_text_field', $_REQUEST['lists'] ); // phpcs:ignore
+	$popup_id  = isset( $_REQUEST['newspack_popup_id'] ) ? (int) $_REQUEST['newspack_popup_id'] : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$metadata  = [
 		'current_page_url'                => home_url( add_query_arg( array(), \wp_get_referer() ) ),
 		'newspack_popup_id'               => $popup_id,
@@ -482,7 +478,7 @@ function process_form() {
 
 	// Handle Mailchimp double opt-in option.
 	$provider = \Newspack_Newsletters::get_service_provider();
-	if ( $provider && 'mailchimp' === $provider->service && isset( $_REQUEST['double_optin'] ) && '1' === $_REQUEST['double_optin'] ) {
+	if ( $provider && 'mailchimp' === $provider->service && isset( $_REQUEST['double_optin'] ) && '1' === $_REQUEST['double_optin'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$metadata['status'] = 'pending';
 	}
 
@@ -523,8 +519,8 @@ function process_form() {
 		return send_form_response( $result );
 	}
 
-	// Generate a new nonce for subsequent form submissions.
-	$result[ FORM_ACTION ] = \wp_create_nonce( FORM_ACTION );
+	// Propagate the form action for subsequent form submissions.
+	$result[ FORM_ACTION ] = '1';
 
 	return send_form_response( $result );
 }

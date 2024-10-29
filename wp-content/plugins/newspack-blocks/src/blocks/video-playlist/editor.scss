@@ -5,8 +5,17 @@
  * Prevents interaction with the player until the block is focused.
  */
 .wpbnbvp__overlay {
+	align-content: center;
+	background-color: rgba(255, 255, 255, 0.9);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	left: 0;
+	height: 100%;
 	position: absolute;
-	inset: 0;
+	text-align: center;
+	top: 0;
+	width: 100%;
 }
 
 .wpbnbvp-preview {

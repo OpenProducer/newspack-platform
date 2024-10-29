@@ -42,9 +42,9 @@ __webpack_require__.d(__webpack_exports__, {
   privateApis: () => (/* reexport */ privateApis)
 });
 
-;// CONCATENATED MODULE: external ["wp","element"]
+;// external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+;// ./node_modules/@babel/runtime/helpers/esm/extends.js
 function extends_extends() {
   return extends_extends = Object.assign ? Object.assign.bind() : function (n) {
     for (var e = 1; e < arguments.length; e++) {
@@ -55,7 +55,7 @@ function extends_extends() {
   }, extends_extends.apply(null, arguments);
 }
 
-;// CONCATENATED MODULE: ./node_modules/history/index.js
+;// ./node_modules/history/index.js
 
 
 /**
@@ -845,9 +845,9 @@ function parsePath(path) {
 
 
 
-;// CONCATENATED MODULE: external ["wp","url"]
+;// external ["wp","url"]
 const external_wp_url_namespaceObject = window["wp"]["url"];
-;// CONCATENATED MODULE: ./packages/router/build-module/history.js
+;// ./packages/router/build-module/history.js
 /* wp:polyfill */
 /**
  * External dependencies
@@ -904,14 +904,16 @@ function getLocationWithParams() {
   }
   return locationWithParams;
 }
-history_history.push = push;
-history_history.replace = replace;
-history_history.getLocationWithParams = getLocationWithParams;
-/* harmony default export */ const build_module_history = (history_history);
+/* harmony default export */ const build_module_history = ({
+  ...history_history,
+  push,
+  replace,
+  getLocationWithParams
+});
 
-;// CONCATENATED MODULE: external "ReactJSXRuntime"
+;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// CONCATENATED MODULE: ./packages/router/build-module/router.js
+;// ./packages/router/build-module/router.js
 /**
  * WordPress dependencies
  */
@@ -922,8 +924,8 @@ const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
  */
 
 
-const RoutesContext = (0,external_wp_element_namespaceObject.createContext)();
-const HistoryContext = (0,external_wp_element_namespaceObject.createContext)();
+const RoutesContext = (0,external_wp_element_namespaceObject.createContext)(null);
+const HistoryContext = (0,external_wp_element_namespaceObject.createContext)(build_module_history);
 function useLocation() {
   return (0,external_wp_element_namespaceObject.useContext)(RoutesContext);
 }
@@ -943,9 +945,9 @@ function RouterProvider({
   });
 }
 
-;// CONCATENATED MODULE: external ["wp","privateApis"]
+;// external ["wp","privateApis"]
 const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// CONCATENATED MODULE: ./packages/router/build-module/lock-unlock.js
+;// ./packages/router/build-module/lock-unlock.js
 /**
  * WordPress dependencies
  */
@@ -955,7 +957,7 @@ const {
   unlock
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/router');
 
-;// CONCATENATED MODULE: ./packages/router/build-module/private-apis.js
+;// ./packages/router/build-module/private-apis.js
 /**
  * Internal dependencies
  */
@@ -968,7 +970,7 @@ lock(privateApis, {
   RouterProvider: RouterProvider
 });
 
-;// CONCATENATED MODULE: ./packages/router/build-module/index.js
+;// ./packages/router/build-module/index.js
 
 
 (window.wp = window.wp || {}).router = __webpack_exports__;

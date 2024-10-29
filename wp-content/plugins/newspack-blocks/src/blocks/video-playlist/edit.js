@@ -1,18 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { Component, Fragment } from '@wordpress/element';
-import { Placeholder, Spinner, PanelBody, RangeControl } from '@wordpress/components';
+import { Notice, Placeholder, Spinner, PanelBody } from '@wordpress/components';
 import { InspectorControls } from '@wordpress/block-editor';
 import { addQueryArgs } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
-
-/**
- * Internal dependencies.
- */
-import AutocompleteTokenField from '../../components/autocomplete-tokenfield';
 
 class Edit extends Component {
 	constructor( props ) {
@@ -176,54 +171,45 @@ class Edit extends Component {
 	};
 
 	/**
-	 * Hide the overlay so users can play the videos.
-	 */
-	hideOverlay() {
-		this.setState( { interactive: true } );
-	}
-
-	/**
 	 * Render.
 	 */
 	render() {
-		const { attributes, setAttributes } = this.props;
-		const { categories, videosToShow } = attributes;
-		const { embed, isLoading, interactive } = this.state;
+		const { embed, isLoading } = this.state;
+
+		const Warning = () => (
+			<>
+				<h2>{ __( 'The YouTube Video Playlist block is deprecated', 'newspack-plugin' ) }</h2>
+				<p dangerouslySetInnerHTML={ {
+					__html: sprintf(
+						// translators: %1$s is the link to Google's help doc on creating YouTube playlists. %2$s is the link to the help doc on embedding playlists.
+						__( 'Consider using <a href="%1$s">YouTube Playlists</a> instead, which can be <a href="%2$s">embedded</a> into post or page content.', 'newspack-blocks' ),
+						'https://support.google.com/youtube/answer/57792',
+						'https://support.google.com/youtube/answer/171780'
+					),
+				} } />
+			</>
+		)
 
 		return (
 			<Fragment>
-				{ ( isLoading || '' === embed ) && this.renderPlaceholder() }
-				{ ! ( isLoading || '' === embed ) && (
-					<div className="wpbnbvp-preview">
-						<div dangerouslySetInnerHTML={ { __html: embed } } />
-						{ ! interactive && (
-							// eslint-disable-next-line jsx-a11y/no-static-element-interactions
-							<div className="wpbnbvp__overlay" onMouseUp={ () => this.hideOverlay() } />
-						) }
-					</div>
-				) }
+				<div>
+					{ ( isLoading || '' === embed ) && this.renderPlaceholder() }
+					{ ! ( isLoading || '' === embed ) && (
+						<div className="wpbnbvp-preview">
+							<div dangerouslySetInnerHTML={ { __html: embed } } />
+						</div>
+					) }
+					{ ! isLoading && (
+						<div className="wpbnbvp__overlay">
+							<Warning />
+						</div>
+					) }
+				</div>
 				<InspectorControls>
 					<PanelBody title={ __( 'Settings', 'newspack-blocks' ) } initialOpen={ true }>
-						<Fragment>
-							<RangeControl
-								className="videosToShow"
-								label={ __( 'Videos', 'newspack-blocks' ) }
-								help={ __( 'The maximum number of videos to pull from posts.', 'newspack-blocks' ) }
-								value={ videosToShow }
-								onChange={ _videosToShow => setAttributes( { videosToShow: _videosToShow } ) }
-								min={ 1 }
-								max={ 30 }
-								required
-							/>
-							<AutocompleteTokenField
-								key="categories"
-								tokens={ categories || [] }
-								onChange={ _categories => setAttributes( { categories: _categories } ) }
-								fetchSuggestions={ this.fetchCategorySuggestions }
-								fetchSavedInfo={ this.fetchSavedCategories }
-								label={ __( 'Categories', 'newspack-blocks' ) }
-							/>
-						</Fragment>
+						<Notice status="warning" isDismissible={ false }>
+							<Warning />
+						</Notice>
 					</PanelBody>
 				</InspectorControls>
 			</Fragment>

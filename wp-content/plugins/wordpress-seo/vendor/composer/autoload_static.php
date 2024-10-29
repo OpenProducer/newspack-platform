@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6ed7fe8536fe4855ff3e0c45f49644fc
+class ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984
 {
     public static $files = array (
         '81db02b30f563b92907e271b66bd7559' => __DIR__ . '/..' . '/yoast/whip/src/Facades/wordpress.php',
@@ -785,7 +785,7 @@ class ComposerStaticInit6ed7fe8536fe4855ff3e0c45f49644fc
         'Yoast\\WP\\SEO\\Helpers\\Primary_Term_Helper' => __DIR__ . '/../..' . '/src/helpers/primary-term-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Product_Helper' => __DIR__ . '/../..' . '/src/helpers/product-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Redirect_Helper' => __DIR__ . '/../..' . '/src/helpers/redirect-helper.php',
-        'Yoast\\WP\\SEO\\Helpers\\Request_Helper' => __DIR__ . '/../..' . '/src/helpers/request-helper.php',
+        'Yoast\\WP\\SEO\\Helpers\\Request_Helper' => __DIR__ . '/../..' . '/src/deprecated/src/helpers/request-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Require_File_Helper' => __DIR__ . '/../..' . '/src/helpers/require-file-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Robots_Helper' => __DIR__ . '/../..' . '/src/helpers/robots-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Robots_Txt_Helper' => __DIR__ . '/../..' . '/src/helpers/robots-txt-helper.php',
@@ -1148,9 +1148,9 @@ class ComposerStaticInit6ed7fe8536fe4855ff3e0c45f49644fc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6ed7fe8536fe4855ff3e0c45f49644fc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6ed7fe8536fe4855ff3e0c45f49644fc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6ed7fe8536fe4855ff3e0c45f49644fc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984::$classMap;
 
         }, null, ClassLoader::class);
     }

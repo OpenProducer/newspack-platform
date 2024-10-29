@@ -22,6 +22,8 @@ return array(
     'CS_REST_Transactional_SmartEmail' => $vendorDir . '/campaignmonitor/createsend-php/csrest_transactional_smartemail.php',
     'CS_REST_Transactional_Timeline' => $vendorDir . '/campaignmonitor/createsend-php/csrest_transactional_timeline.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Newspack\\Newsletters\\Send_List' => $baseDir . '/includes/class-send-list.php',
+    'Newspack\\Newsletters\\Send_Lists' => $baseDir . '/includes/class-send-lists.php',
     'Newspack\\Newsletters\\Subscription_List' => $baseDir . '/includes/class-subscription-list.php',
     'Newspack\\Newsletters\\Subscription_Lists' => $baseDir . '/includes/class-subscription-lists.php',
     'Newspack_Newsletters' => $baseDir . '/includes/class-newspack-newsletters.php',

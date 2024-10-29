@@ -42,14 +42,10 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 		);
 		\register_meta(
 			'post',
-			'mc_list_id',
+			'mc_folder_id',
 			[
 				'object_subtype' => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => true,
 				'type'           => 'string',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
@@ -67,11 +63,11 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 
 		\register_rest_route(
 			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)',
+			'(?P<id>[\a-z]+)/retrieve',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_retrieve' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
 				'args'                => [
 					'id' => [
 						'sanitize_callback' => 'absint',
@@ -86,7 +82,7 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_test' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'permission_callback' => [ 'Newspack_Newsletters', 'api_authoring_permissions_check' ],
 				'args'                => [
 					'id'         => [
 						'sanitize_callback' => 'absint',
@@ -94,84 +90,6 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 					],
 					'test_email' => [
 						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/sender',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_sender' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'        => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'from_name' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'reply_to'  => [
-						'sanitize_callback' => 'sanitize_email',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/folder',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_folder' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'        => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'list_id'   => [
-						'sanitize_callback' => 'esc_attr',
-					],
-					'folder_id' => [
-						'sanitize_callback' => 'esc_attr',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/list/(?P<list_id>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_list' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'      => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'list_id' => [
-						'sanitize_callback' => 'esc_attr',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/segments',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_segments' ],
-				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'        => [
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
-					],
-					'target_id' => [
-						'sanitize_callback' => 'esc_attr',
 					],
 				],
 			]
@@ -204,63 +122,6 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 		$response = $this->service_provider->test(
 			$request['id'],
 			$emails
-		);
-		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Set the sender name and email for the campaign.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return WP_REST_Response|mixed API response or error.
-	 */
-	public function api_sender( $request ) {
-		$response = $this->service_provider->sender(
-			$request['id'],
-			$request['from_name'],
-			$request['reply_to']
-		);
-		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Set folder for a campaign.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return WP_REST_Response|mixed API response or error.
-	 */
-	public function api_folder( $request ) {
-		$response = $this->service_provider->folder(
-			$request['id'],
-			$request['folder_id']
-		);
-		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Set list for a campaign.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return WP_REST_Response|mixed API response or error.
-	 */
-	public function api_list( $request ) {
-		$response = $this->service_provider->list(
-			$request['id'],
-			$request['list_id']
-		);
-		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Set Mailchimp audience segments for a campaign.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return WP_REST_Response|mixed API response or error.
-	 */
-	public function api_segments( $request ) {
-		$response = $this->service_provider->audience_segments(
-			$request['id'],
-			$request['target_id']
 		);
 		return self::get_api_response( $response );
 	}

@@ -35,14 +35,12 @@ class Newspack_Blocks_Caching {
 	 * Add hooks and filters.
 	 */
 	public static function init() {
-		if ( defined( 'NEWSPACK_BLOCKS_CACHE_BLOCKS' ) && NEWSPACK_BLOCKS_CACHE_BLOCKS ) {
-			add_action( 'template_redirect', [ __CLASS__, 'check_all_blocks_cache_status' ] );
-			add_filter( 'pre_render_block', [ __CLASS__, 'maybe_serve_cached_block' ], 10, 2 );
-			add_filter( 'render_block', [ __CLASS__, 'maybe_cache_block' ], 9999, 2 );
+		add_action( 'template_redirect', [ __CLASS__, 'check_all_blocks_cache_status' ] );
+		add_filter( 'pre_render_block', [ __CLASS__, 'maybe_serve_cached_block' ], 10, 2 );
+		add_filter( 'render_block', [ __CLASS__, 'maybe_cache_block' ], 9999, 2 );
 
-			if ( ! defined( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME' ) ) {
-				define( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME', 300 );
-			}
+		if ( ! defined( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME' ) ) {
+			define( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME', 300 );
 		}
 	}
 
@@ -210,7 +208,11 @@ class Newspack_Blocks_Caching {
 			return $block_html;
 		}
 
-		Newspack_Blocks::enqueue_view_assets( 'homepage-articles' );
+		if ( 'newspack-blocks/homepage-articles' === $block_data['blockName'] ) {
+			Newspack_Blocks::enqueue_view_assets( 'homepage-articles' );
+		} elseif ( 'newspack-blocks/carousel' === $block_data['blockName'] ) {
+			Newspack_Blocks::enqueue_view_assets( 'carousel' );
+		}
 
 		return $cached_data['cached_content'];
 	}

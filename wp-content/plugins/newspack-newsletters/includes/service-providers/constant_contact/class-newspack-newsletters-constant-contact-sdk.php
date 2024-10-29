@@ -297,10 +297,12 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	/**
 	 * Get account email addresses
 	 *
+	 * @param array $args Array of query args.
+	 *
 	 * @return object Email addresses.
 	 */
-	public function get_email_addresses() {
-		return $this->request( 'GET', 'account/emails' );
+	public function get_email_addresses( $args = [] ) {
+		return $this->request( 'GET', 'account/emails', [ 'query' => $args ] );
 	}
 
 	/**
@@ -309,11 +311,35 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	 * @return object Contact lists.
 	 */
 	public function get_contact_lists() {
+		$args = [
+			'include_count'            => 'true',
+			'include_membership_count' => 'active',
+			'limit'                    => 1000,
+			'status'                   => 'active',
+		];
 		return $this->request(
 			'GET',
 			'contact_lists',
-			[ 'query' => [ 'include_count' => 'true' ] ]
+			[ 'query' => $args ]
 		)->lists;
+	}
+
+	/**
+	 * Get a Contact List by ID
+	 *
+	 * @param string $id Contact List ID.
+	 *
+	 * @return object Contact list.
+	 */
+	public function get_contact_list( $id ) {
+		$args = [
+			'include_membership_count' => 'active',
+		];
+		return $this->request(
+			'GET',
+			'contact_lists/' . $id,
+			[ 'query' => $args ]
+		);
 	}
 
 	/**
@@ -322,11 +348,29 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	 * @return array
 	 */
 	public function get_segments() {
+		$args = [
+			'limit'   => 1000,
+			'sort_by' => 'date',
+		];
 		return $this->request(
 			'GET',
 			'segments',
-			[ 'query' => [ 'sort_by' => 'name' ] ]
+			[ 'query' => $args ]
 		)->segments;
+	}
+
+	/**
+	 * Get a segment by ID
+	 *
+	 * @param string $id Segment ID.
+	 *
+	 * @return object Segment.
+	 */
+	public function get_segment( $id ) {
+		return $this->request(
+			'GET',
+			'segments/' . $id
+		);
 	}
 
 	/**

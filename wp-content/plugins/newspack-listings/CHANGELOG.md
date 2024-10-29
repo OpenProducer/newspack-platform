@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/Automattic/newspack-listings/compare/v3.0.0...v3.1.0) (2024-10-28)
+
+
+### Features
+
+* **wc:** handle HPOS ([#484](https://github.com/Automattic/newspack-listings/issues/484)) ([48f21bc](https://github.com/Automattic/newspack-listings/commit/48f21bc0a064a78af4ea4c188a22b50dc60cc4c3))
+
 # [3.0.0](https://github.com/Automattic/newspack-listings/compare/v2.16.0...v3.0.0) (2024-08-13)
 
 

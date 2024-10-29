@@ -23,6 +23,10 @@ function newspack_blocks_render_block_video_playlist( $attributes ) {
  * Registers the `newspack-blocks/donate` block on server.
  */
 function newspack_blocks_register_video_playlist() {
+	if ( ! Newspack_Blocks::can_use_video_playlist_block() ) {
+		return;
+	}
+
 	register_block_type(
 		'newspack-blocks/youtube-video-playlist',
 		array(

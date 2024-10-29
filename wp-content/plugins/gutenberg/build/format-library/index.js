@@ -1,36 +1,18 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	// The require scope
-/******/ 	var __webpack_require__ = {};
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
 var __webpack_exports__ = {};
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
 
-;// CONCATENATED MODULE: external ["wp","richText"]
+;// external ["wp","richText"]
 const external_wp_richText_namespaceObject = window["wp"]["richText"];
-;// CONCATENATED MODULE: external ["wp","i18n"]
+;// external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// CONCATENATED MODULE: external ["wp","blockEditor"]
+;// external ["wp","blockEditor"]
 const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
-;// CONCATENATED MODULE: external ["wp","primitives"]
+;// external ["wp","primitives"]
 const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
-;// CONCATENATED MODULE: external "ReactJSXRuntime"
+;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/format-bold.js
+;// ./packages/icons/build-module/library/format-bold.js
 /**
  * WordPress dependencies
  */
@@ -45,12 +27,10 @@ const formatBold = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)
 });
 /* harmony default export */ const format_bold = (formatBold);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/bold/index.js
+;// ./packages/format-library/build-module/bold/index.js
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -102,7 +82,7 @@ const bold = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/code.js
+;// ./packages/icons/build-module/library/code.js
 /**
  * WordPress dependencies
  */
@@ -117,12 +97,10 @@ const code = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exter
 });
 /* harmony default export */ const library_code = (code);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/code/index.js
+;// ./packages/format-library/build-module/code/index.js
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -195,16 +173,14 @@ const code_code = {
   }
 };
 
-;// CONCATENATED MODULE: external ["wp","components"]
+;// external ["wp","components"]
 const external_wp_components_namespaceObject = window["wp"]["components"];
-;// CONCATENATED MODULE: external ["wp","element"]
+;// external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: ./packages/format-library/build-module/image/index.js
+;// ./packages/format-library/build-module/image/index.js
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -361,7 +337,7 @@ function Edit({
   });
 }
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/format-italic.js
+;// ./packages/icons/build-module/library/format-italic.js
 /**
  * WordPress dependencies
  */
@@ -376,12 +352,10 @@ const formatItalic = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.js
 });
 /* harmony default export */ const format_italic = (formatItalic);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/italic/index.js
+;// ./packages/format-library/build-module/italic/index.js
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -433,11 +407,11 @@ const italic = {
   }
 };
 
-;// CONCATENATED MODULE: external ["wp","url"]
+;// external ["wp","url"]
 const external_wp_url_namespaceObject = window["wp"]["url"];
-;// CONCATENATED MODULE: external ["wp","htmlEntities"]
+;// external ["wp","htmlEntities"]
 const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/link.js
+;// ./packages/icons/build-module/library/link.js
 /**
  * WordPress dependencies
  */
@@ -452,11 +426,11 @@ const link_link = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(
 });
 /* harmony default export */ const library_link = (link_link);
 
-;// CONCATENATED MODULE: external ["wp","a11y"]
+;// external ["wp","a11y"]
 const external_wp_a11y_namespaceObject = window["wp"]["a11y"];
-;// CONCATENATED MODULE: external ["wp","data"]
+;// external ["wp","data"]
 const external_wp_data_namespaceObject = window["wp"]["data"];
-;// CONCATENATED MODULE: ./packages/format-library/build-module/link/utils.js
+;// ./packages/format-library/build-module/link/utils.js
 /**
  * WordPress dependencies
  */
@@ -661,7 +635,7 @@ const partialRight = (fn, ...partialArgs) => (...args) => fn(...args, ...partial
 const walkToStart = partialRight(walkToBoundary, 'backwards');
 const walkToEnd = partialRight(walkToBoundary, 'forwards');
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/link/inline.js
+;// ./packages/format-library/build-module/link/inline.js
 /**
  * WordPress dependencies
  */
@@ -847,7 +821,7 @@ function InlineLinkUI({
     };
   }
   function createButtonText(searchTerm) {
-    return (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: search term. */
+    return (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: search term. */
     (0,external_wp_i18n_namespaceObject.__)('Create page: <mark>%s</mark>'), searchTerm), {
       mark: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("mark", {})
     });
@@ -908,7 +882,7 @@ function getRichTextValueFromSelection(value, isActive) {
 }
 /* harmony default export */ const inline = (InlineLinkUI);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/link/index.js
+;// ./packages/format-library/build-module/link/index.js
 /**
  * WordPress dependencies
  */
@@ -924,8 +898,6 @@ function getRichTextValueFromSelection(value, isActive) {
 /**
  * Internal dependencies
  */
-
-
 
 
 
@@ -1134,7 +1106,7 @@ const build_module_link_link = {
   edit: link_Edit
 };
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/format-strikethrough.js
+;// ./packages/icons/build-module/library/format-strikethrough.js
 /**
  * WordPress dependencies
  */
@@ -1149,12 +1121,10 @@ const formatStrikethrough = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceOb
 });
 /* harmony default export */ const format_strikethrough = (formatStrikethrough);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/strikethrough/index.js
+;// ./packages/format-library/build-module/strikethrough/index.js
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -1196,12 +1166,10 @@ const strikethrough = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/underline/index.js
+;// ./packages/format-library/build-module/underline/index.js
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -1242,7 +1210,7 @@ const underline = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/icon/index.js
+;// ./packages/icons/build-module/icon/index.js
 /**
  * WordPress dependencies
  */
@@ -1274,7 +1242,7 @@ function Icon({
 }
 /* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/text-color.js
+;// ./packages/icons/build-module/library/text-color.js
 /**
  * WordPress dependencies
  */
@@ -1289,7 +1257,7 @@ const textColor = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(
 });
 /* harmony default export */ const text_color = (textColor);
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/color.js
+;// ./packages/icons/build-module/library/color.js
 /**
  * WordPress dependencies
  */
@@ -1304,9 +1272,9 @@ const color = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
 });
 /* harmony default export */ const library_color = (color);
 
-;// CONCATENATED MODULE: external ["wp","privateApis"]
+;// external ["wp","privateApis"]
 const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// CONCATENATED MODULE: ./packages/format-library/build-module/lock-unlock.js
+;// ./packages/format-library/build-module/lock-unlock.js
 /**
  * WordPress dependencies
  */
@@ -1316,7 +1284,7 @@ const {
   unlock
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/format-library');
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/text-color/inline.js
+;// ./packages/format-library/build-module/text-color/inline.js
 /**
  * WordPress dependencies
  */
@@ -1330,7 +1298,6 @@ const {
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -1480,7 +1447,7 @@ function InlineColorUI({
   });
 }
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/text-color/index.js
+;// ./packages/format-library/build-module/text-color/index.js
 /**
  * WordPress dependencies
  */
@@ -1493,8 +1460,6 @@ function InlineColorUI({
 /**
  * Internal dependencies
  */
-
-
 
 
 const transparentValue = 'rgba(0, 0, 0, 0)';
@@ -1577,7 +1542,7 @@ const text_color_textColor = {
   edit: TextColorEdit
 };
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/subscript.js
+;// ./packages/icons/build-module/library/subscript.js
 /**
  * WordPress dependencies
  */
@@ -1592,7 +1557,7 @@ const subscript = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(
 });
 /* harmony default export */ const library_subscript = (subscript);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/subscript/index.js
+;// ./packages/format-library/build-module/subscript/index.js
 /**
  * WordPress dependencies
  */
@@ -1634,7 +1599,7 @@ const subscript_subscript = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/superscript.js
+;// ./packages/icons/build-module/library/superscript.js
 /**
  * WordPress dependencies
  */
@@ -1649,7 +1614,7 @@ const superscript = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx
 });
 /* harmony default export */ const library_superscript = (superscript);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/superscript/index.js
+;// ./packages/format-library/build-module/superscript/index.js
 /**
  * WordPress dependencies
  */
@@ -1691,7 +1656,7 @@ const superscript_superscript = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/button.js
+;// ./packages/icons/build-module/library/button.js
 /**
  * WordPress dependencies
  */
@@ -1706,7 +1671,7 @@ const button_button = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.j
 });
 /* harmony default export */ const library_button = (button_button);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/keyboard/index.js
+;// ./packages/format-library/build-module/keyboard/index.js
 /**
  * WordPress dependencies
  */
@@ -1748,7 +1713,7 @@ const keyboard = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/help.js
+;// ./packages/icons/build-module/library/help.js
 /**
  * WordPress dependencies
  */
@@ -1763,7 +1728,7 @@ const help = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exter
 });
 /* harmony default export */ const library_help = (help);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/unknown/index.js
+;// ./packages/format-library/build-module/unknown/index.js
 /**
  * WordPress dependencies
  */
@@ -1811,7 +1776,7 @@ const unknown = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/language.js
+;// ./packages/icons/build-module/library/language.js
 /**
  * WordPress dependencies
  */
@@ -1826,7 +1791,7 @@ const language = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(e
 });
 /* harmony default export */ const library_language = (language);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/language/index.js
+;// ./packages/format-library/build-module/language/index.js
 /**
  * WordPress dependencies
  */
@@ -1835,8 +1800,6 @@ const language = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(e
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -1948,7 +1911,7 @@ function InlineLanguageUI({
   });
 }
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/non-breaking-space/index.js
+;// ./packages/format-library/build-module/non-breaking-space/index.js
 /**
  * WordPress dependencies
  */
@@ -1978,7 +1941,7 @@ const nonBreakingSpace = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/default-formats.js
+;// ./packages/format-library/build-module/default-formats.js
 /**
  * Internal dependencies
  */
@@ -1998,7 +1961,7 @@ const nonBreakingSpace = {
 
 /* harmony default export */ const default_formats = ([bold, code_code, image_image, italic, build_module_link_link, strikethrough, underline, text_color_textColor, subscript_subscript, superscript_superscript, keyboard, unknown, language_language, nonBreakingSpace]);
 
-;// CONCATENATED MODULE: ./packages/format-library/build-module/index.js
+;// ./packages/format-library/build-module/index.js
 /**
  * WordPress dependencies
  */

@@ -758,7 +758,7 @@ return array(
     'Yoast\\WP\\SEO\\Helpers\\Primary_Term_Helper' => $baseDir . '/src/helpers/primary-term-helper.php',
     'Yoast\\WP\\SEO\\Helpers\\Product_Helper' => $baseDir . '/src/helpers/product-helper.php',
     'Yoast\\WP\\SEO\\Helpers\\Redirect_Helper' => $baseDir . '/src/helpers/redirect-helper.php',
-    'Yoast\\WP\\SEO\\Helpers\\Request_Helper' => $baseDir . '/src/helpers/request-helper.php',
+    'Yoast\\WP\\SEO\\Helpers\\Request_Helper' => $baseDir . '/src/deprecated/src/helpers/request-helper.php',
     'Yoast\\WP\\SEO\\Helpers\\Require_File_Helper' => $baseDir . '/src/helpers/require-file-helper.php',
     'Yoast\\WP\\SEO\\Helpers\\Robots_Helper' => $baseDir . '/src/helpers/robots-helper.php',
     'Yoast\\WP\\SEO\\Helpers\\Robots_Txt_Helper' => $baseDir . '/src/helpers/robots-txt-helper.php',

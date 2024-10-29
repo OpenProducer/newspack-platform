@@ -32,11 +32,7 @@
             "time": "2022-12-19T17:10:46+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Firebase\\JWT\\": "src"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
@@ -91,11 +87,7 @@
             "time": "2024-04-26T14:46:26+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "lucatume\\DI52\\": "src/"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0"
@@ -169,11 +161,7 @@
                 }
             },
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Monolog\\": "src/Monolog"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -219,11 +207,7 @@
             "time": "2021-11-05T16:50:12+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Container\\": "src/"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -275,11 +259,7 @@
                 }
             },
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Log\\": "Psr/Log/"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -335,11 +315,7 @@
             "time": "2024-08-08T20:46:30+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "StellarWP\\Assets\\": "src/Assets/"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0"
@@ -382,11 +358,7 @@
             "time": "2023-09-05T20:08:29+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "StellarWP\\ContainerContract\\": "src/"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
@@ -444,11 +416,7 @@
             "time": "2024-06-06T20:03:23+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "StellarWP\\DB\\": "src/DB/"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0"
@@ -508,13 +476,7 @@
             "time": "2023-06-06T13:25:04+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "StellarWP\\Installer\\": "src/Installer",
-                    "StellarWP\\Installer\\Assets_JS\\": "src/assets/js",
-                    "StellarWP\\Installer\\Admin_Views\\": "src/admin-views"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
@@ -533,12 +495,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/models.git",
-                "reference": "7c21d232c06a6670e5845570945791f2887ead48"
+                "reference": "ac30397971ac654278ebe2cf703524db81459630"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/models/zipball/7c21d232c06a6670e5845570945791f2887ead48",
-                "reference": "7c21d232c06a6670e5845570945791f2887ead48",
+                "url": "https://api.github.com/repos/stellarwp/models/zipball/ac30397971ac654278ebe2cf703524db81459630",
+                "reference": "ac30397971ac654278ebe2cf703524db81459630",
                 "shasum": ""
             },
             "require": {
@@ -556,15 +518,11 @@
                 "lucatume/wp-browser": "^3.0.14",
                 "phpunit/phpunit": "~6.0"
             },
-            "time": "2024-05-10T21:20:20+00:00",
+            "time": "2024-09-26T18:03:55+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "StellarWP\\Models\\": "src/Models/"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-or-later"
@@ -582,7 +540,7 @@
             ],
             "support": {
                 "issues": "https://github.com/stellarwp/models/issues",
-                "source": "https://github.com/stellarwp/models/tree/main"
+                "source": "https://github.com/stellarwp/models/tree/1.2.2"
             },
             "install-path": "../stellarwp/models"
         },
@@ -626,11 +584,7 @@
             "time": "2024-06-06T17:01:03+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "StellarWP\\Schema\\": "src/Schema/"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0"
@@ -682,13 +636,7 @@
             "time": "2024-01-08T18:55:26+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "StellarWP\\Telemetry\\": "src/Telemetry",
-                    "StellarWP\\Telemetry\\Views_Dir\\": "src/views",
-                    "StellarWP\\Telemetry\\Assets_Dir\\": "src/resources"
-                }
-            },
+            "autoload": [],
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"

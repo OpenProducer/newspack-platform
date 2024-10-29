@@ -62,6 +62,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 			add_action( 'rest_api_init', [ $this->controller, 'register_routes' ] );
 		}
 		add_action( 'pre_post_update', [ $this, 'pre_post_update' ], 10, 2 );
+		add_action( 'save_post', [ $this, 'save_post' ], 10, 2 );
 		add_action( 'transition_post_status', [ $this, 'transition_post_status' ], 10, 3 );
 		add_action( 'updated_post_meta', [ $this, 'updated_post_meta' ], 10, 4 );
 		add_action( 'wp_insert_post', [ $this, 'insert_post' ], 10, 3 );
@@ -94,25 +95,6 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 			self::$instances[ static::class ] = new static();
 		}
 		return self::$instances[ static::class ];
-	}
-
-	/**
-	 * Check capabilities for using the API for authoring tasks.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return bool|WP_Error
-	 */
-	public function api_authoring_permissions_check( $request ) {
-		if ( ! current_user_can( 'edit_others_posts' ) ) {
-			return new \WP_Error(
-				'newspack_rest_forbidden',
-				esc_html__( 'You cannot use this resource.', 'newspack-newsletters' ),
-				[
-					'status' => 403,
-				]
-			);
-		}
-		return true;
 	}
 
 	/**
@@ -161,6 +143,22 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 				wp_die( esc_html( $result->get_error_message() ), '', esc_html( $result->get_error_code() ) );
 			}
 		}
+	}
+
+	/**
+	 * Delete layout defaults meta after saving the post.
+	 * We don't want layout defaults overwriting saved values unless the layout has just been set.
+	 *
+	 * @param int $post_id The ID of the post being saved.
+	 * @return void
+	 */
+	public function save_post( $post_id ) {
+		$post_type = get_post_type( $post_id );
+		if ( Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT !== $post_type ) {
+			return;
+		}
+
+		delete_post_meta( $post_id, 'stringifiedCampaignDefaults' );
 	}
 
 	/**
@@ -537,8 +535,10 @@ Error message(s) received:
 			'name'                    => '', // The provider name.
 			'list'                    => __( 'list', 'newspack-newsletters' ), // "list" in lower case singular format.
 			'lists'                   => __( 'lists', 'newspack-newsletters' ), // "list" in lower case plural format.
+			'sublist'                 => __( 'sublist', 'newspack-newsletters' ), // Sublist entities in lowercase singular format.
 			'List'                    => __( 'List', 'newspack-newsletters' ), // "list" in uppercase case singular format.
 			'Lists'                   => __( 'Lists', 'newspack-newsletters' ), // "list" in uppercase case plural format.
+			'Sublist'                 => __( 'Sublist', 'newspack-newsletters' ), // Sublist entities in uppercase singular format.
 			'tag_prefix'              => 'Newspack: ', // The prefix to be used in tags.
 			'tag_metabox_before_save' => __( 'Once this list is saved, a tag will be created for it.', 'newspack-newsletters' ),
 			'tag_metabox_after_save'  => __( 'Tag created for this list', 'newspack-newsletters' ),
@@ -651,12 +651,6 @@ Error message(s) received:
 		if ( static::$support_local_lists ) {
 			$lists_to_add    = $this->update_contact_local_lists( $email, $lists_to_add, 'add' );
 			$lists_to_remove = $this->update_contact_local_lists( $email, $lists_to_remove, 'remove' );
-			if ( is_wp_error( $lists_to_add ) ) {
-				return $lists_to_add;
-			}
-			if ( is_wp_error( $lists_to_remove ) ) {
-				return $lists_to_remove;
-			}
 		}
 		return $this->update_contact_lists( $email, $lists_to_add, $lists_to_remove );
 	}
@@ -667,7 +661,7 @@ Error message(s) received:
 	 * @param string $email The contact email.
 	 * @param array  $lists An array with List IDs, mixing local and providers lists. Only local lists will be handled.
 	 * @param string $action The action to be performed. add or remove.
-	 * @return array|WP_Error The remaining lists that were not handled by this method, because they are not local lists.
+	 * @return array The remaining lists that were not handled by this method, because they are not local lists.
 	 */
 	protected function update_contact_local_lists( $email, $lists = [], $action = 'add' ) {
 		foreach ( $lists as $key => $list_id ) {
@@ -676,7 +670,22 @@ Error message(s) received:
 					$list = Subscription_List::from_public_id( $list_id );
 
 					if ( ! $list->is_configured_for_provider( $this->service ) ) {
-						return new WP_Error( 'List not properly configured for the provider' );
+						do_action(
+							'newspack_log',
+							'newspack_esp_update_contact_lists_error',
+							__( 'Local list not properly configured for the provider', 'newspack-newsletters' ),
+							[
+								'type'       => 'error',
+								'data'       => [
+									'provider' => $this->service,
+									'list_id'  => $list_id,
+								],
+								'user_email' => $email,
+								'file'       => 'newspack_' . $this->service,
+							]
+						);
+						unset( $lists[ $key ] );
+						continue;
 					}
 					$list_settings = $list->get_provider_settings( $this->service );
 
@@ -685,11 +694,23 @@ Error message(s) received:
 					} elseif ( 'remove' === $action ) {
 						$this->remove_esp_local_list_from_contact( $email, $list_settings['tag_id'], $list_settings['list'] );
 					}
-
 					unset( $lists[ $key ] );
-
 				} catch ( \InvalidArgumentException $e ) {
-					return new WP_Error( 'List not found' );
+					do_action(
+						'newspack_log',
+						'newspack_esp_update_contact_lists_error',
+						__( 'Local list not found', 'newspack-newsletters' ),
+						[
+							'type'       => 'error',
+							'data'       => [
+								'provider' => $this->service,
+								'list_id'  => $list_id,
+							],
+							'user_email' => $email,
+							'file'       => 'newspack_' . $this->service,
+						]
+					);
+					unset( $lists[ $key ] );
 				}
 			}
 		}

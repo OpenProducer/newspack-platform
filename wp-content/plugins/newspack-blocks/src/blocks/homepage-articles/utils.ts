@@ -272,3 +272,23 @@ export const postsBlockDispatch = (
 		triggerReflow: isEditorBlock ? dispatch( STORE_NAMESPACE ).reflow : () => undefined,
 	};
 };
+
+// Ensure innerBlocks are populated for some blocks (e.g. `widget-area` and `post-content`).
+// See https://github.com/WordPress/gutenberg/issues/32607#issuecomment-890728216.
+// See https://github.com/Automattic/wp-calypso/issues/91839.
+export const recursivelyGetBlocks = (
+	getBlocks: ( clientId?: string ) => Block[],
+	blocks: Block[] = getBlocks()
+) => {
+	return blocks.map( ( block ) => {
+		let innerBlocks =
+			block.innerBlocks.length === 0
+				? getBlocks( block.clientId )
+				: block.innerBlocks;
+		innerBlocks = recursivelyGetBlocks( getBlocks, innerBlocks );
+		return {
+			...block,
+			innerBlocks,
+		};
+	});
+};

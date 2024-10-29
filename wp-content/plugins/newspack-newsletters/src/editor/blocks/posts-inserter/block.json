@@ -1,6 +1,6 @@
 {
 	"name": "newspack-newsletters/posts-inserter",
-	"category": "widgets",
+	"category": "newspack",
 	"supports": [
 		"align"
 	],

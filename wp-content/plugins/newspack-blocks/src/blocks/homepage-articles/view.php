@@ -134,34 +134,34 @@ function newspack_blocks_get_homepage_articles_css_string( $attrs ) {
 
 	ob_start();
 	?>
-		.wpnbha article .entry-title {
+		.wp-block-newspack-blocks-homepage-articles article .entry-title {
 			font-size: 1.2em;
 		}
-		.wpnbha .entry-meta {
+		.wp-block-newspack-blocks-homepage-articles .entry-meta {
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
 			margin-top: 0.5em;
 		}
-		.wpnbha article .entry-meta {
+		.wp-block-newspack-blocks-homepage-articles article .entry-meta {
 			font-size: 0.8em;
 		}
-		.wpnbha article .avatar {
+		.wp-block-newspack-blocks-homepage-articles article .avatar {
 			height: 25px;
 			width: 25px;
 		}
-		.wpnbha .post-thumbnail{
+		.wp-block-newspack-blocks-homepage-articles .post-thumbnail{
 			margin: 0;
 			margin-bottom: 0.25em;
 		}
-		.wpnbha .post-thumbnail img {
+		.wp-block-newspack-blocks-homepage-articles .post-thumbnail img {
 			height: auto;
 			width: 100%;
 		}
-		.wpnbha .post-thumbnail figcaption {
+		.wp-block-newspack-blocks-homepage-articles .post-thumbnail figcaption {
 			margin-bottom: 0.5em;
 		}
-		.wpnbha p {
+		.wp-block-newspack-blocks-homepage-articles p {
 			margin: 0.5em 0;
 		}
 
