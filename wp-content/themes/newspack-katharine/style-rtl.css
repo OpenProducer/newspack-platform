@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 2.0.1-alpha.2
+Version: 2.1.0-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -986,6 +986,21 @@ input[type=submit]:focus,
   color: var(--newspack-theme-color-bg-body);
   outline: thin dotted;
   outline-offset: -4px;
+}
+.button[disabled], .button[disabled]:hover,
+button[disabled],
+button[disabled]:hover,
+input[type=button][disabled],
+input[type=button][disabled]:hover,
+input[type=reset][disabled],
+input[type=reset][disabled]:hover,
+input[type=submit][disabled],
+input[type=submit][disabled]:hover,
+.wp-block-search__button[disabled],
+.wp-block-search__button[disabled]:hover {
+  background: var(--newspack-ui-color-neutral-30, #ddd);
+  color: var(--newspack-ui-color-neutral-0, #fff);
+  cursor: default;
 }
 
 input[type=text],
