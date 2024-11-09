@@ -525,7 +525,12 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	 */
 	public static function handle_cron() {
 		Newspack_Newsletters_Logger::log( 'Mailchimp cache: Handling cron request to refresh cache' );
-		$lists = self::fetch_lists(); // Force a cache refresh.
+		try {
+			$lists = self::fetch_lists(); // Force a cache refresh.
+		} catch ( Exception $e ) {
+			Newspack_Newsletters_Logger::log( 'Mailchimp cache: Error refreshing lists cache: ' . $e->getMessage() );
+			return;
+		}
 
 		foreach ( $lists as $list ) {
 			Newspack_Newsletters_Logger::log( 'Mailchimp cache: Dispatching request to refresh cache for list ' . $list['id'] );
@@ -556,10 +561,6 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 			),
 			__( 'Error retrieving Mailchimp lists.', 'newspack_newsletters' )
 		);
-		if ( is_wp_error( $lists_response ) || empty( $lists_response['lists'] ) ) {
-			Newspack_Newsletters_Logger::log( 'Mailchimp cache: Error refreshing cache: ' . ( $lists_response->getMessage() ?? __( 'Error retrieving Mailchimp lists.', 'newspack_newsletters' ) ) );
-			return is_wp_error( $lists_response ) ? $lists_response : [];
-		}
 
 		// Cache the lists (only if we got them all).
 		if ( ! $limit ) {

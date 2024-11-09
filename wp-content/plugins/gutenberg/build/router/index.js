@@ -879,11 +879,31 @@ function preserveThemePreview(params) {
     wp_theme_preview: currentThemePreview
   };
 }
-function push(params, state) {
-  const search = (0,external_wp_url_namespaceObject.buildQueryString)(preserveThemePreview(params));
-  return originalHistoryPush.call(history_history, {
-    search
-  }, state);
+function push(params, state, options = {}) {
+  const performPush = () => {
+    const search = (0,external_wp_url_namespaceObject.buildQueryString)(preserveThemePreview(params));
+    return originalHistoryPush.call(history_history, {
+      search
+    }, state);
+  };
+
+  /*
+   * Skip transition in mobile, otherwise it crashes the browser.
+   * See: https://github.com/WordPress/gutenberg/pull/63002.
+   */
+  const isMediumOrBigger = window.matchMedia('(min-width: 782px)').matches;
+  if (!isMediumOrBigger ||
+  // @ts-expect-error
+  !document.startViewTransition || !options.transition) {
+    return performPush();
+  }
+  document.documentElement.classList.add(options.transition);
+  // @ts-expect-error
+  const transition = document.startViewTransition(() => performPush());
+  transition.finished.finally(() => {
+    var _options$transition;
+    document.documentElement.classList.remove((_options$transition = options.transition) !== null && _options$transition !== void 0 ? _options$transition : '');
+  });
 }
 function replace(params, state) {
   const search = (0,external_wp_url_namespaceObject.buildQueryString)(preserveThemePreview(params));

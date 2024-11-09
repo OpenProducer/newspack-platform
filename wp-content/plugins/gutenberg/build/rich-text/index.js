@@ -3648,7 +3648,9 @@ function fixPlaceholderSelection(defaultView) {
 const allEventListeners = [copy_handler, select_object, format_boundaries, event_listeners_delete, input_and_selection, selection_change_compat];
 function useEventListeners(props) {
   const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
-  propsRef.current = props;
+  (0,external_wp_element_namespaceObject.useInsertionEffect)(() => {
+    propsRef.current = props;
+  });
   const refEffects = (0,external_wp_element_namespaceObject.useMemo)(() => allEventListeners.map(refEffect => refEffect(propsRef)), [propsRef]);
   return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
     const cleanups = refEffects.map(effect => effect(element));

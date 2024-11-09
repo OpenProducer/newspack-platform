@@ -2482,12 +2482,25 @@ function __disposeResources(env) {
   return next();
 }
 
+function __rewriteRelativeImportExtension(path, preserveJsx) {
+  if (typeof path === "string" && /^\.\.?\//.test(path)) {
+      return path.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
+          return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
+      });
+  }
+  return path;
+}
+
 /* harmony default export */ const tslib_es6 = ({
   __extends,
   __assign,
   __rest,
   __decorate,
   __param,
+  __esDecorate,
+  __runInitializers,
+  __propKey,
+  __setFunctionName,
   __metadata,
   __awaiter,
   __generator,
@@ -2510,6 +2523,7 @@ function __disposeResources(env) {
   __classPrivateFieldIn,
   __addDisposableResource,
   __disposeResources,
+  __rewriteRelativeImportExtension,
 });
 
 ;// ./node_modules/lower-case/dist.es2015/index.js
@@ -3718,7 +3732,9 @@ function useCopyOnClick(ref, text, timeout = 4000) {
  */
 function useUpdatedRef(value) {
   const ref = (0,external_wp_element_namespaceObject.useRef)(value);
-  ref.current = value;
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    ref.current = value;
+  }, [value]);
   return ref;
 }
 
@@ -5507,36 +5523,10 @@ function useThrottle(fn, wait, options) {
 
 ;// ./packages/compose/build-module/hooks/use-drop-zone/index.js
 /**
- * WordPress dependencies
- */
-
-
-/**
  * Internal dependencies
  */
 
 
-/* eslint-disable jsdoc/valid-types */
-/**
- * @template T
- * @param {T} value
- * @return {import('react').MutableRefObject<T|null>} A ref with the value.
- */
-function useFreshRef(value) {
-  /* eslint-enable jsdoc/valid-types */
-  /* eslint-disable jsdoc/no-undefined-types */
-  /** @type {import('react').MutableRefObject<T>} */
-  /* eslint-enable jsdoc/no-undefined-types */
-  // Disable reason: We're doing something pretty JavaScript-y here where the
-  // ref will always have a current value that is not null or undefined but it
-  // needs to start as undefined. We don't want to change the return type so
-  // it's easier to just ts-ignore this specific line that's complaining about
-  // undefined not being part of T.
-  // @ts-ignore
-  const ref = (0,external_wp_element_namespaceObject.useRef)();
-  ref.current = value;
-  return ref;
-}
 
 /**
  * A hook to facilitate drag and drop handling.
@@ -5563,12 +5553,12 @@ function useDropZone({
   onDragEnd: _onDragEnd,
   onDragOver: _onDragOver
 }) {
-  const onDropRef = useFreshRef(_onDrop);
-  const onDragStartRef = useFreshRef(_onDragStart);
-  const onDragEnterRef = useFreshRef(_onDragEnter);
-  const onDragLeaveRef = useFreshRef(_onDragLeave);
-  const onDragEndRef = useFreshRef(_onDragEnd);
-  const onDragOverRef = useFreshRef(_onDragOver);
+  const onDropEvent = useEvent(_onDrop);
+  const onDragStartEvent = useEvent(_onDragStart);
+  const onDragEnterEvent = useEvent(_onDragEnter);
+  const onDragLeaveEvent = useEvent(_onDragLeave);
+  const onDragEndEvent = useEvent(_onDragEnd);
+  const onDragOverEvent = useEvent(_onDragOver);
   return useRefEffect(elem => {
     if (isDisabled) {
       return;
@@ -5619,8 +5609,8 @@ function useDropZone({
       // node is removed.
       ownerDocument.addEventListener('dragend', maybeDragEnd);
       ownerDocument.addEventListener('mousemove', maybeDragEnd);
-      if (onDragStartRef.current) {
-        onDragStartRef.current(event);
+      if (_onDragStart) {
+        onDragStartEvent(event);
       }
     }
     function onDragEnter(/** @type {DragEvent} */event) {
@@ -5633,14 +5623,14 @@ function useDropZone({
       if (element.contains(/** @type {Node} */event.relatedTarget)) {
         return;
       }
-      if (onDragEnterRef.current) {
-        onDragEnterRef.current(event);
+      if (_onDragEnter) {
+        onDragEnterEvent(event);
       }
     }
     function onDragOver(/** @type {DragEvent} */event) {
       // Only call onDragOver for the innermost hovered drop zones.
-      if (!event.defaultPrevented && onDragOverRef.current) {
-        onDragOverRef.current(event);
+      if (!event.defaultPrevented && _onDragOver) {
+        onDragOverEvent(event);
       }
 
       // Prevent the browser default while also signalling to parent
@@ -5659,8 +5649,8 @@ function useDropZone({
       if (isElementInZone(event.relatedTarget)) {
         return;
       }
-      if (onDragLeaveRef.current) {
-        onDragLeaveRef.current(event);
+      if (_onDragLeave) {
+        onDragLeaveEvent(event);
       }
     }
     function onDrop(/** @type {DragEvent} */event) {
@@ -5678,8 +5668,8 @@ function useDropZone({
       // not recognized.
       // eslint-disable-next-line no-unused-expressions
       event.dataTransfer && event.dataTransfer.files.length;
-      if (onDropRef.current) {
-        onDropRef.current(event);
+      if (_onDrop) {
+        onDropEvent(event);
       }
       maybeDragEnd(event);
     }
@@ -5690,11 +5680,11 @@ function useDropZone({
       isDragging = false;
       ownerDocument.removeEventListener('dragend', maybeDragEnd);
       ownerDocument.removeEventListener('mousemove', maybeDragEnd);
-      if (onDragEndRef.current) {
-        onDragEndRef.current(event);
+      if (_onDragEnd) {
+        onDragEndEvent(event);
       }
     }
-    element.dataset.isDropZone = 'true';
+    element.setAttribute('data-is-drop-zone', 'true');
     element.addEventListener('drop', onDrop);
     element.addEventListener('dragenter', onDragEnter);
     element.addEventListener('dragover', onDragOver);
@@ -5703,7 +5693,7 @@ function useDropZone({
     // the document.
     ownerDocument.addEventListener('dragenter', maybeDragStart);
     return () => {
-      delete element.dataset.isDropZone;
+      element.removeAttribute('data-is-drop-zone');
       element.removeEventListener('drop', onDrop);
       element.removeEventListener('dragenter', onDragEnter);
       element.removeEventListener('dragover', onDragOver);
