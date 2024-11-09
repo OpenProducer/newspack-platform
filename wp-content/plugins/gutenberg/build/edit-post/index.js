@@ -1667,7 +1667,7 @@ function KeyboardShortcuts() {
     registerShortcut({
       name: 'core/edit-post/toggle-fullscreen',
       category: 'global',
-      description: (0,external_wp_i18n_namespaceObject.__)('Toggle fullscreen mode.'),
+      description: (0,external_wp_i18n_namespaceObject.__)('Enable or disable fullscreen mode.'),
       keyCombination: {
         modifier: 'secondary',
         character: 'f'
@@ -2635,21 +2635,28 @@ function usePaddingAppender(enabled) {
 
 
 
+
+/**
+ * Internal dependencies
+ */
+
 const isGutenbergPlugin =  true ? true : 0;
 function useShouldIframe() {
   const {
     isBlockBasedTheme,
     hasV3BlocksOnly,
-    isEditingTemplate,
-    isZoomOutMode
+    isEditingTemplateOrPattern,
+    isZoomOutMode,
+    deviceType
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getEditorSettings,
-      getCurrentPostType
+      getCurrentPostType,
+      getDeviceType
     } = select(external_wp_editor_namespaceObject.store);
     const {
-      __unstableGetEditorMode
-    } = select(external_wp_blockEditor_namespaceObject.store);
+      isZoomOut
+    } = unlock(select(external_wp_blockEditor_namespaceObject.store));
     const {
       getBlockTypes
     } = select(external_wp_blocks_namespaceObject.store);
@@ -2659,11 +2666,12 @@ function useShouldIframe() {
       hasV3BlocksOnly: getBlockTypes().every(type => {
         return type.apiVersion >= 3;
       }),
-      isEditingTemplate: getCurrentPostType() === 'wp_template',
-      isZoomOutMode: __unstableGetEditorMode() === 'zoom-out'
+      isEditingTemplateOrPattern: ['wp_template', 'wp_block'].includes(getCurrentPostType()),
+      isZoomOutMode: isZoomOut(),
+      deviceType: getDeviceType()
     };
   }, []);
-  return hasV3BlocksOnly || isGutenbergPlugin && isBlockBasedTheme || isEditingTemplate || isZoomOutMode;
+  return hasV3BlocksOnly || isGutenbergPlugin && isBlockBasedTheme || isEditingTemplateOrPattern || isZoomOutMode || ['Tablet', 'Mobile'].includes(deviceType);
 }
 
 ;// ./packages/edit-post/build-module/hooks/use-navigate-to-entity-record.js
@@ -3020,7 +3028,7 @@ function MetaBoxesMain({
             })
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.VisuallyHidden, {
             id: separatorHelpId,
-            children: (0,external_wp_i18n_namespaceObject.__)('Use up and down arrow keys to resize the metabox pane.')
+            children: (0,external_wp_i18n_namespaceObject.__)('Use up and down arrow keys to resize the meta box panel.')
           })]
         })
       },
@@ -3113,8 +3121,8 @@ function Layout({
       name: 'wp_template'
     });
     const {
-      __unstableGetEditorMode
-    } = select(external_wp_blockEditor_namespaceObject.store);
+      isZoomOut
+    } = unlock(select(external_wp_blockEditor_namespaceObject.store));
     const {
       getEditorMode,
       getRenderingMode
@@ -3130,7 +3138,7 @@ function Layout({
       showMetaBoxes: !DESIGN_POST_TYPES.includes(currentPostType) && isRenderingPostOnly,
       isWelcomeGuideVisible: isFeatureActive('welcomeGuide'),
       templateId: supportsTemplateMode && isViewable && canViewTemplate && !isEditingTemplate ? getEditedPostTemplateId() : null,
-      enablePaddingAppender: __unstableGetEditorMode() !== 'zoom-out' && isRenderingPostOnly && !DESIGN_POST_TYPES.includes(currentPostType)
+      enablePaddingAppender: !isZoomOut() && isRenderingPostOnly && !DESIGN_POST_TYPES.includes(currentPostType)
     };
   }, [currentPostType, isEditingTemplate, settings.supportsTemplateMode]);
   const [paddingAppenderRef, paddingStyle] = usePaddingAppender(enablePaddingAppender);
@@ -3179,7 +3187,7 @@ function Layout({
           const newItem = items[0];
           const title = typeof newItem.title === 'string' ? newItem.title : newItem.title?.rendered;
           createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(
-          // translators: %s: Title of the created post e.g: "Post 1".
+          // translators: %s: Title of the created post or template, e.g: "Hello world".
           (0,external_wp_i18n_namespaceObject.__)('"%s" successfully created.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title)), {
             type: 'snackbar',
             id: 'duplicate-post-action',
@@ -3445,6 +3453,7 @@ function initializeEditor(id, postType, postId, settings, initialEdits) {
   (0,external_wp_data_namespaceObject.dispatch)(external_wp_preferences_namespaceObject.store).setDefaults('core', {
     allowRightClickOverrides: true,
     editorMode: 'visual',
+    editorTool: 'edit',
     fixedToolbar: false,
     hiddenBlockTypes: [],
     inactivePanels: [],

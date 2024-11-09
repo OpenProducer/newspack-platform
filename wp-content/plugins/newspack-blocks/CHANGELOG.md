@@ -1,3 +1,24 @@
+## [4.3.4](https://github.com/Automattic/newspack-blocks/compare/v4.3.3...v4.3.4) (2024-10-30)
+
+
+### Bug Fixes
+
+* name branch correctly ([a6fffd6](https://github.com/Automattic/newspack-blocks/commit/a6fffd620945666bcb6e10427309ea9b94baecb9))
+
+## [4.3.3](https://github.com/Automattic/newspack-blocks/compare/v4.3.2...v4.3.3) (2024-10-29)
+
+
+### Bug Fixes
+
+* remove expensive query before registering video playlist block ([#1930](https://github.com/Automattic/newspack-blocks/issues/1930)) ([9d967e0](https://github.com/Automattic/newspack-blocks/commit/9d967e0e415ca78018540c2c033c06fd2fe64fab))
+
+## [4.3.2](https://github.com/Automattic/newspack-blocks/compare/v4.3.1...v4.3.2) (2024-10-29)
+
+
+### Bug Fixes
+
+* dont cache blocks for staff ([2d30450](https://github.com/Automattic/newspack-blocks/commit/2d30450aa4047e92275e5d78c8ccb31ca96b345e))
+
 ## [4.3.1](https://github.com/Automattic/newspack-blocks/compare/v4.3.0...v4.3.1) (2024-10-28)
 
 

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3ae5bc47eb9353a360f97b3691e81473
+class ComposerStaticInitdebf13c4d057fe67d06acfa7ae9872b2
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -79,6 +79,7 @@ class ComposerStaticInit3ae5bc47eb9353a360f97b3691e81473
         'TEC\\Common\\Integrations\\Traits\\Theme_Integration' => __DIR__ . '/../..' . '/src/Common/Integrations/Traits/Theme_Integration.php',
         'TEC\\Common\\Libraries\\Installer\\Provider' => __DIR__ . '/../..' . '/src/Common/Libraries/Installer/Provider.php',
         'TEC\\Common\\Libraries\\Provider' => __DIR__ . '/../..' . '/src/Common/Libraries/Provider.php',
+        'TEC\\Common\\Libraries\\Uplink_Controller' => __DIR__ . '/../..' . '/src/Common/Libraries/Uplink_Controller.php',
         'TEC\\Common\\Site_Health\\Factory' => __DIR__ . '/../..' . '/src/Common/Site_Health/Factory.php',
         'TEC\\Common\\Site_Health\\Fields\\Generic_Info_Field' => __DIR__ . '/../..' . '/src/Common/Site_Health/Fields/Generic_Info_Field.php',
         'TEC\\Common\\Site_Health\\Fields\\Post_Status_Count_Field' => __DIR__ . '/../..' . '/src/Common/Site_Health/Fields/Post_Status_Count_Field.php',
@@ -280,9 +281,9 @@ class ComposerStaticInit3ae5bc47eb9353a360f97b3691e81473
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3ae5bc47eb9353a360f97b3691e81473::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3ae5bc47eb9353a360f97b3691e81473::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3ae5bc47eb9353a360f97b3691e81473::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdebf13c4d057fe67d06acfa7ae9872b2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdebf13c4d057fe67d06acfa7ae9872b2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdebf13c4d057fe67d06acfa7ae9872b2::$classMap;
 
         }, null, ClassLoader::class);
     }

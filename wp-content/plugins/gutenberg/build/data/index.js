@@ -4140,7 +4140,6 @@ function useMappingSelect(suspense, mapSelect, deps) {
 
   // These are "pass-through" dependencies from the parent hook,
   // and the parent should catch any hook rule violations.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const selector = (0,external_wp_element_namespaceObject.useCallback)(mapSelect, deps);
   const {
     subscribe,

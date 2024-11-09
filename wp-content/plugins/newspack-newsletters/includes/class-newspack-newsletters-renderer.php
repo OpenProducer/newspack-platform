@@ -1269,11 +1269,8 @@ final class Newspack_Newsletters_Renderer {
 		 */
 		$body             = self::post_to_mjml_components( $post ); // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
 		$background_color = get_post_meta( $post->ID, 'background_color', true );
-		$preview_text     = get_post_meta( $post->ID, 'preview_text', true );
+		$preview_text     = self::get_preview_text( $post );
 		$custom_css       = get_post_meta( $post->ID, 'custom_css', true );
-		if ( ! $preview_text ) {
-			$preview_text = wp_trim_words( wp_strip_all_tags( $body ), 60 );
-		}
 		if ( ! $background_color ) {
 			$background_color = '#ffffff';
 		}
@@ -1281,6 +1278,33 @@ final class Newspack_Newsletters_Renderer {
 		ob_start();
 		include __DIR__ . '/email-template.mjml.php';
 		return ob_get_clean();
+	}
+
+	/**
+	 * Retrieve or build a preview text string.
+	 * Strip all HTML + merge tags, and truncate to 60 words.
+	 *
+	 * @param WP_Post $post The post.
+	 *
+	 * @return string The preview text.
+	 */
+	public static function get_preview_text( $post ) {
+		$preview_text = get_post_meta( $post->ID, 'preview_text', true );
+		if ( ! $preview_text ) {
+			$preview_text = wp_trim_words( wp_strip_all_tags( get_the_content( null, false, $post ) ), 60 );
+		}
+		return self::strip_all_merge_tags( $preview_text );
+	}
+
+	/**
+	 * Strip all Mailchimp merge tag strings from a string.
+	 *
+	 * @param string $string The string.
+	 *
+	 * @return string The string with all merge tags stripped.
+	 */
+	public static function strip_all_merge_tags( $string ) {
+		return preg_replace( '/\*\|[^|]+\|\*/', '', $string );
 	}
 
 	/**

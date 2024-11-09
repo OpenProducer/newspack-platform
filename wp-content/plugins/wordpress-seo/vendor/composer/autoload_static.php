@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984
+class ComposerStaticInit58519990b93f3f8bc8e541001395dbdb
 {
     public static $files = array (
         '81db02b30f563b92907e271b66bd7559' => __DIR__ . '/..' . '/yoast/whip/src/Facades/wordpress.php',
@@ -583,7 +583,6 @@ class ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984
         'Yoast\\WP\\SEO\\Conditionals\\Import_Tool_Selected_Conditional' => __DIR__ . '/../..' . '/src/conditionals/import-tool-selected-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional' => __DIR__ . '/../..' . '/src/conditionals/jetpack-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Migrations_Conditional' => __DIR__ . '/../..' . '/src/conditionals/migrations-conditional.php',
-        'Yoast\\WP\\SEO\\Conditionals\\New_Dashboard_Ui_Conditional' => __DIR__ . '/../..' . '/src/conditionals/new-dashboard-ui-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\New_Settings_Ui_Conditional' => __DIR__ . '/../..' . '/src/conditionals/new-settings-ui-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\News_Conditional' => __DIR__ . '/../..' . '/src/conditionals/news-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\No_Conditionals' => __DIR__ . '/../..' . '/src/conditionals/no-conditionals-trait.php',
@@ -667,7 +666,6 @@ class ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984
         'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Watcher_Actions' => __DIR__ . '/../..' . '/src/content-type-visibility/application/content-type-visibility-watcher-actions.php',
         'Yoast\\WP\\SEO\\Content_Type_Visibility\\User_Interface\\Content_Type_Visibility_Dismiss_New_Route' => __DIR__ . '/../..' . '/src/content-type-visibility/user-interface/content-type-visibility-dismiss-new-route.php',
         'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context' => __DIR__ . '/../..' . '/src/context/meta-tags-context.php',
-        'Yoast\\WP\\SEO\\Dashboard\\User_Interface\\New_Dashboard_Page_Integration' => __DIR__ . '/../..' . '/src/dashboard/user-interface/new-dashboard-page-integration.php',
         'Yoast\\WP\\SEO\\Editors\\Application\\Analysis_Features\\Enabled_Analysis_Features_Repository' => __DIR__ . '/../..' . '/src/editors/application/analysis-features/enabled-analysis-features-repository.php',
         'Yoast\\WP\\SEO\\Editors\\Application\\Integrations\\Integration_Information_Repository' => __DIR__ . '/../..' . '/src/editors/application/integrations/integration-information-repository.php',
         'Yoast\\WP\\SEO\\Editors\\Application\\Seo\\Post_Seo_Information_Repository' => __DIR__ . '/../..' . '/src/editors/application/seo/post-seo-information-repository.php',
@@ -735,6 +733,7 @@ class ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984
         'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Empty_Property_Exception' => __DIR__ . '/../..' . '/src/exceptions/oauth/tokens/empty-property-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Empty_Token_Exception' => __DIR__ . '/../..' . '/src/exceptions/oauth/tokens/empty-token-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Failed_Storage_Exception' => __DIR__ . '/../..' . '/src/exceptions/oauth/tokens/failed-storage-exception.php',
+        'Yoast\\WP\\SEO\\General\\User_Interface\\General_Page_Integration' => __DIR__ . '/../..' . '/src/general/user-interface/general-page-integration.php',
         'Yoast\\WP\\SEO\\Generated\\Cached_Container' => __DIR__ . '/../..' . '/src/generated/container.php',
         'Yoast\\WP\\SEO\\Generators\\Breadcrumbs_Generator' => __DIR__ . '/../..' . '/src/generators/breadcrumbs-generator.php',
         'Yoast\\WP\\SEO\\Generators\\Generator_Interface' => __DIR__ . '/../..' . '/src/generators/generator-interface.php',
@@ -1148,9 +1147,9 @@ class ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfd64d0df74bdd0f9f74f3e895222d984::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit58519990b93f3f8bc8e541001395dbdb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit58519990b93f3f8bc8e541001395dbdb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit58519990b93f3f8bc8e541001395dbdb::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -35,12 +35,21 @@ class Newspack_Blocks_Caching {
 	 * Add hooks and filters.
 	 */
 	public static function init() {
-		add_action( 'template_redirect', [ __CLASS__, 'check_all_blocks_cache_status' ] );
-		add_filter( 'pre_render_block', [ __CLASS__, 'maybe_serve_cached_block' ], 10, 2 );
-		add_filter( 'render_block', [ __CLASS__, 'maybe_cache_block' ], 9999, 2 );
+		add_action( 'init', [ __CLASS__, 'setup_block_caching' ] );
+	}
 
-		if ( ! defined( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME' ) ) {
-			define( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME', 300 );
+	/**
+	 * Initialize block caching if needed.
+	 */
+	public static function setup_block_caching() {
+		if ( ! is_user_logged_in() || ! current_user_can( 'edit_posts' ) ) {
+			add_action( 'template_redirect', [ __CLASS__, 'check_all_blocks_cache_status' ] );
+			add_filter( 'pre_render_block', [ __CLASS__, 'maybe_serve_cached_block' ], 10, 2 );
+			add_filter( 'render_block', [ __CLASS__, 'maybe_cache_block' ], 9999, 2 );
+
+			if ( ! defined( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME' ) ) {
+				define( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME', 120 ); // Two minutes.
+			}
 		}
 	}
 

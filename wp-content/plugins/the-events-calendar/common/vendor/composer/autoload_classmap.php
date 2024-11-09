@@ -54,6 +54,7 @@ return array(
     'TEC\\Common\\Integrations\\Traits\\Theme_Integration' => $baseDir . '/src/Common/Integrations/Traits/Theme_Integration.php',
     'TEC\\Common\\Libraries\\Installer\\Provider' => $baseDir . '/src/Common/Libraries/Installer/Provider.php',
     'TEC\\Common\\Libraries\\Provider' => $baseDir . '/src/Common/Libraries/Provider.php',
+    'TEC\\Common\\Libraries\\Uplink_Controller' => $baseDir . '/src/Common/Libraries/Uplink_Controller.php',
     'TEC\\Common\\Site_Health\\Factory' => $baseDir . '/src/Common/Site_Health/Factory.php',
     'TEC\\Common\\Site_Health\\Fields\\Generic_Info_Field' => $baseDir . '/src/Common/Site_Health/Fields/Generic_Info_Field.php',
     'TEC\\Common\\Site_Health\\Fields\\Post_Status_Count_Field' => $baseDir . '/src/Common/Site_Health/Fields/Post_Status_Count_Field.php',
