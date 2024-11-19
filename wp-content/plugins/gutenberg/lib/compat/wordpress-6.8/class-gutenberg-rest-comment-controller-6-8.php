@@ -10,6 +10,10 @@
 class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller {
 
 	public function create_item_permissions_check( $request ) {
+		if ( empty( $request['comment_type'] ) || 'comment' === $request['comment_type'] ) {
+			return parent::create_item_permissions_check( $request );
+		}
+
 		if ( ! is_user_logged_in() ) {
 			if ( get_option( 'comment_registration' ) ) {
 				return new WP_Error(
@@ -90,14 +94,6 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 			);
 		}
 
-		if ( 'draft' === $post->post_status && 'comment' === $request['comment_type'] ) {
-			return new WP_Error(
-				'rest_comment_draft_post',
-				__( 'Sorry, you are not allowed to create a comment on this post.' ),
-				array( 'status' => 403 )
-			);
-		}
-
 		if ( 'trash' === $post->post_status ) {
 			return new WP_Error(
 				'rest_comment_trash_post',
@@ -111,14 +107,6 @@ class Gutenberg_REST_Comment_Controller_6_8 extends WP_REST_Comments_Controller 
 				'rest_cannot_read_post',
 				__( 'Sorry, you are not allowed to read the post for this comment.' ),
 				array( 'status' => rest_authorization_required_code() )
-			);
-		}
-
-		if ( ! comments_open( $post->ID ) && 'comment' === $request['comment_type'] ) {
-			return new WP_Error(
-				'rest_comment_closed',
-				__( 'Sorry, comments are closed for this item.' ),
-				array( 'status' => 403 )
 			);
 		}
 

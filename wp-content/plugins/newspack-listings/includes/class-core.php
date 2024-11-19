@@ -95,6 +95,8 @@ final class Core {
 
 	/**
 	 * Add options page.
+	 *
+	 * Note: with Newspack Plugin active and Information Architecture UI (2024): this callback is replaced.
 	 */
 	public static function add_plugin_page() {
 		// Top-level menu item.
@@ -106,22 +108,6 @@ final class Core {
 			'',
 			'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtNS41IDcuNWgydjJoLTJ6bTIgNGgtMnYyaDJ6bTEtNGg3djJoLTd6bTcgNGgtN3YyaDd6Ii8+PHBhdGggY2xpcC1ydWxlPSJldmVub2RkIiBkPSJtNC42MjUgM2MtLjg5NyAwLTEuNjI1LjcyOC0xLjYyNSAxLjYyNXYxMS43NWMwIC44OTguNzI4IDEuNjI1IDEuNjI1IDEuNjI1aDExLjc1Yy44OTggMCAxLjYyNS0uNzI3IDEuNjI1LTEuNjI1di0xMS43NWMwLS44OTctLjcyNy0xLjYyNS0xLjYyNS0xLjYyNXptMTEuNzUgMS41aC0xMS43NWEuMTI1LjEyNSAwIDAgMCAtLjEyNS4xMjV2MTEuNzVjMCAuMDY5LjA1Ni4xMjUuMTI1LjEyNWgxMS43NWEuMTI1LjEyNSAwIDAgMCAuMTI1LS4xMjV2LTExLjc1YS4xMjUuMTI1IDAgMCAwIC0uMTI1LS4xMjV6IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48cGF0aCBkPSJtMjEuNzUgOGgtMS41djExYzAgLjY5LS41NiAxLjI1LTEuMjQ5IDEuMjVoLTEzLjAwMXYxLjVoMTMuMDAxYTIuNzQ5IDIuNzQ5IDAgMCAwIDIuNzQ5LTIuNzV6Ii8+PC9zdmc+Cg==',
 			35
-		);
-
-		// Custom taxonomy menu links.
-		add_submenu_page(
-			'newspack-listings',
-			__( 'Newspack Listings: Categories', 'newspack-listings' ),
-			__( 'Categories', 'newspack-listings' ),
-			'manage_categories',
-			'edit-tags.php?taxonomy=category'
-		);
-		add_submenu_page(
-			'newspack-listings',
-			__( 'Newspack Listings: Tags', 'newspack-listings' ),
-			__( 'Tags', 'newspack-listings' ),
-			'manage_categories',
-			'edit-tags.php?taxonomy=post_tag'
 		);
 
 		// Settings menu link.
@@ -192,25 +178,7 @@ final class Core {
 				'rewrite'  => [ 'slug' => $prefix . $settings['newspack_listings_event_slug'] ],
 				'template' => [ [ 'newspack-listings/event-dates' ] ],
 			],
-			'generic'     => [
-				'labels'  => [
-					'name'               => _x( 'Generic Listings', 'post type general name', 'newspack-listings' ),
-					'singular_name'      => _x( 'Generic Listing', 'post type singular name', 'newspack-listings' ),
-					'menu_name'          => _x( 'Generic Listings', 'admin menu', 'newspack-listings' ),
-					'name_admin_bar'     => _x( 'Generic Listing', 'add new on admin bar', 'newspack-listings' ),
-					'add_new'            => _x( 'Add New', 'popup', 'newspack-listings' ),
-					'add_new_item'       => __( 'Add New Generic Listing', 'newspack-listings' ),
-					'new_item'           => __( 'New Generic Listing', 'newspack-listings' ),
-					'edit_item'          => __( 'Edit Generic Listing', 'newspack-listings' ),
-					'view_item'          => __( 'View Generic Listing', 'newspack-listings' ),
-					'all_items'          => __( 'Generic Listings', 'newspack-listings' ),
-					'search_items'       => __( 'Search Generic Listings', 'newspack-listings' ),
-					'parent_item_colon'  => __( 'Parent Generic Listing:', 'newspack-listings' ),
-					'not_found'          => __( 'No generic listings found.', 'newspack-listings' ),
-					'not_found_in_trash' => __( 'No generic listings found in Trash.', 'newspack-listings' ),
-				],
-				'rewrite' => [ 'slug' => $prefix . $settings['newspack_listings_generic_slug'] ],
-			],
+			// Move Marketplace above Generic here so that admin submenu will show Marketplace above Generic.
 			'marketplace' => [
 				'labels'  => [
 					'name'               => _x( 'Marketplace', 'post type general name', 'newspack-listings' ),
@@ -229,6 +197,25 @@ final class Core {
 					'not_found_in_trash' => __( 'No Marketplace listings found in Trash.', 'newspack-listings' ),
 				],
 				'rewrite' => [ 'slug' => $prefix . $settings['newspack_listings_marketplace_slug'] ],
+			],
+			'generic'     => [
+				'labels'  => [
+					'name'               => _x( 'Generic Listings', 'post type general name', 'newspack-listings' ),
+					'singular_name'      => _x( 'Generic Listing', 'post type singular name', 'newspack-listings' ),
+					'menu_name'          => _x( 'Generic Listings', 'admin menu', 'newspack-listings' ),
+					'name_admin_bar'     => _x( 'Generic Listing', 'add new on admin bar', 'newspack-listings' ),
+					'add_new'            => _x( 'Add New', 'popup', 'newspack-listings' ),
+					'add_new_item'       => __( 'Add New Generic Listing', 'newspack-listings' ),
+					'new_item'           => __( 'New Generic Listing', 'newspack-listings' ),
+					'edit_item'          => __( 'Edit Generic Listing', 'newspack-listings' ),
+					'view_item'          => __( 'View Generic Listing', 'newspack-listings' ),
+					'all_items'          => __( 'Generic Listings', 'newspack-listings' ),
+					'search_items'       => __( 'Search Generic Listings', 'newspack-listings' ),
+					'parent_item_colon'  => __( 'Parent Generic Listing:', 'newspack-listings' ),
+					'not_found'          => __( 'No generic listings found.', 'newspack-listings' ),
+					'not_found_in_trash' => __( 'No generic listings found in Trash.', 'newspack-listings' ),
+				],
+				'rewrite' => [ 'slug' => $prefix . $settings['newspack_listings_generic_slug'] ],
 			],
 			'place'       => [
 				'labels'  => [

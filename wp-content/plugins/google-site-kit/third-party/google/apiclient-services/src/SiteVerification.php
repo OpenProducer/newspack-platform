@@ -38,6 +38,7 @@ class SiteVerification extends \Google\Site_Kit_Dependencies\Google\Service
     /** Manage your new site verifications with Google. */
     const SITEVERIFICATION_VERIFY_ONLY = "https://www.googleapis.com/auth/siteverification.verify_only";
     public $webResource;
+    public $rootUrlTemplate;
     /**
      * Constructs the internal representation of the SiteVerification service.
      *
@@ -49,6 +50,7 @@ class SiteVerification extends \Google\Site_Kit_Dependencies\Google\Service
     {
         parent::__construct($clientOrConfig);
         $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
+        $this->rootUrlTemplate = $rootUrl ?: 'https://www.UNIVERSE_DOMAIN/';
         $this->servicePath = 'siteVerification/v1/';
         $this->batchPath = 'batch/siteVerification/v1';
         $this->version = 'v1';

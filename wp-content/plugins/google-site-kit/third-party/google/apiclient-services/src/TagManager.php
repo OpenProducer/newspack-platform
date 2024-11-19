@@ -65,6 +65,7 @@ class TagManager extends \Google\Site_Kit_Dependencies\Google\Service
     public $accounts_containers_workspaces_variables;
     public $accounts_containers_workspaces_zones;
     public $accounts_user_permissions;
+    public $rootUrlTemplate;
     /**
      * Constructs the internal representation of the TagManager service.
      *
@@ -76,6 +77,7 @@ class TagManager extends \Google\Site_Kit_Dependencies\Google\Service
     {
         parent::__construct($clientOrConfig);
         $this->rootUrl = $rootUrl ?: 'https://tagmanager.googleapis.com/';
+        $this->rootUrlTemplate = $rootUrl ?: 'https://tagmanager.UNIVERSE_DOMAIN/';
         $this->servicePath = '';
         $this->batchPath = 'batch';
         $this->version = 'v2';

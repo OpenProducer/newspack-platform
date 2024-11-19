@@ -690,7 +690,7 @@ final class Newspack_Popups_Inserter {
 					}
 				}
 
-				$script_data['segments'] = self::$segments;
+				$script_data['segments'] = (object) self::$segments;
 			}
 
 			$donor_landing_page = Newspack_Popups_Settings::donor_landing_page();

@@ -1,4 +1,6 @@
 <?php
+declare( strict_types = 1 );
+
 namespace Automattic\WooCommerce\StoreApi;
 
 use Automattic\WooCommerce\StoreApi\Routes\V1\AbstractRoute;
@@ -66,7 +68,6 @@ class RoutesController {
 				Routes\V1\ProductsById::IDENTIFIER       => Routes\V1\ProductsById::class,
 				Routes\V1\ProductsBySlug::IDENTIFIER     => Routes\V1\ProductsBySlug::class,
 			],
-			// @todo Migrate internal AI routes to WooCommerce Core codebase.
 			'private' => [
 				Routes\V1\AI\Products::IDENTIFIER => Routes\V1\AI\Products::class,
 				Routes\V1\Patterns::IDENTIFIER    => Routes\V1\Patterns::class,

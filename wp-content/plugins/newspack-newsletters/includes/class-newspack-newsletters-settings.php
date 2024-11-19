@@ -328,7 +328,7 @@ class Newspack_Newsletters_Settings {
 								/>
 							</td>
 							<td class="name">
-								<label for="<?php echo esc_attr( $checkbox_id ); ?>"><?php echo esc_html( $list['name'] ); ?></strong>
+								<label for="<?php echo esc_attr( $checkbox_id ); ?>"><?php echo esc_html( $list['remote_name'] ); ?></strong>
 								<br/>
 								<small>
 									<?php echo esc_html( $list['type_label'] ); ?>

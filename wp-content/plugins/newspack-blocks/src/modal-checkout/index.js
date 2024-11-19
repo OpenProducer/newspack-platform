@@ -28,6 +28,7 @@ function domReady( callback ) {
 domReady( () => {
 	const continueButton = document.querySelector( '.modal-continue' );
 	if ( continueButton ) {
+		continueButton.removeAttribute( 'disabled' );
 		continueButton.addEventListener( 'click', () => {
 			const form = document.querySelector( 'form.checkout' );
 			form.submit();

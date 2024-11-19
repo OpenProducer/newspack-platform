@@ -1,3 +1,23 @@
+# [3.4.0](https://github.com/Automattic/newspack-newsletters/compare/v3.3.3...v3.4.0) (2024-11-11)
+
+
+### Bug Fixes
+
+* avoid double notice components ([#1703](https://github.com/Automattic/newspack-newsletters/issues/1703)) ([b8e9130](https://github.com/Automattic/newspack-newsletters/commit/b8e913013b035e824452566943a4576a304f7527))
+* avoid race condition between post-save sync & test ([#1679](https://github.com/Automattic/newspack-newsletters/issues/1679)) ([7bde119](https://github.com/Automattic/newspack-newsletters/commit/7bde1190aa83e09e7b411db25c38884bddb92506))
+* avoid Redux usage and related errors in non-newsletter email editors ([#1688](https://github.com/Automattic/newspack-newsletters/issues/1688)) ([d3f1f37](https://github.com/Automattic/newspack-newsletters/commit/d3f1f37a110d663cdd5fb31b8807f8e443eee3b5))
+* correct button stacking on sent newsletters ([#1695](https://github.com/Automattic/newspack-newsletters/issues/1695)) ([4e2688e](https://github.com/Automattic/newspack-newsletters/commit/4e2688e01600376d7c0e8dc397c7c9c9f748860d))
+* dont html encode ampersands in subject ([#1686](https://github.com/Automattic/newspack-newsletters/issues/1686)) ([f178b23](https://github.com/Automattic/newspack-newsletters/commit/f178b2355cd1198531972eee36939de70524eb93))
+* **mailchimp:** avoid duplicate audiences in Mailchimp UIs ([#1685](https://github.com/Automattic/newspack-newsletters/issues/1685)) ([44c1b12](https://github.com/Automattic/newspack-newsletters/commit/44c1b12d54773a0badbaf462175ed42185e70839))
+* move Preview, Send buttons to match Publish button location ([#1689](https://github.com/Automattic/newspack-newsletters/issues/1689)) ([72897f2](https://github.com/Automattic/newspack-newsletters/commit/72897f206058af5c63afdd7fd2ab9946a9a0b923))
+* preview & send buttons on WP 6.7 ([49450d3](https://github.com/Automattic/newspack-newsletters/commit/49450d32c206435a60e0fbab36f179d75ee2bf46))
+* remove behavior to hide post title in newsletter editor ([#1701](https://github.com/Automattic/newspack-newsletters/issues/1701)) ([8a15cf5](https://github.com/Automattic/newspack-newsletters/commit/8a15cf5393f6dcf6cbbe3a326d9e996610711649))
+
+
+### Features
+
+* display list remote name on settings page ([#1672](https://github.com/Automattic/newspack-newsletters/issues/1672)) ([562d396](https://github.com/Automattic/newspack-newsletters/commit/562d396ea5c5fef5683fe1e37bb2b26690ac4b75))
+
 ## [3.3.3](https://github.com/Automattic/newspack-newsletters/compare/v3.3.2...v3.3.3) (2024-11-07)
 
 
