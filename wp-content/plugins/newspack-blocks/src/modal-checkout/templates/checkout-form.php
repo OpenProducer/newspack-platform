@@ -101,7 +101,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 		<?php if ( $edit_billing ) : ?>
 			<div class="checkout-billing">
 				<?php do_action( 'woocommerce_checkout_billing' ); ?>
-				<button type="button" class="button alt wp-element-button modal-continue"><?php esc_html_e( 'Continue', 'newspack-blocks' ); ?></button>
+				<button type="button" class="button alt wp-element-button modal-continue" disabled><?php esc_html_e( 'Continue', 'newspack-blocks' ); ?></button>
 			</div>
 		<?php else : ?>
 			<div class="checkout-billing checkout-billing-summary">

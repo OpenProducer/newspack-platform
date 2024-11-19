@@ -107,6 +107,17 @@ class Utils {
 	}
 
 	/**
+	 * Clears the runtime cache.
+	 *
+	 * @since 1.4.1
+	 *
+	 * @return void
+	 */
+	public static function clear_runtime_cache() {
+		static::$bases = [];
+	}
+
+	/**
 	 * Get the runtime cache key.
 	 *
 	 * @since 1.2.3

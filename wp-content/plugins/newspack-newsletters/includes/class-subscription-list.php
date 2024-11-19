@@ -548,6 +548,7 @@ class Subscription_List {
 			'type_label'  => $this->get_type_label(),
 			'edit_link'   => $this->get_edit_link(),
 			'active'      => $this->is_active(),
+			'remote_name' => $this->get_remote_name(),
 		];
 	}
 }

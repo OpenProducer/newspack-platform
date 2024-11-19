@@ -618,14 +618,15 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 * @return array|WP_Error List of subscription lists or error.
 	 */
 	public function get_lists( $audiences_only = false ) {
-		$lists = Newspack_Newsletters_Mailchimp_Cached_Data::get_lists();
-		if ( $audiences_only || is_wp_error( $lists ) ) {
-			return $lists;
+		$audiences = Newspack_Newsletters_Mailchimp_Cached_Data::get_lists();
+		if ( $audiences_only || is_wp_error( $audiences ) ) {
+			return $audiences;
 		}
+		$lists = [];
 
 		// In addition to Audiences, we also automatically fetch all groups and tags and offer them as Subscription Lists.
 		// Build the final list inside the loop so groups are added after the list they belong to and we can then represent the hierarchy in the UI.
-		foreach ( $lists as $list ) {
+		foreach ( $audiences as $list ) {
 
 			$lists[]        = $list;
 			$all_categories = Newspack_Newsletters_Mailchimp_Cached_Data::get_interest_categories( $list['id'] );
@@ -958,18 +959,6 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			);
 		}
 		try {
-
-			$sync_result = $this->sync( get_post( $post_id ) );
-			if ( ! $sync_result ) {
-				return new WP_Error(
-					'newspack_newsletters_mailchimp_error',
-					__( 'Unable to synchronize with Mailchimp.', 'newspack-newsletters' )
-				);
-			}
-			if ( is_wp_error( $sync_result ) ) {
-				return $sync_result;
-			}
-
 			$mc      = new Mailchimp( $this->api_key() );
 			$payload = [
 				'test_emails' => $emails,
@@ -1015,7 +1004,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			'type'         => 'regular',
 			'content_type' => 'template',
 			'settings'     => [
-				'subject_line' => $post->post_title,
+				'subject_line' => html_entity_decode( $post->post_title ),
 				'title'        => $this->get_campaign_name( $post ),
 			],
 		];

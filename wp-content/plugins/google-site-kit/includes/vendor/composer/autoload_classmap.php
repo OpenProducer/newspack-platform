@@ -307,6 +307,7 @@ return array(
     'Google\\Site_Kit\\Modules\\Search_Console\\Settings' => $baseDir . '/Modules/Search_Console/Settings.php',
     'Google\\Site_Kit\\Modules\\Sign_In_With_Google' => $baseDir . '/Modules/Sign_In_With_Google.php',
     'Google\\Site_Kit\\Modules\\Sign_In_With_Google\\Settings' => $baseDir . '/Modules/Sign_In_With_Google/Settings.php',
+    'Google\\Site_Kit\\Modules\\Sign_In_With_Google\\Tag_Matchers' => $baseDir . '/Modules/Sign_In_With_Google/Tag_Matchers.php',
     'Google\\Site_Kit\\Modules\\Site_Verification' => $baseDir . '/Modules/Site_Verification.php',
     'Google\\Site_Kit\\Modules\\Tag_Manager' => $baseDir . '/Modules/Tag_Manager.php',
     'Google\\Site_Kit\\Modules\\Tag_Manager\\AMP_Tag' => $baseDir . '/Modules/Tag_Manager/AMP_Tag.php',

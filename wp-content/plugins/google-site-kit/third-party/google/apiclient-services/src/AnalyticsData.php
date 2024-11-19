@@ -45,6 +45,7 @@ class AnalyticsData extends \Google\Site_Kit_Dependencies\Google\Service
     const ANALYTICS_READONLY = "https://www.googleapis.com/auth/analytics.readonly";
     public $properties;
     public $properties_audienceExports;
+    public $rootUrlTemplate;
     /**
      * Constructs the internal representation of the AnalyticsData service.
      *
@@ -56,6 +57,7 @@ class AnalyticsData extends \Google\Site_Kit_Dependencies\Google\Service
     {
         parent::__construct($clientOrConfig);
         $this->rootUrl = $rootUrl ?: 'https://analyticsdata.googleapis.com/';
+        $this->rootUrlTemplate = $rootUrl ?: 'https://analyticsdata.UNIVERSE_DOMAIN/';
         $this->servicePath = '';
         $this->batchPath = 'batch';
         $this->version = 'v1beta';

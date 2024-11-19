@@ -1050,7 +1050,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 				'p[' . $send_list_id . ']' => 1,
 				'fromemail'                => $from_email,
 				'fromname'                 => $from_name,
-				'subject'                  => $post->post_title,
+				'subject'                  => html_entity_decode( $post->post_title ),
 			],
 			$message_data
 		);

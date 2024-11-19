@@ -27,6 +27,8 @@ class ComposerStaticInitaf65b88dc513654448dc0c9e151257f0
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TEC\\Events\\Admin\\Help_Hub\\Provider' => __DIR__ . '/../..' . '/src/Events/Admin/Help_Hub/Provider.php',
+        'TEC\\Events\\Admin\\Help_Hub\\TEC_Hub_Resource_Data' => __DIR__ . '/../..' . '/src/Events/Admin/Help_Hub/TEC_Hub_Resource_Data.php',
         'TEC\\Events\\Admin\\Notice\\Provider' => __DIR__ . '/../..' . '/src/Events/Admin/Notice/Provider.php',
         'TEC\\Events\\Admin\\Notice\\Rest_Api' => __DIR__ . '/../..' . '/src/Events/Admin/Notice/Rest_Api.php',
         'TEC\\Events\\Admin\\Settings\\Community_Upsell' => __DIR__ . '/../..' . '/src/Events/Admin/Settings/Community_Upsell.php',

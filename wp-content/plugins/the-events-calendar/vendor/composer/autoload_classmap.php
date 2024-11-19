@@ -7,6 +7,8 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'TEC\\Events\\Admin\\Help_Hub\\Provider' => $baseDir . '/src/Events/Admin/Help_Hub/Provider.php',
+    'TEC\\Events\\Admin\\Help_Hub\\TEC_Hub_Resource_Data' => $baseDir . '/src/Events/Admin/Help_Hub/TEC_Hub_Resource_Data.php',
     'TEC\\Events\\Admin\\Notice\\Provider' => $baseDir . '/src/Events/Admin/Notice/Provider.php',
     'TEC\\Events\\Admin\\Notice\\Rest_Api' => $baseDir . '/src/Events/Admin/Notice/Rest_Api.php',
     'TEC\\Events\\Admin\\Settings\\Community_Upsell' => $baseDir . '/src/Events/Admin/Settings/Community_Upsell.php',

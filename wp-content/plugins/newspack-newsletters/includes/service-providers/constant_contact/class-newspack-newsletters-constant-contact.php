@@ -655,7 +655,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 			$activity = [
 				'format_type'      => 5,
 				'email_content'    => $content,
-				'subject'          => $post->post_title,
+				'subject'          => html_entity_decode( $post->post_title ),
 				'contact_list_ids' => $campaign->activity->contact_list_ids,
 				'from_name'        => $from_name,
 				'from_email'       => $reply_to,

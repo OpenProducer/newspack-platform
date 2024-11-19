@@ -18305,6 +18305,15 @@ const isSameTermName = (termA, termB) => unescapeString(termA).toLowerCase() ===
 const termNamesToIds = (names, terms) => {
   return names.map(termName => terms.find(term => isSameTermName(term.name, termName))?.id).filter(id => id !== undefined);
 };
+const Wrapper = ({
+  children,
+  __nextHasNoMarginBottom
+}) => __nextHasNoMarginBottom ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalVStack, {
+  spacing: 4,
+  children: children
+}) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.Fragment, {
+  children: children
+});
 
 /**
  * Renders a flat term selector component.
@@ -18478,15 +18487,8 @@ function FlatTermSelector({
   (0,external_wp_i18n_namespaceObject._x)('%s removed', 'term'), singularName);
   const removeTermLabel = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: term name. */
   (0,external_wp_i18n_namespaceObject._x)('Remove %s', 'term'), singularName);
-  const Wrapper = ({
-    children
-  }) => __nextHasNoMarginBottom ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalVStack, {
-    spacing: 4,
-    children: children
-  }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.Fragment, {
-    children: children
-  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Wrapper, {
+    __nextHasNoMarginBottom: __nextHasNoMarginBottom,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FormTokenField, {
       __next40pxDefaultSize: true,
       value: values,

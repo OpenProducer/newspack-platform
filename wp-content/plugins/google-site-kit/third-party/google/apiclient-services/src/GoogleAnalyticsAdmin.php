@@ -54,6 +54,7 @@ class GoogleAnalyticsAdmin extends \Google\Site_Kit_Dependencies\Google\Service
     public $properties_firebaseLinks;
     public $properties_googleAdsLinks;
     public $properties_keyEvents;
+    public $rootUrlTemplate;
     /**
      * Constructs the internal representation of the GoogleAnalyticsAdmin service.
      *
@@ -65,6 +66,7 @@ class GoogleAnalyticsAdmin extends \Google\Site_Kit_Dependencies\Google\Service
     {
         parent::__construct($clientOrConfig);
         $this->rootUrl = $rootUrl ?: 'https://analyticsadmin.googleapis.com/';
+        $this->rootUrlTemplate = $rootUrl ?: 'https://analyticsadmin.UNIVERSE_DOMAIN/';
         $this->servicePath = '';
         $this->batchPath = 'batch';
         $this->version = 'v1beta';

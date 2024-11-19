@@ -22,7 +22,7 @@ final class WP_Service_Worker_Admin_Assets_Integration extends WP_Service_Worker
 	 */
 	public function register( WP_Service_Worker_Scripts $scripts ) {
 		if ( ! function_exists( 'list_files' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/file.php';
+			require_once ABSPATH . 'wp-admin/includes/file.php'; // @phpstan-ignore requireOnce.fileNotFound
 		}
 
 		$admin_dir    = ABSPATH . 'wp-admin/';

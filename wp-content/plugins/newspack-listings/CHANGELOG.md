@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/Automattic/newspack-listings/compare/v3.1.0...v3.2.0) (2024-11-11)
+
+
+### Features
+
+* **ia-epic:** Adjustments to Menu for Information Architecture UI ([#487](https://github.com/Automattic/newspack-listings/issues/487)) ([22b70d4](https://github.com/Automattic/newspack-listings/commit/22b70d479439b0390d835dca948b88492599d5f3))
+
 # [3.1.0](https://github.com/Automattic/newspack-listings/compare/v3.0.0...v3.1.0) (2024-10-28)
 
 

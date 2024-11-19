@@ -490,8 +490,8 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 		}
 
 		$args = [
-			'Subject'   => get_the_title( $post_id ),
-			'Name'      => get_the_title( $post_id ) . ' ' . gmdate( 'h:i:s A' ), // Name must be unique.
+			'Subject'   => html_entity_decode( get_the_title( $post_id ) ),
+			'Name'      => html_entity_decode( get_the_title( $post_id ) ) . ' ' . gmdate( 'h:i:s A' ), // Name must be unique.
 			'FromName'  => get_post_meta( $post_id, 'senderName', true ),
 			'FromEmail' => get_post_meta( $post_id, 'senderEmail', true ),
 			'ReplyTo'   => get_post_meta( $post_id, 'senderEmail', true ),
