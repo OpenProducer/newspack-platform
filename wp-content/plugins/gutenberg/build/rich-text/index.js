@@ -896,7 +896,18 @@ function toTree({
         innerHTML
       } = replacement;
       const formatType = get_format_type_getFormatType(type);
-      if (!isEditableTree && type === 'script') {
+      if (isEditableTree && type === '#comment') {
+        pointer = append(getParent(pointer), {
+          type: 'span',
+          attributes: {
+            contenteditable: 'false',
+            'data-rich-text-comment': attributes['data-rich-text-comment']
+          }
+        });
+        append(append(pointer, {
+          type: 'span'
+        }), attributes['data-rich-text-comment'].trim());
+      } else if (!isEditableTree && type === 'script') {
         pointer = append(getParent(pointer), fromFormat({
           type: 'script',
           isEditableTree
@@ -1061,6 +1072,14 @@ function createElementHTML({
   object,
   children
 }) {
+  if (type === '#comment') {
+    // We can't restore the original comment delimiters, because once parsed
+    // into DOM nodes, we don't have the information. But in the future we
+    // could allow comment handlers to specify custom delimiters, for
+    // example `</{comment-content}>` for Bits, where `comment-content`
+    // would be `/{bit-name}` or `__{translatable-string}` (TBD).
+    return `<!--${attributes['data-rich-text-comment']}-->`;
+  }
   let attributeString = '';
   for (const key in attributes) {
     if (!(0,external_wp_escapeHtml_namespaceObject.isValidAttributeName)(key)) {
@@ -1554,6 +1573,21 @@ function createFromElement({
       accumulator.formats.length += text.length;
       accumulator.replacements.length += text.length;
       accumulator.text += text;
+      continue;
+    }
+    if (node.nodeType === node.COMMENT_NODE || node.nodeType === node.ELEMENT_NODE && node.tagName === 'SPAN' && node.hasAttribute('data-rich-text-comment')) {
+      const value = {
+        formats: [,],
+        replacements: [{
+          type: '#comment',
+          attributes: {
+            'data-rich-text-comment': node.nodeType === node.COMMENT_NODE ? node.nodeValue : node.getAttribute('data-rich-text-comment')
+          }
+        }],
+        text: OBJECT_REPLACEMENT_CHARACTER
+      };
+      accumulateSelection(accumulator, node, range, value);
+      mergePair(accumulator, value);
       continue;
     }
     if (node.nodeType !== node.ELEMENT_NODE) {
@@ -2380,9 +2414,13 @@ function to_dom_append(element, child) {
     attributes
   } = child;
   if (type) {
-    child = element.ownerDocument.createElement(type);
-    for (const key in attributes) {
-      child.setAttribute(key, attributes[key]);
+    if (type === '#comment') {
+      child = element.ownerDocument.createComment(attributes['data-rich-text-comment']);
+    } else {
+      child = element.ownerDocument.createElement(type);
+      for (const key in attributes) {
+        child.setAttribute(key, attributes[key]);
+      }
     }
   }
   return element.appendChild(child);
@@ -3629,6 +3667,52 @@ function fixPlaceholderSelection(defaultView) {
   };
 });
 
+;// ./packages/rich-text/build-module/component/event-listeners/prevent-focus-capture.js
+/**
+ * Prevents focus from being captured by the element when clicking _outside_
+ * around the element. This may happen when the parent element is flex.
+ * @see https://github.com/WordPress/gutenberg/pull/65857
+ * @see https://github.com/WordPress/gutenberg/pull/66402
+ */
+function preventFocusCapture() {
+  return element => {
+    const {
+      ownerDocument
+    } = element;
+    const {
+      defaultView
+    } = ownerDocument;
+    let value = null;
+    function onPointerDown(event) {
+      // Abort if the event is default prevented, we will not get a pointer up event.
+      if (event.defaultPrevented) {
+        return;
+      }
+      if (event.target === element) {
+        return;
+      }
+      if (!event.target.contains(element)) {
+        return;
+      }
+      value = element.getAttribute('contenteditable');
+      element.setAttribute('contenteditable', 'false');
+      defaultView.getSelection().removeAllRanges();
+    }
+    function onPointerUp() {
+      if (value !== null) {
+        element.setAttribute('contenteditable', value);
+        value = null;
+      }
+    }
+    defaultView.addEventListener('pointerdown', onPointerDown);
+    defaultView.addEventListener('pointerup', onPointerUp);
+    return () => {
+      defaultView.removeEventListener('pointerdown', onPointerDown);
+      defaultView.removeEventListener('pointerup', onPointerUp);
+    };
+  };
+}
+
 ;// ./packages/rich-text/build-module/component/event-listeners/index.js
 /**
  * WordPress dependencies
@@ -3645,7 +3729,8 @@ function fixPlaceholderSelection(defaultView) {
 
 
 
-const allEventListeners = [copy_handler, select_object, format_boundaries, event_listeners_delete, input_and_selection, selection_change_compat];
+
+const allEventListeners = [copy_handler, select_object, format_boundaries, event_listeners_delete, input_and_selection, selection_change_compat, preventFocusCapture];
 function useEventListeners(props) {
   const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
   (0,external_wp_element_namespaceObject.useInsertionEffect)(() => {

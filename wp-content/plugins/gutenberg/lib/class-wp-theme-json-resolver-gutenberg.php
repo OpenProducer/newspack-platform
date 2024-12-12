@@ -316,7 +316,7 @@ class WP_Theme_JSON_Resolver_Gutenberg {
 		 * So we take theme supports, transform it to theme.json shape
 		 * and merge the static::$theme upon that.
 		 */
-		$theme_support_data = WP_Theme_JSON_Gutenberg::get_from_editor_settings( gutenberg_get_classic_theme_supports_block_editor_settings() );
+		$theme_support_data = WP_Theme_JSON_Gutenberg::get_from_editor_settings( get_classic_theme_supports_block_editor_settings() );
 		if ( ! wp_theme_has_theme_json() ) {
 			/*
 			 * Unlike block themes, classic themes without a theme.json disable
@@ -920,18 +920,14 @@ class WP_Theme_JSON_Resolver_Gutenberg {
 			return $theme_json;
 		}
 
-		$resolved_theme_json_data = array(
-			'version' => WP_Theme_JSON_Gutenberg::LATEST_SCHEMA,
-		);
+		$resolved_theme_json_data = $theme_json->get_raw_data();
 
 		foreach ( $resolved_urls as $resolved_url ) {
 			$path = explode( '.', $resolved_url['target'] );
 			_wp_array_set( $resolved_theme_json_data, $path, $resolved_url['href'] );
 		}
 
-		$theme_json->merge( new WP_Theme_JSON_Gutenberg( $resolved_theme_json_data ) );
-
-		return $theme_json;
+		return new WP_Theme_JSON_Gutenberg( $resolved_theme_json_data );
 	}
 
 	/**

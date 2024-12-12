@@ -15,6 +15,7 @@ if ( version_compare( $GLOBALS['wp_version'], '4.7', '<' ) ) {
 	return;
 }
 
+
 if ( ! function_exists( 'newspack_is_amp' ) ) {
 	/**
 	 * Determine whether it is an AMP response.
@@ -1357,3 +1358,10 @@ if ( class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) 
  * Woo Templates cache handling
  */
 require get_template_directory() . '/woocommerce/templates.php';
+
+/**
+ * Yoast customizations
+ */
+if ( class_exists( 'WPSEO_Options' ) ) {
+	require get_template_directory() . '/inc/yoast.php';
+}

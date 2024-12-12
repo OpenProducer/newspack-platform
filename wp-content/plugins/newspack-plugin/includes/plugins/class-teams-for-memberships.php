@@ -22,6 +22,7 @@ class Teams_For_Memberships {
 	public static function init() {
 		add_filter( 'newspack_ras_metadata_keys', [ __CLASS__, 'add_teams_metadata_keys' ] );
 		add_filter( 'newspack_esp_sync_contact', [ __CLASS__, 'handle_esp_sync_contact' ] );
+		add_filter( 'newspack_my_account_disabled_pages', [ __CLASS__, 'enable_members_area_for_team_members' ] );
 	}
 
 	/**
@@ -100,6 +101,26 @@ class Teams_For_Memberships {
 		}
 
 		return $contact;
+	}
+
+	/**
+	 * Enable Members Area for team members only. Team owners/managers get access to the "Teams" menu instead.
+	 *
+	 * @param array $disabled_wc_menu_items Disabled WooCommerce menu items.
+	 *
+	 * @return array Updated disabled WooCommerce menu items.
+	 */
+	public static function enable_members_area_for_team_members( $disabled_wc_menu_items ) {
+		if ( ! function_exists( 'wc_memberships_for_teams_get_teams' ) ) {
+			return $disabled_wc_menu_items;
+		}
+		if (
+			in_array( 'members-area', $disabled_wc_menu_items, true ) &&
+			! empty( \wc_memberships_for_teams_get_teams( \get_current_user_id(), [ 'role' => 'member' ] ) )
+		) {
+			$disabled_wc_menu_items = array_values( array_diff( $disabled_wc_menu_items, [ 'members-area' ] ) );
+		}
+		return $disabled_wc_menu_items;
 	}
 }
 

@@ -35,4 +35,12 @@
 	mark {
 		background-color: transparent;
 	}
+
+	&--selected {
+		&-other {
+			.wp-block-newspack-blocks-donate__frequency-label {
+				display: none;
+			}
+		}
+	}
 }

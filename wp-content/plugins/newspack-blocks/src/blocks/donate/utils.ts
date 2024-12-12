@@ -51,6 +51,22 @@ export const getMigratedAmount = (
 };
 
 export const getFrequencyLabel = (
+	frequencySlug: DonationFrequencySlug,
+	hideOnceLabel = false
+) => {
+	// eslint-disable-next-line no-nested-ternary
+	return frequencySlug === 'once'
+		? hideOnceLabel
+			? ''
+			: __( ' once', 'newspack-blocks' )
+		: sprintf(
+			// Translators: %s is the frequency (e.g. per month, per year).
+			_x( ' per %s', 'per `Frequency`', 'newspack-blocks' ),
+			frequencySlug
+		);
+}
+
+export const getFrequencyLabelWithAmount = (
 	amount: number,
 	frequencySlug: DonationFrequencySlug,
 	hideOnceLabel = false
@@ -88,17 +104,7 @@ export const getFrequencyLabel = (
 
 	const formattedAmount = ( amount || 0 ).toFixed( 2 ).replace( /\.?0*$/, '' );
 
-	const frequency =
-		// eslint-disable-next-line no-nested-ternary
-		frequencySlug === 'once'
-			? hideOnceLabel
-				? ''
-				: __( ' once', 'newspack-blocks' )
-			: sprintf(
-				// Translators: %s is the frequency (e.g. per month, per year).
-				_x( ' per %s', 'per `Frequency`', 'newspack-blocks' ),
-				frequencySlug
-			);
+	const frequency = getFrequencyLabel(frequencySlug, hideOnceLabel)
 
 	return template
 		.replace( 'AMOUNT_PLACEHOLDER', formattedAmount )

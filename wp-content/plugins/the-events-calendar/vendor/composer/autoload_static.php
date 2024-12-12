@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitaf65b88dc513654448dc0c9e151257f0
+class ComposerStaticInit9341b32032f5c2c14ff1f117a6964efc
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -213,6 +213,8 @@ class ComposerStaticInitaf65b88dc513654448dc0c9e151257f0
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Provider.php',
         'TEC\\Events\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Provider.php',
         'TEC\\Events\\Legacy\\Views\\V1\\Provider' => __DIR__ . '/../..' . '/src/Events/Legacy/Views/V1/Provider.php',
+        'TEC\\Events\\Notifications\\Notifications' => __DIR__ . '/../..' . '/src/Events/Notifications/Notifications.php',
+        'TEC\\Events\\Notifications\\Provider' => __DIR__ . '/../..' . '/src/Events/Notifications/Provider.php',
         'TEC\\Events\\SEO\\Controller' => __DIR__ . '/../..' . '/src/Events/SEO/Controller.php',
         'TEC\\Events\\Site_Health\\Info_Section' => __DIR__ . '/../..' . '/src/Events/Site_Health/Info_Section.php',
         'TEC\\Events\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Events/Site_Health/Provider.php',
@@ -355,9 +357,9 @@ class ComposerStaticInitaf65b88dc513654448dc0c9e151257f0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitaf65b88dc513654448dc0c9e151257f0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitaf65b88dc513654448dc0c9e151257f0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitaf65b88dc513654448dc0c9e151257f0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9341b32032f5c2c14ff1f117a6964efc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9341b32032f5c2c14ff1f117a6964efc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9341b32032f5c2c14ff1f117a6964efc::$classMap;
 
         }, null, ClassLoader::class);
     }

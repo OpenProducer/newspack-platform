@@ -605,8 +605,8 @@ class Setup_Wizard extends Wizard {
 			if ( isset( $request['reader-revenue']['donation_data'] ) ) {
 				$rr_wizard->update_donation_settings( $request['reader-revenue']['donation_data'] );
 			}
-			if ( isset( $request['reader-revenue']['stripe_data'] ) ) {
-				$stripe_settings            = $request['reader-revenue']['stripe_data'];
+			if ( ! empty( $request['reader-revenue']['payment_gateways']['stripe'] ) ) {
+				$stripe_settings            = $request['reader-revenue']['payment_gateways']['stripe'];
 				$stripe_settings['enabled'] = true;
 				$rr_wizard->update_stripe_settings( $stripe_settings );
 			}

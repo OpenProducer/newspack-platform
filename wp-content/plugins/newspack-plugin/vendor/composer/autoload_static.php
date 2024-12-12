@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc369974a4cd43e0e153b57b5e37442a7
+class ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -144,6 +144,7 @@ class ComposerStaticInitc369974a4cd43e0e153b57b5e37442a7
         'Newspack\\Media_Partners' => __DIR__ . '/../..' . '/includes/optional-modules/class-media-partners.php',
         'Newspack\\Memberships' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-memberships.php',
         'Newspack\\Memberships\\Block_Patterns' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-block-patterns.php',
+        'Newspack\\Memberships\\Import_Export' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-import-export.php',
         'Newspack\\Memberships\\Metering' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-metering.php',
         'Newspack\\Meta_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-meta-pixel.php',
         'Newspack\\NRH' => __DIR__ . '/../..' . '/includes/class-nrh.php',
@@ -154,11 +155,14 @@ class ComposerStaticInitc369974a4cd43e0e153b57b5e37442a7
         'Newspack\\Newspack_Newsletters_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-newspack-newsletters-configuration-manager.php',
         'Newspack\\Newspack_Popups_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-newspack-popups-configuration-manager.php',
         'Newspack\\Newspack_Theme_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-newspack-theme-configuration-manager.php',
+        'Newspack\\Newspack_UI' => __DIR__ . '/../..' . '/includes/class-newspack-ui.php',
+        'Newspack\\Newspack_UI_Icons' => __DIR__ . '/../..' . '/includes/class-newspack-ui-icons.php',
         'Newspack\\OAuth' => __DIR__ . '/../..' . '/includes/oauth/class-oauth.php',
         'Newspack\\OAuth_Transients' => __DIR__ . '/../..' . '/includes/oauth/class-oauth-transients.php',
+        'Newspack\\On_Hold_Duration' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-on-hold-duration.php',
         'Newspack\\OneSignal' => __DIR__ . '/../..' . '/includes/plugins/class-onesignal.php',
         'Newspack\\Organic_Profile_Block' => __DIR__ . '/../..' . '/includes/plugins/class-organic-profile-block.php',
-        'Newspack\\PWA' => __DIR__ . '/../..' . '/includes/class-pwa.php',
+        'Newspack\\PWA' => __DIR__ . '/../..' . '/includes/plugins/class-pwa.php',
         'Newspack\\Parsely_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-parsely-configuration-manager.php',
         'Newspack\\Patches' => __DIR__ . '/../..' . '/includes/class-patches.php',
         'Newspack\\Perfmatters' => __DIR__ . '/../..' . '/includes/plugins/class-perfmatters.php',
@@ -194,6 +198,7 @@ class ComposerStaticInitc369974a4cd43e0e153b57b5e37442a7
         'Newspack\\Starter_Content_Provider' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-provider.php',
         'Newspack\\Starter_Content_WordPress' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-wordpress.php',
         'Newspack\\Stripe_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-connection.php',
+        'Newspack\\Sync_Reader_Data_CLI' => __DIR__ . '/../..' . '/includes/reader-activation/cli/class-sync-reader-data-cli.php',
         'Newspack\\Syndication_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-syndication-wizard.php',
         'Newspack\\Teams_For_Memberships' => __DIR__ . '/../..' . '/includes/plugins/class-teams-for-memberships.php',
         'Newspack\\Theme_Manager' => __DIR__ . '/../..' . '/includes/class-theme-manager.php',
@@ -208,15 +213,16 @@ class ComposerStaticInitc369974a4cd43e0e153b57b5e37442a7
         'Newspack\\WooCommerce_My_Account' => __DIR__ . '/../..' . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
         'Newspack\\WooCommerce_Order_UTM' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-order-utm.php',
         'Newspack\\WooCommerce_Products' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-products.php',
+        'Newspack\\WooCommerce_Subscriptions' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php',
         'Newspack\\WordPress_SEO_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc369974a4cd43e0e153b57b5e37442a7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc369974a4cd43e0e153b57b5e37442a7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc369974a4cd43e0e153b57b5e37442a7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -92,6 +92,29 @@ export default ( parentEl: HTMLElement ) => {
 	tierSelectionButtonsEls.forEach( buttonEl => {
 		buttonEl.addEventListener( 'click', () => {
 			const tierIndex = parseInt( buttonEl.getAttribute( 'data-tier-index' ) || '' );
+
+			// Remove hidden index and value inputs from tiers form.
+			const hiddenIndexInputEl = initFormEl.querySelector( 'input[name="donation_tier_index"]' );
+			const hiddenValueInputEl = initFormEl.querySelector( `input[name="donation_value_${ selectedFrequency }"]` );
+			if ( hiddenIndexInputEl ) {
+				hiddenIndexInputEl.remove();
+			}
+			if ( hiddenValueInputEl ) {
+				hiddenValueInputEl.remove();
+			}
+
+			// Append hidden index input to tiers form.
+			const indexInputEl = document.createElement( 'input' );
+			const valueInputEl = document.createElement( 'input' );
+			indexInputEl.setAttribute( 'type', 'hidden' );
+			valueInputEl.setAttribute( 'type', 'hidden' );
+			indexInputEl.setAttribute( 'name', 'donation_tier_index' );
+			valueInputEl.setAttribute( 'name', `donation_value_${ selectedFrequency }` );
+			indexInputEl.setAttribute( 'value', tierIndex.toString() );
+			valueInputEl.setAttribute( 'value', config.amounts[ selectedFrequency ][ tierIndex ] );
+			initFormEl.appendChild( indexInputEl );
+			initFormEl.appendChild( valueInputEl );
+
 			const tierHeadingEl: HTMLElement | null = parentEl.querySelector(
 				'.wpbnbd__tiers__tier-tile h2'
 			);

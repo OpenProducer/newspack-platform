@@ -235,3 +235,11 @@
 		}
 	}
 }
+
+.wp-block-newspack-blocks-donate {
+	&__frequency-label {
+		display: flex;
+		align-items: center;
+		padding-left: 8px;
+	}
+}

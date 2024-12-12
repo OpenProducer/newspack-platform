@@ -253,6 +253,46 @@ Data_Events::register_listener(
 );
 
 /**
+ * For when a donation subscription is switched (recurrence/amount change).
+ */
+Data_Events::register_listener(
+	'woocommerce_subscriptions_switch_completed',
+	'donation_subscription_changed',
+	function( $order ) {
+
+		if ( ! function_exists( 'wcs_get_objects_property' ) ) {
+			return;
+		}
+
+		$switch_order_data = wcs_get_objects_property( $order, 'subscription_switch_data' );
+
+		if ( empty( $switch_order_data ) || ! is_array( $switch_order_data ) ) {
+			return;
+		}
+
+		$subscription_id = array_key_first( $switch_order_data );
+
+		$subscription = wcs_get_subscription( $subscription_id );
+
+		if ( ! $subscription instanceof \WC_Subscription ) {
+			return;
+		}
+
+		$data = \Newspack\Data_Events\Utils::get_recurring_donation_data( $subscription );
+		if ( ! is_array( $data ) ) {
+			return;
+		}
+		return array_merge(
+			$data,
+			[
+				'status_before' => $subscription->get_status(),
+				'status_after'  => $subscription->get_status(),
+			]
+		);
+	}
+);
+
+/**
  * When a non-donation subscription status changes.
  * The subscription will be removed from the user's list of active subscriptions.
  */
@@ -284,6 +324,78 @@ Data_Events::register_listener(
 			'recurrence'      => $subscription->get_billing_period(),
 			'status_before'   => $status_from,
 			'status_after'    => $status_to,
+		];
+	}
+);
+
+/**
+ * When a subscription of any type renews.
+ */
+Data_Events::register_listener(
+	'wcs_renewal_order_created',
+	'subscription_renewal_attempt',
+	function( $renewal_order, $subscription ) {
+		return [
+			'user_id'         => $subscription->get_customer_id(),
+			'email'           => $subscription->get_billing_email(),
+			'order_id'        => $renewal_order->get_id(),
+			'subscription_id' => $subscription->get_id(),
+			'amount'          => (float) $subscription->get_total(),
+			'currency'        => $subscription->get_currency(),
+			'recurrence'      => $subscription->get_billing_period(),
+		];
+	}
+);
+
+/**
+ * For when a non-donation subscription is switched (recurrence/amount change).
+ */
+Data_Events::register_listener(
+	'woocommerce_subscriptions_switch_completed',
+	'product_subscription_changed',
+	function( $order ) {
+
+		if ( ! function_exists( 'wcs_get_objects_property' ) ) {
+			return;
+		}
+
+		$switch_order_data = wcs_get_objects_property( $order, 'subscription_switch_data' );
+
+		if ( empty( $switch_order_data ) || ! is_array( $switch_order_data ) ) {
+			return;
+		}
+
+		$subscription_id = array_key_first( $switch_order_data );
+
+		$subscription = wcs_get_subscription( $subscription_id );
+
+		if ( ! $subscription instanceof \WC_Subscription ) {
+			return;
+		}
+
+		$product_ids = array_values(
+			array_filter(
+				\Newspack\WooCommerce_Connection::get_products_for_order( $subscription->get_id() ),
+				function( $product_id ) {
+					return ! Donations::is_donation_product( $product_id );
+				}
+			)
+		);
+
+		if ( empty( $product_ids ) ) {
+			return;
+		}
+
+		return [
+			'user_id'         => $subscription->get_customer_id(),
+			'email'           => $subscription->get_billing_email(),
+			'subscription_id' => $subscription->get_id(),
+			'product_ids'     => $product_ids,
+			'amount'          => (float) $subscription->get_total(),
+			'currency'        => $subscription->get_currency(),
+			'recurrence'      => $subscription->get_billing_period(),
+			'status_before'   => $subscription->get_status(),
+			'status_after'    => $subscription->get_status(),
 		];
 	}
 );

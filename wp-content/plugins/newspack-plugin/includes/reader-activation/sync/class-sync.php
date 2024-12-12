@@ -21,9 +21,18 @@ class Sync {
 	 * Log a message to the Newspack Logger.
 	 *
 	 * @param string $message The message to log.
+	 * @param array  $data    Optional. Additional data to log.
 	 */
-	protected static function log( $message ) {
+	protected static function log( $message, $data = [] ) {
 		Logger::log( $message, 'NEWSPACK-SYNC' );
+		if ( ! empty( $data ) ) {
+			Logger::newspack_log(
+				'newspack_sync',
+				$message,
+				$data,
+				'debug'
+			);
+		}
 	}
 
 	/**

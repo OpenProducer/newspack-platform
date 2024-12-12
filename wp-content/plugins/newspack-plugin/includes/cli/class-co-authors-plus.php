@@ -77,7 +77,7 @@ class Co_Authors_Plus {
 	}
 
 	/**
-	 * Migrate Co-Authors Plus guest authors to regular users.
+	 * Migrate Co-Authors Plus guest authors to regular users with the [Guest Contributor role](https://help.newspack.com/publishing-and-appearance/guest-contributors/).
 	 *
 	 * ## OPTIONS
 	 *
@@ -181,7 +181,8 @@ class Co_Authors_Plus {
 	}
 
 	/**
-	 * This function handles setting up a cron job to backfill author terms for posts.
+	 * Set up a cron job to backfill any missing Co-Author plus author terms for posts.
+	 * Runs incrementally at a rate of up to 250 posts per hour to minimize performance impact.
 	 *
 	 * @return void
 	 * @throws WP_CLI\ExitException When the command fails.

@@ -1,3 +1,64 @@
+## [5.9.1](https://github.com/Automattic/newspack-plugin/compare/v5.9.0...v5.9.1) (2024-12-11)
+
+
+### Bug Fixes
+
+* couple bug fixes for esp sync cli ([#3615](https://github.com/Automattic/newspack-plugin/issues/3615)) ([4557dda](https://github.com/Automattic/newspack-plugin/commit/4557ddab9b422c4d2293b6fea29fe7d3cbbfcb6d))
+
+# [5.9.0](https://github.com/Automattic/newspack-plugin/compare/v5.8.2...v5.9.0) (2024-12-09)
+
+
+### Bug Fixes
+
+* **emails:** account for false order value ([#3590](https://github.com/Automattic/newspack-plugin/issues/3590)) ([a2e4042](https://github.com/Automattic/newspack-plugin/commit/a2e404287c7bdeba44689b1a98df9644322d4a71))
+* **ras-acc:** correct My Account custom font sizing clash ([#3588](https://github.com/Automattic/newspack-plugin/issues/3588)) ([080f1ce](https://github.com/Automattic/newspack-plugin/commit/080f1ce9e3ac102bdc475b1e5fac4016d48dee2a))
+* **ras-acc:** make helper text size more specific ([#3584](https://github.com/Automattic/newspack-plugin/issues/3584)) ([5bcc688](https://github.com/Automattic/newspack-plugin/commit/5bcc68812937ea979b9d28a08ca95e71fb19a341))
+* **ras-acc:** re-add recaptcha to the WooCommerce checkout ([#3605](https://github.com/Automattic/newspack-plugin/issues/3605)) ([07f46b3](https://github.com/Automattic/newspack-plugin/commit/07f46b3bfd7581a6e1e05490e1b2df06677ae59e))
+* undefined var ([#3585](https://github.com/Automattic/newspack-plugin/issues/3585)) ([00d8bc7](https://github.com/Automattic/newspack-plugin/commit/00d8bc7f4db78602e948a4ba7dfe5dad2b606672))
+* **woocommerce-emails:** use the default email payload if there are no donation products ([#3545](https://github.com/Automattic/newspack-plugin/issues/3545)) ([60c21f3](https://github.com/Automattic/newspack-plugin/commit/60c21f31641a9bbc906d4cc4319fa7d418f8fdf1))
+
+
+### Features
+
+* mark perfmatters as a required plugin ([#3578](https://github.com/Automattic/newspack-plugin/issues/3578)) ([f20291c](https://github.com/Automattic/newspack-plugin/commit/f20291c7899e99c5d52b8663a10a8e57b7ff1029))
+* **ras-acc:** add reader account creation and login improvements ([#3582](https://github.com/Automattic/newspack-plugin/issues/3582)) ([b66de08](https://github.com/Automattic/newspack-plugin/commit/b66de08dcf0a901063577c715257d7ffecd9908d))
+* **reader-data:** add a CLI command to align reader membership data ([#3548](https://github.com/Automattic/newspack-plugin/issues/3548)) ([8e49bf0](https://github.com/Automattic/newspack-plugin/commit/8e49bf0a2c9e74958f80de13a52b5fa720e87949))
+* **subscriptions:** add setting to reattempt payment after final retry ([#3560](https://github.com/Automattic/newspack-plugin/issues/3560)) ([553c3ac](https://github.com/Automattic/newspack-plugin/commit/553c3ac4327691b3f1826a7de6e3bd5f3d335ccf))
+* **woocommerce:** remove internal metadata from REST API response ([6b659a6](https://github.com/Automattic/newspack-plugin/commit/6b659a6afb38d235cf36e116a655352523a09725))
+
+## [5.8.2](https://github.com/Automattic/newspack-plugin/compare/v5.8.1...v5.8.2) (2024-12-09)
+
+
+### Bug Fixes
+
+* **esp-sync:** schedule second sync upon subscription reactivation, just in case ([#3603](https://github.com/Automattic/newspack-plugin/issues/3603)) ([9334295](https://github.com/Automattic/newspack-plugin/commit/93342955db2f70afa9feac6eb8fa349f3703fd72))
+
+## [5.8.1](https://github.com/Automattic/newspack-plugin/compare/v5.8.0...v5.8.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* cast values for transaction fee options ([#3580](https://github.com/Automattic/newspack-plugin/issues/3580)) ([82a513f](https://github.com/Automattic/newspack-plugin/commit/82a513fd28d5db9a09de871527bc191923e20957))
+
+# [5.8.0](https://github.com/Automattic/newspack-plugin/compare/v5.7.0...v5.8.0) (2024-11-25)
+
+
+### Bug Fixes
+
+* **reader-registration-block:** fix styles of newsletter lists ([1e1d7a4](https://github.com/Automattic/newspack-plugin/commit/1e1d7a4a0e9945490d83b2f7e29a39dc4b3a09e6))
+* **salesforce:** handle woocommerce inactive ([#3521](https://github.com/Automattic/newspack-plugin/issues/3521)) ([bf868a4](https://github.com/Automattic/newspack-plugin/commit/bf868a4b9cc69b7ced5cbe7dd1bb6197f8de6573))
+* use user email for esp sync purposes ([#3520](https://github.com/Automattic/newspack-plugin/issues/3520)) ([d6925ff](https://github.com/Automattic/newspack-plugin/commit/d6925ffe8687da0a99ba05ce7ce588e850cd7d43))
+* **wc-memberships:** WC for Teams join-team link; team in my-account ([#3540](https://github.com/Automattic/newspack-plugin/issues/3540)) ([489ce0f](https://github.com/Automattic/newspack-plugin/commit/489ce0fb7390f9fabc5956844ac7b437c2c701ac))
+
+
+### Features
+
+* also trigger subscription change events on switch ([#3514](https://github.com/Automattic/newspack-plugin/issues/3514)) ([5a84949](https://github.com/Automattic/newspack-plugin/commit/5a849497afd67dd73dbf81a8df4d8a68fd8cf53a))
+* **pwa:** enable SW file caching ([82af7d4](https://github.com/Automattic/newspack-plugin/commit/82af7d4785e430c6d99b4399ea4e4ed5f1e09a17))
+* **starter-content:** e2e improvements; removal CLI command ([35431ac](https://github.com/Automattic/newspack-plugin/commit/35431ac7f1efc4f5048bc511e6b072d0b28e65f0))
+* update Stripe Settings dashboard UI ([#3488](https://github.com/Automattic/newspack-plugin/issues/3488)) ([7974fac](https://github.com/Automattic/newspack-plugin/commit/7974faccabff7dc85ce83c9f5d628e0bba20fd9d))
+* **wc-memberships:** support team data in import ([63c78b2](https://github.com/Automattic/newspack-plugin/commit/63c78b2a9303b5d0fb342ee27a5560f477cef884))
+
 # [5.7.0](https://github.com/Automattic/newspack-plugin/compare/v5.6.1...v5.7.0) (2024-11-11)
 
 
@@ -430,7 +491,6 @@ ress/* packages
 
 # [4.4.0](https://github.com/Automattic/newspack-plugin/compare/v4.3.4...v4.4.0) (2024-07-01)
 
-
 ### Bug Fixes
 
 * add modified check before updating donation product ([#3183](https://github.com/Automattic/newspack-plugin/issues/3183)) ([208c55e](https://github.com/Automattic/newspack-plugin/commit/208c55e21ac8f6a4b6736f89c25cf12994f2cbaf))
@@ -536,6 +596,13 @@ ress/* packages
 ### Reverts
 
 * **ia:** back to `trunk` ([69b2ba0](https://github.com/Automattic/newspack-plugin/commit/69b2ba09a222e7c1b84b9cba0b97c36881cda63f))
+
+## [4.3.4](https://github.com/Automattic/newspack-plugin/compare/v4.3.3...v4.3.4) (2024-06-27)
+
+### Bug Fixes
+
+* variable name > constant ([#3203](https://github.com/Automattic/newspack-plugin/issues/3203)) ([46c5651](https://github.com/Automattic/newspack-plugin/commit/46c5651cf48e88abef3b8f3855b8fd3f5860c2a3))
+
 
 ## [4.3.3](https://github.com/Automattic/newspack-plugin/compare/v4.3.2...v4.3.3) (2024-06-24)
 

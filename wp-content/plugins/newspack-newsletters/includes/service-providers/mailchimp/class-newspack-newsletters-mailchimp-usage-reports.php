@@ -21,8 +21,15 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	 * @return DrewM\MailChimp\MailChimp|WP_Error
 	 */
 	private static function get_mc_api() {
+		$api_key = Newspack_Newsletters_Mailchimp::instance()->api_key();
+		if ( empty( $api_key ) ) {
+			return new WP_Error(
+				'newspack_newsletters_mailchimp_empty_api_key',
+				__( 'Mailchimp API key is not set.', 'newspack-newsletters' )
+			);
+		}
 		try {
-			return new Mailchimp( Newspack_Newsletters_Mailchimp::instance()->api_key() );
+			return new Mailchimp( $api_key );
 		} catch ( Exception $e ) {
 			return new WP_Error(
 				'newspack_newsletters_mailchimp_error',
@@ -45,7 +52,9 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 		}
 
 		$reports = [];
-		$lists  = $mc_api->get( 'lists', [ 'count' => 1000 ] );
+		$lists   = Newspack_Newsletters_Mailchimp::instance()->validate(
+			$mc_api->get( 'lists', [ 'count' => 1000 ] )
+		);
 		if ( ! isset( $lists['lists'] ) ) {
 			return $reports;
 		}
@@ -105,7 +114,16 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 		// sent/opens/clicks data, the campaign reports have to be used.
 		// It appears that the sent/opens/clicks data in the lists activity are only added after a
 		// delay of 2-3 days.
-		$reports = self::get_list_activity_reports( $days_in_past );
+
+		try {
+			// Get the list activity reports.
+			$reports = self::get_list_activity_reports( $days_in_past );
+		} catch ( Exception $e ) {
+			return new WP_Error(
+				'newspack_newsletters_mailchimp_error',
+				$e->getMessage()
+			);
+		}
 
 		$campaign_reports = [];
 		// Look at reports for campaigns sent at most two weeks ago, unless $days_in_past is larger.
@@ -170,11 +188,17 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	/**
 	 * Creates a usage report.
 	 *
-	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error Usage report or error.
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error|null Usage report, error or Null in case there's no need to check for a report.
 	 */
 	public static function get_usage_report() {
 		$reports = self::get_usage_reports( 1 );
 		if ( \is_wp_error( $reports ) ) {
+
+			// if the api key is not set, Mailchimp is not in use, we shouldn't even try to get the usage report.
+			if ( $reports->get_error_code() === 'newspack_newsletters_mailchimp_empty_api_key' ) {
+				return null;
+			}
+
 			return $reports;
 		}
 		return reset( $reports );

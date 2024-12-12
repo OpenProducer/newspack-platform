@@ -110,7 +110,7 @@ const {
 const {
   useHistory
 } = unlock(external_wp_router_namespaceObject.privateApis);
-function useAddNewPageCommand() {
+const getAddNewPageCommand = () => function useAddNewPageCommand() {
   const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
   const history = useHistory();
   const isBlockBasedTheme = (0,external_wp_data_namespaceObject.useSelect)(select => {
@@ -160,19 +160,19 @@ function useAddNewPageCommand() {
     isLoading: false,
     commands
   };
-}
+};
 function useAdminNavigationCommands() {
   (0,external_wp_commands_namespaceObject.useCommand)({
     name: 'core/add-new-post',
     label: (0,external_wp_i18n_namespaceObject.__)('Add new post'),
     icon: library_plus,
     callback: () => {
-      document.location.href = 'post-new.php';
+      document.location.assign('post-new.php');
     }
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/add-new-page',
-    hook: useAddNewPageCommand
+    hook: getAddNewPageCommand()
   });
 }
 
@@ -535,11 +535,7 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
     isLoading
   };
 };
-const usePageNavigationCommandLoader = getNavigationCommandLoaderPerPostType('page');
-const usePostNavigationCommandLoader = getNavigationCommandLoaderPerPostType('post');
-const useTemplateNavigationCommandLoader = getNavigationCommandLoaderPerTemplate('wp_template');
-const useTemplatePartNavigationCommandLoader = getNavigationCommandLoaderPerTemplate('wp_template_part');
-function useSiteEditorBasicNavigationCommands() {
+const getSiteEditorBasicNavigationCommands = () => function useSiteEditorBasicNavigationCommands() {
   const history = site_editor_navigation_commands_useHistory();
   const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
   const {
@@ -664,27 +660,27 @@ function useSiteEditorBasicNavigationCommands() {
     commands,
     isLoading: false
   };
-}
+};
 function useSiteEditorNavigationCommands() {
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-pages',
-    hook: usePageNavigationCommandLoader
+    hook: getNavigationCommandLoaderPerPostType('page')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-posts',
-    hook: usePostNavigationCommandLoader
+    hook: getNavigationCommandLoaderPerPostType('post')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-templates',
-    hook: useTemplateNavigationCommandLoader
+    hook: getNavigationCommandLoaderPerTemplate('wp_template')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-template-parts',
-    hook: useTemplatePartNavigationCommandLoader
+    hook: getNavigationCommandLoaderPerTemplate('wp_template_part')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/basic-navigation',
-    hook: useSiteEditorBasicNavigationCommands,
+    hook: getSiteEditorBasicNavigationCommands(),
     context: 'site-editor'
   });
 }

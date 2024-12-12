@@ -38,10 +38,6 @@
       "type": "boolean",
       "default": false
     },
-    "newsletterTitle": {
-      "type": "string",
-      "default": "Newsletters"
-    },
     "newsletterLabel": {
       "type": "string",
       "default": "Subscribe to our newsletter"
@@ -57,13 +53,9 @@
       "type": "object",
       "default": {}
     },
-    "haveAccountLabel": {
-      "type": "string",
-      "default": "Already have an account?"
-    },
     "signInLabel": {
       "type": "string",
-      "default": "Sign in"
+      "default": "Sign in to an existing account"
     },
     "signedInLabel": {
       "type": "string",

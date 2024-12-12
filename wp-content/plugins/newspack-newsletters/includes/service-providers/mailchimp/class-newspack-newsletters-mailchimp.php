@@ -1426,7 +1426,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				throw new Exception( esc_html__( 'A Mailchimp error has occurred.', 'newspack-newsletters' ) );
 			}
 		}
-		if ( ! empty( $result['status'] ) && in_array( $result['status'], [ 400, 404 ] ) ) {
+		if ( ! empty( $result['status'] ) && (int) $result['status'] >= 400 ) {
 			if ( $preferred_error && ! Newspack_Newsletters::debug_mode() ) {
 				if ( ! empty( $result['detail'] ) ) {
 					$preferred_error .= ' ' . $result['detail'];

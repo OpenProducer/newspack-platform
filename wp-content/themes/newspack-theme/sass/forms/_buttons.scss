@@ -9,7 +9,7 @@ input[type="submit"],
 .wp-block-search__button {
 	@include utilities.button-transition;
 
-	background: var(--newspack-theme-color-secondary);
+	background-color: var(--newspack-theme-color-secondary);
 	border: none;
 	border-radius: 5px;
 	box-sizing: border-box;
@@ -26,7 +26,7 @@ input[type="submit"],
 
 	&:hover,
 	&:hover:visited {
-		background: var(--newspack-theme-color-bg-button-hover);
+		background-color: var(--newspack-theme-color-bg-button-hover);
 		color: var(--newspack-theme-color-bg-body);
 		cursor: pointer;
 	}
@@ -37,7 +37,7 @@ input[type="submit"],
 	}
 
 	&:focus {
-		background: var(--newspack-theme-color-bg-button-hover);
+		background-color: var(--newspack-theme-color-bg-button-hover);
 		color: var(--newspack-theme-color-bg-body);
 		outline: thin dotted;
 		outline-offset: -4px;
@@ -45,7 +45,7 @@ input[type="submit"],
 
 	&[disabled],
 	&[disabled]:hover {
-		background: var(--newspack-ui-color-neutral-30, #ddd);
+		background-color: var(--newspack-ui-color-neutral-30, #ddd);
 		color: var(--newspack-ui-color-neutral-0, #fff);
 		cursor: default;
 	}

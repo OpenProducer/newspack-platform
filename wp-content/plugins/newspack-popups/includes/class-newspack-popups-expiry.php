@@ -28,37 +28,61 @@ final class Newspack_Popups_Expiry {
 	}
 
 	/**
+	 * Check if a given date should be considered expired.
+	 * A date is expired if it's at or before the next occuring midnight.
+	 *
+	 * @param string $date The date string to check.
+	 *
+	 * @return bool True if the date is expired, false otherwise.
+	 */
+	public static function is_expired( $date ) {
+		$expiration_date = strtotime( $date );
+		if ( $expiration_date && $expiration_date <= strtotime( 'tomorrow' ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Revert expired prompts to draft state.
 	 */
 	public static function revert_expired_to_draft() {
 		// Get all prompts with the expiration_date in the past.
-		$expired_prompts = get_posts(
+		$prompts_with_expiration = get_posts(
 			[
 				'post_type'      => Newspack_Popups::NEWSPACK_POPUPS_CPT,
+				'post_status'    => 'publish',
 				'posts_per_page' => -1,
 				'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					'relation' => 'AND',
 					[
 						'key'     => 'expiration_date',
-						'value'   => gmdate( 'Y-m-d H:i:s' ),
-						'compare' => '<=',
+						'compare' => 'EXISTS',
 					],
 					[
 						'key'     => 'expiration_date',
-						'compare' => 'REGEXP', // phpcs:ignore WordPressVIPMinimum.Performance.RegexpCompare.compare_compare
-						'value'   => '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}',
+						'compare' => '!=',
+						'value'   => '',
 					],
 				],
 			]
 		);
-		foreach ( $expired_prompts as $prompt_post ) {
+		foreach ( $prompts_with_expiration as $prompt ) {
 			// Change the post status to draft.
-			wp_update_post(
-				[
-					'ID'          => $prompt_post->ID,
-					'post_status' => 'draft',
-				]
-			);
+			if ( self::is_expired( get_post_meta( $prompt->ID, 'expiration_date', true ) ) ) {
+				wp_update_post(
+					[
+						'ID'          => $prompt->ID,
+						'post_status' => 'draft',
+					]
+				);
+				Newspack_Popups_Logger::log(
+					sprintf(
+						'Prompt "%s" has expired and reverted to draft status.',
+						$prompt->post_title
+					)
+				);
+			}
 		}
 	}
 
