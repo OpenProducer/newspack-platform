@@ -1,0 +1,41 @@
+/*
+Theme Name: Newspack Radio
+Theme URI: https://github.com/OpenProducer/newspack-radio-theme
+Template: newspack-theme
+Author: OpenProducer
+Author URI: https://openproducer.org/
+Version: 1.0.0-alpha.1.1719272843
+Updated: 2024-06-24 16:47:23
+
+*/
+@import url('../newspack-theme/style.css');
+
+/*removing top margin from newspack front page */
+.newspack-front-page .site-content  {
+    margin-top: 0;
+  }
+  
+  /*removing margins from newspack front page */
+  .newspack-front-page .entry .entry-content > * {
+    margin-top: 0;
+  }
+  
+  /*removing border from newspack section headers */
+  .accent-header, #secondary .widgettitle, .article-section-title {
+    border: none;
+      font-size: inherit;
+  }
+  
+  /*adjusting newspack section header title size*/
+  .wpnbha .article-section-title {
+   font-size:inherit;
+  }
+  
+  /*removing margin from front page slider*/
+  .newspack-front-page .wp-block-newspack-blocks-carousel {
+    margin: 0;
+  }
+  
+  .newspack-front-page .wp-block-newspack-blocks-carousel .swiper-pagination-bullets {
+    display: none;
+  }
