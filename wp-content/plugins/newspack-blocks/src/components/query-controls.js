@@ -311,9 +311,9 @@ class QueryControls extends Component {
 							/>
 						) }
 						{ onCustomTaxonomiesChange &&
-							registeredCustomTaxonomies.map( tax => (
+							registeredCustomTaxonomies.map( ( tax, index ) => (
 								<AutocompleteTokenField
-									key={ `${ customTaxonomies[ tax.slug ] }-selector` }
+									key={ index }
 									tokens={ getTermsOfCustomTaxonomy( customTaxonomies, tax.slug ) }
 									onChange={ value => {
 										customTaxonomiesPrepareChange(

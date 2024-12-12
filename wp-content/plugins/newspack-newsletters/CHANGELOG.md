@@ -1,3 +1,29 @@
+# [3.6.0](https://github.com/Automattic/newspack-newsletters/compare/v3.5.0...v3.6.0) (2024-12-09)
+
+
+### Bug Fixes
+
+* let the exceptions be thrown ([#1698](https://github.com/Automattic/newspack-newsletters/issues/1698)) ([85746b8](https://github.com/Automattic/newspack-newsletters/commit/85746b87de538ceccbc5141c0d6869b6071cad83))
+
+
+### Features
+
+* **ras-acc:** add reader account creation and login improvements ([#1716](https://github.com/Automattic/newspack-newsletters/issues/1716)) ([4640cae](https://github.com/Automattic/newspack-newsletters/commit/4640cae18706102bafaf2553df9eae93eddc20b9))
+* rate limit requests for CC ([#1714](https://github.com/Automattic/newspack-newsletters/issues/1714)) ([ad092ca](https://github.com/Automattic/newspack-newsletters/commit/ad092cab16714da143c604615c4af328d3847535))
+
+# [3.5.0](https://github.com/Automattic/newspack-newsletters/compare/v3.4.0...v3.5.0) (2024-11-25)
+
+
+### Bug Fixes
+
+* better handle error responses from AC api ([#1707](https://github.com/Automattic/newspack-newsletters/issues/1707)) ([17a21e2](https://github.com/Automattic/newspack-newsletters/commit/17a21e261695acfb229c0f9c13549abc9035aa77))
+* **mailchimp:** fatal error with invalid API keys ([#1690](https://github.com/Automattic/newspack-newsletters/issues/1690)) ([b7fd7e6](https://github.com/Automattic/newspack-newsletters/commit/b7fd7e69446aa613bbec16d96002a8f0eb42d3dd))
+
+
+### Features
+
+* **cli:** add command to synchronize premium lists ([#1699](https://github.com/Automattic/newspack-newsletters/issues/1699)) ([21d15a7](https://github.com/Automattic/newspack-newsletters/commit/21d15a779a6affbe900effb104c2da2e23d0617d))
+
 # [3.4.0](https://github.com/Automattic/newspack-newsletters/compare/v3.3.3...v3.4.0) (2024-11-11)
 
 

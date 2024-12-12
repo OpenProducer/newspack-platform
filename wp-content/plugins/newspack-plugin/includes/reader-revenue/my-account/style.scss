@@ -125,7 +125,10 @@
 		}
 	}
 
-
+	// Fixes an issue with form display caused by Newspack Theme CSS.
+	.entry-content p {
+		word-wrap: normal;
+	}
 }
 
 /* stylelint-disable-next-line */

@@ -341,7 +341,7 @@ class WooCommerce {
 		$last_name  = $customer->get_billing_last_name();
 		$full_name  = trim( "$first_name $last_name" );
 		$contact    = [
-			'email'    => ! empty( $customer->get_billing_email() ) ? $customer->get_billing_email() : $customer->get_email(),
+			'email'    => $customer->get_email(),
 			'metadata' => $metadata,
 		];
 		if ( ! empty( $full_name ) ) {

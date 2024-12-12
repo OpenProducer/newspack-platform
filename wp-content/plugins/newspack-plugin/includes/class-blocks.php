@@ -42,7 +42,7 @@ final class Blocks {
 				'has_reader_activation'   => Reader_Activation::is_enabled(),
 				'newsletters_url'         => Wizards::get_wizard( 'engagement' )->newsletters_settings_url(),
 				'has_google_oauth'        => Google_OAuth::is_oauth_configured(),
-				'google_logo_svg'         => file_get_contents( dirname( NEWSPACK_PLUGIN_FILE ) . '/src/blocks/reader-registration/icons/google.svg' ),
+				'google_logo_svg'         => \Newspack\Newspack_UI_Icons::get_svg( 'google' ),
 				'reader_activation_terms' => Reader_Activation::get_setting( 'terms_text' ),
 				'reader_activation_url'   => Reader_Activation::get_setting( 'terms_url' ),
 				'has_recaptcha'           => Recaptcha::can_use_captcha(),

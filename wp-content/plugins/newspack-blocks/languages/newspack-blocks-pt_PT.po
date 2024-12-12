@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Newspack Blocks 1.0.0-alpha.25\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/newspack-blocks\n"
-"POT-Creation-Date: 2023-12-07T20:21:58+00:00\n"
-"PO-Revision-Date: 2023-12-07 12:21-0800\n"
+"POT-Creation-Date: 2024-08-30T15:48:13+00:00\n"
+"PO-Revision-Date: 2024-08-30 08:46-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.5\n"
 "X-Domain: newspack-blocks\n"
 
 #. Plugin Name of the plugin
@@ -33,122 +33,279 @@ msgstr ""
 msgid "Automattic"
 msgstr "Automattic"
 
-#: includes/class-modal-checkout.php:256 includes/class-modal-checkout.php:283
-#: release/newspack-blocks/includes/class-modal-checkout.php:256
-#: release/newspack-blocks/includes/class-modal-checkout.php:283
+#. Translators: %s is the maximum price.
+#: includes/class-modal-checkout.php:311
+#: release/newspack-blocks/includes/class-modal-checkout.php:311
+msgid "Adjusted price must be less than the maximum of %s."
+msgstr ""
+
+#. Translators: %s is the name-your-price custom price.
+#: includes/class-modal-checkout.php:335
+#: release/newspack-blocks/includes/class-modal-checkout.php:335
+msgid "Adjusted price must be greater than base price of %s."
+msgstr ""
+
+#: includes/class-modal-checkout.php:379 includes/class-modal-checkout.php:461
+#: release/newspack-blocks/includes/class-modal-checkout.php:379
+#: release/newspack-blocks/includes/class-modal-checkout.php:457
 msgid "Close"
 msgstr ""
 
-#: includes/class-modal-checkout.php:290
-#: release/newspack-blocks/includes/class-modal-checkout.php:290
-msgid "Select an option below:"
+#: includes/class-modal-checkout.php:405
+#: release/newspack-blocks/includes/class-modal-checkout.php:401
+msgid "per"
 msgstr ""
 
-#. translators: %s: field name
-#: includes/class-modal-checkout.php:620
-#: release/newspack-blocks/includes/class-modal-checkout.php:620
-msgid "%s is a required field."
+#: includes/class-modal-checkout.php:469
+#: release/newspack-blocks/includes/class-modal-checkout.php:465
+msgid "Select an option to continue:"
 msgstr ""
 
-#: includes/class-modal-checkout.php:697
-#: release/newspack-blocks/includes/class-modal-checkout.php:697
+#. translators: 1: variable product name, 2: product variation name
+#: includes/class-modal-checkout.php:492
+#: release/newspack-blocks/includes/class-modal-checkout.php:488
+msgid "%1$s - %2$s"
+msgstr ""
+
+#: includes/class-modal-checkout.php:569
+msgid "Or"
+msgstr ""
+
+#: includes/class-modal-checkout.php:673
+msgid "Go back"
+msgstr ""
+
+#: includes/class-modal-checkout.php:923
+#: release/newspack-blocks/includes/class-modal-checkout.php:905
+msgid "Please enter someone else' email address to receive this gift."
+msgstr ""
+
+#: includes/class-modal-checkout.php:924
+#: release/newspack-blocks/includes/class-modal-checkout.php:906
+msgid "Please enter a valid email address to receive this gift."
+msgstr ""
+
+#: includes/class-modal-checkout.php:1010
+#: release/newspack-blocks/includes/class-modal-checkout.php:992
+msgid "Close window"
+msgstr ""
+
+#. translators: %s: Site name.
+#: includes/class-modal-checkout.php:1070
+msgid ""
+"You're already a subscriber! You can only have one active subscription at a "
+"time. Thank you for supporting %s."
+msgstr ""
+
+#: includes/class-modal-checkout.php:1104
+#: release/newspack-blocks/includes/class-modal-checkout.php:1078
+msgid "Could not complete this transaction. Please contact us for assistance."
+msgstr ""
+
+#. translators: 1: Checkout button confirmation text. 2: Order total.
+#. translators: 1 is the name of the item. 2 is the price of the item.
+#: includes/class-modal-checkout.php:1153
+#: includes/class-modal-checkout.php:1536
+#: release/newspack-blocks/includes/class-modal-checkout.php:1127
+#: release/newspack-blocks/includes/class-modal-checkout.php:1510
+msgid "%1$s: %2$s"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1453
+#: release/newspack-blocks/includes/class-modal-checkout.php:1427
+msgid "Billing details"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1454
+#: release/newspack-blocks/includes/class-modal-checkout.php:1428
+msgid "Shipping details"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1455
+#: release/newspack-blocks/includes/class-modal-checkout.php:1429
+msgid "Gift recipient"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1456
+#: includes/class-modal-checkout.php:1457
+#: includes/class-modal-checkout.php:1458
+#: release/newspack-blocks/includes/class-modal-checkout.php:1430
+#: release/newspack-blocks/includes/class-modal-checkout.php:1431
+#: release/newspack-blocks/includes/class-modal-checkout.php:1432
+msgid "Complete your transaction"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1459
+#: release/newspack-blocks/includes/class-modal-checkout.php:1433
+msgctxt "Login modal title when logged out user attempts to checkout."
+msgid "Sign in to complete transaction"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1464
+#: release/newspack-blocks/includes/class-modal-checkout.php:1438
+msgctxt "Login modal title when unregistered user attempts to checkout"
+msgid "Register to complete transaction"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1469
+#: release/newspack-blocks/includes/class-modal-checkout.php:1443
 msgid "Continue browsing"
 msgstr ""
 
-#: includes/class-modal-checkout.php:739
-#: release/newspack-blocks/includes/class-modal-checkout.php:739
-msgid "Sign up for newsletters"
+#: includes/class-modal-checkout.php:1470
+#: release/newspack-blocks/includes/class-modal-checkout.php:1444
+msgid "This donation is a gift"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1471
+#: release/newspack-blocks/includes/class-modal-checkout.php:1445
+msgid "This purchase is a gift"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1472
+#: release/newspack-blocks/includes/class-modal-checkout.php:1446
+msgid "Complete transaction"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1473
+#: release/newspack-blocks/includes/class-modal-checkout.php:1447
+msgid "Purchase"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1474
+#: release/newspack-blocks/includes/class-modal-checkout.php:1448
+msgid "Back"
+msgstr ""
+
+#: includes/class-modal-checkout.php:1475
+#: release/newspack-blocks/includes/class-modal-checkout.php:1449
+msgid "Transaction successful"
 msgstr ""
 
 #. Translators: %s is the site name.
-#: includes/class-modal-checkout.php:745
-#: release/newspack-blocks/includes/class-modal-checkout.php:745
-msgid "Get the best of %s directly in your email inbox."
+#: includes/class-modal-checkout.php:1478
+#: release/newspack-blocks/includes/class-modal-checkout.php:1452
+msgid "Thank you for supporting %s. Your transaction was successful."
 msgstr ""
 
-#. Translators: %s is the user's email address.
-#: includes/class-modal-checkout.php:756
-#: release/newspack-blocks/includes/class-modal-checkout.php:756
-msgid "Sending to: %s"
+#: includes/class-modal-checkout.php:1481
+#: release/newspack-blocks/includes/class-modal-checkout.php:1455
+msgid ""
+"Your contribution directly funds our work. If you're moved to do so, you can "
+"opt to pay more than the standard rate."
 msgstr ""
 
-#: includes/class-modal-checkout.php:793
-#: release/newspack-blocks/includes/class-modal-checkout.php:793
-#: release/newspack-blocks/src/modal-checkout/templates/checkout-form.php:104
-#: src/modal-checkout/templates/checkout-form.php:104
-msgid "Continue"
+#: includes/class-modal-checkout.php:1482
+#: release/newspack-blocks/includes/class-modal-checkout.php:1456
+msgid "Thank you for your generosity! We couldn't do this without you!"
 msgstr ""
 
-#: includes/class-modal-checkout.php:816
-#: release/newspack-blocks/includes/class-modal-checkout.php:816
-msgid "No lists selected."
+#: includes/class-modal-checkout.php:1483
+#: release/newspack-blocks/includes/class-modal-checkout.php:1457
+msgid "Increase your support"
 msgstr ""
 
-#: includes/class-modal-checkout.php:864
-#: release/newspack-blocks/includes/class-modal-checkout.php:864
-msgid "Signup successful!"
+#: includes/class-modal-checkout.php:1484
+#: release/newspack-blocks/includes/class-modal-checkout.php:1458
+#: release/newspack-blocks/src/modal-checkout/templates/form-coupon.php:20
+#: src/modal-checkout/templates/form-coupon.php:20
+msgid "Apply"
 msgstr ""
 
-#. Translators: %s is the site name.
-#: includes/class-modal-checkout.php:871
-#: release/newspack-blocks/includes/class-modal-checkout.php:871
-msgid "Thanks for supporting %s."
+#: includes/class-newspack-blocks-patterns.php:130
+#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:130
+msgid "Support our publication"
 msgstr ""
 
-#: includes/class-modal-checkout.php:918
-#: release/newspack-blocks/includes/class-modal-checkout.php:918
-msgid "Donate now"
+#: includes/class-newspack-blocks-patterns.php:131
+#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:131
+msgid ""
+"With the support of readers like you, we provide thoughtfully researched "
+"articles for a more informed and connected community. This is your chance to "
+"support credible, community-based, public-service journalism. Please join us!"
 msgstr ""
 
-#: includes/class-newspack-blocks-patterns.php:144
-#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:144
+#: includes/class-newspack-blocks-patterns.php:134
+#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:134
+msgid "Subscribe to our newsletter"
+msgstr ""
+
+#: includes/class-newspack-blocks-patterns.php:135
+#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:135
+msgid "Be the first to know about breaking news, articles, and updates."
+msgstr ""
+
+#: includes/class-newspack-blocks-patterns.php:154
+#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:154
 msgid "Newspack Donations"
 msgstr ""
 
-#: includes/class-newspack-blocks-patterns.php:148
-#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:148
+#: includes/class-newspack-blocks-patterns.php:158
+#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:158
 msgid "Newspack Homepage Posts"
 msgstr ""
 
-#: includes/class-newspack-blocks-patterns.php:152
-#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:152
+#: includes/class-newspack-blocks-patterns.php:162
+#: release/newspack-blocks/includes/class-newspack-blocks-patterns.php:162
 msgid "Newspack Subscribe"
 msgstr ""
 
-#: includes/class-newspack-blocks.php:900
-#: release/newspack-blocks/includes/class-newspack-blocks.php:900
+#: includes/class-newspack-blocks.php:913
+#: release/newspack-blocks/includes/class-newspack-blocks.php:912
 msgid "Common"
 msgstr ""
 
 #. translators: separates last two sponsor names; needs a space on either side.
-#: includes/class-newspack-blocks.php:1001
-#: release/newspack-blocks/includes/class-newspack-blocks.php:1001
+#: includes/class-newspack-blocks.php:1014
+#: release/newspack-blocks/includes/class-newspack-blocks.php:1013
 msgid " and "
 msgstr " e "
 
 #. translators: separates all but the last two sponsor names; needs a space at the end.
-#: includes/class-newspack-blocks.php:1004
-#: release/newspack-blocks/includes/class-newspack-blocks.php:1004
+#: includes/class-newspack-blocks.php:1017
+#: release/newspack-blocks/includes/class-newspack-blocks.php:1016
 msgid ", "
 msgstr ""
 
-#: includes/class-newspack-blocks.php:1415
-#: release/newspack-blocks/includes/class-newspack-blocks.php:1415
+#: includes/class-newspack-blocks.php:1428
+#: release/newspack-blocks/includes/class-newspack-blocks.php:1427
 msgid "Jetpack donations is disabled in favour of Newspack donations."
 msgstr ""
 
-#: includes/class-newspack-blocks.php:1448
-#: release/newspack-blocks/includes/class-newspack-blocks.php:1448
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3069
+#: includes/class-newspack-blocks.php:1461
+#: release/newspack-blocks/includes/class-newspack-blocks.php:1460
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 #: release/newspack-blocks/src/shared/js/utils.js:77 src/shared/js/utils.js:77
 msgid "Draft"
 msgstr ""
 
-#: includes/class-newspack-blocks.php:1449
-#: release/newspack-blocks/includes/class-newspack-blocks.php:1449
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3069
+#: includes/class-newspack-blocks.php:1462
+#: release/newspack-blocks/includes/class-newspack-blocks.php:1461
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 #: release/newspack-blocks/src/shared/js/utils.js:77 src/shared/js/utils.js:77
 msgid "Scheduled"
+msgstr ""
+
+#. Translators: %s is the %s is the frequency.
+#: includes/class-newspack-blocks.php:1602
+#: release/newspack-blocks/includes/class-newspack-blocks.php:1601
+#: dist/editor.js:29 release/newspack-blocks/dist/editor.js:29
+msgid "per %s"
+msgstr ""
+
+#: includes/class-newspack-blocks.php:1628
+#: release/newspack-blocks/includes/class-newspack-blocks.php:1627
+#: dist/editor.js:29 release/newspack-blocks/dist/editor.js:29
+msgid " once"
+msgstr ""
+
+#: includes/class-newspack-blocks.php:1631
+#: release/newspack-blocks/includes/class-newspack-blocks.php:1630
+msgid " per "
+msgstr ""
+
+#: release/newspack-blocks/includes/class-modal-checkout.php:1046
+msgid "You may only have one subscription of this product at a time."
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/donations-1.php:9
@@ -156,26 +313,9 @@ msgstr ""
 msgid "Donations Pattern 1"
 msgstr ""
 
-#: release/newspack-blocks/src/block-patterns/donations-1.php:10
-#: release/newspack-blocks/src/block-patterns/donations-2.php:10
-#: release/newspack-blocks/src/block-patterns/donations-3.php:10
-#: release/newspack-blocks/src/block-patterns/donations-4.php:10
-#: src/block-patterns/donations-1.php:10 src/block-patterns/donations-2.php:10
-#: src/block-patterns/donations-3.php:10 src/block-patterns/donations-4.php:10
-msgid "Support our publication"
-msgstr ""
-
 #: release/newspack-blocks/src/block-patterns/donations-2.php:9
 #: src/block-patterns/donations-2.php:9
 msgid "Donations Pattern 2"
-msgstr ""
-
-#: release/newspack-blocks/src/block-patterns/donations-2.php:10
-#: src/block-patterns/donations-2.php:10
-msgid ""
-"With the support of readers like you, we provide thoughtfully researched "
-"articles for a more informed and connected community. This is your chance to "
-"support credible, community-based, public-service journalism. Please join us!"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/donations-3.php:9
@@ -186,6 +326,11 @@ msgstr ""
 #: release/newspack-blocks/src/block-patterns/donations-4.php:9
 #: src/block-patterns/donations-4.php:9
 msgid "Donations Pattern 4"
+msgstr ""
+
+#: release/newspack-blocks/src/block-patterns/donations-5.php:9
+#: src/block-patterns/donations-5.php:9
+msgid "Donations Pattern 5"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-1.php:9
@@ -348,18 +493,6 @@ msgstr ""
 msgid "Subscribe Pattern 1"
 msgstr ""
 
-#: release/newspack-blocks/src/block-patterns/subscribe-1.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-2.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-3.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-4.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-5.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-6.php:10
-#: src/block-patterns/subscribe-1.php:10 src/block-patterns/subscribe-2.php:10
-#: src/block-patterns/subscribe-3.php:10 src/block-patterns/subscribe-4.php:10
-#: src/block-patterns/subscribe-5.php:10 src/block-patterns/subscribe-6.php:10
-msgid "Subscribe to our newsletter"
-msgstr ""
-
 #: release/newspack-blocks/src/block-patterns/subscribe-2.php:9
 #: src/block-patterns/subscribe-2.php:9
 msgid "Subscribe Pattern 2"
@@ -390,181 +523,118 @@ msgstr ""
 msgid "Subscribe Pattern 7"
 msgstr ""
 
-#: release/newspack-blocks/src/block-patterns/subscribe-7.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-8.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-9.php:10
-#: src/block-patterns/subscribe-7.php:10 src/block-patterns/subscribe-8.php:10
-#: src/block-patterns/subscribe-9.php:10
-msgid "Subscribe to our Newsletter"
-msgstr ""
-
-#: release/newspack-blocks/src/block-patterns/subscribe-7.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-8.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-9.php:10
-#: release/newspack-blocks/src/block-patterns/subscribe-10.php:10
-#: src/block-patterns/subscribe-7.php:10 src/block-patterns/subscribe-8.php:10
-#: src/block-patterns/subscribe-9.php:10 src/block-patterns/subscribe-10.php:10
-msgid "Be the first to know about breaking news, articles, and updates."
-msgstr ""
-
-#: release/newspack-blocks/src/block-patterns/subscribe-8.php:9
-#: src/block-patterns/subscribe-8.php:9
-msgid "Subscribe Pattern 8"
-msgstr ""
-
-#: release/newspack-blocks/src/block-patterns/subscribe-9.php:9
-#: src/block-patterns/subscribe-9.php:9
-msgid "Subscribe Pattern 9"
-msgstr ""
-
-#: release/newspack-blocks/src/block-patterns/subscribe-10.php:9
-#: src/block-patterns/subscribe-10.php:9
-msgid "Subscribe Pattern 10"
-msgstr ""
-
 #. translators: %d: Slide number.
-#: release/newspack-blocks/src/blocks/carousel/view.php:210
-#: src/blocks/carousel/view.php:210
+#: release/newspack-blocks/src/blocks/carousel/view.php:221
+#: src/blocks/carousel/view.php:221
 msgid "Go to slide %d"
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/carousel/view.php:231
-#: src/blocks/carousel/view.php:231
+#: release/newspack-blocks/src/blocks/carousel/view.php:242
+#: src/blocks/carousel/view.php:242
 msgid "Previous Slide"
 msgstr "Slide Anterior"
 
-#: release/newspack-blocks/src/blocks/carousel/view.php:232
-#: src/blocks/carousel/view.php:232
+#: release/newspack-blocks/src/blocks/carousel/view.php:243
+#: src/blocks/carousel/view.php:243
 msgid "Next Slide"
 msgstr "Próximo Slide"
 
-#: release/newspack-blocks/src/blocks/carousel/view.php:276
-#: src/blocks/carousel/view.php:276
+#: release/newspack-blocks/src/blocks/carousel/view.php:287
+#: src/blocks/carousel/view.php:287
 msgid "Pause Slideshow"
 msgstr "Pausa na apresentação"
 
-#: release/newspack-blocks/src/blocks/carousel/view.php:277
-#: src/blocks/carousel/view.php:277
+#: release/newspack-blocks/src/blocks/carousel/view.php:288
+#: src/blocks/carousel/view.php:288
 msgid "Play Slideshow"
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:31
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:31
-msgid "Could not retrieve donation settings."
-msgstr ""
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:97
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:97
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2706
-msgid "One-time"
-msgstr "Uma vez"
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:98
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:98
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2706
-msgid "Monthly"
-msgstr "Mensal"
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:99
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:99
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2706
-msgid "Annually"
-msgstr "Anualmente"
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:227
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:227
-msgid "Email"
-msgstr ""
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:237
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:237
-msgid "Full Name"
-msgstr ""
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:261
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:261
-msgid "Agree to pay fees?"
-msgstr ""
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:264
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:264
-msgid ""
-"Paying the transaction fee is not required, but it directs more money in "
-"support of our mission."
-msgstr ""
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:270
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:270
-msgid "Sign up for our newsletter"
-msgstr ""
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:164
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:240
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:123
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:187
-#: release/newspack-blocks/dist/editor.js:2717
-msgid "Donation amount"
-msgstr "Valor da Doação"
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:234
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:181
-#: release/newspack-blocks/dist/editor.js:2717
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Other"
-msgstr "Outro"
-
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:24
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:24
-#: release/newspack-blocks/dist/editor.js:2728
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:30
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:30
 msgid "once"
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:26
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:26
-#: release/newspack-blocks/dist/editor.js:2728
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:32
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:32
 msgid "per month"
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:28
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:28
-#: release/newspack-blocks/dist/editor.js:2728
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:34
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:34
 msgid "per year"
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:185
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:185
-msgid "Back"
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:50
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:50
+msgid "Could not retrieve donation settings."
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:199
-#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:199
-msgid "Renews on"
-msgstr ""
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:115
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:115
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "One-time"
+msgstr "Uma vez"
+
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:116
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:116
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Monthly"
+msgstr "Mensal"
+
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:117
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php:117
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Annually"
+msgstr "Anualmente"
+
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:144
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:241
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:63
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:144
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:241
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-tiers-based.php:63
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+#: release/newspack-blocks/src/blocks/donate/index.js:25
+#: src/blocks/donate/index.js:25
+msgid "Donate"
+msgstr "Doação"
+
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:169
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:274
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:169
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:274
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Donation amount"
+msgstr "Valor da Doação"
+
+#: release/newspack-blocks/src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:268
+#: src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-frequency-based.php:268
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Other"
+msgstr "Outro"
 
 #: release/newspack-blocks/src/blocks/homepage-articles/view.php:393
-#: src/blocks/homepage-articles/view.php:389 dist/editor.js:41
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:782
-#: src/blocks/homepage-articles/edit.js:785
+#: src/blocks/homepage-articles/view.php:393 dist/editor.js:38
+#: release/newspack-blocks/dist/editor.js:38
 msgid "Load more posts"
 msgstr "Carregar mais posts"
 
-#: release/newspack-blocks/src/blocks/homepage-articles/view.php:395
-#: src/blocks/homepage-articles/view.php:397
+#: release/newspack-blocks/src/blocks/homepage-articles/view.php:400
+#: src/blocks/homepage-articles/view.php:400
 msgid "Something went wrong. Please refresh the page and/or try again."
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/homepage-articles/view.php:470
-#: src/blocks/homepage-articles/view.php:471 dist/editor.js:41
-#: release/newspack-blocks/dist/editor.js:3069
+#: release/newspack-blocks/src/blocks/homepage-articles/view.php:474
+#: src/blocks/homepage-articles/view.php:474 dist/editor.js:8
+#: release/newspack-blocks/dist/editor.js:8
 #: release/newspack-blocks/src/shared/js/utils.js:18 src/shared/js/utils.js:18
 msgctxt "post author"
 msgid "by"
 msgstr "por"
 
-#: release/newspack-blocks/src/blocks/homepage-articles/view.php:493
-#: src/blocks/homepage-articles/view.php:494 dist/editor.js:41
-#: release/newspack-blocks/dist/editor.js:3069
+#: release/newspack-blocks/src/blocks/homepage-articles/view.php:491
+#: src/blocks/homepage-articles/view.php:491 dist/editor.js:8
+#: release/newspack-blocks/dist/editor.js:8
 #: release/newspack-blocks/src/shared/js/utils.js:30
 #: release/newspack-blocks/src/shared/js/utils.js:67 src/shared/js/utils.js:30
 #: src/shared/js/utils.js:67
@@ -572,120 +642,104 @@ msgctxt "post author"
 msgid " and "
 msgstr " e "
 
-#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:111
-#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:118
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:111
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:118
-msgid "Could not find the iframe file on your request."
+#. Translators: %s is a list of supported file extensions for uploading.
+#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:261
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:261
+msgid ""
+"Unsupported filetype. Please make sure it's one of the supported filetypes: "
+"% s"
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:152
-#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:159
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:152
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:159
+#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:270
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:270
+msgid "Could not upload this file."
+msgstr ""
+
+#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:304
+#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:311
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:304
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:311
 msgid "Please choose a valid (.zip) assets archive."
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:227
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:227
+#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:379
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:379
 msgid "Could not upload your document."
 msgstr ""
 
-#. translators: %s: iframe entry file (e.g. index,html)
-#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:300
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:300
-msgid "%s was not found in the iframe archive."
-msgstr ""
-
-#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:308
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:308
+#. Translators: %s is a list of supported file extensions for uploading.
+#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:397
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:397
 msgid ""
-"Could not unzip the iframe archive, make sure it's a valid .zip archive file."
+"Error reading the archive. Please make sure it's a valid .zip archive file "
+"and contains only supported filetypes: %s"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/billing-form.php:22
-#: src/modal-checkout/templates/billing-form.php:22
-msgid "Billing &amp; Shipping"
+#. translators: %s: iframe entry file (e.g. index,html)
+#: release/newspack-blocks/src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:482
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:482
+msgid "Required %s entrypoint file was not found in the archive."
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/billing-form.php:26
-#: release/newspack-blocks/src/modal-checkout/templates/checkout-form.php:109
-#: src/modal-checkout/templates/billing-form.php:26
-#: src/modal-checkout/templates/checkout-form.php:109
-msgid "Billing details"
-msgstr ""
-
-#: release/newspack-blocks/src/modal-checkout/templates/checkout-form.php:39
-#: src/modal-checkout/templates/checkout-form.php:39
+#: release/newspack-blocks/src/modal-checkout/templates/form-checkout.php:22
+#: src/modal-checkout/templates/form-checkout.php:22
 msgid "You must be logged in to checkout."
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/checkout-form.php:89
-#: src/modal-checkout/templates/checkout-form.php:89
-msgid "Order Details"
+#: release/newspack-blocks/src/modal-checkout/templates/form-checkout.php:34
+#: src/modal-checkout/templates/form-checkout.php:34
+msgid "Continue"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/checkout-form.php:110
-#: src/modal-checkout/templates/checkout-form.php:110
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Edit"
+#: release/newspack-blocks/src/modal-checkout/templates/form-checkout.php:39
+#: src/modal-checkout/templates/form-checkout.php:39
+msgid "Transaction details"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/checkout-form.php:137
-#: src/modal-checkout/templates/checkout-form.php:137
-msgid "Create an account?"
+#: release/newspack-blocks/src/modal-checkout/templates/form-coupon.php:17
+#: src/modal-checkout/templates/form-coupon.php:17
+msgid "Apply a coupon code"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:57
-#: src/modal-checkout/templates/thankyou.php:57
-msgid "Transaction Successful"
+#: release/newspack-blocks/src/modal-checkout/templates/form-coupon.php:19
+#: src/modal-checkout/templates/form-coupon.php:19
+msgid "Coupon code"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:60
-#: src/modal-checkout/templates/thankyou.php:60
-msgid "Date:"
+#: release/newspack-blocks/src/modal-checkout/templates/form-coupon.php:20
+#: src/modal-checkout/templates/form-coupon.php:20
+msgid "Apply coupon"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:66
-#: src/modal-checkout/templates/thankyou.php:66
-msgid "Email:"
+#: release/newspack-blocks/src/modal-checkout/templates/form-gift-subscription.php:23
+#: src/modal-checkout/templates/form-gift-subscription.php:23
+msgid "Recipient’s Email Address"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:72
-#: src/modal-checkout/templates/thankyou.php:72
-msgid "Total:"
+#: release/newspack-blocks/src/modal-checkout/templates/form-gift-subscription.php:25
+#: src/modal-checkout/templates/form-gift-subscription.php:25
+msgid "recipient@example.com"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:78
-#: src/modal-checkout/templates/thankyou.php:78
-msgid "Payment method:"
+#: release/newspack-blocks/src/modal-checkout/templates/form-gift-subscription.php:29
+#: src/modal-checkout/templates/form-gift-subscription.php:29
+msgid "Recipient: "
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:84
-#: src/modal-checkout/templates/thankyou.php:84
-msgid "Item:"
-msgstr ""
-
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:89
-#: src/modal-checkout/templates/thankyou.php:89
-msgid "Transaction:"
-msgstr ""
-
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:95
-#: src/modal-checkout/templates/thankyou.php:95
+#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:76
+#: src/modal-checkout/templates/thankyou.php:76
 msgid ""
 "Unfortunately your order cannot be processed. Please attempt your purchase "
 "again."
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:99
-#: src/modal-checkout/templates/thankyou.php:99
-#: release/newspack-blocks/dist/editor.js:2717
+#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:79
+#: src/modal-checkout/templates/thankyou.php:79
 msgid "Pay"
 msgstr ""
 
-#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:101
-#: src/modal-checkout/templates/thankyou.php:101
+#: release/newspack-blocks/src/modal-checkout/templates/thankyou.php:81
+#: src/modal-checkout/templates/thankyou.php:81
 msgid "My account"
 msgstr ""
 
@@ -696,215 +750,160 @@ msgid " <a href=\"%1$s\">More by %2$s</a>"
 msgstr ""
 
 #. translators: Indicates which slide the slider is on.
-#: dist/carousel/view.js:1 dist/editor.js:41
-#: release/newspack-blocks/dist/carousel/view.js:39
-#: release/newspack-blocks/dist/editor.js:2618
+#: dist/carousel/view.js:2 dist/editor.js:4
+#: release/newspack-blocks/dist/carousel/view.js:2
+#: release/newspack-blocks/dist/editor.js:4
 #: release/newspack-blocks/src/blocks/carousel/create-swiper.js:104
 #: src/blocks/carousel/create-swiper.js:104
 msgid "Slide %s"
 msgstr ""
 
 #. translators: 1: current slide number and 2: total number of slides
-#: dist/carousel/view.js:1 dist/editor.js:41
-#: release/newspack-blocks/dist/carousel/view.js:39
-#: release/newspack-blocks/dist/editor.js:2618
+#: dist/carousel/view.js:3 dist/editor.js:5
+#: release/newspack-blocks/dist/carousel/view.js:3
+#: release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/carousel/create-swiper.js:155
 #: src/blocks/carousel/create-swiper.js:155
 msgid "Slide %1$s of %2$s"
 msgstr ""
 
 #. translators: the title of the image.
-#: dist/carousel/view.js:1 dist/editor.js:41
-#: release/newspack-blocks/dist/carousel/view.js:39
-#: release/newspack-blocks/dist/editor.js:2618
+#: dist/carousel/view.js:3 dist/editor.js:5
+#: release/newspack-blocks/dist/carousel/view.js:3
+#: release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/carousel/create-swiper.js:166
 #: src/blocks/carousel/create-swiper.js:166
 msgid "Image: %s, "
 msgstr ""
 
-#: dist/carousel/view.js:1 dist/editor.js:41
-#: release/newspack-blocks/dist/carousel/view.js:39
-#: release/newspack-blocks/dist/editor.js:2618
+#: dist/carousel/view.js:3 dist/editor.js:5
+#: release/newspack-blocks/dist/carousel/view.js:3
+#: release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/carousel/create-swiper.js:219
 #: src/blocks/carousel/create-swiper.js:219
 msgid "Playing"
 msgstr ""
 
-#: dist/carousel/view.js:1 dist/editor.js:41
-#: release/newspack-blocks/dist/carousel/view.js:39
-#: release/newspack-blocks/dist/editor.js:2618
+#: dist/carousel/view.js:3 dist/editor.js:5
+#: release/newspack-blocks/dist/carousel/view.js:3
+#: release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/carousel/create-swiper.js:224
 #: src/blocks/carousel/create-swiper.js:224
 msgid "Paused"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:105
-#: release/newspack-blocks/src/blocks/author-list/edit.js:109
-#: src/blocks/author-list/edit.js:105 src/blocks/author-list/edit.js:109
-msgid "Error fetching authors."
+#. translators: label for small text size option
+#. translators: label for small avatar size option
+#. translators: label for small size option
+#: dist/editor.js:1 dist/editor.js:38 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:61
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:100
+#: src/blocks/author-profile/edit.js:61 src/blocks/author-profile/edit.js:100
+msgid "Small"
+msgstr "Pequeno"
+
+#. translators: abbreviation for small text size option
+#. translators: abbreviation for small avatar size option
+#. translators: abbreviation for small size
+#: dist/editor.js:1 dist/editor.js:38 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:62
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:101
+#: src/blocks/author-profile/edit.js:62 src/blocks/author-profile/edit.js:101
+msgid "S"
+msgstr "S"
+
+#. translators: label for medium text size option
+#. translators: label for medium avatar size option
+#. translators: label for medium size option
+#: dist/editor.js:1 dist/editor.js:38 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:69
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:108
+#: src/blocks/author-profile/edit.js:69 src/blocks/author-profile/edit.js:108
+msgid "Medium"
+msgstr "Médio"
+
+#. translators: abbreviation for medium text size option
+#. translators: abbreviation for medium avatar size option
+#. translators: abbreviation for medium size
+#: dist/editor.js:1 dist/editor.js:38 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:70
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:109
+#: src/blocks/author-profile/edit.js:70 src/blocks/author-profile/edit.js:109
+msgid "M"
+msgstr "M"
+
+#. translators: label for small text size option
+#. translators: label for large avatar size option
+#. translators: label for large size option
+#: dist/editor.js:1 dist/editor.js:38 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:77
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:116
+#: src/blocks/author-profile/edit.js:77 src/blocks/author-profile/edit.js:116
+msgid "Large"
+msgstr "Amplo"
+
+#. translators: abbreviation for large text size option
+#. translators: abbreviation for large avatar size option
+#. translators: abbreviation for large size
+#: dist/editor.js:1 dist/editor.js:38 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:78
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:117
+#: src/blocks/author-profile/edit.js:78 src/blocks/author-profile/edit.js:117
+msgid "L"
+msgstr "L"
+
+#. translators: label for extra-large text size option
+#. translators: label for extra large size option
+#: dist/editor.js:1 dist/editor.js:38 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:85
+#: src/blocks/author-profile/edit.js:85
+msgid "Extra Large"
+msgstr "Extra grande"
+
+#. translators: abbreviation for small text size option
+#. translators: abbreviation for extra-large avatar size option
+#. translators: abbreviation for extra large size
+#: dist/editor.js:1 dist/editor.js:38 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:89
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:128
+#: src/blocks/author-profile/edit.js:89 src/blocks/author-profile/edit.js:128
+msgid "XL"
+msgstr "XL"
+
+#. translators: label for extra-large avatar size option
+#: dist/editor.js:1 release/newspack-blocks/dist/editor.js:1
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:124
+#: src/blocks/author-profile/edit.js:124
+msgid "Extra-large"
+msgstr "Extra grande"
+
+#. translators: Error text for when no authors are found.
+#: dist/editor.js:2 dist/editor.js:3 release/newspack-blocks/dist/editor.js:2
+#: release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:183
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:194
+#: src/blocks/author-profile/edit.js:183 src/blocks/author-profile/edit.js:194
+msgid "No authors or guest authors found for ID %s."
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:130
-#: src/blocks/author-list/edit.js:130
-msgid "Author List Settings"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:134
-#: src/blocks/author-list/edit.js:134
-msgid "Author Type"
-msgstr ""
-
-#. translators: help text for author type selection.
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:137
-#: src/blocks/author-list/edit.js:137
-msgid "%s will be displayed."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:139
-#: src/blocks/author-list/edit.js:139
-msgid "Both guest authors and WP users"
-msgstr ""
-
-#. translators: currently selected author type option.
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:142
-#: src/blocks/author-list/edit.js:142
-msgid "%s only"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:150
-#: src/blocks/author-list/edit.js:150
-msgid "All authors"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:144
-#: release/newspack-blocks/src/blocks/author-list/edit.js:151
-#: src/blocks/author-list/edit.js:144 src/blocks/author-list/edit.js:151
-msgid "Guest authors"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:145
-#: release/newspack-blocks/src/blocks/author-list/edit.js:152
-#: src/blocks/author-list/edit.js:145 src/blocks/author-list/edit.js:152
-msgid "WP users"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-list/edit.js:161
-#: release/newspack-blocks/src/blocks/author-list/edit.js:372
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:375
-#: src/blocks/author-list/edit.js:161 src/blocks/author-list/edit.js:372
-#: src/blocks/homepage-articles/edit.js:378
-msgid "Columns"
-msgstr "Colunas"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:174
-#: src/blocks/author-list/edit.js:174
-msgid "WP User Roles"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:196
-#: src/blocks/author-list/edit.js:196
-msgid "Display alphabetical separators"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:197
-#: src/blocks/author-list/edit.js:197
-msgid "Chunk authors alphabetically."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:205
-#: src/blocks/author-list/edit.js:205
-msgid "Group authors by alphabet"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:206
-#: src/blocks/author-list/edit.js:206
-msgid "Display each alphabetical chunk as a discrete section."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:219
-#: src/blocks/author-list/edit.js:219
-msgid "Exclude authors with 0 posts"
-msgstr ""
-
-#. Translators: Help message for "include empty authors" toggle.
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:222
-#: src/blocks/author-list/edit.js:222
-msgid "Authors with no published posts will be %s."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:233
-#: src/blocks/author-list/edit.js:233
-msgid "Search by author name"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:234
-#: src/blocks/author-list/edit.js:234
-msgid "Authors selected here will not be displayed."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/blocks/author-list/edit.js:255
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:391
-#: release/newspack-blocks/src/components/query-controls.js:75
-#: release/newspack-blocks/src/components/query-controls.js:90
-#: src/blocks/author-list/edit.js:255 src/blocks/author-profile/edit.js:391
-#: src/components/query-controls.js:75 src/components/query-controls.js:90
-msgid "(no name)"
-msgstr "(sem nome)"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2563
-#: release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2596
-#: release/newspack-blocks/src/blocks/author-list/edit.js:262
-#: release/newspack-blocks/src/blocks/author-list/index.js:40
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:421
-#: release/newspack-blocks/src/blocks/author-profile/index.js:40
-#: src/blocks/author-list/edit.js:262 src/blocks/author-list/index.js:40
-#: src/blocks/author-profile/edit.js:421 src/blocks/author-profile/index.js:40
-msgid "author"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/src/blocks/author-list/edit.js:263
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:422
-#: src/blocks/author-list/edit.js:263 src/blocks/author-profile/edit.js:422
-msgid "authors"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
 #: release/newspack-blocks/src/blocks/author-list/edit.js:268
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:213
 #: src/blocks/author-list/edit.js:268 src/blocks/author-profile/edit.js:213
 msgid "Author Profile Settings"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
 #: release/newspack-blocks/src/blocks/author-list/edit.js:270
 #: release/newspack-blocks/src/blocks/author-list/edit.js:276
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:215
@@ -914,745 +913,353 @@ msgstr ""
 msgid "Text Size"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
 #: release/newspack-blocks/src/blocks/author-list/edit.js:297
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:242
 #: src/blocks/author-list/edit.js:297 src/blocks/author-profile/edit.js:242
 msgid "Avatar Settings"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
 #: release/newspack-blocks/src/blocks/author-list/edit.js:300
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:245
 #: src/blocks/author-list/edit.js:300 src/blocks/author-profile/edit.js:245
 msgid "Display avatar"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
 #: release/newspack-blocks/src/blocks/author-list/edit.js:308
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:253
 #: src/blocks/author-list/edit.js:308 src/blocks/author-profile/edit.js:253
 msgid "Hide default avatar"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:316
-#: release/newspack-blocks/src/blocks/author-list/edit.js:322
-#: src/blocks/author-list/edit.js:316 src/blocks/author-list/edit.js:322
-msgid "Avatar Size"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/src/blocks/author-list/edit.js:345
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:290
-#: src/blocks/author-list/edit.js:345 src/blocks/author-profile/edit.js:290
-msgid "Avatar border radius"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:364
-#: src/blocks/author-list/edit.js:364
-msgid "List"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/src/blocks/author-list/edit.js:385
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:310
-#: src/blocks/author-list/edit.js:385 src/blocks/author-profile/edit.js:310
-msgid "Show avatar on left"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/src/blocks/author-list/edit.js:391
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:316
-#: src/blocks/author-list/edit.js:391 src/blocks/author-profile/edit.js:316
-msgid "Show avatar on right"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/src/blocks/author-list/edit.js:402
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:327
-#: src/blocks/author-list/edit.js:402 src/blocks/author-profile/edit.js:327
-msgid "Edit selection"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/dist/editor.js:2563
-#: release/newspack-blocks/src/blocks/author-list/edit.js:479
-#: release/newspack-blocks/src/blocks/author-list/index.js:23
-#: src/blocks/author-list/edit.js:479 src/blocks/author-list/index.js:23
-msgid "Author List"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:488
-#: src/blocks/author-list/edit.js:488
-msgid "Fetching authors…"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2563
-#: release/newspack-blocks/dist/editor.js:2596
-#: release/newspack-blocks/dist/editor.js:2838
-#: release/newspack-blocks/src/blocks/author-list/index.js:43
-#: release/newspack-blocks/src/blocks/author-profile/index.js:43
-#: release/newspack-blocks/src/blocks/homepage-articles/index.js:54
-#: src/blocks/author-list/index.js:43 src/blocks/author-profile/index.js:43
-#: src/blocks/homepage-articles/index.js:54
-msgctxt "block style"
-msgid "Default"
-msgstr "Padrão"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2563
-#: release/newspack-blocks/dist/editor.js:2596
-#: release/newspack-blocks/src/blocks/author-list/index.js:44
-#: release/newspack-blocks/src/blocks/author-profile/index.js:44
-#: src/blocks/author-list/index.js:44 src/blocks/author-profile/index.js:44
-msgctxt "block style"
-msgid "Centered"
-msgstr ""
-
-#. translators: label for small text size option
-#. translators: label for small avatar size option
-#. translators: label for small size option
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:61
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:100
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:298
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:327
-#: src/blocks/author-profile/edit.js:61 src/blocks/author-profile/edit.js:100
-#: src/blocks/homepage-articles/edit.js:301
-#: src/blocks/homepage-articles/edit.js:330
-msgid "Small"
-msgstr "Pequeno"
-
-#. translators: abbreviation for small text size option
-#. translators: abbreviation for small avatar size option
-#. translators: abbreviation for small size
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:62
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:101
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:299
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:328
-#: src/blocks/author-profile/edit.js:62 src/blocks/author-profile/edit.js:101
-#: src/blocks/homepage-articles/edit.js:302
-#: src/blocks/homepage-articles/edit.js:331
-msgid "S"
-msgstr "S"
-
-#. translators: label for medium text size option
-#. translators: label for medium avatar size option
-#. translators: label for medium size option
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:69
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:108
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:303
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:332
-#: src/blocks/author-profile/edit.js:69 src/blocks/author-profile/edit.js:108
-#: src/blocks/homepage-articles/edit.js:306
-#: src/blocks/homepage-articles/edit.js:335
-msgid "Medium"
-msgstr "Médio"
-
-#. translators: abbreviation for medium text size option
-#. translators: abbreviation for medium avatar size option
-#. translators: abbreviation for medium size
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:70
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:109
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:304
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:333
-#: src/blocks/author-profile/edit.js:70 src/blocks/author-profile/edit.js:109
-#: src/blocks/homepage-articles/edit.js:307
-#: src/blocks/homepage-articles/edit.js:336
-msgid "M"
-msgstr "M"
-
-#. translators: label for small text size option
-#. translators: label for large avatar size option
-#. translators: label for large size option
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:77
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:116
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:308
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:337
-#: src/blocks/author-profile/edit.js:77 src/blocks/author-profile/edit.js:116
-#: src/blocks/homepage-articles/edit.js:311
-#: src/blocks/homepage-articles/edit.js:340
-msgid "Large"
-msgstr "Amplo"
-
-#. translators: abbreviation for large text size option
-#. translators: abbreviation for large avatar size option
-#. translators: abbreviation for large size
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:78
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:117
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:309
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:338
-#: src/blocks/author-profile/edit.js:78 src/blocks/author-profile/edit.js:117
-#: src/blocks/homepage-articles/edit.js:312
-#: src/blocks/homepage-articles/edit.js:341
-msgid "L"
-msgstr "L"
-
-#. translators: label for extra-large text size option
-#. translators: label for extra large size option
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:85
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:313
-#: src/blocks/author-profile/edit.js:85
-#: src/blocks/homepage-articles/edit.js:316
-msgid "Extra Large"
-msgstr "Extra grande"
-
-#. translators: abbreviation for small text size option
-#. translators: abbreviation for extra-large avatar size option
-#. translators: abbreviation for extra large size
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:89
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:128
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:317
-#: src/blocks/author-profile/edit.js:89 src/blocks/author-profile/edit.js:128
-#: src/blocks/homepage-articles/edit.js:320
-msgid "XL"
-msgstr "XL"
-
-#. translators: label for extra-large avatar size option
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:124
-#: src/blocks/author-profile/edit.js:124
-msgid "Extra-large"
-msgstr "Extra grande"
-
-#. translators: Error text for when no authors are found.
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:183
-#: release/newspack-blocks/src/blocks/author-profile/edit.js:194
-#: src/blocks/author-profile/edit.js:183 src/blocks/author-profile/edit.js:194
-msgid "No authors or guest authors found for ID %s."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 release/newspack-blocks/dist/editor.js:3
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:261
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:267
 #: src/blocks/author-profile/edit.js:261 src/blocks/author-profile/edit.js:267
 msgid "Avatar size"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
-#: release/newspack-blocks/dist/editor.js:2596
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:345
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:290
+#: src/blocks/author-list/edit.js:345 src/blocks/author-profile/edit.js:290
+msgid "Avatar border radius"
+msgstr ""
+
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:385
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:310
+#: src/blocks/author-list/edit.js:385 src/blocks/author-profile/edit.js:310
+msgid "Show avatar on left"
+msgstr ""
+
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:391
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:316
+#: src/blocks/author-list/edit.js:391 src/blocks/author-profile/edit.js:316
+msgid "Show avatar on right"
+msgstr ""
+
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:402
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:327
+#: src/blocks/author-list/edit.js:402 src/blocks/author-profile/edit.js:327
+msgid "Edit selection"
+msgstr ""
+
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:343
 #: release/newspack-blocks/src/blocks/author-profile/index.js:23
 #: src/blocks/author-profile/edit.js:343 src/blocks/author-profile/index.js:23
 msgid "Author Profile"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 release/newspack-blocks/dist/editor.js:3
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:352
 #: src/blocks/author-profile/edit.js:352
 msgid "Fetching author info…"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 release/newspack-blocks/dist/editor.js:3
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:358
 #: src/blocks/author-profile/edit.js:358
 msgid "Search for an author to display"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2574
+#: dist/editor.js:3 release/newspack-blocks/dist/editor.js:3
 #: release/newspack-blocks/src/blocks/author-profile/edit.js:359
 #: src/blocks/author-profile/edit.js:359
 msgid "Begin typing name, click autocomplete result to select."
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2563
-#: release/newspack-blocks/dist/editor.js:2596
+#: dist/editor.js:3 dist/editor.js:5 dist/editor.js:26
+#: release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:255
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:391
+#: release/newspack-blocks/src/components/query-controls.js:75
+#: release/newspack-blocks/src/components/query-controls.js:90
+#: src/blocks/author-list/edit.js:255 src/blocks/author-profile/edit.js:391
+#: src/components/query-controls.js:75 src/components/query-controls.js:90
+msgid "(no name)"
+msgstr "(sem nome)"
+
+#: dist/editor.js:3 dist/editor.js:17 dist/editor.js:26
+#: release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:17
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:262
 #: release/newspack-blocks/src/blocks/author-list/index.js:40
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:421
 #: release/newspack-blocks/src/blocks/author-profile/index.js:40
-#: src/blocks/author-list/index.js:40 src/blocks/author-profile/index.js:40
-msgid "profile"
+#: src/blocks/author-list/edit.js:262 src/blocks/author-list/index.js:40
+#: src/blocks/author-profile/edit.js:421 src/blocks/author-profile/index.js:40
+msgid "author"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2596
-#: release/newspack-blocks/src/blocks/author-profile/index.js:41
-#: src/blocks/author-profile/index.js:41
-msgid "Display an author profile card."
+#: dist/editor.js:3 dist/editor.js:26 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:263
+#: release/newspack-blocks/src/blocks/author-profile/edit.js:422
+#: src/blocks/author-list/edit.js:263 src/blocks/author-profile/edit.js:422
+msgid "authors"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2607
-#: release/newspack-blocks/src/blocks/author-profile/single-author.js:97
-#: src/blocks/author-profile/single-author.js:97
+#: dist/editor.js:3 release/newspack-blocks/dist/editor.js:3
+#: release/newspack-blocks/src/blocks/author-profile/single-author.js:99
+#: src/blocks/author-profile/single-author.js:99
 msgid "More by"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:67
-#: src/blocks/checkout-button/edit.js:67
-msgid "Width settings"
+#. translators: label for square aspect ratio option
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:191
+#: src/blocks/carousel/edit.js:191
+msgid "Square"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:68
-#: src/blocks/checkout-button/edit.js:68
-msgid "Button width"
+#. translators: abbreviation for 1:1 aspect ratio
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:195
+#: src/blocks/carousel/edit.js:195
+msgid "1:1"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:149
-#: src/blocks/checkout-button/edit.js:149
-msgid "Click to change the selected product"
+#. translators: label for 4:3 aspect ratio option
+#. translators: abbreviation for 4:3 aspect ratio
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:202
+#: release/newspack-blocks/src/blocks/carousel/edit.js:203
+#: src/blocks/carousel/edit.js:202 src/blocks/carousel/edit.js:203
+msgid "4:3"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:154
-#: src/blocks/checkout-button/edit.js:154
-msgid "Change the selected product"
+#. translators: label for 16:9 aspect ratio option
+#. translators: abbreviation for 16:9 aspect ratio
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:210
+#: release/newspack-blocks/src/blocks/carousel/edit.js:214
+#: src/blocks/carousel/edit.js:210 src/blocks/carousel/edit.js:214
+msgid "16:9"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:166
-#: src/blocks/checkout-button/edit.js:166
-msgid "Type to search for a product…"
+#. translators: label for 3:4 aspect ratio option
+#. translators: abbreviation for 3:4 aspect ratio
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:221
+#: release/newspack-blocks/src/blocks/carousel/edit.js:222
+#: src/blocks/carousel/edit.js:221 src/blocks/carousel/edit.js:222
+msgid "3:4"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:168
-#: src/blocks/checkout-button/edit.js:168
-msgid "Select a product"
+#. translators: label for 9:16 aspect ratio option
+#. translators: abbreviation for 9:16 aspect ratio
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:229
+#: release/newspack-blocks/src/blocks/carousel/edit.js:233
+#: src/blocks/carousel/edit.js:229 src/blocks/carousel/edit.js:233
+msgid "9:16"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/dist/editor.js:2739
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:178
-#: src/blocks/checkout-button/edit.js:178
-msgid "Cancel"
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:398
+#: release/newspack-blocks/src/blocks/carousel/edit.js:408
+#: src/blocks/carousel/edit.js:398 src/blocks/carousel/edit.js:408
+msgid "Slide Aspect Ratio"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:277
-#: src/blocks/checkout-button/edit.js:277
-msgid "Product"
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:428
+#: release/newspack-blocks/src/blocks/carousel/edit.js:444
+#: src/blocks/carousel/edit.js:428 src/blocks/carousel/edit.js:444
+msgid "Image Fit"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:287
-#: src/blocks/checkout-button/edit.js:287
-msgid "Allow the reader to select the variation before checkout."
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:449
+#: release/newspack-blocks/src/blocks/carousel/edit.js:452
+#: src/blocks/carousel/edit.js:449 src/blocks/carousel/edit.js:452
+msgid "Cover"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:301
-#: src/blocks/checkout-button/edit.js:301
-msgid "Variation"
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:457
+#: release/newspack-blocks/src/blocks/carousel/edit.js:460
+#: src/blocks/carousel/edit.js:457 src/blocks/carousel/edit.js:460
+msgid "Contain"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:302
-#: src/blocks/checkout-button/edit.js:302
-msgid "Select the product variation to be added to cart."
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:508
+#: src/blocks/carousel/edit.js:508
+msgid "Article Meta Settings"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/dist/editor.js:2772
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:326
-#: src/blocks/checkout-button/edit.js:326
-msgid "After purchase"
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/blocks/carousel/edit.js:511
+#: src/blocks/carousel/edit.js:511
+msgid "Show Title"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:330
-#: src/blocks/checkout-button/edit.js:330
-msgid "Name Your Price"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:332
-#: src/blocks/checkout-button/edit.js:332
-msgid ""
-"This product has \"Name Your Price\" toggled on. You can set the custom "
-"price for this checkout."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:338
-#: src/blocks/checkout-button/edit.js:338
-msgid "Suggested price:"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:343
-#: src/blocks/checkout-button/edit.js:343
-msgid "Minimum price:"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:349
-#: src/blocks/checkout-button/edit.js:349
-msgid "Maximum price:"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2662
-#: release/newspack-blocks/src/blocks/checkout-button/edit.js:355
-#: src/blocks/checkout-button/edit.js:355
-msgid "Custom Price"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2706
-msgid "Frequency"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2706
-msgid "Tiers"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:346
-#: src/blocks/homepage-articles/edit.js:349
-msgid "Display Settings"
-msgstr "Exibir Configurações"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:384
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:390
-#: src/blocks/homepage-articles/edit.js:387
-#: src/blocks/homepage-articles/edit.js:393
-msgid "Columns Gap"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:420
-#: src/blocks/homepage-articles/edit.js:423
-msgid ""
-"This blog is private, therefore the \"Load more posts\" feature is not "
-"active."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:428
-#: src/blocks/homepage-articles/edit.js:431
-msgid "Show \"Load more posts\" Button"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:435
-#: src/blocks/homepage-articles/edit.js:438
-msgid "Allow duplicate stories"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:436
-#: src/blocks/homepage-articles/edit.js:439
-msgid ""
-"If checked, this block will be excluded from the page's de-duplication "
-"logic. Duplicate stories may appear."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:445
-#: src/blocks/homepage-articles/edit.js:448
-msgid "Featured Image Settings"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:448
-#: src/blocks/homepage-articles/edit.js:451
-msgid "Show Featured Image"
-msgstr "Mostrar imagem em destaque"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:457
-#: src/blocks/homepage-articles/edit.js:460
-msgid "Show Featured Image Caption"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:468
-#: src/blocks/homepage-articles/edit.js:471
-msgid "Stack on mobile"
-msgstr "Pilha no móbil"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:474
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:480
-#: src/blocks/homepage-articles/edit.js:477
-#: src/blocks/homepage-articles/edit.js:483
-msgid "Featured Image Size"
-msgstr "Tamanho da imagem destacada"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:504
-#: src/blocks/homepage-articles/edit.js:507
-msgid "Minimum height"
-msgstr "Altura mínima"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:505
-#: src/blocks/homepage-articles/edit.js:508
-msgid ""
-"Sets a minimum height for the block, using a percentage of the screen's "
-"current height."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:517
-#: src/blocks/homepage-articles/edit.js:520
-msgid "Post Control Settings"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:521
-#: src/blocks/homepage-articles/edit.js:524
-msgid "Show Subtitle"
-msgstr "Mostrar Subtítulo"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:529
-#: src/blocks/homepage-articles/edit.js:532
-msgid "Show Excerpt"
-msgstr "Exibir Resumo"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:536
-#: src/blocks/homepage-articles/edit.js:539
-msgid "Max number of words in excerpt"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:544
-#: src/blocks/homepage-articles/edit.js:547
-msgid "Add a \"Read More\" link"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:550
-#: src/blocks/homepage-articles/edit.js:553
-msgid "\"Read More\" link text"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:558
-#: src/blocks/homepage-articles/edit.js:561
-msgid "Type Scale"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:567
-#: src/blocks/homepage-articles/edit.js:570
-msgid "Color Settings"
-msgstr "Configurações de Cores"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:573
-#: src/blocks/homepage-articles/edit.js:576
-msgid "Text Color"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:577
-#: src/blocks/homepage-articles/edit.js:580
-msgid "Post Meta Settings"
-msgstr "Artigo Meta Configurações"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/carousel/edit.js:509
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:580
-#: src/blocks/carousel/edit.js:509 src/blocks/homepage-articles/edit.js:583
+#: dist/editor.js:5 dist/editor.js:38 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/carousel/edit.js:518
+#: src/blocks/carousel/edit.js:518
 msgid "Show Date"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/carousel/edit.js:516
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:587
-#: src/blocks/carousel/edit.js:516 src/blocks/homepage-articles/edit.js:590
+#: dist/editor.js:5 dist/editor.js:38 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/carousel/edit.js:525
+#: src/blocks/carousel/edit.js:525
 msgid "Show Category"
 msgstr "Mostrar Categoria"
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/carousel/edit.js:523
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:594
-#: src/blocks/carousel/edit.js:523 src/blocks/homepage-articles/edit.js:597
+#: dist/editor.js:5 dist/editor.js:38 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/carousel/edit.js:532
+#: src/blocks/carousel/edit.js:532
 msgid "Show Author"
 msgstr "Mostrar Autor"
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/carousel/edit.js:531
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:602
-#: src/blocks/carousel/edit.js:531 src/blocks/homepage-articles/edit.js:605
+#: dist/editor.js:5 dist/editor.js:38 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/carousel/edit.js:540
+#: src/blocks/carousel/edit.js:540
 msgid "Show Author Avatar"
 msgstr "Mostrar Autor Avatar"
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:674
-#: src/blocks/homepage-articles/edit.js:677
-msgid "List View"
-msgstr "Exibição de lista"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:680
-#: src/blocks/homepage-articles/edit.js:683
-msgid "Grid View"
-msgstr "Ver em Grade"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:689
-#: src/blocks/homepage-articles/edit.js:692
-msgid "Show media on top"
+#: dist/editor.js:5 dist/editor.js:38 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/carousel/edit.js:548
+#: src/blocks/carousel/edit.js:548
+msgid "Show Featured Image Caption"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:695
-#: src/blocks/homepage-articles/edit.js:698
-msgid "Show media on left"
-msgstr "Mostrar mídia na esquerda"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:701
-#: src/blocks/homepage-articles/edit.js:704
-msgid "Show media on right"
+#: dist/editor.js:5 dist/editor.js:38 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/carousel/edit.js:555
+#: src/blocks/carousel/edit.js:555
+msgid "Show Featured Image Credit"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:707
-#: src/blocks/homepage-articles/edit.js:710
-msgid "Show media behind"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:716
-#: src/blocks/homepage-articles/edit.js:719
-msgid "Landscape Image Shape"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:722
-#: src/blocks/homepage-articles/edit.js:725
-msgid "portrait Image Shape"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:728
-#: src/blocks/homepage-articles/edit.js:731
-msgid "Square Image Shape"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:734
-#: src/blocks/homepage-articles/edit.js:737
-msgid "Uncropped"
-msgstr "Não Cortado"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:752
-#: src/blocks/homepage-articles/edit.js:755
-msgid "Write header…"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2816
-#: release/newspack-blocks/src/blocks/homepage-articles/edit.js:759
-#: src/blocks/homepage-articles/edit.js:762
-msgid "Sorry, no posts were found."
-msgstr "Desculpe, nada foi encontrado."
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2838
-#: release/newspack-blocks/src/blocks/homepage-articles/index.js:55
-#: src/blocks/homepage-articles/index.js:55
-msgctxt "block style"
-msgid "Borders"
-msgstr "Bordas"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2860
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 msgid "The post content."
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2860
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 msgid "The post excerpt."
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2860
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 msgid "Post Subtitle"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2860
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 msgid "Post Title"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2860
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 msgid "Author Name"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2860
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 msgid "Category"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2860
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 msgid "Featured image caption"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2904
-#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:132
-#: src/blocks/iframe/iframe-placeholder.js:132
-msgid ""
-"Upload an asset folder (.zip), a document (PDF, Word, Excel sheet, or a "
-"PPT), pick one from your media library, or add one with a URL."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2904
-#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:92
-#: src/blocks/iframe/iframe-placeholder.js:92
-msgid "Media Library"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2926
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/shared/author.js:14
 #: src/blocks/shared/author.js:14
 msgid "Biographical info"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2926
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/shared/author.js:18
 #: src/blocks/shared/author.js:18
 msgid "Social links"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2926
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/shared/author.js:22
 #: src/blocks/shared/author.js:22
 msgid "Email address"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2926
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/shared/author.js:26
 #: src/blocks/shared/author.js:26
 msgid "Link to author archive"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2926
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
 #: release/newspack-blocks/src/blocks/shared/author.js:33
 #: src/blocks/shared/author.js:33
 msgid "Display the following fields:"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2937
-#: release/newspack-blocks/dist/editor.js:2992
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/editor-panels.js:34
+#: src/components/editor-panels.js:34
+msgid "Listings"
+msgstr ""
+
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/editor-panels.js:53
+#: src/components/editor-panels.js:53
+msgid "Post Types"
+msgstr ""
+
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/editor-panels.js:65
+#: src/components/editor-panels.js:65
+msgid "Additional Post Statuses"
+msgstr ""
+
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/editor-panels.js:68
+#: src/components/editor-panels.js:68
+msgid ""
+"Selection here has effect only for editors, regular users will only see "
+"published posts."
+msgstr ""
+
+#: dist/editor.js:5 dist/editor.js:41 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/video-playlist/edit.js:152
 #: release/newspack-blocks/src/blocks/video-playlist/edit.js:173
 #: release/newspack-blocks/src/components/query-controls.js:17
@@ -1671,757 +1278,1102 @@ msgstr ""
 msgid "(no title)"
 msgstr "(sem título)"
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2772
-#: release/newspack-blocks/dist/editor.js:2937
-#: release/newspack-blocks/src/blocks/video-playlist/edit.js:115
-#: release/newspack-blocks/src/blocks/video-playlist/edit.js:125
-#: src/blocks/video-playlist/edit.js:115 src/blocks/video-playlist/edit.js:125
-msgid "Error"
-msgstr "Erro"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2937
-#: release/newspack-blocks/src/blocks/video-playlist/edit.js:126
-#: src/blocks/video-playlist/edit.js:126
-msgid "No videos found"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2937
-#: release/newspack-blocks/src/blocks/video-playlist/edit.js:206
-#: src/blocks/video-playlist/edit.js:206
-msgid "Settings"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2937
-#: release/newspack-blocks/src/blocks/video-playlist/edit.js:210
-#: src/blocks/video-playlist/edit.js:210
-msgid "Videos"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2937
-#: release/newspack-blocks/src/blocks/video-playlist/edit.js:211
-#: src/blocks/video-playlist/edit.js:211
-msgid "The maximum number of videos to pull from posts."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2937
-#: release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/blocks/video-playlist/edit.js:224
-#: release/newspack-blocks/src/components/query-controls.js:292
-#: src/blocks/video-playlist/edit.js:224 src/components/query-controls.js:292
-msgid "Categories"
-msgstr "Categorias"
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2981
-#: release/newspack-blocks/src/components/editor-panels.js:42
-#: src/components/editor-panels.js:42
-msgid "Post Types"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2981
-#: release/newspack-blocks/src/components/editor-panels.js:54
-#: src/components/editor-panels.js:54
-msgid "Additional Post Statuses"
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2981
-#: release/newspack-blocks/src/components/editor-panels.js:57
-#: src/components/editor-panels.js:57
-msgid ""
-"Selection here has effect only for editors, regular users will only see "
-"published posts."
-msgstr ""
-
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:259
-#: src/components/query-controls.js:259
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:261
+#: src/components/query-controls.js:261
 msgid "Choose Specific Posts"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:268
-#: src/components/query-controls.js:268
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:270
+#: src/components/query-controls.js:270
 msgid "Posts"
 msgstr "Posts"
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:269
-#: src/components/query-controls.js:269
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:271
+#: src/components/query-controls.js:271
 msgid "Begin typing post title, click autocomplete result to select."
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:283
-#: src/components/query-controls.js:283
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:285
+#: src/components/query-controls.js:285
 msgid "Authors"
 msgstr "Autores"
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:299
-#: src/components/query-controls.js:299
+#: dist/editor.js:5 dist/editor.js:41 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/video-playlist/edit.js:224
+#: release/newspack-blocks/src/components/query-controls.js:294
+#: src/blocks/video-playlist/edit.js:224 src/components/query-controls.js:294
+msgid "Categories"
+msgstr "Categorias"
+
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:301
+#: src/components/query-controls.js:301
 msgid "Include subcategories "
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:308
-#: src/components/query-controls.js:308
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:310
+#: src/components/query-controls.js:310
 msgid "Tags"
 msgstr "Tags"
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:346
-#: src/components/query-controls.js:346
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:340
+#: src/components/query-controls.js:340
+msgid "Hide Advanced Filters"
+msgstr ""
+
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:341
+#: src/components/query-controls.js:341
+msgid "Show Advanced Filters"
+msgstr "Mostrar filtros avançados"
+
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:353
+#: src/components/query-controls.js:353
 msgid "Excluded Tags"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:355
-#: src/components/query-controls.js:355
+#: dist/editor.js:5 release/newspack-blocks/dist/editor.js:5
+#: release/newspack-blocks/src/components/query-controls.js:362
+#: src/components/query-controls.js:362
 msgid "Excluded Categories"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3003
+#. translators: %s is the custom taxonomy label.
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
+#: release/newspack-blocks/src/components/query-controls.js:376
+#: src/components/query-controls.js:376
+msgid "Excluded %s"
+msgstr ""
+
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 msgid "Post-Checkout Button"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3003
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 msgid ""
 "After a successful purchase, a button will be presented to finish the "
 "process."
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3003
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 msgid "Close the modal"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3003
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 msgid "Go to a custom URL"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3003
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 msgid "Go to the previous page"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3003
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 msgid "Button Label"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3003
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 msgid "Custom URL"
 msgstr ""
 
-#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:3003
+#: dist/editor.js:8 release/newspack-blocks/dist/editor.js:8
 msgid "https://example.com"
 msgstr ""
 
-#: dist/placeholder_blocks.js:1
-#: release/newspack-blocks/dist/placeholder_blocks.js:39
-#: release/newspack-blocks/src/setup/placeholder-blocks.js:13
-#: src/setup/placeholder-blocks.js:13
-msgid "Ad Unit"
+#. Translators: %s: The name of the type.
+#. Translators: %s: the name of a post type.
+#: dist/editor.js:17 dist/editor.js:26
+#: release/newspack-blocks/dist/editor.js:17
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:479
+#: release/newspack-blocks/src/blocks/author-list/index.js:23
+#: src/blocks/author-list/edit.js:479 src/blocks/author-list/index.js:23
+msgid "Author List"
 msgstr ""
 
-#: dist/placeholder_blocks.js:1
-#: release/newspack-blocks/dist/placeholder_blocks.js:39
-#: release/newspack-blocks/src/setup/placeholder-blocks.js:14
-#: src/setup/placeholder-blocks.js:14
-msgid "Render an ad unit from your inventory."
+#: dist/editor.js:17 dist/editor.js:26
+#: release/newspack-blocks/dist/editor.js:17
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/index.js:40
+#: release/newspack-blocks/src/blocks/author-profile/index.js:40
+#: src/blocks/author-list/index.js:40 src/blocks/author-profile/index.js:40
+msgid "profile"
 msgstr ""
 
-#: dist/placeholder_blocks.js:1
-#: release/newspack-blocks/dist/placeholder_blocks.js:39
-#: release/newspack-blocks/src/setup/placeholder-blocks.js:16
-#: src/setup/placeholder-blocks.js:16
-msgid "Place ad units inside your page by installing Newspack Ads."
-msgstr ""
-
-#. translators: %s is the block name.
-#: dist/placeholder_blocks.js:1
-#: release/newspack-blocks/dist/placeholder_blocks.js:39
-#: release/newspack-blocks/src/setup/placeholder-blocks.js:39
-#: src/setup/placeholder-blocks.js:39
-msgid "The \"%s\" block is currently not available."
-msgstr ""
-
-#: dist/placeholder_blocks.js:1
-#: release/newspack-blocks/dist/placeholder_blocks.js:39
-#: release/newspack-blocks/src/setup/placeholder-blocks.js:48
-#: src/setup/placeholder-blocks.js:48
-msgid "Visit Plugin Page"
-msgstr ""
-
-#: dist/placeholder_blocks.js:1
-#: release/newspack-blocks/dist/placeholder_blocks.js:39
-#: release/newspack-blocks/src/setup/placeholder-blocks.js:52
-#: src/setup/placeholder-blocks.js:52
-msgid "Remove Block"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:224
-#: src/blocks/author-list/edit.js:224
-msgid "hidden"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2541
-#: release/newspack-blocks/src/blocks/author-list/edit.js:225
-#: src/blocks/author-list/edit.js:225
-msgid "displayed"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2563
+#: dist/editor.js:17 release/newspack-blocks/dist/editor.js:17
 #: release/newspack-blocks/src/blocks/author-list/index.js:41
 #: src/blocks/author-list/index.js:41
 msgid "Display a list of author profile cards."
 msgstr ""
 
-#. translators: label for square aspect ratio option
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:189
-#: src/blocks/carousel/edit.js:189
-msgid "Square"
+#: dist/editor.js:17 dist/editor.js:26 dist/editor.js:38
+#: release/newspack-blocks/dist/editor.js:17
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-list/index.js:43
+#: release/newspack-blocks/src/blocks/author-profile/index.js:43
+#: release/newspack-blocks/src/blocks/homepage-articles/index.js:54
+#: src/blocks/author-list/index.js:43 src/blocks/author-profile/index.js:43
+#: src/blocks/homepage-articles/index.js:54
+msgctxt "block style"
+msgid "Default"
+msgstr "Padrão"
+
+#: dist/editor.js:17 dist/editor.js:26
+#: release/newspack-blocks/dist/editor.js:17
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/index.js:44
+#: release/newspack-blocks/src/blocks/author-profile/index.js:44
+#: src/blocks/author-list/index.js:44 src/blocks/author-profile/index.js:44
+msgctxt "block style"
+msgid "Centered"
 msgstr ""
 
-#. translators: abbreviation for 1:1 aspect ratio
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:193
-#: src/blocks/carousel/edit.js:193
-msgid "1:1"
+#: dist/editor.js:17 release/newspack-blocks/dist/editor.js:17
+#: release/newspack-blocks/src/blocks/author-list/edit.js:105
+#: release/newspack-blocks/src/blocks/author-list/edit.js:109
+#: src/blocks/author-list/edit.js:105 src/blocks/author-list/edit.js:109
+msgid "Error fetching authors."
 msgstr ""
 
-#. translators: label for 4:3 aspect ratio option
-#. translators: abbreviation for 4:3 aspect ratio
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:200
-#: release/newspack-blocks/src/blocks/carousel/edit.js:201
-#: src/blocks/carousel/edit.js:200 src/blocks/carousel/edit.js:201
-msgid "4:3"
+#: dist/editor.js:17 release/newspack-blocks/dist/editor.js:17
+#: release/newspack-blocks/src/blocks/author-list/edit.js:130
+#: src/blocks/author-list/edit.js:130
+msgid "Author List Settings"
 msgstr ""
 
-#. translators: label for 16:9 aspect ratio option
-#. translators: abbreviation for 16:9 aspect ratio
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:208
-#: release/newspack-blocks/src/blocks/carousel/edit.js:212
-#: src/blocks/carousel/edit.js:208 src/blocks/carousel/edit.js:212
-msgid "16:9"
+#: dist/editor.js:17 release/newspack-blocks/dist/editor.js:17
+#: release/newspack-blocks/src/blocks/author-list/edit.js:134
+#: src/blocks/author-list/edit.js:134
+msgid "Author Type"
 msgstr ""
 
-#. translators: label for 3:4 aspect ratio option
-#. translators: abbreviation for 3:4 aspect ratio
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:219
-#: release/newspack-blocks/src/blocks/carousel/edit.js:220
-#: src/blocks/carousel/edit.js:219 src/blocks/carousel/edit.js:220
-msgid "3:4"
+#. translators: help text for author type selection.
+#: dist/editor.js:20 release/newspack-blocks/dist/editor.js:20
+#: release/newspack-blocks/src/blocks/author-list/edit.js:137
+#: src/blocks/author-list/edit.js:137
+msgid "%s will be displayed."
 msgstr ""
 
-#. translators: label for 9:16 aspect ratio option
-#. translators: abbreviation for 9:16 aspect ratio
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:227
-#: release/newspack-blocks/src/blocks/carousel/edit.js:231
-#: src/blocks/carousel/edit.js:227 src/blocks/carousel/edit.js:231
-msgid "9:16"
+#: dist/editor.js:20 release/newspack-blocks/dist/editor.js:20
+#: release/newspack-blocks/src/blocks/author-list/edit.js:139
+#: src/blocks/author-list/edit.js:139
+msgid "Both guest authors and WP users"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:388
-#: release/newspack-blocks/src/blocks/carousel/edit.js:398
-#: src/blocks/carousel/edit.js:388 src/blocks/carousel/edit.js:398
-msgid "Slide Aspect Ratio"
+#. translators: currently selected author type option.
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:142
+#: src/blocks/author-list/edit.js:142
+msgid "%s only"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:418
-#: release/newspack-blocks/src/blocks/carousel/edit.js:435
-#: src/blocks/carousel/edit.js:418 src/blocks/carousel/edit.js:435
-msgid "Image Fit"
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:144
+#: release/newspack-blocks/src/blocks/author-list/edit.js:151
+#: src/blocks/author-list/edit.js:144 src/blocks/author-list/edit.js:151
+msgid "Guest authors"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:440
-#: release/newspack-blocks/src/blocks/carousel/edit.js:443
-#: src/blocks/carousel/edit.js:440 src/blocks/carousel/edit.js:443
-msgid "Cover"
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:145
+#: release/newspack-blocks/src/blocks/author-list/edit.js:152
+#: src/blocks/author-list/edit.js:145 src/blocks/author-list/edit.js:152
+msgid "WP users"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:448
-#: release/newspack-blocks/src/blocks/carousel/edit.js:451
-#: src/blocks/carousel/edit.js:448 src/blocks/carousel/edit.js:451
-msgid "Contain"
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:150
+#: src/blocks/author-list/edit.js:150
+msgid "All authors"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:499
-#: src/blocks/carousel/edit.js:499
-msgid "Article Meta Settings"
+#: dist/editor.js:23 dist/editor.js:26 dist/editor.js:38
+#: release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/author-list/edit.js:161
+#: release/newspack-blocks/src/blocks/author-list/edit.js:372
+#: src/blocks/author-list/edit.js:161 src/blocks/author-list/edit.js:372
+msgid "Columns"
+msgstr "Colunas"
+
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:174
+#: src/blocks/author-list/edit.js:174
+msgid "WP User Roles"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2629
-#: release/newspack-blocks/src/blocks/carousel/edit.js:502
-#: src/blocks/carousel/edit.js:502
-msgid "Show Title"
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:196
+#: src/blocks/author-list/edit.js:196
+msgid "Display alphabetical separators"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2717
-#: release/newspack-blocks/dist/editor.js:2794
-#: release/newspack-blocks/src/blocks/donate/index.js:25
-#: src/blocks/donate/index.js:25
-msgid "Donate"
-msgstr "Doação"
-
-#: release/newspack-blocks/dist/editor.js:2717
-msgid "Book"
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:197
+#: src/blocks/author-list/edit.js:197
+msgid "Chunk authors alphabetically."
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2717
-msgid "Buy"
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:205
+#: src/blocks/author-list/edit.js:205
+msgid "Group authors by alphabet"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2717
-#: release/newspack-blocks/dist/editor.js:2728
-msgid "Button text…"
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:206
+#: src/blocks/author-list/edit.js:206
+msgid "Display each alphabetical chunk as a discrete section."
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2717
-msgid "Thank you text…"
+#: dist/editor.js:23 release/newspack-blocks/dist/editor.js:23
+#: release/newspack-blocks/src/blocks/author-list/edit.js:219
+#: src/blocks/author-list/edit.js:219
+msgid "Exclude authors with 0 posts"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2717
-msgid "Card number"
+#. Translators: Help message for "include empty authors" toggle.
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:222
+#: src/blocks/author-list/edit.js:222
+msgid "Authors with no published posts will be %s."
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2717
-msgid "with Apple/Google Pay"
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:224
+#: src/blocks/author-list/edit.js:224
+msgid "hidden"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2728
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:225
+#: src/blocks/author-list/edit.js:225
+msgid "displayed"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:233
+#: src/blocks/author-list/edit.js:233
+msgid "Search by author name"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:234
+#: src/blocks/author-list/edit.js:234
+msgid "Authors selected here will not be displayed."
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:316
+#: release/newspack-blocks/src/blocks/author-list/edit.js:322
+#: src/blocks/author-list/edit.js:316 src/blocks/author-list/edit.js:322
+msgid "Avatar Size"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:364
+#: src/blocks/author-list/edit.js:364
+msgid "List"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-list/edit.js:488
+#: src/blocks/author-list/edit.js:488
+msgid "Fetching authors…"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/author-profile/index.js:41
+#: src/blocks/author-profile/index.js:41
+msgid "Display an author profile card."
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:71
+#: src/blocks/checkout-button/edit.js:71
+msgid "Width settings"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:72
+#: src/blocks/checkout-button/edit.js:72
+msgid "Button width"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:153
+#: src/blocks/checkout-button/edit.js:153
+msgid "Click to change the selected product"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:158
+#: src/blocks/checkout-button/edit.js:158
+msgid "Change the selected product"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:170
+#: src/blocks/checkout-button/edit.js:170
+msgid "Type to search for a product…"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:172
+#: src/blocks/checkout-button/edit.js:172
+msgid "Select a product"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:182
+#: src/blocks/checkout-button/edit.js:182
+msgid "Cancel"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:281
+#: src/blocks/checkout-button/edit.js:281
+msgid "Product"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:291
+#: src/blocks/checkout-button/edit.js:291
+msgid "Allow the reader to select the variation before checkout."
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:305
+#: src/blocks/checkout-button/edit.js:305
+msgid "Variation"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:306
+#: src/blocks/checkout-button/edit.js:306
+msgid "Select the product variation to be added to cart."
+msgstr ""
+
+#. translators: %s is either 'enabled' or 'disabled'.
+#: dist/editor.js:26 dist/editor.js:38
+#: release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:330
+#: src/blocks/checkout-button/edit.js:330
+msgid "After purchase"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:334
+#: src/blocks/checkout-button/edit.js:334
+msgid "Name Your Price"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:336
+#: src/blocks/checkout-button/edit.js:336
+msgid ""
+"This product has \"Name Your Price\" toggled on. You can set the custom "
+"price for this checkout."
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:342
+#: src/blocks/checkout-button/edit.js:342
+msgid "Suggested price:"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:347
+#: src/blocks/checkout-button/edit.js:347
+msgid "Minimum price:"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:353
+#: src/blocks/checkout-button/edit.js:353
+msgid "Maximum price:"
+msgstr ""
+
+#: dist/editor.js:26 release/newspack-blocks/dist/editor.js:26
+#: release/newspack-blocks/src/blocks/checkout-button/edit.js:359
+#: src/blocks/checkout-button/edit.js:359
+msgid "Custom Price"
+msgstr ""
+
+#. Translators: %s is the frequency (e.g. per month, per year).
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgctxt "per `Frequency`"
+msgid " per %s"
+msgstr ""
+
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Frequency"
+msgstr ""
+
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Tiers"
+msgstr ""
+
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 msgid "Heading…"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2728
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 msgid "…"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2728
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Button text…"
+msgstr ""
+
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 msgid "Description…"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Label"
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Thank you text…"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Name"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid ""
-"Name of the field which will be sent to the payment procesor and other third "
-"parties. Field names must be unique."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Options"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Remove"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Name already exists."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Required"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Field width:"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Save"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-#: release/newspack-blocks/dist/editor.js:2904
-#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:166
-#: src/blocks/iframe/iframe-placeholder.js:166
-msgid "Update"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Collect additional data from donors by defining custom form fields."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Move up"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Move down"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Add data field"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2739
-msgid "Edit data field"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 msgid "Low-tier"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2772
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 msgid "Mid-tier"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2772
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 msgid "High-tier"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Go to donation settings to troubleshoot."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "The Donate block will not be rendered."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "The Reader Revenue platform is set to \"other\"."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Go to donation settings to update the platform."
-msgstr ""
-
-#. Translators: %s is the currency symbol, %d is the minimum donation amount.
-#: release/newspack-blocks/dist/editor.js:2772
-msgid ""
-"Warning: suggested donations should be at least the minimum donation amount "
-"(%1$s%2$d)."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Layout"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Tiers layout is disabled if the block is set to render untiered."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Default Tab"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Suggested Donations"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Configure manually"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Tiered"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Minimum donation"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid ""
-"The Donate Block allows you to collect donations from readers. The fields "
-"are automatically defined based on your donation settings."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Edit donation settings"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Styling"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Button Color"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Additional data fields"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Campaign"
-msgstr "Campanha"
-
-#: release/newspack-blocks/dist/editor.js:2772
-msgid "Campaign ID"
-msgstr "ID de campanha"
-
-#: release/newspack-blocks/dist/editor.js:2794
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 #: release/newspack-blocks/src/blocks/donate/index.js:35
 #: src/blocks/donate/index.js:35
 msgid "donate"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2794
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 #: release/newspack-blocks/src/blocks/donate/index.js:36
 #: src/blocks/donate/index.js:36
 msgid "memberships"
 msgstr "Associações"
 
-#: release/newspack-blocks/dist/editor.js:2794
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 #: release/newspack-blocks/src/blocks/donate/index.js:37
 #: src/blocks/donate/index.js:37
 msgid "subscriptions"
 msgstr "assinaturas"
 
-#: release/newspack-blocks/dist/editor.js:2794
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
 #: release/newspack-blocks/src/blocks/donate/index.js:42
 #: src/blocks/donate/index.js:42
 msgid "Manually place a donation block on any post or page on your site."
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2794
-#: release/newspack-blocks/dist/editor.js:2915
+#: dist/editor.js:32 dist/editor.js:41
+#: release/newspack-blocks/dist/editor.js:32
+#: release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/donate/index.js:48
 #: release/newspack-blocks/src/blocks/iframe/index.js:37
 #: src/blocks/donate/index.js:48 src/blocks/iframe/index.js:37
 msgid "Support reference"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2838
+#: dist/editor.js:32 dist/editor.js:41
+#: release/newspack-blocks/dist/editor.js:32
+#: release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/video-playlist/edit.js:115
+#: release/newspack-blocks/src/blocks/video-playlist/edit.js:125
+#: src/blocks/video-playlist/edit.js:115 src/blocks/video-playlist/edit.js:125
+msgid "Error"
+msgstr "Erro"
+
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Go to donation settings to troubleshoot."
+msgstr ""
+
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "The Donate block will not be rendered."
+msgstr ""
+
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "The Reader Revenue platform is set to \"other\"."
+msgstr ""
+
+#: dist/editor.js:32 release/newspack-blocks/dist/editor.js:32
+msgid "Go to donation settings to update the platform."
+msgstr ""
+
+#: dist/editor.js:32 dist/editor.js:38
+#: release/newspack-blocks/dist/editor.js:32
+#: release/newspack-blocks/dist/editor.js:38
+msgid "Grid View"
+msgstr "Ver em Grade"
+
+#: dist/editor.js:32 dist/editor.js:38
+#: release/newspack-blocks/dist/editor.js:32
+#: release/newspack-blocks/dist/editor.js:38
+msgid "List View"
+msgstr "Exibição de lista"
+
+#. Translators: %s is the currency symbol, %d is the minimum donation amount.
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid ""
+"Warning: suggested donations should be at least the minimum donation amount "
+"(%1$s%2$d)."
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Layout"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Tiers layout is disabled if the block is set to render untiered."
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Default Tab"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Suggested Donations"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Configure manually"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Tiered"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Minimum donation"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid ""
+"The Donate Block allows you to collect donations from readers. The fields "
+"are automatically defined based on your donation settings."
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Edit donation settings"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Styling"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Button Color"
+msgstr ""
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Campaign"
+msgstr "Campanha"
+
+#: dist/editor.js:35 release/newspack-blocks/dist/editor.js:35
+msgid "Campaign ID"
+msgstr "ID de campanha"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/donate/index.js:63
+#: src/blocks/donate/index.js:63
+msgid "Alternate"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/donate/index.js:68
+#: src/blocks/donate/index.js:68
+msgid "Minimal"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/donate/index.js:73
+#: src/blocks/donate/index.js:73
+msgid "Modern"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Display Settings"
+msgstr "Exibir Configurações"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Columns Gap"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid ""
+"This blog is private, therefore the \"Load more posts\" feature is not "
+"active."
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Show \"Load more posts\" Button"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Allow duplicate stories"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid ""
+"If checked, this block will be excluded from the page's de-duplication "
+"logic. Duplicate stories may appear."
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Featured Image Settings"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Show Featured Image"
+msgstr "Mostrar imagem em destaque"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Stack on mobile"
+msgstr "Pilha no móbil"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Featured Image Size"
+msgstr "Tamanho da imagem destacada"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Minimum height"
+msgstr "Altura mínima"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid ""
+"Sets a minimum height for the block, using a percentage of the screen's "
+"current height."
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Post Control Settings"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Show Subtitle"
+msgstr "Mostrar Subtítulo"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Show Excerpt"
+msgstr "Exibir Resumo"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Max number of words in excerpt"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Add a \"Read More\" link"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "\"Read More\" link text"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Type Scale"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Color Settings"
+msgstr "Configurações de Cores"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Text Color"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Post Meta Settings"
+msgstr "Artigo Meta Configurações"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Show media on top"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Show media on left"
+msgstr "Mostrar mídia na esquerda"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Show media on right"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Show media behind"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Landscape Image Shape"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "portrait Image Shape"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Square Image Shape"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Uncropped"
+msgstr "Não Cortado"
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Write header…"
+msgstr ""
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+msgid "Sorry, no posts were found."
+msgstr "Desculpe, nada foi encontrado."
+
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
 #: release/newspack-blocks/src/blocks/homepage-articles/index.js:25
 #: src/blocks/homepage-articles/index.js:25
 msgid "Homepage Posts"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2838
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
 #: release/newspack-blocks/src/blocks/homepage-articles/index.js:48
 #: src/blocks/homepage-articles/index.js:48
 msgid "posts"
 msgstr "posts"
 
-#: release/newspack-blocks/dist/editor.js:2838
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
 #: release/newspack-blocks/src/blocks/homepage-articles/index.js:49
 #: src/blocks/homepage-articles/index.js:49
 msgid "articles"
 msgstr "artigos"
 
-#: release/newspack-blocks/dist/editor.js:2838
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
 #: release/newspack-blocks/src/blocks/homepage-articles/index.js:50
 #: src/blocks/homepage-articles/index.js:50
 msgid "latest"
 msgstr "mais recente"
 
-#: release/newspack-blocks/dist/editor.js:2838
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
 #: release/newspack-blocks/src/blocks/homepage-articles/index.js:52
 #: src/blocks/homepage-articles/index.js:52
 msgid "A block for displaying homepage posts."
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:73
-#: release/newspack-blocks/src/blocks/iframe/edit.js:107
-#: src/blocks/iframe/edit.js:73 src/blocks/iframe/edit.js:107
-msgid "An error occured when uploading the iframe archive."
-msgstr ""
+#: dist/editor.js:38 release/newspack-blocks/dist/editor.js:38
+#: release/newspack-blocks/src/blocks/homepage-articles/index.js:55
+#: src/blocks/homepage-articles/index.js:55
+msgctxt "block style"
+msgid "Borders"
+msgstr "Bordas"
 
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:141
-#: src/blocks/iframe/edit.js:141
-msgid "An error occured when setting the iframe from the archive media."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:166
-#: src/blocks/iframe/edit.js:166
-msgid "Hide iframe preview"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:167
-#: src/blocks/iframe/edit.js:167
-msgid "Show iframe preview"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:181
-#: src/blocks/iframe/edit.js:181
-msgid "This block will take over the page content."
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:187
-#: src/blocks/iframe/edit.js:187
-msgid "Newspack embedded iframe"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:220
-#: src/blocks/iframe/edit.js:220
-msgid "Iframe Settings"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:223
-#: src/blocks/iframe/edit.js:223
-msgid "Fullscreen"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:224
-#: src/blocks/iframe/edit.js:224
+#. Translators: %s: describes what kinds of files/embeds the current user can use.
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:138
+#: src/blocks/iframe/iframe-placeholder.js:138
 msgid ""
-"If enabled, the iframe will be full screen and hide all the post content."
+"Upload a document file (PDF, Word, Excel sheet, or a PPT), choose one from "
+"the media library, %s."
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:236
-#: src/blocks/iframe/edit.js:236
-msgid "Width"
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:143
+#: src/blocks/iframe/iframe-placeholder.js:143
+msgid "embed from a URL, or upload a .zip archive containing HTML assets"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2871
-#: release/newspack-blocks/src/blocks/iframe/edit.js:242
-#: src/blocks/iframe/edit.js:242
-msgid "Height"
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:146
+#: src/blocks/iframe/iframe-placeholder.js:146
+msgid "or embed from a URL"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2904
-#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:111
-#: src/blocks/iframe/iframe-placeholder.js:111
-msgid "Update from URL"
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:180
+#: src/blocks/iframe/iframe-placeholder.js:180
+msgid "Update"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2904
-#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:112
-#: src/blocks/iframe/iframe-placeholder.js:112
-msgid "Embed from URL"
-msgstr ""
-
-#: release/newspack-blocks/dist/editor.js:2904
-#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:167
-#: src/blocks/iframe/iframe-placeholder.js:167
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:181
+#: src/blocks/iframe/iframe-placeholder.js:181
 msgid "Upload"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2915
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:95
+#: src/blocks/iframe/iframe-placeholder.js:95
+msgid "Media Library"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:115
+#: src/blocks/iframe/iframe-placeholder.js:115
+msgid "Update from URL"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/iframe-placeholder.js:116
+#: src/blocks/iframe/iframe-placeholder.js:116
+msgid "Embed from URL"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/iframe/index.js:20
 #: src/blocks/iframe/index.js:20
 msgid "Iframe"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2915
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/iframe/index.js:32
 #: src/blocks/iframe/index.js:32
 msgid "iframe"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2915
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/iframe/index.js:32
 #: src/blocks/iframe/index.js:32
 msgid "project iframe"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2915
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/iframe/index.js:35
 #: src/blocks/iframe/index.js:35
 msgid "Embed an iframe."
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2959
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:167
+#: src/blocks/iframe/edit.js:167
+msgid "Hide iframe preview"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:168
+#: src/blocks/iframe/edit.js:168
+msgid "Show iframe preview"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:182
+#: src/blocks/iframe/edit.js:182
+msgid "This block will take over the page content."
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:188
+#: src/blocks/iframe/edit.js:188
+msgid "Newspack embedded iframe"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:73
+#: release/newspack-blocks/src/blocks/iframe/edit.js:108
+#: src/blocks/iframe/edit.js:73 src/blocks/iframe/edit.js:108
+msgid "An error occured when uploading the iframe archive."
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:142
+#: src/blocks/iframe/edit.js:142
+msgid "An error occured when setting the iframe from the archive media."
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:222
+#: src/blocks/iframe/edit.js:222
+msgid "Iframe Settings"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:225
+#: src/blocks/iframe/edit.js:225
+msgid "Fullscreen"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:226
+#: src/blocks/iframe/edit.js:226
+msgid ""
+"If enabled, the iframe will be full screen and hide all the post content."
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:238
+#: src/blocks/iframe/edit.js:238
+msgid "Width"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/iframe/edit.js:244
+#: src/blocks/iframe/edit.js:244
+msgid "Height"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/video-playlist/edit.js:126
+#: src/blocks/video-playlist/edit.js:126
+msgid "No videos found"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/video-playlist/edit.js:206
+#: src/blocks/video-playlist/edit.js:206
+msgid "Settings"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/video-playlist/edit.js:210
+#: src/blocks/video-playlist/edit.js:210
+msgid "Videos"
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
+#: release/newspack-blocks/src/blocks/video-playlist/edit.js:211
+#: src/blocks/video-playlist/edit.js:211
+msgid "The maximum number of videos to pull from posts."
+msgstr ""
+
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/video-playlist/index.js:18
 #: src/blocks/video-playlist/index.js:18
 msgid "YouTube Video Playlist"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2959
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/video-playlist/index.js:40
 #: src/blocks/video-playlist/index.js:40
 msgid "video"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2959
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/video-playlist/index.js:41
 #: src/blocks/video-playlist/index.js:41
 msgid "playlist"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2959
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/video-playlist/index.js:42
 #: src/blocks/video-playlist/index.js:42
 msgid "youtube"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2959
+#: dist/editor.js:41 release/newspack-blocks/dist/editor.js:41
 #: release/newspack-blocks/src/blocks/video-playlist/index.js:44
 #: src/blocks/video-playlist/index.js:44
 msgid "Embed a playlist of latest YouTube videos."
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:333
-#: src/components/query-controls.js:333
-msgid "Hide Advanced Filters"
+#: dist/placeholder_blocks.js:1
+#: release/newspack-blocks/dist/placeholder_blocks.js:1
+#: release/newspack-blocks/src/setup/placeholder-blocks.js:13
+#: src/setup/placeholder-blocks.js:13
+msgid "Ad Unit"
 msgstr ""
 
-#: release/newspack-blocks/dist/editor.js:2992
-#: release/newspack-blocks/src/components/query-controls.js:334
-#: src/components/query-controls.js:334
-msgid "Show Advanced Filters"
-msgstr "Mostrar filtros avançados"
+#: dist/placeholder_blocks.js:1
+#: release/newspack-blocks/dist/placeholder_blocks.js:1
+#: release/newspack-blocks/src/setup/placeholder-blocks.js:14
+#: src/setup/placeholder-blocks.js:14
+msgid "Render an ad unit from your inventory."
+msgstr ""
 
+#: dist/placeholder_blocks.js:1
+#: release/newspack-blocks/dist/placeholder_blocks.js:1
+#: release/newspack-blocks/src/setup/placeholder-blocks.js:16
+#: src/setup/placeholder-blocks.js:16
+msgid "Place ad units inside your page by installing Newspack Ads."
+msgstr ""
+
+#. translators: %s is the block name.
+#: dist/placeholder_blocks.js:4
+#: release/newspack-blocks/dist/placeholder_blocks.js:4
+#: release/newspack-blocks/src/setup/placeholder-blocks.js:39
+#: src/setup/placeholder-blocks.js:39
+msgid "The \"%s\" block is currently not available."
+msgstr ""
+
+#: dist/placeholder_blocks.js:4
+#: release/newspack-blocks/dist/placeholder_blocks.js:4
+#: release/newspack-blocks/src/setup/placeholder-blocks.js:48
+#: src/setup/placeholder-blocks.js:48
+msgid "Visit Plugin Page"
+msgstr ""
+
+#: dist/placeholder_blocks.js:4
+#: release/newspack-blocks/dist/placeholder_blocks.js:4
+#: release/newspack-blocks/src/setup/placeholder-blocks.js:52
+#: src/setup/placeholder-blocks.js:52
+msgid "Remove Block"
+msgstr ""
+
+#: dist/blocks/checkout-button/block.json
+#: release/newspack-blocks/dist/blocks/checkout-button/block.json
 #: release/newspack-blocks/src/blocks/checkout-button/block.json
 #: src/blocks/checkout-button/block.json
 msgctxt "block title"
 msgid "Checkout Button"
 msgstr ""
 
+#: dist/blocks/checkout-button/block.json
+#: release/newspack-blocks/dist/blocks/checkout-button/block.json
 #: release/newspack-blocks/src/blocks/checkout-button/block.json
 #: src/blocks/checkout-button/block.json
 msgctxt "block description"
 msgid "Modal checkout button for WooCommerce products."
 msgstr ""
 
+#: dist/blocks/checkout-button/block.json
+#: release/newspack-blocks/dist/blocks/checkout-button/block.json
 #: release/newspack-blocks/src/blocks/checkout-button/block.json
 #: src/blocks/checkout-button/block.json
 msgctxt "block keyword"
 msgid "woocommerce"
 msgstr ""
 
+#: dist/blocks/checkout-button/block.json
+#: release/newspack-blocks/dist/blocks/checkout-button/block.json
 #: release/newspack-blocks/src/blocks/checkout-button/block.json
 #: src/blocks/checkout-button/block.json
 msgctxt "block keyword"
 msgid "product"
 msgstr ""
 
+#: dist/blocks/checkout-button/block.json
+#: release/newspack-blocks/dist/blocks/checkout-button/block.json
 #: release/newspack-blocks/src/blocks/checkout-button/block.json
 #: src/blocks/checkout-button/block.json
 msgctxt "block keyword"
 msgid "checkout"
 msgstr ""
 
+#: dist/blocks/checkout-button/block.json
+#: release/newspack-blocks/dist/blocks/checkout-button/block.json
 #: release/newspack-blocks/src/blocks/checkout-button/block.json
 #: src/blocks/checkout-button/block.json
 msgctxt "block keyword"
 msgid "button"
 msgstr ""
 
+#: dist/blocks/checkout-button/block.json
+#: release/newspack-blocks/dist/blocks/checkout-button/block.json
 #: release/newspack-blocks/src/blocks/checkout-button/block.json
 #: src/blocks/checkout-button/block.json
 msgctxt "block style label"
 msgid "Fill"
 msgstr ""
 
+#: dist/blocks/checkout-button/block.json
+#: release/newspack-blocks/dist/blocks/checkout-button/block.json
 #: release/newspack-blocks/src/blocks/checkout-button/block.json
 #: src/blocks/checkout-button/block.json
 msgctxt "block style label"

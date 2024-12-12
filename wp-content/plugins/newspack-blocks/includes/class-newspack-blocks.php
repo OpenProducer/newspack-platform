@@ -380,17 +380,41 @@ class Newspack_Blocks {
 		if ( ! empty( $attributes['align'] ) ) {
 			$classes[] = 'align' . $attributes['align'];
 		}
+		if ( ! empty( $attributes['hideControls'] ) ) {
+			$classes[] = 'hide-controls';
+		}
 		if ( isset( $attributes['className'] ) ) {
 			array_push( $classes, $attributes['className'] );
 		}
 		if ( is_array( $extra ) && ! empty( $extra ) ) {
 			$classes = array_merge( $classes, $extra );
 		}
-		if ( ! empty( $attributes['hideControls'] ) ) {
-			$classes[] = 'hide-controls';
-		}
 
 		return implode( ' ', $classes );
+	}
+
+	/**
+	 * Utility to assemble the styles for a server-side rendered block.
+	 *
+	 * @param array $attributes Block attributes.
+	 * @param array $extra      Additional styles to be added to the style list.
+	 *
+	 * @return string style list.
+	 */
+	public static function block_styles( $attributes = [], $extra = [] ) {
+		$styles = [];
+		if ( isset( $attributes['style'] ) && is_array( $attributes['style'] ) ) {
+			$engine_styles = wp_style_engine_get_styles( $attributes['style'], [ 'context' => 'block-supports' ] );
+			if ( isset( $engine_styles['css'] ) ) {
+				$styles[] = $engine_styles['css'];
+			}
+		}
+
+		if ( is_array( $extra ) && ! empty( $extra ) ) {
+			$styles = array_merge( $styles, $extra );
+		}
+
+		return implode( '', $styles );
 	}
 
 	/**
@@ -745,6 +769,9 @@ class Newspack_Blocks {
 						'authors'   => $authors,
 						'coauthors' => $co_authors_names,
 					];
+
+					// Also, in these cases, never offload the query to Elastic Search.
+					$args['newspack_no_es_query'] = true;
 				}
 			}
 		}
@@ -1290,8 +1317,17 @@ class Newspack_Blocks {
 		$exclude = $exclude['where'];
 		$authors = " ( {$wpdb->posts}.post_author IN ( $csv ) $exclude ) ";
 
-		// Make sure the authors are set, the tax query is valid (doesn't contain 0 = 1).
-		if ( false === strpos( $tax_query['where'], ' 0 = 1' ) ) {
+		/**
+		 * Make sure the authors are set, the tax query is valid (doesn't contain 0 = 1).
+		 *
+		 * Since we have two clauses (one searching on name, and one on slug), it's ok to have a "0 = 1" clause for
+		 * one of them, but not for both.
+		 *
+		 * The reason we might have invalid queries is because we do a broad search with many possibles term slugs and names.
+		 * There is not one consistent way terms are created, so the slug/name can have different values. We try to search for all of them, and
+		 * if none of the options we are searching for exist as a term, it will create an invalid query.
+		 */
+		if ( substr_count( $tax_query['where'], ' 0 = 1' ) <= 1 ) {
 			// Append to the current join parts. The JOIN statment only needs to exist in the clause once.
 			if ( false === strpos( $clauses['join'], $tax_query['join'] ) ) {
 				$clauses['join'] .= '/* newspack-blocks */ ' . $tax_query['join'] . ' /* /newspack-blocks */';

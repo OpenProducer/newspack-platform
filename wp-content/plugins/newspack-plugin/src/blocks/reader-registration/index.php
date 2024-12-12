@@ -31,22 +31,6 @@ function register_block() {
 	if ( ! Reader_Activation::is_enabled() ) {
 		return;
 	}
-
-	\register_block_style(
-		'newspack/reader-registration',
-		[
-			'name'       => 'stacked',
-			'label'      => __( 'Stacked', 'newspack-plugin' ),
-			'is_default' => true,
-		]
-	);
-	\register_block_style(
-		'newspack/reader-registration',
-		[
-			'name'  => 'columns',
-			'label' => __( 'Columns (newsletter subscription)', 'newspack-plugin' ),
-		]
-	);
 }
 add_action( 'init', __NAMESPACE__ . '\\register_block' );
 
@@ -112,7 +96,7 @@ function render_block( $attrs, $content ) {
 	$registered      = false;
 	$my_account_url  = function_exists( 'wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : false;
 	$message         = '';
-	$success_message = __( 'Thank you for registering!', 'newspack-plugin' ) . '<br />';
+	$success_message = __( 'Success! Your account was created and you’re signed in.', 'newspack-plugin' ) . '<br />';
 
 	if ( $my_account_url ) {
 		$success_message .= sprintf(
@@ -124,12 +108,10 @@ function render_block( $attrs, $content ) {
 
 	/** Handle default attributes. */
 	$default_attrs = [
-		'style'            => 'stacked',
-		'label'            => __( 'Sign up', 'newspack-plugin' ),
-		'newsletterLabel'  => __( 'Subscribe to our newsletter', 'newspack-plugin' ),
-		'haveAccountLabel' => __( 'Already have an account?', 'newspack-plugin' ),
-		'signInLabel'      => __( 'Sign in', 'newspack-plugin' ),
-		'signedInLabel'    => __( 'An account was already registered with this email. Please check your inbox for an authentication link.', 'newspack-plugin' ),
+		'label'           => __( 'Sign up', 'newspack-plugin' ),
+		'newsletterLabel' => __( 'Subscribe to our newsletter', 'newspack-plugin' ),
+		'signInLabel'     => __( 'Sign in to an existing account', 'newspack-plugin' ),
+		'signedInLabel'   => __( 'An account was already registered with this email. Please check your inbox for an authentication link.', 'newspack-plugin' ),
 	];
 	$attrs         = \wp_parse_args( $attrs, $default_attrs );
 	foreach ( $default_attrs as $key => $value ) {
@@ -179,12 +161,12 @@ function render_block( $attrs, $content ) {
 
 	$success_registration_markup = $content;
 	if ( empty( \wp_strip_all_tags( $content ) ) ) {
-		$success_registration_markup = '<p class="has-text-align-center">' . $success_message . '</p>';
+		$success_registration_markup = '<p>' . $success_message . '</p>';
 	}
 
 	$success_login_markup = $attrs['signedInLabel'];
 	if ( ! empty( \wp_strip_all_tags( $attrs['signedInLabel'] ) ) ) {
-		$success_login_markup = '<p class="has-text-align-center">' . $attrs['signedInLabel'] . '</p>';
+		$success_login_markup = '<p>' . $attrs['signedInLabel'] . '</p>';
 	}
 
 	$checked = [];
@@ -198,25 +180,23 @@ function render_block( $attrs, $content ) {
 
 	ob_start();
 	?>
-	<div class="newspack-registration <?php echo esc_attr( get_block_classes( $attrs ) ); ?>">
+	<div class="newspack-registration newspack-ui <?php echo esc_attr( get_block_classes( $attrs ) ); ?>">
 		<?php if ( $registered ) : ?>
-			<div class="newspack-registration__registration-success">
-				<div class="newspack-registration__icon"></div>
+			<div class="newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
+				<span class="newspack-ui__icon newspack-ui__icon--success">
+					<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+						<path d="M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z" />
+					</svg>
+				</span>
 				<?php echo $success_registration_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 		<?php else : ?>
-			<form id="<?php echo esc_attr( get_form_id() ); ?>">
-				<div class="newspack-registration__have-account">
-					<?php echo \wp_kses_post( $attrs['haveAccountLabel'] ); ?>
-					<a href="<?php echo \esc_url( $sign_in_url ); ?>" data-newspack-reader-account-link>
-						<?php echo \wp_kses_post( $attrs['signInLabel'] ); ?>
-					</a>
-				</div>
-				<div class="newspack-registration__header">
-					<?php if ( ! empty( $attrs['title'] ) ) : ?>
-						<h2 class="newspack-registration__title"><?php echo \wp_kses_post( $attrs['title'] ); ?></h2>
-					<?php endif; ?>
-				</div>
+			<form id="<?php echo esc_attr( get_form_id() ); ?>" data-newspack-recaptcha="newspack_register">
+				<?php if ( ! empty( $attrs['title'] ) ) : ?>
+					<div class="newspack-registration__header">
+						<h3 class="newspack-registration__title"><?php echo \wp_kses_post( $attrs['title'] ); ?></h3>
+					</div>
+				<?php endif; ?>
 				<?php if ( ! empty( $attrs['description'] ) ) : ?>
 					<p class="newspack-registration__description"><?php echo \wp_kses_post( $attrs['description'] ); ?></p>
 				<?php endif; ?>
@@ -250,7 +230,6 @@ function render_block( $attrs, $content ) {
 								$lists,
 								$checked,
 								[
-									'title'            => $attrs['newsletterTitle'],
 									'single_label'     => $attrs['newsletterLabel'],
 									'show_description' => $attrs['displayListDescription'],
 								]
@@ -260,9 +239,7 @@ function render_block( $attrs, $content ) {
 					?>
 					<div class="newspack-registration__main">
 						<div>
-							<?php if ( Recaptcha::can_use_captcha( 'v2' ) ) : ?>
-								<?php Recaptcha::render_recaptcha_v2_container(); ?>
-							<?php endif; ?>
+							<?php Reader_Activation::render_third_party_auth(); ?>
 							<div class="newspack-registration__inputs">
 								<input
 								<?php
@@ -281,52 +258,60 @@ function render_block( $attrs, $content ) {
 									disabled
 									<?php endif; ?>
 									type="submit"
+									class="newspack-ui__button newspack-ui__button--primary"
 								>
 									<span class="submit"><?php echo \esc_html( $attrs['label'] ); ?></span>
 								</button>
 							</div>
-							<?php Reader_Activation::render_third_party_auth(); ?>
 							<div class="newspack-registration__response <?php echo ( empty( $message ) ) ? 'newspack-registration--hidden' : null; ?>">
 								<?php if ( ! empty( $message ) ) : ?>
 									<p><?php echo \esc_html( $message ); ?></p>
 								<?php endif; ?>
 							</div>
 						</div>
-
-						<div class="newspack-registration__help-text">
-							<p>
-								<?php
-								$terms_url = wp_http_validate_url( Reader_Activation::get_setting( 'terms_url' ) );
-								if ( $terms_url ) :
-									?>
-									<a href="<?php echo esc_url( $terms_url ); ?>">
-									<?php
-								endif;
-								$terms_text = empty( $attrs['privacyLabel'] ) ? Reader_Activation::get_setting( 'terms_text' ) : $attrs['privacyLabel'];
-								echo \wp_kses_post( $terms_text );
-								?>
-								<?php if ( $terms_url ) : ?>
-								</a>
-								<?php endif; ?>
-							</p>
-						</div>
 					</div>
 				</div>
+				<div class="newspack-registration__have-account">
+					<a href="<?php echo \esc_url( $sign_in_url ); ?>" data-newspack-reader-account-link class="newspack-ui__button newspack-ui__button--ghost">
+						<?php echo \wp_kses_post( $attrs['signInLabel'] ); ?>
+					</a>
+				</div>
+				<div class="newspack-registration__help-text">
+					<p>
+						<?php
+						$terms_url = wp_http_validate_url( Reader_Activation::get_setting( 'terms_url' ) );
+						if ( $terms_url ) :
+							?>
+							<a href="<?php echo esc_url( $terms_url ); ?>">
+							<?php
+						endif;
+						$terms_text = empty( $attrs['privacyLabel'] ) ? Reader_Activation::get_setting( 'terms_text' ) : $attrs['privacyLabel'];
+						echo \wp_kses_post( $terms_text );
+						?>
+						<?php if ( $terms_url ) : ?>
+						</a>
+						<?php endif; ?>
+					</p>
+				</div>
 			</form>
-			<div class="newspack-registration__registration-success newspack-registration--hidden">
-				<div class="newspack-registration__icon"></div>
+			<div class="newspack-registration__registration-success newspack-registration--hidden newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
+				<span class="newspack-ui__icon newspack-ui__icon--success">
+					<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+						<path d="M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z" />
+					</svg>
+				</span>
 				<?php echo $success_registration_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
-			<div class="newspack-registration__login-success newspack-registration--hidden">
-				<div class="newspack-registration__icon"></div>
+			<div class="newspack-registration__login-success newspack-registration--hidden newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
+				<span class="newspack-ui__icon newspack-ui__icon--success">
+					<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5854 12.6708C19.8395 12.5438 20 12.2841 20 12C20 11.7159 19.8395 11.4562 19.5854 11.3292L5.08543 4.0792C4.79841 3.93569 4.45187 3.99069 4.22339 4.21602C3.9949 4.44135 3.93509 4.78709 4.07461 5.07608L7.4172 12L4.07461 18.924C3.93509 19.213 3.9949 19.5587 4.22339 19.784C4.45187 20.0094 4.79841 20.0644 5.08543 19.9208L19.5854 12.6708ZM8.72077 11.25L6.38144 6.40425L17.573 12L6.38144 17.5958L8.72079 12.75H12V11.25H8.72077Z" />
+					</svg>
+				</span>
 				<?php echo \wp_kses_post( $success_login_markup ); ?>
 			</div>
 		<?php endif; ?>
 	</div>
-	<?php
-		// Including a dummy element with used classes to prevent AMP stripping them.
-	?>
-	<div class="newspack-registration--in-progress newspack-registration--error newspack-registration--success"></div>
 	<?php
 	return ob_get_clean();
 }
@@ -413,7 +398,7 @@ function process_form() {
 	}
 
 	// reCAPTCHA test.
-	if ( Recaptcha::can_use_captcha() ) {
+	if ( Recaptcha::can_use_captcha( 'v3' ) ) {
 		$captcha_result = Recaptcha::verify_captcha();
 		if ( \is_wp_error( $captcha_result ) ) {
 			return send_form_response( $captcha_result );

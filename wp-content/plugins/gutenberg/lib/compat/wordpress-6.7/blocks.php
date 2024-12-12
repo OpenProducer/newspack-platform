@@ -59,6 +59,16 @@ function gutenberg_add_format_query_vars_to_query_loop_block( $query, $block ) {
 		return $query;
 	}
 
+	// Return early if the query already contains a post format. This is to avoid duplication if the
+	// WordPress core filter is already applied.
+	if ( ! empty( $query['tax_query'] ) ) {
+		foreach ( $query['tax_query'] as $taxquery ) {
+			if ( isset( $taxquery['taxonomy'] ) && 'post_format' === $taxquery['taxonomy'] ) {
+				return $query;
+			}
+		}
+	}
+
 	$formats = $block->context['query']['format'];
 	/*
 	 * Validate that the format is either `standard` or a supported post format.

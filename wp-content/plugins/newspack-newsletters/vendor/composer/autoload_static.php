@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9a1ddcfef1ca9b4391ac7348916ff8ac
+class ComposerStaticInit10d01cf9a34f970cdf17aa639821532a
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -42,7 +42,8 @@ class ComposerStaticInit9a1ddcfef1ca9b4391ac7348916ff8ac
         'Newspack\\Newsletters\\Subscription_List' => __DIR__ . '/../..' . '/includes/class-subscription-list.php',
         'Newspack\\Newsletters\\Subscription_Lists' => __DIR__ . '/../..' . '/includes/class-subscription-lists.php',
         'Newspack_Newsletters' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters.php',
-        'Newspack_Newsletters\\Plugins\\Woocommerce_Memberships' => __DIR__ . '/../..' . '/includes/plugins/class-woocommerce-memberships.php',
+        'Newspack_Newsletters\\CLI\\Sync_Membership_Tied_Subscribers_CLI' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-memberships/class-sync-membership-tied-subscribers-cli.php',
+        'Newspack_Newsletters\\Plugins\\Woocommerce_Memberships' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-memberships/class-woocommerce-memberships.php',
         'Newspack_Newsletters\\Tracking\\Admin' => __DIR__ . '/../..' . '/includes/tracking/class-admin.php',
         'Newspack_Newsletters\\Tracking\\Click' => __DIR__ . '/../..' . '/includes/tracking/class-click.php',
         'Newspack_Newsletters\\Tracking\\Data_Events' => __DIR__ . '/../..' . '/includes/tracking/class-data-events.php',
@@ -91,9 +92,9 @@ class ComposerStaticInit9a1ddcfef1ca9b4391ac7348916ff8ac
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9a1ddcfef1ca9b4391ac7348916ff8ac::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9a1ddcfef1ca9b4391ac7348916ff8ac::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9a1ddcfef1ca9b4391ac7348916ff8ac::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit10d01cf9a34f970cdf17aa639821532a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit10d01cf9a34f970cdf17aa639821532a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit10d01cf9a34f970cdf17aa639821532a::$classMap;
 
         }, null, ClassLoader::class);
     }

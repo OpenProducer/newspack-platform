@@ -1,6 +1,7 @@
 {
   "name": "iframe",
   "category": "newspack",
+  "apiVersion": 3,
   "attributes": {
     "className": {
       "type": "string",

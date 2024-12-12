@@ -8,7 +8,7 @@
  * License: GPL2
  * Text Domain:     newspack-newsletters
  * Domain Path:     /languages
- * Version:         3.4.0
+ * Version:         3.6.0
  *
  * @package         Newspack_Newsletters
  */
@@ -72,7 +72,7 @@ require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/tracking/class-click.
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/tracking/class-data-events.php';
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/tracking/class-admin.php';
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/class-newspack-newsletters.php';
-require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/plugins/class-woocommerce-memberships.php';
+require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/plugins/woocommerce-memberships/class-woocommerce-memberships.php';
 
 // This MUST be initialized after Newspack_Newsletter class.
 \Newspack\Newsletters\Subscription_Lists::init();

@@ -92,6 +92,7 @@ function ProductControl( props ) {
 	const [ suggestions, setSuggestions ] = useState( {} );
 	const [ selected, setSelected ] = useState( false );
 	const [ isChanging, setIsChanging ] = useState( false );
+
 	function fetchSuggestions( search ) {
 		setInFlight( true );
 		return apiFetch( {
@@ -100,7 +101,9 @@ function ProductControl( props ) {
 			.then( products => {
 				const _suggestions = {};
 				products.forEach( product => {
-					_suggestions[ product.id ] = `${ product.id }: ${ product.name }`;
+					if ( '' !== product.price || getNYP( product ).isNYP ) { // Variable products will populate price with one of the variations prices.
+						_suggestions[ product.id ] = `${ product.id }: ${ product.name }`;
+					}
 				} );
 				setSuggestions( _suggestions );
 			} )
@@ -198,12 +201,20 @@ function CheckoutButtonEdit( props ) {
 
 	function handleProduct( data ) {
 		setProductData( data );
-
 		// Handle product variation data.
 		if ( data?.variations?.length ) {
 			setAttributes( { is_variable: true } );
 			apiFetch( { path: `/wc/v2/products/${ data.id }/variations?per_page=100` } )
-				.then( res => setVariations( res ) )
+				.then( res => {
+					// Remove any variations without prices set.
+					const priced_variations = [];
+					res.forEach( re => {
+						if ( '' !== re.price || getNYP( re ).isNYP ) {
+							priced_variations.push( re );
+						}
+					} );
+					setVariations( priced_variations );
+				} )
 				.catch( () => setVariations( [] ) );
 		} else {
 			setAttributes( { is_variable: false } );

@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 9.4.1
+Stable tag: 9.4.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -169,12 +169,9 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 9.4.2 2024-11-19 =
+= 9.4.3 2024-11-25 =
 
 **WooCommerce**
 
-* Fix - Modify product import file check to use the WP filesystem API [#51540](https://github.com/woocommerce/woocommerce/pull/51540)
-* Fix - Fix the Payments main menu item linking to a blank page when onboarding tasks are hidden [#52917](https://github.com/woocommerce/woocommerce/pull/52917)
-* Fix - Improve CSV import performance by restoring the default value for `woocommerce_product_import_batch_size` [#51666](https://github.com/woocommerce/woocommerce/pull/51666)
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

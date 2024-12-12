@@ -352,6 +352,11 @@ final class Newspack_Segments_Model {
 			]
 		);
 
+		// if, for any reason, this was called too early and we don't have a registered taxonomy yet, let's not break the site.
+		if ( ! is_array( $terms ) ) {
+			return [];
+		}
+
 		$segments = array_map(
 			function ( $segment ) {
 				return self::get_segment_from_term( $segment );

@@ -47,7 +47,7 @@ final class Woo_User_Registration {
 	public static function checkout_process() {
 
 		/**
-		 * On Newspack\Donations::process_donation_form(), we add these values to the cart.
+		 * On Newspack\Donations::process_donation_request(), we add these values to the cart.
 		 *
 		 * Later, we add them to the order (Newspack\Donations::checkout_create_order_line_item()) and use it to send the metadata to Newspack on donation events.
 		 *

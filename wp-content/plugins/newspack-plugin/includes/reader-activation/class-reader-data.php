@@ -9,6 +9,8 @@ namespace Newspack;
 
 use Newspack\Memberships;
 
+require_once NEWSPACK_ABSPATH . 'includes/reader-activation/cli/class-sync-reader-data-cli.php';
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -131,7 +133,7 @@ final class Reader_Data {
 	 *
 	 * @param string $key Key.
 	 */
-	private static function get_meta_key_name( $key ) {
+	public static function get_meta_key_name( $key ) {
 		return 'newspack_reader_data_item_' . $key;
 	}
 

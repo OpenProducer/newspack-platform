@@ -28,6 +28,7 @@ class Plugin_Manager {
 		'google-site-kit',
 		'newspack-blocks',
 		'wp-parsely',
+		'perfmatters',
 	];
 
 	/**
@@ -40,25 +41,25 @@ class Plugin_Manager {
 	public static function get_managed_plugins() {
 		$managed_plugins = [
 			'akismet'                     => [
-				'Name'        => \esc_html__( 'Akismet Anti-Spam', 'newspack' ),
-				'Description' => \esc_html__( 'Used by millions, Akismet is quite possibly the best way in the world to protect your blog from spam. It keeps your site protected even while you sleep.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Akismet Anti-Spam', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Used by millions, Akismet is quite possibly the best way in the world to protect your blog from spam. It keeps your site protected even while you sleep.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com/wordpress-plugins/' ),
 				'PluginURI'   => \esc_url( 'https://akismet.com/' ),
 				'Download'    => 'wporg',
 			],
 			'co-authors-plus'             => [
-				'Name'        => \esc_html__( 'Co-Authors Plus', 'newspack' ),
-				'Description' => \esc_html__( 'Allows multiple authors and guest authors to be assigned to a post.', 'newspack' ),
-				'Author'      => \esc_html__( 'Mohammad Jangda, Daniel Bachhuber, Automattic, Weston Ruter', 'newspack' ),
+				'Name'        => \esc_html__( 'Co-Authors Plus', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Allows multiple authors and guest authors to be assigned to a post.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Mohammad Jangda, Daniel Bachhuber, Automattic, Weston Ruter', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://wordpress.org/extend/plugins/co-authors-plus/' ),
 				'PluginURI'   => \esc_url( 'https://wordpress.org/extend/plugins/co-authors-plus/' ),
 				'Download'    => 'wporg',
 			],
 			'google-site-kit'             => [
-				'Name'        => \esc_html__( 'Google Site Kit', 'newspack' ),
-				'Description' => \esc_html__( 'Site Kit is is a one-stop solution for WordPress users to use everything Google has to offer to make them successful on the web.', 'newspack' ),
-				'Author'      => \esc_html__( 'Google', 'newspack' ),
+				'Name'        => \esc_html__( 'Google Site Kit', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Site Kit is is a one-stop solution for WordPress users to use everything Google has to offer to make them successful on the web.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Google', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://opensource.google.com' ),
 				'PluginURI'   => \esc_url( 'https://sitekit.withgoogle.com/' ),
 				'Download'    => 'wporg',
@@ -69,16 +70,16 @@ class Plugin_Manager {
 				],
 			],
 			'gravityforms'                => [
-				'Name'        => \esc_html__( 'Gravity Forms', 'newspack' ),
-				'Description' => \esc_html__( 'Create custom web forms to capture leads, collect payments, automate your workflows, and build your business online.', 'newspack' ),
-				'Author'      => \esc_html__( 'Rocketgenius', 'newspack' ),
+				'Name'        => \esc_html__( 'Gravity Forms', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Create custom web forms to capture leads, collect payments, automate your workflows, and build your business online.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Rocketgenius', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://www.gravityforms.com/' ),
 				'AuthorURI'   => \esc_url( 'https://rocketgenius.com/' ),
 			],
 			'jetpack'                     => [
-				'Name'        => __( 'Jetpack', 'newspack' ),
-				'Description' => \esc_html__( 'Bring the power of the WordPress.com cloud to your self-hosted WordPress. Jetpack enables you to connect your blog to a WordPress.com account to use the powerful features normally only available to WordPress.com users.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => __( 'Jetpack', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Bring the power of the WordPress.com cloud to your self-hosted WordPress. Jetpack enables you to connect your blog to a WordPress.com account to use the powerful features normally only available to WordPress.com users.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://jetpack.com/' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com/' ),
 				'Download'    => 'wporg',
@@ -86,120 +87,120 @@ class Plugin_Manager {
 			],
 			'mailchimp-for-woocommerce'   => [
 				'Name'        => 'Mailchimp for WooCommerce',
-				'Description' => \esc_html__( 'Connects WooCommerce to Mailchimp to sync your store data, send targeted campaigns to your customers, and sell more stuff.', 'newspack' ),
-				'Author'      => \esc_html__( 'Mailchimp', 'newspack' ),
+				'Description' => \esc_html__( 'Connects WooCommerce to Mailchimp to sync your store data, send targeted campaigns to your customers, and sell more stuff.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Mailchimp', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://mailchimp.com' ),
 				'PluginURI'   => \esc_url( 'https://mailchimp.com/connect-your-store/' ),
 				'Download'    => 'wporg',
 			],
 			'newspack-ads'                => [
-				'Name'        => \esc_html__( 'Newspack Ads', 'newspack' ),
-				'Description' => \esc_html__( 'Ads integration.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Ads', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Ads integration.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-ads/releases/latest/download/newspack-ads.zip',
 			],
 			'newspack-blocks'             => [
-				'Name'        => \esc_html__( 'Newspack Blocks', 'newspack' ),
-				'Description' => \esc_html__( 'A collection of blocks for news publishers.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Blocks', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'A collection of blocks for news publishers.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-blocks/releases/latest/download/newspack-blocks.zip',
 			],
 			'newspack-content-converter'  => [
-				'Name'        => \esc_html__( 'Newspack Content Converter', 'newspack' ),
-				'Description' => \esc_html__( 'Batch conversion of Classic->Gutenberg post conversion.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Content Converter', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Batch conversion of Classic->Gutenberg post conversion.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-content-converter/releases/latest/download/newspack-content-converter.zip',
 				'Quiet'       => true,
 			],
 			'newspack-multibranded-site'  => [
-				'Name'        => \esc_html__( 'Newspack Multibranded Site', 'newspack' ),
-				'Description' => \esc_html__( 'Brand different content and sections of your site with unique colors and navigation.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Multibranded Site', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Brand different content and sections of your site with unique colors and navigation.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-multibranded-site/releases/latest/download/newspack-multibranded-site.zip',
 				'Quiet'       => true,
 			],
 			'newspack-network'            => [
-				'Name'        => \esc_html__( 'Newspack Network', 'newspack' ),
-				'Description' => \esc_html__( 'Distribute content across a network of Newspack sites.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Network', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Distribute content across a network of Newspack sites.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-network/releases/latest/download/newspack-network.zip',
 				'Quiet'       => true,
 			],
 			'newspack-newsletters'        => [
-				'Name'        => \esc_html__( 'Newspack Newsletters', 'newspack' ),
-				'Description' => \esc_html__( 'Newsletter authoring using the Gutenberg editor.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Newsletters', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Newsletter authoring using the Gutenberg editor.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-newsletters/releases/latest/download/newspack-newsletters.zip',
 			],
 			'newspack-popups'             => [
-				'Name'        => \esc_html__( 'Newspack Campaigns', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Campaigns', 'newspack-plugin' ),
 				'Description' => \esc_html__( 'Build persuasive call-to-action prompts from scratch and display them as overlays, inline with the story, or above the site header.', 'newspack-plugin' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-popups/releases/latest/download/newspack-popups.zip',
 			],
 			'newspack-sponsors'           => [
-				'Name'        => \esc_html__( 'Newspack Sponsors', 'newspack' ),
-				'Description' => \esc_html__( 'Sponsored and underwritten content for Newspack sites.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Sponsors', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Sponsored and underwritten content for Newspack sites.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-sponsors/releases/latest/download/newspack-sponsors.zip',
 			],
 			'newspack-listings'           => [
-				'Name'        => \esc_html__( 'Newspack Listings', 'newspack' ),
-				'Description' => \esc_html__( 'Create reusable content in list form using the Gutenberg editor.', 'newspack' ),
-				'Author'      => \esc_html__( 'Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Listings', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Create reusable content in list form using the Gutenberg editor.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-listings/releases/latest/download/newspack-listings.zip',
 			],
 			'newspack-theme'              => [
-				'Name'        => \esc_html__( 'Newspack Theme', 'newspack' ),
-				'Description' => \esc_html__( 'The Newspack theme.', 'newspack' ),
-				'Author'      => \esc_html__( 'Newspack', 'newspack' ),
+				'Name'        => \esc_html__( 'Newspack Theme', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'The Newspack theme.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Newspack', 'newspack-plugin' ),
 			],
 			'wp-parsely'                  => [
-				'Name'        => \esc_html__( 'Parse.ly', 'newspack' ),
-				'Description' => \esc_html__( 'This plugin makes it a snap to add Parse.ly tracking code to your WordPress blog.', 'newspack' ),
-				'Author'      => \esc_html__( 'Mike Sukmanowsky ( mike@parsely.com )', 'newspack' ),
+				'Name'        => \esc_html__( 'Parse.ly', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'This plugin makes it a snap to add Parse.ly tracking code to your WordPress blog.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Mike Sukmanowsky ( mike@parsely.com )', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://www.parsely.com/' ),
 				'AuthorURI'   => \esc_url( 'https://www.parsely.com/' ),
 				'Download'    => 'wporg',
 			],
 			'password-protected'          => [
-				'Name'        => \esc_html__( 'Password Protected', 'newspack' ),
-				'Description' => \esc_html__( 'A very simple way to quickly password protect your WordPress site with a single password. Please note: This plugin does not restrict access to uploaded files and images and does not work with some caching setups.', 'newspack' ),
-				'Author'      => \esc_html__( 'Ben Huson', 'newspack' ),
+				'Name'        => \esc_html__( 'Password Protected', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'A very simple way to quickly password protect your WordPress site with a single password. Please note: This plugin does not restrict access to uploaded files and images and does not work with some caching setups.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Ben Huson', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://github.com/benhuson/password-protected/' ),
 				'AuthorURI'   => \esc_url( 'https://github.com/benhuson/password-protected/' ),
 				'Download'    => 'wporg',
 				'EditPath'    => 'options-general.php?page=password-protected',
 			],
 			'perfmatters'                 => [
-				'Name'        => \esc_html__( 'Perfmatters', 'newspack' ),
-				'Description' => \esc_html__( 'Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.', 'newspack' ),
-				'Author'      => \esc_html__( 'forgemedia', 'newspack' ),
+				'Name'        => \esc_html__( 'Perfmatters', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'forgemedia', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://forgemedia.io/' ),
 				'PluginURI'   => \esc_url( 'https://perfmatters.io/' ),
 			],
 			'publish-to-apple-news'       => [
-				'Name'        => \esc_html__( 'Publish to Apple News', 'newspack' ),
-				'Description' => \esc_html__( 'Export and synchronize posts to Apple format', 'newspack' ),
-				'Author'      => \esc_html__( 'Alley Interactive', 'newspack' ),
+				'Name'        => \esc_html__( 'Publish to Apple News', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Export and synchronize posts to Apple format', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Alley Interactive', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://www.alleyinteractive.com' ),
 				'PluginURI'   => \esc_url( 'https://github.com/alleyinteractive/apple-news' ),
 				'Download'    => 'wporg',
@@ -210,121 +211,130 @@ class Plugin_Manager {
 				],
 			],
 			'pwa'                         => [
-				'Name'        => \esc_html__( 'PWA', 'newspack' ),
-				'Description' => \esc_html__( 'Feature plugin to bring Progressive Web App (PWA) capabilities to Core.', 'newspack' ),
-				'Author'      => \esc_html__( 'PWA Plugin Contributors', 'newspack' ),
+				'Name'        => \esc_html__( 'PWA', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Feature plugin to bring Progressive Web App (PWA) capabilities to Core.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'PWA Plugin Contributors', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://github.com/xwp/pwa-wp/graphs/contributors' ),
 				'PluginURI'   => \esc_url( 'https://github.com/xwp/pwa-wp' ),
 				'Download'    => 'wporg',
 			],
 			'redirection'                 => [
-				'Name'        => \esc_html__( 'Redirection', 'newspack' ),
-				'Description' => \esc_html__( 'Manage all your 301 redirects and monitor 404 errors.', 'newspack' ),
-				'Author'      => \esc_html__( 'John Godley', 'newspack' ),
+				'Name'        => \esc_html__( 'Redirection', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Manage all your 301 redirects and monitor 404 errors.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'John Godley', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://redirection.me/' ),
 				'PluginURI'   => \esc_url( 'https://redirection.me/' ),
 				'Download'    => 'wporg',
 			],
 			'woocommerce'                 => [
-				'Name'        => \esc_html__( 'WooCommerce', 'newspack' ),
-				'Description' => \esc_html__( 'An eCommerce toolkit that helps you sell anything. Beautifully.', 'newspack' ),
-				'Author'      => \esc_html__( 'WordPress.com VIP, XWP, Google, and contributors', 'newspack' ),
+				'Name'        => \esc_html__( 'WooCommerce', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'An eCommerce toolkit that helps you sell anything. Beautifully.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'WordPress.com VIP, XWP, Google, and contributors', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://woocommerce.com/' ),
 				'AuthorURI'   => \esc_url( 'https://woocommerce.com' ),
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=wc-settings',
 			],
 			'woocommerce-gateway-stripe'  => [
-				'Name'        => \esc_html__( 'WooCommerce Stripe Gateway', 'newspack' ),
-				'Description' => \esc_html__( 'Take credit card payments on your store using Stripe.', 'newspack' ),
-				'Author'      => \esc_html__( 'WooCommerce', 'newspack' ),
+				'Name'        => \esc_html__( 'WooCommerce Stripe Gateway', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Take credit card payments on your store using Stripe.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'WooCommerce', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://woocommerce.com/' ),
 				'AuthorURI'   => \esc_url( 'https://woocommerce.com/' ),
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=wc-settings&tab=checkout&section=stripe',
 			],
+			'woocommerce-payments'        => [
+				'Name'        => \esc_html__( 'WooPayments', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Accept payments via credit card. Manage transactions within WordPress.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'WooCommerce', 'newspack-plugin' ),
+				'PluginURI'   => \esc_url( 'https://woocommerce.com/' ),
+				'AuthorURI'   => \esc_url( 'https://woocommerce.com/' ),
+				'Download'    => 'wporg',
+				'EditPath'    => 'admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments',
+			],
 			'woocommerce-name-your-price' => [
-				'Name'        => \esc_html__( 'WooCommerce Name Your Price', 'newspack' ),
-				'Description' => \esc_html__( 'WooCommerce Name Your Price allows customers to set their own price for products or donations.', 'newspack' ),
-				'Author'      => \esc_html__( 'Kathy Darling', 'newspack' ),
+				'Name'        => \esc_html__( 'WooCommerce Name Your Price', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'WooCommerce Name Your Price allows customers to set their own price for products or donations.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Kathy Darling', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://www.woocommerce.com/products/name-your-price/' ),
 				'AuthorURI'   => \esc_url( 'https://kathyisawesome.com' ),
 			],
 			'woocommerce-subscriptions'   => [
-				'Name'        => \esc_html__( 'WooCommerce Subscriptions', 'newspack' ),
-				'Description' => \esc_html__( 'Sell products and services with recurring payments in your WooCommerce Store.', 'newspack' ),
-				'Author'      => \esc_html__( 'WooCommerce', 'newspack' ),
+				'Name'        => \esc_html__( 'WooCommerce Subscriptions', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Sell products and services with recurring payments in your WooCommerce Store.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'WooCommerce', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://woocommerce.com/products/woocommerce-subscriptions/' ),
 				'AuthorURI'   => \esc_url( 'https://woocommerce.com/' ),
 			],
 			'wordpress-seo'               => [
-				'Name'        => \esc_html__( 'Yoast SEO', 'newspack' ),
-				'Description' => \esc_html__( 'The first true all-in-one SEO solution for WordPress, including on-page content analysis, XML sitemaps and much more.', 'newspack' ),
-				'Author'      => \esc_html__( 'Team Yoast', 'newspack' ),
+				'Name'        => \esc_html__( 'Yoast SEO', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'The first true all-in-one SEO solution for WordPress, including on-page content analysis, XML sitemaps and much more.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Team Yoast', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://yoa.st/1uk' ),
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=wpseo_dashboard',
 			],
 			'complianz-gdpr'              => [
-				'Name'        => \esc_html__( 'Complianz - GDPR/CCPA Cookie Consent', 'newspack' ),
-				'Description' => \esc_html__( 'Complianz is a GDPR/CCPA Cookie Consent plugin that supports GDPR, ePrivacy, DSGVO, TTDSG, LGPD, POPIA, APA, RGPD, CCPA/CPRA and PIPEDA with a conditional Cookie Notice and customized Cookie Policy based on the results of the built-in Cookie Scan.', 'newspack' ),
-				'Author'      => \esc_html__( 'Really Simple Plugins', 'newspack' ),
+				'Name'        => \esc_html__( 'Complianz - GDPR/CCPA Cookie Consent', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Complianz is a GDPR/CCPA Cookie Consent plugin that supports GDPR, ePrivacy, DSGVO, TTDSG, LGPD, POPIA, APA, RGPD, CCPA/CPRA and PIPEDA with a conditional Cookie Notice and customized Cookie Policy based on the results of the built-in Cookie Scan.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Really Simple Plugins', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://www.complianz.io/' ),
 				'PluginURI'   => \esc_url( 'https://wordpress.org/plugins/complianz-gdpr/' ),
 				'Download'    => 'wporg',
 			],
 			'simple-local-avatars'        => [
-				'Name'        => \esc_html__( 'Simple Local Avatars', 'newspack' ),
-				'Description' => \esc_html__( 'Adds an avatar upload field to user profiles if the current user has media permissions. Generates requested sizes on demand just like Gravatar! Simple and lightweight.', 'newspack' ),
-				'Author'      => \esc_html__( 'Jake Goldman, 10up', 'newspack' ),
+				'Name'        => \esc_html__( 'Simple Local Avatars', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Adds an avatar upload field to user profiles if the current user has media permissions. Generates requested sizes on demand just like Gravatar! Simple and lightweight.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Jake Goldman, 10up', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://10up.com' ),
 				'PluginURI'   => \esc_url( 'https://wordpress.org/plugins/simple-local-avatars/' ),
 				'Download'    => 'wporg',
 			],
 			'distributor'                 => [
-				'Name'        => \esc_html__( 'Distributor', 'newspack' ),
-				'Description' => \esc_html__( 'Distributor is a WordPress plugin that makes it easy to syndicate and reuse content across your websites — whether in a single multisite or across the web.', 'newspack' ),
+				'Name'        => \esc_html__( 'Distributor', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Distributor is a WordPress plugin that makes it easy to syndicate and reuse content across your websites — whether in a single multisite or across the web.', 'newspack-plugin' ),
 				'Author'      => '10up',
 				'AuthorURI'   => \esc_url( 'https://10up.com' ),
 				'PluginURI'   => \esc_url( 'https://distributorplugin.com/' ),
 				'Download'    => \esc_url( 'https://github.com/10up/distributor/releases/latest/download/distributor.zip' ),
 			],
 			'super-cool-ad-inserter'      => [
-				'Name'        => \esc_html__( 'Super Cool Ad Inserter Plugin', 'newspack' ),
-				'Description' => \esc_html__( 'Display ads within your article content.', 'newspack' ),
-				'Author'      => \esc_html__( 'INN Labs, Automattic', 'newspack' ),
+				'Name'        => \esc_html__( 'Super Cool Ad Inserter Plugin', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Display ads within your article content.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'INN Labs, Automattic', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
 				'PluginURI'   => \esc_url( 'https://wordpress.org/plugins/super-cool-ad-inserter/' ),
 				'Download'    => 'wporg',
 			],
 			'ad-refresh-control'          => [
-				'Name'        => \esc_html__( 'Ad Refresh Control', 'newspack' ),
-				'Description' => \esc_html__( 'Enable Active View refresh for Google Ad Manager ads without needing to modify any code.', 'newspack' ),
-				'Author'      => \esc_html__( 'Gary Thayer, David Green, 10up', 'newspack' ),
+				'Name'        => \esc_html__( 'Ad Refresh Control', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Enable Active View refresh for Google Ad Manager ads without needing to modify any code.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'Gary Thayer, David Green, 10up', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://10up.com' ),
 				'PluginURI'   => \esc_url( 'https://wordpress.org/plugins/ad-refresh-control/' ),
 				'Download'    => 'wporg',
 			],
 			'ads-txt'                     => [
-				'Name'        => \esc_html__( 'Ads.txt Manager', 'newspack' ),
-				'Description' => \esc_html__( 'Create, manage, and validate your ads.txt and app-ads.txt from within WordPress, just like any other content asset.', 'newspack' ),
-				'Author'      => \esc_html__( '10up', 'newspack' ),
+				'Name'        => \esc_html__( 'Ads.txt Manager', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Create, manage, and validate your ads.txt and app-ads.txt from within WordPress, just like any other content asset.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( '10up', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://wordpress.org/plugins/ads-txt/' ),
 				'AuthorURI'   => \esc_url( 'https://10up.com/' ),
 				'Download'    => 'wporg',
 				'EditPath'    => 'options-general.php?page=adstxt-settings',
 			],
 			'broadstreet'                 => [
-				'Name'        => \esc_html__( 'Broadstreet', 'newspack' ),
-				'Description' => \esc_html__( 'Integrate Broadstreet’s business directory and ad-serving features into your site.', 'newspack' ),
+				'Name'        => \esc_html__( 'Broadstreet', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Integrate Broadstreet’s business directory and ad-serving features into your site.', 'newspack-plugin' ),
 				'Author'      => 'Broadstreet',
 				'AuthorURI'   => \esc_url( 'https://broadstreetads.com/' ),
 				'PluginURI'   => \esc_url( 'https://wordpress.org/plugins/broadstreet/' ),
 				'Download'    => 'wporg',
 			],
 			'everlit'                     => [
-				'Name'        => esc_html__( 'Everlit', 'newspack' ),
-				'Description' => esc_html__( 'Using a new generation of ultra realistic, AI-driven speech synthesis, we are bringing a backlog of human interest stories, fiction, and knowledge to the present day.', 'newspack' ),
+				'Name'        => esc_html__( 'Everlit', 'newspack-plugin' ),
+				'Description' => esc_html__( 'Using a new generation of ultra realistic, AI-driven speech synthesis, we are bringing a backlog of human interest stories, fiction, and knowledge to the present day.', 'newspack-plugin' ),
 				'Author'      => 'Everlit',
 				'AuthorURI'   => esc_url( 'https://everlit.audio' ),
 				'PluginURI'   => esc_url( 'https://everlit.audio' ),
@@ -378,12 +388,13 @@ class Plugin_Manager {
 	 *
 	 * @param string $plugin_slug Plugin slug.
 	 */
-	private static function get_managed_plugin_status( $plugin_slug ) {
+	public static function get_managed_plugin_status( $plugin_slug ) {
 		if ( Newspack::is_debug_mode() ) {
 			return 'active';
 		}
 		$status            = 'uninstalled';
 		$installed_plugins = self::get_installed_plugins();
+
 		if ( isset( $installed_plugins[ $plugin_slug ] ) ) {
 			if ( \is_plugin_active( $installed_plugins[ $plugin_slug ] ) ) {
 				$status = 'active';
@@ -396,6 +407,25 @@ class Plugin_Manager {
 		if ( 'wordpress-seo' === $plugin_slug && 'active' !== $status && isset( $installed_plugins['wordpress-seo-premium'] ) && $installed_plugins['wordpress-seo-premium'] ) {
 			if ( \is_plugin_active( $installed_plugins['wordpress-seo-premium'] ) ) {
 				$status = 'active';
+			}
+		}
+
+		// Also check for alpha or epic versions of newspack plugins.
+		if ( 'active' !== $status && str_contains( $plugin_slug, 'newspack' ) ) {
+			foreach ( $installed_plugins as $slug => $path ) {
+				if ( $slug !== $plugin_slug && str_contains( $slug, $plugin_slug ) ) {
+					$versions = [
+						'alpha',
+						'epic',
+					];
+
+					foreach ( $versions as $version ) {
+						if ( str_contains( $slug, $version ) && \is_plugin_active( $path ) ) {
+							$status = 'active';
+							break;
+						}
+					}
+				}
 			}
 		}
 
@@ -503,7 +533,7 @@ class Plugin_Manager {
 
 		$plugin_slug = self::get_plugin_slug( $plugin );
 		if ( ! $plugin_slug ) {
-			return new WP_Error( 'newspack_invalid_plugin', __( 'Invalid plugin.', 'newspack' ) );
+			return new WP_Error( 'newspack_invalid_plugin', __( 'Invalid plugin.', 'newspack-plugin' ) );
 		}
 
 		$installed_plugins = self::get_installed_plugins();
@@ -523,7 +553,7 @@ class Plugin_Manager {
 		}
 
 		if ( \is_plugin_active( $installed_plugins[ $plugin_slug ] ) ) {
-			return new WP_Error( 'newspack_plugin_already_active', __( 'The plugin is already active.', 'newspack' ) );
+			return new WP_Error( 'newspack_plugin_already_active', __( 'The plugin is already active.', 'newspack-plugin' ) );
 		}
 
 		$activated = activate_plugin( $installed_plugins[ $plugin_slug ] );
@@ -543,7 +573,7 @@ class Plugin_Manager {
 	public static function deactivate( $plugin ) {
 		$installed_plugins = self::get_installed_plugins();
 		if ( ! in_array( $plugin, $installed_plugins ) && ! isset( $installed_plugins[ $plugin ] ) ) {
-			return new WP_Error( 'newspack_plugin_not_installed', __( 'The plugin is not installed.', 'newspack' ) );
+			return new WP_Error( 'newspack_plugin_not_installed', __( 'The plugin is not installed.', 'newspack-plugin' ) );
 		}
 
 		if ( isset( $installed_plugins[ $plugin ] ) ) {
@@ -553,12 +583,12 @@ class Plugin_Manager {
 		}
 
 		if ( ! \is_plugin_active( $plugin_file ) ) {
-			return new WP_Error( 'newspack_plugin_not_active', __( 'The plugin is not active.', 'newspack' ) );
+			return new WP_Error( 'newspack_plugin_not_active', __( 'The plugin is not active.', 'newspack-plugin' ) );
 		}
 
 		deactivate_plugins( $plugin_file );
 		if ( \is_plugin_active( $plugin_file ) ) {
-			return new WP_Error( 'newspack_plugin_failed_deactivation', __( 'Failed to deactivate plugin.', 'newspack' ) );
+			return new WP_Error( 'newspack_plugin_failed_deactivation', __( 'Failed to deactivate plugin.', 'newspack-plugin' ) );
 		}
 		return true;
 	}
@@ -637,7 +667,7 @@ class Plugin_Manager {
 	 */
 	public static function install( $plugin ) {
 		if ( ! self::can_install_plugins() ) {
-			return new WP_Error( 'newspack_plugin_failed_install', __( 'Plugins cannot be installed.', 'newspack' ) );
+			return new WP_Error( 'newspack_plugin_failed_install', __( 'Plugins cannot be installed.', 'newspack-plugin' ) );
 		}
 
 		if ( \wp_http_validate_url( $plugin ) ) {
@@ -655,7 +685,7 @@ class Plugin_Manager {
 	 */
 	public static function uninstall( $plugin ) {
 		if ( ! self::can_install_plugins() ) {
-			return new WP_Error( 'newspack_plugin_failed_uninstall', __( 'Plugins cannot be uninstalled.', 'newspack' ) );
+			return new WP_Error( 'newspack_plugin_failed_uninstall', __( 'Plugins cannot be uninstalled.', 'newspack-plugin' ) );
 		}
 
 		$plugins_to_uninstall = [];
@@ -667,7 +697,7 @@ class Plugin_Manager {
 
 		foreach ( $plugin as $plugin_slug ) {
 			if ( ! in_array( $plugin_slug, $installed_plugins ) && ! isset( $installed_plugins[ $plugin_slug ] ) ) {
-				return new WP_Error( 'newspack_plugin_failed_uninstall', __( 'The plugin is not installed.', 'newspack' ) );
+				return new WP_Error( 'newspack_plugin_failed_uninstall', __( 'The plugin is not installed.', 'newspack-plugin' ) );
 			}
 
 			if ( isset( $installed_plugins[ $plugin_slug ] ) ) {
@@ -691,7 +721,7 @@ class Plugin_Manager {
 			\wp_clean_plugins_cache();
 			return true;
 		}
-		return new WP_Error( 'newspack_plugin_failed_uninstall', __( 'The plugin could not be uninstalled.', 'newspack' ) );
+		return new WP_Error( 'newspack_plugin_failed_uninstall', __( 'The plugin could not be uninstalled.', 'newspack-plugin' ) );
 	}
 
 	/**
@@ -704,23 +734,23 @@ class Plugin_Manager {
 		// Quick check to make sure plugin directory doesn't already exist.
 		$plugin_directory = WP_PLUGIN_DIR . '/' . $plugin_slug;
 		if ( is_dir( $plugin_directory ) ) {
-			return new WP_Error( 'newspack_plugin_already_installed', __( 'The plugin directory already exists.', 'newspack' ) );
+			return new WP_Error( 'newspack_plugin_already_installed', __( 'The plugin directory already exists.', 'newspack-plugin' ) );
 		}
 
 		$managed_plugins = self::get_managed_plugins();
 		if ( ! isset( $managed_plugins[ $plugin_slug ] ) ) {
 			return new WP_Error(
 				'newspack_plugin_failed_install',
-				__( 'Plugin not found.', 'newspack' )
+				__( 'Plugin not found.', 'newspack-plugin' )
 			);
 		}
 
 		// Return a useful error if we are unable to get download info for the plugin.
 		if ( empty( $managed_plugins[ $plugin_slug ]['Download'] ) ) {
-			$error_message = __( 'Newspack cannot install this plugin. You will need to get it from the plugin\'s site and install it manually.', 'newspack' );
+			$error_message = __( 'Newspack cannot install this plugin. You will need to get it from the plugin\'s site and install it manually.', 'newspack-plugin' );
 			if ( ! empty( $managed_plugins[ $plugin_slug ]['PluginURI'] ) ) {
 				/* translators: %s: plugin URL */
-				$error_message = sprintf( __( 'Newspack cannot install this plugin. You will need to get it from <a href="%s">the plugin\'s site</a> and install it manually.', 'newspack' ), esc_url( $managed_plugins[ $plugin_slug ]['PluginURI'] ) );
+				$error_message = sprintf( __( 'Newspack cannot install this plugin. You will need to get it from <a href="%s">the plugin\'s site</a> and install it manually.', 'newspack-plugin' ), esc_url( $managed_plugins[ $plugin_slug ]['PluginURI'] ) );
 			}
 
 			return new WP_Error(

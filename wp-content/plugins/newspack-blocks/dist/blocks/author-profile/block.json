@@ -1,6 +1,7 @@
 {
   "name": "author-profile",
   "category": "newspack",
+  "apiVersion": 3,
   "attributes": {
     "className": {
       "type": "string",

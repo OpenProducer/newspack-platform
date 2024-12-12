@@ -1,6 +1,7 @@
 {
   "name": "author-list",
   "category": "newspack",
+  "apiVersion": 3,
   "attributes": {
     "className": {
       "type": "string",

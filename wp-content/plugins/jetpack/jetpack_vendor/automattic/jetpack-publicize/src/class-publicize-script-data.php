@@ -12,6 +12,7 @@ use Automattic\Jetpack\Connection\Manager;
 use Automattic\Jetpack\Current_Plan;
 use Automattic\Jetpack\Publicize\Jetpack_Social_Settings\Settings;
 use Automattic\Jetpack\Publicize\Publicize_Utils as Utils;
+use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Status\Host;
 use Jetpack_Options;
 
@@ -55,7 +56,7 @@ class Publicize_Script_Data {
 	 */
 	public static function set_admin_script_data( $data ) {
 
-		$data['social'] = self::get_admin_script_data();
+		$data['social'] = apply_filters( 'jetpack_social_admin_script_data', self::get_admin_script_data(), $data );
 
 		if ( empty( $data['site']['plan']['product_slug'] ) ) {
 			$data['site']['plan'] = Current_Plan::get();
@@ -65,6 +66,9 @@ class Publicize_Script_Data {
 		if ( ( new Host() )->is_wpcom_simple() ) {
 			$data['site']['plan']['features'] = Current_Plan::get_simple_site_specific_features();
 		}
+
+		$data['site']['wpcom']['blog_id'] = Manager::get_site_id( true );
+		$data['site']['suffix']           = ( new Status() )->get_site_suffix();
 
 		return $data;
 	}
@@ -93,6 +97,7 @@ class Publicize_Script_Data {
 			'supported_services'   => array(),
 			'shares_data'          => array(),
 			'urls'                 => array(),
+			'settings'             => self::get_social_settings(),
 		);
 
 		if ( ! Utils::is_publicize_active() ) {
@@ -109,11 +114,11 @@ class Publicize_Script_Data {
 		return array_merge(
 			$basic_data,
 			array(
-				'api_paths'          => self::get_api_paths(),
-				'supported_services' => self::get_supported_services(),
-				'shares_data'        => self::get_shares_data(),
-				'urls'               => self::get_urls(),
-				'settings'           => self::get_social_settings(),
+				'api_paths'           => self::get_api_paths(),
+				'supported_services'  => self::get_supported_services(),
+				'shares_data'         => self::get_shares_data(),
+				'urls'                => self::get_urls(),
+				'store_initial_state' => self::get_store_initial_state(),
 			)
 		);
 	}
@@ -129,6 +134,34 @@ class Publicize_Script_Data {
 
 		return array(
 			'socialImageGenerator' => $settings->get_image_generator_settings(),
+			'utmSettings'          => $settings->get_utm_settings(),
+		);
+	}
+
+	/**
+	 * Get the social store initial state.
+	 *
+	 * @return array
+	 */
+	public static function get_store_initial_state() {
+
+		$is_wpcom = ( new Host() )->is_wpcom_platform();
+
+		$post = get_post();
+
+		$share_status = array();
+
+		// get_post_share_status is not available on WPCOM yet.
+		if ( Utils::should_block_editor_have_social() && $post && ! $is_wpcom ) {
+			$share_status[ $post->ID ] = self::publicize()->get_post_share_status( $post->ID );
+		}
+
+		return array(
+			'connectionData' => array(
+				// We do not have this method on WPCOM Publicize class yet.
+				'connections' => ! $is_wpcom ? self::publicize()->get_all_connections_for_user() : array(),
+			),
+			'shareStatus'    => $share_status,
 		);
 	}
 

@@ -1,6 +1,7 @@
 {
 	"name": "homepage-articles",
 	"category": "newspack",
+	"apiVersion": 3,
 	"attributes": {
 		"className": {
 			"type": "string",
@@ -222,7 +223,9 @@
 		},
 		"postType": {
 			"type": "array",
-			"default": ["post"],
+			"default": [
+				"post"
+			],
 			"items": {
 				"type": "string"
 			}
@@ -233,7 +236,9 @@
 		},
 		"includedPostStatuses": {
 			"type": "array",
-			"default": ["publish"],
+			"default": [
+				"publish"
+			],
 			"items": {
 				"type": "string"
 			}

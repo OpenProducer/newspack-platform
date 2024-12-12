@@ -40,7 +40,13 @@ function _gutenberg_add_block_templates_from_registry( $query_result, $query, $t
 	}
 
 	if ( ! isset( $query['wp_id'] ) ) {
-		$template_files = _gutenberg_get_block_templates_files( $template_type, $query );
+		// We need to unset the post_type query param because some templates
+		// would be excluded otherwise, like `page.html` when looking for
+		// `page` templates.
+		// See: https://github.com/WordPress/gutenberg/issues/65584
+		$template_files_query = $query;
+		unset( $template_files_query['post_type'] );
+		$template_files = _get_block_templates_files( $template_type, $template_files_query );
 
 		/*
 		 * Add templates registered in the template registry. Filtering out the ones which have a theme file.

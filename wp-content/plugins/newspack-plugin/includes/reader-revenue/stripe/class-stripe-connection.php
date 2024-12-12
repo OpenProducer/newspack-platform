@@ -57,31 +57,10 @@ class Stripe_Connection {
 		$stripe_data = array_merge(
 			$stripe_data,
 			[
-				'currency'                    => $currency,
-				'location_code'               => $location_code,
-				'newsletter_list_id'          => '',
-				'allow_covering_fees'         => get_option( 'newspack_donations_allow_covering_fees', true ),
-				'allow_covering_fees_default' => get_option( 'newspack_donations_allow_covering_fees_default', false ),
-				'allow_covering_fees_label'   => get_option( 'newspack_donations_allow_covering_fees_label', '' ),
+				'currency'      => $currency,
+				'location_code' => $location_code,
 			]
 		);
-
-		// Read data from the legacy option.
-		$legacy_stripe_data = array_filter(
-			get_option( 'newspack_stripe_data', [] ),
-			[ __CLASS__, 'is_value_non_empty' ]
-		);
-		$stripe_data        = array_merge( $legacy_stripe_data, $stripe_data );
-
-		if ( isset( $stripe_data['testMode'] ) ) {
-			$stripe_data['usedPublishableKey'] = $stripe_data['testMode'] ? $stripe_data['testPublishableKey'] : $stripe_data['publishableKey'];
-			$stripe_data['usedSecretKey']      = $stripe_data['testMode'] ? $stripe_data['testSecretKey'] : $stripe_data['secretKey'];
-		} else {
-			$stripe_data['usedPublishableKey'] = '';
-			$stripe_data['usedSecretKey']      = '';
-		}
-		$stripe_data['fee_multiplier'] = get_option( 'newspack_blocks_donate_fee_multiplier', '2.9' );
-		$stripe_data['fee_static']     = get_option( 'newspack_blocks_donate_fee_static', '0.3' );
 		return $stripe_data;
 	}
 
@@ -99,12 +78,6 @@ class Stripe_Connection {
 		}
 		if ( isset( $updated_stripe_data['location_code'] ) ) {
 			update_option( 'woocommerce_default_country', $updated_stripe_data['location_code'] );
-		}
-		if ( isset( $updated_stripe_data['fee_multiplier'] ) ) {
-			update_option( 'newspack_blocks_donate_fee_multiplier', $updated_stripe_data['fee_multiplier'] );
-		}
-		if ( isset( $updated_stripe_data['fee_static'] ) ) {
-			update_option( 'newspack_blocks_donate_fee_static', $updated_stripe_data['fee_static'] );
 		}
 	}
 }

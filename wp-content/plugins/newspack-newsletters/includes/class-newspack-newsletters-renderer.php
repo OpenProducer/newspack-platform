@@ -852,17 +852,18 @@ final class Newspack_Newsletters_Renderer {
 				$social_wrapper_attrs = array(
 					'icon-size'     => '24px',
 					'mode'          => 'horizontal',
-					'padding'       => '0',
 					'border-radius' => '999px',
-					'icon-padding'  => '7px',
+					'icon-padding'  => isset( $attrs['className'] ) && 'is-style-filled-primary-text' === $attrs['className'] ? '0px' : '7px',
+					'padding'       => '0',
 				);
 				if ( isset( $attrs['align'] ) ) {
 					$social_wrapper_attrs['align'] = $attrs['align'];
 				} else {
 					$social_wrapper_attrs['align'] = 'left';
 				}
+
 				$markup = '<mj-social ' . self::array_to_attributes( $social_wrapper_attrs ) . '>';
-				foreach ( $inner_blocks as $link_block ) {
+				foreach ( $inner_blocks as $index => $link_block ) {
 					if ( isset( $link_block['attrs']['url'] ) ) {
 						$url = $link_block['attrs']['url'];
 						// Handle older version of the block, where innner blocks we named `core/social-link-<service>`.
@@ -875,7 +876,13 @@ final class Newspack_Newsletters_Renderer {
 								'src'              => plugins_url( 'assets/' . $social_icon['icon'], __DIR__ ),
 								'background-color' => $social_icon['color'],
 								'css-class'        => 'social-element',
+								'padding'          => '8px',
 							);
+
+							if ( $index === 0 || $index === count( $inner_blocks ) - 1 ) {
+								$img_attrs['padding-left']  = $index === 0 ? '0' : '8px';
+								$img_attrs['padding-right'] = $index === 0 ? '8px' : '0';
+							}
 
 							$markup .= '<mj-social-element ' . self::array_to_attributes( $img_attrs ) . '/>';
 						}

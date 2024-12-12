@@ -39,6 +39,7 @@ class Initializer {
 		}
 
 		WP_CLI::add_command( 'newspack setup', 'Newspack\CLI\Setup' );
+		WP_CLI::add_command( 'newspack remove-starter-content', [ 'Newspack\Starter_Content','remove_starter_content' ] );
 
 		// Utility commands for managing RAS data via WP CLI.
 		WP_CLI::add_command(
@@ -48,87 +49,12 @@ class Initializer {
 
 		WP_CLI::add_command(
 			'newspack verify-reader',
-			[ 'Newspack\CLI\RAS', 'cli_verify_reader' ],
-			[
-				'shortdesc' => 'Verify a reader account . ',
-				'synopsis'  => [
-					[
-						'type'        => 'positional',
-						'name'        => 'user',
-						'description' => 'ID or email of the user account . ',
-						'optional'    => false,
-						'repeating'   => false,
-					],
-				],
-			]
+			[ 'Newspack\CLI\RAS', 'cli_verify_reader' ]
 		);
 
 		WP_CLI::add_command(
 			'newspack esp sync',
-			[ 'Newspack\CLI\RAS_ESP_Sync', 'cli_sync_contacts' ],
-			[
-				'shortdesc' => __( 'Sync reader data to the connected ESP.', 'newspack-plugin' ),
-				'synopsis'  => [
-					[
-						'type'     => 'flag',
-						'name'     => 'dry-run',
-						'optional' => true,
-					],
-					[
-						'type'     => 'flag',
-						'name'     => 'active-only',
-						'optional' => true,
-					],
-					[
-						'type'     => 'assoc',
-						'name'     => 'migrated-subscriptions',
-						'default'  => false,
-						'optional' => true,
-						'options'  => [ 'stripe', 'piano-csv', 'stripe-csv', false ],
-					],
-					[
-						'type'     => 'assoc',
-						'name'     => 'subscription-ids',
-						'default'  => false,
-						'optional' => true,
-					],
-					[
-						'type'     => 'assoc',
-						'name'     => 'user-ids',
-						'default'  => false,
-						'optional' => true,
-					],
-					[
-						'type'     => 'assoc',
-						'name'     => 'order-ids',
-						'default'  => false,
-						'optional' => true,
-					],
-					[
-						'type'     => 'assoc',
-						'name'     => 'batch-size',
-						'default'  => 10,
-						'optional' => true,
-					],
-					[
-						'type'     => 'assoc',
-						'name'     => 'offset',
-						'default'  => 0,
-						'optional' => true,
-					],
-					[
-						'type'     => 'assoc',
-						'name'     => 'max-batches',
-						'default'  => 0,
-						'optional' => true,
-					],
-					[
-						'type'     => 'assoc',
-						'name'     => 'sync-context',
-						'optional' => true,
-					],
-				],
-			]
+			[ 'Newspack\CLI\RAS_ESP_Sync', 'cli_sync_contacts' ]
 		);
 
 		WP_CLI::add_command( 'newspack migrate-co-authors-guest-authors', [ 'Newspack\CLI\Co_Authors_Plus', 'migrate_guest_authors' ] );
