@@ -1,3 +1,17 @@
+# [1.14.0](https://github.com/Automattic/newspack-block-theme/compare/v1.13.0...v1.14.0) (2024-11-25)
+
+
+### Features
+
+* add post subtitle support ([#290](https://github.com/Automattic/newspack-block-theme/issues/290)) ([593ffca](https://github.com/Automattic/newspack-block-theme/commit/593ffca3787ebffd665433d82dadea450bb9b7b9))
+
+# [1.14.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.13.0...v1.14.0-alpha.1) (2024-11-15)
+
+
+### Features
+
+* add post subtitle support ([#290](https://github.com/Automattic/newspack-block-theme/issues/290)) ([593ffca](https://github.com/Automattic/newspack-block-theme/commit/593ffca3787ebffd665433d82dadea450bb9b7b9))
+
 # [1.13.0](https://github.com/Automattic/newspack-block-theme/compare/v1.12.0...v1.13.0) (2024-10-08)
 
 
