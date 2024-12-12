@@ -17,10 +17,7 @@
 		}
 	},
 	"supports": {
-		"align": [
-			"wide",
-			"full"
-		],
+		"align": [ "wide", "full" ],
 		"html": false,
 		"color": {
 			"gradients": true,
@@ -63,8 +60,5 @@
 		}
 	},
 	"editorStyle": "wp-block-comments-editor",
-	"usesContext": [
-		"postId",
-		"postType"
-	]
+	"usesContext": [ "postId", "postType" ]
 }

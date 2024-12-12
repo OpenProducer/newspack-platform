@@ -1,11 +1,16 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 2,
+	"apiVersion": 3,
 	"name": "newspack-blocks/checkout-button",
 	"title": "Checkout Button",
 	"category": "newspack",
 	"description": "Modal checkout button for WooCommerce products.",
-	"keywords": [ "woocommerce", "product", "checkout", "button" ],
+	"keywords": [
+		"woocommerce",
+		"product",
+		"checkout",
+		"button"
+	],
 	"textdomain": "newspack-blocks",
 	"attributes": {
 		"product": {
@@ -41,7 +46,7 @@
 		},
 		"afterSuccessButtonLabel": {
 			"type": "string",
-			"default": "Continue browsing"
+			"default": "Continue"
 		},
 		"afterSuccessURL": {
 			"type": "string"
@@ -52,7 +57,10 @@
 	},
 	"supports": {
 		"anchor": true,
-		"align": [ "center", "wide" ],
+		"align": [
+			"center",
+			"wide"
+		],
 		"color": {
 			"__experimentalSkipSerialization": true,
 			"gradients": true,
@@ -77,7 +85,10 @@
 		"shadow": true,
 		"spacing": {
 			"__experimentalSkipSerialization": true,
-			"padding": [ "horizontal", "vertical" ],
+			"padding": [
+				"horizontal",
+				"vertical"
+			],
 			"__experimentalDefaultControls": {
 				"padding": true
 			}
@@ -91,8 +102,15 @@
 		}
 	},
 	"styles": [
-		{ "name": "fill", "label": "Fill", "isDefault": true },
-		{ "name": "outline", "label": "Outline" }
+		{
+			"name": "fill",
+			"label": "Fill",
+			"isDefault": true
+		},
+		{
+			"name": "outline",
+			"label": "Outline"
+		}
 	],
 	"editorStyle": "newspack-checkout-button-editor",
 	"style": "newspack-checkout-block-button"

@@ -123,15 +123,23 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		$response = json_decode( $response['body'], true );
-		if ( isset( $response['errors'] ) && ! empty( $response['errors'] ) ) {
+		$response_code = wp_remote_retrieve_response_code( $response );
+		$response_body = json_decode( wp_remote_retrieve_body( $response ), true );
+		$response_message = wp_remote_retrieve_response_message( $response );
+
+		if ( 400 < $response_code || ! empty( $response_body['errors'] ) ) {
 			$errors = new WP_Error();
-			foreach ( $response['errors'] as $error ) {
-				$errors->add( $error['code'], $error['title'] );
+			if ( isset( $response_body['errors'] ) && is_array( $response_body['errors'] ) ) {
+				foreach ( $response_body['errors'] as $error ) {
+					$errors->add( $error['code'] ?? 'error', $error['title'] );
+				}
+			} elseif ( ! empty( $response_message ) ) {
+				$errors->add( $response_code, $response_message );
 			}
+
 			return $errors;
 		}
-		return $response;
+		return $response_body;
 	}
 
 	/**

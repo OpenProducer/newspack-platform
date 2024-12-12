@@ -19,9 +19,15 @@ defined( 'ABSPATH' ) || exit;
 class Setup {
 
 	/**
-	 * Sets up a testing site
+	 * Shortcut to skip the onboarding wizard for a brand-new or empty Newspack site.
 	 *
-	 * This is a command used to set up a testing site from scratch, installing required plugins and running the onboard wizard automatically
+	 * This is a command used to set up a testing site from scratch, installing
+	 * required plugins and running the onboard wizard automatically.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--site=<WordPress-site-url>]
+	 * : If passed, will use post content from the given URL to populate starter content.
 	 *
 	 * @param array $args Positional arguments.
 	 * @param array $assoc_args Assoc arguments.
@@ -121,8 +127,9 @@ class Setup {
 			return WP_CLI::error( $response->data['message'] );
 		}
 
-		WP_CLI::line( 'Creating Posts' );
-		for ( $i = 0; $i < 40; $i++ ) {
+		$posts_count = \Newspack\Starter_Content::is_e2e() ? 10 : 40;
+		WP_CLI::line( sprintf( 'Creating %d posts', $posts_count ) );
+		for ( $i = 0; $i < $posts_count; $i++ ) {
 			$request  = new WP_REST_Request( 'POST', '/' . NEWSPACK_API_NAMESPACE . '/wizard/newspack-setup-wizard/starter-content/post/' . $i );
 			$response = rest_do_request( $request );
 			echo '.';

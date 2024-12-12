@@ -161,6 +161,7 @@ final class Newspack_Popups {
 		$cpt_args = [
 			'labels'       => $labels,
 			'public'       => false,
+			'show_in_menu' => false,
 			'show_ui'      => true,
 			'show_in_rest' => true,
 			'supports'     => [ 'editor', 'title', 'custom-fields', 'thumbnail', 'revisions' ],

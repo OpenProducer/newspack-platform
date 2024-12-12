@@ -1503,7 +1503,7 @@ function TextColorEdit({
   const [allowCustomControl, colors = EMPTY_ARRAY] = (0,external_wp_blockEditor_namespaceObject.useSettings)('color.custom', 'color.palette');
   const [isAddingColor, setIsAddingColor] = (0,external_wp_element_namespaceObject.useState)(false);
   const colorIndicatorStyle = (0,external_wp_element_namespaceObject.useMemo)(() => fillComputedColors(contentRef.current, getActiveColors(value, text_color_name, colors)), [contentRef, value, colors]);
-  const hasColorsToChoose = colors.length || !allowCustomControl;
+  const hasColorsToChoose = !!colors.length || allowCustomControl;
   if (!hasColorsToChoose && !isActive) {
     return null;
   }

@@ -74,6 +74,7 @@ class Memberships {
 
 		include __DIR__ . '/class-block-patterns.php';
 		include __DIR__ . '/class-metering.php';
+		include __DIR__ . '/class-import-export.php';
 	}
 
 	/**
@@ -770,7 +771,7 @@ class Memberships {
 			window.newspackRAS = window.newspackRAS || [];
 			window.newspackRAS.push( function( ras ) {
 				ras.on( 'reader', function( ev ) {
-					if ( ev.detail.authenticated ) {
+					if ( ev.detail.authenticated && ! window?.newspackReaderActivation?.getPendingCheckout() ) {
 						if ( ras.overlays.get().length ) {
 							ras.on( 'overlay', function( ev ) {
 								if ( ! ev.detail.overlays.length ) {

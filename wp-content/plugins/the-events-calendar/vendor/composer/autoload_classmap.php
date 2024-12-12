@@ -193,6 +193,8 @@ return array(
     'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Provider' => $baseDir . '/src/Events/Integrations/Plugins/WordPress_SEO/Provider.php',
     'TEC\\Events\\Integrations\\Provider' => $baseDir . '/src/Events/Integrations/Provider.php',
     'TEC\\Events\\Legacy\\Views\\V1\\Provider' => $baseDir . '/src/Events/Legacy/Views/V1/Provider.php',
+    'TEC\\Events\\Notifications\\Notifications' => $baseDir . '/src/Events/Notifications/Notifications.php',
+    'TEC\\Events\\Notifications\\Provider' => $baseDir . '/src/Events/Notifications/Provider.php',
     'TEC\\Events\\SEO\\Controller' => $baseDir . '/src/Events/SEO/Controller.php',
     'TEC\\Events\\Site_Health\\Info_Section' => $baseDir . '/src/Events/Site_Health/Info_Section.php',
     'TEC\\Events\\Site_Health\\Provider' => $baseDir . '/src/Events/Site_Health/Provider.php',

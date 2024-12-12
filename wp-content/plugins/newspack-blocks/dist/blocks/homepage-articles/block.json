@@ -1,6 +1,7 @@
 {
   "name": "homepage-articles",
   "category": "newspack",
+  "apiVersion": 3,
   "attributes": {
     "className": {
       "type": "string",

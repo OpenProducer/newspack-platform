@@ -40,6 +40,8 @@ final class Core {
 
 		// Make theme available for translation.
 		\load_theme_textdomain( 'newspack-block-theme' );
+
+		\add_theme_support( 'post-subtitle' );
 	}
 
 	/**
@@ -50,7 +52,6 @@ final class Core {
 	 * @return void
 	 */
 	public static function theme_styles() {
-
 		// Register theme stylesheet.
 		\wp_register_style(
 			'newspack_block_theme-style',

@@ -17,7 +17,10 @@ defined( 'ABSPATH' ) || exit;
  */
 class RAS {
 	/**
-	 * Verify the given user, bypassing the need to complete the email-based verification flow.
+	 * Shortcut to skip the Reader Activation onboarding wizard.
+	 *
+	 * Will generate default Reader Activation prompts for Newspack Campaigns.
+	 * Note that prerequisites must still be met for features to be fully functional.
 	 */
 	public static function cli_setup_ras() {
 		if ( Reader_Activation::is_ras_campaign_configured() ) {
@@ -28,7 +31,7 @@ class RAS {
 			WP_CLI::error( __( 'Newspack Campaigns plugin not found.', 'newspack-plugin' ) );
 		}
 
-		
+
 		if ( ! class_exists( '\Newspack_Newsletters_Subscription' ) ) {
 			WP_CLI::error( __( 'Newspack Newsletters plugin not found.', 'newspack-plugin' ) );
 		}
@@ -38,7 +41,7 @@ class RAS {
 		}
 
 		$result = \Newspack_Popups_Presets::activate_ras_presets();
-		
+
 		if ( ! $result ) {
 			WP_CLI::error( __( 'Something went wrong. Please check for required plugins and try again.', 'newspack-plugin' ) );
 			exit;
@@ -48,7 +51,12 @@ class RAS {
 	}
 
 	/**
-	 * Verify the given user, bypassing the need to complete the email-based verification flow.
+	 * Verify a reader account, allowing them to skip the account ownership verification flow.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--user=<user ID|email>]
+	 * : The user ID or email address associated with the reader account to verify.
 	 *
 	 * @param array $args Positional args.
 	 * @param array $assoc_args Associative args.

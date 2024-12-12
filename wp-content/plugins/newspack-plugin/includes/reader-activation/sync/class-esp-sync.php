@@ -22,6 +22,12 @@ class ESP_Sync extends Sync {
 	 * @var string
 	 */
 	protected static $context = 'ESP Sync';
+	/**
+	 * Initialize hooks.
+	 */
+	public static function init_hooks() {
+		add_action( 'newspack_scheduled_esp_sync', [ __CLASS__, 'scheduled_sync' ], 10, 2 );
+	}
 
 	/**
 	 * Whether contacts can be synced to the ESP.
@@ -82,7 +88,7 @@ class ESP_Sync extends Sync {
 	 *
 	 * @return true|\WP_Error True if succeeded or WP_Error.
 	 */
-	protected static function sync( $contact, $context = '' ) {
+	public static function sync( $contact, $context = '' ) {
 		$can_sync = static::can_esp_sync( true );
 		if ( $can_sync->has_errors() ) {
 			return $can_sync;
@@ -107,6 +113,53 @@ class ESP_Sync extends Sync {
 		$result = \Newspack_Newsletters_Contacts::upsert( $contact, $master_list_id, $context );
 
 		return \is_wp_error( $result ) ? $result : true;
+	}
+
+	/**
+	 * Schedule a future sync.
+	 *
+	 * @param int    $user_id The user ID for the contact to sync.
+	 * @param string $context The context of the sync.
+	 * @param int    $delay   The delay in seconds.
+	 */
+	public static function schedule_sync( $user_id, $context, $delay ) {
+		// Schedule another sync in $delay number of seconds.
+		if ( ! is_int( $delay ) ) {
+			return;
+		}
+
+		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return;
+		}
+
+		static::log(
+			sprintf(
+				// Translators: %s is the email address of the contact to synced.
+				__( 'Scheduling secondary sync for contact %s.', 'newspack-plugin' ),
+				$user->data->user_email
+			),
+			[
+				'user_email' => $user->data->user_email,
+				'user_id'    => $user_id,
+				'context'    => $context,
+			]
+		);
+		\wp_schedule_single_event( \time() + $delay, 'newspack_scheduled_esp_sync', [ $user_id, $context ] );
+	}
+
+	/**
+	 * Handle a scheduled sync event.
+	 *
+	 * @param int    $user_id The user ID for the contact to sync.
+	 * @param string $context The context of the sync.
+	 */
+	public static function scheduled_sync( $user_id, $context ) {
+		$contact = Sync\WooCommerce::get_contact_from_customer( new \WC_Customer( $user_id ) );
+		if ( ! $contact ) {
+			return;
+		}
+		self::sync( $contact, $context );
 	}
 
 	/**
@@ -167,3 +220,4 @@ class ESP_Sync extends Sync {
 		return $result;
 	}
 }
+ESP_Sync::init_hooks();

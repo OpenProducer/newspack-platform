@@ -1,6 +1,7 @@
 {
   "name": "donate",
   "category": "newspack",
+  "apiVersion": 3,
   "attributes": {
     "className": {
       "type": "string"
@@ -88,7 +89,7 @@
     },
     "afterSuccessButtonLabel": {
       "type": "string",
-      "default": "Continue browsing"
+      "default": "Continue"
     },
     "afterSuccessURL": {
       "type": "string"

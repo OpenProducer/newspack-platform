@@ -56,6 +56,11 @@ function gutenberg_update_meta_args_with_label( $args ) {
 		return $args;
 	}
 
+	// Don't update schema if not exposed to REST
+	if ( ! isset( $args['show_in_rest'] ) ) {
+		return $args;
+	}
+
 	$schema = array( 'title' => $args['label'] );
 	if ( ! is_array( $args['show_in_rest'] ) ) {
 		$args['show_in_rest'] = array(

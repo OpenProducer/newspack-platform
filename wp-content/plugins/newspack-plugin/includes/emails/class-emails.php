@@ -28,6 +28,8 @@ class Emails {
 		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
 		add_filter( 'newspack_newsletters_email_editor_cpts', [ __CLASS__, 'register_email_cpt_with_email_editor' ] );
 		add_filter( 'newspack_newsletters_allowed_editor_actions', [ __CLASS__, 'register_scripts_enqueue_with_email_editor' ] );
+		add_action( 'update_option_theme_mods_' . ( wp_get_theme()->parent() ? get_stylesheet() : get_template() ), [ __CLASS__, 'maybe_update_email_templates' ], 10, 2 );
+		add_action( 'admin_head', [ __CLASS__, 'inject_dynamic_email_template_styles' ] );
 	}
 
 	/**
@@ -63,26 +65,26 @@ class Emails {
 		}
 
 		$labels = [
-			'name'                     => _x( 'Newspack Emails', 'post type general name', 'newspack' ),
-			'singular_name'            => _x( 'Newspack Email', 'post type singular name', 'newspack' ),
-			'menu_name'                => _x( 'Newspack Emails', 'admin menu', 'newspack' ),
-			'name_admin_bar'           => _x( 'Newspack Email', 'add new on admin bar', 'newspack' ),
-			'add_new'                  => _x( 'Add New', 'popup', 'newspack' ),
-			'add_new_item'             => __( 'Add New Newspack Email', 'newspack' ),
-			'new_item'                 => __( 'New Newspack Email', 'newspack' ),
-			'edit_item'                => __( 'Edit Newspack Email', 'newspack' ),
-			'view_item'                => __( 'View Newspack Email', 'newspack' ),
-			'all_items'                => __( 'All Newspack Emails', 'newspack' ),
-			'search_items'             => __( 'Search Newspack Emails', 'newspack' ),
-			'parent_item_colon'        => __( 'Parent Newspack Emails:', 'newspack' ),
-			'not_found'                => __( 'No Newspack Emails found.', 'newspack' ),
-			'not_found_in_trash'       => __( 'No Newspack Emails found in Trash.', 'newspack' ),
-			'items_list'               => __( 'Newspack Emails list', 'newspack' ),
-			'item_published'           => __( 'Newspack Email published', 'newspack' ),
-			'item_published_privately' => __( 'Newspack Email published privately', 'newspack' ),
-			'item_reverted_to_draft'   => __( 'Newspack Email reverted to draft', 'newspack' ),
-			'item_scheduled'           => __( 'Newspack Email scheduled', 'newspack' ),
-			'item_updated'             => __( 'Newspack Email updated', 'newspack' ),
+			'name'                     => _x( 'Newspack Emails', 'post type general name', 'newspack-plugin' ),
+			'singular_name'            => _x( 'Newspack Email', 'post type singular name', 'newspack-plugin' ),
+			'menu_name'                => _x( 'Newspack Emails', 'admin menu', 'newspack-plugin' ),
+			'name_admin_bar'           => _x( 'Newspack Email', 'add new on admin bar', 'newspack-plugin' ),
+			'add_new'                  => _x( 'Add New', 'popup', 'newspack-plugin' ),
+			'add_new_item'             => __( 'Add New Newspack Email', 'newspack-plugin' ),
+			'new_item'                 => __( 'New Newspack Email', 'newspack-plugin' ),
+			'edit_item'                => __( 'Edit Newspack Email', 'newspack-plugin' ),
+			'view_item'                => __( 'View Newspack Email', 'newspack-plugin' ),
+			'all_items'                => __( 'All Newspack Emails', 'newspack-plugin' ),
+			'search_items'             => __( 'Search Newspack Emails', 'newspack-plugin' ),
+			'parent_item_colon'        => __( 'Parent Newspack Emails:', 'newspack-plugin' ),
+			'not_found'                => __( 'No Newspack Emails found.', 'newspack-plugin' ),
+			'not_found_in_trash'       => __( 'No Newspack Emails found in Trash.', 'newspack-plugin' ),
+			'items_list'               => __( 'Newspack Emails list', 'newspack-plugin' ),
+			'item_published'           => __( 'Newspack Email published', 'newspack-plugin' ),
+			'item_published_privately' => __( 'Newspack Email published privately', 'newspack-plugin' ),
+			'item_reverted_to_draft'   => __( 'Newspack Email reverted to draft', 'newspack-plugin' ),
+			'item_scheduled'           => __( 'Newspack Email scheduled', 'newspack-plugin' ),
+			'item_updated'             => __( 'Newspack Email updated', 'newspack-plugin' ),
 		];
 
 		\register_post_type(
@@ -170,19 +172,68 @@ class Emails {
 		$email_config   = self::get_email_config_by_type( $config_name );
 		$html           = $email_config['html_payload'];
 		$reply_to_email = $email_config['reply_to_email'];
-		$placeholders   = array_merge(
+		$site_address   = '';
+
+		if ( class_exists( 'WC' ) ) {
+			$base_address  = WC()->countries->get_base_address();
+			$base_city     = WC()->countries->get_base_city();
+			$base_postcode = WC()->countries->get_base_postcode();
+		} else {
+			$base_address  = get_option( 'woocommerce_store_address', '' );
+			$base_city     = get_option( 'woocommerce_store_city', '' );
+			$base_postcode = get_option( 'woocommerce_store_postcode', '' );
+		}
+
+		if ( $base_address ) {
+			if ( ! $base_city && ! $base_postcode ) {
+				$site_address = $base_address;
+			} else {
+				$site_address = sprintf(
+					// translators: formatted store address where 1 is street address, 2 is city, and 3 is postcode.
+					__( '%1$s, %2$s %3$s', 'newspack-plugin' ),
+					$base_address,
+					$base_city,
+					$base_postcode
+				);
+			}
+		}
+
+		if ( $site_address ) {
+			$site_contact = sprintf(
+				/* Translators: 1: site title 2: site base address. */
+				__( '%1$s — %2$s', 'newspack-plugin' ),
+				'<strong>' . get_bloginfo( 'name' ) . '</strong>',
+				$site_address
+			);
+		} else {
+			$site_contact = get_bloginfo( 'name' );
+		}
+
+		$placeholders = array_merge(
 			[
 				[
 					'template' => '*CONTACT_EMAIL*',
 					'value'    => sprintf( '<a href="mailto:%s">%s</a>', $reply_to_email, $reply_to_email ),
 				],
 				[
-					'template' => '*SITE_URL*',
-					'value'    => get_site_url(),
+					'template' => '*SITE_ADDRESS*',
+					'value'    => $site_address,
+				],
+				[
+					'template' => '*SITE_CONTACT*',
+					'value'    => $site_contact,
 				],
 				[
 					'template' => '*SITE_LOGO*',
 					'value'    => esc_url( wp_get_attachment_url( get_theme_mod( 'custom_logo' ) ) ),
+				],
+				[
+					'template' => '*SITE_TITLE*',
+					'value'    => get_bloginfo( 'name' ),
+				],
+				[
+					'template' => '*SITE_URL*',
+					'value'    => get_bloginfo( 'wpurl' ),
 				],
 			],
 			$placeholders
@@ -207,6 +258,35 @@ class Emails {
 	public static function send_email( $config_name, $to, $placeholders = [] ) {
 		if ( ! self::supports_emails() ) {
 			return false;
+		}
+
+		// Migrate to RAS-ACC email templates if migration option is not set AND there have been no manual updates to the templates.
+		if ( get_option( 'newspack_email_templates_migrated', '' ) !== 'v1' ) {
+			$migrated  = true;
+			$templates = get_posts(
+				[
+					'post_type'      => self::POST_TYPE,
+					'posts_per_page' => -1,
+					'post_status'    => 'publish',
+				]
+			);
+
+			foreach ( $templates as $template ) {
+				$publish_date       = get_the_date( 'Y-m-d H:i:s', $template->ID );
+				$last_modified_date = get_the_modified_date( 'Y-m-d H:i:s', $template->ID );
+
+				// Template has not been modified, so trash the post so we can trigger a template update.
+				if ( $publish_date === $last_modified_date ) {
+					if ( ! wp_trash_post( $template->ID ) ) {
+						// Flag the migration as failed so we can trigger another attempt later.
+						$migrated = false;
+					}
+				}
+			}
+
+			if ( $migrated ) {
+				update_option( 'newspack_email_templates_migrated', 'v1' );
+			}
 		}
 
 		$switched_locale = \switch_to_locale( \get_user_locale( \wp_get_current_user() ) );
@@ -335,6 +415,7 @@ class Emails {
 			$edit_link = str_replace( site_url(), '', $post_link );
 		}
 		$serialized_email = [
+			'type'           => $type,
 			'label'          => $email_config['label'],
 			'description'    => $email_config['description'],
 			'post_id'        => $post_id,
@@ -428,6 +509,21 @@ class Emails {
 			/** Only attempt to create the email post if wp-includes/pluggable.php is loaded. */
 			return false;
 		} else {
+			// Make sure newsletters color palette is updated with latest theme colors.
+			if ( self::supports_emails() && method_exists( '\Newspack_Newsletters', 'update_color_palette' ) ) {
+				$theme_colors = newspack_get_theme_colors();
+				\Newspack_Newsletters::update_color_palette(
+					[
+						'primary'             => $theme_colors['primary_color'],
+						'primary-text'        => $theme_colors['primary_text_color'],
+						'primary-variation'   => $theme_colors['primary_variation'],
+						'secondary'           => $theme_colors['secondary_color'],
+						'secondary-text'      => $theme_colors['secondary_text_color'],
+						'secondary-variation' => $theme_colors['secondary_variation'],
+					]
+				);
+			}
+
 			$email_post_data = self::load_email_template( $type );
 			if ( ! $email_post_data ) {
 				Logger::error( 'Error: could not retrieve template for type: ' . $type );
@@ -438,6 +534,8 @@ class Emails {
 			$email_post_data['meta_input']  = [
 				self::EMAIL_CONFIG_NAME_META           => $type,
 				\Newspack_Newsletters::EMAIL_HTML_META => $email_post_data['email_html'],
+				'font_body'                            => 'Arial, Helvetica, sans-serif',
+				'font_header'                          => 'Arial, Helvetica, sans-serif',
 			];
 			$post_id                        = wp_insert_post( $email_post_data );
 			Logger::log( sprintf( 'Creating email of type %s (id: %s).', $type, $post_id ) );
@@ -490,7 +588,7 @@ class Emails {
 		} else {
 			return new \WP_Error(
 				'newspack_test_email_not_sent',
-				__( 'Test email was not sent.', 'newspack' )
+				__( 'Test email was not sent.', 'newspack-plugin' )
 			);
 		}
 	}
@@ -531,7 +629,7 @@ class Emails {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new \WP_Error(
 				'newspack_rest_forbidden',
-				esc_html__( 'You cannot use this resource.', 'newspack' ),
+				esc_html__( 'You cannot use this resource.', 'newspack-plugin' ),
 				[
 					'status' => 403,
 				]
@@ -559,5 +657,112 @@ class Emails {
 
 		return wp_lostpassword_url();
 	}
+
+	/**
+	 * Trigger an update to all email template posts when theme color is updated in customizer.
+	 * This is to force an update of dynamic properties such as theme colors.
+	 *
+	 * @param string|array $previous_value previous option value.
+	 * @param string|array $updated_value  updated option value.
+	 *
+	 * @return void
+	 */
+	public static function maybe_update_email_templates( $previous_value, $updated_value ) {
+		// Do nothing if newsletters is not active.
+		if ( ! self::supports_emails() ) {
+			return;
+		}
+
+		// Check for theme mod color settings in case a non-newspack theme is installed.
+		if ( ! isset( $previous_value['primary_color_hex'], $updated_value['primary_color_hex'] ) ) {
+			return;
+		}
+
+		if ( ( $previous_value['primary_color_hex'] !== $updated_value['primary_color_hex'] ) || ( $previous_value['secondary_color_hex'] !== $updated_value['secondary_color_hex'] ) ) {
+			// Update the newsletters color palette.
+			$updated = \Newspack_Newsletters::update_color_palette(
+				[
+					'primary'             => $updated_value['primary_color_hex'],
+					'primary-text'        => newspack_get_color_contrast( $updated_value['primary_color_hex'] ),
+					'primary-variation'   => newspack_adjust_brightness( $updated_value['primary_color_hex'], -40 ),
+					'secondary'           => $updated_value['secondary_color_hex'],
+					'secondary-text'      => newspack_get_color_contrast( $updated_value['secondary_color_hex'] ),
+					'secondary-variation' => newspack_adjust_brightness( $updated_value['secondary_color_hex'], -40 ),
+
+				]
+			);
+
+			if ( ! $updated ) {
+				Logger::error( 'There was an error updating the newsletters color palette.' );
+			}
+
+			// Trigger an update of all email templates to regenerate HTML.
+			$templates = get_posts(
+				[
+					'post_type'      => self::POST_TYPE,
+					'posts_per_page' => -1,
+					'post_status'    => 'publish',
+				]
+			);
+
+			foreach ( $templates as $template ) {
+				// Find/replace the old hex values with the new ones in the rendered email HTML.
+				$email_html = get_post_meta( $template->ID, \Newspack_Newsletters::EMAIL_HTML_META, true );
+				$email_html = str_replace(
+					[
+						$previous_value['primary_color_hex'],
+						newspack_get_color_contrast( $previous_value['primary_color_hex'] ),
+						newspack_adjust_brightness( $previous_value['primary_color_hex'], -40 ),
+						$previous_value['secondary_color_hex'],
+						newspack_get_color_contrast( $previous_value['secondary_color_hex'] ),
+						newspack_adjust_brightness( $previous_value['secondary_color_hex'], -40 ),
+					],
+					[
+						$updated_value['primary_color_hex'],
+						newspack_get_color_contrast( $updated_value['primary_color_hex'] ),
+						newspack_adjust_brightness( $updated_value['primary_color_hex'], -40 ),
+						$updated_value['secondary_color_hex'],
+						newspack_get_color_contrast( $updated_value['secondary_color_hex'] ),
+						newspack_adjust_brightness( $updated_value['secondary_color_hex'], -40 ),
+					],
+					$email_html
+				);
+				update_post_meta( $template->ID, \Newspack_Newsletters::EMAIL_HTML_META, $email_html );
+
+				wp_update_post( [ 'ID' => $template->ID ] );
+			}
+		}
+	}
+
+	/**
+	 * Inject dynamic email template styles for dynamic text colors in the editor.
+	 *
+	 * @return void
+	 */
+	public static function inject_dynamic_email_template_styles() {
+		if ( get_post_type() !== self::POST_TYPE ) {
+			return;
+		}
+
+		[ 'primary_text_color' => $primary_text_color ] = newspack_get_theme_colors();
+
+		?>
+		<style type="text/css">
+			.<?php echo esc_html( self::POST_TYPE ); ?>-has-primary-text-color,
+			.<?php echo esc_html( self::POST_TYPE ); ?>-has-primary-text-color a {
+				color: <?php echo esc_attr( $primary_text_color ); ?> !important;
+			}
+
+			.is-style-filled-primary-text li {
+				background: transparent !important;
+			}
+
+			.is-style-filled-primary-text li svg {
+				color: <?php echo esc_attr( $primary_text_color ); ?> !important;
+			}
+		</style>
+		<?php
+	}
 }
+
 Emails::init();

@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class WooCommerce_Cover_Fees {
 	const CUSTOM_FIELD_NAME  = 'newspack-wc-pay-fees';
-	const SUPPORTED_GATEWAYS = [ 'stripe' ];
+	const SUPPORTED_GATEWAYS = [ 'stripe', 'woocommerce_payments' ];
 
 	/**
 	 * Initialize hooks.
@@ -160,9 +160,8 @@ class WooCommerce_Cover_Fees {
 					id="<?php echo esc_attr( self::CUSTOM_FIELD_NAME . '_' . $payment_gateway ); ?>"
 					name="<?php echo esc_attr( self::CUSTOM_FIELD_NAME ); ?>"
 					type="checkbox"
-					style="margin-right: 8px;"
 					value="1"
-					<?php if ( get_option( 'newspack_donations_allow_covering_fees_default', false ) ) : ?>
+					<?php if ( boolval( get_option( 'newspack_donations_allow_covering_fees_default', false ) ) ) : ?>
 						checked
 					<?php endif; ?>
 				/>
@@ -291,7 +290,7 @@ class WooCommerce_Cover_Fees {
 	 * @return float
 	 */
 	public static function get_cart_fee_value() {
-		return self::get_fee_value( WC()->cart->get_subtotal() );
+		return self::get_fee_value( WC()->cart->get_subtotal() + ( WC()->cart->get_subtotal_tax() ?? 0 ) );
 	}
 
 	/**
@@ -300,7 +299,7 @@ class WooCommerce_Cover_Fees {
 	 * @return float
 	 */
 	public static function get_cart_fee_percentage() {
-		return self::get_fee_percentage( WC()->cart->get_subtotal() );
+		return self::get_fee_percentage( WC()->cart->get_subtotal() + ( WC()->cart->get_subtotal_tax() ?? 0 ) );
 	}
 
 	/**
@@ -309,7 +308,7 @@ class WooCommerce_Cover_Fees {
 	 * @return string
 	 */
 	public static function get_cart_fee_display_value() {
-		return self::get_fee_display_value( WC()->cart->get_subtotal() );
+		return self::get_fee_display_value( WC()->cart->get_subtotal() + ( WC()->cart->get_subtotal_tax() ?? 0 ) );
 	}
 
 	/**
@@ -318,7 +317,7 @@ class WooCommerce_Cover_Fees {
 	 * @return float
 	 */
 	public static function get_cart_total_with_fee() {
-		return self::get_total_with_fee( WC()->cart->get_subtotal() );
+		return self::get_total_with_fee( WC()->cart->get_subtotal() + ( WC()->cart->get_subtotal_tax() ?? 0 ) );
 	}
 }
 WooCommerce_Cover_Fees::init();

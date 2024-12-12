@@ -57,7 +57,7 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 		}
 		$page_templates = [ '', 'single-feature.php' ];
 		$paragraphs     = explode( PHP_EOL, self::get_lipsum( 'paras', 5 ) );
-		$title          = self::generate_title();
+		$title          = self::generate_title( $post_index );
 		$post_data      = [
 			'post_title'   => $title,
 			'post_name'    => sanitize_title_with_dashes( $title, '', 'save' ),
@@ -247,11 +247,12 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 	/**
 	 * Generate a post title
 	 *
+	 * @param int $post_index The index of the created post.
 	 * @return string The title.
 	 */
-	public static function generate_title() {
+	public static function generate_title( $post_index = 0 ) {
 		if ( Starter_Content::is_e2e() ) {
-			return file_get_contents( NEWSPACK_ABSPATH . 'includes/raw_assets/markup/title.txt' );
+			return $post_index . ' ' . file_get_contents( NEWSPACK_ABSPATH . 'includes/raw_assets/markup/title.txt' );
 		}
 		$title = self::get_lipsum( 'words', wp_rand( 7, 14 ) );
 		$title = ucfirst( strtolower( str_replace( '.', '', $title ) ) ); // Remove periods, convert to sentence case.

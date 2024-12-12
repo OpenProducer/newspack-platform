@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/Automattic/newspack-ads/compare/v3.2.1...v3.2.2) (2024-11-25)
+
+
+### Bug Fixes
+
+* add clear: both to global ads ([#918](https://github.com/Automattic/newspack-ads/issues/918)) ([8f951b5](https://github.com/Automattic/newspack-ads/commit/8f951b5e16e0c02690163e0cedce8e93b510c823))
+
 ## [3.2.1](https://github.com/Automattic/newspack-ads/compare/v3.2.0...v3.2.1) (2024-10-11)
 
 

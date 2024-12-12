@@ -10,7 +10,7 @@ import classNames from 'classnames';
  * Internal dependencies
  */
 import type { ComponentProps, DonateBlockAttributes, TierBasedOptionValue } from '../types';
-import { getColorForContrast, getFrequencyLabel } from '../utils';
+import { getColorForContrast, getFrequencyLabelWithAmount } from '../utils';
 import { FREQUENCIES, DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX } from '../consts';
 
 const TierBasedLayout = ( props: ComponentProps ) => {
@@ -44,22 +44,24 @@ const TierBasedLayout = ( props: ComponentProps ) => {
 
 	return (
 		<form className="wpbnbd__tiers" onSubmit={ e => e.preventDefault() }>
-			<div className="wpbnbd__tiers__selection">
-				{ availableFrequencies.map( frequencySlug => {
-					const isActive = currentFrequency === frequencySlug;
-					return (
-						<button
-							key={ frequencySlug }
-							className={ classNames( 'wpbnbd__button', {
-								'wpbnbd__button--active': isActive,
-							} ) }
-							onClick={ () => setCurrencyFrequency( frequencySlug ) }
-						>
-							{ FREQUENCIES[ frequencySlug ] }
-						</button>
-					);
-				} ) }
-			</div>
+			{ availableFrequencies.length > 1 && (
+				<div className="wpbnbd__tiers__selection">
+					{ availableFrequencies.map( frequencySlug => {
+						const isActive = currentFrequency === frequencySlug;
+						return (
+							<button
+								key={ frequencySlug }
+								className={ classNames( 'wpbnbd__button', {
+									'wpbnbd__button--active': isActive,
+								} ) }
+								onClick={ () => setCurrencyFrequency( frequencySlug ) }
+							>
+								{ FREQUENCIES[ frequencySlug ] }
+							</button>
+						);
+					} ) }
+				</div>
+			)}
 			<div className="wpbnbd__tiers__options">
 				{ displayedAmounts.map( ( amount, index ) => {
 					const recommendLabel = attributes.tiersBasedOptions[ index ].recommendLabel || '';
@@ -94,7 +96,7 @@ const TierBasedLayout = ( props: ComponentProps ) => {
 							<div className="wpbnbd__tiers__amount">
 								<div
 									dangerouslySetInnerHTML={ {
-										__html: getFrequencyLabel( amount, currentFrequency ),
+										__html: getFrequencyLabelWithAmount( amount, currentFrequency ),
 									} }
 								/>
 							</div>

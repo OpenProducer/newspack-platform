@@ -157,8 +157,20 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	 * @return WC_Gateway_Stripe|bool WC_Gateway_Stripe instance if Stripe payment gateway is available, false if not.
 	 */
 	public static function get_stripe_gateway( $only_enabled = false ) {
-		$gateways = self::get_payment_gateways();
+		$gateways = self::get_payment_gateways( $only_enabled );
 		return isset( $gateways['stripe'] ) ? $gateways['stripe'] : false;
+	}
+
+	/**
+	 * Get WooPayments payment gateway, if available.
+	 *
+	 * @param bool $only_enabled If true, only return the gateway if enabled.
+	 *
+	 * @return WC_Gateway_Stripe|bool WC_Gateway_Stripe instance if Stripe payment gateway is available, false if not.
+	 */
+	public static function get_woopayments_gateway( $only_enabled = false ) {
+		$gateways = self::get_payment_gateways( $only_enabled );
+		return isset( $gateways['woocommerce_payments'] ) ? $gateways['woocommerce_payments'] : false;
 	}
 
 	/**
@@ -167,17 +179,38 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	 * @return Array|bool Array of Stripe data, or false if Stripe gateway isn't available.
 	 */
 	public function stripe_data() {
-		$stripe = self::get_stripe_gateway();
-		if ( ! $stripe ) {
+		$stripe_gateway = self::get_stripe_gateway();
+		if ( ! $stripe_gateway || ! class_exists( 'WC_Stripe' ) || ! class_exists( 'WC_Stripe_Feature_Flags' ) ) {
 			return false;
 		}
+
+		$stripe_connection = \WC_Stripe::get_instance()->connect;
 		return [
-			'enabled'            => 'yes' === $stripe->get_option( 'enabled', false ) ? true : false,
-			'testMode'           => 'yes' === $stripe->get_option( 'testmode', false ) ? true : false,
-			'publishableKey'     => $stripe->get_option( 'publishable_key', '' ),
-			'secretKey'          => $stripe->get_option( 'secret_key', '' ),
-			'testPublishableKey' => $stripe->get_option( 'test_publishable_key', '' ),
-			'testSecretKey'      => $stripe->get_option( 'test_secret_key', '' ),
+			'enabled'                 => 'yes' === $stripe_gateway->get_option( 'enabled', false ) ? true : false,
+			'testMode'                => 'yes' === $stripe_gateway->get_option( 'testmode', false ) ? true : false,
+			'is_connected_api_test'   => $stripe_connection->is_connected( 'test' ),
+			'is_connected_api_live'   => $stripe_connection->is_connected( 'live' ),
+			'is_connected_oauth_test' => $stripe_connection->is_connected_via_oauth( 'test' ),
+			'is_connected_oauth_live' => $stripe_connection->is_connected_via_oauth( 'live' ),
+			'legacy_checkout_enabled' => ! \WC_Stripe_Feature_Flags::is_upe_checkout_enabled(),
+		];
+	}
+
+	/**
+	 * Retrieve WooPayments data
+	 *
+	 * @return Array|bool Array of WooPayments data, or false if WooPayments gateway isn't available.
+	 */
+	public function woopayments_data() {
+		$woopayments_gateway = self::get_woopayments_gateway();
+		if ( ! $woopayments_gateway ) {
+			return false;
+		}
+
+		return [
+			'enabled'      => 'yes' === $woopayments_gateway->get_option( 'enabled', false ) ? true : false,
+			'test_mode'    => 'yes' === $woopayments_gateway->get_option( 'test_mode', false ) ? true : false,
+			'is_connected' => $woopayments_gateway->is_connected(),
 		];
 	}
 
@@ -233,6 +266,43 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 
 		// @todo when is the best time to do this?
 		$this->set_smart_defaults();
+
+		return true;
+	}
+
+	/**
+	 * Update WooPayments settings
+	 *
+	 * @param Array $args Settings.
+	 * @return Array|WP_Error The data that was updated or an error.
+	 */
+	public function update_wc_woopayments_settings( $args ) {
+		if ( ! class_exists( 'WC_Payment_Gateways' ) ) {
+			return false;
+		}
+
+		// Get the WooPayments payment gateway instance.
+		$woopayments = self::get_woopayments_gateway();
+		if ( ! $woopayments ) {
+			if ( isset( $args['enabled'] ) && $args['enabled'] ) {
+				// WooPayments gateway is not installed and we want to use it. Install/Activate/Initialize it.
+				Plugin_Manager::activate( 'woocommerce-payments' );
+				do_action( 'plugins_loaded' );
+				\WC_Payment_Gateways::instance()->init();
+				$woopayments = self::get_woopayments_gateway();
+				if ( ! $woopayments ) {
+					return new WP_Error( 'newspack_woopayments_gateway_error', __( 'Error activating WooPayments.', 'newspack-plugin' ) );
+				}
+			} else {
+				// WooPayments is not installed and we don't want to use it. No settings needed.
+				return true;
+			}
+		}
+
+		// Update WooPayments settings.
+		if ( isset( $args['enabled'] ) ) {
+			$woopayments->update_option( 'enabled', $args['enabled'] ? 'yes' : 'no' );
+		}
 
 		return true;
 	}

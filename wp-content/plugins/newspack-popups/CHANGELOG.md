@@ -1,3 +1,25 @@
+## [3.1.5](https://github.com/Automattic/newspack-popups/compare/v3.1.4...v3.1.5) (2024-12-09)
+
+
+### Bug Fixes
+
+* hide cpt from menu ([#1365](https://github.com/Automattic/newspack-popups/issues/1365)) ([6ec34ee](https://github.com/Automattic/newspack-popups/commit/6ec34eed785a73b0f621120a029e56a8f38f74f7))
+* prevent issue with double-scrollbars in really specific circumstances ([#1370](https://github.com/Automattic/newspack-popups/issues/1370)) ([c35772f](https://github.com/Automattic/newspack-popups/commit/c35772f65b429f3fdbfc9afe7cc0166685fd7a2a))
+
+## [3.1.4](https://github.com/Automattic/newspack-popups/compare/v3.1.3...v3.1.4) (2024-11-25)
+
+
+### Bug Fixes
+
+* avoid fatal on get_segments ([#1359](https://github.com/Automattic/newspack-popups/issues/1359)) ([2fb88fb](https://github.com/Automattic/newspack-popups/commit/2fb88fbe7031d050397d46edffd7956902dd4e94))
+
+## [3.1.3](https://github.com/Automattic/newspack-popups/compare/v3.1.2...v3.1.3) (2024-11-19)
+
+
+### Bug Fixes
+
+* ensure prompts with expiration dates expire correctly ([#1371](https://github.com/Automattic/newspack-popups/issues/1371)) ([85a63b6](https://github.com/Automattic/newspack-popups/commit/85a63b656208e6f73560dd975997d83462148682))
+
 ## [3.1.2](https://github.com/Automattic/newspack-popups/compare/v3.1.1...v3.1.2) (2024-11-13)
 
 

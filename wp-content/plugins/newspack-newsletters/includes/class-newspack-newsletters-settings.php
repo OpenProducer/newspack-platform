@@ -287,6 +287,11 @@ class Newspack_Newsletters_Settings {
 	private static function render_lists_table() {
 		$lists = Newspack_Newsletters_Subscription::get_lists();
 		if ( is_wp_error( $lists ) || empty( $lists ) ) {
+			?>
+			<div class="notice notice-error">
+				<p><?php echo esc_html( is_wp_error( $lists ) ? $lists->get_error_message() : __( 'No list data found.', 'newspack-newsletters' ) ); ?></p>
+			</div>
+			<?php
 			return;
 		}
 		?>

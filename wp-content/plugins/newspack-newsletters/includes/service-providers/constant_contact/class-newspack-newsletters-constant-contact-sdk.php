@@ -69,6 +69,27 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	private $custom_fields;
 
 	/**
+	 * Request counter for rate limiting
+	 *
+	 * @var int
+	 */
+	private static $request_count = 0;
+
+	/**
+	 * Last request timestamp
+	 *
+	 * @var float
+	 */
+	private static $last_request_time = 0;
+
+	/**
+	 * Maximum requests per second
+	 *
+	 * @var int
+	 */
+	private static $max_requests_per_second = 4;
+
+	/**
 	 * Perform API requests.
 	 *
 	 * @param string $method  Request method.
@@ -80,6 +101,22 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	 * @throws Exception Error message.
 	 */
 	private function request( $method, $path, $options = [] ) {
+		// Rate limiting logic.
+		$current_time = microtime( true );
+		if ( self::$request_count >= self::$max_requests_per_second ) {
+			$time_since_last_request = $current_time - self::$last_request_time;
+			if ( $time_since_last_request < 1 ) {
+				// Sleep for the remaining time in the 1-second window.
+				usleep( ( 1 - $time_since_last_request ) * 1000000 );
+				self::$request_count = 0;
+			}
+		}
+
+		// Reset counter if more than 1 second has passed.
+		if ( $current_time - self::$last_request_time >= 1 ) {
+			self::$request_count = 0;
+		}
+
 		/** Remove "/v3/" coming from paging cursors. */
 		if ( 0 === strpos( $path, '/v3' ) ) {
 			$path = substr( $path, 4 );
@@ -101,6 +138,10 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			],
 		];
 		try {
+			// Update request counter and timestamp before making request.
+			self::$request_count++;
+			self::$last_request_time = microtime( true );
+
 			$response = wp_safe_remote_request( $url, $args + $options );
 			if ( is_wp_error( $response ) ) {
 				throw new Exception( $response->get_error_message() );

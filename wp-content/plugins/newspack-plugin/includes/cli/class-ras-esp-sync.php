@@ -40,9 +40,15 @@ class RAS_ESP_Sync extends Reader_Activation\ESP_Sync {
 	 * Log to WP CLI.
 	 *
 	 * @param string $message The message to log.
+	 * @param array  $data    Optional. Additional data to log.
 	 */
-	protected static function log( $message ) {
+	protected static function log( $message, $data = [] ) {
 		WP_CLI::log( $message );
+		if ( ! empty( $data ) ) {
+			WP_CLI::log(
+				wp_json_encode( $data )
+			);
+		}
 	}
 
 	/**
@@ -218,9 +224,9 @@ class RAS_ESP_Sync extends Reader_Activation\ESP_Sync {
 					if ( \is_wp_error( $result ) ) {
 						static::log(
 							sprintf(
-								// Translators: $1$s is the contact's email address. %2$s is the error message.
-								__( 'Error syncing contact info for %1$s. %2$s' ),
-								$customer->get_email(),
+								// Translators: $1$s is the contact's user ID. %2$s is the error message.
+								__( 'Error syncing contact info for user ID %1$d. %2$s' ),
+								$user_id,
 								$result->get_error_message()
 							)
 						);
@@ -338,7 +344,36 @@ class RAS_ESP_Sync extends Reader_Activation\ESP_Sync {
 	}
 
 	/**
-	 * CLI command for syncing reader data to the connected ESP.
+	 * Sync Reader Activation contact data to the connected ESP for all customers, migrated subscriptions, or specific customers/subscriptions/orders.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--dry-run]
+	 * : If passed, output results but do not execute the sync.
+	 *
+	 * [--active-only]
+	 * : If passed, only sync users who have active subscriptions, otherwise resync all users.
+	 *
+	 * [--migrated-subscriptions=<stripe|piano-csv|stripe-csv>]
+	 * : If passed, will only query for subscriptions that were migrated via the Newspack Subscription Migrations plugin using the Stripe/Piano CSV importers, or the legacy Stripe migrator. The Newspack Subscription Migrations plugin must be active to use this flag.
+	 *
+	 * [--subscription-ids=<id1,id2,etc>]
+	 * : Comma-delimited list of subscription IDs. If passed, will only process those specific subscriptions.
+	 *
+	 * [--user-ids=<id1,id2,etc>]
+	 * : Comma-delimited list of user IDs. If passed, will only process subscriptions associated with those specific users.
+	 *
+	 * [--order-ids=<id1,id2,etc>]
+	 * : Comma-delimited list of order IDs. If passed, will only process subscriptions associated with those specific orders.
+	 *
+	 * [--batch-size=<number>]
+	 * : Number of subscriptions to query/process at once.
+	 *
+	 * [--max-batches=<number>]
+	 * : Maximum number of batches to process.
+	 *
+	 * [--offset=<number>]
+	 * : Offset value passed to the subscription query. Use with `--batch-size` and `--max-batches` to run multiple processes in parallel.
 	 *
 	 * @param array $args Positional args.
 	 * @param array $assoc_args Associative args.

@@ -44,6 +44,7 @@ class WooCommerce_Connection {
 		\add_filter( 'default_option_woocommerce_subscriptions_allow_switching_nyp_price', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
 		\add_filter( 'default_option_woocommerce_subscriptions_enable_retry', [ __CLASS__, 'force_allow_failed_payment_retry' ] );
 		\add_filter( 'woocommerce_email_enabled_customer_completed_order', [ __CLASS__, 'send_customizable_receipt_email' ], 10, 3 );
+		\add_filter( 'woocommerce_email_enabled_cancelled_subscription', [ __CLASS__, 'send_customizable_cancellation_email' ], 10, 3 );
 		\add_action( 'woocommerce_order_status_completed', [ __CLASS__, 'maybe_update_reader_display_name' ], 10, 2 );
 		\add_action( 'option_woocommerce_feature_order_attribution_enabled', [ __CLASS__, 'force_disable_order_attribution' ] );
 		\add_filter( 'woocommerce_related_products', [ __CLASS__, 'disable_related_products' ] );
@@ -257,7 +258,7 @@ class WooCommerce_Connection {
 	}
 
 	/**
-	 * Send the customizable receipt email instead of WooCommerce's default receipt.
+	 * Send the customizable receipt or welcome email instead of WooCommerce's default receipt.
 	 *
 	 * @param bool     $enable Whether to send the default receipt email.
 	 * @param WC_Order $order The order object for the receipt email.
@@ -267,10 +268,31 @@ class WooCommerce_Connection {
 	 */
 	public static function send_customizable_receipt_email( $enable, $order, $class ) {
 		// If we don't have a valid order, or the customizable email isn't enabled, bail.
-		if ( ! is_a( $order, 'WC_Order' ) || ! Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'] ) ) {
+		if ( empty( $order ) || ! is_a( $order, 'WC_Order' ) || ! Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'] ) ) {
 			return $enable;
 		}
-		if ( $order->get_meta( '_newspack_receipt_email_sent', true ) ) {
+
+		// If there are no donation products in the order, do not override the default WC receipt email.
+		$has_donation_product = \Newspack\Donations::get_order_donation_product_id( $order->get_id() ) !== false;
+		if ( ! $has_donation_product ) {
+			return $enable;
+		}
+
+		$email_type      = Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'];
+		$email_sent_meta = '_newspack_receipt_email_sent';
+
+		// If this is a new registration, and the welcome email is enabled, send the welcome email instead.
+		if ( $order->get_meta( '_newspack_checkout_registration_meta' ) && Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPES['WELCOME'] ) ) {
+			$email_type      = Reader_Revenue_Emails::EMAIL_TYPES['WELCOME'];
+			$email_sent_meta = '_newspack_welcome_email_sent';
+		}
+
+		// if the customizable email isn't enabled bail.
+		if ( ! Emails::can_send_email( $email_type ) ) {
+			return $enable;
+		}
+
+		if ( $order->get_meta( $email_sent_meta, true ) ) {
 			return $enable;
 		}
 
@@ -327,17 +349,112 @@ class WooCommerce_Connection {
 				'template' => '*RECEIPT_URL*',
 				'value'    => sprintf( '<a href="%s">%s</a>', $order->get_view_order_url(), __( 'My Account', 'newspack-plugin' ) ),
 			],
+			[
+				'template' => '*ACCOUNT_URL*',
+				'value'    => function_exists( '\wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : get_bloginfo( 'wpurl' ),
+			],
 		];
 
 		$sent = Emails::send_email(
-			Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'],
+			$email_type,
 			$order->get_billing_email(),
 			$placeholders
 		);
 		if ( $sent ) {
-			$order->add_meta_data( '_newspack_receipt_email_sent', true, true );
+			$order->add_meta_data( $email_sent_meta, true, true );
 			return false;
 		}
+		return $enable;
+	}
+
+	/**
+	 * Send the customizable cancellation email in addition to WooCommerce Subscription's default.
+	 * We still want to allow WCS to send its cancellation email since this targets the store admin.
+	 *
+	 * @param bool            $enable        Whether to send the cancellation email.
+	 * @param WC_Subscription $subscription  The order object for the cancellation email.
+	 * @param WC_Email        $class         Instance of the WC_Email class.
+	 *
+	 * @return bool
+	 */
+	public static function send_customizable_cancellation_email( $enable, $subscription, $class ) {
+		// If we don't have a valid subscription, or the customizable email isn't enabled, bail.
+		if ( ! is_a( $subscription, 'WC_Subscription' ) || ! Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPES['CANCELLATION'] ) ) {
+			return $enable;
+		}
+
+		$frequencies = [
+			'month' => __( 'Monthly', 'newspack-plugin' ),
+			'year'  => __( 'Yearly', 'newspack-plugin' ),
+		];
+		$product_map = [];
+		foreach ( $frequencies as $frequency => $label ) {
+			$product_id = Donations::get_donation_product( $frequency );
+			if ( $product_id ) {
+				$product_map[ $product_id ] = $label;
+			}
+		}
+
+		$items = $subscription->get_items();
+
+		if ( ! empty( $items ) ) {
+			$item         = array_shift( $items );
+			$is_donation  = Donations::is_donation_product( $item->get_product_id() );
+			// Replace content placeholders.
+			$placeholders = [
+				[
+					'template' => '*BILLING_NAME*',
+					'value'    => trim( $subscription->get_billing_first_name() . ' ' . $subscription->get_billing_last_name() ),
+				],
+				[
+					'template' => '*BILLING_FIRST_NAME*',
+					'value'    => $subscription->get_billing_first_name(),
+				],
+				[
+					'template' => '*BILLING_LAST_NAME*',
+					'value'    => $subscription->get_billing_last_name(),
+				],
+				[
+					'template' => '*BILLING_FREQUENCY*',
+					'value'    => $product_map[ $item->get_product_id() ] ?? __( 'One-time', 'newspack-plugin' ),
+				],
+				[
+					'template' => '*PRODUCT_NAME*',
+					'value'    => $item->get_name(),
+				],
+				[
+					'template' => '*END_DATE*',
+					'value'    => wcs_format_datetime( wcs_get_datetime_from( $subscription->get_date( 'end' ) ) ),
+				],
+				[
+					'template' => '*BUTTON_TEXT*',
+					'value'    => $is_donation ? __( 'Restart Donation', 'newspack-plugin' ) : __( 'Restart Subscription', 'newspack-plugin' ),
+				],
+				[
+					'template' => '*CANCELLATION_DATE*',
+					'value'    => wcs_format_datetime( wcs_get_datetime_from( $subscription->get_date( 'cancelled' ) ) ),
+				],
+				[
+					'template' => '*CANCELLATION_TITLE*',
+					'value'    => $is_donation ? __( 'Donation Cancelled', 'newspack-plugin' ) : __( 'Subscription Cancelled', 'newspack-plugin' ),
+				],
+				[
+					'template' => '*CANCELLATION_TYPE*',
+					'value'    => $is_donation ? __( 'recurring donation', 'newspack-plugin' ) : __( 'subscription', 'newspack-plugin' ),
+				],
+				[
+					'template' => '*SUBSCRIPTION_URL*',
+					'value'    => $subscription->get_view_order_url(),
+				],
+			];
+
+			$sent = Emails::send_email(
+				Reader_Revenue_Emails::EMAIL_TYPES['CANCELLATION'],
+				$subscription->get_billing_email(),
+				$placeholders
+			);
+		}
+
 		return $enable;
 	}
 

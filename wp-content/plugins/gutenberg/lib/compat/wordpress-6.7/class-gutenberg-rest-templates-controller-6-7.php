@@ -9,7 +9,7 @@
  * Gutenberg_REST_Templates_Controller_6_7 class
  *
  */
-class Gutenberg_REST_Templates_Controller_6_7 extends Gutenberg_REST_Templates_Controller_6_6 {
+class Gutenberg_REST_Templates_Controller_6_7 extends WP_REST_Templates_Controller {
 	/**
 	 * Returns the given template
 	 *

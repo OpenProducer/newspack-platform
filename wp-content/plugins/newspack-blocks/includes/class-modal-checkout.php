@@ -14,6 +14,20 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Modal_Checkout {
 	/**
+	 * Checkout registration flag.
+	 *
+	 * @var string
+	 */
+	const CHECKOUT_REGISTRATION_FLAG = '_newspack_checkout_registration';
+
+	/**
+	 * Checkout registration order meta key.
+	 *
+	 * @var string
+	 */
+	const CHECKOUT_REGISTRATION_ORDER_META_KEY = '_newspack_checkout_registration_meta';
+
+	/**
 	 * Whether the modal checkout has been enqueued.
 	 *
 	 * @var boolean
@@ -28,10 +42,83 @@ final class Modal_Checkout {
 	private static $products = [];
 
 	/**
+	 * Labels for the modal checkout UI.
+	 *
+	 * @var mixed[]
+	 */
+	private static $modal_checkout_labels = [];
+
+	/**
+	 * Allowed assets for modal checkout.
+	 *
+	 * @var string[]
+	 */
+	private static $allowed_scripts = [
+		'jquery',
+		'google_gtagjs',
+		// Newspack.
+		'newspack-newsletters-',
+		'newspack-blocks-modal',
+		'newspack-blocks-modal-checkout',
+		'newspack-wc',
+		'newspack-ui',
+		'newspack-style',
+		'newspack-recaptcha',
+		'newspack-woocommerce-style',
+		// Woo.
+		'woocommerce',
+		'WCPAY',
+		'Woo',
+		'wc-',
+		'wc_',
+		'wcs-',
+		'stripe',
+		'select2',
+		'selectWoo',
+		// Metorik.
+		'metorik',
+	];
+
+	/**
+	 * Allowed styles for modal checkout.
+	 *
+	 * @var string[]
+	 */
+	private static $allowed_styles = [
+		// Newspack.
+		'newspack-newsletters-',
+		'newspack-blocks-modal',
+		'newspack-blocks-modal-checkout',
+		'newspack-wc',
+		'newspack-ui',
+		'newspack-style',
+		'newspack-recaptcha',
+		'newspack-woocommerce-style',
+		// Woo.
+		'woocommerce',
+		'WCPAY',
+		'Woo',
+		'wc-',
+		'wc_',
+		'wcs-',
+		'stripe',
+		'select2',
+		'selectWoo',
+		// Metorik.
+		'metorik',
+	];
+
+	/**
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		add_action( 'wp_loaded', [ __CLASS__, 'process_checkout_request' ], 5 );
+		// Process checkout request.
+		add_action( 'wp_ajax_modal_checkout_request', [ __CLASS__, 'process_checkout_request' ] );
+		add_action( 'wp_ajax_nopriv_modal_checkout_request', [ __CLASS__, 'process_checkout_request' ] );
+		add_action( 'wp', [ __CLASS__, 'process_checkout_request' ] );
+		add_action( 'wp_ajax_abandon_modal_checkout', [ __CLASS__, 'process_abandon_checkout' ] );
+		add_action( 'wp_ajax_nopriv_abandon_modal_checkout', [ __CLASS__, 'process_abandon_checkout' ] );
+
 		add_filter( 'wp_redirect', [ __CLASS__, 'pass_url_param_on_redirect' ] );
 		add_filter( 'woocommerce_cart_product_cannot_be_purchased_message', [ __CLASS__, 'woocommerce_cart_product_cannot_be_purchased_message' ], 10, 2 );
 		add_filter( 'woocommerce_add_error', [ __CLASS__, 'hide_expiry_message_shop_link' ] );
@@ -43,26 +130,37 @@ final class Modal_Checkout {
 		add_filter( 'woocommerce_get_return_url', [ __CLASS__, 'woocommerce_get_return_url' ], 10, 2 );
 		add_filter( 'woocommerce_get_checkout_order_received_url', [ __CLASS__, 'woocommerce_get_return_url' ], 10, 2 );
 		add_filter( 'wc_get_template', [ __CLASS__, 'wc_get_template' ], 10, 2 );
-		add_filter( 'woocommerce_checkout_get_value', [ __CLASS__, 'woocommerce_checkout_get_value' ], 10, 2 );
 		add_filter( 'woocommerce_checkout_fields', [ __CLASS__, 'woocommerce_checkout_fields' ] );
 		add_filter( 'woocommerce_update_order_review_fragments', [ __CLASS__, 'order_review_fragments' ] );
-		add_filter( 'woocommerce_payment_successful_result', [ __CLASS__, 'woocommerce_payment_successful_result' ] );
-		add_action( 'woocommerce_checkout_create_order_line_item', [ __CLASS__, 'woocommerce_checkout_create_order_line_item' ], 10, 4 );
-		add_filter( 'newspack_donations_cart_item_data', [ __CLASS__, 'amend_cart_item_data' ] );
 		add_filter( 'newspack_recaptcha_verify_captcha', [ __CLASS__, 'recaptcha_verify_captcha' ], 10, 2 );
 		add_filter( 'woocommerce_enqueue_styles', [ __CLASS__, 'dequeue_woocommerce_styles' ] );
-		add_filter( 'wcs_place_subscription_order_text', [ __CLASS__, 'order_button_text' ], 1 );
-		add_filter( 'woocommerce_order_button_text', [ __CLASS__, 'order_button_text' ] );
-		add_filter( 'option_woocommerce_subscriptions_order_button_text', [ __CLASS__, 'order_button_text' ] );
+		add_filter( 'wcs_place_subscription_order_text', [ __CLASS__, 'order_button_text' ], 5 );
+		add_filter( 'woocommerce_order_button_text', [ __CLASS__, 'order_button_text' ], 5 );
+		add_filter( 'option_woocommerce_subscriptions_order_button_text', [ __CLASS__, 'order_button_text' ], 5 );
+		add_action( 'woocommerce_before_checkout_form', [ __CLASS__, 'render_before_checkout_form' ] );
+		add_action( 'woocommerce_before_checkout_form', [ __CLASS__, 'render_name_your_price_form' ], 11 );
+		add_action( 'woocommerce_checkout_before_customer_details', [ __CLASS__, 'render_before_customer_details' ] );
+		add_filter( 'woocommerce_enable_order_notes_field', [ __CLASS__, 'enable_order_notes_field' ] );
+		add_action( 'woocommerce_checkout_process', [ __CLASS__, 'wcsg_apply_gift_subscription' ] );
+		add_filter( 'woocommerce_order_received_verify_known_shoppers', '__return_false' );
+		add_filter( 'woocommerce_order_button_html', [ __CLASS__, 'order_button_html' ], 10, 1 );
 		add_action( 'option_woocommerce_default_customer_address', [ __CLASS__, 'ensure_base_default_customer_address' ] );
 		add_action( 'default_option_woocommerce_default_customer_address', [ __CLASS__, 'ensure_base_default_customer_address' ] );
+		add_action( 'wp_ajax_process_name_your_price_request', [ __CLASS__, 'process_name_your_price_request' ] );
+		add_filter( 'option_woocommerce_woocommerce_payments_settings', [ __CLASS__, 'filter_woocommerce_payments_settings' ] );
+		add_action( 'init', [ __CLASS__, 'unhook_woocommerce_payments_update_billing_fields' ] );
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'update_password_strength_message' ], 9999 );
+
 
 		/** Custom handling for registered users. */
 		add_filter( 'woocommerce_checkout_customer_id', [ __CLASS__, 'associate_existing_user' ] );
+		add_action( 'woocommerce_after_checkout_validation', [ __CLASS__, 'maybe_reset_checkout_registration_flag' ], 10, 2 );
 		add_filter( 'woocommerce_checkout_posted_data', [ __CLASS__, 'skip_account_creation' ], 11 );
+		add_action( 'woocommerce_checkout_create_order', [ __CLASS__, 'maybe_add_checkout_registration_order_meta' ], 10, 1 );
+		add_action( 'newpack_blocks_modal_checkout_thankyou', [ __CLASS__, 'reset_checkout_registration_flag' ] );
 
 		// Remove some stuff from the modal checkout page. It's displayed in an iframe, so it should not be treated as a separate page.
-		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'dequeue_scripts' ], 11 );
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'dequeue_scripts' ], PHP_INT_MAX );
 		add_filter( 'newspack_reader_activation_should_render_auth', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
 		add_filter( 'newspack_enqueue_reader_activation_block', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
 		add_filter( 'newspack_enqueue_memberships_block_patterns', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
@@ -70,11 +168,13 @@ final class Modal_Checkout {
 		add_filter( 'newspack_theme_enqueue_js', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
 		add_filter( 'newspack_theme_enqueue_print_styles', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
 		add_filter( 'cmplz_site_needs_cookiewarning', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
-		add_filter( 'googlesitekit_analytics_tag_blocked', [ __CLASS__, 'is_modal_checkout' ] );
-		add_filter( 'googlesitekit_analytics-4_tag_blocked', [ __CLASS__, 'is_modal_checkout' ] );
 		add_filter( 'googlesitekit_adsense_tag_blocked', [ __CLASS__, 'is_modal_checkout' ] );
-		add_filter( 'googlesitekit_tagmanager_tag_blocked', [ __CLASS__, 'is_modal_checkout' ] );
 		add_filter( 'jetpack_active_modules', [ __CLASS__, 'jetpack_active_modules' ] );
+		add_filter( 'woocommerce_checkout_update_order_review_expired', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
+
+		// Make the current cart price available to the JavaScript.
+		add_action( 'wp_ajax_get_cart_total', [ __CLASS__, 'get_cart_total_js' ] );
+		add_action( 'wp_ajax_nopriv_get_cart_total', [ __CLASS__, 'get_cart_total_js' ] );
 
 		/**
 		 * Ensure that options to limit the number of subscriptions per product are respected.
@@ -91,6 +191,10 @@ final class Modal_Checkout {
 			add_filter( 'woocommerce_valid_order_statuses_for_order_again', [ 'WCS_Limiter', 'filter_order_again_statuses_for_limited_subscriptions' ] );
 		}
 		add_filter( 'woocommerce_subscriptions_product_limited_for_user', [ __CLASS__, 'subscriptions_product_limited_for_user' ], 10, 3 );
+		add_filter( 'woocommerce_get_privacy_policy_text', [ __CLASS__, 'woocommerce_get_privacy_policy_text' ], 10, 2 );
+
+		// Remove any hooks that aren't supported by the modal checkout.
+		add_action( 'plugins_loaded', [ __CLASS__, 'remove_hooks' ] );
 	}
 
 	/**
@@ -106,59 +210,12 @@ final class Modal_Checkout {
 	}
 
 	/**
-	 * Add information about modal checkout to order item meta.
-	 *
-	 * @param \WC_Order_Item_Product $item The cart item.
-	 * @param string                 $cart_item_key The cart item key.
-	 * @param array                  $values The cart item values.
-	 * @param \WC_Order              $order The order.
-	 * @return void
-	 */
-	public static function woocommerce_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
-		if ( ! empty( $values['newspack_modal_checkout_url'] ) ) {
-			$order->add_meta_data( '_newspack_modal_checkout_url', $values['newspack_modal_checkout_url'] );
-		}
-	}
-
-	/**
-	 * Change the post-transaction return URL.
-	 * This is specifically for non-redirect-based flows, such as Apple Pay.
-	 *
-	 * @param array $result The return payload for a successful transaction.
-	 */
-	public static function woocommerce_payment_successful_result( $result ) {
-		$order_id           = $result['order_id'];
-		$order              = \wc_get_order( $order_id );
-		$modal_checkout_url = $order->get_meta( '_newspack_modal_checkout_url' );
-		if ( empty( $modal_checkout_url ) ) {
-			return $result;
-		}
-
-		$modal_checkout_url_query = \wp_parse_url( $modal_checkout_url, PHP_URL_QUERY );
-		\wp_parse_str( $modal_checkout_url_query, $modal_checkout_url_query_params );
-		$passed_params_names = [ 'modal_checkout', 'after_success_behavior', 'after_success_url', 'after_success_button_label' ];
-		// Pick passed params from the query params.
-		$passed_params = array_intersect_key( $modal_checkout_url_query_params, array_flip( $passed_params_names ) );
-
-		$result['redirect'] = \add_query_arg(
-			array_merge(
-				$passed_params,
-				[
-					'order_id' => $order_id,
-				]
-			),
-			$result['redirect']
-		);
-		return $result;
-	}
-
-	/**
 	 * Dequeue WC styles if on modal checkout.
 	 *
 	 * @param array $enqueue_styles Array of styles to enqueue.
 	 */
 	public static function dequeue_woocommerce_styles( $enqueue_styles ) {
-		if ( ! isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! self::is_modal_checkout() ) {
 			return $enqueue_styles;
 		}
 		unset( $enqueue_styles['woocommerce-general'] );
@@ -170,25 +227,29 @@ final class Modal_Checkout {
 	 * Process checkout request for modal.
 	 */
 	public static function process_checkout_request() {
-		if ( is_admin() ) {
+		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
 			return;
 		}
 
-		$is_newspack_checkout       = filter_input( INPUT_GET, 'newspack_checkout', FILTER_SANITIZE_NUMBER_INT );
+		$is_newspack_checkout = filter_input( INPUT_GET, 'newspack_checkout', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( ! $is_newspack_checkout ) {
+			return;
+		}
+
 		$product_id                 = filter_input( INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT );
 		$variation_id               = filter_input( INPUT_GET, 'variation_id', FILTER_SANITIZE_NUMBER_INT );
 		$after_success_behavior     = filter_input( INPUT_GET, 'after_success_behavior', FILTER_SANITIZE_SPECIAL_CHARS );
-		$after_success_url          = filter_input( INPUT_GET, 'after_success_url', FILTER_SANITIZE_SPECIAL_CHARS );
+		$after_success_url          = filter_input( INPUT_GET, 'after_success_url', FILTER_SANITIZE_URL );
 		$after_success_button_label = filter_input( INPUT_GET, 'after_success_button_label', FILTER_SANITIZE_SPECIAL_CHARS );
 
-		if ( ! $is_newspack_checkout || ! $product_id ) {
+		if ( ! $product_id ) {
 			return;
 		}
+
 		if ( $variation_id ) {
 			$product_id = $variation_id;
 		}
-
-		\WC()->cart->empty_cart();
 
 		$referer    = wp_get_referer();
 		$params     = [];
@@ -251,16 +312,21 @@ final class Modal_Checkout {
 		}
 
 		/**
-		 * Filters the cart item data for the modal checkout.
-		 *
-		 * @param array $cart_item_data Cart item data.
-		 */
+		* Filters the cart item data for the modal checkout.
+		*
+		* @param array $cart_item_data Cart item data.
+		*/
 		$cart_item_data = apply_filters( 'newspack_blocks_modal_checkout_cart_item_data', $cart_item_data );
 
+		\WC()->cart->empty_cart();
 		\WC()->cart->add_to_cart( $product_id, 1, 0, [], $cart_item_data );
 
-		$query_args = [];
+		// Set checkout registration flag if user is logged not logged in.
+		if ( ! is_user_logged_in() ) {
+			self::set_checkout_registration_flag();
+		}
 
+		$query_args = [];
 		if ( ! empty( $referer_tags ) ) {
 			$query_args['referer_tags'] = implode( ',', $referer_tags );
 		}
@@ -282,9 +348,187 @@ final class Modal_Checkout {
 			\wc_get_page_permalink( 'checkout' )
 		);
 
-		// Redirect to checkout.
-		\wp_safe_redirect( apply_filters( 'newspack_blocks_checkout_url', $checkout_url ) );
-		exit;
+		// Get data to send for this purchase.
+		$checkout_button_metadata = [
+			'currency'   => function_exists( 'get_woocommerce_currency' ) ? \get_woocommerce_currency() : 'USD',
+			'amount'     => $price,
+			'product_id' => $product_id,
+			'referrer'   => $referer,
+		];
+
+		/**
+		 * Action to fire for checkout button block modal.
+		 */
+		\do_action( 'newspack_blocks_checkout_button_modal', $checkout_button_metadata );
+
+		$checkout_url = apply_filters( 'newspack_blocks_checkout_url', $checkout_url );
+
+		if ( defined( 'DOING_AJAX' ) ) {
+			echo wp_json_encode( [ 'url' => $checkout_url ] );
+			exit;
+		} else {
+			// Redirect to checkout.
+			\wp_safe_redirect( $checkout_url );
+			exit;
+		}
+	}
+
+	/**
+	 * Process abandon checkout for modal.
+	 */
+	public static function process_abandon_checkout() {
+		if ( ! defined( 'DOING_AJAX' ) ) {
+			return;
+		}
+
+		if ( ! self::is_modal_checkout() ) {
+			return;
+		}
+
+		if ( ! check_ajax_referer( 'newspack_modal_checkout_nonce' ) ) {
+			wp_send_json_error( [ 'message' => __( 'Invalid nonce.', 'newspack-blocks' ) ] );
+			wp_die();
+		}
+
+		$cart = \WC()->cart;
+		if ( $cart && ! $cart->is_empty() ) {
+			$cart->empty_cart();
+		}
+		self::reset_checkout_registration_flag();
+
+		wp_send_json_success( [ 'message' => __( 'Cart has been emptied.', 'newspack-blocks' ) ] );
+		wp_die();
+	}
+
+	/**
+	 * Filter unsupported Woo Payments features.
+	 *
+	 * @param array $settings WooCommerce Payments settings.
+	 *
+	 * @return array Filtered WooCommerce Payments settings.
+	 */
+	public static function filter_woocommerce_payments_settings( $settings ) {
+		if ( ! self::is_modal_checkout() ) {
+			return $settings;
+		}
+		if ( isset( $settings['platform_checkout'] ) ) {
+			$settings['platform_checkout'] = 'no';
+		}
+		return $settings;
+	}
+
+	/**
+	 * Unhook WooCommerce Payments billing fields update.
+	 *
+	 * The WC_Payment_Gateway_WCPay->checkout_update_email_field_priority() hook
+	 * changes the position of the email address field in the checkout form and
+	 * appends a broken Stripelink button to the email input.
+	 */
+	public static function unhook_woocommerce_payments_update_billing_fields() {
+		if ( ! self::is_modal_checkout() ) {
+			return;
+		}
+		if ( ! class_exists( 'WC_Payments' ) ) {
+			return;
+		}
+		$gateway = \WC_Payments::get_gateway();
+		if ( ! $gateway ) {
+			return;
+		}
+		$filters = $GLOBALS['wp_filter']['woocommerce_billing_fields'];
+		foreach ( $filters as $index => $filter ) {
+			$keys = array_keys( $filter );
+			foreach ( $keys as $key ) {
+				if ( strpos( $key, 'checkout_update_email_field_priority' ) !== false ) {
+					remove_filter( 'woocommerce_billing_fields', $key, $index );
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Process name your price request for modal.
+	 */
+	public static function process_name_your_price_request() {
+		if ( ! defined( 'DOING_AJAX' ) ) {
+			return;
+		}
+
+		if ( ! function_exists( 'WC' ) || ! \Newspack_Blocks::can_use_name_your_price() || ! method_exists( '\WC_Name_Your_Price_Helpers', 'is_nyp' ) ) {
+			return;
+		}
+
+		check_ajax_referer( 'newspack_checkout_name_your_price' );
+
+		$is_newspack_checkout_nyp = filter_input( INPUT_POST, 'newspack_checkout_name_your_price', FILTER_SANITIZE_NUMBER_INT );
+		$product_id               = filter_input( INPUT_POST, 'product_id', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( ! $is_newspack_checkout_nyp || ! $product_id ) {
+			return;
+		}
+
+		$price     = \WC_Name_Your_Price_Helpers::standardize_number( filter_input( INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) );
+		$max_price = \WC_Name_Your_Price_Helpers::get_maximum_price( $product_id );
+
+		if ( ! empty( $max_price ) && $price > $max_price ) {
+			wp_send_json_error(
+				[
+					'message' => sprintf(
+						// Translators: %s is the maximum price.
+						__( 'Adjusted price must be less than the maximum of %s.', 'newspack-blocks' ),
+						\wc_price( $max_price )
+					),
+				]
+			);
+
+			wp_die();
+		}
+
+		$cart_item_data = self::amend_cart_item_data( [ 'referer' => wp_get_referer() ] );
+
+		foreach ( \WC()->cart->get_cart() as $cart_item_key => $cart_item ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+			if ( $cart_item['product_id'] !== (int) $product_id && $cart_item['variation_id'] !== (int) $product_id ) {
+				continue;
+			}
+
+			$cart_item_data['nyp'] = $price;
+			$cart_item_data['base_price'] = isset( $cart_item['base_price'] ) ? $cart_item['base_price'] : $cart_item['nyp'];
+
+			if ( $price < $cart_item_data['base_price'] ) {
+				wp_send_json_error(
+					[
+						'message' => sprintf(
+							// Translators: %s is the name-your-price custom price.
+							__( 'Adjusted price must be greater than base price of %s.', 'newspack-blocks' ),
+							\wc_price( $cart_item_data['base_price'] )
+						),
+					]
+				);
+
+				wp_die();
+			}
+		}
+
+		$coupons = \WC()->cart->get_applied_coupons();
+
+		\WC()->cart->empty_cart();
+		\WC()->cart->add_to_cart( $product_id, 1, 0, [], $cart_item_data );
+
+		if ( ! empty( $coupons ) ) {
+			foreach ( $coupons as $coupon ) {
+				\WC()->cart->apply_coupon( $coupon );
+			}
+		}
+
+		wp_send_json_success(
+			[
+				'message' => self::get_modal_checkout_labels( 'checkout_nyp_thankyou' ),
+				'price'   => \wc_price( $price ),
+			]
+		);
+
+		wp_die();
 	}
 
 	/**
@@ -294,21 +538,64 @@ final class Modal_Checkout {
 		if ( ! self::$has_modal ) {
 			return;
 		}
+		/**
+		* Filters the header title for the modal checkout.
+		*
+		* @param string $title The title.
+		*/
+		$title        = self::get_modal_checkout_labels( 'checkout_modal_title' );
+		$class_prefix = self::get_class_prefix();
 		?>
-		<div class="newspack-blocks-checkout-modal newspack-blocks-modal" style="display: none;">
-			<div class="newspack-blocks-modal__content">
-				<a href="#" class="newspack-blocks-modal__close">
-					<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-blocks' ); ?></span>
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
-						<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
-					</svg>
-				</a>
-				<div class="newspack-blocks-modal__spinner">
-					<span></span>
-				</div>
+		<div id="newspack_modal_checkout" class="<?php echo esc_attr( "$class_prefix {$class_prefix}__modal-container" ); ?>">
+			<div class="<?php echo esc_attr( "{$class_prefix}__modal-container__overlay" ); ?>"></div>
+			<div class="<?php echo esc_attr( "{$class_prefix}__modal" ); ?>" role="dialog" aria-modal="true" aria-labelledby="newspack-modal-checkout-label">
+				<header class="<?php echo esc_attr( "{$class_prefix}__modal__header" ); ?>">
+					<h2 id="newspack-modal-checkout-label"><?php echo esc_html( $title ); ?></h2>
+					<button class="<?php echo esc_attr( "{$class_prefix}__button {$class_prefix}__button--icon {$class_prefix}__button--ghost {$class_prefix}__modal__close" ); ?>">
+						<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-blocks' ); ?></span>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+							<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+						</svg>
+					</button>
+				</header>
+				<section class="<?php echo esc_attr( "{$class_prefix}__modal__content" ); ?>">
+					<div class="<?php echo esc_attr( "{$class_prefix}__spinner" ); ?>">
+						<span></span>
+					</div>
+				</section>
+				<?php
+					// Hacky way to help trap focus in the modal for accessibility, without involving the iframe.
+					echo '<span tabindex="0" id="newspack-a11y-last-element"></span>';
+				?>
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Update product price string for subscriptions to use "per" instead of "/".
+	 *
+	 * @param string $price_string The price string.
+	 */
+	public static function update_subscriptions_product_price_string( $price_string ) {
+		$price_string = str_replace( ' / ', ' ' . __( 'per', 'newspack-blocks' ) . ' ', $price_string );
+		return $price_string;
+	}
+
+	/**
+	 * Update price to remove empty decimals (.00) if over three digits.
+	 *
+	 * @param string $price_string The price string.
+	 */
+	public static function maybe_remove_decimal_spaces( $price_string ) {
+		$decimal_separator = wc_get_price_decimal_separator();
+		$pattern           = '/\b\d{3,}' . preg_quote( $decimal_separator, '/' ) . '00\b/';
+		preg_match( $pattern, $price_string, $matches );
+		if ( ! empty( $matches ) ) {
+			$replace_pattern = '/' . preg_quote( $decimal_separator, '/' ) . '00$/';
+			$price_string    = preg_replace( $pattern, preg_replace( $replace_pattern, '', $matches[0] ), $price_string );
+		}
+		return $price_string;
 	}
 
 	/**
@@ -319,67 +606,166 @@ final class Modal_Checkout {
 			return;
 		}
 
+		add_filter( 'woocommerce_subscriptions_product_price_string', [ __CLASS__, 'update_subscriptions_product_price_string' ], 10, 1 );
+		add_filter( 'formatted_woocommerce_price', [ __CLASS__, 'maybe_remove_decimal_spaces' ], 10, 1 );
+		/**
+		* Filters the header title for the modal checkout.
+		*
+		* @param string $title The title.
+		*/
+		$title        = self::get_modal_checkout_labels( 'variation_modal_title' );
+		$products     = array_keys( self::$products );
+		$class_prefix = self::get_class_prefix();
+
 		$products = array_keys( self::$products );
 		foreach ( $products as $product_id ) {
 			$product = wc_get_product( $product_id );
 			if ( ! $product || ! $product->is_type( 'variable' ) ) {
 				continue;
 			}
+			$product_name = $product->get_name();
 			?>
-			<div class="newspack-blocks-variation-modal newspack-blocks-modal" data-product-id="<?php echo esc_attr( $product_id ); ?>" style="display:none;">
-				<div class="newspack-blocks-modal__content">
-					<a href="#" class="newspack-blocks-modal__close">
-						<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-blocks' ); ?></span>
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
-							<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
-						</svg>
-					</a>
-					<div class="newspack-blocks-variation-modal__selection" data-product-id="<?php echo esc_attr( $product_id ); ?>">
-						<h3><?php echo esc_html( $product->get_name() ); ?></h3>
-						<p><?php esc_html_e( 'Select an option below:', 'newspack-blocks' ); ?></p>
-						<?php
-						$variations = $product->get_available_variations( 'objects' );
-						foreach ( $variations as $variation ) {
-							$name        = wc_get_formatted_variation( $variation, true );
-							$price       = $variation->get_price_html();
-							$description = $variation->get_description();
-							?>
-							<form>
-								<input type="hidden" name="newspack_checkout" value="1" />
-								<input type="hidden" name="product_id" value="<?php echo esc_attr( $variation->get_id() ); ?>" />
-								<button>
-									<span class="summary">
-										<span class="price"><?php echo $price; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-										<span class="variation_name"><?php echo esc_html( $name ); ?></span>
-									</span>
-									<?php if ( ! empty( $description ) ) : ?>
-										<span class="description"><?php echo esc_html( $description ); ?></span>
-									<?php endif; ?>
-								</button>
-							</form>
-							<?php
-						}
-						?>
-					</div>
+			<div
+				class="<?php echo esc_attr( "$class_prefix {$class_prefix}__modal-container newspack-blocks__modal-variation" ); ?>"
+				data-product-id="<?php echo esc_attr( $product_id ); ?>"
+			>
+				<div class="<?php echo esc_attr( "{$class_prefix}__modal-container__overlay" ); ?>"></div>
+				<div class="<?php echo esc_attr( "{$class_prefix}__modal" ); ?>" role="dialog" aria-modal="true" aria-labelledby="newspack-modal-checkout-label">
+					<header class="<?php echo esc_attr( "{$class_prefix}__modal__header" ); ?>">
+						<h2 id="newspack-modal-checkout-label"><?php echo esc_html( $title ); ?></h2>
+						<button class="<?php echo esc_attr( "{$class_prefix}__button {$class_prefix}__button--icon {$class_prefix}__button--ghost {$class_prefix}__modal__close" ); ?>">
+							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-blocks' ); ?></span>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+								<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+							</svg>
+						</button>
+					</header>
+					<section class="<?php echo esc_attr( "{$class_prefix}__modal__content" ); ?>">
+						<h3><?php echo esc_html( $product_name ); ?></h3>
+						<p><?php esc_html_e( 'Select an option to continue:', 'newspack-blocks' ); ?></p>
+						<div class="<?php echo esc_attr( "{$class_prefix}__selection" ); ?>" data-product-id="<?php echo esc_attr( $product_id ); ?>">
+							<ul class="newspack-blocks__options"">
+								<?php
+								$variations = $product->get_available_variations( 'objects' );
+								foreach ( $variations as $variation ) :
+									$variation_id   = $variation->get_id();
+									$variation_name = wc_get_formatted_variation( $variation, true );
+									$price          = $variation->get_price();
+									$price_html     = $variation->get_price_html();
+									$frequency      = '';
+									$product_type = \Newspack_Blocks\Tracking\Data_Events::get_product_type( $product_id );
+
+									// Use suggested price if NYP is active and set for variation.
+									if ( \Newspack_Blocks::can_use_name_your_price() && \WC_Name_Your_Price_Helpers::is_nyp( $variation_id ) ) {
+										$price = \WC_Name_Your_Price_Helpers::get_suggested_price( $variation_id );
+										$min_price = \WC_Name_Your_Price_Helpers::get_minimum_price( $variation_id );
+										if ( ! $price && ! $min_price ) {
+											continue;
+										}
+									}
+
+									if ( class_exists( '\WC_Subscriptions_Product' ) && \WC_Subscriptions_Product::is_subscription( $variation ) ) {
+										$frequency = \WC_Subscriptions_Product::get_period( $variation );
+									}
+
+									$name = sprintf(
+										/* translators: 1: variable product name, 2: product variation name */
+										__( '%1$s - %2$s', 'newspack-blocks' ),
+										$product_name,
+										$variation_name
+									);
+									$product_price_summary = self::get_summary_card_price_string( $name, $price, $frequency );
+									$product_data          = [
+										'amount'       => $price,
+										'action_type'  => 'checkout_button',
+										'currency'     => function_exists( 'get_woocommerce_currency' ) ? \get_woocommerce_currency() : 'USD',
+										'product_price_summary' => $product_price_summary,
+										'product_id'   => (string) $product_id,
+										'product_type' => $product_type,
+										'recurrence'   => ! empty( $frequency ) ? $frequency : 'once',
+										'referrer'     => substr( \get_permalink(), strlen( home_url() ) ), // TODO: Is this OK?
+										'variation_id' => (string) $variation_id,
+									];
+
+									// Replace nyp price html for variations.
+									if ( class_exists( '\WC_Name_Your_Price_Helpers' ) && \WC_Name_Your_Price_Helpers::is_nyp( $variation->get_id() ) ) {
+										$price_html = str_replace( ':', '', $price_html );
+										$price_html = str_replace( '<span class="suggested-text">', '<span class="suggested-text"><span class="suggested-prefix">', $price_html );
+										$price_html = str_replace( '<span class="woocommerce-Price-amount amount">', '</span><span class="woocommerce-Price-amount amount">', $price_html );
+									}
+									?>
+									<li class="newspack-blocks__options__item"">
+										<div class="summary">
+											<span class="price"><?php echo $price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+										</div>
+										<div class="variation"><?php echo esc_html( $variation_name ); ?></div>
+										<form data-product="<?php echo esc_attr( wp_json_encode( $product_data ) ); ?>">
+											<input type="hidden" name="newspack_checkout" value="1" />
+											<button type="submit" class="<?php echo esc_attr( "{$class_prefix}__button {$class_prefix}__button--primary" ); ?> newspack-modal-checkout-variation-selection"><?php echo esc_html( self::get_modal_checkout_labels( 'checkout_confirm_variation' ) ); ?></button>
+										</form>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+					</section>
 				</div>
 			</div>
 			<?php
 		}
+		remove_filter( 'woocommerce_subscriptions_product_price_string', [ __CLASS__, 'update_subscriptions_product_price_string' ], 10, 1 );
+		remove_filter( 'formatted_woocommerce_price', [ __CLASS__, 'maybe_remove_decimal_spaces' ], 10, 1 );
 	}
 
 	/**
 	 * Enqueue scripts for the checkout page rendered in a modal.
 	 */
 	public static function enqueue_scripts() {
+		if (
+			( ! function_exists( 'is_checkout' ) || ! is_checkout() ) &&
+			( ! function_exists( 'is_cart' ) || ! is_cart() ) &&
+			( ! function_exists( 'is_order_received_page' ) || ! is_order_received_page() )
+		) {
+			return;
+		}
+
 		if ( ! self::is_modal_checkout() ) {
 			return;
 		}
+
+		$dependencies = [ 'jquery', 'wc-checkout' ];
+		// Add support reCAPTCHA dependencies, if connected.
+		if ( class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha() ) {
+			$dependencies[] = \Newspack\Recaptcha::SCRIPT_HANDLE;
+		}
+
 		wp_enqueue_script(
 			'newspack-blocks-modal-checkout',
 			plugins_url( 'dist/modalCheckout.js', \NEWSPACK_BLOCKS__PLUGIN_FILE ),
-			[],
+			$dependencies,
 			\NEWSPACK_BLOCKS__VERSION,
-			true
+			[
+				'strategy'  => 'async',
+				'in_footer' => true,
+			]
+		);
+		wp_localize_script(
+			'newspack-blocks-modal-checkout',
+			'newspackBlocksModalCheckout',
+			[
+				'ajax_url'              => admin_url( 'admin-ajax.php' ),
+				'nyp_nonce'             => wp_create_nonce( 'newspack_checkout_name_your_price' ),
+				'checkout_nonce'        => wp_create_nonce( 'newspack_modal_checkout_nonce' ),
+				'newspack_class_prefix' => self::get_class_prefix(),
+				'is_checkout_complete'  => function_exists( 'is_order_received_page' ) && is_order_received_page(),
+				'divider_text'          => esc_html__( 'Or', 'newspack-blocks' ),
+				'is_error'              => ! is_checkout() && ! is_order_received_page(),
+				'labels'                => [
+					'billing_details'  => self::get_modal_checkout_labels( 'billing_details' ),
+					'shipping_details' => self::get_modal_checkout_labels( 'shipping_details' ),
+					'gift_recipient'   => self::get_modal_checkout_labels( 'gift_recipient' ),
+					'complete_button'  => self::order_button_text_with_price(),
+				],
+			]
 		);
 		wp_enqueue_style(
 			'newspack-blocks-modal-checkout',
@@ -396,9 +782,130 @@ final class Modal_Checkout {
 		if ( ! self::is_modal_checkout() ) {
 			return;
 		}
-		wp_dequeue_style( 'cmplz-general' );
-		wp_deregister_script( 'wp-mediaelement' );
-		wp_deregister_style( 'wp-mediaelement' );
+
+		global $wp_scripts, $wp_styles;
+
+		$payment_gateways       = \WC()->payment_gateways->get_available_payment_gateways();
+		$allowed_gateway_assets = [];
+		if ( ! empty( $payment_gateways ) ) {
+			foreach ( array_keys( $payment_gateways ) as $gateway ) {
+				$class                    = get_class( $payment_gateways[ $gateway ] );
+				$plugin_file              = ( new \ReflectionClass( $class ) )->getFileName();
+				$plugin_base              = \plugin_basename( $plugin_file );
+				$plugin_slug              = explode( '/', $plugin_base )[0];
+				$allowed_gateway_assets[] = $plugin_slug;
+			}
+		}
+
+		/**
+		 * Filters the allowed styles to render in the modal checkout
+		 *
+		 * @param string[] $allowed_styles Array of allowed assets handles.
+		 */
+		$allowed_styles = apply_filters( 'newspack_blocks_modal_checkout_allowed_styles', self::$allowed_styles );
+		foreach ( $wp_styles->registered as $handle => $wp_style ) {
+			$allowed = false;
+			foreach ( $allowed_styles as $allowed_style ) {
+				if ( 0 === strpos( $handle, $allowed_style ) ) {
+					$allowed = true;
+					break;
+				}
+			}
+			if ( ! empty( $payment_gateways ) ) {
+				foreach ( $allowed_gateway_assets as $gateway ) {
+					if ( false !== strpos( $wp_style->src, $gateway ) ) {
+						$allowed = true;
+						break;
+					}
+				}
+			}
+			if ( ! $allowed ) {
+				wp_dequeue_style( $handle );
+			}
+		}
+
+		/**
+		 * Filters the allowed scripts to render in the modal checkout
+		 *
+		 * @param string[] $allowed_scripts Array of allowed assets handles.
+		 */
+		$allowed_scripts = apply_filters( 'newspack_blocks_modal_checkout_allowed_scripts', self::$allowed_scripts );
+		foreach ( $wp_scripts->registered as $handle => $wp_script ) {
+			$allowed = false;
+			foreach ( $allowed_scripts as $allowed_script ) {
+				if ( 0 === strpos( $handle, $allowed_script ) ) {
+					$allowed = true;
+					break;
+				}
+			}
+			foreach ( $allowed_gateway_assets as $gateway ) {
+				if ( false !== strpos( $wp_script->src, $gateway ) ) {
+					$allowed = true;
+					break;
+				}
+			}
+			if ( ! $allowed ) {
+				wp_dequeue_script( $handle );
+			}
+		}
+	}
+
+	/**
+	 * Remove any hooks that may not work nicely with the modal checkout.
+	 */
+	public static function remove_hooks() {
+		if ( ! self::is_modal_checkout() ) {
+			return;
+		}
+
+		$remove_list = [];
+
+		// reCaptcha for WooCommerce.
+		if ( class_exists( 'I13_Woo_Recpatcha' ) ) {
+			global $i13_woo_recpatcha;
+			array_push(
+				$remove_list,
+				[
+					'hook'     => 'woocommerce_review_order_before_payment',
+					'callback' => array( $i13_woo_recpatcha, 'i13woo_extra_checkout_fields' ),
+				],
+				[
+					'hook'     => 'woocommerce_after_checkout_validation',
+					'callback' => array( $i13_woo_recpatcha, 'i13_woocomm_validate_checkout_captcha' ),
+				],
+				[
+					'hook'     => 'woocommerce_pay_order_before_submit',
+					'callback' => array( $i13_woo_recpatcha, 'i13woo_extra_checkout_fields' ),
+				],
+				[
+					'hook'     => 'woocommerce_review_order_before_submit',
+					'callback' => array( $i13_woo_recpatcha, 'i13woo_extra_checkout_fields' ),
+				],
+				[
+					'hook'     => 'woocommerce_pay_order_before_submit',
+					'callback' => array( $i13_woo_recpatcha, 'i13woo_extra_checkout_fields_pay_order' ),
+				],
+				[
+					'hook'     => 'woocommerce_proceed_to_checkout',
+					'callback' => array( $i13_woo_recpatcha, 'i13_woocommerce_payment_request_btn_captcha' ),
+				],
+				[
+					'hook'     => 'wp_head',
+					'callback' => array( $i13_woo_recpatcha, 'i13_add_header_metadata' ),
+				]
+			);
+		}
+		/**
+		 * Filters the hooks to remove from the modal checkout.
+		 *
+		 * @param string[] $remove_list Array of hooks to remove.
+		 */
+		$remove_list = apply_filters( 'newspack_blocks_modal_checkout_remove_hooks', $remove_list );
+
+		foreach ( $remove_list as $remove ) {
+			$priority = has_action( $remove['hook'], $remove['callback'] );
+			remove_action( $remove['hook'], $remove['callback'], $priority );
+		}
 	}
 
 	/**
@@ -416,7 +923,27 @@ final class Modal_Checkout {
 			plugins_url( 'dist/modal.js', \NEWSPACK_BLOCKS__PLUGIN_FILE ),
 			[],
 			\NEWSPACK_BLOCKS__VERSION,
-			true
+			[
+				'strategy'  => 'async',
+				'in_footer' => true,
+			]
+		);
+		wp_localize_script(
+			'newspack-blocks-modal',
+			'newspackBlocksModal',
+			[
+				'ajax_url'                   => admin_url( 'admin-ajax.php' ),
+				'checkout_registration_flag' => self::CHECKOUT_REGISTRATION_FLAG,
+				'newspack_class_prefix'      => self::get_class_prefix(),
+				'is_registration_required'   => self::is_registration_required(),
+				'labels'                     => [
+					'auth_modal_title'     => self::get_modal_checkout_labels( 'auth_modal_title' ),
+					'checkout_modal_title' => self::get_modal_checkout_labels( 'checkout_modal_title' ),
+					'register_modal_title' => self::get_modal_checkout_labels( 'register_modal_title' ),
+					'signin_modal_title'   => self::get_modal_checkout_labels( 'signin_modal_title' ),
+					'thankyou_modal_title' => self::get_modal_checkout_labels( 'checkout_success' ),
+				],
+			]
 		);
 		wp_enqueue_style(
 			'newspack-blocks-modal',
@@ -434,25 +961,19 @@ final class Modal_Checkout {
 	 * @return string
 	 */
 	public static function get_checkout_template( $template ) {
-		if ( ! function_exists( 'is_checkout' ) || ! function_exists( 'is_order_received_page' ) || ! function_exists( 'is_cart' ) ) {
-			return $template;
-		}
-		if ( ! is_checkout() && ! is_order_received_page() && ! is_cart() ) {
-			return $template;
-		}
 		if ( ! self::is_modal_checkout() ) {
 			return $template;
 		}
-		$body_classes = [ 'newspack-modal-checkout' ];
-		if ( is_checkout() ) {
-			$body_classes[] = 'checkout';
+		// Ensure we are on a wc page or endpoint.
+		if (
+			( ! function_exists( 'is_checkout' ) && ! is_checkout() ) &&
+			( ! function_exists( 'is_cart' ) && ! is_cart() ) &&
+			( ! function_exists( 'is_wc_endpoint_url' ) && ! is_wc_endpoint_url() )
+		) {
+			return $template;
 		}
-		if ( is_order_received_page() ) {
-			$body_classes[] = 'order-received';
-		}
-		if ( is_cart() ) {
-			$body_classes[] = 'cart';
-		}
+		$class_prefix = self::get_class_prefix();
+		$wc_errors    = wc_get_notices( 'error' );
 		ob_start();
 		?>
 		<!doctype html>
@@ -463,16 +984,33 @@ final class Modal_Checkout {
 			<link rel="profile" href="https://gmpg.org/xfn/11" />
 			<?php wp_head(); ?>
 		</head>
-		<body id="newspack_modal_checkout" class="<?php echo esc_attr( implode( ' ', $body_classes ) ); ?>">
+		<body class="<?php echo esc_attr( "$class_prefix {$class_prefix}__modal__content" ); ?>" id="newspack_modal_checkout_container">
 			<?php
-			echo do_shortcode( '[woocommerce_checkout]' );
-			wp_footer();
-			?>
-
-			<?php
-			if ( is_cart() ) {
-				self::render_close_button();
+			if ( is_checkout() || is_order_received_page() ) {
+				echo do_shortcode( '[woocommerce_checkout]' );
+			} else {
+				// If template is not checkout or order received we want to render an error and back button in modal checkout context.
+				?>
+				<div class="newspack-ui__notice newspack-ui__notice--error">
+					<div>
+						<p>
+							<?php
+							$message = __( "We're sorry, there was an unexpected error. Please try again in a few minutes.", 'newspack-blocks' );
+							if ( ! empty( $wc_errors ) ) {
+								$error = $wc_errors[0];
+								if ( is_array( $error ) && isset( $error['notice'] ) ) {
+									$message = $error['notice'];
+								}
+							}
+							echo esc_html( $message );
+							?>
+						</p>
+					</div>
+				</div>
+				<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--wide" id="checkout_error_back" type="submit"><?php esc_html_e( 'Go back', 'newspack-blocks' ); ?></button>
+				<?php
 			}
+				wp_footer();
 			?>
 		</body>
 		</html>
@@ -486,9 +1024,9 @@ final class Modal_Checkout {
 	private static function get_after_success_params() {
 		return array_filter(
 			[
-				'after_success_behavior'     => isset( $_REQUEST['after_success_behavior'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_behavior'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				'after_success_url'          => isset( $_REQUEST['after_success_url'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_url'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				'after_success_button_label' => isset( $_REQUEST['after_success_button_label'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_button_label'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'after_success_behavior'     => isset( $_REQUEST['after_success_behavior'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_behavior'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'after_success_url'          => isset( $_REQUEST['after_success_url'] ) ? sanitize_url( wp_unslash( $_REQUEST['after_success_url'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'after_success_button_label' => isset( $_REQUEST['after_success_button_label'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_button_label'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			]
 		);
 	}
@@ -531,9 +1069,31 @@ final class Modal_Checkout {
 			$args['key']      = $order->get_order_key();
 		}
 
+		// Pass checkout registration flag.
+		if ( isset( $_REQUEST[ self::CHECKOUT_REGISTRATION_FLAG ] ) && $_REQUEST[ self::CHECKOUT_REGISTRATION_FLAG ] ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			$args[ self::CHECKOUT_REGISTRATION_FLAG ] = '1';
+		}
+
 		return add_query_arg(
 			$args,
 			$url
+		);
+	}
+
+	/**
+	 * Update the text used for the Password Strength message from WooCommerce.
+	 */
+	public static function update_password_strength_message() {
+		wp_localize_script(
+			'wc-password-strength-meter',
+			'pwsL10n',
+			array(
+				'mismatch' => __( 'Password mismatch', 'newspack-blocks' ),
+				'short'    => __( 'Password strength: Very weak', 'newspack-blocks' ),
+				'bad'      => __( 'Password strength: Weak', 'newspack-blocks' ),
+				'good'     => __( 'Password strength: Medium', 'newspack-blocks' ),
+				'strong'   => __( 'Password strength: Strong', 'newspack-blocks' ),
+			)
 		);
 	}
 
@@ -551,14 +1111,29 @@ final class Modal_Checkout {
 		}
 
 		$custom_templates = [
-			'checkout/form-checkout.php'  => 'src/modal-checkout/templates/checkout-form.php',
-			'checkout/form-billing.php'   => 'src/modal-checkout/templates/billing-form.php',
-			'checkout/payment-method.php' => 'src/modal-checkout/templates/payment-method.php',
-			'checkout/thankyou.php'       => 'src/modal-checkout/templates/thankyou.php',
+			'checkout/form-coupon.php'            => 'src/modal-checkout/templates/form-coupon.php',
+			'checkout/form-gift-subscription.php' => 'src/modal-checkout/templates/form-gift-subscription.php',
+		];
+
+		// If Newspack UI is present, use our templates.
+		if ( self::get_class_prefix() === 'newspack-ui' ) {
 			// Replace the login form with the order summary if using the modal checkout. This is
 			// for the case where the reader used an existing email address.
-			'global/form-login.php'       => 'src/modal-checkout/templates/thankyou.php',
-		];
+			$custom_templates['global/form-login.php']       = 'src/modal-checkout/templates/thankyou.php';
+			$custom_templates['checkout/form-checkout.php']  = 'src/modal-checkout/templates/form-checkout.php';
+			$custom_templates['checkout/payment-method.php'] = 'src/modal-checkout/templates/payment-method.php';
+			$custom_templates['checkout/thankyou.php']       = 'src/modal-checkout/templates/thankyou.php';
+		}
+
+		// Only show the woocommerce-subscriptions-gifting fields when we want to.
+		if ( 'html-add-recipient.php' === $template_name ) {
+			$cart_items = \WC()->cart->get_cart();
+
+			// If there's only one cart item, prefer our custom gift UI. Otherwise, use the default.
+			if ( 1 === count( array_values( $cart_items ) ) && class_exists( 'WCS_Gifting' ) ) {
+				$custom_templates['html-add-recipient.php'] = 'src/modal-checkout/templates/empty-html-add-recipient.php';
+			}
+		}
 
 		foreach ( $custom_templates as $original_template => $custom_template ) {
 			if ( $template_name === $original_template ) {
@@ -590,43 +1165,6 @@ final class Modal_Checkout {
 	}
 
 	/**
-	 * Check the nonce for the edit billing request.
-	 *
-	 * @return bool
-	 */
-	private static function validate_edit_billing_request() {
-		if ( ! isset( $_REQUEST['newspack_blocks_edit_billing_nonce'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return false;
-		}
-		if ( ! wp_verify_nonce( sanitize_key( $_REQUEST['newspack_blocks_edit_billing_nonce'] ), 'newspack_blocks_edit_billing' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Modify WC checkout field value.
-	 *
-	 * @param null   $value Value.
-	 * @param string $input Input name.
-	 *
-	 * @return string|null Value or null if unaltered.
-	 */
-	public static function woocommerce_checkout_get_value( $value, $input ) {
-		if ( ! self::is_modal_checkout() ) {
-			return null;
-		}
-		$valid_request = self::validate_edit_billing_request(); // This performs nonce verification.
-		if ( ! $valid_request ) {
-			return null;
-		}
-		if ( isset( $_REQUEST[ $input ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$value = sanitize_text_field( wp_unslash( $_REQUEST[ $input ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		}
-		return $value;
-	}
-
-	/**
 	 * Modify fields for modal checkout.
 	 *
 	 * @param array $fields Checkout fields.
@@ -635,6 +1173,11 @@ final class Modal_Checkout {
 	 */
 	public static function woocommerce_checkout_fields( $fields ) {
 		if ( ! self::is_modal_checkout() ) {
+			return $fields;
+		}
+		$cart = \WC()->cart;
+		// Don't modify fields if shipping is required.
+		if ( $cart->needs_shipping_address() ) {
 			return $fields;
 		}
 		/**
@@ -654,65 +1197,93 @@ final class Modal_Checkout {
 			}
 			unset( $fields['billing'][ $key ] );
 		}
+
+		/**
+		 * Add the form-row-last CSS class to billing phone field.
+		 */
+		if ( in_array( 'billing_phone', $billing_fields, true ) ) {
+			$fields['billing']['billing_phone']['class'] = 'form-row-last';
+		}
+
 		return $fields;
 	}
 
 	/**
-	 * Get the prefilled values for billing fields.
+	 * If WooCommerce Subscriptions Gifting extension is available, render its fields.
 	 *
-	 * @return array
+	 * @return string HTML for the WooCommerce Subscriptions Gifting fields.
 	 */
-	public static function get_prefilled_fields() {
-		$checkout        = \WC()->checkout();
-		$fields          = $checkout->get_checkout_fields( 'billing' );
-		$customer        = new \WC_Customer( get_current_user_id() );
-		$customer_fields = $customer->get_billing();
-		// If the user is logged in and there's no billing email, use the user's email.
-		if ( is_user_logged_in() && empty( $customer_fields['email'] ) ) {
-			$customer_fields['email'] = $customer->get_email();
+	public static function maybe_show_wcs_gifting_fields() {
+		if ( ! self::is_modal_checkout() ) {
+			return;
 		}
-		$valid_request    = self::validate_edit_billing_request();
-		$prefilled_fields = [];
-		foreach ( $fields as $key => $field ) {
-			$key = str_replace( 'billing_', '', $key );
-			if ( $valid_request && isset( $_REQUEST[ 'billing_' . $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$value = sanitize_text_field( wp_unslash( $_REQUEST[ 'billing_' . $key ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			} elseif ( isset( $customer_fields[ $key ] ) ) {
-				$value = $customer_fields[ $key ];
+
+		// Add custom Gift Subscriptions fields if needed.
+		$cart_items = array_values( \WC()->cart->get_cart() );
+		if (
+			1 === count( $cart_items ) &&
+			method_exists( 'WCSG_Cart', 'is_giftable_item' ) &&
+			method_exists( 'WCSG_Cart', 'contains_gifted_renewal' ) &&
+			function_exists( 'wcs_cart_contains_renewal' )
+		) {
+			$cart_item = reset( $cart_items );
+			if ( \WCSG_Cart::is_giftable_item( $cart_item ) ) {
+				$email = ( empty( $cart_item['wcsg_gift_recipients_email'] ) ) ? '' : $cart_item['wcsg_gift_recipients_email'];
+				$args  = [
+					'email'      => $email,
+					'is_renewal' => false,
+				];
+
+				if ( \WCSG_Cart::contains_gifted_renewal() ) {
+					$recipient_user_id = \WCSG_Cart::get_recipient_from_cart_item( \wcs_cart_contains_renewal() );
+					$recipient_user    = \get_userdata( $recipient_user_id );
+					if ( $recipient_user && isset( $recipient_user->email ) ) {
+						$args['email']      = $recipient_user->user_email;
+						$args['is_renewal'] = true;
+					}
+				}
+
+				\wc_get_template( 'checkout/form-gift-subscription.php', $args );
 			}
-			$prefilled_fields[ $key ] = $value;
 		}
-		return $prefilled_fields;
 	}
 
 	/**
-	 * Whether the current checkout session has all required billing fields filled.
-	 *
-	 * @return bool
+	 * If the WooCommerce Subscriptions Gifting extension is available, handle custom form inputs.
 	 */
-	public static function has_filled_required_fields() {
-		$checkout        = \WC()->checkout();
-		$fields          = $checkout->get_checkout_fields( 'billing' );
-		$required        = array_filter(
-			$fields,
-			function( $field ) {
-				return isset( $field['required'] ) && $field['required'];
-			}
-		);
-		$required_keys   = array_keys( $required );
-		$customer_fields = self::get_prefilled_fields();
-		$is_request      = self::validate_edit_billing_request();
-		foreach ( $required_keys as $key ) {
-			$key = str_replace( 'billing_', '', $key );
-			if ( empty( $customer_fields[ $key ] ) ) {
-				if ( $is_request ) {
-					/* translators: %s: field name */
-					wc_add_notice( sprintf( __( '%s is a required field.', 'newspack-blocks' ), $fields[ 'billing_' . $key ]['label'] ), 'error' );
+	public static function wcsg_apply_gift_subscription() {
+		$cart_items = \WC()->cart->get_cart();
+		if (
+			1 === count( array_values( $cart_items ) ) &&
+			method_exists( 'WCS_Gifting', 'email_belongs_to_current_user' ) &&
+			method_exists( 'WCS_Gifting', 'update_cart_item_key' ) &&
+			method_exists( 'WCSG_Cart', 'is_giftable_item' )
+		) {
+			$is_gift   = ! empty( filter_input( INPUT_POST, 'newspack_wcsg_is_gift', FILTER_SANITIZE_SPECIAL_CHARS ) );
+			$cart_item_key = array_keys( $cart_items )[0];
+			$cart_item     = array_values( $cart_items )[0];
+			if ( $is_gift && \WCSG_Cart::is_giftable_item( $cart_item ) ) {
+				$recipient_email = \sanitize_email( filter_input( INPUT_POST, 'wcsg_gift_recipients_email', FILTER_SANITIZE_EMAIL ) );
+				$self_gifting    = \WCS_Gifting::email_belongs_to_current_user( $recipient_email );
+				$is_valid_email  = ! $self_gifting && \is_email( $recipient_email );
+
+				// If no errors, attach the recipient's email address to the subscription item.
+				if ( $is_valid_email ) {
+					\WCS_Gifting::update_cart_item_key( $cart_item, $cart_item_key, $recipient_email );
+				} else {
+					$notice = $self_gifting
+						? __( 'Please enter someone else\' email address to receive this gift.', 'newspack-blocks' )
+						: __( 'Please enter a valid email address to receive this gift.', 'newspack-blocks' );
+
+					// Handle email validation errors.
+					\wc_add_notice(
+						$notice,
+						'error',
+						[ 'id' => 'wcsg_gift_recipients_email' ]
+					);
 				}
-				return false;
 			}
 		}
-		return true;
 	}
 
 	/**
@@ -737,6 +1308,29 @@ final class Modal_Checkout {
 		if ( ! empty( $cart->get_fees() ) ) {
 			return true;
 		}
+		if ( $cart->needs_shipping_address() ) {
+			$shipping       = \WC()->shipping;
+			$packages       = $shipping->get_packages();
+			$totals         = $cart->get_totals();
+			$shipping_rates = [];
+
+			// Find all the shipping rates that apply to the current transaction.
+			foreach ( $packages as $package ) {
+				if ( ! empty( $package['rates'] ) ) {
+					foreach ( $package['rates'] as $rate_key => $rate ) {
+						$shipping_rates[ $rate_key ] = $rate;
+					}
+				}
+			}
+
+			// Show details if shipping requires a fee or if there are multiple shipping rates to choose from.
+			if ( (float) $totals['total'] !== (float) $totals['subtotal'] || 1 < count( array_values( $shipping_rates ) ) ) {
+				return true;
+			}
+		}
+		if ( class_exists( 'WC_Subscriptions_Cart' ) && \WC_Subscriptions_Cart::cart_contains_subscription() ) {
+			return true;
+		}
 		return false;
 	}
 
@@ -748,10 +1342,7 @@ final class Modal_Checkout {
 	 * @return array
 	 */
 	public static function order_review_fragments( $fragments ) {
-		if ( isset( $_POST['post_data'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			parse_str( \sanitize_text_field( \wp_unslash( $_POST['post_data'] ) ), $post_data ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		}
-		if ( ! isset( $post_data['modal_checkout'] ) ) {
+		if ( ! self::is_modal_checkout() ) {
 			return $fragments;
 		}
 		if ( ! self::should_show_order_details() ) {
@@ -759,50 +1350,6 @@ final class Modal_Checkout {
 			$fragments['.woocommerce-checkout-review-order-table'] = '<table class="shop_table woocommerce-checkout-review-order-table empty"></table>';
 		}
 		return $fragments;
-	}
-
-	/**
-	 * Render markup at the end of the "thank you" view.
-	 *
-	 * @param WC_Order $order The order related to the transaction.
-	 *
-	 * @return void
-	 */
-	public static function render_checkout_after_success_markup( $order ) {
-		if ( self::is_newsletter_signup_available() ) {
-			self::render_newsletter_signup_form( $order );
-		} else {
-			self::render_after_success_button();
-		}
-	}
-
-	/**
-	 * Render markup at the end of the "thank you" view.
-	 *
-	 * @return void
-	 */
-	private static function render_after_success_button() {
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		if ( empty( $_REQUEST['modal_checkout'] ) ) {
-			return;
-		}
-
-		$button_label = ! empty( $_REQUEST['after_success_button_label'] ) ? urldecode( wp_unslash( $_REQUEST['after_success_button_label'] ) ) : __( 'Continue browsing', 'newspack-blocks' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$url          = ! empty( $_REQUEST['after_success_url'] ) ? urldecode( wp_unslash( $_REQUEST['after_success_url'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		?>
-			<a
-				<?php if ( empty( $url ) ) : ?>
-					onclick="parent.newspackCloseModalCheckout(this);"
-				<?php else : ?>
-					href="<?php echo esc_url( $url ); ?>"
-					target="_top"
-				<?php endif; ?>
-				class="button newspack-modal-newsletters__button"
-			>
-				<?php echo esc_html( $button_label ); ?>
-			</a>
-		<?php
-		// phpcs:enable
 	}
 
 	/**
@@ -827,186 +1374,22 @@ final class Modal_Checkout {
 	}
 
 	/**
-	 * Renders newsletter signup form.
-	 *
-	 * @param WC_Order $order The order related to the transaction.
-	 */
-	private static function render_newsletter_signup_form( $order ) {
-		$email_address = $order->get_billing_email();
-		if ( ! $email_address ) {
-			return;
-		}
-		if ( ! method_exists( '\Newspack\Reader_Activation', 'get_registration_newsletter_lists' ) ) {
-			return;
-		}
-		$newsletters_lists = array_filter(
-			\Newspack\Reader_Activation::get_registration_newsletter_lists(),
-			function( $item ) {
-				return $item['active'];
-			}
-		);
-		if ( empty( $newsletters_lists ) ) {
-			return;
-		}
-		?>
-			<div class="newspack-modal-newsletters">
-				<h4><?php esc_html_e( 'Sign up for newsletters', 'newspack-blocks' ); ?></h4>
-				<div class="newspack-modal-newsletters__info">
-					<?php
-					echo esc_html(
-						sprintf(
-							// Translators: %s is the site name.
-							__( 'Get the best of %s directly in your email inbox.', 'newspack-blocks' ),
-							get_bloginfo( 'name' )
-						)
-					);
-					?>
-					<br>
-					<span>
-					<?php
-						echo esc_html(
-							sprintf(
-								// Translators: %s is the user's email address.
-								__( 'Sending to: %s', 'newspack-blocks' ),
-								$email_address
-							)
-						);
-					?>
-					</span>
-				</div>
-				<form>
-					<input type="hidden" name="modal_checkout" value="1" />
-					<input type="hidden" name="newsletter_signup_email" value="<?php echo esc_attr( $email_address ); ?>" />
-					<?php
-					self::render_hidden_inputs();
-					foreach ( $newsletters_lists as $list ) {
-						$checkbox_id = sprintf( 'newspack-blocks-list-%s', $list['id'] );
-						?>
-							<div class="newspack-modal-newsletters__list-item">
-							<input
-								type="checkbox"
-								name="lists[]"
-								value="<?php echo \esc_attr( $list['id'] ); ?>"
-								id="<?php echo \esc_attr( $checkbox_id ); ?>"
-								<?php
-								if ( isset( $list['checked'] ) && $list['checked'] ) {
-									echo 'checked';
-								}
-								?>
-							>
-							<label for="<?php echo \esc_attr( $checkbox_id ); ?>">
-								<b><?php echo \esc_html( $list['title'] ); ?></b>
-								<?php if ( ! empty( $list['description'] ) ) : ?>
-									<span><?php echo \esc_html( $list['description'] ); ?></span>
-								<?php endif; ?>
-							</label>
-							</div>
-						<?php
-					}
-					?>
-					<input type="submit" value="<?php esc_attr_e( 'Continue', 'newspack-blocks' ); ?>">
-				</form>
-			</div>
-		<?php
-	}
-
-	/**
-	 * Should post-chcekout newsletter signup be available?
-	 */
-	private static function is_newsletter_signup_available() {
-		return defined( 'NEWSPACK_ENABLE_POST_CHECKOUT_NEWSLETTER_SIGNUP' ) && NEWSPACK_ENABLE_POST_CHECKOUT_NEWSLETTER_SIGNUP;
-	}
-
-	/**
-	 * Should newsletter confirmation be rendered?
-	 */
-	public static function confirm_newsletter_signup() {
-		if ( ! self::is_newsletter_signup_available() ) {
-			return false;
-		}
-		$signup_data = self::get_newsletter_signup_data();
-		if ( false !== $signup_data ) {
-			if ( empty( $signup_data['lists'] ) ) {
-				return new \WP_Error( 'newspack_no_lists_selected', __( 'No lists selected.', 'newspack-blocks' ) );
-			} else {
-				$result = \Newspack_Newsletters_Contacts::subscribe(
-					[
-						'email'    => $signup_data['email'],
-						'metadata' => [
-							'current_page_url' => home_url( add_query_arg( array(), \wp_get_referer() ) ),
-							'newsletters_subscription_method' => 'post-checkout',
-						],
-					],
-					$signup_data['lists'],
-					false,
-					'Contact subscribed to newsletters from the post-checkout modal'
-				);
-				if ( \is_wp_error( $result ) ) {
-					return $result;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Should newsletter confirmation be rendered?
-	 */
-	public static function get_newsletter_signup_data() {
-		$newsletter_signup_email = isset( $_GET['newsletter_signup_email'] ) ? \sanitize_text_field( \wp_unslash( $_GET['newsletter_signup_email'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( $newsletter_signup_email && isset( $_SERVER['REQUEST_URI'] ) ) {
-			parse_str( \wp_parse_url( \wp_unslash( $_SERVER['REQUEST_URI'] ) )['query'], $query ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$signup_data = [
-				'email' => $newsletter_signup_email,
-				'lists' => [],
-			];
-			if ( isset( $query['lists'] ) && count( $query['lists'] ) ) {
-				$signup_data['lists'] = $query['lists'];
-			}
-			return $signup_data;
-		}
-		return false;
-	}
-
-	/**
-	 * Renders newsletter signup confirmation.
-	 *
-	 * @param bool $no_lists_selected Whether no lists were selected.
-	 */
-	public static function render_newsletter_confirmation( $no_lists_selected = false ) {
-		?>
-			<?php if ( ! $no_lists_selected ) : ?>
-				<h4><?php esc_html_e( 'Signup successful!', 'newspack-blocks' ); ?></h4>
-			<?php endif; ?>
-			<p>
-				<?php
-				echo esc_html(
-					sprintf(
-						// Translators: %s is the site name.
-						__( 'Thanks for supporting %s.', 'newspack-blocks' ),
-						get_option( 'blogname' )
-					)
-				);
-				?>
-			</p>
-		<?php
-		self::render_after_success_button();
-	}
-
-	/**
 	 * Prevent reCaptcha from being verified for AJAX checkout (e.g. Apple Pay).
 	 *
 	 * @param bool   $should_verify Whether to verify the captcha.
 	 * @param string $url The URL from which the checkout originated.
 	 */
 	public static function recaptcha_verify_captcha( $should_verify, $url ) {
+		$is_validation_only = boolval( filter_input( INPUT_POST, 'is_validation_only', FILTER_SANITIZE_NUMBER_INT ) );
 		parse_str( \wp_parse_url( $url, PHP_URL_QUERY ), $query );
 		if (
-			// Only in the context of a checkout request.
-			defined( 'WOOCOMMERCE_CHECKOUT' )
-			&& isset( $query['wc-ajax'] )
-			&& 'wc_stripe_create_order' === $query['wc-ajax']
+			// Only in the context of a true checkout request.
+			$is_validation_only ||
+			(
+				defined( 'WOOCOMMERCE_CHECKOUT' )
+				&& isset( $query['wc-ajax'] )
+				&& 'wc_stripe_create_order' === $query['wc-ajax']
+			)
 		) {
 			return false;
 		}
@@ -1034,7 +1417,11 @@ final class Modal_Checkout {
 	 * @return string
 	 */
 	public static function get_subscription_limited_message() {
-		return __( 'You may only have one subscription of this product at a time.', 'newspack-blocks' );
+		return sprintf(
+			// translators: %s: Site name.
+			__( "You're already a subscriber! You can only have one active subscription at a time. Thank you for supporting %s.", 'newspack-blocks' ),
+			get_bloginfo( 'name' )
+		);
 	}
 
 	/**
@@ -1049,7 +1436,7 @@ final class Modal_Checkout {
 		if ( method_exists( 'WCS_Limiter', 'is_purchasable' ) ) {
 			$product = \wc_get_product( $product_data->get_id() );
 			if ( ! \WCS_Limiter::is_purchasable( false, $product ) ) {
-				$message .= ' ' . self::get_subscription_limited_message();
+				$message = self::get_subscription_limited_message();
 			}
 		}
 
@@ -1108,10 +1495,182 @@ final class Modal_Checkout {
 	 * @param string $text The button text.
 	 */
 	public static function order_button_text( $text ) {
-		if ( self::is_modal_checkout() && method_exists( 'Newspack\Donations', 'is_donation_cart' ) && \Newspack\Donations::is_donation_cart() ) {
-			return __( 'Donate now', 'newspack-blocks' );
+		if ( ! self::is_modal_checkout() ) {
+			return $text;
 		}
-		return $text;
+		$cart = \WC()->cart;
+		if ( ! $cart || $cart->is_empty() ) {
+			return $text;
+		}
+
+		return self::get_modal_checkout_labels( 'checkout_confirm' );
+	}
+
+	/**
+	 * Get the updated "Place order" button text for JS updates.
+	 */
+	public static function order_button_text_with_price() {
+		$cart = \WC()->cart;
+		$is_donation = method_exists( 'Newspack\Donations', 'is_donation_cart' ) && \Newspack\Donations::is_donation_cart();
+
+		// If this isn't a cart, if the cart is empty, or if this is a donation product, bail.
+		if ( ! $cart || $cart->is_empty() || $is_donation ) {
+			return;
+		}
+
+		$total = \wp_strip_all_tags( \wc_price( $cart->total ) );
+
+		return sprintf(
+			/* translators: 1: Checkout button confirmation text. 2: Order total. */
+			__( '%1$s: %2$s', 'newspack-blocks' ),
+			self::get_modal_checkout_labels( 'checkout_confirm' ),
+			'<span class="cart-price">' . html_entity_decode( $total ) . '</span>'
+		);
+	}
+
+	/**
+	 * Get the updated price for updating the "Place order" button.
+	 */
+	public static function get_cart_total_js() {
+		$cart = \WC()->cart;
+		if ( ! $cart || $cart->is_empty() ) {
+			return;
+		}
+		$total = \wp_strip_all_tags( \wc_price( $cart->total ) );
+		echo esc_html( html_entity_decode( $total ) );
+		wp_die();
+	}
+
+	/**
+	 * Render before the checkout form.
+	 *
+	 * This will render the order summary card.
+	 */
+	public static function render_before_checkout_form() {
+		if ( ! self::is_modal_checkout() ) {
+			return;
+		}
+		$cart = \WC()->cart;
+		if ( 1 !== $cart->get_cart_contents_count() ) {
+			return;
+		}
+		$class_prefix = self::get_class_prefix();
+		?>
+			<div class="<?php echo esc_attr( "order-details-summary {$class_prefix}__box {$class_prefix}__box--text-center" ); ?>">
+			<?php
+			// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce hooks.
+			foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) :
+				$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
+				if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) :
+					// Create an empty array to store data order information.
+					$data_order_details = [];
+					// Create an array of order information to pass to GA4 via JavaScript.
+					$data_order_details = \Newspack_Blocks\Tracking\Data_Events::build_js_data_events( $_product->get_id(), $cart_item, $_product->get_parent_id() );
+					?>
+					<p id="modal-checkout-product-details" data-order-details='<?php echo wp_json_encode( $data_order_details ); ?>'>
+						<strong>
+							<?php
+							echo apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) . ': '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo wc_get_formatted_cart_item_data( $cart_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							?>
+							<?php echo apply_filters( 'woocommerce_cart_item_subtotal', $cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						</strong>
+					</p>
+					<?php
+				endif;
+			endforeach;
+			// phpcs:enable
+			?>
+			</div>
+		<?php
+	}
+
+	/**
+	 * Render name your price form if nyp is active and available.
+	 */
+	public static function render_name_your_price_form() {
+		if ( ! self::is_modal_checkout() || ! function_exists( 'WC' ) || ! method_exists( '\WC_Name_Your_Price_Helpers', 'is_nyp' ) ) {
+			return;
+		}
+
+		// Only show nyp form for checkout button modal checkout.
+		$is_donation = method_exists( 'Newspack\Donations', 'is_donation_cart' ) && \Newspack\Donations::is_donation_cart();
+		if ( $is_donation ) {
+			return;
+		}
+
+		$cart = \WC()->cart;
+		if ( 1 !== $cart->get_cart_contents_count() ) {
+			return;
+		}
+		$class_prefix = self::get_class_prefix();
+		?>
+			<div class="name-your-price">
+				<?php
+				// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce hooks.
+				foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) :
+					$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
+					if ( ! $_product || ! $_product->exists() || $cart_item['quantity'] <= 0 || ! \WC_Name_Your_Price_Helpers::is_nyp( $_product ) || ! apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
+						continue;
+					}
+					$currency_symbol = \get_woocommerce_currency_symbol();
+					$product_id      = $_product->get_id();
+					$price           = $_product->get_price();
+					?>
+					<form class="modal_checkout_nyp">
+						<h3><?php echo esc_html( self::get_modal_checkout_labels( 'checkout_nyp_title' ) ); ?></h3>
+						<input type="hidden" name="newspack_checkout_name_your_price" value="1" />
+						<input type="hidden" name="product_id" value="<?php echo esc_attr( $product_id ); ?>" />
+						<p class="input-price" >
+							<label for="price">
+								<span class="currency"><?php echo esc_html( $currency_symbol ); ?></span>
+								<input type="number" min="0" step=".01" name="price" placeholder="<?php echo esc_attr( $price ); ?>" onwheel="return false" />
+							</label>
+							<button type="submit" class="<?php echo esc_attr( "{$class_prefix}__button {$class_prefix}__button--outline" ); ?>">
+								<?php echo esc_html( self::get_modal_checkout_labels( 'checkout_nyp_apply' ) ); ?>
+							</button>
+						</p>
+						<p class="result <?php echo esc_attr( "{$class_prefix}__helper-text" ); ?>">
+							<?php echo esc_attr( self::get_modal_checkout_labels( 'checkout_nyp' ) ); ?>
+						</p>
+					</form>
+					<?php
+				endforeach;
+				// phpcs:enable
+				?>
+			</div>
+		<?php
+	}
+
+	/**
+	 * Render before customer details.
+	 *
+	 * This will render the hidden inputs necessary for the modal checkout.
+	 */
+	public static function render_before_customer_details() {
+		if ( ! self::is_modal_checkout() ) {
+			return;
+		}
+		?>
+		<input type="hidden" name="modal_checkout" value="1" />
+		<?php self::render_hidden_inputs(); ?>
+		<?php
+	}
+
+	/**
+	 * Maybe disable order notes in the modal checkout.
+	 *
+	 * @param bool $enable Whether to enable the order notes field.
+	 *
+	 * @return bool
+	 */
+	public static function enable_order_notes_field( $enable ) {
+		if ( self::is_modal_checkout() ) {
+			$cart = \WC()->cart;
+			$billing_fields = apply_filters( 'newspack_blocks_donate_billing_fields_keys', [], $cart );
+			return in_array( 'order_comments', $billing_fields, true );
+		}
+		return $enable;
 	}
 
 	/**
@@ -1212,6 +1771,17 @@ final class Modal_Checkout {
 	}
 
 	/**
+	 * The value for the custom WooCommerce Subscriptions Gifting Extension checkbox label.
+	 *
+	 * @return string Gift checkbox label.
+	 */
+	public static function subscriptions_gifting_label() {
+		$is_donation = method_exists( 'Newspack\Donations', 'is_donation_cart' ) && \Newspack\Donations::is_donation_cart();
+		$label       = $is_donation ? self::get_modal_checkout_labels( 'donation_gift_details' ) : self::get_modal_checkout_labels( 'purchase_gift_details' );
+		return \apply_filters( 'wcsg_enable_gifting_checkbox_label', $label ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce hooks.
+	}
+
+	/**
 	 * Filter the a value dependent on the page not being modal checkout.
 	 *
 	 * @param bool $value The value.
@@ -1236,6 +1806,177 @@ final class Modal_Checkout {
 	}
 
 	/**
+	 * Get the relevant class prefix (newspack-blocks or newspack-ui) depending on whether Newpack plugin is active.
+	 */
+	private static function get_class_prefix() {
+		return class_exists( '\Newspack\Newspack_UI' ) ? 'newspack-ui' : 'newspack-blocks';
+	}
+
+	/**
+	 * Add newspack ui classes to the "Place order" button html.
+	 *
+	 * @param string $html The button html.
+	 */
+	public static function order_button_html( $html ) {
+		if ( ! self::is_modal_checkout() ) {
+			return $html;
+		}
+
+		$class_prefix = self::get_class_prefix();
+
+		$newspack_ui_html = preg_replace( '/class=".*?"/', "class='{$class_prefix}__button {$class_prefix}__button--primary {$class_prefix}__button--wide'", $html );
+
+		return $newspack_ui_html;
+	}
+
+	/**
+	 * Get modal checkout flow labels.
+	 *
+	 * @param string|null $key Key of the label to return (optional).
+	 *
+	 * @return string[]|string The label string or an array of labels keyed by string.
+	 */
+	public static function get_modal_checkout_labels( $key = null ) {
+		if ( empty( self::$modal_checkout_labels ) ) {
+			$default_labels = [
+				'billing_details'            => __( 'Billing details', 'newspack-blocks' ),
+				'shipping_details'           => __( 'Shipping details', 'newspack-blocks' ),
+				'gift_recipient'             => __( 'Gift recipient', 'newspack-blocks' ),
+				'checkout_modal_title'       => __( 'Complete your transaction', 'newspack-blocks' ),
+				'variation_modal_title'      => __( 'Complete your transaction', 'newspack-blocks' ),
+				'auth_modal_title'           => __( 'Complete your transaction', 'newspack-blocks' ),
+				'signin_modal_title'         => _x(
+					'Sign in to complete transaction',
+					'Login modal title when logged out user attempts to checkout.',
+					'newspack-blocks'
+				),
+				'register_modal_title'       => _x(
+					'Register to complete transaction',
+					'Login modal title when unregistered user attempts to checkout',
+					'newspack-blocks'
+				),
+				'after_success'              => __( 'Continue browsing', 'newspack-blocks' ),
+				'donation_gift_details'      => __( 'This donation is a gift', 'newspack-blocks' ),
+				'purchase_gift_details'      => __( 'This purchase is a gift', 'newspack-blocks' ),
+				'checkout_confirm'           => __( 'Complete transaction', 'newspack-blocks' ),
+				'checkout_confirm_variation' => __( 'Purchase', 'newspack-blocks' ),
+				'checkout_back'              => __( 'Back', 'newspack-blocks' ),
+				'checkout_success'           => __( 'Transaction successful', 'newspack-blocks' ),
+				'checkout_nyp'               => __( "Your contribution directly funds our work. If you're moved to do so, you can opt to pay more than the standard rate.", 'newspack-blocks' ),
+				'checkout_nyp_thankyou'      => __( "Thank you for your generosity! We couldn't do this without you!", 'newspack-blocks' ),
+				'checkout_nyp_title'         => __( 'Increase your support', 'newspack-blocks' ),
+				'checkout_nyp_apply'         => __( 'Apply', 'newspack-blocks' ),
+			];
+
+			/**
+			* Filters the global labels for modal checkout flow.
+			*
+			* @param mixed[] $labels Labels keyed by name.
+			*/
+			$filtered_labels = apply_filters( 'newspack_blocks_modal_checkout_labels', $default_labels );
+
+			// Merge the default and filtered labels to ensure there are no missing labels.
+			self::$modal_checkout_labels = array_merge( $default_labels, $filtered_labels );
+		}
+
+		if ( ! $key ) {
+			return self::$modal_checkout_labels;
+		}
+
+		return self::$modal_checkout_labels[ $key ] ?? '';
+	}
+
+	/**
+	 * Get price string for the price summary card to render in auth flow.
+	 *
+	 * @param string $name      The name.
+	 * @param string $price     The price. Optional. If not provided, the price string will contain 0.
+	 * @param string $frequency The frequency. Optional. If not provided, the price will be treated as a one-time payment.
+	 *
+	 * @return string The price string.
+	 */
+	public static function get_summary_card_price_string( $name, $price = '', $frequency = '' ) {
+		if ( ! $price ) {
+			$price = '0';
+		}
+
+		if ( function_exists( 'wcs_price_string' ) && function_exists( 'wc_price' ) ) {
+			if ( $frequency && $frequency !== 'once' ) {
+				$price = wp_strip_all_tags(
+					wcs_price_string(
+						[
+							'recurring_amount'    => $price,
+							'subscription_period' => $frequency,
+							'use_per_slash'       => true,
+						]
+					)
+				);
+			} else {
+				$price = wp_strip_all_tags( wc_price( $price ) );
+			}
+		}
+
+		// translators: 1 is the name of the item. 2 is the price of the item.
+		return sprintf( __( '%1$s: %2$s', 'newspack-blocks' ), $name, $price );
+	}
+
+	/**
+	 * Set the checkout registration flag to WC session.
+	 */
+	public static function set_checkout_registration_flag() {
+		\WC()->session->set( self::CHECKOUT_REGISTRATION_FLAG, true );
+	}
+
+	/**
+	 * Reset the checkout registration flag from WC session.
+	 */
+	public static function reset_checkout_registration_flag() {
+		if ( self::is_checkout_registration() ) {
+			\WC()->session->set( self::CHECKOUT_REGISTRATION_FLAG, null );
+		}
+	}
+
+	/**
+	 * Conditionally reset the checkout registration flag from WC session if user exists.
+	 *
+	 * @param array    $data  Checkout data.
+	 * @param WP_Error $error Checkout errors.
+	 */
+	public static function maybe_reset_checkout_registration_flag( $data, $error ) {
+		if ( ! self::is_checkout_registration() || ! isset( $data['billing_email'] ) ) {
+			return;
+		}
+
+		if ( get_user_by( 'email', $data['billing_email'] ) ) {
+			self::reset_checkout_registration_flag();
+		}
+	}
+
+	/**
+	 * Whether the WC session is for checkout registration.
+	 */
+	public static function is_checkout_registration() {
+		return \WC()->session->get( self::CHECKOUT_REGISTRATION_FLAG, false );
+	}
+
+	/**
+	 * Conditionally adds the checkout registration order meta flag.
+	 *
+	 * @param WC_Order $order    The order object.
+	 *
+	 * @return void.
+	 */
+	public static function maybe_add_checkout_registration_order_meta( $order ) {
+		if ( ! self::is_modal_checkout() ) {
+			return;
+		}
+
+		if ( self::is_checkout_registration() ) {
+			$order->add_meta_data( self::CHECKOUT_REGISTRATION_ORDER_META_KEY, true, true );
+		}
+	}
+
+	/**
 	 * Trigger the subscriptions-limiting logic, using the user gleaned from the email address.
 	 *
 	 * @param bool           $is_limited_for_user If the subscription should be limited.
@@ -1254,6 +1995,55 @@ final class Modal_Checkout {
 			}
 		}
 		return $is_limited_for_user;
+	}
+
+	/**
+	 * Whether modal checkout requires registration.
+	 *
+	 * @return bool
+	 */
+	public static function is_registration_required() {
+		if ( ! class_exists( '\Newspack\Reader_Activation' ) ) {
+			return false;
+		}
+
+		return \Newspack\Reader_Activation::is_woocommerce_registration_required();
+	}
+
+	/**
+	 * Filters the WooCommerce registration privacy policy text.
+	 *
+	 * @param string $text Privacy policy text.
+	 * @param string $type Privacy policy text type.
+	 *
+	 * @return string Privacy policy text.
+	 */
+	public static function woocommerce_get_privacy_policy_text( $text, $type ) {
+		if ( ! self::is_modal_checkout() || ! class_exists( '\Newspack\Reader_Activation' ) ) {
+			return $text;
+		}
+
+		return \Newspack\Reader_Activation::get_checkout_privacy_policy_text();
+	}
+
+	/**
+	 * Get post checkout success message text.
+	 *
+	 * @return string Post checkout success message text.
+	 */
+	public static function get_post_checkout_success_text() {
+		if ( ! class_exists( '\Newspack\Reader_Activation' ) || ! \Newspack\Reader_Activation::is_enabled() ) {
+			return sprintf(
+				// Translators: %s is the site name.
+				__( 'Thank you for supporting %s. Your transaction was completed successfully.', 'newspack-blocks' ),
+				get_option( 'blogname' )
+			);
+		}
+		if ( ! self::is_registration_required() && self::is_checkout_registration() ) {
+			return \Newspack\Reader_Activation::get_post_checkout_registration_success_text();
+		} else {
+			return \Newspack\Reader_Activation::get_post_checkout_success_text();
+		}
 	}
 }
 Modal_Checkout::init();

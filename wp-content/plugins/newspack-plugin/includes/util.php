@@ -7,6 +7,8 @@
 
 namespace Newspack;
 
+use Newspack\Configuration_Managers;
+
 defined( 'ABSPATH' ) || exit;
 
 define( 'NEWSPACK_API_NAMESPACE', 'newspack/v1' );
@@ -491,4 +493,154 @@ function newspack_get_countries() {
 		];
 	}
 	return $countries_options;
+}
+
+/**
+ * Pick either white or black, whatever has sufficient contrast with the color being passed to it.
+ * (Copied from the Newspack theme: https://github.com/Automattic/newspack-theme/blob/6dc4e89a65c465abdd207d990e313921f2972a9a/newspack-theme/inc/template-functions.php#L547)
+ *
+ * @param  string $hex Hexidecimal value of the color to adjust.
+ *
+ * @return string Either black or white hexidecimal values.
+ *
+ * @ref https://stackoverflow.com/questions/1331591/given-a-background-color-black-or-white-text
+ */
+function newspack_get_color_contrast( $hex ) {
+	// hex RGB.
+	$r1 = hexdec( substr( $hex, 1, 2 ) );
+	$g1 = hexdec( substr( $hex, 3, 2 ) );
+	$b1 = hexdec( substr( $hex, 5, 2 ) );
+	// Black RGB.
+	$black_color    = '#000';
+	$r2_black_color = hexdec( substr( $black_color, 1, 2 ) );
+	$g2_black_color = hexdec( substr( $black_color, 3, 2 ) );
+	$b2_black_color = hexdec( substr( $black_color, 5, 2 ) );
+	// Calc contrast ratio.
+	$l1             = 0.2126 * pow( $r1 / 255, 2.2 ) +
+		0.7152 * pow( $g1 / 255, 2.2 ) +
+		0.0722 * pow( $b1 / 255, 2.2 );
+	$l2             = 0.2126 * pow( $r2_black_color / 255, 2.2 ) +
+		0.7152 * pow( $g2_black_color / 255, 2.2 ) +
+		0.0722 * pow( $b2_black_color / 255, 2.2 );
+	$contrast_ratio = 0;
+	if ( $l1 > $l2 ) {
+		$contrast_ratio = (int) ( ( $l1 + 0.05 ) / ( $l2 + 0.05 ) );
+	} else {
+		$contrast_ratio = (int) ( ( $l2 + 0.05 ) / ( $l1 + 0.05 ) );
+	}
+	if ( $contrast_ratio > 5 ) {
+		// If contrast is more than 5, return black color.
+		return 'black';
+	} else {
+		// if not, return white color.
+		return 'white';
+	}
+}
+
+/**
+ * Adjust a hexidecimal colour value to lighten or darken it.
+ *
+ * @param  string $hex Hexidecimal value of the color to adjust.
+ * @param  string $steps Number of 'steps' to adjust the hexidecimal value's brightness.
+ * @return string Updated hexidecimal value.
+ */
+function newspack_adjust_brightness( $hex, $steps ) {
+
+	$steps = max( -255, min( 255, $steps ) );
+
+	$hex = str_replace( '#', '', $hex );
+	if ( 3 == strlen( $hex ) ) {
+		$hex = str_repeat( substr( $hex, 0, 1 ), 2 ) . str_repeat( substr( $hex, 1, 1 ), 2 ) . str_repeat( substr( $hex, 2, 1 ), 2 );
+	}
+
+	// Split into three parts: R, G and B.
+	$color_parts = str_split( $hex, 2 );
+	$new_shade   = '#';
+
+	foreach ( $color_parts as $color ) {
+		$color      = hexdec( $color ); // Convert to decimal.
+		$color      = max( 0, min( 255, $color + $steps ) ); // Adjust color.
+		$new_shade .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT ); // Make two char hex code.
+	}
+
+	return $new_shade;
+}
+
+
+/**
+ * Get theme primary and secondary colors or defaults if none present.
+ *
+ * @return array An array containing primary and secondary colors.
+ */
+function newspack_get_theme_colors() {
+	$default_primary_color   = function_exists( 'newspack_get_primary_color' ) ? newspack_get_primary_color() : '#3366ff';
+	$default_secondary_color = function_exists( 'newspack_get_secondary_color' ) ? newspack_get_secondary_color() : '#666666';
+	$primary_color           = get_theme_mod( 'primary_color_hex', $default_primary_color );
+	$secondary_color         = get_theme_mod( 'secondary_color_hex', $default_secondary_color );
+
+	return [
+		'primary_color'        => $primary_color,
+		'primary_text_color'   => newspack_get_color_contrast( $primary_color ),
+		'primary_variation'    => newspack_adjust_brightness( $primary_color, -40 ),
+		'secondary_color'      => $secondary_color,
+		'secondary_text_color' => newspack_get_color_contrast( $secondary_color ),
+		'secondary_variation'  => newspack_adjust_brightness( $secondary_color, -40 ),
+	];
+}
+
+/**
+ * Get block and html markup for social media services.
+ *
+ * @param string $color The color to use for the social media icons.
+ *
+ * @return array An array containing block and html markup for social media services.
+ */
+function newspack_get_social_markup( $color = 'white' ) {
+	$cm               = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'wordpress_seo' );
+	$has_social_icons = false;
+	$social_urls      = [];
+	$markup           = [
+		'block_markup' => '<!-- wp:social-links {"iconColor":"primary-text","iconColorValue":"primary-text","className":"is-style-filled-primary-text","style":{"spacing":{"padding":{"right":"0","left":"4px"}}},"layout":{"type":"flex","flexWrap":"nowrap"}} --><ul class="wp-block-social-links has-icon-color is-style-filled-primary-text" style="padding-right:0;padding-left:4px">',
+		'html_markup'  => '',
+	];
+
+	if ( ! is_wp_error( $cm ) ) {
+		$social_urls = [
+			'facebook'  => $cm->get_option( 'facebook_site' ),
+			'twitter'   => $cm->get_option( 'twitter_site' ),
+			'instagram' => $cm->get_option( 'instagram_url' ),
+			'linkedin'  => $cm->get_option( 'linkedin_url' ),
+			'youtube'   => $cm->get_option( 'youtube_url' ),
+		];
+	}
+
+	foreach ( $social_urls as $service => $url ) {
+		if ( ! empty( $url ) && ! is_wp_error( $url ) ) {
+			$markup['block_markup'] .= '<!-- wp:social-link {"url":"' . esc_url( $url ) . '","service":"' . esc_attr( $service ) . '"} /-->';
+			$markup['html_markup']  .= '
+				<table align="left" border="0" cellpadding="0" cellspacing="0" role="presentation" style="float:none;display:inline-table;">
+					<tbody>
+						<tr class="social-element">
+							<td style="padding:0;vertical-align:middle;">
+								<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:transparent;border-radius:999px;width:24px;">
+									<tbody>
+										<tr>
+											<td style="padding:8px;padding-left:' . ( $has_social_icons ? '8px' : '0px' ) . ';font-size:0;height:24px;vertical-align:middle;width:24px;">
+												<a href="' . esc_url( $url ) . '" target="_blank"><img alt="" height="24" src="*SITE_URL*/wp-content/plugins/newspack-newsletters/assets/' . $color . '-' . $service . '.png" style="border-radius:999px;display:block;" width="24"></a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!--[if mso | IE]></td><td><![endif]-->';
+			$has_social_icons = true;
+		}
+	}
+
+	$markup['block_markup'] .= '</ul><!-- /wp:social-links -->';
+
+	return $markup;
 }
