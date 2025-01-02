@@ -107,9 +107,7 @@
 		--_track-size: min(23px, 23px);
 		--_track: #fff;
 
-		-webkit-appearance: none;
-
-		        appearance: none;
+		appearance: none;
 		border: none;
 		border-radius: var(--_radius);
 		height: var(--_track-size);

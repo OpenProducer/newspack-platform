@@ -654,7 +654,7 @@ const walkToEnd = partialRight(walkToBoundary, 'forwards');
 
 
 
-const LINK_SETTINGS = [...external_wp_blockEditor_namespaceObject.__experimentalLinkControl.DEFAULT_LINK_SETTINGS, {
+const LINK_SETTINGS = [...external_wp_blockEditor_namespaceObject.LinkControl.DEFAULT_LINK_SETTINGS, {
   id: 'nofollow',
   title: (0,external_wp_i18n_namespaceObject.__)('Mark as nofollow')
 }];
@@ -836,7 +836,7 @@ function InlineLinkUI({
     shift: true,
     focusOnMount: focusOnMount,
     constrainTabbing: true,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.__experimentalLinkControl, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.LinkControl, {
       value: linkValue,
       onChange: onChangeLink,
       onRemove: removeLink,
@@ -1286,6 +1286,7 @@ const {
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/format-library');
 
 ;// ./packages/format-library/build-module/text-color/inline.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1730,6 +1731,7 @@ const help = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exter
 /* harmony default export */ const library_help = (help);
 
 ;// ./packages/format-library/build-module/unknown/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1963,6 +1965,7 @@ const nonBreakingSpace = {
 /* harmony default export */ const default_formats = ([bold, code_code, image_image, italic, build_module_link_link, strikethrough, underline, text_color_textColor, subscript_subscript, superscript_superscript, keyboard, unknown, language_language, nonBreakingSpace]);
 
 ;// ./packages/format-library/build-module/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */

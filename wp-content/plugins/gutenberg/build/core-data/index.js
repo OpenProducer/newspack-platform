@@ -489,7 +489,7 @@ module.exports = function equal(a, b) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -668,6 +668,7 @@ const external_wp_compose_namespaceObject = window["wp"]["compose"];
 const external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
 var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(external_wp_isShallowEqual_namespaceObject);
 ;// ./packages/undo-manager/build-module/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1475,6 +1476,7 @@ const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// external ["wp","richText"]
 const external_wp_richText_namespaceObject = window["wp"]["richText"];
 ;// ./packages/core-data/build-module/entities.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1983,6 +1985,7 @@ function withWeakMapCache(fn) {
 /* harmony default export */ const with_weak_map_cache = (withWeakMapCache);
 
 ;// ./packages/core-data/build-module/queried-data/get-query-parts.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2087,6 +2090,7 @@ function getQueryParts(query) {
 /* harmony default export */ const get_query_parts = (with_weak_map_cache(getQueryParts));
 
 ;// ./packages/core-data/build-module/queried-data/reducer.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2323,6 +2327,7 @@ const queries = (state = {}, action) => {
 }));
 
 ;// ./packages/core-data/build-module/reducer.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -2939,6 +2944,7 @@ const STORE_NAME = 'core';
 var equivalent_key_map = __webpack_require__(3249);
 var equivalent_key_map_default = /*#__PURE__*/__webpack_require__.n(equivalent_key_map);
 ;// ./packages/core-data/build-module/utils/set-nested-value.js
+/* wp:polyfill */
 /**
  * Sets the value at path of object.
  * If a portion of path doesn’t exist, it’s created.
@@ -2983,6 +2989,7 @@ function setNestedValue(object, path, value) {
 }
 
 ;// ./packages/core-data/build-module/queried-data/selectors.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -3143,6 +3150,7 @@ function isRawAttribute(entity, attribute) {
 }
 
 ;// ./packages/core-data/build-module/utils/user-permissions.js
+/* wp:polyfill */
 const ALLOWED_RESOURCE_ACTIONS = ['create', 'read', 'update', 'delete'];
 function getUserPermissionsFromAllowHeader(allowedMethods) {
   const permissions = {};
@@ -3166,6 +3174,7 @@ function getUserPermissionCacheKey(action, resource, id) {
 }
 
 ;// ./packages/core-data/build-module/selectors.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -3352,7 +3361,7 @@ function getEntityConfig(state, kind, name) {
  * @param state State tree
  * @param kind  Entity kind.
  * @param name  Entity name.
- * @param key   Record's key
+ * @param key   Optional record's key. If requesting a global record (e.g. site settings), the key can be omitted. If requesting a specific item, the key must always be included.
  * @param query Optional query. If requesting specific
  *              fields, fields must always include the ID. For valid query parameters see the [Reference](https://developer.wordpress.org/rest-api/reference/) in the REST API Handbook and select the entity kind. Then see the arguments available "Retrieve a [Entity kind]".
  *
@@ -4227,6 +4236,7 @@ const {
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/core-data');
 
 ;// ./packages/core-data/build-module/private-selectors.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -4338,9 +4348,7 @@ const getHomePage = (0,external_wp_data_namespaceObject.createRegistrySelector)(
     postType: 'wp_template',
     postId: frontPageTemplateId
   };
-}, state => [
-// @ts-expect-error
-getEntityRecord(state, 'root', 'site'), getDefaultTemplateId(state, {
+}, state => [getEntityRecord(state, 'root', 'site'), getDefaultTemplateId(state, {
   slug: 'front-page'
 })]));
 const getPostsPageId = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => () => {
@@ -4501,6 +4509,7 @@ function v4(options, buf, offset) {
 
 /* harmony default export */ const esm_browser_v4 = (v4);
 ;// ./packages/core-data/build-module/utils/get-nested-value.js
+/* wp:polyfill */
 /**
  * Helper util to return a value from a certain path of the object.
  * Path is specified as either:
@@ -4583,6 +4592,7 @@ function receiveQueriedItems(items, query = {}, edits, meta) {
 }
 
 ;// ./packages/core-data/build-module/batch/default-processor.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -21593,6 +21603,7 @@ function getSyncProvider() {
 }
 
 ;// ./packages/core-data/build-module/actions.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -22495,6 +22506,7 @@ const forwardResolver = resolverName => (...args) => async ({
 const RECEIVE_INTERMEDIATE_RESULTS = Symbol('RECEIVE_INTERMEDIATE_RESULTS');
 
 ;// ./packages/core-data/build-module/fetch/__experimental-fetch-link-suggestions.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -22655,8 +22667,16 @@ function sortResults(results, search) {
   for (const result of results) {
     if (result.title) {
       const titleTokens = tokenize(result.title);
-      const matchingTokens = titleTokens.filter(titleToken => searchTokens.some(searchToken => titleToken.includes(searchToken)));
-      scores[result.id] = matchingTokens.length / titleTokens.length;
+      const exactMatchingTokens = titleTokens.filter(titleToken => searchTokens.some(searchToken => titleToken === searchToken));
+      const subMatchingTokens = titleTokens.filter(titleToken => searchTokens.some(searchToken => titleToken !== searchToken && titleToken.includes(searchToken)));
+
+      // The score is a combination of exact matches and sub-matches.
+      // More weight is given to exact matches, as they are more relevant (e.g. "cat" vs "caterpillar").
+      // Diving by the total number of tokens in the title normalizes the score and skews
+      // the results towards shorter titles.
+      const exactMatchScore = exactMatchingTokens.length / titleTokens.length * 10;
+      const subMatchScore = subMatchingTokens.length / titleTokens.length;
+      scores[result.id] = exactMatchScore + subMatchScore;
     } else {
       scores[result.id] = 0;
     }
@@ -22747,6 +22767,7 @@ const fetchUrlData = async (url, options = {}) => {
 /* harmony default export */ const _experimental_fetch_url_data = (fetchUrlData);
 
 ;// ./packages/core-data/build-module/fetch/index.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -23584,6 +23605,7 @@ const resolvers_getEntitiesConfig = kind => async ({
 };
 
 ;// ./packages/core-data/build-module/locks/utils.js
+/* wp:polyfill */
 function deepCopyLocksTreePath(tree, path) {
   const newTree = {
     ...tree
@@ -23646,6 +23668,7 @@ function hasConflictingLock({
 }
 
 ;// ./packages/core-data/build-module/locks/reducer.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -24710,6 +24733,7 @@ function getRichTextValuesCached(block) {
 }
 
 ;// ./packages/core-data/build-module/footnotes/get-footnotes-order.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -24746,6 +24770,7 @@ function getFootnotesOrder(blocks) {
 }
 
 ;// ./packages/core-data/build-module/footnotes/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -25070,6 +25095,7 @@ lock(privateApis, {
 });
 
 ;// ./packages/core-data/build-module/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */

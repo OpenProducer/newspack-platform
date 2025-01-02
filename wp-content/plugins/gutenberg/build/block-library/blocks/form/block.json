@@ -64,6 +64,5 @@
 			}
 		},
 		"__experimentalSelector": "form"
-	},
-	"viewScript": "file:./view.min.js"
+	}
 }

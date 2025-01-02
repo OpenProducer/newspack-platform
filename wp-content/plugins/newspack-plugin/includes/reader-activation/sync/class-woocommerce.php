@@ -10,6 +10,7 @@ namespace Newspack\Reader_Activation\Sync;
 use Newspack\Donations;
 use Newspack\WooCommerce_Connection;
 use Newspack\WooCommerce_Order_UTM;
+use Newspack\Subscriptions_Meta;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -264,10 +265,10 @@ class WooCommerce {
 				$metadata['membership_status'] = $current_subscription->get_status();
 			}
 
-			$metadata['sub_start_date']    = $current_subscription->get_date( 'start' );
-			$metadata['sub_end_date']      = $current_subscription->get_date( 'end' ) ? $current_subscription->get_date( 'end' ) : '';
-			$metadata['billing_cycle']     = $current_subscription->get_billing_period();
-			$metadata['recurring_payment'] = $current_subscription->get_total();
+			$metadata['sub_start_date']      = $current_subscription->get_date( 'start' );
+			$metadata['sub_end_date']        = $current_subscription->get_date( 'end' ) ? $current_subscription->get_date( 'end' ) : '';
+			$metadata['billing_cycle']       = $current_subscription->get_billing_period();
+			$metadata['recurring_payment']   = $current_subscription->get_total();
 			$metadata['last_payment_amount'] = $current_subscription->get_total();
 			$metadata['last_payment_date']   = $current_subscription->get_date( 'last_order_date_paid' ) ? $current_subscription->get_date( 'last_order_date_paid' ) : gmdate( Metadata::DATE_FORMAT );
 
@@ -284,6 +285,12 @@ class WooCommerce {
 				if ( $subscription_order_items ) {
 					$metadata['product_name'] = reset( $subscription_order_items )->get_name();
 				}
+			}
+
+			// Record the cancellation reason if meta exists and is not a pending cancellation.
+			$cancellation_reason = $current_subscription->get_meta( Subscriptions_Meta::CANCELLATION_REASON_META_KEY );
+			if ( ! empty( $cancellation_reason ) && ! in_array( $cancellation_reason, [ Subscriptions_Meta::CANCELLATION_REASON_USER_PENDING_CANCEL, Subscriptions_Meta::CANCELLATION_REASON_ADMIN_PENDING_CANCEL ], true ) ) {
+				$metadata['cancellation_reason'] = $cancellation_reason;
 			}
 		}
 

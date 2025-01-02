@@ -10,10 +10,27 @@
  */
 function gutenberg_block_editor_preload_paths_6_8( $paths, $context ) {
 	if ( 'core/edit-site' === $context->name ) {
-		if ( ! empty( $_GET['postId'] ) ) {
-			$route_for_post = rest_get_route_for_post( $_GET['postId'] );
+		$post = null;
+		if ( isset( $_GET['postId'] ) && is_numeric( $_GET['postId'] ) ) {
+			$post = get_post( (int) $_GET['postId'] );
+		}
+		if ( isset( $_GET['p'] ) && preg_match( '/^\/page\/(\d+)$/', $_GET['p'], $matches ) ) {
+			$post = get_post( (int) $matches[1] );
+		}
+
+		if ( $post ) {
+			$route_for_post = rest_get_route_for_post( $post );
 			if ( $route_for_post ) {
 				$paths[] = add_query_arg( 'context', 'edit', $route_for_post );
+				$paths[] = add_query_arg( 'context', 'edit', '/wp/v2/types/' . $post->post_type );
+				if ( 'page' === $post->post_type ) {
+					$paths[] = add_query_arg(
+						'slug',
+						// @see https://github.com/WordPress/gutenberg/blob/489f6067c623926bce7151a76755bb68d8e22ea7/packages/edit-site/src/components/sync-state-with-url/use-init-edited-entity-from-url.js#L139-L140
+						'page-' . $post->post_name,
+						'/wp/v2/templates/lookup'
+					);
+				}
 			}
 		}
 
@@ -31,9 +48,9 @@ function gutenberg_block_editor_preload_paths_6_8( $paths, $context ) {
 				'site_icon_url',
 				'site_logo',
 				'timezone_string',
-				'url',
 				'default_template_part_areas',
 				'default_template_types',
+				'url',
 			)
 		);
 		$paths[] = '/wp/v2/templates/lookup?slug=front-page';
@@ -70,6 +87,9 @@ function gutenberg_block_editor_preload_paths_6_8( $paths, $context ) {
 		 */
 		$context = current_user_can( 'edit_theme_options' ) ? 'edit' : 'view';
 		$paths[] = "/wp/v2/global-styles/$global_styles_id?context=$context";
+
+		// Used by getBlockPatternCategories in useBlockEditorSettings.
+		$paths[] = '/wp/v2/block-patterns/categories';
 	}
 	return $paths;
 }

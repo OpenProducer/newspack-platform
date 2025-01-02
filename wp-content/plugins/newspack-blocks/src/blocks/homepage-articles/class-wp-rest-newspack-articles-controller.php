@@ -129,7 +129,7 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ) {
-		$page        = $request->get_param( 'page' ) ?? 1;
+		$page        = (int) $request->get_param( 'page' ) ?? 1;
 		$exclude_ids = $request->get_param( 'exclude_ids' ) ?? [];
 		$next_page   = $page + 1;
 		$attributes  = wp_parse_args(

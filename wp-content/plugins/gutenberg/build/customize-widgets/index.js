@@ -184,8 +184,6 @@ const external_wp_widgets_namespaceObject = window["wp"]["widgets"];
 const external_wp_blocks_namespaceObject = window["wp"]["blocks"];
 ;// external ["wp","data"]
 const external_wp_data_namespaceObject = window["wp"]["data"];
-;// external ["wp","editor"]
-const external_wp_editor_namespaceObject = window["wp"]["editor"];
 ;// external ["wp","preferences"]
 const external_wp_preferences_namespaceObject = window["wp"]["preferences"];
 ;// external ["wp","components"]
@@ -674,6 +672,7 @@ const textFormattingShortcuts = [{
 }];
 
 ;// ./packages/customize-widgets/build-module/components/keyboard-shortcut-help-modal/shortcut.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -769,6 +768,7 @@ function DynamicShortcut({
 /* harmony default export */ const dynamic_shortcut = (DynamicShortcut);
 
 ;// ./packages/customize-widgets/build-module/components/keyboard-shortcut-help-modal/index.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1226,6 +1226,7 @@ function widgetToBlock({
 }
 
 ;// ./packages/customize-widgets/build-module/components/sidebar-block-editor/use-sidebar-block-editor.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1384,6 +1385,7 @@ function FocusControl({
 const useFocusControl = () => (0,external_wp_element_namespaceObject.useContext)(FocusControlContext);
 
 ;// ./packages/customize-widgets/build-module/components/focus-control/use-blocks-focus-control.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1466,6 +1468,7 @@ function SidebarEditorProvider({
 }
 
 ;// ./packages/customize-widgets/build-module/components/welcome-guide/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1717,6 +1720,7 @@ function SidebarBlockEditor({
       mediaUpload: mediaUploadBlockEditor,
       hasFixedToolbar: isFixedToolbarActive || !isMediumViewport,
       keepCaretInsideBlock,
+      editorTool: 'edit',
       __unstableHasCustomAppender: true
     };
   }, [hasUploadPermissions, blockEditorSettings, isFixedToolbarActive, isMediumViewport, keepCaretInsideBlock, setIsInserterOpened]);
@@ -1872,6 +1876,7 @@ function useClearSelectedBlock(sidebarControl, popoverRef) {
 }
 
 ;// ./packages/customize-widgets/build-module/components/customize-widgets/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2028,6 +2033,7 @@ function getInspectorSection() {
 }
 
 ;// ./packages/customize-widgets/build-module/controls/sidebar-section.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2368,6 +2374,7 @@ class SidebarAdapter {
 ;// external ["wp","dom"]
 const external_wp_dom_namespaceObject = window["wp"]["dom"];
 ;// ./packages/customize-widgets/build-module/controls/inserter-outer-section.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2533,6 +2540,7 @@ function getSidebarControl() {
 }
 
 ;// ./packages/customize-widgets/build-module/filters/move-to-sidebar.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2620,6 +2628,7 @@ const replaceMediaUpload = () => external_wp_mediaUtils_namespaceObject.MediaUpl
 (0,external_wp_hooks_namespaceObject.addFilter)('editor.MediaUpload', 'core/edit-widgets/replace-media-upload', replaceMediaUpload);
 
 ;// ./packages/customize-widgets/build-module/filters/wide-widget-display.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2651,10 +2660,10 @@ const withWideWidgetDisplay = (0,external_wp_compose_namespaceObject.createHighe
 
 
 ;// ./packages/customize-widgets/build-module/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -2670,15 +2679,11 @@ const withWideWidgetDisplay = (0,external_wp_compose_namespaceObject.createHighe
 
 
 
-
 const {
   wp: build_module_wp
 } = window;
 const DISABLED_BLOCKS = ['core/more', 'core/block', 'core/freeform', 'core/template-part'];
 const ENABLE_EXPERIMENTAL_FSE_BLOCKS = false;
-const {
-  registerCoreBlockBindingsSources
-} = unlock(external_wp_editor_namespaceObject.privateApis);
 
 /**
  * Initializes the widgets block editor in the customizer.
@@ -2696,7 +2701,6 @@ function initialize(editorName, blockEditorSettings) {
     return !(DISABLED_BLOCKS.includes(block.name) || block.name.startsWith('core/post') || block.name.startsWith('core/query') || block.name.startsWith('core/site') || block.name.startsWith('core/navigation'));
   });
   (0,external_wp_blockLibrary_namespaceObject.registerCoreBlocks)(coreBlocks);
-  registerCoreBlockBindingsSources();
   (0,external_wp_widgets_namespaceObject.registerLegacyWidgetBlock)();
   if (true) {
     (0,external_wp_blockLibrary_namespaceObject.__experimentalRegisterExperimentalCoreBlocks)({

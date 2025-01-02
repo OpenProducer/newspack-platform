@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7
+class ComposerStaticInit9c6408c446e39a7ecea345c7d6a3ad1a
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -99,9 +99,11 @@ class ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7
         'Newspack\\Blocks' => __DIR__ . '/../..' . '/includes/class-blocks.php',
         'Newspack\\CLI\\Co_Authors_Plus' => __DIR__ . '/../..' . '/includes/cli/class-co-authors-plus.php',
         'Newspack\\CLI\\Initializer' => __DIR__ . '/../..' . '/includes/cli/class-initializer.php',
+        'Newspack\\CLI\\Mailchimp' => __DIR__ . '/../..' . '/includes/cli/class-mailchimp.php',
         'Newspack\\CLI\\RAS' => __DIR__ . '/../..' . '/includes/cli/class-ras.php',
         'Newspack\\CLI\\RAS_ESP_Sync' => __DIR__ . '/../..' . '/includes/cli/class-ras-esp-sync.php',
         'Newspack\\CLI\\Setup' => __DIR__ . '/../..' . '/includes/cli/class-setup.php',
+        'Newspack\\CLI\\WooCommerce_Subscriptions' => __DIR__ . '/../..' . '/includes/cli/class-woocommerce-subscriptions.php',
         'Newspack\\Category_Pager' => __DIR__ . '/../..' . '/includes/class-category-pager.php',
         'Newspack\\Components_Demo' => __DIR__ . '/../..' . '/includes/wizards/class-components-demo.php',
         'Newspack\\Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-manager.php',
@@ -185,6 +187,7 @@ class ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7
         'Newspack\\Reader_Revenue_Emails' => __DIR__ . '/../..' . '/includes/reader-revenue/class-reader-revenue-emails.php',
         'Newspack\\Reader_Revenue_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-reader-revenue-wizard.php',
         'Newspack\\Recaptcha' => __DIR__ . '/../..' . '/includes/class-recaptcha.php',
+        'Newspack\\Renewal' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-renewal.php',
         'Newspack\\Revisions_Control' => __DIR__ . '/../..' . '/includes/revisions-control/class-revisions-control.php',
         'Newspack\\SEO_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-seo-wizard.php',
         'Newspack\\Salesforce' => __DIR__ . '/../..' . '/includes/class-salesforce.php',
@@ -198,6 +201,7 @@ class ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7
         'Newspack\\Starter_Content_Provider' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-provider.php',
         'Newspack\\Starter_Content_WordPress' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-wordpress.php',
         'Newspack\\Stripe_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-connection.php',
+        'Newspack\\Subscriptions_Meta' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-meta.php',
         'Newspack\\Sync_Reader_Data_CLI' => __DIR__ . '/../..' . '/includes/reader-activation/cli/class-sync-reader-data-cli.php',
         'Newspack\\Syndication_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-syndication-wizard.php',
         'Newspack\\Teams_For_Memberships' => __DIR__ . '/../..' . '/includes/plugins/class-teams-for-memberships.php',
@@ -210,6 +214,7 @@ class ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7
         'Newspack\\WooCommerce_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
         'Newspack\\WooCommerce_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-connection.php',
         'Newspack\\WooCommerce_Cover_Fees' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-cover-fees.php',
+        'Newspack\\WooCommerce_Duplicate_Orders' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-duplicate-orders.php',
         'Newspack\\WooCommerce_My_Account' => __DIR__ . '/../..' . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
         'Newspack\\WooCommerce_Order_UTM' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-order-utm.php',
         'Newspack\\WooCommerce_Products' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-products.php',
@@ -220,9 +225,9 @@ class ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7cc1ceedf4a273f1ee2f671148a7c9c7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9c6408c446e39a7ecea345c7d6a3ad1a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9c6408c446e39a7ecea345c7d6a3ad1a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9c6408c446e39a7ecea345c7d6a3ad1a::$classMap;
 
         }, null, ClassLoader::class);
     }
