@@ -130,6 +130,7 @@ const createRootURLMiddleware = rootURL => (options, next) => {
 ;// external ["wp","url"]
 const external_wp_url_namespaceObject = window["wp"]["url"];
 ;// ./packages/api-fetch/build-module/middlewares/preloading.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -321,7 +322,6 @@ const fetchAllMiddleware = async (options, next) => {
 /* harmony default export */ const fetch_all_middleware = (fetchAllMiddleware);
 
 ;// ./packages/api-fetch/build-module/middlewares/http-v1.js
-/* wp:polyfill */
 /**
  * Set of HTTP methods which are eligible to be overridden.
  *

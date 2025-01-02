@@ -71,6 +71,10 @@ function gutenberg_stabilize_experimental_block_supports( $args ) {
 		}
 
 		$stabilize_config = function ( $unstable_config, $stable_support_key ) use ( $experimental_support_properties, $common_experimental_properties ) {
+			if ( ! is_array( $unstable_config ) ) {
+				return $unstable_config;
+			}
+
 			$stable_config = array();
 			foreach ( $unstable_config as $key => $value ) {
 				// Get stable key from support-specific map, common properties map, or keep original.
@@ -116,18 +120,19 @@ function gutenberg_stabilize_experimental_block_supports( $args ) {
 				( $key_positions[ $support ] ?? PHP_INT_MAX ) <
 				( $key_positions[ $stable_support_key ] ?? PHP_INT_MAX );
 
-			if ( is_array( $args['supports'][ $stable_support_key ] ) ) {
-				/*
-				 * To merge the alternative support config effectively, it also needs to be
-				 * stabilized before merging to keep stabilized and experimental flags in
-				 * sync.
-				 */
-				$args['supports'][ $stable_support_key ] = $stabilize_config( $args['supports'][ $stable_support_key ], $stable_support_key );
-				$stable_config                           = $experimental_first
+			/*
+			 * To merge the alternative support config effectively, it also needs to be
+			 * stabilized before merging to keep stabilized and experimental flags in
+			 * sync.
+			 */
+			$args['supports'][ $stable_support_key ] = $stabilize_config( $args['supports'][ $stable_support_key ], $stable_support_key );
+			// Prevents reprocessing this support as it was stabilized above.
+			$done[ $stable_support_key ] = true;
+
+			if ( is_array( $stable_config ) && is_array( $args['supports'][ $stable_support_key ] ) ) {
+				$stable_config = $experimental_first
 					? array_merge( $stable_config, $args['supports'][ $stable_support_key ] )
 					: array_merge( $args['supports'][ $stable_support_key ], $stable_config );
-				// Prevents reprocessing this support as it was merged above.
-				$done[ $stable_support_key ] = true;
 			} else {
 				$stable_config = $experimental_first
 					? $args['supports'][ $stable_support_key ]

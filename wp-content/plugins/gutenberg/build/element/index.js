@@ -135,6 +135,7 @@ __webpack_require__.d(__webpack_exports__, {
 ;// external "React"
 const external_React_namespaceObject = window["React"];
 ;// ./packages/element/build-module/create-interpolate-element.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -445,6 +446,7 @@ function closeOuterElement(endOffset) {
 /* harmony default export */ const create_interpolate_element = (createInterpolateElement);
 
 ;// ./packages/element/build-module/react.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1379,6 +1381,7 @@ function paramCase(input, options) {
 ;// external ["wp","escapeHtml"]
 const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 ;// ./packages/element/build-module/raw-html.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */

@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunk_wcAdmin_webpackJsonp=globalThis.webpackChunk_wcAdmin_webpackJsonp||[]).push([[5571],{94113:(e,a,n)=>{n.r(a),n.d(a,{default:()=>s});var c=n(69307);const s=({})=>(0,c.createElement)("div",null,"Settings page")}}]);

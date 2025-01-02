@@ -91,7 +91,7 @@ final class Newspack_Popups_Model {
 	 * Set terms for a Popup.
 	 *
 	 * @param integer $id ID of Popup.
-	 * @param array   $terms Array of terms to be set.
+	 * @param array   $terms Array of term objects or IDs to be set.
 	 * @param string  $taxonomy Taxonomy slug.
 	 */
 	public static function set_popup_terms( $id, $terms, $taxonomy ) {
@@ -117,7 +117,11 @@ final class Newspack_Popups_Model {
 			);
 		}
 		$term_ids = array_map(
-			function( $term ) {
+			function( $term ) use ( $taxonomy ) {
+				if ( is_int( $term ) ) {
+					$term       = get_term_by( 'id', $term, $taxonomy, ARRAY_A );
+					$term['id'] = $term['term_id'];
+				}
 				return $term['id'];
 			},
 			$terms

@@ -115,6 +115,9 @@ final class Newspack_Newsletters_Editor {
 		$color_palette = json_decode( get_option( Newspack_Newsletters::NEWSPACK_NEWSLETTERS_PALETTE_META, false ), true );
 		if ( ! empty( $color_palette ) ) {
 			foreach ( $color_palette as $color_name => $color_value ) {
+				if ( '' === $color_name || '' === $color_value ) {
+					continue;
+				}
 				$rules[] = '.has-' . esc_html( $color_name ) . '-color { color: ' . esc_html( $color_value ) . '; }';
 			}
 		}

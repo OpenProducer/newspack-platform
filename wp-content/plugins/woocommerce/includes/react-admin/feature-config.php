@@ -9,6 +9,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'product-block-editor' => true,
 			'product-data-views' => false,
 			'experimental-blocks' => false,
+			'coming-soon-newsletter-template' => false,
 			'coupons' => true,
 			'core-profiler' => true,
 			'customize-store' => true,
@@ -21,7 +22,6 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'marketing' => true,
 			'minified-js' => false,
 			'mobile-app-banner' => true,
-			'navigation' => true,
 			'onboarding' => true,
 			'onboarding-tasks' => true,
 			'pattern-toolkit-full-composability' => true,
@@ -45,6 +45,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'blueprint' => false,
 			'reactify-classic-payments-settings' => false,
 			'use-wp-horizon' => false,
+			'add-to-cart-with-options-stepper-layout' => false,
 		);
 	}
 }

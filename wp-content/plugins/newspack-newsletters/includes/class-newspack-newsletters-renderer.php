@@ -163,6 +163,7 @@ final class Newspack_Newsletters_Renderer {
 			'linkedin'  => '#0577b5',
 			'tiktok'    => '#000000',
 			'tumblr'    => '#011835',
+			'bluesky'   => '#0a7aff',
 			'twitter'   => '#21a1f3',
 			'x'         => '#000000',
 			'wordpress' => '#3499cd',

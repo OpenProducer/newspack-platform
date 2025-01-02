@@ -69,6 +69,7 @@ const external_wp_blocks_namespaceObject = window["wp"]["blocks"];
 ;// external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// ./packages/reusable-blocks/build-module/store/actions.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -249,6 +250,7 @@ const external_wp_notices_namespaceObject = window["wp"]["notices"];
 ;// external ["wp","coreData"]
 const external_wp_coreData_namespaceObject = window["wp"]["coreData"];
 ;// ./packages/reusable-blocks/build-module/components/reusable-blocks-menu-items/reusable-block-convert-button.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */

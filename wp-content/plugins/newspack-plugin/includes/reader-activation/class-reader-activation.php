@@ -9,6 +9,7 @@ namespace Newspack;
 
 use Newspack\Recaptcha;
 use Newspack\Reader_Activation\Sync;
+use Newspack\Renewal;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -655,6 +656,22 @@ final class Reader_Activation {
 	}
 
 	/**
+	 * Get an array of required plugins for satisfying Reader Revenue prerequisites.
+	 * WooCommerce and Woo Subscriptions are required for Newspack, but not for NRH.
+	 */
+	public static function get_reader_revenue_required_plugins() {
+		$required_plugins = [
+			'newspack-blocks' => class_exists( '\Newspack_Blocks' ),
+		];
+
+		if ( Donations::is_platform_wc() ) {
+			$required_plugins['woocommerce'] = class_exists( 'WooCommerce' );
+			$required_plugins['woocommerce-subscriptions'] = class_exists( 'WCS_Query' );
+		}
+		return $required_plugins;
+	}
+
+	/**
 	 * Are the Legal Pages settings configured?
 	 * Allows for blank values.
 	 */
@@ -761,11 +778,7 @@ final class Reader_Activation {
 			],
 			'reader_revenue'   => [
 				'active'       => self::is_reader_revenue_ready(),
-				'plugins'      => [
-					'newspack-blocks'           => class_exists( '\Newspack_Blocks' ),
-					'woocommerce'               => function_exists( 'WC' ),
-					'woocommerce-subscriptions' => class_exists( 'WC_Subscriptions_Product' ),
-				],
+				'plugins'      => self::get_reader_revenue_required_plugins(),
 				'label'        => __( 'Reader Revenue', 'newspack-plugin' ),
 				'description'  => __( 'Setting suggested donation amounts is required for enabling a streamlined donation experience.', 'newspack-plugin' ),
 				'instructions' => __( 'Set platform to "Newspack" or "News Revenue Hub" and configure your default donation settings. If using News Revenue Hub, set an Organization ID and a Donor Landing Page in News Revenue Hub Settings.', 'newspack-plugin' ),
@@ -1330,10 +1343,16 @@ final class Reader_Activation {
 
 		$referer           = \wp_parse_url( \wp_get_referer() );
 		$labels            = self::get_reader_activation_labels( 'signin' );
-		$auth_callback_url = '#';
-		// If we are already on the my account page, set the my account URL so the page reloads on submit.
-		if ( function_exists( 'wc_get_page_permalink' ) && function_exists( 'is_account_page' ) && \is_account_page() ) {
-			$auth_callback_url = \wc_get_page_permalink( 'myaccount' );
+		// If there is a redirect parameter, use it as the auth callback URL.
+		$auth_callback_url = filter_input( INPUT_GET, 'redirect', FILTER_SANITIZE_URL ) ?? '#';
+		if ( '#' === $auth_callback_url ) {
+			if ( Renewal::is_subscriptions_page() ) {
+				// If we are on the subscriptions page, set the auth callback URL to the subscriptions page.
+				$auth_callback_url = Renewal::get_subscriptions_url();
+			} elseif ( function_exists( 'wc_get_page_permalink' ) && function_exists( 'is_account_page' ) && \is_account_page() ) {
+				// If we are already on the my account page, set the my account URL so the page reloads on submit.
+				$auth_callback_url = \wc_get_page_permalink( 'myaccount' );
+			}
 		}
 		?>
 		<div class="newspack-ui newspack-reader-auth">

@@ -103,6 +103,7 @@ __webpack_require__.d(actions_namespaceObject, {
 ;// external ["wp","data"]
 const external_wp_data_namespaceObject = window["wp"]["data"];
 ;// ./packages/rich-text/build-module/store/reducer.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -137,6 +138,7 @@ function formatTypes(state = {}, action) {
 }));
 
 ;// ./packages/rich-text/build-module/store/selectors.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -417,6 +419,7 @@ function isFormatEqual(format1, format2) {
 }
 
 ;// ./packages/rich-text/build-module/normalise-formats.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -455,6 +458,7 @@ function normaliseFormats(value) {
 }
 
 ;// ./packages/rich-text/build-module/apply-format.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -584,6 +588,7 @@ const ZWNBSP = '\ufeff';
 ;// external ["wp","escapeHtml"]
 const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 ;// ./packages/rich-text/build-module/get-active-formats.js
+/* wp:polyfill */
 /** @typedef {import('./types').RichTextValue} RichTextValue */
 /** @typedef {import('./types').RichTextFormatList} RichTextFormatList */
 
@@ -691,6 +696,7 @@ function get_format_type_getFormatType(name) {
 }
 
 ;// ./packages/rich-text/build-module/to-tree.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -981,6 +987,7 @@ function toTree({
 }
 
 ;// ./packages/rich-text/build-module/to-html-string.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1124,6 +1131,7 @@ function getTextContent({
 }
 
 ;// ./packages/rich-text/build-module/create.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1245,6 +1253,13 @@ class RichTextData {
       html
     }));
   }
+  /**
+   * Create a RichTextData instance from an HTML element.
+   *
+   * @param {HTMLElement}                    htmlElement The HTML element to create the instance from.
+   * @param {{preserveWhiteSpace?: boolean}} options     Options.
+   * @return {RichTextData} The RichTextData instance.
+   */
   static fromHTMLElement(htmlElement, options = {}) {
     const {
       preserveWhiteSpace = false
@@ -1266,6 +1281,12 @@ class RichTextData {
   }
   // We could expose `toHTMLElement` at some point as well, but we'd only use
   // it internally.
+  /**
+   * Convert the rich text value to an HTML string.
+   *
+   * @param {{preserveWhiteSpace?: boolean}} options Options.
+   * @return {string} The HTML string.
+   */
   toHTMLString({
     preserveWhiteSpace
   } = {}) {
@@ -1725,6 +1746,7 @@ function getAttributes({
 }
 
 ;// ./packages/rich-text/build-module/concat.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -1763,6 +1785,7 @@ function concat(...values) {
 }
 
 ;// ./packages/rich-text/build-module/get-active-format.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -1862,6 +1885,7 @@ function isEmpty({
 }
 
 ;// ./packages/rich-text/build-module/join.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -1990,6 +2014,7 @@ function registerFormatType(name, settings) {
 }
 
 ;// ./packages/rich-text/build-module/remove-format.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -2260,6 +2285,7 @@ function slice(value, startIndex = value.start, endIndex = value.end) {
 }
 
 ;// ./packages/rich-text/build-module/split.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -3177,6 +3203,7 @@ function useBoundaryStyle({
 ;// external ["wp","keycodes"]
 const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// ./packages/rich-text/build-module/component/event-listeners/format-boundaries.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -3323,6 +3350,7 @@ const EMPTY_ACTIVE_FORMATS = [];
 });
 
 ;// ./packages/rich-text/build-module/update-formats.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -3380,7 +3408,6 @@ function updateFormats({
 }
 
 ;// ./packages/rich-text/build-module/component/event-listeners/input-and-selection.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -3714,6 +3741,7 @@ function preventFocusCapture() {
 }
 
 ;// ./packages/rich-text/build-module/component/event-listeners/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */

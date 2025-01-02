@@ -5819,7 +5819,7 @@ if (true) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -5881,6 +5881,7 @@ __webpack_require__.d(__webpack_exports__, {
   parse: () => (/* reexport */ parser_parse),
   parseWithAttributeSchema: () => (/* reexport */ parseWithAttributeSchema),
   pasteHandler: () => (/* reexport */ pasteHandler),
+  privateApis: () => (/* reexport */ privateApis),
   rawHandler: () => (/* reexport */ rawHandler),
   registerBlockBindingsSource: () => (/* reexport */ registerBlockBindingsSource),
   registerBlockCollection: () => (/* reexport */ registerBlockCollection),
@@ -6833,6 +6834,7 @@ const {
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/blocks');
 
 ;// ./packages/blocks/build-module/api/registration.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -7718,6 +7720,7 @@ function getBlockBindingsSources() {
 }
 
 ;// ./packages/blocks/build-module/api/utils.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -8022,6 +8025,13 @@ const __experimentalGetBlockAttributesNamesByRole = (...args) => {
   });
   return getBlockAttributesNamesByRole(...args);
 };
+function isContentBlock(name) {
+  const attributes = getBlockType(name)?.attributes;
+  return !!Object.keys(attributes)?.some(attributeKey => {
+    const attribute = attributes[attributeKey];
+    return attribute?.role === 'content' || attribute?.__experimentalRole === 'content';
+  });
+}
 
 /**
  * Return a new object with the specified keys omitted.
@@ -8418,6 +8428,7 @@ function blockBindingsSources(state = {}, action) {
 var remove_accents = __webpack_require__(9681);
 var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
 ;// ./packages/blocks/build-module/store/utils.js
+/* wp:polyfill */
 /**
  * Helper util to return a value from a certain path of the object.
  * Path is specified as either:
@@ -8462,6 +8473,7 @@ function matchesAttributes(blockAttributes, variationAttributes) {
 }
 
 ;// ./packages/blocks/build-module/store/private-selectors.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -8639,6 +8651,7 @@ const hasContentRoleAttribute = (state, blockTypeName) => {
 };
 
 ;// ./packages/blocks/build-module/store/selectors.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -9051,7 +9064,7 @@ function getCollections(state) {
  * };
  * ```
  *
- * @return {string?} Default block name.
+ * @return {?string} Default block name.
  */
 function selectors_getDefaultBlockName(state) {
   return state.defaultBlockName;
@@ -9087,7 +9100,7 @@ function selectors_getDefaultBlockName(state) {
  * };
  * ```
  *
- * @return {string?} Name of the block for handling non-block content.
+ * @return {?string} Name of the block for handling non-block content.
  */
 function getFreeformFallbackBlockName(state) {
   return state.freeformFallbackBlockName;
@@ -9123,7 +9136,7 @@ function getFreeformFallbackBlockName(state) {
  * };
  * ```
  *
- * @return {string?} Name of the block for handling unregistered blocks.
+ * @return {?string} Name of the block for handling unregistered blocks.
  */
 function getUnregisteredFallbackBlockName(state) {
   return state.unregisteredFallbackBlockName;
@@ -9159,7 +9172,7 @@ function getUnregisteredFallbackBlockName(state) {
  * };
  * ```
  *
- * @return {string?} Name of the block for handling the grouping of blocks.
+ * @return {?string} Name of the block for handling the grouping of blocks.
  */
 function selectors_getGroupingBlockName(state) {
   return state.groupingBlockName;
@@ -9463,6 +9476,7 @@ var react_is = __webpack_require__(4398);
 ;// external ["wp","hooks"]
 const external_wp_hooks_namespaceObject = window["wp"]["hooks"];
 ;// ./packages/blocks/build-module/store/process-block-type.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -10739,6 +10753,7 @@ const external_wp_autop_namespaceObject = window["wp"]["autop"];
 const external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
 var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(external_wp_isShallowEqual_namespaceObject);
 ;// ./packages/blocks/build-module/api/parser/serialize-raw-block.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -10791,6 +10806,7 @@ function serializeRawBlock(rawBlock, options = {}) {
 ;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 ;// ./packages/blocks/build-module/api/serializer.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -11857,6 +11873,7 @@ function createQueuedLogger() {
 }
 
 ;// ./packages/blocks/build-module/api/validation/index.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -13343,6 +13360,7 @@ function children_matcher(selector) {
 });
 
 ;// ./packages/blocks/build-module/api/parser/get-block-attributes.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -13581,6 +13599,7 @@ function getBlockAttributes(blockTypeOrName, innerHTML, attributes = {}) {
 }
 
 ;// ./packages/blocks/build-module/api/parser/fix-custom-classname.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -13783,6 +13802,7 @@ function applyBlockDeprecatedVersions(block, rawBlock, blockType) {
 }
 
 ;// ./packages/blocks/build-module/api/parser/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14064,6 +14084,7 @@ function parser_parse(content, options) {
 }
 
 ;// ./packages/blocks/build-module/api/raw-handling/get-raw-transforms.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -14080,6 +14101,7 @@ function getRawTransforms() {
 }
 
 ;// ./packages/blocks/build-module/api/raw-handling/html-to-blocks.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14198,6 +14220,7 @@ function normaliseBlocks(HTML, options = {}) {
 }
 
 ;// ./packages/blocks/build-module/api/raw-handling/special-comment-converter.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14296,6 +14319,7 @@ function createNextpage(doc) {
 }
 
 ;// ./packages/blocks/build-module/api/raw-handling/list-reducer.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14458,6 +14482,7 @@ function figureContentReducer(node, doc, schema) {
 ;// external ["wp","shortcode"]
 const external_wp_shortcode_namespaceObject = window["wp"]["shortcode"];
 ;// ./packages/blocks/build-module/api/raw-handling/shortcode-converter.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14550,6 +14575,7 @@ function segmentHTMLToShortcodeBlock(HTML, lastIndex = 0, excludedBlockNames = [
 /* harmony default export */ const shortcode_converter = (segmentHTMLToShortcodeBlock);
 
 ;// ./packages/blocks/build-module/api/raw-handling/utils.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14735,6 +14761,7 @@ function getSibling(node, which) {
 }
 
 ;// ./packages/blocks/build-module/api/raw-handling/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14834,6 +14861,7 @@ function commentRemover(node) {
 }
 
 ;// ./packages/blocks/build-module/api/raw-handling/is-inline-content.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14941,6 +14969,7 @@ function headRemover(node) {
 }
 
 ;// ./packages/blocks/build-module/api/raw-handling/ms-list-ignore.js
+/* wp:polyfill */
 /**
  * Looks for comments, and removes them.
  *
@@ -15301,6 +15330,7 @@ function slackParagraphCorrector(node) {
 }
 
 ;// ./packages/blocks/build-module/api/raw-handling/paste-handler.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -15579,6 +15609,7 @@ function categories_updateCategory(slug, category) {
 }
 
 ;// ./packages/blocks/build-module/api/templates.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -15680,6 +15711,12 @@ function synchronizeBlocksWithTemplate(blocks = [], template) {
 }
 
 ;// ./packages/blocks/build-module/api/index.js
+/**
+ * Internal dependencies
+ */
+
+
+
 // The blocktype is the most important concept within the block API. It defines
 // all aspects of the block configuration and its interfaces, including `edit`
 // and `save`. The transforms specification allows converting one blocktype to
@@ -15776,6 +15813,10 @@ function synchronizeBlocksWithTemplate(blocks = [], template) {
 
 
 
+const privateApis = {};
+lock(privateApis, {
+  isContentBlock: isContentBlock
+});
 
 ;// ./packages/blocks/build-module/deprecated.js
 /**

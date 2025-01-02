@@ -35,6 +35,7 @@ class WooCommerce_My_Account {
 		\add_filter( 'woocommerce_billing_fields', [ __CLASS__, 'required_address_fields' ] );
 		\add_filter( 'woocommerce_get_checkout_url', [ __CLASS__, 'get_checkout_url' ] );
 		\add_filter( 'woocommerce_get_checkout_payment_url', [ __CLASS__, 'get_checkout_url' ] );
+		\add_filter( 'wc_stripe_update_subs_payment_method_card_statuses', [ __CLASS__, 'update_payment_methods_for_all_subs' ] );
 
 		// Reader Activation mods.
 		if ( Reader_Activation::is_enabled() ) {
@@ -744,6 +745,22 @@ class WooCommerce_My_Account {
 			unset( $columns['membership-next-bill-on'] );
 		}
 		return $columns;
+	}
+
+	/**
+	 * When adding a new payment method, apply to subscriptions of all statuses.
+	 * By default, this is only applied to subscriptions with an `active` status.
+	 * Applies to the Stripe payment gateway only.
+	 *
+	 * @return array Filtered array of statuses.
+	 */
+	public static function update_payment_methods_for_all_subs() {
+		return [
+			'active',
+			'pending',
+			'on-hold',
+			'pending-cancel',
+		];
 	}
 }
 

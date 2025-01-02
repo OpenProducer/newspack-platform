@@ -550,6 +550,27 @@ final class Webhooks {
 	}
 
 	/**
+	 * Get the request priority.
+	 *
+	 * This is only applicable if using Action Scheduler.
+	 *
+	 * @param int $request_id Request ID.
+	 *
+	 * @return int
+	 */
+	private static function get_request_priority( $request_id ) {
+		$action_name = \get_post_meta( $request_id, 'action_name', true );
+		/**
+		 * Filters the request priority.
+		 *
+		 * @param int    $priority    Request priority.
+		 * @param string $action_name Action name.
+		 * @param int    $request_id  Request ID.
+		 */
+		return apply_filters( 'newspack_webhooks_request_priority', 10, $action_name, $request_id );
+	}
+
+	/**
 	 * Create webhook request.
 	 *
 	 * @param int    $endpoint_id Endpoint ID.
@@ -707,7 +728,14 @@ final class Webhooks {
 		\update_post_meta( $request_id, 'scheduled', $time );
 		if ( self::use_action_scheduler() ) {
 			Logger::log( "Scheduling request {$request_id} for {$date_gmt} via Action Scheduler.", self::LOGGER_HEADER );
-			\as_schedule_single_action( $time, 'newspack_webhooks_as_process_request', [ $request_id ], 'newspack-data-events' );
+			\as_schedule_single_action(
+				$time,
+				'newspack_webhooks_as_process_request',
+				[ $request_id ],
+				'newspack-data-events',
+				false,
+				self::get_request_priority( $request_id )
+			);
 		} else {
 			Logger::log( "Scheduling request {$request_id} for {$date_gmt} via scheduled post publishing.", self::LOGGER_HEADER );
 			\wp_update_post(

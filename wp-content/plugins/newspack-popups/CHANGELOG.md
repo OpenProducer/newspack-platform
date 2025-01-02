@@ -1,3 +1,10 @@
+## [3.1.6](https://github.com/Automattic/newspack-popups/compare/v3.1.5...v3.1.6) (2024-12-16)
+
+
+### Bug Fixes
+
+* copy original segments when duplicating prompt ([#1373](https://github.com/Automattic/newspack-popups/issues/1373)) ([96ba0ca](https://github.com/Automattic/newspack-popups/commit/96ba0ca989732614c43ca24cf85cd011f11e44ff))
+
 ## [3.1.5](https://github.com/Automattic/newspack-popups/compare/v3.1.4...v3.1.5) (2024-12-09)
 
 

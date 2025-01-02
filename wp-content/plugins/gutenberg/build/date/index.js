@@ -1146,7 +1146,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"version":"2023c","zones":["Africa/Ab
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -1178,6 +1178,7 @@ var moment_timezone_utils = __webpack_require__(1685);
 const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// ./packages/date/build-module/index.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1704,7 +1705,7 @@ function isInTheFuture(dateValue) {
 /**
  * Create and return a JavaScript Date Object from a date string in the WP timezone.
  *
- * @param {string?} dateString Date formatted in the WP timezone.
+ * @param {?string} dateString Date formatted in the WP timezone.
  *
  * @return {Date} Date
  */

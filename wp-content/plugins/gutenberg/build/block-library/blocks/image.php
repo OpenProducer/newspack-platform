@@ -290,6 +290,7 @@ function gutenberg_block_core_image_print_lightbox_overlay() {
 			data-wp-on-async--click="actions.hideLightbox"
 			data-wp-on-async-window--resize="callbacks.setOverlayStyles"
 			data-wp-on-async-window--scroll="actions.handleScroll"
+			data-wp-bind--style="state.overlayStyles"
 			tabindex="-1"
 			>
 				<button type="button" aria-label="$close_button_label" style="fill: $close_button_color" class="close-button">
@@ -306,7 +307,6 @@ function gutenberg_block_core_image_print_lightbox_overlay() {
 					</figure>
 				</div>
 				<div class="scrim" style="background-color: $background_color" aria-hidden="true"></div>
-				<style data-wp-text="state.overlayStyles"></style>
 		</div>
 HTML;
 }

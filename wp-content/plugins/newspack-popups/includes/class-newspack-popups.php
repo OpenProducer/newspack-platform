@@ -334,6 +334,9 @@ final class Newspack_Popups {
 				'single'            => true,
 				'auth_callback'     => '__return_true',
 				'sanitize_callback' => function( $input ) {
+					if ( empty( $input ) ) {
+						return '';
+					}
 					return preg_replace( '~[^-\w0-9_\s]+~', '', $input );
 				},
 			]
@@ -1251,6 +1254,14 @@ final class Newspack_Popups {
 				[ 'fields' => 'ids' ]
 			);
 			wp_set_post_terms( $new_popup_id, $old_campaigns, self::NEWSPACK_POPUPS_TAXONOMY );
+
+			// Apply segment terms.
+			$old_segments = wp_get_post_terms(
+				$id,
+				Newspack_Segments_Model::TAX_SLUG,
+				[ 'fields' => 'ids' ]
+			);
+			wp_set_post_terms( $new_popup_id, $old_segments, Newspack_Segments_Model::TAX_SLUG );
 
 			// Set prompt options to match old prompt.
 			$old_popup_options = Newspack_Popups_Model::get_popup_options( $id );

@@ -128,6 +128,7 @@ const external_wp_coreData_namespaceObject = window["wp"]["coreData"];
 ;// external ["wp","data"]
 const external_wp_data_namespaceObject = window["wp"]["data"];
 ;// ./packages/widgets/build-module/blocks/legacy-widget/edit/widget-type-selector.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -618,7 +619,6 @@ function serializeForm(form) {
 }
 
 ;// ./packages/widgets/build-module/blocks/legacy-widget/edit/form.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1060,6 +1060,7 @@ function NotEmpty({
 }
 
 ;// ./packages/widgets/build-module/blocks/legacy-widget/transforms.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1456,6 +1457,7 @@ const v1 = {
 /* harmony default export */ const deprecated = ([v1]);
 
 ;// ./packages/widgets/build-module/blocks/widget-group/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1551,6 +1553,7 @@ const moveTo = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
 /* harmony default export */ const move_to = (moveTo);
 
 ;// ./packages/widgets/build-module/components/move-to-widget-area/index.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1630,6 +1633,7 @@ function addWidgetIdToBlock(block, widgetId) {
 }
 
 ;// ./packages/widgets/build-module/register-legacy-widget-variations.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
