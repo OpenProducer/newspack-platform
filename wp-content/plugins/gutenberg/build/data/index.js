@@ -1002,6 +1002,10 @@ function combine_reducers_combineReducers(reducers) {
 
 ;// ./packages/data/build-module/factory.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Creates a selector function that takes additional curried argument with the
  * registry `select` function. While a regular selector has signature
  * ```js
@@ -1036,10 +1040,10 @@ function combine_reducers_combineReducers(reducers) {
  * registry as argument. The registry binding happens automatically when registering the selector
  * with a store.
  *
- * @param {Function} registrySelector Function receiving a registry `select`
- *                                    function and returning a state selector.
+ * @param registrySelector Function receiving a registry `select`
+ *                         function and returning a state selector.
  *
- * @return {Function} Registry selector that can be registered with a store.
+ * @return Registry selector that can be registered with a store.
  */
 function createRegistrySelector(registrySelector) {
   const selectorsByRegistry = new WeakMap();
@@ -1063,8 +1067,6 @@ function createRegistrySelector(registrySelector) {
    * Flag indicating that the selector is a registry selector that needs the correct registry
    * reference to be assigned to `selector.registry` to make it work correctly.
    * be mapped as a registry selector.
-   *
-   * @type {boolean}
    */
   wrappedSelector.isRegistrySelector = true;
   return wrappedSelector;
@@ -1086,9 +1088,9 @@ function createRegistrySelector(registrySelector) {
  * When registering a control created with `createRegistryControl` with a store, the store
  * knows which calling convention to use when executing the control.
  *
- * @param {Function} registryControl Function receiving a registry object and returning a control.
+ * @param registryControl Function receiving a registry object and returning a control.
  *
- * @return {Function} Registry control that can be registered with a store.
+ * @return Registry control that can be registered with a store.
  */
 function createRegistryControl(registryControl) {
   registryControl.isRegistryControl = true;
@@ -1270,6 +1272,7 @@ const promiseMiddleware = () => next => action => {
 /* harmony default export */ const promise_middleware = (promiseMiddleware);
 
 ;// ./packages/data/build-module/resolvers-cache-middleware.js
+/* wp:polyfill */
 /** @typedef {import('./registry').WPDataRegistry} WPDataRegistry */
 
 /**
@@ -1375,6 +1378,7 @@ function selectorArgsToStateKey(args) {
 }
 
 ;// ./packages/data/build-module/redux-store/metadata/reducer.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1799,6 +1803,7 @@ function isShallowEqual(a, b, fromIndex) {
 }
 
 ;// ./packages/data/build-module/redux-store/metadata/selectors.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -3201,6 +3206,7 @@ try {
 /* harmony default export */ const storage_default = (default_storage);
 
 ;// ./packages/data/build-module/plugins/persistence/index.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -3604,6 +3610,15 @@ function useAsyncMode() {
 
 
 const renderQueue = (0,external_wp_priorityQueue_namespaceObject.createQueue)();
+function warnOnUnstableReference(a, b) {
+  if (!a || !b) {
+    return;
+  }
+  const keys = typeof a === 'object' && typeof b === 'object' ? Object.keys(a).filter(k => a[k] !== b[k]) : [];
+
+  // eslint-disable-next-line no-console
+  console.warn('The `useSelect` hook returns different values when called with the same state and parameters.\n' + 'This can lead to unnecessary re-renders and performance issues if not fixed.\n\n' + 'Non-equal value keys: %s\n\n', keys.join(', '));
+}
 
 /**
  * @typedef {import('../../types').StoreDescriptor<C>} StoreDescriptor
@@ -3958,6 +3973,7 @@ const withSelect = mapSelectToProps => (0,external_wp_compose_namespaceObject.cr
 /* harmony default export */ const with_select = (withSelect);
 
 ;// ./packages/data/build-module/components/use-dispatch/use-dispatch-with-map.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */

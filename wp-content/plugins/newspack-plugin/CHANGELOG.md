@@ -1,3 +1,66 @@
+## [5.10.4](https://github.com/Automattic/newspack-plugin/compare/v5.10.3...v5.10.4) (2024-12-23)
+
+
+### Bug Fixes
+
+* dont try to get orders if Woo is not active ([#3649](https://github.com/Automattic/newspack-plugin/issues/3649)) ([608f017](https://github.com/Automattic/newspack-plugin/commit/608f017000b59e8b3bdcd81b14d81969bc72b379))
+
+## [5.10.3](https://github.com/Automattic/newspack-plugin/compare/v5.10.2...v5.10.3) (2024-12-20)
+
+
+### Bug Fixes
+
+* **stripe:** when adding new card, update subs of all statuses ([#3643](https://github.com/Automattic/newspack-plugin/issues/3643)) ([62fe022](https://github.com/Automattic/newspack-plugin/commit/62fe02231e891fa7a9bc9d5f573ba336b6cb03f3))
+
+## [5.10.2](https://github.com/Automattic/newspack-plugin/compare/v5.10.1...v5.10.2) (2024-12-17)
+
+
+### Bug Fixes
+
+* **recaptcha:** various optimizations ([#3631](https://github.com/Automattic/newspack-plugin/issues/3631)) ([5d816bc](https://github.com/Automattic/newspack-plugin/commit/5d816bcc94f49538399bd44572f6d78e739806da)), closes [#3627](https://github.com/Automattic/newspack-plugin/issues/3627)
+
+## [5.10.1](https://github.com/Automattic/newspack-plugin/compare/v5.10.0...v5.10.1) (2024-12-16)
+
+
+### Bug Fixes
+
+* **sync:** strip unsuffixed UTM meta keys from normalized contact data ([#3623](https://github.com/Automattic/newspack-plugin/issues/3623)) ([5bbcc7b](https://github.com/Automattic/newspack-plugin/commit/5bbcc7bc505c1ee022b66285f5753b41705b5c22))
+
+# [5.10.0](https://github.com/Automattic/newspack-plugin/compare/v5.9.2...v5.10.0) (2024-12-16)
+
+
+### Bug Fixes
+
+* dont load textdomain too early ([#3629](https://github.com/Automattic/newspack-plugin/issues/3629)) ([76c1f97](https://github.com/Automattic/newspack-plugin/commit/76c1f975a93fab6bbcbe97c886126a2b25afeb49))
+* duplicate orders save on cron ([#3604](https://github.com/Automattic/newspack-plugin/issues/3604)) ([ec69167](https://github.com/Automattic/newspack-plugin/commit/ec691677e60a55f63f7832e195d8301649bb52ee))
+* hide duplicate notices if all was dismissed ([#3630](https://github.com/Automattic/newspack-plugin/issues/3630)) ([cf48188](https://github.com/Automattic/newspack-plugin/commit/cf481888db82f45ea3a350e129ed4041b2be988d))
+* **ras-acc:** re-add recaptcha to the WooCommerce checkout ([#3605](https://github.com/Automattic/newspack-plugin/issues/3605)) ([f42a75b](https://github.com/Automattic/newspack-plugin/commit/f42a75b598b08a92352ec18afd5d2a8f9178c04e))
+* **ras:** do not require Woo plugins if using NRH ([#3614](https://github.com/Automattic/newspack-plugin/issues/3614)) ([363a834](https://github.com/Automattic/newspack-plugin/commit/363a834539652e9eb358d42121ee07880e8861ae))
+* **wcs:** remove subscriptions expiration feature flag ([#3618](https://github.com/Automattic/newspack-plugin/issues/3618)) ([7c175d9](https://github.com/Automattic/newspack-plugin/commit/7c175d92fa4776979565dabd9041c74a50cae859))
+* **wcs:** update subscription expiration feature ([#3613](https://github.com/Automattic/newspack-plugin/issues/3613)) ([ebf6e6d](https://github.com/Automattic/newspack-plugin/commit/ebf6e6d8cdf0c7eecf9e7918675b38405433deeb))
+* **wcs:** update subscriptions expiration cli behavior ([#3617](https://github.com/Automattic/newspack-plugin/issues/3617)) ([07e768c](https://github.com/Automattic/newspack-plugin/commit/07e768c74343a2877fb9bdb4a6a59b30f8fe4543))
+
+
+### Features
+
+* **subscriptions:** add cancellation reason metadata ([#3568](https://github.com/Automattic/newspack-plugin/issues/3568)) ([de83e02](https://github.com/Automattic/newspack-plugin/commit/de83e02e6b3160c520f30b7d5bcd1f6e96db8058))
+* **wc:** duplicate orders admin notice ([#3555](https://github.com/Automattic/newspack-plugin/issues/3555)) ([cb764e3](https://github.com/Automattic/newspack-plugin/commit/cb764e33b4cb0b6cfed4930121db230efd2a5832))
+* **wcs:** add expired subscription cli tool ([#3593](https://github.com/Automattic/newspack-plugin/issues/3593)) ([5d39398](https://github.com/Automattic/newspack-plugin/commit/5d39398e681555cd030bd8b47c60eb0eef26d6f6))
+* **webhooks:** filter request priority ([#3587](https://github.com/Automattic/newspack-plugin/issues/3587)) ([1928a6a](https://github.com/Automattic/newspack-plugin/commit/1928a6a5ac627c35a7a9d2f16e3dec5ae9c459b7))
+* **woocommerce-subscriptions:** add url redirect for wc subscription renewals ([#3525](https://github.com/Automattic/newspack-plugin/issues/3525)) ([5b14aeb](https://github.com/Automattic/newspack-plugin/commit/5b14aebd98a7513ca3f254339f1315175389aee6))
+
+
+### Reverts
+
+* Revert "feat: command to initialize cron job to slowly backfill CAP term data (#3425)" (#3620) ([c9a9d45](https://github.com/Automattic/newspack-plugin/commit/c9a9d45f697c337d280828f36318f8ed57c94ea8)), closes [#3425](https://github.com/Automattic/newspack-plugin/issues/3425) [#3620](https://github.com/Automattic/newspack-plugin/issues/3620)
+
+## [5.9.2](https://github.com/Automattic/newspack-plugin/compare/v5.9.1...v5.9.2) (2024-12-13)
+
+
+### Bug Fixes
+
+* **recaptcha:** add safeguards against duplicate renders ([#3624](https://github.com/Automattic/newspack-plugin/issues/3624)) ([d95ee7e](https://github.com/Automattic/newspack-plugin/commit/d95ee7e05dc303c0a8fa6f50029e0ac7135e86b7))
+
 ## [5.9.1](https://github.com/Automattic/newspack-plugin/compare/v5.9.0...v5.9.1) (2024-12-11)
 
 

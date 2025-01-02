@@ -9,6 +9,7 @@ import * as __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__ from "
 /* harmony export */   ed: () => (/* binding */ headElements),
 /* harmony export */   yp: () => (/* binding */ updateHead)
 /* harmony export */ });
+/* wp:polyfill */
 /**
  * The cache of prefetched stylesheets and scripts.
  */
@@ -313,6 +314,7 @@ const {
   state: {
     url: window.location.href,
     navigation: {
+      isLoading: false,
       hasStarted: false,
       hasFinished: false
     }
@@ -364,6 +366,7 @@ const {
         if (navigatingTo !== href) {
           return;
         }
+        navigation.isLoading = true;
         if (loadingAnimation) {
           navigation.hasStarted = true;
           navigation.hasFinished = false;
@@ -392,6 +395,7 @@ const {
 
         // Update the navigation status once the the new page rendering
         // has been completed.
+        navigation.isLoading = false;
         if (loadingAnimation) {
           navigation.hasStarted = false;
           navigation.hasFinished = true;

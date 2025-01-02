@@ -26,6 +26,8 @@ class Initializer {
 		include_once NEWSPACK_ABSPATH . 'includes/cli/class-ras.php';
 		include_once NEWSPACK_ABSPATH . 'includes/cli/class-ras-esp-sync.php';
 		include_once NEWSPACK_ABSPATH . 'includes/cli/class-co-authors-plus.php';
+		include_once NEWSPACK_ABSPATH . 'includes/cli/class-mailchimp.php';
+		include_once NEWSPACK_ABSPATH . 'includes/cli/class-woocommerce-subscriptions.php';
 	}
 
 	/**
@@ -57,14 +59,23 @@ class Initializer {
 			[ 'Newspack\CLI\RAS_ESP_Sync', 'cli_sync_contacts' ]
 		);
 
+		WP_CLI::add_command(
+			'newspack mailchimp merge-fields list',
+			[ 'Newspack\CLI\Mailchimp', 'cli_mailchimp_list_merge_fields' ]
+		);
+
+		WP_CLI::add_command(
+			'newspack mailchimp merge-fields delete',
+			[ 'Newspack\CLI\Mailchimp', 'cli_mailchimp_delete_merge_fields' ]
+		);
+
+		WP_CLI::add_command(
+			'newspack mailchimp merge-fields fix-duplicates',
+			[ 'Newspack\CLI\Mailchimp', 'cli_mailchimp_fix_duplicate_merge_fields' ]
+		);
+
 		WP_CLI::add_command( 'newspack migrate-co-authors-guest-authors', [ 'Newspack\CLI\Co_Authors_Plus', 'migrate_guest_authors' ] );
 		WP_CLI::add_command( 'newspack backfill-non-editing-contributors', [ 'Newspack\CLI\Co_Authors_Plus', 'backfill_non_editing_contributor' ] );
-		WP_CLI::add_command(
-			'newspack schedule-co-authors-author-term-backfill',
-			[
-				'Newspack\CLI\Co_Authors_Plus',
-				'schedule_author_term_backfill',
-			]
-		);
+		WP_CLI::add_command( 'newspack migrate-expired-subscriptions', [ 'Newspack\CLI\WooCommerce_Subscriptions', 'migrate_expired_subscriptions' ] );
 	}
 }

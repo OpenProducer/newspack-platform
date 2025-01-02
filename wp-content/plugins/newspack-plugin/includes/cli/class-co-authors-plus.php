@@ -15,66 +15,10 @@ defined( 'ABSPATH' ) || exit;
  * Co-Authors Plus CLI commands.
  */
 class Co_Authors_Plus {
-	const NEWSPACK_SCHEDULE_AUTHOR_TERM_BACKFILL = 'newspack_cap_author_term_backfill';
-
 	private static $live = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 	private static $verbose = true; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 	private static $user_logins = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 	private static $guest_author_ids = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
-
-	/**
-	 * Add hooks.
-	 */
-	public static function init() {
-		add_action( self::NEWSPACK_SCHEDULE_AUTHOR_TERM_BACKFILL, [ __CLASS__, 'run_cap_cli_command' ] );
-		add_action( 'init', [ __CLASS__, 'register_deactivation_hook' ] );
-	}
-
-	/**
-	 * Execute the co-authors-plus create-terms-for-posts CLI command.
-	 */
-	public static function run_cap_cli_command() {
-		if ( method_exists( 'WP_CLI', 'runcommand' ) ) {
-			$result = WP_CLI::runcommand(
-				'co-authors-plus create-author-terms-for-posts --records-per-batch=50',
-				[
-					'exit_error' => false, // This allows us to capture any errors that occur during script execution.
-					'launch'     => false, // This keeps any formatting that's been set.
-					'return'     => 'all', // This ensures we get stdout, stderr, and return code.
-				]
-			);
-
-			WP_CLI::out( $result->stdout );
-
-			do_action(
-				'newspack_log',
-				self::NEWSPACK_SCHEDULE_AUTHOR_TERM_BACKFILL,
-				! empty( $result->stderr ) ? $result->stderr : $result->stdout,
-				[
-					'type' => 0 !== $result->return_code || ! empty( $result->stderr ) ? 'error' : 'success',
-					'data' => [
-						'stdout'    => $result->stdout,
-						'timestamp' => gmdate( 'c', time() ),
-					],
-					'file' => 'newspack_cap_author_terms_backfill',
-				]
-			);
-		}
-	}
-
-	/**
-	 * Unschedule any unexecuted jobs upon plugin deactivation.
-	 */
-	public static function register_deactivation_hook() {
-		register_deactivation_hook( NEWSPACK_PLUGIN_FILE, [ __CLASS__, 'unschedule_author_term_backfill' ] );
-	}
-
-	/**
-	 * Clear the cron job when this plugin is deactivated.
-	 */
-	public static function unschedule_author_term_backfill() {
-		wp_clear_scheduled_hook( self::NEWSPACK_SCHEDULE_AUTHOR_TERM_BACKFILL );
-	}
 
 	/**
 	 * Migrate Co-Authors Plus guest authors to regular users with the [Guest Contributor role](https://help.newspack.com/publishing-and-appearance/guest-contributors/).
@@ -175,39 +119,6 @@ class Co_Authors_Plus {
 					WP_CLI::line( sprintf( 'Would add the Non-Editing Contributor role to user %d.', $user_id ) );
 				}
 			}
-		}
-
-		WP_CLI::line( '' );
-	}
-
-	/**
-	 * Set up a cron job to backfill any missing Co-Author plus author terms for posts.
-	 * Runs incrementally at a rate of up to 250 posts per hour to minimize performance impact.
-	 *
-	 * @return void
-	 * @throws WP_CLI\ExitException When the command fails.
-	 */
-	public function schedule_author_term_backfill() {
-		WP_CLI::line( '' );
-
-		if ( has_action( self::NEWSPACK_SCHEDULE_AUTHOR_TERM_BACKFILL ) ) {
-			remove_action(
-				self::NEWSPACK_SCHEDULE_AUTHOR_TERM_BACKFILL,
-				[ __CLASS__, 'run_cap_cli_command' ]
-			);
-		}
-
-		if ( ! wp_next_scheduled( self::NEWSPACK_SCHEDULE_AUTHOR_TERM_BACKFILL ) ) {
-			$result = wp_schedule_event( time(), 'hourly', self::NEWSPACK_SCHEDULE_AUTHOR_TERM_BACKFILL );
-			if ( $result ) {
-				WP_CLI::success( 'Scheduled author term backfill.' );
-			} else {
-				WP_CLI::error( 'Could not schedule author term backfill.' );
-			}
-		} else {
-			// Unschedule and reschedule.
-			self::unschedule_author_term_backfill();
-			self::schedule_author_term_backfill();
 		}
 
 		WP_CLI::line( '' );
@@ -578,4 +489,3 @@ class Co_Authors_Plus {
 		}
 	}
 }
-Co_Authors_Plus::init();

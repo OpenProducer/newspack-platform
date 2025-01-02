@@ -17,12 +17,22 @@ class WooCommerce_Subscriptions {
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
-		if ( self::is_enabled() ) {
-			include_once __DIR__ . '/class-on-hold-duration.php';
-
-			On_Hold_Duration::init();
-		}
+		add_action( 'plugins_loaded', [ __CLASS__, 'woocommerce_subscriptions_integration_init' ] );
 	}
+
+	/**
+	 * Initialize WooCommerce Subscriptions Integration.
+	 */
+	public static function woocommerce_subscriptions_integration_init() {
+		include_once __DIR__ . '/class-on-hold-duration.php';
+		include_once __DIR__ . '/class-renewal.php';
+		include_once __DIR__ . '/class-subscriptions-meta.php';
+
+		On_Hold_Duration::init();
+		Renewal::init();
+		Subscriptions_Meta::init();
+	}
+
 
 	/**
 	 * Check if WooCommerce Subscriptions is active.
@@ -36,12 +46,20 @@ class WooCommerce_Subscriptions {
 	/**
 	 * Check if WooCommerce Subscriptions Integration is enabled.
 	 *
-	 * Enalbed if Reader activation is enabled and the feature flag is defined.
+	 * True if:
+	 * - WooCommerce Subscriptions is active and,
+	 * - Reader Activation is enabled and,
 	 *
 	 * @return bool
 	 */
 	public static function is_enabled() {
-		return Reader_Activation::is_enabled() && defined( 'NEWSPACK_SUBSCRIPTIONS_EXPIRATION' ) && NEWSPACK_SUBSCRIPTIONS_EXPIRATION;
+		$is_enabled = self::is_active() && Reader_Activation::is_enabled();
+		/**
+		 * Filters whether subscriptions expiration is enabled.
+		 *
+		 * @param bool $is_enabled
+		 */
+		return apply_filters( 'newspack_subscriptions_expiration_enabled', $is_enabled );
 	}
 }
 WooCommerce_Subscriptions::init();

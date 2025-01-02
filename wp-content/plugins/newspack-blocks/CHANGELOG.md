@@ -1,3 +1,12 @@
+## [4.5.2](https://github.com/Automattic/newspack-blocks/compare/v4.5.1...v4.5.2) (2024-12-16)
+
+
+### Bug Fixes
+
+* remove CAP compatibility mode ([414691d](https://github.com/Automattic/newspack-blocks/commit/414691d048a59a2c72ddcb1689289f07ab2102d8))
+* removed another unused constant ([298cf88](https://github.com/Automattic/newspack-blocks/commit/298cf884228522a6d93e328d10391f5d7cfbac88))
+* show x.com URLs and icons instead of Twitter in Author blocks ([036517b](https://github.com/Automattic/newspack-blocks/commit/036517b5a80342711f4dd571ae5de02c2d588c69))
+
 ## [4.5.1](https://github.com/Automattic/newspack-blocks/compare/v4.5.0...v4.5.1) (2024-12-09)
 
 

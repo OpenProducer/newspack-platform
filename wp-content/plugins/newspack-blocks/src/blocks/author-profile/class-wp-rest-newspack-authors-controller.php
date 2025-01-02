@@ -435,7 +435,7 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 				$handle     = $is_website ? get_post_meta( $author_id, 'cap-website', true ) : get_the_author_meta( $profile, $author_id );
 
 				if ( $handle ) {
-					$url             = 'twitter' === $profile ? esc_url( 'https://twitter.com/' . $handle ) : esc_url( $handle );
+					$url             = 'twitter' === $profile ? esc_url( 'https://x.com/' . $handle ) : esc_url( $handle );
 					$acc[ $profile ] = [ 'url' => $url ];
 
 					if ( class_exists( 'Newspack_SVG_Icons' ) ) {

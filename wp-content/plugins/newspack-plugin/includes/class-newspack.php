@@ -40,6 +40,7 @@ final class Newspack {
 	public function __construct() {
 		$this->define_constants();
 		$this->includes();
+		add_action( 'init', [ __CLASS__, 'load_textdomain' ] );
 		add_action( 'admin_init', [ $this, 'admin_redirects' ] );
 		add_action( 'current_screen', [ $this, 'restrict_user_access' ] );
 		add_action( 'current_screen', [ $this, 'wizard_redirect' ] );
@@ -50,6 +51,13 @@ final class Newspack {
 		add_action( 'all_admin_notices', [ $this, 'remove_notifications' ], -9999 );
 		register_activation_hook( NEWSPACK_PLUGIN_FILE, [ $this, 'activation_hook' ] );
 		register_deactivation_hook( NEWSPACK_PLUGIN_FILE, [ $this, 'deactivation_hook' ] );
+	}
+
+	/**
+	 * Set text domain.
+	 */
+	public static function load_textdomain() {
+		load_plugin_textdomain( 'newspack-plugin', false, NEWSPACK_PLUGIN_BASEDIR . '/languages' );
 	}
 
 	/**

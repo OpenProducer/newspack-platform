@@ -140,7 +140,7 @@ abstract class Wizard {
 			'is_debug_mode'       => Newspack::is_debug_mode(),
 			'has_completed_setup' => get_option( NEWSPACK_SETUP_COMPLETE ),
 			'site_title'          => get_option( 'blogname' ),
-			'is_atomic'           => defined( 'ATOMIC_SITE_ID' ) && ATOMIC_SITE_ID,
+			'is_managed'          => method_exists( 'Newspack_Manager', 'is_connected_to_manager' ) && \Newspack_Manager::is_connected_to_manager(),
 		];
 
 		wp_localize_script( 'newspack_data', 'newspack_urls', $urls );

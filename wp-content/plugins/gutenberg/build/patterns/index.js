@@ -109,6 +109,7 @@ const PARTIAL_SYNCING_SUPPORTED_BLOCKS = {
 const PATTERN_OVERRIDES_BINDING_SOURCE = 'core/pattern-overrides';
 
 ;// ./packages/patterns/build-module/store/actions.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -303,6 +304,7 @@ const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// ./packages/patterns/build-module/api/index.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -338,6 +340,7 @@ function hasOverridableBlocks(blocks) {
 ;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 ;// ./packages/patterns/build-module/components/overrides-panel.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -383,6 +386,7 @@ const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// external ["wp","htmlEntities"]
 const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
 ;// ./packages/patterns/build-module/components/category-selector.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -435,6 +439,7 @@ function CategorySelector({
 }
 
 ;// ./packages/patterns/build-module/private-hooks.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -530,6 +535,7 @@ function useAddPatternCategory() {
 }
 
 ;// ./packages/patterns/build-module/components/create-pattern-modal.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -869,6 +875,7 @@ const symbol = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
 /* harmony default export */ const library_symbol = (symbol);
 
 ;// ./packages/patterns/build-module/components/pattern-convert-button.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1120,6 +1127,7 @@ function PatternsMenuItems({
 ;// external ["wp","a11y"]
 const external_wp_a11y_namespaceObject = window["wp"]["a11y"];
 ;// ./packages/patterns/build-module/components/rename-pattern-category-modal.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */

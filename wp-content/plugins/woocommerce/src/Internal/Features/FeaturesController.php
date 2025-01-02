@@ -259,6 +259,14 @@ class FeaturesController {
 					'is_legacy'          => false,
 					'is_experimental'    => true,
 				),
+				'email_improvements'    => array(
+					'name'        => __( 'Email improvements', 'woocommerce' ),
+					'description' => __(
+						'Enable modern email design and live preview for transactional emails',
+						'woocommerce'
+					),
+					'disable_ui'  => true,
+				),
 			);
 
 			foreach ( $legacy_features as $slug => $definition ) {
@@ -546,7 +554,7 @@ class FeaturesController {
 	 *
 	 * @return bool True if 'woocommerce_init' has run or is running, false otherwise.
 	 */
-	private function verify_did_woocommerce_init( string $function_name = null ): bool {
+	private function verify_did_woocommerce_init( ?string $function_name = null ): bool {
 		if ( ! $this->proxy->call_function( 'did_action', 'woocommerce_init' ) &&
 			! $this->proxy->call_function( 'doing_action', 'woocommerce_init' ) ) {
 			if ( ! is_null( $function_name ) ) {
@@ -866,7 +874,6 @@ class FeaturesController {
 		}
 
 		if ( ! $this->is_legacy_feature( $feature_id ) && ! $disabled && $this->verify_did_woocommerce_init() ) {
-			$disabled                = ! $this->feature_is_enabled( $feature_id );
 			$plugin_info_for_feature = $this->get_compatible_plugins_for_feature( $feature_id, true );
 			$desc_tip                = $this->plugin_util->generate_incompatible_plugin_feature_warning( $feature_id, $plugin_info_for_feature );
 		}
