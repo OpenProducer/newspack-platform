@@ -145,4 +145,4 @@ function gutenberg_add_styles_submenu_item() {
 		}
 	}
 }
-add_action( 'admin_init', 'gutenberg_add_styles_submenu_item' );
+add_action( 'admin_menu', 'gutenberg_add_styles_submenu_item' );

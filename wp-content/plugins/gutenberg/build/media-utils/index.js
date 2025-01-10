@@ -857,8 +857,11 @@ function uploadMedia({
   const validFiles = [];
   const filesSet = [];
   const setAndUpdateFiles = (index, value) => {
-    if (filesSet[index]?.url) {
-      (0,external_wp_blob_namespaceObject.revokeBlobURL)(filesSet[index].url);
+    // For client-side media processing, this is handled by the upload-media package.
+    if (!window.__experimentalMediaProcessing) {
+      if (filesSet[index]?.url) {
+        (0,external_wp_blob_namespaceObject.revokeBlobURL)(filesSet[index].url);
+      }
     }
     filesSet[index] = value;
     onFileChange?.(filesSet.filter(attachment => attachment !== null));
@@ -891,12 +894,15 @@ function uploadMedia({
     }
     validFiles.push(mediaFile);
 
-    // Set temporary URL to create placeholder media file, this is replaced
-    // with final file from media gallery when upload is `done` below.
-    filesSet.push({
-      url: (0,external_wp_blob_namespaceObject.createBlobURL)(mediaFile)
-    });
-    onFileChange?.(filesSet);
+    // For client-side media processing, this is handled by the upload-media package.
+    if (!window.__experimentalMediaProcessing) {
+      // Set temporary URL to create placeholder media file, this is replaced
+      // with final file from media gallery when upload is `done` below.
+      filesSet.push({
+        url: (0,external_wp_blob_namespaceObject.createBlobURL)(mediaFile)
+      });
+      onFileChange?.(filesSet);
+    }
   }
   validFiles.map(async (file, index) => {
     try {

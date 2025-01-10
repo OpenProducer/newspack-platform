@@ -1,3 +1,10 @@
+## [3.7.2](https://github.com/Automattic/newspack-newsletters/compare/v3.7.1...v3.7.2) (2025-01-08)
+
+
+### Bug Fixes
+
+* throw error if we fail to fetch merge fields ([#1732](https://github.com/Automattic/newspack-newsletters/issues/1732)) ([e855d45](https://github.com/Automattic/newspack-newsletters/commit/e855d45c935b0be57bf46571df2ed9ff7c78adaf))
+
 ## [3.7.1](https://github.com/Automattic/newspack-newsletters/compare/v3.7.0...v3.7.1) (2024-12-23)
 
 

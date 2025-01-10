@@ -4330,6 +4330,13 @@ function normalizePageId(value) {
   return value.toString();
 }
 const getHomePage = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)(() => {
+  const canReadSiteData = select(STORE_NAME).canUser('read', {
+    kind: 'root',
+    name: 'site'
+  });
+  if (!canReadSiteData) {
+    return null;
+  }
   const siteData = select(STORE_NAME).getEntityRecord('root', 'site');
   if (!siteData) {
     return null;
@@ -4348,10 +4355,20 @@ const getHomePage = (0,external_wp_data_namespaceObject.createRegistrySelector)(
     postType: 'wp_template',
     postId: frontPageTemplateId
   };
-}, state => [getEntityRecord(state, 'root', 'site'), getDefaultTemplateId(state, {
+}, state => [canUser(state, 'read', {
+  kind: 'root',
+  name: 'site'
+}) && getEntityRecord(state, 'root', 'site'), getDefaultTemplateId(state, {
   slug: 'front-page'
 })]));
 const getPostsPageId = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => () => {
+  const canReadSiteData = select(STORE_NAME).canUser('read', {
+    kind: 'root',
+    name: 'site'
+  });
+  if (!canReadSiteData) {
+    return null;
+  }
   const siteData = select(STORE_NAME).getEntityRecord('root', 'site');
   return siteData?.show_on_front === 'page' ? normalizePageId(siteData.page_for_posts) : null;
 });
@@ -22723,7 +22740,7 @@ const CACHE = new Map();
  *
  * @async
  * @param {string}  url     the URL to request details from.
- * @param {Object?} options any options to pass to the underlying fetch.
+ * @param {?Object} options any options to pass to the underlying fetch.
  * @example
  * ```js
  * import { __experimentalFetchUrlData as fetchUrlData } from '@wordpress/core-data';
@@ -22972,7 +22989,7 @@ const resolvers_getEditedEntityRecord = forward_resolver('getEntityRecord');
  *
  * @param {string}  kind  Entity kind.
  * @param {string}  name  Entity name.
- * @param {Object?} query Query Object. If requesting specific fields, fields
+ * @param {?Object} query Query Object. If requesting specific fields, fields
  *                        must always include the ID.
  */
 const resolvers_getEntityRecords = (kind, name, query = {}) => async ({

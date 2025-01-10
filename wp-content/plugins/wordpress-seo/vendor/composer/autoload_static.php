@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcb3e526d89862c36ac53b003d66df64d
+class ComposerStaticInit5ee83be5cc8ef65e2e67c43a537d8167
 {
     public static $files = array (
         '81db02b30f563b92907e271b66bd7559' => __DIR__ . '/..' . '/yoast/whip/src/Facades/wordpress.php',
@@ -42,6 +42,7 @@ class ComposerStaticInitcb3e526d89862c36ac53b003d66df64d
         'Composer\\Installers\\BaseInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/BaseInstaller.php',
         'Composer\\Installers\\BitrixInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/BitrixInstaller.php',
         'Composer\\Installers\\BonefishInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/BonefishInstaller.php',
+        'Composer\\Installers\\BotbleInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/BotbleInstaller.php',
         'Composer\\Installers\\CakePHPInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CakePHPInstaller.php',
         'Composer\\Installers\\ChefInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ChefInstaller.php',
         'Composer\\Installers\\CiviCrmInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CiviCrmInstaller.php',
@@ -49,6 +50,7 @@ class ComposerStaticInitcb3e526d89862c36ac53b003d66df64d
         'Composer\\Installers\\CockpitInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CockpitInstaller.php',
         'Composer\\Installers\\CodeIgniterInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CodeIgniterInstaller.php',
         'Composer\\Installers\\Concrete5Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Concrete5Installer.php',
+        'Composer\\Installers\\ConcreteCMSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ConcreteCMSInstaller.php',
         'Composer\\Installers\\CroogoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CroogoInstaller.php',
         'Composer\\Installers\\DecibelInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DecibelInstaller.php',
         'Composer\\Installers\\DframeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DframeInstaller.php',
@@ -59,6 +61,7 @@ class ComposerStaticInitcb3e526d89862c36ac53b003d66df64d
         'Composer\\Installers\\EliasisInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/EliasisInstaller.php',
         'Composer\\Installers\\ExpressionEngineInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ExpressionEngineInstaller.php',
         'Composer\\Installers\\EzPlatformInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/EzPlatformInstaller.php',
+        'Composer\\Installers\\ForkCMSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ForkCMSInstaller.php',
         'Composer\\Installers\\FuelInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/FuelInstaller.php',
         'Composer\\Installers\\FuelphpInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/FuelphpInstaller.php',
         'Composer\\Installers\\GravInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/GravInstaller.php',
@@ -705,7 +708,9 @@ class ComposerStaticInitcb3e526d89862c36ac53b003d66df64d
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\SEO_Scores_Endpoint' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/endpoints/seo-scores-endpoint.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Nonces\\Nonce_Repository' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/nonces/nonce-repository.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Score_Groups\\Score_Group_Link_Collector' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/score-groups/score-group-link-collector.php',
+        'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Score_Results\\Readability_Score_Results\\Cached_Readability_Score_Results_Collector' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/score-results/readability-score-results/cached-readability-score-results-collector.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Score_Results\\Readability_Score_Results\\Readability_Score_Results_Collector' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/score-results/readability-score-results/readability-score-results-collector.php',
+        'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Score_Results\\SEO_Score_Results\\Cached_SEO_Score_Results_Collector' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/score-results/seo-score-results/cached-seo-score-results-collector.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Score_Results\\SEO_Score_Results\\SEO_Score_Results_Collector' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/score-results/seo-score-results/seo-score-results-collector.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Score_Results\\Score_Results_Collector_Interface' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/score-results/score-results-collector-interface.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Taxonomies\\Taxonomies_Collector' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/taxonomies/taxonomies-collector.php',
@@ -901,6 +906,7 @@ class ComposerStaticInitcb3e526d89862c36ac53b003d66df64d
         'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Sidebar_Checklist_Notification' => __DIR__ . '/../..' . '/src/integrations/alerts/black-friday-sidebar-checklist-notification.php',
         'Yoast\\WP\\SEO\\Integrations\\Alerts\\Trustpilot_Review_Notification' => __DIR__ . '/../..' . '/src/integrations/alerts/trustpilot-review-notification.php',
         'Yoast\\WP\\SEO\\Integrations\\Alerts\\Webinar_Promo_Notification' => __DIR__ . '/../..' . '/src/integrations/alerts/webinar-promo-notification.php',
+        'Yoast\\WP\\SEO\\Integrations\\Blocks\\Block_Editor_Integration' => __DIR__ . '/../..' . '/src/integrations/blocks/block-editor-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Breadcrumbs_Block' => __DIR__ . '/../..' . '/src/integrations/blocks/breadcrumbs-block.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Dynamic_Block' => __DIR__ . '/../..' . '/src/integrations/blocks/abstract-dynamic-block.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Dynamic_Block_V3' => __DIR__ . '/../..' . '/src/integrations/blocks/abstract-dynamic-block-v3.php',
@@ -1194,9 +1200,9 @@ class ComposerStaticInitcb3e526d89862c36ac53b003d66df64d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcb3e526d89862c36ac53b003d66df64d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcb3e526d89862c36ac53b003d66df64d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcb3e526d89862c36ac53b003d66df64d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5ee83be5cc8ef65e2e67c43a537d8167::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5ee83be5cc8ef65e2e67c43a537d8167::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5ee83be5cc8ef65e2e67c43a537d8167::$classMap;
 
         }, null, ClassLoader::class);
     }
