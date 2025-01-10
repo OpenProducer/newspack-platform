@@ -1605,6 +1605,10 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 					'file'       => 'newspack_mailchimp',
 				]
 			);
+			return new \WP_Error(
+				'newspack_mailchimp_prepare_merge_fields',
+				$e->getMessage()
+			);
 		}
 
 		if ( empty( $existing_fields ) ) {
@@ -1793,9 +1797,10 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				 * @param array $merge_fields The merge fields payload to pass to the Mailchimp API.
 				 */
 				$merge_fields = apply_filters( 'newspack_mailchimp_merge_fields', $this->prepare_merge_fields( $list_id, $contact ) );
-				if ( ! empty( $merge_fields ) ) {
-					$update_payload['merge_fields'] = $merge_fields;
+				if ( is_wp_error( $merge_fields ) ) {
+					throw new Exception( $merge_fields->get_error_message() );
 				}
+				$update_payload['merge_fields'] = $merge_fields;
 			}
 
 			// Add groups and tags, if any.

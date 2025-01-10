@@ -895,7 +895,7 @@ const ComplementaryAreaHeader = ({
 const noop = () => {};
 function ActionItemSlot({
   name,
-  as: Component = external_wp_components_namespaceObject.ButtonGroup,
+  as: Component = external_wp_components_namespaceObject.MenuGroup,
   fillProps = {},
   bubblesVirtually,
   ...props
@@ -1595,7 +1595,7 @@ function transformWidgetToBlock(widget) {
  * Converts a block to a widget entity record.
  *
  * @param {Object}  block         The block.
- * @param {Object?} relatedWidget A related widget entity record from the API (optional).
+ * @param {?Object} relatedWidget A related widget entity record from the API (optional).
  * @return {Object} the widget object (converted from block).
  */
 function transformBlockToWidget(block, relatedWidget = {}) {
@@ -4309,21 +4309,6 @@ function WidgetAreasBlockEditorContent({
   });
 }
 
-;// ./packages/icons/build-module/library/close.js
-/**
- * WordPress dependencies
- */
-
-
-const close_close = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"
-  })
-});
-/* harmony default export */ const library_close = (close_close);
-
 ;// ./packages/edit-widgets/build-module/hooks/use-widget-library-insertion-point.js
 /**
  * WordPress dependencies
@@ -4389,9 +4374,6 @@ const useWidgetLibraryInsertionPoint = () => {
 
 
 
-
-
-
 /**
  * Internal dependencies
  */
@@ -4410,34 +4392,26 @@ function InserterSidebar() {
   const closeInserter = (0,external_wp_element_namespaceObject.useCallback)(() => {
     return setIsInserterOpened(false);
   }, [setIsInserterOpened]);
-  const TagName = !isMobileViewport ? external_wp_components_namespaceObject.VisuallyHidden : 'div';
   const [inserterDialogRef, inserterDialogProps] = (0,external_wp_compose_namespaceObject.__experimentalUseDialog)({
     onClose: closeInserter,
     focusOnMount: true
   });
   const libraryRef = (0,external_wp_element_namespaceObject.useRef)();
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     ref: inserterDialogRef,
     ...inserterDialogProps,
     className: "edit-widgets-layout__inserter-panel",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TagName, {
-      className: "edit-widgets-layout__inserter-panel-header",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-        __next40pxDefaultSize: true,
-        icon: library_close,
-        onClick: closeInserter,
-        label: (0,external_wp_i18n_namespaceObject.__)('Close Block Inserter')
-      })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "edit-widgets-layout__inserter-panel-content",
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.__experimentalLibrary, {
         showInserterHelpPanel: true,
         shouldFocusBlock: isMobileViewport,
         rootClientId: rootClientId,
         __experimentalInsertionIndex: insertionIndex,
-        ref: libraryRef
+        ref: libraryRef,
+        onClose: closeInserter
       })
-    })]
+    })
   });
 }
 

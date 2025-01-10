@@ -45,6 +45,7 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 	require __DIR__ . '/compat/wordpress-6.8/block-comments.php';
 	require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-rest-comment-controller-6-8.php';
 	require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-rest-post-types-controller-6-8.php';
+	require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-hierarchical-sort.php';
 	require __DIR__ . '/compat/wordpress-6.8/rest-api.php';
 
 	// Plugin specific code.

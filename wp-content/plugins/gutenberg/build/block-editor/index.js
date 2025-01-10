@@ -7238,26 +7238,39 @@ module.exports = window["React"];
 /***/ 5042:
 /***/ ((module) => {
 
+// This alphabet uses `A-Za-z0-9_-` symbols.
+// The order of characters is optimized for better gzip and brotli compression.
+// References to the same file (works both for gzip and brotli):
+// `'use`, `andom`, and `rict'`
+// References to the brotli default dictionary:
+// `-26T`, `1983`, `40px`, `75px`, `bush`, `jack`, `mind`, `very`, and `wolf`
 let urlAlphabet =
   'useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict'
+
 let customAlphabet = (alphabet, defaultSize = 21) => {
   return (size = defaultSize) => {
     let id = ''
-    let i = size
+    // A compact alternative for `for (var i = 0; i < step; i++)`.
+    let i = size | 0
     while (i--) {
+      // `| 0` is more compact and faster than `Math.floor()`.
       id += alphabet[(Math.random() * alphabet.length) | 0]
     }
     return id
   }
 }
+
 let nanoid = (size = 21) => {
   let id = ''
-  let i = size
+  // A compact alternative for `for (var i = 0; i < step; i++)`.
+  let i = size | 0
   while (i--) {
+    // `| 0` is more compact and faster than `Math.floor()`.
     id += urlAlphabet[(Math.random() * 64) | 0]
   }
   return id
 }
+
 module.exports = { nanoid, customAlphabet }
 
 
@@ -9878,9 +9891,15 @@ function temporarilyEditingFocusModeRevert(state = '', action) {
 function blockEditingModes(state = new Map(), action) {
   switch (action.type) {
     case 'SET_BLOCK_EDITING_MODE':
+      if (state.get(action.clientId) === action.mode) {
+        return state;
+      }
       return new Map(state).set(action.clientId, action.mode);
     case 'UNSET_BLOCK_EDITING_MODE':
       {
+        if (!state.has(action.clientId)) {
+          return state;
+        }
         const newState = new Map(state);
         newState.delete(action.clientId);
         return newState;
@@ -10092,16 +10111,16 @@ function getBlockTreeBlock(state, clientId) {
  *                            The callback receives the current block as its argument.
  */
 function traverseBlockTree(state, clientId, callback) {
-  const parentTree = getBlockTreeBlock(state, clientId);
-  if (!parentTree) {
+  const tree = getBlockTreeBlock(state, clientId);
+  if (!tree) {
     return;
   }
-  callback(parentTree);
-  if (!parentTree?.innerBlocks?.length) {
+  callback(tree);
+  if (!tree?.innerBlocks?.length) {
     return;
   }
-  for (const block of parentTree?.innerBlocks) {
-    traverseBlockTree(state, block.clientId, callback);
+  for (const innerBlock of tree?.innerBlocks) {
+    traverseBlockTree(state, innerBlock.clientId, callback);
   }
 }
 
@@ -10115,8 +10134,11 @@ function traverseBlockTree(state, clientId, callback) {
  * @return {string|undefined} The client ID of the parent block if found, undefined otherwise.
  */
 function findParentInClientIdsList(state, clientId, clientIds) {
+  if (!clientIds.length) {
+    return;
+  }
   let parent = state.blocks.parents.get(clientId);
-  while (parent) {
+  while (parent !== undefined) {
     if (clientIds.includes(parent)) {
       return parent;
     }
@@ -10153,12 +10175,59 @@ function getDerivedBlockEditingModesForTree(state, isNavMode = false, treeClient
   // so the default block editing mode is set to disabled.
   const sectionRootClientId = state.settings?.[sectionRootClientIdKey];
   const sectionClientIds = state.blocks.order.get(sectionRootClientId);
-  const syncedPatternClientIds = Object.keys(state.blocks.controlledInnerBlocks).filter(clientId => state.blocks.byClientId?.get(clientId)?.name === 'core/block');
+  const hasDisabledBlocks = Array.from(state.blockEditingModes).some(([, mode]) => mode === 'disabled');
+  const templatePartClientIds = [];
+  const syncedPatternClientIds = [];
+  Object.keys(state.blocks.controlledInnerBlocks).forEach(clientId => {
+    const block = state.blocks.byClientId?.get(clientId);
+    if (block?.name === 'core/template-part') {
+      templatePartClientIds.push(clientId);
+    }
+    if (block?.name === 'core/block') {
+      syncedPatternClientIds.push(clientId);
+    }
+  });
   traverseBlockTree(state, treeClientId, block => {
     const {
       clientId,
       name: blockName
     } = block;
+
+    // If the block already has an explicit block editing mode set,
+    // don't override it.
+    if (state.blockEditingModes.has(clientId)) {
+      return;
+    }
+
+    // Disabled explicit block editing modes are inherited by children.
+    // It's an expensive calculation, so only do it if there are disabled blocks.
+    if (hasDisabledBlocks) {
+      // Look through parents to find one with an explicit block editing mode.
+      let ancestorBlockEditingMode;
+      let parent = state.blocks.parents.get(clientId);
+      while (parent !== undefined) {
+        // There's a chance we only just calculated this for the parent,
+        // if so we can return that value for a faster lookup.
+        if (derivedBlockEditingModes.has(parent)) {
+          ancestorBlockEditingMode = derivedBlockEditingModes.get(parent);
+        } else if (state.blockEditingModes.has(parent)) {
+          // Checking the explicit block editing mode will be slower,
+          // as the block editing mode is more likely to be set on a
+          // distant ancestor.
+          ancestorBlockEditingMode = state.blockEditingModes.get(parent);
+        }
+        if (ancestorBlockEditingMode) {
+          break;
+        }
+        parent = state.blocks.parents.get(parent);
+      }
+
+      // If the ancestor block editing mode is disabled, it's inherited by the child.
+      if (ancestorBlockEditingMode === 'disabled') {
+        derivedBlockEditingModes.set(clientId, 'disabled');
+        return;
+      }
+    }
     if (isZoomedOut || isNavMode) {
       // If the root block is the section root set its editing mode to contentOnly.
       if (clientId === sectionRootClientId) {
@@ -10178,10 +10247,29 @@ function getDerivedBlockEditingModesForTree(state, isNavMode = false, treeClient
 
       // If zoomed out, all blocks that aren't sections or the section root are
       // disabled.
-      // If the tree root is not in a section, set its editing mode to disabled.
-      if (isZoomedOut || !findParentInClientIdsList(state, clientId, sectionClientIds)) {
+      if (isZoomedOut) {
         derivedBlockEditingModes.set(clientId, 'disabled');
         return;
+      }
+      const isInSection = !!findParentInClientIdsList(state, clientId, sectionClientIds);
+      if (!isInSection) {
+        if (clientId === '') {
+          derivedBlockEditingModes.set(clientId, 'disabled');
+          return;
+        }
+
+        // Allow selection of template parts outside of sections.
+        if (blockName === 'core/template-part') {
+          derivedBlockEditingModes.set(clientId, 'contentOnly');
+          return;
+        }
+        const isInTemplatePart = !!findParentInClientIdsList(state, clientId, templatePartClientIds);
+        // Allow contentOnly blocks in template parts outside of sections
+        // to be editable. Only disable blocks that don't fit this criteria.
+        if (!isInTemplatePart && !isContentBlock(blockName)) {
+          derivedBlockEditingModes.set(clientId, 'disabled');
+          return;
+        }
       }
 
       // Handle synced pattern content so the inner blocks of a synced pattern are
@@ -10376,22 +10464,28 @@ function withDerivedBlockEditingModes(reducer) {
           }
           break;
         }
+      case 'SET_BLOCK_EDITING_MODE':
+      case 'UNSET_BLOCK_EDITING_MODE':
       case 'SET_HAS_CONTROLLED_INNER_BLOCKS':
         {
-          const updatedBlock = nextState.blocks.tree.get(action.clientId);
-          // The block might have been removed.
+          const updatedBlock = getBlockTreeBlock(nextState, action.clientId);
+
+          // The block might have been removed in which case it'll be
+          // handled by the `REMOVE_BLOCKS` action.
           if (!updatedBlock) {
             break;
           }
           const nextDerivedBlockEditingModes = getDerivedBlockEditingModesUpdates({
             prevState: state,
             nextState,
+            removedClientIds: [action.clientId],
             addedBlocks: [updatedBlock],
             isNavMode: false
           });
           const nextDerivedNavModeBlockEditingModes = getDerivedBlockEditingModesUpdates({
             prevState: state,
             nextState,
+            removedClientIds: [action.clientId],
             addedBlocks: [updatedBlock],
             isNavMode: true
           });
@@ -11240,9 +11334,19 @@ const getParentSectionBlock = (state, clientId) => {
  * @return {boolean} Whether the block is a content locking parent.
  */
 function isSectionBlock(state, clientId) {
+  const blockName = getBlockName(state, clientId);
+  if (blockName === 'core/block' || getTemplateLock(state, clientId) === 'contentOnly') {
+    return true;
+  }
+
+  // Template parts become sections in navigation mode.
+  const _isNavigationMode = isNavigationMode(state);
+  if (_isNavigationMode && blockName === 'core/template-part') {
+    return true;
+  }
   const sectionRootClientId = getSectionRootClientId(state);
   const sectionClientIds = getBlockOrder(state, sectionRootClientId);
-  return getBlockName(state, clientId) === 'core/block' || getTemplateLock(state, clientId) === 'contentOnly' || isNavigationMode(state) && sectionClientIds.includes(clientId);
+  return _isNavigationMode && sectionClientIds.includes(clientId);
 }
 
 /**
@@ -11626,7 +11730,7 @@ function isBlockValid(state, clientId) {
  * @param {Object} state    Editor state.
  * @param {string} clientId Block client ID.
  *
- * @return {Object?} Block attributes.
+ * @return {?Object} Block attributes.
  */
 function getBlockAttributes(state, clientId) {
   const block = state.blocks.byClientId.get(clientId);
@@ -13240,7 +13344,7 @@ const getItemFromVariation = (state, item) => variation => {
  * Returns the calculated frecency.
  *
  * 'frecency' is a heuristic (https://en.wikipedia.org/wiki/Frecency)
- * that combines block usage frequenty and recency.
+ * that combines block usage frequency and recency.
  *
  * @param {number} time  When the last insert occurred as a UNIX epoch
  * @param {number} count The number of inserts that have occurred.
@@ -13324,7 +13428,7 @@ const buildBlockTypeItem = (state, {
  * inserter and handle its selection.
  *
  * The 'frecency' property is a heuristic (https://en.wikipedia.org/wiki/Frecency)
- * that combines block usage frequenty and recency.
+ * that combines block usage frequency and recency.
  *
  * Items are returned ordered descendingly by their 'utility' and 'frecency'.
  *
@@ -13437,7 +13541,7 @@ const getInserterItems = (0,external_wp_data_namespaceObject.createRegistrySelec
  * transform list and handle its selection.
  *
  * The 'frecency' property is a heuristic (https://en.wikipedia.org/wiki/Frecency)
- * that combines block usage frequenty and recency.
+ * that combines block usage frequency and recency.
  *
  * Items are returned ordered descendingly by their 'frecency'.
  *
@@ -13528,7 +13632,7 @@ const __experimentalGetAllowedBlocks = (0,external_wp_data_namespaceObject.creat
  * @typedef {Object} WPDirectInsertBlock
  * @property {string}         name             The type of block.
  * @property {?Object}        attributes       Attributes to pass to the newly created block.
- * @property {?Array<string>} attributesToCopy Attributes to be copied from adjecent blocks when inserted.
+ * @property {?Array<string>} attributesToCopy Attributes to be copied from adjacent blocks when inserted.
  */
 function getDirectInsertBlock(state, rootClientId = null) {
   var _state$blockListSetti;
@@ -14065,9 +14169,7 @@ const getBlockEditingMode = (0,external_wp_data_namespaceObject.createRegistrySe
     const isContent = hasContentRoleAttribute(name);
     return isContent ? 'contentOnly' : 'disabled';
   }
-  // Otherwise, check if there's an ancestor that is contentOnly
-  const parentMode = getBlockEditingMode(state, rootClientId);
-  return parentMode === 'contentOnly' ? 'default' : parentMode;
+  return 'default';
 });
 
 /**
@@ -14198,7 +14300,7 @@ const castArray = maybeArray => Array.isArray(maybeArray) ? maybeArray : [maybeA
  *
  * @see https://github.com/WordPress/gutenberg/pull/46131
  */
-const privateSettings = ['inserterMediaCategories', 'blockInspectorAnimation'];
+const privateSettings = ['inserterMediaCategories', 'blockInspectorAnimation', 'mediaSideload'];
 
 /**
  * Action that updates the block editor settings and
@@ -17186,7 +17288,7 @@ function getFontStylesAndWeights(fontFamilyFaces) {
  * @param {Preset}                     preset
  * @param {Object}                     settings
  * @param {boolean|TypographySettings} settings.typography.fluid  Whether fluid typography is enabled, and, optionally, fluid font size options.
- * @param {Object?}                    settings.typography.layout Layout options.
+ * @param {?Object}                    settings.typography.layout Layout options.
  *
  * @return {string|*} A font-size value or the value of preset.size.
  */
@@ -18268,7 +18370,7 @@ function transformStyles(activeSupports, migrationPaths, result, source, index, 
  */
 function shouldSkipSerialization(blockNameOrType, featureSet, feature) {
   const support = (0,external_wp_blocks_namespaceObject.getBlockSupport)(blockNameOrType, featureSet);
-  const skipSerialization = support?.skipSerialization;
+  const skipSerialization = support?.__experimentalSkipSerialization;
   if (Array.isArray(skipSerialization)) {
     return skipSerialization.includes(feature);
   }
@@ -19641,7 +19743,7 @@ function getInitialView(values = {}, sides) {
  * The string check is for backwards compatibility before Gutenberg supported
  * split gap values (row and column) and the value was a string n + unit.
  *
- * @param {string? | Object?} blockGapValue A block gap string or axial object value, e.g., '10px' or { top: '10px', left: '10px'}.
+ * @param {?string | ?Object} blockGapValue A block gap string or axial object value, e.g., '10px' or { top: '10px', left: '10px'}.
  * @return {Object|null}                    A value to pass to the BoxControl component.
  */
 function getGapBoxControlValueFromStyle(blockGapValue) {
@@ -19658,7 +19760,7 @@ function getGapBoxControlValueFromStyle(blockGapValue) {
 /**
  * Returns a CSS value for the `gap` property from a given blockGap style.
  *
- * @param {string? | Object?} blockGapValue A block gap string or axial object value, e.g., '10px' or { top: '10px', left: '10px'}.
+ * @param {?string | ?Object} blockGapValue A block gap string or axial object value, e.g., '10px' or { top: '10px', left: '10px'}.
  * @param {?string}           defaultValue  A default gap value.
  * @return {string|null}                    The concatenated gap value (row and column).
  */
@@ -23498,10 +23600,12 @@ const __experimentalLinkControlSearchInput = props => {
 
 
 const info = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M5.5 12a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0ZM12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm.75 4v1.5h-1.5V8h1.5Zm0 8v-5h-1.5v5h1.5Z"
   })
 });
 /* harmony default export */ const library_info = (info);
@@ -24403,14 +24507,8 @@ const DeprecatedExperimentalLinkControl = props => {
 ;// ./packages/block-editor/build-module/components/media-replace-flow/index.js
 /* wp:polyfill */
 /**
- * External dependencies
- */
-
-
-/**
  * WordPress dependencies
  */
-
 
 
 
@@ -24451,13 +24549,12 @@ const MediaReplaceFlow = ({
   multiple = false,
   addToGallery,
   handleUpload = true,
-  popoverProps
+  popoverProps,
+  renderToggle
 }) => {
-  const mediaUpload = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    return select(store).getSettings().mediaUpload;
-  }, []);
-  const canUpload = !!mediaUpload;
-  const editMediaButtonRef = (0,external_wp_element_namespaceObject.useRef)();
+  const {
+    getSettings
+  } = (0,external_wp_data_namespaceObject.useSelect)(store);
   const errorNoticeID = `block-editor/media-replace-flow/error-notice/${++uniqueId}`;
   const onUploadError = message => {
     const safeMessage = (0,external_wp_dom_namespaceObject.__unstableStripHTML)(message);
@@ -24496,7 +24593,7 @@ const MediaReplaceFlow = ({
       return onSelect(files);
     }
     onFilesUpload(files);
-    mediaUpload({
+    getSettings().mediaUpload({
       allowedTypes,
       filesList: files,
       onFileChange: ([media]) => {
@@ -24524,14 +24621,24 @@ const MediaReplaceFlow = ({
     renderToggle: ({
       isOpen,
       onToggle
-    }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
-      ref: editMediaButtonRef,
-      "aria-expanded": isOpen,
-      "aria-haspopup": "true",
-      onClick: onToggle,
-      onKeyDown: openOnArrowDown,
-      children: name
-    }),
+    }) => {
+      if (renderToggle) {
+        return renderToggle({
+          'aria-expanded': isOpen,
+          'aria-haspopup': 'true',
+          onClick: onToggle,
+          onKeyDown: openOnArrowDown,
+          children: name
+        });
+      }
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
+        "aria-expanded": isOpen,
+        "aria-haspopup": "true",
+        onClick: onToggle,
+        onKeyDown: openOnArrowDown,
+        children: name
+      });
+    },
     renderContent: ({
       onClose
     }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
@@ -24566,7 +24673,7 @@ const MediaReplaceFlow = ({
                 onClick: () => {
                   openFileDialog();
                 },
-                children: (0,external_wp_i18n_namespaceObject.__)('Upload')
+                children: (0,external_wp_i18n_namespaceObject._x)('Upload', 'verb')
               });
             }
           })]
@@ -24588,9 +24695,7 @@ const MediaReplaceFlow = ({
       /*#__PURE__*/
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
       (0,external_ReactJSXRuntime_namespaceObject.jsxs)("form", {
-        className: dist_clsx('block-editor-media-flow__url-input', {
-          'has-siblings': canUpload || onToggleFeaturedImage
-        }),
+        className: "block-editor-media-flow__url-input",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
           className: "block-editor-media-replace-flow__image-url-label",
           children: (0,external_wp_i18n_namespaceObject.__)('Current media URL:')
@@ -24604,7 +24709,6 @@ const MediaReplaceFlow = ({
             url
           }) => {
             onSelectURL(url);
-            editMediaButtonRef.current.focus();
           }
         })]
       })]
@@ -24933,6 +25037,10 @@ function BackgroundImageControls({
         label: imgLabel
       }),
       variant: "secondary",
+      renderToggle: props => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        ...props,
+        __next40pxDefaultSize: true
+      }),
       onError: onUploadError,
       onReset: () => {
         closeAndFocus();
@@ -25451,6 +25559,7 @@ function background_BackgroundImagePanel({
       backgroundSize: settings?.background?.backgroundSize && hasBackgroundSupport(name, 'backgroundSize')
     }
   };
+  const defaultControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [BACKGROUND_SUPPORT_KEY, 'defaultControls']);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(background_panel_BackgroundImagePanel, {
     inheritedValue: inheritedValue,
     as: BackgroundInspectorControl,
@@ -25458,6 +25567,7 @@ function background_BackgroundImagePanel({
     defaultValues: BACKGROUND_BLOCK_DEFAULT_VALUES,
     settings: updatedSettings,
     onChange: onChange,
+    defaultControls: defaultControls,
     value: style
   });
 }
@@ -26918,7 +27028,7 @@ function BorderPanel({
 
 
 
-const BORDER_SUPPORT_KEY = 'border';
+const BORDER_SUPPORT_KEY = '__experimentalBorder';
 const SHADOW_SUPPORT_KEY = 'shadow';
 const getColorByProperty = (colors, property, value) => {
   let matchedColor;
@@ -27051,8 +27161,8 @@ function border_BorderPanel({
     return null;
   }
   const defaultControls = {
-    ...(0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [BORDER_SUPPORT_KEY, 'defaultControls']),
-    ...(0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [SHADOW_SUPPORT_KEY, 'defaultControls'])
+    ...(0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [BORDER_SUPPORT_KEY, '__experimentalDefaultControls']),
+    ...(0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [SHADOW_SUPPORT_KEY, '__experimentalDefaultControls'])
   };
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BorderPanel, {
     as: BordersInspectorControl,
@@ -27727,6 +27837,9 @@ function ColorPanelDropdown({
             icon: library_reset,
             onClick: () => {
               resetValue();
+              if (isOpen) {
+                onToggle();
+              }
               // Return focus to parent button
               colorGradientDropdownButtonRef.current?.focus();
             }
@@ -28557,7 +28670,7 @@ function ColorEdit({
   if (!isEnabled) {
     return null;
   }
-  const defaultControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [COLOR_SUPPORT_KEY, 'defaultControls']);
+  const defaultControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [COLOR_SUPPORT_KEY, '__experimentalDefaultControls']);
   const enableContrastChecking = external_wp_element_namespaceObject.Platform.OS === 'web' && !value?.color?.gradient && (settings?.color?.text || settings?.color?.link) &&
   // Contrast checking is enabled by default.
   // Deactivating it requires `enableContrastChecker` to have
@@ -28666,6 +28779,7 @@ function FontFamilyControl({
   className,
   ...props
 }) {
+  var _options$find;
   const [blockLevelFontFamilies] = use_settings_useSettings('typography.fontFamilies');
   if (!fontFamilies) {
     fontFamilies = blockLevelFontFamilies;
@@ -28693,11 +28807,19 @@ function FontFamilyControl({
       hint: 'Set the `__nextHasNoMarginBottom` prop to true to start opting into the new styles, which will become the default in a future version'
     });
   }
+  if (!__next40pxDefaultSize && (props.size === undefined || props.size === 'default')) {
+    external_wp_deprecated_default()(`36px default size for wp.blockEditor.__experimentalFontFamilyControl`, {
+      since: '6.8',
+      version: '7.1',
+      hint: 'Set the `__next40pxDefaultSize` prop to true to start opting into the new default size, which will become the default in a future version.'
+    });
+  }
+  const selectedValue = (_options$find = options.find(option => option.key === value)) !== null && _options$find !== void 0 ? _options$find : '';
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CustomSelectControl, {
     __next40pxDefaultSize: __next40pxDefaultSize,
     __shouldNotWarnDeprecated36pxSize: true,
     label: (0,external_wp_i18n_namespaceObject.__)('Font'),
-    value: value,
+    value: selectedValue,
     onChange: ({
       selectedItem
     }) => onChange(selectedItem.key),
@@ -28714,6 +28836,7 @@ function FontFamilyControl({
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -28860,6 +28983,13 @@ function FontAppearanceControl(props) {
     // translators: %s: Currently selected font appearance.
     (0,external_wp_i18n_namespaceObject.__)('Currently selected font appearance: %s'), currentSelection.name);
   };
+  if (!__next40pxDefaultSize && (otherProps.size === undefined || otherProps.size === 'default')) {
+    external_wp_deprecated_default()(`36px default size for wp.blockEditor.__experimentalFontAppearanceControl`, {
+      since: '6.8',
+      version: '7.1',
+      hint: 'Set the `__next40pxDefaultSize` prop to true to start opting into the new default size, which will become the default in a future version.'
+    });
+  }
   return hasStylesOrWeights && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CustomSelectControl, {
     ...otherProps,
     className: "components-font-appearance-control",
@@ -28910,6 +29040,7 @@ function isLineHeightDefined(lineHeight) {
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -28989,6 +29120,13 @@ const line_height_control_LineHeightControl = ({
     }
     onChange(`${nextValue}`);
   };
+  if (!__next40pxDefaultSize && (otherProps.size === undefined || otherProps.size === 'default')) {
+    external_wp_deprecated_default()(`36px default size for wp.blockEditor.LineHeightControl`, {
+      since: '6.8',
+      version: '7.1',
+      hint: 'Set the `__next40pxDefaultSize` prop to true to start opting into the new default size, which will become the default in a future version.'
+    });
+  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     className: "block-editor-line-height-control",
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
@@ -30012,7 +30150,7 @@ var external_wp_tokenList_default = /*#__PURE__*/__webpack_require__.n(external_
 
 
 
-const FONT_FAMILY_SUPPORT_KEY = 'typography.fontFamily';
+const FONT_FAMILY_SUPPORT_KEY = 'typography.__experimentalFontFamily';
 const {
   kebabCase: font_family_kebabCase
 } = unlock(external_wp_components_namespaceObject.privateApis);
@@ -30629,12 +30767,12 @@ function addAssignedTextAlign(props, blockType, attributes) {
 function omit(object, keys) {
   return Object.fromEntries(Object.entries(object).filter(([key]) => !keys.includes(key)));
 }
-const LETTER_SPACING_SUPPORT_KEY = 'typography.letterSpacing';
-const TEXT_TRANSFORM_SUPPORT_KEY = 'typography.textTransform';
-const TEXT_DECORATION_SUPPORT_KEY = 'typography.textDecoration';
+const LETTER_SPACING_SUPPORT_KEY = 'typography.__experimentalLetterSpacing';
+const TEXT_TRANSFORM_SUPPORT_KEY = 'typography.__experimentalTextTransform';
+const TEXT_DECORATION_SUPPORT_KEY = 'typography.__experimentalTextDecoration';
 const TEXT_COLUMNS_SUPPORT_KEY = 'typography.textColumns';
-const FONT_STYLE_SUPPORT_KEY = 'typography.fontStyle';
-const FONT_WEIGHT_SUPPORT_KEY = 'typography.fontWeight';
+const FONT_STYLE_SUPPORT_KEY = 'typography.__experimentalFontStyle';
+const FONT_WEIGHT_SUPPORT_KEY = 'typography.__experimentalFontWeight';
 const WRITING_MODE_SUPPORT_KEY = 'typography.__experimentalWritingMode';
 const TYPOGRAPHY_SUPPORT_KEY = 'typography';
 const TYPOGRAPHY_SUPPORT_KEYS = [LINE_HEIGHT_SUPPORT_KEY, FONT_SIZE_SUPPORT_KEY, FONT_STYLE_SUPPORT_KEY, FONT_WEIGHT_SUPPORT_KEY, FONT_FAMILY_SUPPORT_KEY, TEXT_ALIGN_SUPPORT_KEY, TEXT_COLUMNS_SUPPORT_KEY, TEXT_DECORATION_SUPPORT_KEY, WRITING_MODE_SUPPORT_KEY, TEXT_TRANSFORM_SUPPORT_KEY, LETTER_SPACING_SUPPORT_KEY];
@@ -30719,7 +30857,7 @@ function typography_TypographyPanel({
   if (!isEnabled) {
     return null;
   }
-  const defaultControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [TYPOGRAPHY_SUPPORT_KEY, 'defaultControls']);
+  const defaultControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [TYPOGRAPHY_SUPPORT_KEY, '__experimentalDefaultControls']);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TypographyPanel, {
     as: TypographyInspectorControl,
     panelId: clientId,
@@ -31667,6 +31805,7 @@ function useGetNumberOfBlocksBeforeCell(gridClientId, numColumns) {
 
 
 
+
 function helpText(selfStretch, parentLayout) {
   const {
     orientation = 'horizontal'
@@ -31743,6 +31882,10 @@ function FlexControls({
   } = parentLayout !== null && parentLayout !== void 0 ? parentLayout : {};
   const hasFlexValue = () => !!selfStretch;
   const flexResetLabel = orientation === 'horizontal' ? (0,external_wp_i18n_namespaceObject.__)('Width') : (0,external_wp_i18n_namespaceObject.__)('Height');
+  const [availableUnits] = use_settings_useSettings('spacing.units');
+  const units = (0,external_wp_components_namespaceObject.__experimentalUseCustomUnits)({
+    availableUnits: availableUnits || ['%', 'px', 'em', 'rem', 'vh', 'vw']
+  });
   const resetFlex = () => {
     onChange({
       selfStretch: undefined,
@@ -31791,6 +31934,7 @@ function FlexControls({
       }, "fixed")]
     }), selfStretch === 'fixed' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalUnitControl, {
       size: "__unstable-large",
+      units: units,
       onChange: value => {
         onChange({
           selfStretch,
@@ -33158,8 +33302,8 @@ function dimensions_DimensionsPanel({
   if (!isEnabled) {
     return null;
   }
-  const defaultDimensionsControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [DIMENSIONS_SUPPORT_KEY, 'defaultControls']);
-  const defaultSpacingControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [SPACING_SUPPORT_KEY, 'defaultControls']);
+  const defaultDimensionsControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [DIMENSIONS_SUPPORT_KEY, '__experimentalDefaultControls']);
+  const defaultSpacingControls = (0,external_wp_blocks_namespaceObject.getBlockSupport)(name, [SPACING_SUPPORT_KEY, '__experimentalDefaultControls']);
   const defaultControls = {
     ...defaultDimensionsControls,
     ...defaultSpacingControls
@@ -33332,12 +33476,12 @@ function style_addAttribute(settings) {
  * @type {Record<string, string[]>}
  */
 const skipSerializationPathsEdit = {
-  [`${BORDER_SUPPORT_KEY}.skipSerialization`]: ['border'],
-  [`${COLOR_SUPPORT_KEY}.skipSerialization`]: [COLOR_SUPPORT_KEY],
-  [`${TYPOGRAPHY_SUPPORT_KEY}.skipSerialization`]: [TYPOGRAPHY_SUPPORT_KEY],
-  [`${DIMENSIONS_SUPPORT_KEY}.skipSerialization`]: [DIMENSIONS_SUPPORT_KEY],
-  [`${SPACING_SUPPORT_KEY}.skipSerialization`]: [SPACING_SUPPORT_KEY],
-  [`${SHADOW_SUPPORT_KEY}.skipSerialization`]: [SHADOW_SUPPORT_KEY]
+  [`${BORDER_SUPPORT_KEY}.__experimentalSkipSerialization`]: ['border'],
+  [`${COLOR_SUPPORT_KEY}.__experimentalSkipSerialization`]: [COLOR_SUPPORT_KEY],
+  [`${TYPOGRAPHY_SUPPORT_KEY}.__experimentalSkipSerialization`]: [TYPOGRAPHY_SUPPORT_KEY],
+  [`${DIMENSIONS_SUPPORT_KEY}.__experimentalSkipSerialization`]: [DIMENSIONS_SUPPORT_KEY],
+  [`${SPACING_SUPPORT_KEY}.__experimentalSkipSerialization`]: [SPACING_SUPPORT_KEY],
+  [`${SHADOW_SUPPORT_KEY}.__experimentalSkipSerialization`]: [SHADOW_SUPPORT_KEY]
 };
 
 /**
@@ -33474,7 +33618,7 @@ function omitStyle(style, paths, preserveReference = false) {
   }
   let newStyle = style;
   if (!preserveReference) {
-    newStyle = structuredClone(style);
+    newStyle = JSON.parse(JSON.stringify(style));
   }
   if (!Array.isArray(paths)) {
     paths = [paths];
@@ -34952,7 +35096,7 @@ const ELEMENT_CLASS_NAMES = {
 // List of block support features that can have their related styles
 // generated under their own feature level selector rather than the block's.
 const BLOCK_SUPPORT_FEATURE_LEVEL_SELECTORS = {
-  border: 'border',
+  __experimentalBorder: 'border',
   color: 'color',
   spacing: 'spacing',
   typography: 'typography'
@@ -35365,7 +35509,7 @@ function pickStyleKeys(treeToPickFrom) {
   const entries = Object.entries(treeToPickFrom);
   const pickedEntries = entries.filter(([key]) => STYLE_KEYS.includes(key));
   // clone the style objects so that `getFeatureDeclarations` can remove consumed keys from it
-  const clonedEntries = pickedEntries.map(([key, style]) => [key, structuredClone(style)]);
+  const clonedEntries = pickedEntries.map(([key, style]) => [key, JSON.parse(JSON.stringify(style))]);
   return Object.fromEntries(clonedEntries);
 }
 const getNodesWithStyles = (tree, blockSelectors) => {
@@ -36794,6 +36938,14 @@ function getGridItemRect(gridItemElement) {
 function getGridInfo(gridElement) {
   const gridTemplateColumns = utils_getComputedCSS(gridElement, 'grid-template-columns');
   const gridTemplateRows = utils_getComputedCSS(gridElement, 'grid-template-rows');
+  const borderTopWidth = utils_getComputedCSS(gridElement, 'border-top-width');
+  const borderRightWidth = utils_getComputedCSS(gridElement, 'border-right-width');
+  const borderBottomWidth = utils_getComputedCSS(gridElement, 'border-bottom-width');
+  const borderLeftWidth = utils_getComputedCSS(gridElement, 'border-left-width');
+  const paddingTop = utils_getComputedCSS(gridElement, 'padding-top');
+  const paddingRight = utils_getComputedCSS(gridElement, 'padding-right');
+  const paddingBottom = utils_getComputedCSS(gridElement, 'padding-bottom');
+  const paddingLeft = utils_getComputedCSS(gridElement, 'padding-left');
   const numColumns = gridTemplateColumns.split(' ').length;
   const numRows = gridTemplateRows.split(' ').length;
   const numItems = numColumns * numRows;
@@ -36806,7 +36958,10 @@ function getGridInfo(gridElement) {
       gridTemplateColumns,
       gridTemplateRows,
       gap: utils_getComputedCSS(gridElement, 'gap'),
-      padding: utils_getComputedCSS(gridElement, 'padding')
+      paddingTop: `calc(${paddingTop} + ${borderTopWidth})`,
+      paddingRight: `calc(${paddingRight} + ${borderRightWidth})`,
+      paddingBottom: `calc(${paddingBottom} + ${borderBottomWidth})`,
+      paddingLeft: `calc(${paddingLeft} + ${borderLeftWidth})`
     }
   };
 }
@@ -36949,6 +37104,40 @@ function BlockIcon({
 
 
 
+
+const {
+  Badge
+} = unlock(external_wp_components_namespaceObject.privateApis);
+
+/**
+ * A card component that displays block information including title, icon, and description.
+ * Can be used to show block metadata and navigation controls for parent blocks.
+ *
+ * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/block-card/README.md
+ *
+ * @example
+ * ```jsx
+ * function Example() {
+ *   return (
+ *     <BlockCard
+ *       title="My Block"
+ *       icon="smiley"
+ *       description="A simple block example"
+ *       name="Custom Block"
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * @param {Object}        props             Component props.
+ * @param {string}        props.title       The title of the block.
+ * @param {string|Object} props.icon        The icon of the block. This can be any of [WordPress' Dashicons](https://developer.wordpress.org/resource/dashicons/), or a custom `svg` element.
+ * @param {string}        props.description The description of the block.
+ * @param {Object}        [props.blockType] Deprecated: Object containing block type data.
+ * @param {string}        [props.className] Additional classes to apply to the card.
+ * @param {string}        [props.name]      Custom block name to display before the title.
+ * @return {Element}                        Block card component.
+ */
 function BlockCard({
   title,
   icon,
@@ -37005,11 +37194,14 @@ function BlockCard({
       showColors: true
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
       spacing: 1,
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("h2", {
         className: "block-editor-block-card__title",
-        children: name?.length ? (0,external_wp_i18n_namespaceObject.sprintf)(
-        // translators:  1: Custom block name. 2: Block title.
-        (0,external_wp_i18n_namespaceObject._x)('%1$s (%2$s)', 'block label'), name, title) : title
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "block-editor-block-card__name",
+          children: !!name?.length ? name : title
+        }), !!name?.length && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Badge, {
+          children: title
+        })]
       }), description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalText, {
         className: "block-editor-block-card__description",
         children: description
@@ -37019,6 +37211,8 @@ function BlockCard({
 }
 /* harmony default export */ const block_card = (BlockCard);
 
+;// external ["wp","uploadMedia"]
+const external_wp_uploadMedia_namespaceObject = window["wp"]["uploadMedia"];
 ;// ./packages/block-editor/build-module/components/provider/with-registry-provider.js
 /**
  * WordPress dependencies
@@ -37368,8 +37562,8 @@ function KeyboardShortcutsRegister() {
       category: 'block',
       description: (0,external_wp_i18n_namespaceObject.__)('Remove the selected block(s).'),
       keyCombination: {
-        modifier: 'access',
-        character: 'z'
+        modifier: 'shift',
+        character: 'backspace'
       }
     });
     registerShortcut({
@@ -37480,12 +37674,37 @@ function KeyboardShortcutsRegister() {
 KeyboardShortcuts.Register = KeyboardShortcutsRegister;
 /* harmony default export */ const keyboard_shortcuts = (KeyboardShortcuts);
 
+;// ./packages/block-editor/build-module/components/provider/use-media-upload-settings.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * React hook used to compute the media upload settings to use in the post editor.
+ *
+ * @param {Object} settings Media upload settings prop.
+ *
+ * @return {Object} Media upload settings.
+ */
+function useMediaUploadSettings(settings = {}) {
+  return (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    mediaUpload: settings.mediaUpload,
+    mediaSideload: settings.mediaSideload,
+    maxUploadFileSize: settings.maxUploadFileSize,
+    allowedMimeTypes: settings.allowedMimeTypes
+  }), [settings]);
+}
+/* harmony default export */ const use_media_upload_settings = (useMediaUploadSettings);
+
 ;// ./packages/block-editor/build-module/components/provider/index.js
 /**
  * WordPress dependencies
  */
 
 
+
+//eslint-disable-next-line import/no-extraneous-dependencies -- Experimental package, not published.
 
 
 /**
@@ -37498,14 +37717,61 @@ KeyboardShortcuts.Register = KeyboardShortcutsRegister;
 
 
 
+
 /** @typedef {import('@wordpress/data').WPDataRegistry} WPDataRegistry */
 
+const provider_noop = () => {};
+
+/**
+ * Upload a media file when the file upload button is activated
+ * or when adding a file to the editor via drag & drop.
+ *
+ * @param {WPDataRegistry} registry
+ * @param {Object}         $3                Parameters object passed to the function.
+ * @param {Array}          $3.allowedTypes   Array with the types of media that can be uploaded, if unset all types are allowed.
+ * @param {Object}         $3.additionalData Additional data to include in the request.
+ * @param {Array<File>}    $3.filesList      List of files.
+ * @param {Function}       $3.onError        Function called when an error happens.
+ * @param {Function}       $3.onFileChange   Function called each time a file or a temporary representation of the file is available.
+ * @param {Function}       $3.onSuccess      Function called once a file has completely finished uploading, including thumbnails.
+ * @param {Function}       $3.onBatchSuccess Function called once all files in a group have completely finished uploading, including thumbnails.
+ */
+function mediaUpload(registry, {
+  allowedTypes,
+  additionalData = {},
+  filesList,
+  onError = provider_noop,
+  onFileChange,
+  onSuccess,
+  onBatchSuccess
+}) {
+  void registry.dispatch(external_wp_uploadMedia_namespaceObject.store).addItems({
+    files: filesList,
+    onChange: onFileChange,
+    onSuccess,
+    onBatchSuccess,
+    onError: ({
+      message
+    }) => onError(message),
+    additionalData,
+    allowedTypes
+  });
+}
 const ExperimentalBlockEditorProvider = with_registry_provider(props => {
   const {
-    children,
-    settings,
+    settings: _settings,
+    registry,
     stripExperimentalSettings = false
   } = props;
+  const mediaUploadSettings = use_media_upload_settings(_settings);
+  let settings = _settings;
+  if (window.__experimentalMediaProcessing && _settings.mediaUpload) {
+    // Create a new variable so that the original props.settings.mediaUpload is not modified.
+    settings = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+      ..._settings,
+      mediaUpload: mediaUpload.bind(null, registry)
+    }), [_settings, registry]);
+  }
   const {
     __experimentalUpdateSettings
   } = unlock((0,external_wp_data_namespaceObject.useDispatch)(store));
@@ -37521,12 +37787,20 @@ const ExperimentalBlockEditorProvider = with_registry_provider(props => {
 
   // Syncs the entity provider with changes in the block-editor store.
   useBlockSync(props);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.SlotFillProvider, {
+  const children = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.SlotFillProvider, {
     passthrough: true,
     children: [!settings?.isPreviewMode && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(keyboard_shortcuts.Register, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockRefsProvider, {
-      children: children
+      children: props.children
     })]
   });
+  if (window.__experimentalMediaProcessing) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_uploadMedia_namespaceObject.MediaUploadProvider, {
+      settings: mediaUploadSettings,
+      useSubRegistry: false,
+      children: children
+    });
+  }
+  return children;
 });
 const BlockEditorProvider = props => {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ExperimentalBlockEditorProvider, {
@@ -37580,6 +37854,261 @@ function BlockContextProvider({
 }
 /* harmony default export */ const block_context = (block_context_Context);
 
+;// ./packages/block-editor/build-module/utils/block-bindings.js
+/* wp:polyfill */
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const DEFAULT_ATTRIBUTE = '__default';
+const PATTERN_OVERRIDES_SOURCE = 'core/pattern-overrides';
+const BLOCK_BINDINGS_ALLOWED_BLOCKS = {
+  'core/paragraph': ['content'],
+  'core/heading': ['content'],
+  'core/image': ['id', 'url', 'title', 'alt'],
+  'core/button': ['url', 'text', 'linkTarget', 'rel']
+};
+
+/**
+ * Checks if the given object is empty.
+ *
+ * @param {?Object} object The object to check.
+ *
+ * @return {boolean} Whether the object is empty.
+ */
+function isObjectEmpty(object) {
+  return !object || Object.keys(object).length === 0;
+}
+
+/**
+ * Based on the given block name, checks if it is possible to bind the block.
+ *
+ * @param {string} blockName The name of the block.
+ *
+ * @return {boolean} Whether it is possible to bind the block to sources.
+ */
+function canBindBlock(blockName) {
+  return blockName in BLOCK_BINDINGS_ALLOWED_BLOCKS;
+}
+
+/**
+ * Based on the given block name and attribute name, checks if it is possible to bind the block attribute.
+ *
+ * @param {string} blockName     The name of the block.
+ * @param {string} attributeName The name of attribute.
+ *
+ * @return {boolean} Whether it is possible to bind the block attribute.
+ */
+function canBindAttribute(blockName, attributeName) {
+  return canBindBlock(blockName) && BLOCK_BINDINGS_ALLOWED_BLOCKS[blockName].includes(attributeName);
+}
+
+/**
+ * Gets the bindable attributes for a given block.
+ *
+ * @param {string} blockName The name of the block.
+ *
+ * @return {string[]} The bindable attributes for the block.
+ */
+function getBindableAttributes(blockName) {
+  return BLOCK_BINDINGS_ALLOWED_BLOCKS[blockName];
+}
+
+/**
+ * Checks if the block has the `__default` binding for pattern overrides.
+ *
+ * @param {?Record<string, object>} bindings A block's bindings from the metadata attribute.
+ *
+ * @return {boolean} Whether the block has the `__default` binding for pattern overrides.
+ */
+function hasPatternOverridesDefaultBinding(bindings) {
+  return bindings?.[DEFAULT_ATTRIBUTE]?.source === PATTERN_OVERRIDES_SOURCE;
+}
+
+/**
+ * Returns the bindings with the `__default` binding for pattern overrides
+ * replaced with the full-set of supported attributes. e.g.:
+ *
+ * - bindings passed in: `{ __default: { source: 'core/pattern-overrides' } }`
+ * - bindings returned: `{ content: { source: 'core/pattern-overrides' } }`
+ *
+ * @param {string}                  blockName The block name (e.g. 'core/paragraph').
+ * @param {?Record<string, object>} bindings  A block's bindings from the metadata attribute.
+ *
+ * @return {Object} The bindings with default replaced for pattern overrides.
+ */
+function replacePatternOverridesDefaultBinding(blockName, bindings) {
+  // The `__default` binding currently only works for pattern overrides.
+  if (hasPatternOverridesDefaultBinding(bindings)) {
+    const supportedAttributes = BLOCK_BINDINGS_ALLOWED_BLOCKS[blockName];
+    const bindingsWithDefaults = {};
+    for (const attributeName of supportedAttributes) {
+      // If the block has mixed binding sources, retain any non pattern override bindings.
+      const bindingSource = bindings[attributeName] ? bindings[attributeName] : {
+        source: PATTERN_OVERRIDES_SOURCE
+      };
+      bindingsWithDefaults[attributeName] = bindingSource;
+    }
+    return bindingsWithDefaults;
+  }
+  return bindings;
+}
+
+/**
+ * Contains utils to update the block `bindings` metadata.
+ *
+ * @typedef {Object} WPBlockBindingsUtils
+ *
+ * @property {Function} updateBlockBindings    Updates the value of the bindings connected to block attributes.
+ * @property {Function} removeAllBlockBindings Removes the bindings property of the `metadata` attribute.
+ */
+
+/**
+ * Retrieves the existing utils needed to update the block `bindings` metadata.
+ * They can be used to create, modify, or remove connections from the existing block attributes.
+ *
+ * It contains the following utils:
+ * - `updateBlockBindings`: Updates the value of the bindings connected to block attributes. It can be used to remove a specific binding by setting the value to `undefined`.
+ * - `removeAllBlockBindings`: Removes the bindings property of the `metadata` attribute.
+ *
+ * @since 6.7.0 Introduced in WordPress core.
+ *
+ * @param {?string} clientId Optional block client ID. If not set, it will use the current block client ID from the context.
+ *
+ * @return {?WPBlockBindingsUtils} Object containing the block bindings utils.
+ *
+ * @example
+ * ```js
+ * import { useBlockBindingsUtils } from '@wordpress/block-editor'
+ * const { updateBlockBindings, removeAllBlockBindings } = useBlockBindingsUtils();
+ *
+ * // Update url and alt attributes.
+ * updateBlockBindings( {
+ *     url: {
+ *         source: 'core/post-meta',
+ *         args: {
+ *             key: 'url_custom_field',
+ *         },
+ *     },
+ *     alt: {
+ *         source: 'core/post-meta',
+ *         args: {
+ *             key: 'text_custom_field',
+ *         },
+ *     },
+ * } );
+ *
+ * // Remove binding from url attribute.
+ * updateBlockBindings( { url: undefined } );
+ *
+ * // Remove bindings from all attributes.
+ * removeAllBlockBindings();
+ * ```
+ */
+function useBlockBindingsUtils(clientId) {
+  const {
+    clientId: contextClientId
+  } = useBlockEditContext();
+  const blockClientId = clientId || contextClientId;
+  const {
+    updateBlockAttributes
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  const {
+    getBlockAttributes
+  } = (0,external_wp_data_namespaceObject.useRegistry)().select(store);
+
+  /**
+   * Updates the value of the bindings connected to block attributes.
+   * It removes the binding when the new value is `undefined`.
+   *
+   * @param {Object} bindings        Bindings including the attributes to update and the new object.
+   * @param {string} bindings.source The source name to connect to.
+   * @param {Object} [bindings.args] Object containing the arguments needed by the source.
+   *
+   * @example
+   * ```js
+   * import { useBlockBindingsUtils } from '@wordpress/block-editor'
+   *
+   * const { updateBlockBindings } = useBlockBindingsUtils();
+   * updateBlockBindings( {
+   *     url: {
+   *         source: 'core/post-meta',
+   *         args: {
+   *             key: 'url_custom_field',
+   *         },
+   * 	   },
+   *     alt: {
+   *         source: 'core/post-meta',
+   *         args: {
+   *             key: 'text_custom_field',
+   *         },
+   * 	   }
+   * } );
+   * ```
+   */
+  const updateBlockBindings = bindings => {
+    const {
+      metadata: {
+        bindings: currentBindings,
+        ...metadata
+      } = {}
+    } = getBlockAttributes(blockClientId);
+    const newBindings = {
+      ...currentBindings
+    };
+    Object.entries(bindings).forEach(([attribute, binding]) => {
+      if (!binding && newBindings[attribute]) {
+        delete newBindings[attribute];
+        return;
+      }
+      newBindings[attribute] = binding;
+    });
+    const newMetadata = {
+      ...metadata,
+      bindings: newBindings
+    };
+    if (isObjectEmpty(newMetadata.bindings)) {
+      delete newMetadata.bindings;
+    }
+    updateBlockAttributes(blockClientId, {
+      metadata: isObjectEmpty(newMetadata) ? undefined : newMetadata
+    });
+  };
+
+  /**
+   * Removes the bindings property of the `metadata` attribute.
+   *
+   * @example
+   * ```js
+   * import { useBlockBindingsUtils } from '@wordpress/block-editor'
+   *
+   * const { removeAllBlockBindings } = useBlockBindingsUtils();
+   * removeAllBlockBindings();
+   * ```
+   */
+  const removeAllBlockBindings = () => {
+    const {
+      metadata: {
+        bindings,
+        ...metadata
+      } = {}
+    } = getBlockAttributes(blockClientId);
+    updateBlockAttributes(blockClientId, {
+      metadata: isObjectEmpty(metadata) ? undefined : metadata
+    });
+  };
+  return {
+    updateBlockBindings,
+    removeAllBlockBindings
+  };
+}
+
 ;// ./packages/block-editor/build-module/components/block-edit/edit.js
 /* wp:polyfill */
 /**
@@ -37594,9 +38123,13 @@ function BlockContextProvider({
 
 
 
+
 /**
  * Internal dependencies
  */
+
+
+
 
 
 /**
@@ -37629,33 +38162,166 @@ const Edit = props => {
 const EditWithFilters = (0,external_wp_components_namespaceObject.withFilters)('editor.BlockEdit')(Edit);
 const EditWithGeneratedProps = props => {
   const {
-    attributes = {},
-    name
+    name,
+    clientId,
+    attributes,
+    setAttributes
   } = props;
+  const registry = (0,external_wp_data_namespaceObject.useRegistry)();
   const blockType = (0,external_wp_blocks_namespaceObject.getBlockType)(name);
   const blockContext = (0,external_wp_element_namespaceObject.useContext)(block_context);
+  const registeredSources = (0,external_wp_data_namespaceObject.useSelect)(select => unlock(select(external_wp_blocks_namespaceObject.store)).getAllBlockBindingsSources(), []);
+  const {
+    blockBindings,
+    context,
+    hasPatternOverrides
+  } = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    // Assign context values using the block type's declared context needs.
+    const computedContext = blockType?.usesContext ? Object.fromEntries(Object.entries(blockContext).filter(([key]) => blockType.usesContext.includes(key))) : DEFAULT_BLOCK_CONTEXT;
+    // Add context requested by Block Bindings sources.
+    if (attributes?.metadata?.bindings) {
+      Object.values(attributes?.metadata?.bindings || {}).forEach(binding => {
+        registeredSources[binding?.source]?.usesContext?.forEach(key => {
+          computedContext[key] = blockContext[key];
+        });
+      });
+    }
+    return {
+      blockBindings: replacePatternOverridesDefaultBinding(name, attributes?.metadata?.bindings),
+      context: computedContext,
+      hasPatternOverrides: hasPatternOverridesDefaultBinding(attributes?.metadata?.bindings)
+    };
+  }, [name, blockType?.usesContext, blockContext, attributes?.metadata?.bindings, registeredSources]);
+  const computedAttributes = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    if (!blockBindings) {
+      return attributes;
+    }
+    const attributesFromSources = {};
+    const blockBindingsBySource = new Map();
+    for (const [attributeName, binding] of Object.entries(blockBindings)) {
+      const {
+        source: sourceName,
+        args: sourceArgs
+      } = binding;
+      const source = registeredSources[sourceName];
+      if (!source || !canBindAttribute(name, attributeName)) {
+        continue;
+      }
+      blockBindingsBySource.set(source, {
+        ...blockBindingsBySource.get(source),
+        [attributeName]: {
+          args: sourceArgs
+        }
+      });
+    }
+    if (blockBindingsBySource.size) {
+      for (const [source, bindings] of blockBindingsBySource) {
+        // Get values in batch if the source supports it.
+        let values = {};
+        if (!source.getValues) {
+          Object.keys(bindings).forEach(attr => {
+            // Default to the the source label when `getValues` doesn't exist.
+            values[attr] = source.label;
+          });
+        } else {
+          values = source.getValues({
+            select,
+            context,
+            clientId,
+            bindings
+          });
+        }
+        for (const [attributeName, value] of Object.entries(values)) {
+          if (attributeName === 'url' && (!value || !isURLLike(value))) {
+            // Return null if value is not a valid URL.
+            attributesFromSources[attributeName] = null;
+          } else {
+            attributesFromSources[attributeName] = value;
+          }
+        }
+      }
+    }
+    return {
+      ...attributes,
+      ...attributesFromSources
+    };
+  }, [attributes, blockBindings, clientId, context, name, registeredSources]);
+  const setBoundAttributes = (0,external_wp_element_namespaceObject.useCallback)(nextAttributes => {
+    if (!blockBindings) {
+      setAttributes(nextAttributes);
+      return;
+    }
+    registry.batch(() => {
+      const keptAttributes = {
+        ...nextAttributes
+      };
+      const blockBindingsBySource = new Map();
 
-  // Assign context values using the block type's declared context needs.
-  const context = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    return blockType && blockType.usesContext ? Object.fromEntries(Object.entries(blockContext).filter(([key]) => blockType.usesContext.includes(key))) : DEFAULT_BLOCK_CONTEXT;
-  }, [blockType, blockContext]);
+      // Loop only over the updated attributes to avoid modifying the bound ones that haven't changed.
+      for (const [attributeName, newValue] of Object.entries(keptAttributes)) {
+        if (!blockBindings[attributeName] || !canBindAttribute(name, attributeName)) {
+          continue;
+        }
+        const binding = blockBindings[attributeName];
+        const source = registeredSources[binding?.source];
+        if (!source?.setValues) {
+          continue;
+        }
+        blockBindingsBySource.set(source, {
+          ...blockBindingsBySource.get(source),
+          [attributeName]: {
+            args: binding.args,
+            newValue
+          }
+        });
+        delete keptAttributes[attributeName];
+      }
+      if (blockBindingsBySource.size) {
+        for (const [source, bindings] of blockBindingsBySource) {
+          source.setValues({
+            select: registry.select,
+            dispatch: registry.dispatch,
+            context,
+            clientId,
+            bindings
+          });
+        }
+      }
+      const hasParentPattern = !!context['pattern/overrides'];
+      if (
+      // Don't update non-connected attributes if the block is using pattern overrides
+      // and the editing is happening while overriding the pattern (not editing the original).
+      !(hasPatternOverrides && hasParentPattern) && Object.keys(keptAttributes).length) {
+        // Don't update caption and href until they are supported.
+        if (hasPatternOverrides) {
+          delete keptAttributes.caption;
+          delete keptAttributes.href;
+        }
+        setAttributes(keptAttributes);
+      }
+    });
+  }, [blockBindings, clientId, context, hasPatternOverrides, setAttributes, registeredSources, name, registry]);
   if (!blockType) {
     return null;
   }
   if (blockType.apiVersion > 1) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditWithFilters, {
       ...props,
-      context: context
+      attributes: computedAttributes,
+      context: context,
+      setAttributes: setBoundAttributes
     });
   }
 
   // Generate a class name for the block's editable form.
   const generatedClassName = (0,external_wp_blocks_namespaceObject.hasBlockSupport)(blockType, 'className', true) ? (0,external_wp_blocks_namespaceObject.getBlockDefaultClassName)(name) : null;
-  const className = dist_clsx(generatedClassName, attributes.className, props.className);
+  const className = dist_clsx(generatedClassName, attributes?.className, props.className);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditWithFilters, {
     ...props,
+    attributes: computedAttributes,
+    className: className,
     context: context,
-    className: className
+    setAttributes: setBoundAttributes
   });
 };
 /* harmony default export */ const block_edit_edit = (EditWithGeneratedProps);
@@ -43148,260 +43814,6 @@ function useFlashEditableBlocks({
   }, [isEnabled]);
 }
 
-;// ./packages/block-editor/build-module/hooks/use-bindings-attributes.js
-/* wp:polyfill */
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-/** @typedef {import('@wordpress/compose').WPHigherOrderComponent} WPHigherOrderComponent */
-/** @typedef {import('@wordpress/blocks').WPBlockSettings} WPBlockSettings */
-
-/**
- * Given a binding of block attributes, returns a higher order component that
- * overrides its `attributes` and `setAttributes` props to sync any changes needed.
- *
- * @return {WPHigherOrderComponent} Higher-order component.
- */
-
-const BLOCK_BINDINGS_ALLOWED_BLOCKS = {
-  'core/paragraph': ['content'],
-  'core/heading': ['content'],
-  'core/image': ['id', 'url', 'title', 'alt'],
-  'core/button': ['url', 'text', 'linkTarget', 'rel']
-};
-const DEFAULT_ATTRIBUTE = '__default';
-
-/**
- * Returns the bindings with the `__default` binding for pattern overrides
- * replaced with the full-set of supported attributes. e.g.:
- *
- * bindings passed in: `{ __default: { source: 'core/pattern-overrides' } }`
- * bindings returned: `{ content: { source: 'core/pattern-overrides' } }`
- *
- * @param {string} blockName The block name (e.g. 'core/paragraph').
- * @param {Object} bindings  A block's bindings from the metadata attribute.
- *
- * @return {Object} The bindings with default replaced for pattern overrides.
- */
-function replacePatternOverrideDefaultBindings(blockName, bindings) {
-  // The `__default` binding currently only works for pattern overrides.
-  if (bindings?.[DEFAULT_ATTRIBUTE]?.source === 'core/pattern-overrides') {
-    const supportedAttributes = BLOCK_BINDINGS_ALLOWED_BLOCKS[blockName];
-    const bindingsWithDefaults = {};
-    for (const attributeName of supportedAttributes) {
-      // If the block has mixed binding sources, retain any non pattern override bindings.
-      const bindingSource = bindings[attributeName] ? bindings[attributeName] : {
-        source: 'core/pattern-overrides'
-      };
-      bindingsWithDefaults[attributeName] = bindingSource;
-    }
-    return bindingsWithDefaults;
-  }
-  return bindings;
-}
-
-/**
- * Based on the given block name,
- * check if it is possible to bind the block.
- *
- * @param {string} blockName - The block name.
- * @return {boolean} Whether it is possible to bind the block to sources.
- */
-function canBindBlock(blockName) {
-  return blockName in BLOCK_BINDINGS_ALLOWED_BLOCKS;
-}
-
-/**
- * Based on the given block name and attribute name,
- * check if it is possible to bind the block attribute.
- *
- * @param {string} blockName     - The block name.
- * @param {string} attributeName - The attribute name.
- * @return {boolean} Whether it is possible to bind the block attribute.
- */
-function canBindAttribute(blockName, attributeName) {
-  return canBindBlock(blockName) && BLOCK_BINDINGS_ALLOWED_BLOCKS[blockName].includes(attributeName);
-}
-function getBindableAttributes(blockName) {
-  return BLOCK_BINDINGS_ALLOWED_BLOCKS[blockName];
-}
-const withBlockBindingSupport = (0,external_wp_compose_namespaceObject.createHigherOrderComponent)(BlockEdit => props => {
-  const registry = (0,external_wp_data_namespaceObject.useRegistry)();
-  const blockContext = (0,external_wp_element_namespaceObject.useContext)(block_context);
-  const sources = (0,external_wp_data_namespaceObject.useSelect)(select => unlock(select(external_wp_blocks_namespaceObject.store)).getAllBlockBindingsSources());
-  const {
-    name,
-    clientId,
-    context,
-    setAttributes
-  } = props;
-  const blockBindings = (0,external_wp_element_namespaceObject.useMemo)(() => replacePatternOverrideDefaultBindings(name, props.attributes.metadata?.bindings), [props.attributes.metadata?.bindings, name]);
-
-  // While this hook doesn't directly call any selectors, `useSelect` is
-  // used purposely here to ensure `boundAttributes` is updated whenever
-  // there are attribute updates.
-  // `source.getValues` may also call a selector via `registry.select`.
-  const updatedContext = {};
-  const boundAttributes = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    if (!blockBindings) {
-      return;
-    }
-    const attributes = {};
-    const blockBindingsBySource = new Map();
-    for (const [attributeName, binding] of Object.entries(blockBindings)) {
-      const {
-        source: sourceName,
-        args: sourceArgs
-      } = binding;
-      const source = sources[sourceName];
-      if (!source || !canBindAttribute(name, attributeName)) {
-        continue;
-      }
-
-      // Populate context.
-      for (const key of source.usesContext || []) {
-        updatedContext[key] = blockContext[key];
-      }
-      blockBindingsBySource.set(source, {
-        ...blockBindingsBySource.get(source),
-        [attributeName]: {
-          args: sourceArgs
-        }
-      });
-    }
-    if (blockBindingsBySource.size) {
-      for (const [source, bindings] of blockBindingsBySource) {
-        // Get values in batch if the source supports it.
-        let values = {};
-        if (!source.getValues) {
-          Object.keys(bindings).forEach(attr => {
-            // Default to the the source label when `getValues` doesn't exist.
-            values[attr] = source.label;
-          });
-        } else {
-          values = source.getValues({
-            select,
-            context: updatedContext,
-            clientId,
-            bindings
-          });
-        }
-        for (const [attributeName, value] of Object.entries(values)) {
-          if (attributeName === 'url' && (!value || !isURLLike(value))) {
-            // Return null if value is not a valid URL.
-            attributes[attributeName] = null;
-          } else {
-            attributes[attributeName] = value;
-          }
-        }
-      }
-    }
-    return attributes;
-  }, [blockBindings, name, clientId, updatedContext, sources]);
-  const hasParentPattern = !!updatedContext['pattern/overrides'];
-  const hasPatternOverridesDefaultBinding = props.attributes.metadata?.bindings?.[DEFAULT_ATTRIBUTE]?.source === 'core/pattern-overrides';
-  const _setAttributes = (0,external_wp_element_namespaceObject.useCallback)(nextAttributes => {
-    registry.batch(() => {
-      if (!blockBindings) {
-        setAttributes(nextAttributes);
-        return;
-      }
-      const keptAttributes = {
-        ...nextAttributes
-      };
-      const blockBindingsBySource = new Map();
-
-      // Loop only over the updated attributes to avoid modifying the bound ones that haven't changed.
-      for (const [attributeName, newValue] of Object.entries(keptAttributes)) {
-        if (!blockBindings[attributeName] || !canBindAttribute(name, attributeName)) {
-          continue;
-        }
-        const binding = blockBindings[attributeName];
-        const source = sources[binding?.source];
-        if (!source?.setValues) {
-          continue;
-        }
-        blockBindingsBySource.set(source, {
-          ...blockBindingsBySource.get(source),
-          [attributeName]: {
-            args: binding.args,
-            newValue
-          }
-        });
-        delete keptAttributes[attributeName];
-      }
-      if (blockBindingsBySource.size) {
-        for (const [source, bindings] of blockBindingsBySource) {
-          source.setValues({
-            select: registry.select,
-            dispatch: registry.dispatch,
-            context: updatedContext,
-            clientId,
-            bindings
-          });
-        }
-      }
-      if (
-      // Don't update non-connected attributes if the block is using pattern overrides
-      // and the editing is happening while overriding the pattern (not editing the original).
-      !(hasPatternOverridesDefaultBinding && hasParentPattern) && Object.keys(keptAttributes).length) {
-        // Don't update caption and href until they are supported.
-        if (hasPatternOverridesDefaultBinding) {
-          delete keptAttributes?.caption;
-          delete keptAttributes?.href;
-        }
-        setAttributes(keptAttributes);
-      }
-    });
-  }, [registry, blockBindings, name, clientId, updatedContext, setAttributes, sources, hasPatternOverridesDefaultBinding, hasParentPattern]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockEdit, {
-      ...props,
-      attributes: {
-        ...props.attributes,
-        ...boundAttributes
-      },
-      setAttributes: _setAttributes,
-      context: {
-        ...context,
-        ...updatedContext
-      }
-    })
-  });
-}, 'withBlockBindingSupport');
-
-/**
- * Filters a registered block's settings to enhance a block's `edit` component
- * to upgrade bound attributes.
- *
- * @param {WPBlockSettings} settings - Registered block settings.
- * @param {string}          name     - Block name.
- * @return {WPBlockSettings} Filtered block settings.
- */
-function shimAttributeSource(settings, name) {
-  if (!canBindBlock(name)) {
-    return settings;
-  }
-  return {
-    ...settings,
-    edit: withBlockBindingSupport(settings.edit)
-  };
-}
-(0,external_wp_hooks_namespaceObject.addFilter)('blocks.registerBlockType', 'core/editor/custom-sources-backwards-compatibility/shim-attribute-source', shimAttributeSource);
-
 ;// ./packages/block-editor/build-module/components/block-list/use-block-props/use-firefox-draggable-compatibility.js
 /**
  * WordPress dependencies
@@ -45458,21 +45870,21 @@ function useNestedSettingsUpdate(clientId, parentLock, allowedBlocks, prioritize
 function useInnerBlockTemplateSync(clientId, template, templateLock, templateInsertUpdatesSelection) {
   // Instead of adding a useSelect mapping here, please add to the useSelect
   // mapping in InnerBlocks! Every subscription impacts performance.
-
-  const {
-    getBlocks,
-    getSelectedBlocksInitialCaretPosition,
-    isBlockSelected
-  } = (0,external_wp_data_namespaceObject.useSelect)(store);
-  const {
-    replaceInnerBlocks,
-    __unstableMarkNextChangeAsNotPersistent
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  const registry = (0,external_wp_data_namespaceObject.useRegistry)();
 
   // Maintain a reference to the previous value so we can do a deep equality check.
   const existingTemplateRef = (0,external_wp_element_namespaceObject.useRef)(null);
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     let isCancelled = false;
+    const {
+      getBlocks,
+      getSelectedBlocksInitialCaretPosition,
+      isBlockSelected
+    } = registry.select(store);
+    const {
+      replaceInnerBlocks,
+      __unstableMarkNextChangeAsNotPersistent
+    } = registry.dispatch(store);
 
     // There's an implicit dependency between useInnerBlockTemplateSync and useNestedSettingsUpdate
     // The former needs to happen after the latter and since the latter is using microtasks to batch updates (performance optimization),
@@ -45506,7 +45918,7 @@ function useInnerBlockTemplateSync(clientId, template, templateLock, templateIns
     return () => {
       isCancelled = true;
     };
-  }, [template, templateLock, clientId]);
+  }, [template, templateLock, clientId, registry, templateInsertUpdatesSelection]);
 }
 
 ;// ./packages/block-editor/build-module/components/inner-blocks/use-block-context.js
@@ -46231,7 +46643,8 @@ function useBlockDropZone({
       rootBlockIndex: getBlockIndex(targetRootClientId)
     });
     const [targetIndex, operation, nearestSide] = dropTargetPosition;
-    if (isZoomOut() && operation !== 'insert') {
+    const isTargetIndexEmptyDefaultBlock = blocksData[targetIndex]?.isUnmodifiedDefaultBlock;
+    if (isZoomOut() && !isTargetIndexEmptyDefaultBlock && operation !== 'insert') {
       return;
     }
     if (operation === 'group') {
@@ -46818,14 +47231,16 @@ function ZoomOutSeparator({
     sectionClientIds,
     insertionPoint,
     blockInsertionPointVisible,
-    blockInsertionPoint
+    blockInsertionPoint,
+    blocksBeingDragged
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getInsertionPoint,
       getBlockOrder,
       getSectionRootClientId,
       isBlockInsertionPointVisible,
-      getBlockInsertionPoint
+      getBlockInsertionPoint,
+      getDraggedBlockClientIds
     } = unlock(select(store));
     const root = getSectionRootClientId();
     const sectionRootClientIds = getBlockOrder(root);
@@ -46835,7 +47250,8 @@ function ZoomOutSeparator({
       blockOrder: getBlockOrder(root),
       insertionPoint: getInsertionPoint(),
       blockInsertionPoint: getBlockInsertionPoint(),
-      blockInsertionPointVisible: isBlockInsertionPointVisible()
+      blockInsertionPointVisible: isBlockInsertionPointVisible(),
+      blocksBeingDragged: getDraggedBlockClientIds()
     };
   }, []);
   const isReducedMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
@@ -46849,6 +47265,7 @@ function ZoomOutSeparator({
   }
   const hasTopInsertionPoint = insertionPoint?.index === 0 && clientId === sectionClientIds[insertionPoint.index];
   const hasBottomInsertionPoint = insertionPoint && insertionPoint.hasOwnProperty('index') && clientId === sectionClientIds[insertionPoint.index - 1];
+
   // We want to show the zoom out separator in either of these conditions:
   // 1. If the inserter has an insertion index set
   // 2. We are dragging a pattern over an insertion point
@@ -46857,6 +47274,19 @@ function ZoomOutSeparator({
   }
   if (position === 'bottom') {
     isVisible = hasBottomInsertionPoint || blockInsertionPointVisible && clientId === sectionClientIds[blockInsertionPoint.index - 1];
+  }
+  const blockBeingDraggedClientId = blocksBeingDragged[0];
+  const isCurrentBlockBeingDragged = blocksBeingDragged.includes(clientId);
+  const blockBeingDraggedIndex = sectionClientIds.indexOf(blockBeingDraggedClientId);
+  const blockBeingDraggedPreviousSiblingClientId = blockBeingDraggedIndex > 0 ? sectionClientIds[blockBeingDraggedIndex - 1] : null;
+  const isCurrentBlockPreviousSiblingOfBlockBeingDragged = blockBeingDraggedPreviousSiblingClientId === clientId;
+
+  // The separators are visually top/bottom of the block, but in actual fact
+  // the "top" separator is the "bottom" separator of the previous block.
+  // Therefore, this logic hides the separator if the current block is being dragged
+  // or if the current block is the previous sibling of the block being dragged.
+  if (isCurrentBlockBeingDragged || isCurrentBlockPreviousSiblingOfBlockBeingDragged) {
+    isVisible = false;
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableAnimatePresence, {
     children: isVisible && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableMotion.div, {
@@ -46940,7 +47370,6 @@ function Root({
   className,
   ...settings
 }) {
-  const isLargeViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
   const {
     isOutlineMode,
     isFocusMode,
@@ -46996,7 +47425,7 @@ function Root({
     ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([useBlockSelectionClearer(), useInBetweenInserter(), useTypingObserver()]),
     className: dist_clsx('is-root-container', className, {
       'is-outline-mode': isOutlineMode,
-      'is-focus-mode': isFocusMode && isLargeViewport
+      'is-focus-mode': isFocusMode
     })
   }, settings);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(IntersectionObserver.Provider, {
@@ -49507,7 +49936,7 @@ function Iframe({
           // Appending a hash to the current URL will not reload the
           // page. This is useful for e.g. footnotes.
           const href = event.target.getAttribute('href');
-          if (href.startsWith('#')) {
+          if (href?.startsWith('#')) {
             iFrameDocument.defaultView.location.hash = href.slice(1);
           }
         }
@@ -52513,7 +52942,7 @@ function PatternsExplorer({
   rootClientId
 }) {
   const [searchValue, setSearchValue] = (0,external_wp_element_namespaceObject.useState)('');
-  const [selectedCategory, setSelectedCategory] = (0,external_wp_element_namespaceObject.useState)(initialCategory?.name);
+  const [selectedCategory, setSelectedCategory] = (0,external_wp_element_namespaceObject.useState)(initialCategory);
   const patternCategories = usePatternCategories(rootClientId);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "block-editor-block-patterns-explorer",
@@ -52637,7 +53066,7 @@ function MobileTabNavigation({
 
 const getShouldDisableSyncFilter = sourceFilter => sourceFilter !== 'all' && sourceFilter !== 'user';
 const getShouldHideSourcesFilter = category => {
-  return category.name === myPatternsCategory.name;
+  return category?.name === myPatternsCategory.name;
 };
 const PATTERN_SOURCE_MENU_OPTIONS = [{
   value: 'all',
@@ -52664,7 +53093,7 @@ function PatternsFilter({
   // we do this by deriving from props rather than calling setPatternSourceFilter otherwise
   // the user may be confused when switching to another category if the haven't explicity set
   // this filter themselves.
-  const currentPatternSourceFilter = category.name === myPatternsCategory.name ? INSERTER_PATTERN_TYPES.user : patternSourceFilter;
+  const currentPatternSourceFilter = category?.name === myPatternsCategory.name ? INSERTER_PATTERN_TYPES.user : patternSourceFilter;
 
   // We need to disable the sync filter option if the source filter is not 'all' or 'user'
   // otherwise applying them will just result in no patterns being shown.
@@ -52783,13 +53212,13 @@ function PatternCategoryPreviews({
     if (isPatternFiltered(pattern, patternSourceFilter, patternSyncFilter)) {
       return false;
     }
-    if (category.name === allPatternsCategory.name) {
+    if (category.name === allPatternsCategory?.name) {
       return true;
     }
-    if (category.name === myPatternsCategory.name && pattern.type === INSERTER_PATTERN_TYPES.user) {
+    if (category.name === myPatternsCategory?.name && pattern.type === INSERTER_PATTERN_TYPES.user) {
       return true;
     }
-    if (category.name === starterPatternsCategory.name && pattern.blockTypes?.includes('core/post-content')) {
+    if (category.name === starterPatternsCategory?.name && pattern.blockTypes?.includes('core/post-content')) {
       return true;
     }
     if (category.name === 'uncategorized') {
@@ -52829,7 +53258,7 @@ function PatternCategoryPreviews({
             size: 13,
             level: 4,
             as: "div",
-            children: category.label
+            children: category?.label
           })
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PatternsFilter, {
           patternSyncFilter: patternSyncFilter,
@@ -52923,8 +53352,7 @@ function CategoryTabs({
       className: "block-editor-inserter__category-tablist",
       children: categories.map(category => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(category_tabs_Tabs.Tab, {
         tabId: category.name,
-        "aria-label": category.label,
-        "aria-current": category === selectedCategory ? 'true' : undefined,
+        "aria-current": category.name === selectedCategory?.name ? 'true' : undefined,
         children: category.label
       }, category.name))
     }), categories.map(category => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(category_tabs_Tabs.TabPanel, {
@@ -53012,7 +53440,7 @@ function BlockPatternsTab({
         }, category.name)
       })
     }), showPatternsExplorer && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(block_patterns_explorer, {
-      initialCategory: selectedCategory || categories[0],
+      initialCategory: selectedCategory?.name || categories[0]?.name,
       patternCategories: categories,
       onModalClose: () => setShowPatternsExplorer(false),
       rootClientId: rootClientId
@@ -53942,6 +54370,7 @@ function TabbedSidebar({
 
 
 
+
 /**
  * A hook used to set the editor mode to zoomed out mode, invoking the hook sets the mode.
  * Concepts:
@@ -53951,6 +54380,9 @@ function TabbedSidebar({
  * @param {boolean} enabled If we should enter into zoomOut mode or not
  */
 function useZoomOut(enabled = true) {
+  const {
+    postId
+  } = (0,external_wp_element_namespaceObject.useContext)(block_context);
   const {
     setZoomLevel,
     resetZoomLevel
@@ -53974,6 +54406,7 @@ function useZoomOut(enabled = true) {
   }, []);
   const controlZoomLevelRef = (0,external_wp_element_namespaceObject.useRef)(false);
   const isEnabledRef = (0,external_wp_element_namespaceObject.useRef)(enabled);
+  const postIdRef = (0,external_wp_element_namespaceObject.useRef)(postId);
 
   /**
    * This hook tracks if the zoom state was changed manually by the user via clicking
@@ -53990,6 +54423,11 @@ function useZoomOut(enabled = true) {
   }, [isZoomedOut]);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     isEnabledRef.current = enabled;
+
+    // If the user created a new post/page, we should take control of the zoom level.
+    if (postIdRef.current !== postId) {
+      controlZoomLevelRef.current = true;
+    }
     if (enabled !== isZoomOut()) {
       controlZoomLevelRef.current = true;
       if (enabled) {
@@ -54004,7 +54442,7 @@ function useZoomOut(enabled = true) {
         resetZoomLevel();
       }
     };
-  }, [enabled, isZoomOut, resetZoomLevel, setZoomLevel]);
+  }, [enabled, isZoomOut, postId, resetZoomLevel, setZoomLevel]);
 }
 
 ;// ./packages/block-editor/build-module/components/inserter/menu.js
@@ -54286,17 +54724,13 @@ function PublicInserterMenu(props, ref) {
 
 
 
-
 const SEARCH_THRESHOLD = 6;
 const SHOWN_BLOCK_TYPES = 6;
-const SHOWN_BLOCK_PATTERNS = 2;
-const SHOWN_BLOCK_PATTERNS_WITH_PRIORITIZATION = 4;
 function QuickInserter({
   onSelect,
   rootClientId,
   clientId,
   isAppender,
-  prioritizePatterns,
   selectBlockOnInsert,
   hasSearch = true
 }) {
@@ -54309,7 +54743,6 @@ function QuickInserter({
     selectBlockOnInsert
   });
   const [blockTypes] = use_block_types_state(destinationRootClientId, onInsertBlocks, true);
-  const [patterns] = use_patterns_state(onInsertBlocks, destinationRootClientId, undefined, true);
   const {
     setInserterIsOpened,
     insertionIndex
@@ -54327,8 +54760,7 @@ function QuickInserter({
       insertionIndex: index === -1 ? blockCount : index
     };
   }, [clientId]);
-  const showPatterns = patterns.length && (!!filterValue || prioritizePatterns);
-  const showSearch = hasSearch && (showPatterns && patterns.length > SEARCH_THRESHOLD || blockTypes.length > SEARCH_THRESHOLD);
+  const showSearch = hasSearch && blockTypes.length > SEARCH_THRESHOLD;
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (setInserterIsOpened) {
       setInserterIsOpened(false);
@@ -54345,10 +54777,6 @@ function QuickInserter({
       insertionIndex
     });
   };
-  let maxBlockPatterns = 0;
-  if (showPatterns) {
-    maxBlockPatterns = prioritizePatterns ? SHOWN_BLOCK_PATTERNS_WITH_PRIORITIZATION : SHOWN_BLOCK_PATTERNS;
-  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: dist_clsx('block-editor-inserter__quick-inserter', {
       'has-search': showSearch,
@@ -54371,10 +54799,9 @@ function QuickInserter({
         rootClientId: rootClientId,
         clientId: clientId,
         isAppender: isAppender,
-        maxBlockPatterns: maxBlockPatterns,
+        maxBlockPatterns: 0,
         maxBlockTypes: SHOWN_BLOCK_TYPES,
         isDraggable: false,
-        prioritizePatterns: prioritizePatterns,
         selectBlockOnInsert: selectBlockOnInsert,
         isQuick: true
       })
@@ -54420,8 +54847,7 @@ const defaultRenderToggle = ({
   isOpen,
   blockTitle,
   hasSingleBlockType,
-  toggleProps = {},
-  prioritizePatterns
+  toggleProps = {}
 }) => {
   const {
     as: Wrapper = external_wp_components_namespaceObject.Button,
@@ -54434,8 +54860,6 @@ const defaultRenderToggle = ({
     label = (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %s: the name of the block when there is only one
     (0,external_wp_i18n_namespaceObject._x)('Add %s', 'directly add the only allowed block'), blockTitle);
-  } else if (!label && prioritizePatterns) {
-    label = (0,external_wp_i18n_namespaceObject.__)('Add pattern');
   } else if (!label) {
     label = (0,external_wp_i18n_namespaceObject._x)('Add block', 'Generic label for block inserter button');
   }
@@ -54450,6 +54874,7 @@ const defaultRenderToggle = ({
     }
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Wrapper, {
+    __next40pxDefaultSize: toggleProps.as ? undefined : true,
     icon: library_plus,
     label: label,
     tooltipPosition: "bottom",
@@ -54500,8 +54925,7 @@ class Inserter extends external_wp_element_namespaceObject.Component {
       directInsertBlock,
       toggleProps,
       hasItems,
-      renderToggle = defaultRenderToggle,
-      prioritizePatterns
+      renderToggle = defaultRenderToggle
     } = this.props;
     return renderToggle({
       onToggle,
@@ -54510,8 +54934,7 @@ class Inserter extends external_wp_element_namespaceObject.Component {
       blockTitle,
       hasSingleBlockType,
       directInsertBlock,
-      toggleProps,
-      prioritizePatterns
+      toggleProps
     });
   }
 
@@ -54535,7 +54958,6 @@ class Inserter extends external_wp_element_namespaceObject.Component {
       // This prop is experimental to give some time for the quick inserter to mature
       // Feel free to make them stable after a few releases.
       __experimentalIsQuick: isQuick,
-      prioritizePatterns,
       onSelectOrClose,
       selectBlockOnInsert
     } = this.props;
@@ -54551,7 +54973,6 @@ class Inserter extends external_wp_element_namespaceObject.Component {
         rootClientId: rootClientId,
         clientId: clientId,
         isAppender: isAppender,
-        prioritizePatterns: prioritizePatterns,
         selectBlockOnInsert: selectBlockOnInsert
       });
     }
@@ -54606,8 +55027,7 @@ class Inserter extends external_wp_element_namespaceObject.Component {
     getBlockRootClientId,
     hasInserterItems,
     getAllowedBlocks,
-    getDirectInsertBlock,
-    getSettings
+    getDirectInsertBlock
   } = select(store);
   const {
     getBlockVariations
@@ -54615,7 +55035,6 @@ class Inserter extends external_wp_element_namespaceObject.Component {
   rootClientId = rootClientId || getBlockRootClientId(clientId) || undefined;
   const allowedBlocks = getAllowedBlocks(rootClientId);
   const directInsertBlock = shouldDirectInsert && getDirectInsertBlock(rootClientId);
-  const settings = getSettings();
   const hasSingleBlockType = allowedBlocks?.length === 1 && getBlockVariations(allowedBlocks[0].name, 'inserter')?.length === 0;
   let allowedBlockType = false;
   if (hasSingleBlockType) {
@@ -54627,8 +55046,7 @@ class Inserter extends external_wp_element_namespaceObject.Component {
     blockTitle: allowedBlockType ? allowedBlockType.title : '',
     allowedBlockType,
     directInsertBlock,
-    rootClientId,
-    prioritizePatterns: settings.__experimentalPreferPatternsOnRoot && !rootClientId
+    rootClientId
   };
 }), (0,external_wp_data_namespaceObject.withDispatch)((dispatch, ownProps, {
   select
@@ -54768,7 +55186,6 @@ class Inserter extends external_wp_element_namespaceObject.Component {
  */
 
 
-
 function button_block_appender_ButtonBlockAppender({
   rootClientId,
   className,
@@ -54776,8 +55193,6 @@ function button_block_appender_ButtonBlockAppender({
   tabIndex,
   onSelect
 }, ref) {
-  const inserterButtonRef = (0,external_wp_element_namespaceObject.useRef)();
-  const mergedInserterButtonRef = (0,external_wp_compose_namespaceObject.useMergeRefs)([inserterButtonRef, ref]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(inserter, {
     position: "bottom center",
     rootClientId: rootClientId,
@@ -54786,7 +55201,6 @@ function button_block_appender_ButtonBlockAppender({
       if (onSelect && typeof onSelect === 'function') {
         onSelect(...args);
       }
-      inserterButtonRef.current?.focus();
     },
     renderToggle: ({
       onToggle,
@@ -54801,7 +55215,7 @@ function button_block_appender_ButtonBlockAppender({
       (0,external_wp_i18n_namespaceObject._x)('Add %s', 'directly add the only allowed block'), blockTitle) : (0,external_wp_i18n_namespaceObject._x)('Add block', 'Generic label for block inserter button');
       return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
         __next40pxDefaultSize: true,
-        ref: mergedInserterButtonRef,
+        ref: ref,
         onFocus: onFocus,
         tabIndex: tabIndex,
         className: dist_clsx(className, 'block-editor-button-block-appender'),
@@ -54900,6 +55314,15 @@ const GridVisualizerGrid = (0,external_wp_element_namespaceObject.forwardRef)(({
       observer.observe(element);
       observers.push(observer);
     }
+    const mutationObserver = new window.MutationObserver(() => {
+      setGridInfo(getGridInfo(gridElement));
+    });
+    mutationObserver.observe(gridElement, {
+      attributeFilter: ['style', 'class'],
+      childList: true,
+      subtree: true
+    });
+    observers.push(mutationObserver);
     return () => {
       for (const observer of observers) {
         observer.disconnect();
@@ -55995,171 +56418,6 @@ function BlockHooksControlPure({
   }
 });
 
-;// ./packages/block-editor/build-module/utils/block-bindings.js
-/* wp:polyfill */
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-function isObjectEmpty(object) {
-  return !object || Object.keys(object).length === 0;
-}
-
-/**
- * Contains utils to update the block `bindings` metadata.
- *
- * @typedef {Object} WPBlockBindingsUtils
- *
- * @property {Function} updateBlockBindings    Updates the value of the bindings connected to block attributes.
- * @property {Function} removeAllBlockBindings Removes the bindings property of the `metadata` attribute.
- */
-
-/**
- * Retrieves the existing utils needed to update the block `bindings` metadata.
- * They can be used to create, modify, or remove connections from the existing block attributes.
- *
- * It contains the following utils:
- * - `updateBlockBindings`: Updates the value of the bindings connected to block attributes. It can be used to remove a specific binding by setting the value to `undefined`.
- * - `removeAllBlockBindings`: Removes the bindings property of the `metadata` attribute.
- *
- * @since 6.7.0 Introduced in WordPress core.
- *
- * @param {?string} clientId Optional block client ID. If not set, it will use the current block client ID from the context.
- *
- * @return {?WPBlockBindingsUtils} Object containing the block bindings utils.
- *
- * @example
- * ```js
- * import { useBlockBindingsUtils } from '@wordpress/block-editor'
- * const { updateBlockBindings, removeAllBlockBindings } = useBlockBindingsUtils();
- *
- * // Update url and alt attributes.
- * updateBlockBindings( {
- *     url: {
- *         source: 'core/post-meta',
- *         args: {
- *             key: 'url_custom_field',
- *         },
- *     },
- *     alt: {
- *         source: 'core/post-meta',
- *         args: {
- *             key: 'text_custom_field',
- *         },
- *     },
- * } );
- *
- * // Remove binding from url attribute.
- * updateBlockBindings( { url: undefined } );
- *
- * // Remove bindings from all attributes.
- * removeAllBlockBindings();
- * ```
- */
-function useBlockBindingsUtils(clientId) {
-  const {
-    clientId: contextClientId
-  } = useBlockEditContext();
-  const blockClientId = clientId || contextClientId;
-  const {
-    updateBlockAttributes
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
-  const {
-    getBlockAttributes
-  } = (0,external_wp_data_namespaceObject.useRegistry)().select(store);
-
-  /**
-   * Updates the value of the bindings connected to block attributes.
-   * It removes the binding when the new value is `undefined`.
-   *
-   * @param {Object} bindings        Bindings including the attributes to update and the new object.
-   * @param {string} bindings.source The source name to connect to.
-   * @param {Object} [bindings.args] Object containing the arguments needed by the source.
-   *
-   * @example
-   * ```js
-   * import { useBlockBindingsUtils } from '@wordpress/block-editor'
-   *
-   * const { updateBlockBindings } = useBlockBindingsUtils();
-   * updateBlockBindings( {
-   *     url: {
-   *         source: 'core/post-meta',
-   *         args: {
-   *             key: 'url_custom_field',
-   *         },
-   * 	   },
-   *     alt: {
-   *         source: 'core/post-meta',
-   *         args: {
-   *             key: 'text_custom_field',
-   *         },
-   * 	   }
-   * } );
-   * ```
-   */
-  const updateBlockBindings = bindings => {
-    const {
-      metadata: {
-        bindings: currentBindings,
-        ...metadata
-      } = {}
-    } = getBlockAttributes(blockClientId);
-    const newBindings = {
-      ...currentBindings
-    };
-    Object.entries(bindings).forEach(([attribute, binding]) => {
-      if (!binding && newBindings[attribute]) {
-        delete newBindings[attribute];
-        return;
-      }
-      newBindings[attribute] = binding;
-    });
-    const newMetadata = {
-      ...metadata,
-      bindings: newBindings
-    };
-    if (isObjectEmpty(newMetadata.bindings)) {
-      delete newMetadata.bindings;
-    }
-    updateBlockAttributes(blockClientId, {
-      metadata: isObjectEmpty(newMetadata) ? undefined : newMetadata
-    });
-  };
-
-  /**
-   * Removes the bindings property of the `metadata` attribute.
-   *
-   * @example
-   * ```js
-   * import { useBlockBindingsUtils } from '@wordpress/block-editor'
-   *
-   * const { removeAllBlockBindings } = useBlockBindingsUtils();
-   * removeAllBlockBindings();
-   * ```
-   */
-  const removeAllBlockBindings = () => {
-    const {
-      metadata: {
-        bindings,
-        ...metadata
-      } = {}
-    } = getBlockAttributes(blockClientId);
-    updateBlockAttributes(blockClientId, {
-      metadata: isObjectEmpty(metadata) ? undefined : metadata
-    });
-  };
-  return {
-    updateBlockBindings,
-    removeAllBlockBindings
-  };
-}
-
 ;// ./packages/block-editor/build-module/hooks/block-bindings.js
 /* wp:polyfill */
 /**
@@ -56182,7 +56440,6 @@ function useBlockBindingsUtils(clientId) {
 
 
 
-
 const {
   Menu
 } = unlock(external_wp_components_namespaceObject.privateApis);
@@ -56197,7 +56454,7 @@ const block_bindings_useToolsPanelDropdownMenuProps = () => {
     }
   } : {};
 };
-function BlockBindingsPanelDropdown({
+function BlockBindingsPanelMenuContent({
   fieldsList,
   attribute,
   binding
@@ -56303,21 +56560,23 @@ function EditableBlockBindingsPanelItems({
             [attribute]: undefined
           });
         },
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Menu, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Menu, {
           placement: isMobile ? 'bottom-start' : 'left-start',
-          gutter: isMobile ? 8 : 36,
-          trigger: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalItem, {
+          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Menu.TriggerButton, {
+            render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalItem, {}),
             children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockBindingsAttribute, {
               attribute: attribute,
               binding: binding,
               fieldsList: fieldsList
             })
-          }),
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockBindingsPanelDropdown, {
-            fieldsList: fieldsList,
-            attribute: attribute,
-            binding: binding
-          })
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Menu.Popover, {
+            gutter: isMobile ? 8 : 36,
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockBindingsPanelMenuContent, {
+              fieldsList: fieldsList,
+              attribute: attribute,
+              binding: binding
+            })
+          })]
         })
       }, attribute);
     })
@@ -57088,7 +57347,6 @@ function useCachedTruthy(value) {
 
 
 
-
 createBlockEditFilter([align, text_align, hooks_anchor, custom_class_name, style, duotone, position, layout, content_lock_ui, block_hooks, block_bindings, layout_child].filter(Boolean));
 createBlockListBlockFilter([align, text_align, background, style, color, dimensions, duotone, font_family, font_size, border, position, block_style_variation, layout_child]);
 createBlockSaveFilter([align, text_align, hooks_anchor, aria_label, custom_class_name, border, color, style, font_family, font_size]);
@@ -57783,6 +58041,38 @@ function BlockFullHeightAlignmentControl({
 
 
 const block_alignment_matrix_control_noop = () => {};
+
+/**
+ * The alignment matrix control allows users to quickly adjust inner block alignment.
+ *
+ * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/block-alignment-matrix-control/README.md
+ *
+ * @example
+ * ```jsx
+ * function Example() {
+ *   return (
+ *     <BlockControls>
+ *       <BlockAlignmentMatrixControl
+ *         label={ __( 'Change content position' ) }
+ *         value="center"
+ *         onChange={ ( nextPosition ) =>
+ *           setAttributes( { contentPosition: nextPosition } )
+ *         }
+ *       />
+ *     </BlockControls>
+ *   );
+ * }
+ * ```
+ *
+ * @param {Object}   props            Component props.
+ * @param {string}   props.label      Label for the control. Defaults to 'Change matrix alignment'.
+ * @param {Function} props.onChange   Function to execute upon change of matrix state.
+ * @param {string}   props.value      Content alignment location. One of: 'center', 'center center',
+ *                                    'center left', 'center right', 'top center', 'top left',
+ *                                    'top right', 'bottom center', 'bottom left', 'bottom right'.
+ * @param {boolean}  props.isDisabled Whether the control should be disabled.
+ * @return {Element} The BlockAlignmentMatrixControl component.
+ */
 function BlockAlignmentMatrixControl(props) {
   const {
     label = (0,external_wp_i18n_namespaceObject.__)('Change matrix alignment'),
@@ -59640,7 +59930,7 @@ function BlockTranformationItem({
  * @param {Array}  styles    Block styles.
  * @param {string} className Class name
  *
- * @return {Object?} The active style.
+ * @return {?Object} The active style.
  */
 function getActiveStyle(styles, className) {
   for (const style of new (external_wp_tokenList_default())(className).values()) {
@@ -59662,7 +59952,7 @@ function getActiveStyle(styles, className) {
  * Replaces the active style in the block's className.
  *
  * @param {string}  className   Class name.
- * @param {Object?} activeStyle The replaced style.
+ * @param {?Object} activeStyle The replaced style.
  * @param {Object}  newStyle    The replacing style.
  *
  * @return {string} The updated className.
@@ -59702,7 +59992,7 @@ function getRenderedStyles(styles) {
  *
  * @param {Array} styles Block styles.
  *
- * @return {Object?}        The default style object, if found.
+ * @return {?Object}        The default style object, if found.
  */
 function getDefaultStyle(styles) {
   return styles?.find(style => style.isDefault);
@@ -60441,20 +60731,20 @@ __unstableBlockToolbarLastItem.Slot = block_toolbar_last_item_Slot;
 
 const ALIGN_SUPPORT_KEY = 'align';
 const ALIGN_WIDE_SUPPORT_KEY = 'alignWide';
-const supports_BORDER_SUPPORT_KEY = 'border';
+const supports_BORDER_SUPPORT_KEY = '__experimentalBorder';
 const supports_COLOR_SUPPORT_KEY = 'color';
 const CUSTOM_CLASS_NAME_SUPPORT_KEY = 'customClassName';
-const supports_FONT_FAMILY_SUPPORT_KEY = 'typography.fontFamily';
+const supports_FONT_FAMILY_SUPPORT_KEY = 'typography.__experimentalFontFamily';
 const supports_FONT_SIZE_SUPPORT_KEY = 'typography.fontSize';
 const supports_LINE_HEIGHT_SUPPORT_KEY = 'typography.lineHeight';
 /**
  * Key within block settings' support array indicating support for font style.
  */
-const supports_FONT_STYLE_SUPPORT_KEY = 'typography.fontStyle';
+const supports_FONT_STYLE_SUPPORT_KEY = 'typography.__experimentalFontStyle';
 /**
  * Key within block settings' support array indicating support for font weight.
  */
-const supports_FONT_WEIGHT_SUPPORT_KEY = 'typography.fontWeight';
+const supports_FONT_WEIGHT_SUPPORT_KEY = 'typography.__experimentalFontWeight';
 /**
  * Key within block settings' supports array indicating support for text
  * align e.g. settings found in `block.json`.
@@ -60469,7 +60759,7 @@ const supports_TEXT_COLUMNS_SUPPORT_KEY = 'typography.textColumns';
  * Key within block settings' supports array indicating support for text
  * decorations e.g. settings found in `block.json`.
  */
-const supports_TEXT_DECORATION_SUPPORT_KEY = 'typography.textDecoration';
+const supports_TEXT_DECORATION_SUPPORT_KEY = 'typography.__experimentalTextDecoration';
 /**
  * Key within block settings' supports array indicating support for writing mode
  * e.g. settings found in `block.json`.
@@ -60479,13 +60769,13 @@ const supports_WRITING_MODE_SUPPORT_KEY = 'typography.__experimentalWritingMode'
  * Key within block settings' supports array indicating support for text
  * transforms e.g. settings found in `block.json`.
  */
-const supports_TEXT_TRANSFORM_SUPPORT_KEY = 'typography.textTransform';
+const supports_TEXT_TRANSFORM_SUPPORT_KEY = 'typography.__experimentalTextTransform';
 
 /**
  * Key within block settings' supports array indicating support for letter-spacing
  * e.g. settings found in `block.json`.
  */
-const supports_LETTER_SPACING_SUPPORT_KEY = 'typography.letterSpacing';
+const supports_LETTER_SPACING_SUPPORT_KEY = 'typography.__experimentalLetterSpacing';
 const LAYOUT_SUPPORT_KEY = 'layout';
 const supports_TYPOGRAPHY_SUPPORT_KEYS = [supports_LINE_HEIGHT_SUPPORT_KEY, supports_FONT_SIZE_SUPPORT_KEY, supports_FONT_STYLE_SUPPORT_KEY, supports_FONT_WEIGHT_SUPPORT_KEY, supports_FONT_FAMILY_SUPPORT_KEY, supports_TEXT_ALIGN_SUPPORT_KEY, supports_TEXT_COLUMNS_SUPPORT_KEY, supports_TEXT_DECORATION_SUPPORT_KEY, supports_TEXT_TRANSFORM_SUPPORT_KEY, supports_WRITING_MODE_SUPPORT_KEY, supports_LETTER_SPACING_SUPPORT_KEY];
 const EFFECTS_SUPPORT_KEYS = ['shadow'];
@@ -62008,8 +62298,7 @@ function BlockSettingsDropdown({
     previousBlockClientId,
     selectedBlockClientIds,
     openedBlockSettingsMenu,
-    isContentOnly,
-    isZoomOut
+    isContentOnly
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getBlockName,
@@ -62018,8 +62307,7 @@ function BlockSettingsDropdown({
       getSelectedBlockClientIds,
       getBlockAttributes,
       getOpenedBlockSettingsMenu,
-      getBlockEditingMode,
-      isZoomOut: _isZoomOut
+      getBlockEditingMode
     } = unlock(select(store));
     const {
       getActiveBlockVariation
@@ -62032,8 +62320,7 @@ function BlockSettingsDropdown({
       previousBlockClientId: getPreviousBlockClientId(firstBlockClientId),
       selectedBlockClientIds: getSelectedBlockClientIds(),
       openedBlockSettingsMenu: getOpenedBlockSettingsMenu(),
-      isContentOnly: getBlockEditingMode(firstBlockClientId) === 'contentOnly',
-      isZoomOut: _isZoomOut()
+      isContentOnly: getBlockEditingMode(firstBlockClientId) === 'contentOnly'
     };
   }, [firstBlockClientId]);
   const {
@@ -62145,7 +62432,7 @@ function BlockSettingsDropdown({
               parentBlockType: parentBlockType
             }), count === 1 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(block_html_convert_button, {
               clientId: firstBlockClientId
-            }), (!isContentOnly || isZoomOut) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CopyMenuItem, {
+            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CopyMenuItem, {
               clientIds: clientIds,
               onCopy: onCopy,
               shortcut: external_wp_keycodes_namespaceObject.displayShortcut.primary('c')
@@ -62177,7 +62464,7 @@ function BlockSettingsDropdown({
               onClick: onPasteStyles,
               children: (0,external_wp_i18n_namespaceObject.__)('Paste styles')
             })]
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(block_settings_menu_controls.Slot, {
+          }), !isContentOnly && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(block_settings_menu_controls.Slot, {
             fillProps: {
               onClose,
               count,
@@ -63350,14 +63637,18 @@ function ZoomOutModeInserters() {
     blockOrder,
     setInserterIsOpened,
     sectionRootClientId,
-    selectedBlockClientId
+    selectedBlockClientId,
+    blockInsertionPoint,
+    insertionPointVisible
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getSettings,
       getBlockOrder,
       getSelectionStart,
       getSelectedBlockClientId,
-      getSectionRootClientId
+      getSectionRootClientId,
+      getBlockInsertionPoint,
+      isBlockInsertionPointVisible
     } = unlock(select(store));
     const root = getSectionRootClientId();
     return {
@@ -63365,7 +63656,9 @@ function ZoomOutModeInserters() {
       blockOrder: getBlockOrder(root),
       sectionRootClientId: root,
       setInserterIsOpened: getSettings().__experimentalSetIsInserterOpened,
-      selectedBlockClientId: getSelectedBlockClientId()
+      selectedBlockClientId: getSelectedBlockClientId(),
+      blockInsertionPoint: getBlockInsertionPoint(),
+      insertionPointVisible: isBlockInsertionPointVisible()
     };
   }, []);
 
@@ -63388,7 +63681,14 @@ function ZoomOutModeInserters() {
   }
   const previousClientId = selectedBlockClientId;
   const index = blockOrder.findIndex(clientId => selectedBlockClientId === clientId);
-  const nextClientId = blockOrder[index + 1];
+  const insertionIndex = index + 1;
+  const nextClientId = blockOrder[insertionIndex];
+
+  // If the block insertion point is visible, and the insertion
+  // Indices match then we don't need to render the inserter.
+  if (insertionPointVisible && blockInsertionPoint?.index === insertionIndex) {
+    return null;
+  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(inbetween, {
     previousClientId: previousClientId,
     nextClientId: nextClientId,
@@ -63396,11 +63696,11 @@ function ZoomOutModeInserters() {
       onClick: () => {
         setInserterIsOpened({
           rootClientId: sectionRootClientId,
-          insertionIndex: index + 1,
+          insertionIndex,
           tab: 'patterns',
           category: 'all'
         });
-        showInsertionPoint(sectionRootClientId, index + 1, {
+        showInsertionPoint(sectionRootClientId, insertionIndex, {
           operation: 'insert'
         });
       }
@@ -68235,28 +68535,19 @@ if (exampleDate.getMonth() === 4) {
  *
  * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/date-format-picker/README.md
  *
- * @param {Object}                          props
- * @param {string|null}                     props.format        The selected date
- *                                                              format. If
- *                                                              `null`,
- *                                                              _Default_ is
- *                                                              selected.
- * @param {string}                          props.defaultFormat The date format that
- *                                                              will be used if the
- *                                                              user selects
- *                                                              'Default'.
- * @param {( format: string|null ) => void} props.onChange      Called when a
- *                                                              selection is
- *                                                              made. If `null`,
- *                                                              _Default_ is
- *                                                              selected.
+ * @param {Object}      props
+ * @param {string|null} props.format        The selected date format. If `null`, _Default_ is selected.
+ * @param {string}      props.defaultFormat The date format that will be used if the user selects 'Default'.
+ * @param {Function}    props.onChange      Called when a selection is made. If `null`, _Default_ is selected.
  */
 function DateFormatPicker({
   format,
   defaultFormat,
   onChange
 }) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("fieldset", {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
+    as: "fieldset",
+    spacing: 4,
     className: "block-editor-date-format-picker",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.VisuallyHidden, {
       as: "legend",
@@ -68353,6 +68644,13 @@ function NonDefaultControls({
  */
 
 
+
+
+/**
+ * Internal dependencies
+ */
+
+
 /**
  * Internal dependencies
  */
@@ -68414,23 +68712,53 @@ const renderToggle = settings => ({
   isOpen
 }) => {
   const {
+    clearable,
     colorValue,
+    gradientValue,
+    onColorChange,
+    onGradientChange,
     label
   } = settings;
+  const colorButtonRef = (0,external_wp_element_namespaceObject.useRef)(undefined);
   const toggleProps = {
     onClick: onToggle,
     className: dist_clsx('block-editor-panel-color-gradient-settings__dropdown', {
       'is-open': isOpen
     }),
-    'aria-expanded': isOpen
+    'aria-expanded': isOpen,
+    ref: colorButtonRef
   };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-    __next40pxDefaultSize: true,
-    ...toggleProps,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dropdown_LabeledColorIndicator, {
-      colorValue: colorValue,
-      label: label
-    })
+  const clearValue = () => {
+    if (colorValue) {
+      onColorChange();
+    } else if (gradientValue) {
+      onGradientChange();
+    }
+  };
+  const value = colorValue !== null && colorValue !== void 0 ? colorValue : gradientValue;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+      __next40pxDefaultSize: true,
+      ...toggleProps,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dropdown_LabeledColorIndicator, {
+        colorValue: value,
+        label: label
+      })
+    }), clearable && value && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+      __next40pxDefaultSize: true,
+      label: (0,external_wp_i18n_namespaceObject.__)('Reset'),
+      className: "block-editor-panel-color-gradient-settings__reset",
+      size: "small",
+      icon: library_reset,
+      onClick: () => {
+        clearValue();
+        if (isOpen) {
+          onToggle();
+        }
+        // Return focus to parent button
+        colorButtonRef.current?.focus();
+      }
+    })]
   });
 };
 
@@ -68461,7 +68789,6 @@ function ColorGradientSettingsDropdown({
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: settings.map((setting, index) => {
-      var _setting$gradientValu;
       const controlProps = {
         clearable: false,
         colorValue: setting.colorValue,
@@ -68479,8 +68806,12 @@ function ColorGradientSettingsDropdown({
         ...setting
       };
       const toggleSettings = {
-        colorValue: (_setting$gradientValu = setting.gradientValue) !== null && _setting$gradientValu !== void 0 ? _setting$gradientValu : setting.colorValue,
-        label: setting.label
+        clearable: setting.clearable,
+        label: setting.label,
+        colorValue: setting.colorValue,
+        gradientValue: setting.gradientValue,
+        onColorChange: setting.onColorChange,
+        onGradientChange: setting.onGradientChange
       };
       return setting &&
       /*#__PURE__*/
@@ -71143,7 +71474,7 @@ function MediaPlaceholder({
                 variant: "primary",
                 className: dist_clsx('block-editor-media-placeholder__button', 'block-editor-media-placeholder__upload-button'),
                 onClick: openFileDialog,
-                children: (0,external_wp_i18n_namespaceObject.__)('Upload')
+                children: (0,external_wp_i18n_namespaceObject._x)('Upload', 'verb')
               }), uploadMediaLibraryButton, renderUrlSelectionUI(), renderFeaturedImageToggle(), renderCancelLink()]
             });
             return renderPlaceholder(content);
@@ -71161,7 +71492,7 @@ function MediaPlaceholder({
             onClick: openFileDialog,
             variant: "primary",
             className: dist_clsx('block-editor-media-placeholder__button', 'block-editor-media-placeholder__upload-button'),
-            children: (0,external_wp_i18n_namespaceObject.__)('Upload')
+            children: (0,external_wp_i18n_namespaceObject._x)('Upload', 'verb')
           }),
           onChange: onUpload,
           accept: accept,
@@ -72064,7 +72395,8 @@ function createLinkInParagraph(url, onReplace) {
 /* harmony default export */ const event_listeners_delete = (props => element => {
   function onKeyDown(event) {
     const {
-      keyCode
+      keyCode,
+      shiftKey
     } = event;
     if (event.defaultPrevented) {
       return;
@@ -72085,6 +72417,11 @@ function createLinkInParagraph(url, onReplace) {
 
       // Only process delete if the key press occurs at an uncollapsed edge.
       if (!(0,external_wp_richText_namespaceObject.isCollapsed)(value) || hasActiveFormats || isReverse && start !== 0 || !isReverse && end !== text.length) {
+        return;
+      }
+
+      // Exclude shift+backspace as they are shortcuts for deleting blocks.
+      if (shiftKey) {
         return;
       }
       if (onMerge) {
@@ -73061,7 +73398,41 @@ EditableText.Content = ({
 
 
 /**
+ * Render an auto-growing textarea allow users to fill any textual content.
+ *
  * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/plain-text/README.md
+ *
+ * @example
+ * ```jsx
+ * import { registerBlockType } from '@wordpress/blocks';
+ * import { PlainText } from '@wordpress/block-editor';
+ *
+ * registerBlockType( 'my-plugin/example-block', {
+ *   // ...
+ *
+ *   attributes: {
+ *     content: {
+ *       type: 'string',
+ *     },
+ *   },
+ *
+ *   edit( { className, attributes, setAttributes } ) {
+ *     return (
+ *       <PlainText
+ *         className={ className }
+ *         value={ attributes.content }
+ *         onChange={ ( content ) => setAttributes( { content } ) }
+ *       />
+ *     );
+ *   },
+ * } );
+ * ````
+ *
+ * @param {Object}   props          Component props.
+ * @param {string}   props.value    String value of the textarea.
+ * @param {Function} props.onChange Function called when the text value changes.
+ * @param {Object}   [props.ref]    The component forwards the `ref` property to the `TextareaAutosize` component.
+ * @return {Element} Plain text component
  */
 
 const PlainText = (0,external_wp_element_namespaceObject.forwardRef)(({
@@ -73164,7 +73535,7 @@ function ResponsiveBlockControl(props) {
   }
   const toggleControlLabel = toggleLabel || (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: Property value for the control (eg: margin, padding, etc.). */
   (0,external_wp_i18n_namespaceObject.__)('Use the same %s on all screen sizes.'), property);
-  const toggleHelpText = (0,external_wp_i18n_namespaceObject.__)('Toggle between using the same value for all screen sizes or using a unique value per screen size.');
+  const toggleHelpText = (0,external_wp_i18n_namespaceObject.__)('Choose whether to use the same value for all screen sizes or a unique value for each screen size.');
   const defaultControl = renderDefaultControl(/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResponsiveBlockControlLabel, {
     property: property,
     viewport: defaultLabel
@@ -76483,7 +76854,7 @@ function extends_extends() {
   }, extends_extends.apply(null, arguments);
 }
 
-;// ./node_modules/@emotion/styled/node_modules/@emotion/memoize/dist/emotion-memoize.esm.js
+;// ./node_modules/@emotion/is-prop-valid/node_modules/@emotion/memoize/dist/emotion-memoize.esm.js
 function memoize(fn) {
   var cache = Object.create(null);
   return function (arg) {
@@ -76494,7 +76865,7 @@ function memoize(fn) {
 
 
 
-;// ./node_modules/@emotion/styled/node_modules/@emotion/is-prop-valid/dist/emotion-is-prop-valid.esm.js
+;// ./node_modules/@emotion/is-prop-valid/dist/emotion-is-prop-valid.esm.js
 
 
 var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|disableRemotePlayback|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
@@ -78930,7 +79301,8 @@ function ResolutionTool({
   onChange,
   options = DEFAULT_SIZE_OPTIONS,
   defaultValue = DEFAULT_SIZE_OPTIONS[0].value,
-  isShownByDefault = true
+  isShownByDefault = true,
+  resetAllFilter
 }) {
   const displayValue = value !== null && value !== void 0 ? value : defaultValue;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
@@ -78939,6 +79311,7 @@ function ResolutionTool({
     onDeselect: () => onChange(defaultValue),
     isShownByDefault: isShownByDefault,
     panelId: panelId,
+    resetAllFilter: resetAllFilter,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
       __nextHasNoMarginBottom: true,
       label: (0,external_wp_i18n_namespaceObject.__)('Resolution'),

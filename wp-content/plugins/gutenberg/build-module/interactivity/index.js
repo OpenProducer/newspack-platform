@@ -2156,9 +2156,13 @@ const getGlobalAsyncEventDirective = type => {
     const {
       namespace
     } = entry;
-    const list = evaluate(entry);
+    const iterable = evaluate(entry);
+    if (typeof iterable?.[Symbol.iterator] !== 'function') {
+      return;
+    }
     const itemProp = isNonDefaultDirectiveSuffix(entry) ? kebabToCamelCase(entry.suffix) : 'item';
-    return list.map(item => {
+    const result = [];
+    for (const item of iterable) {
       const itemContext = proxifyContext(proxifyState(namespace, {}), inheritedValue.client[namespace]);
       const mergedContext = {
         client: {
@@ -2180,11 +2184,12 @@ const getGlobalAsyncEventDirective = type => {
       const key = eachKey ? getEvaluate({
         scope
       })(eachKey[0]) : item;
-      return (0,preact_module.h)(Provider, {
+      result.push((0,preact_module.h)(Provider, {
         value: mergedContext,
         key
-      }, element.props.content);
-    });
+      }, element.props.content));
+    }
+    return result;
   }, {
     priority: 20
   });

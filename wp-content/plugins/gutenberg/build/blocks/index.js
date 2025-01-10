@@ -6564,12 +6564,12 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
   },
   borderColor: {
     value: ['border', 'color'],
-    support: ['border', 'color'],
+    support: ['__experimentalBorder', 'color'],
     useEngine: true
   },
   borderRadius: {
     value: ['border', 'radius'],
-    support: ['border', 'radius'],
+    support: ['__experimentalBorder', 'radius'],
     properties: {
       borderTopLeftRadius: 'topLeft',
       borderTopRightRadius: 'topRight',
@@ -6580,72 +6580,72 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
   },
   borderStyle: {
     value: ['border', 'style'],
-    support: ['border', 'style'],
+    support: ['__experimentalBorder', 'style'],
     useEngine: true
   },
   borderWidth: {
     value: ['border', 'width'],
-    support: ['border', 'width'],
+    support: ['__experimentalBorder', 'width'],
     useEngine: true
   },
   borderTopColor: {
     value: ['border', 'top', 'color'],
-    support: ['border', 'color'],
+    support: ['__experimentalBorder', 'color'],
     useEngine: true
   },
   borderTopStyle: {
     value: ['border', 'top', 'style'],
-    support: ['border', 'style'],
+    support: ['__experimentalBorder', 'style'],
     useEngine: true
   },
   borderTopWidth: {
     value: ['border', 'top', 'width'],
-    support: ['border', 'width'],
+    support: ['__experimentalBorder', 'width'],
     useEngine: true
   },
   borderRightColor: {
     value: ['border', 'right', 'color'],
-    support: ['border', 'color'],
+    support: ['__experimentalBorder', 'color'],
     useEngine: true
   },
   borderRightStyle: {
     value: ['border', 'right', 'style'],
-    support: ['border', 'style'],
+    support: ['__experimentalBorder', 'style'],
     useEngine: true
   },
   borderRightWidth: {
     value: ['border', 'right', 'width'],
-    support: ['border', 'width'],
+    support: ['__experimentalBorder', 'width'],
     useEngine: true
   },
   borderBottomColor: {
     value: ['border', 'bottom', 'color'],
-    support: ['border', 'color'],
+    support: ['__experimentalBorder', 'color'],
     useEngine: true
   },
   borderBottomStyle: {
     value: ['border', 'bottom', 'style'],
-    support: ['border', 'style'],
+    support: ['__experimentalBorder', 'style'],
     useEngine: true
   },
   borderBottomWidth: {
     value: ['border', 'bottom', 'width'],
-    support: ['border', 'width'],
+    support: ['__experimentalBorder', 'width'],
     useEngine: true
   },
   borderLeftColor: {
     value: ['border', 'left', 'color'],
-    support: ['border', 'color'],
+    support: ['__experimentalBorder', 'color'],
     useEngine: true
   },
   borderLeftStyle: {
     value: ['border', 'left', 'style'],
-    support: ['border', 'style'],
+    support: ['__experimentalBorder', 'style'],
     useEngine: true
   },
   borderLeftWidth: {
     value: ['border', 'left', 'width'],
-    support: ['border', 'width'],
+    support: ['__experimentalBorder', 'width'],
     useEngine: true
   },
   color: {
@@ -6689,7 +6689,7 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
   },
   fontFamily: {
     value: ['typography', 'fontFamily'],
-    support: ['typography', 'fontFamily'],
+    support: ['typography', '__experimentalFontFamily'],
     useEngine: true
   },
   fontSize: {
@@ -6699,12 +6699,12 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
   },
   fontStyle: {
     value: ['typography', 'fontStyle'],
-    support: ['typography', 'fontStyle'],
+    support: ['typography', '__experimentalFontStyle'],
     useEngine: true
   },
   fontWeight: {
     value: ['typography', 'fontWeight'],
-    support: ['typography', 'fontWeight'],
+    support: ['typography', '__experimentalFontWeight'],
     useEngine: true
   },
   lineHeight: {
@@ -6746,17 +6746,17 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
   },
   textDecoration: {
     value: ['typography', 'textDecoration'],
-    support: ['typography', 'textDecoration'],
+    support: ['typography', '__experimentalTextDecoration'],
     useEngine: true
   },
   textTransform: {
     value: ['typography', 'textTransform'],
-    support: ['typography', 'textTransform'],
+    support: ['typography', '__experimentalTextTransform'],
     useEngine: true
   },
   letterSpacing: {
     value: ['typography', 'letterSpacing'],
-    support: ['typography', 'letterSpacing'],
+    support: ['typography', '__experimentalLetterSpacing'],
     useEngine: true
   },
   writingMode: {
@@ -6800,23 +6800,6 @@ const __EXPERIMENTAL_PATHS_WITH_OVERRIDE = {
   'dimensions.aspectRatios': true,
   'typography.fontSizes': true,
   'spacing.spacingSizes': true
-};
-const EXPERIMENTAL_SUPPORTS_MAP = {
-  __experimentalBorder: 'border'
-};
-const COMMON_EXPERIMENTAL_PROPERTIES = {
-  __experimentalDefaultControls: 'defaultControls',
-  __experimentalSkipSerialization: 'skipSerialization'
-};
-const EXPERIMENTAL_SUPPORT_PROPERTIES = {
-  typography: {
-    __experimentalFontFamily: 'fontFamily',
-    __experimentalFontStyle: 'fontStyle',
-    __experimentalFontWeight: 'fontWeight',
-    __experimentalLetterSpacing: 'letterSpacing',
-    __experimentalTextDecoration: 'textDecoration',
-    __experimentalTextTransform: 'textTransform'
-  }
 };
 
 ;// external ["wp","warning"]
@@ -7937,6 +7920,17 @@ function getDefault(attributeSchema) {
 }
 
 /**
+ * Check if a block is registered.
+ *
+ * @param {string} name The block's name.
+ *
+ * @return {boolean} Whether the block is registered.
+ */
+function isBlockRegistered(name) {
+  return getBlockType(name) !== undefined;
+}
+
+/**
  * Ensure attributes contains only values defined by block type, and merge
  * default values for missing attributes.
  *
@@ -8025,8 +8019,20 @@ const __experimentalGetBlockAttributesNamesByRole = (...args) => {
   });
   return getBlockAttributesNamesByRole(...args);
 };
+
+/**
+ * Checks if a block is a content block by examining its attributes.
+ * A block is considered a content block if it has at least one attribute
+ * with a role of 'content'.
+ *
+ * @param {string} name The name of the block to check.
+ * @return {boolean}    Whether the block is a content block.
+ */
 function isContentBlock(name) {
   const attributes = getBlockType(name)?.attributes;
+  if (!attributes) {
+    return false;
+  }
   return !!Object.keys(attributes)?.some(attributeKey => {
     const attribute = attributes[attributeKey];
     return attribute?.role === 'content' || attribute?.__experimentalRole === 'content';
@@ -8750,7 +8756,7 @@ const selectors_getBlockTypes = (0,external_wp_data_namespaceObject.createSelect
  * };
  * ```
  *
- * @return {Object?} Block Type.
+ * @return {?Object} Block Type.
  */
 function selectors_getBlockType(state, name) {
   return state.blockTypes[name];
@@ -9536,128 +9542,6 @@ function mergeBlockVariations(bootstrappedVariations = [], clientVariations = []
 }
 
 /**
- * Stabilizes a block support configuration by converting experimental properties
- * to their stable equivalents.
- *
- * @param {Object} unstableConfig   The support configuration to stabilize.
- * @param {string} stableSupportKey The stable support key for looking up properties.
- * @return {Object} The stabilized support configuration.
- */
-function stabilizeSupportConfig(unstableConfig, stableSupportKey) {
-  const stableConfig = {};
-  for (const [key, value] of Object.entries(unstableConfig)) {
-    var _ref, _EXPERIMENTAL_SUPPORT;
-    // Get stable key from support-specific map, common properties map, or keep original.
-    const stableKey = (_ref = (_EXPERIMENTAL_SUPPORT = EXPERIMENTAL_SUPPORT_PROPERTIES[stableSupportKey]?.[key]) !== null && _EXPERIMENTAL_SUPPORT !== void 0 ? _EXPERIMENTAL_SUPPORT : COMMON_EXPERIMENTAL_PROPERTIES[key]) !== null && _ref !== void 0 ? _ref : key;
-    stableConfig[stableKey] = value;
-
-    /*
-     * The `__experimentalSkipSerialization` key needs to be kept until
-     * WP 6.8 becomes the minimum supported version. This is due to the
-     * core `wp_should_skip_block_supports_serialization` function only
-     * checking for `__experimentalSkipSerialization` in earlier versions.
-     */
-    if (key === '__experimentalSkipSerialization' || key === 'skipSerialization') {
-      stableConfig.__experimentalSkipSerialization = value;
-    }
-  }
-  return stableConfig;
-}
-
-/**
- * Stabilizes experimental block supports by converting experimental keys and properties
- * to their stable equivalents.
- *
- * @param {Object|undefined} rawSupports The block supports configuration to stabilize.
- * @return {Object|undefined} The stabilized block supports configuration.
- */
-function stabilizeSupports(rawSupports) {
-  if (!rawSupports) {
-    return rawSupports;
-  }
-
-  /*
-   * Create a new object to avoid mutating the original. This ensures that
-   * custom block plugins that rely on immutable supports are not affected.
-   * See: https://github.com/WordPress/gutenberg/pull/66849#issuecomment-2463614281
-   */
-  const newSupports = {};
-  const done = {};
-  for (const [support, config] of Object.entries(rawSupports)) {
-    var _EXPERIMENTAL_SUPPORT2;
-    /*
-     * If this support config has already been stabilized, skip it.
-     * A stable support key occurring after an experimental key, gets
-     * stabilized then so that the two configs can be merged effectively.
-     */
-    if (done[support]) {
-      continue;
-    }
-    const stableSupportKey = (_EXPERIMENTAL_SUPPORT2 = EXPERIMENTAL_SUPPORTS_MAP[support]) !== null && _EXPERIMENTAL_SUPPORT2 !== void 0 ? _EXPERIMENTAL_SUPPORT2 : support;
-
-    /*
-     * Use the support's config as is when it's not in need of stabilization.
-     * A support does not need stabilization if:
-     * - The support key doesn't need stabilization AND
-     * - Either:
-     *     - The config isn't an object, so can't have experimental properties OR
-     *     - The config is an object but has no experimental properties to stabilize.
-     */
-    if (support === stableSupportKey && (!isPlainObject(config) || !EXPERIMENTAL_SUPPORT_PROPERTIES[stableSupportKey] && Object.keys(config).every(key => !COMMON_EXPERIMENTAL_PROPERTIES[key]))) {
-      newSupports[support] = config;
-      continue;
-    }
-
-    // Stabilize the config value.
-    const stableConfig = isPlainObject(config) ? stabilizeSupportConfig(config, stableSupportKey) : config;
-
-    /*
-     * If a plugin overrides the support config with the `blocks.registerBlockType`
-     * filter, both experimental and stable configs may be present. In that case,
-     * use the order keys are defined in to determine the final value.
-     *    - If config is an array, merge the arrays in their order of definition.
-     *    - If config is not an array, use the value defined last.
-     *
-     * The reason for preferring the last defined key is that after filters
-     * are applied, the last inserted key is likely the most up-to-date value.
-     * We cannot determine with certainty which value was "last modified" so
-     * the insertion order is the best guess. The extreme edge case of multiple
-     * filters tweaking the same support property will become less over time as
-     * extenders migrate existing blocks and plugins to stable keys.
-     */
-    if (support !== stableSupportKey && Object.hasOwn(rawSupports, stableSupportKey)) {
-      var _keyPositions$support, _keyPositions$stableS;
-      const keyPositions = Object.keys(rawSupports).reduce((acc, key, index) => {
-        acc[key] = index;
-        return acc;
-      }, {});
-      const experimentalFirst = ((_keyPositions$support = keyPositions[support]) !== null && _keyPositions$support !== void 0 ? _keyPositions$support : Number.MAX_VALUE) < ((_keyPositions$stableS = keyPositions[stableSupportKey]) !== null && _keyPositions$stableS !== void 0 ? _keyPositions$stableS : Number.MAX_VALUE);
-      if (isPlainObject(rawSupports[stableSupportKey])) {
-        /*
-         * To merge the alternative support config effectively, it also needs to be
-         * stabilized before merging to keep stabilized and experimental flags in sync.
-         */
-        rawSupports[stableSupportKey] = stabilizeSupportConfig(rawSupports[stableSupportKey], stableSupportKey);
-        newSupports[stableSupportKey] = experimentalFirst ? {
-          ...stableConfig,
-          ...rawSupports[stableSupportKey]
-        } : {
-          ...rawSupports[stableSupportKey],
-          ...stableConfig
-        };
-        // Prevents reprocessing this support as it was merged above.
-        done[stableSupportKey] = true;
-      } else {
-        newSupports[stableSupportKey] = experimentalFirst ? rawSupports[stableSupportKey] : stableConfig;
-      }
-    } else {
-      newSupports[stableSupportKey] = stableConfig;
-    }
-  }
-  return newSupports;
-}
-
-/**
  * Takes the unprocessed block type settings, merges them with block type metadata
  * and applies all the existing filters for the registered block type.
  * Next, it validates all the settings and performs additional processing to the block type definition.
@@ -9688,43 +9572,25 @@ const processBlockType = (name, blockSettings) => ({
     // blockType.variations can be defined as a filePath.
     variations: mergeBlockVariations(Array.isArray(bootstrappedBlockType?.variations) ? bootstrappedBlockType.variations : [], Array.isArray(blockSettings?.variations) ? blockSettings.variations : [])
   };
-
-  // Stabilize any experimental supports before applying filters.
-  blockType.supports = stabilizeSupports(blockType.supports);
   const settings = (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType', blockType, name, null);
-
-  // Re-stabilize any experimental supports after applying filters.
-  // This ensures that any supports updated by filters are also stabilized.
-  blockType.supports = stabilizeSupports(blockType.supports);
   if (settings.description && typeof settings.description !== 'string') {
     external_wp_deprecated_default()('Declaring non-string block descriptions', {
       since: '6.2'
     });
   }
   if (settings.deprecated) {
-    settings.deprecated = settings.deprecated.map(deprecation => {
-      // Stabilize any experimental supports before applying filters.
-      let filteredDeprecation = {
-        ...deprecation,
-        supports: stabilizeSupports(deprecation.supports)
-      };
-      filteredDeprecation =
-      // Only keep valid deprecation keys.
-      (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType',
-      // Merge deprecation keys with pre-filter settings
-      // so that filters that depend on specific keys being
-      // present don't fail.
-      {
-        // Omit deprecation keys here so that deprecations
-        // can opt out of specific keys like "supports".
-        ...omit(blockType, DEPRECATED_ENTRY_KEYS),
-        ...filteredDeprecation
-      }, blockType.name, filteredDeprecation);
-      // Re-stabilize any experimental supports after applying filters.
-      // This ensures that any supports updated by filters are also stabilized.
-      filteredDeprecation.supports = stabilizeSupports(filteredDeprecation.supports);
-      return Object.fromEntries(Object.entries(filteredDeprecation).filter(([key]) => DEPRECATED_ENTRY_KEYS.includes(key)));
-    });
+    settings.deprecated = settings.deprecated.map(deprecation => Object.fromEntries(Object.entries(
+    // Only keep valid deprecation keys.
+    (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType',
+    // Merge deprecation keys with pre-filter settings
+    // so that filters that depend on specific keys being
+    // present don't fail.
+    {
+      // Omit deprecation keys here so that deprecations
+      // can opt out of specific keys like "supports".
+      ...omit(blockType, DEPRECATED_ENTRY_KEYS),
+      ...deprecation
+    }, blockType.name, deprecation)).filter(([key]) => DEPRECATED_ENTRY_KEYS.includes(key))));
   }
   if (!isPlainObject(settings)) {
      false ? 0 : void 0;
@@ -10324,6 +10190,13 @@ function v4(options, buf, offset) {
  * @return {Object} Block object.
  */
 function createBlock(name, attributes = {}, innerBlocks = []) {
+  if (!isBlockRegistered(name)) {
+    return createBlock('core/missing', {
+      originalName: name,
+      originalContent: '',
+      originalUndelimitedContent: ''
+    });
+  }
   const sanitizedAttributes = __experimentalSanitizeBlockAttributes(name, attributes);
   const clientId = esm_browser_v4();
 
@@ -10367,8 +10240,18 @@ function createBlocksFromInnerBlocksTemplate(innerBlocksOrTemplate = []) {
  * @return {Object} A cloned block.
  */
 function __experimentalCloneSanitizedBlock(block, mergeAttributes = {}, newInnerBlocks) {
+  const {
+    name
+  } = block;
+  if (!isBlockRegistered(name)) {
+    return createBlock('core/missing', {
+      originalName: name,
+      originalContent: '',
+      originalUndelimitedContent: ''
+    });
+  }
   const clientId = esm_browser_v4();
-  const sanitizedAttributes = __experimentalSanitizeBlockAttributes(block.name, {
+  const sanitizedAttributes = __experimentalSanitizeBlockAttributes(name, {
     ...block.attributes,
     ...mergeAttributes
   });
@@ -10733,16 +10616,8 @@ function switchToBlockType(blocks, name) {
  * @return {Object} block.
  */
 const getBlockFromExample = (name, example) => {
-  try {
-    var _example$innerBlocks;
-    return createBlock(name, example.attributes, ((_example$innerBlocks = example.innerBlocks) !== null && _example$innerBlocks !== void 0 ? _example$innerBlocks : []).map(innerBlock => getBlockFromExample(innerBlock.name, innerBlock)));
-  } catch {
-    return createBlock('core/missing', {
-      originalName: name,
-      originalContent: '',
-      originalUndelimitedContent: ''
-    });
-  }
+  var _example$innerBlocks;
+  return createBlock(name, example.attributes, ((_example$innerBlocks = example.innerBlocks) !== null && _example$innerBlocks !== void 0 ? _example$innerBlocks : []).map(innerBlock => getBlockFromExample(innerBlock.name, innerBlock)));
 };
 
 ;// external ["wp","blockSerializationDefaultParser"]
@@ -15694,18 +15569,7 @@ function synchronizeBlocksWithTemplate(blocks = [], template) {
 
     const blockType = getBlockType(name);
     const normalizedAttributes = normalizeAttributes((_blockType$attributes = blockType?.attributes) !== null && _blockType$attributes !== void 0 ? _blockType$attributes : {}, attributes);
-    let [blockName, blockAttributes] = convertLegacyBlockNameAndAttributes(name, normalizedAttributes);
-
-    // If a Block is undefined at this point, use the core/missing block as
-    // a placeholder for a better user experience.
-    if (undefined === getBlockType(blockName)) {
-      blockAttributes = {
-        originalName: name,
-        originalContent: '',
-        originalUndelimitedContent: ''
-      };
-      blockName = 'core/missing';
-    }
+    const [blockName, blockAttributes] = convertLegacyBlockNameAndAttributes(name, normalizedAttributes);
     return createBlock(blockName, blockAttributes, synchronizeBlocksWithTemplate([], innerBlocksTemplate));
   });
 }

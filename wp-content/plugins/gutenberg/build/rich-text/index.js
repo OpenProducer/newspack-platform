@@ -213,7 +213,7 @@ const getFormatTypes = (0,external_wp_data_namespaceObject.createSelector)(state
  * };
  * ```
  *
- * @return {Object?} Format type.
+ * @return {?Object} Format type.
  */
 function getFormatType(state, name) {
   return state.formatTypes[name];
