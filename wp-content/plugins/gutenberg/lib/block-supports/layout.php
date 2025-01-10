@@ -1055,8 +1055,8 @@ function gutenberg_restore_group_inner_container( $block_content, $block ) {
 }
 
 if ( function_exists( 'wp_restore_group_inner_container' ) ) {
-	remove_filter( 'render_block', 'wp_restore_group_inner_container', 10, 2 );
-	remove_filter( 'render_block_core/group', 'wp_restore_group_inner_container', 10, 2 );
+	remove_filter( 'render_block', 'wp_restore_group_inner_container', 10 );
+	remove_filter( 'render_block_core/group', 'wp_restore_group_inner_container', 10 );
 }
 add_filter( 'render_block_core/group', 'gutenberg_restore_group_inner_container', 10, 2 );
 
@@ -1118,6 +1118,6 @@ function gutenberg_restore_image_outer_container( $block_content, $block ) {
 }
 
 if ( function_exists( 'wp_restore_image_outer_container' ) ) {
-	remove_filter( 'render_block_core/image', 'wp_restore_image_outer_container', 10, 2 );
+	remove_filter( 'render_block_core/image', 'wp_restore_image_outer_container', 10 );
 }
 add_filter( 'render_block_core/image', 'gutenberg_restore_image_outer_container', 10, 2 );

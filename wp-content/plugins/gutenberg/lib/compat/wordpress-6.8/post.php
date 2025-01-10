@@ -32,15 +32,18 @@ function gutenberg_post_type_rendering_modes() {
  * @return array Updated array of post type arguments.
  */
 function gutenberg_post_type_default_rendering_mode( $args, $post_type ) {
-	$rendering_mode  = 'page' === $post_type ? 'template-locked' : 'post-only';
-	$rendering_modes = gutenberg_post_type_rendering_modes();
+	if ( ! wp_is_block_theme() || ! current_theme_supports( 'block-templates' ) ) {
+		return $args;
+	}
 
 	// Make sure the post type supports the block editor.
 	if (
-		wp_is_block_theme() &&
 		( isset( $args['show_in_rest'] ) && $args['show_in_rest'] ) &&
 		( ! empty( $args['supports'] ) && in_array( 'editor', $args['supports'], true ) )
 	) {
+		$rendering_mode  = 'page' === $post_type ? 'template-locked' : 'post-only';
+		$rendering_modes = gutenberg_post_type_rendering_modes();
+
 		// Validate the supplied rendering mode.
 		if (
 			isset( $args['default_rendering_mode'] ) &&
