@@ -443,7 +443,11 @@ function process_form() {
 	}
 
 	// reCAPTCHA test.
-	if ( method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha() ) {
+	$current_page_url = \wp_parse_url( \wp_get_raw_referer() );
+	if ( ! empty( $current_page_url['path'] ) ) {
+		$current_page_url = \esc_url( \home_url( $current_page_url['path'] ) );
+	}
+	if ( method_exists( 'Newspack\Recaptcha', 'can_use_captcha' ) && apply_filters( 'newspack_recaptcha_verify_captcha', \Newspack\Recaptcha::can_use_captcha(), $current_page_url, 'newletter_subscription_form_block' ) ) {
 		$captcha_result = \Newspack\Recaptcha::verify_captcha();
 		if ( \is_wp_error( $captcha_result ) ) {
 			return send_form_response( $captcha_result );

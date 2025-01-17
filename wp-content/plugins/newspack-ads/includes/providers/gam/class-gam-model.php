@@ -363,6 +363,8 @@ final class GAM_Model {
 							$created_unit = $api->ad_units->create_ad_unit( $ad_unit_config );
 							if ( ! is_wp_error( $created_unit ) ) {
 								$gam_ad_unit = $created_unit;
+							} else {
+								continue;
 							}
 						}
 						$ad_units[ $ad_unit_key ] = $gam_ad_unit;

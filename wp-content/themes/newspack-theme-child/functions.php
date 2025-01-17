@@ -46,3 +46,17 @@ add_filter(
   }
 );
 
+function add_event_categories_to_carousel( $query_args ) {
+    // Check if the query is for the Post Carousel Block and events
+    if ( isset( $query_args['post_type'] ) && $query_args['post_type'] === 'tribe_events' ) {
+        $query_args['tax_query'] = array(
+            array(
+                'taxonomy' => 'tribe_events_cat', // Custom taxonomy for event categories
+                'field'    => 'slug', // Filter by slug
+                'terms'    => array( 'upcoming-events' ), // Replace with your event category slug(s)
+            ),
+        );
+    }
+    return $query_args;
+}
+add_filter( 'newspack_blocks_post_carousel_query_args', 'add_event_categories_to_carousel' );

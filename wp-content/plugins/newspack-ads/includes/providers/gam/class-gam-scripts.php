@@ -137,6 +137,13 @@ final class GAM_Scripts {
 		];
 
 		/**
+		 * Filters the ad config data parsed for gtag.
+		 *
+		 * @param array $ad_config Ad config data.
+		 */
+		$ad_config = apply_filters( 'newspack_ads_gtag_ad_config', $ad_config );
+
+		/**
 		 * Filters the ads data parsed for gtag.
 		 *
 		 * @param array $data {
