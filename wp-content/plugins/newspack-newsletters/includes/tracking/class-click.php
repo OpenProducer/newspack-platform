@@ -153,17 +153,19 @@ final class Click {
 		$url = html_entity_decode( esc_url_raw( \wp_unslash( $_GET['url'] ?? '' ) ) );
 		// phpcs:enable
 
-		// Double-check and make sure the URL is actually a URL within the email.
+		$is_admin_user = current_user_can( 'edit_others_posts' );
+		// If the redirect URL does not point to the site, double-check it is actually a URL within the email.
 		$url_without_query_args = untrailingslashit( strtok( $url, '?' ) );
-		$newsletter_content     = (string) get_post_meta( $newsletter_id, 'newspack_email_html', true );
-		$is_admin_user          = current_user_can( 'edit_others_posts' );
-		if (
-			false === stripos( $newsletter_content, $url_without_query_args ) &&
-			false === stripos( $newsletter_content, urlencode( $url_without_query_args ) ) && // URL might be encoded via a block pattern.
-			! $is_admin_user // Allow redirect for logged-in editor or admin users.
-		) {
-			\wp_die( 'Invalid URL', '', 400 );
-			exit;
+		if ( false === strpos( $url_without_query_args, \get_site_url() ) ) {
+			$newsletter_content = (string) get_post_meta( $newsletter_id, 'newspack_email_html', true );
+			if (
+				false === stripos( $newsletter_content, $url_without_query_args ) &&
+				false === stripos( $newsletter_content, urlencode( $url_without_query_args ) ) && // URL might be encoded via a block pattern.
+				! $is_admin_user // Allow redirect for logged-in editor or admin users.
+			) {
+				\wp_die( 'Invalid URL', '', 400 );
+				exit;
+			}
 		}
 
 		/**

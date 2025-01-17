@@ -132,7 +132,7 @@ final class Modal_Checkout {
 		add_filter( 'wc_get_template', [ __CLASS__, 'wc_get_template' ], 10, 2 );
 		add_filter( 'woocommerce_checkout_fields', [ __CLASS__, 'woocommerce_checkout_fields' ] );
 		add_filter( 'woocommerce_update_order_review_fragments', [ __CLASS__, 'order_review_fragments' ] );
-		add_filter( 'newspack_recaptcha_verify_captcha', [ __CLASS__, 'recaptcha_verify_captcha' ], 10, 2 );
+		add_filter( 'newspack_recaptcha_verify_captcha', [ __CLASS__, 'recaptcha_verify_captcha' ], 10, 3 );
 		add_filter( 'woocommerce_enqueue_styles', [ __CLASS__, 'dequeue_woocommerce_styles' ] );
 		add_filter( 'wcs_place_subscription_order_text', [ __CLASS__, 'order_button_text' ], 5 );
 		add_filter( 'woocommerce_order_button_text', [ __CLASS__, 'order_button_text' ], 5 );
@@ -1374,12 +1374,17 @@ final class Modal_Checkout {
 	}
 
 	/**
-	 * Prevent reCaptcha from being verified for AJAX checkout (e.g. Apple Pay).
+	 * Prevent reCAPTCHA from being verified for AJAX checkout (e.g. Apple Pay).
 	 *
 	 * @param bool   $should_verify Whether to verify the captcha.
-	 * @param string $url The URL from which the checkout originated.
+	 * @param string $url The URL from which the verification request originated.
+	 * @param string $context The context that triggered the verification request.
 	 */
-	public static function recaptcha_verify_captcha( $should_verify, $url ) {
+	public static function recaptcha_verify_captcha( $should_verify, $url, $context = 'unknown' ) {
+		if ( 'checkout' !== $context ) {
+			return $should_verify;
+		}
+
 		$is_validation_only = boolval( filter_input( INPUT_POST, 'is_validation_only', FILTER_SANITIZE_NUMBER_INT ) );
 		parse_str( \wp_parse_url( $url, PHP_URL_QUERY ), $query );
 		if (

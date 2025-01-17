@@ -426,6 +426,7 @@ import { domReady } from './utils';
 					// Clear checkout details.
 					$( '#checkout_details' ).remove();
 					if ( isEditingDetails ) {
+						$form.attr( 'data-skip-recaptcha', '1' );
 						$form.append( '<input name="is_validation_only" type="hidden" value="1" />' );
 						// Destroy reCAPTCHA inputs so we don't trigger validation between checkout steps.
 						if ( 'v3' === newspack_grecaptcha?.version ) {
@@ -447,6 +448,7 @@ import { domReady } from './utils';
 						} );
 						$form.on( 'submit', handleFormSubmit );
 					} else {
+						$form.removeAttr( 'data-skip-recaptcha' );
 						const $validationOnlyField = $form.find( '[name="is_validation_only"]' );
 						if ( $validationOnlyField.length ) {
 							$validationOnlyField.remove();
@@ -737,13 +739,6 @@ import { domReady } from './utils';
 					form.removeClass( 'modal-processing' );
 					return true;
 				}
-
-				// Trigger form submission on "Enter" key press.
-				$form.on( 'keydown', function ( ev ) {
-					if ( ev.key === 'Enter' ) {
-						$form.submit();
-					}
-				} );
 			}
 			init();
 		}

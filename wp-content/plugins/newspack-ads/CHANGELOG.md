@@ -1,3 +1,17 @@
+## [3.3.1](https://github.com/Automattic/newspack-ads/compare/v3.3.0...v3.3.1) (2025-01-17)
+
+
+### Bug Fixes
+
+* **gam:** better handling of broken ad unit ([#934](https://github.com/Automattic/newspack-ads/issues/934)) ([0fdcc4f](https://github.com/Automattic/newspack-ads/commit/0fdcc4fba341140e40e2d7ae6b8799b19161f4e2))
+
+# [3.3.0](https://github.com/Automattic/newspack-ads/compare/v3.2.2...v3.3.0) (2025-01-14)
+
+
+### Features
+
+* **gam:** add filter for ad config data in gtag ([#933](https://github.com/Automattic/newspack-ads/issues/933)) ([32e931e](https://github.com/Automattic/newspack-ads/commit/32e931ee737ddb756103e22e3dcb06cf0193f30e))
+
 ## [3.2.2](https://github.com/Automattic/newspack-ads/compare/v3.2.1...v3.2.2) (2024-11-25)
 
 
