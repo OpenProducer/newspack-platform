@@ -1,0 +1,14 @@
+{
+	"name": "newspack/tabs-item",
+	"category": "newspack",
+	"attributes":{
+		"header": {
+			"type": "string"
+		}
+	},
+	"supports": {
+		"reusable": false,
+		"html": false
+	},
+	"parent":[ "newspack/tabs" ]
+}

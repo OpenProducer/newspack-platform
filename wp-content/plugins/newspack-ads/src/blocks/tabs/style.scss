@@ -2,14 +2,7 @@
 
 .wp-block-newspack-tabs {
 	background: var(--newspack-ui-color-body-bg, #fff);
-}
 
-.has-background .wp-block-newspack-tabs {
-	border-radius: var(--newspack-ui-border-radius-m, 6px);
-	padding: var(--newspack-ui-spacer-5, 24px);
-}
-
-.media-kit-page__wrapper {
 	.tab-list {
 		display: flex;
 		font-family: var(--newspack-ui-font-family, system-ui, sans-serif);
@@ -145,4 +138,9 @@
 			}
 		}
 	}
+}
+
+.has-background .wp-block-newspack-tabs {
+	border-radius: var(--newspack-ui-border-radius-m, 6px);
+	padding: var(--newspack-ui-spacer-5, 24px);
 }

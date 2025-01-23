@@ -1,3 +1,11 @@
+## [4.5.5](https://github.com/Automattic/newspack-blocks/compare/v4.5.4...v4.5.5) (2025-01-20)
+
+
+### Bug Fixes
+
+* **modal-checkout:** force checkout registration option ([#2007](https://github.com/Automattic/newspack-blocks/issues/2007)) ([acad91c](https://github.com/Automattic/newspack-blocks/commit/acad91c18a3bef5be22387a09af0207f87df3023))
+* tweak modal iframe size ([#2006](https://github.com/Automattic/newspack-blocks/issues/2006)) ([fef66e1](https://github.com/Automattic/newspack-blocks/commit/fef66e1b34345cc0634741367bb2ae0879d8099c))
+
 ## [4.5.4](https://github.com/Automattic/newspack-blocks/compare/v4.5.3...v4.5.4) (2025-01-15)
 
 

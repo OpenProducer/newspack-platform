@@ -1,0 +1,1 @@
+(()=>{const i=window&&window.jQuery;if("undefined"!=typeof inlineEditPost){const t=inlineEditPost.edit;inlineEditPost.edit=function(e){t.apply(this,arguments);let n=0;"object"==typeof e&&(n=parseInt(this.getId(e))),n>0&&i(`tr#post-${n} .inline_data.is_public`).data("is_public")&&i(`tr#edit-${n} :input[name="switch_public_page"]`).prop("checked",!0)}}})();
