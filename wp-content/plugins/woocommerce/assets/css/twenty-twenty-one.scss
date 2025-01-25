@@ -573,7 +573,7 @@ table.variations {
 	}
 }
 
-button.reset_variations {
+a.reset_variations {
 	margin-left: 0.5em;
 }
 
@@ -740,6 +740,10 @@ button.reset_variations {
 					color: var(--button--color-text);
 					background-color: var(--button--color-background);
 					border: var(--button--border-width) solid var(--button--color-background);
+
+					&:focus {
+						color: $body-color;
+					}
 				}
 			}
 		}

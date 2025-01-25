@@ -5,7 +5,9 @@
  * @package  automattic/jetpack-assets
  */
 
-namespace Automattic\Jetpack;
+namespace Automattic\Jetpack\Assets;
+
+use Automattic\Jetpack\Assets;
 
 /**
  * Class script data
@@ -13,6 +15,13 @@ namespace Automattic\Jetpack;
 class Script_Data {
 
 	const SCRIPT_HANDLE = 'jetpack-script-data';
+
+	/**
+	 * Whether the script data has been rendered.
+	 *
+	 * @var bool
+	 */
+	private static $did_render_script_data = false;
 
 	/**
 	 * Configure.
@@ -38,6 +47,7 @@ class Script_Data {
 		 */
 		$hook = is_admin() ? 'admin_print_scripts' : 'wp_print_scripts';
 		add_action( $hook, array( self::class, 'render_script_data' ), 1 );
+		add_action( 'enqueue_block_editor_assets', array( self::class, 'render_script_data' ), 1 );
 	}
 
 	/**
@@ -66,6 +76,12 @@ class Script_Data {
 	 * @return void
 	 */
 	public static function render_script_data() {
+		// In case of 'enqueue_block_editor_assets' action, this can be called multiple times.
+		if ( self::$did_render_script_data ) {
+			return;
+		}
+
+		self::$did_render_script_data = true;
 
 		$script_data = is_admin() ? self::get_admin_script_data() : self::get_public_script_data();
 
@@ -90,7 +106,7 @@ class Script_Data {
 
 		global $wp_version;
 
-		$state = array(
+		$data = array(
 			'site' => array(
 				'admin_url'    => esc_url_raw( admin_url() ),
 				'date_format'  => get_option( 'date_format' ),
@@ -125,9 +141,9 @@ class Script_Data {
 		 *
 		 * @since 2.3.0
 		 *
-		 * @param array $state The script data.
+		 * @param array $data The script data.
 		 */
-		return apply_filters( 'jetpack_admin_js_script_data', $state );
+		return apply_filters( 'jetpack_admin_js_script_data', $data );
 	}
 
 	/**
@@ -137,7 +153,7 @@ class Script_Data {
 	 */
 	protected static function get_public_script_data() {
 
-		$state = array(
+		$data = array(
 			'site' => array(
 				'icon'  => self::get_site_icon(),
 				'title' => self::get_site_title(),
@@ -151,9 +167,9 @@ class Script_Data {
 		 *
 		 * @since 2.3.0
 		 *
-		 * @param array $state The script data.
+		 * @param array $data The script data.
 		 */
-		return apply_filters( 'jetpack_public_js_script_data', $state );
+		return apply_filters( 'jetpack_public_js_script_data', $data );
 	}
 
 	/**

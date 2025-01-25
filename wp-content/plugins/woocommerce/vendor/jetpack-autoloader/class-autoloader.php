@@ -5,7 +5,7 @@
  * @package automattic/jetpack-autoloader
  */
 
-namespace Automattic\Jetpack\Autoloader\jpe068848765b4c2df4244eac75f7ea46d;
+namespace Automattic\Jetpack\Autoloader\jp67abb2f5c15b32a13611c55273717232\al5_0_0;
 
  // phpcs:ignore
 
@@ -84,6 +84,9 @@ class Autoloader {
 
 		// Register a shutdown handler to clean up the autoloader.
 		$hook_manager->add_action( 'shutdown', new Shutdown_Handler( $plugins_handler, $cached_plugins, $was_included_by_autoloader ) );
+
+		// Register a plugins_loaded handler to check for conflicting autoloaders.
+		$hook_manager->add_action( 'plugins_loaded', array( $guard, 'check_for_conflicting_autoloaders' ), 1 );
 
 		// phpcs:enable Generic.Commenting.DocComment.MissingShort
 	}

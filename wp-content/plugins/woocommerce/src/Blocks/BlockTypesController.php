@@ -389,8 +389,8 @@ final class BlockTypesController {
 			'ProductButton',
 			'ProductCategories',
 			'ProductCategory',
-			'ProductCollection',
-			'ProductCollectionNoResults',
+			'ProductCollection\Controller',
+			'ProductCollection\NoResults',
 			'ProductGallery',
 			'ProductGalleryLargeImage',
 			'ProductGalleryLargeImageNextPrevious',
@@ -464,6 +464,10 @@ final class BlockTypesController {
 			$block_types[] = 'ProductFilterClearButton';
 			$block_types[] = 'ProductFilterCheckboxList';
 			$block_types[] = 'ProductFilterChips';
+			if ( Features::is_enabled( 'blockified-add-to-cart' ) ) {
+				$block_types[] = 'AddToCartWithOptions';
+				$block_types[] = 'AddToCartWithOptionsQuantitySelector';
+			}
 		}
 
 		/**
@@ -477,8 +481,8 @@ final class BlockTypesController {
 					'Cart',
 					'Checkout',
 					'ProductGallery',
-					'ProductCollection',
-					'ProductCollectionNoResults',
+					'ProductCollection\Controller',
+					'ProductCollection\NoResults',
 				)
 			);
 		}

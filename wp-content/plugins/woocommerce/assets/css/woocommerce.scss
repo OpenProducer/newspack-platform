@@ -80,7 +80,9 @@ p.demo_store,
 		text-align: center;
 		line-height: 1;
 		border-radius: 100%;
-		color: var(--wc-red) !important; // Required for default theme compatibility
+		color: var(
+			--wc-red
+		) !important; // Required for default theme compatibility
 		text-decoration: none;
 		font-weight: 700;
 		border: 0;
@@ -387,9 +389,8 @@ p.demo_store,
 			}
 
 			.variations {
-				border: 0;
 				margin-bottom: 1em;
-				border-spacing: 0;
+				border: 0;
 				width: 100%;
 
 				td,
@@ -433,7 +434,6 @@ p.demo_store,
 			}
 
 			.reset_variations {
-				display: none;
 				visibility: hidden;
 				font-size: 0.83em;
 			}
@@ -528,6 +528,10 @@ p.demo_store,
 
 		a {
 			text-decoration: none;
+
+			&.woocommerce-loop-product__link {
+				display: block;
+			}
 		}
 
 		a img {
@@ -1364,6 +1368,18 @@ p.demo_store,
 	.woocommerce-order-details {
 		margin-bottom: 2em;
 
+		.order-actions--heading {
+			vertical-align: middle;
+		}
+
+		.order-actions-button {
+			margin-right: 10px;
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+
 		*:last-child {
 			margin-bottom: 0;
 		}
@@ -1828,7 +1844,7 @@ p.demo_store,
 	&::before {
 		font-family: "WooCommerce";
 		content: "\e028";
-		content: "\e028" / ""; // Add an empty alternative text so screen readers ignore it
+		content: "\e028"/ ""; // Add an empty alternative text so screen readers ignore it
 		display: inline-block;
 		position: absolute;
 		top: 1em;
@@ -2103,14 +2119,15 @@ p.demo_store,
 	}
 
 	#payment {
-		background: desaturate(rgba($primary, .14), 21%);
+		background: desaturate(rgba($primary, 0.14), 21%);
 		border-radius: 5px;
 
 		ul.payment_methods {
 			@include clearfix();
 			text-align: left;
 			padding: 1em;
-			border-bottom: 1px solid darken(desaturate(rgba($primary, .14), 21%), 10%);
+			border-bottom: 1px solid
+				darken(desaturate(rgba($primary, 0.14), 21%), 10%);
 			margin: 0;
 			list-style: none outside;
 
