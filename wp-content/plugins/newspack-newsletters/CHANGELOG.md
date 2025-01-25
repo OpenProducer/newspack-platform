@@ -1,3 +1,10 @@
+## [3.7.5](https://github.com/Automattic/newspack-newsletters/compare/v3.7.4...v3.7.5) (2025-01-20)
+
+
+### Bug Fixes
+
+* **subscribe-block:** add recaptcha error styles ([#1724](https://github.com/Automattic/newspack-newsletters/issues/1724)) ([7725918](https://github.com/Automattic/newspack-newsletters/commit/7725918d8863168d18abb6206f9bc0ae2fa7e32c))
+
 ## [3.7.4](https://github.com/Automattic/newspack-newsletters/compare/v3.7.3...v3.7.4) (2025-01-15)
 
 

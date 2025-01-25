@@ -1,3 +1,15 @@
+## [3.3.2](https://github.com/Automattic/newspack-ads/compare/v3.3.1...v3.3.2) (2025-01-20)
+
+
+### Bug Fixes
+
+* consolidate duplicate selectors ([6382fb0](https://github.com/Automattic/newspack-ads/commit/6382fb083686b987676d031052a6a63a3b426f08))
+* correct linting errors ([1dbc9ec](https://github.com/Automattic/newspack-ads/commit/1dbc9ec5f00112d1c14593cc77c5e79dcf8fd8f1))
+* correct linting errors ([759e54e](https://github.com/Automattic/newspack-ads/commit/759e54e34b391fbb405dcc4411265a6ff7d05552))
+* correct spacing issues in editor ([31ef925](https://github.com/Automattic/newspack-ads/commit/31ef9255d3e9c4743432ae21d8f38f9edfff65db))
+* correct variable value ([7fd768d](https://github.com/Automattic/newspack-ads/commit/7fd768da0488c04e87ab77c240b4ec9afc75492b))
+* update CSS selector for tabs to work outside of media kit ([49d7a86](https://github.com/Automattic/newspack-ads/commit/49d7a86fd0462d439050095b6a7f9c9980685645))
+
 ## [3.3.1](https://github.com/Automattic/newspack-ads/compare/v3.3.0...v3.3.1) (2025-01-17)
 
 
