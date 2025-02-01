@@ -325,7 +325,7 @@ const {
     /**
      * Navigates to the specified page.
      *
-     * This function normalizes the passed href, fetchs the page HTML if
+     * This function normalizes the passed href, fetches the page HTML if
      * needed, and updates any interactive regions whose contents have
      * changed. It also creates a new entry in the browser session history.
      *
@@ -418,7 +418,7 @@ const {
       }
     },
     /**
-     * Prefetchs the page with the passed URL.
+     * Prefetches the page with the passed URL.
      *
      * The function normalizes the URL and stores internally the fetch
      * promise, to avoid triggering a second fetch for an ongoing request.

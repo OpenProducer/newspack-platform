@@ -1,3 +1,24 @@
+## [5.12.5](https://github.com/Automattic/newspack-plugin/compare/v5.12.4...v5.12.5) (2025-01-30)
+
+
+### Bug Fixes
+
+* **reader-revenue:** collect transaction fee settings ([#3697](https://github.com/Automattic/newspack-plugin/issues/3697)) ([28ff2cd](https://github.com/Automattic/newspack-plugin/commit/28ff2cdcdee78684de23d5cbf1fda12d471f721b))
+
+## [5.12.4](https://github.com/Automattic/newspack-plugin/compare/v5.12.3...v5.12.4) (2025-01-28)
+
+
+### Bug Fixes
+
+* create guest contributors dummy emails ([#3705](https://github.com/Automattic/newspack-plugin/issues/3705)) ([528712c](https://github.com/Automattic/newspack-plugin/commit/528712c2638c105f15557facb3611585efda2398))
+
+## [5.12.3](https://github.com/Automattic/newspack-plugin/compare/v5.12.2...v5.12.3) (2025-01-23)
+
+
+### Bug Fixes
+
+* **reader-data:** reduce number of sync requests ([c23c580](https://github.com/Automattic/newspack-plugin/commit/c23c5805a72557b7e684b1bc50939603239733b8))
+
 ## [5.12.2](https://github.com/Automattic/newspack-plugin/compare/v5.12.1...v5.12.2) (2025-01-23)
 
 

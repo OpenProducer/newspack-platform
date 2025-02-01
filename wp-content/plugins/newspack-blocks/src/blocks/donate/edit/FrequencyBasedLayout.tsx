@@ -14,7 +14,7 @@ import { RichText } from '@wordpress/block-editor';
  * Internal dependencies
  */
 import { AmountValueInput } from './components';
-import { getColorForContrast, getFrequencyLabel, getFrequencyLabelWithAmount } from '../utils';
+import { getColorForContrast, getFrequencyLabel, getFormattedAmount, getFrequencyLabelWithAmount } from '../utils';
 import { FREQUENCIES } from '../consts';
 import type { ComponentProps, DonationFrequencySlug } from '../types';
 import { updateBlockClassName, getFormData } from '../view'
@@ -105,9 +105,6 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 		</button>
 	);
 
-	// This code is fired on tab select and updates aria elements, tabindex states, and radio buttons
-	const displayAmount = ( amount: number ) => amount.toFixed( 2 ).replace( /\.?0*$/, '' );
-
 	const renderFormHeader = () => {
 		return ! rendersSingleFrequency && (
 			<div className="tab-container">{ availableFrequencies.map( renderTab ) }</div>
@@ -197,7 +194,7 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 								}`;
 								const tierLabel = isOtherTier
 									? __( 'Other', 'newspack-blocks' )
-									: `${settings.currencySymbol}${displayAmount( suggestedAmount )}` 
+									: getFormattedAmount( suggestedAmount, true );
 								return (
 									<div
 										className={ classNames(

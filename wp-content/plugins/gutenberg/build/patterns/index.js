@@ -192,7 +192,7 @@ const convertSyncedPatternToStatic = clientId => ({
         delete metadata.bindings;
         // Use overridden values of the pattern block if they exist.
         if (existingOverrides?.[metadata.name]) {
-          // Iterate over each overriden attribute.
+          // Iterate over each overridden attribute.
           for (const [attributeName, value] of Object.entries(existingOverrides[metadata.name])) {
             // Skip if the attribute does not exist in the block type.
             if (!(0,external_wp_blocks_namespaceObject.getBlockType)(block.name)?.attributes[attributeName]) {
@@ -1502,7 +1502,7 @@ const CONTENT = 'content';
 function ResetOverridesControl(props) {
   const name = props.attributes.metadata?.name;
   const registry = (0,external_wp_data_namespaceObject.useRegistry)();
-  const isOverriden = (0,external_wp_data_namespaceObject.useSelect)(select => {
+  const isOverridden = (0,external_wp_data_namespaceObject.useSelect)(select => {
     if (!name) {
       return;
     }
@@ -1553,7 +1553,7 @@ function ResetOverridesControl(props) {
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarGroup, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
         onClick: onClick,
-        disabled: !isOverriden,
+        disabled: !isOverridden,
         children: (0,external_wp_i18n_namespaceObject.__)('Reset')
       })
     })

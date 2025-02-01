@@ -264,6 +264,12 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 													'donation_price_summary_' . $frequency_slug => $product_price_summary,
 												]
 											);
+
+											$decimals         = intval( $amount ) == floatval( $amount ) ? 0 : 2;
+											$format_options   = [ 'decimals' => $decimals ];
+											$formatted_amount = function_exists( 'wc_price' ) ?
+												wp_strip_all_tags( \wc_price( (float) $amount, $format_options ) ) :
+												$configuration['currencySymbol'] . number_format( $amount, $decimals );
 										?>
 										<div
 											class='wp-block-newspack-blocks-donate__tier donation-tier__<?php echo esc_attr( $frequency_slug ); ?>'
@@ -315,7 +321,7 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 													class='tier-select-label tier-label'
 													for='newspack-tier-<?php echo esc_attr( $frequency_slug . '-' . $uid ); ?>-<?php echo (int) $index; ?>'
 												>
-													<?php echo esc_html( $configuration['currencySymbol'] . $amount ); ?>
+													<?php echo wp_kses_post( $formatted_amount ); ?>
 												</label>
 											<?php endif; ?>
 										</div>

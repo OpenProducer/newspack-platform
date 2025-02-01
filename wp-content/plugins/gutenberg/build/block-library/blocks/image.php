@@ -149,18 +149,14 @@ function gutenberg_block_core_image_render_lightbox( $block_content, $block ) {
 		return $block_content;
 	}
 
-	$alt              = $p->get_attribute( 'alt' );
-	$img_uploaded_src = $p->get_attribute( 'src' );
-	$img_class_names  = $p->get_attribute( 'class' );
-	$img_styles       = $p->get_attribute( 'style' );
-	$img_width        = 'none';
-	$img_height       = 'none';
-	$aria_label       = __( 'Enlarge image' );
-
-	if ( $alt ) {
-		/* translators: %s: Image alt text. */
-		$aria_label = sprintf( __( 'Enlarge image: %s' ), $alt );
-	}
+	$alt               = $p->get_attribute( 'alt' );
+	$img_uploaded_src  = $p->get_attribute( 'src' );
+	$img_class_names   = $p->get_attribute( 'class' );
+	$img_styles        = $p->get_attribute( 'style' );
+	$img_width         = 'none';
+	$img_height        = 'none';
+	$aria_label        = __( 'Enlarge' );
+	$dialog_aria_label = __( 'Enlarged image' );
 
 	if ( isset( $block['attrs']['id'] ) ) {
 		$img_uploaded_src = wp_get_attachment_url( $block['attrs']['id'] );
@@ -190,7 +186,7 @@ function gutenberg_block_core_image_render_lightbox( $block_content, $block ) {
 					'targetWidth'      => $img_width,
 					'targetHeight'     => $img_height,
 					'scaleAttr'        => $block['attrs']['scale'] ?? false,
-					'ariaLabel'        => $aria_label,
+					'ariaLabel'        => $dialog_aria_label,
 					'alt'              => $alt,
 				),
 			),
