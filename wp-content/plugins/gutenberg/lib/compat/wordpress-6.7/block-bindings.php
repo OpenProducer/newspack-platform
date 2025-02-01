@@ -32,7 +32,7 @@ add_action( 'enqueue_block_editor_assets', 'gutenberg_bootstrap_server_block_bin
 /**
  * Initialize `canUpdateBlockBindings` editor setting if it doesn't exist. By default, it is `true` only for admin users.
  *
- * @param array $settings The block editor settings from the `block_editor_settings_all` filter.
+ * @param array $editor_settings The block editor settings from the `block_editor_settings_all` filter.
  * @return array The editor settings including `canUpdateBlockBindings`.
  */
 function gutenberg_add_can_update_block_bindings_editor_setting( $editor_settings ) {

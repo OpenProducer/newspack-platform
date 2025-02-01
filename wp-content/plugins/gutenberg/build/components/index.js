@@ -28183,7 +28183,7 @@ var dist = __webpack_require__(9664);
  * @property {string | Record<string, unknown>}                           [highlightClassName='']   Classname to apply to highlighted text or a Record of classnames to apply to given text (which should be the key).
  * @property {import('react').AllHTMLAttributes<HTMLDivElement>['style']} [highlightStyle={}]       Styles to apply to highlighted text.
  * @property {keyof JSX.IntrinsicElements}                                [highlightTag='mark']     Tag to use for the highlighted text.
- * @property {import('highlight-words-core').FindAllArgs['sanitize']}     [sanitize]                Custom `santize` function to pass to `highlight-words-core`.
+ * @property {import('highlight-words-core').FindAllArgs['sanitize']}     [sanitize]                Custom `sanitize` function to pass to `highlight-words-core`.
  * @property {string[]}                                                   [searchWords=[]]          Words to search for and highlight.
  * @property {string}                                                     [unhighlightClassName=''] Classname to apply to unhighlighted text.
  * @property {import('react').AllHTMLAttributes<HTMLDivElement>['style']} [unhighlightStyle]        Style to apply to unhighlighted text.
@@ -28464,10 +28464,12 @@ function useText(props) {
     sx.optimalTextColor = null;
     if (optimizeReadabilityFor) {
       const isOptimalTextColorDark = getOptimalTextShade(optimizeReadabilityFor) === 'dark';
+
+      // Should not use theme colors
       sx.optimalTextColor = isOptimalTextColorDark ? /*#__PURE__*/emotion_react_browser_esm_css({
-        color: COLORS.theme.foreground
+        color: COLORS.gray[900]
       },  true ? "" : 0,  true ? "" : 0) : /*#__PURE__*/emotion_react_browser_esm_css({
-        color: COLORS.theme.foregroundInverted
+        color: COLORS.white
       },  true ? "" : 0,  true ? "" : 0);
     }
     return cx(Text, sx.Base, sx.optimalTextColor, isDestructive && destructive, !!isHighlighter && highlighterText, isBlock && styles_block, isCaption && muted, variant && text_styles_namespaceObject[variant], upperCase && sx.upperCase, className);
@@ -28745,7 +28747,7 @@ const dragStyles = ({
 
 const Input = /*#__PURE__*/emotion_styled_base_browser_esm("input",  true ? {
   target: "em5sgkm3"
-} : 0)("&&&{background-color:transparent;box-sizing:border-box;border:none;box-shadow:none!important;color:", COLORS.theme.foreground, ";display:block;font-family:inherit;margin:0;outline:none;width:100%;", dragStyles, " ", disabledStyles, " ", fontSizeStyles, " ", sizeStyles, " ", customPaddings, " &::-webkit-input-placeholder{line-height:normal;}}" + ( true ? "" : 0));
+} : 0)("&&&{background-color:transparent;box-sizing:border-box;border:none;box-shadow:none!important;color:", COLORS.theme.foreground, ";display:block;font-family:inherit;margin:0;outline:none;width:100%;", dragStyles, " ", disabledStyles, " ", fontSizeStyles, " ", sizeStyles, " ", customPaddings, " &::-webkit-input-placeholder{line-height:normal;}&[type='email'],&[type='url']{direction:ltr;}}" + ( true ? "" : 0));
 const BaseLabel = /*#__PURE__*/emotion_styled_base_browser_esm(text_component,  true ? {
   target: "em5sgkm2"
 } : 0)("&&&{", baseLabelTypography, ";box-sizing:border-box;display:block;padding-top:0;padding-bottom:0;max-width:100%;z-index:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}" + ( true ? "" : 0));
@@ -37024,7 +37026,7 @@ const InputControlSuffixWrapperWithClickThrough = /*#__PURE__*/emotion_styled_ba
  * Return an SVG icon.
  *
  * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifiying the icon size in pixels
+ *                                                          size is a number specifying the icon size in pixels
  *                                                          Other props will be passed to wrapped SVG component
  * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
  *
@@ -38942,16 +38944,17 @@ const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
 
 
 
-
 function UnforwardedOptionAsButton(props, forwardedRef) {
   const {
     isPressed,
+    label,
     ...additionalProps
   } = props;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
     ...additionalProps,
     "aria-pressed": isPressed,
-    ref: forwardedRef
+    ref: forwardedRef,
+    label: label
   });
 }
 const OptionAsButton = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedOptionAsButton);
@@ -38959,6 +38962,7 @@ function UnforwardedOptionAsOption(props, forwardedRef) {
   const {
     id,
     isSelected,
+    label,
     ...additionalProps
   } = props;
   const {
@@ -38978,7 +38982,8 @@ function UnforwardedOptionAsOption(props, forwardedRef) {
       ...additionalProps,
       role: "option",
       "aria-selected": !!isSelected,
-      ref: forwardedRef
+      ref: forwardedRef,
+      label: label
     }),
     id: id
   });
@@ -39005,17 +39010,16 @@ function Option({
   const isListbox = setActiveId !== undefined;
   const optionControl = isListbox ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OptionAsOption, {
     ...commonProps,
+    label: tooltipText,
     isSelected: isSelected
   }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OptionAsButton, {
     ...commonProps,
+    label: tooltipText,
     isPressed: isSelected
   });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: dist_clsx(className, 'components-circular-option-picker__option-wrapper'),
-    children: [tooltipText ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-      text: tooltipText,
-      children: optionControl
-    }) : optionControl, isSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
+    children: [optionControl, isSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
       icon: library_check,
       ...selectedIconProps
     })]
@@ -39140,7 +39144,6 @@ function ButtonAction({
  * 						style={ { backgroundColor: color, color } }
  * 						isSelected={ index === currentColor }
  * 						onClick={ () => setCurrentColor( index ) }
- * 						aria-label={ name }
  * 					/>
  * 				);
  * 			} ) }
@@ -39684,12 +39687,7 @@ function SinglePalette({
           backgroundColor: color,
           color
         },
-        onClick: isSelected ? clearColor : () => onChange(color, index),
-        "aria-label": name ?
-        // translators: %s: The name of the color e.g: "vivid red".
-        (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Color: %s'), name) :
-        // translators: %s: color hex code e.g: "#f00".
-        (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Color code: %s'), color)
+        onClick: isSelected ? clearColor : () => onChange(color, index)
       }, `${color}-${index}`);
     });
   }, [colors, value, onChange, clearColor]);
@@ -60051,7 +60049,7 @@ function UnforwardedSearchControl({
   const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     BaseControl: {
       // Overrides the underlying BaseControl `__nextHasNoMarginBottom` via the context system
-      // to provide backwards compatibile margin for SearchControl.
+      // to provide backwards compatible margin for SearchControl.
       // (In a standard InputControl, the BaseControl `__nextHasNoMarginBottom` is always set to true.)
       _overrides: {
         __nextHasNoMarginBottom
@@ -69104,7 +69102,7 @@ function isComponentLike(object) {
  *                describing the component and the
  *                focus return characteristics.
  *
- * @return Higher Order Component with the focus restauration behaviour.
+ * @return Higher Order Component with the focus restoration behaviour.
  */
 /* harmony default export */ const with_focus_return = ((0,external_wp_compose_namespaceObject.createHigherOrderComponent)(
 // @ts-expect-error TODO: Reconcile with intended `createHigherOrderComponent` types
@@ -69463,7 +69461,7 @@ function useMenuStore(props = {}) {
  * Internal dependencies
  */
 
-const MenuContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
+const context_Context = (0,external_wp_element_namespaceObject.createContext)(undefined);
 
 ;// ./node_modules/@ariakit/react-core/esm/__chunks/MVIULMNR.js
 "use client";
@@ -70187,44 +70185,44 @@ const TOOLBAR_VARIANT_BORDER_COLOR = COLORS.theme.foreground;
 const DEFAULT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${DEFAULT_BORDER_COLOR}, ${config_values.elevationMedium}`;
 const TOOLBAR_VARIANT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${TOOLBAR_VARIANT_BORDER_COLOR}`;
 const GRID_TEMPLATE_COLS = 'minmax( 0, max-content ) 1fr';
-const MenuPopoverOuterWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+const PopoverOuterWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e1wg7tti14"
 } : 0)("position:relative;background-color:", COLORS.ui.background, ";border-radius:", config_values.radiusMedium, ";", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? TOOLBAR_VARIANT_BOX_SHADOW : DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overflow:hidden;@media not ( prefers-reduced-motion ){transition-property:transform,opacity;transition-timing-function:", styles_ANIMATION_PARAMS.EASING, ";transition-duration:", styles_ANIMATION_PARAMS.DURATION.IN, ";will-change:transform,opacity;opacity:0;&:has( [data-enter] ){opacity:1;}&:has( [data-leave] ){transition-duration:", styles_ANIMATION_PARAMS.DURATION.OUT, ";}&:has( [data-side='bottom'] ),&:has( [data-side='top'] ){transform:scaleY( ", styles_ANIMATION_PARAMS.SCALE_AMOUNT_OUTER, " );}&:has( [data-side='bottom'] ){transform-origin:top;}&:has( [data-side='top'] ){transform-origin:bottom;}&:has( [data-enter][data-side='bottom'] ),&:has( [data-enter][data-side='top'] ),&:has( [data-leave][data-side='bottom'] ),&:has( [data-leave][data-side='top'] ){transform:scaleY( 1 );}}" + ( true ? "" : 0));
-const MenuPopoverInnerWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+const PopoverInnerWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e1wg7tti13"
 } : 0)("position:relative;z-index:1000000;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";grid-template-rows:auto;box-sizing:border-box;min-width:160px;max-width:320px;max-height:var( --popover-available-height );padding:", CONTENT_WRAPPER_PADDING, ";overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;@media not ( prefers-reduced-motion ){transition:inherit;transform-origin:inherit;&[data-side='bottom'],&[data-side='top']{transform:scaleY(\n\t\t\t\tcalc(\n\t\t\t\t\t1 / ", styles_ANIMATION_PARAMS.SCALE_AMOUNT_OUTER, " *\n\t\t\t\t\t\t", styles_ANIMATION_PARAMS.SCALE_AMOUNT_CONTENT, "\n\t\t\t\t)\n\t\t\t);}&[data-enter][data-side='bottom'],&[data-enter][data-side='top'],&[data-leave][data-side='bottom'],&[data-leave][data-side='top']{transform:scaleY( 1 );}}" + ( true ? "" : 0));
-const baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;position:relative;min-height:", space(10), ";box-sizing:border-box;grid-column:1/-1;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";align-items:center;@supports ( grid-template-columns: subgrid ){grid-template-columns:subgrid;}font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.theme.foreground, ";border-radius:", config_values.radiusSmall, ";padding-block:", ITEM_PADDING_BLOCK, ";padding-inline:", ITEM_PADDING_INLINE, ";scroll-margin:", CONTENT_WRAPPER_PADDING, ";user-select:none;outline:none;&[aria-disabled='true']{color:", COLORS.ui.textDisabled, ";cursor:not-allowed;}&[data-active-item]:not( [data-focus-visible] ):not(\n\t\t\t[aria-disabled='true']\n\t\t){background-color:", COLORS.theme.accent, ";color:", COLORS.theme.accentInverted, ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px ", COLORS.theme.accent, ";outline:2px solid transparent;}&:active,&[data-active]{}", MenuPopoverInnerWrapper, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{background-color:", LIGHT_BACKGROUND_COLOR, ";color:", COLORS.theme.foreground, ";}svg{fill:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
-const styles_MenuItem = /*#__PURE__*/emotion_styled_base_browser_esm(MVIULMNR_MenuItem,  true ? {
+const baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;position:relative;min-height:", space(10), ";box-sizing:border-box;grid-column:1/-1;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";align-items:center;@supports ( grid-template-columns: subgrid ){grid-template-columns:subgrid;}font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.theme.foreground, ";border-radius:", config_values.radiusSmall, ";padding-block:", ITEM_PADDING_BLOCK, ";padding-inline:", ITEM_PADDING_INLINE, ";scroll-margin:", CONTENT_WRAPPER_PADDING, ";user-select:none;outline:none;&[aria-disabled='true']{color:", COLORS.ui.textDisabled, ";cursor:not-allowed;}&[data-active-item]:not( [data-focus-visible] ):not(\n\t\t\t[aria-disabled='true']\n\t\t){background-color:", COLORS.theme.accent, ";color:", COLORS.theme.accentInverted, ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px ", COLORS.theme.accent, ";outline:2px solid transparent;}&:active,&[data-active]{}", PopoverInnerWrapper, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{background-color:", LIGHT_BACKGROUND_COLOR, ";color:", COLORS.theme.foreground, ";}svg{fill:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
+const styles_Item = /*#__PURE__*/emotion_styled_base_browser_esm(MVIULMNR_MenuItem,  true ? {
   target: "e1wg7tti12"
 } : 0)(baseItem, ";" + ( true ? "" : 0));
-const styles_MenuCheckboxItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemCheckbox,  true ? {
+const styles_CheckboxItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemCheckbox,  true ? {
   target: "e1wg7tti11"
 } : 0)(baseItem, ";" + ( true ? "" : 0));
-const styles_MenuRadioItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemRadio,  true ? {
+const styles_RadioItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemRadio,  true ? {
   target: "e1wg7tti10"
 } : 0)(baseItem, ";" + ( true ? "" : 0));
 const ItemPrefixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1wg7tti9"
-} : 0)("grid-column:1;", styles_MenuCheckboxItem, ">&,", styles_MenuRadioItem, ">&{min-width:", space(6), ";}", styles_MenuCheckboxItem, ">&,", styles_MenuRadioItem, ">&,&:not( :empty ){margin-inline-end:", space(2), ";}display:flex;align-items:center;justify-content:center;color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] )>&,[aria-disabled='true']>&{color:inherit;}" + ( true ? "" : 0));
-const MenuItemContentWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+} : 0)("grid-column:1;", styles_CheckboxItem, ">&,", styles_RadioItem, ">&{min-width:", space(6), ";}", styles_CheckboxItem, ">&,", styles_RadioItem, ">&,&:not( :empty ){margin-inline-end:", space(2), ";}display:flex;align-items:center;justify-content:center;color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] )>&,[aria-disabled='true']>&{color:inherit;}" + ( true ? "" : 0));
+const ItemContentWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e1wg7tti8"
 } : 0)("grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:", space(3), ";pointer-events:none;" + ( true ? "" : 0));
-const MenuItemChildrenWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+const ItemChildrenWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e1wg7tti7"
 } : 0)("flex:1;display:inline-flex;flex-direction:column;gap:", space(1), ";" + ( true ? "" : 0));
 const ItemSuffixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1wg7tti6"
-} : 0)("flex:0 1 fit-content;min-width:0;width:fit-content;display:flex;align-items:center;justify-content:center;gap:", space(3), ";color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] ) *:not(", MenuPopoverInnerWrapper, ") &,[aria-disabled='true'] *:not(", MenuPopoverInnerWrapper, ") &{color:inherit;}" + ( true ? "" : 0));
-const styles_MenuGroup = /*#__PURE__*/emotion_styled_base_browser_esm(menu_group_MenuGroup,  true ? {
+} : 0)("flex:0 1 fit-content;min-width:0;width:fit-content;display:flex;align-items:center;justify-content:center;gap:", space(3), ";color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] ) *:not(", PopoverInnerWrapper, ") &,[aria-disabled='true'] *:not(", PopoverInnerWrapper, ") &{color:inherit;}" + ( true ? "" : 0));
+const styles_Group = /*#__PURE__*/emotion_styled_base_browser_esm(menu_group_MenuGroup,  true ? {
   target: "e1wg7tti5"
 } : 0)( true ? {
   name: "49aokf",
   styles: "display:contents"
 } : 0);
-const styles_MenuGroupLabel = /*#__PURE__*/emotion_styled_base_browser_esm(MenuGroupLabel,  true ? {
+const styles_GroupLabel = /*#__PURE__*/emotion_styled_base_browser_esm(MenuGroupLabel,  true ? {
   target: "e1wg7tti4"
 } : 0)("grid-column:1/-1;padding-block-start:", space(3), ";padding-block-end:", space(2), ";padding-inline:", ITEM_PADDING_INLINE, ";" + ( true ? "" : 0));
-const styles_MenuSeparator = /*#__PURE__*/emotion_styled_base_browser_esm(MenuSeparator,  true ? {
+const styles_Separator = /*#__PURE__*/emotion_styled_base_browser_esm(MenuSeparator,  true ? {
   target: "e1wg7tti3"
 } : 0)("grid-column:1/-1;border:none;height:", config_values.borderWidth, ";background-color:", props => props.variant === 'toolbar' ? TOOLBAR_VARIANT_BORDER_COLOR : DIVIDER_COLOR, ";margin-block:", space(2), ";margin-inline:", ITEM_PADDING_INLINE, ";outline:2px solid transparent;" + ( true ? "" : 0));
 const SubmenuChevronIcon = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_icon,  true ? {
@@ -70234,12 +70232,12 @@ const SubmenuChevronIcon = /*#__PURE__*/emotion_styled_base_browser_esm(build_mo
 }, {
   transform: `scaleX(-1)`
 }), ";" + ( true ? "" : 0));
-const styles_MenuItemLabel = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
+const styles_ItemLabel = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
   target: "e1wg7tti1"
 } : 0)("font-size:", font('default.fontSize'), ";line-height:20px;color:inherit;" + ( true ? "" : 0));
-const styles_MenuItemHelpText = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
+const styles_ItemHelpText = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
   target: "e1wg7tti0"
-} : 0)("font-size:", font('helpText.fontSize'), ";line-height:16px;color:", LIGHTER_TEXT_COLOR, ";overflow-wrap:anywhere;[data-active-item]:not( [data-focus-visible] ) *:not( ", MenuPopoverInnerWrapper, " ) &,[aria-disabled='true'] *:not( ", MenuPopoverInnerWrapper, " ) &{color:inherit;}" + ( true ? "" : 0));
+} : 0)("font-size:", font('helpText.fontSize'), ";line-height:16px;color:", LIGHTER_TEXT_COLOR, ";overflow-wrap:anywhere;[data-active-item]:not( [data-focus-visible] ) *:not( ", PopoverInnerWrapper, " ) &,[aria-disabled='true'] *:not( ", PopoverInnerWrapper, " ) &{color:inherit;}" + ( true ? "" : 0));
 
 ;// ./packages/components/build-module/menu/item.js
 /**
@@ -70254,7 +70252,7 @@ const styles_MenuItemHelpText = /*#__PURE__*/emotion_styled_base_browser_esm(tru
 
 
 
-const item_MenuItem = (0,external_wp_element_namespaceObject.forwardRef)(function MenuItem({
+const item_Item = (0,external_wp_element_namespaceObject.forwardRef)(function Item({
   prefix,
   suffix,
   children,
@@ -70263,7 +70261,7 @@ const item_MenuItem = (0,external_wp_element_namespaceObject.forwardRef)(functio
   store,
   ...props
 }, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.Item can only be rendered inside a Menu component');
   }
@@ -70273,7 +70271,7 @@ const item_MenuItem = (0,external_wp_element_namespaceObject.forwardRef)(functio
   // `Menu.SubmenuTriggerItem`), the context store wouldn't be correct. This is
   // why the component accepts a `store` prop to override the context store.
   const computedStore = store !== null && store !== void 0 ? store : menuContext.store;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_MenuItem, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_Item, {
     ref: ref,
     ...props,
     accessibleWhenDisabled: true,
@@ -70282,8 +70280,8 @@ const item_MenuItem = (0,external_wp_element_namespaceObject.forwardRef)(functio
     store: computedStore,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {
       children: prefix
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(MenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemChildrenWrapper, {
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(ItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemChildrenWrapper, {
         children: children
       }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
         children: suffix
@@ -70346,18 +70344,18 @@ var MenuItemCheck = forwardRef2(function MenuItemCheck2(props) {
 
 
 
-const MenuCheckboxItem = (0,external_wp_element_namespaceObject.forwardRef)(function MenuCheckboxItem({
+const CheckboxItem = (0,external_wp_element_namespaceObject.forwardRef)(function CheckboxItem({
   suffix,
   children,
   disabled = false,
   hideOnClick = false,
   ...props
 }, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.CheckboxItem can only be rendered inside a Menu component');
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_MenuCheckboxItem, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_CheckboxItem, {
     ref: ref,
     ...props,
     accessibleWhenDisabled: true,
@@ -70377,8 +70375,8 @@ const MenuCheckboxItem = (0,external_wp_element_namespaceObject.forwardRef)(func
         icon: library_check,
         size: 24
       })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(MenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemChildrenWrapper, {
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(ItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemChildrenWrapper, {
         children: children
       }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
         children: suffix
@@ -70416,18 +70414,18 @@ const radioCheck = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)
     r: 3
   })
 });
-const MenuRadioItem = (0,external_wp_element_namespaceObject.forwardRef)(function MenuRadioItem({
+const RadioItem = (0,external_wp_element_namespaceObject.forwardRef)(function RadioItem({
   suffix,
   children,
   disabled = false,
   hideOnClick = false,
   ...props
 }, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.RadioItem can only be rendered inside a Menu component');
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_MenuRadioItem, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_RadioItem, {
     ref: ref,
     ...props,
     accessibleWhenDisabled: true,
@@ -70447,8 +70445,8 @@ const MenuRadioItem = (0,external_wp_element_namespaceObject.forwardRef)(functio
         icon: radioCheck,
         size: 24
       })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(MenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemChildrenWrapper, {
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(ItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemChildrenWrapper, {
         children: children
       }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
         children: suffix
@@ -70470,12 +70468,12 @@ const MenuRadioItem = (0,external_wp_element_namespaceObject.forwardRef)(functio
 
 
 
-const group_MenuGroup = (0,external_wp_element_namespaceObject.forwardRef)(function MenuGroup(props, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+const group_Group = (0,external_wp_element_namespaceObject.forwardRef)(function Group(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.Group can only be rendered inside a Menu component');
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuGroup, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_Group, {
     ref: ref,
     ...props,
     store: menuContext.store
@@ -70496,12 +70494,12 @@ const group_MenuGroup = (0,external_wp_element_namespaceObject.forwardRef)(funct
 
 
 
-const group_label_MenuGroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function MenuGroup(props, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+const group_label_GroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function Group(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.GroupLabel can only be rendered inside a Menu component');
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuGroupLabel, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_GroupLabel, {
     ref: ref,
     render:
     /*#__PURE__*/
@@ -70531,12 +70529,12 @@ const group_label_MenuGroupLabel = (0,external_wp_element_namespaceObject.forwar
 
 
 
-const separator_MenuSeparator = (0,external_wp_element_namespaceObject.forwardRef)(function MenuSeparator(props, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+const separator_Separator = (0,external_wp_element_namespaceObject.forwardRef)(function Separator(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.Separator can only be rendered inside a Menu component');
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuSeparator, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_Separator, {
     ref: ref,
     ...props,
     store: menuContext.store,
@@ -70557,12 +70555,12 @@ const separator_MenuSeparator = (0,external_wp_element_namespaceObject.forwardRe
 
 
 
-const MenuItemLabel = (0,external_wp_element_namespaceObject.forwardRef)(function MenuItemLabel(props, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+const ItemLabel = (0,external_wp_element_namespaceObject.forwardRef)(function ItemLabel(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.ItemLabel can only be rendered inside a Menu component');
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuItemLabel, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_ItemLabel, {
     numberOfLines: 1,
     ref: ref,
     ...props
@@ -70582,12 +70580,12 @@ const MenuItemLabel = (0,external_wp_element_namespaceObject.forwardRef)(functio
 
 
 
-const MenuItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(function MenuItemHelpText(props, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+const ItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(function ItemHelpText(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.ItemHelpText can only be rendered inside a Menu component');
   }
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuItemHelpText, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_ItemHelpText, {
     numberOfLines: 2,
     ref: ref,
     ...props
@@ -70809,12 +70807,12 @@ var MenuButton = forwardRef2(function MenuButton2(props) {
 
 
 
-const MenuTriggerButton = (0,external_wp_element_namespaceObject.forwardRef)(function MenuTriggerButton({
+const TriggerButton = (0,external_wp_element_namespaceObject.forwardRef)(function TriggerButton({
   children,
   disabled = false,
   ...props
 }, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store) {
     throw new Error('Menu.TriggerButton can only be rendered inside a Menu component');
   }
@@ -70865,11 +70863,11 @@ const chevronRightSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObje
 
 
 
-const MenuSubmenuTriggerItem = (0,external_wp_element_namespaceObject.forwardRef)(function MenuSubmenuTriggerItem({
+const SubmenuTriggerItem = (0,external_wp_element_namespaceObject.forwardRef)(function SubmenuTriggerItem({
   suffix,
   ...otherProps
 }, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   if (!menuContext?.store.parent) {
     throw new Error('Menu.SubmenuTriggerItem can only be rendered inside a nested Menu component');
   }
@@ -70877,10 +70875,10 @@ const MenuSubmenuTriggerItem = (0,external_wp_element_namespaceObject.forwardRef
     ref: ref,
     accessibleWhenDisabled: true,
     store: menuContext.store,
-    render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(item_MenuItem, {
+    render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(item_Item, {
       ...otherProps,
       // The menu item needs to register and be part of the parent menu.
-      // Without specifying the store explicitly, the `MenuItem` component
+      // Without specifying the store explicitly, the `Item` component
       // would otherwise read the store via context and pick up the one from
       // the sub-menu `Menu` component.
       store: menuContext.store.parent,
@@ -71261,14 +71259,14 @@ var Menu = createDialogComponent(
 
 
 
-const MenuPopover = (0,external_wp_element_namespaceObject.forwardRef)(function MenuPopover({
+const menu_popover_Popover = (0,external_wp_element_namespaceObject.forwardRef)(function Popover({
   gutter,
   children,
   shift,
   modal = true,
   ...otherProps
 }, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
 
   // Extract the side from the applied placement — useful for animations.
   // Using `currentPlacement` instead of `placement` to make sure that we
@@ -71315,9 +71313,9 @@ const MenuPopover = (0,external_wp_element_namespaceObject.forwardRef)(function 
     // container scales with a different factor than its contents.
     // The {...renderProps} are passed to the inner wrapper, so that the
     // menu element is the direct parent of the menu item elements.
-    (0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuPopoverOuterWrapper, {
+    (0,external_ReactJSXRuntime_namespaceObject.jsx)(PopoverOuterWrapper, {
       variant: menuContext.variant,
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuPopoverInnerWrapper, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PopoverInnerWrapper, {
         ...renderProps
       })
     }),
@@ -71364,7 +71362,7 @@ const UnconnectedMenu = props => {
     // From internal components context
     variant
   } = useContextSystem(props, 'Menu');
-  const parentContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
+  const parentContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
   const rtl = (0,external_wp_i18n_namespaceObject.isRTL)();
 
   // If an explicit value for the `placement` prop is not passed,
@@ -71394,46 +71392,119 @@ const UnconnectedMenu = props => {
     store: menuStore,
     variant
   }), [menuStore, variant]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuContext.Provider, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(context_Context.Provider, {
     value: contextValue,
     children: children
   });
 };
+
+/**
+ * Menu is a collection of React components that combine to render
+ * ARIA-compliant [menu](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) and
+ * [menu button](https://www.w3.org/WAI/ARIA/apg/patterns/menubutton/) patterns.
+ *
+ * `Menu` itself is a wrapper component and context provider.
+ * It is responsible for managing the state of the menu and its items, and for
+ * rendering the `Menu.TriggerButton` (or the `Menu.SubmenuTriggerItem`)
+ * component, and the `Menu.Popover` component.
+ */
 const menu_Menu = Object.assign(contextConnectWithoutRef(UnconnectedMenu, 'Menu'), {
-  Context: Object.assign(MenuContext, {
+  Context: Object.assign(context_Context, {
     displayName: 'Menu.Context'
   }),
-  Item: Object.assign(item_MenuItem, {
+  /**
+   * Renders a menu item inside the `Menu.Popover` or `Menu.Group` components.
+   *
+   * It can optionally contain one instance of the `Menu.ItemLabel` component
+   * and one instance of the `Menu.ItemHelpText` component.
+   */
+  Item: Object.assign(item_Item, {
     displayName: 'Menu.Item'
   }),
-  RadioItem: Object.assign(MenuRadioItem, {
+  /**
+   * Renders a radio menu item inside the `Menu.Popover` or `Menu.Group`
+   * components.
+   *
+   * It can optionally contain one instance of the `Menu.ItemLabel` component
+   * and one instance of the `Menu.ItemHelpText` component.
+   */
+  RadioItem: Object.assign(RadioItem, {
     displayName: 'Menu.RadioItem'
   }),
-  CheckboxItem: Object.assign(MenuCheckboxItem, {
+  /**
+   * Renders a checkbox menu item inside the `Menu.Popover` or `Menu.Group`
+   * components.
+   *
+   * It can optionally contain one instance of the `Menu.ItemLabel` component
+   * and one instance of the `Menu.ItemHelpText` component.
+   */
+  CheckboxItem: Object.assign(CheckboxItem, {
     displayName: 'Menu.CheckboxItem'
   }),
-  Group: Object.assign(group_MenuGroup, {
+  /**
+   * Renders a group for menu items.
+   *
+   * It should contain one instance of `Menu.GroupLabel` and one or more
+   * instances of `Menu.Item`, `Menu.RadioItem`, or `Menu.CheckboxItem`.
+   */
+  Group: Object.assign(group_Group, {
     displayName: 'Menu.Group'
   }),
-  GroupLabel: Object.assign(group_label_MenuGroupLabel, {
+  /**
+   * Renders a label in a menu group.
+   *
+   * This component should be wrapped with `Menu.Group` so the
+   * `aria-labelledby` is correctly set on the group element.
+   */
+  GroupLabel: Object.assign(group_label_GroupLabel, {
     displayName: 'Menu.GroupLabel'
   }),
-  Separator: Object.assign(separator_MenuSeparator, {
+  /**
+   * Renders a divider between menu items or menu groups.
+   */
+  Separator: Object.assign(separator_Separator, {
     displayName: 'Menu.Separator'
   }),
-  ItemLabel: Object.assign(MenuItemLabel, {
+  /**
+   * Renders a menu item's label text. It should be wrapped with `Menu.Item`,
+   * `Menu.RadioItem`, or `Menu.CheckboxItem`.
+   */
+  ItemLabel: Object.assign(ItemLabel, {
     displayName: 'Menu.ItemLabel'
   }),
-  ItemHelpText: Object.assign(MenuItemHelpText, {
+  /**
+   * Renders a menu item's help text. It should be wrapped with `Menu.Item`,
+   * `Menu.RadioItem`, or `Menu.CheckboxItem`.
+   */
+  ItemHelpText: Object.assign(ItemHelpText, {
     displayName: 'Menu.ItemHelpText'
   }),
-  Popover: Object.assign(MenuPopover, {
+  /**
+   * Renders a dropdown menu element that's controlled by a sibling
+   * `Menu.TriggerButton` component. It renders a popover and automatically
+   * focuses on items when the menu is shown.
+   *
+   * The only valid children of `Menu.Popover` are `Menu.Item`,
+   * `Menu.RadioItem`, `Menu.CheckboxItem`, `Menu.Group`, `Menu.Separator`,
+   * and `Menu` (for nested dropdown menus).
+   */
+  Popover: Object.assign(menu_popover_Popover, {
     displayName: 'Menu.Popover'
   }),
-  TriggerButton: Object.assign(MenuTriggerButton, {
+  /**
+   * Renders a menu button that toggles the visibility of a sibling
+   * `Menu.Popover` component when clicked or when using arrow keys.
+   */
+  TriggerButton: Object.assign(TriggerButton, {
     displayName: 'Menu.TriggerButton'
   }),
-  SubmenuTriggerItem: Object.assign(MenuSubmenuTriggerItem, {
+  /**
+   * Renders a menu item that toggles the visibility of a sibling
+   * `Menu.Popover` component when clicked or when using arrow keys.
+   *
+   * This component is used to create a nested dropdown menu.
+   */
+  SubmenuTriggerItem: Object.assign(SubmenuTriggerItem, {
     displayName: 'Menu.SubmenuTriggerItem'
   })
 });
@@ -72204,36 +72275,42 @@ const error = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
 
 
 
+/**
+ * Returns an icon based on the badge context.
+ *
+ * @return The corresponding icon for the provided context.
+ */
+
+function contextBasedIcon(intent = 'default') {
+  switch (intent) {
+    case 'info':
+      return library_info;
+    case 'success':
+      return library_published;
+    case 'warning':
+      return library_caution;
+    case 'error':
+      return library_error;
+    default:
+      return null;
+  }
+}
 function Badge({
   className,
   intent = 'default',
   children,
   ...props
 }) {
-  /**
-   * Returns an icon based on the badge context.
-   *
-   * @return The corresponding icon for the provided context.
-   */
-  function contextBasedIcon() {
-    switch (intent) {
-      case 'info':
-        return library_info;
-      case 'success':
-        return library_published;
-      case 'warning':
-        return library_caution;
-      case 'error':
-        return library_error;
-      default:
-        return null;
-    }
-  }
+  const icon = contextBasedIcon(intent);
+  const hasIcon = !!icon;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
-    className: dist_clsx('components-badge', `is-${intent}`, intent !== 'default' && 'has-icon', className),
+    className: dist_clsx('components-badge', className, {
+      [`is-${intent}`]: intent,
+      'has-icon': hasIcon
+    }),
     ...props,
-    children: [intent !== 'default' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_icon, {
-      icon: contextBasedIcon(),
+    children: [hasIcon && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_icon, {
+      icon: icon,
       size: 16,
       fill: "currentColor",
       className: "components-badge__icon"

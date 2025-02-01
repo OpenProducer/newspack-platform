@@ -806,9 +806,9 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, 
 /**
  * Whether the role supports checked state.
  *
+ * @see https://www.w3.org/TR/wai-aria-1.1/#aria-checked
  * @param {import('react').AriaRole} role Role.
  * @return {boolean} Whether the role supports checked state.
- * @see https://www.w3.org/TR/wai-aria-1.1/#aria-checked
  */
 
 function roleSupportsCheckedState(role) {

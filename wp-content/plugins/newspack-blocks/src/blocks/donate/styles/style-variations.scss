@@ -103,7 +103,7 @@
 		}
 	}
 
-	// Tiers-based version.
+	/* Tiers-based version. */
 	.wpbnbd__tiers .wpbnbd__button {
 		border: 0.19rem solid transparent;
 
@@ -113,7 +113,7 @@
 	}
 
 	.wpbnbd__tiers .wpbnbd__button--active,
-	// Frequency-based version.
+	/* Frequency-based version. */
 	.tab-container .freq-label.wpbnbd__button--active::after {
 		background: white;
 		border-radius: 5px;
@@ -146,7 +146,7 @@
 		}
 	}
 
-	// Show/hide the tab content.
+	/* Show/hide the tab content. */
 	.frequencies input[type="radio"]:checked ~ .tiers {
 		display: grid;
 		grid-gap: 0.28rem;
@@ -204,7 +204,7 @@
 		}
 	}
 
-	// Tiers-based version.
+	/* Tiers-based version. */
 	.wpbnbd__tiers {
 		&__selection {
 			.wpbnbd__button {
@@ -407,7 +407,7 @@
 	}
 
 	.wpbnbd__tiers .wpbnbd__button--active,
-	// Frequency-based version.
+	/* Frequency-based version. */
 	.tab-container .freq-label.wpbnbd__button--active::after {
 		background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
 		border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
@@ -444,7 +444,7 @@
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	// Layout: Frequency
+	/* Layout: Frequency */
 	&.wpbnbd--frequency-based {
 		form {
 			&::after {
@@ -635,7 +635,7 @@
 		}
 	}
 
-	// Layout: Tiers
+	/* Layout: Tiers */
 	&.wpbnbd--tiers-based {
 		color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
 
@@ -757,6 +757,7 @@
 					font-family: inherit;
 					font-size: var(--newspack-ui-font-size-xl, clamp(1.375rem, 0.394rem + 2.008vw, 2rem));
 					line-height: var(--newspack-ui-line-height-xl, 1.375);
+					word-break: break-all;
 				}
 			}
 

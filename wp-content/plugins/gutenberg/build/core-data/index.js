@@ -4738,7 +4738,7 @@ function createBatch(processor = defaultProcessor) {
      * rejected when the input is processed by `batch.run()`.
      *
      * You may also pass a thunk which allows inputs to be added
-     * asychronously.
+     * asynchronously.
      *
      * ```
      * // Both are allowed:
@@ -19138,7 +19138,7 @@ const createSyncProvider = (connectLocal, connectRemote) => {
   const docs = {};
 
   /**
-   * Registeres an object type.
+   * Registers an object type.
    *
    * @param {ObjectType}   objectType   Object type to register.
    * @param {ObjectConfig} objectConfig Object config.
@@ -22023,7 +22023,7 @@ const undo = () => ({
 };
 
 /**
- * Action triggered to redo the last undoed
+ * Action triggered to redo the last undone
  * edit to an entity record, if any.
  */
 const redo = () => ({
@@ -22893,7 +22893,7 @@ const resolvers_getEntityRecord = (kind, name, key = '', query) => async ({
           dispatch.receiveEntityRecords(kind, name, record, query);
         });
 
-        // Boostraps the edited document as well (and load from peers).
+        // Bootstraps the edited document as well (and load from peers).
         await getSyncProvider().bootstrap(entityConfig.syncObjectType + '--edit', objectId, record => {
           dispatch({
             type: 'EDIT_ENTITY_RECORD',
@@ -23269,8 +23269,12 @@ const resolvers_getAutosaves = (postType, postId) => async ({
 }) => {
   const {
     rest_base: restBase,
-    rest_namespace: restNamespace = 'wp/v2'
+    rest_namespace: restNamespace = 'wp/v2',
+    supports
   } = await resolveSelect.getPostType(postType);
+  if (!supports?.autosave) {
+    return;
+  }
   const autosaves = await external_wp_apiFetch_default()({
     path: `/${restNamespace}/${restBase}/${postId}/autosaves?context=edit`
   });
@@ -23879,6 +23883,35 @@ function createLocksActions() {
     __unstableReleaseStoreLock
   };
 }
+
+;// ./packages/core-data/build-module/dynamic-entities.js
+/**
+ * Internal dependencies
+ */
+
+/**
+ * A simple utility that pluralizes a string.
+ * Converts:
+ * - "post" to "posts"
+ * - "taxonomy" to "taxonomies"
+ * - "media" to "mediaItems"
+ * - "status" to "statuses"
+ *
+ * It does not pluralize "GlobalStyles" due to lack of clarity about it at time of writing.
+ */
+
+/**
+ * A simple utility that singularizes a string.
+ *
+ * Converts:
+ * - "posts" to "post"
+ * - "taxonomies" to "taxonomy"
+ * - "mediaItems" to "media"
+ * - "statuses" to "status"
+ */
+
+let dynamicActions;
+let dynamicSelectors;
 
 ;// external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
@@ -24977,7 +25010,7 @@ function useEntityBlockEditor(kind, name, {
     }
 
     // If there's an edit, cache the parsed blocks by the edit.
-    // If not, cache by the original enity record.
+    // If not, cache by the original entity record.
     const edits = getEntityRecordEdits(kind, name, id);
     const isUnedited = !edits || !Object.keys(edits).length;
     const cackeKey = isUnedited ? getEntityRecord(kind, name, id) : edits;
@@ -25132,6 +25165,7 @@ lock(privateApis, {
 
 
 
+
 // The entity selectors/resolvers and actions are shortcuts to their generic equivalents
 // (getEntityRecord, getEntityRecords, updateEntityRecord, updateEntityRecords)
 // Instead of getEntityRecord, the consumer could use more user-friendly named selector: getPostType, getTaxonomy...
@@ -25175,11 +25209,13 @@ const entityActions = build_module_entitiesConfig.reduce((result, entity) => {
 const storeConfig = () => ({
   reducer: build_module_reducer,
   actions: {
+    ...dynamicActions,
     ...build_module_actions_namespaceObject,
     ...entityActions,
     ...createLocksActions()
   },
   selectors: {
+    ...dynamicSelectors,
     ...build_module_selectors_namespaceObject,
     ...entitySelectors
   },

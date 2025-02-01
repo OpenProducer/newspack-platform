@@ -2370,7 +2370,7 @@ function createReduxStore(key, options) {
         };
 
         // Expose normalization method on the bound selector
-        // in order that it can be called when fullfilling
+        // in order that it can be called when fulfilling
         // the resolver.
         boundSelector.__unstableNormalizeArgs = selector.__unstableNormalizeArgs;
         const resolver = resolvers[selectorName];
