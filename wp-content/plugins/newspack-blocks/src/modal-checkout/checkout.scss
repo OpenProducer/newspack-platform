@@ -101,8 +101,16 @@
 			}
 		}
 
-		.woocommerce-billing-fields__field-wrapper ~ .form-row {
-			margin: var(--newspack-ui-spacer-5, 24px) 0 0;
+		.woocommerce-billing-fields__field-wrapper {
+			&::after {
+				clear: both;
+				content: "";
+				display: table;
+			}
+
+			& ~ .form-row {
+				margin: var(--newspack-ui-spacer-5, 24px) 0 0;
+			}
 		}
 
 		// Additional fields

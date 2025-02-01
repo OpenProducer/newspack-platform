@@ -8145,7 +8145,7 @@ function ResizableFrame({
   setIsOversized,
   isReady,
   children,
-  /** The default (unresized) width/height of the frame, based on the space availalbe in the viewport. */
+  /** The default (unresized) width/height of the frame, based on the space available in the viewport. */
   defaultSize,
   innerContentStyle
 }) {
@@ -14327,7 +14327,7 @@ function SidebarNavigationScreen({
  * Return an SVG icon.
  *
  * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifiying the icon size in pixels
+ *                                                          size is a number specifying the icon size in pixels
  *                                                          Other props will be passed to wrapped SVG component
  * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
  *
@@ -16300,7 +16300,7 @@ function ScreenRoot() {
         paddingTop: 2
         /*
          * 13px matches the text inset of the NavigationButton (12px padding, plus the width of the button's border).
-         * This is an ad hoc override for this instance and the Addtional CSS option below. Other options for matching the
+         * This is an ad hoc override for this instance and the Additional CSS option below. Other options for matching the
          * the nav button inset should be looked at before reusing further.
          */,
         paddingX: "13px",
@@ -26736,6 +26736,8 @@ const STYLE_BOOK_IFRAME_STYLES = `
 /**
  * WordPress dependencies
  */
+// @wordpress/blocks imports are not typed.
+// @ts-expect-error
 
 
 /**
@@ -26751,20 +26753,24 @@ const STYLE_BOOK_IFRAME_STYLES = `
  * @return {CategoryExamples|undefined} An object containing the category examples.
  */
 function getExamplesByCategory(categoryDefinition, examples) {
+  var _categoryDefinition$s;
   if (!categoryDefinition?.slug || !examples?.length) {
     return;
   }
-  if (categoryDefinition?.subcategories?.length) {
-    return categoryDefinition.subcategories.reduce((acc, subcategoryDefinition) => {
+  const categories = (_categoryDefinition$s = categoryDefinition?.subcategories) !== null && _categoryDefinition$s !== void 0 ? _categoryDefinition$s : [];
+  if (categories.length) {
+    return categories.reduce((acc, subcategoryDefinition) => {
       const subcategoryExamples = getExamplesByCategory(subcategoryDefinition, examples);
       if (subcategoryExamples) {
+        if (!acc.subcategories) {
+          acc.subcategories = [];
+        }
         acc.subcategories = [...acc.subcategories, subcategoryExamples];
       }
       return acc;
     }, {
       title: categoryDefinition.title,
-      slug: categoryDefinition.slug,
-      subcategories: []
+      slug: categoryDefinition.slug
     });
   }
   const blocksToInclude = categoryDefinition?.blocks || [];
@@ -26791,10 +26797,11 @@ function getTopLevelStyleBookCategories() {
   const reservedCategories = [...STYLE_BOOK_THEME_SUBCATEGORIES, ...STYLE_BOOK_CATEGORIES].map(({
     slug
   }) => slug);
-  const extraCategories = (0,external_wp_blocks_namespaceObject.getCategories)().filter(({
+  const extraCategories = (0,external_wp_blocks_namespaceObject.getCategories)();
+  const extraCategoriesFiltered = extraCategories.filter(({
     slug
   }) => !reservedCategories.includes(slug));
-  return [...STYLE_BOOK_CATEGORIES, ...extraCategories];
+  return [...STYLE_BOOK_CATEGORIES, ...extraCategoriesFiltered];
 }
 
 ;// ./packages/edit-site/build-module/components/style-book/color-examples.js
@@ -26922,8 +26929,9 @@ function getColorExamples(colors) {
   }
   const examples = [];
   STYLE_BOOK_COLOR_GROUPS.forEach(group => {
-    const palette = colors[group.type].find(origin => origin.slug === group.origin);
-    if (palette?.[group.type]) {
+    const palette = colors[group.type];
+    const paletteFiltered = Array.isArray(palette) ? palette.find(origin => origin.slug === group.origin) : undefined;
+    if (paletteFiltered?.[group.type]) {
       const example = {
         name: group.slug,
         title: group.title,
@@ -26931,12 +26939,12 @@ function getColorExamples(colors) {
       };
       if (group.type === 'duotones') {
         example.content = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(duotone_examples, {
-          duotones: palette[group.type]
+          duotones: paletteFiltered[group.type]
         });
         examples.push(example);
       } else {
         example.content = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(color_examples, {
-          colors: palette[group.type],
+          colors: paletteFiltered[group.type],
           type: group.type
         });
         examples.push(example);
@@ -26956,7 +26964,7 @@ function getOverviewBlockExamples(colors) {
   const examples = [];
 
   // Get theme palette from colors if they exist.
-  const themePalette = colors?.colors.find(origin => origin.slug === 'theme');
+  const themePalette = Array.isArray(colors?.colors) ? colors.colors.find(origin => origin.slug === 'theme') : undefined;
   if (themePalette) {
     const themeColorexample = {
       name: 'theme-colors',
@@ -26964,7 +26972,7 @@ function getOverviewBlockExamples(colors) {
       category: 'overview',
       content: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(color_examples, {
         colors: themePalette.colors,
-        type: colors,
+        type: "colors",
         templateColumns: "repeat(auto-fill, minmax( 200px, 1fr ))",
         itemHeight: "32px"
       })
@@ -29789,6 +29797,7 @@ function MaybeEditor({
       const document = event.target.contentDocument;
       document.getElementById('wpadminbar').remove();
       document.getElementsByTagName('html')[0].setAttribute('style', 'margin-top: 0 !important;');
+      document.getElementsByTagName('body')[0].classList.remove('admin-bar');
       // Make interactive elements unclickable.
       const interactiveElements = document.querySelectorAll('a, button, input, details, audio');
       interactiveElements.forEach(element => {
@@ -30559,7 +30568,7 @@ function useDeleteNavigationMenu() {
       createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Navigation Menu successfully deleted.'), {
         type: 'snackbar'
       });
-      history.navivate('/navigation');
+      history.navigate('/navigation');
     } catch (error) {
       createErrorNotice((0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: error message describing why the navigation menu could not be deleted. */
       (0,external_wp_i18n_namespaceObject.__)(`Unable to delete Navigation Menu (%s).`), error?.message), {
@@ -31697,7 +31706,7 @@ function sort(a, b, direction) {
   return direction === 'asc' ? a - b : b - a;
 }
 function isValid(value, context) {
-  // TODO: this implicitely means the value is required.
+  // TODO: this implicitly means the value is required.
   if (value === '') {
     return false;
   }
@@ -38053,15 +38062,11 @@ function DataViewsSelectionCheckbox({
 }) {
   const id = getItemId(item);
   const checked = !disabled && selection.includes(id);
-  let selectionLabel;
-  if (titleField?.getValue && item) {
-    // eslint-disable-next-line @wordpress/valid-sprintf
-    selectionLabel = (0,external_wp_i18n_namespaceObject.sprintf)(checked ? /* translators: %s: item title. */(0,external_wp_i18n_namespaceObject.__)('Deselect item: %s') : /* translators: %s: item title. */(0,external_wp_i18n_namespaceObject.__)('Select item: %s'), titleField.getValue({
-      item
-    }));
-  } else {
-    selectionLabel = checked ? (0,external_wp_i18n_namespaceObject.__)('Select a new item') : (0,external_wp_i18n_namespaceObject.__)('Deselect item');
-  }
+
+  // Fallback label to ensure accessibility
+  const selectionLabel = titleField?.getValue?.({
+    item
+  }) || (0,external_wp_i18n_namespaceObject.__)('(no title)');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
     className: "dataviews-selection-checkbox",
     __nextHasNoMarginBottom: true,
@@ -38962,7 +38967,7 @@ function TableRow({
       })
     }), columns.map(column => {
       var _view$layout$styles$c;
-      // Explicits picks the supported styles.
+      // Explicit picks the supported styles.
       const {
         width,
         maxWidth,
@@ -39101,7 +39106,7 @@ function ViewTable({
             })
           }), columns.map((column, index) => {
             var _view$layout$styles$c2;
-            // Explicits picks the supported styles.
+            // Explicit picks the supported styles.
             const {
               width,
               maxWidth,
@@ -40269,6 +40274,8 @@ const external_wp_warning_namespaceObject = window["wp"]["warning"];
  * External dependencies
  */
 
+
+
 /**
  * WordPress dependencies
  */
@@ -40465,16 +40472,67 @@ function ItemsPerPageControl() {
     })
   });
 }
+function PreviewOptions({
+  previewOptions,
+  onChangePreviewOption,
+  onMenuOpenChange,
+  activeOption
+}) {
+  const focusPreviewOptionsField = id => {
+    // Focus the visibility button to avoid focus loss.
+    // Our code is safe against the component being unmounted, so we don't need to worry about cleaning the timeout.
+    // eslint-disable-next-line @wordpress/react-no-unsafe-timeout
+    setTimeout(() => {
+      const element = document.querySelector(`.dataviews-field-control__field-${id} .dataviews-field-control__field-preview-options-button`);
+      if (element instanceof HTMLElement) {
+        element.focus();
+      }
+    }, 50);
+  };
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(dataviews_view_config_Menu, {
+    onOpenChange: onMenuOpenChange,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dataviews_view_config_Menu.TriggerButton, {
+      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        className: "dataviews-field-control__field-preview-options-button",
+        size: "compact",
+        icon: more_vertical,
+        label: (0,external_wp_i18n_namespaceObject.__)('Preview')
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dataviews_view_config_Menu.Popover, {
+      children: previewOptions?.map(({
+        id,
+        label
+      }) => {
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dataviews_view_config_Menu.RadioItem, {
+          value: id,
+          checked: id === activeOption,
+          onChange: () => {
+            onChangePreviewOption?.(id);
+            focusPreviewOptionsField(id);
+          },
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dataviews_view_config_Menu.ItemLabel, {
+            children: label
+          })
+        }, id);
+      })
+    })]
+  });
+}
 function FieldItem({
   field,
+  label,
+  description,
   isVisible,
   isFirst,
   isLast,
   canMove = true,
   onToggleVisibility,
   onMoveUp,
-  onMoveDown
+  onMoveDown,
+  previewOptions,
+  onChangePreviewOption
 }) {
+  const [isChangingPreviewOption, setIsChangingPreviewOption] = (0,external_wp_element_namespaceObject.useState)(false);
   const focusVisibilityField = () => {
     // Focus the visibility button to avoid focus loss.
     // Our code is safe against the component being unmounted, so we don't need to worry about cleaning the timeout.
@@ -40489,16 +40547,31 @@ function FieldItem({
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalItem, {
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
       expanded: true,
-      className: `dataviews-field-control__field dataviews-field-control__field-${field.id}`,
+      className: dist_clsx('dataviews-field-control__field', `dataviews-field-control__field-${field.id}`,
+      // The actions are hidden when the mouse is not hovering the item, or focus
+      // is outside the item.
+      // For actions that require a popover, a menu etc, that would mean that when the interactive element
+      // opens and the focus goes there the actions would be hidden.
+      // To avoid that we add a class to the item, that makes sure actions are visible while there is some
+      // interaction with the item.
+      {
+        'is-interacting': isChangingPreviewOption
+      }),
       justify: "flex-start",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
         className: "dataviews-field-control__icon",
         children: !canMove && !field.enableHiding && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
           icon: library_lock
         })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-        className: "dataviews-field-control__label",
-        children: field.label
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
+        className: "dataviews-field-control__label-sub-label-container",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "dataviews-field-control__label",
+          children: label || field.label
+        }), description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "dataviews-field-control__sub-label",
+          children: description
+        })]
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
         justify: "flex-end",
         expanded: false,
@@ -40534,6 +40607,11 @@ function FieldItem({
           label: isVisible ? (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: field label */
           (0,external_wp_i18n_namespaceObject._x)('Hide %s', 'field'), field.label) : (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: field label */
           (0,external_wp_i18n_namespaceObject._x)('Show %s', 'field'), field.label)
+        }), previewOptions && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PreviewOptions, {
+          previewOptions: previewOptions,
+          onChangePreviewOption: onChangePreviewOption,
+          onMenuOpenChange: setIsChangingPreviewOption,
+          activeOption: field.id
         })]
       })]
     })
@@ -40587,20 +40665,48 @@ function FieldControl() {
   } = (0,external_wp_element_namespaceObject.useContext)(dataviews_context);
   const togglableFields = [view?.titleField, view?.mediaField, view?.descriptionField].filter(Boolean);
   const visibleFieldIds = (_view$fields2 = view.fields) !== null && _view$fields2 !== void 0 ? _view$fields2 : [];
-  const hiddenFields = fields.filter(f => !visibleFieldIds.includes(f.id) && !togglableFields.includes(f.id));
+  const hiddenFields = fields.filter(f => !visibleFieldIds.includes(f.id) && !togglableFields.includes(f.id) && f.type !== 'media');
   const visibleFields = visibleFieldIds.map(fieldId => fields.find(f => f.id === fieldId)).filter(dataviews_view_config_isDefined);
   if (!visibleFields?.length && !hiddenFields?.length) {
     return null;
   }
   const titleField = fields.find(f => f.id === view.titleField);
-  const mediaField = fields.find(f => f.id === view.mediaField);
+  const previewField = fields.find(f => f.id === view.mediaField);
   const descriptionField = fields.find(f => f.id === view.descriptionField);
+  const previewFields = fields.filter(f => f.type === 'media');
+  let previewFieldUI;
+  if (previewFields.length > 1) {
+    var _view$showMedia;
+    const isPreviewFieldVisible = dataviews_view_config_isDefined(previewField) && ((_view$showMedia = view.showMedia) !== null && _view$showMedia !== void 0 ? _view$showMedia : true);
+    previewFieldUI = dataviews_view_config_isDefined(previewField) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FieldItem, {
+      field: previewField,
+      label: (0,external_wp_i18n_namespaceObject.__)('Preview'),
+      description: previewField.label,
+      isVisible: isPreviewFieldVisible,
+      onToggleVisibility: () => {
+        onChangeView({
+          ...view,
+          showMedia: !isPreviewFieldVisible
+        });
+      },
+      canMove: false,
+      previewOptions: previewFields.map(field => ({
+        label: field.label,
+        id: field.id
+      })),
+      onChangePreviewOption: newPreviewId => onChangeView({
+        ...view,
+        mediaField: newPreviewId
+      })
+    }, previewField.id);
+  }
   const lockedFields = [{
     field: titleField,
     isVisibleFlag: 'showTitle'
   }, {
-    field: mediaField,
-    isVisibleFlag: 'showMedia'
+    field: previewField,
+    isVisibleFlag: 'showMedia',
+    ui: previewFieldUI
   }, {
     field: descriptionField,
     isVisibleFlag: 'showDescription'
@@ -40638,9 +40744,10 @@ function FieldControl() {
         isSeparated: true,
         children: [visibleLockedFields.map(({
           field,
-          isVisibleFlag
+          isVisibleFlag,
+          ui
         }) => {
-          return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FieldItem, {
+          return ui !== null && ui !== void 0 ? ui : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FieldItem, {
             field: field,
             isVisible: true,
             onToggleVisibility: () => {
@@ -40673,9 +40780,10 @@ function FieldControl() {
           isSeparated: true,
           children: [hiddenLockedFields.length > 0 && hiddenLockedFields.map(({
             field,
-            isVisibleFlag
+            isVisibleFlag,
+            ui
           }) => {
-            return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FieldItem, {
+            return ui !== null && ui !== void 0 ? ui : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FieldItem, {
               field: field,
               isVisible: false,
               onToggleVisibility: () => {
@@ -42536,7 +42644,7 @@ const utils_getValueFromObjectPath = (object, path) => {
  *
  * @param {Object[]} entities The array of entities.
  * @param {string}   path     The path to map a `name` property from the entity.
- * @return {IHasNameAndId[]} An array of enitities that now implement the `IHasNameAndId` interface.
+ * @return {IHasNameAndId[]} An array of entities that now implement the `IHasNameAndId` interface.
  */
 const mapToIHasNameAndId = (entities, path) => {
   return (entities || []).map(entity => ({

@@ -66,6 +66,24 @@ export const getFrequencyLabel = (
 		);
 }
 
+export const getFormattedAmount = ( amount: number, withCurrency = false ) => {
+	type NumberFormatOptions = {
+		minimumFractionDigits: number;
+		style?: string;
+		currency?: string;
+	}
+	const options = <NumberFormatOptions>{
+		minimumFractionDigits: 0 === amount % 1 ? 0 : 2,
+	};
+	if ( withCurrency ) {
+		options.style = 'currency';
+		options.currency = window.newspack_blocks_data?.currency || 'USD';
+	}
+	const formatter = new Intl.NumberFormat( navigator?.language || 'en-US', options as object );
+
+	return formatter.format( amount );
+}
+
 export const getFrequencyLabelWithAmount = (
 	amount: number,
 	frequencySlug: DonationFrequencySlug,
@@ -75,11 +93,6 @@ export const getFrequencyLabelWithAmount = (
 
 	if ( ! template ) {
 		try {
-			const formatter = new Intl.NumberFormat( navigator?.language || 'en-US', {
-				style: 'currency',
-				currency: 'USD',
-			} );
-
 			const frequencyString =
 				frequencySlug === 'once'
 					? frequencySlug
@@ -91,7 +104,7 @@ export const getFrequencyLabelWithAmount = (
 
 			const formattedPrice =
 				'<span class="price-amount">' +
-				formatter.format( amount ) +
+				getFormattedAmount( amount, true ) +
 				'</span> <span class="tier-frequency">' +
 				frequencyString +
 				'</span>';
@@ -102,11 +115,9 @@ export const getFrequencyLabelWithAmount = (
 		}
 	}
 
-	const formattedAmount = ( amount || 0 ).toFixed( 2 ).replace( /\.?0*$/, '' );
-
-	const frequency = getFrequencyLabel(frequencySlug, hideOnceLabel)
+	const frequency = getFrequencyLabel( frequencySlug, hideOnceLabel );
 
 	return template
-		.replace( 'AMOUNT_PLACEHOLDER', formattedAmount )
+		.replace( 'AMOUNT_PLACEHOLDER', getFormattedAmount( amount ) )
 		.replace( 'FREQUENCY_PLACEHOLDER', frequency );
 };

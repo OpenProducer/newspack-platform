@@ -1911,14 +1911,14 @@ function join(values, separator = '') {
       text: separator
     });
   }
-  return normaliseFormats(values.reduce((accumlator, {
+  return normaliseFormats(values.reduce((accumulator, {
     formats,
     replacements,
     text
   }) => ({
-    formats: accumlator.formats.concat(separator.formats, formats),
-    replacements: accumlator.replacements.concat(separator.replacements, replacements),
-    text: accumlator.text + separator.text + text
+    formats: accumulator.formats.concat(separator.formats, formats),
+    replacements: accumulator.replacements.concat(separator.replacements, replacements),
+    text: accumulator.text + separator.text + text
   })));
 }
 
@@ -2850,7 +2850,7 @@ const external_wp_compose_namespaceObject = window["wp"]["compose"];
 function getFormatElement(range, editableContentElement, tagName, className) {
   let element = range.startContainer;
 
-  // Even if the active format is defined, the actualy DOM range's start
+  // Even if the active format is defined, the actually DOM range's start
   // container may be outside of the format's DOM element:
   // `a‸<strong>b</strong>` (DOM) while visually it's `a<strong>‸b</strong>`.
   // So at a given selection index, start with the deepest format DOM element.
@@ -3926,7 +3926,7 @@ function useRichText({
   }
   const didMountRef = (0,external_wp_element_namespaceObject.useRef)(false);
 
-  // Value updates must happen synchonously to avoid overwriting newer values.
+  // Value updates must happen synchronously to avoid overwriting newer values.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (didMountRef.current && value !== _valueRef.current) {
       applyFromProps();
@@ -3934,7 +3934,7 @@ function useRichText({
     }
   }, [value]);
 
-  // Value updates must happen synchonously to avoid overwriting newer values.
+  // Value updates must happen synchronously to avoid overwriting newer values.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (!hadSelectionUpdateRef.current) {
       return;

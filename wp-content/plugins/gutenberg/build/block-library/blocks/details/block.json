@@ -16,6 +16,9 @@
 			"type": "rich-text",
 			"source": "rich-text",
 			"selector": "summary"
+		},
+		"allowedBlocks": {
+			"type": "array"
 		}
 	},
 	"supports": {

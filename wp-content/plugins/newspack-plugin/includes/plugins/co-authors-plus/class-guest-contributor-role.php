@@ -268,7 +268,7 @@ class Guest_Contributor_Role {
 		if ( is_string( $user_or_name ) ) {
 			return $user_or_name . '@' . $email_domain;
 		}
-		return $user->user_login . '@' . $email_domain;
+		return $user_or_name->user_login . '@' . $email_domain;
 	}
 
 	/**
