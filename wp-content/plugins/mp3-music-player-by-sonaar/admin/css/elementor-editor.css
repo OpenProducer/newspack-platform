@@ -1,0 +1,158 @@
+@font-face {
+    font-family: "sricons";
+    src: url("../../public/webfonts/sricons/font/sricons.eot?1b5ca7");
+    src: url("../../public/webfonts/sricons/font/sricons.eot?1b5ca7#iefix")
+    format("embedded-opentype"),
+      url("../../public/webfonts/sricons/font/sricons.woff2?1b5ca7") format("woff2"),
+      url("../../public/webfonts/sricons/font/sricons.woff?1b5ca7") format("woff"),
+      url("../../public/webfonts/sricons/font/sricons.ttf?1b5ca7") format("truetype"),
+      url("../../public/webfonts/sricons/font/sricons.svg?1b5ca7#sricons") format("svg");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+/* Badge for Sonaar elementor elements
+--------------------------*/
+.elementor-element{
+    position: relative;
+}
+.elementor-element .sonaar-badge--dark.sonaar-badge:after{
+    background-color: #1b1b1b;
+}
+.elementor-element .sonaar-badge:after{
+    content: "Sonaar";
+    border-radius: 0px;
+    background-color: #008479;
+    color: #fff;
+    position: absolute;
+    top: 35px;
+    left: -34px;
+    letter-spacing: 3px;
+    transform: rotate(-90deg);
+    z-index: 1;
+    padding: 3px 15px 3px;
+    font-weight: 600;
+    font-size: 9px;
+    text-align: right;
+    text-transform: uppercase;
+    font-family: "Open Sans",Roboto,Helvetica,Arial,sans-serif;
+}
+.elementor-element:hover .sonaar-badge,
+div[id*="elementor-panel-category-elementor-sonaar"] .elementor-element:hover .icon,
+div[id*="elementor-panel-category-elementor-sonaar"] .elementor-element:hover .title {
+    color: #008479 !important;
+}
+
+[class^="sricons-"],
+[class*=" sricons-"]{
+  font-family: "sricons" !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  speak: none;
+}
+
+.sricons-logo:before {
+  content: "\e812" !important;
+}
+/* Go Pro Panel
+--------------------------*/
+.sr_gopro .elementor-nerd-box-message{
+    font-size:12px;
+}
+.sr_gopro.elementor-nerd-box{
+    padding:20px;
+}
+.sr_gopro ul {
+    margin-top: 30px;
+    padding: 20px 0px;
+}
+.sr_gopro li {
+    text-indent: -9px;
+    font-size: 12px;
+    text-align: left;
+    line-height: 16px;
+    margin-bottom: 5px;
+}
+.sr_gopro i.eicon-check {
+    margin-right: 6px;
+}
+.sr_gopro li:before {
+    position: absolute!important;
+    left: 50px;
+    font-family: FontAwesome!important;
+
+}
+.sr-pro-heading-only .elementor-control-title:after {
+    content: "GO PRO";
+    white-space: nowrap;
+    background-color: #d30c5c;
+    padding: 2px 6px;
+    margin-left: 6px;
+    position: relative;
+    bottom: 1px;
+    letter-spacing: 0.5px;
+    font-size: 9px;
+    border-radius: 3px;
+}
+/*.sr-pro-only label.elementor-control-title:after {
+   // content: "GO PRO";
+    white-space: nowrap;
+    background-color: #d30c5c;
+    padding: 2px 6px;
+    margin-left: 6px;
+    position: relative;
+    bottom: 1px;
+    letter-spacing: 0.5px;
+    font-size: 9px;
+    border-radius: 3px;
+}*/
+.sr-pro-only {
+    pointer-events: none;
+}
+.sr-pro-only .elementor-control-content {
+    opacity: 0.7;
+}
+.sr-pro-only .elementor-control-title {
+    line-height: 1.2em;
+}
+.srp_promo_plan_heading {
+    margin-top: 20px;
+    text-align: left;
+    font-size: 18px;
+    margin-bottom: -30px;
+}
+.sr_gopro.sonaar-gopro .sricons-logo{
+    font-size:42px;
+}
+.sr_gopro.sonaar-gopro .srp_promo_plan_heading .sricons-logo {
+    opacity: 0.4;
+    font-size: 16px;
+    margin-right: 6px;
+}
+.sr-adaptive-colors label.elementor-control-title:after {
+    content: "AI RENDERED";
+    white-space: nowrap;
+    background-color: #d30c5c;
+    padding: 2px 6px;
+    margin-left: 6px;
+    position: relative;
+    bottom: 1px;
+    letter-spacing: 0.5px;
+    font-size: 9px;
+    border-radius: 3px;
+}
+.srmp3-heading-title .elementor-control-title {
+    text-indent: 10px;
+    margin-left: -19px!important;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-style: italic;
+    background-color: #0000003b;
+    width: -webkit-fill-available;
+    padding: 10px;
+}

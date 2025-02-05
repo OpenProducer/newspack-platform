@@ -1,0 +1,14 @@
+@import 'fa-brands';
+@import 'fa-solid';
+@import 'fontawesome';
+
+.cmb-type-store-list select.fab.fas{
+  font-family: 'Font Awesome 5 Free', 'Font Awesome 5 Brands', sans-serif;
+  font-weight: 500;
+
+  option{
+    font-family: inherit;
+    font-weight: inherit;
+  }
+
+}

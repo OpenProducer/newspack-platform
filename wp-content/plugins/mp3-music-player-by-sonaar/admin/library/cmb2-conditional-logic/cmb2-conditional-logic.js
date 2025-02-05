@@ -1,0 +1,151 @@
+/**
+ * Conditional logic for CMB2 library
+ * @author    Awran5 <github.com/awran5>
+ * @version   1.0.0
+ * @license   under GPL v2.0 (https://github.com/awran5/CMB2-conditional-logic/blob/master/LICENSE)
+ * @copyright © 2018 Awran5. All rights reserved.
+ * 
+ */
+
+(function( $ ) {
+    'use strict'
+
+    function evaluateConditions() {
+        $('[data-conditional]').each(function(){
+            var field = $(this);
+            var conditions = JSON.parse(field.attr('data-conditional'));
+            var showField = conditions.logic === 'AND' ? true : false;
+
+            conditions.conditions.forEach(function(condition) {
+                var targetField, targetValue;
+                var conditionValue = Array.isArray(condition.value) ? condition.value : [condition.value]; // Ensure value is an array
+
+                // Determine the type of input and get the value accordingly
+                if ($('#' + condition.id).attr('type') === 'checkbox') {
+                    targetValue = $('#' + condition.id).is(':checked').toString(); // Get "true" or "false" for checkbox
+                } else if ($('input[name="' + condition.id + '"]').attr('type') === 'radio') {
+                    targetField = $('input[name="' + condition.id + '"]:checked');
+                    targetValue = targetField.val(); // Get value of checked radio button
+                } else {
+                    targetValue = $('#' + condition.id).val(); // Default to getting value directly
+                }
+
+                var conditionMet = conditionValue.includes(targetValue);
+
+                if (conditions.logic === 'AND') {
+                    showField = showField && conditionMet;
+                } else {
+                    showField = showField || conditionMet;
+                }
+            });
+
+            if (showField) {
+                field.closest('.cmb-row').show();
+            } else {
+                field.closest('.cmb-row').hide();
+            }
+        });
+    }
+    function CMB2Conditional() {
+ 
+      
+        
+            // Run on document ready and on any field change
+            evaluateConditions();
+            $(document).on('change', 'input, select, textarea', evaluateConditions);
+        
+
+
+         
+        $('[data-conditional-id]').each( (i, el) => { 
+           
+            function escapeSelector(selector) {
+                // Minimal escaping targeting only the characters that need to be escaped in jQuery selectors
+                return selector.replace(/([[\]])/g, '\\$1').replace(/"/g, '\\"');
+            }
+            let condName    = el.dataset.conditionalId,
+                condValue   = el.dataset.conditionalValue,
+                condParent  = el.closest('.cmb-row'),
+                inGroup     = condParent.classList.contains('cmb-repeat-group-field');
+                // Check if the field is in group
+                if (inGroup) {
+                    let groupID = condParent.closest('.cmb-repeatable-group').getAttribute('data-groupid'),
+                        iterator = condParent.closest('.cmb-repeatable-grouping').getAttribute('data-iterator'),
+                        conditionalIds = JSON.parse(el.getAttribute('data-conditional-id').replace(/&quot;/g, '"'));
+            
+                    // Assuming 'player_metas' is always the second element in the array
+                    let keyPart = conditionalIds[1];
+            
+                    condName = `${groupID}[${iterator}][${keyPart}]`;
+                }
+                
+            // Check if value is matching
+            function valueMatch(value) {
+                return condValue.includes(value) && value !== '' ;
+            }
+           
+            // Select the field by name and loob through
+            $('[name="' + condName + '"]').each(function(i, field) {
+                // Select field
+                if( "select-one" === field.type ) {
+                    if( !valueMatch( field.value ) )
+                        $(condParent).hide();
+
+                    // Check on change
+                    $(field).on('change', function(event) {
+
+                       ( valueMatch( event.target.value ) ) ? $(condParent).show() : $(condParent).hide();
+                    
+                    });
+                }
+                
+                // Radio field
+                else if( "radio" === field.type ) {
+
+                    // Hide the row if the value doesn't match and not checked
+                    if( !valueMatch( field.value ) && field.checked ) 
+                        $(condParent).hide();
+
+                    // Check on change
+                    $(field).on('change', function(event) {
+
+                        ( valueMatch( event.target.value ) ) ? $(condParent).show() : $(condParent).hide();
+                    
+                    });
+                }
+
+                // Checkbox field
+                else if( "checkbox" === field.type ) {    
+
+                    // Hide the row if the value doesn't match and not checked
+                    if( !field.checked ) 
+                        $(condParent).hide();
+
+                    // Check on change
+                    $(field).on('change', function(event) {
+
+                        ( event.target.checked ) ? $(condParent).show() : $(condParent).hide();
+                    
+                    });
+                }
+               
+            });
+
+        });
+    }
+
+    // Trigger the funtion
+    CMB2Conditional();
+
+    // Trigger again when new group added
+    $( '.cmb2-wrap > .cmb2-metabox' ).on( 'cmb2_add_row', function() {
+        evaluateConditions();
+        CMB2Conditional();
+    });
+    $('.cmb-repeatable-group').on('cmb2_shift_rows_complete cmb2_remove_row cmb2_add_row', function (event, instance) {
+        evaluateConditions();
+        CMB2Conditional();
+
+    });
+
+})( jQuery );

@@ -1,0 +1,67 @@
+{
+    "playlist_name": "",
+    "playlist_image": "https://rebirthtest.local/wp-content/uploads/2021/03/sonaar-music-avatar.jpg",
+    "tracks": [
+        {
+            "id": "",
+            "mp3": "https://rebirthtest.local/wp-content/uploads/2022/03/Lose-Yourself-Eminem.mp3",
+            "loading": true,
+            "track_title": "Title",
+            "track_artist": "",
+            "length": false,
+            "album_title": "My JSON Playlist",
+            "poster": "https://picsum.photos/300/300",
+            "track_pos": 0,
+            "release_date": "yooo",
+            "song_store_list": "",
+            "has_song_store": false,
+            "album_store_list": false,
+            "sourcePostID": "",
+            "has_lyric": false,
+            "description": false,
+            "icecast_json": false,
+            "icecast_mount": false
+        },
+        {
+            "id": "",
+            "mp3": "https://rebirthtest.local/wp-content/uploads/2022/03/Lose-Yourself-Eminem.mp3",
+            "loading": true,
+            "track_title": "Lose Yourself",
+            "track_artist": "Eminem",
+            "length": "05:23",
+            "album_title": "8 Mile",
+            "poster": "https://picsum.photos/400/400",
+            "track_pos": 1,
+            "release_date": "ahh ouin",
+            "song_store_list": [
+                {
+                "store-icon": "sricon-amazonmusic",
+                "store-name": "Amazon",
+                "store-link": "https://google.com"
+                },
+                {
+                "store-icon": "fab fa-apple",
+                "store-name": "Apple Music",
+                "store-link": "https://google.com"
+                },
+                {
+                "store-icon": "fab fa-spotify",
+                "store-name": "Spotify",
+                "store-link": "https://google.com"
+                },
+                {
+                "store-icon": "fas fa-download",
+                "store-name": "Downloadzz",
+                "store-link": "https://google.com",
+                "store-target": "_self"
+                }
+                ],
+            "album_store_list": false,
+            "sourcePostID": "",
+            "has_lyric": false,
+            "description": false,
+            "icecast_json": false,
+            "icecast_mount": false
+        }
+    ]
+}

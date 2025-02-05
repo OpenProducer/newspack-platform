@@ -1,0 +1,7 @@
+/* image-select ------------- */
+.cmb-row.cmb-type-image-select .cmb2-image-select-list{margin: 0 !important; }
+.cmb-row.cmb-type-image-select .cmb2-image-select-list .cmb2-image-select input[type="radio"] { display: none; }
+.cmb-row.cmb-type-image-select .cmb2-image-select-list .cmb2-image-select{ display: inline-block; margin: 0 10px 3px; min-width: 80px; padding: 2px 15px 2px 0; text-align: center; }
+.cmb-row.cmb-type-image-select .cmb2-image-select-list .cmb2-image-select:first-child{margin-left:0} 
+.cmb-row.cmb-type-image-select .cmb2-image-select-list .cmb2-image-select img { border: 4px solid #0d00ff; }
+.cmb-row.cmb-type-image-select .cmb2-image-select-list .cmb2-image-select.cmb2-image-select-selected img { border-color: #005077; }

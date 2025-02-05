@@ -1,0 +1,85 @@
+.own-slider-field-value-display {
+	position: absolute;
+    font-weight: 400;
+    font-size: 12px;
+    color: #888;
+    padding-top: .5em;
+}
+/* Base slider styles */
+.own-slider-field.ui-slider {
+	position: relative;
+    width: 100%;
+    height: 0px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    overflow: visible;
+}
+
+/* Slider handle styles */
+.own-slider-field.ui-slider .ui-slider-handle {
+	position: absolute;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    margin-top: -10px;
+    border-radius: 50%;
+    background: #7401DF;
+    border: 3px solid #ebebeb;
+   
+    transition: transform 0.3s ease-out, background-color 0.3s ease-out;
+}
+.own-slider-field.ui-slider .ui-slider-handle{
+	cursor: pointer;
+}
+/* Hover and focus states for the handle */
+.own-slider-field.ui-slider .ui-slider-handle:hover {
+	box-shadow: 0 0 8px rgba(116, 1, 223, 0.4);
+    transform: scale(1.1); /* Enlarge handle on hover/focus */
+    background-color: #8a2be2; /* Slightly lighter purple to indicate active state */
+}
+.own-slider-field.ui-slider .ui-slider-handle:active {
+    transition: 100ms;
+    transform: scale(1.5);
+}
+.own-slider-field.ui-slider .ui-slider-handle:focus-visible {
+	box-shadow: 0 0 8px rgba(116, 1, 223, 0.4);
+	outline:unset;
+}
+.own-slider-field .ui-slider-range.ui-corner-all.ui-widget-header.ui-slider-range-min {
+    border: 1px solid #7501e0;
+}
+/* Track before the handle (filled part) */
+.own-slider-field.ui-slider .ui-slider-range {
+    background-color: #7401DF; /* Main accent color for the filled part of the track */
+    border-radius: 3px; /* Rounded edges on the filled part */
+}
+
+/* Disabled state styling */
+.own-slider-field.ui-slider-disabled .ui-slider-handle,
+.own-slider-field.ui-slider-disabled .ui-slider-range {
+    background-color: #9a9a9a; /* Gray color for disabled state */
+    box-shadow: none;
+}
+
+/* Additional focus styling for accessibility */
+.own-slider-field.ui-slider:focus .ui-slider-handle {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 15px rgba(116, 1, 223, 0.8); /* Strong focus indicator */
+}
+
+/* Animation for the focus state to emphasize the handle */
+.own-slider-field.ui-slider:focus .ui-slider-handle {
+    animation: pulse 1s infinite alternate;
+}
+
+/* Keyframes for the pulse animation used on focus */
+@keyframes pulse {
+    from {
+        transform: scale(1.2);
+        box-shadow: 0 0 10px rgba(116, 1, 223, 0.7);
+    }
+    to {
+        transform: scale(1.4);
+        box-shadow: 0 0 15px rgba(116, 1, 223, 0.9);
+    }
+}
