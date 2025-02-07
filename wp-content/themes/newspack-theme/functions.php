@@ -647,7 +647,7 @@ function newspack_fse_blocks_to_remove() {
 		'core/post-comments-form',
 		'core/comments-query-loop',
 		'core/query',
-		'core/post-title',
+		// 'core/post-title', Temporarily allow this block. Ref. https://github.com/woocommerce/woocommerce/pull/52209
 		'core/post-featured-image',
 		'core/post-excerpt',
 		'core/post-content',

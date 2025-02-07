@@ -19,6 +19,12 @@ figcaption,
 	text-align: left;
 }
 
+// Override some specific styles coming from WordPress.
+:root :where(.wp-block-image figcaption) {
+	color: var(--newspack-theme-color-text-light);
+	font-size: var(--newspack-theme-font-size-xs);
+}
+
 .has-text-color {
 	figcaption,
 	.wp-caption-text {
