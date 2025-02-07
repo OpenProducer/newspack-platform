@@ -226,6 +226,28 @@
 	}
 }
 
+.non-modal-checkout-loading {
+	position: relative;
+
+	span {
+		visibility: hidden;
+	}
+
+	&::before {
+		animation: spin 900ms infinite linear;
+		border: 1.5px solid;
+		border-color: currentcolor currentcolor transparent transparent;
+		border-radius: 50%;
+		content: "";
+		display: block;
+		height: 18px;
+		inset: calc(50% - 9px) calc(50% - 9px) auto auto;
+		position: absolute;
+		width: 18px;
+	}
+}
+
+
 @keyframes spin {
 	0% {
 		transform: rotate(0deg);

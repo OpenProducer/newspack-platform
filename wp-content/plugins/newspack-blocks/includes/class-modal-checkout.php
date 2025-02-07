@@ -109,6 +109,21 @@ final class Modal_Checkout {
 	];
 
 	/**
+	 * Supported Payment Gateways
+	 *
+	 * @var string[]
+	 */
+	private static $supported_gateways = [
+		'bacs', // Direct bank transfer.
+		'cheque',
+		'cod', // Cash on delivery.
+		'ppcp-gateway', // PayPal Payments.
+		'stripe',
+		'stripe-link',
+		'woocommerce_payments',
+	];
+
+	/**
 	 * Initialize hooks.
 	 */
 	public static function init() {
@@ -150,7 +165,6 @@ final class Modal_Checkout {
 		add_filter( 'option_woocommerce_woocommerce_payments_settings', [ __CLASS__, 'filter_woocommerce_payments_settings' ] );
 		add_action( 'init', [ __CLASS__, 'unhook_woocommerce_payments_update_billing_fields' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'update_password_strength_message' ], 9999 );
-
 
 		/** Custom handling for registered users. */
 		add_filter( 'woocommerce_checkout_customer_id', [ __CLASS__, 'associate_existing_user' ] );
@@ -222,6 +236,38 @@ final class Modal_Checkout {
 		unset( $enqueue_styles['woocommerce-general'] );
 		unset( $enqueue_styles['woocommerce-smallscreen'] );
 		return $enqueue_styles;
+	}
+
+	/**
+	 * Get list of supported payment gateways for Modal Checkout.
+	 *
+	 * @return string[] Supported payment gateways.
+	 */
+	public static function get_supported_payment_gateways() {
+		/**
+		 * Filters the list of supported gateways in modal checkout.
+		 *
+		 * @param array $supported_gateways
+		 */
+		return apply_filters( 'newspack_blocks_modal_checkout_supported_gateways', self::$supported_gateways );
+	}
+
+	/**
+	 * Whether any available payment gateways are not suppored in modal checkout.
+	 *
+	 * @return boolean
+	 */
+	public static function has_unsupported_payment_gateway() {
+		$supported_gateways          = self::get_supported_payment_gateways();
+		$available_gateways          = function_exists( 'WC' ) ? \WC()->payment_gateways->get_available_payment_gateways() : [];
+		$unsupported_payment_gateway = false;
+		foreach ( $available_gateways as $id => $gateway ) {
+			if ( ! in_array( $id, $supported_gateways, true ) ) {
+				$unsupported_payment_gateway = true;
+				break;
+			}
+		}
+		return $unsupported_payment_gateway;
 	}
 
 	/**
@@ -334,13 +380,18 @@ final class Modal_Checkout {
 		if ( ! empty( $referer_categories ) ) {
 			$query_args['referer_categories'] = implode( ',', $referer_categories );
 		}
-		$query_args['modal_checkout'] = 1;
+
+		if ( ! self::has_unsupported_payment_gateway() ) {
+			$query_args['modal_checkout'] = 1;
+		}
 
 		// Pass through UTM and after_success params so they can be forwarded to the WooCommerce checkout flow.
 		foreach ( $params as $param => $value ) {
 			if ( 'utm' === substr( $param, 0, 3 ) || 'after_success' === substr( $param, 0, 13 ) ) {
-				$param                = sanitize_text_field( $param );
-				$query_args[ $param ] = sanitize_text_field( $value );
+				if ( ! empty( $value ) ) {
+					$param                = sanitize_text_field( $param );
+					$query_args[ $param ] = sanitize_text_field( $value );
+				}
 			}
 		}
 
@@ -915,6 +966,11 @@ final class Modal_Checkout {
 	 * @param int $product_id Product ID (optional).
 	 */
 	public static function enqueue_modal( $product_id = null ) {
+		// Don't enqueue the modal if WooCommerce is not available.
+		if ( ! function_exists( 'WC' ) ) {
+			return;
+		}
+
 		self::$has_modal = true;
 		if ( ! empty( $product_id ) ) {
 			self::$products[ $product_id ] = true;
@@ -933,11 +989,12 @@ final class Modal_Checkout {
 			'newspack-blocks-modal',
 			'newspackBlocksModal',
 			[
-				'ajax_url'                   => admin_url( 'admin-ajax.php' ),
-				'checkout_registration_flag' => self::CHECKOUT_REGISTRATION_FLAG,
-				'newspack_class_prefix'      => self::get_class_prefix(),
-				'is_registration_required'   => self::is_registration_required(),
-				'labels'                     => [
+				'ajax_url'                        => admin_url( 'admin-ajax.php' ),
+				'checkout_registration_flag'      => self::CHECKOUT_REGISTRATION_FLAG,
+				'newspack_class_prefix'           => self::get_class_prefix(),
+				'is_registration_required'        => self::is_registration_required(),
+				'has_unsupported_payment_gateway' => self::has_unsupported_payment_gateway(),
+				'labels'                          => [
 					'auth_modal_title'     => self::get_modal_checkout_labels( 'auth_modal_title' ),
 					'checkout_modal_title' => self::get_modal_checkout_labels( 'checkout_modal_title' ),
 					'register_modal_title' => self::get_modal_checkout_labels( 'register_modal_title' ),
@@ -1052,7 +1109,7 @@ final class Modal_Checkout {
 	 * @return string
 	 */
 	public static function woocommerce_get_return_url( $url, $order ) {
-		if ( ! self::is_modal_checkout() ) {
+		if ( ! self::is_modal_checkout() || self::has_unsupported_payment_gateway() ) {
 			return $url;
 		}
 

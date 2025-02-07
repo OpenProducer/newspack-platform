@@ -1,3 +1,27 @@
+## [5.13.1](https://github.com/Automattic/newspack-plugin/compare/v5.13.0...v5.13.1) (2025-02-06)
+
+
+### Bug Fixes
+
+* **esp-sync:** get last payment amount from actual completed order ([#3726](https://github.com/Automattic/newspack-plugin/issues/3726)) ([db284c1](https://github.com/Automattic/newspack-plugin/commit/db284c11a3c5f3308e17c799733d8a1d680ffaa3))
+
+# [5.13.0](https://github.com/Automattic/newspack-plugin/compare/v5.12.5...v5.13.0) (2025-02-03)
+
+
+### Bug Fixes
+
+* add supported gateways check ([#3650](https://github.com/Automattic/newspack-plugin/issues/3650)) ([74f7773](https://github.com/Automattic/newspack-plugin/commit/74f77735a5135b004516f8d1217d8752d2c8fadd))
+* **corrections:** replace deprecated sanitize method ([#3694](https://github.com/Automattic/newspack-plugin/issues/3694)) ([ce50e24](https://github.com/Automattic/newspack-plugin/commit/ce50e247462672d024a6f93e37d7a9f5e4c934ee))
+* remove support for legacy form checkout ([#3691](https://github.com/Automattic/newspack-plugin/issues/3691)) ([46a3c16](https://github.com/Automattic/newspack-plugin/commit/46a3c160a0146e78cc5b8213b105d10fa523f797))
+* **wcs:** expire manual subscriptions after on-hold duration ([#3681](https://github.com/Automattic/newspack-plugin/issues/3681)) ([658416c](https://github.com/Automattic/newspack-plugin/commit/658416c889c868d0c36c538fba63cd422425dfd4))
+
+
+### Features
+
+* add custom bylines ([#3667](https://github.com/Automattic/newspack-plugin/issues/3667)) ([3f45a6f](https://github.com/Automattic/newspack-plugin/commit/3f45a6fa9075bab583f30a03680eaa287436b7da))
+* rate limit checkout attempts ([#3678](https://github.com/Automattic/newspack-plugin/issues/3678)) ([d275524](https://github.com/Automattic/newspack-plugin/commit/d275524695f72b97b6d92b7c97ab5639aba9674c))
+* **reader-revenue:** add PayPal Payments gateway to wizard ([#3665](https://github.com/Automattic/newspack-plugin/issues/3665)) ([1476eed](https://github.com/Automattic/newspack-plugin/commit/1476eed84788dd28b1852519d5aafa793159f1f3))
+
 ## [5.12.5](https://github.com/Automattic/newspack-plugin/compare/v5.12.4...v5.12.5) (2025-01-30)
 
 

@@ -1201,14 +1201,32 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		}
 
 		$result = $cc->upsert_contact( $contact['email'], $data );
-		if ( is_wp_error( $result ) ) {
-			return $result;
-		}
-		if ( ! $result ) {
-			return new WP_Error(
-				'newspack_newsletters_error',
-				__( 'Failed to add contact.', 'newspack-newsletters' )
+		if ( is_wp_error( $result ) || empty( $result ) ) {
+
+			// Log the error with any details returned from the API.
+			do_action(
+				'newspack_log',
+				'newspack_constant_contact_add_contact_failed',
+				'Error adding contact to Constant Contact.',
+				[
+					'type'       => 'error',
+					'data'       => [
+						'messages' => empty( $result ) ? 'Unknown error' : $result->get_error_messages(),
+						'status'   => empty( $result ) ? 'Unknown error' : $result->get_error_code(),
+					],
+					'user_email' => $contact['email'],
+					'file'       => 'newspack_constant_contact',
+				]
 			);
+
+			$reader_error = $this->get_add_contact_reader_error_message(
+				[
+					'email'   => $contact['email'],
+					'list_id' => $list_id,
+				]
+			);
+
+			return Newspack_Newsletters::debug_mode() ? $result : new \WP_Error( 'newspack_constant_contact_add_contact_failed', $reader_error );
 		}
 
 		return get_object_vars( $result );

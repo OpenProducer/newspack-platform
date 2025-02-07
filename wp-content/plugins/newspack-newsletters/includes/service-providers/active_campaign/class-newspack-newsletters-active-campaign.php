@@ -1385,7 +1385,33 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		);
 
 		if ( is_wp_error( $result ) ) {
-			return $result;
+			// Log the error with any details returned from the API.
+			do_action(
+				'newspack_log',
+				'newspack_active_campaign_add_contact_failed',
+				'Error adding contact to ActiveCampaign.',
+				[
+					'type'       => 'error',
+					'data'       => [
+						'messages' => $result->get_error_messages(),
+						'status'   => $result->get_error_code(),
+					],
+					'user_email' => $contact['email'],
+					'file'       => 'newspack_active_campaign',
+				]
+			);
+
+			if ( Newspack_Newsletters::debug_mode() ) {
+				return $result;
+			}
+
+			$reader_error = $this->get_add_contact_reader_error_message(
+				[
+					'email'   => $contact['email'],
+					'list_id' => $list_id,
+				]
+			);
+			return new \WP_Error( 'newspack_active_campaign_add_contact_failed', $reader_error );
 		}
 
 		// On success, clear cached contact data to make sure we get updated data next time we need.

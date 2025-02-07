@@ -168,13 +168,13 @@ class Reader_Revenue_Wizard extends Wizard {
 			]
 		);
 
-		// Save WooPayments info.
+		// Save payment gateway info.
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/woopayments/',
+			'/wizard/' . $this->slug . '/gateway/',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_update_woopayments_settings' ],
+				'callback'            => [ $this, 'api_update_gateway_settings' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
 					'activate' => [
@@ -182,6 +182,9 @@ class Reader_Revenue_Wizard extends Wizard {
 					],
 					'enabled'  => [
 						'sanitize_callback' => 'Newspack\newspack_string_to_bool',
+					],
+					'slug'     => [
+						'sanitize_callback' => 'Newspack\newspack_clean',
 					],
 				],
 			]
@@ -423,16 +426,23 @@ class Reader_Revenue_Wizard extends Wizard {
 	}
 
 	/**
-	 * Save WooPayments settings.
+	 * Save payment gateway settings.
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response.
 	 */
-	public function api_update_woopayments_settings( $request ) {
+	public function api_update_gateway_settings( $request ) {
 		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
 
 		$params = $request->get_params();
-		$result = $wc_configuration_manager->update_wc_woopayments_settings( $params );
+		if ( ! isset( $params['slug'] ) ) {
+			return \rest_ensure_response(
+				new WP_Error( 'newspack_invalid_param', __( 'Gateway slug is required.', 'newspack' ) )
+			);
+		}
+		$slug = $params['slug'];
+		unset( $params['slug'] );
+		$result = $wc_configuration_manager->update_gateway_settings( $slug, $params );
 		return \rest_ensure_response( $result );
 	}
 
@@ -495,7 +505,6 @@ class Reader_Revenue_Wizard extends Wizard {
 		$platform                 = Donations::get_platform_slug();
 		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
 		$wc_installed             = 'active' === Plugin_Manager::get_managed_plugin_status( 'woocommerce' );
-		$stripe_data              = Stripe_Connection::get_stripe_data();
 
 		$billing_fields    = null;
 		$order_notes_field = [];
@@ -516,8 +525,9 @@ class Reader_Revenue_Wizard extends Wizard {
 			'currency_fields'          => newspack_get_currencies_options(),
 			'location_data'            => [],
 			'payment_gateways'         => [
-				'stripe'      => $stripe_data,
-				'woopayments' => $wc_configuration_manager->woopayments_data(),
+				'stripe'               => Stripe_Connection::get_stripe_data(),
+				'woocommerce_payments' => $wc_configuration_manager->gateway_data( 'woocommerce_payments' ),
+				'ppcp-gateway'         => $wc_configuration_manager->gateway_data( 'ppcp-gateway' ),
 			],
 			'additional_settings'      => [
 				'allow_covering_fees'         => boolval( get_option( 'newspack_donations_allow_covering_fees', true ) ),

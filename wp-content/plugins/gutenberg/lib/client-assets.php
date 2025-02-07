@@ -539,7 +539,7 @@ function gutenberg_enqueue_stored_styles( $options = array() ) {
 
 	// Combines Core styles.
 	if ( ! empty( $compiled_core_stylesheet ) ) {
-		wp_register_style( $style_tag_id, false, array(), true, true );
+		wp_register_style( $style_tag_id, false, array(), true );
 		wp_add_inline_style( $style_tag_id, $compiled_core_stylesheet );
 		wp_enqueue_style( $style_tag_id );
 	}
@@ -562,7 +562,7 @@ function gutenberg_enqueue_stored_styles( $options = array() ) {
 		$styles = gutenberg_style_engine_get_stylesheet_from_context( $store_name, $options );
 		if ( ! empty( $styles ) ) {
 			$key = "wp-style-engine-$store_name";
-			wp_register_style( $key, false, array(), true, true );
+			wp_register_style( $key, false, array(), true );
 			wp_add_inline_style( $key, $styles );
 			wp_enqueue_style( $key );
 		}
