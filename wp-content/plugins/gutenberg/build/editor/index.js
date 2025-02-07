@@ -3655,10 +3655,10 @@ const isEditorPanelOpened = (0,external_wp_data_namespaceObject.createRegistrySe
 /**
  * Returns the current selection start.
  *
+ * @deprecated since Gutenberg 10.0.0.
+ *
  * @param {Object} state
  * @return {WPBlockSelection} The selection start.
- *
- * @deprecated since Gutenberg 10.0.0.
  */
 function getEditorSelectionStart(state) {
   external_wp_deprecated_default()("select('core/editor').getEditorSelectionStart", {
@@ -3671,10 +3671,10 @@ function getEditorSelectionStart(state) {
 /**
  * Returns the current selection end.
  *
+ * @deprecated since Gutenberg 10.0.0.
+ *
  * @param {Object} state
  * @return {WPBlockSelection} The selection end.
- *
- * @deprecated since Gutenberg 10.0.0.
  */
 function getEditorSelectionEnd(state) {
   external_wp_deprecated_default()("select('core/editor').getEditorSelectionStart", {
@@ -13764,11 +13764,9 @@ function BlockRemovalWarnings() {
 function StartPageOptions() {
   const {
     postId,
-    shouldEnable
+    enabled
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
-      isEditedPostDirty,
-      isEditedPostEmpty,
       getCurrentPostId,
       getCurrentPostType
     } = select(store_store);
@@ -13776,20 +13774,31 @@ function StartPageOptions() {
     const choosePatternModalEnabled = select(external_wp_preferences_namespaceObject.store).get('core', 'enableChoosePatternModal');
     return {
       postId: getCurrentPostId(),
-      shouldEnable: choosePatternModalEnabled && !preferencesModalActive && !isEditedPostDirty() && isEditedPostEmpty() && 'page' === getCurrentPostType()
+      enabled: choosePatternModalEnabled && !preferencesModalActive && 'page' === getCurrentPostType()
     };
   }, []);
+  const {
+    isEditedPostDirty,
+    isEditedPostEmpty
+  } = (0,external_wp_data_namespaceObject.useSelect)(store_store);
   const {
     setIsInserterOpened
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (shouldEnable) {
+    if (!enabled) {
+      return;
+    }
+    const isFreshPage = !isEditedPostDirty() && isEditedPostEmpty();
+    if (isFreshPage) {
       setIsInserterOpened({
         tab: 'patterns',
         category: 'core/starter-content'
       });
     }
-  }, [postId, shouldEnable, setIsInserterOpened]);
+
+    // Note: The `postId` ensures the effect re-runs when pages are switched without remounting the component.
+    // Examples: changing pages in the List View, creating a new page via Command Palette.
+  }, [postId, enabled, setIsInserterOpened, isEditedPostDirty, isEditedPostEmpty]);
   return null;
 }
 
@@ -14861,7 +14870,7 @@ const ExperimentalEditorProvider = with_registry_provider(({
     } = select(external_wp_coreData_namespaceObject.store);
     const postTypeSupports = getPostType(post.type)?.supports;
     const hasLoadedPostObject = hasFinishedResolution('getPostType', [post.type]);
-    const _defaultMode = Array.isArray(postTypeSupports?.editor) ? postTypeSupports.editor.find(features => 'default_mode' in features)?.default_mode : undefined;
+    const _defaultMode = Array.isArray(postTypeSupports?.editor) ? postTypeSupports.editor.find(features => 'default-mode' in features)?.['default-mode'] : undefined;
     const hasDefaultMode = RENDERING_MODES.includes(_defaultMode);
     return {
       editorSettings: getEditorSettings(),
@@ -16753,10 +16762,10 @@ function DocumentOutline({
 /**
  * Component check if there are any headings (core/heading blocks) present in the document.
  *
- * @param {Object}             props          Props.
- * @param {React.ReactElement} props.children Children to be rendered.
+ * @param {Object}          props          Props.
+ * @param {React.ReactNode} props.children Children to be rendered.
  *
- * @return {React.ReactElement} The component to be rendered or null if there are headings.
+ * @return {React.ReactNode} The component to be rendered or null if there are headings.
  */
 function DocumentOutlineCheck({
   children
@@ -17899,10 +17908,10 @@ function LocalAutosaveMonitor() {
 /**
  * Wrapper component that renders its children only if the post type supports page attributes.
  *
- * @param {Object}             props          - The component props.
- * @param {React.ReactElement} props.children - The child components to render.
+ * @param {Object}          props          - The component props.
+ * @param {React.ReactNode} props.children - The child components to render.
  *
- * @return {React.ReactElement} The rendered child components or null if page attributes are not supported.
+ * @return {React.ReactNode} The rendered child components or null if page attributes are not supported.
  */
 function PageAttributesCheck({
   children
@@ -17943,13 +17952,13 @@ function PageAttributesCheck({
  * A component which renders its own children only if the current editor post
  * type supports one of the given `supportKeys` prop.
  *
- * @param {Object}             props             Props.
- * @param {React.ReactElement} props.children    Children to be rendered if post
- *                                               type supports.
- * @param {(string|string[])}  props.supportKeys String or string array of keys
- *                                               to test.
+ * @param {Object}            props             Props.
+ * @param {React.ReactNode}   props.children    Children to be rendered if post
+ *                                              type supports.
+ * @param {(string|string[])} props.supportKeys String or string array of keys
+ *                                              to test.
  *
- * @return {React.ReactElement} The component to be rendered.
+ * @return {React.ReactNode} The component to be rendered.
  */
 function PostTypeSupportCheck({
   children,
@@ -21017,11 +21026,11 @@ function PrivateExcerpt() {
 /**
  * Checks if the current theme supports specific features and renders the children if supported.
  *
- * @param {Object}             props             The component props.
- * @param {React.ReactElement} props.children    The children to render if the theme supports the specified features.
- * @param {string|string[]}    props.supportKeys The key(s) of the theme support(s) to check.
+ * @param {Object}          props             The component props.
+ * @param {React.ReactNode} props.children    The children to render if the theme supports the specified features.
+ * @param {string|string[]} props.supportKeys The key(s) of the theme support(s) to check.
  *
- * @return {React.ReactElement} The rendered children if the theme supports the specified features, otherwise null.
+ * @return {React.ReactNode} The rendered children if the theme supports the specified features, otherwise null.
  */
 function ThemeSupportCheck({
   children,
@@ -21995,10 +22004,10 @@ function PostLockedModal() {
  * If the post is already published or the user doesn't have the
  * capability to publish, it returns null.
  *
- * @param {Object}             props          Component properties.
- * @param {React.ReactElement} props.children Children to be rendered.
+ * @param {Object}          props          Component properties.
+ * @param {React.ReactNode} props.children Children to be rendered.
  *
- * @return {React.ReactElement} The rendered child elements or null if the post is already published or the user doesn't have the capability to publish.
+ * @return {React.ReactNode} The rendered child elements or null if the post is already published or the user doesn't have the capability to publish.
  */
 function PostPendingStatusCheck({
   children
@@ -25382,10 +25391,10 @@ const cloud = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
 /**
  * Wrapper component that renders its children only if post has a sticky action.
  *
- * @param {Object}             props          Props.
- * @param {React.ReactElement} props.children Children to be rendered.
+ * @param {Object}          props          Props.
+ * @param {React.ReactNode} props.children Children to be rendered.
  *
- * @return {React.ReactElement} The component to be rendered or null if post type is not 'post' or hasStickyAction is false.
+ * @return {React.ReactNode} The component to be rendered or null if post type is not 'post' or hasStickyAction is false.
  */
 function PostStickyCheck({
   children
@@ -25860,10 +25869,10 @@ function PostSavedState({
 /**
  * Wrapper component that renders its children only if post has a publish action.
  *
- * @param {Object}             props          Props.
- * @param {React.ReactElement} props.children Children to be rendered.
+ * @param {Object}          props          Props.
+ * @param {React.ReactNode} props.children Children to be rendered.
  *
- * @return {React.ReactElement} - The component to be rendered or null if there is no publish action.
+ * @return {React.ReactNode} - The component to be rendered or null if there is no publish action.
  */
 function PostScheduleCheck({
   children
@@ -26177,7 +26186,7 @@ function PostTaxonomies({
  * @param {Object}          props          The component props.
  * @param {React.ReactNode} props.children The children components to render.
  *
- * @return {React.ReactElement} The rendered children components or null if the current post type has no taxonomies.
+ * @return {React.ReactNode} The rendered children components or null if the current post type has no taxonomies.
  */
 function PostTaxonomiesCheck({
   children
@@ -26772,10 +26781,10 @@ function PostTitleRaw(_, forwardedRef) {
 /**
  * Wrapper component that renders its children only if the post can be trashed.
  *
- * @param {Object}             props          The component props.
- * @param {React.ReactElement} props.children The child components.
+ * @param {Object}          props          The component props.
+ * @param {React.ReactNode} props.children The child components.
  *
- * @return {React.ReactElement | null} The rendered child components or null if the post can't be trashed.
+ * @return {React.ReactNode} The rendered child components or null if the post can't be trashed.
  */
 function PostTrashCheck({
   children
@@ -27076,10 +27085,10 @@ function PostURL({
 /**
  * Check if the post URL is valid and visible.
  *
- * @param {Object}             props          The component props.
- * @param {React.ReactElement} props.children The child components.
+ * @param {Object}          props          The component props.
+ * @param {React.ReactNode} props.children The child components.
  *
- * @return {React.ReactElement} The child components if the post URL is valid and visible, otherwise null.
+ * @return {React.ReactNode} The child components if the post URL is valid and visible, otherwise null.
  */
 function PostURLCheck({
   children
@@ -30156,7 +30165,8 @@ function header_Header({
     isPublishSidebarOpened,
     showIconLabels,
     hasFixedToolbar,
-    hasBlockSelection
+    hasBlockSelection,
+    hasSectionRootClientId
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       get: getPreference
@@ -30166,21 +30176,25 @@ function header_Header({
       getCurrentPostType,
       isPublishSidebarOpened: _isPublishSidebarOpened
     } = select(store_store);
+    const {
+      getBlockSelectionStart,
+      getSectionRootClientId
+    } = unlock(select(external_wp_blockEditor_namespaceObject.store));
     return {
       postType: getCurrentPostType(),
       isTextEditor: getEditorMode() === 'text',
       isPublishSidebarOpened: _isPublishSidebarOpened(),
       showIconLabels: getPreference('core', 'showIconLabels'),
       hasFixedToolbar: getPreference('core', 'fixedToolbar'),
-      hasBlockSelection: !!select(external_wp_blockEditor_namespaceObject.store).getBlockSelectionStart()
+      hasBlockSelection: !!getBlockSelectionStart(),
+      hasSectionRootClientId: !!getSectionRootClientId()
     };
   }, []);
-  const canBeZoomedOut = ['post', 'page', 'wp_template'].includes(postType);
-  const disablePreviewOption = [NAVIGATION_POST_TYPE, TEMPLATE_PART_POST_TYPE, PATTERN_POST_TYPE].includes(postType);
+  const canBeZoomedOut = ['post', 'page', 'wp_template'].includes(postType) && hasSectionRootClientId;
+  const disablePreviewOption = [NAVIGATION_POST_TYPE, TEMPLATE_PART_POST_TYPE, PATTERN_POST_TYPE].includes(postType) || forceDisableBlockTools;
   const [isBlockToolsCollapsed, setIsBlockToolsCollapsed] = (0,external_wp_element_namespaceObject.useState)(true);
   const hasCenter = !isTooNarrowForDocumentBar && (!hasFixedToolbar || hasFixedToolbar && (!hasBlockSelection || isBlockToolsCollapsed));
   const hasBackButton = useHasBackButton();
-  const hasSectionRootClientId = (0,external_wp_data_namespaceObject.useSelect)(select => !!unlock(select(external_wp_blockEditor_namespaceObject.store)).getSectionRootClientId(), []);
 
   /*
    * The edit-post-header classname is only kept for backward compatibility
@@ -30239,7 +30253,7 @@ function header_Header({
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PostPreviewButton, {
         className: "editor-header__post-preview-button",
         forceIsAutosaveable: forceIsDirty
-      }), canBeZoomedOut && isWideViewport && hasSectionRootClientId && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(zoom_out_toggle, {
+      }), isWideViewport && canBeZoomedOut && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(zoom_out_toggle, {
         disabled: forceDisableBlockTools
       }), (isWideViewport || !showIconLabels) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(pinned_items.Slot, {
         scope: "core"
@@ -33894,7 +33908,7 @@ function PreferencesModalContents({
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PreferenceToggleControl, {
           scope: "core",
           featureName: "keepCaretInsideBlock",
-          help: (0,external_wp_i18n_namespaceObject.__)('Keeps the text cursor within the block boundaries, aiding users with screen readers by preventing unintentional cursor movement outside the block.'),
+          help: (0,external_wp_i18n_namespaceObject.__)('Keeps the text cursor within blocks while navigating with arrow keys, preventing it from moving to other blocks and enhancing accessibility for keyboard users.'),
           label: (0,external_wp_i18n_namespaceObject.__)('Contain text cursor inside block')
         })
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PreferencesModalSection, {

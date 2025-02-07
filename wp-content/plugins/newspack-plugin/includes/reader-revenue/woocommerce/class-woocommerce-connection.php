@@ -59,6 +59,8 @@ class WooCommerce_Connection {
 		\add_filter( 'wc_memberships_for_teams_product_team_user_input_fields', [ __CLASS__, 'wc_memberships_for_teams_product_team_user_input_fields' ] );
 
 		\add_action( 'woocommerce_payment_complete', [ __CLASS__, 'order_paid' ], 101 );
+		\add_action( 'woocommerce_after_checkout_validation', [ __CLASS__, 'rate_limit_checkout' ], 10, 2 );
+		\add_filter( 'woocommerce_add_payment_method_form_is_valid', [ __CLASS__, 'rate_limit_payment_methods' ] );
 		\add_action( 'wc_stripe_save_to_subs_checked', '__return_true' );
 
 		\add_filter( 'page_template', [ __CLASS__, 'page_template' ] );
@@ -152,6 +154,102 @@ class WooCommerce_Connection {
 		 * @param int $product_id Donation product post ID.
 		 */
 		\do_action( 'newspack_donation_order_processed', $order_id, $product_id );
+	}
+
+	/**
+	 * Get client IP.
+	 *
+	 * @return string|null Client IP.
+	 */
+	private static function get_client_ip() {
+		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
+			if ( array_key_exists( $key, $_SERVER ) === true ) {
+				foreach ( explode( ',', $_SERVER[ $key ] ) as $ip ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized below
+					$ip = trim( $ip );
+
+					if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
+						return $ip;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Check the rate limit for the current user or IP.
+	 * Currently locked behind a NEWSPACK_CHECKOUT_RATE_LIMIT environment constant, for controlled rollout.
+	 *
+	 * @param string $action_name   The action the user is trying to perform.
+	 * @param string $error_message Error message to display or return if the user should be rate-limited.
+	 * @param bool   $return_error  If true and the user should be rate-limited, return a WP_Error with the given message instead of a boolean value.
+	 *
+	 * @return bool|WP_Error True or WP_Error if the rate limit is exceeded, false otherwise.
+	 */
+	public static function rate_limit_by_user( $action_name, $error_message = '', $return_error = false ) {
+		$rate_limited = false;
+		if ( ! defined( 'NEWSPACK_CHECKOUT_RATE_LIMIT' ) || ! class_exists( 'WC_Rate_Limiter' ) ) {
+			return $rate_limited;
+		}
+		if ( ! $error_message ) {
+			$error_message = __( 'Please wait a moment before trying again.', 'newspack-plugin' );
+		}
+		$user_id    = get_current_user_id();
+		$now        = time();
+		$rate_limit = defined( 'NEWSPACK_CHECKOUT_RATE_LIMIT' ) ? (int) NEWSPACK_CHECKOUT_RATE_LIMIT : 90; // Number of seconds to wait before allowing the same user to attempt another checkout action. Default: 90.
+		if ( 0 === $rate_limit ) {
+			return $rate_limited; // If $rate_limit is 0 seconds, no need to proceed.
+		}
+
+		// If not logged in, use IP.
+		if ( ! $user_id ) {
+			$user_id = self::get_client_ip();
+		}
+		if ( ! $user_id ) {
+			return $rate_limited;
+		}
+		$hashed_user_id = \wp_hash( $user_id, 'nonce' );
+		$user_action    = "{$action_name}_{$hashed_user_id}";
+		$rate_limited   = \WC_Rate_Limiter::retried_too_soon( $user_action );
+		if ( $rate_limited ) {
+			if ( $return_error ) {
+				return new \WP_Error( 'newspack_rate_limit', $error_message );
+			} else {
+				self::add_wc_notice( $error_message, 'error' );
+			}
+		}
+
+		\WC_Rate_Limiter::set_rate_limit( $user_action, $rate_limit );
+		return $rate_limited;
+	}
+
+	/**
+	 * Rate limit checkout attempts per user.
+	 *
+	 * @param  array    $posted_data An array of posted data.
+	 * @param  WP_Error $errors Validation error.
+	 */
+	public static function rate_limit_checkout( $posted_data, $errors ) {
+		// Don't rate limit if there are other checkout errors.
+		if ( $errors->has_errors() ) {
+			return;
+		}
+		self::rate_limit_by_user( 'checkout', __( 'Please wait a moment before trying to complete this transaction again.', 'newspack-plugin' ) );
+	}
+
+	/**
+	 * Rate limit new payment methods per user.
+	 *
+	 * @param bool $is_valid Whether the form is valid.
+	 *
+	 * @return bool
+	 */
+	public static function rate_limit_payment_methods( $is_valid ) {
+		if ( self::rate_limit_by_user( 'add_payment_method', __( 'Please wait a moment before trying to add a new payment method.', 'newspack-plugin' ) ) ) {
+			return false;
+		}
+
+		return $is_valid;
 	}
 
 	/**

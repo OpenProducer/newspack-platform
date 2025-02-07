@@ -26601,7 +26601,7 @@ const STYLE_BOOK_ALL_BLOCKS_SUBCATEGORIES = [...STYLE_BOOK_THEME_SUBCATEGORIES, 
   include: []
 }];
 
-// Style book preview categories are organised slightly differently to the editor ones.
+// Style book preview categories are organized slightly differently to the editor ones.
 const STYLE_BOOK_PREVIEW_CATEGORIES = [{
   slug: 'overview',
   title: (0,external_wp_i18n_namespaceObject.__)('Overview'),
@@ -28164,7 +28164,7 @@ function Pagination({
   className,
   disabled = false,
   buttonVariant = 'tertiary',
-  label = (0,external_wp_i18n_namespaceObject.__)('Pagination Navigation')
+  label = (0,external_wp_i18n_namespaceObject.__)('Pagination')
 }) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
     expanded: false,
@@ -28360,7 +28360,7 @@ function ScreenRevisions() {
         changePage: setCurrentPage,
         totalItems: revisionsCount,
         disabled: isLoading,
-        label: (0,external_wp_i18n_namespaceObject.__)('Global Styles pagination navigation')
+        label: (0,external_wp_i18n_namespaceObject.__)('Global Styles pagination')
       })
     }), isLoadingRevisionWithUnsavedChanges && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalConfirmDialog, {
       isOpen: isLoadingRevisionWithUnsavedChanges,

@@ -42,8 +42,6 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 	require __DIR__ . '/compat/wordpress-6.7/rest-api.php';
 
 	// WordPress 6.8 compat.
-	require __DIR__ . '/compat/wordpress-6.8/block-comments.php';
-	require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-rest-comment-controller-6-8.php';
 	require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-hierarchical-sort.php';
 	require __DIR__ . '/compat/wordpress-6.8/rest-api.php';
 
@@ -54,6 +52,12 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 
 	require_once __DIR__ . '/experimental/rest-api.php';
 	require_once __DIR__ . '/experimental/kses-allowed-html.php';
+
+	// Block Comments.
+	if ( gutenberg_is_experiment_enabled( 'gutenberg-block-comment' ) ) {
+		require __DIR__ . '/experimental/block-comments.php';
+		require __DIR__ . '/experimental/class-gutenberg-rest-comment-controller.php';
+	}
 }
 
 // Experimental signaling server.

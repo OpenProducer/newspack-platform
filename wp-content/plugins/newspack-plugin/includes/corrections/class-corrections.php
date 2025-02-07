@@ -363,7 +363,7 @@ class Corrections {
 		}
 
 		$corrections_active   = filter_input( INPUT_POST, self::CORRECTIONS_ACTIVE_META, FILTER_SANITIZE_NUMBER_INT );
-		$corrections_location = filter_input( INPUT_POST, self::CORRECTIONS_LOCATION_META, FILTER_SANITIZE_STRING );
+		$corrections_location = filter_input( INPUT_POST, self::CORRECTIONS_LOCATION_META, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		$corrections_data     = filter_input_array(
 			INPUT_POST,
 			[

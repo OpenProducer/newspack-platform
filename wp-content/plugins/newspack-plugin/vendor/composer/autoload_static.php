@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit85c91e1d42d96da79e19e4eee2852f5d
+class ComposerStaticInitd4c8871592997972eb836f965fe6e009
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -97,6 +97,7 @@ class ComposerStaticInit85c91e1d42d96da79e19e4eee2852f5d
         'Newspack\\Author_Filter' => __DIR__ . '/../..' . '/includes/author-filter/class-author-filter.php',
         'Newspack\\Authors_Custom_Fields' => __DIR__ . '/../..' . '/includes/authors/class-authors-custom-fields.php',
         'Newspack\\Blocks' => __DIR__ . '/../..' . '/includes/class-blocks.php',
+        'Newspack\\Bylines' => __DIR__ . '/../..' . '/includes/bylines/class-bylines.php',
         'Newspack\\CLI\\Co_Authors_Plus' => __DIR__ . '/../..' . '/includes/cli/class-co-authors-plus.php',
         'Newspack\\CLI\\Initializer' => __DIR__ . '/../..' . '/includes/cli/class-initializer.php',
         'Newspack\\CLI\\Mailchimp' => __DIR__ . '/../..' . '/includes/cli/class-mailchimp.php',
@@ -226,9 +227,9 @@ class ComposerStaticInit85c91e1d42d96da79e19e4eee2852f5d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit85c91e1d42d96da79e19e4eee2852f5d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit85c91e1d42d96da79e19e4eee2852f5d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit85c91e1d42d96da79e19e4eee2852f5d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd4c8871592997972eb836f965fe6e009::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd4c8871592997972eb836f965fe6e009::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd4c8871592997972eb836f965fe6e009::$classMap;
 
         }, null, ClassLoader::class);
     }

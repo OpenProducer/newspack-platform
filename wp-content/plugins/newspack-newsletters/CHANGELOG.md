@@ -1,3 +1,15 @@
+# [3.8.0](https://github.com/Automattic/newspack-newsletters/compare/v3.7.5...v3.8.0) (2025-02-03)
+
+
+### Bug Fixes
+
+* **mailchimp:** only remove sender email on successful response ([#1739](https://github.com/Automattic/newspack-newsletters/issues/1739)) ([6d912f4](https://github.com/Automattic/newspack-newsletters/commit/6d912f432de4c8f95f8fffe387e6cd897136175b))
+
+
+### Features
+
+* better reader-facing error messages ([#1745](https://github.com/Automattic/newspack-newsletters/issues/1745)) ([26b39b6](https://github.com/Automattic/newspack-newsletters/commit/26b39b6affb9ba4562fce27e672bba645afcd606))
+
 ## [3.7.5](https://github.com/Automattic/newspack-newsletters/compare/v3.7.4...v3.7.5) (2025-01-20)
 
 

@@ -18,6 +18,7 @@ return array(
     'Newspack\\Author_Filter' => $baseDir . '/includes/author-filter/class-author-filter.php',
     'Newspack\\Authors_Custom_Fields' => $baseDir . '/includes/authors/class-authors-custom-fields.php',
     'Newspack\\Blocks' => $baseDir . '/includes/class-blocks.php',
+    'Newspack\\Bylines' => $baseDir . '/includes/bylines/class-bylines.php',
     'Newspack\\CLI\\Co_Authors_Plus' => $baseDir . '/includes/cli/class-co-authors-plus.php',
     'Newspack\\CLI\\Initializer' => $baseDir . '/includes/cli/class-initializer.php',
     'Newspack\\CLI\\Mailchimp' => $baseDir . '/includes/cli/class-mailchimp.php',

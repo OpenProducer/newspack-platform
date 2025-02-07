@@ -2,25 +2,25 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 9.6.0\n"
+"Project-Id-Version: WooCommerce 9.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-01-16T17:36:56+00:00\n"
+"POT-Creation-Date: 2025-02-03T17:44:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: woocommerce\n"
 
 #. Plugin Name of the plugin
 #: woocommerce.php
-#: includes/admin/class-wc-admin-menus.php:100
+#: includes/admin/class-wc-admin-menus.php:99
 #: includes/admin/class-wc-admin-setup-wizard.php:353
 #: includes/admin/class-wc-admin-setup-wizard.php:446
 #: includes/admin/class-wc-admin.php:248
-#: includes/admin/helper/views/html-oauth-start.php:34
+#: includes/admin/helper/views/html-oauth-start.php:21
 #: includes/class-wc-order.php:2012
 #: includes/class-wc-order.php:2013
 #: includes/class-wc-privacy.php:54
@@ -33,8 +33,8 @@ msgstr ""
 #: src/Blocks/Patterns/PatternRegistry.php:24
 #: src/Internal/Admin/Homescreen.php:182
 #: src/Internal/Admin/Loader.php:410
-#: src/Internal/Admin/Settings.php:212
-#: templates/auth/header.php:48
+#: src/Internal/Admin/Settings.php:209
+#: templates/auth/header.php:35
 #: assets/client/blocks/all-products.js:6
 #: assets/client/blocks/all-reviews.js:7
 #: assets/client/blocks/cart.js:50
@@ -9385,7 +9385,7 @@ msgid "Available on backorder"
 msgstr ""
 
 #: includes/abstracts/abstract-wc-settings-api.php:832
-#: includes/admin/class-wc-admin-menus.php:452
+#: includes/admin/class-wc-admin-menus.php:451
 #: includes/admin/class-wc-admin-settings.php:745
 #: includes/admin/meta-boxes/views/html-product-attribute-inner.php:72
 #: assets/client/admin/product-editor/index.js:2
@@ -9603,7 +9603,7 @@ msgstr ""
 msgid "You do not have permission to revoke API Keys"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:168
+#: includes/admin/class-wc-admin-assets.php:162
 #: includes/class-wc-frontend-scripts.php:611
 #: includes/widgets/class-wc-widget-layered-nav.php:322
 #: includes/widgets/class-wc-widget-product-categories.php:272
@@ -9611,145 +9611,145 @@ msgctxt "enhanced select"
 msgid "No matches found"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:169
+#: includes/admin/class-wc-admin-assets.php:163
 #: includes/class-wc-frontend-scripts.php:612
 msgctxt "enhanced select"
 msgid "Loading failed"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:170
+#: includes/admin/class-wc-admin-assets.php:164
 #: includes/class-wc-frontend-scripts.php:613
 msgctxt "enhanced select"
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:171
+#: includes/admin/class-wc-admin-assets.php:165
 #: includes/class-wc-frontend-scripts.php:614
 msgctxt "enhanced select"
 msgid "Please enter %qty% or more characters"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:172
+#: includes/admin/class-wc-admin-assets.php:166
 #: includes/class-wc-frontend-scripts.php:615
 msgctxt "enhanced select"
 msgid "Please delete 1 character"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:173
+#: includes/admin/class-wc-admin-assets.php:167
 #: includes/class-wc-frontend-scripts.php:616
 msgctxt "enhanced select"
 msgid "Please delete %qty% characters"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:174
+#: includes/admin/class-wc-admin-assets.php:168
 #: includes/class-wc-frontend-scripts.php:617
 msgctxt "enhanced select"
 msgid "You can only select 1 item"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:175
+#: includes/admin/class-wc-admin-assets.php:169
 #: includes/class-wc-frontend-scripts.php:618
 msgctxt "enhanced select"
 msgid "You can only select %qty% items"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:176
+#: includes/admin/class-wc-admin-assets.php:170
 #: includes/class-wc-frontend-scripts.php:619
 msgctxt "enhanced select"
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:177
+#: includes/admin/class-wc-admin-assets.php:171
 #: includes/class-wc-frontend-scripts.php:620
 msgctxt "enhanced select"
 msgid "Searching&hellip;"
 msgstr ""
 
 #. translators: %s: decimal
-#: includes/admin/class-wc-admin-assets.php:222
+#: includes/admin/class-wc-admin-assets.php:216
 msgid "Please enter a value with one decimal point (%s) without thousand separators."
 msgstr ""
 
 #. translators: %s: price decimal separator
-#: includes/admin/class-wc-admin-assets.php:224
+#: includes/admin/class-wc-admin-assets.php:218
 msgid "Please enter a value with one monetary decimal point (%s) without thousand separators and currency symbols."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:225
+#: includes/admin/class-wc-admin-assets.php:219
 msgid "Please enter in country code with two capital letters."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:226
+#: includes/admin/class-wc-admin-assets.php:220
 msgid "Please enter in a value less than the regular price."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:227
+#: includes/admin/class-wc-admin-assets.php:221
 msgid "This product has produced sales and may be linked to existing orders. Are you sure you want to delete it?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:228
+#: includes/admin/class-wc-admin-assets.php:222
 msgid "This action cannot be reversed. Are you sure you wish to erase personal data from the selected orders?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:229
+#: includes/admin/class-wc-admin-assets.php:223
 msgid "Are you sure you wish to delete this item?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:230
+#: includes/admin/class-wc-admin-assets.php:224
 #: src/Internal/Features/ProductBlockEditor/ProductTemplates/ProductVariationTemplate.php:347
 #: src/Internal/Features/ProductBlockEditor/ProductTemplates/SimpleProductTemplate.php:779
 msgid "Please enter only numbers and hyphens (-)."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:235
+#: includes/admin/class-wc-admin-assets.php:229
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:185
 #: assets/client/admin/chunks/core-profiler.js:1
 msgid "Import"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:236
+#: includes/admin/class-wc-admin-assets.php:230
 #: assets/client/admin/app/index.js:2
 msgid "Export"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:262
+#: includes/admin/class-wc-admin-assets.php:256
 #: includes/admin/meta-boxes/views/html-product-data-advanced.php:47
 #: includes/admin/settings/class-wc-settings-products.php:167
 msgid "Enable reviews"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:277
+#: includes/admin/class-wc-admin-assets.php:271
 msgid "Product description"
 msgstr ""
 
 #. translators: %d: Number of variations
-#: includes/admin/class-wc-admin-assets.php:304
+#: includes/admin/class-wc-admin-assets.php:298
 msgid "Do you want to generate all variations? This will create a new variation for each and every possible combination of variation attributes (max %d per run)."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:305
+#: includes/admin/class-wc-admin-assets.php:299
 #: assets/client/admin/product-editor/index.js:2
 msgid "Enter a value"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:306
+#: includes/admin/class-wc-admin-assets.php:300
 msgid "Variation menu order (determines position in the list of variations)"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:307
+#: includes/admin/class-wc-admin-assets.php:301
 #: assets/client/admin/product-editor/index.js:2
 msgid "Enter a value (fixed or %)"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:308
+#: includes/admin/class-wc-admin-assets.php:302
 msgid "Are you sure you want to delete all variations? This cannot be undone."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:309
+#: includes/admin/class-wc-admin-assets.php:303
 msgid "Last warning, are you sure?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:310
+#: includes/admin/class-wc-admin-assets.php:304
 #: includes/admin/class-wc-admin-brands.php:342
 #: includes/admin/class-wc-admin-brands.php:425
 #: includes/admin/class-wc-admin-taxonomies.php:163
@@ -9759,46 +9759,46 @@ msgstr ""
 msgid "Choose an image"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:311
+#: includes/admin/class-wc-admin-assets.php:305
 msgid "Set variation image"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:312
+#: includes/admin/class-wc-admin-assets.php:306
 msgid "1 variation added"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:313
+#: includes/admin/class-wc-admin-assets.php:307
 msgid "%qty% variations added"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:314
+#: includes/admin/class-wc-admin-assets.php:308
 msgid "Are you sure you want to remove this variation?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:315
+#: includes/admin/class-wc-admin-assets.php:309
 #: assets/client/admin/product-editor/index.js:2
 msgid "Sale start date (YYYY-MM-DD format or leave blank)"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:316
+#: includes/admin/class-wc-admin-assets.php:310
 #: assets/client/admin/product-editor/index.js:2
 msgid "Sale end date (YYYY-MM-DD format or leave blank)"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:317
+#: includes/admin/class-wc-admin-assets.php:311
 msgid "Save changes before changing page?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:318
+#: includes/admin/class-wc-admin-assets.php:312
 msgid "1 variation"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:319
+#: includes/admin/class-wc-admin-assets.php:313
 msgid "%qty% variations"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:335
-#: includes/admin/class-wc-admin-assets.php:536
+#: includes/admin/class-wc-admin-assets.php:329
+#: includes/admin/class-wc-admin-assets.php:530
 #: includes/admin/settings/views/html-webhooks-edit.php:68
 #: includes/class-wc-frontend-scripts.php:610
 #: includes/wc-template-functions.php:3103
@@ -9807,57 +9807,57 @@ msgstr ""
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:338
+#: includes/admin/class-wc-admin-assets.php:332
 #: includes/admin/meta-boxes/views/html-order-item-meta.php:62
 msgid "Name (required)"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:339
+#: includes/admin/class-wc-admin-assets.php:333
 #: includes/admin/meta-boxes/views/html-order-item-meta.php:63
 msgid "Value (required)"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:350
+#: includes/admin/class-wc-admin-assets.php:344
 msgid "Generate coupon code"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:362
+#: includes/admin/class-wc-admin-assets.php:356
 msgid "Are you sure you want to remove the selected items?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:363
+#: includes/admin/class-wc-admin-assets.php:357
 msgid "Are you sure you want to remove the selected fees?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:364
+#: includes/admin/class-wc-admin-assets.php:358
 msgid "Are you sure you want to remove the selected shipping?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:375
+#: includes/admin/class-wc-admin-assets.php:369
 msgid "You may need to manually restore the item's stock."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:384
+#: includes/admin/class-wc-admin-assets.php:378
 msgid "Please select some items."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:385
+#: includes/admin/class-wc-admin-assets.php:379
 msgid "Are you sure you wish to process this refund? This action cannot be undone."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:386
+#: includes/admin/class-wc-admin-assets.php:380
 msgid "Are you sure you wish to delete this refund? This action cannot be undone."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:387
+#: includes/admin/class-wc-admin-assets.php:381
 msgid "Are you sure you wish to delete this tax column? This action cannot be undone."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:388
+#: includes/admin/class-wc-admin-assets.php:382
 msgid "Remove this item meta?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:389
+#: includes/admin/class-wc-admin-assets.php:383
 #: includes/admin/class-wc-admin-attributes.php:206
 #: includes/admin/class-wc-admin-attributes.php:273
 #: includes/admin/class-wc-admin-attributes.php:308
@@ -9892,7 +9892,7 @@ msgid "Name"
 msgstr ""
 
 #. translators: Remove chip.
-#: includes/admin/class-wc-admin-assets.php:390
+#: includes/admin/class-wc-admin-assets.php:384
 #: includes/admin/meta-boxes/views/html-product-attribute.php:10
 #: includes/admin/meta-boxes/views/html-variation-admin.php:20
 #: assets/client/admin/app/index.js:2
@@ -9902,52 +9902,52 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:391
+#: includes/admin/class-wc-admin-assets.php:385
 #: includes/admin/meta-boxes/views/html-order-download-permission.php:9
 #: includes/admin/meta-boxes/views/html-product-attribute.php:8
 msgid "Click to toggle"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:392
+#: includes/admin/class-wc-admin-assets.php:386
 #: includes/admin/meta-boxes/views/html-product-attribute-inner.php:28
 msgid "Value(s)"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:393
+#: includes/admin/class-wc-admin-assets.php:387
 msgid "Enter some text, or some attributes by pipe (|) separating values."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:394
+#: includes/admin/class-wc-admin-assets.php:388
 #: includes/admin/meta-boxes/views/html-product-attribute-inner.php:97
 msgid "Visible on the product page"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:395
+#: includes/admin/class-wc-admin-assets.php:389
 #: includes/admin/meta-boxes/views/html-product-attribute-inner.php:103
 msgid "Used for variations"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:396
+#: includes/admin/class-wc-admin-assets.php:390
 msgid "Enter a name for the new attribute term:"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:397
+#: includes/admin/class-wc-admin-assets.php:391
 msgid "Recalculate totals? This will calculate taxes based on the customers country (or the store base country) and update totals."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:398
+#: includes/admin/class-wc-admin-assets.php:392
 msgid "Copy billing information to shipping information? This will remove any currently entered shipping information."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:399
+#: includes/admin/class-wc-admin-assets.php:393
 msgid "Load the customer's billing information? This will remove any currently entered billing information."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:400
+#: includes/admin/class-wc-admin-assets.php:394
 msgid "Load the customer's shipping information? This will remove any currently entered shipping information."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:401
+#: includes/admin/class-wc-admin-assets.php:395
 #: includes/admin/class-wc-admin-post-types.php:745
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:131
 #: includes/admin/views/html-bulk-edit-product.php:240
@@ -9956,118 +9956,118 @@ msgstr ""
 msgid "Featured"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:405
+#: includes/admin/class-wc-admin-assets.php:399
 msgid "No customer selected"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:430
+#: includes/admin/class-wc-admin-assets.php:424
 msgid "Could not grant access - the user may already have permission for this file or billing email is not set. Ensure the billing email is set, and the order has been saved."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:431
+#: includes/admin/class-wc-admin-assets.php:425
 msgid "Are you sure you want to revoke access to this download?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:432
+#: includes/admin/class-wc-admin-assets.php:426
 msgid "You cannot add the same tax rate twice!"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:433
+#: includes/admin/class-wc-admin-assets.php:427
 msgid "Are you sure you wish to delete this note? This action cannot be undone."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:434
+#: includes/admin/class-wc-admin-assets.php:428
 msgid "Enter a coupon code to apply. Discounts are applied to line totals, before taxes."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:435
+#: includes/admin/class-wc-admin-assets.php:429
 msgid "Enter a fixed amount or percentage to apply as a fee."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:436
+#: includes/admin/class-wc-admin-assets.php:430
 #: includes/admin/meta-boxes/views/html-product-attribute.php:11
 msgid "New attribute"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:437
+#: includes/admin/class-wc-admin-assets.php:431
 msgid "<b>Simple –</b> covers the vast majority of any products you may sell. Simple products are shipped and have no options. For example, a book."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:438
+#: includes/admin/class-wc-admin-assets.php:432
 msgid "<b>Grouped –</b> a collection of related products that can be purchased individually and only consist of simple products. For example, a set of six drinking glasses."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:439
+#: includes/admin/class-wc-admin-assets.php:433
 msgid "<b>External or Affiliate –</b> one that you list and describe on your website but is sold elsewhere."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:440
+#: includes/admin/class-wc-admin-assets.php:434
 msgid "<b>Variable –</b> a product with variations, each of which may have a different SKU, price, stock option, etc. For example, a t-shirt available in different colors and/or sizes."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:441
+#: includes/admin/class-wc-admin-assets.php:435
 msgid "Product types define available product details and attributes, such as downloadable files and variations. They’re also used for analytics and inventory management."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:442
+#: includes/admin/class-wc-admin-assets.php:436
 #: assets/client/admin/product-editor/index.js:2
 msgid "Describe this product. What makes it unique? What are its most important features?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:443
+#: includes/admin/class-wc-admin-assets.php:437
 msgid "Summarize this product in 1-2 short sentences. We’ll show it at the top of the page."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:444
+#: includes/admin/class-wc-admin-assets.php:438
 msgid "Make sure you enter the name and values for each attribute."
 msgstr ""
 
 #. translators: %1$s: maximum file size
-#: includes/admin/class-wc-admin-assets.php:446
+#: includes/admin/class-wc-admin-assets.php:440
 msgid "For best results, upload JPEG or PNG files that are 1000 by 1000 pixels or larger. Maximum upload file size: %1$s."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:447
+#: includes/admin/class-wc-admin-assets.php:441
 msgid "If you remove this attribute, customers will no longer be able to purchase some variations of this product."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:448
+#: includes/admin/class-wc-admin-assets.php:442
 msgid "Adding new attribute failed."
 msgstr ""
 
 #. translators: %s: WC_DELIMITER
-#: includes/admin/class-wc-admin-assets.php:450
+#: includes/admin/class-wc-admin-assets.php:444
 msgid "Enter some descriptive text. Use “%s” to separate different values."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:451
+#: includes/admin/class-wc-admin-assets.php:445
 msgid "Enter options for customers to choose from, f.e. “Blue” or “Large”. Use “%s” to separate different options."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:504
+#: includes/admin/class-wc-admin-assets.php:498
 #: includes/admin/views/html-admin-page-status-report.php:73
 msgid "Copying to clipboard failed. Please press Ctrl/Cmd+C to copy."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:522
+#: includes/admin/class-wc-admin-assets.php:516
 msgid "Are you sure you want to delete this log?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:523
+#: includes/admin/class-wc-admin-assets.php:517
 msgid "Are you sure you want to run this tool?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:561
+#: includes/admin/class-wc-admin-assets.php:555
 #: src/Internal/Admin/Notes/WooCommerceSubscriptions.php:55
 #: assets/client/admin/chunks/core-profiler.js:1
 msgid "Learn More"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:563
+#: includes/admin/class-wc-admin-assets.php:557
 msgid "Dismiss this suggestion"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:565
+#: includes/admin/class-wc-admin-assets.php:559
 #: includes/admin/marketplace-suggestions/templates/html-product-data-extensions.php:27
 msgid "Manage suggestions"
 msgstr ""
@@ -10243,7 +10243,7 @@ msgstr ""
 #: src/Admin/RemoteInboxNotifications/RemoteInboxNotificationsEngine.php:284
 #: src/Internal/Admin/Orders/MetaBoxes/CustomMetaBox.php:392
 #: src/Internal/DataStores/Orders/CustomOrdersTableController.php:298
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/customize-store.js:1
 #: assets/client/admin/experimental/index.js:2
 #: assets/client/admin/product-editor/blocks/product-fields/downloads/edit-downloads-modal/edit-downloads-modal.js:1
@@ -10422,7 +10422,7 @@ msgid "WooCommerce Endpoint"
 msgstr ""
 
 #: includes/admin/class-wc-admin-customize.php:77
-#: includes/admin/class-wc-admin-menus.php:421
+#: includes/admin/class-wc-admin-menus.php:420
 #: includes/admin/settings/class-wc-settings-advanced.php:307
 #: includes/class-wc-query.php:158
 msgid "Lost password"
@@ -10505,7 +10505,7 @@ msgid "Loading network orders"
 msgstr ""
 
 #: includes/admin/class-wc-admin-dashboard.php:475
-#: includes/admin/class-wc-admin-menus.php:197
+#: includes/admin/class-wc-admin-menus.php:196
 #: includes/admin/class-wc-admin-webhooks-table-list.php:51
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:125
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:81
@@ -10815,7 +10815,7 @@ msgstr ""
 msgid "Sale"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:106
+#: includes/admin/class-wc-admin-menus.php:105
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:874
 #: includes/admin/meta-boxes/class-wc-meta-box-product-data.php:99
 #: includes/admin/views/html-admin-page-product-export.php:41
@@ -10826,28 +10826,28 @@ msgstr ""
 msgid "Attributes"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:114
+#: includes/admin/class-wc-admin-menus.php:113
 #: includes/react-admin/connect-existing-pages.php:31
 msgid "Reports"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:116
+#: includes/admin/class-wc-admin-menus.php:115
 msgid "Sales reports"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:126
+#: includes/admin/class-wc-admin-menus.php:125
 msgid "WooCommerce settings"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:127
+#: includes/admin/class-wc-admin-menus.php:126
 #: includes/admin/views/html-admin-page-status-report.php:693
-#: includes/class-wc-install.php:2206
+#: includes/class-wc-install.php:2209
 #: includes/react-admin/connect-existing-pages.php:35
 #: src/Internal/Admin/Analytics.php:265
 #: src/Internal/Admin/Logging/PageController.php:212
 #: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/8656.js:1
-#: assets/client/admin/chunks/9001.js:1
 #: assets/client/admin/chunks/customize-store.js:1
 #: assets/client/admin/settings-editor/index.js:2
 #: assets/client/blocks/add-to-cart-with-options-quantity-selector.js:1
@@ -10864,35 +10864,35 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:197
+#: includes/admin/class-wc-admin-menus.php:196
 msgid "WooCommerce status"
 msgstr ""
 
 #. translators: %s: extensions count
-#: includes/admin/class-wc-admin-menus.php:217
+#: includes/admin/class-wc-admin-menus.php:216
 msgid "Extensions %s"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:218
-#: includes/admin/class-wc-admin-menus.php:228
+#: includes/admin/class-wc-admin-menus.php:217
+#: includes/admin/class-wc-admin-menus.php:227
 msgid "WooCommerce extensions"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:270
+#: includes/admin/class-wc-admin-menus.php:269
 #: includes/class-wc-post-types.php:476
 msgctxt "Admin menu name"
 msgid "Orders"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:405
+#: includes/admin/class-wc-admin-menus.php:404
 msgid "WooCommerce endpoints"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:456
+#: includes/admin/class-wc-admin-menus.php:455
 msgid "Add to menu"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:490
+#: includes/admin/class-wc-admin-menus.php:489
 msgid "Visit Store"
 msgstr ""
 
@@ -10932,33 +10932,33 @@ msgstr ""
 #: src/Internal/Admin/ProductReviews/Reviews.php:85
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:1348
 #: templates/single-product-reviews.php:37
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/customize-store.js:1
 msgid "Reviews"
 msgstr ""
 
-#: includes/admin/class-wc-admin-notices.php:172
+#: includes/admin/class-wc-admin-notices.php:171
 msgid "WooCommerce webhooks that use the Legacy REST API are unsupported"
 msgstr ""
 
 #. translators: Placeholders are URLs.
-#: includes/admin/class-wc-admin-notices.php:176
+#: includes/admin/class-wc-admin-notices.php:175
 msgid "⚠️ The WooCommerce Legacy REST API has been removed from WooCommerce, this will cause <a href=\"%1$s\">webhooks on this site that are configured to use the Legacy REST API</a> to stop working. <a target=\"_blank\" href=\"%2$s\">A separate WooCommerce extension is available</a> to allow these webhooks to keep using the Legacy REST API without interruption. You can also edit these webhooks to use the current REST API version to generate the payload instead. <b><a target=\"_blank\" href=\"%3$s\">Learn more about this change.</a></b>"
 msgstr ""
 
-#: includes/admin/class-wc-admin-notices.php:267
+#: includes/admin/class-wc-admin-notices.php:266
 #: includes/admin/class-wc-admin-status.php:305
 #: includes/emails/class-wc-email.php:1013
 #: src/Internal/Features/FeaturesController.php:1436
 msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
-#: includes/admin/class-wc-admin-notices.php:283
+#: includes/admin/class-wc-admin-notices.php:282
 #: includes/emails/class-wc-email.php:1017
 msgid "You don&#8217;t have permission to do this."
 msgstr ""
 
-#: includes/admin/class-wc-admin-notices.php:416
+#: includes/admin/class-wc-admin-notices.php:413
 #: includes/tracks/events/class-wc-admin-setup-wizard-tracking.php:29
 #: includes/tracks/events/class-wc-admin-setup-wizard-tracking.php:39
 #: includes/tracks/events/class-wc-admin-setup-wizard-tracking.php:49
@@ -11331,9 +11331,9 @@ msgstr ""
 #: src/Internal/ProductDownloads/ApprovedDirectories/Admin/UI.php:360
 #: assets/client/admin/app/index.js:2
 #: assets/client/admin/chunks/957.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/6885.js:1
 #: assets/client/admin/chunks/8656.js:1
-#: assets/client/admin/chunks/9001.js:1
 #: assets/client/admin/chunks/activity-panels-inbox.js:1
 #: assets/client/admin/chunks/customize-store.js:1
 #: assets/client/admin/chunks/launch-store.js:1
@@ -11588,7 +11588,7 @@ msgstr ""
 #: src/Admin/ReportCSVEmail.php:58
 #: src/Internal/Admin/Analytics.php:217
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/analytics-report-categories.js:1
 #: assets/client/admin/chunks/analytics-report-coupons.js:1
 #: assets/client/admin/chunks/analytics-report-customers.js:1
@@ -11651,7 +11651,7 @@ msgstr ""
 #: src/Admin/ReportCSVEmail.php:61
 #: src/Internal/Admin/Analytics.php:253
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/analytics-report-categories.js:1
 #: assets/client/admin/chunks/analytics-report-products.js:1
 #: assets/client/admin/chunks/analytics-report-stock.js:1
@@ -11790,7 +11790,7 @@ msgstr ""
 #: src/Internal/ReceiptRendering/ReceiptRenderingEngine.php:347
 #: templates/cart/cart-totals.php:52
 #: templates/cart/cart-totals.php:53
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/analytics-report-revenue.js:1
 #: assets/client/admin/chunks/dashboard-charts.js:1
 #: assets/client/admin/product-editor/index.js:2
@@ -11966,8 +11966,8 @@ msgstr ""
 #: includes/admin/class-wc-admin-setup-wizard.php:786
 #: includes/admin/class-wc-admin-setup-wizard.php:826
 #: src/Admin/API/Plugins.php:412
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:404
-#: assets/client/admin/chunks/9001.js:1
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:401
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Jetpack"
 msgstr ""
@@ -12181,13 +12181,13 @@ msgid "PayPal email address"
 msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:1470
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Klarna Checkout for WooCommerce"
 msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:1478
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Klarna Payments for WooCommerce"
 msgstr ""
@@ -12292,7 +12292,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-setup-wizard.php:1920
 #: includes/admin/class-wc-admin-setup-wizard.php:1924
 #: src/Internal/Admin/Loader.php:482
-#: src/Internal/Admin/Settings.php:292
+#: src/Internal/Admin/Settings.php:289
 msgid "WooCommerce Admin"
 msgstr ""
 
@@ -12305,7 +12305,7 @@ msgid "WooCommerce Admin icon"
 msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:1931
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:202
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:199
 msgid "Mailchimp"
 msgstr ""
 
@@ -12318,7 +12318,7 @@ msgid "Mailchimp icon"
 msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:1935
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Mailchimp for WooCommerce"
 msgstr ""
@@ -12338,9 +12338,9 @@ msgid "Facebook icon"
 msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:1946
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:139
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:147
-#: assets/client/admin/chunks/9001.js:1
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:136
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:144
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Facebook for WooCommerce"
 msgstr ""
@@ -12637,8 +12637,8 @@ msgid "Product categories for your store can be managed here. To change the orde
 msgstr ""
 
 #: includes/admin/class-wc-admin-taxonomies.php:340
-#: includes/class-wc-install.php:1216
-#: includes/class-wc-install.php:1222
+#: includes/class-wc-install.php:1219
+#: includes/class-wc-install.php:1225
 msgctxt "Default category slug"
 msgid "Uncategorized"
 msgstr ""
@@ -13147,7 +13147,7 @@ msgid "We've made things simpler and easier to manage moving forward. From now o
 msgstr ""
 
 #: includes/admin/helper/views/html-main.php:13
-#: includes/admin/helper/views/html-oauth-start.php:27
+#: includes/admin/helper/views/html-oauth-start.php:14
 msgid "WooCommerce Extensions"
 msgstr ""
 
@@ -13235,7 +13235,7 @@ msgstr ""
 #: src/Internal/Admin/Notes/UnsecuredReportFiles.php:57
 #: src/Internal/Admin/WCPayPromotion/WCPaymentGatewayPreInstallWCPayPromotion.php:81
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/marketplace.js:1
 #: assets/client/admin/chunks/multichannel-marketing.js:1
 #: assets/client/admin/chunks/settings-payments-main.js:1
@@ -13256,23 +13256,23 @@ msgstr ""
 msgid "Please <a href=\"%1$s\">Install the WooCommerce.com Update Manager</a> to continue receiving the updates and streamlined support included in your WooCommerce.com subscriptions. Alternatively, you can <a href=\"%2$s\">download</a> and install it manually."
 msgstr ""
 
-#: includes/admin/helper/views/html-oauth-start.php:46
+#: includes/admin/helper/views/html-oauth-start.php:33
 msgid "Sorry to see you go."
 msgstr ""
 
-#: includes/admin/helper/views/html-oauth-start.php:46
+#: includes/admin/helper/views/html-oauth-start.php:33
 msgid "Feel free to reconnect again using the button below."
 msgstr ""
 
-#: includes/admin/helper/views/html-oauth-start.php:49
+#: includes/admin/helper/views/html-oauth-start.php:36
 msgid "Manage your subscriptions, get important product notifications, and updates, all from the convenience of your WooCommerce dashboard"
 msgstr ""
 
-#: includes/admin/helper/views/html-oauth-start.php:50
+#: includes/admin/helper/views/html-oauth-start.php:37
 msgid "Once connected, your WooCommerce.com purchases will be listed here."
 msgstr ""
 
-#: includes/admin/helper/views/html-oauth-start.php:51
+#: includes/admin/helper/views/html-oauth-start.php:38
 #: assets/client/admin/app/index.js:2
 #: assets/client/admin/chunks/marketplace.js:1
 msgid "Connect"
@@ -14251,7 +14251,7 @@ msgstr ""
 #: includes/class-wc-countries.php:491
 #: includes/class-wc-order-item-tax.php:170
 #: includes/class-wc-tax.php:977
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 msgid "Tax"
 msgstr ""
 
@@ -14293,9 +14293,9 @@ msgstr ""
 #: includes/admin/settings/class-wc-settings-accounts.php:243
 #: includes/admin/settings/class-wc-settings-accounts.php:252
 #: includes/admin/settings/class-wc-settings-accounts.php:261
-#: includes/admin/settings/class-wc-settings-emails.php:98
-#: includes/admin/settings/class-wc-settings-emails.php:150
-#: includes/admin/settings/class-wc-settings-emails.php:368
+#: includes/admin/settings/class-wc-settings-emails.php:97
+#: includes/admin/settings/class-wc-settings-emails.php:149
+#: includes/admin/settings/class-wc-settings-emails.php:367
 #: includes/admin/settings/views/settings-tax.php:107
 #: includes/emails/class-wc-email-cancelled-order.php:189
 #: includes/emails/class-wc-email-customer-invoice.php:222
@@ -14367,7 +14367,7 @@ msgstr ""
 
 #. Translators: %s Payment gateway name.
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:261
-#: includes/admin/settings/class-wc-settings-emails.php:595
+#: includes/admin/settings/class-wc-settings-emails.php:594
 #: includes/admin/settings/class-wc-settings-payment-gateways.php:230
 #: includes/admin/settings/class-wc-settings-shipping.php:343
 #: includes/admin/views/html-bulk-edit-product.php:246
@@ -15210,7 +15210,7 @@ msgstr ""
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:166
 #: templates/myaccount/form-reset-password.php:45
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/product-editor/index.js:2
 #: assets/client/admin/wp-admin-scripts/beta-features-tracking-modal.js:1
 msgid "Save"
@@ -15266,7 +15266,7 @@ msgstr ""
 
 #: includes/admin/meta-boxes/views/html-order-items.php:405
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/product-editor/blocks/product-fields/product-list/edit.js:1
 #: assets/client/admin/product-editor/index.js:2
 msgid "Add products"
@@ -15386,8 +15386,8 @@ msgstr ""
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:122
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:172
 #: src/Blocks/BlockTypes/ProductFilters.php:117
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/8656.js:1
-#: assets/client/admin/chunks/9001.js:1
 #: assets/client/admin/chunks/customize-store.js:1
 #: assets/client/admin/chunks/launch-store.js:1
 #: assets/client/admin/components/index.js:2
@@ -16021,7 +16021,7 @@ msgid "Upload an image"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-variation-admin.php:113
-#: includes/admin/settings/class-wc-settings-emails.php:595
+#: includes/admin/settings/class-wc-settings-emails.php:594
 #: includes/admin/settings/class-wc-settings-payment-gateways.php:140
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:82
 #: includes/admin/views/html-admin-page-status-report.php:795
@@ -16406,7 +16406,7 @@ msgid "Username"
 msgstr ""
 
 #: includes/admin/reports/class-wc-report-customer-list.php:217
-#: includes/admin/settings/class-wc-settings-emails.php:558
+#: includes/admin/settings/class-wc-settings-emails.php:557
 #: src/Admin/API/Reports/Customers/Controller.php:545
 #: src/Admin/Features/MarketingRecommendations/DefaultMarketingRecommendations.php:36
 #: src/Internal/Admin/Orders/ListTable.php:1589
@@ -17341,41 +17341,41 @@ msgstr ""
 msgid "⚠️ The WooCommerce Legacy REST API has been moved to <a target=”_blank” href=\"%1$s\">a dedicated extension</a>. <b><a target=”_blank” href=\"%2$s\">Learn more about this change</a></b>"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:46
+#: includes/admin/settings/class-wc-settings-emails.php:45
 msgid "Emails"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:73
+#: includes/admin/settings/class-wc-settings-emails.php:72
 msgid "Email options"
 msgstr ""
 
 #. translators: %1$s: Link to WP Mail Logging plugin, %2$s: Link to Email FAQ support page.
-#: includes/admin/settings/class-wc-settings-emails.php:85
+#: includes/admin/settings/class-wc-settings-emails.php:84
 msgid "To ensure your store&rsquo;s notifications arrive in your and your customers&rsquo; inboxes, we recommend connecting your email address to your domain and setting up a dedicated SMTP server. If something doesn&rsquo;t seem to be sending correctly, install the <a href=\"%1$s\">WP Mail Logging Plugin</a> or check the <a href=\"%2$s\">Email FAQ page</a>."
 msgstr ""
 
 #. translators: %s: Nonced email preview link
-#: includes/admin/settings/class-wc-settings-emails.php:91
+#: includes/admin/settings/class-wc-settings-emails.php:90
 msgid "This section lets you customize the WooCommerce emails. <a href=\"%s\" target=\"_blank\">Click here to preview your email template</a>."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:93
+#: includes/admin/settings/class-wc-settings-emails.php:92
 msgid "Header image"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:94
+#: includes/admin/settings/class-wc-settings-emails.php:93
 msgid "Paste the URL of an image you want to show in the email header. Upload images using the media uploader (Media > Add New)."
 msgstr ""
 
 #. translators: %s: Available placeholders for use
-#: includes/admin/settings/class-wc-settings-emails.php:107
+#: includes/admin/settings/class-wc-settings-emails.php:106
 msgid "The text to appear in the footer of all WooCommerce emails."
 msgstr ""
 
 #. translators: %s: Available placeholders for use
 #. translators: %s: list of placeholders
-#: includes/admin/settings/class-wc-settings-emails.php:107
-#: includes/admin/settings/class-wc-settings-emails.php:177
+#: includes/admin/settings/class-wc-settings-emails.php:106
+#: includes/admin/settings/class-wc-settings-emails.php:176
 #: includes/emails/class-wc-email-cancelled-order.php:152
 #: includes/emails/class-wc-email-customer-invoice.php:184
 #: includes/emails/class-wc-email-customer-refunded-order.php:238
@@ -17385,221 +17385,221 @@ msgstr ""
 msgid "Available placeholders: %s"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:119
+#: includes/admin/settings/class-wc-settings-emails.php:118
 msgid "Base color"
 msgstr ""
 
 #. translators: %s: default color
-#: includes/admin/settings/class-wc-settings-emails.php:121
+#: includes/admin/settings/class-wc-settings-emails.php:120
 msgid "The base color for WooCommerce email templates. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:123
+#: includes/admin/settings/class-wc-settings-emails.php:122
 msgid "Background color"
 msgstr ""
 
 #. translators: %s: default color
-#: includes/admin/settings/class-wc-settings-emails.php:125
+#: includes/admin/settings/class-wc-settings-emails.php:124
 msgid "The background color for WooCommerce email templates. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:127
+#: includes/admin/settings/class-wc-settings-emails.php:126
 msgid "Body background color"
 msgstr ""
 
 #. translators: %s: default color
-#: includes/admin/settings/class-wc-settings-emails.php:129
+#: includes/admin/settings/class-wc-settings-emails.php:128
 msgid "The main body background color. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:131
+#: includes/admin/settings/class-wc-settings-emails.php:130
 msgid "Body text color"
 msgstr ""
 
 #. translators: %s: default color
-#: includes/admin/settings/class-wc-settings-emails.php:133
+#: includes/admin/settings/class-wc-settings-emails.php:132
 msgid "The main body text color. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:135
+#: includes/admin/settings/class-wc-settings-emails.php:134
 msgid "Footer text color"
 msgstr ""
 
 #. translators: %s: footer default color
-#: includes/admin/settings/class-wc-settings-emails.php:137
+#: includes/admin/settings/class-wc-settings-emails.php:136
 msgid "The footer text color. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:143
+#: includes/admin/settings/class-wc-settings-emails.php:142
 msgid "Customize your WooCommerce email template and preview it below."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:145
+#: includes/admin/settings/class-wc-settings-emails.php:144
 #: assets/client/admin/chunks/customize-store.js:1
 msgid "Logo"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:146
+#: includes/admin/settings/class-wc-settings-emails.php:145
 msgid "Add your logo to each of your WooCommerce emails. If no logo is uploaded, your site title will be used instead."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:156
+#: includes/admin/settings/class-wc-settings-emails.php:155
 msgid "Header alignment"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:163
+#: includes/admin/settings/class-wc-settings-emails.php:162
 #: includes/admin/settings/class-wc-settings-general.php:253
 #: assets/client/blocks/all-products.js:15
 msgid "Left"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:164
+#: includes/admin/settings/class-wc-settings-emails.php:163
 #: assets/client/blocks/all-products.js:15
 msgid "Center"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:165
+#: includes/admin/settings/class-wc-settings-emails.php:164
 #: includes/admin/settings/class-wc-settings-general.php:254
 #: assets/client/blocks/all-products.js:15
 msgid "Right"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:170
+#: includes/admin/settings/class-wc-settings-emails.php:169
 msgid "Font family"
 msgstr ""
 
 #. translators: %s: Available placeholders for use
-#: includes/admin/settings/class-wc-settings-emails.php:177
+#: includes/admin/settings/class-wc-settings-emails.php:176
 msgid "This text will appear in the footer of all of your WooCommerce emails."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:180
+#: includes/admin/settings/class-wc-settings-emails.php:179
 msgid "Accent"
 msgstr ""
 
 #. translators: %s: default color
-#: includes/admin/settings/class-wc-settings-emails.php:182
+#: includes/admin/settings/class-wc-settings-emails.php:181
 msgid "Customize the color of your buttons and links. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:184
+#: includes/admin/settings/class-wc-settings-emails.php:183
 msgid "Email background"
 msgstr ""
 
 #. translators: %s: default color
-#: includes/admin/settings/class-wc-settings-emails.php:186
+#: includes/admin/settings/class-wc-settings-emails.php:185
 msgid "Select a color for the background of your emails. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:188
+#: includes/admin/settings/class-wc-settings-emails.php:187
 msgid "Content background"
 msgstr ""
 
 #. translators: %s: default color
-#: includes/admin/settings/class-wc-settings-emails.php:190
+#: includes/admin/settings/class-wc-settings-emails.php:189
 msgid "Choose a background color for the content area of your emails. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:192
+#: includes/admin/settings/class-wc-settings-emails.php:191
 msgid "Heading & text"
 msgstr ""
 
 #. translators: %s: default color
-#: includes/admin/settings/class-wc-settings-emails.php:194
+#: includes/admin/settings/class-wc-settings-emails.php:193
 msgid "Set the color of your headings and text. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:196
+#: includes/admin/settings/class-wc-settings-emails.php:195
 msgid "Secondary text"
 msgstr ""
 
 #. translators: %s: footer default color
-#: includes/admin/settings/class-wc-settings-emails.php:198
+#: includes/admin/settings/class-wc-settings-emails.php:197
 msgid "Choose a color for your secondary text, such as your footer content. Default %s."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:201
+#: includes/admin/settings/class-wc-settings-emails.php:200
 msgid "Color palette"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:286
+#: includes/admin/settings/class-wc-settings-emails.php:285
 msgid "Email notifications"
 msgstr ""
 
 #. translators: %s: help description with link to WP Mail logging and support page.
-#: includes/admin/settings/class-wc-settings-emails.php:288
+#: includes/admin/settings/class-wc-settings-emails.php:287
 msgid "Email notifications sent from WooCommerce are listed below. Click on an email to configure it.<br>%s"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:306
+#: includes/admin/settings/class-wc-settings-emails.php:305
 msgid "Email sender options"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:308
+#: includes/admin/settings/class-wc-settings-emails.php:307
 msgid "Set the name and email address you'd like your outgoing emails to use."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:313
+#: includes/admin/settings/class-wc-settings-emails.php:312
 msgid "\"From\" name"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:324
+#: includes/admin/settings/class-wc-settings-emails.php:323
 msgid "\"From\" address"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:343
+#: includes/admin/settings/class-wc-settings-emails.php:342
 msgid "Email template"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:364
+#: includes/admin/settings/class-wc-settings-emails.php:363
 msgid "Footer text"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:399
+#: includes/admin/settings/class-wc-settings-emails.php:398
 msgid "Store management insights"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:405
+#: includes/admin/settings/class-wc-settings-emails.php:404
 msgid "Enable email insights"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:406
+#: includes/admin/settings/class-wc-settings-emails.php:405
 msgid "Receive email notifications with additional guidance to complete the basic store setup and helpful insights"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:559
+#: includes/admin/settings/class-wc-settings-emails.php:558
 msgid "Content type"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:560
+#: includes/admin/settings/class-wc-settings-emails.php:559
 #: includes/emails/class-wc-email-cancelled-order.php:161
 #: includes/emails/class-wc-email-failed-order.php:159
 #: includes/emails/class-wc-email-new-order.php:184
 msgid "Recipient(s)"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:586
+#: includes/admin/settings/class-wc-settings-emails.php:585
 #: src/Admin/API/Reports/Orders/Controller.php:466
 #: assets/client/admin/chunks/analytics-report-orders.js:1
 msgid "Customer"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:593
+#: includes/admin/settings/class-wc-settings-emails.php:592
 msgid "Manually sent"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:593
+#: includes/admin/settings/class-wc-settings-emails.php:592
 msgid "Manual"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:597
+#: includes/admin/settings/class-wc-settings-emails.php:596
 #: includes/wc-webhook-functions.php:152
 #: src/Internal/ProductDownloads/ApprovedDirectories/Admin/Table.php:203
 msgid "Disabled"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-emails.php:609
+#: includes/admin/settings/class-wc-settings-emails.php:608
 #: includes/admin/settings/class-wc-settings-payment-gateways.php:216
 #: includes/admin/settings/class-wc-settings-payment-gateways.php:220
 #: assets/client/admin/app/index.js:2
@@ -17609,19 +17609,19 @@ msgstr ""
 msgid "Manage"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:666
+#: includes/admin/settings/class-wc-settings-emails.php:665
 msgid "Email preview"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:668
+#: includes/admin/settings/class-wc-settings-emails.php:667
 msgid "Preview your email template. You can also test on different devices and send yourself a test email."
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:768
+#: includes/admin/settings/class-wc-settings-emails.php:767
 msgid "Standard fonts"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-emails.php:782
+#: includes/admin/settings/class-wc-settings-emails.php:781
 msgid "Custom fonts"
 msgstr ""
 
@@ -21512,159 +21512,159 @@ msgstr ""
 msgid "Please enter a stronger password."
 msgstr ""
 
-#: includes/class-wc-install.php:778
+#: includes/class-wc-install.php:781
 msgid "Monthly"
 msgstr ""
 
-#: includes/class-wc-install.php:782
+#: includes/class-wc-install.php:785
 msgid "Every 15 Days"
 msgstr ""
 
-#: includes/class-wc-install.php:897
+#: includes/class-wc-install.php:900
 msgctxt "Page slug"
 msgid "shop"
 msgstr ""
 
-#: includes/class-wc-install.php:898
+#: includes/class-wc-install.php:901
 msgctxt "Page title"
 msgid "Shop"
 msgstr ""
 
-#: includes/class-wc-install.php:902
+#: includes/class-wc-install.php:905
 msgctxt "Page slug"
 msgid "cart"
 msgstr ""
 
-#: includes/class-wc-install.php:903
+#: includes/class-wc-install.php:906
 msgctxt "Page title"
 msgid "Cart"
 msgstr ""
 
-#: includes/class-wc-install.php:907
+#: includes/class-wc-install.php:910
 msgctxt "Page slug"
 msgid "checkout"
 msgstr ""
 
-#: includes/class-wc-install.php:908
+#: includes/class-wc-install.php:911
 msgctxt "Page title"
 msgid "Checkout"
 msgstr ""
 
-#: includes/class-wc-install.php:912
+#: includes/class-wc-install.php:915
 msgctxt "Page slug"
 msgid "my-account"
 msgstr ""
 
-#: includes/class-wc-install.php:913
+#: includes/class-wc-install.php:916
 msgctxt "Page title"
 msgid "My account"
 msgstr ""
 
-#: includes/class-wc-install.php:917
+#: includes/class-wc-install.php:920
 msgctxt "Page slug"
 msgid "refund_returns"
 msgstr ""
 
-#: includes/class-wc-install.php:918
+#: includes/class-wc-install.php:921
 msgctxt "Page title"
 msgid "Refund and Returns Policy"
 msgstr ""
 
-#: includes/class-wc-install.php:980
+#: includes/class-wc-install.php:983
 msgid "Reduced rate"
 msgstr ""
 
-#: includes/class-wc-install.php:981
+#: includes/class-wc-install.php:984
 msgid "Zero rate"
 msgstr ""
 
 #. translators: 1 = URL of Legacy REST API plugin page, 2 = URL of Legacy API settings in current site, 3 = URL of webhooks settings in current site, 4 = URL of logs page in current site, 5 = URL of plugins page in current site, 6 = URL of blog post about the Legacy REST API removal
-#: includes/class-wc-install.php:1342
+#: includes/class-wc-install.php:1345
 msgid "⚠️ WooCommerce installed <a href=\"%1$s\">the Legacy REST API plugin</a> because this site has <a href=\"%2$s\">the Legacy REST API enabled</a> or has <a href=\"%3$s\">legacy webhooks defined</a>, but it failed to activate it (see error details in <a href=\"%4$s\">the WooCommerce logs</a>). Please go to <a href=\"%5$s\">the plugins page</a> and activate it manually. <a href=\"%6$s\">More information</a>"
 msgstr ""
 
-#: includes/class-wc-install.php:1352
+#: includes/class-wc-install.php:1355
 msgid "WooCommerce installed the Legacy REST API plugin but failed to activate it, see context for more details."
 msgstr ""
 
 #. translators: 1 = URL of Legacy REST API plugin page, 2 = URL of Legacy API settings in current site, 3 = URL of webhooks settings in current site, 4 = URL of blog post about the Legacy REST API removal
-#: includes/class-wc-install.php:1361
+#: includes/class-wc-install.php:1364
 msgid "ℹ️ WooCommerce installed and activated <a href=\"%1$s\">the Legacy REST API plugin</a> because this site has <a href=\"%2$s\">the Legacy REST API enabled</a> or has <a href=\"%3$s\">legacy webhooks defined</a>. <a href=\"%4$s\">More information</a>"
 msgstr ""
 
 #. translators: 1 = URL of Legacy REST API plugin page, 2 = URL of Legacy API settings in current site, 3 = URL of webhooks settings in current site, 4 = URL of logs page in current site, 5 = URL of blog post about the Legacy REST API removal
-#: includes/class-wc-install.php:1375
+#: includes/class-wc-install.php:1378
 msgid "⚠️ WooCommerce attempted to install <a href=\"%1$s\">the Legacy REST API plugin</a> because this site has <a href=\"%2$s\">the Legacy REST API enabled</a> or has <a href=\"%3$s\">legacy webhooks defined</a>, but the installation failed (see error details in <a href=\"%4$s\">the WooCommerce logs</a>). Please install and activate the plugin manually. <a href=\"%5$s\">More information</a>"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:1957
+#: includes/class-wc-install.php:1960
 msgctxt "User role"
 msgid "Customer"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:1959
+#: includes/class-wc-install.php:1962
 msgctxt "User role"
 msgid "Shop manager"
 msgstr ""
 
-#: includes/class-wc-install.php:2206
+#: includes/class-wc-install.php:2209
 msgid "View WooCommerce settings"
 msgstr ""
 
-#: includes/class-wc-install.php:2254
+#: includes/class-wc-install.php:2257
 msgid "View WooCommerce documentation"
 msgstr ""
 
-#: includes/class-wc-install.php:2254
+#: includes/class-wc-install.php:2257
 msgid "Docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2255
+#: includes/class-wc-install.php:2258
 msgid "View WooCommerce API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2255
+#: includes/class-wc-install.php:2258
 msgid "API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2256
+#: includes/class-wc-install.php:2259
 msgid "Visit community forums"
 msgstr ""
 
-#: includes/class-wc-install.php:2256
+#: includes/class-wc-install.php:2259
 msgid "Community support"
 msgstr ""
 
-#: includes/class-wc-install.php:2260
+#: includes/class-wc-install.php:2263
 msgid "Visit premium customer support"
 msgstr ""
 
-#: includes/class-wc-install.php:2260
+#: includes/class-wc-install.php:2263
 msgid "Premium support"
 msgstr ""
 
 #. translators: 1: plugin name, 2: error message, 3: URL to install plugin manually.
 #. translators: 1: theme slug, 2: error message, 3: URL to install theme manually.
-#: includes/class-wc-install.php:2388
-#: includes/class-wc-install.php:2492
+#: includes/class-wc-install.php:2391
+#: includes/class-wc-install.php:2495
 msgid "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it manually by clicking here.</a>"
 msgstr ""
 
 #. translators: 1: plugin name, 2: URL to WP plugin page.
-#: includes/class-wc-install.php:2416
+#: includes/class-wc-install.php:2419
 msgid "%1$s was installed but could not be activated. <a href=\"%2$s\">Please activate it manually by clicking here.</a>"
 msgstr ""
 
-#: includes/class-wc-install.php:2723
+#: includes/class-wc-install.php:2726
 #: src/Blocks/BlockTypes/Cart.php:69
 #: assets/client/blocks/cart.js:12
 #: assets/client/blocks/product-collection.js:1
 msgid "You may be interested in…"
 msgstr ""
 
-#: includes/class-wc-install.php:2779
+#: includes/class-wc-install.php:2782
 #: src/Blocks/BlockTypes/Cart.php:78
 #: src/Blocks/BlockTypes/MiniCart.php:572
 #: assets/client/blocks/cart.js:21
@@ -21672,7 +21672,7 @@ msgstr ""
 msgid "Your cart is currently empty!"
 msgstr ""
 
-#: includes/class-wc-install.php:2787
+#: includes/class-wc-install.php:2790
 #: src/Blocks/BlockTypes/Cart.php:88
 #: assets/client/blocks/cart.js:21
 msgid "New in store"
@@ -23000,7 +23000,7 @@ msgstr ""
 #: includes/class-wc-privacy.php:124
 #: src/Internal/Admin/Settings/PaymentsController.php:71
 #: src/Internal/Admin/WcPayWelcomePage.php:93
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 msgid "Payments"
 msgstr ""
 
@@ -24877,7 +24877,7 @@ msgstr ""
 #: src/Internal/Admin/Marketplace.php:71
 #: src/Internal/Admin/Marketplace.php:72
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/marketplace.js:1
 msgid "Extensions"
 msgstr ""
@@ -34860,13 +34860,13 @@ msgid "Create advertising campaigns and reach one billion global users with TikT
 msgstr ""
 
 #: src/Admin/Features/MarketingRecommendations/DefaultMarketingRecommendations.php:112
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:148
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:145
 msgid "List products and create ads on Facebook and Instagram."
 msgstr ""
 
 #: src/Admin/Features/MarketingRecommendations/DefaultMarketingRecommendations.php:128
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:180
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:451
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:177
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:448
 msgid "Create and send purchase follow-up emails, newsletters, and promotional campaigns straight from your dashboard."
 msgstr ""
 
@@ -34875,7 +34875,7 @@ msgid "Send targeted campaigns, recover abandoned carts and more with Mailchimp.
 msgstr ""
 
 #: src/Admin/Features/MarketingRecommendations/DefaultMarketingRecommendations.php:162
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:210
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:207
 msgid "Grow and retain customers with intelligent, impactful email and SMS marketing automation and a consolidated view of customer interactions."
 msgstr ""
 
@@ -35089,7 +35089,7 @@ msgid "Add store details"
 msgstr ""
 
 #: src/Admin/Features/OnboardingTasks/Tasks/StoreDetails.php:33
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 msgid "Store details"
 msgstr ""
 
@@ -35119,7 +35119,7 @@ msgid "Discover ways of extending your store with a tour of the Woo Marketplace"
 msgstr ""
 
 #: src/Admin/Features/OnboardingTasks/Tasks/WooCommercePayments.php:38
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:547
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:544
 msgid "Get paid with WooPayments"
 msgstr ""
 
@@ -35258,7 +35258,7 @@ msgstr ""
 
 #: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:580
 #: src/Internal/Admin/Suggestions/PaymentExtensionSuggestions.php:2346
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Razorpay"
 msgstr ""
@@ -35300,11 +35300,11 @@ msgstr ""
 #: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:783
 #: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:825
 #: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:860
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:216
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:213
 #: src/Internal/Admin/WCPayPromotion/DefaultPromotions.php:28
 #: src/Internal/Admin/WCPayPromotion/DefaultPromotions.php:40
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "WooPayments"
 msgstr ""
@@ -36666,7 +36666,7 @@ msgstr ""
 #. translators: %s number of products in cart.
 #. translators: %d is the count of products.
 #: src/Blocks/BlockTypes/ProductCategories.php:393
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/blocks/featured-category.js:13
 #: assets/client/blocks/featured-product.js:13
 #: assets/client/blocks/product-best-sellers.js:12
@@ -37825,34 +37825,34 @@ msgid "%1$s &lsaquo; %2$s"
 msgstr ""
 
 #: src/Internal/Admin/Loader.php:483
-#: src/Internal/Admin/Settings.php:293
+#: src/Internal/Admin/Settings.php:290
 msgid "Settings for WooCommerce admin reporting."
 msgstr ""
 
 #: src/Internal/Admin/Loader.php:502
-#: src/Internal/Admin/Settings.php:312
+#: src/Internal/Admin/Settings.php:309
 msgid "Excluded report order statuses"
 msgstr ""
 
 #: src/Internal/Admin/Loader.php:503
-#: src/Internal/Admin/Settings.php:313
+#: src/Internal/Admin/Settings.php:310
 msgid "Statuses that should not be included when calculating report totals."
 msgstr ""
 
 #: src/Internal/Admin/Loader.php:511
-#: src/Internal/Admin/Settings.php:321
+#: src/Internal/Admin/Settings.php:318
 msgid "Actionable order statuses"
 msgstr ""
 
 #: src/Internal/Admin/Loader.php:512
-#: src/Internal/Admin/Settings.php:322
+#: src/Internal/Admin/Settings.php:319
 msgid "Statuses that require extra action on behalf of the store admin."
 msgstr ""
 
 #: src/Internal/Admin/Loader.php:520
 #: src/Internal/Admin/Loader.php:521
-#: src/Internal/Admin/Settings.php:330
-#: src/Internal/Admin/Settings.php:331
+#: src/Internal/Admin/Settings.php:327
+#: src/Internal/Admin/Settings.php:328
 msgid "Default Date Range"
 msgstr ""
 
@@ -38115,7 +38115,7 @@ msgstr ""
 #: src/Internal/Admin/Marketing.php:75
 #: src/Internal/Admin/Marketing.php:76
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 msgid "Marketing"
 msgstr ""
 
@@ -38943,8 +38943,8 @@ msgstr[1] ""
 #: src/Internal/Admin/ProductReviews/Reviews.php:446
 #: src/Internal/Admin/ProductReviews/Reviews.php:457
 #: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/8656.js:1
-#: assets/client/admin/chunks/9001.js:1
 #: assets/client/admin/chunks/activity-panels-inbox.js:1
 #: assets/client/blocks/cart.js:44
 #: assets/client/blocks/checkout.js:40
@@ -39017,7 +39017,7 @@ msgstr ""
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:474
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:676
 #: templates/auth/form-grant-access.php:64
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 msgid "Approve"
 msgstr ""
 
@@ -39255,202 +39255,202 @@ msgstr ""
 msgid "No pending reviews"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:39
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:36
 msgid "Get the basics"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:49
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:68
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:78
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:46
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:65
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:75
 msgid "Grow your store"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:59
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:56
 msgid "Reach out to customers"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:109
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:132
-#: assets/client/admin/chunks/9001.js:1
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:106
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:129
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Google for WooCommerce"
 msgstr ""
 
 #. translators: 1: opening product link tag. 2: closing link tag
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:112
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:109
 msgid "Drive sales with %1$sGoogle for WooCommerce%2$s"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:133
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:130
 msgid "Reach more shoppers and drive sales for your store. Integrate with Google to list your products for free and launch paid ad campaigns."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:140
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:137
 msgid "List products and create ads on Facebook and Instagram with <a href=\"https://woocommerce.com/products/facebook/\">Facebook for WooCommerce</a>"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:155
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:172
-#: assets/client/admin/chunks/9001.js:1
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:152
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:169
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Pinterest for WooCommerce"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:156
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:153
 msgid "Get your products in front of Pinners searching for ideas and things to buy."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:173
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:170
 msgid "Get your products in front of Pinterest users searching for ideas and things to buy. Get started with Pinterest and make your entire product catalog browsable."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:179
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:427
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:450
-#: assets/client/admin/chunks/9001.js:1
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:176
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:424
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:447
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "MailPoet"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:187
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:184
 msgid "Meta Ads & Pixel for WooCommerce"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:188
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:579
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:185
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:576
 msgid "Sync your store catalog, set up pixel tracking, and run targeted ad campaigns."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:203
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:200
 msgid "Send targeted campaigns, recover abandoned carts and much more with Mailchimp."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:209
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:206
 #: assets/client/admin/chunks/multichannel-marketing.js:1
 #: assets/client/admin/wp-admin-scripts/marketing-coupons.js:2
 msgid "Klaviyo"
 msgstr ""
 
 #. translators: 1: opening product link tag. 2: closing link tag
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:220
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:217
 msgid "Accept credit cards and other popular payment methods with %1$sWooPayments%2$s"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:276
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:273
 #: assets/client/admin/chunks/shipping-recommendations.js:1
 msgid "WooCommerce Shipping"
 msgstr ""
 
 #. translators: 1: opening product link tag. 2: closing link tag
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:280
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:277
 msgid "Print shipping labels with %1$sWooCommerce Shipping%2$s"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:363
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:360
 #: assets/client/admin/app/index.js:2
 msgid "WooCommerce Tax"
 msgstr ""
 
 #. translators: 1: opening product link tag. 2: closing link tag
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:367
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:364
 msgid "Get automated sales tax with %1$sWooCommerce Tax%2$s"
 msgstr ""
 
 #. translators: 1: opening product link tag. 2: closing link tag
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:408
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:405
 msgid "Enhance speed and security with %1$sJetpack%2$s"
 msgstr ""
 
 #. translators: 1: opening product link tag. 2: closing link tag
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:431
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:428
 msgid "Level up your email marketing with %1$sMailPoet%2$s"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:457
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:513
-#: assets/client/admin/chunks/9001.js:1
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:454
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:510
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/data/index.js:2
 msgid "TikTok for WooCommerce"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:460
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:457
 msgid "Grow your online sales by promoting your products on TikTok to over one billion monthly active users around the world."
 msgstr ""
 
 #. translators: 1: opening product link tag. 2: closing link tag
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:517
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:514
 msgid "Create ad campaigns and reach one billion global users with %1$sTikTok for WooCommerce%2$s"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:549
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:546
 msgid "Securely accept payments and manage payment activity straight from your store's dashboard"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:555
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:552
 msgid "Print shipping labels with WooCommerce Shipping"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:557
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:554
 msgid "Print USPS and DHL labels directly from your dashboard and save on shipping."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:562
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:559
 msgid "Boost content creation with Jetpack AI Assistant"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:564
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:561
 msgid "Save time on content creation — unlock high-quality blog posts and pages using AI."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:570
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:567
 msgid "Showcase your products with Pinterest"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:572
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:569
 msgid "Get your products in front of a highly engaged audience."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:577
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:574
 msgid "Grow your business with Facebook and Instagram"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:584
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:581
 msgid "Reach your customers with MailPoet"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:586
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:583
 msgid "Send purchase follow-up emails, newsletters, and promotional campaigns."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:591
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:588
 msgid "Create ad campaigns with TikTok"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:593
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:590
 msgid "Create advertising campaigns and reach one billion global users."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:598
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:595
 msgid "Drive sales with Google for WooCommerce"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:600
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:597
 msgid "Reach millions of active shoppers across Google with free product listings and ads."
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:605
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:602
 msgid "Get automated tax rates with WooCommerce Tax"
 msgstr ""
 
-#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:607
+#: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:604
 msgid "Automatically calculate how much sales tax should be collected – by city, country, or state."
 msgstr ""
 
-#: src/Internal/Admin/Settings.php:338
+#: src/Internal/Admin/Settings.php:335
 msgid "Date Type"
 msgstr ""
 
-#: src/Internal/Admin/Settings.php:339
+#: src/Internal/Admin/Settings.php:336
 #: assets/client/admin/app/index.js:2
 msgid "Database date field considered for Revenue and Orders reports"
 msgstr ""
@@ -43054,7 +43054,7 @@ msgstr ""
 msgid "Username or email address"
 msgstr ""
 
-#: templates/auth/header.php:40
+#: templates/auth/header.php:27
 msgid "Application authentication request"
 msgstr ""
 
@@ -44119,7 +44119,7 @@ msgid "Retry"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/wcpay-payment-welcome-page.js:1
 #: assets/client/admin/components/index.js:2
 msgid "No thanks"
@@ -44423,10 +44423,6 @@ msgstr ""
 
 #: assets/client/admin/app/index.js:2
 msgid "WooCommerce Tax, recommended for new stores"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "Best for new stores"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -45164,7 +45160,7 @@ msgid "We’re sorry for the inconvenience. Please try reloading the page, or yo
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9001.js:1
+#: assets/client/admin/chunks/2791.js:1
 #: assets/client/admin/chunks/activity-panels-help.js:1
 msgid "Get Support"
 msgstr ""
@@ -45444,6 +45440,581 @@ msgstr ""
 msgid "Connect your store to WordPress.com to enable WooCommerce Shipping"
 msgstr ""
 
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Adding and Managing Products"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Import products using the CSV Importer and Exporter"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Migrate products using Cart2Cart"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Learn more about setting up products"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Showcase your products and tailor your shopping experience using Blocks"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Manage Store Notice, Catalog View and Product Images"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "How to choose and change a theme"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Setting up Shipping Zones"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Core Shipping Options"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Product Shipping Classes"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "WooCommerce Shipping setup and configuration"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Learn more about configuring your shipping settings"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Setting up Taxes in WooCommerce"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Automated Tax calculation using WooCommerce Tax"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Which Payment Option is Right for Me?"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "WooPayments Start Up Guide"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "WooPayments FAQs"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Stripe Setup and Configuration"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "PayPal Checkout Setup and Configuration"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Square - Get started"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Klarna - Introduction"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Payfast Setup and Configuration"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Eway Setup and Configuration"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Direct Bank Transfer (BACS)"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Cash on Delivery"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Get started with Mailpoet"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Set up Google for WooCommerce"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Set up Pinterest for WooCommerce"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Connect Mailchimp for WooCommerce"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Set up Creative Mail for WooCommerce"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Home Screen"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Inbox"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Stats Overview"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Store Management"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Store Setup Checklist"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "WooCommerce Docs"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-help.js:1
+msgid "Documentation"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "You currently don’t have any actionable statuses. To display orders here, select orders that require further review in settings."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "You’ve fulfilled all your orders"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Manage all orders"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "{{orderLink}}Order #%(orderNumber)s{{/orderLink}} %(customerString)s"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "%s stock updated"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "%s stock could not be updated"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/product-editor/index.js:2
+msgid "Update stock"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "in stock"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "%d in stock"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Last ordered %s"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Review successfully deleted."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Review could not be deleted."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Review successfully updated."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Review could not be updated."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "{{authorLink}}%1$s{{/authorLink}}{{verifiedCustomerIcon/}} reviewed {{productLink}}%2$s{{/productLink}}"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Verified owner"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Mark as spam"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Manage all reviews"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "There was an error getting your orders."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Please try again."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "There was an error getting your low stock products."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "There was an error getting your reviews."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/4249.js:1
+#: assets/client/admin/chunks/store-performance.js:1
+#: assets/client/admin/components/index.js:2
+msgid "Previous period:"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/data/index.js:2
+msgid "Creative Mail for WooCommerce"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/data/index.js:2
+msgid "WooCommerce PayPal"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/data/index.js:2
+msgid "WooCommerce Stripe"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/data/index.js:2
+msgid "WooCommerce Payfast"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/data/index.js:2
+msgid "WooCommerce Shipping & Tax"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/data/index.js:2
+msgid "WooCommerce ShipStation Gateway"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/data/index.js:2
+msgid "Mercado Pago payments for WooCommerce"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/data/index.js:2
+msgid "Omnichannel for WooCommerce"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Get traffic stats with Jetpack"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Keep an eye on your views and visitors metrics with Jetpack. Requires Jetpack plugin and a WordPress.com account."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Get Jetpack"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Activate Jetpack"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Connect Jetpack"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Stats overview"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/components/index.js:2
+msgid "Choose which values to display"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/store-performance.js:1
+msgid "Display stats:"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/date/index.js:1
+msgid "Today"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/date/index.js:1
+msgid "Week to date"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/date/index.js:1
+msgid "Month to date"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "View detailed stats"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Marketing & Merchandising"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Personalize my store"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "View my store"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Store management"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Screen captures of the WooCommerce mobile app"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "✨️ Send the sign-in link"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Check your email!"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "We just sent you the magic link. Open it on your mobile device and follow the instructions."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "DIDN’T GET IT?"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Check your spam/junk email folder or {{ sendAnotherLink /}}."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "send another link"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Manage orders and track sales in real-time with the free mobile app"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "The WooCommerce Mobile App is available on iOS and Android"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "The app version needs to be 15.7 or above to sign in with this link."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Any troubles signing in? Check out the {{link}}FAQ{{/link}}."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Install the mobile app"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Scan the code below to download or upgrade the app, or visit woo.com/mobile from your mobile device."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "App is installed"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Sign into the app"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "App installed"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "We’ll send a magic link to %s. Open it on your smartphone or tablet to sign into your store instantly."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Scan the QR code below and enter the wp-admin password in the app."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Follow the instructions in the app to sign in."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Run your store from anywhere in two easy steps."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Sorry, an unknown error occurred."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "We couldn’t send the link. Try again in a few seconds."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Sorry, your account doesn’t have sufficient permission."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Get the WooCommerce app"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "Your store today"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+msgid "To-dos, tips, and insights for your business"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Dismiss all messages"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Are you sure? Inbox messages will be dismissed forever."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "All messages dismissed"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Messages could not be dismissed"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Yes, dismiss all"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "There was an error getting your inbox. Please try again."
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+#: assets/client/admin/components/index.js:2
+msgid "Reload"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Your inbox is empty"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "As things begin to happen in your store your inbox will start to fill up. You’ll see things like achievements, new feature announcements, extension recommendations and more!"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Inbox Notes Options"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Dismiss all"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Show more"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+msgid "Show older"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+#: assets/client/admin/chunks/store-alerts.js:1
+msgid "Message dismissed"
+msgstr ""
+
+#: assets/client/admin/chunks/2791.js:1
+#: assets/client/admin/chunks/activity-panels-inbox.js:1
+#: assets/client/admin/chunks/store-alerts.js:1
+msgid "Message could not be dismissed"
+msgid_plural "Messages could not be dismissed"
+msgstr[0] ""
+msgstr[1] ""
+
 #: assets/client/admin/chunks/4249.js:1
 #: assets/client/admin/chunks/dashboard-charts.js:1
 msgid "No data for the current search"
@@ -45452,13 +46023,6 @@ msgstr ""
 #: assets/client/admin/chunks/4249.js:1
 #: assets/client/admin/chunks/dashboard-charts.js:1
 msgid "No data for the selected date range"
-msgstr ""
-
-#: assets/client/admin/chunks/4249.js:1
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/store-performance.js:1
-#: assets/client/admin/components/index.js:2
-msgid "Previous period:"
 msgstr ""
 
 #: assets/client/admin/chunks/4249.js:1
@@ -45787,574 +46351,6 @@ msgstr ""
 #: assets/client/admin/chunks/8656.js:1
 msgid "Show or hide the Settings sidebar."
 msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Adding and Managing Products"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Import products using the CSV Importer and Exporter"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Migrate products using Cart2Cart"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Learn more about setting up products"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Showcase your products and tailor your shopping experience using Blocks"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Manage Store Notice, Catalog View and Product Images"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "How to choose and change a theme"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Setting up Shipping Zones"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Core Shipping Options"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Product Shipping Classes"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "WooCommerce Shipping setup and configuration"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Learn more about configuring your shipping settings"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Setting up Taxes in WooCommerce"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Automated Tax calculation using WooCommerce Tax"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Which Payment Option is Right for Me?"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "WooPayments Start Up Guide"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "WooPayments FAQs"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Stripe Setup and Configuration"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "PayPal Checkout Setup and Configuration"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Square - Get started"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Klarna - Introduction"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Payfast Setup and Configuration"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Eway Setup and Configuration"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Direct Bank Transfer (BACS)"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Cash on Delivery"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Get started with Mailpoet"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Set up Google for WooCommerce"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Set up Pinterest for WooCommerce"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Connect Mailchimp for WooCommerce"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Set up Creative Mail for WooCommerce"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Home Screen"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Inbox"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Stats Overview"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Store Management"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Store Setup Checklist"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "WooCommerce Docs"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-help.js:1
-msgid "Documentation"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "You currently don’t have any actionable statuses. To display orders here, select orders that require further review in settings."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "You’ve fulfilled all your orders"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Manage all orders"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "{{orderLink}}Order #%(orderNumber)s{{/orderLink}} %(customerString)s"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "%s stock updated"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "%s stock could not be updated"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/product-editor/index.js:2
-msgid "Update stock"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "in stock"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "%d in stock"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Last ordered %s"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Review successfully deleted."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Review could not be deleted."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Review successfully updated."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Review could not be updated."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "{{authorLink}}%1$s{{/authorLink}}{{verifiedCustomerIcon/}} reviewed {{productLink}}%2$s{{/productLink}}"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Verified owner"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Mark as spam"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Manage all reviews"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "There was an error getting your orders."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Please try again."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "There was an error getting your low stock products."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "There was an error getting your reviews."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/data/index.js:2
-msgid "Creative Mail for WooCommerce"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/data/index.js:2
-msgid "WooCommerce PayPal"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/data/index.js:2
-msgid "WooCommerce Stripe"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/data/index.js:2
-msgid "WooCommerce Payfast"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/data/index.js:2
-msgid "WooCommerce Shipping & Tax"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/data/index.js:2
-msgid "WooCommerce ShipStation Gateway"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/data/index.js:2
-msgid "Mercado Pago payments for WooCommerce"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/data/index.js:2
-msgid "Omnichannel for WooCommerce"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Get traffic stats with Jetpack"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Keep an eye on your views and visitors metrics with Jetpack. Requires Jetpack plugin and a WordPress.com account."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Get Jetpack"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Activate Jetpack"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Connect Jetpack"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Stats overview"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/components/index.js:2
-msgid "Choose which values to display"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/store-performance.js:1
-msgid "Display stats:"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/date/index.js:1
-msgid "Today"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/date/index.js:1
-msgid "Week to date"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/date/index.js:1
-msgid "Month to date"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "View detailed stats"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Marketing & Merchandising"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Personalize my store"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "View my store"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Store management"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Screen captures of the WooCommerce mobile app"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "✨️ Send the sign-in link"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Check your email!"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "We just sent you the magic link. Open it on your mobile device and follow the instructions."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "DIDN’T GET IT?"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Check your spam/junk email folder or {{ sendAnotherLink /}}."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "send another link"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Manage orders and track sales in real-time with the free mobile app"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "The WooCommerce Mobile App is available on iOS and Android"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "The app version needs to be 15.7 or above to sign in with this link."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Any troubles signing in? Check out the {{link}}FAQ{{/link}}."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Install the mobile app"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Scan the code below to download or upgrade the app, or visit woo.com/mobile from your mobile device."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "App is installed"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Sign into the app"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "App installed"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "We’ll send a magic link to %s. Open it on your smartphone or tablet to sign into your store instantly."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Scan the QR code below and enter the wp-admin password in the app."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Follow the instructions in the app to sign in."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Run your store from anywhere in two easy steps."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Sorry, an unknown error occurred."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "We couldn’t send the link. Try again in a few seconds."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Sorry, your account doesn’t have sufficient permission."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Get the WooCommerce app"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "Your store today"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-msgid "To-dos, tips, and insights for your business"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Dismiss all messages"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Are you sure? Inbox messages will be dismissed forever."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "All messages dismissed"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Messages could not be dismissed"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Yes, dismiss all"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "There was an error getting your inbox. Please try again."
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-#: assets/client/admin/components/index.js:2
-msgid "Reload"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Your inbox is empty"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "As things begin to happen in your store your inbox will start to fill up. You’ll see things like achievements, new feature announcements, extension recommendations and more!"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Inbox Notes Options"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Dismiss all"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Show more"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-msgid "Show older"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-#: assets/client/admin/chunks/store-alerts.js:1
-msgid "Message dismissed"
-msgstr ""
-
-#: assets/client/admin/chunks/9001.js:1
-#: assets/client/admin/chunks/activity-panels-inbox.js:1
-#: assets/client/admin/chunks/store-alerts.js:1
-msgid "Message could not be dismissed"
-msgid_plural "Messages could not be dismissed"
-msgstr[0] ""
-msgstr[1] ""
 
 #: assets/client/admin/chunks/analytics-report-categories.js:1
 msgctxt "A sentence describing filters for Categories. See screen shot for context: https://cloudup.com/cSsUY9VeCVJ"

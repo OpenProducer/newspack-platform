@@ -179,6 +179,42 @@ class WooCommerce {
 	}
 
 	/**
+	 * Get the amount of the last payment associated with the given subscription.
+	 *
+	 * @param \WC_Subscription $subscription Subscription object.
+	 *
+	 * @return float The amount of the last payment.
+	 */
+	private static function get_last_payment_amount( $subscription ) {
+		$last_order = $subscription->get_last_order(
+			// The whole WC_Order object, not just the ID.
+			'all',
+			// Only parent and renewal orders.
+			[
+				'parent',
+				'renewal',
+			],
+			// Only completed or processing orders, so exclude all other statuses.
+			[
+				'pending',
+				'failed',
+				'on-hold',
+				'cancelled',
+				'trash',
+				'draft',
+				'auto-draft',
+				'new',
+			]
+		);
+
+		if ( ! $last_order ) {
+			return 0;
+		}
+
+		return $last_order->get_total();
+	}
+
+	/**
 	 * Get data about a customer's order to sync to the connected ESP.
 	 *
 	 * @param \WC_Order|int $order WooCommerce order or order ID.
@@ -290,7 +326,7 @@ class WooCommerce {
 			$metadata['sub_end_date']        = $current_subscription->get_date( 'end' ) ? $current_subscription->get_date( 'end' ) : '';
 			$metadata['billing_cycle']       = $current_subscription->get_billing_period();
 			$metadata['recurring_payment']   = $current_subscription->get_total();
-			$metadata['last_payment_amount'] = $current_subscription->get_total();
+			$metadata['last_payment_amount'] = self::get_last_payment_amount( $current_subscription );
 			$metadata['last_payment_date']   = $current_subscription->get_date( 'last_order_date_paid' ) ? $current_subscription->get_date( 'last_order_date_paid' ) : gmdate( Metadata::DATE_FORMAT );
 
 			// When a WC Subscription is terminated, the next payment date is set to 0. We don't want to sync that – the next payment date should remain as it was

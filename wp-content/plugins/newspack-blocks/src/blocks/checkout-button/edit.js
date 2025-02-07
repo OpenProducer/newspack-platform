@@ -10,7 +10,7 @@ import { debounce, invert } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	InspectorControls,
 	RichText,
@@ -92,11 +92,14 @@ function ProductControl( props ) {
 	const [ suggestions, setSuggestions ] = useState( {} );
 	const [ selected, setSelected ] = useState( false );
 	const [ isChanging, setIsChanging ] = useState( false );
+	const [ productError, setProductError ] = useState( '' );
 
 	function fetchSuggestions( search ) {
 		setInFlight( true );
 		return apiFetch( {
-			path: `/wc/v2/products?search=${ encodeURIComponent( search ) }`,
+			// The search query is wrapped in quotes to ensure that the search is for
+			// the exact phrase, matching the behavior of the FormTokenField component.
+			path: `/wc/v2/products?search=${ encodeURIComponent( '"' + search + '"' ) }`,
 		} )
 			.then( products => {
 				const _suggestions = {};
@@ -117,7 +120,17 @@ function ProductControl( props ) {
 			.then( product => {
 				setSuggestions( { [ product.id ]: `${ product.id }: ${ product.name }` } );
 				setSelected( product );
+				setProductError( '' );
 				props.onProduct( product );
+			} )
+			.catch( () => {
+				setProductError(
+					sprintf(
+						// translators: %s: product ID.
+						__( 'Could not find a product with ID %s. Please select a different product.', 'newspack-blocks' ),
+						props.value
+					)
+				);
 			} )
 			.finally( () => setInFlight( false ) );
 	}
@@ -144,7 +157,7 @@ function ProductControl( props ) {
 			setInFlight( false );
 		}
 	};
-	if ( props.value && ! selected && inFlight ) {
+	if ( props.value && ! productError && ! selected && inFlight ) {
 		return <Spinner />;
 	}
 	return (
@@ -187,6 +200,7 @@ function ProductControl( props ) {
 					) }
 				</>
 			) }
+			{ productError && <p className="newspack-checkout-button__product-field__error">{ productError }</p> }
 		</div>
 	);
 }

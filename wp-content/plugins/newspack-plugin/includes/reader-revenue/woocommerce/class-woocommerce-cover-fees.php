@@ -13,8 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * WooCommerce Order UTM class.
  */
 class WooCommerce_Cover_Fees {
-	const CUSTOM_FIELD_NAME  = 'newspack-wc-pay-fees';
-	const SUPPORTED_GATEWAYS = [ 'stripe', 'woocommerce_payments' ];
+	const CUSTOM_FIELD_NAME = 'newspack-wc-pay-fees';
 
 	/**
 	 * Initialize hooks.
@@ -135,7 +134,8 @@ class WooCommerce_Cover_Fees {
 		if ( ! self::should_allow_covering_fees() ) {
 			return false;
 		}
-		if ( ! isset( $data['payment_method'] ) || ! in_array( $data['payment_method'], self::SUPPORTED_GATEWAYS, true ) ) {
+		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
+		if ( ! isset( $data['payment_method'] ) || ! in_array( $data['payment_method'], $wc_configuration_manager->get_supported_payment_gateways(), true ) ) {
 			return false;
 		}
 		if ( ! isset( $data[ self::CUSTOM_FIELD_NAME ] ) || '1' !== $data[ self::CUSTOM_FIELD_NAME ] ) {
@@ -150,7 +150,8 @@ class WooCommerce_Cover_Fees {
 	 * @param string $payment_gateway The slug for the payment gateway rendering these payment fields.
 	 */
 	public static function render_transaction_fee_input( $payment_gateway ) {
-		if ( ! self::should_allow_covering_fees() || ! in_array( $payment_gateway, self::SUPPORTED_GATEWAYS, true ) ) {
+		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
+		if ( ! self::should_allow_covering_fees() || ! in_array( $payment_gateway, $wc_configuration_manager->get_supported_payment_gateways(), true ) ) {
 			return;
 		}
 		?>

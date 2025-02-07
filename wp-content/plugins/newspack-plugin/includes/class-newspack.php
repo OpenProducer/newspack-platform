@@ -126,6 +126,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/revisions-control/class-revisions-control.php';
 		include_once NEWSPACK_ABSPATH . 'includes/authors/class-authors-custom-fields.php';
 		include_once NEWSPACK_ABSPATH . 'includes/corrections/class-corrections.php';
+		include_once NEWSPACK_ABSPATH . 'includes/bylines/class-bylines.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-provider.php';
 		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-generated.php';

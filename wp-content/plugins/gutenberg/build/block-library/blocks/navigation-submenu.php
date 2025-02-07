@@ -82,7 +82,6 @@ function gutenberg_render_block_core_navigation_submenu( $attributes, $content, 
 	$font_sizes      = gutenberg_block_core_navigation_submenu_build_css_font_sizes( $block->context );
 	$style_attribute = $font_sizes['inline_styles'];
 
-	$css_classes = trim( implode( ' ', $font_sizes['css_classes'] ) );
 	$has_submenu = count( $block->inner_blocks ) > 0;
 	$kind        = empty( $attributes['kind'] ) ? 'post_type' : str_replace( '-', '_', $attributes['kind'] );
 	$is_active   = ! empty( $attributes['id'] ) && get_queried_object_id() === (int) $attributes['id'] && ! empty( get_queried_object()->$kind );
@@ -99,11 +98,29 @@ function gutenberg_render_block_core_navigation_submenu( $attributes, $content, 
 	$open_on_hover_and_click = isset( $block->context['openSubmenusOnClick'] ) && ! $block->context['openSubmenusOnClick'] &&
 		$show_submenu_indicators;
 
+	$classes = array(
+		'wp-block-navigation-item',
+	);
+	$classes = array_merge(
+		$classes,
+		$font_sizes['css_classes']
+	);
+	if ( $has_submenu ) {
+		$classes[] = 'has-child';
+	}
+	if ( $open_on_click ) {
+		$classes[] = 'open-on-click';
+	}
+	if ( $open_on_hover_and_click ) {
+		$classes[] = 'open-on-hover-click';
+	}
+	if ( $is_active ) {
+		$classes[] = 'current-menu-item';
+	}
+
 	$wrapper_attributes = get_block_wrapper_attributes(
 		array(
-			'class' => $css_classes . ' wp-block-navigation-item' . ( $has_submenu ? ' has-child' : '' ) .
-			( $open_on_click ? ' open-on-click' : '' ) . ( $open_on_hover_and_click ? ' open-on-hover-click' : '' ) .
-			( $is_active ? ' current-menu-item' : '' ),
+			'class' => implode( ' ', $classes ),
 			'style' => $style_attribute,
 		)
 	);

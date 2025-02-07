@@ -851,9 +851,32 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 				return $result;
 			}
 		} catch ( \Exception $e ) {
+			// Log the error with any details returned from the API.
+			do_action(
+				'newspack_log',
+				'newspack_campaign_monitor_add_contact_failed',
+				'Error adding contact to Campaign Monitor.',
+				[
+					'type'       => 'error',
+					'data'       => [
+						'messages' => $e->getMessage(),
+						'status'   => $e->getCode(),
+					],
+					'user_email' => $contact['email'],
+					'file'       => 'newspack_campaign_monitor',
+				]
+			);
+
+			$reader_error = $this->get_add_contact_reader_error_message(
+				[
+					'email'   => $contact['email'],
+					'list_id' => $list_id,
+				]
+			);
+
 			return new \WP_Error(
-				'newspack_add_contact',
-				$e->getMessage()
+				'newspack_campaign_monitor_add_contact_failed',
+				Newspack_Newsletters::debug_mode() ? $e->getMessage() : $reader_error
 			);
 		}
 	}

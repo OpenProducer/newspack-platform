@@ -1,3 +1,5 @@
+@use "../../shared/sass/colors";
+
 .newspack-checkout-button {
 	&__product-field {
 		&__selected {
@@ -6,6 +8,11 @@
 				width: 100%;
 				text-align: left;
 			}
+		}
+		&__error {
+			color: colors.$color__error;
+			font-size: 0.9em;
+			margin-top: 0.5em;
 		}
 		/* Workaround for hard-coded help text in FormTokenField. */
 		.components-form-token-field__help {
@@ -38,3 +45,4 @@
 		}
 	}
 }
+

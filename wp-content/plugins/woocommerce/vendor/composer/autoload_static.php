@@ -921,7 +921,6 @@ class ComposerStaticInit67abb2f5c15b32a13611c55273717232
         'Automattic\\WooCommerce\\Internal\\AssignDefaultCategory' => __DIR__ . '/../..' . '/src/Internal/AssignDefaultCategory.php',
         'Automattic\\WooCommerce\\Internal\\BatchProcessing\\BatchProcessingController' => __DIR__ . '/../..' . '/src/Internal/BatchProcessing/BatchProcessingController.php',
         'Automattic\\WooCommerce\\Internal\\BatchProcessing\\BatchProcessorInterface' => __DIR__ . '/../..' . '/src/Internal/BatchProcessing/BatchProcessorInterface.php',
-        'Automattic\\WooCommerce\\Internal\\BrandingController' => __DIR__ . '/../..' . '/src/Internal/BrandingController.php',
         'Automattic\\WooCommerce\\Internal\\Brands' => __DIR__ . '/../..' . '/src/Internal/Brands.php',
         'Automattic\\WooCommerce\\Internal\\ComingSoon\\ComingSoonAdminBarBadge' => __DIR__ . '/../..' . '/src/Internal/ComingSoon/ComingSoonAdminBarBadge.php',
         'Automattic\\WooCommerce\\Internal\\ComingSoon\\ComingSoonCacheInvalidator' => __DIR__ . '/../..' . '/src/Internal/ComingSoon/ComingSoonCacheInvalidator.php',

@@ -594,6 +594,28 @@ Error message(s) received:
 	}
 
 	/**
+	 * Get a reader-facing error message to be shown when the add_contact method fails.
+	 *
+	 * @param array $params Additional information about the request that triggered the error.
+	 *
+	 * @return string
+	 */
+	public function get_add_contact_reader_error_message( $params = [] ) {
+		/**
+		 * A default error message to show to readers if their signup request results in an error.
+		 *
+		 * @param string $reader_error The default error message.
+		 * @param array  $params Additional information about the request that triggered the error.
+		 */
+		$reader_error = apply_filters(
+			'newspack_newsletters_add_contact_reader_error_message',
+			__( "Sorry, this email cannot be subscribed to this newsletter. Please contact support with the email list you were trying to subscribe to and we'll add you to the list.", 'newspack-newsletters' ),
+			$params
+		);
+		return $reader_error;
+	}
+
+	/**
 	 * Handle adding to local lists.
 	 * If the $list_id is a local list, a tag will be added to the contact.
 	 *
