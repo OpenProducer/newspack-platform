@@ -17,7 +17,7 @@ function gutenberg_update_page_editor_support( $args ) {
 	if ( false !== $editor_support_key ) {
 		unset( $args['supports'][ $editor_support_key ] );
 		$args['supports']['editor'] = array(
-			'default_mode' => 'template-locked',
+			'default-mode' => 'template-locked',
 		);
 	}
 

@@ -55,7 +55,9 @@ fieldLabel:(0,Lt.sprintf)((0,Lt.__)("Other profile %1$s","wordpress-seo"),e+1)})
 (0,Lt.__)("You haven't set a Shop page in your WooCommerce settings. %1$sPlease do this first%2$s.","wordpress-seo"),"<a>","</a>"),v,"link-woocommerce-shop-page-setting")),[g,v,b]),C=(0,i.useMemo)((()=>(0,i.createInterpolateElement)((0,Lt.sprintf)(
 // translators: %1$s and %2$s are replaced by opening and closing <em> tags.
 (0,Lt.__)("You can add multiple custom fields and separate them by using %1$senter%2$s or %1$scomma%2$s.","wordpress-seo"),"<em>","</em>"),{em:(0,e.createElement)("em",null)})),[]),A=(0,i.useMemo)((()=>Xi((0,Lt.sprintf)(
-// translators: %1$s expands to the post type plural, e.g. posts. %2$s and %3$s expand to opening and closing anchor tag. %4$s expands to "Yoast SEO".
+/* translators: %1$s expands to the post type plural, e.g. posts.
+   * %2$s and %3$s expand to opening and closing anchor tag. %4$s expands to "Yoast SEO".
+   */
 (0,Lt.__)("Determine how your %1$s should be described by default in %2$syour site's Schema.org markup%3$s. You can always change the settings for individual %1$s in the %4$s sidebar or metabox.","wordpress-seo"),P,"<a>","</a>","Yoast SEO"),L,"link-post-type-schema")),[P,L]),{values:M}=q(),{opengraph:D}=M.wpseo_social,{"breadcrumbs-enable":B}=M.wpseo_titles;return(0,e.createElement)(uo,{title:s,description:(0,Lt.sprintf)(/* translators: %1$s expands to the post type plural, e.g. posts. */
 (0,Lt.__)("Determine how your %1$s should look in search engines and on social media.","wordpress-seo"),P)},(0,e.createElement)(ca,null,(0,e.createElement)("div",{className:"yst-max-w-5xl"},(0,e.createElement)(na,{title:(0,Lt.__)("Search appearance","wordpress-seo"),description:(0,Lt.sprintf)(
 // translators: %1$s expands to the post type plural, e.g. posts. %2$s expands to "Yoast SEO".

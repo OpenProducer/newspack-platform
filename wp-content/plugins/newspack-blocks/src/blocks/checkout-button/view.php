@@ -101,10 +101,12 @@ function render_callback( $attributes ) {
 	);
 
 	// Generate hidden fields for the form.
-	$hidden_fields  = '<input type="hidden" name="newspack_checkout" value="1" />';
-	$hidden_fields .= $after_success_behavior ? '<input type="hidden" name="after_success_behavior" value="' . esc_attr( $after_success_behavior ) . '" />' : '';
-	$hidden_fields .= $after_success_button_label ? '<input type="hidden" name="after_success_button_label" value="' . esc_attr( $after_success_button_label ) . '" />' : '';
-	$hidden_fields .= $after_success_url ? '<input type="hidden" name="after_success_url" value="' . esc_attr( $after_success_url ) . '" />' : '';
+	$hidden_fields = '<input type="hidden" name="newspack_checkout" value="1" />';
+	if ( ! Modal_Checkout::has_unsupported_payment_gateway() ) {
+		$hidden_fields .= $after_success_behavior ? '<input type="hidden" name="after_success_behavior" value="' . esc_attr( $after_success_behavior ) . '" />' : '';
+		$hidden_fields .= $after_success_button_label ? '<input type="hidden" name="after_success_button_label" value="' . esc_attr( $after_success_button_label ) . '" />' : '';
+		$hidden_fields .= $after_success_url ? '<input type="hidden" name="after_success_url" value="' . esc_attr( $after_success_url ) . '" />' : '';
+	}
 
 	// Generate the form.
 	if ( function_exists( 'wc_get_product' ) ) {

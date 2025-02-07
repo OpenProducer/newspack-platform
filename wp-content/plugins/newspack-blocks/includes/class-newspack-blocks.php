@@ -689,6 +689,10 @@ class Newspack_Blocks {
 							$term = $coauthors_plus->get_author_term( $co_author );
 							if ( $term ) {
 								$authors_term_ids[] = $term->term_id;
+							} else {
+								// If the author term does not exist, force a non-match, otherwise all posts will be returned.
+								// CAP's cli command to create author terms will only create terms for users that have authored posts.
+								$authors_term_ids[] = -1;
 							}
 
 							// If it's a guest author, also check the linked author.

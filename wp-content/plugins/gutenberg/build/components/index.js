@@ -35270,8 +35270,6 @@ function useBorderBoxControlLinkedButton(props) {
 
 
 
-
-
 const BorderBoxControlLinkedButton = (props, forwardedRef) => {
   const {
     className,
@@ -35279,19 +35277,14 @@ const BorderBoxControlLinkedButton = (props, forwardedRef) => {
     ...buttonProps
   } = useBorderBoxControlLinkedButton(props);
   const label = isLinked ? (0,external_wp_i18n_namespaceObject.__)('Unlink sides') : (0,external_wp_i18n_namespaceObject.__)('Link sides');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-    text: label,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(component, {
-      className: className,
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-        ...buttonProps,
-        size: "small",
-        icon: isLinked ? library_link : link_off,
-        iconSize: 24,
-        "aria-label": label,
-        ref: forwardedRef
-      })
-    })
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+    ...buttonProps,
+    size: "small",
+    icon: isLinked ? library_link : link_off,
+    iconSize: 24,
+    label: label,
+    ref: forwardedRef,
+    className: className
   });
 };
 const ConnectedBorderBoxControlLinkedButton = contextConnect(BorderBoxControlLinkedButton, 'BorderBoxControlLinkedButton');
@@ -42806,22 +42799,18 @@ function BoxInputControl({
  */
 
 
-
 function LinkedButton({
   isLinked,
   ...props
 }) {
   const label = isLinked ? (0,external_wp_i18n_namespaceObject.__)('Unlink sides') : (0,external_wp_i18n_namespaceObject.__)('Link sides');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-    text: label,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-      ...props,
-      className: "component-box-control__linked-button",
-      size: "small",
-      icon: isLinked ? library_link : link_off,
-      iconSize: 24,
-      "aria-label": label
-    })
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+    ...props,
+    className: "component-box-control__linked-button",
+    size: "small",
+    icon: isLinked ? library_link : link_off,
+    iconSize: 24,
+    label: label
   });
 }
 
@@ -42830,6 +42819,7 @@ function LinkedButton({
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -42962,6 +42952,11 @@ function BoxControl({
     size: undefined
   });
   const sidesToRender = getAllowedSides(sides);
+  if (presets && !presetKey || !presets && presetKey) {
+    const definedProp = presets ? 'presets' : 'presetKey';
+    const missingProp = presets ? 'presetKey' : 'presets';
+     false ? 0 : void 0;
+  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(grid_component, {
     id: id,
     columns: 3,

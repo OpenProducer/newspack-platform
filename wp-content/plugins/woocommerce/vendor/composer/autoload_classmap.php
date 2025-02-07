@@ -806,7 +806,6 @@ return array(
     'Automattic\\WooCommerce\\Internal\\AssignDefaultCategory' => $baseDir . '/src/Internal/AssignDefaultCategory.php',
     'Automattic\\WooCommerce\\Internal\\BatchProcessing\\BatchProcessingController' => $baseDir . '/src/Internal/BatchProcessing/BatchProcessingController.php',
     'Automattic\\WooCommerce\\Internal\\BatchProcessing\\BatchProcessorInterface' => $baseDir . '/src/Internal/BatchProcessing/BatchProcessorInterface.php',
-    'Automattic\\WooCommerce\\Internal\\BrandingController' => $baseDir . '/src/Internal/BrandingController.php',
     'Automattic\\WooCommerce\\Internal\\Brands' => $baseDir . '/src/Internal/Brands.php',
     'Automattic\\WooCommerce\\Internal\\ComingSoon\\ComingSoonAdminBarBadge' => $baseDir . '/src/Internal/ComingSoon/ComingSoonAdminBarBadge.php',
     'Automattic\\WooCommerce\\Internal\\ComingSoon\\ComingSoonCacheInvalidator' => $baseDir . '/src/Internal/ComingSoon/ComingSoonCacheInvalidator.php',

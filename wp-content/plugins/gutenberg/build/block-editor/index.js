@@ -13088,10 +13088,21 @@ const isBlockVisibleInTheInserter = (state, blockNameOrType, rootClientId = null
   // If parent blocks are not visible, child blocks should be hidden too.
   const parents = (Array.isArray(blockType.parent) ? blockType.parent : []).concat(Array.isArray(blockType.ancestor) ? blockType.ancestor : []);
   if (parents.length > 0) {
-    const rootBlockName = getBlockName(state, rootClientId);
     // This is an exception to the rule that says that all blocks are visible in the inserter.
     // Blocks that require a given parent or ancestor are only visible if we're within that parent.
-    return parents.includes('core/post-content') || parents.includes(rootBlockName) || getBlockParentsByBlockName(state, rootClientId, parents).length > 0;
+    if (parents.includes('core/post-content')) {
+      return true;
+    }
+    let current = rootClientId;
+    let hasParent = false;
+    do {
+      if (parents.includes(getBlockName(state, current))) {
+        hasParent = true;
+        break;
+      }
+      current = state.blocks.parents.get(current);
+    } while (current);
+    return hasParent;
   }
   return true;
 };
@@ -19584,54 +19595,6 @@ function getSliderValueFromPreset(presetValue, spacingSizes) {
 }
 
 /**
- * Gets an items with the most occurrence within an array
- * https://stackoverflow.com/a/20762713
- *
- * @param {Array<any>} arr Array of items to check.
- * @return {any} The item with the most occurrences.
- */
-function mode(arr) {
-  return arr.sort((a, b) => arr.filter(v => v === a).length - arr.filter(v => v === b).length).pop();
-}
-
-/**
- * Gets the 'all' input value from values data.
- *
- * @param {Object} values Box spacing values
- *
- * @return {string} The most common value from all sides of box.
- */
-function getAllRawValue(values = {}) {
-  return mode(Object.values(values));
-}
-
-/**
- * Checks to determine if values are mixed.
- *
- * @param {Object} values Box values.
- * @param {Array}  sides  Sides that values relate to.
- *
- * @return {boolean} Whether values are mixed.
- */
-function isValuesMixed(values = {}, sides = ALL_SIDES) {
-  return Object.values(values).length >= 1 && Object.values(values).length < sides.length || new Set(Object.values(values)).size > 1;
-}
-
-/**
- * Checks to determine if values are defined.
- *
- * @param {Object} values Box values.
- *
- * @return {boolean} Whether values are defined.
- */
-function isValuesDefined(values) {
-  if (values === undefined || values === null) {
-    return false;
-  }
-  return Object.values(values).filter(value => !!value).length > 0;
-}
-
-/**
  * Determines whether a particular axis has support. If no axis is
  * specified, this function checks if either axis is supported.
  *
@@ -19653,62 +19616,6 @@ function hasAxisSupport(sides, axis) {
     return hasVerticalSupport;
   }
   return hasHorizontalSupport || hasVerticalSupport;
-}
-
-/**
- * Determines which menu options should be included in the SidePicker.
- *
- * @param {Array} sides Supported sides.
- *
- * @return {Object} Menu options with each option containing label & icon.
- */
-function getSupportedMenuItems(sides) {
-  if (!sides || !sides.length) {
-    return {};
-  }
-  const menuItems = {};
-
-  // Determine the primary "side" menu options.
-  const hasHorizontalSupport = hasAxisSupport(sides, 'horizontal');
-  const hasVerticalSupport = hasAxisSupport(sides, 'vertical');
-  if (hasHorizontalSupport && hasVerticalSupport) {
-    menuItems.axial = {
-      label: LABELS.axial,
-      icon: ICONS.axial
-    };
-  } else if (hasHorizontalSupport) {
-    menuItems.axial = {
-      label: LABELS.horizontal,
-      icon: ICONS.horizontal
-    };
-  } else if (hasVerticalSupport) {
-    menuItems.axial = {
-      label: LABELS.vertical,
-      icon: ICONS.vertical
-    };
-  }
-
-  // Track whether we have any individual sides so we can omit the custom
-  // option if required.
-  let numberOfIndividualSides = 0;
-  ALL_SIDES.forEach(side => {
-    if (sides.includes(side)) {
-      numberOfIndividualSides += 1;
-      menuItems[side] = {
-        label: LABELS[side],
-        icon: ICONS[side]
-      };
-    }
-  });
-
-  // Add custom item if there are enough sides to warrant a separated view.
-  if (numberOfIndividualSides > 1) {
-    menuItems.custom = {
-      label: LABELS.custom,
-      icon: ICONS.custom
-    };
-  }
-  return menuItems;
 }
 
 /**
@@ -25948,7 +25855,8 @@ function addTransforms(result, source, index, results) {
   // if source N does not exists we do nothing.
   if (source[index]) {
     const originClassName = source[index]?.attributes.className;
-    if (originClassName) {
+    // Avoid overriding classes if the transformed block already includes them.
+    if (originClassName && result.attributes.className === undefined) {
       return {
         ...result,
         attributes: {
@@ -26200,7 +26108,7 @@ function useMultipleOriginColorsAndGradients() {
  * @param {Array<any>} inputArray Array of items to check.
  * @return {any}                  The item with the most occurrences.
  */
-function utils_mode(inputArray) {
+function mode(inputArray) {
   const arr = [...inputArray];
   return arr.sort((a, b) => inputArray.filter(v => v === b).length - inputArray.filter(v => v === a).length).shift();
 }
@@ -26220,7 +26128,7 @@ function getAllUnit(selectedUnits = {}) {
     flat,
     ...cornerUnits
   } = selectedUnits;
-  return flat || utils_mode(Object.values(cornerUnits).filter(Boolean)) || 'px';
+  return flat || mode(Object.values(cornerUnits).filter(Boolean)) || 'px';
 }
 
 /**
@@ -26245,7 +26153,7 @@ function getAllValue(values = {}) {
   });
   const allUnits = parsedQuantitiesAndUnits.map(value => value[1]);
   const value = allValues.every(v => v === allValues[0]) ? allValues[0] : '';
-  const unit = utils_mode(allUnits);
+  const unit = mode(allUnits);
   const allValue = value === 0 || value ? `${value}${unit}` : undefined;
   return allValue;
 }
@@ -28443,6 +28351,7 @@ function useBlockElement(clientId) {
 }
 
 ;// ./packages/block-editor/build-module/hooks/contrast-checker.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -28454,41 +28363,59 @@ function useBlockElement(clientId) {
 
 
 
-function getComputedStyle(node) {
-  return node.ownerDocument.defaultView.getComputedStyle(node);
+function getComputedValue(node, property) {
+  return node.ownerDocument.defaultView.getComputedStyle(node).getPropertyValue(property);
+}
+function getBlockElementColors(blockEl) {
+  if (!blockEl) {
+    return {};
+  }
+  const firstLinkElement = blockEl.querySelector('a');
+  const linkColor = !!firstLinkElement?.innerText ? getComputedValue(firstLinkElement, 'color') : undefined;
+  const textColor = getComputedValue(blockEl, 'color');
+  let backgroundColorNode = blockEl;
+  let backgroundColor = getComputedValue(backgroundColorNode, 'background-color');
+  while (backgroundColor === 'rgba(0, 0, 0, 0)' && backgroundColorNode.parentNode && backgroundColorNode.parentNode.nodeType === backgroundColorNode.parentNode.ELEMENT_NODE) {
+    backgroundColorNode = backgroundColorNode.parentNode;
+    backgroundColor = getComputedValue(backgroundColorNode, 'background-color');
+  }
+  return {
+    textColor,
+    backgroundColor,
+    linkColor
+  };
+}
+function contrast_checker_reducer(prevColors, newColors) {
+  const hasChanged = Object.keys(newColors).some(key => prevColors[key] !== newColors[key]);
+
+  // Do not re-render if the colors have not changed.
+  return hasChanged ? newColors : prevColors;
 }
 function BlockColorContrastChecker({
   clientId
 }) {
-  const [detectedBackgroundColor, setDetectedBackgroundColor] = (0,external_wp_element_namespaceObject.useState)();
-  const [detectedColor, setDetectedColor] = (0,external_wp_element_namespaceObject.useState)();
-  const [detectedLinkColor, setDetectedLinkColor] = (0,external_wp_element_namespaceObject.useState)();
   const blockEl = useBlockElement(clientId);
+  const [colors, setColors] = (0,external_wp_element_namespaceObject.useReducer)(contrast_checker_reducer, {});
 
   // There are so many things that can change the color of a block
   // So we perform this check on every render.
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (!blockEl) {
       return;
     }
-    setDetectedColor(getComputedStyle(blockEl).color);
-    const firstLinkElement = blockEl.querySelector('a');
-    if (firstLinkElement && !!firstLinkElement.innerText) {
-      setDetectedLinkColor(getComputedStyle(firstLinkElement).color);
+    function updateColors() {
+      setColors(getBlockElementColors(blockEl));
     }
-    let backgroundColorNode = blockEl;
-    let backgroundColor = getComputedStyle(backgroundColorNode).backgroundColor;
-    while (backgroundColor === 'rgba(0, 0, 0, 0)' && backgroundColorNode.parentNode && backgroundColorNode.parentNode.nodeType === backgroundColorNode.parentNode.ELEMENT_NODE) {
-      backgroundColorNode = backgroundColorNode.parentNode;
-      backgroundColor = getComputedStyle(backgroundColorNode).backgroundColor;
-    }
-    setDetectedBackgroundColor(backgroundColor);
-  }, [blockEl]);
+
+    // Combine `useLayoutEffect` and two rAF calls to ensure that values are read
+    // after the current paint but before the next paint.
+    window.requestAnimationFrame(() => window.requestAnimationFrame(updateColors));
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(contrast_checker, {
-    backgroundColor: detectedBackgroundColor,
-    textColor: detectedColor,
-    enableAlphaChecker: true,
-    linkColor: detectedLinkColor
+    backgroundColor: colors.backgroundColor,
+    textColor: colors.textColor,
+    linkColor: colors.linkColor,
+    enableAlphaChecker: true
   });
 }
 
@@ -30918,6 +30845,49 @@ const hasTypographySupport = blockName => {
   return TYPOGRAPHY_SUPPORT_KEYS.some(key => hasBlockSupport(blockName, key));
 };
 
+;// ./packages/block-editor/build-module/components/spacing-sizes-control/hooks/use-spacing-sizes.js
+/* wp:polyfill */
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const use_spacing_sizes_EMPTY_ARRAY = [];
+const compare = new Intl.Collator('und', {
+  numeric: true
+}).compare;
+function useSpacingSizes() {
+  const [customSpacingSizes, themeSpacingSizes, defaultSpacingSizes, defaultSpacingSizesEnabled] = use_settings_useSettings('spacing.spacingSizes.custom', 'spacing.spacingSizes.theme', 'spacing.spacingSizes.default', 'spacing.defaultSpacingSizes');
+  const customSizes = customSpacingSizes !== null && customSpacingSizes !== void 0 ? customSpacingSizes : use_spacing_sizes_EMPTY_ARRAY;
+  const themeSizes = themeSpacingSizes !== null && themeSpacingSizes !== void 0 ? themeSpacingSizes : use_spacing_sizes_EMPTY_ARRAY;
+  const defaultSizes = defaultSpacingSizes && defaultSpacingSizesEnabled !== false ? defaultSpacingSizes : use_spacing_sizes_EMPTY_ARRAY;
+  return (0,external_wp_element_namespaceObject.useMemo)(() => {
+    const sizes = [{
+      name: (0,external_wp_i18n_namespaceObject.__)('None'),
+      slug: '0',
+      size: 0
+    }, ...customSizes, ...themeSizes, ...defaultSizes];
+
+    // Using numeric slugs opts-in to sorting by slug.
+    if (sizes.every(({
+      slug
+    }) => /^[0-9]/.test(slug))) {
+      sizes.sort((a, b) => compare(a.slug, b.slug));
+    }
+    return sizes.length > RANGE_CONTROL_MAX_SIZE ? [{
+      name: (0,external_wp_i18n_namespaceObject.__)('Default'),
+      slug: 'default',
+      size: undefined
+    }, ...sizes] : sizes;
+  }, [customSizes, themeSizes, defaultSizes]);
+}
+
 ;// ./packages/icons/build-module/library/settings.js
 /**
  * WordPress dependencies
@@ -31439,59 +31409,13 @@ function linked_button_LinkedButton({
   ...props
 }) {
   const label = isLinked ? (0,external_wp_i18n_namespaceObject.__)('Unlink sides') : (0,external_wp_i18n_namespaceObject.__)('Link sides');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Tooltip, {
-    text: label,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-      ...props,
-      size: "small",
-      icon: isLinked ? library_link : link_off,
-      iconSize: 24,
-      "aria-label": label
-    })
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    ...props,
+    size: "small",
+    icon: isLinked ? library_link : link_off,
+    iconSize: 24,
+    label: label
   });
-}
-
-;// ./packages/block-editor/build-module/components/spacing-sizes-control/hooks/use-spacing-sizes.js
-/* wp:polyfill */
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-const use_spacing_sizes_EMPTY_ARRAY = [];
-const compare = new Intl.Collator('und', {
-  numeric: true
-}).compare;
-function useSpacingSizes() {
-  const [customSpacingSizes, themeSpacingSizes, defaultSpacingSizes, defaultSpacingSizesEnabled] = use_settings_useSettings('spacing.spacingSizes.custom', 'spacing.spacingSizes.theme', 'spacing.spacingSizes.default', 'spacing.defaultSpacingSizes');
-  const customSizes = customSpacingSizes !== null && customSpacingSizes !== void 0 ? customSpacingSizes : use_spacing_sizes_EMPTY_ARRAY;
-  const themeSizes = themeSpacingSizes !== null && themeSpacingSizes !== void 0 ? themeSpacingSizes : use_spacing_sizes_EMPTY_ARRAY;
-  const defaultSizes = defaultSpacingSizes && defaultSpacingSizesEnabled !== false ? defaultSpacingSizes : use_spacing_sizes_EMPTY_ARRAY;
-  return (0,external_wp_element_namespaceObject.useMemo)(() => {
-    const sizes = [{
-      name: (0,external_wp_i18n_namespaceObject.__)('None'),
-      slug: '0',
-      size: 0
-    }, ...customSizes, ...themeSizes, ...defaultSizes];
-
-    // Using numeric slugs opts-in to sorting by slug.
-    if (sizes.every(({
-      slug
-    }) => /^[0-9]/.test(slug))) {
-      sizes.sort((a, b) => compare(a.slug, b.slug));
-    }
-    return sizes.length > RANGE_CONTROL_MAX_SIZE ? [{
-      name: (0,external_wp_i18n_namespaceObject.__)('Default'),
-      slug: 'default',
-      size: undefined
-    }, ...sizes] : sizes;
-  }, [customSizes, themeSizes, defaultSizes]);
 }
 
 ;// ./packages/block-editor/build-module/components/spacing-sizes-control/index.js
@@ -31511,6 +31435,50 @@ function useSpacingSizes() {
 
 
 
+
+/**
+ * A flexible control for managing spacing values in the block editor. Supports single, axial,
+ * and separated input controls for different spacing configurations with automatic view selection
+ * based on current values and available sides.
+ *
+ * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/spacing-sizes-control/README.md
+ *
+ * @example
+ * ```jsx
+ * import { __experimentalSpacingSizesControl as SpacingSizesControl } from '@wordpress/block-editor';
+ * import { useState } from '@wordpress/element';
+ *
+ * function Example() {
+ *   const [ sides, setSides ] = useState( {
+ *     top: '0px',
+ *     right: '0px',
+ *     bottom: '0px',
+ *     left: '0px',
+ *   } );
+ *
+ *   return (
+ *     <SpacingSizesControl
+ *       values={ sides }
+ *       onChange={ setSides }
+ *       label="Sides"
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * @param {Object}   props                    Component props.
+ * @param {Object}   props.inputProps         Additional props for input controls.
+ * @param {string}   props.label              Label for the control.
+ * @param {number}   props.minimumCustomValue Minimum value for custom input.
+ * @param {Function} props.onChange           Called when spacing values change.
+ * @param {Function} props.onMouseOut         Called when mouse leaves the control.
+ * @param {Function} props.onMouseOver        Called when mouse enters the control.
+ * @param {boolean}  props.showSideInLabel    Show side in control label.
+ * @param {Array}    props.sides              Available sides for control.
+ * @param {boolean}  props.useSelect          Use select control for predefined values.
+ * @param {Object}   props.values             Current spacing values.
+ * @return {Element}                         Spacing sizes control component.
+ */
 
 function SpacingSizesControl({
   inputProps,
@@ -37005,10 +36973,12 @@ function getGridInfo(gridElement) {
       gridTemplateColumns,
       gridTemplateRows,
       gap: utils_getComputedCSS(gridElement, 'gap'),
-      paddingTop: `calc(${paddingTop} + ${borderTopWidth})`,
-      paddingRight: `calc(${paddingRight} + ${borderRightWidth})`,
-      paddingBottom: `calc(${paddingBottom} + ${borderBottomWidth})`,
-      paddingLeft: `calc(${paddingLeft} + ${borderLeftWidth})`
+      inset: `
+				calc(${paddingTop} + ${borderTopWidth})
+				calc(${paddingRight} + ${borderRightWidth})
+				calc(${paddingBottom} + ${borderBottomWidth})
+				calc(${paddingLeft} + ${borderLeftWidth})
+			`
     }
   };
 }
@@ -55853,8 +55823,19 @@ function InserterMenu({
   __experimentalInitialTab,
   __experimentalInitialCategory
 }, ref) {
-  const isZoomOutMode = (0,external_wp_data_namespaceObject.useSelect)(select => unlock(select(store)).isZoomOut(), []);
-  const hasSectionRootClientId = (0,external_wp_data_namespaceObject.useSelect)(select => !!unlock(select(store)).getSectionRootClientId(), []);
+  const {
+    isZoomOutMode,
+    hasSectionRootClientId
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      isZoomOut,
+      getSectionRootClientId
+    } = unlock(select(store));
+    return {
+      isZoomOutMode: isZoomOut(),
+      hasSectionRootClientId: !!getSectionRootClientId()
+    };
+  }, []);
   const [filterValue, setFilterValue, delayedFilterValue] = (0,external_wp_compose_namespaceObject.useDebouncedInput)(__experimentalFilterValue);
   const [hoveredItem, setHoveredItem] = (0,external_wp_element_namespaceObject.useState)(null);
   const [selectedPatternCategory, setSelectedPatternCategory] = (0,external_wp_element_namespaceObject.useState)(__experimentalInitialCategory);
@@ -56667,27 +56648,19 @@ const GridVisualizerGrid = (0,external_wp_element_namespaceObject.forwardRef)(({
   const [gridInfo, setGridInfo] = (0,external_wp_element_namespaceObject.useState)(() => getGridInfo(gridElement));
   const [isDroppingAllowed, setIsDroppingAllowed] = (0,external_wp_element_namespaceObject.useState)(false);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    const observers = [];
-    for (const element of [gridElement, ...gridElement.children]) {
-      const observer = new window.ResizeObserver(() => {
-        setGridInfo(getGridInfo(gridElement));
-      });
-      observer.observe(element);
-      observers.push(observer);
-    }
-    const mutationObserver = new window.MutationObserver(() => {
-      setGridInfo(getGridInfo(gridElement));
+    const resizeCallback = () => setGridInfo(getGridInfo(gridElement));
+    // Both border-box and content-box are observed as they may change
+    // independently. This requires two observers because a single one
+    // can’t be made to monitor both on the same element.
+    const borderBoxSpy = new window.ResizeObserver(resizeCallback);
+    borderBoxSpy.observe(gridElement, {
+      box: 'border-box'
     });
-    mutationObserver.observe(gridElement, {
-      attributeFilter: ['style', 'class'],
-      childList: true,
-      subtree: true
-    });
-    observers.push(mutationObserver);
+    const contentBoxSpy = new window.ResizeObserver(resizeCallback);
+    contentBoxSpy.observe(gridElement);
     return () => {
-      for (const observer of observers) {
-        observer.disconnect();
-      }
+      borderBoxSpy.disconnect();
+      contentBoxSpy.disconnect();
     };
   }, [gridElement]);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
@@ -75785,11 +75758,9 @@ const AdvancedControls = () => {
 /* harmony default export */ const advanced_controls_panel = (AdvancedControls);
 
 ;// ./packages/block-editor/build-module/components/inspector-controls-tabs/position-controls-panel.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -75801,37 +75772,67 @@ const AdvancedControls = () => {
 
 
 
-const PositionControlsPanel = () => {
-  const [initialOpen, setInitialOpen] = (0,external_wp_element_namespaceObject.useState)();
 
-  // Determine whether the panel should be expanded.
+
+const PositionControlsPanel = () => {
   const {
-    multiSelectedBlocks
+    selectedClientIds,
+    selectedBlocks,
+    hasPositionAttribute
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getBlocksByClientId,
       getSelectedBlockClientIds
     } = select(store);
-    const clientIds = getSelectedBlockClientIds();
+    const selectedBlockClientIds = getSelectedBlockClientIds();
+    const _selectedBlocks = getBlocksByClientId(selectedBlockClientIds);
     return {
-      multiSelectedBlocks: getBlocksByClientId(clientIds)
+      selectedClientIds: selectedBlockClientIds,
+      selectedBlocks: _selectedBlocks,
+      hasPositionAttribute: _selectedBlocks?.some(({
+        attributes
+      }) => !!attributes?.style?.position?.type)
     };
   }, []);
-  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    // If any selected block has a position set, open the panel by default.
-    // The first block's value will still be used within the control though.
-    if (initialOpen === undefined) {
-      setInitialOpen(multiSelectedBlocks.some(({
-        attributes
-      }) => !!attributes?.style?.position?.type));
+  const {
+    updateBlockAttributes
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  const dropdownMenuProps = useToolsPanelDropdownMenuProps();
+  function resetPosition() {
+    if (!selectedClientIds?.length || !selectedBlocks?.length) {
+      return;
     }
-  }, [initialOpen, multiSelectedBlocks, setInitialOpen]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.PanelBody, {
+    const attributesByClientId = Object.fromEntries(selectedBlocks?.map(({
+      clientId,
+      attributes
+    }) => [clientId, {
+      style: utils_cleanEmptyObject({
+        ...attributes?.style,
+        position: {
+          ...attributes?.style?.position,
+          type: undefined,
+          top: undefined,
+          right: undefined,
+          bottom: undefined,
+          left: undefined
+        }
+      })
+    }]));
+    updateBlockAttributes(selectedClientIds, attributesByClientId, true);
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanel, {
     className: "block-editor-block-inspector__position",
-    title: (0,external_wp_i18n_namespaceObject.__)('Position'),
-    initialOpen: initialOpen !== null && initialOpen !== void 0 ? initialOpen : false,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(inspector_controls.Slot, {
-      group: "position"
+    label: (0,external_wp_i18n_namespaceObject.__)('Position'),
+    resetAll: resetPosition,
+    dropdownMenuProps: dropdownMenuProps,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
+      isShownByDefault: hasPositionAttribute,
+      label: (0,external_wp_i18n_namespaceObject.__)('Position'),
+      hasValue: () => hasPositionAttribute,
+      onDeselect: resetPosition,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(inspector_controls.Slot, {
+        group: "position"
+      })
     })
   });
 };

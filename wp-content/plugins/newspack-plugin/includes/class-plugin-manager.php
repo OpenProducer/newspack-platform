@@ -253,6 +253,15 @@ class Plugin_Manager {
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments',
 			],
+			'woocommerce-paypal-payments' => [
+				'Name'        => \esc_html__( 'WooCommerce PayPal Payments', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'PayPal\'s latest complete payments processing solution. Accept PayPal, Pay Later, credit/debit cards, alternative digital wallets local payment types and bank accounts. Turn on only PayPal options or process a full suite of payment methods. Enable global transaction with extensive currency and country coverage.', 'newspack-plugin' ),
+				'Author'      => \esc_html__( 'WooCommerce', 'newspack-plugin' ),
+				'PluginURI'   => \esc_url( 'https://woocommerce.com/' ),
+				'AuthorURI'   => \esc_url( 'https://woocommerce.com/' ),
+				'Download'    => 'wporg',
+				'EditPath'    => 'admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway',
+			],
 			'woocommerce-name-your-price' => [
 				'Name'        => \esc_html__( 'WooCommerce Name Your Price', 'newspack-plugin' ),
 				'Description' => \esc_html__( 'WooCommerce Name Your Price allows customers to set their own price for products or donations.', 'newspack-plugin' ),

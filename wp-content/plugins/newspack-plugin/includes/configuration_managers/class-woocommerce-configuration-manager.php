@@ -26,6 +26,35 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	public $slug = 'woocommerce';
 
 	/**
+	 * Fully-supported payment gateways.
+	 *
+	 * @var array
+	 */
+	public $supported_gateways = [
+		'ppcp-gateway'         => [
+			'name'     => 'PayPal Payments',
+			'plugin'   => 'woocommerce-paypal-payments',
+			'url'      => 'https://woocommerce.com/products/woocommerce-paypal-payments/',
+			'connect'  => 'admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway&ppcp-tab=ppcp-connection',
+			'settings' => 'admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway',
+		],
+		'stripe'               => [
+			'name'     => 'Stripe',
+			'plugin'   => 'woocommerce-gateway-stripe',
+			'url'      => 'https://woocommerce.com/document/stripe/',
+			'connect'  => 'admin.php?page=wc-settings&tab=checkout&section=stripe',
+			'settings' => 'admin.php?page=wc-settings&tab=checkout&section=stripe&panel=settings',
+		],
+		'woocommerce_payments' => [
+			'name'     => 'WooCommerce Payments',
+			'plugin'   => 'woocommerce-payments',
+			'url'      => 'https://woocommerce.com/payments/',
+			'connect'  => 'admin.php?page=wc-admin&path=%2Fpayments%2Foverview',
+			'settings' => 'admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments',
+		],
+	];
+
+	/**
 	 * Get whether the WooCommerce plugin is active and set up.
 	 *
 	 * @todo Actually implement this.
@@ -162,15 +191,25 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Get WooPayments payment gateway, if available.
+	 * Get slugs for supported payment gateways.
 	 *
-	 * @param bool $only_enabled If true, only return the gateway if enabled.
+	 * @return array
+	 */
+	public function get_supported_payment_gateways() {
+		return array_keys( $this->supported_gateways );
+	}
+
+	/**
+	 * Get payment gateway by slug, if available.
+	 *
+	 * @param string $gateway The slug for the payment gateway to get.
+	 * @param bool   $only_enabled If true, only return the gateway if enabled.
 	 *
 	 * @return WC_Gateway_Stripe|bool WC_Gateway_Stripe instance if Stripe payment gateway is available, false if not.
 	 */
-	public static function get_woopayments_gateway( $only_enabled = false ) {
+	public static function get_payment_gateway( $gateway, $only_enabled = false ) {
 		$gateways = self::get_payment_gateways( $only_enabled );
-		return isset( $gateways['woocommerce_payments'] ) ? $gateways['woocommerce_payments'] : false;
+		return isset( $gateways[ $gateway ] ) ? $gateways[ $gateway ] : false;
 	}
 
 	/**
@@ -197,20 +236,44 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Retrieve WooPayments data
+	 * Retrieve data for the given payment gateway.
 	 *
-	 * @return Array|bool Array of WooPayments data, or false if WooPayments gateway isn't available.
+	 * @param string $gateway_slug The slug for the payment gateway to get.
+	 *
+	 * @return Array|bool Array of gateway data, or false if gateway isn't available.
 	 */
-	public function woopayments_data() {
-		$woopayments_gateway = self::get_woopayments_gateway();
-		if ( ! $woopayments_gateway ) {
+	public function gateway_data( $gateway_slug ) {
+		if ( ! isset( $this->supported_gateways[ $gateway_slug ] ) ) {
 			return false;
+		}
+		$gateway      = self::get_payment_gateway( $gateway_slug );
+		$is_connected = $gateway && method_exists( $gateway, 'is_connected' ) ? $gateway->is_connected() : false;
+		$test_mode    = $gateway && 'yes' === $gateway->get_option( 'test_mode', false ) ? true : false;
+
+		// PayPal gateway doesn't provide helper functions, so we need to use its internal API.
+		if ( 'ppcp-gateway' === $gateway_slug && method_exists( 'WooCommerce\PayPalCommerce\PPCP', 'container' ) ) {
+			$paypal = \WooCommerce\PayPalCommerce\PPCP::container();
+			if ( $paypal ) {
+				$env = $paypal->get( 'onboarding.environment' );
+				if ( $env && $env->current_environment_is( $env::SANDBOX ) ) {
+					$test_mode = true;
+				}
+				$state = $paypal->get( 'onboarding.state' );
+				if ( $state && $state::STATE_ONBOARDED <= $state->current_state() ) {
+					$is_connected = true;
+				}
+			}
 		}
 
 		return [
-			'enabled'      => 'yes' === $woopayments_gateway->get_option( 'enabled', false ) ? true : false,
-			'test_mode'    => 'yes' === $woopayments_gateway->get_option( 'test_mode', false ) ? true : false,
-			'is_connected' => $woopayments_gateway->is_connected(),
+			'enabled'      => $gateway && 'yes' === $gateway->get_option( 'enabled', false ) ? true : false,
+			'name'         => esc_html( $this->supported_gateways[ $gateway_slug ]['name'] ),
+			'test_mode'    => $test_mode,
+			'is_connected' => $is_connected,
+			'slug'         => $gateway_slug,
+			'url'          => $this->supported_gateways[ $gateway_slug ]['url'],
+			'connect'      => \admin_url( $this->supported_gateways[ $gateway_slug ]['connect'] ),
+			'settings'     => \admin_url( $this->supported_gateways[ $gateway_slug ]['settings'] ),
 		];
 	}
 
@@ -271,37 +334,49 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Update WooPayments settings
+	 * Update settings for the given payment gateway.
 	 *
-	 * @param Array $args Settings.
+	 * @param string $gateway_slug The slug for the payment gateway to update.
+	 * @param Array  $args Settings.
 	 * @return Array|WP_Error The data that was updated or an error.
 	 */
-	public function update_wc_woopayments_settings( $args ) {
+	public function update_gateway_settings( $gateway_slug, $args ) {
 		if ( ! class_exists( 'WC_Payment_Gateways' ) ) {
 			return false;
 		}
 
-		// Get the WooPayments payment gateway instance.
-		$woopayments = self::get_woopayments_gateway();
-		if ( ! $woopayments ) {
+		if ( ! isset( $this->supported_gateways[ $gateway_slug ] ) ) {
+			return false;
+		}
+
+		// Get the payment gateway instance.
+		$gateway = self::get_payment_gateway( $gateway_slug );
+		if ( ! $gateway ) {
 			if ( isset( $args['enabled'] ) && $args['enabled'] ) {
-				// WooPayments gateway is not installed and we want to use it. Install/Activate/Initialize it.
-				Plugin_Manager::activate( 'woocommerce-payments' );
+				// Gateway is not installed and we want to use it. Install/Activate/Initialize it.
+				Plugin_Manager::activate( $this->supported_gateways[ $gateway_slug ]['plugin'] );
 				do_action( 'plugins_loaded' );
 				\WC_Payment_Gateways::instance()->init();
-				$woopayments = self::get_woopayments_gateway();
-				if ( ! $woopayments ) {
-					return new WP_Error( 'newspack_woopayments_gateway_error', __( 'Error activating WooPayments.', 'newspack-plugin' ) );
+				$gateway = self::get_payment_gateway( $gateway_slug );
+				if ( ! $gateway ) {
+					return new WP_Error(
+						'newspack_payment_gateway_error',
+						sprintf(
+							// Translators: %s is the slug of the payment gateway.
+							__( 'Error activating %s gateway.', 'newspack-plugin' ),
+							$gateway_slug
+						)
+					);
 				}
 			} else {
-				// WooPayments is not installed and we don't want to use it. No settings needed.
+				// Gateway is not installed and we don't want to use it. No settings needed.
 				return true;
 			}
 		}
 
-		// Update WooPayments settings.
+		// Update gateway settings.
 		if ( isset( $args['enabled'] ) ) {
-			$woopayments->update_option( 'enabled', $args['enabled'] ? 'yes' : 'no' );
+			$gateway->update_option( 'enabled', $args['enabled'] ? 'yes' : 'no' );
 		}
 
 		return true;
