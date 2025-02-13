@@ -11,7 +11,9 @@ $blue:          	#2ea2cc !default;
 $primary:           #720eec !default;                                    // Primary color for buttons (alt)
 $primarytext:       desaturate(lighten($primary, 50%), 18%) !default;    // Text on primary color bg
 
-$secondary:         desaturate(lighten($primary, 40%), 21%) !default;    // Secondary buttons
+// We use the old WooCommerce color as the base of the secondary color on purpose.
+// See: https://github.com/woocommerce/woocommerce/issues/55165.
+$secondary:         desaturate(lighten(#7F54B3, 40%), 21%) !default;    // Secondary buttons
 $secondarytext:     desaturate(darken($secondary, 60%), 21%) !default;   // Text on secondary color bg
 
 $highlight:         adjust-hue(darken($primary, 18%), 150deg) !default;  // Prices, In stock labels, sales flash

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Newspack
  * Description: An advanced open-source publishing and revenue-generating platform for news organizations.
- * Version: 5.13.1
+ * Version: 5.13.3
  * Author: Automattic
  * Author URI: https://newspack.com/
  * License: GPL2
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEWSPACK_PLUGIN_VERSION', '5.13.1' );
+define( 'NEWSPACK_PLUGIN_VERSION', '5.13.3' );
 
 // Define NEWSPACK_PLUGIN_FILE.
 if ( ! defined( 'NEWSPACK_PLUGIN_FILE' ) ) {
