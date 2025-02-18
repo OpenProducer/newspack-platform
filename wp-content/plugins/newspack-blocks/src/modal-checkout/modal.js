@@ -651,7 +651,7 @@ domReady( () => {
 
 	const openModal = el => {
 		if ( window.newspackReaderActivation?.overlays ) {
-			modalCheckout.overlayId = window.newspackReaderActivation?.overlays.add();
+			el.overlayId = window.newspackReaderActivation?.overlays.add();
 		}
 		el.setAttribute( 'data-state', 'open' );
 		document.body.style.overflow = 'hidden';

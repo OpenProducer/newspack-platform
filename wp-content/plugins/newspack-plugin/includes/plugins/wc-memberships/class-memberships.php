@@ -774,7 +774,7 @@ class Memberships {
 					if ( ev.detail.authenticated && ! window?.newspackReaderActivation?.getPendingCheckout() ) {
 						if ( ras.overlays.get().length ) {
 							ras.on( 'overlay', function( ev ) {
-								if ( ! ev.detail.overlays.length ) {
+								if ( ! ev.detail.overlays.length && ! window?.newspackReaderActivation?.openNewslettersSignupModal ) {
 									window.location.reload();
 								}
 							} );

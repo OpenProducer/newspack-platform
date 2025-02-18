@@ -1,3 +1,34 @@
+## [5.14.1](https://github.com/Automattic/newspack-plugin/compare/v5.14.0...v5.14.1) (2025-02-18)
+
+
+### Bug Fixes
+
+* **esp-sync:** broken CLI sync command ([#3762](https://github.com/Automattic/newspack-plugin/issues/3762)) ([f609670](https://github.com/Automattic/newspack-plugin/commit/f6096706dfba077b13dd3e91687cb4e949ed50b5))
+
+# [5.14.0](https://github.com/Automattic/newspack-plugin/compare/v5.13.5...v5.14.0) (2025-02-17)
+
+
+### Features
+
+* **esp-sync:** queue data events sync to run once ([#3661](https://github.com/Automattic/newspack-plugin/issues/3661)) ([#3759](https://github.com/Automattic/newspack-plugin/issues/3759)) ([74c7122](https://github.com/Automattic/newspack-plugin/commit/74c7122b06e64819fdef1b251f25cb35cc1ddb30))
+
+## [5.13.5](https://github.com/Automattic/newspack-plugin/compare/v5.13.4...v5.13.5) (2025-02-17)
+
+
+### Bug Fixes
+
+* add check for newsletter modal and fix typo ([#3727](https://github.com/Automattic/newspack-plugin/issues/3727)) ([5fdcab6](https://github.com/Automattic/newspack-plugin/commit/5fdcab688bb5654011fd34b0357bf3d4d28c7ee4))
+* check for WC as well as WCS ([#3720](https://github.com/Automattic/newspack-plugin/issues/3720)) ([f91803a](https://github.com/Automattic/newspack-plugin/commit/f91803a7f482893d663b0e16fa67a5d8122152f8))
+* make the cart, checkout pages use shortcodes on install ([#3699](https://github.com/Automattic/newspack-plugin/issues/3699)) ([954e01b](https://github.com/Automattic/newspack-plugin/commit/954e01b792d425f670f415fc4d3142e1b4bcb8ba))
+* update corrections post type slug ([#3702](https://github.com/Automattic/newspack-plugin/issues/3702)) ([5f100ba](https://github.com/Automattic/newspack-plugin/commit/5f100ba9f155d5b9a158bd2008107938f6e3eb15))
+
+## [5.13.4](https://github.com/Automattic/newspack-plugin/compare/v5.13.3...v5.13.4) (2025-02-14)
+
+
+### Bug Fixes
+
+* **wcs:** account for pagination and failed scheduled retries in on-hold migration script ([#3750](https://github.com/Automattic/newspack-plugin/issues/3750)) ([171b29e](https://github.com/Automattic/newspack-plugin/commit/171b29ea6ce5caaf812f2ed93e8fbbdac58ff5d1))
+
 ## [5.13.3](https://github.com/Automattic/newspack-plugin/compare/v5.13.2...v5.13.3) (2025-02-12)
 
 

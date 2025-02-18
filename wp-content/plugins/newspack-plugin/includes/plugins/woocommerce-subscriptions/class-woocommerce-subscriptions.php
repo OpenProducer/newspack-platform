@@ -40,7 +40,7 @@ class WooCommerce_Subscriptions {
 	 * @return bool
 	 */
 	public static function is_active() {
-		return class_exists( 'WC_Subscriptions' );
+		return function_exists( 'WC' ) && class_exists( 'WC_Subscriptions' );
 	}
 
 	/**
