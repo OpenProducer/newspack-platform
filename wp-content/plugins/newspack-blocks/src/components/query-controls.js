@@ -3,7 +3,13 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { Component } from '@wordpress/element';
-import { Button, QueryControls as BasicQueryControls, ToggleControl } from '@wordpress/components';
+import {
+	BaseControl,
+	Button,
+	ButtonGroup,
+	CheckboxControl,
+	QueryControls as BasicQueryControls
+} from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
@@ -19,10 +25,6 @@ const getCategoryTitle = category =>
 const getTermTitle = term => decodeEntities( term.name ) || __( '(no title)', 'newspack-blocks' );
 
 class QueryControls extends Component {
-	state = {
-		showAdvancedFilters: false,
-	};
-
 	fetchPostSuggestions = search => {
 		const { postType } = this.props;
 		const restUrl = window.newspack_blocks_data.specific_posts_rest_url;
@@ -217,6 +219,7 @@ class QueryControls extends Component {
 		const {
 			specificMode,
 			onSpecificModeChange,
+			onLoopModeChange,
 			specificPosts,
 			onSpecificPostsChange,
 			authors,
@@ -237,7 +240,6 @@ class QueryControls extends Component {
 			onCustomTaxonomyExclusionsChange,
 			enableSpecific,
 		} = this.props;
-		const { showAdvancedFilters } = this.state;
 
 		const registeredCustomTaxonomies = window.newspack_blocks_data?.custom_taxonomies;
 
@@ -255,11 +257,33 @@ class QueryControls extends Component {
 		return (
 			<>
 				{ enableSpecific && (
-					<ToggleControl
-						checked={ specificMode }
-						onChange={ onSpecificModeChange }
-						label={ __( 'Choose Specific Posts', 'newspack-blocks' ) }
-					/>
+					<BaseControl
+						label={ __( 'Mode', 'newspack-blocks' ) }
+						id="newspack-block__loop-type"
+						className="newspack-block__button-group"
+						help={ specificMode ? (
+							__( 'The block will display only the specifically selected post(s).', 'newspack-blocks' )
+						) : (
+							__( 'The block will display content based on the filtering settings below.', 'newspack-blocks' )
+						) }
+					>
+						<ButtonGroup>
+							<Button
+								variant={ ! specificMode && 'primary' }
+								aria-pressed={ ! specificMode }
+								onClick={ onLoopModeChange }
+							>
+								{ __( 'Dynamic', 'newspack-blocks' ) }
+							</Button>
+							<Button
+								variant={ specificMode && 'primary' }
+								aria-pressed={ specificMode }
+								onClick={ onSpecificModeChange }
+							>
+								{ __( 'Static', 'newspack-blocks' ) }
+							</Button>
+						</ButtonGroup>
+					</BaseControl>
 				) }
 				{ specificMode ? (
 					<AutocompleteTokenField
@@ -269,22 +293,13 @@ class QueryControls extends Component {
 						fetchSavedInfo={ this.fetchSavedPosts }
 						label={ __( 'Posts', 'newspack-blocks' ) }
 						help={ __(
-							'Begin typing post title, click autocomplete result to select.',
+							'Begin typing any word in a post title. Click on an autocomplete result to select it.',
 							'newspack-blocks'
 						) }
 					/>
 				) : (
 					<>
-						<BasicQueryControls { ...this.props } />
-						{ onAuthorsChange && (
-							<AutocompleteTokenField
-								tokens={ authors || [] }
-								onChange={ onAuthorsChange }
-								fetchSuggestions={ this.fetchAuthorSuggestions }
-								fetchSavedInfo={ this.fetchSavedAuthors }
-								label={ __( 'Authors', 'newspack-blocks' ) }
-							/>
-						) }
+						<BasicQueryControls { ...this.props } maxItems={ 30 } />
 						{ onCategoriesChange && (
 							<AutocompleteTokenField
 								tokens={ categories || [] }
@@ -295,7 +310,7 @@ class QueryControls extends Component {
 							/>
 						) }
 						{ onIncludeSubcategoriesChange && (
-							<ToggleControl
+							<CheckboxControl
 								checked={ includeSubcategories }
 								onChange={ onIncludeSubcategoriesChange }
 								label={ __( 'Include subcategories ', 'newspack-blocks' ) }
@@ -308,6 +323,15 @@ class QueryControls extends Component {
 								fetchSuggestions={ this.fetchTagSuggestions }
 								fetchSavedInfo={ this.fetchSavedTags }
 								label={ __( 'Tags', 'newspack-blocks' ) }
+							/>
+						) }
+						{ onAuthorsChange && (
+							<AutocompleteTokenField
+								tokens={ authors || [] }
+								onChange={ onAuthorsChange }
+								fetchSuggestions={ this.fetchAuthorSuggestions }
+								fetchSavedInfo={ this.fetchSavedAuthors }
+								label={ __( 'Authors', 'newspack-blocks' ) }
 							/>
 						) }
 						{ onCustomTaxonomiesChange &&
@@ -330,65 +354,49 @@ class QueryControls extends Component {
 									label={ tax.label }
 								/>
 							) ) }
+						{ onCategoryExclusionsChange && (
+							<AutocompleteTokenField
+								tokens={ categoryExclusions || [] }
+								onChange={ onCategoryExclusionsChange }
+								fetchSuggestions={ this.fetchCategorySuggestions }
+								fetchSavedInfo={ this.fetchSavedCategories }
+								label={ __( 'Excluded categories', 'newspack-blocks' ) }
+							/>
+						) }
 						{ onTagExclusionsChange && (
-							<p>
-								<Button
-									isLink
-									onClick={ () => this.setState( { showAdvancedFilters: ! showAdvancedFilters } ) }
-								>
-									{ showAdvancedFilters
-										? __( 'Hide Advanced Filters', 'newspack-blocks' )
-										: __( 'Show Advanced Filters', 'newspack-blocks' ) }
-								</Button>
-							</p>
+							<AutocompleteTokenField
+								tokens={ tagExclusions || [] }
+								onChange={ onTagExclusionsChange }
+								fetchSuggestions={ this.fetchTagSuggestions }
+								fetchSavedInfo={ this.fetchSavedTags }
+								label={ __( 'Excluded tags', 'newspack-blocks' ) }
+							/>
 						) }
-						{ showAdvancedFilters && (
-							<>
-								{ onTagExclusionsChange && (
-									<AutocompleteTokenField
-										tokens={ tagExclusions || [] }
-										onChange={ onTagExclusionsChange }
-										fetchSuggestions={ this.fetchTagSuggestions }
-										fetchSavedInfo={ this.fetchSavedTags }
-										label={ __( 'Excluded Tags', 'newspack-blocks' ) }
-									/>
-								) }
-								{ onCategoryExclusionsChange && (
-									<AutocompleteTokenField
-										tokens={ categoryExclusions || [] }
-										onChange={ onCategoryExclusionsChange }
-										fetchSuggestions={ this.fetchCategorySuggestions }
-										fetchSavedInfo={ this.fetchSavedCategories }
-										label={ __( 'Excluded Categories', 'newspack-blocks' ) }
-									/>
-								) }
-								{ registeredCustomTaxonomies &&
-									onCustomTaxonomyExclusionsChange &&
-									registeredCustomTaxonomies.map( ( { label, slug } ) => (
-										<AutocompleteTokenField
-											fetchSavedInfo={ termIds => this.fetchSavedCustomTaxonomies( slug, termIds ) }
-											fetchSuggestions={ search =>
-												this.fetchCustomTaxonomiesSuggestions( slug, search )
-											}
-											key={ `${ slug }-exclusions-selector` }
-											label={ sprintf(
-												// translators: %s is the custom taxonomy label.
-												__( 'Excluded %s', 'newspack-blocks' ),
-												label
-											) }
-											onChange={ value =>
-												customTaxonomiesPrepareChange(
-													customTaxonomyExclusions,
-													onCustomTaxonomyExclusionsChange,
-													slug,
-													value
-												)
-											}
-											tokens={ getTermsOfCustomTaxonomy( customTaxonomyExclusions, slug ) }
-										/>
-									) ) }
-							</>
-						) }
+						{ registeredCustomTaxonomies &&
+							onCustomTaxonomyExclusionsChange &&
+							registeredCustomTaxonomies.map( ( { label, slug } ) => (
+								<AutocompleteTokenField
+									fetchSavedInfo={ termIds => this.fetchSavedCustomTaxonomies( slug, termIds ) }
+									fetchSuggestions={ search =>
+										this.fetchCustomTaxonomiesSuggestions( slug, search )
+									}
+									key={ `${ slug }-exclusions-selector` }
+									label={ sprintf(
+										// translators: %s is the custom taxonomy label.
+										__( 'Excluded %s', 'newspack-blocks' ),
+										label
+									) }
+									onChange={ value =>
+										customTaxonomiesPrepareChange(
+											customTaxonomyExclusions,
+											onCustomTaxonomyExclusionsChange,
+											slug,
+											value
+										)
+									}
+									tokens={ getTermsOfCustomTaxonomy( customTaxonomyExclusions, slug ) }
+								/>
+							) ) }
 					</>
 				) }
 			</>

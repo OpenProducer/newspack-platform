@@ -268,7 +268,7 @@ export const postsBlockDispatch = (
 ) => {
 	return {
 		// Only editor blocks can trigger reflows.
-		// @ts-ignore It's a string.
+		// @ts-expect-error It's a string.
 		triggerReflow: isEditorBlock ? dispatch( STORE_NAMESPACE ).reflow : () => undefined,
 	};
 };

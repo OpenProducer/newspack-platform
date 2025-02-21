@@ -32,6 +32,16 @@ class Corrections {
 	const CORRECTIONS_LOCATION_META = 'newspack_corrections_location';
 
 	/**
+	 * Meta key for post corrections type meta.
+	 */
+	const CORRECTIONS_TYPE_META = 'newspack_corrections_type';
+
+	/**
+	 * Supported post types.
+	 */
+	const SUPPORTED_POST_TYPES = [ 'article_legacy', 'content_type_blog', 'post', 'press_release' ];
+
+	/**
 	 * Initializes the class.
 	 */
 	public static function init() {
@@ -134,7 +144,7 @@ class Corrections {
 			'public'           => true,
 			'public_queryable' => true,
 			'query_var'        => true,
-			'rewrite'          => [ 'slug' => 'correction' ],
+			'rewrite'          => [ 'slug' => 'corrections' ],
 			'show_ui'          => false,
 			'show_in_rest'     => true,
 			'supports'         => $supports,
@@ -142,6 +152,12 @@ class Corrections {
 			'menu_icon'        => 'dashicons-edit',
 		);
 		\register_post_type( self::POST_TYPE, $args );
+
+		$rewrite_rules_updated_option_name = 'newspack_corrections_rewrite_rules_updated';
+		if ( get_option( $rewrite_rules_updated_option_name ) !== true ) {
+			flush_rewrite_rules(); //phpcs:ignore
+			update_option( $rewrite_rules_updated_option_name, true );
+		}
 	}
 
 	/**
@@ -161,6 +177,7 @@ class Corrections {
 					'post_status'  => 'publish',
 					'meta_input'   => [
 						self::CORRECTION_POST_ID_META => $post_id,
+						self::CORRECTIONS_TYPE_META   => $correction['type'],
 					],
 				]
 			);
@@ -202,6 +219,9 @@ class Corrections {
 				'ID'           => $correction_id,
 				'post_content' => sanitize_textarea_field( $correction['content'] ),
 				'post_date'    => sanitize_text_field( $correction['date'] ),
+				'meta_input'   => [
+					self::CORRECTIONS_TYPE_META => $correction['type'],
+				],
 			]
 		);
 	}
@@ -223,6 +243,32 @@ class Corrections {
 	 */
 	public static function add_corrections_shortcode() {
 		add_shortcode( 'corrections', [ __CLASS__, 'handle_corrections_shortcode' ] );
+	}
+
+	/**
+	 * Gets the Correction type label for a given post. Defaults to the current global post if none is provided.
+	 *
+	 * @param int $post_id The correction id.
+	 * @return string The correction type label.
+	 */
+	public static function get_correction_type( $post_id = null ) {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+		return self::get_correction_type_label( get_post_meta( $post_id, self::CORRECTIONS_TYPE_META, true ) );
+	}
+
+	/**
+	 * Gets the correction type label.
+	 *
+	 * @param string $type the correction type.
+	 * @return string the correction type label.
+	 */
+	private static function get_correction_type_label( $type ) {
+		if ( 'clarification' === $type ) {
+			return __( 'Clarification', 'newspack-plugin' );
+		}
+		return __( 'Correction', 'newspack-plugin' );
 	}
 
 	/**
@@ -288,8 +334,7 @@ class Corrections {
 	 * @param string $post_type the post type.
 	 */
 	public static function add_corrections_metabox( $post_type ) {
-		$valid_post_types = [ 'article_legacy', 'content_type_blog', 'post', 'press_release' ];
-		if ( in_array( $post_type, $valid_post_types, true ) ) {
+		if ( in_array( $post_type, self::SUPPORTED_POST_TYPES, true ) ) {
 			add_meta_box(
 				'corrections',
 				'Corrections',
@@ -330,6 +375,7 @@ class Corrections {
 					foreach ( $corrections as $correction ) :
 						$correction_content = $correction->post_content;
 						$correction_date    = \get_the_date( 'Y-m-d', $correction->ID );
+						$correction_type    = get_post_meta( $correction->ID, self::CORRECTIONS_TYPE_META, true );
 						?>
 						<fieldset name="existing-corrections[<?php echo esc_attr( $correction->ID ); ?>]" class="correction">
 							<p><?php echo esc_html( __( 'Article Correction', 'newspack-plugin' ) ); ?></p>
@@ -338,6 +384,13 @@ class Corrections {
 							<p>
 								<?php echo esc_html( __( 'Date:', 'newspack_plugin' ) ); ?>
 								<input name="existing-corrections[<?php echo esc_attr( $correction->ID ); ?>][date]" type="date" value="<?php echo esc_attr( sanitize_text_field( $correction_date ) ); ?>">
+							</p>
+							<p>
+								<?php echo esc_html( __( 'Type:', 'newspack_plugin' ) ); ?>
+								<select name="existing-corrections[<?php echo esc_attr( $correction->ID ); ?>][type]" />
+									<option value="correction" <?php selected( $correction_type, 'correction' ); ?>><?php echo esc_html( self::get_correction_type_label( 'correction' ) ); ?></option>
+									<option value="clarification" <?php selected( $correction_type, 'clarification' ); ?>><?php echo esc_html( self::get_correction_type_label( 'clarification' ) ); ?></option>
+								</select>
 							</p>
 							<button class="delete-correction">X</button>
 						</fieldset>
@@ -357,8 +410,8 @@ class Corrections {
 	 * @param int $post_id the post id.
 	 */
 	public static function save_corrections_metabox( $post_id ) {
-		// return early if we are saving a correction.
-		if ( self::POST_TYPE === get_post_type( $post_id ) ) {
+		// return early if we are saving an unsupported post type.
+		if ( ! in_array( get_post_type( $post_id ), self::SUPPORTED_POST_TYPES, true ) ) {
 			return;
 		}
 
@@ -414,6 +467,7 @@ class Corrections {
 				$corrections[] = [
 					'content' => sanitize_textarea_field( $correction['content'] ),
 					'date'    => ! empty( $correction['date'] ) ? sanitize_text_field( $correction['date'] ) : gmdate( 'Y-m-d' ),
+					'type'    => sanitize_text_field( $correction['type'] ),
 				];
 			}
 			self::add_corrections( $post_id, $corrections );
@@ -454,11 +508,13 @@ class Corrections {
 			<?php
 			foreach ( $corrections as $correction ) :
 				$correction_content = $correction->post_content;
-				$correction_date    = \get_the_date( 'M j, Y', $correction->ID );
+				$correction_date    = \get_the_date( get_option( 'date_format' ), $correction->ID );
+				$correction_time    = \get_the_time( get_option( 'time_format' ), $correction->ID );
 				$correction_heading = sprintf(
-					// translators: %s: correction date.
-					__( 'Correction on %s', 'newspack-plugin' ),
-					$correction_date
+					'%s, %s %s',
+					self::get_correction_type_label( get_post_meta( $correction->ID, self::CORRECTIONS_TYPE_META, true ) ),
+					$correction_date,
+					$correction_time
 				);
 				?>
 				<!-- wp:paragraph {"fontSize":"small"} -->

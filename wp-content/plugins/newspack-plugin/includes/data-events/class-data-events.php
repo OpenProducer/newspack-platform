@@ -45,6 +45,13 @@ final class Data_Events {
 	private static $queued_dispatches = [];
 
 	/**
+	 * Current action event.
+	 *
+	 * @var string|null
+	 */
+	private static $current_event = null;
+
+	/**
 	 * Initialize hooks.
 	 */
 	public static function init() {
@@ -95,6 +102,9 @@ final class Data_Events {
 	 * @param string $client_id   Client ID.
 	 */
 	public static function handle( $action_name, $timestamp, $data, $client_id ) {
+		// Set current event.
+		self::set_current_event( $action_name );
+
 		// Execute global handlers.
 		Logger::log(
 			sprintf( 'Executing global action handlers for "%s".', $action_name ),
@@ -145,6 +155,27 @@ final class Data_Events {
 		 * @param string $client_id   Client ID.
 		 */
 		\do_action( 'newspack_data_event', $action_name, $timestamp, $data, $client_id );
+
+		// Unset current event.
+		self::set_current_event( null );
+	}
+
+	/**
+	 * Get the current event being handled.
+	 *
+	 * @return string|null Current event.
+	 */
+	public static function current_event() {
+		return self::$current_event;
+	}
+
+	/**
+	 * Set the current event being handled.
+	 *
+	 * @param string|null $name Event name.
+	 */
+	private static function set_current_event( $name ) {
+		self::$current_event = $name;
 	}
 
 	/**

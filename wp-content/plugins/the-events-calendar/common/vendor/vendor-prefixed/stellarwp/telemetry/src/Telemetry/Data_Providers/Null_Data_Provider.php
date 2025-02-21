@@ -5,9 +5,6 @@
  * @since   TBD
  *
  * @package TEC\Common\StellarWP\Telemetry\Data_Providers;
- *
- * @license GPL-2.0-or-later
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Telemetry\Data_Providers;

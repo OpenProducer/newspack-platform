@@ -424,6 +424,13 @@ function newspack_content_width() {
 add_action( 'template_redirect', 'newspack_content_width', 0 );
 
 /**
+ * Return the list of custom fonts in use.
+ */
+function newspack_get_used_custom_fonts(): array {
+	return array_filter( [ get_theme_mod( 'font_header', '' ), get_theme_mod( 'font_body', '' ) ] );
+}
+
+/**
  * Enqueue scripts and styles.
  */
 function newspack_scripts() {
@@ -486,6 +493,15 @@ function newspack_scripts() {
 		wp_enqueue_script( 'amp-animation', 'https://cdn.ampproject.org/v0/amp-animation-0.1.js', array(), '0.1', true );
 		wp_enqueue_script( 'amp-position-observer', 'https://cdn.ampproject.org/v0/amp-position-observer-0.1.js', array(), '0.1', true );
 	}
+
+	wp_enqueue_script( 'newspack-font-loading', get_theme_file_uri( '/js/dist/font-loading.js' ), array(), wp_get_theme()->get( 'Version' ), true );
+	wp_localize_script(
+		'newspack-font-loading',
+		'newspackFontLoading',
+		[
+			'fonts' => newspack_get_used_custom_fonts(),
+		]
+	);
 }
 add_action( 'wp_enqueue_scripts', 'newspack_scripts' );
 

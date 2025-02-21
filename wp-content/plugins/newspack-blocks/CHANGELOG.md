@@ -1,3 +1,19 @@
+# [4.6.0](https://github.com/Automattic/newspack-blocks/compare/v4.5.10...v4.6.0) (2025-02-17)
+
+
+### Bug Fixes
+
+* enforce the password strength on checkout ([#2037](https://github.com/Automattic/newspack-blocks/issues/2037)) ([b9dcf03](https://github.com/Automattic/newspack-blocks/commit/b9dcf03e9d1ceefcb481eabb59f5837ad56788d4))
+* make sure membership gate refreshes after variation purchase ([#2044](https://github.com/Automattic/newspack-blocks/issues/2044)) ([1555b0f](https://github.com/Automattic/newspack-blocks/commit/1555b0ff5a65286bfbf0cc1f19a1eb6df2e9d97c))
+* remove OneSignal script from the modal checkout ([#2029](https://github.com/Automattic/newspack-blocks/issues/2029)) ([343ca5e](https://github.com/Automattic/newspack-blocks/commit/343ca5edf001acfd83a91b9726d5dd0687d749d5))
+* return no posts for authors without term ([#2033](https://github.com/Automattic/newspack-blocks/issues/2033)) ([e331139](https://github.com/Automattic/newspack-blocks/commit/e331139ea60fa1a784179e3261f36cd94630a67d))
+
+
+### Features
+
+* **homepage-articles:** rename block and reorganise settings ([#2000](https://github.com/Automattic/newspack-blocks/issues/2000)) ([841de19](https://github.com/Automattic/newspack-blocks/commit/841de1975232307640e730f32715dd5d223600a1))
+* rename all homepage posts patterns to content loop patterns ([#2046](https://github.com/Automattic/newspack-blocks/issues/2046)) ([9b6bdee](https://github.com/Automattic/newspack-blocks/commit/9b6bdeed4df250753963f7bbaeca5d85ed76193a))
+
 ## [4.5.10](https://github.com/Automattic/newspack-blocks/compare/v4.5.9...v4.5.10) (2025-02-04)
 
 

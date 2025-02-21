@@ -178,6 +178,8 @@ class RAS_ESP_Sync extends Reader_Activation\ESP_Sync {
 							$result->get_error_message()
 						)
 					);
+				} elseif ( ! empty( static::$results ) ) {
+					static::$results['processed']++;
 				}
 			}
 		}

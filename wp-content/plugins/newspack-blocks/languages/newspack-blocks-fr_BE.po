@@ -333,157 +333,157 @@ msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-1.php:9
 #: src/block-patterns/homepage-posts-1.php:9
-msgid "Homepage Posts Pattern 1"
+msgid "Content Loop Pattern 1"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-2.php:9
 #: src/block-patterns/homepage-posts-2.php:9
-msgid "Homepage Posts Pattern 2"
+msgid "Content Loop Pattern 2"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-3.php:9
 #: src/block-patterns/homepage-posts-3.php:9
-msgid "Homepage Posts Pattern 3"
+msgid "Content Loop Pattern 3"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-4.php:9
 #: src/block-patterns/homepage-posts-4.php:9
-msgid "Homepage Posts Pattern 4"
+msgid "Content Loop Pattern 4"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-5.php:9
 #: src/block-patterns/homepage-posts-5.php:9
-msgid "Homepage Posts Pattern 5"
+msgid "Content Loop Pattern 5"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-6.php:9
 #: src/block-patterns/homepage-posts-6.php:9
-msgid "Homepage Posts Pattern 6"
+msgid "Content Loop Pattern 6"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-7.php:9
 #: src/block-patterns/homepage-posts-7.php:9
-msgid "Homepage Posts Pattern 7"
+msgid "Content Loop Pattern 7"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-8.php:9
 #: src/block-patterns/homepage-posts-8.php:9
-msgid "Homepage Posts Pattern 8"
+msgid "Content Loop Pattern 8"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-9.php:9
 #: src/block-patterns/homepage-posts-9.php:9
-msgid "Homepage Posts Pattern 9"
+msgid "Content Loop Pattern 9"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-10.php:9
 #: src/block-patterns/homepage-posts-10.php:9
-msgid "Homepage Posts Pattern 10"
+msgid "Content Loop Pattern 10"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-11.php:9
 #: src/block-patterns/homepage-posts-11.php:9
-msgid "Homepage Posts Pattern 11"
+msgid "Content Loop Pattern 11"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-12.php:9
 #: src/block-patterns/homepage-posts-12.php:9
-msgid "Homepage Posts Pattern 12"
+msgid "Content Loop Pattern 12"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-13.php:9
 #: src/block-patterns/homepage-posts-13.php:9
-msgid "Homepage Posts Pattern 13"
+msgid "Content Loop Pattern 13"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-14.php:9
 #: src/block-patterns/homepage-posts-14.php:9
-msgid "Homepage Posts Pattern 14"
+msgid "Content Loop Pattern 14"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-15.php:9
 #: src/block-patterns/homepage-posts-15.php:9
-msgid "Homepage Posts Pattern 15"
+msgid "Content Loop Pattern 15"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-16.php:9
 #: src/block-patterns/homepage-posts-16.php:9
-msgid "Homepage Posts Pattern 16"
+msgid "Content Loop Pattern 16"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-17.php:9
 #: src/block-patterns/homepage-posts-17.php:9
-msgid "Homepage Posts Pattern 17"
+msgid "Content Loop Pattern 17"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-18.php:9
 #: src/block-patterns/homepage-posts-18.php:9
-msgid "Homepage Posts Pattern 18"
+msgid "Content Loop Pattern 18"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-19.php:9
 #: src/block-patterns/homepage-posts-19.php:9
-msgid "Homepage Posts Pattern 19"
+msgid "Content Loop Pattern 19"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-20.php:9
 #: src/block-patterns/homepage-posts-20.php:9
-msgid "Homepage Posts Pattern 20"
+msgid "Content Loop Pattern 20"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-21.php:9
 #: src/block-patterns/homepage-posts-21.php:9
-msgid "Homepage Posts Pattern 21"
+msgid "Content Loop Pattern 21"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-22.php:9
 #: src/block-patterns/homepage-posts-22.php:9
-msgid "Homepage Posts Pattern 22"
+msgid "Content Loop Pattern 22"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-23.php:9
 #: src/block-patterns/homepage-posts-23.php:9
-msgid "Homepage Posts Pattern 23"
+msgid "Content Loop Pattern 23"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-24.php:9
 #: src/block-patterns/homepage-posts-24.php:9
-msgid "Homepage Posts Pattern 24"
+msgid "Content Loop Pattern 24"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-25.php:9
 #: src/block-patterns/homepage-posts-25.php:9
-msgid "Homepage Posts Pattern 25"
+msgid "Content Loop Pattern 25"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-26.php:9
 #: src/block-patterns/homepage-posts-26.php:9
-msgid "Homepage Posts Pattern 26"
+msgid "Content Loop Pattern 26"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-27.php:9
 #: src/block-patterns/homepage-posts-27.php:9
-msgid "Homepage Posts Pattern 27"
+msgid "Content Loop Pattern 27"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-28.php:9
 #: src/block-patterns/homepage-posts-28.php:9
-msgid "Homepage Posts Pattern 28"
+msgid "Content Loop Pattern 28"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-29.php:9
 #: src/block-patterns/homepage-posts-29.php:9
-msgid "Homepage Posts Pattern 29"
+msgid "Content Loop Pattern 29"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-30.php:9
 #: src/block-patterns/homepage-posts-30.php:9
-msgid "Homepage Posts Pattern 30"
+msgid "Content Loop Pattern 30"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/homepage-posts-31.php:9
 #: src/block-patterns/homepage-posts-31.php:9
-msgid "Homepage Posts Pattern 31"
+msgid "Content Loop Pattern 31"
 msgstr ""
 
 #: release/newspack-blocks/src/block-patterns/subscribe-1.php:9

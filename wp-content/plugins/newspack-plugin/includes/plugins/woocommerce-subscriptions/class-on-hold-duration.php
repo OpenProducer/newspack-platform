@@ -33,8 +33,10 @@ class On_Hold_Duration {
 
 		add_filter( 'woocommerce_subscription_settings', [ __CLASS__, 'add_on_hold_duration_setting' ], 11, 1 );
 		add_filter( 'wcs_default_retry_rules', [ __CLASS__, 'maybe_apply_on_hold_duration_rule' ], 99, 1 );
-		add_action( 'woocommerce_generated_manual_renewal_order', [ __CLASS__, 'maybe_schedule_expiration' ], 10, 2 );
-		add_action( 'woocommerce_subscription_renewal_payment_complete', [ __CLASS__, 'maybe_unschedule_expiration_on_manual_renewal' ], 10, 2 );
+		add_action( 'woocommerce_subscription_status_on-hold', [ __CLASS__, 'maybe_schedule_expiration' ], 10, 1 );
+		add_action( 'woocommerce_subscription_status_active', [ __CLASS__, 'maybe_unschedule_expiration' ], 10, 1 );
+		add_action( 'woocommerce_subscriptions_after_apply_retry_rule', [ __CLASS__, 'maybe_unschedule_expiration_on_retry' ], 10, 3 );
+		add_action( 'woocommerce_subscription_payment_failed', [ __CLASS__, 'trash_subscription_on_failed_payment' ], 10, 2 );
 		add_action( self::AS_HOOK, [ __CLASS__, 'handle_scheduled_action' ] );
 	}
 
@@ -119,29 +121,52 @@ class On_Hold_Duration {
 	}
 
 	/**
-	 * Conditionally schedule expiration action.
+	 * Conditionally schedule expiration action if no retries are scheduled.
 	 *
-	 * @param int    $order_id     Order ID.
 	 * @param object $subscription Subscription object.
 	 */
-	public static function maybe_schedule_expiration( $order_id, $subscription ) {
-		if ( 'on-hold' === $subscription->get_status() ) {
-			$default_grace_period = 7 * DAY_IN_SECONDS; // 7 days, the number of days the retry system normally waits before marking a subscription as expired.
+	public static function maybe_schedule_expiration( $subscription ) {
+		if ( $subscription->get_date( 'payment_retry' ) === 0 || ! \WCS_Retry_Manager::is_retry_enabled() ) {
+			$default_grace_period = $subscription->is_manual() ? 7 * DAY_IN_SECONDS : 0; // Default grace period is 7 days if the subscription is manual otherwise 0.
 			$on_hold_duration     = self::get_on_hold_duration() * DAY_IN_SECONDS;
 			$timestamp            = $subscription->get_time( 'next_payment' ) + $default_grace_period + $on_hold_duration;
-			as_schedule_single_action( $timestamp, self::AS_HOOK, [ $subscription->get_id() ], self::AS_GROUP );
+			self::schedule_expiration( $subscription->get_id(), $timestamp );
 		}
 	}
 
 	/**
-	 * Unschedule expiration if scheduled when manual subscription is renewed.
+	 * Schedule expiration action.
+	 *
+	 * @param int $subscription_id Subscription ID.
+	 * @param int $timestamp       Timestamp.
+	 */
+	public static function schedule_expiration( $subscription_id, $timestamp ) {
+		if ( ! as_has_scheduled_action( self::AS_HOOK, [ $subscription_id ], self::AS_GROUP ) ) {
+			as_schedule_single_action( $timestamp, self::AS_HOOK, [ $subscription_id ], self::AS_GROUP );
+		}
+	}
+
+	/**
+	 * Unschedule expiration if scheduled.
 	 *
 	 * @param \WC_Subscription $subscription The Subscription.
-	 * @param \WC_Order        $order        The order.
 	 */
-	public static function maybe_unschedule_expiration_on_manual_renewal( $subscription, $order ) {
+	public static function maybe_unschedule_expiration( $subscription ) {
 		if ( false !== as_has_scheduled_action( self::AS_HOOK, [ $subscription->get_id() ], self::AS_GROUP ) ) {
 			as_unschedule_action( self::AS_HOOK, [ $subscription->get_id() ], self::AS_GROUP );
+		}
+	}
+
+	/**
+	 * Unschedule expiration if payment retry is scheduled.
+	 *
+	 * @param array            $retry_rule   Retry rule.
+	 * @param \WC_Order        $last_order   The last order.
+	 * @param \WC_Subscription $subscription The Subscription.
+	 */
+	public static function maybe_unschedule_expiration_on_retry( $retry_rule, $last_order, $subscription ) {
+		if ( $subscription->get_date( 'payment_retry' ) > 0 ) {
+			self::maybe_unschedule_expiration( $subscription );
 		}
 	}
 
@@ -154,6 +179,20 @@ class On_Hold_Duration {
 		$subscription = wcs_get_subscription( $subscription_id );
 		if ( $subscription && 'on-hold' === $subscription->get_status() ) {
 			$subscription->update_status( 'expired' );
+		}
+	}
+
+	/**
+	 * Trash subscription on failed payment.
+	 *
+	 * @param \WC_Subscription $subscription The Subscription.
+	 * @param string           $status       The status.
+	 */
+	public static function trash_subscription_on_failed_payment( $subscription, $status ) {
+		$last_order = $subscription->get_last_order( 'all' );
+		if ( ! $last_order || $last_order->get_id() === $subscription->get_parent_id() ) {
+			$subscription->update_status( 'trash', __( 'Subscription status updated by Newspack.', 'newspack-plugin' ) );
+			$subscription->save();
 		}
 	}
 }

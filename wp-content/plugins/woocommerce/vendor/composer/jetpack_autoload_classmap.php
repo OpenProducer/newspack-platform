@@ -275,2227 +275,2227 @@ return array(
 		'path'    => $vendorDir . '/automattic/jetpack-connection/src/class-tracking.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\AI\\AIEndpoint' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/AI/AIEndpoint.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\AI\\BusinessDescription' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/AI/BusinessDescription.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\AI\\Images' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/AI/Images.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\AI\\Middleware' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/AI/Middleware.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\AI\\Patterns' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/AI/Patterns.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\AI\\Product' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/AI/Product.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\AI\\StoreInfo' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/AI/StoreInfo.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\AI\\StoreTitle' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/AI/StoreTitle.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Coupons' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Coupons.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\CustomAttributeTraits' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/CustomAttributeTraits.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Customers' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Customers.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Data' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Data.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\DataCountries' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/DataCountries.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\DataDownloadIPs' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/DataDownloadIPs.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Experiments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Experiments.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Features' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Features.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\LaunchYourStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/LaunchYourStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Leaderboards' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Leaderboards.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Marketing' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Marketing.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\MarketingCampaignTypes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/MarketingCampaignTypes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\MarketingCampaigns' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/MarketingCampaigns.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\MarketingChannels' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/MarketingChannels.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\MarketingOverview' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/MarketingOverview.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\MarketingRecommendations' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/MarketingRecommendations.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\MobileAppMagicLink' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/MobileAppMagicLink.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\NoteActions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/NoteActions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Notes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Notes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Notice' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Notice.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\OnboardingFreeExtensions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/OnboardingFreeExtensions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\OnboardingPlugins' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/OnboardingPlugins.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\OnboardingProductTypes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/OnboardingProductTypes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\OnboardingProducts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/OnboardingProducts.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\OnboardingProfile' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/OnboardingProfile.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\OnboardingTasks' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/OnboardingTasks.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\OnboardingThemes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/OnboardingThemes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Options' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Options.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Orders' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Orders.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\PaymentGatewaySuggestions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/PaymentGatewaySuggestions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Plugins' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Plugins.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\ProductAttributeTerms' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/ProductAttributeTerms.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\ProductAttributes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/ProductAttributes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\ProductCategories' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/ProductCategories.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\ProductForm' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/ProductForm.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\ProductReviews' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/ProductReviews.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\ProductVariations' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/ProductVariations.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Products' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Products.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\ProductsLowInStock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/ProductsLowInStock.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Cache.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Categories\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Categories/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Categories\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Categories/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Categories\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Categories/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Coupons\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Coupons/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Coupons\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Coupons/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Coupons\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Coupons/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Coupons\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Coupons/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Coupons\\Stats\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Coupons/Stats/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Coupons\\Stats\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Coupons/Stats/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Coupons\\Stats\\Segmenter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Coupons/Stats/Segmenter.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Customers\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Customers/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Customers\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Customers/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Customers\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Customers/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Customers\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Customers/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Customers\\Stats\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Customers/Stats/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Customers\\Stats\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Customers/Stats/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStoreInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/DataStoreInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Downloads\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Downloads/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Downloads\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Downloads/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Downloads\\Files\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Downloads/Files/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Downloads\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Downloads/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Downloads\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Downloads/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Downloads\\Stats\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Downloads/Stats/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Downloads\\Stats\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Downloads/Stats/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Export\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Export/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\ExportableInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/ExportableInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\ExportableTraits' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/ExportableTraits.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\FilteredGetDataTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/FilteredGetDataTrait.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/GenericController.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/GenericQuery.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/GenericStatsController.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Import\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Import/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\OrderAwareControllerTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/OrderAwareControllerTrait.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Orders/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Orders/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Orders/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Orders/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\Stats\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Orders/Stats/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\Stats\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Orders/Stats/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\Stats\\Segmenter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Orders/Stats/Segmenter.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\ParameterException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/ParameterException.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\PerformanceIndicators\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/PerformanceIndicators/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Products/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Products/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Products/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Products/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Products/Stats/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Products/Stats/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Segmenter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Products/Stats/Segmenter.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Revenue\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Revenue/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Revenue\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Revenue/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Segmenter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Segmenter.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\SqlQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/SqlQuery.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\StatsDataStoreTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/StatsDataStoreTrait.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Stock\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Stock/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Stock\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Stock/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Stock\\Stats\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Stock/Stats/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Stock\\Stats\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Stock/Stats/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Taxes\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Taxes/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Taxes\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Taxes/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Taxes\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Taxes/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Taxes\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Taxes/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Taxes\\Stats\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Taxes/Stats/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Taxes\\Stats\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Taxes/Stats/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Taxes\\Stats\\Segmenter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Taxes/Stats/Segmenter.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\TimeInterval' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/TimeInterval.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Variations\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Variations/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Variations\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Variations/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Variations\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Variations/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Variations\\Stats\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Variations/Stats/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Variations\\Stats\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Variations/Stats/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Variations\\Stats\\Query' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Variations/Stats/Query.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Reports\\Variations\\Stats\\Segmenter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Reports/Variations/Stats/Segmenter.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\SettingOptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/SettingOptions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\ShippingPartnerSuggestions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/ShippingPartnerSuggestions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Taxes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Taxes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\API\\Themes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/API/Themes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\BlockTemplates\\BlockContainerInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/BlockTemplates/BlockContainerInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\BlockTemplates\\BlockInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/BlockTemplates/BlockInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\BlockTemplates\\BlockTemplateInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/BlockTemplates/BlockTemplateInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\BlockTemplates\\ContainerInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/BlockTemplates/ContainerInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Composer\\Package' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Composer/Package.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\DataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/DataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\DateTimeProvider\\CurrentDateTimeProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/DateTimeProvider/CurrentDateTimeProvider.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\DateTimeProvider\\DateTimeProviderInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/DateTimeProvider/DateTimeProviderInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\DeprecatedClassFacade' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/DeprecatedClassFacade.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\FeaturePlugin' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/FeaturePlugin.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\AsyncProductEditorCategoryField\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/AsyncProductEditorCategoryField/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Exporters\\ExportWCCoreProfilerOptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Exporters/ExportWCCoreProfilerOptions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Exporters\\ExportWCPaymentGateways' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Exporters/ExportWCPaymentGateways.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Exporters\\ExportWCSettings' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Exporters/ExportWCSettings.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Exporters\\ExportWCShipping' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Exporters/ExportWCShipping.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Exporters\\ExportWCTaskOptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Exporters/ExportWCTaskOptions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Exporters\\ExportWCTaxRates' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Exporters/ExportWCTaxRates.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Importers\\ImportSetWCPaymentGateways' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Importers/ImportSetWCPaymentGateways.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Importers\\ImportSetWCShipping' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Importers/ImportSetWCShipping.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Importers\\ImportSetWCTaxRates' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Importers/ImportSetWCTaxRates.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\RestApi' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/RestApi.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Steps\\SetWCPaymentGateways' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Steps/SetWCPaymentGateways.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Steps\\SetWCShipping' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Steps/SetWCShipping.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Blueprint\\Steps\\SetWCTaxRates' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Blueprint/Steps/SetWCTaxRates.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Features' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Features.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\LaunchYourStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/LaunchYourStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\MarketingRecommendations\\DefaultMarketingRecommendations' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/MarketingRecommendations/DefaultMarketingRecommendations.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\MarketingRecommendations\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/MarketingRecommendations/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\MarketingRecommendations\\MarketingRecommendationsDataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/MarketingRecommendations/MarketingRecommendationsDataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\MarketingRecommendations\\MiscRecommendationsDataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/MarketingRecommendations/MiscRecommendationsDataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Navigation\\RemovedDeprecated' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Navigation/RemovedDeprecated.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Onboarding' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Onboarding.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\DeprecatedExtendedTask' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/DeprecatedExtendedTask.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\DeprecatedOptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/DeprecatedOptions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Task' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Task.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/TaskList.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskListSection' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/TaskListSection.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskLists' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/TaskLists.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskTraits' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/TaskTraits.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\AdditionalPayments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/AdditionalPayments.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Appearance' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/Appearance.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\CustomizeStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/CustomizeStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\ExperimentalShippingRecommendation' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/ExperimentalShippingRecommendation.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\ExtendStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/ExtendStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\GetMobileApp' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/GetMobileApp.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\LaunchYourStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/LaunchYourStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Marketing' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/Marketing.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/Payments.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Products' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/Products.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\ReviewShippingOptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/ReviewShippingOptions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Shipping' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/Shipping.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\StoreCreation' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/StoreCreation.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\StoreDetails' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/StoreDetails.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Tax' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/Tax.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\TourInAppMarketplace' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/TourInAppMarketplace.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\WooCommercePayments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/OnboardingTasks/Tasks/WooCommercePayments.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\PaymentGatewaySuggestions\\DefaultPaymentGateways' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\PaymentGatewaySuggestions\\EvaluateSuggestion' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/PaymentGatewaySuggestions/EvaluateSuggestion.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\PaymentGatewaySuggestions\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/PaymentGatewaySuggestions/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\PaymentGatewaySuggestions\\PaymentGatewaySuggestionsDataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/PaymentGatewaySuggestions/PaymentGatewaySuggestionsDataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\PaymentGatewaySuggestions\\PaymentGatewaysController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/PaymentGatewaySuggestions/PaymentGatewaysController.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\BlockRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/BlockRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\BlockTemplateUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/BlockTemplateUtils.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\ProductFormsController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/ProductFormsController.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\ProductTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/ProductTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\ProductTemplates\\GroupInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/ProductTemplates/GroupInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\ProductTemplates\\ProductFormTemplateInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/ProductTemplates/ProductFormTemplateInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\ProductTemplates\\SectionInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/ProductTemplates/SectionInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\ProductTemplates\\SubsectionInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/ProductTemplates/SubsectionInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\RedirectionController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/RedirectionController.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\Tracks' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductBlockEditor/Tracks.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ProductDataViews\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ProductDataViews/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Settings\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Settings/Init.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\Settings\\Transformer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/Settings/Transformer.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ShippingPartnerSuggestions\\DefaultShippingPartners' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ShippingPartnerSuggestions/DefaultShippingPartners.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ShippingPartnerSuggestions\\ShippingPartnerSuggestions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ShippingPartnerSuggestions/ShippingPartnerSuggestions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\ShippingPartnerSuggestions\\ShippingPartnerSuggestionsDataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/ShippingPartnerSuggestions/ShippingPartnerSuggestionsDataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Features\\TransientNotices' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Features/TransientNotices.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Loader' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Loader.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Marketing\\InstalledExtensions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Marketing/InstalledExtensions.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Marketing\\MarketingCampaign' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Marketing/MarketingCampaign.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Marketing\\MarketingCampaignType' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Marketing/MarketingCampaignType.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Marketing\\MarketingChannelInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Marketing/MarketingChannelInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Marketing\\MarketingChannels' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Marketing/MarketingChannels.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Marketing\\Price' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Marketing/Price.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\DataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DataStore.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\Note' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/Note.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\NoteTraits' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/NoteTraits.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\Notes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/Notes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\NotesUnavailableException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/NotesUnavailableException.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Note' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Customize_Store_With_Blocks' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_EU_VAT_Number' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Edit_Products_On_The_Move' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Facebook_Marketing_Expert' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_First_Product' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Giving_Feedback_Notes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Install_JP_And_WCS_Plugins' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Launch_Checklist' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Migrate_From_Shopify' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Mobile_App' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_New_Sales_Record' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Onboarding_Email_Marketing' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Onboarding_Payments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Online_Clothing_Store' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Order_Milestones' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Performance_On_Mobile' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Personalize_Store' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Real_Time_Order_Alerts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Selling_Online_Courses' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Tracking_Opt_In' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_WooCommerce_Payments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_WooCommerce_Subscriptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Notes\\WC_Admin_Notes_Woo_Subscriptions_Notes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Notes/DeprecatedNotes.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Overrides\\Order' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Overrides/Order.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Overrides\\OrderRefund' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Overrides/OrderRefund.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Overrides\\OrderTraits' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Overrides/OrderTraits.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Overrides\\ThemeUpgrader' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Overrides/ThemeUpgrader.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Overrides\\ThemeUpgraderSkin' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Overrides/ThemeUpgraderSkin.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\PageController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/PageController.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\PluginsHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/PluginsHelper.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\PluginsInstallLoggers\\AsyncPluginsInstallLogger' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/PluginsInstallLoggers/AsyncPluginsInstallLogger.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\PluginsInstallLoggers\\PluginsInstallLogger' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/PluginsInstallLoggers/PluginsInstallLogger.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\PluginsInstaller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/PluginsInstaller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\PluginsProvider\\PluginsProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/PluginsProvider/PluginsProvider.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\PluginsProvider\\PluginsProviderInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/PluginsProvider/PluginsProviderInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\RemoteInboxNotificationsDataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteInboxNotifications/RemoteInboxNotificationsDataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\RemoteInboxNotificationsEngine' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteInboxNotifications/RemoteInboxNotificationsEngine.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\RuleProcessorInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteInboxNotifications/RuleProcessorInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\SpecRunner' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteInboxNotifications/SpecRunner.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\TransformerInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteInboxNotifications/TransformerInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\DataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/DataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RemoteSpecsEngine' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RemoteSpecsEngine.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\BaseLocationCountryRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/BaseLocationCountryRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\BaseLocationStateRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/BaseLocationStateRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\ComparisonOperation' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/ComparisonOperation.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\EvaluateAndGetStatus' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/EvaluateAndGetStatus.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\EvaluationLogger' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/EvaluationLogger.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\FailRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/FailRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\GetRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/GetRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\IsEcommerceRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/IsEcommerceRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\IsWooExpressRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/IsWooExpressRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\NotRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/NotRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\NoteStatusRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/NoteStatusRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\OnboardingProfileRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/OnboardingProfileRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\OptionRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/OptionRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\OrRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/OrRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\OrderCountRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/OrderCountRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\OrdersProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/OrdersProvider.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\PassRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/PassRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\PluginVersionRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/PluginVersionRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\PluginsActivatedRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/PluginsActivatedRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\ProductCountRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/ProductCountRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\PublishAfterTimeRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/PublishAfterTimeRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\PublishBeforeTimeRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/PublishBeforeTimeRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\RuleEvaluator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/RuleEvaluator.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\RuleProcessorInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/RuleProcessorInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\StoredStateRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/StoredStateRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\StoredStateSetupForProducts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/StoredStateSetupForProducts.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\TotalPaymentsVolumeProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/TotalPaymentsVolumeProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\ArrayColumn' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/ArrayColumn.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\ArrayFlatten' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/ArrayFlatten.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\ArrayKeys' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/ArrayKeys.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\ArraySearch' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/ArraySearch.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\ArrayValues' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/ArrayValues.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\Count' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/Count.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\DotNotation' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/DotNotation.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\PrepareUrl' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/PrepareUrl.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\TransformerInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/TransformerInterface.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\Transformers\\TransformerService' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/Transformers/TransformerService.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\WCAdminActiveForProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/WCAdminActiveForProvider.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\WCAdminActiveForRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/WCAdminActiveForRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\RemoteSpecs\\RuleProcessors\\WooCommerceAdminUpdatedRuleProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/RemoteSpecs/RuleProcessors/WooCommerceAdminUpdatedRuleProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\ReportCSVEmail' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/ReportCSVEmail.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\ReportCSVExporter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/ReportCSVExporter.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\ReportExporter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/ReportExporter.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\ReportsSync' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/ReportsSync.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\Schedulers\\SchedulerTraits' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/Schedulers/SchedulerTraits.php'
 	),
 	'Automattic\\WooCommerce\\Admin\\WCAdminHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Admin/WCAdminHelper.php'
 	),
 	'Automattic\\WooCommerce\\Autoloader' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Autoloader.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\AIContent\\ContentProcessor' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/AIContent/ContentProcessor.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\AIContent\\PatternsDictionary' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/AIContent/PatternsDictionary.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\AIContent\\PatternsHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/AIContent/PatternsHelper.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\AIContent\\UpdatePatterns' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/AIContent/UpdatePatterns.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\AIContent\\UpdateProducts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/AIContent/UpdateProducts.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\AI\\Configuration' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/AI/Configuration.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\AI\\Connection' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/AI/Connection.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Assets' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Assets.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\AssetsController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/AssetsController.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Assets\\Api' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Assets/Api.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Assets\\AssetDataRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Assets/AssetDataRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockPatterns' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockPatterns.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTemplatesController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTemplatesController.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTemplatesRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTemplatesRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypesController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypesController.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AbstractBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractDynamicBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AbstractDynamicBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractInnerBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AbstractInnerBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractProductGrid' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AbstractProductGrid.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ActiveFilters' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ActiveFilters.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AddToCartForm.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AddToCartWithOptions.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptionsQuantitySelector' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AddToCartWithOptionsQuantitySelector.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AllProducts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AllProducts.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AllReviews' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AllReviews.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AtomicBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AtomicBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AttributeFilter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/AttributeFilter.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\Breadcrumbs' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/Breadcrumbs.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\Cart' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/Cart.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartAcceptedPaymentMethodsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartAcceptedPaymentMethodsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartCrossSellsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartCrossSellsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartCrossSellsProductsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartCrossSellsProductsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartExpressPaymentBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartExpressPaymentBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartItemsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartItemsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartLineItemsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartLineItemsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartLink' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartLink.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummaryBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummaryBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummaryCouponFormBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummaryCouponFormBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummaryDiscountBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummaryDiscountBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummaryFeeBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummaryFeeBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummaryHeadingBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummaryHeadingBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummaryShippingBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummaryShippingBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummarySubtotalBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummarySubtotalBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummaryTaxesBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummaryTaxesBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartOrderSummaryTotalsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartOrderSummaryTotalsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartTotalsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CartTotalsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CatalogSorting' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CatalogSorting.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\Checkout' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/Checkout.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutActionsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutActionsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutAdditionalInformationBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutAdditionalInformationBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutBillingAddressBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutBillingAddressBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutContactInformationBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutContactInformationBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutExpressPaymentBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutExpressPaymentBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutFieldsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutFieldsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderNoteBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderNoteBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummaryBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummaryBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummaryCartItemsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummaryCartItemsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummaryCouponFormBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummaryCouponFormBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummaryDiscountBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummaryDiscountBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummaryFeeBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummaryFeeBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummaryShippingBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummaryShippingBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummarySubtotalBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummarySubtotalBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummaryTaxesBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummaryTaxesBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutOrderSummaryTotalsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutOrderSummaryTotalsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutPaymentBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutPaymentBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutPickupOptionsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutPickupOptionsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutShippingAddressBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutShippingAddressBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutShippingMethodBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutShippingMethodBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutShippingMethodsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutShippingMethodsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutTermsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutTermsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CheckoutTotalsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CheckoutTotalsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ClassicShortcode' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ClassicShortcode.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ClassicTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ClassicTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ComingSoon' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ComingSoon.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CustomerAccount' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/CustomerAccount.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\EmptyCartBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/EmptyCartBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\EmptyMiniCartContentsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/EmptyMiniCartContentsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\FeaturedCategory' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/FeaturedCategory.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\FeaturedItem' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/FeaturedItem.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\FeaturedProduct' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/FeaturedProduct.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\FilledCartBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/FilledCartBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\FilledMiniCartContentsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/FilledMiniCartContentsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\FilterWrapper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/FilterWrapper.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\HandpickedProducts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/HandpickedProducts.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCart' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCart.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartCartButtonBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartCartButtonBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartCheckoutButtonBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartCheckoutButtonBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartContents' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartContents.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartFooterBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartFooterBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartItemsBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartItemsBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartProductsTableBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartProductsTableBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartShoppingButtonBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartShoppingButtonBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartTitleBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartTitleBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartTitleItemsCounterBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartTitleItemsCounterBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCartTitleLabelBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/MiniCartTitleLabelBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\AbstractOrderConfirmationBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/AbstractOrderConfirmationBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\AdditionalFields' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/AdditionalFields.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\AdditionalFieldsWrapper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/AdditionalFieldsWrapper.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\AdditionalInformation' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/AdditionalInformation.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\BillingAddress' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/BillingAddress.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\BillingWrapper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/BillingWrapper.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\CreateAccount' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/CreateAccount.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\Downloads' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/Downloads.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\DownloadsWrapper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/DownloadsWrapper.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\ShippingAddress' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/ShippingAddress.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\ShippingWrapper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/ShippingWrapper.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\Status' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/Status.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\Summary' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/Summary.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\Totals' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/Totals.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\OrderConfirmation\\TotalsWrapper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/OrderConfirmation/TotalsWrapper.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\PageContentWrapper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/PageContentWrapper.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\PriceFilter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/PriceFilter.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProceedToCheckoutBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProceedToCheckoutBlock.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductAverageRating' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductAverageRating.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductBestSellers' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductBestSellers.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductButton' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductButton.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCategories' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductCategories.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCategory' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductCategory.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCollection\\Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductCollection/Controller.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCollection\\HandlerRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductCollection/HandlerRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCollection\\NoResults' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductCollection/NoResults.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCollection\\QueryBuilder' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductCollection/QueryBuilder.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCollection\\Renderer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductCollection/Renderer.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCollection\\Utils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductCollection/Utils.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductDetails' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductDetails.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterActive' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterActive.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterAttribute' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterAttribute.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterCheckboxList' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterCheckboxList.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterChips' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterChips.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterClearButton' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterClearButton.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterPrice' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterPrice.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterPriceSlider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterPriceSlider.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterRating' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterRating.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterRemovableChips' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterRemovableChips.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilterStatus' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilterStatus.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductFilters' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductFilters.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductGallery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductGallery.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductGalleryLargeImage' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductGalleryLargeImage.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductGalleryLargeImageNextPrevious' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductGalleryLargeImageNextPrevious.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductGalleryPager' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductGalleryPager.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductGalleryThumbnails' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductGalleryThumbnails.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductImage' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductImage.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductImageGallery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductImageGallery.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductMeta' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductMeta.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductNew' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductNew.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductOnSale' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductOnSale.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductPrice' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductPrice.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductQuery.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductRating' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductRating.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductRatingCounter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductRatingCounter.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductRatingStars' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductRatingStars.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductResultsCount' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductResultsCount.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductReviews' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductReviews.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductSKU' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductSKU.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductSaleBadge' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductSaleBadge.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductSearch' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductSearch.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductStockIndicator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductStockIndicator.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductSummary' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductSummary.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductTag' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductTag.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductTitle' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductTitle.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductTopRated' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductTopRated.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductsByAttribute' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ProductsByAttribute.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\RatingFilter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/RatingFilter.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\RelatedProducts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/RelatedProducts.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ReviewsByCategory' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ReviewsByCategory.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ReviewsByProduct' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/ReviewsByProduct.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\SingleProduct' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/SingleProduct.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\StockFilter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/StockFilter.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\BlockTypes\\StoreNotices' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/BlockTypes/StoreNotices.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Bootstrap' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Bootstrap.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Package' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Package.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\CheckoutFields' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/CheckoutFields.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\CheckoutFieldsAdmin' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/CheckoutFieldsAdmin.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\CheckoutFieldsFrontend' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/CheckoutFieldsFrontend.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\CreateAccount' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/CreateAccount.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\DraftOrders' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/DraftOrders.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Email\\CustomerNewAccount' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/Email/CustomerNewAccount.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\FeatureGating' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/FeatureGating.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\GoogleAnalytics' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/GoogleAnalytics.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/Hydration.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Notices' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/Notices.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\OnboardingTasks\\ReviewCheckoutTask' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/OnboardingTasks/ReviewCheckoutTask.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Domain\\Services\\OnboardingTasks\\TasksController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/OnboardingTasks/TasksController.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Images\\Pexels' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Images/Pexels.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\InboxNotifications' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/InboxNotifications.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Installer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Installer.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Integrations\\IntegrationInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Integrations/IntegrationInterface.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Integrations\\IntegrationRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Integrations/IntegrationRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\InteractivityComponents\\CheckboxList' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/InteractivityComponents/CheckboxList.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\InteractivityComponents\\Dropdown' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/InteractivityComponents/Dropdown.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Library' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Library.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Migration' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Migration.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Options' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Options.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Package' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Package.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Patterns\\AIPatterns' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Patterns/AIPatterns.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Patterns\\PTKClient' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Patterns/PTKClient.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Patterns\\PTKPatternsStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Patterns/PTKPatternsStore.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Patterns\\PatternRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Patterns/PatternRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Payments\\Api' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Payments/Api.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Payments\\Integrations\\AbstractPaymentMethodType' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Payments/Integrations/AbstractPaymentMethodType.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Payments\\Integrations\\BankTransfer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Payments/Integrations/BankTransfer.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Payments\\Integrations\\CashOnDelivery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Payments/Integrations/CashOnDelivery.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Payments\\Integrations\\Cheque' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Payments/Integrations/Cheque.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Payments\\Integrations\\PayPal' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Payments/Integrations/PayPal.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Payments\\PaymentMethodRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Payments/PaymentMethodRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Payments\\PaymentMethodTypeInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Payments/PaymentMethodTypeInterface.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\QueryFilters' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/QueryFilters.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Registry\\AbstractDependencyType' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Registry/AbstractDependencyType.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Registry\\Container' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Registry/Container.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Registry\\FactoryType' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Registry/FactoryType.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Registry\\SharedType' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Registry/SharedType.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Shipping\\PickupLocation' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Shipping/PickupLocation.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Shipping/ShippingController.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\TemplateOptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/TemplateOptions.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\AbstractPageTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/AbstractPageTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\AbstractTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/AbstractTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\AbstractTemplateCompatibility' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/AbstractTemplateCompatibility.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\AbstractTemplatePart' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/AbstractTemplatePart.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ArchiveProductTemplatesCompatibility' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ArchiveProductTemplatesCompatibility.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\CartTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/CartTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\CheckoutHeaderTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/CheckoutHeaderTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\CheckoutTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/CheckoutTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ClassicTemplatesCompatibility' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ClassicTemplatesCompatibility.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonSocialLinksTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ComingSoonSocialLinksTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ComingSoonTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\MiniCartTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/MiniCartTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\OrderConfirmationTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/OrderConfirmationTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ProductAttributeTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ProductAttributeTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ProductCatalogTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ProductCatalogTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ProductCategoryTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ProductCategoryTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ProductSearchResultsTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ProductSearchResultsTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\ProductTagTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/ProductTagTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/SingleProductTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplateCompatibility' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Templates/SingleProductTemplateCompatibility.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Utils\\BlockHooksTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Utils/BlockHooksTrait.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Utils/BlockTemplateUtils.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Utils\\BlocksWpQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Utils/BlocksWpQuery.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Utils/CartCheckoutUtils.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Utils\\MiniCartUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Utils/MiniCartUtils.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Utils\\ProductGalleryUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Utils/ProductGalleryUtils.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Utils\\StyleAttributesUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Utils/StyleAttributesUtils.php'
 	),
 	'Automattic\\WooCommerce\\Blocks\\Utils\\Utils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Utils/Utils.php'
 	),
 	'Automattic\\WooCommerce\\Blueprint\\BuiltInExporters' => array(
@@ -2691,2699 +2691,2699 @@ return array(
 		'path'    => $vendorDir . '/woocommerce/blueprint/src/ZipExportedSchema.php'
 	),
 	'Automattic\\WooCommerce\\Caches\\OrderCache' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Caches/OrderCache.php'
 	),
 	'Automattic\\WooCommerce\\Caches\\OrderCacheController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Caches/OrderCacheController.php'
 	),
 	'Automattic\\WooCommerce\\Caching\\CacheEngine' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Caching/CacheEngine.php'
 	),
 	'Automattic\\WooCommerce\\Caching\\CacheException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Caching/CacheException.php'
 	),
 	'Automattic\\WooCommerce\\Caching\\CacheNameSpaceTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Caching/CacheNameSpaceTrait.php'
 	),
 	'Automattic\\WooCommerce\\Caching\\ObjectCache' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Caching/ObjectCache.php'
 	),
 	'Automattic\\WooCommerce\\Caching\\WPCacheEngine' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Caching/WPCacheEngine.php'
 	),
 	'Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Checkout/Helpers/ReserveStock.php'
 	),
 	'Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStockException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Checkout/Helpers/ReserveStockException.php'
 	),
 	'Automattic\\WooCommerce\\Container' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Container.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\CustomOrderTable\\CLIRunner' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/CustomOrderTable/CLIRunner.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\CustomOrderTable\\PostMetaToOrderMetaMigrator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/CustomOrderTable/PostMetaToOrderMetaMigrator.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\CustomOrderTable\\PostToOrderAddressTableMigrator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/CustomOrderTable/PostToOrderAddressTableMigrator.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\CustomOrderTable\\PostToOrderOpTableMigrator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/CustomOrderTable/PostToOrderOpTableMigrator.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\CustomOrderTable\\PostToOrderTableMigrator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/CustomOrderTable/PostToOrderTableMigrator.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\CustomOrderTable\\PostsToOrdersMigrationController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/CustomOrderTable/PostsToOrdersMigrationController.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\MetaToCustomTableMigrator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/MetaToCustomTableMigrator.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\MetaToMetaTableMigrator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/MetaToMetaTableMigrator.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\MigrationHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/MigrationHelper.php'
 	),
 	'Automattic\\WooCommerce\\Database\\Migrations\\TableMigrator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Database/Migrations/TableMigrator.php'
 	),
 	'Automattic\\WooCommerce\\Enums\\OrderInternalStatus' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Enums/OrderInternalStatus.php'
 	),
 	'Automattic\\WooCommerce\\Enums\\OrderStatus' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Enums/OrderStatus.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ActivityPanels' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ActivityPanels.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Analytics' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Analytics.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\BlockTemplates\\AbstractBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/BlockTemplates/AbstractBlock.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\BlockTemplates\\AbstractBlockTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/BlockTemplates/AbstractBlockTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\BlockTemplates\\Block' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/BlockTemplates/Block.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\BlockTemplates\\BlockContainerTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/BlockTemplates/BlockContainerTrait.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\BlockTemplates\\BlockFormattedTemplateTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/BlockTemplates/BlockFormattedTemplateTrait.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\BlockTemplates\\BlockTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/BlockTemplates/BlockTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\BlockTemplates\\BlockTemplateLogger' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/BlockTemplates/BlockTemplateLogger.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\CategoryLookup' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/CategoryLookup.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Coupons' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Coupons.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\CouponsMovedTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/CouponsMovedTrait.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\CustomerEffortScoreTracks' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/CustomerEffortScoreTracks.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\EmailPreview\\EmailPreview' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/EmailPreview/EmailPreview.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\EmailPreview\\EmailPreviewRestController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/EmailPreview/EmailPreviewRestController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Events' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Events.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\FeaturePlugin' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/FeaturePlugin.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Homescreen' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Homescreen.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ImportExport\\CSVUploadHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ImportExport/CSVUploadHelper.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Loader' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Loader.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Logging\\FileV2\\File' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Logging/FileV2/File.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Logging\\FileV2\\FileController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Logging/FileV2/FileController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Logging\\FileV2\\FileExporter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Logging/FileV2/FileExporter.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Logging\\FileV2\\FileListTable' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Logging/FileV2/FileListTable.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Logging\\FileV2\\SearchListTable' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Logging/FileV2/SearchListTable.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Logging\\LogHandlerFileV2' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Logging/LogHandlerFileV2.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Logging\\PageController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Logging/PageController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Logging\\Settings' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Logging/Settings.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Marketing' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Marketing.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Marketing\\MarketingSpecs' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Marketing/MarketingSpecs.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Marketplace' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Marketplace.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\MobileAppBanner' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/MobileAppBanner.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\AddFirstProduct' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/AddFirstProduct.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\ChoosingTheme' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/ChoosingTheme.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\CustomizeStoreWithBlocks' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/CustomizeStoreWithBlocks.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\CustomizingProductCatalog' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/CustomizingProductCatalog.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\EUVATNumber' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/EUVATNumber.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\EditProductsOnTheMove' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/EditProductsOnTheMove.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\EmailNotification' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/EmailNotification.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\FirstProduct' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/FirstProduct.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\GivingFeedbackNotes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/GivingFeedbackNotes.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\InstallJPAndWCSPlugins' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/InstallJPAndWCSPlugins.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\LaunchChecklist' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/LaunchChecklist.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MagentoMigration' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/MagentoMigration.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\ManageOrdersOnTheGo' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/ManageOrdersOnTheGo.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MarketingJetpack' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/MarketingJetpack.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MerchantEmailNotifications' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/MerchantEmailNotifications.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MigrateFromShopify' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/MigrateFromShopify.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MobileApp' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/MobileApp.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\NewSalesRecord' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/NewSalesRecord.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\OnboardingPayments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/OnboardingPayments.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\OnlineClothingStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/OnlineClothingStore.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\OrderMilestones' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/OrderMilestones.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\PaymentsMoreInfoNeeded' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/PaymentsMoreInfoNeeded.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\PaymentsRemindMeLater' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/PaymentsRemindMeLater.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\PerformanceOnMobile' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/PerformanceOnMobile.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\PersonalizeStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/PersonalizeStore.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\RealTimeOrderAlerts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/RealTimeOrderAlerts.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\SellingOnlineCourses' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/SellingOnlineCourses.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\TrackingOptIn' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/TrackingOptIn.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\UnsecuredReportFiles' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/UnsecuredReportFiles.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WooCommercePayments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/WooCommercePayments.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WooCommerceSubscriptions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/WooCommerceSubscriptions.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WooSubscriptionsNotes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Notes/WooSubscriptionsNotes.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\Onboarding' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/Onboarding.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingFonts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingFonts.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingHelper.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingIndustries' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingIndustries.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingJetpack' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingJetpack.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingMailchimp' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingMailchimp.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingProducts' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingProducts.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingProfile' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingProfile.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingSetupWizard' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingSetupWizard.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingSync' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Onboarding/OnboardingSync.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\COTRedirectionController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/COTRedirectionController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/Edit.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\EditLock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/EditLock.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\ListTable' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/ListTable.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\MetaBoxes\\CustomMetaBox' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/MetaBoxes/CustomMetaBox.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\MetaBoxes\\CustomerHistory' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/MetaBoxes/CustomerHistory.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\MetaBoxes\\OrderAttribution' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/MetaBoxes/OrderAttribution.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\MetaBoxes\\TaxonomiesMetaBox' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/MetaBoxes/TaxonomiesMetaBox.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/PageController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PostsRedirectionController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Orders/PostsRedirectionController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductForm\\Component' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductForm/Component.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductForm\\ComponentTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductForm/ComponentTrait.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductForm\\Field' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductForm/Field.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductForm\\FormFactory' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductForm/FormFactory.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductForm\\Section' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductForm/Section.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductForm\\Subsection' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductForm/Subsection.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductForm\\Tab' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductForm/Tab.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductReviews/Reviews.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\ReviewsCommentsOverrides' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductReviews/ReviewsCommentsOverrides.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\ReviewsListTable' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductReviews/ReviewsListTable.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\ReviewsUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ProductReviews/ReviewsUtil.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\RemoteFreeExtensions\\DefaultFreeExtensions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\RemoteFreeExtensions\\EvaluateExtension' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/RemoteFreeExtensions/EvaluateExtension.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\RemoteFreeExtensions\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/RemoteFreeExtensions/Init.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\RemoteFreeExtensions\\RemoteFreeExtensionsDataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/RemoteFreeExtensions/RemoteFreeExtensionsDataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\RemoteInboxNotifications' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/RemoteInboxNotifications.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Schedulers\\CustomersScheduler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Schedulers/CustomersScheduler.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Schedulers\\ImportInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Schedulers/ImportInterface.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Schedulers\\ImportScheduler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Schedulers/ImportScheduler.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Schedulers\\MailchimpScheduler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Schedulers/MailchimpScheduler.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Schedulers\\OrdersScheduler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Schedulers/OrdersScheduler.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentProviders' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/PaymentProviders.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentProviders\\PayPal' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/PaymentProviders/PayPal.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentProviders\\PaymentGateway' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/PaymentProviders/PaymentGateway.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentProviders\\Stripe' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/PaymentProviders/Stripe.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentProviders\\WCCore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/PaymentProviders/WCCore.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentProviders\\WooPayments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/PaymentProviders/WooPayments.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/Payments.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/PaymentsController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsRestController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/PaymentsRestController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Settings/Utils.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ShippingLabelBanner' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ShippingLabelBanner.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\ShippingLabelBannerDisplayRules' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/ShippingLabelBannerDisplayRules.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\SiteHealth' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/SiteHealth.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Suggestions\\Incentives\\Incentive' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Suggestions/Incentives/Incentive.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Suggestions\\Incentives\\WooPayments' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Suggestions/Incentives/WooPayments.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Suggestions\\PaymentExtensionSuggestionIncentives' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Suggestions/PaymentExtensionSuggestionIncentives.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Suggestions\\PaymentExtensionSuggestions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Suggestions/PaymentExtensionSuggestions.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Survey' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Survey.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\SystemStatusReport' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/SystemStatusReport.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\Translations' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/Translations.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\WCAdminAssets' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/WCAdminAssets.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\WCAdminSharedSettings' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/WCAdminSharedSettings.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\WCAdminUser' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/WCAdminUser.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\WCPayPromotion\\DefaultPromotions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/WCPayPromotion/DefaultPromotions.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\WCPayPromotion\\Init' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/WCPayPromotion/Init.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\WCPayPromotion\\WCPayPromotionDataSourcePoller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/WCPayPromotion/WCPayPromotionDataSourcePoller.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\WCPayPromotion\\WCPaymentGatewayPreInstallWCPayPromotion' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/WCPayPromotion/WCPaymentGatewayPreInstallWCPayPromotion.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Admin\\WcPayWelcomePage' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Admin/WcPayWelcomePage.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\AssignDefaultCategory' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/AssignDefaultCategory.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\BatchProcessing\\BatchProcessingController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/BatchProcessing/BatchProcessingController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\BatchProcessing\\BatchProcessorInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/BatchProcessing/BatchProcessorInterface.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Brands' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Brands.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ComingSoon\\ComingSoonAdminBarBadge' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ComingSoon/ComingSoonAdminBarBadge.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ComingSoon\\ComingSoonCacheInvalidator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ComingSoon/ComingSoonCacheInvalidator.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ComingSoon\\ComingSoonHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ComingSoon/ComingSoonHelper.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ComingSoon\\ComingSoonRequestHandler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ComingSoon/ComingSoonRequestHandler.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\CostOfGoodsSold\\CogsAwareRestControllerTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/CostOfGoodsSold/CogsAwareRestControllerTrait.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\CostOfGoodsSold\\CogsAwareTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/CostOfGoodsSold/CogsAwareTrait.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\CostOfGoodsSold\\CogsAwareUnitTestSuiteTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/CostOfGoodsSold/CogsAwareUnitTestSuiteTrait.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\CostOfGoodsSold\\CostOfGoodsSoldController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/CostOfGoodsSold/CostOfGoodsSoldController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\CustomMetaDataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/CustomMetaDataStore.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\CustomOrdersTableController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/CustomOrdersTableController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/DataSynchronizer.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\LegacyDataCleanup' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/LegacyDataCleanup.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\LegacyDataHandler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/LegacyDataHandler.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableDataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/OrdersTableDataStore.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableDataStoreMeta' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/OrdersTableDataStoreMeta.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableFieldQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/OrdersTableFieldQuery.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableMetaQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/OrdersTableMetaQuery.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/OrdersTableQuery.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableRefundDataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/OrdersTableRefundDataStore.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableSearchQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DataStores/Orders/OrdersTableSearchQuery.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\AbstractServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/AbstractServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ContainerException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ContainerException.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\Definition' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/Definition.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ExtendedContainer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ExtendedContainer.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/RuntimeContainer.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\AbstractInterfaceServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/AbstractInterfaceServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\AdminSettingsServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/AdminSettingsServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\AdminSuggestionsServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/AdminSuggestionsServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\AssignDefaultCategoryServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/AssignDefaultCategoryServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\BatchProcessingServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/BatchProcessingServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\COTMigrationServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/COTMigrationServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\ComingSoonServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/ComingSoonServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\CostOfGoodsSoldServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/CostOfGoodsSoldServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\DownloadPermissionsAdjusterServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/DownloadPermissionsAdjusterServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\EmailPreviewServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/EmailPreviewServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\EnginesServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/EnginesServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\FeaturesServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/FeaturesServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\ImportExportServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/ImportExportServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\LayoutTemplatesServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/LayoutTemplatesServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\LoggingServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/LoggingServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\MarketingServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/MarketingServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\MarketplaceServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/MarketplaceServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\ObjectCacheServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/ObjectCacheServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\OptionSanitizerServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/OptionSanitizerServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\OrderAdminServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/OrderAdminServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\OrderAttributionServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/OrderAttributionServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\OrderMetaBoxServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/OrderMetaBoxServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\OrdersControllersServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/OrdersControllersServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\OrdersDataStoreServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/OrdersDataStoreServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\ProductAttributesLookupServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/ProductAttributesLookupServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\ProductDownloadsServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/ProductDownloadsServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\ProductImageBySKUServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/ProductImageBySKUServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\ProductReviewsServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/ProductReviewsServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\ProxiesServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/ProxiesServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\RestockRefundedItemsAdjusterServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/RestockRefundedItemsAdjusterServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\StatsServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/StatsServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DependencyManagement\\ServiceProviders\\UtilsClassesServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DependencyManagement/ServiceProviders/UtilsClassesServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\DownloadPermissionsAdjuster' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/DownloadPermissionsAdjuster.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\FeaturesController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/FeaturesController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\ProductBlockEditor\\ProductTemplates\\AbstractProductFormTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/ProductBlockEditor/ProductTemplates/AbstractProductFormTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\ProductBlockEditor\\ProductTemplates\\DownloadableProductTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/ProductBlockEditor/ProductTemplates/DownloadableProductTrait.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\ProductBlockEditor\\ProductTemplates\\Group' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/ProductBlockEditor/ProductTemplates/Group.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\ProductBlockEditor\\ProductTemplates\\ProductBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/ProductBlockEditor/ProductTemplates/ProductBlock.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\ProductBlockEditor\\ProductTemplates\\ProductVariationTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/ProductBlockEditor/ProductTemplates/ProductVariationTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\ProductBlockEditor\\ProductTemplates\\Section' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/ProductBlockEditor/ProductTemplates/Section.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\ProductBlockEditor\\ProductTemplates\\SimpleProductTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/ProductBlockEditor/ProductTemplates/SimpleProductTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Features\\ProductBlockEditor\\ProductTemplates\\Subsection' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Features/ProductBlockEditor/ProductTemplates/Subsection.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Font\\FontFace' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Font/FontFace.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Font\\FontFamily' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Font/FontFamily.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Integrations\\WPConsentAPI' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Integrations/WPConsentAPI.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Logging\\RemoteLogger' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Logging/RemoteLogger.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Logging\\SafeGlobalFunctionProxy' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Logging/SafeGlobalFunctionProxy.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\McStats' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/McStats.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\OrderCouponDataMigrator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/OrderCouponDataMigrator.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\CouponsController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/CouponsController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\IppFunctions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/IppFunctions.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\MobileMessagingHandler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/MobileMessagingHandler.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\OrderActionsRestController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/OrderActionsRestController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\OrderAttributionBlocksController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/OrderAttributionBlocksController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\OrderAttributionController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/OrderAttributionController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\OrderStatusRestController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/OrderStatusRestController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\PaymentInfo' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/PaymentInfo.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Orders\\TaxesController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Orders/TaxesController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductAttributesLookup\\CLIRunner' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductAttributesLookup/CLIRunner.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductAttributesLookup\\DataRegenerator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductAttributesLookup/DataRegenerator.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductAttributesLookup\\Filterer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductAttributesLookup/Filterer.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductAttributesLookup\\LookupDataStore' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductAttributesLookup/LookupDataStore.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductDownloads\\ApprovedDirectories\\Admin\\SyncUI' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductDownloads/ApprovedDirectories/Admin/SyncUI.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductDownloads\\ApprovedDirectories\\Admin\\Table' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductDownloads/ApprovedDirectories/Admin/Table.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductDownloads\\ApprovedDirectories\\Admin\\UI' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductDownloads/ApprovedDirectories/Admin/UI.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductDownloads\\ApprovedDirectories\\ApprovedDirectoriesException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductDownloads/ApprovedDirectories/ApprovedDirectoriesException.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductDownloads\\ApprovedDirectories\\Register' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductDownloads/ApprovedDirectories/Register.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductDownloads\\ApprovedDirectories\\StoredUrl' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductDownloads/ApprovedDirectories/StoredUrl.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductDownloads\\ApprovedDirectories\\Synchronize' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductDownloads/ApprovedDirectories/Synchronize.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ProductImage\\MatchImageBySKU' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ProductImage/MatchImageBySKU.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ReceiptRendering\\ReceiptRenderingEngine' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ReceiptRendering/ReceiptRenderingEngine.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\ReceiptRendering\\ReceiptRenderingRestController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/ReceiptRendering/ReceiptRenderingRestController.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\RegisterHooksInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/RegisterHooksInterface.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\RestApiControllerBase' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/RestApiControllerBase.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\RestApiParameterUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/RestApiParameterUtil.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\RestockRefundedItemsAdjuster' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/RestockRefundedItemsAdjuster.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Settings\\OptionSanitizer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Settings/OptionSanitizer.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Traits\\AccessiblePrivateMethods' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Traits/AccessiblePrivateMethods.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Traits\\OrderAttributionMeta' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Traits/OrderAttributionMeta.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Traits\\ScriptDebug' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Traits/ScriptDebug.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\TransientFiles\\TransientFilesEngine' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/TransientFiles/TransientFilesEngine.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\ArrayUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/ArrayUtil.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\BlocksUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/BlocksUtil.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\COTMigrationUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/COTMigrationUtil.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\DatabaseUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/DatabaseUtil.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\FilesystemUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/FilesystemUtil.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\HtmlSanitizer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/HtmlSanitizer.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\LegacyRestApiStub' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/LegacyRestApiStub.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\PluginInstaller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/PluginInstaller.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\Types' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/Types.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\URL' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/URL.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\URLException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/URLException.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\Users' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/Users.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\Utilities\\WebhookUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/Utilities/WebhookUtil.php'
 	),
 	'Automattic\\WooCommerce\\Internal\\WCCom\\ConnectionHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Internal/WCCom/ConnectionHelper.php'
 	),
 	'Automattic\\WooCommerce\\LayoutTemplates\\LayoutTemplateRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/LayoutTemplates/LayoutTemplateRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Packages' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Packages.php'
 	),
 	'Automattic\\WooCommerce\\Proxies\\ActionsProxy' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Proxies/ActionsProxy.php'
 	),
 	'Automattic\\WooCommerce\\Proxies\\LegacyProxy' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Proxies/LegacyProxy.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\Package' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Package.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\Server' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Server.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\UnitTests\\Helpers\\AdminNotesHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/legacy/unit-tests/rest-api/Helpers/AdminNotesHelper.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\UnitTests\\Helpers\\CouponHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/legacy/unit-tests/rest-api/Helpers/CouponHelper.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\UnitTests\\Helpers\\CustomerHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/legacy/unit-tests/rest-api/Helpers/CustomerHelper.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\UnitTests\\Helpers\\OrderHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/legacy/unit-tests/rest-api/Helpers/OrderHelper.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\UnitTests\\Helpers\\ProductHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/legacy/unit-tests/rest-api/Helpers/ProductHelper.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\UnitTests\\Helpers\\QueueHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/legacy/unit-tests/rest-api/Helpers/QueueHelper.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\UnitTests\\Helpers\\SettingsHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/legacy/unit-tests/rest-api/Helpers/SettingsHelper.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\UnitTests\\Helpers\\ShippingHelper' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/legacy/unit-tests/rest-api/Helpers/ShippingHelper.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\Utilities\\ImageAttachment' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Utilities/ImageAttachment.php'
 	),
 	'Automattic\\WooCommerce\\RestApi\\Utilities\\SingletonTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Utilities/SingletonTrait.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Authentication' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Authentication.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Exceptions\\InvalidCartException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Exceptions/InvalidCartException.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Exceptions\\InvalidStockLevelsInCartException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Exceptions/InvalidStockLevelsInCartException.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Exceptions\\NotPurchasableException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Exceptions/NotPurchasableException.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Exceptions\\OutOfStockException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Exceptions/OutOfStockException.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Exceptions\\PartialOutOfStockException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Exceptions/PartialOutOfStockException.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Exceptions\\RouteException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Exceptions/RouteException.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Exceptions\\StockAvailabilityException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Exceptions/StockAvailabilityException.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Exceptions\\TooManyInCartException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Exceptions/TooManyInCartException.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Formatters' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Formatters.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Formatters\\CurrencyFormatter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Formatters/CurrencyFormatter.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Formatters\\DefaultFormatter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Formatters/DefaultFormatter.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Formatters\\FormatterInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Formatters/FormatterInterface.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Formatters\\HtmlFormatter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Formatters/HtmlFormatter.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Formatters\\MoneyFormatter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Formatters/MoneyFormatter.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Legacy' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Legacy.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Payments\\PaymentContext' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Payments/PaymentContext.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Payments\\PaymentResult' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Payments/PaymentResult.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\RoutesController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/RoutesController.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\RouteInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/RouteInterface.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AI\\Middleware' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/AI/Middleware.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AI\\Products' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/AI/Products.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/AbstractCartRoute.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/AbstractRoute.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractTermsRoute' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/AbstractTermsRoute.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Batch' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/Batch.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Cart' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/Cart.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartAddItem' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartAddItem.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartApplyCoupon' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartApplyCoupon.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartCoupons' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartCoupons.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartCouponsByCode' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartCouponsByCode.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartExtensions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartExtensions.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartItems' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartItems.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartItemsByKey' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartItemsByKey.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartRemoveCoupon' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartRemoveCoupon.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartRemoveItem' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartRemoveItem.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartSelectShippingRate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartSelectShippingRate.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartUpdateCustomer.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateItem' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CartUpdateItem.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Checkout' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/Checkout.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CheckoutOrder' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/CheckoutOrder.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Order' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/Order.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Patterns' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/Patterns.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductAttributeTerms' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductAttributeTerms.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductAttributes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductAttributes.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductAttributesById' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductAttributesById.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductCategories' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductCategories.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductCategoriesById' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductCategoriesById.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductCollectionData' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductCollectionData.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductReviews' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductReviews.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductTags' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductTags.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Products' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/Products.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductsById.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsBySlug' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Routes/V1/ProductsBySlug.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\SchemaController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/SchemaController.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\ExtendSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/ExtendSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\AI\\ProductsSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/AI/ProductsSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\AbstractAddressSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/AbstractAddressSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\AbstractSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/AbstractSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\BatchSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/BatchSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\BillingAddressSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/BillingAddressSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CartCouponSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/CartCouponSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CartExtensionsSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/CartExtensionsSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CartFeeSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/CartFeeSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CartItemSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/CartItemSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CartSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/CartSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CartShippingRateSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/CartShippingRateSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CheckoutOrderSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/CheckoutOrderSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CheckoutSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/CheckoutSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ErrorSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ErrorSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ImageAttachmentSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ImageAttachmentSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ItemSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ItemSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\OrderCouponSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/OrderCouponSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\OrderFeeSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/OrderFeeSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\OrderItemSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/OrderItemSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\OrderSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/OrderSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\PatternsSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/PatternsSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductAttributeSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ProductAttributeSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductCategorySchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ProductCategorySchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductCollectionDataSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ProductCollectionDataSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductReviewSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ProductReviewSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ProductSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ShippingAddressSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/ShippingAddressSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\TermSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Schemas/V1/TermSchema.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\SessionHandler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/SessionHandler.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\StoreApi' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/StoreApi.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\ArrayUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/ArrayUtils.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/CartController.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\CheckoutTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/CheckoutTrait.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\DraftOrderTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/DraftOrderTrait.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\JsonWebToken' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/JsonWebToken.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/LocalPickupUtils.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\NoticeHandler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/NoticeHandler.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\OrderAuthorizationTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/OrderAuthorizationTrait.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\OrderController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/OrderController.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\Pagination' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/Pagination.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\ProductItemTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/ProductItemTrait.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\ProductQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/ProductQuery.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\ProductQueryFilters' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/ProductQueryFilters.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/QuantityLimits.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\RateLimits' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/RateLimits.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\SanitizationUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/SanitizationUtils.php'
 	),
 	'Automattic\\WooCommerce\\StoreApi\\Utilities\\ValidationUtils' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/StoreApi/Utilities/ValidationUtils.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\CodeHacking\\CodeHacker' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/CodeHacking/CodeHacker.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\CodeHacking\\Hacks\\BypassFinalsHack' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/CodeHacking/Hacks/BypassFinalsHack.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\CodeHacking\\Hacks\\CodeHack' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/CodeHacking/Hacks/CodeHack.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\CodeHacking\\Hacks\\FunctionsMockerHack' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/CodeHacking/Hacks/FunctionsMockerHack.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\CodeHacking\\Hacks\\StaticMockerHack' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/CodeHacking/Hacks/StaticMockerHack.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\DependencyManagement\\MockableLegacyProxy' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/DependencyManagement/MockableLegacyProxy.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\DynamicDecorator' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/DynamicDecorator.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\FakeQueue' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/FakeQueue.php'
 	),
 	'Automattic\\WooCommerce\\Testing\\Tools\\TestingContainer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/Tools/TestingContainer.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\API\\LaunchYourStoreTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/API/LaunchYourStoreTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\API\\MarketingCampaignTypesTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/API/MarketingCampaignTypesTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\API\\MarketingCampaignsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/API/MarketingCampaignsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\API\\MarketingChannelsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/API/MarketingChannelsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\API\\MarketingRecommendationsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/API/MarketingRecommendationsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\API\\OnboardingPluginsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/API/OnboardingPluginsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\API\\PaymentGatewaySuggestionsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/API/PaymentGatewaySuggestionsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\Features\\Blueprint\\Importers\\ImportSetWCTaxRatesTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/Features/Blueprint/Importers/ImportSetWCTaxRatesTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\Features\\OnboardingTasks\\Tasks\\ExperimentalShippingRecommendationTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/Features/OnboardingTasks/Tasks/ExperimentalShippingRecommendationTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\Features\\Settings\\TransformerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/Features/Settings/TransformerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\Features\\ShippingPartnerSuggestions\\DefaultShippingPartnersTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/Features/ShippingPartnerSuggestions/DefaultShippingPartnersTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\Marketing\\MarketingCampaignTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/Marketing/MarketingCampaignTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\Marketing\\MarketingChannelsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/Marketing/MarketingChannelsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\ProductBlockEditor\\BlockRegistryTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/ProductBlockEditor/BlockRegistryTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\ProductBlockEditor\\ProductTemplates\\CustomProductFormTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/ProductBlockEditor/ProductTemplates/CustomProductFormTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Admin\\ProductBlockEditor\\ProductTemplates\\CustomProductFormTemplateTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Admin/ProductBlockEditor/ProductTemplates/CustomProductFormTemplateTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\AI\\ConnectionTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/AI/ConnectionTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\AssetsController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/AssetsController.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Assets\\AssetDataRegistry' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Assets/AssetDataRegistry.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockPatterns\\BlockPatterns' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockPatterns/BlockPatterns.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockTypesController' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockTypesController.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockTypes\\BlockHooksTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockTypes/BlockHooksTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockTypes\\Cart' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockTypes/Cart.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockTypes\\Checkout' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockTypes/Checkout.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockTypes\\MiniCart' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockTypes/MiniCart.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockTypes\\OrderConfirmation\\Totals' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockTypes/OrderConfirmation/Totals.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockTypes\\ProductCollection' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockTypes/ProductCollection.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\BlockTypes\\ProductQuery' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/BlockTypes/ProductQuery.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Bootstrap\\MainFile' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Bootstrap/MainFile.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Domain\\Package' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Domain/Package.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Domain\\Services\\DeleteDraftOrders' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Domain/Services/DeleteDraftOrders.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Domain\\Services\\Hydration' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Domain/Services/Hydration.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Helpers\\FixtureData' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Helpers/FixtureData.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Helpers\\TestValidateSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Helpers/TestValidateSchema.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Helpers\\ValidateSchema' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Helpers/ValidateSchema.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\MigrationTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/MigrationTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Mocks\\AssetDataRegistryMock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Mocks/AssetDataRegistryMock.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Mocks\\BlockHooksTestBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Mocks/BlockHooksTestBlock.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Mocks\\CartCheckoutUtilsMock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Mocks/CartCheckoutUtilsMock.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Mocks\\CheckoutMock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Mocks/CheckoutMock.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Mocks\\MockTestDependency' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Mocks/MockTestDependency.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Mocks\\OrderConfirmation\\TotalsMock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Mocks/OrderConfirmation/TotalsMock.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Mocks\\ProductCollectionMock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Mocks/ProductCollectionMock.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Mocks\\ProductQueryMock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Mocks/ProductQueryMock.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Patterns\\PTKClientTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Patterns/PTKClientTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Patterns\\PTKPatternsStoreTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Patterns/PTKPatternsStoreTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Patterns\\PatternRegistryTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Patterns/PatternRegistryTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Registry\\Container' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Registry/Container.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\ControllerTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/ControllerTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\ExtendSchemaTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/ExtendSchemaTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Formatters\\TestCurrencyFormatter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Formatters/TestCurrencyFormatter.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Formatters\\TestFormatters' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Formatters/TestFormatters.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Formatters\\TestHtmlFormatter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Formatters/TestHtmlFormatter.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Formatters\\TestMoneyFormatter' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Formatters/TestMoneyFormatter.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\MockSessionHandler' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/MockSessionHandler.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\RateLimitsTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/RateLimitsTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\AdditionalFields' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/AdditionalFields.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\Batch' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/Batch.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\Cart' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/Cart.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\CartCoupons' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/CartCoupons.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\CartExtensions' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/CartExtensions.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\CartItems' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/CartItems.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\Checkout' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/Checkout.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\ControllerTestCase' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/ControllerTestCase.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\Patterns' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/Patterns.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\ProductAttributeTerms' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/ProductAttributeTerms.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\ProductAttributes' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/ProductAttributes.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\ProductCollectionData' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/ProductCollectionData.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\ProductReviews' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/ProductReviews.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Routes\\Products' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Routes/Products.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Utilities\\CartControllerTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Utilities/CartControllerTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Utilities\\NoticeHandlerTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Utilities/NoticeHandlerTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Utilities\\OrderControllerTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Utilities/OrderControllerTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Utilities\\ProductQueryFiltersTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Utilities/ProductQueryFiltersTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\StoreApi\\Utilities\\SanitizationUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/StoreApi/Utilities/SanitizationUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Templates\\SingleProductTemplateCompatibilityTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Templates/SingleProductTemplateCompatibilityTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Templates\\SingleProductTemplateTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Templates/SingleProductTemplateTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Utils\\BlockTemplateUtilsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Utils/BlockTemplateUtilsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Utils\\CartCheckoutUtilsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Utils/CartCheckoutUtilsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Blocks\\Utils\\MiniCartUtilsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Blocks/Utils/MiniCartUtilsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Caching\\CacheExceptionTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Caching/CacheExceptionTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Caching\\InvalidObjectCacheClass' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Caching/InvalidObjectCacheClass.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Caching\\ObjectCacheTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Caching/ObjectCacheTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Caching\\OrderCacheTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Caching/OrderCacheTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Caching\\WPCacheEngineTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Caching/WPCacheEngineTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Database\\BlockHooksVersionTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Database/BlockHooksVersionTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Database\\Migrations\\CustomOrderTable\\PostsToOrdersMigrationControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Database/Migrations/CustomOrderTable/PostsToOrdersMigrationControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\BlockTemplates\\BlockTemplateTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/BlockTemplates/BlockTemplateTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\BlockTemplates\\BlockTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/BlockTemplates/BlockTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\BlockTemplates\\CustomBlock' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/BlockTemplates/CustomBlock.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\BlockTemplates\\CustomBlockInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/BlockTemplates/CustomBlockInterface.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\BlockTemplates\\CustomBlockTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/BlockTemplates/CustomBlockTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\BlockTemplates\\CustomBlockTemplateTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/BlockTemplates/CustomBlockTemplateTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\BlockTemplates\\CustomBlockTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/BlockTemplates/CustomBlockTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\EmailPreview\\EmailPreviewRestControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/EmailPreview/EmailPreviewRestControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\EmailPreview\\EmailPreviewTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/EmailPreview/EmailPreviewTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Logging\\FileV2\\FileControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Logging/FileV2/FileControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Logging\\FileV2\\FileTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Logging/FileV2/FileTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Logging\\LogHandlerFileV2Test' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Logging/LogHandlerFileV2Test.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Logging\\SettingsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Logging/SettingsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\MarketingRecommendations\\InitTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/MarketingRecommendations/InitTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Orders\\COTRedirectionControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Orders/COTRedirectionControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Orders\\EditLockTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Orders/EditLockTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Orders\\ListTableTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Orders/ListTableTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Orders\\MetaBoxes\\OrderAttributionTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Orders/MetaBoxes/OrderAttributionTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Orders\\PageControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Orders/PageControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\ProductReviews\\ReviewsCommentsOverridesTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/ProductReviews/ReviewsCommentsOverridesTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\ProductReviews\\ReviewsListTableTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/ProductReviews/ReviewsListTableTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\ProductReviews\\ReviewsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/ProductReviews/ReviewsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\ProductReviews\\ReviewsUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/ProductReviews/ReviewsUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\RemoteFreeExtensions\\DefaultFreeExtensionsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensionsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\RemoteFreeExtensions\\InitTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/RemoteFreeExtensions/InitTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Settings\\Mocks\\FakePaymentGateway' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Settings/Mocks/FakePaymentGateway.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Settings\\PaymentProvidersTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Settings/PaymentProvidersTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Settings\\PaymentProviders\\PaymentGatewayTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Settings/PaymentProviders/PaymentGatewayTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Settings\\PaymentProviders\\WCCoreTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Settings/PaymentProviders/WCCoreTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Settings\\PaymentsRestControllerIntegrationTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Settings/PaymentsRestControllerIntegrationTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Settings\\PaymentsRestControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Settings/PaymentsRestControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Settings\\PaymentsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Settings/PaymentsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Settings\\UtilsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Settings/UtilsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\ShippingPartnerSuggestions\\ShippingPartnerSuggestionsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/ShippingPartnerSuggestions/ShippingPartnerSuggestionsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Suggestions\\Incentives\\IncentiveTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Suggestions/Incentives/IncentiveTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Suggestions\\Incentives\\WooPaymentsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Suggestions/Incentives/WooPaymentsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Suggestions\\Mocks\\FakeIncentive' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Suggestions/Mocks/FakeIncentive.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Suggestions\\PaymentExtensionSuggestionIncentivesTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Suggestions/PaymentExtensionSuggestionIncentivesTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\Suggestions\\PaymentExtensionSuggestionsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/Suggestions/PaymentExtensionSuggestionsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\WCPayPromotion\\DefaultPromotionsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/WCPayPromotion/DefaultPromotionsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Admin\\WCPayPromotion\\InitTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Admin/WCPayPromotion/InitTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\AssignDefaultCategoryTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/AssignDefaultCategoryTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\BatchProcessing\\BatchProcessingControllerTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/BatchProcessing/BatchProcessingControllerTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ComingSoon\\ComingSoonCacheInvalidatorTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ComingSoon/ComingSoonCacheInvalidatorTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ComingSoon\\ComingSoonHelperTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ComingSoon/ComingSoonHelperTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ComingSoon\\ComingSoonRequestHandlerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ComingSoon/ComingSoonRequestHandlerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DataStores\\Orders\\DataSynchronizerTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DataStores/Orders/DataSynchronizerTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DataStores\\Orders\\LegacyDataCleanupTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DataStores/Orders/LegacyDataCleanupTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DataStores\\Orders\\LegacyDataHandlerTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DataStores/Orders/LegacyDataHandlerTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DataStores\\Orders\\OrdersTableDataStoreRestOrdersControllerTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DataStores/Orders/OrdersTableDataStoreRestOrdersControllerTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DataStores\\Orders\\OrdersTableDataStoreTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DataStores/Orders/OrdersTableDataStoreTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DataStores\\Orders\\OrdersTableQueryTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DataStores/Orders/OrdersTableQueryTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DataStores\\Orders\\OrdersTableRefundDataStoreTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DataStores/Orders/OrdersTableRefundDataStoreTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\AbstractInterfaceServiceProviderTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/AbstractInterfaceServiceProviderTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\AbstractServiceProviderTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/AbstractServiceProviderTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\AnotherClassInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/AnotherClassInterface.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassInterface.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassThatHasReferenceArgumentsInInit' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassThatHasReferenceArgumentsInInit.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassThatThrowsOnInit' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassThatThrowsOnInit.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithDependencies' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithDependencies.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithInjectionMethodArgumentWithoutTypeHint' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithInjectionMethodArgumentWithoutTypeHint.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithInterface.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithMultipleInterfaces' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithMultipleInterfaces.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithNestedDependencies' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithNestedDependencies.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithNoInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithNoInterface.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithNonFinalInjectionMethod' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithNonFinalInjectionMethod.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithPrivateInjectionMethod' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithPrivateInjectionMethod.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithRecursiveDependencies1' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithRecursiveDependencies1.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithRecursiveDependencies2' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithRecursiveDependencies2.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithRecursiveDependencies3' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithRecursiveDependencies3.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithScalarInjectionMethodArgument' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithScalarInjectionMethodArgument.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithStaticInjectionMethod' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithStaticInjectionMethod.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithStoreApiDependency' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithStoreApiDependency.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\ClassWithUntypedInjectionMethodArgument' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithUntypedInjectionMethodArgument.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\DependencyClass' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/DependencyClass.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\DependencyClassWithInnerDependency' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/DependencyClassWithInnerDependency.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\DerivedDependencyClass' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/DerivedDependencyClass.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\InnerDependencyClass' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/InnerDependencyClass.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleClasses\\SomeTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/SomeTrait.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\ClassA' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/ClassA.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\ClassAWithInterface1' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/ClassAWithInterface1.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\ClassAWithInterface2' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/ClassAWithInterface2.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\ClassB' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/ClassB.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\ClassBWithInterface1' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/ClassBWithInterface1.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\ClassBWithInterface2' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/ClassBWithInterface2.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\ProviderA' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/ProviderA.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\ProviderB' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/ProviderB.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExampleProviders\\TheInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleProviders/TheInterface.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\ExtendedContainerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExtendedContainerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\RuntimeContainerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/RuntimeContainerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DependencyManagement\\TestingContainerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/TestingContainerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\DownloadPermissionsAdjusterTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DownloadPermissionsAdjusterTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Features\\FeaturesControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Features/FeaturesControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Integration\\WPConsentAPITest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Integration/WPConsentAPITest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Logging\\RemoteLoggerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Logging/RemoteLoggerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Logging\\RemoteLoggerWithEnvironmentOverride' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Logging/RemoteLoggerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\McStatsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/McStatsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Orders\\IppFunctionsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Orders/IppFunctionsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Orders\\MobileMessagingHandlerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Orders/MobileMessagingHandlerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Orders\\OrderActionsRestControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Orders/OrderActionsRestControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Orders\\OrderAttributionControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Orders/OrderAttributionControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Orders\\OrderStatusRestControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Orders/OrderStatusRestControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Orders\\PaymentInfoTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Orders/PaymentInfoTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ProductAttributesLookup\\DataRegeneratorTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ProductAttributesLookup/DataRegeneratorTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ProductAttributesLookup\\FiltererTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ProductAttributesLookup/FiltererTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ProductAttributesLookup\\LookupDataStoreTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ProductAttributesLookup/LookupDataStoreTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ProductDownloads\\ApprovedDirectories\\RegisterTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ProductDownloads/ApprovedDirectories/RegisterTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ProductDownloads\\ApprovedDirectories\\SynchronizeTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ProductDownloads/ApprovedDirectories/SynchronizeTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\ReceiptRendering\\ReceiptRenderingEngineTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/ReceiptRendering/ReceiptRenderingEngineTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\RestApiParameterUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/RestApiParameterUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Telemetry\\TelemetryControllerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Telemetry/TelemetryControllerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Traits\\AccessiblePrivateMethodsTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Traits/AccessiblePrivateMethodsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Traits\\BaseClass' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Traits/AccessiblePrivateMethodsTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\TransientFiles\\TransientFilesEngineTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/TransientFiles/TransientFilesEngineTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Utilities\\COTMigrationUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Utilities/COTMigrationUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Utilities\\DatabaseUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Utilities/DatabaseUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Utilities\\FilesystemUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Utilities/FilesystemUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Utilities\\HtmlSanitizerTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Utilities/HtmlSanitizerTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Utilities\\TypesTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Utilities/TypesTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Utilities\\URLTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Utilities/URLTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\Utilities\\UsersTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/Utilities/UsersTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Internal\\WCCom\\ConnectionHelperTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/WCCom/ConnectionHelperTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\LayoutTemplates\\LayoutTemplateRegistryTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/LayoutTemplates/LayoutTemplateRegistryTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\LayoutTemplates\\TestLayoutTemplate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/LayoutTemplates/TestLayoutTemplate.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Proxies\\ClassThatDependsOnLegacyCodeTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Proxies/ClassThatDependsOnLegacyCodeTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Proxies\\DynamicDecoratorTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Proxies/DynamicDecoratorTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Proxies\\ExampleClasses\\ClassThatDependsOnLegacyCode' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Proxies/ExampleClasses/ClassThatDependsOnLegacyCode.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Proxies\\ExampleClasses\\ClassWithReplaceableMembers' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Proxies/ExampleClasses/ClassWithReplaceableMembers.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Proxies\\LegacyProxyTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Proxies/LegacyProxyTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Proxies\\MockableLegacyProxyTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Proxies/MockableLegacyProxyTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Utilities\\ArrayUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Utilities/ArrayUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Utilities\\DiscountsUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Utilities/DiscountsUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Utilities\\I18nUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Utilities/I18nUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Utilities\\NumberUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Utilities/NumberUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Utilities\\PluginUtilTests' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Utilities/PluginUtilTests.php'
 	),
 	'Automattic\\WooCommerce\\Tests\\Utilities\\StringUtilTest' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Utilities/StringUtilTest.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\ArrayUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/ArrayUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\DiscountsUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/DiscountsUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\FeaturesUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/FeaturesUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\I18nUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/I18nUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\LoggingUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/LoggingUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\NumberUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/NumberUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\OrderUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/OrderUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\PluginUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/PluginUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\RestApiUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/RestApiUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\StringUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/StringUtil.php'
 	),
 	'Automattic\\WooCommerce\\Utilities\\TimeUtil' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Utilities/TimeUtil.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\Detection\\MobileDetect' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/Detection/MobileDetect.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Argument\\ArgumentResolverInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Argument/ArgumentResolverInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Argument\\ArgumentResolverTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Argument/ArgumentResolverTrait.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Argument\\ClassName' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Argument/ClassName.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Argument\\ClassNameInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Argument/ClassNameInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Argument\\ClassNameWithOptionalValue' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Argument/ClassNameWithOptionalValue.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Argument\\RawArgument' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Argument/RawArgument.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Argument\\RawArgumentInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Argument/RawArgumentInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Container' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Container.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\ContainerAwareInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/ContainerAwareInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\ContainerAwareTrait' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/ContainerAwareTrait.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Definition\\Definition' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Definition/Definition.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Definition\\DefinitionAggregate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Definition/DefinitionAggregate.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Definition\\DefinitionAggregateInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Definition/DefinitionAggregateInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Definition\\DefinitionInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Definition/DefinitionInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Exception\\ContainerException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Exception/ContainerException.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Exception\\NotFoundException' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Exception/NotFoundException.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Inflector\\Inflector' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Inflector/Inflector.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Inflector\\InflectorAggregate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Inflector/InflectorAggregate.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Inflector\\InflectorAggregateInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Inflector/InflectorAggregateInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\Inflector\\InflectorInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/Inflector/InflectorInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\ReflectionContainer' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/ReflectionContainer.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\ServiceProvider\\AbstractServiceProvider' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/ServiceProvider/AbstractServiceProvider.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\ServiceProvider\\BootableServiceProviderInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/ServiceProvider/BootableServiceProviderInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\ServiceProvider\\ServiceProviderAggregate' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/ServiceProvider/ServiceProviderAggregate.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\ServiceProvider\\ServiceProviderAggregateInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/ServiceProvider/ServiceProviderAggregateInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\League\\Container\\ServiceProvider\\ServiceProviderInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/League/Container/ServiceProvider/ServiceProviderInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\Psr\\Container\\ContainerExceptionInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/Psr/Container/ContainerExceptionInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\Psr\\Container\\ContainerInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/Psr/Container/ContainerInterface.php'
 	),
 	'Automattic\\WooCommerce\\Vendor\\Psr\\Container\\NotFoundExceptionInterface' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/lib/packages/Psr/Container/NotFoundExceptionInterface.php'
 	),
 	'ClassWithLoadMethod' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithLoadMethod.php'
 	),
 	'ClassWithSingleton' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Internal/DependencyManagement/ExampleClasses/ClassWithSingleton.php'
 	),
 	'Composer\\Installers\\AglInstaller' => array(
@@ -5799,7 +5799,7 @@ return array(
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-container.php'
 	),
 	'Foo\\Bar\\ClassWithNonWooNamespace' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/tests/php/src/Proxies/ExampleClasses/ClassWithNonWooNamespace.php'
 	),
 	'Hook_Manager' => array(
@@ -7119,411 +7119,411 @@ return array(
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-version-selector.php'
 	),
 	'WC_Interactivity_Initial_State' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/src/Blocks/Interactivity/class-wc-interactivity-initial-state.php'
 	),
 	'WC_REST_CRUD_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php'
 	),
 	'WC_REST_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-controller.php'
 	),
 	'WC_REST_Coupons_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-coupons-controller.php'
 	),
 	'WC_REST_Coupons_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-coupons-v1-controller.php'
 	),
 	'WC_REST_Coupons_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-coupons-v2-controller.php'
 	),
 	'WC_REST_Customer_Downloads_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-customer-downloads-controller.php'
 	),
 	'WC_REST_Customer_Downloads_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-customer-downloads-v1-controller.php'
 	),
 	'WC_REST_Customer_Downloads_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-customer-downloads-v2-controller.php'
 	),
 	'WC_REST_Customers_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-customers-controller.php'
 	),
 	'WC_REST_Customers_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-customers-v1-controller.php'
 	),
 	'WC_REST_Customers_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-customers-v2-controller.php'
 	),
 	'WC_REST_Data_Continents_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-data-continents-controller.php'
 	),
 	'WC_REST_Data_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-data-controller.php'
 	),
 	'WC_REST_Data_Countries_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-data-countries-controller.php'
 	),
 	'WC_REST_Data_Currencies_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-data-currencies-controller.php'
 	),
 	'WC_REST_Layout_Templates_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-layout-templates-controller.php'
 	),
 	'WC_REST_Network_Orders_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-network-orders-controller.php'
 	),
 	'WC_REST_Network_Orders_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-network-orders-v2-controller.php'
 	),
 	'WC_REST_Order_Notes_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-order-notes-controller.php'
 	),
 	'WC_REST_Order_Notes_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-order-notes-v1-controller.php'
 	),
 	'WC_REST_Order_Notes_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-order-notes-v2-controller.php'
 	),
 	'WC_REST_Order_Refunds_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-order-refunds-controller.php'
 	),
 	'WC_REST_Order_Refunds_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-order-refunds-v1-controller.php'
 	),
 	'WC_REST_Order_Refunds_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-order-refunds-v2-controller.php'
 	),
 	'WC_REST_Orders_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-orders-controller.php'
 	),
 	'WC_REST_Orders_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-orders-v1-controller.php'
 	),
 	'WC_REST_Orders_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-orders-v2-controller.php'
 	),
 	'WC_REST_Payment_Gateways_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php'
 	),
 	'WC_REST_Payment_Gateways_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php'
 	),
 	'WC_REST_Posts_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php'
 	),
 	'WC_REST_Product_Attribute_Terms_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-attribute-terms-controller.php'
 	),
 	'WC_REST_Product_Attribute_Terms_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-product-attribute-terms-v1-controller.php'
 	),
 	'WC_REST_Product_Attribute_Terms_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-product-attribute-terms-v2-controller.php'
 	),
 	'WC_REST_Product_Attributes_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-attributes-controller.php'
 	),
 	'WC_REST_Product_Attributes_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-product-attributes-v1-controller.php'
 	),
 	'WC_REST_Product_Attributes_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-product-attributes-v2-controller.php'
 	),
 	'WC_REST_Product_Brands_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-brands-controller.php'
 	),
 	'WC_REST_Product_Brands_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-product-brands-v2-controller.php'
 	),
 	'WC_REST_Product_Categories_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-categories-controller.php'
 	),
 	'WC_REST_Product_Categories_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-product-categories-v1-controller.php'
 	),
 	'WC_REST_Product_Categories_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-product-categories-v2-controller.php'
 	),
 	'WC_REST_Product_Custom_Fields_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-custom-fields-controller.php'
 	),
 	'WC_REST_Product_Reviews_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php'
 	),
 	'WC_REST_Product_Reviews_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-product-reviews-v1-controller.php'
 	),
 	'WC_REST_Product_Reviews_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-product-reviews-v2-controller.php'
 	),
 	'WC_REST_Product_Shipping_Classes_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-shipping-classes-controller.php'
 	),
 	'WC_REST_Product_Shipping_Classes_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-product-shipping-classes-v1-controller.php'
 	),
 	'WC_REST_Product_Shipping_Classes_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-product-shipping-classes-v2-controller.php'
 	),
 	'WC_REST_Product_Tags_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-tags-controller.php'
 	),
 	'WC_REST_Product_Tags_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-product-tags-v1-controller.php'
 	),
 	'WC_REST_Product_Tags_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-product-tags-v2-controller.php'
 	),
 	'WC_REST_Product_Variations_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-variations-controller.php'
 	),
 	'WC_REST_Product_Variations_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-product-variations-v2-controller.php'
 	),
 	'WC_REST_Products_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-products-controller.php'
 	),
 	'WC_REST_Products_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-products-v1-controller.php'
 	),
 	'WC_REST_Products_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php'
 	),
 	'WC_REST_Refunds_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-refunds-controller.php'
 	),
 	'WC_REST_Report_Coupons_Totals_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-coupons-totals-controller.php'
 	),
 	'WC_REST_Report_Customers_Totals_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-customers-totals-controller.php'
 	),
 	'WC_REST_Report_Orders_Totals_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-orders-totals-controller.php'
 	),
 	'WC_REST_Report_Products_Totals_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-products-totals-controller.php'
 	),
 	'WC_REST_Report_Reviews_Totals_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-reviews-totals-controller.php'
 	),
 	'WC_REST_Report_Sales_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-sales-controller.php'
 	),
 	'WC_REST_Report_Sales_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-report-sales-v1-controller.php'
 	),
 	'WC_REST_Report_Sales_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-report-sales-v2-controller.php'
 	),
 	'WC_REST_Report_Top_Sellers_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-top-sellers-controller.php'
 	),
 	'WC_REST_Report_Top_Sellers_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-report-top-sellers-v1-controller.php'
 	),
 	'WC_REST_Report_Top_Sellers_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-report-top-sellers-v2-controller.php'
 	),
 	'WC_REST_Reports_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-reports-controller.php'
 	),
 	'WC_REST_Reports_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-reports-v1-controller.php'
 	),
 	'WC_REST_Reports_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-reports-v2-controller.php'
 	),
 	'WC_REST_Setting_Options_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php'
 	),
 	'WC_REST_Setting_Options_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php'
 	),
 	'WC_REST_Settings_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-settings-controller.php'
 	),
 	'WC_REST_Settings_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-settings-v2-controller.php'
 	),
 	'WC_REST_Shipping_Methods_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-shipping-methods-controller.php'
 	),
 	'WC_REST_Shipping_Methods_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-shipping-methods-v2-controller.php'
 	),
 	'WC_REST_Shipping_Zone_Locations_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-shipping-zone-locations-controller.php'
 	),
 	'WC_REST_Shipping_Zone_Locations_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-locations-v2-controller.php'
 	),
 	'WC_REST_Shipping_Zone_Methods_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-shipping-zone-methods-controller.php'
 	),
 	'WC_REST_Shipping_Zone_Methods_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php'
 	),
 	'WC_REST_Shipping_Zones_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-shipping-zones-controller.php'
 	),
 	'WC_REST_Shipping_Zones_Controller_Base' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-shipping-zones-controller-base.php'
 	),
 	'WC_REST_Shipping_Zones_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zones-v2-controller.php'
 	),
 	'WC_REST_System_Status_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-system-status-controller.php'
 	),
 	'WC_REST_System_Status_Tools_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-system-status-tools-controller.php'
 	),
 	'WC_REST_System_Status_Tools_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-system-status-tools-v2-controller.php'
 	),
 	'WC_REST_System_Status_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php'
 	),
 	'WC_REST_Tax_Classes_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-tax-classes-controller.php'
 	),
 	'WC_REST_Tax_Classes_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-tax-classes-v1-controller.php'
 	),
 	'WC_REST_Tax_Classes_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-tax-classes-v2-controller.php'
 	),
 	'WC_REST_Taxes_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-taxes-controller.php'
 	),
 	'WC_REST_Taxes_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php'
 	),
 	'WC_REST_Taxes_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-taxes-v2-controller.php'
 	),
 	'WC_REST_Telemetry_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Telemetry/class-wc-rest-telemetry-controller.php'
 	),
 	'WC_REST_Terms_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-terms-controller.php'
 	),
 	'WC_REST_Webhook_Deliveries_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-webhook-deliveries-v1-controller.php'
 	),
 	'WC_REST_Webhook_Deliveries_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-webhook-deliveries-v2-controller.php'
 	),
 	'WC_REST_Webhooks_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version3/class-wc-rest-webhooks-controller.php'
 	),
 	'WC_REST_Webhooks_V1_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php'
 	),
 	'WC_REST_Webhooks_V2_Controller' => array(
-		'version' => '9.6.1.0',
+		'version' => '9.6.2.0',
 		'path'    => $baseDir . '/includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php'
 	),
 );

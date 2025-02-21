@@ -1,9 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 /**
  * @var Resource $resource The Resource object.
