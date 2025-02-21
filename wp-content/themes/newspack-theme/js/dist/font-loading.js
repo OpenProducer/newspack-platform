@@ -1,0 +1,1 @@
+(()=>{const n=window.newspackFontLoading?.fonts||[];Promise.all(n.map((n=>document.fonts.load(`1rem ${n}`)))).then((o=>{o.length===n.length&&document.body.classList.remove("newspack--font-loading")}))})();

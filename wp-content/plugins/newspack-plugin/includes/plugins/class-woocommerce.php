@@ -20,6 +20,7 @@ class WooCommerce {
 	public static function init() {
 		add_action( 'wp_loaded', [ __CLASS__, 'disable_wc_author_archive_override' ] );
 		add_filter( 'woocommerce_rest_prepare_shop_order_object', [ __CLASS__, 'modify_shop_order_wc_rest_api_payload' ] );
+		add_filter( 'woocommerce_create_pages', [ __CLASS__, 'use_shortcodes_for_cart_checkout' ] );
 	}
 
 	/**
@@ -51,6 +52,19 @@ class WooCommerce {
 		}
 		$response->set_data( $data );
 		return $response;
+	}
+
+	/**
+	 * Override the default page contents when creating the WooCommerce Cart and Checkout pages.
+	 *
+	 * @param array $woocommerce_pages Defaults for WooCommerce pages created on install.
+	 * @return array
+	 */
+	public static function use_shortcodes_for_cart_checkout( $woocommerce_pages ) {
+		$woocommerce_pages['cart']['content'] = '<!-- wp:shortcode -->[woocommerce_cart]<!-- /wp:shortcode -->';
+		$woocommerce_pages['checkout']['content'] = '<!-- wp:shortcode -->[woocommerce_checkout]<!-- /wp:shortcode -->';
+
+		return $woocommerce_pages;
 	}
 }
 WooCommerce::init();

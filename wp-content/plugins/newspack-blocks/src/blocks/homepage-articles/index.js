@@ -22,7 +22,7 @@ const { name, attributes, category } = metadata;
 // Name must be exported separately.
 export { name };
 
-export const title = __( 'Homepage Posts', 'newspack-blocks' );
+export const title = __( 'Content Loop', 'newspack-blocks' );
 
 export const icon = (
 	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -48,11 +48,23 @@ export const settings = {
 		__( 'posts', 'newspack-blocks' ),
 		__( 'articles', 'newspack-blocks' ),
 		__( 'latest', 'newspack-blocks' ),
+		__( 'homepage', 'newspack-blocks' ),
+		__( 'query', 'newspack-blocks' ),
 	],
-	description: __( 'A block for displaying homepage posts.', 'newspack-blocks' ),
+	description: __(
+		'An advanced block that allows displaying content based on different parameters and visual configurations.',
+		'newspack-blocks'
+	),
 	styles: [
-		{ name: 'default', label: _x( 'Default', 'block style', 'newspack-blocks' ), isDefault: true },
-		{ name: 'borders', label: _x( 'Borders', 'block style', 'newspack-blocks' ) },
+		{
+			name: 'default',
+			label: _x('Default', 'block style', 'newspack-blocks'),
+			isDefault: true,
+		},
+		{
+			name: 'borders',
+			label: _x('Borders', 'block style', 'newspack-blocks'),
+		},
 	],
 	supports: {
 		html: false,

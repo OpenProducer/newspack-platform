@@ -155,6 +155,9 @@ class Co_Authors_Plus {
 		$unlinked_guest_authors = get_posts( $get_posts_args );
 		WP_CLI::line( sprintf( 'Found %d guest author(s) not linked to any WP User.', count( $unlinked_guest_authors ) ) );
 
+		$updated_users_count = 0;
+		$created_users_count = 0;
+
 		foreach ( $unlinked_guest_authors as $guest_author ) {
 			WP_CLI::line( '' );
 			$post_meta = array_map(
@@ -171,38 +174,87 @@ class Co_Authors_Plus {
 				}
 			}
 
-			$user_login = $post_meta['cap-user_login'];
+			$guest_author_login = $post_meta['cap-user_login'];
 
 			$user_data = [
-				'user_login'      => $user_login,
-				'user_nicename'   => isset( $post_meta['cap-user_login'] ) ? $post_meta['cap-user_login'] : '',
-				'user_url'        => isset( $post_meta['cap-website'] ) ? $post_meta['cap-website'] : '',
-				'user_pass'       => wp_generate_password(),
-				'role'            => \Newspack\Guest_Contributor_Role::CONTRIBUTOR_NO_EDIT_ROLE_NAME,
-				'display_name'    => isset( $post_meta['cap-display_name'] ) ? $post_meta['cap-display_name'] : '',
-				'first_name'      => isset( $post_meta['cap-first_name'] ) ? $post_meta['cap-first_name'] : '',
-				'last_name'       => isset( $post_meta['cap-last_name'] ) ? $post_meta['cap-last_name'] : '',
-				'description'     => isset( $post_meta['cap-description'] ) ? $post_meta['cap-description'] : '',
-				'user_registered' => $guest_author->post_date,
-				'meta_input'      => [
+				'user_url'     => isset( $post_meta['cap-website'] ) ? $post_meta['cap-website'] : '',
+				'display_name' => isset( $post_meta['cap-display_name'] ) ? trim( $post_meta['cap-display_name'] ) : '',
+				'meta_input'   => [
 					'_np_migrated_cap_guest_author' => $guest_author->ID,
 				],
 			];
 
-			if ( isset( $post_meta['cap-user_email'] ) && ! empty( $post_meta['cap-user_email'] ) ) {
-				$user_data['user_email'] = $post_meta['cap-user_email'];
-			} else {
-				$dummy_email = \Newspack\Guest_Contributor_Role::get_dummy_email_address( '_migrated-' . $guest_author->ID . '-' . $user_login );
-				$user_data['user_email'] = $dummy_email;
-				if ( self::$verbose ) {
-					WP_CLI::line( sprintf( 'Missing email for Guest Author, email address will be updated to %s.', $dummy_email ) );
-				}
+			if ( ! empty( $post_meta['cap-first_name'] ) ) {
+				$user_data['first_name'] = $post_meta['cap-first_name'];
+			}
+			if ( ! empty( $post_meta['cap-last_name'] ) ) {
+				$user_data['last_name'] = $post_meta['cap-last_name'];
+			}
+			if ( ! empty( $post_meta['cap-description'] ) ) {
+				$user_data['description'] = $post_meta['cap-description'];
 			}
 
-			$existing_user = get_user_by( 'login', $user_login );
-			if ( $existing_user !== false ) {
-				WP_CLI::warning( sprintf( 'User with login %s already exists, it will be updated.', $user_login ) );
+			/**
+			 * CoAuthors plus assign users to posts using the author taxonomy. There is one term for each author.
+			 * The term is the user->user_nicename. In case of Guest Authors, it's the cap-user_login.
+			 * That's why here we see if there are already users with the same nicename. If there are, the posts are actually already assigned to them
+			 * and to the Guest Author at the same time, which is kind of a broken state. But in this case, we just need to delete the GA and the posts will
+			 * already be assigned to this existing user.
+			 */
+			global $wpdb;
+			$existing_user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_nicename = %s", $guest_author_login ) ); //phpcs:ignore
+			$updating = false;
+
+			if ( $existing_user ) {
+				$updated_users_count++;
 				$user_data['ID'] = $existing_user->ID;
+				$user_data['user_login'] = $existing_user->user_login;
+				$updating = true;
+
+				if ( self::$verbose ) {
+					WP_CLI::line( sprintf( 'User with nicename %s already exists, it will be updated.', $guest_author_login ) );
+					if ( $post_meta['cap-display_name'] !== $existing_user->display_name ) {
+						WP_CLI::line( sprintf( 'Display name will be updated from %s to %s', $existing_user->display_name, $post_meta['cap-display_name'] ) );
+					}
+					WP_CLI::line( 'Values before the migration stored in _np_cap_guest_author_migration_data user meta.' );
+				}
+				$migration_data = [
+					'info'         => 'User data before Guest Authors migration executed on ' . gmdate( 'Y-m-d H:i:s' ),
+					'display_name' => $existing_user->display_name,
+					'first_name'   => get_user_meta( $existing_user->ID, 'first_name', true ),
+					'last_name'    => get_user_meta( $existing_user->ID, 'last_name', true ),
+					'description'  => get_user_meta( $existing_user->ID, 'description', true ),
+				];
+				add_user_meta( $existing_user->ID, '_np_cap_guest_author_migration_data', $migration_data );
+			} else {
+				$created_users_count++;
+				$user_data['role']            = \Newspack\Guest_Contributor_Role::CONTRIBUTOR_NO_EDIT_ROLE_NAME;
+				$user_data['user_registered'] = $guest_author->post_date;
+				$user_data['user_login']      = $guest_author_login;
+				$user_data['user_nicename']   = $guest_author_login;
+				$user_data['user_pass']       = wp_generate_password();
+
+				if ( ! empty( $post_meta['cap-user_email'] ) ) {
+					$user_data['user_email'] = $post_meta['cap-user_email'];
+				} else {
+					$dummy_email = \Newspack\Guest_Contributor_Role::get_dummy_email_address( '_migrated-' . $guest_author->ID . '-' . $guest_author_login );
+					$user_data['user_email'] = $dummy_email;
+					if ( self::$verbose ) {
+						WP_CLI::line( sprintf( 'Missing email for Guest Author, email address will be updated to %s.', $dummy_email ) );
+					}
+				}
+
+				// Check if a user with this email address already exists (they might be a Subscriber).
+				$user = get_user_by( 'email', $user_data['user_email'] );
+				if ( $user !== false ) {
+					$new_email_address = '_migrated-' . $guest_author->ID . '-' . $user_data['user_email'];
+					if ( self::$verbose ) {
+						WP_CLI::line( sprintf( 'User with email %s already exists, email address will be updated to %s.', $user_data['user_email'], $new_email_address ) );
+					}
+					// Update the new user (non-editing contributor) email address.
+					// Since they won't need to log in, this email address does not have to be real.
+					$user_data['user_email'] = $new_email_address;
+				}
 			}
 
 			foreach ( array_values( \Newspack\Authors_Custom_Fields::USER_META_NAMES ) as $meta_key ) {
@@ -211,29 +263,31 @@ class Co_Authors_Plus {
 				}
 			}
 
-			// Check if a user with this email address already exists (they might be a Subscriber).
-			$user = get_user_by( 'email', $user_data['user_email'] );
-			if ( $user !== false ) {
-				$new_email_address = '_migrated-' . $guest_author->ID . '-' . $user_data['user_email'];
-				if ( self::$verbose ) {
-					WP_CLI::line( sprintf( 'User with email %s already exists, email address will be updated to %s.', $user_data['user_email'], $new_email_address ) );
-				}
-				// Update the new user (non-editing contributor) email address.
-				// Since they won't need to log in, this email address does not have to be real.
-				$user_data['user_email'] = $new_email_address;
-			}
-
 			if ( self::$live ) {
-				$user_id = \wp_insert_user( $user_data );
+				if ( $updating ) {
+					$user_id = wp_update_user( $user_data );
+				} else {
+					$user_id = wp_insert_user( $user_data );
+				}
+
 				if ( is_wp_error( $user_id ) ) {
-					WP_CLI::warning( sprintf( 'Could not create user: %s', $user_id->get_error_message() ) );
+					WP_CLI::warning( sprintf( 'Could not create/update user: %s', $user_id->get_error_message() ) );
 					continue;
 				}
-				WP_CLI::success( sprintf( 'User created successfully (#%d).', $user_id ) );
+				WP_CLI::success( sprintf( 'User created/updated successfully (#%d).', $user_id ) );
 
 				self::assign_user_avatar( $guest_author, $user_id );
 				self::delete_guest_author_post( $guest_author->ID );
+			} else {
+				WP_CLI::line( sprintf( 'Would create/update user %s from Guest Author #%d. Payload: %s', $post_meta['cap-display_name'], $guest_author->ID, wp_json_encode( $user_data ) ) );
 			}
+		}
+		if ( self::$live ) {
+			WP_CLI::line( '' );
+			WP_CLI::line( sprintf( 'Created %d user(s) and updated %d user(s).', $created_users_count, $updated_users_count ) );
+		} else {
+			WP_CLI::line( '' );
+			WP_CLI::line( sprintf( 'Would create %d user(s) and update %d user(s).', $created_users_count, $updated_users_count ) );
 		}
 	}
 

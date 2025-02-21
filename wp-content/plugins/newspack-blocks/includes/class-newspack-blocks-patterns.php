@@ -73,7 +73,7 @@ class Newspack_Blocks_Patterns {
 				);
 			}
 
-			// Homepage Posts: pages only.
+			// Content Loop: pages only.
 			if ( null === $post_type || 'page' === $post_type ) {
 				array_push(
 					$block_patterns,
@@ -155,7 +155,7 @@ class Newspack_Blocks_Patterns {
 			);
 			register_block_pattern_category(
 				'newspack-homepage-posts',
-				[ 'label' => __( 'Newspack Homepage Posts', 'newspack-blocks' ) ]
+				[ 'label' => __( 'Newspack Content Loop', 'newspack-blocks' ) ]
 			);
 			register_block_pattern_category(
 				'newspack-subscribe',

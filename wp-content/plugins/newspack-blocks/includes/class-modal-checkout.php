@@ -165,6 +165,7 @@ final class Modal_Checkout {
 		add_filter( 'option_woocommerce_woocommerce_payments_settings', [ __CLASS__, 'filter_woocommerce_payments_settings' ] );
 		add_action( 'init', [ __CLASS__, 'unhook_woocommerce_payments_update_billing_fields' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'update_password_strength_message' ], 9999 );
+		add_filter( 'woocommerce_enforce_password_strength_meter_on_checkout', '__return_true' );
 
 		/** Custom handling for registered users. */
 		add_filter( 'woocommerce_checkout_customer_id', [ __CLASS__, 'associate_existing_user' ] );
@@ -947,6 +948,15 @@ final class Modal_Checkout {
 				]
 			);
 		}
+		// OneSignal.
+		array_push(
+			$remove_list,
+			[
+				'hook'     => 'wp_head',
+				'callback' => 'onesignal_init',
+			]
+		);
+
 		/**
 		 * Filters the hooks to remove from the modal checkout.
 		 *

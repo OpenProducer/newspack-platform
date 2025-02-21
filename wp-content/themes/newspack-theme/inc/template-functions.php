@@ -258,6 +258,11 @@ function newspack_body_classes( $classes ) {
 		$classes[] = 'fw-stacked';
 	}
 
+	// If custom fonts are used, add a class indicating that fonts will be loaded. The class will be removed by JS.
+	if ( ! empty( newspack_get_used_custom_fonts() ) ) {
+		$classes[] = 'newspack--font-loading';
+	}
+
 	return $classes;
 }
 add_filter( 'body_class', 'newspack_body_classes' );

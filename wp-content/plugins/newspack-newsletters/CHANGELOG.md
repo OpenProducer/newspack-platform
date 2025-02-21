@@ -1,3 +1,10 @@
+## [3.8.1](https://github.com/Automattic/newspack-newsletters/compare/v3.8.0...v3.8.1) (2025-02-17)
+
+
+### Bug Fixes
+
+* avoid moving cursor when editing Subject input field ([#1748](https://github.com/Automattic/newspack-newsletters/issues/1748)) ([34a5632](https://github.com/Automattic/newspack-newsletters/commit/34a56320bcbf19b750355e3840f9772cae2824ad))
+
 # [3.8.0](https://github.com/Automattic/newspack-newsletters/compare/v3.7.5...v3.8.0) (2025-02-03)
 
 
