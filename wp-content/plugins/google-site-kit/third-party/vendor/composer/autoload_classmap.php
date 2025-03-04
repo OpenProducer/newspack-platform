@@ -139,6 +139,7 @@ return array(
     'Google\\Site_Kit_Dependencies\\Google\\Service\\AnalyticsData\\DimensionMetadata' => $baseDir . '/google/apiclient-services/src/AnalyticsData/DimensionMetadata.php',
     'Google\\Site_Kit_Dependencies\\Google\\Service\\AnalyticsData\\DimensionOrderBy' => $baseDir . '/google/apiclient-services/src/AnalyticsData/DimensionOrderBy.php',
     'Google\\Site_Kit_Dependencies\\Google\\Service\\AnalyticsData\\DimensionValue' => $baseDir . '/google/apiclient-services/src/AnalyticsData/DimensionValue.php',
+    'Google\\Site_Kit_Dependencies\\Google\\Service\\AnalyticsData\\EmptyFilter' => $baseDir . '/google/apiclient-services/src/AnalyticsData/EmptyFilter.php',
     'Google\\Site_Kit_Dependencies\\Google\\Service\\AnalyticsData\\Filter' => $baseDir . '/google/apiclient-services/src/AnalyticsData/Filter.php',
     'Google\\Site_Kit_Dependencies\\Google\\Service\\AnalyticsData\\FilterExpression' => $baseDir . '/google/apiclient-services/src/AnalyticsData/FilterExpression.php',
     'Google\\Site_Kit_Dependencies\\Google\\Service\\AnalyticsData\\FilterExpressionList' => $baseDir . '/google/apiclient-services/src/AnalyticsData/FilterExpressionList.php',

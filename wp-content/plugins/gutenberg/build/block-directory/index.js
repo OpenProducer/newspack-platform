@@ -103,7 +103,6 @@ const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// external ["wp","editor"]
 const external_wp_editor_namespaceObject = window["wp"]["editor"];
 ;// ./packages/block-directory/build-module/store/reducer.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -209,7 +208,6 @@ const errorNotices = (state = {}, action) => {
 ;// external ["wp","blockEditor"]
 const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
 ;// ./packages/block-directory/build-module/store/utils/has-block-type.js
-/* wp:polyfill */
 /**
  * Check if a block list contains a specific block type. Recursively searches
  * through `innerBlocks` if they exist.
@@ -237,7 +235,6 @@ function hasBlockType(blockType, blocks = []) {
 }
 
 ;// ./packages/block-directory/build-module/store/selectors.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -360,7 +357,6 @@ const external_wp_notices_namespaceObject = window["wp"]["notices"];
 ;// external ["wp","url"]
 const external_wp_url_namespaceObject = window["wp"]["url"];
 ;// ./packages/block-directory/build-module/store/load-assets.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -452,7 +448,6 @@ function getPluginUrl(block) {
 }
 
 ;// ./packages/block-directory/build-module/store/actions.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1223,7 +1218,6 @@ function camelCase(input, options) {
 }
 
 ;// ./packages/block-directory/build-module/store/resolvers.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1300,7 +1294,6 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, 
 (0,external_wp_data_namespaceObject.register)(store);
 
 ;// ./packages/block-directory/build-module/components/auto-block-uninstaller/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1430,7 +1423,6 @@ const starEmpty = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(
 /* harmony default export */ const star_empty = (starEmpty);
 
 ;// ./packages/block-directory/build-module/components/block-ratings/stars.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1687,7 +1679,6 @@ function DownloadableBlockListItem({
 /* harmony default export */ const downloadable_block_list_item = (DownloadableBlockListItem);
 
 ;// ./packages/block-directory/build-module/components/downloadable-blocks-list/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1786,21 +1777,6 @@ function DownloadableBlocksInserterPanel({
 }
 /* harmony default export */ const inserter_panel = (DownloadableBlocksInserterPanel);
 
-;// ./packages/icons/build-module/library/block-default.js
-/**
- * WordPress dependencies
- */
-
-
-const blockDefault = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M19 8h-1V6h-5v2h-2V6H6v2H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm.5 10c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5v-8c0-.3.2-.5.5-.5h14c.3 0 .5.2.5.5v8z"
-  })
-});
-/* harmony default export */ const block_default = (blockDefault);
-
 ;// ./packages/block-directory/build-module/components/downloadable-blocks-panel/no-results.js
 /**
  * WordPress dependencies
@@ -1808,17 +1784,13 @@ const blockDefault = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.js
 
 
 
-
 function DownloadableBlocksNoResults() {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "block-editor-inserter__no-results",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icon, {
-        className: "block-editor-inserter__no-results-icon",
-        icon: block_default
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
         children: (0,external_wp_i18n_namespaceObject.__)('No results found.')
-      })]
+      })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "block-editor-inserter__tips",
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Tip, {
@@ -1833,7 +1805,6 @@ function DownloadableBlocksNoResults() {
 /* harmony default export */ const no_results = (DownloadableBlocksNoResults);
 
 ;// ./packages/block-directory/build-module/components/downloadable-blocks-panel/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -1982,7 +1953,6 @@ function InserterMenuDownloadableBlocksPanel() {
 /* harmony default export */ const inserter_menu_downloadable_blocks_panel = (InserterMenuDownloadableBlocksPanel);
 
 ;// ./packages/block-directory/build-module/components/compact-list/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2034,7 +2004,6 @@ function CompactList({
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -2047,7 +2016,6 @@ function InstalledBlocksPrePublishPanel() {
     return null;
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_editor_namespaceObject.PluginPrePublishPanel, {
-    icon: block_default,
     title: (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %d: number of blocks (number).
     (0,external_wp_i18n_namespaceObject._n)('Added: %d block', 'Added: %d blocks', newBlockTypes.length), newBlockTypes.length),
@@ -2109,7 +2077,6 @@ function InstallButton({
 }
 
 ;// ./packages/block-directory/build-module/plugins/get-install-missing/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2230,6 +2197,9 @@ const ModifiedWarning = ({
 
 
 (0,external_wp_plugins_namespaceObject.registerPlugin)('block-directory', {
+  // The icon is explicitly set to undefined to prevent PluginPrePublishPanel
+  // from rendering the fallback icon pluginIcon.
+  icon: undefined,
   render() {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AutoBlockUninstaller, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(inserter_menu_downloadable_blocks_panel, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InstalledBlocksPrePublishPanel, {})]

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit40ebd487e50b8cec70b127802448762e
+class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -161,6 +161,8 @@ class ComposerStaticInit40ebd487e50b8cec70b127802448762e
         'Newspack\\Newspack_Theme_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-newspack-theme-configuration-manager.php',
         'Newspack\\Newspack_UI' => __DIR__ . '/../..' . '/includes/class-newspack-ui.php',
         'Newspack\\Newspack_UI_Icons' => __DIR__ . '/../..' . '/includes/class-newspack-ui-icons.php',
+        'Newspack\\Nicename_Change' => __DIR__ . '/../..' . '/includes/plugins/co-authors-plus/class-nicename-change.php',
+        'Newspack\\Nicename_Change_UI' => __DIR__ . '/../..' . '/includes/plugins/co-authors-plus/class-nicename-change-ui.php',
         'Newspack\\OAuth' => __DIR__ . '/../..' . '/includes/oauth/class-oauth.php',
         'Newspack\\OAuth_Transients' => __DIR__ . '/../..' . '/includes/oauth/class-oauth-transients.php',
         'Newspack\\On_Hold_Duration' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-on-hold-duration.php',
@@ -227,9 +229,9 @@ class ComposerStaticInit40ebd487e50b8cec70b127802448762e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit40ebd487e50b8cec70b127802448762e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit40ebd487e50b8cec70b127802448762e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit40ebd487e50b8cec70b127802448762e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit728f97be17d9d0257fad447ece46daa6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit728f97be17d9d0257fad447ece46daa6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit728f97be17d9d0257fad447ece46daa6::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -7,7 +7,9 @@
 
 namespace Newspack;
 
+use Newspack\Logger;
 use Newspack\Memberships\Metering;
+use Newspack\Reader_Activation;
 use Newspack\WooCommerce_Connection;
 
 defined( 'ABSPATH' ) || exit;
@@ -58,7 +60,6 @@ class Memberships {
 		add_filter( 'user_has_cap', [ __CLASS__, 'user_has_cap' ], 10, 3 );
 		add_action( 'wp', [ __CLASS__, 'remove_unnecessary_content_restriction' ], 11 );
 		add_filter( 'body_class', [ __CLASS__, 'add_body_class' ] );
-		add_filter( 'wc_memberships_expire_user_membership', [ __CLASS__, 'handle_wc_memberships_expire_user_membership' ], 10, 2 );
 
 		/** Add gate content filters to mimic 'the_content'. See 'wp-includes/default-filters.php' for reference. */
 		add_filter( 'newspack_gate_content', 'capital_P_dangit', 11 );
@@ -934,19 +935,13 @@ class Memberships {
 			return true;
 		}
 
-		$integrations      = wc_memberships()->get_integrations_instance();
-		$integration       = $integrations ? $integrations->get_subscriptions_instance() : null;
 		$require_all_plans = self::get_require_all_plans_setting();
 		$has_access        = false;
 		$has_subscription  = false;
 
 		foreach ( $rules as $rule ) {
 			$membership_plan_id = $rule->get_membership_plan_id();
-			if ( $integration && $integration->has_membership_plan_subscription( $membership_plan_id ) ) {
-				$subscription_plan  = new \WC_Memberships_Integration_Subscriptions_Membership_Plan( $membership_plan_id );
-				$required_products  = $subscription_plan->get_subscription_product_ids();
-				$has_subscription   = ! empty( WooCommerce_Connection::get_active_subscriptions_for_user( $user_id, $required_products ) );
-			}
+			$has_subscription   = ! empty( self::get_user_subscription_for_membership_plan( $user_id, $membership_plan_id ) );
 
 			// If no object ID is provided, then we are looking at rules that apply to whole post types or taxonomies.
 			// In this case, rules that apply to specific objects should be skipped.
@@ -1067,24 +1062,28 @@ class Memberships {
 	}
 
 	/**
-	 * Prevent User Membership expiring, if the linked subscription is active.
+	 * Does the given user have an active subscription with the product required by the given membership plan?
 	 *
-	 * @param bool                            $expire true will expire this membership, false will retain it - default: true, expire it.
-	 * @param \WC_Memberships_User_Membership $user_membership the User Membership object being expired.
+	 * @param int $user_id User ID.
+	 * @param int $membership_plan_id Membership plan ID.
+	 *
+	 * @return int Subscription ID if the user has an active subscription with the required product. False if the user does not have the required subscription. Null if the membership plan doesn't require a subscription.
 	 */
-	public static function handle_wc_memberships_expire_user_membership( $expire, $user_membership ) {
-		$integration = wc_memberships()->get_integrations_instance()->get_subscriptions_instance();
-		if ( ! $integration ) {
-			return $expire;
+	public static function get_user_subscription_for_membership_plan( $user_id, $membership_plan_id ) {
+		$integrations = wc_memberships()->get_integrations_instance();
+		$integration  = $integrations ? $integrations->get_subscriptions_instance() : null;
+		if ( ! $integration || ! $integration->has_membership_plan_subscription( $membership_plan_id ) ) {
+			return null;
 		}
-		$subscription = $integration->get_subscription_from_membership( $user_membership->get_id() );
-		if ( $subscription ) {
-			$subscription_status = $integration->get_subscription_status( $subscription );
-			if ( 'active' === $subscription_status ) {
-				return false;
-			}
+
+		$subscription_plan  = new \WC_Memberships_Integration_Subscriptions_Membership_Plan( $membership_plan_id );
+		$required_products  = $subscription_plan->get_subscription_product_ids();
+		$user_subscriptions = WooCommerce_Connection::get_active_subscriptions_for_user( $user_id, $required_products );
+		if ( empty( $user_subscriptions ) ) {
+			return false;
 		}
-		return $expire;
+
+		return (int) reset( $user_subscriptions );
 	}
 }
 Memberships::init();

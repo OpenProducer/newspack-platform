@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('wc-blocks-frontend-vendors', 'wc-interactivity', 'wc-price-format', 'wp-polyfill'), 'version' => '1cba8b38916ffa948b23');
+<?php return array('dependencies' => array('wc-blocks-frontend-vendors', 'wc-interactivity', 'wp-polyfill'), 'version' => '2aad523aa42e41356504');

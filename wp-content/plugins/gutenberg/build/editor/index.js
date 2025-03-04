@@ -1940,7 +1940,6 @@ const EDITOR_SETTINGS_DEFAULTS = {
 };
 
 ;// ./packages/editor/build-module/dataviews/store/reducer.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2012,7 +2011,6 @@ function fields(state = {}, action) {
 }));
 
 ;// ./packages/editor/build-module/store/reducer.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2569,7 +2567,6 @@ const layout = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
 /* harmony default export */ const library_layout = (layout);
 
 ;// ./packages/editor/build-module/utils/get-template-info.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2622,7 +2619,6 @@ const getTemplateInfo = params => {
 };
 
 ;// ./packages/editor/build-module/store/selectors.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -4335,7 +4331,6 @@ function getNotificationArgumentsForTrashFail(data) {
 }
 
 ;// ./packages/editor/build-module/store/actions.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -5944,7 +5939,6 @@ function getControlByType(type) {
 }
 
 ;// ./packages/dataviews/build-module/normalize-fields.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -6025,7 +6019,6 @@ function isCombinedField(field) {
 }
 
 ;// ./packages/dataviews/build-module/dataforms-layouts/regular/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -6145,7 +6138,6 @@ const closeSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)
 /* harmony default export */ const close_small = (closeSmall);
 
 ;// ./packages/dataviews/build-module/dataforms-layouts/panel/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -6359,7 +6351,6 @@ function FormPanelField({
 }
 
 ;// ./packages/dataviews/build-module/dataforms-layouts/index.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -6377,7 +6368,6 @@ function getFormFieldLayout(type) {
 }
 
 ;// ./packages/dataviews/build-module/normalize-form-fields.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -6409,7 +6399,6 @@ function normalizeFormFields(form) {
 }
 
 ;// ./packages/dataviews/build-module/dataforms-layouts/data-form-layout.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -6620,7 +6609,6 @@ const titleField = {
 /* harmony default export */ const title = (titleField);
 
 ;// ./packages/fields/build-module/actions/duplicate-post.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -7270,7 +7258,6 @@ function paramCase(input, options) {
 }
 
 ;// ./packages/fields/build-module/components/create-template-part-modal/utils.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -7327,7 +7314,6 @@ const getCleanTemplatePartSlug = title => {
 };
 
 ;// ./packages/fields/build-module/components/create-template-part-modal/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -7769,7 +7755,6 @@ const renamePost = {
 /* harmony default export */ const rename_post = (renamePost);
 
 ;// ./packages/dataviews/build-module/validation.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -7952,7 +7937,6 @@ const download = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(e
 /* harmony default export */ const library_download = (download);
 
 ;// ./packages/fields/build-module/actions/export-pattern.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -8024,7 +8008,6 @@ const backup = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
 /* harmony default export */ const library_backup = (backup);
 
 ;// ./packages/fields/build-module/actions/restore-post.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -8353,7 +8336,6 @@ const trash = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
 /* harmony default export */ const library_trash = (trash);
 
 ;// ./packages/fields/build-module/mutation/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -8486,7 +8468,6 @@ const editPostWithNotices = async (postsWithUpdates, notice, callbacks) => {
 };
 
 ;// ./packages/fields/build-module/actions/delete-post.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -8614,7 +8595,6 @@ const deletePostAction = {
 /* harmony default export */ const delete_post = (deletePostAction);
 
 ;// ./packages/fields/build-module/actions/trash-post.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -8756,7 +8736,6 @@ const trash_post_trashPost = {
 /* harmony default export */ const trash_post = (trash_post_trashPost);
 
 ;// ./packages/fields/build-module/actions/permanently-delete-post.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -9324,7 +9303,6 @@ const STATUSES = [{
 /* harmony default export */ const status_elements = (STATUSES);
 
 ;// ./packages/fields/build-module/fields/status/status-view.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -9707,7 +9685,6 @@ function getTitleWithFallbackName(post) {
 }
 
 ;// ./packages/fields/build-module/fields/parent/parent-edit.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -10035,7 +10012,6 @@ const commentStatusField = {
 /* harmony default export */ const comment_status = (commentStatusField);
 
 ;// ./packages/fields/build-module/fields/template/template-edit.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -11169,7 +11145,6 @@ function GlobalStylesProvider({
 }
 
 ;// ./packages/editor/build-module/components/provider/use-block-editor-settings.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -11434,7 +11409,6 @@ function usePostContentBlocks() {
 }
 
 ;// ./packages/editor/build-module/components/provider/disable-non-page-content-blocks.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -12403,7 +12377,6 @@ const ComplementaryAreaHeader = ({
 /* harmony default export */ const complementary_area_header = (ComplementaryAreaHeader);
 
 ;// ./packages/interface/build-module/components/action-item/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -13683,7 +13656,6 @@ function useCommands() {
 }
 
 ;// ./packages/editor/build-module/components/block-removal-warnings/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -13883,7 +13855,6 @@ const textFormattingShortcuts = [{
 ;// external ["wp","keycodes"]
 const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// ./packages/editor/build-module/components/keyboard-shortcut-help-modal/shortcut.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -13979,7 +13950,6 @@ function DynamicShortcut({
 /* harmony default export */ const dynamic_shortcut = (DynamicShortcut);
 
 ;// ./packages/editor/build-module/components/keyboard-shortcut-help-modal/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -14104,7 +14074,6 @@ function KeyboardShortcutHelpModal() {
 /* harmony default export */ const keyboard_shortcut_help_modal = (KeyboardShortcutHelpModal);
 
 ;// ./packages/editor/build-module/components/block-settings-menu/content-only-settings-menu.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14244,7 +14213,6 @@ function ContentOnlySettingsMenu() {
 }
 
 ;// ./packages/editor/build-module/components/start-template-options/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -14701,7 +14669,6 @@ function TemplatePartConverterMenuItem({
 }
 
 ;// ./packages/editor/build-module/components/provider/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -15154,7 +15121,6 @@ const postPreviewField = {
 /* harmony default export */ const content_preview = (postPreviewField);
 
 ;// ./packages/editor/build-module/dataviews/store/private-actions.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -15250,7 +15216,6 @@ const registerPostTypeSchema = postType => async ({
 };
 
 ;// ./packages/editor/build-module/store/private-actions.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -15633,7 +15598,6 @@ function isEntityReady(state, kind, name) {
 }
 
 ;// ./packages/editor/build-module/store/private-selectors.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -15830,7 +15794,6 @@ unlock(store_store).registerPrivateActions(store_private_actions_namespaceObject
 unlock(store_store).registerPrivateSelectors(store_private_selectors_namespaceObject);
 
 ;// ./packages/editor/build-module/hooks/custom-sources-backwards-compatibility.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -15921,7 +15884,6 @@ function shimAttributeSource(settings) {
 (0,external_wp_hooks_namespaceObject.addFilter)('blocks.registerBlockType', 'core/editor/custom-sources-backwards-compatibility/shim-attribute-source', shimAttributeSource);
 
 ;// ./packages/editor/build-module/components/autocompleters/user.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -16007,7 +15969,6 @@ function setDefaultCompleters(completers = []) {
 (0,external_wp_hooks_namespaceObject.addFilter)('editor.MediaUpload', 'core/editor/components/media-upload', () => external_wp_mediaUtils_namespaceObject.MediaUpload);
 
 ;// ./packages/editor/build-module/hooks/pattern-overrides.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -16524,7 +16485,6 @@ const TableOfContentsItem = ({
 /* harmony default export */ const document_outline_item = (TableOfContentsItem);
 
 ;// ./packages/editor/build-module/components/document-outline/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -17102,7 +17062,6 @@ function TemplateValidationNotice() {
 }
 
 ;// ./packages/editor/build-module/components/editor-notices/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -17158,7 +17117,6 @@ function EditorNotices() {
 /* harmony default export */ const editor_notices = (EditorNotices);
 
 ;// ./packages/editor/build-module/components/editor-snackbars/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -17261,7 +17219,6 @@ function EntityRecordItem({
 }
 
 ;// ./packages/editor/build-module/components/entities-saved-states/entity-type-list.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -17353,7 +17310,6 @@ function EntityTypeList({
 }
 
 ;// ./packages/editor/build-module/components/entities-saved-states/hooks/use-is-dirty.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -17433,7 +17389,6 @@ const useIsDirty = () => {
 };
 
 ;// ./packages/editor/build-module/components/entities-saved-states/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -17702,7 +17657,6 @@ class ErrorBoundary extends external_wp_element_namespaceObject.Component {
 /* harmony default export */ const error_boundary = (ErrorBoundary);
 
 ;// ./packages/editor/build-module/components/local-autosave-monitor/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -17936,7 +17890,6 @@ function PageAttributesCheck({
 /* harmony default export */ const page_attributes_check = (PageAttributesCheck);
 
 ;// ./packages/editor/build-module/components/post-type-support-check/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -18081,7 +18034,6 @@ const PostPanelRow = (0,external_wp_element_namespaceObject.forwardRef)(({
 /* harmony default export */ const post_panel_row = (PostPanelRow);
 
 ;// ./packages/editor/build-module/utils/terms.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -18161,7 +18113,6 @@ const unescapeTerms = terms => {
 };
 
 ;// ./packages/editor/build-module/components/page-attributes/parent.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -18217,13 +18168,15 @@ function parent_PageAttributesParent() {
     isHierarchical,
     parentPostId,
     parentPostTitle,
-    pageItems
+    pageItems,
+    isLoading
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     var _pType$hierarchical;
     const {
       getPostType,
       getEntityRecords,
-      getEntityRecord
+      getEntityRecord,
+      isResolving
     } = select(external_wp_coreData_namespaceObject.store);
     const {
       getCurrentPostId,
@@ -18252,7 +18205,8 @@ function parent_PageAttributesParent() {
       isHierarchical: postIsHierarchical,
       parentPostId: pageId,
       parentPostTitle: parentPost ? getTitle(parentPost) : '',
-      pageItems: postIsHierarchical ? getEntityRecords('postType', postTypeSlug, query) : null
+      pageItems: postIsHierarchical ? getEntityRecords('postType', postTypeSlug, query) : null,
+      isLoading: postIsHierarchical ? isResolving('getEntityRecords', ['postType', postTypeSlug, query]) : false
     };
   }, [fieldValue]);
   const parentOptions = (0,external_wp_element_namespaceObject.useMemo)(() => {
@@ -18326,7 +18280,8 @@ function parent_PageAttributesParent() {
     options: parentOptions,
     onFilterValueChange: (0,external_wp_compose_namespaceObject.debounce)(handleKeydown, 300),
     onChange: handleChange,
-    hideLabelFromVision: true
+    hideLabelFromVision: true,
+    isLoading: isLoading
   });
 }
 function PostParentToggle({
@@ -18684,7 +18639,6 @@ function useCurrentTemplateSlug() {
 }
 
 ;// ./packages/editor/build-module/components/post-template/classic-theme.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -19075,7 +19029,6 @@ PluginDocumentSettingPanel.Slot = plugin_document_setting_panel_Slot;
 /* harmony default export */ const plugin_document_setting_panel = (PluginDocumentSettingPanel);
 
 ;// ./packages/editor/build-module/components/block-settings-menu/plugin-block-settings-menu-item.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -19667,7 +19620,6 @@ function PluginSidebarMoreMenuItem(props) {
 }
 
 ;// ./packages/editor/build-module/components/post-template/swap-template-button.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -20065,7 +20017,6 @@ const AUTHORS_QUERY = {
 };
 
 ;// ./packages/editor/build-module/components/post-author/hook.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -20084,11 +20035,13 @@ function useAuthorsQuery(search) {
   const {
     authorId,
     authors,
-    postAuthor
+    postAuthor,
+    isLoading
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getUser,
-      getUsers
+      getUsers,
+      isResolving
     } = select(external_wp_coreData_namespaceObject.store);
     const {
       getEditedPostAttribute
@@ -20104,7 +20057,8 @@ function useAuthorsQuery(search) {
     return {
       authorId: _authorId,
       authors: getUsers(query),
-      postAuthor: getUser(_authorId, BASE_QUERY)
+      postAuthor: getUser(_authorId, BASE_QUERY),
+      isLoading: isResolving('getUsers', [query])
     };
   }, [search]);
   const authorOptions = (0,external_wp_element_namespaceObject.useMemo)(() => {
@@ -20136,7 +20090,8 @@ function useAuthorsQuery(search) {
   return {
     authorId,
     authorOptions,
-    postAuthor
+    postAuthor,
+    isLoading
   };
 }
 
@@ -20163,7 +20118,8 @@ function PostAuthorCombobox() {
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
   const {
     authorId,
-    authorOptions
+    authorOptions,
+    isLoading
   } = useAuthorsQuery(fieldValue);
 
   /**
@@ -20197,7 +20153,8 @@ function PostAuthorCombobox() {
     onFilterValueChange: (0,external_wp_compose_namespaceObject.debounce)(handleKeydown, 300),
     onChange: handleSelect,
     allowReset: false,
-    hideLabelFromVision: true
+    hideLabelFromVision: true,
+    isLoading: isLoading
   });
 }
 
@@ -20305,12 +20262,11 @@ function PostAuthorCheck({
     hasAssignAuthorAction,
     hasAuthors
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    var _post$_links$wpActio;
     const post = select(store_store).getCurrentPost();
-    const authors = select(external_wp_coreData_namespaceObject.store).getUsers(AUTHORS_QUERY);
+    const canAssignAuthor = post?._links?.['wp:action-assign-author'] ? true : false;
     return {
-      hasAssignAuthorAction: (_post$_links$wpActio = post._links?.['wp:action-assign-author']) !== null && _post$_links$wpActio !== void 0 ? _post$_links$wpActio : false,
-      hasAuthors: authors?.length >= 1
+      hasAssignAuthorAction: canAssignAuthor,
+      hasAuthors: canAssignAuthor ? select(external_wp_coreData_namespaceObject.store).getUsers(AUTHORS_QUERY)?.length >= 1 : false
     };
   }, []);
   if (!hasAssignAuthorAction || !hasAuthors) {
@@ -21011,7 +20967,6 @@ function PrivateExcerpt() {
 }
 
 ;// ./packages/editor/build-module/components/theme-support-check/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -21483,7 +21438,6 @@ function PostFormatCheck({
 }
 
 ;// ./packages/editor/build-module/components/post-format/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -22355,7 +22309,6 @@ function PublishButtonLabel() {
 }
 
 ;// ./packages/editor/build-module/components/post-publish-button/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -23428,7 +23381,6 @@ function validateTimezone(_hours, minutes) {
 /* harmony default export */ const date_fns_parseISO = ((/* unused pure expression or super */ null && (parseISO)));
 
 ;// ./packages/editor/build-module/components/post-schedule/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -23641,7 +23593,6 @@ function isSameDay(left, right) {
 }
 
 ;// ./packages/editor/build-module/components/post-taxonomies/most-used-terms.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -23703,7 +23654,6 @@ function MostUsedTerms({
 }
 
 ;// ./packages/editor/build-module/components/post-taxonomies/flat-term-selector.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -23798,11 +23748,11 @@ function FlatTermSelector({
     } = select(store_store);
     const {
       getEntityRecords,
-      getTaxonomy,
+      getEntityRecord,
       hasFinishedResolution
     } = select(external_wp_coreData_namespaceObject.store);
     const post = getCurrentPost();
-    const _taxonomy = getTaxonomy(slug);
+    const _taxonomy = getEntityRecord('root', 'taxonomy', slug);
     const _termIds = _taxonomy ? getEditedPostAttribute(_taxonomy.rest_base) : flat_term_selector_EMPTY_ARRAY;
     const query = {
       ...flat_term_selector_DEFAULT_QUERY,
@@ -23993,7 +23943,7 @@ const MaybeTagsPanel = () => {
     isPostTypeSupported
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const postType = select(store_store).getCurrentPostType();
-    const tagsTaxonomy = select(external_wp_coreData_namespaceObject.store).getTaxonomy('post_tag');
+    const tagsTaxonomy = select(external_wp_coreData_namespaceObject.store).getEntityRecord('root', 'taxonomy', 'post_tag');
     const _isPostTypeSupported = tagsTaxonomy?.types?.includes(postType);
     const areTagsFetched = tagsTaxonomy !== undefined;
     const tags = tagsTaxonomy && select(store_store).getEditedPostAttribute(tagsTaxonomy.rest_base);
@@ -24025,7 +23975,6 @@ const MaybeTagsPanel = () => {
 /* harmony default export */ const maybe_tags_panel = (MaybeTagsPanel);
 
 ;// ./packages/editor/build-module/components/post-publish-panel/maybe-post-format-panel.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -24100,7 +24049,6 @@ function PostFormatPanel() {
 }
 
 ;// ./packages/editor/build-module/components/post-taxonomies/hierarchical-term-selector.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -24257,11 +24205,11 @@ function HierarchicalTermSelector({
       getEditedPostAttribute
     } = select(store_store);
     const {
-      getTaxonomy,
+      getEntityRecord,
       getEntityRecords,
       isResolving
     } = select(external_wp_coreData_namespaceObject.store);
-    const _taxonomy = getTaxonomy(slug);
+    const _taxonomy = getEntityRecord('root', 'taxonomy', slug);
     const post = getCurrentPost();
     return {
       hasCreateAction: _taxonomy ? (_post$_links = post._links?.['wp:action-create-' + _taxonomy.rest_base]) !== null && _post$_links !== void 0 ? _post$_links : false : false,
@@ -24489,7 +24437,6 @@ function HierarchicalTermSelector({
 /* harmony default export */ const hierarchical_term_selector = ((0,external_wp_components_namespaceObject.withFilters)('editor.PostTaxonomyType')(HierarchicalTermSelector));
 
 ;// ./packages/editor/build-module/components/post-publish-panel/maybe-category-panel.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -24510,10 +24457,9 @@ function MaybeCategoryPanel() {
     const postType = select(store_store).getCurrentPostType();
     const {
       canUser,
-      getEntityRecord,
-      getTaxonomy
+      getEntityRecord
     } = select(external_wp_coreData_namespaceObject.store);
-    const categoriesTaxonomy = getTaxonomy('category');
+    const categoriesTaxonomy = getEntityRecord('root', 'taxonomy', 'category');
     const defaultCategoryId = canUser('read', {
       kind: 'root',
       name: 'site'
@@ -24555,7 +24501,6 @@ function MaybeCategoryPanel() {
 /* harmony default export */ const maybe_category_panel = (MaybeCategoryPanel);
 
 ;// ./packages/editor/build-module/components/post-publish-panel/media-util.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -24629,7 +24574,6 @@ function fetchMedia(urls) {
 }
 
 ;// ./packages/editor/build-module/components/post-publish-panel/maybe-upload-media.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -25690,7 +25634,6 @@ function PostStatus() {
 }
 
 ;// ./packages/editor/build-module/components/post-saved-state/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -26108,7 +26051,6 @@ function PostSyncStatus() {
 }
 
 ;// ./packages/editor/build-module/components/post-taxonomies/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -26133,7 +26075,7 @@ function PostTaxonomies({
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     return {
       postType: select(store_store).getCurrentPostType(),
-      taxonomies: select(external_wp_coreData_namespaceObject.store).getTaxonomies({
+      taxonomies: select(external_wp_coreData_namespaceObject.store).getEntityRecords('root', 'taxonomy', {
         per_page: -1
       })
     };
@@ -26193,7 +26135,7 @@ function PostTaxonomiesCheck({
 }) {
   const hasTaxonomies = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const postType = select(store_store).getCurrentPostType();
-    const taxonomies = select(external_wp_coreData_namespaceObject.store).getTaxonomies({
+    const taxonomies = select(external_wp_coreData_namespaceObject.store).getEntityRecords('root', 'taxonomy', {
       per_page: -1
     });
     return taxonomies?.some(taxonomy => taxonomy.types.includes(postType));
@@ -27644,7 +27586,6 @@ function UnsavedChangesWarning() {
 const external_wp_serverSideRender_namespaceObject = window["wp"]["serverSideRender"];
 var external_wp_serverSideRender_default = /*#__PURE__*/__webpack_require__.n(external_wp_serverSideRender_namespaceObject);
 ;// ./packages/editor/build-module/components/deprecated.js
-/* wp:polyfill */
 // Block Creation Components.
 /**
  * WordPress dependencies
@@ -28200,7 +28141,6 @@ function CommentAuthorInfo({
 /* harmony default export */ const comment_author_info = (CommentAuthorInfo);
 
 ;// ./packages/editor/build-module/components/collab-sidebar/utils.js
-/* wp:polyfill */
 /**
  * Sanitizes a comment string by removing non-printable ASCII characters.
  *
@@ -28306,7 +28246,6 @@ function CommentForm({
 /* harmony default export */ const comment_form = (CommentForm);
 
 ;// ./packages/editor/build-module/components/collab-sidebar/comments.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -28709,7 +28648,6 @@ const AddCommentToolbarButton = ({
 /* harmony default export */ const comment_button_toolbar = (AddCommentToolbarButton);
 
 ;// ./packages/editor/build-module/components/collab-sidebar/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -29368,7 +29306,6 @@ function CopyContentMenuItem() {
 }
 
 ;// ./packages/editor/build-module/components/mode-switcher/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -29987,7 +29924,6 @@ function PreviewDropdown({
 const square = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
-  fill: "none",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
     fill: "none",
     d: "M5.75 12.75V18.25H11.25M12.75 5.75H18.25V11.25",
@@ -30414,7 +30350,6 @@ function ListViewOutline() {
 }
 
 ;// ./packages/editor/build-module/components/list-view-sidebar/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -30958,7 +30893,6 @@ function ResizableEditor({
 /* harmony default export */ const resizable_editor = (ResizableEditor);
 
 ;// ./packages/editor/build-module/components/visual-editor/use-select-nearest-editable-block.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -31954,7 +31888,6 @@ const useSetAsPostsPageAction = () => {
 };
 
 ;// ./packages/editor/build-module/components/post-actions/actions.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -32076,7 +32009,6 @@ function usePostActions({
 }
 
 ;// ./packages/editor/build-module/components/post-actions/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -32423,7 +32355,6 @@ function PostContentInformation() {
 }
 
 ;// ./packages/editor/build-module/components/post-format/panel.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -32986,7 +32917,6 @@ function PostSummary({
 }
 
 ;// ./packages/editor/build-module/components/post-transform-panel/hooks.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -33280,7 +33210,6 @@ function TemplateContentPanel() {
 }
 
 ;// ./packages/editor/build-module/components/template-part-content-panel/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -33392,7 +33321,6 @@ function useAutoSwitchEditorSidebars() {
 /* harmony default export */ const use_auto_switch_editor_sidebars = (useAutoSwitchEditorSidebars);
 
 ;// ./packages/editor/build-module/components/sidebar/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -33578,23 +33506,27 @@ function Editor({
   const {
     post,
     template,
-    hasLoadedPost
+    hasLoadedPost,
+    error
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getEntityRecord,
+      getResolutionError,
       hasFinishedResolution
     } = select(external_wp_coreData_namespaceObject.store);
+    const postArgs = ['postType', postType, postId];
     return {
-      post: getEntityRecord('postType', postType, postId),
+      post: getEntityRecord(...postArgs),
       template: templateId ? getEntityRecord('postType', TEMPLATE_POST_TYPE, templateId) : undefined,
-      hasLoadedPost: hasFinishedResolution('getEntityRecord', ['postType', postType, postId])
+      hasLoadedPost: hasFinishedResolution('getEntityRecord', postArgs),
+      error: getResolutionError('getEntityRecord', postArgs)?.message
     };
   }, [postType, postId, templateId]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [hasLoadedPost && !post && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
-      status: "warning",
+      status: !!error ? 'error' : 'warning',
       isDismissible: false,
-      children: (0,external_wp_i18n_namespaceObject.__)("You attempted to edit an item that doesn't exist. Perhaps it was deleted?")
+      children: !error ? (0,external_wp_i18n_namespaceObject.__)("You attempted to edit an item that doesn't exist. Perhaps it was deleted?") : error
     }), !!post && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(ExperimentalEditorProvider, {
       post: post,
       __unstableTemplate: template,
@@ -33645,7 +33577,6 @@ function EnablePublishSidebarOption(props) {
 }
 
 ;// ./packages/editor/build-module/components/preferences-modal/block-visibility.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -33727,7 +33658,6 @@ function BlockVisibility() {
 }
 
 ;// ./packages/editor/build-module/components/preferences-modal/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -33966,7 +33896,6 @@ function PreferencesModalContents({
 }
 
 ;// ./packages/editor/build-module/components/post-fields/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -34030,7 +33959,6 @@ function usePostFields({
 /* harmony default export */ const post_fields = (usePostFields);
 
 ;// ./packages/editor/build-module/bindings/pattern-overrides.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -34125,7 +34053,6 @@ const CONTENT = 'content';
 });
 
 ;// ./packages/editor/build-module/bindings/post-meta.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -34336,6 +34263,8 @@ const {
 const privateApis = {};
 lock(privateApis, {
   CreateTemplatePartModal: CreateTemplatePartModal,
+  patternTitleField: pattern_title,
+  templateTitleField: template_title,
   BackButton: back_button,
   EntitiesSavedStatesExtensible: EntitiesSavedStatesExtensible,
   Editor: editor,

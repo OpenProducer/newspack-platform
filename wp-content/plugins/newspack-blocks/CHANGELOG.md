@@ -1,3 +1,10 @@
+## [4.6.1](https://github.com/Automattic/newspack-blocks/compare/v4.6.0...v4.6.1) (2025-02-27)
+
+
+### Bug Fixes
+
+* restore non-API version of the editor styles ([#2062](https://github.com/Automattic/newspack-blocks/issues/2062)) ([b726d4b](https://github.com/Automattic/newspack-blocks/commit/b726d4b15dee9d3fae653bdd57246b219edd11e0))
+
 # [4.6.0](https://github.com/Automattic/newspack-blocks/compare/v4.5.10...v4.6.0) (2025-02-17)
 
 

@@ -48,7 +48,6 @@ function gutenberg_add_default_template_part_areas_to_index( WP_REST_Response $r
 	$response->data['default_template_part_areas'] = get_allowed_block_template_part_areas();
 	return $response;
 }
-
 add_filter( 'rest_index', 'gutenberg_add_default_template_part_areas_to_index' );
 
 /**
@@ -70,5 +69,48 @@ function gutenberg_add_default_template_types_to_index( WP_REST_Response $respon
 	$response->data['default_template_types'] = $indexed_template_types;
 	return $response;
 }
-
 add_filter( 'rest_index', 'gutenberg_add_default_template_types_to_index' );
+
+/**
+ * Adds `ignore_sticky` parameter to the post collection endpoint.
+ *
+ * Note: Backports into the wp-includes/rest-api/endpoints/class-wp-rest-posts-controller.php file.
+ *
+ * @param array        $query_params JSON Schema-formatted collection parameters.
+ * @param WP_Post_Type $post_type    Post type object.
+ * @return array
+ */
+function gutenberg_modify_post_collection_paramt( $query_params, WP_Post_Type $post_type ) {
+	if ( 'post' === $post_type->name && ! isset( $query_params['ignore_sticky'] ) ) {
+		$query_params['ignore_sticky'] = array(
+			'description' => __( 'Whether to ignore sticky posts or not.' ),
+			'type'        => 'boolean',
+			'default'     => false,
+		);
+	}
+
+	return $query_params;
+}
+add_filter( 'rest_post_collection_params', 'gutenberg_modify_post_collection_paramt', 10, 2 );
+
+/**
+ * Modify posts query based on `ignore_sticky` parameter.
+ *
+ * Note: Backports into the wp-includes/rest-api/endpoints/class-wp-rest-posts-controller.php file.
+ *
+ * @param array           $prepared_args Array of arguments for WP_User_Query.
+ * @param WP_REST_Request $request       The REST API request.
+ * @return array Modified arguments
+ */
+function gutenberg_modify_post_collection_query( $args, WP_REST_Request $request ) {
+	/*
+	 * Honor the original REST API `post__in` behavior. Don't prepend sticky posts
+	 * when `post__in` has been specified.
+	 */
+	if ( isset( $request['ignore_sticky'] ) && empty( $args['post__in'] ) ) {
+		$args['ignore_sticky_posts'] = $request['ignore_sticky'];
+	}
+
+	return $args;
+}
+add_filter( 'rest_post_query', 'gutenberg_modify_post_collection_query', 10, 2 );

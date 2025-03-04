@@ -815,7 +815,6 @@ function getQueryString(url) {
 }
 
 ;// ./packages/url/build-module/build-query-string.js
-/* wp:polyfill */
 /**
  * Generates URL-encoded query string using input query data.
  *
@@ -985,7 +984,6 @@ function safeDecodeURIComponent(uriComponent) {
 }
 
 ;// ./packages/url/build-module/get-query-args.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -1170,7 +1168,6 @@ function hasQueryArg(url, arg) {
 }
 
 ;// ./packages/url/build-module/remove-query-args.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -1374,7 +1371,6 @@ function getFilename(url) {
 }
 
 ;// ./packages/url/build-module/normalize-path.js
-/* wp:polyfill */
 /**
  * Given a path, returns a normalized path where equal query parameter values
  * will be treated as identical, regardless of order they appear in the original

@@ -1178,7 +1178,6 @@ var moment_timezone_utils = __webpack_require__(1685);
 const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// ./packages/date/build-module/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
