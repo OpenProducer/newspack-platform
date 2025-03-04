@@ -681,7 +681,11 @@ class WooCommerce_Connection {
 	 * @param string $meta_key Meta key.
 	 */
 	public static function get_post_metadata( $value, $id, $meta_key ) {
-		if ( '_wp_page_template' === $meta_key && self::should_override_template() ) {
+		if (
+			'_wp_page_template' === $meta_key &&
+			self::should_override_template() &&
+			'page' === get_post_type( $id )
+		) {
 			return 'single-wide';
 		}
 		return $value;

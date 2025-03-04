@@ -347,7 +347,6 @@ const plugins = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ex
 /* harmony default export */ const library_plugins = (plugins);
 
 ;// ./packages/plugins/build-module/api/index.js
-/* wp:polyfill */
 /* eslint no-console: [ 'error', { allow: [ 'error' ] } ] */
 /**
  * External dependencies
@@ -548,7 +547,6 @@ function getPlugins(scope) {
 }
 
 ;// ./packages/plugins/build-module/components/plugin-area/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */

@@ -2999,7 +2999,6 @@ function observableMap() {
 }
 
 ;// ./packages/compose/build-module/higher-order/pipe.js
-/* wp:polyfill */
 /**
  * Parts of this source were derived and modified from lodash,
  * released under the MIT license.
@@ -3181,7 +3180,6 @@ const pure = createHigherOrderComponent(function (WrappedComponent) {
 const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// ./packages/compose/build-module/higher-order/with-global-events/listener.js
-/* wp:polyfill */
 /**
  * Class responsible for orchestrating event handling on the global window,
  * binding a single event to be shared across all handling instances, and
@@ -3221,7 +3219,6 @@ class Listener {
 /* harmony default export */ const listener = (Listener);
 
 ;// ./packages/compose/build-module/higher-order/with-global-events/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -3393,7 +3390,6 @@ const withInstanceId = createHigherOrderComponent(WrappedComponent => {
 /* harmony default export */ const with_instance_id = (withInstanceId);
 
 ;// ./packages/compose/build-module/higher-order/with-safe-timeout/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -3783,7 +3779,6 @@ function useCopyToClipboard(text, onSuccess) {
 ;// external ["wp","keycodes"]
 const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// ./packages/compose/build-module/hooks/use-focus-on-mount/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -4094,7 +4089,6 @@ function useFocusOutside(onFocusOutside) {
 }
 
 ;// ./packages/compose/build-module/hooks/use-merge-refs/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -4289,7 +4283,6 @@ function useDialog(options) {
 /* harmony default export */ const use_dialog = (useDialog);
 
 ;// ./packages/compose/build-module/hooks/use-disabled/index.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -4511,7 +4504,6 @@ var mousetrap_default = /*#__PURE__*/__webpack_require__.n(mousetrap_mousetrap);
 // EXTERNAL MODULE: ./node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.js
 var mousetrap_global_bind = __webpack_require__(5760);
 ;// ./packages/compose/build-module/hooks/use-keyboard-shortcut/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -4695,7 +4687,6 @@ const useReducedMotion = () => useMediaQuery('(prefers-reduced-motion: reduce)')
 /* harmony default export */ const use_reduced_motion = (useReducedMotion);
 
 ;// ./packages/undo-manager/build-module/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -5085,7 +5076,6 @@ function useResizeObserver(callback, resizeObserverOptions = {}) {
 }
 
 ;// ./packages/compose/build-module/hooks/use-resize-observer/legacy/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -5345,7 +5335,6 @@ function useAsyncList(list, config = {
 /* harmony default export */ const use_async_list = (useAsyncList);
 
 ;// ./packages/compose/build-module/hooks/use-warn-on-change/index.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */

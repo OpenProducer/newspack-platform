@@ -9,6 +9,8 @@
  */
 
 use Automattic\Jetpack\Constants;
+use Automattic\WooCommerce\Enums\ProductStatus;
+use Automattic\WooCommerce\Enums\ProductType;
 use Automattic\WooCommerce\Proxies\LegacyProxy;
 use Automattic\WooCommerce\Utilities\ArrayUtil;
 use Automattic\WooCommerce\Utilities\NumberUtil;
@@ -302,6 +304,7 @@ function wc_product_canonical_redirect(): void {
 
 	// In the event we are dealing with ugly permalinks, this will be empty.
 	$specified_category_slug = get_query_var( 'product_cat' );
+	$specified_category_slug = urldecode( $specified_category_slug );
 
 	if ( ! is_string( $specified_category_slug ) || strlen( $specified_category_slug ) < 1 ) {
 		return;
@@ -310,6 +313,7 @@ function wc_product_canonical_redirect(): void {
 	// What category slug did we expect? Normally this maps back to the first assigned product_cat
 	// term. However, this is filterable so we use the relevant helper function to figure this out.
 	$expected_category_slug = wc_product_post_type_link( '%product_cat%', get_post( get_the_ID() ) );
+	$expected_category_slug = urldecode( $expected_category_slug );
 
 	if ( $specified_category_slug === $expected_category_slug ) {
 		return;
@@ -639,10 +643,10 @@ function wc_get_product_types() {
 	return (array) apply_filters(
 		'product_type_selector',
 		array(
-			'simple'   => __( 'Simple product', 'woocommerce' ),
-			'grouped'  => __( 'Grouped product', 'woocommerce' ),
-			'external' => __( 'External/Affiliate product', 'woocommerce' ),
-			'variable' => __( 'Variable product', 'woocommerce' ),
+			ProductType::SIMPLE   => __( 'Simple product', 'woocommerce' ),
+			ProductType::GROUPED  => __( 'Grouped product', 'woocommerce' ),
+			ProductType::EXTERNAL => __( 'External/Affiliate product', 'woocommerce' ),
+			ProductType::VARIABLE => __( 'Variable product', 'woocommerce' ),
 		)
 	);
 }
@@ -1186,6 +1190,10 @@ function wc_get_price_including_tax( $product, $args = array() ) {
  * @return float|string Price with tax excluded, or an empty string if price calculation failed.
  */
 function wc_get_price_excluding_tax( $product, $args = array() ) {
+	if ( ! ( $product instanceof WC_Product ) ) {
+		return '';
+	}
+
 	$args = wp_parse_args(
 		$args,
 		array(
@@ -1312,7 +1320,7 @@ function wc_products_array_filter_visible( $product ) {
  * @return bool
  */
 function wc_products_array_filter_visible_grouped( $product ) {
-	return $product && is_a( $product, 'WC_Product' ) && ( 'publish' === $product->get_status() || current_user_can( 'edit_product', $product->get_id() ) );
+	return $product && is_a( $product, 'WC_Product' ) && ( ProductStatus::PUBLISH === $product->get_status() || current_user_can( 'edit_product', $product->get_id() ) );
 }
 
 /**

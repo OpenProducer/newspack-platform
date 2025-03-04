@@ -1,9 +1,3 @@
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
 /*!
  * cookie
  * Copyright(c) 2012-2014 Roman Shtylman
@@ -11,7 +5,8 @@ object-assign
  * MIT Licensed
  */
 
-/** @license React v17.0.2
+/**
+ * @license React
  * react-jsx-runtime.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.

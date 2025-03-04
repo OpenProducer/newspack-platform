@@ -969,6 +969,7 @@ final class Newspack_Popups_Model {
 		$classes              = array_merge( $classes, explode( ' ', $popup['options']['additional_classes'] ) );
 		$assigned_segments    = Newspack_Segments_Model::get_popup_segments_ids_string( $popup['id'] );
 		$frequency_config     = self::get_frequency_config( $popup );
+		$utm_suppression      = $popup['options']['utm_suppression'];
 
 		ob_start();
 		?>
@@ -981,6 +982,9 @@ final class Newspack_Popups_Model {
 				id="<?php echo esc_attr( $element_id ); ?>"
 				data-segments="<?php echo esc_attr( $assigned_segments ); ?>"
 				data-frequency="<?php echo esc_attr( $frequency_config ); ?>"
+				<?php if ( ! empty( $utm_suppression ) ) : ?>
+					data-suppression="<?php echo esc_attr( $utm_suppression ); ?>"
+				<?php endif; ?>
 			>
 				<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>

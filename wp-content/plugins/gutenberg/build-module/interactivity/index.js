@@ -742,7 +742,6 @@ class PropSignal {
 }
 
 ;// ./packages/interactivity/build-module/proxies/state.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1214,7 +1213,6 @@ const proxifyContext = (current, inherited = {}) => {
 
 
 ;// ./packages/interactivity/build-module/store.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -1406,7 +1404,6 @@ const data = parseServerData();
 populateServerData(data);
 
 ;// ./packages/interactivity/build-module/hooks.js
-/* wp:polyfill */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -1662,7 +1659,6 @@ preact_module/* options */.fF.vnode = vnode => {
 };
 
 ;// ./packages/interactivity/build-module/directives.js
-/* wp:polyfill */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -2204,7 +2200,6 @@ const getGlobalAsyncEventDirective = type => {
 const directivePrefix = 'wp';
 
 ;// ./packages/interactivity/build-module/vdom.js
-/* wp:polyfill */
 /**
  * External dependencies
  */

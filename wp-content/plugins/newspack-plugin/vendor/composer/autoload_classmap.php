@@ -82,6 +82,8 @@ return array(
     'Newspack\\Newspack_Theme_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-newspack-theme-configuration-manager.php',
     'Newspack\\Newspack_UI' => $baseDir . '/includes/class-newspack-ui.php',
     'Newspack\\Newspack_UI_Icons' => $baseDir . '/includes/class-newspack-ui-icons.php',
+    'Newspack\\Nicename_Change' => $baseDir . '/includes/plugins/co-authors-plus/class-nicename-change.php',
+    'Newspack\\Nicename_Change_UI' => $baseDir . '/includes/plugins/co-authors-plus/class-nicename-change-ui.php',
     'Newspack\\OAuth' => $baseDir . '/includes/oauth/class-oauth.php',
     'Newspack\\OAuth_Transients' => $baseDir . '/includes/oauth/class-oauth-transients.php',
     'Newspack\\On_Hold_Duration' => $baseDir . '/includes/plugins/woocommerce-subscriptions/class-on-hold-duration.php',

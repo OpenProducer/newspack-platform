@@ -797,7 +797,6 @@ function isActionOfType(object, expectedType) {
 }
 
 ;// ./packages/redux-routine/build-module/runtime.js
-/* wp:polyfill */
 /**
  * External dependencies
  */

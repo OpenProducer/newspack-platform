@@ -1,0 +1,2 @@
+@keyframes spinner__animation{0%{animation-timing-function:cubic-bezier(.5856,.0703,.4143,.9297);transform:rotate(0deg)}to{transform:rotate(-1turn)}}@keyframes loading__animation{to{transform:translateX(-100%)}}
+@keyframes spinner__animation{0%{animation-timing-function:cubic-bezier(.5856,.0703,.4143,.9297);transform:rotate(0deg)}to{transform:rotate(-1turn)}}@keyframes loading__animation{to{transform:translateX(-100%)}}.wp-block-woocommerce-add-to-cart-with-options .variations_form.cart{margin-bottom:0!important}

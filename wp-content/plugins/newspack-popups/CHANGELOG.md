@@ -1,3 +1,10 @@
+## [3.1.7](https://github.com/Automattic/newspack-popups/compare/v3.1.6...v3.1.7) (2025-02-26)
+
+
+### Bug Fixes
+
+* restore UTM suppression feature ([#1399](https://github.com/Automattic/newspack-popups/issues/1399)) ([351d63a](https://github.com/Automattic/newspack-popups/commit/351d63afb568f9528619f6ffc7591d8a9639fd41))
+
 ## [3.1.6](https://github.com/Automattic/newspack-popups/compare/v3.1.5...v3.1.6) (2024-12-16)
 
 
