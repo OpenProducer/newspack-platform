@@ -32,8 +32,8 @@ class Resource
 {
     // Valid query parameters that work, but don't appear in discovery.
     private $stackParameters = ['alt' => ['type' => 'string', 'location' => 'query'], 'fields' => ['type' => 'string', 'location' => 'query'], 'trace' => ['type' => 'string', 'location' => 'query'], 'userIp' => ['type' => 'string', 'location' => 'query'], 'quotaUser' => ['type' => 'string', 'location' => 'query'], 'data' => ['type' => 'string', 'location' => 'body'], 'mimeType' => ['type' => 'string', 'location' => 'header'], 'uploadType' => ['type' => 'string', 'location' => 'query'], 'mediaUpload' => ['type' => 'complex', 'location' => 'query'], 'prettyPrint' => ['type' => 'string', 'location' => 'query']];
-    /** @var string $rootUrl */
-    private $rootUrl;
+    /** @var string $rootUrlTemplate */
+    private $rootUrlTemplate;
     /** @var \Google\Client $client */
     private $client;
     /** @var string $serviceName */
@@ -46,7 +46,7 @@ class Resource
     private $methods;
     public function __construct($service, $serviceName, $resourceName, $resource)
     {
-        $this->rootUrl = $service->rootUrl;
+        $this->rootUrlTemplate = $service->rootUrlTemplate ?? $service->rootUrl;
         $this->client = $service->getClient();
         $this->servicePath = $service->servicePath;
         $this->serviceName = $serviceName;
@@ -177,12 +177,14 @@ class Resource
         } else {
             $requestUrl = $this->servicePath . $restPath;
         }
-        // code for leading slash
-        if ($this->rootUrl) {
-            if ('/' !== \substr($this->rootUrl, -1) && '/' !== \substr($requestUrl, 0, 1)) {
+        if ($this->rootUrlTemplate) {
+            // code for universe domain
+            $rootUrl = \str_replace('UNIVERSE_DOMAIN', $this->client->getUniverseDomain(), $this->rootUrlTemplate);
+            // code for leading slash
+            if ('/' !== \substr($rootUrl, -1) && '/' !== \substr($requestUrl, 0, 1)) {
                 $requestUrl = '/' . $requestUrl;
             }
-            $requestUrl = $this->rootUrl . $requestUrl;
+            $requestUrl = $rootUrl . $requestUrl;
         }
         $uriTemplateVars = [];
         $queryVars = [];

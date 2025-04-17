@@ -163,9 +163,9 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 			return;
 		}
 
-		/** 
-		* When a renewal happens, it triggers two syncs to the ESP, one setting the subscription as on hold, and a 
-		* second one setting it back to active. This sometimes creates a race condition on the ESP side. 
+		/**
+		* When a renewal happens, it triggers two syncs to the ESP, one setting the subscription as on hold, and a
+		* second one setting it back to active. This sometimes creates a race condition on the ESP side.
 		* This third request will make sure the ESP always has the correct and most up to date data about the reader.
 		*/
 		self::schedule_sync(
@@ -200,9 +200,10 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 	 * @param array $data      Data.
 	 */
 	public static function newsletter_updated( $timestamp, $data ) {
-		if ( empty( $data['user_id'] ) || empty( $data['email'] ) ) {
+		if ( empty( $data['user_id'] ) || empty( $data['email'] ) || empty( $data['contact'] ) ) {
 			return;
 		}
+		$contact          = $data['contact'];
 		$subscribed_lists = \Newspack_Newsletters_Subscription::get_contact_lists( $data['email'] );
 		if ( is_wp_error( $subscribed_lists ) || ! is_array( $subscribed_lists ) ) {
 			return;
@@ -220,14 +221,13 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 			}
 		}
 
-		$metadata = [
-			'account'              => $data['user_id'],
-			'newsletter_selection' => implode( ', ', $lists_names ),
-		];
-		$contact  = [
-			'email'    => $data['email'],
-			'metadata' => $metadata,
-		];
+		$contact['metadata'] = array_merge(
+			$contact['metadata'],
+			[
+				'account'              => $data['user_id'],
+				'newsletter_selection' => implode( ', ', $lists_names ),
+			]
+		);
 		self::sync( $contact, 'Updating newsletter_selection field after a change in the subscription lists.' );
 	}
 

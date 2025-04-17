@@ -1,3 +1,10 @@
+# [3.3.0](https://github.com/Automattic/newspack-listings/compare/v3.2.0...v3.3.0) (2025-03-04)
+
+
+### Features
+
+* update to new brand ([#509](https://github.com/Automattic/newspack-listings/issues/509)) ([4fb7253](https://github.com/Automattic/newspack-listings/commit/4fb725302d7a153d4204d955aa975ba7460bd0c4))
+
 # [3.2.0](https://github.com/Automattic/newspack-listings/compare/v3.1.0...v3.2.0) (2024-11-11)
 
 

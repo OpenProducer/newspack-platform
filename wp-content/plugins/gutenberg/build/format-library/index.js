@@ -236,7 +236,7 @@ function InlineUI({
           type: image_name,
           attributes: {
             ...activeObjectAttributes,
-            style: width ? `width: ${editedWidth}px;` : '',
+            style: editedWidth ? `width: ${editedWidth}px;` : '',
             alt: editedAlt
           }
         };
@@ -1407,6 +1407,9 @@ function ColorPicker({
         [property]: color
       }));
     }
+    // Prevent the text and color picker from overlapping.
+    ,
+    __experimentalIsRenderedInSidebar: true
   });
 }
 function InlineColorUI({

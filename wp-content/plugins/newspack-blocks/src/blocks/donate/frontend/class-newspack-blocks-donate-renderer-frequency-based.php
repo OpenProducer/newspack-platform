@@ -140,6 +140,18 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 
 		$configuration = self::get_configuration( $attributes );
 
+		// Calculate the value for the "step" property of the custom amount donation value `input` element.
+		$input_element_step_attribute = '1';
+		$thousand_separator = get_option( 'woocommerce_price_thousand_sep', false );
+		$decimals = get_option( 'woocommerce_price_num_decimals', 2 );
+		if ( $thousand_separator !== '.' && $decimals > 0 ) {
+			// According to the HTML spec, a float can only use a dot (https://html.spec.whatwg.org/dev/common-microsyntaxes.html#valid-floating-point-number).
+			// Therefore, an `input[type="number"]` with a `,` decimal separator is invalid HTML.
+			// To support separators other than a dot would mean using a standard `input[type="text"]` element,
+			// with JS handling the validation and input filtering. This might be revisited in the future.
+			$input_element_step_attribute = '0.' . str_repeat( '0', $decimals - 1 ) . '1';
+		}
+
 		ob_start();
 
 		/**
@@ -200,6 +212,7 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 											name='donation_value_<?php echo esc_attr( $frequency_slug ); ?>_untiered'
 											value='<?php echo esc_attr( $amount ); ?>'
 											id='newspack-<?php echo esc_attr( $frequency_slug . '-' . $uid ); ?>-untiered-input'
+											step='<?php echo esc_attr( $input_element_step_attribute ); ?>'
 										/>
 									</div>
 									<?php else : ?>
@@ -305,6 +318,7 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 														min='<?php echo esc_attr( $configuration['minimumDonation'] ); ?>'
 														name='donation_value_<?php echo esc_attr( $frequency_slug ); ?>_other'
 														id='newspack-tier-<?php echo esc_attr( $frequency_slug . '-' . $uid ); ?>-other-input'
+														step='<?php echo esc_attr( $input_element_step_attribute ); ?>'
 													/>
 												</div>
 												<?php

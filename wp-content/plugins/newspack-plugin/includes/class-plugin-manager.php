@@ -85,14 +85,6 @@ class Plugin_Manager {
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=jetpack',
 			],
-			'mailchimp-for-woocommerce'   => [
-				'Name'        => 'Mailchimp for WooCommerce',
-				'Description' => \esc_html__( 'Connects WooCommerce to Mailchimp to sync your store data, send targeted campaigns to your customers, and sell more stuff.', 'newspack-plugin' ),
-				'Author'      => \esc_html__( 'Mailchimp', 'newspack-plugin' ),
-				'AuthorURI'   => \esc_url( 'https://mailchimp.com' ),
-				'PluginURI'   => \esc_url( 'https://mailchimp.com/connect-your-store/' ),
-				'Download'    => 'wporg',
-			],
 			'newspack-ads'                => [
 				'Name'        => \esc_html__( 'Newspack Ads', 'newspack-plugin' ),
 				'Description' => \esc_html__( 'Ads integration.', 'newspack-plugin' ),
@@ -199,7 +191,7 @@ class Plugin_Manager {
 			],
 			'publish-to-apple-news'       => [
 				'Name'        => \esc_html__( 'Publish to Apple News', 'newspack-plugin' ),
-				'Description' => \esc_html__( 'Export and synchronize posts to Apple format', 'newspack-plugin' ),
+				'Description' => \esc_html__( 'Export and synchronize posts to Apple format.', 'newspack-plugin' ),
 				'Author'      => \esc_html__( 'Alley Interactive', 'newspack-plugin' ),
 				'AuthorURI'   => \esc_url( 'https://www.alleyinteractive.com' ),
 				'PluginURI'   => \esc_url( 'https://github.com/alleyinteractive/apple-news' ),
@@ -444,7 +436,7 @@ class Plugin_Manager {
 	/**
 	 * Get the list of plugins which are supported, but not managed.
 	 * These plugins will not be added to the WP Admin plugins screen,
-	 * but installing them will not raise any issues in Health Check.
+	 * but installing them shouldn't be an issue.
 	 */
 	private static function get_supported_plugins_slugs() {
 		return [
@@ -562,7 +554,7 @@ class Plugin_Manager {
 		}
 
 		if ( \is_plugin_active( $installed_plugins[ $plugin_slug ] ) ) {
-			return new WP_Error( 'newspack_plugin_already_active', __( 'The plugin is already active.', 'newspack-plugin' ) );
+			return true;
 		}
 
 		$activated = activate_plugin( $installed_plugins[ $plugin_slug ] );

@@ -102,6 +102,7 @@ declare global {
 		authors: AuthorId[];
 		categories: CategoryId[];
 		includeSubcategories: boolean;
+		categoryJoinType: string;
 		excerptLength: number;
 		postType: PostType[];
 		showImage: boolean;

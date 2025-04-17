@@ -7,6 +7,8 @@
 
 namespace Newspack;
 
+use stdClass;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -80,7 +82,11 @@ class Mailchimp_API {
 	 * @return WP_REST_Response
 	 */
 	public static function api_mailchimp_auth_status() {
-		return self::is_valid_api_key();
+		$is_valid = self::is_valid_api_key();
+		if ( is_wp_error( $is_valid ) && 'no_api_key' === $is_valid->get_error_code() ) {
+			return rest_ensure_response( [] );
+		}
+		return $is_valid;
 	}
 
 	/**
@@ -111,7 +117,7 @@ class Mailchimp_API {
 	 */
 	public static function api_mailchimp_delete_key() {
 		delete_option( 'newspack_mailchimp_api_key' );
-		return \rest_ensure_response( [] );
+		return rest_ensure_response( new stdClass() );
 	}
 
 	/**
@@ -159,6 +165,9 @@ class Mailchimp_API {
 			// 'newspack_mailchimp_api_key' is a new option introduced to manage MC API key accross Newspack plugins.
 			// Keeping the old option for backwards compatibility.
 			$api_key = \get_option( 'newspack_mailchimp_api_key', get_option( 'newspack_newsletters_mailchimp_api_key' ) );
+			if ( empty( $api_key ) ) {
+				return new \WP_Error( 'no_api_key', __( 'No Mailchimp API Key found.', 'newspack' ) );
+			}
 		}
 		$endpoint = self::get_api_endpoint_from_key( $api_key );
 		if ( ! $endpoint ) {

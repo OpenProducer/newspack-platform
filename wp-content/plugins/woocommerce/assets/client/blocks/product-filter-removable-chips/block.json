@@ -22,7 +22,8 @@
 			"default": {
 				"type": "flex"
 			}
-		}
+		},
+		"interactivity": true
 	},
 	"usesContext": [
 		"queryId",

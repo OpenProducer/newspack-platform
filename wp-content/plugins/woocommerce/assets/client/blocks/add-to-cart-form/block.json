@@ -5,10 +5,6 @@
 	"description": "Display a button so the customer can add a product to their cart. Options will also be displayed depending on product type. e.g. quantity, variation.",
 	"category": "woocommerce-product-elements",
 	"attributes": {
-		"isDescendentOfSingleProductBlock": {
-			"type": "boolean",
-			"default": false
-		},
 		"quantitySelectorStyle": {
 			"type": "string",
 			"enum": [ "input", "stepper" ],

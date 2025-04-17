@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Promise;
 
 /**

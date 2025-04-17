@@ -39,6 +39,13 @@
 		"excerptLength": {
 			"type": "number",
 			"default": 55
+		},
+		"openInNewTab": {
+			"type": "boolean",
+			"default": false
+		},
+		"rel": {
+			"type": "string"
 		}
 	},
 	"supports": {

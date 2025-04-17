@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use DrewM\MailChimp\MailChimp;
+use Newspack_Newsletters_Mailchimp_Api as Mailchimp;
 use Newspack\Newsletters\Subscription_List;
 
 /**
@@ -38,16 +38,20 @@ class Newspack_Newsletters_Mailchimp_Notes {
 		if ( empty( $audience_ids ) ) {
 			return;
 		}
-		$mc = Newspack_Newsletters_Mailchimp::instance();
-		$api      = new Mailchimp( $mc->api_key() );
-		foreach ( $audience_ids as $audience_id ) {
-			$subscriber_hash = Mailchimp::subscriberHash( $email );
-			$api->post(
-				sprintf( 'lists/%s/members/%s/notes', $audience_id, $subscriber_hash ),
-				[
-					'note' => $note,
-				]
-			);
+		try {
+			$mc = Newspack_Newsletters_Mailchimp::instance();
+			$api      = new Mailchimp( $mc->api_key() );
+			foreach ( $audience_ids as $audience_id ) {
+				$subscriber_hash = Mailchimp::subscriberHash( $email );
+				$api->post(
+					sprintf( 'lists/%s/members/%s/notes', $audience_id, $subscriber_hash ),
+					[
+						'note' => $note,
+					]
+				);
+			}
+		} catch ( Exception $e ) {
+			Newspack_Newsletters_Logger::log( 'Error adding note to Mailchimp contact: ' . $e->getMessage() );
 		}
 	}
 

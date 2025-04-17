@@ -1,6 +1,6 @@
 <?php
 /**
- * Reader Activation.
+ * Reader Activation (publicly rebranded as "Audience Management").
  *
  * @package Newspack
  */
@@ -10,6 +10,7 @@ namespace Newspack;
 use Newspack\Recaptcha;
 use Newspack\Reader_Activation\Sync;
 use Newspack\Renewal;
+use Newspack\WooCommerce_My_Account;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -88,6 +89,7 @@ final class Reader_Activation {
 		\add_action( 'woocommerce_customer_reset_password', [ __CLASS__, 'login_after_password_reset' ] );
 
 		if ( self::is_enabled() ) {
+			\add_action( 'rest_api_init', [ __CLASS__, 'register_routes' ] );
 			\add_action( 'clear_auth_cookie', [ __CLASS__, 'clear_auth_intention_cookie' ] );
 			\add_action( 'clear_auth_cookie', [ __CLASS__, 'clear_auth_reader_cookie' ] );
 			\add_action( 'set_auth_cookie', [ __CLASS__, 'clear_auth_intention_cookie' ] );
@@ -226,6 +228,27 @@ final class Reader_Activation {
 	}
 
 	/**
+	 * Register routes.
+	 */
+	public static function register_routes() {
+		\register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/reader-newsletter-signup-lists/(?P<email_address>[\a-z]+)',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ __CLASS__, 'api_render_newsletters_signup_form' ],
+				'permission_callback' => '__return_true',
+				'args'                => [
+					'email_address' => [
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_email',
+					],
+				],
+			]
+		);
+	}
+
+	/**
 	 * Get labels for reader activation flows.
 	 *
 	 * @param string|null $key Key of the label to return (optional).
@@ -336,9 +359,9 @@ final class Reader_Activation {
 			'metadata_fields'                          => Sync\Metadata::get_fields(),
 			'sync_esp_delete'                          => true,
 			'active_campaign_master_list'              => '',
+			'constant_contact_list_id'                 => '',
 			'mailchimp_audience_id'                    => '',
 			'mailchimp_reader_default_status'          => 'transactional',
-			'emails'                                   => Emails::get_emails( array_values( Reader_Activation_Emails::EMAIL_TYPES ), false ),
 			'sender_name'                              => Emails::get_from_name(),
 			'sender_email_address'                     => Emails::get_from_email(),
 			'contact_email_address'                    => Emails::get_reply_to_email(),
@@ -373,7 +396,7 @@ final class Reader_Activation {
 	}
 
 	/**
-	 * Get a reader activation settings.
+	 * Get a setting value.
 	 *
 	 * @param string $name Setting name.
 	 *
@@ -394,7 +417,7 @@ final class Reader_Activation {
 	}
 
 	/**
-	 * Update a reader activation setting.
+	 * Update a setting value.
 	 *
 	 * @param string $key   Option name.
 	 * @param mixed  $value Option value.
@@ -411,7 +434,7 @@ final class Reader_Activation {
 		}
 
 		/**
-		 * Fires just before a Reader Activation setting is updated
+		 * Fires just before a setting is updated
 		 *
 		 * @param string $key   Option name.
 		 * @param mixed  $value Option value.
@@ -432,11 +455,15 @@ final class Reader_Activation {
 	 * Activate RAS features and publish RAS prompts + segments.
 	 */
 	public static function activate() {
-		if ( ! method_exists( '\Newspack_Popups_Presets', 'activate_ras_presets' ) ) {
+		if ( ! method_exists( 'Newspack_Popups_Presets', 'activate_ras_presets' ) ) {
 			return new \WP_Error( 'newspack_reader_activation_missing_dependencies', __( 'Newspack Campaigns plugin is required to activate Reader Activation features.', 'newspack-plugin' ) );
 		}
 
-		return \Newspack_Popups_Presets::activate_ras_presets();
+		$activated = \Newspack_Popups_Presets::activate_ras_presets();
+		if ( $activated ) {
+			self::skip( 'ras_campaign', false );
+		}
+		return $activated;
 	}
 
 	/**
@@ -493,6 +520,8 @@ final class Reader_Activation {
 		switch ( $provider ) {
 			case 'active_campaign':
 				return self::get_setting( 'active_campaign_master_list' );
+			case 'constant_contact':
+				return self::get_setting( 'constant_contact_list_id' );
 			case 'mailchimp':
 				$audience_id = self::get_setting( 'mailchimp_audience_id' );
 				/** Attempt to use list ID from "Mailchimp for WooCommerce" */
@@ -561,20 +590,16 @@ final class Reader_Activation {
 		}
 
 		foreach ( $available_lists as $list_id => $list ) {
-			// Skip any premium lists since the reader has already made a purchase at this stage.
-			if ( method_exists( '\Newspack_Newsletters\Plugins\Woocommerce_Memberships', 'is_subscription_list_tied_to_plan' ) && \Newspack_Newsletters\Plugins\Woocommerce_Memberships::is_subscription_list_tied_to_plan( $list['db_id'] ) ) {
-				continue;
-			}
-
 			$registration_lists[ $list_id ] = $list;
 		}
 
 		/**
 		 * Filters the newsletters lists that should be rendered after checkout.
 		 *
-		 * @param array $registration_lists Array of newsletter lists.
+		 * @param array  $registration_lists Array of newsletter lists.
+		 * @param string $email_address      Email address.
 		 */
-		return apply_filters( 'newspack_post_registration_newsletters_lists', $registration_lists );
+		return apply_filters( 'newspack_post_registration_newsletters_lists', $registration_lists, $email_address );
 	}
 
 	/**
@@ -674,12 +699,23 @@ final class Reader_Activation {
 	/**
 	 * Are the Legal Pages settings configured?
 	 * Allows for blank values.
+	 *
+	 * @param bool $skip Whether to skip the check.
+	 *
+	 * @return bool
 	 */
-	public static function is_terms_configured() {
+	public static function is_terms_configured( $skip = false ) {
 		$terms_text = \get_option( self::OPTIONS_PREFIX . 'terms_text', false );
 		$terms_url  = \get_option( self::OPTIONS_PREFIX . 'terms_url', false );
+		$is_valid   = is_string( $terms_text ) && is_string( $terms_url );
+		if ( $skip ) {
+			return $is_valid || self::is_skipped( 'terms_conditions' );
+		}
+		if ( $is_valid ) {
+			self::skip( 'terms_conditions', false );
+		}
 
-		return is_string( $terms_text ) && is_string( $terms_url );
+		return $is_valid;
 	}
 
 	/**
@@ -694,25 +730,103 @@ final class Reader_Activation {
 	}
 
 	/**
+	 * Is reCAPTCHA enabled?
+	 *
+	 * @param bool $skip Whether to skip the check.
+	 *
+	 * @return bool
+	 */
+	public static function is_recaptcha_enabled( $skip = false ) {
+		$is_valid = method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha();
+		if ( $skip ) {
+			return $is_valid || self::is_skipped( 'recaptcha' );
+		}
+		if ( $is_valid ) {
+			self::skip( 'recaptcha', false );
+		}
+		return $is_valid;
+	}
+
+	/**
 	 * Is the RAS campaign configured?
 	 *
-	 * TODO: Make this dynamic once the third UI screen to generate the prompts is built.
+	 * @param bool $skip Whether to skip the check.
+	 *
+	 * @return bool
 	 */
-	public static function is_ras_campaign_configured() {
-		return self::is_enabled() || get_option( Engagement_Wizard::SKIP_CAMPAIGN_SETUP_OPTION, '' ) === '1';
+	public static function is_ras_campaign_configured( $skip = false ) {
+		$is_valid = class_exists( 'Newspack_Popups_Presets' ) && get_option( \Newspack_Popups_Presets::NEWSPACK_POPUPS_RAS_LAST_UPDATED, false );
+		if ( $skip ) {
+			return $is_valid || self::is_skipped( 'ras_campaign' );
+		}
+		if ( $is_valid ) {
+			self::skip( 'ras_campaign', false );
+		}
+		return $is_valid;
 	}
 
 	/**
 	 * Are all prerequisites for Reader Activation complete?
+	 *
+	 * @return bool
 	 */
 	public static function is_ras_ready_to_configure() {
-		return self::is_terms_configured() && self::is_esp_configured() && self::is_transactional_email_configured() && method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha() && self::is_woocommerce_active();
+		$is_ready = self::is_terms_configured( true ) && self::is_esp_configured() && self::is_transactional_email_configured() && self::is_recaptcha_enabled( true ) && self::is_woocommerce_active();
+
+		// If all requirements are met or skipped, and RAS isn't yet enabled, enable it.
+		if ( $is_ready && self::is_ras_campaign_configured( true ) && ! self::is_enabled() ) {
+			self::update_setting( 'enabled', true );
+		}
+		return $is_ready;
+	}
+
+	/**
+	 * Has the given prerequisite been skipped?
+	 *
+	 * @param string $prerequisite The prerequisite to check.
+	 *
+	 * @return bool
+	 */
+	public static function is_skipped( $prerequisite ) {
+		// Legacy option name compabitility.
+		$legacy_is_skipped = false;
+		if ( 'ras_campaign' === $prerequisite ) {
+			$legacy_is_skipped = get_option( Audience_Wizard::SKIP_CAMPAIGN_SETUP_OPTION, false ) === '1';
+		}
+
+		return boolval( get_option( self::OPTIONS_PREFIX . $prerequisite . '_skipped', $legacy_is_skipped ) );
+	}
+
+	/**
+	 * Skip or unskip the given prerequisite.
+	 *
+	 * @param string $prerequisite The prerequisite to skip.
+	 * @param bool   $skip If true, skip the prerequisite. If false, unskip it.
+	 *
+	 * @return bool True if updated, false if not.
+	 */
+	public static function skip( $prerequisite, $skip = true ) {
+		if ( ( $skip && self::is_skipped( $prerequisite ) ) || ( ! $skip && ! self::is_skipped( $prerequisite ) ) ) {
+			return true;
+		}
+
+		$updated = $skip ? update_option( self::OPTIONS_PREFIX . $prerequisite . '_skipped', '1' ) : delete_option( self::OPTIONS_PREFIX . $prerequisite . '_skipped' );
+
+		// Legacy option name compabitility.
+		if ( 'ras_campaign' === $prerequisite && ! $skip && ! $updated ) {
+			$updated = delete_option( Audience_Wizard::SKIP_CAMPAIGN_SETUP_OPTION );
+		}
+
+		// If all requirements are met or skipped, and RAS isn't yet enabled, enable it.
+		if ( $skip && self::is_ras_ready_to_configure() && self::is_ras_campaign_configured( true ) && ! self::is_enabled() ) {
+			self::update_setting( 'enabled', true );
+		}
+
+		return $updated;
 	}
 
 	/**
 	 * Get the status of the prerequisites for enabling reader activation.
-	 * TODO: Finalize the list of prerequisites and all copy.
-	 * TODO: Establish schema for input fields to be shown in expandable cards.
 	 *
 	 * @return array Array of prerequisites to complete.
 	 */
@@ -722,7 +836,7 @@ final class Reader_Activation {
 				'active'      => self::is_terms_configured(),
 				'label'       => __( 'Legal Pages', 'newspack-plugin' ),
 				'description' => __( 'Displaying legal pages like Privacy Policy and Terms of Service on your site is recommended for allowing readers to register and access their account.', 'newspack-plugin' ),
-				'help_url'    => 'https://help.newspack.com/engagement/reader-activation-system',
+				'help_url'    => 'https://help.newspack.com/engagement/audience-management-system/',
 				'warning'     => __( 'Privacy policies that tell users how you collect and use their data are essential for running a  trustworthy website. While rules and regulations can differ by country, certain legal pages might be required by law.', 'newspack-plugin' ),
 				'fields'      => [
 					'terms_text' => [
@@ -734,6 +848,8 @@ final class Reader_Activation {
 						'description' => __( 'URL to the page containing the privacy policy or terms of service.', 'newspack-plugin' ),
 					],
 				],
+				'skippable'   => true,
+				'is_skipped'  => self::is_skipped( 'terms_conditions' ),
 			],
 			'esp'              => [
 				'active'       => self::is_esp_configured(),
@@ -743,15 +859,15 @@ final class Reader_Activation {
 				'label'        => __( 'Email Service Provider (ESP)', 'newspack-plugin' ),
 				'description'  => __( 'Connect to your ESP to register readers with their email addresses and send newsletters.', 'newspack-plugin' ),
 				'instructions' => __( 'Connect to your email service provider (ESP) and enable at least one subscription list.', 'newspack-plugin' ),
-				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
-				'href'         => \admin_url( '/admin.php?page=newspack-engagement-wizard#/newsletters' ),
+				'help_url'     => 'https://help.newspack.com/engagement/audience-management-system/',
+				'href'         => \admin_url( 'edit.php?post_type=newspack_nl_cpt&page=newspack-newsletters' ),
 				'action_text'  => __( 'ESP settings' ),
 			],
 			'emails'           => [
 				'active'      => self::is_transactional_email_configured(),
 				'label'       => __( 'Transactional Emails', 'newspack-plugin' ),
 				'description' => __( 'Your sender name and email address determines how readers find emails related to their account in their inbox. To customize the content of these emails, visit Advanced Settings below.', 'newspack-plugin' ),
-				'help_url'    => 'https://help.newspack.com/engagement/reader-activation-system',
+				'help_url'    => 'https://help.newspack.com/engagement/audience-management-system/',
 				'fields'      => [
 					'sender_name'           => [
 						'label'       => __( 'Sender Name', 'newspack-plugin' ),
@@ -768,13 +884,15 @@ final class Reader_Activation {
 				],
 			],
 			'recaptcha'        => [
-				'active'       => method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha(),
+				'active'       => self::is_recaptcha_enabled(),
 				'label'        => __( 'reCAPTCHA', 'newspack-plugin' ),
 				'description'  => __( 'Connecting to a Google reCAPTCHA account enables enhanced anti-spam for all Newspack sign-up blocks.', 'newspack-plugin' ),
 				'instructions' => __( 'Enable reCAPTCHA and enter your account credentials.', 'newspack-plugin' ),
-				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
-				'href'         => \admin_url( '/admin.php?page=newspack-connections-wizard&scrollTo=recaptcha' ),
+				'help_url'     => 'https://help.newspack.com/engagement/audience-management-system/',
+				'href'         => \admin_url( '/admin.php?page=newspack-settings&scrollTo=newspack-settings-recaptcha' ),
 				'action_text'  => __( 'reCAPTCHA settings' ),
+				'skippable'    => true,
+				'is_skipped'   => self::is_skipped( 'recaptcha' ),
 			],
 			'reader_revenue'   => [
 				'active'       => self::is_reader_revenue_ready(),
@@ -782,23 +900,24 @@ final class Reader_Activation {
 				'label'        => __( 'Reader Revenue', 'newspack-plugin' ),
 				'description'  => __( 'Setting suggested donation amounts is required for enabling a streamlined donation experience.', 'newspack-plugin' ),
 				'instructions' => __( 'Set platform to "Newspack" or "News Revenue Hub" and configure your default donation settings. If using News Revenue Hub, set an Organization ID and a Donor Landing Page in News Revenue Hub Settings.', 'newspack-plugin' ),
-				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
-				'href'         => \admin_url( '/admin.php?page=newspack-reader-revenue-wizard' ),
+				'help_url'     => 'https://help.newspack.com/engagement/audience-management-system/',
+				'href'         => \admin_url( '/admin.php?page=newspack-audience#/payment' ),
 				'action_text'  => __( 'Reader Revenue settings' ),
 			],
 			'ras_campaign'     => [
 				'active'         => self::is_ras_campaign_configured(),
-				'is_skipped'     => get_option( Engagement_Wizard::SKIP_CAMPAIGN_SETUP_OPTION, '' ) === '1',
 				'plugins'        => [
 					'newspack-popups' => class_exists( '\Newspack_Popups_Model' ),
 				],
-				'label'          => __( 'Reader Activation Campaign', 'newspack-plugin' ),
-				'description'    => __( 'Building a set of prompts with default segments and settings allows for an improved experience optimized for Reader Activation.', 'newspack-plugin' ),
-				'help_url'       => 'https://help.newspack.com/engagement/reader-activation-system',
-				'href'           => self::is_ras_campaign_configured() ? \admin_url( '/admin.php?page=newspack-popups-wizard#/campaigns' ) : \admin_url( '/admin.php?page=newspack-engagement-wizard#/reader-activation/campaign' ),
+				'label'          => __( 'Audience Management Campaign', 'newspack-plugin' ),
+				'description'    => __( 'Building a set of prompts with default segments and settings allows for an improved experience optimized for audience management.', 'newspack-plugin' ),
+				'help_url'       => 'https://help.newspack.com/engagement/audience-management-system/',
+				'href'           => self::is_ras_campaign_configured() ? admin_url( '/admin.php?page=newspack-audience-campaigns' ) : admin_url( '/admin.php?page=newspack-audience#/campaign' ),
 				'action_enabled' => self::is_ras_ready_to_configure(),
-				'action_text'    => __( 'Reader Activation campaign', 'newspack-plugin' ),
+				'action_text'    => __( 'Audience Management campaign', 'newspack-plugin' ),
 				'disabled_text'  => __( 'Waiting for all settings to be ready', 'newspack-plugin' ),
+				'skippable'      => true,
+				'is_skipped'     => self::is_skipped( 'ras_campaign' ),
 			],
 		];
 
@@ -1101,7 +1220,7 @@ final class Reader_Activation {
 	}
 
 	/**
-	 * Whether the reader hasn't set its own password.
+	 * Whether the reader hasn't set their password.
 	 *
 	 * @param \WP_User|int $user_or_user_id User object or user ID.
 	 *
@@ -1118,7 +1237,14 @@ final class Reader_Activation {
 			return new \WP_Error( 'newspack_is_reader_without_password', __( 'Invalid user.', 'newspack-plugin' ) );
 		}
 
-		return (bool) \get_user_meta( $user->ID, self::WITHOUT_PASSWORD, false );
+		/**
+		 * Filters whether the user should be considered a reader without a password.
+		 *
+		 * @param bool $is_reader_without_password True if the reader has not set a password.
+		 * @param int  $user_id                    User ID.
+		 * @return bool
+		 */
+		return (bool) apply_filters( 'newpack_reader_activation_reader_is_without_password', \get_user_meta( $user->ID, self::WITHOUT_PASSWORD, false ), $user->ID );
 	}
 
 	/**
@@ -1349,6 +1475,16 @@ final class Reader_Activation {
 			if ( Renewal::is_subscriptions_page() ) {
 				// If we are on the subscriptions page, set the auth callback URL to the subscriptions page.
 				$auth_callback_url = Renewal::get_subscriptions_url();
+			} elseif ( WooCommerce_My_Account::is_myaccount_url() ) {
+				$params = [];
+				// If we are using one of our my account params, reattach the param to the my account URL.
+				foreach ( WooCommerce_My_Account::ALLOWED_PARAMS as $param ) {
+					$value = $_GET[ $param ] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Recommended
+					if ( $value ) {
+						$params[ $param ] = $value;
+					}
+				}
+				$auth_callback_url = add_query_arg( $params, \wc_get_page_permalink( 'myaccount' ) );
 			} elseif ( function_exists( 'wc_get_page_permalink' ) && function_exists( 'is_account_page' ) && \is_account_page() ) {
 				// If we are already on the my account page, set the my account URL so the page reloads on submit.
 				$auth_callback_url = \wc_get_page_permalink( 'myaccount' );
@@ -1472,6 +1608,19 @@ final class Reader_Activation {
 		<?php
 	}
 
+	/**
+	 * Fetch HTML for the post-checkout newsletter signup modal.
+	 *
+	 * @param WP_REST_Request $request The REST request.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function api_render_newsletters_signup_form( $request ) {
+		ob_start();
+		self::render_newsletters_signup_modal( $request['email_address'] );
+		$html = trim( ob_get_clean() );
+		return new \WP_REST_Response( [ 'html' => $html ] );
+	}
 
 	/**
 	 * Renders newsletters signup form.
@@ -1519,13 +1668,16 @@ final class Reader_Activation {
 
 	/**
 	 * Renders the newsletter signup modal.
+	 *
+	 * @param string $email_address Email address. Optional, defaults to the logged-in reader's email address.
 	 */
-	public static function render_newsletters_signup_modal() {
+	public static function render_newsletters_signup_modal( $email_address = '' ) {
 		if ( ! self::is_newsletters_signup_available() ) {
 			return;
 		}
-
-		$email_address     = self::get_logged_in_reader_email_address();
+		if ( ! is_email( $email_address ) ) {
+			$email_address = self::get_logged_in_reader_email_address();
+		}
 		$newsletters_lists = self::get_post_checkout_newsletter_lists( $email_address );
 		if ( empty( $newsletters_lists ) ) {
 			return;
@@ -2128,13 +2280,19 @@ final class Reader_Activation {
 			$user_data['display_name'] = $user_nicename;
 		}
 
+		if ( empty( $user_data['user_pass'] ) ) {
+			$password = \wp_generate_password();
+		} else {
+			$password = $user_data['user_pass'];
+		}
+
 		$user_data = array_merge(
 			$user_data,
 			[
 				'user_login'    => $user_nicename,
 				'user_nicename' => $user_nicename,
 				'display_name'  => $user_nicename,
-				'user_pass'     => \wp_generate_password(),
+				'user_pass'     => $password,
 			]
 		);
 
@@ -2490,6 +2648,20 @@ final class Reader_Activation {
 				html_entity_decode( get_bloginfo( 'name' ) )
 			)
 		);
+	}
+
+	/**
+	 * Get the checkout configuration.
+	 *
+	 * @return array The checkout configuration.
+	 */
+	public static function get_checkout_configuration() {
+		return [
+			'woocommerce_registration_required'        => self::is_woocommerce_registration_required(),
+			'woocommerce_post_checkout_success_text'   => self::get_post_checkout_success_text(),
+			'woocommerce_checkout_privacy_policy_text' => self::get_checkout_privacy_policy_text(),
+			'woocommerce_post_checkout_registration_success_text' => self::get_post_checkout_registration_success_text(),
+		];
 	}
 }
 Reader_Activation::init();

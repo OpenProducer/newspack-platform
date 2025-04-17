@@ -15,7 +15,7 @@ use Google\Site_Kit\Core\Modules\Module_Sharing_Settings;
 use Google\Site_Kit\Core\Permissions\Permissions;
 use Google\Site_Kit\Core\Storage\Options;
 use Google\Site_Kit\Core\Util\Feature_Flags;
-use Google\Site_Kit\Core\Util\URL;
+use Google\Site_Kit\Core\Util\Plugin_Status;
 use WP_Dependencies;
 use WP_Post_Type;
 
@@ -133,6 +133,24 @@ final class Assets {
 				);
 			}
 		);
+
+		if ( is_admin() ) {
+			add_action(
+				'enqueue_block_assets',
+				function () {
+					$assets = $this->get_assets();
+
+					array_walk(
+						$assets,
+						function ( $asset ) {
+							if ( $asset->has_context( Asset::CONTEXT_ADMIN_BLOCK_EDITOR ) ) {
+								$this->enqueue_asset( $asset->get_handle() );
+							}
+						}
+					);
+				}
+			);
+		}
 
 		add_action(
 			'enqueue_block_editor_assets',

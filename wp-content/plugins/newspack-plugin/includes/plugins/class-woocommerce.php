@@ -21,6 +21,7 @@ class WooCommerce {
 		add_action( 'wp_loaded', [ __CLASS__, 'disable_wc_author_archive_override' ] );
 		add_filter( 'woocommerce_rest_prepare_shop_order_object', [ __CLASS__, 'modify_shop_order_wc_rest_api_payload' ] );
 		add_filter( 'woocommerce_create_pages', [ __CLASS__, 'use_shortcodes_for_cart_checkout' ] );
+		add_filter( 'get_user_option_default_password_nag', [ __CLASS__, 'disable_default_password_nag' ] );
 	}
 
 	/**
@@ -65,6 +66,16 @@ class WooCommerce {
 		$woocommerce_pages['checkout']['content'] = '<!-- wp:shortcode -->[woocommerce_checkout]<!-- /wp:shortcode -->';
 
 		return $woocommerce_pages;
+	}
+
+	/**
+	 * Disable WC's password nag ("Your account with <site-title> is using a temporary password.
+	 * We emailed you a link to change your password.").
+	 *
+	 * @param mixed $value User meta value.
+	 */
+	public static function disable_default_password_nag( $value ) {
+		return false;
 	}
 }
 WooCommerce::init();

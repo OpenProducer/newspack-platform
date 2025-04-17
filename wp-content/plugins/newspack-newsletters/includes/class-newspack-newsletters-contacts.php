@@ -135,8 +135,8 @@ class Newspack_Newsletters_Contacts {
 			Newspack_Newsletters_Logger::log( 'Adding contact without lists. Provider is ' . $provider->service . '.' );
 		}
 
-		if ( null !== $existing_contact ) {
-			$existing_contact = Newspack_Newsletters_Subscription::get_contact_data( $contact['email'], true );
+		if ( null !== $existing_contact && ! is_wp_error( $existing_contact ) ) {
+			$existing_contact = Newspack_Newsletters_Subscription::get_contact_data( $existing_contact['email'], true );
 		}
 
 		$contact['existing_contact_data'] = \is_wp_error( $existing_contact ) ? false : $existing_contact;
@@ -223,6 +223,8 @@ class Newspack_Newsletters_Contacts {
 		 */
 		do_action( 'newspack_newsletters_upsert', $provider->service, $contact, $lists, $result, $is_updating, $context );
 
+		// Logs the success or error resulting from the upsert request.
+		// To see errors returned by the ESP's API, look for the `newspack_{esp}_api_error` error code.
 		do_action(
 			'newspack_log',
 			'newspack_esp_sync_upsert_contact',
@@ -234,6 +236,7 @@ class Newspack_Newsletters_Contacts {
 					'lists'    => $lists,
 					'contact'  => $contact,
 					'errors'   => $errors->get_error_messages(),
+					'status'   => $errors->get_error_codes(),
 				],
 				'user_email' => $contact['email'],
 				'file'       => 'newspack_esp_sync',
@@ -241,7 +244,15 @@ class Newspack_Newsletters_Contacts {
 		);
 
 		if ( $errors->has_errors() ) {
-			return $errors;
+			// Get a reader-friendly error message to show to the user.
+			$reader_error = $provider->get_reader_error_message(
+				[
+					'email' => $contact['email'],
+					'lists' => $lists,
+				],
+				is_wp_error( $result ) ? $result : $errors
+			);
+			return Newspack_Newsletters::debug_mode() ? $errors : new \WP_Error( 'newspack_newsletters_upsert_contact_error', $reader_error );
 		}
 
 		return $result;

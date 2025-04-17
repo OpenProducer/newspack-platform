@@ -58,7 +58,7 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
     {
         static $cache = [self::VARIABLE => [], self::DATA => []];
         $m_length = \strlen($m);
-        if (\strlen($n) >= 2 * $m_length) {
+        if (\strlen($n) > 2 * $m_length) {
             return \bcmod($n, $m);
         }
         // if (m.length >> 1) + 2 <= m.length then m is too small and n can't be reduced
@@ -66,6 +66,13 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
             return self::regularBarrett($n, $m);
         }
         // n = 2 * m.length
+        $correctionNeeded = \false;
+        if ($m_length & 1) {
+            $correctionNeeded = \true;
+            $n .= '0';
+            $m .= '0';
+            $m_length++;
+        }
         if (($key = \array_search($m, $cache[self::VARIABLE])) === \false) {
             $key = \count($cache[self::VARIABLE]);
             $cache[self::VARIABLE][] = $m;
@@ -113,7 +120,7 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
         while (\bccomp($result, $m) >= 0) {
             $result = \bcsub($result, $m);
         }
-        return $result;
+        return $correctionNeeded ? \substr($result, 0, -1) : $result;
     }
     /**
      * (Regular) Barrett Modular Reduction

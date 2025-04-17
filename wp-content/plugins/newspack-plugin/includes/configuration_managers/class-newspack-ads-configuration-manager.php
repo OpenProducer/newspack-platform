@@ -187,7 +187,7 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 * @return bool Is the service enabled.
 	 */
 	public function is_service_enabled( $service ) {
-		return get_option( Advertising_Wizard::NEWSPACK_ADVERTISING_SERVICE_PREFIX . $service, false );
+		return get_option( Advertising_Display_Ads::NEWSPACK_ADVERTISING_SERVICE_PREFIX . $service, false );
 	}
 
 	/**

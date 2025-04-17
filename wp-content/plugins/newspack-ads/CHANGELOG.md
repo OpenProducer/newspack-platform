@@ -1,3 +1,22 @@
+# [3.5.0](https://github.com/Automattic/newspack-ads/compare/v3.4.0...v3.5.0) (2025-03-31)
+
+
+### Bug Fixes
+
+* **ad-block-recovery:** remove nonce field ([#940](https://github.com/Automattic/newspack-ads/issues/940)) ([8144ed1](https://github.com/Automattic/newspack-ads/commit/8144ed1ca7b6139164550989a71aca238827852b))
+
+
+### Features
+
+* **blocks:** update ad-unit icon and move icons to their own file ([#941](https://github.com/Automattic/newspack-ads/issues/941)) ([2ccd063](https://github.com/Automattic/newspack-ads/commit/2ccd06374880a39f874d79deac981bfbb5c6c467))
+
+# [3.4.0](https://github.com/Automattic/newspack-ads/compare/v3.3.2...v3.4.0) (2025-03-04)
+
+
+### Features
+
+* update brand colours ([#937](https://github.com/Automattic/newspack-ads/issues/937)) ([92b7835](https://github.com/Automattic/newspack-ads/commit/92b7835a29ae1103c503e7baead0b44f99367220))
+
 ## [3.3.2](https://github.com/Automattic/newspack-ads/compare/v3.3.1...v3.3.2) (2025-01-20)
 
 

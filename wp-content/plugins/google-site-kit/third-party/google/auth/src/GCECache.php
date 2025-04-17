@@ -42,7 +42,7 @@ class GCECache
      * @param array<mixed> $cacheConfig Configuration for the cache
      * @param CacheItemPoolInterface $cache
      */
-    public function __construct(array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
+    public function __construct(?array $cacheConfig = null, ?\Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
     {
         $this->cache = $cache;
         $this->cacheConfig = \array_merge(['lifetime' => 1500, 'prefix' => ''], (array) $cacheConfig);
@@ -54,7 +54,7 @@ class GCECache
      * @param callable $httpHandler callback which delivers psr7 request
      * @return bool True if this a GCEInstance, false otherwise
      */
-    public function onGce(callable $httpHandler = null)
+    public function onGce(?callable $httpHandler = null)
     {
         if (\is_null($this->cache)) {
             return \Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials::onGce($httpHandler);

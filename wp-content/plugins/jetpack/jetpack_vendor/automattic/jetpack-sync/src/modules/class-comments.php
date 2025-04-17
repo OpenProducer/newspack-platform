@@ -16,24 +16,6 @@ use Automattic\Jetpack\Sync\Settings;
 class Comments extends Module {
 
 	/**
-	 * Max bytes allowed for full sync upload.
-	 * Current Setting : 7MB.
-	 *
-	 * @access public
-	 *
-	 * @var int
-	 */
-	const MAX_SIZE_FULL_SYNC = 7000000;
-	/**
-	 * Max bytes allowed for post meta_value => length.
-	 * Current Setting : 2MB.
-	 *
-	 * @access public
-	 *
-	 * @var int
-	 */
-	const MAX_COMMENT_META_LENGTH = 2000000;
-	/**
 	 * Sync module name.
 	 *
 	 * @access public
@@ -237,6 +219,18 @@ class Comments extends Module {
 	}
 
 	/**
+	 * Returns escaped SQL for whitelisted comment types.
+	 * Can be injected directly into a WHERE clause.
+	 *
+	 * @access public
+	 *
+	 * @return string SQL WHERE clause.
+	 */
+	public function get_whitelisted_comment_types_sql() {
+		return 'comment_type IN (\'' . implode( '\', \'', array_map( 'esc_sql', $this->get_whitelisted_comment_types() ) ) . '\')';
+	}
+
+	/**
 	 * Prevents any comment types that are not in the whitelist from being enqueued and sent to WordPress.com.
 	 *
 	 * @param array $args Arguments passed to wp_insert_comment, deleted_comment, spammed_comment, etc.
@@ -396,11 +390,13 @@ class Comments extends Module {
 	 * @return string WHERE SQL clause, or `null` if no comments are specified in the module config.
 	 */
 	public function get_where_sql( $config ) {
-		if ( is_array( $config ) ) {
+		$where_sql = $this->get_whitelisted_comment_types_sql();
+
+		if ( is_array( $config ) && ! empty( $config ) ) {
 			return 'comment_ID IN (' . implode( ',', array_map( 'intval', $config ) ) . ')';
 		}
 
-		return '1=1';
+		return $where_sql;
 	}
 
 	/**
@@ -599,7 +595,7 @@ class Comments extends Module {
 			'comment',
 			$comments,
 			$metadata,
-			self::MAX_COMMENT_META_LENGTH, // Replace with appropriate comment meta length constant.
+			self::MAX_META_LENGTH, // Replace with appropriate comment meta length constant.
 			self::MAX_SIZE_FULL_SYNC
 		);
 
@@ -608,23 +604,5 @@ class Comments extends Module {
 			'objects'    => $filtered_comments,
 			'meta'       => $filtered_comments_metadata,
 		);
-	}
-
-	/**
-	 * Set the status of the full sync action based on the objects that were sent.
-	 *
-	 * @access public
-	 *
-	 * @param array $status This module Full Sync status.
-	 * @param array $objects This module Full Sync objects.
-	 *
-	 * @return array The updated status.
-	 */
-	public function set_send_full_sync_actions_status( $status, $objects ) {
-
-		$object_ids          = $objects['object_ids'];
-		$status['last_sent'] = end( $object_ids );
-		$status['sent']     += count( $object_ids );
-		return $status;
 	}
 }

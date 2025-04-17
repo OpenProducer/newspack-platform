@@ -16,7 +16,6 @@ use Google\Site_Kit\Core\Assets\Assets;
 use Google\Site_Kit\Core\Assets\Script;
 use Google\Site_Kit\Core\Assets\Stylesheet;
 use Google\Site_Kit\Core\Authentication\Authentication;
-use Google\Site_Kit\Core\Conversion_Tracking\Conversion_Event_Providers\WooCommerce;
 use Google\Site_Kit\Core\Modules\Module;
 use Google\Site_Kit\Core\Modules\Module_With_Assets;
 use Google\Site_Kit\Core\Modules\Module_With_Assets_Trait;
@@ -33,6 +32,7 @@ use Google\Site_Kit\Core\Storage\Options;
 use Google\Site_Kit\Core\Storage\User_Options;
 use Google\Site_Kit\Core\Util\BC_Functions;
 use Google\Site_Kit\Core\Util\Method_Proxy_Trait;
+use Google\Site_Kit\Core\Util\Plugin_Status;
 use Google\Site_Kit\Modules\Sign_In_With_Google\Authenticator;
 use Google\Site_Kit\Modules\Sign_In_With_Google\Authenticator_Interface;
 use Google\Site_Kit\Modules\Sign_In_With_Google\Existing_Client_ID;
@@ -91,12 +91,13 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 	protected $sign_in_with_google_block;
 
 	/**
-	 * WooCommerce instance.
+	 * Stores the active state of the WooCommerce plugin.
 	 *
-	 * @since 1.146.0
-	 * @var WooCommerce
+	 * @since 1.148.0
+	 * @var bool Whether WooCommerce is active or not.
 	 */
-	protected $woocommerce;
+	protected $is_woocommerce_active;
+
 
 	/**
 	 * Constructor.
@@ -117,9 +118,9 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 		Assets $assets = null
 	) {
 		parent::__construct( $context, $options, $user_options, $authentication, $assets );
+
 		$this->existing_client_id        = new Existing_Client_ID( $this->options );
 		$this->sign_in_with_google_block = new Sign_In_With_Google_Block( $this->context );
-		$this->woocommerce               = new WooCommerce( $this->context );
 	}
 
 	/**
@@ -162,6 +163,8 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 		add_action( 'login_footer', $this->get_method_proxy( 'render_signinwithgoogle' ) );
 		// Output the Sign in with Google <div> in the WooCommerce login form.
 		add_action( 'woocommerce_login_form_start', $this->get_method_proxy( 'render_signinwithgoogle_woocommerce' ) );
+		// Output the Sign in with Google <div> in any use of wp_login_form.
+		add_filter( 'login_form_top', $this->get_method_proxy( 'render_button_in_wp_login_form' ) );
 
 		// Delete client ID stored from previous module connection on module reconnection.
 		add_action(
@@ -305,7 +308,7 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 			),
 		);
 
-		if ( Sign_In_With_Google_Block::can_register() ) {
+		if ( Sign_In_With_Google_Block::can_register() && $this->is_connected() ) {
 			$assets[] = new Script(
 				'blocks-sign-in-with-google',
 				array(
@@ -367,16 +370,37 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 		 * Only render the button in a WooCommerce login page if:
 		 *
 		 * - the Sign in with Google module is connected
-		 * - WooCommerce is active
 		 * - the user is not logged in
 		 */
-		if ( ! $this->is_connected() || ! $this->woocommerce->is_active() || is_user_logged_in() ) {
+		if ( ! $this->is_connected() || is_user_logged_in() ) {
 			return;
 		}
 
 		?>
 		<div class="googlesitekit-sign-in-with-google__frontend-output-button woocommerce-form-row form-row"></div>
 		<?php
+	}
+
+	/**
+	 * Checks if the Sign in with Google button can be rendered.
+	 *
+	 * @since 1.149.0
+	 *
+	 * @return bool True if the button can be rendered, false otherwise.
+	 */
+	private function can_render_signinwithgoogle() {
+		$settings = $this->get_settings()->get();
+
+		// If there's no client ID available, don't render the button.
+		if ( ! $settings['clientID'] ) {
+			return false;
+		}
+
+		if ( substr( wp_login_url(), 0, 5 ) !== 'https' ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -388,19 +412,15 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 	 *                rendered the code to replace buttons.
 	 */
 	private function render_signinwithgoogle() {
-		$is_wp_login          = is_login();
+		// `is_login()` isn't available until WP 6.1.
+		$is_wp_login          = false !== stripos( wp_login_url(), $_SERVER['SCRIPT_NAME'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		$is_woocommerce       = class_exists( 'woocommerce' );
 		$is_woocommerce_login = did_action( 'woocommerce_login_form_start' );
 
-		$settings = $this->get_settings()->get();
-
-		// If there's no client ID available, don't render the button.
-		if ( ! $settings['clientID'] ) {
-			return;
-		}
-
+		$settings  = $this->get_settings()->get();
 		$login_uri = add_query_arg( 'action', self::ACTION_AUTH, wp_login_url() );
-		if ( substr( $login_uri, 0, 5 ) !== 'https' ) {
+
+		if ( ! $this->can_render_signinwithgoogle() ) {
 			return;
 		}
 
@@ -518,6 +538,21 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 	}
 
 	/**
+	 * Appends the Sign in with Google button to content of a WordPress filter.
+	 *
+	 * @since 1.149.0
+	 *
+	 * @param string $content Existing content.
+	 * @return string Possibly modified content.
+	 */
+	private function render_button_in_wp_login_form( $content ) {
+		if ( $this->can_render_signinwithgoogle() ) {
+			$content .= '<div class="googlesitekit-sign-in-with-google__frontend-output-button"></div>';
+		}
+		return $content;
+	}
+
+	/**
 	 * Gets the absolute number of users who have authenticated using Sign in with Google.
 	 *
 	 * @since 1.140.0
@@ -620,12 +655,12 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 	 *
 	 * @since 1.140.0
 	 *
-	 * @return string TRUE if tag is found, FALSE if not.
+	 * @return string|array
 	 */
 	public function get_content_url() {
 		$wp_login_url = wp_login_url();
 
-		if ( $this->woocommerce->is_active() ) {
+		if ( $this->is_woocommerce_active() ) {
 			$wc_login_page_id = wc_get_page_id( 'myaccount' );
 			$wc_login_url     = get_permalink( $wc_login_page_id );
 			return array(
@@ -780,7 +815,7 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 			$inline_data['existingClientID'] = $existing_client_id;
 		}
 
-		$is_woocommerce_active            = $this->woocommerce->is_active();
+		$is_woocommerce_active            = $this->is_woocommerce_active();
 		$woocommerce_registration_enabled = $is_woocommerce_active ? get_option( 'woocommerce_enable_myaccount_registration' ) : null;
 
 		$inline_data['isWooCommerceActive']              = $is_woocommerce_active;
@@ -790,5 +825,16 @@ final class Sign_In_With_Google extends Module implements Module_With_Assets, Mo
 		$modules_data['sign-in-with-google'] = $inline_data;
 
 		return $modules_data;
+	}
+
+	/**
+	 * Helper method to determine if the WooCommerce plugin is active.
+	 *
+	 * @since 1.148.0
+	 *
+	 * @return bool True if active, false if not.
+	 */
+	protected function is_woocommerce_active() {
+		return class_exists( 'WooCommerce' );
 	}
 }

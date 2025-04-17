@@ -7,7 +7,9 @@
  */
 
 use Automattic\Jetpack\Constants;
+use Automattic\WooCommerce\Enums\ProductStockStatus;
 use Automattic\WooCommerce\Enums\ProductType;
+use Automattic\WooCommerce\Internal\CostOfGoodsSold\CostOfGoodsSoldController;
 use Automattic\WooCommerce\Utilities\NumberUtil;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -458,6 +460,7 @@ class WC_Admin_Post_Types {
 			} else {
 				$new_regular_price = null;
 			}
+
 			if ( isset( $request_data['_sale_price'] ) ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 				$new_sale_price = ( '' === $request_data['_sale_price'] ) ? '' : wc_format_decimal( $request_data['_sale_price'] );
@@ -481,6 +484,12 @@ class WC_Admin_Post_Types {
 			}
 		}
 
+		if ( wc_get_container()->get( CostOfGoodsSoldController::class )->feature_is_enabled() && isset( $request_data['_cogs_value'] ) ) {
+			$cogs_value = $request_data['_cogs_value'];
+			$cogs_value = '' === $cogs_value ? null : (float) wc_format_decimal( $cogs_value );
+			$product->set_cogs_value( $cogs_value );
+		}
+
 		// Handle Stock Data.
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$manage_stock = ! empty( $request_data['_manage_stock'] ) && ProductType::GROUPED !== $product->get_type() ? 'yes' : 'no';
@@ -488,7 +497,7 @@ class WC_Admin_Post_Types {
 		if ( ! empty( $request_data['_stock_status'] ) ) {
 			$stock_status = wc_clean( $request_data['_stock_status'] );
 		} else {
-			$stock_status = $product->is_type( ProductType::VARIABLE ) ? null : 'instock';
+			$stock_status = $product->is_type( ProductType::VARIABLE ) ? null : ProductStockStatus::IN_STOCK;
 		}
 		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
@@ -648,6 +657,10 @@ class WC_Admin_Post_Types {
 
 		$stock_status = empty( $request_data['_stock_status'] ) ? null : wc_clean( $request_data['_stock_status'] );
 		$product      = $this->maybe_update_stock_status( $product, $stock_status );
+
+		if ( wc_get_container()->get( CostOfGoodsSoldController::class )->feature_is_enabled() ) {
+			$this->maybe_update_cogs_value( $product, $request_data );
+		}
 
 		$product->save();
 
@@ -867,7 +880,7 @@ class WC_Admin_Post_Types {
 	private function maybe_update_stock_status( $product, $stock_status ) {
 		if ( $product->is_type( ProductType::EXTERNAL ) ) {
 			// External products are always in stock.
-			$product->set_stock_status( 'instock' );
+			$product->set_stock_status( ProductStockStatus::IN_STOCK );
 		} elseif ( isset( $stock_status ) ) {
 			if ( $product->is_type( ProductType::VARIABLE ) && ! $product->get_manage_stock() ) {
 				// Stock status is determined by children.
@@ -972,6 +985,22 @@ class WC_Admin_Post_Types {
 	 */
 	protected function request_data() {
 		return $_REQUEST;
+	}
+
+	/**
+	 * Update the Cost of Goods Sold value coming from a bulk edit for a product.
+	 *
+	 * @param WC_Product $product The product to update.
+	 * @param array      $request_data The current request data.
+	 */
+	private function maybe_update_cogs_value( WC_Product $product, array $request_data ) {
+		$change_cogs_value = absint( $request_data['change_cogs_value'] );
+		if ( 1 !== $change_cogs_value ) {
+			return;
+		}
+
+		$cogs_value = wc_clean( wp_unslash( $request_data['_cogs_value'] ?? '' ) );
+		$product->set_cogs_value( '' === $cogs_value ? null : (float) wc_format_decimal( $cogs_value ) );
 	}
 }
 

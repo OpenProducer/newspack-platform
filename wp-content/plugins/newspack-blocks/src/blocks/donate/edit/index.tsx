@@ -68,11 +68,15 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 		platform: '',
 	} );
 
+	interface AudienceDonations {
+		donation_data: DonationSettings;
+	}
+
 	useEffect( () => {
-		apiFetch< DonationSettings >( {
-			path: '/newspack/v1/wizard/newspack-reader-revenue-wizard/donations',
+		apiFetch< AudienceDonations >( {
+			path: '/newspack/v1/wizard/newspack-audience-donations',
 		} )
-			.then( ( donationSettings: DonationSettings ) => {
+			.then( ( { donation_data: donationSettings }: AudienceDonations ) => {
 				setSettings( {
 					amounts: donationSettings.amounts,
 					currencySymbol: donationSettings.currencySymbol,
@@ -118,8 +122,8 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 	if ( error.length ) {
 		return (
 			<Placeholder icon="warning" label={ __( 'Error', 'newspack-blocks' ) } instructions={ error }>
-				<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
-					{ __( 'Go to donation settings to troubleshoot.', 'newspack-blocks' ) }
+				<ExternalLink href="/wp-admin/admin.php?page=newspack-audience#/payment">
+					{ __( 'Go to checkout & payment settings to troubleshoot.', 'newspack-blocks' ) }
 				</ExternalLink>
 			</Placeholder>
 		);
@@ -132,8 +136,8 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 				label={ __( 'The Donate block will not be rendered.', 'newspack-blocks' ) }
 				instructions={ __( 'The Reader Revenue platform is set to "other".', 'newspack-blocks' ) }
 			>
-				<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
-					{ __( 'Go to donation settings to update the platform.', 'newspack-blocks' ) }
+				<ExternalLink href="/wp-admin/admin.php?page=newspack-audience#/payment">
+					{ __( 'Go to checkout & payment settings to update the platform.', 'newspack-blocks' ) }
 				</ExternalLink>
 			</Placeholder>
 		);
@@ -405,7 +409,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 								) }
 								<br />
 								<br />
-								<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
+								<ExternalLink href="/wp-admin/admin.php?page=newspack-audience-donations">
 									{ __( 'Edit donation settings', 'newspack-blocks' ) }
 								</ExternalLink>
 							</p>

@@ -113,7 +113,14 @@ import { domReady } from './utils';
 					if ( ! $wrapper.length ) {
 						return;
 					}
+
 					const $el = $wrapper.clone();
+
+					// Make sure Transaction Details toggle's aria-expanded value is correct in cloned version.
+					if ( $( '#after_customer_details').hasClass( 'transaction-details-expanded' ) ) {
+						$('[id="order_review_heading"]', $el).attr( 'aria-expanded', 'true' );
+					}
+
 					// Remove existing table from inside the payment methods.
 					$( '#payment .order-review-wrapper' ).remove();
 					const $table = $el.find( 'table' );
@@ -128,6 +135,18 @@ import { domReady } from './utils';
 					}
 					// Move new order review table to the payment methods.
 					$( '.payment_methods' ).after( $el );
+				} );
+
+				/**
+				 * Toggle Transaction Details
+				 */
+				$( document ).on( 'click', '#order_review_heading', function() {
+					// Toggle the aria-expanded attribute.
+					$( this ).attr( 'aria-expanded', function( index, attr ) {
+						return attr === 'false' ? 'true' : 'false';
+					} );
+					// Toggle the CSS class to show/hide the Transaction Details.
+					$( '#after_customer_details').toggleClass( 'transaction-details-expanded' );
 				} );
 
 				/**
@@ -151,13 +170,16 @@ import { domReady } from './utils';
 					}
 				}
 
+				/**
+				 * Update Place Order button text.
+				 */
 				$( document ).on( 'updated_checkout', function() {
 					// Update "Place Order" button to include current price.
 					let processOrderText = newspackBlocksModalCheckout.labels.complete_button;
 					if ( ! processOrderText ) {
 						return;
 					}
-					if ( $( '#place_order' ).hasClass( 'button-label-updated' ) ) {
+					if ( $( '#place_order' ).has( $( 'span.cart-price' ) ) ) {
 						// Modify button text to include updated price.
 						const tree = $( '<div>' + processOrderText + '</div>' );
 						// Update the HTML in the .cart-price span with the new price, and return.
@@ -165,11 +187,9 @@ import { domReady } from './utils';
 							return this.childNodes;
 						} );
 						processOrderText = tree.html();
-						$( '#place_order' ).html( processOrderText );
-					} else {
-						// Set default button label passed from PHP.
-						$( '#place_order' ).addClass( 'button-label-updated' ).html( processOrderText );
 					}
+					$( '#place_order' ).html( processOrderText );
+					$( '#place_order_clone' ).html( processOrderText );
 				} );
 
 				/**

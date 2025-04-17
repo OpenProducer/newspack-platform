@@ -55,6 +55,13 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	public static $support_local_lists = false;
 
 	/**
+	 * Memoization of existing contacts.
+	 *
+	 * @var array
+	 */
+	private $existing_contacts = [];
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -597,22 +604,49 @@ Error message(s) received:
 	 * Get a reader-facing error message to be shown when the add_contact method fails.
 	 *
 	 * @param array $params Additional information about the request that triggered the error.
+	 * @param mixed $raw_error Raw error data from the ESP's API. This can vary depending on the provider.
 	 *
 	 * @return string
 	 */
-	public function get_add_contact_reader_error_message( $params = [] ) {
+	public function get_reader_error_message( $params = [], $raw_error = null ) {
 		/**
 		 * A default error message to show to readers if their signup request results in an error.
 		 *
 		 * @param string $reader_error The default error message.
 		 * @param array  $params Additional information about the request that triggered the error.
+		 * @param mixed $raw_error Raw error data from the ESP's API. This can vary depending on the provider.
 		 */
 		$reader_error = apply_filters(
 			'newspack_newsletters_add_contact_reader_error_message',
-			__( "Sorry, this email cannot be subscribed to this newsletter. Please contact support with the email list you were trying to subscribe to and we'll add you to the list.", 'newspack-newsletters' ),
-			$params
+			__( 'Sorry, an error has occurred. Please try again later or contact us for support.', 'newspack-newsletters' ),
+			$params,
+			$raw_error
 		);
 		return $reader_error;
+	}
+
+	/**
+	 * Check if a contact exists in the ESP.
+	 *
+	 * @param string $email The contact email address.
+	 *
+	 * @return bool True if the contact exists, false otherwise.
+	 */
+	public function contact_exists( $email ) {
+		if ( in_array( $email, $this->existing_contacts, true ) ) {
+			return true;
+		}
+
+		$contact = $this->get_contact_data( $email );
+		if ( is_wp_error( $contact ) ) {
+			// Don't memoize missing contacts.
+			return false;
+		}
+
+		// Memoize existing contacts.
+		$this->existing_contacts[] = $email;
+
+		return true;
 	}
 
 	/**
@@ -644,6 +678,15 @@ Error message(s) received:
 		}
 
 		$list_settings = $list->get_provider_settings( $this->service );
+
+		// If the contact doesn't exist, create it.
+		if ( ! $this->contact_exists( $contact['email'] ) ) {
+			$result = $this->add_contact( $contact, $list_settings['list'] );
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+		}
+
 		return $this->add_esp_local_list_to_contact( $contact['email'], $list_settings['tag_id'], $list_settings['list'] );
 	}
 

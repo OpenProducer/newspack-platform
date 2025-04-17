@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use DrewM\MailChimp\MailChimp;
+use Newspack_Newsletters_Mailchimp_Api as Mailchimp;
 
 /**
  * API Controller for Newspack Mailchimp ESP service.

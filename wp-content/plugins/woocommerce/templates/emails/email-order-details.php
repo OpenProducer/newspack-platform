@@ -12,7 +12,7 @@
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates\Emails
- * @version 9.7.0
+ * @version 9.8.0
  */
 
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
@@ -54,10 +54,14 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 		$after  = '';
 	}
 	if ( $email_improvements_enabled ) {
-		echo '<span>';
+		echo '<br><span>';
 	}
 	/* translators: %s: Order ID. */
-	$order_number_string = $email_improvements_enabled ? __( 'Order #%s', 'woocommerce' ) : __( '[Order #%s]', 'woocommerce' );
+	$order_number_string = __( '[Order #%s]', 'woocommerce' );
+	if ( $email_improvements_enabled ) {
+		/* translators: %s: Order ID. */
+		$order_number_string = __( 'Order #%s', 'woocommerce' );
+	}
 	echo wp_kses_post( $before . sprintf( $order_number_string . $after . ' (<time datetime="%s">%s</time>)', $order->get_order_number(), $order->get_date_created()->format( 'c' ), wc_format_datetime( $order->get_date_created() ) ) );
 	if ( $email_improvements_enabled ) {
 		echo '</span>';

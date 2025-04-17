@@ -91,7 +91,7 @@ class UserRefreshCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
      *     @type string $id_token
      * }
      */
-    public function fetchAuthToken(callable $httpHandler = null)
+    public function fetchAuthToken(?callable $httpHandler = null)
     {
         return $this->auth->fetchAuthToken($httpHandler);
     }

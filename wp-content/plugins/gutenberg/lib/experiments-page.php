@@ -86,7 +86,7 @@ function gutenberg_initialize_experiments_settings() {
 		'gutenberg-experiments',
 		'gutenberg_experiments_section',
 		array(
-			'label' => __( 'Disables the TinyMCE and Classic block', 'gutenberg' ),
+			'label' => __( 'Disables the TinyMCE and Classic block.', 'gutenberg' ),
 			'id'    => 'gutenberg-no-tinymce',
 		)
 	);

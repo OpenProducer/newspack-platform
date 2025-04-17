@@ -77,7 +77,7 @@ class OAuth {
 	/**
 	 * Process OAuth proxy URL.
 	 *
-	 * @param string $type 'google' or 'fivetran' for now.
+	 * @param string $type 'google' for now.
 	 * @param string $path Path to append to base URL.
 	 * @param array  $query_args Query params.
 	 * @throws \Exception If trying to authenticate a non-existent proxy.
@@ -103,7 +103,7 @@ class OAuth {
 	/**
 	 * Is OAuth2 configured for this instance?
 	 *
-	 * @param string $type 'google' or 'fivetran' for now.
+	 * @param string $type 'google' for now.
 	 */
 	public static function is_proxy_configured( $type ) {
 		return self::get_proxy_url( $type ) && self::get_proxy_api_key();
@@ -112,7 +112,7 @@ class OAuth {
 	/**
 	 * Get proxy URL by type.
 	 *
-	 * @param string $type 'google' or 'fivetran' for now.
+	 * @param string $type 'google' for now.
 	 */
 	private static function get_proxy_url( $type ) {
 		switch ( $type ) {
@@ -122,14 +122,6 @@ class OAuth {
 				}
 				if ( defined( 'NEWSPACK_GOOGLE_OAUTH_PROXY' ) ) {
 					return NEWSPACK_GOOGLE_OAUTH_PROXY;
-				}
-				break;
-			case 'fivetran':
-				if ( defined( 'NEWSPACK_FIVETRAN_PROXY_OVERRIDE' ) ) {
-					return NEWSPACK_FIVETRAN_PROXY_OVERRIDE;
-				}
-				if ( defined( 'NEWSPACK_FIVETRAN_PROXY' ) ) {
-					return NEWSPACK_FIVETRAN_PROXY;
 				}
 				break;
 		}

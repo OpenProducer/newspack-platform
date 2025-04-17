@@ -46,7 +46,7 @@ class REST
      */
     public static function execute(\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $client, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, $expectedClass = null, $config = [], $retryMap = null)
     {
-        $runner = new \Google\Site_Kit_Dependencies\Google\Task\Runner($config, \sprintf('%s %s', $request->getMethod(), (string) $request->getUri()), [\get_class(), 'doExecute'], [$client, $request, $expectedClass]);
+        $runner = new \Google\Site_Kit_Dependencies\Google\Task\Runner($config, \sprintf('%s %s', $request->getMethod(), (string) $request->getUri()), [self::class, 'doExecute'], [$client, $request, $expectedClass]);
         if (null !== $retryMap) {
             $runner->setRetryMap($retryMap);
         }
@@ -92,7 +92,7 @@ class REST
      * @return mixed|T|null
      * @throws \Google\Service\Exception
      */
-    public static function decodeHttpResponse(\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null, $expectedClass = null)
+    public static function decodeHttpResponse(\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response, ?\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null, $expectedClass = null)
     {
         $code = $response->getStatusCode();
         // retry strategy
@@ -111,7 +111,7 @@ class REST
         }
         return $response;
     }
-    private static function decodeBody(\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null)
+    private static function decodeBody(\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response, ?\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null)
     {
         if (self::isAltMedia($request)) {
             // don't decode the body, it's probably a really long string
@@ -119,7 +119,7 @@ class REST
         }
         return (string) $response->getBody();
     }
-    private static function determineExpectedClass($expectedClass, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null)
+    private static function determineExpectedClass($expectedClass, ?\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null)
     {
         // "false" is used to explicitly prevent an expected class from being returned
         if (\false === $expectedClass) {
@@ -140,7 +140,7 @@ class REST
         }
         return null;
     }
-    private static function isAltMedia(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null)
+    private static function isAltMedia(?\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null)
     {
         if ($request && ($qs = $request->getUri()->getQuery())) {
             \parse_str($qs, $query);

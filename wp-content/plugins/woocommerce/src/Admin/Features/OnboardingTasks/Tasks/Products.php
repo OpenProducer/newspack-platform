@@ -28,6 +28,7 @@ class Products extends Task {
 		add_action( 'woocommerce_new_product', array( $this, 'delete_product_count_cache' ) );
 		add_action( 'wp_trash_post', array( $this, 'delete_product_count_cache' ) );
 		add_action( 'untrashed_post', array( $this, 'delete_product_count_cache' ) );
+		add_action( 'current_screen', array( $this, 'maybe_redirect_to_add_product_tasklist' ), 30, 0 );
 	}
 
 	/**
@@ -95,6 +96,14 @@ class Products extends Task {
 		);
 	}
 
+	/**
+	 * If a task is always accessible, relevant for when a task list is hidden but a task can still be viewed.
+	 *
+	 * @return bool
+	 */
+	public function is_always_accessible() {
+		return true;
+	}
 
 	/**
 	 * Adds a return to task list notice when completing the manual product task.
@@ -215,5 +224,25 @@ class Products extends Task {
 		$products_query = new \WP_Query( $args );
 
 		return $products_query->found_posts;
+	}
+
+	/**
+	 * Redirect to the add product tasklist if there are no products.
+	 *
+	 * @return void
+	 */
+	public function maybe_redirect_to_add_product_tasklist() {
+		$screen = get_current_screen();
+		if ( 'edit' === $screen->base && 'product' === $screen->post_type ) {
+			// wp_count_posts is cached.
+			$counts = (array) wp_count_posts( $screen->post_type );
+			unset( $counts['auto-draft'] );
+			$count = array_sum( $counts );
+			if ( $count > 0 ) {
+				return;
+			}
+			wp_safe_redirect( admin_url( 'admin.php?page=wc-admin&task=products' ) );
+			exit;
+		}
 	}
 }

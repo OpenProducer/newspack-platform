@@ -209,7 +209,7 @@ class Newspack_Blocks {
 				'iframe_can_upload_archives' => WP_REST_Newspack_Iframe_Controller::can_upload_archives(),
 				'supports_recaptcha'         => class_exists( 'Newspack\Recaptcha' ),
 				'has_recaptcha'              => class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha(),
-				'recaptcha_url'              => admin_url( 'admin.php?page=newspack-connections-wizard' ),
+				'recaptcha_url'              => admin_url( 'admin.php?page=newspack-settings' ),
 				'custom_taxonomies'          => self::get_custom_taxonomies(),
 				'can_use_name_your_price'    => self::can_use_name_your_price(),
 				'tier_amounts_template'      => self::get_formatted_amount(),
@@ -588,6 +588,7 @@ class Newspack_Blocks {
 		$authors                    = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
 		$categories                 = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
 		$include_subcategories      = isset( $attributes['includeSubcategories'] ) ? intval( $attributes['includeSubcategories'] ) : false;
+		$category_join              = isset( $attributes['categoryJoinType'] ) ? $attributes['categoryJoinType'] : 'or';
 		$tags                       = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
 		$custom_taxonomies          = isset( $attributes['customTaxonomies'] ) ? $attributes['customTaxonomies'] : array();
 		$tag_exclusions             = isset( $attributes['tagExclusions'] ) ? $attributes['tagExclusions'] : array();
@@ -625,7 +626,7 @@ class Newspack_Blocks {
 				);
 			}
 			if ( $categories && count( $categories ) ) {
-				if ( 1 === $include_subcategories ) {
+				if ( 'or' === $category_join && 1 === $include_subcategories ) {
 					$children = [];
 					foreach ( $categories as $parent ) {
 						$children = array_merge( $children, get_categories( [ 'child_of' => $parent ] ) );
@@ -634,7 +635,11 @@ class Newspack_Blocks {
 						}
 					}
 				}
-				$args['category__in'] = $categories;
+				if ( 'or' === $category_join ) {
+					$args['category__in'] = $categories;
+				} else {
+					$args['category__and'] = $categories;
+				}
 			}
 			if ( $tags && count( $tags ) ) {
 				$args['tag__in'] = $tags;

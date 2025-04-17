@@ -8,6 +8,7 @@ import {
 	Button,
 	ButtonGroup,
 	CheckboxControl,
+	SelectControl,
 	QueryControls as BasicQueryControls
 } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
@@ -125,49 +126,75 @@ class QueryControls extends Component {
 		);
 	};
 	fetchSavedCategories = categoryIDs => {
-		return apiFetch( {
-			path: addQueryArgs( '/wp/v2/categories', {
+		return apiFetch({
+			path: addQueryArgs('/wp/v2/categories', {
 				per_page: 100,
 				_fields: 'id,name',
-				include: categoryIDs.join( ',' ),
-			} ),
-		} ).then( function ( categories ) {
-			return categories.map( category => ( {
+				include: categoryIDs.join(','),
+			}),
+		}).then(function (categories) {
+			const allCats = categories.map(category => ({
 				value: category.id,
-				label: decodeEntities( category.name ) || __( '(no title)', 'newspack-blocks' ),
-			} ) );
-		} );
+				label:
+					decodeEntities(category.name) ||
+					__('(no title)', 'newspack-blocks'),
+			}));
+			// Look for categoryIDs that were not returned (deleted categories) and add them to the list.
+			categoryIDs.forEach(catID => {
+				if (!allCats.find(cat => cat.value === parseInt(catID))) {
+					allCats.push({
+						value: parseInt(catID),
+						label: __('Deleted category', 'newspack-blocks'),
+					});
+				}
+			});
+			return allCats;
+		});
 	};
 
 	fetchTagSuggestions = search => {
-		return apiFetch( {
-			path: addQueryArgs( '/wp/v2/tags', {
+		return apiFetch({
+			path: addQueryArgs('/wp/v2/tags', {
 				search,
 				per_page: 20,
 				_fields: 'id,name',
 				orderby: 'count',
 				order: 'desc',
-			} ),
-		} ).then( function ( tags ) {
-			return tags.map( tag => ( {
+			}),
+		}).then(function (tags) {
+			return tags.map(tag => ({
 				value: tag.id,
-				label: decodeEntities( tag.name ) || __( '(no title)', 'newspack-blocks' ),
-			} ) );
-		} );
+				label:
+					decodeEntities(tag.name) ||
+					__('(no title)', 'newspack-blocks'),
+			}));
+		});
 	};
 	fetchSavedTags = tagIDs => {
-		return apiFetch( {
-			path: addQueryArgs( '/wp/v2/tags', {
+		return apiFetch({
+			path: addQueryArgs('/wp/v2/tags', {
 				per_page: 100,
 				_fields: 'id,name',
-				include: tagIDs.join( ',' ),
-			} ),
-		} ).then( function ( tags ) {
-			return tags.map( tag => ( {
+				include: tagIDs.join(','),
+			}),
+		}).then(function (tags) {
+			const allTags = tags.map(tag => ({
 				value: tag.id,
-				label: decodeEntities( tag.name ) || __( '(no title)', 'newspack-blocks' ),
-			} ) );
-		} );
+				label:
+					decodeEntities(tag.name) ||
+					__('(no title)', 'newspack-blocks'),
+			}));
+			// Look for tagIDs that were not returned (deleted tags) and add them to the list.
+			tagIDs.forEach(tagID => {
+				if (!allTags.find(tag => tag.value === parseInt(tagID))) {
+					allTags.push({
+						value: parseInt(tagID),
+						label: __('Deleted tag', 'newspack-blocks'),
+					});
+				}
+			});
+			return allTags;
+		});
 	};
 
 	fetchCustomTaxonomiesSuggestions = ( taxSlug, search ) => {
@@ -226,6 +253,8 @@ class QueryControls extends Component {
 			onAuthorsChange,
 			categories,
 			onCategoriesChange,
+			categoryJoinType,
+			onCategoryJoinTypeChange,
 			includeSubcategories,
 			onIncludeSubcategoriesChange,
 			tags,
@@ -301,15 +330,38 @@ class QueryControls extends Component {
 					<>
 						<BasicQueryControls { ...this.props } maxItems={ 30 } />
 						{ onCategoriesChange && (
-							<AutocompleteTokenField
-								tokens={ categories || [] }
-								onChange={ onCategoriesChange }
-								fetchSuggestions={ this.fetchCategorySuggestions }
-								fetchSavedInfo={ this.fetchSavedCategories }
-								label={ __( 'Categories', 'newspack-blocks' ) }
-							/>
+							<BaseControl
+								id="newspack-block__category-control"
+							>
+								<div className="components-base-control__label-dropdown">
+									<BaseControl.VisualLabel>
+										{ __( 'Category', 'newspack-blocks' ) }
+									</BaseControl.VisualLabel>
+									<SelectControl
+										size="small"
+										value={ categoryJoinType }
+										options={ [
+											{ label: __( 'is one of', 'newspack-blocks' ), value: 'or' },
+											{ label: __( 'is all of', 'newspack-blocks' ), value: 'all' },
+										] }
+										onChange={ ( value ) => {
+											if ( 'all' === value ) {
+												onIncludeSubcategoriesChange( false );
+											}
+											onCategoryJoinTypeChange( value );
+										} }
+										__nextHasNoMarginBottom
+									/>
+								</div>
+								<AutocompleteTokenField
+									tokens={ categories || [] }
+									onChange={ onCategoriesChange }
+									fetchSuggestions={ this.fetchCategorySuggestions }
+									fetchSavedInfo={ this.fetchSavedCategories }
+								/>
+							</BaseControl>
 						) }
-						{ onIncludeSubcategoriesChange && (
+						{ 'all' !== categoryJoinType && onIncludeSubcategoriesChange && (
 							<CheckboxControl
 								checked={ includeSubcategories }
 								onChange={ onIncludeSubcategoriesChange }

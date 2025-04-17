@@ -3709,6 +3709,10 @@ table.wp-list-table {
 		width: 10ch;
 	}
 
+	.column-cogs_value {
+		width: 10ch;
+	}
+
 	.column-is_in_stock {
 		text-align: left !important;
 		width: 12ch;
@@ -4567,12 +4571,23 @@ table {
 	line-height: 17px;
 }
 
-#wc-shipping-zone-region-picker-root .woocommerce-tree-select-control .components-base-control {
-	padding: 2px 8px;
-	border-radius: 4px;
+#wc-shipping-zone-region-picker-root .woocommerce-tree-select-control {
+	
+	.components-base-control {
+		padding: 2px 8px;
+		border-radius: 4px;
 
-	.woocommerce-tree-select-control__control-input {
+		.woocommerce-tree-select-control__control-input {
+			font-size: 14px;
+		}
+	}
+
+	.woocommerce-tree-select-control__option {
 		font-size: 14px;
+
+		.components-checkbox-control__label {
+			min-height: 52px;
+		}
 	}
 }
 

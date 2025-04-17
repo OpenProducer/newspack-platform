@@ -52,7 +52,7 @@ class WooCommerce_Products {
 		return [
 			'newspack_autocomplete_orders' => [
 				'id'            => '_newspack_autocomplete_orders',
-				'wrapper_class' => 'show_if_virtual',
+				'wrapper_class' => '',
 				'label'         => __( 'Auto-complete orders', 'newspack-plugin' ),
 				'description'   => __( 'Allow orders containing this product to automatically complete upon successful payment.', 'newspack-plugin' ),
 				'default'       => 'yes',
@@ -197,11 +197,7 @@ class WooCommerce_Products {
 	 * @param WC_Product $product The product associated with this order item.
 	 */
 	public static function require_order_processing( $needs_proccessing, $product ) {
-		if ( $product->is_virtual() ) {
-			return self::get_custom_option_value( $product, 'newspack_autocomplete_orders' ) ? false : $needs_proccessing;
-		}
-
-		return $needs_proccessing;
+		return self::get_custom_option_value( $product, 'newspack_autocomplete_orders' ) ? false : $needs_proccessing;
 	}
 }
 

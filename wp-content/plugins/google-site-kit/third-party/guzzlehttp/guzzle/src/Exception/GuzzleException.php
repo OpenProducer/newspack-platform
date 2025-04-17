@@ -2,22 +2,7 @@
 
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Exception;
 
-use Throwable;
-if (\interface_exists(\Throwable::class)) {
-    interface GuzzleException extends \Throwable
-    {
-    }
-} else {
-    /**
-     * @method string getMessage()
-     * @method \Throwable|null getPrevious()
-     * @method mixed getCode()
-     * @method string getFile()
-     * @method int getLine()
-     * @method array getTrace()
-     * @method string getTraceAsString()
-     */
-    interface GuzzleException
-    {
-    }
+use Google\Site_Kit_Dependencies\Psr\Http\Client\ClientExceptionInterface;
+interface GuzzleException extends \Google\Site_Kit_Dependencies\Psr\Http\Client\ClientExceptionInterface
+{
 }

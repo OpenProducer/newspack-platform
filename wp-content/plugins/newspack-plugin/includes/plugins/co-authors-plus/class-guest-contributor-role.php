@@ -50,11 +50,11 @@ class Guest_Contributor_Role {
 	 */
 	public static function initialize() {
 		add_filter( 'coauthors_edit_author_cap', [ __CLASS__, 'coauthors_edit_author_cap' ] );
-		add_action( 'admin_init', [ __CLASS__, 'setup_custom_role_and_capability' ] );
 		add_action( 'template_redirect', [ __CLASS__, 'prevent_myaccount_update' ] );
 		add_action( 'newspack_before_delete_account', [ __CLASS__, 'before_delete_account' ] );
 
 		add_action( 'init', [ __CLASS__, 'early_init' ], 5 );
+		add_action( 'init', [ __CLASS__, 'setup_custom_role_and_capability' ] );
 
 		// Do not allow guest authors to login.
 		\add_filter( 'wp_authenticate_user', [ __CLASS__, 'wp_authenticate_user' ], 10, 2 );
@@ -73,6 +73,8 @@ class Guest_Contributor_Role {
 		\add_filter( 'wp_is_application_passwords_available_for_user', [ __CLASS__, 'disable_feature' ], 10, 2 );
 		\add_filter( 'allow_password_reset', [ __CLASS__, 'disable_feature' ], 10, 2 );
 		\add_filter( 'woocommerce_current_user_can_edit_customer_meta_fields', [ __CLASS__, 'disable_feature' ], 10, 2 );
+
+		\add_filter( 'rest_user_query', [ __CLASS__, 'filter_rest_user_query' ], 10, 2 );
 
 		// Only if Members plugin is not active, because it has its own UI for roles.
 		if ( ! class_exists( 'Members_Plugin' ) ) {
@@ -548,6 +550,21 @@ class Guest_Contributor_Role {
 			}
 		}
 		return $value;
+	}
+
+	/**
+	 * Modify the REST API user query to include users with the custom capability.
+	 *
+	 * @param array           $args    The query arguments.
+	 * @param WP_REST_Request $request The request object.
+	 * @return array Modified query arguments.
+	 */
+	public static function filter_rest_user_query( $args, $request ) {
+		if ( isset( $args['who'] ) && $args['who'] === 'authors' && current_user_can( 'list_users' ) ) {
+			unset( $args['who'] );
+			$args['capability__in'] = [ 'edit_posts', self::ASSIGNABLE_TO_POSTS_CAPABILITY_NAME ];
+		}
+		return $args;
 	}
 }
 Guest_Contributor_Role::initialize();

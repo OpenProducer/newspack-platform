@@ -120,6 +120,6 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
         $params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($params, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DSAParams::MAP);
         $params = new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element($params);
         $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($y, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DSAPublicKey::MAP);
-        return self::wrapPublicKey($key, $params);
+        return self::wrapPublicKey($key, $params, null, $options);
     }
 }

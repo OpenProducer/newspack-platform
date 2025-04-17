@@ -8,6 +8,7 @@
 namespace Newspack;
 
 use Newspack\Starter_Content;
+
 defined( 'ABSPATH' ) || exit;
 
 define( 'NEWSPACK_WIZARD_COMPLETED_OPTION_PREFIX', 'newspack_wizard_completed_' );
@@ -39,18 +40,64 @@ abstract class Wizard {
 	protected $hidden = false;
 
 	/**
-	 * Priority setting for ordering admin submenu items.
+	 * Array to store instances of section objects.
+	 *
+	 * @var Wizards\Section[]
+	 */
+	protected $sections = [];
+
+	/**
+	 * The parent menu item name.
+	 *
+	 * @var string
+	 */
+	public $parent_menu = '';
+
+	/**
+	 * Parent menu order relative to the Newspack Dashboard menu item.
+	 *
+	 * @var int
+	 */
+	public $parent_menu_order = 0;
+
+	/**
+	 * Priority for when 'admin_menu'/'add_page' callback fires. Default is WordPress's default hook priority of 10
+	 * Override this on a per-wizard basis if there is a need to adjust the order that 'admin_menu'/'add_page' fires.
+	 * Example: set priority < 10 so add_page is called before other pages. Or > 10 so it's called after other
+	 * pages or plugins are loaded.
 	 *
 	 * @var int.
 	 */
-	protected $menu_priority = 2;
+	protected $admin_menu_priority = 10;
+
+	/**
+	 * Remove notifications from the wizard screen.
+	 *
+	 * @var bool
+	 */
+	protected $remove_notifications = true;
 
 	/**
 	 * Initialize.
+	 *
+	 * @param array $args Array of optional arguments. i.e. `sections`.
+	 * @return void
+	 *
+	 * @example
+	 * $my_wizard = new My_Wizard( [ 'sections' => [ 'my-wizard-section' => 'Newspack\Wizards\My_Wizard\My_Wizard_Section' ] ] );
 	 */
-	public function __construct() {
-		add_action( 'admin_menu', [ $this, 'add_page' ], $this->menu_priority );
+	public function __construct( $args = [] ) {
+		add_action( 'admin_menu', [ $this, 'add_page' ], $this->admin_menu_priority );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts_and_styles' ] );
+		if ( isset( $args['sections'] ) ) {
+			$this->load_wizard_sections( $args['sections'] );
+		}
+		add_filter( 'admin_body_class', [ $this, 'add_body_class' ] );
+
+		// Remove Notices.
+		add_action( 'admin_notices', [ $this, 'remove_notifications' ], -9999 );
+		add_action( 'all_admin_notices', [ $this, 'remove_notifications' ], -9999 );
+		add_action( 'network_admin_notices', [ $this, 'remove_notifications' ], -9999 );
 	}
 
 	/**
@@ -58,7 +105,7 @@ abstract class Wizard {
 	 */
 	public function add_page() {
 		add_submenu_page(
-			$this->hidden ? 'hidden' : 'newspack',
+			$this->hidden ? 'hidden' : $this->parent_menu,
 			$this->get_name(),
 			$this->get_name(),
 			$this->capability,
@@ -75,6 +122,15 @@ abstract class Wizard {
 		<div class="newspack-wizard <?php echo esc_attr( $this->slug ); ?>" id="<?php echo esc_attr( $this->slug ); ?>">
 		</div>
 		<?php
+	}
+
+	/**
+	 * Is Wizard admin page being viewed.
+	 *
+	 * @return bool
+	 */
+	public function is_wizard_page() {
+		return filter_input( INPUT_GET, 'page', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) === $this->slug;
 	}
 
 	/**
@@ -95,7 +151,7 @@ abstract class Wizard {
 		$support_email = ( defined( 'NEWSPACK_SUPPORT_EMAIL' ) && NEWSPACK_SUPPORT_EMAIL ) ? NEWSPACK_SUPPORT_EMAIL : false;
 
 		$urls = [
-			'dashboard'      => Wizards::get_url( 'dashboard' ),
+			'dashboard'      => Wizards::get_url( 'newspack-dashboard' ),
 			'public_path'    => Newspack::plugin_url() . '/dist/',
 			'bloginfo'       => [
 				'name' => get_bloginfo( 'name' ),
@@ -109,15 +165,13 @@ abstract class Wizard {
 			'support_email'  => $support_email,
 		];
 
-		$screen = get_current_screen();
-
 		if ( Starter_Content::has_created_starter_content() && current_user_can( 'manage_options' ) ) {
 			$urls['remove_starter_content'] = esc_url(
 				add_query_arg(
 					array(
 						'newspack_reset' => 'starter-content',
 					),
-					Wizards::get_url( 'dashboard' )
+					Wizards::get_url( 'newspack-dashboard' )
 				)
 			);
 		}
@@ -130,7 +184,7 @@ abstract class Wizard {
 					array(
 						'newspack_reset' => 'reset',
 					),
-					Wizards::get_url( 'dashboard' )
+					Wizards::get_url( 'newspack-dashboard' )
 				)
 			);
 		}
@@ -146,6 +200,18 @@ abstract class Wizard {
 		wp_localize_script( 'newspack_data', 'newspack_urls', $urls );
 		wp_localize_script( 'newspack_data', 'newspack_aux_data', $aux_data );
 		wp_enqueue_script( 'newspack_data' );
+
+		/**
+		 * Register wizards.js with cache busting
+		 */
+		$asset_file = include dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/wizards.asset.php';
+		wp_register_script(
+			'newspack-wizards',
+			Newspack::plugin_url() . '/dist/wizards.js',
+			$this->get_script_dependencies(),
+			NEWSPACK_PLUGIN_VERSION,
+			true
+		);
 	}
 
 	/**
@@ -237,4 +303,53 @@ abstract class Wizard {
 	 * @return string The wizard name.
 	 */
 	abstract public function get_name();
+
+	/**
+	 * Load wizard sections.
+	 *
+	 * @param string[] $sections Array of Section class names.
+	 */
+	public function load_wizard_sections( $sections ) {
+		foreach ( $sections as $section_slug => $section_class ) {
+			if ( ! class_exists( $section_class ) ) {
+				wp_die( '<pre>' . esc_html( $section_class ) . '</pre> class does not exist.' );
+			}
+			$this->sections[ $section_slug ] = new $section_class( [ 'wizard_slug' => $this->slug ] );
+		}
+	}
+
+	/**
+	 * Add body class for wizard pages.
+	 *
+	 * @param string $classes The current body classes.
+	 */
+	public function add_body_class( $classes ) {
+		if ( ! $this->is_wizard_page() ) {
+			return $classes;
+		}
+		$classes .= ' newspack-wizard-page';
+		return $classes;
+	}
+
+	/**
+	 * Remove notifications.
+	 *
+	 * Note: Many of our admin-header-only wizards are CPT list pages where users can do actions such
+	 * as "trash" a post or "bulk actions" like "edit (multiple)" in the dropbown.  Keep in mind
+	 * that these actions will still show notices like "1 post was trashed" or "5 posts were
+	 * updated" since WordPress shows these notices outside the actions that the function below
+	 * is removing.
+	 *
+	 * Also "settings saved" notices on post-back of a custom options pages are not removed either. See core
+	 * function 'settings_errors()' here: https://developer.wordpress.org/plugins/settings/custom-settings-page/
+	 */
+	public function remove_notifications() {
+		if ( ! $this->is_wizard_page() ) {
+			return;
+		}
+		if ( ! $this->remove_notifications ) {
+			return;
+		}
+		remove_all_actions( current_action() );
+	}
 }

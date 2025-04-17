@@ -254,7 +254,11 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 		if ( 'ppcp-gateway' === $gateway_slug && method_exists( 'WooCommerce\PayPalCommerce\PPCP', 'container' ) ) {
 			$paypal = \WooCommerce\PayPalCommerce\PPCP::container();
 			if ( $paypal ) {
-				$env = $paypal->get( 'onboarding.environment' );
+				try {
+					$env = $paypal->get( 'onboarding.environment' ); // woocommerce-paypal-payments@2.9.6.
+				} catch ( \Throwable $th ) {
+					$env = $paypal->get( 'settings.environment' ); // woocommerce-paypal-payments@3.0.0.
+				}
 				if ( $env && $env->current_environment_is( $env::SANDBOX ) ) {
 					$test_mode = true;
 				}

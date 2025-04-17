@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5b2df0525293932049ceb0cef45bede8
+class ComposerStaticInit04d11155d02843239d3ea2712ba19b51
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -25,6 +25,8 @@ class ComposerStaticInit5b2df0525293932049ceb0cef45bede8
         'Newspack\\Campaigns\\CLI\\Export' => __DIR__ . '/../..' . '/includes/cli/class-export.php',
         'Newspack\\Campaigns\\CLI\\Import' => __DIR__ . '/../..' . '/includes/cli/class-import.php',
         'Newspack\\Campaigns\\CLI\\Prune_Data' => __DIR__ . '/../..' . '/includes/cli/class-prune-data.php',
+        'Newspack\\Campaigns\\Merge_Tag' => __DIR__ . '/../..' . '/includes/merge-tags/class-merge-tag.php',
+        'Newspack\\Campaigns\\Merge_Tags' => __DIR__ . '/../..' . '/includes/merge-tags/class-merge-tags.php',
         'Newspack\\Campaigns\\Schema' => __DIR__ . '/../..' . '/includes/schemas/class-schema.php',
         'Newspack\\Campaigns\\Schemas\\Campaigns' => __DIR__ . '/../..' . '/includes/schemas/class-campaigns.php',
         'Newspack\\Campaigns\\Schemas\\Package' => __DIR__ . '/../..' . '/includes/schemas/class-package.php',
@@ -52,9 +54,9 @@ class ComposerStaticInit5b2df0525293932049ceb0cef45bede8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5b2df0525293932049ceb0cef45bede8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5b2df0525293932049ceb0cef45bede8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5b2df0525293932049ceb0cef45bede8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit04d11155d02843239d3ea2712ba19b51::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit04d11155d02843239d3ea2712ba19b51::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit04d11155d02843239d3ea2712ba19b51::$classMap;
 
         }, null, ClassLoader::class);
     }

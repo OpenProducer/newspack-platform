@@ -22,6 +22,7 @@ use DomainException;
 use Exception;
 use Google\Site_Kit_Dependencies\ExpiredException;
 use Google\Site_Kit_Dependencies\Firebase\JWT\ExpiredException as ExpiredExceptionV3;
+use Google\Site_Kit_Dependencies\Firebase\JWT\JWT;
 use Google\Site_Kit_Dependencies\Firebase\JWT\Key;
 use Google\Site_Kit_Dependencies\Firebase\JWT\SignatureInvalidException;
 use Google\Site_Kit_Dependencies\Google\Auth\Cache\MemoryCacheItemPool;
@@ -30,9 +31,9 @@ use Google\Site_Kit_Dependencies\GuzzleHttp\Client;
 use Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 use LogicException;
+use Google\Site_Kit_Dependencies\phpseclib3\Crypt\AES;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\PublicKeyLoader;
-use Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\PublicKey;
-// Firebase v2
+use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
 use Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions
@@ -59,7 +60,7 @@ class Verify
      * Instantiates the class, but does not initiate the login flow, leaving it
      * to the discretion of the caller.
      */
-    public function __construct(\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $http = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null, $jwt = null)
+    public function __construct(?\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $http = null, ?\Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null, $jwt = null)
     {
         if (null === $http) {
             $http = new \Google\Site_Kit_Dependencies\GuzzleHttp\Client();
@@ -178,66 +179,21 @@ class Verify
     }
     private function getJwtService()
     {
-        $jwtClass = 'JWT';
-        if (\class_exists('Google\\Site_Kit_Dependencies\\Firebase\\JWT\\JWT')) {
-            $jwtClass = 'Google\\Site_Kit_Dependencies\\Firebase\\JWT\\JWT';
-        }
-        if (\property_exists($jwtClass, 'leeway') && $jwtClass::$leeway < 1) {
+        $jwt = new \Google\Site_Kit_Dependencies\Firebase\JWT\JWT();
+        if ($jwt::$leeway < 1) {
             // Ensures JWT leeway is at least 1
             // @see https://github.com/google/google-api-php-client/issues/827
-            $jwtClass::$leeway = 1;
+            $jwt::$leeway = 1;
         }
-        // @phpstan-ignore-next-line
-        return new $jwtClass();
+        return $jwt;
     }
     private function getPublicKey($cert)
     {
-        $bigIntClass = $this->getBigIntClass();
-        $modulus = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['n']), 256);
-        $exponent = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['e']), 256);
+        $modulus = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($this->jwt->urlsafeB64Decode($cert['n']), 256);
+        $exponent = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($this->jwt->urlsafeB64Decode($cert['e']), 256);
         $component = ['n' => $modulus, 'e' => $exponent];
-        if (\class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\RSA\\PublicKey')) {
-            /** @var PublicKey $loader */
-            $loader = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\PublicKeyLoader::load($component);
-            return $loader->toString('PKCS8');
-        }
-        $rsaClass = $this->getRsaClass();
-        $rsa = new $rsaClass();
-        $rsa->loadKey($component);
-        return $rsa->getPublicKey();
-    }
-    private function getRsaClass()
-    {
-        if (\class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\RSA')) {
-            return 'Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\RSA';
-        }
-        if (\class_exists('Google\\Site_Kit_Dependencies\\phpseclib\\Crypt\\RSA')) {
-            return 'Google\\Site_Kit_Dependencies\\phpseclib\\Crypt\\RSA';
-        }
-        return 'Crypt_RSA';
-    }
-    private function getBigIntClass()
-    {
-        if (\class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Math\\BigInteger')) {
-            return 'Google\\Site_Kit_Dependencies\\phpseclib3\\Math\\BigInteger';
-        }
-        if (\class_exists('Google\\Site_Kit_Dependencies\\phpseclib\\Math\\BigInteger')) {
-            return 'Google\\Site_Kit_Dependencies\\phpseclib\\Math\\BigInteger';
-        }
-        return 'Math_BigInteger';
-    }
-    private function getOpenSslConstant()
-    {
-        if (\class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\AES')) {
-            return 'phpseclib3\\Crypt\\AES::ENGINE_OPENSSL';
-        }
-        if (\class_exists('Google\\Site_Kit_Dependencies\\phpseclib\\Crypt\\RSA')) {
-            return 'phpseclib\\Crypt\\RSA::MODE_OPENSSL';
-        }
-        if (\class_exists('Google\\Site_Kit_Dependencies\\Crypt_RSA')) {
-            return 'CRYPT_RSA_MODE_OPENSSL';
-        }
-        throw new \Exception('Cannot find RSA class');
+        $loader = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\PublicKeyLoader::load($component);
+        return $loader->toString('PKCS8');
     }
     /**
      * phpseclib calls "phpinfo" by default, which requires special
@@ -254,7 +210,7 @@ class Verify
                 \define('Google\\Site_Kit_Dependencies\\MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
             }
             if (!\defined('Google\\Site_Kit_Dependencies\\CRYPT_RSA_MODE')) {
-                \define('Google\\Site_Kit_Dependencies\\CRYPT_RSA_MODE', \constant($this->getOpenSslConstant()));
+                \define('Google\\Site_Kit_Dependencies\\CRYPT_RSA_MODE', \Google\Site_Kit_Dependencies\phpseclib3\Crypt\AES::ENGINE_OPENSSL);
             }
         }
     }

@@ -25,7 +25,7 @@ export const registerCustomPlacementBlock = () => {
 		title: __( 'Campaigns: Custom Placement', 'newspack-listing' ),
 		icon: {
 			src: <Icon icon={ megaphone } />,
-			foreground: '#36f',
+			foreground: '#406ebc',
 		},
 		category,
 		keywords: [

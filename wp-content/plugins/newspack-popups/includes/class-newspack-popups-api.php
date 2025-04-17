@@ -104,7 +104,7 @@ final class Newspack_Popups_API {
 		// API endpoints for RAS presets.
 		register_rest_route(
 			'newspack-popups/v1',
-			'/reader-activation/campaign',
+			'/audience-management/campaign',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_reader_activation_campaign_settings' ],
@@ -113,7 +113,7 @@ final class Newspack_Popups_API {
 		);
 		register_rest_route(
 			'newspack-popups/v1',
-			'/reader-activation/campaign',
+			'/audience-management/campaign',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_reader_activation_campaign_settings' ],

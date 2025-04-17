@@ -14,6 +14,7 @@ use Automattic\WooCommerce\Admin\API\Reports\ExportableInterface;
 use Automattic\WooCommerce\Enums\ProductType;
 use WP_REST_Request;
 use WP_REST_Response;
+use Automattic\WooCommerce\Enums\ProductStockStatus;
 
 /**
  * REST API Reports stock controller class.
@@ -72,7 +73,7 @@ class Controller extends GenericController implements ExportableInterface {
 
 		$args['post_type'] = array( 'product', 'product_variation' );
 
-		if ( 'lowstock' === $request['type'] ) {
+		if ( ProductStockStatus::LOW_STOCK === $request['type'] ) {
 			$args['low_in_stock'] = true;
 		} elseif ( in_array( $request['type'], array_keys( $this->status_options ), true ) ) {
 			$args['stock_status'] = $request['type'];

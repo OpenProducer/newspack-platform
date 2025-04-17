@@ -8,7 +8,10 @@
 namespace Newspack;
 
 use Newspack\Reader_Activation;
-use WP_Error;
+use Newspack\Reader_Activation\Sync\Metadata;
+use Newspack\Reader_Activation\ESP_Sync;
+use Newspack\Stripe_Connection;
+use Newspack\WooCommerce_Connection;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,6 +24,22 @@ class WooCommerce_My_Account {
 	const DELETE_ACCOUNT_FORM          = 'delete-account-form';
 	const SEND_MAGIC_LINK_PARAM        = 'magic-link';
 	const AFTER_ACCOUNT_DELETION_PARAM = 'account-deleted';
+	const CANCEL_EMAIL_CHANGE_PARAM    = 'cancel-email-change';
+	const VERIFY_EMAIL_CHANGE_PARAM    = 'verify-email-change';
+	const PENDING_EMAIL_CHANGE_META    = 'newspack_pending_email_change';
+	const ALLOWED_PARAMS               = [
+		self::RESET_PASSWORD_URL_PARAM,
+		self::DELETE_ACCOUNT_URL_PARAM,
+		self::SEND_MAGIC_LINK_PARAM,
+		self::AFTER_ACCOUNT_DELETION_PARAM,
+		self::CANCEL_EMAIL_CHANGE_PARAM,
+		self::VERIFY_EMAIL_CHANGE_PARAM,
+	];
+
+	/**
+	 * Cron hook for syncing email change with ESP.
+	 */
+	const SYNC_ESP_EMAIL_CHANGE_CRON_HOOK = 'newspack_esp_sync_email_change';
 
 	/**
 	 * Initialize.
@@ -28,9 +47,8 @@ class WooCommerce_My_Account {
 	 * @codeCoverageIgnore
 	 */
 	public static function init() {
+		\add_action( 'rest_api_init', [ __CLASS__, 'register_routes' ] );
 		\add_filter( 'woocommerce_account_menu_items', [ __CLASS__, 'my_account_menu_items' ], 1000 );
-		\add_filter( 'wcsg_new_recipient_account_details_fields', [ __CLASS__, 'new_recipient_fields' ] );
-		\add_filter( 'wcsg_require_shipping_address_for_virtual_products', '__return_false' );
 		\add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'required_address_fields' ] );
 		\add_filter( 'woocommerce_billing_fields', [ __CLASS__, 'required_address_fields' ] );
 		\add_filter( 'woocommerce_get_checkout_url', [ __CLASS__, 'get_checkout_url' ] );
@@ -47,6 +65,10 @@ class WooCommerce_My_Account {
 			\add_action( 'template_redirect', [ __CLASS__, 'handle_magic_link_request' ] );
 			\add_action( 'template_redirect', [ __CLASS__, 'redirect_to_account_details' ] );
 			\add_action( 'template_redirect', [ __CLASS__, 'edit_account_prevent_email_update' ] );
+			\add_action( 'woocommerce_save_account_details', [ __CLASS__, 'handle_email_change_request' ] );
+			\add_action( 'template_redirect', [ __CLASS__, 'handle_cancel_email_change' ] );
+			\add_action( 'template_redirect', [ __CLASS__, 'handle_verify_email_change' ] );
+			\add_filter( 'send_email_change_email', '__return_false' );
 			\add_action( 'init', [ __CLASS__, 'restrict_account_content' ], 100 );
 			\add_filter( 'woocommerce_save_account_details_required_fields', [ __CLASS__, 'remove_required_fields' ] );
 			\add_action( 'template_redirect', [ __CLASS__, 'verify_saved_account_details' ] );
@@ -55,8 +77,39 @@ class WooCommerce_My_Account {
 			\add_filter( 'wcs_my_account_redirect_to_single_subscription', [ __CLASS__, 'redirect_to_single_subscription' ] );
 			\add_filter( 'wc_memberships_members_area_my-memberships_actions', [ __CLASS__, 'hide_cancel_button_from_memberships_table' ] );
 			\add_filter( 'wc_memberships_my_memberships_column_names', [ __CLASS__, 'remove_next_bill_on' ], 21 );
-
+			\add_action( 'profile_update', [ __CLASS__, 'handle_admin_email_change_request' ], 10, 3 );
+			\add_action( self::SYNC_ESP_EMAIL_CHANGE_CRON_HOOK, [ __CLASS__, 'sync_email_change_with_esp' ], 10, 3 );
 		}
+	}
+
+	/**
+	 * Register routes.
+	 */
+	public static function register_routes() {
+		\register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/check-rate',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ __CLASS__, 'api_check_rate_limit' ],
+				'permission_callback' => '__return_true',
+			]
+		);
+	}
+
+	/**
+	 * REST API handler for rate limit check.
+	 */
+	public static function api_check_rate_limit() {
+		$is_rate_limited = WooCommerce_Connection::rate_limit_by_user( 'add_payment_method', __( 'Please wait a moment before trying to add a new payment method.', 'newspack-plugin' ), true );
+		$response        = [ 'success' => false ];
+		if ( ! \is_wp_error( $is_rate_limited ) && ! $is_rate_limited ) {
+			$response['success'] = true;
+		}
+		if ( \is_wp_error( $is_rate_limited ) ) {
+			$response['error'] = $is_rate_limited->get_error_message();
+		}
+		return new \WP_REST_Response( $response );
 	}
 
 	/**
@@ -75,9 +128,12 @@ class WooCommerce_My_Account {
 				'my-account',
 				'newspack_my_account',
 				[
-					'labels' => [
+					'labels'            => [
 						'cancel_subscription_message' => __( 'Are you sure you want to cancel this subscription?', 'newspack-plugin' ),
 					],
+					'rest_url'          => get_rest_url(),
+					'should_rate_limit' => WooCommerce_Connection::rate_limiting_enabled(),
+					'nonce'             => wp_create_nonce( 'wp_rest' ),
 				]
 			);
 			\wp_enqueue_style(
@@ -128,7 +184,7 @@ class WooCommerce_My_Account {
 					unset( $shipping_address[ $ignored_field ] );
 				}
 
-				if ( empty( array_filter( $billing_address ) ) && empty( array_filter( $billing_address ) ) ) {
+				if ( empty( array_filter( $billing_address ) ) && empty( array_filter( $shipping_address ) ) ) {
 					$default_disabled_items[] = 'edit-address';
 				}
 
@@ -368,10 +424,10 @@ class WooCommerce_My_Account {
 	 */
 	public static function redirect_to_account_details() {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		$is_resubscribe_request       = isset( $_REQUEST['resubscribe'] ) ? 'shop_subscription' === \get_post_type( absint( $_REQUEST['resubscribe'] ) ) : false;
-		$is_renewal_request           = isset( $_REQUEST['subscription_renewal'] ) ? true : false;
-		$is_cancel_membership_request = isset( $_REQUEST['cancel_membership'] ) ? true : false;
-		$is_checkout_request          = isset( $_REQUEST['my_account_checkout'] ) ? true : false;
+		$is_resubscribe_request       = isset( $_REQUEST['resubscribe'] );
+		$is_renewal_request           = isset( $_REQUEST['subscription_renewal'] );
+		$is_cancel_membership_request = isset( $_REQUEST['cancel_membership'] );
+		$is_checkout_request          = isset( $_REQUEST['my_account_checkout'] );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		if (
@@ -381,7 +437,8 @@ class WooCommerce_My_Account {
 			! $is_resubscribe_request &&
 			! $is_renewal_request &&
 			! $is_cancel_membership_request &&
-			! $is_checkout_request
+			! $is_checkout_request &&
+			! self::is_myaccount_url()
 		) {
 			global $wp;
 			$current_url               = \home_url( $wp->request );
@@ -548,29 +605,6 @@ class WooCommerce_My_Account {
 			$fields = self::get_required_fields( $fields );
 		}
 
-		return $fields;
-	}
-
-	/**
-	 * Ensure that only billing address fields enabled in Reader Revenue settings
-	 * are required for new gift recipient accounts.
-	 *
-	 * See: https://github.com/woocommerce/woocommerce-subscriptions-gifting/blob/trunk/includes/class-wcsg-recipient-details.php#L275
-	 *
-	 * @param array $fields Address fields.
-	 * @return array
-	 */
-	public static function new_recipient_fields( $fields ) {
-		// Escape hatch to force required shipping address for virtual products.
-		if ( apply_filters( 'wcsg_require_shipping_address_for_virtual_products', false ) ) { // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-			return $fields;
-		}
-		$required_fields = Donations::get_billing_fields();
-		foreach ( $fields as $field_name => $field_config ) {
-			if ( ! in_array( 'billing_' . $field_name, $required_fields, true ) ) {
-				unset( $fields[ $field_name ] );
-			}
-		}
 		return $fields;
 	}
 
@@ -761,6 +795,249 @@ class WooCommerce_My_Account {
 			'on-hold',
 			'pending-cancel',
 		];
+	}
+
+	/**
+	 * Whether email changes are enabled.
+	 */
+	public static function is_email_change_enabled() {
+		if ( class_exists( '\Newspack_Manager\Features' ) && \Newspack_Manager\Features::is_automattician() ) {
+			return true;
+		}
+		$is_enabled = defined( 'NEWSPACK_EMAIL_CHANGE_ENABLED' ) && NEWSPACK_EMAIL_CHANGE_ENABLED;
+		/**
+		 * Filters whether or not to allow email changes in My Account.
+		 *
+		 * @param bool $enabled Whether or not to allow email changes.
+		 */
+		return \apply_filters( 'newspack_email_change_enabled', $is_enabled );
+	}
+
+	/**
+	 * Get email change verification url.
+	 *
+	 * @param string $param The email change param.
+	 * @param string $value The email change param value.
+	 *
+	 * @return string
+	 */
+	public static function get_email_change_url( $param, $value ) {
+		return \add_query_arg(
+			[
+				$param => \wp_hash( $value ),
+			],
+			\wc_get_endpoint_url( 'edit-account', '', \wc_get_page_permalink( 'myaccount' ) )
+		);
+	}
+
+	/**
+	 * Handle email change request.
+	 *
+	 * @param int $user_id User ID.
+	 */
+	public static function handle_email_change_request( $user_id ) {
+		$new_email = filter_input( INPUT_POST, 'newspack_account_email', FILTER_SANITIZE_EMAIL );
+		if (
+			empty( $new_email )
+			|| ! \is_user_logged_in()
+			|| ! Reader_Activation::is_enabled()
+			|| ! self::is_email_change_enabled()
+		) {
+			return;
+		}
+		$old_email = \wp_get_current_user()->user_email;
+		if ( $new_email === $old_email ) {
+			return;
+		}
+		if ( ! \is_email( $new_email ) ) {
+			\wc_add_notice( __( 'Please enter a valid email address.', 'newspack-plugin' ), 'error' );
+		} elseif ( \email_exists( $new_email ) ) {
+			\wc_add_notice( __( 'This email address is already in use.', 'newspack-plugin' ), 'error' );
+		} else {
+			$update = \update_user_meta( $user_id, self::PENDING_EMAIL_CHANGE_META, $new_email );
+			if ( ! $update ) {
+				\wc_add_notice( __( 'Something went wrong. Please try again.', 'newspack-plugin' ), 'error' );
+			} else {
+				$sent = [];
+				foreach ( [ $old_email, $new_email ] as $email ) {
+					if (
+						Emails::send_email(
+							Reader_Activation_Emails::EMAIL_TYPES['CHANGE_EMAIL'],
+							$email,
+							[
+								[
+									'template' => '*EMAIL_VERIFICATION_URL*',
+									'value'    => self::get_email_change_url( self::VERIFY_EMAIL_CHANGE_PARAM, $old_email ),
+								],
+								[
+									'template' => '*EMAIL_CANCELLATION_URL*',
+									'value'    => self::get_email_change_url( self::CANCEL_EMAIL_CHANGE_PARAM, $old_email ),
+								],
+							]
+						)
+					) {
+						$sent[] = $email;
+					}
+				}
+				if ( empty( $sent ) ) {
+					\wc_add_notice( __( 'Something went wrong. Please contact the site administrator.', 'newspack-plugin' ), 'error' );
+				} elseif ( count( $sent ) === 1 ) {
+					\wc_add_notice(
+						sprintf(
+							// Translators: %s is the email address the verification email was sent to..
+							__( 'A verification email has been sent to %s. Please verify to complete the change.', 'newspack-plugin' ),
+							$sent[0]
+						)
+					);
+				} else {
+					\wc_add_notice(
+						sprintf(
+							// Translators: 1 and 2 are the email addresses the verification email was sent to.
+							__( 'A verification email has been sent to %1$s and %2$s. Please verify to complete the change.', 'newspack-plugin' ),
+							$sent[0],
+							$sent[1]
+						)
+					);
+				}
+			}
+		}
+		// Redirect and exit ahead of Woo so only our notice is displayed.
+		\wp_safe_redirect( \wc_get_endpoint_url( 'edit-account', '', \wc_get_page_permalink( 'myaccount' ) ) );
+		exit;
+	}
+
+	/**
+	 * Handle admin email change request.
+	 *
+	 * @param int     $user_id User ID.
+	 * @param WP_User $user    User object.
+	 * @param array   $data    User data.
+	 */
+	public static function handle_admin_email_change_request( $user_id, $user, $data ) {
+		if ( ! is_admin() || ! self::is_email_change_enabled() ) {
+			return;
+		}
+		$new_email = $data['user_email'] ?? '';
+		$old_email = $user->user_email;
+		if ( $new_email !== $old_email && \is_email( $new_email ) && \is_email( $old_email ) ) {
+			self::maybe_sync_email_change_with_stripe( $user_id, $new_email );
+			self::sync_email_change_with_esp( $user_id, $new_email, $old_email );
+		}
+	}
+
+	/**
+	 * Handle email change verification.
+	 */
+	public static function handle_verify_email_change() {
+		if ( ! self::is_email_change_enabled() || ! \is_user_logged_in() ) {
+			return;
+		}
+		$secret = filter_input( INPUT_GET, self::VERIFY_EMAIL_CHANGE_PARAM, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		if ( ! $secret ) {
+			return;
+		}
+		$error     = __( 'Something went wrong.', 'newspack-plugin' );
+		$user_id   = \get_current_user_id();
+		$new_email = \get_user_meta( $user_id, self::PENDING_EMAIL_CHANGE_META, true );
+		$old_email = \wp_get_current_user()->user_email;
+		if ( $new_email && \wp_hash( $old_email ) === $secret ) {
+			\delete_user_meta( \get_current_user_id(), self::PENDING_EMAIL_CHANGE_META );
+			$update = \wp_update_user(
+				[
+					'ID'         => $user_id,
+					'user_email' => $new_email,
+				]
+			);
+			if ( $update ) {
+				$customer = new \WC_Customer( $user_id );
+				$customer->set_billing_email( $new_email );
+				$customer->save();
+				self::maybe_sync_email_change_with_stripe( $user_id, $new_email );
+				self::sync_email_change_with_esp( $user_id, $new_email, $old_email );
+				\delete_user_meta( $user_id, self::PENDING_EMAIL_CHANGE_META );
+				\wc_add_notice( __( 'Your email address has been successfully updated.', 'newspack-plugin' ) );
+			} else {
+				\wc_add_notice( $error, 'error' );
+			}
+		} else {
+			\wc_add_notice( $error, 'error' );
+		}
+		\wp_safe_redirect( \wc_get_endpoint_url( 'edit-account', '', \wc_get_page_permalink( 'myaccount' ) ) );
+		exit;
+	}
+
+	/**
+	 * Handle email change cancellation.
+	 */
+	public static function handle_cancel_email_change() {
+		if ( ! self::is_email_change_enabled() || ! \is_user_logged_in() ) {
+			return;
+		}
+		$secret = filter_input( INPUT_GET, self::CANCEL_EMAIL_CHANGE_PARAM, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		if ( ! $secret ) {
+			return;
+		}
+		$current_email = \wp_get_current_user()->user_email;
+		if ( \wp_hash( $current_email ) === $secret ) {
+			\delete_user_meta( \get_current_user_id(), self::PENDING_EMAIL_CHANGE_META );
+			\wc_add_notice( __( 'Your email change request has been cancelled.', 'newspack-plugin' ) );
+		} else {
+			\wc_add_notice( __( 'Something went wrong.', 'newspack-plugin' ), 'error' );
+		}
+		\wp_safe_redirect( \wc_get_endpoint_url( 'edit-account', '', \wc_get_page_permalink( 'myaccount' ) ) );
+		exit;
+	}
+
+	/**
+	 * Sync reader email change with stripe.
+	 *
+	 * @param int    $user_id User ID.
+	 * @param string $email   New email.
+	 */
+	public static function maybe_sync_email_change_with_stripe( $user_id, $email ) {
+		$request = Stripe_Connection::update_customer_data(
+			$user_id,
+			[
+				'email' => $email,
+			]
+		);
+		if ( \is_wp_error( $request ) ) {
+			Logger::error( 'Error updating Stripe customer email: ' . $result->get_error_message() );
+		}
+	}
+
+	/**
+	 * Sync email change with site ESPs.
+	 *
+	 * @param int    $user_id User ID.
+	 * @param string $new_email New email address.
+	 * @param string $old_email Old email address.
+	 */
+	public static function sync_email_change_with_esp( $user_id, $new_email, $old_email ) {
+		if ( ! ESP_Sync::can_esp_sync() ) {
+			return;
+		}
+		$contact = ESP_Sync::get_contact_data( $user_id );
+		if ( ! $contact ) {
+			return;
+		}
+		$update = ESP_Sync::sync( $contact, 'Email_Change', array_merge( $contact, [ 'email' => $old_email ] ) );
+		if ( is_wp_error( $update ) ) {
+			// If the update failed, retry in 24 hours.
+			\wp_schedule_single_event( time() + DAY_IN_SECONDS, self::SYNC_ESP_EMAIL_CHANGE_CRON_HOOK, [ $user_id, $new_email, $old_email ] );
+			Logger::error( 'Error syncing email change with ESP: ' . $update->get_error_message() . '. Retrying in 24 hours.' );
+		}
+	}
+
+	/**
+	 * Check if url is newspack my account url.
+	 *
+	 * @return bool
+	 */
+	public static function is_myaccount_url() {
+		$cancel_secret = filter_input( INPUT_GET, self::CANCEL_EMAIL_CHANGE_PARAM, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$verify_secret = filter_input( INPUT_GET, self::VERIFY_EMAIL_CHANGE_PARAM, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		return ! empty( $cancel_secret ) || ! empty( $verify_secret );
 	}
 }
 

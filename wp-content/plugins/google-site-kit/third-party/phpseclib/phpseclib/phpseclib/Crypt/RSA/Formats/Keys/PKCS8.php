@@ -106,6 +106,6 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     {
         $key = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\Formats\Keys\PKCS1::savePublicKey($n, $e);
         $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::extractBER($key);
-        return self::wrapPublicKey($key, null);
+        return self::wrapPublicKey($key, null, null, $options);
     }
 }
