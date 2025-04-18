@@ -28,10 +28,10 @@ class HttpHandlerFactory
      * Builds out a default http handler for the installed version of guzzle.
      *
      * @param ClientInterface $client
-     * @return Guzzle5HttpHandler|Guzzle6HttpHandler|Guzzle7HttpHandler
+     * @return Guzzle6HttpHandler|Guzzle7HttpHandler
      * @throws \Exception
      */
-    public static function build(\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $client = null)
+    public static function build(?\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $client = null)
     {
         if (\is_null($client)) {
             $stack = null;
@@ -51,8 +51,6 @@ class HttpHandlerFactory
             $version = (int) \substr(\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface::VERSION, 0, 1);
         }
         switch ($version) {
-            case 5:
-                return new \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\Guzzle5HttpHandler($client);
             case 6:
                 return new \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\Guzzle6HttpHandler($client);
             case 7:

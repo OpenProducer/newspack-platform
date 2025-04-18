@@ -1,28 +1,30 @@
 <?php
 
+declare (strict_types=1);
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
 
 use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
 /**
  * Stream decorator that begins dropping data once the size of the underlying
  * stream becomes too full.
- *
- * @final
  */
-class DroppingStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
+final class DroppingStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
 {
     use StreamDecoratorTrait;
+    /** @var int */
     private $maxLength;
+    /** @var StreamInterface */
+    private $stream;
     /**
      * @param StreamInterface $stream    Underlying stream to decorate.
      * @param int             $maxLength Maximum size before dropping data.
      */
-    public function __construct(\Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface $stream, $maxLength)
+    public function __construct(\Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface $stream, int $maxLength)
     {
         $this->stream = $stream;
         $this->maxLength = $maxLength;
     }
-    public function write($string)
+    public function write($string) : int
     {
         $diff = $this->maxLength - $this->stream->getSize();
         // Begin returning 0 when the underlying stream is too large.

@@ -17,7 +17,8 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Auth;
 
-use Google\Site_Kit_Dependencies\phpseclib\Crypt\RSA;
+use Google\Site_Kit_Dependencies\phpseclib3\Crypt\PublicKeyLoader;
+use Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA;
 /**
  * Sign a string using a Service Account private key.
  */
@@ -35,11 +36,9 @@ trait ServiceAccountSignerTrait
     {
         $privateKey = $this->auth->getSigningKey();
         $signedString = '';
-        if (\class_exists('Google\\Site_Kit_Dependencies\\phpseclib\\Crypt\\RSA') && !$forceOpenssl) {
-            $rsa = new \Google\Site_Kit_Dependencies\phpseclib\Crypt\RSA();
-            $rsa->loadKey($privateKey);
-            $rsa->setSignatureMode(\Google\Site_Kit_Dependencies\phpseclib\Crypt\RSA::SIGNATURE_PKCS1);
-            $rsa->setHash('sha256');
+        if (\class_exists(\Google\Site_Kit_Dependencies\Google\Auth\phpseclib3\Crypt\RSA::class) && !$forceOpenssl) {
+            $key = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\PublicKeyLoader::load($privateKey);
+            $rsa = $key->withHash('sha256')->withPadding(\Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA::SIGNATURE_PKCS1);
             $signedString = $rsa->sign($stringToSign);
         } elseif (\extension_loaded('openssl')) {
             \openssl_sign($stringToSign, $signedString, $privateKey, 'sha256WithRSAEncryption');

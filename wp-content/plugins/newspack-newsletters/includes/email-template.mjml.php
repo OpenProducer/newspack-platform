@@ -24,6 +24,10 @@
 		<?php if ( isset( $preview_text ) ): ?>
 			<mj-preview><?php echo $preview_text; ?></mj-preview>
 		<?php endif; ?>
+		<mj-attributes>
+			<mj-all color="<?php echo $text_color ?? '#000000'; ?>" />
+			<mj-text color="<?php echo $text_color ?? '#000000'; ?>" />
+		</mj-attributes>
 	</mj-head>
 	<mj-body background-color="<?php echo $background_color; ?>" css-class="updated-<?php echo $updated; ?>">
 		<?php echo $body; ?>

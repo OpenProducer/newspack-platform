@@ -47,7 +47,7 @@
 						<?php
 						// Place smaller featured images inside of 'content' area.
 						if ( 'small' === newspack_featured_image_position() ) {
-							newspack_post_thumbnail();
+							newspack_post_thumbnail( 'newspack-featured-image-small');
 						}
 
 						get_template_part( 'template-parts/content/content', 'page' );

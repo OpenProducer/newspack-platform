@@ -9,6 +9,7 @@ use Automattic\WooCommerce\Admin\Features\OnboardingTasks\TaskLists;
 use Automattic\WooCommerce\Admin\PageController;
 use Automattic\WooCommerce\Internal\Admin\Suggestions\PaymentExtensionSuggestionIncentives;
 use Automattic\WooCommerce\Internal\Admin\Suggestions\PaymentExtensionSuggestions;
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
 
 /**
  * Class WCPayWelcomePage
@@ -68,7 +69,7 @@ class WcPayWelcomePage {
 	 */
 	public function delayed_register() {
 		// Don't do anything if the feature is enabled.
-		if ( Features::is_enabled( 'reactify-classic-payments-settings' ) ) {
+		if ( FeaturesUtil::feature_is_enabled( 'reactify-classic-payments-settings' ) ) {
 			return;
 		}
 
@@ -128,6 +129,21 @@ class WcPayWelcomePage {
 
 				call_user_func_array( 'add_menu_page', $menu_with_nav_data );
 			}
+
+			// Add a badge to the Payments menu item when an incentive is active (available and not dismissed).
+			$badge = ' <span class="wcpay-menu-badge awaiting-mod count-1"><span class="plugin-count">1</span></span>';
+			foreach ( $menu as $index => $menu_item ) {
+				// Only add the badge markup if not already present and the menu item is the Payments menu item.
+				if ( 0 === strpos( $menu_item[0], $menu_title )
+					&& $menu_path === $menu_item[2]
+					&& false === strpos( $menu_item[0], $badge ) ) {
+
+					$menu[ $index ][0] .= $badge; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+					// One menu item with a badge is more than enough.
+					break;
+				}
+			}
 		} else {
 			// Default to linking to the Payments settings page.
 			$menu_path = 'admin.php?page=wc-settings&tab=checkout';
@@ -147,25 +163,6 @@ class WcPayWelcomePage {
 				$menu_icon,
 				56,
 			);
-		}
-
-		// Maybe add a badge to the menu.
-		// If the main Payments task is not complete, we add a badge to the Payments menu item.
-		// We use the complete logic of the main Payments task because it is the most general one.
-		if ( ! empty( $this->get_payments_task() ) && ! $this->is_payments_task_complete() ) {
-			$badge = ' <span class="wcpay-menu-badge awaiting-mod count-1"><span class="plugin-count">1</span></span>';
-			foreach ( $menu as $index => $menu_item ) {
-				// Only add the badge markup if not already present and the menu item is the Payments menu item.
-				if ( 0 === strpos( $menu_item[0], $menu_title )
-					&& $menu_path === $menu_item[2]
-					&& false === strpos( $menu_item[0], $badge ) ) {
-
-					$menu[ $index ][0] .= $badge; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-
-					// One menu item with a badge is more than enough.
-					break;
-				}
-			}
 		}
 	}
 

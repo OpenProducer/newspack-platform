@@ -69,19 +69,24 @@ export function registerCriteria( id, config = {} ) {
 		}
 
 		// Set criteria value.
-		if ( typeof criteria.matchingAttribute === 'function' ) {
-			criteria.value = criteria.matchingAttribute( ras );
-		} else if ( typeof criteria.matchingAttribute === 'string' ) {
-			if ( typeof ras?.store?.get === 'function' ) {
-				criteria.value = ras.store.get( criteria.matchingAttribute );
-			} else {
-				// eslint-disable-next-line no-console
-				console.warn(
-					`Reader data library not loaded. Unable to fetch value for '${ criteria.id }'`
-				);
-			}
-		}
+		criteria.value = criteria.getValue( ras );
 	};
+
+	criteria.getValue = ras => {
+		if ( typeof criteria.matchingAttribute === 'function' ) {
+			return criteria.matchingAttribute( ras );
+		}
+		if ( typeof criteria.matchingAttribute === 'string' ) {
+			if ( typeof ras?.store?.get === 'function' ) {
+				return ras.store.get( criteria.matchingAttribute );
+			}
+			// eslint-disable-next-line no-console
+			console.warn(
+				`Reader data library not loaded. Unable to fetch value for '${ criteria.id }'`
+			);
+		}
+		return criteria.value;
+	}
 
 	// Check if the criteria matches the segment config.
 	criteria._matched = {}; // Cache results.

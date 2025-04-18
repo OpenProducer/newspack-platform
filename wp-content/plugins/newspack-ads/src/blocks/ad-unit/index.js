@@ -2,12 +2,12 @@
  * WordPress dependencies
  */
 import { getCategories } from '@wordpress/blocks';
-import { pullquote } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
+import { ad as icon } from '../utils/icons';
 import edit from './edit';
 
 /**
@@ -21,8 +21,8 @@ export const title = __( 'Ad Unit', 'newspack-ads' );
 export const settings = {
 	title,
 	icon: {
-		src: pullquote,
-		foreground: '#36f',
+		src: icon,
+		foreground: '#406ebc',
 	},
 	category: getCategories().some( ( { slug } ) => slug === 'newspack' ) ? 'newspack' : 'common',
 	keywords: [

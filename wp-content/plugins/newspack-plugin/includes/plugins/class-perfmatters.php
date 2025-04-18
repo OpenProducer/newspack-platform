@@ -85,8 +85,8 @@ class Perfmatters {
 			'plugins/newspack-newsletters', // Newspack Newsletters.
 			'plugins/newspack-plugin', // Newspack main plugin.
 			'plugins/newspack-popups', // Newspack Campaigns.
-			'plugins/jetpack/modules/sharedaddy', // Jetpack's share buttons.
-			'plugins/jetpack/_inc/social-logos', // Jetpack's social logos CSS.
+			'modules/sharedaddy', // Jetpack's share buttons.
+			'_inc/social-logos', // Jetpack's social logos CSS.
 			'plugins/jetpack/css/jetpack.css', // Jetpack's main CSS.
 			'plugins/the-events-calendar', // The Events Calendar.
 			'plugins/events-calendar-pro', // The Events Calendar Pro.
@@ -222,6 +222,13 @@ class Perfmatters {
 		$options['lazyload']['lazy_loading_iframes']       = true;
 		$options['lazyload']['youtube_preview_thumbnails'] = true;
 		$options['lazyload']['image_dimensions']           = true;
+
+		$parent_exclusions = empty( $options['lazyload']['lazy_loading_parent_exclusions'] ) ? [] : $options['lazyload']['lazy_loading_parent_exclusions'];
+		// Add our customizations to the front of the array to avoid confusion when editing the setting in the UI.
+		$options['lazyload']['lazy_loading_parent_exclusions'] = array_merge(
+			[ 'wp-block-jetpack-image-compare' ],
+			$parent_exclusions
+		);
 
 		// Fonts.
 		if ( ! isset( $options['fonts'] ) ) {

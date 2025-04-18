@@ -27,7 +27,7 @@ class Composer
      * @param Event $event Composer event passed in for any script method
      * @param Filesystem $filesystem Optional. Used for testing.
      */
-    public static function cleanup(\Google\Site_Kit_Dependencies\Composer\Script\Event $event, \Google\Site_Kit_Dependencies\Symfony\Component\Filesystem\Filesystem $filesystem = null)
+    public static function cleanup(\Google\Site_Kit_Dependencies\Composer\Script\Event $event, ?\Google\Site_Kit_Dependencies\Symfony\Component\Filesystem\Filesystem $filesystem = null)
     {
         $composer = $event->getComposer();
         $extra = $composer->getPackage()->getExtra();

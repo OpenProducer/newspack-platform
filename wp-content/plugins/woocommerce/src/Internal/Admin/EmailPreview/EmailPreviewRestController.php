@@ -13,6 +13,13 @@ use WP_REST_Request;
 class EmailPreviewRestController extends RestApiControllerBase {
 
 	/**
+	 * Email preview nonce.
+	 *
+	 * @var string
+	 */
+	const NONCE_KEY = 'email-preview-nonce';
+
+	/**
 	 * Holds the EmailPreview instance for rendering email previews.
 	 *
 	 * @var EmailPreview
@@ -110,6 +117,7 @@ class EmailPreviewRestController extends RestApiControllerBase {
 				'type'              => 'string',
 				'required'          => true,
 				'validate_callback' => fn( $key ) => $this->validate_email_type( $key ),
+				'sanitize_callback' => 'sanitize_text_field',
 			),
 			'email' => array(
 				'description'       => __( 'Email address to send the email preview to.', 'woocommerce' ),
@@ -117,6 +125,7 @@ class EmailPreviewRestController extends RestApiControllerBase {
 				'format'            => 'email',
 				'required'          => true,
 				'validate_callback' => 'rest_validate_request_arg',
+				'sanitize_callback' => 'sanitize_email',
 			),
 		);
 	}
@@ -133,6 +142,7 @@ class EmailPreviewRestController extends RestApiControllerBase {
 				'type'              => 'string',
 				'required'          => true,
 				'validate_callback' => fn( $key ) => $this->validate_email_type( $key ),
+				'sanitize_callback' => 'sanitize_text_field',
 			),
 		);
 	}
@@ -149,7 +159,7 @@ class EmailPreviewRestController extends RestApiControllerBase {
 				'type'              => 'string',
 				'description'       => 'The key for the transient. Must be one of the allowed options.',
 				'validate_callback' => function ( $key ) {
-					if ( ! in_array( $key, EmailPreview::get_all_email_settings_ids(), true ) ) {
+					if ( ! in_array( $key, EmailPreview::get_all_email_setting_ids(), true ) ) {
 						return new \WP_Error(
 							'woocommerce_rest_not_allowed_key',
 							sprintf( 'The provided key "%s" is not allowed.', $key ),
@@ -247,6 +257,14 @@ class EmailPreviewRestController extends RestApiControllerBase {
 	 * @return bool|WP_Error True if the current user has the capability, otherwise a WP_Error object.
 	 */
 	private function check_permissions( WP_REST_Request $request ) {
+		$nonce = $request->get_param( 'nonce' );
+		if ( ! wp_verify_nonce( $nonce, self::NONCE_KEY ) ) {
+			return new WP_Error(
+				'invalid_nonce',
+				__( 'Invalid nonce.', 'woocommerce' ),
+				array( 'status' => 403 ),
+			);
+		}
 		return $this->check_permission( $request, 'manage_woocommerce' );
 	}
 
@@ -258,7 +276,19 @@ class EmailPreviewRestController extends RestApiControllerBase {
 	 */
 	public function send_email_preview( WP_REST_Request $request ) {
 		$email_address = $request->get_param( 'email' );
-		$email_content = $this->email_preview->render();
+		// Start output buffering to prevent partial renders with PHP notices or warnings.
+		ob_start();
+		try {
+			$email_content = $this->email_preview->render();
+		} catch ( \Throwable $e ) {
+			ob_end_clean();
+			return new WP_Error(
+				'woocommerce_rest_email_preview_not_rendered',
+				__( 'There was an error rendering an email preview.', 'woocommerce' ),
+				array( 'status' => 500 )
+			);
+		}
+		ob_end_clean();
 		$email_subject = $this->email_preview->get_subject();
 		$email         = new \WC_Emails();
 		$sent          = $email->send( $email_address, $email_subject, $email_content );

@@ -67,6 +67,7 @@ class Collection extends \Google\Site_Kit_Dependencies\Google\Model implements \
         return isset($this->{$this->collection_key}[$offset]);
     }
     /** @return mixed */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (!\is_numeric($offset)) {

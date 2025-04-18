@@ -3,8 +3,11 @@ declare( strict_types=1 );
 
 namespace Automattic\WooCommerce\Internal\Admin\Settings;
 
-use Automattic\WooCommerce\Admin\Features\Features;
+use Automattic\WooCommerce\Internal\Admin\FeaturePlugin;
+use Automattic\WooCommerce\Internal\Features\FeaturesController;
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use Exception;
+use WooCommerce\Admin\Experimental_Abtest;
 
 defined( 'ABSPATH' ) || exit;
 /**
@@ -32,11 +35,58 @@ class PaymentsController {
 	}
 
 	/**
+	 * Adjust the new Payments Settings page feature default enablement based on the experiment.
+	 * This is invoked from within FeaturesController.
+	 *
+	 * @param FeaturesController $features_controller The features controller instance.
+	 *
+	 * @return void
+	 */
+	public function adjust_feature_default_enablement_by_experiment( FeaturesController $features_controller ) {
+		// Needed for CLI and unit tests.
+		FeaturePlugin::instance()->init();
+
+		// If the feature is disabled (or doesn't exist), don't do anything.
+		if ( ! $features_controller->feature_is_enabled( 'reactify-classic-payments-settings' ) ) {
+			return;
+		}
+
+		// We only want to adjust the default feature value.
+		// If the feature value is already set in the DB, don't do anything.
+		$option_name = $features_controller->feature_enable_option_name( 'reactify-classic-payments-settings' );
+		if ( get_option( $option_name ) !== false ) {
+			return;
+		}
+
+		// Transient key to handle the experiment group assignment failure.
+		$transient_key = 'wc_experiment_failure_woocommerce_payment_settings_2025_v2';
+
+		// If we failed to determine the experiment group assignment in the previous hour, don't do anything.
+		if ( 'error' === get_transient( $transient_key ) ) {
+			return;
+		}
+
+		try {
+			$in_treatment = Experimental_Abtest::in_treatment( 'woocommerce_payment_settings_2025_v2' );
+		} catch ( \Exception $e ) {
+			// If the experiment group assignment fails, set a transient to avoid repeated fetches and
+			// consider the user not in the treatment group.
+			set_transient( $transient_key, 'error', HOUR_IN_SECONDS );
+			$in_treatment = false;
+		}
+
+		// If the user is NOT in the experiment treatment group disable the feature.
+		if ( ! $in_treatment ) {
+			$features_controller->change_feature_enable( 'reactify-classic-payments-settings', false );
+		}
+	}
+
+	/**
 	 * Delayed hook registration.
 	 */
 	public function delayed_register() {
 		// Don't do anything if the feature is not enabled.
-		if ( ! Features::is_enabled( 'reactify-classic-payments-settings' ) ) {
+		if ( ! FeaturesUtil::feature_is_enabled( 'reactify-classic-payments-settings' ) ) {
 			return;
 		}
 
@@ -83,8 +133,8 @@ class PaymentsController {
 			56, // Position after WooCommerce Product menu item.
 		);
 
-		// If the store doesn't have any enabled gateways or providers need action, add a notice badge to the Payments menu item.
-		if ( ! $this->store_has_enabled_gateways() || $this->store_has_providers_with_action() ) {
+		// If there are providers with active incentive, add a notice badge to the Payments menu item.
+		if ( $this->store_has_providers_with_incentive() ) {
 			$badge = ' <span class="wcpay-menu-badge awaiting-mod count-1"><span class="plugin-count">1</span></span>';
 			foreach ( $menu as $index => $menu_item ) {
 				// Only add the badge markup if not already present and the menu item is the Payments menu item.
@@ -117,10 +167,10 @@ class PaymentsController {
 		}
 
 		// Add the business location country to the settings.
-		if ( ! isset( $settings[ Payments::USER_PAYMENTS_NOX_PROFILE_KEY ] ) ) {
-			$settings[ Payments::USER_PAYMENTS_NOX_PROFILE_KEY ] = array();
+		if ( ! isset( $settings[ Payments::PAYMENTS_NOX_PROFILE_KEY ] ) ) {
+			$settings[ Payments::PAYMENTS_NOX_PROFILE_KEY ] = array();
 		}
-		$settings[ Payments::USER_PAYMENTS_NOX_PROFILE_KEY ]['business_country_code'] = $this->payments->get_country();
+		$settings[ Payments::PAYMENTS_NOX_PROFILE_KEY ]['business_country_code'] = $this->payments->get_country();
 
 		return $settings;
 	}
@@ -168,13 +218,11 @@ class PaymentsController {
 	}
 
 	/**
-	 * Check if the store has any payment providers that need an action/attention.
+	 * Check if the store has any payment providers that have an active incentive.
 	 *
-	 * This includes gateways that are enabled but not configured (need setup).
-	 *
-	 * @return bool True if the store has enabled gateways that need attention, false otherwise.
+	 * @return bool True if the store has providers with an active incentive.
 	 */
-	private function store_has_providers_with_action(): bool {
+	private function store_has_providers_with_incentive(): bool {
 		try {
 			$providers = $this->payments->get_payment_providers( $this->payments->get_country() );
 		} catch ( Exception $e ) {
@@ -182,25 +230,16 @@ class PaymentsController {
 			return false;
 		}
 
-		// Go through the providers and check if any of them need attention from the user.
+		// Go through the providers and check if any of them have a "prominently" visible incentive (i.e., modal or banner).
 		foreach ( $providers as $provider ) {
-			// Handle payment gateways and offline payment methods that need setup.
-			if (
-				in_array(
-					$provider['_type'],
-					array(
-						PaymentProviders::TYPE_GATEWAY,
-						PaymentProviders::TYPE_OFFLINE_PM,
-					),
-					true
-				) &&
-				! empty( $provider['state']['needs_setup'] )
+			// We check to see if the incentive was dismissed in the banner context.
+			// In case an incentive uses the modal surface also (like the WooPayments Switch incentive),
+			// we rely on the fact that the modal falls back to the banner, once dismissed.
+			if ( ! empty( $provider['_incentive'] ) &&
+				( empty( $provider['_incentive']['_dismissals'] ) ||
+					! in_array( 'wc_settings_payments__banner', $provider['_incentive']['_dismissals'], true )
+				)
 			) {
-				return true;
-			}
-
-			// If there are incentives, the provider needs attention.
-			if ( ! empty( $provider['_incentive'] ) ) {
 				return true;
 			}
 		}

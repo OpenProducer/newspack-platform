@@ -31,7 +31,6 @@ class RAS {
 			WP_CLI::error( __( 'Newspack Campaigns plugin not found.', 'newspack-plugin' ) );
 		}
 
-
 		if ( ! class_exists( '\Newspack_Newsletters_Subscription' ) ) {
 			WP_CLI::error( __( 'Newspack Newsletters plugin not found.', 'newspack-plugin' ) );
 		}

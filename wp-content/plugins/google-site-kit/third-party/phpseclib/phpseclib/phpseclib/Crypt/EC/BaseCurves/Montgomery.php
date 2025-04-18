@@ -193,7 +193,7 @@ class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseC
     public function multiplyPoint(array $p, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $d)
     {
         $p1 = [$this->one, $this->zero];
-        $alreadyInternal = isset($x[1]);
+        $alreadyInternal = isset($p[1]);
         $p2 = $this->convertToInternal($p);
         $x = $p[0];
         $b = $d->toBits();

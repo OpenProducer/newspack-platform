@@ -161,6 +161,12 @@ class Prompts extends Schema {
 							'required' => false,
 							'default'  => false,
 						],
+						'no_padding'                     => [
+							'name'     => 'no_padding',
+							'type'     => 'boolean',
+							'required' => false,
+							'default'  => false,
+						],
 						'frequency'                      => [
 							'name'     => 'frequency',
 							'type'     => 'string',
@@ -202,6 +208,18 @@ class Prompts extends Schema {
 								'week',
 								'day',
 							],
+						],
+						'close_button_background_color'  => [
+							'name'     => 'close_button_background_color',
+							'type'     => 'string',
+							'required' => false,
+							'default'  => '#00000000', // format: 'hex-color' removed to pass tests with an 8-character hex. Related: https://core.trac.wordpress.org/ticket/55962.
+						],
+						'enable_close_button_background' => [
+							'name'     => 'enable_close_button_background',
+							'type'     => 'boolean',
+							'required' => false,
+							'default'  => false,
 						],
 						'overlay_color'                  => [
 							'name'     => 'overlay_color',

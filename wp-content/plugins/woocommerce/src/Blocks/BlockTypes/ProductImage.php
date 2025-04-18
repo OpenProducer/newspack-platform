@@ -102,13 +102,14 @@ class ProductImage extends AbstractBlock {
 			'
 		<div class="wc-block-components-product-sale-badge wc-block-components-product-sale-badge--align-%s wc-block-grid__product-onsale %s" style="%s">
 			<span aria-hidden="true">%s</span>
-			<span class="screen-reader-text">Product on sale</span>
+			<span class="screen-reader-text">%s</span>
 		</div>
 	',
 			esc_attr( $attributes['saleBadgeAlign'] ),
 			isset( $font_size['class'] ) ? esc_attr( $font_size['class'] ) : '',
 			isset( $font_size['style'] ) ? esc_attr( $font_size['style'] ) : '',
-			esc_html__( 'Sale', 'woocommerce' )
+			esc_html__( 'Sale', 'woocommerce' ),
+			esc_html__( 'Product on sale', 'woocommerce' )
 		);
 		return $on_sale_badge;
 	}
@@ -127,7 +128,7 @@ class ProductImage extends AbstractBlock {
 
 		$is_link        = true === $attributes['showProductLink'];
 		$pointer_events = $is_link ? '' : 'pointer-events: none;';
-		$directive      = $is_link ? 'data-wc-on--click="woocommerce/product-collection::actions.viewProduct"' : '';
+		$directive      = $is_link ? 'data-wp-on--click="woocommerce/product-collection::actions.viewProduct"' : '';
 
 		return sprintf(
 			'<a href="%1$s" style="%2$s" %3$s>%4$s %5$s</a>',

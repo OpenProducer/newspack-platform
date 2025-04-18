@@ -17,8 +17,11 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Auth\Middleware;
 
+use Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenCache;
 use Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface;
 use Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface;
+use Google\Site_Kit_Dependencies\Google\Auth\UpdateMetadataInterface;
+use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
 /**
  * AuthTokenMiddleware is a Guzzle Middleware that adds an Authorization header
@@ -38,6 +41,9 @@ class AuthTokenMiddleware
      */
     private $httpHandler;
     /**
+     * It must be an implementation of FetchAuthTokenInterface.
+     * It may also implement UpdateMetadataInterface allowing direct
+     * retrieval of auth related headers
      * @var FetchAuthTokenInterface
      */
     private $fetcher;
@@ -52,7 +58,7 @@ class AuthTokenMiddleware
      * @param callable $httpHandler (optional) callback which delivers psr7 request
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      */
-    public function __construct(\Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface $fetcher, callable $httpHandler = null, callable $tokenCallback = null)
+    public function __construct(\Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
         $this->fetcher = $fetcher;
         $this->httpHandler = $httpHandler;
@@ -90,7 +96,7 @@ class AuthTokenMiddleware
             if (!isset($options['auth']) || $options['auth'] !== 'google_auth') {
                 return $handler($request, $options);
             }
-            $request = $request->withHeader('authorization', 'Bearer ' . $this->fetchToken());
+            $request = $this->addAuthHeaders($request);
             if ($quotaProject = $this->getQuotaProject()) {
                 $request = $request->withHeader(\Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
             }
@@ -98,24 +104,26 @@ class AuthTokenMiddleware
         };
     }
     /**
-     * Call fetcher to fetch the token.
+     * Adds auth related headers to the request.
      *
-     * @return string|null
+     * @param RequestInterface $request
+     * @return RequestInterface
      */
-    private function fetchToken()
+    private function addAuthHeaders(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request)
     {
-        $auth_tokens = (array) $this->fetcher->fetchAuthToken($this->httpHandler);
-        if (\array_key_exists('access_token', $auth_tokens)) {
-            // notify the callback if applicable
-            if ($this->tokenCallback) {
-                \call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $auth_tokens['access_token']);
+        if (!$this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\UpdateMetadataInterface || $this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenCache && !$this->fetcher->getFetcher() instanceof \Google\Site_Kit_Dependencies\Google\Auth\UpdateMetadataInterface) {
+            $token = $this->fetcher->fetchAuthToken();
+            $request = $request->withHeader('authorization', 'Bearer ' . ($token['access_token'] ?? $token['id_token'] ?? ''));
+        } else {
+            $headers = $this->fetcher->updateMetadata($request->getHeaders(), null, $this->httpHandler);
+            $request = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::modifyRequest($request, ['set_headers' => $headers]);
+        }
+        if ($this->tokenCallback && ($token = $this->fetcher->getLastReceivedToken())) {
+            if (\array_key_exists('access_token', $token)) {
+                \call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $token['access_token']);
             }
-            return $auth_tokens['access_token'];
         }
-        if (\array_key_exists('id_token', $auth_tokens)) {
-            return $auth_tokens['id_token'];
-        }
-        return null;
+        return $request;
     }
     /**
      * @return string|null

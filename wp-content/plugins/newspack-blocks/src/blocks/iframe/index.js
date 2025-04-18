@@ -26,7 +26,7 @@ export const settings = {
 	title,
 	icon: {
 		src: iframeIcon,
-		foreground: '#36f',
+		foreground: '#406ebc',
 	},
 	category,
 	keywords: [ __( 'iframe', 'newspack-blocks' ), __( 'project iframe', 'newspack-blocks' ) ],

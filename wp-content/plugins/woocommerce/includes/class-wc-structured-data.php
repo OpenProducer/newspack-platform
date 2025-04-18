@@ -13,6 +13,8 @@
  */
 
 use Automattic\WooCommerce\Enums\OrderStatus;
+use Automattic\WooCommerce\Enums\ProductType;
+use Automattic\WooCommerce\Enums\ProductStockStatus;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -231,7 +233,7 @@ class WC_Structured_Data {
 			// Assume prices will be valid until the end of next year, unless on sale and there is an end date.
 			$price_valid_until = gmdate( 'Y-12-31', time() + YEAR_IN_SECONDS );
 
-			if ( $product->is_type( 'variable' ) ) {
+			if ( $product->is_type( ProductType::VARIABLE ) ) {
 				$lowest  = $product->get_variation_price( 'min', false );
 				$highest = $product->get_variation_price( 'max', false );
 
@@ -286,7 +288,7 @@ class WC_Structured_Data {
 						);
 					}
 				}
-			} elseif ( $product->is_type( 'grouped' ) ) {
+			} elseif ( $product->is_type( ProductType::GROUPED ) ) {
 				$tax_display_mode = get_option( 'woocommerce_tax_display_shop' );
 				$children         = array_filter( array_map( 'wc_get_product', $product->get_children() ), 'wc_products_array_filter_visible_grouped' );
 				$price_function   = 'incl' === $tax_display_mode ? 'wc_get_price_including_tax' : 'wc_get_price_excluding_tax';
@@ -334,12 +336,17 @@ class WC_Structured_Data {
 						$sale_price_valid_until = gmdate( 'Y-m-d', $product->get_date_on_sale_to()->getTimestamp() );
 					}
 
-					$markup_offer['priceSpecification'][] = array(
-						'@type'                 => 'UnitPriceSpecification',
-						'price'                 => wc_format_decimal( $min_sale_price, wc_get_price_decimals() ),
-						'priceCurrency'         => $currency,
-						'valueAddedTaxIncluded' => wc_prices_include_tax(),
-						'validThrough'          => $sale_price_valid_until ?? $price_valid_until,
+					// We add the sale price to the top of the array so it's the first offer.
+					// See https://github.com/woocommerce/woocommerce/issues/55043.
+					array_unshift(
+						$markup_offer['priceSpecification'],
+						array(
+							'@type'                 => 'UnitPriceSpecification',
+							'price'                 => wc_format_decimal( $min_sale_price, wc_get_price_decimals() ),
+							'priceCurrency'         => $currency,
+							'valueAddedTaxIncluded' => wc_prices_include_tax(),
+							'validThrough'          => $sale_price_valid_until ?? $price_valid_until,
+						)
 					);
 				}
 			} else {
@@ -367,18 +374,23 @@ class WC_Structured_Data {
 						$sale_price_valid_until = gmdate( 'Y-m-d', $product->get_date_on_sale_to()->getTimestamp() );
 					}
 
-					$markup_offer['priceSpecification'][] = array(
-						'@type'                 => 'UnitPriceSpecification',
-						'price'                 => wc_format_decimal( $product->get_sale_price(), wc_get_price_decimals() ),
-						'priceCurrency'         => $currency,
-						'valueAddedTaxIncluded' => wc_prices_include_tax(),
-						'validThrough'          => $sale_price_valid_until ?? $price_valid_until,
+					// We add the sale price to the top of the array so it's the first offer.
+					// See https://github.com/woocommerce/woocommerce/issues/55043.
+					array_unshift(
+						$markup_offer['priceSpecification'],
+						array(
+							'@type'                 => 'UnitPriceSpecification',
+							'price'                 => wc_format_decimal( $product->get_sale_price(), wc_get_price_decimals() ),
+							'priceCurrency'         => $currency,
+							'valueAddedTaxIncluded' => wc_prices_include_tax(),
+							'validThrough'          => $sale_price_valid_until ?? $price_valid_until,
+						)
 					);
 				}
 			}
 
 			if ( $product->is_in_stock() ) {
-				$stock_status_schema = ( 'onbackorder' === $product->get_stock_status() ) ? 'BackOrder' : 'InStock';
+				$stock_status_schema = ( ProductStockStatus::ON_BACKORDER === $product->get_stock_status() ) ? 'BackOrder' : 'InStock';
 			} else {
 				$stock_status_schema = 'OutOfStock';
 			}

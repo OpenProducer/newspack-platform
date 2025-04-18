@@ -20,37 +20,37 @@ use Tribe__Main;
 class Updater extends Tribe__Updater {
 	/**
 	 * The key used to hold the TCMN version in the database.
-	 * 
+	 *
 	 * @since 5.6.1.1
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $version_option = 'tec-schema-version';
 
 	/**
 	 * The version to reset to when a reset() is called.
-	 * 
+	 *
 	 * @since 5.6.1.1
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $reset_version = '3.9';
 
 	/**
 	 * The current version of the plugin. As recorded in the database.
-	 * 
+	 *
 	 * @since 5.6.1.1
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $current_version = 0;
 
 	/**
-	 * Instantiates the class and set the current version to the passed version 
+	 * Instantiates the class and set the current version to the passed version
 	 * or the one found in the Tribe__Main class.
-	 * 
+	 *
 	 * @since 5.6.1.1
-	 * 
+	 *
 	 * @param ?string $current_version The current version of the plugin. Passed or provided from the Main class.
 	 */
 	public function __construct( $current_version = null ) {
@@ -58,13 +58,39 @@ class Updater extends Tribe__Updater {
 	}
 
 	/**
+	 * Allows setting the version we are using for running tasks.
+	 *
+	 * @since 6.5.2
+	 *
+	 * @param string $version The version we want to use.
+	 */
+	public function set_version( string $version ) {
+		$this->current_version = $version;
+	}
+
+	/**
+	 * Gets the current version we are using for running tasks.
+	 *
+	 * @since 6.5.2
+	 *
+	 * @return string The current version we are using.
+	 */
+	public function get_version(): string {
+		return $this->current_version;
+	}
+
+	/**
 	 * Hook into admin init and run the update process.
-	 * 
+	 *
 	 * @since 5.6.1.1
 	 */
 	public function hook(): void {
 		// Only run once.
 		if ( did_action( 'tec_did_updates' ) ) {
+			return;
+		}
+
+		if ( ! is_admin() ) {
 			return;
 		}
 
@@ -78,7 +104,11 @@ class Updater extends Tribe__Updater {
 			return;
 		}
 
-		add_action( 'admin_init', [ $this, 'do_updates' ] );
+		if ( ! $this->update_required() ) {
+			return;
+		}
+
+		$this->do_updates();
 	}
 
 	/**
@@ -98,8 +128,8 @@ class Updater extends Tribe__Updater {
 		try {
 			foreach ( $updates as $version => $callback ) {
 				if (
-					version_compare( $version, $this->current_version, '<=' ) 
-					&& $this->is_version_in_db_less_than( $version ) 
+					version_compare( $version, $this->current_version, '<=' )
+					&& $this->is_version_in_db_less_than( $version )
 				) {
 					call_user_func( $callback );
 				}
@@ -135,7 +165,7 @@ class Updater extends Tribe__Updater {
 
 	/**
 	 * Resets the `tribe_pue_key_notices` option.
-	 * 
+	 *
 	 * @since 6.5.1.1
 	 */
 	public function reset_pue_notices(): void {

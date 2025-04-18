@@ -474,8 +474,12 @@ function process_form() {
 	$email     = \sanitize_email( $_REQUEST['npe'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$lists     = array_map( 'sanitize_text_field', $_REQUEST['lists'] ); // phpcs:ignore
 	$popup_id  = isset( $_REQUEST['newspack_popup_id'] ) ? (int) $_REQUEST['newspack_popup_id'] : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$metadata  = [
-		'current_page_url'                => home_url( add_query_arg( array(), \wp_get_referer() ) ),
+	$current_page_url = \wp_get_raw_referer();
+	if ( strpos( $current_page_url, 'http' ) !== 0 ) {
+		$current_page_url = \home_url( $current_page_url );
+	}
+	$metadata = [
+		'current_page_url'                => $current_page_url,
 		'newspack_popup_id'               => $popup_id,
 		'newsletters_subscription_method' => 'newsletters-subscription-block',
 	];

@@ -36,7 +36,7 @@ class Revoke
      * Instantiates the class, but does not initiate the login flow, leaving it
      * to the discretion of the caller.
      */
-    public function __construct(\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $http = null)
+    public function __construct(?\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $http = null)
     {
         $this->http = $http;
     }

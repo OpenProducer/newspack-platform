@@ -34,7 +34,7 @@ class Exception extends \Google\Site_Kit_Dependencies\Google\Exception
      * @param array<array<string,string>>|null $errors List of errors returned in an HTTP
      * response or null.  Defaults to [].
      */
-    public function __construct($message, $code = 0, \Google\Site_Kit_Dependencies\Google\Service\Exception $previous = null, $errors = [])
+    public function __construct($message, $code = 0, ?\Google\Site_Kit_Dependencies\Google\Service\Exception $previous = null, $errors = [])
     {
         if (\version_compare(\PHP_VERSION, '5.3.0') >= 0) {
             parent::__construct($message, $code, $previous);

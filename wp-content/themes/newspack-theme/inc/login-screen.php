@@ -56,17 +56,19 @@ function newspack_login_enqueue_scripts() {
 		}
 
 		#login h1 a {
-			background-position: bottom center;
-			background-repeat: no-repeat;
-			background-size: contain;
-			height: 72px;
 			margin: 0 auto;
 			<?php if ( has_custom_logo() ) : ?>
 				background-image: url( "<?php echo esc_url( wp_get_attachment_url( get_theme_mod( 'custom_logo' ) ) ); ?>" );
+				background-position: bottom center;
+				background-repeat: no-repeat;
+				background-size: contain;
+				height: 72px;
 				width: 272px;
 			<?php else : ?>
-				background-image: url( "data:image/svg+xml,%3Csvg width='72' height='72' fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 32c8.836 0 16-7.164 16-16S24.836 0 16 0 0 7.164 0 16s7.163 16 16 16z' fill='%2336f'/%3E%3Cpath d='M22.988 16.622h-1.72l-1.103-1.124h2.823v1.124zm0-3.31H18.02l-1.102-1.124h6.071v1.124zm0-3.31h-8.217l-1.103-1.125h9.32v1.125zm0 13.12L9.012 8.878v14.246h3.45v-5.98l5.867 5.98h4.66z' fill='%23fff'/%3E%3C/svg%3E%0A" );
-				width: 72px;
+				background: none;
+				height: auto;
+				text-indent: inherit;
+				width: auto;
 			<?php endif; ?>
 		}
 

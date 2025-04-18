@@ -8,6 +8,9 @@
 
 declare( strict_types = 1);
 
+use Automattic\WooCommerce\Admin\Features\Features;
+
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -118,6 +121,13 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 		protected $is_modern = false;
 
 		/**
+		 * Whether the output method has been called.
+		 *
+		 * @var bool
+		 */
+		private $output_called = false;
+
+		/**
 		 * Constructor.
 		 */
 		public function __construct() {
@@ -178,44 +188,27 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 		 * @return array
 		 */
 		public function add_settings_page_data( $pages ) {
-			$sections      = $this->get_sections();
-			$sections_data = array();
+			global $current_section;
+
+			$saved_current_section = $current_section;
+			$sections              = $this->get_sections();
+			$sections_data         = array();
 
 			// Loop through each section and get the settings for that section.
 			foreach ( $sections as $section_id => $section_label ) {
-				$section_settings = count( $sections ) > 1
-					? $this->get_settings_for_section( $section_id )
-					: $this->get_settings();
-
-				$section_settings_data = array();
-
-				// Loop through each setting in the section and add the value to the settings data.
-				foreach ( $section_settings as $section_setting ) {
-					if ( isset( $section_setting['id'] ) ) {
-						$section_setting['value'] = isset( $section_setting['default'] )
-							// Fallback to the default value if it exists.
-							? get_option( $section_setting['id'], $section_setting['default'] )
-							// Otherwise, fallback to false.
-							: get_option( $section_setting['id'] );
-					}
-
-					$type = $section_setting['type'];
-
-					if ( ! in_array( $type, $this->types, true ) ) {
-						$section_setting = $this->get_custom_type_field( 'woocommerce_admin_field_' . $type, $section_setting );
-					}
-
-					$section_settings_data[] = $section_setting;
-				}
+				$current_section       = $section_id;
+				$section_settings_data = $this->get_section_settings_data( $section_id, $sections );
 
 				// Replace empty string section ids with 'default'.
-				$section_id = '' === $section_id ? 'default' : $section_id;
-
-				$sections_data[ $section_id ] = array(
-					'label'    => html_entity_decode( $section_label ),
+				$normalized_section_id                   = '' === $section_id ? 'default' : $section_id;
+				$sections_data[ $normalized_section_id ] = array(
+					'label'    => html_entity_decode( esc_html( $section_label ) ),
 					'settings' => $section_settings_data,
 				);
 			}
+
+			// Reset the current section to the saved current section.
+			$current_section = $saved_current_section;
 
 			$pages[ $this->id ] = array(
 				'label'     => html_entity_decode( $this->label ),
@@ -225,7 +218,123 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 				'is_modern' => $this->is_modern,
 			);
 
+			$pages[ $this->id ]['start'] = $this->get_custom_view( 'woocommerce_before_settings_' . $this->id );
+			$pages[ $this->id ]['end']   = $this->get_custom_view( 'woocommerce_after_settings_' . $this->id );
+
 			return $pages;
+		}
+
+		/**
+		 * Get settings data for a specific section.
+		 *
+		 * @param string $section_id The ID of the section.
+		 * @param array  $sections   All sections available.
+		 * @return array Settings data for the section.
+		 */
+		protected function get_section_settings_data( $section_id, $sections ) {
+			$section_settings_data = array();
+
+			$custom_view = $this->get_custom_view( 'woocommerce_settings_' . $this->id, $section_id );
+			// We only want to loop through the settings object if the parent class's output method is being rendered during the get_custom_view call.
+			if ( $this->output_called ) {
+				$section_settings = count( $sections ) > 1
+					? $this->get_settings_for_section( $section_id )
+					: $this->get_settings();
+
+				// Loop through each setting in the section and add the value to the settings data.
+				foreach ( $section_settings as $section_setting ) {
+					// Add custom views for sectionend.
+					if ( 'sectionend' === $section_setting['type'] && ! empty( $section_setting['id'] ) ) {
+						$section_settings_data[] = $this->get_custom_view( 'woocommerce_settings_' . $section_setting['id'] . '_end' );
+						$section_settings_data[] = $this->get_custom_view( 'woocommerce_settings_' . $section_setting['id'] . '_after' );
+					}
+
+					$section_settings_data[] = $this->populate_setting_value( $section_setting );
+
+					// Add custom views for title.
+					if ( 'title' === $section_setting['type'] && ! empty( $section_setting['id'] ) ) {
+						$section_settings_data[] = $this->get_custom_view( 'woocommerce_settings_' . $section_setting['id'] );
+					}
+				}
+			}
+
+			// If the custom view has output, add it to the settings data.
+			if ( ! empty( $custom_view ) ) {
+				$section_settings_data[] = $custom_view;
+			}
+
+			// Reset the output_called property.
+			$this->output_called = false;
+
+			return $section_settings_data;
+		}
+
+		/**
+		 * Populate the value for a given section setting.
+		 *
+		 * @param array $section_setting The setting array to populate.
+		 * @return array The setting array with populated value.
+		 */
+		protected function populate_setting_value( $section_setting ) {
+			if ( isset( $section_setting['id'] ) ) {
+				$section_setting['value'] = isset( $section_setting['default'] )
+					// Fallback to the default value if it exists.
+					? get_option( $section_setting['id'], $section_setting['default'] )
+					// Otherwise, fallback to false.
+					: get_option( $section_setting['id'] );
+			}
+
+			$type = $section_setting['type'];
+			if ( ! in_array( $type, $this->types, true ) ) {
+				$section_setting = $this->get_custom_type_field( 'woocommerce_admin_field_' . $type, $section_setting );
+			}
+
+			return $section_setting;
+		}
+
+		/**
+		 * Get the custom view given the current tab and section.
+		 *
+		 * @param string $action The action to call.
+		 * @param string $section_id The section id.
+		 * @return string The custom view. HTML output.
+		 */
+		public function get_custom_view( $action, $section_id = false ) {
+			global $current_section;
+
+			if ( $section_id ) {
+				// Make sure the current section is set to the sectionid here. Reset it at the end of the function.
+				$saved_current_section = $current_section;
+				// set global current_section to the section_id.
+				$current_section = $section_id;
+			}
+
+			ob_start();
+			/**
+			 * Output the custom view given the current tab and section by calling the action.
+			 *
+			 * @since 2.1.0
+			 */
+			do_action( $action );
+			$html = ob_get_contents();
+			ob_end_clean();
+
+			// Reset the global variable.
+			if ( $section_id ) {
+				$current_section = $saved_current_section;
+			}
+
+			$content = trim( $html );
+
+			if ( empty( $content ) ) {
+				return null;
+			}
+
+			return array(
+				'id'      => wp_unique_prefixed_id( 'settings_custom_view' ),
+				'type'    => 'custom',
+				'content' => $content,
+			);
 		}
 
 		/**
@@ -246,7 +355,7 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 			$html = ob_get_contents();
 			ob_end_clean();
 			$setting['content'] = trim( $html );
-			$setting['id']      = isset( $setting['id'] ) ? $setting['id'] : $setting['type'];
+			$setting['id']      = isset( $setting['id'] ) ? $setting['id'] : wp_unique_prefixed_id( 'settings_custom_view' );
 			$setting['type']    = 'custom';
 
 			return $setting;
@@ -388,6 +497,12 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 		 * Output the HTML for the settings.
 		 */
 		public function output() {
+			$this->output_called = true;
+
+			if ( Features::is_enabled( 'settings' ) ) {
+				return;
+			}
+
 			global $current_section;
 
 			// We can't use "get_settings_for_section" here

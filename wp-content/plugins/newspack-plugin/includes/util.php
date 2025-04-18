@@ -12,6 +12,7 @@ use Newspack\Configuration_Managers;
 defined( 'ABSPATH' ) || exit;
 
 define( 'NEWSPACK_API_NAMESPACE', 'newspack/v1' );
+define( 'NEWSPACK_API_NAMESPACE_V2', 'newspack/v2' );
 define( 'NEWSPACK_API_URL', get_site_url() . '/wp-json/' . NEWSPACK_API_NAMESPACE );
 
 /**
@@ -495,6 +496,26 @@ function newspack_get_countries() {
 	return $countries_options;
 }
 
+
+/**
+ * Determine Google Site Kit availability.
+ *
+ * @return bool True if available, false otherwise.
+ */
+function google_site_kit_available() {
+	return get_option( 'googlesitekit_has_connected_admins' ) && in_array( 'analytics', get_option( 'googlesitekit_active_modules', [] ) );
+}
+
+/**
+ * Determine if a plugin is active. Similar to WP core `is_plugin_active` but is available immediately.
+ *
+ * @param string $plugin_file `plugin-directory/plugin-file.php` path to the plugin file.
+ * @return bool
+ */
+function is_plugin_active( string $plugin_file ) {
+	return in_array( $plugin_file, get_option( 'active_plugins' ), true );
+}
+
 /**
  * Pick either white or black, whatever has sufficient contrast with the color being passed to it.
  * (Copied from the Newspack theme: https://github.com/Automattic/newspack-theme/blob/6dc4e89a65c465abdd207d990e313921f2972a9a/newspack-theme/inc/template-functions.php#L547)
@@ -573,7 +594,7 @@ function newspack_adjust_brightness( $hex, $steps ) {
  * @return array An array containing primary and secondary colors.
  */
 function newspack_get_theme_colors() {
-	$default_primary_color   = function_exists( 'newspack_get_primary_color' ) ? newspack_get_primary_color() : '#3366ff';
+	$default_primary_color   = function_exists( 'newspack_get_primary_color' ) ? newspack_get_primary_color() : '#003da5';
 	$default_secondary_color = function_exists( 'newspack_get_secondary_color' ) ? newspack_get_secondary_color() : '#666666';
 	$primary_color           = get_theme_mod( 'primary_color_hex', $default_primary_color );
 	$secondary_color         = get_theme_mod( 'secondary_color_hex', $default_secondary_color );

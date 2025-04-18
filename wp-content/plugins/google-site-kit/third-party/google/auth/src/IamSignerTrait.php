@@ -47,7 +47,10 @@ trait IamSignerTrait
         $httpHandler = \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build(\Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
         // Providing a signer is useful for testing, but it's undocumented
         // because it's not something a user would generally need to do.
-        $signer = $this->iam ?: new \Google\Site_Kit_Dependencies\Google\Auth\Iam($httpHandler);
+        $signer = $this->iam;
+        if (!$signer) {
+            $signer = $this instanceof \Google\Site_Kit_Dependencies\Google\Auth\GetUniverseDomainInterface ? new \Google\Site_Kit_Dependencies\Google\Auth\Iam($httpHandler, $this->getUniverseDomain()) : new \Google\Site_Kit_Dependencies\Google\Auth\Iam($httpHandler);
+        }
         $email = $this->getClientName($httpHandler);
         if (\is_null($accessToken)) {
             $previousToken = $this->getLastReceivedToken();

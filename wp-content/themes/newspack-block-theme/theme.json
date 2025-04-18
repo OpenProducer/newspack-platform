@@ -46,14 +46,19 @@
 					"slug": "contrast-3"
 				},
 				{
-					"color": "#2240D5",
+					"color": "#003DA5",
 					"name": "Accent",
 					"slug": "accent"
 				},
 				{
-					"color": "#3366FF",
+					"color": "#2055B0",
 					"name": "Accent / Two",
 					"slug": "accent-2"
+				},
+				{
+					"color": "#26D07C",
+					"name": "Accent / Three",
+					"slug": "accent-3"
 				}
 			]
 		},
@@ -280,7 +285,7 @@
 				"neutral-100": "#000000",
 				"neutral-90": "#1E1E1E",
 				"neutral-80": "#3E3E3E",
-				"neutral-70": "#00000070",
+				"neutral-70": "#000000B3",
 				"neutral-60": "#6C6C6C",
 				"neutral-50": "#949494",
 				"neutral-40": "#CCCCCC",
@@ -1157,7 +1162,7 @@
 			"name": "footer",
 			"title": "Footer"
 		},
-    {
+		{
 			"area": "footer",
 			"name": "footer-desktop",
 			"title": "Footer (Desktop)"

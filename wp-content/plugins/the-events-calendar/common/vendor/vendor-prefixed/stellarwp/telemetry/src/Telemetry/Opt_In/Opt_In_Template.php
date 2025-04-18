@@ -135,6 +135,22 @@ class Opt_In_Template implements Template_Interface {
 
 		/**
 		 * Filters the name of the option stored in the options table.
+		 * This filter can be used to apply a generic option name.
+		 * Usage of this filter is highly discouraged.
+		 *
+		 * @since 2.3
+		 *
+		 * @param string $option_name
+		 * @param string $stellar_slug The current stellar slug.
+		 */
+		$option_name = apply_filters(
+			'stellarwp/telemetry/show_optin_option_name',
+			$option_name,
+			$stellar_slug
+		);
+
+		/**
+		 * Filters the name of the option stored in the options table.
 		 *
 		 * @since 1.0.0
 		 * @since 2.0.0 - Update to pass stellar slug for checking the current filter context.

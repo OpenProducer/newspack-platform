@@ -114,7 +114,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
      *     @type string $expiration_time
      * }
      */
-    public function fetchAuthToken(callable $httpHandler = null)
+    public function fetchAuthToken(?callable $httpHandler = null)
     {
         try {
             $this->checkAppEngineContext();
@@ -149,7 +149,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
      * @param callable $httpHandler Not used by this type.
      * @return string|null
      */
-    public function getProjectId(callable $httpHandler = null)
+    public function getProjectId(?callable $httpHandler = null)
     {
         try {
             $this->checkAppEngineContext();
@@ -168,7 +168,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
      * @return string
      * @throws \Exception If AppEngine SDK or mock is not available.
      */
-    public function getClientName(callable $httpHandler = null)
+    public function getClientName(?callable $httpHandler = null)
     {
         $this->checkAppEngineContext();
         if (!$this->clientName) {

@@ -21,6 +21,8 @@ class Filter extends \Google\Site_Kit_Dependencies\Google\Model
 {
     protected $betweenFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BetweenFilter::class;
     protected $betweenFilterDataType = '';
+    protected $emptyFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\EmptyFilter::class;
+    protected $emptyFilterDataType = '';
     /**
      * @var string
      */
@@ -44,6 +46,20 @@ class Filter extends \Google\Site_Kit_Dependencies\Google\Model
     public function getBetweenFilter()
     {
         return $this->betweenFilter;
+    }
+    /**
+     * @param EmptyFilter
+     */
+    public function setEmptyFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\EmptyFilter $emptyFilter)
+    {
+        $this->emptyFilter = $emptyFilter;
+    }
+    /**
+     * @return EmptyFilter
+     */
+    public function getEmptyFilter()
+    {
+        return $this->emptyFilter;
     }
     /**
      * @param string

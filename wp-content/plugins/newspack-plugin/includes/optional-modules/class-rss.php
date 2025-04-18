@@ -21,7 +21,7 @@ class RSS {
 	 * Initialise.
 	 */
 	public static function init() {
-		if ( ! Settings::is_optional_module_active( 'rss' ) ) {
+		if ( ! Optional_Modules::is_optional_module_active( 'rss' ) ) {
 			return;
 		}
 
@@ -36,8 +36,10 @@ class RSS {
 		add_filter( 'option_rss_use_excerpt', [ __CLASS__, 'filter_use_rss_excerpt' ] );
 		add_action( 'pre_get_posts', [ __CLASS__, 'modify_feed_query' ] );
 		add_action( 'rss2_item', [ __CLASS__, 'add_extra_tags' ] );
+		add_action( 'atom_entry', [ __CLASS__, 'add_extra_tags' ] );
 		add_filter( 'the_excerpt_rss', [ __CLASS__, 'maybe_remove_content_featured_image' ], 1 );
 		add_filter( 'the_content_feed', [ __CLASS__, 'maybe_remove_content_featured_image' ], 1 );
+		add_filter( 'the_content_feed', [ __CLASS__, 'maybe_add_tracking_snippet' ], 1 );
 		add_filter( 'wpseo_include_rss_footer', [ __CLASS__, 'maybe_suppress_yoast' ] );
 		add_action( 'rss2_ns', [ __CLASS__, 'maybe_inject_yahoo_namespace' ] );
 		add_filter( 'the_title_rss', [ __CLASS__, 'maybe_wrap_titles_in_cdata' ] );
@@ -47,10 +49,13 @@ class RSS {
 	 * Get URL for a feed.
 	 *
 	 * @param WP_Post $feed_post RSS feed post object.
+	 * @param string  $feed_type Feed type (rss or atom).
+	 *
+	 * @return string Feed URL.
 	 */
-	public static function get_feed_url( $feed_post ) {
-		$base_feed_url = get_bloginfo( 'rss2_url' );
+	public static function get_feed_url( $feed_post, $feed_type = 'rss' ) {
 		$feed_slug     = is_numeric( $feed_post ) ? get_post_field( 'post_name', $feed_post ) : $feed_post->post_name;
+		$base_feed_url = 'atom' === $feed_type ? get_bloginfo( 'atom_url' ) : get_bloginfo( 'rss2_url' );
 		return add_query_arg( self::FEED_QUERY_ARG, $feed_slug, $base_feed_url );
 	}
 
@@ -78,6 +83,8 @@ class RSS {
 			'update_frequency'       => false,
 			'use_post_id_as_guid'    => false,
 			'cdata_titles'           => false,
+			'republication_tracker'  => false,
+			'only_republishable'     => false,
 		];
 
 		if ( ! $feed_post ) {
@@ -154,7 +161,7 @@ class RSS {
 	 * @return array Modified $columns.
 	 */
 	public static function columns_head( $columns ) {
-		$columns['feed_url'] = __( 'Feed URL', 'newspack-plugin' );
+		$columns['feed_url'] = __( 'Feed URLs', 'newspack-plugin' );
 		return $columns;
 	}
 
@@ -166,11 +173,22 @@ class RSS {
 	 */
 	public static function column_content( $column_name, $post_id ) {
 		if ( 'feed_url' === $column_name ) {
-			$feed_url = self::get_feed_url( $post_id );
+			$rss_feed_url  = self::get_feed_url( $post_id );
+			$atom_feed_url = self::get_feed_url( $post_id, 'atom' );
 			?>
-			<a href='<?php echo esc_url( $feed_url ); ?>' target='_blank'>
-				<?php echo esc_url( $feed_url ); ?>
-			</a>
+			<span>
+				<strong><?php esc_html_e( 'RSS:', 'newspack-plugin' ); ?></strong>
+				<a href='<?php echo esc_url( $rss_feed_url ); ?>' target='_blank'>
+					<?php echo esc_url( $rss_feed_url ); ?>
+				</a>
+			</span>
+			<br />
+			<span>
+				<strong><?php esc_html_e( 'Atom:', 'newspack-plugin' ); ?></strong>
+				<a href='<?php echo esc_url( $atom_feed_url ); ?>' target='_blank'>
+					<?php echo esc_url( $atom_feed_url ); ?>
+				</a>
+			</span>
 			<?php
 		}
 	}
@@ -183,7 +201,7 @@ class RSS {
 	public static function add_metaboxes( $feed_post ) {
 		add_meta_box(
 			'partner_rss_feed_url',
-			__( 'Feed URL', 'newspack-plugin' ),
+			__( 'Feed URLs', 'newspack-plugin' ),
 			[ __CLASS__, 'render_url_metabox' ],
 			self::FEED_CPT
 		);
@@ -244,14 +262,31 @@ class RSS {
 			return;
 		}
 
-		$feed_url = self::get_feed_url( $feed_post );
-
+		$rss_feed_url  = self::get_feed_url( $feed_post );
+		$atom_feed_url = self::get_feed_url( $feed_post, 'atom' );
 		?>
-		<h3>
-			<a href='<?php echo esc_url( $feed_url ); ?>' target='_blank'>
-				<?php echo esc_url( $feed_url ); ?>
-			</a>
-		</h3>
+		<table>
+			<tr>
+				<td><h3><?php esc_html_e( 'RSS -', 'newspack-plugin' ); ?></h3></td>
+				<td>
+					<h3>
+						<a href="<?php echo esc_url( $rss_feed_url ); ?>" target="_blank">
+							<?php echo esc_url( $rss_feed_url ); ?>
+						</a>
+					</h3>
+				</td>
+			</tr>
+			<tr>
+				<td><h3><?php esc_html_e( 'Atom -', 'newspack-plugin' ); ?></h3></td>
+				<td>
+					<h3>
+						<a href="<?php echo esc_url( $atom_feed_url ); ?>" target="_blank">
+							<?php echo esc_url( $atom_feed_url ); ?>
+						</a>
+					</h3>
+				</td>
+			</tr>
+		</table>
 		<?php
 	}
 
@@ -339,6 +374,22 @@ class RSS {
 					<input type="checkbox" name="use_post_id_as_guid" value="1" <?php checked( $settings['use_post_id_as_guid'] ); ?> />
 				</td>
 			</tr>
+
+			<?php
+			// Only show this new option if the Republication Tracker Tool plugin is active.
+			if ( self::is_republication_tracker_plugin_active() ) :
+				?>
+				<tr>
+					<th>
+						<?php esc_html_e( 'Only include republishable posts', 'newspack-plugin' ); ?>
+						<p class="description"><?php echo esc_html_x( 'When toggled on, posts which have republication disabled will be excluded from the feed.', 'help text for only republishable setting', 'newspack-plugin' ); ?></p>
+					</th>
+					<td>
+						<input type="hidden" name="only_republishable" value="0" />
+						<input type="checkbox" name="only_republishable" value="1" <?php checked( $settings['only_republishable'] ); ?> />
+					</td>
+				</tr>
+			<?php endif; ?>
 		</table>
 
 		<script>
@@ -426,6 +477,19 @@ class RSS {
 						<input type="checkbox" name="suppress_yoast" value="1" <?php checked( $settings['suppress_yoast'] ); ?> />
 					</td>
 				</tr>
+			<?php endif; ?>
+			<?php
+			// Only show this new option if the Republication Tracker Tool plugin is active.
+			if ( self::is_republication_tracker_plugin_active() ) :
+				?>
+				<tr>
+					<th><?php esc_html_e( 'Add republication tracker snippet to posts', 'newspack-plugin' ); ?></th>
+					<td>
+						<input type="hidden" name="republication_tracker" value="0" />
+						<input type="checkbox" name="republication_tracker" value="1" <?php checked( $settings['republication_tracker'] ); ?> />
+					</td>
+				</tr>
+
 			<?php endif; ?>
 		</table>
 		<?php
@@ -517,6 +581,16 @@ class RSS {
 			}
 		}
 
+		// Process Republication Tracker options only if the plugin is active.
+		if ( self::is_republication_tracker_plugin_active() ) {
+			$republication_tracker             = filter_input( INPUT_POST, 'republication_tracker', FILTER_SANITIZE_NUMBER_INT );
+			$settings['republication_tracker'] = (bool) $republication_tracker;
+
+			$only_republishable             = filter_input( INPUT_POST, 'only_republishable', FILTER_SANITIZE_NUMBER_INT );
+			$settings['only_republishable'] = (bool) $only_republishable;
+
+		}
+
 		update_post_meta( $feed_post_id, self::FEED_SETTINGS_META, $settings );
 		// @todo flush feed cache here.
 	}
@@ -578,6 +652,19 @@ class RSS {
 				10,
 				2
 			);
+		}
+
+		if ( self::is_republication_tracker_plugin_active() && ! empty( $settings['only_republishable'] ) ) {
+			$meta_query = $query->get( 'meta_query' );
+			if ( ! is_array( $meta_query ) ) {
+				$meta_query = [];
+			}
+			$meta_query[] = [
+				'key'     => 'republication-tracker-tool-hide-widget',
+				'value'   => '1',
+				'compare' => '!=',
+			];
+			$query->set( 'meta_query', $meta_query );
 		}
 	}
 
@@ -658,6 +745,53 @@ class RSS {
 	}
 
 	/**
+	 * Add tracking pixel to feed content if setting is checked.
+	 *
+	 * @param string $content Feed content.
+	 * @return string Modified $content.
+	 */
+	public static function maybe_add_tracking_snippet( $content ) {
+		$settings = self::get_feed_settings();
+
+		if ( ! $settings || empty( $settings['republication_tracker'] ) || ! method_exists( 'Republication_Tracker_Tool', 'create_tracking_pixel_markup' ) ) {
+			return $content;
+		}
+
+		$post_id          = get_the_ID();
+		$pixel            = \Republication_Tracker_Tool::create_tracking_pixel_markup( $post_id );
+		$parsely_tracking = \Republication_Tracker_Tool::create_parsely_tracking( $post_id );
+
+		// Check if the attribution should be displayed.
+		$display_attribution = get_option( 'republication_tracker_tool_display_attribution', 'on' );
+
+		if ( 'on' !== $display_attribution ) {
+			return $content . $pixel . $parsely_tracking;
+		}
+
+		$site_icon_markup = '';
+		$site_icon_url    = get_site_icon_url( 150 );
+		if ( ! empty( $site_icon_url ) ) {
+			$site_icon_markup = sprintf(
+				'<img src="%1$s" style="width:1em;height:1em;margin-left:10px;">',
+				esc_attr( $site_icon_url )
+			);
+		}
+
+		$attribution = sprintf(
+			'This <a target="_blank" href="%1$s">article</a> first appeared on <a target="_blank" href="%2$s">%3$s</a> and is republished here under a Creative Commons license. %4$s %5$s',
+			esc_url( get_permalink( $post_id ) ),
+			esc_url( home_url() ),
+			esc_html( get_bloginfo() ) . $site_icon_markup,
+			$pixel,
+			$parsely_tracking
+		);
+
+		$content .= $attribution;
+
+		return $content;
+	}
+
+	/**
 	 * The Newspack Theme adds featured images to the top of feed content by default. This setting toggles whether to do that.
 	 *
 	 * @param string $content Feed content.
@@ -721,11 +855,21 @@ xmlns:media="http://search.yahoo.com/mrss/"
 			return $title;
 		}
 
-		if ( $settings['cdata_titles'] ) {
+		if ( $settings['cdata_titles'] && 'atom' !== get_query_var( 'feed' ) ) {
 			$title = '<![CDATA[' . $title . ']]>';
 		}
 
 		return $title;
+	}
+
+	/**
+	 * Check if the Republication Tracker Tool plugin is active.
+	 * This is used to determine whether to show additional options in the RSS feed settings.
+	 *
+	 * @return bool Whether the Republication Tracker Tool plugin is active.
+	 */
+	private static function is_republication_tracker_plugin_active() {
+		return class_exists( 'Republication_Tracker_Tool' );
 	}
 }
 RSS::init();

@@ -32,5 +32,5 @@ interface UpdateMetadataInterface
      * @param callable $httpHandler callback which delivers psr7 request
      * @return array<mixed> updated metadata hashmap
      */
-    public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null);
+    public function updateMetadata($metadata, $authUri = null, ?callable $httpHandler = null);
 }

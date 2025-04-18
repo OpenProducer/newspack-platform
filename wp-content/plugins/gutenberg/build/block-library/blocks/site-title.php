@@ -16,7 +16,7 @@
  */
 function gutenberg_render_block_core_site_title( $attributes ) {
 	$site_title = get_bloginfo( 'name' );
-	if ( ! $site_title ) {
+	if ( ! trim( $site_title ) ) {
 		return;
 	}
 
@@ -31,7 +31,7 @@ function gutenberg_render_block_core_site_title( $attributes ) {
 	}
 
 	if ( $attributes['isLink'] ) {
-		$aria_current = is_home() || ( is_front_page() && 'page' === get_option( 'show_on_front' ) ) ? ' aria-current="page"' : '';
+		$aria_current = ! is_paged() && ( is_front_page() || is_home() && ( (int) get_option( 'page_for_posts' ) !== get_queried_object_id() ) ) ? ' aria-current="page"' : '';
 		$link_target  = ! empty( $attributes['linkTarget'] ) ? $attributes['linkTarget'] : '_self';
 
 		$site_title = sprintf(

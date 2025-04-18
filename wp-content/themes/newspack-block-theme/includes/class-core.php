@@ -21,6 +21,7 @@ final class Core {
 		\add_action( 'after_setup_theme', [ __CLASS__, 'theme_support' ] );
 		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'theme_styles' ] );
 		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'editor_scripts' ] );
+		\add_filter( 'body_class', [ __CLASS__, 'body_class' ] );
 		\add_filter( 'block_type_metadata', [ __CLASS__, 'block_variations' ] );
 		\add_filter( 'rest_dispatch_request', [ __CLASS__, 'restrict_patterns' ], 12, 3 );
 		\add_filter( 'should_load_remote_block_patterns', '__return_false' );
@@ -83,6 +84,24 @@ final class Core {
 	public static function editor_scripts() {
 		// Enqueue editor JavaScript.
 		wp_enqueue_script( 'editor-script', get_theme_file_uri( '/dist/editor.js' ), array( 'wp-blocks', 'wp-dom' ), wp_get_theme()->get( 'Version' ), true );
+	}
+
+	/**
+	 * Body class.
+	 *
+	 * @since Newspack Block Theme 1.0
+	 *
+	 * @param array $classes Array of body class names.
+	 * @return array Modified array of body class names.
+	 */
+	public static function body_class( $classes ) {
+		$global_settings = wp_get_global_settings();
+
+		$classes[] = 'theme-variation-' . esc_attr(
+			$global_settings['custom']['className'] ?? 'default'
+		);
+
+		return $classes;
 	}
 
 	/**

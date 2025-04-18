@@ -275,6 +275,7 @@ class Edit extends Component< HomepageArticlesProps > {
 			postsToShow,
 			categories,
 			includeSubcategories,
+			categoryJoinType,
 			customTaxonomies,
 			columns,
 			postType,
@@ -369,6 +370,8 @@ class Edit extends Component< HomepageArticlesProps > {
 						onCategoriesChange={ handleAttributeChange( 'categories' ) }
 						includeSubcategories={ includeSubcategories }
 						onIncludeSubcategoriesChange={ handleAttributeChange( 'includeSubcategories' ) }
+						categoryJoinType={ categoryJoinType }
+						onCategoryJoinTypeChange={ handleAttributeChange( 'categoryJoinType' ) }
 						tags={ tags }
 						onTagsChange={ handleAttributeChange( 'tags' ) }
 						onCustomTaxonomiesChange={ handleAttributeChange( 'customTaxonomies' ) }
@@ -827,7 +830,7 @@ class Edit extends Component< HomepageArticlesProps > {
 					 * The "More" button option is hidden for private sites, so we should
 					 * also hide the button in case it was previously enabled.
 					 */
-					<div className="editor-styles-wrapper wpnbha__wp-block-button__wrapper">
+					<div className="wpnbha__wp-block-button__wrapper">
 						<div className="wp-block-button">
 							<RichText
 								placeholder={ __( 'Load more posts', 'newspack-blocks' ) }

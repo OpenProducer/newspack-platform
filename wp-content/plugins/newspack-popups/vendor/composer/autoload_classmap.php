@@ -10,6 +10,8 @@ return array(
     'Newspack\\Campaigns\\CLI\\Export' => $baseDir . '/includes/cli/class-export.php',
     'Newspack\\Campaigns\\CLI\\Import' => $baseDir . '/includes/cli/class-import.php',
     'Newspack\\Campaigns\\CLI\\Prune_Data' => $baseDir . '/includes/cli/class-prune-data.php',
+    'Newspack\\Campaigns\\Merge_Tag' => $baseDir . '/includes/merge-tags/class-merge-tag.php',
+    'Newspack\\Campaigns\\Merge_Tags' => $baseDir . '/includes/merge-tags/class-merge-tags.php',
     'Newspack\\Campaigns\\Schema' => $baseDir . '/includes/schemas/class-schema.php',
     'Newspack\\Campaigns\\Schemas\\Campaigns' => $baseDir . '/includes/schemas/class-campaigns.php',
     'Newspack\\Campaigns\\Schemas\\Package' => $baseDir . '/includes/schemas/class-package.php',

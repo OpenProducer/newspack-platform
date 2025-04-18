@@ -5,6 +5,97 @@ namespace Automattic\WooCommerce\Blocks\Utils;
  * Class containing utility methods for dealing with the Cart and Checkout blocks.
  */
 class CartCheckoutUtils {
+	/**
+	 * Returns true if:
+	 * - The cart page is being viewed.
+	 * - The page contains a cart block, cart shortcode or classic shortcode block with the cart attribute.
+	 *
+	 * @return bool
+	 */
+	public static function is_cart_page() {
+		global $post;
+
+		$page_id      = wc_get_page_id( 'cart' );
+		$is_cart_page = $page_id && is_page( $page_id );
+
+		if ( $is_cart_page ) {
+			return true;
+		}
+
+		// Check page contents for block/shortcode.
+		return is_a( $post, 'WP_Post' ) && ( wc_post_content_has_shortcode( 'woocommerce_cart' ) || self::has_block_variation( 'woocommerce/classic-shortcode', 'shortcode', 'cart', $post->post_content ) );
+	}
+
+	/**
+	 * Returns true if shipping methods exist in the store. Excludes local pickup and only counts enabled shipping methods.
+	 *
+	 * @return bool true if shipping methods exist.
+	 */
+	public static function shipping_methods_exist() {
+		// Local pickup is included with legacy shipping methods since they do not support shipping zones.
+		$local_pickup_count = count(
+			array_filter(
+				WC()->shipping()->get_shipping_methods(),
+				function ( $method ) {
+					return isset( $method->enabled ) && 'yes' === $method->enabled && ! $method->supports( 'shipping-zones' ) && $method->supports( 'local-pickup' );
+				}
+			)
+		);
+
+		$shipping_methods_count = wc_get_shipping_method_count( true, true ) - $local_pickup_count;
+		return $shipping_methods_count > 0;
+	}
+
+	/**
+	 * Returns true if:
+	 * - The checkout page is being viewed.
+	 * - The page contains a checkout block, checkout shortcode or classic shortcode block with the checkout attribute.
+	 *
+	 * @return bool
+	 */
+	public static function is_checkout_page() {
+		global $post;
+
+		$page_id          = wc_get_page_id( 'checkout' );
+		$is_checkout_page = $page_id && is_page( $page_id );
+
+		if ( $is_checkout_page ) {
+			return true;
+		}
+
+		// Check page contents for block/shortcode.
+		return is_a( $post, 'WP_Post' ) && ( wc_post_content_has_shortcode( 'woocommerce_checkout' ) || self::has_block_variation( 'woocommerce/classic-shortcode', 'shortcode', 'checkout', $post->post_content ) );
+	}
+
+	/**
+	 * Check if the post content contains a block with a specific attribute value.
+	 *
+	 * @param string $block_id The block ID to check for.
+	 * @param string $attribute The attribute to check.
+	 * @param string $value The value to check for.
+	 * @return boolean
+	 */
+	public static function has_block_variation( $block_id, $attribute, $value, $post_content ) {
+		if ( ! $post_content ) {
+			return false;
+		}
+
+		if ( has_block( $block_id, $post_content ) ) {
+			$blocks = (array) parse_blocks( $post_content );
+
+			foreach ( $blocks as $block ) {
+				if ( isset( $block['attrs'][ $attribute ] ) && $value === $block['attrs'][ $attribute ] ) {
+					return true;
+				}
+				// Cart is default so it will be empty.
+				if ( 'woocommerce/classic-shortcode' === $block_id && 'shortcode' === $attribute && 'cart' === $value && ! isset( $block['attrs']['shortcode'] ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 	/**
 	 * Checks if the default cart page is using the Cart block.
@@ -197,9 +288,23 @@ class CartCheckoutUtils {
 	public static function get_country_data() {
 		$billing_countries  = WC()->countries->get_allowed_countries();
 		$shipping_countries = WC()->countries->get_shipping_countries();
-		$country_locales    = wc()->countries->get_country_locale();
 		$country_states     = wc()->countries->get_states();
 		$all_countries      = self::deep_sort_with_accents( array_unique( array_merge( $billing_countries, $shipping_countries ) ) );
+		$country_locales    = array_map(
+			function ( $locale ) {
+				foreach ( $locale as $field => $field_data ) {
+					if ( isset( $field_data['priority'] ) ) {
+						$locale[ $field ]['index'] = $field_data['priority'];
+						unset( $locale[ $field ]['priority'] );
+					}
+					if ( isset( $field_data['class'] ) ) {
+						unset( $locale[ $field ]['class'] );
+					}
+				}
+				return $locale;
+			},
+			WC()->countries->get_country_locale()
+		);
 
 		$country_data = [];
 

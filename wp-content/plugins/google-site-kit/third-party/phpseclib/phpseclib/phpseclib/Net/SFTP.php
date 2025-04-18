@@ -326,7 +326,7 @@ class SFTP extends \Google\Site_Kit_Dependencies\phpseclib3\Net\SSH2
         parent::__construct($host, $port, $timeout);
         $this->max_sftp_packet = 1 << 15;
         if (empty(self::$packet_types)) {
-            self::$packet_types = [1 => 'NET_SFTP_INIT', 2 => 'NET_SFTP_VERSION', 3 => 'NET_SFTP_OPEN', 4 => 'NET_SFTP_CLOSE', 5 => 'NET_SFTP_READ', 6 => 'NET_SFTP_WRITE', 7 => 'NET_SFTP_LSTAT', 9 => 'NET_SFTP_SETSTAT', 10 => 'NET_SFTP_FSETSTAT', 11 => 'NET_SFTP_OPENDIR', 12 => 'NET_SFTP_READDIR', 13 => 'NET_SFTP_REMOVE', 14 => 'NET_SFTP_MKDIR', 15 => 'NET_SFTP_RMDIR', 16 => 'NET_SFTP_REALPATH', 17 => 'NET_SFTP_STAT', 18 => 'NET_SFTP_RENAME', 19 => 'NET_SFTP_READLINK', 20 => 'NET_SFTP_SYMLINK', 21 => 'NET_SFTP_LINK', 101 => 'NET_SFTP_STATUS', 102 => 'NET_SFTP_HANDLE', 103 => 'NET_SFTP_DATA', 104 => 'NET_SFTP_NAME', 105 => 'NET_SFTP_ATTRS', 200 => 'NET_SFTP_EXTENDED'];
+            self::$packet_types = [1 => 'NET_SFTP_INIT', 2 => 'NET_SFTP_VERSION', 3 => 'NET_SFTP_OPEN', 4 => 'NET_SFTP_CLOSE', 5 => 'NET_SFTP_READ', 6 => 'NET_SFTP_WRITE', 7 => 'NET_SFTP_LSTAT', 9 => 'NET_SFTP_SETSTAT', 10 => 'NET_SFTP_FSETSTAT', 11 => 'NET_SFTP_OPENDIR', 12 => 'NET_SFTP_READDIR', 13 => 'NET_SFTP_REMOVE', 14 => 'NET_SFTP_MKDIR', 15 => 'NET_SFTP_RMDIR', 16 => 'NET_SFTP_REALPATH', 17 => 'NET_SFTP_STAT', 18 => 'NET_SFTP_RENAME', 19 => 'NET_SFTP_READLINK', 20 => 'NET_SFTP_SYMLINK', 21 => 'NET_SFTP_LINK', 101 => 'NET_SFTP_STATUS', 102 => 'NET_SFTP_HANDLE', 103 => 'NET_SFTP_DATA', 104 => 'NET_SFTP_NAME', 105 => 'NET_SFTP_ATTRS', 200 => 'NET_SFTP_EXTENDED', 201 => 'NET_SFTP_EXTENDED_REPLY'];
             self::$status_codes = [0 => 'NET_SFTP_STATUS_OK', 1 => 'NET_SFTP_STATUS_EOF', 2 => 'NET_SFTP_STATUS_NO_SUCH_FILE', 3 => 'NET_SFTP_STATUS_PERMISSION_DENIED', 4 => 'NET_SFTP_STATUS_FAILURE', 5 => 'NET_SFTP_STATUS_BAD_MESSAGE', 6 => 'NET_SFTP_STATUS_NO_CONNECTION', 7 => 'NET_SFTP_STATUS_CONNECTION_LOST', 8 => 'NET_SFTP_STATUS_OP_UNSUPPORTED', 9 => 'NET_SFTP_STATUS_INVALID_HANDLE', 10 => 'NET_SFTP_STATUS_NO_SUCH_PATH', 11 => 'NET_SFTP_STATUS_FILE_ALREADY_EXISTS', 12 => 'NET_SFTP_STATUS_WRITE_PROTECT', 13 => 'NET_SFTP_STATUS_NO_MEDIA', 14 => 'NET_SFTP_STATUS_NO_SPACE_ON_FILESYSTEM', 15 => 'NET_SFTP_STATUS_QUOTA_EXCEEDED', 16 => 'NET_SFTP_STATUS_UNKNOWN_PRINCIPAL', 17 => 'NET_SFTP_STATUS_LOCK_CONFLICT', 18 => 'NET_SFTP_STATUS_DIR_NOT_EMPTY', 19 => 'NET_SFTP_STATUS_NOT_A_DIRECTORY', 20 => 'NET_SFTP_STATUS_INVALID_FILENAME', 21 => 'NET_SFTP_STATUS_LINK_LOOP', 22 => 'NET_SFTP_STATUS_CANNOT_DELETE', 23 => 'NET_SFTP_STATUS_INVALID_PARAMETER', 24 => 'NET_SFTP_STATUS_FILE_IS_A_DIRECTORY', 25 => 'NET_SFTP_STATUS_BYTE_RANGE_LOCK_CONFLICT', 26 => 'NET_SFTP_STATUS_BYTE_RANGE_LOCK_REFUSED', 27 => 'NET_SFTP_STATUS_DELETE_PENDING', 28 => 'NET_SFTP_STATUS_FILE_CORRUPT', 29 => 'NET_SFTP_STATUS_OWNER_INVALID', 30 => 'NET_SFTP_STATUS_GROUP_INVALID', 31 => 'NET_SFTP_STATUS_NO_MATCHING_BYTE_RANGE_LOCK'];
             // http://tools.ietf.org/html/draft-ietf-secsh-filexfer-13#section-7.1
             // the order, in this case, matters quite a lot - see \phpseclib3\Net\SFTP::_parseAttributes() to understand why
@@ -2581,6 +2581,7 @@ class SFTP extends \Google\Site_Kit_Dependencies\phpseclib3\Net\SSH2
      */
     protected function parseAttributes(&$response)
     {
+        $attr = [];
         if ($this->version >= 4) {
             list($flags, $attr['type']) = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('NC', $response);
         } else {
@@ -3012,6 +3013,21 @@ class SFTP extends \Google\Site_Kit_Dependencies\phpseclib3\Net\SSH2
         return $temp;
     }
     /**
+     * Get supported SFTP extensions
+     *
+     * @return array
+     */
+    public function getSupportedExtensions()
+    {
+        if (!($this->bitmap & \Google\Site_Kit_Dependencies\phpseclib3\Net\SSH2::MASK_LOGIN)) {
+            return \false;
+        }
+        if (!$this->partial_init) {
+            $this->partial_init_sftp_connection();
+        }
+        return $this->extensions;
+    }
+    /**
      * Get supported SFTP versions
      *
      * @return int|false
@@ -3062,5 +3078,100 @@ class SFTP extends \Google\Site_Kit_Dependencies\phpseclib3\Net\SSH2
     public function disableDatePreservation()
     {
         $this->preserveTime = \false;
+    }
+    /**
+     * POSIX Rename
+     *
+     * Where rename() fails "if there already exists a file with the name specified by newpath"
+     * (draft-ietf-secsh-filexfer-02#section-6.5), posix_rename() overwrites the existing file in an atomic fashion.
+     * ie. "there is no observable instant in time where the name does not refer to either the old or the new file"
+     * (draft-ietf-secsh-filexfer-13#page-39).
+     *
+     * @param string $oldname
+     * @param string $newname
+     * @return bool
+     */
+    public function posix_rename($oldname, $newname)
+    {
+        if (!$this->precheck()) {
+            return \false;
+        }
+        $oldname = $this->realpath($oldname);
+        $newname = $this->realpath($newname);
+        if ($oldname === \false || $newname === \false) {
+            return \false;
+        }
+        if ($this->version >= 5) {
+            $packet = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ssN', $oldname, $newname, 2);
+            // 2 = SSH_FXP_RENAME_ATOMIC
+            $this->send_sftp_packet(NET_SFTP_RENAME, $packet);
+        } elseif (isset($this->extensions['posix-rename@openssh.com']) && $this->extensions['posix-rename@openssh.com'] === '1') {
+            $packet = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('sss', 'posix-rename@openssh.com', $oldname, $newname);
+            $this->send_sftp_packet(NET_SFTP_EXTENDED, $packet);
+        } else {
+            throw new \RuntimeException("Extension 'posix-rename@openssh.com' is not supported by the server. " . "Call getSupportedVersions() to see a list of supported extension");
+        }
+        $response = $this->get_sftp_packet();
+        if ($this->packet_type != NET_SFTP_STATUS) {
+            throw new \UnexpectedValueException('Expected NET_SFTP_STATUS. ' . 'Got packet type: ' . $this->packet_type);
+        }
+        // if $status isn't SSH_FX_OK it's probably SSH_FX_NO_SUCH_FILE or SSH_FX_PERMISSION_DENIED
+        list($status) = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('N', $response);
+        if ($status != NET_SFTP_STATUS_OK) {
+            $this->logError($response, $status);
+            return \false;
+        }
+        // don't move the stat cache entry over since this operation could very well change the
+        // atime and mtime attributes
+        //$this->update_stat_cache($newname, $this->query_stat_cache($oldname));
+        $this->remove_from_stat_cache($oldname);
+        $this->remove_from_stat_cache($newname);
+        return \true;
+    }
+    /**
+     * Returns general information about a file system.
+     *
+     * The function statvfs() returns information about a mounted filesystem.
+     * @see https://man7.org/linux/man-pages/man3/statvfs.3.html
+     *
+     * @param string $path
+     * @return false|array{bsize: int, frsize: int, blocks: int, bfree: int, bavail: int, files: int, ffree: int, favail: int, fsid: int, flag: int, namemax: int}
+     */
+    public function statvfs($path)
+    {
+        if (!$this->precheck()) {
+            return \false;
+        }
+        if (!isset($this->extensions['statvfs@openssh.com']) || $this->extensions['statvfs@openssh.com'] !== '2') {
+            throw new \RuntimeException("Extension 'statvfs@openssh.com' is not supported by the server. " . "Call getSupportedVersions() to see a list of supported extension");
+        }
+        $realpath = $this->realpath($path);
+        if ($realpath === \false) {
+            return \false;
+        }
+        $packet = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ss', 'statvfs@openssh.com', $realpath);
+        $this->send_sftp_packet(NET_SFTP_EXTENDED, $packet);
+        $response = $this->get_sftp_packet();
+        if ($this->packet_type !== NET_SFTP_EXTENDED_REPLY) {
+            throw new \UnexpectedValueException('Expected SSH_FXP_EXTENDED_REPLY. ' . 'Got packet type: ' . $this->packet_type);
+        }
+        /**
+         * These requests return a SSH_FXP_STATUS reply on failure. On success they
+         * return the following SSH_FXP_EXTENDED_REPLY reply:
+         *
+         * uint32        id
+         * uint64        f_bsize     file system block size
+         * uint64        f_frsize     fundamental fs block size
+         * uint64        f_blocks     number of blocks (unit f_frsize)
+         * uint64        f_bfree      free blocks in file system
+         * uint64        f_bavail     free blocks for non-root
+         * uint64        f_files      total file inodes
+         * uint64        f_ffree      free file inodes
+         * uint64        f_favail     free file inodes for to non-root
+         * uint64        f_fsid       file system id
+         * uint64        f_flag       bit mask of f_flag values
+         * uint64        f_namemax    maximum filename length
+         */
+        return \array_combine(['bsize', 'frsize', 'blocks', 'bfree', 'bavail', 'files', 'ffree', 'favail', 'fsid', 'flag', 'namemax'], \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('QQQQQQQQQQQ', $response));
     }
 }

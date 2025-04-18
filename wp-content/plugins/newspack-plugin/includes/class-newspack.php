@@ -46,9 +46,6 @@ final class Newspack {
 		add_action( 'current_screen', [ $this, 'wizard_redirect' ] );
 		add_action( 'admin_menu', [ $this, 'handle_resets' ], 1 );
 		add_action( 'admin_menu', [ $this, 'remove_newspack_suite_plugin_links' ], 1 );
-		add_action( 'admin_notices', [ $this, 'remove_notifications' ], -9999 );
-		add_action( 'network_admin_notices', [ $this, 'remove_notifications' ], -9999 );
-		add_action( 'all_admin_notices', [ $this, 'remove_notifications' ], -9999 );
 		register_activation_hook( NEWSPACK_PLUGIN_FILE, [ $this, 'activation_hook' ] );
 		register_deactivation_hook( NEWSPACK_PLUGIN_FILE, [ $this, 'deactivation_hook' ] );
 	}
@@ -72,6 +69,7 @@ final class Newspack {
 		define( 'NEWSPACK_ACTIVATION_TRANSIENT', '_newspack_activation_redirect' );
 		define( 'NEWSPACK_NRH_CONFIG', 'newspack_nrh_config' );
 		define( 'NEWSPACK_CLIENT_ID_COOKIE_NAME', 'newspack-cid' );
+		define( 'NEWSPACK_SETUP_COMPLETE', 'newspack_setup_complete' );
 	}
 
 	/**
@@ -117,7 +115,6 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-services-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-mailchimp-api.php';
-		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-fivetran-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-login.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-blocks.php';
 		include_once NEWSPACK_ABSPATH . 'includes/tracking/class-pixel.php';
@@ -126,29 +123,54 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/revisions-control/class-revisions-control.php';
 		include_once NEWSPACK_ABSPATH . 'includes/authors/class-authors-custom-fields.php';
 		include_once NEWSPACK_ABSPATH . 'includes/corrections/class-corrections.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-syndication.php';
 		include_once NEWSPACK_ABSPATH . 'includes/bylines/class-bylines.php';
+		include_once NEWSPACK_ABSPATH . 'includes/lite-site/class-lite-site.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-provider.php';
 		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-generated.php';
 		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-wordpress.php';
 
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-wizard.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-wizard-section.php';
+
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-setup-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-dashboard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-components-demo.php';
 
-		/* Unified Wizards */
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-settings.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-advertising-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-analytics-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-engagement-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-reader-revenue-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-seo-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-site-design-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-syndication-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-health-check-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-popups-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-connections-wizard.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/traits/trait-wizards-admin-header.php';
 
+		// Newspack Wizards and Sections.
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/newspack/class-newspack-dashboard.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/newspack/class-newspack-settings.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/newspack/class-custom-events-section.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/newspack/class-syndication-section.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/newspack/class-seo-section.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/newspack/class-pixels-section.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/newspack/class-recirculation-section.php';
+
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-setup-wizard.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-components-demo.php';
+
+		// Listings Wizard.
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-listings-wizard.php';
+
+		// Advertising Wizard.
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/advertising/class-advertising-display-ads.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/advertising/class-advertising-sponsors.php';
+
+		// Audience Wizard.
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-wizard.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-campaigns.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-donations.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-subscriptions.php';
+
+		// Network Wizard.
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-network-wizard.php';
+
+		// Newsletters Wizard.
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-newsletters-wizard.php';
+
+		/* Unified Wizards */
 		include_once NEWSPACK_ABSPATH . 'includes/class-wizards.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-handoff-banner.php';
@@ -171,19 +193,27 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-perfmatters.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-pwa.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/co-authors-plus/class-guest-contributor-role.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/co-authors-plus/class-nicename-change.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/co-authors-plus/class-nicename-change-ui.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/co-authors-plus/class-search-authors-limit.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/wc-memberships/class-memberships.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-woocommerce.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions-gifting.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-woocommerce-gateway-stripe.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-teams-for-memberships.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-newspack-elections.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-yoast.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 		include_once NEWSPACK_ABSPATH . 'includes/polyfills/class-amp-polyfills.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-performance.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-default-image.php';
 
+		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-optional-modules.php';
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-rss.php';
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-media-partners.php';
+		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-woo-member-commenting.php';
 
 		if ( Donations::is_platform_nrh() ) {
 			include_once NEWSPACK_ABSPATH . 'includes/class-nrh.php';
@@ -234,7 +264,7 @@ final class Newspack {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		$redirect_url   = admin_url( 'admin.php?page=newspack' );
+		$redirect_url   = admin_url( 'admin.php?page=newspack-dashboard' );
 		$newspack_reset = filter_input( INPUT_GET, 'newspack_reset', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( 'starter-content' === $newspack_reset ) {
 			Starter_Content::remove_starter_content();
@@ -258,19 +288,6 @@ final class Newspack {
 			wp_safe_redirect( $redirect_url );
 			exit;
 		}
-	}
-
-	/**
-	 * Remove notifications.
-	 */
-	public function remove_notifications() {
-		$screen = get_current_screen();
-
-		$is_newspack_screen = ( 'newspack' === $screen->parent_base ) || ( 'admin_page_newspack-' === substr( $screen->base, 0, 20 ) );
-		if ( ! $screen || ! $is_newspack_screen ) {
-			return;
-		}
-		remove_all_actions( current_action() );
 	}
 
 	/**
@@ -332,7 +349,7 @@ final class Newspack {
 		$post_type_mapping = [
 			Emails::POST_TYPE => [
 				'base' => 'edit',
-				'url'  => esc_url( admin_url( 'admin.php?page=newspack' ) ),
+				'url'  => esc_url( admin_url( 'admin.php?page=newspack-dashboard' ) ),
 			],
 		];
 
@@ -340,7 +357,7 @@ final class Newspack {
 		if ( class_exists( '\Newspack_Popups' ) ) {
 			$post_type_mapping[ \Newspack_Popups::NEWSPACK_POPUPS_CPT ] = [
 				'base' => 'edit',
-				'url'  => esc_url( admin_url( 'admin.php?page=newspack-popups-wizard' ) ),
+				'url'  => esc_url( admin_url( 'admin.php?page=newspack-audience-campaigns' ) ),
 			];
 		}
 
@@ -378,6 +395,13 @@ final class Newspack {
 	}
 
 	/**
+	 * Is the Setup completed?
+	 */
+	public static function is_setup_complete() {
+		return '1' === get_option( NEWSPACK_SETUP_COMPLETE, '0' );
+	}
+
+	/**
 	 * Load the common assets.
 	 */
 	public static function load_common_assets() {
@@ -399,12 +423,14 @@ final class Newspack {
 		wp_style_add_data( 'newspack-commons', 'rtl', 'replace' );
 		wp_enqueue_style( 'newspack-commons' );
 
-		\wp_enqueue_style(
-			'newspack-admin',
-			self::plugin_url() . '/dist/admin.css',
-			[],
-			NEWSPACK_PLUGIN_VERSION
-		);
+		if ( is_admin() ) {
+			\wp_enqueue_style(
+				'newspack-admin',
+				self::plugin_url() . '/dist/admin.css',
+				[],
+				NEWSPACK_PLUGIN_VERSION
+			);
+		}
 	}
 }
 Newspack::instance();

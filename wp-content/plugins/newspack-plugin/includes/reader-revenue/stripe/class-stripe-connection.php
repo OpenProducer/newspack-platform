@@ -80,4 +80,24 @@ class Stripe_Connection {
 			update_option( 'woocommerce_default_country', $updated_stripe_data['location_code'] );
 		}
 	}
+
+	/**
+	 * Update stripe customer data.
+	 *
+	 * @param int   $user_id User ID.
+	 * @param array $data    Stripe customer data.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public static function update_customer_data( $user_id, $data ) {
+		if ( ! class_exists( 'WC_Stripe_API' ) ) {
+			return false;
+		}
+		$stripe_customer_id = \get_user_option( '_stripe_customer_id', $user_id );
+		if ( ! $stripe_customer_id ) {
+			return false;
+		}
+		$result = \WC_Stripe_API::request( $data, 'customers/' . $stripe_customer_id );
+		return \is_wp_error( $result ) ? $result : true;
+	}
 }

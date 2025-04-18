@@ -7,6 +7,11 @@
 
 namespace Newspack;
 
+use WP_Error;
+use WP_REST_Server;
+use WP_REST_Request;
+use WP_REST_Response;
+
 /**
  * Class to handle Corrections and Clarifications.
  */
@@ -22,14 +27,9 @@ class Corrections {
 	const CORRECTION_POST_ID_META = 'newspack_correction-post-id';
 
 	/**
-	 * Meta key for post corrections active meta.
+	 * Meta key for post corrections priority meta.
 	 */
-	const CORRECTIONS_ACTIVE_META = 'newspack_corrections_active';
-
-	/**
-	 * Meta key for post corrections location meta.
-	 */
-	const CORRECTIONS_LOCATION_META = 'newspack_corrections_location';
+	const CORRECTIONS_PRIORITY_META = 'newspack_corrections_priority';
 
 	/**
 	 * Meta key for post corrections type meta.
@@ -42,52 +42,59 @@ class Corrections {
 	const SUPPORTED_POST_TYPES = [ 'article_legacy', 'content_type_blog', 'post', 'press_release' ];
 
 	/**
+	 * REST route for corrections.
+	 */
+	const REST_ROUTE = '/corrections';
+
+	/**
 	 * Initializes the class.
 	 */
 	public static function init() {
-		if ( ! self::is_enabled() ) {
-			return;
-		}
 		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
-		add_action( 'init', [ __CLASS__, 'add_corrections_shortcode' ] );
-		add_action( 'add_meta_boxes', [ __CLASS__, 'add_corrections_metabox' ] );
-		add_action( 'save_post', [ __CLASS__, 'save_corrections_metabox' ] );
 		add_filter( 'the_content', [ __CLASS__, 'output_corrections_on_post' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'wp_enqueue_scripts' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'wp_enqueue_scripts' ] );
+		add_action( 'rest_api_init', [ __CLASS__, 'register_rest_routes' ] );
+		add_action( 'admin_init', [ __CLASS__, 'register_corrections_block_patterns' ] );
+		add_action( 'init', [ __CLASS__, 'register_corrections_template' ] );
 	}
-
-	/**
-	 * Checks if the feature is enabled.
-	 *
-	 * True when:
-	 * - NEWSPACK_CORRECTIONS_ENABLED is defined and true.
-	 *
-	 * @return bool True if the feature is enabled, false otherwise.
-	 */
-	public static function is_enabled() {
-		return defined( 'NEWSPACK_CORRECTIONS_ENABLED' ) && NEWSPACK_CORRECTIONS_ENABLED;
-	}
-
 
 	/**
 	 * Enqueue scripts and styles.
 	 */
 	public static function wp_enqueue_scripts() {
+		\wp_enqueue_style(
+			'newspack-corrections-single',
+			Newspack::plugin_url() . '/dist/other-scripts/corrections.css',
+			[],
+			NEWSPACK_PLUGIN_VERSION
+		);
+
 		if ( ! is_admin() || ! filter_input( INPUT_GET, 'post', FILTER_VALIDATE_INT ) ) {
 			return;
 		}
 
 		\wp_enqueue_script(
-			'newspack-corrections',
-			Newspack::plugin_url() . '/dist/other-scripts/corrections.js',
-			[],
+			'newspack-corrections-modal',
+			Newspack::plugin_url() . '/dist/other-scripts/corrections-modal.js',
+			[ 'wp-edit-post', 'wp-data', 'wp-components', 'wp-element' ],
 			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
+
+		wp_localize_script(
+			'newspack-corrections-modal',
+			'NewspackCorrectionsData',
+			[
+				'corrections'  => self::get_corrections( get_the_ID() ),
+				'restPath'     => sprintf( '/%s%s', NEWSPACK_API_NAMESPACE, self::REST_ROUTE ),
+				'siteTimezone' => wp_timezone_string(),
+			]
+		);
+
 		\wp_enqueue_style(
-			'newspack-corrections',
-			Newspack::plugin_url() . '/dist/other-scripts/corrections.css',
+			'newspack-corrections-modal',
+			Newspack::plugin_url() . '/dist/other-scripts/corrections-modal.css',
 			[],
 			NEWSPACK_PLUGIN_VERSION
 		);
@@ -161,30 +168,102 @@ class Corrections {
 	}
 
 	/**
-	 * Save corrections for post.
-	 *
-	 * @param int   $post_id     The post ID.
-	 * @param array $corrections The corrections.
+	 * Register REST route for corrections.
 	 */
-	public static function add_corrections( $post_id, $corrections ) {
+	public static function register_rest_routes() {
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			self::REST_ROUTE . '/(?P<id>\d+)',
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ __CLASS__, 'rest_save_corrections' ],
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			]
+		);
+	}
+
+	/**
+	 * REST endpoint to save corrections.
+	 *
+	 * @param WP_REST_Request $request The REST request.
+	 *
+	 * @return WP_REST_Response The REST response.
+	 */
+	public static function rest_save_corrections( WP_REST_Request $request ) {
+		$post_id     = $request->get_param( 'post_id' );
+		$corrections = $request->get_param( 'corrections' );
+
+		if ( ! get_post( $post_id ) ) {
+			return rest_ensure_response( new WP_Error( 'invalid_post_id', 'Invalid post ID.', [ 'status' => 400 ] ) );
+		}
+
+		$existing_corrections = self::get_corrections( $post_id );
+		$existing_ids         = wp_list_pluck( $existing_corrections, 'ID' );
+
+		// Track processed corrections to handle deletions.
+		$processed_ids = [];
+
 		foreach ( $corrections as $correction ) {
-			$id = wp_insert_post(
-				[
-					'post_title'   => 'Correction for ' . get_the_title( $post_id ),
-					'post_content' => $correction['content'],
-					'post_date'    => $correction['date'],
-					'post_type'    => self::POST_TYPE,
-					'post_status'  => 'publish',
-					'meta_input'   => [
-						self::CORRECTION_POST_ID_META => $post_id,
-						self::CORRECTIONS_TYPE_META   => $correction['type'],
-					],
-				]
-			);
-			if ( ! \is_wp_error( $id ) ) {
-				$correction_ids[] = $id;
+			$correction_id = $correction['id'];
+
+			if ( empty( $correction['content'] ) ) {
+				continue;
+			}
+
+			// ID will be null if it's a new correction.
+			if ( ! empty( $correction_id ) ) {
+				// Update existing correction.
+				self::update_correction( $correction_id, $correction );
+				$processed_ids[] = $correction_id;
+			} else {
+				// Create new correction.
+				$new_correction_id = self::add_correction( $post_id, $correction );
+				if ( ! is_wp_error( $new_correction_id ) ) {
+					$processed_ids[] = $new_correction_id;
+				}
 			}
 		}
+
+		// Delete corrections that are no longer present.
+		$to_delete = array_diff( $existing_ids, $processed_ids );
+		self::delete_corrections( $post_id, $to_delete );
+
+		return rest_ensure_response(
+			[
+				'success'           => true,
+				'corrections_saved' => $processed_ids,
+				'message'           => __( 'Corrections saved successfully.', 'newspack-plugin' ),
+			]
+		);
+	}
+
+	/**
+	 * Save corrections for post.
+	 *
+	 * @param int   $post_id    The post ID.
+	 * @param array $correction The corrections.
+	 *
+	 * @return int|WP_Error The correction ID.
+	 */
+	public static function add_correction( $post_id, $correction ) {
+		$id = wp_insert_post(
+			[
+				'post_title'   => sprintf( 'Correction for %s', get_the_title( $post_id ) ),
+				'post_content' => sanitize_textarea_field( $correction['content'] ),
+				'post_date'    => sanitize_text_field( $correction['date'] ),
+				'post_type'    => self::POST_TYPE,
+				'post_status'  => 'publish',
+				'meta_input'   => [
+					self::CORRECTION_POST_ID_META   => $post_id,
+					self::CORRECTIONS_TYPE_META     => $correction['type'],
+					self::CORRECTIONS_PRIORITY_META => $correction['priority'],
+				],
+			]
+		);
+
+		return $id;
 	}
 
 	/**
@@ -195,7 +274,7 @@ class Corrections {
 	 * @return array The corrections.
 	 */
 	public static function get_corrections( $post_id ) {
-		return get_posts(
+		$corrections = get_posts(
 			[
 				'posts_per_page' => -1,
 				'post_type'      => self::POST_TYPE,
@@ -205,6 +284,15 @@ class Corrections {
 				'order'          => 'DESC',
 			]
 		);
+
+		// Attach correction type & date to each post.
+		foreach ( $corrections as $correction ) {
+			$correction->correction_type     = get_post_meta( $correction->ID, self::CORRECTIONS_TYPE_META, true );
+			$correction->correction_date     = get_post_datetime( $correction->ID )->format( 'Y-m-d H:i:s' );
+			$correction->correction_priority = get_post_meta( $correction->ID, self::CORRECTIONS_PRIORITY_META, true );
+		}
+
+		return $corrections;
 	}
 
 	/**
@@ -220,7 +308,8 @@ class Corrections {
 				'post_content' => sanitize_textarea_field( $correction['content'] ),
 				'post_date'    => sanitize_text_field( $correction['date'] ),
 				'meta_input'   => [
-					self::CORRECTIONS_TYPE_META => $correction['type'],
+					self::CORRECTIONS_TYPE_META     => $correction['type'],
+					self::CORRECTIONS_PRIORITY_META => $correction['priority'],
 				],
 			]
 		);
@@ -236,13 +325,6 @@ class Corrections {
 		foreach ( $correction_ids as $id ) {
 			wp_delete_post( $id, true );
 		}
-	}
-
-	/**
-	 * Adds the corrections shortcode.
-	 */
-	public static function add_corrections_shortcode() {
-		add_shortcode( 'corrections', [ __CLASS__, 'handle_corrections_shortcode' ] );
 	}
 
 	/**
@@ -272,214 +354,6 @@ class Corrections {
 	}
 
 	/**
-	 * Handles the corrections shortcode.
-	 *
-	 * @return string the shortcode output.
-	 */
-	public static function handle_corrections_shortcode() {
-		global $wpdb;
-
-		$post_ids = get_posts(
-			[
-				'posts_per_page' => -1,
-				'meta_key'       => self::CORRECTIONS_ACTIVE_META,
-				'meta_value'     => 1, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
-				'fields'         => 'ids',
-				'orderby'        => 'date',
-				'order'          => 'DESC',
-			]
-		);
-
-		ob_start();
-		foreach ( $post_ids as $post_id ) :
-			$corrections = self::get_corrections( $post_id );
-			if ( empty( $corrections ) ) {
-				continue;
-			}
-
-			?>
-			<!-- wp:group {"className":"is-style-default correction-shortcode-item"} -->
-			<div class="wp-block-group is-style-default correction-shortcode-item">
-				<div class="wp-block-group__inner-container">
-					<!-- wp:newspack-blocks/homepage-articles {"showExcerpt":false,"showDate":false,"showAuthor":false,"mediaPosition":"left","specificPosts":["<?php echo intval( $post_id ); ?>"],"imageScale":2,"specificMode":true} /-->
-
-					<div class="correction-list">
-						<?php
-						foreach ( $corrections as $correction ) :
-							$correction_content = $correction->post_content;
-							$correction_date    = \get_the_date( 'M j, Y', $correction->ID );
-							$correction_heading = sprintf(
-								// translators: %s: correction date.
-								__( 'Correction on %s', 'newspack-plugin' ),
-								$correction_date
-							);
-							?>
-							<p>
-								<span class="correction-date"><?php echo esc_html( $correction_heading ); ?><span>:</span></span>
-								<?php echo esc_html( $correction_content ); ?>
-							</p>
-						<?php endforeach; ?>
-					</div>
-				</div>
-			</div>
-			<!-- /wp:group -->
-			<?php
-		endforeach;
-		return do_blocks( ob_get_clean() );
-	}
-
-	/**
-	 * Adds the corrections metabox.
-	 *
-	 * @param string $post_type the post type.
-	 */
-	public static function add_corrections_metabox( $post_type ) {
-		if ( in_array( $post_type, self::SUPPORTED_POST_TYPES, true ) ) {
-			add_meta_box(
-				'corrections',
-				'Corrections',
-				[ __CLASS__, 'render_corrections_metabox' ],
-				$post_type,
-				'advanced',
-				'high'
-			);
-		}
-	}
-
-	/**
-	 * Renders the corrections metabox.
-	 *
-	 * @param \WP_Post $post the post object.
-	 */
-	public static function render_corrections_metabox( $post ) {
-		$is_active   = get_post_meta( $post->ID, self::CORRECTIONS_ACTIVE_META, true );
-		$location    = get_post_meta( $post->ID, self::CORRECTIONS_LOCATION_META, true );
-		$corrections = self::get_corrections( $post->ID );
-		?>
-		<div class="corrections-metabox-container">
-			<div class="activate-corrections">
-				<input type="hidden" value="0" name="<?php echo esc_attr( self::CORRECTIONS_ACTIVE_META ); ?>" />
-				<input type="checkbox" class="activate-corrections-checkbox" value="1" name="<?php echo esc_attr( self::CORRECTIONS_ACTIVE_META ); ?>" <?php checked( 0 != $is_active ); ?> />
-				<?php echo esc_html( __( 'activate corrections', 'newspack-plugin' ) ); ?>
-			</div>
-			<div class="display-corrections">
-				<select name="<?php echo esc_attr( self::CORRECTIONS_LOCATION_META ); ?>" />
-					<option value=""><?php echo esc_html( __( 'Select Location', 'newspack-plugin' ) ); ?></option>
-					<option value="bottom" <?php selected( $location, 'bottom' ); ?>><?php echo esc_html( __( 'Bottom', 'newspack-plugin' ) ); ?></option>
-					<option value="top" <?php selected( $location, 'top' ); ?>><?php echo esc_html( __( 'Top', 'newspack-plugin' ) ); ?></option>
-				</select>
-			</div>
-			<div class="manage-corrections">
-				<fieldset name="existing-corrections[]" class="existing-corrections">
-					<?php
-					foreach ( $corrections as $correction ) :
-						$correction_content = $correction->post_content;
-						$correction_date    = \get_the_date( 'Y-m-d', $correction->ID );
-						$correction_type    = get_post_meta( $correction->ID, self::CORRECTIONS_TYPE_META, true );
-						?>
-						<fieldset name="existing-corrections[<?php echo esc_attr( $correction->ID ); ?>]" class="correction">
-							<p><?php echo esc_html( __( 'Article Correction', 'newspack-plugin' ) ); ?></p>
-							<textarea name="existing-corrections[<?php echo esc_attr( $correction->ID ); ?>][content]" rows="3" cols="60"><?php echo esc_html( $correction_content ); ?></textarea>
-							<br/>
-							<p>
-								<?php echo esc_html( __( 'Date:', 'newspack_plugin' ) ); ?>
-								<input name="existing-corrections[<?php echo esc_attr( $correction->ID ); ?>][date]" type="date" value="<?php echo esc_attr( sanitize_text_field( $correction_date ) ); ?>">
-							</p>
-							<p>
-								<?php echo esc_html( __( 'Type:', 'newspack_plugin' ) ); ?>
-								<select name="existing-corrections[<?php echo esc_attr( $correction->ID ); ?>][type]" />
-									<option value="correction" <?php selected( $correction_type, 'correction' ); ?>><?php echo esc_html( self::get_correction_type_label( 'correction' ) ); ?></option>
-									<option value="clarification" <?php selected( $correction_type, 'clarification' ); ?>><?php echo esc_html( self::get_correction_type_label( 'clarification' ) ); ?></option>
-								</select>
-							</p>
-							<button class="delete-correction">X</button>
-						</fieldset>
-					<?php endforeach; ?>
-				</fieldset>
-				<fieldset name="new-corrections[]" class="new-corrections"></fieldset>
-				<fieldset name="deleted-corrections[]" class="deleted-corrections"></fieldset>
-				<button type="button" class="add-correction"><?php echo esc_html( __( 'Add new correction', 'newspack-plugin' ) ); ?></button>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Saves the corrections metabox.
-	 *
-	 * @param int $post_id the post id.
-	 */
-	public static function save_corrections_metabox( $post_id ) {
-		// return early if we are saving an unsupported post type.
-		if ( ! in_array( get_post_type( $post_id ), self::SUPPORTED_POST_TYPES, true ) ) {
-			return;
-		}
-
-		$corrections_active   = filter_input( INPUT_POST, self::CORRECTIONS_ACTIVE_META, FILTER_SANITIZE_NUMBER_INT );
-		$corrections_location = filter_input( INPUT_POST, self::CORRECTIONS_LOCATION_META, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-		$corrections_data     = filter_input_array(
-			INPUT_POST,
-			[
-				'existing-corrections' => [
-					'flags'  => FILTER_REQUIRE_ARRAY,
-					'filter' => FILTER_DEFAULT,
-				],
-				'new-corrections'      => [
-					'flags'  => FILTER_REQUIRE_ARRAY,
-					'filter' => FILTER_DEFAULT,
-				],
-				'deleted-corrections'  => [
-					'flags'  => FILTER_REQUIRE_ARRAY,
-					'filter' => FILTER_SANITIZE_NUMBER_INT,
-				],
-			]
-		);
-		// return early if there is no corrections data.
-		if ( false === $corrections_active && false === $corrections_location && empty( $corrections_data ) ) {
-			return;
-		}
-		// update active flag if present.
-		if ( $corrections_active != get_post_meta( $post_id, self::CORRECTIONS_ACTIVE_META, true ) ) {
-			update_post_meta( $post_id, self::CORRECTIONS_ACTIVE_META, $corrections_active );
-		}
-		// update location flag if present.
-		if ( $corrections_location !== get_post_meta( $post_id, self::CORRECTIONS_LOCATION_META, true ) ) {
-			update_post_meta( $post_id, self::CORRECTIONS_LOCATION_META, sanitize_text_field( $corrections_location ) );
-		}
-		// update existing corrections if present.
-		if ( ! empty( $corrections_data['existing-corrections'] ) ) {
-			foreach ( $corrections_data['existing-corrections'] as $correction_id => $correction ) {
-				// don't save empty corrections.
-				if ( empty( trim( $correction['content'] ) ) ) {
-					continue;
-				}
-				self::update_correction( $correction_id, $correction );
-			}
-		}
-		// save new corrections if present.
-		if ( ! empty( $corrections_data['new-corrections'] ) ) {
-			$corrections = [];
-			foreach ( $corrections_data['new-corrections'] as $correction ) {
-				// don't save empty corrections.
-				if ( empty( trim( $correction['content'] ) ) ) {
-					continue;
-				}
-				$corrections[] = [
-					'content' => sanitize_textarea_field( $correction['content'] ),
-					'date'    => ! empty( $correction['date'] ) ? sanitize_text_field( $correction['date'] ) : gmdate( 'Y-m-d' ),
-					'type'    => sanitize_text_field( $correction['type'] ),
-				];
-			}
-			self::add_corrections( $post_id, $corrections );
-		}
-		// delete corrections if present.
-		if ( ! empty( $corrections_data['deleted-corrections'] ) ) {
-			$correction_ids = array_map( 'intval', $corrections_data['deleted-corrections'] );
-			self::delete_corrections( $post_id, $correction_ids );
-		}
-	}
-
-	/**
 	 * Outputs corrections on the post content.
 	 *
 	 * @param string $content the post content.
@@ -487,11 +361,7 @@ class Corrections {
 	 * @return string the post content with corrections.
 	 */
 	public static function output_corrections_on_post( $content ) {
-		if ( is_admin() || ! is_single() ) {
-			return $content;
-		}
-
-		if ( 0 == get_post_meta( get_the_ID(), self::CORRECTIONS_ACTIVE_META, true ) ) {
+		if ( is_admin() || ! is_single() || wp_is_block_theme() ) {
 			return $content;
 		}
 
@@ -500,37 +370,141 @@ class Corrections {
 			return $content;
 		}
 
+		// Separate corrections by priority.
+		$high_priority_corrections    = [];
+		$low_prioirty_corrections = [];
+
+		foreach ( $corrections as $correction ) {
+			if ( 'high' === $correction->correction_priority ) {
+				$high_priority_corrections[] = $correction;
+			} else {
+				$low_prioirty_corrections[] = $correction;
+			}
+		}
+
+		$top_corrections_markup    = ! empty( $high_priority_corrections ) ? self::get_corrections_markup( $high_priority_corrections, 'high' ) : '';
+		$bottom_corrections_markup = ! empty( $low_prioirty_corrections ) ? self::get_corrections_markup( $low_prioirty_corrections, 'low' ) : '';
+
+		return $top_corrections_markup . $content . $bottom_corrections_markup;
+	}
+
+	/**
+	 * Generates the corrections markup from an array of correction posts.
+	 *
+	 * @param array  $corrections Array of correction post objects.
+	 * @param string $corrections_priority The priority of the corrections.
+	 *
+	 * @return string Generated markup (or an empty string if no corrections).
+	 */
+	private static function get_corrections_markup( $corrections, $corrections_priority = 'low' ) {
+		// If no corrections, return an empty string.
+		if ( empty( $corrections ) ) {
+			return '';
+		}
+
+		$corrections_archive_url = get_post_type_archive_link( self::POST_TYPE );
+
 		ob_start();
 		?>
 		<!-- wp:group {"className":"correction-module","backgroundColor":"light-gray"} -->
-		<div class="wp-block-group correction-module has-light-gray-background-color has-background">
-			<div class="wp-block-group__inner-container">
-			<?php
-			foreach ( $corrections as $correction ) :
+		<div class="wp-block-group newspack-corrections-module corrections-<?php echo esc_attr( $corrections_priority ); ?>-module">
+			<?php foreach ( $corrections as $correction ) : ?>
+				<?php
 				$correction_content = $correction->post_content;
 				$correction_date    = \get_the_date( get_option( 'date_format' ), $correction->ID );
 				$correction_time    = \get_the_time( get_option( 'time_format' ), $correction->ID );
 				$correction_heading = sprintf(
-					'%s, %s %s',
-					self::get_correction_type_label( get_post_meta( $correction->ID, self::CORRECTIONS_TYPE_META, true ) ),
+					'%s, %s %s:',
+					self::get_correction_type( $correction->ID ),
 					$correction_date,
 					$correction_time
 				);
 				?>
-				<!-- wp:paragraph {"fontSize":"small"} -->
-				<p class="has-small-font-size correction-heading"><?php echo esc_html( $correction_heading ); ?></p>
-				<!-- /wp:paragraph -->
+				<p class="correction">
+					<a class="correction-title" href="<?php echo esc_url( $corrections_archive_url ); ?>"><?php echo esc_html( $correction_heading ); ?></a>
 
-				<!-- wp:paragraph {"fontSize":"normal"} -->
-				<p class="has-normal-font-size correction-body"><?php echo esc_html( $correction_content ); ?></p>
-				<!-- /wp:paragraph -->
+					<span class="correction-content"><?php echo esc_html( $correction_content ); ?></span>
+				</p>
 			<?php endforeach; ?>
-			</div>
 		</div>
 		<!-- /wp:group -->
 		<?php
-		$markup = do_blocks( ob_get_clean() );
-		return 'top' === get_post_meta( get_the_ID(), self::CORRECTIONS_LOCATION_META, true ) ? $markup . $content : $content . $markup;
+		return do_blocks( ob_get_clean() );
+	}
+
+	/**
+	 * Registers the block template.
+	 */
+	public static function register_corrections_block_patterns() {
+		if ( ! class_exists( 'WP_Block_Patterns_Registry' ) || ! wp_is_block_theme() ) {
+			return;
+		}
+
+		$category = 'newspack-corrections';
+
+		\register_block_pattern_category(
+			$category,
+			[
+				'label' => __( 'Newspack Corrections', 'newspack-plugin' ),
+			]
+		);
+
+		\register_block_pattern(
+			'newspack/corrections-loop',
+			[
+				'categories'  => [ $category ],
+				'title'       => __( 'Corrections Loop', 'newspack-plugin' ),
+				'description' => __( 'A block pattern for displaying an archive of corrections.', 'newspack-plugin' ),
+				'content'     => self::get_corrections_pattern_content( 'corrections-loop' ),
+				'keywords'    => [ __( 'corrections', 'newspack-plugin' ), __( 'archive', 'newspack-plugin' ), __( 'loop', 'newspack-plugin' ) ],
+			]
+		);
+	}
+
+	/**
+	 * Retrieves the block template content.
+	 *
+	 * @param string $pattern The pattern name.
+	 *
+	 * @return string The template content.
+	 */
+	private static function get_corrections_pattern_content( $pattern ) {
+		ob_start();
+		include_once __DIR__ . "/../templates/block-patterns/corrections/{$pattern}.php";
+		$content = ob_get_clean();
+		return $content;
+	}
+
+	/**
+	 * Registers the block template.
+	 */
+	public static function register_corrections_template() {
+		if ( ! class_exists( 'WP_Block_Templates_Registry' ) || ! wp_is_block_theme() ) {
+			return;
+		}
+
+		\register_block_template(
+			'newspack//corrections-archive',
+			[
+				'title'       => __( 'Corrections Archive', 'newspack-plugin' ),
+				'description' => __( 'A block template for displaying an archive of corrections.', 'newspack-plugin' ),
+				'content'     => self::get_corrections_template_content( 'corrections-archive' ),
+			]
+		);
+	}
+
+	/**
+	 * Retrieves the block template content.
+	 *
+	 * @param string $template The template name.
+	 *
+	 * @return string The template content.
+	 */
+	private static function get_corrections_template_content( $template ) {
+		ob_start();
+		include_once __DIR__ . "/../templates/corrections/{$template}.php";
+		$content = ob_get_clean();
+		return $content;
 	}
 }
 Corrections::init();

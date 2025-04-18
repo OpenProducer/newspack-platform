@@ -34,6 +34,12 @@ class WC_Tracks {
 	public static function get_blog_details( $user_id ) {
 		$blog_details = get_transient( 'wc_tracks_blog_details' );
 		if ( false === $blog_details ) {
+			// Ensure the store ID is set.
+			if ( ! class_exists( '\WC_Install' ) ) {
+				include_once WC_ABSPATH . 'includes/class-wc-install.php';
+			}
+			\WC_Install::maybe_set_store_id();
+
 			$blog_details = array(
 				'url'            => home_url(),
 				'blog_lang'      => get_user_locale( $user_id ),
@@ -113,6 +119,29 @@ class WC_Tracks {
 		}
 
 		return $event_obj->record();
+	}
+
+	/**
+	 * Track when the user attempts to toggle
+	 * woocommerce_allow_tracking option.
+	 *
+	 * @since x.x.x
+	 *
+	 * @param string $prev_value The previous value for the setting. 'yes' or 'no'.
+	 * @param string $new_value The new value for the setting. 'yes' or 'no'.
+	 * @param string $context Which avenue the user utilized to toggle.
+	 */
+	public static function track_woocommerce_allow_tracking_toggled( $prev_value, $new_value, $context = 'settings' ) {
+		if ( $new_value !== $prev_value ) {
+			self::record_event(
+				'woocommerce_allow_tracking_toggled',
+				array(
+					'previous_value' => $prev_value,
+					'new_value'      => $new_value,
+					'context'        => $context,
+				)
+			);
+		}
 	}
 
 	/**

@@ -851,17 +851,17 @@
         },
         {
             "name": "opis/json-schema",
-            "version": "2.3.0",
-            "version_normalized": "2.3.0.0",
+            "version": "2.4.1",
+            "version_normalized": "2.4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opis/json-schema.git",
-                "reference": "c48df6d7089a45f01e1c82432348f2d5976f9bfb"
+                "reference": "712827751c62b465daae6e725bf0cf5ffbf965e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opis/json-schema/zipball/c48df6d7089a45f01e1c82432348f2d5976f9bfb",
-                "reference": "c48df6d7089a45f01e1c82432348f2d5976f9bfb",
+                "url": "https://api.github.com/repos/opis/json-schema/zipball/712827751c62b465daae6e725bf0cf5ffbf965e1",
+                "reference": "712827751c62b465daae6e725bf0cf5ffbf965e1",
                 "shasum": ""
             },
             "require": {
@@ -875,7 +875,7 @@
                 "ext-intl": "*",
                 "phpunit/phpunit": "^9.0"
             },
-            "time": "2022-01-08T20:38:03+00:00",
+            "time": "2024-12-30T20:20:21+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -913,7 +913,7 @@
             ],
             "support": {
                 "issues": "https://github.com/opis/json-schema/issues",
-                "source": "https://github.com/opis/json-schema/tree/2.3.0"
+                "source": "https://github.com/opis/json-schema/tree/2.4.1"
             },
             "install-path": "../opis/json-schema"
         },
@@ -1198,6 +1198,64 @@
             "install-path": "../sabberworm/php-css-parser"
         },
         {
+            "name": "soundasleep/html2text",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/soundasleep/html2text.git",
+                "reference": "83502b6f8f1aaef8e2e238897199d64f284b4af3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/soundasleep/html2text/zipball/83502b6f8f1aaef8e2e238897199d64f284b4af3",
+                "reference": "83502b6f8f1aaef8e2e238897199d64f284b4af3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^7.0|^8.0|^9.0"
+            },
+            "time": "2023-01-06T09:28:15+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Soundasleep\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jevon Wright",
+                    "homepage": "https://jevon.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP script to convert HTML into a plain text format",
+            "homepage": "https://github.com/soundasleep/html2text",
+            "keywords": [
+                "email",
+                "html",
+                "php",
+                "text"
+            ],
+            "support": {
+                "email": "support@jevon.org",
+                "issues": "https://github.com/soundasleep/html2text/issues",
+                "source": "https://github.com/soundasleep/html2text/tree/2.1.0"
+            },
+            "install-path": "../soundasleep/html2text"
+        },
+        {
             "name": "symfony/css-selector",
             "version": "v5.4.40",
             "version_normalized": "5.4.40.0",
@@ -1351,17 +1409,17 @@
         },
         {
             "name": "woocommerce/action-scheduler",
-            "version": "3.9.0",
-            "version_normalized": "3.9.0.0",
+            "version": "3.9.2",
+            "version_normalized": "3.9.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/woocommerce/action-scheduler.git",
-                "reference": "90b98e6fe97d455679b1d288f050cad8f6f79771"
+                "reference": "efbb7953f72a433086335b249292f280dd43ddfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/90b98e6fe97d455679b1d288f050cad8f6f79771",
-                "reference": "90b98e6fe97d455679b1d288f050cad8f6f79771",
+                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/efbb7953f72a433086335b249292f280dd43ddfe",
+                "reference": "efbb7953f72a433086335b249292f280dd43ddfe",
                 "shasum": ""
             },
             "require": {
@@ -1373,7 +1431,7 @@
                 "wp-cli/wp-cli": "~2.5.0",
                 "yoast/phpunit-polyfills": "^2.0"
             },
-            "time": "2024-11-15T00:11:39+00:00",
+            "time": "2025-02-03T09:09:30+00:00",
             "type": "wordpress-plugin",
             "extra": {
                 "scripts-description": {
@@ -1391,7 +1449,7 @@
             "homepage": "https://actionscheduler.org/",
             "support": {
                 "issues": "https://github.com/woocommerce/action-scheduler/issues",
-                "source": "https://github.com/woocommerce/action-scheduler/tree/3.9.0"
+                "source": "https://github.com/woocommerce/action-scheduler/tree/3.9.2"
             },
             "install-path": "../../packages/action-scheduler"
         },
@@ -1424,6 +1482,78 @@
                 "relative": true
             },
             "install-path": "../woocommerce/blueprint"
+        },
+        {
+            "name": "woocommerce/email-editor",
+            "version": "dev-add-a-basic-integration-of-the-block-email-editor-to-the-woo-core",
+            "version_normalized": "dev-add-a-basic-integration-of-the-block-email-editor-to-the-woo-core",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/php/email-editor",
+                "reference": "956f59488f8336599f920f70267a6147149cb032"
+            },
+            "require": {
+                "php": ">=7.4",
+                "soundasleep/html2text": "^2.1"
+            },
+            "require-dev": {
+                "automattic/jetpack-changelogger": "3.3.0"
+            },
+            "type": "wordpress-plugin",
+            "extra": {
+                "changelogger": {
+                    "formatter": {
+                        "filename": "../../../tools/changelogger/class-package-formatter.php"
+                    },
+                    "types": {
+                        "fix": "Fixes an existing bug",
+                        "add": "Adds functionality",
+                        "update": "Update existing functionality",
+                        "dev": "Development related task",
+                        "tweak": "A minor adjustment to the codebase",
+                        "performance": "Address performance issues",
+                        "enhancement": "Improve existing functionality"
+                    },
+                    "changelog": "CHANGELOG.md"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "autoload-dev": {
+                "classmap": [
+                    "tests/unit/"
+                ]
+            },
+            "scripts": {
+                "unit-test": [
+                    "../../../tests_env/vendor/bin/codecept run unit"
+                ],
+                "integration-test": [
+                    "cd ../../../tests_env/docker && COMPOSE_HTTP_TIMEOUT=200 docker compose run -e SKIP_DEPS=1 -e SKIP_PLUGINS=1 -e PACKAGE_NAME=email-editor codeception_integration"
+                ],
+                "code-style": [
+                    "../../../mailpoet/tasks/code_sniffer/vendor/bin/phpcs -ps"
+                ],
+                "code-style-fix": [
+                    "../../../mailpoet/tasks/code_sniffer/vendor/bin/phpcbf -p"
+                ],
+                "phpstan": [
+                    "php ./tasks/run-phpstan.php"
+                ]
+            },
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Email editor based on WordPress Gutenberg package.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            },
+            "install-path": "../../packages/email-editor"
         }
     ],
     "dev": false,
