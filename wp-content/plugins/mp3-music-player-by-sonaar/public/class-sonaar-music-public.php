@@ -298,7 +298,7 @@ class Sonaar_Music_Public {
 	public function enqueue_scripts() {
 		// other scripts
 		wp_register_script( 'sonaar-music', plugin_dir_url( __FILE__ ) . 'js/sonaar-music-public.js', array( 'jquery' ), $this->version, true );		
-		wp_register_script( 'moments', plugin_dir_url( __FILE__ ) . 'js/iron-audioplayer/00.moments.min.js', array(), $this->version, true );
+		wp_register_script( 'moments', plugin_dir_url( __FILE__ ) . 'js/iron-audioplayer/moment.min.js', array(), $this->version, true );
 		wp_register_script( 'sonaar-music-mp3player', plugin_dir_url( __FILE__ ) . 'js/iron-audioplayer/iron-audioplayer.js', array( 'jquery', 'sonaar-music' ,'moments'), $this->version, true );
 		wp_register_script( 'sonaar-music-scrollbar', plugin_dir_url( __FILE__ ) . 'js/perfect-scrollbar.min.js', array( 'jquery' ), $this->version, false );
 		

@@ -887,6 +887,7 @@ class Sonaar_Music_Widget extends WP_Widget{
             //error_log('track peaks == ' . $track['peaks']);
             $format_playlist .= ( array_key_exists( 'icecast_json', $track) && $track['icecast_json'] !== '')? ' data-icecast_json="' . esc_attr( $track['icecast_json'] ) . '"' : '';
             $format_playlist .= ( array_key_exists( 'icecast_mount', $track) && $track['icecast_mount'] !== '')? ' data-icecast_mount="' . esc_attr( $track['icecast_mount'] ) . '"' : '';
+            $format_playlist .= ( array_key_exists( 'icecast_json', $track) && $track['icecast_json'] !== '' && $track['optional_poster'] != false)? ' data-optional_poster="true"' : ''; //if icecast we need to display the optional poster if no image is provided
             $format_playlist .= '>';
 
             $cf_input_formatted_ar=array();
@@ -1541,6 +1542,10 @@ class Sonaar_Music_Widget extends WP_Widget{
                     $widgetPart_slider_content .= $widgetPart_slider_album_title . $widgetPart_slider_track_title;
                 }
 
+                if( isset($sliderSource) && $sliderSource == 'post' ){
+                    $index = $trackIndex;
+                }
+
                 if($currentTrackId != $slidePostId){ //Reset $trackIndexRelatedToItsPost counting. It is incremented at the end of the foreach.
                     $currentTrackId = $slidePostId;
                     $trackIndexRelatedToItsPost = 0; 
@@ -1557,6 +1562,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                     $trackIndex =  $trackIndexRelatedToItsPost;
                 }
 
+                
                 $song_store_list_ar = $this->fetch_song_store_list_html($playlist['tracks'][$index], $trackIndex,  $show_track_market, $index);
                 $song_store_list = $song_store_list_ar['store_list'];
                 $playlist_has_ctas = (isset($playlist_has_ctas) && $playlist_has_ctas == true ) ? $playlist_has_ctas : $song_store_list_ar['playlist_has_ctas'];
@@ -1754,14 +1760,15 @@ class Sonaar_Music_Widget extends WP_Widget{
 
         $feed = str_replace('&', 'amp;', $feed); //replace & with amp; to avoid conflict with json
         $feed_title = str_replace( "'", "apos;", $feed_title ); //replace ' with apos; to avoid conflict with json
+        $feed_title_raw = rawurlencode(wp_unslash($feed_title));
         
         //We set the json file in attribute to be used in the sticky.
         //$category = ( isset( $this->shortcodeParams['category'] ) ) ? $this->shortcodeParams['category'] : false;
         if ( $category ) {
           $albums = '';
         }
-        $json_file = home_url('?load=playlist.json&amp;title='.$title.'&amp;albums='.$albums.'&amp;category='.$category.'&amp;posts_not_in='.$posts_not_in.'&amp;category_not_in='.$category_not_in.'&amp;author='.$author.'&amp;feed_title='.$feed_title.'&amp;feed='.$feed.'&amp;feed_img='.$feed_img.'&amp;el_widget_id='.$el_widget_id.'&amp;artwork='.$artwork .'&amp;posts_per_pages='.$posts_per_pages .'&amp;all_category='.$all_category .'&amp;single_playlist='.$single_playlist .'&amp;reverse_tracklist='. $this->getOptionValue('reverse_tracklist') .'&amp;audio_meta_field='.$audio_meta_field .'&amp;repeater_meta_field='.$repeater_meta_field .'&amp;import_file='.$import_file .'&amp;rss_items='.$rss_items .'&amp;rss_item_title='.$rss_item_title .'&amp;is_favorite=' . $isPlayer_Favorite .'&amp;is_recentlyplayed=' . $isPlayer_recentlyPlayed );
-        
+        $json_file = home_url('?load=playlist.json&amp;title='.$title.'&amp;albums='.$albums.'&amp;category='.$category.'&amp;posts_not_in='.$posts_not_in.'&amp;category_not_in='.$category_not_in.'&amp;author='.$author.'&amp;feed_title='.$feed_title_raw.'&amp;feed='.$feed.'&amp;feed_img='.$feed_img.'&amp;el_widget_id='.$el_widget_id.'&amp;artwork='.$artwork .'&amp;posts_per_pages='.$posts_per_pages .'&amp;all_category='.$all_category .'&amp;single_playlist='.$single_playlist .'&amp;reverse_tracklist='. $this->getOptionValue('reverse_tracklist') .'&amp;audio_meta_field='.$audio_meta_field .'&amp;repeater_meta_field='.$repeater_meta_field .'&amp;import_file='.$import_file .'&amp;rss_items='.$rss_items .'&amp;rss_item_title='.$rss_item_title .'&amp;is_favorite=' . $isPlayer_Favorite .'&amp;is_recentlyplayed=' . $isPlayer_recentlyPlayed );
+       
         $jsonExtraParamNames = ['srp_player_id','srp_meta','srp_search','srp_page','srp_order']; //Add params from ajaxInstance in the json file
         foreach ($jsonExtraParamNames as $name) {
             if ( isset($this->shortcodeParams[$name]) && $this->shortcodeParams[$name] != '') {
@@ -4301,13 +4308,16 @@ class Sonaar_Music_Widget extends WP_Widget{
                         $track_artist = ''; // reset artist value.
                         $fileOrStream =  $album_tracks[$i]['FileOrStream'];
                         $thumb_id = get_post_thumbnail_id($a->ID);
+                        $ifOptionalImage = false;
                         if(isset($album_tracks[$i]["track_image_id"]) && $album_tracks[$i]["track_image_id"] != ''){
                             $thumb_id = $album_tracks[$i]["track_image_id"];
+                            $ifOptionalImage = true; 
                         }
                         
                         $artworkImageSize = ( $player == 'sticky' )? 'medium' : Sonaar_Music::get_option('music_player_coverSize', 'srmp3_settings_widget_player');
 
                         $thumb_url = ( $thumb_id )? wp_get_attachment_image_src($thumb_id, $artworkImageSize, true)[0] : false ;
+
                         if ($artwork){ //means artwork is set in the shortcode so prioritize this image instead of the the post featured image.
                            // $thumb_url = $artwork;
                         }
@@ -4430,6 +4440,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                         $album_tracks[$i]["length"] = $track_length;
                         $album_tracks[$i]["album_title"] = ( $album_title )? $album_title : $a->post_title;
                         $album_tracks[$i]["poster"] = urldecode($thumb_url);
+                        $album_tracks[$i]["optional_poster"] = ( $ifOptionalImage )? urldecode($thumb_url) : false; 
                         if(isset($thumb_id)){
                             $album_tracks[$i]["track_image_id"] = $thumb_id;
                         }

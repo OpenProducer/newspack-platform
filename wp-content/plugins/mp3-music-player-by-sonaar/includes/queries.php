@@ -168,6 +168,7 @@ function srp_elementor_select_authors() {
         return $options;
     }
     function sr_plugin_elementor_select_playlist(){
+        if (!is_admin() && !\Elementor\Plugin::$instance->editor->is_edit_mode()) return;
 
         $sr_postypes = Sonaar_Music_Admin::get_cpt($all = true);
 

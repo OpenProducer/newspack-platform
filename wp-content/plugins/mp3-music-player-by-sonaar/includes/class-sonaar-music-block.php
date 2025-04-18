@@ -34,7 +34,7 @@ class Sonaar_Block {
         // Register Script for elementor
 		// other scripts
 		wp_register_script( 'sonaar-music', plugin_dir_url( dirname( __FILE__ ) ) . 'public/js/sonaar-music-public.js', array( 'jquery' ), $this->version, true );		
-		wp_register_script( 'moments', plugin_dir_url( dirname( __FILE__ ) ) . 'public/js/iron-audioplayer/00.moments.min.js', array(), $this->version, true );
+		wp_register_script( 'moments', plugin_dir_url( dirname( __FILE__ ) ) . 'public/js/iron-audioplayer/moment.min.js', array(), $this->version, true );
 		wp_register_script( 'sonaar-music-mp3player', plugin_dir_url( dirname( __FILE__ ) ) . 'public/js/iron-audioplayer/iron-audioplayer.js', array( 'jquery', 'sonaar-music' ,'moments'), $this->version, true );
 
 		/* Enqueue Sonaar Music related CSS and Js file */

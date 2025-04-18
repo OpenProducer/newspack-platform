@@ -4441,6 +4441,7 @@ class SR_Audio_Player extends Widget_Base {
 						<# if ( "playlist_title" == miniplayer_order_meta ) { #>' . $metaTitles['playlist_title'] . '<# } #>
 						<# if ( "track_title" == miniplayer_order_meta ) { #>' . $metaTitles['track_title'] . '<# } #>		
 						<# if ( "artist_name" == miniplayer_order_meta ) { #>' . $metaTitles['artist_name'] . '<# } #>
+						<# if ( "description" == miniplayer_order_meta ) { #>' . $metaTitles['description'] . '<# } #>
 						<# if ( "duration" == miniplayer_order_meta ) { #>' . $metaTitles['duration'] . '<# } #>
 						<# if ( "tags" == miniplayer_order_meta ) { #>' . $metaTitles['tags'] . '<# } #>
 						<# if ( "categories" == miniplayer_order_meta ) { #>' . $metaTitles['categories'] . '<# } #>
@@ -8694,7 +8695,7 @@ class SR_Audio_Player extends Widget_Base {
 					'type' 							=> Controls_Manager::DIMENSIONS,
 					'size_units' 					=> [ 'px', 'em', '%' ],
 					'selectors' 					=> [
-													'{{WRAPPER}} .playlist' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+													'{{WRAPPER}} div.iron-audioplayer .playlist' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					],
 					'condition' 					=> [
 						'player_layout' 	=> 'skin_boxed_tracklist'

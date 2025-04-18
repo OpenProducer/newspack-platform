@@ -5,7 +5,7 @@ Donate link: https://sonaar.io
 Requires at least: 4.7
 Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: 5.9.4
+Stable tag: 5.9.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -342,6 +342,27 @@ Yes, with the pro version, you can click on the 'Add to Favorite' icon to store 
 10. Shortcode Builder: Create, Import and Customize audio players using shortcodes in real-time
 
 == Changelog ==
+= 5.9.5 =
+- New: Add "Order" option to the playlist/episode post type to allow manual ordering
+- Fix: Icecast: Force Optional Image when no image is provided by the json
+- Fix: Carousel "view detail" and "favorite" issue when source is "Post"
+- Fix: Allow dash character (#) in the feed_title shortcode attribute
+- Fix: Playlist padding not working in Elementor Editor in some case
+- Fix: Lyrics Karaoke not working when sticky player loaded on page load
+- Fix: Search and tag filter not working in some case
+- Fix: Compatibility issue with JetMenu plugin
+- Fix: Translation of License and contract default value.
+- Fix: Tracklist Grid: Fix play button over image when "Link to the post page" is enable
+- Fix: PDF Licence creation not working with Cyrillic
+- Fix: Issue with special characters in the product attribute name
+- Fix: Chip widget: Fix Clear All Button
+- Update: Moment JS library 2.30.1
+- Update: Swiper JS Library 11.2.3
+- Tweak: Speed Optimization of the frontend. Removed unnecessary query
+- Tweak: Renamed Icecast Stream for Live Stream in the admin area
+- Tweak: Add ALT text on sticky player thumbnail
+- Fix: Resolved a security vulnerability with broken access control
+
 = 5.9.4 =
 - Fix: Caroussel Slider with Favorites 
 - Fix: PHP warning in the classic Widget interface in some case

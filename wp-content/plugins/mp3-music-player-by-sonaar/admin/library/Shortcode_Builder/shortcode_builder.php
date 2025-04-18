@@ -28,6 +28,9 @@ class SRMP3_ShortcodeBuilder {
         return $classes;
     }
     function srmp3_toggle_dark_mode() {
+        if (!current_user_can('manage_options')) {
+            wp_die('Access Denied');
+        }
         check_ajax_referer('sonaar_music_admin_ajax_nonce', 'nonce');
         $user_id = get_current_user_id();
         $dark_mode = sanitize_text_field($_POST['dark_mode']);
@@ -73,6 +76,9 @@ class SRMP3_ShortcodeBuilder {
         }
     }
     public function export_shortcodebuilder_template(){
+        if (!current_user_can('manage_options')) {
+            wp_die('Access Denied');
+        }
         check_ajax_referer('sonaar_music_admin_ajax_nonce', 'nonce');
 
         if (isset($_POST['template_name']) && !empty($_POST['template_name'])) {
@@ -192,6 +198,9 @@ class SRMP3_ShortcodeBuilder {
     }
     public static function import_shortcodebuilder_template($templateSettings = null) {
         // This function is an ajax callback from shortcode builder AND also used in the big template importer
+        if (!current_user_can('manage_options')) {
+            wp_die('Access Denied');
+        }
         check_ajax_referer('sonaar_music_admin_ajax_nonce', 'nonce');
     
         if (!function_exists('run_sonaar_music_pro') || empty(get_site_option('sonaar_music_licence'))) {
@@ -233,6 +242,9 @@ class SRMP3_ShortcodeBuilder {
     }
     
     public function load_shortcodebuilder_template() {
+        if (!current_user_can('manage_options')) {
+            wp_die('Access Denied');
+        }
         check_ajax_referer('sonaar_music_admin_ajax_nonce', 'nonce');
 
         if (isset($_POST['template_name']) && !empty($_POST['template_name'])) {
@@ -250,25 +262,7 @@ class SRMP3_ShortcodeBuilder {
             wp_send_json_error(['message' => 'Template name is required.']);
         }
     }
-    public function srmp3_save_template_callback() {
-        check_ajax_referer('sonaar_music_admin_ajax_nonce', 'nonce');
 
-        if (isset($_POST['template_name']) && !empty($_POST['template_name'])) {
-            $template_name = sanitize_text_field($_POST['template_name']);
-            
-            // Fetch the current settings
-            $current_settings = get_option('srmp3_settings_shortcodebuilder', []);
-
-            // Save the current settings in the templates option
-            $templates = get_option('srmp3_shortcode_templates', []);
-            $templates[$template_name] = $current_settings;
-            update_option('srmp3_shortcode_templates', $templates);
-
-            wp_send_json_success(['message' => 'Template saved successfully.']);
-        } else {
-            wp_send_json_error(['message' => 'Template name is required.']);
-        }
-    }
     public function reset_shortcodeBuilder_callback(){
         if (!current_user_can('manage_options')) {
             wp_die('Access Denied');
@@ -283,6 +277,9 @@ class SRMP3_ShortcodeBuilder {
     }
     public function update_shortcodeBuilder_callback() {
         // Check for the nonce for security
+        if (!current_user_can('manage_options')) {
+            wp_die('Access Denied');
+        }
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'sonaar_music_admin_ajax_nonce')) {
             wp_die('Nonce validation failed');
         }

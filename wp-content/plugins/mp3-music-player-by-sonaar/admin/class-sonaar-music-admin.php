@@ -7237,7 +7237,7 @@ class Sonaar_Music_Admin {
             'options'           => array(
                 'mp3'               => esc_html__('Local MP3', 'sonaar-music'),
                 'stream'            => esc_html__('External Audio File', 'sonaar-music'),
-                'icecast'           => esc_html__('Icecast', 'sonaar-music')
+                'icecast'           => esc_html__('Live Stream (eg: Icecast)', 'sonaar-music')
             ),
             'default'           => 'mp3'
         ));
@@ -7327,9 +7327,9 @@ class Sonaar_Music_Admin {
         $cmb_album->add_group_field($tracklist, array(
             'id'            => 'icecast_link',
             'classes'       => 'sr-stream-url-field  srmp3-cmb2-file srmp3-settings--subitem',
-            'name'          => esc_html__('Icecast Feed','sonaar-music'),
+            'name'          => esc_html__('Streaming Feed URL','sonaar-music'),
             'type'          => 'text_url',
-            'description'   => esc_html__('Enter URL that points to your Icecast Feed.', 'sonaar-music'),
+            'description'   => esc_html__('Enter URL that points to your audio file.', 'sonaar-music'),
             'attributes'    => array(
                 'required'               => false, // Will be required only if visible.
                 'data-conditional-id'    => wp_json_encode( array( $tracklist, 'FileOrStream' )),
@@ -7341,8 +7341,8 @@ class Sonaar_Music_Admin {
             'before'            => array($this, 'promo_ad_text_cb'),
             'plan_required' => 'starter',
             'id'            => 'icecast_json',
-            'name'          => esc_html__('Icecast JSON file', 'sonaar-music'),
-            'description'   => esc_html__("Allow to fetch the content of what is currently playing from your feed (Track Title, Artist Name, Image Cover). Usually https://yourstream.com:xxxx/status-json.xsl )",'sonaar-music'),
+            'name'          => esc_html__('Information JSON file', 'sonaar-music'),
+            'description'   => esc_html__('Optional. Enter URL where to fetch the currently playing track details from your feed (which includes the Track Title, Album Title, Artist Name, Cover Image). Typically, the URL follows this format: https://yourstream.com:xxxx/status-json.xsl.','sonaar-music'),
             'type'          => 'text_url',
             'attributes'    => array(
                 'required'               => false, // Will be required only if visible.
@@ -7374,7 +7374,7 @@ class Sonaar_Music_Admin {
             'id'            => 'icecast_title',
             'classes'       => 'sr-stream-title-field',
             'name'          => esc_html__('Feed Title', 'sonaar-music'),
-            'description'   => esc_html__("If we cannot retrieve what is currently playing from Icecast, we will show this default title",'sonaar-music'),
+            'description'   => esc_html__("If we cannot retrieve what is currently playing from your streaming feed, we will show this default title",'sonaar-music'),
             'type'          => 'text',
             'attributes'    => array(
                 'required'               => false, // Will be required only if visible.
@@ -8102,7 +8102,7 @@ class Sonaar_Music_Admin {
                         <strong>{MONETIZED_MUSIC_VIDEOS}</strong> - ' . __('Number of monetized music videos allowed', 'sonaar-music') . '<br>
                         <strong>{FREE_DOWNLOADS}</strong> - ' . __('Number of free downloads allowed', 'sonaar-music') . '<br>
                         <strong>{STATE_PROVINCE_COUNTRY}</strong> - ' . __('State, province, and country of the seller', 'sonaar-music') . '<br>
-                        <strong>{acf_Your-ACF-ID-Here}</strong> - ' . __('Use ACF field prefixed with {acf_xxxx}', 'sonaar-music'),
+                        <strong>{acf_XXXX}</strong> - ' . __('Use the ACF Field Name assigned to your product post. For example, if your ACF field is "artist_name", use {acf_artist_name}', 'sonaar-music'),
                     'options' => array(
                         //'textpromo' => esc_html__('Pro Feature', 'sonaar-music'),
                         'wpautop' => false, // use wpautop?
@@ -8395,6 +8395,7 @@ class Sonaar_Music_Admin {
             'excerpt',
             'author',
             'thumbnail',
+            'page-attributes',
             'comments'
         );
         

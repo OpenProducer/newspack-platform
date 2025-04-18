@@ -16,7 +16,7 @@
  * Plugin Name:       MP3 Audio Player by Sonaar
  * Plugin URI:        https://sonaar.io/mp3-audio-player-pro/?utm_source=Sonaar+Music+Free+Plugin&utm_medium=plugin
  * Description:       The most popular and complete Music & Podcast Player for WordPress.
- * Version:           5.9.4
+ * Version:           5.9.5
  * Author:            Sonaar Music
  * Author URI:        https://sonaar.io/?utm_source=Sonaar%20Music%20Free%20Plugin&utm_medium=plugin
  * License:           GPL-2.0+
@@ -30,8 +30,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define('SRMP3_VERSION', '5.9.4'); // important to avoid cache issues on update
-define('SRMP3_PRO_MIN_VERSION', '5.9.4'); // Minimum pro version required
+define('SRMP3_VERSION', '5.9.5'); // important to avoid cache issues on update
+define('SRMP3_PRO_MIN_VERSION', '5.9.5'); // Minimum pro version required
 if ( !defined( 'SRMP3_DIR_PATH' ) ) {
     define( 'SRMP3_DIR_PATH', plugin_dir_path( __FILE__ ) );
 }
