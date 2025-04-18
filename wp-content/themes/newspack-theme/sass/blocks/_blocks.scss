@@ -1722,10 +1722,12 @@ $colors: (
 		}
 	}
 
-	// Make SCAIP placements full-width.
-	.entry .entry-content .scaip {
-		.newspack_global_ad,
-		.widget_newspack-ads-widget {
+	// Make ad placements full-width.
+	.main-content {
+		.scaip .newspack_global_ad,
+		.scaip .widget_newspack-ads-widget,
+		.newspack_global_ad.sidebar_article-1,
+		.newspack_global_ad.sidebar_article-2 {
 			background-color: var(--newspack-theme-color-bg-pre);
 			margin-left: calc(50% - 50vw);
 			margin-right: calc(50% - 50vw);

@@ -1,12 +1,12 @@
 // Custom Colors - defaults
 :root {
-	--newspack-theme-color-primary: #36f; // TODO: rename --newspack-primary-color, --newspack-listings--primary elsewhere
-	--newspack-theme-color-primary-variation: #2240d5;
+	--newspack-theme-color-primary: #003da5; // TODO: rename --newspack-primary-color, --newspack-listings--primary elsewhere
+	--newspack-theme-color-primary-variation: #2055b0;
 	--newspack-theme-color-secondary: #555; // TODO: replace --newspack-secondary-color elsewhere
 	--newspack-theme-color-secondary-variation: #3e3e3e;
 	--newspack-theme-color-highlight: #fed850;
-	--newspack-theme-color-primary-darken-5: #1a53ff; // TODO: find a better approach than being this literal.
-	--newspack-theme-color-primary-darken-10: #0040ff; // TODO: find a better approach than being this literal.
+	--newspack-theme-color-primary-darken-5: #00296e; // TODO: find a better approach than being this literal.
+	--newspack-theme-color-primary-darken-10: #001f53; // TODO: find a better approach than being this literal.
 
 	// Constast colors - text against white background, if light changes to grey:
 	--newspack-theme-color-primary-against-white: var(--newspack-theme-color-primary); // primary color against white bg.
@@ -42,7 +42,7 @@
 	--newspack-theme-color-border-light: #e0e0e0;
 
 	// Alert
-	--newspack-theme-color-alert-yellow: #f0b849;
-	--newspack-theme-color-alert-red: #cc1818;
-	--newspack-theme-color-alert-green: #4ab866;
+	--newspack-theme-color-alert-yellow: #dba617;
+	--newspack-theme-color-alert-red: #d63638;
+	--newspack-theme-color-alert-green: #008a20;
 }

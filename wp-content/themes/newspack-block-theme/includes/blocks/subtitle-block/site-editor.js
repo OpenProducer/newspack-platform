@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 import { Icon, listView } from '@wordpress/icons';
 import { useEntityProp } from '@wordpress/core-data';
 
-import blockData from './block.json';
+import metadata from './block.json';
 
 const EditComponent = ( { context: { postType, postId } } ) => {
 	const [ postMeta = {} ] = useEntityProp( 'postType', postType, 'meta', postId );
@@ -18,7 +18,7 @@ const EditComponent = ( { context: { postType, postId } } ) => {
 	);
 };
 
-blockData = {
+const blockData = {
 	title: __( 'Article Subtitle', 'newspack-block-theme' ),
 	icon: {
 		src: <Icon icon={ listView } />,
@@ -26,7 +26,7 @@ blockData = {
 	},
 	edit: EditComponent,
 	usesContext: [ 'postId', 'postType' ],
-	...blockData,
+	...metadata,
 };
 
-registerBlockType( blockData.name, blockData );
+registerBlockType( metadata.name, blockData );

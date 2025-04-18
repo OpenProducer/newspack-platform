@@ -1894,3 +1894,16 @@ table.woocommerce-table--order-details.shop_table,
 		}
 	}
 }
+
+// Membership appearance
+.wc-memberships-member-discount-message {
+	margin-top: 1rem;
+
+	a:not(:hover) {
+		text-decoration: underline;
+	}
+}
+
+.woocommerce span.onsale.wc-memberships-member-discount {
+	left: 0;
+}

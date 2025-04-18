@@ -45,64 +45,67 @@
 				}
 			]
 		},
-				"typography": {
-						"fluid": true,
-						"fontFamilies": [
+		"typography": {
+				"fluid": true,
+				"fontFamilies": [
+					{
+						"fontFace": [
 							{
-								"fontFace": [
-									{
-										"fontFamily": "Jost",
-										"fontStretch": "normal",
-										"fontStyle": "normal",
-										"fontWeight": "100 900",
-										"src": [
-											"file:./assets/fonts/jost/Jost-VariableFont_wght.ttf"
-										]
-									},
-									{
-										"fontFamily": "Jost",
-										"fontStretch": "normal",
-										"fontStyle": "italic",
-										"fontWeight": "100 900",
-										"src": [
-											"file:./assets/fonts/jost/Jost-Italic-VariableFont_wght.ttf"
-										]
-									}
-								],
-								"fontFamily": "\"Jost\", sans-serif",
-								"name": "Jost",
-								"slug": "jost"
+								"fontFamily": "Jost",
+								"fontStretch": "normal",
+								"fontStyle": "normal",
+								"fontWeight": "100 900",
+								"src": [
+									"file:./assets/fonts/jost/Jost-VariableFont_wght.ttf"
+								]
 							},
 							{
-								"fontFace": [
-									{
-										"fontFamily": "Newsreader",
-										"fontStretch": "normal",
-										"fontStyle": "normal",
-										"fontWeight": "200 800",
-										"src": [
-											"file:./assets/fonts/newsreader/Newsreader-VariableFont_opsz,wght.ttf"
-										]
-									},
-									{
-										"fontFamily": "Newsreader",
-										"fontStretch": "normal",
-										"fontStyle": "italic",
-										"fontWeight": "200 800",
-										"src": [
-											"file:./assets/fonts/newsreader/Newsreader-Italic-VariableFont_opsz,wght.ttf"
-										]
-									}
-								],
-								"fontFamily": "\"Newsreader\", serif",
-								"name": "Newsreader",
-								"slug": "newsreader"
+								"fontFamily": "Jost",
+								"fontStretch": "normal",
+								"fontStyle": "italic",
+								"fontWeight": "100 900",
+								"src": [
+									"file:./assets/fonts/jost/Jost-Italic-VariableFont_wght.ttf"
+								]
 							}
-						]
-				}
+						],
+						"fontFamily": "\"Jost\", sans-serif",
+						"name": "Jost",
+						"slug": "jost"
+					},
+					{
+						"fontFace": [
+							{
+								"fontFamily": "Newsreader",
+								"fontStretch": "normal",
+								"fontStyle": "normal",
+								"fontWeight": "200 800",
+								"src": [
+									"file:./assets/fonts/newsreader/Newsreader-VariableFont_opsz,wght.ttf"
+								]
+							},
+							{
+								"fontFamily": "Newsreader",
+								"fontStretch": "normal",
+								"fontStyle": "italic",
+								"fontWeight": "200 800",
+								"src": [
+									"file:./assets/fonts/newsreader/Newsreader-Italic-VariableFont_opsz,wght.ttf"
+								]
+							}
+						],
+						"fontFamily": "\"Newsreader\", serif",
+						"name": "Newsreader",
+						"slug": "newsreader"
+					}
+				]
+		},
+		"custom": {
+			"className": "paul"
+		}
 	},
-		"styles": {
-				"typography": {
+	"styles": {
+		"typography": {
 			"fontFamily": "var( --wp--preset--font-family--newsreader )"
 		},
 		"elements": {
@@ -112,7 +115,7 @@
 				}
 			}
 		}
-		},
-		"version": 2,
+	},
+	"version": 2,
 	"$schema": "https://schemas.wp.org/wp/6.2/theme.json"
 }
