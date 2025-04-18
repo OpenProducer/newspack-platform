@@ -145,11 +145,11 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
             throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedCurveException('Montgomery Curves are not supported');
         }
         if ($curve instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\TwistedEdwards) {
-            return self::wrapPublicKey($curve->encodePoint($publicKey), null, $curve instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Curves\Ed25519 ? 'id-Ed25519' : 'id-Ed448');
+            return self::wrapPublicKey($curve->encodePoint($publicKey), null, $curve instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Curves\Ed25519 ? 'id-Ed25519' : 'id-Ed448', $options);
         }
         $params = new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element(self::encodeParameters($curve, \false, $options));
         $key = "\x04" . $publicKey[0]->toBytes() . $publicKey[1]->toBytes();
-        return self::wrapPublicKey($key, $params, 'id-ecPublicKey');
+        return self::wrapPublicKey($key, $params, 'id-ecPublicKey', $options);
     }
     /**
      * Convert a private key to the appropriate format.

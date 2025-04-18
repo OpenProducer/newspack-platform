@@ -308,19 +308,12 @@ class AddToCartWithOptionsVariationSelector extends AbstractBlock {
 	 * @return string Rendered block output.
 	 */
 	protected function render( $attributes, $content, $block ): string {
-		if ( ! isset( $block->context['postId'] ) ) {
-			return '';
-		}
-
 		global $product;
-		$previous_product = $product;
-		$product          = wc_get_product( $block->context['postId'] );
 
-		if ( ! $product instanceof \WC_Product || ! $product->is_type( 'variable' ) ) {
-			$product = $previous_product;
-			return '';
+		if ( $product instanceof \WC_Product && $product->is_type( 'variable' ) ) {
+			return $this->render_variation_form( $product, $attributes );
 		}
 
-		return $this->render_variation_form( $product, $attributes );
+		return '';
 	}
 }

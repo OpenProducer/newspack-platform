@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use DrewM\MailChimp\MailChimp;
+use Newspack_Newsletters_Mailchimp_Api as Mailchimp;
 
 /**
  * Usage reports for Mailchimp.
@@ -18,7 +18,7 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	/**
 	 * Retrieves an instance of the Mailchimp api
 	 *
-	 * @return DrewM\MailChimp\MailChimp|WP_Error
+	 * @return Newspack_Newsletters_Mailchimp_Api|WP_Error
 	 */
 	private static function get_mc_api() {
 		$api_key = Newspack_Newsletters_Mailchimp::instance()->api_key();

@@ -17,7 +17,8 @@
 	"supports": {
 		"color": {
 			"enableContrastChecker": false
-		}
+		},
+		"interactivity": true
 	},
 	"usesContext": [
 		"filterData"

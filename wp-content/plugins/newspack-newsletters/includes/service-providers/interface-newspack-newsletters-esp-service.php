@@ -9,7 +9,6 @@
  * ESP API.
  */
 interface Newspack_Newsletters_ESP_API_Interface {
-
 	/**
 	 * Get API credentials for service provider.
 	 *

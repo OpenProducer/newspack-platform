@@ -1196,37 +1196,23 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		if ( isset( $contact['metadata'] ) ) {
 			$data['custom_fields'] = [];
 			foreach ( $contact['metadata'] as $key => $value ) {
-				$data['custom_fields'][ strval( $key ) ] = strval( $value );
+				// Update request will fail if metadata contains an empty value, so we set these to '-'.
+				$data['custom_fields'][ strval( $key ) ] = empty( $value ) ? '-' : strval( $value );
 			}
 		}
 
-		$result = $cc->upsert_contact( $contact['email'], $data );
-		if ( is_wp_error( $result ) || empty( $result ) ) {
+		$email = $contact['email'];
+		if ( isset( $contact['existing_contact_data']['email_address'] ) ) {
+			$existing_email = $contact['existing_contact_data']['email_address'];
+			if ( $existing_email->address !== $email ) {
+				$data['email'] = $email;
+				$email         = $existing_email->address;
+			}
+		}
+		$result = $cc->upsert_contact( $email, $data );
 
-			// Log the error with any details returned from the API.
-			do_action(
-				'newspack_log',
-				'newspack_constant_contact_add_contact_failed',
-				'Error adding contact to Constant Contact.',
-				[
-					'type'       => 'error',
-					'data'       => [
-						'messages' => empty( $result ) ? 'Unknown error' : $result->get_error_messages(),
-						'status'   => empty( $result ) ? 'Unknown error' : $result->get_error_code(),
-					],
-					'user_email' => $contact['email'],
-					'file'       => 'newspack_constant_contact',
-				]
-			);
-
-			$reader_error = $this->get_add_contact_reader_error_message(
-				[
-					'email'   => $contact['email'],
-					'list_id' => $list_id,
-				]
-			);
-
-			return Newspack_Newsletters::debug_mode() ? $result : new \WP_Error( 'newspack_constant_contact_add_contact_failed', $reader_error );
+		if ( is_wp_error( $result ) ) {
+			return $result;
 		}
 
 		return get_object_vars( $result );

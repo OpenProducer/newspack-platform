@@ -485,7 +485,7 @@ add_filter( 'walker_nav_menu_start_el', 'newspack_add_dropdown_icons', 10, 4 );
  * @return string the default hexidecimal color.
  */
 function newspack_get_primary_color() {
-	return '#3366ff';
+	return '#003da5';
 }
 
 /**
@@ -641,7 +641,7 @@ function newspack_math_to_time_ago( $post_time, $format, $post, $updated ) {
 	// Only filter time when $use_time_ago is enabled, and it's not using a machine-readable format (for datetime).
 	if ( true === $use_time_ago && 'Y-m-d\TH:i:sP' !== $format ) {
 		$current_time = current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-		$cut_off      = get_theme_mod( 'post_time_ago_cut_off', '14' );
+		$cut_off      = get_theme_mod( 'post_time_ago_cut_off', NP_DEFAULT_POST_TIME_AGO_CUT_OFF_DAYS );
 		$org_time     = strtotime( $post->post_date );
 
 		if ( true === $updated ) {
@@ -694,12 +694,15 @@ function newspack_convert_modified_to_time_ago( $post_time, $format, $post ) {
  * Check whether updated date should be displayed.
  */
 function newspack_should_display_updated_date() {
+	if ( ! is_singular( 'post' ) ) {
+		return false;
+	}
 	$show_updated_date_sitewide = get_theme_mod( 'post_updated_date', false );
 
 	$hide_updated_date_post     = get_post_meta( get_the_ID(), 'newspack_hide_updated_date', true );
 	$show_updated_date_post     = get_post_meta( get_the_ID(), 'newspack_show_updated_date', true ) && ! $show_updated_date_sitewide;
 
-	if ( is_single() && ( ( $show_updated_date_sitewide && ! $hide_updated_date_post ) || $show_updated_date_post ) ) {
+	if ( ( $show_updated_date_sitewide && ! $hide_updated_date_post ) || $show_updated_date_post ) {
 		$post          = get_post();
 		$publish_date  = $post->post_date;
 		$modified_date = $post->post_modified;
@@ -779,3 +782,26 @@ function newspack_inject_post_summary( $content ) {
 	return newspack_post_summary_markup( $summary ) . $content;
 }
 add_filter( 'the_content', 'newspack_inject_post_summary', 11 );
+
+/**
+ * Change the number of corrections per page for the Corrections archive.
+ *
+ * @param WP_Query $query The WP_Query instance.
+ */
+function newspack_corrections_per_page( $query ) {
+	if (
+		! class_exists( 'Newspack\Corrections' )
+		|| is_admin()
+		|| ! $query->is_main_query()
+		|| ! is_post_type_archive( \Newspack\Corrections::POST_TYPE )
+	) {
+		return;
+	}
+
+	$per_page = defined( 'NEWSPACK_CORRECTIONS_ARCHIVE_PER_PAGE' ) && is_int( NEWSPACK_CORRECTIONS_ARCHIVE_PER_PAGE ) ? NEWSPACK_CORRECTIONS_ARCHIVE_PER_PAGE : 20;
+
+	$query->set( 'posts_per_page', $per_page );
+
+	return $query;
+}
+add_filter( 'pre_get_posts', 'newspack_corrections_per_page' );

@@ -7,6 +7,9 @@
 
 namespace Newspack;
 
+use Newspack\Wizards\Newspack\Newspack_Settings;
+use Newspack\Memberships;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -23,25 +26,48 @@ class Wizards {
 	protected static $wizards = [];
 
 	/**
-	 * Initialize and register all of the wizards.
+	 * Initialize.
 	 */
 	public static function init() {
+		add_action( 'init', [ __CLASS__, 'init_wizards' ] );
+		// Allow custom menu order.
+		add_filter( 'custom_menu_order', '__return_true' );
+		// Fix menu order for wizards with parent menu items.
+		add_filter( 'menu_order', [ __CLASS__, 'menu_order' ], 11 );
+	}
+
+	/**
+	 * Initialize wizards.
+	 */
+	public static function init_wizards() {
 		self::$wizards = [
-			'setup'           => new Setup_Wizard(),
-			'dashboard'       => new Dashboard(),
-			'site-design'     => new Site_Design_Wizard(),
-			'reader-revenue'  => new Reader_Revenue_Wizard(),
-			'advertising'     => new Advertising_Wizard(),
-			'syndication'     => new Syndication_Wizard(),
-			'analytics'       => new Analytics_Wizard(),
-			'components-demo' => new Components_Demo(),
-			'seo'             => new SEO_Wizard(),
-			'health-check'    => new Health_Check_Wizard(),
-			'engagement'      => new Engagement_Wizard(),
-			'popups'          => new Popups_Wizard(),
-			'connections'     => new Connections_Wizard(),
-			'settings'        => new Settings(),
+			'components-demo'         => new Components_Demo(),
+			// v2 Information Architecture.
+			'newspack-dashboard'      => new Newspack_Dashboard(),
+			'setup'                   => new Setup_Wizard(),
+			'newspack-settings'       => new Newspack_Settings(
+				[
+					'sections' => [
+						'custom-events' => 'Newspack\Wizards\Newspack\Custom_Events_Section',
+						'social-pixels' => 'Newspack\Wizards\Newspack\Pixels_Section',
+						'recirculation' => 'Newspack\Wizards\Newspack\Recirculation_Section',
+						'syndication'   => 'Newspack\Wizards\Newspack\Syndication_Section',
+						'seo'           => 'Newspack\Wizards\Newspack\Seo_Section',
+					],
+				]
+			),
+			'advertising-display-ads' => new Advertising_Display_Ads(),
+			'advertising-sponsors'    => new Advertising_Sponsors(),
+			'audience'                => new Audience_Wizard(),
+			'audience-campaigns'      => new Audience_Campaigns(),
+			'audience-donations'      => new Audience_Donations(),
+			'listings'                => new Listings_Wizard(),
+			'network'                 => new Network_Wizard(),
+			'newsletters'             => new Newsletters_Wizard(),
 		];
+		if ( Memberships::is_active() ) {
+			self::$wizards['audience-subscriptions'] = new Audience_Subscriptions();
+		}
 	}
 
 	/**
@@ -115,6 +141,39 @@ class Wizards {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Update menu order for wizards with parent menu items.
+	 *
+	 * @param array $menu_order The current menu order.
+	 *
+	 * @return array The updated menu order.
+	 */
+	public static function menu_order( $menu_order ) {
+		$index = array_search( 'newspack-dashboard', $menu_order, true );
+		if ( false === $index ) {
+			return $menu_order;
+		}
+		$ordered_wizards = [];
+		foreach ( self::$wizards as $slug => $wizard ) {
+			if ( ! empty( $wizard->parent_menu ) && ! empty( $wizard->parent_menu_order ) ) {
+				$ordered_wizards[ $wizard->parent_menu_order ] = $wizard->parent_menu;
+			}
+		}
+		if ( empty( $ordered_wizards ) ) {
+			return $menu_order;
+		}
+		ksort( $ordered_wizards );
+		foreach ( array_reverse( $ordered_wizards ) as $menu_item ) {
+			$key = array_search( $menu_item, $menu_order, true );
+			if ( false === $key ) {
+				continue;
+			}
+			array_splice( $menu_order, $key, 1 );
+			array_splice( $menu_order, $index + 1, 0, $menu_item );
+		}
+		return $menu_order;
 	}
 }
 Wizards::init();

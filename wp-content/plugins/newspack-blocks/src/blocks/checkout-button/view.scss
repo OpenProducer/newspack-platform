@@ -28,4 +28,9 @@
 	&.wp-block-button__width-100 button {
 		width: 100%;
 	}
+
+	.wp-block-button__link {
+		display: inline-block;
+		width: auto;
+	}
 }

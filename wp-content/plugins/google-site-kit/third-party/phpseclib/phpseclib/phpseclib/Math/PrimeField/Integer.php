@@ -55,8 +55,9 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      * Default constructor
      *
      * @param int $instanceID
+     * @param BigInteger $num
      */
-    public function __construct($instanceID, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $num = null)
+    public function __construct($instanceID, $num = null)
     {
         $this->instanceID = $instanceID;
         if (!isset($num)) {

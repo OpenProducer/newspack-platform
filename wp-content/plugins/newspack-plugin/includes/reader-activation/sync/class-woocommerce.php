@@ -56,7 +56,7 @@ class WooCommerce {
 	 * @return \WC_Order|false Order object or false.
 	 */
 	private static function get_current_product_order_for_sync( $customer ) {
-		if ( ! is_a( $customer, 'WC_Customer' ) ) {
+		if ( ! class_exists( 'WC_Customer' ) || ! is_a( $customer, 'WC_Customer' ) ) {
 			return false;
 		}
 
@@ -99,6 +99,9 @@ class WooCommerce {
 	 * @return ?WCS_Subscription A Subscription object or null.
 	 */
 	private static function get_most_recent_cancelled_or_expired_subscription( $user_id ) {
+		if ( ! function_exists( 'wcs_get_users_subscriptions' ) ) {
+			return;
+		}
 		$subscriptions = array_reduce(
 			array_keys( \wcs_get_users_subscriptions( $user_id ) ),
 			function( $acc, $subscription_id ) {
@@ -179,13 +182,13 @@ class WooCommerce {
 	}
 
 	/**
-	 * Get the amount of the last payment associated with the given subscription.
+	 * Get the successful order associated with the given subscription.
 	 *
 	 * @param \WC_Subscription $subscription Subscription object.
 	 *
-	 * @return float The amount of the last payment.
+	 * @return \WC_Order? The order.
 	 */
-	private static function get_last_payment_amount( $subscription ) {
+	private static function get_last_successful_order( $subscription ) {
 		$last_order = $subscription->get_last_order(
 			// The whole WC_Order object, not just the ID.
 			'all',
@@ -207,11 +210,9 @@ class WooCommerce {
 			]
 		);
 
-		if ( ! $last_order ) {
-			return 0;
+		if ( $last_order ) {
+			return $last_order;
 		}
-
-		return $last_order->get_total();
 	}
 
 	/**
@@ -321,14 +322,22 @@ class WooCommerce {
 
 			$sub_start_date    = $current_subscription->get_date( 'start', 'site' );
 			$sub_end_date      = $current_subscription->get_date( 'end', 'site' );
-			$last_payment_date = $current_subscription->get_date( 'last_order_date_paid', 'site' );
+
+			$metadata['last_payment_amount'] = 0;
+			$metadata['last_payment_date']   = '';
+			$last_successful_order = self::get_last_successful_order( $current_subscription );
+			if ( $last_successful_order ) {
+				$last_order_date_paid = $last_successful_order->get_date_paid();
+				if ( ! empty( $last_order_date_paid ) ) {
+					$metadata['last_payment_amount'] = $last_successful_order->get_total();
+					$metadata['last_payment_date']   = $last_order_date_paid->date( Metadata::DATE_FORMAT );
+				}
+			}
 
 			$metadata['sub_start_date']      = empty( $sub_start_date ) ? '' : $sub_start_date;
 			$metadata['sub_end_date']        = empty( $sub_end_date ) ? '' : $sub_end_date;
 			$metadata['billing_cycle']       = $current_subscription->get_billing_period();
 			$metadata['recurring_payment']   = $current_subscription->get_total();
-			$metadata['last_payment_amount'] = self::get_last_payment_amount( $current_subscription );
-			$metadata['last_payment_date']   = empty( $last_payment_date ) ? current_time( Metadata::DATE_FORMAT ) : $last_payment_date;
 
 			// When a WC Subscription is terminated, the next payment date is set to 0. We don't want to sync that – the next payment date should remain as it was
 			// in the event of cancellation.
@@ -376,7 +385,7 @@ class WooCommerce {
 	 * @return array|false Contact data or false.
 	 */
 	public static function get_contact_from_customer( $customer, $payment_page_url = false ) {
-		if ( ! is_a( $customer, 'WC_Customer' ) ) {
+		if ( ! class_exists( 'WC_Customer' ) || ! is_a( $customer, 'WC_Customer' ) ) {
 			$customer = new \WC_Customer( $customer );
 		}
 

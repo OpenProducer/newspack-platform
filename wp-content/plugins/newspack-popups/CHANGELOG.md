@@ -1,3 +1,45 @@
+## [3.4.1](https://github.com/Automattic/newspack-popups/compare/v3.4.0...v3.4.1) (2025-04-14)
+
+
+### Bug Fixes
+
+* update merge tags data reference to use window ([#1410](https://github.com/Automattic/newspack-popups/issues/1410)) ([c66bdb9](https://github.com/Automattic/newspack-popups/commit/c66bdb9e19f3746de3c7ebfcc4d687c56ecb12e1))
+
+# [3.4.0](https://github.com/Automattic/newspack-popups/compare/v3.3.0...v3.4.0) (2025-04-07)
+
+
+### Features
+
+* merge tags outside the feature flag ([#1417](https://github.com/Automattic/newspack-popups/issues/1417)) ([7821498](https://github.com/Automattic/newspack-popups/commit/7821498e54d765995dd24eab149adf1fef6ccf6a))
+
+# [3.3.0](https://github.com/Automattic/newspack-popups/compare/v3.2.1...v3.3.0) (2025-03-31)
+
+
+### Features
+
+* information architecture ([4a7f3f6](https://github.com/Automattic/newspack-popups/commit/4a7f3f6e7e0b89f715ccfa2006a39e8208f8d28e))
+* prompt merge tags ([#1400](https://github.com/Automattic/newspack-popups/issues/1400)) ([5bcb5c2](https://github.com/Automattic/newspack-popups/commit/5bcb5c2acfd218b751f608fd0347b6d79402f5be))
+
+## [3.2.1](https://github.com/Automattic/newspack-popups/compare/v3.2.0...v3.2.1) (2025-03-05)
+
+
+### Bug Fixes
+
+* **data-events:** handle prompts with nested blocks in data events metadata ([#1401](https://github.com/Automattic/newspack-popups/issues/1401)) ([735d614](https://github.com/Automattic/newspack-popups/commit/735d614150eb4518b4ec34318d83326b716c8647))
+
+# [3.2.0](https://github.com/Automattic/newspack-popups/compare/v3.1.7...v3.2.0) (2025-03-04)
+
+
+### Bug Fixes
+
+* make a real no-padding option for popups ([#1389](https://github.com/Automattic/newspack-popups/issues/1389)) ([fbfbe41](https://github.com/Automattic/newspack-popups/commit/fbfbe41ca6cd3ce18a87c23e1de54d588378f0e0))
+
+
+### Features
+
+* add control to change close button color ([#1396](https://github.com/Automattic/newspack-popups/issues/1396)) ([1689de9](https://github.com/Automattic/newspack-popups/commit/1689de94fdbbc076b29325b4ba0e4018ec85a80e))
+* update brand colours ([#1394](https://github.com/Automattic/newspack-popups/issues/1394)) ([158adb3](https://github.com/Automattic/newspack-popups/commit/158adb3dfb6babe572973f664400f458e730447d))
+
 ## [3.1.7](https://github.com/Automattic/newspack-popups/compare/v3.1.6...v3.1.7) (2025-02-26)
 
 

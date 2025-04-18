@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __, _x } from '@wordpress/i18n';
-import { Icon, listView } from '@wordpress/icons';
+import { listView } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -34,8 +34,8 @@ authorCustomFields.forEach( field => {
 export const settings = {
 	title,
 	icon: {
-		src: <Icon icon={ listView } />,
-		foreground: '#36f',
+		src: listView,
+		foreground: '#406ebc',
 	},
 	keywords: [ __( 'author', 'newspack-blocks' ), __( 'profile', 'newspack-blocks' ) ],
 	description: __( 'Display a list of author profile cards.', 'newspack-blocks' ),

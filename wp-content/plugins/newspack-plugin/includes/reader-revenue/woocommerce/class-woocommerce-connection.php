@@ -45,18 +45,17 @@ class WooCommerce_Connection {
 		\add_filter( 'default_option_woocommerce_subscriptions_allow_switching', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
 		\add_filter( 'default_option_woocommerce_subscriptions_allow_switching_nyp_price', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
 		\add_filter( 'default_option_woocommerce_subscriptions_enable_retry', [ __CLASS__, 'force_allow_failed_payment_retry' ] );
-		\add_filter( 'woocommerce_email_enabled_customer_completed_order', [ __CLASS__, 'send_customizable_receipt_email' ], 10, 3 );
-		\add_filter( 'woocommerce_email_enabled_cancelled_subscription', [ __CLASS__, 'send_customizable_cancellation_email' ], 10, 3 );
 		\add_action( 'woocommerce_order_status_completed', [ __CLASS__, 'maybe_update_reader_display_name' ], 10, 2 );
-		\add_action( 'option_woocommerce_feature_order_attribution_enabled', [ __CLASS__, 'force_disable_order_attribution' ] );
 		\add_filter( 'woocommerce_related_products', [ __CLASS__, 'disable_related_products' ] );
 		\add_action( 'cli_init', [ __CLASS__, 'register_cli_commands' ] );
 
-		// WooCommerce Subscriptions.
-		\add_filter( 'wc_stripe_generate_payment_request', [ __CLASS__, 'stripe_gateway_payment_request_data' ], 10, 2 );
+		// Emails.
+		\add_filter( 'woocommerce_order_status_completed_notification', [ __CLASS__, 'send_customizable_receipt_email' ] );
+		\add_action( 'cancelled_subscription_notification', [ __CLASS__, 'send_customizable_cancellation_email' ] );
 
 		// woocommerce-memberships-for-teams plugin.
 		\add_filter( 'wc_memberships_for_teams_product_team_user_input_fields', [ __CLASS__, 'wc_memberships_for_teams_product_team_user_input_fields' ] );
+		\add_filter( 'woocommerce_form_field_args', [ __CLASS__, 'wc_memberships_for_teams_filter_team_name_in_form' ], 10, 3 );
 
 		\add_action( 'woocommerce_payment_complete', [ __CLASS__, 'order_paid' ], 101 );
 		\add_action( 'woocommerce_after_checkout_validation', [ __CLASS__, 'rate_limit_checkout' ], 10, 2 );
@@ -177,6 +176,15 @@ class WooCommerce_Connection {
 	}
 
 	/**
+	 * Check if rate limiting by user should be enabled for checkout and payment methods.
+	 *
+	 * @return bool
+	 */
+	public static function rate_limiting_enabled() {
+		return defined( 'NEWSPACK_CHECKOUT_RATE_LIMIT' ) && is_int( NEWSPACK_CHECKOUT_RATE_LIMIT ) && 0 !== NEWSPACK_CHECKOUT_RATE_LIMIT && class_exists( 'WC_Rate_Limiter' );
+	}
+
+	/**
 	 * Check the rate limit for the current user or IP.
 	 * Currently locked behind a NEWSPACK_CHECKOUT_RATE_LIMIT environment constant, for controlled rollout.
 	 *
@@ -188,7 +196,7 @@ class WooCommerce_Connection {
 	 */
 	public static function rate_limit_by_user( $action_name, $error_message = '', $return_error = false ) {
 		$rate_limited = false;
-		if ( ! defined( 'NEWSPACK_CHECKOUT_RATE_LIMIT' ) || ! class_exists( 'WC_Rate_Limiter' ) ) {
+		if ( ! self::rate_limiting_enabled() ) {
 			return $rate_limited;
 		}
 		if ( ! $error_message ) {
@@ -263,6 +271,9 @@ class WooCommerce_Connection {
 	 * @return int[] Array of active subscription IDs.
 	 */
 	public static function get_active_subscriptions_for_user( $user_id, $product_ids = [] ) {
+		if ( ! function_exists( 'wcs_get_users_subscriptions' ) ) {
+			return [];
+		}
 		$subcriptions = array_reduce(
 			array_keys( \wcs_get_users_subscriptions( $user_id ) ),
 			function( $acc, $subscription_id ) use ( $product_ids ) {
@@ -285,32 +296,6 @@ class WooCommerce_Connection {
 		);
 
 		return $subcriptions;
-	}
-
-	/**
-	 * Filter post request made by the Stripe Gateway for Stripe payments.
-	 *
-	 * @param array     $post_data An array of metadata.
-	 * @param \WC_Order $order The order object.
-	 */
-	public static function stripe_gateway_payment_request_data( $post_data, $order ) {
-		if ( ! function_exists( 'wcs_get_subscriptions_for_renewal_order' ) ) {
-			return $post_data;
-		}
-		$related_subscriptions = \wcs_get_subscriptions_for_renewal_order( $order );
-		if ( ! empty( $related_subscriptions ) ) {
-			// In theory, there should be just one subscription per renewal.
-			$subscription    = reset( $related_subscriptions );
-			$subscription_id = $subscription->get_id();
-			// Add subscription ID to any renewal.
-			$post_data['metadata']['subscription_id'] = $subscription_id;
-			if ( \wcs_order_contains_renewal( $order ) ) {
-				$post_data['metadata']['subscription_status'] = 'renewed';
-			} else {
-				$post_data['metadata']['subscription_status'] = 'created';
-			}
-		}
-		return $post_data;
 	}
 
 	/**
@@ -360,42 +345,23 @@ class WooCommerce_Connection {
 	}
 
 	/**
-	 * Force option for enabling order attribution to OFF unless the
-	 * NEWSPACK_PREVENT_WC_ALLOW_ORDER_ATTRIBUTION_OVERRIDE constant is set.
-	 * Right now, it causes JavaScript errors in the modal checkout.
-	 *
-	 * See:https://woo.com/document/order-attribution-tracking/
-	 *
-	 * @param bool $should_allow Whether WooCommerce should allow enabling Order Attribution.
-	 *
-	 * @return string Option value.
-	 */
-	public static function force_disable_order_attribution( $should_allow ) {
-		if ( defined( 'NEWSPACK_PREVENT_WC_ALLOW_ORDER_ATTRIBUTION_OVERRIDE' ) && NEWSPACK_PREVENT_WC_ALLOW_ORDER_ATTRIBUTION_OVERRIDE ) {
-			return $should_allow;
-		}
-		return false;
-	}
-
-	/**
 	 * Send the customizable receipt or welcome email instead of WooCommerce's default receipt.
 	 *
-	 * @param bool     $enable Whether to send the default receipt email.
-	 * @param WC_Order $order The order object for the receipt email.
-	 * @param WC_Email $class Instance of the WC_Email class.
+	 * @param int $order_id The order ID.
 	 *
-	 * @return bool
+	 * @return bool True if the email was sent.
 	 */
-	public static function send_customizable_receipt_email( $enable, $order, $class ) {
-		// If we don't have a valid order, or the customizable email isn't enabled, bail.
-		if ( empty( $order ) || ! is_a( $order, 'WC_Order' ) || ! Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'] ) ) {
-			return $enable;
+	public static function send_customizable_receipt_email( $order_id ) {
+		$order = \wc_get_order( $order_id );
+
+		if ( empty( $order ) || ! is_a( $order, 'WC_Order' ) ) {
+			return false;
 		}
 
 		// If there are no donation products in the order, do not override the default WC receipt email.
 		$has_donation_product = \Newspack\Donations::get_order_donation_product_id( $order->get_id() ) !== false;
 		if ( ! $has_donation_product ) {
-			return $enable;
+			return false;
 		}
 
 		$email_type      = Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'];
@@ -407,13 +373,13 @@ class WooCommerce_Connection {
 			$email_sent_meta = '_newspack_welcome_email_sent';
 		}
 
-		// if the customizable email isn't enabled bail.
+		// If the customizable email isn't enabled bail.
 		if ( ! Emails::can_send_email( $email_type ) ) {
-			return $enable;
+			return false;
 		}
 
 		if ( $order->get_meta( $email_sent_meta, true ) ) {
-			return $enable;
+			return false;
 		}
 
 		$frequencies = [
@@ -484,23 +450,30 @@ class WooCommerce_Connection {
 			$order->add_meta_data( $email_sent_meta, true, true );
 			return false;
 		}
-		return $enable;
+		return true;
 	}
 
 	/**
 	 * Send the customizable cancellation email in addition to WooCommerce Subscription's default.
 	 * We still want to allow WCS to send its cancellation email since this targets the store admin.
 	 *
-	 * @param bool            $enable        Whether to send the cancellation email.
 	 * @param WC_Subscription $subscription  The order object for the cancellation email.
-	 * @param WC_Email        $class         Instance of the WC_Email class.
 	 *
-	 * @return bool
+	 * @return bool True if the email was sent.
 	 */
-	public static function send_customizable_cancellation_email( $enable, $subscription, $class ) {
+	public static function send_customizable_cancellation_email( $subscription ) {
 		// If we don't have a valid subscription, or the customizable email isn't enabled, bail.
-		if ( ! is_a( $subscription, 'WC_Subscription' ) || ! Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPES['CANCELLATION'] ) ) {
-			return $enable;
+		if (
+			! is_a( $subscription, 'WC_Subscription' )
+			|| ! Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPES['CANCELLATION'] )
+			|| ! $subscription->has_status( [ 'pending-cancel', 'cancelled' ] )
+		) {
+			return false;
+		}
+
+		$email_sent_meta = '_newspack_subscription_cancelled_email_sent';
+		if ( $subscription->get_meta( $email_sent_meta, true ) ) {
+			return false;
 		}
 
 		$frequencies = [
@@ -573,9 +546,12 @@ class WooCommerce_Connection {
 				$subscription->get_billing_email(),
 				$placeholders
 			);
+			if ( $sent ) {
+				$subscription->add_meta_data( $email_sent_meta, true, true );
+				return false;
+			}
+			return true;
 		}
-
-		return $enable;
 	}
 
 	/**
@@ -701,18 +677,142 @@ class WooCommerce_Connection {
 	 * @param array $fields associative array of user input fields.
 	 */
 	public static function wc_memberships_for_teams_product_team_user_input_fields( $fields ) {
-		global $wp;
-		if ( ! isset( $wp->query_vars['order-pay'] ) || ! class_exists( 'WC_Order' ) || ! function_exists( 'wc_memberships_for_teams_get_team_for_order_item' ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( empty( $fields['team_name'] ) || ! empty( $_REQUEST['team_name'] ) ) {
 			return $fields;
 		}
-		$order = new \WC_Order( $wp->query_vars['order-pay'] );
-		foreach ( $order->get_items( 'line_item' ) as $id => $item ) {
-			$team = wc_memberships_for_teams_get_team_for_order_item( $item );
-			if ( $team ) {
-				$_REQUEST['team_name'] = $team->get_name();
+		global $wp;
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['resubscribe'] ) && 'my-account' === $wp->query_vars['pagename'] ) {
+			$order_id_to_fix = sanitize_text_field( $_GET['resubscribe'] );
+		} elseif ( isset( $wp->query_vars['order-pay'] ) ) {
+			$order_id_to_fix = sanitize_text_field( $wp->query_vars['order-pay'] );
+		} elseif ( isset( $_REQUEST['subscription_renewal_early'] ) ) {
+			$order_id_to_fix = sanitize_text_field( $_REQUEST['subscription_renewal_early'] );
+		} else {
+			return $fields;
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		$team_name = self::get_membership_team_name_from_order_id( $order_id_to_fix );
+		if ( ! empty( $team_name ) ) {
+			$_REQUEST['team_name'] = $team_name;
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Get the membership team name associated with an order ID (if any).
+	 *
+	 * Attempts to find the team name by checking the order items for team
+	 * membership information. If no team is found in the order items, it falls
+	 * back to retrieving the team name from the user associated with the order.
+	 *
+	 * @param int $order_id The ID of the order to retrieve the team name from.
+	 *
+	 * @return string The membership team name if found, or an empty string if
+	 *                  not found or if required functions are not available.
+	 */
+	public static function get_membership_team_name_from_order_id( $order_id ): string {
+		if ( empty( $order_id ) || ! function_exists( '\wc_get_order' ) || ! function_exists( '\wc_memberships_for_teams_get_team_for_order_item' ) ) {
+			return '';
+		}
+
+		$order = \wc_get_order( $order_id );
+		if ( ! $order ) {
+			return '';
+		}
+
+		foreach ( $order->get_items() as $item ) {
+			try {
+				$team = \wc_memberships_for_teams_get_team_for_order_item( $item );
+				if ( $team ) {
+					return $team->get_name();
+				}
+			} catch ( \Exception $e ) {
+				Logger::log( 'Exception thrown when trying to get team name from order: ' . $e->getMessage() );
 			}
 		}
-		return $fields;
+
+		$user = $order->get_user();
+		if ( $user ) {
+			return self::get_membership_team_name_from_user( $user->ID );
+		}
+
+		return '';
+	}
+
+	/**
+	 * Retrieves the membership team name for a given user.
+	 *
+	 * This function attempts to find an appropriate team name for a user based on their
+	 * billing information or display name. It first checks for a billing company name,
+	 * then falls back to billing first and last name, and finally uses the user's display name.
+	 *
+	 * @param int $user_id The ID of the user for whom to retrieve the team name.
+	 *
+	 * @return string The determined team name. Returns an empty string if the user is not found.
+	 */
+	public static function get_membership_team_name_from_user( $user_id ): string {
+		$team_user = get_user_by( 'ID', $user_id );
+		if ( ! $team_user ) {
+			return '';
+		}
+
+		$company = get_user_meta( $user_id, 'billing_company', true );
+		if ( ! empty( $company ) ) {
+			return $company;
+		}
+
+		$billing_first_name = get_user_meta( $user_id, 'billing_first_name', true );
+		$billing_last_name  = get_user_meta( $user_id, 'billing_last_name', true );
+		if ( ! empty( $billing_first_name ) || ! empty( $billing_last_name ) ) {
+			$team_name = trim( $billing_first_name . ' ' . $billing_last_name );
+		} else {
+			$team_name = $team_user->display_name;
+		}
+
+		// Translators: %s is the user's billing first and last name – or company name.
+		return sprintf( __( "%s's Team", 'newspack-plugin' ), $team_name );
+	}
+
+
+	/**
+	 * Filter callback for the team name in WooCommerce forms.
+	 *
+	 * This is only relevant for the "team_name" field. It will try to figure out if we need to
+	 * fix the team name – and if we do, then get it from the order if it's available.
+	 *
+	 * @param array  $args  The original arguments for the form field.
+	 * @param string $key   The key of the form field.
+	 * @param mixed  $value The value of the form field.
+	 *
+	 * @return array The arguments for the form field.
+	 */
+	public static function wc_memberships_for_teams_filter_team_name_in_form( $args, $key, $value ) {
+		if ( 'team_name' !== $key || ! empty( $args['default'] ) || ! empty( $value ) || is_admin() ) {
+			return $args;
+		}
+		global $wp;
+		// Try to figure out if we need to fix the team name – and if we do, then grab the order ID
+		// from the relevant param.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( isset( $wp->query_vars['order-pay'] ) ) {
+			$order_id_to_fix = sanitize_text_field( $wp->query_vars['order-pay'] );
+		} elseif ( ! empty( $_GET['switch-subscription'] ) && $wp->query_vars['product'] ) {
+			$order_id_to_fix = sanitize_text_field( $_GET['switch-subscription'] );
+		} else {
+			return $args;
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		$team_name = self::get_membership_team_name_from_order_id( $order_id_to_fix );
+		if ( ! empty( $team_name ) ) {
+			$args['default'] = $team_name;
+		}
+
+		return $args;
 	}
 }
 

@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Icon, button } from '@wordpress/icons';
+import { button } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -18,8 +18,8 @@ export { name };
 export const settings = {
 	...metadata,
 	icon: {
-		src: <Icon icon={ button } />,
-		foreground: '#36f',
+		src: button,
+		foreground: '#406ebc',
 	},
 	edit,
 	deprecated,

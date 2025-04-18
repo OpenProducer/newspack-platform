@@ -51,14 +51,6 @@ final class GAM_Ad_Block_Recovery {
 					'type'        => 'string',
 					'public'      => true,
 				],
-				[
-					'description' => __( 'Nonce', 'newspack-ads' ),
-					'help'        => __( '"Nonce" value provided by GAM. E.g.: Ab3De6GhiJklMnoPqRstUV', 'newspack-ads' ),
-					'section'     => self::SECTION,
-					'key'         => 'nonce',
-					'type'        => 'string',
-					'public'      => true,
-				],
 			],
 			$settings_list
 		);
@@ -72,12 +64,12 @@ final class GAM_Ad_Block_Recovery {
 		if ( empty( $settings ) ) {
 			return;
 		}
-		if ( ! $settings['active'] || empty( $settings['pub'] ) || empty( $settings['nonce'] ) ) {
+		if ( ! $settings['active'] || empty( $settings['pub'] ) ) {
 			return;
 		}
 		?>
-		<script async src="https://fundingchoicesmessages.google.com/i/pub-<?php echo \esc_attr( $settings['pub'] ); ?>?ers=1" nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>"></script>
-		<script nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
+		<script async src="https://fundingchoicesmessages.google.com/i/pub-<?php echo \esc_attr( $settings['pub'] ); ?>?ers=1"></script>
+		<script>
 			( function() {
 				function signalGooglefcPresent() {
 					if ( !window.frames['googlefcPresent'] ) {

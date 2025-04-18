@@ -41,7 +41,7 @@ get_header();
 
 					// Place smaller featured images inside of 'content' area.
 					if ( 'small' === newspack_featured_image_position() ) {
-						newspack_post_thumbnail();
+						newspack_post_thumbnail( 'newspack-featured-image-small');
 					}
 
 					if ( is_page() ) {

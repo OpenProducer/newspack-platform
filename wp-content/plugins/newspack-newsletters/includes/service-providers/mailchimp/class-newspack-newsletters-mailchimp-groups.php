@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use DrewM\MailChimp\MailChimp;
+use Newspack_Newsletters_Mailchimp_Api as Mailchimp;
 use Newspack\Newsletters\Subscription_List;
 
 /**

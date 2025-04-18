@@ -25,6 +25,7 @@ class GoogleSiteKit {
 		add_action( 'admin_init', [ __CLASS__, 'setup_sitekit_ga4' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'insert_ga4_analytics' ] );
 		add_filter( 'option_googlesitekit_analytics_settings', [ __CLASS__, 'filter_ga_settings' ] );
+		add_filter( 'option_googlesitekit_analytics-4_settings', [ __CLASS__, 'filter_ga_settings' ] );
 		add_filter( 'googlesitekit_gtag_opt', [ __CLASS__, 'add_ga_custom_parameters' ] );
 	}
 
@@ -34,6 +35,9 @@ class GoogleSiteKit {
 	 * @param array $googlesitekit_analytics_settings GA settings.
 	 */
 	public static function filter_ga_settings( $googlesitekit_analytics_settings ) {
+		if ( ! is_array( $googlesitekit_analytics_settings ) || ! isset( $googlesitekit_analytics_settings['trackingDisabled'] ) || ! is_array( $googlesitekit_analytics_settings['trackingDisabled'] ) ) {
+			return $googlesitekit_analytics_settings;
+		}
 		if ( in_array( 'loggedinUsers', $googlesitekit_analytics_settings['trackingDisabled'] ) ) {
 			$googlesitekit_analytics_settings['trackingDisabled'] = [ 'contentCreators' ];
 		}

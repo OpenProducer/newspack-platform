@@ -20,7 +20,7 @@ class Patches {
 		add_filter( 'wpseo_enhanced_slack_data', [ __CLASS__, 'use_cap_for_slack_preview' ] );
 		add_action( 'admin_menu', [ __CLASS__, 'add_patterns_menu_link' ] );
 		add_action( 'admin_menu', [ __CLASS__, 'add_pattern_categories_menu_link' ] );
-		add_action( 'admin_menu', [ __CLASS__, 'remove_core_patterns_menu_link' ] );
+		add_action( 'admin_menu', [ __CLASS__, 'remove_core_appearance_menu_links' ] );
 		add_action( 'manage_edit-wp_block_columns', [ __CLASS__, 'add_custom_columns' ] );
 		add_action( 'manage_edit-wp_block_sortable_columns', [ __CLASS__, 'add_sortable_columns' ] );
 		add_action( 'manage_wp_block_posts_custom_column', [ __CLASS__, 'custom_column_content' ], 10, 2 );
@@ -120,10 +120,15 @@ class Patches {
 	}
 
 	/**
-	 * Remove the Core Patterns link, which redirects to the Site Editor as of WordPress 6.6.
+	 * Remove some site editor links from the Appearance menu:
+	 * - The Appearance > Patterns link added in WordPress 6.6.
+	 * - The Appearance > Design link added in WordPress 6.8.
+	 *
+	 * Once WordPress 6.8 is released, the code to remove the Patterns link can be removed.
 	 */
-	public static function remove_core_patterns_menu_link() {
+	public static function remove_core_appearance_menu_links() {
 		remove_submenu_page( 'themes.php', 'site-editor.php?path=/patterns' );
+		remove_submenu_page( 'themes.php', 'site-editor.php' );
 	}
 
 	/**
@@ -421,7 +426,7 @@ class Patches {
 	public static function restrict_media_library_access_ajax( $query_args ) {
 		$current_user_id = get_current_user_id();
 
-		if ( $current_user_id && ! current_user_can( 'edit_others_posts' ) && ! current_user_can( 'edit_files' ) ) {
+		if ( $current_user_id && ! current_user_can( 'edit_others_posts' ) && ! current_user_can( 'edit_files' ) && ! current_user_can( 'newspack_view_others_media' ) ) {
 			$query_args['author'] = $current_user_id;
 		}
 

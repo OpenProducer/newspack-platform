@@ -1,0 +1,140 @@
+{
+	"title": "Harold",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"color": "#ffffff",
+					"name": "Base",
+					"slug": "base"
+				},
+				{
+					"color": "#F0F0F0",
+					"name": "Base / Two",
+					"slug": "base-2"
+				},
+				{
+					"color": "#DDDDDD",
+					"name": "Base / Three",
+					"slug": "base-3"
+				},
+				{
+					"color": "#CCCCCC",
+					"name": "Base / Four",
+					"slug": "base-4"
+				},
+				{
+					"color": "#949494",
+					"name": "Base / Five",
+					"slug": "base-5"
+				},
+				{
+					"color": "#1E1E1E",
+					"name": "Contrast",
+					"slug": "contrast"
+				},
+				{
+					"color": "#3E3E3E",
+					"name": "Contrast / Two",
+					"slug": "contrast-2"
+				},
+				{
+					"color": "#6C6C6C",
+					"name": "Contrast / Three",
+					"slug": "contrast-3"
+				},
+				{
+					"color": "#D63638",
+					"name": "Accent",
+					"slug": "accent"
+				},
+				{
+					"color": "#691C1C",
+					"name": "Accent / Two",
+					"slug": "accent-2"
+				},
+				{
+					"color": "#007DBC",
+					"name": "Accent / Three",
+					"slug": "accent-3"
+				}
+			]
+		},
+		"layout": {
+			"contentSize": "800px",
+			"wideSize": "1216px"
+		},
+		"typography": {
+				"fluid": true,
+				"fontFamilies": [
+					{
+						"fontFace": [
+							{
+								"fontFamily": "Fraunces",
+								"fontStretch": "normal",
+								"fontStyle": "normal",
+								"fontWeight": "100 900",
+								"src": [
+									"file:./assets/fonts/fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf"
+								]
+							},
+							{
+								"fontFamily": "Fraunces",
+								"fontStretch": "normal",
+								"fontStyle": "italic",
+								"fontWeight": "100 900",
+								"src": [
+									"file:./assets/fonts/fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf"
+								]
+							}
+						],
+						"fontFamily": "\"Fraunces\", serif",
+						"name": "Fraunces",
+						"slug": "fraunces"
+					},
+					{
+						"fontFace": [
+							{
+								"fontFamily": "Nunito",
+								"fontStretch": "normal",
+								"fontStyle": "normal",
+								"fontWeight": "200 900",
+								"src": [
+									"file:./assets/fonts/nunito/Nunito-VariableFont_wght.ttf"
+								]
+							},
+							{
+								"fontFamily": "Nunito",
+								"fontStretch": "normal",
+								"fontStyle": "italic",
+								"fontWeight": "200 900",
+								"src": [
+									"file:./assets/fonts/nunito/Nunito-Italic-VariableFont_wght.ttf"
+								]
+							}
+						],
+						"fontFamily": "\"Nunito\", sans-serif",
+						"name": "Nunito",
+						"slug": "nunito"
+					}
+				]
+		},
+		"custom": {
+			"className": "harold"
+		}
+	},
+	"styles": {
+		"typography": {
+			"fontFamily": "var( --wp--preset--font-family--nunito )"
+		},
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontFamily": "var( --wp--preset--font-family--fraunces )"
+				}
+			}
+		}
+	},
+	"version": 2,
+	"$schema": "https://schemas.wp.org/wp/6.2/theme.json"
+}

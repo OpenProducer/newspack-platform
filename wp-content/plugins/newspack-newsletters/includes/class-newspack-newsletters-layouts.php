@@ -76,6 +76,7 @@ final class Newspack_Newsletters_Layouts {
 		\register_meta( 'post', 'font_header', $meta_default_params );
 		\register_meta( 'post', 'font_body', $meta_default_params );
 		\register_meta( 'post', 'background_color', $meta_default_params );
+		\register_meta( 'post', 'text_color', $meta_default_params );
 		\register_meta( 'post', 'custom_css', $meta_default_params );
 		\register_meta( 'post', 'campaign_defaults', $meta_default_params );
 	}
@@ -206,6 +207,7 @@ final class Newspack_Newsletters_Layouts {
 			function ( $post ) {
 				$post->meta = [
 					'background_color'  => get_post_meta( $post->ID, 'background_color', true ),
+					'text_color'        => get_post_meta( $post->ID, 'text_color', true ),
 					'font_body'         => get_post_meta( $post->ID, 'font_body', true ),
 					'font_header'       => get_post_meta( $post->ID, 'font_header', true ),
 					'custom_css'        => get_post_meta( $post->ID, 'custom_css', true ),

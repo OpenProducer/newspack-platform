@@ -27,6 +27,26 @@ class CartCheckoutUtils {
 	}
 
 	/**
+	 * Returns true if shipping methods exist in the store. Excludes local pickup and only counts enabled shipping methods.
+	 *
+	 * @return bool true if shipping methods exist.
+	 */
+	public static function shipping_methods_exist() {
+		// Local pickup is included with legacy shipping methods since they do not support shipping zones.
+		$local_pickup_count = count(
+			array_filter(
+				WC()->shipping()->get_shipping_methods(),
+				function ( $method ) {
+					return isset( $method->enabled ) && 'yes' === $method->enabled && ! $method->supports( 'shipping-zones' ) && $method->supports( 'local-pickup' );
+				}
+			)
+		);
+
+		$shipping_methods_count = wc_get_shipping_method_count( true, true ) - $local_pickup_count;
+		return $shipping_methods_count > 0;
+	}
+
+	/**
 	 * Returns true if:
 	 * - The checkout page is being viewed.
 	 * - The page contains a checkout block, checkout shortcode or classic shortcode block with the checkout attribute.
@@ -268,9 +288,23 @@ class CartCheckoutUtils {
 	public static function get_country_data() {
 		$billing_countries  = WC()->countries->get_allowed_countries();
 		$shipping_countries = WC()->countries->get_shipping_countries();
-		$country_locales    = wc()->countries->get_country_locale();
 		$country_states     = wc()->countries->get_states();
 		$all_countries      = self::deep_sort_with_accents( array_unique( array_merge( $billing_countries, $shipping_countries ) ) );
+		$country_locales    = array_map(
+			function ( $locale ) {
+				foreach ( $locale as $field => $field_data ) {
+					if ( isset( $field_data['priority'] ) ) {
+						$locale[ $field ]['index'] = $field_data['priority'];
+						unset( $locale[ $field ]['priority'] );
+					}
+					if ( isset( $field_data['class'] ) ) {
+						unset( $locale[ $field ]['class'] );
+					}
+				}
+				return $locale;
+			},
+			WC()->countries->get_country_locale()
+		);
 
 		$country_data = [];
 

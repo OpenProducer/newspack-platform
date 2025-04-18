@@ -6,5 +6,4 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'DrewM\\MailChimp\\' => array($vendorDir . '/drewm/mailchimp-api/src'),
 );

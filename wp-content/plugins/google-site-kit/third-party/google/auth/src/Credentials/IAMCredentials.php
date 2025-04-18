@@ -67,7 +67,7 @@ class IAMCredentials
      *
      * @return array<mixed> updated metadata hashmap
      */
-    public function updateMetadata($metadata, $unusedAuthUri = null, callable $httpHandler = null)
+    public function updateMetadata($metadata, $unusedAuthUri = null, ?callable $httpHandler = null)
     {
         $metadata_copy = $metadata;
         $metadata_copy[self::SELECTOR_KEY] = $this->selector;

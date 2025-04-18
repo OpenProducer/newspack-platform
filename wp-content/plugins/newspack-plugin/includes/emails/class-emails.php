@@ -402,6 +402,7 @@ class Emails {
 			$email_config = [
 				'label'       => '',
 				'description' => '',
+				'category'    => '',
 			];
 		}
 		$html_payload = get_post_meta( $post_id, \Newspack_Newsletters::EMAIL_HTML_META, true );
@@ -416,6 +417,7 @@ class Emails {
 		}
 		$serialized_email = [
 			'type'           => $type,
+			'category'       => $email_config['category'],
 			'label'          => $email_config['label'],
 			'description'    => $email_config['description'],
 			'post_id'        => $post_id,

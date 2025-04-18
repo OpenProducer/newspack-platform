@@ -259,6 +259,9 @@ class RAS_ESP_Sync extends Reader_Activation\ESP_Sync {
 	 * @return bool
 	 */
 	private static function user_has_active_subscriptions( $user_id ) {
+		if ( ! function_exists( 'wcs_get_users_subscriptions' ) ) {
+			return false;
+		}
 		$subcriptions = array_reduce(
 			array_keys( \wcs_get_users_subscriptions( $user_id ) ),
 			function( $acc, $subscription_id ) {

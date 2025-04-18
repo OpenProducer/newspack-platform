@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
+class ComposerStaticInit36fcc28857e9baca245d6188785f97dd
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -86,14 +86,19 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Lite_Site' => __DIR__ . '/../..' . '/includes/lite-site/class-lite-site.php',
         'Newspack\\AMP_Enhancements' => __DIR__ . '/../..' . '/includes/class-amp-enhancements.php',
         'Newspack\\AMP_Polyfills' => __DIR__ . '/../..' . '/includes/polyfills/class-amp-polyfills.php',
         'Newspack\\API' => __DIR__ . '/../..' . '/includes/class-api.php',
         'Newspack\\API\\Plugins_Controller' => __DIR__ . '/../..' . '/includes/api/class-plugins-controller.php',
         'Newspack\\API\\Wizards_Controller' => __DIR__ . '/../..' . '/includes/api/class-wizards-controller.php',
         'Newspack\\Admin_Plugins_Screen' => __DIR__ . '/../..' . '/includes/class-admin-plugins-screen.php',
-        'Newspack\\Advertising_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-advertising-wizard.php',
-        'Newspack\\Analytics_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-analytics-wizard.php',
+        'Newspack\\Advertising_Display_Ads' => __DIR__ . '/../..' . '/includes/wizards/advertising/class-advertising-display-ads.php',
+        'Newspack\\Advertising_Sponsors' => __DIR__ . '/../..' . '/includes/wizards/advertising/class-advertising-sponsors.php',
+        'Newspack\\Audience_Campaigns' => __DIR__ . '/../..' . '/includes/wizards/audience/class-audience-campaigns.php',
+        'Newspack\\Audience_Donations' => __DIR__ . '/../..' . '/includes/wizards/audience/class-audience-donations.php',
+        'Newspack\\Audience_Subscriptions' => __DIR__ . '/../..' . '/includes/wizards/audience/class-audience-subscriptions.php',
+        'Newspack\\Audience_Wizard' => __DIR__ . '/../..' . '/includes/wizards/audience/class-audience-wizard.php',
         'Newspack\\Author_Filter' => __DIR__ . '/../..' . '/includes/author-filter/class-author-filter.php',
         'Newspack\\Authors_Custom_Fields' => __DIR__ . '/../..' . '/includes/authors/class-authors-custom-fields.php',
         'Newspack\\Blocks' => __DIR__ . '/../..' . '/includes/class-blocks.php',
@@ -101,6 +106,7 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\CLI\\Co_Authors_Plus' => __DIR__ . '/../..' . '/includes/cli/class-co-authors-plus.php',
         'Newspack\\CLI\\Initializer' => __DIR__ . '/../..' . '/includes/cli/class-initializer.php',
         'Newspack\\CLI\\Mailchimp' => __DIR__ . '/../..' . '/includes/cli/class-mailchimp.php',
+        'Newspack\\CLI\\Optional_Modules' => __DIR__ . '/../..' . '/includes/cli/class-optional-modules.php',
         'Newspack\\CLI\\RAS' => __DIR__ . '/../..' . '/includes/cli/class-ras.php',
         'Newspack\\CLI\\RAS_ESP_Sync' => __DIR__ . '/../..' . '/includes/cli/class-ras-esp-sync.php',
         'Newspack\\CLI\\Setup' => __DIR__ . '/../..' . '/includes/cli/class-setup.php',
@@ -109,9 +115,7 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\Components_Demo' => __DIR__ . '/../..' . '/includes/wizards/class-components-demo.php',
         'Newspack\\Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-manager.php',
         'Newspack\\Configuration_Managers' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-managers.php',
-        'Newspack\\Connections_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-connections-wizard.php',
         'Newspack\\Corrections' => __DIR__ . '/../..' . '/includes/corrections/class-corrections.php',
-        'Newspack\\Dashboard' => __DIR__ . '/../..' . '/includes/wizards/class-dashboard.php',
         'Newspack\\Data_Events' => __DIR__ . '/../..' . '/includes/data-events/class-data-events.php',
         'Newspack\\Data_Events\\Api' => __DIR__ . '/../..' . '/includes/data-events/class-api.php',
         'Newspack\\Data_Events\\Connectors\\ESP_Connector' => __DIR__ . '/../..' . '/includes/data-events/connectors/class-esp-connector.php',
@@ -122,11 +126,10 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\Data_Events\\Utils' => __DIR__ . '/../..' . '/includes/data-events/class-utils.php',
         'Newspack\\Data_Events\\Webhooks' => __DIR__ . '/../..' . '/includes/data-events/class-webhooks.php',
         'Newspack\\Data_Events\\Woo_User_Registration' => __DIR__ . '/../..' . '/includes/data-events/class-woo-user-registration.php',
+        'Newspack\\Default_Image' => __DIR__ . '/../..' . '/includes/class-default-image.php',
         'Newspack\\Donations' => __DIR__ . '/../..' . '/includes/class-donations.php',
         'Newspack\\Emails' => __DIR__ . '/../..' . '/includes/emails/class-emails.php',
-        'Newspack\\Engagement_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-engagement-wizard.php',
         'Newspack\\Everlit_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-everlit-configuration-manager.php',
-        'Newspack\\Fivetran_Connection' => __DIR__ . '/../..' . '/includes/oauth/class-fivetran-connection.php',
         'Newspack\\GoogleSiteKit' => __DIR__ . '/../..' . '/includes/plugins/google-site-kit/class-googlesitekit.php',
         'Newspack\\GoogleSiteKitAnalytics' => __DIR__ . '/../..' . '/includes/plugins/google-site-kit/class-googlesitekitanalytics.php',
         'Newspack\\GoogleSiteKit_Logger' => __DIR__ . '/../..' . '/includes/plugins/google-site-kit/class-googlesitekit-logger.php',
@@ -136,9 +139,9 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\GravityForms' => __DIR__ . '/../..' . '/includes/plugins/class-gravityforms.php',
         'Newspack\\Guest_Contributor_Role' => __DIR__ . '/../..' . '/includes/plugins/co-authors-plus/class-guest-contributor-role.php',
         'Newspack\\Handoff_Banner' => __DIR__ . '/../..' . '/includes/class-handoff-banner.php',
-        'Newspack\\Health_Check_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-health-check-wizard.php',
         'Newspack\\Jetpack' => __DIR__ . '/../..' . '/includes/plugins/class-jetpack.php',
         'Newspack\\Jetpack_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-jetpack-configuration-manager.php',
+        'Newspack\\Listings_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-listings-wizard.php',
         'Newspack\\Logger' => __DIR__ . '/../..' . '/includes/class-logger.php',
         'Newspack\\Magic_Link' => __DIR__ . '/../..' . '/includes/class-magic-link.php',
         'Newspack\\Mailchimp_API' => __DIR__ . '/../..' . '/includes/oauth/class-mailchimp-api.php',
@@ -152,8 +155,11 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\Memberships\\Metering' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-metering.php',
         'Newspack\\Meta_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-meta-pixel.php',
         'Newspack\\NRH' => __DIR__ . '/../..' . '/includes/class-nrh.php',
+        'Newspack\\Network_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-network-wizard.php',
+        'Newspack\\Newsletters_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-newsletters-wizard.php',
         'Newspack\\Newspack' => __DIR__ . '/../..' . '/includes/class-newspack.php',
         'Newspack\\Newspack_Ads_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-newspack-ads-configuration-manager.php',
+        'Newspack\\Newspack_Dashboard' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-newspack-dashboard.php',
         'Newspack\\Newspack_Elections' => __DIR__ . '/../..' . '/includes/plugins/class-newspack-elections.php',
         'Newspack\\Newspack_Image_Credits' => __DIR__ . '/../..' . '/includes/class-newspack-image-credits.php',
         'Newspack\\Newspack_Newsletters_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-newspack-newsletters-configuration-manager.php',
@@ -167,6 +173,7 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\OAuth_Transients' => __DIR__ . '/../..' . '/includes/oauth/class-oauth-transients.php',
         'Newspack\\On_Hold_Duration' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-on-hold-duration.php',
         'Newspack\\OneSignal' => __DIR__ . '/../..' . '/includes/plugins/class-onesignal.php',
+        'Newspack\\Optional_Modules' => __DIR__ . '/../..' . '/includes/optional-modules/class-optional-modules.php',
         'Newspack\\Organic_Profile_Block' => __DIR__ . '/../..' . '/includes/plugins/class-organic-profile-block.php',
         'Newspack\\PWA' => __DIR__ . '/../..' . '/includes/plugins/class-pwa.php',
         'Newspack\\Parsely_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-parsely-configuration-manager.php',
@@ -175,7 +182,6 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\Performance' => __DIR__ . '/../..' . '/includes/class-performance.php',
         'Newspack\\Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-pixel.php',
         'Newspack\\Plugin_Manager' => __DIR__ . '/../..' . '/includes/class-plugin-manager.php',
-        'Newspack\\Popups_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-popups-wizard.php',
         'Newspack\\Profile' => __DIR__ . '/../..' . '/includes/class-profile.php',
         'Newspack\\Publish_To_Apple_News_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-publish-to-apple-news-configuration-manager.php',
         'Newspack\\RSS' => __DIR__ . '/../..' . '/includes/optional-modules/class-rss.php',
@@ -189,16 +195,12 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\Reader_Activation_Emails' => __DIR__ . '/../..' . '/includes/reader-activation/class-reader-activation-emails.php',
         'Newspack\\Reader_Data' => __DIR__ . '/../..' . '/includes/reader-activation/class-reader-data.php',
         'Newspack\\Reader_Revenue_Emails' => __DIR__ . '/../..' . '/includes/reader-revenue/class-reader-revenue-emails.php',
-        'Newspack\\Reader_Revenue_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-reader-revenue-wizard.php',
         'Newspack\\Recaptcha' => __DIR__ . '/../..' . '/includes/class-recaptcha.php',
         'Newspack\\Renewal' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-renewal.php',
         'Newspack\\Revisions_Control' => __DIR__ . '/../..' . '/includes/revisions-control/class-revisions-control.php',
-        'Newspack\\SEO_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-seo-wizard.php',
         'Newspack\\Salesforce' => __DIR__ . '/../..' . '/includes/class-salesforce.php',
         'Newspack\\Search_Authors_Limit' => __DIR__ . '/../..' . '/includes/plugins/co-authors-plus/class-search-authors-limit.php',
-        'Newspack\\Settings' => __DIR__ . '/../..' . '/includes/wizards/class-settings.php',
         'Newspack\\Setup_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-setup-wizard.php',
-        'Newspack\\Site_Design_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-site-design-wizard.php',
         'Newspack\\Site_Kit_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-site-kit-configuration-manager.php',
         'Newspack\\Starter_Content' => __DIR__ . '/../..' . '/includes/class-starter-content.php',
         'Newspack\\Starter_Content_Generated' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-generated.php',
@@ -207,31 +209,43 @@ class ComposerStaticInit728f97be17d9d0257fad447ece46daa6
         'Newspack\\Stripe_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-connection.php',
         'Newspack\\Subscriptions_Meta' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-meta.php',
         'Newspack\\Sync_Reader_Data_CLI' => __DIR__ . '/../..' . '/includes/reader-activation/cli/class-sync-reader-data-cli.php',
-        'Newspack\\Syndication_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-syndication-wizard.php',
+        'Newspack\\Syndication' => __DIR__ . '/../..' . '/includes/class-syndication.php',
         'Newspack\\Teams_For_Memberships' => __DIR__ . '/../..' . '/includes/plugins/class-teams-for-memberships.php',
         'Newspack\\Theme_Manager' => __DIR__ . '/../..' . '/includes/class-theme-manager.php',
         'Newspack\\Twitter_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-twitter-pixel.php',
         'Newspack\\Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-wizard.php',
         'Newspack\\Wizards' => __DIR__ . '/../..' . '/includes/class-wizards.php',
+        'Newspack\\Wizards\\Newspack\\Custom_Events_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-custom-events-section.php',
+        'Newspack\\Wizards\\Newspack\\Newspack_Settings' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-newspack-settings.php',
+        'Newspack\\Wizards\\Newspack\\Pixels_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-pixels-section.php',
+        'Newspack\\Wizards\\Newspack\\Recirculation_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-recirculation-section.php',
+        'Newspack\\Wizards\\Newspack\\SEO_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-seo-section.php',
+        'Newspack\\Wizards\\Newspack\\Syndication_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-syndication-section.php',
+        'Newspack\\Wizards\\Traits\\Admin_Header' => __DIR__ . '/../..' . '/includes/wizards/traits/trait-wizards-admin-header.php',
+        'Newspack\\Wizards\\Wizard_Section' => __DIR__ . '/../..' . '/includes/wizards/class-wizard-section.php',
         'Newspack\\WooCommerce' => __DIR__ . '/../..' . '/includes/plugins/class-woocommerce.php',
         'Newspack\\WooCommerce_Cli' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-cli.php',
         'Newspack\\WooCommerce_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
         'Newspack\\WooCommerce_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-connection.php',
         'Newspack\\WooCommerce_Cover_Fees' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-cover-fees.php',
         'Newspack\\WooCommerce_Duplicate_Orders' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-duplicate-orders.php',
+        'Newspack\\WooCommerce_Gateway_Stripe' => __DIR__ . '/../..' . '/includes/plugins/class-woocommerce-gateway-stripe.php',
         'Newspack\\WooCommerce_My_Account' => __DIR__ . '/../..' . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
         'Newspack\\WooCommerce_Order_UTM' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-order-utm.php',
         'Newspack\\WooCommerce_Products' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-products.php',
         'Newspack\\WooCommerce_Subscriptions' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php',
+        'Newspack\\WooCommerce_Subscriptions_Gifting' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions-gifting.php',
+        'Newspack\\Woo_Member_Commenting' => __DIR__ . '/../..' . '/includes/optional-modules/class-woo-member-commenting.php',
         'Newspack\\WordPress_SEO_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
+        'Newspack\\Yoast' => __DIR__ . '/../..' . '/includes/plugins/class-yoast.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit728f97be17d9d0257fad447ece46daa6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit728f97be17d9d0257fad447ece46daa6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit728f97be17d9d0257fad447ece46daa6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit36fcc28857e9baca245d6188785f97dd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit36fcc28857e9baca245d6188785f97dd::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit36fcc28857e9baca245d6188785f97dd::$classMap;
 
         }, null, ClassLoader::class);
     }

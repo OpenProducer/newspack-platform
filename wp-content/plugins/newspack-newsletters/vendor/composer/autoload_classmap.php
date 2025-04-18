@@ -57,6 +57,7 @@ return array(
     'Newspack_Newsletters_Letterhead_Promotion_Dto' => $baseDir . '/includes/service-providers/letterhead/dtos/class-newspack-newsletters-letterhead-promotion-dto.php',
     'Newspack_Newsletters_Logger' => $baseDir . '/includes/class-newspack-newsletters-logger.php',
     'Newspack_Newsletters_Mailchimp' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php',
+    'Newspack_Newsletters_Mailchimp_Api' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-api.php',
     'Newspack_Newsletters_Mailchimp_Cached_Data' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-cached-data.php',
     'Newspack_Newsletters_Mailchimp_Controller' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-controller.php',
     'Newspack_Newsletters_Mailchimp_Groups' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-groups.php',

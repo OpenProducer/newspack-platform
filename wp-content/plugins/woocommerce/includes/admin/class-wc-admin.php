@@ -207,12 +207,16 @@ class WC_Admin {
 				}
 			}
 
+			// Start output buffering to prevent partial renders with PHP notices or warnings.
+			ob_start();
 			try {
 				$message = $email_preview->render();
 				$message = $email_preview->ensure_links_open_in_new_tab( $message );
 			} catch ( Throwable $e ) {
+				ob_end_clean();
 				wp_die( esc_html__( 'There was an error rendering an email preview.', 'woocommerce' ), 404 );
 			}
+			ob_end_clean();
 
 			// print the preview email.
 			// phpcs:ignore WordPress.Security.EscapeOutput

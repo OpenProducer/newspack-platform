@@ -19,12 +19,13 @@ import {
 	Button,
 } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { pencil, pullquote } from '@wordpress/icons';
+import { pencil } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
 import PlacementControl from '../../placements/placement-control';
+import { ad as icon } from '../utils/icons';
 
 function Edit( { attributes, setAttributes } ) {
 	const [ inFlight, setInFlight ] = useState( false );
@@ -118,7 +119,7 @@ function Edit( { attributes, setAttributes } ) {
 					</div>
 				</Fragment>
 			) : (
-				<Placeholder label={ __( 'Ad Unit', 'newspack-ads' ) } icon={ pullquote }>
+				<Placeholder label={ __( 'Ad Unit', 'newspack-ads' ) } icon={ icon }>
 					<div className="newspack-ads-ad-block-edit">
 						{ inFlight ? (
 							<Spinner />

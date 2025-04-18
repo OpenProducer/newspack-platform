@@ -80,7 +80,7 @@ class ServiceAccountJwtAccessCredentials extends \Google\Site_Kit_Dependencies\G
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
         $this->auth = new \Google\Site_Kit_Dependencies\Google\Auth\OAuth2(['issuer' => $jsonKey['client_email'], 'sub' => $jsonKey['client_email'], 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key'], 'scope' => $scope]);
-        $this->projectId = isset($jsonKey['project_id']) ? $jsonKey['project_id'] : null;
+        $this->projectId = $jsonKey['project_id'] ?? null;
     }
     /**
      * Updates metadata with the authorization token.
@@ -90,7 +90,7 @@ class ServiceAccountJwtAccessCredentials extends \Google\Site_Kit_Dependencies\G
      * @param callable $httpHandler callback which delivers psr7 request
      * @return array<mixed> updated metadata hashmap
      */
-    public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null)
+    public function updateMetadata($metadata, $authUri = null, ?callable $httpHandler = null)
     {
         $scope = $this->auth->getScope();
         if (empty($authUri) && empty($scope)) {
@@ -106,7 +106,7 @@ class ServiceAccountJwtAccessCredentials extends \Google\Site_Kit_Dependencies\G
      *
      * @return null|array{access_token:string} A set of auth related metadata
      */
-    public function fetchAuthToken(callable $httpHandler = null)
+    public function fetchAuthToken(?callable $httpHandler = null)
     {
         $audience = $this->auth->getAudience();
         $scope = $this->auth->getScope();
@@ -119,7 +119,7 @@ class ServiceAccountJwtAccessCredentials extends \Google\Site_Kit_Dependencies\G
         $access_token = $this->auth->toJwt();
         // Set the self-signed access token in OAuth2 for getLastReceivedToken
         $this->auth->setAccessToken($access_token);
-        return ['access_token' => $access_token];
+        return ['access_token' => $access_token, 'expires_in' => $this->auth->getExpiry(), 'token_type' => 'Bearer'];
     }
     /**
      * @return string
@@ -143,7 +143,7 @@ class ServiceAccountJwtAccessCredentials extends \Google\Site_Kit_Dependencies\G
      * @param callable $httpHandler Not used by this credentials type.
      * @return string|null
      */
-    public function getProjectId(callable $httpHandler = null)
+    public function getProjectId(?callable $httpHandler = null)
     {
         return $this->projectId;
     }
@@ -155,7 +155,7 @@ class ServiceAccountJwtAccessCredentials extends \Google\Site_Kit_Dependencies\G
      * @param callable $httpHandler Not used by this credentials type.
      * @return string
      */
-    public function getClientName(callable $httpHandler = null)
+    public function getClientName(?callable $httpHandler = null)
     {
         return $this->auth->getIssuer();
     }

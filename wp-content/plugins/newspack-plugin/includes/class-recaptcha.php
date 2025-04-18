@@ -179,7 +179,16 @@ final class Recaptcha {
 	public static function get_settings_config() {
 		return [
 			'use_captcha' => false,
-			'credentials' => [],
+			'credentials' => [
+				'v3'           => [
+					'site_key'    => '',
+					'site_secret' => '',
+				],
+				'v2_invisible' => [
+					'site_key'    => '',
+					'site_secret' => '',
+				],
+			],
 			'threshold'   => 0.5,
 			'version'     => 'v3',
 		];
@@ -226,7 +235,11 @@ final class Recaptcha {
 		$config   = self::get_settings_config();
 		$settings = [];
 		foreach ( $config as $key => $default_value ) {
-			$settings[ $key ] = self::get_setting( $key );
+			if ( 'credentials' === $key ) {
+				$settings[ $key ] = wp_parse_args( self::get_setting( $key ), $default_value );
+			} else {
+				$settings[ $key ] = self::get_setting( $key );
+			}
 		}
 
 		// Migrate reCAPTCHA settings from separate site_key/site_secret options to credentials array.
@@ -328,7 +341,7 @@ final class Recaptcha {
 	/**
 	 * Check whether reCaptcha is enabled and that we have all required settings.
 	 *
-	 * @param string $version If specified, chedk whether the given version of reCaptcha is enabled.
+	 * @param string $version If specified, check whether the given version of reCaptcha is enabled.
 	 *
 	 * @return boolean True if we can use reCaptcha to secure checkout requests.
 	 */

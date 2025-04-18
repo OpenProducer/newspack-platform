@@ -1,18 +1,20 @@
 <?php
 
+declare (strict_types=1);
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
 
 use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
 /**
  * Stream that when read returns bytes for a streaming multipart or
  * multipart/form-data stream.
- *
- * @final
  */
-class MultipartStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
+final class MultipartStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
 {
     use StreamDecoratorTrait;
+    /** @var string */
     private $boundary;
+    /** @var StreamInterface */
+    private $stream;
     /**
      * @param array  $elements Array of associative arrays, each containing a
      *                         required "name" key mapping to the form field,
@@ -25,28 +27,25 @@ class MultipartStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $elements = [], $boundary = null)
+    public function __construct(array $elements = [], ?string $boundary = null)
     {
-        $this->boundary = $boundary ?: \sha1(\uniqid('', \true));
+        $this->boundary = $boundary ?: \bin2hex(\random_bytes(20));
         $this->stream = $this->createStream($elements);
     }
-    /**
-     * Get the boundary
-     *
-     * @return string
-     */
-    public function getBoundary()
+    public function getBoundary() : string
     {
         return $this->boundary;
     }
-    public function isWritable()
+    public function isWritable() : bool
     {
         return \false;
     }
     /**
      * Get the headers needed before transferring the content of a POST file
+     *
+     * @param string[] $headers
      */
-    private function getHeaders(array $headers)
+    private function getHeaders(array $headers) : string
     {
         $str = '';
         foreach ($headers as $key => $value) {
@@ -57,17 +56,20 @@ class MultipartStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\
     /**
      * Create the aggregate stream that will be used to upload the POST data
      */
-    protected function createStream(array $elements)
+    protected function createStream(array $elements = []) : \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
     {
         $stream = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\AppendStream();
         foreach ($elements as $element) {
+            if (!\is_array($element)) {
+                throw new \UnexpectedValueException('An array is expected');
+            }
             $this->addElement($stream, $element);
         }
         // Add the trailing boundary with CRLF
         $stream->addStream(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor("--{$this->boundary}--\r\n"));
         return $stream;
     }
-    private function addElement(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\AppendStream $stream, array $element)
+    private function addElement(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\AppendStream $stream, array $element) : void
     {
         foreach (['contents', 'name'] as $key) {
             if (!\array_key_exists($key, $element)) {
@@ -77,46 +79,49 @@ class MultipartStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\
         $element['contents'] = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($element['contents']);
         if (empty($element['filename'])) {
             $uri = $element['contents']->getMetadata('uri');
-            if (\substr($uri, 0, 6) !== 'php://') {
+            if ($uri && \is_string($uri) && \substr($uri, 0, 6) !== 'php://' && \substr($uri, 0, 7) !== 'data://') {
                 $element['filename'] = $uri;
             }
         }
-        list($body, $headers) = $this->createElement($element['name'], $element['contents'], isset($element['filename']) ? $element['filename'] : null, isset($element['headers']) ? $element['headers'] : []);
+        [$body, $headers] = $this->createElement($element['name'], $element['contents'], $element['filename'] ?? null, $element['headers'] ?? []);
         $stream->addStream(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($this->getHeaders($headers)));
         $stream->addStream($body);
         $stream->addStream(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor("\r\n"));
     }
     /**
-     * @return array
+     * @param string[] $headers
+     *
+     * @return array{0: StreamInterface, 1: string[]}
      */
-    private function createElement($name, \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface $stream, $filename, array $headers)
+    private function createElement(string $name, \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface $stream, ?string $filename, array $headers) : array
     {
         // Set a default content-disposition header if one was no provided
-        $disposition = $this->getHeader($headers, 'content-disposition');
+        $disposition = self::getHeader($headers, 'content-disposition');
         if (!$disposition) {
             $headers['Content-Disposition'] = $filename === '0' || $filename ? \sprintf('form-data; name="%s"; filename="%s"', $name, \basename($filename)) : "form-data; name=\"{$name}\"";
         }
         // Set a default content-length header if one was no provided
-        $length = $this->getHeader($headers, 'content-length');
+        $length = self::getHeader($headers, 'content-length');
         if (!$length) {
             if ($length = $stream->getSize()) {
                 $headers['Content-Length'] = (string) $length;
             }
         }
         // Set a default Content-Type if one was not supplied
-        $type = $this->getHeader($headers, 'content-type');
+        $type = self::getHeader($headers, 'content-type');
         if (!$type && ($filename === '0' || $filename)) {
-            if ($type = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\MimeType::fromFilename($filename)) {
-                $headers['Content-Type'] = $type;
-            }
+            $headers['Content-Type'] = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\MimeType::fromFilename($filename) ?? 'application/octet-stream';
         }
         return [$stream, $headers];
     }
-    private function getHeader(array $headers, $key)
+    /**
+     * @param string[] $headers
+     */
+    private static function getHeader(array $headers, string $key) : ?string
     {
         $lowercaseHeader = \strtolower($key);
         foreach ($headers as $k => $v) {
-            if (\strtolower($k) === $lowercaseHeader) {
+            if (\strtolower((string) $k) === $lowercaseHeader) {
                 return $v;
             }
         }

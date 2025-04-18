@@ -35,6 +35,8 @@
 		flex-direction: column;
 	}
 	&__button {
+		width: auto;
+
 		[data-align="full"] &,
 		[data-align="wide"] & {
 			width: 100%;

@@ -9,9 +9,6 @@ namespace Newspack;
 
 use WP_Error, WP_REST_Server;
 defined( 'ABSPATH' ) || exit;
-require_once NEWSPACK_ABSPATH . '/includes/wizards/class-wizard.php';
-
-define( 'NEWSPACK_SETUP_COMPLETE', 'newspack_setup_complete' );
 
 /**
  * Setup Newspack.
@@ -37,6 +34,20 @@ class Setup_Wizard extends Wizard {
 	protected $slug = 'newspack-setup-wizard';
 
 	/**
+	 * The parent menu item name.
+	 *
+	 * @var string
+	 */
+	public $parent_menu = 'newspack-dashboard';
+
+	/**
+	 * Make sure Setup is first submenu item (after the dashboard wizard creates the "Newspack" menu).
+	 *
+	 * @var int.
+	 */
+	protected $admin_menu_priority = 2;
+
+	/**
 	 * The capability required to access this wizard.
 	 *
 	 * @var string
@@ -56,7 +67,7 @@ class Setup_Wizard extends Wizard {
 	public function __construct() {
 		parent::__construct();
 		add_action( 'rest_api_init', [ $this, 'register_api_endpoints' ] );
-		if ( ! get_option( NEWSPACK_SETUP_COMPLETE ) ) {
+		if ( ! Newspack::is_setup_complete() ) {
 			add_action( 'current_screen', [ $this, 'redirect_to_setup' ] );
 			add_action( 'admin_menu', [ $this, 'hide_non_setup_menu_items' ], 1000 );
 		}
@@ -511,6 +522,9 @@ class Setup_Wizard extends Wizard {
 
 			// All-posts updates: featured image and post template.
 			if ( substr_compare( $key, '_all_posts', -strlen( '_all_posts' ) ) === 0 ) {
+				if ( 'none' === $value ) {
+					continue;
+				}
 				switch ( $key ) {
 					case 'featured_image_all_posts':
 						self::update_meta_key_in_batches( 'newspack_featured_image_position', $value );
@@ -543,10 +557,15 @@ class Setup_Wizard extends Wizard {
 			'post_type'      => 'post',
 			'fields'         => 'ids',
 			'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'relation' => 'OR',
 				[
 					'key'     => $meta_key,
 					'value'   => $value,
 					'compare' => '!=',
+				],
+				[
+					'key'     => $meta_key,
+					'compare' => 'NOT EXISTS',
 				],
 			],
 		];
@@ -601,25 +620,26 @@ class Setup_Wizard extends Wizard {
 		}
 		if ( true === $request['reader-revenue']['is_service_enabled'] ) {
 			Plugin_Manager::activate( 'woocommerce' );
-			$rr_wizard = new Reader_Revenue_Wizard();
 			if ( isset( $request['reader-revenue']['donation_data'] ) ) {
+				$rr_wizard = new Audience_Donations();
 				$rr_wizard->update_donation_settings( $request['reader-revenue']['donation_data'] );
 			}
 			if ( ! empty( $request['reader-revenue']['payment_gateways']['stripe'] ) ) {
+				$audience_wizard = new Audience_Wizard();
 				$stripe_settings            = $request['reader-revenue']['payment_gateways']['stripe'];
 				$stripe_settings['enabled'] = true;
-				$rr_wizard->update_stripe_settings( $stripe_settings );
+				$audience_wizard->update_stripe_settings( $stripe_settings );
 			}
 		}
 		if ( true === $request['google-ad-manager']['is_service_enabled'] ) {
 			$service = 'google_ad_manager';
-			update_option( Advertising_Wizard::NEWSPACK_ADVERTISING_SERVICE_PREFIX . $service, true );
+			update_option( Advertising_Display_Ads::NEWSPACK_ADVERTISING_SERVICE_PREFIX . $service, true );
 			if ( isset( $request['google-ad-manager']['networkCode'] ) && ! empty( $request['google-ad-manager']['networkCode'] ) ) {
 				$network_code = $request['google-ad-manager']['networkCode'];
 				// Update legacy network code in case service account credentials are not set.
-				update_option( Advertising_Wizard::OPTION_NAME_LEGACY_NETWORK_CODE, $network_code );
+				update_option( Advertising_Display_Ads::OPTION_NAME_LEGACY_NETWORK_CODE, $network_code );
 				// Update network code used by authenticated credentials. Ensures use of desired code in case the credentials are for multiple networks.
-				update_option( Advertising_Wizard::OPTION_NAME_GAM_NETWORK_CODE, $network_code );
+				update_option( Advertising_Display_Ads::OPTION_NAME_GAM_NETWORK_CODE, $network_code );
 			}
 			Plugin_Manager::activate( 'newspack-ads' );
 		}
@@ -674,9 +694,9 @@ class Setup_Wizard extends Wizard {
 		if ( ! current_user_can( $this->capability ) ) {
 			return;
 		}
-		foreach ( $submenu['newspack'] as $key => $value ) {
+		foreach ( $submenu['newspack-dashboard'] as $key => $value ) {
 			if ( 'newspack-setup-wizard' !== $value[2] ) {
-				unset( $submenu['newspack'][ $key ] );
+				unset( $submenu['newspack-dashboard'][ $key ] );
 			}
 		}
 	}
@@ -686,7 +706,7 @@ class Setup_Wizard extends Wizard {
 	 */
 	public function redirect_to_setup() {
 		$screen = get_current_screen();
-		if ( $screen && 'toplevel_page_newspack' === $screen->id ) {
+		if ( $screen && 'toplevel_page_newspack-dashboard' === $screen->id ) {
 			$setup_url = Wizards::get_url( 'setup' );
 			wp_safe_redirect( esc_url( $setup_url ) );
 			exit;

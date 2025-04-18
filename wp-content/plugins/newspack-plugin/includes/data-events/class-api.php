@@ -9,6 +9,7 @@ namespace Newspack\Data_Events;
 
 use Newspack\Data_Events;
 use Newspack\Data_Events\Webhooks;
+use WP_Error;
 
 /**
  * Main Class.
@@ -194,7 +195,8 @@ final class Api {
 		}
 		return \rest_ensure_response(
 			[
-				'success' => $code && 200 >= $code && 300 > $code,
+				// Success if response code is in 2xx range.
+				'success' => $code && $code > 199 && $code < 300,
 				'code'    => $code,
 				'message' => $message,
 			]
@@ -273,6 +275,21 @@ final class Api {
 				$args['actions'] ?? [],
 				$args['disabled']
 			);
+		}
+		if ( is_wp_error( $endpoint ) ) {
+			$error_code = $endpoint->get_error_code();
+			if ( $error_code === 'term_exists' ) {
+				return new WP_Error(
+					'newspack_webhooks_endpoint_exists',
+					/* translators: %s: URL */
+					sprintf( __( 'URL "%s" is already in use.', 'newspack-plugin' ), $args['url'] ),
+					[
+						'status' => 400,
+					]
+				);
+
+			}
+			return $endpoint;
 		}
 		if ( is_string( $request->get_param( 'label' ) ) ) {
 			Webhooks::update_endpoint_label( $endpoint['id'], $request->get_param( 'label' ) );

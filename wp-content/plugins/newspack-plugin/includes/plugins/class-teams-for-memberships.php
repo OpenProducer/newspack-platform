@@ -9,6 +9,7 @@ namespace Newspack;
 
 defined( 'ABSPATH' ) || exit;
 
+use Newspack\Donations;
 use Newspack\Reader_Activation\Sync;
 
 /**
@@ -31,7 +32,7 @@ class Teams_For_Memberships {
 	 * @return bool True if enabled, false otherwise.
 	 */
 	private static function is_enabled() {
-		return class_exists( 'WC_Memberships_For_Teams_Loader' );
+		return Donations::is_platform_wc() && class_exists( 'WC_Memberships_For_Teams_Loader' );
 	}
 
 	/**

@@ -1,3 +1,88 @@
+# [4.10.0](https://github.com/Automattic/newspack-blocks/compare/v4.9.2...v4.10.0) (2025-04-14)
+
+
+### Bug Fixes
+
+* correct Content Loop button width in WP 6.8 ([#2090](https://github.com/Automattic/newspack-blocks/issues/2090)) ([c39a46c](https://github.com/Automattic/newspack-blocks/commit/c39a46c74a0aee7334c0d7bb824ba0b02f00d7f4))
+* remove unneeded editor-style-wrapper class ([#2089](https://github.com/Automattic/newspack-blocks/issues/2089)) ([e13ea9e](https://github.com/Automattic/newspack-blocks/commit/e13ea9ebecd68305f80a820c573e8ed805ad214c))
+
+
+### Features
+
+* **content-loop:** Allow for AND (inter-join) logic ([#2092](https://github.com/Automattic/newspack-blocks/issues/2092)) ([02053aa](https://github.com/Automattic/newspack-blocks/commit/02053aa2d9029cf5a4f91cff8612af38f849e77b))
+
+## [4.9.2](https://github.com/Automattic/newspack-blocks/compare/v4.9.1...v4.9.2) (2025-04-10)
+
+
+### Bug Fixes
+
+* tweak button update functionality for Braintree ([#2104](https://github.com/Automattic/newspack-blocks/issues/2104)) ([0248e82](https://github.com/Automattic/newspack-blocks/commit/0248e82a6a5be4b9dbf9c37fdca706a9cc86cbd0))
+
+## [4.9.1](https://github.com/Automattic/newspack-blocks/compare/v4.9.0...v4.9.1) (2025-04-02)
+
+
+### Bug Fixes
+
+* **donate-block:** handle decimals in custom amount input, fixed ([8090da1](https://github.com/Automattic/newspack-blocks/commit/8090da1d99da9b1e576c7ca0057bb4fbd93e00e8))
+
+# [4.9.0](https://github.com/Automattic/newspack-blocks/compare/v4.8.1...v4.9.0) (2025-03-31)
+
+
+### Features
+
+* trigger relase ([4be679e](https://github.com/Automattic/newspack-blocks/commit/4be679ebaf3aa6b7d0cf4917f52bcae1a8a71a5f))
+
+## [4.8.1](https://github.com/Automattic/newspack-blocks/compare/v4.8.0...v4.8.1) (2025-03-31)
+
+
+### Reverts
+
+* Revert "fix(donate-block): handle decimals in custom amount input (#2074)" (#2094) ([bc4efc2](https://github.com/Automattic/newspack-blocks/commit/bc4efc2a4d6af25ae177ebd5902f69c42495df67)), closes [#2074](https://github.com/Automattic/newspack-blocks/issues/2074) [#2094](https://github.com/Automattic/newspack-blocks/issues/2094)
+
+# [4.8.0](https://github.com/Automattic/newspack-blocks/compare/v4.7.1...v4.8.0) (2025-03-31)
+
+
+### Bug Fixes
+
+* **api:** avoid warning newspack blocks api accessing attachment images ([#2069](https://github.com/Automattic/newspack-blocks/issues/2069)) ([93ffebf](https://github.com/Automattic/newspack-blocks/commit/93ffebf19ae195aa23fd175635c16644d67a33bf))
+* better handle deleted terms ([#2076](https://github.com/Automattic/newspack-blocks/issues/2076)) ([7d7a639](https://github.com/Automattic/newspack-blocks/commit/7d7a6396e1e5e388c178e0ce58bcfa8962565075))
+* correct checkout button block width in WP 6.8 ([#2087](https://github.com/Automattic/newspack-blocks/issues/2087)) ([a9def73](https://github.com/Automattic/newspack-blocks/commit/a9def73c86aac2eb8c71b5e75890b2c09732c54b))
+* **donate-block:** handle decimals in custom amount input ([#2074](https://github.com/Automattic/newspack-blocks/issues/2074)) ([9db74fe](https://github.com/Automattic/newspack-blocks/commit/9db74fe6f703e104b5703065ce86ac17e1abad07))
+* make sure five column border layout works ([#2072](https://github.com/Automattic/newspack-blocks/issues/2072)) ([a1dbfbc](https://github.com/Automattic/newspack-blocks/commit/a1dbfbce9091072e64b763c9a13316a7d1bf8943))
+* **modal-checkout:** trigger REST API endpoint to refresh post-checko… ([#2080](https://github.com/Automattic/newspack-blocks/issues/2080)) ([e534446](https://github.com/Automattic/newspack-blocks/commit/e5344463fc07207e7406f7a4b9d0a7d4708a6359))
+
+
+### Features
+
+* information architecture ([#2083](https://github.com/Automattic/newspack-blocks/issues/2083)) ([2d75fd1](https://github.com/Automattic/newspack-blocks/commit/2d75fd165ea26b4e2f4febebfb7ee28cb9f749ea))
+
+## [4.7.1](https://github.com/Automattic/newspack-blocks/compare/v4.7.0...v4.7.1) (2025-03-18)
+
+
+### Bug Fixes
+
+* **modal-checkout:** trigger REST API endpoint to refresh post-checko… ([#2080](https://github.com/Automattic/newspack-blocks/issues/2080)) ([8258e52](https://github.com/Automattic/newspack-blocks/commit/8258e52f31edff73ff9a676a34df7bf200cb98e5))
+* prevent php notice when filtering scripts ([77408f3](https://github.com/Automattic/newspack-blocks/commit/77408f36f654a74e390d4b8c88c5d110198239ae))
+* remove coming soon mode message from the modal checkout ([#2067](https://github.com/Automattic/newspack-blocks/issues/2067)) ([c27937d](https://github.com/Automattic/newspack-blocks/commit/c27937d6ec51a9f0235b9aeee6d8111d6efe1574))
+* remove OneSignal v2 from modal checkout ([#2061](https://github.com/Automattic/newspack-blocks/issues/2061)) ([9727e02](https://github.com/Automattic/newspack-blocks/commit/9727e0247eb5f3599cdf44eefbbe40fc3516d86f))
+
+# [4.7.0](https://github.com/Automattic/newspack-blocks/compare/v4.6.1...v4.7.0) (2025-03-04)
+
+
+### Bug Fixes
+
+* **carousel:** avoid editor crash on empty ([#2058](https://github.com/Automattic/newspack-blocks/issues/2058)) ([c316801](https://github.com/Automattic/newspack-blocks/commit/c316801b54059dcac79fa463dc0df7a8e78bdc01))
+* **modal-checkout:** better iframe sizing ([#2052](https://github.com/Automattic/newspack-blocks/issues/2052)) ([aa308f2](https://github.com/Automattic/newspack-blocks/commit/aa308f2acd956e5f0e5282493f9b33e83ae8e391))
+* **recaptcha:** use clone of #place_order button to trigger checkout ([#2028](https://github.com/Automattic/newspack-blocks/issues/2028)) ([46eb8b5](https://github.com/Automattic/newspack-blocks/commit/46eb8b5b2a99e907eabbfab9cfed1fd4a44687da)), closes [#2030](https://github.com/Automattic/newspack-blocks/issues/2030) [#2030](https://github.com/Automattic/newspack-blocks/issues/2030)
+
+
+### Features
+
+* add styles to fix Braintree modal appearance ([#2036](https://github.com/Automattic/newspack-blocks/issues/2036)) ([9ab2c62](https://github.com/Automattic/newspack-blocks/commit/9ab2c62d705879cc6164fc179093d37e562dfbac))
+* add toggle for transaction details ([#2049](https://github.com/Automattic/newspack-blocks/issues/2049)) ([d254aca](https://github.com/Automattic/newspack-blocks/commit/d254aca605a6e90b6e6b4b586527376cda1f86f8))
+* **carousel:** rename block and reorganise settings ([#1962](https://github.com/Automattic/newspack-blocks/issues/1962)) ([9905717](https://github.com/Automattic/newspack-blocks/commit/9905717a90b660ff3136871aaf3f97a915a48f23))
+* update blocks with new brand ([#2050](https://github.com/Automattic/newspack-blocks/issues/2050)) ([2711302](https://github.com/Automattic/newspack-blocks/commit/27113027329484675efce2d009c4c59f56074ee3))
+
 ## [4.6.1](https://github.com/Automattic/newspack-blocks/compare/v4.6.0...v4.6.1) (2025-02-27)
 
 

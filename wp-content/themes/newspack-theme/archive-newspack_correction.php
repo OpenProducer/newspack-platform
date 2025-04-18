@@ -45,7 +45,13 @@ get_header();
 			endwhile;
 
 			// Previous/next page navigation.
-			newspack_the_posts_navigation();
+			the_posts_pagination(
+				array(
+					'mid_size'  => 2,
+					'prev_text' => __( 'Previous', 'newspack' ),
+					'next_text' => __( 'Next', 'newspack' ),
+				)
+			);
 
 			// If no content, include the "No posts found" template.
 		else :

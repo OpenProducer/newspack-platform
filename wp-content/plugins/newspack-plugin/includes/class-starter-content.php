@@ -174,7 +174,7 @@ class Starter_Content {
 	 */
 	public static function upload_logo() {
 
-		$attachment_title = esc_attr__( 'Newspack Placeholder Logo', 'newspack' );
+		$attachment_title = esc_attr__( 'Newspack Placeholder Logomark', 'newspack' );
 
 		$args = [
 			'posts_per_page' => 1,
@@ -195,9 +195,9 @@ class Starter_Content {
 		}
 
 		$file = wp_upload_bits(
-			'newspack-logo.png',
+			'newspack-logomark.png',
 			null,
-			file_get_contents( NEWSPACK_ABSPATH . 'includes/raw_assets/images/newspack-logo.png' )
+			file_get_contents( NEWSPACK_ABSPATH . 'includes/raw_assets/images/newspack-logomark.png' )
 		);
 
 		if ( ! $file || empty( $file['file'] ) ) {

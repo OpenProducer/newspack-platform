@@ -94,6 +94,7 @@ class Reader_Revenue_Emails {
 		];
 		$configs[ self::EMAIL_TYPES['RECEIPT'] ]      = [
 			'name'                   => self::EMAIL_TYPES['RECEIPT'],
+			'category'               => 'reader-revenue',
 			'label'                  => __( 'Receipt', 'newspack-plugin' ),
 			'description'            => __( "Email sent to the donor after they've donated.", 'newspack-plugin' ),
 			'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-revenue-emails/receipt.php',
@@ -123,6 +124,7 @@ class Reader_Revenue_Emails {
 		];
 		$configs[ self::EMAIL_TYPES['WELCOME'] ]      = [
 			'name'                   => self::EMAIL_TYPES['WELCOME'],
+			'category'               => 'reader-revenue',
 			'label'                  => __( 'Welcome', 'newspack-plugin' ),
 			'description'            => __( 'Email sent to new reader accounts registered during a transaction.', 'newspack-plugin' ),
 			'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-revenue-emails/welcome.php',
@@ -156,6 +158,7 @@ class Reader_Revenue_Emails {
 		];
 		$configs[ self::EMAIL_TYPES['CANCELLATION'] ] = [
 			'name'                   => self::EMAIL_TYPES['CANCELLATION'],
+			'category'               => 'reader-revenue',
 			'label'                  => __( 'Cancellation', 'newspack-plugin' ),
 			'description'            => __( "Email sent to the donor after they've cancelled a recurring donation.", 'newspack-plugin' ),
 			'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-revenue-emails/cancellation.php',

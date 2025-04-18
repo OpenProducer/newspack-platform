@@ -1065,7 +1065,7 @@ const toggleFullscreenMode = () => ({
 }) => {
   const isFullscreen = registry.select(external_wp_preferences_namespaceObject.store).get('core/edit-post', 'fullscreenMode');
   registry.dispatch(external_wp_preferences_namespaceObject.store).toggle('core/edit-post', 'fullscreenMode');
-  registry.dispatch(external_wp_notices_namespaceObject.store).createInfoNotice(isFullscreen ? (0,external_wp_i18n_namespaceObject.__)('Fullscreen mode activated.') : (0,external_wp_i18n_namespaceObject.__)('Fullscreen mode deactivated.'), {
+  registry.dispatch(external_wp_notices_namespaceObject.store).createInfoNotice(isFullscreen ? (0,external_wp_i18n_namespaceObject.__)('Fullscreen mode deactivated.') : (0,external_wp_i18n_namespaceObject.__)('Fullscreen mode activated.'), {
     id: 'core/edit-post/toggle-fullscreen-mode/notice',
     type: 'snackbar',
     actions: [{
@@ -1946,7 +1946,7 @@ function ManagePatternsMenuItem() {
       post_type: 'wp_block'
     });
     const patternsUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
-      path: '/patterns'
+      p: '/pattern'
     });
 
     // The site editor and templates both check whether the user has
@@ -3025,6 +3025,7 @@ function Layout({
   const {
     mode,
     isFullscreenActive,
+    hasResolvedMode,
     hasActiveMetaboxes,
     hasBlockSelected,
     showIconLabels,
@@ -3039,7 +3040,8 @@ function Layout({
       get
     } = select(external_wp_preferences_namespaceObject.store);
     const {
-      isFeatureActive
+      isFeatureActive,
+      hasMetaBoxes
     } = select(store);
     const {
       canUser,
@@ -3053,29 +3055,34 @@ function Layout({
       name: 'wp_template'
     });
     const {
+      getBlockSelectionStart,
       isZoomOut
     } = unlock(select(external_wp_blockEditor_namespaceObject.store));
     const {
       getEditorMode,
-      getRenderingMode
-    } = select(external_wp_editor_namespaceObject.store);
+      getRenderingMode,
+      getDefaultRenderingMode
+    } = unlock(select(external_wp_editor_namespaceObject.store));
     const isRenderingPostOnly = getRenderingMode() === 'post-only';
     const isNotDesignPostType = !DESIGN_POST_TYPES.includes(currentPostType);
     const isDirectlyEditingPattern = currentPostType === 'wp_block' && !onNavigateToPreviousEntityRecord;
+    const _templateId = getTemplateId(currentPostType, currentPostId);
+    const defaultMode = getDefaultRenderingMode(currentPostType);
     return {
       mode: getEditorMode(),
-      isFullscreenActive: select(store).isFeatureActive('fullscreenMode'),
-      hasActiveMetaboxes: select(store).hasMetaBoxes(),
-      hasBlockSelected: !!select(external_wp_blockEditor_namespaceObject.store).getBlockSelectionStart(),
+      isFullscreenActive: isFeatureActive('fullscreenMode'),
+      hasActiveMetaboxes: hasMetaBoxes(),
+      hasResolvedMode: defaultMode === 'template-locked' ? !!_templateId : defaultMode !== undefined,
+      hasBlockSelected: !!getBlockSelectionStart(),
       showIconLabels: get('core', 'showIconLabels'),
       isDistractionFree: get('core', 'distractionFree'),
       showMetaBoxes: isNotDesignPostType && !isZoomOut() || isDirectlyEditingPattern,
       isWelcomeGuideVisible: isFeatureActive('welcomeGuide'),
-      templateId: supportsTemplateMode && isViewable && canViewTemplate && !isEditingTemplate ? getTemplateId(currentPostType, currentPostId) : null,
+      templateId: supportsTemplateMode && isViewable && canViewTemplate && !isEditingTemplate ? _templateId : null,
       enablePaddingAppender: !isZoomOut() && isRenderingPostOnly && isNotDesignPostType
     };
   }, [currentPostType, currentPostId, isEditingTemplate, settings.supportsTemplateMode, onNavigateToPreviousEntityRecord]);
-  useMetaBoxInitialization(hasActiveMetaboxes);
+  useMetaBoxInitialization(hasActiveMetaboxes && hasResolvedMode);
   const [paddingAppenderRef, paddingStyle] = usePaddingAppender(enablePaddingAppender);
 
   // Set the right context for the command palette

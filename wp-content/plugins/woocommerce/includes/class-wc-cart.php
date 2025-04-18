@@ -1045,6 +1045,12 @@ class WC_Cart extends WC_Legacy_Cart {
 				return false;
 			}
 
+			// Variable product cannot be added to cart without a specified variation.
+			if ( ! $variation_id && $product_data->is_type( ProductType::VARIABLE ) ) {
+				/* translators: 1: product link, 2: product name */
+				throw new Exception( sprintf( __( 'Please choose product options by visiting <a href="%1$s" title="%2$s">%2$s</a>.', 'woocommerce' ), esc_url( $product_data->get_permalink() ), esc_html( $product_data->get_name() ) ) );
+			}
+
 			if ( $product_data->is_type( ProductType::VARIATION ) ) {
 				$missing_attributes = array();
 				$parent_data        = wc_get_product( $product_data->get_parent_id() );
@@ -1142,6 +1148,9 @@ class WC_Cart extends WC_Legacy_Cart {
 				)
 			) {
 				$product = wc_get_product( $product_id );
+				if ( ! ( $product instanceof WC_Product ) ) {
+					throw new Exception( __( 'The selected product is invalid.', 'woocommerce' ) );
+				}
 
 				/* translators: 1: product link, 2: product name */
 				throw new Exception( sprintf( __( 'The selected product isn\'t a variation of %2$s, please choose product options by visiting <a href="%1$s" title="%2$s">%2$s</a>.', 'woocommerce' ), esc_url( $product->get_permalink() ), esc_html( $product->get_name() ) ) );

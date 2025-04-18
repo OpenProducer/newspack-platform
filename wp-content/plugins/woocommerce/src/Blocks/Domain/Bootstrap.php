@@ -37,9 +37,6 @@ use Automattic\WooCommerce\StoreApi\RoutesController;
 use Automattic\WooCommerce\StoreApi\SchemaController;
 use Automattic\WooCommerce\StoreApi\StoreApi;
 use Automattic\WooCommerce\Blocks\Shipping\ShippingController;
-use Automattic\WooCommerce\Blocks\Templates\SingleProductTemplateCompatibility;
-use Automattic\WooCommerce\Blocks\Templates\ArchiveProductTemplatesCompatibility;
-use Automattic\WooCommerce\Blocks\Domain\Services\OnboardingTasks\TasksController;
 use Automattic\WooCommerce\Blocks\TemplateOptions;
 
 
@@ -141,13 +138,16 @@ class Bootstrap {
 		$is_rest              = wc()->is_rest_api_request();
 		$is_store_api_request = wc()->is_store_api_request();
 
+		// Initialize Store API in non-admin context.
+		if ( ! is_admin() ) {
+			$this->container->get( StoreApi::class )->init();
+		}
+
 		// Load and init assets.
-		$this->container->get( StoreApi::class )->init();
 		$this->container->get( PaymentsApi::class )->init();
 		$this->container->get( DraftOrders::class )->init();
 		$this->container->get( CreateAccount::class )->init();
 		$this->container->get( ShippingController::class )->init();
-		$this->container->get( TasksController::class )->init();
 		$this->container->get( CheckoutFields::class )->init();
 
 		// Load assets in admin and on the frontend.
@@ -401,12 +401,6 @@ class Bootstrap {
 				$asset_api           = $container->get( AssetApi::class );
 				$asset_data_registry = $container->get( AssetDataRegistry::class );
 				return new ShippingController( $asset_api, $asset_data_registry );
-			}
-		);
-		$this->container->register(
-			TasksController::class,
-			function () {
-				return new TasksController();
 			}
 		);
 		$this->container->register(

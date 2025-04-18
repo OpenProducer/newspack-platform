@@ -9,11 +9,23 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface;
  */
 class BadResponseException extends \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\RequestException
 {
-    public function __construct($message, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response = null, \Exception $previous = null, array $handlerContext = [])
+    public function __construct(string $message, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response, ?\Throwable $previous = null, array $handlerContext = [])
     {
-        if (null === $response) {
-            @\trigger_error('Instantiating the ' . __CLASS__ . ' class without a Response is deprecated since version 6.3 and will be removed in 7.0.', \E_USER_DEPRECATED);
-        }
         parent::__construct($message, $request, $response, $previous, $handlerContext);
+    }
+    /**
+     * Current exception and the ones that extend it will always have a response.
+     */
+    public function hasResponse() : bool
+    {
+        return \true;
+    }
+    /**
+     * This function narrows the return type from the parent class and does not allow it to be nullable.
+     */
+    public function getResponse() : \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface
+    {
+        /** @var ResponseInterface */
+        return parent::getResponse();
     }
 }

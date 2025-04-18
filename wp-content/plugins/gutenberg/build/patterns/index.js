@@ -1059,7 +1059,7 @@ function PatternsManageButton({
         kind: 'postType',
         name: 'wp_template'
       }) ? (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
-        path: '/patterns'
+        p: '/pattern'
       }) : (0,external_wp_url_namespaceObject.addQueryArgs)('edit.php', {
         post_type: 'wp_block'
       })

@@ -1,6 +1,5 @@
 <?php
 
-declare (strict_types=1);
 namespace Google\Site_Kit_Dependencies\Psr\Http\Message;
 
 /**
@@ -28,7 +27,7 @@ interface ResponseInterface extends \Google\Site_Kit_Dependencies\Psr\Http\Messa
      *
      * @return int Status code.
      */
-    public function getStatusCode();
+    public function getStatusCode() : int;
     /**
      * Return an instance with the specified status code and, optionally, reason phrase.
      *
@@ -49,7 +48,7 @@ interface ResponseInterface extends \Google\Site_Kit_Dependencies\Psr\Http\Messa
      * @return static
      * @throws \InvalidArgumentException For invalid status code arguments.
      */
-    public function withStatus(int $code, string $reasonPhrase = '');
+    public function withStatus(int $code, string $reasonPhrase = '') : \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface;
     /**
      * Gets the response reason phrase associated with the status code.
      *
@@ -63,5 +62,5 @@ interface ResponseInterface extends \Google\Site_Kit_Dependencies\Psr\Http\Messa
      * @link http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
      * @return string Reason phrase; must return an empty string if none present.
      */
-    public function getReasonPhrase();
+    public function getReasonPhrase() : string;
 }

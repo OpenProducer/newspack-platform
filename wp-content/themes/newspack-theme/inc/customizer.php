@@ -891,7 +891,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'post_time_ago_cut_off',
 		array(
-			'default'           => '14', // Two weeks.
+			'default'           => NP_DEFAULT_POST_TIME_AGO_CUT_OFF_DAYS,
 			'sanitize_callback' => 'absint',
 		)
 	);

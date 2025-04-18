@@ -42,8 +42,10 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 	require __DIR__ . '/compat/wordpress-6.7/rest-api.php';
 
 	// WordPress 6.8 compat.
-	require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-hierarchical-sort.php';
 	require __DIR__ . '/compat/wordpress-6.8/rest-api.php';
+
+	// WordPress 6.9 compat.
+	require __DIR__ . '/compat/wordpress-6.9/class-gutenberg-hierarchical-sort.php';
 
 	// Plugin specific code.
 	require_once __DIR__ . '/class-wp-rest-global-styles-controller-gutenberg.php';
@@ -98,12 +100,14 @@ require __DIR__ . '/compat/wordpress-6.7/compat.php';
 require __DIR__ . '/compat/wordpress-6.7/post-formats.php';
 
 // WordPress 6.8 compat.
+require __DIR__ . '/compat/wordpress-6.8/admin-bar.php';
 require __DIR__ . '/compat/wordpress-6.8/preload.php';
 require __DIR__ . '/compat/wordpress-6.8/blocks.php';
 require __DIR__ . '/compat/wordpress-6.8/functions.php';
-require __DIR__ . '/compat/wordpress-6.8/post.php';
 require __DIR__ . '/compat/wordpress-6.8/site-editor.php';
 require __DIR__ . '/compat/wordpress-6.8/class-gutenberg-rest-user-controller.php';
+require __DIR__ . '/compat/wordpress-6.8/block-template-utils.php';
+require __DIR__ . '/compat/wordpress-6.8/site-preview.php';
 
 // Experimental features.
 require __DIR__ . '/experimental/block-editor-settings-mobile.php';
@@ -177,6 +181,7 @@ require __DIR__ . '/block-supports/duotone.php';
 require __DIR__ . '/block-supports/shadow.php';
 require __DIR__ . '/block-supports/background.php';
 require __DIR__ . '/block-supports/block-style-variations.php';
+require __DIR__ . '/block-supports/aria-label.php';
 
 // Data views.
 require_once __DIR__ . '/experimental/data-views.php';

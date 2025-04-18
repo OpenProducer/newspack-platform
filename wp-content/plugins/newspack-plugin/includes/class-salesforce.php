@@ -708,7 +708,7 @@ class Salesforce {
 	 * @return string Redirect URL.
 	 */
 	public static function get_redirect_url() {
-		return get_admin_url( null, 'admin.php?page=newspack-reader-revenue-wizard#/salesforce' );
+		return get_admin_url( null, 'admin.php?page=newspack-audience' );
 	}
 
 	/**

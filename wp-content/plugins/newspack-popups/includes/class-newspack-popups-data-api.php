@@ -63,6 +63,27 @@ final class Newspack_Popups_Data_Api {
 	}
 
 	/**
+	 * Return block data matching the given block name in the array of blocks, looking recursively in innerBlocks if necessary.
+	 *
+	 * @param string $block_name The block name to search for.
+	 * @param array  $blocks The array of blocks to search in.
+	 *
+	 * @return array|false Array of block data if found, false otherwise.
+	 */
+	public static function get_block_data( $block_name, $blocks ) {
+		$found_blocks = [];
+		foreach ( $blocks as $block ) {
+			if ( $block_name === $block['blockName'] ) {
+				$found_blocks[] = $block;
+			}
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$found_blocks = array_merge( $found_blocks, self::get_block_data( $block_name, $block['innerBlocks'] ) );
+			}
+		}
+		return $found_blocks;
+	}
+
+	/**
 	 * Extract the relevant data from a popup.
 	 *
 	 * This method is used by the Newspack Data Events API.
@@ -103,16 +124,10 @@ final class Newspack_Popups_Data_Api {
 				// Get the suggested donation values for the donation block.
 				if ( 'donation' === $key ) {
 					$prompt_blocks = \parse_blocks( $popup['content'] );
-					$donate_block  = array_values(
-						array_filter(
-							$prompt_blocks,
-							function( $block ) use ( $block_name ) {
-								return $block_name === $block['blockName'];
-							}
-						)
-					)[0];
+					$donate_blocks = self::get_block_data( $block_name, $prompt_blocks );
 
-					if ( $donate_block && method_exists( '\Newspack\Donations', 'get_donation_settings' ) ) {
+					if ( ! empty( $donate_blocks ) && method_exists( '\Newspack\Donations', 'get_donation_settings' ) ) {
+						$donate_block     = reset( $donate_blocks );
 						$is_manual        = $donate_block['attrs']['manual'] ?? false;
 						$is_layout_tiers  = isset( $donate_block['attrs']['layoutOption'] ) && 'tiers' === $donate_block['attrs']['layoutOption'];
 						$default_settings = \Newspack\Donations::get_donation_settings();

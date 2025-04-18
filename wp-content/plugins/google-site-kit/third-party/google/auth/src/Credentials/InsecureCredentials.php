@@ -35,7 +35,7 @@ class InsecureCredentials implements \Google\Site_Kit_Dependencies\Google\Auth\F
      * @param callable $httpHandler
      * @return array{access_token:string} A set of auth related metadata
      */
-    public function fetchAuthToken(callable $httpHandler = null)
+    public function fetchAuthToken(?callable $httpHandler = null)
     {
         return $this->token;
     }

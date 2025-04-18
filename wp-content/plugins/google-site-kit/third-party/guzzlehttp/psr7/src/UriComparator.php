@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
 
 use Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface;
@@ -13,10 +14,8 @@ final class UriComparator
     /**
      * Determines if a modified URL should be considered cross-origin with
      * respect to an original URL.
-     *
-     * @return bool
      */
-    public static function isCrossOrigin(\Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $original, \Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $modified)
+    public static function isCrossOrigin(\Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $original, \Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $modified) : bool
     {
         if (\strcasecmp($original->getHost(), $modified->getHost()) !== 0) {
             return \true;
@@ -29,10 +28,7 @@ final class UriComparator
         }
         return \false;
     }
-    /**
-     * @return int
-     */
-    private static function computePort(\Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $uri)
+    private static function computePort(\Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $uri) : int
     {
         $port = $uri->getPort();
         if (null !== $port) {

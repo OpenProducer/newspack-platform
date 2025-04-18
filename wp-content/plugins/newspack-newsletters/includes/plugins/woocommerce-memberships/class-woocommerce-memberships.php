@@ -62,6 +62,7 @@ class Woocommerce_Memberships {
 		add_filter( 'newspack_newsletters_contact_lists', [ __CLASS__, 'filter_lists' ] );
 		add_filter( 'newspack_newsletters_subscription_block_available_lists', [ __CLASS__, 'filter_lists' ] );
 		add_filter( 'newspack_newsletters_manage_newsletters_available_lists', [ __CLASS__, 'filter_lists_objects' ] );
+		add_filter( 'newspack_post_registration_newsletters_lists', [ __CLASS__, 'filter_lists_objects' ], 10, 2 );
 		add_filter( 'newspack_auth_form_newsletters_lists', [ __CLASS__, 'filter_lists_objects' ] );
 		add_action( 'wc_memberships_user_membership_status_changed', [ __CLASS__, 'handle_membership_status_change' ], 10, 3 );
 		add_action( 'wc_memberships_user_membership_saved', [ __CLASS__, 'add_user_to_lists' ], 10, 2 );
@@ -85,16 +86,17 @@ class Woocommerce_Memberships {
 	 * Keep users from being added to lists that require a membership plan they dont have
 	 * Also filters lists that require a membership plan to be displayed in the subscription block and in the Manage Newsletters page in My Account
 	 *
-	 * @param array $lists The List IDs.
+	 * @param array  $lists         The List IDs.
+	 * @param string $email_address The email address of the user to check against. Optional.
 	 * @return array
 	 */
-	public static function filter_lists( $lists ) {
+	public static function filter_lists( $lists, $email_address = '' ) {
 		if ( ! self::is_enabled() || ! is_array( $lists ) || empty( $lists ) ) {
 			return $lists;
 		}
 		$lists = array_filter(
 			$lists,
-			function ( $list ) {
+			function ( $list ) use ( $email_address ) {
 				$list_object = Subscription_List::from_public_id( $list );
 				if ( ! $list_object ) {
 					return false;
@@ -106,7 +108,14 @@ class Woocommerce_Memberships {
 					return true;
 				}
 
-				$user_id = self::$user_id_in_scope ?? get_current_user_id();
+				$user_id = self::$user_id_in_scope;
+				if ( ! $user_id ) {
+					if ( is_email( $email_address ) ) {
+						$user_id = get_user_by( 'email', $email_address )->ID;
+					} else {
+						$user_id = get_current_user_id();
+					}
+				}
 
 				return \wc_memberships_user_can( $user_id, 'view', [ 'post' => $list_object->get_id() ] );
 			}
@@ -117,15 +126,16 @@ class Woocommerce_Memberships {
 	/**
 	 * Receives an array of Lists and returns only the ones that the user has access to
 	 *
-	 * @param array $lists An array of lists in which the key are the list IDs.
+	 * @param array  $lists         An array of lists in which the key are the list IDs.
+	 * @param string $email_address The email address of the user to check against. Optional.
 	 * @return array
 	 */
-	public static function filter_lists_objects( $lists ) {
+	public static function filter_lists_objects( $lists, $email_address = '' ) {
 		if ( ! self::is_enabled() || ! is_array( $lists ) || empty( $lists ) ) {
 			return $lists;
 		}
 
-		$list_ids = self::filter_lists( array_keys( $lists ) );
+		$list_ids = self::filter_lists( array_keys( $lists ), $email_address );
 
 		return array_filter(
 			$lists,
@@ -231,6 +241,26 @@ class Woocommerce_Memberships {
 	}
 
 	/**
+	 * Get list IDs for any lists shown in the post-checkout signup modal.
+	 *
+	 * @return array Array of list IDs enabled for the post-checkout signup-modal.
+	 */
+	private static function get_post_checkout_newsletter_signup_lists() {
+		$list_ids = [];
+		if ( ! method_exists( 'Newspack\Reader_Activation', 'get_settings' ) ) {
+			return $list_ids;
+		}
+		$settings = \Newspack\Reader_Activation::get_settings();
+		if ( ! empty( $settings['use_custom_lists'] ) && ! empty( $settings['newsletter_lists'] ) ) {
+			foreach ( $settings['newsletter_lists'] as $list ) {
+				$list_ids[] = $list['id'];
+			}
+		}
+
+		return $list_ids;
+	}
+
+	/**
 	 * Adds user to membership-tied lists when a membership is granted
 	 *
 	 * @param \WC_Memberships_Membership_Plan $plan the plan that user was granted access to.
@@ -265,17 +295,6 @@ class Woocommerce_Memberships {
 		// In this case, we don't want to add the user to the lists again.
 		if ( $previous_status && in_array( $previous_status, $active_statuses, true ) ) {
 			Newspack_Newsletters_Logger::log( 'Membership ' . $user_membership->get_id() . ' was already active. No need to subscribe user to lists' );
-			return;
-		}
-
-		// If post-checkout newsletter signup is enabled, we only want to add the reader to membership-tied lists if:
-		// - The membership is going from `paused` to `active` status (when a prior subscription is renewed).
-		// - The reader was already subscribed to the list(s).
-		$post_checkout_newsletter_signup_enabled = defined( 'NEWSPACK_ENABLE_POST_CHECKOUT_NEWSLETTER_SIGNUP' ) && NEWSPACK_ENABLE_POST_CHECKOUT_NEWSLETTER_SIGNUP;
-		if (
-			$post_checkout_newsletter_signup_enabled &&
-			( 'paused' !== $previous_status || ! $args['is_update'] || empty( $previous_lists[ $args['user_membership_id'] ] ) )
-		) {
 			return;
 		}
 
@@ -318,6 +337,26 @@ class Woocommerce_Memberships {
 
 		// No need to re-add the user to the lists they are already subscribed to.
 		$current_user_lists = \Newspack_Newsletters_Subscription::get_contact_lists( $user_email );
+
+		// If a list is shown in the post-checkout newsletter signup modal, we only want to add the reader to membership-tied lists if:
+		// - The membership is going from `paused` to `active` status (when a prior subscription is renewed).
+		// - The reader was already subscribed to the list(s).
+		// Otherwise, we want to let readers opt into the lists they want via the post-checkout signup modal.
+		$lists_in_post_checkout_signup_modal = self::get_post_checkout_newsletter_signup_lists();
+		foreach ( $lists_in_post_checkout_signup_modal as $list_id ) {
+			if (
+				'paused' !== $previous_status ||
+				! $args['is_update'] ||
+				empty( $previous_lists[ $args['user_membership_id'] ] ) ||
+				! is_array( $previous_lists[ $args['user_membership_id'] ] ) ||
+				! in_array( $list_id, $previous_lists[ $args['user_membership_id'] ], true )
+			) {
+				$lists_to_add = array_values(
+					array_diff( $lists_to_add, [ $list_id ] )
+				);
+			}
+		}
+
 		$lists_to_add = array_diff( $lists_to_add, $current_user_lists );
 		if ( empty( $lists_to_add ) ) {
 			return;

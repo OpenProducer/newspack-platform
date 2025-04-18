@@ -19,6 +19,9 @@
 		"onlyIncludeCurrentPage": {
 			"type": "boolean",
 			"default": false
+		},
+		"maxLevel": {
+			"type": "number"
 		}
 	},
 	"supports": {
