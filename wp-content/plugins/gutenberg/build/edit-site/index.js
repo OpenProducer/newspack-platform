@@ -26999,7 +26999,8 @@ function getOverviewBlockExamples(colors) {
   const typographyBlockExamples = [];
   if ((0,external_wp_blocks_namespaceObject.getBlockType)('core/heading')) {
     const headingBlock = (0,external_wp_blocks_namespaceObject.createBlock)('core/heading', {
-      content: (0,external_wp_i18n_namespaceObject.__)(`AaBbCcDdEeFfGgHhiiJjKkLIMmNnOoPpQakRrssTtUuVVWwXxxYyZzOl23356789X{(…)},2!*&:/A@HELFO™`),
+      // translators: Typography example. Your local alphabet, numbers and some common special characters.
+      content: (0,external_wp_i18n_namespaceObject.__)(`AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789X{(…)},.-<>?!*&:/A@HELFO™©`),
       level: 1
     });
     typographyBlockExamples.push(headingBlock);
@@ -30331,7 +30332,8 @@ function NavigationMenuContent({
       rootClientId: listViewRootClientId,
       onSelect: offCanvasOnselect,
       blockSettingsMenu: LeafMoreMenu,
-      showAppender: false
+      showAppender: false,
+      isExpanded: true
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "edit-site-sidebar-navigation-screen-navigation-menus__helper-block-editor",
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockList, {})
@@ -38181,12 +38183,13 @@ function ActionModal({
   items,
   closeModal
 }) {
+  var _action$modalFocusOnM;
   const label = typeof action.label === 'string' ? action.label : action.label(items);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Modal, {
     title: action.modalHeader || label,
     __experimentalHideHeader: !!action.hideModalHeader,
     onRequestClose: closeModal,
-    focusOnMount: "firstContentElement",
+    focusOnMount: (_action$modalFocusOnM = action.modalFocusOnMount) !== null && _action$modalFocusOnM !== void 0 ? _action$modalFocusOnM : true,
     size: action.modalSize || 'medium',
     overlayClassName: `dataviews-action-modal dataviews-action-modal__${dataviews_item_actions_kebabCase(action.id)}`,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(action.RenderModal, {
@@ -43726,7 +43729,7 @@ function AddCustomGenericTemplateModalContent({
     setIsBusy(true);
     try {
       await createTemplate({
-        slug: 'wp-custom-template-' + paramCase(title || defaultTitle),
+        slug: paramCase(title || defaultTitle) || 'wp-custom-template',
         title: title || defaultTitle
       }, false);
     } finally {

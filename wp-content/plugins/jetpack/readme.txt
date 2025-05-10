@@ -1,8 +1,8 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, arsihasi, azaozz, barry, batmoo, beaulebens, bindlegirl, biskobe, bjorsch, blobaugh, brbrr, brileyhooper, cainm, cena, cfinke, cgastrell, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, daniloercoli, davoraltman, delawski, designsimply, dkmyta, dllh, drawmyface, dsmart, dun2mis, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, joen, jblz, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lhkowalski, lschuyler, macmanx, martinremy, matt, mattwiebe, matveb, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, miguelxavierpenha, mikeyarce, mkaz, nancythanki, nickmomrik, njweller, nunyvega, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, renatoagds, retrofox, richardmtl, richardmuscat, robertbpugh, roccotripaldi, ryancowles, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, thehenridev, tmoorewp, tyxla, Viper007Bond, westi, williamvianas, wpkaren, yoavf, zinigor
 Tags: Security, backup, malware, scan, performance
-Stable tag: 14.5
-Requires at least: 6.6
+Stable tag: 14.6
+Requires at least: 6.7
 Requires PHP: 7.2
 Tested up to: 6.8
 License: GPLv2 or later
@@ -326,62 +326,60 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 
 
 == Changelog ==
-### 14.5 - 2025-04-02
+### 14.6 - 2025-05-06
+#### Major Enhancements
+- General: Update minimum WordPress version to 6.7.
+
 #### Enhancements
-- Add page view count in the post and page list.
-- Add the Account Protection module toggle.
-- AI Assistant: Add image block extension with alt text and caption generation.
-- AI Assistant: Use base64 on image extension requests.
-- Connection: Add modal for disconnecting owner account in Dashboard.
-- Connection: Allow pre-selected login providers.
-- Feature suggestions: Improve the design of cards to better match WordPress Core's design.
-- Forms: Add Akismet panel to Form Block.
-- Forms: Add block integrations modal with feature flag.
-- Forms: Add quick link in the admin bar for form entries.
-- Forms: Add third-party integration endpoint.
-- Improve the onboarding experience of Jetpack.
-- My Jetpack: Introduce a new onboarding screen to provide clear, step-by-step instructions for new users connecting to Jetpack.
-- Newsletter Dashboard Widget: Remove feature flag and enable widget.
-- Publicize Components: Add a schedule button.
-- Sharing block: Improve the description of the "Native Share" feature.
-- Social: Add "Schedule" functionality to the Share Post modal.
-- Social: Move resharing into the Share Post modal.
+- Add My Jetpack tour.
+- Admin Menu: Update the icon of WooCommerce for the Woo installation.
+- Button block: Add support for border width, style, and color.
+- Featured Content: Add messaging to clarify that the tag name is case sensitive.
+- Forms: Add custom hooks for integrations.
+- Forms: Add endpoint for all integrations.
+- Forms: Add new integrations setup modal.
+- Forms: Add tabs to forms dashboard.
+- Forms: Close block panels by default.
+- Forms: Reduce default padding in form patterns.
+- Forms: Update default forms view to dataviews.
+- Forms: Update the email notification template.
+- My Jetpack: Update the onboarding UI to show a single button on initial page.
+- Newsletter Widget: Improve the display of links in the Newsletter widget.
+- Replace video embed with VideoPress block in Media & Text block.
+- Sharing buttons: Update legacy Twitter logos to use the X logo.
+- Shortcode: Convert an embed code from Facebook.com to an oEmbeddable URL.
+- Sitemaps: Use XMLWriter for a more performant sitemap generation when available.
+- User: Allow user to delete themselves through the endpoint.
 
 #### Improved compatibility
-- AI Assistant: Improve performance by optimizing state management in the AI feature hook.
-- Carousel: Enable core lightbox on single image blocks.
-- Components: Prevent deprecation notices by adding `__next40pxDefaultSize` to controls.
-- Components: Update controls to prevent more deprecation notices.
-- VideoPress: Add block sidebar notice to transform embed into a block.
+- Add Share status support for WordPress.com sites.
+- Blocks: Ensure all child blocks use the latest version of the Blocks API.
+- Enable the Top Posts block in WP Admin for Simple Sites.
+- Forms: Ensure styles are loaded when expected, preventing console warnings.
+- Sharing: Remove deprecated Skype sharing button.
 
 #### Bug fixes
-- Add a default value for the error param in the `wp_login_failed` action callback.
-- Admin Color Scheme: Fix colors in the Aquatic color scheme.
-- Button: Fix contrast checker for user-specified colors.
-- Fix display name when listing gravatar accounts.
-- Fix error with videos uploaded through the Video block.
-- Fix potential `wp_login_failed` action conflicts.
-- Forms: Add a default label for textarea fields.
-- Forms: Fix core list bullets not showing.
-- Forms: Remove default padding around form block.
-- Forms: Remove Google Drive beta badge.
-- Forms: Remove Salesforce beta badge.
-- Forms: Update the variation previews to match the current structures.
-- Map block: Increase compatibility of components, preventing console warnings.
-- Newsletter: Ensure aria-label attribute on dashboard welcome message section is correctly spelled.
-- Newsletter: Ensure external links are marked as such in the Newsletter widget.
-- Search: Ensure the count of returned results is shown after searching.
-- Site Badge: Update styles of the Coming Soon badge.
-- Site Verification: Fix auto-verification via Google when Social is disabled.
-- Slideshow: Fix misaligned controls in site editor.
-- Social: Resolve connection issues with LinkedIn company pages and Tumblr additional blogs.
-- Stats: Ensure the Stats widget is automatically disabled when the Stats module is disabled.
-- Stats: Fix date processing for "At a Glance" chart.
-- Story block: Avoid PHP warnings when using video files.
-- Twitter Timeline Widget: Prevent broken links when using Twitter's deprecated data-widget-id approach.
-- Video: Fix auto-reload after upload completes.
-- VideoPress Block: Fix broken undo functionality.
-- VideoPress Block: Fix error in the core Video block.
+- Add translation context to Search menu item.
+- Block editor: Hide blocks from non-admins when feature is not active.
+- Blogroll block: Prevent console warnings and block validation issues when adding new items to the blogroll.
+- Dashboard: Avoid layout issues with "Apply" button on sites using a localized version of WordPress.
+- Forms: Ensure `render_field` returns string.
+- Forms: Update form responses link on editor sidebar.
+- Image Compare block: Ensure block does not overlap navigation submenu items.
+- Image Compare block: Ensure sticky menus hide the compare line.
+- JS Packages: Decrease CSS priority of global styles to prevent them from applying within the editor.
+- My Jetpack: Prevent social login from getting stuck when email input is not empty.
+- Open Graph: Ensure scaled images are used when specific registered image files exist on a site.
+- Related Posts: Ensure the block is properly displayed in the editor regardless of user role.
+- Reset access level of the post to everyone when a paywall is removed.
+- Slideshow: Prevent images from appearing stuck to the mouse in block-based themes.
+- Slideshow block: Ensure block preview doesn't generate an invalid API request.
+- Social: Do not load in the Classic editor if module is off.
+- Social: Fix "Start for free" not working when module is OFF.
+- Star Rating: Fix padding and improve panel copy.
+- Stats: Fix PHP TypeError.
+- Subscriptions: Only display the dashboard widget to site admins when the Subscriptions feature is active.
+- VideoPress: Avoid suggesting transforming unsupported Video blocks into VideoPress blocks.
 
 --------
 

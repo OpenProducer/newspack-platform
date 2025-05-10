@@ -6641,6 +6641,7 @@ const duplicatePost = {
   }) {
     return status !== 'trash';
   },
+  modalFocusOnMount: 'firstContentElement',
   RenderModal: ({
     items,
     closeModal,
@@ -7539,6 +7540,7 @@ const duplicateTemplatePart = {
   label: (0,external_wp_i18n_namespaceObject._x)('Duplicate', 'action label'),
   isEligible: item => item.type === 'wp_template_part',
   modalHeader: (0,external_wp_i18n_namespaceObject._x)('Duplicate template part', 'action label'),
+  modalFocusOnMount: 'firstContentElement',
   RenderModal: ({
     items,
     closeModal
@@ -7613,6 +7615,7 @@ const duplicatePattern = {
   label: (0,external_wp_i18n_namespaceObject._x)('Duplicate', 'action label'),
   isEligible: item => item.type !== 'wp_template_part',
   modalHeader: (0,external_wp_i18n_namespaceObject._x)('Duplicate pattern', 'action label'),
+  modalFocusOnMount: 'firstContentElement',
   RenderModal: ({
     items,
     closeModal
@@ -7662,6 +7665,7 @@ const {
 const renamePost = {
   id: 'rename-post',
   label: (0,external_wp_i18n_namespaceObject.__)('Rename'),
+  modalFocusOnMount: 'firstContentElement',
   isEligible(post) {
     if (post.status === 'trash') {
       return false;
@@ -7912,6 +7916,7 @@ const reorderPage = {
   }) {
     return status !== 'trash';
   },
+  modalFocusOnMount: 'firstContentElement',
   RenderModal: ReorderModal
 };
 
@@ -8242,6 +8247,7 @@ const resetPostAction = {
   icon: library_backup,
   supportsBulk: true,
   hideModalHeader: true,
+  modalFocusOnMount: 'firstContentElement',
   RenderModal: ({
     items,
     closeModal,
@@ -8510,6 +8516,7 @@ const deletePostAction = {
   },
   supportsBulk: true,
   hideModalHeader: true,
+  modalFocusOnMount: 'firstContentElement',
   RenderModal: ({
     items,
     closeModal,
@@ -8626,6 +8633,7 @@ const trash_post_trashPost = {
   },
   supportsBulk: true,
   hideModalHeader: true,
+  modalFocusOnMount: 'firstContentElement',
   RenderModal: ({
     items,
     closeModal,
@@ -8772,6 +8780,7 @@ const permanentlyDeletePost = {
     return status === 'trash' && permissions?.delete;
   },
   hideModalHeader: true,
+  modalFocusOnMount: 'firstContentElement',
   RenderModal: ({
     items,
     closeModal,
@@ -13752,6 +13761,7 @@ function BlockRemovalWarnings() {
  */
 
 
+
 function useStartPatterns() {
   // A pattern is a start pattern if it includes 'core/post-content' in its blockTypes,
   // and it has no postTypes declared and the current post type is page or if
@@ -13886,7 +13896,7 @@ function StartPageOptions() {
     const choosePatternModalEnabled = select(external_wp_preferences_namespaceObject.store).get('core', 'enableChoosePatternModal');
     return {
       postId: getCurrentPostId(),
-      enabled: choosePatternModalEnabled && 'page' === getCurrentPostType()
+      enabled: choosePatternModalEnabled && TEMPLATE_POST_TYPE !== getCurrentPostType()
     };
   }, []);
 
@@ -18707,9 +18717,13 @@ const addTemplate = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx
 
 ;// ./packages/editor/build-module/components/post-template/create-new-template-modal.js
 /**
- * WordPress dependencies
+ * External dependencies
  */
 
+
+/**
+ * WordPress dependencies
+ */
 
 
 
@@ -18772,7 +18786,7 @@ function CreateNewTemplateModal({
       }
     })])]);
     const newTemplate = await createTemplate({
-      slug: (0,external_wp_url_namespaceObject.cleanForSlug)(title || DEFAULT_TITLE),
+      slug: paramCase(title || DEFAULT_TITLE) || 'wp-custom-template',
       content: newTemplateContent,
       title: title || DEFAULT_TITLE
     });
@@ -31988,6 +32002,7 @@ const useSetAsHomepageAction = () => {
       }
       return true;
     },
+    modalFocusOnMount: 'firstContentElement',
     RenderModal: SetAsHomepageModal
   }), [pageForPosts, pageOnFront]);
 };
@@ -32135,6 +32150,7 @@ const useSetAsPostsPageAction = () => {
       }
       return true;
     },
+    modalFocusOnMount: 'firstContentElement',
     RenderModal: SetAsPostsPageModal
   }), [pageForPosts, pageOnFront]);
 };

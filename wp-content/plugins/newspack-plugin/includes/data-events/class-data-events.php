@@ -24,6 +24,36 @@ final class Data_Events {
 	const LOGGER_HEADER = 'NEWSPACK-DATA-EVENTS';
 
 	/**
+	 * Option name for storing the nonce.
+	 */
+	const NONCE_OPTION = 'newspack_data_events_nonce';
+
+	/**
+	 * Option name for storing the nonce expiration.
+	 */
+	const NONCE_EXPIRATION_OPTION = 'newspack_data_events_nonce_expiration';
+
+	/**
+	 * Nonce lifetime in seconds (1 hour).
+	 */
+	const NONCE_LIFETIME = 3600; // 1 hour in seconds
+
+	/**
+	 * Grace period in seconds for accepting old nonces.
+	 */
+	const NONCE_GRACE_PERIOD = 10; // 10 seconds
+
+	/**
+	 * Option name for storing the previous nonce.
+	 */
+	const PREVIOUS_NONCE_OPTION = 'newspack_data_events_previous_nonce';
+
+	/**
+	 * Option name for storing the previous nonce expiration.
+	 */
+	const PREVIOUS_NONCE_EXPIRATION_OPTION = 'newspack_data_events_previous_nonce_expiration';
+
+	/**
 	 * Registered callable handlers, keyed by their action name.
 	 *
 	 * @var callable[]
@@ -61,17 +91,83 @@ final class Data_Events {
 	}
 
 	/**
+	 * Get the current nonce for data events.
+	 *
+	 * We use a custom nonce implementation to avoid issues with user authentication.
+	 * In some cases, and in some sites, the nonce is created for a user ID but the dispatched request does not have a user ID.
+	 * This implementation generates a nonce that is not tied to a user ID, making it more reliable.
+	 *
+	 * @return string The nonce.
+	 */
+	public static function get_nonce() {
+		$nonce = \get_option( self::NONCE_OPTION, '' );
+		$expiration = \get_option( self::NONCE_EXPIRATION_OPTION, 0 );
+		$current_time = time();
+
+		// If nonce is empty or expired, generate a new one.
+		if ( empty( $nonce ) || $current_time > $expiration ) {
+			// Store the current nonce as previous before generating a new one.
+			if ( ! empty( $nonce ) ) {
+				\update_option( self::PREVIOUS_NONCE_OPTION, $nonce );
+				\update_option( self::PREVIOUS_NONCE_EXPIRATION_OPTION, $current_time + self::NONCE_GRACE_PERIOD );
+			}
+
+			$nonce = self::generate_nonce();
+			$expiration = $current_time + self::NONCE_LIFETIME;
+
+			\update_option( self::NONCE_OPTION, $nonce );
+			\update_option( self::NONCE_EXPIRATION_OPTION, $expiration );
+		}
+
+		return $nonce;
+	}
+
+	/**
+	 * Generate a random nonce that's safe for use in URLs.
+	 *
+	 * @return string URL-safe random nonce.
+	 */
+	private static function generate_nonce() {
+		// Generate password with only alphanumeric characters.
+		return \wp_generate_password( 32, false, false );
+	}
+
+	/**
+	 * Verify the provided nonce.
+	 *
+	 * @param string $nonce The nonce to verify.
+	 * @return bool Whether the nonce is valid.
+	 */
+	public static function verify_nonce( $nonce ) {
+		// Check against current nonce.
+		$current_nonce = \get_option( self::NONCE_OPTION, '' );
+		if ( $current_nonce === $nonce ) {
+			return true;
+		}
+
+		// If current nonce doesn't match, check against previous nonce if within grace period.
+		$previous_nonce = \get_option( self::PREVIOUS_NONCE_OPTION, '' );
+		$previous_expiration = \get_option( self::PREVIOUS_NONCE_EXPIRATION_OPTION, 0 );
+
+		if ( $previous_nonce === $nonce && time() <= $previous_expiration ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Maybe handle an event.
 	 */
 	public static function maybe_handle() {
 		// Don't lock up other requests while processing.
 		session_write_close(); // phpcs:ignore
 
-		if ( ! isset( $_REQUEST['nonce'] ) || ! \wp_verify_nonce( \sanitize_text_field( $_REQUEST['nonce'] ), self::ACTION ) ) {
+		if ( ! isset( $_REQUEST['nonce'] ) || ! self::verify_nonce( \sanitize_text_field( $_REQUEST['nonce'] ) ) ) { // phpcs:ignore
 			\wp_die();
 		}
 
-		$dispatches = isset( $_POST['dispatches'] ) ? $_POST['dispatches'] : null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$dispatches = isset( $_POST['dispatches'] ) ? $_POST['dispatches'] : null; // phpcs:ignore
 
 		if ( empty( $dispatches ) || ! is_array( $dispatches ) ) {
 			\wp_die();
@@ -206,15 +302,34 @@ final class Data_Events {
 			self::$global_handlers[] = $handler;
 			return;
 		}
+
+		$error = false;
+
 		if ( ! isset( self::$actions[ $action_name ] ) ) {
-			return new WP_Error( 'action_not_registered', __( 'Action not registered.', 'newspack' ) );
+			$error = new WP_Error( 'action_not_registered', __( 'Action not registered.', 'newspack' ) );
 		}
 		if ( ! is_callable( $handler ) ) {
-			return new WP_Error( 'handler_not_callable', __( 'Handler is not callable.', 'newspack' ) );
+			$error = new WP_Error( 'handler_not_callable', __( 'Handler is not callable.', 'newspack' ) );
 		}
+
+		if ( $error ) {
+
+			Logger::log(
+				sprintf(
+					'ATTENTION: Data Event handler for action "%s" was not properly registered: %s',
+					$action_name,
+					$error->get_error_message()
+				),
+				'DATA EVENTS'
+			);
+
+			return $error;
+		}
+
 		if ( in_array( $handler, self::$actions[ $action_name ], true ) ) {
 			return new WP_Error( 'handler_already_registered', __( 'Handler already registered.', 'newspack' ) );
 		}
+
 		self::$actions[ $action_name ][] = $handler;
 	}
 
@@ -384,7 +499,7 @@ final class Data_Events {
 		$url = \add_query_arg(
 			[
 				'action' => self::ACTION,
-				'nonce'  => \wp_create_nonce( self::ACTION ),
+				'nonce'  => self::get_nonce(),
 			],
 			\admin_url( 'admin-ajax.php' )
 		);

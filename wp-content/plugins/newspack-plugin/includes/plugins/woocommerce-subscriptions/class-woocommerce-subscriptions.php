@@ -27,10 +27,12 @@ class WooCommerce_Subscriptions {
 		include_once __DIR__ . '/class-on-hold-duration.php';
 		include_once __DIR__ . '/class-renewal.php';
 		include_once __DIR__ . '/class-subscriptions-meta.php';
+		include_once __DIR__ . '/class-subscriptions-confirmation.php';
 
 		On_Hold_Duration::init();
 		Renewal::init();
 		Subscriptions_Meta::init();
+		Subscriptions_Confirmation::init();
 	}
 
 

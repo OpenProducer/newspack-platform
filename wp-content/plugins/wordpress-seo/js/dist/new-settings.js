@@ -263,7 +263,7 @@ fieldLabel:(0,Lt.sprintf)((0,Lt.__)("Other profile %1$s","wordpress-seo"),e+1)})
    * %2$s expands to a closing strong tag.
    * %3$s expands to the recommended image size.
    */
-(0,Lt.__)("Recommended size for this image is %1$s%3$s%2$s","wordpress-seo"),"<strong>","</strong>","1200x675px"),{strong:(0,e.createElement)("strong",{className:"yst-font-semibold"})})),[]),b=(0,i.useMemo)((()=>(0,i.createInterpolateElement)((0,Lt.sprintf)(
+(0,Lt.__)("Recommended size for this image is %1$s%3$s%2$s","wordpress-seo"),"<strong>","</strong>","1200x675px"),{strong:(0,e.createElement)("strong",{className:"yst-font-semibold"})})),[]),b=(0,i.useMemo)((()=>((e,t)=>{try{return(0,i.createInterpolateElement)(e,t)}catch(t){return console.error("Error in translation for:",e,t),e}})((0,Lt.sprintf)(
 /**
    * translators: %1$s expands to an opening anchor tag.
    * %2$s expands to a closing anchor tag.

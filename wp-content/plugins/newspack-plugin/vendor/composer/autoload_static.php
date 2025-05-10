@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit36fcc28857e9baca245d6188785f97dd
+class ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -207,6 +207,7 @@ class ComposerStaticInit36fcc28857e9baca245d6188785f97dd
         'Newspack\\Starter_Content_Provider' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-provider.php',
         'Newspack\\Starter_Content_WordPress' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-wordpress.php',
         'Newspack\\Stripe_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-connection.php',
+        'Newspack\\Subscriptions_Confirmation' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-confirmation.php',
         'Newspack\\Subscriptions_Meta' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-meta.php',
         'Newspack\\Sync_Reader_Data_CLI' => __DIR__ . '/../..' . '/includes/reader-activation/cli/class-sync-reader-data-cli.php',
         'Newspack\\Syndication' => __DIR__ . '/../..' . '/includes/class-syndication.php',
@@ -243,9 +244,9 @@ class ComposerStaticInit36fcc28857e9baca245d6188785f97dd
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit36fcc28857e9baca245d6188785f97dd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit36fcc28857e9baca245d6188785f97dd::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit36fcc28857e9baca245d6188785f97dd::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5::$classMap;
 
         }, null, ClassLoader::class);
     }

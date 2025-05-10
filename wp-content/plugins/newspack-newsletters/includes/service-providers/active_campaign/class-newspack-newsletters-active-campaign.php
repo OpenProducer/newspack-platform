@@ -416,7 +416,11 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			]
 		);
 
-		if ( is_array( $created ) && ! empty( $created['contacts'] ) ) {
+		if ( is_wp_error( $created ) ) {
+			$created = [ 'message' => $created->get_error_message() ];
+		}
+
+		if ( is_array( $created ) && ! empty( $created['contactTag'] ) ) {
 			return true;
 		}
 

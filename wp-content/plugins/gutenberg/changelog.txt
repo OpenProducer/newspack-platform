@@ -1,5 +1,140 @@
 == Changelog ==
 
+= 20.7.0 =
+
+## Changelog
+
+### Enhancements
+
+- Format Library: Add a feature to set the alpha value to Highlight. ([67525](https://github.com/WordPress/gutenberg/pull/67525))
+- Playwright end-to-end utils: Add new `emulateNetworkConditions` helper. ([69865](https://github.com/WordPress/gutenberg/pull/69865))
+
+#### Block Library
+- Details: Enable all non-interactive formats. ([68741](https://github.com/WordPress/gutenberg/pull/68741))
+- Heading: Add/correct typography examples. ([69812](https://github.com/WordPress/gutenberg/pull/69812))
+- Navigation in Site View: Automatically expand all options. ([69343](https://github.com/WordPress/gutenberg/pull/69343))
+- Remove experimental status from comments count and comment link blocks. ([69832](https://github.com/WordPress/gutenberg/pull/69832))
+- Table Block: Preserve Column Alignment when Pasting Markdown Tables. ([69322](https://github.com/WordPress/gutenberg/pull/69322))
+- Tag Cloud: Remove unnecessary full-width padding. ([69725](https://github.com/WordPress/gutenberg/pull/69725))
+
+#### Block Editor
+- Remove truncation from media tab preview tooltips. ([69741](https://github.com/WordPress/gutenberg/pull/69741))
+- Support passing updater function to 'setAttributes'. ([69709](https://github.com/WordPress/gutenberg/pull/69709))
+
+#### Media
+- Remove `@shopify/web-worker` Dependency from `packages/upload-media`. ([69816](https://github.com/WordPress/gutenberg/pull/69816))
+
+
+### Bug Fixes
+
+- DataViews: Ensure consistent display of primary ellipsis in list layout. ([69846](https://github.com/WordPress/gutenberg/pull/69846))
+- Scripts: Fix blocks manifest generation when directory name has space. ([69766](https://github.com/WordPress/gutenberg/pull/69766))
+
+#### Block Library
+- Enhance Featured Image Block: Don't include interactive elements within an element. ([69730](https://github.com/WordPress/gutenberg/pull/69730))
+- Featured Image: Don't render empty Resolution tools panel if media is not set. ([69805](https://github.com/WordPress/gutenberg/pull/69805))
+- Fix: Background wrapper for 'Button Inside' option. ([69624](https://github.com/WordPress/gutenberg/pull/69624))
+- Fix: Update the static text and make them translatable in the Blocks example. ([69859](https://github.com/WordPress/gutenberg/pull/69859))
+- Fixed Media & Text Block - Image not rendered properly on frontend when inside stack. ([68610](https://github.com/WordPress/gutenberg/pull/68610))
+- Query Loop: Don't overwrite the 'query.inherit' attribute value. ([69698](https://github.com/WordPress/gutenberg/pull/69698))
+- Query Loop: Fix 'undo trap' and improve debouncing for 'Keyword' control. ([69845](https://github.com/WordPress/gutenberg/pull/69845))
+- ToC: Fix condition for 'Limit heading levels'. ([69811](https://github.com/WordPress/gutenberg/pull/69811))
+- ToC: Fix related block attribute persistence. ([69734](https://github.com/WordPress/gutenberg/pull/69734))
+
+#### Block Editor
+- Block Tools: Prevent showing block toolbar when block interface is hidden. ([69795](https://github.com/WordPress/gutenberg/pull/69795))
+- Block drag & drop: Enable mouse click on input/textarea elements in Firefox. ([69781](https://github.com/WordPress/gutenberg/pull/69781))
+- Fix: Restore static properties on deprecated __experimentalLinkControl. ([69860](https://github.com/WordPress/gutenberg/pull/69860))
+- Fix: Space visualizer showing previous value. ([69747](https://github.com/WordPress/gutenberg/pull/69747))
+
+#### Post Editor
+- Fix: Save custom template with non-latin slug. ([69732](https://github.com/WordPress/gutenberg/pull/69732))
+- Iframe: Don't enable for block themes in core if v2 blocks exist. ([69778](https://github.com/WordPress/gutenberg/pull/69778))
+
+#### Document Settings
+- PostPublishPanel: Fix post title overflow. ([69804](https://github.com/WordPress/gutenberg/pull/69804))
+
+#### Patterns
+- Editor: Enable starter pattern modal for all post types. ([69753](https://github.com/WordPress/gutenberg/pull/69753))
+
+#### Components
+- UI Components: Add theme support for `FormTokenField` and `ComboboxControl`. ([69638](https://github.com/WordPress/gutenberg/pull/69638))
+
+
+### Accessibility
+
+- DataViews: Always show primary action for list layout if hover isn't supported. ([69876](https://github.com/WordPress/gutenberg/pull/69876))
+
+#### Block Library
+- Navigation Link, Navigation Submenu: Remove the title attribute controls. ([69689](https://github.com/WordPress/gutenberg/pull/69689))
+- Navigation block: Fix submenu Escape key behavior. ([69837](https://github.com/WordPress/gutenberg/pull/69837))
+- Social Icons: Remove custom placeholder state. ([69821](https://github.com/WordPress/gutenberg/pull/69821))
+
+#### Components
+- Button: Update hover styles to account for pressed state for `tertiary button`. ([68542](https://github.com/WordPress/gutenberg/pull/68542))
+- Global Styles: Fix incorrect usage of ItemGroup in the Background image panel. ([68631](https://github.com/WordPress/gutenberg/pull/68631))
+
+#### DataViews
+- ActionModal: Add support for customisable `focusOnMount`. ([69609](https://github.com/WordPress/gutenberg/pull/69609))
+
+
+### Documentation
+
+- Add WithCloseHandlers story. ([69688](https://github.com/WordPress/gutenberg/pull/69688))
+- Create Block: Improve support for blocks manifest and relevant Core APIs. ([69767](https://github.com/WordPress/gutenberg/pull/69767))
+- Docs: Improve document and parameters in render_block_core_* function. ([69856](https://github.com/WordPress/gutenberg/pull/69856))
+- Fix:  Incorrect Type of `wp_widget_factory` in `render_block_core_legacy_widget` Doc Block. ([69775](https://github.com/WordPress/gutenberg/pull/69775))
+- Fix: Expose TypeScript types for subcomponents. ([69619](https://github.com/WordPress/gutenberg/pull/69619))
+- Latest Posts block: Add missing @global PHP documentation. ([69763](https://github.com/WordPress/gutenberg/pull/69763))
+
+
+### Code Quality
+
+- Block Parser: Remove description for singular since tag. ([69799](https://github.com/WordPress/gutenberg/pull/69799))
+- Fix Documentation inconsistencies in `Block Parser` classes. ([69785](https://github.com/WordPress/gutenberg/pull/69785))
+- Stylelint-config: Add stylelint-scss as a peer dependency. ([69685](https://github.com/WordPress/gutenberg/pull/69685))
+
+#### Block Library
+- Query Loop: Remove unused 'Columns' control. ([69843](https://github.com/WordPress/gutenberg/pull/69843))
+- Search: `wp-block-search__inside-wrapper` classname trailing spaces. ([69405](https://github.com/WordPress/gutenberg/pull/69405))
+- Social Icons: Fix effect dependencies. ([69824](https://github.com/WordPress/gutenberg/pull/69824))
+- Social Icons: Remove unused editor style. ([69836](https://github.com/WordPress/gutenberg/pull/69836))
+
+#### Block Directory
+- Update metadata fields requested from server. ([69801](https://github.com/WordPress/gutenberg/pull/69801))
+
+#### Components
+- Update gradient-parser dependency from 0.1.5 to 1.0.2. ([69783](https://github.com/WordPress/gutenberg/pull/69783))
+
+
+### Tools
+
+#### Testing
+- Automated Testing: Add GitHub Actions workflow for Storybook smoke testing. ([69679](https://github.com/WordPress/gutenberg/pull/69679))
+- E2E: Split list view keyboard shortcuts into multiple tests. ([69231](https://github.com/WordPress/gutenberg/pull/69231))
+- Workflows: Ignore 'widgets' for manual backports. ([69792](https://github.com/WordPress/gutenberg/pull/69792))
+
+#### Build Tooling
+- Workflows: Ignore 'block-serialization-default-parser' for manual backports. ([69791](https://github.com/WordPress/gutenberg/pull/69791))
+
+
+## First-time contributors
+
+The following PRs were merged by first-time contributors:
+
+- @Debarghya-Banerjee: Fix:  Incorrect Type of `wp_widget_factory` in `render_block_core_legacy_widget` Doc Block. ([69775](https://github.com/WordPress/gutenberg/pull/69775))
+- @karthikeya-io: Fix: Space visualizer showing previous value. ([69747](https://github.com/WordPress/gutenberg/pull/69747))
+
+
+## Contributors
+
+The following contributors merged PRs in this release:
+
+@carolinan @Debarghya-Banerjee @dhruvikpatel18 @dilipbheda @himanshupathak95 @im3dabasia @Infinite-Null @jonathanbossenger @karthikeya-io @Mamaduka @Mayank-Tripathi32 @Rishit30G @SainathPoojary @shimotmk @snehapatil2001 @stokesman @Sukhendu2002 @swissspidy @t-hamano @timse201 @yogeshbhutkar
+
+
+
+
 = 20.6.0 =
 
 ## Changelog

@@ -501,6 +501,9 @@ import { domReady } from './utils';
 						originalFormHandlers.forEach( handler => {
 							$form.on( 'submit', handler.handler );
 						} );
+
+						// Disable 'Place Order' button if Subscription Confirmation is required.
+						handleSubscriptionConfirmation();
 					}
 					$form.triggerHandler( 'editing_details', [ isEditingDetails ] );
 					// Scroll to top.
@@ -762,6 +765,45 @@ import { domReady } from './utils';
 			}
 			init();
 		}
+
+		/**
+		 * Block form submission when Subscription Confirmation is required.
+		 * This is enabled under Newspack > Audience > Configuration > Checkout & Payment, and only appears when there's a subscription product in the cart.
+		 */
+		function handleSubscriptionConfirmation() {
+			const $subscription_confirmation = $( '#newspack_subscription_terms_confirmation, #newspack_subscription_confirmation' );
+			if ( $subscription_confirmation.length ) {
+				const $form = $( 'form.checkout' );
+				const $buttons = $form.find( 'button#place_order, button#place_order_clone' );
+
+				// Toggle button state based on checkbox.
+				function toggleButtonState() {
+					const isChecked = $subscription_confirmation.is( ':checked' );
+					$buttons.each( ( i, el ) => {
+						$( el ).attr( 'disabled', ! isChecked );
+					} );
+				}
+
+				// Initial state.
+				toggleButtonState();
+
+				// Watch for checkbox changes.
+				$subscription_confirmation.on( 'change', toggleButtonState );
+
+				// Prevent form submission if the Subscription Confirmation or Terms & Conditions checkbox is not checked.
+				$form.on( 'submit', function( e ) {
+					if ( ! $subscription_confirmation.is( ':checked' ) ) {
+						e.preventDefault();
+						e.stopPropagation();
+						return false;
+					}
+				} );
+			}
+		}
+		// Listen to various WooCommerce events.
+		$( document.body ).on( 'updated_checkout payment_method_selected checkout_error', handleSubscriptionConfirmation );
+		// Also handle initial load.
+		$( document ).ready( handleSubscriptionConfirmation );
 
 		/**
 		 * Handle modal checkout error events.
