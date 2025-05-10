@@ -1406,7 +1406,8 @@ function ColorPicker({
       onChange(setColors(value, name, colors, {
         [property]: color
       }));
-    }
+    },
+    enableAlpha: true
     // Prevent the text and color picker from overlapping.
     ,
     __experimentalIsRenderedInSidebar: true

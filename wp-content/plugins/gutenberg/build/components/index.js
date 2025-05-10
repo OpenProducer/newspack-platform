@@ -380,7 +380,174 @@ module.exports.strategies = {
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-var GradientParser = {};
+var GradientParser = (GradientParser || {});
+
+GradientParser.stringify = (function() {
+
+  var visitor = {
+
+    'visit_linear-gradient': function(node) {
+      return visitor.visit_gradient(node);
+    },
+
+    'visit_repeating-linear-gradient': function(node) {
+      return visitor.visit_gradient(node);
+    },
+
+    'visit_radial-gradient': function(node) {
+      return visitor.visit_gradient(node);
+    },
+
+    'visit_repeating-radial-gradient': function(node) {
+      return visitor.visit_gradient(node);
+    },
+
+    'visit_gradient': function(node) {
+      var orientation = visitor.visit(node.orientation);
+      if (orientation) {
+        orientation += ', ';
+      }
+
+      return node.type + '(' + orientation + visitor.visit(node.colorStops) + ')';
+    },
+
+    'visit_shape': function(node) {
+      var result = node.value,
+          at = visitor.visit(node.at),
+          style = visitor.visit(node.style);
+
+      if (style) {
+        result += ' ' + style;
+      }
+
+      if (at) {
+        result += ' at ' + at;
+      }
+
+      return result;
+    },
+
+    'visit_default-radial': function(node) {
+      var result = '',
+          at = visitor.visit(node.at);
+
+      if (at) {
+        result += at;
+      }
+      return result;
+    },
+
+    'visit_extent-keyword': function(node) {
+      var result = node.value,
+          at = visitor.visit(node.at);
+
+      if (at) {
+        result += ' at ' + at;
+      }
+
+      return result;
+    },
+
+    'visit_position-keyword': function(node) {
+      return node.value;
+    },
+
+    'visit_position': function(node) {
+      return visitor.visit(node.value.x) + ' ' + visitor.visit(node.value.y);
+    },
+
+    'visit_%': function(node) {
+      return node.value + '%';
+    },
+
+    'visit_em': function(node) {
+      return node.value + 'em';
+    },
+
+    'visit_px': function(node) {
+      return node.value + 'px';
+    },
+
+    'visit_literal': function(node) {
+      return visitor.visit_color(node.value, node);
+    },
+
+    'visit_hex': function(node) {
+      return visitor.visit_color('#' + node.value, node);
+    },
+
+    'visit_rgb': function(node) {
+      return visitor.visit_color('rgb(' + node.value.join(', ') + ')', node);
+    },
+
+    'visit_rgba': function(node) {
+      return visitor.visit_color('rgba(' + node.value.join(', ') + ')', node);
+    },
+
+    'visit_color': function(resultColor, node) {
+      var result = resultColor,
+          length = visitor.visit(node.length);
+
+      if (length) {
+        result += ' ' + length;
+      }
+      return result;
+    },
+
+    'visit_angular': function(node) {
+      return node.value + 'deg';
+    },
+
+    'visit_directional': function(node) {
+      return 'to ' + node.value;
+    },
+
+    'visit_array': function(elements) {
+      var result = '',
+          size = elements.length;
+
+      elements.forEach(function(element, i) {
+        result += visitor.visit(element);
+        if (i < size - 1) {
+          result += ', ';
+        }
+      });
+
+      return result;
+    },
+
+    'visit': function(element) {
+      if (!element) {
+        return '';
+      }
+      var result = '';
+
+      if (element instanceof Array) {
+        return visitor.visit_array(element, result);
+      } else if (element.type) {
+        var nodeVisitor = visitor['visit_' + element.type];
+        if (nodeVisitor) {
+          return nodeVisitor(element);
+        } else {
+          throw Error('Missing visitor visit_' + element.type);
+        }
+      } else {
+        throw Error('Invalid node.');
+      }
+    }
+
+  };
+
+  return function(root) {
+    return visitor.visit(root);
+  };
+})();
+
+// Copyright (c) 2014 Rafael Caricio. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+var GradientParser = (GradientParser || {});
 
 GradientParser.parse = (function() {
 
@@ -476,7 +643,7 @@ GradientParser.parse = (function() {
         error('Missing (');
       }
 
-      result = callback(captures);
+      var result = callback(captures);
 
       if (!scan(tokens.endCall)) {
         error('Missing )');
@@ -529,12 +696,21 @@ GradientParser.parse = (function() {
     if (radialType) {
       radialType.at = matchAtPosition();
     } else {
-      var defaultPosition = matchPositioning();
-      if (defaultPosition) {
-        radialType = {
-          type: 'default-radial',
-          at: defaultPosition
-        };
+      var extent = matchExtentKeyword();
+      if (extent) {
+        radialType = extent;
+        var positionAt = matchAtPosition();
+        if (positionAt) {
+          radialType.at = positionAt;
+        }
+      } else {
+        var defaultPosition = matchPositioning();
+        if (defaultPosition) {
+          radialType = {
+            type: 'default-radial',
+            at: defaultPosition
+          };
+        }
       }
     }
 
@@ -714,7 +890,8 @@ GradientParser.parse = (function() {
   };
 })();
 
-exports.parse = (GradientParser || {}).parse;
+exports.parse = GradientParser.parse;
+exports.stringify = GradientParser.stringify;
 
 
 /***/ }),
@@ -34522,6 +34699,18 @@ const UnforwardedPopover = (props, forwardedRef) => {
   });
 };
 
+// Export the PopoverSlot individually to allow typescript to pick the types up.
+const PopoverSlot = (0,external_wp_element_namespaceObject.forwardRef)(({
+  name = SLOT_NAME
+}, ref) => {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(slot_fill_Slot, {
+    bubblesVirtually: true,
+    name: name,
+    className: "popover-slot",
+    ref: ref
+  });
+});
+
 /**
  * `Popover` renders its content in a floating modal. If no explicit anchor is passed via props, it anchors to its parent element by default.
  *
@@ -34545,22 +34734,22 @@ const UnforwardedPopover = (props, forwardedRef) => {
  * ```
  *
  */
-const popover_Popover = contextConnect(UnforwardedPopover, 'Popover');
-function PopoverSlot({
-  name = SLOT_NAME
-}, ref) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(slot_fill_Slot, {
-    bubblesVirtually: true,
-    name: name,
-    className: "popover-slot",
-    ref: ref
-  });
-}
-
-// @ts-expect-error For Legacy Reasons
-popover_Popover.Slot = (0,external_wp_element_namespaceObject.forwardRef)(PopoverSlot);
-// @ts-expect-error For Legacy Reasons
-popover_Popover.__unstableSlotNameProvider = slotNameContext.Provider;
+const popover_Popover = Object.assign(contextConnect(UnforwardedPopover, 'Popover'), {
+  /**
+   * Renders a slot that is used internally by Popover for rendering content.
+   */
+  Slot: Object.assign(PopoverSlot, {
+    displayName: 'Popover.Slot'
+  }),
+  /**
+   * Provides a context to manage popover slot names.
+   *
+   * This is marked as unstable and should not be used directly.
+   */
+  __unstableSlotNameProvider: Object.assign(slotNameContext.Provider, {
+    displayName: 'Popover.__unstableSlotNameProvider'
+  })
+});
 /* harmony default export */ const popover = (popover_Popover);
 
 ;// ./packages/components/build-module/autocomplete/autocompleter-ui.js

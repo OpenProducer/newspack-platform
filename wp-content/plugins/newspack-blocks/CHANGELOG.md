@@ -1,3 +1,24 @@
+# [4.11.0](https://github.com/Automattic/newspack-blocks/compare/v4.10.2...v4.11.0) (2025-05-08)
+
+
+### Features
+
+* update styles for the Subscription Confirmation checkbox ([#2117](https://github.com/Automattic/newspack-blocks/issues/2117)) ([e61c430](https://github.com/Automattic/newspack-blocks/commit/e61c43045d4fcff282baac6c18b1c3d711c7cc46))
+
+## [4.10.2](https://github.com/Automattic/newspack-blocks/compare/v4.10.1...v4.10.2) (2025-04-24)
+
+
+### Bug Fixes
+
+* add the timezone to the Content Loop datetime attribute ([#2113](https://github.com/Automattic/newspack-blocks/issues/2113)) ([6fbd004](https://github.com/Automattic/newspack-blocks/commit/6fbd0044bd7b5822d464bd569cc4941df5d81e19))
+
+## [4.10.1](https://github.com/Automattic/newspack-blocks/compare/v4.10.0...v4.10.1) (2025-04-21)
+
+
+### Bug Fixes
+
+* **recaptcha:** move clone button code to Newspack\Recaptcha class ([#2111](https://github.com/Automattic/newspack-blocks/issues/2111)) ([a7bcdbd](https://github.com/Automattic/newspack-blocks/commit/a7bcdbd221b19fdbc4d565b0233d1b6de954c1b0))
+
 # [4.10.0](https://github.com/Automattic/newspack-blocks/compare/v4.9.2...v4.10.0) (2025-04-14)
 
 

@@ -35,7 +35,13 @@ final class Reader_Data {
 		add_action( 'rest_api_init', [ __CLASS__, 'register_routes' ] );
 		add_action( 'wp', [ __CLASS__, 'setup_reader_activity' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'config_script' ] );
+		add_action( 'init', [ __CLASS__, 'register_data_event_handlers' ] );
+	}
 
+	/**
+	 * Register all data event handlers.
+	 */
+	public static function register_data_event_handlers() {
 		/* Update reader data items on data event dispatches */
 		Data_Events::register_handler( [ __CLASS__, 'update_newsletter_subscribed_lists' ], 'newsletter_subscribed' );
 		Data_Events::register_handler( [ __CLASS__, 'update_newsletter_subscribed_lists' ], 'newsletter_updated' );

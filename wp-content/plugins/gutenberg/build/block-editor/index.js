@@ -24424,6 +24424,9 @@ const DeprecatedExperimentalLinkControl = props => {
     ...props
   });
 };
+DeprecatedExperimentalLinkControl.ViewerFill = LinkControl.ViewerFill;
+DeprecatedExperimentalLinkControl.DEFAULT_LINK_SETTINGS = LinkControl.DEFAULT_LINK_SETTINGS;
+
 /* harmony default export */ const link_control = (LinkControl);
 
 ;// ./packages/block-editor/build-module/components/media-replace-flow/index.js
@@ -24751,16 +24754,17 @@ function InspectorImagePreviewItem({
   className,
   onToggleCallback = background_image_control_noop
 }) {
+  const {
+    isOpen,
+    ...restToggleProps
+  } = toggleProps;
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (typeof toggleProps?.isOpen !== 'undefined') {
-      onToggleCallback(toggleProps?.isOpen);
+    if (typeof isOpen !== 'undefined') {
+      onToggleCallback(isOpen);
     }
-  }, [toggleProps?.isOpen, onToggleCallback]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalItemGroup, {
-    as: as,
-    className: className,
-    ...toggleProps,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+  }, [isOpen, onToggleCallback]);
+  const renderPreviewContent = () => {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
       justify: "flex-start",
       as: "span",
       className: "block-editor-global-styles-background-panel__inspector-preview-inner",
@@ -24788,8 +24792,15 @@ function InspectorImagePreviewItem({
           (0,external_wp_i18n_namespaceObject.__)('Background image: %s'), filename || label) : (0,external_wp_i18n_namespaceObject.__)('No background image selected')
         })]
       })]
-    })
-  });
+    });
+  };
+  return as === 'button' ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
+    className: className,
+    ...restToggleProps,
+    "aria-expanded": isOpen,
+    children: renderPreviewContent()
+  }) : renderPreviewContent();
 }
 function BackgroundControlsPanel({
   label,
@@ -33114,17 +33125,23 @@ function SpacingVisualizer({
 }) {
   const blockElement = useBlockElement(clientId);
   const [style, updateStyle] = (0,external_wp_element_namespaceObject.useReducer)(() => computeStyle(blockElement));
-  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+
+  // It's not sufficient to read the block’s computed style when `value` changes because
+  // the effect would run before the block’s style has updated. Thus observing mutations
+  // to the block’s attributes is used to trigger updates to the visualizer’s styles.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (!blockElement) {
       return;
     }
-    // It's not sufficient to read the computed spacing value when value.spacing changes as
-    // useEffect may run before the browser recomputes CSS. We therefore combine
-    // useLayoutEffect and two rAF calls to ensure that we read the spacing after the current
-    // paint but before the next paint.
-    // See https://github.com/WordPress/gutenberg/pull/59227.
-    window.requestAnimationFrame(() => window.requestAnimationFrame(updateStyle));
-  }, [blockElement, value]);
+    const observer = new window.MutationObserver(updateStyle);
+    observer.observe(blockElement, {
+      attributes: true,
+      attributeFilter: ['style', 'class']
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, [blockElement]);
   const previousValueRef = (0,external_wp_element_namespaceObject.useRef)(value);
   const [isActive, setIsActive] = (0,external_wp_element_namespaceObject.useState)(false);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
@@ -45135,12 +45152,15 @@ function down(event) {
   } = event;
   const {
     ownerDocument,
-    isContentEditable
+    isContentEditable,
+    tagName
   } = target;
+  const isInputOrTextArea = ['INPUT', 'TEXTAREA'].includes(tagName);
   const nodes = nodesByDocument.get(ownerDocument);
-  if (isContentEditable) {
-    // Whenever an editable element is clicked, check which draggable
-    // blocks contain this element, and temporarily disable draggability.
+  if (isContentEditable || isInputOrTextArea) {
+    // Whenever an editable element or an input or textarea is clicked,
+    // check which draggable blocks contain this element, and temporarily
+    // disable draggability.
     for (const node of nodes) {
       if (node.getAttribute('draggable') === 'true' && node.contains(target)) {
         node.removeAttribute('draggable');
@@ -45148,8 +45168,8 @@ function down(event) {
       }
     }
   } else {
-    // Whenever a non-editable element is clicked, re-enable draggability
-    // for any blocks that were previously disabled.
+    // Whenever a non-editable element or an input or textarea is clicked,
+    // re-enable draggability for any blocks that were previously disabled.
     for (const node of nodes) {
       restore(node);
     }
@@ -45157,11 +45177,11 @@ function down(event) {
 }
 
 /**
- * In Firefox, the `draggable` and `contenteditable` attributes don't play well
- * together. When `contenteditable` is within a `draggable` element, selection
- * doesn't get set in the right place. The only solution is to temporarily
- * remove the `draggable` attribute clicking inside `contenteditable` elements.
- *
+ * In Firefox, the `draggable` and `contenteditable` or `input` or `textarea`
+ * elements don't play well together. When these elements are within a
+ * `draggable` element, selection doesn't get set in the right place. The only
+ * solution is to temporarily remove the `draggable` attribute clicking inside
+ * these elements.
  * @return {Function} Cleanup function.
  */
 function useFirefoxDraggableCompatibility() {
@@ -45594,15 +45614,17 @@ const applyWithDispatch = (0,external_wp_data_namespaceObject.withDispatch)((dis
   // Do not add new properties here, use `useDispatch` instead to avoid
   // leaking new props to the public API (editor.BlockListBlock filter).
   return {
-    setAttributes(newAttributes) {
+    setAttributes(nextAttributes) {
       const {
         getMultiSelectedBlockClientIds
       } = registry.select(store);
       const multiSelectedBlockClientIds = getMultiSelectedBlockClientIds();
       const {
-        clientId
+        clientId,
+        attributes
       } = ownProps;
       const clientIds = multiSelectedBlockClientIds.length ? multiSelectedBlockClientIds : [clientId];
+      const newAttributes = typeof nextAttributes === 'function' ? nextAttributes(attributes) : nextAttributes;
       updateBlockAttributes(clientIds, newAttributes);
     },
     onInsertBlocks(blocks, index) {
@@ -54826,7 +54848,6 @@ function getBlockAndPreviewFromMedia(media, mediaType) {
 
 
 const ALLOWED_MEDIA_TYPES = ['image'];
-const MAXIMUM_TITLE_LENGTH = 25;
 const MEDIA_OPTIONS_POPOVER_PROPS = {
   position: 'bottom left',
   className: 'block-editor-inserter__media-list__item-preview-options__popover'
@@ -54994,11 +55015,6 @@ function MediaPreview({
     });
   }, [isInserting, getSettings, onClick, createSuccessNotice, updateBlockAttributes, createErrorNotice, getBlock]);
   const title = typeof media.title === 'string' ? media.title : media.title?.rendered || (0,external_wp_i18n_namespaceObject.__)('no title');
-  let truncatedTitle;
-  if (title.length > MAXIMUM_TITLE_LENGTH) {
-    const omission = '...';
-    truncatedTitle = title.slice(0, MAXIMUM_TITLE_LENGTH - omission.length) + omission;
-  }
   const onMouseEnter = (0,external_wp_element_namespaceObject.useCallback)(() => setIsHovered(true), []);
   const onMouseLeave = (0,external_wp_element_namespaceObject.useCallback)(() => setIsHovered(false), []);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
@@ -55020,7 +55036,7 @@ function MediaPreview({
           onMouseEnter: onMouseEnter,
           onMouseLeave: onMouseLeave,
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Tooltip, {
-            text: truncatedTitle || title,
+            text: title,
             children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Composite.Item, {
               render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
                 "aria-label": title,
@@ -65028,7 +65044,8 @@ function useShowBlockTools() {
       getBlockMode,
       getSettings,
       __unstableGetEditorMode,
-      isTyping
+      isTyping,
+      isBlockInterfaceHidden
     } = unlock(select(store));
     const clientId = getSelectedBlockClientId() || getFirstMultiSelectedBlockClientId();
     const block = getBlock(clientId);
@@ -65039,7 +65056,7 @@ function useShowBlockTools() {
     // Hide the block inserter on the navigation mode.
     // See https://github.com/WordPress/gutenberg/pull/66636#discussion_r1824728483.
     editorMode !== 'navigation' && isEmptyDefaultBlock;
-    const _showBlockToolbarPopover = !getSettings().hasFixedToolbar && !_showEmptyBlockSideInserter && hasSelectedBlock && !isEmptyDefaultBlock;
+    const _showBlockToolbarPopover = !isBlockInterfaceHidden() && !getSettings().hasFixedToolbar && !_showEmptyBlockSideInserter && hasSelectedBlock && !isEmptyDefaultBlock;
     return {
       showEmptyBlockSideInserter: _showEmptyBlockSideInserter,
       showBlockToolbarPopover: _showBlockToolbarPopover

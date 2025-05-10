@@ -1,3 +1,31 @@
+# [6.5.0](https://github.com/Automattic/newspack-plugin/compare/v6.4.4...v6.5.0) (2025-05-08)
+
+
+### Features
+
+* add Subscription Confirmation checkboxes for FTC compliance ([#3961](https://github.com/Automattic/newspack-plugin/issues/3961)) ([90d4bf6](https://github.com/Automattic/newspack-plugin/commit/90d4bf610d47379811677a40a39d12e4f2622381))
+
+## [6.4.4](https://github.com/Automattic/newspack-plugin/compare/v6.4.3...v6.4.4) (2025-04-21)
+
+
+### Bug Fixes
+
+* **recaptcha-v2:** clone Place Order button for all checkouts, not just modal ([#3930](https://github.com/Automattic/newspack-plugin/issues/3930)) ([90287ab](https://github.com/Automattic/newspack-plugin/commit/90287ab84e42762816633fd11fc7e677c7fa7780))
+
+## [6.4.3](https://github.com/Automattic/newspack-plugin/compare/v6.4.2...v6.4.3) (2025-04-21)
+
+
+### Bug Fixes
+
+* register reader data handlers after listeners ([#3901](https://github.com/Automattic/newspack-plugin/issues/3901)) ([df71105](https://github.com/Automattic/newspack-plugin/commit/df71105c276bb3f872c0f3876287e15022416a99))
+
+## [6.4.2](https://github.com/Automattic/newspack-plugin/compare/v6.4.1...v6.4.2) (2025-04-17)
+
+
+### Bug Fixes
+
+* change nonce strategy for data events ([#3924](https://github.com/Automattic/newspack-plugin/issues/3924)) ([dba7e6b](https://github.com/Automattic/newspack-plugin/commit/dba7e6b8113c55db8c8091755cacb5ceed94209e))
+
 ## [6.4.1](https://github.com/Automattic/newspack-plugin/compare/v6.4.0...v6.4.1) (2025-04-16)
 
 

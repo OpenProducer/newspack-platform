@@ -30,6 +30,9 @@ final class Recaptcha {
 		\add_action( 'woocommerce_checkout_after_customer_details', [ __CLASS__, 'add_recaptcha_v3_to_checkout' ] );
 		\add_action( 'woocommerce_add_payment_method_form_bottom', [ __CLASS__, 'add_recaptcha_v3_to_checkout' ] );
 
+		// Clone the Place Order button so we can attach the reCAPTCHA widget to it without triggering other third-party extensions' event listeners.
+		\add_filter( 'woocommerce_order_button_html', [ __CLASS__, 'order_button_html' ], 999 );
+
 		// Verify reCAPTCHA on checkout submission.
 		\add_action( 'woocommerce_checkout_process', [ __CLASS__, 'verify_recaptcha_on_checkout' ] );
 
@@ -507,6 +510,24 @@ final class Recaptcha {
 			} );
 		</script>
 		<?php
+	}
+
+	/**
+	 * Clone the Place Order button so we can attach the reCAPTCHA widget to it without triggering other third-party extensions' event listeners.
+	 *
+	 * @param string $html The button html.
+	 *
+	 * @return string The modified button html.
+	 */
+	public static function order_button_html( $html ) {
+		if ( self::can_use_captcha( 'v2' ) ) {
+			$cloned_button    = preg_replace( '/type="submit"/', 'type="button"', $html );
+			$cloned_button    = preg_replace( '/id="place_order"/', '', $html );
+			$cloned_button    = preg_replace( '/name=".*?"/', 'id="place_order_clone"', $html );
+			$html = $cloned_button . $html;
+		}
+
+		return $html;
 	}
 
 	/**
