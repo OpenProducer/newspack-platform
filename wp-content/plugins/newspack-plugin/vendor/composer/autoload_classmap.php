@@ -128,6 +128,7 @@ return array(
     'Newspack\\Starter_Content_Provider' => $baseDir . '/includes/starter_content/class-starter-content-provider.php',
     'Newspack\\Starter_Content_WordPress' => $baseDir . '/includes/starter_content/class-starter-content-wordpress.php',
     'Newspack\\Stripe_Connection' => $baseDir . '/includes/reader-revenue/stripe/class-stripe-connection.php',
+    'Newspack\\Subscriptions_Confirmation' => $baseDir . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-confirmation.php',
     'Newspack\\Subscriptions_Meta' => $baseDir . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-meta.php',
     'Newspack\\Sync_Reader_Data_CLI' => $baseDir . '/includes/reader-activation/cli/class-sync-reader-data-cli.php',
     'Newspack\\Syndication' => $baseDir . '/includes/class-syndication.php',

@@ -52,7 +52,7 @@ final class Newspack_Newsletters_Editor {
 		add_filter( 'block_categories_all', [ __CLASS__, 'add_custom_block_category' ] );
 		add_filter( 'allowed_block_types_all', [ __CLASS__, 'newsletters_allowed_block_types' ], 10, 2 );
 		add_action( 'rest_post_query', [ __CLASS__, 'maybe_filter_excerpt_length' ], 10, 2 );
-		add_action( 'rest_post_query', [ __CLASS__, 'maybe_exclude_sponsored_posts' ], 10, 2 );
+		add_action( 'rest_post_query', [ __CLASS__, 'rest_post_query_filter' ], 10, 2 );
 		add_action( 'rest_api_init', [ __CLASS__, 'add_newspack_author_info' ] );
 		add_filter( 'the_posts', [ __CLASS__, 'maybe_reset_excerpt_length' ] );
 		add_filter( 'should_load_remote_block_patterns', [ __CLASS__, 'strip_block_patterns' ] );
@@ -467,16 +467,20 @@ final class Newspack_Newsletters_Editor {
 	}
 
 	/**
-	 * If Posts Inserter is set to hide sponsored content, add a tax query to exclude sponsored posts.
+	 * Update the Post Inserter query.
 	 *
 	 * @param array           $args Request arguments.
 	 * @param WP_REST_Request $request The original REST request params.
 	 *
 	 * @return array Filtered request args.
 	 */
-	public static function maybe_exclude_sponsored_posts( $args, $request ) {
+	public static function rest_post_query_filter( $args, $request ) {
 		$params = $request->get_params();
 
+		// Ignore sticky posts in query.
+		$args['ignore_sticky_posts'] = true;
+
+		// If Posts Inserter is set to hide sponsored content, add a tax query to exclude sponsored posts.
 		if ( ! empty( $params['exclude_sponsors'] ) && class_exists( '\Newspack_Sponsors\Core' ) ) {
 			if ( empty( $args['tax_query'] ) ) {
 				$args['tax_query'] = []; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query

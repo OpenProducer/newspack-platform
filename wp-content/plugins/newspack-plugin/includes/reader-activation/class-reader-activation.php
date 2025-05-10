@@ -346,29 +346,34 @@ final class Reader_Activation {
 	 */
 	private static function get_settings_config() {
 		$settings_config = [
-			'enabled'                                  => false,
-			'enabled_account_link'                     => true,
-			'account_link_menu_locations'              => [ 'tertiary-menu' ],
-			'newsletters_label'                        => self::get_reader_activation_labels( 'newsletters_cta' ),
-			'use_custom_lists'                         => false,
-			'newsletter_lists'                         => [],
-			'terms_text'                               => '',
-			'terms_url'                                => '',
-			'sync_esp'                                 => true,
-			'metadata_prefix'                          => Sync\Metadata::get_prefix(),
-			'metadata_fields'                          => Sync\Metadata::get_fields(),
-			'sync_esp_delete'                          => true,
-			'active_campaign_master_list'              => '',
-			'constant_contact_list_id'                 => '',
-			'mailchimp_audience_id'                    => '',
-			'mailchimp_reader_default_status'          => 'transactional',
-			'sender_name'                              => Emails::get_from_name(),
-			'sender_email_address'                     => Emails::get_from_email(),
-			'contact_email_address'                    => Emails::get_reply_to_email(),
-			'woocommerce_registration_required'        => false,
-			'woocommerce_checkout_privacy_policy_text' => self::get_checkout_privacy_policy_text(),
-			'woocommerce_post_checkout_success_text'   => self::get_post_checkout_success_text(),
+			'enabled'                                      => false,
+			'enabled_account_link'                         => true,
+			'account_link_menu_locations'                  => [ 'tertiary-menu' ],
+			'newsletters_label'                            => self::get_reader_activation_labels( 'newsletters_cta' ),
+			'use_custom_lists'                             => false,
+			'newsletter_lists'                             => [],
+			'terms_text'                                   => '',
+			'terms_url'                                    => '',
+			'sync_esp'                                     => true,
+			'metadata_prefix'                              => Sync\Metadata::get_prefix(),
+			'metadata_fields'                              => Sync\Metadata::get_fields(),
+			'sync_esp_delete'                              => true,
+			'active_campaign_master_list'                  => '',
+			'constant_contact_list_id'                     => '',
+			'mailchimp_audience_id'                        => '',
+			'mailchimp_reader_default_status'              => 'transactional',
+			'sender_name'                                  => Emails::get_from_name(),
+			'sender_email_address'                         => Emails::get_from_email(),
+			'contact_email_address'                        => Emails::get_reply_to_email(),
+			'woocommerce_registration_required'            => false,
+			'woocommerce_checkout_privacy_policy_text'     => self::get_checkout_privacy_policy_text(),
+			'woocommerce_post_checkout_success_text'       => self::get_post_checkout_success_text(),
 			'woocommerce_post_checkout_registration_success_text' => self::get_post_checkout_registration_success_text(),
+			'woocommerce_enable_subscription_confirmation' => false,
+			'woocommerce_subscription_confirmation_text'   => self::get_subscription_confirmation_text(),
+			'woocommerce_enable_terms_confirmation'        => false,
+			'woocommerce_terms_confirmation_text'          => self::get_terms_confirmation_text(),
+			'woocommerce_terms_confirmation_url'           => self::get_terms_confirmation_url(),
 		];
 
 		/**
@@ -2651,16 +2656,75 @@ final class Reader_Activation {
 	}
 
 	/**
+	 * Return if the Subscription confirmation checkbox is enabled.
+	 *
+	 * @return bool Whether the subscription confirmation checkbox is enabled.
+	 */
+	public static function is_subscription_confirmation_enabled() {
+		return (bool) \get_option( self::OPTIONS_PREFIX . 'woocommerce_enable_subscription_confirmation', false );
+	}
+
+	/**
+	 * Get the text label for the subscription confirmation checkbox.
+	 *
+	 * @return string Returns either the default text label or a customized one.
+	 */
+	public static function get_subscription_confirmation_text() {
+		return \get_option(
+			self::OPTIONS_PREFIX . 'woocommerce_subscription_confirmation_text',
+			__(
+				'I understand this is a recurring subscription and that I can cancel anytime through the My Account Page.',
+				'newspack-plugin'
+			)
+		);
+	}
+
+	/**
+	 * Return if the Terms & Conditions confirmation checkbox is enabled.
+	 *
+	 * @return bool Whether the Terms & Conditions confirmation checkbox is enabled.
+	 */
+	public static function is_terms_confirmation_enabled() {
+		return (bool) \get_option( self::OPTIONS_PREFIX . 'woocommerce_enable_terms_confirmation', false );
+	}
+
+	/**
+	 * Get the text label for the Terms & Conditions confirmation checkbox.
+	 *
+	 * @return string Returns either the default text label or a customized one.
+	 */
+	public static function get_terms_confirmation_text() {
+		return \get_option(
+			self::OPTIONS_PREFIX . 'woocommerce_terms_confirmation_text',
+			__( 'I have read and accept the {{Terms & Conditions}}.', 'newspack-plugin' )
+		);
+	}
+
+	/**
+	 * Get the URL for the Terms & Conditions confirmation checkbox.
+	 *
+	 * @return string Returns the URL for the Terms & Conditions confirmation checkbox.
+	 */
+	public static function get_terms_confirmation_url() {
+		return \get_option( self::OPTIONS_PREFIX . 'woocommerce_terms_confirmation_url', '' );
+	}
+
+	/**
 	 * Get the checkout configuration.
 	 *
 	 * @return array The checkout configuration.
 	 */
 	public static function get_checkout_configuration() {
 		return [
-			'woocommerce_registration_required'        => self::is_woocommerce_registration_required(),
-			'woocommerce_post_checkout_success_text'   => self::get_post_checkout_success_text(),
-			'woocommerce_checkout_privacy_policy_text' => self::get_checkout_privacy_policy_text(),
+			'woocommerce_registration_required'            => self::is_woocommerce_registration_required(),
+			'woocommerce_post_checkout_success_text'       => self::get_post_checkout_success_text(),
+			'woocommerce_checkout_privacy_policy_text'     => self::get_checkout_privacy_policy_text(),
 			'woocommerce_post_checkout_registration_success_text' => self::get_post_checkout_registration_success_text(),
+			'woocommerce_enable_subscription_confirmation' => self::is_subscription_confirmation_enabled(),
+			'woocommerce_subscription_confirmation_text'   => self::get_subscription_confirmation_text(),
+			'woocommerce_enable_terms_confirmation'        => self::is_terms_confirmation_enabled(),
+			'woocommerce_terms_confirmation_text'          => self::get_terms_confirmation_text(),
+			'woocommerce_terms_confirmation_url'           => self::get_terms_confirmation_url(),
 		];
 	}
 }

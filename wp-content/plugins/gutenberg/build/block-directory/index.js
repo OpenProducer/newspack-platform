@@ -540,7 +540,7 @@ const installBlockType = block => async ({
     });
 
     // Ensures that the block metadata is propagated to the editor when registered on the server.
-    const metadataFields = ['api_version', 'title', 'category', 'parent', 'icon', 'description', 'keywords', 'attributes', 'provides_context', 'uses_context', 'supports', 'styles', 'example', 'variations'];
+    const metadataFields = ['api_version', 'title', 'category', 'parent', 'ancestor', 'icon', 'description', 'keywords', 'attributes', 'provides_context', 'uses_context', 'selectors', 'supports', 'styles', 'example', 'variations', 'allowed_blocks', 'block_hooks'];
     await external_wp_apiFetch_default()({
       path: (0,external_wp_url_namespaceObject.addQueryArgs)(`/wp/v2/block-types/${name}`, {
         _fields: metadataFields

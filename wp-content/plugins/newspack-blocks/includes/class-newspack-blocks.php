@@ -1390,6 +1390,24 @@ class Newspack_Blocks {
 	}
 
 	/**
+	 * Get post date in ISO-8601 format to be used in the datetime attribute.
+	 *
+	 * @param WP_Post $post Post object.
+	 * @return string Date string in ISO-8601 format.
+	 */
+	public static function get_datetime_post_date( $post = null ) {
+		if ( $post === null ) {
+			$post = get_post();
+		}
+		/**
+		 * Filters the post date used for the datetime attribute.
+		 *
+		 * @param string Date string in a format appropriate for datetime attributes.
+		 */
+		return apply_filters( 'newspack_blocks_displayed_post_date', get_post_datetime( $post )->format( 'c' ), $post );
+	}
+
+	/**
 	 * Get post date to be displayed, formatted.
 	 *
 	 * @param WP_Post $post Post object.

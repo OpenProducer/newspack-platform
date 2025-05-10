@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 9.8.1\n"
+"Project-Id-Version: WooCommerce 9.8.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-09T10:05:58+00:00\n"
+"POT-Creation-Date: 2025-05-06T16:49:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0-alpha\n"
 "X-Domain: woocommerce\n"
@@ -9255,7 +9255,7 @@ msgid "via %s"
 msgstr ""
 
 #: includes/abstracts/abstract-wc-order.php:2266
-#: includes/class-wc-cart.php:1639
+#: includes/class-wc-cart.php:1649
 #: includes/class-wc-product-grouped.php:122
 msgid "Free!"
 msgstr ""
@@ -9379,7 +9379,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-reports.php:152
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:321
 #: includes/admin/reports/class-wc-report-stock.php:120
-#: includes/wc-product-functions.php:1067
+#: includes/wc-product-functions.php:1088
 #: src/Internal/Features/ProductBlockEditor/ProductTemplates/ProductVariationTemplate.php:400
 #: src/Internal/Features/ProductBlockEditor/ProductTemplates/SimpleProductTemplate.php:866
 #: assets/client/admin/chunks/analytics-report-stock.js:1
@@ -10863,7 +10863,7 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-menus.php:126
 #: includes/admin/views/html-admin-page-status-report.php:693
-#: includes/class-wc-install.php:2229
+#: includes/class-wc-install.php:2278
 #: includes/react-admin/connect-existing-pages.php:35
 #: src/Admin/Features/Blueprint/RestApi.php:238
 #: src/Internal/Admin/Analytics.php:266
@@ -10973,7 +10973,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-notices.php:266
 #: includes/admin/class-wc-admin-status.php:305
 #: includes/emails/class-wc-email.php:1158
-#: src/Internal/Features/FeaturesController.php:1633
+#: src/Internal/Features/FeaturesController.php:1632
 msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
@@ -12669,8 +12669,8 @@ msgid "Product categories for your store can be managed here. To change the orde
 msgstr ""
 
 #: includes/admin/class-wc-admin-taxonomies.php:340
-#: includes/class-wc-install.php:1239
-#: includes/class-wc-install.php:1245
+#: includes/class-wc-install.php:1288
+#: includes/class-wc-install.php:1294
 msgctxt "Default category slug"
 msgid "Uncategorized"
 msgstr ""
@@ -13041,7 +13041,7 @@ msgstr ""
 #: includes/widgets/class-wc-widget-brand-thumbnails.php:210
 #: src/Internal/Admin/Orders/ListTable.php:581
 #: src/Internal/Admin/Orders/ListTable.php:1697
-#: src/Internal/Features/FeaturesController.php:1588
+#: src/Internal/Features/FeaturesController.php:1587
 #: assets/client/admin/chunks/analytics-report-orders.js:1
 #: assets/client/admin/chunks/dashboard-charts.js:1
 #: assets/client/admin/components/index.js:2
@@ -14435,7 +14435,7 @@ msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:317
 #: includes/admin/reports/class-wc-report-stock.php:116
-#: includes/wc-product-functions.php:1068
+#: includes/wc-product-functions.php:1089
 #: src/Internal/Features/ProductBlockEditor/ProductTemplates/ProductVariationTemplate.php:404
 #: src/Internal/Features/ProductBlockEditor/ProductTemplates/SimpleProductTemplate.php:870
 #: assets/client/admin/chunks/analytics-report-stock.js:1
@@ -14446,7 +14446,7 @@ msgstr ""
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:319
 #: includes/admin/reports/class-wc-report-stock.php:118
 #: includes/wc-formatting-functions.php:1256
-#: includes/wc-product-functions.php:1066
+#: includes/wc-product-functions.php:1087
 #: src/Internal/Features/ProductBlockEditor/ProductTemplates/ProductVariationTemplate.php:396
 #: src/Internal/Features/ProductBlockEditor/ProductTemplates/SimpleProductTemplate.php:862
 #: assets/client/admin/chunks/analytics-report-stock.js:1
@@ -14480,7 +14480,6 @@ msgid "Virtual"
 msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:430
-#: patterns/filters.php:35
 #: assets/client/blocks/filter-wrapper.js:1
 #: assets/client/blocks/product-category.js:12
 #: assets/client/blocks/product-new.js:12
@@ -16581,7 +16580,6 @@ msgstr ""
 
 #: includes/admin/reports/class-wc-report-downloads.php:123
 #: includes/widgets/class-wc-widget-layered-nav-filters.php:27
-#: patterns/filters.php:15
 #: assets/client/blocks/active-filters.js:6
 #: assets/client/blocks/filter-wrapper.js:1
 msgid "Active filters"
@@ -17182,7 +17180,7 @@ msgid "WooCommerce.com"
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-advanced.php:57
-#: src/Internal/Features/FeaturesController.php:420
+#: src/Internal/Features/FeaturesController.php:419
 msgid "Blueprint (beta)"
 msgstr ""
 
@@ -18738,7 +18736,7 @@ msgstr ""
 #: includes/admin/settings/views/html-settings-tax.php:24
 #: includes/admin/views/html-bulk-edit-product.php:127
 #: includes/admin/views/html-quick-edit-product.php:88
-#: includes/wc-product-functions.php:1046
+#: includes/wc-product-functions.php:1067
 msgid "Standard"
 msgstr ""
 
@@ -20085,7 +20083,7 @@ msgstr ""
 #: includes/admin/views/html-bulk-edit-product.php:260
 #: includes/admin/views/html-quick-edit-product.php:164
 #: includes/customizer/class-wc-shop-customizer.php:766
-#: includes/wc-product-functions.php:1032
+#: includes/wc-product-functions.php:1053
 #: assets/client/admin/product-editor/index.js:2
 msgid "Hidden"
 msgstr ""
@@ -20555,7 +20553,7 @@ msgid "Sorry, this coupon is not applicable to the brands of selected products."
 msgstr ""
 
 #: includes/class-wc-brands.php:191
-#: includes/wc-product-functions.php:321
+#: includes/wc-product-functions.php:342
 msgctxt "slug"
 msgid "uncategorized"
 msgstr ""
@@ -20697,66 +20695,66 @@ msgstr[1] ""
 msgid "The cart has been filled with the items from your previous order."
 msgstr ""
 
-#: includes/class-wc-cart.php:605
+#: includes/class-wc-cart.php:613
 msgid "Get cart should not be called before the wp_loaded action."
 msgstr ""
 
-#: includes/class-wc-cart.php:753
+#: includes/class-wc-cart.php:761
 msgid "An item which is no longer available was removed from your cart."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/class-wc-cart.php:776
+#: includes/class-wc-cart.php:784
 msgid "Sorry, \"%s\" is not in stock. Please edit your cart and try again. We apologize for any inconvenience caused."
 msgstr ""
 
 #. translators: 1: product name 2: quantity in stock
 #. translators: %s: product name
-#: includes/class-wc-cart.php:799
+#: includes/class-wc-cart.php:807
 #: includes/shortcodes/class-wc-shortcode-checkout.php:170
 #: src/StoreApi/Utilities/OrderController.php:670
 msgid "Sorry, we do not have enough \"%1$s\" in stock to fulfill your order (%2$s available). We apologize for any inconvenience caused."
 msgstr ""
 
 #. translators: 1: product link, 2: product name
-#: includes/class-wc-cart.php:1051
+#: includes/class-wc-cart.php:1059
 #: includes/class-wc-form-handler.php:960
 msgid "Please choose product options by visiting <a href=\"%1$s\" title=\"%2$s\">%2$s</a>."
 msgstr ""
 
-#: includes/class-wc-cart.php:1096
+#: includes/class-wc-cart.php:1104
 msgid "Please choose product options&hellip;"
 msgstr ""
 
 #. translators: %s: Attribute name.
-#: includes/class-wc-cart.php:1128
+#: includes/class-wc-cart.php:1136
 msgid "Invalid value posted for %s"
 msgstr ""
 
 #. translators: %s: Attribute name.
-#: includes/class-wc-cart.php:1138
+#: includes/class-wc-cart.php:1146
 #: src/StoreApi/Utilities/CartController.php:1323
 msgid "%s is a required field"
 msgid_plural "%s are required fields"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-cart.php:1152
+#: includes/class-wc-cart.php:1160
 msgid "The selected product is invalid."
 msgstr ""
 
 #. translators: 1: product link, 2: product name
-#: includes/class-wc-cart.php:1156
+#: includes/class-wc-cart.php:1164
 msgid "The selected product isn't a variation of %2$s, please choose product options by visiting <a href=\"%1$s\" title=\"%2$s\">%2$s</a>."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/class-wc-cart.php:1175
+#: includes/class-wc-cart.php:1183
 msgid "You cannot add another \"%s\" to your cart."
 msgstr ""
 
-#: includes/class-wc-cart.php:1187
-#: includes/class-wc-cart.php:1254
+#: includes/class-wc-cart.php:1195
+#: includes/class-wc-cart.php:1262
 #: includes/class-wc-frontend-scripts.php:598
 #: includes/wc-cart-functions.php:130
 #: includes/wc-template-functions.php:2459
@@ -20765,28 +20763,28 @@ msgstr ""
 msgid "View cart"
 msgstr ""
 
-#: includes/class-wc-cart.php:1192
+#: includes/class-wc-cart.php:1200
 msgid "Sorry, this product cannot be purchased."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/class-wc-cart.php:1207
+#: includes/class-wc-cart.php:1215
 #: src/StoreApi/Utilities/CartController.php:265
 msgid "You cannot add &quot;%s&quot; to the cart because the product is out of stock."
 msgstr ""
 
 #. translators: 1: product name 2: quantity in stock
-#: includes/class-wc-cart.php:1224
+#: includes/class-wc-cart.php:1232
 #: src/StoreApi/Utilities/CartController.php:281
 msgid "You cannot add that amount of &quot;%1$s&quot; to the cart because there is not enough stock (%2$s remaining)."
 msgstr ""
 
 #. translators: 1: quantity in stock 2: current quantity
-#: includes/class-wc-cart.php:1251
+#: includes/class-wc-cart.php:1259
 msgid "You cannot add that amount to the cart &mdash; we have %1$s in stock and you already have %2$s in your cart."
 msgstr ""
 
-#: includes/class-wc-cart.php:1730
+#: includes/class-wc-cart.php:1740
 msgid "This method has been deprecated and will be removed soon. Use Automattic\\WooCommerce\\Utilities\\DiscountsUtil::is_coupon_emails_allowed instead."
 msgstr ""
 
@@ -21262,22 +21260,22 @@ msgstr ""
 msgid "Invalid permission ID."
 msgstr ""
 
-#: includes/class-wc-customer.php:795
+#: includes/class-wc-customer.php:873
 #: src/Admin/API/OnboardingProfile.php:677
 msgid "Invalid email address"
 msgstr ""
 
 #. translators: 1: first name 2: last name
-#: includes/class-wc-customer.php:828
+#: includes/class-wc-customer.php:906
 msgctxt "display name"
 msgid "%1$s %2$s"
 msgstr ""
 
-#: includes/class-wc-customer.php:841
+#: includes/class-wc-customer.php:919
 msgid "Invalid role"
 msgstr ""
 
-#: includes/class-wc-customer.php:1045
+#: includes/class-wc-customer.php:1123
 #: includes/class-wc-order.php:1344
 msgid "Invalid billing email address"
 msgstr ""
@@ -21687,159 +21685,159 @@ msgstr ""
 msgid "Please enter a stronger password."
 msgstr ""
 
-#: includes/class-wc-install.php:786
+#: includes/class-wc-install.php:788
 msgid "Monthly"
 msgstr ""
 
-#: includes/class-wc-install.php:790
+#: includes/class-wc-install.php:792
 msgid "Every 15 Days"
 msgstr ""
 
-#: includes/class-wc-install.php:905
+#: includes/class-wc-install.php:907
 msgctxt "Page slug"
 msgid "shop"
 msgstr ""
 
-#: includes/class-wc-install.php:906
+#: includes/class-wc-install.php:908
 msgctxt "Page title"
 msgid "Shop"
 msgstr ""
 
-#: includes/class-wc-install.php:910
+#: includes/class-wc-install.php:912
 msgctxt "Page slug"
 msgid "cart"
 msgstr ""
 
-#: includes/class-wc-install.php:911
+#: includes/class-wc-install.php:913
 msgctxt "Page title"
 msgid "Cart"
 msgstr ""
 
-#: includes/class-wc-install.php:915
+#: includes/class-wc-install.php:917
 msgctxt "Page slug"
 msgid "checkout"
 msgstr ""
 
-#: includes/class-wc-install.php:916
+#: includes/class-wc-install.php:918
 msgctxt "Page title"
 msgid "Checkout"
 msgstr ""
 
-#: includes/class-wc-install.php:920
+#: includes/class-wc-install.php:922
 msgctxt "Page slug"
 msgid "my-account"
 msgstr ""
 
-#: includes/class-wc-install.php:921
+#: includes/class-wc-install.php:923
 msgctxt "Page title"
 msgid "My account"
 msgstr ""
 
-#: includes/class-wc-install.php:925
+#: includes/class-wc-install.php:927
 msgctxt "Page slug"
 msgid "refund_returns"
 msgstr ""
 
-#: includes/class-wc-install.php:926
+#: includes/class-wc-install.php:928
 msgctxt "Page title"
 msgid "Refund and Returns Policy"
 msgstr ""
 
-#: includes/class-wc-install.php:988
+#: includes/class-wc-install.php:990
 msgid "Reduced rate"
 msgstr ""
 
-#: includes/class-wc-install.php:989
+#: includes/class-wc-install.php:991
 msgid "Zero rate"
 msgstr ""
 
 #. translators: 1 = URL of Legacy REST API plugin page, 2 = URL of Legacy API settings in current site, 3 = URL of webhooks settings in current site, 4 = URL of logs page in current site, 5 = URL of plugins page in current site, 6 = URL of blog post about the Legacy REST API removal
-#: includes/class-wc-install.php:1365
+#: includes/class-wc-install.php:1414
 msgid "⚠️ WooCommerce installed <a href=\"%1$s\">the Legacy REST API plugin</a> because this site has <a href=\"%2$s\">the Legacy REST API enabled</a> or has <a href=\"%3$s\">legacy webhooks defined</a>, but it failed to activate it (see error details in <a href=\"%4$s\">the WooCommerce logs</a>). Please go to <a href=\"%5$s\">the plugins page</a> and activate it manually. <a href=\"%6$s\">More information</a>"
 msgstr ""
 
-#: includes/class-wc-install.php:1375
+#: includes/class-wc-install.php:1424
 msgid "WooCommerce installed the Legacy REST API plugin but failed to activate it, see context for more details."
 msgstr ""
 
 #. translators: 1 = URL of Legacy REST API plugin page, 2 = URL of Legacy API settings in current site, 3 = URL of webhooks settings in current site, 4 = URL of blog post about the Legacy REST API removal
-#: includes/class-wc-install.php:1384
+#: includes/class-wc-install.php:1433
 msgid "ℹ️ WooCommerce installed and activated <a href=\"%1$s\">the Legacy REST API plugin</a> because this site has <a href=\"%2$s\">the Legacy REST API enabled</a> or has <a href=\"%3$s\">legacy webhooks defined</a>. <a href=\"%4$s\">More information</a>"
 msgstr ""
 
 #. translators: 1 = URL of Legacy REST API plugin page, 2 = URL of Legacy API settings in current site, 3 = URL of webhooks settings in current site, 4 = URL of logs page in current site, 5 = URL of blog post about the Legacy REST API removal
-#: includes/class-wc-install.php:1398
+#: includes/class-wc-install.php:1447
 msgid "⚠️ WooCommerce attempted to install <a href=\"%1$s\">the Legacy REST API plugin</a> because this site has <a href=\"%2$s\">the Legacy REST API enabled</a> or has <a href=\"%3$s\">legacy webhooks defined</a>, but the installation failed (see error details in <a href=\"%4$s\">the WooCommerce logs</a>). Please install and activate the plugin manually. <a href=\"%5$s\">More information</a>"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:1980
+#: includes/class-wc-install.php:2029
 msgctxt "User role"
 msgid "Customer"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:1982
+#: includes/class-wc-install.php:2031
 msgctxt "User role"
 msgid "Shop manager"
 msgstr ""
 
-#: includes/class-wc-install.php:2229
+#: includes/class-wc-install.php:2278
 msgid "View WooCommerce settings"
 msgstr ""
 
-#: includes/class-wc-install.php:2277
+#: includes/class-wc-install.php:2326
 msgid "View WooCommerce documentation"
 msgstr ""
 
-#: includes/class-wc-install.php:2277
+#: includes/class-wc-install.php:2326
 msgid "Docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2278
+#: includes/class-wc-install.php:2327
 msgid "View WooCommerce API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2278
+#: includes/class-wc-install.php:2327
 msgid "API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2279
+#: includes/class-wc-install.php:2328
 msgid "Visit community forums"
 msgstr ""
 
-#: includes/class-wc-install.php:2279
+#: includes/class-wc-install.php:2328
 msgid "Community support"
 msgstr ""
 
-#: includes/class-wc-install.php:2283
+#: includes/class-wc-install.php:2332
 msgid "Visit premium customer support"
 msgstr ""
 
-#: includes/class-wc-install.php:2283
+#: includes/class-wc-install.php:2332
 msgid "Premium support"
 msgstr ""
 
 #. translators: 1: plugin name, 2: error message, 3: URL to install plugin manually.
 #. translators: 1: theme slug, 2: error message, 3: URL to install theme manually.
-#: includes/class-wc-install.php:2411
-#: includes/class-wc-install.php:2515
+#: includes/class-wc-install.php:2460
+#: includes/class-wc-install.php:2564
 msgid "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it manually by clicking here.</a>"
 msgstr ""
 
 #. translators: 1: plugin name, 2: URL to WP plugin page.
-#: includes/class-wc-install.php:2439
+#: includes/class-wc-install.php:2488
 msgid "%1$s was installed but could not be activated. <a href=\"%2$s\">Please activate it manually by clicking here.</a>"
 msgstr ""
 
-#: includes/class-wc-install.php:2746
+#: includes/class-wc-install.php:2795
 #: src/Blocks/BlockTypes/Cart.php:69
 #: assets/client/blocks/cart.js:12
 #: assets/client/blocks/product-collection.js:1
 msgid "You may be interested in…"
 msgstr ""
 
-#: includes/class-wc-install.php:2802
+#: includes/class-wc-install.php:2851
 #: src/Blocks/BlockTypes/Cart.php:78
 #: src/Blocks/BlockTypes/MiniCart.php:594
 #: assets/client/blocks/cart.js:21
@@ -21847,7 +21845,7 @@ msgstr ""
 msgid "Your cart is currently empty!"
 msgstr ""
 
-#: includes/class-wc-install.php:2810
+#: includes/class-wc-install.php:2859
 #: src/Blocks/BlockTypes/Cart.php:88
 #: assets/client/blocks/cart.js:21
 msgid "New in store"
@@ -23174,7 +23172,7 @@ msgstr ""
 
 #: includes/class-wc-privacy.php:124
 #: src/Admin/Features/Blueprint/Exporters/ExportWCPaymentGateways.php:77
-#: src/Internal/Admin/Settings/PaymentsController.php:121
+#: src/Internal/Admin/Settings/PaymentsController.php:72
 #: src/Internal/Admin/WcPayWelcomePage.php:94
 #: assets/client/admin/chunks/homescreen.js:1
 msgid "Payments"
@@ -27039,7 +27037,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-products-v1-controller.php:321
 #: includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php:450
 #: includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php:451
-#: includes/wc-product-functions.php:437
+#: includes/wc-product-functions.php:458
 #: assets/client/blocks/order-confirmation-additional-fields.js:1
 #: assets/client/blocks/order-confirmation-billing-address.js:1
 #: assets/client/blocks/order-confirmation-shipping-address.js:1
@@ -31297,7 +31295,7 @@ msgstr ""
 #. translators: 1: wc_load_cart 2: woocommerce_init
 #. translators: 1: class::method 2: plugins_loaded
 #: includes/wc-core-functions.php:2647
-#: src/Internal/Features/FeaturesController.php:797
+#: src/Internal/Features/FeaturesController.php:796
 msgid "%1$s should not be called before the %2$s action."
 msgstr ""
 
@@ -31407,46 +31405,46 @@ msgstr ""
 msgid "%1$s should not be called before the %2$s, %3$s and %4$s actions have finished."
 msgstr ""
 
-#: includes/wc-product-functions.php:714
+#: includes/wc-product-functions.php:735
 msgid "Simple product"
 msgstr ""
 
-#: includes/wc-product-functions.php:715
+#: includes/wc-product-functions.php:736
 #: src/Admin/Features/ProductBlockEditor/Init.php:297
 #: assets/client/admin/chunks/6262.js:1
 msgid "Grouped product"
 msgstr ""
 
-#: includes/wc-product-functions.php:716
+#: includes/wc-product-functions.php:737
 msgid "External/Affiliate product"
 msgstr ""
 
-#: includes/wc-product-functions.php:717
+#: includes/wc-product-functions.php:738
 #: assets/client/admin/chunks/6262.js:1
 msgid "Variable product"
 msgstr ""
 
-#: includes/wc-product-functions.php:1029
+#: includes/wc-product-functions.php:1050
 msgid "Shop and search results"
 msgstr ""
 
-#: includes/wc-product-functions.php:1030
+#: includes/wc-product-functions.php:1051
 msgid "Shop only"
 msgstr ""
 
-#: includes/wc-product-functions.php:1031
+#: includes/wc-product-functions.php:1052
 msgid "Search results only"
 msgstr ""
 
-#: includes/wc-product-functions.php:1081
+#: includes/wc-product-functions.php:1102
 msgid "Do not allow"
 msgstr ""
 
-#: includes/wc-product-functions.php:1082
+#: includes/wc-product-functions.php:1103
 msgid "Allow, but notify customer"
 msgstr ""
 
-#: includes/wc-product-functions.php:1083
+#: includes/wc-product-functions.php:1104
 msgid "Allow"
 msgstr ""
 
@@ -31890,7 +31888,6 @@ msgid "Filter Products by Price"
 msgstr ""
 
 #: includes/widgets/class-wc-widget-price-filter.php:31
-#: patterns/filters.php:25
 #: assets/client/blocks/filter-wrapper.js:1
 #: assets/client/blocks/price-filter.js:5
 msgid "Filter by price"
@@ -33073,17 +33070,6 @@ msgstr ""
 
 #: patterns/featured-category-triple.php:74
 msgid "Placeholder image used to represent products being showcased in featured categories banner. 3 out of 3"
-msgstr ""
-
-#: patterns/filters.php:45
-#: assets/client/blocks/attribute-filter.js:19
-#: assets/client/blocks/filter-wrapper.js:1
-msgid "Filter by attribute"
-msgstr ""
-
-#: patterns/filters.php:64
-#: assets/client/blocks/filter-wrapper.js:1
-msgid "Filter by rating"
 msgstr ""
 
 #: patterns/footer-large.php:19
@@ -37500,6 +37486,22 @@ msgstr ""
 msgid "Price: From {{min}}"
 msgstr ""
 
+#: src/Blocks/BlockTypes/ProductFilterPriceSlider.php:98
+#: src/Blocks/BlockTypes/ProductFilterPriceSlider.php:123
+#: assets/client/blocks/price-filter-frontend.js:5
+#: assets/client/blocks/price-filter-wrapper-frontend.js:5
+#: assets/client/blocks/price-filter.js:5
+msgid "Filter products by minimum price"
+msgstr ""
+
+#: src/Blocks/BlockTypes/ProductFilterPriceSlider.php:138
+#: src/Blocks/BlockTypes/ProductFilterPriceSlider.php:151
+#: assets/client/blocks/price-filter-frontend.js:5
+#: assets/client/blocks/price-filter-wrapper-frontend.js:5
+#: assets/client/blocks/price-filter.js:5
+msgid "Filter products by maximum price"
+msgstr ""
+
 #. translators: %s is referring to rating value. Example: Rated 4 out of 5.
 #: src/Blocks/BlockTypes/ProductFilterRating.php:84
 msgid "Rating: Rated %d out of 5"
@@ -37720,8 +37722,8 @@ msgstr ""
 
 #. translators: %s: is the field label
 #. translators: %s Field label.
-#: src/Blocks/Domain/Services/CheckoutFieldsFrontend.php:356
-#: src/StoreApi/Routes/V1/Checkout.php:279
+#: src/Blocks/Domain/Services/CheckoutFieldsFrontend.php:357
+#: src/StoreApi/Routes/V1/Checkout.php:267
 #: src/StoreApi/Utilities/OrderController.php:409
 msgid "%s is required"
 msgstr ""
@@ -37887,7 +37889,7 @@ msgstr ""
 msgid "Optional cost to charge for local pickup."
 msgstr ""
 
-#: src/Blocks/Shipping/ShippingController.php:547
+#: src/Blocks/Shipping/ShippingController.php:499
 #: src/StoreApi/Utilities/LocalPickupUtils.php:20
 #: src/StoreApi/Utilities/LocalPickupUtils.php:27
 #: assets/client/blocks/cart-blocks/order-summary-shipping-frontend.js:1
@@ -38455,7 +38457,7 @@ msgid "This tool will reset the cached values used in WooCommerce Analytics. If 
 msgstr ""
 
 #: src/Internal/Admin/Analytics.php:190
-#: src/Internal/Features/FeaturesController.php:247
+#: src/Internal/Features/FeaturesController.php:246
 #: assets/client/admin/app/index.js:2
 msgid "Analytics"
 msgstr ""
@@ -41387,203 +41389,203 @@ msgstr ""
 msgid "Homepage URL"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:248
+#: src/Internal/Features/FeaturesController.php:247
 msgid "Enable WooCommerce Analytics"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:256
+#: src/Internal/Features/FeaturesController.php:255
 msgid "New product editor"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:257
+#: src/Internal/Features/FeaturesController.php:256
 msgid "Try the new product editor (Beta)"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:267
+#: src/Internal/Features/FeaturesController.php:266
 msgid "⚠ This feature is compatible with WordPress version 6.2 or higher."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:277
+#: src/Internal/Features/FeaturesController.php:276
 msgid "Cart & Checkout Blocks"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:278
+#: src/Internal/Features/FeaturesController.php:277
 msgid "Optimize for faster checkout"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:283
+#: src/Internal/Features/FeaturesController.php:282
 msgid "Rate limit Checkout"
 msgstr ""
 
 #. translators: %s is the URL to the rate limiting documentation.
-#: src/Internal/Features/FeaturesController.php:286
+#: src/Internal/Features/FeaturesController.php:285
 msgid "Enables rate limiting for Checkout place order and Store API /checkout endpoint. To further control this, refer to <a href=\"%s\" target=\"_blank\">rate limiting documentation</a>."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:295
+#: src/Internal/Features/FeaturesController.php:294
 #: assets/client/admin/chunks/3796.js:1
 msgid "Marketplace"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:296
+#: src/Internal/Features/FeaturesController.php:295
 msgid "New, faster way to find extensions and themes for your WooCommerce store"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:308
+#: src/Internal/Features/FeaturesController.php:307
 msgid "Order Attribution"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:309
+#: src/Internal/Features/FeaturesController.php:308
 msgid "Enable this feature to track and credit channels and campaigns that contribute to orders on your site"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:319
+#: src/Internal/Features/FeaturesController.php:318
 msgid "Site visibility badge"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:320
+#: src/Internal/Features/FeaturesController.php:319
 msgid "Enable the site visibility badge in the WordPress admin bar"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:331
+#: src/Internal/Features/FeaturesController.php:330
 msgid "HPOS Full text search indexes"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:332
+#: src/Internal/Features/FeaturesController.php:331
 msgid "Create and use full text search indexes for orders. This feature only works with high-performance order storage."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:342
+#: src/Internal/Features/FeaturesController.php:341
 msgid "HPOS Data Caching"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:343
+#: src/Internal/Features/FeaturesController.php:342
 msgid "Enable order data caching in the datastore. This feature only works with high-performance order storage."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:356
+#: src/Internal/Features/FeaturesController.php:355
 msgid "⚠ This feature is currently only suggested with the use of external object caching."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:368
+#: src/Internal/Features/FeaturesController.php:367
 msgid "Remote Logging"
 msgstr ""
 
 #. translators: %1$s: opening link tag, %2$s: closing link tag
-#: src/Internal/Features/FeaturesController.php:371
+#: src/Internal/Features/FeaturesController.php:370
 msgid "Allow WooCommerce to send error logs and non-sensitive diagnostic data to help improve WooCommerce. This feature requires %1$susage tracking%2$s to be enabled."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:394
+#: src/Internal/Features/FeaturesController.php:393
 msgid "⚠ Usage tracking must be enabled to use remote logging."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:401
+#: src/Internal/Features/FeaturesController.php:400
 msgid "Email improvements"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:402
+#: src/Internal/Features/FeaturesController.php:401
 msgid "Enable modern email design for transactional emails"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:421
+#: src/Internal/Features/FeaturesController.php:420
 msgid "Enable blueprint to import and export settings in bulk"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:440
+#: src/Internal/Features/FeaturesController.php:439
 msgid "Payments Settings (beta)"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:441
+#: src/Internal/Features/FeaturesController.php:440
 msgid "Enable the new payments settings experience"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:460
+#: src/Internal/Features/FeaturesController.php:459
 msgid "Block Email Editor (alpha)"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:461
+#: src/Internal/Features/FeaturesController.php:460
 msgid "Enable the block-based email editor for transactional emails"
 msgstr ""
 
 #. translators: 1: class::method 2: before_woocommerce_init
-#: src/Internal/Features/FeaturesController.php:672
+#: src/Internal/Features/FeaturesController.php:671
 msgid "%1$s should be called inside the %2$s action."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:956
-#: src/Internal/Features/FeaturesController.php:981
+#: src/Internal/Features/FeaturesController.php:955
+#: src/Internal/Features/FeaturesController.php:980
 msgid "Features"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:983
+#: src/Internal/Features/FeaturesController.php:982
 msgid "Start using new features that are being progressively rolled out to improve the store management experience."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1024
+#: src/Internal/Features/FeaturesController.php:1023
 msgid "Experimental features"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1026
+#: src/Internal/Features/FeaturesController.php:1025
 msgid "These features are either experimental or incomplete, enable them at your own risk!"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1099
+#: src/Internal/Features/FeaturesController.php:1098
 msgid "WooCommerce Admin has been disabled"
 msgstr ""
 
 #. translators: 1: line break tag.
-#: src/Internal/Features/FeaturesController.php:1103
+#: src/Internal/Features/FeaturesController.php:1102
 msgid ""
 "%1$s This navigation will soon become unavailable while we make necessary improvements.\n"
 "\t\t\t\t\t\t\t\t\tIf you turn it off now, you will not be able to turn it back on."
 msgstr ""
 
 #. translators: 1: line break tag, 2: open link to WordPress update link, 3: close link tag.
-#: src/Internal/Features/FeaturesController.php:1115
+#: src/Internal/Features/FeaturesController.php:1114
 msgid "%1$s %2$sUpdate WordPress to enable the new navigation%3$s"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1319
+#: src/Internal/Features/FeaturesController.php:1318
 msgid "WooCommerce has detected that some of your active plugins are incompatible with currently enabled WooCommerce features. Please <a>review the details</a>."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1362
+#: src/Internal/Features/FeaturesController.php:1361
 msgid "You are viewing active plugins that are incompatible with currently enabled WooCommerce features."
 msgstr ""
 
 #. translators: %s is a feature name.
-#: src/Internal/Features/FeaturesController.php:1365
+#: src/Internal/Features/FeaturesController.php:1364
 msgid "You are viewing the active plugins that are incompatible with the '%s' feature."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1371
+#: src/Internal/Features/FeaturesController.php:1370
 msgid "<a href='%1$s'>View all plugins</a> - <a href='%2$s'>Manage WooCommerce features</a>"
 msgstr ""
 
 #. translators: %s = printable plugin name
-#: src/Internal/Features/FeaturesController.php:1457
+#: src/Internal/Features/FeaturesController.php:1456
 msgid "⚠ This plugin is incompatible with the enabled WooCommerce feature '%s', it shouldn't be activated."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1463
+#: src/Internal/Features/FeaturesController.php:1462
 msgid "⚠ This plugin is incompatible with the enabled WooCommerce features '%1$s' and '%2$s', it shouldn't be activated."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1470
+#: src/Internal/Features/FeaturesController.php:1469
 msgid "⚠ This plugin is incompatible with the enabled WooCommerce features '%1$s', '%2$s' and %3$d more, it shouldn't be activated."
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1477
+#: src/Internal/Features/FeaturesController.php:1476
 msgid "Manage WooCommerce features"
 msgstr ""
 
-#: src/Internal/Features/FeaturesController.php:1582
+#: src/Internal/Features/FeaturesController.php:1581
 msgid "Incompatible with WooCommerce features"
 msgstr ""
 
 #. translators: %s = name of a WooCommerce feature
-#: src/Internal/Features/FeaturesController.php:1584
+#: src/Internal/Features/FeaturesController.php:1583
 msgid "Incompatible with '%s'"
 msgstr ""
 
@@ -42704,11 +42706,11 @@ msgstr ""
 msgid "Your installation of WooCommerce is incomplete. If you installed WooCommerce from GitHub, please refer to this document to set up your development environment: https://github.com/woocommerce/woocommerce/wiki/How-to-set-up-WooCommerce-development-environment"
 msgstr ""
 
-#: src/StoreApi/Routes/V1/AbstractCartRoute.php:309
+#: src/StoreApi/Routes/V1/AbstractCartRoute.php:330
 msgid "Missing the Nonce header. This endpoint requires a valid nonce."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/AbstractCartRoute.php:313
+#: src/StoreApi/Routes/V1/AbstractCartRoute.php:334
 msgid "Nonce is invalid."
 msgstr ""
 
@@ -42848,7 +42850,7 @@ msgstr ""
 
 #. translators: %s: List of invalid parameters.
 #: src/StoreApi/Routes/V1/CartUpdateCustomer.php:112
-#: src/StoreApi/Routes/V1/Checkout.php:334
+#: src/StoreApi/Routes/V1/Checkout.php:322
 msgid "Invalid parameter(s): %s"
 msgstr ""
 
@@ -42860,34 +42862,34 @@ msgstr ""
 msgid "New quantity of the item in the cart."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/Checkout.php:93
+#: src/StoreApi/Routes/V1/Checkout.php:92
 #: src/StoreApi/Routes/V1/CheckoutOrder.php:70
 msgid "Data to pass through to the payment method when processing payment."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/Checkout.php:108
+#: src/StoreApi/Routes/V1/Checkout.php:107
 msgid "Customer password for new accounts, if applicable."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/Checkout.php:123
+#: src/StoreApi/Routes/V1/Checkout.php:121
 msgid "Additional fields related to the order."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/Checkout.php:127
+#: src/StoreApi/Routes/V1/Checkout.php:125
 msgid "Selected payment method for the order."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/Checkout.php:131
+#: src/StoreApi/Routes/V1/Checkout.php:129
 msgid "Order notes."
 msgstr ""
 
 #. translators: %s: is the field error message
-#: src/StoreApi/Routes/V1/Checkout.php:282
+#: src/StoreApi/Routes/V1/Checkout.php:270
 msgid "There was a problem with the provided shipping address: %s"
 msgstr ""
 
 #. translators: %s: is the field error message
-#: src/StoreApi/Routes/V1/Checkout.php:285
+#: src/StoreApi/Routes/V1/Checkout.php:273
 msgid "There was a problem with the provided billing address: %s"
 msgstr ""
 
@@ -55526,6 +55528,11 @@ msgstr ""
 msgid "Now displaying a preview of the Filter Products by Attribute block."
 msgstr ""
 
+#: assets/client/blocks/attribute-filter.js:19
+#: assets/client/blocks/filter-wrapper.js:1
+msgid "Filter by attribute"
+msgstr ""
+
 #: assets/client/blocks/breadcrumbs.js:1
 msgid "Breadcrumbs"
 msgstr ""
@@ -57177,6 +57184,10 @@ msgid "Highlight a product or variation."
 msgstr ""
 
 #: assets/client/blocks/filter-wrapper.js:1
+msgid "Filter by rating"
+msgstr ""
+
+#: assets/client/blocks/filter-wrapper.js:1
 msgid "Active Filters"
 msgstr ""
 
@@ -57660,18 +57671,6 @@ msgstr ""
 
 #: assets/client/blocks/order-confirmation-summary.js:1
 msgid "Credit Card"
-msgstr ""
-
-#: assets/client/blocks/price-filter-frontend.js:5
-#: assets/client/blocks/price-filter-wrapper-frontend.js:5
-#: assets/client/blocks/price-filter.js:5
-msgid "Filter products by minimum price"
-msgstr ""
-
-#: assets/client/blocks/price-filter-frontend.js:5
-#: assets/client/blocks/price-filter-wrapper-frontend.js:5
-#: assets/client/blocks/price-filter.js:5
-msgid "Filter products by maximum price"
 msgstr ""
 
 #: assets/client/blocks/price-filter-frontend.js:5
