@@ -30,18 +30,22 @@
 		flex-wrap: wrap;
 		align-items: center;
 		margin-top: 0.5em;
+		// Work around RawHTML `<div />` encapsulation.
+		div.byline-container {
+			display: inline;
+			display: flex;
+			align-items: center;
+			margin-right: 1.5em;
+		}
 	}
 
 	.cat-links {
 		font-size: variables.$font__size-xs;
 	}
 
-	span.avatar {
+	.entry-meta .avatar {
 		display: inline-block;
 		margin-right: 0.5em;
-		div {
-			display: inline;
-		}
 	}
 
 	/* Article excerpt */

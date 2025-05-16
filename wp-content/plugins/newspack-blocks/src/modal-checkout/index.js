@@ -7,7 +7,7 @@ import './checkout.scss';
 /**
  * Internal dependencies
  */
-import { manageCheckoutAttempt, manageLoaded, managePagination } from './analytics';
+import { manageCheckoutAttempt, manageCheckoutSuccess, manageLoaded, managePagination } from './analytics';
 import { domReady } from './utils';
 
 ( $ => {
@@ -51,6 +51,8 @@ import { domReady } from './utils';
 		}
 
 		if ( newspackBlocksModalCheckout.is_checkout_complete ) {
+			manageCheckoutSuccess();
+
 			/**
 			 * Set the checkout as complete so the modal can resolve post checkout flows.
 			 */

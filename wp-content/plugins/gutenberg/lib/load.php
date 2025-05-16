@@ -35,16 +35,11 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 		require_once __DIR__ . '/experimental/class-wp-rest-block-editor-settings-controller.php';
 	}
 
-	// WordPress 6.7 compat.
-	require __DIR__ . '/compat/wordpress-6.7/class-gutenberg-rest-posts-controller-6-7.php';
-	require __DIR__ . '/compat/wordpress-6.7/class-gutenberg-rest-templates-controller-6-7.php';
-	require __DIR__ . '/compat/wordpress-6.7/class-gutenberg-rest-server.php';
-	require __DIR__ . '/compat/wordpress-6.7/rest-api.php';
-
 	// WordPress 6.8 compat.
 	require __DIR__ . '/compat/wordpress-6.8/rest-api.php';
 
 	// WordPress 6.9 compat.
+	require __DIR__ . '/compat/wordpress-6.9/rest-api.php';
 	require __DIR__ . '/compat/wordpress-6.9/class-gutenberg-hierarchical-sort.php';
 
 	// Plugin specific code.
@@ -73,34 +68,8 @@ require __DIR__ . '/experimental/editor-settings.php';
 require __DIR__ . '/compat/plugin/edit-site-routes-backwards-compat.php';
 require __DIR__ . '/compat/plugin/fonts.php';
 
-// The Token Map was created to support the HTML API. It must be loaded before it.
-require __DIR__ . '/compat/wordpress-6.7/class-gutenberg-token-map-6-7.php';
-
-// Type annotations were added in 6.7 so every file is updated.
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-active-formatting-elements-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-attribute-token-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-decoder-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-open-elements-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-span-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-stack-event-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-text-replacement-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-token-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-unsupported-exception-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-tag-processor-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-processor-state-6-7.php';
-require __DIR__ . '/compat/wordpress-6.7/html-api/class-gutenberg-html-processor-6-7.php';
-
-// WordPress 6.7 compat.
-require __DIR__ . '/compat/wordpress-6.7/block-templates.php';
-require __DIR__ . '/compat/wordpress-6.7/blocks.php';
-require __DIR__ . '/compat/wordpress-6.7/block-bindings.php';
-require __DIR__ . '/compat/wordpress-6.7/script-modules.php';
-require __DIR__ . '/compat/wordpress-6.7/class-wp-block-templates-registry.php';
-require __DIR__ . '/compat/wordpress-6.7/compat.php';
-require __DIR__ . '/compat/wordpress-6.7/post-formats.php';
-
 // WordPress 6.8 compat.
-require __DIR__ . '/compat/wordpress-6.8/admin-bar.php';
+// Note: admin-bar.php (69271) was reverted in Gutenberg 20.8.0. See https://github.com/WordPress/gutenberg/pull/69974.
 require __DIR__ . '/compat/wordpress-6.8/preload.php';
 require __DIR__ . '/compat/wordpress-6.8/blocks.php';
 require __DIR__ . '/compat/wordpress-6.8/functions.php';

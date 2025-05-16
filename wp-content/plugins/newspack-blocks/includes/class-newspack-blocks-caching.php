@@ -139,6 +139,7 @@ class Newspack_Blocks_Caching {
 	 *
 	 * The tradeoff is that occasionally the current post may show up in an article block on a post.
 	 * Archives should all use a global cache group, because there is nothing that would need de-duplication.
+	 * Feeds have their own cache group because some blocks have (e.g. content loop) have different markup in feeds vs. site frontend.
 	 *
 	 * @return string Cache group.
 	 */
@@ -150,6 +151,8 @@ class Newspack_Blocks_Caching {
 				return sprintf( self::CACHE_GROUP . '-post-%d', get_the_ID() );
 			}
 			return self::CACHE_GROUP;
+		} elseif ( is_feed() ) {
+			return self::CACHE_GROUP . '-feed';
 		} else {
 			return self::CACHE_GROUP;
 		}

@@ -1,7 +1,7 @@
 @use "../../../shared/sass/variables";
 @use "../../../shared/sass/mixins";
 
-body:not([class*="block-theme"]) .editor-styles-wrapper div.wp-block-columns {
+body:not(.is-block-theme) .editor-styles-wrapper div.wp-block-columns {
 	gap: 32px;
 
 	&.is-style-borders {

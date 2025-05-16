@@ -1,3 +1,10 @@
+## [3.3.1](https://github.com/Automattic/newspack-listings/compare/v3.3.0...v3.3.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* force alpha build ([b206521](https://github.com/Automattic/newspack-listings/commit/b2065217883196ad1552f42ed5e2652b16487da4))
+
 # [3.3.0](https://github.com/Automattic/newspack-listings/compare/v3.2.0...v3.3.0) (2025-03-04)
 
 

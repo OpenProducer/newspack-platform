@@ -40,7 +40,7 @@ final class Placements {
 	 * Initialize settings.
 	 */
 	public static function init() {
-		self::register_default_placements();
+		add_action( 'init', [ __CLASS__, 'register_default_placements' ] );
 		add_action( 'rest_api_init', [ __CLASS__, 'register_api_endpoints' ] );
 	}
 
@@ -360,7 +360,7 @@ final class Placements {
 	/**
 	 * Register default placements.
 	 */
-	private static function register_default_placements() {
+	public static function register_default_placements() {
 		$placements = array(
 			'global_above_header' => array(
 				'name'        => __( 'Global: Above Header', 'newspack-ads' ),

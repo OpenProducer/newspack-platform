@@ -13,44 +13,19 @@ export const manageOpened = ( data ) => {
 	let action = 'opened';
 
 	const {
-		action_type,
 		amount = '',
-		currency,
 		is_variable = '',
 		price = '',
-		product_id,
-		product_type,
-		recurrence,
-		referrer,
 		variation_id = '',
 	} = data;
 
 	const params = {
-		action_type,
-		currency,
-		product_id,
-		product_type,
-		referrer,
+		...data,
 	};
 
 	// On the first variable screen, there may not be a price so we want to check for it.
 	if ( amount || price ) {
 		params.amount = amount ? amount : price;
-	}
-
-	// Only pass is_variable if available -- it only is for variable products.
-	if ( is_variable ) {
-		params.is_variable = is_variable;
-	}
-
-	// Only pass the variation_id if available -- it only is when a variation is picked.
-	if ( variation_id ) {
-		params.variation_id = variation_id;
-	}
-
-	// Only pass the recurrence if available -- for variable products, it won't be until a variation is picked.
-	if ( recurrence ) {
-		params.recurrence = recurrence;
 	}
 
 	// Change the action when opening the initial variation modal.

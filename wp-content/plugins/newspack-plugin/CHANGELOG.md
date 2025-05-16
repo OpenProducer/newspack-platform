@@ -1,3 +1,61 @@
+## [6.6.1](https://github.com/Automattic/newspack-plugin/compare/v6.6.0...v6.6.1) (2025-05-15)
+
+
+### Bug Fixes
+
+* remove nonexistent filter use ([#3976](https://github.com/Automattic/newspack-plugin/issues/3976)) ([ace5f7a](https://github.com/Automattic/newspack-plugin/commit/ace5f7a711572665918e72420e8666d3d8a4a950))
+
+# [6.6.0](https://github.com/Automattic/newspack-plugin/compare/v6.5.1...v6.6.0) (2025-05-14)
+
+
+### Bug Fixes
+
+* add white background to Newspack admin screens ([#3909](https://github.com/Automattic/newspack-plugin/issues/3909)) ([4c8409e](https://github.com/Automattic/newspack-plugin/commit/4c8409e6a3da3cc5a7462224fdb12d90c79f4d2d))
+* allow guest contributors to have empty archives ([#3902](https://github.com/Automattic/newspack-plugin/issues/3902)) ([af8bed9](https://github.com/Automattic/newspack-plugin/commit/af8bed9b4e3cdfbfad34c3220bf82a36fa55aa41))
+* **analytics:** migrate back-end GA4 events to front-end ([#3895](https://github.com/Automattic/newspack-plugin/issues/3895)) ([7e18628](https://github.com/Automattic/newspack-plugin/commit/7e1862887acbdf1895e34a87754184d1c1253f06))
+* **auth-form:** check user before is_user_reader() call ([#3944](https://github.com/Automattic/newspack-plugin/issues/3944)) ([1cbb760](https://github.com/Automattic/newspack-plugin/commit/1cbb760fb4b33e71fdbe023ecfdd3193684b387f))
+* avoid warning for network event ([#3942](https://github.com/Automattic/newspack-plugin/issues/3942)) ([60d0aa3](https://github.com/Automattic/newspack-plugin/commit/60d0aa3ccdb54829387ee3da536ddef12436eefd))
+* **bylines:** avoid rerendering of editable area ([#3896](https://github.com/Automattic/newspack-plugin/issues/3896)) ([9fdf659](https://github.com/Automattic/newspack-plugin/commit/9fdf659b7369250298c246dd22635cfe68a4909b))
+* **bylines:** custom edited state for modal ([#3919](https://github.com/Automattic/newspack-plugin/issues/3919)) ([2a1a800](https://github.com/Automattic/newspack-plugin/commit/2a1a8007a3a28e4f4296b775f006ea1e590032c4))
+* **bylines:** get CAP data from the plugin's store ([#3906](https://github.com/Automattic/newspack-plugin/issues/3906)) ([0745113](https://github.com/Automattic/newspack-plugin/commit/0745113167a647bb38bd8939154322126e5f63be))
+* **corrections:** Limit CPT to posts only ([#3927](https://github.com/Automattic/newspack-plugin/issues/3927)) ([1d49c39](https://github.com/Automattic/newspack-plugin/commit/1d49c39947895f1c8d7694092dd7f24185c0b915))
+* **corrections:** Use Corrections Archive template by default ([#3929](https://github.com/Automattic/newspack-plugin/issues/3929)) ([c4c1925](https://github.com/Automattic/newspack-plugin/commit/c4c1925d6e7841ad19879fabce2b931c275b1207))
+* **email-change:** ensure success and error messages persist after redirect ([#3913](https://github.com/Automattic/newspack-plugin/issues/3913)) ([caf82a5](https://github.com/Automattic/newspack-plugin/commit/caf82a572fedf602612012ff10c0967a8bbc4c04))
+* **email-change:** improve messaging for in-progress or expired change requests ([#3886](https://github.com/Automattic/newspack-plugin/issues/3886)) ([02d2ea0](https://github.com/Automattic/newspack-plugin/commit/02d2ea0d8f103089b56599251ba7ce4fd1cc53f6))
+* **email-change:** typo in variable name ([#3941](https://github.com/Automattic/newspack-plugin/issues/3941)) ([941dc21](https://github.com/Automattic/newspack-plugin/commit/941dc2168fd0045e30e54d77d370aa17068390f2))
+* **ga4:** ensure gate_post_id and newspack_popup_id are passed to activities ([#3956](https://github.com/Automattic/newspack-plugin/issues/3956)) ([fadaa4d](https://github.com/Automattic/newspack-plugin/commit/fadaa4d4c1e93ffe59269516573177c74ab26b24))
+* **google-login:** handle google oauth disabled state in the editor ([#3946](https://github.com/Automattic/newspack-plugin/issues/3946)) ([0f9f7c6](https://github.com/Automattic/newspack-plugin/commit/0f9f7c6e69c5f7ae0190cf2ecf385f351876f552))
+* hide campaigns menu when the Newspack Campaigns plugin is not activated ([#3922](https://github.com/Automattic/newspack-plugin/issues/3922)) ([adcc21f](https://github.com/Automattic/newspack-plugin/commit/adcc21f4e4476ef6e272a552230add780d90ed29))
+* make front end not dependent on coauthors plus ([#3905](https://github.com/Automattic/newspack-plugin/issues/3905)) ([dc96e5b](https://github.com/Automattic/newspack-plugin/commit/dc96e5b33cf9d328dbdcbb36f8504628e4e52349))
+* **newsletters-wizard:** remove advertisers menu item ([#3948](https://github.com/Automattic/newspack-plugin/issues/3948)) ([2fddbd6](https://github.com/Automattic/newspack-plugin/commit/2fddbd6aaa3e6a266ff626fdaeb05d39c546c4e9))
+* **otp-input:** enhance OTP input handling for clipboard ([#3898](https://github.com/Automattic/newspack-plugin/issues/3898)) ([a56328b](https://github.com/Automattic/newspack-plugin/commit/a56328b8c6c802a304733c9c18618b2d135fb7d4))
+* reinstate the Add New Newsletter link in the admin menu ([#3926](https://github.com/Automattic/newspack-plugin/issues/3926)) ([1c8c7d7](https://github.com/Automattic/newspack-plugin/commit/1c8c7d7fd1ea2e62e4947c2a52ef0df02d284c0c))
+* remove extra space above empty help text ([#3904](https://github.com/Automattic/newspack-plugin/issues/3904)) ([6a4fe4f](https://github.com/Automattic/newspack-plugin/commit/6a4fe4f7590d9d772af0486ede40283376ac34d9))
+* remove import and route for Suppression ([#3894](https://github.com/Automattic/newspack-plugin/issues/3894)) ([a2034e7](https://github.com/Automattic/newspack-plugin/commit/a2034e73ca8d284f73278c4f9c361313c0b4e292))
+* **setup-wizard:** prevent Yoast redirect ([#3940](https://github.com/Automattic/newspack-plugin/issues/3940)) ([3461b5f](https://github.com/Automattic/newspack-plugin/commit/3461b5f6bf76cf5e747b136f2030243724807653))
+
+
+### Features
+
+* **auth:** OTP autocomplete integration ([#3888](https://github.com/Automattic/newspack-plugin/issues/3888)) ([5a1d7a8](https://github.com/Automattic/newspack-plugin/commit/5a1d7a8cdc9e33eb54a2f5cbed5f74801734e264))
+* **bylines:** get post byline authors ([#3911](https://github.com/Automattic/newspack-plugin/issues/3911)) ([17942a2](https://github.com/Automattic/newspack-plugin/commit/17942a2e2e497a23540cf1bbcbfcf29779193290))
+* **bylines:** useAuthorTokens() hook with user entity validation ([#3907](https://github.com/Automattic/newspack-plugin/issues/3907)) ([3d1feee](https://github.com/Automattic/newspack-plugin/commit/3d1feee1a8b2ff80dde66659a3757bf1f0eb5028))
+* **email-change:** allow old email to cancel email change only, not confirm ([#3912](https://github.com/Automattic/newspack-plugin/issues/3912)) ([92413e3](https://github.com/Automattic/newspack-plugin/commit/92413e35a5e08ade9d401366eb31215f3ae6b91f))
+* **email-change:** remove env constant requirement ([#3943](https://github.com/Automattic/newspack-plugin/issues/3943)) ([f04e58f](https://github.com/Automattic/newspack-plugin/commit/f04e58ffd1f4f64b428f788acb755d3922dd0e1f))
+* **ga4:** np_newsletter_subscribed event upon front-end signup ([#3938](https://github.com/Automattic/newspack-plugin/issues/3938)) ([2295277](https://github.com/Automattic/newspack-plugin/commit/2295277de20c6bf61435ea1f96a31d0a9f95224f))
+* **ras-newsletter:** Newsletters list progressive disclosure ([#3887](https://github.com/Automattic/newspack-plugin/issues/3887)) ([53f4eed](https://github.com/Automattic/newspack-plugin/commit/53f4eed0b8993245a97a4f43877e7767d9ba5c2b))
+* **reader-auth:** send WP login reminder email to non-reader accounts ([#3796](https://github.com/Automattic/newspack-plugin/issues/3796)) ([d1af25e](https://github.com/Automattic/newspack-plugin/commit/d1af25e3ab28488f355ba91568483054c856dd94)), closes [#3823](https://github.com/Automattic/newspack-plugin/issues/3823)
+* **scss:** export colors as module for JS consumption ([#3910](https://github.com/Automattic/newspack-plugin/issues/3910)) ([81da8f0](https://github.com/Automattic/newspack-plugin/commit/81da8f0df1e1f70b6430302f8d74c314ced286b1))
+* **segments:** add filter for device segment ([#3880](https://github.com/Automattic/newspack-plugin/issues/3880)) ([d465726](https://github.com/Automattic/newspack-plugin/commit/d4657261bf9da8b47f527d68a0dfc3e7d8e78f5e))
+* update colors and add all design system variables ([#3882](https://github.com/Automattic/newspack-plugin/issues/3882)) ([6ee8e30](https://github.com/Automattic/newspack-plugin/commit/6ee8e3019d21c1b5faa3214c97604ce12ac752a9))
+
+## [6.5.1](https://github.com/Automattic/newspack-plugin/compare/v6.5.0...v6.5.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* **stripe-gateway:** transaction metadata for renewals ([#3939](https://github.com/Automattic/newspack-plugin/issues/3939)) ([5929618](https://github.com/Automattic/newspack-plugin/commit/59296184c0130c10f3c9c15908ae117fe2105831))
+
 # [6.5.0](https://github.com/Automattic/newspack-plugin/compare/v6.4.4...v6.5.0) (2025-05-08)
 
 

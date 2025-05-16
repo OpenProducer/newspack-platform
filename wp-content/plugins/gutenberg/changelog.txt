@@ -1,5 +1,153 @@
 == Changelog ==
 
+= 20.8.0 =
+
+## Changelog
+
+### Enhancements
+
+- Create Block: Add `--textdomain` flag to create block tool. ([69802](https://github.com/WordPress/gutenberg/pull/69802))
+
+#### Components
+- Guide: Make `next` and `previous` button text customizable. ([69907](https://github.com/WordPress/gutenberg/pull/69907))
+- Popover: Add virtual padding to prevent it from hitting the viewport edge. ([69555](https://github.com/WordPress/gutenberg/pull/69555))
+
+#### Document Settings
+- Editor: Add search functionality to template swapping modal. ([69667](https://github.com/WordPress/gutenberg/pull/69667))
+
+#### Block Editor
+- Widget Editor: Don't close the inserter when focusing outside it. ([67838](https://github.com/WordPress/gutenberg/pull/67838))
+
+#### Editor
+- Use split view for meta boxes only when canvas is iframed and “Desktop” view. ([69958](https://github.com/WordPress/gutenberg/pull/69958))
+
+
+### New APIs
+
+#### Widgets Editor
+- Edit Widgets: Save lock control via actions. ([69984](https://github.com/WordPress/gutenberg/pull/69984))
+
+
+### Bug Fixes
+
+- GitHub Actions: Fix components changelog CI check. ([70034](https://github.com/WordPress/gutenberg/pull/70034))
+- Persist git credentials when publishing via lerna. ([70007](https://github.com/WordPress/gutenberg/pull/70007))
+- Plugin: Fix deprecation for 'apply_block_hooks_to_content_from_post_object'. ([69909](https://github.com/WordPress/gutenberg/pull/69909))
+- ServerSideRender: Don't render the previous error response in loading state. ([69988](https://github.com/WordPress/gutenberg/pull/69988))
+- ServerSideRender: Refactor fetchData to use `useCallback` and `refs`. ([69237](https://github.com/WordPress/gutenberg/pull/69237))
+
+#### Block Library
+- Author, Author Name block: Fix PHP warning error when there is no context. ([69949](https://github.com/WordPress/gutenberg/pull/69949))
+- Block Editor: Allow editing invalid blocks as HTML. ([69902](https://github.com/WordPress/gutenberg/pull/69902))
+- Block Editor: Prevent negative width values in Spacer block when used inside a row block. ([68845](https://github.com/WordPress/gutenberg/pull/68845))
+- Calendar block: Disable edit as HTML support. ([69961](https://github.com/WordPress/gutenberg/pull/69961))
+- Image: Avoid stale URL when reselecting the same image from the library. ([69985](https://github.com/WordPress/gutenberg/pull/69985))
+- Latest Posts: Update content display labels to `Display post content` and `Content length`. ([69839](https://github.com/WordPress/gutenberg/pull/69839))
+- Navigation Link, Navigation Submenu: Fix undefined key warning. ([69951](https://github.com/WordPress/gutenberg/pull/69951))
+- fix: Update the logic of fetching current URL in loginout block. ([70031](https://github.com/WordPress/gutenberg/pull/70031))
+
+#### Block Editor
+- Block HTML: Add `box-sizing` property to prevent overflow. ([70014](https://github.com/WordPress/gutenberg/pull/70014))
+- Fix: Improve warning message and add spacing in HTMLElementControl. ([70002](https://github.com/WordPress/gutenberg/pull/70002))
+- MediaPlaceholder: Fix Regression with media URL input type to allow a local URL path. ([70043](https://github.com/WordPress/gutenberg/pull/70043))
+- Prevent block merging on blocks with the 'disabled' editing mode. ([69918](https://github.com/WordPress/gutenberg/pull/69918))
+
+#### Components
+- Don't mutate 'ALL_CSS_UNITS' default value in 'useCustomUnits'. ([70037](https://github.com/WordPress/gutenberg/pull/70037))
+- Fix double border in `ItemGroup` when last item is focused. ([70021](https://github.com/WordPress/gutenberg/pull/70021))
+- Fix: Duotone unset button. ([69981](https://github.com/WordPress/gutenberg/pull/69981))
+- ToggleGroupControl: Fix active background for empty string value. ([69969](https://github.com/WordPress/gutenberg/pull/69969))
+
+#### Site Editor
+- Check user permissions before rendering export menu item. ([69971](https://github.com/WordPress/gutenberg/pull/69971))
+
+#### Widgets Editor
+- Fix: Browser Warnings when closing keyboard shortcut modal. ([69929](https://github.com/WordPress/gutenberg/pull/69929))
+
+#### Block API
+- Fix: Missing conversion from json styled variable to CSS variable. ([69551](https://github.com/WordPress/gutenberg/pull/69551))
+
+#### Typography
+- Fix: Prevent `FontSizePicker` crash when no font size exists. ([68733](https://github.com/WordPress/gutenberg/pull/68733))
+
+#### Icons
+- Remove width / height attributes from svg element. ([43747](https://github.com/WordPress/gutenberg/pull/43747))
+
+
+### Accessibility
+
+- Keyboard Shortcuts: Revert delete shortcut to `access + z`. ([69931](https://github.com/WordPress/gutenberg/pull/69931))
+
+#### Block Library
+- Add new HTMLElementControl component. ([69904](https://github.com/WordPress/gutenberg/pull/69904))
+
+
+### Performance
+
+#### Block Library
+- Latest Posts: Delay inspector control queries until the block is selected. ([69898](https://github.com/WordPress/gutenberg/pull/69898))
+- Latest Posts: Embed author in response. ([69889](https://github.com/WordPress/gutenberg/pull/69889))
+
+#### Document Settings
+- Lazy load post authors' data. ([69950](https://github.com/WordPress/gutenberg/pull/69950))
+
+
+### Documentation
+
+- Add WP version note for 'setAttributes' updater function. ([69972](https://github.com/WordPress/gutenberg/pull/69972))
+- Create Block: Add `--textdomain`  in create-block README. ([69927](https://github.com/WordPress/gutenberg/pull/69927))
+- Docs: Add post meta limitations to Block Bindings API documentation. ([68583](https://github.com/WordPress/gutenberg/pull/68583))
+- Docs: Added copy and code for style_data. ([69920](https://github.com/WordPress/gutenberg/pull/69920))
+- Fix missing `CSS` import in data basics tutorial code. ([69914](https://github.com/WordPress/gutenberg/pull/69914))
+- Fix typos. ([69957](https://github.com/WordPress/gutenberg/pull/69957))
+- Fix: Remove an unnecessary `@return` tag from this filter docblock. ([69960](https://github.com/WordPress/gutenberg/pull/69960))
+
+
+### Code Quality
+
+- ServerSideRender: Use `useLayoutEffect` to update `latestPropsRef`. ([69999](https://github.com/WordPress/gutenberg/pull/69999))
+- Stylelint: Migrate configuration from `JSON` to `JavaScript` format. ([69590](https://github.com/WordPress/gutenberg/pull/69590))
+- theme.json: Unify property order. ([70033](https://github.com/WordPress/gutenberg/pull/70033))
+
+#### Themes
+- Simplify color specifications from `rgba` to `rgb`. ([70008](https://github.com/WordPress/gutenberg/pull/70008))
+
+#### Block Editor
+- Simplify condition selectors for 'useHasBlockToolbar'. ([69930](https://github.com/WordPress/gutenberg/pull/69930))
+
+#### Block Library
+- Latest Posts: Only fetch necessary fields for categories. ([69888](https://github.com/WordPress/gutenberg/pull/69888))
+
+#### Components
+- ColorPicker: Add tests for `ColorPicker` Alpha slider. ([69203](https://github.com/WordPress/gutenberg/pull/69203))
+
+
+### Tools
+
+#### Testing
+- Automated Testing: Skip storybook smoke test. ([69943](https://github.com/WordPress/gutenberg/pull/69943))
+- List View: Add end-to-end test to verify pasting block styles via keyboard. ([69979](https://github.com/WordPress/gutenberg/pull/69979))
+- Try: Fix 'wp-polyfill' script dependents unit test. ([69912](https://github.com/WordPress/gutenberg/pull/69912))
+- Workflows: Try different SHA. ([70048](https://github.com/WordPress/gutenberg/pull/70048))
+
+
+## First-time contributors
+
+The following PRs were merged by first-time contributors:
+
+- @jrmd: Block Editor: Prevent block merging on blocks with the 'disabled' editing mode. ([69918](https://github.com/WordPress/gutenberg/pull/69918))
+- @Maikuolan: Navigation Link, Navigation Submenu: Fix undefined key warning. ([69951](https://github.com/WordPress/gutenberg/pull/69951))
+
+
+## Contributors
+
+The following contributors merged PRs in this release:
+
+@bph @Debarghya-Banerjee @georgestephanis @himanshupathak95 @im3dabasia @Infinite-Null @johnbillion @jrmd @karthikeya-io @Maikuolan @Mamaduka @Mayank-Tripathi32 @Rishit30G @SH4LIN @shimotmk @stokesman @Sukhendu2002 @t-hamano @yogeshbhutkar
+
+
+
+
 = 20.7.0 =
 
 ## Changelog

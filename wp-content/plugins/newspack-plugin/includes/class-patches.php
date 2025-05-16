@@ -351,6 +351,7 @@ class Patches {
 					'editor',
 					'author',
 					'contributor',
+					Guest_Contributor_Role::CONTRIBUTOR_NO_EDIT_ROLE_NAME,
 				]
 			);
 

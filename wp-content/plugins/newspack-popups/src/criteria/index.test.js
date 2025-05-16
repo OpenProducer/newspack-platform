@@ -169,4 +169,20 @@ describe( 'criteria matching', () => {
 		expect( criteria.matches( { value: 'bar' } ) ).toEqual( true );
 		expect( matchingFunction ).toHaveBeenCalledTimes( 2 );
 	} );
+	it( 'should pass option params to matching function', () => {
+		registerCriteria( criteriaId, {
+			matchingAttribute: 'my-custom-attribute',
+			matchingFunction: ( config, ras, { optionParams } ) => {
+				expect( optionParams ).toBeDefined();
+				expect( optionParams[ config.value ] ).toBeDefined();
+				return true;
+			},
+			optionParams: {
+				1: { foo: 'bar' },
+				2: { foo: 'baz' },
+			},
+		} );
+		// Trigger the matching function for assertions.
+		getCriteria( criteriaId ).matches( { value: '1' } );
+	} );
 } );

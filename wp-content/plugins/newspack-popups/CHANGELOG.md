@@ -1,3 +1,18 @@
+# [3.5.0](https://github.com/Automattic/newspack-popups/compare/v3.4.3...v3.5.0) (2025-05-14)
+
+
+### Bug Fixes
+
+* pass popup ID param through order ([#1424](https://github.com/Automattic/newspack-popups/issues/1424)) ([2058424](https://github.com/Automattic/newspack-popups/commit/2058424119c2d35a214b7c572d1658a292775bfd))
+* remove "-popup" suffix from method params, no longer needed ([#1431](https://github.com/Automattic/newspack-popups/issues/1431)) ([843282e](https://github.com/Automattic/newspack-popups/commit/843282e6485856caf1227d48103548dd11667364))
+* **segmentation:** range criteria ([#1419](https://github.com/Automattic/newspack-popups/issues/1419)) ([c50d60a](https://github.com/Automattic/newspack-popups/commit/c50d60a7ce0f5da49b5b5f97e7a9dbcdd0348f45))
+
+
+### Features
+
+* **criteria:** option parameters ([#1421](https://github.com/Automattic/newspack-popups/issues/1421)) ([3ed2b4a](https://github.com/Automattic/newspack-popups/commit/3ed2b4aabd4f0eb2cc8795a45c718eb92bf2a15d))
+* **segments:** add screen size criteria ([#1414](https://github.com/Automattic/newspack-popups/issues/1414)) ([5832984](https://github.com/Automattic/newspack-popups/commit/5832984257ea0a4f38e79a9ef8910e0a66979244))
+
 ## [3.4.3](https://github.com/Automattic/newspack-popups/compare/v3.4.2...v3.4.3) (2025-05-08)
 
 

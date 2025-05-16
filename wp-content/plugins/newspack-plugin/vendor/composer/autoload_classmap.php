@@ -40,8 +40,6 @@ return array(
     'Newspack\\Data_Events' => $baseDir . '/includes/data-events/class-data-events.php',
     'Newspack\\Data_Events\\Api' => $baseDir . '/includes/data-events/class-api.php',
     'Newspack\\Data_Events\\Connectors\\ESP_Connector' => $baseDir . '/includes/data-events/connectors/class-esp-connector.php',
-    'Newspack\\Data_Events\\Connectors\\GA4' => $baseDir . '/includes/data-events/connectors/ga4/class-ga4.php',
-    'Newspack\\Data_Events\\Connectors\\GA4\\Event' => $baseDir . '/includes/data-events/connectors/ga4/class-event.php',
     'Newspack\\Data_Events\\Memberships' => $baseDir . '/includes/data-events/class-memberships.php',
     'Newspack\\Data_Events\\Popups' => $baseDir . '/includes/data-events/class-popups.php',
     'Newspack\\Data_Events\\Utils' => $baseDir . '/includes/data-events/class-utils.php',

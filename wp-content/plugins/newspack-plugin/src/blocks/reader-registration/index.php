@@ -200,7 +200,8 @@ function render_block( $attrs, $content ) {
 				<?php if ( ! empty( $attrs['description'] ) ) : ?>
 					<p class="newspack-registration__description"><?php echo \wp_kses_post( $attrs['description'] ); ?></p>
 				<?php endif; ?>
-				<?php \wp_nonce_field( FORM_ACTION, FORM_ACTION ); ?>
+				<input type="hidden" name="<?php echo esc_attr( FORM_ACTION ); ?>" value="<?php echo esc_attr( FORM_ACTION ); ?>" />
+				<div class="newspack-registration__form-content">
 				<?php
 				/**
 				 * Action to add custom fields before the form fields of the registration block.
@@ -209,7 +210,6 @@ function render_block( $attrs, $content ) {
 				 */
 				do_action( 'newspack_registration_before_form_fields', $attrs );
 				?>
-				<div class="newspack-registration__form-content">
 					<?php
 					if ( ! empty( $lists ) ) {
 						if ( 1 === count( $lists ) && $attrs['hideSubscriptionInput'] ) {
@@ -381,16 +381,20 @@ function process_form() {
 		return;
 	}
 
+	$action = filter_input( INPUT_POST, FORM_ACTION, FILTER_SANITIZE_SPECIAL_CHARS );
+
 	// No need to proceed if we don't have the required params.
-	if ( ! isset( $_REQUEST[ FORM_ACTION ] ) || ! \wp_verify_nonce( \sanitize_text_field( $_REQUEST[ FORM_ACTION ] ), FORM_ACTION ) ) {
+	if ( empty( $action ) || $action !== FORM_ACTION ) {
 		return;
 	}
 
+	$honeypot_trap = filter_input( INPUT_POST, 'email', FILTER_SANITIZE_EMAIL );
+
 	// Honeypot trap.
-	if ( ! empty( $_REQUEST['email'] ) ) {
+	if ( ! empty( $honeypot_trap ) ) {
 		return send_form_response(
 			[
-				'email'         => \sanitize_email( $_REQUEST['email'] ),
+				'email'         => \sanitize_email( $honeypot_trap ),
 				'authenticated' => true,
 				'existing_user' => false,
 			]
@@ -411,26 +415,19 @@ function process_form() {
 
 	// Note that that the "true" email address field is called `npe` due to the honeypot strategy.
 	// The honeypot field is called `email` to hopefully capture bots that might be looking for such a field.
-	$email = isset( $_REQUEST['npe'] ) ? \sanitize_email( $_REQUEST['npe'] ) : '';
+	$email = filter_input( INPUT_POST, 'npe', FILTER_SANITIZE_EMAIL );
 	if ( empty( $email ) ) {
 		return send_form_response( new \WP_Error( 'invalid_email', __( 'You must enter a valid email address.', 'newspack-plugin' ) ) );
 	}
 
+	$lists = filter_input( INPUT_POST, 'lists', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY );
 	$metadata = [];
-	$lists    = array_map( 'sanitize_text_field', isset( $_REQUEST['lists'] ) ? $_REQUEST['lists'] : [] );
 	if ( ! empty( $lists ) ) {
 		$metadata['lists'] = $lists;
 	}
 	$metadata['referer']             = \wp_get_raw_referer(); // wp_get_referer() will return false because it's a POST request to the same page.
 	$metadata['current_page_url']    = home_url( add_query_arg( array(), $metadata['referer'] ) );
 	$metadata['registration_method'] = 'registration-block';
-
-	$popup_id                      = isset( $_REQUEST['newspack_popup_id'] ) ? (int) $_REQUEST['newspack_popup_id'] : false;
-	$metadata['newspack_popup_id'] = $popup_id;
-
-	if ( $popup_id ) {
-		$metadata['registration_method'] = 'registration-block-popup';
-	}
 
 	/**
 	 * Filters the metadata to be saved for a reader registered through the Reader Registration Block.
@@ -462,6 +459,7 @@ function process_form() {
 			'email'         => $email,
 			'authenticated' => $user_logged_in,
 			'existing_user' => ! $user_logged_in,
+			'metadata'      => $metadata,
 		]
 	);
 }

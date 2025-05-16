@@ -18,7 +18,6 @@ import {
 /**
  * Internal dependencies
  */
-import './style.scss';
 import meta from './block.json';
 
 /**

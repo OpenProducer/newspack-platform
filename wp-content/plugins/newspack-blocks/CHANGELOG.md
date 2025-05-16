@@ -1,3 +1,18 @@
+# [4.12.0](https://github.com/Automattic/newspack-blocks/compare/v4.11.0...v4.12.0) (2025-05-14)
+
+
+### Bug Fixes
+
+* adjust cache handling for feeds ([#2112](https://github.com/Automattic/newspack-blocks/issues/2112)) ([f880061](https://github.com/Automattic/newspack-blocks/commit/f8800618a7f61317f0a3e661a469d31982f6e49c))
+* update how we check for the express checkout in the is_modal check ([#2109](https://github.com/Automattic/newspack-blocks/issues/2109)) ([652daf7](https://github.com/Automattic/newspack-blocks/commit/652daf763301079c2ad8c99bf0db14d5ee9c2830))
+
+
+### Features
+
+* add body class depending on theme type ([#2101](https://github.com/Automattic/newspack-blocks/issues/2101)) ([efcda76](https://github.com/Automattic/newspack-blocks/commit/efcda76d08b589657a99fc48774991c4ecc2d458))
+* **content-loop:** support custom bylines ([#2105](https://github.com/Automattic/newspack-blocks/issues/2105)) ([6f70449](https://github.com/Automattic/newspack-blocks/commit/6f704494045e6950c49b2d9ccd11a2c07dd5c5b4))
+* **wcsg:** respect checkbox label option in WCSG settings ([#2053](https://github.com/Automattic/newspack-blocks/issues/2053)) ([58e40c5](https://github.com/Automattic/newspack-blocks/commit/58e40c5c61fe339987a13de28a910b7d9c39d395))
+
 # [4.11.0](https://github.com/Automattic/newspack-blocks/compare/v4.10.2...v4.11.0) (2025-05-08)
 
 

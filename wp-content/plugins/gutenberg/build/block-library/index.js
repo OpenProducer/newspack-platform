@@ -6408,6 +6408,7 @@ const calendar_metadata = {
   },
   supports: {
     align: true,
+    html: false,
     color: {
       link: true,
       __experimentalSkipSerialization: ["text", "background"],
@@ -9248,27 +9249,10 @@ const v1 = {
 };
 /* harmony default export */ const comments_deprecated = ([v1]);
 
-;// ./packages/block-library/build-module/utils/messages.js
-/**
- * WordPress dependencies
- */
-
-const htmlElementMessages = {
-  article: (0,external_wp_i18n_namespaceObject.__)('The <article> element should represent a self-contained, syndicatable portion of the document.'),
-  aside: (0,external_wp_i18n_namespaceObject.__)("The <aside> element should represent a portion of a document whose content is only indirectly related to the document's main content."),
-  div: (0,external_wp_i18n_namespaceObject.__)('The <div> element should only be used if the block is a design element with no semantic meaning.'),
-  footer: (0,external_wp_i18n_namespaceObject.__)('The <footer> element should represent a footer for its nearest sectioning element (e.g.: <section>, <article>, <main> etc.).'),
-  header: (0,external_wp_i18n_namespaceObject.__)('The <header> element should represent introductory content, typically a group of introductory or navigational aids.'),
-  main: (0,external_wp_i18n_namespaceObject.__)('The <main> element should be used for the primary content of your document only.'),
-  nav: (0,external_wp_i18n_namespaceObject.__)('The <nav> element should be used to identify groups of links that are intended to be used for website or page content navigation.'),
-  section: (0,external_wp_i18n_namespaceObject.__)("The <section> element should represent a standalone portion of the document that can't be better represented by another element.")
-};
-
 ;// ./packages/block-library/build-module/comments/edit/comments-inspector-controls.js
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -9277,19 +9261,25 @@ const htmlElementMessages = {
  */
 
 
+const {
+  HTMLElementControl
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function CommentsInspectorControls({
   attributes: {
     tagName
   },
-  setAttributes
+  setAttributes,
+  clientId
 }) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
       group: "advanced",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-        __nextHasNoMarginBottom: true,
-        __next40pxDefaultSize: true,
-        label: (0,external_wp_i18n_namespaceObject.__)('HTML element'),
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HTMLElementControl, {
+        tagName: tagName,
+        onChange: value => setAttributes({
+          tagName: value
+        }),
+        clientId: clientId,
         options: [{
           label: (0,external_wp_i18n_namespaceObject.__)('Default (<div>)'),
           value: 'div'
@@ -9299,12 +9289,7 @@ function CommentsInspectorControls({
         }, {
           label: '<aside>',
           value: 'aside'
-        }],
-        value: tagName,
-        onChange: value => setAttributes({
-          tagName: value
-        }),
-        help: htmlElementMessages[tagName]
+        }]
       })
     })
   });
@@ -9649,7 +9634,8 @@ const TEMPLATE = [['core/comments-title'], ['core/comment-template', {}, [['core
 function CommentsEdit(props) {
   const {
     attributes,
-    setAttributes
+    setAttributes,
+    clientId
   } = props;
   const {
     tagName: TagName,
@@ -9667,7 +9653,8 @@ function CommentsEdit(props) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CommentsInspectorControls, {
       attributes: attributes,
-      setAttributes: setAttributes
+      setAttributes: setAttributes,
+      clientId: clientId
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TagName, {
       ...innerBlocksProps
     })]
@@ -10666,8 +10653,6 @@ const comment_date_init = () => initBlock({
 
 
 const commentEditLink = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  width: "24",
-  height: "24",
   viewBox: "0 0 24 24",
   xmlns: "http://www.w3.org/2000/svg",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
@@ -10831,8 +10816,6 @@ const comment_edit_link_init = () => initBlock({
 
 
 const commentReplyLink = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  width: "24",
-  height: "24",
   viewBox: "0 0 24 24",
   xmlns: "http://www.w3.org/2000/svg",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
@@ -14204,10 +14187,10 @@ const DEFAULT_MEDIA_SIZE_SLUG = 'full';
 
 
 
-
 const {
   cleanEmptyObject: inspector_controls_cleanEmptyObject,
-  ResolutionTool
+  ResolutionTool,
+  HTMLElementControl: inspector_controls_HTMLElementControl
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function CoverHeightInput({
   onChange,
@@ -14508,10 +14491,12 @@ function CoverInspectorControls({
       })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
       group: "advanced",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-        __nextHasNoMarginBottom: true,
-        __next40pxDefaultSize: true,
-        label: (0,external_wp_i18n_namespaceObject.__)('HTML element'),
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(inspector_controls_HTMLElementControl, {
+        tagName: tagName,
+        onChange: value => setAttributes({
+          tagName: value
+        }),
+        clientId: clientId,
         options: [{
           label: (0,external_wp_i18n_namespaceObject.__)('Default (<div>)'),
           value: 'div'
@@ -14533,12 +14518,7 @@ function CoverInspectorControls({
         }, {
           label: '<footer>',
           value: 'footer'
-        }],
-        value: tagName,
-        onChange: value => setAttributes({
-          tagName: value
-        }),
-        help: htmlElementMessages[tagName]
+        }]
       })
     })]
   });
@@ -23676,12 +23656,15 @@ function GroupPlaceHolder({
 
 
 
-
 /**
  * Internal dependencies
  */
 
 
+
+const {
+  HTMLElementControl: edit_HTMLElementControl
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 
 /**
  * Render inspector controls for the Group block.
@@ -23689,20 +23672,21 @@ function GroupPlaceHolder({
  * @param {Object}   props                 Component props.
  * @param {string}   props.tagName         The HTML tag name.
  * @param {Function} props.onSelectTagName onChange function for the SelectControl.
+ * @param {string}   props.clientId        The client ID of the current block.
  *
  * @return {JSX.Element}                The control group.
  */
-
 function GroupEditControls({
   tagName,
-  onSelectTagName
+  onSelectTagName,
+  clientId
 }) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
     group: "advanced",
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-      __nextHasNoMarginBottom: true,
-      __next40pxDefaultSize: true,
-      label: (0,external_wp_i18n_namespaceObject.__)('HTML element'),
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(edit_HTMLElementControl, {
+      tagName: tagName,
+      onChange: onSelectTagName,
+      clientId: clientId,
       options: [{
         label: (0,external_wp_i18n_namespaceObject.__)('Default (<div>)'),
         value: 'div'
@@ -23724,10 +23708,7 @@ function GroupEditControls({
       }, {
         label: '<footer>',
         value: 'footer'
-      }],
-      value: tagName,
-      onChange: onSelectTagName,
-      help: htmlElementMessages[tagName]
+      }]
     })
   });
 }
@@ -23809,7 +23790,8 @@ function GroupEdit({
       tagName: TagName,
       onSelectTagName: value => setAttributes({
         tagName: value
-      })
+      }),
+      clientId: clientId
     }), showPlaceholder && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_primitives_namespaceObject.View, {
       children: [innerBlocksProps.children, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(placeholder, {
         name: name,
@@ -27787,12 +27769,6 @@ function ImageEdit({
       additionalAttributes = {
         sizeSlug: newSize
       };
-    } else {
-      // Keep the same url when selecting the same file, so "Resolution"
-      // option is not changed.
-      additionalAttributes = {
-        url
-      };
     }
 
     // Check if default link setting should be used.
@@ -28971,6 +28947,7 @@ const DEFAULT_EXCERPT_LENGTH = 55;
 
 const CATEGORIES_LIST_QUERY = {
   per_page: -1,
+  _fields: 'id,name',
   context: 'view'
 };
 const USERS_LIST_QUERY = {
@@ -28978,6 +28955,23 @@ const USERS_LIST_QUERY = {
   has_published_posts: ['post'],
   context: 'view'
 };
+const imageAlignmentOptions = [{
+  value: 'none',
+  icon: align_none,
+  label: (0,external_wp_i18n_namespaceObject.__)('None')
+}, {
+  value: 'left',
+  icon: position_left,
+  label: (0,external_wp_i18n_namespaceObject.__)('Left')
+}, {
+  value: 'center',
+  icon: position_center,
+  label: (0,external_wp_i18n_namespaceObject.__)('Center')
+}, {
+  value: 'right',
+  icon: position_right,
+  label: (0,external_wp_i18n_namespaceObject.__)('Right')
+}];
 function getFeaturedImageDetails(post, size) {
   var _image$media_details$;
   const image = post._embedded?.['wp:featuredmedia']?.['0'];
@@ -28986,13 +28980,15 @@ function getFeaturedImageDetails(post, size) {
     alt: image?.alt_text
   };
 }
-function LatestPostsEdit({
+function getCurrentAuthor(post) {
+  return post._embedded?.author?.[0];
+}
+function Controls({
   attributes,
-  setAttributes
+  setAttributes,
+  postCount
 }) {
   var _categoriesList$reduc;
-  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(LatestPostsEdit);
-  const dropdownMenuProps = useToolsPanelDropdownMenuProps();
   const {
     postsToShow,
     order,
@@ -29015,7 +29011,6 @@ function LatestPostsEdit({
   } = attributes;
   const {
     imageSizes,
-    latestPosts,
     defaultImageWidth,
     defaultImageHeight,
     categoriesList,
@@ -29027,37 +29022,15 @@ function LatestPostsEdit({
       getUsers
     } = select(external_wp_coreData_namespaceObject.store);
     const settings = select(external_wp_blockEditor_namespaceObject.store).getSettings();
-    const catIds = categories && categories.length > 0 ? categories.map(cat => cat.id) : [];
-    const latestPostsQuery = Object.fromEntries(Object.entries({
-      categories: catIds,
-      author: selectedAuthor,
-      order,
-      orderby: orderBy,
-      per_page: postsToShow,
-      _embed: 'wp:featuredmedia',
-      ignore_sticky: true
-    }).filter(([, value]) => typeof value !== 'undefined'));
     return {
       defaultImageWidth: (_settings$imageDimens = settings.imageDimensions?.[featuredImageSizeSlug]?.width) !== null && _settings$imageDimens !== void 0 ? _settings$imageDimens : 0,
       defaultImageHeight: (_settings$imageDimens2 = settings.imageDimensions?.[featuredImageSizeSlug]?.height) !== null && _settings$imageDimens2 !== void 0 ? _settings$imageDimens2 : 0,
       imageSizes: settings.imageSizes,
-      latestPosts: getEntityRecords('postType', 'post', latestPostsQuery),
       categoriesList: getEntityRecords('taxonomy', 'category', CATEGORIES_LIST_QUERY),
       authorList: getUsers(USERS_LIST_QUERY)
     };
-  }, [featuredImageSizeSlug, postsToShow, order, orderBy, categories, selectedAuthor]);
-
-  // If a user clicks to a link prevent redirection and show a warning.
-  const {
-    createWarningNotice
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  const showRedirectionPreventedNotice = event => {
-    event.preventDefault();
-    createWarningNotice((0,external_wp_i18n_namespaceObject.__)('Links are disabled in the editor.'), {
-      id: `block-library/core/latest-posts/redirection-prevented/${instanceId}`,
-      type: 'snackbar'
-    });
-  };
+  }, [featuredImageSizeSlug]);
+  const dropdownMenuProps = useToolsPanelDropdownMenuProps();
   const imageSizeOptions = imageSizes.filter(({
     slug
   }) => slug !== 'full').map(({
@@ -29090,25 +29063,7 @@ function LatestPostsEdit({
       categories: allCategories
     });
   };
-  const imageAlignmentOptions = [{
-    value: 'none',
-    icon: align_none,
-    label: (0,external_wp_i18n_namespaceObject.__)('None')
-  }, {
-    value: 'left',
-    icon: position_left,
-    label: (0,external_wp_i18n_namespaceObject.__)('Left')
-  }, {
-    value: 'center',
-    icon: position_center,
-    label: (0,external_wp_i18n_namespaceObject.__)('Center')
-  }, {
-    value: 'right',
-    icon: position_right,
-    label: (0,external_wp_i18n_namespaceObject.__)('Right')
-  }];
-  const hasPosts = !!latestPosts?.length;
-  const inspectorControls = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_blockEditor_namespaceObject.InspectorControls, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalToolsPanel, {
       label: (0,external_wp_i18n_namespaceObject.__)('Post content'),
       resetAll: () => setAttributes({
@@ -29119,14 +29074,14 @@ function LatestPostsEdit({
       dropdownMenuProps: dropdownMenuProps,
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
         hasValue: () => !!displayPostContent,
-        label: (0,external_wp_i18n_namespaceObject.__)('Post content'),
+        label: (0,external_wp_i18n_namespaceObject.__)('Display post content'),
         onDeselect: () => setAttributes({
           displayPostContent: false
         }),
         isShownByDefault: true,
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToggleControl, {
           __nextHasNoMarginBottom: true,
-          label: (0,external_wp_i18n_namespaceObject.__)('Post content'),
+          label: (0,external_wp_i18n_namespaceObject.__)('Display post content'),
           checked: displayPostContent,
           onChange: value => setAttributes({
             displayPostContent: value
@@ -29134,13 +29089,13 @@ function LatestPostsEdit({
         })
       }), displayPostContent && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
         hasValue: () => displayPostContentRadio !== 'excerpt',
-        label: (0,external_wp_i18n_namespaceObject.__)('Show'),
+        label: (0,external_wp_i18n_namespaceObject.__)('Content length'),
         onDeselect: () => setAttributes({
           displayPostContentRadio: 'excerpt'
         }),
         isShownByDefault: true,
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.RadioControl, {
-          label: (0,external_wp_i18n_namespaceObject.__)('Show'),
+          label: (0,external_wp_i18n_namespaceObject.__)('Content length'),
           selected: displayPostContentRadio,
           options: [{
             label: (0,external_wp_i18n_namespaceObject.__)('Excerpt'),
@@ -29304,10 +29259,77 @@ function LatestPostsEdit({
           columns: value
         }),
         min: 2,
-        max: !hasPosts ? MAX_POSTS_COLUMNS : Math.min(MAX_POSTS_COLUMNS, latestPosts.length),
+        max: !postCount ? MAX_POSTS_COLUMNS : Math.min(MAX_POSTS_COLUMNS, postCount),
         required: true
       })]
     })]
+  });
+}
+function LatestPostsEdit({
+  attributes,
+  setAttributes
+}) {
+  var _latestPosts$length;
+  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(LatestPostsEdit);
+  const {
+    postsToShow,
+    order,
+    orderBy,
+    categories,
+    selectedAuthor,
+    displayFeaturedImage,
+    displayPostContentRadio,
+    displayPostContent,
+    displayPostDate,
+    displayAuthor,
+    postLayout,
+    columns,
+    excerptLength,
+    featuredImageAlign,
+    featuredImageSizeSlug,
+    featuredImageSizeWidth,
+    featuredImageSizeHeight,
+    addLinkToFeaturedImage
+  } = attributes;
+  const {
+    latestPosts
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getEntityRecords
+    } = select(external_wp_coreData_namespaceObject.store);
+    const catIds = categories && categories.length > 0 ? categories.map(cat => cat.id) : [];
+    const latestPostsQuery = Object.fromEntries(Object.entries({
+      categories: catIds,
+      author: selectedAuthor,
+      order,
+      orderby: orderBy,
+      per_page: postsToShow,
+      _embed: 'author,wp:featuredmedia',
+      ignore_sticky: true
+    }).filter(([, value]) => typeof value !== 'undefined'));
+    return {
+      latestPosts: getEntityRecords('postType', 'post', latestPostsQuery)
+    };
+  }, [postsToShow, order, orderBy, categories, selectedAuthor]);
+
+  // If a user clicks to a link prevent redirection and show a warning.
+  const {
+    createWarningNotice
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  const showRedirectionPreventedNotice = event => {
+    event.preventDefault();
+    createWarningNotice((0,external_wp_i18n_namespaceObject.__)('Links are disabled in the editor.'), {
+      id: `block-library/core/latest-posts/redirection-prevented/${instanceId}`,
+      type: 'snackbar'
+    });
+  };
+  const hasPosts = !!latestPosts?.length;
+  const inspectorControls = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Controls, {
+      attributes: attributes,
+      setAttributes: setAttributes,
+      postCount: (_latestPosts$length = latestPosts?.length) !== null && _latestPosts$length !== void 0 ? _latestPosts$length : 0
+    })
   });
   const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
     className: dist_clsx({
@@ -29357,7 +29379,7 @@ function LatestPostsEdit({
       children: displayPosts.map(post => {
         const titleTrimmed = post.title.rendered.trim();
         let excerpt = post.excerpt.rendered;
-        const currentAuthor = authorList?.find(author => author.id === post.author);
+        const currentAuthor = getCurrentAuthor(post);
         const excerptElement = document.createElement('div');
         excerptElement.innerHTML = excerpt;
         excerpt = excerptElement.textContent || excerptElement.innerText || '';
@@ -38285,7 +38307,7 @@ function getMissingText(type) {
  * packages/block-library/src/navigation-submenu/edit.js
  * Consider reusing this components for both blocks.
  */
-function Controls({
+function edit_Controls({
   attributes,
   setAttributes,
   setIsLabelFieldFocused
@@ -38606,7 +38628,7 @@ function NavigationLinkEdit({
         })]
       })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Controls, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(edit_Controls, {
         attributes: attributes,
         setAttributes: setAttributes,
         setIsLabelFieldFocused: setIsLabelFieldFocused
@@ -49762,7 +49784,6 @@ function QueryToolbar({
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -49773,6 +49794,9 @@ function QueryToolbar({
 
 
 
+const {
+  HTMLElementControl: query_content_HTMLElementControl
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 const DEFAULTS_POSTS_PER_PAGE = 3;
 const query_content_TEMPLATE = [['core/post-template']];
 function QueryContent({
@@ -49889,10 +49913,12 @@ function QueryContent({
       })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_blockEditor_namespaceObject.InspectorControls, {
       group: "advanced",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-        __nextHasNoMarginBottom: true,
-        __next40pxDefaultSize: true,
-        label: (0,external_wp_i18n_namespaceObject.__)('HTML element'),
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(query_content_HTMLElementControl, {
+        tagName: TagName,
+        onChange: value => setAttributes({
+          tagName: value
+        }),
+        clientId: clientId,
         options: [{
           label: (0,external_wp_i18n_namespaceObject.__)('Default (<div>)'),
           value: 'div'
@@ -49905,12 +49931,7 @@ function QueryContent({
         }, {
           label: '<aside>',
           value: 'aside'
-        }],
-        value: TagName,
-        onChange: value => setAttributes({
-          tagName: value
-        }),
-        help: htmlElementMessages[TagName]
+        }]
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EnhancedPaginationControl, {
         enhancedPagination: enhancedPagination,
         setAttributes: setAttributes,
@@ -54765,9 +54786,13 @@ function useDeprecatedOpacity(opacity, currentColor, setAttributes) {
 
 
 
+const {
+  HTMLElementControl: separator_edit_HTMLElementControl
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function SeparatorEdit({
   attributes,
-  setAttributes
+  setAttributes,
+  clientId
 }) {
   const {
     backgroundColor,
@@ -54797,22 +54822,19 @@ function SeparatorEdit({
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.InspectorControls, {
       group: "advanced",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-        __nextHasNoMarginBottom: true,
-        __next40pxDefaultSize: true,
-        label: (0,external_wp_i18n_namespaceObject.__)('HTML element'),
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(separator_edit_HTMLElementControl, {
+        tagName: tagName,
+        onChange: value => setAttributes({
+          tagName: value
+        }),
+        clientId: clientId,
         options: [{
           label: (0,external_wp_i18n_namespaceObject.__)('Default (<hr>)'),
           value: 'hr'
         }, {
           label: '<div>',
           value: 'div'
-        }],
-        value: tagName,
-        onChange: value => setAttributes({
-          tagName: value
-        }),
-        help: htmlElementMessages[tagName]
+        }]
       })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Wrapper, {
       ...(0,external_wp_blockEditor_namespaceObject.useBlockProps)({
@@ -63592,19 +63614,24 @@ function TemplatePartImportControls({
 
 
 
+
 /**
  * Internal dependencies
  */
 
 
 
+const {
+  HTMLElementControl: advanced_controls_HTMLElementControl
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function TemplatePartAdvancedControls({
   tagName,
   setAttributes,
   isEntityAvailable,
   templatePartId,
   defaultWrapper,
-  hasInnerBlocks
+  hasInnerBlocks,
+  clientId
 }) {
   const [area, setArea] = (0,external_wp_coreData_namespaceObject.useEntityProp)('postType', 'wp_template_part', 'area', templatePartId);
   const [title, setTitle] = (0,external_wp_coreData_namespaceObject.useEntityProp)('postType', 'wp_template_part', 'title', templatePartId);
@@ -63636,10 +63663,12 @@ function TemplatePartAdvancedControls({
         value: area,
         onChange: setArea
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-      __nextHasNoMarginBottom: true,
-      __next40pxDefaultSize: true,
-      label: (0,external_wp_i18n_namespaceObject.__)('HTML element'),
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(advanced_controls_HTMLElementControl, {
+      tagName: tagName || '',
+      onChange: value => setAttributes({
+        tagName: value
+      }),
+      clientId: clientId,
       options: [{
         label: (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: HTML tag based on area. */
         (0,external_wp_i18n_namespaceObject.__)('Default based on area (%s)'), `<${defaultWrapper}>`),
@@ -63665,12 +63694,7 @@ function TemplatePartAdvancedControls({
       }, {
         label: '<div>',
         value: 'div'
-      }],
-      value: tagName || '',
-      onChange: value => setAttributes({
-        tagName: value
-      }),
-      help: htmlElementMessages[tagName]
+      }]
     }), !hasInnerBlocks && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TemplatePartImportControls, {
       area: area,
       setAttributes: setAttributes
@@ -64012,7 +64036,8 @@ function TemplatePartEdit({
           isEntityAvailable: isEntityAvailable,
           templatePartId: templatePartId,
           defaultWrapper: areaObject.tagName,
-          hasInnerBlocks: hasInnerBlocks
+          hasInnerBlocks: hasInnerBlocks,
+          clientId: clientId
         })
       }), isPlaceholder && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TagName, {
         ...blockProps,

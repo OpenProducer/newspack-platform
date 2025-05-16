@@ -29017,10 +29017,19 @@ const external_wp_blob_namespaceObject = window["wp"]["blob"];
 
 
 
+
 function SiteExport() {
+  const canExport = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    var _select$getCurrentThe;
+    const targetHints = (_select$getCurrentThe = select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?._links?.['wp:export-theme']?.[0]?.targetHints) !== null && _select$getCurrentThe !== void 0 ? _select$getCurrentThe : {};
+    return !!targetHints.allow?.includes('GET');
+  }, []);
   const {
     createErrorNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  if (!canExport) {
+    return null;
+  }
   async function handleExport() {
     try {
       const response = await external_wp_apiFetch_default()({
@@ -29080,8 +29089,6 @@ function WelcomeGuideMenuItem() {
  */
 
 
-
-
 /**
  * Internal dependencies
  */
@@ -29094,12 +29101,9 @@ const {
   PreferencesModal
 } = unlock(external_wp_editor_namespaceObject.privateApis);
 function MoreMenu() {
-  const isBlockBasedTheme = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    return select(external_wp_coreData_namespaceObject.store).getCurrentTheme().is_block_theme;
-  }, []);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(ToolsMoreMenuGroup, {
-      children: [isBlockBasedTheme && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SiteExport, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WelcomeGuideMenuItem, {})]
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SiteExport, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WelcomeGuideMenuItem, {})]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PreferencesModal, {})]
   });
 }
@@ -45178,8 +45182,6 @@ function DataViewsSidebarContent({
 
 
 const drawerRight = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  width: "24",
-  height: "24",
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {

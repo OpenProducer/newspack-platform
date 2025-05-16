@@ -27,6 +27,11 @@ final class Newspack_Popups_Data_Api {
 	public static function init() {
 		\add_action( 'newspack_campaigns_after_campaign_render', [ __CLASS__, 'get_rendered_popups' ] );
 		\add_action( 'wp_footer', [ __CLASS__, 'print_popups_data' ], 999 );
+		add_filter( 'newspack_blocks_modal_checkout_cart_item_data', [ __CLASS__, 'checkout_cart_item_data' ], 10, 2 );
+		add_action( 'woocommerce_checkout_create_order_line_item', [ __CLASS__, 'checkout_create_order_line_item' ], 10, 4 );
+		add_filter( 'newspack_auth_form_metadata', [ __CLASS__, 'register_reader_metadata' ] );
+		add_filter( 'newspack_register_reader_form_metadata', [ __CLASS__, 'register_reader_metadata' ] );
+		add_filter( 'newspack_newsletters_subscription_form_metadata', [ __CLASS__, 'register_reader_metadata' ] );
 	}
 
 	/**
@@ -237,6 +242,51 @@ final class Newspack_Popups_Data_Api {
 			var newspackPopupsData = <?php echo \wp_json_encode( $popups ); ?>;
 		</script>
 		<?php
+	}
+
+	/**
+	 * Add content gate metadata to the cart item.
+	 *
+	 * @param array $cart_item_data The cart item data.
+	 *
+	 * @return array
+	 */
+	public static function checkout_cart_item_data( $cart_item_data ) {
+		$popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
+		if ( ! empty( $gate_post_id ) ) {
+			$cart_item_data['newspack_popup_id'] = $popup_id;
+		}
+		return $cart_item_data;
+	}
+
+	/**
+	 * Add content gate metadata from the cart item to the order.
+	 *
+	 * @param \WC_Order_Item_Product $item The cart item.
+	 * @param string                 $cart_item_key The cart item key.
+	 * @param array                  $values The cart item values.
+	 * @param \WC_Order              $order The order.
+	 * @return void
+	 */
+	public static function checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
+		if ( ! empty( $values['newspack_popup_id'] ) ) {
+			$order->add_meta_data( '_newspack_popup_id', $values['newspack_popup_id'] );
+		}
+	}
+
+	/**
+	 * Add content gate metadata on reader registration.
+	 *
+	 * @param array $metadata The metadata.
+	 *
+	 * @return array
+	 */
+	public static function register_reader_metadata( $metadata ) {
+		$popup_id = filter_input( INPUT_POST, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
+		if ( ! empty( $popup_id ) && isset( $metadata['registration_method'] ) ) {
+			$metadata['newspack_popup_id'] = $popup_id;
+		}
+		return $metadata;
 	}
 }
 
