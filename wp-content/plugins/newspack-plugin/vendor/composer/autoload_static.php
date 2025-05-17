@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5
+class ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -119,8 +119,6 @@ class ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5
         'Newspack\\Data_Events' => __DIR__ . '/../..' . '/includes/data-events/class-data-events.php',
         'Newspack\\Data_Events\\Api' => __DIR__ . '/../..' . '/includes/data-events/class-api.php',
         'Newspack\\Data_Events\\Connectors\\ESP_Connector' => __DIR__ . '/../..' . '/includes/data-events/connectors/class-esp-connector.php',
-        'Newspack\\Data_Events\\Connectors\\GA4' => __DIR__ . '/../..' . '/includes/data-events/connectors/ga4/class-ga4.php',
-        'Newspack\\Data_Events\\Connectors\\GA4\\Event' => __DIR__ . '/../..' . '/includes/data-events/connectors/ga4/class-event.php',
         'Newspack\\Data_Events\\Memberships' => __DIR__ . '/../..' . '/includes/data-events/class-memberships.php',
         'Newspack\\Data_Events\\Popups' => __DIR__ . '/../..' . '/includes/data-events/class-popups.php',
         'Newspack\\Data_Events\\Utils' => __DIR__ . '/../..' . '/includes/data-events/class-utils.php',
@@ -244,9 +242,9 @@ class ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd66390afb3230542bec9cf4cc15c2fa5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82::$classMap;
 
         }, null, ClassLoader::class);
     }

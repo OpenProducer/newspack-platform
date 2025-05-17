@@ -466,10 +466,10 @@ class Google_OAuth {
 	}
 
 	/**
-	 * Is OAuth configured?
+	 * Is Google OAuth configured?
 	 */
 	public static function is_oauth_configured() {
-		return OAuth::is_proxy_configured( 'google' );
+		return OAuth::is_proxy_configured( 'google' ) && ( ! defined( 'NEWSPACK_DISABLE_GOOGLE_OAUTH' ) || ! NEWSPACK_DISABLE_GOOGLE_OAUTH );
 	}
 }
 new Google_OAuth();

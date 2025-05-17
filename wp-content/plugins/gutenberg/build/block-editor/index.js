@@ -15808,7 +15808,7 @@ const mergeBlocks = (firstBlockClientId, secondBlockClientId) => ({
   const clientIdB = secondBlockClientId;
   const blockA = select.getBlock(clientIdA);
   const blockAType = (0,external_wp_blocks_namespaceObject.getBlockType)(blockA.name);
-  if (!blockAType) {
+  if (!blockAType || select.getBlockEditingMode(clientIdA) === 'disabled' || select.getBlockEditingMode(clientIdB) === 'disabled') {
     return;
   }
   const blockB = select.getBlock(clientIdB);
@@ -30729,7 +30729,7 @@ function typography_styleToAttributes(style) {
   };
   const fontSizeValue = style?.typography?.fontSize;
   const fontFamilyValue = style?.typography?.fontFamily;
-  const fontSizeSlug = fontSizeValue?.startsWith('var:preset|font-size|') ? fontSizeValue.substring('var:preset|font-size|'.length) : undefined;
+  const fontSizeSlug = typeof fontSizeValue === 'string' && fontSizeValue?.startsWith('var:preset|font-size|') ? fontSizeValue.substring('var:preset|font-size|'.length) : undefined;
   const fontFamilySlug = fontFamilyValue?.startsWith('var:preset|font-family|') ? fontFamilyValue.substring('var:preset|font-family|'.length) : undefined;
   updatedStyle.typography = {
     ...omit(updatedStyle.typography, ['fontFamily']),
@@ -31925,6 +31925,7 @@ function FlexControls({
         });
       },
       value: flexSize,
+      min: 0,
       label: flexResetLabel,
       hideLabelFromVision: true
     })]
@@ -34413,7 +34414,7 @@ function DuotonePanelPure({
   if (blockEditingMode !== 'default') {
     return null;
   }
-  const duotonePresetOrColors = !Array.isArray(duotoneStyle) ? getColorsFromDuotonePreset(duotoneStyle, duotonePalette) : duotoneStyle;
+  const duotonePresetOrColors = duotoneStyle === 'unset' || Array.isArray(duotoneStyle) ? duotoneStyle : getColorsFromDuotonePreset(duotoneStyle, duotonePalette);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(inspector_controls, {
       group: "filter",
@@ -38856,8 +38857,8 @@ function KeyboardShortcutsRegister() {
       category: 'block',
       description: (0,external_wp_i18n_namespaceObject.__)('Remove the selected block(s).'),
       keyCombination: {
-        modifier: 'primaryShift',
-        character: 'backspace'
+        modifier: 'access',
+        character: 'z'
       }
     });
     registerShortcut({
@@ -44754,8 +44755,6 @@ function useFocusHandler(clientId) {
 
 
 const dragHandle = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  width: "24",
-  height: "24",
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
@@ -63114,7 +63113,7 @@ function BlockModeToggle({
   const {
     blockType,
     mode,
-    isCodeEditingEnabled
+    enabled
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getBlock,
@@ -63125,13 +63124,13 @@ function BlockModeToggle({
     return {
       mode: getBlockMode(clientId),
       blockType: block ? (0,external_wp_blocks_namespaceObject.getBlockType)(block.name) : null,
-      isCodeEditingEnabled: getSettings().codeEditingEnabled
+      enabled: getSettings().codeEditingEnabled && !!block?.isValid
     };
   }, [clientId]);
   const {
     toggleBlockMode
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
-  if (!blockType || !(0,external_wp_blocks_namespaceObject.hasBlockSupport)(blockType, 'html', true) || !isCodeEditingEnabled) {
+  if (!blockType || !(0,external_wp_blocks_namespaceObject.hasBlockSupport)(blockType, 'html', true) || !enabled) {
     return null;
   }
   const label = mode === 'visual' ? (0,external_wp_i18n_namespaceObject.__)('Edit as HTML') : (0,external_wp_i18n_namespaceObject.__)('Edit visually');
@@ -64340,10 +64339,7 @@ function NavigableToolbar({
  * @return {boolean} Whether the block toolbar component will be rendered.
  */
 function useHasBlockToolbar() {
-  const {
-    isToolbarEnabled,
-    isBlockDisabled
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+  const enabled = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getBlockEditingMode,
       getBlockName,
@@ -64355,15 +64351,9 @@ function useHasBlockToolbar() {
     // instead of getSelectedBlockClientIds
     const selectedBlockClientId = getBlockSelectionStart();
     const blockType = selectedBlockClientId && (0,external_wp_blocks_namespaceObject.getBlockType)(getBlockName(selectedBlockClientId));
-    return {
-      isToolbarEnabled: blockType && (0,external_wp_blocks_namespaceObject.hasBlockSupport)(blockType, '__experimentalToolbar', true),
-      isBlockDisabled: getBlockEditingMode(selectedBlockClientId) === 'disabled'
-    };
+    return blockType && (0,external_wp_blocks_namespaceObject.hasBlockSupport)(blockType, '__experimentalToolbar', true) && getBlockEditingMode(selectedBlockClientId) !== 'disabled';
   }, []);
-  if (!isToolbarEnabled || isBlockDisabled) {
-    return false;
-  }
-  return true;
+  return enabled;
 }
 
 ;// ./packages/block-editor/build-module/components/block-toolbar/change-design.js
@@ -65627,9 +65617,9 @@ function ExperimentalBlockCanvas({
   if (!shouldIframe) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(BlockTools, {
       __unstableContentRef: localRef,
-      className: "block-editor-block-canvas",
       style: {
-        height
+        height,
+        display: 'flex'
       },
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(editor_styles, {
         styles: styles,
@@ -65639,13 +65629,16 @@ function ExperimentalBlockCanvas({
         ref: contentRef,
         className: "editor-styles-wrapper",
         tabIndex: -1,
+        style: {
+          height: '100%',
+          width: '100%'
+        },
         children: children
       })]
     });
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockTools, {
     __unstableContentRef: localRef,
-    className: "block-editor-block-canvas",
     style: {
       height,
       display: 'flex'
@@ -66048,8 +66041,6 @@ function useListViewScrollIntoView({
 
 
 const pinSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  width: "24",
-  height: "24",
   viewBox: "0 0 24 24",
   xmlns: "http://www.w3.org/2000/svg",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
@@ -72430,7 +72421,8 @@ const InsertFromURLPopover = ({
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
       __next40pxDefaultSize: true,
       label: (0,external_wp_i18n_namespaceObject.__)('URL'),
-      type: "url",
+      type: "text" // Use text instead of URL to allow relative paths (e.g., /image/image.jpg)
+      ,
       hideLabelFromVision: true,
       placeholder: (0,external_wp_i18n_namespaceObject.__)('Paste or type URL'),
       onChange: onChange,
@@ -73698,10 +73690,7 @@ function createLinkInParagraph(url, onReplace) {
 /* harmony default export */ const event_listeners_delete = (props => element => {
   function onKeyDown(event) {
     const {
-      keyCode,
-      shiftKey,
-      ctrlKey,
-      metaKey
+      keyCode
     } = event;
     if (event.defaultPrevented) {
       return;
@@ -73722,11 +73711,6 @@ function createLinkInParagraph(url, onReplace) {
 
       // Only process delete if the key press occurs at an uncollapsed edge.
       if (!(0,external_wp_richText_namespaceObject.isCollapsed)(value) || hasActiveFormats || isReverse && start !== 0 || !isReverse && end !== text.length) {
-        return;
-      }
-
-      // Exclude (command|ctrl)+shift+backspace as they are shortcuts for deleting blocks.
-      if (shiftKey && (ctrlKey || metaKey)) {
         return;
       }
       if (onMerge) {
@@ -75560,7 +75544,7 @@ function useResizeCanvas(deviceType) {
           marginLeft: marginHorizontal,
           marginRight: marginHorizontal,
           height,
-          maxWidth: '100%'
+          overflowY: 'auto'
         };
       default:
         return {
@@ -80637,10 +80621,134 @@ function ResolutionTool({
   });
 }
 
+;// ./packages/block-editor/build-module/components/html-element-control/messages.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Messages providing helpful descriptions for HTML elements.
+ */
+const htmlElementMessages = {
+  article: (0,external_wp_i18n_namespaceObject.__)('The <article> element should represent a self-contained, syndicatable portion of the document.'),
+  aside: (0,external_wp_i18n_namespaceObject.__)("The <aside> element should represent a portion of a document whose content is only indirectly related to the document's main content."),
+  div: (0,external_wp_i18n_namespaceObject.__)('The <div> element should only be used if the block is a design element with no semantic meaning.'),
+  footer: (0,external_wp_i18n_namespaceObject.__)('The <footer> element should represent a footer for its nearest sectioning element (e.g.: <section>, <article>, <main> etc.).'),
+  header: (0,external_wp_i18n_namespaceObject.__)('The <header> element should represent introductory content, typically a group of introductory or navigational aids.'),
+  main: (0,external_wp_i18n_namespaceObject.__)('The <main> element should be used for the primary content of your document only.'),
+  nav: (0,external_wp_i18n_namespaceObject.__)('The <nav> element should be used to identify groups of links that are intended to be used for website or page content navigation.'),
+  section: (0,external_wp_i18n_namespaceObject.__)("The <section> element should represent a standalone portion of the document that can't be better represented by another element.")
+};
+
+;// ./packages/block-editor/build-module/components/html-element-control/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Renders a SelectControl for choosing HTML elements with validation
+ * to prevent duplicate <main> elements.
+ *
+ * @param {Object}   props          Component props.
+ * @param {string}   props.tagName  The current HTML tag name.
+ * @param {Function} props.onChange Function to call when the tag is changed.
+ * @param {string}   props.clientId The client ID of the current block.
+ * @param {Array}    props.options  SelectControl options (optional).
+ *
+ * @return {Component} The HTML element select control with validation.
+ */
+
+function HTMLElementControl({
+  tagName,
+  onChange,
+  clientId,
+  options = [{
+    label: (0,external_wp_i18n_namespaceObject.__)('Default (<div>)'),
+    value: 'div'
+  }, {
+    label: '<header>',
+    value: 'header'
+  }, {
+    label: '<main>',
+    value: 'main'
+  }, {
+    label: '<section>',
+    value: 'section'
+  }, {
+    label: '<article>',
+    value: 'article'
+  }, {
+    label: '<aside>',
+    value: 'aside'
+  }, {
+    label: '<footer>',
+    value: 'footer'
+  }]
+}) {
+  const checkForMainTag = !!clientId && options.some(option => option.value === 'main');
+  const hasMainElementElsewhere = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    if (!checkForMainTag) {
+      return false;
+    }
+    const {
+      getClientIdsWithDescendants,
+      getBlockAttributes
+    } = select(store);
+    return getClientIdsWithDescendants().some(id => {
+      // Skip the current block.
+      if (id === clientId) {
+        return false;
+      }
+      return getBlockAttributes(id)?.tagName === 'main';
+    });
+  }, [clientId, checkForMainTag]);
+
+  // Create a modified options array that disables the main option if needed.
+  const modifiedOptions = options.map(option => {
+    if (option.value === 'main' && hasMainElementElsewhere && tagName !== 'main') {
+      return {
+        ...option,
+        disabled: true,
+        label: (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: HTML element name */
+        (0,external_wp_i18n_namespaceObject.__)('%s (Already in use)'), option.label)
+      };
+    }
+    return option;
+  });
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
+    spacing: 2,
+    className: "block-editor-html-element-control",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
+      __nextHasNoMarginBottom: true,
+      __next40pxDefaultSize: true,
+      label: (0,external_wp_i18n_namespaceObject.__)('HTML element'),
+      options: modifiedOptions,
+      value: tagName,
+      onChange: onChange,
+      help: htmlElementMessages[tagName]
+    }), tagName === 'main' && hasMainElementElsewhere && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
+      status: "warning",
+      isDismissible: false,
+      children: (0,external_wp_i18n_namespaceObject.__)('Multiple <main> elements detected. The duplicate may be in your content or template. This is not valid HTML and may cause accessibility issues. Please change this HTML element.')
+    })]
+  });
+}
+
 ;// ./packages/block-editor/build-module/private-apis.js
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -80704,6 +80812,7 @@ lock(privateApis, {
   TextAlignmentControl: TextAlignmentControl,
   usesContextKey: usesContextKey,
   useFlashEditableBlocks: useFlashEditableBlocks,
+  HTMLElementControl: HTMLElementControl,
   useZoomOut: useZoomOut,
   globalStylesDataKey: globalStylesDataKey,
   globalStylesLinksDataKey: globalStylesLinksDataKey,

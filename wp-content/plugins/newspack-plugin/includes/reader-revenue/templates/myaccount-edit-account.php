@@ -66,9 +66,26 @@ endif;
 
 	<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide mt0">
 		<label for="account_email_display"><?php \esc_html_e( 'Email address', 'newspack-plugin' ); ?>
-		<?php if ( $is_email_change_enabled ) : ?>
+		<?php
+		if ( $is_email_change_enabled ) :
+			?>
 		<input type="email" class="woocommerce-Input woocommerce-Input--email input-text" name="newspack_account_email" id="newspack_account_email" autocomplete="email" <?php echo \esc_attr( $is_pending_email_change ? 'disabled' : '' ); ?> value="<?php echo \esc_attr( $display_email ); ?>" />
 		<input type="hidden" class="woocommerce-Input woocommerce-Input--email input-text" name="account_email" id="account_email" autocomplete="email" value="<?php echo \esc_attr( $user->user_email ); ?>" />
+			<?php if ( $is_pending_email_change ) : ?>
+			<span>
+				<em>
+				<?php
+				echo \wp_kses_post(
+					sprintf(
+						// Translators: %s is the account's current email address.
+						__( 'This email address is pending verification. Please verify to complete the change request, or cancel the change to retain the current account email: %s', 'newspack-plugin' ),
+						"<a href='mailto:$user->user_email'>$user->user_email</a>"
+					)
+				);
+				?>
+				</em>
+			</span>
+			<?php endif; ?>
 		<?php else : ?>
 		<input type="email" class="woocommerce-Input woocommerce-Input--email input-text" name="account_email_display" id="account_email_display" autocomplete="email" disabled value="<?php echo \esc_attr( $user->user_email ); ?>" />
 		<input type="hidden" class="woocommerce-Input woocommerce-Input--email input-text" name="account_email" id="account_email" autocomplete="email" value="<?php echo \esc_attr( $user->user_email ); ?>" />

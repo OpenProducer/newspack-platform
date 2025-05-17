@@ -1,3 +1,10 @@
+## [3.5.1](https://github.com/Automattic/newspack-ads/compare/v3.5.0...v3.5.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* force alpha build ([15a54b1](https://github.com/Automattic/newspack-ads/commit/15a54b1e004b8e2e1dc22f0e2969398b4289e1f2))
+
 # [3.5.0](https://github.com/Automattic/newspack-ads/compare/v3.4.0...v3.5.0) (2025-03-31)
 
 

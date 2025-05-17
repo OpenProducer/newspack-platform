@@ -31,6 +31,7 @@ domReady( function () {
 	const cancelButton = document.querySelector( '.subscription_details .button.cancel' );
 	const { labels, nonce, rest_url, should_rate_limit } = newspack_my_account || {};
 
+	// Show a confirmation dialog before cancelling a subscription.
 	if ( cancelButton ) {
 		const confirmCancel = event => {
 			const message =
@@ -45,6 +46,7 @@ domReady( function () {
 		cancelButton.addEventListener( 'click', confirmCancel );
 	}
 
+	// Rate limit the add payment method form.
 	const addPaymentForm = document.getElementById( 'add_payment_method' );
 	if ( addPaymentForm && Boolean( should_rate_limit ) ) {
 		const errorContainer = document.querySelector( '.woocommerce-notices-wrapper' );
@@ -93,4 +95,22 @@ domReady( function () {
 		addPaymentForm.addEventListener( 'submit' , rateLimit, true );
 		submitButton.addEventListener( 'click', rateLimit, true );
 	}
+
+	// Fire a newsletter_signup event when the user subscribes to a newsletter via My Account.
+	window.newspackRAS = window.newspackRAS || [];
+	window.newspackRAS.push( readerActivation => {
+		const reader = readerActivation.getReader();
+		const params = new URLSearchParams( window.location.search );
+		const subscribed = params.get( 'newspack_newsletters_subscription_subscribed' );
+		if ( subscribed && reader?.email && reader?.authenticated ) {
+			readerActivation.dispatchActivity( 'newsletter_signup', {
+				email: reader.email,
+				lists: subscribed.split( ',' ),
+				newsletters_subscription_method: 'my-account',
+			} );
+		}
+		params.delete( 'newspack_newsletters_subscription_subscribed' );
+		const newQueryString = params.toString() ? '?' + params.toString() : '';
+		window.history.replaceState( {}, '', window.location.pathname + newQueryString );
+	} );
 } );

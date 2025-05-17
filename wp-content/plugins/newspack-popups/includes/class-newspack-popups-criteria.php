@@ -35,7 +35,12 @@ final class Newspack_Popups_Criteria {
 	 * Initialize the hooks.
 	 */
 	public static function init() {
-		require_once __DIR__ . '/../src/criteria/default/index.php';
+		add_action(
+			'init',
+			function() {
+				require_once __DIR__ . '/../src/criteria/default/index.php';
+			}
+		);
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
 	}
 
@@ -99,9 +104,31 @@ final class Newspack_Popups_Criteria {
 			$config[ $criteria['id'] ] = [
 				'matchingFunction'  => $criteria['matching_function'],
 				'matchingAttribute' => $criteria['matching_attribute'],
+				'optionParams'      => self::get_criteria_option_params( $criteria ),
 			];
 		}
 		return $config;
+	}
+
+	/**
+	 * Get the option params for the criteria.
+	 *
+	 * @param array $criteria The criteria.
+	 *
+	 * @return array Option params keyed by option value.
+	 */
+	protected static function get_criteria_option_params( $criteria ) {
+		if ( empty( $criteria['options'] ) ) {
+			return [];
+		}
+		$option_params = [];
+		foreach ( $criteria['options'] as $option ) {
+			if ( empty( $option['params'] ) ) {
+				continue;
+			}
+			$option_params[ $option['value'] ] = $option['params'];
+		}
+		return $option_params;
 	}
 
 	/**

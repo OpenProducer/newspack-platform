@@ -26,7 +26,7 @@ class RSS {
 		}
 
 		// Backend.
-		self::register_feed_cpt();
+		add_action( 'init', [ __CLASS__, 'register_feed_cpt' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_autocomplete_scripts' ] );
 		add_action( 'save_post_' . self::FEED_CPT, [ __CLASS__, 'save_settings' ] );
 		add_filter( 'manage_' . self::FEED_CPT . '_posts_columns', [ __CLASS__, 'columns_head' ] );

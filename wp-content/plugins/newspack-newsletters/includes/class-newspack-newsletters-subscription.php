@@ -26,6 +26,13 @@ class Newspack_Newsletters_Subscription {
 	const SUBSCRIPTION_INTENT_CPT = 'np_nl_sub_intent';
 
 	/**
+	 * Memoized lists config.
+	 *
+	 * @var array
+	 */
+	private static $lists_config;
+
+	/**
 	 * Initialize hooks.
 	 */
 	public static function init() {
@@ -215,6 +222,9 @@ class Newspack_Newsletters_Subscription {
 	 * @return array[]|WP_Error Associative array with list configuration keyed by list ID or error.
 	 */
 	public static function get_lists_config() {
+		if ( self::$lists_config ) {
+			return self::$lists_config;
+		}
 		$provider = Newspack_Newsletters::get_service_provider();
 		if ( empty( $provider ) ) {
 			return new WP_Error( 'newspack_newsletters_invalid_provider', __( 'Provider is not set.', 'newspack-newsletters' ) );
@@ -230,7 +240,8 @@ class Newspack_Newsletters_Subscription {
 			$active_lists[ $list->get_public_id() ] = $list->to_array();
 		}
 
-		return $active_lists;
+		self::$lists_config = $active_lists;
+		return self::$lists_config;
 	}
 
 	/**
@@ -1033,12 +1044,18 @@ class Newspack_Newsletters_Subscription {
 		if ( ! is_user_logged_in() || ! self::is_email_verified() ) {
 			wc_add_notice( __( 'You must be logged in and verified to update your subscriptions.', 'newspack-newsletters' ), 'error' );
 		} else {
-			$email  = get_userdata( get_current_user_id() )->user_email;
-			$lists  = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : [];
+			$email         = get_userdata( get_current_user_id() )->user_email;
+			$lists         = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : [];
+			$lists_config   = self::get_lists_config();
+			$lists_to_add  = array_intersect( array_keys( $lists_config ), $lists );
+			$current_lists = [];
+			$lists_to_add  = array_values( array_diff( $lists_to_add, $current_lists ) );
 			if ( false === self::is_newsletter_subscriber( $email ) ) {
 				$result = Newspack_Newsletters_Contacts::subscribe( [ 'email' => $email ], $lists, false, 'User subscribed on My Account page' );
 			} else {
-				$result = Newspack_Newsletters_Contacts::update_lists( $email, $lists, 'User updated their subscriptions on My Account page' );
+				$current_lists = self::get_contact_lists( $email );
+				$lists_to_add  = array_values( array_diff( $lists_to_add, $current_lists ) );
+				$result        = Newspack_Newsletters_Contacts::update_lists( $email, $lists, 'User updated their subscriptions on My Account page' );
 			}
 			if ( is_wp_error( $result ) ) {
 				wc_add_notice( $result->get_error_message(), 'error' );
@@ -1046,6 +1063,15 @@ class Newspack_Newsletters_Subscription {
 				wc_add_notice( __( 'You must select newsletters to update.', 'newspack-newsletters' ), 'error' );
 			} else {
 				wc_add_notice( __( 'Your subscriptions were updated.', 'newspack-newsletters' ), 'success' );
+				if ( ! empty( $lists_to_add ) ) {
+					wp_safe_redirect(
+						add_query_arg(
+							[ self::SUBSCRIPTION_UPDATE . '_subscribed' => implode( ',', $lists_to_add ) ],
+							remove_query_arg( self::SUBSCRIPTION_UPDATE, wp_get_referer() )
+						)
+					);
+					exit;
+				}
 			}
 		}
 	}

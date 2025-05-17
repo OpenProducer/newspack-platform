@@ -1115,6 +1115,9 @@ class Donations {
 	 * @return bool
 	 */
 	public static function disable_coupons( $enabled ) {
+		if ( ! did_action( 'woocommerce_after_register_post_type' ) ) {
+			return $enabled;
+		}
 		if ( is_admin() ) {
 			return $enabled;
 		}

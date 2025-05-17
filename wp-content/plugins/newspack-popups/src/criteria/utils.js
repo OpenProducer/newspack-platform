@@ -100,7 +100,7 @@ export function registerCriteria( id, config = {} ) {
 			console.warn( 'Reader activation script not loaded.' ); // eslint-disable-line no-console
 		}
 		setup( ras );
-		criteria._matched[ configString ] = criteria.matchingFunction( segmentConfig, ras );
+		criteria._matched[ configString ] = criteria.matchingFunction( segmentConfig, ras, criteria );
 		return criteria._matched[ configString ];
 	};
 	if ( ! window.newspackPopupsCriteria.criteria ) {

@@ -7,9 +7,7 @@
 
 namespace Newspack;
 
-use Newspack\Logger;
 use Newspack\Memberships\Metering;
-use Newspack\Reader_Activation;
 use Newspack\WooCommerce_Connection;
 
 defined( 'ABSPATH' ) || exit;
@@ -56,7 +54,6 @@ class Memberships {
 		add_action( 'wc_memberships_user_membership_actions', [ __CLASS__, 'user_membership_meta_box_actions' ], 1, 2 );
 		add_action( 'admin_init', [ __CLASS__, 'handle_reevaluation_request' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'render_overlay_gate' ], 1 );
-		add_action( 'wp_footer', [ __CLASS__, 'render_js' ] );
 		add_filter( 'newspack_popups_assess_has_disabled_popups', [ __CLASS__, 'disable_popups' ] );
 		add_filter( 'newspack_reader_activity_article_view', [ __CLASS__, 'suppress_article_view_activity' ], 100 );
 		add_filter( 'user_has_cap', [ __CLASS__, 'user_has_cap' ], 10, 3 );
@@ -306,26 +303,6 @@ class Memberships {
 	}
 
 	/**
-	 * Recursively get the unique block names from the post content.
-	 *
-	 * @param array $blocks The blocks.
-	 *
-	 * @return array
-	 */
-	private static function get_block_names_recursive( $blocks ) {
-		$block_names = [];
-		foreach ( $blocks as $block ) {
-			if ( ! empty( $block['blockName'] ) ) {
-				$block_names[] = $block['blockName'];
-			}
-			if ( ! empty( $block['innerBlocks'] ) ) {
-				$block_names = array_merge( $block_names, self::get_block_names_recursive( $block['innerBlocks'] ) );
-			}
-		}
-		return array_unique( $block_names );
-	}
-
-	/**
 	 * Get gate metadata to be used for analytics purposes.
 	 *
 	 * @return array {
@@ -337,12 +314,9 @@ class Memberships {
 	 */
 	public static function get_gate_metadata() {
 		$post_id = self::get_gate_post_id();
-		$blocks  = self::get_block_names_recursive( parse_blocks( get_post_field( 'post_content', $post_id ) ) );
 		return [
-			'gate_post_id'                => $post_id,
-			'gate_has_donation_block'     => in_array( 'newspack-blocks/donate', $blocks ) ? 'yes' : 'no',
-			'gate_has_registration_block' => in_array( 'newspack/reader-registration', $blocks ) ? 'yes' : 'no',
-			'gate_has_checkout_button'    => in_array( 'newspack-blocks/checkout-button', $blocks ) ? 'yes' : 'no',
+			'gate_post_id' => $post_id,
+			'logged_in'    => \is_user_logged_in() ? 'yes' : 'no',
 		];
 	}
 
@@ -758,43 +732,6 @@ class Memberships {
 		self::$gate_rendered = true;
 		wp_reset_postdata();
 		$post = $_post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-	}
-
-	/**
-	 * Render footer JS.
-	 *
-	 * If the gate was rendered, reload the page after a new reader is detected.
-	 * This allows the membership purchase to unlock the content.
-	 */
-	public static function render_js() {
-		if ( ! self::$gate_rendered ) {
-			return;
-		}
-		?>
-		<script type="text/javascript">
-			window.newspackRAS = window.newspackRAS || [];
-			window.newspackRAS.push( function( ras ) {
-				let hasReader = false;
-				ras.on( 'overlay', function( ev ) {
-					// When an overlay was closed, and there's a reader,
-					// reload the window, but allow other JS – which might have
-					// triggered another overlay – to be executed (setTimeout hack).
-					if ( ! ras.overlays.get().length && hasReader ) {
-						setTimeout( () => {
-							if ( ! ras.overlays.get().length ) {
-								window.location.reload();
-							}
-						}, 1 )
-					}
-				})
-				ras.on( 'reader', function( ev ) {
-					if ( ev.detail.authenticated && ! window?.newspackReaderActivation?.getPendingCheckout() ) {
-						hasReader = true;
-					}
-				} );
-			} );
-		</script>
-		<?php
 	}
 
 	/**

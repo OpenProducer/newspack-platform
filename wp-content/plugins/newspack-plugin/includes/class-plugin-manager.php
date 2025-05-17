@@ -553,13 +553,22 @@ class Plugin_Manager {
 			$installed_plugins = self::get_installed_plugins();
 		}
 
-		if ( \is_plugin_active( $installed_plugins[ $plugin_slug ] ) ) {
-			return true;
+		if ( ! \is_plugin_active( $installed_plugins[ $plugin_slug ] ) ) {
+			$activated = activate_plugin( $installed_plugins[ $plugin_slug ] );
+			if ( \is_wp_error( $activated ) ) {
+				return new WP_Error( 'newspack_plugin_failed_activation', $activated->get_error_message() );
+			}
 		}
 
-		$activated = activate_plugin( $installed_plugins[ $plugin_slug ] );
-		if ( \is_wp_error( $activated ) ) {
-			return new WP_Error( 'newspack_plugin_failed_activation', $activated->get_error_message() );
+		// Prevent Yoast from redirecting after installation.
+		if (
+			in_array( $plugin_slug, [ 'wordpress-seo', 'wordpress-seo-premium' ] )
+			&& method_exists( 'WPSEO_Options', 'get' )
+		) {
+			$redirect = \WPSEO_Options::get( 'should_redirect_after_install_free' );
+			if ( $redirect ) {
+				\WPSEO_Options::set( 'should_redirect_after_install_free', false );
+			}
 		}
 
 		return true;

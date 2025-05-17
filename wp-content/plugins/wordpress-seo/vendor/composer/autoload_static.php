@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit18ea696e1cd589184e616540b92e0296
+class ComposerStaticInit7681a32885cab0ae4a60538eda9543f7
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -568,6 +568,7 @@ class ComposerStaticInit18ea696e1cd589184e616540b92e0296
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/elementor-activated-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Edit_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/elementor-edit-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Polylang_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/polylang-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Site_Kit_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/site-kit-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\TranslatePress_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/translatepress-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\W3_Total_Cache_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/w3-total-cache-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\WPML_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/wpml-conditional.php',
@@ -694,10 +695,12 @@ class ComposerStaticInit18ea696e1cd589184e616540b92e0296
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Analytics_4\\Analytics_4_Parameters' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/analytics-4/analytics-4-parameters.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Analytics_4\\Site_Kit_Analytics_4_Adapter' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/analytics-4/site-kit-analytics-4-adapter.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Analytics_4\\Site_Kit_Analytics_4_Api_Call' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/analytics-4/site-kit-analytics-4-api-call.php',
+        'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Browser_Cache\\Browser_Cache_Configuration' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/browser-cache/browser-cache-configuration.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Configuration\\Permanently_Dismissed_Site_Kit_Configuration_Repository' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/configuration/permanently-dismissed-site-kit-configuration-repository.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Configuration\\Permanently_Dismissed_Site_Kit_Configuration_Repository_Interface' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/configuration/permanently-dismissed-site-kit-configuration-repository-interface.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Configuration\\Site_Kit_Consent_Repository' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/configuration/site-kit-consent-repository.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Configuration\\Site_Kit_Consent_Repository_Interface' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/configuration/site-kit-consent-repository-interface.php',
+        'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Connection\\Site_Kit_Is_Connected_Call' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/connection/site-kit-is-connected-call.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Content_Types\\Content_Types_Collector' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/content-types/content-types-collector.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Readability_Scores_Endpoint' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/endpoints/readability-scores-endpoint.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\SEO_Scores_Endpoint' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/endpoints/seo-scores-endpoint.php',
@@ -721,6 +724,7 @@ class ComposerStaticInit18ea696e1cd589184e616540b92e0296
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Taxonomies\\Taxonomy_Validator' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/taxonomies/taxonomy-validator.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Tracking\\Setup_Steps_Tracking_Repository' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/tracking/setup-steps-tracking-repository.php',
         'Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Tracking\\Setup_Steps_Tracking_Repository_Interface' => __DIR__ . '/../..' . '/src/dashboard/infrastructure/tracking/setup-steps-tracking-repository-interface.php',
+        'Yoast\\WP\\SEO\\Dashboard\\User_Interface\\Configuration\\Site_Kit_Capabilities_Integration' => __DIR__ . '/../..' . '/src/dashboard/user-interface/configuration/site-kit-capabilities-integration.php',
         'Yoast\\WP\\SEO\\Dashboard\\User_Interface\\Configuration\\Site_Kit_Configuration_Dismissal_Route' => __DIR__ . '/../..' . '/src/dashboard/user-interface/configuration/site-kit-configuration-dismissal-route.php',
         'Yoast\\WP\\SEO\\Dashboard\\User_Interface\\Configuration\\Site_Kit_Consent_Management_Route' => __DIR__ . '/../..' . '/src/dashboard/user-interface/configuration/site-kit-consent-management-route.php',
         'Yoast\\WP\\SEO\\Dashboard\\User_Interface\\Scores\\Abstract_Scores_Route' => __DIR__ . '/../..' . '/src/dashboard/user-interface/scores/abstract-scores-route.php',
@@ -1212,9 +1216,9 @@ class ComposerStaticInit18ea696e1cd589184e616540b92e0296
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit18ea696e1cd589184e616540b92e0296::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit18ea696e1cd589184e616540b92e0296::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit18ea696e1cd589184e616540b92e0296::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7681a32885cab0ae4a60538eda9543f7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7681a32885cab0ae4a60538eda9543f7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7681a32885cab0ae4a60538eda9543f7::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -6,8 +6,7 @@
 import QueryControls from '../../components/query-controls';
 import { postsBlockSelector, postsBlockDispatch, isBlogPrivate, shouldReflow } from './utils';
 import {
-	formatAvatars,
-	formatByline,
+	getBylineHTML,
 	formatSponsorLogos,
 	formatSponsorByline,
 	getPostStatusLabel,
@@ -236,14 +235,9 @@ class Edit extends Component< HomepageArticlesProps > {
 
 						{ showAuthor &&
 							! post.newspack_listings_hide_author &&
-							showAvatar &&
 							( ! post.newspack_post_sponsors || post.newspack_sponsors_show_author ) &&
-							formatAvatars( post.newspack_author_info ) }
-
-						{ showAuthor &&
-							! post.newspack_listings_hide_author &&
-							( ! post.newspack_post_sponsors || post.newspack_sponsors_show_author ) &&
-							formatByline( post.newspack_author_info ) }
+							<RawHTML className="byline-container">{ getBylineHTML( post, showAvatar ) }</RawHTML>
+						}
 
 						{ showDate && ! post.newspack_listings_hide_publish_date && (
 							<time className="entry-date published" key="pub-date">

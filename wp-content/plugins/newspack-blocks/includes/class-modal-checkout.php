@@ -7,6 +7,8 @@
 
 namespace Newspack_Blocks;
 
+use Newspack_Blocks\Tracking\Data_Events;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -347,11 +349,6 @@ final class Modal_Checkout {
 		}
 
 		$cart_item_data = self::amend_cart_item_data( [ 'referer' => $referer ] );
-
-		$newspack_popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
-		if ( $newspack_popup_id ) {
-			$cart_item_data['newspack_popup_id'] = $newspack_popup_id;
-		}
 
 		/** Apply NYP custom price */
 		$price = filter_input( INPUT_GET, 'price', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
@@ -714,7 +711,7 @@ final class Modal_Checkout {
 									$price          = $variation->get_price();
 									$price_html     = $variation->get_price_html();
 									$frequency      = '';
-									$product_type = \Newspack_Blocks\Tracking\Data_Events::get_product_type( $product_id );
+									$product_type = Data_Events::get_product_type( $product_id );
 
 									// Use suggested price if NYP is active and set for variation.
 									if ( \Newspack_Blocks::can_use_name_your_price() && \WC_Name_Your_Price_Helpers::is_nyp( $variation_id ) ) {
@@ -1114,13 +1111,29 @@ final class Modal_Checkout {
 	 * Get after success button params.
 	 */
 	private static function get_after_success_params() {
-		return array_filter(
-			[
-				'after_success_behavior'     => isset( $_REQUEST['after_success_behavior'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_behavior'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				'after_success_url'          => isset( $_REQUEST['after_success_url'] ) ? sanitize_url( wp_unslash( $_REQUEST['after_success_url'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				'after_success_button_label' => isset( $_REQUEST['after_success_button_label'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_button_label'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			]
-		);
+		// Express checkout payment requests are separate requests, so they won't have the after_success attributes. We'll have to check the HTTP_REFERER instead.
+		if ( self::is_express_checkout() ) {
+			$referrer = isset( $_SERVER['HTTP_REFERER'] ) ? \esc_url_raw( \wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : false; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( $referrer ) {
+				$referrer_query = \wp_parse_url( $referrer, PHP_URL_QUERY );
+				\wp_parse_str( $referrer_query, $referrer_query_params );
+				return array_filter(
+					[
+						'after_success_behavior'     => isset( $referrer_query_params['after_success_behavior'] ) ? sanitize_text_field( wp_unslash( $referrer_query_params['after_success_behavior'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+						'after_success_url'          => isset( $referrer_query_params['after_success_url'] ) ? sanitize_url( wp_unslash( $referrer_query_params['after_success_url'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+						'after_success_button_label' => isset( $referrer_query_params['after_success_button_label'] ) ? sanitize_text_field( wp_unslash( $referrer_query_params['after_success_button_label'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					]
+				);
+			}
+		} else {
+			return array_filter(
+				[
+					'after_success_behavior'     => isset( $_REQUEST['after_success_behavior'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_behavior'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					'after_success_url'          => isset( $_REQUEST['after_success_url'] ) ? sanitize_url( wp_unslash( $_REQUEST['after_success_url'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					'after_success_button_label' => isset( $_REQUEST['after_success_button_label'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_button_label'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				]
+			);
+		}
 	}
 
 	/**
@@ -1165,7 +1178,6 @@ final class Modal_Checkout {
 		if ( isset( $_REQUEST[ self::CHECKOUT_REGISTRATION_FLAG ] ) && $_REQUEST[ self::CHECKOUT_REGISTRATION_FLAG ] ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 			$args[ self::CHECKOUT_REGISTRATION_FLAG ] = '1';
 		}
-
 		return add_query_arg(
 			$args,
 			$url
@@ -1526,7 +1538,16 @@ final class Modal_Checkout {
 	 */
 	public static function pass_url_param_on_redirect( $location ) {
 		if ( self::is_modal_checkout() ) {
-			$location = \add_query_arg( [ 'modal_checkout' => 1 ], $location );
+			$params = [ 'modal_checkout' => 1 ];
+			$newspack_popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
+			$gate_post_id = filter_input( INPUT_GET, 'memberships_content_gate', FILTER_SANITIZE_NUMBER_INT );
+			if ( $newspack_popup_id ) {
+				$params['newspack_popup_id'] = $newspack_popup_id;
+			}
+			if ( $gate_post_id ) {
+				$params['memberships_content_gate'] = $gate_post_id;
+			}
+			$location = \add_query_arg( $params, $location );
 		}
 		return $location;
 	}
@@ -1592,21 +1613,33 @@ final class Modal_Checkout {
 			$is_modal_checkout = strpos( $_REQUEST['post_data'], 'modal_checkout=1' ) !== false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
 
-		// Express checkout payment requests are separate requests, so they won't have the modal checkout flag. We'll have to check the HTTP_REFERER insteaad.
-		$payment_request_type = filter_input( INPUT_POST, 'payment_request_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-		$is_express_checkout  = ! empty( $payment_request_type ) && in_array( $payment_request_type, [ 'apple_pay', 'google_pay', 'payment_request_api' ], true ); // Validate payment request types: https://github.com/woocommerce/woocommerce-gateway-stripe/blob/develop/includes/payment-methods/class-wc-stripe-payment-request.php#L529-L548.
+		if ( self::is_express_checkout() ) {
+			$is_modal_checkout = true;
+		}
+
+		return $is_modal_checkout;
+	}
+
+	/**
+	 * Is this transaction using an express checkout method?
+	 */
+	public static function is_express_checkout() {
+		// Get express_payment_type in a way that works for both Stripe and WooPayments.
+		$express_payment_info = isset( $_POST['express_payment_type'] ) ? sanitize_text_field( wp_unslash( $_POST['express_payment_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+
+		$is_express_checkout = ! empty( $express_payment_info ) && in_array( $express_payment_info, [ 'apple_pay', 'google_pay', 'payment_request_api' ], true );  // Validate payment request types: https://github.com/woocommerce/woocommerce-gateway-stripe/blob/develop/includes/payment-methods/class-wc-stripe-payment-request.php#L557-L586.
+
 		if ( $is_express_checkout ) {
 			$referrer = isset( $_SERVER['HTTP_REFERER'] ) ? \esc_url_raw( \wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : false; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			if ( $referrer ) {
 				$referrer_query = \wp_parse_url( $referrer, PHP_URL_QUERY );
 				\wp_parse_str( $referrer_query, $referrer_query_params );
 				if ( isset( $referrer_query_params['modal_checkout'] ) && $referrer_query_params['modal_checkout'] ) {
-					$is_modal_checkout = true;
+					return true;
 				}
 			}
 		}
-
-		return $is_modal_checkout;
+		return false;
 	}
 
 	/**
@@ -1682,10 +1715,8 @@ final class Modal_Checkout {
 			foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) :
 				$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 				if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) :
-					// Create an empty array to store data order information.
-					$data_order_details = [];
 					// Create an array of order information to pass to GA4 via JavaScript.
-					$data_order_details = \Newspack_Blocks\Tracking\Data_Events::build_js_data_events( $_product->get_id(), $cart_item, $_product->get_parent_id() );
+					$data_order_details = Data_Events::build_js_data_events( $_product->get_id(), $cart_item );
 					?>
 					<p id="modal-checkout-product-details" data-order-details='<?php echo wp_json_encode( $data_order_details ); ?>'>
 						<strong>
@@ -2015,7 +2046,12 @@ final class Modal_Checkout {
 				),
 				'after_success'              => __( 'Continue browsing', 'newspack-blocks' ),
 				'donation_gift_details'      => __( 'This donation is a gift', 'newspack-blocks' ),
-				'purchase_gift_details'      => __( 'This purchase is a gift', 'newspack-blocks' ),
+				'purchase_gift_details'      => get_option(
+					'woocommerce_subscriptions_gifting_gifting_checkbox_text',
+					method_exists( 'Newspack\WooCommerce_Subscriptions_Gifting', 'default_gifting_checkbox_text' ) ?
+						\Newspack\WooCommerce_Subscriptions_Gifting::default_gifting_checkbox_text() :
+						__( 'This purchase is a gift', 'newspack-blocks' )
+				),
 				'checkout_confirm'           => __( 'Complete transaction', 'newspack-blocks' ),
 				'checkout_confirm_variation' => __( 'Purchase', 'newspack-blocks' ),
 				'checkout_back'              => __( 'Back', 'newspack-blocks' ),

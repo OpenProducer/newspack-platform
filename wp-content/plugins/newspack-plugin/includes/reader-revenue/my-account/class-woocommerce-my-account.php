@@ -801,16 +801,12 @@ class WooCommerce_My_Account {
 	 * Whether email changes are enabled.
 	 */
 	public static function is_email_change_enabled() {
-		if ( class_exists( '\Newspack_Manager\Features' ) && \Newspack_Manager\Features::is_automattician() ) {
-			return true;
-		}
-		$is_enabled = defined( 'NEWSPACK_EMAIL_CHANGE_ENABLED' ) && NEWSPACK_EMAIL_CHANGE_ENABLED;
 		/**
 		 * Filters whether or not to allow email changes in My Account.
 		 *
 		 * @param bool $enabled Whether or not to allow email changes.
 		 */
-		return \apply_filters( 'newspack_email_change_enabled', $is_enabled );
+		return \apply_filters( 'newspack_email_change_enabled', true );
 	}
 
 	/**
@@ -859,43 +855,50 @@ class WooCommerce_My_Account {
 				\wc_add_notice( __( 'Something went wrong. Please try again.', 'newspack-plugin' ), 'error' );
 			} else {
 				$sent = [];
-				foreach ( [ $old_email, $new_email ] as $email ) {
-					if (
-						Emails::send_email(
-							Reader_Activation_Emails::EMAIL_TYPES['CHANGE_EMAIL'],
-							$email,
+				if (
+					Emails::send_email(
+						Reader_Activation_Emails::EMAIL_TYPES['CHANGE_EMAIL_CANCEL'],
+						$old_email,
+						[
 							[
-								[
-									'template' => '*EMAIL_VERIFICATION_URL*',
-									'value'    => self::get_email_change_url( self::VERIFY_EMAIL_CHANGE_PARAM, $old_email ),
-								],
-								[
-									'template' => '*EMAIL_CANCELLATION_URL*',
-									'value'    => self::get_email_change_url( self::CANCEL_EMAIL_CHANGE_PARAM, $old_email ),
-								],
-							]
-						)
-					) {
-						$sent[] = $email;
-					}
+								'template' => '*PENDING_EMAIL_ADDRESS*',
+								'value'    => $new_email,
+							],
+							[
+								'template' => '*EMAIL_CANCELLATION_URL*',
+								'value'    => self::get_email_change_url( self::CANCEL_EMAIL_CHANGE_PARAM, $old_email ),
+							],
+						]
+					)
+				) {
+					$sent[] = $old_email;
+				}
+				if (
+					Emails::send_email(
+						Reader_Activation_Emails::EMAIL_TYPES['CHANGE_EMAIL'],
+						$new_email,
+						[
+							[
+								'template' => '*EMAIL_VERIFICATION_URL*',
+								'value'    => self::get_email_change_url( self::VERIFY_EMAIL_CHANGE_PARAM, $old_email ),
+							],
+							[
+								'template' => '*EMAIL_CANCELLATION_URL*',
+								'value'    => self::get_email_change_url( self::CANCEL_EMAIL_CHANGE_PARAM, $old_email ),
+							],
+						]
+					)
+				) {
+					$sent[] = $new_email;
 				}
 				if ( empty( $sent ) ) {
 					\wc_add_notice( __( 'Something went wrong. Please contact the site administrator.', 'newspack-plugin' ), 'error' );
-				} elseif ( count( $sent ) === 1 ) {
+				} else {
 					\wc_add_notice(
 						sprintf(
 							// Translators: %s is the email address the verification email was sent to..
 							__( 'A verification email has been sent to %s. Please verify to complete the change.', 'newspack-plugin' ),
-							$sent[0]
-						)
-					);
-				} else {
-					\wc_add_notice(
-						sprintf(
-							// Translators: 1 and 2 are the email addresses the verification email was sent to.
-							__( 'A verification email has been sent to %1$s and %2$s. Please verify to complete the change.', 'newspack-plugin' ),
-							$sent[0],
-							$sent[1]
+							$new_email
 						)
 					);
 				}
@@ -936,7 +939,8 @@ class WooCommerce_My_Account {
 		if ( ! $secret ) {
 			return;
 		}
-		$error     = __( 'Something went wrong.', 'newspack-plugin' );
+		$message   = __( 'Your email address has been successfully updated.', 'newspack-plugin' );
+		$is_error  = false;
 		$user_id   = \get_current_user_id();
 		$new_email = \get_user_meta( $user_id, self::PENDING_EMAIL_CHANGE_META, true );
 		$old_email = \wp_get_current_user()->user_email;
@@ -955,14 +959,27 @@ class WooCommerce_My_Account {
 				self::maybe_sync_email_change_with_stripe( $user_id, $new_email );
 				self::sync_email_change_with_esp( $user_id, $new_email, $old_email );
 				\delete_user_meta( $user_id, self::PENDING_EMAIL_CHANGE_META );
-				\wc_add_notice( __( 'Your email address has been successfully updated.', 'newspack-plugin' ) );
 			} else {
-				\wc_add_notice( $error, 'error' );
+				$message  = __( 'Something went wrong.', 'newspack-plugin' );
+				$is_error = true;
 			}
 		} else {
-			\wc_add_notice( $error, 'error' );
+			$message  = __( 'This email change request has been cancelled or expired.', 'newspack-plugin' );
+			$is_error = true;
 		}
-		\wp_safe_redirect( \wc_get_endpoint_url( 'edit-account', '', \wc_get_page_permalink( 'myaccount' ) ) );
+		\wp_safe_redirect(
+			\add_query_arg(
+				[
+					'message'  => $message,
+					'is_error' => $is_error,
+				],
+				\wc_get_endpoint_url(
+					'edit-account',
+					'',
+					\wc_get_page_permalink( 'myaccount' )
+				)
+			)
+		);
 		exit;
 	}
 
@@ -978,13 +995,27 @@ class WooCommerce_My_Account {
 			return;
 		}
 		$current_email = \wp_get_current_user()->user_email;
+		$message       = __( 'Your email address change request has been cancelled.', 'newspack-plugin' );
+		$is_error      = false;
 		if ( \wp_hash( $current_email ) === $secret ) {
 			\delete_user_meta( \get_current_user_id(), self::PENDING_EMAIL_CHANGE_META );
-			\wc_add_notice( __( 'Your email change request has been cancelled.', 'newspack-plugin' ) );
 		} else {
-			\wc_add_notice( __( 'Something went wrong.', 'newspack-plugin' ), 'error' );
+			$message  = __( 'This email change request has been cancelled or expired.', 'newspack-plugin' );
+			$is_error = true;
 		}
-		\wp_safe_redirect( \wc_get_endpoint_url( 'edit-account', '', \wc_get_page_permalink( 'myaccount' ) ) );
+		\wp_safe_redirect(
+			\add_query_arg(
+				[
+					'message'  => $message,
+					'is_error' => $is_error,
+				],
+				\wc_get_endpoint_url(
+					'edit-account',
+					'',
+					\wc_get_page_permalink( 'myaccount' )
+				)
+			)
+		);
 		exit;
 	}
 
@@ -995,13 +1026,16 @@ class WooCommerce_My_Account {
 	 * @param string $email   New email.
 	 */
 	public static function maybe_sync_email_change_with_stripe( $user_id, $email ) {
-		$request = Stripe_Connection::update_customer_data(
+		$result = Stripe_Connection::update_customer_data(
 			$user_id,
 			[
 				'email' => $email,
 			]
 		);
-		if ( \is_wp_error( $request ) ) {
+		if ( false === $result ) {
+			Logger::log( 'Skipping Stripe email update: no Stripe customer found for user ' . $email );
+		}
+		if ( \is_wp_error( $result ) ) {
 			Logger::error( 'Error updating Stripe customer email: ' . $result->get_error_message() );
 		}
 	}

@@ -29,6 +29,8 @@ class Newspack_Blocks {
 		add_post_type_support( 'page', 'newspack_blocks' );
 		add_action( 'jetpack_register_gutenberg_extensions', [ __CLASS__, 'disable_jetpack_donate' ], 99 );
 		add_filter( 'the_content', [ __CLASS__, 'hide_post_content_when_iframe_block_is_fullscreen' ] );
+		add_filter( 'body_class', [ __CLASS__, 'add_body_classes' ] );
+		add_filter( 'admin_body_class', [ __CLASS__, 'add_body_classes' ] );
 
 		/**
 		 * Disable NextGEN's `C_NextGen_Shortcode_Manager`.
@@ -78,6 +80,25 @@ class Newspack_Blocks {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Body class.
+	 *
+	 * @param string|array $classes Array or string of body class names.
+	 * @return string|array Modified array or string of body class names.
+	 */
+	public static function add_body_classes( $classes ) {
+		if ( wp_is_block_theme() ) {
+			// Handle string (admin) vs array (frontend) cases.
+			if ( is_string( $classes ) ) {
+				$classes .= ' is-block-theme ';
+			} else {
+				$classes[] = 'is-block-theme';
+			}
+		}
+
+		return $classes;
 	}
 
 	/**
@@ -772,27 +793,38 @@ class Newspack_Blocks {
 	/**
 	 * Prepare an array of authors, taking presence of CoAuthors Plus into account.
 	 *
-	 * @return array Array of WP_User objects.
+	 * @return object[] Array of user objects.
 	 */
 	public static function prepare_authors() {
-		if ( function_exists( 'coauthors_posts_links' ) && ! empty( get_coauthors() ) ) {
+		$authors = [];
+
+		if ( function_exists( 'get_coauthors' ) ) {
 			$authors = get_coauthors();
 			foreach ( $authors as $author ) {
 				$author->avatar = coauthors_get_avatar( $author, 48 );
 				$author->url    = get_author_posts_url( $author->ID, $author->user_nicename );
 			}
-			return $authors;
 		}
-		$id = get_the_author_meta( 'ID' );
-		return array(
-			(object) array(
-				'ID'            => $id,
-				'avatar'        => get_avatar( $id, 48 ),
-				'url'           => get_author_posts_url( $id ),
-				'user_nicename' => get_the_author(),
-				'display_name'  => get_the_author_meta( 'display_name' ),
-			),
-		);
+
+		if ( empty( $authors ) ) {
+			$id = get_the_author_meta( 'ID' );
+			$authors = array(
+				(object) array(
+					'ID'            => $id,
+					'avatar'        => get_avatar( $id, 48 ),
+					'url'           => get_author_posts_url( $id ),
+					'user_nicename' => get_the_author(),
+					'display_name'  => get_the_author_meta( 'display_name' ),
+				),
+			);
+		}
+
+		/**
+		 * Filters the authors array.
+		 *
+		 * @param object[] $authors Array of user objects.
+		 */
+		return apply_filters( 'newspack_blocks_post_authors', $authors );
 	}
 
 	/**
@@ -1450,7 +1482,7 @@ class Newspack_Blocks {
 	 */
 	public static function get_formatted_amount( $amount = null, $frequency = null, $hide_once_label = false ) {
 		if ( ! function_exists( 'wc_price' ) || ( method_exists( 'Newspack\Donations', 'is_platform_wc' ) && ! \Newspack\Donations::is_platform_wc() ) ) {
-			if ( 0 === $amount ) {
+			if ( empty( $amount ) ) {
 				return false;
 			}
 
