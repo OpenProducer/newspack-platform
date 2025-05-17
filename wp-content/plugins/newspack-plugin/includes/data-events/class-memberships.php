@@ -41,7 +41,11 @@ final class Memberships {
 		add_action( 'init', [ __CLASS__, 'register_listeners' ] );
 		add_filter( 'newspack_blocks_modal_checkout_cart_item_data', [ __CLASS__, 'checkout_cart_item_data' ], 10, 2 );
 		add_action( 'woocommerce_checkout_create_order_line_item', [ __CLASS__, 'checkout_create_order_line_item' ], 10, 4 );
-		add_filter( 'newspack_register_reader_metadata', [ __CLASS__, 'register_reader_metadata' ], 10, 2 );
+		add_filter( 'newspack_register_reader_metadata', [ __CLASS__, 'register_reader_metadata' ] );
+		add_filter( 'newspack_auth_form_metadata', [ __CLASS__, 'register_reader_metadata' ] );
+		add_filter( 'newspack_otp_login_metadata', [ __CLASS__, 'register_reader_metadata' ] );
+		add_filter( 'newspack_register_reader_form_metadata', [ __CLASS__, 'register_reader_metadata' ] );
+		add_filter( 'newspack_newsletters_subscription_form_metadata', [ __CLASS__, 'register_reader_metadata' ] );
 	}
 
 	/**
@@ -52,8 +56,9 @@ final class Memberships {
 	 * @return array
 	 */
 	public static function checkout_cart_item_data( $cart_item_data ) {
-		if ( isset( $_REQUEST[ self::METADATA_NAME ] ) && ! empty( $_REQUEST[ self::METADATA_NAME ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$cart_item_data[ self::METADATA_NAME ] = true;
+		$gate_post_id = filter_input( INPUT_GET, self::METADATA_NAME, FILTER_SANITIZE_NUMBER_INT );
+		if ( ! empty( $gate_post_id ) ) {
+			$cart_item_data[ self::METADATA_NAME ] = $gate_post_id;
 		}
 		return $cart_item_data;
 	}
@@ -69,22 +74,21 @@ final class Memberships {
 	 */
 	public static function checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
 		if ( ! empty( $values[ self::METADATA_NAME ] ) ) {
-			$order->add_meta_data( '_memberships_content_gate', true );
+			$order->add_meta_data( '_memberships_content_gate', $values[ self::METADATA_NAME ] );
 		}
 	}
 
 	/**
 	 * Add content gate metadata on reader registration.
 	 *
-	 * @param array     $metadata The metadata.
-	 * @param int|false $user_id  The user ID or false if not created.
+	 * @param array $metadata The metadata.
 	 *
 	 * @return array
 	 */
-	public static function register_reader_metadata( $metadata, $user_id ) {
-		if ( isset( $_REQUEST[ self::METADATA_NAME ] ) && ! empty( $_REQUEST[ self::METADATA_NAME ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$metadata[ self::METADATA_NAME ] = true;
-			$metadata['registration_method'] = 'registration-block-content-gate';
+	public static function register_reader_metadata( $metadata ) {
+		$gate_post_id = filter_input( INPUT_POST, self::METADATA_NAME, FILTER_SANITIZE_NUMBER_INT );
+		if ( ! empty( $gate_post_id ) && ( isset( $metadata['registration_method'] ) || isset( $metadata['login_method'] ) ) ) {
+			$metadata['gate_post_id'] = $gate_post_id;
 		}
 		return $metadata;
 	}

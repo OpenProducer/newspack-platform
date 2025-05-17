@@ -1,18 +1,18 @@
 {
 	"name": "@automattic/newspack-blocks",
-	"version": "4.11.0",
+	"version": "4.12.0",
 	"author": "Automattic",
 	"devDependencies": {
 		"@rushstack/eslint-patch": "^1.11.0",
 		"@testing-library/dom": "^10.4.0",
 		"@testing-library/user-event": "^14.6.1",
 		"@types/lodash": "^4.17.16",
-		"@wordpress/browserslist-config": "^6.21.0",
+		"@wordpress/browserslist-config": "^6.22.0",
 		"eslint": "^8.57.0",
 		"fetch-mock-jest": "^1.5.1",
 		"html-entities": "^2.6.0",
 		"identity-obj-proxy": "^3.0.0",
-		"lint-staged": "^15.5.0",
+		"lint-staged": "^15.5.1",
 		"newspack-components": "^3.1.0",
 		"newspack-scripts": "^5.5.2",
 		"postcss-scss": "^4.0.9"

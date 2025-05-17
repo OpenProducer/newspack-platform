@@ -16,12 +16,14 @@ defined( 'ABSPATH' ) || exit;
  */
 class Reader_Activation_Emails {
 	const EMAIL_TYPES = [
-		'VERIFICATION'   => 'reader-activation-verification',
-		'MAGIC_LINK'     => 'reader-activation-magic-link',
-		'OTP_AUTH'       => 'reader-activation-otp-authentication',
-		'RESET_PASSWORD' => 'reader-activation-reset-password',
-		'DELETE_ACCOUNT' => 'reader-activation-delete-account',
-		'CHANGE_EMAIL'   => 'reader-activation-change-email',
+		'VERIFICATION'        => 'reader-activation-verification',
+		'MAGIC_LINK'          => 'reader-activation-magic-link',
+		'OTP_AUTH'            => 'reader-activation-otp-authentication',
+		'RESET_PASSWORD'      => 'reader-activation-reset-password',
+		'DELETE_ACCOUNT'      => 'reader-activation-delete-account',
+		'CHANGE_EMAIL'        => 'reader-activation-change-email',
+		'CHANGE_EMAIL_CANCEL' => 'reader-activation-change-email-cancel',
+		'NON_READER'          => 'reader-activation-non-reader-user',
 	];
 
 	/**
@@ -158,10 +160,10 @@ class Reader_Activation_Emails {
 			$configs[ self::EMAIL_TYPES['CHANGE_EMAIL'] ] = [
 				'name'                   => self::EMAIL_TYPES['CHANGE_EMAIL'],
 				'category'               => 'reader-activation',
-				'label'                  => __( 'Change Email', 'newspack-plugin' ),
-				'description'            => __( 'Email sent to the reader when changing email addresses.', 'newspack-plugin' ),
+				'label'                  => __( 'Change Email Confirmation', 'newspack-plugin' ),
+				'description'            => __( 'Email sent to the reader to confirm or cancel a request to update their email address.', 'newspack-plugin' ),
 				'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-activation-emails/change-email.php',
-				'editor_notice'          => __( 'This email will be sent to a reader after they\'ve updated their email address.', 'newspack-plugin' ),
+				'editor_notice'          => __( 'This email will be sent to a reader\'s new email address after they update their email address.', 'newspack-plugin' ),
 				'available_placeholders' => array_merge(
 					$available_placeholders,
 					[
@@ -176,7 +178,45 @@ class Reader_Activation_Emails {
 					]
 				),
 			];
+			$configs[ self::EMAIL_TYPES['CHANGE_EMAIL_CANCEL'] ] = [
+				'name'                   => self::EMAIL_TYPES['CHANGE_EMAIL_CANCEL'],
+				'category'               => 'reader-activation',
+				'label'                  => __( 'Change Email Notification', 'newspack-plugin' ),
+				'description'            => __( 'Email sent to notify the reader of a request to update their email addresses.', 'newspack-plugin' ),
+				'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-activation-emails/change-email-cancel.php',
+				'editor_notice'          => __( 'This email will be sent to a reader\'s existing email address after they update their email address.', 'newspack-plugin' ),
+				'available_placeholders' => array_merge(
+					$available_placeholders,
+					[
+						[
+							'label'    => __( 'the email change cancellation link', 'newspack-plugin' ),
+							'template' => '*EMAIL_CANCELLATION_URL*',
+						],
+						[
+							'label'    => __( 'the new account email address pending confirmation', 'newspack-plugin' ),
+							'template' => '*PENDING_EMAIL_ADDRESS*',
+						],
+					]
+				),
+			];
 		}
+		$configs[ self::EMAIL_TYPES['NON_READER'] ] = [
+			'name'                   => self::EMAIL_TYPES['NON_READER'],
+			'category'               => 'reader-activation',
+			'label'                  => __( 'Non-reader account', 'newspack-plugin' ),
+			'description'            => __( 'Email reminder sent to non-reader accounts instead of reader account-related emails.', 'newspack-plugin' ),
+			'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-activation-emails/non-reader.php',
+			'editor_notice'          => __( 'This email will be sent to non-reader WP user accounts as a reminder to use standard WP login flows.', 'newspack-plugin' ),
+			'available_placeholders' => array_merge(
+				$available_placeholders,
+				[
+					[
+						'label'    => __( 'the standard WP login page', 'newspack-pliugin' ),
+						'template' => '*WP_LOGIN_URL*',
+					],
+				]
+			),
+		];
 		return $configs;
 	}
 

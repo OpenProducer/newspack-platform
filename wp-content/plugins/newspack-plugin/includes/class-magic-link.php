@@ -477,6 +477,10 @@ final class Magic_Link {
 	 * @return bool|\WP_Error Whether the email was sent or WP_Error if sending failed.
 	 */
 	public static function send_email( $user, $redirect_to = '', $use_otp = true ) {
+		// Send reminder to non-reader accounts to use standard WP login.
+		if ( ! Reader_Activation::is_user_reader( $user ) ) {
+			return Reader_Activation::send_non_reader_login_reminder( $user );
+		}
 		$token_data = self::generate_token( $user );
 		if ( \is_wp_error( $token_data ) ) {
 			return $token_data;
@@ -885,7 +889,22 @@ final class Magic_Link {
 			return self::send_otp_request_response( __( 'Unable to authenticate, try again.', 'newspack-plugin' ), false, [ 'expired' => true ] );
 		}
 
-		return self::send_otp_request_response( __( 'Login successful!', 'newspack-plugin' ), true );
+		/**
+		 * Filters the metadata to be saved for a reader registered via the auth modal.
+		 *
+		 * @param array  $metadata Metadata.
+		 * @param string $email    Email address of the reader.
+		 */
+		$metadata = apply_filters(
+			'newspack_otp_login_metadata',
+			[
+				'email'        => $email,
+				'login_method' => 'otp',
+			],
+			$email
+		);
+
+		return self::send_otp_request_response( __( 'Login successful!', 'newspack-plugin' ), true, [ 'metadata' => $metadata ] );
 	}
 
 	/**

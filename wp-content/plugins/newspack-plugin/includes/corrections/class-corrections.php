@@ -37,11 +37,6 @@ class Corrections {
 	const CORRECTIONS_TYPE_META = 'newspack_corrections_type';
 
 	/**
-	 * Supported post types.
-	 */
-	const SUPPORTED_POST_TYPES = [ 'article_legacy', 'content_type_blog', 'post', 'press_release' ];
-
-	/**
 	 * REST route for corrections.
 	 */
 	const REST_ROUTE = '/corrections';
@@ -71,6 +66,19 @@ class Corrections {
 		);
 
 		if ( ! is_admin() || ! filter_input( INPUT_GET, 'post', FILTER_VALIDATE_INT ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+
+		/**
+		 * Filter to allow other post types to support Newspack Corrections and clarifications.
+		 *
+		 * @param array $supported_post_types Array of supported post types slugs.
+		 */
+		$supported_post_types = apply_filters( 'newspack_corrections_supported_post_types', [ 'post' ] );
+
+		if ( empty( $screen ) || 'post' !== $screen->base || ! in_array( $screen->post_type, $supported_post_types, true ) ) {
 			return;
 		}
 
@@ -145,18 +153,20 @@ class Corrections {
 			'item_link_description'    => __( 'A link to a correction.', 'newspack-plugin' ),
 		];
 		$args = array(
-			'labels'           => $labels,
-			'description'      => 'Post type used to store corrections and clarifications.',
-			'has_archive'      => true,
-			'public'           => true,
-			'public_queryable' => true,
-			'query_var'        => true,
-			'rewrite'          => [ 'slug' => 'corrections' ],
-			'show_ui'          => false,
-			'show_in_rest'     => true,
-			'supports'         => $supports,
-			'taxonomies'       => [],
-			'menu_icon'        => 'dashicons-edit',
+			'labels'              => $labels,
+			'description'         => __( 'Post type used to store corrections and clarifications.', 'newspack-plugin' ),
+			'has_archive'         => true,
+			'public'              => false,
+			'publicly_queryable'  => true,
+			'exclude_from_search' => true,
+			'query_var'           => true,
+			'rewrite'             => [ 'slug' => 'corrections' ],
+			'show_ui'             => false,
+			'show_in_nav_menus'   => false,
+			'show_in_rest'        => true,
+			'supports'            => $supports,
+			'taxonomies'          => [],
+			'menu_icon'           => 'dashicons-edit',
 		);
 		\register_post_type( self::POST_TYPE, $args );
 
@@ -484,7 +494,7 @@ class Corrections {
 		}
 
 		\register_block_template(
-			'newspack//corrections-archive',
+			'newspack//archive-' . self::POST_TYPE,
 			[
 				'title'       => __( 'Corrections Archive', 'newspack-plugin' ),
 				'description' => __( 'A block template for displaying an archive of corrections.', 'newspack-plugin' ),

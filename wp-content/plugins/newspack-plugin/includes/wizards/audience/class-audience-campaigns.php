@@ -105,14 +105,16 @@ class Audience_Campaigns extends Wizard {
 	 * Add Audience top-level and Campaigns subpage to the /wp-admin menu.
 	 */
 	public function add_page() {
-		add_submenu_page(
-			$this->parent_slug,
-			$this->get_name(),
-			esc_html__( 'Campaigns', 'newspack-plugin' ),
-			$this->capability,
-			$this->slug,
-			[ $this, 'render_wizard' ]
-		);
+		if ( class_exists( 'Newspack_Popups' ) ) {
+			add_submenu_page(
+				$this->parent_slug,
+				$this->get_name(),
+				esc_html__( 'Campaigns', 'newspack-plugin' ),
+				$this->capability,
+				$this->slug,
+				[ $this, 'render_wizard' ]
+			);
+		}
 	}
 
 	/**

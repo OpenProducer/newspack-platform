@@ -35,8 +35,7 @@ import QueryControls from '../../components/query-controls';
 import { PostTypesPanel, PostStatusesPanel } from '../../components/editor-panels';
 import createSwiper from './create-swiper';
 import {
-	formatAvatars,
-	formatByline,
+	getBylineHTML,
 	formatSponsorLogos,
 	formatSponsorByline,
 	getPostStatusLabel,
@@ -320,14 +319,10 @@ class Edit extends Component {
 														</span>
 													) }
 													{ showAuthor &&
-														showAvatar &&
-														( ! post.newspack_post_sponsors ||
-															post.newspack_sponsors_show_author ) &&
-														formatAvatars( post.newspack_author_info ) }
-													{ showAuthor &&
-														( ! post.newspack_post_sponsors ||
-															post.newspack_sponsors_show_author ) &&
-														formatByline( post.newspack_author_info ) }
+														! post.newspack_listings_hide_author &&
+														( ! post.newspack_post_sponsors || post.newspack_sponsors_show_author ) &&
+														<RawHTML className="byline-container">{ getBylineHTML( post, showAvatar ) }</RawHTML>
+													}
 													{ showDate && (
 														<time className="entry-date published" key="pub-date">
 															{ dateI18n( dateFormat, post.date ) }

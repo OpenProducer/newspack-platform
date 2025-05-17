@@ -59,8 +59,11 @@ export default {
 	 * the segment config.
 	 */
 	range: ( criteria, config ) => {
+		if ( isNaN( criteria.value ) ) {
+			return false;
+		}
 		const { min, max } = config.value;
-		if ( ! criteria.value || ( min && criteria.value < min ) || ( max && criteria.value > max ) ) {
+		if ( ( min && criteria.value < min ) || ( max && criteria.value > max ) ) {
 			return false;
 		}
 		return true;

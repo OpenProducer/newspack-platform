@@ -34402,6 +34402,13 @@ function overlayMiddlewares() {
 
 const SLOT_NAME = 'Popover';
 
+/**
+ * Virtual padding to account for overflow boundaries.
+ *
+ * @type {number}
+ */
+const OVERFLOW_PADDING = 8;
+
 // An SVG displaying a triangle facing down, filled with a solid
 // color and bordered in such a way to create an arrow-like effect.
 // Keeping the SVG's viewbox squared simplify the arrow positioning
@@ -34512,6 +34519,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
   const hasArrow = !isExpanded && !noArrow;
   const normalizedPlacementFromProps = position ? positionToPlacement(position) : placementProp;
   const middleware = [...(placementProp === 'overlay' ? overlayMiddlewares() : []), offset(offsetProp), computedFlipProp && floating_ui_dom_flip(), computedResizeProp && floating_ui_dom_size({
+    padding: OVERFLOW_PADDING,
     apply(sizeProps) {
       var _refs$floating$curren;
       const {
@@ -34525,7 +34533,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
 
       // Reduce the height of the popover to the available space.
       Object.assign(firstElementChild.style, {
-        maxHeight: `${sizeProps.availableHeight}px`,
+        maxHeight: `${Math.max(0, sizeProps.availableHeight)}px`,
         overflow: 'auto'
       });
     }
@@ -36283,7 +36291,7 @@ function UnconnectedToggleGroupControl(props, forwardedRef) {
   const [selectedElement, setSelectedElement] = (0,external_wp_element_namespaceObject.useState)();
   const [controlElement, setControlElement] = (0,external_wp_element_namespaceObject.useState)();
   const refs = (0,external_wp_compose_namespaceObject.useMergeRefs)([setControlElement, forwardedRef]);
-  const selectedRect = useTrackElementOffsetRect(value || value === 0 ? selectedElement : undefined);
+  const selectedRect = useTrackElementOffsetRect(value !== null && value !== undefined ? selectedElement : undefined);
   useAnimatedOffsetRect(controlElement, selectedRect, {
     prefix: 'selected',
     dataAttribute: 'indicator-animated',
@@ -40566,15 +40574,16 @@ const useCustomUnits = ({
   defaultValues
 }) => {
   const customUnitsToReturn = filterUnitsWithSettings(availableUnits, units);
-  if (defaultValues) {
-    customUnitsToReturn.forEach((unit, i) => {
-      if (defaultValues[unit.value]) {
-        const [parsedDefaultValue] = parseQuantityAndUnitFromRawValue(defaultValues[unit.value]);
-        customUnitsToReturn[i].default = parsedDefaultValue;
-      }
-    });
+  if (!defaultValues) {
+    return customUnitsToReturn;
   }
-  return customUnitsToReturn;
+  return customUnitsToReturn.map(unit => {
+    const [defaultValue] = defaultValues[unit.value] ? parseQuantityAndUnitFromRawValue(defaultValues[unit.value]) : [];
+    return {
+      ...unit,
+      default: defaultValue
+    };
+  });
 };
 
 /**
@@ -44513,7 +44522,7 @@ const item =  true ? {
   styles: "box-sizing:border-box;width:100%;display:block;margin:0;color:inherit"
 } : 0;
 const bordered = /*#__PURE__*/emotion_react_browser_esm_css("border:1px solid ", config_values.surfaceBorderColor, ";" + ( true ? "" : 0),  true ? "" : 0);
-const separated = /*#__PURE__*/emotion_react_browser_esm_css(">*:not( marquee )>*{border-bottom:1px solid ", config_values.surfaceBorderColor, ";}>*:last-of-type>*:not( :focus ){border-bottom-color:transparent;}" + ( true ? "" : 0),  true ? "" : 0);
+const separated = /*#__PURE__*/emotion_react_browser_esm_css(">*:not( marquee )>*{border-bottom:1px solid ", config_values.surfaceBorderColor, ";}>*:last-of-type>*{border-bottom-color:transparent;}" + ( true ? "" : 0),  true ? "" : 0);
 const styles_borderRadius = config_values.radiusSmall;
 const styles_spacedAround = /*#__PURE__*/emotion_react_browser_esm_css("border-radius:", styles_borderRadius, ";" + ( true ? "" : 0),  true ? "" : 0);
 const styles_rounded = /*#__PURE__*/emotion_react_browser_esm_css("border-radius:", styles_borderRadius, ";>*:first-of-type>*{border-top-left-radius:", styles_borderRadius, ";border-top-right-radius:", styles_borderRadius, ";}>*:last-of-type>*{border-bottom-left-radius:", styles_borderRadius, ";border-bottom-right-radius:", styles_borderRadius, ";}" + ( true ? "" : 0),  true ? "" : 0);
@@ -58652,6 +58661,8 @@ function Guide({
   className,
   contentLabel,
   finishButtonText = (0,external_wp_i18n_namespaceObject.__)('Finish'),
+  nextButtonText = (0,external_wp_i18n_namespaceObject.__)('Next'),
+  previousButtonText = (0,external_wp_i18n_namespaceObject.__)('Previous'),
   onFinish,
   pages = []
 }) {
@@ -58726,13 +58737,13 @@ function Guide({
           variant: "tertiary",
           onClick: goBack,
           __next40pxDefaultSize: true,
-          children: (0,external_wp_i18n_namespaceObject.__)('Previous')
+          children: previousButtonText
         }), canGoForward && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
           className: "components-guide__forward-button",
           variant: "primary",
           onClick: goForward,
           __next40pxDefaultSize: true,
-          children: (0,external_wp_i18n_namespaceObject.__)('Next')
+          children: nextButtonText
         }), !canGoForward && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
           className: "components-guide__finish-button",
           variant: "primary",

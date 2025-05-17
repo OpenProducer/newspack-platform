@@ -176,14 +176,13 @@ const generatePreviewPost = ( id: PostId ) => {
 			rendered: __( 'Post Title', 'newspack-blocks' ),
 		},
 		newspack_article_classes: 'type-post',
-		newspack_author_info: [
-			{
-				display_name: __( 'Author Name', 'newspack-blocks' ),
-				avatar: `<div style="background: #e8e8e8;width: 40px;height: 40px;display: block;overflow: hidden;border-radius: 50%; max-width: 100%; max-height: 100%;"></div>`,
-				id: 1,
-				author_link: '/',
-			},
-		],
+		newspack_post_avatars: `<div style="background: #e8e8e8;width: 40px;height: 40px;display: block;overflow: hidden;border-radius: 50%; max-width: 100%; max-height: 100%;" class="avatar"></div>`,
+		newspack_post_byline: `<span class="byline">
+			<span class="author-prefix">${ __( 'by', 'newspack-blocks' ) }</span>
+			<span class="author vcard">
+				<a class="url fn n" href="/">Author Name</a>
+			</span>
+		</span>`,
 		newspack_category_info: __( 'Category', 'newspack-blocks' ),
 		newspack_featured_image_caption: __( 'Featured image caption', 'newspack-blocks' ),
 		newspack_featured_image_src: {

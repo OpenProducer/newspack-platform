@@ -490,12 +490,16 @@ function process_form() {
 		$metadata['status'] = 'pending';
 	}
 
+	$registered_user = false;
 	if ( ! \is_user_logged_in() && \class_exists( '\Newspack\Reader_Activation' ) && \Newspack\Reader_Activation::is_enabled() ) {
 		$metadata = array_merge( $metadata, [ 'registration_method' => 'newsletters-subscription' ] );
 		if ( $popup_id ) {
 			$metadata['registration_method'] = 'newsletters-subscription-popup';
 		}
-		\Newspack\Reader_Activation::register_reader( $email, $name, true, $metadata );
+		$registered_user = \Newspack\Reader_Activation::register_reader( $email, $name, true, $metadata );
+		if ( $registered_user ) {
+			$metadata['registered'] = '1';
+		}
 	}
 
 	$result = \Newspack_Newsletters_Contacts::subscribe(
@@ -529,6 +533,9 @@ function process_form() {
 
 	// Propagate the form action for subsequent form submissions.
 	$result[ FORM_ACTION ] = '1';
+
+	// Append additional metadata to the result.
+	$result['metadata'] = $metadata;
 
 	return send_form_response( $result );
 }

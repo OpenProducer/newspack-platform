@@ -89,6 +89,7 @@ var store_actions_namespaceObject = {};
 __webpack_require__.r(store_actions_namespaceObject);
 __webpack_require__.d(store_actions_namespaceObject, {
   closeGeneralSidebar: () => (closeGeneralSidebar),
+  lockWidgetSaving: () => (lockWidgetSaving),
   moveBlockToWidgetArea: () => (moveBlockToWidgetArea),
   persistStubPost: () => (persistStubPost),
   saveEditedWidgetAreas: () => (saveEditedWidgetAreas),
@@ -98,7 +99,8 @@ __webpack_require__.d(store_actions_namespaceObject, {
   setIsListViewOpened: () => (setIsListViewOpened),
   setIsWidgetAreaOpen: () => (setIsWidgetAreaOpen),
   setWidgetAreasOpenState: () => (setWidgetAreasOpenState),
-  setWidgetIdForClientId: () => (setWidgetIdForClientId)
+  setWidgetIdForClientId: () => (setWidgetIdForClientId),
+  unlockWidgetSaving: () => (unlockWidgetSaving)
 });
 
 // NAMESPACE OBJECT: ./packages/edit-widgets/build-module/store/resolvers.js
@@ -125,7 +127,8 @@ __webpack_require__.d(store_selectors_namespaceObject, {
   getWidgets: () => (selectors_getWidgets),
   isInserterOpened: () => (isInserterOpened),
   isListViewOpened: () => (isListViewOpened),
-  isSavingWidgetAreas: () => (isSavingWidgetAreas)
+  isSavingWidgetAreas: () => (isSavingWidgetAreas),
+  isWidgetSavingLocked: () => (isWidgetSavingLocked)
 });
 
 // NAMESPACE OBJECT: ./packages/edit-widgets/build-module/store/private-selectors.js
@@ -269,12 +272,42 @@ function inserterSidebarToggleRef(state = {
 }) {
   return state;
 }
+
+/**
+ * Widget saving lock.
+ *
+ * When widget saving is locked, the widget cannot be updated.
+ *
+ * @param {Object} state  Current state.
+ * @param {Object} action Dispatched action.
+ *
+ * @return {Object} Updated state.
+ */
+function widgetSavingLock(state = {}, action) {
+  switch (action.type) {
+    case 'LOCK_WIDGET_SAVING':
+      return {
+        ...state,
+        [action.lockName]: true
+      };
+    case 'UNLOCK_WIDGET_SAVING':
+      {
+        const {
+          [action.lockName]: removedLockName,
+          ...restState
+        } = state;
+        return restState;
+      }
+  }
+  return state;
+}
 /* harmony default export */ const reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
   blockInserterPanel,
   inserterSidebarToggleRef,
   listViewPanel,
   listViewToggleRef,
-  widgetAreasOpenState
+  widgetAreasOpenState,
+  widgetSavingLock
 }));
 
 ;// external ["wp","i18n"]
@@ -2064,6 +2097,34 @@ const moveBlockToWidgetArea = (clientId, widgetAreaId) => async ({
   registry.dispatch(external_wp_blockEditor_namespaceObject.store).moveBlocksToPosition([clientId], sourceRootClientId, destinationRootClientId, destinationIndex);
 };
 
+/**
+ * Returns an action object used to signal that widget saving is unlocked.
+ *
+ * @param {string} lockName The lock name.
+ *
+ * @return {Object} Action object
+ */
+function unlockWidgetSaving(lockName) {
+  return {
+    type: 'UNLOCK_WIDGET_SAVING',
+    lockName
+  };
+}
+
+/**
+ * Returns an action object used to signal that widget saving is locked.
+ *
+ * @param {string} lockName The lock name.
+ *
+ * @return {Object} Action object
+ */
+function lockWidgetSaving(lockName) {
+  return {
+    type: 'LOCK_WIDGET_SAVING',
+    lockName
+  };
+}
+
 ;// ./packages/edit-widgets/build-module/store/resolvers.js
 /**
  * WordPress dependencies
@@ -2377,6 +2438,17 @@ const canInsertBlockInWidgetArea = (0,external_wp_data_namespaceObject.createReg
  */
 function isListViewOpened(state) {
   return state.listViewPanel;
+}
+
+/**
+ * Returns whether widget saving is locked.
+ *
+ * @param {Object} state Global application state.
+ *
+ * @return {boolean} Is locked.
+ */
+function isWidgetSavingLocked(state) {
+  return Object.keys(state.widgetSavingLock).length > 0;
 }
 
 ;// ./packages/edit-widgets/build-module/store/private-selectors.js
@@ -3163,8 +3235,6 @@ function WidgetAreasBlockEditorProvider({
 
 
 const drawerLeft = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  width: "24",
-  height: "24",
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
@@ -3182,8 +3252,6 @@ const drawerLeft = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)
 
 
 const drawerRight = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  width: "24",
-  height: "24",
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
@@ -3685,21 +3753,24 @@ function DocumentTools() {
 function SaveButton() {
   const {
     hasEditedWidgetAreaIds,
-    isSaving
+    isSaving,
+    isWidgetSaveLocked
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getEditedWidgetAreas,
-      isSavingWidgetAreas
+      isSavingWidgetAreas,
+      isWidgetSavingLocked
     } = select(store_store);
     return {
       hasEditedWidgetAreaIds: getEditedWidgetAreas()?.length > 0,
-      isSaving: isSavingWidgetAreas()
+      isSaving: isSavingWidgetAreas(),
+      isWidgetSaveLocked: isWidgetSavingLocked()
     };
   }, []);
   const {
     saveEditedWidgetAreas
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
-  const isDisabled = isSaving || !hasEditedWidgetAreaIds;
+  const isDisabled = isWidgetSaveLocked || isSaving || !hasEditedWidgetAreaIds;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
     variant: "primary",
     isBusy: isSaving,
@@ -4388,14 +4459,8 @@ function InserterSidebar() {
   const closeInserter = (0,external_wp_element_namespaceObject.useCallback)(() => {
     return setIsInserterOpened(false);
   }, [setIsInserterOpened]);
-  const [inserterDialogRef, inserterDialogProps] = (0,external_wp_compose_namespaceObject.__experimentalUseDialog)({
-    onClose: closeInserter,
-    focusOnMount: true
-  });
   const libraryRef = (0,external_wp_element_namespaceObject.useRef)();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-    ref: inserterDialogRef,
-    ...inserterDialogProps,
     className: "edit-widgets-layout__inserter-panel",
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "edit-widgets-layout__inserter-panel-content",

@@ -171,16 +171,109 @@ class GoogleSiteKit {
 	}
 
 	/**
+	 * Extracts the Session ID from the _ga_{container} cookie
+	 *
+	 * If the cookie is not found, it will be created
+	 *
+	 * @return ?string
+	 */
+	private static function extract_sid_from_cookies() {
+		foreach ( $_COOKIE as $key => $value ) { //phpcs:ignore
+			if ( strpos( $key, '_ga_' ) === 0 && strpos( $value, 'GS1.' ) === 0 ) {
+				$cookie_pieces = explode( '.', $value );
+				if ( ! empty( $cookie_pieces[2] ) ) {
+					return $cookie_pieces[2];
+				}
+			}
+		}
+	}
+
+	/**
+	 * Get custom parameters for a GA configuration or event body.
+	 *
+	 * @return array
+	 */
+	public static function get_custom_event_parameters() {
+		$params = [
+			'logged_in' => is_user_logged_in() ? 'yes' : 'no',
+		];
+
+		// Get current post author name.
+		$author_name = '';
+		if ( function_exists( 'get_coauthors' ) ) {
+			$author_name = implode(
+				', ',
+				array_map(
+					function( $author ) {
+						return $author->display_name;
+					},
+					get_coauthors()
+				)
+			);
+		} else {
+			$post = get_post();
+			if ( null !== $post && is_numeric( $post->post_author ) ) {
+				// For some reason, get_the_author() does not work here.
+				$author_user = get_user_by( 'ID', $post->post_author );
+				if ( $author_user ) {
+					$author_name = $author_user->display_name;
+				}
+			}
+		}
+		if ( ! empty( $author_name ) ) {
+			$params['author'] = $author_name;
+		}
+
+		// Get current post categories.
+		$category_names = array_map(
+			function( $category ) {
+				return $category->name;
+			},
+			get_the_category()
+		);
+		if ( ! empty( $category_names ) ) {
+			$params['categories'] = implode( ', ', $category_names );
+		}
+
+		$params['is_reader'] = 'no';
+		if ( is_user_logged_in() ) {
+			$current_user = wp_get_current_user();
+			$params['is_reader'] = Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
+			$params['email_hash'] = md5( $current_user->user_email );
+
+			if ( method_exists( 'Newspack\Reader_Data', 'get_data' ) ) {
+				$reader_data = \Newspack\Reader_Data::get_data( get_current_user_id() );
+				// If the reader is signed up for any newsletters.
+				$params['is_newsletter_subscriber'] = empty( $reader_data['is_newsletter_subscriber'] ) ? 'no' : 'yes';
+				// If reader has donated.
+				$params['is_donor'] = empty( $reader_data['is_donor'] ) ? 'no' : 'yes';
+				// If reader has any currently active non-donation subscriptions.
+				$params['is_subscriber'] = empty( $reader_data['active_subscriptions'] ) ? 'no' : 'yes';
+			}
+		}
+
+		/**
+		 * Filters the custom parameters passed to GA4.
+		 *
+		 * @param array $params Custom parameters sent to GA4.
+		 */
+		return apply_filters( 'newspack_ga4_custom_parameters', $params );
+	}
+
+	/**
 	 * Filter the GA config to add custom parameters.
 	 *
 	 * @param array $gtag_opt gtag config options.
 	 */
 	public static function add_ga_custom_parameters( $gtag_opt ) {
+		// Set transport type to 'beacon' to allow async requests to complete after a new page is loaded.
+		$gtag_opt['transport_type'] = 'beacon';
+
 		$enable_fe_custom_params = defined( 'NEWSPACK_GA_ENABLE_CUSTOM_FE_PARAMS' ) && NEWSPACK_GA_ENABLE_CUSTOM_FE_PARAMS;
 		if ( ! $enable_fe_custom_params ) {
 			return $gtag_opt;
 		}
-		$custom_params = \Newspack\Data_Events\Connectors\GA4::get_custom_parameters();
+		$custom_params = self::get_custom_event_parameters();
 		return array_merge( $custom_params, $gtag_opt );
 	}
 }

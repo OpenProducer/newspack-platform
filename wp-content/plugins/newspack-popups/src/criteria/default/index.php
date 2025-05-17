@@ -31,6 +31,53 @@ $criteria = [
 		'category'          => 'reader_engagement',
 		'matching_function' => 'list__in',
 	],
+	'devices'                  => [
+		'name'        => __( 'Devices', 'newspack-popups' ),
+		'description' => __( 'The device the user is viewing the site on – e.g. mobile, tablet, etc.', 'newspack-popups' ),
+		'category'    => 'reader_engagement',
+		'options'     => [
+			[
+				'label'  => __( 'Desktop - 1280 px and above', 'newspack-popups' ),
+				'value'  => 'Desktop',
+				'params' => [
+					'max_width' => PHP_INT_MAX,
+					'min_width' => 1280,
+				],
+			],
+			[
+				'label'  => __( 'Laptop - between 1024 and 1280 px wide', 'newspack-popups' ),
+				'value'  => 'Laptop',
+				'params' => [
+					'max_width' => 1280,
+					'min_width' => 1024,
+				],
+			],
+			[
+				'label'  => __( 'Tablet - between 768 and 1024 px wide', 'newspack-popups' ),
+				'value'  => 'Tablet',
+				'params' => [
+					'max_width' => 1024,
+					'min_width' => 768,
+				],
+			],
+			[
+				'label'  => __( 'Mobile (large phones) - between 480 and 786 px wide', 'newspack-popups' ),
+				'value'  => 'Mobile',
+				'params' => [
+					'max_width' => 768,
+					'min_width' => 480,
+				],
+			],
+			[
+				'label'  => __( 'Mobile (small phones) - 480 px and below wide', 'newspack-popups' ),
+				'value'  => 'Mobile small',
+				'params' => [
+					'max_width' => 480,
+					'min_width' => 0,
+				],
+			],
+		],
+	],
 	/**
 	 * Reader Activity.
 	 */
