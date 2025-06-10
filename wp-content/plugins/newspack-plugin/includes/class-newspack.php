@@ -106,8 +106,8 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-recaptcha.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-magic-link.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/stripe/class-stripe-connection.php';
-		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/woocommerce/class-woocommerce-connection.php';
-		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/my-account/class-woocommerce-my-account.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/woocommerce/class-woocommerce-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/woocommerce/my-account/class-woocommerce-my-account.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth-transients.php';

@@ -9,21 +9,21 @@ namespace Newspack_Ads\Providers\GAM\Api;
 
 use Newspack_Ads\Providers\GAM\Api;
 use Newspack_Ads\Providers\GAM\Api\Api_Object;
-use Google\AdsApi\AdManager\Util\v202405\StatementBuilder;
-use Google\AdsApi\AdManager\v202405\ServiceFactory;
-use Google\AdsApi\AdManager\v202405\LineItemService;
-use Google\AdsApi\AdManager\v202405\LineItemCreativeAssociation;
-use Google\AdsApi\AdManager\v202405\LineItem;
-use Google\AdsApi\AdManager\v202405\Size;
-use Google\AdsApi\AdManager\v202405\Money;
-use Google\AdsApi\AdManager\v202405\Goal;
-use Google\AdsApi\AdManager\v202405\Targeting;
-use Google\AdsApi\AdManager\v202405\AdUnitTargeting;
-use Google\AdsApi\AdManager\v202405\InventoryTargeting;
-use Google\AdsApi\AdManager\v202405\CreativePlaceholder;
-use Google\AdsApi\AdManager\v202405\CustomCriteriaSet;
-use Google\AdsApi\AdManager\v202405\CustomCriteria;
-use Google\AdsApi\AdManager\v202405\ApiException;
+use Google\AdsApi\AdManager\Util\v202505\StatementBuilder;
+use Google\AdsApi\AdManager\v202505\ServiceFactory;
+use Google\AdsApi\AdManager\v202505\LineItemService;
+use Google\AdsApi\AdManager\v202505\LineItemCreativeAssociation;
+use Google\AdsApi\AdManager\v202505\LineItem;
+use Google\AdsApi\AdManager\v202505\Size;
+use Google\AdsApi\AdManager\v202505\Money;
+use Google\AdsApi\AdManager\v202505\Goal;
+use Google\AdsApi\AdManager\v202505\Targeting;
+use Google\AdsApi\AdManager\v202505\AdUnitTargeting;
+use Google\AdsApi\AdManager\v202505\InventoryTargeting;
+use Google\AdsApi\AdManager\v202505\CreativePlaceholder;
+use Google\AdsApi\AdManager\v202505\CustomCriteriaSet;
+use Google\AdsApi\AdManager\v202505\CustomCriteria;
+use Google\AdsApi\AdManager\v202505\ApiException;
 
 /**
  * Newspack Ads GAM Line Items

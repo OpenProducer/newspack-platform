@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82
+class ComposerStaticInit1939887bfa398efb976d65968c4b95fa
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -86,7 +86,6 @@ class ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Lite_Site' => __DIR__ . '/../..' . '/includes/lite-site/class-lite-site.php',
         'Newspack\\AMP_Enhancements' => __DIR__ . '/../..' . '/includes/class-amp-enhancements.php',
         'Newspack\\AMP_Polyfills' => __DIR__ . '/../..' . '/includes/polyfills/class-amp-polyfills.php',
         'Newspack\\API' => __DIR__ . '/../..' . '/includes/class-api.php',
@@ -140,6 +139,7 @@ class ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82
         'Newspack\\Jetpack' => __DIR__ . '/../..' . '/includes/plugins/class-jetpack.php',
         'Newspack\\Jetpack_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-jetpack-configuration-manager.php',
         'Newspack\\Listings_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-listings-wizard.php',
+        'Newspack\\Lite_Site' => __DIR__ . '/../..' . '/includes/lite-site/class-lite-site.php',
         'Newspack\\Logger' => __DIR__ . '/../..' . '/includes/class-logger.php',
         'Newspack\\Magic_Link' => __DIR__ . '/../..' . '/includes/class-magic-link.php',
         'Newspack\\Mailchimp_API' => __DIR__ . '/../..' . '/includes/oauth/class-mailchimp-api.php',
@@ -152,6 +152,8 @@ class ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82
         'Newspack\\Memberships\\Import_Export' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-import-export.php',
         'Newspack\\Memberships\\Metering' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-metering.php',
         'Newspack\\Meta_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-meta-pixel.php',
+        'Newspack\\My_Account_UI_V0' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/my-account/class-my-account-ui-v0.php',
+        'Newspack\\My_Account_UI_V1' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php',
         'Newspack\\NRH' => __DIR__ . '/../..' . '/includes/class-nrh.php',
         'Newspack\\Network_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-network-wizard.php',
         'Newspack\\Newsletters_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-newsletters-wizard.php',
@@ -223,15 +225,16 @@ class ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82
         'Newspack\\Wizards\\Traits\\Admin_Header' => __DIR__ . '/../..' . '/includes/wizards/traits/trait-wizards-admin-header.php',
         'Newspack\\Wizards\\Wizard_Section' => __DIR__ . '/../..' . '/includes/wizards/class-wizard-section.php',
         'Newspack\\WooCommerce' => __DIR__ . '/../..' . '/includes/plugins/class-woocommerce.php',
-        'Newspack\\WooCommerce_Cli' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-cli.php',
+        'Newspack\\WooCommerce_Cli' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-cli.php',
         'Newspack\\WooCommerce_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
-        'Newspack\\WooCommerce_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-connection.php',
-        'Newspack\\WooCommerce_Cover_Fees' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-cover-fees.php',
-        'Newspack\\WooCommerce_Duplicate_Orders' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-duplicate-orders.php',
+        'Newspack\\WooCommerce_Connection' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-connection.php',
+        'Newspack\\WooCommerce_Cover_Fees' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-cover-fees.php',
+        'Newspack\\WooCommerce_Duplicate_Orders' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-duplicate-orders.php',
         'Newspack\\WooCommerce_Gateway_Stripe' => __DIR__ . '/../..' . '/includes/plugins/class-woocommerce-gateway-stripe.php',
-        'Newspack\\WooCommerce_My_Account' => __DIR__ . '/../..' . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
-        'Newspack\\WooCommerce_Order_UTM' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-order-utm.php',
-        'Newspack\\WooCommerce_Products' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-products.php',
+        'Newspack\\WooCommerce_Logs' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-logs.php',
+        'Newspack\\WooCommerce_My_Account' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/my-account/class-woocommerce-my-account.php',
+        'Newspack\\WooCommerce_Order_UTM' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-order-utm.php',
+        'Newspack\\WooCommerce_Products' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-products.php',
         'Newspack\\WooCommerce_Subscriptions' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php',
         'Newspack\\WooCommerce_Subscriptions_Gifting' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions-gifting.php',
         'Newspack\\Woo_Member_Commenting' => __DIR__ . '/../..' . '/includes/optional-modules/class-woo-member-commenting.php',
@@ -242,9 +245,9 @@ class ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc211372b1544f2d0eb99a808f0d56d82::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1939887bfa398efb976d65968c4b95fa::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1939887bfa398efb976d65968c4b95fa::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1939887bfa398efb976d65968c4b95fa::$classMap;
 
         }, null, ClassLoader::class);
     }

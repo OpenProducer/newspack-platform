@@ -259,4 +259,76 @@ final class Newspack_Newsletters_Letterhead extends \Newspack_Newsletters_Servic
 	 * @param int $post_id The Post ID.
 	 */
 	public function trash( $post_id ) {}
+
+	// phpcs:disable Squiz.Commenting.FunctionComment.MissingParamTag
+
+	/**
+	 * Get the provider specific labels
+	 */
+	public static function get_labels( $context = '' ) {}
+
+	/**
+	 * Get configuration for conditional tag support in case the ESP supports it.
+	 */
+	public static function get_conditional_tag_support() {}
+
+	/**
+	 * Get contact data by email.
+	 */
+	public function get_contact_data( $email, $return_details = false ) {}
+
+	/**
+	 * Get the lists a contact is subscribed to.
+	 */
+	public function get_contact_lists( $email ) {}
+
+	/**
+	 * Update a contact lists subscription.
+	 */
+	public function update_contact_lists( $email, $lists_to_add = [], $lists_to_remove = [] ) {}
+
+	/**
+	 * Retrieve the ESP's tag ID from its name
+	 */
+	public function get_tag_id( $tag_name, $create_if_not_found = true, $list_id = null ) {}
+
+	/**
+	 * Retrieve the ESP's tag name from its ID
+	 */
+	public function get_tag_by_id( $tag_id, $list_id = null ) {}
+
+	/**
+	 * Create a Tag on the provider
+	 */
+	public function create_tag( $tag, $list_id = null ) {}
+
+	/**
+	 * Updates a Tag name on the provider
+	 */
+	public function update_tag( $tag_id, $tag, $list_id = null ) {}
+
+	/**
+	 * Add a tag to a contact
+	 */
+	public function add_tag_to_contact( $email, $tag, $list_id = null ) {}
+
+	/**
+	 * Remove a tag from a contact
+	 */
+	public function remove_tag_from_contact( $email, $tag, $list_id = null ) {}
+
+	/**
+	 * Get the IDs of the tags associated with a contact.
+	 */
+	public function get_contact_tags_ids( $email ) {}
+
+	/**
+	 * Get a reader-facing error message to be shown when the add_contact method fails.
+	 */
+	public function get_reader_error_message( $params = [], $raw_error = null ) {}
+
+	/**
+	 * Get usage report for yesterday.
+	 */
+	public function get_usage_report() {}
 }

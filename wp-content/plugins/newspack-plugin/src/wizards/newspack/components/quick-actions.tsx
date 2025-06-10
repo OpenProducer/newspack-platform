@@ -8,12 +8,13 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { Icon } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
 import { Card, Grid } from '../../../components/src';
-import { Icon, icons } from './icons';
+import { icons } from './icons';
 
 const {
 	newspackDashboard: { quickActions },

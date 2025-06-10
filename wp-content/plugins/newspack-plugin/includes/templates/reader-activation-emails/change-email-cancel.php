@@ -250,6 +250,12 @@ $email_html = '
 					<div style="margin:0px auto;max-width:488px;"><table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="" style="vertical-align:top;width:488px;" ><![endif]-->
 						<div class="mj-column-per-100 mj-outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:12px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial;font-size:12px;line-height:1.5;text-align:left;color:' . esc_attr( $primary_text_color ) . ';"><p class="has-small-font-size">*SITE_CONTACT*<br> ' . sprintf( /* Translators: s: link to site url. */ __( 'You received this email because you requested to update your email address for %s', 'newspack-plugin' ), '<a style="color:' . esc_attr( $primary_text_color ) . ' !important" href="*SITE_URL*" target="_blank">*SITE_URL*</a>' ) . '</p></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]-->
 			</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 		</body>
 	</html>';
 

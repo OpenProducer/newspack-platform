@@ -21,6 +21,7 @@ export const managePagination = ( action = 'continue' ) => {
 		referrer,
 		variation_id = '',
 		gate_post_id = '',
+		newspack_popup_id = '',
 	} = getProductDetails( 'modal-checkout-product-details' );
 
 	const params = {
@@ -41,6 +42,11 @@ export const managePagination = ( action = 'continue' ) => {
 	// If this checkout started from a content gate, add the gate ID to the payload.
 	if ( gate_post_id ) {
 		params.gate_post_id = gate_post_id;
+	}
+
+	// If this checkout started from a campaign prompt, add the popup ID to the payload.
+	if ( newspack_popup_id ) {
+		params.newspack_popup_id = newspack_popup_id;
 	}
 
 	const payload = getEventPayload( action, params );

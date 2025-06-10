@@ -24856,7 +24856,8 @@ function BackgroundImageControls({
   onRemoveImage = background_image_control_noop,
   onResetImage = background_image_control_noop,
   displayInPanel,
-  defaultValues
+  defaultValues,
+  containerRef
 }) {
   const [isUploading, setIsUploading] = (0,external_wp_element_namespaceObject.useState)(false);
   const {
@@ -24869,7 +24870,6 @@ function BackgroundImageControls({
   } = style?.background?.backgroundImage || {
     ...inheritedValue?.background?.backgroundImage
   };
-  const replaceContainerRef = (0,external_wp_element_namespaceObject.useRef)();
   const {
     createErrorNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
@@ -24917,6 +24917,8 @@ function BackgroundImageControls({
       backgroundSize: sizeValue
     }));
     setIsUploading(false);
+    // Close the dropdown and focus the toggle button.
+    closeAndFocus();
   };
 
   // Drag and drop callback, restricting image to one.
@@ -24933,12 +24935,17 @@ function BackgroundImageControls({
   };
   const hasValue = hasBackgroundImageValue(style);
   const closeAndFocus = () => {
-    const [toggleButton] = external_wp_dom_namespaceObject.focus.tabbable.find(replaceContainerRef.current);
-    // Focus the toggle button and close the dropdown menu.
-    // This ensures similar behaviour as to selecting an image, where the dropdown is
-    // closed and focus is redirected to the dropdown toggle button.
-    toggleButton?.focus();
-    toggleButton?.click();
+    // Use requestAnimationFrame to ensure DOM updates are complete
+    window.requestAnimationFrame(() => {
+      const [toggleButton] = external_wp_dom_namespaceObject.focus.tabbable.find(containerRef?.current);
+      if (!toggleButton) {
+        return;
+      }
+      // Focus the toggle button and close the dropdown menu.
+      // This ensures similar behaviour as to selecting an image, where the dropdown is
+      // closed and focus is redirected to the dropdown toggle button.
+      toggleButton.focus();
+    });
   };
   const onRemove = () => onChange(setImmutably(style, ['background'], {
     backgroundImage: 'none'
@@ -24946,7 +24953,6 @@ function BackgroundImageControls({
   const canRemove = !hasValue && hasBackgroundImageValue(inheritedValue);
   const imgLabel = title || (0,external_wp_url_namespaceObject.getFilename)(url) || (0,external_wp_i18n_namespaceObject.__)('Add background image');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-    ref: replaceContainerRef,
     className: "block-editor-global-styles-background-panel__image-tools-panel-item",
     children: [isUploading && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LoadingSpinner, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(media_replace_flow, {
       mediaId: id,
@@ -25174,7 +25180,9 @@ function BackgroundImagePanel({
   const imageValue = value?.background?.backgroundImage || inheritedValue?.background?.backgroundImage;
   const shouldShowBackgroundImageControls = hasImageValue && 'none' !== imageValue && (settings?.background?.backgroundSize || settings?.background?.backgroundPosition || settings?.background?.backgroundRepeat);
   const [isDropDownOpen, setIsDropDownOpen] = (0,external_wp_element_namespaceObject.useState)(false);
+  const containerRef = (0,external_wp_element_namespaceObject.useRef)();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    ref: containerRef,
     className: dist_clsx('block-editor-global-styles-background-panel__inspector-media-replace-container', {
       'is-open': isDropDownOpen
     }),
@@ -25197,7 +25205,8 @@ function BackgroundImagePanel({
             resetBackground();
           },
           onRemoveImage: () => setIsDropDownOpen(false),
-          defaultValues: defaultValues
+          defaultValues: defaultValues,
+          containerRef: containerRef
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BackgroundSizeControls, {
           onChange: onChange,
           style: value,
@@ -25214,7 +25223,8 @@ function BackgroundImagePanel({
         setIsDropDownOpen(false);
         resetBackground();
       },
-      onRemoveImage: () => setIsDropDownOpen(false)
+      onRemoveImage: () => setIsDropDownOpen(false),
+      containerRef: containerRef
     })
   });
 }
@@ -72625,11 +72635,10 @@ function MediaPlaceholder({
         })).catch(() => resolve(block.attributes.url));
       });
     })).catch(err => onError(err));
-    if (multiple) {
-      onSelect(uploadedMediaList);
-    } else {
-      onSelect(uploadedMediaList[0]);
+    if (!uploadedMediaList?.length) {
+      return;
     }
+    onSelect(multiple ? uploadedMediaList : uploadedMediaList[0]);
   }
   const onUpload = event => {
     onFilesUpload(event.target.files);

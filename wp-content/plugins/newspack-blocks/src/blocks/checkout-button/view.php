@@ -108,6 +108,15 @@ function render_callback( $attributes ) {
 		$hidden_fields .= $after_success_url ? '<input type="hidden" name="after_success_url" value="' . esc_attr( $after_success_url ) . '" />' : '';
 	}
 
+	ob_start();
+	/**
+	 * Fires when generating hidden fields for the checkout button.
+	 *
+	 * @param array $attributes Block attributes.
+	 */
+	do_action( 'newspack_blocks_checkout_button_hidden_fields', $attributes );
+	$hidden_fields .= ob_get_clean();
+
 	// Generate the form.
 	if ( function_exists( 'wc_get_product' ) ) {
 		$product = wc_get_product( $product_id );

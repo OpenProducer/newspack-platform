@@ -4270,7 +4270,8 @@ function getNotificationArgumentsForSaveSuccess(data) {
   if (shouldShowLink) {
     actions.push({
       label: isDraft ? (0,external_wp_i18n_namespaceObject.__)('View Preview') : postType.labels.view_item,
-      url: post.link
+      url: post.link,
+      openInNewTab: true
     });
   }
   return [noticeMessage, {
@@ -14702,6 +14703,7 @@ function ConvertToRegularBlocks({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -14719,13 +14721,15 @@ function ConvertToTemplatePart({
     createSuccessNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
   const {
+    isBlockBasedTheme,
     canCreate
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     return {
+      isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
       canCreate: select(external_wp_blockEditor_namespaceObject.store).canInsertBlockType('core/template-part')
     };
   }, []);
-  if (!canCreate) {
+  if (!isBlockBasedTheme || !canCreate) {
     return null;
   }
   const onConvert = async templatePart => {
@@ -15515,7 +15519,8 @@ const saveDirtyEntities = ({
         id: saveNoticeId,
         actions: [{
           label: (0,external_wp_i18n_namespaceObject.__)('View site'),
-          url: homeUrl
+          url: homeUrl,
+          openInNewTab: true
         }]
       });
     }
@@ -25306,6 +25311,7 @@ function PostPublishPanelPrepublish({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -25405,7 +25411,7 @@ function PostPublishPanelPostpublish({
     className: "post-publish-panel__postpublish",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.PanelBody, {
       className: "post-publish-panel__postpublish-header",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ExternalLink, {
         ref: postLinkRef,
         href: link,
         children: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(post.title) || (0,external_wp_i18n_namespaceObject.__)('(no title)')
@@ -25435,11 +25441,18 @@ function PostPublishPanelPostpublish({
         })]
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "post-publish-panel__postpublish-buttons",
-        children: [!isScheduled && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        children: [!isScheduled && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Button, {
           variant: "primary",
           href: link,
           __next40pxDefaultSize: true,
-          children: viewPostLabel
+          icon: library_external,
+          iconPosition: "right",
+          target: "_blank",
+          children: [viewPostLabel, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.VisuallyHidden, {
+            as: "span",
+            children: /* translators: accessibility text */
+            (0,external_wp_i18n_namespaceObject.__)('(opens in a new tab)')
+          })]
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
           variant: isScheduled ? 'primary' : 'secondary',
           __next40pxDefaultSize: true,
@@ -28567,7 +28580,9 @@ function CommentForm({
       __next40pxDefaultSize: true,
       __nextHasNoMarginBottom: true,
       value: inputComment !== null && inputComment !== void 0 ? inputComment : '',
-      onChange: setInputComment
+      onChange: setInputComment,
+      label: (0,external_wp_i18n_namespaceObject.__)('Comment'),
+      hideLabelFromVision: true
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
       alignment: "left",
       spacing: "3",
@@ -31786,7 +31801,6 @@ function EditorInterface({
 }) {
   const {
     mode,
-    isRichEditingEnabled,
     isInserterOpened,
     isListViewOpened,
     isDistractionFree,
@@ -31803,9 +31817,15 @@ function EditorInterface({
     } = select(store_store);
     const editorSettings = getEditorSettings();
     const postTypeLabel = getPostTypeLabel();
+    let _mode = select(store_store).getEditorMode();
+    if (!editorSettings.richEditingEnabled && _mode === 'visual') {
+      _mode = 'text';
+    }
+    if (!editorSettings.codeEditingEnabled && _mode === 'text') {
+      _mode = 'visual';
+    }
     return {
-      mode: select(store_store).getEditorMode(),
-      isRichEditingEnabled: editorSettings.richEditingEnabled,
+      mode: _mode,
       isInserterOpened: select(store_store).isInserterOpened(),
       isListViewOpened: select(store_store).isListViewOpened(),
       isDistractionFree: get('core', 'distractionFree'),
@@ -31853,14 +31873,14 @@ function EditorInterface({
     content: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
       children: [!isDistractionFree && !isPreviewMode && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(editor_notices, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(content_slot_fill.Slot, {
         children: ([editorCanvasView]) => editorCanvasView ? editorCanvasView : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-          children: [!isPreviewMode && (mode === 'text' || !isRichEditingEnabled) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TextEditor
+          children: [!isPreviewMode && mode === 'text' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TextEditor
           // We should auto-focus the canvas (title) on load.
           // eslint-disable-next-line jsx-a11y/no-autofocus
           , {
             autoFocus: autoFocus
           }), !isPreviewMode && !isLargeViewport && mode === 'visual' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockToolbar, {
             hideDragHandle: true
-          }), (isPreviewMode || isRichEditingEnabled && mode === 'visual') && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(visual_editor, {
+          }), (isPreviewMode || mode === 'visual') && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(visual_editor, {
             styles: styles,
             contentRef: contentRef,
             disableIframe: disableIframe
@@ -31873,7 +31893,7 @@ function EditorInterface({
         })
       })]
     }),
-    footer: !isPreviewMode && !isDistractionFree && isLargeViewport && showBlockBreadcrumbs && isRichEditingEnabled && mode === 'visual' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockBreadcrumb, {
+    footer: !isPreviewMode && !isDistractionFree && isLargeViewport && showBlockBreadcrumbs && mode === 'visual' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockBreadcrumb, {
       rootLabelText: documentLabel
     }),
     actions: !isPreviewMode ? customSavePanel || /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SavePublishPanels, {

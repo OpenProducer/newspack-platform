@@ -27,15 +27,11 @@ class Send_Lists {
 	 * @return void
 	 */
 	public static function init() {
-		if ( ! self::should_initialize_send_lists() ) {
-			return;
-		}
-
 		\add_action( 'rest_api_init', [ __CLASS__, 'register_api_endpoints' ] );
 	}
 
 	/**
-	 * Check if we should initialize Send lists.
+	 * Check if we should initialize Send lists. Needs to be called after init.
 	 *
 	 * @return boolean
 	 */
@@ -52,6 +48,11 @@ class Send_Lists {
 	 * Register the endpoints needed to fetch send lists.
 	 */
 	public static function register_api_endpoints() {
+
+		if ( ! self::should_initialize_send_lists() ) {
+			return;
+		}
+
 		\register_rest_route(
 			Newspack_Newsletters::API_NAMESPACE,
 			'/send-lists',

@@ -129,7 +129,7 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 										<strong>
 											{ segmentId ? (
 												<ExternalLink
-													href={ `/wp-admin/admin.php?page=newspack-popups-wizard#/segments/${ segmentId }` }
+													href={ `/wp-admin/admin.php?page=newspack-audience-campaigns#/campaigns/${ segmentId }` }
 												>
 													{ sprintf(
 														// Translators: Segment name.

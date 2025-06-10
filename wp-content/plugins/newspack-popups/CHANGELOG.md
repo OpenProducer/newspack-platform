@@ -1,3 +1,20 @@
+## [3.5.2](https://github.com/Automattic/newspack-popups/compare/v3.5.1...v3.5.2) (2025-06-02)
+
+
+### Bug Fixes
+
+* **pageviews:** enqueue logPageView JS before segmentation JS ([#1436](https://github.com/Automattic/newspack-popups/issues/1436)) ([9191d68](https://github.com/Automattic/newspack-popups/commit/9191d6854eb419534c58685759ba6889bd988821))
+* **preview:** enqueue styles and scripts in preview mode ([#1430](https://github.com/Automattic/newspack-popups/issues/1430)) ([44d02a4](https://github.com/Automattic/newspack-popups/commit/44d02a4377e7860732d3410e7c0b902e1f03c6ed))
+* segmentation link ([#1427](https://github.com/Automattic/newspack-popups/issues/1427)) ([0512d58](https://github.com/Automattic/newspack-popups/commit/0512d5871fc79fac9c9ace24e8f6d9ee21f3d35a))
+* **segmentation:** log page view even if page is not showing prompts ([#1428](https://github.com/Automattic/newspack-popups/issues/1428)) ([f99fa3e](https://github.com/Automattic/newspack-popups/commit/f99fa3e5a45aeacba77aeb697e0fa32cbb9ffd32))
+
+## [3.5.1](https://github.com/Automattic/newspack-popups/compare/v3.5.0...v3.5.1) (2025-05-29)
+
+
+### Bug Fixes
+
+* **data:** hidden field integration with Checkout Button block ([#1441](https://github.com/Automattic/newspack-popups/issues/1441)) ([6fac0c7](https://github.com/Automattic/newspack-popups/commit/6fac0c763614f09e2ba93c33a6a697836548bf76))
+
 # [3.5.0](https://github.com/Automattic/newspack-popups/compare/v3.4.3...v3.5.0) (2025-05-14)
 
 

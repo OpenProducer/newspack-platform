@@ -14787,17 +14787,17 @@ function MainSidebarNavigationContent({
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalItemGroup, {
     className: "edit-site-sidebar-navigation-screen-main",
     children: [isBlockBasedTheme && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationItem, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationItemGlobalStyles, {
+        to: "/styles",
+        uid: "global-styles-navigation-item",
+        icon: library_styles,
+        children: (0,external_wp_i18n_namespaceObject.__)('Styles')
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationItem, {
         uid: "navigation-navigation-item",
         to: "/navigation",
         withChevron: true,
         icon: library_navigation,
         children: (0,external_wp_i18n_namespaceObject.__)('Navigation')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationItemGlobalStyles, {
-        to: "/styles",
-        uid: "global-styles-navigation-item",
-        icon: library_styles,
-        children: (0,external_wp_i18n_namespaceObject.__)('Styles')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SidebarNavigationItem, {
         uid: "page-navigation-item",
         to: "/page",
@@ -19409,7 +19409,7 @@ function FontCollection({
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalSpacer, {
             margin: 4
           }), !!selectedCollection?.font_families?.length && !fonts.length && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalText, {
-            children: (0,external_wp_i18n_namespaceObject.__)('No fonts found. Try with a different search term')
+            children: (0,external_wp_i18n_namespaceObject.__)('No fonts found. Try with a different search term.')
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
             className: "font-library-modal__fonts-grid__main",
             children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
@@ -24787,21 +24787,6 @@ function font_sizes_FontSizes() {
 }
 /* harmony default export */ const font_sizes = (font_sizes_FontSizes);
 
-;// ./packages/icons/build-module/library/shuffle.js
-/**
- * WordPress dependencies
- */
-
-
-const shuffle = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  viewBox: "0 0 24 24",
-  xmlns: "http://www.w3.org/2000/SVG",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M17.192 6.75L15.47 5.03l1.06-1.06 3.537 3.53-3.537 3.53-1.06-1.06 1.723-1.72h-3.19c-.602 0-.993.202-1.28.498-.309.319-.538.792-.695 1.383-.13.488-.222 1.023-.296 1.508-.034.664-.116 1.413-.303 2.117-.193.721-.513 1.467-1.068 2.04-.575.594-1.359.954-2.357.954H4v-1.5h4.003c.601 0 .993-.202 1.28-.498.308-.319.538-.792.695-1.383.149-.557.216-1.093.288-1.662l.039-.31a9.653 9.653 0 0 1 .272-1.653c.193-.722.513-1.467 1.067-2.04.576-.594 1.36-.954 2.358-.954h3.19zM8.004 6.75c.8 0 1.46.23 1.988.628a6.24 6.24 0 0 0-.684 1.396 1.725 1.725 0 0 0-.024-.026c-.287-.296-.679-.498-1.28-.498H4v-1.5h4.003zM12.699 14.726c-.161.459-.38.94-.684 1.396.527.397 1.188.628 1.988.628h3.19l-1.722 1.72 1.06 1.06L20.067 16l-3.537-3.53-1.06 1.06 1.723 1.72h-3.19c-.602 0-.993-.202-1.28-.498a1.96 1.96 0 0 1-.024-.026z"
-  })
-});
-/* harmony default export */ const library_shuffle = (shuffle);
-
 ;// ./packages/edit-site/build-module/components/global-styles/color-indicator-wrapper.js
 /**
  * External dependencies
@@ -24842,7 +24827,6 @@ function ColorIndicatorWrapper({
 
 
 
-
 const {
   useGlobalSetting: palette_useGlobalSetting
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
@@ -24854,7 +24838,6 @@ function Palette({
   const [themeColors] = palette_useGlobalSetting('color.palette.theme');
   const [defaultColors] = palette_useGlobalSetting('color.palette.default');
   const [defaultPaletteEnabled] = palette_useGlobalSetting('color.defaultPalette', name);
-  const [randomizeThemeColors] = useColorRandomizer();
   const colors = (0,external_wp_element_namespaceObject.useMemo)(() => [...(customColors || EMPTY_COLORS), ...(themeColors || EMPTY_COLORS), ...(defaultColors && defaultPaletteEnabled ? defaultColors : EMPTY_COLORS)], [customColors, themeColors, defaultColors, defaultPaletteEnabled]);
   const screenPath = !name ? '/colors/palette' : '/blocks/' + encodeURIComponent(name) + '/colors/palette';
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
@@ -24891,12 +24874,6 @@ function Palette({
           })]
         })
       })
-    }), window.__experimentalEnableColorRandomizer && themeColors?.length > 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-      __next40pxDefaultSize: true,
-      variant: "secondary",
-      icon: library_shuffle,
-      onClick: randomizeThemeColors,
-      children: (0,external_wp_i18n_namespaceObject.__)('Randomize colors')
     })]
   });
 }
@@ -24951,6 +24928,21 @@ function ScreenColors() {
   });
 }
 /* harmony default export */ const screen_colors = (ScreenColors);
+
+;// ./packages/icons/build-module/library/shuffle.js
+/**
+ * WordPress dependencies
+ */
+
+
+const shuffle = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/SVG",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M17.192 6.75L15.47 5.03l1.06-1.06 3.537 3.53-3.537 3.53-1.06-1.06 1.723-1.72h-3.19c-.602 0-.993.202-1.28.498-.309.319-.538.792-.695 1.383-.13.488-.222 1.023-.296 1.508-.034.664-.116 1.413-.303 2.117-.193.721-.513 1.467-1.068 2.04-.575.594-1.359.954-2.357.954H4v-1.5h4.003c.601 0 .993-.202 1.28-.498.308-.319.538-.792.695-1.383.149-.557.216-1.093.288-1.662l.039-.31a9.653 9.653 0 0 1 .272-1.653c.193-.722.513-1.467 1.067-2.04.576-.594 1.36-.954 2.358-.954h3.19zM8.004 6.75c.8 0 1.46.23 1.988.628a6.24 6.24 0 0 0-.684 1.396 1.725 1.725 0 0 0-.024-.026c-.287-.296-.679-.498-1.28-.498H4v-1.5h4.003zM12.699 14.726c-.161.459-.38.94-.684 1.396.527.397 1.188.628 1.988.628h3.19l-1.722 1.72 1.06 1.06L20.067 16l-3.537-3.53-1.06 1.06 1.723 1.72h-3.19c-.602 0-.993-.202-1.28-.498a1.96 1.96 0 0 1-.024-.026z"
+  })
+});
+/* harmony default export */ const library_shuffle = (shuffle);
 
 ;// ./packages/edit-site/build-module/components/global-styles/preset-colors.js
 /**
@@ -25079,9 +25071,11 @@ function ColorVariations({
 
 
 
+
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -25103,17 +25097,27 @@ function ColorPalettePanel({
   const [defaultPaletteEnabled] = color_palette_panel_useGlobalSetting('color.defaultPalette', name);
   const isMobileViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('small', '<');
   const popoverProps = isMobileViewport ? mobilePopoverProps : undefined;
+  const [randomizeThemeColors] = useColorRandomizer();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
     className: "edit-site-global-styles-color-palette-panel",
     spacing: 8,
-    children: [!!themeColors && !!themeColors.length && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalPaletteEdit, {
-      canReset: themeColors !== baseThemeColors,
-      canOnlyChangeValues: true,
-      colors: themeColors,
-      onChange: setThemeColors,
-      paletteLabel: (0,external_wp_i18n_namespaceObject.__)('Theme'),
-      paletteLabelHeadingLevel: 3,
-      popoverProps: popoverProps
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
+      spacing: 4,
+      children: [!!themeColors && !!themeColors.length && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalPaletteEdit, {
+        canReset: themeColors !== baseThemeColors,
+        canOnlyChangeValues: true,
+        colors: themeColors,
+        onChange: setThemeColors,
+        paletteLabel: (0,external_wp_i18n_namespaceObject.__)('Theme'),
+        paletteLabelHeadingLevel: 3,
+        popoverProps: popoverProps
+      }), window.__experimentalEnableColorRandomizer && themeColors?.length > 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        __next40pxDefaultSize: true,
+        variant: "secondary",
+        icon: library_shuffle,
+        onClick: randomizeThemeColors,
+        children: (0,external_wp_i18n_namespaceObject.__)('Randomize colors')
+      })]
     }), !!defaultColors && !!defaultColors.length && !!defaultPaletteEnabled && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalPaletteEdit, {
       canReset: defaultColors !== baseDefaultColors,
       canOnlyChangeValues: true,

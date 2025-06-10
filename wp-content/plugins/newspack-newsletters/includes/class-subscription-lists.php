@@ -38,9 +38,6 @@ class Subscription_Lists {
 		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
 		add_action( 'init', [ __CLASS__, 'migrate_lists' ], 11 );
 
-		if ( ! self::should_initialize_local_lists() ) {
-			return;
-		}
 		add_filter( 'wp_editor_settings', [ __CLASS__, 'filter_editor_settings' ], 10, 2 );
 		add_action( 'save_post', [ __CLASS__, 'save_post' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_scripts' ] );
@@ -53,6 +50,11 @@ class Subscription_Lists {
 	 * Add custom CSS to the List post type edit screen
 	 */
 	public static function admin_enqueue_scripts() {
+
+		if ( ! self::should_initialize_local_lists() ) {
+			return;
+		}
+
 		if ( get_current_screen()->post_type === self::CPT ) {
 			wp_enqueue_style(
 				'newspack-newsletters-subscription-list-editor',
@@ -93,6 +95,11 @@ class Subscription_Lists {
 	 * @return array
 	 */
 	public static function filter_editor_settings( $settings, $editor_id ) {
+
+		if ( ! self::should_initialize_local_lists() ) {
+			return $settings;
+		}
+
 		if ( 'content' === $editor_id && get_current_screen()->post_type === self::CPT ) {
 			$settings['tinymce']       = false;
 			$settings['quicktags']     = false;
@@ -166,6 +173,11 @@ class Subscription_Lists {
 	 * @return void
 	 */
 	public static function add_metabox( $post ) {
+
+		if ( ! self::should_initialize_local_lists() ) {
+			return;
+		}
+
 		add_meta_box(
 			'newspack-newsletters-list-metabox',
 			__( 'Provider settings' ),
@@ -286,6 +298,10 @@ class Subscription_Lists {
 	 * @return void
 	 */
 	public static function save_post( $post_id ) {
+
+		if ( ! self::should_initialize_local_lists() ) {
+			return;
+		}
 
 		$post_type = sanitize_text_field( $_POST['post_type'] ?? '' );
 
@@ -635,6 +651,11 @@ class Subscription_Lists {
 	 * Outputs a title for the description field in the post editor.
 	 */
 	public static function edit_form_before_permalink() {
+
+		if ( ! self::should_initialize_local_lists() ) {
+			return;
+		}
+
 		if ( self::CPT === get_post_type() ) {
 			printf( '<h2>%s</h2>', esc_html__( 'Description', 'newspack-newsletters' ) );
 		}
@@ -644,6 +665,11 @@ class Subscription_Lists {
 	 * Outputs a link back to the Settings page above the title in the post editor.
 	 */
 	public static function edit_form_top() {
+
+		if ( ! self::should_initialize_local_lists() ) {
+			return;
+		}
+
 		if ( self::CPT === get_post_type() ) {
 			?>
 			<a href="<?php echo esc_url( Newspack_Newsletters_Settings::get_settings_url() ); ?>">

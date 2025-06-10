@@ -31,12 +31,12 @@ class Recirculation_Section extends Wizard_Section {
 	 *
 	 * @var string
 	 */
-	protected $related_posts_option = 'newspack_related_posts_max_age';
-	
+	const RELATED_POSTS_OPTION = 'newspack_related_posts_max_age';
+
 	/**
 	 * Register Wizard Section specific endpoints.
 	 *
-	 * @return void 
+	 * @return void
 	 */
 	public function register_rest_routes() {
 		register_rest_route(
@@ -71,7 +71,7 @@ class Recirculation_Section extends Wizard_Section {
 		return rest_ensure_response(
 			[
 				'relatedPostsEnabled' => $jetpack_configuration_manager->is_related_posts_enabled(),
-				'relatedPostsMaxAge'  => get_option( $this->related_posts_option, 0 ),
+				'relatedPostsMaxAge'  => get_option( self::RELATED_POSTS_OPTION, 0 ),
 			]
 		);
 	}
@@ -86,7 +86,7 @@ class Recirculation_Section extends Wizard_Section {
 		$args = $request->get_params();
 
 		if ( is_numeric( $args['relatedPostsMaxAge'] ) && 0 <= $args['relatedPostsMaxAge'] ) {
-			update_option( $this->related_posts_option, $args['relatedPostsMaxAge'] );
+			update_option( self::RELATED_POSTS_OPTION, $args['relatedPostsMaxAge'] );
 		} else {
 			return new WP_Error(
 				'newspack_related_posts_invalid_arg',

@@ -1,10 +1,10 @@
 === WooCommerce ===
 Contributors: automattic, woocommerce, mikejolley, jameskoster, claudiosanches, rodrigosprimo, peterfabian1000, vedjain, jamosova, obliviousharmony, konamiman, sadowski, wpmuguru, royho, barryhughes-1, claudiulodro, tiagonoronha, ryelle, levinmedia, aljullu, nerrad, joshuawold, assassinateur, haszari, mppfeiffer, nielslange, opr18, ralucastn, tjcafferkey, danielwrobert, patriciahillebrandt, albarin, dinhtungdu, imanish003, karolmanijak, sunyatasattva, alexandrelara, gigitux, danieldudzic, samueljseay, alexflorisca, opr18, tarunvijwani, pauloarromba, saadtarhi, bor0, kloon, coreymckrill, jorgeatorres, leifsinger, neosinner
 Tags: online store, ecommerce, shop, shopping cart, sell online
-Requires at least: 6.6
+Requires at least: 6.7
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 9.8.4
+Stable tag: 9.8.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -169,26 +169,12 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 9.8.5 2025-05-12 =
+= 9.9.3 2025-06-09 =
 
 **WooCommerce**
 
-* Fix - Address PHP 8.4 deprecation warnings. [#57864](https://github.com/woocommerce/woocommerce/pull/57864)
-* Fix - Allow other protocols such as S3 for file paths in CSV importer [#57465](https://github.com/woocommerce/woocommerce/pull/57465)
-* Fix - Apply reactify-payments-settings class to the page body when the feature is active. [#57618](https://github.com/woocommerce/woocommerce/pull/57618)
-* Fix - Fix backward compatibility for individual gateway settings pages/sections to display notices and sections with the new Reactified Payments Settings page. [#57618](https://github.com/woocommerce/woocommerce/pull/57618)
-* Fix - Prevent PHP notice in transient cleanup. [#57679](https://github.com/woocommerce/woocommerce/pull/57679)
-* Fix - Prevent shipping rates remaining hidden when checkout fields filtered to be optional are not filled on classic checkout. [#57674](https://github.com/woocommerce/woocommerce/pull/57674)
-* Fix - PTK Pattern: improve guard [#57847](https://github.com/woocommerce/woocommerce/pull/57847)
-* Fix - Remove the section navigation for the offline payment methods settings pages. [#57748](https://github.com/woocommerce/woocommerce/pull/57748)
-* Add - Use wc_back_header function for tertiary+ level pages in WooCommerce settings. [#57618](https://github.com/woocommerce/woocommerce/pull/57618)
-* Update - Allow WooPayments to take over Payments menu item only if WooPayments is fully onboarded. [#57618](https://github.com/woocommerce/woocommerce/pull/57618)
-* Update - Improve WooPayments incentive handling. [#57618](https://github.com/woocommerce/woocommerce/pull/57618)
-* Update - Update popover interaction from hover to click [#57618](https://github.com/woocommerce/woocommerce/pull/57618)
-* Update - Update the payments extensions official badge icon. [#57714](https://github.com/woocommerce/woocommerce/pull/57714)
-* Dev - E2E tests: enhance shipping zones test [#56786](https://github.com/woocommerce/woocommerce/pull/56786)
-* Tweak - The new Payments Settings page is now enabled by default for all stores, new and existing. [#57614](https://github.com/woocommerce/woocommerce/pull/57614)
-* Tweak - Update recurring payments icon on the new settings page. [#57618](https://github.com/woocommerce/woocommerce/pull/57618)
+* Fix - Remove order status validation for order count cache [#58586](https://github.com/woocommerce/woocommerce/pull/58586)
+* Fix - Revert "unsupported_theme_title_filter" Id parameter typing. [#58574](https://github.com/woocommerce/woocommerce/pull/58574)
 
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

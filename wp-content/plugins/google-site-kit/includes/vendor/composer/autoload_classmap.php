@@ -229,7 +229,6 @@ return array(
     'Google\\Site_Kit\\Core\\Util\\Method_Proxy_Trait' => $baseDir . '/Core/Util/Method_Proxy_Trait.php',
     'Google\\Site_Kit\\Core\\Util\\Migrate_Legacy_Keys' => $baseDir . '/Core/Util/Migrate_Legacy_Keys.php',
     'Google\\Site_Kit\\Core\\Util\\Migration_1_123_0' => $baseDir . '/Core/Util/Migration_1_123_0.php',
-    'Google\\Site_Kit\\Core\\Util\\Migration_1_129_0' => $baseDir . '/Core/Util/Migration_1_129_0.php',
     'Google\\Site_Kit\\Core\\Util\\Migration_1_150_0' => $baseDir . '/Core/Util/Migration_1_150_0.php',
     'Google\\Site_Kit\\Core\\Util\\Migration_1_3_0' => $baseDir . '/Core/Util/Migration_1_3_0.php',
     'Google\\Site_Kit\\Core\\Util\\Migration_1_8_1' => $baseDir . '/Core/Util/Migration_1_8_1.php',

@@ -1,3 +1,52 @@
+# [6.7.0](https://github.com/Automattic/newspack-plugin/compare/v6.6.4...v6.7.0) (2025-06-02)
+
+
+### Bug Fixes
+
+* **404-images:** use JS without modifying content ([#3963](https://github.com/Automattic/newspack-plugin/issues/3963)) ([9f5646b](https://github.com/Automattic/newspack-plugin/commit/9f5646bf02ebcef283f38c88d0f8ec8dcd534fde))
+* add missing namespace ([#3980](https://github.com/Automattic/newspack-plugin/issues/3980)) ([6d58793](https://github.com/Automattic/newspack-plugin/commit/6d58793b95fc75f5c36bee7336eb22b47b532016))
+* **emails:** add missing HTML markup in the change-email-cancel template ([#3981](https://github.com/Automattic/newspack-plugin/issues/3981)) ([040ae30](https://github.com/Automattic/newspack-plugin/commit/040ae30695a61865a2a72ae0978ceef82f2324d1))
+* **ga4:** fire login/registration activities via SSO ([#3965](https://github.com/Automattic/newspack-plugin/issues/3965)) ([8c97515](https://github.com/Automattic/newspack-plugin/commit/8c975151b39109514c4230763e65011d62f1c8f0))
+* hide modal content gate when modal checkout is opened ([#3953](https://github.com/Automattic/newspack-plugin/issues/3953)) ([a503973](https://github.com/Automattic/newspack-plugin/commit/a503973ada8dcf4ce9dae2011894eccb6060de14))
+* **jetpack:** handle the related posts max age option ([#3964](https://github.com/Automattic/newspack-plugin/issues/3964)) ([8aad2b8](https://github.com/Automattic/newspack-plugin/commit/8aad2b8b6010690b93c19bd68c6c66ed9d0a4603))
+* make sure fix duplcate fields apply filters ([#3971](https://github.com/Automattic/newspack-plugin/issues/3971)) ([f361a4e](https://github.com/Automattic/newspack-plugin/commit/f361a4edc2c5214be93a16191076fa6e69e97d88))
+* namespace Lite Site ([#3975](https://github.com/Automattic/newspack-plugin/issues/3975)) ([e4665ae](https://github.com/Automattic/newspack-plugin/commit/e4665aeeca38319aa03bfef9d18bd6e7018f9257))
+* prevent auto-publishing corrections when scheduling posts ([#4006](https://github.com/Automattic/newspack-plugin/issues/4006)) ([7531832](https://github.com/Automattic/newspack-plugin/commit/753183230025967e41a50f969fb2f8d562672657))
+* sync correction status with parent post status ([#3978](https://github.com/Automattic/newspack-plugin/issues/3978)) ([dcd5a12](https://github.com/Automattic/newspack-plugin/commit/dcd5a128a66f52cb359366e1b1106f78617b7aaf))
+
+
+### Features
+
+* add compatibility to network in custom bylines ([#3972](https://github.com/Automattic/newspack-plugin/issues/3972)) ([199a993](https://github.com/Automattic/newspack-plugin/commit/199a993d84df0da8da883b7d0cedc10672db0295))
+* add icons repository and remove custom icons ([#3883](https://github.com/Automattic/newspack-plugin/issues/3883)) ([e56d2e0](https://github.com/Automattic/newspack-plugin/commit/e56d2e0faa47539184f66eed329ff29f5eab41cd))
+* **analytics:** "My Account" dashboard interactions ([#3949](https://github.com/Automattic/newspack-plugin/issues/3949)) ([22e9590](https://github.com/Automattic/newspack-plugin/commit/22e959022980ac27b3f5cb8b4b3ba1a0c969edb9))
+* **donations:** update notice style and type ([#3962](https://github.com/Automattic/newspack-plugin/issues/3962)) ([3f60ef3](https://github.com/Automattic/newspack-plugin/commit/3f60ef3ffdf15f0fde13424e6b13748b413c31c4))
+* **email-change:** remove env constant requirement ([#3943](https://github.com/Automattic/newspack-plugin/issues/3943)) ([4158bf1](https://github.com/Automattic/newspack-plugin/commit/4158bf1b36ab2ad40fe3451a7a73e49bcda4d144))
+* **my-account:** apply Newspack UI styles to My Account w/ env constant ([#3951](https://github.com/Automattic/newspack-plugin/issues/3951)) ([e4aa5a2](https://github.com/Automattic/newspack-plugin/commit/e4aa5a2e8cd5d8fc318fad1e1577dd21a2c00cbd))
+* **my-account:** full-site takeover template and custom nav menu ([#3974](https://github.com/Automattic/newspack-plugin/issues/3974)) ([5cf8403](https://github.com/Automattic/newspack-plugin/commit/5cf84031df14884c5f9337cff8df6b1278573fd0))
+* **woocommerce:** log error notices ([#3952](https://github.com/Automattic/newspack-plugin/issues/3952)) ([1654007](https://github.com/Automattic/newspack-plugin/commit/1654007b8abb358ad036290db0fd8416ef4d96c2))
+
+## [6.6.4](https://github.com/Automattic/newspack-plugin/compare/v6.6.3...v6.6.4) (2025-05-29)
+
+
+### Bug Fixes
+
+* **autocomplete-orders:** apply option to variations, not parent product ([#3958](https://github.com/Automattic/newspack-plugin/issues/3958)) ([f8bf431](https://github.com/Automattic/newspack-plugin/commit/f8bf431763377a4432f23b177c24514e79ea9f9b))
+
+## [6.6.3](https://github.com/Automattic/newspack-plugin/compare/v6.6.2...v6.6.3) (2025-05-27)
+
+
+### Bug Fixes
+
+* **corrections:** rewrite rule flush check ([#3998](https://github.com/Automattic/newspack-plugin/issues/3998)) ([e2023db](https://github.com/Automattic/newspack-plugin/commit/e2023db4f10304c7b4fd062439fd580ffa113dcd))
+
+## [6.6.2](https://github.com/Automattic/newspack-plugin/compare/v6.6.1...v6.6.2) (2025-05-21)
+
+
+### Bug Fixes
+
+* ensure compatibility with woo memberships 1.27.2 ([#3987](https://github.com/Automattic/newspack-plugin/issues/3987)) ([a52224a](https://github.com/Automattic/newspack-plugin/commit/a52224ae16096c555b1979ce4b4b508d834a5410))
+
 ## [6.6.1](https://github.com/Automattic/newspack-plugin/compare/v6.6.0...v6.6.1) (2025-05-15)
 
 

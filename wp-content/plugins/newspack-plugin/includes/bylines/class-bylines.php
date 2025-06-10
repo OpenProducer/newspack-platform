@@ -37,6 +37,10 @@ class Bylines {
 		add_filter( 'pre_newspack_posted_by', [ __CLASS__, 'pre_newspack_posted_by' ] );
 		add_filter( 'newspack_blocks_post_authors', [ __CLASS__, 'newspack_blocks_post_authors' ] );
 		add_filter( 'newspack_blocks_post_byline', [ __CLASS__, 'newspack_blocks_post_byline' ] );
+
+		// Newspack Network compatibility.
+		add_filter( 'newspack_network_distributed_post_meta', [ __CLASS__, 'newspack_network_distributed_post_meta' ], 10, 2 );
+		add_action( 'newspack_network_incoming_post_inserted', [ __CLASS__, 'newspack_network_incoming_post_inserted' ], 10, 3 );
 	}
 
 	/**
@@ -293,6 +297,70 @@ class Bylines {
 		}
 
 		return $custom_byline;
+	}
+
+	/**
+	 * Filters the post meta data for distribution and add a new method with a mapping of author IDs to author emails.
+	 *
+	 * @param array   $meta The post meta data.
+	 * @param WP_Post $post The post object.
+	 */
+	public static function newspack_network_distributed_post_meta( $meta, $post ) {
+		$byline_is_active = \get_post_meta( \get_the_ID(), self::META_KEY_ACTIVE, true );
+		if ( ! $byline_is_active ) {
+			return $meta;
+		}
+
+		$byline = \get_post_meta( $post->ID, self::META_KEY_BYLINE, true );
+
+		$author_ids = self::extract_author_ids_from_shortcode( $byline );
+
+		if ( empty( $author_ids ) ) {
+			return $meta;
+		}
+
+		$mapping = [];
+		// create a mapping of author IDs to author emails.
+		foreach ( $author_ids as $author_id ) {
+			$mapping[ $author_id ] = get_the_author_meta( 'user_email', $author_id );
+		}
+
+		$meta['_newspack_byline_network_authors'] = [ wp_json_encode( $mapping ) ];
+
+		return $meta;
+	}
+
+	/**
+	 * After an incoming post is inserted, update the IDs with the IDs in the target site, based on the mapping that was sent.
+	 *
+	 * @param int   $post_id   The post ID.
+	 * @param bool  $is_linked Whether the post is linked.
+	 * @param array $payload   The post payload.
+	 */
+	public static function newspack_network_incoming_post_inserted( $post_id, $is_linked, $payload ) {
+		if ( ! $is_linked ) {
+			return;
+		}
+
+		$byline = get_post_meta( $post_id, self::META_KEY_BYLINE, true );
+
+		$mapping = get_post_meta( $post_id, '_newspack_byline_network_authors', true );
+
+		$mapping = json_decode( $mapping, true );
+
+		if ( empty( $mapping ) ) {
+			return;
+		}
+
+		foreach ( $mapping as $author_id => $author_email ) {
+			$local_user = get_user_by( 'email', $author_email );
+			if ( ! $local_user ) {
+				continue;
+			}
+			$byline = str_replace( 'id=' . $author_id, 'id=' . $local_user->ID, $byline );
+		}
+
+		update_post_meta( $post_id, self::META_KEY_BYLINE, $byline );
 	}
 }
 Bylines::init();
