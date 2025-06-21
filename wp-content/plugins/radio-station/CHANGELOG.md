@@ -7,6 +7,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+= 2.5.12 =
+* Updated: Block translation and element functions
+* Fixed: preload player settings when Block editing
+
+= 2.5.11 =
+* Added: AJAX load of Schedule views for cachebusting
+* Fixed: instance validation for schedule loader shortcode
+* Fixed: mismatched function name in popup player
+
+= 2.5.10 =
+* Updated: Freemius SDK (2.11.0)
+* Updated: reader.php with prefixed reader functions
+* Updated: Plugin Panel (1.3.5) with new reader function
+* Updated: Color Picker Alpha Library (3.0.4)
+* Updated: Howler Library (2.2.4)
+* Improved: use wp_kses on player widget output
+* Improved: player volume slider background sync/hover
+* Fixed: Freemius optin image URL path
+
 = 2.5.9 =
 * Fixed: Missing use of prepare method on some database queries
 * Added: Vulnerability disclosure program link to FAQ
