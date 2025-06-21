@@ -1,3 +1,22 @@
+# [6.8.0](https://github.com/Automattic/newspack-plugin/compare/v6.7.0...v6.8.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* **campaigns:** segments: min/max values for articles read count defaults ([2efe437](https://github.com/Automattic/newspack-plugin/commit/2efe4372931a5441d4d7ca27d5727dcfcee2760d))
+* prevent auto-publishing corrections when scheduling posts ([#4006](https://github.com/Automattic/newspack-plugin/issues/4006)) ([1a3dc5b](https://github.com/Automattic/newspack-plugin/commit/1a3dc5b9d3a46e693069642cc071a4c7ae3e5b79))
+* sync membership status to ESP when reader deletes account ([#4004](https://github.com/Automattic/newspack-plugin/issues/4004)) ([2cff33b](https://github.com/Automattic/newspack-plugin/commit/2cff33be1cc28cf6eb59125a642b7927f0e143a9))
+* update path to verify template in WooCommerce My Account class ([#3992](https://github.com/Automattic/newspack-plugin/issues/3992)) ([d54e67f](https://github.com/Automattic/newspack-plugin/commit/d54e67fadebfd68d10320b8a3c7642129afaccaa))
+* update text in accessibility statement ([#4030](https://github.com/Automattic/newspack-plugin/issues/4030)) ([391d12b](https://github.com/Automattic/newspack-plugin/commit/391d12b0737846684741dc545921f9467ab4a784))
+
+
+### Features
+
+* add an option to create an Accessibility Statement page ([#4022](https://github.com/Automattic/newspack-plugin/issues/4022)) ([b802442](https://github.com/Automattic/newspack-plugin/commit/b802442045e4ce8501263055c37bed517aeed637))
+* **collections:** add optional collections module ([#3990](https://github.com/Automattic/newspack-plugin/issues/3990)) ([48b4a45](https://github.com/Automattic/newspack-plugin/commit/48b4a45af91f01f1ebcdf6b4b78b809a457f4185))
+* **my-account:** custom confirmation modal flows ([#3985](https://github.com/Automattic/newspack-plugin/issues/3985)) ([90990aa](https://github.com/Automattic/newspack-plugin/commit/90990aaeedf72b2dd55e7711ae47ea1da221ce3d))
+* **my-account:** resubscribe and renew early via modal checkout ([#3973](https://github.com/Automattic/newspack-plugin/issues/3973)) ([5a664a1](https://github.com/Automattic/newspack-plugin/commit/5a664a1a11805740083a738b30061f9368516a0d))
+
 # [6.7.0](https://github.com/Automattic/newspack-plugin/compare/v6.6.4...v6.7.0) (2025-06-02)
 
 

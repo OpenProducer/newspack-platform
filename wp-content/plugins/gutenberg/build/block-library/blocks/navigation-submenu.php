@@ -169,6 +169,10 @@ function gutenberg_render_block_core_navigation_submenu( $attributes, $content, 
 			$html .= ' rel="nofollow"';
 		}
 
+		if ( isset( $attributes['title'] ) ) {
+			$html .= ' title="' . esc_attr( $attributes['title'] ) . '"';
+		}
+
 		$html .= '>';
 		// End appending HTML attributes to anchor tag.
 

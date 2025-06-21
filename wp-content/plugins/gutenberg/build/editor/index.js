@@ -24401,6 +24401,7 @@ function PostFormatPanel() {
 
 
 
+
 /**
  * Module Constants
  */
@@ -24414,6 +24415,9 @@ const hierarchical_term_selector_DEFAULT_QUERY = {
 };
 const MIN_TERMS_COUNT_FOR_FILTER = 8;
 const hierarchical_term_selector_EMPTY_ARRAY = [];
+const {
+  normalizeTextString
+} = unlock(external_wp_components_namespaceObject.privateApis);
 
 /**
  * Sort Terms by Selected.
@@ -24492,7 +24496,7 @@ function getFilterMatcher(filterValue) {
 
     // If the term's name contains the filterValue, or it has children
     // (i.e. some child matched at some point in the tree) then return it.
-    if (-1 !== term.name.toLowerCase().indexOf(filterValue.toLowerCase()) || term.children.length > 0) {
+    if (-1 !== normalizeTextString(term.name).indexOf(normalizeTextString(filterValue)) || term.children.length > 0) {
       return term;
     }
 

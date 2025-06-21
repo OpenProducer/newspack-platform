@@ -273,11 +273,14 @@ class ESP_Sync extends Sync {
 
 		foreach ( self::$queued_syncs as $email => $queued_sync ) {
 			$user = get_user_by( 'email', $email );
-			if ( ! $user ) {
-				continue;
+			$contact = null;
+			if ( $user ) {
+				// For existing users, get fresh contact data.
+				$contact = self::get_contact_data( $user->ID );
+			} else {
+				// For deleted users, try to use the queued contact data directly; $user will return nothing.
+				$contact = $queued_sync['contact'];
 			}
-
-			$contact = self::get_contact_data( $user->ID );
 			if ( ! $contact ) {
 				continue;
 			}

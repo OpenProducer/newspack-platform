@@ -1,5 +1,5 @@
-import { getEventPayload, getProductDetails, sendEvent } from './utils';
-
+import { getEventPayload, sendEvent } from './utils';
+import { getCheckoutData } from '../../utils';
 /**
  * Event fired when switching between steps of the multi-step checkout flow.
  *
@@ -11,7 +11,7 @@ export const manageCheckoutSuccess = () => {
 		return;
 	}
 
-	const params = getProductDetails( 'modal-checkout-product-details' );
+	const params = getCheckoutData( 'modal-checkout-product-details' );
 	const payload = getEventPayload( 'form_submission_success', params );
 	sendEvent( payload );
 };

@@ -1,5 +1,135 @@
 == Changelog ==
 
+= 21.0.0 =
+
+## Changelog
+
+### Enhancements
+
+#### Block Library
+- Button Block: Add HTML Element selection in Advanced settings. ([70139](https://github.com/WordPress/gutenberg/pull/70139))
+- Comment Date: Convert Comment Date block settings to ToolsPanel. ([70248](https://github.com/WordPress/gutenberg/pull/70248))
+- Comment Author Name Block: Refactor setting panel to use ToolsPanel. ([69407](https://github.com/WordPress/gutenberg/pull/69407))
+- Comment Edit Link: Refactor settings panel to use ToolsPanel. ([70247](https://github.com/WordPress/gutenberg/pull/70247))
+- Comment Title: Refactor settings panel to use ToolsPanel. ([70246](https://github.com/WordPress/gutenberg/pull/70246))
+- Comments Pagination Block: Refactor settings panel to use ToolsPanel. ([70245](https://github.com/WordPress/gutenberg/pull/70245))
+- Embed Block: Refactor setting panel to use ToolsPanel. ([69636](https://github.com/WordPress/gutenberg/pull/69636))
+- File Block: Refactor setting panel to use ToolsPanel. ([70189](https://github.com/WordPress/gutenberg/pull/70189))
+- Form Input: Convert Form Input block settings to ToolsPanel. ([70249](https://github.com/WordPress/gutenberg/pull/70249))
+- Form: Convert Form block settings to ToolsPanel. ([70253](https://github.com/WordPress/gutenberg/pull/70253))
+- Latest posts: Change panel body to tools panel. ([70200](https://github.com/WordPress/gutenberg/pull/70200))
+- List Block: Refactor setting panel to use ToolsPanel. ([69387](https://github.com/WordPress/gutenberg/pull/69387))
+- Navigation Link, Navigation Submenu: Hide title UI controls while keeping attribute support. ([70234](https://github.com/WordPress/gutenberg/pull/70234))
+- Navigation: Refactor display panel to use ToolsPanel. ([68011](https://github.com/WordPress/gutenberg/pull/68011))
+- Post Title: Refactor settings panel to use ToolsPanel. ([70229](https://github.com/WordPress/gutenberg/pull/70229))
+- RSS: Refactor setting panel to use `ToolsPanel`. ([70213](https://github.com/WordPress/gutenberg/pull/70213))
+- Separator: Change html element option visibility. ([70185](https://github.com/WordPress/gutenberg/pull/70185))
+- Shortcode: Add role attribute to content in `block.json`. ([70164](https://github.com/WordPress/gutenberg/pull/70164))
+- Video: Add option to set a track as default. ([70227](https://github.com/WordPress/gutenberg/pull/70227))
+
+#### Components
+- ComboboxControl: Handle Unicode characters when matching values. ([70180](https://github.com/WordPress/gutenberg/pull/70180))
+- DropZone: Allow overriding the default icon. ([70236](https://github.com/WordPress/gutenberg/pull/70236))
+
+#### Block Transforms
+- Adds transforms functionality to Post comments link and post comments number. ([70287](https://github.com/WordPress/gutenberg/pull/70287))
+
+
+### Bug Fixes
+
+#### Block Library
+- Button: Avoid empty block control slot. ([70191](https://github.com/WordPress/gutenberg/pull/70191))
+- Fix: Click-through blur effect when gallery images have a caption. ([69067](https://github.com/WordPress/gutenberg/pull/69067))
+- Pullquote block: Cannot override cite element style via theme.json. ([70260](https://github.com/WordPress/gutenberg/pull/70260))
+- Social Link: Localize social service names for translations. ([70199](https://github.com/WordPress/gutenberg/pull/70199))
+- Social: Moves size settings to inspector controls. ([70186](https://github.com/WordPress/gutenberg/pull/70186))
+
+#### Components
+- Ensure SVG Images Without a Width Attribute Are Displayed Correctly in FocalPointPicker. ([70061](https://github.com/WordPress/gutenberg/pull/70061))
+- FormTokenField: Fix filtering with full-width string. ([70232](https://github.com/WordPress/gutenberg/pull/70232))
+
+#### Interactivity API
+- iAPI: Make storePart argument optional in overloads. ([70296](https://github.com/WordPress/gutenberg/pull/70296))
+
+#### Post Editor
+- Editor: Better normalize strings for hierarchical term filtering. ([70178](https://github.com/WordPress/gutenberg/pull/70178))
+
+#### Block Editor
+- Flex Layout: Fix incorrect default alignment values for `Vertical Alignment Control` component. ([68866](https://github.com/WordPress/gutenberg/pull/68866))
+
+### Accessibility
+
+#### Block Library
+- Button: Avoid focus loss when unlinking using keyboard. ([70192](https://github.com/WordPress/gutenberg/pull/70192))
+- Columns block: Don't use ToolsPanelItem for Columns setting. ([70210](https://github.com/WordPress/gutenberg/pull/70210))
+- Details Block: Fix keyboard accessibility issues and allow list view selection to show up inner blocks. ([70056](https://github.com/WordPress/gutenberg/pull/70056))
+
+#### Components
+- Toolbar: Adjust colors for dark mode support. ([69278](https://github.com/WordPress/gutenberg/pull/69278))
+
+### Experiments
+
+#### Interactivity API
+- iAPI: Remove the full-page client-side navigation experiment. ([70228](https://github.com/WordPress/gutenberg/pull/70228))
+
+### Documentation
+
+- Docs: Added the missing ALT attribute to all images. ([70225](https://github.com/WordPress/gutenberg/pull/70225))
+- Docs: Remove misleading section from curating the editor experience. ([70262](https://github.com/WordPress/gutenberg/pull/70262))
+- Fix parameter hint for `canInsertBlocks`. ([70305](https://github.com/WordPress/gutenberg/pull/70305))
+- Fix: Render_block_core_site_title function doc has missing return type. ([70269](https://github.com/WordPress/gutenberg/pull/70269))
+- Improve default ALT attribute value for images in documentation. ([70226](https://github.com/WordPress/gutenberg/pull/70226))
+- JSON schema: Clean reference URLs. ([70274](https://github.com/WordPress/gutenberg/pull/70274))
+- Removed Empty line and corrected typo in inline document. ([70203](https://github.com/WordPress/gutenberg/pull/70203))
+- Replace “sidebar” with “panel” in tutorial.md. ([70257](https://github.com/WordPress/gutenberg/pull/70257))
+- Small grammar fix in glossary.md. ([70292](https://github.com/WordPress/gutenberg/pull/70292))
+- The wp_admin_notice() function should be called instead of custom HTML for admin notice in docs/how-to-guides/notices/README.md. ([70231](https://github.com/WordPress/gutenberg/pull/70231))
+- Updated small typo in inline documentation. ([70187](https://github.com/WordPress/gutenberg/pull/70187))
+- `useDropZone`: Refactor documentation to use the correct function syntax. ([70286](https://github.com/WordPress/gutenberg/pull/70286))
+- `block.json` schema: Add role field. ([70272](https://github.com/WordPress/gutenberg/pull/70272))
+
+
+### Code Quality
+
+#### Block Editor
+- Clarify 'clientId' prop use for 'HTMLElementControl'. ([70258](https://github.com/WordPress/gutenberg/pull/70258))
+- ImageSizeControl: Use margin-free style. ([70202](https://github.com/WordPress/gutenberg/pull/70202))
+
+#### Components
+- Remove forced focus of `InputControl` on mousedown. ([41118](https://github.com/WordPress/gutenberg/pull/41118))
+- SuggestionsList: Remove unused code. ([70195](https://github.com/WordPress/gutenberg/pull/70195))
+
+#### Block Library
+- Video: Use a unique 'key' in the 'TrackList' component. ([70263](https://github.com/WordPress/gutenberg/pull/70263))
+
+### Tools
+
+#### Testing
+- Cover Block: Add `E2E` Test for `FocalPointPicker`. ([69077](https://github.com/WordPress/gutenberg/pull/69077))
+- E2E: Add general end-to-end tests for `templateLock` functionality. ([70160](https://github.com/WordPress/gutenberg/pull/70160))
+- Fix end-to-end test for block API / filtered blocks. ([51882](https://github.com/WordPress/gutenberg/pull/51882))
+- Format `.github` workflows `.yml` file. ([70219](https://github.com/WordPress/gutenberg/pull/70219))
+- Account for tests env port being overridden from 8889 in PHP unit tests. ([70267](https://github.com/WordPress/gutenberg/pull/70267))
+
+
+## First-time contributors
+
+The following PRs were merged by first-time contributors:
+
+- @catgofire: Small grammar fix in glossary.md. ([70292](https://github.com/WordPress/gutenberg/pull/70292))
+- @Mukulsingh27: Pullquote block: Cannot override cite element style via theme.json. ([70260](https://github.com/WordPress/gutenberg/pull/70260))
+- @nani-samireddy: Comments Pagination Block: Refactor settings panel to use ToolsPanel. ([70245](https://github.com/WordPress/gutenberg/pull/70245))
+- @OpuRockey: Fix: Render_block_core_site_title function doc has missing return type. ([70269](https://github.com/WordPress/gutenberg/pull/70269))
+- @ravigadhiya007: Docs: Added the missing ALT attribute to all images. ([70225](https://github.com/WordPress/gutenberg/pull/70225))
+
+
+## Contributors
+
+The following contributors merged PRs in this release:
+
+@aurooba @catgofire @DAreRodz @dhruvikpatel18 @himanshupathak95 @im3dabasia @Infinite-Null @Mamaduka @Mayank-Tripathi32 @Mukulsingh27 @nani-samireddy @OpuRockey @pmbaldha @ravigadhiya007 @Rishit30G @SainathPoojary @shail-mehta @shimotmk @stokesman @t-hamano @troychaplin @vipul0425 @vk17-starlord @westonruter @yogeshbhutkar
+
+
 = 20.9.0 =
 
 

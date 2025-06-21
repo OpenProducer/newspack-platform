@@ -1,4 +1,5 @@
-import { getEventPayload, getProductDetails, sendEvent } from './utils';
+import { getEventPayload, sendEvent } from './utils';
+import { getCheckoutData } from '../../utils';
 
 /**
  * Event fired when switching between steps of the multi-step checkout flow.
@@ -22,7 +23,7 @@ export const managePagination = ( action = 'continue' ) => {
 		variation_id = '',
 		gate_post_id = '',
 		newspack_popup_id = '',
-	} = getProductDetails( 'modal-checkout-product-details' );
+	} = getCheckoutData( 'modal-checkout-product-details' );
 
 	const params = {
 		action_type,

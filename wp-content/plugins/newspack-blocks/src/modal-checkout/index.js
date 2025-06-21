@@ -63,7 +63,7 @@ import { domReady } from './utils';
 		} else {
 			function init() {
 				// If present, update the markup used for the WooPayments express checkout divider.
-				$( '#wcpay-express-checkout-button-separator, #wc-stripe-payment-request-button-separator' ).after(
+				$( '#wcpay-express-checkout-button-separator, #wc-stripe-payment-request-button-separator, #wc-stripe-express-checkout-button-separator' ).after(
 					'<div class="newspack-ui__word-divider">' + newspackBlocksModalCheckout.divider_text + '</div>'
 				);
 

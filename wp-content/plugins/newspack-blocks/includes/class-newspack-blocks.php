@@ -1504,6 +1504,10 @@ class Newspack_Blocks {
 			$currency_symbol     = function_exists( 'get_woocommerce_currency_symbol' ) ? \get_woocommerce_currency_symbol() : '&#36;';
 			$wc_formatted_amount = '<span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">' . $currency_symbol . '</span>AMOUNT_PLACEHOLDER</bdi></span> FREQUENCY_PLACEHOLDER';
 		} else {
+			// If it's a float but with no decimal value, treat it as an int.
+			if ( is_float( $amount ) && floor( $amount ) == $amount ) {
+				$amount = (int) $amount;
+			}
 			// Format the amount with currency symbol and separators.
 			$amount_string = \wc_price(
 				$amount,

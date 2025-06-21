@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 9.9.3\n"
+"Project-Id-Version: WooCommerce 9.9.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-09T11:11:02+00:00\n"
+"POT-Creation-Date: 2025-06-16T15:12:53+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: woocommerce\n"
@@ -9424,7 +9424,7 @@ msgstr ""
 msgid "Select none"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-shipping-method.php:350
+#: includes/abstracts/abstract-wc-shipping-method.php:355
 #: src/Internal/Admin/Orders/Edit.php:79
 msgid "Items"
 msgstr ""
@@ -9455,7 +9455,7 @@ msgid "Free"
 msgstr ""
 
 #: includes/admin/class-wc-admin-addons.php:163
-#: includes/admin/helper/class-wc-helper.php:403
+#: includes/admin/helper/class-wc-helper.php:471
 #: assets/client/admin/chunks/core-profiler.js:1
 #: assets/client/admin/chunks/marketplace.js:1
 msgid "Installed"
@@ -10222,7 +10222,7 @@ msgid "Determines the sort order of the terms on the frontend shop product pages
 msgstr ""
 
 #: includes/admin/class-wc-admin-attributes.php:283
-#: includes/admin/helper/class-wc-helper.php:200
+#: includes/admin/helper/class-wc-helper.php:268
 #: includes/admin/helper/views/html-section-account.php:3
 #: includes/admin/meta-boxes/class-wc-meta-box-order-actions.php:77
 #: src/Internal/Admin/Orders/MetaBoxes/CustomMetaBox.php:403
@@ -13034,7 +13034,7 @@ msgid "API response is missing required elements, or they are in the wrong form.
 msgstr ""
 
 #: includes/admin/helper/class-wc-helper-api.php:52
-#: includes/admin/helper/class-wc-helper.php:2761
+#: includes/admin/helper/class-wc-helper.php:2830
 msgid "Authentication failed. Please try again after a few minutes. If the issue persists, disconnect your store from WooCommerce.com and reconnect."
 msgstr ""
 
@@ -13158,68 +13158,76 @@ msgstr ""
 msgid "Please visit the <a href=\"%s\" target=\"_blank\">subscriptions page</a> and renew to continue receiving updates."
 msgstr ""
 
+#: includes/admin/helper/class-wc-helper.php:110
+msgid "We’re having trouble connecting to WooCommerce.com"
+msgstr ""
+
+#: includes/admin/helper/class-wc-helper.php:111
+msgid "Some subscription data may be temporarily unavailable. Please refresh the page in a few minutes to try again."
+msgstr ""
+
 #. translators: %s: version number
-#: includes/admin/helper/class-wc-helper.php:199
-#: includes/admin/helper/class-wc-helper.php:219
+#: includes/admin/helper/class-wc-helper.php:267
+#: includes/admin/helper/class-wc-helper.php:287
 #, php-format
 msgid "Version %s is <strong>available</strong>."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:208
+#: includes/admin/helper/class-wc-helper.php:276
 msgid "To enable this update you need to <strong>activate</strong> this subscription."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:224
+#: includes/admin/helper/class-wc-helper.php:292
 msgid "To enable this update you need to <strong>purchase</strong> a new subscription."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:225
-#: includes/admin/helper/class-wc-helper.php:323
-#: includes/admin/helper/class-wc-helper.php:337
+#: includes/admin/helper/class-wc-helper.php:293
+#: includes/admin/helper/class-wc-helper.php:391
+#: includes/admin/helper/class-wc-helper.php:405
 msgid "Purchase"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:234
+#: includes/admin/helper/class-wc-helper.php:302
 msgid "This subscription has expired. Contact the owner to <strong>renew</strong> the subscription to receive updates and support."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:242
+#: includes/admin/helper/class-wc-helper.php:310
 msgid "This subscription has expired. Please <strong>renew</strong> to receive updates and support."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:243
-#: includes/admin/helper/class-wc-helper.php:272
+#: includes/admin/helper/class-wc-helper.php:311
+#: includes/admin/helper/class-wc-helper.php:340
 #: src/Admin/PluginsHelper.php:822
 #: src/Admin/PluginsHelper.php:1022
 #: assets/client/admin/chunks/marketplace.js:1
 msgid "Renew"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:257
+#: includes/admin/helper/class-wc-helper.php:325
 msgid "Subscription is <strong>expiring</strong> soon."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:258
+#: includes/admin/helper/class-wc-helper.php:326
 msgid "Enable auto-renew"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:271
+#: includes/admin/helper/class-wc-helper.php:339
 msgid "This subscription is expiring soon. Please <strong>renew</strong> to continue receiving updates and support."
 msgstr ""
 
 #. translators: %s: version number
-#: includes/admin/helper/class-wc-helper.php:322
+#: includes/admin/helper/class-wc-helper.php:390
 #, php-format
 msgid "Version %s is <strong>available</strong>. To enable this update you need to <strong>purchase</strong> a new subscription."
 msgstr ""
 
 #. translators: 1: subscriptions docs 2: subscriptions docs
-#: includes/admin/helper/class-wc-helper.php:336
+#: includes/admin/helper/class-wc-helper.php:404
 #, php-format
 msgid "To receive updates and support for this extension, you need to <strong>purchase</strong> a new subscription or consolidate your extensions to one connected account by <strong><a href=\"%1$s\" title=\"Sharing Docs\">sharing</a> or <a href=\"%2$s\" title=\"Transferring Docs\">transferring</a></strong> this extension to this connected account."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:400
+#: includes/admin/helper/class-wc-helper.php:468
 #: includes/admin/reports/class-wc-report-sales-by-category.php:230
 #: includes/widgets/class-wc-widget-brand-thumbnails.php:210
 #: src/Internal/Admin/Orders/ListTable.php:652
@@ -13236,7 +13244,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:401
+#: includes/admin/helper/class-wc-helper.php:469
 #: includes/admin/helper/views/html-main.php:143
 #: includes/admin/helper/views/html-main.php:146
 #: includes/wc-webhook-functions.php:150
@@ -13245,7 +13253,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:402
+#: includes/admin/helper/class-wc-helper.php:470
 #: includes/admin/helper/views/html-main.php:153
 #: includes/admin/helper/views/html-main.php:156
 #: includes/admin/helper/views/html-main.php:163
@@ -13256,15 +13264,15 @@ msgstr ""
 msgid "Inactive"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:404
+#: includes/admin/helper/class-wc-helper.php:472
 msgid "Update Available"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:405
+#: includes/admin/helper/class-wc-helper.php:473
 msgid "Expiring Soon"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:406
+#: includes/admin/helper/class-wc-helper.php:474
 #: assets/client/admin/chunks/marketplace.js:1
 #: assets/client/admin/wp-admin-scripts/woo-product-usage-notice.js:2
 msgid "Expired"
@@ -13272,7 +13280,7 @@ msgstr ""
 
 #. translators: 1: current item count
 #. translators: %d: downloads count
-#: includes/admin/helper/class-wc-helper.php:407
+#: includes/admin/helper/class-wc-helper.php:475
 #: includes/admin/helper/views/html-main.php:140
 #: includes/class-wc-emails.php:480
 #: includes/legacy/abstract-wc-legacy-order.php:511
@@ -13291,92 +13299,92 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: product name
-#: includes/admin/helper/class-wc-helper.php:536
+#: includes/admin/helper/class-wc-helper.php:604
 #, php-format
 msgid "%s activated successfully. You will now receive updates for this product."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/admin/helper/class-wc-helper.php:549
+#: includes/admin/helper/class-wc-helper.php:617
 #, php-format
 msgid "An error has occurred when activating %s. Please try again later."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/admin/helper/class-wc-helper.php:562
+#: includes/admin/helper/class-wc-helper.php:630
 #, php-format
 msgid "Subscription for %s deactivated successfully. You will no longer receive updates for this product."
 msgstr ""
 
 #. translators: %1$s: product name, %2$s: deactivate url
-#: includes/admin/helper/class-wc-helper.php:581
+#: includes/admin/helper/class-wc-helper.php:649
 #, php-format
 msgid "Subscription for %1$s deactivated successfully. You will no longer receive updates for this product. <a href=\"%2$s\">Click here</a> if you wish to deactivate the plugin as well."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/admin/helper/class-wc-helper.php:600
+#: includes/admin/helper/class-wc-helper.php:668
 #, php-format
 msgid "An error has occurred when deactivating the subscription for %s. Please try again later."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/admin/helper/class-wc-helper.php:613
+#: includes/admin/helper/class-wc-helper.php:681
 #, php-format
 msgid "The extension %s has been deactivated successfully."
 msgstr ""
 
 #. translators: %1$s: product name, %2$s: plugins screen url
-#: includes/admin/helper/class-wc-helper.php:626
+#: includes/admin/helper/class-wc-helper.php:694
 #, php-format
 msgid "An error has occurred when deactivating the extension %1$s. Please proceed to the <a href=\"%2$s\">Plugins screen</a> to deactivate it manually."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:635
+#: includes/admin/helper/class-wc-helper.php:703
 msgid "You have successfully connected your store to WooCommerce.com"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:642
+#: includes/admin/helper/class-wc-helper.php:710
 #: includes/cli/class-wc-cli-com-command.php:124
 msgid "You have successfully disconnected your store from WooCommerce.com"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:649
+#: includes/admin/helper/class-wc-helper.php:717
 msgid "Authentication and subscription caches refreshed successfully."
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:1082
-#: includes/admin/helper/class-wc-helper.php:1126
-#: includes/admin/helper/class-wc-helper.php:1190
+#: includes/admin/helper/class-wc-helper.php:1150
+#: includes/admin/helper/class-wc-helper.php:1194
+#: includes/admin/helper/class-wc-helper.php:1258
 msgid "Subscription not found"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:1107
-#: includes/admin/helper/class-wc-helper.php:1231
+#: includes/admin/helper/class-wc-helper.php:1175
+#: includes/admin/helper/class-wc-helper.php:1299
 #: src/Internal/Admin/Settings/Utils.php:380
 #: src/Internal/Admin/Settings/Utils.php:420
 msgid "Unknown error"
 msgstr ""
 
-#: includes/admin/helper/class-wc-helper.php:1663
-#: includes/admin/helper/class-wc-helper.php:1806
+#: includes/admin/helper/class-wc-helper.php:1720
+#: includes/admin/helper/class-wc-helper.php:1873
 msgid "WooCommerce.com API returned an invalid response."
 msgstr ""
 
 #. translators: %1$s: helper url, %2$d: number of extensions
-#: includes/admin/helper/class-wc-helper.php:2375
+#: includes/admin/helper/class-wc-helper.php:2444
 #, php-format
 msgid "Note: You currently have <a href=\"%1$s\">%2$d paid extension</a> which should be updated first before updating WooCommerce."
 msgid_plural "Note: You currently have <a href=\"%1$s\">%2$d paid extensions</a> which should be updated first before updating WooCommerce."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/helper/class-wc-helper.php:2759
+#: includes/admin/helper/class-wc-helper.php:2828
 msgid "You have exceeded the request limit. Please try again after a few minutes."
 msgstr ""
 
 #. translators: %d: HTTP status code.
-#: includes/admin/helper/class-wc-helper.php:2765
+#: includes/admin/helper/class-wc-helper.php:2834
 #, php-format
 msgid "WooCommerce.com API returned HTTP status code %d."
 msgstr ""
@@ -19655,6 +19663,10 @@ msgstr ""
 msgid "Information about the operating system your server is running."
 msgstr ""
 
+#: includes/admin/views/html-admin-page-status-report.php:257
+msgid "Unable to determine server architecture.  Please ask your hosting provider for this information."
+msgstr ""
+
 #: includes/admin/views/html-admin-page-status-report.php:260
 msgid "PHP version"
 msgstr ""
@@ -24946,7 +24958,7 @@ msgid "New order emails are sent to chosen recipient(s) when a new order is rece
 msgstr ""
 
 #: includes/emails/class-wc-email-new-order.php:73
-msgid "[{site_title}]: Cha-ching! You've got a new order: #{order_number}"
+msgid "[{site_title}]: You've got a new order: #{order_number}"
 msgstr ""
 
 #: includes/emails/class-wc-email-new-order.php:74
@@ -30086,27 +30098,27 @@ msgstr ""
 msgid "cURL installed but unable to retrieve version."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1505
+#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1507
 msgctxt "Page setting"
 msgid "Shop base"
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1508
+#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1510
 msgctxt "Page setting"
 msgid "Cart"
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1533
+#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1535
 msgctxt "Page setting"
 msgid "Checkout"
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1558
+#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1560
 msgctxt "Page setting"
 msgid "My account"
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1562
+#: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-v2-controller.php:1564
 msgctxt "Page setting"
 msgid "Terms and conditions"
 msgstr ""
@@ -45718,7 +45730,7 @@ msgstr ""
 #: templates/emails/admin-new-order.php:35
 #: templates/emails/plain/admin-new-order.php:32
 #, php-format
-msgid "Woo! You’ve received a new order from %s:"
+msgid "You’ve received a new order from %s:"
 msgstr ""
 
 #. translators: %s: order number
@@ -45786,7 +45798,7 @@ msgstr ""
 #. translators: %s: Customer full name
 #: templates/emails/block/admin-new-order.php:36
 #, php-format
-msgid "Woo! You’ve received a new order from %s"
+msgid "You’ve received a new order from %s"
 msgstr ""
 
 #: templates/emails/block/customer-completed-order.php:38

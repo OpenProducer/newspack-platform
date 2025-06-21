@@ -7,6 +7,8 @@
 
 namespace Newspack_Blocks\Tracking;
 
+use Newspack_Blocks\Modal_Checkout\Checkout_Data;
+
 /**
  * Tracking Data Events Class.
  */
@@ -48,143 +50,6 @@ final class Data_Events {
 	}
 
 	/**
-	 * Returns whether a product is a one time purchase, or recurring and when.
-	 *
-	 * @param string $product_id Product's ID.
-	 */
-	public static function get_purchase_recurrence( $product_id ) {
-		$recurrence = get_post_meta( $product_id, '_subscription_period', true );
-		if ( empty( $recurrence ) ) {
-			$recurrence = 'once';
-		}
-		return $recurrence;
-	}
-
-	/**
-	 * Returns whether a product ID is associated with a membership.
-	 *
-	 * @param string $product_id Product's ID.
-	 */
-	public static function is_membership_product( $product_id ) {
-		if ( ! function_exists( 'wc_memberships_get_membership_plans' ) ) {
-			return false;
-		}
-		$membership_plans = wc_memberships_get_membership_plans();
-		$plans            = [];
-
-		foreach ( $membership_plans as $plan ) {
-			$subscription_plan  = new \WC_Memberships_Integration_Subscriptions_Membership_Plan( $plan->get_id() );
-			$required_products = $subscription_plan->get_subscription_product_ids();
-			if ( in_array( $product_id, $required_products ) ) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-
-	/**
-	 * Returns the product type: product, subscription, donation, or membership.
-	 * TODOGA4: move this check & related functions into a more central location, and update based on final decision for product types.
-	 *
-	 * @param string $product_id Product's ID.
-	 */
-	public static function get_product_type( $product_id ) {
-		$product_type = 'product';
-		$recurrence   = self::get_purchase_recurrence( $product_id );
-
-		// Check if it's a subscription product.
-		if ( 'once' !== $recurrence ) {
-			$product_type = 'subscription';
-		}
-
-		// Check if it's a membership product.
-		if ( self::is_membership_product( $product_id ) ) {
-			$product_type = 'membership';
-		}
-
-		// Check if it's a donation product.
-		if ( method_exists( 'Newspack\Donations', 'is_donation_product' ) ) {
-			if ( \Newspack\Donations::is_donation_product( $product_id ) ) {
-				$product_type = 'donation';
-			}
-		}
-
-		return $product_type;
-	}
-
-	/**
-	 * Returns the action type: checkout_button or donation.
-	 *
-	 * @param string $product_id Product's ID.
-	 */
-	public static function get_action_type( $product_id ) {
-		$action_type = 'checkout_button';
-		// Check if it's a donation product, and update action_type, product_type.
-		if ( method_exists( 'Newspack\Donations', 'is_donation_product' ) ) {
-			if ( \Newspack\Donations::is_donation_product( $product_id ) ) {
-				$action_type = 'donation';
-			}
-		}
-		return $action_type;
-	}
-
-	/**
-	 * Returns an array of product information.
-	 *
-	 * @param int      $product_id Product's ID.
-	 * @param array    $cart_item Cart item, if during checkout.
-	 * @param WC_Order $order Completed order, if checkout is completed.
-	 *
-	 * @return array
-	 */
-	public static function build_js_data_events( $product_id, $cart_item = null, $order = null ) {
-		$data_order_details = [];
-		if ( empty( $product_id ) || ( empty( $cart_item ) && empty( $order ) ) ) {
-			return $data_order_details;
-		}
-
-		// Reassign the IDs to make sure the product is the product and the variation is the variation.
-		$product           = \wc_get_product( $product_id );
-		$product_parent_id = $product->get_parent_id();
-		$variation_id = '';
-		if ( '' !== $product_parent_id && 0 !== $product_parent_id ) {
-			$variation_id = $product_id;
-			$product_id   = $product_parent_id;
-		}
-
-		$amount   = 0;
-		$referrer = '';
-		if ( ! empty( $order ) ) {
-			$amount = $order->get_total();
-			$referrer = $order->get_meta( '_newspack_referer' );
-		} elseif ( ! empty( $cart_item ) ) {
-			$amount = $cart_item['data']->get_price();
-			$referrer = $cart_item['referer'];
-		}
-
-		$data_order_details = [
-			'amount'       => $amount,
-			'action_type'  => self::get_action_type( $product_id ),
-			'currency'     => function_exists( 'get_woocommerce_currency' ) ? \get_woocommerce_currency() : 'USD',
-			'product_id'   => strval( $product_id ),
-			'product_type' => self::get_product_type( $product_id ),
-			'referrer'     => str_replace( home_url(), '', $referrer ), // Keeps format consistent for Homepage with Donate and Checkout Button blocks.
-			'recurrence'   => self::get_purchase_recurrence( $product_id ),
-			'variation_id' => strval( $variation_id ),
-		];
-		$gate_post_id = ! empty( $order ) ? $order->get_meta( '_memberships_content_gate' ) : filter_input( INPUT_GET, 'memberships_content_gate', FILTER_SANITIZE_NUMBER_INT );
-		if ( $gate_post_id ) {
-			$data_order_details['gate_post_id'] = $gate_post_id;
-		}
-		$newspack_popup_id = ! empty( $order ) ? $order->get_meta( '_newspack_popup_id' ) : filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
-		if ( $newspack_popup_id ) {
-			$data_order_details['newspack_popup_id'] = $newspack_popup_id;
-		}
-		return $data_order_details;
-	}
-
-	/**
 	 * Send data to GA4.
 	 *
 	 * @param string    $order_id Order's ID.
@@ -207,10 +72,10 @@ final class Data_Events {
 		$product_id = is_array( $data['platform_data']['product_id'] ) ? $data['platform_data']['product_id'][0] : $data['platform_data']['product_id'];
 
 		$data['action']       = self::FORM_SUBMISSION_SUCCESS;
-		$data['action_type']  = self::get_action_type( $product_id );
+		$data['action_type']  = Checkout_Data::get_action_type( $product_id );
 		$data['product_id']   = $product_id;
-		$data['product_type'] = self::get_product_type( $product_id );
-		$data['recurrence']   = self::get_purchase_recurrence( $product_id );
+		$data['product_type'] = Checkout_Data::get_product_type( $product_id );
+		$data['recurrence']   = Checkout_Data::get_purchase_recurrence( $product_id );
 
 		return $data;
 	}

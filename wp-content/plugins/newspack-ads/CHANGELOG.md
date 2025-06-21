@@ -1,3 +1,10 @@
+## [3.5.4](https://github.com/Automattic/newspack-ads/compare/v3.5.3...v3.5.4) (2025-06-16)
+
+
+### Bug Fixes
+
+* **suppress-ads:** check whether post type supports meta ([#947](https://github.com/Automattic/newspack-ads/issues/947)) ([1bf9f22](https://github.com/Automattic/newspack-ads/commit/1bf9f22287393126beb3e0a52aa7d468d6a66584))
+
 ## [3.5.3](https://github.com/Automattic/newspack-ads/compare/v3.5.2...v3.5.3) (2025-06-10)
 
 

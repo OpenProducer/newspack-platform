@@ -1,6 +1,6 @@
 <?php
 /**
- * Newspack > Settings > Display Settings Section Object.
+ * Newspack > Settings > Advanced Settings Section Object.
  *
  * @package Newspack
  */

@@ -1,3 +1,16 @@
+# [4.13.0](https://github.com/Automattic/newspack-blocks/compare/v4.12.3...v4.13.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* donate block formatting ([#2133](https://github.com/Automattic/newspack-blocks/issues/2133)) ([f27cb76](https://github.com/Automattic/newspack-blocks/commit/f27cb761a800999e526e197f2b4c1b47895e20bc))
+* update stripe express checkout divider ([#2131](https://github.com/Automattic/newspack-blocks/issues/2131)) ([b907452](https://github.com/Automattic/newspack-blocks/commit/b907452a8b91cf162afabee9af9e3313a1e27223))
+
+
+### Features
+
+* **modal-checkout:** checkout from "My Account" dashboard ([#2121](https://github.com/Automattic/newspack-blocks/issues/2121)) ([0c5301b](https://github.com/Automattic/newspack-blocks/commit/0c5301b38e93b2c958dc04c8bba6302ec397dc17))
+
 ## [4.12.3](https://github.com/Automattic/newspack-blocks/compare/v4.12.2...v4.12.3) (2025-06-03)
 
 

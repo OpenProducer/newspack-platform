@@ -7,7 +7,7 @@
 
 namespace Newspack_Blocks;
 
-use Newspack_Blocks\Tracking\Data_Events;
+use Newspack_Blocks\Modal_Checkout\Checkout_Data;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -710,8 +710,6 @@ final class Modal_Checkout {
 									$variation_name = wc_get_formatted_variation( $variation, true );
 									$price          = $variation->get_price();
 									$price_html     = $variation->get_price_html();
-									$frequency      = '';
-									$product_type = Data_Events::get_product_type( $product_id );
 
 									// Use suggested price if NYP is active and set for variation.
 									if ( \Newspack_Blocks::can_use_name_your_price() && \WC_Name_Your_Price_Helpers::is_nyp( $variation_id ) ) {
@@ -721,29 +719,6 @@ final class Modal_Checkout {
 											continue;
 										}
 									}
-
-									if ( class_exists( '\WC_Subscriptions_Product' ) && \WC_Subscriptions_Product::is_subscription( $variation ) ) {
-										$frequency = \WC_Subscriptions_Product::get_period( $variation );
-									}
-
-									$name = sprintf(
-										/* translators: 1: variable product name, 2: product variation name */
-										__( '%1$s - %2$s', 'newspack-blocks' ),
-										$product_name,
-										$variation_name
-									);
-									$product_price_summary = self::get_summary_card_price_string( $name, $price, $frequency );
-									$product_data          = [
-										'amount'       => $price,
-										'action_type'  => 'checkout_button',
-										'currency'     => function_exists( 'get_woocommerce_currency' ) ? \get_woocommerce_currency() : 'USD',
-										'product_price_summary' => $product_price_summary,
-										'product_id'   => (string) $product_id,
-										'product_type' => $product_type,
-										'recurrence'   => ! empty( $frequency ) ? $frequency : 'once',
-										'referrer'     => substr( \get_permalink(), strlen( home_url() ) ), // TODO: Is this OK?
-										'variation_id' => (string) $variation_id,
-									];
 
 									// Replace nyp price html for variations.
 									if ( class_exists( '\WC_Name_Your_Price_Helpers' ) && \WC_Name_Your_Price_Helpers::is_nyp( $variation->get_id() ) ) {
@@ -757,7 +732,7 @@ final class Modal_Checkout {
 											<span class="price"><?php echo $price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 										</div>
 										<div class="variation"><?php echo esc_html( $variation_name ); ?></div>
-										<form data-product="<?php echo esc_attr( wp_json_encode( $product_data ) ); ?>">
+										<form data-checkout="<?php echo esc_attr( wp_json_encode( Checkout_Data::get_checkout_data( $variation ) ) ); ?>">
 											<input type="hidden" name="newspack_checkout" value="1" />
 											<button type="submit" class="<?php echo esc_attr( "{$class_prefix}__button {$class_prefix}__button--primary" ); ?> newspack-modal-checkout-variation-selection"><?php echo esc_html( self::get_modal_checkout_labels( 'checkout_confirm_variation' ) ); ?></button>
 										</form>
@@ -1025,6 +1000,7 @@ final class Modal_Checkout {
 				'newspack_class_prefix'           => self::get_class_prefix(),
 				'is_registration_required'        => self::is_registration_required(),
 				'has_unsupported_payment_gateway' => self::has_unsupported_payment_gateway(),
+				'checkout_url'                    => remove_query_arg( 'my_account_checkout', add_query_arg( 'modal_checkout', '1', wc_get_checkout_url() ) ),
 				'labels'                          => [
 					'auth_modal_title'     => self::get_modal_checkout_labels( 'auth_modal_title' ),
 					'checkout_modal_title' => self::get_modal_checkout_labels( 'checkout_modal_title' ),
@@ -1111,29 +1087,23 @@ final class Modal_Checkout {
 	 * Get after success button params.
 	 */
 	private static function get_after_success_params() {
-		// Express checkout payment requests are separate requests, so they won't have the after_success attributes. We'll have to check the HTTP_REFERER instead.
+		$request_params = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( self::is_express_checkout() ) {
+			$request_params = [];
 			$referrer = isset( $_SERVER['HTTP_REFERER'] ) ? \esc_url_raw( \wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : false; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			if ( $referrer ) {
 				$referrer_query = \wp_parse_url( $referrer, PHP_URL_QUERY );
-				\wp_parse_str( $referrer_query, $referrer_query_params );
-				return array_filter(
-					[
-						'after_success_behavior'     => isset( $referrer_query_params['after_success_behavior'] ) ? sanitize_text_field( wp_unslash( $referrer_query_params['after_success_behavior'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-						'after_success_url'          => isset( $referrer_query_params['after_success_url'] ) ? sanitize_url( wp_unslash( $referrer_query_params['after_success_url'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-						'after_success_button_label' => isset( $referrer_query_params['after_success_button_label'] ) ? sanitize_text_field( wp_unslash( $referrer_query_params['after_success_button_label'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-					]
-				);
+				\wp_parse_str( $referrer_query, $request_params );
 			}
-		} else {
-			return array_filter(
-				[
-					'after_success_behavior'     => isset( $_REQUEST['after_success_behavior'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_behavior'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-					'after_success_url'          => isset( $_REQUEST['after_success_url'] ) ? sanitize_url( wp_unslash( $_REQUEST['after_success_url'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-					'after_success_button_label' => isset( $_REQUEST['after_success_button_label'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_button_label'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				]
-			);
 		}
+		return array_filter(
+			[
+				'after_success_behavior'     => isset( $request_params['after_success_behavior'] ) ? sanitize_text_field( wp_unslash( $request_params['after_success_behavior'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'after_success_url'          => isset( $request_params['after_success_url'] ) ? sanitize_url( wp_unslash( $request_params['after_success_url'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'after_success_button_label' => isset( $request_params['after_success_button_label'] ) ? sanitize_text_field( wp_unslash( $request_params['after_success_button_label'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'action_type'                => isset( $request_params['action_type'] ) ? sanitize_text_field( wp_unslash( $request_params['action_type'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			]
+		);
 	}
 
 	/**
@@ -1538,16 +1508,7 @@ final class Modal_Checkout {
 	 */
 	public static function pass_url_param_on_redirect( $location ) {
 		if ( self::is_modal_checkout() ) {
-			$params = [ 'modal_checkout' => 1 ];
-			$newspack_popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
-			$gate_post_id = filter_input( INPUT_GET, 'memberships_content_gate', FILTER_SANITIZE_NUMBER_INT );
-			if ( $newspack_popup_id ) {
-				$params['newspack_popup_id'] = $newspack_popup_id;
-			}
-			if ( $gate_post_id ) {
-				$params['memberships_content_gate'] = $gate_post_id;
-			}
-			$location = \add_query_arg( $params, $location );
+			$location = \add_query_arg( [ 'modal_checkout' => 1 ], $location );
 		}
 		return $location;
 	}
@@ -1707,29 +1668,28 @@ final class Modal_Checkout {
 		if ( 1 !== $cart->get_cart_contents_count() ) {
 			return;
 		}
+		$cart_item_key = array_key_first( $cart->get_cart() );
+		$cart_item = $cart->get_cart_item( $cart_item_key );
+		$product_id = $cart_item['variation_id'] ? $cart_item['variation_id'] : $cart_item['product_id'];
 		$class_prefix = self::get_class_prefix();
 		?>
 			<div class="<?php echo esc_attr( "order-details-summary {$class_prefix}__box {$class_prefix}__box--text-center" ); ?>">
 			<?php
 			// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce hooks.
-			foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) :
-				$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
-				if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) :
-					// Create an array of order information to pass to GA4 via JavaScript.
-					$data_order_details = Data_Events::build_js_data_events( $_product->get_id(), $cart_item );
-					?>
-					<p id="modal-checkout-product-details" data-order-details='<?php echo wp_json_encode( $data_order_details ); ?>'>
-						<strong>
-							<?php
-							echo apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) . ': '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							echo wc_get_formatted_cart_item_data( $cart_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							?>
-							<?php echo apply_filters( 'woocommerce_cart_item_subtotal', $cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						</strong>
-					</p>
-					<?php
-				endif;
-			endforeach;
+			$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
+			if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) :
+				?>
+				<p id="modal-checkout-product-details" data-checkout='<?php echo wp_json_encode( Checkout_Data::get_checkout_data( $cart ) ); ?>'>
+					<strong>
+						<?php
+						echo apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) . ': '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo wc_get_formatted_cart_item_data( $cart_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						?>
+						<?php echo apply_filters( 'woocommerce_cart_item_subtotal', $cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					</strong>
+				</p>
+				<?php
+			endif;
 			// phpcs:enable
 			?>
 			</div>
@@ -2078,40 +2038,6 @@ final class Modal_Checkout {
 		}
 
 		return self::$modal_checkout_labels[ $key ] ?? '';
-	}
-
-	/**
-	 * Get price string for the price summary card to render in auth flow.
-	 *
-	 * @param string $name      The name.
-	 * @param string $price     The price. Optional. If not provided, the price string will contain 0.
-	 * @param string $frequency The frequency. Optional. If not provided, the price will be treated as a one-time payment.
-	 *
-	 * @return string The price string.
-	 */
-	public static function get_summary_card_price_string( $name, $price = '', $frequency = '' ) {
-		if ( ! $price ) {
-			$price = '0';
-		}
-
-		if ( function_exists( 'wcs_price_string' ) && function_exists( 'wc_price' ) ) {
-			if ( $frequency && $frequency !== 'once' ) {
-				$price = wp_strip_all_tags(
-					wcs_price_string(
-						[
-							'recurring_amount'    => $price,
-							'subscription_period' => $frequency,
-							'use_per_slash'       => true,
-						]
-					)
-				);
-			} else {
-				$price = wp_strip_all_tags( wc_price( $price ) );
-			}
-		}
-
-		// translators: 1 is the name of the item. 2 is the price of the item.
-		return sprintf( __( '%1$s: %2$s', 'newspack-blocks' ), $name, $price );
 	}
 
 	/**

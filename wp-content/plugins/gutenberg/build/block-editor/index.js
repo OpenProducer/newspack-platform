@@ -13208,9 +13208,9 @@ const canInsertBlockType = (0,external_wp_data_namespaceObject.createRegistrySel
  * Determines if the given blocks are allowed to be inserted into the block
  * list.
  *
- * @param {Object}  state        Editor state.
- * @param {string}  clientIds    The block client IDs to be inserted.
- * @param {?string} rootClientId Optional root client ID of block list.
+ * @param {Object}   state        Editor state.
+ * @param {string[]} clientIds    The block client IDs to be inserted.
+ * @param {?string}  rootClientId Optional root client ID of block list.
  *
  * @return {boolean} Whether the given blocks are allowed to be inserted.
  */
@@ -20023,6 +20023,10 @@ const verticalAlignmentMap = {
   stretch: 'stretch',
   'space-between': 'space-between'
 };
+const defaultAlignments = {
+  horizontal: 'center',
+  vertical: 'top'
+};
 const flexWrapOptions = ['wrap', 'nowrap'];
 /* harmony default export */ const flex = ({
   name: 'flex',
@@ -20147,7 +20151,7 @@ function FlexLayoutVerticalAlignmentControl({
   const {
     orientation = 'horizontal'
   } = layout;
-  const defaultVerticalAlignment = orientation === 'horizontal' ? verticalAlignmentMap.center : verticalAlignmentMap.top;
+  const defaultVerticalAlignment = orientation === 'horizontal' ? defaultAlignments.horizontal : defaultAlignments.vertical;
   const {
     verticalAlignment = defaultVerticalAlignment
   } = layout;
@@ -72131,7 +72135,9 @@ function ImageSizeControl({
     } = getScaledWidthAndHeight(scale, imageWidth, imageHeight);
     return currentWidth === scaledWidth && currentHeight === scaledHeight;
   });
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
+    className: "block-editor-image-size-control",
+    spacing: "4",
     children: [imageSizeOptions && imageSizeOptions.length > 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
       __nextHasNoMarginBottom: true,
       label: (0,external_wp_i18n_namespaceObject.__)('Resolution'),
@@ -72140,20 +72146,17 @@ function ImageSizeControl({
       onChange: onChangeImage,
       help: imageSizeHelp,
       size: "__unstable-large"
-    }), isResizable && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "block-editor-image-size-control",
+    }), isResizable && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
         align: "baseline",
-        spacing: "3",
+        spacing: "4",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
-          className: "block-editor-image-size-control__width",
           label: (0,external_wp_i18n_namespaceObject.__)('Width'),
           value: currentWidth,
           min: 1,
           onChange: value => updateDimension('width', value),
           size: "__unstable-large"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
-          className: "block-editor-image-size-control__height",
           label: (0,external_wp_i18n_namespaceObject.__)('Height'),
           value: currentHeight,
           min: 1,
@@ -80640,8 +80643,10 @@ function ResolutionTool({
  * Messages providing helpful descriptions for HTML elements.
  */
 const htmlElementMessages = {
+  a: (0,external_wp_i18n_namespaceObject.__)('The <a> element should be used for links that navigate to a different page or to a different section within the same page.'),
   article: (0,external_wp_i18n_namespaceObject.__)('The <article> element should represent a self-contained, syndicatable portion of the document.'),
   aside: (0,external_wp_i18n_namespaceObject.__)("The <aside> element should represent a portion of a document whose content is only indirectly related to the document's main content."),
+  button: (0,external_wp_i18n_namespaceObject.__)('The <button> element should be used for interactive controls that perform an action on the current page, such as opening a modal or toggling content visibility.'),
   div: (0,external_wp_i18n_namespaceObject.__)('The <div> element should only be used if the block is a design element with no semantic meaning.'),
   footer: (0,external_wp_i18n_namespaceObject.__)('The <footer> element should represent a footer for its nearest sectioning element (e.g.: <section>, <article>, <main> etc.).'),
   header: (0,external_wp_i18n_namespaceObject.__)('The <header> element should represent introductory content, typically a group of introductory or navigational aids.'),
@@ -80671,7 +80676,7 @@ const htmlElementMessages = {
  * @param {Object}   props          Component props.
  * @param {string}   props.tagName  The current HTML tag name.
  * @param {Function} props.onChange Function to call when the tag is changed.
- * @param {string}   props.clientId The client ID of the current block.
+ * @param {string}   props.clientId Optional. The client ID of the block. Used to check for existing <main> elements.
  * @param {Array}    props.options  SelectControl options (optional).
  *
  * @return {Component} The HTML element select control with validation.

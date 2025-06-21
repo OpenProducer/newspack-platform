@@ -31557,19 +31557,6 @@ function InputField({
     }
   });
   const dragProps = isDragEnabled ? dragGestureProps() : {};
-  /*
-   * Works around the odd UA (e.g. Firefox) that does not focus inputs of
-   * type=number when their spinner arrows are pressed.
-   */
-  let handleOnMouseDown;
-  if (type === 'number') {
-    handleOnMouseDown = event => {
-      props.onMouseDown?.(event);
-      if (event.currentTarget !== event.currentTarget.ownerDocument.activeElement) {
-        event.currentTarget.focus();
-      }
-    };
-  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Input, {
     ...props,
     ...dragProps,
@@ -31581,7 +31568,6 @@ function InputField({
     onBlur: handleOnBlur,
     onChange: handleOnChange,
     onKeyDown: withIgnoreIMEEvents(handleOnKeyDown),
-    onMouseDown: handleOnMouseDown,
     ref: ref,
     inputSize: size
     // Fallback to `''` to avoid "uncontrolled to controlled" warning.
@@ -33159,7 +33145,7 @@ const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
  */
 const ALL_UNICODE_DASH_CHARACTERS = new RegExp(/[\u007e\u00ad\u2053\u207b\u208b\u2212\p{Pd}]/gu);
 const normalizeTextString = value => {
-  return remove_accents_default()(value).toLocaleLowerCase().replace(ALL_UNICODE_DASH_CHARACTERS, '-');
+  return remove_accents_default()(value).normalize('NFKC').toLocaleLowerCase().replace(ALL_UNICODE_DASH_CHARACTERS, '-');
 };
 
 /**
@@ -47086,7 +47072,6 @@ function SuggestionsList({
   const listRef = (0,external_wp_compose_namespaceObject.useRefEffect)(listNode => {
     // only have to worry about scrolling selected suggestion into view
     // when already expanded.
-    let rafId;
     if (selectedIndex > -1 && scrollIntoView && listNode.children[selectedIndex]) {
       listNode.children[selectedIndex].scrollIntoView({
         behavior: 'instant',
@@ -47094,11 +47079,6 @@ function SuggestionsList({
         inline: 'nearest'
       });
     }
-    return () => {
-      if (rafId !== undefined) {
-        cancelAnimationFrame(rafId);
-      }
-    };
   }, [selectedIndex, scrollIntoView]);
   const handleHover = suggestion => {
     return () => {
@@ -47111,12 +47091,12 @@ function SuggestionsList({
     };
   };
   const computeSuggestionMatch = suggestion => {
-    const matchText = displayTransform(match).toLocaleLowerCase();
+    const matchText = displayTransform(match).normalize('NFKC').toLocaleLowerCase();
     if (matchText.length === 0) {
       return null;
     }
     const transformedSuggestion = displayTransform(suggestion);
-    const indexOfMatch = transformedSuggestion.toLocaleLowerCase().indexOf(matchText);
+    const indexOfMatch = transformedSuggestion.normalize('NFKC').toLocaleLowerCase().indexOf(matchText);
     return {
       suggestionBeforeMatch: transformedSuggestion.substring(0, indexOfMatch),
       suggestionMatch: transformedSuggestion.substring(indexOfMatch, indexOfMatch + matchText.length),
@@ -56143,6 +56123,7 @@ const upload = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
  */
 function DropZoneComponent({
   className,
+  icon = library_upload,
   label,
   onFilesDrop,
   onHTMLDrop,
@@ -56220,7 +56201,7 @@ function DropZoneComponent({
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "components-drop-zone__content-inner",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
-          icon: library_upload,
+          icon: icon,
           className: "components-drop-zone__content-icon"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
           className: "components-drop-zone__content-text",
@@ -56789,7 +56770,7 @@ const MediaWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ?
 } : 0);
 const MediaContainer = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "eeew7dm7"
-} : 0)("align-items:center;border-radius:", config_values.radiusSmall, ";cursor:pointer;display:inline-flex;justify-content:center;margin:auto;position:relative;height:100%;&:after{border-radius:inherit;bottom:0;box-shadow:inset 0 0 0 1px rgba( 0, 0, 0, 0.1 );content:'';left:0;pointer-events:none;position:absolute;right:0;top:0;}img,video{border-radius:inherit;box-sizing:border-box;display:block;height:auto;margin:0;max-height:100%;max-width:100%;pointer-events:none;user-select:none;width:auto;}" + ( true ? "" : 0));
+} : 0)("align-items:center;border-radius:", config_values.radiusSmall, ";cursor:pointer;display:inline-flex;justify-content:center;margin:auto;position:relative;height:100%;&:after{border-radius:inherit;bottom:0;box-shadow:inset 0 0 0 1px rgba( 0, 0, 0, 0.1 );content:'';left:0;pointer-events:none;position:absolute;right:0;top:0;}img,video{border-radius:inherit;box-sizing:border-box;display:block;height:auto;margin:0;max-height:100%;max-width:100%;pointer-events:none;user-select:none;width:100%;}" + ( true ? "" : 0));
 const MediaPlaceholder = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "eeew7dm6"
 } : 0)("background:", COLORS.gray[100], ";border-radius:inherit;box-sizing:border-box;height:", INITIAL_BOUNDS.height, "px;max-width:280px;min-width:", INITIAL_BOUNDS.width, "px;width:100%;" + ( true ? "" : 0));
@@ -58385,9 +58366,9 @@ function FormTokenField(props) {
     if (match.length === 0) {
       _suggestions = _suggestions.filter(suggestion => !normalizedValue.includes(suggestion));
     } else {
-      match = match.toLocaleLowerCase();
+      match = match.normalize('NFKC').toLocaleLowerCase();
       _suggestions.forEach(suggestion => {
-        const index = suggestion.toLocaleLowerCase().indexOf(match);
+        const index = suggestion.normalize('NFKC').toLocaleLowerCase().indexOf(match);
         if (normalizedValue.indexOf(suggestion) === -1) {
           if (index === 0) {
             startsWithMatch.push(suggestion);
@@ -72354,6 +72335,7 @@ function Badge({
 
 
 
+
 const privateApis = {};
 lock(privateApis, {
   __experimentalPopoverLegacyPositionToPlacement: positionToPlacement,
@@ -72362,7 +72344,9 @@ lock(privateApis, {
   Theme: theme,
   Menu: menu_Menu,
   kebabCase: kebabCase,
-  Badge: badge
+  withIgnoreIMEEvents: withIgnoreIMEEvents,
+  Badge: badge,
+  normalizeTextString: normalizeTextString
 });
 
 ;// ./packages/components/build-module/index.js

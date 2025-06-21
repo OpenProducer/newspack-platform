@@ -11,7 +11,7 @@
 
 namespace Newspack_Blocks;
 
-use Newspack_Blocks\Tracking\Data_Events;
+use Newspack_Blocks\Modal_Checkout\Checkout_Data;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,10 +43,7 @@ function newspack_blocks_replace_login_with_order_summary() {
 	$after_success_behavior = isset( $_GET['after_success_behavior'] ) ? \sanitize_text_field( \wp_unslash( $_GET['after_success_behavior'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$after_success_url      = isset( $_GET['after_success_url'] ) ? esc_url( \sanitize_url( \wp_unslash( $_GET['after_success_url'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$after_success_label    = isset( $_GET['after_success_button_label'] ) ? \sanitize_text_field( \wp_unslash( $_GET['after_success_button_label'] ) ) : \Newspack_Blocks\Modal_Checkout::get_modal_checkout_labels( 'after_success' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$order_items            = $order->get_items();
-	$item                   = reset( $order_items );
-	$product_id             = $item ? $item->get_product_id() : null;
-	$data_order_details     = Data_Events::build_js_data_events( $product_id, null, $order );
+	$checkout_data          = Checkout_Data::get_checkout_data( $order );
 	?>
 	<div class="woocommerce-order">
 	<?php if ( $is_success ) : ?>
@@ -57,7 +54,7 @@ function newspack_blocks_replace_login_with_order_summary() {
 					<path d="M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"></path>
 				</svg>
 			</span>
-			<p id="modal-checkout-product-details" data-order-details='<?php echo wp_json_encode( $data_order_details ); ?>'>
+			<p id="modal-checkout-product-details" data-checkout='<?php echo wp_json_encode( $checkout_data ); ?>'>
 				<strong>
 					<?php
 						echo esc_html( Modal_Checkout::get_post_checkout_success_text() );

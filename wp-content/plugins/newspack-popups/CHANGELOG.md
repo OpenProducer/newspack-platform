@@ -1,3 +1,10 @@
+## [3.5.3](https://github.com/Automattic/newspack-popups/compare/v3.5.2...v3.5.3) (2025-06-16)
+
+
+### Bug Fixes
+
+* correct URL for segments admin link ([#1444](https://github.com/Automattic/newspack-popups/issues/1444)) ([3e09294](https://github.com/Automattic/newspack-popups/commit/3e09294835d4f9f377ca6e0ed66b960d734a4d45))
+
 ## [3.5.2](https://github.com/Automattic/newspack-popups/compare/v3.5.1...v3.5.2) (2025-06-02)
 
 

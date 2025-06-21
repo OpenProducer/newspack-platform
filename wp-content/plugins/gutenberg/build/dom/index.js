@@ -598,7 +598,7 @@ function isTextField(node) {
  *
  * @param {Element} element The HTML element.
  *
- * @return {boolean} Whether the input/textareaa element has some "selection".
+ * @return {boolean} Whether the input/textarea element has some "selection".
  */
 function inputFieldHasUncollapsedSelection(element) {
   if (!isHTMLInputElement(element) && !isTextField(element)) {

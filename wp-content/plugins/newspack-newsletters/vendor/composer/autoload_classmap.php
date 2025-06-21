@@ -31,7 +31,6 @@ return array(
     'Newspack_Newsletters\\Plugins\\Woocommerce_Memberships' => $baseDir . '/includes/plugins/woocommerce-memberships/class-woocommerce-memberships.php',
     'Newspack_Newsletters\\Tracking\\Admin' => $baseDir . '/includes/tracking/class-admin.php',
     'Newspack_Newsletters\\Tracking\\Click' => $baseDir . '/includes/tracking/class-click.php',
-    'Newspack_Newsletters\\Tracking\\Data_Events' => $baseDir . '/includes/tracking/class-data-events.php',
     'Newspack_Newsletters\\Tracking\\Pixel' => $baseDir . '/includes/tracking/class-pixel.php',
     'Newspack_Newsletters\\Tracking\\Utils' => $baseDir . '/includes/tracking/class-utils.php',
     'Newspack_Newsletters_Active_Campaign' => $baseDir . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php',

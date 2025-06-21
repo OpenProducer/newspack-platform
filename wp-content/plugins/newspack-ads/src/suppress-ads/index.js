@@ -4,7 +4,7 @@
  * WordPress dependencies
  */
 import { registerPlugin } from '@wordpress/plugins';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
 import { ToggleControl } from '@wordpress/components';
 import { Fragment, Component } from '@wordpress/element';
@@ -69,8 +69,11 @@ class NewspackSuppressAdsPanel extends Component {
 
 const ComposedPanel = compose( [
 	withSelect( select => {
-		const { newspack_ads_suppress_ads, newspack_ads_suppress_ads_placements } =
-			select( 'core/editor' ).getEditedPostAttribute( 'meta' );
+		const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' );
+		if ( ! meta ) {
+			return {};
+		}
+		const { newspack_ads_suppress_ads, newspack_ads_suppress_ads_placements } = meta;
 		return { newspack_ads_suppress_ads, newspack_ads_suppress_ads_placements };
 	} ),
 	withDispatch( dispatch => ( {

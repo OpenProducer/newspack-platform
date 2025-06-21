@@ -1,3 +1,10 @@
+## [3.15.1](https://github.com/Automattic/newspack-newsletters/compare/v3.15.0...v3.15.1) (2025-06-16)
+
+
+### Bug Fixes
+
+* dont check for current provider before init ([#1836](https://github.com/Automattic/newspack-newsletters/issues/1836)) ([860e71a](https://github.com/Automattic/newspack-newsletters/commit/860e71aa20c66a72a8e10e0650445045111b71e9))
+
 # [3.15.0](https://github.com/Automattic/newspack-newsletters/compare/v3.14.0...v3.15.0) (2025-06-02)
 
 

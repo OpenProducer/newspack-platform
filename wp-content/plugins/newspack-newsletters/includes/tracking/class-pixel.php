@@ -177,6 +177,46 @@ final class Pixel {
 	}
 
 	/**
+	 * Bulk track seen.
+	 *
+	 * @param array $events Events. an array where the keys have the newsletter ID and tracking ID concatenated, and the values are the number of views.
+	 * @return void
+	 */
+	public static function bulk_track_seen( $events ) {
+
+		if ( ! Admin::is_tracking_pixel_enabled() ) {
+			return;
+		}
+
+		foreach ( $events as $event => $views ) {
+			$newsletter_id = substr( $event, 0, strpos( $event, '|' ) );
+			$tracking_id   = substr( $event, strpos( $event, '|' ) + 1 );
+
+			$newsletter_tracking_id = \get_post_meta( $newsletter_id, 'tracking_id', true );
+
+			// Bail if tracking ID mismatch.
+			if ( $newsletter_tracking_id !== $tracking_id ) {
+				return;
+			}
+
+			$pixel_seen = \get_post_meta( $newsletter_id, 'tracking_pixel_seen', true );
+			if ( ! $pixel_seen ) {
+				$pixel_seen = 0;
+			}
+			$pixel_seen += $views;
+			\update_post_meta( $newsletter_id, 'tracking_pixel_seen', $pixel_seen );
+
+			/**
+			 * Fires when a batch of tracking pixels are seen and valid.
+			 *
+			 * @param int    $newsletter_id ID of the newsletter.
+			 * @param int    $views       Number of views.
+			 */
+			do_action( 'newspack_newsletters_bulk_tracking_pixel_seen', $newsletter_id, $views );
+		}
+	}
+
+	/**
 	 * Render the tracking pixel.
 	 */
 	public static function render() {
@@ -266,23 +306,49 @@ final class Pixel {
 	}
 
 	/**
+	 * Parse an item from the log.
+	 *
+	 * @param string $item The item to parse.
+	 *
+	 * @return array|null
+	 */
+	public static function parse_item( $item ) {
+		$item = explode( '|', $item );
+		if ( 3 !== count( $item ) ) {
+			return;
+		}
+		$result = [
+			'newsletter_id' => $item[0],
+			'tracking_id'   => $item[1],
+			'email_address' => $item[2],
+		];
+
+		if ( ! $result['newsletter_id'] || ! $result['tracking_id'] || ! $result['email_address'] ) {
+			return;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Sanitize and track an item from the log.
 	 *
 	 * @param string $item The item to sanitize and track.
 	 */
 	public static function sanitize_and_track_item( $item ) {
-		$item = explode( '|', $item );
+		$item = self::parse_item( $item );
+		if ( ! $item ) {
+			return;
+		}
+
 		if ( 3 !== count( $item ) ) {
 			return;
 		}
 
 		// Values must be sanitized as they are stored in the logs without sanitization.
-		$newsletter_id = isset( $item[0] ) ? intval( $item[0] ) : 0;
-		$tracking_id   = isset( $item[1] ) ? \sanitize_text_field( $item[1] ) : 0;
-		$email_address = isset( $item[2] ) ? \sanitize_email( $item[2] ) : '';
-		if ( ! $newsletter_id || ! $tracking_id || ! $email_address ) {
-			return;
-		}
+		$newsletter_id = $item['newsletter_id'];
+		$tracking_id   = $item['tracking_id'];
+		$email_address = $item['email_address'];
 
 		self::track_seen( $newsletter_id, $tracking_id, $email_address );
 	}
@@ -292,66 +358,90 @@ final class Pixel {
 	 *
 	 * @param int $max_lines Maximum number of lines to process at a time.
 	 */
-	public static function process_logs( $max_lines = 100 ) {
+	public static function process_logs( $max_lines = 1000 ) {
 		$current_log_file = \get_option( 'newspack_newsletters_tracking_pixel_log_file' );
+		$previous_log_file = \get_option( 'newspack_newsletters_tracking_pixel_previous_log_file' );
+
+		/**
+		 * Sometimes we can receive a hit after the log file was deleted,
+		 * but just before the tracking file was written. In this case,
+		 * that hit will recreate the log file. This will result in some log files
+		 * being left behind, usually with a single entry.
+		 *
+		 * To clean up these left-behind log files, we check if there is a previous
+		 * log file and if it exists. If it does, we process it and delete it.
+		 */
+		$processing_previous_log_file = false;
+		if ( $previous_log_file && file_exists( $previous_log_file ) ) {
+			$current_log_file = $previous_log_file;
+			$processing_previous_log_file = true;
+		}
 
 		if ( $current_log_file && file_exists( $current_log_file ) ) {
 			// Read the tracking data from the log file. Process in batches to avoid memory issues.
 			$handle = fopen( $current_log_file, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 			$file_end = false;
 			$file_pointer_position = 0;
+			$last_offset = get_option( 'newspack_newsletters_pixel_log_offset', 0 );
 
-			while ( ! $file_end ) {
-				$file_size = filesize( $current_log_file );
-				$lines     = 0;
+			$lines = 0;
 
-				// Process a chunk of lines from the file.
-				while ( $lines < $max_lines ) {
-					// Process the tracking data.
-					$item = trim( fgets( $handle ) );
-
-					// If we've reached the end of the chunk or file, stop the loop.
-					if ( ! $item || feof( $handle ) ) {
-						break;
-					}
-
-					self::sanitize_and_track_item( $item );
-					$lines++;
-				}
-
-				// If we've reached the end of the file, stop the loop.
-				if ( feof( $handle ) ) {
-					$file_end = true;
-					break;
-				}
-
-				// Get the current position in the file after processing the chunk.
-				$file_pointer_position = ftell( $handle );
-				$file_length_remaining = $file_size - $file_pointer_position;
-				if ( $file_length_remaining <= 0 ) {
-					$file_end = true;
-					break;
-				}
-
-				// If there are more lines to process, truncate the file for the next chunk.
-				$truncated_contents = fread( $handle, $file_length_remaining ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
-
-				// Reopen the file in write mode.
-				fclose( $handle );
-				$handle = fopen( $current_log_file, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-				fputs( $handle, $truncated_contents ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputs
-
-				// Close and reopen truncated file in read mode.
-				fclose( $handle );
-				$handle = fopen( $current_log_file, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-				rewind( $handle );
+			if ( $last_offset && ! $processing_previous_log_file ) {
+				fseek( $handle, $last_offset );
 			}
 
-			// Remove the log file after processing.
-			fclose( $handle );
-			unlink( $current_log_file, null ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink
-		}
+			$items_to_process = [];
 
+			// Process a chunk of lines from the file.
+			while ( $lines < $max_lines ) {
+				// Process the tracking data.
+				$item = trim( fgets( $handle ) );
+
+				// If we've reached the end of the chunk or file, stop the loop.
+				if ( ! $item || feof( $handle ) ) {
+					$file_end = true;
+					break;
+				}
+
+				$parsed_item = self::parse_item( $item );
+				if ( ! $parsed_item ) {
+					continue;
+				}
+
+				$item_key = $parsed_item['newsletter_id'] . '|' . $parsed_item['tracking_id'];
+				if ( ! isset( $items_to_process[ $item_key ] ) ) {
+					$items_to_process[ $item_key ] = 0;
+				}
+				$items_to_process[ $item_key ]++;
+
+				$lines++;
+			}
+
+			self::bulk_track_seen( $items_to_process );
+
+			// Get the current position in the file after processing the chunk.
+			if ( ! $processing_previous_log_file ) {
+				$file_pointer_position = ftell( $handle );
+				update_option( 'newspack_newsletters_pixel_log_offset', $file_pointer_position );
+			}
+
+			fclose( $handle );
+
+			if ( $file_end ) {
+				unlink( $current_log_file, null ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink
+				if ( ! $processing_previous_log_file ) {
+					update_option( 'newspack_newsletters_tracking_pixel_previous_log_file', $current_log_file );
+					delete_option( 'newspack_newsletters_pixel_log_offset' );
+					self::rotate_log_file();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Rotate the log file.
+	 */
+	private static function rotate_log_file() {
 		// Generate a new log file.
 		$log_dir       = \wp_get_upload_dir()['path'];
 		$log_file_path = tempnam( $log_dir, 'newspack_newsletters_pixel_log_' ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_tempnam
