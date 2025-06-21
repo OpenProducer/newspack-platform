@@ -7,7 +7,7 @@
  * Author URI:      https://newspack.com/
  * Text Domain:     newspack-blocks
  * Domain Path:     /languages
- * Version:         4.12.0
+ * Version:         4.13.0
  *
  * @package         Newspack_Blocks
  */
@@ -15,12 +15,13 @@
 define( 'NEWSPACK_BLOCKS__PLUGIN_FILE', __FILE__ );
 define( 'NEWSPACK_BLOCKS__BLOCKS_DIRECTORY', 'dist/' );
 define( 'NEWSPACK_BLOCKS__PLUGIN_DIR', plugin_dir_path( NEWSPACK_BLOCKS__PLUGIN_FILE ) );
-define( 'NEWSPACK_BLOCKS__VERSION', '4.12.0' );
+define( 'NEWSPACK_BLOCKS__VERSION', '4.13.0' );
 
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks-api.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks-patterns.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks-caching.php';
+require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/modal-checkout/class-checkout-data.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-modal-checkout.php';
 
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/plugins/class-the-events-calendar.php';

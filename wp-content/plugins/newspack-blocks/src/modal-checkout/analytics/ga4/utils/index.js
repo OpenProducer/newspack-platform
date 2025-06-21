@@ -13,28 +13,42 @@ export const getEventPayload = ( action, extraParams = {} ) => {
 };
 
 /**
+ * Checkout data keys that can be included in the event payload.
+ *
+ * @type {string[]}
+ */
+const eventKeys = [
+	'action',
+	'action_type',
+	'amount',
+	'currency',
+	'product_id',
+	'product_type',
+	'variation_id',
+	'price_summary',
+	'newspack_popup_id',
+	'gate_post_id',
+	'recurrence',
+	'referrer',
+];
+
+/**
  * Send an event to GA4.
  *
  * @param {Object} payload   Event payload.
  * @param {string} eventName Name of the event. Defaults to `np_modal_checkout_interaction` but can be overriden if necessary.
  */
-
-export const sendEvent = ( payload, eventName = 'np_modal_checkout_interaction' ) => {
+export const sendEvent = (
+	payload,
+	eventName = 'np_modal_checkout_interaction'
+) => {
 	if ( 'function' === typeof window.gtag && payload ) {
-		window.gtag( 'event', eventName, payload );
+		const filteredPayload = {};
+		for ( const key of eventKeys ) {
+			if ( payload[ key ] ) {
+				filteredPayload[ key ] = payload[ key ].toString();
+			}
+		}
+		window.gtag( 'event', eventName, filteredPayload );
 	}
 };
-
-/**
- * Get product details from the data-order-details attribute, for inside the iframe.
- *
- * @return {Object} Product details.
- *
- * @param {string} detailsElement ID of HTML element to get product details from.
- */
-export const getProductDetails = ( detailsElement ) => {
-	const productDetailsContainer = document.getElementById( detailsElement );
-	const productDetailsJSON = productDetailsContainer ? productDetailsContainer.getAttribute( 'data-order-details' ) : false;
-	const productDetails = productDetailsJSON ? JSON.parse( productDetailsJSON ) : false;
-	return productDetails || {};
-}

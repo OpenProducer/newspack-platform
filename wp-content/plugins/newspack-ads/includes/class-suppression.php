@@ -201,7 +201,7 @@ final class Suppression {
 	 */
 	public static function enqueue_block_editor_assets() {
 		$post_type = \get_current_screen()->post_type;
-		if ( ! empty( $post_type ) && \is_post_type_viewable( $post_type ) ) {
+		if ( ! empty( $post_type ) && \is_post_type_viewable( $post_type ) && \post_type_supports( $post_type, 'custom-fields' ) ) {
 			\wp_enqueue_script( 'newspack-ads-suppress-ads', Core::plugin_url( 'dist/suppress-ads.js' ), [], NEWSPACK_ADS_VERSION, true );
 			$placements = Placements::get_placements();
 			\wp_localize_script(

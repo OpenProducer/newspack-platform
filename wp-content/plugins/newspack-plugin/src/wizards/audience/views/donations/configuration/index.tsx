@@ -381,14 +381,16 @@ const Donation = () => {
 								'Your donations landing page is published.',
 								'newspack-plugin'
 							) }
+							style={ { marginBottom: '64px' } }
 						/>
 					) : (
 						<Notice
-							isError
+							isWarning
 							noticeText={ __(
 								'Your donations landing page is not yet published.',
 								'newspack-plugin'
 							) }
+							style={ { marginBottom: '64px' } }
 						/>
 					) }
 				</>
@@ -399,9 +401,6 @@ const Donation = () => {
 					{ __( 'Save Settings', 'newspack-plugin' ) }
 				</Button>
 			</div>
-			<SectionHeader
-				title={ __( 'Additional Settings', 'newspack-plugin' ) }
-			/>
 			<CoverFeesSettings />
 		</WizardsTab>
 	);

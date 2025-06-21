@@ -3,6 +3,10 @@ declare( strict_types=1 );
 
 namespace Automattic\WooCommerce\Internal\Admin\Settings;
 
+use Automattic\Jetpack\Connection\Manager;
+use Automattic\WooCommerce\Admin\API\OnboardingPlugins;
+use WP_REST_Request;
+
 defined( 'ABSPATH' ) || exit;
 /**
  * Payments settings utilities class.
@@ -247,6 +251,21 @@ class Utils {
 	}
 
 	/**
+	 * Trim the .php file extension from a path.
+	 *
+	 * @param string $path The path to trim.
+	 *
+	 * @return string The trimmed path. If the path does not end with .php, it will be returned as is.
+	 */
+	public static function trim_php_file_extension( string $path ): string {
+		if ( ! empty( $path ) && str_ends_with( $path, '.php' ) ) {
+			$path = substr( $path, 0, - 4 );
+		}
+
+		return $path;
+	}
+
+	/**
 	 * Truncate a text to a target character length while preserving whole words.
 	 *
 	 * We take a greedy approach: if some characters of a word fit in the target length, the whole word is included.
@@ -306,5 +325,143 @@ class Utils {
 		}
 
 		return $truncated;
+	}
+
+	/**
+	 * Retrieves a URL to relative path inside WooCommerce admin Payments settings with
+	 * the provided query parameters.
+	 *
+	 * @param string|null $path  Relative path of the desired page.
+	 * @param array       $query Query parameters to append to the path.
+	 *
+	 * @return string       Fully qualified URL pointing to the desired path.
+	 */
+	public static function wc_payments_settings_url( ?string $path = null, array $query = array() ): string {
+		$path = $path ? '&path=' . $path : '';
+
+		$query_string = '';
+		if ( ! empty( $query ) ) {
+			$query_string = '&' . http_build_query( $query );
+		}
+
+		return admin_url( 'admin.php?page=wc-settings&tab=checkout' . $path . $query_string );
+	}
+
+	/**
+	 * Get data from a WooCommerce API endpoint.
+	 *
+	 * @param string $endpoint Endpoint.
+	 * @param array  $params   Params to pass with request query.
+	 *
+	 * @return array|\WP_Error The response data or a WP_Error object.
+	 */
+	public static function rest_endpoint_get_request( string $endpoint, array $params = array() ) {
+		$request = new \WP_REST_Request( 'GET', $endpoint );
+		if ( $params ) {
+			$request->set_query_params( $params );
+		}
+
+		// Do the internal request.
+		// This has minimal overhead compared to an external request.
+		$response = rest_do_request( $request );
+
+		$server        = rest_get_server();
+		$response_data = json_decode( wp_json_encode( $server->response_to_data( $response, false ) ), true );
+
+		// Handle non-200 responses.
+		if ( 200 !== $response->get_status() ) {
+			return new \WP_Error(
+				'woocommerce_settings_payments_rest_error',
+				sprintf(
+					/* translators: 1: the endpoint relative URL, 2: error code, 3: error message */
+					esc_html__( 'REST request GET %1$s failed with: (%2$s) %3$s', 'woocommerce' ),
+					$endpoint,
+					$response_data['code'] ?? 'unknown_error',
+					$response_data['message'] ?? esc_html__( 'Unknown error', 'woocommerce' )
+				),
+				$response_data
+			);
+		}
+
+		// If the response is 200, return the data.
+		return $response_data;
+	}
+
+	/**
+	 * Post data to a WooCommerce API endpoint and return the response data.
+	 *
+	 * @param string $endpoint Endpoint.
+	 * @param array  $params   Params to pass with request body.
+	 *
+	 * @return array|\WP_Error The response data or a WP_Error object.
+	 */
+	public static function rest_endpoint_post_request( string $endpoint, array $params = array() ) {
+		$request = new \WP_REST_Request( 'POST', $endpoint );
+		if ( $params ) {
+			$request->set_body_params( $params );
+		}
+
+		// Do the internal request.
+		// This has minimal overhead compared to an external request.
+		$response = rest_do_request( $request );
+
+		$server        = rest_get_server();
+		$response_data = json_decode( wp_json_encode( $server->response_to_data( $response, false ) ), true );
+
+		// Handle non-200 responses.
+		if ( 200 !== $response->get_status() ) {
+			return new \WP_Error(
+				'woocommerce_settings_payments_rest_error',
+				sprintf(
+				/* translators: 1: the endpoint relative URL, 2: error code, 3: error message */
+					esc_html__( 'REST request POST %1$s failed with: (%2$s) %3$s', 'woocommerce' ),
+					$endpoint,
+					$response_data['code'] ?? 'unknown_error',
+					$response_data['message'] ?? esc_html__( 'Unknown error', 'woocommerce' )
+				),
+				$response_data
+			);
+		}
+
+		// If the response is 200, return the data.
+		return $response_data;
+	}
+
+	/**
+	 * Get the details to authorize a connection to WordPress.com.
+	 *
+	 * The most important part of the result is the URL to redirect to for authorization.
+	 *
+	 * @param string $return_url The URL to redirect to after the connection is authorized.
+	 *
+	 * @return array {
+	 *               'success' => bool Whether the request was successful.
+	 *               'errors' => array An array of error messages, if any.
+	 *               'color_scheme' => string The color scheme to use for the authorization page.
+	 *               'url' => string The URL to redirect to for authorization.
+	 * }
+	 */
+	public static function get_wpcom_connection_authorization( string $return_url ): array {
+		$plugin_onboarding = new OnboardingPlugins();
+
+		$request = new WP_REST_Request();
+		$request->set_param( 'redirect_url', $return_url );
+		$result = $plugin_onboarding->get_jetpack_authorization_url( $request );
+
+		if ( ! empty( $result['url'] ) ) {
+			$result['url'] = add_query_arg(
+				array(
+					// We use the new WooDNA value.
+					'from'         => 'woocommerce-onboarding',
+					// We inform Calypso that this is a WooPayments onboarding flow.
+					'plugin_name'  => 'woocommerce-payments',
+					// Use the current user's WP admin color scheme.
+					'color_scheme' => $result['color_scheme'],
+				),
+				$result['url']
+			);
+		}
+
+		return $result;
 	}
 }

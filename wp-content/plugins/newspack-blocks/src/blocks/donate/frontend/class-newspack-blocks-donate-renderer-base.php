@@ -40,7 +40,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 	 *
 	 * @param array $attributes Block attributes.
 	 */
-	public static function get_configuration( $attributes ) {
+	public static function get_configuration( $attributes = [] ) {
 		$attributes_hash = md5( wp_json_encode( $attributes ) );
 		if ( isset( self::$configurations_cache[ $attributes_hash ] ) ) {
 			return self::$configurations_cache[ $attributes_hash ];
@@ -148,7 +148,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 		if ( isset( $configuration['minimumDonation'] ) ) {
 			foreach ( $configuration['amounts'] as $frequency => $amounts ) {
 				foreach ( $amounts as $index => $amount ) {
-					$configuration['amounts'][ $frequency ][ $index ] = max( $configuration['minimumDonation'], $amount );
+					$configuration['amounts'][ $frequency ][ $index ] = max( (float) $configuration['minimumDonation'], $amount );
 				}
 			}
 		}

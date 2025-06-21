@@ -1080,6 +1080,13 @@
 	},
 	"customTemplates": [
 		{
+			"name": "page/wide",
+			"postTypes": [
+				"page"
+			],
+			"title": "Page (Wide)"
+		},
+		{
 			"name": "page/blank",
 			"postTypes": [
 				"page"
@@ -1099,6 +1106,13 @@
 				"page"
 			],
 			"title": "Page - No Title"
+		},
+		{
+			"name": "page/no-title--wide",
+			"postTypes": [
+				"page"
+			],
+			"title": "Page (Wide) - No Title"
 		},
 		{
 			"name": "single/large-image",

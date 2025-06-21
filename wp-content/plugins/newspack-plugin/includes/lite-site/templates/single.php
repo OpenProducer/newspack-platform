@@ -5,6 +5,8 @@
  * @package newspack
  */
 
+namespace Newspack;
+
 $current_post_id = get_query_var( 'lite_site_id' );
 $current_post = get_post( $current_post_id );
 

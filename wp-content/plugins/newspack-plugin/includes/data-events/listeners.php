@@ -47,6 +47,24 @@ Data_Events::register_listener(
 	}
 );
 
+
+/**
+ * For when a reader is deleted, syncs the membership status update to the ESP.
+ */
+Data_Events::register_listener(
+	'delete_user',
+	'reader_delete_sync',
+	function( $user_id, $reassign, $user ) {
+		if ( ! Reader_Activation::is_user_reader( $user ) ) {
+			return;
+		}
+		return [
+			'user_id' => $user_id,
+			'user'    => $user,
+		];
+	}
+);
+
 /**
  * For when a reader registers via Woo.
  */

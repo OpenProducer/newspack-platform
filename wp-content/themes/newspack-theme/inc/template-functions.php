@@ -229,6 +229,12 @@ function newspack_body_classes( $classes ) {
 		$classes[] = 'archive-' . esc_attr( $archive_layout );
 	}
 
+	// Adds a class for the archive page layout.
+	$archive_list_or_grid = get_theme_mod( 'archive_list_or_grid', 'list' );
+	if ( is_archive() && 'list' !== $archive_list_or_grid ) {
+		$classes[] = 'archive-grid';
+	}
+
 	// Add a class when using the 'featured latest' archive layout.
 	$feature_latest_post = get_theme_mod( 'archive_feature_latest_post', true );
 	if ( is_archive() && true === $feature_latest_post && ! is_post_type_archive( 'tribe_events' ) ) {
@@ -630,7 +636,73 @@ function newspack_the_custom_logo() {
 	}
 }
 
-// post_modified
+/**
+ * Customize the site title.
+ * This is the one that is displayed in the header, next to the logo, when "Display Site Title" is enabled in Appearance > Customize > Site Identity.
+ * If not enabled, this site title is still rendered, but hidden via CSS.
+ *
+ * @return string The site title.
+ */
+function newspack_site_title() {
+	/**
+	 * Filters the site name.
+	 *
+	 * @param string $blog_name The site name.
+	 */
+	$blog_name = apply_filters( 'newspack_site_title_name', get_bloginfo( 'name' ) );
+
+	if ( empty( $blog_name ) ) {
+		return;
+	}
+
+	/**
+	 * Filters the site URL.
+	 *
+	 * @param string $site_url The site URL.
+	 */
+	$site_url = apply_filters( 'newspack_site_title_url', home_url( '/' ) );
+
+	if ( is_front_page() && is_home() ) {
+		$tag = 'h1';
+	} else {
+		$tag = 'p';
+	}
+
+	$site_title = sprintf(
+		'<%1$s class="site-title"><a href="%2$s" rel="home">%3$s</a></%1$s>',
+		esc_html( $tag ),
+		esc_url( $site_url ),
+		esc_html( $blog_name )
+	);
+
+	/**
+	 * Filters the site title.
+	 *
+	 * @param string $site_title The site title.
+	 */
+	return apply_filters( 'newspack_site_title', $site_title );
+}
+
+/**
+ * Display the custom site title.
+ */
+function newspack_the_site_title() {
+	echo wp_kses_post( newspack_site_title() );
+}
+
+/**
+ * If available, returns a link to the accessibility statement page.
+ */
+function newspack_accessibility_page_link() {
+	// Check if the Newspack Accessibility Statement Page class exists.
+	if ( class_exists( '\Newspack\Accessibility_Statement_Page' ) ) {
+		$page_data = \Newspack\Accessibility_Statement_Page::get_page();
+		// If an Accessibility Statement page exists and is published, display a link to it.
+		if ( $page_data && ( $page_data['pageUrl'] ?? '' ) && 'publish' === ( $page_data['status'] ?? '' ) ) {
+			echo '<a class="accessibility-statement-link" href="' . esc_url( $page_data['pageUrl'] ) . '">' . esc_html( $page_data['title'] ?? '' ) . '</a>';
+		}
+	}
+}
 
 /**
  * Change date to 'time ago' format if enabled in the Customizer.
@@ -691,12 +763,28 @@ function newspack_convert_modified_to_time_ago( $post_time, $format, $post ) {
 }
 
 /**
+ * Return a filterable array of supported post types for the updated date functionality.
+ *
+ * @return array Array of post type slugs.
+ */
+function newspack_get_updated_date_supported_post_types() {
+	/**
+	 * Filter post types that support the updated date functionality.
+	 *
+	 * @return array Array of post type slugs.
+	 */
+	return apply_filters( 'newspack_updated_date_supported_post_types', array( 'post' ) );
+}
+
+/**
  * Check whether updated date should be displayed.
  */
 function newspack_should_display_updated_date() {
-	if ( ! is_singular( 'post' ) ) {
+	$supported_post_types = newspack_get_updated_date_supported_post_types();
+	if ( ! is_singular( $supported_post_types ) ) {
 		return false;
 	}
+
 	$show_updated_date_sitewide = get_theme_mod( 'post_updated_date', false );
 
 	$hide_updated_date_post     = get_post_meta( get_the_ID(), 'newspack_hide_updated_date', true );

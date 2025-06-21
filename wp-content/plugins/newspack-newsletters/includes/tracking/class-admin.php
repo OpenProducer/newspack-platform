@@ -22,11 +22,6 @@ final class Admin {
 		add_action( 'update_option_newspack_newsletters_use_tracking_pixel', [ __CLASS__, 'updated_option' ] );
 		add_action( 'update_option_newspack_newsletters_use_click_tracking', [ __CLASS__, 'updated_option' ] );
 
-		// Newsletters columns.
-		add_action( 'manage_' . \Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT . '_posts_columns', [ __CLASS__, 'manage_columns' ] );
-		add_action( 'manage_' . \Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT . '_posts_custom_column', [ __CLASS__, 'custom_column' ], 10, 2 );
-		add_action( 'manage_edit-' . \Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT . '_sortable_columns', [ __CLASS__, 'sortable_columns' ] );
-
 		// Newsletters Ads columns.
 		add_action( 'manage_' . \Newspack_Newsletters_Ads::CPT . '_posts_columns', [ __CLASS__, 'manage_ads_columns' ] );
 		add_action( 'manage_' . \Newspack_Newsletters_Ads::CPT . '_posts_custom_column', [ __CLASS__, 'custom_ads_column' ], 10, 2 );
@@ -208,21 +203,6 @@ final class Admin {
 	}
 
 	/**
-	 * Manage columns.
-	 *
-	 * @param array $columns Columns.
-	 */
-	public static function manage_columns( $columns ) {
-		if ( self::is_tracking_pixel_enabled() ) {
-			$columns['opened'] = __( 'Opened', 'newspack-newsletters' );
-		}
-		if ( self::is_tracking_click_enabled() ) {
-			$columns['clicks'] = __( 'Clicks', 'newspack-newsletters' );
-		}
-		return $columns;
-	}
-
-	/**
 	 * Manage ads columns.
 	 *
 	 * @param array $columns Columns.
@@ -231,20 +211,6 @@ final class Admin {
 		$columns['impressions'] = __( 'Impressions', 'newspack-newsletters' );
 		$columns['clicks']      = __( 'Clicks', 'newspack-newsletters' );
 		return $columns;
-	}
-
-	/**
-	 * Custom column content.
-	 *
-	 * @param array $column_name Column name.
-	 * @param int   $post_id     Post ID.
-	 */
-	public static function custom_column( $column_name, $post_id ) {
-		if ( 'opened' === $column_name ) {
-			echo intval( get_post_meta( $post_id, 'tracking_pixel_seen', true ) );
-		} elseif ( 'clicks' === $column_name ) {
-			echo intval( get_post_meta( $post_id, 'tracking_clicks', true ) );
-		}
 	}
 
 	/**
@@ -259,17 +225,6 @@ final class Admin {
 		} elseif ( 'clicks' === $column_name ) {
 			echo intval( get_post_meta( $post_id, 'tracking_clicks', true ) );
 		}
-	}
-
-	/**
-	 * Sortable columns.
-	 *
-	 * @param array $columns Columns.
-	 */
-	public static function sortable_columns( $columns ) {
-		$columns['opened'] = 'opened';
-		$columns['clicks'] = 'clicks';
-		return $columns;
 	}
 
 	/**

@@ -4,16 +4,10 @@
  * WordPress dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import {
-	BaseControl,
-	CheckboxControl,
-	ExternalLink,
-	Path,
-	SVG,
-	TextareaControl,
-} from '@wordpress/components';
+import { BaseControl, CheckboxControl, ExternalLink, TextareaControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { Fragment, useEffect, useState } from '@wordpress/element';
+import { seen } from '@wordpress/icons';
 
 /**
  * External dependencies
@@ -90,22 +84,6 @@ export default function Prompt( {
 	useEffect( () => {
 		setTimeout( () => setSuccess( false ), 5000 );
 	}, [ success ] );
-
-	const previewIcon = (
-		<SVG
-			xmlns="http://www.w3.org/2000/svg"
-			height="24"
-			viewBox="0 0 24 24"
-			width="24"
-		>
-			<Path
-				fillRule="evenodd"
-				clipRule="evenodd"
-				d="M4.5001 13C5.17092 13.3354 5.17078 13.3357 5.17066 13.3359L5.17346 13.3305C5.1767 13.3242 5.18233 13.3135 5.19036 13.2985C5.20643 13.2686 5.23209 13.2218 5.26744 13.1608C5.33819 13.0385 5.44741 12.8592 5.59589 12.6419C5.89361 12.2062 6.34485 11.624 6.95484 11.0431C8.17357 9.88241 9.99767 8.75 12.5001 8.75C15.0025 8.75 16.8266 9.88241 18.0454 11.0431C18.6554 11.624 19.1066 12.2062 19.4043 12.6419C19.5528 12.8592 19.662 13.0385 19.7328 13.1608C19.7681 13.2218 19.7938 13.2686 19.8098 13.2985C19.8179 13.3135 19.8235 13.3242 19.8267 13.3305L19.8295 13.3359C19.8294 13.3357 19.8293 13.3354 20.5001 13C21.1709 12.6646 21.1708 12.6643 21.1706 12.664L21.1702 12.6632L21.1693 12.6614L21.1667 12.6563L21.1588 12.6408C21.1522 12.6282 21.1431 12.6108 21.1315 12.5892C21.1083 12.5459 21.0749 12.4852 21.0311 12.4096C20.9437 12.2584 20.8146 12.0471 20.6428 11.7956C20.2999 11.2938 19.7823 10.626 19.0798 9.9569C17.6736 8.61759 15.4977 7.25 12.5001 7.25C9.50252 7.25 7.32663 8.61759 5.92036 9.9569C5.21785 10.626 4.70033 11.2938 4.35743 11.7956C4.1856 12.0471 4.05654 12.2584 3.96909 12.4096C3.92533 12.4852 3.89191 12.5459 3.86867 12.5892C3.85705 12.6108 3.84797 12.6282 3.84141 12.6408L3.83346 12.6563L3.8309 12.6614L3.82997 12.6632L3.82959 12.664C3.82943 12.6643 3.82928 12.6646 4.5001 13ZM12.5001 16C14.4331 16 16.0001 14.433 16.0001 12.5C16.0001 10.567 14.4331 9 12.5001 9C10.5671 9 9.0001 10.567 9.0001 12.5C9.0001 14.433 10.5671 16 12.5001 16Z"
-				fill={ inFlight ? '#828282' : '#3366FF' }
-			/>
-		</SVG>
-	);
 
 	const getPreviewUrl = ( {
 		options,
@@ -491,7 +469,7 @@ export default function Prompt( {
 								} ) => (
 									<Button
 										disabled={ inFlight }
-										icon={ previewIcon }
+										icon={ seen }
 										isSecondary
 										onClick={ async () => showPreview() }
 									>

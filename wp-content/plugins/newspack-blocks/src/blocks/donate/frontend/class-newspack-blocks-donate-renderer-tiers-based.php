@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/donate/frontend/class-newspack-blocks-donate-renderer-base.php';
 
-use Newspack_Blocks\Modal_Checkout;
+use Newspack_Blocks\Modal_Checkout\Checkout_Data;
 
 /**
  * Renders the tiers-based Donate block.
@@ -57,28 +57,16 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 			<div class="wpbnbd__tiers__amount">
 				<span>
 					<?php foreach ( $configuration['frequencies'] as $frequency_slug => $frequency_name ) : ?>
-						<?php
-							$amount                = $configuration['amounts'][ $frequency_slug ][ $index ];
-							$product_price_summary = Modal_Checkout::get_summary_card_price_string(
-								__( 'Donate', 'newspack-blocks' ),
-								$amount,
-								$frequency_slug
-							);
-							$product_data = wp_json_encode(
-								[
-									'donation_price_summary_' . $frequency_slug => $product_price_summary,
-								]
-							);
-						?>
+						<?php $amount = $configuration['amounts'][ $frequency_slug ][ $index ]; ?>
 						<span
 							style="<?php echo $frequency_slug === $selected_frequency ? '' : 'display:none;'; ?>"
 							class="donation-tier__<?php echo esc_attr( $frequency_slug ); ?>"
 							data-frequency-slug="<?php echo esc_attr( $frequency_slug ); ?>"
-							data-amount="<?php echo esc_attr( $configuration['amounts'][ $frequency_slug ][ $index ] ); ?>"
+							data-amount="<?php echo esc_attr( $amount ); ?>"
 							data-tier-index="<?php echo esc_attr( $index ); ?>"
-							data-product="<?php echo esc_attr( $product_data ); ?>"
+							data-checkout="<?php echo esc_attr( wp_json_encode( Checkout_Data::get_donation_checkout_data( $frequency_slug, $amount ) ) ); ?>"
 						>
-							<?php echo wp_kses_post( Newspack_Blocks::get_formatted_amount( $configuration['amounts'][ $frequency_slug ][ $index ], $frequency_slug ) ); ?>
+							<?php echo wp_kses_post( Newspack_Blocks::get_formatted_amount( $amount, $frequency_slug ) ); ?>
 						</span>
 					<?php endforeach; ?>
 				</span>

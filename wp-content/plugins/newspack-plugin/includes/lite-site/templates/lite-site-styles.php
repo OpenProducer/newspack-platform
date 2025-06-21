@@ -5,6 +5,8 @@
  * @package newspack
  */
 
+namespace Newspack;
+
 ?>
 <style>
 	body {

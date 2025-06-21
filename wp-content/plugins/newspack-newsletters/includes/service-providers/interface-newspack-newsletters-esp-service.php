@@ -31,6 +31,39 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	public function has_api_credentials();
 
 	/**
+	 * Get the provider specific labels
+	 *
+	 * This allows us to make reference to provider specific features in the way the user is used to see them in the provider's UI
+	 *
+	 * This methos must return an array with localized labels forfollowing keys:
+	 * - name: The provider name.
+	 * - list: "list" in lower case singular format.
+	 * - lists: "list" in lower case plural format.
+	 * - sublist: Sublist entities in lowercase singular format.
+	 * - List: "list" in uppercase case singular format.
+	 * - Lists: "list" in uppercase case plural format.
+	 * - Sublist: Sublist entities in uppercase singular format.
+	 * - tag_prefix: The prefix to be used in tags.
+	 * - tag_metabox_before_save: The message to show before saving a list that will create a tag.
+	 * - tag_metabox_after_save: The message to show after saving a list that created a tag.
+	 *
+	 * @param mixed $context The context in which the labels are being applied. Either list_explanation or local_list_explanation.
+	 * @return array
+	 */
+	public static function get_labels( $context = '' );
+
+	/**
+	 * Get configuration for conditional tag support in case the ESP supports it.
+	 *
+	 * Returns an array with two keys:
+	 * - support_url: URL to the ESP's documentation on conditional tags.
+	 * - example: Array with two keys, 'before' and 'after', containing example code snippets with opening and closing tags.
+	 *
+	 * @return array
+	 */
+	public static function get_conditional_tag_support();
+
+	/**
 	 * Set list for a campaign.
 	 *
 	 * @param string $post_id Campaign Id.
@@ -102,6 +135,25 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	public function add_contact( $contact, $list_id = false );
 
 	/**
+	 * Get contact data by email.
+	 *
+	 * @param string $email Email address.
+	 * @param bool   $return_details Fetch full contact data.
+	 *
+	 * @return array|WP_Error Response or error if contact was not found.
+	 */
+	public function get_contact_data( $email, $return_details = false );
+
+	/**
+	 * Get the lists a contact is subscribed to.
+	 *
+	 * @param string $email The contact email.
+	 *
+	 * @return string[] Contact subscribed lists IDs.
+	 */
+	public function get_contact_lists( $email );
+
+	/**
 	 * Update a contact lists subscription.
 	 *
 	 * @param string   $email           Contact email address.
@@ -171,18 +223,27 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	public function remove_tag_from_contact( $email, $tag, $list_id = null );
 
 	/**
+	 * Get the IDs of the tags associated with a contact.
+	 *
+	 * @param string $email The contact email.
+	 * @return array|WP_Error The tag IDs on success. WP_Error on failure.
+	 */
+	public function get_contact_tags_ids( $email );
+
+	/**
+	 * Get a reader-facing error message to be shown when the add_contact method fails.
+	 *
+	 * @param array $params Additional information about the request that triggered the error.
+	 * @param mixed $raw_error Raw error data from the ESP's API. This can vary depending on the provider.
+	 *
+	 * @return string
+	 */
+	public function get_reader_error_message( $params = [], $raw_error = null );
+
+	/**
 	 * Get usage report for yesterday.
 	 *
 	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error
 	 */
 	public function get_usage_report();
-
-	/**
-	 * Get transient name for async error messages.
-	 *
-	 * @param int $post_id The post ID.
-	 *
-	 * @return string The transient name.
-	 */
-	public function get_transient_name( $post_id );
 }

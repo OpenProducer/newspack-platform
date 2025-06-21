@@ -9,12 +9,13 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
+import { Icon } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
 /* eslint import/namespace: ['error', { allowComputed: true }] */
-import { Icon, icons } from '../../components/icons';
+import { icons } from '../../components/icons';
 import { Grid, Card } from '../../../../components/src';
 
 const {

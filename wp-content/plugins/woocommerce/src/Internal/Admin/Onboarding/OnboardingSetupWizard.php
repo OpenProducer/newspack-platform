@@ -251,7 +251,7 @@ class OnboardingSetupWizard {
 		if ( $this->is_setup_wizard() ) {
 			$settings['onboarding']['pageCount']    = (int) ( wp_count_posts( 'page' ) )->publish;
 			$settings['onboarding']['postCount']    = (int) ( wp_count_posts( 'post' ) )->publish;
-			$settings['onboarding']['isBlockTheme'] = wc_current_theme_is_fse_theme();
+			$settings['onboarding']['isBlockTheme'] = wp_is_block_theme();
 		}
 
 		// phpcs:ignore WooCommerce.Commenting.CommentHooks.MissingHookComment

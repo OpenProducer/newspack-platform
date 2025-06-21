@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'woocommerce/woocommerce',
-        'pretty_version' => '9.8.5',
-        'version' => '9.8.5.0',
+        'pretty_version' => '9.9.4',
+        'version' => '9.9.4.0',
         'reference' => null,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -212,11 +212,11 @@
             'dev_requirement' => false,
         ),
         'woocommerce/blueprint' => array(
-            'pretty_version' => 'dev-add/blueprint-package-1',
-            'version' => 'dev-add/blueprint-package-1',
-            'reference' => '4eac6cb480be161204cb4fbf81567215592daecc',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../woocommerce/blueprint',
+            'pretty_version' => '0.0.1',
+            'version' => '0.0.1.0',
+            'reference' => 'f996d43977196b9670d783b58c167243950876d3',
+            'type' => 'wordpress-plugin',
+            'install_path' => __DIR__ . '/../../packages/blueprint',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -230,8 +230,8 @@
             'dev_requirement' => false,
         ),
         'woocommerce/woocommerce' => array(
-            'pretty_version' => '9.8.5',
-            'version' => '9.8.5.0',
+            'pretty_version' => '9.9.4',
+            'version' => '9.9.4.0',
             'reference' => null,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',

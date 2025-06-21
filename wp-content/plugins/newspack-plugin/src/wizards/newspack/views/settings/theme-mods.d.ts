@@ -99,9 +99,9 @@ interface Recirculation {
 }
 
 /**
- * Display settings.
+ * Advanced settings.
  */
-interface DisplaySettings {
+interface AdvancedSettings {
 	// Author Bio.
 	show_author_bio: boolean;
 	show_author_email: boolean;
@@ -121,6 +121,13 @@ interface DisplaySettings {
 	newspack_image_credits_prefix_label: string;
 	newspack_image_credits_placeholder: number | null;
 	newspack_image_credits_auto_populate: boolean;
+
+	// Accessibility Statement.
+	accessibility_statement_page?: {
+		editUrl: string;
+		status: string;
+		pageUrl: string;
+	};
 }
 
 interface MiscSettings {
@@ -130,4 +137,4 @@ interface MiscSettings {
 	custom_css_post_id: number;
 }
 
-interface ThemeMods extends ThemeAndBrand, DisplaySettings, MiscSettings {}
+interface ThemeMods extends ThemeAndBrand, AdvancedSettings, MiscSettings {}

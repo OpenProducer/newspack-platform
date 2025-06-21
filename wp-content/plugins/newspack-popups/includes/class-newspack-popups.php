@@ -765,7 +765,7 @@ final class Newspack_Popups {
 				'taxonomy'                     => self::NEWSPACK_POPUPS_TAXONOMY,
 				'is_prompt'                    => self::NEWSPACK_POPUPS_CPT == get_post_type(),
 				'segments_taxonomy'            => Newspack_Segments_Model::TAX_SLUG,
-				'segments_admin_url'           => admin_url( 'admin.php?page=newspack-popups-wizard#/segments' ),
+				'segments_admin_url'           => admin_url( 'admin.php?page=newspack-audience-campaigns#/segments' ),
 				'available_post_types'         => array_values(
 					get_post_types(
 						[

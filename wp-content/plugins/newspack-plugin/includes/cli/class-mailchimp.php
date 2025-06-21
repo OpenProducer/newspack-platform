@@ -450,11 +450,17 @@ class Mailchimp {
 	 * @return array
 	 */
 	private static function get_fields_to_check_for_duplicates() {
+		/**
+		 * Apply the filters that allow other plugins to add their own fields.
+		 *
+		 * This filter is documented in Newspack\Reader_Activation\Sync\Metadata::get_keys().
+		 */
+		$fields = \apply_filters( 'newspack_ras_metadata_keys', Metadata::get_all_fields() );
 		$fields = array_map(
 			function( $key ) {
 				return Metadata::get_key( $key );
 			},
-			array_keys( Metadata::get_all_fields() )
+			array_keys( $fields )
 		);
 
 		// Additional fields.

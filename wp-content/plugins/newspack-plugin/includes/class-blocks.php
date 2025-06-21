@@ -23,6 +23,9 @@ final class Blocks {
 			require_once NEWSPACK_ABSPATH . 'src/blocks/correction-box/class-correction-box-block.php';
 			require_once NEWSPACK_ABSPATH . 'src/blocks/correction-item/class-correction-item-block.php';
 		}
+		if ( wp_is_block_theme() ) {
+			require_once NEWSPACK_ABSPATH . 'src/blocks/avatar/class-avatar-block.php';
+		}
 
 		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
 	}

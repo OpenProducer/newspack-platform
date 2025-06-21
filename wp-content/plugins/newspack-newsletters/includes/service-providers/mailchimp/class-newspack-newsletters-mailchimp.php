@@ -2040,10 +2040,11 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 * Get contact data by email.
 	 *
 	 * @param string $email          Email address.
+	 * @param bool   $return_details Whether to return detailed information.
 	 *
 	 * @return array|WP_Error Response or error if contact was not found.
 	 */
-	public function get_contact_data( $email ) {
+	public function get_contact_data( $email, $return_details = false ) {
 		try {
 			$mc    = new Mailchimp( $this->api_key() );
 			$result  = $mc->get(

@@ -41,7 +41,7 @@ export const THEME_BRAND_DEFAULTS = {
 	homepage_pattern_index: 0,
 };
 
-export const DISPLAY_SETTINGS_DEFAULTS = {
+export const ADVANCED_SETTINGS_DEFAULTS = {
 	// Author Bio.
 	show_author_bio: true,
 	show_author_email: false,
@@ -62,7 +62,7 @@ export const DISPLAY_SETTINGS_DEFAULTS = {
 
 export const DEFAULT_THEME_MODS: ThemeMods = {
 	...THEME_BRAND_DEFAULTS,
-	...DISPLAY_SETTINGS_DEFAULTS,
+	...ADVANCED_SETTINGS_DEFAULTS,
 
 	/**
 	 * Misc.

@@ -9,6 +9,8 @@ namespace Newspack;
 
 defined( 'ABSPATH' ) || exit;
 
+use Newspack\Newspack_UI_Icons;
+
 /**
  * Class for reCAPTCHA integration.
  */
@@ -65,12 +67,129 @@ class Newspack_UI {
 	}
 
 	/**
+	 * Generate markup for a Newspack UI modal.
+	 *
+	 * @param array $args {
+	 *     Arguments for building the modal.
+	 *     @type string $id The modal ID.
+	 *     @type string $title The modal title.
+	 *     @type string $content The modal content HTML.
+	 *     @type string $footer The modal footer HTML.
+	 *     @type string $form The form method to use. If given, modal content and action buttons will be wrapped in a form element.
+	 *     @type array $actions {
+	 *         @type string $label The button label.
+	 *         @type string $type The button type.
+	 *         @type string $action The action to perform when the button is clicked. Currently only: 'close' to close the modal.
+	 *         @type string $url The URL to navigate to when the button is clicked.
+	 *         @type array {
+	 *               $fetch Data to trigger a REST API request.
+	 *               @type string $url The URL to send the request to.
+	 *               @type string $method The HTTP method to use.
+	 *               @type string $nonce The nonce to use for the request.
+	 *               @type array $body The body to send with a POST request.
+	 *               @type array $params Parameters to send with a GET request.
+	 *               @type string $next The ID for another modal to open after the action is completed.
+	 *         }
+	 *     }
+	 * }
+	 */
+	public static function generate_modal( $args ) {
+		$args = wp_parse_args(
+			$args,
+			[
+				'id'    => 'modal-' . wp_rand( 1, 1000 ),
+				'size'  => 'small',
+				'state' => 'closed',
+			]
+		);
+		?>
+		<div id="newspack-my-account__<?php echo esc_attr( $args['id'] ); ?>" class="newspack-ui__modal-container" data-state="<?php echo esc_attr( $args['state'] ); ?>">
+			<div class="newspack-ui__modal-container__overlay"></div>
+			<div class="newspack-ui__modal newspack-ui__modal--<?php echo esc_attr( $args['size'] ); ?>">
+				<header class="newspack-ui__modal__header">
+					<?php if ( ! empty( $args['title'] ) ) : ?>
+						<h2 class="newspack-ui__font--l"><?php echo wp_kses_post( $args['title'] ); ?></h2>
+					<?php endif; ?>
+					<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
+						<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
+						<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
+					</button>
+				</header>
+
+				<?php if ( ! empty( $args['form'] ) ) : ?>
+				<form class="newspack-ui__modal__content <?php echo esc_attr( $args['form_class'] ); ?>" method="<?php echo esc_attr( $args['form'] ); ?>">
+				<?php else : ?>
+				<section class="newspack-ui__modal__content">
+				<?php endif; ?>
+						<?php
+						echo wp_kses(
+							$args['content'],
+							array_merge(
+								\wp_kses_allowed_html( 'post' ),
+								Newspack_UI_Icons::sanitize_svgs(),
+								[
+									'input' => [
+										'type'          => true,
+										'name'          => true,
+										'id'            => true,
+										'placeholder'   => true,
+										'required'      => true,
+										'aria-required' => true,
+										'class'         => true,
+										'value'         => true,
+									],
+								]
+							)
+						);
+						?>
+						<?php
+						if ( ! empty( $args['actions'] ) ) :
+							foreach ( $args['actions'] as $action ) :
+								$classes = [
+									'newspack-ui__button',
+									'newspack-ui__button--wide',
+									'newspack-ui__button--' . ( $action['type'] ?? 'secondary' ),
+								];
+								if ( ! empty( $action['action'] ) ) {
+									$classes[] = 'newspack-ui__modal__' . $action['action'];
+								}
+								$fetch_data = ! empty( $action['fetch'] ) ? 'data-fetch=' . \wp_json_encode( $action['fetch'] ) : '';
+								?>
+								<?php if ( isset( $action['url'] ) ) : ?>
+								<a href="<?php echo esc_url( $action['url'] ); ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" <?php echo esc_attr( $fetch_data ); ?>>
+									<?php echo wp_kses_post( $action['label'] ); ?>
+								</a>
+							<?php else : ?>
+								<button type="submit" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" <?php echo esc_attr( $fetch_data ); ?>>
+									<?php echo wp_kses_post( $action['label'] ); ?>
+								</button>
+								<?php
+							endif;
+						endforeach;
+						endif;
+						?>
+				<?php if ( ! empty( $args['form'] ) ) : ?>
+				</form>
+				<?php else : ?>
+				</section>
+				<?php endif; ?>
+				<?php if ( ! empty( $args['footer'] ) ) : ?>
+				<footer class="newspack-ui__modal__footer">
+					<?php echo wp_kses_post( $args['footer'] ); ?>
+				</footer>
+				<?php endif; ?>
+			</div><!-- .newspack-ui__modal__small -->
+		</div> <!-- .newspack-ui__modal-container -->
+		<?php
+	}
+
+	/**
 	 * Make a page to demo these components
 	 */
 	public static function return_demo_content() {
 		ob_start();
 		?>
-		<div class="newspack-ui">
+		<div class="newspack-ui newspack-ui__demo">
 			<h1>Component Demo</h1>
 
 			<ul>
@@ -201,6 +320,19 @@ class Newspack_UI {
 					<p>"Error" notice with icon style</p>
 				</div>
 			</div>
+			<button id="show-snackbar-example" class="newspack-ui__button newspack-ui__button--primary">Show snackbar</button>
+			<div id="snackbar-example" class="newspack-ui__snackbar newspack-ui__snackbar--top-right newspack-ui__snackbar--success">
+				This is a snackbar message
+			</div>
+			<script>
+				( function() {
+					const snackbar = document.getElementById( 'snackbar-example' );
+					const button = document.getElementById( 'show-snackbar-example' );
+					button.addEventListener( 'click', function() {
+						snackbar.classList.add( 'active' );
+					} );
+				} )();
+			</script>
 
 			<hr>
 

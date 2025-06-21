@@ -1115,6 +1115,23 @@ function newspack_customize_register( $wp_customize ) {
 		)
 	);
 
+	// Add option to change the first archive's layout.
+	$wp_customize->add_setting(
+		'archive_feature_latest_post',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'newspack_sanitize_checkbox',
+		)
+	);
+
+	$wp_customize->add_control(
+		'archive_feature_latest_post',
+		array(
+			'type'    => 'checkbox',
+			'label'   => esc_html__( 'Use a large, featured display for the latest post in the archives', 'newspack' ),
+			'section' => 'archive_options',
+		)
+	);
 
 	// Add option to change archive layouts.
 	$wp_customize->add_setting(
@@ -1134,25 +1151,6 @@ function newspack_customize_register( $wp_customize ) {
 				'one-column'      => esc_html__( 'One column', 'newspack' ),
 				'one-column-wide' => esc_html__( 'One column wide', 'newspack' ),
 			),
-			'section' => 'archive_options',
-		)
-	);
-
-
-	// Add option to change the first archive's layout.
-	$wp_customize->add_setting(
-		'archive_feature_latest_post',
-		array(
-			'default'           => true,
-			'sanitize_callback' => 'newspack_sanitize_checkbox',
-		)
-	);
-
-	$wp_customize->add_control(
-		'archive_feature_latest_post',
-		array(
-			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Use a large, featured display for the latest post in the archives', 'newspack' ),
 			'section' => 'archive_options',
 		)
 	);
@@ -1179,6 +1177,28 @@ function newspack_customize_register( $wp_customize ) {
 			'section'     => 'archive_options',
 		)
 	);
+
+		// Add option to to switch between list and grid.
+		$wp_customize->add_setting(
+			'archive_list_or_grid',
+			array(
+				'default'           => 'list',
+				'sanitize_callback' => 'newspack_sanitize_radio',
+			)
+		);
+		$wp_customize->add_control(
+			'archive_list_or_grid',
+			array(
+				'type'    => 'radio',
+				'label'   => esc_html__( 'List or Grid Layout', 'newspack' ),
+				'description' => esc_html__( 'When using grid, set the number of posts per page to a number divisible by 12 under Settings > Reading and disable the "Use a large, featured display for the latest post in the archives" above to get a full bottom row of posts.', 'newspack' ),
+				'choices' => array(
+					'list'         => esc_html__( 'List', 'newspack' ),
+					'grid'      => esc_html__( 'Grid', 'newspack' ),
+				),
+				'section' => 'archive_options',
+			)
+		);
 
 	/**
 	 * Comments settings

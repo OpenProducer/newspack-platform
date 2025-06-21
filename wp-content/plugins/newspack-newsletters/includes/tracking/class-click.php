@@ -160,8 +160,7 @@ final class Click {
 			$newsletter_content = (string) get_post_meta( $newsletter_id, 'newspack_email_html', true );
 			if (
 				false === stripos( $newsletter_content, $url_without_query_args ) &&
-				false === stripos( $newsletter_content, urlencode( $url_without_query_args ) ) && // URL might be encoded via a block pattern.
-				! $is_admin_user // Allow redirect for logged-in editor or admin users.
+				false === stripos( $newsletter_content, urlencode( $url_without_query_args ) ) // URL might be encoded via a block pattern.
 			) {
 				\wp_die( 'Invalid URL', '', 400 );
 				exit;

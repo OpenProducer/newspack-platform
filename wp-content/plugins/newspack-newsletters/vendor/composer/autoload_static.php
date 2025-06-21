@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0a794eeb27f89fd45672724980c00ef2
+class ComposerStaticInit2ac62e2c670d344e9252df974696065b
 {
     public static $classMap = array (
         'CS_REST_Administrators' => __DIR__ . '/..' . '/campaignmonitor/createsend-php/csrest_administrators.php',
@@ -32,7 +32,6 @@ class ComposerStaticInit0a794eeb27f89fd45672724980c00ef2
         'Newspack_Newsletters\\Plugins\\Woocommerce_Memberships' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-memberships/class-woocommerce-memberships.php',
         'Newspack_Newsletters\\Tracking\\Admin' => __DIR__ . '/../..' . '/includes/tracking/class-admin.php',
         'Newspack_Newsletters\\Tracking\\Click' => __DIR__ . '/../..' . '/includes/tracking/class-click.php',
-        'Newspack_Newsletters\\Tracking\\Data_Events' => __DIR__ . '/../..' . '/includes/tracking/class-data-events.php',
         'Newspack_Newsletters\\Tracking\\Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-pixel.php',
         'Newspack_Newsletters\\Tracking\\Utils' => __DIR__ . '/../..' . '/includes/tracking/class-utils.php',
         'Newspack_Newsletters_Active_Campaign' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php',
@@ -79,7 +78,7 @@ class ComposerStaticInit0a794eeb27f89fd45672724980c00ef2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit0a794eeb27f89fd45672724980c00ef2::$classMap;
+            $loader->classMap = ComposerStaticInit2ac62e2c670d344e9252df974696065b::$classMap;
 
         }, null, ClassLoader::class);
     }

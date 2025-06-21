@@ -31,37 +31,37 @@ class Jetpack {
 	 * @var string[]
 	 */
 	public static $default_active_modules = [
-		/** 
+		/**
 		 * Assets CDN
 		 *
 		 * @link https://jetpack.com/support/site-accelerator/
 		 */
 		'photon-cdn',
-		/** 
+		/**
 		 * Image CDN
 		 *
 		 * @link https://jetpack.com/support/site-accelerator/
 		 */
 		'photon',
-		/** 
+		/**
 		 * Contact Form
 		 *
 		 * @link https://jetpack.com/support/contact-form/
 		 */
 		'contact-form',
-		/** 
-		 * Brute Force Protection. 
+		/**
+		 * Brute Force Protection.
 		 *
 		 * @link https://jetpack.com/support/protect/
 		 */
 		'protect',
-		/** 
-		 * JSON API 
+		/**
+		 * JSON API
 		 *
 		 * @link https://jetpack.com/support/json-api/
 		 */
 		'json-api',
-		/** 
+		/**
 		 * Notifications
 		 *
 		 * @link https://jetpack.com/support/notifications/
@@ -158,6 +158,9 @@ class Jetpack {
 		// Set Jetpack default modules on Newspack setup.
 		add_action( 'add_option_newspack_setup_complete', [ __CLASS__, 'set_default_modules' ], 10, 2 );
 		add_action( 'update_option_newspack_setup_complete', [ __CLASS__, 'set_default_modules' ], 10, 2 );
+
+		// Modify the related posts timeframe.
+		add_filter( 'jetpack_relatedposts_filter_date_range', [ __CLASS__, 'restrict_age_of_related_posts' ] );
 	}
 
 	/**
@@ -307,12 +310,28 @@ class Jetpack {
 	 *
 	 * @param string $old_val_or_opt_name If adding will be opt name. If updating will be old value.
 	 * @param string $new_val Value correlated to update/add.
-	 * @return void 
+	 * @return void
 	 */
 	public static function set_default_modules( string $old_val_or_opt_name, string $new_val ) {
 		if ( $new_val === '1' ) {
 			update_option( 'jetpack_active_modules', static::$default_active_modules );
 		}
+	}
+
+	/**
+	 * Restrict the age of related content shown by Jetpack Related Posts.
+	 *
+	 * @param array $date_range Array of start and end dates.
+	 * @return array Filtered array of start/end dates.
+	 */
+	public static function restrict_age_of_related_posts( $date_range ) {
+		$related_posts_max_age = get_option( Wizards\Newspack\Recirculation_Section::RELATED_POSTS_OPTION );
+		if ( is_numeric( $related_posts_max_age ) && 0 < $related_posts_max_age ) {
+			$date_range['from'] = strtotime( '-' . $related_posts_max_age . ' months' );
+			$date_range['to']   = time();
+		}
+
+		return $date_range;
 	}
 }
 Jetpack::init();

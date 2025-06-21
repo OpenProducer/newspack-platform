@@ -253,7 +253,7 @@ final class Newspack_Popups_Data_Api {
 	 */
 	public static function checkout_cart_item_data( $cart_item_data ) {
 		$popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
-		if ( ! empty( $gate_post_id ) ) {
+		if ( ! empty( $popup_id ) ) {
 			$cart_item_data['newspack_popup_id'] = $popup_id;
 		}
 		return $cart_item_data;

@@ -30,8 +30,7 @@ class Default_Image {
 		add_filter( 'attachment_fields_to_save', [ __CLASS__, 'save_attachement_settings' ], 10, 2 );
 		add_filter( 'attachment_fields_to_edit', [ __CLASS__, 'add_attachment_field' ], 10, 2 );
 		add_action( 'template_redirect', [ __CLASS__, 'handle_not_found_image' ] );
-		add_action( 'wp_head', [ __CLASS__, 'add_404_image_handler_function' ] );
-		add_filter( 'the_content', [ __CLASS__, 'add_onerror_to_images' ] );
+		add_action( 'wp_footer', [ __CLASS__, 'add_404_image_handler_function' ] );
 	}
 
 	/**
@@ -93,49 +92,25 @@ class Default_Image {
 	 * Add JavaScript function to handle 404 images.
 	 * If an image is served from a different domain, the `template_redirect` action won't catch a 404.
 	 * Adding a JS fallback ensures all images will have the default applied.
-	 *
-	 * Note that a better approach would be to use `img.addEventListener` here, instead of
-	 * adding the `onerror` attribute in `add_onerror_to_images` method, but
-	 * the event listener way for some reason did not work in testing. This solution
-	 * is less elegant, but more robust.
 	 */
 	public static function add_404_image_handler_function() {
 		$default_image_url = get_option( self::OPTION_NAME );
 		if ( ! empty( $default_image_url ) ) {
-			echo '<script>
-				function newspackHandleImageError(img) {
-					if (!img.dataset.defaultImageHandled) {
-						img.dataset.defaultImageHandled = true;
-						img.src = "' . esc_js( $default_image_url ) . '";
-					}
-				}
-			</script>';
-		}
-	}
+			?>
+				<script>
+					document.querySelectorAll('img').forEach(function(imgEl) {
+						imgEl.addEventListener('error', function(){
+							if (!imgEl.hasAttribute('data-404-handled')) {
+								imgEl.setAttribute('data-404-handled', 'true');
+								imgEl.src = "<?php echo esc_js( $default_image_url ); ?>";
+								imgEl.removeAttribute('srcset');
+							}
+						})
+					})
+				</script>
+			<?php
 
-	/**
-	 * Add the onerror attribute to all img elements in the content.
-	 *
-	 * @param string $content The post content.
-	 * @return string Modified content with onerror attributes.
-	 */
-	public static function add_onerror_to_images( $content ) {
-		$content = preg_replace_callback(
-			'/<img[^>]+>/i',
-			function ( $matches ) {
-				if ( strpos( $matches[0], 'onerror=' ) === false ) {
-					return preg_replace(
-						'/<img/',
-						'<img onerror="if (typeof newspackHandleImageError === \'function\') newspackHandleImageError(this);"',
-						$matches[0],
-						1
-					);
-				}
-				return $matches[0];
-			},
-			$content
-		);
-		return $content;
+		}
 	}
 }
 Default_Image::init();
