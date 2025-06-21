@@ -22,6 +22,7 @@ class WooCommerce {
 		add_filter( 'woocommerce_rest_prepare_shop_order_object', [ __CLASS__, 'modify_shop_order_wc_rest_api_payload' ] );
 		add_filter( 'woocommerce_create_pages', [ __CLASS__, 'use_shortcodes_for_cart_checkout' ] );
 		add_filter( 'get_user_option_default_password_nag', [ __CLASS__, 'disable_default_password_nag' ] );
+		add_filter( 'woocommerce_order_again_cart_item_data', [ __CLASS__, 'order_again_cart_item_data' ], 10, 3 );
 	}
 
 	/**
@@ -76,6 +77,21 @@ class WooCommerce {
 	 */
 	public static function disable_default_password_nag( $value ) {
 		return false;
+	}
+
+	/**
+	 * Flag reordered cart items.
+	 *
+	 * @param array     $cart_item_data The cart item data.
+	 * @param array     $item           The cart item.
+	 * @param \WC_Order $order          The order.
+	 *
+	 * @return array
+	 */
+	public static function order_again_cart_item_data( $cart_item_data, $item, $order ) {
+		$cart_item_data['newspack_order_again'] = true;
+		$cart_item_data['newspack_order_again_order_id'] = $order->get_id();
+		return $cart_item_data;
 	}
 }
 WooCommerce::init();

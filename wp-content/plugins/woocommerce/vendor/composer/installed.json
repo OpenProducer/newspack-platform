@@ -1455,33 +1455,71 @@
         },
         {
             "name": "woocommerce/blueprint",
-            "version": "dev-add/blueprint-package-1",
-            "version_normalized": "dev-add/blueprint-package-1",
+            "version": "0.0.1",
+            "version_normalized": "0.0.1.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/php/blueprint",
-                "reference": "4eac6cb480be161204cb4fbf81567215592daecc"
+                "reference": "f996d43977196b9670d783b58c167243950876d3"
             },
             "require": {
                 "opis/json-schema": "^2.3"
             },
             "require-dev": {
-                "mockery/mockery": "^1.5",
-                "phpunit/phpunit": "^9"
+                "automattic/jetpack-changelogger": "3.3.0",
+                "mockery/mockery": "^1.6",
+                "phpunit/phpunit": "^9",
+                "woocommerce/woocommerce-sniffs": "^1.0.0",
+                "yoast/phpunit-polyfills": "^2.0"
             },
-            "type": "library",
+            "type": "wordpress-plugin",
+            "extra": {
+                "changelogger": {
+                    "formatter": {
+                        "filename": "../../../tools/changelogger/class-legacy-core-formatter.php"
+                    },
+                    "types": {
+                        "fix": "Fixes an existing bug",
+                        "add": "Adds functionality",
+                        "update": "Update existing functionality",
+                        "dev": "Development related task",
+                        "tweak": "A minor adjustment to the codebase",
+                        "performance": "Address performance issues",
+                        "enhancement": "Improve existing functionality"
+                    },
+                    "changelog": "changelog.md"
+                }
+            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Automattic\\WooCommerce\\Blueprint\\": "src/",
+                    "Automattic\\WooCommerce\\Blueprint\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
                     "Automattic\\WooCommerce\\Blueprint\\Tests\\": "tests/"
                 }
+            },
+            "scripts": {
+                "test:setup": [
+                    "wp-env start"
+                ],
+                "test:unit": [
+                    "wp-env run tests-cli --env-cwd=wp-content/plugins/blueprint ./vendor/bin/phpunit"
+                ],
+                "phpcs": [
+                    "phpcs -s -p"
+                ],
+                "phpcbf": [
+                    "phpcbf -p"
+                ]
             },
             "transport-options": {
                 "symlink": false,
                 "relative": true
             },
-            "install-path": "../woocommerce/blueprint"
+            "install-path": "../../packages/blueprint"
         },
         {
             "name": "woocommerce/email-editor",

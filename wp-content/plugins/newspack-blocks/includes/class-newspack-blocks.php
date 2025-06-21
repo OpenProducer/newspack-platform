@@ -839,14 +839,18 @@ class Newspack_Blocks {
 		$tags = get_the_terms( $post_id, 'post_tag' );
 		if ( ! empty( $tags ) ) {
 			foreach ( $tags as $tag ) {
-				$classes[] = 'tag-' . $tag->slug;
+				if ( ! empty( $tag->slug ) ) {
+					$classes[] = 'tag-' . $tag->slug;
+				}
 			}
 		}
 
 		$categories = get_the_terms( $post_id, 'category' );
 		if ( ! empty( $categories ) ) {
 			foreach ( $categories as $cat ) {
-				$classes[] = 'category-' . $cat->slug;
+				if ( ! empty( $cat->slug ) ) {
+					$classes[] = 'category-' . $cat->slug;
+				}
 			}
 		}
 
@@ -854,7 +858,9 @@ class Newspack_Blocks {
 			$terms = get_the_terms( $post_id, $tax['slug'] );
 			if ( ! empty( $terms ) ) {
 				foreach ( $terms as $term ) {
-					$classes[] = $term->taxonomy . '-' . $term->slug;
+					if ( ! empty( $term->taxonomy ) && ! empty( $term->slug ) ) {
+						$classes[] = $term->taxonomy . '-' . $term->slug;
+					}
 				}
 			}
 		}
@@ -1498,6 +1504,10 @@ class Newspack_Blocks {
 			$currency_symbol     = function_exists( 'get_woocommerce_currency_symbol' ) ? \get_woocommerce_currency_symbol() : '&#36;';
 			$wc_formatted_amount = '<span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">' . $currency_symbol . '</span>AMOUNT_PLACEHOLDER</bdi></span> FREQUENCY_PLACEHOLDER';
 		} else {
+			// If it's a float but with no decimal value, treat it as an int.
+			if ( is_float( $amount ) && floor( $amount ) == $amount ) {
+				$amount = (int) $amount;
+			}
 			// Format the amount with currency symbol and separators.
 			$amount_string = \wc_price(
 				$amount,

@@ -1,3 +1,59 @@
+## [1.18.1](https://github.com/Automattic/newspack-block-theme/compare/v1.18.0...v1.18.1) (2025-06-16)
+
+
+### Bug Fixes
+
+* have header inherit position if mobile or desktop header has a custom position ([#346](https://github.com/Automattic/newspack-block-theme/issues/346)) ([eb08ace](https://github.com/Automattic/newspack-block-theme/commit/eb08ace2689b7c94bc92b4d96ddc2c25e20c22aa))
+
+## [1.18.1-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.18.0...v1.18.1-alpha.1) (2025-06-05)
+
+
+### Bug Fixes
+
+* have header inherit position if mobile or desktop header has a custom position ([#346](https://github.com/Automattic/newspack-block-theme/issues/346)) ([eb08ace](https://github.com/Automattic/newspack-block-theme/commit/eb08ace2689b7c94bc92b4d96ddc2c25e20c22aa))
+
+# [1.18.0](https://github.com/Automattic/newspack-block-theme/compare/v1.17.0...v1.18.0) (2025-06-02)
+
+
+### Features
+
+* **featured-image:** overwrite link style when it's the caption ([#339](https://github.com/Automattic/newspack-block-theme/issues/339)) ([cad839e](https://github.com/Automattic/newspack-block-theme/commit/cad839e4e3d96de4b5067b428849d01b1a205edd))
+
+# [1.18.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.17.0...v1.18.0-alpha.1) (2025-05-23)
+
+
+### Features
+
+* **featured-image:** overwrite link style when it's the caption ([#339](https://github.com/Automattic/newspack-block-theme/issues/339)) ([cad839e](https://github.com/Automattic/newspack-block-theme/commit/cad839e4e3d96de4b5067b428849d01b1a205edd))
+
+# [1.17.0](https://github.com/Automattic/newspack-block-theme/compare/v1.16.0...v1.17.0) (2025-05-14)
+
+
+### Bug Fixes
+
+* only use text-wrap pretty for headings ([#338](https://github.com/Automattic/newspack-block-theme/issues/338)) ([7bf5940](https://github.com/Automattic/newspack-block-theme/commit/7bf5940b791e07889428fd3bd38a0822a99007f8))
+* remove atomic-proxy-bar style ([e3f49c4](https://github.com/Automattic/newspack-block-theme/commit/e3f49c44781dc51483fbab2ca9e88ae937446ff9))
+
+
+### Features
+
+* add atomic-proxy-bar style ([#332](https://github.com/Automattic/newspack-block-theme/issues/332)) ([d95a9a8](https://github.com/Automattic/newspack-block-theme/commit/d95a9a8b9c866c989294a2de799682a32f3e6fec))
+* **templates:** add wide and wide no-title ([#331](https://github.com/Automattic/newspack-block-theme/issues/331)) ([e10a4a5](https://github.com/Automattic/newspack-block-theme/commit/e10a4a573be4ec830e48fbc6538a853146f9526c))
+
+# [1.17.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.16.0...v1.17.0-alpha.1) (2025-04-23)
+
+
+### Bug Fixes
+
+* only use text-wrap pretty for headings ([#338](https://github.com/Automattic/newspack-block-theme/issues/338)) ([7bf5940](https://github.com/Automattic/newspack-block-theme/commit/7bf5940b791e07889428fd3bd38a0822a99007f8))
+* remove atomic-proxy-bar style ([e3f49c4](https://github.com/Automattic/newspack-block-theme/commit/e3f49c44781dc51483fbab2ca9e88ae937446ff9))
+
+
+### Features
+
+* add atomic-proxy-bar style ([#332](https://github.com/Automattic/newspack-block-theme/issues/332)) ([d95a9a8](https://github.com/Automattic/newspack-block-theme/commit/d95a9a8b9c866c989294a2de799682a32f3e6fec))
+* **templates:** add wide and wide no-title ([#331](https://github.com/Automattic/newspack-block-theme/issues/331)) ([e10a4a5](https://github.com/Automattic/newspack-block-theme/commit/e10a4a573be4ec830e48fbc6538a853146f9526c))
+
 # [1.16.0](https://github.com/Automattic/newspack-block-theme/compare/v1.15.1...v1.16.0) (2025-04-14)
 
 

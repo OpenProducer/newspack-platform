@@ -1463,4 +1463,19 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		$ac_usage_reports = new Newspack_Newsletters_Constant_Contact_Usage_Reports();
 		return $ac_usage_reports->get_usage_report();
 	}
+
+	/**
+	 * Get configuration for conditional tag support.
+	 *
+	 * @return array
+	 */
+	public static function get_conditional_tag_support() {
+		return [
+			'support_url' => '',
+			'example'     => [
+				'before' => '',
+				'after'  => '',
+			],
+		];
+	}
 }

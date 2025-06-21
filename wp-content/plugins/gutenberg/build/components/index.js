@@ -31366,18 +31366,18 @@ function useInputControlStateReducer(stateReducer = initialStateReducer, initial
 
 ;// ./packages/components/build-module/utils/with-ignore-ime-events.js
 /**
- * A higher-order function that wraps a keydown event handler to ensure it is not an IME event.
+ * A higher-order function that wraps a keyboard event handler to ensure it is not an IME event.
  *
  * In CJK languages, an IME (Input Method Editor) is used to input complex characters.
- * During an IME composition, keydown events (e.g. Enter or Escape) can be fired
+ * During an IME composition, keyboard events (e.g. Enter or Escape) can be fired
  * which are intended to control the IME and not the application.
  * These events should be ignored by any application logic.
  *
- * @param keydownHandler The keydown event handler to execute after ensuring it was not an IME event.
+ * @param handler The keyboard event handler to execute after ensuring it was not an IME event.
  *
  * @return A wrapped version of the given event handler that ignores IME events.
  */
-function withIgnoreIMEEvents(keydownHandler) {
+function withIgnoreIMEEvents(handler) {
   return event => {
     const {
       isComposing
@@ -31389,7 +31389,7 @@ function withIgnoreIMEEvents(keydownHandler) {
     event.keyCode === 229) {
       return;
     }
-    keydownHandler(event);
+    handler(event);
   };
 }
 
@@ -31557,19 +31557,6 @@ function InputField({
     }
   });
   const dragProps = isDragEnabled ? dragGestureProps() : {};
-  /*
-   * Works around the odd UA (e.g. Firefox) that does not focus inputs of
-   * type=number when their spinner arrows are pressed.
-   */
-  let handleOnMouseDown;
-  if (type === 'number') {
-    handleOnMouseDown = event => {
-      props.onMouseDown?.(event);
-      if (event.currentTarget !== event.currentTarget.ownerDocument.activeElement) {
-        event.currentTarget.focus();
-      }
-    };
-  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Input, {
     ...props,
     ...dragProps,
@@ -31581,7 +31568,6 @@ function InputField({
     onBlur: handleOnBlur,
     onChange: handleOnChange,
     onKeyDown: withIgnoreIMEEvents(handleOnKeyDown),
-    onMouseDown: handleOnMouseDown,
     ref: ref,
     inputSize: size
     // Fallback to `''` to avoid "uncontrolled to controlled" warning.
@@ -33159,7 +33145,7 @@ const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
  */
 const ALL_UNICODE_DASH_CHARACTERS = new RegExp(/[\u007e\u00ad\u2053\u207b\u208b\u2212\p{Pd}]/gu);
 const normalizeTextString = value => {
-  return remove_accents_default()(value).toLocaleLowerCase().replace(ALL_UNICODE_DASH_CHARACTERS, '-');
+  return remove_accents_default()(value).normalize('NFKC').toLocaleLowerCase().replace(ALL_UNICODE_DASH_CHARACTERS, '-');
 };
 
 /**
@@ -38373,6 +38359,21 @@ const ColorfulWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  tru
   target: "ez9hsf40"
 } : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:", config_values.radiusFull, ";margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
 
+;// ./packages/icons/build-module/library/check.js
+/**
+ * WordPress dependencies
+ */
+
+
+const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
+  })
+});
+/* harmony default export */ const library_check = (check);
+
 ;// ./packages/icons/build-module/library/copy.js
 /**
  * WordPress dependencies
@@ -38446,7 +38447,8 @@ const ColorCopyButton = props => {
       }
     };
   }, []);
-  const label = copiedColor === color.toHex() ? (0,external_wp_i18n_namespaceObject.__)('Copied!') : (0,external_wp_i18n_namespaceObject.__)('Copy');
+  const isCopied = copiedColor === color.toHex();
+  const label = isCopied ? (0,external_wp_i18n_namespaceObject.__)('Copied!') : (0,external_wp_i18n_namespaceObject.__)('Copy');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
     delay: 0,
     hideOnClick: false,
@@ -38455,7 +38457,7 @@ const ColorCopyButton = props => {
       size: "compact",
       "aria-label": label,
       ref: copyRef,
-      icon: library_copy,
+      icon: isCopied ? library_check : library_copy,
       showTooltip: false
     })
   });
@@ -39084,21 +39086,6 @@ const LegacyAdapter = props => {
  */
 
 const CircularOptionPickerContext = (0,external_wp_element_namespaceObject.createContext)({});
-
-;// ./packages/icons/build-module/library/check.js
-/**
- * WordPress dependencies
- */
-
-
-const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
-  })
-});
-/* harmony default export */ const library_check = (check);
 
 ;// ./packages/components/build-module/circular-option-picker/circular-option-picker-option.js
 /**
@@ -47085,7 +47072,6 @@ function SuggestionsList({
   const listRef = (0,external_wp_compose_namespaceObject.useRefEffect)(listNode => {
     // only have to worry about scrolling selected suggestion into view
     // when already expanded.
-    let rafId;
     if (selectedIndex > -1 && scrollIntoView && listNode.children[selectedIndex]) {
       listNode.children[selectedIndex].scrollIntoView({
         behavior: 'instant',
@@ -47093,11 +47079,6 @@ function SuggestionsList({
         inline: 'nearest'
       });
     }
-    return () => {
-      if (rafId !== undefined) {
-        cancelAnimationFrame(rafId);
-      }
-    };
   }, [selectedIndex, scrollIntoView]);
   const handleHover = suggestion => {
     return () => {
@@ -47110,12 +47091,12 @@ function SuggestionsList({
     };
   };
   const computeSuggestionMatch = suggestion => {
-    const matchText = displayTransform(match).toLocaleLowerCase();
+    const matchText = displayTransform(match).normalize('NFKC').toLocaleLowerCase();
     if (matchText.length === 0) {
       return null;
     }
     const transformedSuggestion = displayTransform(suggestion);
-    const indexOfMatch = transformedSuggestion.toLocaleLowerCase().indexOf(matchText);
+    const indexOfMatch = transformedSuggestion.normalize('NFKC').toLocaleLowerCase().indexOf(matchText);
     return {
       suggestionBeforeMatch: transformedSuggestion.substring(0, indexOfMatch),
       suggestionMatch: transformedSuggestion.substring(indexOfMatch, indexOfMatch + matchText.length),
@@ -47269,12 +47250,12 @@ function UnforwardedSpinner({
 /**
  * `Spinner` is a component used to notify users that their action is being processed.
  *
- * ```js
- *   import { Spinner } from '@wordpress/components';
+ * ```jsx
+ * import { Spinner } from '@wordpress/components';
  *
- *   function Example() {
- *     return <Spinner />;
- *   }
+ * function Example() {
+ * 	return <Spinner />;
+ * }
  * ```
  */
 const Spinner = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedSpinner);
@@ -56142,6 +56123,7 @@ const upload = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
  */
 function DropZoneComponent({
   className,
+  icon = library_upload,
   label,
   onFilesDrop,
   onHTMLDrop,
@@ -56219,7 +56201,7 @@ function DropZoneComponent({
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "components-drop-zone__content-inner",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
-          icon: library_upload,
+          icon: icon,
           className: "components-drop-zone__content-icon"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
           className: "components-drop-zone__content-text",
@@ -56788,7 +56770,7 @@ const MediaWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ?
 } : 0);
 const MediaContainer = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "eeew7dm7"
-} : 0)("align-items:center;border-radius:", config_values.radiusSmall, ";cursor:pointer;display:inline-flex;justify-content:center;margin:auto;position:relative;height:100%;&:after{border-radius:inherit;bottom:0;box-shadow:inset 0 0 0 1px rgba( 0, 0, 0, 0.1 );content:'';left:0;pointer-events:none;position:absolute;right:0;top:0;}img,video{border-radius:inherit;box-sizing:border-box;display:block;height:auto;margin:0;max-height:100%;max-width:100%;pointer-events:none;user-select:none;width:auto;}" + ( true ? "" : 0));
+} : 0)("align-items:center;border-radius:", config_values.radiusSmall, ";cursor:pointer;display:inline-flex;justify-content:center;margin:auto;position:relative;height:100%;&:after{border-radius:inherit;bottom:0;box-shadow:inset 0 0 0 1px rgba( 0, 0, 0, 0.1 );content:'';left:0;pointer-events:none;position:absolute;right:0;top:0;}img,video{border-radius:inherit;box-sizing:border-box;display:block;height:auto;margin:0;max-height:100%;max-width:100%;pointer-events:none;user-select:none;width:100%;}" + ( true ? "" : 0));
 const MediaPlaceholder = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "eeew7dm6"
 } : 0)("background:", COLORS.gray[100], ";border-radius:inherit;box-sizing:border-box;height:", INITIAL_BOUNDS.height, "px;max-width:280px;min-width:", INITIAL_BOUNDS.width, "px;width:100%;" + ( true ? "" : 0));
@@ -58384,9 +58366,9 @@ function FormTokenField(props) {
     if (match.length === 0) {
       _suggestions = _suggestions.filter(suggestion => !normalizedValue.includes(suggestion));
     } else {
-      match = match.toLocaleLowerCase();
+      match = match.normalize('NFKC').toLocaleLowerCase();
       _suggestions.forEach(suggestion => {
-        const index = suggestion.toLocaleLowerCase().indexOf(match);
+        const index = suggestion.normalize('NFKC').toLocaleLowerCase().indexOf(match);
         if (normalizedValue.indexOf(suggestion) === -1) {
           if (index === 0) {
             startsWithMatch.push(suggestion);
@@ -65009,6 +64991,7 @@ function SandBox({
  */
 
 
+
 const NOTICE_TIMEOUT = 10000;
 
 /**
@@ -65111,17 +65094,21 @@ function UnforwardedSnackbar({
       }), children, actions.map(({
         label,
         onClick,
-        url
-      }, index) => {
-        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-          __next40pxDefaultSize: true,
-          href: url,
-          variant: "link",
-          onClick: event => onActionClick(event, onClick),
-          className: "components-snackbar__action",
-          children: label
-        }, index);
-      }), explicitDismiss && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        url,
+        openInNewTab = false
+      }, index) => url !== undefined && openInNewTab ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_link, {
+        href: url,
+        onClick: event => onActionClick(event, onClick),
+        className: "components-snackbar__action",
+        children: label
+      }, index) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+        __next40pxDefaultSize: true,
+        href: url,
+        variant: "link",
+        onClick: event => onActionClick(event, onClick),
+        className: "components-snackbar__action",
+        children: label
+      }, index)), explicitDismiss && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
         role: "button",
         "aria-label": (0,external_wp_i18n_namespaceObject.__)('Dismiss this notice'),
         tabIndex: 0,
@@ -66180,7 +66167,7 @@ const inputStyleNeutral = /*#__PURE__*/emotion_react_browser_esm_css("box-shadow
 const inputStyleFocus = /*#__PURE__*/emotion_react_browser_esm_css("border-color:", COLORS.theme.accent, ";box-shadow:0 0 0 calc( ", config_values.borderWidthFocus, " - ", config_values.borderWidth, " ) ", COLORS.theme.accent, ";outline:2px solid transparent;" + ( true ? "" : 0),  true ? "" : 0);
 const StyledTextarea = /*#__PURE__*/emotion_styled_base_browser_esm("textarea",  true ? {
   target: "e1w5nnrk0"
-} : 0)("width:100%;display:block;font-family:", font('default.fontFamily'), ";line-height:20px;padding:9px 11px;", inputStyleNeutral, ";font-size:", font('mobileTextMinFontSize'), ";", breakpoint('small'), "{font-size:", font('default.fontSize'), ";}&:focus{", inputStyleFocus, ";}&::-webkit-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}.is-dark-theme &{&::-webkit-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}}" + ( true ? "" : 0));
+} : 0)("width:100%;display:block;font-family:", font('default.fontFamily'), ";line-height:20px;background:", COLORS.theme.background, ";color:", COLORS.theme.foreground, ";padding:9px 11px;", inputStyleNeutral, ";font-size:", font('mobileTextMinFontSize'), ";", breakpoint('small'), "{font-size:", font('default.fontSize'), ";}&:focus{", inputStyleFocus, ";}&::-webkit-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}.is-dark-theme &{&::-webkit-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}}" + ( true ? "" : 0));
 
 ;// ./packages/components/build-module/textarea-control/index.js
 /**
@@ -72348,6 +72335,7 @@ function Badge({
 
 
 
+
 const privateApis = {};
 lock(privateApis, {
   __experimentalPopoverLegacyPositionToPlacement: positionToPlacement,
@@ -72356,7 +72344,9 @@ lock(privateApis, {
   Theme: theme,
   Menu: menu_Menu,
   kebabCase: kebabCase,
-  Badge: badge
+  withIgnoreIMEEvents: withIgnoreIMEEvents,
+  Badge: badge,
+  normalizeTextString: normalizeTextString
 });
 
 ;// ./packages/components/build-module/index.js

@@ -275,7 +275,7 @@ final class Placements {
 		/**
 		 * Default placement data to return if not configured or stored yet.
 		 */
-		$default_data = wp_parse_args(
+		$data = wp_parse_args(
 			isset( $config['data'] ) ? $config['data'] : [],
 			[
 				'enabled'  => isset( $config['default_enabled'] ) ? $config['default_enabled'] : false,
@@ -284,10 +284,14 @@ final class Placements {
 			]
 		);
 
-		$data = wp_parse_args(
-			json_decode( get_option( self::get_option_name( $placement_key ) ), true ) ?? [],
-			$default_data
-		);
+		// This check is on purpose. The show_ui key we look for is either be absent or set to true.
+		// Placements without admin UI will not have config stored in WP options.
+		if ( ! isset( $config['show_ui'] ) || ! empty( $config['show_ui'] ) ) {
+			$data = wp_parse_args(
+				json_decode( get_option( self::get_option_name( $placement_key ) ), true ) ?? [],
+				$data
+			);
+		}
 
 		// Generate unique ID if not yet stored.
 		if ( isset( $data['ad_unit'] ) && $data['ad_unit'] && ! isset( $data['id'] ) ) {

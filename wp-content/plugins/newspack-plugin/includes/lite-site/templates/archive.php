@@ -5,6 +5,8 @@
  * @package newspack
  */
 
+namespace Newspack;
+
 ?>
 <!DOCTYPE html>
 <html lang="<?php bloginfo( 'language' ); ?>">

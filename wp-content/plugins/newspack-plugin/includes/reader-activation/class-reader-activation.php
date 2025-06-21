@@ -2067,8 +2067,9 @@ final class Reader_Activation {
 				if ( \is_wp_error( $user ) ) {
 					return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( 'Password not recognized, try again.', 'newspack-plugin' ) ) );
 				}
-				$authenticated            = self::set_current_reader( $user->ID );
+				$authenticated = self::set_current_reader( $user->ID );
 				$payload['authenticated'] = \is_wp_error( $authenticated ) ? 0 : 1;
+				$payload['existing_user'] = \is_wp_error( $authenticated ) ? 0 : 1;
 				$metadata['login_method'] = 'auth-form-password';
 				break;
 			case 'link':

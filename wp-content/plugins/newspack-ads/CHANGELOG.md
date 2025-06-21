@@ -1,3 +1,24 @@
+## [3.5.4](https://github.com/Automattic/newspack-ads/compare/v3.5.3...v3.5.4) (2025-06-16)
+
+
+### Bug Fixes
+
+* **suppress-ads:** check whether post type supports meta ([#947](https://github.com/Automattic/newspack-ads/issues/947)) ([1bf9f22](https://github.com/Automattic/newspack-ads/commit/1bf9f22287393126beb3e0a52aa7d468d6a66584))
+
+## [3.5.3](https://github.com/Automattic/newspack-ads/compare/v3.5.2...v3.5.3) (2025-06-10)
+
+
+### Bug Fixes
+
+* avoid using get_option with random IDs [NPPM-2029] ([#956](https://github.com/Automattic/newspack-ads/issues/956)) ([3cc4201](https://github.com/Automattic/newspack-ads/commit/3cc4201bb47c749adae484def99e182dd200545a))
+
+## [3.5.2](https://github.com/Automattic/newspack-ads/compare/v3.5.1...v3.5.2) (2025-06-09)
+
+
+### Bug Fixes
+
+* **deps:** bump googleads/googleads-php-lib from 65.0.0 to 69.0.0 ([#950](https://github.com/Automattic/newspack-ads/issues/950)) ([27b0574](https://github.com/Automattic/newspack-ads/commit/27b0574e8f18d27f452b40ff8b29db886090d0ff))
+
 ## [3.5.1](https://github.com/Automattic/newspack-ads/compare/v3.5.0...v3.5.1) (2025-05-14)
 
 

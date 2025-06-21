@@ -11,6 +11,7 @@
  */
 
 use Automattic\Jetpack\Constants;
+use Automattic\WooCommerce\Internal\Admin\EmailImprovements\EmailImprovements;
 use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableDataStore;
 use Automattic\WooCommerce\Utilities\{ FeaturesUtil, OrderUtil, PluginUtil };
 use Automattic\WooCommerce\Internal\Utilities\BlocksUtil;
@@ -252,7 +253,7 @@ class WC_Tracker {
 		$theme_data           = wp_get_theme();
 		$theme_child_theme    = wc_bool_to_string( is_child_theme() );
 		$theme_wc_support     = wc_bool_to_string( current_theme_supports( 'woocommerce' ) );
-		$theme_is_block_theme = wc_bool_to_string( wc_current_theme_is_fse_theme() );
+		$theme_is_block_theme = wc_bool_to_string( wp_is_block_theme() );
 
 		return array(
 			'name'        => $theme_data->Name, // @phpcs:ignore
@@ -337,7 +338,7 @@ class WC_Tracker {
 	 *
 	 * @return array
 	 */
-	private static function get_all_plugins() {
+	public static function get_all_plugins() {
 		// Ensure get_plugins function is loaded.
 		if ( ! function_exists( 'get_plugins' ) ) {
 			include ABSPATH . '/wp-admin/includes/plugin.php';
@@ -1015,7 +1016,7 @@ class WC_Tracker {
 	 *
 	 * @return array
 	 */
-	private static function get_all_template_overrides() {
+	public static function get_all_template_overrides() {
 		$override_data = array();
 		/**
 		 * Filter the paths to scan for template overrides.
@@ -1188,7 +1189,7 @@ class WC_Tracker {
 	 */
 	private static function get_mini_cart_info() {
 		$mini_cart_block_name = 'woocommerce/mini-cart';
-		$mini_cart_block_data = wc_current_theme_is_fse_theme() ? BlocksUtil::get_block_from_template_part( $mini_cart_block_name, 'header' ) : BlocksUtil::get_blocks_from_widget_area( $mini_cart_block_name );
+		$mini_cart_block_data = wp_is_block_theme() ? BlocksUtil::get_block_from_template_part( $mini_cart_block_name, 'header' ) : BlocksUtil::get_blocks_from_widget_area( $mini_cart_block_name );
 		return array(
 			'mini_cart_used'             => empty( $mini_cart_block_data[0] ) ? 'No' : 'Yes',
 			'mini_cart_block_attributes' => empty( $mini_cart_block_data[0] ) ? array() : $mini_cart_block_data[0]['attrs'],
@@ -1452,6 +1453,7 @@ class WC_Tracker {
 		return array(
 			'enabled'                        => get_option( 'woocommerce_feature_email_improvements_enabled', 'no' ),
 			'default_enabled'                => get_option( 'woocommerce_email_improvements_default_enabled', 'no' ),
+			'existing_store_enabled'         => get_option( 'woocommerce_email_improvements_existing_store_enabled', 'no' ),
 			'auto_sync_enabled'              => get_option( 'woocommerce_email_auto_sync_with_theme', 'no' ),
 			'first_enabled_at'               => get_option( 'woocommerce_email_improvements_first_enabled_at', null ),
 			'last_enabled_at'                => get_option( 'woocommerce_email_improvements_last_enabled_at', null ),
@@ -1472,7 +1474,7 @@ class WC_Tracker {
 	 * @return array Array with counts of enabled and disabled emails.
 	 */
 	private static function get_core_email_status_counts() {
-		$core_emails = self::get_core_emails();
+		$core_emails = EmailImprovements::get_core_emails();
 		$enabled     = 0;
 		$disabled    = 0;
 
@@ -1494,34 +1496,13 @@ class WC_Tracker {
 	 * Check if any core emails are being overridden by a template override.
 	 *
 	 * @param array $template_overrides Template overrides.
-	 * @return bool True if core emails are being overridden, false otherwise.
+	 * @return array Array with count of core email overrides and the templates that are overriden.
 	 */
-	private static function get_core_email_overrides( $template_overrides ) {
-		$core_emails            = self::get_core_emails();
-		$core_email_templates   = array_map(
-			function ( $email ) {
-				return basename( $email->template_html );
-			},
-			$core_emails
-		);
-		$intersecting_templates = array_intersect( $core_email_templates, $template_overrides );
+	public static function get_core_email_overrides( $template_overrides ): array {
+		$email_template_overrides = EmailImprovements::get_core_email_overrides( $template_overrides );
 		return array(
-			'count'     => count( $intersecting_templates ),
-			'templates' => $intersecting_templates,
-		);
-	}
-
-	/**
-	 * Get all core emails.
-	 *
-	 * @return array Core emails.
-	 */
-	private static function get_core_emails() {
-		return array_filter(
-			WC()->mailer()->get_emails(),
-			function ( $email ) {
-				return strpos( get_class( $email ), 'WC_Email_' ) === 0;
-			}
+			'count'     => count( $email_template_overrides ),
+			'templates' => $email_template_overrides,
 		);
 	}
 }

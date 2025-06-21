@@ -71,6 +71,19 @@ amp-script .sponsor-label {
 	top: calc(100% + 5px);
 	width: 300px;
 	z-index: 5;
+	a {
+		background: none;
+		border: none;
+		padding: 0;
+		margin: 0;
+		text-transform: none;
+		text-decoration: underline !important;
+		&:hover {
+			opacity: 1 !important;
+			background: none;
+			color: inherit;
+		}
+	}
 }
 
 .sponsor-label .sponsor-info {

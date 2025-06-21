@@ -2102,6 +2102,21 @@ const moveBlockToWidgetArea = (clientId, widgetAreaId) => async ({
  *
  * @param {string} lockName The lock name.
  *
+ * @example
+ * ```js
+ * import { store as widgetStore } from '@wordpress/edit-widgets';
+ * import { useDispatch } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ * 	const { unlockWidgetSaving } = useDispatch( widgetStore );
+ * 	return (
+ * 		<Button onClick={ () => unlockWidgetSaving( 'lockName' ) }>
+ * 			{ __( 'Unlock Widget Saving' ) }
+ * 		</Button>
+ * 	);
+ * };
+ * ```
+ *
  * @return {Object} Action object
  */
 function unlockWidgetSaving(lockName) {
@@ -2115,6 +2130,21 @@ function unlockWidgetSaving(lockName) {
  * Returns an action object used to signal that widget saving is locked.
  *
  * @param {string} lockName The lock name.
+ *
+ * @example
+ * ```js
+ * import { store as widgetStore } from '@wordpress/edit-widgets';
+ * import { useDispatch } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ * 	const { lockWidgetSaving } = useDispatch( widgetStore );
+ * 	return (
+ * 		<Button onClick={ () => lockWidgetSaving( 'lockName' ) }>
+ * 			{ __( 'Lock Widget Saving' ) }
+ * 		</Button>
+ * 	);
+ * };
+ * ```
  *
  * @return {Object} Action object
  */
@@ -2444,6 +2474,26 @@ function isListViewOpened(state) {
  * Returns whether widget saving is locked.
  *
  * @param {Object} state Global application state.
+ *
+ * @example
+ * ```jsx
+ * import { __ } from '@wordpress/i18n';
+ * import { store as widgetStore } from '@wordpress/edit-widgets';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ * 	const isSavingLocked = useSelect(
+ * 		( select ) => select( widgetStore ).isWidgetSavingLocked(),
+ * 		[]
+ * 	);
+ *
+ * 	return isSavingLocked ? (
+ * 		<p>{ __( 'Widget saving is locked' ) }</p>
+ * 	) : (
+ * 		<p>{ __( 'Widget saving is not locked' ) }</p>
+ * 	);
+ * };
+ * ```
  *
  * @return {boolean} Is locked.
  */

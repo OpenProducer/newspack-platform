@@ -1,12 +1,12 @@
 <?php
 /**
- * This file is part of the MailPoet Email Editor package.
+ * This file is part of the WooCommerce Email Editor package.
  *
- * @package MailPoet\EmailEditor
+ * @package Automattic\WooCommerce\EmailEditor
  */
 
 declare(strict_types = 1);
-namespace MailPoet\EmailEditor\Engine;
+namespace Automattic\WooCommerce\EmailEditor\Engine;
 
 use WP_Block_Template;
 use WP_Post;
@@ -70,7 +70,7 @@ class Theme_Controller {
 		$theme->merge( $this->core_theme );
 		$theme->merge( $this->base_theme );
 
-		return apply_filters( 'mailpoet_email_editor_theme_json', $theme );
+		return apply_filters( 'woocommerce_email_editor_theme_json', $theme );
 	}
 
 	/**
@@ -217,19 +217,22 @@ class Theme_Controller {
 			$css_blocks .= $this->get_theme()->get_styles_for_block( $block_metadata );
 		}
 
+		// Remove `:root :where(...)` selectors since they are not supported in the CSS inliner.
+		$css_blocks = preg_replace( '/:root\s:where\((.*?)\)/', '$1', $css_blocks );
+
 		// Element specific styles.
 		$elements_styles = $this->get_theme()->get_raw_data()['styles']['elements'] ?? array();
 
 		// Because the section styles is not a part of the output the `get_styles_block_nodes` method, we need to get it separately.
 		if ( $template && $template->wp_id ) {
-			$template_theme    = (array) get_post_meta( $template->wp_id, 'mailpoet_email_theme', true );
+			$template_theme    = (array) get_post_meta( $template->wp_id, Email_Editor::WOOCOMMERCE_EMAIL_META_THEME_TYPE, true );
 			$template_styles   = (array) ( $template_theme['styles'] ?? array() );
 			$template_elements = $template_styles['elements'] ?? array();
 			$elements_styles   = array_replace_recursive( (array) $elements_styles, (array) $template_elements );
 		}
 
 		if ( $post ) {
-			$post_theme      = (array) get_post_meta( $post->ID, 'mailpoet_email_theme', true );
+			$post_theme      = (array) get_post_meta( $post->ID, 'woocommerce_email_theme', true );
 			$post_styles     = (array) ( $post_theme['styles'] ?? array() );
 			$post_elements   = $post_styles['elements'] ?? array();
 			$elements_styles = array_replace_recursive( (array) $elements_styles, (array) $post_elements );

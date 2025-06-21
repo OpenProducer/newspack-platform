@@ -9,6 +9,7 @@ namespace Newspack_Blocks\Checkout_Button;
 
 use Newspack_Blocks;
 use Newspack_Blocks\Modal_Checkout;
+use Newspack_Blocks\Modal_Checkout\Checkout_Data;
 
 /**
  * Register the block.
@@ -108,6 +109,15 @@ function render_callback( $attributes ) {
 		$hidden_fields .= $after_success_url ? '<input type="hidden" name="after_success_url" value="' . esc_attr( $after_success_url ) . '" />' : '';
 	}
 
+	ob_start();
+	/**
+	 * Fires when generating hidden fields for the checkout button.
+	 *
+	 * @param array $attributes Block attributes.
+	 */
+	do_action( 'newspack_blocks_checkout_button_hidden_fields', $attributes );
+	$hidden_fields .= ob_get_clean();
+
 	// Generate the form.
 	if ( function_exists( 'wc_get_product' ) ) {
 		$product = wc_get_product( $product_id );
@@ -115,15 +125,6 @@ function render_callback( $attributes ) {
 			return '';
 		}
 
-		$frequency = '';
-		if ( class_exists( '\WC_Subscriptions_Product' ) && \WC_Subscriptions_Product::is_subscription( $product ) ) {
-			$frequency = \WC_Subscriptions_Product::get_period( $product );
-		}
-
-		// Get the product type.
-		$product_type = \Newspack_Blocks\Tracking\Data_Events::get_product_type( $product_id );
-
-		$name      = $product->get_name();
 		$price     = $product->get_price();
 		$min_price = '';
 		if ( ! empty( $attributes['price'] ) ) {
@@ -135,37 +136,8 @@ function render_callback( $attributes ) {
 			$min_price = \WC_Name_Your_Price_Helpers::get_minimum_price( $product_id );
 		}
 
-		$is_variable           = $attributes['is_variable'];
-		$variation_id          = $attributes['variation'];
-		$product_price_summary = Modal_Checkout::get_summary_card_price_string( $name, $price, $frequency );
-
-		// If this is a variable product without a variation picked, we're not sure about the frequency.
-		$recurrence = ! empty( $frequency ) ? $frequency : 'once';
-		if ( $is_variable && empty( $variation_id ) ) {
-			$recurrence = '';
-		}
-
-		$product_data = [
-			'action_type'  => 'checkout_button',
-			'currency'     => function_exists( 'get_woocommerce_currency' ) ? \get_woocommerce_currency() : 'USD',
-			'is_variable'  => $is_variable,
-			'product_id'   => $product_id,
-			'product_type' => $product_type,
-			'recurrence'   => $recurrence,
-			'referrer'     => substr( \get_permalink(), strlen( home_url() ) ),
-		];
-
-		if ( ! $is_variable || $variation_id ) {
-			$product_data['price']                 = $price;
-			$product_data['product_price_summary'] = $product_price_summary;
-		}
-
-		if ( $variation_id ) {
-			// We're doing a lot of shuffling around to get the "right" product ID, variation ID, and product type for GA4.
-			$product_data['product_id']   = $product->get_parent_id(); // Reset Product ID as parent ID.
-			$product_data['product_type'] = \Newspack_Blocks\Tracking\Data_Events::get_product_type( $product->get_parent_id() );
-			$product_data['variation_id'] = $product_id; // Overwrite us setting the product ID as the variation ID.
-		}
+		$is_variable  = $attributes['is_variable'];
+		$variation_id = $attributes['variation'];
 
 		// Check if the button should be output: it needs a price, or needs to be a product with variations to pick.
 		if ( $min_price && ! $price ) {
@@ -175,9 +147,12 @@ function render_callback( $attributes ) {
 			return '';
 		}
 
+		$checkout_data = Checkout_Data::get_checkout_data( $product );
+		$checkout_data['is_variable'] = $is_variable;
+
 		$form = sprintf(
-			'<form data-product="%1$s">%2$s %3$s</form>',
-			esc_attr( wp_json_encode( $product_data ) ),
+			'<form data-checkout="%1$s">%2$s %3$s</form>',
+			esc_attr( wp_json_encode( $checkout_data ) ),
 			$button,
 			$hidden_fields
 		);

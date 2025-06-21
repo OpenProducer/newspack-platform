@@ -936,25 +936,29 @@ function newspack_register_meta() {
 		)
 	);
 
-	register_post_meta(
-		'post',
-		'newspack_hide_updated_date',
-		array(
-			'show_in_rest' => true,
-			'single'       => true,
-			'type'         => 'boolean',
-		)
-	);
+	$updated_date_post_types = newspack_get_updated_date_supported_post_types();
 
-	register_post_meta(
-		'post',
-		'newspack_show_updated_date',
-		array(
-			'show_in_rest' => true,
-			'single'       => true,
-			'type'         => 'boolean',
-		)
-	);
+	foreach ( $updated_date_post_types as $post_type ) {
+		register_post_meta(
+			$post_type,
+			'newspack_hide_updated_date',
+			array(
+				'show_in_rest' => true,
+				'single'       => true,
+				'type'         => 'boolean',
+			)
+		);
+
+		register_post_meta(
+			$post_type,
+			'newspack_show_updated_date',
+			array(
+				'show_in_rest' => true,
+				'single'       => true,
+				'type'         => 'boolean',
+			)
+		);
+	}
 
 	register_post_meta(
 		'page',
@@ -1187,9 +1191,9 @@ function newspack_get_post_toggle_post_types() {
 	$hide_date_post_types = [];
 	$show_date_post_types = [];
 	if ( true === get_theme_mod( 'post_updated_date', false ) ) {
-		$hide_date_post_types[] = 'post';
+		$hide_date_post_types = newspack_get_updated_date_supported_post_types();
 	} else {
-		$show_date_post_types[] = 'post';
+		$show_date_post_types = newspack_get_updated_date_supported_post_types();
 	}
 
 	return array(

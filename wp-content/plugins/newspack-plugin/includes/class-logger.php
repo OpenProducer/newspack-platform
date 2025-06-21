@@ -89,8 +89,8 @@ class Logger {
 	 * @param string $type      The type of log. Defaults to 'error'.
 	 * @param string $log_level The Log level.
 	 */
-	public static function newspack_log( $code, $message, $data, $type = 'error', $log_level = 2 ) {
-		$email = '';
+	public static function newspack_log( $code, $message, $data = [], $type = 'error', $log_level = 2 ) {
+		$email = wp_get_current_user()->user_email;
 		if ( isset( $data['user_email'] ) ) {
 			$email = $data['user_email'];
 			unset( $data['user_email'] );
@@ -100,6 +100,15 @@ class Logger {
 			$file = $data['file'];
 			unset( $data['file'] );
 		}
+		$data = array_merge(
+			$data,
+			[
+				// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
+				'user_agent' => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : 'N/A',
+				'referrer'   => isset( $_SERVER['HTTP_REFERER'] ) ? esc_url( $_SERVER['HTTP_REFERER'] ) : 'N/A',
+				// phpcs:enable
+			]
+		);
 		do_action(
 			'newspack_log',
 			$code,

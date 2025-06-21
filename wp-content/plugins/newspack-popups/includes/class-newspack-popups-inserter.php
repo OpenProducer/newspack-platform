@@ -623,12 +623,6 @@ final class Newspack_Popups_Inserter {
 			return;
 		}
 
-		// Don't enqueue assets if prompts are disabled on this post.
-		$has_disabled_prompts = is_singular() && ! empty( get_post_meta( get_the_ID(), 'newspack_popups_has_disabled_popups', true ) );
-		if ( $has_disabled_prompts ) {
-			return;
-		}
-
 		if ( self::should_show_admin_ui() ) {
 			$admin_script_handle = self::ADMIN_SCRIPT_HANDLE;
 			\wp_register_script(
@@ -674,7 +668,8 @@ final class Newspack_Popups_Inserter {
 			);
 
 			$script_data = [
-				'debug' => self::should_log_debug_info(),
+				'debug'                => self::should_log_debug_info(),
+				'has_disabled_prompts' => is_singular() && ! empty( get_post_meta( get_the_ID(), 'newspack_popups_has_disabled_popups', true ) ) && ! Newspack_Popups::is_preview_request(),
 			];
 
 			if ( Newspack_Popups::$segmentation_enabled ) {

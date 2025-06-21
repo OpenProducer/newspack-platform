@@ -1,3 +1,30 @@
+## [3.15.1](https://github.com/Automattic/newspack-newsletters/compare/v3.15.0...v3.15.1) (2025-06-16)
+
+
+### Bug Fixes
+
+* dont check for current provider before init ([#1836](https://github.com/Automattic/newspack-newsletters/issues/1836)) ([860e71a](https://github.com/Automattic/newspack-newsletters/commit/860e71aa20c66a72a8e10e0650445045111b71e9))
+
+# [3.15.0](https://github.com/Automattic/newspack-newsletters/compare/v3.14.0...v3.15.0) (2025-06-02)
+
+
+### Bug Fixes
+
+* dont check for current provider before init ([#1836](https://github.com/Automattic/newspack-newsletters/issues/1836)) ([1d95e58](https://github.com/Automattic/newspack-newsletters/commit/1d95e582b68634886249896625829ed4a2cc5747))
+
+
+### Features
+
+* allow ESP provider extension ([#1828](https://github.com/Automattic/newspack-newsletters/issues/1828)) ([030c71c](https://github.com/Automattic/newspack-newsletters/commit/030c71cacc886751e6b680a7ba87d40706d65862)), closes [#1829](https://github.com/Automattic/newspack-newsletters/issues/1829)
+* starting reorganizing esp abstraction ([#1758](https://github.com/Automattic/newspack-newsletters/issues/1758)) ([5fd89fc](https://github.com/Automattic/newspack-newsletters/commit/5fd89fc06d25d146017df61b9d8bd80466495565))
+
+# [3.14.0](https://github.com/Automattic/newspack-newsletters/compare/v3.13.0...v3.14.0) (2025-05-27)
+
+
+### Features
+
+* dont allow redirect to arbitrary urls ([#1834](https://github.com/Automattic/newspack-newsletters/issues/1834)) ([251f6cc](https://github.com/Automattic/newspack-newsletters/commit/251f6cc3d23fe42a04ff75a72e7624885da3fddd)), closes [#1635](https://github.com/Automattic/newspack-newsletters/issues/1635)
+
 # [3.13.0](https://github.com/Automattic/newspack-newsletters/compare/v3.12.2...v3.13.0) (2025-05-14)
 
 

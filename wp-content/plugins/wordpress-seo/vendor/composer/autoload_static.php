@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7681a32885cab0ae4a60538eda9543f7
+class ComposerStaticInit7261f9708891ac6c29d2e04c8939f88b
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -1016,6 +1016,39 @@ class ComposerStaticInit7681a32885cab0ae4a60538eda9543f7
         'Yoast\\WP\\SEO\\Introductions\\User_Interface\\Introductions_Integration' => __DIR__ . '/../..' . '/src/introductions/user-interface/introductions-integration.php',
         'Yoast\\WP\\SEO\\Introductions\\User_Interface\\Introductions_Seen_Route' => __DIR__ . '/../..' . '/src/introductions/user-interface/introductions-seen-route.php',
         'Yoast\\WP\\SEO\\Introductions\\User_Interface\\Wistia_Embed_Permission_Route' => __DIR__ . '/../..' . '/src/introductions/user-interface/wistia-embed-permission-route.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\File\\Commands\\Populate_File_Command_Handler' => __DIR__ . '/../..' . '/src/llms-txt/application/file/commands/populate-file-command-handler.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\File\\Commands\\Remove_File_Command_Handler' => __DIR__ . '/../..' . '/src/llms-txt/application/file/commands/remove-file-command-handler.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\File\\Llms_Txt_Cron_Scheduler' => __DIR__ . '/../..' . '/src/llms-txt/application/file/llms-txt-cron-scheduler.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Health_Check\\File_Check' => __DIR__ . '/../..' . '/src/llms-txt/application/health-check/file-check.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Health_Check\\File_Runner' => __DIR__ . '/../..' . '/src/llms-txt/application/health-check/file-runner.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Description_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/description-builder.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Intro_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/intro-builder.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Link_Lists_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/link-lists-builder.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Markdown_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/markdown-builder.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Title_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/title-builder.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Escaper' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-escaper.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\File\\Llms_File_System_Interface' => __DIR__ . '/../..' . '/src/llms-txt/domain/file/llms-file-system-interface.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\File\\Llms_Txt_Permission_Gate_Interface' => __DIR__ . '/../..' . '/src/llms-txt/domain/file/llms-txt-permission-gate-interface.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Markdown\\Items\\Item_Interface' => __DIR__ . '/../..' . '/src/llms-txt/domain/markdown/items/item-interface.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Markdown\\Items\\Link' => __DIR__ . '/../..' . '/src/llms-txt/domain/markdown/items/link.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Markdown\\Llms_Txt_Renderer' => __DIR__ . '/../..' . '/src/llms-txt/domain/markdown/llms-txt-renderer.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Markdown\\Sections\\Description' => __DIR__ . '/../..' . '/src/llms-txt/domain/markdown/sections/description.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Markdown\\Sections\\Intro' => __DIR__ . '/../..' . '/src/llms-txt/domain/markdown/sections/intro.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Markdown\\Sections\\Link_List' => __DIR__ . '/../..' . '/src/llms-txt/domain/markdown/sections/link-list.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Markdown\\Sections\\Section_Interface' => __DIR__ . '/../..' . '/src/llms-txt/domain/markdown/sections/section-interface.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Markdown\\Sections\\Title' => __DIR__ . '/../..' . '/src/llms-txt/domain/markdown/sections/title.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\File\\WordPress_File_System_Adapter' => __DIR__ . '/../..' . '/src/llms-txt/infrastructure/file/wordpress-file-system-adapter.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\File\\WordPress_Llms_Txt_Permission_Gate' => __DIR__ . '/../..' . '/src/llms-txt/infrastructure/file/wordpress-llms-txt-permission-gate.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\Markdown_Services\\Content_Types_Collector' => __DIR__ . '/../..' . '/src/llms-txt/infrastructure/markdown-services/content-types-collector.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\Markdown_Services\\Description_Adapter' => __DIR__ . '/../..' . '/src/llms-txt/infrastructure/markdown-services/description-adapter.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\Markdown_Services\\Sitemap_Link_Collector' => __DIR__ . '/../..' . '/src/llms-txt/infrastructure/markdown-services/sitemap-link-collector.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\Markdown_Services\\Terms_Collector' => __DIR__ . '/../..' . '/src/llms-txt/infrastructure/markdown-services/terms-collector.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\Markdown_Services\\Title_Adapter' => __DIR__ . '/../..' . '/src/llms-txt/infrastructure/markdown-services/title-adapter.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\User_Interface\\Cleanup_Llms_Txt_On_Deactivation' => __DIR__ . '/../..' . '/src/llms-txt/user-interface/cleanup-llms-txt-on-deactivation.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\User_Interface\\Enable_Llms_Txt_Option_Watcher' => __DIR__ . '/../..' . '/src/llms-txt/user-interface/enable-llms-txt-option-watcher.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\User_Interface\\Health_Check\\File_Reports' => __DIR__ . '/../..' . '/src/llms-txt/user-interface/health-check/file-reports.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\User_Interface\\Llms_Txt_Cron_Callback_Integration' => __DIR__ . '/../..' . '/src/llms-txt/user-interface/llms-txt-cron-callback-integration.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\User_Interface\\Schedule_Population_On_Activation_Integration' => __DIR__ . '/../..' . '/src/llms-txt/user-interface/schedule-population-on-activation-integration.php',
         'Yoast\\WP\\SEO\\Loadable_Interface' => __DIR__ . '/../..' . '/src/loadable-interface.php',
         'Yoast\\WP\\SEO\\Loader' => __DIR__ . '/../..' . '/src/loader.php',
         'Yoast\\WP\\SEO\\Loggers\\Logger' => __DIR__ . '/../..' . '/src/loggers/logger.php',
@@ -1216,9 +1249,9 @@ class ComposerStaticInit7681a32885cab0ae4a60538eda9543f7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7681a32885cab0ae4a60538eda9543f7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7681a32885cab0ae4a60538eda9543f7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7681a32885cab0ae4a60538eda9543f7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7261f9708891ac6c29d2e04c8939f88b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7261f9708891ac6c29d2e04c8939f88b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7261f9708891ac6c29d2e04c8939f88b::$classMap;
 
         }, null, ClassLoader::class);
     }

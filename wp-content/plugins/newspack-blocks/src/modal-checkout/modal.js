@@ -10,8 +10,14 @@ import * as a11y from './accessibility.js';
  * Internal dependencies
  */
 import { manageDismissed, manageOpened } from './analytics';
-import { getProductDetails } from './analytics/ga4/utils';
-import { createHiddenInput, domReady } from './utils';
+import {
+	domReady,
+	iframeReady,
+	createHiddenInput,
+	triggerFormSubmit,
+	getCheckoutData,
+	getFormattedAmount,
+} from './utils';
 
 const CLASS_PREFIX = newspackBlocksModal.newspack_class_prefix;
 const IFRAME_NAME = 'newspack_modal_checkout_iframe';
@@ -20,10 +26,11 @@ const MODAL_CHECKOUT_ID = 'newspack_modal_checkout';
 const MODAL_CLASS_PREFIX = `${ CLASS_PREFIX }__modal`;
 const VARIATON_MODAL_CLASS_PREFIX = 'newspack-blocks__modal-variation';
 
-// Track the checkout state for analytics.
-let analyticsData = {};
 // Track the checkout intent to avoid multiple analytics events.
 let inCheckoutIntent = false;
+
+// Checkout title.
+let checkoutTitle = newspackBlocksModal.labels.checkout_modal_title;
 
 // Close the modal.
 const closeModal = el => {
@@ -44,6 +51,11 @@ window.onpageshow = event => {
 	}
 }
 
+// Register the "checkout closed" event.
+const checkoutClosedEvent = new CustomEvent( 'checkout-closed' );
+
+window.newspackRAS = window.newspackRAS || [];
+
 domReady( () => {
 	const modalCheckout = document.querySelector( `#${ MODAL_CHECKOUT_ID }` );
 	if ( ! modalCheckout ) {
@@ -60,44 +72,6 @@ domReady( () => {
 	iframe.name = IFRAME_NAME;
 	iframe.style.height = initialHeight;
 	iframe.style.visibility = 'hidden';
-
-	function iframeReady( cb ) {
-		if ( iframe._readyTimer ) {
-			clearTimeout( iframe._readyTimer );
-		}
-		let fired = false;
-
-		function ready() {
-			if ( ! fired ) {
-				fired = true;
-				clearTimeout( iframe._readyTimer );
-				cb.call( this );
-			}
-		}
-		function readyState() {
-			if ( this.readyState === "complete" ) {
-				ready.call( this );
-			}
-		}
-		function checkLoaded() {
-			if ( iframe._ready ) {
-				clearTimeout( iframe._readyTimer );
-				return;
-			}
-			const doc = iframe.contentDocument || iframe.contentWindow?.document;
-			if ( doc && doc.URL.indexOf('about:') !== 0 ) {
-				if ( doc?.readyState === 'complete' ) {
-					ready.call( doc );
-				} else {
-					doc.addEventListener( 'DOMContentLoaded', ready );
-					doc.addEventListener( 'readystatechange', readyState );
-				}
-			} else {
-				iframe._readyTimer = setTimeout( checkLoaded, 10 );
-			}
-		}
-		checkLoaded();
-	}
 
 	/**
 	 * Handle iframe load state.
@@ -116,6 +90,9 @@ domReady( () => {
 			}
 		}
 		const container = iframe?.contentDocument?.querySelector( `#${ IFRAME_CONTAINER_ID }` );
+		if ( ! container ) {
+			return;
+		}
 		const setModalReady = () => {
 			iframeResizeObserver.observe( container );
 			if ( spinner.style.display !== 'none' ) {
@@ -126,40 +103,42 @@ domReady( () => {
 			}
 			iframe._ready = true;
 		}
-		if ( container ) {
-			if ( container.checkoutComplete ) {
-				// Dispatch a checkout_completed event to RAS.
-				const params = getProductDetails( MODAL_CHECKOUT_ID );
-				window.newspackRAS = window.newspackRAS || [];
-				window.newspackRAS.push( function( ras ) {
-					ras.dispatchActivity( 'checkout_completed', params );
-				} );
+		const productDetails = container.querySelector( '#modal-checkout-product-details' );
+		const checkoutData = getCheckoutData( productDetails );
+		if ( container.checkoutComplete ) {
+			// Dispatch a `checkout_completed` activity to RAS.
+			window.newspackRAS.push( [ 'checkout_completed', checkoutData ] );
 
-				// Update the newsletters signup modal if it exists.
-				if ( window?.newspackReaderActivation?.refreshNewslettersSignupModal && window?.newspackReaderActivation?.getReader()?.email ) {
-					window.newspackReaderActivation.refreshNewslettersSignupModal( window.newspackReaderActivation.getReader().email );
-				}
+			// Update the newsletters signup modal if it exists.
+			if ( window?.newspackReaderActivation?.refreshNewslettersSignupModal && window?.newspackReaderActivation?.getReader()?.email ) {
+				window.newspackReaderActivation.refreshNewslettersSignupModal( window.newspackReaderActivation.getReader().email );
+			}
 
-				// Update the modal title and width to reflect successful transaction.
-				setModalSize( 'small' );
-				setModalTitle( newspackBlocksModal.labels.thankyou_modal_title );
-				setModalReady();
-				a11y.trapFocus( modalCheckout.querySelector( `.${ MODAL_CLASS_PREFIX }` ) );
-			} else {
-				// Revert modal title and width default value.
-				setModalSize();
-				setModalTitle( newspackBlocksModal.labels.checkout_modal_title );
-				if ( iframe.contentWindow?.newspackBlocksModalCheckout?.checkout_nonce ) {
-					// Store the checkout nonce for later use.
-					// We store the nonce from the iframe content window to ensure the nonce was generated for a logged in session
-					modalCheckout.checkout_nonce = iframe.contentWindow.newspackBlocksModalCheckout.checkout_nonce;
-				}
+			// Update the modal title and width to reflect successful transaction.
+			setModalSize( 'small' );
+			setModalTitle( newspackBlocksModal.labels.thankyou_modal_title );
+			setModalReady();
+			a11y.trapFocus( modalCheckout.querySelector( `.${ MODAL_CLASS_PREFIX }` ) );
+		} else {
+			// Make sure the order summary renders the correct text.
+			const summaryTextNode = productDetails?.querySelector( 'strong' );
+			if ( summaryTextNode ) {
+				summaryTextNode.textContent = checkoutData.price_summary;
 			}
-			if ( container.checkoutReady ) {
-				setModalReady();
-			} else {
-				container.addEventListener( 'checkout-ready', setModalReady );
+
+			// Revert modal title and width default value.
+			setModalSize();
+			setModalTitle( checkoutTitle );
+			if ( iframe.contentWindow?.newspackBlocksModalCheckout?.checkout_nonce ) {
+				// Store the checkout nonce for later use.
+				// We store the nonce from the iframe content window to ensure the nonce was generated for a logged in session
+				modalCheckout.checkout_nonce = iframe.contentWindow.newspackBlocksModalCheckout.checkout_nonce;
 			}
+		}
+		if ( container.checkoutReady ) {
+			setModalReady();
+		} else {
+			container.addEventListener( 'checkout-ready', setModalReady );
 		}
 	}
 
@@ -172,11 +151,13 @@ domReady( () => {
 	 * the session for a newly registered reader fails to carry the cart over to
 	 * the checkout.
 	 *
+	 * @param {Object} checkoutData The checkout data.
+	 *
 	 * @return {Promise} The promise that resolves with the checkout URL.
 	 */
-	const generateCart = ( formData ) => {
+	const generateCart = ( checkoutData ) => {
 		return new Promise( ( resolve, reject ) => {
-			const urlParams = new URLSearchParams( formData );
+			const urlParams = new URLSearchParams( checkoutData );
 			urlParams.append( 'action', 'modal_checkout_request' );
 			fetch( newspackBlocksModal.ajax_url + '?' + urlParams.toString() )
 				.then( res => {
@@ -196,7 +177,7 @@ domReady( () => {
 	/**
 	 * Empty cart via ajax.
 	 */
-	const emptyCart = () => {
+	const emptyCart = async () => {
 		const body = new FormData();
 		if ( ! newspackBlocksModal.has_unsupported_payment_gateway ) {
 			body.append( 'modal_checkout', '1' );
@@ -204,14 +185,18 @@ domReady( () => {
 		body.append( 'action', 'abandon_modal_checkout' );
 		body.append( '_wpnonce', modalCheckout.checkout_nonce );
 		modalCheckout.checkout_nonce = null;
-		fetch(
-			newspackBlocksModal.ajax_url,
-			{
-				method: 'POST',
-				body,
-			}
-		);
-	}
+		try {
+			await fetch(
+				newspackBlocksModal.ajax_url,
+				{
+					method: 'POST',
+					body,
+				}
+			);
+		} catch ( error ) {
+			console.warn( 'Unable to empty cart:', error ); // eslint-disable-line no-console
+		}
+	};
 
 	/**
 	 * Whether reader should be prompted with registration.
@@ -236,19 +221,45 @@ domReady( () => {
 		}
 		const form = ev.target;
 		form.classList.add( 'modal-processing' );
-		const productData = form.dataset.product;
-		if ( productData ) {
-			const data = JSON.parse( productData );
-			Object.keys( data ).forEach( key => {
+
+		const checkoutData = getCheckoutData( form );
+
+		const isDonateBlock = checkoutData.newspack_donate;
+		if ( isDonateBlock ) {
+			const frequency = checkoutData.donation_frequency;
+			const donationTiers = [
+				...form.querySelectorAll(
+					`.donation-tier__${ frequency }, .donation-frequency__${ frequency }`
+				)
+			];
+			const donationTierIndex = checkoutData.donation_tier_index;
+			let donationContainer, customAmount;
+			if ( donationTierIndex ) {
+				donationContainer = donationTiers[ donationTierIndex ];
+				customAmount = checkoutData[ `donation_value_${ frequency }` ];
+			} else {
+				donationContainer = donationTiers[ 0 ];
+				customAmount = checkoutData[ `donation_value_${ frequency }_untiered` ];
+			}
+			const donationData = getCheckoutData( donationContainer );
+			for( const key in donationData ) {
+				checkoutData[ key ] = donationData[ key ];
+			}
+			checkoutData.amount = customAmount;
+			checkoutData.price_summary = checkoutData.summary_template.replace( '{{PRICE}}', getFormattedAmount( checkoutData.amount, checkoutData.currency ) );
+		}
+
+		if ( checkoutData ) {
+			Object.keys( checkoutData ).forEach( key => {
 				const existingInputs = form.querySelectorAll( 'input[name="' +  key + '"]' );
 				if ( 0 === existingInputs.length ) {
-					form.appendChild( createHiddenInput( key, data[ key ] ) );
+					form.appendChild( createHiddenInput( key, checkoutData[ key ] ) );
 				}
 			} );
 		}
-		const formData = new FormData( form );
+
 		// If we're not going from variation picker to checkout, set the modal trigger:
-		if ( ! formData.get( 'variation_id' ) ) {
+		if ( ! checkoutData.variation_id ) {
 			modalTrigger = ev.submitter;
 		}
 		// Clear any open variation modal.
@@ -261,9 +272,9 @@ domReady( () => {
 		} );
 
 		// Trigger variation modal if variation is not selected.
-		if ( formData.get( 'is_variable' ) && ! formData.get( 'variation_id' ) ) {
+		if ( checkoutData.is_variable && ! checkoutData.variation_id ) {
 			const variationModal = [ ...variationModals ].find(
-				modal => modal.dataset.productId === formData.get( 'product_id' )
+				modal => modal.dataset.productId === checkoutData.product_id
 			);
 			if ( variationModal ) {
 				variationModal
@@ -277,12 +288,12 @@ domReady( () => {
 						].forEach( afterSuccessParam => {
 							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' +  afterSuccessParam + '"]' );
 							if ( 0 === existingInputs.length ) {
-								singleVariationForm.appendChild( createHiddenInput( afterSuccessParam, formData.get( afterSuccessParam ) ) );
+								singleVariationForm.appendChild( createHiddenInput( afterSuccessParam, checkoutData[ afterSuccessParam ] ) );
 							}
 						} );
 
 						// Append the product data hidden inputs.
-						const variationData = singleVariationForm.dataset.product;
+						const variationData = singleVariationForm.dataset.checkout;
 						if ( variationData ) {
 							const data = JSON.parse( variationData );
 							Object.keys( data ).forEach( key => {
@@ -300,34 +311,30 @@ domReady( () => {
 				openModal( variationModal );
 				a11y.trapFocus( variationModal, false );
 
-				// Set up some GA4 information.
-				const formAnalyticsData = form.getAttribute( 'data-product' );
-				analyticsData = formAnalyticsData ? JSON.parse( formAnalyticsData ) : {};
-
 				// For the variation modal we will not set `inCheckoutIntent = true` and
 				// let the `opened` event get triggered once the user selects a
 				// variation so we track the selection.
 				if ( ! inCheckoutIntent ) {
-					manageOpened( analyticsData );
+					manageOpened( checkoutData );
 				}
 
 				// Append product data info to the modal itself, so we can grab it for manageDismissed:
 				document
 					.getElementById( 'newspack_modal_checkout' )
-					.setAttribute( 'data-order-details', JSON.stringify( analyticsData ) );
+					.setAttribute( 'data-checkout', JSON.stringify( checkoutData ) );
 				return;
 			}
 		}
 
 		// Populate cart and redirect to checkout if there is an unsupported payment gateway.
 		if ( ! isModalCheckout && ! shouldPromptRegistration() ) {
-			generateCart( formData ).then( url => {
+			generateCart( checkoutData ).then( url => {
 				// Remove modal checkout query string and trailing question mark (if any).
 				window.location.href = url;
 			} );
 			// Add some animation to the Checkout Button while the non-modal checkout is loading.
 			// For now, don't do it when any popup opens, just when we go right to the checkout page.
-			if ( ! ( formData.get( 'is_variable' ) && ! formData.get( 'variation_id' ) ) ) {
+			if ( ! ( checkoutData.is_variable && ! checkoutData.variation_id ) ) {
 				const buttons = form.querySelectorAll( 'button[type=submit]:focus' );
 				buttons.forEach( button => {
 					button.classList.add( 'non-modal-checkout-loading' );
@@ -338,141 +345,21 @@ domReady( () => {
 			return;
 		}
 		form.classList.remove( 'modal-processing' );
-		const isDonateBlock = formData.get( 'newspack_donate' );
-		const isCheckoutButtonBlock = formData.get( 'newspack_checkout' );
-		// Set up some GA4 information.
-		if ( isCheckoutButtonBlock ) { // this fires on the second in-modal variations screen, too
-			const formAnalyticsData = form.getAttribute( 'data-product' );
-			analyticsData = formAnalyticsData ? JSON.parse( formAnalyticsData ) : {};
-		} else if ( isDonateBlock ) {
-			// Get donation information and append to the modal checkout for GA4:
-			const donationFreq = formData.get( 'donation_frequency' );
-			let donationValue = '';
-			let productId = '';
-
-			for ( const key of formData.keys() ) {
-				// Find values that match the frequency name, that aren't empty
-				if (
-					key.indexOf( 'donation_value_' + donationFreq ) >= 0 &&
-					'other' !== formData.get( key ) &&
-					'' !== formData.get( key )
-				) {
-					donationValue = formData.get( key );
-				}
-			}
-
-			// Get IDs for donation frequencies, and compare them to the selected frequency.
-			const freqIds = JSON.parse( formData.get( 'frequency_ids' ) );
-			for ( const freq in freqIds ) {
-				if ( freq === donationFreq ) {
-					productId = freqIds[freq].toString();
-				}
-			}
-
-			// Get product information together to be appended to the modal for GA4 events outside of the iframe.
-			analyticsData = {
-				amount: donationValue,
-				action_type: 'donation',
-				currency: formData.get( 'donation_currency' ),
-				product_id: productId,
-				product_type: 'donation',
-				recurrence: donationFreq,
-				referrer: formData.get( '_wp_http_referer' ),
-			};
-		}
-
-		// If the checkout started from a content gate, add the gate ID to the payload.
-		const gateId = formData.get( 'memberships_content_gate' );
-		if ( gateId ) {
-			analyticsData.gate_post_id = gateId;
-		}
-		const popupId = formData.get( 'newspack_popup_id' );
-		if ( popupId ) {
-			analyticsData.newspack_popup_id = popupId;
-		}
 
 		// Analytics.
 		if ( ! inCheckoutIntent ) {
-			manageOpened( analyticsData );
+			manageOpened( checkoutData );
 		}
 		inCheckoutIntent = true;
 
 		if ( shouldPromptRegistration() ) {
 			ev.preventDefault();
-			let content = '';
-			let price = '0';
-			let priceSummary = '';
 
-			if ( isDonateBlock ) {
-				const frequency = formData.get( 'donation_frequency' );
-				const donationTiers = form.querySelectorAll(
-					`.donation-tier__${ frequency }, .donation-frequency__${ frequency }`
-				);
-
-				if ( donationTiers?.length ) {
-					const donationTierIndex = formData.get( 'donation_tier_index' );
-
-					if ( ! donationTierIndex ) {
-						// Handle untiered and frequency donations.
-
-						const frequencyInputs = form.querySelectorAll(
-							`input[name="donation_value_${ frequency }"], input[name="donation_value_${ frequency }_untiered"]`
-						);
-
-						if ( frequencyInputs?.length ) {
-							// Handle frequency based donation tiers.
-							frequencyInputs.forEach( input => {
-								if ( input.checked && input.value !== 'other' ) {
-									price = input.value;
-								}
-							} );
-
-							donationTiers.forEach( el => {
-								const donationData = JSON.parse( el.dataset.product );
-								if ( donationData.hasOwnProperty( `donation_price_summary_${ frequency }` ) ) {
-									const priceData = donationData[ `donation_price_summary_${ frequency }` ];
-									const priceRegex = new RegExp( `(?<=\\D)${ price }(?=\\D)` );
-									if ( priceRegex.test( priceData ) ) {
-										priceSummary = priceData;
-									}
-								}
-
-								if ( price === '0' && priceSummary ) {
-									// Replace placeholder price with price input for other.
-									let otherPrice = formData.get( `donation_value_${ frequency }_other` );
-
-									// Fallback to untiered price if other price is not set.
-									if ( ! otherPrice ) {
-										otherPrice = formData.get( `donation_value_${ frequency }_untiered` );
-									}
-
-									if ( otherPrice ) {
-										priceSummary = priceSummary.replace( '0', otherPrice );
-									}
-								}
-							} );
-						}
-					} else {
-						const donationData = JSON.parse( donationTiers?.[ donationTierIndex ].dataset.product );
-						if ( donationData.hasOwnProperty( `donation_price_summary_${ frequency }` ) ) {
-							priceSummary = donationData[ `donation_price_summary_${ frequency }` ];
-						}
-					}
-				}
-			} else if ( isCheckoutButtonBlock ) {
-				const priceSummaryInput = form.querySelector( 'input[name="product_price_summary"]' );
-
-				if ( priceSummaryInput ) {
-					priceSummary = priceSummaryInput.value;
-				}
-			}
-
-			if ( priceSummary ) {
-				content = `<div class="order-details-summary ${ CLASS_PREFIX }__box ${ CLASS_PREFIX }__box--text-center"><p><strong>${ priceSummary }</strong></p></div>`;
-			}
+			const priceSummary = checkoutData.price_summary;
+			const content = priceSummary ? `<div class="order-details-summary ${ CLASS_PREFIX }__box ${ CLASS_PREFIX }__box--text-center"><p><strong>${ priceSummary }</strong></p></div>` : '';
 
 			// Generate cart asynchroneously.
-			const cartReq = generateCart( formData );
+			const cartReq = generateCart( checkoutData );
 
 			// Update pending checkout URL.
 			cartReq.then( url => {
@@ -490,10 +377,10 @@ domReady( () => {
 						// Populate cart and redirect to checkout if there is an unsupported payment gateway.
 						if ( ! isModalCheckout ) {
 							// Remove modal checkout query string, and trailing question mark (if any).
-							generateCart( formData ).then( window.location.href = url );
+							generateCart( checkoutData ).then( window.location.href = url );
 						} else {
 							const checkoutForm = generateCheckoutPageForm( url );
-							triggerCheckout( checkoutForm );
+							triggerFormSubmit( checkoutForm );
 						}
 					} )
 					.catch( error => {
@@ -506,9 +393,9 @@ domReady( () => {
 				},
 				onDismiss: () => {
 					// Analytics: Track a dismissal event (modal has been manually closed without completing the checkout).
-					manageDismissed( analyticsData );
+					manageDismissed( checkoutData );
 					inCheckoutIntent = false;
-					document.getElementById( 'newspack_modal_checkout' ).removeAttribute( 'data-order-details' );
+					document.getElementById( 'newspack_modal_checkout' ).removeAttribute( 'data-checkout' );
 				},
 				skipSuccess: true,
 				skipNewslettersSignup: true,
@@ -530,7 +417,7 @@ domReady( () => {
 			// Append product data info to the modal, so we can grab it for GA4 events outside of the iframe.
 			document
 				.getElementById( 'newspack_modal_checkout' )
-				.setAttribute( 'data-order-details', JSON.stringify( analyticsData ) );
+				.setAttribute( 'data-checkout', JSON.stringify( checkoutData ) );
 		}
 	};
 
@@ -582,6 +469,7 @@ domReady( () => {
 			iframe.style.height = iframeHeight + 'px';
 		}
 	} );
+
 	const closeCheckout = () => {
 		const container = iframe?.contentDocument?.querySelector( `#${ IFRAME_CONTAINER_ID }` );
 		const afterSuccessUrlInput = container?.querySelector( 'input[name="after_success_url"]' );
@@ -618,6 +506,8 @@ domReady( () => {
 			if ( modalTrigger ) {
 				modalTrigger.focus();
 			}
+
+			document.dispatchEvent( checkoutClosedEvent );
 		}
 
 		if ( container?.checkoutComplete ) {
@@ -648,19 +538,25 @@ domReady( () => {
 
 			// Ensure we always reset the modal title and width once the modal closes.
 			if ( shouldCloseModal ) {
+				checkoutTitle = newspackBlocksModal.labels.checkout_modal_title;
 				setModalSize();
-				setModalTitle( newspackBlocksModal.labels.checkout_modal_title );
+				setModalTitle( checkoutTitle );
 			}
 		} else {
 			window?.newspackReaderActivation?.setPendingCheckout?.();
 			// Analytics: Track a dismissal event (modal has been manually closed without completing the checkout).
 			manageDismissed();
 			inCheckoutIntent = false;
-			document.getElementById( 'newspack_modal_checkout' ).removeAttribute( 'data-order-details' );
+			document.getElementById( 'newspack_modal_checkout' ).removeAttribute( 'data-checkout' );
 		}
+		document.removeEventListener( 'keydown', handleKeydown );
 	};
 
-	const openCheckout = () => {
+	const openCheckout = ( url ) => {
+		if ( url ) {
+			iframe.src = url;
+		}
+
 		spinner.style.display = 'flex';
 		openModal( modalCheckout );
 		modalContent.appendChild( iframe );
@@ -673,6 +569,8 @@ domReady( () => {
 		a11y.trapFocus( modalCheckout, iframe );
 
 		iframeReady( handleIframeReady );
+
+		document.addEventListener( 'keydown', handleKeydown );
 	};
 
 	const openModal = el => {
@@ -715,8 +613,6 @@ domReady( () => {
 		}
 	};
 
-	window.newspackCloseModalCheckout = closeCheckout;
-
 	/**
 	 * Handle modal checkout close button.
 	 */
@@ -745,13 +641,13 @@ domReady( () => {
 	} );
 
 	/**
-	 * Close the modal with the escape key.
+	 * Escape key handler to close the modal checkout.
 	 */
-	document.addEventListener( 'keydown', function ( ev ) {
+	const handleKeydown = ev => {
 		if ( ev.key === 'Escape' ) {
 			closeCheckout();
 		}
-	} );
+	};
 
 	/**
 	 * Handle modal checkout triggers.
@@ -771,15 +667,6 @@ domReady( () => {
 			} );
 		} );
 
-	/**
-	 * Triggers checkout form submit.
-	 *
-	 * @param {HTMLFormElement} form The form element.
-	 */
-	const triggerCheckout = form => {
-		// form.submit does not trigger submit event listener, so we use requestSubmit.
-		form.requestSubmit( form.querySelector( 'button[type="submit"]' ) );
-	}
 
 	/**
 	 * Handle donation form triggers.
@@ -830,7 +717,7 @@ domReady( () => {
 				}
 			} );
 		if ( form ) {
-			triggerCheckout( form );
+			triggerFormSubmit( form );
 		}
 	}
 
@@ -850,7 +737,7 @@ domReady( () => {
 			if ( variationModal ) {
 				const forms = variationModal.querySelectorAll( `form[target="${ IFRAME_NAME }"]` );
 				forms.forEach( variationForm => {
-					const productData = JSON.parse( variationForm.dataset.product );
+					const productData = JSON.parse( variationForm.dataset.checkout );
 					if ( productData?.variation_id === Number( variationId ) ) {
 						form = variationForm;
 					}
@@ -863,14 +750,14 @@ domReady( () => {
 				if ( ! checkoutButtonForm ) {
 					return;
 				}
-				const productData = JSON.parse( checkoutButtonForm.dataset.product );
+				const productData = JSON.parse( checkoutButtonForm.dataset.checkout );
 				if ( productData?.product_id === productId ) {
 					form = checkoutButtonForm;
 				}
 			} );
 		}
 		if ( form ) {
-			triggerCheckout( form );
+			triggerFormSubmit( form );
 		}
 	}
 
@@ -901,11 +788,103 @@ domReady( () => {
 			const url = window.newspackReaderActivation?.getPendingCheckout?.();
 			if ( url ) {
 				const form = generateCheckoutPageForm( url );
-				triggerCheckout( form );
+				triggerFormSubmit( form );
 			}
 		}
 		// Remove the URL param to prevent re-triggering.
 		window.history.replaceState( null, null, window.location.pathname );
 	};
 	handleModalCheckoutUrlParams();
+
+	/**
+	 * Open the modal checkout.
+	 *
+	 * @param {Object}   options                    Modal checkout options object.
+	 * @param {string}   options.title              The title to set for the modal.
+	 * @param {string}   options.actionType         The action type to set for the modal.
+	 * @param {Object}   options.afterSuccess       The after success configuration object.
+	 * @param {Function} options.onCheckoutComplete The callback to call when the checkout is complete.
+	 * @param {Function} options.onClose            The callback to call when the modal is closed.
+	 */
+	window.newspackOpenModalCheckout = ( {
+		title = null,
+		actionType = null,
+		afterSuccess = {},
+		onCheckoutComplete = null,
+		onClose = null,
+	} ) => {
+		/**
+		 * Title configuration.
+		 */
+		checkoutTitle = title || newspackBlocksModal.labels.checkout_modal_title;
+		// Set the modal title early, even though it may be overridden by the modal content.
+		setModalTitle( checkoutTitle );
+
+		/**
+		 * Start with the default checkout URL.
+		 */
+		const url = new URL( newspackBlocksModal.checkout_url );
+
+		/**
+		 * Custom action type configuration.
+		 */
+		if ( actionType ) {
+			url.searchParams.set( 'action_type', actionType );
+		}
+
+		/**
+		 * After success parameters.
+		 */
+		if ( afterSuccess?.url ) {
+			url.searchParams.set( 'after_success_url', afterSuccess.url );
+		}
+		if ( afterSuccess?.behavior || afterSuccess?.url ) {
+			url.searchParams.set( 'after_success_behavior', afterSuccess.behavior || 'custom' );
+		}
+		if ( afterSuccess?.buttonLabel ) {
+			url.searchParams.set( 'after_success_button_label', afterSuccess.buttonLabel );
+		}
+
+		/**
+		 * On checkout complete callback.
+		 */
+		if ( onCheckoutComplete ) {
+			const handleCheckoutComplete = ( { detail: { action, data } } ) => {
+				if ( action !== 'checkout_completed' ) {
+					return;
+				}
+				onCheckoutComplete( data );
+			};
+			window.newspackRAS.push( ras => {
+				ras.on( 'activity', handleCheckoutComplete );
+				// Unsubscribe from the checkout complete event when the modal is closed.
+				const closeHandler = () => {
+					ras.off( 'activity', handleCheckoutComplete );
+					document.removeEventListener( 'checkout-closed', closeHandler );
+				};
+				document.addEventListener( 'checkout-closed', closeHandler );
+			} );
+		}
+
+		/**
+		 * On close callback.
+		 */
+		if ( onClose ) {
+			const closeHandler = () => {
+				onClose();
+				document.removeEventListener( 'checkout-closed', closeHandler );
+			};
+			document.addEventListener( 'checkout-closed', closeHandler );
+		}
+
+		/**
+		 * Open the modal checkout.
+		 */
+		openCheckout( url.toString() );
+	};
+
+	/**
+	 * Close the modal checkout.
+	 */
+	window.newspackCloseModalCheckout = closeCheckout;
 } );

@@ -240,8 +240,21 @@ function DefaultErrorResponsePlaceholder({
 }
 function DefaultLoadingResponsePlaceholder({
   children,
-  showLoader
+  isLoading
 }) {
+  const [showLoader, setShowLoader] = (0,external_wp_element_namespaceObject.useState)(false);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!isLoading) {
+      setShowLoader(false);
+      return;
+    }
+
+    // Schedule showing the Spinner after 1 second.
+    const timeout = setTimeout(() => {
+      setShowLoader(true);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     style: {
       position: 'relative'
@@ -271,7 +284,6 @@ function ServerSideRender(props) {
     LoadingResponsePlaceholder = DefaultLoadingResponsePlaceholder
   } = props;
   const isMountedRef = (0,external_wp_element_namespaceObject.useRef)(false);
-  const [showLoader, setShowLoader] = (0,external_wp_element_namespaceObject.useState)(false);
   const fetchRequestRef = (0,external_wp_element_namespaceObject.useRef)();
   const [response, setResponse] = (0,external_wp_element_namespaceObject.useState)(null);
   const prevProps = (0,external_wp_compose_namespaceObject.usePrevious)(props);
@@ -293,11 +305,6 @@ function ServerSideRender(props) {
       urlQueryArgs
     } = latestPropsRef.current;
     setIsLoading(true);
-
-    // Schedule showing the Spinner after 1 second.
-    const timeout = setTimeout(() => {
-      setShowLoader(true);
-    }, 1000);
     let sanitizedAttributes = attributes && (0,external_wp_blocks_namespaceObject.__experimentalSanitizeBlockAttributes)(block, attributes);
     if (skipBlockSupportAttributes) {
       sanitizedAttributes = removeBlockSupportAttributes(sanitizedAttributes);
@@ -332,9 +339,6 @@ function ServerSideRender(props) {
     }).finally(() => {
       if (isMountedRef.current && fetchRequest === fetchRequestRef.current) {
         setIsLoading(false);
-        // Cancel the timeout to show the Spinner.
-        setShowLoader(false);
-        clearTimeout(timeout);
       }
     });
     return fetchRequest;
@@ -364,7 +368,7 @@ function ServerSideRender(props) {
   if (isLoading) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LoadingResponsePlaceholder, {
       ...props,
-      showLoader: showLoader,
+      isLoading: isLoading,
       children: hasResponse && !hasError && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.RawHTML, {
         className: className,
         children: response

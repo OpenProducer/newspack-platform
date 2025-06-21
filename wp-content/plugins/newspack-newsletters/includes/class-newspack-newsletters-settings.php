@@ -47,36 +47,31 @@ class Newspack_Newsletters_Settings {
 	 * @return array Settings list.
 	 */
 	public static function get_settings_list() {
+
+		$esp_list = [
+			[
+				'name'  => esc_html__( 'Select service provider', 'newspack-newsletter' ),
+				'value' => '',
+			],
+		];
+
+		foreach ( Newspack_Newsletters::get_registered_providers() as $provider_slug => $provider ) {
+			$esp_list[] = [
+				'name'  => $provider['name'],
+				'value' => $provider_slug,
+			];
+		}
+
+		$esp_list[] = [
+			'name'  => esc_html__( 'Manual / Other', 'newspack-newsletters' ),
+			'value' => 'manual',
+		];
+
 		$settings_list = array(
 			array(
 				'description' => esc_html__( 'Service Provider', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_service_provider',
-				'options'     => array(
-					array(
-						'name'  => esc_html__( 'Select service provider', 'newspack-newsletter' ),
-						'value' => '',
-					),
-					array(
-						'name'  => esc_html__( 'Mailchimp', 'newspack-newsletters' ),
-						'value' => 'mailchimp',
-					),
-					array(
-						'name'  => esc_html__( 'Constant Contact', 'newspack-newsletters' ),
-						'value' => 'constant_contact',
-					),
-					array(
-						'name'  => esc_html__( 'Campaign Monitor', 'newspack-newsletters' ),
-						'value' => 'campaign_monitor',
-					),
-					array(
-						'name'  => esc_html__( 'ActiveCampaign', 'newspack-newsletters' ),
-						'value' => 'active_campaign',
-					),
-					array(
-						'name'  => esc_html__( 'Manual / Other', 'newspack-newsletters' ),
-						'value' => 'manual',
-					),
-				),
+				'options'     => $esp_list,
 				'type'        => 'select',
 				'onboarding'  => true,
 			),
@@ -84,7 +79,7 @@ class Newspack_Newsletters_Settings {
 				'description' => esc_html__( 'Mailchimp API Key', 'newspack-newsletters' ),
 				'key'         => 'newspack_mailchimp_api_key',
 				'type'        => 'text',
-				'default'     => get_option( 'newspack_newsletters_mailchimp_api_key', '' ),
+				'default'     => get_option( 'newspack_mailchimp_api_key', get_option( 'newspack_newsletters_mailchimp_api_key' ) ),
 				'provider'    => 'mailchimp',
 				'placeholder' => esc_attr( '123457103961b1f4dc0b2b2fd59c137b-us1' ),
 				'help'        => esc_html__( 'Find or generate your API key', 'newspack-newsletter' ),
@@ -103,20 +98,6 @@ class Newspack_Newsletters_Settings {
 				'key'         => 'newspack_newsletters_constant_contact_api_secret',
 				'type'        => 'text',
 				'provider'    => 'constant_contact',
-				'onboarding'  => true,
-			),
-			array(
-				'description' => esc_html__( 'Campaign Monitor API Key', 'newspack-newsletters' ),
-				'key'         => 'newspack_newsletters_campaign_monitor_api_key',
-				'type'        => 'text',
-				'provider'    => 'campaign_monitor',
-				'onboarding'  => true,
-			),
-			array(
-				'description' => esc_html__( 'Campaign Monitor Client ID', 'newspack-newsletters' ),
-				'key'         => 'newspack_newsletters_campaign_monitor_client_id',
-				'type'        => 'text',
-				'provider'    => 'campaign_monitor',
 				'onboarding'  => true,
 			),
 			array(
@@ -182,6 +163,13 @@ class Newspack_Newsletters_Settings {
 				'onboarding'  => false,
 			);
 		}
+
+		/**
+		 * Filters the settings list.
+		 *
+		 * @param array $settings_list The settings list.
+		 */
+		$settings_list = apply_filters( 'newspack_newsletters_settings_list', $settings_list );
 
 		// Filter out options related to unsupported providers.
 		$supported_providers = Newspack_Newsletters::get_supported_providers();

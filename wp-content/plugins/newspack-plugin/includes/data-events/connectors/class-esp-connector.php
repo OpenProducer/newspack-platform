@@ -23,6 +23,8 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 	 */
 	public static function init_hooks() {
 		add_action( 'init', [ __CLASS__, 'register_handlers' ] );
+		// Store user data before deletion.
+		add_action( 'delete_user', [ __CLASS__, 'store_user_data_before_deletion' ], 5 );
 	}
 
 	/**
@@ -34,6 +36,7 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 		}
 		Data_Events::register_handler( [ __CLASS__, 'reader_registered' ], 'reader_registered' );
 		Data_Events::register_handler( [ __CLASS__, 'reader_deleted' ], 'reader_deleted' );
+		Data_Events::register_handler( [ __CLASS__, 'reader_delete_sync' ], 'reader_delete_sync' );
 		Data_Events::register_handler( [ __CLASS__, 'reader_logged_in' ], 'reader_logged_in' );
 		Data_Events::register_handler( [ __CLASS__, 'order_completed' ], 'order_completed' );
 		Data_Events::register_handler( [ __CLASS__, 'subscription_updated' ], 'donation_subscription_changed' );
@@ -45,6 +48,29 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 		if ( class_exists( 'Newspack_Network\Initializer' ) ) {
 			Data_Events::register_handler( [ __CLASS__, 'network_new_reader' ], 'network_new_reader' );
 		}
+	}
+
+	/**
+	 * Store user data before deletion.
+	 *
+	 * @param int $user_id User ID being deleted.
+	 */
+	public static function store_user_data_before_deletion( $user_id ) {
+		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return;
+		}
+
+		// Get WooCommerce customer data.
+		$customer = new \WC_Customer( $user_id );
+		$contact = Sync\WooCommerce::get_contact_from_customer( $customer );
+
+		$data_to_store = [
+			'email'         => $user->user_email,
+			'user_id'       => $user_id,
+			'customer_data' => $contact,
+		];
+		set_transient( 'newspack_user_deletion_data_' . $user_id, $data_to_store, 5 * MINUTE_IN_SECONDS );
 	}
 
 	/**
@@ -194,6 +220,46 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 		if ( true === Reader_Activation::get_setting( 'sync_esp_delete' ) ) {
 			return Newspack_Newsletters_Contacts::delete( $data['user_id'], 'RAS Reader deleted' );
 		}
+	}
+
+	/**
+	 * Handle a reader delete sync.
+	 *
+	 * @param int   $timestamp Timestamp of the event.
+	 * @param array $data      Data associated with the event.
+	 * @param int   $client_id ID of the client that triggered the event.
+	 */
+	public static function reader_delete_sync( $timestamp, $data, $client_id ) {
+		if ( empty( $data['user_id'] ) ) {
+			return;
+		}
+		// Get the stored data from before the user was deleted.
+		$stored_data = get_transient( 'newspack_user_deletion_data_' . $data['user_id'] );
+
+		if ( $stored_data && ! empty( $stored_data['customer_data'] ) ) {
+			$contact = $stored_data['customer_data'];
+			$contact['metadata'] = array_merge(
+				$contact['metadata'],
+				[
+					'membership_status' => 'user-deleted',
+				]
+			);
+		} else {
+			// If we don't have anything stored, send what we can.
+			$contact = [
+				'email'    => $data['user']['data']['user_email'] ?? '',
+				'metadata' => [
+					'account'           => $data['user_id'],
+					'membership_status' => 'user-deleted',
+				],
+			];
+		}
+
+		// Clean up the transient.
+		delete_transient( 'newspack_user_deletion_data_' . $data['user_id'] );
+
+		// Sync contact information with ESP.
+		$sync_result = self::sync( $contact, 'RAS Reader deletion' );
 	}
 
 	/**

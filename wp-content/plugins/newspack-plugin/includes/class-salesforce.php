@@ -895,8 +895,8 @@ class Salesforce {
 	 * Parse WooCommerce order data to send in an update or create request to Salesforce.
 	 * Ensures that the data only contains valid Salesforce field names.
 	 *
-	 * @param $array|WC_Order $order Raw order data or WC_Order object to parse.
-	 * @return @array|bool Parsed data, or false.
+	 * @param array|WC_Order $order Raw order data or WC_Order object to parse.
+	 * @return array|bool Parsed data, or false.
 	 */
 	private static function parse_wc_order_data( $order ) {
 		if ( ! class_exists( 'WooCommerce' ) ) {

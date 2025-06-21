@@ -34,6 +34,7 @@ final class Newspack_Popups_Model {
 		'newspack_registration_before_form_fields',
 		'newspack_newsletters_subscribe_block_before_form_fields',
 		'newspack_blocks_donate_before_form_fields',
+		'newspack_blocks_checkout_button_hidden_fields',
 	];
 
 	/**

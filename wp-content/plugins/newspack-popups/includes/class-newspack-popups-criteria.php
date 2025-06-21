@@ -51,9 +51,6 @@ final class Newspack_Popups_Criteria {
 		if ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) {
 			return;
 		}
-		if ( Newspack_Popups_Inserter::assess_has_disabled_popups() ) {
-			return;
-		}
 
 		wp_enqueue_script(
 			self::SCRIPT_HANDLE,

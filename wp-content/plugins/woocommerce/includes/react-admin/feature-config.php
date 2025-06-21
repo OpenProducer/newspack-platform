@@ -25,6 +25,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'onboarding' => true,
 			'onboarding-tasks' => true,
 			'pattern-toolkit-full-composability' => true,
+			'point-of-sale' => false,
 			'product-pre-publish-modal' => false,
 			'product-custom-fields' => true,
 			'remote-inbox-notifications' => true,
@@ -45,6 +46,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'use-wp-horizon' => false,
 			'add-to-cart-with-options-stepper-layout' => true,
 			'blockified-add-to-cart' => false,
+			'disable-core-profiler-fallback' => true,
 		);
 	}
 }

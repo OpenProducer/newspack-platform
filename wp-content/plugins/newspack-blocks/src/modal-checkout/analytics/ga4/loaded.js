@@ -1,5 +1,5 @@
-import { getEventPayload, getProductDetails, sendEvent } from './utils';
-import { domReady } from '../../utils';
+import { getEventPayload, sendEvent } from './utils';
+import { domReady, getCheckoutData } from '../../utils';
 
 /**
  * Event fired when the modal checkout content is loaded.
@@ -9,7 +9,7 @@ export const manageLoaded = () => {
 		if ( 'function' !== typeof window.gtag ) {
 			return;
 		}
-		const params = getProductDetails( 'modal-checkout-product-details' );
+		const params = getCheckoutData( 'modal-checkout-product-details' );
 		const payload = getEventPayload( 'loaded', params );
 
 		sendEvent( payload );

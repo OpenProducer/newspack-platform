@@ -77,21 +77,6 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	}
 
 	/**
-	 * Get configuration for conditional tag support.
-	 *
-	 * @return array
-	 */
-	public static function get_conditional_tag_support() {
-		return [
-			'support_url' => '',
-			'example'     => [
-				'before' => '',
-				'after'  => '',
-			],
-		];
-	}
-
-	/**
 	 * Manage singleton instances of all descendant service provider classes.
 	 */
 	public static function instance() {
@@ -517,24 +502,23 @@ Error message(s) received:
 	}
 
 	/**
-	 * Update a contact lists subscription.
-	 *
-	 * @param string   $email           Contact email address.
-	 * @param string[] $lists_to_add    Array of list IDs to subscribe the contact to.
-	 * @param string[] $lists_to_remove Array of list IDs to remove the contact from.
-	 *
-	 * @return true|WP_Error True if the contact was updated or error.
-	 */
-	public function update_contact_lists( $email, $lists_to_add = [], $lists_to_remove = [] ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
-	}
-
-	/**
 	 * Get the provider specific labels
 	 *
 	 * This allows us to make reference to provider specific features in the way the user is used to see them in the provider's UI
 	 *
-	 * @param mixed $context The context in which the labels are being applied.
+	 * This methos must return an array with localized labels forfollowing keys:
+	 * - name: The provider name.
+	 * - list: "list" in lower case singular format.
+	 * - lists: "list" in lower case plural format.
+	 * - sublist: Sublist entities in lowercase singular format.
+	 * - List: "list" in uppercase case singular format.
+	 * - Lists: "list" in uppercase case plural format.
+	 * - Sublist: Sublist entities in uppercase singular format.
+	 * - tag_prefix: The prefix to be used in tags.
+	 * - tag_metabox_before_save: The message to show before saving a list that will create a tag.
+	 * - tag_metabox_after_save: The message to show after saving a list that created a tag.
+	 *
+	 * @param mixed $context The context in which the labels are being applied. Either list_explanation or local_list_explanation.
 	 * @return array
 	 */
 	public static function get_labels( $context = '' ) {
@@ -785,6 +769,8 @@ Error message(s) received:
 	/**
 	 * Get the contact local lists IDs
 	 *
+	 * Note: Mailchimp overrides this method.
+	 *
 	 * @param string $email The contact email.
 	 * @return string[] Array of local lists IDs or error.
 	 */
@@ -826,86 +812,6 @@ Error message(s) received:
 			}
 		}
 		return array_merge( $lists, $local_lists );
-	}
-
-	/**
-	 * Retrieve the ESP's tag ID from its name
-	 *
-	 * @param string  $tag_name The tag.
-	 * @param boolean $create_if_not_found Whether to create a new tag if not found. Default to true.
-	 * @param string  $list_id The List ID.
-	 * @return int|WP_Error The tag ID on success. WP_Error on failure.
-	 */
-	public function get_tag_id( $tag_name, $create_if_not_found = true, $list_id = null ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
-	}
-
-	/**
-	 * Retrieve the ESP's tag name from its ID
-	 *
-	 * @param string|int $tag_id The tag ID.
-	 * @param string     $list_id The List ID.
-	 * @return string|WP_Error The tag name on success. WP_Error on failure.
-	 */
-	public function get_tag_by_id( $tag_id, $list_id = null ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
-	}
-
-	/**
-	 * Create a Tag on the provider
-	 *
-	 * @param string $tag The Tag name.
-	 * @param string $list_id The List ID.
-	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
-	 */
-	public function create_tag( $tag, $list_id = null ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
-	}
-
-	/**
-	 * Updates a Tag name on the provider
-	 *
-	 * @param string|int $tag_id The tag ID.
-	 * @param string     $tag The Tag new name.
-	 * @param string     $list_id The List ID.
-	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
-	 */
-	public function update_tag( $tag_id, $tag, $list_id = null ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
-	}
-
-	/**
-	 * Add a tag to a contact
-	 *
-	 * @param string     $email The contact email.
-	 * @param string|int $tag The tag ID.
-	 * @param string     $list_id The List ID.
-	 * @return true|WP_Error
-	 */
-	public function add_tag_to_contact( $email, $tag, $list_id = null ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
-	}
-
-	/**
-	 * Remove a tag from a contact
-	 *
-	 * @param string     $email The contact email.
-	 * @param string|int $tag The tag ID.
-	 * @param string     $list_id The List ID.
-	 * @return true|WP_Error
-	 */
-	public function remove_tag_from_contact( $email, $tag, $list_id = null ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
-	}
-
-	/**
-	 * Get the IDs of the tags associated with a contact.
-	 *
-	 * @param string $email The contact email.
-	 * @return array|WP_Error The tag IDs on success. WP_Error on failure.
-	 */
-	public function get_contact_tags_ids( $email ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
 	}
 
 	/**
@@ -1000,15 +906,6 @@ Error message(s) received:
 	 */
 	public function get_contact_esp_local_lists_ids( $email ) {
 		return $this->get_contact_tags_ids( $email );
-	}
-
-	/**
-	 * Get usage data for yesterday.
-	 *
-	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error|null Usage report, error or Null in case there's no need to check for a report.
-	 */
-	public function get_usage_report() {
-		return null; // Not implemented for the provider.
 	}
 
 	/**

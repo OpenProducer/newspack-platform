@@ -1,1 +1,0 @@
-<?php return array('dependencies' => array('react', 'wc-blocks-data-store', 'wc-price-format', 'wc-settings', 'wc-types', 'wp-block-editor', 'wp-blocks', 'wp-data', 'wp-element', 'wp-i18n', 'wp-interactivity', 'wp-is-shallow-equal', 'wp-polyfill', 'wp-primitives'), 'version' => 'facfc85c91dbd640054a');
