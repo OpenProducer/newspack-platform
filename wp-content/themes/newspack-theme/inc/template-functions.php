@@ -229,6 +229,12 @@ function newspack_body_classes( $classes ) {
 		$classes[] = 'archive-' . esc_attr( $archive_layout );
 	}
 
+	// Adds a class for the archive page layout.
+	$archive_list_or_grid = get_theme_mod( 'archive_list_or_grid', 'list' );
+	if ( is_archive() && 'list' !== $archive_list_or_grid ) {
+		$classes[] = 'archive-grid';
+	}
+
 	// Add a class when using the 'featured latest' archive layout.
 	$feature_latest_post = get_theme_mod( 'archive_feature_latest_post', true );
 	if ( is_archive() && true === $feature_latest_post && ! is_post_type_archive( 'tribe_events' ) ) {
@@ -684,7 +690,19 @@ function newspack_the_site_title() {
 	echo wp_kses_post( newspack_site_title() );
 }
 
-// post_modified
+/**
+ * If available, returns a link to the accessibility statement page.
+ */
+function newspack_accessibility_page_link() {
+	// Check if the Newspack Accessibility Statement Page class exists.
+	if ( class_exists( '\Newspack\Accessibility_Statement_Page' ) ) {
+		$page_data = \Newspack\Accessibility_Statement_Page::get_page();
+		// If an Accessibility Statement page exists and is published, display a link to it.
+		if ( $page_data && ( $page_data['pageUrl'] ?? '' ) && 'publish' === ( $page_data['status'] ?? '' ) ) {
+			echo '<a class="accessibility-statement-link" href="' . esc_url( $page_data['pageUrl'] ) . '">' . esc_html( $page_data['title'] ?? '' ) . '</a>';
+		}
+	}
+}
 
 /**
  * Change date to 'time ago' format if enabled in the Customizer.

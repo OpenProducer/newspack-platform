@@ -1,3 +1,17 @@
+## [1.18.1](https://github.com/Automattic/newspack-block-theme/compare/v1.18.0...v1.18.1) (2025-06-16)
+
+
+### Bug Fixes
+
+* have header inherit position if mobile or desktop header has a custom position ([#346](https://github.com/Automattic/newspack-block-theme/issues/346)) ([eb08ace](https://github.com/Automattic/newspack-block-theme/commit/eb08ace2689b7c94bc92b4d96ddc2c25e20c22aa))
+
+## [1.18.1-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.18.0...v1.18.1-alpha.1) (2025-06-05)
+
+
+### Bug Fixes
+
+* have header inherit position if mobile or desktop header has a custom position ([#346](https://github.com/Automattic/newspack-block-theme/issues/346)) ([eb08ace](https://github.com/Automattic/newspack-block-theme/commit/eb08ace2689b7c94bc92b4d96ddc2c25e20c22aa))
+
 # [1.18.0](https://github.com/Automattic/newspack-block-theme/compare/v1.17.0...v1.18.0) (2025-06-02)
 
 

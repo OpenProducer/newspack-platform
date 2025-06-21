@@ -139,6 +139,66 @@
 	.cat-links:not(.sponsor-label) {
 		display: none;
 	}
+
+	// Archive grid layout.
+	&.archive-grid {
+		.entry {
+			margin-top: 0;
+		}
+
+		.has-post-thumbnail {
+			display: block;
+
+			.post-thumbnail {
+				flex-basis: 100%;
+				max-width: 100%;
+				margin: 0 0 10px;
+			}
+		}
+
+		.site-main {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 2rem;
+
+			article {
+				width: 100%;
+			}
+		}
+
+		@include utilities.media( mobile ) {
+			.site-main {
+				article {
+					width: calc(50% - 1rem);
+				}
+
+				.entry-title {
+					font-size: var(--newspack-theme-font-size-md);
+				}
+			}
+
+			&:not(.paged).feature-latest article.entry:first-of-type {
+				width: 100%;
+			}
+		}
+
+		@include utilities.media( narrowdesktop ) {
+			.site-main article {
+				width: calc(33.33% - 1.5rem);
+			}
+		}
+
+		@include utilities.media( desktop ) {
+			&.archive-one-column-wide .site-main article {
+				width: calc(25% - 1.5rem);
+			}
+		}
+
+		.pagination {
+			width: 100%;
+		}
+	}
+
 }
 
 .page-description {
