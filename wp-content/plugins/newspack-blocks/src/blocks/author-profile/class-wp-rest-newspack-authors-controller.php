@@ -142,11 +142,7 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 				}
 			}
 		} else {
-			$role_in = [ 'Administrator', 'Editor', 'Author', 'Contributor' ];
-			// Support for Newspack's Guest Contributor Role.
-			if ( class_exists( 'Newspack\Guest_Contributor_Role' ) ) {
-				$role_in[] = Newspack\Guest_Contributor_Role::CONTRIBUTOR_NO_EDIT_ROLE_NAME;
-			}
+			$role_in = Newspack_Blocks\get_authors_roles_slugs();
 
 			$user_args = [
 				'role__in' => $role_in,

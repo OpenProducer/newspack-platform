@@ -12,17 +12,8 @@ import { TextareaControl, ToggleControl } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import {
-	Grid,
-	SelectControl,
-	TextControl,
-} from '../../../../../components/src';
-import {
-	getFontImportURL,
-	getFontsList,
-	isFontInOptions,
-	TYPOGRAPHY_OPTIONS,
-} from './utils';
+import { Grid, SelectControl, TextControl } from '../../../../../components/src';
+import { getFontImportURL, getFontsList, isFontInOptions, TYPOGRAPHY_OPTIONS } from './utils';
 
 /**
  * Font Group schema.
@@ -36,14 +27,8 @@ type FontGroup = {
 	} >;
 };
 
-export default function Typography( {
-	data,
-	isFetching,
-	update,
-}: ThemeModComponentProps & { isFetching: boolean } ) {
-	const [ typographyOptionsType, updateTypographyOptionsType ] = useState<
-		null | 'curated' | 'custom'
-	>( null );
+export default function Typography( { data, isFetching, update }: ThemeModComponentProps & { isFetching: boolean } ) {
+	const [ typographyOptionsType, updateTypographyOptionsType ] = useState< null | 'curated' | 'custom' >( null );
 
 	useEffect( () => {
 		if ( typographyOptionsType ) {
@@ -56,19 +41,13 @@ export default function Typography( {
 
 	function getType() {
 		const { font_header: headerFont, font_body: bodyFont } = data;
-		if (
-			( headerFont && ! isFontInOptions( headerFont ) ) ||
-			( bodyFont && ! isFontInOptions( bodyFont ) )
-		) {
+		if ( ( headerFont && ! isFontInOptions( headerFont ) ) || ( bodyFont && ! isFontInOptions( bodyFont ) ) ) {
 			return TYPOGRAPHY_OPTIONS[ 1 ].value;
 		}
 		return TYPOGRAPHY_OPTIONS[ 0 ].value;
 	}
 
-	function updateTypographyState(
-		objectOrKey: Partial< Typography > | string,
-		change?: string | boolean
-	) {
+	function updateTypographyState( objectOrKey: Partial< Typography > | string, change?: string | boolean ) {
 		if ( objectOrKey instanceof Object ) {
 			update( { ...data, ...objectOrKey } );
 			return;
@@ -81,56 +60,27 @@ export default function Typography( {
 
 	const renderCustomFontChoice = ( type: string ) => {
 		const isHeadings = type === 'headings';
-		const label = isHeadings
-			? __( 'Headings', 'newspack-plugin' )
-			: __( 'Body', 'newspack-plugin' );
+		const label = isHeadings ? __( 'Headings', 'newspack-plugin' ) : __( 'Body', 'newspack-plugin' );
 		return (
 			<Grid columns={ 1 } gutter={ 16 }>
 				<TextareaControl
-					label={
-						label +
-						' - ' +
-						__(
-							'Font provider import code or URL',
-							'newspack-plugin'
-						)
-					}
-					placeholder={
-						'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap'
-					}
-					value={
-						( isHeadings
-							? data.custom_font_import_code
-							: data.custom_font_import_code_alternate ) ?? ''
-					}
+					label={ label + ' - ' + __( 'Font provider import code or URL', 'newspack-plugin' ) }
+					placeholder={ 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap' }
+					value={ ( isHeadings ? data.custom_font_import_code : data.custom_font_import_code_alternate ) ?? '' }
 					onChange={ e => {
-						updateTypographyState(
-							isHeadings
-								? 'custom_font_import_code'
-								: 'custom_font_import_code_alternate',
-							e
-						);
+						updateTypographyState( isHeadings ? 'custom_font_import_code' : 'custom_font_import_code_alternate', e );
 					} }
 					rows={ 3 }
 				/>
 				<TextControl
-					label={
-						label + ' - ' + __( 'Font name', 'newspack-plugin' )
-					}
+					label={ label + ' - ' + __( 'Font name', 'newspack-plugin' ) }
 					value={ isHeadings ? data.font_header : data.font_body }
 					onChange={ ( e: string ) => {
-						updateTypographyState(
-							isHeadings ? 'font_header' : 'font_body',
-							e
-						);
+						updateTypographyState( isHeadings ? 'font_header' : 'font_body', e );
 					} }
 				/>
 				<SelectControl
-					label={
-						label +
-						' - ' +
-						__( 'Font fallback stack', 'newspack-plugin' )
-					}
+					label={ label + ' - ' + __( 'Font fallback stack', 'newspack-plugin' ) }
 					options={ [
 						{
 							value: 'serif',
@@ -149,19 +99,8 @@ export default function Typography( {
 							label: __( 'Monospace', 'newspack-plugin' ),
 						},
 					] }
-					value={
-						isHeadings
-							? data.font_header_stack
-							: data.font_body_stack
-					}
-					onChange={ ( e: string ) =>
-						updateTypographyState(
-							isHeadings
-								? 'font_header_stack'
-								: 'font_body_stack',
-							e
-						)
-					}
+					value={ isHeadings ? data.font_header_stack : data.font_body_stack }
+					onChange={ ( e: string ) => updateTypographyState( isHeadings ? 'font_header_stack' : 'font_body_stack', e ) }
 				/>
 			</Grid>
 		);
@@ -173,9 +112,7 @@ export default function Typography( {
 				label={ __( 'Typography Options', 'newspack-plugin' ) }
 				hideLabelFromVision
 				disabled={ true }
-				value={
-					typographyOptionsType ? typographyOptionsType : 'curated'
-				}
+				value={ typographyOptionsType ? typographyOptionsType : 'curated' }
 				onChange={ updateTypographyOptionsType }
 				buttonOptions={
 					isFetching
@@ -189,8 +126,7 @@ export default function Typography( {
 				}
 			/>
 			<Grid gutter={ 32 }>
-				{ typographyOptionsType === 'curated' ||
-				null === typographyOptionsType ? (
+				{ typographyOptionsType === 'curated' || null === typographyOptionsType ? (
 					<>
 						<SelectControl
 							label={ __( 'Headings', 'newspack-plugin' ) }
@@ -199,8 +135,7 @@ export default function Typography( {
 							onChange={ ( value: string, group: FontGroup ) => {
 								updateTypographyState( {
 									font_header: value,
-									custom_font_import_code:
-										getFontImportURL( value ),
+									custom_font_import_code: getFontImportURL( value ),
 									font_header_stack: group?.fallback,
 								} );
 							} }
@@ -212,8 +147,7 @@ export default function Typography( {
 							onChange={ ( value: string, group: FontGroup ) => {
 								updateTypographyState( {
 									font_body: value,
-									custom_font_import_code_alternate:
-										getFontImportURL( value ),
+									custom_font_import_code_alternate: getFontImportURL( value ),
 									font_body_stack: group?.fallback,
 								} );
 							} }
@@ -228,13 +162,8 @@ export default function Typography( {
 			</Grid>
 			<ToggleControl
 				checked={ data.accent_allcaps }
-				onChange={ checked =>
-					updateTypographyState( 'accent_allcaps', checked )
-				}
-				label={ __(
-					'Use all-caps for accent text',
-					'newspack-plugin'
-				) }
+				onChange={ checked => updateTypographyState( 'accent_allcaps', checked ) }
+				label={ __( 'Use all-caps for accent text', 'newspack-plugin' ) }
 			/>
 		</Grid>
 	);

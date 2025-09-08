@@ -381,13 +381,17 @@ class Setup_Wizard extends Wizard {
 			}
 		}
 
+		// Append PWA display mode option.
+		$theme_mods['pwa_display_mode'] = get_option( 'newspack_pwa_display_mode', 'minimal-ui' );
+
 		return rest_ensure_response(
 			[
 				'theme'             => Starter_Content::get_theme(),
 				'theme_mods'        => $theme_mods,
 				'homepage_patterns' => $this->get_homepage_patterns(),
 				'etc'               => [
-					'post_count' => wp_count_posts()->publish,
+					'post_count'     => wp_count_posts()->publish,
+					'has_pwa_plugin' => defined( 'PWA_PLUGIN_FILE' ),
 				],
 			]
 		);
@@ -517,6 +521,12 @@ class Setup_Wizard extends Wizard {
 			// Media credits are actually options, not theme mods.
 			if ( 'newspack_image_credits' === substr( $key, 0, 22 ) ) {
 				Newspack_Image_Credits::update_setting( $key, $value );
+				continue;
+			}
+
+			// PWA display mode is an option, not a theme mod.
+			if ( 'pwa_display_mode' === $key ) {
+				update_option( 'newspack_pwa_display_mode', $value );
 				continue;
 			}
 

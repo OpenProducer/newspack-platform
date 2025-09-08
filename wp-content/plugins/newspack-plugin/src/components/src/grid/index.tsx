@@ -12,14 +12,7 @@ import './style.scss';
  */
 import classnames from 'classnames';
 
-const Grid = ( {
-	className = '',
-	columns = 2,
-	gutter = 32,
-	noMargin = false,
-	rowGap = 0,
-	...otherProps
-} ) => {
+const Grid = ( { className = '', columns = 2, gutter = 32, noMargin = false, rowGap = 0, ...otherProps } ) => {
 	const classes = classnames(
 		'newspack-grid',
 		noMargin && 'newspack-grid--no-margin',

@@ -24,7 +24,10 @@ class Patches {
 		add_action( 'manage_edit-wp_block_columns', [ __CLASS__, 'add_custom_columns' ] );
 		add_action( 'manage_edit-wp_block_sortable_columns', [ __CLASS__, 'add_sortable_columns' ] );
 		add_action( 'manage_wp_block_posts_custom_column', [ __CLASS__, 'custom_column_content' ], 10, 2 );
-		add_filter( 'wpseo_opengraph_url', [ __CLASS__, 'http_ogurls' ] );
+		add_action( 'restrict_manage_posts', [ __CLASS__, 'add_pattern_category_filter' ] );
+		add_action( 'pre_get_posts', [ __CLASS__, 'filter_patterns_by_category' ] );
+		add_filter( 'manage_edit-wp_pattern_category_columns', [ __CLASS__, 'remove_pattern_category_count' ] );
+		add_action( 'manage_wp_pattern_category_custom_column', [ __CLASS__, 'render_pattern_category_posts_count' ], 10, 3 );
 		add_filter( 'map_meta_cap', [ __CLASS__, 'prevent_accidental_page_deletion' ], 10, 4 );
 		add_action( 'pre_post_update', [ __CLASS__, 'prevent_unpublish_front_page' ], 10, 2 );
 		add_action( 'pre_get_posts', [ __CLASS__, 'maybe_display_author_page' ] );
@@ -170,17 +173,71 @@ class Patches {
 	}
 
 	/**
-	 * On Atomic infrastructure, URLs are `http` for Facebook requests.
-	 * This forces the `og:url` to `http` for consistency, to prevent 301 redirect loop issues.
-	 *
-	 * @param string $og_url The opengraph URL.
-	 * @return string modified $og_url
+	 * Add pattern category filter dropdown to the patterns list page.
 	 */
-	public static function http_ogurls( $og_url ) {
-		if ( defined( 'ATOMIC_SITE_ID' ) && ATOMIC_SITE_ID ) {
-			$og_url = str_replace( 'https:', 'http:', $og_url );
+	public static function add_pattern_category_filter() {
+		global $typenow;
+
+		// Only show on wp_block post type.
+		if ( 'wp_block' !== $typenow ) {
+			return;
 		}
-		return $og_url;
+
+		$taxonomy = 'wp_pattern_category';
+		$terms    = get_terms(
+			[
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => true,
+			]
+		);
+
+		if ( empty( $terms ) || is_wp_error( $terms ) ) {
+			return;
+		}
+
+		$current_term = isset( $_GET[ $taxonomy ] ) ? sanitize_text_field( wp_unslash( $_GET[ $taxonomy ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		?>
+		<label class="screen-reader-text" for="filter-by-pattern-category"><?php esc_html_e( 'Filter by Pattern Category', 'newspack-plugin' ); ?></label>
+		<select name="<?php echo esc_attr( $taxonomy ); ?>" id="filter-by-pattern-category">
+			<option value=""><?php esc_html_e( 'All Pattern Categories', 'newspack-plugin' ); ?></option>
+			<?php foreach ( $terms as $term ) : ?>
+				<option value="<?php echo esc_attr( $term->slug ); ?>" <?php selected( $current_term, $term->slug ); ?>>
+					<?php echo esc_html( $term->name ); ?>
+				</option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+	}
+
+	/**
+	 * Filter patterns by category when the filter is applied.
+	 *
+	 * @param WP_Query $query The query object.
+	 */
+	public static function filter_patterns_by_category( $query ) {
+		global $pagenow, $typenow;
+
+		// Only apply on the patterns list page.
+		if ( ! is_admin() || 'edit.php' !== $pagenow || 'wp_block' !== $typenow || ! $query->is_main_query() ) {
+			return;
+		}
+
+		$taxonomy = 'wp_pattern_category';
+		$term_slug = isset( $_GET[ $taxonomy ] ) ? sanitize_text_field( wp_unslash( $_GET[ $taxonomy ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( ! empty( $term_slug ) ) {
+			$query->set(
+				'tax_query',
+				[
+					[
+						'taxonomy' => $taxonomy,
+						'field'    => 'slug',
+						'terms'    => $term_slug,
+					],
+				]
+			);
+		}
 	}
 
 	/**
@@ -368,6 +425,8 @@ class Patches {
 
 	/**
 	 * Restrict non-privileged users from seeing posts not owned by them.
+	 * An author without the edit_others_* cap will not be able to edit the posts,
+	 * but still can view the list of posts. This method prevents that.
 	 * Affects all admin post lists and the legacy (non-AJAX) media library list page.
 	 *
 	 * @param WP_Query $query Query to alter.
@@ -385,7 +444,10 @@ class Patches {
 		$is_posts_list    = 'edit' === $current_screen->base;
 
 		// If the user can't edit others' posts, only allow them to view their own posts.
-		if ( ( $is_media_library || $is_posts_list ) && ! current_user_can( 'edit_others_posts' ) ) {
+		if (
+			( $is_media_library || $is_posts_list )
+			&& ! Capabilities::current_user_can( 'edit_others_posts', $current_screen->post_type )
+		) {
 			$query->set( 'author', $current_user_id ); // phpcs:ignore WordPressVIPMinimum.Hooks.PreGetPosts.PreGetPosts
 			add_filter( 'wp_count_posts', [ __CLASS__, 'fix_post_counts' ], 10, 2 );
 		}
@@ -427,7 +489,12 @@ class Patches {
 	public static function restrict_media_library_access_ajax( $query_args ) {
 		$current_user_id = get_current_user_id();
 
-		if ( $current_user_id && ! current_user_can( 'edit_others_posts' ) && ! current_user_can( 'edit_files' ) && ! current_user_can( 'newspack_view_others_media' ) ) {
+		if (
+			$current_user_id
+			&& ! current_user_can( 'edit_others_posts' )
+			&& ! current_user_can( 'edit_files' )
+			&& ! current_user_can( 'newspack_view_others_media' )
+		) {
 			$query_args['author'] = $current_user_id;
 		}
 
@@ -452,6 +519,45 @@ class Patches {
 	 */
 	public static function remove_tec_extra_excerpt_filtering() {
 		remove_all_actions( 'tribe_events_views_v2_after_make_view' );
+	}
+
+	/**
+	 * Remove the pattern category count from the edit screen and add custom posts count column.
+	 *
+	 * @param array $columns The columns array.
+	 * @return array Modified columns array.
+	 */
+	public static function remove_pattern_category_count( $columns ) {
+		unset( $columns['posts'] );
+		$columns['posts_count'] = __( 'Patterns Count', 'newspack-plugin' );
+		return $columns;
+	}
+
+	/**
+	 * Render the custom posts count column for pattern categories.
+	 *
+	 * @param string $content The column content.
+	 * @param string $column_name The column name.
+	 * @param int    $term_id The term ID.
+	 */
+	public static function render_pattern_category_posts_count( $content, $column_name, $term_id ) {
+		if ( 'posts_count' !== $column_name ) {
+			return $content;
+		}
+
+		$term = get_term( $term_id, 'wp_pattern_category' );
+		if ( ! $term || is_wp_error( $term ) ) {
+			return $content;
+		}
+
+		$count = $term->count;
+		$url   = admin_url( 'edit.php?post_type=wp_block&wp_pattern_category=' . $term->slug );
+
+		printf(
+			'<a href="%s">%d</a>',
+			esc_url( $url ),
+			esc_html( $count )
+		);
 	}
 }
 Patches::init();

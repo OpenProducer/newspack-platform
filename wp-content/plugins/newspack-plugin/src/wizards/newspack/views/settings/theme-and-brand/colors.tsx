@@ -12,13 +12,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { ColorPicker, Grid } from '../../../../../components/src';
 
-export default function Colors( {
-	themeMods,
-	updateColors,
-}: {
-	themeMods: ThemeMods;
-	updateColors: ( a: ThemeMods ) => void;
-} ) {
+export default function Colors( { themeMods, updateColors }: { themeMods: ThemeMods; updateColors: ( a: ThemeMods ) => void } ) {
 	return (
 		<Grid gutter={ 32 }>
 			{ /* This UI does not enable setting 'theme_colors' to 'default'. As soon as a color is picked, 'theme_colors' will be 'custom'. */ }

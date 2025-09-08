@@ -19,6 +19,7 @@ import { domReady } from './utils';
 
 		const CLASS_PREFIX = newspackBlocksModalCheckout.newspack_class_prefix;
 		const readyEvent = new CustomEvent( 'checkout-ready' );
+		const completeEvent = new CustomEvent( 'checkout-complete' );
 
 		function getEventHandlers( element, event ) {
 			const events = $._data( element, 'events' );
@@ -28,7 +29,7 @@ import { domReady } from './utils';
 			if ( ! event ) {
 				return events;
 			}
-			return $._data( element, 'events' )[ event ];
+			return events[ event ] || [];
 		}
 
 		function clearNotices() {
@@ -59,6 +60,7 @@ import { domReady } from './utils';
 			const container = document.querySelector( '#newspack_modal_checkout_container' );
 			if ( container ) {
 				container.checkoutComplete = true;
+				container.dispatchEvent( completeEvent );
 			}
 		} else {
 			function init() {
@@ -72,7 +74,8 @@ import { domReady } from './utils';
 				const $form = $( 'form.checkout' );
 
 				if ( ! $form.length ) {
-					console.warn( 'Form is not available' ); // eslint-disable-line no-console
+					console.warn( 'Checkout form is not available' ); // eslint-disable-line no-console
+					setReady();
 					return;
 				}
 

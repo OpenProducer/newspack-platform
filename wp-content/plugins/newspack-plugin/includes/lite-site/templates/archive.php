@@ -34,14 +34,35 @@ namespace Newspack;
 		$query_args['category__in'] = $categories;
 	}
 
+	// Render sticky posts prominently at the top.
+	$sticky_post_ids_option = get_option( 'sticky_posts' );
+	$sticky_post_ids        = [];
+	$sticky_posts           = [];
+	if ( ! empty( $sticky_post_ids_option ) ) {
+		$sticky_post_ids = array_values( $sticky_post_ids_option );
+		$sticky_posts    = get_posts(
+			[
+				'post__in' => $sticky_post_ids,
+			]
+		);
+	}
+
 	$recent_posts = get_posts( $query_args );
 
-	foreach ( $recent_posts as $current_post ) {
+	$all_posts = array_merge( $sticky_posts, $recent_posts );
+
+	$all_posts = array_unique( $all_posts, SORT_REGULAR );
+
+	$all_posts = array_slice( $all_posts, 0, Lite_Site::get_number_of_posts() );
+
+	foreach ( $all_posts as $current_post ) {
 		printf(
-			'<li><a href="/%s/%d">%s</a></li>',
+			'<li>%s<a href="/%s/%d">%s</a>%s</li>',
+			in_array( $current_post->ID, $sticky_post_ids, true ) ? '<h3>' : '',
 			esc_attr( Lite_Site::get_url_base() ),
 			esc_attr( $current_post->ID ),
-			esc_html( $current_post->post_title )
+			esc_html( $current_post->post_title ),
+			in_array( $current_post->ID, $sticky_post_ids, true ) ? '</h3>' : ''
 		);
 	}
 	?>
@@ -55,5 +76,13 @@ namespace Newspack;
 			<?php echo wp_kses_post( $footer_html ); ?>
 		</footer>
 	<?php endif; ?>
+
+	<?php
+	/**
+	 * Fires after the footer of the lite site archive page.
+	 */
+	do_action( 'newspack_lite_site_archive_after_footer' );
+	?>
+
 </body>
 </html>

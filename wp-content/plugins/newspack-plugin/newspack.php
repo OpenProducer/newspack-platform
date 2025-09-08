@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Newspack
  * Description: An advanced open-source publishing and revenue-generating platform for news organizations.
- * Version: 6.8.0
+ * Version: 6.18.0
  * Author: Automattic
  * Author URI: https://newspack.com/
  * License: GPL2
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEWSPACK_PLUGIN_VERSION', '6.8.0' );
+define( 'NEWSPACK_PLUGIN_VERSION', '6.18.0' );
 
 // Define NEWSPACK_PLUGIN_FILE.
 if ( ! defined( 'NEWSPACK_PLUGIN_FILE' ) ) {
@@ -27,6 +27,9 @@ if ( ! defined( 'NEWSPACK_PLUGIN_BASEDIR' ) ) {
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
+
+// Action Scheduler.
+require_once __DIR__ . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
 
 // Include the main Newspack class.
 if ( ! class_exists( 'Newspack' ) ) {

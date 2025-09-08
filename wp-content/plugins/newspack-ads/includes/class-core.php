@@ -58,12 +58,21 @@ final class Core {
 		if ( ! newspack_ads_should_show_ads() ) {
 			return;
 		}
+		$asset_file = require_once dirname( NEWSPACK_ADS_PLUGIN_FILE ) . '/dist/frontend.asset.php';
+
+		\wp_enqueue_script(
+			'newspack-ads-frontend',
+			plugins_url( '../dist/frontend.js', __FILE__ ),
+			[],
+			$asset_file['version'],
+			true
+		);
 
 		\wp_register_style(
 			'newspack-ads-frontend',
 			plugins_url( '../dist/frontend.css', __FILE__ ),
-			null,
-			filemtime( dirname( NEWSPACK_ADS_PLUGIN_FILE ) . '/dist/frontend.css' )
+			[],
+			$asset_file['version']
 		);
 		\wp_style_add_data( 'newspack-ads-frontend', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-ads-frontend' );
@@ -102,6 +111,7 @@ final class Core {
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-suppression.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/media-kit/class-media-kit.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/functions.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/integrations/class-side-rail-placements.php';
 	}
 
 	/**

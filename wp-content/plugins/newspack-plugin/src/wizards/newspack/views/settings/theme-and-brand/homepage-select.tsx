@@ -28,10 +28,7 @@ export function HomepageSelect( {
 	homepagePatterns: HomepagePattern[];
 	isFetching: boolean;
 } ) {
-	const items =
-		isFetching && homepagePatterns.length === 0
-			? LOADING_CARDS
-			: homepagePatterns;
+	const items = isFetching && homepagePatterns.length === 0 ? LOADING_CARDS : homepagePatterns;
 
 	return (
 		<Grid columns={ 6 } gutter={ 16 }>
@@ -44,10 +41,7 @@ export function HomepageSelect( {
 					onClick={ () => {
 						updateHomepagePattern( i );
 					} }
-					ariaLabel={ `${ __(
-						'Activate Layout',
-						'newspack-plugin'
-					) } ${ i + 1 }` }
+					ariaLabel={ `${ __( 'Activate Layout', 'newspack-plugin' ) } ${ i + 1 }` }
 				/>
 			) ) }
 		</Grid>

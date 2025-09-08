@@ -1688,8 +1688,8 @@ function SidebarBlockEditor({
     } = select(external_wp_preferences_namespaceObject.store);
     return {
       hasUploadPermissions: (_select$canUser = select(external_wp_coreData_namespaceObject.store).canUser('create', {
-        kind: 'root',
-        name: 'media'
+        kind: 'postType',
+        name: 'attachment'
       })) !== null && _select$canUser !== void 0 ? _select$canUser : true,
       isFixedToolbarActive: !!get('core/customize-widgets', 'fixedToolbar'),
       keepCaretInsideBlock: !!get('core/customize-widgets', 'keepCaretInsideBlock'),

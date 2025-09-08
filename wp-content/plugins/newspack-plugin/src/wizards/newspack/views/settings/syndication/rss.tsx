@@ -10,14 +10,7 @@ import WizardsActionCard from '../../../../wizards-action-card';
 import useWizardApiFetchToggle from '../../../../hooks/use-wizard-api-fetch-toggle';
 
 function Rss() {
-	const {
-		description,
-		apiData,
-		isFetching,
-		actionText,
-		apiFetchToggle,
-		errorMessage,
-	} = useWizardApiFetchToggle< RssData >( {
+	const { description, apiData, isFetching, actionText, apiFetchToggle, errorMessage } = useWizardApiFetchToggle< RssData >( {
 		path: '/newspack/v1/wizard/newspack-settings/syndication',
 		apiNamespace: 'newspack-settings/syndication/rss',
 		refreshOn: [ 'POST' ],
@@ -25,10 +18,7 @@ function Rss() {
 			module_enabled_rss: false,
 			'module_enabled_media-partners': false,
 		},
-		description: __(
-			'Create and manage customized RSS feeds for syndication partners',
-			'newspack-plugin'
-		),
+		description: __( 'Create and manage customized RSS feeds for syndication partners', 'newspack-plugin' ),
 	} );
 
 	return (
@@ -39,12 +29,7 @@ function Rss() {
 			actionText={ actionText }
 			error={ errorMessage }
 			toggleChecked={ apiData.module_enabled_rss }
-			toggleOnChange={ ( value: boolean ) =>
-				apiFetchToggle(
-					{ ...apiData, module_enabled_rss: value },
-					true
-				)
-			}
+			toggleOnChange={ ( value: boolean ) => apiFetchToggle( { ...apiData, module_enabled_rss: value }, true ) }
 		/>
 	);
 }

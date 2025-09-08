@@ -20,8 +20,7 @@ import * as Components from '../components/src';
  */
 import '../shared/js/public-path';
 
-const pageParam =
-	new URLSearchParams( window.location.search ).get( 'page' ) ?? '';
+const pageParam = new URLSearchParams( window.location.search ).get( 'page' ) ?? '';
 const rootElement = document.getElementById( pageParam );
 
 const components: Record< string, any > = {
@@ -30,57 +29,27 @@ const components: Record< string, any > = {
 	 */
 	'newspack-dashboard': {
 		label: __( 'Dashboard', 'newspack-plugin' ),
-		component: lazy(
-			() =>
-				import(
-					/* webpackChunkName: "newspack-wizards" */ './newspack/views/dashboard'
-				)
-		),
+		component: lazy( () => import( /* webpackChunkName: "newspack-wizards" */ './newspack/views/dashboard' ) ),
 	},
 	'newspack-settings': {
 		label: __( 'Settings', 'newspack-plugin' ),
-		component: lazy(
-			() =>
-				import(
-					/* webpackChunkName: "newspack-wizards" */ './newspack/views/settings'
-				)
-		),
+		component: lazy( () => import( /* webpackChunkName: "newspack-wizards" */ './newspack/views/settings' ) ),
 	},
 	'newspack-audience': {
 		label: __( 'Audience', 'newspack-plugin' ),
-		component: lazy(
-			() =>
-				import(
-					/* webpackChunkName: "audience-wizards" */ './audience/views/setup'
-				)
-		),
+		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/setup' ) ),
 	},
 	'newspack-audience-campaigns': {
 		label: __( 'Audience Campaigns', 'newspack-plugin' ),
-		component: lazy(
-			() =>
-				import(
-					/* webpackChunkName: "audience-wizards" */ './audience/views/campaigns'
-				)
-		),
+		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/campaigns' ) ),
 	},
 	'newspack-audience-donations': {
 		label: __( 'Audience Donations', 'newspack-plugin' ),
-		component: lazy(
-			() =>
-				import(
-					/* webpackChunkName: "audience-wizards" */ './audience/views/donations'
-				)
-		),
+		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/donations' ) ),
 	},
 	'newspack-audience-subscriptions': {
 		label: __( 'Audience Subscriptions', 'newspack-plugin' ),
-		component: lazy(
-			() =>
-				import(
-					/* webpackChunkName: "audience-wizards" */ './audience/views/subscriptions'
-				)
-		),
+		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/subscriptions' ) ),
 	},
 } as const;
 
@@ -106,11 +75,7 @@ const AdminPageLoader = ( { label }: { label: string } ) => {
 const AdminPages = () => {
 	const PageComponent = components[ pageParam ].component;
 	return (
-		<Suspense
-			fallback={
-				<AdminPageLoader label={ components[ pageParam ].label } />
-			}
-		>
+		<Suspense fallback={ <AdminPageLoader label={ components[ pageParam ].label } /> }>
 			<PageComponent />
 		</Suspense>
 	);

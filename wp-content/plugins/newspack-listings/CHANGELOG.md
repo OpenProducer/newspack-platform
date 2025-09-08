@@ -1,3 +1,10 @@
+# [3.4.0](https://github.com/Automattic/newspack-listings/compare/v3.3.1...v3.4.0) (2025-08-25)
+
+
+### Features
+
+* add i18n ([#539](https://github.com/Automattic/newspack-listings/issues/539)) ([af9a3ae](https://github.com/Automattic/newspack-listings/commit/af9a3ae2c6ab571386f84a50c363485361166445))
+
 ## [3.3.1](https://github.com/Automattic/newspack-listings/compare/v3.3.0...v3.3.1) (2025-05-14)
 
 

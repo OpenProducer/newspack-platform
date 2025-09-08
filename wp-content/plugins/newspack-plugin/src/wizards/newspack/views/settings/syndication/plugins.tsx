@@ -20,10 +20,7 @@ const PLUGINS: Record< string, PluginCard > = {
 		editLink: 'admin.php?page=apple-news-options',
 		isConfigurable: true,
 		reloadOnActivation: false,
-		description: __(
-			'Export and synchronize posts to Apple format.',
-			'newspack-plugin'
-		),
+		description: __( 'Export and synchronize posts to Apple format.', 'newspack-plugin' ),
 	},
 	distributor: {
 		slug: 'distributor',
@@ -41,15 +38,7 @@ function Plugins() {
 	return (
 		<Fragment>
 			{ Object.keys( PLUGINS ).map( pluginKey => {
-				return (
-					<WizardsPluginCard
-						key={ pluginKey }
-						isTogglable
-						isStatusPrepended={ false }
-						isMedium={ false }
-						{ ...PLUGINS[ pluginKey ] }
-					/>
-				);
+				return <WizardsPluginCard key={ pluginKey } isTogglable isStatusPrepended={ false } isMedium={ false } { ...PLUGINS[ pluginKey ] } />;
 			} ) }
 		</Fragment>
 	);

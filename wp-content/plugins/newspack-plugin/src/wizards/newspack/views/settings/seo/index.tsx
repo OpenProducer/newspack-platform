@@ -44,18 +44,11 @@ function Seo() {
 
 	const codesValidation = useFieldsValidation< SeoData[ 'verification' ] >(
 		[
-			[
-				'google',
-				'isId',
-				{ message: __( 'Invalid Google verification code!', 'newspack-plugin' ) },
-			],
+			[ 'google', 'isId', { message: __( 'Invalid Google verification code!', 'newspack-plugin' ) } ],
 			[
 				'bing',
 				/** JS version of [WPSEO PHP regex](https://github.com/Yoast/wordpress-seo/blob/trunk/inc/options/class-wpseo-option.php#L313) */
-				v =>
-					/^[A-Fa-f0-9_-]*$/.test( v )
-						? ''
-						: __( 'Invalid Bing verification code!', 'newspack-plugin' ),
+				v => ( /^[A-Fa-f0-9_-]*$/.test( v ) ? '' : __( 'Invalid Bing verification code!', 'newspack-plugin' ) ),
 			],
 		],
 		data.verification
@@ -114,32 +107,19 @@ function Seo() {
 		);
 	}
 	return (
-		<WizardsTab
-			title={ __( 'SEO', 'newspack-plugin' ) }
-			className={ isFetching ? 'is-fetching' : '' }
-		>
+		<WizardsTab title={ __( 'SEO', 'newspack-plugin' ) } className={ isFetching ? 'is-fetching' : '' }>
 			<WizardSection
 				title={ __( 'Webmaster Tools', 'newspack-plugin' ) }
 				description={ __( 'Add verification meta tags to your site', 'newspack-plugin' ) }
 			>
-				{ codesValidation.errorMessage && (
-					<Notice isError noticeText={ codesValidation.errorMessage } />
-				) }
-				<VerificationCodes
-					setData={ verification => setData( { ...data, verification } ) }
-					data={ data.verification }
-				/>
+				{ codesValidation.errorMessage && <Notice isError noticeText={ codesValidation.errorMessage } /> }
+				<VerificationCodes setData={ verification => setData( { ...data, verification } ) } data={ data.verification } />
 			</WizardSection>
 			<WizardSection
 				title={ __( 'Social Accounts', 'newspack-plugin' ) }
-				description={ __(
-					'Let search engines know which social profiles are associated to your site',
-					'newspack-plugin'
-				) }
+				description={ __( 'Let search engines know which social profiles are associated to your site', 'newspack-plugin' ) }
 			>
-				{ accountsValidation.errorMessage && (
-					<Notice isError noticeText={ accountsValidation.errorMessage } />
-				) }
+				{ accountsValidation.errorMessage && <Notice isError noticeText={ accountsValidation.errorMessage } /> }
 				<Accounts setData={ urls => setData( { ...data, urls } ) } data={ data.urls } />
 			</WizardSection>
 			<WizardSection>
@@ -154,9 +134,7 @@ function Seo() {
 			</WizardSection>
 			<div className="newspack-buttons-card">
 				<Button isPrimary onClick={ post } disabled={ isFetching }>
-					{ isFetching
-						? __( 'Loading…', 'newspack-plugin' )
-						: __( 'Save Settings', 'newspack-plugin' ) }
+					{ isFetching ? __( 'Loading…', 'newspack-plugin' ) : __( 'Save Settings', 'newspack-plugin' ) }
 				</Button>
 			</div>
 		</WizardsTab>

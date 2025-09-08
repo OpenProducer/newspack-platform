@@ -293,10 +293,12 @@ const withPluginContext = mapContextToProps => (0,external_wp_compose_namespaceO
  * WordPress dependencies
  */
 
+
+/**
+ * Internal dependencies
+ */
+
 class PluginErrorBoundary extends external_wp_element_namespaceObject.Component {
-  /**
-   * @param {Object} props
-   */
   constructor(props) {
     super(props);
     this.state = {
@@ -308,10 +310,6 @@ class PluginErrorBoundary extends external_wp_element_namespaceObject.Component 
       hasError: true
     };
   }
-
-  /**
-   * @param {Error} error Error object passed by React.
-   */
   componentDidCatch(error) {
     const {
       name,

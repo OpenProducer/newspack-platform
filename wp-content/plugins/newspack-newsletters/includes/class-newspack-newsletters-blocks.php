@@ -40,7 +40,7 @@ final class Newspack_Newsletters_Blocks {
 				'settings_url'       => Newspack_Newsletters_Settings::get_settings_url(),
 				'supports_recaptcha' => class_exists( 'Newspack\Recaptcha' ),
 				'has_recaptcha'      => class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha(),
-				'recaptcha_url'      => admin_url( 'admin.php?page=newspack-connections-wizard' ),
+				'recaptcha_url'      => admin_url( 'admin.php?page=newspack-settings#/' ),
 			]
 		);
 		wp_enqueue_style(

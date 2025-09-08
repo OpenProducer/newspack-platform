@@ -41,6 +41,13 @@ class Newspack_Popups_Importer {
 	private $segments_mapping = [];
 
 	/**
+	 * The input data to import.
+	 *
+	 * @var array
+	 */
+	private $input;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array $input_data Data to import.

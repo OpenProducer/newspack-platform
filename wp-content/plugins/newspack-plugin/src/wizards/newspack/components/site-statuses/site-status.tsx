@@ -25,15 +25,7 @@ const defaultStatuses = {
 	'error-request': undefined,
 };
 
-const SiteStatus = ( {
-	label = '',
-	isPreflightValid = true,
-	dependencies: dependenciesProp,
-	statuses,
-	endpoint,
-	configLink,
-	then,
-}: Status ) => {
+const SiteStatus = ( { label = '', isPreflightValid = true, dependencies: dependenciesProp, statuses, endpoint, configLink, then }: Status ) => {
 	const parsedStatusLabels: Record< StatusLabels, string > = {
 		...defaultStatuses,
 		...statuses,
@@ -41,16 +33,11 @@ const SiteStatus = ( {
 
 	const [ requestCode, setRequestCode ] = useState( 200 );
 
-	const [ requestStatus, setRequestStatus ] =
-		useState< StatusLabels >( 'idle' );
-	const [ failedDependencies, setFailedDependencies ] = useState< string[] >(
-		[]
-	);
+	const [ requestStatus, setRequestStatus ] = useState< StatusLabels >( 'idle' );
+	const [ failedDependencies, setFailedDependencies ] = useState< string[] >( [] );
 	const [ isModalVisible, setIsModalVisible ] = useState( false );
 
-	const dependencies = structuredClone< Dependencies | undefined >(
-		dependenciesProp
-	);
+	const dependencies = structuredClone< Dependencies | undefined >( dependenciesProp );
 
 	useEffect( () => {
 		makeRequest();
@@ -67,10 +54,7 @@ const SiteStatus = ( {
 			// Dependency check
 			if ( dependencies && Object.keys( dependencies ).length > 0 ) {
 				const failedDeps: string[] = [];
-				for ( const [
-					dependencyName,
-					dependencyInfo,
-				] of Object.entries( dependencies ) ) {
+				for ( const [ dependencyName, dependencyInfo ] of Object.entries( dependencies ) ) {
 					// Don't process active
 					if ( dependencyInfo.isActive ) {
 						continue;
@@ -106,9 +90,7 @@ const SiteStatus = ( {
 				} )
 				.catch( err => {
 					const status = err?.status ?? 500;
-					setRequestStatus(
-						status > 399 ? 'error-request' : 'error'
-					);
+					setRequestStatus( status > 399 ? 'error-request' : 'error' );
 					setRequestCode( status );
 					resolve();
 				} );
@@ -119,24 +101,12 @@ const SiteStatus = ( {
 
 	return (
 		<>
-			{ isModalVisible && (
-				<SiteActionModal
-					plugins={ failedDependencies }
-					onSuccess={ makeRequest }
-					onRequestClose={ setIsModalVisible }
-				/>
-			) }
+			{ isModalVisible && <SiteActionModal plugins={ failedDependencies } onSuccess={ makeRequest } onRequestClose={ setIsModalVisible } /> }
 			{ /* Error UI, link user to config */ }
 			{ requestStatus === 'error' && (
-				<Tooltip
-					text={ __(
-						'Click to navigate to configuration',
-						'newspack-plugin'
-					) }
-				>
+				<Tooltip text={ __( 'Click to navigate to configuration', 'newspack-plugin' ) }>
 					<a href={ configLink } className={ classes }>
-						{ label }:{ ' ' }
-						<span>{ parsedStatusLabels[ requestStatus ] }</span>
+						{ label }: <span>{ parsedStatusLabels[ requestStatus ] }</span>
 						<span className="hidden">{ __( 'Configure?' ) }</span>
 					</a>
 				</Tooltip>
@@ -147,53 +117,26 @@ const SiteStatus = ( {
 					text={ sprintf(
 						// translators: %s is a comma separated list of needed dependencies.
 						__( '%s must be installed & activated!' ),
-						failedDependencies
-							.map( dep => dependencies[ dep ].label )
-							.join( ', ' )
+						failedDependencies.map( dep => dependencies[ dep ].label ).join( ', ' )
 					) }
 				>
-					<button
-						onClick={ () => setIsModalVisible( true ) }
-						className={ classes }
-					>
-						{ label }:{ ' ' }
-						<span>
-							{ _n(
-								'Missing dependency',
-								'Missing dependencies',
-								failedDependencies.length,
-								'newspack-plugin'
-							) }
-						</span>
+					<button onClick={ () => setIsModalVisible( true ) } className={ classes }>
+						{ label }: <span>{ _n( 'Missing dependency', 'Missing dependencies', failedDependencies.length, 'newspack-plugin' ) }</span>
 						<span className="hidden">
-							{ _n(
-								'Install dependency',
-								'Install dependencies',
-								failedDependencies.length,
-								'newspack-plugin'
-							) }
+							{ _n( 'Install dependency', 'Install dependencies', failedDependencies.length, 'newspack-plugin' ) }
 						</span>
 					</button>
 				</Tooltip>
 			) }
 			{ /* Display standard UI for the rest */ }
-			{ [
-				'error-preflight',
-				'success',
-				'idle',
-				'pending',
-				'error-request',
-			].includes( requestStatus ) && (
+			{ [ 'error-preflight', 'success', 'idle', 'pending', 'error-request' ].includes( requestStatus ) && (
 				<div className={ classes }>
 					{ label }:{ ' ' }
 					<span>
 						{ requestStatus === 'error-request'
 							? sprintf(
 									/* translators: %d is the HTTP status code */
-									__(
-										'Request failed - %d',
-										'newspack-plugin'
-									),
+									__( 'Request failed - %d', 'newspack-plugin' ),
 									requestCode
 							  )
 							: parsedStatusLabels[ requestStatus ] }

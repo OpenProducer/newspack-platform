@@ -89,12 +89,7 @@ type PrequisiteProps = {
 	};
 	inFlight: boolean;
 	saveConfig: ( config: Config ) => void;
-	skipPrerequisite: (
-		data: {
-			prerequisite: string;
-			skip: boolean;
-		}
-	) => void;
+	skipPrerequisite: ( data: { prerequisite: string; skip: boolean } ) => void;
 
 	// Schema for prequisite object is defined in PHP class Reader_Activation::get_prerequisites_status().
 	prerequisite: {
@@ -199,12 +194,7 @@ type PromptOptions = PromptOptionsBase & {
 };
 
 type InputValues = {
-	[ fieldName: string ]:
-		| string
-		| number
-		| Array< string >
-		| Array< number >
-		| boolean;
+	[ fieldName: string ]: string | number | Array< string > | Array< number > | boolean;
 };
 
 // Props for the Prompt component.

@@ -1749,66 +1749,40 @@ function getPostEditURL(postId) {
     action: 'edit'
   });
 }
-class BrowserURL extends external_wp_element_namespaceObject.Component {
-  constructor() {
-    super(...arguments);
-    this.state = {
-      historyId: null
-    };
-  }
-  componentDidUpdate(prevProps) {
-    const {
-      postId,
-      postStatus
-    } = this.props;
-    const {
-      historyId
-    } = this.state;
-    if ((postId !== prevProps.postId || postId !== historyId) && postStatus !== 'auto-draft' && postId) {
-      this.setBrowserURL(postId);
-    }
-  }
-
-  /**
-   * Replaces the browser URL with a post editor link for the given post ID.
-   *
-   * Note it is important that, since this function may be called when the
-   * editor first loads, the result generated `getPostEditURL` matches that
-   * produced by the server. Otherwise, the URL will change unexpectedly.
-   *
-   * @param {number} postId Post ID for which to generate post editor URL.
-   */
-  setBrowserURL(postId) {
-    window.history.replaceState({
-      id: postId
-    }, 'Post ' + postId, getPostEditURL(postId));
-    this.setState(() => ({
-      historyId: postId
-    }));
-  }
-  render() {
-    return null;
-  }
-}
-/* harmony default export */ const browser_url = ((0,external_wp_data_namespaceObject.withSelect)(select => {
+function BrowserURL() {
+  const [historyId, setHistoryId] = (0,external_wp_element_namespaceObject.useState)(null);
   const {
-    getCurrentPost
-  } = select(external_wp_editor_namespaceObject.store);
-  const post = getCurrentPost();
-  let {
-    id,
-    status,
-    type
-  } = post;
-  const isTemplate = ['wp_template', 'wp_template_part'].includes(type);
-  if (isTemplate) {
-    id = post.wp_id;
-  }
-  return {
-    postId: id,
-    postStatus: status
-  };
-})(BrowserURL));
+    postId,
+    postStatus
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getCurrentPost
+    } = select(external_wp_editor_namespaceObject.store);
+    const post = getCurrentPost();
+    let {
+      id,
+      status,
+      type
+    } = post;
+    const isTemplate = ['wp_template', 'wp_template_part'].includes(type);
+    if (isTemplate) {
+      id = post.wp_id;
+    }
+    return {
+      postId: id,
+      postStatus: status
+    };
+  }, []);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (postId && postId !== historyId && postStatus !== 'auto-draft') {
+      window.history.replaceState({
+        id: postId
+      }, 'Post ' + postId, getPostEditURL(postId));
+      setHistoryId(postId);
+    }
+  }, [postId, postStatus, historyId]);
+  return null;
+}
 
 ;// ./packages/edit-post/build-module/components/meta-boxes/meta-boxes-area/index.js
 /**
@@ -3204,7 +3178,7 @@ function Layout({
           }),
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PostLockedModal, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(EditorInitialization, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FullscreenMode, {
             isActive: isFullscreenActive
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(browser_url, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.UnsavedChangesWarning, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.AutosaveMonitor, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.LocalAutosaveMonitor, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(keyboard_shortcuts, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.EditorKeyboardShortcutsRegister, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockKeyboardShortcuts, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InitPatternModal, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_plugins_namespaceObject.PluginArea, {
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BrowserURL, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.UnsavedChangesWarning, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.AutosaveMonitor, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.LocalAutosaveMonitor, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(keyboard_shortcuts, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.EditorKeyboardShortcutsRegister, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockKeyboardShortcuts, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InitPatternModal, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_plugins_namespaceObject.PluginArea, {
             onError: onPluginAreaError
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(more_menu, {}), backButton, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.EditorSnackbars, {})]
         })

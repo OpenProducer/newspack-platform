@@ -35,8 +35,11 @@ class PWA {
 			'wp_front_service_worker',
 			function () {
 				header( 'Cache-Control: max-age=86400, must-revalidate' );
-			} 
+			}
 		);
+
+		// Add web app manifest filter.
+		add_filter( 'web_app_manifest', [ __CLASS__, 'filter_web_app_manifest' ] );
 	}
 
 	/**
@@ -122,6 +125,20 @@ class PWA {
 	 */
 	public static function bypass_service_worker( WP_Service_Worker_Scripts $scripts ) {
 		unset( $scripts->registered['wp-offline-post-request-handling'] );
+	}
+
+	/**
+	 * Filter the web app manifest to include custom display mode.
+	 *
+	 * @param array $manifest The web app manifest array.
+	 * @return array The modified manifest.
+	 */
+	public static function filter_web_app_manifest( $manifest ) {
+		$display_mode = get_option( 'newspack_pwa_display_mode', '' );
+		if ( ! empty( $display_mode ) ) {
+			$manifest['display'] = $display_mode;
+		}
+		return $manifest;
 	}
 }
 PWA::init();

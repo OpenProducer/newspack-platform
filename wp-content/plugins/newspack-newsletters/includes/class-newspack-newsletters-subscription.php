@@ -549,18 +549,6 @@ class Newspack_Newsletters_Subscription {
 	}
 
 	/**
-	 * Permanently delete a user subscription.
-	 *
-	 * @param int $user_id User ID.
-	 *
-	 * @return bool|WP_Error Whether the contact was deleted or error.
-	 */
-	public static function delete_user_subscription( $user_id ) {
-		_deprecated_function( __METHOD__, '2.21', 'Newspack_Newsletters_Contacts::delete' );
-		return Newspack_Newsletters_Contacts::delete( $user_id );
-	}
-
-	/**
 	 * Add a contact to ESP when a reader is registered.
 	 *
 	 * @param string         $email         Email address.

@@ -382,8 +382,8 @@ final class Placements {
 				'hook_name'   => 'before_footer',
 			),
 			'sticky'              => array(
-				'name'        => __( 'Mobile Sticky Footer', 'newspack-ads' ),
-				'description' => __( 'Choose a sticky ad unit to display at the bottom of the viewport on mobile devices (recommended sizes are 320x50, 300x50)', 'newspack-ads' ),
+				'name'        => __( 'Sticky Footer', 'newspack-ads' ),
+				'description' => __( 'Choose a sticky ad unit to display at the bottom of the viewport (recommended sizes are 728x90, 320x50, 300x50)', 'newspack-ads' ),
 				'hook_name'   => 'before_footer',
 			),
 		);

@@ -200,21 +200,10 @@ class Network_Wizard extends Wizard {
 				];
 			}
 
-			// Once "Content Distribution" is outside the feature flag,
-			// this tab should be removed.
-			if ( 'hub' === static::get_site_role() && ( ! defined( 'NEWPACK_NETWORK_CONTENT_DISTRIBUTION' ) || ! NEWPACK_NETWORK_CONTENT_DISTRIBUTION ) ) {
-				$tabs[] = [
-					'textContent' => esc_html__( 'Distributor Settings', 'newspack-plugin' ),
-					'href'        => admin_url( 'admin.php?page=newspack-network-distributor-settings' ),
-				];
-			}
-
-			if ( defined( 'NEWPACK_NETWORK_CONTENT_DISTRIBUTION' ) && NEWPACK_NETWORK_CONTENT_DISTRIBUTION ) {
-				$tabs[] = [
-					'textContent' => esc_html__( 'Content Distribution', 'newspack-plugin' ),
-					'href'        => admin_url( 'admin.php?page=newspack-network-distribution-settings' ),
-				];
-			}
+			$tabs[] = [
+				'textContent' => esc_html__( 'Content Distribution', 'newspack-plugin' ),
+				'href'        => admin_url( 'admin.php?page=newspack-network-distribution-settings' ),
+			];
 
 			return $tabs;
 
@@ -346,22 +335,19 @@ class Network_Wizard extends Wizard {
 			}
 		}
 
-		if ( defined( 'NEWPACK_NETWORK_CONTENT_DISTRIBUTION' ) && NEWPACK_NETWORK_CONTENT_DISTRIBUTION ) {
-
-			// Re-add "Content Distribution" as hidden page.
-			if ( is_callable( [ \Newspack_Network\Content_Distribution\Admin::class, 'render' ] ) ) {
-				remove_submenu_page( $this->parent_menu, 'newspack-network-distribution-settings' );
-				$title = __( 'Content Distribution', 'newspack-plugin' );
-				$hook = add_submenu_page(
-					'', // hidden.
-					$title,
-					__( 'Content Distribution', 'newspack-plugin' ),
-					'manage_options', // copied from original.
-					'newspack-network-distribution-settings',
-					[ \Newspack_Network\Content_Distribution\Admin::class, 'render' ]
-				);
-				$this->set_html_title( $hook, $title );
-			}
+		// Re-add "Content Distribution" as hidden page.
+		if ( is_callable( [ \Newspack_Network\Content_Distribution\Admin::class, 'render' ] ) ) {
+			remove_submenu_page( $this->parent_menu, 'newspack-network-distribution-settings' );
+			$title = __( 'Content Distribution', 'newspack-plugin' );
+			$hook = add_submenu_page(
+				'', // hidden.
+				$title,
+				__( 'Content Distribution', 'newspack-plugin' ),
+				'manage_options', // copied from original.
+				'newspack-network-distribution-settings',
+				[ \Newspack_Network\Content_Distribution\Admin::class, 'render' ]
+			);
+			$this->set_html_title( $hook, $title );
 		}
 	}
 

@@ -17,6 +17,10 @@ use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Status\Host;
 use Automattic\Jetpack\Tracking;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 /**
  * Handles the Jetpack Forms dashboard.
  */
@@ -27,6 +31,8 @@ class Dashboard {
 	 * @var string
 	 */
 	const SCRIPT_HANDLE = 'jp-forms-dashboard';
+
+	const ADMIN_SLUG = 'jetpack-forms-admin';
 
 	/**
 	 * Priority for the dashboard menu.
@@ -59,7 +65,7 @@ class Dashboard {
 		$this->switch = $switch ?? new Dashboard_View_Switch();
 
 		// Set the integrations tab feature flag
-		self::$show_integrations = apply_filters( 'jetpack_forms_enable_integrations_tab', false );
+		self::$show_integrations = apply_filters( 'jetpack_forms_enable_integrations_tab', true );
 	}
 
 	/**
@@ -70,6 +76,11 @@ class Dashboard {
 		add_action( 'admin_menu', array( $this, 'add_new_admin_submenu' ), self::MENU_PRIORITY );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_scripts' ) );
+
+		// Removed all admin notices on the Jetpack Forms admin page.
+		if ( isset( $_GET['page'] ) && $_GET['page'] === self::ADMIN_SLUG ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			remove_all_actions( 'admin_notices' );
+		}
 
 		$this->switch->init();
 	}
@@ -176,11 +187,13 @@ class Dashboard {
 		}
 
 		Admin_Menu::add_menu(
-			__( 'Jetpack Forms', 'jetpack-forms' ),
-			_x( 'Forms', 'submenu title for Jetpack Forms', 'jetpack-forms' ),
+			/** "Jetpack Forms" and "Forms" are Product names, do not translate. */
+			'Jetpack Forms',
+			'Forms',
 			'edit_pages',
-			'jetpack-forms-admin',
-			array( $this, 'render_new_dashboard' )
+			self::ADMIN_SLUG,
+			array( $this, 'render_new_dashboard' ),
+			10
 		);
 	}
 
@@ -216,8 +229,10 @@ class Dashboard {
 			'hasAI'                   => $has_ai,
 			'enableIntegrationsTab'   => self::$show_integrations,
 			'renderMigrationPage'     => $this->switch->is_jetpack_forms_announcing_new_menu(),
-			'dashboardURL'            => $this->switch->get_forms_admin_url(),
+			'dashboardURL'            => add_query_arg( 'jetpack_forms_migration_announcement_seen', 'yes', $this->switch->get_forms_admin_url() ),
+			'isMailpoetEnabled'       => Jetpack_Forms::is_mailpoet_enabled(),
 		);
+
 		if ( ! empty( $extra_config ) ) {
 			$config = array_merge( $config, $extra_config );
 		}

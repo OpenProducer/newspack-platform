@@ -24,15 +24,8 @@ import { useWizardApiFetch } from './hooks/use-wizard-api-fetch';
  * @param callbacks Wizard API Fetch callbacks
  * @return Wizard API Fetch response
  */
-function fetchHandler(
-	slug: string,
-	action = '',
-	apiFetch: WizardApiFetch< PluginResponse >,
-	callbacks?: ApiFetchCallbacks< PluginResponse >
-) {
-	const path = action
-		? `/newspack/v1/plugins/${ slug }/${ action }`
-		: `/newspack/v1/plugins/${ slug }`;
+function fetchHandler( slug: string, action = '', apiFetch: WizardApiFetch< PluginResponse >, callbacks?: ApiFetchCallbacks< PluginResponse > ) {
+	const path = action ? `/newspack/v1/plugins/${ slug }/${ action }` : `/newspack/v1/plugins/${ slug }`;
 	const method = action ? 'POST' : 'GET';
 	return apiFetch( { path, method }, callbacks );
 }
@@ -80,18 +73,10 @@ function WizardsPluginCardButton( {
 	actionText?: PluginCardActionText;
 } ) {
 	if ( plugin.status === 'page-reload' ) {
-		return (
-			<span className="gray">
-				{ __( 'Page reloading…', 'newspack-plugin' ) }
-			</span>
-		);
+		return <span className="gray">{ __( 'Page reloading…', 'newspack-plugin' ) }</span>;
 	}
 	if ( plugin.status === 'page-redirect' ) {
-		return (
-			<span className="gray">
-				{ __( 'Page redirecting…', 'newspack-plugin' ) }
-			</span>
-		);
+		return <span className="gray">{ __( 'Page redirecting…', 'newspack-plugin' ) }</span>;
 	}
 	if ( isLoading ) {
 		return <Waiting />;
@@ -134,21 +119,11 @@ function WizardsPluginCardButton( {
 			);
 		}
 		if ( plugin.editLink ) {
-			return (
-				<a href={ plugin.editLink }>
-					{ actionText.complete ??
-						__( 'Complete Setup', 'newspack-plugin' ) }
-				</a>
-			);
+			return <a href={ plugin.editLink }>{ actionText.complete ?? __( 'Complete Setup', 'newspack-plugin' ) }</a>;
 		}
 	}
 	if ( plugin.editLink ) {
-		return (
-			<a href={ plugin.editLink }>
-				{ actionText.configure ??
-					__( 'Configure', 'newspack-plugin' ) }
-			</a>
-		);
+		return <a href={ plugin.editLink }>{ actionText.configure ?? __( 'Configure', 'newspack-plugin' ) }</a>;
 	}
 	return null;
 }
@@ -185,9 +160,7 @@ function WizardsPluginCard( {
 	actionText = {},
 	...props
 }: PluginCard ) {
-	const { wizardApiFetch, errorMessage, isFetching } = useWizardApiFetch(
-		`/newspack/wizards/plugins/${ slug }`
-	);
+	const { wizardApiFetch, errorMessage, isFetching } = useWizardApiFetch( `/newspack/wizards/plugins/${ slug }` );
 	const [ pluginState, setPluginState ] = hooks.useObjectState( {
 		slug,
 		status: '',
@@ -205,41 +178,11 @@ function WizardsPluginCard( {
 	};
 
 	const on: PluginCallbacks = {
-		init: fetchCallbacks =>
-			fetchHandler(
-				pluginState.slug,
-				undefined,
-				wizardApiFetch,
-				fetchCallbacks
-			),
-		activate: fetchCallbacks =>
-			fetchHandler(
-				pluginState.slug,
-				'activate',
-				wizardApiFetch,
-				fetchCallbacks
-			),
-		deactivate: fetchCallbacks =>
-			fetchHandler(
-				pluginState.slug,
-				'deactivate',
-				wizardApiFetch,
-				fetchCallbacks
-			),
-		install: fetchCallbacks =>
-			fetchHandler(
-				pluginState.slug,
-				'install',
-				wizardApiFetch,
-				fetchCallbacks
-			),
-		configure: fetchCallbacks =>
-			fetchHandler(
-				pluginState.slug,
-				'configure',
-				wizardApiFetch,
-				fetchCallbacks
-			),
+		init: fetchCallbacks => fetchHandler( pluginState.slug, undefined, wizardApiFetch, fetchCallbacks ),
+		activate: fetchCallbacks => fetchHandler( pluginState.slug, 'activate', wizardApiFetch, fetchCallbacks ),
+		deactivate: fetchCallbacks => fetchHandler( pluginState.slug, 'deactivate', wizardApiFetch, fetchCallbacks ),
+		install: fetchCallbacks => fetchHandler( pluginState.slug, 'install', wizardApiFetch, fetchCallbacks ),
+		configure: fetchCallbacks => fetchHandler( pluginState.slug, 'configure', wizardApiFetch, fetchCallbacks ),
 	};
 
 	/**
@@ -250,9 +193,7 @@ function WizardsPluginCard( {
 	function setPluginAction( callbacksKey: keyof PluginCallbacks ) {
 		// If action is activating or deactivating.
 		const actions = reloadOnActivation ? [ 'activate', 'deactivate' ] : [ 'deactivate' ];
-		const isPluginStateUpdate = actions.includes(
-			callbacksKey
-		);
+		const isPluginStateUpdate = actions.includes( callbacksKey );
 		setPluginState( { status: '' } );
 		on[ callbacksKey ]( {
 			onSuccess( update ) {
@@ -303,21 +244,13 @@ function WizardsPluginCard( {
 		const descriptionAppend = description ?? '';
 		let newDescription = '';
 		if ( ! statuses.isInstalled ) {
-			newDescription =
-				pluginState.statusDescription?.uninstalled ??
-				__( 'Uninstalled.', 'newspack-plugin' );
+			newDescription = pluginState.statusDescription?.uninstalled ?? __( 'Uninstalled.', 'newspack-plugin' );
 		} else if ( ! statuses.isActive ) {
-			newDescription =
-				pluginState.statusDescription?.inactive ??
-				__( 'Inactive.', 'newspack-plugin' );
+			newDescription = pluginState.statusDescription?.inactive ?? __( 'Inactive.', 'newspack-plugin' );
 		} else if ( ! statuses.isConfigured ) {
-			newDescription =
-				pluginState.statusDescription?.notConfigured ??
-				__( 'Not connected.', 'newspack-plugin' );
+			newDescription = pluginState.statusDescription?.notConfigured ?? __( 'Not connected.', 'newspack-plugin' );
 		} else {
-			newDescription =
-				pluginState.statusDescription?.connected ??
-				__( 'Connected.', 'newspack-plugin' );
+			newDescription = pluginState.statusDescription?.connected ?? __( 'Connected.', 'newspack-plugin' );
 		}
 		return (
 			<>
@@ -337,8 +270,7 @@ function WizardsPluginCard( {
 	// Add toggle specific props if the card is togglable.
 	if ( isTogglable ) {
 		conditionalProps.toggleChecked = statuses.isActive;
-		conditionalProps.toggleOnChange = () =>
-			! statuses.isActive ? onActivate() : onDeactivate();
+		conditionalProps.toggleOnChange = () => ( ! statuses.isActive ? onActivate() : onDeactivate() );
 		conditionalProps.disabled = isFetching;
 	}
 

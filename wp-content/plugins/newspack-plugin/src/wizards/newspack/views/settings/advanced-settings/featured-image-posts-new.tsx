@@ -12,21 +12,12 @@ import { __ } from '@wordpress/i18n';
  */
 import { Grid, SelectControl } from '../../../../../components/src';
 
-export default function FeaturedImagePostsNew( {
-	data,
-	update,
-}: ThemeModComponentProps< AdvancedSettings > ) {
+export default function FeaturedImagePostsNew( { data, update }: ThemeModComponentProps< AdvancedSettings > ) {
 	return (
 		<Grid gutter={ 32 }>
 			<SelectControl
-				label={ __(
-					'Default featured image position for new posts',
-					'newspack-plugin'
-				) }
-				help={ __(
-					'Set a default featured image position for new posts.',
-					'newspack-plugin'
-				) }
+				label={ __( 'Default featured image position for new posts', 'newspack-plugin' ) }
+				help={ __( 'Set a default featured image position for new posts.', 'newspack-plugin' ) }
 				value={ data.featured_image_default }
 				options={ [
 					{ label: __( 'Large', 'newspack-plugin' ), value: 'large' },
@@ -44,19 +35,11 @@ export default function FeaturedImagePostsNew( {
 						value: 'hidden',
 					},
 				] }
-				onChange={ ( featured_image_default: string ) =>
-					update( { featured_image_default } )
-				}
+				onChange={ ( featured_image_default: string ) => update( { featured_image_default } ) }
 			/>
 			<SelectControl
-				label={ __(
-					'Default template for new posts',
-					'newspack-plugin'
-				) }
-				help={ __(
-					'Set a default template for new posts.',
-					'newspack-plugin'
-				) }
+				label={ __( 'Default template for new posts', 'newspack-plugin' ) }
+				help={ __( 'Set a default template for new posts.', 'newspack-plugin' ) }
 				value={ data.post_template_default }
 				options={ [
 					{
@@ -72,9 +55,7 @@ export default function FeaturedImagePostsNew( {
 						value: 'single-wide.php',
 					},
 				] }
-				onChange={ ( post_template_default: string ) =>
-					update( { post_template_default } )
-				}
+				onChange={ ( post_template_default: string ) => update( { post_template_default } ) }
 			/>
 		</Grid>
 	);

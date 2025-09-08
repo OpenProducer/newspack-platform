@@ -8,40 +8,65 @@ use WC_Address_Provider;
  * Service class for managing address providers.
  */
 class AddressProviderController {
-
 	/**
-	 * Cached provider class names from the last filter call.
-	 *
-	 * @var string[]
-	 */
-	private $cached_provider_class_names = array();
-
-	/**
-	 * Cached provider instances.
+	 * Registered provider instances.
 	 *
 	 * @var WC_Address_Provider[]
 	 */
-	private $cached_providers = array();
+	private $providers = array();
+
+	/**
+	 * Preferred provider from options.
+	 *
+	 * @var string ID of preferred address provider.
+	 */
+	private $preferred_provider_option;
+
+	/**
+	 * Init function runs after this provider was added to DI container.
+	 *
+	 * @internal
+	 */
+	final public function init() {
+		$this->preferred_provider_option = get_option( 'woocommerce_address_autocomplete_provider', '' );
+		$this->providers                 = $this->get_registered_providers();
+	}
+
+	/**
+	 * Get the registered providers.
+	 *
+	 * @return WC_Address_Provider[] array of WC_Address_Providers.
+	 */
+	public function get_providers(): array {
+		return $this->providers;
+	}
 
 	/**
 	 * Get all registered providers.
 	 *
 	 * @return WC_Address_Provider[] array of WC_Address_Providers.
 	 */
-	public function get_registered_providers(): array {
+	private function get_registered_providers(): array {
 		/**
 		 * Filter the registered address providers.
 		 *
 		 * @since 9.9.0
-		 * @param WC_Address_Provider[] $providers Array of fully qualified class names that extend WC_Address_Provider.
+		 * @param array $providers Array of fully qualified class names (strings) or WC_Address_Provider instances.
+		 *                         Class names will be instantiated automatically.
+		 *                         Example: array( 'My_Provider_Class', new My_Other_Provider() )
 		 */
-		$provider_class_names = apply_filters( 'woocommerce_address_providers', array() );
+		$provider_items = apply_filters( 'woocommerce_address_providers', array() );
+
+		// The filter returned nothing but an empty array, so we can skip the rest of the function.
+		if ( empty( $provider_items ) && is_array( $provider_items ) ) {
+			return array();
+		}
 
 		$logger = wc_get_logger();
 
-		if ( ! is_array( $provider_class_names ) ) {
+		if ( ! is_array( $provider_items ) ) {
 			$logger->error(
-				'Invalid return value for woocommerce_address_providers, expected an array of class names.',
+				'Invalid return value for woocommerce_address_providers, expected an array of class names or instances.',
 				array(
 					'context' => 'address_provider_service',
 				)
@@ -49,44 +74,32 @@ class AddressProviderController {
 			return array();
 		}
 
-		// If the class names haven't changed, return the cached instances.
-		if ( $this->cached_provider_class_names === $provider_class_names && ! empty( $this->cached_providers ) ) {
-			return $this->cached_providers;
-		}
-
 		$providers = array();
 		$seen_ids  = array();
 
-		foreach ( $provider_class_names as $provider_class_name ) {
+		foreach ( $provider_items as $provider_item ) {
+			if ( is_string( $provider_item ) && class_exists( $provider_item ) ) {
+				$provider_item = new $provider_item();
+			}
 
-			// Validate the class name is a string.
-			if ( ! is_string( $provider_class_name ) ) {
+			// Providers need to be valid and extend WC_Address_Provider.
+			if ( ! is_a( $provider_item, WC_Address_Provider::class ) ) {
 				$logger->error(
-					'Invalid class name for address provider, expected a string.',
+					sprintf(
+						'Invalid address provider item "%s", expected a string class name or WC_Address_Provider instance.',
+						is_object( $provider_item ) ? get_class( $provider_item ) : gettype( $provider_item )
+					),
 					array(
 						'context' => 'address_provider_service',
 					)
 				);
 				continue;
 			}
-
-			// Ensure the class exists and is a valid WC_Address_Provider subclass.
-			if ( ! class_exists( $provider_class_name ) || ! is_subclass_of( $provider_class_name, WC_Address_Provider::class ) ) {
-				$logger->error(
-					'Invalid address provider class, class does not exist or is not a subclass of WC_Address_Provider: ' . $provider_class_name,
-					array(
-						'context' => 'address_provider_service',
-					)
-				);
-				continue;
-			}
-
-			$provider_instance = new $provider_class_name();
 
 			// Validate the instance has the necessary properties.
-			if ( empty( $provider_instance->id ) || empty( $provider_instance->name ) ) {
+			if ( empty( $provider_item->id ) || empty( $provider_item->name ) ) {
 				$logger->error(
-					'Invalid address provider instance, id or name property is missing or empty: ' . $provider_class_name,
+					'Invalid address provider instance, id or name property is missing or empty: ' . get_class( $provider_item ),
 					array(
 						'context' => 'address_provider_service',
 					)
@@ -95,13 +108,13 @@ class AddressProviderController {
 			}
 
 			// Check for duplicate IDs.
-			if ( isset( $seen_ids[ $provider_instance->id ] ) ) {
+			if ( isset( $seen_ids[ $provider_item->id ] ) ) {
 				$logger->error(
 					sprintf(
 						'Duplicate provider ID found. ID "%s" is used by both %s and %s.',
-						$provider_instance->id,
-						$seen_ids[ $provider_instance->id ],
-						$provider_class_name
+						$provider_item->id,
+						$seen_ids[ $provider_item->id ],
+						get_class( $provider_item )
 					),
 					array(
 						'context' => 'address_provider_service',
@@ -111,15 +124,24 @@ class AddressProviderController {
 			}
 
 			// Track the ID and its provider class for error reporting.
-			$seen_ids[ $provider_instance->id ] = $provider_class_name;
+			$seen_ids[ $provider_item->id ] = get_class( $provider_item );
 
 			// Add the provider instance to the array after all checks are completed.
-			$providers[] = $provider_instance;
+			$providers[] = $provider_item;
 		}
 
-		// Update the cache.
-		$this->cached_provider_class_names = $provider_class_names;
-		$this->cached_providers            = $providers;
+		if ( ! empty( $this->preferred_provider_option ) && ! empty( $providers ) ) {
+			// Look for the preferred provider in the array.
+			foreach ( $providers as $key => $provider ) {
+				if ( $provider->id === $this->preferred_provider_option ) {
+					// Found the preferred provider, move it to the beginning of the array.
+					$preferred_provider = $provider;
+					unset( $providers[ $key ] );
+					array_unshift( $providers, $preferred_provider );
+					break;
+				}
+			}
+		}
 
 		return $providers;
 	}
@@ -131,14 +153,30 @@ class AddressProviderController {
 	 * @return bool
 	 */
 	public function is_provider_available( string $provider_id ): bool {
-		$providers = $this->get_registered_providers();
 
-		foreach ( $providers as $provider ) {
+		foreach ( $this->providers as $provider ) {
 			if ( $provider->id === $provider_id ) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get the preferred provider; this is what was selected in the WooCommerce "preferred provider" setting *or* the
+	 * first registered provider if no preference was set. If the provider selected in WC Settings is not registered
+	 * anymore, it will fall back to the first registered provider. Any other case will return an empty string.
+	 *
+	 * @return string
+	 */
+	public function get_preferred_provider(): string {
+
+		if ( $this->is_provider_available( $this->preferred_provider_option ) ) {
+			return $this->preferred_provider_option;
+		}
+
+		// Get the first provider's ID.
+		return $this->providers[0]->id ?? '';
 	}
 }

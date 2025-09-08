@@ -34,9 +34,7 @@ const actions: Statuses = {
 	googleAdManager: {
 		...siteStatuses.googleAdManager,
 		then( { services: { google_ad_manager } } ) {
-			return (
-				google_ad_manager.available && google_ad_manager.enabled === '1'
-			);
+			return google_ad_manager.available && google_ad_manager.enabled === '1';
 		},
 	},
 } as const;

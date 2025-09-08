@@ -25,18 +25,10 @@ function WizardsTab( {
 	className?: string;
 	description?: React.ReactNode;
 } ) {
-	const isWizardLoading = useSelect(
-		( select: ( namespace: string ) => WizardSelector ) =>
-			select( WIZARD_STORE_NAMESPACE ).isLoading(),
-		[]
-	);
+	const isWizardLoading = useSelect( ( select: ( namespace: string ) => WizardSelector ) => select( WIZARD_STORE_NAMESPACE ).isLoading(), [] );
 	const className = props.className || '';
 	return (
-		<div
-			className={ `${
-				isWizardLoading || isFetching ? 'is-fetching ' : ''
-			}${ className } newspack-wizard__sections` }
-		>
+		<div className={ `${ isWizardLoading || isFetching ? 'is-fetching ' : '' }${ className } newspack-wizard__sections` }>
 			<h1>{ title }</h1>
 			{ description && <p className="newspack-wizard__sections__description">{ description }</p> }
 			{ children }

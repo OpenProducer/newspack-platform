@@ -195,7 +195,7 @@ final class Newspack_Popups_Inserter {
 					$classic_content = force_balance_tags( wpautop( $block['innerHTML'] ) ); // Ensure we have paragraph tags and valid HTML.
 					$dom             = new DomDocument();
 					libxml_use_internal_errors( true );
-					$dom->loadHTML( mb_convert_encoding( $classic_content, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ) );
+					$dom->loadHTML( htmlspecialchars_decode( htmlentities( mb_convert_encoding( $classic_content, 'UTF-8', get_bloginfo( 'charset' ) ) ) ) );
 					$dom_body = $dom->getElementsByTagName( 'body' );
 					if ( 0 < $dom_body->length ) {
 						$dom_body_elements = $dom_body->item( 0 )->childNodes;
@@ -705,6 +705,29 @@ final class Newspack_Popups_Inserter {
 		);
 		\wp_style_add_data( $script_handle, 'rtl', 'replace' );
 		\wp_enqueue_style( $script_handle );
+
+		// Enqueue Jetpack contact form styles if any active popups contain contact forms.
+		self::maybe_enqueue_contact_form_styles();
+	}
+
+	/**
+	 * Enqueue Jetpack contact form styles if any active popups contain contact forms.
+	 */
+	public static function maybe_enqueue_contact_form_styles() {
+		// Only proceed if Jetpack contact forms are available.
+		if ( ! class_exists( '\Automattic\Jetpack\Extensions\Contact_Form\Contact_Form_Block' ) ) {
+			return;
+		}
+
+		// Check if any active popups contain Jetpack contact forms.
+		$active_popups = Newspack_Popups_Model::retrieve_active_popups();
+		foreach ( $active_popups as $popup ) {
+			if ( false !== strpos( $popup['content'], 'wp:jetpack/contact-form' ) ) {
+				// Enqueue the grunion.css stylesheet.
+				\wp_enqueue_style( 'grunion.css' );
+				break;
+			}
+		}
 	}
 
 	/**
@@ -825,8 +848,9 @@ final class Newspack_Popups_Inserter {
 	 * @return bool Whether the prompt should be shown based on matching terms.
 	 */
 	public static function assess_taxonomy_filter( $popup, $taxonomy = 'category' ) {
-		// If a preview request, ensure the prompt appears in the first post loaded in the preview window.
-		if ( Newspack_Popups::is_preview_request() ) {
+		// For single popup preview, ensure the prompt appears in the first post loaded in the preview window.
+		// But for view_as preview, we should still apply category filtering.
+		if ( Newspack_Popups::is_preview_request() && ! Newspack_Popups_View_As::viewing_as_spec() ) {
 			return true;
 		}
 

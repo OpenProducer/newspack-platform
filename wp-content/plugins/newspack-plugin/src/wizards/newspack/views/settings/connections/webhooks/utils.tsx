@@ -44,14 +44,8 @@ export function getEndpointTitle( endpoint: Endpoint ): JSX.Element {
 	const { label, url } = endpoint;
 	return (
 		<Fragment>
-			{ label && (
-				<span className="newspack-webhooks__endpoint__label">
-					{ label }:{ ' ' }
-				</span>
-			) }
-			<span className="newspack-webhooks__endpoint__url">
-				{ getDisplayUrl( url ) }
-			</span>
+			{ label && <span className="newspack-webhooks__endpoint__label">{ label }: </span> }
+			<span className="newspack-webhooks__endpoint__url">{ getDisplayUrl( url ) }</span>
 		</Fragment>
 	);
 }
@@ -62,9 +56,7 @@ export function getEndpointTitle( endpoint: Endpoint ): JSX.Element {
  * @param status The status of the request.
  * @return       The icon component for the request status.
  */
-export function getRequestStatusIcon(
-	status: 'pending' | 'finished' | 'killed'
-) {
+export function getRequestStatusIcon( status: 'pending' | 'finished' | 'killed' ) {
 	const icons = {
 		pending: reusableBlock,
 		finished: check,

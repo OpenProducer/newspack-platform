@@ -31,6 +31,10 @@ final class GAM_Model {
 
 	const OPTION_NAME_DEFAULT_UNITS = '_newspack_ads_gam_default_units';
 
+	const OPTION_NAME_PARENT_AD_UNIT = '_newspack_ads_gam_parent_ad_unit';
+
+	const OPTION_NAME_PARENT_NETWORK_CODE = '_newspack_ads_gam_parent_network_code';
+
 	/**
 	 * GAM Api
 	 *
@@ -343,7 +347,8 @@ final class GAM_Model {
 		if ( true === $sync ) {
 			$api = self::get_api();
 			if ( $api ) {
-				$gam_ad_units = $api->ad_units->get_serialized_ad_units( [], true );
+				$parent_ad_unit_id = self::get_parent_ad_unit_id();
+				$gam_ad_units      = $api->ad_units->get_serialized_ad_units( $parent_ad_unit_id, [], true );
 				if ( ! is_wp_error( $gam_ad_units ) ) {
 					foreach ( $ad_units as $ad_unit_key => $ad_unit_config ) {
 						/** Validate config before continuing. */
@@ -356,7 +361,7 @@ final class GAM_Model {
 							/** Update ad unit status to 'ACTIVE' if not active. */
 							if ( 'ACTIVE' !== $gam_ad_unit['status'] ) {
 								$api->ad_units->update_ad_unit_status( $gam_ad_unit['id'], 'ACTIVE' );
-								$gam_ad_unit = $api->ad_units->get_serialized_ad_units( [ $gam_ad_unit['id'] ] )[0];
+								$gam_ad_unit = $api->ad_units->get_serialized_ad_units( null, [ $gam_ad_unit['id'] ] )[0];
 							}
 						} else {
 							/** Create ad unit if not synced. */
@@ -436,6 +441,37 @@ final class GAM_Model {
 	}
 
 	/**
+	 * Get parent network code.
+	 *
+	 * @return string Parent network code or empty string if not set.
+	 */
+	public static function get_parent_network_code() {
+		return get_option( self::OPTION_NAME_PARENT_NETWORK_CODE, '' );
+	}
+
+	/**
+	 * Get parent ad unit id.
+	 *
+	 * @return string Parent ad unit id or empty string if not set.
+	 */
+	public static function get_parent_ad_unit_id() {
+		return get_option( self::OPTION_NAME_PARENT_AD_UNIT, '' );
+	}
+
+	/**
+	 * Get parent ad units with children.
+	 *
+	 * @return array Array of ad units.
+	 */
+	public static function get_parent_ad_units() {
+		$api = self::get_api();
+		if ( $api ) {
+			return $api->ad_units->get_parent_ad_units();
+		}
+		return [];
+	}
+
+	/**
 	 * Get the ad units.
 	 *
 	 * @param bool $sync Whether to attempt sync with connected GAM.
@@ -448,7 +484,8 @@ final class GAM_Model {
 			if ( self::is_api_connected() ) {
 				$api = self::get_api();
 				if ( $api ) {
-					$gam_ad_units = $api->ad_units->get_serialized_ad_units();
+					$parent_ad_unit_id = self::get_parent_ad_unit_id();
+					$gam_ad_units      = $api->ad_units->get_serialized_ad_units( $parent_ad_unit_id );
 					if ( ! \is_wp_error( $gam_ad_units ) && ! empty( $gam_ad_units ) ) {
 						self::sync_gam_settings( $gam_ad_units );
 						self::$synced = true;
@@ -484,6 +521,10 @@ final class GAM_Model {
 	public static function add_ad_unit( $ad_unit ) {
 		if ( self::is_api_connected() ) {
 			$api    = self::get_api();
+			$parent_ad_unit_id = self::get_parent_ad_unit_id();
+			if ( $parent_ad_unit_id ) {
+				$ad_unit['parent_id'] = $parent_ad_unit_id;
+			}
 			$result = $api->ad_units->create_ad_unit( $ad_unit );
 			self::sync_gam_settings();
 		} else {
@@ -643,7 +684,8 @@ final class GAM_Model {
 	public static function sync_gam_settings( $serialised_ad_units = null, $settings = null ) {
 		$api = self::get_api();
 		if ( null === $serialised_ad_units ) {
-			$serialised_ad_units = $api->ad_units->get_serialized_ad_units();
+			$parent_ad_unit_id = self::get_parent_ad_unit_id();
+			$serialised_ad_units = $api->ad_units->get_serialized_ad_units( $parent_ad_unit_id );
 		}
 		if ( null === $settings ) {
 			try {
@@ -774,16 +816,6 @@ final class GAM_Model {
 
 		if ( ! is_array( $ad_unit['sizes'] ) ) {
 			$ad_unit['sizes'] = [];
-		}
-
-		// Remove all ad sizes greater than 600px wide for sticky ads.
-		if ( self::is_sticky( $ad_unit ) ) {
-			$ad_unit['sizes'] = array_filter(
-				$ad_unit['sizes'],
-				function( $size ) {
-					return $size[0] < 600;
-				}
-			);
 		}
 
 		self::$slots[ $unique_id ] = $ad_unit;

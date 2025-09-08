@@ -332,11 +332,15 @@ function withScope(func) {
       const gen = func(...args);
       let value;
       let it;
+      let error;
       while (true) {
         setNamespace(ns);
         setScope(scope);
         try {
-          it = gen.next(value);
+          it = error ? gen.throw(error) : gen.next(value);
+          error = undefined;
+        } catch (e) {
+          throw e;
         } finally {
           resetScope();
           resetNamespace();
@@ -344,15 +348,14 @@ function withScope(func) {
         try {
           value = await it.value;
         } catch (e) {
-          setNamespace(ns);
-          setScope(scope);
-          gen.throw(e);
-        } finally {
-          resetScope();
-          resetNamespace();
+          error = e;
         }
         if (it.done) {
-          break;
+          if (error) {
+            throw error;
+          } else {
+            break;
+          }
         }
       }
       return value;
@@ -460,16 +463,17 @@ function useCallback(callback, inputs) {
 }
 
 /**
- * Pass a factory function and an array of inputs. `useMemo` will only recompute
- * the memoized value when one of the inputs has changed.
+ * Returns the memoized output of the passed factory function, allowing access
+ * to the current element's scope.
  *
  * This hook is equivalent to Preact's `useMemo` and makes the element's scope
  * available so functions like `getElement()` and `getContext()` can be used
- * inside the passed factory function.
+ * inside the passed factory function. Note that `useMemo` will only recompute
+ * the memoized value when one of the inputs has changed.
  *
  * @param factory Factory function that returns that value for memoization.
- * @param inputs  If present, the factory will only be run to recompute if
- *                the values in the list change (using `===`).
+ * @param inputs  If present, the factory will only be run to recompute if the
+ *                values in the list change (using `===`).
  *
  * @return The memoized value.
  */
@@ -742,7 +746,7 @@ class PropSignal {
   }
 
   /**
-   *  Update the internal signals for the value and the getter of the
+   *  Updates the internal signals for the value and the getter of the
    *  corresponding prop.
    *
    * @param param0
@@ -1077,7 +1081,7 @@ const deepMergeRecursive = (target, source, override = true) => {
 };
 
 /**
- * Recursively update prop values inside the passed `target` and nested plain
+ * Recursively updates prop values inside the passed `target` and nested plain
  * objects, using the values present in `source`. References to plain objects
  * are kept, only updating props containing primitives or arrays. Arrays are
  * replaced instead of merged or concatenated.
@@ -1204,7 +1208,7 @@ const contextHandlers = {
 };
 
 /**
- * Wrap a context object with a proxy to reproduce the context stack. The proxy
+ * Wraps a context object with a proxy to reproduce the context stack. The proxy
  * uses the passed `inherited` context as a fallback to look up for properties
  * that don't exist in the given context. Also, updated properties are modified
  * where they are defined, or added to the main context when they don't exist.
@@ -1253,7 +1257,7 @@ const storeConfigs = new Map();
 const serverStates = new Map();
 
 /**
- * Get the defined config for the store with the passed namespace.
+ * Gets the defined config for the store with the passed namespace.
  *
  * @param namespace Store's namespace from which to retrieve the config.
  * @return Defined config for the given namespace.
@@ -1261,7 +1265,7 @@ const serverStates = new Map();
 const getConfig = namespace => storeConfigs.get(namespace || getNamespace()) || {};
 
 /**
- * Get the part of the state defined and updated from the server.
+ * Gets the part of the state defined and updated from the server.
  *
  * The object returned is read-only, and includes the state defined in PHP with
  * `wp_interactivity_state()`. When using `actions.navigate()`, this object is
@@ -1459,7 +1463,7 @@ const directiveCallbacks = {};
 const directivePriorities = {};
 
 /**
- * Register a new directive type in the Interactivity API runtime.
+ * Registers a new directive type in the Interactivity API runtime.
  *
  * @example
  * ```js
@@ -1723,7 +1727,7 @@ preact_module/* options */.fF.vnode = vnode => {
 
 
 /**
- * Recursively clone the passed object.
+ * Recursively clones the passed object.
  *
  * @param source Source object.
  * @return Cloned object.
@@ -1783,7 +1787,7 @@ const ruleNewline = /\n+/g;
 const empty = ' ';
 
 /**
- * Convert a css style string into a object.
+ * Converts a css style string into a object.
  *
  * Made by Cristian Bote (@cristianbote) for Goober.
  * https://unpkg.com/browse/goober@2.1.13/src/core/astish.js
@@ -2213,7 +2217,10 @@ const getGlobalAsyncEventDirective = type => {
       }
     }
   }) => {
-    // Preserve the initial inner HTML.
+    // Shown deprecation warning
+    warn('The "data-wp-ignore" directive of the Interactivity API is deprecated since version 6.9 and will be removed in version 7.0.');
+
+    // Preserve the initial inner HTML
     const cached = T(() => innerHTML, []);
     return (0,preact_module.h)(Type, {
       dangerouslySetInnerHTML: {
@@ -2388,6 +2395,8 @@ const hydratedIslands = new WeakSet();
  * @return The resulting vDOM tree.
  */
 function toVdom(root) {
+  const nodesToRemove = new Set();
+  const nodesToReplace = new Set();
   const treeWalker = document.createTreeWalker(root, 205 // TEXT + CDATA_SECTION + COMMENT + PROCESSING_INSTRUCTION + ELEMENT
   );
   function walk(node) {
@@ -2397,22 +2406,19 @@ function toVdom(root) {
 
     // TEXT_NODE (3)
     if (nodeType === 3) {
-      return [node.data];
+      return node.data;
     }
 
     // CDATA_SECTION_NODE (4)
     if (nodeType === 4) {
-      var _nodeValue;
-      const next = treeWalker.nextSibling();
-      node.replaceWith(new window.Text((_nodeValue = node.nodeValue) !== null && _nodeValue !== void 0 ? _nodeValue : ''));
-      return [node.nodeValue, next];
+      nodesToReplace.add(node);
+      return node.nodeValue;
     }
 
     // COMMENT_NODE (8) || PROCESSING_INSTRUCTION_NODE (7)
     if (nodeType === 8 || nodeType === 7) {
-      const next = treeWalker.nextSibling();
-      node.remove();
-      return [null, next];
+      nodesToRemove.add(node);
+      return null;
     }
     const elementNode = node;
     const {
@@ -2490,11 +2496,11 @@ function toVdom(root) {
       let child = treeWalker.firstChild();
       if (child) {
         while (child) {
-          const [vnode, nextChild] = walk(child);
+          const vnode = walk(child);
           if (vnode) {
             children.push(vnode);
           }
-          child = nextChild || treeWalker.nextSibling();
+          child = treeWalker.nextSibling();
         }
         treeWalker.parentNode();
       }
@@ -2504,9 +2510,15 @@ function toVdom(root) {
     if (island) {
       namespaces.pop();
     }
-    return [(0,preact_module.h)(localName, props, children)];
+    return (0,preact_module.h)(localName, props, children);
   }
-  return walk(treeWalker.currentNode);
+  const vdom = walk(treeWalker.currentNode);
+  nodesToRemove.forEach(node => node.remove());
+  nodesToReplace.forEach(node => {
+    var _nodeValue;
+    return node.replaceWith(new window.Text((_nodeValue = node.nodeValue) !== null && _nodeValue !== void 0 ? _nodeValue : ''));
+  });
+  return vdom;
 }
 
 ;// ./packages/interactivity/build-module/init.js

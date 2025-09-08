@@ -704,18 +704,16 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 ;// ./packages/redux-routine/build-module/is-generator.js
-/* eslint-disable jsdoc/valid-types */
 /**
  * Returns true if the given object is a generator, or false otherwise.
  *
  * @see https://www.ecma-international.org/ecma-262/6.0/#sec-generator-objects
  *
- * @param {any} object Object to test.
+ * @param object Object to test.
  *
- * @return {object is Generator} Whether object is a generator.
+ * @return Whether object is a generator.
  */
 function isGenerator(object) {
-  /* eslint-enable jsdoc/valid-types */
   // Check that iterator (next) and iterable (Symbol.iterator) interfaces are satisfied.
   // These checks seem to be compatible with several generator helpers as well as the native implementation.
   return !!object && typeof object[Symbol.iterator] === 'function' && typeof object.next === 'function';
@@ -769,14 +767,12 @@ function isPlainObject(o) {
  * External dependencies
  */
 
-
-/* eslint-disable jsdoc/valid-types */
 /**
  * Returns true if the given object quacks like an action.
  *
- * @param {any} object Object to test
+ * @param object Object to test
  *
- * @return {object is import('redux').AnyAction}  Whether object is an action.
+ * @return Whether object is an action.
  */
 function isAction(object) {
   return isPlainObject(object) && typeof object.type === 'string';
@@ -786,13 +782,12 @@ function isAction(object) {
  * Returns true if the given object quacks like an action and has a specific
  * action type
  *
- * @param {unknown} object       Object to test
- * @param {string}  expectedType The expected type for the action.
+ * @param object       Object to test
+ * @param expectedType The expected type for the action.
  *
- * @return {object is import('redux').AnyAction} Whether object is an action and is of specific type.
+ * @return Whether object is an action and is of specific type.
  */
 function isActionOfType(object, expectedType) {
-  /* eslint-enable jsdoc/valid-types */
   return isAction(object) && object.type === expectedType;
 }
 
@@ -848,6 +843,10 @@ function createRuntime(controls = {}, dispatch) {
 
 ;// ./packages/redux-routine/build-module/index.js
 /**
+ * External dependencies
+ */
+
+/**
  * Internal dependencies
  */
 
@@ -861,9 +860,9 @@ function createRuntime(controls = {}, dispatch) {
  * value of the yield assignment. If the control handler returns undefined, the
  * execution is not continued.
  *
- * @param {Record<string, (value: import('redux').AnyAction) => Promise<boolean> | boolean>} controls Object of control handlers.
+ * @param controls Object of control handlers.
  *
- * @return {import('redux').Middleware} Co-routine runtime
+ * @return Co-routine runtime
  */
 function createMiddleware(controls = {}) {
   return store => {

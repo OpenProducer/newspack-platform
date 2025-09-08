@@ -181,6 +181,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-amp-enhancements.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-newspack-image-credits.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-rss-add-image.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-capabilities.php';
 		include_once NEWSPACK_ABSPATH . 'includes/advanced-settings/class-accessibility-statement-page.php';
 
 		/* Integrations with other plugins. */
@@ -216,6 +217,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-media-partners.php';
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-woo-member-commenting.php';
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-collections.php';
+		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-indesign-exporter.php';
 
 		if ( Donations::is_platform_nrh() ) {
 			include_once NEWSPACK_ABSPATH . 'includes/class-nrh.php';

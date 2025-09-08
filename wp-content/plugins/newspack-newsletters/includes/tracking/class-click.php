@@ -7,6 +7,8 @@
 
 namespace Newspack_Newsletters\Tracking;
 
+use Newspack_Newsletters\Ads;
+
 /**
  * Tracking Click-Tracking Class.
  */
@@ -101,6 +103,9 @@ final class Click {
 			return $url;
 		}
 		if ( ! $post ) {
+			return $url;
+		}
+		if ( $post->post_type !== Ads::CPT ) {
 			return $url;
 		}
 		return self::get_proxied_url( $post->ID, $url );

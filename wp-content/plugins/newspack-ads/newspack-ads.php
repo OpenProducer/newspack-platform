@@ -5,7 +5,7 @@
  * Description:     Ad services integration.
  * Author:          Automattic
  * License:         GPL2
- * Version:         3.5.4
+ * Version:         3.8.0
  *
  * @package         Newspack
  */
@@ -14,7 +14,7 @@ namespace Newspack_Ads;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEWSPACK_ADS_VERSION', '3.5.4' );
+define( 'NEWSPACK_ADS_VERSION', '3.8.0' );
 
 // Define NEWSPACK_ADS_PLUGIN_FILE.
 if ( ! defined( 'NEWSPACK_ADS_PLUGIN_FILE' ) ) {

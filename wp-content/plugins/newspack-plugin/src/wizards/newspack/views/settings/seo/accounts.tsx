@@ -12,13 +12,7 @@ import { Grid, TextControl } from '../../../../../components/src';
  * Internal dependencies.
  */
 
-function Accounts( {
-	setData,
-	data,
-}: {
-	setData: ( v: SeoData[ 'urls' ] ) => void;
-	data: SeoData[ 'urls' ] & { [ k: string ]: string };
-} ) {
+function Accounts( { setData, data }: { setData: ( v: SeoData[ 'urls' ] ) => void; data: SeoData[ 'urls' ] & { [ k: string ]: string } } ) {
 	return (
 		<Grid columns={ 3 } rowGap={ 16 }>
 			{ ACCOUNTS.map( ( [ key, label, placeholder ] ) => (

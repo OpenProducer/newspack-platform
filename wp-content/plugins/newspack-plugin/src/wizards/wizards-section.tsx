@@ -32,19 +32,10 @@ export default function WizardSection( {
 	scrollToAnchor?: string | null;
 	className?: string;
 } ) {
-	const classNames = `newspack-wizard__section${
-		className ? ` ${ className }` : ''
-	}`;
+	const classNames = `newspack-wizard__section${ className ? ` ${ className }` : '' }`;
 	return (
 		<div className={ classNames }>
-			{ title && (
-				<SectionHeader
-					id={ scrollToAnchor }
-					heading={ 3 }
-					title={ title }
-					description={ description }
-				/>
-			) }
+			{ title && <SectionHeader id={ scrollToAnchor } heading={ 3 } title={ title } description={ description } /> }
 			{ children }
 		</div>
 	);

@@ -302,7 +302,7 @@ const AuthorProfile = ( { attributes, setAttributes } ) => {
 			</InspectorControls>
 			{ author && (
 				<BlockControls>
-					{ showAvatar && 'is-style-center' !== attributes.className && (
+					{ showAvatar && ! attributes.className?.includes( 'is-style-center' ) && (
 						<Toolbar
 							controls={ [
 								{

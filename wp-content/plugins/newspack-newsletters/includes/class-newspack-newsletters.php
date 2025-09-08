@@ -72,6 +72,7 @@ final class Newspack_Newsletters {
 		add_action( 'init', [ __CLASS__, 'register_blocks' ] );
 		add_action( 'init', [ __CLASS__, 'load_textdomain' ] );
 		add_action( 'rest_api_init', [ __CLASS__, 'rest_api_init' ] );
+		add_action( 'admin_menu', [ __CLASS__, 'remove_admin_menu_items' ], 99 );
 		add_action( 'default_title', [ __CLASS__, 'default_title' ], 10, 2 );
 		add_action( 'wp_head', [ __CLASS__, 'public_newsletter_custom_style' ], 10, 2 );
 		add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
@@ -601,6 +602,33 @@ final class Newspack_Newsletters {
 	}
 
 	/**
+	 * Remove some admin menu items, if the user has no matching capability.
+	 */
+	public static function remove_admin_menu_items() {
+		$newsletter_post_type_object = get_post_type_object( self::NEWSPACK_NEWSLETTERS_CPT );
+		$newsletter_ad_post_type_object = get_post_type_object( Newspack_Newsletters\Ads::CPT );
+
+		if ( $newsletter_post_type_object === null || $newsletter_ad_post_type_object === null ) {
+			return;
+		}
+
+		// If the user can't edit newsletters, the "Category" will be the top-level menu item.
+		$category_page_slug = 'edit-tags.php?taxonomy=category&amp;post_type=' . self::NEWSPACK_NEWSLETTERS_CPT;
+
+		$can_edit_newsletters = current_user_can( $newsletter_post_type_object->cap->edit_posts );
+		$can_edit_newsletter_ads = current_user_can( $newsletter_ad_post_type_object->cap->edit_posts );
+
+		if ( ! $can_edit_newsletters && ! $can_edit_newsletter_ads ) {
+			// If they user can't edit newsletters, the taxonomy menu items will still be visible. Let's remove them.
+			remove_submenu_page( $category_page_slug, $category_page_slug );
+			remove_submenu_page( $category_page_slug, 'edit-tags.php?taxonomy=post_tag&amp;post_type=' . self::NEWSPACK_NEWSLETTERS_CPT );
+		}
+
+		// Note: Newsletter Ads menu handling is done in Newspack_Newsletters\Ads::add_ads_page()
+		// which dynamically places the menu based on user capabilities.
+	}
+
+	/**
 	 * Register blocks server-side for front-end rendering.
 	 */
 	public static function register_blocks() {
@@ -1061,6 +1089,27 @@ final class Newspack_Newsletters {
 							padding: 0 32px;;
 						}
 					<?php endif; ?>
+
+					/* Social Links Block Styles */
+					.wp-block-social-links {
+						gap: 0 !important;
+					}
+					.wp-block-social-links.is-style-circle-black .wp-social-link {
+						background: black;
+						color: white;
+					}
+					.wp-block-social-links.is-style-filled-black .wp-social-link {
+						background: transparent;
+						color: black;
+					}
+					.wp-block-social-links.is-style-circle-white .wp-social-link {
+						background: white;
+						color: black;
+					}
+					.wp-block-social-links.is-style-filled-white .wp-social-link {
+						background: transparent;
+						color: white;
+					}
 				</style>
 			<?php
 		}
@@ -1103,7 +1152,7 @@ final class Newspack_Newsletters {
 		$screen = get_current_screen();
 		if (
 			self::NEWSPACK_NEWSLETTERS_CPT !== $screen->post_type &&
-			Newspack_Newsletters_Ads::CPT !== $screen->post_type &&
+			Newspack_Newsletters\Ads::CPT !== $screen->post_type &&
 			Newspack\Newsletters\Subscription_Lists::CPT !== $screen->post_type
 		) {
 			return;

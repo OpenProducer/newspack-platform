@@ -18,43 +18,17 @@ export const ACCOUNTS = [
 				return '';
 			}
 			if ( inputValue.length > 15 ) {
-				return __(
-					'X handle cannot exceed 15 characters!',
-					'newspack-plugin'
-				);
+				return __( 'X handle cannot exceed 15 characters!', 'newspack-plugin' );
 			}
 			if ( ! /^[a-zA-Z0-9_]+$/.test( inputValue ) ) {
-				return __(
-					'X handle may only contain letters, numbers, and underscores!',
-					'newspack-plugin'
-				);
+				return __( 'X handle may only contain letters, numbers, and underscores!', 'newspack-plugin' );
 			}
 			return '';
 		},
 	],
-	[
-		'facebook',
-		__( 'Facebook', 'newspack-plugin' ),
-		'https://facebook.com/page',
-	],
-	[
-		'instagram',
-		__( 'Instagram', 'newspack-plugin' ),
-		'https://instagram.com/user',
-	],
-	[
-		'youtube',
-		__( 'YouTube', 'newspack-plugin' ),
-		'https://youtube.com/c/channel',
-	],
-	[
-		'linkedin',
-		__( 'LinkedIn', 'newspack-plugin' ),
-		'https://linkedin.com/user',
-	],
-	[
-		'pinterest',
-		__( 'Pinterest', 'newspack-plugin' ),
-		'https://pinterest.com/user',
-	],
+	[ 'facebook', __( 'Facebook', 'newspack-plugin' ), 'https://facebook.com/page' ],
+	[ 'instagram', __( 'Instagram', 'newspack-plugin' ), 'https://instagram.com/user' ],
+	[ 'youtube', __( 'YouTube', 'newspack-plugin' ), 'https://youtube.com/c/channel' ],
+	[ 'linkedin', __( 'LinkedIn', 'newspack-plugin' ), 'https://linkedin.com/user' ],
+	[ 'pinterest', __( 'Pinterest', 'newspack-plugin' ), 'https://pinterest.com/user' ],
 ] as const;

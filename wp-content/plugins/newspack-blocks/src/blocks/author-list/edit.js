@@ -175,14 +175,14 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 							>
 								{ editableRoles.map( ( role, index ) => (
 									<CheckboxControl
-										checked={ -1 < authorRoles.indexOf( role ) }
+										checked={ -1 < authorRoles.indexOf( role.slug ) }
 										key={ index }
-										label={ role }
-										value={ role }
+										label={ role.label }
+										value={ role.slug }
 										onChange={ check => {
 											const selectedRoles = check
-												? [ ...authorRoles, role ]
-												: authorRoles.filter( _role => _role !== role );
+												? [ ...authorRoles, role.slug ]
+												: authorRoles.filter( _role => _role !== role.slug );
 
 											setAttributes( { authorRoles: selectedRoles } );
 										} }
