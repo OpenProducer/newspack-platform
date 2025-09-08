@@ -22,6 +22,7 @@ import FeaturedImagePostsAll from './featured-image-posts-all';
 import FeaturedImagePostsNew from './featured-image-posts-new';
 import MediaCredits from './media-credits';
 import AccessibilityStatement from './accessibility-statement';
+import PwaDisplayMode from './pwa-display-mode';
 
 export default function AdvancedSettings() {
 	const [ data, setData ] = hooks.useObjectState< AdvancedSettings >( {
@@ -29,23 +30,20 @@ export default function AdvancedSettings() {
 	} );
 	const [ etc, setEtc ] = hooks.useObjectState< Etc >( {
 		post_count: '0',
+		has_pwa_plugin: false,
 	} );
 
-	const [ recirculationData, setRecirculationData ] =
-		hooks.useObjectState< Recirculation >( {
-			relatedPostsMaxAge: 0,
-			relatedPostsEnabled: false,
-			relatedPostsError: null,
-			relatedPostsUpdated: false,
-		} );
+	const [ recirculationData, setRecirculationData ] = hooks.useObjectState< Recirculation >( {
+		relatedPostsMaxAge: 0,
+		relatedPostsEnabled: false,
+		relatedPostsError: null,
+		relatedPostsUpdated: false,
+	} );
 
-	const { wizardApiFetch, isFetching, errorMessage } = useWizardApiFetch(
-		'newspack-settings/theme-mods'
+	const { wizardApiFetch, isFetching, errorMessage } = useWizardApiFetch( 'newspack-settings/theme-mods' );
+	const { wizardApiFetch: wizardApiFetchRecirculation, isFetching: isFetchingRecirculation } = useWizardApiFetch(
+		'newspack-settings/advanced-settings/recirculation'
 	);
-	const {
-		wizardApiFetch: wizardApiFetchRecirculation,
-		isFetching: isFetchingRecirculation,
-	} = useWizardApiFetch( 'newspack-settings/advanced-settings/recirculation' );
 
 	const fetchThemeMods = () => {
 		wizardApiFetch< ThemeData >(
@@ -79,8 +77,7 @@ export default function AdvancedSettings() {
 				path: '/newspack/v1/wizard/newspack-settings/related-posts-max-age',
 				method: 'POST',
 				updateCacheKey: {
-					'/newspack/v1/wizard/newspack-settings/related-content':
-						'GET',
+					'/newspack/v1/wizard/newspack-settings/related-content': 'GET',
 				},
 				data: recirculationData,
 			},
@@ -88,16 +85,10 @@ export default function AdvancedSettings() {
 				onSuccess: setRecirculationData,
 			}
 		);
-		if (
-			data.featured_image_all_posts !== 'none' ||
-			data.post_template_all_posts !== 'none'
-		) {
+		if ( data.featured_image_all_posts !== 'none' || data.post_template_all_posts !== 'none' ) {
 			if (
 				! utils.confirmAction(
-					__(
-						'Saving will overwrite existing posts, this cannot be undone. Are you sure you want to proceed?',
-						'newspack-plugin'
-					)
+					__( 'Saving will overwrite existing posts, this cannot be undone. Are you sure you want to proceed?', 'newspack-plugin' )
 				)
 			) {
 				return;
@@ -124,52 +115,28 @@ export default function AdvancedSettings() {
 	}
 
 	return (
-		<WizardsTab
-			title={ __( 'Advanced Settings', 'newspack-plugin' ) }
-			isFetching={ isFetching || isFetchingRecirculation }
-		>
+		<WizardsTab title={ __( 'Advanced Settings', 'newspack-plugin' ) } isFetching={ isFetching || isFetchingRecirculation }>
 			<WizardSection title={ __( 'Recirculation', 'newspack-plugin' ) }>
-				<Recirculation
-					isFetching={ isFetchingRecirculation }
-					update={ setRecirculationData }
-					data={ recirculationData }
-				/>
+				<Recirculation isFetching={ isFetchingRecirculation } update={ setRecirculationData } data={ recirculationData } />
 			</WizardSection>
 
 			<WizardSection title={ __( 'Author Bio', 'newspack-plugin' ) }>
-				<AuthorBio
-					update={ setData }
-					data={ data }
-					isFetching={ isFetching }
-				/>
+				<AuthorBio update={ setData } data={ data } isFetching={ isFetching } />
 			</WizardSection>
 			<WizardSection
-				title={ __(
-					'Default Featured Image Position And Post Template',
-					'newspack-plugin'
-				) }
-				description={ __(
-					'Modify how the featured image and post template settings are applied to new posts.',
-					'newspack-plugin'
-				) }
+				title={ __( 'Default Featured Image Position And Post Template', 'newspack-plugin' ) }
+				description={ __( 'Modify how the featured image and post template settings are applied to new posts.', 'newspack-plugin' ) }
 			>
 				<FeaturedImagePostsNew data={ data } update={ setData } />
 			</WizardSection>
 			<WizardSection
-				title={ __(
-					'Featured Image Position And Post Template For All Posts',
-					'newspack-plugin'
-				) }
+				title={ __( 'Featured Image Position And Post Template For All Posts', 'newspack-plugin' ) }
 				description={ __(
 					'Modify how the featured image and post template settings are applied to existing posts. Warning: saving these options will override all posts.',
 					'newspack-plugin'
 				) }
 			>
-				<FeaturedImagePostsAll
-					data={ data }
-					postCount={ etc.post_count }
-					update={ setData }
-				/>
+				<FeaturedImagePostsAll data={ data } postCount={ etc.post_count } update={ setData } />
 			</WizardSection>
 			<WizardSection title={ __( 'Media Credits', 'newspack-plugin' ) }>
 				<MediaCredits data={ data } update={ setData } />
@@ -177,6 +144,11 @@ export default function AdvancedSettings() {
 			<WizardSection>
 				<AccessibilityStatement isFetching={ isFetching } />
 			</WizardSection>
+			{ etc.has_pwa_plugin ? (
+				<WizardSection title={ __( 'Progressive Web App', 'newspack-plugin' ) }>
+					<PwaDisplayMode data={ data } update={ setData } isFetching={ isFetching } />
+				</WizardSection>
+			) : null }
 			{ errorMessage && <Notice /> }
 			<div className="newspack-buttons-card">
 				<Button variant="primary" onClick={ save }>

@@ -38,12 +38,7 @@ function GoogleOAuth( {
 	const userBasicInfo = authState?.user_basic_info;
 	const isConnected = Boolean( userBasicInfo && userBasicInfo.email );
 
-	const {
-		setError,
-		errorMessage,
-		wizardApiFetch,
-		isFetching: inFlight,
-	} = useWizardApiFetch( '/newspack-settings/connections/apis/google-oauth' );
+	const { setError, errorMessage, wizardApiFetch, isFetching: inFlight } = useWizardApiFetch( '/newspack-settings/connections/apis/google-oauth' );
 
 	// We only want to autofetch the current auth state if we're not onboarding.
 	useEffect( () => {
@@ -54,12 +49,7 @@ function GoogleOAuth( {
 
 	useEffect( () => {
 		if ( isConnected && userBasicInfo && ! userBasicInfo.has_refresh_token ) {
-			setError(
-				new WizardError(
-					WIZARD_ERROR_MESSAGES.GOOGLEOAUTH_REFRESH_TOKEN_EXPIRED,
-					'googleoauth_refresh_token_expired'
-				)
-			);
+			setError( new WizardError( WIZARD_ERROR_MESSAGES.GOOGLEOAUTH_REFRESH_TOKEN_EXPIRED, 'googleoauth_refresh_token_expired' ) );
 		}
 	}, [ isConnected ] );
 
@@ -96,23 +86,13 @@ function GoogleOAuth( {
 			{
 				onSuccess( url ) {
 					if ( url === null ) {
-						setError(
-							new WizardError(
-								WIZARD_ERROR_MESSAGES.GOOGLE.URL_INVALID,
-								'googleoauth_popup_blocked'
-							)
-						);
+						setError( new WizardError( WIZARD_ERROR_MESSAGES.GOOGLE.URL_INVALID, 'googleoauth_popup_blocked' ) );
 						return;
 					}
 					authWindow = window.open( url, 'newspack_google_oauth', 'width=500,height=600' );
 					/** authWindow can be 'null' due to browser's popup blocker. */
 					if ( authWindow === null ) {
-						setError(
-							new WizardError(
-								WIZARD_ERROR_MESSAGES.GOOGLE.OAUTH_POPUP_BLOCKED,
-								'googleoauth_popup_blocked'
-							)
-						);
+						setError( new WizardError( WIZARD_ERROR_MESSAGES.GOOGLE.OAUTH_POPUP_BLOCKED, 'googleoauth_popup_blocked' ) );
 						return;
 					}
 					const interval = setInterval( () => {
@@ -164,15 +144,8 @@ function GoogleOAuth( {
 			description={ getDescription() }
 			isChecked={ isConnected }
 			actionText={
-				<Button
-					variant="link"
-					isDestructive={ isConnected }
-					onClick={ isConnected ? disconnect : openAuth }
-					disabled={ inFlight }
-				>
-					{ isConnected
-						? __( 'Disconnect', 'newspack-plugin' )
-						: __( 'Connect', 'newspack-plugin' ) }
+				<Button variant="link" isDestructive={ isConnected } onClick={ isConnected ? disconnect : openAuth } disabled={ inFlight }>
+					{ isConnected ? __( 'Disconnect', 'newspack-plugin' ) : __( 'Connect', 'newspack-plugin' ) }
 				</Button>
 			}
 			error={ errorMessage }

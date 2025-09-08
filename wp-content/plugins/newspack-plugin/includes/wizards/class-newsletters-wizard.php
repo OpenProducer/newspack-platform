@@ -9,7 +9,6 @@ namespace Newspack;
 
 use Newspack\Wizards\Traits\Admin_Header;
 use Newspack_Newsletters;
-use Newspack_Newsletters_Ads;
 use Newspack_Newsletters_Settings;
 use Newspack_Newsletters\Tracking\Admin as Newspack_Newsletters_Tracking_Admin;
 
@@ -80,9 +79,22 @@ class Newsletters_Wizard extends Wizard {
 		];
 
 		// Menu removals.
-		remove_action( 'admin_menu', [ Newspack_Newsletters_Ads::class, 'add_ads_page' ] );
 		remove_action( 'admin_menu', [ Newspack_Newsletters_Settings::class, 'add_plugin_page' ] );
 		remove_action( 'admin_menu', [ Newspack_Newsletters_Tracking_Admin::class, 'add_settings_page' ] );
+
+		// Customize the Newsletter ads menu titles.
+		add_filter(
+			'newspack_newsletters_ads_page_title',
+			function() {
+				return __( 'Newsletters Advertising', 'newspack-plugin' );
+			}
+		);
+		add_filter(
+			'newspack_newsletters_ads_menu_title',
+			function() {
+				return __( 'Advertising', 'newspack-plugin' );
+			}
+		);
 
 		// Hooks: admin_menu/add_page, admin_enqueue_scripts/enqueue_scripts_and_styles, admin_body_class/add_body_class .
 		parent::__construct();
@@ -283,16 +295,7 @@ class Newsletters_Wizard extends Wizard {
 		// Remove catetory and tags. For remove_submenu_page() to match (===) on submenu slug: "&" in urls need be replaced with "&amp;".
 		remove_submenu_page( 'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, 'edit-tags.php?taxonomy=category&amp;post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT );
 		remove_submenu_page( 'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, 'edit-tags.php?taxonomy=post_tag&amp;post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT );
-		remove_submenu_page( 'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, 'edit-tags.php?taxonomy=' . Newspack_Newsletters_Ads::ADVERTISER_TAX . '&amp;post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT );
-
-		// Re-add Ads (Advertising) item with updated title. ( See 'remove_action' above. See Newsletters Plugin: Newspack_Newsletters_Ads > 'add_ads_page' ) .
-		add_submenu_page(
-			'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-			__( 'Newsletters Advertising', 'newspack-plugin' ),
-			__( 'Advertising', 'newspack-plugin' ),
-			'edit_others_posts', // As defined in original callback.
-			'/edit.php?post_type=' . Newspack_Newsletters_Ads::CPT
-		);
+		remove_submenu_page( 'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, 'edit-tags.php?taxonomy=' . Newspack_Newsletters\Ads::ADVERTISER_TAX . '&amp;post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT );
 
 		add_submenu_page(
 			'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
@@ -400,20 +403,28 @@ class Newsletters_Wizard extends Wizard {
 	private function get_tabs() {
 
 		if ( in_array( $this->get_screen_slug(), [ 'newspack_nl_ads_cpt', 'newspack_nl_advertiser' ], true ) ) {
+			// Check if user can access newsletters to determine tab URLs.
+			$newsletters_post_type_object = get_post_type_object( Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT );
+			$can_edit_newsletters = current_user_can( $newsletters_post_type_object->cap->edit_posts );
 
-			return [
+			$tabs = [
 				[
 					'textContent' => esc_html__( 'Ads', 'newspack-plugin' ),
 					'href'        => admin_url( 'edit.php?post_type=newspack_nl_ads_cpt' ),
 				],
-				[
+			];
+
+			// Only show Advertisers tab if user can edit newsletters (otherwise it won't be accessible).
+			if ( $can_edit_newsletters ) {
+				$tabs[] = [
 					'textContent'   => esc_html__( 'Advertisers', 'newspack-plugin' ),
 					'href'          => admin_url( 'edit-tags.php?taxonomy=newspack_nl_advertiser&post_type=newspack_nl_cpt' ),
 					// also force selected tab for url: term.php?taxonomy=newspack_nl_advertiser&tag_ID=32&post_type=newspack_nl_cpt...
 					'forceSelected' => ( 'newspack_nl_advertiser' === $this->get_screen_slug() ),
-				],
-			];
+				];
+			}
 
+			return $tabs;
 		}
 
 		return [];
@@ -460,7 +471,7 @@ class Newsletters_Wizard extends Wizard {
 
 		global $wp_taxonomies;
 
-		if ( Newspack_Newsletters_Ads::ADVERTISER_TAX !== $taxonomy ) {
+		if ( Newspack_Newsletters\Ads::ADVERTISER_TAX !== $taxonomy ) {
 			return;
 		}
 
@@ -479,13 +490,18 @@ class Newsletters_Wizard extends Wizard {
 	 * @return string
 	 */
 	public function submenu_file( $submenu_file ) {
+		// Check if user can access newsletters to determine where ads menu is placed.
+		$newsletters_post_type_object = get_post_type_object( Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT );
+		$can_edit_newsletters = current_user_can( $newsletters_post_type_object->cap->edit_posts );
+
 		// Move newsletter ads menu file.
 		if ( ! empty( $submenu_file ) && strpos( $submenu_file, 'newspack_nl_ads_cpt' ) !== false ) {
-			return 'edit.php?post_type=newspack_nl_ads_cpt';
+			// If user can edit newsletters, ads are in submenu. Otherwise, they're top-level.
+			return $can_edit_newsletters ? 'edit.php?post_type=newspack_nl_ads_cpt' : $submenu_file;
 		}
 		// Move newsletter ads taxonomy menu submenu_file.
 		if ( ! empty( $submenu_file ) && strpos( $submenu_file, 'newspack_nl_advertiser' ) !== false ) {
-			return 'edit.php?post_type=newspack_nl_ads_cpt';
+			return $can_edit_newsletters ? 'edit.php?post_type=newspack_nl_ads_cpt' : $submenu_file;
 		}
 
 		// Move new newsletter menu submenu_file.
@@ -509,13 +525,22 @@ class Newsletters_Wizard extends Wizard {
 	 * @return string
 	 */
 	public function parent_file( $parent_file ) {
+		// Check if user can access newsletters to determine where ads menu is placed.
+		$newsletters_post_type_object = get_post_type_object( Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT );
+		$can_edit_newsletters = current_user_can( $newsletters_post_type_object->cap->edit_posts );
+
 		if (
 			strpos( $parent_file, 'newspack_nl_ads_cpt' ) !== false || // Newsletter Ads.
-			strpos( $parent_file, 'newspack_nl_advertiser' ) !== false || // Newsletter Advertisers.
-			strpos( $parent_file, 'newspack_nl_list' ) !== false          // Newsletter Subscription Lists.
+			strpos( $parent_file, 'newspack_nl_advertiser' ) !== false    // Newsletter Advertisers.
 		) {
+			// If user can edit newsletters, ads appear under newsletters menu. Otherwise, they're top-level.
+			return $can_edit_newsletters ? 'edit.php?post_type=newspack_nl_cpt' : $parent_file;
+		}
+
+		if ( strpos( $parent_file, 'newspack_nl_list' ) !== false ) { // Newsletter Subscription Lists.
 			return 'edit.php?post_type=newspack_nl_cpt';
 		}
+
 		return $parent_file;
 	}
 }

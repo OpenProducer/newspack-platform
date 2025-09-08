@@ -24,13 +24,7 @@ type BaseComponentProps = {
 	value: string | number;
 };
 
-const TextControl = ( {
-	className = '',
-	required = false,
-	isWide = false,
-	withMargin = true,
-	...otherProps
-} ) => {
+const TextControl = ( { className = '', required = false, isWide = false, withMargin = true, ...otherProps } ) => {
 	const wrapperRef = useRef< HTMLDivElement >( null );
 	useEffect( () => {
 		if ( wrapperRef.current === null ) {
@@ -51,11 +45,7 @@ const TextControl = ( {
 	);
 	return required ? (
 		<div ref={ wrapperRef } className="newspack-text-control--required">
-			<BaseComponent
-				className={ classes }
-				required={ required }
-				{ ...( otherProps as BaseComponentProps ) }
-			/>
+			<BaseComponent className={ classes } required={ required } { ...( otherProps as BaseComponentProps ) } />
 		</div>
 	) : (
 		<BaseComponent className={ classes } { ...( otherProps as BaseComponentProps ) } />

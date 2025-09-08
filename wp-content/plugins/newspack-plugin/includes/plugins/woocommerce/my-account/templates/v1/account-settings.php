@@ -1,6 +1,6 @@
 <?php
 /**
- * My Account Account Details page.
+ * My Account Account Settings page.
  * Based on woocommerce/templates/myaccount/form-edit-account.php.
  *
  * @package Newspack
@@ -182,7 +182,7 @@ endif;
 				<a href="<?php echo esc_url( WooCommerce_My_Account::get_email_change_url( WooCommerce_My_Account::CANCEL_EMAIL_CHANGE_PARAM, $user->user_email ) ); ?>" class="woocommerce-Button button ma0"><?php \esc_html_e( 'Cancel email change', 'newspack-plugin' ); ?></a>
 			<?php endif; ?>
 			<input type="hidden" name="action" value="save_account_details" />
-			<button type="submit" class="woocommerce-Button button primary newspack-ui__button--wide-on-mobile" name="save_account_details" value="<?php \esc_attr_e( 'Save changes', 'newspack-plugin' ); ?>"><?php \esc_html_e( 'Update profile', 'newspack-plugin' ); ?></button>
+			<button type="submit" class="woocommerce-Button button primary newspack-ui__button--wide-on-mobile newspack-ui--block-on-interaction" name="save_account_details" value="<?php \esc_attr_e( 'Save changes', 'newspack-plugin' ); ?>"><?php \esc_html_e( 'Update profile', 'newspack-plugin' ); ?></button>
 		</p>
 
 		<?php \do_action( 'newspack_woocommerce_edit_account_form_end' ); ?>
@@ -244,12 +244,12 @@ endif;
 			<input type="hidden" name="action" value="newspack_my_account_reset_password" />
 			<button
 				type="submit"
-				class="woocommerce-Button button primary newspack-ui__button--wide-on-mobile"
+				class="woocommerce-Button button primary newspack-ui__button--wide-on-mobile newspack-ui--block-on-interaction"
 				value="<?php esc_attr_e( 'Save', 'newspack-plugin' ); ?>"
 			>
 				<?php echo esc_html( $without_password ? __( 'Set password', 'newspack-plugin' ) : __( 'Update password', 'newspack-plugin' ) ); ?>
 			</button>
-			<a id="newspack-my-account__reset-password" class="woocommerce-Button button ghost newspack-ui__button--wide-on-mobile" href="<?php echo '?' . \esc_attr( $newspack_reset_password_arg ) . '=' . \esc_attr( \wp_create_nonce( $newspack_reset_password_arg ) ); ?>">
+			<a id="newspack-my-account__reset-password" class="woocommerce-Button button ghost newspack-ui__button--wide-on-mobile newspack-ui--block-on-interaction" href="<?php echo '?' . \esc_attr( $newspack_reset_password_arg ) . '=' . \esc_attr( \wp_create_nonce( $newspack_reset_password_arg ) ); ?>">
 				<?php \esc_html_e( 'Forgot password', 'newspack-plugin' ); ?>
 			</a>
 		</p>

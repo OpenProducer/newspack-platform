@@ -1387,10 +1387,19 @@ const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 /** @typedef {{children: string} & import('react').ComponentPropsWithoutRef<'div'>} RawHTMLProps */
 
 /**
- * Component used as equivalent of Fragment with unescaped HTML, in cases where
- * it is desirable to render dangerous HTML without needing a wrapper element.
- * To preserve additional props, a `div` wrapper _will_ be created if any props
- * aside from `children` are passed.
+ * Component used to render unescaped HTML.
+ *
+ * Note: The `renderElement` serializer will remove the `div` wrapper
+ * unless non-children props are present; typically when preparing a block for saving.
+ *
+ * @example
+ * ```jsx
+ * import { RawHTML } from '@wordpress/element';
+ *
+ * const Component = () => <RawHTML><h3>Hello world</h3></RawHTML>;
+ * // Edit: <div><h3>Hello world</h3></div>
+ * // save: <h3>Hello world</h3>
+ * ```
  *
  * @param {RawHTMLProps} props Children should be a string of HTML or an array
  *                             of strings. Other props will be passed through
@@ -1678,7 +1687,7 @@ function getNormalStylePropertyName(property) {
  * @return {*} Normalized property value.
  */
 function getNormalStylePropertyValue(property, value) {
-  if (typeof value === 'number' && 0 !== value && !CSS_PROPERTIES_SUPPORTS_UNITLESS.has(property)) {
+  if (typeof value === 'number' && 0 !== value && !hasPrefix(property, ['--']) && !CSS_PROPERTIES_SUPPORTS_UNITLESS.has(property)) {
     return value + 'px';
   }
   return value;

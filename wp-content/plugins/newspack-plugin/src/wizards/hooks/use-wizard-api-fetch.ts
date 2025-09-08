@@ -37,9 +37,7 @@ let promiseCache: Record< string, any > = {};
  * @param error The error response from the API.
  * @return      Parsed error object or null if no error.
  */
-const parseApiError = (
-	error: WpFetchError | string
-): WizardApiError | null => {
+const parseApiError = ( error: WpFetchError | string ): WizardApiError | null => {
 	const newError = {
 		message: 'An unknown API error occurred.',
 		statusCode: 500,
@@ -58,12 +56,7 @@ const parseApiError = (
 		newError.details = '';
 	}
 
-	return new WizardApiError(
-		newError.message,
-		newError.statusCode,
-		newError.errorCode,
-		newError.details
-	);
+	return new WizardApiError( newError.message, newError.statusCode, newError.errorCode, newError.details );
 };
 
 /**
@@ -90,17 +83,12 @@ const onCallbacks = < T >( callbacks: ApiFetchCallbacks< T > ) => ( {
  */
 export function useWizardApiFetch( slug: string ) {
 	const [ isFetching, setIsFetching ] = useState( false );
-	const { wizardApiFetch, updateWizardSettings } = useDispatch(
-		WIZARD_STORE_NAMESPACE
-	);
+	const { wizardApiFetch, updateWizardSettings } = useDispatch( WIZARD_STORE_NAMESPACE );
 	const wizardData: WizardData = useSelect(
-		( select: ( namespace: string ) => WizardSelector ) =>
-			select( WIZARD_STORE_NAMESPACE ).getWizardData( slug ),
+		( select: ( namespace: string ) => WizardSelector ) => select( WIZARD_STORE_NAMESPACE ).getWizardData( slug ),
 		[ slug ]
 	);
-	const [ error, setError ] = useState< WizardApiError | null >(
-		wizardData.error ?? null
-	);
+	const [ error, setError ] = useState< WizardApiError | null >( wizardData.error ?? null );
 
 	const requests = useRef< string[] >( [] );
 
@@ -130,23 +118,14 @@ export function useWizardApiFetch( slug: string ) {
 		 * @param value                The value to set for the property.
 		 * @param cacheKeyPathOverride The path to update in the wizard data.
 		 */
-		return (
-			prop: string | string[],
-			value: any,
-			cacheKeyPathOverride = cacheKeyPath
-		) => {
+		return ( prop: string | string[], value: any, cacheKeyPathOverride = cacheKeyPath ) => {
 			// Remove query parameters from the cacheKeyPath
 
-			const normalizedPath = cacheKeyPathOverride
-				? removeQueryArgs( cacheKeyPathOverride )
-				: cacheKeyPathOverride;
+			const normalizedPath = cacheKeyPathOverride ? removeQueryArgs( cacheKeyPathOverride ) : cacheKeyPathOverride;
 
 			updateWizardSettings( {
 				slug,
-				path: [
-					normalizedPath,
-					...( Array.isArray( prop ) ? prop : [ prop ] ),
-				].filter( str => typeof str === 'string' ),
+				path: [ normalizedPath, ...( Array.isArray( prop ) ? prop : [ prop ] ) ].filter( str => typeof str === 'string' ),
 				value,
 			} );
 		};
@@ -161,25 +140,14 @@ export function useWizardApiFetch( slug: string ) {
 	 * @return               The result of the API fetch request.
 	 */
 	const apiFetch = useCallback(
-		async < T = any >(
-			opts: ApiFetchOptions,
-			callbacks?: ApiFetchCallbacks< T >
-		) => {
+		async < T = any >( opts: ApiFetchOptions, callbacks?: ApiFetchCallbacks< T > ) => {
 			const { on } = onCallbacks< T >( callbacks ?? {} );
 			const updateSettings = updateWizardData( opts.path );
 			const { path, method = 'GET' } = opts;
 			const cacheKeyPath = removeQueryArgs( path ?? '' );
-			const {
-				isCached = method === 'GET',
-				updateCacheKey = null,
-				updateCacheMethods = [],
-				...options
-			} = opts;
+			const { isCached = method === 'GET', updateCacheKey = null, updateCacheMethods = [], ...options } = opts;
 
-			const {
-				error: cachedError,
-				[ cacheKeyPath ]: { [ method ]: cachedMethod = null } = {},
-			}: WizardData = wizardData;
+			const { error: cachedError, [ cacheKeyPath ]: { [ method ]: cachedMethod = null } = {} }: WizardData = wizardData;
 
 			function thenCallback( response: T ) {
 				if ( isCached ) {
@@ -188,13 +156,9 @@ export function useWizardApiFetch( slug: string ) {
 
 				if ( updateCacheKey && updateCacheKey.constructor === Object ) {
 					// Derive the key and method from the updateCacheKey object.
-					const [ updateCacheKeyKey, updateCacheKeyMethod ]: [
-						keyof WizardData,
-						ApiMethods,
-					] = Object.entries( updateCacheKey )[ 0 ];
+					const [ updateCacheKeyKey, updateCacheKeyMethod ]: [ keyof WizardData, ApiMethods ] = Object.entries( updateCacheKey )[ 0 ];
 
-					const cachedValue =
-						wizardData[ updateCacheKeyKey ][ updateCacheKeyMethod ];
+					const cachedValue = wizardData[ updateCacheKeyKey ][ updateCacheKeyMethod ];
 
 					let newCache;
 
@@ -207,11 +171,7 @@ export function useWizardApiFetch( slug: string ) {
 						newCache = response;
 					}
 
-					updateSettings(
-						Object.entries( updateCacheKey )[ 0 ],
-						newCache,
-						null
-					);
+					updateSettings( Object.entries( updateCacheKey )[ 0 ], newCache, null );
 				}
 
 				for ( const replaceMethod of updateCacheMethods ) {
@@ -232,9 +192,7 @@ export function useWizardApiFetch( slug: string ) {
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { [ cacheKeyPath ]: _removed, ...newData } = promiseCache;
 				promiseCache = newData;
-				requests.current = requests.current.filter(
-					request => request !== cacheKeyPath
-				);
+				requests.current = requests.current.filter( request => request !== cacheKeyPath );
 				setIsFetching( requests.current.length > 0 );
 				on( 'onFinally' );
 			}
@@ -242,10 +200,7 @@ export function useWizardApiFetch( slug: string ) {
 			// If the promise is already in progress, return it before making a new request.
 			if ( promiseCache[ cacheKeyPath ] ) {
 				setIsFetching( true );
-				return promiseCache[ cacheKeyPath ]
-					.then( thenCallback )
-					.catch( catchCallback )
-					.finally( finallyCallback );
+				return promiseCache[ cacheKeyPath ].then( thenCallback ).catch( catchCallback ).finally( finallyCallback );
 			}
 
 			// Cache exists and is not empty, return it.
@@ -292,9 +247,7 @@ export function useWizardApiFetch( slug: string ) {
 				},
 			};
 		},
-		setError(
-			value: string | WizardErrorType | null | { message: string }
-		) {
+		setError( value: string | WizardErrorType | null | { message: string } ) {
 			if ( value === null ) {
 				resetError();
 			} else {

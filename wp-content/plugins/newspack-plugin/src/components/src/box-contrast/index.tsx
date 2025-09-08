@@ -32,9 +32,7 @@ const BoxContrast = ( {
 	} else {
 		contrastColor = getContrast( hexColor );
 	}
-	const style = isInverted
-		? { color: hexColor, backgoundColor: contrastColor }
-		: { backgroundColor: hexColor, color: contrastColor };
+	const style = isInverted ? { color: hexColor, backgoundColor: contrastColor } : { backgroundColor: hexColor, color: contrastColor };
 
 	return (
 		<div { ...props } style={ style }>

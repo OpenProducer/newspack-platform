@@ -91,8 +91,7 @@ const WizardsToggleHeaderCard = < T extends Record< string, any > >( {
 	onToggle = ( active, data ) => ( { ...data, active } ),
 	onChecked = ( data: T ) => data.active,
 }: WizardsToggleHeaderCardProps< T > ) => {
-	const { wizardApiFetch, isFetching, errorMessage, setError, resetError } =
-		useWizardApiFetch( namespace );
+	const { wizardApiFetch, isFetching, errorMessage, setError, resetError } = useWizardApiFetch( namespace );
 	const [ settings, setSettings ] = useState< T >( { ...defaultValue } );
 	const [ settingsUpdates, setSettingsUpdates ] = useState< T >( { ...defaultValue } );
 
@@ -166,20 +165,12 @@ const WizardsToggleHeaderCard = < T extends Record< string, any > >( {
 		return (
 			<WizardsActionCard
 				title={ title }
-				description={
-					isFetching && ! isChecked ? __( 'Loading…', 'newspack-plugin' ) : description
-				}
+				description={ isFetching && ! isChecked ? __( 'Loading…', 'newspack-plugin' ) : description }
 				hasGreyHeader={ isChecked }
 				actionContent={
 					isChecked && (
-						<Button
-							variant="primary"
-							disabled={ isFetching }
-							onClick={ () => updateSettings( settingsUpdates ) }
-						>
-							{ isFetching
-								? __( 'Loading…', 'newspack-plugin' )
-								: __( 'Save Settings', 'newspack-plugin' ) }
+						<Button variant="primary" disabled={ isFetching } onClick={ () => updateSettings( settingsUpdates ) }>
+							{ isFetching ? __( 'Loading…', 'newspack-plugin' ) : __( 'Save Settings', 'newspack-plugin' ) }
 						</Button>
 					)
 				}
@@ -190,8 +181,7 @@ const WizardsToggleHeaderCard = < T extends Record< string, any > >( {
 				} }
 				toggleChecked={ isChecked }
 			>
-				{ isChecked &&
-					renderCallback( { updates: settingsUpdates, setSettingsUpdates, settings } ) }
+				{ isChecked && renderCallback( { updates: settingsUpdates, setSettingsUpdates, settings } ) }
 			</WizardsActionCard>
 		);
 	};

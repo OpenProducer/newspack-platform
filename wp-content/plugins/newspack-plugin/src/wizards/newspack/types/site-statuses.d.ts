@@ -12,7 +12,7 @@ type StatusLabels =
 
 type Status = {
 	label: string;
-	statuses?: Partial<StatusLabels, string>;
+	statuses?: Partial< StatusLabels, string >;
 	isPreflightValid?: boolean;
 	configLink: string;
 	endpoint: string;

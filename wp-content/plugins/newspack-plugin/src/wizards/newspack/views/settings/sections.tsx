@@ -16,15 +16,11 @@ import Syndication from './syndication';
 import AdvancedSettings from './advanced-settings';
 import ThemeAndBrand from './theme-and-brand';
 import Collections from './collections';
+import Print from './print';
 
 type SectionKeys = keyof typeof settingsTabs;
 
-const sectionComponents: Partial<
-	Record<
-		SectionKeys | 'default',
-		( props: { isPartOfSetup?: boolean } ) => React.ReactNode
-	>
-> = {
+const sectionComponents: Partial< Record< SectionKeys | 'default', ( props: { isPartOfSetup?: boolean } ) => React.ReactNode > > = {
 	connections: Connections,
 	social: Social,
 	emails: Emails,
@@ -33,6 +29,7 @@ const sectionComponents: Partial<
 	'theme-and-brand': ThemeAndBrand,
 	'advanced-settings': AdvancedSettings,
 	collections: Collections,
+	print: Print,
 	default: () => <h2>🚫 { __( 'Not found' ) }</h2>,
 };
 
@@ -40,12 +37,7 @@ const sectionComponents: Partial<
  * Load additional brands section if `newspack-multibranded-site` plugin is active.
  */
 if ( 'additional-brands' in settingsTabs ) {
-	sectionComponents[ 'additional-brands' ] = lazy(
-		() =>
-			import(
-				/* webpackChunkName: "newspack-wizards" */ './additional-brands'
-			)
-	);
+	sectionComponents[ 'additional-brands' ] = lazy( () => import( /* webpackChunkName: "newspack-wizards" */ './additional-brands' ) );
 }
 
 const settingsSectionKeys = Object.keys( settingsTabs ) as SectionKeys[];

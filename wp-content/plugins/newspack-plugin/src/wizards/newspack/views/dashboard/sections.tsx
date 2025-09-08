@@ -42,42 +42,22 @@ export default [
 						<div className="newspack-dashboard__section">
 							<h3>{ dashSections[ sectionKey ].title }</h3>
 							<p>{ dashSections[ sectionKey ].desc }</p>
-							<Grid
-								columns={ 3 }
-								gutter={ 24 }
-								key={ `${ sectionKey }-grid` }
-							>
-								{ dashSections[ sectionKey ].cards.map(
-									( sectionCard, i ) => {
-										return (
-											<a
-												href={ sectionCard.href }
-												key={ `${ sectionKey }-card-${ i }` }
-											>
-												<Card className="newspack-dashboard__card">
-													<div className="newspack-dashboard__card-icon">
-														<Icon
-															size={ 32 }
-															icon={ getIcon(
-																sectionCard.icon
-															) }
-														/>
-													</div>
-													<div className="newspack-dashboard__card-text">
-														<h4>
-															{
-																sectionCard.title
-															}
-														</h4>
-														<p>
-															{ sectionCard.desc }
-														</p>
-													</div>
-												</Card>
-											</a>
-										);
-									}
-								) }
+							<Grid columns={ 3 } gutter={ 24 } key={ `${ sectionKey }-grid` }>
+								{ dashSections[ sectionKey ].cards.map( ( sectionCard, i ) => {
+									return (
+										<a href={ sectionCard.href } key={ `${ sectionKey }-card-${ i }` }>
+											<Card className="newspack-dashboard__card">
+												<div className="newspack-dashboard__card-icon">
+													<Icon size={ 32 } icon={ getIcon( sectionCard.icon ) } />
+												</div>
+												<div className="newspack-dashboard__card-text">
+													<h4>{ sectionCard.title }</h4>
+													<p>{ sectionCard.desc }</p>
+												</div>
+											</Card>
+										</a>
+									);
+								} ) }
 							</Grid>
 						</div>
 					</Fragment>

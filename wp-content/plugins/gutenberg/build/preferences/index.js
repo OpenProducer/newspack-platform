@@ -530,31 +530,29 @@ const external_wp_element_namespaceObject = window["wp"]["element"];
  */
 
 
-/** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
+/**
+ * External dependencies
+ */
 
 /**
  * Return an SVG icon.
  *
- * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifying the icon size in pixels
- *                                                          Other props will be passed to wrapped SVG component
- * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
+ * @param props The component props.
  *
- * @return {JSX.Element}  Icon component
+ * @return Icon component
  */
-function Icon({
+/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(({
   icon,
   size = 24,
   ...props
-}, ref) {
+}, ref) => {
   return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
     width: size,
     height: size,
     ...props,
     ref
   });
-}
-/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
+}));
 
 ;// ./packages/icons/build-module/library/chevron-left.js
 /**

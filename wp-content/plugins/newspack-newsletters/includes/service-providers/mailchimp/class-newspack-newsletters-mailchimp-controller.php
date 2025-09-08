@@ -20,7 +20,7 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 	 */
 	public function __construct( $mailchimp ) {
 		$this->service_provider = $mailchimp;
-		add_action( 'init', [ __CLASS__, 'register_meta' ] );
+		add_action( 'init', [ __CLASS__, 'register_meta' ], 99 ); // This current class is initialized at priority 10, so we need to register the meta later than that.
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 		parent::__construct( $mailchimp );
 	}

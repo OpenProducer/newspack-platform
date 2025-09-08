@@ -13,20 +13,11 @@ import { PluginInstaller, Modal } from '../../../../components/src';
 
 const SiteActionModal = ( { onRequestClose, plugins, onSuccess }: SiteActionModal ) => {
 	return (
-		<Modal
-			title={ __( 'Add missing dependencies', 'newspack-plugin' ) }
-			onRequestClose={ () => onRequestClose( false ) }
-		>
+		<Modal title={ __( 'Add missing dependencies', 'newspack-plugin' ) } onRequestClose={ () => onRequestClose( false ) }>
 			<PluginInstaller
 				plugins={ plugins }
 				canUninstall
-				onStatus={ ( {
-					complete,
-					pluginInfo,
-				}: {
-					complete: boolean;
-					pluginInfo: Record< string, any >;
-				} ) => {
+				onStatus={ ( { complete, pluginInfo }: { complete: boolean; pluginInfo: Record< string, any > } ) => {
 					if ( complete ) {
 						onSuccess( pluginInfo );
 						onRequestClose( false );

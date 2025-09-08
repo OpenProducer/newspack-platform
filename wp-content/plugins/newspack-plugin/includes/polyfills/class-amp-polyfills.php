@@ -95,7 +95,7 @@ class AMP_Polyfills {
 		if ( $has_amp_fit_text || $has_amp_youtube || $has_amp_vimeo ) {
 			$dom = new \DomDocument();
 			libxml_use_internal_errors( true );
-			$dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ) );
+			$dom->loadHTML( htmlspecialchars_decode( htmlentities( mb_convert_encoding( $content, 'UTF-8', get_bloginfo( 'charset' ) ) ) ) );
 			$xpath = new \DOMXpath( $dom );
 
 			// Process amp-fit-text tags.

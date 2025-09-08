@@ -13,7 +13,7 @@ import WizardSection from '../../../wizards-section';
 
 const subscriptionTabs = window.newspackAudienceSubscriptions.tabs;
 
-function AudienceSubscriptions( props: Record<string, any>, ref: React.ForwardedRef<HTMLDivElement> ) {
+function AudienceSubscriptions( props: Record< string, any >, ref: React.ForwardedRef< HTMLDivElement > ) {
 	const tabs = subscriptionTabs.map( tab => {
 		const render = () => (
 			<WizardsTab title={ tab.title }>
@@ -37,10 +37,7 @@ function AudienceSubscriptions( props: Record<string, any>, ref: React.Forwarded
 
 	return (
 		<Wizard
-			headerText={ __(
-				'Audience Management / Subscriptions',
-				'newspack-plugin'
-			) }
+			headerText={ __( 'Audience Management / Subscriptions', 'newspack-plugin' ) }
 			sections={ tabs }
 			requiredPlugins={ [ 'woocommerce', 'woocommerce-memberships' ] }
 			ref={ ref }

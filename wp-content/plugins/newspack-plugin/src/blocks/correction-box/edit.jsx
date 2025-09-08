@@ -7,13 +7,7 @@ import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import ServerSideRender from '@wordpress/server-side-render';
 import { BlockControls, InspectorControls } from '@wordpress/block-editor';
-import {
-	ToolbarGroup,
-	ToolbarButton,
-	PanelBody,
-	PanelRow,
-	SelectControl,
-} from '@wordpress/components';
+import { ToolbarGroup, ToolbarButton, PanelBody, PanelRow, SelectControl } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -41,18 +35,8 @@ export default function Edit( { attributes, setAttributes } ) {
 	function EmptyPlaceholder() {
 		return (
 			<>
-				<p>
-					{ __(
-						'This is the Corrections block, it will display all the corrections and clarifications.',
-						'newspack-plugin'
-					) }
-				</p>
-				<p>
-					{ __(
-						'If there are no corrections or clarifications, this block will not be displayed.',
-						'newspack-plugin'
-					) }
-				</p>
+				<p>{ __( 'This is the Corrections block, it will display all the corrections and clarifications.', 'newspack-plugin' ) }</p>
+				<p>{ __( 'If there are no corrections or clarifications, this block will not be displayed.', 'newspack-plugin' ) }</p>
 			</>
 		);
 	}
@@ -76,17 +60,14 @@ export default function Edit( { attributes, setAttributes } ) {
 					<PanelRow>
 						<SelectControl
 							label={ __( 'Corrections by Priority', 'newspack-plugin' ) }
-							help={ __(
-								'Filter corrections by their priority.',
-								'newspack-plugin'
-							) }
+							help={ __( 'Filter corrections by their priority.', 'newspack-plugin' ) }
 							value={ attributes.priority }
 							options={ [
 								{ label: __( 'High', 'newspack-plugin' ), value: 'high' },
 								{ label: __( 'Low', 'newspack-plugin' ), value: 'low' },
 								{ label: __( 'All', 'newspack-plugin' ), value: 'all' },
 							] }
-							onChange={ value => setAttributes( { priority : value } ) }
+							onChange={ value => setAttributes( { priority: value } ) }
 						/>
 					</PanelRow>
 				</PanelBody>
@@ -104,19 +85,10 @@ export default function Edit( { attributes, setAttributes } ) {
 			<CorrectionSettings />
 			<BlockControls>
 				<ToolbarGroup>
-					<ToolbarButton
-						icon={ update }
-						label={ __( 'Refresh', 'newspack-plugin' ) }
-						onClick={ toggleRefresh }
-					/>
+					<ToolbarButton icon={ update } label={ __( 'Refresh', 'newspack-plugin' ) } onClick={ toggleRefresh } />
 				</ToolbarGroup>
 			</BlockControls>
-			<ServerSideRender
-				block={ meta.name }
-				EmptyResponsePlaceholder={ EmptyPlaceholder }
-				refresh={ isRefreshing }
-				attributes={ attributes }
-			/>
+			<ServerSideRender block={ meta.name } EmptyResponsePlaceholder={ EmptyPlaceholder } refresh={ isRefreshing } attributes={ attributes } />
 		</>
 	);
 }

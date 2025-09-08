@@ -10,8 +10,13 @@ use Automattic\Jetpack\Blocks;
 use Automattic\Jetpack\Extensions\Premium_Content\Subscription_Service\Abstract_Token_Subscription_Service;
 use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Status\Host;
+use Automattic\Jetpack\Status\Request;
 use const Automattic\Jetpack\Extensions\Subscriptions\META_NAME_FOR_POST_LEVEL_ACCESS_SETTINGS;
 use const Automattic\Jetpack\Extensions\Subscriptions\META_NAME_FOR_POST_TIER_ID_SETTINGS;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
 
 require_once __DIR__ . '/../../extensions/blocks/subscriptions/constants.php';
 
@@ -246,7 +251,7 @@ class Jetpack_Memberships {
 		add_filter( 'jetpack_sync_post_meta_whitelist', array( $this, 'allow_sync_post_meta' ) );
 		$this->setup_cpts();
 
-		if ( Jetpack::is_module_active( 'subscriptions' ) && jetpack_is_frontend() ) {
+		if ( Jetpack::is_module_active( 'subscriptions' ) && Request::is_frontend() ) {
 			add_action( 'wp_logout', array( $this, 'subscriber_logout' ) );
 		}
 	}
@@ -533,7 +538,11 @@ class Jetpack_Memberships {
 			$content       = str_replace( 'recurring-payments-id', $block_id, $content );
 			$content       = str_replace( 'wp-block-jetpack-recurring-payments', 'wp-block-jetpack-recurring-payments wp-block-button', $content );
 			$subscribe_url = $this->get_subscription_url( $plan_id );
-			return preg_replace( '/(href=".*")/U', 'href="' . $subscribe_url . '"', $content );
+
+			$content = preg_replace( '/(href=".*")/U', 'href="' . $subscribe_url . '"', $content );
+			$content = wp_kses_post( $content );
+
+			return $content;
 		}
 
 		return $this->deprecated_render_button_v1( $attributes, $plan_id );

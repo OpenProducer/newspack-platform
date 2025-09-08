@@ -38,53 +38,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   parse: () => (/* binding */ parse)
 /* harmony export */ });
-/**
- * @type {string}
- */
 let document;
-/**
- * @type {number}
- */
 let offset;
-/**
- * @type {ParsedBlock[]}
- */
 let output;
-/**
- * @type {ParsedFrame[]}
- */
 let stack;
-
-/**
- * @typedef {Object|null} Attributes
- */
-
-/**
- * @typedef {Object} ParsedBlock
- * @property {string|null}        blockName    Block name.
- * @property {Attributes}         attrs        Block attributes.
- * @property {ParsedBlock[]}      innerBlocks  Inner blocks.
- * @property {string}             innerHTML    Inner HTML.
- * @property {Array<string|null>} innerContent Inner content.
- */
-
-/**
- * @typedef {Object} ParsedFrame
- * @property {ParsedBlock} block            Block.
- * @property {number}      tokenStart       Token start.
- * @property {number}      tokenLength      Token length.
- * @property {number}      prevOffset       Previous offset.
- * @property {number|null} leadingHtmlStart Leading HTML start.
- */
-
-/**
- * @typedef {'no-more-tokens'|'void-block'|'block-opener'|'block-closer'} TokenType
- */
-
-/**
- * @typedef {[TokenType, string, Attributes, number, number]} Token
- */
-
 /**
  * Matches block comment delimiters
  *
@@ -121,8 +78,6 @@ let stack;
  *    once browsers reliably support atomic grouping or possessive
  *    quantifiers natively we should remove this trick and simplify
  *
- * @type {RegExp}
- *
  * @since 3.8.0
  * @since 4.6.1 added optimization to prevent backtracking on attribute parsing
  */
@@ -131,12 +86,13 @@ const tokenizer = /<!--\s+(\/)?wp:([a-z][a-z0-9_-]*\/)?([a-z][a-z0-9_-]*)\s+({(?
 /**
  * Constructs a block object.
  *
- * @param {string|null}   blockName
- * @param {Attributes}    attrs
- * @param {ParsedBlock[]} innerBlocks
- * @param {string}        innerHTML
- * @param {string[]}      innerContent
- * @return {ParsedBlock} The block object.
+ * @param blockName    Either the abbreviated core types, e.g. "paragraph", or the fully-qualified
+ *                     block type with namespace and type, e.g. "core/paragraph" or "my-plugin/csv-table".
+ * @param attrs        The attributes for the block, or null if there are no attributes.
+ * @param innerBlocks  An array of inner blocks.
+ * @param innerHTML    The inner HTML of the block.
+ * @param innerContent An array of inner content strings.
+ * @return The block object.
  */
 function Block(blockName, attrs, innerBlocks, innerHTML, innerContent) {
   return {
@@ -151,8 +107,8 @@ function Block(blockName, attrs, innerBlocks, innerHTML, innerContent) {
 /**
  * Constructs a freeform block object.
  *
- * @param {string} innerHTML
- * @return {ParsedBlock} The freeform block object.
+ * @param innerHTML The inner HTML of the block.
+ * @return The freeform block object.
  */
 function Freeform(innerHTML) {
   return Block(null, {}, [], innerHTML, [innerHTML]);
@@ -161,12 +117,12 @@ function Freeform(innerHTML) {
 /**
  * Constructs a frame object.
  *
- * @param {ParsedBlock} block
- * @param {number}      tokenStart
- * @param {number}      tokenLength
- * @param {number}      prevOffset
- * @param {number|null} leadingHtmlStart
- * @return {ParsedFrame} The frame object.
+ * @param block            The block object.
+ * @param tokenStart       The start offset of the token in the document.
+ * @param tokenLength      The length of the token in the document.
+ * @param prevOffset       The offset of the previous token in the document.
+ * @param leadingHtmlStart The start offset of leading HTML before the block.
+ * @return The frame object.
  */
 function Frame(block, tokenStart, tokenLength, prevOffset, leadingHtmlStart) {
   return {
@@ -181,7 +137,7 @@ function Frame(block, tokenStart, tokenLength, prevOffset, leadingHtmlStart) {
 /**
  * Parser function, that converts input HTML into a block based structure.
  *
- * @param {string} doc The HTML document to parse.
+ * @param doc The HTML document to parse.
  *
  * @example
  * Input post:
@@ -253,7 +209,7 @@ function Frame(block, tokenStart, tokenLength, prevOffset, leadingHtmlStart) {
  *     }
  * ];
  * ```
- * @return {ParsedBlock[]} A block-based representation of the input HTML.
+ * @return A block-based representation of the input HTML.
  */
 const parse = doc => {
   document = doc;
@@ -270,7 +226,7 @@ const parse = doc => {
 /**
  * Parses the next token in the input document.
  *
- * @return {boolean} Returns true when there is more tokens to parse.
+ * @return Returns true when there is more tokens to parse.
  */
 function proceed() {
   const stackDepth = stack.length;
@@ -348,7 +304,7 @@ function proceed() {
 
       // Otherwise we're nested and we have to close out the current
       // block and add it as a innerBlock to the parent.
-      const stackTop = /** @type {ParsedFrame} */stack.pop();
+      const stackTop = stack.pop();
       const html = document.substr(stackTop.prevOffset, startOffset - stackTop.prevOffset);
       stackTop.block.innerHTML += html;
       stackTop.block.innerContent.push(html);
@@ -370,8 +326,8 @@ function proceed() {
  * delimiters is constrained to be an object
  * and cannot be things like `true` or `null`
  *
- * @param {string} input JSON input string to parse
- * @return {Object|null} parsed JSON if valid
+ * @param input JSON input string to parse
+ * @return parsed JSON if valid or null if invalid
  */
 function parseJSON(input) {
   try {
@@ -384,7 +340,7 @@ function parseJSON(input) {
 /**
  * Finds the next token in the document.
  *
- * @return {Token} The next matched token.
+ * @return The next matched token.
  */
 function nextToken() {
   // Aye the magic
@@ -427,7 +383,7 @@ function nextToken() {
 /**
  * Adds a freeform block to the output.
  *
- * @param {number} [rawLength]
+ * @param rawLength Optional length of the raw HTML to include as freeform content.
  */
 function addFreeform(rawLength) {
   const length = rawLength ? rawLength : document.length - offset;
@@ -440,10 +396,11 @@ function addFreeform(rawLength) {
 /**
  * Adds inner block to the parent block.
  *
- * @param {ParsedBlock} block
- * @param {number}      tokenStart
- * @param {number}      tokenLength
- * @param {number}      [lastOffset]
+ * @param block       The inner block to be added to the parent.
+ * @param tokenStart  The start offset of the block token in the document.
+ * @param tokenLength The total length of the block token.
+ * @param lastOffset  Optional offset marking the end of the current block,
+ *                    used to update the parent's HTML content boundaries.
  */
 function addInnerBlock(block, tokenStart, tokenLength, lastOffset) {
   const parent = stack[stack.length - 1];
@@ -460,7 +417,7 @@ function addInnerBlock(block, tokenStart, tokenLength, lastOffset) {
 /**
  * Adds block from the stack to the output.
  *
- * @param {number} [endOffset]
+ * @param endOffset Optional offset marking the end of the block's HTML content.
  */
 function addBlockFromStack(endOffset) {
   const {
@@ -468,7 +425,7 @@ function addBlockFromStack(endOffset) {
     leadingHtmlStart,
     prevOffset,
     tokenStart
-  } = /** @type {ParsedFrame} */stack.pop();
+  } = stack.pop();
   const html = endOffset ? document.substr(prevOffset, endOffset - prevOffset) : document.substr(prevOffset);
   if (html) {
     block.innerHTML += html;

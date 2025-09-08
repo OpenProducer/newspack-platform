@@ -191,6 +191,11 @@ final class Reader_Data {
 			$value = wp_json_encode( $value );
 		}
 
+		$value = sanitize_text_field( $value );
+		if ( ! $value ) {
+			return new \WP_Error( 'invalid_value', __( 'Invalid value.', 'newspack' ), [ 'status' => 400 ] );
+		}
+
 		/**
 		 * Filter the maximum number of items per user.
 		 *

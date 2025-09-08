@@ -36,6 +36,9 @@ class My_Account_UI_V1 {
 		\add_action( 'newspack_after_delete_account', [ __CLASS__, 'handle_after_delete_account' ] );
 		\add_action( 'wp_footer', [ __CLASS__, 'add_after_delete_account_notice' ] );
 		\add_action( 'woocommerce_subscription_details_table', [ __CLASS__, 'cancel_subscription_modal' ] );
+		\add_filter( 'option_woocommerce_myaccount_add_payment_method_endpoint', [ __CLASS__, 'add_payment_method_endpoint' ] );
+		\add_filter( 'default_option_woocommerce_myaccount_add_payment_method_endpoint', [ __CLASS__, 'add_payment_method_endpoint' ] );
+		\add_action( 'newspack_woocommerce_after_account_payment_methods', [ __CLASS__, 'add_payment_method_modal' ] );
 	}
 
 	/**
@@ -85,38 +88,55 @@ class My_Account_UI_V1 {
 	 * Enqueue assets.
 	 */
 	public static function enqueue_assets() {
-		// Only in My Account.
-		if ( ! function_exists( 'is_account_page' ) || ! \is_account_page() ) {
+		if ( ! function_exists( 'wc_get_account_endpoint_url' ) ) {
 			return;
 		}
+		$script_data = [
+			'myAccountUrl' => wc_get_account_endpoint_url( 'dashboard' ),
+			'labels'       => [
+				'resubscribe_title'           => __( 'Renew subscription', 'newspack-plugin' ),
+				'renewal_early_title'         => __( 'Renew subscription early', 'newspack-plugin' ),
+				'change_payment_method_title' => __( 'Change payment method', 'newspack-plugin' ),
+			],
+		];
 
-		\wp_enqueue_script(
-			'my-account-v1',
-			\Newspack\Newspack::plugin_url() . '/dist/my-account-v1.js',
-			[ 'my-account' ],
-			NEWSPACK_PLUGIN_VERSION,
-			true
-		);
-		\wp_localize_script(
-			'my-account-v1',
-			'newspackMyAccountV1',
-			[
-				'myAccountUrl' => wc_get_account_endpoint_url( 'dashboard' ),
-				'labels'       => [
-					'resubscribe_title'   => __( 'Renew subscription', 'newspack-plugin' ),
-					'renewal_early_title' => __( 'Renew subscription early', 'newspack-plugin' ),
-				],
-			]
-		);
+		// Only in My Account.
+		if ( ! function_exists( 'is_account_page' ) || ! \is_account_page() ) {
+			\wp_enqueue_script(
+				'account-frontend',
+				\Newspack\Newspack::plugin_url() . '/dist/account-frontend.js',
+				[],
+				NEWSPACK_PLUGIN_VERSION,
+				true
+			);
+			\wp_localize_script(
+				'account-frontend',
+				'newspackMyAccountV1',
+				$script_data
+			);
+		} else {
+			\wp_enqueue_script(
+				'my-account-v1',
+				\Newspack\Newspack::plugin_url() . '/dist/my-account-v1.js',
+				[ 'my-account' ],
+				NEWSPACK_PLUGIN_VERSION,
+				true
+			);
+			\wp_localize_script(
+				'my-account-v1',
+				'newspackMyAccountV1',
+				$script_data
+			);
 
-		// Dequeue styles from the Newspack theme first, for a fresh start.
-		\wp_dequeue_style( 'newspack-woocommerce-style' );
-		\wp_enqueue_style(
-			'my-account-v1',
-			\Newspack\Newspack::plugin_url() . '/dist/my-account-v1.css',
-			[],
-			NEWSPACK_PLUGIN_VERSION
-		);
+			// Dequeue styles from the Newspack theme first, for a fresh start.
+			\wp_dequeue_style( 'newspack-woocommerce-style' );
+			\wp_enqueue_style(
+				'my-account-v1',
+				\Newspack\Newspack::plugin_url() . '/dist/my-account-v1.css',
+				[],
+				NEWSPACK_PLUGIN_VERSION
+			);
+		}
 	}
 
 	/**
@@ -131,9 +151,23 @@ class My_Account_UI_V1 {
 				return __DIR__ . '/templates/v1/navigation.php';
 			case 'myaccount/form-edit-account.php':
 				return __DIR__ . '/templates/v1/account-settings.php';
+			case 'myaccount/payment-methods.php':
+				return __DIR__ . '/templates/v1/payment-information.php';
 			default:
 				return $template;
 		}
+	}
+
+	/**
+	 * Add query var for the "Payment Information" page.
+	 *
+	 * @param array $vars Query var.
+	 *
+	 * @return array
+	 */
+	public static function query_vars( $vars ) {
+		$vars[] = 'add-payment-method';
+		return $vars;
 	}
 
 	/**
@@ -145,6 +179,12 @@ class My_Account_UI_V1 {
 	public static function my_account_menu_items( $items ) {
 		// Remove logout menu item (to be replaced in our custom template).
 		unset( $items['customer-logout'] );
+
+		// Rename "Payment Methods" to "Payment Information".
+		if ( isset( $items['payment-methods'] ) ) {
+			$items['payment-methods'] = __( 'Payment information', 'newspack-plugin' );
+		}
+
 		return $items;
 	}
 
@@ -211,7 +251,7 @@ class My_Account_UI_V1 {
 				<p class="font-size newspack-ui__font--s newspack-ui__font--bold"><?php esc_html_e( 'Subscriptions', 'newspack-plugin' ); ?></p>
 				<p class="newspack-ui__helper-text"><?php esc_html_e( 'Review and cancel active subscriptions.', 'newspack-plugin' ); ?></p>
 			</div>
-			<div class="newspack-ui__width--33">
+			<div class="newspack-ui__width--40">
 				<a class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--wide" href="<?php echo esc_url( \wc_get_endpoint_url( 'subscriptions', '', \wc_get_page_permalink( 'myaccount' ) ) ); ?>">
 					<?php esc_html_e( 'Manage subscriptions', 'newspack-plugin' ); ?>
 				</a>
@@ -224,7 +264,7 @@ class My_Account_UI_V1 {
 				<p class="font-size newspack-ui__font--s newspack-ui__font--bold"><?php esc_html_e( 'Newsletters', 'newspack-plugin' ); ?></p>
 				<p class="newspack-ui__helper-text"><?php esc_html_e( 'Update your newsletter preferences.', 'newspack-plugin' ); ?></p>
 			</div>
-			<div class="newspack-ui__width--33">
+			<div class="newspack-ui__width--40">
 				<a class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--wide" href="<?php echo esc_url( \wc_get_endpoint_url( 'newsletters', '', \wc_get_page_permalink( 'myaccount' ) ) ); ?>">
 					<?php esc_html_e( 'Manage newsletters', 'newspack-plugin' ); ?>
 				</a>
@@ -447,6 +487,46 @@ class My_Account_UI_V1 {
 				]
 			);
 		}
+	}
+
+	/**
+	 * Set "Add Payment Method" endpoint to "payment-methods".
+	 * The add-payment-method form is now rendered via a modal.
+	 *
+	 * @return string
+	 */
+	public static function add_payment_method_endpoint() {
+		return \get_option( 'woocommerce_myaccount_payment_methods_endpoint', 'payment-methods' );
+	}
+
+	/**
+	 * Render the "Add Payment Method" modal.
+	 */
+	public static function add_payment_method_modal() {
+		if ( ! \is_user_logged_in() || ! Reader_Activation::is_user_reader( \wp_get_current_user() ) ) {
+			return;
+		}
+		ob_start();
+		\woocommerce_account_add_payment_method();
+		$content = ob_get_clean();
+		Newspack_UI::generate_modal(
+			[
+				'id'         => 'add-payment-method',
+				'title'      => __( 'Add Payment Method', 'newspack-plugin' ),
+				'content'    => $content,
+				'size'       => 'medium',
+				'form'       => 'POST',
+				'form_class' => 'newspack-ui__accordion newspack-ui__accordion--open',
+				'form_id'    => 'add_payment_method',
+				'actions'    => [
+					'cancel' => [
+						'label'  => __( 'Cancel', 'newspack-plugin' ),
+						'type'   => 'ghost',
+						'action' => 'close',
+					],
+				],
+			]
+		);
 	}
 }
 My_Account_UI_V1::init();

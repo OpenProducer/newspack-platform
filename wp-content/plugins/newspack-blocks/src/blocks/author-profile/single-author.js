@@ -62,7 +62,7 @@ export const SingleAuthor = ( { author, attributes } ) => {
 				'wp-block-newspack-blocks-author-profile',
 				'avatar-' + avatarAlignment,
 				'text-size-' + textSize,
-				{ 'is-style-center': 'is-style-center' === attributes.className }
+				attributes.className
 			) }
 		>
 			{ showAvatar && author.avatar && (

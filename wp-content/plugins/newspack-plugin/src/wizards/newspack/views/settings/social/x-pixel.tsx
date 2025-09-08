@@ -20,10 +20,7 @@ const XPixel = () => {
 		<WizardsToggleHeaderCard< PixelData >
 			title={ __( 'X Pixel', 'newspack-plugin' ) }
 			namespace={ `${ PAGE_NAMESPACE }/social/pixel/x` }
-			description={ __(
-				'Add the X pixel (formerly known as Twitter pixel) to your site.',
-				'newspack-plugin'
-			) }
+			description={ __( 'Add the X pixel (formerly known as Twitter pixel) to your site.', 'newspack-plugin' ) }
 			path="/newspack/v1/wizard/newspack-settings/social/x_pixel"
 			defaultValue={ {
 				active: false,
@@ -37,17 +34,11 @@ const XPixel = () => {
 					},
 				],
 			] }
-			renderProp={ ( {
-				settingsUpdates,
-				setSettingsUpdates,
-				isFetching,
-			} ) => (
+			renderProp={ ( { settingsUpdates, setSettingsUpdates, isFetching } ) => (
 				<TextControl
 					value={ settingsUpdates?.pixel_id ?? '' }
 					label={ __( 'Pixel ID', 'newspack-plugin' ) }
-					onChange={ ( pixel_id: string ) =>
-						setSettingsUpdates( { ...settingsUpdates, pixel_id } )
-					}
+					onChange={ ( pixel_id: string ) => setSettingsUpdates( { ...settingsUpdates, pixel_id } ) }
 					help={ createInterpolateElement(
 						__(
 							'The X Pixel ID. You only need to add the number, not the full code. Example: 123456789123456789. You can get this information <linkToFb>here</linkToFb>.',
@@ -56,11 +47,7 @@ const XPixel = () => {
 						{
 							linkToFb: (
 								/* eslint-disable-next-line jsx-a11y/anchor-has-content */
-								<a
-									href="https://www.facebook.com/ads/manager/pixel/facebook_pixel"
-									target="_blank"
-									rel="noopener noreferrer"
-								/>
+								<a href="https://www.facebook.com/ads/manager/pixel/facebook_pixel" target="_blank" rel="noopener noreferrer" />
 							),
 						}
 					) }

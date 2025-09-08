@@ -16,13 +16,7 @@ import { Card } from '../components/src';
  *
  * @return Component.
  */
-function WizardsCard( {
-	children,
-	...props
-}: {
-	children: React.ReactNode;
-	className?: string;
-} ) {
+function WizardsCard( { children, ...props }: { children: React.ReactNode; className?: string } ) {
 	return <Card { ...props }>{ children }</Card>;
 }
 

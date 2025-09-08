@@ -56,6 +56,9 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 	 * @param int $user_id User ID being deleted.
 	 */
 	public static function store_user_data_before_deletion( $user_id ) {
+		if ( ! class_exists( 'WC_Customer' ) ) {
+			return;
+		}
 		$user = get_userdata( $user_id );
 		if ( ! $user ) {
 			return;
@@ -217,9 +220,15 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
 	public static function reader_deleted( $timestamp, $data, $client_id ) {
-		if ( true === Reader_Activation::get_setting( 'sync_esp_delete' ) ) {
-			return Newspack_Newsletters_Contacts::delete( $data['user_id'], 'RAS Reader deleted' );
+		if ( ! isset( $data['user']['data']['user_email'] ) ) {
+			return;
 		}
+		if ( true === Reader_Activation::get_setting( 'sync_esp_delete' ) ) {
+			$result = Newspack_Newsletters_Contacts::delete( $data['user']['data']['user_email'], 'RAS Reader deleted' );
+		} else {
+			$result = Newspack_Newsletters_Contacts::update_lists( $data['user']['data']['user_email'], [], 'Reader account deleted' );
+		}
+		return $result;
 	}
 
 	/**

@@ -14,17 +14,9 @@ import { WIZARD_STORE_NAMESPACE } from '../../../../components/src/wizard/store'
 import WizardsSection from '../../../wizards-section';
 
 const BillingFields = () => {
-	const wizardData = useWizardData(
-		'newspack-audience/billing-fields'
-	);
-	const { updateWizardSettings, saveWizardSettings } = useDispatch(
-		WIZARD_STORE_NAMESPACE
-	);
-	const isQuietLoading = useSelect(
-		( select: any ) =>
-			select( WIZARD_STORE_NAMESPACE ).isQuietLoading() ?? false,
-		[]
-	);
+	const wizardData = useWizardData( 'newspack-audience/billing-fields' );
+	const { updateWizardSettings, saveWizardSettings } = useDispatch( WIZARD_STORE_NAMESPACE );
+	const isQuietLoading = useSelect( ( select: any ) => select( WIZARD_STORE_NAMESPACE ).isQuietLoading() ?? false, [] );
 
 	if ( ! wizardData ) {
 		return null;
@@ -48,9 +40,7 @@ const BillingFields = () => {
 		return null;
 	}
 
-	const billingFields = wizardData.billing_fields.length
-		? wizardData.billing_fields
-		: Object.keys( availableFields );
+	const billingFields = wizardData.billing_fields.length ? wizardData.billing_fields : Object.keys( availableFields );
 
 	return (
 		<WizardsSection
@@ -65,18 +55,13 @@ const BillingFields = () => {
 				{ Object.keys( availableFields ).map( fieldKey => (
 					<CheckboxControl
 						key={ fieldKey }
-						label={
-							availableFields[ fieldKey ].label +
-							( availableFields[ fieldKey ].required ? ' *' : '' )
-						}
+						label={ availableFields[ fieldKey ].label + ( availableFields[ fieldKey ].required ? ' *' : '' ) }
 						checked={ billingFields.includes( fieldKey ) }
 						disabled={ fieldKey === 'billing_email' } // Email is always required.
 						onChange={ () => {
 							let newFields = [ ...billingFields ];
 							if ( billingFields.includes( fieldKey ) ) {
-								newFields = newFields.filter(
-									field => field !== fieldKey
-								);
+								newFields = newFields.filter( field => field !== fieldKey );
 							} else {
 								newFields = [ ...newFields, fieldKey ];
 							}
@@ -91,9 +76,7 @@ const BillingFields = () => {
 						onChange={ () => {
 							let newFields = [ ...billingFields ];
 							if ( billingFields.includes( 'order_comments' ) ) {
-								newFields = newFields.filter(
-									field => field !== 'order_comments'
-								);
+								newFields = newFields.filter( field => field !== 'order_comments' );
 							} else {
 								newFields = [ ...newFields, 'order_comments' ];
 							}
@@ -103,14 +86,8 @@ const BillingFields = () => {
 				) }
 			</Grid>
 			<div className="newspack-buttons-card">
-				<Button
-					variant="primary"
-					onClick={ onSave }
-					disabled={ isQuietLoading }
-				>
-					{ isQuietLoading
-						? __( 'Saving…', 'newspack-plugin' )
-						: __( 'Save Settings', 'newspack-plugin' ) }
+				<Button variant="primary" onClick={ onSave } disabled={ isQuietLoading }>
+					{ isQuietLoading ? __( 'Saving…', 'newspack-plugin' ) : __( 'Save Settings', 'newspack-plugin' ) }
 				</Button>
 			</div>
 		</WizardsSection>

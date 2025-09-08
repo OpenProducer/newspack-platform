@@ -52,5 +52,15 @@ if ( ! $current_post ) {
 			<?php echo wp_kses_post( $footer_html ); ?>
 		</footer>
 	<?php endif; ?>
+
+
+	<?php
+	/**
+	 * Fires after the footer of the lite site single post page.
+	 *
+	 * @param WP_Post $current_post The current post.
+	 */
+	do_action( 'newspack_lite_site_single_after_footer', $current_post );
+	?>
 </body>
 </html>

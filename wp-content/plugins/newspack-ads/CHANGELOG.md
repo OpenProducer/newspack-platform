@@ -1,3 +1,47 @@
+# [3.8.0](https://github.com/Automattic/newspack-ads/compare/v3.7.0...v3.8.0) (2025-08-28)
+
+
+### Features
+
+* **scaip:** add setting to filter after which blocks ads may be added ([#974](https://github.com/Automattic/newspack-ads/issues/974)) ([#988](https://github.com/Automattic/newspack-ads/issues/988)) ([ddb3020](https://github.com/Automattic/newspack-ads/commit/ddb30207c90e16943d11f4acf8f408000e4c4481))
+
+# [3.7.0](https://github.com/Automattic/newspack-ads/compare/v3.6.2...v3.7.0) (2025-08-25)
+
+
+### Features
+
+* **gam:** parent ad unit inventory ([#967](https://github.com/Automattic/newspack-ads/issues/967)) ([a3c47f6](https://github.com/Automattic/newspack-ads/commit/a3c47f6ae4a75a3fefd5701050098913a3d8b952))
+* **gam:** support MCM (parent network code) ([#978](https://github.com/Automattic/newspack-ads/issues/978)) ([86af6d5](https://github.com/Automattic/newspack-ads/commit/86af6d558e1c97d705340e78930f7c9f9590073c))
+* **placements:** new sticky and side rail ([#975](https://github.com/Automattic/newspack-ads/issues/975)) ([6d38353](https://github.com/Automattic/newspack-ads/commit/6d38353b10eae37816af2e6dfb9e8e9bf514f471))
+
+## [3.6.2](https://github.com/Automattic/newspack-ads/compare/v3.6.1...v3.6.2) (2025-08-13)
+
+
+### Bug Fixes
+
+* **placements:** side rail placement dimension race condition ([#984](https://github.com/Automattic/newspack-ads/issues/984)) ([304a9f3](https://github.com/Automattic/newspack-ads/commit/304a9f3163943379bc3887ae4f22fda241151cc7))
+
+## [3.6.1](https://github.com/Automattic/newspack-ads/compare/v3.6.0...v3.6.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* **placements:** fix side rail main element ([#983](https://github.com/Automattic/newspack-ads/issues/983)) ([5094654](https://github.com/Automattic/newspack-ads/commit/5094654a6625dc089661e092ec74ec782128d5f7))
+
+# [3.6.0](https://github.com/Automattic/newspack-ads/compare/v3.5.5...v3.6.0) (2025-08-11)
+
+
+### Features
+
+* **placements:** new sticky and side rail ([#975](https://github.com/Automattic/newspack-ads/issues/975)) ([18d6c78](https://github.com/Automattic/newspack-ads/commit/18d6c7881eb26d6489a2a9de5c5f7e27437f3ebf))
+
+## [3.5.5](https://github.com/Automattic/newspack-ads/compare/v3.5.4...v3.5.5) (2025-07-28)
+
+
+### Bug Fixes
+
+* **ad-block:** handle missing ad unit ([#965](https://github.com/Automattic/newspack-ads/issues/965)) ([434d3e2](https://github.com/Automattic/newspack-ads/commit/434d3e2bafb83275b91eb7fe18256a7f90b21681))
+
 ## [3.5.4](https://github.com/Automattic/newspack-ads/compare/v3.5.3...v3.5.4) (2025-06-16)
 
 

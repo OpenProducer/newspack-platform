@@ -46,7 +46,7 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 			'settings' => 'admin.php?page=wc-settings&tab=checkout&section=stripe&panel=settings',
 		],
 		'woocommerce_payments' => [
-			'name'     => 'WooCommerce Payments',
+			'name'     => 'WooPay',
 			'plugin'   => 'woocommerce-payments',
 			'url'      => 'https://woocommerce.com/payments/',
 			'connect'  => 'admin.php?page=wc-admin&path=%2Fpayments%2Foverview',

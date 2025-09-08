@@ -182,9 +182,29 @@ class Google_Login {
 		/** Close window if it's a popup. */
 		?>
 		<script type="text/javascript" data-amp-plus-allowed>
+			// Debug logging function that uses the centralized logging from newspackReaderActivation.
+			const debugLog = function( level ) {
+				if ( window.opener && window.opener.newspackReaderActivation && window.opener.newspackReaderActivation.debugLog ) {
+					window.opener.newspackReaderActivation.debugLog.apply( null, [level].concat( Array.prototype.slice.call( arguments, 1 ) ) );
+				}
+			};
+
+			debugLog('log', '[Google OAuth Callback] Script running, window.opener:', window.opener);
 			if ( window.opener ) {
-				window.opener.dispatchEvent( new Event('google-oauth-success') );
+				// Use postMessage for cross-origin communication (handles COOP restrictions).
+				try {
+					debugLog('log', '[Google OAuth Callback] Sending postMessage to origin:', window.location.origin);
+					window.opener.postMessage( 'google-oauth-success', window.location.origin );
+					debugLog('log', '[Google OAuth Callback] postMessage sent successfully');
+				} catch ( e ) {
+					debugLog('error', '[Google OAuth Callback] postMessage failed:', e);
+					// Fallback: postMessage might fail in some edge cases.
+				}
+
+				debugLog('log', '[Google OAuth Callback] Closing window');
 				window.close();
+			} else {
+				debugLog('log', '[Google OAuth Callback] No window.opener found');
 			}
 		</script>
 		<?php

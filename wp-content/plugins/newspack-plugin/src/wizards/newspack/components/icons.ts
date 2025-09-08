@@ -27,7 +27,7 @@ import {
 /**
  * Internal dependencies
  */
-import { ad, emailAd, gift } from '../../../icons';
+import { ad, emailAd, gift } from '../../../../packages/icons';
 
 /**
  * Export Dashboard Icons

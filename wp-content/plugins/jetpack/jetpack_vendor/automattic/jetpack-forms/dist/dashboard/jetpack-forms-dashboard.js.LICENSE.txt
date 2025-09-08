@@ -16,29 +16,16 @@
  */
 
 /**
- * @remix-run/router v1.23.0
+ * [js-sha256]{@link https://github.com/emn178/js-sha256}
  *
- * Copyright (c) Remix Software Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.md file in the root directory of this source tree.
- *
+ * @version 0.11.1
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2014-2025
  * @license MIT
  */
 
 /**
- * React Router DOM v6.30.0
- *
- * Copyright (c) Remix Software Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.md file in the root directory of this source tree.
- *
- * @license MIT
- */
-
-/**
- * React Router v6.30.0
+ * react-router v7.6.2
  *
  * Copyright (c) Remix Software Inc.
  *

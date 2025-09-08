@@ -4,7 +4,7 @@ Contributors:      google
 Requires at least: 5.2
 Tested up to:      6.8
 Requires PHP:      7.4
-Stable tag:        1.155.0
+Stable tag:        1.161.0
 License:           Apache License 2.0
 License URI:       https://www.apache.org/licenses/LICENSE-2.0
 Tags:              google, search-console, analytics, adsense, pagespeed-insights
@@ -109,23 +109,28 @@ Please create a new topic on our [WordPress.org support forum](https://wordpress
 
 == Changelog ==
 
-= 1.155.0 =
+= 1.161.0 =
 
 **Enhanced**
 
-* Redesign the Enhanced Measurement Banner with the new Middle SVG and In Progress Banner states. See [#10813](https://github.com/google/site-kit-wp/issues/10813).
-* Refactor Setup CTA Widgets which use the new "Top SVG" Banner component variation. See [#10716](https://github.com/google/site-kit-wp/issues/10716).
-* Update the Consent Mode, Ads Setup, and Reader Revenue Manager banner images. See [#10715](https://github.com/google/site-kit-wp/issues/10715).
-* Update the Setup CTAs to use a different/consistent image style. See [#10714](https://github.com/google/site-kit-wp/issues/10714).
-* Remove the `rrmModule` feature flag. See [#10677](https://github.com/google/site-kit-wp/issues/10677).
-* Refactor AudienceSegmentationIntroductoryOverlayNotification to use the new notifications infrastructure. See [#10391](https://github.com/google/site-kit-wp/issues/10391).
-* Enhance the loading performance of the Audiences Widget by refining the data fetching logic. See [#9982](https://github.com/google/site-kit-wp/issues/9982).
-* Update references to Google Analytics "conversions" to use the new "key events" terminology across the plugin. See [#9463](https://github.com/google/site-kit-wp/issues/9463).
-* Refactor Audience Segmentation / FPM Setup Success Subtle Notifications to use a new "on demand" notification. See [#9453](https://github.com/google/site-kit-wp/issues/9453).
+* Add GTG key metrics tracking. See [#11412](https://github.com/google/site-kit-wp/issues/11412).
+* Update Partner Ads Experience to `1.1.10` and add `'site-kit'` identifier. See [#11399](https://github.com/google/site-kit-wp/issues/11399).
+* Add logo and GA events tracking to the AdSense server notifications. See [#11214](https://github.com/google/site-kit-wp/issues/11214).
+* Add integration for WooCommerce with Enhanced Conversions. See [#11006](https://github.com/google/site-kit-wp/issues/11006).
+* Update background colors of various UI elements to use a consistent, lighter gray. Props 10upsimon. See [#5579](https://github.com/google/site-kit-wp/issues/5579).
+
+**Changed**
+
+* Remove support for Analytics Pivot reports. Props 10upsimon. See [#10298](https://github.com/google/site-kit-wp/issues/10298).
 
 **Fixed**
 
-* Fix bug that could cause auth setup banners to be interrupted by another notification. See [#10903](https://github.com/google/site-kit-wp/issues/10903).
-* Update the key metrics setup banner to continue showing the progress state in the CTA button until the next page loads. See [#10721](https://github.com/google/site-kit-wp/issues/10721).
+* Update the Google tag gateway for advertisers `measurement.php` proxy script to the latest version. See [#11389](https://github.com/google/site-kit-wp/issues/11389).
+* Update notification priorities to have more important permission-related notifications have higher priority. See [#11206](https://github.com/google/site-kit-wp/issues/11206).
+* Fix color issues for hX tags created by the `Typography` component. See [#11159](https://github.com/google/site-kit-wp/issues/11159).
+* Fix bug that caused the "Grant permission" button not to appear during failed plugin setup. See [#11063](https://github.com/google/site-kit-wp/issues/11063).
+* Fix a regression that caused the font size of the admin bar data block to appear too small. Props sudhanshugaikwad. See [#11041](https://github.com/google/site-kit-wp/issues/11041).
+* Fix bug that could cause odd error state when answering Key Metrics question about site goals. See [#10645](https://github.com/google/site-kit-wp/issues/10645).
+* Improve/consolidate permissions errors UI when setting up Site Kit. See [#10118](https://github.com/google/site-kit-wp/issues/10118).
 
 [See changelog for all versions](https://raw.githubusercontent.com/google/site-kit-wp/main/changelog.txt).

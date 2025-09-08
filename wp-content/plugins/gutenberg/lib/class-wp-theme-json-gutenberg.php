@@ -204,6 +204,15 @@ class WP_Theme_JSON_Gutenberg {
 			'classes'           => array(),
 			'properties'        => array( 'box-shadow' ),
 		),
+		array(
+			'path'              => array( 'border', 'radiusSizes' ),
+			'prevent_override'  => false,
+			'use_default_names' => false,
+			'value_key'         => 'size',
+			'css_vars'          => '--wp--preset--border-radius--$slug',
+			'classes'           => array(),
+			'properties'        => array( 'border-radius' ),
+		),
 	);
 
 	/**
@@ -386,10 +395,11 @@ class WP_Theme_JSON_Gutenberg {
 			'backgroundSize'  => null,
 		),
 		'border'                        => array(
-			'color'  => null,
-			'radius' => null,
-			'style'  => null,
-			'width'  => null,
+			'color'       => null,
+			'radius'      => null,
+			'style'       => null,
+			'width'       => null,
+			'radiusSizes' => null,
 		),
 		'color'                         => array(
 			'background'       => null,

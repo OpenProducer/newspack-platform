@@ -46,6 +46,9 @@ final class SCAIP {
 		add_action( 'init', array( __CLASS__, 'register_placements' ) );
 		add_action( 'scaip_shortcode', [ __CLASS__, 'create_placement_action' ] );
 
+		// Block filtering hooks.
+		add_filter( 'scaip_allowing_insertion_blocks', [ __CLASS__, 'filter_allowed_blocks' ] );
+
 		// Setup Newspack Ads defaults on activation.
 		add_action( 'newspack_ads_activation_hook', array( __CLASS__, 'register_defaults' ) );
 
@@ -111,6 +114,33 @@ final class SCAIP {
 				'key'         => 'legacy_widgets',
 				'type'        => 'boolean',
 				'default'     => true,
+			),
+			array(
+				'description' => __( 'Allowed block types', 'newspack-ads' ),
+				'help'        => __( 'Select which block types can be followed by an ad.', 'newspack-ads' ),
+				'section'     => 'scaip',
+				'key'         => 'allowed_blocks',
+				'type'        => 'string',
+				'multiple'    => true,
+				'options'     => array(
+					array(
+						'name'  => __( 'Paragraph', 'newspack-ads' ),
+						'value' => 'core/paragraph',
+					),
+					array(
+						'name'  => __( 'Image', 'newspack-ads' ),
+						'value' => 'core/image',
+					),
+					array(
+						'name'  => __( 'Heading', 'newspack-ads' ),
+						'value' => 'core/heading',
+					),
+					array(
+						'name'  => __( 'Embed', 'newspack-ads' ),
+						'value' => 'core/embed',
+					),
+				),
+				'default'     => array( 'core/paragraph' ),
 			),
 		);
 		return array_merge( $settings_list, $scaip_settings );
@@ -230,6 +260,22 @@ final class SCAIP {
 			}
 		}
 		return $placement_data;
+	}
+
+	/**
+	 * Filter the allowed blocks for SCAIP insertion.
+	 *
+	 * @param array $blocks Default allowed blocks.
+	 *
+	 * @return array Filtered allowed blocks.
+	 */
+	public static function filter_allowed_blocks( $blocks ) {
+		$allowed_blocks = Settings::get_setting( 'scaip', 'allowed_blocks' );
+		if ( empty( $allowed_blocks ) || ! is_array( $allowed_blocks ) ) {
+			return $blocks;
+		}
+
+		return $allowed_blocks;
 	}
 }
 SCAIP::init();

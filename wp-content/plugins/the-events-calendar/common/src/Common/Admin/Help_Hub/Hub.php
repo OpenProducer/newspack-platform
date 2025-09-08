@@ -5,7 +5,7 @@
  * This class handles rendering the Help Hub page, loading necessary assets,
  * and generating iframes and admin notices related to the Help Hub.
  *
- * @since   6.3.2
+ * @since 6.3.2
  * @package TEC\Common\Admin\Help_Hub
  */
 
@@ -125,6 +125,13 @@ class Hub {
 			 */
 			define( 'TEC_HELP_HUB_CHAT_ZENDESK_CHAT_KEY', 'd8e5e319-c54b-4da9-9d7d-e984cc3c4900' );
 		}
+
+		if ( ! defined( 'TEC_HELP_HUB_CHAT_HELPSCOUT_BEACON_CHAT_KEY' ) ) {
+			/**
+			 * Help Scout Beacon key for embedding the beacon widget.
+			 */
+			define( 'TEC_HELP_HUB_CHAT_HELPSCOUT_BEACON_CHAT_KEY', '9bb4e819-f901-45b4-9616-abe17a460fc2' );
+		}
 	}
 
 	/**
@@ -135,7 +142,7 @@ class Hub {
 	 * @return Help_Hub_Data_Interface The data object containing Help Hub resources.
 	 */
 	public function get_data(): Help_Hub_Data_Interface {
-		if ( $this->data ) {
+		if ( empty( $this->data ) ) {
 			$this->data->initialize();
 			return $this->data;
 		}
@@ -170,7 +177,7 @@ class Hub {
 	 */
 	public function register_hidden_page(): void {
 		add_submenu_page(
-			null, // Make the page hidden.
+			'', // Make the page hidden.
 			__( 'Help Hub', 'tribe-common' ),
 			__( 'Help Hub', 'tribe-common' ),
 			'manage_options',
@@ -228,7 +235,7 @@ class Hub {
 		 *
 		 * @since 6.3.2
 		 *
-		 * @param Hub $this The Hub instance.
+		 * @param Hub $instance The Hub instance.
 		 */
 		do_action( 'tec_help_hub_before_render', $this );
 
@@ -276,7 +283,7 @@ class Hub {
 		 *
 		 * @since 6.3.2
 		 *
-		 * @param Hub $this The Hub instance.
+		 * @param Hub $instance The Hub instance.
 		 */
 		do_action( 'tec_help_hub_after_render', $this );
 	}
@@ -403,7 +410,7 @@ class Hub {
 			Tribe__Main::instance(),
 			'tec-common-help-hub-style',
 			'help-hub.css',
-			null,
+			[],
 			'admin_enqueue_scripts'
 		);
 
@@ -459,7 +466,6 @@ class Hub {
 		 * @since 6.8.0
 		 *
 		 * @param string $default_url The default URL to the telemetry opt-in settings tab.
-		 * @param Hub $this The Hub instance.
 		 */
 		return apply_filters( 'tec_help_hub_telemetry_opt_in_link', $default_url );
 	}
@@ -495,13 +501,16 @@ class Hub {
 		 *
 		 * @since 6.3.2
 		 *
-		 * @param Hub $this The Hub instance.
+		 * @param Hub $instance The Hub instance.
 		 */
 		do_action( 'tec_help_hub_before_iframe_render', $this );
 
 		$this->ensure_data_is_set();
 
-		define( 'IFRAME_REQUEST', true );
+		if ( ! defined( 'IFRAME_REQUEST' ) ) {
+			define( 'IFRAME_REQUEST', true );
+		}
+
 		// phpcs:ignore WordPressVIPMinimum.UserExperience.AdminBarRemoval.RemovalDetected
 		show_admin_bar( false );
 
@@ -517,7 +526,7 @@ class Hub {
 		 *
 		 * @since 6.3.2
 		 *
-		 * @param Hub $this The Hub instance.
+		 * @param Hub $instance The Hub instance.
 		 */
 		do_action( 'tec_help_hub_after_iframe_render', $this );
 
@@ -548,7 +557,9 @@ class Hub {
 	 * @return void
 	 */
 	public function enqueue_help_page_iframe_assets(): void {
-		define( 'IFRAME_REQUEST', true );
+		if ( ! defined( 'IFRAME_REQUEST' ) ) {
+			define( 'IFRAME_REQUEST', true );
+		}
 
 		tec_asset(
 			Tribe__Main::instance(),
@@ -568,8 +579,14 @@ class Hub {
 				'localize' => [
 					'name' => 'helpHubSettings',
 					'data' => [
-						'docsbot_key'    => $this->config->get( 'TEC_HELP_HUB_CHAT_DOCSBOT_SUPPORT_KEY' ),
-						'zendeskChatKey' => $this->config->get( 'TEC_HELP_HUB_CHAT_ZENDESK_CHAT_KEY' ),
+						'docsbot_key'        => $this->config->get( 'TEC_HELP_HUB_CHAT_DOCSBOT_SUPPORT_KEY' ),
+						'zendeskChatKey'     => $this->config->get( 'TEC_HELP_HUB_CHAT_ZENDESK_CHAT_KEY' ),
+						'helpScoutBeaconKey' => $this->config->get( 'TEC_HELP_HUB_CHAT_HELPSCOUT_BEACON_CHAT_KEY' ),
+						// Pass userIdentifiers as an array if you want to prefill the Help Scout form.
+						'userIdentifiers'    => null,
+						'errorMessages'      => [
+							'helpScoutScriptLoadFailed' => __( 'Failed to load Help Scout Beacon script.', 'tribe-common' ),
+						],
 					],
 				],
 			]

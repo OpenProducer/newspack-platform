@@ -73,8 +73,7 @@ export default function Brand( {
 		parent: 0,
 	} );
 	const [ publicPages, setPublicPages ] = useState< PublicPage[] >( [] );
-	const [ showOnFrontSelect, setShowOnFrontSelect ] =
-		useState< string >( 'no' );
+	const [ showOnFrontSelect, setShowOnFrontSelect ] = useState< string >( 'no' );
 
 	useEffect( () => {
 		if ( selectedBrand && typeof selectedBrand.meta._logo === 'number' ) {
@@ -86,9 +85,7 @@ export default function Brand( {
 	useEffect( () => {
 		if ( selectedBrand ) {
 			updateBrand( selectedBrand );
-			setShowOnFrontSelect(
-				selectedBrand.meta._show_page_on_front ? 'yes' : 'no'
-			);
+			setShowOnFrontSelect( selectedBrand.meta._show_page_on_front ? 'yes' : 'no' );
 		}
 	}, [ selectedBrand ] );
 
@@ -110,16 +107,10 @@ export default function Brand( {
 	const brandThemeColors = brand.meta._theme_colors;
 
 	const isBrandValid =
-		brand.name?.length > 0 &&
-		( showOnFrontSelect === 'no' ||
-			( showOnFrontSelect === 'yes' &&
-				brand.meta._show_page_on_front > 0 ) );
+		brand.name?.length > 0 && ( showOnFrontSelect === 'no' || ( showOnFrontSelect === 'yes' && brand.meta._show_page_on_front > 0 ) );
 
 	// Utility functions for brand updates
-	function updateThemeColor(
-		name: string | undefined,
-		color: string | undefined
-	) {
+	function updateThemeColor( name: string | undefined, color: string | undefined ) {
 		if ( ! name ) {
 			return;
 		}
@@ -130,18 +121,14 @@ export default function Brand( {
 		if ( color ) {
 			if ( existingColor ) {
 				// Update existing color
-				updatedThemeColors = updatedThemeColors.map( _color =>
-					_color.name === name ? { ..._color, color } : _color
-				);
+				updatedThemeColors = updatedThemeColors.map( _color => ( _color.name === name ? { ..._color, color } : _color ) );
 			} else {
 				// Add new color
 				updatedThemeColors.push( { name, color } );
 			}
 		} else {
 			// Reset to default
-			updatedThemeColors = updatedThemeColors.filter(
-				_color => _color.name !== name
-			);
+			updatedThemeColors = updatedThemeColors.filter( _color => _color.name !== name );
 		}
 
 		updateBrand( {
@@ -166,10 +153,7 @@ export default function Brand( {
 	}
 
 	function updateMenus( location: string, menu: number ) {
-		const updatedMenus =
-			brand.meta._menus.map( _menu =>
-				_menu.location === location ? { ..._menu, menu } : _menu
-			) || [];
+		const updatedMenus = brand.meta._menus.map( _menu => ( _menu.location === location ? { ..._menu, menu } : _menu ) ) || [];
 
 		updateBrand( {
 			meta: {
@@ -179,15 +163,10 @@ export default function Brand( {
 		} );
 	}
 
-	const baseUrl = `${ window.newspack_urls.site }/${
-		brand.meta._custom_url === 'no' ? 'brand/' : ''
-	}`;
+	const baseUrl = `${ window.newspack_urls.site }/${ brand.meta._custom_url === 'no' ? 'brand/' : '' }`;
 
 	function findSelectedMenu( location: string ) {
-		return (
-			brand.meta._menus.find( menu => menu.location === location )
-				?.menu || 0
-		);
+		return brand.meta._menus.find( menu => menu.location === location )?.menu || 0;
 	}
 
 	function isFetchingLogo() {
@@ -196,13 +175,7 @@ export default function Brand( {
 
 	return (
 		<Fragment>
-			<SectionHeader
-				title={ __( 'Brand', 'newspack-plugin' ) }
-				description={ __(
-					'Set your brand identity',
-					'newspack-plugin'
-				) }
-			/>
+			<SectionHeader title={ __( 'Brand', 'newspack-plugin' ) } description={ __( 'Set your brand identity', 'newspack-plugin' ) } />
 			<Grid gutter={ 32 }>
 				<Grid columns={ 1 } gutter={ 16 }>
 					<TextControl
@@ -216,15 +189,9 @@ export default function Brand( {
 				<Grid columns={ 1 } gutter={ 16 }>
 					<ImageUpload
 						className="newspack-brand__header__logo"
-						buttonLabel={
-							isFetchingLogo()
-								? __( 'Fetching logo…', 'newspack-plugin' )
-								: undefined
-						}
+						buttonLabel={ isFetchingLogo() ? __( 'Fetching logo…', 'newspack-plugin' ) : undefined }
 						label={ __( 'Logo', 'newspack-plugin' ) }
-						image={
-							isFetchingLogo() ? undefined : brand.meta._logo
-						}
+						image={ isFetchingLogo() ? undefined : brand.meta._logo }
 						onChange={ ( logoId: number ) =>
 							updateBrand( {
 								meta: { ...brand.meta, _logo: logoId },
@@ -239,10 +206,7 @@ export default function Brand( {
 				<Fragment>
 					<SectionHeader
 						title={ __( 'Colors', 'newspack-plugin' ) }
-						description={ __(
-							'These are the colors you can customize for this brand in the active theme',
-							'newspack-plugin'
-						) }
+						description={ __( 'These are the colors you can customize for this brand in the active theme', 'newspack-plugin' ) }
 					/>
 					{ registeredThemeColors.map( color => (
 						<Card noBorder key={ color.theme_mod_name }>
@@ -251,37 +215,15 @@ export default function Brand( {
 								label={
 									<Fragment>
 										<span>{ color.label }</span>
-										{ brandThemeColors.find(
-											c => c.name === color.theme_mod_name
-										)?.color && (
-											<Button
-												variant="link"
-												onClick={ () =>
-													updateThemeColor(
-														color.theme_mod_name,
-														''
-													)
-												}
-											>
-												{ __(
-													'Reset default color',
-													'newspack-plugin'
-												) }
+										{ brandThemeColors.find( c => c.name === color.theme_mod_name )?.color && (
+											<Button variant="link" onClick={ () => updateThemeColor( color.theme_mod_name, '' ) }>
+												{ __( 'Reset default color', 'newspack-plugin' ) }
 											</Button>
 										) }
 									</Fragment>
 								}
-								color={
-									brandThemeColors.find(
-										c => c.name === color.theme_mod_name
-									)?.color ?? color.default
-								}
-								onChange={ ( newColor: string ) =>
-									updateThemeColor(
-										color.theme_mod_name,
-										newColor
-									)
-								}
+								color={ brandThemeColors.find( c => c.name === color.theme_mod_name )?.color ?? color.default }
+								onChange={ ( newColor: string ) => updateThemeColor( color.theme_mod_name, newColor ) }
 							/>
 						</Card>
 					) ) }
@@ -305,9 +247,7 @@ export default function Brand( {
 							value: 'no',
 						},
 					] }
-					onChange={ ( _custom_url: string ) =>
-						updateBrand( { meta: { ...brand.meta, _custom_url } } )
-					}
+					onChange={ ( _custom_url: string ) => updateBrand( { meta: { ...brand.meta, _custom_url } } ) }
 				/>
 				<div className="newspack-brand__base-url-component">
 					<span>{ baseUrl }</span>
@@ -360,8 +300,7 @@ export default function Brand( {
 							updateBrand( {
 								meta: {
 									...brand.meta,
-									_show_page_on_front:
-										Number( _show_page_on_front ),
+									_show_page_on_front: Number( _show_page_on_front ),
 								},
 							} )
 						}
@@ -371,13 +310,7 @@ export default function Brand( {
 			</Card>
 
 			{ /* Menu Settings */ }
-			<SectionHeader
-				title={ __( 'Menus', 'newspack-plugin' ) }
-				description={ __(
-					'Customize the menus for this brand',
-					'newspack-plugin'
-				) }
-			/>
+			<SectionHeader title={ __( 'Menus', 'newspack-plugin' ) } description={ __( 'Customize the menus for this brand', 'newspack-plugin' ) } />
 			{ menuLocations &&
 				Object.keys( menuLocations ).map( location => (
 					<SelectControl
@@ -391,19 +324,13 @@ export default function Brand( {
 							},
 							...availableMenus,
 						] }
-						onChange={ ( menuId: number ) =>
-							updateMenus( location, menuId )
-						}
+						onChange={ ( menuId: number ) => updateMenus( location, menuId ) }
 					/>
 				) ) }
 			{ errorMessage && <Notice isError>{ errorMessage }</Notice> }
 			{ /* Action Buttons */ }
 			<div className="newspack-buttons-card">
-				<Button
-					disabled={ ! isBrandValid }
-					variant="primary"
-					onClick={ () => upsertBrand( Number( brandId ), brand ) }
-				>
+				<Button disabled={ ! isBrandValid } variant="primary" onClick={ () => upsertBrand( Number( brandId ), brand ) }>
 					{ __( 'Save', 'newspack-plugin' ) }
 				</Button>
 				<Button variant="secondary" href={ `#${ TAB_PATH }` }>

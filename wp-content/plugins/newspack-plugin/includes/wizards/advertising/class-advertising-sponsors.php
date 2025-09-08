@@ -57,7 +57,7 @@ class Advertising_Sponsors extends Wizard {
 	/**
 	 * Use a late priority for this wizard's menu adjustments so they happen
 	 * after the Sponsors Plugin is done adding it's menu items.
-	 * 
+	 *
 	 * @var int.
 	 */
 	protected $admin_menu_priority = 11;
@@ -66,6 +66,10 @@ class Advertising_Sponsors extends Wizard {
 	 * Advertising_Sponsors Constructor.
 	 */
 	public function __construct() {
+		if ( ! current_user_can( $this->capability ) ) {
+			return;
+		}
+
 		if ( ! is_plugin_active( 'newspack-sponsors/newspack-sponsors.php' ) ) {
 			return;
 		}

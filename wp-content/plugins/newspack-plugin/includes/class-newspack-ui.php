@@ -16,22 +16,33 @@ use Newspack\Newspack_UI_Icons;
  */
 class Newspack_UI {
 	/**
+	 * Array of notices to display.
+	 *
+	 * @var array
+	 */
+	private static $notices = [];
+
+	/**
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_styles' ] );
-		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_styles' ] );
+		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
+		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_assets' ] );
 		\add_filter( 'the_content', [ __CLASS__, 'load_demo' ] );
 		// Only run if the site is using a block theme.
 		if ( wp_theme_has_theme_json() ) {
 			\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'colors_css_wrap' ] );
 		}
+		add_action( 'wp_footer', [ __CLASS__, 'print_notices' ], 100 );
+
+		add_action( 'wp_ajax_newspack_ui_notice_dismissed', [ __CLASS__, 'ajax_notice_dismissed' ] );
+		add_action( 'wp_ajax_nopriv_newspack_ui_notice_dismissed', [ __CLASS__, 'ajax_notice_dismissed' ] );
 	}
 
 	/**
-	 * Enqueue styles for the Newspack UI.
+	 * Enqueue assets for the Newspack UI.
 	 */
-	public static function enqueue_styles() {
+	public static function enqueue_assets() {
 		\wp_enqueue_style(
 			'newspack-ui',
 			Newspack::plugin_url() . '/dist/newspack-ui.css',
@@ -42,10 +53,97 @@ class Newspack_UI {
 		wp_enqueue_script(
 			'newspack-ui',
 			Newspack::plugin_url() . '/dist/newspack-ui.js',
-			[],
+			[ 'wp-util' ],
 			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
+	}
+
+	/**
+	 * Add a snackbar notice.
+	 *
+	 * @param string       $message The notice message.
+	 * @param string|array $args    Notice arguments array or notice type.
+	 *
+	 * @return string The notice ID.
+	 */
+	public static function add_notice( $message, $args = [] ) {
+		if ( is_string( $args ) ) {
+			$args = [
+				'type' => $args,
+			];
+		}
+		$notice = wp_parse_args(
+			$args,
+			[
+				'message'        => $message,
+				'corner'         => 'top-right',
+				'type'           => 'success',
+				'id'             => uniqid(),
+				'autohide'       => true, // If false, the notice will have a close button.
+				'active_on_load' => true, // Whether the notice should be visible on page load.
+			]
+		);
+		self::$notices[ $notice['corner'] ][ $notice['id'] ] = $notice;
+
+		return $notice['id'];
+	}
+
+	/**
+	 * Print the notices.
+	 */
+	public static function print_notices() {
+		if ( empty( self::$notices ) ) {
+			return;
+		}
+
+		foreach ( self::$notices as $corner => $notices ) {
+			if ( empty( $notices ) ) {
+				continue;
+			}
+			?>
+			<div class="newspack-ui">
+				<div class="newspack-ui__snackbar newspack-ui__snackbar--<?php echo esc_attr( $corner ); ?>">
+					<?php foreach ( $notices as $notice ) : ?>
+						<div
+							class="newspack-ui__snackbar__item newspack-ui__snackbar__item--<?php echo esc_attr( $notice['type'] ); ?>"
+							data-notice-id="<?php echo esc_attr( $notice['id'] ); ?>"
+							data-nonce="<?php echo esc_attr( wp_create_nonce( 'newspack_ui_notice_dismissed' ) ); ?>"
+							data-autohide="<?php echo $notice['autohide'] ? 'true' : 'false'; ?>"
+							data-active-on-load="<?php echo $notice['active_on_load'] ? 'true' : 'false'; ?>"
+						>
+							<?php if ( ! $notice['autohide'] ) : ?>
+								<button class="newspack-ui__snackbar__close" aria-label="<?php esc_attr_e( 'Close', 'newspack-plugin' ); ?>" title="<?php esc_attr_e( 'Close', 'newspack-plugin' ); ?>">
+									<?php Newspack_UI_Icons::print_svg( 'closeSmall' ); ?>
+								</button>
+							<?php endif; ?>
+							<div class="newspack-ui__snackbar__content">
+								<?php echo wp_kses_post( $notice['message'] ); ?>
+							</div>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * Ajax handler when a notice is dismissed.
+	 */
+	public static function ajax_notice_dismissed() {
+		check_ajax_referer( 'newspack_ui_notice_dismissed', 'nonce' );
+		$notice_id = isset( $_POST['id'] ) ? sanitize_text_field( wp_unslash( $_POST['id'] ) ) : '';
+		if ( empty( $notice_id ) ) {
+			wp_send_json_error( 'No notice ID provided' );
+		}
+		/**
+		 * Fires when a notice is dismissed.
+		 *
+		 * @param string $notice_id The ID of the notice that was dismissed.
+		 */
+		do_action( 'newspack_ui_notice_dismissed', $notice_id );
+		wp_send_json_success( 'Notice dismissed' );
 	}
 
 	/**
@@ -117,7 +215,7 @@ class Newspack_UI {
 				</header>
 
 				<?php if ( ! empty( $args['form'] ) ) : ?>
-				<form class="newspack-ui__modal__content <?php echo esc_attr( $args['form_class'] ); ?>" method="<?php echo esc_attr( $args['form'] ); ?>">
+				<form class="newspack-ui__modal__content <?php echo esc_attr( $args['form_class'] ?? '' ); ?>" method="<?php echo esc_attr( $args['form'] ); ?>" <?php echo esc_attr( $args['form_id'] ? 'id=' . esc_attr( $args['form_id'] ) : '' ); ?>>
 				<?php else : ?>
 				<section class="newspack-ui__modal__content">
 				<?php endif; ?>
@@ -128,15 +226,42 @@ class Newspack_UI {
 								\wp_kses_allowed_html( 'post' ),
 								Newspack_UI_Icons::sanitize_svgs(),
 								[
-									'input' => [
+									'input'    => [
 										'type'          => true,
 										'name'          => true,
 										'id'            => true,
+										'class'         => true,
+										'tabindex'      => true,
 										'placeholder'   => true,
 										'required'      => true,
+										'aria-hidden'   => true,
 										'aria-required' => true,
-										'class'         => true,
 										'value'         => true,
+										'disabled'      => true,
+									],
+									'select'   => [
+										'name'             => true,
+										'id'               => true,
+										'class'            => true,
+										'tabindex'         => true,
+										'required'         => true,
+										'aria-hidden'      => true,
+										'aria-required'    => true,
+										'value'            => true,
+										'disabled'         => true,
+										'multiple'         => true,
+										'autocomplete'     => true,
+										'data-label'       => true,
+										'data-placeholder' => true,
+									],
+									'option'   => [
+										'value'    => true,
+										'selected' => true,
+										'disabled' => true,
+									],
+									'noscript' => [],
+									'iframe'   => [
+										'src' => true,
 									],
 								]
 							)
@@ -263,6 +388,23 @@ class Newspack_UI {
 					<strong>Error box style, plus icon + <code>newspack-ui__box--text-center</code> class.</strong>
 				</p>
 				<p>Plus a little bit of text below it.</p>
+			</div>
+
+			<div class="newspack-ui__box newspack-ui__box--border newspack-ui__box--has-dropdown">
+				<p>Box with "more"-style dropdown menu</p>
+				<div class="newspack-ui__dropdown">
+					<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
+						<?php \Newspack\Newspack_UI_Icons::print_svg( 'more' ); ?>
+						<span class="screen-reader-text">More</span>
+					</button>
+					<div class="newspack-ui__dropdown__content">
+						<ul>
+							<li><a class="newspack-ui__button newspack-ui__button--ghost" href="#">Dropdown item 1</a></li>
+							<li><a class="newspack-ui__button newspack-ui__button--ghost" href="#">Dropdown item 2</a></li>
+							<li><a class="newspack-ui__button newspack-ui__button--ghost" href="#">Dropdown item 3</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 
 			<hr>
@@ -510,11 +652,11 @@ class Newspack_UI {
 			<hr>
 
 			<h2 id="buttons">Buttons</h2>
-			<p><code>newspack-ui__button--primary</code>, <code>--branded</code>, <code>--secondary</code>, <code>--ghost</code>, and <code>--destructive</code> classes for colours/borders, and <code>newspack-ui__button--wide</code> for being 100% wide</p>
+			<p><code>newspack-ui__button--primary</code>, <code>--accent</code>, <code>--secondary</code>, <code>--ghost</code>, and <code>--destructive</code> classes for colours/borders, and <code>newspack-ui__button--wide</code> for being 100% wide</p>
 			<button class="newspack-ui__button newspack-ui__button--primary">Primary Button</button><br>
 			<button class="newspack-ui__button newspack-ui__button--primary" disabled>Primary Button Disabled</button><br>
-			<button class="newspack-ui__button newspack-ui__button--branded">Branded Button</button><br>
-			<button class="newspack-ui__button newspack-ui__button--branded" disabled>Branded Button Disabled</button><br>
+			<button class="newspack-ui__button newspack-ui__button--accent">Accent Button</button><br>
+			<button class="newspack-ui__button newspack-ui__button--accent" disabled>Accent Button Disabled</button><br>
 			<button class="newspack-ui__button newspack-ui__button--secondary">Secondary Button</button><br>
 			<button class="newspack-ui__button newspack-ui__button--secondary" disabled>Secondary Button Disabled</button><br>
 			<button class="newspack-ui__button newspack-ui__button--ghost">Ghost Button</button><br>
@@ -532,7 +674,7 @@ class Newspack_UI {
 
 			<h3>Wide buttons</h3>
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--wide">Primary Button</button>
-			<button class="newspack-ui__button newspack-ui__button--branded newspack-ui__button--wide">Branded Button</button>
+			<button class="newspack-ui__button newspack-ui__button--accent newspack-ui__button--wide">Accent Button</button>
 			<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--wide">Secondary Button</button>
 			<button class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--wide">Ghost Button</button>
 			<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--wide">
@@ -660,7 +802,7 @@ class Newspack_UI {
 				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
-			<button class="newspack-ui__button newspack-ui__button--branded newspack-ui__button--icon">
+			<button class="newspack-ui__button newspack-ui__button--accent newspack-ui__button--icon">
 				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>

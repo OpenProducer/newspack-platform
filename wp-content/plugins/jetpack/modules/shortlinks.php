@@ -1,7 +1,7 @@
 <?php
 /**
  * Module Name: WP.me Shortlinks
- * Module Description: Generates shorter links using the wp.me domain.
+ * Module Description: Share short, easy-to-remember links to your posts and pages.
  * Sort Order: 8
  * First Introduced: 1.1
  * Requires Connection: Yes
@@ -12,6 +12,10 @@
  *
  * @package automattic/jetpack
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
 
 add_filter( 'pre_get_shortlink', 'wpme_get_shortlink_handler', 1, 4 );
 
