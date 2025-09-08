@@ -1,4 +1,107 @@
-/* global shippingZoneMethodsLocalizeScript, ajaxurl */
+/**
+ * Number validation utilities for WooCommerce shipping forms
+ */
+
+/**
+ * Validates formatted number strings with support for different locales and formulas
+ *
+ * @param {string} value - The value to validate
+ * @param {Object} config - Configuration object with decimal and thousand separators
+ * @param {string} config.decimalSeparator - Decimal separator (e.g., '.' or ',')
+ * @param {string} config.thousandSeparator - Thousand separator (e.g., ',' or ' ' or '.')
+ * @returns {boolean} Whether the value is a valid formatted number or formula
+ */
+function isValidFormattedNumber( value, config ) {
+	// Check if value is a string and config is provided
+	if ( ! value || typeof value !== 'string' || ! config || typeof config !== 'object' ) {
+		return false;
+	}
+
+	var decimalSeparator = config.decimalSeparator || '.';
+	var thousandSeparator = config.thousandSeparator || ',';
+
+	// Prepare regex to match numbers with the given separators
+	var escapedThousand = thousandSeparator.replace(
+		/[.*+?^${}()|[\]\\]/g,
+		'\\$&'
+	);
+	var escapedDecimal = decimalSeparator.replace(
+		/[.*+?^${}()|[\]\\]/g,
+		'\\$&'
+	);
+	var regex = new RegExp(
+		"([0-9,.' " + escapedDecimal + escapedThousand + ']+)',
+		'g'
+	);
+
+	// Find all possible number matches in the value
+	const matches = ( value.match( regex ) || [] )
+		.map( ( num ) => num.trim() )
+		.filter( ( num ) => num !== '' );
+
+	// If no numbers found, check if it's a shortcode format.
+	if ( 0 === matches.length ) {
+		// Check if the value is a shortcode format like [qty] or [cost]
+		const shortcodeRegex = /^\[([a-zA-Z0-9_"'= ]+)\]/;
+		return shortcodeRegex.test( value );
+	}
+
+	// Check if all matches are valid numbers with the correct separators
+	return matches.every( ( num ) => {
+		if ( ! num || num.length === 0 || ! num[ 0 ].match( /\d/ ) ) {
+			return false; // If the first character is not a digit, it's invalid
+		}
+		// Extract the separators used in the number
+		const usedSeparators = num.match( /([^0-9])+/g );
+		if ( ! usedSeparators ) return true; // No separators found, a valid number.
+		// Get the last separator used, which is assumed to be the decimal separator
+		const usedDecimalSeparator = usedSeparators.pop();
+
+		// If there are remaining separators, they should all be the same, and equal to the thousand separator
+		if ( usedSeparators.length > 0 ) {
+			// Check if remaining separators are all the same (thousand separator)
+			const uniqueSeparators = new Set( usedSeparators );
+			if ( uniqueSeparators.size > 1 ) {
+				return false; // Invalid separators used
+			}
+
+			// If all remaining separators are the same, they should match the thousand separator
+			if ( usedSeparators[ 0 ] !== thousandSeparator ) {
+				return false; // Invalid separator used
+			}
+		}
+
+		if ( usedDecimalSeparator.trim() !== decimalSeparator.trim() ) {
+			// If the last separator is not the decimal separator, it must be the thousand separator
+            if ( usedDecimalSeparator.trim() !== thousandSeparator.trim() ) {
+                return false; // Invalid separator used
+            }
+            // Check if the last group has exactly 3 digits for thousand separator
+            const lastGroup = num.split( usedDecimalSeparator ).pop();
+            if ( ! lastGroup || lastGroup.length !== 3 || ! /^\d{3}$/.test( lastGroup ) ) {
+                return false; // Invalid thousand separator format
+            }
+		}
+
+		return true; // Valid decimal.
+	} ); // All decimals use the correct separator
+}
+
+// Export for different module systems
+if ( typeof module !== 'undefined' && module.exports ) {
+	// CommonJS (Node.js)
+	module.exports = { isValidFormattedNumber };
+} else if ( typeof define === 'function' && define.amd ) {
+	// AMD
+	define( [], function () {
+		return { isValidFormattedNumber };
+	} );
+} else {
+	// Browser global
+	window.WCNumberValidation = { isValidFormattedNumber };
+}
+
+/* global shippingZoneMethodsLocalizeScript, ajaxurl, WCNumberValidation */
 ( function( $, data, wp, ajaxurl ) {
 	$( function() {
 		var $table          = $( '.wc-shipping-zone-methods' ),
@@ -463,7 +566,7 @@
 					});
 				},
 				/**
-				 * The settings HTML is controlled and built by the settings api, so in order to refactor the 
+				 * The settings HTML is controlled and built by the settings api, so in order to refactor the
 				 * markup, it needs to be manipulated here.
 				 */
 				reformatSettingsHTML: function( html ) {
@@ -569,8 +672,8 @@
 					// Wrap the html content in a div
 					const htmlContent = $( '<div>' + html + '</div>' );
 
-					// `<table class="form-table" />` elements added by the Settings API need to be removed. 
-					// Modern browsers won't interpret other table elements like `td` not in a `table`, so 
+					// `<table class="form-table" />` elements added by the Settings API need to be removed.
+					// Modern browsers won't interpret other table elements like `td` not in a `table`, so
 					// Removing the `table` is sufficient.
 					const innerTables = htmlContent.find( 'table.form-table' );
 					innerTables.each( ( i ) => {
@@ -608,13 +711,13 @@
 
 								// Avoid triggering a rerender here because we don't want to show the method
 								// in the table in case merchant doesn't finish flow.
-								
+
 								shippingMethodView.model.set( 'methods', response.data.methods );
 
 								// Close original modal
 								closeModal();
 							}
-							var instance_id = response.data.instance_id, 
+							var instance_id = response.data.instance_id,
 							    method      = response.data.methods[ instance_id ];
 
 							shippingMethodView.unblock();
@@ -642,7 +745,7 @@
 								shippingMethodView.model.trigger( 'change:methods' );
 								shippingMethodView.model.trigger( 'saved:methods' );
 							}
-		
+
 							$( document.body ).trigger( 'init_tooltips' );
 						}, 'json' );
 					}
@@ -650,8 +753,8 @@
 				// Free Shipping has hidden field elements depending on data values.
 				possiblyHideFreeShippingRequirements: function( data ) {
 					if ( Object.keys( data ).includes( 'woocommerce_free_shipping_requires' ) ) {
-						const shouldHideRequirements = data.woocommerce_free_shipping_requires === null || 
-							data.woocommerce_free_shipping_requires === '' || 
+						const shouldHideRequirements = data.woocommerce_free_shipping_requires === null ||
+							data.woocommerce_free_shipping_requires === '' ||
 							data.woocommerce_free_shipping_requires === 'coupon';
 
 						const select = $( '#woocommerce_free_shipping_requires' );
@@ -678,6 +781,24 @@
 						event.data.view.possiblyAddShippingClassLink( event );
 						if ( window.wc.wcSettings.CURRENCY && window.wc.currency.localiseMonetaryValue ) {
 							const config = window.wc.wcSettings.CURRENCY;
+							$('.wc-shipping-modal-price').on( 'input', function() {
+								// When the user types, we validate the value.
+								const value = $(this).val();
+								$(this).removeClass( 'wc-shipping-invalid-price' );
+								$(this).siblings( 'span.wc-shipping-invalid-price-message' ).remove();
+								const modal = $( this ).parents( '.wc-backbone-modal-main' );
+								modal.find( '#btn-ok' ).removeAttr( 'disabled' );
+								modal.find( '.wc-shipping-method-add-class-costs').show();
+								if ( ! WCNumberValidation.isValidFormattedNumber( value, config ) ) {
+									$(this).addClass( 'wc-shipping-invalid-price' );
+									$('<span class="wc-shipping-zone-method-fields-help-text wc-shipping-invalid-price-message">'
+										+ shippingZoneMethodsLocalizeScript.strings.invalid_number_format
+										+ '</span>').insertAfter( this );
+									modal.find( '#btn-ok' ).attr( 'disabled', 'disabled' );
+									modal.find( '.wc-shipping-method-add-class-costs').hide();
+								}
+							});
+
 							$('.wc-shipping-modal-price').on('blur', function() {
 								const value = $(this).val();
 								const formattedValue = window.wc.currency.localiseMonetaryValue( config, value );

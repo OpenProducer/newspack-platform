@@ -116,7 +116,7 @@ class Logger {
 			[
 				'type'       => $type,
 				'data'       => $data,
-				'user_email' => $email,
+				'user_email' => (string) $email,
 				'file'       => $file,
 				'log_level'  => $log_level,
 			]

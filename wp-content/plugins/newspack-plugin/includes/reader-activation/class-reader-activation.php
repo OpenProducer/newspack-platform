@@ -2335,6 +2335,14 @@ final class Reader_Activation {
 		// If we don't have a display name, make it match the nicename.
 		if ( empty( $user_data['display_name'] ) ) {
 			$user_data['display_name'] = $user_nicename;
+		} else {
+			$name_fragments = explode( ' ', $user_data['display_name'], 2 );
+			$user_data['first_name'] = $name_fragments[0] ?? '';
+			if ( isset( $name_fragments[1] ) ) {
+				$user_data['last_name'] = $name_fragments[1];
+			} else {
+				$user_data['last_name'] = '';
+			}
 		}
 
 		if ( empty( $user_data['user_pass'] ) ) {
@@ -2344,13 +2352,13 @@ final class Reader_Activation {
 		}
 
 		$user_data = array_merge(
-			$user_data,
 			[
 				'user_login'    => $user_nicename,
 				'user_nicename' => $user_nicename,
 				'display_name'  => $user_nicename,
 				'user_pass'     => $password,
-			]
+			],
+			$user_data
 		);
 
 		// Check if a user with this login exists.
@@ -2526,7 +2534,9 @@ final class Reader_Activation {
 	/**
 	 * Send a magic link with special messaging to verify the user.
 	 *
-	 * @param WP_User $user WP_User object to be verified.
+	 * @param \WP_User $user WP_User object to be verified.
+	 *
+	 * @return bool|\WP_Error
 	 */
 	public static function send_verification_email( $user ) {
 		// Send reminder to non-reader accounts to use standard WP login.
@@ -2542,13 +2552,18 @@ final class Reader_Activation {
 		$redirect_to = function_exists( '\wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : '';
 		\update_user_meta( $user->ID, self::LAST_EMAIL_DATE, time() );
 
+		$link = Magic_Link::generate_url( $user, $redirect_to );
+		if ( is_wp_error( $link ) ) {
+			return $link;
+		}
+
 		return Emails::send_email(
 			Reader_Activation_Emails::EMAIL_TYPES['VERIFICATION'],
 			$user->user_email,
 			[
 				[
 					'template' => '*VERIFICATION_URL*',
-					'value'    => Magic_Link::generate_url( $user, $redirect_to ),
+					'value'    => $link,
 				],
 			]
 		);

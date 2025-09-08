@@ -81,6 +81,7 @@ declare global {
 					};
 				};
 			};
+			print: WizardTab;
 			'additional-brands': WizardTab & {
 				sections: {
 					additionalBrands: {

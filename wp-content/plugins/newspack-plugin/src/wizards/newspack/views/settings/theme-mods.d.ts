@@ -1,13 +1,7 @@
 /**
  * Theme names without `newspack` prefix.
  */
-type ThemeNames =
-	| 'theme'
-	| 'scott'
-	| 'nelson'
-	| 'katharine'
-	| 'sacha'
-	| 'joseph';
+type ThemeNames = 'theme' | 'scott' | 'nelson' | 'katharine' | 'sacha' | 'joseph';
 
 /**
  * Theme names with `newspack` prefix.
@@ -19,6 +13,7 @@ type NewspackThemes = `newspack-${ ThemeNames }`;
  */
 interface Etc {
 	post_count: string;
+	has_pwa_plugin?: boolean;
 }
 
 /**
@@ -128,6 +123,9 @@ interface AdvancedSettings {
 		status: string;
 		pageUrl: string;
 	};
+
+	// PWA Display Mode.
+	pwa_display_mode: string;
 }
 
 interface MiscSettings {

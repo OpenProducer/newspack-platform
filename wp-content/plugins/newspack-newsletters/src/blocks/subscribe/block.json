@@ -98,6 +98,10 @@
 		{
 			"name": "modern",
 			"label": "Modern"
+		},
+		{
+			"name": "modern--grid",
+			"label": "Modern Grid"
 		}
 	]
 }

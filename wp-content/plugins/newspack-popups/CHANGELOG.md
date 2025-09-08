@@ -1,3 +1,26 @@
+## [3.6.1](https://github.com/Automattic/newspack-popups/compare/v3.6.0...v3.6.1) (2025-09-08)
+
+
+### Bug Fixes
+
+* scheduling expiry check for midnight using AS ([#1467](https://github.com/Automattic/newspack-popups/issues/1467)) ([9ccb1fa](https://github.com/Automattic/newspack-popups/commit/9ccb1faebeaa16777780f67cddbb6f3e00df754b))
+
+# [3.6.0](https://github.com/Automattic/newspack-popups/compare/v3.5.4...v3.6.0) (2025-08-25)
+
+
+### Features
+
+* add i18n ([#1460](https://github.com/Automattic/newspack-popups/issues/1460)) ([1462aca](https://github.com/Automattic/newspack-popups/commit/1462aca5a5e933a0c3f3024ead24c11cbf9c817f))
+
+## [3.5.4](https://github.com/Automattic/newspack-popups/compare/v3.5.3...v3.5.4) (2025-08-11)
+
+
+### Bug Fixes
+
+* **previews:** handle categories ([#1456](https://github.com/Automattic/newspack-popups/issues/1456)) ([b81bac0](https://github.com/Automattic/newspack-popups/commit/b81bac07e8b80f55e69a3636ae8b8f3ddf30d21d))
+* **rendering:** enqueue styles for jetpack form ([#1457](https://github.com/Automattic/newspack-popups/issues/1457)) ([71faf34](https://github.com/Automattic/newspack-popups/commit/71faf343d7148e8cf642bf2a2d48a2ea03050b32))
+* Support Unit Tests for php 8.3 ([#1455](https://github.com/Automattic/newspack-popups/issues/1455)) ([65c657b](https://github.com/Automattic/newspack-popups/commit/65c657b59725c2d3ca72aac84f32c81968e52bdd))
+
 ## [3.5.3](https://github.com/Automattic/newspack-popups/compare/v3.5.2...v3.5.3) (2025-06-16)
 
 

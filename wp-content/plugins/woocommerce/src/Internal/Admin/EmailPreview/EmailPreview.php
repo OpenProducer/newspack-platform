@@ -15,6 +15,7 @@ use WC_Order;
 use WC_Product;
 use WC_Product_Variation;
 use WP_User;
+use WC_Order_Item_Shipping;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -253,16 +254,45 @@ class EmailPreview {
 	 * @return string
 	 */
 	public function ensure_links_open_in_new_tab( string $content ) {
-		return (string) preg_replace_callback(
-			'/<a\s+([^>]*?)(target=["\']?[^"\']*["\']?)?([^>]*)>/i',
-			function ( $matches ) {
-				$before = $matches[1];
-				$target = 'target="_blank"';
-				$after  = $matches[3];
-				return "<a $before $target $after>";
-			},
-			$content
-		);
+		if ( empty( $content ) || strpos( $content, '<a' ) === false ) {
+			return $content;
+		}
+
+		if ( ! class_exists( 'DOMDocument' ) ) {
+			return $content;
+		}
+
+		// Suppress libxml errors to prevent them from being displayed.
+		$previous_use_internal_errors = libxml_use_internal_errors( true );
+
+		try {
+			$dom = new \DOMDocument();
+
+			// Add UTF-8 encoding and load with error suppression flags.
+			$html_with_encoding = '<?xml encoding="UTF-8">' . $content;
+			$dom->loadHTML(
+				$html_with_encoding,
+				LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING | LIBXML_NOERROR
+			);
+
+			$links = $dom->getElementsByTagName( 'a' );
+			foreach ( $links as $link ) {
+				$link->setAttribute( 'target', '_blank' );
+				$link->setAttribute( 'rel', 'noopener' );
+			}
+
+			$result = $dom->saveHTML();
+
+			// Remove the XML declaration we added earlier, it's not meant to be used in an HTML document.
+			$result = preg_replace( '/<\?xml[^>]*>\s*/i', '', $result );
+
+			return $result;
+		} catch ( \Exception $e ) {
+			return $content;
+		} finally {
+			libxml_use_internal_errors( $previous_use_internal_errors );
+			libxml_clear_errors();
+		}
 	}
 
 	/**
@@ -306,7 +336,7 @@ class EmailPreview {
 		}
 
 		if ( 'plain' === $this->email->get_email_type() ) {
-			$content  = '<pre style="word-wrap: break-word; white-space: pre-wrap;">';
+			$content  = '<pre style="word-wrap: break-word; white-space: pre-wrap; text-align: ' . ( is_rtl() ? 'right' : 'left' ) . ';">';
 			$content .= $this->email->get_content_plain();
 			$content .= '</pre>';
 		} else {
@@ -343,7 +373,19 @@ class EmailPreview {
 		$order->set_shipping_total( 5 );
 		$order->set_total( 65 );
 		$order->set_payment_method_title( __( 'Direct bank transfer', 'woocommerce' ) );
-		$order->set_customer_note( __( "This is a customer note. Customers can add a note to their order on checkout.\n\nIt can be multiple lines. If there’s no note, this section is hidden.", 'woocommerce' ) );
+		$order->set_transaction_id( '999999999' );
+		$order->set_customer_note( __( "This is a customer note. Customers can add a note to their order on checkout.\n\nIt can be multiple lines. If there's no note, this section is hidden.", 'woocommerce' ) );
+
+		// Add shipping method.
+		$shipping_item = new WC_Order_Item_Shipping();
+		$shipping_item->set_props(
+			array(
+				'method_title' => __( 'Flat rate', 'woocommerce' ),
+				'method_id'    => 'flat_rate',
+				'total'        => '5.00',
+			)
+		);
+		$order->add_item( $shipping_item );
 
 		$address = $this->get_dummy_address();
 		$order->set_billing_address( $address );
@@ -477,8 +519,6 @@ class EmailPreview {
 		add_filter( 'woocommerce_order_item_product', array( $this, 'get_dummy_product_when_not_set' ), 10, 1 );
 		// Enable email preview mode - this way transient values are fetched for live preview.
 		add_filter( 'woocommerce_is_email_preview', array( $this, 'enable_preview_mode' ) );
-		// Get shipping method without needing to save it in the order.
-		add_filter( 'woocommerce_order_shipping_method', array( $this, 'get_shipping_method' ) );
 		// Use placeholder image included in WooCommerce files.
 		add_filter( 'woocommerce_order_item_thumbnail', array( $this, 'get_placeholder_image' ) );
 	}
@@ -490,17 +530,7 @@ class EmailPreview {
 		remove_filter( 'woocommerce_order_needs_shipping_address', array( $this, 'enable_shipping_address' ) );
 		remove_filter( 'woocommerce_order_item_product', array( $this, 'get_dummy_product_when_not_set' ), 10 );
 		remove_filter( 'woocommerce_is_email_preview', array( $this, 'enable_preview_mode' ) );
-		remove_filter( 'woocommerce_order_shipping_method', array( $this, 'get_shipping_method' ) );
 		remove_filter( 'woocommerce_order_item_thumbnail', array( $this, 'get_placeholder_image' ) );
-	}
-
-	/**
-	 * Get the shipping method for the preview email.
-	 *
-	 * @return string
-	 */
-	public function get_shipping_method() {
-		return __( 'Flat rate', 'woocommerce' );
 	}
 
 	/**
@@ -529,7 +559,7 @@ class EmailPreview {
 	 * @return string
 	 */
 	public function get_placeholder_image() {
-		return '<img src="' . WC()->plugin_url() . '/assets/images/placeholder.png" width="48" height="48" alt="" />';
+		return '<img src="' . WC()->plugin_url() . '/assets/images/placeholder.webp" width="48" height="48" alt="" />';
 	}
 
 	/**

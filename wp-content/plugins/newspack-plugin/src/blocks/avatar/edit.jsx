@@ -12,27 +12,20 @@ import {
 	__experimentalUseBorderProps as useBorderProps,
 } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import {
-	PanelBody,
-	RangeControl,
-	ToggleControl,
-} from '@wordpress/components';
+import { PanelBody, RangeControl, ToggleControl } from '@wordpress/components';
 import { addQueryArgs, removeQueryArgs } from '@wordpress/url';
 /**
  * Internal dependencies
  */
 import { useUserAvatar, usePostAuthors } from './hooks';
-const AvatarInspectorControls = ( {
-	setAttributes,
-	attributes,
-} ) => (
+const AvatarInspectorControls = ( { setAttributes, attributes } ) => (
 	<InspectorControls>
 		<PanelBody title={ __( 'Settings', 'newspack-plugin' ) }>
 			<RangeControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				label={ __( 'Image size', 'newspack-plugin' ) }
-				onChange={ ( newSize ) =>
+				onChange={ newSize =>
 					setAttributes( {
 						size: newSize,
 					} )
@@ -45,9 +38,7 @@ const AvatarInspectorControls = ( {
 			<ToggleControl
 				__nextHasNoMarginBottom
 				label={ __( 'Link to author archive', 'newspack-plugin' ) }
-				onChange={ () =>
-					setAttributes( { linkToAuthorArchive: ! attributes.linkToAuthorArchive } )
-				}
+				onChange={ () => setAttributes( { linkToAuthorArchive: ! attributes.linkToAuthorArchive } ) }
 				checked={ attributes.linkToAuthorArchive }
 			/>
 		</PanelBody>
@@ -56,31 +47,17 @@ const AvatarInspectorControls = ( {
 
 const AvatarWrapper = ( { avatar, size, attributes } ) => {
 	const { className } = useBlockProps();
-	const duotoneClassName = className
-		? className.split( ' ' ).filter( ( classes ) => classes.includes( 'wp-duotone' ) )
-		: '';
-	const classNames = clsx(
-		'newspack-avatar-wrapper',
-		duotoneClassName,
-	);
+	const duotoneClassName = className ? className.split( ' ' ).filter( classes => classes.includes( 'wp-duotone' ) ) : '';
+	const classNames = clsx( 'newspack-avatar-wrapper', duotoneClassName );
 	const borderProps = useBorderProps( attributes );
-	const doubledSizedSrc  = addQueryArgs(
-		removeQueryArgs( avatar?.src, [ 's' ] ),
-		{
-			s: attributes?.size * 2,
-		}
-	);
+	const doubledSizedSrc = addQueryArgs( removeQueryArgs( avatar?.src, [ 's' ] ), {
+		s: attributes?.size * 2,
+	} );
 	const avatarImage = (
 		<img
 			src={ doubledSizedSrc }
 			alt={ avatar.alt }
-			className={ clsx(
-				'avatar',
-				'avatar-' + size,
-				'photo',
-				'wp-block-newspack-avatar__image',
-				borderProps.className
-			) }
+			className={ clsx( 'avatar', 'avatar-' + size, 'photo', 'wp-block-newspack-avatar__image', borderProps.className ) }
 			style={ {
 				width: size,
 				height: size,
@@ -92,15 +69,11 @@ const AvatarWrapper = ( { avatar, size, attributes } ) => {
 		<div
 			className={ classNames }
 			style={ {
-				'--avatar-size': size + 'px'
+				'--avatar-size': size + 'px',
 			} }
 		>
 			{ attributes.linkToAuthorArchive ? (
-				<a
-					href="#avatar-pseudo-link"
-					className="wp-block-newspack-avatar__link"
-					onClick={ ( event ) => event.preventDefault() }
-				>
+				<a href="#avatar-pseudo-link" className="wp-block-newspack-avatar__link" onClick={ event => event.preventDefault() }>
 					{ avatarImage }
 				</a>
 			) : (
@@ -119,38 +92,29 @@ const Edit = ( { attributes, context, setAttributes } ) => {
 	const authors = allAuthors?.length ? allAuthors : null;
 
 	// Wait until we have something to render
-	if ( ! avatar?.src && !authors?.length ) {
+	if ( ! avatar?.src && ! authors?.length ) {
 		return <div { ...blockProps }>{ __( 'Loading avatar…', 'newspack-plugin' ) }</div>;
 	}
 
 	const renderAvatar = ( currentAvatar, key ) => (
-		<AvatarWrapper
-			key={ key }
-			avatar={ currentAvatar }
-			size={ attributes.size }
-			attributes={ attributes }
-		/>
+		<AvatarWrapper key={ key } avatar={ currentAvatar } size={ attributes.size } attributes={ attributes } />
 	);
 	return (
 		<>
-			<AvatarInspectorControls
-				attributes={ attributes }
-				setAttributes={ setAttributes }
-			/>
-			{authors?.length
+			<AvatarInspectorControls attributes={ attributes } setAttributes={ setAttributes } />
+			{ authors?.length
 				? authors.map( ( author, index ) => {
 						const currentAvatar = {
-							src: author?.avatar_urls?.['96'],
+							src: author?.avatar_urls?.[ '96' ],
 							alt: author?.name,
 							minSize: 16,
 							maxSize: 128,
 						};
 						return renderAvatar( currentAvatar, author.id || index );
-					} )
-				: renderAvatar( avatar, 'single-author' )}
+				  } )
+				: renderAvatar( avatar, 'single-author' ) }
 		</>
 	);
 };
-
 
 export default Edit;

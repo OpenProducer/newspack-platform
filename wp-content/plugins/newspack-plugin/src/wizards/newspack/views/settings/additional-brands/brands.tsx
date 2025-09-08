@@ -41,24 +41,13 @@ export default function Brands( {
 				</NavLink>
 			</Card>
 			{ brands.length ? (
-				brands.map( brand => (
-					<Brand
-						key={ brand.id }
-						brand={ brand }
-						deleteBrand={ deleteBrand }
-					/>
-				) )
+				brands.map( brand => <Brand key={ brand.id } brand={ brand } deleteBrand={ deleteBrand } /> )
 			) : (
 				<Fragment>
 					{ isFetching ? (
 						<p>{ __( 'Fetching brands…', 'newspack-plugin' ) }</p>
 					) : (
-						<p>
-							{ __(
-								'Create brands to enhance your readers experience.',
-								'newspack-plugin'
-							) }
-						</p>
+						<p>{ __( 'Create brands to enhance your readers experience.', 'newspack-plugin' ) }</p>
 					) }
 				</Fragment>
 			) }

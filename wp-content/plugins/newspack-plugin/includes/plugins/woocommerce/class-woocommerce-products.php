@@ -27,6 +27,8 @@ class WooCommerce_Products {
 		\add_action( 'woocommerce_process_product_meta', [ __CLASS__, 'save_custom_product_options' ] );
 		\add_action( 'woocommerce_admin_process_variation_object', [ __CLASS__, 'save_custom_variation_options' ], 30, 2 );
 		\add_filter( 'woocommerce_order_item_needs_processing', [ __CLASS__, 'require_order_processing' ], 10, 2 );
+		\add_filter( 'woocommerce_product_description_heading', '__return_false', 10, 2 );
+		\add_filter( 'woocommerce_product_additional_information_heading', '__return_false', 10, 2 );
 	}
 
 	/**

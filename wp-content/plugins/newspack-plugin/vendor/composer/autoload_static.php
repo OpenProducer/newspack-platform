@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54
+class ComposerStaticInitdf79c870274cddbed17bca790afe3dbb
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -111,8 +111,24 @@ class ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54
         'Newspack\\CLI\\RAS_ESP_Sync' => __DIR__ . '/../..' . '/includes/cli/class-ras-esp-sync.php',
         'Newspack\\CLI\\Setup' => __DIR__ . '/../..' . '/includes/cli/class-setup.php',
         'Newspack\\CLI\\WooCommerce_Subscriptions' => __DIR__ . '/../..' . '/includes/cli/class-woocommerce-subscriptions.php',
+        'Newspack\\Capabilities' => __DIR__ . '/../..' . '/includes/class-capabilities.php',
         'Newspack\\Category_Pager' => __DIR__ . '/../..' . '/includes/class-category-pager.php',
-        'Newspack\\Collections' => __DIR__ . '/../..' . '/includes/optional-modules/class-collections.php',
+        'Newspack\\Collections\\Cache' => __DIR__ . '/../..' . '/includes/collections/class-cache.php',
+        'Newspack\\Collections\\Collection_Category_Taxonomy' => __DIR__ . '/../..' . '/includes/collections/class-collection-category-taxonomy.php',
+        'Newspack\\Collections\\Collection_Meta' => __DIR__ . '/../..' . '/includes/collections/class-collection-meta.php',
+        'Newspack\\Collections\\Collection_Section_Taxonomy' => __DIR__ . '/../..' . '/includes/collections/class-collection-section-taxonomy.php',
+        'Newspack\\Collections\\Collection_Taxonomy' => __DIR__ . '/../..' . '/includes/collections/class-collection-taxonomy.php',
+        'Newspack\\Collections\\Content_Inserter' => __DIR__ . '/../..' . '/includes/collections/class-content-inserter.php',
+        'Newspack\\Collections\\Enqueuer' => __DIR__ . '/../..' . '/includes/collections/class-enqueuer.php',
+        'Newspack\\Collections\\Post_Meta' => __DIR__ . '/../..' . '/includes/collections/class-post-meta.php',
+        'Newspack\\Collections\\Post_Type' => __DIR__ . '/../..' . '/includes/collections/class-post-type.php',
+        'Newspack\\Collections\\Query_Helper' => __DIR__ . '/../..' . '/includes/collections/class-query-helper.php',
+        'Newspack\\Collections\\Settings' => __DIR__ . '/../..' . '/includes/collections/class-settings.php',
+        'Newspack\\Collections\\Sync' => __DIR__ . '/../..' . '/includes/collections/class-sync.php',
+        'Newspack\\Collections\\Template_Helper' => __DIR__ . '/../..' . '/includes/collections/class-template-helper.php',
+        'Newspack\\Collections\\Traits\\Hook_Manager' => __DIR__ . '/../..' . '/includes/collections/traits/trait-hook-manager.php',
+        'Newspack\\Collections\\Traits\\Meta_Handler' => __DIR__ . '/../..' . '/includes/collections/traits/trait-meta-handler.php',
+        'Newspack\\Collections\\Traits\\Registration_Manager' => __DIR__ . '/../..' . '/includes/collections/traits/trait-registration-manager.php',
         'Newspack\\Components_Demo' => __DIR__ . '/../..' . '/includes/wizards/class-components-demo.php',
         'Newspack\\Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-manager.php',
         'Newspack\\Configuration_Managers' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-managers.php',
@@ -149,6 +165,7 @@ class ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54
         'Newspack\\Major_Revision' => __DIR__ . '/../..' . '/includes/revisions-control/class-major-revision.php',
         'Newspack\\Major_Revisions' => __DIR__ . '/../..' . '/includes/revisions-control/class-major-revisions.php',
         'Newspack\\Media_Partners' => __DIR__ . '/../..' . '/includes/optional-modules/class-media-partners.php',
+        'Newspack\\Membership_Expiry' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-membership-expiry.php',
         'Newspack\\Memberships' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-memberships.php',
         'Newspack\\Memberships\\Block_Patterns' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-block-patterns.php',
         'Newspack\\Memberships\\Import_Export' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-import-export.php',
@@ -177,6 +194,9 @@ class ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54
         'Newspack\\On_Hold_Duration' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-on-hold-duration.php',
         'Newspack\\OneSignal' => __DIR__ . '/../..' . '/includes/plugins/class-onesignal.php',
         'Newspack\\Optional_Modules' => __DIR__ . '/../..' . '/includes/optional-modules/class-optional-modules.php',
+        'Newspack\\Optional_Modules\\Collections' => __DIR__ . '/../..' . '/includes/optional-modules/class-collections.php',
+        'Newspack\\Optional_Modules\\InDesign_Export\\InDesign_Converter' => __DIR__ . '/../..' . '/includes/optional-modules/indesign-export/class-indesign-converter.php',
+        'Newspack\\Optional_Modules\\InDesign_Exporter' => __DIR__ . '/../..' . '/includes/optional-modules/class-indesign-exporter.php',
         'Newspack\\Organic_Profile_Block' => __DIR__ . '/../..' . '/includes/plugins/class-organic-profile-block.php',
         'Newspack\\PWA' => __DIR__ . '/../..' . '/includes/plugins/class-pwa.php',
         'Newspack\\Parsely_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-parsely-configuration-manager.php',
@@ -223,6 +243,7 @@ class ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54
         'Newspack\\Wizards\\Newspack\\Custom_Events_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-custom-events-section.php',
         'Newspack\\Wizards\\Newspack\\Newspack_Settings' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-newspack-settings.php',
         'Newspack\\Wizards\\Newspack\\Pixels_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-pixels-section.php',
+        'Newspack\\Wizards\\Newspack\\Print_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-print-section.php',
         'Newspack\\Wizards\\Newspack\\Recirculation_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-recirculation-section.php',
         'Newspack\\Wizards\\Newspack\\SEO_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-seo-section.php',
         'Newspack\\Wizards\\Newspack\\Syndication_Section' => __DIR__ . '/../..' . '/includes/wizards/newspack/class-syndication-section.php',
@@ -241,6 +262,7 @@ class ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54
         'Newspack\\WooCommerce_Products' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-products.php',
         'Newspack\\WooCommerce_Subscriptions' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php',
         'Newspack\\WooCommerce_Subscriptions_Gifting' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions-gifting.php',
+        'Newspack\\WooCommerce_Update_Payment_Notice' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/class-woocommerce-update-payment-notice.php',
         'Newspack\\Woo_Member_Commenting' => __DIR__ . '/../..' . '/includes/optional-modules/class-woo-member-commenting.php',
         'Newspack\\WordPress_SEO_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
         'Newspack\\Yoast' => __DIR__ . '/../..' . '/includes/plugins/class-yoast.php',
@@ -249,9 +271,9 @@ class ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2abb4969ff5d90cb7a20f93ebaa44a54::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdf79c870274cddbed17bca790afe3dbb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdf79c870274cddbed17bca790afe3dbb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdf79c870274cddbed17bca790afe3dbb::$classMap;
 
         }, null, ClassLoader::class);
     }

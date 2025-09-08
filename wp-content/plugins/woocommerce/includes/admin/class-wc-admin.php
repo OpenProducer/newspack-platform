@@ -141,13 +141,13 @@ class WC_Admin {
 	}
 
 	/**
-	 * Handle redirects to setup/welcome page after install and updates.
+	 * Handle redirects:
+	 * 1. Nonced plugin install redirects.
 	 *
 	 * The user must have access rights, and we must ignore the network/bulk plugin updaters.
 	 */
 	public function admin_redirects() {
-		// Don't run this fn from Action Scheduler requests, as it would clear _wc_activation_redirect transient.
-		// That means OBW would never be shown.
+		// Don't run this fn from Action Scheduler requests.
 		if ( wc_is_running_from_async_action_scheduler() ) {
 			return;
 		}
@@ -167,7 +167,6 @@ class WC_Admin {
 			wp_safe_redirect( $url );
 			exit;
 		}
-
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 

@@ -107,7 +107,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			$time_since_last_request = $current_time - self::$last_request_time;
 			if ( $time_since_last_request < 1 ) {
 				// Sleep for the remaining time in the 1-second window.
-				usleep( ( 1 - $time_since_last_request ) * 1000000 );
+				usleep( absint( ( 1 - $time_since_last_request ) * 1000000 ) );
 				self::$request_count = 0;
 			}
 		}

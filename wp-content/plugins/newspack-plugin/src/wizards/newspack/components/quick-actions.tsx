@@ -24,7 +24,7 @@ const QuickActions = () => {
 	return (
 		<div className="newspack-dashboard__section">
 			<h3>{ __( 'Quick actions', 'newspack-plugin' ) }</h3>
-			<Grid style={ { '--np-dash-card-icon-size': '48px' } } columns={ 3 } gutter={ 24 }>
+			<Grid style={ { '--np-dash-card-icon-size': '40px' } } columns={ 3 } gutter={ 24 }>
 				{ quickActions.map( ( action, i ) => {
 					return (
 						<a href={ action.href } key={ i }>

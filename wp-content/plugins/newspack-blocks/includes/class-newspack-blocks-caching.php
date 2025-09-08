@@ -212,6 +212,10 @@ class Newspack_Blocks_Caching {
 		if ( ! self::should_cache_block( $block_data ) ) {
 			return $block_html;
 		}
+
+		// Equeue the styles needed to render the blocks.
+		newspack_blocks_enqueue_block_homepage_articles_styles();
+
 		if ( ! self::$can_serve_all_blocks_from_cache ) {
 			return $block_html;
 		}

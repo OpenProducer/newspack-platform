@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('wc-cart-checkout-base', 'wc-cart-checkout-vendors', 'wc-blocks-data-store', 'wc-price-format', 'wc-settings', 'wc-types', 'wp-data', 'wp-i18n', 'wp-polyfill'), 'version' => '57afd6974dfbfd956d06');
+<?php return array('dependencies' => array('wc-cart-checkout-base', 'wc-cart-checkout-vendors', 'wc-blocks-data-store', 'wc-price-format', 'wc-settings', 'wc-types', 'wp-data', 'wp-i18n', 'wp-polyfill'), 'version' => 'f7403ae8c18597571632');

@@ -59,6 +59,11 @@ class Memberships {
 		add_filter( 'user_has_cap', [ __CLASS__, 'user_has_cap' ], 10, 3 );
 		add_action( 'wp', [ __CLASS__, 'remove_unnecessary_content_restriction' ], 11 );
 		add_filter( 'body_class', [ __CLASS__, 'add_body_class' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'disable_subscription_linked_membership_fields' ] );
+		add_action( 'save_post_wc_user_membership', [ __CLASS__, 'prevent_subscription_linked_membership_field_updates' ], 10, 2 );
+		add_action( 'post_row_actions', [ __CLASS__, 'prevent_subscription_linked_membership_field_updates_row_actions' ], 20, 2 );
+		add_action( 'load-edit.php', [ __CLASS__, 'store_original_membership_data_before_bulk_edit' ] );
+		add_action( 'bulk_edit_posts', [ __CLASS__, 'prevent_bulk_edit_subscription_linked_memberships' ], 10, 2 );
 
 		/** Add gate content filters to mimic 'the_content'. See 'wp-includes/default-filters.php' for reference. */
 		add_filter( 'newspack_gate_content', 'capital_P_dangit', 11 );
@@ -75,6 +80,7 @@ class Memberships {
 		include __DIR__ . '/class-block-patterns.php';
 		include __DIR__ . '/class-metering.php';
 		include __DIR__ . '/class-import-export.php';
+		include __DIR__ . '/class-membership-expiry.php';
 	}
 
 	/**
@@ -1089,6 +1095,252 @@ class Memberships {
 				);
 		}
 		return $actions;
+	}
+
+	/**
+	 * Should editing the status be disabled for a membership?
+	 *
+	 * @param \WP_Post $post Membership post object.
+	 */
+	public static function should_disable_editing_membership_status( $post ): bool {
+		// Ensure we have a valid post.
+		if ( ! $post || 'wc_user_membership' !== $post->post_type ) {
+			return false;
+		}
+		$subscription_id = get_post_meta( $post->ID, '_subscription_id', true );
+		return ! empty( $subscription_id );
+	}
+
+	/**
+	 * Disable Status, Member since, and Expires fields for subscription-linked memberships.
+	 */
+	public static function disable_subscription_linked_membership_fields() {
+		global $current_screen, $post;
+
+		// Only apply on user membership edit screen.
+		if ( ! $current_screen || 'wc_user_membership' !== $current_screen->id || 'post' !== $current_screen->base ) {
+			return;
+		}
+
+		if ( ! self::should_disable_editing_membership_status( $post ) ) {
+			return;
+		}
+
+		// Enqueue JavaScript to disable the fields.
+		wp_add_inline_script(
+			'jquery',
+			'
+			jQuery(document).ready(function($) {
+				function disableFields() {
+					// Disable Status field (Select2-based)
+					$(".plan-details #post_status").prop("disabled", true).css("opacity", "0.6");
+					$("#post_status").next(".select2-container").css("opacity", "0.6").css("pointer-events", "none");
+
+					// Disable Member since fields
+					$("#_start_date").prop("disabled", true).css("opacity", "0.6");
+					$("#_start_date").next(".ui-datepicker-trigger").css("display", "none");
+
+					// Disable Expires fields
+					$("#_end_date").prop("disabled", true).css("opacity", "0.6");
+					$("#_end_date").next(".ui-datepicker-trigger").css("display", "none");
+
+					// Add visual indication that fields are disabled
+					$("#post_status, #_start_date, #_end_date").each(function() {
+						var container = $(this).closest("p, .form-field");
+						if (!container.find(".subscription-linked-notice").length) {
+							container.append("<small class=\"subscription-linked-notice\" style=\"color: #666; font-style: italic; display: block; margin-top: 5px;\">This field cannot be edited because this membership is linked to a subscription.</small>");
+						}
+					});
+				}
+
+				// Initial disable
+				disableFields();
+
+				// Re-disable after Select2 initialization (it may re-enable the field)
+				setTimeout(disableFields, 500);
+
+				// Watch for Select2 events and re-disable if needed
+				$(document).on("select2:opening", "#post_status", function(e) {
+					e.preventDefault();
+					return false;
+				});
+			});
+		'
+		);
+	}
+
+	/**
+	 * Removes edit screen row actions from subscription-linked user memberships.
+	 *
+	 * @param array    $actions associative array of row actions.
+	 * @param \WP_Post $post related membership post object.
+	 * @return array
+	 */
+	public static function prevent_subscription_linked_membership_field_updates_row_actions( $actions, $post ) {
+		if ( self::should_disable_editing_membership_status( $post ) ) {
+			unset( $actions['pause'], $actions['cancel'], $actions['delete'] );
+		}
+		return $actions;
+	}
+
+	/**
+	 * Prevent updating Status, Member since, and Expires fields for subscription-linked memberships.
+	 *
+	 * @param int     $post_id The post ID.
+	 * @param WP_Post $post    Post object.
+	 */
+	public static function prevent_subscription_linked_membership_field_updates( $post_id, $post ) {
+		// Skip if not a user membership post type.
+		if ( 'wc_user_membership' !== $post->post_type ) {
+			return;
+		}
+
+		// Skip during autosave.
+		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		// Check if membership is linked to a subscription.
+		$subscription_id = get_post_meta( $post_id, '_subscription_id', true );
+		if ( empty( $subscription_id ) ) {
+			return;
+		}
+
+		// Get the original post data before the update.
+		$original_post = get_post( $post_id );
+
+		// Restore original status if it was changed.
+		if ( $original_post && $original_post->post_status !== $post->post_status ) {
+			wp_update_post(
+				[
+					'ID'          => $post_id,
+					'post_status' => $original_post->post_status,
+				]
+			);
+		}
+
+		// Restore original start date if it was changed.
+		$original_start_date = get_post_meta( $post_id, '_start_date', true );
+
+		if ( isset( $_POST['_start_date'] ) && $_POST['_start_date'] !== $original_start_date ) { // phpcs:disable WordPress.Security.NonceVerification.Missing
+			update_post_meta( $post_id, '_start_date', $original_start_date );
+		}
+
+		// Restore original end date if it was changed.
+		$original_end_date = get_post_meta( $post_id, '_end_date', true );
+		if ( isset( $_POST['_end_date'] ) && $_POST['_end_date'] !== $original_end_date ) { // phpcs:disable WordPress.Security.NonceVerification.Missing
+			update_post_meta( $post_id, '_end_date', $original_end_date );
+		}
+	}
+
+	/**
+	 * Store original membership data before bulk edit to allow restoration.
+	 */
+	public static function store_original_membership_data_before_bulk_edit() {
+		// Only on wc_user_membership edit page.
+		if ( ! isset( $_GET['post_type'] ) || 'wc_user_membership' !== $_GET['post_type'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+			return;
+		}
+
+		// Check if this is a bulk edit request.
+		if ( ! isset( $_REQUEST['bulk_edit'] ) && ! isset( $_REQUEST['action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			return;
+		}
+
+		// Get post IDs from bulk edit.
+		$post_ids = [];
+		if ( isset( $_REQUEST['post'] ) && is_array( $_REQUEST['post'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$post_ids = array_map( 'intval', $_REQUEST['post'] ); // phpcs:ignore WordPress.Security.NonceVerification
+		}
+
+		if ( empty( $post_ids ) ) {
+			return;
+		}
+
+		// Store original data for subscription-linked memberships.
+		$original_data = [];
+		foreach ( $post_ids as $post_id ) {
+			$post = get_post( $post_id );
+			if ( $post && 'wc_user_membership' === $post->post_type && self::should_disable_editing_membership_status( $post ) ) {
+				$original_data[ $post_id ] = [
+					'post_status' => $post->post_status,
+					'_start_date' => get_post_meta( $post_id, '_start_date', true ),
+					'_end_date'   => get_post_meta( $post_id, '_end_date', true ),
+				];
+			}
+		}
+
+		if ( ! empty( $original_data ) ) {
+			set_transient( 'newspack_membership_original_data_' . get_current_user_id(), $original_data, 300 );
+		}
+	}
+
+	/**
+	 * Prevent bulk editing of subscription-linked memberships.
+	 * This fires after bulk edits are processed and restores original values for subscription-linked memberships.
+	 *
+	 * @param array $post_ids Array of post IDs that were bulk edited.
+	 * @param array $edit_data Array of edit data from the bulk edit form.
+	 */
+	public static function prevent_bulk_edit_subscription_linked_memberships( $post_ids, $edit_data ) {
+		// Only handle wc_user_membership posts.
+		if ( empty( $post_ids ) || ! is_array( $post_ids ) ) {
+			return;
+		}
+
+		// Get stored original data.
+		$original_data = get_transient( 'newspack_membership_original_data_' . get_current_user_id() );
+		if ( ! $original_data ) {
+			return;
+		}
+
+		$reverted_count = 0;
+
+		foreach ( $post_ids as $post_id ) {
+			// Skip if we don't have original data for this post or it's not subscription-linked.
+			if ( ! isset( $original_data[ $post_id ] ) ) {
+				continue;
+			}
+
+			$post = get_post( $post_id );
+			if ( ! $post || 'wc_user_membership' !== $post->post_type ) {
+				continue;
+			}
+
+			// Restore original post status.
+			if ( $post->post_status !== $original_data[ $post_id ]['post_status'] ) {
+				wp_update_post(
+					[
+						'ID'          => $post_id,
+						'post_status' => $original_data[ $post_id ]['post_status'],
+					]
+				);
+				$reverted_count++;
+
+				// Add a note to the user membership explaining why the changes were reverted.
+				if ( function_exists( 'wc_memberships_get_user_membership' ) ) {
+					$membership = wc_memberships_get_user_membership( $post_id );
+					if ( $membership ) {
+						$membership->add_note( __( 'Bulk edit changes were reverted because this membership is linked to a subscription.', 'newspack-plugin' ) );
+					}
+				}
+			}
+
+			// Restore original start date.
+			$current_start_date = get_post_meta( $post_id, '_start_date', true );
+			if ( $current_start_date !== $original_data[ $post_id ]['_start_date'] ) {
+				update_post_meta( $post_id, '_start_date', $original_data[ $post_id ]['_start_date'] );
+			}
+
+			// Restore original end date.
+			$current_end_date = get_post_meta( $post_id, '_end_date', true );
+			if ( $current_end_date !== $original_data[ $post_id ]['_end_date'] ) {
+				update_post_meta( $post_id, '_end_date', $original_data[ $post_id ]['_end_date'] );
+			}
+		}
+
+		// Clean up stored data.
+		delete_transient( 'newspack_membership_original_data_' . get_current_user_id() );
 	}
 }
 Memberships::init();

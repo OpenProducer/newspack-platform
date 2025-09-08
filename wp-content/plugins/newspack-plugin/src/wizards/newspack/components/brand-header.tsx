@@ -10,10 +10,7 @@ const { settings } = window.newspackDashboard;
 
 const BrandHeader = () => {
 	return (
-		<header
-			className="newspack-dashboard__brand-header"
-			style={ { backgroundColor: settings.headerBgColor } }
-		>
+		<header className="newspack-dashboard__brand-header" style={ { backgroundColor: settings.headerBgColor } }>
 			<BoxContrast className="brand-header__inner" hexColor={ settings.headerBgColor }>
 				<h1>{ settings.siteName }</h1>
 			</BoxContrast>

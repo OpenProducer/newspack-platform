@@ -30,10 +30,10 @@
     "authorRoles": {
       "type": "array",
       "default": [
-        "Administrator",
-        "Editor",
-        "Author",
-        "Contributor"
+        "administrator",
+        "editor",
+        "author",
+        "contributor"
       ]
     },
     "authorType": {

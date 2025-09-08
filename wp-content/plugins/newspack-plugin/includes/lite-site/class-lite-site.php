@@ -440,7 +440,10 @@ class Lite_Site {
 		$content = preg_replace( '/<!--(.|\s)*?-->/', '', $content );
 
 		// First remove figures and their contents (including images and captions).
-		$content = preg_replace( '/<figure.*?>.*?<\/figure>/s', '', $content );
+		$content = preg_replace( '/<figure.*?>.*?<\/figure>/is', '', $content );
+
+		// Remove script tags.
+		$content = preg_replace( '/<script.*?>.*?<\/script>/is', '', $content );
 
 		// Define allowed HTML elements for text-only content.
 		$allowed_html = [

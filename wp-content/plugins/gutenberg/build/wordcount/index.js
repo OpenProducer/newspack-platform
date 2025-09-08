@@ -43,43 +43,13 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 ;// ./packages/wordcount/build-module/defaultSettings.js
-/** @typedef {import('./index').WPWordCountStrategy} WPWordCountStrategy */
-
-/** @typedef {Partial<{type: WPWordCountStrategy, shortcodes: string[]}>} WPWordCountL10n */
-
 /**
- * @typedef WPWordCountSettingsFields
- * @property {RegExp}              HTMLRegExp                        Regular expression that matches HTML tags
- * @property {RegExp}              HTMLcommentRegExp                 Regular expression that matches HTML comments
- * @property {RegExp}              spaceRegExp                       Regular expression that matches spaces in HTML
- * @property {RegExp}              HTMLEntityRegExp                  Regular expression that matches HTML entities
- * @property {RegExp}              connectorRegExp                   Regular expression that matches word connectors, like em-dash
- * @property {RegExp}              removeRegExp                      Regular expression that matches various characters to be removed when counting
- * @property {RegExp}              astralRegExp                      Regular expression that matches astral UTF-16 code points
- * @property {RegExp}              wordsRegExp                       Regular expression that matches words
- * @property {RegExp}              characters_excluding_spacesRegExp Regular expression that matches characters excluding spaces
- * @property {RegExp}              characters_including_spacesRegExp Regular expression that matches characters including spaces
- * @property {RegExp}              shortcodesRegExp                  Regular expression that matches WordPress shortcodes
- * @property {string[]}            shortcodes                        List of all shortcodes
- * @property {WPWordCountStrategy} type                              Describes what and how are we counting
- * @property {WPWordCountL10n}     l10n                              Object with human translations
+ * Internal dependencies
  */
 
 /**
- * Lower-level settings for word counting that can be overridden.
- *
- * @typedef {Partial<WPWordCountSettingsFields>} WPWordCountUserSettings
+ * Default settings for word counting operations.
  */
-
-// Disable reason: JSDoc linter doesn't seem to parse the union (`&`) correctly: https://github.com/jsdoc/jsdoc/issues/1285
-/* eslint-disable jsdoc/valid-types */
-/**
- * Word counting settings that include non-optional values we set if missing
- *
- * @typedef {WPWordCountUserSettings & typeof defaultSettings} WPWordCountDefaultSettings
- */
-/* eslint-enable jsdoc/valid-types */
-
 const defaultSettings = {
   HTMLRegExp: /<\/?[a-z][^>]*?>/gi,
   HTMLcommentRegExp: /<!--[\s\S]*?-->/g,
@@ -146,12 +116,15 @@ const defaultSettings = {
 
 ;// ./packages/wordcount/build-module/stripTags.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Replaces items matched in the regex with new line
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function stripTags(settings, text) {
   return text.replace(settings.HTMLRegExp, '\n');
@@ -159,12 +132,15 @@ function stripTags(settings, text) {
 
 ;// ./packages/wordcount/build-module/transposeAstralsToCountableChar.js
 /**
- * Replaces items matched in the regex with character.
+ * Internal dependencies
+ */
+
+/**
+ * Replaces items matched in the regex with a single character.
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function transposeAstralsToCountableChar(settings, text) {
   return text.replace(settings.astralRegExp, 'a');
@@ -172,12 +148,15 @@ function transposeAstralsToCountableChar(settings, text) {
 
 ;// ./packages/wordcount/build-module/stripHTMLEntities.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Removes items matched in the regex.
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function stripHTMLEntities(settings, text) {
   return text.replace(settings.HTMLEntityRegExp, '');
@@ -185,12 +164,15 @@ function stripHTMLEntities(settings, text) {
 
 ;// ./packages/wordcount/build-module/stripConnectors.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Replaces items matched in the regex with spaces.
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function stripConnectors(settings, text) {
   return text.replace(settings.connectorRegExp, ' ');
@@ -198,12 +180,15 @@ function stripConnectors(settings, text) {
 
 ;// ./packages/wordcount/build-module/stripRemovables.js
 /**
- * Removes items matched in the regex.
+ * Internal dependencies
+ */
+
+/**
+ * Replaces items matched in the regex with spaces.
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function stripRemovables(settings, text) {
   return text.replace(settings.removeRegExp, '');
@@ -211,12 +196,15 @@ function stripRemovables(settings, text) {
 
 ;// ./packages/wordcount/build-module/stripHTMLComments.js
 /**
- * Removes items matched in the regex.
+ * Internal dependencies
+ */
+
+/**
+ * Replaces items matched in the regex with new line.
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function stripHTMLComments(settings, text) {
   return text.replace(settings.HTMLcommentRegExp, '');
@@ -224,12 +212,15 @@ function stripHTMLComments(settings, text) {
 
 ;// ./packages/wordcount/build-module/stripShortcodes.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Replaces items matched in the regex with a new line.
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function stripShortcodes(settings, text) {
   if (settings.shortcodesRegExp) {
@@ -240,12 +231,15 @@ function stripShortcodes(settings, text) {
 
 ;// ./packages/wordcount/build-module/stripSpaces.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Replaces items matched in the regex with spaces.
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function stripSpaces(settings, text) {
   return text.replace(settings.spaceRegExp, ' ');
@@ -253,12 +247,15 @@ function stripSpaces(settings, text) {
 
 ;// ./packages/wordcount/build-module/transposeHTMLEntitiesToCountableChars.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Replaces items matched in the regex with a single character.
  *
- * @param {import('./index').WPWordCountSettings} settings The main settings object containing regular expressions
- * @param {string}                                text     The string being counted.
- *
- * @return {string} The manipulated text.
+ * @param settings The main settings object containing regular expressions
+ * @param text     The string being counted.
+ * @return The manipulated text.
  */
 function transposeHTMLEntitiesToCountableChars(settings, text) {
   return text.replace(settings.HTMLEntityRegExp, 'a');
@@ -278,34 +275,28 @@ function transposeHTMLEntitiesToCountableChars(settings, text) {
 
 
 
-
-/**
- * @typedef {import('./defaultSettings').WPWordCountDefaultSettings}  WPWordCountSettings
- * @typedef {import('./defaultSettings').WPWordCountUserSettings}     WPWordCountUserSettings
- */
-
-/**
- * Possible ways of counting.
- *
- * @typedef {'words'|'characters_excluding_spaces'|'characters_including_spaces'} WPWordCountStrategy
- */
-
 /**
  * Private function to manage the settings.
  *
- * @param {WPWordCountStrategy}     type         The type of count to be done.
- * @param {WPWordCountUserSettings} userSettings Custom settings for the count.
- *
- * @return {WPWordCountSettings} The combined settings object to be used.
+ * @param type         The type of count to be done.
+ * @param userSettings Custom settings for the count.
+ * @return The combined settings object to be used.
  */
-function loadSettings(type, userSettings) {
+function loadSettings(type = 'words', userSettings = {}) {
   var _settings$l10n$shortc;
-  const settings = Object.assign({}, defaultSettings, userSettings);
+  const mergedSettings = {
+    ...defaultSettings,
+    ...userSettings
+  };
+  const settings = {
+    ...mergedSettings,
+    type,
+    shortcodes: []
+  };
   settings.shortcodes = (_settings$l10n$shortc = settings.l10n?.shortcodes) !== null && _settings$l10n$shortc !== void 0 ? _settings$l10n$shortc : [];
   if (settings.shortcodes && settings.shortcodes.length) {
     settings.shortcodesRegExp = new RegExp('\\[\\/?(?:' + settings.shortcodes.join('|') + ')[^\\]]*?\\]', 'g');
   }
-  settings.type = type;
   if (settings.type !== 'characters_excluding_spaces' && settings.type !== 'characters_including_spaces') {
     settings.type = 'words';
   }
@@ -315,11 +306,10 @@ function loadSettings(type, userSettings) {
 /**
  * Count the words in text
  *
- * @param {string}              text     The text being processed
- * @param {RegExp}              regex    The regular expression pattern being matched
- * @param {WPWordCountSettings} settings Settings object containing regular expressions for each strip function
- *
- * @return {number} Count of words.
+ * @param text     The text being processed
+ * @param regex    The regular expression pattern being matched
+ * @param settings Settings object containing regular expressions for each strip function
+ * @return Count of words.
  */
 function countWords(text, regex, settings) {
   var _text$match$length;
@@ -331,11 +321,10 @@ function countWords(text, regex, settings) {
 /**
  * Count the characters in text
  *
- * @param {string}              text     The text being processed
- * @param {RegExp}              regex    The regular expression pattern being matched
- * @param {WPWordCountSettings} settings Settings object containing regular expressions for each strip function
- *
- * @return {number} Count of characters.
+ * @param text     The text being processed
+ * @param regex    The regular expression pattern being matched
+ * @param settings Settings object containing regular expressions for each strip function
+ * @return Count of characters.
  */
 function countCharacters(text, regex, settings) {
   var _text$match$length2;
@@ -347,17 +336,17 @@ function countCharacters(text, regex, settings) {
 /**
  * Count some words.
  *
- * @param {string}                  text         The text being processed
- * @param {WPWordCountStrategy}     type         The type of count. Accepts 'words', 'characters_excluding_spaces', or 'characters_including_spaces'.
- * @param {WPWordCountUserSettings} userSettings Custom settings object.
+ * @param text         The text being processed
+ * @param type         The type of count. Accepts 'words', 'characters_excluding_spaces', or 'characters_including_spaces'.
+ * @param userSettings Custom settings object.
  *
  * @example
- * ```js
+ * ```ts
  * import { count } from '@wordpress/wordcount';
  * const numberOfWords = count( 'Words to count', 'words', {} )
  * ```
  *
- * @return {number} The word or character count.
+ * @return The word or character count.
  */
 function count(text, type, userSettings) {
   const settings = loadSettings(type, userSettings);
@@ -376,6 +365,9 @@ function count(text, type, userSettings) {
       return 0;
   }
 }
+
+// Export types for external usage
+
 
 (window.wp = window.wp || {}).wordcount = __webpack_exports__;
 /******/ })()

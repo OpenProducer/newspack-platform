@@ -64,10 +64,7 @@ type ModalComponentProps = {
 	action: WebhookActions;
 	setError: ( err: WizardErrorType | null | string ) => void;
 	setAction: ( action: WebhookActions, id: number | string ) => void;
-	wizardApiFetch: < T = any >(
-		opts: ApiFetchOptions,
-		callbacks?: ApiFetchCallbacks< T >
-	) => void;
+	wizardApiFetch: < T = any >( opts: ApiFetchOptions, callbacks?: ApiFetchCallbacks< T > ) => void;
 	setEndpoints: ( endpoints: Endpoint[] ) => void;
 };
 
@@ -95,10 +92,18 @@ type RssData = {
 type JetpackSSOCaps = 'edit_posts' | 'publish_posts' | 'edit_others_posts' | 'manage_options';
 
 /** Jetpack SSO Settings */
-type JetpackSSOSettings = Partial<{
+type JetpackSSOSettings = Partial< {
 	jetpack_sso_force_2fa: boolean;
 	force_2fa: boolean;
 	force_2fa_cap: JetpackSSOCaps;
 	obfuscate_account: boolean;
-	available_caps: { [key in JetpackSSOCaps]?: string };
-}>;
+	available_caps: { [ key in JetpackSSOCaps ]?: string };
+} >;
+
+/** Print */
+/**
+ * Print API data
+ */
+type PrintData = {
+	module_enabled_print: boolean;
+};

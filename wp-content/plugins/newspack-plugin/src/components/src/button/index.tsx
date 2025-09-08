@@ -41,7 +41,7 @@ const Button = ( { href, onClick, ...otherProps }: Props ) => {
 	if ( isAwaitingOnClick ) {
 		otherProps.disabled = true;
 	}
-	// @ts-ignore - @wordpress/components' Button can only have either href or onClick, not both.
+	// @ts-expect-error - @wordpress/components' Button can only have either href or onClick, not both.
 	return <BaseComponent { ...otherProps } />;
 };
 

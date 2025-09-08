@@ -776,7 +776,7 @@ final class Newspack_Newsletters_Renderer {
 					// Parse block content.
 					$dom = new DomDocument();
 					libxml_use_internal_errors( true );
-					$dom->loadHTML( mb_convert_encoding( $button_block['innerHTML'], 'HTML-ENTITIES', get_bloginfo( 'charset' ) ) );
+					$dom->loadHTML( htmlspecialchars_decode( htmlentities( mb_convert_encoding( $button_block['innerHTML'], 'UTF-8', get_bloginfo( 'charset' ) ) ) ) );
 					$xpath         = new DOMXpath( $dom );
 					$anchor        = $xpath->query( '//a' )[0];
 					$attrs         = self::process_attributes( $button_block['attrs'] );
@@ -967,6 +967,28 @@ final class Newspack_Newsletters_Renderer {
 					$inner_blocks[ $no_width_cols_index ]['attrs']['width'] = ( 100 - $widths_sum ) / count( $no_width_cols_indexes ) . '%';
 				}
 
+				// Recalculate total width including no-width columns that were just assigned.
+				$total_width = 0;
+				foreach ( $inner_blocks as $block ) {
+					if ( isset( $block['attrs']['width'] ) ) {
+						$total_width += floatval( $block['attrs']['width'] );
+					}
+				}
+
+				// If total width exceeds 100%, adjust all columns proportionally.
+				if ( $total_width > 100 ) {
+					$excess = $total_width - 100;
+					$adjustment_per_column = $excess / count( $inner_blocks );
+
+					foreach ( $inner_blocks as $i => $block ) {
+						if ( isset( $block['attrs']['width'] ) ) {
+							$current_width = floatval( $block['attrs']['width'] );
+							$new_width = max( 1, $current_width - $adjustment_per_column ); // Ensure minimum 1% width.
+							$inner_blocks[ $i ]['attrs']['width'] = $new_width . '%';
+						}
+					}
+				}
+
 				if ( isset( $attrs['color'] ) ) {
 					$default_attrs['color'] = $attrs['color'];
 				}
@@ -1083,7 +1105,7 @@ final class Newspack_Newsletters_Renderer {
 				// Parse block caption.
 				$dom = new DomDocument();
 				libxml_use_internal_errors( true );
-				$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ) );
+				$dom->loadHTML( htmlspecialchars_decode( htmlentities( mb_convert_encoding( $inner_html, 'UTF-8', get_bloginfo( 'charset' ) ) ) ) );
 				$xpath      = new DOMXpath( $dom );
 				$figcaption = $xpath->query( '//figcaption/text()' )[0];
 				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -1150,11 +1172,15 @@ final class Newspack_Newsletters_Renderer {
 			case 'newspack-newsletters/ad':
 				$ad_post = false;
 				if ( ! empty( $attrs['adId'] ) ) {
-					$ad_post = get_post( $attrs['adId'] );
+					if ( strpos( $attrs['adId'], 'placement:' ) === 0 ) {
+						$ad_post = Newspack_Newsletters\Ads_Placements::get_ad_by_placement( str_replace( 'placement:', '', $attrs['adId'] ), self::$newsletter_id );
+					} else {
+						$ad_post = get_post( $attrs['adId'] );
+					}
 				} elseif ( ! empty( self::$newsletter_id ) ) {
-					$ads = Newspack_Newsletters_Ads::get_newsletter_ads( self::$newsletter_id );
+					$ads = Newspack_Newsletters\Ads::get_newsletter_ads( self::$newsletter_id );
 					foreach ( $ads as $ad ) {
-						if ( ! Newspack_Newsletters_Ads::is_ad_inserted( self::$newsletter_id, $ad->ID ) ) {
+						if ( ! Newspack_Newsletters\Ads::is_ad_inserted( self::$newsletter_id, $ad->ID ) ) {
 							$ad_post = $ad;
 							break;
 						}
@@ -1163,7 +1189,7 @@ final class Newspack_Newsletters_Renderer {
 				if ( $ad_post ) {
 					$block_mjml_markup = self::post_to_mjml_components( $ad_post );
 					if ( ! empty( self::$newsletter_id ) ) {
-						Newspack_Newsletters_Ads::mark_ad_inserted( self::$newsletter_id, $ad_post->ID );
+						Newspack_Newsletters\Ads::mark_ad_inserted( self::$newsletter_id, $ad_post->ID );
 					}
 				}
 				break;

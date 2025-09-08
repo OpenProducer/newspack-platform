@@ -39,7 +39,7 @@ class Templates_Registry {
 	public function register( Template $template ): void {
 		if ( ! \WP_Block_Templates_Registry::get_instance()->is_registered( $template->get_name() ) ) {
 			// skip registration if the template was already registered.
-			register_block_template(
+			$result                                   = register_block_template(
 				$template->get_name(),
 				array(
 					'title'       => $template->get_title(),

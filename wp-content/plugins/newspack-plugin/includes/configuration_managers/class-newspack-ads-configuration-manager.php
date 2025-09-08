@@ -83,6 +83,17 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Get the parent ad units.
+	 *
+	 * @return array|WP_Error Array of ad units or WP_Error if Newspack Ads isn't installed and activated.
+	 */
+	public function get_parent_ad_units() {
+		return $this->is_configured() ?
+			GAM_Model::get_parent_ad_units() :
+			$this->unconfigured_error();
+	}
+
+	/**
 	 * Get a single ad unit.
 	 *
 	 * @param number $id The id of the ad unit to retrieve.

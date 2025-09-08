@@ -21,9 +21,43 @@ final class Newspack_Popups_Expiry {
 	 */
 	public static function init() {
 		add_action( 'transition_post_status', [ __CLASS__, 'transition_post_status' ], 10, 3 );
+		add_action( 'init', [ __CLASS__, 'register_recurring_event' ] );
 		add_action( self::CRON_HOOK, [ __CLASS__, 'revert_expired_to_draft' ] );
-		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-			wp_schedule_event( time(), 'hourly', self::CRON_HOOK );
+	}
+
+	/**
+	 * Register the recurring event, prioritizing the use of Action Scheduler.
+	 *
+	 * @return void
+	 */
+	public static function register_recurring_event() {
+		if ( is_admin() && function_exists( 'as_schedule_recurring_action' ) ) {
+			self::register_check_expiry_as_event();
+
+			// If AS supports, it, also hook into ensure_recurring actions.
+			if ( function_exists( 'as_supports' ) && as_supports( 'ensure_recurring_actions_hook' ) ) {
+				add_action( 'action_scheduler_ensure_recurring_actions', [ __CLASS__, 'register_check_expiry_as_event' ] );
+			}
+		} elseif ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
+			wp_schedule_event( strtotime( 'tomorrow' ), 'daily', self::CRON_HOOK );
+		}
+	}
+
+	/**
+	 * Registers the Action Scheduler's recurring event
+	 *
+	 * @return void
+	 */
+	public static function register_check_expiry_as_event() {
+		if ( false === wp_cache_get( 'newspack_popups_recurring_action_scheduled' ) ) {
+			if ( ! as_has_scheduled_action( self::CRON_HOOK ) ) {
+				as_schedule_recurring_action(
+					strtotime( 'tomorrow' ) + 60, // plus 60 to avoid race conditions.
+					DAY_IN_SECONDS,
+					self::CRON_HOOK
+				);
+			}
+			wp_cache_set( 'newspack_popups_recurring_action_scheduled', true, HOUR_IN_SECONDS );
 		}
 	}
 

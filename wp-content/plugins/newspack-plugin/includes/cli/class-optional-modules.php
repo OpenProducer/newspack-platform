@@ -78,12 +78,16 @@ class Optional_Modules {
 			\WP_CLI::error( sprintf( 'Module is not available. These are the available modules: %s', implode( ', ', $available_modules ) ) );
 		}
 
-		$settings = \Newspack\Optional_Modules::activate_optional_module( $module_name );
+		if ( \Newspack\Optional_Modules::is_optional_module_active( $module_name ) ) {
+			\WP_CLI::warning( "Cannot activate module – it's already active." );
+			return;
+		}
 
-		if ( empty( $settings[ \Newspack\Optional_Modules::MODULE_ENABLED_PREFIX . $module_name ] ) ) {
+		$settings = \Newspack\Optional_Modules::activate_optional_module( $module_name );
+		if ( ! empty( $settings[ \Newspack\Optional_Modules::MODULE_ENABLED_PREFIX . $module_name ] ) ) {
 			\WP_CLI::success( 'Module activated.' );
 		} else {
-			\WP_CLI::error( "Cannot activate module – it's already active" );
+			\WP_CLI::error( 'Failed to activate module.' );
 		}
 	}
 
@@ -98,13 +102,12 @@ class Optional_Modules {
 	public static function cmd_deactivate_module( array $pos_args, array $assoc_args ) {
 		$module_name = $pos_args[0];
 
-		$enabled_modules = array_filter( \Newspack\Optional_Modules::get_settings() );
-
-		if ( empty( $enabled_modules[ \Newspack\Optional_Modules::MODULE_ENABLED_PREFIX . $module_name ] ) ) {
-			\WP_CLI::error( 'Module is not active. Cannot deactivate it' );
+		if ( ! \Newspack\Optional_Modules::is_optional_module_active( $module_name ) ) {
+			\WP_CLI::warning( 'Module is not active. Cannot deactivate it' );
+			return;
 		}
-		$settings = \Newspack\Optional_Modules::deactivate_optional_module( $module_name );
 
+		$settings = \Newspack\Optional_Modules::deactivate_optional_module( $module_name );
 		if ( empty( $settings[ \Newspack\Optional_Modules::MODULE_ENABLED_PREFIX . $module_name ] ) ) {
 			\WP_CLI::success( 'Module deactivated.' );
 		} else {

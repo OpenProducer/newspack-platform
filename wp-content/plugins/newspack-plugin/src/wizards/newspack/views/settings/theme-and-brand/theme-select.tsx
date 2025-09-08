@@ -12,13 +12,7 @@ import NewspackImg from './images/newspack.png';
 import KatharineImg from './images/katharine.png';
 import { Grid, StyleCard } from '../../../../../components/src';
 
-const ThemeSelection = ( {
-	theme,
-	updateTheme,
-}: {
-	theme: ThemeData[ 'theme' ];
-	updateTheme: ( a: ThemeData[ 'theme' ] ) => void;
-} ) => (
+const ThemeSelection = ( { theme, updateTheme }: { theme: ThemeData[ 'theme' ]; updateTheme: ( a: ThemeData[ 'theme' ] ) => void } ) => (
 	<Grid columns={ 3 } gutter={ 32 }>
 		<StyleCard
 			cardTitle="Newspack"

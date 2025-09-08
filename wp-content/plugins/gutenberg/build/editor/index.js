@@ -1533,7 +1533,7 @@ __webpack_require__.d(__webpack_exports__, {
   PostLastRevision: () => (/* reexport */ post_last_revision),
   PostLastRevisionCheck: () => (/* reexport */ post_last_revision_check),
   PostLastRevisionPanel: () => (/* reexport */ post_last_revision_panel),
-  PostLockedModal: () => (/* reexport */ PostLockedModal),
+  PostLockedModal: () => (/* reexport */ post_locked_modal),
   PostPendingStatus: () => (/* reexport */ post_pending_status),
   PostPendingStatusCheck: () => (/* reexport */ post_pending_status_check),
   PostPingbacks: () => (/* reexport */ post_pingbacks),
@@ -2906,10 +2906,14 @@ const getNestedEditedPostProperty = (0,external_wp_data_namespaceObject.createSe
  * 	const getFeaturedMediaUrl = useSelect( ( select ) => {
  * 		const getFeaturedMediaId =
  * 			select( 'core/editor' ).getEditedPostAttribute( 'featured_media' );
- * 		const getMedia = select( 'core' ).getMedia( getFeaturedMediaId );
+ * 		const media = select( 'core' ).getEntityRecord(
+ * 			'postType',
+ * 			'attachment',
+ * 			getFeaturedMediaId
+ * 		);
  *
  * 		return (
- * 			getMedia?.media_details?.sizes?.large?.source_url || getMedia?.source_url || ''
+ * 			media?.media_details?.sizes?.large?.source_url || media?.source_url || ''
  * 		);
  * }, [] );
  *```
@@ -3139,9 +3143,11 @@ const isEditedPostAutosaveable = (0,external_wp_data_namespaceObject.createRegis
     return false;
   }
   const postType = getCurrentPostType(state);
+  const postTypeObject = select(external_wp_coreData_namespaceObject.store).getPostType(postType);
 
   // Currently template autosaving is not supported.
-  if (postType === 'wp_template') {
+  // @todo: Remove hardcode check for template after bumping required WP version to 6.8.
+  if (postType === 'wp_template' || !postTypeObject?.supports?.autosave) {
     return false;
   }
   const postId = getCurrentPostId(state);
@@ -3515,6 +3521,26 @@ function isPostLocked(state) {
  *
  * @param {Object} state Global application state.
  *
+ * @example
+ * ```jsx
+ * import { __ } from '@wordpress/i18n';
+ * import { store as editorStore } from '@wordpress/editor';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ * 	const isSavingLocked = useSelect(
+ * 		( select ) => select( editorStore ).isPostSavingLocked(),
+ * 		[]
+ * 	);
+ *
+ * 	return isSavingLocked ? (
+ * 		<p>{ __( 'Post saving is locked' ) }</p>
+ * 	) : (
+ * 		<p>{ __( 'Post saving is not locked' ) }</p>
+ * 	);
+ * };
+ * ```
+ *
  * @return {boolean} Is locked.
  */
 function isPostSavingLocked(state) {
@@ -3525,6 +3551,26 @@ function isPostSavingLocked(state) {
  * Returns whether post autosaving is locked.
  *
  * @param {Object} state Global application state.
+ *
+ * @example
+ * ```jsx
+ * import { __ } from '@wordpress/i18n';
+ * import { store as editorStore } from '@wordpress/editor';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ * 	const isAutoSavingLocked = useSelect(
+ * 		( select ) => select( editorStore ).isPostAutosavingLocked(),
+ * 		[]
+ * 	);
+ *
+ * 	return isAutoSavingLocked ? (
+ * 		<p>{ __( 'Post auto saving is locked' ) }</p>
+ * 	) : (
+ * 		<p>{ __( 'Post auto saving is not locked' ) }</p>
+ * 	);
+ * };
+ * ```
  *
  * @return {boolean} Is locked.
  */
@@ -4486,21 +4532,6 @@ function setEditedPost(postType, postId) {
  * ```js
  * // Update the post title
  * wp.data.dispatch( 'core/editor' ).editPost( { title: `${ newTitle }` } );
- * ```
- *
- * @example
- *```js
- * 	// Get specific media size based on the featured media ID
- * 	// Note: change sizes?.large for any registered size
- * 	const getFeaturedMediaUrl = useSelect( ( select ) => {
- * 		const getFeaturedMediaId =
- * 			select( 'core/editor' ).getEditedPostAttribute( 'featured_media' );
- * 		const getMedia = select( 'core' ).getMedia( getFeaturedMediaId );
- *
- * 		return (
- * 			getMedia?.media_details?.sizes?.large?.source_url || getMedia?.source_url || ''
- * 		);
- * }, [] );
  * ```
  *
  * @return {Object} Action object
@@ -5505,8 +5536,8 @@ const viewPostRevisions = {
   label(items) {
     var _items$0$_links$versi;
     const revisionsCount = (_items$0$_links$versi = items[0]._links?.['version-history']?.[0]?.count) !== null && _items$0$_links$versi !== void 0 ? _items$0$_links$versi : 0;
-    return (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: number of revisions. */
-    (0,external_wp_i18n_namespaceObject.__)('View revisions (%s)'), revisionsCount);
+    return (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %d: number of revisions. */
+    (0,external_wp_i18n_namespaceObject.__)('View revisions (%d)'), revisionsCount);
   },
   isEligible(post) {
     var _post$_links$predeces, _post$_links$version;
@@ -5562,88 +5593,673 @@ function DataFormProvider({
 }
 /* harmony default export */ const dataform_context = (DataFormContext);
 
-;// ./packages/dataviews/build-module/field-types/integer.js
+;// ./packages/dataviews/build-module/utils.js
 /**
  * Internal dependencies
  */
 
-function sort(a, b, direction) {
+function renderFromElements({
+  item,
+  field
+}) {
+  const value = field.getValue({
+    item
+  });
+  return field?.elements?.find(element => element.value === value)?.label || field.getValue({
+    item
+  });
+}
+
+;// ./packages/icons/build-module/library/arrow-up.js
+/**
+ * WordPress dependencies
+ */
+
+
+const arrowUp = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M12 3.9 6.5 9.5l1 1 3.8-3.7V20h1.5V6.8l3.7 3.7 1-1z"
+  })
+});
+/* harmony default export */ const arrow_up = (arrowUp);
+
+;// ./packages/icons/build-module/library/arrow-down.js
+/**
+ * WordPress dependencies
+ */
+
+
+const arrowDown = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "m16.5 13.5-3.7 3.7V4h-1.5v13.2l-3.8-3.7-1 1 5.5 5.6 5.5-5.6z"
+  })
+});
+/* harmony default export */ const arrow_down = (arrowDown);
+
+;// ./packages/dataviews/build-module/constants.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+// Filter operators.
+const OPERATOR_IS = 'is';
+const OPERATOR_IS_NOT = 'isNot';
+const OPERATOR_IS_ANY = 'isAny';
+const OPERATOR_IS_NONE = 'isNone';
+const OPERATOR_IS_ALL = 'isAll';
+const OPERATOR_IS_NOT_ALL = 'isNotAll';
+const OPERATOR_LESS_THAN = 'lessThan';
+const OPERATOR_GREATER_THAN = 'greaterThan';
+const OPERATOR_LESS_THAN_OR_EQUAL = 'lessThanOrEqual';
+const OPERATOR_GREATER_THAN_OR_EQUAL = 'greaterThanOrEqual';
+const OPERATOR_BEFORE = 'before';
+const OPERATOR_AFTER = 'after';
+const OPERATOR_BEFORE_INC = 'beforeInc';
+const OPERATOR_AFTER_INC = 'afterInc';
+const OPERATOR_CONTAINS = 'contains';
+const OPERATOR_NOT_CONTAINS = 'notContains';
+const OPERATOR_STARTS_WITH = 'startsWith';
+const OPERATOR_BETWEEN = 'between';
+const OPERATOR_ON = 'on';
+const OPERATOR_NOT_ON = 'notOn';
+const OPERATOR_IN_THE_PAST = 'inThePast';
+const OPERATOR_OVER = 'over';
+const ALL_OPERATORS = [OPERATOR_IS, OPERATOR_IS_NOT, OPERATOR_IS_ANY, OPERATOR_IS_NONE, OPERATOR_IS_ALL, OPERATOR_IS_NOT_ALL, OPERATOR_LESS_THAN, OPERATOR_GREATER_THAN, OPERATOR_LESS_THAN_OR_EQUAL, OPERATOR_GREATER_THAN_OR_EQUAL, OPERATOR_BEFORE, OPERATOR_AFTER, OPERATOR_BEFORE_INC, OPERATOR_AFTER_INC, OPERATOR_CONTAINS, OPERATOR_NOT_CONTAINS, OPERATOR_STARTS_WITH, OPERATOR_BETWEEN, OPERATOR_ON, OPERATOR_NOT_ON, OPERATOR_IN_THE_PAST, OPERATOR_OVER];
+const SINGLE_SELECTION_OPERATORS = [OPERATOR_IS, OPERATOR_IS_NOT, OPERATOR_LESS_THAN, OPERATOR_GREATER_THAN, OPERATOR_LESS_THAN_OR_EQUAL, OPERATOR_GREATER_THAN_OR_EQUAL, OPERATOR_BEFORE, OPERATOR_AFTER, OPERATOR_BEFORE_INC, OPERATOR_AFTER_INC, OPERATOR_CONTAINS, OPERATOR_NOT_CONTAINS, OPERATOR_STARTS_WITH, OPERATOR_ON, OPERATOR_NOT_ON];
+const OPERATORS = {
+  [OPERATOR_IS]: {
+    key: 'is-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Is')
+  },
+  [OPERATOR_IS_NOT]: {
+    key: 'is-not-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Is not')
+  },
+  [OPERATOR_IS_ANY]: {
+    key: 'is-any-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Is any')
+  },
+  [OPERATOR_IS_NONE]: {
+    key: 'is-none-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Is none')
+  },
+  [OPERATOR_IS_ALL]: {
+    key: 'is-all-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Is all')
+  },
+  [OPERATOR_IS_NOT_ALL]: {
+    key: 'is-not-all-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Is not all')
+  },
+  [OPERATOR_LESS_THAN]: {
+    key: 'less-than-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Less than')
+  },
+  [OPERATOR_GREATER_THAN]: {
+    key: 'greater-than-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Greater than')
+  },
+  [OPERATOR_LESS_THAN_OR_EQUAL]: {
+    key: 'less-than-or-equal-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Less than or equal')
+  },
+  [OPERATOR_GREATER_THAN_OR_EQUAL]: {
+    key: 'greater-than-or-equal-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Greater than or equal')
+  },
+  [OPERATOR_BEFORE]: {
+    key: 'before-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Before')
+  },
+  [OPERATOR_AFTER]: {
+    key: 'after-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('After')
+  },
+  [OPERATOR_BEFORE_INC]: {
+    key: 'before-inc-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Before (inc)')
+  },
+  [OPERATOR_AFTER_INC]: {
+    key: 'after-inc-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('After (inc)')
+  },
+  [OPERATOR_CONTAINS]: {
+    key: 'contains-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Contains')
+  },
+  [OPERATOR_NOT_CONTAINS]: {
+    key: 'not-contains-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)("Doesn't contain")
+  },
+  [OPERATOR_STARTS_WITH]: {
+    key: 'starts-with-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Starts with')
+  },
+  [OPERATOR_BETWEEN]: {
+    key: 'between-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Between (inc)')
+  },
+  [OPERATOR_ON]: {
+    key: 'on-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('On')
+  },
+  [OPERATOR_NOT_ON]: {
+    key: 'not-on-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Not on')
+  },
+  [OPERATOR_IN_THE_PAST]: {
+    key: 'in-the-past-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('In the past')
+  },
+  [OPERATOR_OVER]: {
+    key: 'over-filter',
+    label: (0,external_wp_i18n_namespaceObject.__)('Over')
+  }
+};
+const SORTING_DIRECTIONS = (/* unused pure expression or super */ null && (['asc', 'desc']));
+const sortArrows = {
+  asc: '↑',
+  desc: '↓'
+};
+const sortValues = {
+  asc: 'ascending',
+  desc: 'descending'
+};
+const sortLabels = {
+  asc: (0,external_wp_i18n_namespaceObject.__)('Sort ascending'),
+  desc: (0,external_wp_i18n_namespaceObject.__)('Sort descending')
+};
+const sortIcons = {
+  asc: arrow_up,
+  desc: arrow_down
+};
+
+// View layouts.
+const LAYOUT_TABLE = 'table';
+const LAYOUT_GRID = 'grid';
+const LAYOUT_LIST = 'list';
+
+;// ./packages/dataviews/build-module/field-types/email.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function sort(valueA, valueB, direction) {
+  return direction === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+}
+
+// Email validation regex based on HTML5 spec
+// https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address
+const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+/* harmony default export */ const email = ({
+  sort,
+  isValid: {
+    custom: (item, field) => {
+      const value = field.getValue({
+        item
+      });
+      if (![undefined, '', null].includes(value) && !emailRegex.test(value)) {
+        return (0,external_wp_i18n_namespaceObject.__)('Value must be a valid email address.');
+      }
+      if (field.elements) {
+        const validValues = field.elements.map(f => f.value);
+        if (!validValues.includes(value)) {
+          return (0,external_wp_i18n_namespaceObject.__)('Value must be one of the elements.');
+        }
+      }
+      return null;
+    }
+  },
+  Edit: 'email',
+  render: ({
+    item,
+    field
+  }) => {
+    return field.elements ? renderFromElements({
+      item,
+      field
+    }) : field.getValue({
+      item
+    });
+  },
+  enableSorting: true,
+  filterBy: {
+    defaultOperators: [OPERATOR_IS_ANY, OPERATOR_IS_NONE],
+    validOperators: [OPERATOR_IS, OPERATOR_IS_NOT, OPERATOR_CONTAINS, OPERATOR_NOT_CONTAINS, OPERATOR_STARTS_WITH,
+    // Multiple selection
+    OPERATOR_IS_ANY, OPERATOR_IS_NONE, OPERATOR_IS_ALL, OPERATOR_IS_NOT_ALL]
+  }
+});
+
+;// ./packages/dataviews/build-module/field-types/integer.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function integer_sort(a, b, direction) {
   return direction === 'asc' ? a - b : b - a;
 }
-function isValid(value, context) {
-  // TODO: this implicitly means the value is required.
-  if (value === '') {
-    return false;
-  }
-  if (!Number.isInteger(Number(value))) {
-    return false;
-  }
-  if (context?.elements) {
-    const validValues = context?.elements.map(f => f.value);
-    if (!validValues.includes(Number(value))) {
-      return false;
-    }
-  }
-  return true;
-}
 /* harmony default export */ const integer = ({
-  sort,
-  isValid,
-  Edit: 'integer'
+  sort: integer_sort,
+  isValid: {
+    custom: (item, field) => {
+      const value = field.getValue({
+        item
+      });
+      if (![undefined, '', null].includes(value) && !Number.isInteger(value)) {
+        return (0,external_wp_i18n_namespaceObject.__)('Value must be an integer.');
+      }
+      if (field?.elements) {
+        const validValues = field.elements.map(f => f.value);
+        if (!validValues.includes(Number(value))) {
+          return (0,external_wp_i18n_namespaceObject.__)('Value must be one of the elements.');
+        }
+      }
+      return null;
+    }
+  },
+  Edit: 'integer',
+  render: ({
+    item,
+    field
+  }) => {
+    return field.elements ? renderFromElements({
+      item,
+      field
+    }) : field.getValue({
+      item
+    });
+  },
+  enableSorting: true,
+  filterBy: {
+    defaultOperators: [OPERATOR_IS, OPERATOR_IS_NOT, OPERATOR_LESS_THAN, OPERATOR_GREATER_THAN, OPERATOR_LESS_THAN_OR_EQUAL, OPERATOR_GREATER_THAN_OR_EQUAL, OPERATOR_BETWEEN],
+    validOperators: [
+    // Single-selection
+    OPERATOR_IS, OPERATOR_IS_NOT, OPERATOR_LESS_THAN, OPERATOR_GREATER_THAN, OPERATOR_LESS_THAN_OR_EQUAL, OPERATOR_GREATER_THAN_OR_EQUAL, OPERATOR_BETWEEN,
+    // Multiple-selection
+    OPERATOR_IS_ANY, OPERATOR_IS_NONE, OPERATOR_IS_ALL, OPERATOR_IS_NOT_ALL]
+  }
 });
 
 ;// ./packages/dataviews/build-module/field-types/text.js
 /**
+ * WordPress dependencies
+ */
+
+
+/**
  * Internal dependencies
  */
+
+
 
 function text_sort(valueA, valueB, direction) {
   return direction === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
 }
-function text_isValid(value, context) {
-  if (context?.elements) {
-    const validValues = context?.elements?.map(f => f.value);
-    if (!validValues.includes(value)) {
-      return false;
-    }
-  }
-  return true;
-}
 /* harmony default export */ const field_types_text = ({
   sort: text_sort,
-  isValid: text_isValid,
-  Edit: 'text'
+  isValid: {
+    custom: (item, field) => {
+      const value = field.getValue({
+        item
+      });
+      if (field?.elements) {
+        const validValues = field.elements.map(f => f.value);
+        if (!validValues.includes(value)) {
+          return (0,external_wp_i18n_namespaceObject.__)('Value must be one of the elements.');
+        }
+      }
+      return null;
+    }
+  },
+  Edit: 'text',
+  render: ({
+    item,
+    field
+  }) => {
+    return field.elements ? renderFromElements({
+      item,
+      field
+    }) : field.getValue({
+      item
+    });
+  },
+  enableSorting: true,
+  filterBy: {
+    defaultOperators: [OPERATOR_IS_ANY, OPERATOR_IS_NONE],
+    validOperators: [
+    // Single selection
+    OPERATOR_IS, OPERATOR_IS_NOT, OPERATOR_CONTAINS, OPERATOR_NOT_CONTAINS, OPERATOR_STARTS_WITH,
+    // Multiple selection
+    OPERATOR_IS_ANY, OPERATOR_IS_NONE, OPERATOR_IS_ALL, OPERATOR_IS_NOT_ALL]
+  }
 });
 
 ;// ./packages/dataviews/build-module/field-types/datetime.js
 /**
+ * WordPress dependencies
+ */
+
+
+/**
  * Internal dependencies
  */
+
+
 
 function datetime_sort(a, b, direction) {
   const timeA = new Date(a).getTime();
   const timeB = new Date(b).getTime();
   return direction === 'asc' ? timeA - timeB : timeB - timeA;
 }
-function datetime_isValid(value, context) {
-  if (context?.elements) {
-    const validValues = context?.elements.map(f => f.value);
-    if (!validValues.includes(value)) {
-      return false;
-    }
-  }
-  return true;
-}
 /* harmony default export */ const datetime = ({
   sort: datetime_sort,
-  isValid: datetime_isValid,
-  Edit: 'datetime'
+  isValid: {
+    custom: (item, field) => {
+      const value = field.getValue({
+        item
+      });
+      if (field?.elements) {
+        const validValues = field.elements.map(f => f.value);
+        if (!validValues.includes(value)) {
+          return (0,external_wp_i18n_namespaceObject.__)('Value must be one of the elements.');
+        }
+      }
+      return null;
+    }
+  },
+  Edit: 'datetime',
+  render: ({
+    item,
+    field
+  }) => {
+    return field.elements ? renderFromElements({
+      item,
+      field
+    }) : field.getValue({
+      item
+    });
+  },
+  enableSorting: true,
+  filterBy: {
+    defaultOperators: [OPERATOR_ON, OPERATOR_NOT_ON, OPERATOR_BEFORE, OPERATOR_AFTER, OPERATOR_BEFORE_INC, OPERATOR_AFTER_INC, OPERATOR_IN_THE_PAST, OPERATOR_OVER],
+    validOperators: [OPERATOR_ON, OPERATOR_NOT_ON, OPERATOR_BEFORE, OPERATOR_AFTER, OPERATOR_BEFORE_INC, OPERATOR_AFTER_INC, OPERATOR_IN_THE_PAST, OPERATOR_OVER]
+  }
 });
 
-;// ./packages/dataviews/build-module/field-types/index.js
+;// ./packages/dataviews/build-module/field-types/date.js
+/**
+ * WordPress dependencies
+ */
+
+
+
 /**
  * Internal dependencies
  */
+
+
+
+const getFormattedDate = dateToDisplay => (0,external_wp_date_namespaceObject.dateI18n)((0,external_wp_date_namespaceObject.getSettings)().formats.date, (0,external_wp_date_namespaceObject.getDate)(dateToDisplay));
+function date_sort(a, b, direction) {
+  const timeA = new Date(a).getTime();
+  const timeB = new Date(b).getTime();
+  return direction === 'asc' ? timeA - timeB : timeB - timeA;
+}
+/* harmony default export */ const date = ({
+  sort: date_sort,
+  Edit: 'date',
+  isValid: {
+    custom: (item, field) => {
+      const value = field.getValue({
+        item
+      });
+      if (field?.elements) {
+        const validValues = field.elements.map(f => f.value);
+        if (!validValues.includes(value)) {
+          return (0,external_wp_i18n_namespaceObject.__)('Value must be one of the elements.');
+        }
+      }
+      return null;
+    }
+  },
+  render: ({
+    item,
+    field
+  }) => {
+    if (field.elements) {
+      return renderFromElements({
+        item,
+        field
+      });
+    }
+    const value = field.getValue({
+      item
+    });
+    if (!value) {
+      return '';
+    }
+    return getFormattedDate(value);
+  },
+  enableSorting: true,
+  filterBy: {
+    defaultOperators: [OPERATOR_ON, OPERATOR_NOT_ON, OPERATOR_BEFORE, OPERATOR_AFTER, OPERATOR_BEFORE_INC, OPERATOR_AFTER_INC, OPERATOR_IN_THE_PAST, OPERATOR_OVER, OPERATOR_BETWEEN],
+    validOperators: [OPERATOR_ON, OPERATOR_NOT_ON, OPERATOR_BEFORE, OPERATOR_AFTER, OPERATOR_BEFORE_INC, OPERATOR_AFTER_INC, OPERATOR_IN_THE_PAST, OPERATOR_OVER, OPERATOR_BETWEEN]
+  }
+});
+
+;// ./packages/dataviews/build-module/field-types/boolean.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function boolean_sort(a, b, direction) {
+  const boolA = Boolean(a);
+  const boolB = Boolean(b);
+  if (boolA === boolB) {
+    return 0;
+  }
+
+  // In ascending order, false comes before true
+  if (direction === 'asc') {
+    return boolA ? 1 : -1;
+  }
+
+  // In descending order, true comes before false
+  return boolA ? -1 : 1;
+}
+/* harmony default export */ const field_types_boolean = ({
+  sort: boolean_sort,
+  isValid: {
+    custom: (item, field) => {
+      const value = field.getValue({
+        item
+      });
+      if (![undefined, '', null].includes(value) && ![true, false].includes(value)) {
+        return (0,external_wp_i18n_namespaceObject.__)('Value must be true, false, or undefined');
+      }
+      return null;
+    }
+  },
+  Edit: 'boolean',
+  render: ({
+    item,
+    field
+  }) => {
+    if (field.elements) {
+      return renderFromElements({
+        item,
+        field
+      });
+    }
+    if (field.getValue({
+      item
+    }) === true) {
+      return (0,external_wp_i18n_namespaceObject.__)('True');
+    }
+    if (field.getValue({
+      item
+    }) === false) {
+      return (0,external_wp_i18n_namespaceObject.__)('False');
+    }
+    return null;
+  },
+  enableSorting: true,
+  filterBy: {
+    defaultOperators: [OPERATOR_IS, OPERATOR_IS_NOT],
+    validOperators: [OPERATOR_IS, OPERATOR_IS_NOT]
+  }
+});
+
+;// ./packages/dataviews/build-module/field-types/media.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+function media_sort() {
+  return 0;
+}
+/* harmony default export */ const media = ({
+  sort: media_sort,
+  isValid: {
+    custom: (item, field) => {
+      const value = field.getValue({
+        item
+      });
+      if (field?.elements) {
+        const validValues = field.elements.map(f => f.value);
+        if (!validValues.includes(value)) {
+          return (0,external_wp_i18n_namespaceObject.__)('Value must be one of the elements.');
+        }
+      }
+      return null;
+    }
+  },
+  Edit: null,
+  render: () => null,
+  enableSorting: false,
+  filterBy: false
+});
+
+;// ./packages/dataviews/build-module/field-types/array.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+// Sort arrays by length, then alphabetically by joined string
+function array_sort(valueA, valueB, direction) {
+  const arrA = Array.isArray(valueA) ? valueA : [];
+  const arrB = Array.isArray(valueB) ? valueB : [];
+  if (arrA.length !== arrB.length) {
+    return direction === 'asc' ? arrA.length - arrB.length : arrB.length - arrA.length;
+  }
+  const joinedA = arrA.join(',');
+  const joinedB = arrB.join(',');
+  return direction === 'asc' ? joinedA.localeCompare(joinedB) : joinedB.localeCompare(joinedA);
+}
+function render({
+  item,
+  field
+}) {
+  const value = field.getValue({
+    item
+  }) || [];
+  return value.join(', ');
+}
+const arrayFieldType = {
+  sort: array_sort,
+  isValid: {
+    custom: (item, field) => {
+      const value = field.getValue({
+        item
+      });
+      if (![undefined, '', null].includes(value) && !Array.isArray(value)) {
+        return (0,external_wp_i18n_namespaceObject.__)('Value must be an array.');
+      }
+
+      // Only allow strings for now. Can be extended to other types in the future.
+      if (!value.every(v => typeof v === 'string')) {
+        return (0,external_wp_i18n_namespaceObject.__)('Every value must be a string.');
+      }
+      if (field?.elements) {
+        const validValues = field.elements.map(f => f.value);
+        if (!value.every(v => validValues.includes(v))) {
+          return (0,external_wp_i18n_namespaceObject.__)('Value must be one of the elements.');
+        }
+      }
+      return null;
+    }
+  },
+  Edit: 'array',
+  // Use array control
+  render,
+  enableSorting: true,
+  filterBy: {
+    defaultOperators: [OPERATOR_IS_ANY, OPERATOR_IS_NONE],
+    validOperators: [OPERATOR_IS_ANY, OPERATOR_IS_NONE, OPERATOR_IS_ALL, OPERATOR_IS_NOT_ALL]
+  }
+};
+/* harmony default export */ const array = (arrayFieldType);
+
+;// ./packages/dataviews/build-module/field-types/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
 
 
 
@@ -5656,6 +6272,9 @@ function datetime_isValid(value, context) {
  * @return A field type definition.
  */
 function getFieldTypeDefinition(type) {
+  if ('email' === type) {
+    return email;
+  }
   if ('integer' === type) {
     return integer;
   }
@@ -5665,6 +6284,21 @@ function getFieldTypeDefinition(type) {
   if ('datetime' === type) {
     return datetime;
   }
+  if ('date' === type) {
+    return date;
+  }
+  if ('boolean' === type) {
+    return field_types_boolean;
+  }
+  if ('media' === type) {
+    return media;
+  }
+  if ('array' === type) {
+    return array;
+  }
+
+  // This is a fallback for fields that don't provide a type.
+  // It can be removed when the field.type is mandatory.
   return {
     sort: (a, b, direction) => {
       if (typeof a === 'number' && typeof b === 'number') {
@@ -5672,21 +6306,183 @@ function getFieldTypeDefinition(type) {
       }
       return direction === 'asc' ? a.localeCompare(b) : b.localeCompare(a);
     },
-    isValid: (value, context) => {
-      if (context?.elements) {
-        const validValues = context?.elements?.map(f => f.value);
-        if (!validValues.includes(value)) {
-          return false;
+    isValid: {
+      custom: (item, field) => {
+        if (field?.elements) {
+          const value = field.getValue({
+            item
+          });
+          const validValues = field?.elements?.map(f => f.value);
+          if (!validValues.includes(value)) {
+            return (0,external_wp_i18n_namespaceObject.__)('Value must be one of the elements.');
+          }
         }
+        return null;
       }
-      return true;
     },
-    Edit: () => null
+    Edit: null,
+    render: ({
+      item,
+      field
+    }) => {
+      return field.elements ? renderFromElements({
+        item,
+        field
+      }) : field.getValue({
+        item
+      });
+    },
+    enableSorting: true,
+    filterBy: {
+      defaultOperators: [OPERATOR_IS, OPERATOR_IS_NOT],
+      validOperators: ALL_OPERATORS
+    }
   };
 }
 
 ;// external ["wp","components"]
 const external_wp_components_namespaceObject = window["wp"]["components"];
+;// ./packages/dataviews/build-module/dataform-controls/checkbox.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+function Checkbox({
+  field,
+  onChange,
+  data,
+  hideLabelFromVision
+}) {
+  const {
+    id,
+    getValue,
+    label,
+    description
+  } = field;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CheckboxControl, {
+    __nextHasNoMarginBottom: true,
+    hidden: hideLabelFromVision,
+    label: label,
+    help: description,
+    checked: getValue({
+      item: data
+    }),
+    onChange: () => onChange({
+      [id]: !getValue({
+        item: data
+      })
+    })
+  });
+}
+
+;// ./node_modules/clsx/dist/clsx.mjs
+function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e)){var o=e.length;for(t=0;t<o;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f)}else for(f in e)e[f]&&(n&&(n+=" "),n+=f);return n}function clsx(){for(var e,t,f=0,n="",o=arguments.length;f<o;f++)(e=arguments[f])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}/* harmony default export */ const dist_clsx = (clsx);
+;// ./packages/dataviews/build-module/dataform-controls/relative-date-control.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const TIME_UNITS_OPTIONS = {
+  [OPERATOR_IN_THE_PAST]: [{
+    value: 'days',
+    label: (0,external_wp_i18n_namespaceObject.__)('Days')
+  }, {
+    value: 'weeks',
+    label: (0,external_wp_i18n_namespaceObject.__)('Weeks')
+  }, {
+    value: 'months',
+    label: (0,external_wp_i18n_namespaceObject.__)('Months')
+  }, {
+    value: 'years',
+    label: (0,external_wp_i18n_namespaceObject.__)('Years')
+  }],
+  [OPERATOR_OVER]: [{
+    value: 'days',
+    label: (0,external_wp_i18n_namespaceObject.__)('Days ago')
+  }, {
+    value: 'weeks',
+    label: (0,external_wp_i18n_namespaceObject.__)('Weeks ago')
+  }, {
+    value: 'months',
+    label: (0,external_wp_i18n_namespaceObject.__)('Months ago')
+  }, {
+    value: 'years',
+    label: (0,external_wp_i18n_namespaceObject.__)('Years ago')
+  }]
+};
+function RelativeDateControl({
+  id,
+  value,
+  onChange,
+  label,
+  hideLabelFromVision,
+  options,
+  className
+}) {
+  const {
+    value: relValue = '',
+    unit = options[0].value
+  } = value;
+  const onChangeValue = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
+    [id]: {
+      value: Number(newValue),
+      unit
+    }
+  }), [id, onChange, unit]);
+  const onChangeUnit = (0,external_wp_element_namespaceObject.useCallback)(newUnit => onChange({
+    [id]: {
+      value: relValue,
+      unit: newUnit
+    }
+  }), [id, onChange, relValue]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
+    id: id,
+    __nextHasNoMarginBottom: true,
+    className: dist_clsx(className, 'dataviews-controls__relative-date'),
+    label: label,
+    hideLabelFromVision: hideLabelFromVision,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+      spacing: 2.5,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+        __next40pxDefaultSize: true,
+        className: "dataviews-controls__relative-date-number",
+        spinControls: "none",
+        min: 1,
+        step: 1,
+        value: relValue,
+        onChange: onChangeValue
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
+        className: "dataviews-controls__relative-date-unit",
+        __next40pxDefaultSize: true,
+        __nextHasNoMarginBottom: true,
+        label: (0,external_wp_i18n_namespaceObject.__)('Unit'),
+        value: unit,
+        options: options,
+        onChange: onChangeUnit,
+        hideLabelFromVision: true
+      })]
+    })
+  });
+}
+
 ;// ./packages/dataviews/build-module/dataform-controls/datetime.js
 /**
  * WordPress dependencies
@@ -5698,11 +6494,15 @@ const external_wp_components_namespaceObject = window["wp"]["components"];
  * Internal dependencies
  */
 
+
+
+
 function DateTime({
   data,
   field,
   onChange,
-  hideLabelFromVision
+  hideLabelFromVision,
+  operator
 }) {
   const {
     id,
@@ -5714,6 +6514,16 @@ function DateTime({
   const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
     [id]: newValue
   }), [id, onChange]);
+  if (operator === OPERATOR_IN_THE_PAST || operator === OPERATOR_OVER) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(RelativeDateControl, {
+      id: id,
+      value: value && typeof value === 'object' ? value : {},
+      onChange: onChange,
+      label: label,
+      hideLabelFromVision: hideLabelFromVision,
+      options: TIME_UNITS_OPTIONS[operator]
+    });
+  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("fieldset", {
     className: "dataviews-controls__datetime",
     children: [!hideLabelFromVision && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl.VisualLabel, {
@@ -5723,14 +6533,3848 @@ function DateTime({
       as: "legend",
       children: label
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.TimePicker, {
-      currentTime: value,
+      currentTime: typeof value === 'string' ? value : undefined,
       onChange: onChangeControl,
       hideLabelFromVision: true
     })]
   });
 }
 
-;// ./packages/dataviews/build-module/dataform-controls/integer.js
+;// ./packages/dataviews/node_modules/date-fns/constants.js
+/**
+ * @module constants
+ * @summary Useful constants
+ * @description
+ * Collection of useful date constants.
+ *
+ * The constants could be imported from `date-fns/constants`:
+ *
+ * ```ts
+ * import { maxTime, minTime } from "./constants/date-fns/constants";
+ *
+ * function isAllowedTime(time) {
+ *   return time <= maxTime && time >= minTime;
+ * }
+ * ```
+ */
+
+/**
+ * @constant
+ * @name daysInWeek
+ * @summary Days in 1 week.
+ */
+const daysInWeek = 7;
+
+/**
+ * @constant
+ * @name daysInYear
+ * @summary Days in 1 year.
+ *
+ * @description
+ * How many days in a year.
+ *
+ * One years equals 365.2425 days according to the formula:
+ *
+ * > Leap year occurs every 4 years, except for years that are divisible by 100 and not divisible by 400.
+ * > 1 mean year = (365+1/4-1/100+1/400) days = 365.2425 days
+ */
+const daysInYear = 365.2425;
+
+/**
+ * @constant
+ * @name maxTime
+ * @summary Maximum allowed time.
+ *
+ * @example
+ * import { maxTime } from "./constants/date-fns/constants";
+ *
+ * const isValid = 8640000000000001 <= maxTime;
+ * //=> false
+ *
+ * new Date(8640000000000001);
+ * //=> Invalid Date
+ */
+const maxTime = Math.pow(10, 8) * 24 * 60 * 60 * 1000;
+
+/**
+ * @constant
+ * @name minTime
+ * @summary Minimum allowed time.
+ *
+ * @example
+ * import { minTime } from "./constants/date-fns/constants";
+ *
+ * const isValid = -8640000000000001 >= minTime;
+ * //=> false
+ *
+ * new Date(-8640000000000001)
+ * //=> Invalid Date
+ */
+const minTime = -maxTime;
+
+/**
+ * @constant
+ * @name millisecondsInWeek
+ * @summary Milliseconds in 1 week.
+ */
+const millisecondsInWeek = 604800000;
+
+/**
+ * @constant
+ * @name millisecondsInDay
+ * @summary Milliseconds in 1 day.
+ */
+const millisecondsInDay = 86400000;
+
+/**
+ * @constant
+ * @name millisecondsInMinute
+ * @summary Milliseconds in 1 minute
+ */
+const millisecondsInMinute = 60000;
+
+/**
+ * @constant
+ * @name millisecondsInHour
+ * @summary Milliseconds in 1 hour
+ */
+const millisecondsInHour = 3600000;
+
+/**
+ * @constant
+ * @name millisecondsInSecond
+ * @summary Milliseconds in 1 second
+ */
+const millisecondsInSecond = 1000;
+
+/**
+ * @constant
+ * @name minutesInYear
+ * @summary Minutes in 1 year.
+ */
+const minutesInYear = 525600;
+
+/**
+ * @constant
+ * @name minutesInMonth
+ * @summary Minutes in 1 month.
+ */
+const minutesInMonth = 43200;
+
+/**
+ * @constant
+ * @name minutesInDay
+ * @summary Minutes in 1 day.
+ */
+const minutesInDay = 1440;
+
+/**
+ * @constant
+ * @name minutesInHour
+ * @summary Minutes in 1 hour.
+ */
+const minutesInHour = 60;
+
+/**
+ * @constant
+ * @name monthsInQuarter
+ * @summary Months in 1 quarter.
+ */
+const monthsInQuarter = 3;
+
+/**
+ * @constant
+ * @name monthsInYear
+ * @summary Months in 1 year.
+ */
+const monthsInYear = 12;
+
+/**
+ * @constant
+ * @name quartersInYear
+ * @summary Quarters in 1 year
+ */
+const quartersInYear = 4;
+
+/**
+ * @constant
+ * @name secondsInHour
+ * @summary Seconds in 1 hour.
+ */
+const secondsInHour = 3600;
+
+/**
+ * @constant
+ * @name secondsInMinute
+ * @summary Seconds in 1 minute.
+ */
+const secondsInMinute = 60;
+
+/**
+ * @constant
+ * @name secondsInDay
+ * @summary Seconds in 1 day.
+ */
+const secondsInDay = secondsInHour * 24;
+
+/**
+ * @constant
+ * @name secondsInWeek
+ * @summary Seconds in 1 week.
+ */
+const secondsInWeek = secondsInDay * 7;
+
+/**
+ * @constant
+ * @name secondsInYear
+ * @summary Seconds in 1 year.
+ */
+const secondsInYear = secondsInDay * daysInYear;
+
+/**
+ * @constant
+ * @name secondsInMonth
+ * @summary Seconds in 1 month
+ */
+const secondsInMonth = secondsInYear / 12;
+
+/**
+ * @constant
+ * @name secondsInQuarter
+ * @summary Seconds in 1 quarter.
+ */
+const secondsInQuarter = secondsInMonth * 3;
+
+/**
+ * @constant
+ * @name constructFromSymbol
+ * @summary Symbol enabling Date extensions to inherit properties from the reference date.
+ *
+ * The symbol is used to enable the `constructFrom` function to construct a date
+ * using a reference date and a value. It allows to transfer extra properties
+ * from the reference date to the new date. It's useful for extensions like
+ * [`TZDate`](https://github.com/date-fns/tz) that accept a time zone as
+ * a constructor argument.
+ */
+const constructFromSymbol = Symbol.for("constructDateFrom");
+
+;// ./packages/dataviews/node_modules/date-fns/constructFrom.js
+
+
+/**
+ * @name constructFrom
+ * @category Generic Helpers
+ * @summary Constructs a date using the reference date and the value
+ *
+ * @description
+ * The function constructs a new date using the constructor from the reference
+ * date and the given value. It helps to build generic functions that accept
+ * date extensions.
+ *
+ * It defaults to `Date` if the passed reference date is a number or a string.
+ *
+ * Starting from v3.7.0, it allows to construct a date using `[Symbol.for("constructDateFrom")]`
+ * enabling to transfer extra properties from the reference date to the new date.
+ * It's useful for extensions like [`TZDate`](https://github.com/date-fns/tz)
+ * that accept a time zone as a constructor argument.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The reference date to take constructor from
+ * @param value - The value to create the date
+ *
+ * @returns Date initialized using the given date and value
+ *
+ * @example
+ * import { constructFrom } from "./constructFrom/date-fns";
+ *
+ * // A function that clones a date preserving the original type
+ * function cloneDate<DateType extends Date>(date: DateType): DateType {
+ *   return constructFrom(
+ *     date, // Use constructor from the given date
+ *     date.getTime() // Use the date value to create a new date
+ *   );
+ * }
+ */
+function constructFrom(date, value) {
+  if (typeof date === "function") return date(value);
+
+  if (date && typeof date === "object" && constructFromSymbol in date)
+    return date[constructFromSymbol](value);
+
+  if (date instanceof Date) return new date.constructor(value);
+
+  return new Date(value);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_constructFrom = ((/* unused pure expression or super */ null && (constructFrom)));
+
+;// ./packages/dataviews/node_modules/date-fns/toDate.js
+
+
+/**
+ * @name toDate
+ * @category Common Helpers
+ * @summary Convert the given argument to an instance of Date.
+ *
+ * @description
+ * Convert the given argument to an instance of Date.
+ *
+ * If the argument is an instance of Date, the function returns its clone.
+ *
+ * If the argument is a number, it is treated as a timestamp.
+ *
+ * If the argument is none of the above, the function returns Invalid Date.
+ *
+ * Starting from v3.7.0, it clones a date using `[Symbol.for("constructDateFrom")]`
+ * enabling to transfer extra properties from the reference date to the new date.
+ * It's useful for extensions like [`TZDate`](https://github.com/date-fns/tz)
+ * that accept a time zone as a constructor argument.
+ *
+ * **Note**: *all* Date arguments passed to any *date-fns* function is processed by `toDate`.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param argument - The value to convert
+ *
+ * @returns The parsed date in the local time zone
+ *
+ * @example
+ * // Clone the date:
+ * const result = toDate(new Date(2014, 1, 11, 11, 30, 30))
+ * //=> Tue Feb 11 2014 11:30:30
+ *
+ * @example
+ * // Convert the timestamp to date:
+ * const result = toDate(1392098430000)
+ * //=> Tue Feb 11 2014 11:30:30
+ */
+function toDate(argument, context) {
+  // [TODO] Get rid of `toDate` or `constructFrom`?
+  return constructFrom(context || argument, argument);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_toDate = ((/* unused pure expression or super */ null && (toDate)));
+
+;// ./packages/dataviews/node_modules/date-fns/addDays.js
+
+
+
+/**
+ * The {@link addDays} function options.
+ */
+
+/**
+ * @name addDays
+ * @category Day Helpers
+ * @summary Add the specified number of days to the given date.
+ *
+ * @description
+ * Add the specified number of days to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of days to be added.
+ * @param options - An object with options
+ *
+ * @returns The new date with the days added
+ *
+ * @example
+ * // Add 10 days to 1 September 2014:
+ * const result = addDays(new Date(2014, 8, 1), 10)
+ * //=> Thu Sep 11 2014 00:00:00
+ */
+function addDays(date, amount, options) {
+  const _date = toDate(date, options?.in);
+  if (isNaN(amount)) return constructFrom(options?.in || date, NaN);
+
+  // If 0 days, no-op to avoid changing times in the hour before end of DST
+  if (!amount) return _date;
+
+  _date.setDate(_date.getDate() + amount);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_addDays = ((/* unused pure expression or super */ null && (addDays)));
+
+;// ./packages/dataviews/node_modules/date-fns/subDays.js
+
+
+/**
+ * The {@link subDays} function options.
+ */
+
+/**
+ * @name subDays
+ * @category Day Helpers
+ * @summary Subtract the specified number of days from the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of days to be subtracted.
+ * @param options - An object with options
+ *
+ * @returns The new date with the days subtracted
+ *
+ * @example
+ * // Subtract 10 days from 1 September 2014:
+ * const result = subDays(new Date(2014, 8, 1), 10)
+ * //=> Fri Aug 22 2014 00:00:00
+ */
+function subDays(date, amount, options) {
+  return addDays(date, -amount, options);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_subDays = ((/* unused pure expression or super */ null && (subDays)));
+
+;// ./packages/dataviews/node_modules/date-fns/addMonths.js
+
+
+
+/**
+ * The {@link addMonths} function options.
+ */
+
+/**
+ * @name addMonths
+ * @category Month Helpers
+ * @summary Add the specified number of months to the given date.
+ *
+ * @description
+ * Add the specified number of months to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of months to be added.
+ * @param options - The options object
+ *
+ * @returns The new date with the months added
+ *
+ * @example
+ * // Add 5 months to 1 September 2014:
+ * const result = addMonths(new Date(2014, 8, 1), 5)
+ * //=> Sun Feb 01 2015 00:00:00
+ *
+ * // Add one month to 30 January 2023:
+ * const result = addMonths(new Date(2023, 0, 30), 1)
+ * //=> Tue Feb 28 2023 00:00:00
+ */
+function addMonths(date, amount, options) {
+  const _date = toDate(date, options?.in);
+  if (isNaN(amount)) return constructFrom(options?.in || date, NaN);
+  if (!amount) {
+    // If 0 months, no-op to avoid changing times in the hour before end of DST
+    return _date;
+  }
+  const dayOfMonth = _date.getDate();
+
+  // The JS Date object supports date math by accepting out-of-bounds values for
+  // month, day, etc. For example, new Date(2020, 0, 0) returns 31 Dec 2019 and
+  // new Date(2020, 13, 1) returns 1 Feb 2021.  This is *almost* the behavior we
+  // want except that dates will wrap around the end of a month, meaning that
+  // new Date(2020, 13, 31) will return 3 Mar 2021 not 28 Feb 2021 as desired. So
+  // we'll default to the end of the desired month by adding 1 to the desired
+  // month and using a date of 0 to back up one day to the end of the desired
+  // month.
+  const endOfDesiredMonth = constructFrom(options?.in || date, _date.getTime());
+  endOfDesiredMonth.setMonth(_date.getMonth() + amount + 1, 0);
+  const daysInMonth = endOfDesiredMonth.getDate();
+  if (dayOfMonth >= daysInMonth) {
+    // If we're already at the end of the month, then this is the correct date
+    // and we're done.
+    return endOfDesiredMonth;
+  } else {
+    // Otherwise, we now know that setting the original day-of-month value won't
+    // cause an overflow, so set the desired day-of-month. Note that we can't
+    // just set the date of `endOfDesiredMonth` because that object may have had
+    // its time changed in the unusual case where where a DST transition was on
+    // the last day of the month and its local time was in the hour skipped or
+    // repeated next to a DST transition.  So we use `date` instead which is
+    // guaranteed to still have the original time.
+    _date.setFullYear(
+      endOfDesiredMonth.getFullYear(),
+      endOfDesiredMonth.getMonth(),
+      dayOfMonth,
+    );
+    return _date;
+  }
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_addMonths = ((/* unused pure expression or super */ null && (addMonths)));
+
+;// ./packages/dataviews/node_modules/date-fns/subMonths.js
+
+
+/**
+ * The subMonths function options.
+ */
+
+/**
+ * @name subMonths
+ * @category Month Helpers
+ * @summary Subtract the specified number of months from the given date.
+ *
+ * @description
+ * Subtract the specified number of months from the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of months to be subtracted.
+ * @param options - An object with options
+ *
+ * @returns The new date with the months subtracted
+ *
+ * @example
+ * // Subtract 5 months from 1 February 2015:
+ * const result = subMonths(new Date(2015, 1, 1), 5)
+ * //=> Mon Sep 01 2014 00:00:00
+ */
+function subMonths(date, amount, options) {
+  return addMonths(date, -amount, options);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_subMonths = ((/* unused pure expression or super */ null && (subMonths)));
+
+;// ./packages/dataviews/node_modules/date-fns/startOfMonth.js
+
+
+/**
+ * The {@link startOfMonth} function options.
+ */
+
+/**
+ * @name startOfMonth
+ * @category Month Helpers
+ * @summary Return the start of a month for the given date.
+ *
+ * @description
+ * Return the start of a month for the given date. The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments.
+ * Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed,
+ * or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of a month
+ *
+ * @example
+ * // The start of a month for 2 September 2014 11:55:00:
+ * const result = startOfMonth(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Mon Sep 01 2014 00:00:00
+ */
+function startOfMonth(date, options) {
+  const _date = toDate(date, options?.in);
+  _date.setDate(1);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfMonth = ((/* unused pure expression or super */ null && (startOfMonth)));
+
+;// ./packages/dataviews/node_modules/date-fns/addYears.js
+
+
+/**
+ * The {@link addYears} function options.
+ */
+
+/**
+ * @name addYears
+ * @category Year Helpers
+ * @summary Add the specified number of years to the given date.
+ *
+ * @description
+ * Add the specified number of years to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of years to be added.
+ * @param options - The options
+ *
+ * @returns The new date with the years added
+ *
+ * @example
+ * // Add 5 years to 1 September 2014:
+ * const result = addYears(new Date(2014, 8, 1), 5)
+ * //=> Sun Sep 01 2019 00:00:00
+ */
+function addYears(date, amount, options) {
+  return addMonths(date, amount * 12, options);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_addYears = ((/* unused pure expression or super */ null && (addYears)));
+
+;// ./packages/dataviews/node_modules/date-fns/subYears.js
+
+
+/**
+ * The {@link subYears} function options.
+ */
+
+/**
+ * @name subYears
+ * @category Year Helpers
+ * @summary Subtract the specified number of years from the given date.
+ *
+ * @description
+ * Subtract the specified number of years from the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of years to be subtracted.
+ * @param options - An object with options
+ *
+ * @returns The new date with the years subtracted
+ *
+ * @example
+ * // Subtract 5 years from 1 September 2014:
+ * const result = subYears(new Date(2014, 8, 1), 5)
+ * //=> Tue Sep 01 2009 00:00:00
+ */
+function subYears(date, amount, options) {
+  return addYears(date, -amount, options);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_subYears = ((/* unused pure expression or super */ null && (subYears)));
+
+;// ./packages/dataviews/node_modules/date-fns/startOfYear.js
+
+
+/**
+ * The {@link startOfYear} function options.
+ */
+
+/**
+ * @name startOfYear
+ * @category Year Helpers
+ * @summary Return the start of a year for the given date.
+ *
+ * @description
+ * Return the start of a year for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - The options
+ *
+ * @returns The start of a year
+ *
+ * @example
+ * // The start of a year for 2 September 2014 11:55:00:
+ * const result = startOfYear(new Date(2014, 8, 2, 11, 55, 00))
+ * //=> Wed Jan 01 2014 00:00:00
+ */
+function startOfYear(date, options) {
+  const date_ = toDate(date, options?.in);
+  date_.setFullYear(date_.getFullYear(), 0, 1);
+  date_.setHours(0, 0, 0, 0);
+  return date_;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfYear = ((/* unused pure expression or super */ null && (startOfYear)));
+
+;// ./packages/dataviews/node_modules/date-fns/isDate.js
+/**
+ * @name isDate
+ * @category Common Helpers
+ * @summary Is the given value a date?
+ *
+ * @description
+ * Returns true if the given value is an instance of Date. The function works for dates transferred across iframes.
+ *
+ * @param value - The value to check
+ *
+ * @returns True if the given value is a date
+ *
+ * @example
+ * // For a valid date:
+ * const result = isDate(new Date())
+ * //=> true
+ *
+ * @example
+ * // For an invalid date:
+ * const result = isDate(new Date(NaN))
+ * //=> true
+ *
+ * @example
+ * // For some value:
+ * const result = isDate('2014-02-31')
+ * //=> false
+ *
+ * @example
+ * // For an object:
+ * const result = isDate({})
+ * //=> false
+ */
+function isDate(value) {
+  return (
+    value instanceof Date ||
+    (typeof value === "object" &&
+      Object.prototype.toString.call(value) === "[object Date]")
+  );
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_isDate = ((/* unused pure expression or super */ null && (isDate)));
+
+;// ./packages/dataviews/node_modules/date-fns/isValid.js
+
+
+
+/**
+ * @name isValid
+ * @category Common Helpers
+ * @summary Is the given date valid?
+ *
+ * @description
+ * Returns false if argument is Invalid Date and true otherwise.
+ * Argument is converted to Date using `toDate`. See [toDate](https://date-fns.org/docs/toDate)
+ * Invalid Date is a Date, whose time value is NaN.
+ *
+ * Time value of Date: http://es5.github.io/#x15.9.1.1
+ *
+ * @param date - The date to check
+ *
+ * @returns The date is valid
+ *
+ * @example
+ * // For the valid date:
+ * const result = isValid(new Date(2014, 1, 31))
+ * //=> true
+ *
+ * @example
+ * // For the value, convertible into a date:
+ * const result = isValid(1393804800000)
+ * //=> true
+ *
+ * @example
+ * // For the invalid date:
+ * const result = isValid(new Date(''))
+ * //=> false
+ */
+function isValid(date) {
+  return !((!isDate(date) && typeof date !== "number") || isNaN(+toDate(date)));
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_isValid = ((/* unused pure expression or super */ null && (isValid)));
+
+;// ./packages/dataviews/node_modules/date-fns/locale/en-US/_lib/formatDistance.js
+const formatDistanceLocale = {
+  lessThanXSeconds: {
+    one: "less than a second",
+    other: "less than {{count}} seconds",
+  },
+
+  xSeconds: {
+    one: "1 second",
+    other: "{{count}} seconds",
+  },
+
+  halfAMinute: "half a minute",
+
+  lessThanXMinutes: {
+    one: "less than a minute",
+    other: "less than {{count}} minutes",
+  },
+
+  xMinutes: {
+    one: "1 minute",
+    other: "{{count}} minutes",
+  },
+
+  aboutXHours: {
+    one: "about 1 hour",
+    other: "about {{count}} hours",
+  },
+
+  xHours: {
+    one: "1 hour",
+    other: "{{count}} hours",
+  },
+
+  xDays: {
+    one: "1 day",
+    other: "{{count}} days",
+  },
+
+  aboutXWeeks: {
+    one: "about 1 week",
+    other: "about {{count}} weeks",
+  },
+
+  xWeeks: {
+    one: "1 week",
+    other: "{{count}} weeks",
+  },
+
+  aboutXMonths: {
+    one: "about 1 month",
+    other: "about {{count}} months",
+  },
+
+  xMonths: {
+    one: "1 month",
+    other: "{{count}} months",
+  },
+
+  aboutXYears: {
+    one: "about 1 year",
+    other: "about {{count}} years",
+  },
+
+  xYears: {
+    one: "1 year",
+    other: "{{count}} years",
+  },
+
+  overXYears: {
+    one: "over 1 year",
+    other: "over {{count}} years",
+  },
+
+  almostXYears: {
+    one: "almost 1 year",
+    other: "almost {{count}} years",
+  },
+};
+
+const formatDistance = (token, count, options) => {
+  let result;
+
+  const tokenValue = formatDistanceLocale[token];
+  if (typeof tokenValue === "string") {
+    result = tokenValue;
+  } else if (count === 1) {
+    result = tokenValue.one;
+  } else {
+    result = tokenValue.other.replace("{{count}}", count.toString());
+  }
+
+  if (options?.addSuffix) {
+    if (options.comparison && options.comparison > 0) {
+      return "in " + result;
+    } else {
+      return result + " ago";
+    }
+  }
+
+  return result;
+};
+
+;// ./packages/dataviews/node_modules/date-fns/locale/_lib/buildFormatLongFn.js
+function buildFormatLongFn(args) {
+  return (options = {}) => {
+    // TODO: Remove String()
+    const width = options.width ? String(options.width) : args.defaultWidth;
+    const format = args.formats[width] || args.formats[args.defaultWidth];
+    return format;
+  };
+}
+
+;// ./packages/dataviews/node_modules/date-fns/locale/en-US/_lib/formatLong.js
+
+
+const dateFormats = {
+  full: "EEEE, MMMM do, y",
+  long: "MMMM do, y",
+  medium: "MMM d, y",
+  short: "MM/dd/yyyy",
+};
+
+const timeFormats = {
+  full: "h:mm:ss a zzzz",
+  long: "h:mm:ss a z",
+  medium: "h:mm:ss a",
+  short: "h:mm a",
+};
+
+const dateTimeFormats = {
+  full: "{{date}} 'at' {{time}}",
+  long: "{{date}} 'at' {{time}}",
+  medium: "{{date}}, {{time}}",
+  short: "{{date}}, {{time}}",
+};
+
+const formatLong = {
+  date: buildFormatLongFn({
+    formats: dateFormats,
+    defaultWidth: "full",
+  }),
+
+  time: buildFormatLongFn({
+    formats: timeFormats,
+    defaultWidth: "full",
+  }),
+
+  dateTime: buildFormatLongFn({
+    formats: dateTimeFormats,
+    defaultWidth: "full",
+  }),
+};
+
+;// ./packages/dataviews/node_modules/date-fns/locale/en-US/_lib/formatRelative.js
+const formatRelativeLocale = {
+  lastWeek: "'last' eeee 'at' p",
+  yesterday: "'yesterday at' p",
+  today: "'today at' p",
+  tomorrow: "'tomorrow at' p",
+  nextWeek: "eeee 'at' p",
+  other: "P",
+};
+
+const formatRelative = (token, _date, _baseDate, _options) =>
+  formatRelativeLocale[token];
+
+;// ./packages/dataviews/node_modules/date-fns/locale/_lib/buildLocalizeFn.js
+/**
+ * The localize function argument callback which allows to convert raw value to
+ * the actual type.
+ *
+ * @param value - The value to convert
+ *
+ * @returns The converted value
+ */
+
+/**
+ * The map of localized values for each width.
+ */
+
+/**
+ * The index type of the locale unit value. It types conversion of units of
+ * values that don't start at 0 (i.e. quarters).
+ */
+
+/**
+ * Converts the unit value to the tuple of values.
+ */
+
+/**
+ * The tuple of localized era values. The first element represents BC,
+ * the second element represents AD.
+ */
+
+/**
+ * The tuple of localized quarter values. The first element represents Q1.
+ */
+
+/**
+ * The tuple of localized day values. The first element represents Sunday.
+ */
+
+/**
+ * The tuple of localized month values. The first element represents January.
+ */
+
+function buildLocalizeFn(args) {
+  return (value, options) => {
+    const context = options?.context ? String(options.context) : "standalone";
+
+    let valuesArray;
+    if (context === "formatting" && args.formattingValues) {
+      const defaultWidth = args.defaultFormattingWidth || args.defaultWidth;
+      const width = options?.width ? String(options.width) : defaultWidth;
+
+      valuesArray =
+        args.formattingValues[width] || args.formattingValues[defaultWidth];
+    } else {
+      const defaultWidth = args.defaultWidth;
+      const width = options?.width ? String(options.width) : args.defaultWidth;
+
+      valuesArray = args.values[width] || args.values[defaultWidth];
+    }
+    const index = args.argumentCallback ? args.argumentCallback(value) : value;
+
+    // @ts-expect-error - For some reason TypeScript just don't want to match it, no matter how hard we try. I challenge you to try to remove it!
+    return valuesArray[index];
+  };
+}
+
+;// ./packages/dataviews/node_modules/date-fns/locale/en-US/_lib/localize.js
+
+
+const eraValues = {
+  narrow: ["B", "A"],
+  abbreviated: ["BC", "AD"],
+  wide: ["Before Christ", "Anno Domini"],
+};
+
+const quarterValues = {
+  narrow: ["1", "2", "3", "4"],
+  abbreviated: ["Q1", "Q2", "Q3", "Q4"],
+  wide: ["1st quarter", "2nd quarter", "3rd quarter", "4th quarter"],
+};
+
+// Note: in English, the names of days of the week and months are capitalized.
+// If you are making a new locale based on this one, check if the same is true for the language you're working on.
+// Generally, formatted dates should look like they are in the middle of a sentence,
+// e.g. in Spanish language the weekdays and months should be in the lowercase.
+const monthValues = {
+  narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+  abbreviated: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+
+  wide: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+};
+
+const dayValues = {
+  narrow: ["S", "M", "T", "W", "T", "F", "S"],
+  short: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+  abbreviated: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  wide: [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ],
+};
+
+const dayPeriodValues = {
+  narrow: {
+    am: "a",
+    pm: "p",
+    midnight: "mi",
+    noon: "n",
+    morning: "morning",
+    afternoon: "afternoon",
+    evening: "evening",
+    night: "night",
+  },
+  abbreviated: {
+    am: "AM",
+    pm: "PM",
+    midnight: "midnight",
+    noon: "noon",
+    morning: "morning",
+    afternoon: "afternoon",
+    evening: "evening",
+    night: "night",
+  },
+  wide: {
+    am: "a.m.",
+    pm: "p.m.",
+    midnight: "midnight",
+    noon: "noon",
+    morning: "morning",
+    afternoon: "afternoon",
+    evening: "evening",
+    night: "night",
+  },
+};
+
+const formattingDayPeriodValues = {
+  narrow: {
+    am: "a",
+    pm: "p",
+    midnight: "mi",
+    noon: "n",
+    morning: "in the morning",
+    afternoon: "in the afternoon",
+    evening: "in the evening",
+    night: "at night",
+  },
+  abbreviated: {
+    am: "AM",
+    pm: "PM",
+    midnight: "midnight",
+    noon: "noon",
+    morning: "in the morning",
+    afternoon: "in the afternoon",
+    evening: "in the evening",
+    night: "at night",
+  },
+  wide: {
+    am: "a.m.",
+    pm: "p.m.",
+    midnight: "midnight",
+    noon: "noon",
+    morning: "in the morning",
+    afternoon: "in the afternoon",
+    evening: "in the evening",
+    night: "at night",
+  },
+};
+
+const ordinalNumber = (dirtyNumber, _options) => {
+  const number = Number(dirtyNumber);
+
+  // If ordinal numbers depend on context, for example,
+  // if they are different for different grammatical genders,
+  // use `options.unit`.
+  //
+  // `unit` can be 'year', 'quarter', 'month', 'week', 'date', 'dayOfYear',
+  // 'day', 'hour', 'minute', 'second'.
+
+  const rem100 = number % 100;
+  if (rem100 > 20 || rem100 < 10) {
+    switch (rem100 % 10) {
+      case 1:
+        return number + "st";
+      case 2:
+        return number + "nd";
+      case 3:
+        return number + "rd";
+    }
+  }
+  return number + "th";
+};
+
+const localize = {
+  ordinalNumber,
+
+  era: buildLocalizeFn({
+    values: eraValues,
+    defaultWidth: "wide",
+  }),
+
+  quarter: buildLocalizeFn({
+    values: quarterValues,
+    defaultWidth: "wide",
+    argumentCallback: (quarter) => quarter - 1,
+  }),
+
+  month: buildLocalizeFn({
+    values: monthValues,
+    defaultWidth: "wide",
+  }),
+
+  day: buildLocalizeFn({
+    values: dayValues,
+    defaultWidth: "wide",
+  }),
+
+  dayPeriod: buildLocalizeFn({
+    values: dayPeriodValues,
+    defaultWidth: "wide",
+    formattingValues: formattingDayPeriodValues,
+    defaultFormattingWidth: "wide",
+  }),
+};
+
+;// ./packages/dataviews/node_modules/date-fns/locale/_lib/buildMatchFn.js
+function buildMatchFn(args) {
+  return (string, options = {}) => {
+    const width = options.width;
+
+    const matchPattern =
+      (width && args.matchPatterns[width]) ||
+      args.matchPatterns[args.defaultMatchWidth];
+    const matchResult = string.match(matchPattern);
+
+    if (!matchResult) {
+      return null;
+    }
+    const matchedString = matchResult[0];
+
+    const parsePatterns =
+      (width && args.parsePatterns[width]) ||
+      args.parsePatterns[args.defaultParseWidth];
+
+    const key = Array.isArray(parsePatterns)
+      ? findIndex(parsePatterns, (pattern) => pattern.test(matchedString))
+      : // [TODO] -- I challenge you to fix the type
+        findKey(parsePatterns, (pattern) => pattern.test(matchedString));
+
+    let value;
+
+    value = args.valueCallback ? args.valueCallback(key) : key;
+    value = options.valueCallback
+      ? // [TODO] -- I challenge you to fix the type
+        options.valueCallback(value)
+      : value;
+
+    const rest = string.slice(matchedString.length);
+
+    return { value, rest };
+  };
+}
+
+function findKey(object, predicate) {
+  for (const key in object) {
+    if (
+      Object.prototype.hasOwnProperty.call(object, key) &&
+      predicate(object[key])
+    ) {
+      return key;
+    }
+  }
+  return undefined;
+}
+
+function findIndex(array, predicate) {
+  for (let key = 0; key < array.length; key++) {
+    if (predicate(array[key])) {
+      return key;
+    }
+  }
+  return undefined;
+}
+
+;// ./packages/dataviews/node_modules/date-fns/locale/_lib/buildMatchPatternFn.js
+function buildMatchPatternFn(args) {
+  return (string, options = {}) => {
+    const matchResult = string.match(args.matchPattern);
+    if (!matchResult) return null;
+    const matchedString = matchResult[0];
+
+    const parseResult = string.match(args.parsePattern);
+    if (!parseResult) return null;
+    let value = args.valueCallback
+      ? args.valueCallback(parseResult[0])
+      : parseResult[0];
+
+    // [TODO] I challenge you to fix the type
+    value = options.valueCallback ? options.valueCallback(value) : value;
+
+    const rest = string.slice(matchedString.length);
+
+    return { value, rest };
+  };
+}
+
+;// ./packages/dataviews/node_modules/date-fns/locale/en-US/_lib/match.js
+
+
+
+const matchOrdinalNumberPattern = /^(\d+)(th|st|nd|rd)?/i;
+const parseOrdinalNumberPattern = /\d+/i;
+
+const matchEraPatterns = {
+  narrow: /^(b|a)/i,
+  abbreviated: /^(b\.?\s?c\.?|b\.?\s?c\.?\s?e\.?|a\.?\s?d\.?|c\.?\s?e\.?)/i,
+  wide: /^(before christ|before common era|anno domini|common era)/i,
+};
+const parseEraPatterns = {
+  any: [/^b/i, /^(a|c)/i],
+};
+
+const matchQuarterPatterns = {
+  narrow: /^[1234]/i,
+  abbreviated: /^q[1234]/i,
+  wide: /^[1234](th|st|nd|rd)? quarter/i,
+};
+const parseQuarterPatterns = {
+  any: [/1/i, /2/i, /3/i, /4/i],
+};
+
+const matchMonthPatterns = {
+  narrow: /^[jfmasond]/i,
+  abbreviated: /^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i,
+  wide: /^(january|february|march|april|may|june|july|august|september|october|november|december)/i,
+};
+const parseMonthPatterns = {
+  narrow: [
+    /^j/i,
+    /^f/i,
+    /^m/i,
+    /^a/i,
+    /^m/i,
+    /^j/i,
+    /^j/i,
+    /^a/i,
+    /^s/i,
+    /^o/i,
+    /^n/i,
+    /^d/i,
+  ],
+
+  any: [
+    /^ja/i,
+    /^f/i,
+    /^mar/i,
+    /^ap/i,
+    /^may/i,
+    /^jun/i,
+    /^jul/i,
+    /^au/i,
+    /^s/i,
+    /^o/i,
+    /^n/i,
+    /^d/i,
+  ],
+};
+
+const matchDayPatterns = {
+  narrow: /^[smtwf]/i,
+  short: /^(su|mo|tu|we|th|fr|sa)/i,
+  abbreviated: /^(sun|mon|tue|wed|thu|fri|sat)/i,
+  wide: /^(sunday|monday|tuesday|wednesday|thursday|friday|saturday)/i,
+};
+const parseDayPatterns = {
+  narrow: [/^s/i, /^m/i, /^t/i, /^w/i, /^t/i, /^f/i, /^s/i],
+  any: [/^su/i, /^m/i, /^tu/i, /^w/i, /^th/i, /^f/i, /^sa/i],
+};
+
+const matchDayPeriodPatterns = {
+  narrow: /^(a|p|mi|n|(in the|at) (morning|afternoon|evening|night))/i,
+  any: /^([ap]\.?\s?m\.?|midnight|noon|(in the|at) (morning|afternoon|evening|night))/i,
+};
+const parseDayPeriodPatterns = {
+  any: {
+    am: /^a/i,
+    pm: /^p/i,
+    midnight: /^mi/i,
+    noon: /^no/i,
+    morning: /morning/i,
+    afternoon: /afternoon/i,
+    evening: /evening/i,
+    night: /night/i,
+  },
+};
+
+const match = {
+  ordinalNumber: buildMatchPatternFn({
+    matchPattern: matchOrdinalNumberPattern,
+    parsePattern: parseOrdinalNumberPattern,
+    valueCallback: (value) => parseInt(value, 10),
+  }),
+
+  era: buildMatchFn({
+    matchPatterns: matchEraPatterns,
+    defaultMatchWidth: "wide",
+    parsePatterns: parseEraPatterns,
+    defaultParseWidth: "any",
+  }),
+
+  quarter: buildMatchFn({
+    matchPatterns: matchQuarterPatterns,
+    defaultMatchWidth: "wide",
+    parsePatterns: parseQuarterPatterns,
+    defaultParseWidth: "any",
+    valueCallback: (index) => index + 1,
+  }),
+
+  month: buildMatchFn({
+    matchPatterns: matchMonthPatterns,
+    defaultMatchWidth: "wide",
+    parsePatterns: parseMonthPatterns,
+    defaultParseWidth: "any",
+  }),
+
+  day: buildMatchFn({
+    matchPatterns: matchDayPatterns,
+    defaultMatchWidth: "wide",
+    parsePatterns: parseDayPatterns,
+    defaultParseWidth: "any",
+  }),
+
+  dayPeriod: buildMatchFn({
+    matchPatterns: matchDayPeriodPatterns,
+    defaultMatchWidth: "any",
+    parsePatterns: parseDayPeriodPatterns,
+    defaultParseWidth: "any",
+  }),
+};
+
+;// ./packages/dataviews/node_modules/date-fns/locale/en-US.js
+
+
+
+
+
+
+/**
+ * @category Locales
+ * @summary English locale (United States).
+ * @language English
+ * @iso-639-2 eng
+ * @author Sasha Koss [@kossnocorp](https://github.com/kossnocorp)
+ * @author Lesha Koss [@leshakoss](https://github.com/leshakoss)
+ */
+const enUS = {
+  code: "en-US",
+  formatDistance: formatDistance,
+  formatLong: formatLong,
+  formatRelative: formatRelative,
+  localize: localize,
+  match: match,
+  options: {
+    weekStartsOn: 0 /* Sunday */,
+    firstWeekContainsDate: 1,
+  },
+};
+
+// Fallback for modularized imports:
+/* harmony default export */ const en_US = ((/* unused pure expression or super */ null && (enUS)));
+
+;// ./packages/dataviews/node_modules/date-fns/_lib/defaultOptions.js
+let defaultOptions = {};
+
+function getDefaultOptions() {
+  return defaultOptions;
+}
+
+function setDefaultOptions(newOptions) {
+  defaultOptions = newOptions;
+}
+
+;// ./packages/dataviews/node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds.js
+
+
+/**
+ * Google Chrome as of 67.0.3396.87 introduced timezones with offset that includes seconds.
+ * They usually appear for dates that denote time before the timezones were introduced
+ * (e.g. for 'Europe/Prague' timezone the offset is GMT+00:57:44 before 1 October 1891
+ * and GMT+01:00:00 after that date)
+ *
+ * Date#getTimezoneOffset returns the offset in minutes and would return 57 for the example above,
+ * which would lead to incorrect calculations.
+ *
+ * This function returns the timezone offset in milliseconds that takes seconds in account.
+ */
+function getTimezoneOffsetInMilliseconds(date) {
+  const _date = toDate(date);
+  const utcDate = new Date(
+    Date.UTC(
+      _date.getFullYear(),
+      _date.getMonth(),
+      _date.getDate(),
+      _date.getHours(),
+      _date.getMinutes(),
+      _date.getSeconds(),
+      _date.getMilliseconds(),
+    ),
+  );
+  utcDate.setUTCFullYear(_date.getFullYear());
+  return +date - +utcDate;
+}
+
+;// ./packages/dataviews/node_modules/date-fns/_lib/normalizeDates.js
+
+
+function normalizeDates(context, ...dates) {
+  const normalize = constructFrom.bind(
+    null,
+    context || dates.find((date) => typeof date === "object"),
+  );
+  return dates.map(normalize);
+}
+
+;// ./packages/dataviews/node_modules/date-fns/startOfDay.js
+
+
+/**
+ * The {@link startOfDay} function options.
+ */
+
+/**
+ * @name startOfDay
+ * @category Day Helpers
+ * @summary Return the start of a day for the given date.
+ *
+ * @description
+ * Return the start of a day for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - The options
+ *
+ * @returns The start of a day
+ *
+ * @example
+ * // The start of a day for 2 September 2014 11:55:00:
+ * const result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Tue Sep 02 2014 00:00:00
+ */
+function startOfDay(date, options) {
+  const _date = toDate(date, options?.in);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfDay = ((/* unused pure expression or super */ null && (startOfDay)));
+
+;// ./packages/dataviews/node_modules/date-fns/differenceInCalendarDays.js
+
+
+
+
+
+/**
+ * The {@link differenceInCalendarDays} function options.
+ */
+
+/**
+ * @name differenceInCalendarDays
+ * @category Day Helpers
+ * @summary Get the number of calendar days between the given dates.
+ *
+ * @description
+ * Get the number of calendar days between the given dates. This means that the times are removed
+ * from the dates and then the difference in days is calculated.
+ *
+ * @param laterDate - The later date
+ * @param earlierDate - The earlier date
+ * @param options - The options object
+ *
+ * @returns The number of calendar days
+ *
+ * @example
+ * // How many calendar days are between
+ * // 2 July 2011 23:00:00 and 2 July 2012 00:00:00?
+ * const result = differenceInCalendarDays(
+ *   new Date(2012, 6, 2, 0, 0),
+ *   new Date(2011, 6, 2, 23, 0)
+ * )
+ * //=> 366
+ * // How many calendar days are between
+ * // 2 July 2011 23:59:00 and 3 July 2011 00:01:00?
+ * const result = differenceInCalendarDays(
+ *   new Date(2011, 6, 3, 0, 1),
+ *   new Date(2011, 6, 2, 23, 59)
+ * )
+ * //=> 1
+ */
+function differenceInCalendarDays(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate,
+  );
+
+  const laterStartOfDay = startOfDay(laterDate_);
+  const earlierStartOfDay = startOfDay(earlierDate_);
+
+  const laterTimestamp =
+    +laterStartOfDay - getTimezoneOffsetInMilliseconds(laterStartOfDay);
+  const earlierTimestamp =
+    +earlierStartOfDay - getTimezoneOffsetInMilliseconds(earlierStartOfDay);
+
+  // Round the number of days to the nearest integer because the number of
+  // milliseconds in a day is not constant (e.g. it's different in the week of
+  // the daylight saving time clock shift).
+  return Math.round((laterTimestamp - earlierTimestamp) / millisecondsInDay);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_differenceInCalendarDays = ((/* unused pure expression or super */ null && (differenceInCalendarDays)));
+
+;// ./packages/dataviews/node_modules/date-fns/getDayOfYear.js
+
+
+
+
+/**
+ * The {@link getDayOfYear} function options.
+ */
+
+/**
+ * @name getDayOfYear
+ * @category Day Helpers
+ * @summary Get the day of the year of the given date.
+ *
+ * @description
+ * Get the day of the year of the given date.
+ *
+ * @param date - The given date
+ * @param options - The options
+ *
+ * @returns The day of year
+ *
+ * @example
+ * // Which day of the year is 2 July 2014?
+ * const result = getDayOfYear(new Date(2014, 6, 2))
+ * //=> 183
+ */
+function getDayOfYear(date, options) {
+  const _date = toDate(date, options?.in);
+  const diff = differenceInCalendarDays(_date, startOfYear(_date));
+  const dayOfYear = diff + 1;
+  return dayOfYear;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_getDayOfYear = ((/* unused pure expression or super */ null && (getDayOfYear)));
+
+;// ./packages/dataviews/node_modules/date-fns/startOfWeek.js
+
+
+
+/**
+ * The {@link startOfWeek} function options.
+ */
+
+/**
+ * @name startOfWeek
+ * @category Week Helpers
+ * @summary Return the start of a week for the given date.
+ *
+ * @description
+ * Return the start of a week for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of a week
+ *
+ * @example
+ * // The start of a week for 2 September 2014 11:55:00:
+ * const result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Sun Aug 31 2014 00:00:00
+ *
+ * @example
+ * // If the week starts on Monday, the start of the week for 2 September 2014 11:55:00:
+ * const result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0), { weekStartsOn: 1 })
+ * //=> Mon Sep 01 2014 00:00:00
+ */
+function startOfWeek(date, options) {
+  const defaultOptions = getDefaultOptions();
+  const weekStartsOn =
+    options?.weekStartsOn ??
+    options?.locale?.options?.weekStartsOn ??
+    defaultOptions.weekStartsOn ??
+    defaultOptions.locale?.options?.weekStartsOn ??
+    0;
+
+  const _date = toDate(date, options?.in);
+  const day = _date.getDay();
+  const diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
+
+  _date.setDate(_date.getDate() - diff);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfWeek = ((/* unused pure expression or super */ null && (startOfWeek)));
+
+;// ./packages/dataviews/node_modules/date-fns/startOfISOWeek.js
+
+
+/**
+ * The {@link startOfISOWeek} function options.
+ */
+
+/**
+ * @name startOfISOWeek
+ * @category ISO Week Helpers
+ * @summary Return the start of an ISO week for the given date.
+ *
+ * @description
+ * Return the start of an ISO week for the given date.
+ * The result will be in the local timezone.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of an ISO week
+ *
+ * @example
+ * // The start of an ISO week for 2 September 2014 11:55:00:
+ * const result = startOfISOWeek(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Mon Sep 01 2014 00:00:00
+ */
+function startOfISOWeek(date, options) {
+  return startOfWeek(date, { ...options, weekStartsOn: 1 });
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfISOWeek = ((/* unused pure expression or super */ null && (startOfISOWeek)));
+
+;// ./packages/dataviews/node_modules/date-fns/getISOWeekYear.js
+
+
+
+
+/**
+ * The {@link getISOWeekYear} function options.
+ */
+
+/**
+ * @name getISOWeekYear
+ * @category ISO Week-Numbering Year Helpers
+ * @summary Get the ISO week-numbering year of the given date.
+ *
+ * @description
+ * Get the ISO week-numbering year of the given date,
+ * which always starts 3 days before the year's first Thursday.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @param date - The given date
+ *
+ * @returns The ISO week-numbering year
+ *
+ * @example
+ * // Which ISO-week numbering year is 2 January 2005?
+ * const result = getISOWeekYear(new Date(2005, 0, 2))
+ * //=> 2004
+ */
+function getISOWeekYear(date, options) {
+  const _date = toDate(date, options?.in);
+  const year = _date.getFullYear();
+
+  const fourthOfJanuaryOfNextYear = constructFrom(_date, 0);
+  fourthOfJanuaryOfNextYear.setFullYear(year + 1, 0, 4);
+  fourthOfJanuaryOfNextYear.setHours(0, 0, 0, 0);
+  const startOfNextYear = startOfISOWeek(fourthOfJanuaryOfNextYear);
+
+  const fourthOfJanuaryOfThisYear = constructFrom(_date, 0);
+  fourthOfJanuaryOfThisYear.setFullYear(year, 0, 4);
+  fourthOfJanuaryOfThisYear.setHours(0, 0, 0, 0);
+  const startOfThisYear = startOfISOWeek(fourthOfJanuaryOfThisYear);
+
+  if (_date.getTime() >= startOfNextYear.getTime()) {
+    return year + 1;
+  } else if (_date.getTime() >= startOfThisYear.getTime()) {
+    return year;
+  } else {
+    return year - 1;
+  }
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_getISOWeekYear = ((/* unused pure expression or super */ null && (getISOWeekYear)));
+
+;// ./packages/dataviews/node_modules/date-fns/startOfISOWeekYear.js
+
+
+
+
+/**
+ * The {@link startOfISOWeekYear} function options.
+ */
+
+/**
+ * @name startOfISOWeekYear
+ * @category ISO Week-Numbering Year Helpers
+ * @summary Return the start of an ISO week-numbering year for the given date.
+ *
+ * @description
+ * Return the start of an ISO week-numbering year,
+ * which always starts 3 days before the year's first Thursday.
+ * The result will be in the local timezone.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of an ISO week-numbering year
+ *
+ * @example
+ * // The start of an ISO week-numbering year for 2 July 2005:
+ * const result = startOfISOWeekYear(new Date(2005, 6, 2))
+ * //=> Mon Jan 03 2005 00:00:00
+ */
+function startOfISOWeekYear(date, options) {
+  const year = getISOWeekYear(date, options);
+  const fourthOfJanuary = constructFrom(options?.in || date, 0);
+  fourthOfJanuary.setFullYear(year, 0, 4);
+  fourthOfJanuary.setHours(0, 0, 0, 0);
+  return startOfISOWeek(fourthOfJanuary);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfISOWeekYear = ((/* unused pure expression or super */ null && (startOfISOWeekYear)));
+
+;// ./packages/dataviews/node_modules/date-fns/getISOWeek.js
+
+
+
+
+
+/**
+ * The {@link getISOWeek} function options.
+ */
+
+/**
+ * @name getISOWeek
+ * @category ISO Week Helpers
+ * @summary Get the ISO week of the given date.
+ *
+ * @description
+ * Get the ISO week of the given date.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @param date - The given date
+ * @param options - The options
+ *
+ * @returns The ISO week
+ *
+ * @example
+ * // Which week of the ISO-week numbering year is 2 January 2005?
+ * const result = getISOWeek(new Date(2005, 0, 2))
+ * //=> 53
+ */
+function getISOWeek(date, options) {
+  const _date = toDate(date, options?.in);
+  const diff = +startOfISOWeek(_date) - +startOfISOWeekYear(_date);
+
+  // Round the number of weeks to the nearest integer because the number of
+  // milliseconds in a week is not constant (e.g. it's different in the week of
+  // the daylight saving time clock shift).
+  return Math.round(diff / millisecondsInWeek) + 1;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_getISOWeek = ((/* unused pure expression or super */ null && (getISOWeek)));
+
+;// ./packages/dataviews/node_modules/date-fns/getWeekYear.js
+
+
+
+
+
+/**
+ * The {@link getWeekYear} function options.
+ */
+
+/**
+ * @name getWeekYear
+ * @category Week-Numbering Year Helpers
+ * @summary Get the local week-numbering year of the given date.
+ *
+ * @description
+ * Get the local week-numbering year of the given date.
+ * The exact calculation depends on the values of
+ * `options.weekStartsOn` (which is the index of the first day of the week)
+ * and `options.firstWeekContainsDate` (which is the day of January, which is always in
+ * the first week of the week-numbering year)
+ *
+ * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
+ *
+ * @param date - The given date
+ * @param options - An object with options.
+ *
+ * @returns The local week-numbering year
+ *
+ * @example
+ * // Which week numbering year is 26 December 2004 with the default settings?
+ * const result = getWeekYear(new Date(2004, 11, 26))
+ * //=> 2005
+ *
+ * @example
+ * // Which week numbering year is 26 December 2004 if week starts on Saturday?
+ * const result = getWeekYear(new Date(2004, 11, 26), { weekStartsOn: 6 })
+ * //=> 2004
+ *
+ * @example
+ * // Which week numbering year is 26 December 2004 if the first week contains 4 January?
+ * const result = getWeekYear(new Date(2004, 11, 26), { firstWeekContainsDate: 4 })
+ * //=> 2004
+ */
+function getWeekYear(date, options) {
+  const _date = toDate(date, options?.in);
+  const year = _date.getFullYear();
+
+  const defaultOptions = getDefaultOptions();
+  const firstWeekContainsDate =
+    options?.firstWeekContainsDate ??
+    options?.locale?.options?.firstWeekContainsDate ??
+    defaultOptions.firstWeekContainsDate ??
+    defaultOptions.locale?.options?.firstWeekContainsDate ??
+    1;
+
+  const firstWeekOfNextYear = constructFrom(options?.in || date, 0);
+  firstWeekOfNextYear.setFullYear(year + 1, 0, firstWeekContainsDate);
+  firstWeekOfNextYear.setHours(0, 0, 0, 0);
+  const startOfNextYear = startOfWeek(firstWeekOfNextYear, options);
+
+  const firstWeekOfThisYear = constructFrom(options?.in || date, 0);
+  firstWeekOfThisYear.setFullYear(year, 0, firstWeekContainsDate);
+  firstWeekOfThisYear.setHours(0, 0, 0, 0);
+  const startOfThisYear = startOfWeek(firstWeekOfThisYear, options);
+
+  if (+_date >= +startOfNextYear) {
+    return year + 1;
+  } else if (+_date >= +startOfThisYear) {
+    return year;
+  } else {
+    return year - 1;
+  }
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_getWeekYear = ((/* unused pure expression or super */ null && (getWeekYear)));
+
+;// ./packages/dataviews/node_modules/date-fns/startOfWeekYear.js
+
+
+
+
+
+/**
+ * The {@link startOfWeekYear} function options.
+ */
+
+/**
+ * @name startOfWeekYear
+ * @category Week-Numbering Year Helpers
+ * @summary Return the start of a local week-numbering year for the given date.
+ *
+ * @description
+ * Return the start of a local week-numbering year.
+ * The exact calculation depends on the values of
+ * `options.weekStartsOn` (which is the index of the first day of the week)
+ * and `options.firstWeekContainsDate` (which is the day of January, which is always in
+ * the first week of the week-numbering year)
+ *
+ * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of a week-numbering year
+ *
+ * @example
+ * // The start of an a week-numbering year for 2 July 2005 with default settings:
+ * const result = startOfWeekYear(new Date(2005, 6, 2))
+ * //=> Sun Dec 26 2004 00:00:00
+ *
+ * @example
+ * // The start of a week-numbering year for 2 July 2005
+ * // if Monday is the first day of week
+ * // and 4 January is always in the first week of the year:
+ * const result = startOfWeekYear(new Date(2005, 6, 2), {
+ *   weekStartsOn: 1,
+ *   firstWeekContainsDate: 4
+ * })
+ * //=> Mon Jan 03 2005 00:00:00
+ */
+function startOfWeekYear(date, options) {
+  const defaultOptions = getDefaultOptions();
+  const firstWeekContainsDate =
+    options?.firstWeekContainsDate ??
+    options?.locale?.options?.firstWeekContainsDate ??
+    defaultOptions.firstWeekContainsDate ??
+    defaultOptions.locale?.options?.firstWeekContainsDate ??
+    1;
+
+  const year = getWeekYear(date, options);
+  const firstWeek = constructFrom(options?.in || date, 0);
+  firstWeek.setFullYear(year, 0, firstWeekContainsDate);
+  firstWeek.setHours(0, 0, 0, 0);
+  const _date = startOfWeek(firstWeek, options);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_startOfWeekYear = ((/* unused pure expression or super */ null && (startOfWeekYear)));
+
+;// ./packages/dataviews/node_modules/date-fns/getWeek.js
+
+
+
+
+
+/**
+ * The {@link getWeek} function options.
+ */
+
+/**
+ * @name getWeek
+ * @category Week Helpers
+ * @summary Get the local week index of the given date.
+ *
+ * @description
+ * Get the local week index of the given date.
+ * The exact calculation depends on the values of
+ * `options.weekStartsOn` (which is the index of the first day of the week)
+ * and `options.firstWeekContainsDate` (which is the day of January, which is always in
+ * the first week of the week-numbering year)
+ *
+ * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
+ *
+ * @param date - The given date
+ * @param options - An object with options
+ *
+ * @returns The week
+ *
+ * @example
+ * // Which week of the local week numbering year is 2 January 2005 with default options?
+ * const result = getWeek(new Date(2005, 0, 2))
+ * //=> 2
+ *
+ * @example
+ * // Which week of the local week numbering year is 2 January 2005,
+ * // if Monday is the first day of the week,
+ * // and the first week of the year always contains 4 January?
+ * const result = getWeek(new Date(2005, 0, 2), {
+ *   weekStartsOn: 1,
+ *   firstWeekContainsDate: 4
+ * })
+ * //=> 53
+ */
+function getWeek(date, options) {
+  const _date = toDate(date, options?.in);
+  const diff = +startOfWeek(_date, options) - +startOfWeekYear(_date, options);
+
+  // Round the number of weeks to the nearest integer because the number of
+  // milliseconds in a week is not constant (e.g. it's different in the week of
+  // the daylight saving time clock shift).
+  return Math.round(diff / millisecondsInWeek) + 1;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_getWeek = ((/* unused pure expression or super */ null && (getWeek)));
+
+;// ./packages/dataviews/node_modules/date-fns/_lib/addLeadingZeros.js
+function addLeadingZeros(number, targetLength) {
+  const sign = number < 0 ? "-" : "";
+  const output = Math.abs(number).toString().padStart(targetLength, "0");
+  return sign + output;
+}
+
+;// ./packages/dataviews/node_modules/date-fns/_lib/format/lightFormatters.js
+
+
+/*
+ * |     | Unit                           |     | Unit                           |
+ * |-----|--------------------------------|-----|--------------------------------|
+ * |  a  | AM, PM                         |  A* |                                |
+ * |  d  | Day of month                   |  D  |                                |
+ * |  h  | Hour [1-12]                    |  H  | Hour [0-23]                    |
+ * |  m  | Minute                         |  M  | Month                          |
+ * |  s  | Second                         |  S  | Fraction of second             |
+ * |  y  | Year (abs)                     |  Y  |                                |
+ *
+ * Letters marked by * are not implemented but reserved by Unicode standard.
+ */
+
+const lightFormatters = {
+  // Year
+  y(date, token) {
+    // From http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_tokens
+    // | Year     |     y | yy |   yyy |  yyyy | yyyyy |
+    // |----------|-------|----|-------|-------|-------|
+    // | AD 1     |     1 | 01 |   001 |  0001 | 00001 |
+    // | AD 12    |    12 | 12 |   012 |  0012 | 00012 |
+    // | AD 123   |   123 | 23 |   123 |  0123 | 00123 |
+    // | AD 1234  |  1234 | 34 |  1234 |  1234 | 01234 |
+    // | AD 12345 | 12345 | 45 | 12345 | 12345 | 12345 |
+
+    const signedYear = date.getFullYear();
+    // Returns 1 for 1 BC (which is year 0 in JavaScript)
+    const year = signedYear > 0 ? signedYear : 1 - signedYear;
+    return addLeadingZeros(token === "yy" ? year % 100 : year, token.length);
+  },
+
+  // Month
+  M(date, token) {
+    const month = date.getMonth();
+    return token === "M" ? String(month + 1) : addLeadingZeros(month + 1, 2);
+  },
+
+  // Day of the month
+  d(date, token) {
+    return addLeadingZeros(date.getDate(), token.length);
+  },
+
+  // AM or PM
+  a(date, token) {
+    const dayPeriodEnumValue = date.getHours() / 12 >= 1 ? "pm" : "am";
+
+    switch (token) {
+      case "a":
+      case "aa":
+        return dayPeriodEnumValue.toUpperCase();
+      case "aaa":
+        return dayPeriodEnumValue;
+      case "aaaaa":
+        return dayPeriodEnumValue[0];
+      case "aaaa":
+      default:
+        return dayPeriodEnumValue === "am" ? "a.m." : "p.m.";
+    }
+  },
+
+  // Hour [1-12]
+  h(date, token) {
+    return addLeadingZeros(date.getHours() % 12 || 12, token.length);
+  },
+
+  // Hour [0-23]
+  H(date, token) {
+    return addLeadingZeros(date.getHours(), token.length);
+  },
+
+  // Minute
+  m(date, token) {
+    return addLeadingZeros(date.getMinutes(), token.length);
+  },
+
+  // Second
+  s(date, token) {
+    return addLeadingZeros(date.getSeconds(), token.length);
+  },
+
+  // Fraction of second
+  S(date, token) {
+    const numberOfDigits = token.length;
+    const milliseconds = date.getMilliseconds();
+    const fractionalSeconds = Math.trunc(
+      milliseconds * Math.pow(10, numberOfDigits - 3),
+    );
+    return addLeadingZeros(fractionalSeconds, token.length);
+  },
+};
+
+;// ./packages/dataviews/node_modules/date-fns/_lib/format/formatters.js
+
+
+
+
+
+
+
+
+
+const dayPeriodEnum = {
+  am: "am",
+  pm: "pm",
+  midnight: "midnight",
+  noon: "noon",
+  morning: "morning",
+  afternoon: "afternoon",
+  evening: "evening",
+  night: "night",
+};
+
+/*
+ * |     | Unit                           |     | Unit                           |
+ * |-----|--------------------------------|-----|--------------------------------|
+ * |  a  | AM, PM                         |  A* | Milliseconds in day            |
+ * |  b  | AM, PM, noon, midnight         |  B  | Flexible day period            |
+ * |  c  | Stand-alone local day of week  |  C* | Localized hour w/ day period   |
+ * |  d  | Day of month                   |  D  | Day of year                    |
+ * |  e  | Local day of week              |  E  | Day of week                    |
+ * |  f  |                                |  F* | Day of week in month           |
+ * |  g* | Modified Julian day            |  G  | Era                            |
+ * |  h  | Hour [1-12]                    |  H  | Hour [0-23]                    |
+ * |  i! | ISO day of week                |  I! | ISO week of year               |
+ * |  j* | Localized hour w/ day period   |  J* | Localized hour w/o day period  |
+ * |  k  | Hour [1-24]                    |  K  | Hour [0-11]                    |
+ * |  l* | (deprecated)                   |  L  | Stand-alone month              |
+ * |  m  | Minute                         |  M  | Month                          |
+ * |  n  |                                |  N  |                                |
+ * |  o! | Ordinal number modifier        |  O  | Timezone (GMT)                 |
+ * |  p! | Long localized time            |  P! | Long localized date            |
+ * |  q  | Stand-alone quarter            |  Q  | Quarter                        |
+ * |  r* | Related Gregorian year         |  R! | ISO week-numbering year        |
+ * |  s  | Second                         |  S  | Fraction of second             |
+ * |  t! | Seconds timestamp              |  T! | Milliseconds timestamp         |
+ * |  u  | Extended year                  |  U* | Cyclic year                    |
+ * |  v* | Timezone (generic non-locat.)  |  V* | Timezone (location)            |
+ * |  w  | Local week of year             |  W* | Week of month                  |
+ * |  x  | Timezone (ISO-8601 w/o Z)      |  X  | Timezone (ISO-8601)            |
+ * |  y  | Year (abs)                     |  Y  | Local week-numbering year      |
+ * |  z  | Timezone (specific non-locat.) |  Z* | Timezone (aliases)             |
+ *
+ * Letters marked by * are not implemented but reserved by Unicode standard.
+ *
+ * Letters marked by ! are non-standard, but implemented by date-fns:
+ * - `o` modifies the previous token to turn it into an ordinal (see `format` docs)
+ * - `i` is ISO day of week. For `i` and `ii` is returns numeric ISO week days,
+ *   i.e. 7 for Sunday, 1 for Monday, etc.
+ * - `I` is ISO week of year, as opposed to `w` which is local week of year.
+ * - `R` is ISO week-numbering year, as opposed to `Y` which is local week-numbering year.
+ *   `R` is supposed to be used in conjunction with `I` and `i`
+ *   for universal ISO week-numbering date, whereas
+ *   `Y` is supposed to be used in conjunction with `w` and `e`
+ *   for week-numbering date specific to the locale.
+ * - `P` is long localized date format
+ * - `p` is long localized time format
+ */
+
+const formatters = {
+  // Era
+  G: function (date, token, localize) {
+    const era = date.getFullYear() > 0 ? 1 : 0;
+    switch (token) {
+      // AD, BC
+      case "G":
+      case "GG":
+      case "GGG":
+        return localize.era(era, { width: "abbreviated" });
+      // A, B
+      case "GGGGG":
+        return localize.era(era, { width: "narrow" });
+      // Anno Domini, Before Christ
+      case "GGGG":
+      default:
+        return localize.era(era, { width: "wide" });
+    }
+  },
+
+  // Year
+  y: function (date, token, localize) {
+    // Ordinal number
+    if (token === "yo") {
+      const signedYear = date.getFullYear();
+      // Returns 1 for 1 BC (which is year 0 in JavaScript)
+      const year = signedYear > 0 ? signedYear : 1 - signedYear;
+      return localize.ordinalNumber(year, { unit: "year" });
+    }
+
+    return lightFormatters.y(date, token);
+  },
+
+  // Local week-numbering year
+  Y: function (date, token, localize, options) {
+    const signedWeekYear = getWeekYear(date, options);
+    // Returns 1 for 1 BC (which is year 0 in JavaScript)
+    const weekYear = signedWeekYear > 0 ? signedWeekYear : 1 - signedWeekYear;
+
+    // Two digit year
+    if (token === "YY") {
+      const twoDigitYear = weekYear % 100;
+      return addLeadingZeros(twoDigitYear, 2);
+    }
+
+    // Ordinal number
+    if (token === "Yo") {
+      return localize.ordinalNumber(weekYear, { unit: "year" });
+    }
+
+    // Padding
+    return addLeadingZeros(weekYear, token.length);
+  },
+
+  // ISO week-numbering year
+  R: function (date, token) {
+    const isoWeekYear = getISOWeekYear(date);
+
+    // Padding
+    return addLeadingZeros(isoWeekYear, token.length);
+  },
+
+  // Extended year. This is a single number designating the year of this calendar system.
+  // The main difference between `y` and `u` localizers are B.C. years:
+  // | Year | `y` | `u` |
+  // |------|-----|-----|
+  // | AC 1 |   1 |   1 |
+  // | BC 1 |   1 |   0 |
+  // | BC 2 |   2 |  -1 |
+  // Also `yy` always returns the last two digits of a year,
+  // while `uu` pads single digit years to 2 characters and returns other years unchanged.
+  u: function (date, token) {
+    const year = date.getFullYear();
+    return addLeadingZeros(year, token.length);
+  },
+
+  // Quarter
+  Q: function (date, token, localize) {
+    const quarter = Math.ceil((date.getMonth() + 1) / 3);
+    switch (token) {
+      // 1, 2, 3, 4
+      case "Q":
+        return String(quarter);
+      // 01, 02, 03, 04
+      case "QQ":
+        return addLeadingZeros(quarter, 2);
+      // 1st, 2nd, 3rd, 4th
+      case "Qo":
+        return localize.ordinalNumber(quarter, { unit: "quarter" });
+      // Q1, Q2, Q3, Q4
+      case "QQQ":
+        return localize.quarter(quarter, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // 1, 2, 3, 4 (narrow quarter; could be not numerical)
+      case "QQQQQ":
+        return localize.quarter(quarter, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // 1st quarter, 2nd quarter, ...
+      case "QQQQ":
+      default:
+        return localize.quarter(quarter, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // Stand-alone quarter
+  q: function (date, token, localize) {
+    const quarter = Math.ceil((date.getMonth() + 1) / 3);
+    switch (token) {
+      // 1, 2, 3, 4
+      case "q":
+        return String(quarter);
+      // 01, 02, 03, 04
+      case "qq":
+        return addLeadingZeros(quarter, 2);
+      // 1st, 2nd, 3rd, 4th
+      case "qo":
+        return localize.ordinalNumber(quarter, { unit: "quarter" });
+      // Q1, Q2, Q3, Q4
+      case "qqq":
+        return localize.quarter(quarter, {
+          width: "abbreviated",
+          context: "standalone",
+        });
+      // 1, 2, 3, 4 (narrow quarter; could be not numerical)
+      case "qqqqq":
+        return localize.quarter(quarter, {
+          width: "narrow",
+          context: "standalone",
+        });
+      // 1st quarter, 2nd quarter, ...
+      case "qqqq":
+      default:
+        return localize.quarter(quarter, {
+          width: "wide",
+          context: "standalone",
+        });
+    }
+  },
+
+  // Month
+  M: function (date, token, localize) {
+    const month = date.getMonth();
+    switch (token) {
+      case "M":
+      case "MM":
+        return lightFormatters.M(date, token);
+      // 1st, 2nd, ..., 12th
+      case "Mo":
+        return localize.ordinalNumber(month + 1, { unit: "month" });
+      // Jan, Feb, ..., Dec
+      case "MMM":
+        return localize.month(month, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // J, F, ..., D
+      case "MMMMM":
+        return localize.month(month, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // January, February, ..., December
+      case "MMMM":
+      default:
+        return localize.month(month, { width: "wide", context: "formatting" });
+    }
+  },
+
+  // Stand-alone month
+  L: function (date, token, localize) {
+    const month = date.getMonth();
+    switch (token) {
+      // 1, 2, ..., 12
+      case "L":
+        return String(month + 1);
+      // 01, 02, ..., 12
+      case "LL":
+        return addLeadingZeros(month + 1, 2);
+      // 1st, 2nd, ..., 12th
+      case "Lo":
+        return localize.ordinalNumber(month + 1, { unit: "month" });
+      // Jan, Feb, ..., Dec
+      case "LLL":
+        return localize.month(month, {
+          width: "abbreviated",
+          context: "standalone",
+        });
+      // J, F, ..., D
+      case "LLLLL":
+        return localize.month(month, {
+          width: "narrow",
+          context: "standalone",
+        });
+      // January, February, ..., December
+      case "LLLL":
+      default:
+        return localize.month(month, { width: "wide", context: "standalone" });
+    }
+  },
+
+  // Local week of year
+  w: function (date, token, localize, options) {
+    const week = getWeek(date, options);
+
+    if (token === "wo") {
+      return localize.ordinalNumber(week, { unit: "week" });
+    }
+
+    return addLeadingZeros(week, token.length);
+  },
+
+  // ISO week of year
+  I: function (date, token, localize) {
+    const isoWeek = getISOWeek(date);
+
+    if (token === "Io") {
+      return localize.ordinalNumber(isoWeek, { unit: "week" });
+    }
+
+    return addLeadingZeros(isoWeek, token.length);
+  },
+
+  // Day of the month
+  d: function (date, token, localize) {
+    if (token === "do") {
+      return localize.ordinalNumber(date.getDate(), { unit: "date" });
+    }
+
+    return lightFormatters.d(date, token);
+  },
+
+  // Day of year
+  D: function (date, token, localize) {
+    const dayOfYear = getDayOfYear(date);
+
+    if (token === "Do") {
+      return localize.ordinalNumber(dayOfYear, { unit: "dayOfYear" });
+    }
+
+    return addLeadingZeros(dayOfYear, token.length);
+  },
+
+  // Day of week
+  E: function (date, token, localize) {
+    const dayOfWeek = date.getDay();
+    switch (token) {
+      // Tue
+      case "E":
+      case "EE":
+      case "EEE":
+        return localize.day(dayOfWeek, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // T
+      case "EEEEE":
+        return localize.day(dayOfWeek, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // Tu
+      case "EEEEEE":
+        return localize.day(dayOfWeek, {
+          width: "short",
+          context: "formatting",
+        });
+      // Tuesday
+      case "EEEE":
+      default:
+        return localize.day(dayOfWeek, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // Local day of week
+  e: function (date, token, localize, options) {
+    const dayOfWeek = date.getDay();
+    const localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
+    switch (token) {
+      // Numerical value (Nth day of week with current locale or weekStartsOn)
+      case "e":
+        return String(localDayOfWeek);
+      // Padded numerical value
+      case "ee":
+        return addLeadingZeros(localDayOfWeek, 2);
+      // 1st, 2nd, ..., 7th
+      case "eo":
+        return localize.ordinalNumber(localDayOfWeek, { unit: "day" });
+      case "eee":
+        return localize.day(dayOfWeek, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // T
+      case "eeeee":
+        return localize.day(dayOfWeek, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // Tu
+      case "eeeeee":
+        return localize.day(dayOfWeek, {
+          width: "short",
+          context: "formatting",
+        });
+      // Tuesday
+      case "eeee":
+      default:
+        return localize.day(dayOfWeek, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // Stand-alone local day of week
+  c: function (date, token, localize, options) {
+    const dayOfWeek = date.getDay();
+    const localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
+    switch (token) {
+      // Numerical value (same as in `e`)
+      case "c":
+        return String(localDayOfWeek);
+      // Padded numerical value
+      case "cc":
+        return addLeadingZeros(localDayOfWeek, token.length);
+      // 1st, 2nd, ..., 7th
+      case "co":
+        return localize.ordinalNumber(localDayOfWeek, { unit: "day" });
+      case "ccc":
+        return localize.day(dayOfWeek, {
+          width: "abbreviated",
+          context: "standalone",
+        });
+      // T
+      case "ccccc":
+        return localize.day(dayOfWeek, {
+          width: "narrow",
+          context: "standalone",
+        });
+      // Tu
+      case "cccccc":
+        return localize.day(dayOfWeek, {
+          width: "short",
+          context: "standalone",
+        });
+      // Tuesday
+      case "cccc":
+      default:
+        return localize.day(dayOfWeek, {
+          width: "wide",
+          context: "standalone",
+        });
+    }
+  },
+
+  // ISO day of week
+  i: function (date, token, localize) {
+    const dayOfWeek = date.getDay();
+    const isoDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
+    switch (token) {
+      // 2
+      case "i":
+        return String(isoDayOfWeek);
+      // 02
+      case "ii":
+        return addLeadingZeros(isoDayOfWeek, token.length);
+      // 2nd
+      case "io":
+        return localize.ordinalNumber(isoDayOfWeek, { unit: "day" });
+      // Tue
+      case "iii":
+        return localize.day(dayOfWeek, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // T
+      case "iiiii":
+        return localize.day(dayOfWeek, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // Tu
+      case "iiiiii":
+        return localize.day(dayOfWeek, {
+          width: "short",
+          context: "formatting",
+        });
+      // Tuesday
+      case "iiii":
+      default:
+        return localize.day(dayOfWeek, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // AM or PM
+  a: function (date, token, localize) {
+    const hours = date.getHours();
+    const dayPeriodEnumValue = hours / 12 >= 1 ? "pm" : "am";
+
+    switch (token) {
+      case "a":
+      case "aa":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      case "aaa":
+        return localize
+          .dayPeriod(dayPeriodEnumValue, {
+            width: "abbreviated",
+            context: "formatting",
+          })
+          .toLowerCase();
+      case "aaaaa":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "narrow",
+          context: "formatting",
+        });
+      case "aaaa":
+      default:
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // AM, PM, midnight, noon
+  b: function (date, token, localize) {
+    const hours = date.getHours();
+    let dayPeriodEnumValue;
+    if (hours === 12) {
+      dayPeriodEnumValue = dayPeriodEnum.noon;
+    } else if (hours === 0) {
+      dayPeriodEnumValue = dayPeriodEnum.midnight;
+    } else {
+      dayPeriodEnumValue = hours / 12 >= 1 ? "pm" : "am";
+    }
+
+    switch (token) {
+      case "b":
+      case "bb":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      case "bbb":
+        return localize
+          .dayPeriod(dayPeriodEnumValue, {
+            width: "abbreviated",
+            context: "formatting",
+          })
+          .toLowerCase();
+      case "bbbbb":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "narrow",
+          context: "formatting",
+        });
+      case "bbbb":
+      default:
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // in the morning, in the afternoon, in the evening, at night
+  B: function (date, token, localize) {
+    const hours = date.getHours();
+    let dayPeriodEnumValue;
+    if (hours >= 17) {
+      dayPeriodEnumValue = dayPeriodEnum.evening;
+    } else if (hours >= 12) {
+      dayPeriodEnumValue = dayPeriodEnum.afternoon;
+    } else if (hours >= 4) {
+      dayPeriodEnumValue = dayPeriodEnum.morning;
+    } else {
+      dayPeriodEnumValue = dayPeriodEnum.night;
+    }
+
+    switch (token) {
+      case "B":
+      case "BB":
+      case "BBB":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      case "BBBBB":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "narrow",
+          context: "formatting",
+        });
+      case "BBBB":
+      default:
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // Hour [1-12]
+  h: function (date, token, localize) {
+    if (token === "ho") {
+      let hours = date.getHours() % 12;
+      if (hours === 0) hours = 12;
+      return localize.ordinalNumber(hours, { unit: "hour" });
+    }
+
+    return lightFormatters.h(date, token);
+  },
+
+  // Hour [0-23]
+  H: function (date, token, localize) {
+    if (token === "Ho") {
+      return localize.ordinalNumber(date.getHours(), { unit: "hour" });
+    }
+
+    return lightFormatters.H(date, token);
+  },
+
+  // Hour [0-11]
+  K: function (date, token, localize) {
+    const hours = date.getHours() % 12;
+
+    if (token === "Ko") {
+      return localize.ordinalNumber(hours, { unit: "hour" });
+    }
+
+    return addLeadingZeros(hours, token.length);
+  },
+
+  // Hour [1-24]
+  k: function (date, token, localize) {
+    let hours = date.getHours();
+    if (hours === 0) hours = 24;
+
+    if (token === "ko") {
+      return localize.ordinalNumber(hours, { unit: "hour" });
+    }
+
+    return addLeadingZeros(hours, token.length);
+  },
+
+  // Minute
+  m: function (date, token, localize) {
+    if (token === "mo") {
+      return localize.ordinalNumber(date.getMinutes(), { unit: "minute" });
+    }
+
+    return lightFormatters.m(date, token);
+  },
+
+  // Second
+  s: function (date, token, localize) {
+    if (token === "so") {
+      return localize.ordinalNumber(date.getSeconds(), { unit: "second" });
+    }
+
+    return lightFormatters.s(date, token);
+  },
+
+  // Fraction of second
+  S: function (date, token) {
+    return lightFormatters.S(date, token);
+  },
+
+  // Timezone (ISO-8601. If offset is 0, output is always `'Z'`)
+  X: function (date, token, _localize) {
+    const timezoneOffset = date.getTimezoneOffset();
+
+    if (timezoneOffset === 0) {
+      return "Z";
+    }
+
+    switch (token) {
+      // Hours and optional minutes
+      case "X":
+        return formatTimezoneWithOptionalMinutes(timezoneOffset);
+
+      // Hours, minutes and optional seconds without `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `XX`
+      case "XXXX":
+      case "XX": // Hours and minutes without `:` delimiter
+        return formatTimezone(timezoneOffset);
+
+      // Hours, minutes and optional seconds with `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `XXX`
+      case "XXXXX":
+      case "XXX": // Hours and minutes with `:` delimiter
+      default:
+        return formatTimezone(timezoneOffset, ":");
+    }
+  },
+
+  // Timezone (ISO-8601. If offset is 0, output is `'+00:00'` or equivalent)
+  x: function (date, token, _localize) {
+    const timezoneOffset = date.getTimezoneOffset();
+
+    switch (token) {
+      // Hours and optional minutes
+      case "x":
+        return formatTimezoneWithOptionalMinutes(timezoneOffset);
+
+      // Hours, minutes and optional seconds without `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `xx`
+      case "xxxx":
+      case "xx": // Hours and minutes without `:` delimiter
+        return formatTimezone(timezoneOffset);
+
+      // Hours, minutes and optional seconds with `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `xxx`
+      case "xxxxx":
+      case "xxx": // Hours and minutes with `:` delimiter
+      default:
+        return formatTimezone(timezoneOffset, ":");
+    }
+  },
+
+  // Timezone (GMT)
+  O: function (date, token, _localize) {
+    const timezoneOffset = date.getTimezoneOffset();
+
+    switch (token) {
+      // Short
+      case "O":
+      case "OO":
+      case "OOO":
+        return "GMT" + formatTimezoneShort(timezoneOffset, ":");
+      // Long
+      case "OOOO":
+      default:
+        return "GMT" + formatTimezone(timezoneOffset, ":");
+    }
+  },
+
+  // Timezone (specific non-location)
+  z: function (date, token, _localize) {
+    const timezoneOffset = date.getTimezoneOffset();
+
+    switch (token) {
+      // Short
+      case "z":
+      case "zz":
+      case "zzz":
+        return "GMT" + formatTimezoneShort(timezoneOffset, ":");
+      // Long
+      case "zzzz":
+      default:
+        return "GMT" + formatTimezone(timezoneOffset, ":");
+    }
+  },
+
+  // Seconds timestamp
+  t: function (date, token, _localize) {
+    const timestamp = Math.trunc(+date / 1000);
+    return addLeadingZeros(timestamp, token.length);
+  },
+
+  // Milliseconds timestamp
+  T: function (date, token, _localize) {
+    return addLeadingZeros(+date, token.length);
+  },
+};
+
+function formatTimezoneShort(offset, delimiter = "") {
+  const sign = offset > 0 ? "-" : "+";
+  const absOffset = Math.abs(offset);
+  const hours = Math.trunc(absOffset / 60);
+  const minutes = absOffset % 60;
+  if (minutes === 0) {
+    return sign + String(hours);
+  }
+  return sign + String(hours) + delimiter + addLeadingZeros(minutes, 2);
+}
+
+function formatTimezoneWithOptionalMinutes(offset, delimiter) {
+  if (offset % 60 === 0) {
+    const sign = offset > 0 ? "-" : "+";
+    return sign + addLeadingZeros(Math.abs(offset) / 60, 2);
+  }
+  return formatTimezone(offset, delimiter);
+}
+
+function formatTimezone(offset, delimiter = "") {
+  const sign = offset > 0 ? "-" : "+";
+  const absOffset = Math.abs(offset);
+  const hours = addLeadingZeros(Math.trunc(absOffset / 60), 2);
+  const minutes = addLeadingZeros(absOffset % 60, 2);
+  return sign + hours + delimiter + minutes;
+}
+
+;// ./packages/dataviews/node_modules/date-fns/_lib/format/longFormatters.js
+const dateLongFormatter = (pattern, formatLong) => {
+  switch (pattern) {
+    case "P":
+      return formatLong.date({ width: "short" });
+    case "PP":
+      return formatLong.date({ width: "medium" });
+    case "PPP":
+      return formatLong.date({ width: "long" });
+    case "PPPP":
+    default:
+      return formatLong.date({ width: "full" });
+  }
+};
+
+const timeLongFormatter = (pattern, formatLong) => {
+  switch (pattern) {
+    case "p":
+      return formatLong.time({ width: "short" });
+    case "pp":
+      return formatLong.time({ width: "medium" });
+    case "ppp":
+      return formatLong.time({ width: "long" });
+    case "pppp":
+    default:
+      return formatLong.time({ width: "full" });
+  }
+};
+
+const dateTimeLongFormatter = (pattern, formatLong) => {
+  const matchResult = pattern.match(/(P+)(p+)?/) || [];
+  const datePattern = matchResult[1];
+  const timePattern = matchResult[2];
+
+  if (!timePattern) {
+    return dateLongFormatter(pattern, formatLong);
+  }
+
+  let dateTimeFormat;
+
+  switch (datePattern) {
+    case "P":
+      dateTimeFormat = formatLong.dateTime({ width: "short" });
+      break;
+    case "PP":
+      dateTimeFormat = formatLong.dateTime({ width: "medium" });
+      break;
+    case "PPP":
+      dateTimeFormat = formatLong.dateTime({ width: "long" });
+      break;
+    case "PPPP":
+    default:
+      dateTimeFormat = formatLong.dateTime({ width: "full" });
+      break;
+  }
+
+  return dateTimeFormat
+    .replace("{{date}}", dateLongFormatter(datePattern, formatLong))
+    .replace("{{time}}", timeLongFormatter(timePattern, formatLong));
+};
+
+const longFormatters = {
+  p: timeLongFormatter,
+  P: dateTimeLongFormatter,
+};
+
+;// ./packages/dataviews/node_modules/date-fns/_lib/protectedTokens.js
+const dayOfYearTokenRE = /^D+$/;
+const weekYearTokenRE = /^Y+$/;
+
+const throwTokens = ["D", "DD", "YY", "YYYY"];
+
+function isProtectedDayOfYearToken(token) {
+  return dayOfYearTokenRE.test(token);
+}
+
+function isProtectedWeekYearToken(token) {
+  return weekYearTokenRE.test(token);
+}
+
+function warnOrThrowProtectedError(token, format, input) {
+  const _message = message(token, format, input);
+  console.warn(_message);
+  if (throwTokens.includes(token)) throw new RangeError(_message);
+}
+
+function message(token, format, input) {
+  const subject = token[0] === "Y" ? "years" : "days of the month";
+  return `Use \`${token.toLowerCase()}\` instead of \`${token}\` (in \`${format}\`) for formatting ${subject} to the input \`${input}\`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md`;
+}
+
+;// ./packages/dataviews/node_modules/date-fns/format.js
+
+
+
+
+
+
+
+
+// Rexports of internal for libraries to use.
+// See: https://github.com/date-fns/date-fns/issues/3638#issuecomment-1877082874
+
+
+// This RegExp consists of three parts separated by `|`:
+// - [yYQqMLwIdDecihHKkms]o matches any available ordinal number token
+//   (one of the certain letters followed by `o`)
+// - (\w)\1* matches any sequences of the same letter
+// - '' matches two quote characters in a row
+// - '(''|[^'])+('|$) matches anything surrounded by two quote characters ('),
+//   except a single quote symbol, which ends the sequence.
+//   Two quote characters do not end the sequence.
+//   If there is no matching single quote
+//   then the sequence will continue until the end of the string.
+// - . matches any single character unmatched by previous parts of the RegExps
+const formattingTokensRegExp =
+  /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|$)|./g;
+
+// This RegExp catches symbols escaped by quotes, and also
+// sequences of symbols P, p, and the combinations like `PPPPPPPppppp`
+const longFormattingTokensRegExp = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
+
+const escapedStringRegExp = /^'([^]*?)'?$/;
+const doubleQuoteRegExp = /''/g;
+const unescapedLatinCharacterRegExp = /[a-zA-Z]/;
+
+
+
+/**
+ * The {@link format} function options.
+ */
+
+/**
+ * @name format
+ * @alias formatDate
+ * @category Common Helpers
+ * @summary Format the date.
+ *
+ * @description
+ * Return the formatted date string in the given format. The result may vary by locale.
+ *
+ * > ⚠️ Please note that the `format` tokens differ from Moment.js and other libraries.
+ * > See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ *
+ * The characters wrapped between two single quotes characters (') are escaped.
+ * Two single quotes in a row, whether inside or outside a quoted sequence, represent a 'real' single quote.
+ * (see the last example)
+ *
+ * Format of the string is based on Unicode Technical Standard #35:
+ * https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+ * with a few additions (see note 7 below the table).
+ *
+ * Accepted patterns:
+ * | Unit                            | Pattern | Result examples                   | Notes |
+ * |---------------------------------|---------|-----------------------------------|-------|
+ * | Era                             | G..GGG  | AD, BC                            |       |
+ * |                                 | GGGG    | Anno Domini, Before Christ        | 2     |
+ * |                                 | GGGGG   | A, B                              |       |
+ * | Calendar year                   | y       | 44, 1, 1900, 2017                 | 5     |
+ * |                                 | yo      | 44th, 1st, 0th, 17th              | 5,7   |
+ * |                                 | yy      | 44, 01, 00, 17                    | 5     |
+ * |                                 | yyy     | 044, 001, 1900, 2017              | 5     |
+ * |                                 | yyyy    | 0044, 0001, 1900, 2017            | 5     |
+ * |                                 | yyyyy   | ...                               | 3,5   |
+ * | Local week-numbering year       | Y       | 44, 1, 1900, 2017                 | 5     |
+ * |                                 | Yo      | 44th, 1st, 1900th, 2017th         | 5,7   |
+ * |                                 | YY      | 44, 01, 00, 17                    | 5,8   |
+ * |                                 | YYY     | 044, 001, 1900, 2017              | 5     |
+ * |                                 | YYYY    | 0044, 0001, 1900, 2017            | 5,8   |
+ * |                                 | YYYYY   | ...                               | 3,5   |
+ * | ISO week-numbering year         | R       | -43, 0, 1, 1900, 2017             | 5,7   |
+ * |                                 | RR      | -43, 00, 01, 1900, 2017           | 5,7   |
+ * |                                 | RRR     | -043, 000, 001, 1900, 2017        | 5,7   |
+ * |                                 | RRRR    | -0043, 0000, 0001, 1900, 2017     | 5,7   |
+ * |                                 | RRRRR   | ...                               | 3,5,7 |
+ * | Extended year                   | u       | -43, 0, 1, 1900, 2017             | 5     |
+ * |                                 | uu      | -43, 01, 1900, 2017               | 5     |
+ * |                                 | uuu     | -043, 001, 1900, 2017             | 5     |
+ * |                                 | uuuu    | -0043, 0001, 1900, 2017           | 5     |
+ * |                                 | uuuuu   | ...                               | 3,5   |
+ * | Quarter (formatting)            | Q       | 1, 2, 3, 4                        |       |
+ * |                                 | Qo      | 1st, 2nd, 3rd, 4th                | 7     |
+ * |                                 | QQ      | 01, 02, 03, 04                    |       |
+ * |                                 | QQQ     | Q1, Q2, Q3, Q4                    |       |
+ * |                                 | QQQQ    | 1st quarter, 2nd quarter, ...     | 2     |
+ * |                                 | QQQQQ   | 1, 2, 3, 4                        | 4     |
+ * | Quarter (stand-alone)           | q       | 1, 2, 3, 4                        |       |
+ * |                                 | qo      | 1st, 2nd, 3rd, 4th                | 7     |
+ * |                                 | qq      | 01, 02, 03, 04                    |       |
+ * |                                 | qqq     | Q1, Q2, Q3, Q4                    |       |
+ * |                                 | qqqq    | 1st quarter, 2nd quarter, ...     | 2     |
+ * |                                 | qqqqq   | 1, 2, 3, 4                        | 4     |
+ * | Month (formatting)              | M       | 1, 2, ..., 12                     |       |
+ * |                                 | Mo      | 1st, 2nd, ..., 12th               | 7     |
+ * |                                 | MM      | 01, 02, ..., 12                   |       |
+ * |                                 | MMM     | Jan, Feb, ..., Dec                |       |
+ * |                                 | MMMM    | January, February, ..., December  | 2     |
+ * |                                 | MMMMM   | J, F, ..., D                      |       |
+ * | Month (stand-alone)             | L       | 1, 2, ..., 12                     |       |
+ * |                                 | Lo      | 1st, 2nd, ..., 12th               | 7     |
+ * |                                 | LL      | 01, 02, ..., 12                   |       |
+ * |                                 | LLL     | Jan, Feb, ..., Dec                |       |
+ * |                                 | LLLL    | January, February, ..., December  | 2     |
+ * |                                 | LLLLL   | J, F, ..., D                      |       |
+ * | Local week of year              | w       | 1, 2, ..., 53                     |       |
+ * |                                 | wo      | 1st, 2nd, ..., 53th               | 7     |
+ * |                                 | ww      | 01, 02, ..., 53                   |       |
+ * | ISO week of year                | I       | 1, 2, ..., 53                     | 7     |
+ * |                                 | Io      | 1st, 2nd, ..., 53th               | 7     |
+ * |                                 | II      | 01, 02, ..., 53                   | 7     |
+ * | Day of month                    | d       | 1, 2, ..., 31                     |       |
+ * |                                 | do      | 1st, 2nd, ..., 31st               | 7     |
+ * |                                 | dd      | 01, 02, ..., 31                   |       |
+ * | Day of year                     | D       | 1, 2, ..., 365, 366               | 9     |
+ * |                                 | Do      | 1st, 2nd, ..., 365th, 366th       | 7     |
+ * |                                 | DD      | 01, 02, ..., 365, 366             | 9     |
+ * |                                 | DDD     | 001, 002, ..., 365, 366           |       |
+ * |                                 | DDDD    | ...                               | 3     |
+ * | Day of week (formatting)        | E..EEE  | Mon, Tue, Wed, ..., Sun           |       |
+ * |                                 | EEEE    | Monday, Tuesday, ..., Sunday      | 2     |
+ * |                                 | EEEEE   | M, T, W, T, F, S, S               |       |
+ * |                                 | EEEEEE  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * | ISO day of week (formatting)    | i       | 1, 2, 3, ..., 7                   | 7     |
+ * |                                 | io      | 1st, 2nd, ..., 7th                | 7     |
+ * |                                 | ii      | 01, 02, ..., 07                   | 7     |
+ * |                                 | iii     | Mon, Tue, Wed, ..., Sun           | 7     |
+ * |                                 | iiii    | Monday, Tuesday, ..., Sunday      | 2,7   |
+ * |                                 | iiiii   | M, T, W, T, F, S, S               | 7     |
+ * |                                 | iiiiii  | Mo, Tu, We, Th, Fr, Sa, Su        | 7     |
+ * | Local day of week (formatting)  | e       | 2, 3, 4, ..., 1                   |       |
+ * |                                 | eo      | 2nd, 3rd, ..., 1st                | 7     |
+ * |                                 | ee      | 02, 03, ..., 01                   |       |
+ * |                                 | eee     | Mon, Tue, Wed, ..., Sun           |       |
+ * |                                 | eeee    | Monday, Tuesday, ..., Sunday      | 2     |
+ * |                                 | eeeee   | M, T, W, T, F, S, S               |       |
+ * |                                 | eeeeee  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * | Local day of week (stand-alone) | c       | 2, 3, 4, ..., 1                   |       |
+ * |                                 | co      | 2nd, 3rd, ..., 1st                | 7     |
+ * |                                 | cc      | 02, 03, ..., 01                   |       |
+ * |                                 | ccc     | Mon, Tue, Wed, ..., Sun           |       |
+ * |                                 | cccc    | Monday, Tuesday, ..., Sunday      | 2     |
+ * |                                 | ccccc   | M, T, W, T, F, S, S               |       |
+ * |                                 | cccccc  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * | AM, PM                          | a..aa   | AM, PM                            |       |
+ * |                                 | aaa     | am, pm                            |       |
+ * |                                 | aaaa    | a.m., p.m.                        | 2     |
+ * |                                 | aaaaa   | a, p                              |       |
+ * | AM, PM, noon, midnight          | b..bb   | AM, PM, noon, midnight            |       |
+ * |                                 | bbb     | am, pm, noon, midnight            |       |
+ * |                                 | bbbb    | a.m., p.m., noon, midnight        | 2     |
+ * |                                 | bbbbb   | a, p, n, mi                       |       |
+ * | Flexible day period             | B..BBB  | at night, in the morning, ...     |       |
+ * |                                 | BBBB    | at night, in the morning, ...     | 2     |
+ * |                                 | BBBBB   | at night, in the morning, ...     |       |
+ * | Hour [1-12]                     | h       | 1, 2, ..., 11, 12                 |       |
+ * |                                 | ho      | 1st, 2nd, ..., 11th, 12th         | 7     |
+ * |                                 | hh      | 01, 02, ..., 11, 12               |       |
+ * | Hour [0-23]                     | H       | 0, 1, 2, ..., 23                  |       |
+ * |                                 | Ho      | 0th, 1st, 2nd, ..., 23rd          | 7     |
+ * |                                 | HH      | 00, 01, 02, ..., 23               |       |
+ * | Hour [0-11]                     | K       | 1, 2, ..., 11, 0                  |       |
+ * |                                 | Ko      | 1st, 2nd, ..., 11th, 0th          | 7     |
+ * |                                 | KK      | 01, 02, ..., 11, 00               |       |
+ * | Hour [1-24]                     | k       | 24, 1, 2, ..., 23                 |       |
+ * |                                 | ko      | 24th, 1st, 2nd, ..., 23rd         | 7     |
+ * |                                 | kk      | 24, 01, 02, ..., 23               |       |
+ * | Minute                          | m       | 0, 1, ..., 59                     |       |
+ * |                                 | mo      | 0th, 1st, ..., 59th               | 7     |
+ * |                                 | mm      | 00, 01, ..., 59                   |       |
+ * | Second                          | s       | 0, 1, ..., 59                     |       |
+ * |                                 | so      | 0th, 1st, ..., 59th               | 7     |
+ * |                                 | ss      | 00, 01, ..., 59                   |       |
+ * | Fraction of second              | S       | 0, 1, ..., 9                      |       |
+ * |                                 | SS      | 00, 01, ..., 99                   |       |
+ * |                                 | SSS     | 000, 001, ..., 999                |       |
+ * |                                 | SSSS    | ...                               | 3     |
+ * | Timezone (ISO-8601 w/ Z)        | X       | -08, +0530, Z                     |       |
+ * |                                 | XX      | -0800, +0530, Z                   |       |
+ * |                                 | XXX     | -08:00, +05:30, Z                 |       |
+ * |                                 | XXXX    | -0800, +0530, Z, +123456          | 2     |
+ * |                                 | XXXXX   | -08:00, +05:30, Z, +12:34:56      |       |
+ * | Timezone (ISO-8601 w/o Z)       | x       | -08, +0530, +00                   |       |
+ * |                                 | xx      | -0800, +0530, +0000               |       |
+ * |                                 | xxx     | -08:00, +05:30, +00:00            | 2     |
+ * |                                 | xxxx    | -0800, +0530, +0000, +123456      |       |
+ * |                                 | xxxxx   | -08:00, +05:30, +00:00, +12:34:56 |       |
+ * | Timezone (GMT)                  | O...OOO | GMT-8, GMT+5:30, GMT+0            |       |
+ * |                                 | OOOO    | GMT-08:00, GMT+05:30, GMT+00:00   | 2     |
+ * | Timezone (specific non-locat.)  | z...zzz | GMT-8, GMT+5:30, GMT+0            | 6     |
+ * |                                 | zzzz    | GMT-08:00, GMT+05:30, GMT+00:00   | 2,6   |
+ * | Seconds timestamp               | t       | 512969520                         | 7     |
+ * |                                 | tt      | ...                               | 3,7   |
+ * | Milliseconds timestamp          | T       | 512969520900                      | 7     |
+ * |                                 | TT      | ...                               | 3,7   |
+ * | Long localized date             | P       | 04/29/1453                        | 7     |
+ * |                                 | PP      | Apr 29, 1453                      | 7     |
+ * |                                 | PPP     | April 29th, 1453                  | 7     |
+ * |                                 | PPPP    | Friday, April 29th, 1453          | 2,7   |
+ * | Long localized time             | p       | 12:00 AM                          | 7     |
+ * |                                 | pp      | 12:00:00 AM                       | 7     |
+ * |                                 | ppp     | 12:00:00 AM GMT+2                 | 7     |
+ * |                                 | pppp    | 12:00:00 AM GMT+02:00             | 2,7   |
+ * | Combination of date and time    | Pp      | 04/29/1453, 12:00 AM              | 7     |
+ * |                                 | PPpp    | Apr 29, 1453, 12:00:00 AM         | 7     |
+ * |                                 | PPPppp  | April 29th, 1453 at ...           | 7     |
+ * |                                 | PPPPpppp| Friday, April 29th, 1453 at ...   | 2,7   |
+ * Notes:
+ * 1. "Formatting" units (e.g. formatting quarter) in the default en-US locale
+ *    are the same as "stand-alone" units, but are different in some languages.
+ *    "Formatting" units are declined according to the rules of the language
+ *    in the context of a date. "Stand-alone" units are always nominative singular:
+ *
+ *    `format(new Date(2017, 10, 6), 'do LLLL', {locale: cs}) //=> '6. listopad'`
+ *
+ *    `format(new Date(2017, 10, 6), 'do MMMM', {locale: cs}) //=> '6. listopadu'`
+ *
+ * 2. Any sequence of the identical letters is a pattern, unless it is escaped by
+ *    the single quote characters (see below).
+ *    If the sequence is longer than listed in table (e.g. `EEEEEEEEEEE`)
+ *    the output will be the same as default pattern for this unit, usually
+ *    the longest one (in case of ISO weekdays, `EEEE`). Default patterns for units
+ *    are marked with "2" in the last column of the table.
+ *
+ *    `format(new Date(2017, 10, 6), 'MMM') //=> 'Nov'`
+ *
+ *    `format(new Date(2017, 10, 6), 'MMMM') //=> 'November'`
+ *
+ *    `format(new Date(2017, 10, 6), 'MMMMM') //=> 'N'`
+ *
+ *    `format(new Date(2017, 10, 6), 'MMMMMM') //=> 'November'`
+ *
+ *    `format(new Date(2017, 10, 6), 'MMMMMMM') //=> 'November'`
+ *
+ * 3. Some patterns could be unlimited length (such as `yyyyyyyy`).
+ *    The output will be padded with zeros to match the length of the pattern.
+ *
+ *    `format(new Date(2017, 10, 6), 'yyyyyyyy') //=> '00002017'`
+ *
+ * 4. `QQQQQ` and `qqqqq` could be not strictly numerical in some locales.
+ *    These tokens represent the shortest form of the quarter.
+ *
+ * 5. The main difference between `y` and `u` patterns are B.C. years:
+ *
+ *    | Year | `y` | `u` |
+ *    |------|-----|-----|
+ *    | AC 1 |   1 |   1 |
+ *    | BC 1 |   1 |   0 |
+ *    | BC 2 |   2 |  -1 |
+ *
+ *    Also `yy` always returns the last two digits of a year,
+ *    while `uu` pads single digit years to 2 characters and returns other years unchanged:
+ *
+ *    | Year | `yy` | `uu` |
+ *    |------|------|------|
+ *    | 1    |   01 |   01 |
+ *    | 14   |   14 |   14 |
+ *    | 376  |   76 |  376 |
+ *    | 1453 |   53 | 1453 |
+ *
+ *    The same difference is true for local and ISO week-numbering years (`Y` and `R`),
+ *    except local week-numbering years are dependent on `options.weekStartsOn`
+ *    and `options.firstWeekContainsDate` (compare [getISOWeekYear](https://date-fns.org/docs/getISOWeekYear)
+ *    and [getWeekYear](https://date-fns.org/docs/getWeekYear)).
+ *
+ * 6. Specific non-location timezones are currently unavailable in `date-fns`,
+ *    so right now these tokens fall back to GMT timezones.
+ *
+ * 7. These patterns are not in the Unicode Technical Standard #35:
+ *    - `i`: ISO day of week
+ *    - `I`: ISO week of year
+ *    - `R`: ISO week-numbering year
+ *    - `t`: seconds timestamp
+ *    - `T`: milliseconds timestamp
+ *    - `o`: ordinal number modifier
+ *    - `P`: long localized date
+ *    - `p`: long localized time
+ *
+ * 8. `YY` and `YYYY` tokens represent week-numbering years but they are often confused with years.
+ *    You should enable `options.useAdditionalWeekYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ *
+ * 9. `D` and `DD` tokens represent days of the year but they are often confused with days of the month.
+ *    You should enable `options.useAdditionalDayOfYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ *
+ * @param date - The original date
+ * @param format - The string of tokens
+ * @param options - An object with options
+ *
+ * @returns The formatted date string
+ *
+ * @throws `date` must not be Invalid Date
+ * @throws `options.locale` must contain `localize` property
+ * @throws `options.locale` must contain `formatLong` property
+ * @throws use `yyyy` instead of `YYYY` for formatting years using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws use `yy` instead of `YY` for formatting years using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws use `d` instead of `D` for formatting days of the month using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws use `dd` instead of `DD` for formatting days of the month using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws format string contains an unescaped latin alphabet character
+ *
+ * @example
+ * // Represent 11 February 2014 in middle-endian format:
+ * const result = format(new Date(2014, 1, 11), 'MM/dd/yyyy')
+ * //=> '02/11/2014'
+ *
+ * @example
+ * // Represent 2 July 2014 in Esperanto:
+ * import { eoLocale } from 'date-fns/locale/eo'
+ * const result = format(new Date(2014, 6, 2), "do 'de' MMMM yyyy", {
+ *   locale: eoLocale
+ * })
+ * //=> '2-a de julio 2014'
+ *
+ * @example
+ * // Escape string by single quote characters:
+ * const result = format(new Date(2014, 6, 2, 15), "h 'o''clock'")
+ * //=> "3 o'clock"
+ */
+function format(date, formatStr, options) {
+  const defaultOptions = getDefaultOptions();
+  const locale = options?.locale ?? defaultOptions.locale ?? enUS;
+
+  const firstWeekContainsDate =
+    options?.firstWeekContainsDate ??
+    options?.locale?.options?.firstWeekContainsDate ??
+    defaultOptions.firstWeekContainsDate ??
+    defaultOptions.locale?.options?.firstWeekContainsDate ??
+    1;
+
+  const weekStartsOn =
+    options?.weekStartsOn ??
+    options?.locale?.options?.weekStartsOn ??
+    defaultOptions.weekStartsOn ??
+    defaultOptions.locale?.options?.weekStartsOn ??
+    0;
+
+  const originalDate = toDate(date, options?.in);
+
+  if (!isValid(originalDate)) {
+    throw new RangeError("Invalid time value");
+  }
+
+  let parts = formatStr
+    .match(longFormattingTokensRegExp)
+    .map((substring) => {
+      const firstCharacter = substring[0];
+      if (firstCharacter === "p" || firstCharacter === "P") {
+        const longFormatter = longFormatters[firstCharacter];
+        return longFormatter(substring, locale.formatLong);
+      }
+      return substring;
+    })
+    .join("")
+    .match(formattingTokensRegExp)
+    .map((substring) => {
+      // Replace two single quote characters with one single quote character
+      if (substring === "''") {
+        return { isToken: false, value: "'" };
+      }
+
+      const firstCharacter = substring[0];
+      if (firstCharacter === "'") {
+        return { isToken: false, value: cleanEscapedString(substring) };
+      }
+
+      if (formatters[firstCharacter]) {
+        return { isToken: true, value: substring };
+      }
+
+      if (firstCharacter.match(unescapedLatinCharacterRegExp)) {
+        throw new RangeError(
+          "Format string contains an unescaped latin alphabet character `" +
+            firstCharacter +
+            "`",
+        );
+      }
+
+      return { isToken: false, value: substring };
+    });
+
+  // invoke localize preprocessor (only for french locales at the moment)
+  if (locale.localize.preprocessor) {
+    parts = locale.localize.preprocessor(originalDate, parts);
+  }
+
+  const formatterOptions = {
+    firstWeekContainsDate,
+    weekStartsOn,
+    locale,
+  };
+
+  return parts
+    .map((part) => {
+      if (!part.isToken) return part.value;
+
+      const token = part.value;
+
+      if (
+        (!options?.useAdditionalWeekYearTokens &&
+          isProtectedWeekYearToken(token)) ||
+        (!options?.useAdditionalDayOfYearTokens &&
+          isProtectedDayOfYearToken(token))
+      ) {
+        warnOrThrowProtectedError(token, formatStr, String(date));
+      }
+
+      const formatter = formatters[token[0]];
+      return formatter(originalDate, token, locale.localize, formatterOptions);
+    })
+    .join("");
+}
+
+function cleanEscapedString(input) {
+  const matched = input.match(escapedStringRegExp);
+
+  if (!matched) {
+    return input;
+  }
+
+  return matched[1].replace(doubleQuoteRegExp, "'");
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_format = ((/* unused pure expression or super */ null && (format)));
+
+;// ./packages/dataviews/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock: lock_unlock_lock,
+  unlock: lock_unlock_unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/dataviews');
+
+;// ./packages/dataviews/build-module/dataform-controls/date.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const {
+  DateCalendar,
+  DateRangeCalendar
+} = lock_unlock_unlock(external_wp_components_namespaceObject.privateApis);
+const DATE_PRESETS = [{
+  id: 'today',
+  label: (0,external_wp_i18n_namespaceObject.__)('Today'),
+  getValue: () => (0,external_wp_date_namespaceObject.getDate)(null)
+}, {
+  id: 'yesterday',
+  label: (0,external_wp_i18n_namespaceObject.__)('Yesterday'),
+  getValue: () => {
+    const today = (0,external_wp_date_namespaceObject.getDate)(null);
+    return subDays(today, 1);
+  }
+}, {
+  id: 'past-week',
+  label: (0,external_wp_i18n_namespaceObject.__)('Past week'),
+  getValue: () => {
+    const today = (0,external_wp_date_namespaceObject.getDate)(null);
+    return subDays(today, 7);
+  }
+}, {
+  id: 'past-month',
+  label: (0,external_wp_i18n_namespaceObject.__)('Past month'),
+  getValue: () => {
+    const today = (0,external_wp_date_namespaceObject.getDate)(null);
+    return subMonths(today, 1);
+  }
+}];
+const DATE_RANGE_PRESETS = [{
+  id: 'last-7-days',
+  label: (0,external_wp_i18n_namespaceObject.__)('Last 7 days'),
+  getValue: () => {
+    const today = (0,external_wp_date_namespaceObject.getDate)(null);
+    return [subDays(today, 7), today];
+  }
+}, {
+  id: 'last-30-days',
+  label: (0,external_wp_i18n_namespaceObject.__)('Last 30 days'),
+  getValue: () => {
+    const today = (0,external_wp_date_namespaceObject.getDate)(null);
+    return [subDays(today, 30), today];
+  }
+}, {
+  id: 'month-to-date',
+  label: (0,external_wp_i18n_namespaceObject.__)('Month to date'),
+  getValue: () => {
+    const today = (0,external_wp_date_namespaceObject.getDate)(null);
+    return [startOfMonth(today), today];
+  }
+}, {
+  id: 'last-year',
+  label: (0,external_wp_i18n_namespaceObject.__)('Last year'),
+  getValue: () => {
+    const today = (0,external_wp_date_namespaceObject.getDate)(null);
+    return [subYears(today, 1), today];
+  }
+}, {
+  id: 'year-to-date',
+  label: (0,external_wp_i18n_namespaceObject.__)('Year to date'),
+  getValue: () => {
+    const today = (0,external_wp_date_namespaceObject.getDate)(null);
+    return [startOfYear(today), today];
+  }
+}];
+const parseDate = dateString => {
+  if (!dateString) {
+    return null;
+  }
+  const parsed = (0,external_wp_date_namespaceObject.getDate)(dateString);
+  return parsed && isValid(parsed) ? parsed : null;
+};
+const formatDate = date => {
+  if (!date) {
+    return '';
+  }
+  return typeof date === 'string' ? date : format(date, 'yyyy-MM-dd');
+};
+function CalendarDateControl({
+  id,
+  value,
+  onChange,
+  label,
+  hideLabelFromVision,
+  className
+}) {
+  const [selectedPresetId, setSelectedPresetId] = (0,external_wp_element_namespaceObject.useState)(null);
+  const [calendarMonth, setCalendarMonth] = (0,external_wp_element_namespaceObject.useState)(() => {
+    const parsedDate = parseDate(value);
+    return parsedDate || new Date(); // Default to current month
+  });
+  const onSelectDate = (0,external_wp_element_namespaceObject.useCallback)(newDate => {
+    const dateValue = newDate ? format(newDate, 'yyyy-MM-dd') : undefined;
+    onChange({
+      [id]: dateValue
+    });
+    setSelectedPresetId(null);
+  }, [id, onChange]);
+  const handlePresetClick = (0,external_wp_element_namespaceObject.useCallback)(preset => {
+    const presetDate = preset.getValue();
+    const dateValue = formatDate(presetDate);
+    setCalendarMonth(presetDate);
+    onChange({
+      [id]: dateValue
+    });
+    setSelectedPresetId(preset.id);
+  }, [id, onChange]);
+  const handleManualDateChange = (0,external_wp_element_namespaceObject.useCallback)(newValue => {
+    onChange({
+      [id]: newValue
+    });
+    if (newValue) {
+      const parsedDate = parseDate(newValue);
+      if (parsedDate) {
+        setCalendarMonth(parsedDate);
+      }
+    }
+    setSelectedPresetId(null);
+  }, [id, onChange]);
+  const {
+    timezone: {
+      string: timezoneString
+    },
+    l10n: {
+      startOfWeek
+    }
+  } = (0,external_wp_date_namespaceObject.getSettings)();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
+    __nextHasNoMarginBottom: true,
+    id: id,
+    className: className,
+    label: label,
+    hideLabelFromVision: hideLabelFromVision,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
+      spacing: 4,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+        spacing: 2,
+        wrap: true,
+        justify: "flex-start",
+        children: [DATE_PRESETS.map(preset => {
+          const isSelected = selectedPresetId === preset.id;
+          return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+            className: "dataviews-controls__date-preset",
+            variant: "tertiary",
+            isPressed: isSelected,
+            size: "small",
+            onClick: () => handlePresetClick(preset),
+            children: preset.label
+          }, preset.id);
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          className: "dataviews-controls__date-preset",
+          variant: "tertiary",
+          isPressed: !selectedPresetId,
+          size: "small",
+          disabled: !!selectedPresetId,
+          accessibleWhenDisabled: false,
+          children: (0,external_wp_i18n_namespaceObject.__)('Custom')
+        })]
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
+        __next40pxDefaultSize: true,
+        type: "date",
+        label: (0,external_wp_i18n_namespaceObject.__)('Date'),
+        hideLabelFromVision: true,
+        value: value,
+        onChange: handleManualDateChange
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DateCalendar, {
+        style: {
+          width: '100%'
+        },
+        selected: value ? parseDate(value) || undefined : undefined,
+        onSelect: onSelectDate,
+        month: calendarMonth,
+        onMonthChange: setCalendarMonth,
+        timeZone: timezoneString || undefined,
+        weekStartsOn: startOfWeek
+      })]
+    })
+  });
+}
+function CalendarDateRangeControl({
+  id,
+  value,
+  onChange,
+  label,
+  hideLabelFromVision,
+  className
+}) {
+  const [selectedPresetId, setSelectedPresetId] = (0,external_wp_element_namespaceObject.useState)(null);
+  const selectedRange = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    if (!value) {
+      return {
+        from: undefined,
+        to: undefined
+      };
+    }
+    const [from, to] = value;
+    return {
+      from: parseDate(from) || undefined,
+      to: parseDate(to) || undefined
+    };
+  }, [value]);
+  const [calendarMonth, setCalendarMonth] = (0,external_wp_element_namespaceObject.useState)(() => {
+    return selectedRange.from || new Date();
+  });
+  const updateDateRange = (0,external_wp_element_namespaceObject.useCallback)((fromDate, toDate) => {
+    if (fromDate && toDate) {
+      onChange({
+        [id]: [formatDate(fromDate), formatDate(toDate)]
+      });
+    } else if (!fromDate && !toDate) {
+      onChange({
+        [id]: undefined
+      });
+    }
+    // Do nothing if only one date is set - wait for both
+  }, [id, onChange]);
+  const onSelectCalendarRange = (0,external_wp_element_namespaceObject.useCallback)(newRange => {
+    updateDateRange(newRange?.from, newRange?.to);
+    setSelectedPresetId(null);
+  }, [updateDateRange]);
+  const handlePresetClick = (0,external_wp_element_namespaceObject.useCallback)(preset => {
+    const [startDate, endDate] = preset.getValue();
+    setCalendarMonth(startDate);
+    updateDateRange(startDate, endDate);
+    setSelectedPresetId(preset.id);
+  }, [updateDateRange]);
+  const handleManualDateChange = (0,external_wp_element_namespaceObject.useCallback)((fromOrTo, newValue) => {
+    const [currentFrom, currentTo] = value || [undefined, undefined];
+    const updatedFrom = fromOrTo === 'from' ? newValue : currentFrom;
+    const updatedTo = fromOrTo === 'to' ? newValue : currentTo;
+    updateDateRange(updatedFrom, updatedTo);
+    if (newValue) {
+      const parsedDate = parseDate(newValue);
+      if (parsedDate) {
+        setCalendarMonth(parsedDate);
+      }
+    }
+    setSelectedPresetId(null);
+  }, [value, updateDateRange]);
+  const {
+    timezone,
+    l10n
+  } = (0,external_wp_date_namespaceObject.getSettings)();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
+    __nextHasNoMarginBottom: true,
+    id: id,
+    className: className,
+    label: label,
+    hideLabelFromVision: hideLabelFromVision,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
+      spacing: 4,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+        spacing: 2,
+        wrap: true,
+        justify: "flex-start",
+        children: [DATE_RANGE_PRESETS.map(preset => {
+          const isSelected = selectedPresetId === preset.id;
+          return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+            className: "dataviews-controls__date-preset",
+            variant: "tertiary",
+            isPressed: isSelected,
+            size: "small",
+            onClick: () => handlePresetClick(preset),
+            children: preset.label
+          }, preset.id);
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          className: "dataviews-controls__date-preset",
+          variant: "tertiary",
+          isPressed: !selectedPresetId,
+          size: "small",
+          accessibleWhenDisabled: false,
+          disabled: !!selectedPresetId,
+          children: (0,external_wp_i18n_namespaceObject.__)('Custom')
+        })]
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+        spacing: 2,
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
+          __next40pxDefaultSize: true,
+          type: "date",
+          label: (0,external_wp_i18n_namespaceObject.__)('From'),
+          hideLabelFromVision: true,
+          value: value?.[0],
+          onChange: newValue => handleManualDateChange('from', newValue)
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalInputControl, {
+          __next40pxDefaultSize: true,
+          type: "date",
+          label: (0,external_wp_i18n_namespaceObject.__)('To'),
+          hideLabelFromVision: true,
+          value: value?.[1],
+          onChange: newValue => handleManualDateChange('to', newValue)
+        })]
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DateRangeCalendar, {
+        style: {
+          width: '100%'
+        },
+        selected: selectedRange,
+        onSelect: onSelectCalendarRange,
+        month: calendarMonth,
+        onMonthChange: setCalendarMonth,
+        timeZone: timezone.string || undefined,
+        weekStartsOn: l10n.startOfWeek
+      })]
+    })
+  });
+}
+function DateControl({
+  data,
+  field,
+  onChange,
+  hideLabelFromVision,
+  operator
+}) {
+  const {
+    id,
+    label
+  } = field;
+  const value = field.getValue({
+    item: data
+  });
+  if (operator === OPERATOR_IN_THE_PAST || operator === OPERATOR_OVER) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(RelativeDateControl, {
+      className: "dataviews-controls__date",
+      id: id,
+      value: value && typeof value === 'object' ? value : {},
+      onChange: onChange,
+      label: label,
+      hideLabelFromVision: hideLabelFromVision,
+      options: TIME_UNITS_OPTIONS[operator]
+    });
+  }
+  if (operator === OPERATOR_BETWEEN) {
+    let dateRangeValue;
+    if (Array.isArray(value) && value.length === 2 && value.every(date => typeof date === 'string')) {
+      // Ensure the value is expected format
+      dateRangeValue = value;
+    }
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CalendarDateRangeControl, {
+      className: "dataviews-controls__date",
+      id: id,
+      value: dateRangeValue,
+      onChange: onChange,
+      label: label,
+      hideLabelFromVision: hideLabelFromVision
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CalendarDateControl, {
+    className: "dataviews-controls__date",
+    id: id,
+    value: typeof value === 'string' ? value : undefined,
+    onChange: onChange,
+    label: label,
+    hideLabelFromVision: hideLabelFromVision
+  });
+}
+
+;// ./packages/dataviews/build-module/dataform-controls/email.js
 /**
  * WordPress dependencies
  */
@@ -5741,11 +10385,119 @@ function DateTime({
  * Internal dependencies
  */
 
-function Integer({
+
+
+const {
+  ValidatedTextControl
+} = lock_unlock_unlock(external_wp_components_namespaceObject.privateApis);
+function Email({
   data,
   field,
   onChange,
   hideLabelFromVision
+}) {
+  const {
+    id,
+    label,
+    placeholder,
+    description
+  } = field;
+  const value = field.getValue({
+    item: data
+  });
+  const [customValidity, setCustomValidity] = (0,external_wp_element_namespaceObject.useState)(undefined);
+  const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
+    [id]: newValue
+  }), [id, onChange]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ValidatedTextControl, {
+    required: !!field.isValid?.required,
+    onValidate: newValue => {
+      const message = field.isValid?.custom?.({
+        ...data,
+        [id]: newValue
+      }, field);
+      if (message) {
+        setCustomValidity({
+          type: 'invalid',
+          message
+        });
+        return;
+      }
+      setCustomValidity(undefined);
+    },
+    customValidity: customValidity,
+    type: "email",
+    label: label,
+    placeholder: placeholder,
+    value: value !== null && value !== void 0 ? value : '',
+    help: description,
+    onChange: onChangeControl,
+    __next40pxDefaultSize: true,
+    __nextHasNoMarginBottom: true,
+    hideLabelFromVision: hideLabelFromVision
+  });
+}
+
+;// ./packages/dataviews/build-module/dataform-controls/integer.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const {
+  ValidatedNumberControl
+} = lock_unlock_unlock(external_wp_components_namespaceObject.privateApis);
+function BetweenControls({
+  id,
+  value,
+  onChange,
+  hideLabelFromVision
+}) {
+  const [min = '', max = ''] = Array.isArray(value) ? value : [];
+  const onChangeMin = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
+    [id]: [Number(newValue), max]
+  }), [id, onChange, max]);
+  const onChangeMax = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
+    [id]: [min, Number(newValue)]
+  }), [id, onChange, min]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl, {
+    __nextHasNoMarginBottom: true,
+    help: (0,external_wp_i18n_namespaceObject.__)('The max. value must be greater than the min. value.'),
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Flex, {
+      direction: "row",
+      gap: 4,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+        label: (0,external_wp_i18n_namespaceObject.__)('Min.'),
+        value: min,
+        max: max ? Number(max) - 1 : undefined,
+        onChange: onChangeMin,
+        __next40pxDefaultSize: true,
+        hideLabelFromVision: hideLabelFromVision
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+        label: (0,external_wp_i18n_namespaceObject.__)('Max.'),
+        value: max,
+        min: min ? Number(min) + 1 : undefined,
+        onChange: onChangeMax,
+        __next40pxDefaultSize: true,
+        hideLabelFromVision: hideLabelFromVision
+      })]
+    })
+  });
+}
+function Integer({
+  data,
+  field,
+  onChange,
+  hideLabelFromVision,
+  operator
 }) {
   var _field$getValue;
   const {
@@ -5756,10 +10508,40 @@ function Integer({
   const value = (_field$getValue = field.getValue({
     item: data
   })) !== null && _field$getValue !== void 0 ? _field$getValue : '';
-  const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
-    [id]: Number(newValue)
-  }), [id, onChange]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+  const [customValidity, setCustomValidity] = (0,external_wp_element_namespaceObject.useState)(undefined);
+  const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(newValue => {
+    onChange({
+      // Do not convert an empty string or undefined to a number,
+      // otherwise there's a mismatch between the UI control (empty)
+      // and the data relied by onChange (0).
+      [id]: ['', undefined].includes(newValue) ? undefined : Number(newValue)
+    });
+  }, [id, onChange]);
+  if (operator === OPERATOR_BETWEEN) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BetweenControls, {
+      id: id,
+      value: value,
+      onChange: onChange,
+      hideLabelFromVision: hideLabelFromVision
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ValidatedNumberControl, {
+    required: !!field.isValid?.required,
+    onValidate: newValue => {
+      const message = field.isValid?.custom?.({
+        ...data,
+        [id]: [undefined, '', null].includes(newValue) ? undefined : Number(newValue)
+      }, field);
+      if (message) {
+        setCustomValidity({
+          type: 'invalid',
+          message
+        });
+        return;
+      }
+      setCustomValidity(undefined);
+    },
+    customValidity: customValidity,
     label: label,
     help: description,
     value: value,
@@ -5829,15 +10611,21 @@ function Select({
   var _field$getValue, _field$elements;
   const {
     id,
-    label
+    label,
+    type
   } = field;
+  const isMultiple = type === 'array';
   const value = (_field$getValue = field.getValue({
     item: data
-  })) !== null && _field$getValue !== void 0 ? _field$getValue : '';
+  })) !== null && _field$getValue !== void 0 ? _field$getValue : isMultiple ? [] : '';
   const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
     [id]: newValue
   }), [id, onChange]);
-  const elements = [
+  const fieldElements = (_field$elements = field?.elements) !== null && _field$elements !== void 0 ? _field$elements : [];
+  const hasEmptyValue = fieldElements.some(({
+    value: elementValue
+  }) => elementValue === '');
+  const elements = hasEmptyValue || isMultiple ? fieldElements : [
   /*
    * Value can be undefined when:
    *
@@ -5848,15 +10636,17 @@ function Select({
   {
     label: (0,external_wp_i18n_namespaceObject.__)('Select item'),
     value: ''
-  }, ...((_field$elements = field?.elements) !== null && _field$elements !== void 0 ? _field$elements : [])];
+  }, ...fieldElements];
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
     label: label,
     value: value,
+    help: field.description,
     options: elements,
     onChange: onChangeControl,
     __next40pxDefaultSize: true,
     __nextHasNoMarginBottom: true,
-    hideLabelFromVision: hideLabelFromVision
+    hideLabelFromVision: hideLabelFromVision,
+    multiple: isMultiple
   });
 }
 
@@ -5871,6 +10661,11 @@ function Select({
  * Internal dependencies
  */
 
+
+
+const {
+  ValidatedTextControl: text_ValidatedTextControl
+} = lock_unlock_unlock(external_wp_components_namespaceObject.privateApis);
 function Text({
   data,
   field,
@@ -5880,7 +10675,63 @@ function Text({
   const {
     id,
     label,
-    placeholder
+    placeholder,
+    description
+  } = field;
+  const value = field.getValue({
+    item: data
+  });
+  const [customValidity, setCustomValidity] = (0,external_wp_element_namespaceObject.useState)(undefined);
+  const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
+    [id]: newValue
+  }), [id, onChange]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(text_ValidatedTextControl, {
+    required: !!field.isValid?.required,
+    onValidate: newValue => {
+      const message = field.isValid?.custom?.({
+        ...data,
+        [id]: newValue
+      }, field);
+      if (message) {
+        setCustomValidity({
+          type: 'invalid',
+          message
+        });
+        return;
+      }
+      setCustomValidity(undefined);
+    },
+    customValidity: customValidity,
+    label: label,
+    placeholder: placeholder,
+    value: value !== null && value !== void 0 ? value : '',
+    help: description,
+    onChange: onChangeControl,
+    __next40pxDefaultSize: true,
+    __nextHasNoMarginBottom: true,
+    hideLabelFromVision: hideLabelFromVision
+  });
+}
+
+;// ./packages/dataviews/build-module/dataform-controls/toggle-group.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+function ToggleGroup({
+  data,
+  field,
+  onChange,
+  hideLabelFromVision
+}) {
+  const {
+    id
   } = field;
   const value = field.getValue({
     item: data
@@ -5888,14 +10739,146 @@ function Text({
   const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
     [id]: newValue
   }), [id, onChange]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.TextControl, {
-    label: label,
-    placeholder: placeholder,
-    value: value !== null && value !== void 0 ? value : '',
-    onChange: onChangeControl,
-    __next40pxDefaultSize: true,
+  if (field.elements) {
+    const selectedOption = field.elements.find(el => el.value === value);
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControl, {
+      __next40pxDefaultSize: true,
+      __nextHasNoMarginBottom: true,
+      isBlock: true,
+      label: field.label,
+      help: selectedOption?.description || field.description,
+      onChange: onChangeControl,
+      value: value,
+      hideLabelFromVision: hideLabelFromVision,
+      children: field.elements.map(el => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalToggleGroupControlOption, {
+        label: el.label,
+        value: el.value
+      }, el.value))
+    });
+  }
+  return null;
+}
+
+;// ./packages/dataviews/build-module/dataform-controls/boolean.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const {
+  ValidatedToggleControl
+} = lock_unlock_unlock(external_wp_components_namespaceObject.privateApis);
+function boolean_Boolean({
+  field,
+  onChange,
+  data,
+  hideLabelFromVision
+}) {
+  const {
+    id,
+    getValue,
+    label
+  } = field;
+  const [customValidity, setCustomValidity] = (0,external_wp_element_namespaceObject.useState)(undefined);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ValidatedToggleControl, {
+    required: !!field.isValid.required,
+    onValidate: newValue => {
+      const message = field.isValid?.custom?.({
+        ...data,
+        [id]: newValue
+      }, field);
+      if (message) {
+        setCustomValidity({
+          type: 'invalid',
+          message
+        });
+        return;
+      }
+      setCustomValidity(undefined);
+    },
+    customValidity: customValidity,
+    hidden: hideLabelFromVision,
     __nextHasNoMarginBottom: true,
-    hideLabelFromVision: hideLabelFromVision
+    label: label,
+    checked: getValue({
+      item: data
+    }),
+    onChange: () => onChange({
+      [id]: !getValue({
+        item: data
+      })
+    })
+  });
+}
+
+;// ./packages/dataviews/build-module/dataform-controls/array.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+function ArrayControl({
+  data,
+  field,
+  onChange,
+  hideLabelFromVision
+}) {
+  var _elements$map;
+  const {
+    id,
+    label,
+    placeholder,
+    elements
+  } = field;
+  const value = field.getValue({
+    item: data
+  });
+  const findElementByValue = (0,external_wp_element_namespaceObject.useCallback)(suggestionValue => {
+    return elements?.find(suggestion => suggestion.value === suggestionValue);
+  }, [elements]);
+  const findElementByLabel = (0,external_wp_element_namespaceObject.useCallback)(suggestionLabel => {
+    return elements?.find(suggestion => suggestion.label === suggestionLabel);
+  }, [elements]);
+
+  // Ensure value is an array
+  const arrayValue = (0,external_wp_element_namespaceObject.useMemo)(() => Array.isArray(value) ? value.map(token => {
+    const tokenLabel = findElementByValue(token)?.label;
+    return tokenLabel || token;
+  }) : [], [value, findElementByValue]);
+  const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(tokens => {
+    // Convert TokenItem objects to strings
+    const stringTokens = tokens.map(token => {
+      if (typeof token !== 'string') {
+        return token.value;
+      }
+      const tokenByLabel = findElementByLabel(token);
+      return tokenByLabel?.value || token;
+    });
+    onChange({
+      [id]: stringTokens
+    });
+  }, [id, onChange, findElementByLabel]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FormTokenField, {
+    label: hideLabelFromVision ? undefined : label,
+    value: arrayValue,
+    onChange: onChangeControl,
+    placeholder: placeholder,
+    suggestions: (_elements$map = elements?.map(suggestion => suggestion.label)) !== null && _elements$map !== void 0 ? _elements$map : [],
+    __experimentalExpandOnFocus: elements && elements.length > 0,
+    __next40pxDefaultSize: true,
+    __nextHasNoMarginBottom: true
   });
 }
 
@@ -5913,12 +10896,24 @@ function Text({
 
 
 
+
+
+
+
+
+
 const FORM_CONTROLS = {
+  array: ArrayControl,
+  boolean: boolean_Boolean,
+  checkbox: Checkbox,
   datetime: DateTime,
+  date: DateControl,
+  email: Email,
   integer: Integer,
   radio: Radio,
   select: Select,
-  text: Text
+  text: Text,
+  toggleGroup: ToggleGroup
 };
 function getControl(field, fieldTypeDefinition) {
   if (typeof field.Edit === 'function') {
@@ -5927,7 +10922,7 @@ function getControl(field, fieldTypeDefinition) {
   if (typeof field.Edit === 'string') {
     return getControlByType(field.Edit);
   }
-  if (field.elements) {
+  if (field.elements && field.type !== 'array') {
     return getControlByType('select');
   }
   if (typeof fieldTypeDefinition.Edit === 'string') {
@@ -5944,8 +10939,13 @@ function getControlByType(type) {
 
 ;// ./packages/dataviews/build-module/normalize-fields.js
 /**
+ * External dependencies
+ */
+
+/**
  * Internal dependencies
  */
+
 
 
 const getValueFromId = id => ({
@@ -5962,6 +10962,61 @@ const getValueFromId = id => ({
   }
   return value;
 };
+function getFilterBy(field, fieldTypeDefinition) {
+  if (field.filterBy === false) {
+    return false;
+  }
+  if (typeof field.filterBy === 'object') {
+    let operators = field.filterBy.operators;
+
+    // Assign default values if no operator was provided.
+    if (!operators || !Array.isArray(operators)) {
+      operators = !!fieldTypeDefinition.filterBy ? fieldTypeDefinition.filterBy.defaultOperators : [];
+    }
+
+    // Make sure only valid operators are included.
+    let validOperators = ALL_OPERATORS;
+    if (typeof fieldTypeDefinition.filterBy === 'object') {
+      validOperators = fieldTypeDefinition.filterBy.validOperators;
+    }
+    operators = operators.filter(operator => validOperators.includes(operator));
+
+    // The `between` operator is not supported when elements are provided.
+    if (field.elements && operators.includes(OPERATOR_BETWEEN)) {
+      operators = operators.filter(operator => operator !== OPERATOR_BETWEEN);
+    }
+
+    // Do not allow mixing single & multiselection operators.
+    // Remove multiselection operators if any of the single selection ones is present.
+    const hasSingleSelectionOperator = operators.some(operator => SINGLE_SELECTION_OPERATORS.includes(operator));
+    if (hasSingleSelectionOperator) {
+      operators = operators.filter(operator =>
+      // The 'Between' operator is unique as it can be combined with single selection operators.
+      [...SINGLE_SELECTION_OPERATORS, OPERATOR_BETWEEN].includes(operator));
+    }
+
+    // If no operators are left at this point,
+    // the filters should be disabled.
+    if (operators.length === 0) {
+      return false;
+    }
+    return {
+      isPrimary: !!field.filterBy.isPrimary,
+      operators
+    };
+  }
+  if (fieldTypeDefinition.filterBy === false) {
+    return false;
+  }
+  let defaultOperators = fieldTypeDefinition.filterBy.defaultOperators;
+  // The `between` operator is not supported when elements are provided.
+  if (field.elements && defaultOperators.includes(OPERATOR_BETWEEN)) {
+    defaultOperators = defaultOperators.filter(operator => operator !== OPERATOR_BETWEEN);
+  }
+  return {
+    operators: defaultOperators
+  };
+}
 
 /**
  * Apply default values and normalize the fields config.
@@ -5971,7 +11026,7 @@ const getValueFromId = id => ({
  */
 function normalizeFields(fields) {
   return fields.map(field => {
-    var _field$sort, _field$isValid, _field$enableHiding, _field$enableSorting;
+    var _field$sort, _field$render, _field$enableHiding, _ref, _field$enableSorting, _ref2, _field$readOnly;
     const fieldTypeDefinition = getFieldTypeDefinition(field.type);
     const getValue = field.getValue || getValueFromId(field.id);
     const sort = (_field$sort = field.sort) !== null && _field$sort !== void 0 ? _field$sort : function sort(a, b, direction) {
@@ -5981,23 +11036,21 @@ function normalizeFields(fields) {
         item: b
       }), direction);
     };
-    const isValid = (_field$isValid = field.isValid) !== null && _field$isValid !== void 0 ? _field$isValid : function isValid(item, context) {
-      return fieldTypeDefinition.isValid(getValue({
-        item
-      }), context);
+    const isValid = {
+      ...fieldTypeDefinition.isValid,
+      ...field.isValid
     };
     const Edit = getControl(field, fieldTypeDefinition);
-    const renderFromElements = ({
-      item
-    }) => {
-      const value = getValue({
-        item
-      });
-      return field?.elements?.find(element => element.value === value)?.label || getValue({
-        item
+    const render = (_field$render = field.render) !== null && _field$render !== void 0 ? _field$render : function render({
+      item,
+      field: renderedField
+    }) {
+      return fieldTypeDefinition.render({
+        item,
+        field: renderedField
       });
     };
-    const render = field.render || (field.elements ? renderFromElements : getValue);
+    const filterBy = getFilterBy(field, fieldTypeDefinition);
     return {
       ...field,
       label: field.label || field.id,
@@ -6008,7 +11061,9 @@ function normalizeFields(fields) {
       isValid,
       Edit,
       enableHiding: (_field$enableHiding = field.enableHiding) !== null && _field$enableHiding !== void 0 ? _field$enableHiding : true,
-      enableSorting: (_field$enableSorting = field.enableSorting) !== null && _field$enableSorting !== void 0 ? _field$enableSorting : true
+      enableSorting: (_ref = (_field$enableSorting = field.enableSorting) !== null && _field$enableSorting !== void 0 ? _field$enableSorting : fieldTypeDefinition.enableSorting) !== null && _ref !== void 0 ? _ref : true,
+      filterBy,
+      readOnly: (_ref2 = (_field$readOnly = field.readOnly) !== null && _field$readOnly !== void 0 ? _field$readOnly : fieldTypeDefinition.readOnly) !== null && _ref2 !== void 0 ? _ref2 : false
     };
   });
 }
@@ -6022,7 +11077,80 @@ function isCombinedField(field) {
   return field.children !== undefined;
 }
 
+;// ./packages/dataviews/build-module/normalize-form-fields.js
+/**
+ * Internal dependencies
+ */
+
+const DEFAULT_LAYOUT = {
+  type: 'regular',
+  labelPosition: 'top'
+};
+
+/**
+ * Normalizes a layout configuration based on its type.
+ *
+ * @param layout The layout object to normalize.
+ * @return The normalized layout object.
+ */
+function normalizeLayout(layout) {
+  let normalizedLayout = DEFAULT_LAYOUT;
+  if (layout?.type === 'regular') {
+    var _layout$labelPosition;
+    normalizedLayout = {
+      type: 'regular',
+      labelPosition: (_layout$labelPosition = layout?.labelPosition) !== null && _layout$labelPosition !== void 0 ? _layout$labelPosition : 'top'
+    };
+  } else if (layout?.type === 'panel') {
+    var _layout$labelPosition2, _layout$openAs;
+    normalizedLayout = {
+      type: 'panel',
+      labelPosition: (_layout$labelPosition2 = layout?.labelPosition) !== null && _layout$labelPosition2 !== void 0 ? _layout$labelPosition2 : 'side',
+      openAs: (_layout$openAs = layout?.openAs) !== null && _layout$openAs !== void 0 ? _layout$openAs : 'dropdown'
+    };
+  } else if (layout?.type === 'card') {
+    if (layout.withHeader === false) {
+      // Don't let isOpened be false if withHeader is false.
+      // Otherwise, the card will not be visible.
+      normalizedLayout = {
+        type: 'card',
+        withHeader: false,
+        isOpened: true
+      };
+    } else {
+      normalizedLayout = {
+        type: 'card',
+        withHeader: true,
+        isOpened: typeof layout.isOpened === 'boolean' ? layout.isOpened : true
+      };
+    }
+  }
+  return normalizedLayout;
+}
+function normalizeFormFields(form) {
+  var _form$fields;
+  const formLayout = normalizeLayout(form?.layout);
+  return ((_form$fields = form.fields) !== null && _form$fields !== void 0 ? _form$fields : []).map(field => {
+    if (typeof field === 'string') {
+      return {
+        id: field,
+        layout: formLayout
+      };
+    }
+    const fieldLayout = field.layout ? normalizeLayout(field.layout) : formLayout;
+    return {
+      ...field,
+      layout: fieldLayout
+    };
+  });
+}
+
 ;// ./packages/dataviews/build-module/dataforms-layouts/regular/index.js
+/**
+ * External dependencies
+ */
+
+
 /**
  * WordPress dependencies
  */
@@ -6032,6 +11160,7 @@ function isCombinedField(field) {
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -6059,29 +11188,13 @@ function FormRegularField({
   onChange,
   hideLabelFromVision
 }) {
-  var _field$labelPosition;
   const {
     fields
   } = (0,external_wp_element_namespaceObject.useContext)(dataform_context);
-  const form = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (isCombinedField(field)) {
-      return {
-        fields: field.children.map(child => {
-          if (typeof child === 'string') {
-            return {
-              id: child
-            };
-          }
-          return child;
-        }),
-        type: 'regular'
-      };
-    }
-    return {
-      type: 'regular',
-      fields: []
-    };
-  }, [field]);
+  const form = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    layout: DEFAULT_LAYOUT,
+    fields: isCombinedField(field) ? field.children : []
+  }), [field]);
   if (isCombinedField(field)) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
       children: [!hideLabelFromVision && field.label && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Header, {
@@ -6093,20 +11206,27 @@ function FormRegularField({
       })]
     });
   }
-  const labelPosition = (_field$labelPosition = field.labelPosition) !== null && _field$labelPosition !== void 0 ? _field$labelPosition : 'top';
+  const layout = normalizeLayout({
+    ...field.layout,
+    type: 'regular'
+  });
+  const labelPosition = layout.labelPosition;
   const fieldDefinition = fields.find(fieldDef => fieldDef.id === field.id);
-  if (!fieldDefinition) {
+  if (!fieldDefinition || !fieldDefinition.Edit) {
     return null;
   }
   if (labelPosition === 'side') {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
       className: "dataforms-layouts-regular__field",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "dataforms-layouts-regular__field-label",
+        className: dist_clsx('dataforms-layouts-regular__field-label', `dataforms-layouts-regular__field-label--label-position-${labelPosition}`),
         children: fieldDefinition.label
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
         className: "dataforms-layouts-regular__field-control",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(fieldDefinition.Edit, {
+        children: fieldDefinition.readOnly === true ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(fieldDefinition.render, {
+          item: data,
+          field: fieldDefinition
+        }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(fieldDefinition.Edit, {
           data: data,
           field: fieldDefinition,
           onChange: onChange,
@@ -6117,7 +11237,18 @@ function FormRegularField({
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     className: "dataforms-layouts-regular__field",
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(fieldDefinition.Edit, {
+    children: fieldDefinition.readOnly === true ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+      children: [!hideLabelFromVision && labelPosition !== 'none' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "dataforms-layouts-regular__field-label",
+        children: fieldDefinition.label
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "dataforms-layouts-regular__field-control",
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(fieldDefinition.render, {
+          item: data,
+          field: fieldDefinition
+        })
+      })]
+    }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(fieldDefinition.Edit, {
       data: data,
       field: fieldDefinition,
       onChange: onChange,
@@ -6141,7 +11272,7 @@ const closeSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)
 });
 /* harmony default export */ const close_small = (closeSmall);
 
-;// ./packages/dataviews/build-module/dataforms-layouts/panel/index.js
+;// ./packages/dataviews/build-module/dataforms-layouts/panel/dropdown.js
 /**
  * WordPress dependencies
  */
@@ -6189,28 +11320,14 @@ function PanelDropdown({
   field
 }) {
   const fieldLabel = isCombinedField(field) ? field.label : fieldDefinition?.label;
-  const form = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (isCombinedField(field)) {
-      return {
-        type: 'regular',
-        fields: field.children.map(child => {
-          if (typeof child === 'string') {
-            return {
-              id: child
-            };
-          }
-          return child;
-        })
-      };
-    }
+  const form = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    layout: DEFAULT_LAYOUT,
+    fields: isCombinedField(field) ? field.children :
     // If not explicit children return the field id itself.
-    return {
-      type: 'regular',
-      fields: [{
-        id: field.id
-      }]
-    };
-  }, [field]);
+    [{
+      id: field.id
+    }]
+  }), [field]);
 
   // Memoize popoverProps to avoid returning a new object every time.
   const popoverProps = (0,external_wp_element_namespaceObject.useMemo)(() => ({
@@ -6240,10 +11357,13 @@ function PanelDropdown({
       "aria-expanded": isOpen,
       "aria-label": (0,external_wp_i18n_namespaceObject.sprintf)(
       // translators: %s: Field name.
-      (0,external_wp_i18n_namespaceObject._x)('Edit %s', 'field'), fieldLabel),
+      (0,external_wp_i18n_namespaceObject._x)('Edit %s', 'field'), fieldLabel || ''),
       onClick: onToggle,
+      disabled: fieldDefinition.readOnly === true,
+      accessibleWhenDisabled: true,
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(fieldDefinition.render, {
-        item: data
+        item: data,
+        field: fieldDefinition
       })
     }),
     renderContent: ({
@@ -6269,25 +11389,170 @@ function PanelDropdown({
     })
   });
 }
+/* harmony default export */ const dropdown = (PanelDropdown);
+
+;// ./packages/dataviews/build-module/dataforms-layouts/panel/modal.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+function ModalContent({
+  data,
+  form,
+  fieldLabel,
+  onChange,
+  onClose
+}) {
+  const [changes, setChanges] = (0,external_wp_element_namespaceObject.useState)({});
+  const onApply = () => {
+    onChange(changes);
+    onClose();
+  };
+  const handleOnChange = value => {
+    setChanges(prev => ({
+      ...prev,
+      ...value
+    }));
+  };
+
+  // Merge original data with local changes for display
+  const displayData = {
+    ...data,
+    ...changes
+  };
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Modal, {
+    className: "dataforms-layouts-panel__modal",
+    onRequestClose: onClose,
+    isFullScreen: false,
+    title: fieldLabel,
+    size: "medium",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataFormLayout, {
+      data: displayData,
+      form: form,
+      onChange: handleOnChange,
+      children: (FieldLayout, nestedField) => {
+        var _form$fields;
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FieldLayout, {
+          data: displayData,
+          field: nestedField,
+          onChange: handleOnChange,
+          hideLabelFromVision: ((_form$fields = form?.fields) !== null && _form$fields !== void 0 ? _form$fields : []).length < 2
+        }, nestedField.id);
+      }
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+      className: "dataforms-layouts-panel__modal-footer",
+      spacing: 3,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalSpacer, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        variant: "tertiary",
+        onClick: onClose,
+        __next40pxDefaultSize: true,
+        children: (0,external_wp_i18n_namespaceObject.__)('Cancel')
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        variant: "primary",
+        onClick: onApply,
+        __next40pxDefaultSize: true,
+        children: (0,external_wp_i18n_namespaceObject.__)('Apply')
+      })]
+    })]
+  });
+}
+function PanelModal({
+  fieldDefinition,
+  labelPosition,
+  data,
+  onChange,
+  field
+}) {
+  const [isOpen, setIsOpen] = (0,external_wp_element_namespaceObject.useState)(false);
+  const fieldLabel = isCombinedField(field) ? field.label : fieldDefinition?.label;
+  const form = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    layout: DEFAULT_LAYOUT,
+    fields: isCombinedField(field) ? field.children :
+    // If not explicit children return the field id itself.
+    [{
+      id: field.id
+    }]
+  }), [field]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+      className: "dataforms-layouts-modal__field-control",
+      size: "compact",
+      variant: ['none', 'top'].includes(labelPosition) ? 'link' : 'tertiary',
+      "aria-expanded": isOpen,
+      "aria-label": (0,external_wp_i18n_namespaceObject.sprintf)(
+      // translators: %s: Field name.
+      (0,external_wp_i18n_namespaceObject._x)('Edit %s', 'field'), fieldLabel || ''),
+      onClick: () => setIsOpen(true),
+      disabled: fieldDefinition.readOnly === true,
+      accessibleWhenDisabled: true,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(fieldDefinition.render, {
+        item: data,
+        field: fieldDefinition
+      })
+    }), isOpen && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ModalContent, {
+      data: data,
+      form: form,
+      fieldLabel: fieldLabel !== null && fieldLabel !== void 0 ? fieldLabel : '',
+      onChange: onChange,
+      onClose: () => setIsOpen(false)
+    })]
+  });
+}
+/* harmony default export */ const modal = (PanelModal);
+
+;// ./packages/dataviews/build-module/dataforms-layouts/panel/index.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
 function FormPanelField({
   data,
   field,
   onChange
 }) {
-  var _field$labelPosition;
   const {
     fields
   } = (0,external_wp_element_namespaceObject.useContext)(dataform_context);
-  const fieldDefinition = fields.find(fieldDef => {
-    // Default to the first child if it is a combined field.
+  const fieldDefinition = fields.find(_field => {
+    // Default to the first simple child if it is a combined field.
     if (isCombinedField(field)) {
-      const children = field.children.filter(child => typeof child === 'string' || !isCombinedField(child));
-      const firstChildFieldId = typeof children[0] === 'string' ? children[0] : children[0].id;
-      return fieldDef.id === firstChildFieldId;
+      const simpleChildren = field.children.filter(child => typeof child === 'string' || !isCombinedField(child));
+      if (simpleChildren.length === 0) {
+        return false;
+      }
+      const firstChildFieldId = typeof simpleChildren[0] === 'string' ? simpleChildren[0] : simpleChildren[0].id;
+      return _field.id === firstChildFieldId;
     }
-    return fieldDef.id === field.id;
+    return _field.id === field.id;
   });
-  const labelPosition = (_field$labelPosition = field.labelPosition) !== null && _field$labelPosition !== void 0 ? _field$labelPosition : 'side';
 
   // Use internal state instead of a ref to make sure that the component
   // re-renders when the popover's anchor updates.
@@ -6295,41 +11560,47 @@ function FormPanelField({
   if (!fieldDefinition) {
     return null;
   }
+  const layout = normalizeLayout({
+    ...field.layout,
+    type: 'panel'
+  });
+  const labelPosition = layout.labelPosition;
+  const labelClassName = dist_clsx('dataforms-layouts-panel__field-label', `dataforms-layouts-panel__field-label--label-position-${labelPosition}`);
   const fieldLabel = isCombinedField(field) ? field.label : fieldDefinition?.label;
+  const renderedControl = layout.openAs === 'modal' ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(modal, {
+    field: field,
+    fieldDefinition: fieldDefinition,
+    data: data,
+    onChange: onChange,
+    labelPosition: labelPosition
+  }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dropdown, {
+    field: field,
+    popoverAnchor: popoverAnchor,
+    fieldDefinition: fieldDefinition,
+    data: data,
+    onChange: onChange,
+    labelPosition: labelPosition
+  });
   if (labelPosition === 'top') {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
       className: "dataforms-layouts-panel__field",
       spacing: 0,
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "dataforms-layouts-panel__field-label",
+        className: labelClassName,
         style: {
           paddingBottom: 0
         },
         children: fieldLabel
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
         className: "dataforms-layouts-panel__field-control",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PanelDropdown, {
-          field: field,
-          popoverAnchor: popoverAnchor,
-          fieldDefinition: fieldDefinition,
-          data: data,
-          onChange: onChange,
-          labelPosition: labelPosition
-        })
+        children: renderedControl
       })]
     });
   }
   if (labelPosition === 'none') {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "dataforms-layouts-panel__field",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PanelDropdown, {
-        field: field,
-        popoverAnchor: popoverAnchor,
-        fieldDefinition: fieldDefinition,
-        data: data,
-        onChange: onChange,
-        labelPosition: labelPosition
-      })
+      children: renderedControl
     });
   }
 
@@ -6338,17 +11609,169 @@ function FormPanelField({
     ref: setPopoverAnchor,
     className: "dataforms-layouts-panel__field",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "dataforms-layouts-panel__field-label",
+      className: labelClassName,
       children: fieldLabel
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "dataforms-layouts-panel__field-control",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PanelDropdown, {
-        field: field,
-        popoverAnchor: popoverAnchor,
-        fieldDefinition: fieldDefinition,
+      children: renderedControl
+    })]
+  });
+}
+
+;// ./packages/icons/build-module/library/chevron-up.js
+/**
+ * WordPress dependencies
+ */
+
+
+const chevronUp = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M6.5 12.4L12 8l5.5 4.4-.9 1.2L12 10l-4.5 3.6-1-1.2z"
+  })
+});
+/* harmony default export */ const chevron_up = (chevronUp);
+
+;// ./packages/icons/build-module/library/chevron-down.js
+/**
+ * WordPress dependencies
+ */
+
+
+const chevronDown = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"
+  })
+});
+/* harmony default export */ const chevron_down = (chevronDown);
+
+;// ./packages/dataviews/build-module/dataforms-layouts/card/index.js
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+function useCollapsibleCard(initialIsOpen = true) {
+  const [isOpen, setIsOpen] = (0,external_wp_element_namespaceObject.useState)(initialIsOpen);
+  const toggle = (0,external_wp_element_namespaceObject.useCallback)(() => {
+    setIsOpen(prev => !prev);
+  }, []);
+  const CollapsibleCardHeader = (0,external_wp_element_namespaceObject.useCallback)(({
+    children,
+    ...props
+  }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardHeader, {
+    ...props,
+    onClick: toggle,
+    style: {
+      cursor: 'pointer',
+      ...props.style
+    },
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      style: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      },
+      children: children
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+      __next40pxDefaultSize: true,
+      variant: "tertiary",
+      icon: isOpen ? chevron_up : chevron_down,
+      "aria-expanded": isOpen,
+      "aria-label": isOpen ? 'Collapse' : 'Expand'
+    })]
+  }), [toggle, isOpen]);
+  return {
+    isOpen,
+    CollapsibleCardHeader
+  };
+}
+function FormCardField({
+  data,
+  field,
+  onChange,
+  hideLabelFromVision
+}) {
+  const {
+    fields
+  } = (0,external_wp_element_namespaceObject.useContext)(dataform_context);
+  const layout = normalizeLayout({
+    ...field.layout,
+    type: 'card'
+  });
+  const form = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    layout: DEFAULT_LAYOUT,
+    fields: isCombinedField(field) ? field.children : []
+  }), [field]);
+  const {
+    isOpen,
+    CollapsibleCardHeader
+  } = useCollapsibleCard(layout.isOpened);
+  if (isCombinedField(field)) {
+    const withHeader = !!field.label && layout.withHeader;
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+      className: "dataforms-layouts-card__field",
+      children: [withHeader && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CollapsibleCardHeader, {
+        className: "dataforms-layouts-card__field-label",
+        children: field.label
+      }), (isOpen || !withHeader) &&
+      /*#__PURE__*/
+      // If it doesn't have a header, keep it open.
+      // Otherwise, the card will not be visible.
+      (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
+        className: "dataforms-layouts-card__field-control",
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataFormLayout, {
+          data: data,
+          form: form,
+          onChange: onChange
+        })
+      })]
+    });
+  }
+  const fieldDefinition = fields.find(fieldDef => fieldDef.id === field.id);
+  if (!fieldDefinition || !fieldDefinition.Edit) {
+    return null;
+  }
+  const RegularLayout = getFormFieldLayout('regular')?.component;
+  if (!RegularLayout) {
+    return null;
+  }
+  const withHeader = !!fieldDefinition.label && layout.withHeader;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+    className: "dataforms-layouts-card__field",
+    children: [withHeader && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CollapsibleCardHeader, {
+      className: "dataforms-layouts-card__field-label",
+      children: fieldDefinition.label
+    }), (isOpen || !withHeader) &&
+    /*#__PURE__*/
+    // If it doesn't have a header, keep it open.
+    // Otherwise, the card will not be visible.
+    (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
+      className: "dataforms-layouts-card__field-control",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(RegularLayout, {
         data: data,
+        field: field,
         onChange: onChange,
-        labelPosition: labelPosition
+        hideLabelFromVision: hideLabelFromVision || withHeader
       })
     })]
   });
@@ -6360,46 +11783,19 @@ function FormPanelField({
  */
 
 
+
 const FORM_FIELD_LAYOUTS = [{
   type: 'regular',
   component: FormRegularField
 }, {
   type: 'panel',
   component: FormPanelField
+}, {
+  type: 'card',
+  component: FormCardField
 }];
 function getFormFieldLayout(type) {
   return FORM_FIELD_LAYOUTS.find(layout => layout.type === type);
-}
-
-;// ./packages/dataviews/build-module/normalize-form-fields.js
-/**
- * Internal dependencies
- */
-
-function normalizeFormFields(form) {
-  var _form$type, _form$labelPosition, _form$fields;
-  let layout = 'regular';
-  if (['regular', 'panel'].includes((_form$type = form.type) !== null && _form$type !== void 0 ? _form$type : '')) {
-    layout = form.type;
-  }
-  const labelPosition = (_form$labelPosition = form.labelPosition) !== null && _form$labelPosition !== void 0 ? _form$labelPosition : layout === 'regular' ? 'top' : 'side';
-  return ((_form$fields = form.fields) !== null && _form$fields !== void 0 ? _form$fields : []).map(field => {
-    var _field$layout, _field$labelPosition;
-    if (typeof field === 'string') {
-      return {
-        id: field,
-        layout,
-        labelPosition
-      };
-    }
-    const fieldLayout = (_field$layout = field.layout) !== null && _field$layout !== void 0 ? _field$layout : layout;
-    const fieldLabelPosition = (_field$labelPosition = field.labelPosition) !== null && _field$labelPosition !== void 0 ? _field$labelPosition : fieldLayout === 'regular' ? 'top' : 'side';
-    return {
-      ...field,
-      layout: fieldLayout,
-      labelPosition: fieldLabelPosition
-    };
-  });
 }
 
 ;// ./packages/dataviews/build-module/dataforms-layouts/data-form-layout.js
@@ -6433,9 +11829,9 @@ function DataFormLayout({
   }
   const normalizedFormFields = (0,external_wp_element_namespaceObject.useMemo)(() => normalizeFormFields(form), [form]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalVStack, {
-    spacing: 2,
+    spacing: form.layout?.type === 'panel' ? 2 : 4,
     children: normalizedFormFields.map(formField => {
-      const FieldLayout = getFormFieldLayout(formField.layout)?.component;
+      const FieldLayout = getFormFieldLayout(formField.layout.type)?.component;
       if (!FieldLayout) {
         return null;
       }
@@ -6537,8 +11933,6 @@ function isTemplateRemovable(template) {
   return [template.source, template.source].includes('custom') && !Boolean(template.type === 'wp_template' && template?.plugin) && !template.has_theme_file;
 }
 
-;// ./node_modules/clsx/dist/clsx.mjs
-function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e)){var o=e.length;for(t=0;t<o;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f)}else for(f in e)e[f]&&(n&&(n+=" "),n+=f);return n}function clsx(){for(var e,t,f=0,n="",o=arguments.length;f<o;f++)(e=arguments[f])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}/* harmony default export */ const dist_clsx = (clsx);
 ;// ./packages/fields/build-module/fields/title/view.js
 /**
  * External dependencies
@@ -6602,7 +11996,8 @@ const titleField = {
   }) => getItemTitle(item),
   render: TitleView,
   enableHiding: false,
-  enableGlobalSearch: true
+  enableGlobalSearch: true,
+  filterBy: false
 };
 
 /**
@@ -7455,6 +12850,7 @@ function CreateTemplatePartModalContents({
         onChange: setTitle,
         required: true
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("fieldset", {
+        className: "fields-create-template-part-modal__area-fieldset",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.BaseControl.VisualLabel, {
           as: "legend",
           children: (0,external_wp_i18n_namespaceObject.__)('Area')
@@ -7590,8 +12986,8 @@ const external_wp_patterns_namespaceObject = window["wp"]["patterns"];
  */
 
 const {
-  lock: lock_unlock_lock,
-  unlock: lock_unlock_unlock
+  lock: build_module_lock_unlock_lock,
+  unlock: build_module_lock_unlock_unlock
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/fields');
 
 ;// ./packages/fields/build-module/actions/duplicate-pattern.js
@@ -7610,7 +13006,7 @@ const {
 const {
   CreatePatternModalContents,
   useDuplicatePatternProps
-} = lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
+} = build_module_lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
 const duplicatePattern = {
   id: 'duplicate-pattern',
   label: (0,external_wp_i18n_namespaceObject._x)('Duplicate', 'action label'),
@@ -7662,7 +13058,7 @@ const duplicatePattern = {
 // Patterns.
 const {
   PATTERN_TYPES
-} = lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
+} = build_module_lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
 const renamePost = {
   id: 'rename-post',
   label: (0,external_wp_i18n_namespaceObject.__)('Rename'),
@@ -7780,10 +13176,23 @@ function isItemValid(item, fields, form) {
   const _fields = normalizeFields(fields.filter(({
     id
   }) => !!form.fields?.includes(id)));
+  const isEmptyNullOrUndefined = value => [undefined, '', null].includes(value);
   return _fields.every(field => {
-    return field.isValid(item, {
-      elements: field.elements
+    const value = field.getValue({
+      item
     });
+    if (field.isValid.required) {
+      if (field.type === 'text' && isEmptyNullOrUndefined(value) || field.type === 'email' && isEmptyNullOrUndefined(value) || field.type === 'integer' && isEmptyNullOrUndefined(value) || field.type === undefined && isEmptyNullOrUndefined(value)) {
+        return false;
+      }
+      if (field.type === 'boolean' && value !== true) {
+        return false;
+      }
+    }
+    if (typeof field.isValid.custom === 'function' && field.isValid.custom(item, field) !== null) {
+      return false;
+    }
+    return true;
   });
 }
 
@@ -7802,7 +13211,11 @@ const orderField = {
   id: 'menu_order',
   type: 'integer',
   label: (0,external_wp_i18n_namespaceObject.__)('Order'),
-  description: (0,external_wp_i18n_namespaceObject.__)('Determines the order of pages.')
+  description: (0,external_wp_i18n_namespaceObject.__)('Determines the order of pages.'),
+  filterBy: false,
+  isValid: {
+    required: true
+  }
 };
 
 /**
@@ -8064,13 +13477,13 @@ const restorePost = {
     }) => status === 'fulfilled')) {
       let successMessage;
       if (posts.length === 1) {
-        successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The number of posts. */
+        successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: The number of posts. */
         (0,external_wp_i18n_namespaceObject.__)('"%s" has been restored.'), getItemTitle(posts[0]));
       } else if (posts[0].type === 'page') {
-        successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The number of posts. */
+        successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %d: The number of posts. */
         (0,external_wp_i18n_namespaceObject.__)('%d pages have been restored.'), posts.length);
       } else {
-        successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The number of posts. */
+        successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %d: The number of posts. */
         (0,external_wp_i18n_namespaceObject.__)('%d posts have been restored.'), posts.length);
       }
       createSuccessNotice(successMessage, {
@@ -8270,8 +13683,8 @@ const resetPostAction = {
           });
           await saveEditedEntityRecord('postType', template.type, template.id);
         }
-        createSuccessNotice(items.length > 1 ? (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The number of items. */
-        (0,external_wp_i18n_namespaceObject.__)('%s items reset.'), items.length) : (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The template/part's name. */
+        createSuccessNotice(items.length > 1 ? (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %d: The number of items. */
+        (0,external_wp_i18n_namespaceObject.__)('%d items reset.'), items.length) : (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: The template/part's name. */
         (0,external_wp_i18n_namespaceObject.__)('"%s" reset.'), getItemTitle(items[0])), {
           type: 'snackbar',
           id: 'revert-template-action'
@@ -8498,7 +13911,7 @@ const editPostWithNotices = async (postsWithUpdates, notice, callbacks) => {
 
 const {
   PATTERN_TYPES: delete_post_PATTERN_TYPES
-} = lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
+} = build_module_lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
 
 // This action is used for templates, patterns and template parts.
 // Every other post type uses the similar `trashPostAction` which
@@ -8550,7 +13963,7 @@ const deletePostAction = {
               success: {
                 messages: {
                   getMessage: item => {
-                    return isResetting ? (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The template/part's name. */
+                    return isResetting ? (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: The template/part's name. */
                     (0,external_wp_i18n_namespaceObject.__)('"%s" reset.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(getItemTitle(item))) : (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: The template/part's name. */
                     (0,external_wp_i18n_namespaceObject._x)('"%s" deleted.', 'template part'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(getItemTitle(item)));
                   },
@@ -8679,11 +14092,11 @@ const trash_post_trashPost = {
             }) => status === 'fulfilled')) {
               let successMessage;
               if (promiseResult.length === 1) {
-                successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The item's title. */
+                successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: The item's title. */
                 (0,external_wp_i18n_namespaceObject.__)('"%s" moved to the trash.'), getItemTitle(items[0]));
               } else {
-                successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The number of items. */
-                (0,external_wp_i18n_namespaceObject._n)('%s item moved to the trash.', '%s items moved to the trash.', items.length), items.length);
+                successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %d: The number of items. */
+                (0,external_wp_i18n_namespaceObject._n)('%d item moved to the trash.', '%d items moved to the trash.', items.length), items.length);
               }
               createSuccessNotice(successMessage, {
                 type: 'snackbar',
@@ -8828,7 +14241,7 @@ const permanentlyDeletePost = {
             }) => status === 'fulfilled')) {
               let successMessage;
               if (promiseResult.length === 1) {
-                successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The posts's title. */
+                successMessage = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: The posts's title. */
                 (0,external_wp_i18n_namespaceObject.__)('"%s" permanently deleted.'), getItemTitle(items[0]));
               } else {
                 successMessage = (0,external_wp_i18n_namespaceObject.__)('The items were permanently deleted.');
@@ -8943,7 +14356,7 @@ const FeaturedImageEdit = ({
     const {
       getEntityRecord
     } = select(external_wp_coreData_namespaceObject.store);
-    return getEntityRecord('root', 'media', value);
+    return getEntityRecord('postType', 'attachment', value);
   }, [value]);
   const onChangeControl = (0,external_wp_element_namespaceObject.useCallback)(newValue => onChange({
     [id]: newValue
@@ -9028,21 +14441,24 @@ const FeaturedImageEdit = ({
  */
 
 const FeaturedImageView = ({
-  item
+  item,
+  config
 }) => {
   const mediaId = item.featured_media;
   const media = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getEntityRecord
     } = select(external_wp_coreData_namespaceObject.store);
-    return mediaId ? getEntityRecord('root', 'media', mediaId) : null;
+    return mediaId ? getEntityRecord('postType', 'attachment', mediaId) : null;
   }, [mediaId]);
   const url = media?.source_url;
   if (url) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("img", {
       className: "fields-controls__featured-image-image",
       src: url,
-      alt: ""
+      alt: "",
+      srcSet: media?.media_details?.sizes ? Object.values(media.media_details.sizes).map(size => `${size.source_url} ${size.width}w`).join(', ') : undefined,
+      sizes: config?.sizes || '100vw'
     });
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
@@ -9069,7 +14485,8 @@ const featuredImageField = {
   label: (0,external_wp_i18n_namespaceObject.__)('Featured Image'),
   Edit: FeaturedImageEdit,
   render: FeaturedImageView,
-  enableSorting: false
+  enableSorting: false,
+  filterBy: false
 };
 
 /**
@@ -9181,6 +14598,9 @@ const authorField = {
     const nameA = a._embedded?.author?.[0]?.name || '';
     const nameB = b._embedded?.author?.[0]?.name || '';
     return direction === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+  },
+  filterBy: {
+    operators: ['isAny', 'isNone']
   }
 };
 
@@ -9363,7 +14783,7 @@ function StatusView({
 
 
 
-const OPERATOR_IS_ANY = 'isAny';
+const status_OPERATOR_IS_ANY = 'isAny';
 const statusField = {
   label: (0,external_wp_i18n_namespaceObject.__)('Status'),
   id: 'status',
@@ -9373,7 +14793,7 @@ const statusField = {
   Edit: 'radio',
   enableSorting: false,
   filterBy: {
-    operators: [OPERATOR_IS_ANY]
+    operators: [status_OPERATOR_IS_ANY]
   }
 };
 
@@ -9394,7 +14814,7 @@ const statusField = {
  * Internal dependencies
  */
 
-const getFormattedDate = dateToDisplay => (0,external_wp_date_namespaceObject.dateI18n)((0,external_wp_date_namespaceObject.getSettings)().formats.datetimeAbbreviated, (0,external_wp_date_namespaceObject.getDate)(dateToDisplay));
+const date_view_getFormattedDate = dateToDisplay => (0,external_wp_date_namespaceObject.dateI18n)((0,external_wp_date_namespaceObject.getSettings)().formats.datetimeAbbreviated, (0,external_wp_date_namespaceObject.getDate)(dateToDisplay));
 const DateView = ({
   item
 }) => {
@@ -9403,7 +14823,7 @@ const DateView = ({
   if (isDraftOrPrivate) {
     var _item$date;
     return (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: page creation or modification date. */
-    (0,external_wp_i18n_namespaceObject.__)('<span>Modified: <time>%s</time></span>'), getFormattedDate((_item$date = item.date) !== null && _item$date !== void 0 ? _item$date : null)), {
+    (0,external_wp_i18n_namespaceObject.__)('<span>Modified: <time>%s</time></span>'), date_view_getFormattedDate((_item$date = item.date) !== null && _item$date !== void 0 ? _item$date : null)), {
       span: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {}),
       time: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("time", {})
     });
@@ -9412,7 +14832,7 @@ const DateView = ({
   if (isScheduled) {
     var _item$date2;
     return (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: page creation date */
-    (0,external_wp_i18n_namespaceObject.__)('<span>Scheduled: <time>%s</time></span>'), getFormattedDate((_item$date2 = item.date) !== null && _item$date2 !== void 0 ? _item$date2 : null)), {
+    (0,external_wp_i18n_namespaceObject.__)('<span>Scheduled: <time>%s</time></span>'), date_view_getFormattedDate((_item$date2 = item.date) !== null && _item$date2 !== void 0 ? _item$date2 : null)), {
       span: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {}),
       time: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("time", {})
     });
@@ -9421,7 +14841,7 @@ const DateView = ({
   if (isPublished) {
     var _item$date3;
     return (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: page creation time */
-    (0,external_wp_i18n_namespaceObject.__)('<span>Published: <time>%s</time></span>'), getFormattedDate((_item$date3 = item.date) !== null && _item$date3 !== void 0 ? _item$date3 : null)), {
+    (0,external_wp_i18n_namespaceObject.__)('<span>Published: <time>%s</time></span>'), date_view_getFormattedDate((_item$date3 = item.date) !== null && _item$date3 !== void 0 ? _item$date3 : null)), {
       span: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {}),
       time: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("time", {})
     });
@@ -9432,7 +14852,7 @@ const DateView = ({
   const isPending = item.status === 'pending';
   if (isPending) {
     return (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: page creation or modification date. */
-    (0,external_wp_i18n_namespaceObject.__)('<span>Modified: <time>%s</time></span>'), getFormattedDate(dateToDisplay !== null && dateToDisplay !== void 0 ? dateToDisplay : null)), {
+    (0,external_wp_i18n_namespaceObject.__)('<span>Modified: <time>%s</time></span>'), date_view_getFormattedDate(dateToDisplay !== null && dateToDisplay !== void 0 ? dateToDisplay : null)), {
       span: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {}),
       time: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("time", {})
     });
@@ -9440,7 +14860,7 @@ const DateView = ({
 
   // Unknow status.
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("time", {
-    children: getFormattedDate((_item$date5 = item.date) !== null && _item$date5 !== void 0 ? _item$date5 : null)
+    children: date_view_getFormattedDate((_item$date5 = item.date) !== null && _item$date5 !== void 0 ? _item$date5 : null)
   });
 };
 /* harmony default export */ const date_view = (DateView);
@@ -9461,13 +14881,14 @@ const dateField = {
   id: 'date',
   type: 'datetime',
   label: (0,external_wp_i18n_namespaceObject.__)('Date'),
-  render: date_view
+  render: date_view,
+  filterBy: false
 };
 
 /**
  * Date field for BasePost.
  */
-/* harmony default export */ const date = (dateField);
+/* harmony default export */ const fields_date = (dateField);
 
 ;// ./packages/icons/build-module/library/copy-small.js
 /**
@@ -9671,7 +15092,8 @@ const slugField = {
   type: 'text',
   label: (0,external_wp_i18n_namespaceObject.__)('Slug'),
   Edit: slug_edit,
-  render: slug_view
+  render: slug_view,
+  filterBy: false
 };
 
 /**
@@ -9980,7 +15402,8 @@ const parentField = {
   label: (0,external_wp_i18n_namespaceObject.__)('Parent'),
   Edit: ParentEdit,
   render: ParentView,
-  enableSorting: true
+  enableSorting: true,
+  filterBy: false
 };
 
 /**
@@ -10005,9 +15428,7 @@ const commentStatusField = {
   type: 'text',
   Edit: 'radio',
   enableSorting: false,
-  filterBy: {
-    operators: []
-  },
+  filterBy: false,
   elements: [{
     value: 'open',
     label: (0,external_wp_i18n_namespaceObject.__)('Open'),
@@ -10069,7 +15490,7 @@ const TemplateEdit = ({
     const {
       getHomePage,
       getPostsPageId
-    } = lock_unlock_unlock(select(external_wp_coreData_namespaceObject.store));
+    } = build_module_lock_unlock_unlock(select(external_wp_coreData_namespaceObject.store));
     const isPostsPage = getPostsPageId() === +postId;
     const isFrontPage = postType === 'page' && getHomePage()?.postId === +postId;
     const allowSwitchingTemplate = !isPostsPage && !isFrontPage;
@@ -10191,7 +15612,8 @@ const templateField = {
   type: 'text',
   label: (0,external_wp_i18n_namespaceObject.__)('Template'),
   Edit: TemplateEdit,
-  enableSorting: false
+  enableSorting: false,
+  filterBy: false
 };
 
 /**
@@ -10263,6 +15685,8 @@ function PasswordEdit({
  * WordPress dependencies
  */
 
+
+
 /**
  * Internal dependencies
  */
@@ -10271,10 +15695,12 @@ function PasswordEdit({
 const passwordField = {
   id: 'password',
   type: 'text',
+  label: (0,external_wp_i18n_namespaceObject.__)('Password'),
   Edit: edit,
   enableSorting: false,
   enableHiding: false,
-  isVisible: item => item.status !== 'private'
+  isVisible: item => item.status !== 'private',
+  filterBy: false
 };
 
 /**
@@ -10300,7 +15726,7 @@ const passwordField = {
 
 const {
   Badge
-} = lock_unlock_unlock(external_wp_components_namespaceObject.privateApis);
+} = build_module_lock_unlock_unlock(external_wp_components_namespaceObject.privateApis);
 function PageTitleView({
   item
 }) {
@@ -10349,7 +15775,8 @@ const pageTitleField = {
   }) => getItemTitle(item),
   render: PageTitleView,
   enableHiding: false,
-  enableGlobalSearch: true
+  enableGlobalSearch: true,
+  filterBy: false
 };
 
 /**
@@ -10380,7 +15807,8 @@ const templateTitleField = {
   }) => getItemTitle(item),
   render: TitleView,
   enableHiding: false,
-  enableGlobalSearch: true
+  enableGlobalSearch: true,
+  filterBy: false
 };
 
 /**
@@ -10394,31 +15822,29 @@ const templateTitleField = {
  */
 
 
-/** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
+/**
+ * External dependencies
+ */
 
 /**
  * Return an SVG icon.
  *
- * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifying the icon size in pixels
- *                                                          Other props will be passed to wrapped SVG component
- * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
+ * @param props The component props.
  *
- * @return {JSX.Element}  Icon component
+ * @return Icon component
  */
-function Icon({
+/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(({
   icon,
   size = 24,
   ...props
-}, ref) {
+}, ref) => {
   return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
     width: size,
     height: size,
     ...props,
     ref
   });
-}
-/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
+}));
 
 ;// ./packages/icons/build-module/library/lock-small.js
 /**
@@ -10456,7 +15882,7 @@ const lockSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(
 
 const {
   PATTERN_TYPES: view_PATTERN_TYPES
-} = lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
+} = build_module_lock_unlock_unlock(external_wp_patterns_namespaceObject.privateApis);
 function PatternTitleView({
   item
 }) {
@@ -10497,7 +15923,8 @@ const patternTitleField = {
   }) => getItemTitle(item),
   render: PatternTitleView,
   enableHiding: false,
-  enableGlobalSearch: true
+  enableGlobalSearch: true,
+  filterBy: false
 };
 
 /**
@@ -10618,7 +16045,7 @@ const getOpenverseCaption = item => {
   let _caption;
   if (_creator) {
     _caption = title ? (0,external_wp_i18n_namespaceObject.sprintf)(
-    // translators: %1s: Title of a media work from Openverse; %2s: Name of the work's creator; %3s: Work's licence e.g: "CC0 1.0".
+    // translators: %1s: Title of a media work from Openverse; %2$s: Name of the work's creator; %3s: Work's licence e.g: "CC0 1.0".
     (0,external_wp_i18n_namespaceObject._x)('"%1$s" by %2$s/ %3$s', 'caption'), getExternalLink(foreignLandingUrl, (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title)), creatorUrl ? getExternalLink(creatorUrl, _creator) : _creator, licenseUrl ? getExternalLink(`${licenseUrl}?ref=openverse`, fullLicense) : fullLicense) : (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %1s: Link attributes for a given Openverse media work; %2s: Name of the work's creator; %3s: Works's licence e.g: "CC0 1.0".
     (0,external_wp_i18n_namespaceObject._x)('<a %1$s>Work</a> by %2$s/ %3$s', 'caption'), getExternalLinkAttributes(foreignLandingUrl), creatorUrl ? getExternalLink(creatorUrl, _creator) : _creator, licenseUrl ? getExternalLink(`${licenseUrl}?ref=openverse`, fullLicense) : fullLicense);
@@ -10632,7 +16059,7 @@ const getOpenverseCaption = item => {
   return _caption.replace(/\s{2}/g, ' ');
 };
 const coreMediaFetch = async (query = {}) => {
-  const mediaItems = await (0,external_wp_data_namespaceObject.resolveSelect)(external_wp_coreData_namespaceObject.store).getMediaItems({
+  const mediaItems = await (0,external_wp_data_namespaceObject.resolveSelect)(external_wp_coreData_namespaceObject.store).getEntityRecords('postType', 'attachment', {
     ...query,
     orderBy: !!query?.search ? 'relevance' : 'date'
   });
@@ -10836,6 +16263,7 @@ function v4(options, buf, offset) {
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -10844,7 +16272,7 @@ const noop = () => {};
 
 /**
  * Upload a media file when the file upload button is activated.
- * Wrapper around mediaUpload() that injects the current post ID.
+ * Wrapper around uploadMedia() that injects the current post ID.
  *
  * @param {Object}   $0                   Parameters object passed to the function.
  * @param {?Object}  $0.additionalData    Additional data to include in the request.
@@ -10866,6 +16294,9 @@ function mediaUpload({
   onSuccess,
   multiple = true
 }) {
+  const {
+    receiveEntityRecords
+  } = (0,external_wp_data_namespaceObject.dispatch)(external_wp_coreData_namespaceObject.store);
   const {
     getCurrentPost,
     getEditorSettings
@@ -10906,6 +16337,15 @@ function mediaUpload({
         clearSaveLock();
       }
       onFileChange?.(file);
+
+      // Files are initially received by `onFileChange` as a blob.
+      // After that the function is called a second time with the file as an entity.
+      // For core-data, we only care about receiving/invalidating entities.
+      const entityFiles = file.filter(_file => _file?.id);
+      if (entityFiles?.length) {
+        const invalidateCache = true;
+        receiveEntityRecords('postType', 'attachment', entityFiles, undefined, invalidateCache);
+      }
     },
     onSuccess,
     additionalData: {
@@ -11208,7 +16648,8 @@ const {
   globalStylesLinksDataKey,
   selectBlockPatternsKey,
   reusableBlocksSelectKey,
-  sectionRootClientIdKey
+  sectionRootClientIdKey,
+  mediaEditKey
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 
 /**
@@ -11281,8 +16722,8 @@ function useBlockEditorSettings(settings, postType, postId, renderingMode) {
       isDistractionFree: get('core', 'distractionFree'),
       keepCaretInsideBlock: get('core', 'keepCaretInsideBlock'),
       hasUploadPermissions: (_canUser = canUser('create', {
-        kind: 'root',
-        name: 'media'
+        kind: 'postType',
+        name: 'attachment'
       })) !== null && _canUser !== void 0 ? _canUser : true,
       userCanCreatePages: canUser('create', {
         kind: 'postType',
@@ -11317,6 +16758,9 @@ function useBlockEditorSettings(settings, postType, postId, renderingMode) {
     undo,
     setIsInserterOpened
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
+  const {
+    editMediaEntity
+  } = unlock((0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store));
   const {
     saveEntityRecord
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
@@ -11361,6 +16805,7 @@ function useBlockEditorSettings(settings, postType, postId, renderingMode) {
       hasFixedToolbar,
       isDistractionFree,
       keepCaretInsideBlock,
+      [mediaEditKey]: hasUploadPermissions ? editMediaEntity : undefined,
       mediaUpload: hasUploadPermissions ? mediaUpload : undefined,
       mediaSideload: hasUploadPermissions ? media_sideload : undefined,
       __experimentalBlockPatterns: blockPatterns,
@@ -11399,7 +16844,7 @@ function useBlockEditorSettings(settings, postType, postId, renderingMode) {
       editorTool: renderingMode === 'post-only' && postType !== 'wp_template' ? 'edit' : undefined
     };
     return blockEditorSettings;
-  }, [allowedBlockTypes, allowRightClickOverrides, focusMode, forceDisableFocusMode, hasFixedToolbar, isDistractionFree, keepCaretInsideBlock, settings, hasUploadPermissions, userPatternCategories, blockPatterns, blockPatternCategories, canUseUnfilteredHTML, undo, createPageEntity, userCanCreatePages, pageOnFront, pageForPosts, postType, setIsInserterOpened, sectionRootClientId, globalStylesData, globalStylesLinksData, renderingMode]);
+  }, [allowedBlockTypes, allowRightClickOverrides, focusMode, forceDisableFocusMode, hasFixedToolbar, isDistractionFree, keepCaretInsideBlock, settings, hasUploadPermissions, userPatternCategories, blockPatterns, blockPatternCategories, canUseUnfilteredHTML, undo, createPageEntity, userCanCreatePages, pageOnFront, pageForPosts, postType, setIsInserterOpened, sectionRootClientId, globalStylesData, globalStylesLinksData, renderingMode, editMediaEntity]);
 }
 /* harmony default export */ const use_block_editor_settings = (useBlockEditorSettings);
 
@@ -15341,7 +20786,7 @@ const registerPostTypeSchema = postType => async ({
   const actions = [postTypeConfig.viewable ? view_post : undefined, !!postTypeConfig.supports?.revisions ? view_post_revisions : undefined,
   // @ts-ignore
    true ? !['wp_template', 'wp_block', 'wp_template_part'].includes(postTypeConfig.slug) && canCreate && duplicate_post : 0, postTypeConfig.slug === 'wp_template_part' && canCreate && currentTheme?.is_block_theme ? duplicate_template_part : undefined, canCreate && postTypeConfig.slug === 'wp_block' ? duplicate_pattern : undefined, postTypeConfig.supports?.title ? rename_post : undefined, postTypeConfig.supports?.['page-attributes'] ? reorder_page : undefined, postTypeConfig.slug === 'wp_block' ? export_pattern : undefined, restore_post, reset_post, delete_post, trash_post, permanently_delete_post].filter(Boolean);
-  const fields = [postTypeConfig.supports?.thumbnail && currentTheme?.theme_supports?.['post-thumbnails'] && featured_image, postTypeConfig.supports?.author && author, fields_status, date, slug, postTypeConfig.supports?.['page-attributes'] && fields_parent, postTypeConfig.supports?.comments && comment_status, fields_template, fields_password, postTypeConfig.supports?.editor && postTypeConfig.viewable && content_preview].filter(Boolean);
+  const fields = [postTypeConfig.supports?.thumbnail && currentTheme?.theme_supports?.['post-thumbnails'] && featured_image, postTypeConfig.supports?.author && author, fields_status, fields_date, slug, postTypeConfig.supports?.['page-attributes'] && fields_parent, postTypeConfig.supports?.comments && comment_status, fields_template, fields_password, postTypeConfig.supports?.editor && postTypeConfig.viewable && content_preview].filter(Boolean);
   if (postTypeConfig.supports?.title) {
     let _titleField;
     if (postType === 'page') {
@@ -15649,7 +21094,7 @@ const removeTemplates = items => async ({
       } else if (typeof items[0].title?.raw === 'string') {
         title = items[0].title?.raw;
       }
-      successMessage = isResetting ? (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: The template/part's name. */
+      successMessage = isResetting ? (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: The template/part's name. */
       (0,external_wp_i18n_namespaceObject.__)('"%s" reset.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title)) : (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: The template/part's name. */
       (0,external_wp_i18n_namespaceObject._x)('"%s" deleted.', 'template part'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title));
     } else {
@@ -16271,10 +21716,86 @@ function ControlsWithStoreSubscription(props) {
 }
 (0,external_wp_hooks_namespaceObject.addFilter)('editor.BlockEdit', 'core/editor/with-pattern-override-controls', withPatternOverrideControls);
 
+;// ./packages/editor/build-module/hooks/navigation-link-view-button.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+
+// Target blocks that should have the View button.
+
+const SUPPORTED_BLOCKS = ['core/navigation-link', 'core/navigation-submenu'];
+
+/**
+ * Component that renders the View button for navigation blocks.
+ *
+ * @param {Object} props            Component props.
+ * @param {Object} props.attributes Block attributes.
+ * @return {JSX.Element|null} The View button component or null if not applicable.
+ */
+function NavigationViewButton({
+  attributes
+}) {
+  const {
+    kind,
+    id,
+    type
+  } = attributes;
+  const blockEditingMode = (0,external_wp_blockEditor_namespaceObject.useBlockEditingMode)();
+  const onNavigateToEntityRecord = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_blockEditor_namespaceObject.store).getSettings().onNavigateToEntityRecord, []);
+  const onViewPage = (0,external_wp_element_namespaceObject.useCallback)(() => {
+    if (kind === 'post-type' && type === 'page' && id && onNavigateToEntityRecord) {
+      onNavigateToEntityRecord({
+        postId: id,
+        postType: type
+      });
+    }
+  }, [kind, id, type, onNavigateToEntityRecord]);
+
+  // Only show for page-type links, when navigation is available, and when in contentOnly mode.
+  if (kind !== 'post-type' || type !== 'page' || !id || !onNavigateToEntityRecord || blockEditingMode !== 'contentOnly') {
+    return null;
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.__unstableBlockToolbarLastItem, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarGroup, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
+        name: "view",
+        title: (0,external_wp_i18n_namespaceObject.__)('View'),
+        onClick: onViewPage,
+        children: (0,external_wp_i18n_namespaceObject.__)('View')
+      })
+    })
+  });
+}
+
+/**
+ * Higher-order component that adds the View button to navigation blocks.
+ */
+const withNavigationViewButton = (0,external_wp_compose_namespaceObject.createHigherOrderComponent)(BlockEdit => props => {
+  const isSupportedBlock = SUPPORTED_BLOCKS.includes(props.name);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BlockEdit, {
+      ...props
+    }, "edit"), props.isSelected && isSupportedBlock && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NavigationViewButton, {
+      ...props
+    })]
+  });
+}, 'withNavigationViewButton');
+
+// Register the filter.
+(0,external_wp_hooks_namespaceObject.addFilter)('editor.BlockEdit', 'core/editor/with-navigation-view-button', withNavigationViewButton);
+
 ;// ./packages/editor/build-module/hooks/index.js
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -16619,7 +22140,7 @@ function DocumentBar(props) {
         } : undefined,
         children: (0,external_wp_i18n_namespaceObject.__)('Back')
       })
-    }), !isTemplate && isTemplatePreview && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockIcon, {
+    }), !isTemplate && isTemplatePreview && !hasBackButton && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.BlockIcon, {
       icon: library_layout,
       className: "editor-document-bar__icon-layout"
     }), isNotFound ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalText, {
@@ -20523,22 +26044,13 @@ function PostAuthorCombobox() {
       author: postAuthorId
     });
   };
-
-  /**
-   * Handle user input.
-   *
-   * @param {string} inputValue The current value of the input field.
-   */
-  const handleKeydown = inputValue => {
-    setFieldValue(inputValue);
-  };
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ComboboxControl, {
     __nextHasNoMarginBottom: true,
     __next40pxDefaultSize: true,
     label: (0,external_wp_i18n_namespaceObject.__)('Author'),
     options: authorOptions,
     value: authorId,
-    onFilterValueChange: (0,external_wp_compose_namespaceObject.debounce)(handleKeydown, 300),
+    onFilterValueChange: (0,external_wp_compose_namespaceObject.debounce)(setFieldValue, 300),
     onChange: handleSelect,
     allowReset: false,
     hideLabelFromVision: true,
@@ -21650,7 +27162,7 @@ function PostFeaturedImage({
 }
 const applyWithSelect = (0,external_wp_data_namespaceObject.withSelect)(select => {
   const {
-    getMedia,
+    getEntityRecord,
     getPostType,
     hasFinishedResolution
   } = select(external_wp_coreData_namespaceObject.store);
@@ -21660,13 +27172,13 @@ const applyWithSelect = (0,external_wp_data_namespaceObject.withSelect)(select =
   } = select(store_store);
   const featuredImageId = getEditedPostAttribute('featured_media');
   return {
-    media: featuredImageId ? getMedia(featuredImageId, {
+    media: featuredImageId ? getEntityRecord('postType', 'attachment', featuredImageId, {
       context: 'view'
     }) : null,
     currentPostId: getCurrentPostId(),
     postType: getPostType(getEditedPostAttribute('type')),
     featuredImageId,
-    isRequestingFeaturedImageMedia: !!featuredImageId && !hasFinishedResolution('getMedia', [featuredImageId, {
+    isRequestingFeaturedImageMedia: !!featuredImageId && !hasFinishedResolution('getEntityRecord', ['postType', 'attachment', featuredImageId, {
       context: 'view'
     }])
   };
@@ -22130,13 +27642,6 @@ function PostLastRevisionPanel() {
  */
 
 
-/**
- * A modal component that is displayed when a post is locked for editing by another user.
- * The modal provides information about the lock status and options to take over or exit the editor.
- *
- * @return {React.ReactNode} The rendered PostLockedModal component.
- */
-
 function PostLockedModal() {
   const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(PostLockedModal);
   const hookName = 'core/editor/post-locked-modal-' + instanceId;
@@ -22335,6 +27840,14 @@ function PostLockedModal() {
     })
   });
 }
+
+/**
+ * A modal component that is displayed when a post is locked for editing by another user.
+ * The modal provides information about the lock status and options to take over or exit the editor.
+ *
+ * @return {React.ReactNode} The rendered PostLockedModal component.
+ */
+/* harmony default export */ const post_locked_modal = ( true ? (0,external_wp_components_namespaceObject.withFilters)('editor.PostLockedModal')(PostLockedModal) : 0);
 
 ;// ./packages/editor/build-module/components/post-pending-status/check.js
 /**
@@ -23105,7 +28618,7 @@ function usePostVisibilityLabel() {
  * const result = toDate(1392098430000)
  * //=> Tue Feb 11 2014 11:30:30
  */
-function toDate(argument) {
+function toDate_toDate(argument) {
   const argStr = Object.prototype.toString.call(argument);
 
   // Clone the date
@@ -23130,7 +28643,7 @@ function toDate(argument) {
 }
 
 // Fallback for modularized imports:
-/* harmony default export */ const date_fns_toDate = ((/* unused pure expression or super */ null && (toDate)));
+/* harmony default export */ const node_modules_date_fns_toDate = ((/* unused pure expression or super */ null && (toDate_toDate)));
 
 ;// ./node_modules/date-fns/startOfMonth.mjs
 
@@ -23155,15 +28668,15 @@ function toDate(argument) {
  * const result = startOfMonth(new Date(2014, 8, 2, 11, 55, 0))
  * //=> Mon Sep 01 2014 00:00:00
  */
-function startOfMonth(date) {
-  const _date = toDate(date);
+function startOfMonth_startOfMonth(date) {
+  const _date = toDate_toDate(date);
   _date.setDate(1);
   _date.setHours(0, 0, 0, 0);
   return _date;
 }
 
 // Fallback for modularized imports:
-/* harmony default export */ const date_fns_startOfMonth = ((/* unused pure expression or super */ null && (startOfMonth)));
+/* harmony default export */ const node_modules_date_fns_startOfMonth = ((/* unused pure expression or super */ null && (startOfMonth_startOfMonth)));
 
 ;// ./node_modules/date-fns/endOfMonth.mjs
 
@@ -23189,7 +28702,7 @@ function startOfMonth(date) {
  * //=> Tue Sep 30 2014 23:59:59.999
  */
 function endOfMonth(date) {
-  const _date = toDate(date);
+  const _date = toDate_toDate(date);
   const month = _date.getMonth();
   _date.setFullYear(_date.getFullYear(), month + 1, 0);
   _date.setHours(23, 59, 59, 999);
@@ -23222,7 +28735,7 @@ function endOfMonth(date) {
  * @name daysInWeek
  * @summary Days in 1 week.
  */
-const daysInWeek = 7;
+const constants_daysInWeek = 7;
 
 /**
  * @constant
@@ -23237,7 +28750,7 @@ const daysInWeek = 7;
  * > Leap year occures every 4 years, except for years that are divisable by 100 and not divisable by 400.
  * > 1 mean year = (365+1/4-1/100+1/400) days = 365.2425 days
  */
-const daysInYear = 365.2425;
+const constants_daysInYear = 365.2425;
 
 /**
  * @constant
@@ -23253,7 +28766,7 @@ const daysInYear = 365.2425;
  * new Date(8640000000000001);
  * //=> Invalid Date
  */
-const maxTime = Math.pow(10, 8) * 24 * 60 * 60 * 1000;
+const constants_maxTime = Math.pow(10, 8) * 24 * 60 * 60 * 1000;
 
 /**
  * @constant
@@ -23269,140 +28782,140 @@ const maxTime = Math.pow(10, 8) * 24 * 60 * 60 * 1000;
  * new Date(-8640000000000001)
  * //=> Invalid Date
  */
-const minTime = -maxTime;
+const constants_minTime = -constants_maxTime;
 
 /**
  * @constant
  * @name millisecondsInWeek
  * @summary Milliseconds in 1 week.
  */
-const millisecondsInWeek = 604800000;
+const constants_millisecondsInWeek = 604800000;
 
 /**
  * @constant
  * @name millisecondsInDay
  * @summary Milliseconds in 1 day.
  */
-const millisecondsInDay = 86400000;
+const constants_millisecondsInDay = 86400000;
 
 /**
  * @constant
  * @name millisecondsInMinute
  * @summary Milliseconds in 1 minute
  */
-const millisecondsInMinute = 60000;
+const constants_millisecondsInMinute = 60000;
 
 /**
  * @constant
  * @name millisecondsInHour
  * @summary Milliseconds in 1 hour
  */
-const millisecondsInHour = 3600000;
+const constants_millisecondsInHour = 3600000;
 
 /**
  * @constant
  * @name millisecondsInSecond
  * @summary Milliseconds in 1 second
  */
-const millisecondsInSecond = 1000;
+const constants_millisecondsInSecond = 1000;
 
 /**
  * @constant
  * @name minutesInYear
  * @summary Minutes in 1 year.
  */
-const minutesInYear = 525600;
+const constants_minutesInYear = 525600;
 
 /**
  * @constant
  * @name minutesInMonth
  * @summary Minutes in 1 month.
  */
-const minutesInMonth = 43200;
+const constants_minutesInMonth = 43200;
 
 /**
  * @constant
  * @name minutesInDay
  * @summary Minutes in 1 day.
  */
-const minutesInDay = 1440;
+const constants_minutesInDay = 1440;
 
 /**
  * @constant
  * @name minutesInHour
  * @summary Minutes in 1 hour.
  */
-const minutesInHour = 60;
+const constants_minutesInHour = 60;
 
 /**
  * @constant
  * @name monthsInQuarter
  * @summary Months in 1 quarter.
  */
-const monthsInQuarter = 3;
+const constants_monthsInQuarter = 3;
 
 /**
  * @constant
  * @name monthsInYear
  * @summary Months in 1 year.
  */
-const monthsInYear = 12;
+const constants_monthsInYear = 12;
 
 /**
  * @constant
  * @name quartersInYear
  * @summary Quarters in 1 year
  */
-const quartersInYear = 4;
+const constants_quartersInYear = 4;
 
 /**
  * @constant
  * @name secondsInHour
  * @summary Seconds in 1 hour.
  */
-const secondsInHour = 3600;
+const constants_secondsInHour = 3600;
 
 /**
  * @constant
  * @name secondsInMinute
  * @summary Seconds in 1 minute.
  */
-const secondsInMinute = 60;
+const constants_secondsInMinute = 60;
 
 /**
  * @constant
  * @name secondsInDay
  * @summary Seconds in 1 day.
  */
-const secondsInDay = secondsInHour * 24;
+const constants_secondsInDay = constants_secondsInHour * 24;
 
 /**
  * @constant
  * @name secondsInWeek
  * @summary Seconds in 1 week.
  */
-const secondsInWeek = secondsInDay * 7;
+const constants_secondsInWeek = constants_secondsInDay * 7;
 
 /**
  * @constant
  * @name secondsInYear
  * @summary Seconds in 1 year.
  */
-const secondsInYear = secondsInDay * daysInYear;
+const constants_secondsInYear = constants_secondsInDay * constants_daysInYear;
 
 /**
  * @constant
  * @name secondsInMonth
  * @summary Seconds in 1 month
  */
-const secondsInMonth = secondsInYear / 12;
+const constants_secondsInMonth = constants_secondsInYear / 12;
 
 /**
  * @constant
  * @name secondsInQuarter
  * @summary Seconds in 1 quarter.
  */
-const secondsInQuarter = secondsInMonth * 3;
+const constants_secondsInQuarter = constants_secondsInMonth * 3;
 
 ;// ./node_modules/date-fns/parseISO.mjs
 
@@ -23450,7 +28963,7 @@ function parseISO(argument, options) {
   let date;
   if (dateStrings.date) {
     const parseYearResult = parseYear(dateStrings.date, additionalDigits);
-    date = parseDate(parseYearResult.restDateString, parseYearResult.year);
+    date = parseISO_parseDate(parseYearResult.restDateString, parseYearResult.year);
   }
 
   if (!date || isNaN(date.getTime())) {
@@ -23571,7 +29084,7 @@ function parseYear(dateString, additionalDigits) {
   };
 }
 
-function parseDate(dateString, year) {
+function parseISO_parseDate(dateString, year) {
   // Invalid ISO-formatted year
   if (year === null) return new Date(NaN);
 
@@ -23621,7 +29134,7 @@ function parseTime(timeString) {
   }
 
   return (
-    hours * millisecondsInHour + minutes * millisecondsInMinute + seconds * 1000
+    hours * constants_millisecondsInHour + minutes * constants_millisecondsInMinute + seconds * 1000
   );
 }
 
@@ -23643,7 +29156,7 @@ function parseTimezone(timezoneString) {
     return NaN;
   }
 
-  return sign * (hours * millisecondsInHour + minutes * millisecondsInMinute);
+  return sign * (hours * constants_millisecondsInHour + minutes * constants_millisecondsInMinute);
 }
 
 function dayOfISOWeekYear(isoWeekYear, week, day) {
@@ -23762,12 +29275,12 @@ function PrivatePostSchedule({
   const onUpdateDate = date => editPost({
     date
   });
-  const [previewedMonth, setPreviewedMonth] = (0,external_wp_element_namespaceObject.useState)(startOfMonth(new Date(postDate)));
+  const [previewedMonth, setPreviewedMonth] = (0,external_wp_element_namespaceObject.useState)(startOfMonth_startOfMonth(new Date(postDate)));
 
   // Pick up published and scheduled site posts.
   const eventsByPostType = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_coreData_namespaceObject.store).getEntityRecords('postType', postType, {
     status: 'publish,future',
-    after: startOfMonth(previewedMonth).toISOString(),
+    after: startOfMonth_startOfMonth(previewedMonth).toISOString(),
     before: endOfMonth(previewedMonth).toISOString(),
     exclude: [select(store_store).getCurrentPostId()],
     per_page: 100,
@@ -24196,7 +29709,7 @@ function FlatTermSelector({
     (0,external_wp_a11y_namespaceObject.speak)(termAddedMessage, 'assertive');
     onUpdateTerms(newTermIds);
   }
-  const newTermLabel = (_taxonomy$labels$add_ = taxonomy?.labels?.add_new_item) !== null && _taxonomy$labels$add_ !== void 0 ? _taxonomy$labels$add_ : slug === 'post_tag' ? (0,external_wp_i18n_namespaceObject.__)('Add new tag') : (0,external_wp_i18n_namespaceObject.__)('Add new Term');
+  const newTermLabel = (_taxonomy$labels$add_ = taxonomy?.labels?.add_new_item) !== null && _taxonomy$labels$add_ !== void 0 ? _taxonomy$labels$add_ : slug === 'post_tag' ? (0,external_wp_i18n_namespaceObject.__)('Add Tag') : (0,external_wp_i18n_namespaceObject.__)('Add Term');
   const singularName = (_taxonomy$labels$sing2 = taxonomy?.labels?.singular_name) !== null && _taxonomy$labels$sing2 !== void 0 ? _taxonomy$labels$sing2 : slug === 'post_tag' ? (0,external_wp_i18n_namespaceObject.__)('Tag') : (0,external_wp_i18n_namespaceObject.__)('Term');
   const termAddedLabel = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: term name. */
   (0,external_wp_i18n_namespaceObject._x)('%s added', 'term'), singularName);
@@ -24245,15 +29758,24 @@ function FlatTermSelector({
 
 
 const TagsPanel = () => {
+  var _tagLabels$add_new_it, _tagLabels$name;
+  const tagLabels = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const taxonomy = select(external_wp_coreData_namespaceObject.store).getTaxonomy('post_tag');
+    return taxonomy?.labels;
+  }, []);
+  const addNewItem = (_tagLabels$add_new_it = tagLabels?.add_new_item) !== null && _tagLabels$add_new_it !== void 0 ? _tagLabels$add_new_it : (0,external_wp_i18n_namespaceObject.__)('Add tag');
+  const tagLabel = (_tagLabels$name = tagLabels?.name) !== null && _tagLabels$name !== void 0 ? _tagLabels$name : (0,external_wp_i18n_namespaceObject.__)('Tags');
   const panelBodyTitle = [(0,external_wp_i18n_namespaceObject.__)('Suggestion:'), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
     className: "editor-post-publish-panel__link",
-    children: (0,external_wp_i18n_namespaceObject.__)('Add tags')
+    children: addNewItem
   }, "label")];
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.PanelBody, {
     initialOpen: false,
     title: panelBodyTitle,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-      children: (0,external_wp_i18n_namespaceObject.__)('Tags help users and search engines navigate your site and find your content. Add a few keywords to describe your post.')
+      children: (0,external_wp_i18n_namespaceObject.sprintf)(
+      // translators: %s is the taxonomy name (e.g., "Tags").
+      (0,external_wp_i18n_namespaceObject.__)('%s help users and search engines navigate your site and find your content. Add a few keywords to describe your post.'), tagLabel)
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flat_term_selector, {
       slug: "post_tag",
       __nextHasNoMarginBottom: true
@@ -24374,7 +29896,7 @@ function PostFormatPanel() {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PostFormatSuggestion, {
         onUpdatePostFormat: onUpdatePostFormat,
         suggestedPostFormat: suggestion.id,
-        suggestionText: (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: post format */
+        suggestionText: (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %1s: post format */
         (0,external_wp_i18n_namespaceObject.__)('Apply the "%1$s" format.'), suggestion.caption)
       })
     })]
@@ -24704,8 +30226,8 @@ function HierarchicalTermSelector({
     var _taxonomy$labels$labe;
     return (_taxonomy$labels$labe = taxonomy?.labels?.[labelProperty]) !== null && _taxonomy$labels$labe !== void 0 ? _taxonomy$labels$labe : slug === 'category' ? fallbackIsCategory : fallbackIsNotCategory;
   };
-  const newTermButtonLabel = labelWithFallback('add_new_item', (0,external_wp_i18n_namespaceObject.__)('Add new category'), (0,external_wp_i18n_namespaceObject.__)('Add new term'));
-  const newTermLabel = labelWithFallback('new_item_name', (0,external_wp_i18n_namespaceObject.__)('Add new category'), (0,external_wp_i18n_namespaceObject.__)('Add new term'));
+  const newTermButtonLabel = labelWithFallback('add_new_item', (0,external_wp_i18n_namespaceObject.__)('Add Category'), (0,external_wp_i18n_namespaceObject.__)('Add Term'));
+  const newTermLabel = labelWithFallback('new_item_name', (0,external_wp_i18n_namespaceObject.__)('Add Category'), (0,external_wp_i18n_namespaceObject.__)('Add Term'));
   const parentSelectLabel = labelWithFallback('parent_item', (0,external_wp_i18n_namespaceObject.__)('Parent Category'), (0,external_wp_i18n_namespaceObject.__)('Parent Term'));
   const noParentOption = `— ${parentSelectLabel} —`;
   const newTermSubmitLabel = newTermButtonLabel;
@@ -28725,8 +34247,8 @@ function Thread({
       children: [!isFocused && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__experimentalVStack, {
         className: "editor-collab-sidebar-panel__show-more-reply",
         children: (0,external_wp_i18n_namespaceObject.sprintf)(
-        // translators: 1: number of replies.
-        (0,external_wp_i18n_namespaceObject._x)('%s more replies..', 'Show replies button'), thread?.reply?.length)
+        // translators: %s: number of replies.
+        (0,external_wp_i18n_namespaceObject._x)('%s more replies', 'Show replies button'), thread?.reply?.length)
       }), isFocused && thread.reply.map(reply => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalVStack, {
         className: "editor-collab-sidebar-panel__child-thread",
         id: reply.id,
@@ -32292,29 +37814,46 @@ function usePostActions({
       defaultActions: getEntityActions('postType', postType)
     };
   }, [postType]);
-  const {
-    canManageOptions,
-    hasFrontPageTemplate
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+  const shouldShowHomepageActions = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    if (postType !== 'page') {
+      return false;
+    }
     const {
-      getEntityRecords,
+      getDefaultTemplateId,
+      getEntityRecord,
       canUser
     } = select(external_wp_coreData_namespaceObject.store);
     const canUpdateSettings = canUser('update', {
       kind: 'root',
       name: 'site'
     });
-    const templates = 'page' === postType && canUpdateSettings ? getEntityRecords('postType', 'wp_template', {
-      per_page: -1
-    }) : [];
-    return {
-      canManageOptions: canUpdateSettings,
-      hasFrontPageTemplate: !!templates?.find(template => template?.slug === 'front-page')
-    };
+    if (!canUpdateSettings) {
+      return false;
+    }
+
+    // Note that resolved template for `front-page` is not necessarily a
+    // `front-page` template.
+    const frontPageTemplateId = getDefaultTemplateId({
+      slug: 'front-page'
+    });
+    if (!frontPageTemplateId) {
+      return true;
+    }
+
+    // This won't trigger a second network request, getDefaultTemplateId
+    // will have received the whole template from the REST API.
+    const frontPageTemplate = getEntityRecord('postType', 'wp_template', frontPageTemplateId);
+    if (!frontPageTemplate) {
+      return true;
+    }
+
+    // When there is a front page template, the front page cannot be
+    // changed. See
+    // https://developer.wordpress.org/themes/basics/template-hierarchy/
+    return frontPageTemplate.slug !== 'front-page';
   }, [postType]);
   const setAsHomepageAction = useSetAsHomepageAction();
   const setAsPostsPageAction = useSetAsPostsPageAction();
-  const shouldShowHomepageActions = canManageOptions && !hasFrontPageTemplate;
   const {
     registerPostTypeSchema
   } = unlock((0,external_wp_data_namespaceObject.useDispatch)(store_store));
@@ -32606,8 +38145,8 @@ function PostCardPanel({
   let title = (0,external_wp_i18n_namespaceObject.__)('No title');
   if (labels?.name && postIds.length > 1) {
     title = (0,external_wp_i18n_namespaceObject.sprintf)(
-    // translators: %i number of selected items %s: Name of the plural post type e.g: "Posts".
-    (0,external_wp_i18n_namespaceObject.__)('%i %s'), postId.length, labels?.name);
+    // translators: %1$d number of selected items %2$s: Name of the plural post type e.g: "Posts".
+    (0,external_wp_i18n_namespaceObject.__)('%1$d %2$s'), postIds.length, labels?.name);
   } else if (postTitle) {
     title = (0,external_wp_dom_namespaceObject.__unstableStripHTML)(postTitle);
   }
@@ -34332,6 +39871,10 @@ function usePostFields({
  */
 
 const CONTENT = 'content';
+
+/**
+ * @type {WPBlockBindingsSource}
+ */
 /* harmony default export */ const pattern_overrides = ({
   name: 'core/pattern-overrides',
   getValues({
@@ -34420,6 +39963,142 @@ const CONTENT = 'content';
   canUserEditValue: () => true
 });
 
+;// ./packages/editor/build-module/bindings/post-data.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Gets a list of post data fields with their values and labels
+ * to be consumed in the needed callbacks.
+ * If the value is not available based on context, like in templates,
+ * it falls back to the default value, label, or key.
+ *
+ * @param {Object} select  The select function from the data store.
+ * @param {Object} context The context provided.
+ * @return {Object} List of post data fields with their value and label.
+ *
+ * @example
+ * ```js
+ * {
+ *     field_1_key: {
+ *         label: 'Field 1 Label',
+ *         value: 'Field 1 Value',
+ *     },
+ *     field_2_key: {
+ *         label: 'Field 2 Label',
+ *         value: 'Field 2 Value',
+ *     },
+ *     ...
+ * }
+ * ```
+ */
+function getPostDataFields(select, context) {
+  const {
+    getEditedEntityRecord
+  } = select(external_wp_coreData_namespaceObject.store);
+  let entityDataValues, dataFields;
+  // Try to get the current entity data values.
+  if (context?.postType && context?.postId) {
+    entityDataValues = getEditedEntityRecord('postType', context?.postType, context?.postId);
+    dataFields = {
+      date: {
+        label: (0,external_wp_i18n_namespaceObject.__)('Post Date'),
+        value: entityDataValues?.date,
+        type: 'string'
+      },
+      modified: {
+        label: (0,external_wp_i18n_namespaceObject.__)('Post Modified Date'),
+        value: entityDataValues?.modified,
+        type: 'string'
+      }
+    };
+  }
+  if (!Object.keys(dataFields || {}).length) {
+    return null;
+  }
+  return dataFields;
+}
+
+/**
+ * @type {WPBlockBindingsSource}
+ */
+/* harmony default export */ const post_data = ({
+  name: 'core/post-data',
+  getValues({
+    select,
+    context,
+    bindings
+  }) {
+    const dataFields = getPostDataFields(select, context);
+    const newValues = {};
+    for (const [attributeName, source] of Object.entries(bindings)) {
+      var _ref;
+      // Use the value, the field label, or the field key.
+      const fieldKey = source.args.key;
+      const {
+        value: fieldValue,
+        label: fieldLabel
+      } = dataFields?.[fieldKey] || {};
+      newValues[attributeName] = (_ref = fieldValue !== null && fieldValue !== void 0 ? fieldValue : fieldLabel) !== null && _ref !== void 0 ? _ref : fieldKey;
+    }
+    return newValues;
+  },
+  setValues({
+    dispatch,
+    context,
+    bindings
+  }) {
+    const newData = {};
+    Object.values(bindings).forEach(({
+      args,
+      newValue
+    }) => {
+      newData[args.key] = newValue;
+    });
+    dispatch(external_wp_coreData_namespaceObject.store).editEntityRecord('postType', context?.postType, context?.postId, newData);
+  },
+  canUserEditValue({
+    select,
+    context,
+    args
+  }) {
+    // Lock editing in query loop.
+    if (context?.query || context?.queryId) {
+      return false;
+    }
+
+    // Lock editing when `postType` is not defined.
+    if (!context?.postType) {
+      return false;
+    }
+    const fieldValue = getPostDataFields(select, context)?.[args.key]?.value;
+    // Empty string or `false` could be a valid value, so we need to check if the field value is undefined.
+    if (fieldValue === undefined) {
+      return false;
+    }
+
+    // Check that the user has the capability to edit post data.
+    const canUserEdit = select(external_wp_coreData_namespaceObject.store).canUser('update', {
+      kind: 'postType',
+      name: context?.postType,
+      id: context?.postId
+    });
+    if (!canUserEdit) {
+      return false;
+    }
+    return true;
+  },
+  getFieldsList({
+    select,
+    context
+  }) {
+    return getPostDataFields(select, context);
+  }
+});
+
 ;// ./packages/editor/build-module/bindings/post-meta.js
 /**
  * WordPress dependencies
@@ -34490,6 +40169,10 @@ function getPostMetaFields(select, context) {
   }
   return metaFields;
 }
+
+/**
+ * @type {WPBlockBindingsSource}
+ */
 /* harmony default export */ const post_meta = ({
   name: 'core/post-meta',
   getValues({
@@ -34583,6 +40266,7 @@ function getPostMetaFields(select, context) {
 
 
 
+
 /**
  * Function to register core block bindings sources provided by the editor.
  *
@@ -34595,6 +40279,7 @@ function getPostMetaFields(select, context) {
  */
 function registerCoreBlockBindingsSources() {
   (0,external_wp_blocks_namespaceObject.registerBlockBindingsSource)(pattern_overrides);
+  (0,external_wp_blocks_namespaceObject.registerBlockBindingsSource)(post_data);
   (0,external_wp_blocks_namespaceObject.registerBlockBindingsSource)(post_meta);
 }
 

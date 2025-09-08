@@ -2762,6 +2762,7 @@ function WidgetAreaInnerBlocks({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -2773,7 +2774,6 @@ function WidgetAreaInnerBlocks({
 
 function WidgetAreaEdit({
   clientId,
-  className,
   attributes: {
     id,
     name
@@ -2800,33 +2800,36 @@ function WidgetAreaEdit({
       setOpen(false);
     }
   }, [isOpen, isDragging, isDraggingWithin, openedWhileDragging]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Panel, {
-    className: className,
-    ref: wrapper,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.PanelBody, {
-      title: name,
-      opened: isOpen,
-      onToggle: () => {
-        setIsWidgetAreaOpen(clientId, !isOpen);
-      },
-      scrollAfterOpen: !isDragging,
-      children: ({
-        opened
-      }) =>
-      /*#__PURE__*/
-      // This is required to ensure LegacyWidget blocks are not
-      // unmounted when the panel is collapsed. Unmounting legacy
-      // widgets may have unintended consequences (e.g.  TinyMCE
-      // not being properly reinitialized)
-      (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableDisclosureContent, {
-        className: "wp-block-widget-area__panel-body-content",
-        visible: opened,
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_coreData_namespaceObject.EntityProvider, {
-          kind: "root",
-          type: "postType",
-          id: `widget-area-${id}`,
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WidgetAreaInnerBlocks, {
-            id: id
+  const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    ...blockProps,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Panel, {
+      ref: wrapper,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.PanelBody, {
+        title: name,
+        opened: isOpen,
+        onToggle: () => {
+          setIsWidgetAreaOpen(clientId, !isOpen);
+        },
+        scrollAfterOpen: !isDragging,
+        children: ({
+          opened
+        }) =>
+        /*#__PURE__*/
+        // This is required to ensure LegacyWidget blocks are not
+        // unmounted when the panel is collapsed. Unmounting legacy
+        // widgets may have unintended consequences (e.g.  TinyMCE
+        // not being properly reinitialized)
+        (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.__unstableDisclosureContent, {
+          className: "wp-block-widget-area__panel-body-content",
+          visible: opened,
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_coreData_namespaceObject.EntityProvider, {
+            kind: "root",
+            type: "postType",
+            id: `widget-area-${id}`,
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WidgetAreaInnerBlocks, {
+              id: id
+            })
           })
         })
       })
@@ -2874,6 +2877,7 @@ const useIsDragging = elementRef => {
  */
 const metadata = {
   $schema: "https://schemas.wp.org/trunk/block.json",
+  apiVersion: 3,
   name: "core/widget-area",
   title: "Widget Area",
   category: "widgets",
@@ -3217,8 +3221,8 @@ function WidgetAreasBlockEditorProvider({
     }) ? getEntityRecord('root', 'site') : undefined;
     return {
       hasUploadPermissions: (_canUser = canUser('create', {
-        kind: 'root',
-        name: 'media'
+        kind: 'postType',
+        name: 'attachment'
       })) !== null && _canUser !== void 0 ? _canUser : true,
       reusableBlocks: ALLOW_REUSABLE_BLOCKS ? getEntityRecords('postType', 'wp_block') : EMPTY_ARRAY,
       isFixedToolbarActive: !!select(external_wp_preferences_namespaceObject.store).get('core/edit-widgets', 'fixedToolbar'),

@@ -1,3 +1,113 @@
+## [3.21.3](https://github.com/Automattic/newspack-newsletters/compare/v3.21.2...v3.21.3) (2025-09-08)
+
+
+### Bug Fixes
+
+* email html update handling ([#1909](https://github.com/Automattic/newspack-newsletters/issues/1909)) ([2ce2e8c](https://github.com/Automattic/newspack-newsletters/commit/2ce2e8cac9084a8af76015b266d411bd2f16fbe1))
+
+## [3.21.2](https://github.com/Automattic/newspack-newsletters/compare/v3.21.1...v3.21.2) (2025-09-04)
+
+
+### Bug Fixes
+
+* wait for fetch before clearing list or sublist ids ([#1907](https://github.com/Automattic/newspack-newsletters/issues/1907)) ([1435d61](https://github.com/Automattic/newspack-newsletters/commit/1435d61e133f6fe869d694dfb834d49725de13c8)), closes [#1905](https://github.com/Automattic/newspack-newsletters/issues/1905)
+
+## [3.21.1](https://github.com/Automattic/newspack-newsletters/compare/v3.21.0...v3.21.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* reset newsletter list when not found in ESP ([#1905](https://github.com/Automattic/newspack-newsletters/issues/1905)) ([3e09b6c](https://github.com/Automattic/newspack-newsletters/commit/3e09b6ccaaa5226cfcf8a4ba7a78b107ca2d6ec9))
+
+# [3.21.0](https://github.com/Automattic/newspack-newsletters/compare/v3.20.0...v3.21.0) (2025-08-25)
+
+
+### Bug Fixes
+
+* **ads:** only apply click tracking to ad links ([#1895](https://github.com/Automattic/newspack-newsletters/issues/1895)) ([d20b763](https://github.com/Automattic/newspack-newsletters/commit/d20b76313137241e8ab3a589acc17db64bb39c01))
+* email styling issues ([#1878](https://github.com/Automattic/newspack-newsletters/issues/1878)) ([e2f9726](https://github.com/Automattic/newspack-newsletters/commit/e2f972658ac287c784ef8949c522f1d489cab79c))
+* handle scheduled in past sending ([#1886](https://github.com/Automattic/newspack-newsletters/issues/1886)) ([8143259](https://github.com/Automattic/newspack-newsletters/commit/8143259a342e9a57deca7c9a50b96f655ef99f60))
+
+
+### Features
+
+* ads placements ([#1880](https://github.com/Automattic/newspack-newsletters/issues/1880)) ([291c82f](https://github.com/Automattic/newspack-newsletters/commit/291c82f23530af041c8e6d815cbb200b968ad02b))
+* improve CLI ([#1872](https://github.com/Automattic/newspack-newsletters/issues/1872)) ([aa0b684](https://github.com/Automattic/newspack-newsletters/commit/aa0b68410abc77c21b520ac9d55656aa48ca77ab))
+* **subscribe-block:** add modern grid style variation ([#1869](https://github.com/Automattic/newspack-newsletters/issues/1869)) ([3eb1b5d](https://github.com/Automattic/newspack-newsletters/commit/3eb1b5d8acd9a4934de71d6dc78149e8d664887a))
+
+# [3.20.0](https://github.com/Automattic/newspack-newsletters/compare/v3.19.1...v3.20.0) (2025-08-21)
+
+
+### Features
+
+* **activecampaign:** custom address ID via constant ([#1899](https://github.com/Automattic/newspack-newsletters/issues/1899)) ([47da6b7](https://github.com/Automattic/newspack-newsletters/commit/47da6b7dcb5c28c5f34f6ab03b0002f62117b662))
+
+## [3.19.1](https://github.com/Automattic/newspack-newsletters/compare/v3.19.0...v3.19.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* **ads:** ads in scheduled newsletters ([#1885](https://github.com/Automattic/newspack-newsletters/issues/1885)) ([a895989](https://github.com/Automattic/newspack-newsletters/commit/a895989acd94f3edeacfbfb342fd3a6158706e90))
+
+# [3.19.0](https://github.com/Automattic/newspack-newsletters/compare/v3.18.0...v3.19.0) (2025-08-11)
+
+
+### Bug Fixes
+
+* Support Unit Tests for php 8.3 ([#1866](https://github.com/Automattic/newspack-newsletters/issues/1866)) ([03c5ceb](https://github.com/Automattic/newspack-newsletters/commit/03c5ceb311a4ab7718bbf3ca35e13c24b1e7bc7b))
+
+
+### Features
+
+* **posts-inserter-block:** handle custom bylines ([#1871](https://github.com/Automattic/newspack-newsletters/issues/1871)) ([60f2824](https://github.com/Automattic/newspack-newsletters/commit/60f28248fe8c7ef8cdb8a95f2a67cea9e841be61))
+* typo ([#1870](https://github.com/Automattic/newspack-newsletters/issues/1870)) ([5933e4c](https://github.com/Automattic/newspack-newsletters/commit/5933e4ce7d3f73d010dcf16c65b64fea1d9056f0))
+
+# [3.18.0](https://github.com/Automattic/newspack-newsletters/compare/v3.17.0...v3.18.0) (2025-07-28)
+
+
+### Bug Fixes
+
+* **layout:** only migrate layout defaults from legacy meta if esp is not set to manual ([#1859](https://github.com/Automattic/newspack-newsletters/issues/1859)) ([21d8b1b](https://github.com/Automattic/newspack-newsletters/commit/21d8b1bfd5eb6c3b59cad4936ec904d79a57380d))
+* recaptcha settings link ([#1863](https://github.com/Automattic/newspack-newsletters/issues/1863)) ([d43d1e8](https://github.com/Automattic/newspack-newsletters/commit/d43d1e894ce9448079f71fa6101ac27cc80c6ae3))
+
+
+### Features
+
+* **admin-menu:** remove non-applicable admin menu items ([#1807](https://github.com/Automattic/newspack-newsletters/issues/1807)) ([2d9e379](https://github.com/Automattic/newspack-newsletters/commit/2d9e379cbc8525e2e26306861284f0cec4e89771))
+
+# [3.17.0](https://github.com/Automattic/newspack-newsletters/compare/v3.16.0...v3.17.0) (2025-07-14)
+
+
+### Bug Fixes
+
+* prevent HTML overwrite when post taken over ([#1849](https://github.com/Automattic/newspack-newsletters/issues/1849)) ([6e95634](https://github.com/Automattic/newspack-newsletters/commit/6e9563408627ce64f9685618ce6ccab56bcc98a9))
+
+
+### Features
+
+* add a button to unschedule newsletters ([#1844](https://github.com/Automattic/newspack-newsletters/issues/1844)) ([cecbf8f](https://github.com/Automattic/newspack-newsletters/commit/cecbf8f88bbcb761935c44f5e1de005c202567c6))
+
+# [3.16.0](https://github.com/Automattic/newspack-newsletters/compare/v3.15.3...v3.16.0) (2025-06-30)
+
+
+### Features
+
+* delete contact by email address, not user ID ([#1837](https://github.com/Automattic/newspack-newsletters/issues/1837)) ([5cbf055](https://github.com/Automattic/newspack-newsletters/commit/5cbf055135811b8836844ea01838bd89f06b0545))
+
+## [3.15.3](https://github.com/Automattic/newspack-newsletters/compare/v3.15.2...v3.15.3) (2025-06-26)
+
+
+### Bug Fixes
+
+* register meta after class init ([#1851](https://github.com/Automattic/newspack-newsletters/issues/1851)) ([6613286](https://github.com/Automattic/newspack-newsletters/commit/661328646fcc8f2903708668b2f3bced6f40e92a))
+
+## [3.15.2](https://github.com/Automattic/newspack-newsletters/compare/v3.15.1...v3.15.2) (2025-06-25)
+
+
+### Bug Fixes
+
+* trigger release for empty active campaign messages ([8ced47e](https://github.com/Automattic/newspack-newsletters/commit/8ced47e33ded9aefcb047ab63819e1381fd49ee2))
+
 ## [3.15.1](https://github.com/Automattic/newspack-newsletters/compare/v3.15.0...v3.15.1) (2025-06-16)
 
 

@@ -1,7 +1,7 @@
 <?php //phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
  * Module Name: Likes
- * Module Description: Give visitors an easy way to show they appreciate your content.
+ * Module Description: Let readers like your posts to show appreciation and encourage interaction.
  * First Introduced: 2.2
  * Sort Order: 23
  * Requires Connection: Yes
@@ -22,6 +22,10 @@
 
 use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Status\Host;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
 
 Assets::add_resource_hint(
 	array(

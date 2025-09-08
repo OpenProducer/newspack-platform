@@ -38,6 +38,7 @@ class Optional_Modules {
 			self::MODULE_ENABLED_PREFIX . 'media-partners' => false,
 			self::MODULE_ENABLED_PREFIX . 'woo-member-commenting' => false,
 			self::MODULE_ENABLED_PREFIX . 'collections'    => false,
+			self::MODULE_ENABLED_PREFIX . 'indesign-export' => false,
 		];
 		return wp_parse_args( get_option( self::OPTION_NAME ), $default_settings );
 	}
@@ -63,7 +64,7 @@ class Optional_Modules {
 	 * @return array List of available optional modules.
 	 */
 	public static function get_available_optional_modules(): array {
-		return [ 'rss', 'woo-member-commenting', 'collections' ];
+		return [ 'rss', 'woo-member-commenting', 'collections', 'indesign-export' ];
 	}
 
 	/**

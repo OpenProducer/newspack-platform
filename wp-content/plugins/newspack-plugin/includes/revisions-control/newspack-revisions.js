@@ -2,12 +2,12 @@
 
 import './newspack-revisions.scss';
 
-( function( $ ) {
+( function ( $ ) {
 	if ( typeof wp.revisions.view.MetaTo !== 'undefined' ) {
 		const TickMarks = wp.revisions.view.Tickmarks,
 			old_ready = TickMarks.prototype.ready;
 
-		TickMarks.prototype.ready = function() {
+		TickMarks.prototype.ready = function () {
 			old_ready.apply( this );
 
 			// update Tickmarks
@@ -15,7 +15,9 @@ import './newspack-revisions.scss';
 
 			for ( let i = 0; i < tickmarks.length; i++ ) {
 				// Add the ID to the element so we can manipulate it later.
-				$( tickmarks[ i ] ).attr( 'id', 'tickmark-' + this.model.revisions.models[ i ].attributes.id ).addClass( 'newspack-revisions-after-bgcolor' );
+				$( tickmarks[ i ] )
+					.attr( 'id', 'tickmark-' + this.model.revisions.models[ i ].attributes.id )
+					.addClass( 'newspack-revisions-after-bgcolor' );
 				if ( this.model.revisions.models[ i ].attributes.newspack_major ) {
 					$( tickmarks[ i ] ).addClass( 'newspack-major' );
 				}
@@ -28,7 +30,7 @@ import './newspack-revisions.scss';
 		/**
 		 * Callback after ajax request
 		 */
-		MetaTo.prototype.updateRevisionMajor = function( major ) {
+		MetaTo.prototype.updateRevisionMajor = function ( major ) {
 			this.model.attributes.to.attributes.newspack_major = major;
 			this.updateToggleMajorButton();
 			const tick = $( '#tickmark-' + this.model.attributes.to.attributes.id );
@@ -44,7 +46,7 @@ import './newspack-revisions.scss';
 		/**
 		 * Handles the creation of the button to toggle revision
 		 */
-		MetaTo.prototype.updateToggleMajorButton = function() {
+		MetaTo.prototype.updateToggleMajorButton = function () {
 			const labels = newspack_revisions_control.labels;
 
 			const button = this.$el.find( '.mark-major' );
@@ -54,14 +56,14 @@ import './newspack-revisions.scss';
 		/**
 		 * Gets the Message element
 		 */
-		MetaTo.prototype.getMessageSpan = function() {
+		MetaTo.prototype.getMessageSpan = function () {
 			return this.$el.find( '.mark-major-message' );
 		};
 
 		/**
 		 * Overrides the original render method
 		 */
-		MetaTo.prototype.render = function() {
+		MetaTo.prototype.render = function () {
 			// Have the original renderer run first.
 			old_render.apply( this, arguments );
 
@@ -79,7 +81,7 @@ import './newspack-revisions.scss';
 
 			button.onclick = () => {
 				t.getMessageSpan().html( labels.loading ).show();
-				toggleRevisionMajor( post_id, revision_id, function( data ) {
+				toggleRevisionMajor( post_id, revision_id, function ( data ) {
 					t.getMessageSpan().html( labels.saved ).fadeOut( 1000 );
 					const response = jQuery.parseJSON( data );
 					t.updateRevisionMajor( response.major );

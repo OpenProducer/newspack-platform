@@ -1,1 +1,1 @@
-"use strict";(globalThis.webpackChunkwebpackWcBlocksStylingJsonp=globalThis.webpackChunkwebpackWcBlocksStylingJsonp||[]).push([[3819],{70661:(c,s,l)=>{l.r(s),l.d(s,{default:()=>k});const k=l(67985).A}}]);
+"use strict";(globalThis.webpackChunkwebpackWcBlocksStylingJsonp=globalThis.webpackChunkwebpackWcBlocksStylingJsonp||[]).push([[3819],{70661:(c,s,l)=>{l.r(s),l.d(s,{default:()=>k});const k=l(77785).A}}]);

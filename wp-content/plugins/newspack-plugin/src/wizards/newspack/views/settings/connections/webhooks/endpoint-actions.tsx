@@ -42,36 +42,21 @@ function EndpointActions( {
 				<Popover
 					position={ 'bottom left' }
 					onFocusOutside={ () => setPopoverVisible( false ) }
-					onKeyDown={ ( event: KeyboardEvent ) =>
-						ESCAPE === event.keyCode && setPopoverVisible( false )
-					}
+					onKeyDown={ ( event: KeyboardEvent ) => ESCAPE === event.keyCode && setPopoverVisible( false ) }
 				>
-					<MenuItem
-						onClick={ () => setPopoverVisible( false ) }
-						className="screen-reader-text"
-					>
+					<MenuItem onClick={ () => setPopoverVisible( false ) } className="screen-reader-text">
 						{ __( 'Close Endpoint Actions', 'newspack-plugin' ) }
 					</MenuItem>
-					<MenuItem
-						onClick={ () => setAction( 'view', endpoint.id ) }
-						className="newspack-button"
-					>
+					<MenuItem onClick={ () => setAction( 'view', endpoint.id ) } className="newspack-button">
 						{ __( 'View Requests', 'newspack-plugin' ) }
 					</MenuItem>
 					{ ! isSystem && (
-						<MenuItem
-							onClick={ () => setAction( 'edit', endpoint.id ) }
-							className="newspack-button"
-						>
+						<MenuItem onClick={ () => setAction( 'edit', endpoint.id ) } className="newspack-button">
 							{ __( 'Edit', 'newspack-plugin' ) }
 						</MenuItem>
 					) }
 					{ ! isSystem && (
-						<MenuItem
-							onClick={ () => setAction( 'delete', endpoint.id ) }
-							className="newspack-button"
-							isDestructive
-						>
+						<MenuItem onClick={ () => setAction( 'delete', endpoint.id ) } className="newspack-button" isDestructive>
 							{ __( 'Remove', 'newspack-plugin' ) }
 						</MenuItem>
 					) }

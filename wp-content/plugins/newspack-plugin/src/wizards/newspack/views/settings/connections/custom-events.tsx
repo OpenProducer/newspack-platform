@@ -36,9 +36,7 @@ let { customEvents } = window.newspackSettings.connections.sections;
  */
 function CustomEvents() {
 	const [ ga4Credentials, setGa4Credentials ] = useState< Ga4Credentials >( customEvents );
-	const { wizardApiFetch, errorMessage, resetError, setError } = useWizardApiFetch(
-		'newspack-settings/connections/custom-events'
-	);
+	const { wizardApiFetch, errorMessage, resetError, setError } = useWizardApiFetch( 'newspack-settings/connections/custom-events' );
 
 	function isInputsEmpty() {
 		return ! ga4Credentials.measurement_id && ! ga4Credentials.measurement_protocol_secret;
@@ -50,20 +48,12 @@ function CustomEvents() {
 			return;
 		}
 		if ( ! isValidGA4MeasurementID( ga4Credentials.measurement_id ) ) {
-			setError(
-				new WizardError(
-					ERROR_MESSAGES.CUSTOM_EVENTS.INVALID_MEASUREMENT_ID,
-					'ga4_invalid_measurement_id'
-				)
-			);
+			setError( new WizardError( ERROR_MESSAGES.CUSTOM_EVENTS.INVALID_MEASUREMENT_ID, 'ga4_invalid_measurement_id' ) );
 			return;
 		}
 		if ( ! ga4Credentials.measurement_protocol_secret ) {
 			setError(
-				new WizardError(
-					ERROR_MESSAGES.CUSTOM_EVENTS.INVALID_MEASUREMENT_PROTOCOL_SECRET,
-					'ga4_invalid_measurement_protocol_secret'
-				)
+				new WizardError( ERROR_MESSAGES.CUSTOM_EVENTS.INVALID_MEASUREMENT_PROTOCOL_SECRET, 'ga4_invalid_measurement_protocol_secret' )
 			);
 			return;
 		}
@@ -90,11 +80,7 @@ function CustomEvents() {
 	}
 
 	function resetGa4Credentials() {
-		if (
-			! utils.confirmAction(
-				__( 'Are you sure you want to reset the GA4 credentials?', 'newspack-plugin' )
-			)
-		) {
+		if ( ! utils.confirmAction( __( 'Are you sure you want to reset the GA4 credentials?', 'newspack-plugin' ) ) ) {
 			return;
 		}
 		wizardApiFetch< Ga4Credentials >(
@@ -132,9 +118,7 @@ function CustomEvents() {
 						'You can find this in Site Kit Settings, or in Google Analytics > Admin > Data Streams and clickng the data stream. Example: G-ABCDE12345',
 						'newspack-plugin'
 					) }
-					onChange={ ( value: string ) =>
-						setGa4Credentials( { ...ga4Credentials, measurement_id: value } )
-					}
+					onChange={ ( value: string ) => setGa4Credentials( { ...ga4Credentials, measurement_id: value } ) }
 					autoComplete="off"
 				/>
 				<TextControl
@@ -145,19 +129,12 @@ function CustomEvents() {
 						'Generate an API secret from your GA dashboard in Admin > Data Streams and opening your data stream. Select "Measurement Protocol API secrets" under the Events section. Create a new secret.',
 						'newspack-plugin'
 					) }
-					onChange={ ( value: string ) =>
-						setGa4Credentials( { ...ga4Credentials, measurement_protocol_secret: value } )
-					}
+					onChange={ ( value: string ) => setGa4Credentials( { ...ga4Credentials, measurement_protocol_secret: value } ) }
 					autoComplete="one-time-code"
 				/>
 			</Grid>
 			{ errorMessage && <Notice isError noticeText={ errorMessage } /> }
-			<Button
-				className="mr2"
-				variant="primary"
-				onClick={ updateGa4Credentials }
-				disabled={ isInputsEmpty() || !! errorMessage }
-			>
+			<Button className="mr2" variant="primary" onClick={ updateGa4Credentials } disabled={ isInputsEmpty() || !! errorMessage }>
 				{ __( 'Save', 'newspack-plugin' ) }
 			</Button>
 			<Button variant="secondary" onClick={ resetGa4Credentials } disabled={ isInputsEmpty() }>

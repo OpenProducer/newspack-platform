@@ -2,6 +2,10 @@
 
 use Automattic\Jetpack\Assets;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 /**
  * Embed recipe 'cards' in post, with basic styling and print functionality
  *
@@ -16,6 +20,8 @@ use Automattic\Jetpack\Assets;
 
 /**
  * Register and display Recipes in posts.
+ *
+ * @phan-constructor-used-for-side-effects
  */
 class Jetpack_Recipes {
 
@@ -683,8 +689,10 @@ class Jetpack_Recipes {
 		global $themecolors;
 		$style = '';
 
-		if ( isset( $themecolors ) ) {
+		if ( isset( $themecolors['border'] ) ) {
 			$style .= '.jetpack-recipe { border-color: #' . esc_attr( $themecolors['border'] ) . '; }';
+		}
+		if ( isset( $themecolors['link'] ) ) {
 			$style .= '.jetpack-recipe-title { border-bottom-color: #' . esc_attr( $themecolors['link'] ) . '; }';
 		}
 

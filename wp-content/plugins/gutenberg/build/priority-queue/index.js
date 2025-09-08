@@ -309,11 +309,11 @@ var requestidlecallback = __webpack_require__(5033);
 
 
 /**
- * @typedef {( timeOrDeadline: IdleDeadline | number ) => void} Callback
+ * Internal dependencies
  */
 
 /**
- * @return {(callback: Callback) => void} RequestIdleCallback
+ * @return A function that schedules a callback when the browser is idle or via setTimeout on the server.
  */
 function createRequestIdleCallback() {
   if (typeof window === 'undefined') {
@@ -333,43 +333,14 @@ function createRequestIdleCallback() {
 
 /**
  * Enqueued callback to invoke once idle time permits.
- *
- * @typedef {()=>void} WPPriorityQueueCallback
  */
 
 /**
  * An object used to associate callbacks in a particular context grouping.
- *
- * @typedef {{}} WPPriorityQueueContext
  */
 
 /**
- * Function to add callback to priority queue.
- *
- * @typedef {(element:WPPriorityQueueContext,item:WPPriorityQueueCallback)=>void} WPPriorityQueueAdd
- */
-
-/**
- * Function to flush callbacks from priority queue.
- *
- * @typedef {(element:WPPriorityQueueContext)=>boolean} WPPriorityQueueFlush
- */
-
-/**
- * Reset the queue.
- *
- * @typedef {()=>void} WPPriorityQueueReset
- */
-
-/**
- * Priority queue instance.
- *
- * @typedef {Object} WPPriorityQueue
- *
- * @property {WPPriorityQueueAdd}   add    Add callback to queue for context.
- * @property {WPPriorityQueueFlush} flush  Flush queue for context.
- * @property {WPPriorityQueueFlush} cancel Clear queue for context.
- * @property {WPPriorityQueueReset} reset  Reset queue.
+ * Interface for the priority queue instance.
  */
 
 /**
@@ -395,7 +366,6 @@ function createRequestIdleCallback() {
  * @return {WPPriorityQueue} Queue object with `add`, `flush` and `reset` methods.
  */
 const createQueue = () => {
-  /** @type {Map<WPPriorityQueueContext, WPPriorityQueueCallback>} */
   const waitingList = new Map();
   let isRunning = false;
 
@@ -438,8 +408,6 @@ const createQueue = () => {
    * in their second parameter. Missing dependencies can cause unexpected
    * loops and race conditions in the queue.
    *
-   * @type {WPPriorityQueueAdd}
-   *
    * @param {WPPriorityQueueContext}  element Context object.
    * @param {WPPriorityQueueCallback} item    Callback function.
    */
@@ -454,8 +422,6 @@ const createQueue = () => {
   /**
    * Flushes queue for a given context, returning true if the flush was
    * performed, or false if there is no queue for the given context.
-   *
-   * @type {WPPriorityQueueFlush}
    *
    * @param {WPPriorityQueueContext} element Context object.
    *
@@ -476,8 +442,6 @@ const createQueue = () => {
    * executing them. Returns `true` if there were scheduled callbacks to cancel,
    * or `false` if there was is no queue for the given context.
    *
-   * @type {WPPriorityQueueFlush}
-   *
    * @param {WPPriorityQueueContext} element Context object.
    *
    * @return {boolean} Whether any callbacks got cancelled.
@@ -488,8 +452,6 @@ const createQueue = () => {
 
   /**
    * Reset the queue without running the pending callbacks.
-   *
-   * @type {WPPriorityQueueReset}
    */
   const reset = () => {
     waitingList.clear();

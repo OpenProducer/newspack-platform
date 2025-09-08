@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkwebpackWcBlocksStylingJsonp=globalThis.webpackChunkwebpackWcBlocksStylingJsonp||[]).push([[3644],{16033:(c,s,l)=>{l.r(s),l.d(s,{default:()=>k});const k=l(53405).A}}]);

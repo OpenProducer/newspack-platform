@@ -3,14 +3,18 @@
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong
 namespace Yoast\WP\SEO\Llms_Txt\Infrastructure\Markdown_Services;
 
+use WP_Post_Type;
+use Yoast\WP\SEO\Helpers\Options_Helper;
 use Yoast\WP\SEO\Helpers\Post_Type_Helper;
 use Yoast\WP\SEO\Llms_Txt\Domain\Markdown\Items\Link;
 use Yoast\WP\SEO\Llms_Txt\Domain\Markdown\Sections\Link_List;
+use Yoast\WP\SEO\Llms_Txt\Infrastructure\Content\Post_Collection_Factory;
 
 /**
  * The collector of content types.
  *
- * @TODO: This class could maybe be unified with Yoast\WP\SEO\Dashboard\Infrastructure\Content_Types\Content_Types_Collector.
+ * @TODO: This class could maybe be unified with
+ *        Yoast\WP\SEO\Dashboard\Infrastructure\Content_Types\Content_Types_Collector.
  */
 class Content_Types_Collector {
 
@@ -22,12 +26,34 @@ class Content_Types_Collector {
 	private $post_type_helper;
 
 	/**
+	 * The collection factory.
+	 *
+	 * @var Post_Collection_Factory
+	 */
+	private $collection_factory;
+
+	/**
+	 * The options helper.
+	 *
+	 * @var Options_Helper
+	 */
+	private $options_helper;
+
+	/**
 	 * The constructor.
 	 *
-	 * @param Post_Type_Helper $post_type_helper The post type helper.
+	 * @param Post_Type_Helper        $post_type_helper   The post type helper.
+	 * @param Post_Collection_Factory $collection_factory The collection factory.
+	 * @param Options_Helper          $options_helper     The options helper.
 	 */
-	public function __construct( Post_Type_Helper $post_type_helper ) {
-		$this->post_type_helper = $post_type_helper;
+	public function __construct(
+		Post_Type_Helper $post_type_helper,
+		Post_Collection_Factory $collection_factory,
+		Options_Helper $options_helper
+	) {
+		$this->post_type_helper   = $post_type_helper;
+		$this->collection_factory = $collection_factory;
+		$this->options_helper     = $options_helper;
 	}
 
 	/**
@@ -37,6 +63,7 @@ class Content_Types_Collector {
 	 */
 	public function get_content_types_lists(): array {
 		$post_types = $this->post_type_helper->get_indexable_post_type_objects();
+		$post_types = $this->make_sure_pages_are_first( $post_types );
 		$link_list  = [];
 
 		foreach ( $post_types as $post_type_object ) {
@@ -44,11 +71,15 @@ class Content_Types_Collector {
 				continue;
 			}
 
-			$posts = $this->get_relevant_posts( $post_type_object );
-
-			$post_links = new Link_List( $post_type_object->label, [] );
+			$option = 'auto';
+			if ( $post_type_object->name === 'page' ) {
+				$option = $this->options_helper->get( 'llms_txt_selection_mode' );
+			}
+			$collection_strategy = $this->collection_factory->get_post_collection( $option );
+			$posts               = $collection_strategy->get_posts( $post_type_object->name, 5 );
+			$post_links          = new Link_List( $post_type_object->label, [] );
 			foreach ( $posts as $post ) {
-				$post_link = new Link( $post->post_title, \get_permalink( $post->ID ) );
+				$post_link = new Link( $post->get_title(), $post->get_url(), $post->get_description() );
 				$post_links->add_link( $post_link );
 			}
 
@@ -59,30 +90,18 @@ class Content_Types_Collector {
 	}
 
 	/**
-	 * Gets the posts that are relevant for the LLMs.txt.
+	 * Returns an array of indexable post types with pages and posts as the first two.
 	 *
-	 * @param WP_Post_Type $post_type_object The post type object.
+	 * @param array<WP_Post_Type> $post_types List of indexable post type objects.
 	 *
-	 * @return WP_Post[] The posts that are relevant for the LLMs.txt.
+	 * @return array<WP_Post_Type> List of indexable post type objects.
 	 */
-	public function get_relevant_posts( $post_type_object ): array {
-			$args = [
-				'post_type'      => $post_type_object->name,
-				'posts_per_page' => 5,
-				'post_status'    => 'publish',
-				'orderby'        => 'modified',
-				'order'          => 'DESC',
-				'has_password'   => false,
-			];
-
-			if ( $post_type_object->name === 'post' ) {
-				$args['date_query'] = [
-					[
-						'after' => '12 months ago',
-					],
-				];
-			}
-
-			return \get_posts( $args );
+	private function make_sure_pages_are_first( array $post_types ): array {
+		$types_to_go_first = [];
+		if ( isset( $post_types['page'] ) ) {
+			$types_to_go_first['page'] = $post_types['page'];
+			unset( $post_types['page'] );
+		}
+		return \array_merge( $types_to_go_first, $post_types );
 	}
 }

@@ -7,7 +7,6 @@
 
 namespace Newspack_Ads\Providers\GAM\Api;
 
-use Newspack_Ads\Providers\GAM\Api;
 use Newspack_Ads\Providers\GAM\Api\Api_Object;
 use Google\AdsApi\AdManager\Util\v202505\StatementBuilder;
 use Google\AdsApi\AdManager\v202505\ServiceFactory;
@@ -40,35 +39,79 @@ final class Ad_Units extends Api_Object {
 	/**
 	 * Create a statement builder for ad unit retrieval.
 	 *
+	 * @param int     $parent_id        Optional parent ad unit id.
 	 * @param int[]   $ids              Optional array of ad unit ids.
 	 * @param boolean $include_archived Whether to include archived ad units.
 	 *
 	 * @return StatementBuilder Statement builder.
 	 */
-	private static function get_statement_builder( $ids = [], $include_archived = false ) {
+	private static function get_statement_builder( $parent_id = null, $ids = [], $include_archived = false ) {
 		// Get all non-archived ad units, unless ids are specified.
 		$statement_builder = new StatementBuilder();
 		if ( ! empty( $ids ) ) {
 			$statement_builder->where( 'ID IN(' . implode( ', ', $ids ) . ')' );
 		} elseif ( ! $include_archived ) {
-			$statement_builder->where( "Status IN('ACTIVE')" );
+			if ( $parent_id ) {
+				$statement_builder->where( 'parentId = ' . $parent_id . " AND Status IN('ACTIVE')" );
+			} else {
+				$statement_builder->where( "Status IN('ACTIVE')" );
+			}
 		}
 		$statement_builder->orderBy( 'name ASC' )->limit( StatementBuilder::SUGGESTED_PAGE_LIMIT );
 		return $statement_builder;
 	}
 
 	/**
+	 * Get parent ad units with children.
+	 *
+	 * @return array Array of serialzied AdUnits.
+	 */
+	public function get_parent_ad_units() {
+		$statement_builder = self::get_statement_builder();
+		$statement_builder->where( "hasChildren = TRUE AND Status IN('ACTIVE')" );
+		$inventory_service = $this->get_inventory_service();
+		$page = $inventory_service->getAdUnitsByStatement(
+			$statement_builder->toStatement()
+		);
+
+		$ad_units = [];
+		// Retrieve a small amount of items at a time, paging through until all items have been retrieved.
+		$total_result_set_size = 0;
+		do {
+			$page = $inventory_service->getAdUnitsByStatement(
+				$statement_builder->toStatement()
+			);
+
+			if ( $page->getResults() !== null ) {
+				$total_result_set_size = $page->getTotalResultSetSize();
+				foreach ( $page->getResults() as $item ) {
+					$ad_unit_name = $item->getName();
+					if ( 0 === strpos( $ad_unit_name, 'ca-pub-' ) ) {
+						// There are these phantom ad units with 'ca-pub-<int>' names.
+						continue;
+					}
+					$ad_units[] = $item;
+				}
+			}
+			$statement_builder->increaseOffsetBy( StatementBuilder::SUGGESTED_PAGE_LIMIT );
+		} while ( $statement_builder->getOffset() < $total_result_set_size );
+
+		return array_map( [ __CLASS__, 'get_serialized_ad_unit' ], $ad_units );
+	}
+
+	/**
 	 * Get all GAM Ad Units in the user's network.
 	 * If $ids parameter is not specified, will return all ad units found.
 	 *
+	 * @param int     $parent_id        Optional parent ad unit id.
 	 * @param int[]   $ids              Optional array of ad unit ids.
 	 * @param boolean $include_archived Whether to include archived ad units.
 	 *
 	 * @return AdUnit[] Array of AdUnits.
 	 */
-	private function get_ad_units( $ids = [], $include_archived = false ) {
+	private function get_ad_units( $parent_id = null, $ids = [], $include_archived = false ) {
 		$gam_ad_units      = [];
-		$statement_builder = self::get_statement_builder( $ids, $include_archived );
+		$statement_builder = self::get_statement_builder( $parent_id, $ids, $include_archived );
 		$inventory_service = $this->get_inventory_service();
 
 		// Retrieve a small amount of items at a time, paging through until all items have been retrieved.
@@ -98,14 +141,15 @@ final class Ad_Units extends Api_Object {
 	/**
 	 * Get all GAM Ad Units in the user's network, serialized.
 	 *
+	 * @param int     $parent_id        Optional parent ad unit id.
 	 * @param int[]   $ids              Optional array of ad unit ids.
 	 * @param boolean $include_archived Whether to include archived ad units.
 	 *
-	 * @return array[] Array of serialized ad units.
+	 * @return array[]|\WP_Error Array of serialized ad units or error.
 	 */
-	public function get_serialized_ad_units( $ids = [], $include_archived = false ) {
+	public function get_serialized_ad_units( $parent_id = null, $ids = [], $include_archived = false ) {
 		try {
-			$ad_units            = $this->get_ad_units( $ids, $include_archived );
+			$ad_units            = $this->get_ad_units( $parent_id, $ids, $include_archived );
 			$ad_units_serialised = [];
 			foreach ( $ad_units as $ad_unit ) {
 				$ad_units_serialised[] = $this->get_serialized_ad_unit( $ad_unit );
@@ -157,13 +201,14 @@ final class Ad_Units extends Api_Object {
 		);
 
 		$ad_unit = [
-			'id'     => $gam_ad_unit->getId(),
-			'path'   => $path,
-			'code'   => $gam_ad_unit->getAdUnitCode(),
-			'status' => $gam_ad_unit->getStatus(),
-			'name'   => $gam_ad_unit->getName(),
-			'fluid'  => $gam_ad_unit->getIsFluid(),
-			'sizes'  => [],
+			'id'           => $gam_ad_unit->getId(),
+			'path'         => $path,
+			'code'         => $gam_ad_unit->getAdUnitCode(),
+			'status'       => $gam_ad_unit->getStatus(),
+			'name'         => $gam_ad_unit->getName(),
+			'fluid'        => $gam_ad_unit->getIsFluid(),
+			'has_children' => $gam_ad_unit->getHasChildren(),
+			'sizes'        => [],
 		];
 		$sizes   = $gam_ad_unit->getAdUnitSizes();
 		if ( $sizes ) {
@@ -198,7 +243,7 @@ final class Ad_Units extends Api_Object {
 			}
 			$inventory_service = $this->get_inventory_service();
 
-			$statement_builder = self::get_statement_builder( [ $id ] );
+			$statement_builder = self::get_statement_builder( null, [ $id ] );
 			$result            = $inventory_service->performAdUnitAction(
 				$action,
 				$statement_builder->toStatement()
@@ -219,7 +264,7 @@ final class Ad_Units extends Api_Object {
 	 * Given a configuration object and an AdUnit instance, return modified AdUnit.
 	 * If the AdUnit is not provided, create a new one.
 	 *
-	 * @param object $config  Configuration for the Ad Unit.
+	 * @param array  $config  Configuration for the Ad Unit.
 	 * @param AdUnit $ad_unit Ad Unit.
 	 *
 	 * @return AdUnit Ad Unit.
@@ -234,7 +279,11 @@ final class Ad_Units extends Api_Object {
 			$ad_unit = new AdUnit();
 			$ad_unit->setAdUnitCode( uniqid( $slug . '-' ) );
 			$network = $this->api->get_network();
-			$ad_unit->setParentId( $network->getEffectiveRootAdUnitId() );
+			if ( ! empty( $config['parent_id'] ) ) {
+				$ad_unit->setParentId( $config['parent_id'] );
+			} else {
+				$ad_unit->setParentId( $network->getEffectiveRootAdUnitId() );
+			}
 			$ad_unit->setTargetWindow( AdUnitTargetWindow::BLANK );
 		}
 
@@ -268,13 +317,14 @@ final class Ad_Units extends Api_Object {
 	/**
 	 * Update Ad Unit.
 	 *
-	 * @param object $config Ad Unit configuration.
-	 * @return AdUnit|WP_Error Updated AdUnit or error.
+	 * @param array $config Ad Unit configuration.
+	 *
+	 * @return AdUnit|\WP_Error Updated AdUnit or error.
 	 */
 	public function update_ad_unit( $config ) {
 		try {
 			$inventory_service = $this->get_inventory_service();
-			$found_ad_units    = $this->get_ad_units( [ $config['id'] ] );
+			$found_ad_units    = $this->get_ad_units( null, [ $config['id'] ] );
 			if ( empty( $found_ad_units ) ) {
 				return $this->api->get_error( null, __( 'Ad Unit was not found.', 'newspack-ads' ) );
 			}
@@ -293,12 +343,12 @@ final class Ad_Units extends Api_Object {
 	/**
 	 * Create a GAM Ad Unit.
 	 *
-	 * @param object $config Configuration of the ad unit.
-	 * @return AdUnit|WP_Error Created AdUnit or error.
+	 * @param array $config Configuration of the ad unit.
+	 *
+	 * @return array|\WP_Error Created ad unit or error.
 	 */
 	public function create_ad_unit( $config ) {
 		try {
-			$network           = $this->api->get_network();
 			$inventory_service = $this->get_inventory_service();
 			$ad_unit           = $this->modify_ad_unit( $config );
 			$created_ad_units  = $inventory_service->createAdUnits( [ $ad_unit ] );

@@ -261,19 +261,14 @@ class Newspack_Newsletters_Contacts {
 	/**
 	 * Permanently delete a user subscription.
 	 *
-	 * @param int    $user_id User ID.
+	 * @param string $email Email address of deleted user.
 	 * @param string $context Context of the update for logging purposes.
 	 *
 	 * @return bool|WP_Error Whether the contact was deleted or error.
 	 */
-	public static function delete( $user_id, $context = 'Unknown' ) {
-		$user = get_user_by( 'id', $user_id );
-		if ( ! $user ) {
+	public static function delete( $email, $context = 'Unknown' ) {
+		if ( ! $email ) {
 			return new WP_Error( 'newspack_newsletters_invalid_user', __( 'Invalid user.' ) );
-		}
-		/** Only delete if email ownership is verified. */
-		if ( ! Newspack_Newsletters_Subscription::is_email_verified( $user_id ) ) {
-			return new \WP_Error( 'newspack_newsletters_email_not_verified', __( 'Email ownership is not verified.' ) );
 		}
 		$provider = Newspack_Newsletters::get_service_provider();
 		if ( empty( $provider ) ) {
@@ -282,7 +277,7 @@ class Newspack_Newsletters_Contacts {
 		if ( ! method_exists( $provider, 'delete_contact' ) ) {
 			return new WP_Error( 'newspack_newsletters_invalid_provider_method', __( 'Provider does not support deleting user subscriptions.' ) );
 		}
-		$result = $provider->delete_contact( $user->user_email );
+		$result = $provider->delete_contact( $email );
 
 		do_action(
 			'newspack_log',
@@ -294,7 +289,7 @@ class Newspack_Newsletters_Contacts {
 					'provider' => $provider->service,
 					'errors'   => is_wp_error( $result ) ? $result->get_error_message() : [],
 				],
-				'user_email' => $user->user_email,
+				'user_email' => $user['data']['user_email'],
 				'file'       => 'newspack_esp_sync',
 			]
 		);

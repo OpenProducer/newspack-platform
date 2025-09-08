@@ -5,6 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.3] - 2025-08-14
+### Changed
+- Update package dependencies. [#44701]
+
+## [4.3.2] - 2025-08-11
+### Changed
+- Update package dependencies. [#44677]
+
+## [4.3.1] - 2025-08-04
+### Changed
+- Update dependencies. [#44583]
+
+## [4.3.0] - 2025-07-23
+### Fixed
+- Update JITMs to remove jQuery dependency. [#43783]
+
+## [4.2.29] - 2025-07-21
+### Changed
+- Internal updates.
+
+## [4.2.28] - 2025-07-08
+### Changed
+- Update dependencies. [#44229]
+
+## [4.2.27] - 2025-07-03
+### Changed
+- Improve JITM caching and minimize multiple WordPress.com sidebar JITM requests. [#44130]
+- Update package dependencies. [#44148]
+
+## [4.2.26] - 2025-06-30
+### Fixed
+- JITM: Fix ineffective caching due to expired plugin sync transient. [#44117]
+
+## [4.2.25] - 2025-06-23
+### Changed
+- Update package dependencies. [#44020]
+
+## [4.2.24] - 2025-06-18
+### Changed
+- Update dependencies. [#42554]
+
+## [4.2.23] - 2025-06-06
+### Changed
+- Update nonce url handlers for install and activation. [#43779]
+
+## [4.2.22] - 2025-06-05
+### Changed
+- Internal updates.
+
+## [4.2.21] - 2025-06-03
+### Changed
+- Update dependencies.
+
 ## [4.2.20] - 2025-06-02
 ### Changed
 - Update dependencies. [#42554]
@@ -925,6 +978,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update Jetpack to use new JITM package
 
+[4.3.3]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.2...v4.3.3
+[4.3.2]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.1...v4.3.2
+[4.3.1]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.0...v4.3.1
+[4.3.0]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.29...v4.3.0
+[4.2.29]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.28...v4.2.29
+[4.2.28]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.27...v4.2.28
+[4.2.27]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.26...v4.2.27
+[4.2.26]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.25...v4.2.26
+[4.2.25]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.24...v4.2.25
+[4.2.24]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.23...v4.2.24
+[4.2.23]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.22...v4.2.23
+[4.2.22]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.21...v4.2.22
+[4.2.21]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.20...v4.2.21
 [4.2.20]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.19...v4.2.20
 [4.2.19]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.18...v4.2.19
 [4.2.18]: https://github.com/Automattic/jetpack-jitm/compare/v4.2.17...v4.2.18

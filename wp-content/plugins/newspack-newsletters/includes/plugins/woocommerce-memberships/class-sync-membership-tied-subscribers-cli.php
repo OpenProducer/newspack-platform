@@ -54,6 +54,52 @@ Note that if a member has unsubscribed from a list, but has an active membership
 		$active_statuses = wc_memberships()->get_user_memberships_instance()->get_active_access_membership_statuses();
 		return in_array( $user_membership->get_status(), $active_statuses );
 	}
+	/**
+	 * Reset the local WordPress object cache
+	 *
+	 * This only cleans the local cache in WP_Object_Cache, without
+	 * affecting memcache
+	 */
+	private static function reset_local_object_cache() {
+		global $wp_object_cache;
+
+		if ( ! is_object( $wp_object_cache ) ) {
+			return;
+		}
+
+		$properties = [
+			'group_ops',
+			'memcache_debug',
+			'cache',
+		];
+
+		foreach ( $properties as $property ) {
+			if ( property_exists( $wp_object_cache, $property ) ) {
+					$wp_object_cache->$property = [];
+			}
+		}
+
+		if ( method_exists( $wp_object_cache, '__remoteset' ) ) {
+			$wp_object_cache->__remoteset(); // important.
+		}
+	}
+
+	/**
+	 * Reset the WordPress DB query log
+	 */
+	private static function reset_db_query_log() {
+		global $wpdb;
+
+		$wpdb->queries = [];
+	}
+
+	/**
+	 * Cleanup memory.
+	 */
+	private static function memory_cleanup() {
+		self::reset_local_object_cache();
+		self::reset_db_query_log();
+	}
 
 	/**
 	 * CLI handler for membership-tied newsletter lists synchronization.
@@ -65,6 +111,15 @@ Note that if a member has unsubscribed from a list, but has an active membership
 	 *
 	 * [--verbose]
 	 * : More output.
+	 *
+	 * [--plan-id=<plan-id>]
+	 * : Process only the specified plan.
+	 *
+	 * [--list-id=<list-id>]
+	 * : Process only the specified list.
+	 *
+	 * [--resume-from-email=<email>]
+	 * : Will skip all users until it finds the user with the specified email. It will then resume processing all users, starting from that one.
 	 *
 	 * ## EXAMPLES
 	 *
@@ -83,6 +138,12 @@ Note that if a member has unsubscribed from a list, but has an active membership
 
 		$live         = isset( $assoc_args['live'] ) ? true : false;
 		$verbose      = isset( $assoc_args['verbose'] ) ? true : false;
+		$plan_id      = isset( $assoc_args['plan-id'] ) && is_numeric( $assoc_args['plan-id'] ) ? (int) $assoc_args['plan-id'] : null;
+		$list_id      = isset( $assoc_args['list-id'] ) && is_numeric( $assoc_args['list-id'] ) ? (int) $assoc_args['list-id'] : null;
+		$resume_from_email = isset( $assoc_args['resume-from-email'] ) ? $assoc_args['resume-from-email'] : null;
+
+		$start_processing_users = is_null( $resume_from_email );
+
 		if ( $live ) {
 			\WP_CLI::log(
 				'Live mode.
@@ -99,6 +160,10 @@ Note that if a member has unsubscribed from a list, but has an active membership
 		}
 
 		foreach ( wc_memberships_get_membership_plans() as $plan ) {
+			if ( $plan_id && $plan->get_id() !== $plan_id ) {
+				\WP_CLI::log( sprintf( '  - Skipping plan "%s" (#%d)', $plan->get_name(), $plan->get_id() ) );
+				continue;
+			}
 			foreach ( $plan->get_content_restriction_rules() as $rule ) {
 				if ( \Newspack\Newsletters\Subscription_Lists::CPT === $rule->get_content_type_name() ) {
 					if ( $verbose ) {
@@ -123,18 +188,43 @@ Note that if a member has unsubscribed from a list, but has an active membership
 
 					$plan_memberships = $plan->get_memberships();
 					foreach ( $restricted_lists as $list ) {
+						if ( $list_id && $list_id !== $list->get_id() ) {
+							\WP_CLI::log( sprintf( '  - Skipping list "%s" (#%d, public ID: %s)', $list->get_title(), $list->get_id(), $list->get_public_id() ) );
+							continue;
+						}
 						$list_public_id = $list->get_public_id();
 						\WP_CLI::log( sprintf( '  - Synchronizing list "%s" (#%d, public ID: %s)', $list->get_title(), $list->get_id(), $list_public_id ) );
+
+						$user_count = 0;
+
 						foreach ( $plan_memberships as $user_membership ) {
+
+							$user_count++;
+							if ( $user_count > 50 ) {
+								self::memory_cleanup();
+								$user_count = 0;
+							}
+
 							$user = $user_membership->get_user();
 							if ( ! $user ) {
 								continue;
 							}
+
 							$email = $user->user_email;
 							if ( ! $email ) {
 								\WP_CLI::warning( sprintf( 'No email for user #%d, skipping.', $user->ID ) );
 								continue;
 							}
+
+							if ( ! $start_processing_users && $resume_from_email === $email ) {
+								$start_processing_users = true;
+								\WP_CLI::log( sprintf( '  - Resuming from email %s.', $email ) );
+							}
+
+							if ( ! $start_processing_users ) {
+								continue;
+							}
+
 							$membership_id = $user_membership->get_id();
 							$membership_status = $user_membership->get_status();
 							if ( $verbose ) {

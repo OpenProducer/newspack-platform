@@ -468,6 +468,10 @@ GradientParser.stringify = (function() {
       return node.value + 'px';
     },
 
+    'visit_calc': function(node) {
+      return 'calc(' + node.value + ')';
+    },
+
     'visit_literal': function(node) {
       return visitor.visit_color(node.value, node);
     },
@@ -482,6 +486,18 @@ GradientParser.stringify = (function() {
 
     'visit_rgba': function(node) {
       return visitor.visit_color('rgba(' + node.value.join(', ') + ')', node);
+    },
+
+    'visit_hsl': function(node) {
+      return visitor.visit_color('hsl(' + node.value[0] + ', ' + node.value[1] + '%, ' + node.value[2] + '%)', node);
+    },
+
+    'visit_hsla': function(node) {
+      return visitor.visit_color('hsla(' + node.value[0] + ', ' + node.value[1] + '%, ' + node.value[2] + '%, ' + node.value[3] + ')', node);
+    },
+
+    'visit_var': function(node) {
+      return visitor.visit_color('var(' + node.value + ')', node);
     },
 
     'visit_color': function(resultColor, node) {
@@ -516,6 +532,13 @@ GradientParser.stringify = (function() {
       return result;
     },
 
+    'visit_object': function(obj) {
+      if (obj.width && obj.height) {
+        return visitor.visit(obj.width) + ' ' + visitor.visit(obj.height);
+      }
+      return '';
+    },
+
     'visit': function(element) {
       if (!element) {
         return '';
@@ -523,7 +546,9 @@ GradientParser.stringify = (function() {
       var result = '';
 
       if (element instanceof Array) {
-        return visitor.visit_array(element, result);
+        return visitor.visit_array(element);
+      } else if (typeof element === 'object' && !element.type) {
+        return visitor.visit_object(element);
       } else if (element.type) {
         var nodeVisitor = visitor['visit_' + element.type];
         if (nodeVisitor) {
@@ -556,13 +581,14 @@ GradientParser.parse = (function() {
     repeatingLinearGradient: /^(\-(webkit|o|ms|moz)\-)?(repeating\-linear\-gradient)/i,
     radialGradient: /^(\-(webkit|o|ms|moz)\-)?(radial\-gradient)/i,
     repeatingRadialGradient: /^(\-(webkit|o|ms|moz)\-)?(repeating\-radial\-gradient)/i,
-    sideOrCorner: /^to (left (top|bottom)|right (top|bottom)|left|right|top|bottom)/i,
+    sideOrCorner: /^to (left (top|bottom)|right (top|bottom)|top (left|right)|bottom (left|right)|left|right|top|bottom)/i,
     extentKeywords: /^(closest\-side|closest\-corner|farthest\-side|farthest\-corner|contain|cover)/,
     positionKeywords: /^(left|center|right|top|bottom)/i,
     pixelValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))px/,
     percentageValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))\%/,
     emValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))em/,
     angleValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))deg/,
+    radianValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))rad/,
     startCall: /^\(/,
     endCall: /^\)/,
     comma: /^,/,
@@ -570,7 +596,12 @@ GradientParser.parse = (function() {
     literalColor: /^([a-zA-Z]+)/,
     rgbColor: /^rgb/i,
     rgbaColor: /^rgba/i,
-    number: /^(([0-9]*\.[0-9]+)|([0-9]+\.?))/
+    varColor: /^var/i,
+    calcValue: /^calc/i,
+    variableName: /^(--[a-zA-Z0-9-,\s\#]+)/,
+    number: /^(([0-9]*\.[0-9]+)|([0-9]+\.?))/,
+    hslColor: /^hsl/i,
+    hslaColor: /^hsla/i,
   };
 
   var input = '';
@@ -654,8 +685,24 @@ GradientParser.parse = (function() {
   }
 
   function matchLinearOrientation() {
-    return matchSideOrCorner() ||
-      matchAngle();
+    // Check for standard CSS3 "to" direction
+    var sideOrCorner = matchSideOrCorner();
+    if (sideOrCorner) {
+      return sideOrCorner;
+    }
+    
+    // Check for legacy single keyword direction (e.g., "right", "top")
+    var legacyDirection = match('position-keyword', tokens.positionKeywords, 1);
+    if (legacyDirection) {
+      // For legacy syntax, we convert to the directional type
+      return {
+        type: 'directional',
+        value: legacyDirection.value
+      };
+    }
+    
+    // If neither, check for angle
+    return matchAngle();
   }
 
   function matchSideOrCorner() {
@@ -663,7 +710,8 @@ GradientParser.parse = (function() {
   }
 
   function matchAngle() {
-    return match('angular', tokens.angleValue, 1);
+    return match('angular', tokens.angleValue, 1) ||
+      match('angular', tokens.radianValue, 1);
   }
 
   function matchListRadialOrientations() {
@@ -704,12 +752,21 @@ GradientParser.parse = (function() {
           radialType.at = positionAt;
         }
       } else {
-        var defaultPosition = matchPositioning();
-        if (defaultPosition) {
+        // Check for "at" position first, which is a common browser output format
+        var atPosition = matchAtPosition();
+        if (atPosition) {
           radialType = {
             type: 'default-radial',
-            at: defaultPosition
+            at: atPosition
           };
+        } else {
+          var defaultPosition = matchPositioning();
+          if (defaultPosition) {
+            radialType = {
+              type: 'default-radial',
+              at: defaultPosition
+            };
+          }
         }
       }
     }
@@ -731,7 +788,7 @@ GradientParser.parse = (function() {
     var ellipse = match('shape', /^(ellipse)/i, 0);
 
     if (ellipse) {
-      ellipse.style =  matchDistance() || matchExtentKeyword();
+      ellipse.style = matchPositioning() || matchDistance() || matchExtentKeyword();
     }
 
     return ellipse;
@@ -803,8 +860,11 @@ GradientParser.parse = (function() {
 
   function matchColor() {
     return matchHexColor() ||
+      matchHSLAColor() ||
+      matchHSLColor() ||
       matchRGBAColor() ||
       matchRGBColor() ||
+      matchVarColor() ||
       matchLiteralColor();
   }
 
@@ -834,6 +894,70 @@ GradientParser.parse = (function() {
     });
   }
 
+  function matchVarColor() {
+    return matchCall(tokens.varColor, function () {
+      return {
+        type: 'var',
+        value: matchVariableName()
+      };
+    });
+  }
+
+  function matchHSLColor() {
+    return matchCall(tokens.hslColor, function() {
+      // Check for percentage before trying to parse the hue
+      var lookahead = scan(tokens.percentageValue);
+      if (lookahead) {
+        error('HSL hue value must be a number in degrees (0-360) or normalized (-360 to 360), not a percentage');
+      }
+      
+      var hue = matchNumber();
+      scan(tokens.comma);
+      var captures = scan(tokens.percentageValue);
+      var sat = captures ? captures[1] : null;
+      scan(tokens.comma);
+      captures = scan(tokens.percentageValue);
+      var light = captures ? captures[1] : null;
+      if (!sat || !light) {
+        error('Expected percentage value for saturation and lightness in HSL');
+      }
+      return {
+        type: 'hsl',
+        value: [hue, sat, light]
+      };
+    });
+  }
+
+  function matchHSLAColor() {
+    return matchCall(tokens.hslaColor, function() {
+      var hue = matchNumber();
+      scan(tokens.comma);
+      var captures = scan(tokens.percentageValue);
+      var sat = captures ? captures[1] : null;
+      scan(tokens.comma);
+      captures = scan(tokens.percentageValue);
+      var light = captures ? captures[1] : null;
+      scan(tokens.comma);
+      var alpha = matchNumber();
+      if (!sat || !light) {
+        error('Expected percentage value for saturation and lightness in HSLA');
+      }
+      return {
+        type: 'hsla',
+        value: [hue, sat, light, alpha]
+      };
+    });
+  }
+
+  function matchPercentage() {
+    var captures = scan(tokens.percentageValue);
+    return captures ? captures[1] : null;
+  }
+
+  function matchVariableName() {
+    return scan(tokens.variableName)[1];
+  }
+
   function matchNumber() {
     return scan(tokens.number)[1];
   }
@@ -841,11 +965,46 @@ GradientParser.parse = (function() {
   function matchDistance() {
     return match('%', tokens.percentageValue, 1) ||
       matchPositionKeyword() ||
+      matchCalc() ||
       matchLength();
   }
 
   function matchPositionKeyword() {
     return match('position-keyword', tokens.positionKeywords, 1);
+  }
+
+  function matchCalc() {
+    return matchCall(tokens.calcValue, function() {
+      var openParenCount = 1; // Start with the opening parenthesis from calc(
+      var i = 0;
+      
+      // Parse through the content looking for balanced parentheses
+      while (openParenCount > 0 && i < input.length) {
+        var char = input.charAt(i);
+        if (char === '(') {
+          openParenCount++;
+        } else if (char === ')') {
+          openParenCount--;
+        }
+        i++;
+      }
+      
+      // If we exited because we ran out of input but still have open parentheses, error
+      if (openParenCount > 0) {
+        error('Missing closing parenthesis in calc() expression');
+      }
+      
+      // Get the content inside the calc() without the last closing paren
+      var calcContent = input.substring(0, i - 1);
+      
+      // Consume the calc expression content
+      consume(i - 1); // -1 because we don't want to consume the closing parenthesis
+      
+      return {
+        type: 'calc',
+        value: calcContent
+      };
+    });
   }
 
   function matchLength() {
@@ -885,7 +1044,11 @@ GradientParser.parse = (function() {
   }
 
   return function(code) {
-    input = code.toString();
+    input = code.toString().trim();
+    // Remove trailing semicolon if present
+    if (input.endsWith(';')) {
+      input = input.slice(0, -1);
+    }
     return getAST();
   };
 })();
@@ -2160,6 +2323,72 @@ __webpack_require__.d(toggle_group_control_option_base_styles_namespaceObject, {
   y0: () => (LabelView),
   uG: () => (buttonView),
   eh: () => (labelBlock)
+});
+
+// NAMESPACE OBJECT: ./node_modules/react-day-picker/dist/esm/components/custom-components.js
+var custom_components_namespaceObject = {};
+__webpack_require__.r(custom_components_namespaceObject);
+__webpack_require__.d(custom_components_namespaceObject, {
+  Button: () => (Button_Button),
+  CaptionLabel: () => (CaptionLabel),
+  Chevron: () => (Chevron),
+  Day: () => (Day_Day),
+  DayButton: () => (DayButton_DayButton),
+  Dropdown: () => (Dropdown_Dropdown),
+  DropdownNav: () => (DropdownNav),
+  Footer: () => (Footer_Footer),
+  Month: () => (Month_Month),
+  MonthCaption: () => (MonthCaption),
+  MonthGrid: () => (MonthGrid),
+  Months: () => (Months),
+  MonthsDropdown: () => (MonthsDropdown),
+  Nav: () => (Nav),
+  NextMonthButton: () => (NextMonthButton),
+  Option: () => (Option_Option),
+  PreviousMonthButton: () => (PreviousMonthButton),
+  Root: () => (Root_Root),
+  Select: () => (Select_Select),
+  Week: () => (Week),
+  WeekNumber: () => (WeekNumber),
+  WeekNumberHeader: () => (WeekNumberHeader),
+  Weekday: () => (Weekday),
+  Weekdays: () => (Weekdays),
+  Weeks: () => (Weeks),
+  YearsDropdown: () => (YearsDropdown)
+});
+
+// NAMESPACE OBJECT: ./node_modules/react-day-picker/dist/esm/formatters/index.js
+var esm_formatters_namespaceObject = {};
+__webpack_require__.r(esm_formatters_namespaceObject);
+__webpack_require__.d(esm_formatters_namespaceObject, {
+  formatCaption: () => (formatCaption),
+  formatDay: () => (formatDay),
+  formatMonthCaption: () => (formatMonthCaption),
+  formatMonthDropdown: () => (formatMonthDropdown),
+  formatWeekNumber: () => (formatWeekNumber),
+  formatWeekNumberHeader: () => (formatWeekNumberHeader),
+  formatWeekdayName: () => (formatWeekdayName),
+  formatYearCaption: () => (formatYearCaption),
+  formatYearDropdown: () => (formatYearDropdown)
+});
+
+// NAMESPACE OBJECT: ./node_modules/react-day-picker/dist/esm/labels/index.js
+var labels_namespaceObject = {};
+__webpack_require__.r(labels_namespaceObject);
+__webpack_require__.d(labels_namespaceObject, {
+  labelCaption: () => (labelCaption),
+  labelDay: () => (labelDay),
+  labelDayButton: () => (labelDayButton),
+  labelGrid: () => (labelGrid),
+  labelGridcell: () => (labelGridcell),
+  labelMonthDropdown: () => (labelMonthDropdown),
+  labelNav: () => (labelNav),
+  labelNext: () => (labelNext),
+  labelPrevious: () => (labelPrevious),
+  labelWeekNumber: () => (labelWeekNumber),
+  labelWeekNumberHeader: () => (labelWeekNumberHeader),
+  labelWeekday: () => (labelWeekday),
+  labelYearDropdown: () => (labelYearDropdown)
 });
 
 ;// external ["wp","primitives"]
@@ -8662,6 +8891,11 @@ var Dialog = createDialogComponent(
 
 
 ;// ./node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
+/**
+ * Custom positioning reference element.
+ * @see https://floating-ui.com/docs/virtual-elements
+ */
+
 const floating_ui_utils_sides = (/* unused pure expression or super */ null && (['top', 'right', 'bottom', 'left']));
 const alignments = (/* unused pure expression or super */ null && (['start', 'end']));
 const floating_ui_utils_placements = /*#__PURE__*/(/* unused pure expression or super */ null && (floating_ui_utils_sides.reduce((acc, side) => acc.concat(side, side + "-" + alignments[0], side + "-" + alignments[1]), [])));
@@ -8701,8 +8935,9 @@ function getOppositeAxis(axis) {
 function getAxisLength(axis) {
   return axis === 'y' ? 'height' : 'width';
 }
+const yAxisSides = /*#__PURE__*/new Set(['top', 'bottom']);
 function floating_ui_utils_getSideAxis(placement) {
-  return ['top', 'bottom'].includes(floating_ui_utils_getSide(placement)) ? 'y' : 'x';
+  return yAxisSides.has(floating_ui_utils_getSide(placement)) ? 'y' : 'x';
 }
 function getAlignmentAxis(placement) {
   return getOppositeAxis(floating_ui_utils_getSideAxis(placement));
@@ -8727,19 +8962,19 @@ function getExpandedPlacements(placement) {
 function floating_ui_utils_getOppositeAlignmentPlacement(placement) {
   return placement.replace(/start|end/g, alignment => oppositeAlignmentMap[alignment]);
 }
+const lrPlacement = ['left', 'right'];
+const rlPlacement = ['right', 'left'];
+const tbPlacement = ['top', 'bottom'];
+const btPlacement = ['bottom', 'top'];
 function getSideList(side, isStart, rtl) {
-  const lr = ['left', 'right'];
-  const rl = ['right', 'left'];
-  const tb = ['top', 'bottom'];
-  const bt = ['bottom', 'top'];
   switch (side) {
     case 'top':
     case 'bottom':
-      if (rtl) return isStart ? rl : lr;
-      return isStart ? lr : rl;
+      if (rtl) return isStart ? rlPlacement : lrPlacement;
+      return isStart ? lrPlacement : rlPlacement;
     case 'left':
     case 'right':
-      return isStart ? tb : bt;
+      return isStart ? tbPlacement : btPlacement;
     default:
       return [];
   }
@@ -8776,12 +9011,21 @@ function floating_ui_utils_getPaddingObject(padding) {
   };
 }
 function floating_ui_utils_rectToClientRect(rect) {
+  const {
+    x,
+    y,
+    width,
+    height
+  } = rect;
   return {
-    ...rect,
-    top: rect.y,
-    left: rect.x,
-    right: rect.x + rect.width,
-    bottom: rect.y + rect.height
+    width,
+    height,
+    top: y,
+    left: x,
+    right: x + width,
+    bottom: y + height,
+    x,
+    y
   };
 }
 
@@ -8849,7 +9093,7 @@ function computeCoordsFromPlacement(_ref, placement, rtl) {
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
- * next to a reference element when it is given a certain positioning strategy.
+ * next to a given reference element.
  *
  * This export does not have any `platform` interface logic. You will need to
  * write one for the platform you are using Floating UI with.
@@ -8927,7 +9171,6 @@ const computePosition = async (reference, floating, config) => {
         } = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
       }
       i = -1;
-      continue;
     }
   }
   return {
@@ -8977,9 +9220,10 @@ async function detectOverflow(state, options) {
     strategy
   }));
   const rect = elementContext === 'floating' ? {
-    ...rects.floating,
     x,
-    y
+    y,
+    width: rects.floating.width,
+    height: rects.floating.height
   } : rects.reference;
   const offsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(elements.floating));
   const offsetScale = (await (platform.isElement == null ? void 0 : platform.isElement(offsetParent))) ? (await (platform.getScale == null ? void 0 : platform.getScale(offsetParent))) || {
@@ -8990,6 +9234,7 @@ async function detectOverflow(state, options) {
     y: 1
   };
   const elementClientRect = floating_ui_utils_rectToClientRect(platform.convertOffsetParentRelativeRectToViewportRelativeRect ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+    elements,
     rect,
     offsetParent,
     strategy
@@ -9017,7 +9262,8 @@ const arrow = options => ({
       placement,
       rects,
       platform,
-      elements
+      elements,
+      middlewareData
     } = state;
     // Since `element` is required, we don't Partial<> the type.
     const {
@@ -9065,16 +9311,20 @@ const arrow = options => ({
 
     // If the reference is small enough that the arrow's padding causes it to
     // to point to nothing for an aligned placement, adjust the offset of the
-    // floating element itself. This stops `shift()` from taking action, but can
-    // be worked around by calling it again after the `arrow()` if desired.
-    const shouldAddOffset = floating_ui_utils_getAlignment(placement) != null && center != offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
-    const alignmentOffset = shouldAddOffset ? center < min$1 ? min$1 - center : max - center : 0;
+    // floating element itself. To ensure `shift()` continues to take action,
+    // a single reset is performed when this is true.
+    const shouldAddOffset = !middlewareData.arrow && floating_ui_utils_getAlignment(placement) != null && center !== offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
+    const alignmentOffset = shouldAddOffset ? center < min$1 ? center - min$1 : center - max : 0;
     return {
-      [axis]: coords[axis] - alignmentOffset,
+      [axis]: coords[axis] + alignmentOffset,
       data: {
         [axis]: offset,
-        centerOffset: center - offset + alignmentOffset
-      }
+        centerOffset: center - offset - alignmentOffset,
+        ...(shouldAddOffset && {
+          alignmentOffset
+        })
+      },
+      reset: shouldAddOffset
     };
   }
 });
@@ -9196,7 +9446,7 @@ const flip = function (options) {
     name: 'flip',
     options,
     async fn(state) {
-      var _middlewareData$flip;
+      var _middlewareData$arrow, _middlewareData$flip;
       const {
         placement,
         middlewareData,
@@ -9214,11 +9464,21 @@ const flip = function (options) {
         flipAlignment = true,
         ...detectOverflowOptions
       } = floating_ui_utils_evaluate(options, state);
+
+      // If a reset by the arrow was caused due to an alignment offset being
+      // added, we should skip any logic now since `flip()` has already done its
+      // work.
+      // https://github.com/floating-ui/floating-ui/issues/2549#issuecomment-1719601643
+      if ((_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+        return {};
+      }
       const side = floating_ui_utils_getSide(placement);
+      const initialSideAxis = floating_ui_utils_getSideAxis(initialPlacement);
       const isBasePlacement = floating_ui_utils_getSide(initialPlacement) === initialPlacement;
       const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
       const fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipAlignment ? [getOppositePlacement(initialPlacement)] : getExpandedPlacements(initialPlacement));
-      if (!specifiedFallbackPlacements && fallbackAxisSideDirection !== 'none') {
+      const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== 'none';
+      if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) {
         fallbackPlacements.push(...getOppositeAxisPlacements(initialPlacement, flipAlignment, fallbackAxisSideDirection, rtl));
       }
       const placements = [initialPlacement, ...fallbackPlacements];
@@ -9243,16 +9503,22 @@ const flip = function (options) {
         const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
         const nextPlacement = placements[nextIndex];
         if (nextPlacement) {
-          // Try next placement and re-run the lifecycle.
-          return {
-            data: {
-              index: nextIndex,
-              overflows: overflowsData
-            },
-            reset: {
-              placement: nextPlacement
-            }
-          };
+          const ignoreCrossAxisOverflow = checkCrossAxis === 'alignment' ? initialSideAxis !== floating_ui_utils_getSideAxis(nextPlacement) : false;
+          if (!ignoreCrossAxisOverflow ||
+          // We leave the current main axis only if every placement on that axis
+          // overflows the main axis.
+          overflowsData.every(d => d.overflows[0] > 0 && floating_ui_utils_getSideAxis(d.placement) === initialSideAxis)) {
+            // Try next placement and re-run the lifecycle.
+            return {
+              data: {
+                index: nextIndex,
+                overflows: overflowsData
+              },
+              reset: {
+                placement: nextPlacement
+              }
+            };
+          }
         }
 
         // First, find the candidates that fit on the mainAxis side of overflow,
@@ -9264,8 +9530,17 @@ const flip = function (options) {
           switch (fallbackStrategy) {
             case 'bestFit':
               {
-                var _overflowsData$map$so;
-                const placement = (_overflowsData$map$so = overflowsData.map(d => [d.placement, d.overflows.filter(overflow => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$map$so[0];
+                var _overflowsData$filter2;
+                const placement = (_overflowsData$filter2 = overflowsData.filter(d => {
+                  if (hasFallbackAxisSideDirection) {
+                    const currentSideAxis = floating_ui_utils_getSideAxis(d.placement);
+                    return currentSideAxis === initialSideAxis ||
+                    // Create a bias to the `y` side axis due to horizontal
+                    // reading directions favoring greater width.
+                    currentSideAxis === 'y';
+                  }
+                  return true;
+                }).map(d => [d.placement, d.overflows.filter(overflow => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$filter2[0];
                 if (placement) {
                   resetPlacement = placement;
                 }
@@ -9489,8 +9764,11 @@ const inline = function (options) {
   };
 };
 
+const originSides = /*#__PURE__*/new Set(['left', 'top']);
+
 // For type backwards-compatibility, the `OffsetOptions` type was also
 // Derivable.
+
 async function convertValueToCoords(state, options) {
   const {
     placement,
@@ -9501,7 +9779,7 @@ async function convertValueToCoords(state, options) {
   const side = floating_ui_utils_getSide(placement);
   const alignment = floating_ui_utils_getAlignment(placement);
   const isVertical = floating_ui_utils_getSideAxis(placement) === 'y';
-  const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
+  const mainAxisMulti = originSides.has(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = floating_ui_utils_evaluate(options, state);
 
@@ -9515,10 +9793,9 @@ async function convertValueToCoords(state, options) {
     crossAxis: 0,
     alignmentAxis: null
   } : {
-    mainAxis: 0,
-    crossAxis: 0,
-    alignmentAxis: null,
-    ...rawValue
+    mainAxis: rawValue.mainAxis || 0,
+    crossAxis: rawValue.crossAxis || 0,
+    alignmentAxis: rawValue.alignmentAxis
   };
   if (alignment && typeof alignmentAxis === 'number') {
     crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;
@@ -9547,15 +9824,27 @@ const offset = function (options) {
     name: 'offset',
     options,
     async fn(state) {
+      var _middlewareData$offse, _middlewareData$arrow;
       const {
         x,
-        y
+        y,
+        placement,
+        middlewareData
       } = state;
       const diffCoords = await convertValueToCoords(state, options);
+
+      // If the placement is the same and the arrow caused an alignment offset
+      // then we don't need to change the positioning coordinates.
+      if (placement === ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse.placement) && (_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+        return {};
+      }
       return {
         x: x + diffCoords.x,
         y: y + diffCoords.y,
-        data: diffCoords
+        data: {
+          ...diffCoords,
+          placement
+        }
       };
     }
   };
@@ -9628,7 +9917,11 @@ const shift = function (options) {
         ...limitedCoords,
         data: {
           x: limitedCoords.x - x,
-          y: limitedCoords.y - y
+          y: limitedCoords.y - y,
+          enabled: {
+            [mainAxis]: checkMainAxis,
+            [crossAxis]: checkCrossAxis
+          }
         }
       };
     }
@@ -9686,7 +9979,7 @@ const limitShift = function (options) {
       if (checkCrossAxis) {
         var _middlewareData$offse, _middlewareData$offse2;
         const len = mainAxis === 'y' ? 'width' : 'height';
-        const isOriginSide = ['top', 'left'].includes(floating_ui_utils_getSide(placement));
+        const isOriginSide = originSides.has(floating_ui_utils_getSide(placement));
         const limitMin = rects.reference[crossAxis] - rects.floating[len] + (isOriginSide ? ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse[crossAxis]) || 0 : 0) + (isOriginSide ? 0 : computedOffset.crossAxis);
         const limitMax = rects.reference[crossAxis] + rects.reference[len] + (isOriginSide ? 0 : ((_middlewareData$offse2 = middlewareData.offset) == null ? void 0 : _middlewareData$offse2[crossAxis]) || 0) - (isOriginSide ? computedOffset.crossAxis : 0);
         if (crossAxisCoord < limitMin) {
@@ -9717,6 +10010,7 @@ const size = function (options) {
     name: 'size',
     options,
     async fn(state) {
+      var _state$middlewareData, _state$middlewareData2;
       const {
         placement,
         rects,
@@ -9744,17 +10038,18 @@ const size = function (options) {
         widthSide = side;
         heightSide = alignment === 'end' ? 'top' : 'bottom';
       }
-      const overflowAvailableHeight = height - overflow[heightSide];
-      const overflowAvailableWidth = width - overflow[widthSide];
+      const maximumClippingHeight = height - overflow.top - overflow.bottom;
+      const maximumClippingWidth = width - overflow.left - overflow.right;
+      const overflowAvailableHeight = floating_ui_utils_min(height - overflow[heightSide], maximumClippingHeight);
+      const overflowAvailableWidth = floating_ui_utils_min(width - overflow[widthSide], maximumClippingWidth);
       const noShift = !state.middlewareData.shift;
       let availableHeight = overflowAvailableHeight;
       let availableWidth = overflowAvailableWidth;
-      if (isYAxis) {
-        const maximumClippingWidth = width - overflow.left - overflow.right;
-        availableWidth = alignment || noShift ? floating_ui_utils_min(overflowAvailableWidth, maximumClippingWidth) : maximumClippingWidth;
-      } else {
-        const maximumClippingHeight = height - overflow.top - overflow.bottom;
-        availableHeight = alignment || noShift ? floating_ui_utils_min(overflowAvailableHeight, maximumClippingHeight) : maximumClippingHeight;
+      if ((_state$middlewareData = state.middlewareData.shift) != null && _state$middlewareData.enabled.x) {
+        availableWidth = maximumClippingWidth;
+      }
+      if ((_state$middlewareData2 = state.middlewareData.shift) != null && _state$middlewareData2.enabled.y) {
+        availableHeight = maximumClippingHeight;
       }
       if (noShift && !alignment) {
         const xMin = floating_ui_utils_max(overflow.left, 0);
@@ -9787,147 +10082,7 @@ const size = function (options) {
 
 
 
-;// ./node_modules/@floating-ui/dom/node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
-/**
- * Custom positioning reference element.
- * @see https://floating-ui.com/docs/virtual-elements
- */
-
-const dist_floating_ui_utils_sides = (/* unused pure expression or super */ null && (['top', 'right', 'bottom', 'left']));
-const floating_ui_utils_alignments = (/* unused pure expression or super */ null && (['start', 'end']));
-const dist_floating_ui_utils_placements = /*#__PURE__*/(/* unused pure expression or super */ null && (dist_floating_ui_utils_sides.reduce((acc, side) => acc.concat(side, side + "-" + floating_ui_utils_alignments[0], side + "-" + floating_ui_utils_alignments[1]), [])));
-const dist_floating_ui_utils_min = Math.min;
-const dist_floating_ui_utils_max = Math.max;
-const floating_ui_utils_round = Math.round;
-const floating_ui_utils_floor = Math.floor;
-const floating_ui_utils_createCoords = v => ({
-  x: v,
-  y: v
-});
-const floating_ui_utils_oppositeSideMap = {
-  left: 'right',
-  right: 'left',
-  bottom: 'top',
-  top: 'bottom'
-};
-const floating_ui_utils_oppositeAlignmentMap = {
-  start: 'end',
-  end: 'start'
-};
-function floating_ui_utils_clamp(start, value, end) {
-  return dist_floating_ui_utils_max(start, dist_floating_ui_utils_min(value, end));
-}
-function dist_floating_ui_utils_evaluate(value, param) {
-  return typeof value === 'function' ? value(param) : value;
-}
-function dist_floating_ui_utils_getSide(placement) {
-  return placement.split('-')[0];
-}
-function dist_floating_ui_utils_getAlignment(placement) {
-  return placement.split('-')[1];
-}
-function floating_ui_utils_getOppositeAxis(axis) {
-  return axis === 'x' ? 'y' : 'x';
-}
-function floating_ui_utils_getAxisLength(axis) {
-  return axis === 'y' ? 'height' : 'width';
-}
-function dist_floating_ui_utils_getSideAxis(placement) {
-  return ['top', 'bottom'].includes(dist_floating_ui_utils_getSide(placement)) ? 'y' : 'x';
-}
-function floating_ui_utils_getAlignmentAxis(placement) {
-  return floating_ui_utils_getOppositeAxis(dist_floating_ui_utils_getSideAxis(placement));
-}
-function dist_floating_ui_utils_getAlignmentSides(placement, rects, rtl) {
-  if (rtl === void 0) {
-    rtl = false;
-  }
-  const alignment = dist_floating_ui_utils_getAlignment(placement);
-  const alignmentAxis = floating_ui_utils_getAlignmentAxis(placement);
-  const length = floating_ui_utils_getAxisLength(alignmentAxis);
-  let mainAlignmentSide = alignmentAxis === 'x' ? alignment === (rtl ? 'end' : 'start') ? 'right' : 'left' : alignment === 'start' ? 'bottom' : 'top';
-  if (rects.reference[length] > rects.floating[length]) {
-    mainAlignmentSide = floating_ui_utils_getOppositePlacement(mainAlignmentSide);
-  }
-  return [mainAlignmentSide, floating_ui_utils_getOppositePlacement(mainAlignmentSide)];
-}
-function floating_ui_utils_getExpandedPlacements(placement) {
-  const oppositePlacement = floating_ui_utils_getOppositePlacement(placement);
-  return [dist_floating_ui_utils_getOppositeAlignmentPlacement(placement), oppositePlacement, dist_floating_ui_utils_getOppositeAlignmentPlacement(oppositePlacement)];
-}
-function dist_floating_ui_utils_getOppositeAlignmentPlacement(placement) {
-  return placement.replace(/start|end/g, alignment => floating_ui_utils_oppositeAlignmentMap[alignment]);
-}
-function floating_ui_utils_getSideList(side, isStart, rtl) {
-  const lr = ['left', 'right'];
-  const rl = ['right', 'left'];
-  const tb = ['top', 'bottom'];
-  const bt = ['bottom', 'top'];
-  switch (side) {
-    case 'top':
-    case 'bottom':
-      if (rtl) return isStart ? rl : lr;
-      return isStart ? lr : rl;
-    case 'left':
-    case 'right':
-      return isStart ? tb : bt;
-    default:
-      return [];
-  }
-}
-function floating_ui_utils_getOppositeAxisPlacements(placement, flipAlignment, direction, rtl) {
-  const alignment = dist_floating_ui_utils_getAlignment(placement);
-  let list = floating_ui_utils_getSideList(dist_floating_ui_utils_getSide(placement), direction === 'start', rtl);
-  if (alignment) {
-    list = list.map(side => side + "-" + alignment);
-    if (flipAlignment) {
-      list = list.concat(list.map(dist_floating_ui_utils_getOppositeAlignmentPlacement));
-    }
-  }
-  return list;
-}
-function floating_ui_utils_getOppositePlacement(placement) {
-  return placement.replace(/left|right|bottom|top/g, side => floating_ui_utils_oppositeSideMap[side]);
-}
-function floating_ui_utils_expandPaddingObject(padding) {
-  return {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    ...padding
-  };
-}
-function dist_floating_ui_utils_getPaddingObject(padding) {
-  return typeof padding !== 'number' ? floating_ui_utils_expandPaddingObject(padding) : {
-    top: padding,
-    right: padding,
-    bottom: padding,
-    left: padding
-  };
-}
-function dist_floating_ui_utils_rectToClientRect(rect) {
-  const {
-    x,
-    y,
-    width,
-    height
-  } = rect;
-  return {
-    width,
-    height,
-    top: y,
-    left: x,
-    right: x + width,
-    bottom: y + height,
-    x,
-    y
-  };
-}
-
-
-
-;// ./node_modules/@floating-ui/dom/node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
+;// ./node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
 function hasWindow() {
   return typeof window !== 'undefined';
 }
@@ -9972,6 +10127,7 @@ function isShadowRoot(value) {
   }
   return value instanceof ShadowRoot || value instanceof floating_ui_utils_dom_getWindow(value).ShadowRoot;
 }
+const invalidOverflowDisplayValues = /*#__PURE__*/new Set(['inline', 'contents']);
 function isOverflowElement(element) {
   const {
     overflow,
@@ -9979,26 +10135,32 @@ function isOverflowElement(element) {
     overflowY,
     display
   } = floating_ui_utils_dom_getComputedStyle(element);
-  return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !['inline', 'contents'].includes(display);
+  return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !invalidOverflowDisplayValues.has(display);
 }
+const tableElements = /*#__PURE__*/new Set(['table', 'td', 'th']);
 function isTableElement(element) {
-  return ['table', 'td', 'th'].includes(getNodeName(element));
+  return tableElements.has(getNodeName(element));
 }
+const topLayerSelectors = [':popover-open', ':modal'];
 function isTopLayer(element) {
-  return [':popover-open', ':modal'].some(selector => {
+  return topLayerSelectors.some(selector => {
     try {
       return element.matches(selector);
-    } catch (e) {
+    } catch (_e) {
       return false;
     }
   });
 }
+const transformProperties = ['transform', 'translate', 'scale', 'rotate', 'perspective'];
+const willChangeValues = ['transform', 'translate', 'scale', 'rotate', 'perspective', 'filter'];
+const containValues = ['paint', 'layout', 'strict', 'content'];
 function isContainingBlock(elementOrCss) {
   const webkit = isWebKit();
   const css = isElement(elementOrCss) ? floating_ui_utils_dom_getComputedStyle(elementOrCss) : elementOrCss;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-  return css.transform !== 'none' || css.perspective !== 'none' || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || ['transform', 'perspective', 'filter'].some(value => (css.willChange || '').includes(value)) || ['paint', 'layout', 'strict', 'content'].some(value => (css.contain || '').includes(value));
+  // https://drafts.csswg.org/css-transforms-2/#individual-transforms
+  return transformProperties.some(value => css[value] ? css[value] !== 'none' : false) || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || willChangeValues.some(value => (css.willChange || '').includes(value)) || containValues.some(value => (css.contain || '').includes(value));
 }
 function getContainingBlock(element) {
   let currentNode = getParentNode(element);
@@ -10016,8 +10178,9 @@ function isWebKit() {
   if (typeof CSS === 'undefined' || !CSS.supports) return false;
   return CSS.supports('-webkit-backdrop-filter', 'none');
 }
+const lastTraversableNodeNames = /*#__PURE__*/new Set(['html', 'body', '#document']);
 function isLastTraversableNode(node) {
-  return ['html', 'body', '#document'].includes(getNodeName(node));
+  return lastTraversableNodeNames.has(getNodeName(node));
 }
 function floating_ui_utils_dom_getComputedStyle(element) {
   return floating_ui_utils_dom_getWindow(element).getComputedStyle(element);
@@ -10088,7 +10251,6 @@ function getFrameElement(win) {
 
 
 
-
 function getCssDimensions(element) {
   const css = floating_ui_utils_dom_getComputedStyle(element);
   // In testing environments, the `width` and `height` properties are empty
@@ -10098,7 +10260,7 @@ function getCssDimensions(element) {
   const hasOffset = isHTMLElement(element);
   const offsetWidth = hasOffset ? element.offsetWidth : width;
   const offsetHeight = hasOffset ? element.offsetHeight : height;
-  const shouldFallback = floating_ui_utils_round(width) !== offsetWidth || floating_ui_utils_round(height) !== offsetHeight;
+  const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
   if (shouldFallback) {
     width = offsetWidth;
     height = offsetHeight;
@@ -10117,7 +10279,7 @@ function unwrapElement(element) {
 function getScale(element) {
   const domElement = unwrapElement(element);
   if (!isHTMLElement(domElement)) {
-    return floating_ui_utils_createCoords(1);
+    return createCoords(1);
   }
   const rect = domElement.getBoundingClientRect();
   const {
@@ -10125,8 +10287,8 @@ function getScale(element) {
     height,
     $
   } = getCssDimensions(domElement);
-  let x = ($ ? floating_ui_utils_round(rect.width) : rect.width) / width;
-  let y = ($ ? floating_ui_utils_round(rect.height) : rect.height) / height;
+  let x = ($ ? round(rect.width) : rect.width) / width;
+  let y = ($ ? round(rect.height) : rect.height) / height;
 
   // 0, NaN, or Infinity should always fallback to 1.
 
@@ -10142,7 +10304,7 @@ function getScale(element) {
   };
 }
 
-const noOffsets = /*#__PURE__*/floating_ui_utils_createCoords(0);
+const noOffsets = /*#__PURE__*/createCoords(0);
 function getVisualOffsets(element) {
   const win = floating_ui_utils_dom_getWindow(element);
   if (!isWebKit() || !win.visualViewport) {
@@ -10172,7 +10334,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   }
   const clientRect = element.getBoundingClientRect();
   const domElement = unwrapElement(element);
-  let scale = floating_ui_utils_createCoords(1);
+  let scale = createCoords(1);
   if (includeScale) {
     if (offsetParent) {
       if (isElement(offsetParent)) {
@@ -10182,7 +10344,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
       scale = getScale(element);
     }
   }
-  const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : floating_ui_utils_createCoords(0);
+  const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
   let x = (clientRect.left + visualOffsets.x) / scale.x;
   let y = (clientRect.top + visualOffsets.y) / scale.y;
   let width = clientRect.width / scale.x;
@@ -10191,7 +10353,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
     const win = floating_ui_utils_dom_getWindow(domElement);
     const offsetWin = offsetParent && isElement(offsetParent) ? floating_ui_utils_dom_getWindow(offsetParent) : offsetParent;
     let currentWin = win;
-    let currentIFrame = currentWin.frameElement;
+    let currentIFrame = getFrameElement(currentWin);
     while (currentIFrame && offsetParent && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
@@ -10205,7 +10367,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
       x += left;
       y += top;
       currentWin = floating_ui_utils_dom_getWindow(currentIFrame);
-      currentIFrame = currentWin.frameElement;
+      currentIFrame = getFrameElement(currentWin);
     }
   }
   return floating_ui_utils_rectToClientRect({
@@ -10216,15 +10378,29 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   });
 }
 
-const topLayerSelectors = [':popover-open', ':modal'];
-function floating_ui_dom_isTopLayer(floating) {
-  return topLayerSelectors.some(selector => {
-    try {
-      return floating.matches(selector);
-    } catch (e) {
-      return false;
-    }
-  });
+// If <html> has a CSS width greater than the viewport, then this will be
+// incorrect for RTL.
+function getWindowScrollBarX(element, rect) {
+  const leftScroll = getNodeScroll(element).scrollLeft;
+  if (!rect) {
+    return getBoundingClientRect(getDocumentElement(element)).left + leftScroll;
+  }
+  return rect.left + leftScroll;
+}
+
+function getHTMLOffset(documentElement, scroll, ignoreScrollbarX) {
+  if (ignoreScrollbarX === void 0) {
+    ignoreScrollbarX = false;
+  }
+  const htmlRect = documentElement.getBoundingClientRect();
+  const x = htmlRect.left + scroll.scrollLeft - (ignoreScrollbarX ? 0 :
+  // RTL <body> scrollbar.
+  getWindowScrollBarX(documentElement, htmlRect));
+  const y = htmlRect.top + scroll.scrollTop;
+  return {
+    x,
+    y
+  };
 }
 
 function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
@@ -10236,7 +10412,7 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
   } = _ref;
   const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
-  const topLayer = elements ? floating_ui_dom_isTopLayer(elements.floating) : false;
+  const topLayer = elements ? isTopLayer(elements.floating) : false;
   if (offsetParent === documentElement || topLayer && isFixed) {
     return rect;
   }
@@ -10244,8 +10420,8 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
     scrollLeft: 0,
     scrollTop: 0
   };
-  let scale = floating_ui_utils_createCoords(1);
-  const offsets = floating_ui_utils_createCoords(0);
+  let scale = createCoords(1);
+  const offsets = createCoords(0);
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
     if (getNodeName(offsetParent) !== 'body' || isOverflowElement(documentElement)) {
@@ -10258,22 +10434,17 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
       offsets.y = offsetRect.y + offsetParent.clientTop;
     }
   }
+  const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll, true) : createCoords(0);
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y
+    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
+    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y
   };
 }
 
 function getClientRects(element) {
   return Array.from(element.getClientRects());
-}
-
-function getWindowScrollBarX(element) {
-  // If <html> has a CSS width greater than the viewport, then this will be
-  // incorrect for RTL.
-  return getBoundingClientRect(getDocumentElement(element)).left + getNodeScroll(element).scrollLeft;
 }
 
 // Gets the entire size of the scrollable document area, even extending outside
@@ -10282,12 +10453,12 @@ function getDocumentRect(element) {
   const html = getDocumentElement(element);
   const scroll = getNodeScroll(element);
   const body = element.ownerDocument.body;
-  const width = dist_floating_ui_utils_max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
-  const height = dist_floating_ui_utils_max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
+  const width = floating_ui_utils_max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
+  const height = floating_ui_utils_max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
   let x = -scroll.scrollLeft + getWindowScrollBarX(element);
   const y = -scroll.scrollTop;
   if (floating_ui_utils_dom_getComputedStyle(body).direction === 'rtl') {
-    x += dist_floating_ui_utils_max(html.clientWidth, body.clientWidth) - width;
+    x += floating_ui_utils_max(html.clientWidth, body.clientWidth) - width;
   }
   return {
     width,
@@ -10322,12 +10493,13 @@ function getViewportRect(element, strategy) {
   };
 }
 
+const absoluteOrFixed = /*#__PURE__*/new Set(['absolute', 'fixed']);
 // Returns the inner client rect, subtracting scrollbars if present.
 function getInnerBoundingClientRect(element, strategy) {
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element) ? getScale(element) : floating_ui_utils_createCoords(1);
+  const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
   const x = left * scale.x;
@@ -10350,9 +10522,10 @@ function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) 
   } else {
     const visualOffsets = getVisualOffsets(element);
     rect = {
-      ...clippingAncestor,
       x: clippingAncestor.x - visualOffsets.x,
-      y: clippingAncestor.y - visualOffsets.y
+      y: clippingAncestor.y - visualOffsets.y,
+      width: clippingAncestor.width,
+      height: clippingAncestor.height
     };
   }
   return floating_ui_utils_rectToClientRect(rect);
@@ -10385,7 +10558,7 @@ function getClippingElementAncestors(element, cache) {
     if (!currentNodeIsContaining && computedStyle.position === 'fixed') {
       currentContainingBlockComputedStyle = null;
     }
-    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && ['absolute', 'fixed'].includes(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && absoluteOrFixed.has(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
       result = result.filter(ancestor => ancestor !== currentNode);
@@ -10408,15 +10581,15 @@ function getClippingRect(_ref) {
     rootBoundary,
     strategy
   } = _ref;
-  const elementClippingAncestors = boundary === 'clippingAncestors' ? getClippingElementAncestors(element, this._c) : [].concat(boundary);
+  const elementClippingAncestors = boundary === 'clippingAncestors' ? isTopLayer(element) ? [] : getClippingElementAncestors(element, this._c) : [].concat(boundary);
   const clippingAncestors = [...elementClippingAncestors, rootBoundary];
   const firstClippingAncestor = clippingAncestors[0];
   const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
     const rect = getClientRectFromClippingAncestor(element, clippingAncestor, strategy);
-    accRect.top = dist_floating_ui_utils_max(rect.top, accRect.top);
-    accRect.right = dist_floating_ui_utils_min(rect.right, accRect.right);
-    accRect.bottom = dist_floating_ui_utils_min(rect.bottom, accRect.bottom);
-    accRect.left = dist_floating_ui_utils_max(rect.left, accRect.left);
+    accRect.top = floating_ui_utils_max(rect.top, accRect.top);
+    accRect.right = floating_ui_utils_min(rect.right, accRect.right);
+    accRect.bottom = floating_ui_utils_min(rect.bottom, accRect.bottom);
+    accRect.left = floating_ui_utils_max(rect.left, accRect.left);
     return accRect;
   }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
   return {
@@ -10447,7 +10620,13 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
     scrollLeft: 0,
     scrollTop: 0
   };
-  const offsets = floating_ui_utils_createCoords(0);
+  const offsets = createCoords(0);
+
+  // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
+  // Firefox with layout.scrollbar.side = 3 in about:config to test this.
+  function setLeftRTLScrollbarOffset() {
+    offsets.x = getWindowScrollBarX(documentElement);
+  }
   if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
     if (getNodeName(offsetParent) !== 'body' || isOverflowElement(documentElement)) {
       scroll = getNodeScroll(offsetParent);
@@ -10457,17 +10636,25 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     } else if (documentElement) {
-      offsets.x = getWindowScrollBarX(documentElement);
+      setLeftRTLScrollbarOffset();
     }
   }
-  const x = rect.left + scroll.scrollLeft - offsets.x;
-  const y = rect.top + scroll.scrollTop - offsets.y;
+  if (isFixed && !isOffsetParentAnElement && documentElement) {
+    setLeftRTLScrollbarOffset();
+  }
+  const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
+  const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
+  const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
   return {
     x,
     y,
     width: rect.width,
     height: rect.height
   };
+}
+
+function isStaticPositioned(element) {
+  return floating_ui_utils_dom_getComputedStyle(element).position === 'static';
 }
 
 function getTrueOffsetParent(element, polyfill) {
@@ -10477,35 +10664,56 @@ function getTrueOffsetParent(element, polyfill) {
   if (polyfill) {
     return polyfill(element);
   }
-  return element.offsetParent;
+  let rawOffsetParent = element.offsetParent;
+
+  // Firefox returns the <html> element as the offsetParent if it's non-static,
+  // while Chrome and Safari return the <body> element. The <body> element must
+  // be used to perform the correct calculations even if the <html> element is
+  // non-static.
+  if (getDocumentElement(element) === rawOffsetParent) {
+    rawOffsetParent = rawOffsetParent.ownerDocument.body;
+  }
+  return rawOffsetParent;
 }
 
 // Gets the closest ancestor positioned element. Handles some edge cases,
 // such as table ancestors and cross browser bugs.
 function getOffsetParent(element, polyfill) {
-  const window = floating_ui_utils_dom_getWindow(element);
-  if (!isHTMLElement(element) || floating_ui_dom_isTopLayer(element)) {
-    return window;
+  const win = floating_ui_utils_dom_getWindow(element);
+  if (isTopLayer(element)) {
+    return win;
+  }
+  if (!isHTMLElement(element)) {
+    let svgOffsetParent = getParentNode(element);
+    while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
+      if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
+        return svgOffsetParent;
+      }
+      svgOffsetParent = getParentNode(svgOffsetParent);
+    }
+    return win;
   }
   let offsetParent = getTrueOffsetParent(element, polyfill);
-  while (offsetParent && isTableElement(offsetParent) && floating_ui_utils_dom_getComputedStyle(offsetParent).position === 'static') {
+  while (offsetParent && isTableElement(offsetParent) && isStaticPositioned(offsetParent)) {
     offsetParent = getTrueOffsetParent(offsetParent, polyfill);
   }
-  if (offsetParent && (getNodeName(offsetParent) === 'html' || getNodeName(offsetParent) === 'body' && floating_ui_utils_dom_getComputedStyle(offsetParent).position === 'static' && !isContainingBlock(offsetParent))) {
-    return window;
+  if (offsetParent && isLastTraversableNode(offsetParent) && isStaticPositioned(offsetParent) && !isContainingBlock(offsetParent)) {
+    return win;
   }
-  return offsetParent || getContainingBlock(element) || window;
+  return offsetParent || getContainingBlock(element) || win;
 }
 
 const getElementRects = async function (data) {
   const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
   const getDimensionsFn = this.getDimensions;
+  const floatingDimensions = await getDimensionsFn(data.floating);
   return {
     reference: getRectRelativeToOffsetParent(data.reference, await getOffsetParentFn(data.floating), data.strategy),
     floating: {
       x: 0,
       y: 0,
-      ...(await getDimensionsFn(data.floating))
+      width: floatingDimensions.width,
+      height: floatingDimensions.height
     }
   };
 };
@@ -10527,6 +10735,10 @@ const platform = {
   isRTL
 };
 
+function rectsAreEqual(a, b) {
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+}
+
 // https://samthor.au/2021/observing-dom/
 function observeMove(element, onMove) {
   let io = null;
@@ -10546,26 +10758,27 @@ function observeMove(element, onMove) {
       threshold = 1;
     }
     cleanup();
+    const elementRectForRootMargin = element.getBoundingClientRect();
     const {
       left,
       top,
       width,
       height
-    } = element.getBoundingClientRect();
+    } = elementRectForRootMargin;
     if (!skip) {
       onMove();
     }
     if (!width || !height) {
       return;
     }
-    const insetTop = floating_ui_utils_floor(top);
-    const insetRight = floating_ui_utils_floor(root.clientWidth - (left + width));
-    const insetBottom = floating_ui_utils_floor(root.clientHeight - (top + height));
-    const insetLeft = floating_ui_utils_floor(left);
+    const insetTop = floor(top);
+    const insetRight = floor(root.clientWidth - (left + width));
+    const insetBottom = floor(root.clientHeight - (top + height));
+    const insetLeft = floor(left);
     const rootMargin = -insetTop + "px " + -insetRight + "px " + -insetBottom + "px " + -insetLeft + "px";
     const options = {
       rootMargin,
-      threshold: dist_floating_ui_utils_max(0, dist_floating_ui_utils_min(1, threshold)) || 1
+      threshold: floating_ui_utils_max(0, floating_ui_utils_min(1, threshold)) || 1
     };
     let isFirstUpdate = true;
     function handleObserve(entries) {
@@ -10575,12 +10788,24 @@ function observeMove(element, onMove) {
           return refresh();
         }
         if (!ratio) {
+          // If the reference is clipped, the ratio is 0. Throttle the refresh
+          // to prevent an infinite loop of updates.
           timeoutId = setTimeout(() => {
             refresh(false, 1e-7);
-          }, 100);
+          }, 1000);
         } else {
           refresh(false, ratio);
         }
+      }
+      if (ratio === 1 && !rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) {
+        // It's possible that even though the ratio is reported as 1, the
+        // element is not actually fully within the IntersectionObserver's root
+        // area anymore. This can happen under performance constraints. This may
+        // be a bug in the browser's IntersectionObserver implementation. To
+        // work around this, we compare the element's bounding rect now with
+        // what it was at the time we created the IntersectionObserver. If they
+        // are not equal then the element moved, so we refresh.
+        refresh();
       }
       isFirstUpdate = false;
     }
@@ -10593,7 +10818,7 @@ function observeMove(element, onMove) {
         // Handle <iframe>s
         root: root.ownerDocument
       });
-    } catch (e) {
+    } catch (_e) {
       io = new IntersectionObserver(handleObserve, options);
     }
     io.observe(element);
@@ -10659,7 +10884,7 @@ function autoUpdate(reference, floating, update, options) {
   }
   function frameLoop() {
     const nextRefRect = getBoundingClientRect(reference);
-    if (prevRefRect && (nextRefRect.x !== prevRefRect.x || nextRefRect.y !== prevRefRect.y || nextRefRect.width !== prevRefRect.width || nextRefRect.height !== prevRefRect.height)) {
+    if (prevRefRect && !rectsAreEqual(prevRefRect, nextRefRect)) {
       update();
     }
     prevRefRect = nextRefRect;
@@ -10680,6 +10905,25 @@ function autoUpdate(reference, floating, update, options) {
     }
   };
 }
+
+/**
+ * Resolves with an object of overflow side offsets that determine how much the
+ * element is overflowing a given clipping boundary on each side.
+ * - positive = overflowing the boundary by that number of pixels
+ * - negative = how many pixels left before it will overflow
+ * - 0 = lies flush with the boundary
+ * @see https://floating-ui.com/docs/detectOverflow
+ */
+const floating_ui_dom_detectOverflow = (/* unused pure expression or super */ null && (detectOverflow$1));
+
+/**
+ * Modifies the placement by translating the floating element along the
+ * specified axes.
+ * A number (shorthand for `mainAxis` or distance), or an axes configuration
+ * object may be passed.
+ * @see https://floating-ui.com/docs/offset
+ */
+const floating_ui_dom_offset = offset;
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement
@@ -10820,7 +11064,7 @@ function roundByDPR(value) {
   return Math.round(value * dpr) / dpr;
 }
 function getOffsetMiddleware(arrowElement, props) {
-  return offset(({ placement }) => {
+  return floating_ui_dom_offset(({ placement }) => {
     var _a;
     const arrowOffset = ((arrowElement == null ? void 0 : arrowElement.clientHeight) || 0) / 2;
     const finalGutter = typeof props.gutter === "number" ? props.gutter + arrowOffset : (_a = props.gutter) != null ? _a : arrowOffset;
@@ -32050,6 +32294,8 @@ function Icon({
     return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
       // @ts-ignore Just forwarding the size prop along
       size,
+      width: size,
+      height: size,
       ...additionalProps
     });
   }
@@ -33279,7 +33525,7 @@ function getDefaultUseItems(autocompleter) {
   };
 }
 
-;// ./packages/components/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.esm.js
+;// ./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
 
 
 
@@ -33292,7 +33538,7 @@ function getDefaultUseItems(autocompleter) {
  * This wraps the core `arrow` middleware to allow React refs as the element.
  * @see https://floating-ui.com/docs/arrow
  */
-const floating_ui_react_dom_esm_arrow = options => {
+const floating_ui_react_dom_arrow = options => {
   function isRef(value) {
     return {}.hasOwnProperty.call(value, 'current');
   }
@@ -33312,7 +33558,8 @@ const floating_ui_react_dom_esm_arrow = options => {
           }).fn(state);
         }
         return {};
-      } else if (element) {
+      }
+      if (element) {
         return floating_ui_dom_arrow({
           element,
           padding
@@ -33337,11 +33584,13 @@ function deepEqual(a, b) {
   if (typeof a === 'function' && a.toString() === b.toString()) {
     return true;
   }
-  let length, i, keys;
-  if (a && b && typeof a == 'object') {
+  let length;
+  let i;
+  let keys;
+  if (a && b && typeof a === 'object') {
     if (Array.isArray(a)) {
       length = a.length;
-      if (length != b.length) return false;
+      if (length !== b.length) return false;
       for (i = length; i-- !== 0;) {
         if (!deepEqual(a[i], b[i])) {
           return false;
@@ -33370,6 +33619,8 @@ function deepEqual(a, b) {
     }
     return true;
   }
+
+  // biome-ignore lint/suspicious/noSelfCompare: in source
   return a !== a && b !== b;
 }
 
@@ -33381,7 +33632,7 @@ function getDPR(element) {
   return win.devicePixelRatio || 1;
 }
 
-function floating_ui_react_dom_esm_roundByDPR(element, value) {
+function floating_ui_react_dom_roundByDPR(element, value) {
   const dpr = getDPR(element);
   return Math.round(value * dpr) / dpr;
 }
@@ -33396,7 +33647,7 @@ function useLatestRef(value) {
 
 /**
  * Provides data to position a floating element.
- * @see https://floating-ui.com/docs/react
+ * @see https://floating-ui.com/docs/useFloating
  */
 function useFloating(options) {
   if (options === void 0) {
@@ -33430,22 +33681,23 @@ function useFloating(options) {
   const [_reference, _setReference] = external_React_.useState(null);
   const [_floating, _setFloating] = external_React_.useState(null);
   const setReference = external_React_.useCallback(node => {
-    if (node != referenceRef.current) {
+    if (node !== referenceRef.current) {
       referenceRef.current = node;
       _setReference(node);
     }
-  }, [_setReference]);
+  }, []);
   const setFloating = external_React_.useCallback(node => {
     if (node !== floatingRef.current) {
       floatingRef.current = node;
       _setFloating(node);
     }
-  }, [_setFloating]);
+  }, []);
   const referenceEl = externalReference || _reference;
   const floatingEl = externalFloating || _floating;
   const referenceRef = external_React_.useRef(null);
   const floatingRef = external_React_.useRef(null);
   const dataRef = external_React_.useRef(data);
+  const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
   const update = external_React_.useCallback(() => {
@@ -33489,17 +33741,18 @@ function useFloating(options) {
       isMountedRef.current = false;
     };
   }, []);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `hasWhileElementsMounted` is intentionally included.
   index(() => {
     if (referenceEl) referenceRef.current = referenceEl;
     if (floatingEl) floatingRef.current = floatingEl;
     if (referenceEl && floatingEl) {
       if (whileElementsMountedRef.current) {
         return whileElementsMountedRef.current(referenceEl, floatingEl, update);
-      } else {
-        update();
       }
+      update();
     }
-  }, [referenceEl, floatingEl, update, whileElementsMountedRef]);
+  }, [referenceEl, floatingEl, update, whileElementsMountedRef, hasWhileElementsMounted]);
   const refs = external_React_.useMemo(() => ({
     reference: referenceRef,
     floating: floatingRef,
@@ -33519,8 +33772,8 @@ function useFloating(options) {
     if (!elements.floating) {
       return initialStyles;
     }
-    const x = floating_ui_react_dom_esm_roundByDPR(elements.floating, data.x);
-    const y = floating_ui_react_dom_esm_roundByDPR(elements.floating, data.y);
+    const x = floating_ui_react_dom_roundByDPR(elements.floating, data.x);
+    const y = floating_ui_react_dom_roundByDPR(elements.floating, data.y);
     if (transform) {
       return {
         ...initialStyles,
@@ -33817,18 +34070,22 @@ function Slot(props) {
 }
 /* harmony default export */ const slot = (Slot);
 
-;// ./packages/components/node_modules/uuid/dist/esm-browser/rng.js
+;// ./node_modules/uuid/dist/esm-browser/native.js
+const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+/* harmony default export */ const esm_browser_native = ({
+  randomUUID
+});
+;// ./node_modules/uuid/dist/esm-browser/rng.js
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
 // require the crypto API and do not support built-in fallback to lower quality random number
 // generators (like Math.random()).
-var getRandomValues;
-var rnds8 = new Uint8Array(16);
+let getRandomValues;
+const rnds8 = new Uint8Array(16);
 function rng() {
   // lazy load so that environments that need to polyfill have a chance to do so
   if (!getRandomValues) {
-    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation. Also,
-    // find the complete implementation of crypto (msCrypto) on IE11.
-    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto) || typeof msCrypto !== 'undefined' && typeof msCrypto.getRandomValues === 'function' && msCrypto.getRandomValues.bind(msCrypto);
+    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
 
     if (!getRandomValues) {
       throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
@@ -33837,54 +34094,52 @@ function rng() {
 
   return getRandomValues(rnds8);
 }
-;// ./packages/components/node_modules/uuid/dist/esm-browser/regex.js
-/* harmony default export */ const regex = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
-;// ./packages/components/node_modules/uuid/dist/esm-browser/validate.js
-
-
-function validate(uuid) {
-  return typeof uuid === 'string' && regex.test(uuid);
-}
-
-/* harmony default export */ const esm_browser_validate = (validate);
-;// ./packages/components/node_modules/uuid/dist/esm-browser/stringify.js
+;// ./node_modules/uuid/dist/esm-browser/stringify.js
 
 /**
  * Convert array of 16 byte values to UUID string format of the form:
  * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
  */
 
-var byteToHex = [];
+const byteToHex = [];
 
-for (var stringify_i = 0; stringify_i < 256; ++stringify_i) {
-  byteToHex.push((stringify_i + 0x100).toString(16).substr(1));
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
 }
 
-function stringify_stringify(arr) {
-  var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  var uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase(); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+}
+
+function stringify_stringify(arr, offset = 0) {
+  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
   // of the following:
   // - One or more input array values don't map to a hex octet (leading to
   // "undefined" in the uuid)
   // - Invalid input values for the RFC `version` or `variant` fields
 
-  if (!esm_browser_validate(uuid)) {
+  if (!validate(uuid)) {
     throw TypeError('Stringified UUID is invalid');
   }
 
   return uuid;
 }
 
-/* harmony default export */ const esm_browser_stringify = (stringify_stringify);
-;// ./packages/components/node_modules/uuid/dist/esm-browser/v4.js
+/* harmony default export */ const esm_browser_stringify = ((/* unused pure expression or super */ null && (stringify_stringify)));
+;// ./node_modules/uuid/dist/esm-browser/v4.js
+
 
 
 
 function v4(options, buf, offset) {
+  if (esm_browser_native.randomUUID && !buf && !options) {
+    return esm_browser_native.randomUUID();
+  }
+
   options = options || {};
-  var rnds = options.random || (options.rng || rng)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  const rnds = options.random || (options.rng || rng)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
 
   rnds[6] = rnds[6] & 0x0f | 0x40;
   rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
@@ -33892,14 +34147,14 @@ function v4(options, buf, offset) {
   if (buf) {
     offset = offset || 0;
 
-    for (var i = 0; i < 16; ++i) {
+    for (let i = 0; i < 16; ++i) {
       buf[offset + i] = rnds[i];
     }
 
     return buf;
   }
 
-  return esm_browser_stringify(rnds);
+  return unsafeStringify(rnds);
 }
 
 /* harmony default export */ const esm_browser_v4 = (v4);
@@ -34504,7 +34759,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
   const isExpanded = expandOnMobile && isMobileViewport;
   const hasArrow = !isExpanded && !noArrow;
   const normalizedPlacementFromProps = position ? positionToPlacement(position) : placementProp;
-  const middleware = [...(placementProp === 'overlay' ? overlayMiddlewares() : []), offset(offsetProp), computedFlipProp && floating_ui_dom_flip(), computedResizeProp && floating_ui_dom_size({
+  const middleware = [...(placementProp === 'overlay' ? overlayMiddlewares() : []), floating_ui_dom_offset(offsetProp), computedFlipProp && floating_ui_dom_flip(), computedResizeProp && floating_ui_dom_size({
     padding: OVERFLOW_PADDING,
     apply(sizeProps) {
       var _refs$floating$curren;
@@ -34527,7 +34782,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
     crossAxis: true,
     limiter: floating_ui_dom_limitShift(),
     padding: 1 // Necessary to avoid flickering at the edge of the viewport.
-  }), floating_ui_react_dom_esm_arrow({
+  }), floating_ui_react_dom_arrow({
     element: arrowRef
   })];
   const slotName = (0,external_wp_element_namespaceObject.useContext)(slotNameContext) || __unstableSlotName;
@@ -35012,6 +35267,10 @@ function useAutocomplete({
     // Reset autocomplete state after insertion rather than before
     // so insertion events don't cause the completion menu to redisplay.
     reset();
+
+    // Make sure that the content remains focused after making a selection
+    // and that the text cursor position is not lost.
+    contentRef.current?.focus();
   }
   function reset() {
     setSelectedIndex(0);
@@ -35900,15 +36159,19 @@ function useControlledValue({
   const initialValue = hasValue ? valueProp : defaultValue;
   const [state, setState] = (0,external_wp_element_namespaceObject.useState)(initialValue);
   const value = hasValue ? valueProp : state;
+  const uncontrolledSetValue = (0,external_wp_element_namespaceObject.useCallback)((nextValue, ...args) => {
+    setState(nextValue);
+    onChange?.(nextValue, ...args);
+  }, [onChange]);
   let setValue;
   if (hasValue && typeof onChange === 'function') {
+    // Controlled mode.
     setValue = onChange;
   } else if (!hasValue && typeof onChange === 'function') {
-    setValue = nextValue => {
-      onChange(nextValue);
-      setState(nextValue);
-    };
+    // Uncontrolled mode, plus forwarding to the onChange prop.
+    setValue = uncontrolledSetValue;
   } else {
+    // Uncontrolled mode, only update internal state.
     setValue = setState;
   }
   return [value, setValue];
@@ -37182,31 +37445,29 @@ const InputControlSuffixWrapperWithClickThrough = /*#__PURE__*/emotion_styled_ba
  */
 
 
-/** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
+/**
+ * External dependencies
+ */
 
 /**
  * Return an SVG icon.
  *
- * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifying the icon size in pixels
- *                                                          Other props will be passed to wrapped SVG component
- * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
+ * @param props The component props.
  *
- * @return {JSX.Element}  Icon component
+ * @return Icon component
  */
-function icon_Icon({
+/* harmony default export */ const icons_build_module_icon = ((0,external_wp_element_namespaceObject.forwardRef)(({
   icon,
   size = 24,
   ...props
-}, ref) {
+}, ref) => {
   return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
     width: size,
     height: size,
     ...props,
     ref
   });
-}
-/* harmony default export */ const icons_build_module_icon = ((0,external_wp_element_namespaceObject.forwardRef)(icon_Icon));
+}));
 
 ;// ./packages/icons/build-module/library/chevron-down.js
 /**
@@ -37346,10 +37607,10 @@ function UnforwardedSelectControl(props, ref) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control, {
     help: help,
     id: id,
+    className: classes,
     __nextHasNoMarginBottom: __nextHasNoMarginBottom,
     __associatedWPComponentName: "SelectControl",
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(StyledInputBase, {
-      className: classes,
       disabled: disabled,
       hideLabelFromVision: hideLabelFromVision,
       id: id,
@@ -37705,10 +37966,10 @@ var range_control_styles_ref2 =  true ? {
   name: "1lr98c4",
   styles: "bottom:-80%"
 } : 0;
-const tooltipPosition = ({
-  position
+const tooltipPlacement = ({
+  placement
 }) => {
-  const isBottom = position === 'bottom';
+  const isBottom = placement === 'bottom';
   if (isBottom) {
     return range_control_styles_ref2;
   }
@@ -37716,7 +37977,7 @@ const tooltipPosition = ({
 };
 const range_control_styles_Tooltip = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk2"
-} : 0)("background:rgba( 0, 0, 0, 0.8 );border-radius:", config_values.radiusSmall, ";color:white;font-size:12px;min-width:32px;padding:4px 8px;pointer-events:none;position:absolute;text-align:center;user-select:none;line-height:1.4;", tooltipShow, ";", tooltipPosition, ";", rtl({
+} : 0)("background:rgba( 0, 0, 0, 0.8 );border-radius:", config_values.radiusSmall, ";color:white;font-size:12px;min-width:32px;padding:4px 8px;pointer-events:none;position:absolute;text-align:center;user-select:none;line-height:1.4;", tooltipShow, ";", tooltipPlacement, ";", rtl({
   transform: 'translateX(-50%)'
 }, {
   transform: 'translateX(50%)'
@@ -37928,7 +38189,7 @@ function SimpleTooltip(props) {
   const {
     className,
     inputRef,
-    tooltipPosition,
+    tooltipPlacement,
     show = false,
     style = {},
     value = 0,
@@ -37936,9 +38197,9 @@ function SimpleTooltip(props) {
     zIndex = 100,
     ...restProps
   } = props;
-  const position = useTooltipPosition({
+  const placement = useTooltipPlacement({
     inputRef,
-    tooltipPosition
+    tooltipPlacement
   });
   const classes = dist_clsx('components-simple-tooltip', className);
   const styles = {
@@ -37949,33 +38210,33 @@ function SimpleTooltip(props) {
     ...restProps,
     "aria-hidden": "false",
     className: classes,
-    position: position,
+    placement: placement,
     show: show,
     role: "tooltip",
     style: styles,
     children: renderTooltipContent(value)
   });
 }
-function useTooltipPosition({
+function useTooltipPlacement({
   inputRef,
-  tooltipPosition
+  tooltipPlacement
 }) {
-  const [position, setPosition] = (0,external_wp_element_namespaceObject.useState)();
-  const setTooltipPosition = (0,external_wp_element_namespaceObject.useCallback)(() => {
+  const [placement, setPlacement] = (0,external_wp_element_namespaceObject.useState)();
+  const setTooltipPlacement = (0,external_wp_element_namespaceObject.useCallback)(() => {
     if (inputRef && inputRef.current) {
-      setPosition(tooltipPosition);
+      setPlacement(tooltipPlacement);
     }
-  }, [tooltipPosition, inputRef]);
+  }, [tooltipPlacement, inputRef]);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    setTooltipPosition();
-  }, [setTooltipPosition]);
+    setTooltipPlacement();
+  }, [setTooltipPlacement]);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    window.addEventListener('resize', setTooltipPosition);
+    window.addEventListener('resize', setTooltipPlacement);
     return () => {
-      window.removeEventListener('resize', setTooltipPosition);
+      window.removeEventListener('resize', setTooltipPlacement);
     };
   });
-  return position;
+  return placement;
 }
 
 ;// ./packages/components/build-module/range-control/index.js
@@ -38233,7 +38494,7 @@ function UnforwardedRangeControl(props, forwardedRef) {
         }), enableTooltip && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SimpleTooltip, {
           className: "components-range-control__tooltip",
           inputRef: inputRef,
-          tooltipPosition: "bottom",
+          tooltipPlacement: "bottom",
           renderTooltipContent: renderTooltipContent,
           show: isCurrentlyFocused || showTooltip,
           style: offsetStyle,
@@ -38357,7 +38618,7 @@ const ColorInputWrapper = /*#__PURE__*/emotion_styled_base_browser_esm(flex_comp
 } : 0)("padding-top:", space(4), ";padding-left:", space(4), ";padding-right:", space(3), ";padding-bottom:", space(5), ";" + ( true ? "" : 0));
 const ColorfulWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "ez9hsf40"
-} : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:", config_values.radiusFull, ";margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
+} : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:", config_values.radiusFull, ";margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;@media not ( prefers-reduced-motion ){transition:transform ", config_values.transitionDurationFast, " ease-in-out;}}.react-colorful__interactive:focus .react-colorful__pointer{box-shadow:0 0 0 ", config_values.borderWidthFocus, " ", config_values.surfaceColor, ";border:", config_values.borderWidthFocus, " solid black;transform:translate( -50%, -50% ) scale( 1.5 );}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
 
 ;// ./packages/icons/build-module/library/check.js
 /**
@@ -42875,14 +43136,14 @@ function BoxInputControl({
     value: 0,
     label: '',
     tooltip: (0,external_wp_i18n_namespaceObject.__)('None')
-  }].concat(presets.map((preset, index) => {
+  }, ...presets.map((preset, index) => {
     var _preset$name;
     return {
       value: index + 1,
       label: '',
       tooltip: (_preset$name = preset.name) !== null && _preset$name !== void 0 ? _preset$name : preset.slug
     };
-  })) : [];
+  })] : [];
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(InputWrapper, {
     expanded: true,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedBoxControlIcon, {
@@ -44940,7 +45201,7 @@ function ControlPointButton({
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
       "aria-label": (0,external_wp_i18n_namespaceObject.sprintf)(
       // translators: 1: gradient position e.g: 70. 2: gradient color code e.g: rgb(52,121,151).
-      (0,external_wp_i18n_namespaceObject.__)('Gradient control point at position %1$s%% with color code %2$s.'), position, color),
+      (0,external_wp_i18n_namespaceObject.__)('Gradient control point at position %1$d%% with color code %2$s.'), position, color),
       "aria-describedby": descriptionId,
       "aria-haspopup": "true",
       "aria-expanded": isOpen,
@@ -45380,6 +45641,17 @@ function serializeGradientColor({
   if (type === 'hex') {
     return `#${value}`;
   }
+  if (type === 'var') {
+    return `var(${value})`;
+  }
+  if (type === 'hsl') {
+    const [hue, saturation, lightness] = value;
+    return `hsl(${hue},${saturation}%,${lightness}%)`;
+  }
+  if (type === 'hsla') {
+    const [hue, saturation, lightness, alpha] = value;
+    return `hsla(${hue},${saturation}%,${lightness}%,${alpha})`;
+  }
   return `${type}(${value.join(',')})`;
 }
 function serializeGradientPosition(position) {
@@ -45390,6 +45662,9 @@ function serializeGradientPosition(position) {
     value,
     type
   } = position;
+  if (type === 'calc') {
+    return `calc(${value})`;
+  }
   return `${value}${type}`;
 }
 function serializeGradientColorStop({
@@ -45514,9 +45789,21 @@ function getStopCssColor(colorStop) {
       return `#${colorStop.value}`;
     case 'literal':
       return colorStop.value;
+    case 'var':
+      return `${colorStop.type}(${colorStop.value})`;
     case 'rgb':
     case 'rgba':
       return `${colorStop.type}(${colorStop.value.join(',')})`;
+    case 'hsl':
+      {
+        const [hue, saturation, lightness] = colorStop.value;
+        return `hsl(${hue},${saturation}%,${lightness}%)`;
+      }
+    case 'hsla':
+      {
+        const [hue, saturation, lightness, alpha] = colorStop.value;
+        return `hsla(${hue},${saturation}%,${lightness}%,${alpha})`;
+      }
     default:
       // Should be unreachable if passing an AST from gradient-parser.
       // See https://github.com/rafaelcaricio/gradient-parser#ast.
@@ -46580,8 +46867,8 @@ function getNameAndSlugForPosition(elements, slugPrefix) {
     return previousValue;
   }, 1);
   return {
-    name: (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: is an id for a custom color */
-    (0,external_wp_i18n_namespaceObject.__)('Color %s'), position),
+    name: (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %d: is an id for a custom color */
+    (0,external_wp_i18n_namespaceObject.__)('Color %d'), position),
     slug: `${slugPrefix}color-${position}`
   };
 }
@@ -46662,14 +46949,14 @@ function palette_edit_Option({
         },
         "aria-label": (0,external_wp_i18n_namespaceObject.sprintf)(
         // translators: %s is a color or gradient name, e.g. "Red".
-        (0,external_wp_i18n_namespaceObject.__)('Edit: %s'), element.name.trim().length ? element.name : value),
+        (0,external_wp_i18n_namespaceObject.__)('Edit: %s'), element.name.trim().length ? element.name : value || ''),
         style: {
           padding: 0
         },
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IndicatorStyled, {
           colorValue: value
         })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_item_component, {
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_block_component, {
         children: !canOnlyChangeValues ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NameInput, {
           label: isGradient ? (0,external_wp_i18n_namespaceObject.__)('Gradient name') : (0,external_wp_i18n_namespaceObject.__)('Color name'),
           value: element.name,
@@ -46688,7 +46975,7 @@ function palette_edit_Option({
           icon: line_solid,
           label: (0,external_wp_i18n_namespaceObject.sprintf)(
           // translators: %s is a color or gradient name, e.g. "Red".
-          (0,external_wp_i18n_namespaceObject.__)('Remove color: %s'), element.name.trim().length ? element.name : value),
+          (0,external_wp_i18n_namespaceObject.__)('Remove color: %s'), element.name.trim().length ? element.name : value || ''),
           onClick: onRemove
         })
       })]
@@ -49818,9 +50105,9 @@ function defaultRenderSelectedValue(value) {
     return (0,external_wp_i18n_namespaceObject.__)('Select an item');
   }
   if (Array.isArray(value)) {
-    return value.length === 1 ? value[0] :
-    // translators: %s: number of items selected (it will always be 2 or more items)
-    (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('%s items selected'), value.length);
+    return value.length === 1 ? value[0] : (0,external_wp_i18n_namespaceObject.sprintf)(
+    // translators: %d: number of items selected (it will always be 2 or more items)
+    (0,external_wp_i18n_namespaceObject._n)('%d item selected', '%d items selected', value.length), value.length);
   }
   return value;
 }
@@ -54407,6 +54694,7 @@ const useLilius = ({
 
 ;// ./packages/components/build-module/date-time/date/styles.js
 
+function date_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
 /**
  * External dependencies
  */
@@ -54420,28 +54708,36 @@ const useLilius = ({
 
 
 const styles_Wrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e105ri6r5"
+  target: "e105ri6r7"
 } : 0)(boxSizingReset, ";" + ( true ? "" : 0));
 const Navigator = /*#__PURE__*/emotion_styled_base_browser_esm(h_stack_component,  true ? {
+  target: "e105ri6r6"
+} : 0)("column-gap:", space(2), ";display:grid;grid-template-columns:0.5fr repeat( 5, 1fr ) 0.5fr;justify-items:center;margin-bottom:", space(4), ";" + ( true ? "" : 0));
+const ViewPreviousMonthButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_button,  true ? {
+  target: "e105ri6r5"
+} : 0)( true ? {
+  name: "sarfoe",
+  styles: "grid-column:1/2"
+} : 0);
+const ViewNextMonthButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_button,  true ? {
   target: "e105ri6r4"
-} : 0)("margin-bottom:", space(4), ";" + ( true ? "" : 0));
+} : 0)( true ? {
+  name: "1v98r3z",
+  styles: "grid-column:7/8"
+} : 0);
 const NavigatorHeading = /*#__PURE__*/emotion_styled_base_browser_esm(heading_component,  true ? {
   target: "e105ri6r3"
-} : 0)("font-size:", config_values.fontSize, ";font-weight:", config_values.fontWeight, ";strong{font-weight:", config_values.fontWeightHeading, ";}" + ( true ? "" : 0));
+} : 0)("font-size:", config_values.fontSize, ";font-weight:", config_values.fontWeight, ";grid-column:2/7;strong{font-weight:", config_values.fontWeightHeading, ";}" + ( true ? "" : 0));
 const Calendar = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e105ri6r2"
 } : 0)("column-gap:", space(2), ";display:grid;grid-template-columns:0.5fr repeat( 5, 1fr ) 0.5fr;justify-items:center;row-gap:", space(2), ";" + ( true ? "" : 0));
 const DayOfWeek = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "e105ri6r1"
-} : 0)("color:", COLORS.theme.gray[700], ";font-size:", config_values.fontSize, ";line-height:", config_values.fontLineHeightBase, ";&:nth-of-type( 1 ){justify-self:start;}&:nth-of-type( 7 ){justify-self:end;}" + ( true ? "" : 0));
+} : 0)("color:", COLORS.theme.gray[700], ";font-size:", config_values.fontSize, ";line-height:", config_values.fontLineHeightBase, ";" + ( true ? "" : 0));
 const DayButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_button,  true ? {
   shouldForwardProp: prop => !['column', 'isSelected', 'isToday', 'hasEvents'].includes(prop),
   target: "e105ri6r0"
-} : 0)("grid-column:", props => props.column, ";position:relative;justify-content:center;", props => props.column === 1 && `
-		justify-self: start;
-		`, " ", props => props.column === 7 && `
-		justify-self: end;
-		`, " ", props => props.disabled && `
+} : 0)("grid-column:", props => props.column, ";position:relative;justify-content:center;", props => props.disabled && `
 		pointer-events: none;
 		`, " &&&{border-radius:", config_values.radiusRound, ";height:", space(7), ";width:", space(7), ";", props => props.isSelected && `
 				background: ${COLORS.theme.accent};
@@ -54582,7 +54878,6 @@ const TIMEZONELESS_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
 
 
-
 /**
  * DatePicker is a React component that renders a calendar for date selection.
  *
@@ -54648,7 +54943,7 @@ function DatePicker({
     role: "application",
     "aria-label": (0,external_wp_i18n_namespaceObject.__)('Calendar'),
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Navigator, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ViewPreviousMonthButton, {
         icon: (0,external_wp_i18n_namespaceObject.isRTL)() ? arrow_right : arrow_left,
         variant: "tertiary",
         "aria-label": (0,external_wp_i18n_namespaceObject.__)('View previous month'),
@@ -54663,7 +54958,7 @@ function DatePicker({
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("strong", {
           children: (0,external_wp_date_namespaceObject.dateI18n)('F', viewing, -viewing.getTimezoneOffset())
         }), ' ', (0,external_wp_date_namespaceObject.dateI18n)('Y', viewing, -viewing.getTimezoneOffset())]
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ViewNextMonthButton, {
         icon: (0,external_wp_i18n_namespaceObject.isRTL)() ? arrow_left : arrow_right,
         variant: "tertiary",
         "aria-label": (0,external_wp_i18n_namespaceObject.__)('View next month'),
@@ -54791,7 +55086,7 @@ function getDayLabel(date, isSelected, numEvents) {
     (0,external_wp_i18n_namespaceObject._n)('%1$s. Selected. There is %2$d event', '%1$s. Selected. There are %2$d events', numEvents), localizedDate, numEvents);
   } else if (isSelected) {
     return (0,external_wp_i18n_namespaceObject.sprintf)(
-    // translators: %s: The calendar date.
+    // translators: 1: The calendar date.
     (0,external_wp_i18n_namespaceObject.__)('%1$s. Selected'), localizedDate);
   } else if (numEvents > 0) {
     return (0,external_wp_i18n_namespaceObject.sprintf)(
@@ -56238,7 +56533,7 @@ const swatch = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M5 17.7c.4.5.8.9 1.2 1.2l1.1-1.4c-.4-.3-.7-.6-1-1L5 17.7zM5 6.3l1.4 1.1c.3-.4.6-.7 1-1L6.3 5c-.5.4-.9.8-1.3 1.3zm.1 7.8l-1.7.5c.2.6.4 1.1.7 1.6l1.5-.8c-.2-.4-.4-.8-.5-1.3zM4.8 12v-.7L3 11.1v1.8l1.7-.2c.1-.2.1-.5.1-.7zm3 7.9c.5.3 1.1.5 1.6.7l.5-1.7c-.5-.1-.9-.3-1.3-.5l-.8 1.5zM19 6.3c-.4-.5-.8-.9-1.2-1.2l-1.1 1.4c.4.3.7.6 1 1L19 6.3zm-.1 3.6l1.7-.5c-.2-.6-.4-1.1-.7-1.6l-1.5.8c.2.4.4.8.5 1.3zM5.6 8.6l-1.5-.8c-.3.5-.5 1-.7 1.6l1.7.5c.1-.5.3-.9.5-1.3zm2.2-4.5l.8 1.5c.4-.2.8-.4 1.3-.5l-.5-1.7c-.6.2-1.1.4-1.6.7zm8.8 13.5l1.1 1.4c.5-.4.9-.8 1.2-1.2l-1.4-1.1c-.2.3-.5.6-.9.9zm1.8-2.2l1.5.8c.3-.5.5-1.1.7-1.6l-1.7-.5c-.1.5-.3.9-.5 1.3zm2.6-4.3l-1.7.2v1.4l1.7.2V12v-.9zM11.1 3l.2 1.7h1.4l.2-1.7h-1.8zm3 2.1c.5.1.9.3 1.3.5l.8-1.5c-.5-.3-1.1-.5-1.6-.7l-.5 1.7zM12 19.2h-.7l-.2 1.8h1.8l-.2-1.7c-.2-.1-.5-.1-.7-.1zm2.1-.3l.5 1.7c.6-.2 1.1-.4 1.6-.7l-.8-1.5c-.4.2-.8.4-1.3.5z"
+    d: "M7.1 5.7 8 6.9c.4-.3.9-.6 1.5-.8l-.6-1.4c-.7.3-1.3.6-1.8 1ZM4.6 8.9l1.4.6c.2-.5.5-1 .8-1.5l-1.2-.9c-.4.6-.8 1.2-1 1.8Zm14.8 0c-.3-.7-.6-1.3-1-1.8l-1.2.9c.3.4.6.9.8 1.5l1.4-.6ZM7.1 18.3c.6.4 1.2.8 1.8 1l.6-1.4c-.5-.2-1-.5-1.5-.8l-.9 1.2ZM5.5 12v-.9h-.7l-.7-.2v2l1.5-.2v-.9Zm-.7 3h-.2c.3.7.6 1.3 1 1.9l1.2-.9c-.3-.4-.6-.9-.8-1.5l-1.2.5Zm9.7 3 .5 1.2v.2c.7-.3 1.3-.6 1.9-1l-.9-1.2c-.4.3-.9.6-1.5.8Zm-2.5.5h-.9l-.2 1.3v.2h2l-.2-1.5h-.9Zm7.9-7.5-1.5.2V13h.7l.7.2v-2ZM18 14.5c-.2.5-.5 1-.8 1.5l1.2.9c.4-.6.8-1.2 1-1.8h-.2l-1.2-.6ZM11 4.1l.2 1.5H13V4.2h-1.9ZM14.5 6c.5.2 1 .5 1.5.8l.9-1.2c-.6-.4-1.2-.8-1.8-1L14.5 6Z"
   })
 });
 /* harmony default export */ const library_swatch = (swatch);
@@ -57772,12 +58067,10 @@ function FormFileUpload({
     ...props,
     children: children
   });
-  // @todo: Temporary fix a bug that prevents Chromium browsers from selecting ".heic" files
-  // from the file upload. See https://core.trac.wordpress.org/ticket/62268#comment:4.
-  // This can be removed once the Chromium fix is in the stable channel.
-  // Prevent Safari from adding "image/heic" and "image/heif" to the accept attribute.
-  const isSafari = globalThis.window?.navigator.userAgent.includes('Safari') && !globalThis.window?.navigator.userAgent.includes('Chrome') && !globalThis.window?.navigator.userAgent.includes('Chromium');
-  const compatAccept = !isSafari && !!accept?.includes('image/*') ? `${accept}, image/heic, image/heif` : accept;
+
+  // iOS browsers may not reliably handle 'audio/*' in the accept attribute.
+  // Adding explicit audio MIME types improves compatibility across all devices.
+  const compatAccept = accept?.includes('audio/*') ? `${accept}, audio/mp3, audio/x-m4a, audio/x-m4b, audio/x-m4p, audio/x-wav, audio/webm` : accept;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "components-form-file-upload",
     children: [ui, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
@@ -57912,7 +58205,7 @@ function Token({
   });
   const transformedValue = displayTransform(value);
   const termPositionAndCount = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: 1: term name, 2: term position in a set of terms, 3: total term set count. */
-  (0,external_wp_i18n_namespaceObject.__)('%1$s (%2$s of %3$s)'), transformedValue, termPosition, termsCount);
+  (0,external_wp_i18n_namespaceObject.__)('%1$s (%2$d of %3$d)'), transformedValue, termPosition, termsCount);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
     className: tokenClasses,
     onMouseEnter: onMouseEnter,
@@ -58173,6 +58466,9 @@ function FormTokenField(props) {
       case 'Escape':
         preventDefault = handleEscapeKey(event);
         break;
+      case 'Tab':
+        preventDefault = handleTabKey(event);
+        break;
       default:
         break;
     }
@@ -58263,14 +58559,21 @@ function FormTokenField(props) {
     setSelectedSuggestionScroll(true);
     return true; // PreventDefault.
   }
-  function handleEscapeKey(event) {
+  function collapseSuggestionsList(event) {
     if (event.target instanceof HTMLInputElement) {
       setIncompleteTokenValue(event.target.value);
       setIsExpanded(false);
       setSelectedSuggestionIndex(-1);
       setSelectedSuggestionScroll(false);
     }
+  }
+  function handleEscapeKey(event) {
+    collapseSuggestionsList(event);
     return true; // PreventDefault.
+  }
+  function handleTabKey(event) {
+    collapseSuggestionsList(event);
+    return false; // Do not prevent the default behavior.
   }
   function handleCommaKey() {
     if (inputHasValidValue()) {
@@ -59009,6 +59312,7 @@ function UnforwardedMenuItem(props, ref) {
     role: role,
     icon: iconPosition === 'left' ? icon : undefined,
     className: className,
+    accessibleWhenDisabled: true,
     ...buttonProps,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
       className: "components-menu-item__item",
@@ -60287,7 +60591,7 @@ function MenuTitleSearch({
   };
   const inputId = `components-navigation__menu-title-search-${menu}`;
   const placeholder = (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: placeholder for menu search box. %s: menu title */
-  (0,external_wp_i18n_namespaceObject.__)('Search %s'), title?.toLowerCase()).trim();
+  (0,external_wp_i18n_namespaceObject.__)('Search %s'), title?.toLowerCase() || '').trim();
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuTitleSearchControlWrapper, {
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(search_control, {
       __nextHasNoMarginBottom: true,
@@ -66171,6 +66475,11 @@ const StyledTextarea = /*#__PURE__*/emotion_styled_base_browser_esm("textarea", 
 
 ;// ./packages/components/build-module/textarea-control/index.js
 /**
+ * External dependencies
+ */
+
+
+/**
  * WordPress dependencies
  */
 
@@ -66197,6 +66506,7 @@ function UnforwardedTextareaControl(props, ref) {
   const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(TextareaControl);
   const id = `inspector-textarea-control-${instanceId}`;
   const onChangeValue = event => onChange(event.target.value);
+  const classes = dist_clsx('components-textarea-control', className);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control, {
     __nextHasNoMarginBottom: __nextHasNoMarginBottom,
     __associatedWPComponentName: "TextareaControl",
@@ -66204,7 +66514,7 @@ function UnforwardedTextareaControl(props, ref) {
     hideLabelFromVision: hideLabelFromVision,
     id: id,
     help: help,
-    className: className,
+    className: classes,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(StyledTextarea, {
       className: "components-textarea-control__input",
       id: id,
@@ -72323,10 +72633,9082 @@ function Badge({
 }
 /* harmony default export */ const badge = (Badge);
 
+;// ./node_modules/@date-fns/tz/constants/index.js
+/**
+ * The symbol to access the `TZDate`'s function to construct a new instance from
+ * the provided value. It helps date-fns to inherit the time zone.
+ */
+const constructFromSymbol = Symbol.for("constructDateFrom");
+;// ./node_modules/@date-fns/tz/tzOffset/index.js
+const offsetFormatCache = {};
+const offsetCache = {};
+
+/**
+ * The function extracts UTC offset in minutes from the given date in specified
+ * time zone.
+ *
+ * Unlike `Date.prototype.getTimezoneOffset`, this function returns the value
+ * mirrored to the sign of the offset in the time zone. For Asia/Singapore
+ * (UTC+8), `tzOffset` returns 480, while `getTimezoneOffset` returns -480.
+ *
+ * @param timeZone - Time zone name (IANA or UTC offset)
+ * @param date - Date to check the offset for
+ *
+ * @returns UTC offset in minutes
+ */
+function tzOffset_tzOffset(timeZone, date) {
+  try {
+    const format = offsetFormatCache[timeZone] ||= new Intl.DateTimeFormat("en-GB", {
+      timeZone,
+      hour: "numeric",
+      timeZoneName: "longOffset"
+    }).format;
+    const offsetStr = format(date).split('GMT')[1] || '';
+    if (offsetStr in offsetCache) return offsetCache[offsetStr];
+    return calcOffset(offsetStr, offsetStr.split(":"));
+  } catch {
+    // Fallback to manual parsing if the runtime doesn't support ±HH:MM/±HHMM/±HH
+    // See: https://github.com/nodejs/node/issues/53419
+    if (timeZone in offsetCache) return offsetCache[timeZone];
+    const captures = timeZone?.match(offsetRe);
+    if (captures) return calcOffset(timeZone, captures.slice(1));
+    return NaN;
+  }
+}
+const offsetRe = /([+-]\d\d):?(\d\d)?/;
+function calcOffset(cacheStr, values) {
+  const hours = +values[0];
+  const minutes = +(values[1] || 0);
+  return offsetCache[cacheStr] = hours > 0 ? hours * 60 + minutes : hours * 60 - minutes;
+}
+;// ./node_modules/@date-fns/tz/date/mini.js
+
+class TZDateMini extends Date {
+  //#region static
+
+  constructor(...args) {
+    super();
+    if (args.length > 1 && typeof args[args.length - 1] === "string") {
+      this.timeZone = args.pop();
+    }
+    this.internal = new Date();
+    if (isNaN(tzOffset_tzOffset(this.timeZone, this))) {
+      this.setTime(NaN);
+    } else {
+      if (!args.length) {
+        this.setTime(Date.now());
+      } else if (typeof args[0] === "number" && (args.length === 1 || args.length === 2 && typeof args[1] !== "number")) {
+        this.setTime(args[0]);
+      } else if (typeof args[0] === "string") {
+        this.setTime(+new Date(args[0]));
+      } else if (args[0] instanceof Date) {
+        this.setTime(+args[0]);
+      } else {
+        this.setTime(+new Date(...args));
+        adjustToSystemTZ(this, NaN);
+        syncToInternal(this);
+      }
+    }
+  }
+  static tz(tz, ...args) {
+    return args.length ? new TZDateMini(...args, tz) : new TZDateMini(Date.now(), tz);
+  }
+
+  //#endregion
+
+  //#region time zone
+
+  withTimeZone(timeZone) {
+    return new TZDateMini(+this, timeZone);
+  }
+  getTimezoneOffset() {
+    return -tzOffset_tzOffset(this.timeZone, this);
+  }
+
+  //#endregion
+
+  //#region time
+
+  setTime(time) {
+    Date.prototype.setTime.apply(this, arguments);
+    syncToInternal(this);
+    return +this;
+  }
+
+  //#endregion
+
+  //#region date-fns integration
+
+  [Symbol.for("constructDateFrom")](date) {
+    return new TZDateMini(+new Date(date), this.timeZone);
+  }
+
+  //#endregion
+}
+
+// Assign getters and setters
+const mini_re = /^(get|set)(?!UTC)/;
+Object.getOwnPropertyNames(Date.prototype).forEach(method => {
+  if (!mini_re.test(method)) return;
+  const utcMethod = method.replace(mini_re, "$1UTC");
+  // Filter out methods without UTC counterparts
+  if (!TZDateMini.prototype[utcMethod]) return;
+  if (method.startsWith("get")) {
+    // Delegate to internal date's UTC method
+    TZDateMini.prototype[method] = function () {
+      return this.internal[utcMethod]();
+    };
+  } else {
+    // Assign regular setter
+    TZDateMini.prototype[method] = function () {
+      Date.prototype[utcMethod].apply(this.internal, arguments);
+      syncFromInternal(this);
+      return +this;
+    };
+
+    // Assign UTC setter
+    TZDateMini.prototype[utcMethod] = function () {
+      Date.prototype[utcMethod].apply(this, arguments);
+      syncToInternal(this);
+      return +this;
+    };
+  }
+});
+
+/**
+ * Function syncs time to internal date, applying the time zone offset.
+ *
+ * @param {Date} date - Date to sync
+ */
+function syncToInternal(date) {
+  date.internal.setTime(+date);
+  date.internal.setUTCMinutes(date.internal.getUTCMinutes() - date.getTimezoneOffset());
+}
+
+/**
+ * Function syncs the internal date UTC values to the date. It allows to get
+ * accurate timestamp value.
+ *
+ * @param {Date} date - The date to sync
+ */
+function syncFromInternal(date) {
+  // First we transpose the internal values
+  Date.prototype.setFullYear.call(date, date.internal.getUTCFullYear(), date.internal.getUTCMonth(), date.internal.getUTCDate());
+  Date.prototype.setHours.call(date, date.internal.getUTCHours(), date.internal.getUTCMinutes(), date.internal.getUTCSeconds(), date.internal.getUTCMilliseconds());
+
+  // Now we have to adjust the date to the system time zone
+  adjustToSystemTZ(date);
+}
+
+/**
+ * Function adjusts the date to the system time zone. It uses the time zone
+ * differences to calculate the offset and adjust the date.
+ *
+ * @param {Date} date - Date to adjust
+ */
+function adjustToSystemTZ(date) {
+  // Save the time zone offset before all the adjustments
+  const offset = tzOffset_tzOffset(date.timeZone, date);
+
+  //#region System DST adjustment
+
+  // The biggest problem with using the system time zone is that when we create
+  // a date from internal values stored in UTC, the system time zone might end
+  // up on the DST hour:
+  //
+  //   $ TZ=America/New_York node
+  //   > new Date(2020, 2, 8, 1).toString()
+  //   'Sun Mar 08 2020 01:00:00 GMT-0500 (Eastern Standard Time)'
+  //   > new Date(2020, 2, 8, 2).toString()
+  //   'Sun Mar 08 2020 03:00:00 GMT-0400 (Eastern Daylight Time)'
+  //   > new Date(2020, 2, 8, 3).toString()
+  //   'Sun Mar 08 2020 03:00:00 GMT-0400 (Eastern Daylight Time)'
+  //   > new Date(2020, 2, 8, 4).toString()
+  //   'Sun Mar 08 2020 04:00:00 GMT-0400 (Eastern Daylight Time)'
+  //
+  // Here we get the same hour for both 2 and 3, because the system time zone
+  // has DST beginning at 8 March 2020, 2 a.m. and jumps to 3 a.m. So we have
+  // to adjust the internal date to reflect that.
+  //
+  // However we want to adjust only if that's the DST hour the change happenes,
+  // not the hour where DST moves to.
+
+  // We calculate the previous hour to see if the time zone offset has changed
+  // and we have landed on the DST hour.
+  const prevHour = new Date(+date);
+  // We use UTC methods here as we don't want to land on the same hour again
+  // in case of DST.
+  prevHour.setUTCHours(prevHour.getUTCHours() - 1);
+
+  // Calculate if we are on the system DST hour.
+  const systemOffset = -new Date(+date).getTimezoneOffset();
+  const prevHourSystemOffset = -new Date(+prevHour).getTimezoneOffset();
+  const systemDSTChange = systemOffset - prevHourSystemOffset;
+  // Detect the DST shift. System DST change will occur both on
+  const dstShift = Date.prototype.getHours.apply(date) !== date.internal.getUTCHours();
+
+  // Move the internal date when we are on the system DST hour.
+  if (systemDSTChange && dstShift) date.internal.setUTCMinutes(date.internal.getUTCMinutes() + systemDSTChange);
+
+  //#endregion
+
+  //#region System diff adjustment
+
+  // Now we need to adjust the date, since we just applied internal values.
+  // We need to calculate the difference between the system and date time zones
+  // and apply it to the date.
+
+  const offsetDiff = systemOffset - offset;
+  if (offsetDiff) Date.prototype.setUTCMinutes.call(date, Date.prototype.getUTCMinutes.call(date) + offsetDiff);
+
+  //#endregion
+
+  //#region Post-adjustment DST fix
+
+  const postOffset = tzOffset_tzOffset(date.timeZone, date);
+  const postSystemOffset = -new Date(+date).getTimezoneOffset();
+  const postOffsetDiff = postSystemOffset - postOffset;
+  const offsetChanged = postOffset !== offset;
+  const postDiff = postOffsetDiff - offsetDiff;
+  if (offsetChanged && postDiff) {
+    Date.prototype.setUTCMinutes.call(date, Date.prototype.getUTCMinutes.call(date) + postDiff);
+
+    // Now we need to check if got offset change during the post-adjustment.
+    // If so, we also need both dates to reflect that.
+
+    const newOffset = tzOffset_tzOffset(date.timeZone, date);
+    const offsetChange = postOffset - newOffset;
+    if (offsetChange) {
+      date.internal.setUTCMinutes(date.internal.getUTCMinutes() + offsetChange);
+      Date.prototype.setUTCMinutes.call(date, Date.prototype.getUTCMinutes.call(date) + offsetChange);
+    }
+  }
+
+  //#endregion
+}
+;// ./node_modules/@date-fns/tz/date/index.js
+
+
+/**
+ * UTC date class. It maps getters and setters to corresponding UTC methods,
+ * forcing all calculations in the UTC time zone.
+ *
+ * Combined with date-fns, it allows using the class the same way as
+ * the original date class.
+ *
+ * This complete version provides not only getters, setters,
+ * and `getTimezoneOffset`, but also the formatter functions, mirroring
+ * all original `Date` functionality. Use this version when you need to format
+ * a string or in an environment you don't fully control (a library).
+ * For a minimal version, see `UTCDateMini`.
+ */
+class date_TZDate extends TZDateMini {
+  //#region static
+
+  static tz(tz, ...args) {
+    return args.length ? new date_TZDate(...args, tz) : new date_TZDate(Date.now(), tz);
+  }
+
+  //#endregion
+
+  //#region representation
+
+  toISOString() {
+    const [sign, hours, minutes] = this.tzComponents();
+    const tz = `${sign}${hours}:${minutes}`;
+    return this.internal.toISOString().slice(0, -1) + tz;
+  }
+  toString() {
+    // "Tue Aug 13 2024 07:50:19 GMT+0800 (Singapore Standard Time)";
+    return `${this.toDateString()} ${this.toTimeString()}`;
+  }
+  toDateString() {
+    // toUTCString returns RFC 7231 ("Mon, 12 Aug 2024 23:36:08 GMT")
+    const [day, date, month, year] = this.internal.toUTCString().split(" ");
+    // "Tue Aug 13 2024"
+    return `${day?.slice(0, -1) /* Remove "," */} ${month} ${date} ${year}`;
+  }
+  toTimeString() {
+    // toUTCString returns RFC 7231 ("Mon, 12 Aug 2024 23:36:08 GMT")
+    const time = this.internal.toUTCString().split(" ")[4];
+    const [sign, hours, minutes] = this.tzComponents();
+    // "07:42:23 GMT+0800 (Singapore Standard Time)"
+    return `${time} GMT${sign}${hours}${minutes} (${tzName(this.timeZone, this)})`;
+  }
+  toLocaleString(locales, options) {
+    return Date.prototype.toLocaleString.call(this, locales, {
+      ...options,
+      timeZone: options?.timeZone || this.timeZone
+    });
+  }
+  toLocaleDateString(locales, options) {
+    return Date.prototype.toLocaleDateString.call(this, locales, {
+      ...options,
+      timeZone: options?.timeZone || this.timeZone
+    });
+  }
+  toLocaleTimeString(locales, options) {
+    return Date.prototype.toLocaleTimeString.call(this, locales, {
+      ...options,
+      timeZone: options?.timeZone || this.timeZone
+    });
+  }
+
+  //#endregion
+
+  //#region private
+
+  tzComponents() {
+    const offset = this.getTimezoneOffset();
+    const sign = offset > 0 ? "-" : "+";
+    const hours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, "0");
+    const minutes = String(Math.abs(offset) % 60).padStart(2, "0");
+    return [sign, hours, minutes];
+  }
+
+  //#endregion
+
+  withTimeZone(timeZone) {
+    return new date_TZDate(+this, timeZone);
+  }
+
+  //#region date-fns integration
+
+  [Symbol.for("constructDateFrom")](date) {
+    return new date_TZDate(+new Date(date), this.timeZone);
+  }
+
+  //#endregion
+}
+function tzName(tz, date) {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: tz,
+    timeZoneName: "long"
+  }).format(date).slice(12);
+}
+;// ./node_modules/@date-fns/tz/tz/index.js
+
+
+/**
+ * The function creates accepts a time zone and returns a function that creates
+ * a new `TZDate` instance in the time zone from the provided value. Use it to
+ * provide the context for the date-fns functions, via the `in` option.
+ *
+ * @param timeZone - Time zone name (IANA or UTC offset)
+ *
+ * @returns Function that creates a new `TZDate` instance in the time zone
+ */
+const tz = timeZone => value => TZDate.tz(timeZone, +new Date(value));
+;// ./node_modules/@date-fns/tz/tzScan/index.js
+
+
+/**
+ * Time interval.
+ */
+
+/**
+ * Time zone change record.
+ */
+
+/**
+ * The function scans the time zone for changes in the given interval.
+ *
+ * @param timeZone - Time zone name (IANA or UTC offset)
+ * @param interval - Time interval to scan for changes
+ *
+ * @returns Array of time zone changes
+ */
+function tzScan(timeZone, interval) {
+  const changes = [];
+  const monthDate = new Date(interval.start);
+  monthDate.setUTCSeconds(0, 0);
+  const endDate = new Date(interval.end);
+  endDate.setUTCSeconds(0, 0);
+  const endMonthTime = +endDate;
+  let lastOffset = tzOffset(timeZone, monthDate);
+  while (+monthDate < endMonthTime) {
+    // Month forward
+    monthDate.setUTCMonth(monthDate.getUTCMonth() + 1);
+
+    // Find the month where the offset changes
+    const offset = tzOffset(timeZone, monthDate);
+    if (offset != lastOffset) {
+      // Rewind a month back to find the day where the offset changes
+      const dayDate = new Date(monthDate);
+      dayDate.setUTCMonth(dayDate.getUTCMonth() - 1);
+      const endDayTime = +monthDate;
+      lastOffset = tzOffset(timeZone, dayDate);
+      while (+dayDate < endDayTime) {
+        // Day forward
+        dayDate.setUTCDate(dayDate.getUTCDate() + 1);
+
+        // Find the day where the offset changes
+        const offset = tzOffset(timeZone, dayDate);
+        if (offset != lastOffset) {
+          // Rewind a day back to find the time where the offset changes
+          const hourDate = new Date(dayDate);
+          hourDate.setUTCDate(hourDate.getUTCDate() - 1);
+          const endHourTime = +dayDate;
+          lastOffset = tzOffset(timeZone, hourDate);
+          while (+hourDate < endHourTime) {
+            // Hour forward
+            hourDate.setUTCHours(hourDate.getUTCHours() + 1);
+
+            // Find the hour where the offset changes
+            const hourOffset = tzOffset(timeZone, hourDate);
+            if (hourOffset !== lastOffset) {
+              changes.push({
+                date: new Date(hourDate),
+                change: hourOffset - lastOffset,
+                offset: hourOffset
+              });
+            }
+            lastOffset = hourOffset;
+          }
+        }
+        lastOffset = offset;
+      }
+    }
+    lastOffset = offset;
+  }
+  return changes;
+}
+;// ./node_modules/@date-fns/tz/index.js
+
+
+
+
+
+
+;// ./node_modules/react-day-picker/dist/esm/UI.js
+/**
+ * Enum representing the UI elements composing DayPicker. These elements are
+ * mapped to {@link CustomComponents}, {@link ClassNames}, and {@link Styles}.
+ *
+ * Some elements are extended by flags and modifiers.
+ */
+var UI_UI;
+(function (UI) {
+    /** The root component displaying the months and the navigation bar. */
+    UI["Root"] = "root";
+    /** The Chevron SVG element used by navigation buttons and dropdowns. */
+    UI["Chevron"] = "chevron";
+    /**
+     * The grid cell with the day's date. Extended by {@link DayFlag} and
+     * {@link SelectionState}.
+     */
+    UI["Day"] = "day";
+    /** The button containing the formatted day's date, inside the grid cell. */
+    UI["DayButton"] = "day_button";
+    /** The caption label of the month (when not showing the dropdown navigation). */
+    UI["CaptionLabel"] = "caption_label";
+    /** The container of the dropdown navigation (when enabled). */
+    UI["Dropdowns"] = "dropdowns";
+    /** The dropdown element to select for years and months. */
+    UI["Dropdown"] = "dropdown";
+    /** The container element of the dropdown. */
+    UI["DropdownRoot"] = "dropdown_root";
+    /** The root element of the footer. */
+    UI["Footer"] = "footer";
+    /** The month grid. */
+    UI["MonthGrid"] = "month_grid";
+    /** Contains the dropdown navigation or the caption label. */
+    UI["MonthCaption"] = "month_caption";
+    /** The dropdown with the months. */
+    UI["MonthsDropdown"] = "months_dropdown";
+    /** Wrapper of the month grid. */
+    UI["Month"] = "month";
+    /** The container of the displayed months. */
+    UI["Months"] = "months";
+    /** The navigation bar with the previous and next buttons. */
+    UI["Nav"] = "nav";
+    /**
+     * The next month button in the navigation. *
+     *
+     * @since 9.1.0
+     */
+    UI["NextMonthButton"] = "button_next";
+    /**
+     * The previous month button in the navigation.
+     *
+     * @since 9.1.0
+     */
+    UI["PreviousMonthButton"] = "button_previous";
+    /** The row containing the week. */
+    UI["Week"] = "week";
+    /** The group of row weeks in a month (`tbody`). */
+    UI["Weeks"] = "weeks";
+    /** The column header with the weekday. */
+    UI["Weekday"] = "weekday";
+    /** The row grouping the weekdays in the column headers. */
+    UI["Weekdays"] = "weekdays";
+    /** The cell containing the week number. */
+    UI["WeekNumber"] = "week_number";
+    /** The cell header of the week numbers column. */
+    UI["WeekNumberHeader"] = "week_number_header";
+    /** The dropdown with the years. */
+    UI["YearsDropdown"] = "years_dropdown";
+})(UI_UI || (UI_UI = {}));
+/** Enum representing flags for the {@link UI.Day} element. */
+var DayFlag;
+(function (DayFlag) {
+    /** The day is disabled. */
+    DayFlag["disabled"] = "disabled";
+    /** The day is hidden. */
+    DayFlag["hidden"] = "hidden";
+    /** The day is outside the current month. */
+    DayFlag["outside"] = "outside";
+    /** The day is focused. */
+    DayFlag["focused"] = "focused";
+    /** The day is today. */
+    DayFlag["today"] = "today";
+})(DayFlag || (DayFlag = {}));
+/**
+ * Enum representing selection states that can be applied to the {@link UI.Day}
+ * element in selection mode.
+ */
+var SelectionState;
+(function (SelectionState) {
+    /** The day is at the end of a selected range. */
+    SelectionState["range_end"] = "range_end";
+    /** The day is at the middle of a selected range. */
+    SelectionState["range_middle"] = "range_middle";
+    /** The day is at the start of a selected range. */
+    SelectionState["range_start"] = "range_start";
+    /** The day is selected. */
+    SelectionState["selected"] = "selected";
+})(SelectionState || (SelectionState = {}));
+/**
+ * Enum representing different animation states for transitioning between
+ * months.
+ */
+var Animation;
+(function (Animation) {
+    /** The entering weeks when they appear before the exiting month. */
+    Animation["weeks_before_enter"] = "weeks_before_enter";
+    /** The exiting weeks when they disappear before the entering month. */
+    Animation["weeks_before_exit"] = "weeks_before_exit";
+    /** The entering weeks when they appear after the exiting month. */
+    Animation["weeks_after_enter"] = "weeks_after_enter";
+    /** The exiting weeks when they disappear after the entering month. */
+    Animation["weeks_after_exit"] = "weeks_after_exit";
+    /** The entering caption when it appears after the exiting month. */
+    Animation["caption_after_enter"] = "caption_after_enter";
+    /** The exiting caption when it disappears after the entering month. */
+    Animation["caption_after_exit"] = "caption_after_exit";
+    /** The entering caption when it appears before the exiting month. */
+    Animation["caption_before_enter"] = "caption_before_enter";
+    /** The exiting caption when it disappears before the entering month. */
+    Animation["caption_before_exit"] = "caption_before_exit";
+})(Animation || (Animation = {}));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/en-US/_lib/formatDistance.js
+const formatDistance_formatDistanceLocale = {
+  lessThanXSeconds: {
+    one: "less than a second",
+    other: "less than {{count}} seconds",
+  },
+
+  xSeconds: {
+    one: "1 second",
+    other: "{{count}} seconds",
+  },
+
+  halfAMinute: "half a minute",
+
+  lessThanXMinutes: {
+    one: "less than a minute",
+    other: "less than {{count}} minutes",
+  },
+
+  xMinutes: {
+    one: "1 minute",
+    other: "{{count}} minutes",
+  },
+
+  aboutXHours: {
+    one: "about 1 hour",
+    other: "about {{count}} hours",
+  },
+
+  xHours: {
+    one: "1 hour",
+    other: "{{count}} hours",
+  },
+
+  xDays: {
+    one: "1 day",
+    other: "{{count}} days",
+  },
+
+  aboutXWeeks: {
+    one: "about 1 week",
+    other: "about {{count}} weeks",
+  },
+
+  xWeeks: {
+    one: "1 week",
+    other: "{{count}} weeks",
+  },
+
+  aboutXMonths: {
+    one: "about 1 month",
+    other: "about {{count}} months",
+  },
+
+  xMonths: {
+    one: "1 month",
+    other: "{{count}} months",
+  },
+
+  aboutXYears: {
+    one: "about 1 year",
+    other: "about {{count}} years",
+  },
+
+  xYears: {
+    one: "1 year",
+    other: "{{count}} years",
+  },
+
+  overXYears: {
+    one: "over 1 year",
+    other: "over {{count}} years",
+  },
+
+  almostXYears: {
+    one: "almost 1 year",
+    other: "almost {{count}} years",
+  },
+};
+
+const formatDistance_formatDistance = (token, count, options) => {
+  let result;
+
+  const tokenValue = formatDistance_formatDistanceLocale[token];
+  if (typeof tokenValue === "string") {
+    result = tokenValue;
+  } else if (count === 1) {
+    result = tokenValue.one;
+  } else {
+    result = tokenValue.other.replace("{{count}}", count.toString());
+  }
+
+  if (options?.addSuffix) {
+    if (options.comparison && options.comparison > 0) {
+      return "in " + result;
+    } else {
+      return result + " ago";
+    }
+  }
+
+  return result;
+};
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/_lib/buildFormatLongFn.js
+function buildFormatLongFn_buildFormatLongFn(args) {
+  return (options = {}) => {
+    // TODO: Remove String()
+    const width = options.width ? String(options.width) : args.defaultWidth;
+    const format = args.formats[width] || args.formats[args.defaultWidth];
+    return format;
+  };
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/en-US/_lib/formatLong.js
+
+
+const formatLong_dateFormats = {
+  full: "EEEE, MMMM do, y",
+  long: "MMMM do, y",
+  medium: "MMM d, y",
+  short: "MM/dd/yyyy",
+};
+
+const formatLong_timeFormats = {
+  full: "h:mm:ss a zzzz",
+  long: "h:mm:ss a z",
+  medium: "h:mm:ss a",
+  short: "h:mm a",
+};
+
+const formatLong_dateTimeFormats = {
+  full: "{{date}} 'at' {{time}}",
+  long: "{{date}} 'at' {{time}}",
+  medium: "{{date}}, {{time}}",
+  short: "{{date}}, {{time}}",
+};
+
+const formatLong_formatLong = {
+  date: buildFormatLongFn_buildFormatLongFn({
+    formats: formatLong_dateFormats,
+    defaultWidth: "full",
+  }),
+
+  time: buildFormatLongFn_buildFormatLongFn({
+    formats: formatLong_timeFormats,
+    defaultWidth: "full",
+  }),
+
+  dateTime: buildFormatLongFn_buildFormatLongFn({
+    formats: formatLong_dateTimeFormats,
+    defaultWidth: "full",
+  }),
+};
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/en-US/_lib/formatRelative.js
+const formatRelative_formatRelativeLocale = {
+  lastWeek: "'last' eeee 'at' p",
+  yesterday: "'yesterday at' p",
+  today: "'today at' p",
+  tomorrow: "'tomorrow at' p",
+  nextWeek: "eeee 'at' p",
+  other: "P",
+};
+
+const formatRelative_formatRelative = (token, _date, _baseDate, _options) =>
+  formatRelative_formatRelativeLocale[token];
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/_lib/buildLocalizeFn.js
+/**
+ * The localize function argument callback which allows to convert raw value to
+ * the actual type.
+ *
+ * @param value - The value to convert
+ *
+ * @returns The converted value
+ */
+
+/**
+ * The map of localized values for each width.
+ */
+
+/**
+ * The index type of the locale unit value. It types conversion of units of
+ * values that don't start at 0 (i.e. quarters).
+ */
+
+/**
+ * Converts the unit value to the tuple of values.
+ */
+
+/**
+ * The tuple of localized era values. The first element represents BC,
+ * the second element represents AD.
+ */
+
+/**
+ * The tuple of localized quarter values. The first element represents Q1.
+ */
+
+/**
+ * The tuple of localized day values. The first element represents Sunday.
+ */
+
+/**
+ * The tuple of localized month values. The first element represents January.
+ */
+
+function buildLocalizeFn_buildLocalizeFn(args) {
+  return (value, options) => {
+    const context = options?.context ? String(options.context) : "standalone";
+
+    let valuesArray;
+    if (context === "formatting" && args.formattingValues) {
+      const defaultWidth = args.defaultFormattingWidth || args.defaultWidth;
+      const width = options?.width ? String(options.width) : defaultWidth;
+
+      valuesArray =
+        args.formattingValues[width] || args.formattingValues[defaultWidth];
+    } else {
+      const defaultWidth = args.defaultWidth;
+      const width = options?.width ? String(options.width) : args.defaultWidth;
+
+      valuesArray = args.values[width] || args.values[defaultWidth];
+    }
+    const index = args.argumentCallback ? args.argumentCallback(value) : value;
+
+    // @ts-expect-error - For some reason TypeScript just don't want to match it, no matter how hard we try. I challenge you to try to remove it!
+    return valuesArray[index];
+  };
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/en-US/_lib/localize.js
+
+
+const localize_eraValues = {
+  narrow: ["B", "A"],
+  abbreviated: ["BC", "AD"],
+  wide: ["Before Christ", "Anno Domini"],
+};
+
+const localize_quarterValues = {
+  narrow: ["1", "2", "3", "4"],
+  abbreviated: ["Q1", "Q2", "Q3", "Q4"],
+  wide: ["1st quarter", "2nd quarter", "3rd quarter", "4th quarter"],
+};
+
+// Note: in English, the names of days of the week and months are capitalized.
+// If you are making a new locale based on this one, check if the same is true for the language you're working on.
+// Generally, formatted dates should look like they are in the middle of a sentence,
+// e.g. in Spanish language the weekdays and months should be in the lowercase.
+const localize_monthValues = {
+  narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+  abbreviated: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+
+  wide: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+};
+
+const localize_dayValues = {
+  narrow: ["S", "M", "T", "W", "T", "F", "S"],
+  short: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+  abbreviated: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  wide: [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ],
+};
+
+const localize_dayPeriodValues = {
+  narrow: {
+    am: "a",
+    pm: "p",
+    midnight: "mi",
+    noon: "n",
+    morning: "morning",
+    afternoon: "afternoon",
+    evening: "evening",
+    night: "night",
+  },
+  abbreviated: {
+    am: "AM",
+    pm: "PM",
+    midnight: "midnight",
+    noon: "noon",
+    morning: "morning",
+    afternoon: "afternoon",
+    evening: "evening",
+    night: "night",
+  },
+  wide: {
+    am: "a.m.",
+    pm: "p.m.",
+    midnight: "midnight",
+    noon: "noon",
+    morning: "morning",
+    afternoon: "afternoon",
+    evening: "evening",
+    night: "night",
+  },
+};
+
+const localize_formattingDayPeriodValues = {
+  narrow: {
+    am: "a",
+    pm: "p",
+    midnight: "mi",
+    noon: "n",
+    morning: "in the morning",
+    afternoon: "in the afternoon",
+    evening: "in the evening",
+    night: "at night",
+  },
+  abbreviated: {
+    am: "AM",
+    pm: "PM",
+    midnight: "midnight",
+    noon: "noon",
+    morning: "in the morning",
+    afternoon: "in the afternoon",
+    evening: "in the evening",
+    night: "at night",
+  },
+  wide: {
+    am: "a.m.",
+    pm: "p.m.",
+    midnight: "midnight",
+    noon: "noon",
+    morning: "in the morning",
+    afternoon: "in the afternoon",
+    evening: "in the evening",
+    night: "at night",
+  },
+};
+
+const localize_ordinalNumber = (dirtyNumber, _options) => {
+  const number = Number(dirtyNumber);
+
+  // If ordinal numbers depend on context, for example,
+  // if they are different for different grammatical genders,
+  // use `options.unit`.
+  //
+  // `unit` can be 'year', 'quarter', 'month', 'week', 'date', 'dayOfYear',
+  // 'day', 'hour', 'minute', 'second'.
+
+  const rem100 = number % 100;
+  if (rem100 > 20 || rem100 < 10) {
+    switch (rem100 % 10) {
+      case 1:
+        return number + "st";
+      case 2:
+        return number + "nd";
+      case 3:
+        return number + "rd";
+    }
+  }
+  return number + "th";
+};
+
+const localize_localize = {
+  ordinalNumber: localize_ordinalNumber,
+
+  era: buildLocalizeFn_buildLocalizeFn({
+    values: localize_eraValues,
+    defaultWidth: "wide",
+  }),
+
+  quarter: buildLocalizeFn_buildLocalizeFn({
+    values: localize_quarterValues,
+    defaultWidth: "wide",
+    argumentCallback: (quarter) => quarter - 1,
+  }),
+
+  month: buildLocalizeFn_buildLocalizeFn({
+    values: localize_monthValues,
+    defaultWidth: "wide",
+  }),
+
+  day: buildLocalizeFn_buildLocalizeFn({
+    values: localize_dayValues,
+    defaultWidth: "wide",
+  }),
+
+  dayPeriod: buildLocalizeFn_buildLocalizeFn({
+    values: localize_dayPeriodValues,
+    defaultWidth: "wide",
+    formattingValues: localize_formattingDayPeriodValues,
+    defaultFormattingWidth: "wide",
+  }),
+};
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/_lib/buildMatchFn.js
+function buildMatchFn_buildMatchFn(args) {
+  return (string, options = {}) => {
+    const width = options.width;
+
+    const matchPattern =
+      (width && args.matchPatterns[width]) ||
+      args.matchPatterns[args.defaultMatchWidth];
+    const matchResult = string.match(matchPattern);
+
+    if (!matchResult) {
+      return null;
+    }
+    const matchedString = matchResult[0];
+
+    const parsePatterns =
+      (width && args.parsePatterns[width]) ||
+      args.parsePatterns[args.defaultParseWidth];
+
+    const key = Array.isArray(parsePatterns)
+      ? buildMatchFn_findIndex(parsePatterns, (pattern) => pattern.test(matchedString))
+      : // [TODO] -- I challenge you to fix the type
+        buildMatchFn_findKey(parsePatterns, (pattern) => pattern.test(matchedString));
+
+    let value;
+
+    value = args.valueCallback ? args.valueCallback(key) : key;
+    value = options.valueCallback
+      ? // [TODO] -- I challenge you to fix the type
+        options.valueCallback(value)
+      : value;
+
+    const rest = string.slice(matchedString.length);
+
+    return { value, rest };
+  };
+}
+
+function buildMatchFn_findKey(object, predicate) {
+  for (const key in object) {
+    if (
+      Object.prototype.hasOwnProperty.call(object, key) &&
+      predicate(object[key])
+    ) {
+      return key;
+    }
+  }
+  return undefined;
+}
+
+function buildMatchFn_findIndex(array, predicate) {
+  for (let key = 0; key < array.length; key++) {
+    if (predicate(array[key])) {
+      return key;
+    }
+  }
+  return undefined;
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/_lib/buildMatchPatternFn.js
+function buildMatchPatternFn_buildMatchPatternFn(args) {
+  return (string, options = {}) => {
+    const matchResult = string.match(args.matchPattern);
+    if (!matchResult) return null;
+    const matchedString = matchResult[0];
+
+    const parseResult = string.match(args.parsePattern);
+    if (!parseResult) return null;
+    let value = args.valueCallback
+      ? args.valueCallback(parseResult[0])
+      : parseResult[0];
+
+    // [TODO] I challenge you to fix the type
+    value = options.valueCallback ? options.valueCallback(value) : value;
+
+    const rest = string.slice(matchedString.length);
+
+    return { value, rest };
+  };
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/en-US/_lib/match.js
+
+
+
+const match_matchOrdinalNumberPattern = /^(\d+)(th|st|nd|rd)?/i;
+const match_parseOrdinalNumberPattern = /\d+/i;
+
+const match_matchEraPatterns = {
+  narrow: /^(b|a)/i,
+  abbreviated: /^(b\.?\s?c\.?|b\.?\s?c\.?\s?e\.?|a\.?\s?d\.?|c\.?\s?e\.?)/i,
+  wide: /^(before christ|before common era|anno domini|common era)/i,
+};
+const match_parseEraPatterns = {
+  any: [/^b/i, /^(a|c)/i],
+};
+
+const match_matchQuarterPatterns = {
+  narrow: /^[1234]/i,
+  abbreviated: /^q[1234]/i,
+  wide: /^[1234](th|st|nd|rd)? quarter/i,
+};
+const match_parseQuarterPatterns = {
+  any: [/1/i, /2/i, /3/i, /4/i],
+};
+
+const match_matchMonthPatterns = {
+  narrow: /^[jfmasond]/i,
+  abbreviated: /^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i,
+  wide: /^(january|february|march|april|may|june|july|august|september|october|november|december)/i,
+};
+const match_parseMonthPatterns = {
+  narrow: [
+    /^j/i,
+    /^f/i,
+    /^m/i,
+    /^a/i,
+    /^m/i,
+    /^j/i,
+    /^j/i,
+    /^a/i,
+    /^s/i,
+    /^o/i,
+    /^n/i,
+    /^d/i,
+  ],
+
+  any: [
+    /^ja/i,
+    /^f/i,
+    /^mar/i,
+    /^ap/i,
+    /^may/i,
+    /^jun/i,
+    /^jul/i,
+    /^au/i,
+    /^s/i,
+    /^o/i,
+    /^n/i,
+    /^d/i,
+  ],
+};
+
+const match_matchDayPatterns = {
+  narrow: /^[smtwf]/i,
+  short: /^(su|mo|tu|we|th|fr|sa)/i,
+  abbreviated: /^(sun|mon|tue|wed|thu|fri|sat)/i,
+  wide: /^(sunday|monday|tuesday|wednesday|thursday|friday|saturday)/i,
+};
+const match_parseDayPatterns = {
+  narrow: [/^s/i, /^m/i, /^t/i, /^w/i, /^t/i, /^f/i, /^s/i],
+  any: [/^su/i, /^m/i, /^tu/i, /^w/i, /^th/i, /^f/i, /^sa/i],
+};
+
+const match_matchDayPeriodPatterns = {
+  narrow: /^(a|p|mi|n|(in the|at) (morning|afternoon|evening|night))/i,
+  any: /^([ap]\.?\s?m\.?|midnight|noon|(in the|at) (morning|afternoon|evening|night))/i,
+};
+const match_parseDayPeriodPatterns = {
+  any: {
+    am: /^a/i,
+    pm: /^p/i,
+    midnight: /^mi/i,
+    noon: /^no/i,
+    morning: /morning/i,
+    afternoon: /afternoon/i,
+    evening: /evening/i,
+    night: /night/i,
+  },
+};
+
+const _lib_match_match = {
+  ordinalNumber: buildMatchPatternFn_buildMatchPatternFn({
+    matchPattern: match_matchOrdinalNumberPattern,
+    parsePattern: match_parseOrdinalNumberPattern,
+    valueCallback: (value) => parseInt(value, 10),
+  }),
+
+  era: buildMatchFn_buildMatchFn({
+    matchPatterns: match_matchEraPatterns,
+    defaultMatchWidth: "wide",
+    parsePatterns: match_parseEraPatterns,
+    defaultParseWidth: "any",
+  }),
+
+  quarter: buildMatchFn_buildMatchFn({
+    matchPatterns: match_matchQuarterPatterns,
+    defaultMatchWidth: "wide",
+    parsePatterns: match_parseQuarterPatterns,
+    defaultParseWidth: "any",
+    valueCallback: (index) => index + 1,
+  }),
+
+  month: buildMatchFn_buildMatchFn({
+    matchPatterns: match_matchMonthPatterns,
+    defaultMatchWidth: "wide",
+    parsePatterns: match_parseMonthPatterns,
+    defaultParseWidth: "any",
+  }),
+
+  day: buildMatchFn_buildMatchFn({
+    matchPatterns: match_matchDayPatterns,
+    defaultMatchWidth: "wide",
+    parsePatterns: match_parseDayPatterns,
+    defaultParseWidth: "any",
+  }),
+
+  dayPeriod: buildMatchFn_buildMatchFn({
+    matchPatterns: match_matchDayPeriodPatterns,
+    defaultMatchWidth: "any",
+    parsePatterns: match_parseDayPeriodPatterns,
+    defaultParseWidth: "any",
+  }),
+};
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/locale/en-US.js
+
+
+
+
+
+
+/**
+ * @category Locales
+ * @summary English locale (United States).
+ * @language English
+ * @iso-639-2 eng
+ * @author Sasha Koss [@kossnocorp](https://github.com/kossnocorp)
+ * @author Lesha Koss [@leshakoss](https://github.com/leshakoss)
+ */
+const en_US_enUS = {
+  code: "en-US",
+  formatDistance: formatDistance_formatDistance,
+  formatLong: formatLong_formatLong,
+  formatRelative: formatRelative_formatRelative,
+  localize: localize_localize,
+  match: _lib_match_match,
+  options: {
+    weekStartsOn: 0 /* Sunday */,
+    firstWeekContainsDate: 1,
+  },
+};
+
+// Fallback for modularized imports:
+/* harmony default export */ const locale_en_US = ((/* unused pure expression or super */ null && (en_US_enUS)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/constants.js
+/**
+ * @module constants
+ * @summary Useful constants
+ * @description
+ * Collection of useful date constants.
+ *
+ * The constants could be imported from `date-fns/constants`:
+ *
+ * ```ts
+ * import { maxTime, minTime } from "./constants/date-fns/constants";
+ *
+ * function isAllowedTime(time) {
+ *   return time <= maxTime && time >= minTime;
+ * }
+ * ```
+ */
+
+/**
+ * @constant
+ * @name daysInWeek
+ * @summary Days in 1 week.
+ */
+const constants_daysInWeek = 7;
+
+/**
+ * @constant
+ * @name daysInYear
+ * @summary Days in 1 year.
+ *
+ * @description
+ * How many days in a year.
+ *
+ * One years equals 365.2425 days according to the formula:
+ *
+ * > Leap year occurs every 4 years, except for years that are divisible by 100 and not divisible by 400.
+ * > 1 mean year = (365+1/4-1/100+1/400) days = 365.2425 days
+ */
+const constants_daysInYear = 365.2425;
+
+/**
+ * @constant
+ * @name maxTime
+ * @summary Maximum allowed time.
+ *
+ * @example
+ * import { maxTime } from "./constants/date-fns/constants";
+ *
+ * const isValid = 8640000000000001 <= maxTime;
+ * //=> false
+ *
+ * new Date(8640000000000001);
+ * //=> Invalid Date
+ */
+const constants_maxTime = Math.pow(10, 8) * 24 * 60 * 60 * 1000;
+
+/**
+ * @constant
+ * @name minTime
+ * @summary Minimum allowed time.
+ *
+ * @example
+ * import { minTime } from "./constants/date-fns/constants";
+ *
+ * const isValid = -8640000000000001 >= minTime;
+ * //=> false
+ *
+ * new Date(-8640000000000001)
+ * //=> Invalid Date
+ */
+const constants_minTime = -constants_maxTime;
+
+/**
+ * @constant
+ * @name millisecondsInWeek
+ * @summary Milliseconds in 1 week.
+ */
+const constants_millisecondsInWeek = 604800000;
+
+/**
+ * @constant
+ * @name millisecondsInDay
+ * @summary Milliseconds in 1 day.
+ */
+const constants_millisecondsInDay = 86400000;
+
+/**
+ * @constant
+ * @name millisecondsInMinute
+ * @summary Milliseconds in 1 minute
+ */
+const constants_millisecondsInMinute = 60000;
+
+/**
+ * @constant
+ * @name millisecondsInHour
+ * @summary Milliseconds in 1 hour
+ */
+const constants_millisecondsInHour = 3600000;
+
+/**
+ * @constant
+ * @name millisecondsInSecond
+ * @summary Milliseconds in 1 second
+ */
+const constants_millisecondsInSecond = 1000;
+
+/**
+ * @constant
+ * @name minutesInYear
+ * @summary Minutes in 1 year.
+ */
+const constants_minutesInYear = 525600;
+
+/**
+ * @constant
+ * @name minutesInMonth
+ * @summary Minutes in 1 month.
+ */
+const constants_minutesInMonth = 43200;
+
+/**
+ * @constant
+ * @name minutesInDay
+ * @summary Minutes in 1 day.
+ */
+const constants_minutesInDay = 1440;
+
+/**
+ * @constant
+ * @name minutesInHour
+ * @summary Minutes in 1 hour.
+ */
+const constants_minutesInHour = 60;
+
+/**
+ * @constant
+ * @name monthsInQuarter
+ * @summary Months in 1 quarter.
+ */
+const constants_monthsInQuarter = 3;
+
+/**
+ * @constant
+ * @name monthsInYear
+ * @summary Months in 1 year.
+ */
+const constants_monthsInYear = 12;
+
+/**
+ * @constant
+ * @name quartersInYear
+ * @summary Quarters in 1 year
+ */
+const constants_quartersInYear = 4;
+
+/**
+ * @constant
+ * @name secondsInHour
+ * @summary Seconds in 1 hour.
+ */
+const constants_secondsInHour = 3600;
+
+/**
+ * @constant
+ * @name secondsInMinute
+ * @summary Seconds in 1 minute.
+ */
+const constants_secondsInMinute = 60;
+
+/**
+ * @constant
+ * @name secondsInDay
+ * @summary Seconds in 1 day.
+ */
+const constants_secondsInDay = constants_secondsInHour * 24;
+
+/**
+ * @constant
+ * @name secondsInWeek
+ * @summary Seconds in 1 week.
+ */
+const constants_secondsInWeek = constants_secondsInDay * 7;
+
+/**
+ * @constant
+ * @name secondsInYear
+ * @summary Seconds in 1 year.
+ */
+const constants_secondsInYear = constants_secondsInDay * constants_daysInYear;
+
+/**
+ * @constant
+ * @name secondsInMonth
+ * @summary Seconds in 1 month
+ */
+const constants_secondsInMonth = constants_secondsInYear / 12;
+
+/**
+ * @constant
+ * @name secondsInQuarter
+ * @summary Seconds in 1 quarter.
+ */
+const constants_secondsInQuarter = constants_secondsInMonth * 3;
+
+/**
+ * @constant
+ * @name constructFromSymbol
+ * @summary Symbol enabling Date extensions to inherit properties from the reference date.
+ *
+ * The symbol is used to enable the `constructFrom` function to construct a date
+ * using a reference date and a value. It allows to transfer extra properties
+ * from the reference date to the new date. It's useful for extensions like
+ * [`TZDate`](https://github.com/date-fns/tz) that accept a time zone as
+ * a constructor argument.
+ */
+const constants_constructFromSymbol = Symbol.for("constructDateFrom");
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/constructFrom.js
+
+
+/**
+ * @name constructFrom
+ * @category Generic Helpers
+ * @summary Constructs a date using the reference date and the value
+ *
+ * @description
+ * The function constructs a new date using the constructor from the reference
+ * date and the given value. It helps to build generic functions that accept
+ * date extensions.
+ *
+ * It defaults to `Date` if the passed reference date is a number or a string.
+ *
+ * Starting from v3.7.0, it allows to construct a date using `[Symbol.for("constructDateFrom")]`
+ * enabling to transfer extra properties from the reference date to the new date.
+ * It's useful for extensions like [`TZDate`](https://github.com/date-fns/tz)
+ * that accept a time zone as a constructor argument.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The reference date to take constructor from
+ * @param value - The value to create the date
+ *
+ * @returns Date initialized using the given date and value
+ *
+ * @example
+ * import { constructFrom } from "./constructFrom/date-fns";
+ *
+ * // A function that clones a date preserving the original type
+ * function cloneDate<DateType extends Date>(date: DateType): DateType {
+ *   return constructFrom(
+ *     date, // Use constructor from the given date
+ *     date.getTime() // Use the date value to create a new date
+ *   );
+ * }
+ */
+function constructFrom_constructFrom(date, value) {
+  if (typeof date === "function") return date(value);
+
+  if (date && typeof date === "object" && constants_constructFromSymbol in date)
+    return date[constants_constructFromSymbol](value);
+
+  if (date instanceof Date) return new date.constructor(value);
+
+  return new Date(value);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_constructFrom = ((/* unused pure expression or super */ null && (constructFrom_constructFrom)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/toDate.js
+
+
+/**
+ * @name toDate
+ * @category Common Helpers
+ * @summary Convert the given argument to an instance of Date.
+ *
+ * @description
+ * Convert the given argument to an instance of Date.
+ *
+ * If the argument is an instance of Date, the function returns its clone.
+ *
+ * If the argument is a number, it is treated as a timestamp.
+ *
+ * If the argument is none of the above, the function returns Invalid Date.
+ *
+ * Starting from v3.7.0, it clones a date using `[Symbol.for("constructDateFrom")]`
+ * enabling to transfer extra properties from the reference date to the new date.
+ * It's useful for extensions like [`TZDate`](https://github.com/date-fns/tz)
+ * that accept a time zone as a constructor argument.
+ *
+ * **Note**: *all* Date arguments passed to any *date-fns* function is processed by `toDate`.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param argument - The value to convert
+ *
+ * @returns The parsed date in the local time zone
+ *
+ * @example
+ * // Clone the date:
+ * const result = toDate(new Date(2014, 1, 11, 11, 30, 30))
+ * //=> Tue Feb 11 2014 11:30:30
+ *
+ * @example
+ * // Convert the timestamp to date:
+ * const result = toDate(1392098430000)
+ * //=> Tue Feb 11 2014 11:30:30
+ */
+function toDate_toDate(argument, context) {
+  // [TODO] Get rid of `toDate` or `constructFrom`?
+  return constructFrom_constructFrom(context || argument, argument);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_toDate = ((/* unused pure expression or super */ null && (toDate_toDate)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/addDays.js
+
+
+
+/**
+ * The {@link addDays} function options.
+ */
+
+/**
+ * @name addDays
+ * @category Day Helpers
+ * @summary Add the specified number of days to the given date.
+ *
+ * @description
+ * Add the specified number of days to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of days to be added.
+ * @param options - An object with options
+ *
+ * @returns The new date with the days added
+ *
+ * @example
+ * // Add 10 days to 1 September 2014:
+ * const result = addDays(new Date(2014, 8, 1), 10)
+ * //=> Thu Sep 11 2014 00:00:00
+ */
+function addDays_addDays(date, amount, options) {
+  const _date = toDate_toDate(date, options?.in);
+  if (isNaN(amount)) return constructFrom_constructFrom(options?.in || date, NaN);
+
+  // If 0 days, no-op to avoid changing times in the hour before end of DST
+  if (!amount) return _date;
+
+  _date.setDate(_date.getDate() + amount);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_addDays = ((/* unused pure expression or super */ null && (addDays_addDays)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/addMonths.js
+
+
+
+/**
+ * The {@link addMonths} function options.
+ */
+
+/**
+ * @name addMonths
+ * @category Month Helpers
+ * @summary Add the specified number of months to the given date.
+ *
+ * @description
+ * Add the specified number of months to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of months to be added.
+ * @param options - The options object
+ *
+ * @returns The new date with the months added
+ *
+ * @example
+ * // Add 5 months to 1 September 2014:
+ * const result = addMonths(new Date(2014, 8, 1), 5)
+ * //=> Sun Feb 01 2015 00:00:00
+ *
+ * // Add one month to 30 January 2023:
+ * const result = addMonths(new Date(2023, 0, 30), 1)
+ * //=> Tue Feb 28 2023 00:00:00
+ */
+function addMonths_addMonths(date, amount, options) {
+  const _date = toDate_toDate(date, options?.in);
+  if (isNaN(amount)) return constructFrom_constructFrom(options?.in || date, NaN);
+  if (!amount) {
+    // If 0 months, no-op to avoid changing times in the hour before end of DST
+    return _date;
+  }
+  const dayOfMonth = _date.getDate();
+
+  // The JS Date object supports date math by accepting out-of-bounds values for
+  // month, day, etc. For example, new Date(2020, 0, 0) returns 31 Dec 2019 and
+  // new Date(2020, 13, 1) returns 1 Feb 2021.  This is *almost* the behavior we
+  // want except that dates will wrap around the end of a month, meaning that
+  // new Date(2020, 13, 31) will return 3 Mar 2021 not 28 Feb 2021 as desired. So
+  // we'll default to the end of the desired month by adding 1 to the desired
+  // month and using a date of 0 to back up one day to the end of the desired
+  // month.
+  const endOfDesiredMonth = constructFrom_constructFrom(options?.in || date, _date.getTime());
+  endOfDesiredMonth.setMonth(_date.getMonth() + amount + 1, 0);
+  const daysInMonth = endOfDesiredMonth.getDate();
+  if (dayOfMonth >= daysInMonth) {
+    // If we're already at the end of the month, then this is the correct date
+    // and we're done.
+    return endOfDesiredMonth;
+  } else {
+    // Otherwise, we now know that setting the original day-of-month value won't
+    // cause an overflow, so set the desired day-of-month. Note that we can't
+    // just set the date of `endOfDesiredMonth` because that object may have had
+    // its time changed in the unusual case where where a DST transition was on
+    // the last day of the month and its local time was in the hour skipped or
+    // repeated next to a DST transition.  So we use `date` instead which is
+    // guaranteed to still have the original time.
+    _date.setFullYear(
+      endOfDesiredMonth.getFullYear(),
+      endOfDesiredMonth.getMonth(),
+      dayOfMonth,
+    );
+    return _date;
+  }
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_addMonths = ((/* unused pure expression or super */ null && (addMonths_addMonths)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/addWeeks.js
+
+
+/**
+ * The {@link addWeeks} function options.
+ */
+
+/**
+ * @name addWeeks
+ * @category Week Helpers
+ * @summary Add the specified number of weeks to the given date.
+ *
+ * @description
+ * Add the specified number of weeks to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of weeks to be added.
+ * @param options - An object with options
+ *
+ * @returns The new date with the weeks added
+ *
+ * @example
+ * // Add 4 weeks to 1 September 2014:
+ * const result = addWeeks(new Date(2014, 8, 1), 4)
+ * //=> Mon Sep 29 2014 00:00:00
+ */
+function addWeeks_addWeeks(date, amount, options) {
+  return addDays_addDays(date, amount * 7, options);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_addWeeks = ((/* unused pure expression or super */ null && (addWeeks_addWeeks)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/addYears.js
+
+
+/**
+ * The {@link addYears} function options.
+ */
+
+/**
+ * @name addYears
+ * @category Year Helpers
+ * @summary Add the specified number of years to the given date.
+ *
+ * @description
+ * Add the specified number of years to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of years to be added.
+ * @param options - The options
+ *
+ * @returns The new date with the years added
+ *
+ * @example
+ * // Add 5 years to 1 September 2014:
+ * const result = addYears(new Date(2014, 8, 1), 5)
+ * //=> Sun Sep 01 2019 00:00:00
+ */
+function addYears_addYears(date, amount, options) {
+  return addMonths_addMonths(date, amount * 12, options);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_addYears = ((/* unused pure expression or super */ null && (addYears_addYears)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds.js
+
+
+/**
+ * Google Chrome as of 67.0.3396.87 introduced timezones with offset that includes seconds.
+ * They usually appear for dates that denote time before the timezones were introduced
+ * (e.g. for 'Europe/Prague' timezone the offset is GMT+00:57:44 before 1 October 1891
+ * and GMT+01:00:00 after that date)
+ *
+ * Date#getTimezoneOffset returns the offset in minutes and would return 57 for the example above,
+ * which would lead to incorrect calculations.
+ *
+ * This function returns the timezone offset in milliseconds that takes seconds in account.
+ */
+function getTimezoneOffsetInMilliseconds_getTimezoneOffsetInMilliseconds(date) {
+  const _date = toDate_toDate(date);
+  const utcDate = new Date(
+    Date.UTC(
+      _date.getFullYear(),
+      _date.getMonth(),
+      _date.getDate(),
+      _date.getHours(),
+      _date.getMinutes(),
+      _date.getSeconds(),
+      _date.getMilliseconds(),
+    ),
+  );
+  utcDate.setUTCFullYear(_date.getFullYear());
+  return +date - +utcDate;
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/normalizeDates.js
+
+
+function normalizeDates(context, ...dates) {
+  const normalize = constructFrom_constructFrom.bind(
+    null,
+    context || dates.find((date) => typeof date === "object"),
+  );
+  return dates.map(normalize);
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/startOfDay.js
+
+
+/**
+ * The {@link startOfDay} function options.
+ */
+
+/**
+ * @name startOfDay
+ * @category Day Helpers
+ * @summary Return the start of a day for the given date.
+ *
+ * @description
+ * Return the start of a day for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - The options
+ *
+ * @returns The start of a day
+ *
+ * @example
+ * // The start of a day for 2 September 2014 11:55:00:
+ * const result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Tue Sep 02 2014 00:00:00
+ */
+function startOfDay_startOfDay(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_startOfDay = ((/* unused pure expression or super */ null && (startOfDay_startOfDay)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/differenceInCalendarDays.js
+
+
+
+
+
+/**
+ * The {@link differenceInCalendarDays} function options.
+ */
+
+/**
+ * @name differenceInCalendarDays
+ * @category Day Helpers
+ * @summary Get the number of calendar days between the given dates.
+ *
+ * @description
+ * Get the number of calendar days between the given dates. This means that the times are removed
+ * from the dates and then the difference in days is calculated.
+ *
+ * @param laterDate - The later date
+ * @param earlierDate - The earlier date
+ * @param options - The options object
+ *
+ * @returns The number of calendar days
+ *
+ * @example
+ * // How many calendar days are between
+ * // 2 July 2011 23:00:00 and 2 July 2012 00:00:00?
+ * const result = differenceInCalendarDays(
+ *   new Date(2012, 6, 2, 0, 0),
+ *   new Date(2011, 6, 2, 23, 0)
+ * )
+ * //=> 366
+ * // How many calendar days are between
+ * // 2 July 2011 23:59:00 and 3 July 2011 00:01:00?
+ * const result = differenceInCalendarDays(
+ *   new Date(2011, 6, 3, 0, 1),
+ *   new Date(2011, 6, 2, 23, 59)
+ * )
+ * //=> 1
+ */
+function differenceInCalendarDays_differenceInCalendarDays(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate,
+  );
+
+  const laterStartOfDay = startOfDay_startOfDay(laterDate_);
+  const earlierStartOfDay = startOfDay_startOfDay(earlierDate_);
+
+  const laterTimestamp =
+    +laterStartOfDay - getTimezoneOffsetInMilliseconds_getTimezoneOffsetInMilliseconds(laterStartOfDay);
+  const earlierTimestamp =
+    +earlierStartOfDay - getTimezoneOffsetInMilliseconds_getTimezoneOffsetInMilliseconds(earlierStartOfDay);
+
+  // Round the number of days to the nearest integer because the number of
+  // milliseconds in a day is not constant (e.g. it's different in the week of
+  // the daylight saving time clock shift).
+  return Math.round((laterTimestamp - earlierTimestamp) / constants_millisecondsInDay);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_differenceInCalendarDays = ((/* unused pure expression or super */ null && (differenceInCalendarDays_differenceInCalendarDays)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/differenceInCalendarMonths.js
+
+
+/**
+ * The {@link differenceInCalendarMonths} function options.
+ */
+
+/**
+ * @name differenceInCalendarMonths
+ * @category Month Helpers
+ * @summary Get the number of calendar months between the given dates.
+ *
+ * @description
+ * Get the number of calendar months between the given dates.
+ *
+ * @param laterDate - The later date
+ * @param earlierDate - The earlier date
+ * @param options - An object with options
+ *
+ * @returns The number of calendar months
+ *
+ * @example
+ * // How many calendar months are between 31 January 2014 and 1 September 2014?
+ * const result = differenceInCalendarMonths(
+ *   new Date(2014, 8, 1),
+ *   new Date(2014, 0, 31)
+ * )
+ * //=> 8
+ */
+function differenceInCalendarMonths(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate,
+  );
+
+  const yearsDiff = laterDate_.getFullYear() - earlierDate_.getFullYear();
+  const monthsDiff = laterDate_.getMonth() - earlierDate_.getMonth();
+
+  return yearsDiff * 12 + monthsDiff;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_differenceInCalendarMonths = ((/* unused pure expression or super */ null && (differenceInCalendarMonths)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/normalizeInterval.js
+
+
+function normalizeInterval(context, interval) {
+  const [start, end] = normalizeDates(context, interval.start, interval.end);
+  return { start, end };
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/eachMonthOfInterval.js
+
+
+
+/**
+ * The {@link eachMonthOfInterval} function options.
+ */
+
+/**
+ * The {@link eachMonthOfInterval} function result type. It resolves the proper data type.
+ */
+
+/**
+ * @name eachMonthOfInterval
+ * @category Interval Helpers
+ * @summary Return the array of months within the specified time interval.
+ *
+ * @description
+ * Return the array of months within the specified time interval.
+ *
+ * @typeParam IntervalType - Interval type.
+ * @typeParam Options - Options type.
+ *
+ * @param interval - The interval.
+ * @param options - An object with options.
+ *
+ * @returns The array with starts of months from the month of the interval start to the month of the interval end
+ *
+ * @example
+ * // Each month between 6 February 2014 and 10 August 2014:
+ * const result = eachMonthOfInterval({
+ *   start: new Date(2014, 1, 6),
+ *   end: new Date(2014, 7, 10)
+ * })
+ * //=> [
+ * //   Sat Feb 01 2014 00:00:00,
+ * //   Sat Mar 01 2014 00:00:00,
+ * //   Tue Apr 01 2014 00:00:00,
+ * //   Thu May 01 2014 00:00:00,
+ * //   Sun Jun 01 2014 00:00:00,
+ * //   Tue Jul 01 2014 00:00:00,
+ * //   Fri Aug 01 2014 00:00:00
+ * // ]
+ */
+function eachMonthOfInterval_eachMonthOfInterval(interval, options) {
+  const { start, end } = normalizeInterval(options?.in, interval);
+
+  let reversed = +start > +end;
+  const endTime = reversed ? +start : +end;
+  const date = reversed ? end : start;
+  date.setHours(0, 0, 0, 0);
+  date.setDate(1);
+
+  let step = options?.step ?? 1;
+  if (!step) return [];
+  if (step < 0) {
+    step = -step;
+    reversed = !reversed;
+  }
+
+  const dates = [];
+
+  while (+date <= endTime) {
+    dates.push(constructFrom_constructFrom(start, date));
+    date.setMonth(date.getMonth() + step);
+  }
+
+  return reversed ? dates.reverse() : dates;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_eachMonthOfInterval = ((/* unused pure expression or super */ null && (eachMonthOfInterval_eachMonthOfInterval)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/defaultOptions.js
+let _lib_defaultOptions_defaultOptions = {};
+
+function defaultOptions_getDefaultOptions() {
+  return _lib_defaultOptions_defaultOptions;
+}
+
+function defaultOptions_setDefaultOptions(newOptions) {
+  _lib_defaultOptions_defaultOptions = newOptions;
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/endOfWeek.js
+
+
+
+/**
+ * The {@link endOfWeek} function options.
+ */
+
+/**
+ * @name endOfWeek
+ * @category Week Helpers
+ * @summary Return the end of a week for the given date.
+ *
+ * @description
+ * Return the end of a week for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The end of a week
+ *
+ * @example
+ * // The end of a week for 2 September 2014 11:55:00:
+ * const result = endOfWeek(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Sat Sep 06 2014 23:59:59.999
+ *
+ * @example
+ * // If the week starts on Monday, the end of the week for 2 September 2014 11:55:00:
+ * const result = endOfWeek(new Date(2014, 8, 2, 11, 55, 0), { weekStartsOn: 1 })
+ * //=> Sun Sep 07 2014 23:59:59.999
+ */
+function endOfWeek_endOfWeek(date, options) {
+  const defaultOptions = defaultOptions_getDefaultOptions();
+  const weekStartsOn =
+    options?.weekStartsOn ??
+    options?.locale?.options?.weekStartsOn ??
+    defaultOptions.weekStartsOn ??
+    defaultOptions.locale?.options?.weekStartsOn ??
+    0;
+
+  const _date = toDate_toDate(date, options?.in);
+  const day = _date.getDay();
+  const diff = (day < weekStartsOn ? -7 : 0) + 6 - (day - weekStartsOn);
+
+  _date.setDate(_date.getDate() + diff);
+  _date.setHours(23, 59, 59, 999);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_endOfWeek = ((/* unused pure expression or super */ null && (endOfWeek_endOfWeek)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/endOfISOWeek.js
+
+
+/**
+ * The {@link endOfISOWeek} function options.
+ */
+
+/**
+ * @name endOfISOWeek
+ * @category ISO Week Helpers
+ * @summary Return the end of an ISO week for the given date.
+ *
+ * @description
+ * Return the end of an ISO week for the given date.
+ * The result will be in the local timezone.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The end of an ISO week
+ *
+ * @example
+ * // The end of an ISO week for 2 September 2014 11:55:00:
+ * const result = endOfISOWeek(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Sun Sep 07 2014 23:59:59.999
+ */
+function endOfISOWeek(date, options) {
+  return endOfWeek_endOfWeek(date, { ...options, weekStartsOn: 1 });
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_endOfISOWeek = ((/* unused pure expression or super */ null && (endOfISOWeek)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/endOfMonth.js
+
+
+/**
+ * The {@link endOfMonth} function options.
+ */
+
+/**
+ * @name endOfMonth
+ * @category Month Helpers
+ * @summary Return the end of a month for the given date.
+ *
+ * @description
+ * Return the end of a month for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The end of a month
+ *
+ * @example
+ * // The end of a month for 2 September 2014 11:55:00:
+ * const result = endOfMonth(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Tue Sep 30 2014 23:59:59.999
+ */
+function endOfMonth_endOfMonth(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const month = _date.getMonth();
+  _date.setFullYear(_date.getFullYear(), month + 1, 0);
+  _date.setHours(23, 59, 59, 999);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_endOfMonth = ((/* unused pure expression or super */ null && (endOfMonth_endOfMonth)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/endOfYear.js
+
+
+/**
+ * The {@link endOfYear} function options.
+ */
+
+/**
+ * @name endOfYear
+ * @category Year Helpers
+ * @summary Return the end of a year for the given date.
+ *
+ * @description
+ * Return the end of a year for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - The options
+ *
+ * @returns The end of a year
+ *
+ * @example
+ * // The end of a year for 2 September 2014 11:55:00:
+ * const result = endOfYear(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Wed Dec 31 2014 23:59:59.999
+ */
+function endOfYear(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const year = _date.getFullYear();
+  _date.setFullYear(year + 1, 0, 0);
+  _date.setHours(23, 59, 59, 999);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_endOfYear = ((/* unused pure expression or super */ null && (endOfYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/startOfYear.js
+
+
+/**
+ * The {@link startOfYear} function options.
+ */
+
+/**
+ * @name startOfYear
+ * @category Year Helpers
+ * @summary Return the start of a year for the given date.
+ *
+ * @description
+ * Return the start of a year for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - The options
+ *
+ * @returns The start of a year
+ *
+ * @example
+ * // The start of a year for 2 September 2014 11:55:00:
+ * const result = startOfYear(new Date(2014, 8, 2, 11, 55, 00))
+ * //=> Wed Jan 01 2014 00:00:00
+ */
+function startOfYear_startOfYear(date, options) {
+  const date_ = toDate_toDate(date, options?.in);
+  date_.setFullYear(date_.getFullYear(), 0, 1);
+  date_.setHours(0, 0, 0, 0);
+  return date_;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_startOfYear = ((/* unused pure expression or super */ null && (startOfYear_startOfYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/getDayOfYear.js
+
+
+
+
+/**
+ * The {@link getDayOfYear} function options.
+ */
+
+/**
+ * @name getDayOfYear
+ * @category Day Helpers
+ * @summary Get the day of the year of the given date.
+ *
+ * @description
+ * Get the day of the year of the given date.
+ *
+ * @param date - The given date
+ * @param options - The options
+ *
+ * @returns The day of year
+ *
+ * @example
+ * // Which day of the year is 2 July 2014?
+ * const result = getDayOfYear(new Date(2014, 6, 2))
+ * //=> 183
+ */
+function getDayOfYear_getDayOfYear(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const diff = differenceInCalendarDays_differenceInCalendarDays(_date, startOfYear_startOfYear(_date));
+  const dayOfYear = diff + 1;
+  return dayOfYear;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_getDayOfYear = ((/* unused pure expression or super */ null && (getDayOfYear_getDayOfYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/startOfWeek.js
+
+
+
+/**
+ * The {@link startOfWeek} function options.
+ */
+
+/**
+ * @name startOfWeek
+ * @category Week Helpers
+ * @summary Return the start of a week for the given date.
+ *
+ * @description
+ * Return the start of a week for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of a week
+ *
+ * @example
+ * // The start of a week for 2 September 2014 11:55:00:
+ * const result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Sun Aug 31 2014 00:00:00
+ *
+ * @example
+ * // If the week starts on Monday, the start of the week for 2 September 2014 11:55:00:
+ * const result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0), { weekStartsOn: 1 })
+ * //=> Mon Sep 01 2014 00:00:00
+ */
+function startOfWeek_startOfWeek(date, options) {
+  const defaultOptions = defaultOptions_getDefaultOptions();
+  const weekStartsOn =
+    options?.weekStartsOn ??
+    options?.locale?.options?.weekStartsOn ??
+    defaultOptions.weekStartsOn ??
+    defaultOptions.locale?.options?.weekStartsOn ??
+    0;
+
+  const _date = toDate_toDate(date, options?.in);
+  const day = _date.getDay();
+  const diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
+
+  _date.setDate(_date.getDate() - diff);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_startOfWeek = ((/* unused pure expression or super */ null && (startOfWeek_startOfWeek)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/startOfISOWeek.js
+
+
+/**
+ * The {@link startOfISOWeek} function options.
+ */
+
+/**
+ * @name startOfISOWeek
+ * @category ISO Week Helpers
+ * @summary Return the start of an ISO week for the given date.
+ *
+ * @description
+ * Return the start of an ISO week for the given date.
+ * The result will be in the local timezone.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of an ISO week
+ *
+ * @example
+ * // The start of an ISO week for 2 September 2014 11:55:00:
+ * const result = startOfISOWeek(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Mon Sep 01 2014 00:00:00
+ */
+function startOfISOWeek_startOfISOWeek(date, options) {
+  return startOfWeek_startOfWeek(date, { ...options, weekStartsOn: 1 });
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_startOfISOWeek = ((/* unused pure expression or super */ null && (startOfISOWeek_startOfISOWeek)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/getISOWeekYear.js
+
+
+
+
+/**
+ * The {@link getISOWeekYear} function options.
+ */
+
+/**
+ * @name getISOWeekYear
+ * @category ISO Week-Numbering Year Helpers
+ * @summary Get the ISO week-numbering year of the given date.
+ *
+ * @description
+ * Get the ISO week-numbering year of the given date,
+ * which always starts 3 days before the year's first Thursday.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @param date - The given date
+ *
+ * @returns The ISO week-numbering year
+ *
+ * @example
+ * // Which ISO-week numbering year is 2 January 2005?
+ * const result = getISOWeekYear(new Date(2005, 0, 2))
+ * //=> 2004
+ */
+function getISOWeekYear_getISOWeekYear(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const year = _date.getFullYear();
+
+  const fourthOfJanuaryOfNextYear = constructFrom_constructFrom(_date, 0);
+  fourthOfJanuaryOfNextYear.setFullYear(year + 1, 0, 4);
+  fourthOfJanuaryOfNextYear.setHours(0, 0, 0, 0);
+  const startOfNextYear = startOfISOWeek_startOfISOWeek(fourthOfJanuaryOfNextYear);
+
+  const fourthOfJanuaryOfThisYear = constructFrom_constructFrom(_date, 0);
+  fourthOfJanuaryOfThisYear.setFullYear(year, 0, 4);
+  fourthOfJanuaryOfThisYear.setHours(0, 0, 0, 0);
+  const startOfThisYear = startOfISOWeek_startOfISOWeek(fourthOfJanuaryOfThisYear);
+
+  if (_date.getTime() >= startOfNextYear.getTime()) {
+    return year + 1;
+  } else if (_date.getTime() >= startOfThisYear.getTime()) {
+    return year;
+  } else {
+    return year - 1;
+  }
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_getISOWeekYear = ((/* unused pure expression or super */ null && (getISOWeekYear_getISOWeekYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/startOfISOWeekYear.js
+
+
+
+
+/**
+ * The {@link startOfISOWeekYear} function options.
+ */
+
+/**
+ * @name startOfISOWeekYear
+ * @category ISO Week-Numbering Year Helpers
+ * @summary Return the start of an ISO week-numbering year for the given date.
+ *
+ * @description
+ * Return the start of an ISO week-numbering year,
+ * which always starts 3 days before the year's first Thursday.
+ * The result will be in the local timezone.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of an ISO week-numbering year
+ *
+ * @example
+ * // The start of an ISO week-numbering year for 2 July 2005:
+ * const result = startOfISOWeekYear(new Date(2005, 6, 2))
+ * //=> Mon Jan 03 2005 00:00:00
+ */
+function startOfISOWeekYear_startOfISOWeekYear(date, options) {
+  const year = getISOWeekYear_getISOWeekYear(date, options);
+  const fourthOfJanuary = constructFrom_constructFrom(options?.in || date, 0);
+  fourthOfJanuary.setFullYear(year, 0, 4);
+  fourthOfJanuary.setHours(0, 0, 0, 0);
+  return startOfISOWeek_startOfISOWeek(fourthOfJanuary);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_startOfISOWeekYear = ((/* unused pure expression or super */ null && (startOfISOWeekYear_startOfISOWeekYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/getISOWeek.js
+
+
+
+
+
+/**
+ * The {@link getISOWeek} function options.
+ */
+
+/**
+ * @name getISOWeek
+ * @category ISO Week Helpers
+ * @summary Get the ISO week of the given date.
+ *
+ * @description
+ * Get the ISO week of the given date.
+ *
+ * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @param date - The given date
+ * @param options - The options
+ *
+ * @returns The ISO week
+ *
+ * @example
+ * // Which week of the ISO-week numbering year is 2 January 2005?
+ * const result = getISOWeek(new Date(2005, 0, 2))
+ * //=> 53
+ */
+function getISOWeek_getISOWeek(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const diff = +startOfISOWeek_startOfISOWeek(_date) - +startOfISOWeekYear_startOfISOWeekYear(_date);
+
+  // Round the number of weeks to the nearest integer because the number of
+  // milliseconds in a week is not constant (e.g. it's different in the week of
+  // the daylight saving time clock shift).
+  return Math.round(diff / constants_millisecondsInWeek) + 1;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_getISOWeek = ((/* unused pure expression or super */ null && (getISOWeek_getISOWeek)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/getWeekYear.js
+
+
+
+
+
+/**
+ * The {@link getWeekYear} function options.
+ */
+
+/**
+ * @name getWeekYear
+ * @category Week-Numbering Year Helpers
+ * @summary Get the local week-numbering year of the given date.
+ *
+ * @description
+ * Get the local week-numbering year of the given date.
+ * The exact calculation depends on the values of
+ * `options.weekStartsOn` (which is the index of the first day of the week)
+ * and `options.firstWeekContainsDate` (which is the day of January, which is always in
+ * the first week of the week-numbering year)
+ *
+ * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
+ *
+ * @param date - The given date
+ * @param options - An object with options.
+ *
+ * @returns The local week-numbering year
+ *
+ * @example
+ * // Which week numbering year is 26 December 2004 with the default settings?
+ * const result = getWeekYear(new Date(2004, 11, 26))
+ * //=> 2005
+ *
+ * @example
+ * // Which week numbering year is 26 December 2004 if week starts on Saturday?
+ * const result = getWeekYear(new Date(2004, 11, 26), { weekStartsOn: 6 })
+ * //=> 2004
+ *
+ * @example
+ * // Which week numbering year is 26 December 2004 if the first week contains 4 January?
+ * const result = getWeekYear(new Date(2004, 11, 26), { firstWeekContainsDate: 4 })
+ * //=> 2004
+ */
+function getWeekYear_getWeekYear(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const year = _date.getFullYear();
+
+  const defaultOptions = defaultOptions_getDefaultOptions();
+  const firstWeekContainsDate =
+    options?.firstWeekContainsDate ??
+    options?.locale?.options?.firstWeekContainsDate ??
+    defaultOptions.firstWeekContainsDate ??
+    defaultOptions.locale?.options?.firstWeekContainsDate ??
+    1;
+
+  const firstWeekOfNextYear = constructFrom_constructFrom(options?.in || date, 0);
+  firstWeekOfNextYear.setFullYear(year + 1, 0, firstWeekContainsDate);
+  firstWeekOfNextYear.setHours(0, 0, 0, 0);
+  const startOfNextYear = startOfWeek_startOfWeek(firstWeekOfNextYear, options);
+
+  const firstWeekOfThisYear = constructFrom_constructFrom(options?.in || date, 0);
+  firstWeekOfThisYear.setFullYear(year, 0, firstWeekContainsDate);
+  firstWeekOfThisYear.setHours(0, 0, 0, 0);
+  const startOfThisYear = startOfWeek_startOfWeek(firstWeekOfThisYear, options);
+
+  if (+_date >= +startOfNextYear) {
+    return year + 1;
+  } else if (+_date >= +startOfThisYear) {
+    return year;
+  } else {
+    return year - 1;
+  }
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_getWeekYear = ((/* unused pure expression or super */ null && (getWeekYear_getWeekYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/startOfWeekYear.js
+
+
+
+
+
+/**
+ * The {@link startOfWeekYear} function options.
+ */
+
+/**
+ * @name startOfWeekYear
+ * @category Week-Numbering Year Helpers
+ * @summary Return the start of a local week-numbering year for the given date.
+ *
+ * @description
+ * Return the start of a local week-numbering year.
+ * The exact calculation depends on the values of
+ * `options.weekStartsOn` (which is the index of the first day of the week)
+ * and `options.firstWeekContainsDate` (which is the day of January, which is always in
+ * the first week of the week-numbering year)
+ *
+ * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of a week-numbering year
+ *
+ * @example
+ * // The start of an a week-numbering year for 2 July 2005 with default settings:
+ * const result = startOfWeekYear(new Date(2005, 6, 2))
+ * //=> Sun Dec 26 2004 00:00:00
+ *
+ * @example
+ * // The start of a week-numbering year for 2 July 2005
+ * // if Monday is the first day of week
+ * // and 4 January is always in the first week of the year:
+ * const result = startOfWeekYear(new Date(2005, 6, 2), {
+ *   weekStartsOn: 1,
+ *   firstWeekContainsDate: 4
+ * })
+ * //=> Mon Jan 03 2005 00:00:00
+ */
+function startOfWeekYear_startOfWeekYear(date, options) {
+  const defaultOptions = defaultOptions_getDefaultOptions();
+  const firstWeekContainsDate =
+    options?.firstWeekContainsDate ??
+    options?.locale?.options?.firstWeekContainsDate ??
+    defaultOptions.firstWeekContainsDate ??
+    defaultOptions.locale?.options?.firstWeekContainsDate ??
+    1;
+
+  const year = getWeekYear_getWeekYear(date, options);
+  const firstWeek = constructFrom_constructFrom(options?.in || date, 0);
+  firstWeek.setFullYear(year, 0, firstWeekContainsDate);
+  firstWeek.setHours(0, 0, 0, 0);
+  const _date = startOfWeek_startOfWeek(firstWeek, options);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_startOfWeekYear = ((/* unused pure expression or super */ null && (startOfWeekYear_startOfWeekYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/getWeek.js
+
+
+
+
+
+/**
+ * The {@link getWeek} function options.
+ */
+
+/**
+ * @name getWeek
+ * @category Week Helpers
+ * @summary Get the local week index of the given date.
+ *
+ * @description
+ * Get the local week index of the given date.
+ * The exact calculation depends on the values of
+ * `options.weekStartsOn` (which is the index of the first day of the week)
+ * and `options.firstWeekContainsDate` (which is the day of January, which is always in
+ * the first week of the week-numbering year)
+ *
+ * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
+ *
+ * @param date - The given date
+ * @param options - An object with options
+ *
+ * @returns The week
+ *
+ * @example
+ * // Which week of the local week numbering year is 2 January 2005 with default options?
+ * const result = getWeek(new Date(2005, 0, 2))
+ * //=> 2
+ *
+ * @example
+ * // Which week of the local week numbering year is 2 January 2005,
+ * // if Monday is the first day of the week,
+ * // and the first week of the year always contains 4 January?
+ * const result = getWeek(new Date(2005, 0, 2), {
+ *   weekStartsOn: 1,
+ *   firstWeekContainsDate: 4
+ * })
+ * //=> 53
+ */
+function getWeek_getWeek(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const diff = +startOfWeek_startOfWeek(_date, options) - +startOfWeekYear_startOfWeekYear(_date, options);
+
+  // Round the number of weeks to the nearest integer because the number of
+  // milliseconds in a week is not constant (e.g. it's different in the week of
+  // the daylight saving time clock shift).
+  return Math.round(diff / constants_millisecondsInWeek) + 1;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_getWeek = ((/* unused pure expression or super */ null && (getWeek_getWeek)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/addLeadingZeros.js
+function addLeadingZeros_addLeadingZeros(number, targetLength) {
+  const sign = number < 0 ? "-" : "";
+  const output = Math.abs(number).toString().padStart(targetLength, "0");
+  return sign + output;
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/format/lightFormatters.js
+
+
+/*
+ * |     | Unit                           |     | Unit                           |
+ * |-----|--------------------------------|-----|--------------------------------|
+ * |  a  | AM, PM                         |  A* |                                |
+ * |  d  | Day of month                   |  D  |                                |
+ * |  h  | Hour [1-12]                    |  H  | Hour [0-23]                    |
+ * |  m  | Minute                         |  M  | Month                          |
+ * |  s  | Second                         |  S  | Fraction of second             |
+ * |  y  | Year (abs)                     |  Y  |                                |
+ *
+ * Letters marked by * are not implemented but reserved by Unicode standard.
+ */
+
+const lightFormatters_lightFormatters = {
+  // Year
+  y(date, token) {
+    // From http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_tokens
+    // | Year     |     y | yy |   yyy |  yyyy | yyyyy |
+    // |----------|-------|----|-------|-------|-------|
+    // | AD 1     |     1 | 01 |   001 |  0001 | 00001 |
+    // | AD 12    |    12 | 12 |   012 |  0012 | 00012 |
+    // | AD 123   |   123 | 23 |   123 |  0123 | 00123 |
+    // | AD 1234  |  1234 | 34 |  1234 |  1234 | 01234 |
+    // | AD 12345 | 12345 | 45 | 12345 | 12345 | 12345 |
+
+    const signedYear = date.getFullYear();
+    // Returns 1 for 1 BC (which is year 0 in JavaScript)
+    const year = signedYear > 0 ? signedYear : 1 - signedYear;
+    return addLeadingZeros_addLeadingZeros(token === "yy" ? year % 100 : year, token.length);
+  },
+
+  // Month
+  M(date, token) {
+    const month = date.getMonth();
+    return token === "M" ? String(month + 1) : addLeadingZeros_addLeadingZeros(month + 1, 2);
+  },
+
+  // Day of the month
+  d(date, token) {
+    return addLeadingZeros_addLeadingZeros(date.getDate(), token.length);
+  },
+
+  // AM or PM
+  a(date, token) {
+    const dayPeriodEnumValue = date.getHours() / 12 >= 1 ? "pm" : "am";
+
+    switch (token) {
+      case "a":
+      case "aa":
+        return dayPeriodEnumValue.toUpperCase();
+      case "aaa":
+        return dayPeriodEnumValue;
+      case "aaaaa":
+        return dayPeriodEnumValue[0];
+      case "aaaa":
+      default:
+        return dayPeriodEnumValue === "am" ? "a.m." : "p.m.";
+    }
+  },
+
+  // Hour [1-12]
+  h(date, token) {
+    return addLeadingZeros_addLeadingZeros(date.getHours() % 12 || 12, token.length);
+  },
+
+  // Hour [0-23]
+  H(date, token) {
+    return addLeadingZeros_addLeadingZeros(date.getHours(), token.length);
+  },
+
+  // Minute
+  m(date, token) {
+    return addLeadingZeros_addLeadingZeros(date.getMinutes(), token.length);
+  },
+
+  // Second
+  s(date, token) {
+    return addLeadingZeros_addLeadingZeros(date.getSeconds(), token.length);
+  },
+
+  // Fraction of second
+  S(date, token) {
+    const numberOfDigits = token.length;
+    const milliseconds = date.getMilliseconds();
+    const fractionalSeconds = Math.trunc(
+      milliseconds * Math.pow(10, numberOfDigits - 3),
+    );
+    return addLeadingZeros_addLeadingZeros(fractionalSeconds, token.length);
+  },
+};
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/format/formatters.js
+
+
+
+
+
+
+
+
+
+const formatters_dayPeriodEnum = {
+  am: "am",
+  pm: "pm",
+  midnight: "midnight",
+  noon: "noon",
+  morning: "morning",
+  afternoon: "afternoon",
+  evening: "evening",
+  night: "night",
+};
+
+/*
+ * |     | Unit                           |     | Unit                           |
+ * |-----|--------------------------------|-----|--------------------------------|
+ * |  a  | AM, PM                         |  A* | Milliseconds in day            |
+ * |  b  | AM, PM, noon, midnight         |  B  | Flexible day period            |
+ * |  c  | Stand-alone local day of week  |  C* | Localized hour w/ day period   |
+ * |  d  | Day of month                   |  D  | Day of year                    |
+ * |  e  | Local day of week              |  E  | Day of week                    |
+ * |  f  |                                |  F* | Day of week in month           |
+ * |  g* | Modified Julian day            |  G  | Era                            |
+ * |  h  | Hour [1-12]                    |  H  | Hour [0-23]                    |
+ * |  i! | ISO day of week                |  I! | ISO week of year               |
+ * |  j* | Localized hour w/ day period   |  J* | Localized hour w/o day period  |
+ * |  k  | Hour [1-24]                    |  K  | Hour [0-11]                    |
+ * |  l* | (deprecated)                   |  L  | Stand-alone month              |
+ * |  m  | Minute                         |  M  | Month                          |
+ * |  n  |                                |  N  |                                |
+ * |  o! | Ordinal number modifier        |  O  | Timezone (GMT)                 |
+ * |  p! | Long localized time            |  P! | Long localized date            |
+ * |  q  | Stand-alone quarter            |  Q  | Quarter                        |
+ * |  r* | Related Gregorian year         |  R! | ISO week-numbering year        |
+ * |  s  | Second                         |  S  | Fraction of second             |
+ * |  t! | Seconds timestamp              |  T! | Milliseconds timestamp         |
+ * |  u  | Extended year                  |  U* | Cyclic year                    |
+ * |  v* | Timezone (generic non-locat.)  |  V* | Timezone (location)            |
+ * |  w  | Local week of year             |  W* | Week of month                  |
+ * |  x  | Timezone (ISO-8601 w/o Z)      |  X  | Timezone (ISO-8601)            |
+ * |  y  | Year (abs)                     |  Y  | Local week-numbering year      |
+ * |  z  | Timezone (specific non-locat.) |  Z* | Timezone (aliases)             |
+ *
+ * Letters marked by * are not implemented but reserved by Unicode standard.
+ *
+ * Letters marked by ! are non-standard, but implemented by date-fns:
+ * - `o` modifies the previous token to turn it into an ordinal (see `format` docs)
+ * - `i` is ISO day of week. For `i` and `ii` is returns numeric ISO week days,
+ *   i.e. 7 for Sunday, 1 for Monday, etc.
+ * - `I` is ISO week of year, as opposed to `w` which is local week of year.
+ * - `R` is ISO week-numbering year, as opposed to `Y` which is local week-numbering year.
+ *   `R` is supposed to be used in conjunction with `I` and `i`
+ *   for universal ISO week-numbering date, whereas
+ *   `Y` is supposed to be used in conjunction with `w` and `e`
+ *   for week-numbering date specific to the locale.
+ * - `P` is long localized date format
+ * - `p` is long localized time format
+ */
+
+const formatters_formatters = {
+  // Era
+  G: function (date, token, localize) {
+    const era = date.getFullYear() > 0 ? 1 : 0;
+    switch (token) {
+      // AD, BC
+      case "G":
+      case "GG":
+      case "GGG":
+        return localize.era(era, { width: "abbreviated" });
+      // A, B
+      case "GGGGG":
+        return localize.era(era, { width: "narrow" });
+      // Anno Domini, Before Christ
+      case "GGGG":
+      default:
+        return localize.era(era, { width: "wide" });
+    }
+  },
+
+  // Year
+  y: function (date, token, localize) {
+    // Ordinal number
+    if (token === "yo") {
+      const signedYear = date.getFullYear();
+      // Returns 1 for 1 BC (which is year 0 in JavaScript)
+      const year = signedYear > 0 ? signedYear : 1 - signedYear;
+      return localize.ordinalNumber(year, { unit: "year" });
+    }
+
+    return lightFormatters_lightFormatters.y(date, token);
+  },
+
+  // Local week-numbering year
+  Y: function (date, token, localize, options) {
+    const signedWeekYear = getWeekYear_getWeekYear(date, options);
+    // Returns 1 for 1 BC (which is year 0 in JavaScript)
+    const weekYear = signedWeekYear > 0 ? signedWeekYear : 1 - signedWeekYear;
+
+    // Two digit year
+    if (token === "YY") {
+      const twoDigitYear = weekYear % 100;
+      return addLeadingZeros_addLeadingZeros(twoDigitYear, 2);
+    }
+
+    // Ordinal number
+    if (token === "Yo") {
+      return localize.ordinalNumber(weekYear, { unit: "year" });
+    }
+
+    // Padding
+    return addLeadingZeros_addLeadingZeros(weekYear, token.length);
+  },
+
+  // ISO week-numbering year
+  R: function (date, token) {
+    const isoWeekYear = getISOWeekYear_getISOWeekYear(date);
+
+    // Padding
+    return addLeadingZeros_addLeadingZeros(isoWeekYear, token.length);
+  },
+
+  // Extended year. This is a single number designating the year of this calendar system.
+  // The main difference between `y` and `u` localizers are B.C. years:
+  // | Year | `y` | `u` |
+  // |------|-----|-----|
+  // | AC 1 |   1 |   1 |
+  // | BC 1 |   1 |   0 |
+  // | BC 2 |   2 |  -1 |
+  // Also `yy` always returns the last two digits of a year,
+  // while `uu` pads single digit years to 2 characters and returns other years unchanged.
+  u: function (date, token) {
+    const year = date.getFullYear();
+    return addLeadingZeros_addLeadingZeros(year, token.length);
+  },
+
+  // Quarter
+  Q: function (date, token, localize) {
+    const quarter = Math.ceil((date.getMonth() + 1) / 3);
+    switch (token) {
+      // 1, 2, 3, 4
+      case "Q":
+        return String(quarter);
+      // 01, 02, 03, 04
+      case "QQ":
+        return addLeadingZeros_addLeadingZeros(quarter, 2);
+      // 1st, 2nd, 3rd, 4th
+      case "Qo":
+        return localize.ordinalNumber(quarter, { unit: "quarter" });
+      // Q1, Q2, Q3, Q4
+      case "QQQ":
+        return localize.quarter(quarter, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // 1, 2, 3, 4 (narrow quarter; could be not numerical)
+      case "QQQQQ":
+        return localize.quarter(quarter, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // 1st quarter, 2nd quarter, ...
+      case "QQQQ":
+      default:
+        return localize.quarter(quarter, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // Stand-alone quarter
+  q: function (date, token, localize) {
+    const quarter = Math.ceil((date.getMonth() + 1) / 3);
+    switch (token) {
+      // 1, 2, 3, 4
+      case "q":
+        return String(quarter);
+      // 01, 02, 03, 04
+      case "qq":
+        return addLeadingZeros_addLeadingZeros(quarter, 2);
+      // 1st, 2nd, 3rd, 4th
+      case "qo":
+        return localize.ordinalNumber(quarter, { unit: "quarter" });
+      // Q1, Q2, Q3, Q4
+      case "qqq":
+        return localize.quarter(quarter, {
+          width: "abbreviated",
+          context: "standalone",
+        });
+      // 1, 2, 3, 4 (narrow quarter; could be not numerical)
+      case "qqqqq":
+        return localize.quarter(quarter, {
+          width: "narrow",
+          context: "standalone",
+        });
+      // 1st quarter, 2nd quarter, ...
+      case "qqqq":
+      default:
+        return localize.quarter(quarter, {
+          width: "wide",
+          context: "standalone",
+        });
+    }
+  },
+
+  // Month
+  M: function (date, token, localize) {
+    const month = date.getMonth();
+    switch (token) {
+      case "M":
+      case "MM":
+        return lightFormatters_lightFormatters.M(date, token);
+      // 1st, 2nd, ..., 12th
+      case "Mo":
+        return localize.ordinalNumber(month + 1, { unit: "month" });
+      // Jan, Feb, ..., Dec
+      case "MMM":
+        return localize.month(month, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // J, F, ..., D
+      case "MMMMM":
+        return localize.month(month, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // January, February, ..., December
+      case "MMMM":
+      default:
+        return localize.month(month, { width: "wide", context: "formatting" });
+    }
+  },
+
+  // Stand-alone month
+  L: function (date, token, localize) {
+    const month = date.getMonth();
+    switch (token) {
+      // 1, 2, ..., 12
+      case "L":
+        return String(month + 1);
+      // 01, 02, ..., 12
+      case "LL":
+        return addLeadingZeros_addLeadingZeros(month + 1, 2);
+      // 1st, 2nd, ..., 12th
+      case "Lo":
+        return localize.ordinalNumber(month + 1, { unit: "month" });
+      // Jan, Feb, ..., Dec
+      case "LLL":
+        return localize.month(month, {
+          width: "abbreviated",
+          context: "standalone",
+        });
+      // J, F, ..., D
+      case "LLLLL":
+        return localize.month(month, {
+          width: "narrow",
+          context: "standalone",
+        });
+      // January, February, ..., December
+      case "LLLL":
+      default:
+        return localize.month(month, { width: "wide", context: "standalone" });
+    }
+  },
+
+  // Local week of year
+  w: function (date, token, localize, options) {
+    const week = getWeek_getWeek(date, options);
+
+    if (token === "wo") {
+      return localize.ordinalNumber(week, { unit: "week" });
+    }
+
+    return addLeadingZeros_addLeadingZeros(week, token.length);
+  },
+
+  // ISO week of year
+  I: function (date, token, localize) {
+    const isoWeek = getISOWeek_getISOWeek(date);
+
+    if (token === "Io") {
+      return localize.ordinalNumber(isoWeek, { unit: "week" });
+    }
+
+    return addLeadingZeros_addLeadingZeros(isoWeek, token.length);
+  },
+
+  // Day of the month
+  d: function (date, token, localize) {
+    if (token === "do") {
+      return localize.ordinalNumber(date.getDate(), { unit: "date" });
+    }
+
+    return lightFormatters_lightFormatters.d(date, token);
+  },
+
+  // Day of year
+  D: function (date, token, localize) {
+    const dayOfYear = getDayOfYear_getDayOfYear(date);
+
+    if (token === "Do") {
+      return localize.ordinalNumber(dayOfYear, { unit: "dayOfYear" });
+    }
+
+    return addLeadingZeros_addLeadingZeros(dayOfYear, token.length);
+  },
+
+  // Day of week
+  E: function (date, token, localize) {
+    const dayOfWeek = date.getDay();
+    switch (token) {
+      // Tue
+      case "E":
+      case "EE":
+      case "EEE":
+        return localize.day(dayOfWeek, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // T
+      case "EEEEE":
+        return localize.day(dayOfWeek, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // Tu
+      case "EEEEEE":
+        return localize.day(dayOfWeek, {
+          width: "short",
+          context: "formatting",
+        });
+      // Tuesday
+      case "EEEE":
+      default:
+        return localize.day(dayOfWeek, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // Local day of week
+  e: function (date, token, localize, options) {
+    const dayOfWeek = date.getDay();
+    const localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
+    switch (token) {
+      // Numerical value (Nth day of week with current locale or weekStartsOn)
+      case "e":
+        return String(localDayOfWeek);
+      // Padded numerical value
+      case "ee":
+        return addLeadingZeros_addLeadingZeros(localDayOfWeek, 2);
+      // 1st, 2nd, ..., 7th
+      case "eo":
+        return localize.ordinalNumber(localDayOfWeek, { unit: "day" });
+      case "eee":
+        return localize.day(dayOfWeek, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // T
+      case "eeeee":
+        return localize.day(dayOfWeek, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // Tu
+      case "eeeeee":
+        return localize.day(dayOfWeek, {
+          width: "short",
+          context: "formatting",
+        });
+      // Tuesday
+      case "eeee":
+      default:
+        return localize.day(dayOfWeek, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // Stand-alone local day of week
+  c: function (date, token, localize, options) {
+    const dayOfWeek = date.getDay();
+    const localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
+    switch (token) {
+      // Numerical value (same as in `e`)
+      case "c":
+        return String(localDayOfWeek);
+      // Padded numerical value
+      case "cc":
+        return addLeadingZeros_addLeadingZeros(localDayOfWeek, token.length);
+      // 1st, 2nd, ..., 7th
+      case "co":
+        return localize.ordinalNumber(localDayOfWeek, { unit: "day" });
+      case "ccc":
+        return localize.day(dayOfWeek, {
+          width: "abbreviated",
+          context: "standalone",
+        });
+      // T
+      case "ccccc":
+        return localize.day(dayOfWeek, {
+          width: "narrow",
+          context: "standalone",
+        });
+      // Tu
+      case "cccccc":
+        return localize.day(dayOfWeek, {
+          width: "short",
+          context: "standalone",
+        });
+      // Tuesday
+      case "cccc":
+      default:
+        return localize.day(dayOfWeek, {
+          width: "wide",
+          context: "standalone",
+        });
+    }
+  },
+
+  // ISO day of week
+  i: function (date, token, localize) {
+    const dayOfWeek = date.getDay();
+    const isoDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
+    switch (token) {
+      // 2
+      case "i":
+        return String(isoDayOfWeek);
+      // 02
+      case "ii":
+        return addLeadingZeros_addLeadingZeros(isoDayOfWeek, token.length);
+      // 2nd
+      case "io":
+        return localize.ordinalNumber(isoDayOfWeek, { unit: "day" });
+      // Tue
+      case "iii":
+        return localize.day(dayOfWeek, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      // T
+      case "iiiii":
+        return localize.day(dayOfWeek, {
+          width: "narrow",
+          context: "formatting",
+        });
+      // Tu
+      case "iiiiii":
+        return localize.day(dayOfWeek, {
+          width: "short",
+          context: "formatting",
+        });
+      // Tuesday
+      case "iiii":
+      default:
+        return localize.day(dayOfWeek, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // AM or PM
+  a: function (date, token, localize) {
+    const hours = date.getHours();
+    const dayPeriodEnumValue = hours / 12 >= 1 ? "pm" : "am";
+
+    switch (token) {
+      case "a":
+      case "aa":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      case "aaa":
+        return localize
+          .dayPeriod(dayPeriodEnumValue, {
+            width: "abbreviated",
+            context: "formatting",
+          })
+          .toLowerCase();
+      case "aaaaa":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "narrow",
+          context: "formatting",
+        });
+      case "aaaa":
+      default:
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // AM, PM, midnight, noon
+  b: function (date, token, localize) {
+    const hours = date.getHours();
+    let dayPeriodEnumValue;
+    if (hours === 12) {
+      dayPeriodEnumValue = formatters_dayPeriodEnum.noon;
+    } else if (hours === 0) {
+      dayPeriodEnumValue = formatters_dayPeriodEnum.midnight;
+    } else {
+      dayPeriodEnumValue = hours / 12 >= 1 ? "pm" : "am";
+    }
+
+    switch (token) {
+      case "b":
+      case "bb":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      case "bbb":
+        return localize
+          .dayPeriod(dayPeriodEnumValue, {
+            width: "abbreviated",
+            context: "formatting",
+          })
+          .toLowerCase();
+      case "bbbbb":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "narrow",
+          context: "formatting",
+        });
+      case "bbbb":
+      default:
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // in the morning, in the afternoon, in the evening, at night
+  B: function (date, token, localize) {
+    const hours = date.getHours();
+    let dayPeriodEnumValue;
+    if (hours >= 17) {
+      dayPeriodEnumValue = formatters_dayPeriodEnum.evening;
+    } else if (hours >= 12) {
+      dayPeriodEnumValue = formatters_dayPeriodEnum.afternoon;
+    } else if (hours >= 4) {
+      dayPeriodEnumValue = formatters_dayPeriodEnum.morning;
+    } else {
+      dayPeriodEnumValue = formatters_dayPeriodEnum.night;
+    }
+
+    switch (token) {
+      case "B":
+      case "BB":
+      case "BBB":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "abbreviated",
+          context: "formatting",
+        });
+      case "BBBBB":
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "narrow",
+          context: "formatting",
+        });
+      case "BBBB":
+      default:
+        return localize.dayPeriod(dayPeriodEnumValue, {
+          width: "wide",
+          context: "formatting",
+        });
+    }
+  },
+
+  // Hour [1-12]
+  h: function (date, token, localize) {
+    if (token === "ho") {
+      let hours = date.getHours() % 12;
+      if (hours === 0) hours = 12;
+      return localize.ordinalNumber(hours, { unit: "hour" });
+    }
+
+    return lightFormatters_lightFormatters.h(date, token);
+  },
+
+  // Hour [0-23]
+  H: function (date, token, localize) {
+    if (token === "Ho") {
+      return localize.ordinalNumber(date.getHours(), { unit: "hour" });
+    }
+
+    return lightFormatters_lightFormatters.H(date, token);
+  },
+
+  // Hour [0-11]
+  K: function (date, token, localize) {
+    const hours = date.getHours() % 12;
+
+    if (token === "Ko") {
+      return localize.ordinalNumber(hours, { unit: "hour" });
+    }
+
+    return addLeadingZeros_addLeadingZeros(hours, token.length);
+  },
+
+  // Hour [1-24]
+  k: function (date, token, localize) {
+    let hours = date.getHours();
+    if (hours === 0) hours = 24;
+
+    if (token === "ko") {
+      return localize.ordinalNumber(hours, { unit: "hour" });
+    }
+
+    return addLeadingZeros_addLeadingZeros(hours, token.length);
+  },
+
+  // Minute
+  m: function (date, token, localize) {
+    if (token === "mo") {
+      return localize.ordinalNumber(date.getMinutes(), { unit: "minute" });
+    }
+
+    return lightFormatters_lightFormatters.m(date, token);
+  },
+
+  // Second
+  s: function (date, token, localize) {
+    if (token === "so") {
+      return localize.ordinalNumber(date.getSeconds(), { unit: "second" });
+    }
+
+    return lightFormatters_lightFormatters.s(date, token);
+  },
+
+  // Fraction of second
+  S: function (date, token) {
+    return lightFormatters_lightFormatters.S(date, token);
+  },
+
+  // Timezone (ISO-8601. If offset is 0, output is always `'Z'`)
+  X: function (date, token, _localize) {
+    const timezoneOffset = date.getTimezoneOffset();
+
+    if (timezoneOffset === 0) {
+      return "Z";
+    }
+
+    switch (token) {
+      // Hours and optional minutes
+      case "X":
+        return formatters_formatTimezoneWithOptionalMinutes(timezoneOffset);
+
+      // Hours, minutes and optional seconds without `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `XX`
+      case "XXXX":
+      case "XX": // Hours and minutes without `:` delimiter
+        return formatters_formatTimezone(timezoneOffset);
+
+      // Hours, minutes and optional seconds with `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `XXX`
+      case "XXXXX":
+      case "XXX": // Hours and minutes with `:` delimiter
+      default:
+        return formatters_formatTimezone(timezoneOffset, ":");
+    }
+  },
+
+  // Timezone (ISO-8601. If offset is 0, output is `'+00:00'` or equivalent)
+  x: function (date, token, _localize) {
+    const timezoneOffset = date.getTimezoneOffset();
+
+    switch (token) {
+      // Hours and optional minutes
+      case "x":
+        return formatters_formatTimezoneWithOptionalMinutes(timezoneOffset);
+
+      // Hours, minutes and optional seconds without `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `xx`
+      case "xxxx":
+      case "xx": // Hours and minutes without `:` delimiter
+        return formatters_formatTimezone(timezoneOffset);
+
+      // Hours, minutes and optional seconds with `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `xxx`
+      case "xxxxx":
+      case "xxx": // Hours and minutes with `:` delimiter
+      default:
+        return formatters_formatTimezone(timezoneOffset, ":");
+    }
+  },
+
+  // Timezone (GMT)
+  O: function (date, token, _localize) {
+    const timezoneOffset = date.getTimezoneOffset();
+
+    switch (token) {
+      // Short
+      case "O":
+      case "OO":
+      case "OOO":
+        return "GMT" + formatters_formatTimezoneShort(timezoneOffset, ":");
+      // Long
+      case "OOOO":
+      default:
+        return "GMT" + formatters_formatTimezone(timezoneOffset, ":");
+    }
+  },
+
+  // Timezone (specific non-location)
+  z: function (date, token, _localize) {
+    const timezoneOffset = date.getTimezoneOffset();
+
+    switch (token) {
+      // Short
+      case "z":
+      case "zz":
+      case "zzz":
+        return "GMT" + formatters_formatTimezoneShort(timezoneOffset, ":");
+      // Long
+      case "zzzz":
+      default:
+        return "GMT" + formatters_formatTimezone(timezoneOffset, ":");
+    }
+  },
+
+  // Seconds timestamp
+  t: function (date, token, _localize) {
+    const timestamp = Math.trunc(+date / 1000);
+    return addLeadingZeros_addLeadingZeros(timestamp, token.length);
+  },
+
+  // Milliseconds timestamp
+  T: function (date, token, _localize) {
+    return addLeadingZeros_addLeadingZeros(+date, token.length);
+  },
+};
+
+function formatters_formatTimezoneShort(offset, delimiter = "") {
+  const sign = offset > 0 ? "-" : "+";
+  const absOffset = Math.abs(offset);
+  const hours = Math.trunc(absOffset / 60);
+  const minutes = absOffset % 60;
+  if (minutes === 0) {
+    return sign + String(hours);
+  }
+  return sign + String(hours) + delimiter + addLeadingZeros_addLeadingZeros(minutes, 2);
+}
+
+function formatters_formatTimezoneWithOptionalMinutes(offset, delimiter) {
+  if (offset % 60 === 0) {
+    const sign = offset > 0 ? "-" : "+";
+    return sign + addLeadingZeros_addLeadingZeros(Math.abs(offset) / 60, 2);
+  }
+  return formatters_formatTimezone(offset, delimiter);
+}
+
+function formatters_formatTimezone(offset, delimiter = "") {
+  const sign = offset > 0 ? "-" : "+";
+  const absOffset = Math.abs(offset);
+  const hours = addLeadingZeros_addLeadingZeros(Math.trunc(absOffset / 60), 2);
+  const minutes = addLeadingZeros_addLeadingZeros(absOffset % 60, 2);
+  return sign + hours + delimiter + minutes;
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/format/longFormatters.js
+const longFormatters_dateLongFormatter = (pattern, formatLong) => {
+  switch (pattern) {
+    case "P":
+      return formatLong.date({ width: "short" });
+    case "PP":
+      return formatLong.date({ width: "medium" });
+    case "PPP":
+      return formatLong.date({ width: "long" });
+    case "PPPP":
+    default:
+      return formatLong.date({ width: "full" });
+  }
+};
+
+const longFormatters_timeLongFormatter = (pattern, formatLong) => {
+  switch (pattern) {
+    case "p":
+      return formatLong.time({ width: "short" });
+    case "pp":
+      return formatLong.time({ width: "medium" });
+    case "ppp":
+      return formatLong.time({ width: "long" });
+    case "pppp":
+    default:
+      return formatLong.time({ width: "full" });
+  }
+};
+
+const longFormatters_dateTimeLongFormatter = (pattern, formatLong) => {
+  const matchResult = pattern.match(/(P+)(p+)?/) || [];
+  const datePattern = matchResult[1];
+  const timePattern = matchResult[2];
+
+  if (!timePattern) {
+    return longFormatters_dateLongFormatter(pattern, formatLong);
+  }
+
+  let dateTimeFormat;
+
+  switch (datePattern) {
+    case "P":
+      dateTimeFormat = formatLong.dateTime({ width: "short" });
+      break;
+    case "PP":
+      dateTimeFormat = formatLong.dateTime({ width: "medium" });
+      break;
+    case "PPP":
+      dateTimeFormat = formatLong.dateTime({ width: "long" });
+      break;
+    case "PPPP":
+    default:
+      dateTimeFormat = formatLong.dateTime({ width: "full" });
+      break;
+  }
+
+  return dateTimeFormat
+    .replace("{{date}}", longFormatters_dateLongFormatter(datePattern, formatLong))
+    .replace("{{time}}", longFormatters_timeLongFormatter(timePattern, formatLong));
+};
+
+const longFormatters_longFormatters = {
+  p: longFormatters_timeLongFormatter,
+  P: longFormatters_dateTimeLongFormatter,
+};
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/_lib/protectedTokens.js
+const protectedTokens_dayOfYearTokenRE = /^D+$/;
+const protectedTokens_weekYearTokenRE = /^Y+$/;
+
+const protectedTokens_throwTokens = ["D", "DD", "YY", "YYYY"];
+
+function protectedTokens_isProtectedDayOfYearToken(token) {
+  return protectedTokens_dayOfYearTokenRE.test(token);
+}
+
+function protectedTokens_isProtectedWeekYearToken(token) {
+  return protectedTokens_weekYearTokenRE.test(token);
+}
+
+function protectedTokens_warnOrThrowProtectedError(token, format, input) {
+  const _message = protectedTokens_message(token, format, input);
+  console.warn(_message);
+  if (protectedTokens_throwTokens.includes(token)) throw new RangeError(_message);
+}
+
+function protectedTokens_message(token, format, input) {
+  const subject = token[0] === "Y" ? "years" : "days of the month";
+  return `Use \`${token.toLowerCase()}\` instead of \`${token}\` (in \`${format}\`) for formatting ${subject} to the input \`${input}\`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md`;
+}
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/isDate.js
+/**
+ * @name isDate
+ * @category Common Helpers
+ * @summary Is the given value a date?
+ *
+ * @description
+ * Returns true if the given value is an instance of Date. The function works for dates transferred across iframes.
+ *
+ * @param value - The value to check
+ *
+ * @returns True if the given value is a date
+ *
+ * @example
+ * // For a valid date:
+ * const result = isDate(new Date())
+ * //=> true
+ *
+ * @example
+ * // For an invalid date:
+ * const result = isDate(new Date(NaN))
+ * //=> true
+ *
+ * @example
+ * // For some value:
+ * const result = isDate('2014-02-31')
+ * //=> false
+ *
+ * @example
+ * // For an object:
+ * const result = isDate({})
+ * //=> false
+ */
+function isDate_isDate(value) {
+  return (
+    value instanceof Date ||
+    (typeof value === "object" &&
+      Object.prototype.toString.call(value) === "[object Date]")
+  );
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_isDate = ((/* unused pure expression or super */ null && (isDate_isDate)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/isValid.js
+
+
+
+/**
+ * @name isValid
+ * @category Common Helpers
+ * @summary Is the given date valid?
+ *
+ * @description
+ * Returns false if argument is Invalid Date and true otherwise.
+ * Argument is converted to Date using `toDate`. See [toDate](https://date-fns.org/docs/toDate)
+ * Invalid Date is a Date, whose time value is NaN.
+ *
+ * Time value of Date: http://es5.github.io/#x15.9.1.1
+ *
+ * @param date - The date to check
+ *
+ * @returns The date is valid
+ *
+ * @example
+ * // For the valid date:
+ * const result = isValid(new Date(2014, 1, 31))
+ * //=> true
+ *
+ * @example
+ * // For the value, convertible into a date:
+ * const result = isValid(1393804800000)
+ * //=> true
+ *
+ * @example
+ * // For the invalid date:
+ * const result = isValid(new Date(''))
+ * //=> false
+ */
+function isValid_isValid(date) {
+  return !((!isDate_isDate(date) && typeof date !== "number") || isNaN(+toDate_toDate(date)));
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_isValid = ((/* unused pure expression or super */ null && (isValid_isValid)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/format.js
+
+
+
+
+
+
+
+
+// Rexports of internal for libraries to use.
+// See: https://github.com/date-fns/date-fns/issues/3638#issuecomment-1877082874
+
+
+// This RegExp consists of three parts separated by `|`:
+// - [yYQqMLwIdDecihHKkms]o matches any available ordinal number token
+//   (one of the certain letters followed by `o`)
+// - (\w)\1* matches any sequences of the same letter
+// - '' matches two quote characters in a row
+// - '(''|[^'])+('|$) matches anything surrounded by two quote characters ('),
+//   except a single quote symbol, which ends the sequence.
+//   Two quote characters do not end the sequence.
+//   If there is no matching single quote
+//   then the sequence will continue until the end of the string.
+// - . matches any single character unmatched by previous parts of the RegExps
+const format_formattingTokensRegExp =
+  /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|$)|./g;
+
+// This RegExp catches symbols escaped by quotes, and also
+// sequences of symbols P, p, and the combinations like `PPPPPPPppppp`
+const format_longFormattingTokensRegExp = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
+
+const format_escapedStringRegExp = /^'([^]*?)'?$/;
+const format_doubleQuoteRegExp = /''/g;
+const format_unescapedLatinCharacterRegExp = /[a-zA-Z]/;
+
+
+
+/**
+ * The {@link format} function options.
+ */
+
+/**
+ * @name format
+ * @alias formatDate
+ * @category Common Helpers
+ * @summary Format the date.
+ *
+ * @description
+ * Return the formatted date string in the given format. The result may vary by locale.
+ *
+ * > ⚠️ Please note that the `format` tokens differ from Moment.js and other libraries.
+ * > See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ *
+ * The characters wrapped between two single quotes characters (') are escaped.
+ * Two single quotes in a row, whether inside or outside a quoted sequence, represent a 'real' single quote.
+ * (see the last example)
+ *
+ * Format of the string is based on Unicode Technical Standard #35:
+ * https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+ * with a few additions (see note 7 below the table).
+ *
+ * Accepted patterns:
+ * | Unit                            | Pattern | Result examples                   | Notes |
+ * |---------------------------------|---------|-----------------------------------|-------|
+ * | Era                             | G..GGG  | AD, BC                            |       |
+ * |                                 | GGGG    | Anno Domini, Before Christ        | 2     |
+ * |                                 | GGGGG   | A, B                              |       |
+ * | Calendar year                   | y       | 44, 1, 1900, 2017                 | 5     |
+ * |                                 | yo      | 44th, 1st, 0th, 17th              | 5,7   |
+ * |                                 | yy      | 44, 01, 00, 17                    | 5     |
+ * |                                 | yyy     | 044, 001, 1900, 2017              | 5     |
+ * |                                 | yyyy    | 0044, 0001, 1900, 2017            | 5     |
+ * |                                 | yyyyy   | ...                               | 3,5   |
+ * | Local week-numbering year       | Y       | 44, 1, 1900, 2017                 | 5     |
+ * |                                 | Yo      | 44th, 1st, 1900th, 2017th         | 5,7   |
+ * |                                 | YY      | 44, 01, 00, 17                    | 5,8   |
+ * |                                 | YYY     | 044, 001, 1900, 2017              | 5     |
+ * |                                 | YYYY    | 0044, 0001, 1900, 2017            | 5,8   |
+ * |                                 | YYYYY   | ...                               | 3,5   |
+ * | ISO week-numbering year         | R       | -43, 0, 1, 1900, 2017             | 5,7   |
+ * |                                 | RR      | -43, 00, 01, 1900, 2017           | 5,7   |
+ * |                                 | RRR     | -043, 000, 001, 1900, 2017        | 5,7   |
+ * |                                 | RRRR    | -0043, 0000, 0001, 1900, 2017     | 5,7   |
+ * |                                 | RRRRR   | ...                               | 3,5,7 |
+ * | Extended year                   | u       | -43, 0, 1, 1900, 2017             | 5     |
+ * |                                 | uu      | -43, 01, 1900, 2017               | 5     |
+ * |                                 | uuu     | -043, 001, 1900, 2017             | 5     |
+ * |                                 | uuuu    | -0043, 0001, 1900, 2017           | 5     |
+ * |                                 | uuuuu   | ...                               | 3,5   |
+ * | Quarter (formatting)            | Q       | 1, 2, 3, 4                        |       |
+ * |                                 | Qo      | 1st, 2nd, 3rd, 4th                | 7     |
+ * |                                 | QQ      | 01, 02, 03, 04                    |       |
+ * |                                 | QQQ     | Q1, Q2, Q3, Q4                    |       |
+ * |                                 | QQQQ    | 1st quarter, 2nd quarter, ...     | 2     |
+ * |                                 | QQQQQ   | 1, 2, 3, 4                        | 4     |
+ * | Quarter (stand-alone)           | q       | 1, 2, 3, 4                        |       |
+ * |                                 | qo      | 1st, 2nd, 3rd, 4th                | 7     |
+ * |                                 | qq      | 01, 02, 03, 04                    |       |
+ * |                                 | qqq     | Q1, Q2, Q3, Q4                    |       |
+ * |                                 | qqqq    | 1st quarter, 2nd quarter, ...     | 2     |
+ * |                                 | qqqqq   | 1, 2, 3, 4                        | 4     |
+ * | Month (formatting)              | M       | 1, 2, ..., 12                     |       |
+ * |                                 | Mo      | 1st, 2nd, ..., 12th               | 7     |
+ * |                                 | MM      | 01, 02, ..., 12                   |       |
+ * |                                 | MMM     | Jan, Feb, ..., Dec                |       |
+ * |                                 | MMMM    | January, February, ..., December  | 2     |
+ * |                                 | MMMMM   | J, F, ..., D                      |       |
+ * | Month (stand-alone)             | L       | 1, 2, ..., 12                     |       |
+ * |                                 | Lo      | 1st, 2nd, ..., 12th               | 7     |
+ * |                                 | LL      | 01, 02, ..., 12                   |       |
+ * |                                 | LLL     | Jan, Feb, ..., Dec                |       |
+ * |                                 | LLLL    | January, February, ..., December  | 2     |
+ * |                                 | LLLLL   | J, F, ..., D                      |       |
+ * | Local week of year              | w       | 1, 2, ..., 53                     |       |
+ * |                                 | wo      | 1st, 2nd, ..., 53th               | 7     |
+ * |                                 | ww      | 01, 02, ..., 53                   |       |
+ * | ISO week of year                | I       | 1, 2, ..., 53                     | 7     |
+ * |                                 | Io      | 1st, 2nd, ..., 53th               | 7     |
+ * |                                 | II      | 01, 02, ..., 53                   | 7     |
+ * | Day of month                    | d       | 1, 2, ..., 31                     |       |
+ * |                                 | do      | 1st, 2nd, ..., 31st               | 7     |
+ * |                                 | dd      | 01, 02, ..., 31                   |       |
+ * | Day of year                     | D       | 1, 2, ..., 365, 366               | 9     |
+ * |                                 | Do      | 1st, 2nd, ..., 365th, 366th       | 7     |
+ * |                                 | DD      | 01, 02, ..., 365, 366             | 9     |
+ * |                                 | DDD     | 001, 002, ..., 365, 366           |       |
+ * |                                 | DDDD    | ...                               | 3     |
+ * | Day of week (formatting)        | E..EEE  | Mon, Tue, Wed, ..., Sun           |       |
+ * |                                 | EEEE    | Monday, Tuesday, ..., Sunday      | 2     |
+ * |                                 | EEEEE   | M, T, W, T, F, S, S               |       |
+ * |                                 | EEEEEE  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * | ISO day of week (formatting)    | i       | 1, 2, 3, ..., 7                   | 7     |
+ * |                                 | io      | 1st, 2nd, ..., 7th                | 7     |
+ * |                                 | ii      | 01, 02, ..., 07                   | 7     |
+ * |                                 | iii     | Mon, Tue, Wed, ..., Sun           | 7     |
+ * |                                 | iiii    | Monday, Tuesday, ..., Sunday      | 2,7   |
+ * |                                 | iiiii   | M, T, W, T, F, S, S               | 7     |
+ * |                                 | iiiiii  | Mo, Tu, We, Th, Fr, Sa, Su        | 7     |
+ * | Local day of week (formatting)  | e       | 2, 3, 4, ..., 1                   |       |
+ * |                                 | eo      | 2nd, 3rd, ..., 1st                | 7     |
+ * |                                 | ee      | 02, 03, ..., 01                   |       |
+ * |                                 | eee     | Mon, Tue, Wed, ..., Sun           |       |
+ * |                                 | eeee    | Monday, Tuesday, ..., Sunday      | 2     |
+ * |                                 | eeeee   | M, T, W, T, F, S, S               |       |
+ * |                                 | eeeeee  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * | Local day of week (stand-alone) | c       | 2, 3, 4, ..., 1                   |       |
+ * |                                 | co      | 2nd, 3rd, ..., 1st                | 7     |
+ * |                                 | cc      | 02, 03, ..., 01                   |       |
+ * |                                 | ccc     | Mon, Tue, Wed, ..., Sun           |       |
+ * |                                 | cccc    | Monday, Tuesday, ..., Sunday      | 2     |
+ * |                                 | ccccc   | M, T, W, T, F, S, S               |       |
+ * |                                 | cccccc  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * | AM, PM                          | a..aa   | AM, PM                            |       |
+ * |                                 | aaa     | am, pm                            |       |
+ * |                                 | aaaa    | a.m., p.m.                        | 2     |
+ * |                                 | aaaaa   | a, p                              |       |
+ * | AM, PM, noon, midnight          | b..bb   | AM, PM, noon, midnight            |       |
+ * |                                 | bbb     | am, pm, noon, midnight            |       |
+ * |                                 | bbbb    | a.m., p.m., noon, midnight        | 2     |
+ * |                                 | bbbbb   | a, p, n, mi                       |       |
+ * | Flexible day period             | B..BBB  | at night, in the morning, ...     |       |
+ * |                                 | BBBB    | at night, in the morning, ...     | 2     |
+ * |                                 | BBBBB   | at night, in the morning, ...     |       |
+ * | Hour [1-12]                     | h       | 1, 2, ..., 11, 12                 |       |
+ * |                                 | ho      | 1st, 2nd, ..., 11th, 12th         | 7     |
+ * |                                 | hh      | 01, 02, ..., 11, 12               |       |
+ * | Hour [0-23]                     | H       | 0, 1, 2, ..., 23                  |       |
+ * |                                 | Ho      | 0th, 1st, 2nd, ..., 23rd          | 7     |
+ * |                                 | HH      | 00, 01, 02, ..., 23               |       |
+ * | Hour [0-11]                     | K       | 1, 2, ..., 11, 0                  |       |
+ * |                                 | Ko      | 1st, 2nd, ..., 11th, 0th          | 7     |
+ * |                                 | KK      | 01, 02, ..., 11, 00               |       |
+ * | Hour [1-24]                     | k       | 24, 1, 2, ..., 23                 |       |
+ * |                                 | ko      | 24th, 1st, 2nd, ..., 23rd         | 7     |
+ * |                                 | kk      | 24, 01, 02, ..., 23               |       |
+ * | Minute                          | m       | 0, 1, ..., 59                     |       |
+ * |                                 | mo      | 0th, 1st, ..., 59th               | 7     |
+ * |                                 | mm      | 00, 01, ..., 59                   |       |
+ * | Second                          | s       | 0, 1, ..., 59                     |       |
+ * |                                 | so      | 0th, 1st, ..., 59th               | 7     |
+ * |                                 | ss      | 00, 01, ..., 59                   |       |
+ * | Fraction of second              | S       | 0, 1, ..., 9                      |       |
+ * |                                 | SS      | 00, 01, ..., 99                   |       |
+ * |                                 | SSS     | 000, 001, ..., 999                |       |
+ * |                                 | SSSS    | ...                               | 3     |
+ * | Timezone (ISO-8601 w/ Z)        | X       | -08, +0530, Z                     |       |
+ * |                                 | XX      | -0800, +0530, Z                   |       |
+ * |                                 | XXX     | -08:00, +05:30, Z                 |       |
+ * |                                 | XXXX    | -0800, +0530, Z, +123456          | 2     |
+ * |                                 | XXXXX   | -08:00, +05:30, Z, +12:34:56      |       |
+ * | Timezone (ISO-8601 w/o Z)       | x       | -08, +0530, +00                   |       |
+ * |                                 | xx      | -0800, +0530, +0000               |       |
+ * |                                 | xxx     | -08:00, +05:30, +00:00            | 2     |
+ * |                                 | xxxx    | -0800, +0530, +0000, +123456      |       |
+ * |                                 | xxxxx   | -08:00, +05:30, +00:00, +12:34:56 |       |
+ * | Timezone (GMT)                  | O...OOO | GMT-8, GMT+5:30, GMT+0            |       |
+ * |                                 | OOOO    | GMT-08:00, GMT+05:30, GMT+00:00   | 2     |
+ * | Timezone (specific non-locat.)  | z...zzz | GMT-8, GMT+5:30, GMT+0            | 6     |
+ * |                                 | zzzz    | GMT-08:00, GMT+05:30, GMT+00:00   | 2,6   |
+ * | Seconds timestamp               | t       | 512969520                         | 7     |
+ * |                                 | tt      | ...                               | 3,7   |
+ * | Milliseconds timestamp          | T       | 512969520900                      | 7     |
+ * |                                 | TT      | ...                               | 3,7   |
+ * | Long localized date             | P       | 04/29/1453                        | 7     |
+ * |                                 | PP      | Apr 29, 1453                      | 7     |
+ * |                                 | PPP     | April 29th, 1453                  | 7     |
+ * |                                 | PPPP    | Friday, April 29th, 1453          | 2,7   |
+ * | Long localized time             | p       | 12:00 AM                          | 7     |
+ * |                                 | pp      | 12:00:00 AM                       | 7     |
+ * |                                 | ppp     | 12:00:00 AM GMT+2                 | 7     |
+ * |                                 | pppp    | 12:00:00 AM GMT+02:00             | 2,7   |
+ * | Combination of date and time    | Pp      | 04/29/1453, 12:00 AM              | 7     |
+ * |                                 | PPpp    | Apr 29, 1453, 12:00:00 AM         | 7     |
+ * |                                 | PPPppp  | April 29th, 1453 at ...           | 7     |
+ * |                                 | PPPPpppp| Friday, April 29th, 1453 at ...   | 2,7   |
+ * Notes:
+ * 1. "Formatting" units (e.g. formatting quarter) in the default en-US locale
+ *    are the same as "stand-alone" units, but are different in some languages.
+ *    "Formatting" units are declined according to the rules of the language
+ *    in the context of a date. "Stand-alone" units are always nominative singular:
+ *
+ *    `format(new Date(2017, 10, 6), 'do LLLL', {locale: cs}) //=> '6. listopad'`
+ *
+ *    `format(new Date(2017, 10, 6), 'do MMMM', {locale: cs}) //=> '6. listopadu'`
+ *
+ * 2. Any sequence of the identical letters is a pattern, unless it is escaped by
+ *    the single quote characters (see below).
+ *    If the sequence is longer than listed in table (e.g. `EEEEEEEEEEE`)
+ *    the output will be the same as default pattern for this unit, usually
+ *    the longest one (in case of ISO weekdays, `EEEE`). Default patterns for units
+ *    are marked with "2" in the last column of the table.
+ *
+ *    `format(new Date(2017, 10, 6), 'MMM') //=> 'Nov'`
+ *
+ *    `format(new Date(2017, 10, 6), 'MMMM') //=> 'November'`
+ *
+ *    `format(new Date(2017, 10, 6), 'MMMMM') //=> 'N'`
+ *
+ *    `format(new Date(2017, 10, 6), 'MMMMMM') //=> 'November'`
+ *
+ *    `format(new Date(2017, 10, 6), 'MMMMMMM') //=> 'November'`
+ *
+ * 3. Some patterns could be unlimited length (such as `yyyyyyyy`).
+ *    The output will be padded with zeros to match the length of the pattern.
+ *
+ *    `format(new Date(2017, 10, 6), 'yyyyyyyy') //=> '00002017'`
+ *
+ * 4. `QQQQQ` and `qqqqq` could be not strictly numerical in some locales.
+ *    These tokens represent the shortest form of the quarter.
+ *
+ * 5. The main difference between `y` and `u` patterns are B.C. years:
+ *
+ *    | Year | `y` | `u` |
+ *    |------|-----|-----|
+ *    | AC 1 |   1 |   1 |
+ *    | BC 1 |   1 |   0 |
+ *    | BC 2 |   2 |  -1 |
+ *
+ *    Also `yy` always returns the last two digits of a year,
+ *    while `uu` pads single digit years to 2 characters and returns other years unchanged:
+ *
+ *    | Year | `yy` | `uu` |
+ *    |------|------|------|
+ *    | 1    |   01 |   01 |
+ *    | 14   |   14 |   14 |
+ *    | 376  |   76 |  376 |
+ *    | 1453 |   53 | 1453 |
+ *
+ *    The same difference is true for local and ISO week-numbering years (`Y` and `R`),
+ *    except local week-numbering years are dependent on `options.weekStartsOn`
+ *    and `options.firstWeekContainsDate` (compare [getISOWeekYear](https://date-fns.org/docs/getISOWeekYear)
+ *    and [getWeekYear](https://date-fns.org/docs/getWeekYear)).
+ *
+ * 6. Specific non-location timezones are currently unavailable in `date-fns`,
+ *    so right now these tokens fall back to GMT timezones.
+ *
+ * 7. These patterns are not in the Unicode Technical Standard #35:
+ *    - `i`: ISO day of week
+ *    - `I`: ISO week of year
+ *    - `R`: ISO week-numbering year
+ *    - `t`: seconds timestamp
+ *    - `T`: milliseconds timestamp
+ *    - `o`: ordinal number modifier
+ *    - `P`: long localized date
+ *    - `p`: long localized time
+ *
+ * 8. `YY` and `YYYY` tokens represent week-numbering years but they are often confused with years.
+ *    You should enable `options.useAdditionalWeekYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ *
+ * 9. `D` and `DD` tokens represent days of the year but they are often confused with days of the month.
+ *    You should enable `options.useAdditionalDayOfYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ *
+ * @param date - The original date
+ * @param format - The string of tokens
+ * @param options - An object with options
+ *
+ * @returns The formatted date string
+ *
+ * @throws `date` must not be Invalid Date
+ * @throws `options.locale` must contain `localize` property
+ * @throws `options.locale` must contain `formatLong` property
+ * @throws use `yyyy` instead of `YYYY` for formatting years using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws use `yy` instead of `YY` for formatting years using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws use `d` instead of `D` for formatting days of the month using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws use `dd` instead of `DD` for formatting days of the month using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws format string contains an unescaped latin alphabet character
+ *
+ * @example
+ * // Represent 11 February 2014 in middle-endian format:
+ * const result = format(new Date(2014, 1, 11), 'MM/dd/yyyy')
+ * //=> '02/11/2014'
+ *
+ * @example
+ * // Represent 2 July 2014 in Esperanto:
+ * import { eoLocale } from 'date-fns/locale/eo'
+ * const result = format(new Date(2014, 6, 2), "do 'de' MMMM yyyy", {
+ *   locale: eoLocale
+ * })
+ * //=> '2-a de julio 2014'
+ *
+ * @example
+ * // Escape string by single quote characters:
+ * const result = format(new Date(2014, 6, 2, 15), "h 'o''clock'")
+ * //=> "3 o'clock"
+ */
+function format_format(date, formatStr, options) {
+  const defaultOptions = defaultOptions_getDefaultOptions();
+  const locale = options?.locale ?? defaultOptions.locale ?? en_US_enUS;
+
+  const firstWeekContainsDate =
+    options?.firstWeekContainsDate ??
+    options?.locale?.options?.firstWeekContainsDate ??
+    defaultOptions.firstWeekContainsDate ??
+    defaultOptions.locale?.options?.firstWeekContainsDate ??
+    1;
+
+  const weekStartsOn =
+    options?.weekStartsOn ??
+    options?.locale?.options?.weekStartsOn ??
+    defaultOptions.weekStartsOn ??
+    defaultOptions.locale?.options?.weekStartsOn ??
+    0;
+
+  const originalDate = toDate_toDate(date, options?.in);
+
+  if (!isValid_isValid(originalDate)) {
+    throw new RangeError("Invalid time value");
+  }
+
+  let parts = formatStr
+    .match(format_longFormattingTokensRegExp)
+    .map((substring) => {
+      const firstCharacter = substring[0];
+      if (firstCharacter === "p" || firstCharacter === "P") {
+        const longFormatter = longFormatters_longFormatters[firstCharacter];
+        return longFormatter(substring, locale.formatLong);
+      }
+      return substring;
+    })
+    .join("")
+    .match(format_formattingTokensRegExp)
+    .map((substring) => {
+      // Replace two single quote characters with one single quote character
+      if (substring === "''") {
+        return { isToken: false, value: "'" };
+      }
+
+      const firstCharacter = substring[0];
+      if (firstCharacter === "'") {
+        return { isToken: false, value: format_cleanEscapedString(substring) };
+      }
+
+      if (formatters_formatters[firstCharacter]) {
+        return { isToken: true, value: substring };
+      }
+
+      if (firstCharacter.match(format_unescapedLatinCharacterRegExp)) {
+        throw new RangeError(
+          "Format string contains an unescaped latin alphabet character `" +
+            firstCharacter +
+            "`",
+        );
+      }
+
+      return { isToken: false, value: substring };
+    });
+
+  // invoke localize preprocessor (only for french locales at the moment)
+  if (locale.localize.preprocessor) {
+    parts = locale.localize.preprocessor(originalDate, parts);
+  }
+
+  const formatterOptions = {
+    firstWeekContainsDate,
+    weekStartsOn,
+    locale,
+  };
+
+  return parts
+    .map((part) => {
+      if (!part.isToken) return part.value;
+
+      const token = part.value;
+
+      if (
+        (!options?.useAdditionalWeekYearTokens &&
+          protectedTokens_isProtectedWeekYearToken(token)) ||
+        (!options?.useAdditionalDayOfYearTokens &&
+          protectedTokens_isProtectedDayOfYearToken(token))
+      ) {
+        protectedTokens_warnOrThrowProtectedError(token, formatStr, String(date));
+      }
+
+      const formatter = formatters_formatters[token[0]];
+      return formatter(originalDate, token, locale.localize, formatterOptions);
+    })
+    .join("");
+}
+
+function format_cleanEscapedString(input) {
+  const matched = input.match(format_escapedStringRegExp);
+
+  if (!matched) {
+    return input;
+  }
+
+  return matched[1].replace(format_doubleQuoteRegExp, "'");
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_format = ((/* unused pure expression or super */ null && (format_format)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/getMonth.js
+
+
+/**
+ * The {@link getMonth} function options.
+ */
+
+/**
+ * @name getMonth
+ * @category Month Helpers
+ * @summary Get the month of the given date.
+ *
+ * @description
+ * Get the month of the given date.
+ *
+ * @param date - The given date
+ * @param options - An object with options
+ *
+ * @returns The month index (0-11)
+ *
+ * @example
+ * // Which month is 29 February 2012?
+ * const result = getMonth(new Date(2012, 1, 29))
+ * //=> 1
+ */
+function getMonth(date, options) {
+  return toDate_toDate(date, options?.in).getMonth();
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_getMonth = ((/* unused pure expression or super */ null && (getMonth)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/getYear.js
+
+
+/**
+ * The {@link getYear} function options.
+ */
+
+/**
+ * @name getYear
+ * @category Year Helpers
+ * @summary Get the year of the given date.
+ *
+ * @description
+ * Get the year of the given date.
+ *
+ * @param date - The given date
+ * @param options - An object with options
+ *
+ * @returns The year
+ *
+ * @example
+ * // Which year is 2 July 2014?
+ * const result = getYear(new Date(2014, 6, 2))
+ * //=> 2014
+ */
+function getYear(date, options) {
+  return toDate_toDate(date, options?.in).getFullYear();
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_getYear = ((/* unused pure expression or super */ null && (getYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/isAfter.js
+
+
+/**
+ * @name isAfter
+ * @category Common Helpers
+ * @summary Is the first date after the second one?
+ *
+ * @description
+ * Is the first date after the second one?
+ *
+ * @param date - The date that should be after the other one to return true
+ * @param dateToCompare - The date to compare with
+ *
+ * @returns The first date is after the second date
+ *
+ * @example
+ * // Is 10 July 1989 after 11 February 1987?
+ * const result = isAfter(new Date(1989, 6, 10), new Date(1987, 1, 11))
+ * //=> true
+ */
+function isAfter_isAfter(date, dateToCompare) {
+  return +toDate_toDate(date) > +toDate_toDate(dateToCompare);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_isAfter = ((/* unused pure expression or super */ null && (isAfter_isAfter)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/isBefore.js
+
+
+/**
+ * @name isBefore
+ * @category Common Helpers
+ * @summary Is the first date before the second one?
+ *
+ * @description
+ * Is the first date before the second one?
+ *
+ * @param date - The date that should be before the other one to return true
+ * @param dateToCompare - The date to compare with
+ *
+ * @returns The first date is before the second date
+ *
+ * @example
+ * // Is 10 July 1989 before 11 February 1987?
+ * const result = isBefore(new Date(1989, 6, 10), new Date(1987, 1, 11))
+ * //=> false
+ */
+function isBefore_isBefore(date, dateToCompare) {
+  return +toDate_toDate(date) < +toDate_toDate(dateToCompare);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_isBefore = ((/* unused pure expression or super */ null && (isBefore_isBefore)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/isSameDay.js
+
+
+
+/**
+ * The {@link isSameDay} function options.
+ */
+
+/**
+ * @name isSameDay
+ * @category Day Helpers
+ * @summary Are the given dates in the same day (and year and month)?
+ *
+ * @description
+ * Are the given dates in the same day (and year and month)?
+ *
+ * @param laterDate - The first date to check
+ * @param earlierDate - The second date to check
+ * @param options - An object with options
+ *
+ * @returns The dates are in the same day (and year and month)
+ *
+ * @example
+ * // Are 4 September 06:00:00 and 4 September 18:00:00 in the same day?
+ * const result = isSameDay(new Date(2014, 8, 4, 6, 0), new Date(2014, 8, 4, 18, 0))
+ * //=> true
+ *
+ * @example
+ * // Are 4 September and 4 October in the same day?
+ * const result = isSameDay(new Date(2014, 8, 4), new Date(2014, 9, 4))
+ * //=> false
+ *
+ * @example
+ * // Are 4 September, 2014 and 4 September, 2015 in the same day?
+ * const result = isSameDay(new Date(2014, 8, 4), new Date(2015, 8, 4))
+ * //=> false
+ */
+function isSameDay_isSameDay(laterDate, earlierDate, options) {
+  const [dateLeft_, dateRight_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate,
+  );
+  return +startOfDay_startOfDay(dateLeft_) === +startOfDay_startOfDay(dateRight_);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_isSameDay = ((/* unused pure expression or super */ null && (isSameDay_isSameDay)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/isSameMonth.js
+
+
+/**
+ * The {@link isSameMonth} function options.
+ */
+
+/**
+ * @name isSameMonth
+ * @category Month Helpers
+ * @summary Are the given dates in the same month (and year)?
+ *
+ * @description
+ * Are the given dates in the same month (and year)?
+ *
+ * @param laterDate - The first date to check
+ * @param earlierDate - The second date to check
+ * @param options - An object with options
+ *
+ * @returns The dates are in the same month (and year)
+ *
+ * @example
+ * // Are 2 September 2014 and 25 September 2014 in the same month?
+ * const result = isSameMonth(new Date(2014, 8, 2), new Date(2014, 8, 25))
+ * //=> true
+ *
+ * @example
+ * // Are 2 September 2014 and 25 September 2015 in the same month?
+ * const result = isSameMonth(new Date(2014, 8, 2), new Date(2015, 8, 25))
+ * //=> false
+ */
+function isSameMonth_isSameMonth(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate,
+  );
+  return (
+    laterDate_.getFullYear() === earlierDate_.getFullYear() &&
+    laterDate_.getMonth() === earlierDate_.getMonth()
+  );
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_isSameMonth = ((/* unused pure expression or super */ null && (isSameMonth_isSameMonth)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/isSameYear.js
+
+
+/**
+ * The {@link isSameYear} function options.
+ */
+
+/**
+ * @name isSameYear
+ * @category Year Helpers
+ * @summary Are the given dates in the same year?
+ *
+ * @description
+ * Are the given dates in the same year?
+ *
+ * @param laterDate - The first date to check
+ * @param earlierDate - The second date to check
+ * @param options - An object with options
+ *
+ * @returns The dates are in the same year
+ *
+ * @example
+ * // Are 2 September 2014 and 25 September 2014 in the same year?
+ * const result = isSameYear(new Date(2014, 8, 2), new Date(2014, 8, 25))
+ * //=> true
+ */
+function isSameYear(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate,
+  );
+  return laterDate_.getFullYear() === earlierDate_.getFullYear();
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_isSameYear = ((/* unused pure expression or super */ null && (isSameYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/max.js
+
+
+
+/**
+ * The {@link max} function options.
+ */
+
+/**
+ * @name max
+ * @category Common Helpers
+ * @summary Return the latest of the given dates.
+ *
+ * @description
+ * Return the latest of the given dates.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param dates - The dates to compare
+ *
+ * @returns The latest of the dates
+ *
+ * @example
+ * // Which of these dates is the latest?
+ * const result = max([
+ *   new Date(1989, 6, 10),
+ *   new Date(1987, 1, 11),
+ *   new Date(1995, 6, 2),
+ *   new Date(1990, 0, 1)
+ * ])
+ * //=> Sun Jul 02 1995 00:00:00
+ */
+function max_max(dates, options) {
+  let result;
+  let context = options?.in;
+
+  dates.forEach((date) => {
+    // Use the first date object as the context function
+    if (!context && typeof date === "object")
+      context = constructFrom_constructFrom.bind(null, date);
+
+    const date_ = toDate_toDate(date, context);
+    if (!result || result < date_ || isNaN(+date_)) result = date_;
+  });
+
+  return constructFrom_constructFrom(context, result || NaN);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_max = ((/* unused pure expression or super */ null && (max_max)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/min.js
+
+
+
+/**
+ * The {@link min} function options.
+ */
+
+/**
+ * @name min
+ * @category Common Helpers
+ * @summary Returns the earliest of the given dates.
+ *
+ * @description
+ * Returns the earliest of the given dates.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param dates - The dates to compare
+ *
+ * @returns The earliest of the dates
+ *
+ * @example
+ * // Which of these dates is the earliest?
+ * const result = min([
+ *   new Date(1989, 6, 10),
+ *   new Date(1987, 1, 11),
+ *   new Date(1995, 6, 2),
+ *   new Date(1990, 0, 1)
+ * ])
+ * //=> Wed Feb 11 1987 00:00:00
+ */
+function min_min(dates, options) {
+  let result;
+  let context = options?.in;
+
+  dates.forEach((date) => {
+    // Use the first date object as the context function
+    if (!context && typeof date === "object")
+      context = constructFrom_constructFrom.bind(null, date);
+
+    const date_ = toDate_toDate(date, context);
+    if (!result || result > date_ || isNaN(+date_)) result = date_;
+  });
+
+  return constructFrom_constructFrom(context, result || NaN);
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const date_fns_min = ((/* unused pure expression or super */ null && (min_min)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/getDaysInMonth.js
+
+
+
+/**
+ * The {@link getDaysInMonth} function options.
+ */
+
+/**
+ * @name getDaysInMonth
+ * @category Month Helpers
+ * @summary Get the number of days in a month of the given date.
+ *
+ * @description
+ * Get the number of days in a month of the given date, considering the context if provided.
+ *
+ * @param date - The given date
+ * @param options - An object with options
+ *
+ * @returns The number of days in a month
+ *
+ * @example
+ * // How many days are in February 2000?
+ * const result = getDaysInMonth(new Date(2000, 1))
+ * //=> 29
+ */
+function getDaysInMonth_getDaysInMonth(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const year = _date.getFullYear();
+  const monthIndex = _date.getMonth();
+  const lastDayOfMonth = constructFrom_constructFrom(_date, 0);
+  lastDayOfMonth.setFullYear(year, monthIndex + 1, 0);
+  lastDayOfMonth.setHours(0, 0, 0, 0);
+  return lastDayOfMonth.getDate();
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_getDaysInMonth = ((/* unused pure expression or super */ null && (getDaysInMonth_getDaysInMonth)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/setMonth.js
+
+
+
+
+/**
+ * The {@link setMonth} function options.
+ */
+
+/**
+ * @name setMonth
+ * @category Month Helpers
+ * @summary Set the month to the given date.
+ *
+ * @description
+ * Set the month to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param month - The month index to set (0-11)
+ * @param options - The options
+ *
+ * @returns The new date with the month set
+ *
+ * @example
+ * // Set February to 1 September 2014:
+ * const result = setMonth(new Date(2014, 8, 1), 1)
+ * //=> Sat Feb 01 2014 00:00:00
+ */
+function setMonth_setMonth(date, month, options) {
+  const _date = toDate_toDate(date, options?.in);
+  const year = _date.getFullYear();
+  const day = _date.getDate();
+
+  const midMonth = constructFrom_constructFrom(options?.in || date, 0);
+  midMonth.setFullYear(year, month, 15);
+  midMonth.setHours(0, 0, 0, 0);
+  const daysInMonth = getDaysInMonth_getDaysInMonth(midMonth);
+
+  // Set the earlier date, allows to wrap Jan 31 to Feb 28
+  _date.setMonth(month, Math.min(day, daysInMonth));
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_setMonth = ((/* unused pure expression or super */ null && (setMonth_setMonth)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/setYear.js
+
+
+
+/**
+ * The {@link setYear} function options.
+ */
+
+/**
+ * @name setYear
+ * @category Year Helpers
+ * @summary Set the year to the given date.
+ *
+ * @description
+ * Set the year to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param year - The year of the new date
+ * @param options - An object with options.
+ *
+ * @returns The new date with the year set
+ *
+ * @example
+ * // Set year 2013 to 1 September 2014:
+ * const result = setYear(new Date(2014, 8, 1), 2013)
+ * //=> Sun Sep 01 2013 00:00:00
+ */
+function setYear_setYear(date, year, options) {
+  const date_ = toDate_toDate(date, options?.in);
+
+  // Check if date is Invalid Date because Date.prototype.setFullYear ignores the value of Invalid Date
+  if (isNaN(+date_)) return constructFrom_constructFrom(options?.in || date, NaN);
+
+  date_.setFullYear(year);
+  return date_;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_setYear = ((/* unused pure expression or super */ null && (setYear_setYear)));
+
+;// ./node_modules/react-day-picker/node_modules/date-fns/startOfMonth.js
+
+
+/**
+ * The {@link startOfMonth} function options.
+ */
+
+/**
+ * @name startOfMonth
+ * @category Month Helpers
+ * @summary Return the start of a month for the given date.
+ *
+ * @description
+ * Return the start of a month for the given date. The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments.
+ * Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed,
+ * or inferred from the arguments.
+ *
+ * @param date - The original date
+ * @param options - An object with options
+ *
+ * @returns The start of a month
+ *
+ * @example
+ * // The start of a month for 2 September 2014 11:55:00:
+ * const result = startOfMonth(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Mon Sep 01 2014 00:00:00
+ */
+function startOfMonth_startOfMonth(date, options) {
+  const _date = toDate_toDate(date, options?.in);
+  _date.setDate(1);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// Fallback for modularized imports:
+/* harmony default export */ const node_modules_date_fns_startOfMonth = ((/* unused pure expression or super */ null && (startOfMonth_startOfMonth)));
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getBroadcastWeeksInMonth.js
+const FIVE_WEEKS = 5;
+const FOUR_WEEKS = 4;
+/**
+ * Returns the number of weeks to display in the broadcast calendar for a given
+ * month.
+ *
+ * The broadcast calendar may have either 4 or 5 weeks in a month, depending on
+ * the start and end dates of the broadcast weeks.
+ *
+ * @since 9.4.0
+ * @param month The month for which to calculate the number of weeks.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns The number of weeks in the broadcast calendar (4 or 5).
+ */
+function getBroadcastWeeksInMonth(month, dateLib) {
+    // Get the first day of the month
+    const firstDayOfMonth = dateLib.startOfMonth(month);
+    // Get the day of the week for the first day of the month (1-7, where 1 is Monday)
+    const firstDayOfWeek = firstDayOfMonth.getDay() > 0 ? firstDayOfMonth.getDay() : 7;
+    const broadcastStartDate = dateLib.addDays(month, -firstDayOfWeek + 1);
+    const lastDateOfLastWeek = dateLib.addDays(broadcastStartDate, FIVE_WEEKS * 7 - 1);
+    const numberOfWeeks = dateLib.getMonth(month) === dateLib.getMonth(lastDateOfLastWeek)
+        ? FIVE_WEEKS
+        : FOUR_WEEKS;
+    return numberOfWeeks;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/startOfBroadcastWeek.js
+/**
+ * Returns the start date of the week in the broadcast calendar.
+ *
+ * The broadcast week starts on Monday. If the first day of the month is not a
+ * Monday, this function calculates the previous Monday as the start of the
+ * broadcast week.
+ *
+ * @since 9.4.0
+ * @param date The date for which to calculate the start of the broadcast week.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns The start date of the broadcast week.
+ */
+function startOfBroadcastWeek(date, dateLib) {
+    const firstOfMonth = dateLib.startOfMonth(date);
+    const dayOfWeek = firstOfMonth.getDay();
+    if (dayOfWeek === 1) {
+        return firstOfMonth;
+    }
+    else if (dayOfWeek === 0) {
+        return dateLib.addDays(firstOfMonth, -1 * 6);
+    }
+    else {
+        return dateLib.addDays(firstOfMonth, -1 * (dayOfWeek - 1));
+    }
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/endOfBroadcastWeek.js
+
+
+/**
+ * Returns the end date of the week in the broadcast calendar.
+ *
+ * The broadcast week ends on the last day of the last broadcast week for the
+ * given date.
+ *
+ * @since 9.4.0
+ * @param date The date for which to calculate the end of the broadcast week.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns The end date of the broadcast week.
+ */
+function endOfBroadcastWeek(date, dateLib) {
+    const startDate = startOfBroadcastWeek(date, dateLib);
+    const numberOfWeeks = getBroadcastWeeksInMonth(date, dateLib);
+    const endDate = dateLib.addDays(startDate, numberOfWeeks * 7 - 1);
+    return endDate;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/classes/DateLib.js
+
+
+
+
+
+/**
+ * A wrapper class around [date-fns](http://date-fns.org) that provides utility
+ * methods for date manipulation and formatting.
+ *
+ * @since 9.2.0
+ * @example
+ *   const dateLib = new DateLib({ locale: es });
+ *   const newDate = dateLib.addDays(new Date(), 5);
+ */
+class DateLib {
+    /**
+     * Creates an instance of `DateLib`.
+     *
+     * @param options Configuration options for the date library.
+     * @param overrides Custom overrides for the date library functions.
+     */
+    constructor(options, overrides) {
+        /**
+         * Reference to the built-in Date constructor.
+         *
+         * @deprecated Use `newDate()` or `today()`.
+         */
+        this.Date = Date;
+        /**
+         * Creates a new `Date` object representing today's date.
+         *
+         * @since 9.5.0
+         * @returns A `Date` object for today's date.
+         */
+        this.today = () => {
+            if (this.overrides?.today) {
+                return this.overrides.today();
+            }
+            if (this.options.timeZone) {
+                return date_TZDate.tz(this.options.timeZone);
+            }
+            return new this.Date();
+        };
+        /**
+         * Creates a new `Date` object with the specified year, month, and day.
+         *
+         * @since 9.5.0
+         * @param year The year.
+         * @param monthIndex The month (0-11).
+         * @param date The day of the month.
+         * @returns A new `Date` object.
+         */
+        this.newDate = (year, monthIndex, date) => {
+            if (this.overrides?.newDate) {
+                return this.overrides.newDate(year, monthIndex, date);
+            }
+            if (this.options.timeZone) {
+                return new date_TZDate(year, monthIndex, date, this.options.timeZone);
+            }
+            return new Date(year, monthIndex, date);
+        };
+        /**
+         * Adds the specified number of days to the given date.
+         *
+         * @param date The date to add days to.
+         * @param amount The number of days to add.
+         * @returns The new date with the days added.
+         */
+        this.addDays = (date, amount) => {
+            return this.overrides?.addDays
+                ? this.overrides.addDays(date, amount)
+                : addDays_addDays(date, amount);
+        };
+        /**
+         * Adds the specified number of months to the given date.
+         *
+         * @param date The date to add months to.
+         * @param amount The number of months to add.
+         * @returns The new date with the months added.
+         */
+        this.addMonths = (date, amount) => {
+            return this.overrides?.addMonths
+                ? this.overrides.addMonths(date, amount)
+                : addMonths_addMonths(date, amount);
+        };
+        /**
+         * Adds the specified number of weeks to the given date.
+         *
+         * @param date The date to add weeks to.
+         * @param amount The number of weeks to add.
+         * @returns The new date with the weeks added.
+         */
+        this.addWeeks = (date, amount) => {
+            return this.overrides?.addWeeks
+                ? this.overrides.addWeeks(date, amount)
+                : addWeeks_addWeeks(date, amount);
+        };
+        /**
+         * Adds the specified number of years to the given date.
+         *
+         * @param date The date to add years to.
+         * @param amount The number of years to add.
+         * @returns The new date with the years added.
+         */
+        this.addYears = (date, amount) => {
+            return this.overrides?.addYears
+                ? this.overrides.addYears(date, amount)
+                : addYears_addYears(date, amount);
+        };
+        /**
+         * Returns the number of calendar days between the given dates.
+         *
+         * @param dateLeft The later date.
+         * @param dateRight The earlier date.
+         * @returns The number of calendar days between the dates.
+         */
+        this.differenceInCalendarDays = (dateLeft, dateRight) => {
+            return this.overrides?.differenceInCalendarDays
+                ? this.overrides.differenceInCalendarDays(dateLeft, dateRight)
+                : differenceInCalendarDays_differenceInCalendarDays(dateLeft, dateRight);
+        };
+        /**
+         * Returns the number of calendar months between the given dates.
+         *
+         * @param dateLeft The later date.
+         * @param dateRight The earlier date.
+         * @returns The number of calendar months between the dates.
+         */
+        this.differenceInCalendarMonths = (dateLeft, dateRight) => {
+            return this.overrides?.differenceInCalendarMonths
+                ? this.overrides.differenceInCalendarMonths(dateLeft, dateRight)
+                : differenceInCalendarMonths(dateLeft, dateRight);
+        };
+        /**
+         * Returns the months between the given dates.
+         *
+         * @param interval The interval to get the months for.
+         */
+        this.eachMonthOfInterval = (interval) => {
+            return this.overrides?.eachMonthOfInterval
+                ? this.overrides.eachMonthOfInterval(interval)
+                : eachMonthOfInterval_eachMonthOfInterval(interval);
+        };
+        /**
+         * Returns the end of the broadcast week for the given date.
+         *
+         * @param date The original date.
+         * @returns The end of the broadcast week.
+         */
+        this.endOfBroadcastWeek = (date) => {
+            return this.overrides?.endOfBroadcastWeek
+                ? this.overrides.endOfBroadcastWeek(date)
+                : endOfBroadcastWeek(date, this);
+        };
+        /**
+         * Returns the end of the ISO week for the given date.
+         *
+         * @param date The original date.
+         * @returns The end of the ISO week.
+         */
+        this.endOfISOWeek = (date) => {
+            return this.overrides?.endOfISOWeek
+                ? this.overrides.endOfISOWeek(date)
+                : endOfISOWeek(date);
+        };
+        /**
+         * Returns the end of the month for the given date.
+         *
+         * @param date The original date.
+         * @returns The end of the month.
+         */
+        this.endOfMonth = (date) => {
+            return this.overrides?.endOfMonth
+                ? this.overrides.endOfMonth(date)
+                : endOfMonth_endOfMonth(date);
+        };
+        /**
+         * Returns the end of the week for the given date.
+         *
+         * @param date The original date.
+         * @returns The end of the week.
+         */
+        this.endOfWeek = (date, options) => {
+            return this.overrides?.endOfWeek
+                ? this.overrides.endOfWeek(date, options)
+                : endOfWeek_endOfWeek(date, this.options);
+        };
+        /**
+         * Returns the end of the year for the given date.
+         *
+         * @param date The original date.
+         * @returns The end of the year.
+         */
+        this.endOfYear = (date) => {
+            return this.overrides?.endOfYear
+                ? this.overrides.endOfYear(date)
+                : endOfYear(date);
+        };
+        /**
+         * Formats the given date using the specified format string.
+         *
+         * @param date The date to format.
+         * @param formatStr The format string.
+         * @returns The formatted date string.
+         */
+        this.format = (date, formatStr, options) => {
+            const formatted = this.overrides?.format
+                ? this.overrides.format(date, formatStr, this.options)
+                : format_format(date, formatStr, this.options);
+            if (this.options.numerals && this.options.numerals !== "latn") {
+                return this.replaceDigits(formatted);
+            }
+            return formatted;
+        };
+        /**
+         * Returns the ISO week number for the given date.
+         *
+         * @param date The date to get the ISO week number for.
+         * @returns The ISO week number.
+         */
+        this.getISOWeek = (date) => {
+            return this.overrides?.getISOWeek
+                ? this.overrides.getISOWeek(date)
+                : getISOWeek_getISOWeek(date);
+        };
+        /**
+         * Returns the month of the given date.
+         *
+         * @param date The date to get the month for.
+         * @returns The month.
+         */
+        this.getMonth = (date, options) => {
+            return this.overrides?.getMonth
+                ? this.overrides.getMonth(date, this.options)
+                : getMonth(date, this.options);
+        };
+        /**
+         * Returns the year of the given date.
+         *
+         * @param date The date to get the year for.
+         * @returns The year.
+         */
+        this.getYear = (date, options) => {
+            return this.overrides?.getYear
+                ? this.overrides.getYear(date, this.options)
+                : getYear(date, this.options);
+        };
+        /**
+         * Returns the local week number for the given date.
+         *
+         * @param date The date to get the week number for.
+         * @returns The week number.
+         */
+        this.getWeek = (date, options) => {
+            return this.overrides?.getWeek
+                ? this.overrides.getWeek(date, this.options)
+                : getWeek_getWeek(date, this.options);
+        };
+        /**
+         * Checks if the first date is after the second date.
+         *
+         * @param date The date to compare.
+         * @param dateToCompare The date to compare with.
+         * @returns True if the first date is after the second date.
+         */
+        this.isAfter = (date, dateToCompare) => {
+            return this.overrides?.isAfter
+                ? this.overrides.isAfter(date, dateToCompare)
+                : isAfter_isAfter(date, dateToCompare);
+        };
+        /**
+         * Checks if the first date is before the second date.
+         *
+         * @param date The date to compare.
+         * @param dateToCompare The date to compare with.
+         * @returns True if the first date is before the second date.
+         */
+        this.isBefore = (date, dateToCompare) => {
+            return this.overrides?.isBefore
+                ? this.overrides.isBefore(date, dateToCompare)
+                : isBefore_isBefore(date, dateToCompare);
+        };
+        /**
+         * Checks if the given value is a Date object.
+         *
+         * @param value The value to check.
+         * @returns True if the value is a Date object.
+         */
+        this.isDate = (value) => {
+            return this.overrides?.isDate
+                ? this.overrides.isDate(value)
+                : isDate_isDate(value);
+        };
+        /**
+         * Checks if the given dates are on the same day.
+         *
+         * @param dateLeft The first date to compare.
+         * @param dateRight The second date to compare.
+         * @returns True if the dates are on the same day.
+         */
+        this.isSameDay = (dateLeft, dateRight) => {
+            return this.overrides?.isSameDay
+                ? this.overrides.isSameDay(dateLeft, dateRight)
+                : isSameDay_isSameDay(dateLeft, dateRight);
+        };
+        /**
+         * Checks if the given dates are in the same month.
+         *
+         * @param dateLeft The first date to compare.
+         * @param dateRight The second date to compare.
+         * @returns True if the dates are in the same month.
+         */
+        this.isSameMonth = (dateLeft, dateRight) => {
+            return this.overrides?.isSameMonth
+                ? this.overrides.isSameMonth(dateLeft, dateRight)
+                : isSameMonth_isSameMonth(dateLeft, dateRight);
+        };
+        /**
+         * Checks if the given dates are in the same year.
+         *
+         * @param dateLeft The first date to compare.
+         * @param dateRight The second date to compare.
+         * @returns True if the dates are in the same year.
+         */
+        this.isSameYear = (dateLeft, dateRight) => {
+            return this.overrides?.isSameYear
+                ? this.overrides.isSameYear(dateLeft, dateRight)
+                : isSameYear(dateLeft, dateRight);
+        };
+        /**
+         * Returns the latest date in the given array of dates.
+         *
+         * @param dates The array of dates to compare.
+         * @returns The latest date.
+         */
+        this.max = (dates) => {
+            return this.overrides?.max ? this.overrides.max(dates) : max_max(dates);
+        };
+        /**
+         * Returns the earliest date in the given array of dates.
+         *
+         * @param dates The array of dates to compare.
+         * @returns The earliest date.
+         */
+        this.min = (dates) => {
+            return this.overrides?.min ? this.overrides.min(dates) : min_min(dates);
+        };
+        /**
+         * Sets the month of the given date.
+         *
+         * @param date The date to set the month on.
+         * @param month The month to set (0-11).
+         * @returns The new date with the month set.
+         */
+        this.setMonth = (date, month) => {
+            return this.overrides?.setMonth
+                ? this.overrides.setMonth(date, month)
+                : setMonth_setMonth(date, month);
+        };
+        /**
+         * Sets the year of the given date.
+         *
+         * @param date The date to set the year on.
+         * @param year The year to set.
+         * @returns The new date with the year set.
+         */
+        this.setYear = (date, year) => {
+            return this.overrides?.setYear
+                ? this.overrides.setYear(date, year)
+                : setYear_setYear(date, year);
+        };
+        /**
+         * Returns the start of the broadcast week for the given date.
+         *
+         * @param date The original date.
+         * @returns The start of the broadcast week.
+         */
+        this.startOfBroadcastWeek = (date, dateLib) => {
+            return this.overrides?.startOfBroadcastWeek
+                ? this.overrides.startOfBroadcastWeek(date, this)
+                : startOfBroadcastWeek(date, this);
+        };
+        /**
+         * Returns the start of the day for the given date.
+         *
+         * @param date The original date.
+         * @returns The start of the day.
+         */
+        this.startOfDay = (date) => {
+            return this.overrides?.startOfDay
+                ? this.overrides.startOfDay(date)
+                : startOfDay_startOfDay(date);
+        };
+        /**
+         * Returns the start of the ISO week for the given date.
+         *
+         * @param date The original date.
+         * @returns The start of the ISO week.
+         */
+        this.startOfISOWeek = (date) => {
+            return this.overrides?.startOfISOWeek
+                ? this.overrides.startOfISOWeek(date)
+                : startOfISOWeek_startOfISOWeek(date);
+        };
+        /**
+         * Returns the start of the month for the given date.
+         *
+         * @param date The original date.
+         * @returns The start of the month.
+         */
+        this.startOfMonth = (date) => {
+            return this.overrides?.startOfMonth
+                ? this.overrides.startOfMonth(date)
+                : startOfMonth_startOfMonth(date);
+        };
+        /**
+         * Returns the start of the week for the given date.
+         *
+         * @param date The original date.
+         * @returns The start of the week.
+         */
+        this.startOfWeek = (date, options) => {
+            return this.overrides?.startOfWeek
+                ? this.overrides.startOfWeek(date, this.options)
+                : startOfWeek_startOfWeek(date, this.options);
+        };
+        /**
+         * Returns the start of the year for the given date.
+         *
+         * @param date The original date.
+         * @returns The start of the year.
+         */
+        this.startOfYear = (date) => {
+            return this.overrides?.startOfYear
+                ? this.overrides.startOfYear(date)
+                : startOfYear_startOfYear(date);
+        };
+        this.options = { locale: en_US_enUS, ...options };
+        this.overrides = overrides;
+    }
+    /**
+     * Generates a mapping of Arabic digits (0-9) to the target numbering system
+     * digits.
+     *
+     * @since 9.5.0
+     * @returns A record mapping Arabic digits to the target numerals.
+     */
+    getDigitMap() {
+        const { numerals = "latn" } = this.options;
+        // Use Intl.NumberFormat to create a formatter with the specified numbering system
+        const formatter = new Intl.NumberFormat("en-US", {
+            numberingSystem: numerals
+        });
+        // Map Arabic digits (0-9) to the target numerals
+        const digitMap = {};
+        for (let i = 0; i < 10; i++) {
+            digitMap[i.toString()] = formatter.format(i);
+        }
+        return digitMap;
+    }
+    /**
+     * Replaces Arabic digits in a string with the target numbering system digits.
+     *
+     * @since 9.5.0
+     * @param input The string containing Arabic digits.
+     * @returns The string with digits replaced.
+     */
+    replaceDigits(input) {
+        const digitMap = this.getDigitMap();
+        return input.replace(/\d/g, (digit) => digitMap[digit] || digit);
+    }
+    /**
+     * Formats a number using the configured numbering system.
+     *
+     * @since 9.5.0
+     * @param value The number to format.
+     * @returns The formatted number as a string.
+     */
+    formatNumber(value) {
+        return this.replaceDigits(value.toString());
+    }
+}
+/** The default locale (English). */
+
+/**
+ * The default date library with English locale.
+ *
+ * @since 9.2.0
+ */
+const DateLib_defaultDateLib = new DateLib();
+/**
+ * @ignore
+ * @deprecated Use `defaultDateLib`.
+ */
+const dateLib = (/* unused pure expression or super */ null && (DateLib_defaultDateLib));
+
+;// ./node_modules/react-day-picker/dist/esm/utils/rangeIncludesDate.js
+
+/**
+ * Checks if a given date is within a specified date range.
+ *
+ * @since 9.0.0
+ * @param range - The date range to check against.
+ * @param date - The date to check.
+ * @param excludeEnds - If `true`, the range's start and end dates are excluded.
+ * @param dateLib - The date utility library instance.
+ * @returns `true` if the date is within the range, otherwise `false`.
+ * @group Utilities
+ */
+function rangeIncludesDate(range, date, excludeEnds = false, dateLib = DateLib_defaultDateLib) {
+    let { from, to } = range;
+    const { differenceInCalendarDays, isSameDay } = dateLib;
+    if (from && to) {
+        const isRangeInverted = differenceInCalendarDays(to, from) < 0;
+        if (isRangeInverted) {
+            [from, to] = [to, from];
+        }
+        const isInRange = differenceInCalendarDays(date, from) >= (excludeEnds ? 1 : 0) &&
+            differenceInCalendarDays(to, date) >= (excludeEnds ? 1 : 0);
+        return isInRange;
+    }
+    if (!excludeEnds && to) {
+        return isSameDay(to, date);
+    }
+    if (!excludeEnds && from) {
+        return isSameDay(from, date);
+    }
+    return false;
+}
+/**
+ * @private
+ * @deprecated Use {@link rangeIncludesDate} instead.
+ */
+const isDateInRange = (range, date) => rangeIncludesDate(range, date, false, defaultDateLib);
+
+;// ./node_modules/react-day-picker/dist/esm/utils/typeguards.js
+/**
+ * Checks if the given value is of type {@link DateInterval}.
+ *
+ * @param matcher - The value to check.
+ * @returns `true` if the value is a {@link DateInterval}, otherwise `false`.
+ * @group Utilities
+ */
+function isDateInterval(matcher) {
+    return Boolean(matcher &&
+        typeof matcher === "object" &&
+        "before" in matcher &&
+        "after" in matcher);
+}
+/**
+ * Checks if the given value is of type {@link DateRange}.
+ *
+ * @param value - The value to check.
+ * @returns `true` if the value is a {@link DateRange}, otherwise `false`.
+ * @group Utilities
+ */
+function isDateRange(value) {
+    return Boolean(value && typeof value === "object" && "from" in value);
+}
+/**
+ * Checks if the given value is of type {@link DateAfter}.
+ *
+ * @param value - The value to check.
+ * @returns `true` if the value is a {@link DateAfter}, otherwise `false`.
+ * @group Utilities
+ */
+function isDateAfterType(value) {
+    return Boolean(value && typeof value === "object" && "after" in value);
+}
+/**
+ * Checks if the given value is of type {@link DateBefore}.
+ *
+ * @param value - The value to check.
+ * @returns `true` if the value is a {@link DateBefore}, otherwise `false`.
+ * @group Utilities
+ */
+function isDateBeforeType(value) {
+    return Boolean(value && typeof value === "object" && "before" in value);
+}
+/**
+ * Checks if the given value is of type {@link DayOfWeek}.
+ *
+ * @param value - The value to check.
+ * @returns `true` if the value is a {@link DayOfWeek}, otherwise `false`.
+ * @group Utilities
+ */
+function isDayOfWeekType(value) {
+    return Boolean(value && typeof value === "object" && "dayOfWeek" in value);
+}
+/**
+ * Checks if the given value is an array of valid dates.
+ *
+ * @private
+ * @param value - The value to check.
+ * @param dateLib - The date utility library instance.
+ * @returns `true` if the value is an array of valid dates, otherwise `false`.
+ */
+function isDatesArray(value, dateLib) {
+    return Array.isArray(value) && value.every(dateLib.isDate);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/utils/dateMatchModifiers.js
+
+
+
+/**
+ * Checks if a given date matches at least one of the specified {@link Matcher}.
+ *
+ * @param date - The date to check.
+ * @param matchers - The matchers to check against.
+ * @param dateLib - The date utility library instance.
+ * @returns `true` if the date matches any of the matchers, otherwise `false`.
+ * @group Utilities
+ */
+function dateMatchModifiers(date, matchers, dateLib = DateLib_defaultDateLib) {
+    const matchersArr = !Array.isArray(matchers) ? [matchers] : matchers;
+    const { isSameDay, differenceInCalendarDays, isAfter } = dateLib;
+    return matchersArr.some((matcher) => {
+        if (typeof matcher === "boolean") {
+            return matcher;
+        }
+        if (dateLib.isDate(matcher)) {
+            return isSameDay(date, matcher);
+        }
+        if (isDatesArray(matcher, dateLib)) {
+            return matcher.includes(date);
+        }
+        if (isDateRange(matcher)) {
+            return rangeIncludesDate(matcher, date, false, dateLib);
+        }
+        if (isDayOfWeekType(matcher)) {
+            if (!Array.isArray(matcher.dayOfWeek)) {
+                return matcher.dayOfWeek === date.getDay();
+            }
+            return matcher.dayOfWeek.includes(date.getDay());
+        }
+        if (isDateInterval(matcher)) {
+            const diffBefore = differenceInCalendarDays(matcher.before, date);
+            const diffAfter = differenceInCalendarDays(matcher.after, date);
+            const isDayBefore = diffBefore > 0;
+            const isDayAfter = diffAfter < 0;
+            const isClosedInterval = isAfter(matcher.before, matcher.after);
+            if (isClosedInterval) {
+                return isDayAfter && isDayBefore;
+            }
+            else {
+                return isDayBefore || isDayAfter;
+            }
+        }
+        if (isDateAfterType(matcher)) {
+            return differenceInCalendarDays(date, matcher.after) > 0;
+        }
+        if (isDateBeforeType(matcher)) {
+            return differenceInCalendarDays(matcher.before, date) > 0;
+        }
+        if (typeof matcher === "function") {
+            return matcher(date);
+        }
+        return false;
+    });
+}
+/**
+ * @private
+ * @deprecated Use {@link dateMatchModifiers} instead.
+ */
+const isMatch = (/* unused pure expression or super */ null && (dateMatchModifiers));
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/createGetModifiers.js
+
+
+/**
+ * Creates a function to retrieve the modifiers for a given day.
+ *
+ * This function calculates both internal and custom modifiers for each day
+ * based on the provided calendar days and DayPicker props.
+ *
+ * @private
+ * @param days The array of `CalendarDay` objects to process.
+ * @param props The DayPicker props, including modifiers and configuration
+ *   options.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns A function that retrieves the modifiers for a given `CalendarDay`.
+ */
+function createGetModifiers(days, props, dateLib) {
+    const { disabled, hidden, modifiers, showOutsideDays, broadcastCalendar, today } = props;
+    const { isSameDay, isSameMonth, startOfMonth, isBefore, endOfMonth, isAfter } = dateLib;
+    const startMonth = props.startMonth && startOfMonth(props.startMonth);
+    const endMonth = props.endMonth && endOfMonth(props.endMonth);
+    const internalModifiersMap = {
+        [DayFlag.focused]: [],
+        [DayFlag.outside]: [],
+        [DayFlag.disabled]: [],
+        [DayFlag.hidden]: [],
+        [DayFlag.today]: []
+    };
+    const customModifiersMap = {};
+    for (const day of days) {
+        const { date, displayMonth } = day;
+        const isOutside = Boolean(displayMonth && !isSameMonth(date, displayMonth));
+        const isBeforeStartMonth = Boolean(startMonth && isBefore(date, startMonth));
+        const isAfterEndMonth = Boolean(endMonth && isAfter(date, endMonth));
+        const isDisabled = Boolean(disabled && dateMatchModifiers(date, disabled, dateLib));
+        const isHidden = Boolean(hidden && dateMatchModifiers(date, hidden, dateLib)) ||
+            isBeforeStartMonth ||
+            isAfterEndMonth ||
+            // Broadcast calendar will show outside days as default
+            (!broadcastCalendar && !showOutsideDays && isOutside) ||
+            (broadcastCalendar && showOutsideDays === false && isOutside);
+        const isToday = isSameDay(date, today ?? dateLib.today());
+        if (isOutside)
+            internalModifiersMap.outside.push(day);
+        if (isDisabled)
+            internalModifiersMap.disabled.push(day);
+        if (isHidden)
+            internalModifiersMap.hidden.push(day);
+        if (isToday)
+            internalModifiersMap.today.push(day);
+        // Add custom modifiers
+        if (modifiers) {
+            Object.keys(modifiers).forEach((name) => {
+                const modifierValue = modifiers?.[name];
+                const isMatch = modifierValue
+                    ? dateMatchModifiers(date, modifierValue, dateLib)
+                    : false;
+                if (!isMatch)
+                    return;
+                if (customModifiersMap[name]) {
+                    customModifiersMap[name].push(day);
+                }
+                else {
+                    customModifiersMap[name] = [day];
+                }
+            });
+        }
+    }
+    return (day) => {
+        // Initialize all the modifiers to false
+        const dayFlags = {
+            [DayFlag.focused]: false,
+            [DayFlag.disabled]: false,
+            [DayFlag.hidden]: false,
+            [DayFlag.outside]: false,
+            [DayFlag.today]: false
+        };
+        const customModifiers = {};
+        // Find the modifiers for the given day
+        for (const name in internalModifiersMap) {
+            const days = internalModifiersMap[name];
+            dayFlags[name] = days.some((d) => d === day);
+        }
+        for (const name in customModifiersMap) {
+            customModifiers[name] = customModifiersMap[name].some((d) => d === day);
+        }
+        return {
+            ...dayFlags,
+            // custom modifiers should override all the previous ones
+            ...customModifiers
+        };
+    };
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getClassNamesForModifiers.js
+
+/**
+ * Returns the class names for a day based on its modifiers.
+ *
+ * This function combines the base class name for the day with any class names
+ * associated with active modifiers.
+ *
+ * @param modifiers The modifiers applied to the day.
+ * @param classNames The base class names for the calendar elements.
+ * @param modifiersClassNames The class names associated with specific
+ *   modifiers.
+ * @returns An array of class names for the day.
+ */
+function getClassNamesForModifiers(modifiers, classNames, modifiersClassNames = {}) {
+    const modifierClassNames = Object.entries(modifiers)
+        .filter(([, active]) => active === true)
+        .reduce((previousValue, [key]) => {
+        if (modifiersClassNames[key]) {
+            previousValue.push(modifiersClassNames[key]);
+        }
+        else if (classNames[DayFlag[key]]) {
+            previousValue.push(classNames[DayFlag[key]]);
+        }
+        else if (classNames[SelectionState[key]]) {
+            previousValue.push(classNames[SelectionState[key]]);
+        }
+        return previousValue;
+    }, [classNames[UI_UI.Day]]);
+    return modifierClassNames;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Button.js
+
+/**
+ * Render the button elements in the calendar.
+ *
+ * @private
+ * @deprecated Use `PreviousMonthButton` or `@link NextMonthButton` instead.
+ */
+function Button_Button(props) {
+    return external_React_.createElement("button", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/CaptionLabel.js
+
+/**
+ * Render the label in the month caption.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function CaptionLabel(props) {
+    return external_React_.createElement("span", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Chevron.js
+
+/**
+ * Render the chevron icon used in the navigation buttons and dropdowns.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Chevron(props) {
+    const { size = 24, orientation = "left", className } = props;
+    return (external_React_.createElement("svg", { className: className, width: size, height: size, viewBox: "0 0 24 24" },
+        orientation === "up" && (external_React_.createElement("polygon", { points: "6.77 17 12.5 11.43 18.24 17 20 15.28 12.5 8 5 15.28" })),
+        orientation === "down" && (external_React_.createElement("polygon", { points: "6.77 8 12.5 13.57 18.24 8 20 9.72 12.5 17 5 9.72" })),
+        orientation === "left" && (external_React_.createElement("polygon", { points: "16 18.112 9.81111111 12 16 5.87733333 14.0888889 4 6 12 14.0888889 20" })),
+        orientation === "right" && (external_React_.createElement("polygon", { points: "8 18.112 14.18888889 12 8 5.87733333 9.91111111 4 18 12 9.91111111 20" }))));
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Day.js
+
+/**
+ * Render a grid cell for a specific day in the calendar.
+ *
+ * Handles interaction and focus for the day. If you only need to change the
+ * content of the day cell, consider swapping the `DayButton` component
+ * instead.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Day_Day(props) {
+    const { day, modifiers, ...tdProps } = props;
+    return external_React_.createElement("td", { ...tdProps });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/DayButton.js
+
+/**
+ * Render a button for a specific day in the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function DayButton_DayButton(props) {
+    const { day, modifiers, ...buttonProps } = props;
+    const ref = external_React_.useRef(null);
+    external_React_.useEffect(() => {
+        if (modifiers.focused)
+            ref.current?.focus();
+    }, [modifiers.focused]);
+    return external_React_.createElement("button", { ref: ref, ...buttonProps });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Dropdown.js
+
+
+/**
+ * Render a dropdown component for navigation in the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Dropdown_Dropdown(props) {
+    const { options, className, components, classNames, ...selectProps } = props;
+    const cssClassSelect = [classNames[UI_UI.Dropdown], className].join(" ");
+    const selectedOption = options?.find(({ value }) => value === selectProps.value);
+    return (external_React_.createElement("span", { "data-disabled": selectProps.disabled, className: classNames[UI_UI.DropdownRoot] },
+        external_React_.createElement(components.Select, { className: cssClassSelect, ...selectProps }, options?.map(({ value, label, disabled }) => (external_React_.createElement(components.Option, { key: value, value: value, disabled: disabled }, label)))),
+        external_React_.createElement("span", { className: classNames[UI_UI.CaptionLabel], "aria-hidden": true },
+            selectedOption?.label,
+            external_React_.createElement(components.Chevron, { orientation: "down", size: 18, className: classNames[UI_UI.Chevron] }))));
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/DropdownNav.js
+
+/**
+ * Render the navigation dropdowns for the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function DropdownNav(props) {
+    return external_React_.createElement("div", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Footer.js
+
+/**
+ * Render the footer of the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Footer_Footer(props) {
+    return external_React_.createElement("div", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Month.js
+
+/**
+ * Render the grid with the weekday header row and the weeks for a specific
+ * month.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Month_Month(props) {
+    const { calendarMonth, displayIndex, ...divProps } = props;
+    return external_React_.createElement("div", { ...divProps }, props.children);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/MonthCaption.js
+
+/**
+ * Render the caption for a month in the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function MonthCaption(props) {
+    const { calendarMonth, displayIndex, ...divProps } = props;
+    return external_React_.createElement("div", { ...divProps });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/MonthGrid.js
+
+/**
+ * Render the grid of days for a specific month.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function MonthGrid(props) {
+    return external_React_.createElement("table", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Months.js
+
+/**
+ * Render a container wrapping the month grids.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Months(props) {
+    return external_React_.createElement("div", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/useDayPicker.js
+
+/** @ignore */
+const dayPickerContext = (0,external_React_.createContext)(undefined);
+/**
+ * Provides access to the DayPicker context, which includes properties and
+ * methods to interact with the DayPicker component. This hook must be used
+ * within a custom component.
+ *
+ * @template T - Use this type to refine the returned context type with a
+ *   specific selection mode.
+ * @returns The context to work with DayPicker.
+ * @throws {Error} If the hook is used outside of a DayPicker provider.
+ * @group Hooks
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function useDayPicker() {
+    const context = (0,external_React_.useContext)(dayPickerContext);
+    if (context === undefined) {
+        throw new Error("useDayPicker() must be used within a custom component.");
+    }
+    return context;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/MonthsDropdown.js
+
+
+/**
+ * Render a dropdown to navigate between months in the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function MonthsDropdown(props) {
+    const { components } = useDayPicker();
+    return external_React_.createElement(components.Dropdown, { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Nav.js
+
+
+
+/**
+ * Render the navigation toolbar with buttons to navigate between months.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Nav(props) {
+    const { onPreviousClick, onNextClick, previousMonth, nextMonth, ...navProps } = props;
+    const { components, classNames, labels: { labelPrevious, labelNext } } = useDayPicker();
+    const handleNextClick = (0,external_React_.useCallback)((e) => {
+        if (nextMonth) {
+            onNextClick?.(e);
+        }
+    }, [nextMonth, onNextClick]);
+    const handlePreviousClick = (0,external_React_.useCallback)((e) => {
+        if (previousMonth) {
+            onPreviousClick?.(e);
+        }
+    }, [previousMonth, onPreviousClick]);
+    return (external_React_.createElement("nav", { ...navProps },
+        external_React_.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI_UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick },
+            external_React_.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI_UI.Chevron], orientation: "left" })),
+        external_React_.createElement(components.NextMonthButton, { type: "button", className: classNames[UI_UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick },
+            external_React_.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, orientation: "right", className: classNames[UI_UI.Chevron] }))));
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/NextMonthButton.js
+
+
+/**
+ * Render the button to navigate to the next month in the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function NextMonthButton(props) {
+    const { components } = useDayPicker();
+    return external_React_.createElement(components.Button, { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Option.js
+
+/**
+ * Render an `option` element.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Option_Option(props) {
+    return external_React_.createElement("option", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/PreviousMonthButton.js
+
+
+/**
+ * Render the button to navigate to the previous month in the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function PreviousMonthButton(props) {
+    const { components } = useDayPicker();
+    return external_React_.createElement(components.Button, { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Root.js
+
+/**
+ * Render the root element of the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Root_Root(props) {
+    const { rootRef, ...rest } = props;
+    return external_React_.createElement("div", { ...rest, ref: rootRef });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Select.js
+
+/**
+ * Render a `select` element.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Select_Select(props) {
+    return external_React_.createElement("select", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Week.js
+
+/**
+ * Render a table row representing a week in the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Week(props) {
+    const { week, ...trProps } = props;
+    return external_React_.createElement("tr", { ...trProps });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Weekday.js
+
+/**
+ * Render a table header cell with the name of a weekday (e.g., "Mo", "Tu").
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Weekday(props) {
+    return external_React_.createElement("th", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Weekdays.js
+
+/**
+ * Render the table row containing the weekday names.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Weekdays(props) {
+    return (external_React_.createElement("thead", { "aria-hidden": true },
+        external_React_.createElement("tr", { ...props })));
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/WeekNumber.js
+
+/**
+ * Render a table cell displaying the number of the week.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function WeekNumber(props) {
+    const { week, ...thProps } = props;
+    return external_React_.createElement("th", { ...thProps });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/WeekNumberHeader.js
+
+/**
+ * Render the header cell for the week numbers column.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function WeekNumberHeader(props) {
+    return external_React_.createElement("th", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/Weeks.js
+
+/**
+ * Render the container for the weeks in the month grid.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function Weeks(props) {
+    return external_React_.createElement("tbody", { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/YearsDropdown.js
+
+
+/**
+ * Render a dropdown to navigate between years in the calendar.
+ *
+ * @group Components
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function YearsDropdown(props) {
+    const { components } = useDayPicker();
+    return external_React_.createElement(components.Dropdown, { ...props });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/components/custom-components.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getComponents.js
+
+/**
+ * Merges custom components from the props with the default components.
+ *
+ * This function ensures that any custom components provided in the props
+ * override the default components.
+ *
+ * @param customComponents The custom components provided in the DayPicker
+ *   props.
+ * @returns An object containing the merged components.
+ */
+function getComponents(customComponents) {
+    return {
+        ...custom_components_namespaceObject,
+        ...customComponents
+    };
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getDataAttributes.js
+/**
+ * Extracts `data-` attributes from the DayPicker props.
+ *
+ * This function collects all `data-` attributes from the props and adds
+ * additional attributes based on the DayPicker configuration.
+ *
+ * @param props The DayPicker props.
+ * @returns An object containing the `data-` attributes.
+ */
+function getDataAttributes(props) {
+    const dataAttributes = {
+        "data-mode": props.mode ?? undefined,
+        "data-required": "required" in props ? props.required : undefined,
+        "data-multiple-months": (props.numberOfMonths && props.numberOfMonths > 1) || undefined,
+        "data-week-numbers": props.showWeekNumber || undefined,
+        "data-broadcast-calendar": props.broadcastCalendar || undefined,
+        "data-nav-layout": props.navLayout || undefined
+    };
+    Object.entries(props).forEach(([key, val]) => {
+        if (key.startsWith("data-")) {
+            dataAttributes[key] = val;
+        }
+    });
+    return dataAttributes;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getDefaultClassNames.js
+
+/**
+ * Returns the default class names for the UI elements.
+ *
+ * This function generates a mapping of default class names for various UI
+ * elements, day flags, selection states, and animations.
+ *
+ * @returns An object containing the default class names.
+ * @group Utilities
+ */
+function getDefaultClassNames() {
+    const classNames = {};
+    for (const key in UI_UI) {
+        classNames[UI_UI[key]] =
+            `rdp-${UI_UI[key]}`;
+    }
+    for (const key in DayFlag) {
+        classNames[DayFlag[key]] =
+            `rdp-${DayFlag[key]}`;
+    }
+    for (const key in SelectionState) {
+        classNames[SelectionState[key]] =
+            `rdp-${SelectionState[key]}`;
+    }
+    for (const key in Animation) {
+        classNames[Animation[key]] =
+            `rdp-${Animation[key]}`;
+    }
+    return classNames;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/formatters/formatCaption.js
+
+/**
+ * Formats the caption of the month.
+ *
+ * @defaultValue `LLLL y` (e.g., "November 2022").
+ * @param month The date representing the month.
+ * @param options Configuration options for the date library.
+ * @param dateLib The date library to use for formatting. If not provided, a new
+ *   instance is created.
+ * @returns The formatted caption as a string.
+ * @group Formatters
+ * @see https://daypicker.dev/docs/translation#custom-formatters
+ */
+function formatCaption(month, options, dateLib) {
+    return (dateLib ?? new DateLib(options)).format(month, "LLLL y");
+}
+/**
+ * @private
+ * @deprecated Use {@link formatCaption} instead.
+ * @group Formatters
+ */
+const formatMonthCaption = formatCaption;
+
+;// ./node_modules/react-day-picker/dist/esm/formatters/formatDay.js
+
+/**
+ * Formats the day date shown in the day cell.
+ *
+ * @defaultValue `d` (e.g., "1").
+ * @param date The date to format.
+ * @param options Configuration options for the date library.
+ * @param dateLib The date library to use for formatting. If not provided, a new
+ *   instance is created.
+ * @returns The formatted day as a string.
+ * @group Formatters
+ * @see https://daypicker.dev/docs/translation#custom-formatters
+ */
+function formatDay(date, options, dateLib) {
+    return (dateLib ?? new DateLib(options)).format(date, "d");
+}
+
+;// ./node_modules/react-day-picker/dist/esm/formatters/formatMonthDropdown.js
+
+/**
+ * Formats the month for the dropdown option label.
+ *
+ * @defaultValue The localized full month name.
+ * @param month The date representing the month.
+ * @param dateLib The date library to use for formatting. Defaults to
+ *   `defaultDateLib`.
+ * @returns The formatted month name as a string.
+ * @group Formatters
+ * @see https://daypicker.dev/docs/translation#custom-formatters
+ */
+function formatMonthDropdown(month, dateLib = DateLib_defaultDateLib) {
+    return dateLib.format(month, "LLLL");
+}
+
+;// ./node_modules/react-day-picker/dist/esm/formatters/formatWeekNumber.js
+
+/**
+ * Formats the week number.
+ *
+ * @defaultValue The week number as a string, with a leading zero for single-digit numbers.
+ * @param weekNumber The week number to format.
+ * @param dateLib The date library to use for formatting. Defaults to
+ *   `defaultDateLib`.
+ * @returns The formatted week number as a string.
+ * @group Formatters
+ * @see https://daypicker.dev/docs/translation#custom-formatters
+ */
+function formatWeekNumber(weekNumber, dateLib = DateLib_defaultDateLib) {
+    if (weekNumber < 10) {
+        return dateLib.formatNumber(`0${weekNumber.toLocaleString()}`);
+    }
+    return dateLib.formatNumber(`${weekNumber.toLocaleString()}`);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/formatters/formatWeekNumberHeader.js
+/**
+ * Formats the header for the week number column.
+ *
+ * @defaultValue An empty string `""`.
+ * @returns The formatted week number header as a string.
+ * @group Formatters
+ * @see https://daypicker.dev/docs/translation#custom-formatters
+ */
+function formatWeekNumberHeader() {
+    return ``;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/formatters/formatWeekdayName.js
+
+/**
+ * Formats the name of a weekday to be displayed in the weekdays header.
+ *
+ * @defaultValue `cccccc` (e.g., "Mo" for Monday).
+ * @param weekday The date representing the weekday.
+ * @param options Configuration options for the date library.
+ * @param dateLib The date library to use for formatting. If not provided, a new
+ *   instance is created.
+ * @returns The formatted weekday name as a string.
+ * @group Formatters
+ * @see https://daypicker.dev/docs/translation#custom-formatters
+ */
+function formatWeekdayName(weekday, options, dateLib) {
+    return (dateLib ?? new DateLib(options)).format(weekday, "cccccc");
+}
+
+;// ./node_modules/react-day-picker/dist/esm/formatters/formatYearDropdown.js
+
+/**
+ * Formats the year for the dropdown option label.
+ *
+ * @param year The year to format.
+ * @param dateLib The date library to use for formatting. Defaults to
+ *   `defaultDateLib`.
+ * @returns The formatted year as a string.
+ * @group Formatters
+ * @see https://daypicker.dev/docs/translation#custom-formatters
+ */
+function formatYearDropdown(year, dateLib = DateLib_defaultDateLib) {
+    return dateLib.format(year, "yyyy");
+}
+/**
+ * @private
+ * @deprecated Use `formatYearDropdown` instead.
+ * @group Formatters
+ */
+const formatYearCaption = formatYearDropdown;
+
+;// ./node_modules/react-day-picker/dist/esm/formatters/index.js
+
+
+
+
+
+
+
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getFormatters.js
+
+/**
+ * Merges custom formatters from the props with the default formatters.
+ *
+ * @param customFormatters The custom formatters provided in the DayPicker
+ *   props.
+ * @returns The merged formatters object.
+ */
+function getFormatters(customFormatters) {
+    if (customFormatters?.formatMonthCaption && !customFormatters.formatCaption) {
+        customFormatters.formatCaption = customFormatters.formatMonthCaption;
+    }
+    if (customFormatters?.formatYearCaption &&
+        !customFormatters.formatYearDropdown) {
+        customFormatters.formatYearDropdown = customFormatters.formatYearCaption;
+    }
+    return {
+        ...esm_formatters_namespaceObject,
+        ...customFormatters
+    };
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getMonthOptions.js
+/**
+ * Returns the months to show in the dropdown.
+ *
+ * This function generates a list of months for the current year, formatted
+ * using the provided formatter, and determines whether each month should be
+ * disabled based on the navigation range.
+ *
+ * @param displayMonth The currently displayed month.
+ * @param navStart The start date for navigation.
+ * @param navEnd The end date for navigation.
+ * @param formatters The formatters to use for formatting the month labels.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns An array of dropdown options representing the months, or `undefined`
+ *   if no months are available.
+ */
+function getMonthOptions(displayMonth, navStart, navEnd, formatters, dateLib) {
+    const { startOfMonth, startOfYear, endOfYear, eachMonthOfInterval, getMonth } = dateLib;
+    const months = eachMonthOfInterval({
+        start: startOfYear(displayMonth),
+        end: endOfYear(displayMonth)
+    });
+    const options = months.map((month) => {
+        const label = formatters.formatMonthDropdown(month, dateLib);
+        const value = getMonth(month);
+        const disabled = (navStart && month < startOfMonth(navStart)) ||
+            (navEnd && month > startOfMonth(navEnd)) ||
+            false;
+        return { value, label, disabled };
+    });
+    return options;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getStyleForModifiers.js
+
+/**
+ * Returns the computed style for a day based on its modifiers.
+ *
+ * This function merges the base styles for the day with any styles associated
+ * with active modifiers.
+ *
+ * @param dayModifiers The modifiers applied to the day.
+ * @param styles The base styles for the calendar elements.
+ * @param modifiersStyles The styles associated with specific modifiers.
+ * @returns The computed style for the day.
+ */
+function getStyleForModifiers(dayModifiers, styles = {}, modifiersStyles = {}) {
+    let style = { ...styles?.[UI_UI.Day] };
+    Object.entries(dayModifiers)
+        .filter(([, active]) => active === true)
+        .forEach(([modifier]) => {
+        style = {
+            ...style,
+            ...modifiersStyles?.[modifier]
+        };
+    });
+    return style;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getWeekdays.js
+/**
+ * Generates a series of 7 days, starting from the beginning of the week, to use
+ * for formatting weekday names (e.g., Monday, Tuesday, etc.).
+ *
+ * @param dateLib The date library to use for date manipulation.
+ * @param ISOWeek Whether to use ISO week numbering (weeks start on Monday).
+ * @param broadcastCalendar Whether to use the broadcast calendar (weeks start
+ *   on Monday, but may include adjustments for broadcast-specific rules).
+ * @returns An array of 7 dates representing the weekdays.
+ */
+function getWeekdays(dateLib, ISOWeek, broadcastCalendar) {
+    const today = dateLib.today();
+    const start = broadcastCalendar
+        ? dateLib.startOfBroadcastWeek(today, dateLib)
+        : ISOWeek
+            ? dateLib.startOfISOWeek(today)
+            : dateLib.startOfWeek(today);
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+        const day = dateLib.addDays(start, i);
+        days.push(day);
+    }
+    return days;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getYearOptions.js
+/**
+ * Returns the years to display in the dropdown.
+ *
+ * This function generates a list of years between the navigation start and end
+ * dates, formatted using the provided formatter.
+ *
+ * @param navStart The start date for navigation.
+ * @param navEnd The end date for navigation.
+ * @param formatters The formatters to use for formatting the year labels.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns An array of dropdown options representing the years, or `undefined`
+ *   if `navStart` or `navEnd` is not provided.
+ */
+function getYearOptions(navStart, navEnd, formatters, dateLib) {
+    if (!navStart)
+        return undefined;
+    if (!navEnd)
+        return undefined;
+    const { startOfYear, endOfYear, addYears, getYear, isBefore, isSameYear } = dateLib;
+    const firstNavYear = startOfYear(navStart);
+    const lastNavYear = endOfYear(navEnd);
+    const years = [];
+    let year = firstNavYear;
+    while (isBefore(year, lastNavYear) || isSameYear(year, lastNavYear)) {
+        years.push(year);
+        year = addYears(year, 1);
+    }
+    return years.map((year) => {
+        const label = formatters.formatYearDropdown(year, dateLib);
+        return {
+            value: getYear(year),
+            label,
+            disabled: false
+        };
+    });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelGrid.js
+
+/**
+ * Generates the ARIA label for the month grid, which is announced when entering
+ * the grid.
+ *
+ * @defaultValue `LLLL y` (e.g., "November 2022").
+ * @param date - The date representing the month.
+ * @param options - Optional configuration for the date formatting library.
+ * @param dateLib - An optional instance of the date formatting library.
+ * @returns The ARIA label for the month grid.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelGrid(date, options, dateLib) {
+    return (dateLib ?? new DateLib(options)).format(date, "LLLL y");
+}
+/**
+ * @ignore
+ * @deprecated Use {@link labelGrid} instead.
+ */
+const labelCaption = labelGrid;
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelGridcell.js
+
+/**
+ * Generates the label for a day grid cell when the calendar is not interactive.
+ *
+ * @param date - The date to format.
+ * @param modifiers - Optional modifiers providing context for the day.
+ * @param options - Optional configuration for the date formatting library.
+ * @param dateLib - An optional instance of the date formatting library.
+ * @returns The label for the day grid cell.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelGridcell(date, modifiers, options, dateLib) {
+    let label = (dateLib ?? new DateLib(options)).format(date, "PPPP");
+    if (modifiers?.today) {
+        label = `Today, ${label}`;
+    }
+    return label;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelDayButton.js
+
+/**
+ * Generates the ARIA label for a day button.
+ *
+ * Use the `modifiers` argument to provide additional context for the label,
+ * such as indicating if the day is "today" or "selected."
+ *
+ * @defaultValue The formatted date.
+ * @param date - The date to format.
+ * @param modifiers - The modifiers providing context for the day.
+ * @param options - Optional configuration for the date formatting library.
+ * @param dateLib - An optional instance of the date formatting library.
+ * @returns The ARIA label for the day button.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelDayButton(date, modifiers, options, dateLib) {
+    let label = (dateLib ?? new DateLib(options)).format(date, "PPPP");
+    if (modifiers.today)
+        label = `Today, ${label}`;
+    if (modifiers.selected)
+        label = `${label}, selected`;
+    return label;
+}
+/**
+ * @ignore
+ * @deprecated Use `labelDayButton` instead.
+ */
+const labelDay = labelDayButton;
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelNav.js
+/**
+ * Generates the ARIA label for the navigation toolbar.
+ *
+ * @defaultValue `""`
+ * @returns The ARIA label for the navigation toolbar.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelNav() {
+    return "";
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelMonthDropdown.js
+/**
+ * Generates the ARIA label for the months dropdown.
+ *
+ * @defaultValue `"Choose the Month"`
+ * @param options - Optional configuration for the date formatting library.
+ * @returns The ARIA label for the months dropdown.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelMonthDropdown(options) {
+    return "Choose the Month";
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelNext.js
+/**
+ * Generates the ARIA label for the "next month" button.
+ *
+ * @defaultValue `"Go to the Next Month"`
+ * @param month - The date representing the next month, or `undefined` if there
+ *   is no next month.
+ * @returns The ARIA label for the "next month" button.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelNext(month) {
+    return "Go to the Next Month";
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelPrevious.js
+/**
+ * Generates the ARIA label for the "previous month" button.
+ *
+ * @defaultValue `"Go to the Previous Month"`
+ * @param month - The date representing the previous month, or `undefined` if
+ *   there is no previous month.
+ * @returns The ARIA label for the "previous month" button.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelPrevious(month) {
+    return "Go to the Previous Month";
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelWeekday.js
+
+/**
+ * Generates the ARIA label for a weekday column header.
+ *
+ * @defaultValue `"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"`
+ * @param date - The date representing the weekday.
+ * @param options - Optional configuration for the date formatting library.
+ * @param dateLib - An optional instance of the date formatting library.
+ * @returns The ARIA label for the weekday column header.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelWeekday(date, options, dateLib) {
+    return (dateLib ?? new DateLib(options)).format(date, "cccc");
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelWeekNumber.js
+/**
+ * Generates the ARIA label for the week number cell (the first cell in a row).
+ *
+ * @defaultValue `Week ${weekNumber}`
+ * @param weekNumber - The number of the week.
+ * @param options - Optional configuration for the date formatting library.
+ * @returns The ARIA label for the week number cell.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelWeekNumber(weekNumber, options) {
+    return `Week ${weekNumber}`;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelWeekNumberHeader.js
+/**
+ * Generates the ARIA label for the week number header element.
+ *
+ * @defaultValue `"Week Number"`
+ * @param options - Optional configuration for the date formatting library.
+ * @returns The ARIA label for the week number header.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelWeekNumberHeader(options) {
+    return "Week Number";
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/labelYearDropdown.js
+/**
+ * Generates the ARIA label for the years dropdown.
+ *
+ * @defaultValue `"Choose the Year"`
+ * @param options - Optional configuration for the date formatting library.
+ * @returns The ARIA label for the years dropdown.
+ * @group Labels
+ * @see https://daypicker.dev/docs/translation#aria-labels
+ */
+function labelYearDropdown(options) {
+    return "Choose the Year";
+}
+
+;// ./node_modules/react-day-picker/dist/esm/labels/index.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+;// ./node_modules/react-day-picker/dist/esm/useAnimation.js
+
+
+const asHtmlElement = (element) => {
+    if (element instanceof HTMLElement)
+        return element;
+    return null;
+};
+const queryMonthEls = (element) => [
+    ...(element.querySelectorAll("[data-animated-month]") ?? [])
+];
+const queryMonthEl = (element) => asHtmlElement(element.querySelector("[data-animated-month]"));
+const queryCaptionEl = (element) => asHtmlElement(element.querySelector("[data-animated-caption]"));
+const queryWeeksEl = (element) => asHtmlElement(element.querySelector("[data-animated-weeks]"));
+const queryNavEl = (element) => asHtmlElement(element.querySelector("[data-animated-nav]"));
+const queryWeekdaysEl = (element) => asHtmlElement(element.querySelector("[data-animated-weekdays]"));
+/**
+ * Handles animations for transitioning between months in the DayPicker
+ * component.
+ *
+ * @private
+ * @param rootElRef - A reference to the root element of the DayPicker
+ *   component.
+ * @param enabled - Whether animations are enabled.
+ * @param options - Configuration options for the animation, including class
+ *   names, months, focused day, and the date utility library.
+ */
+function useAnimation(rootElRef, enabled, { classNames, months, focused, dateLib }) {
+    const previousRootElSnapshotRef = (0,external_React_.useRef)(null);
+    const previousMonthsRef = (0,external_React_.useRef)(months);
+    const animatingRef = (0,external_React_.useRef)(false);
+    (0,external_React_.useLayoutEffect)(() => {
+        // get previous months before updating the previous months ref
+        const previousMonths = previousMonthsRef.current;
+        // update previous months ref for next effect trigger
+        previousMonthsRef.current = months;
+        if (!enabled ||
+            !rootElRef.current ||
+            // safety check because the ref can be set to anything by consumers
+            !(rootElRef.current instanceof HTMLElement) ||
+            // validation required for the animation to work as expected
+            months.length === 0 ||
+            previousMonths.length === 0 ||
+            months.length !== previousMonths.length) {
+            return;
+        }
+        const isSameMonth = dateLib.isSameMonth(months[0].date, previousMonths[0].date);
+        const isAfterPreviousMonth = dateLib.isAfter(months[0].date, previousMonths[0].date);
+        const captionAnimationClass = isAfterPreviousMonth
+            ? classNames[Animation.caption_after_enter]
+            : classNames[Animation.caption_before_enter];
+        const weeksAnimationClass = isAfterPreviousMonth
+            ? classNames[Animation.weeks_after_enter]
+            : classNames[Animation.weeks_before_enter];
+        // get previous root element snapshot before updating the snapshot ref
+        const previousRootElSnapshot = previousRootElSnapshotRef.current;
+        // update snapshot for next effect trigger
+        const rootElSnapshot = rootElRef.current.cloneNode(true);
+        if (rootElSnapshot instanceof HTMLElement) {
+            // if this effect is triggered while animating, we need to clean up the new root snapshot
+            // to put it in the same state as when not animating, to correctly animate the next month change
+            const currentMonthElsSnapshot = queryMonthEls(rootElSnapshot);
+            currentMonthElsSnapshot.forEach((currentMonthElSnapshot) => {
+                if (!(currentMonthElSnapshot instanceof HTMLElement))
+                    return;
+                // remove the old month snapshots from the new root snapshot
+                const previousMonthElSnapshot = queryMonthEl(currentMonthElSnapshot);
+                if (previousMonthElSnapshot &&
+                    currentMonthElSnapshot.contains(previousMonthElSnapshot)) {
+                    currentMonthElSnapshot.removeChild(previousMonthElSnapshot);
+                }
+                // remove animation classes from the new month snapshots
+                const captionEl = queryCaptionEl(currentMonthElSnapshot);
+                if (captionEl) {
+                    captionEl.classList.remove(captionAnimationClass);
+                }
+                const weeksEl = queryWeeksEl(currentMonthElSnapshot);
+                if (weeksEl) {
+                    weeksEl.classList.remove(weeksAnimationClass);
+                }
+            });
+            previousRootElSnapshotRef.current = rootElSnapshot;
+        }
+        else {
+            previousRootElSnapshotRef.current = null;
+        }
+        if (animatingRef.current ||
+            isSameMonth ||
+            // skip animation if a day is focused because it can cause issues to the animation and is better for a11y
+            focused) {
+            return;
+        }
+        const previousMonthEls = previousRootElSnapshot instanceof HTMLElement
+            ? queryMonthEls(previousRootElSnapshot)
+            : [];
+        const currentMonthEls = queryMonthEls(rootElRef.current);
+        if (currentMonthEls &&
+            currentMonthEls.every((el) => el instanceof HTMLElement) &&
+            previousMonthEls &&
+            previousMonthEls.every((el) => el instanceof HTMLElement)) {
+            animatingRef.current = true;
+            const cleanUpFunctions = [];
+            // set isolation to isolate to isolate the stacking context during animation
+            rootElRef.current.style.isolation = "isolate";
+            // set z-index to 1 to ensure the nav is clickable over the other elements being animated
+            const navEl = queryNavEl(rootElRef.current);
+            if (navEl) {
+                navEl.style.zIndex = "1";
+            }
+            currentMonthEls.forEach((currentMonthEl, index) => {
+                const previousMonthEl = previousMonthEls[index];
+                if (!previousMonthEl) {
+                    return;
+                }
+                // animate new displayed month
+                currentMonthEl.style.position = "relative";
+                currentMonthEl.style.overflow = "hidden";
+                const captionEl = queryCaptionEl(currentMonthEl);
+                if (captionEl) {
+                    captionEl.classList.add(captionAnimationClass);
+                }
+                const weeksEl = queryWeeksEl(currentMonthEl);
+                if (weeksEl) {
+                    weeksEl.classList.add(weeksAnimationClass);
+                }
+                // animate new displayed month end
+                const cleanUp = () => {
+                    animatingRef.current = false;
+                    if (rootElRef.current) {
+                        rootElRef.current.style.isolation = "";
+                    }
+                    if (navEl) {
+                        navEl.style.zIndex = "";
+                    }
+                    if (captionEl) {
+                        captionEl.classList.remove(captionAnimationClass);
+                    }
+                    if (weeksEl) {
+                        weeksEl.classList.remove(weeksAnimationClass);
+                    }
+                    currentMonthEl.style.position = "";
+                    currentMonthEl.style.overflow = "";
+                    if (currentMonthEl.contains(previousMonthEl)) {
+                        currentMonthEl.removeChild(previousMonthEl);
+                    }
+                };
+                cleanUpFunctions.push(cleanUp);
+                // animate old displayed month
+                previousMonthEl.style.pointerEvents = "none";
+                previousMonthEl.style.position = "absolute";
+                previousMonthEl.style.overflow = "hidden";
+                previousMonthEl.setAttribute("aria-hidden", "true");
+                // hide the weekdays container of the old month and only the new one
+                const previousWeekdaysEl = queryWeekdaysEl(previousMonthEl);
+                if (previousWeekdaysEl) {
+                    previousWeekdaysEl.style.opacity = "0";
+                }
+                const previousCaptionEl = queryCaptionEl(previousMonthEl);
+                if (previousCaptionEl) {
+                    previousCaptionEl.classList.add(isAfterPreviousMonth
+                        ? classNames[Animation.caption_before_exit]
+                        : classNames[Animation.caption_after_exit]);
+                    previousCaptionEl.addEventListener("animationend", cleanUp);
+                }
+                const previousWeeksEl = queryWeeksEl(previousMonthEl);
+                if (previousWeeksEl) {
+                    previousWeeksEl.classList.add(isAfterPreviousMonth
+                        ? classNames[Animation.weeks_before_exit]
+                        : classNames[Animation.weeks_after_exit]);
+                }
+                currentMonthEl.insertBefore(previousMonthEl, currentMonthEl.firstChild);
+            });
+        }
+    });
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getDates.js
+/**
+ * Returns all the dates to display in the calendar.
+ *
+ * This function calculates the range of dates to display based on the provided
+ * display months, constraints, and calendar configuration.
+ *
+ * @param displayMonths The months to display in the calendar.
+ * @param maxDate The maximum date to include in the range.
+ * @param props The DayPicker props, including calendar configuration options.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns An array of dates to display in the calendar.
+ */
+function getDates(displayMonths, maxDate, props, dateLib) {
+    const firstMonth = displayMonths[0];
+    const lastMonth = displayMonths[displayMonths.length - 1];
+    const { ISOWeek, fixedWeeks, broadcastCalendar } = props ?? {};
+    const { addDays, differenceInCalendarDays, differenceInCalendarMonths, endOfBroadcastWeek, endOfISOWeek, endOfMonth, endOfWeek, isAfter, startOfBroadcastWeek, startOfISOWeek, startOfWeek } = dateLib;
+    const startWeekFirstDate = broadcastCalendar
+        ? startOfBroadcastWeek(firstMonth, dateLib)
+        : ISOWeek
+            ? startOfISOWeek(firstMonth)
+            : startOfWeek(firstMonth);
+    const endWeekLastDate = broadcastCalendar
+        ? endOfBroadcastWeek(lastMonth)
+        : ISOWeek
+            ? endOfISOWeek(endOfMonth(lastMonth))
+            : endOfWeek(endOfMonth(lastMonth));
+    const nOfDays = differenceInCalendarDays(endWeekLastDate, startWeekFirstDate);
+    const nOfMonths = differenceInCalendarMonths(lastMonth, firstMonth) + 1;
+    const dates = [];
+    for (let i = 0; i <= nOfDays; i++) {
+        const date = addDays(startWeekFirstDate, i);
+        if (maxDate && isAfter(date, maxDate)) {
+            break;
+        }
+        dates.push(date);
+    }
+    // If fixed weeks is enabled, add the extra dates to the array
+    const nrOfDaysWithFixedWeeks = broadcastCalendar ? 35 : 42;
+    const extraDates = nrOfDaysWithFixedWeeks * nOfMonths;
+    if (fixedWeeks && dates.length < extraDates) {
+        const daysToAdd = extraDates - dates.length;
+        for (let i = 0; i < daysToAdd; i++) {
+            const date = addDays(dates[dates.length - 1], 1);
+            dates.push(date);
+        }
+    }
+    return dates;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getDays.js
+/**
+ * Returns all the days belonging to the calendar by merging the days in the
+ * weeks for each month.
+ *
+ * @param calendarMonths The array of calendar months.
+ * @returns An array of `CalendarDay` objects representing all the days in the
+ *   calendar.
+ */
+function getDays(calendarMonths) {
+    const initialDays = [];
+    return calendarMonths.reduce((days, month) => {
+        const weekDays = month.weeks.reduce((weekDays, week) => {
+            return [...weekDays, ...week.days];
+        }, initialDays);
+        return [...days, ...weekDays];
+    }, initialDays);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getDisplayMonths.js
+/**
+ * Returns the months to display in the calendar.
+ *
+ * @param firstDisplayedMonth The first month currently displayed in the
+ *   calendar.
+ * @param calendarEndMonth The latest month the user can navigate to.
+ * @param props The DayPicker props, including `numberOfMonths`.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns An array of dates representing the months to display.
+ */
+function getDisplayMonths(firstDisplayedMonth, calendarEndMonth, props, dateLib) {
+    const { numberOfMonths = 1 } = props;
+    const months = [];
+    for (let i = 0; i < numberOfMonths; i++) {
+        const month = dateLib.addMonths(firstDisplayedMonth, i);
+        if (calendarEndMonth && month > calendarEndMonth) {
+            break;
+        }
+        months.push(month);
+    }
+    return months;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getInitialMonth.js
+/**
+ * Determines the initial month to display in the calendar based on the provided
+ * props.
+ *
+ * This function calculates the starting month, considering constraints such as
+ * `startMonth`, `endMonth`, and the number of months to display.
+ *
+ * @param props The DayPicker props, including navigation and date constraints.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns The initial month to display.
+ */
+function getInitialMonth(props, dateLib) {
+    const { month, defaultMonth, today = dateLib.today(), numberOfMonths = 1, endMonth, startMonth } = props;
+    let initialMonth = month || defaultMonth || today;
+    const { differenceInCalendarMonths, addMonths, startOfMonth } = dateLib;
+    // Adjust the initial month if it is after the endMonth
+    if (endMonth && differenceInCalendarMonths(endMonth, initialMonth) < 0) {
+        const offset = -1 * (numberOfMonths - 1);
+        initialMonth = addMonths(endMonth, offset);
+    }
+    // Adjust the initial month if it is before the startMonth
+    if (startMonth && differenceInCalendarMonths(initialMonth, startMonth) < 0) {
+        initialMonth = startMonth;
+    }
+    return startOfMonth(initialMonth);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/classes/CalendarDay.js
+
+/**
+ * Represents a day displayed in the calendar.
+ *
+ * In DayPicker, a `CalendarDay` is a wrapper around a `Date` object that
+ * provides additional information about the day, such as whether it belongs to
+ * the displayed month.
+ */
+class CalendarDay {
+    constructor(date, displayMonth, dateLib = DateLib_defaultDateLib) {
+        this.date = date;
+        this.displayMonth = displayMonth;
+        this.outside = Boolean(displayMonth && !dateLib.isSameMonth(date, displayMonth));
+        this.dateLib = dateLib;
+    }
+    /**
+     * Checks if this day is equal to another `CalendarDay`, considering both the
+     * date and the displayed month.
+     *
+     * @param day The `CalendarDay` to compare with.
+     * @returns `true` if the days are equal, otherwise `false`.
+     */
+    isEqualTo(day) {
+        return (this.dateLib.isSameDay(day.date, this.date) &&
+            this.dateLib.isSameMonth(day.displayMonth, this.displayMonth));
+    }
+}
+
+;// ./node_modules/react-day-picker/dist/esm/classes/CalendarWeek.js
+/**
+ * Represents a week in a calendar month.
+ *
+ * A `CalendarWeek` contains the days within the week and the week number.
+ */
+class CalendarWeek {
+    constructor(weekNumber, days) {
+        this.days = days;
+        this.weekNumber = weekNumber;
+    }
+}
+
+;// ./node_modules/react-day-picker/dist/esm/classes/CalendarMonth.js
+/**
+ * Represents a month in a calendar year.
+ *
+ * A `CalendarMonth` contains the weeks within the month and the date of the
+ * month.
+ */
+class CalendarMonth {
+    constructor(month, weeks) {
+        this.date = month;
+        this.weeks = weeks;
+    }
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getMonths.js
+
+/**
+ * Returns the months to display in the calendar.
+ *
+ * This function generates `CalendarMonth` objects for each month to be
+ * displayed, including their weeks and days, based on the provided display
+ * months and dates.
+ *
+ * @param displayMonths The months (as dates) to display in the calendar.
+ * @param dates The dates to display in the calendar.
+ * @param props Options from the DayPicker props context.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns An array of `CalendarMonth` objects representing the months to
+ *   display.
+ */
+function getMonths(displayMonths, dates, props, dateLib) {
+    const { addDays, endOfBroadcastWeek, endOfISOWeek, endOfMonth, endOfWeek, getISOWeek, getWeek, startOfBroadcastWeek, startOfISOWeek, startOfWeek } = dateLib;
+    const dayPickerMonths = displayMonths.reduce((months, month) => {
+        const firstDateOfFirstWeek = props.broadcastCalendar
+            ? startOfBroadcastWeek(month, dateLib)
+            : props.ISOWeek
+                ? startOfISOWeek(month)
+                : startOfWeek(month);
+        const lastDateOfLastWeek = props.broadcastCalendar
+            ? endOfBroadcastWeek(month)
+            : props.ISOWeek
+                ? endOfISOWeek(endOfMonth(month))
+                : endOfWeek(endOfMonth(month));
+        /** The dates to display in the month. */
+        const monthDates = dates.filter((date) => {
+            return date >= firstDateOfFirstWeek && date <= lastDateOfLastWeek;
+        });
+        const nrOfDaysWithFixedWeeks = props.broadcastCalendar ? 35 : 42;
+        if (props.fixedWeeks && monthDates.length < nrOfDaysWithFixedWeeks) {
+            const extraDates = dates.filter((date) => {
+                const daysToAdd = nrOfDaysWithFixedWeeks - monthDates.length;
+                return (date > lastDateOfLastWeek &&
+                    date <= addDays(lastDateOfLastWeek, daysToAdd));
+            });
+            monthDates.push(...extraDates);
+        }
+        const weeks = monthDates.reduce((weeks, date) => {
+            const weekNumber = props.ISOWeek ? getISOWeek(date) : getWeek(date);
+            const week = weeks.find((week) => week.weekNumber === weekNumber);
+            const day = new CalendarDay(date, month, dateLib);
+            if (!week) {
+                weeks.push(new CalendarWeek(weekNumber, [day]));
+            }
+            else {
+                week.days.push(day);
+            }
+            return weeks;
+        }, []);
+        const dayPickerMonth = new CalendarMonth(month, weeks);
+        months.push(dayPickerMonth);
+        return months;
+    }, []);
+    if (!props.reverseMonths) {
+        return dayPickerMonths;
+    }
+    else {
+        return dayPickerMonths.reverse();
+    }
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getNavMonth.js
+/**
+ * Returns the start and end months for calendar navigation.
+ *
+ * @param props The DayPicker props, including navigation and layout options.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns A tuple containing the start and end months for navigation.
+ */
+function getNavMonths(props, dateLib) {
+    let { startMonth, endMonth } = props;
+    const { startOfYear, startOfDay, startOfMonth, endOfMonth, addYears, endOfYear, newDate, today } = dateLib;
+    // Handle deprecated code
+    const { fromYear, toYear, fromMonth, toMonth } = props;
+    if (!startMonth && fromMonth) {
+        startMonth = fromMonth;
+    }
+    if (!startMonth && fromYear) {
+        startMonth = dateLib.newDate(fromYear, 0, 1);
+    }
+    if (!endMonth && toMonth) {
+        endMonth = toMonth;
+    }
+    if (!endMonth && toYear) {
+        endMonth = newDate(toYear, 11, 31);
+    }
+    const hasYearDropdown = props.captionLayout === "dropdown" ||
+        props.captionLayout === "dropdown-years";
+    if (startMonth) {
+        startMonth = startOfMonth(startMonth);
+    }
+    else if (fromYear) {
+        startMonth = newDate(fromYear, 0, 1);
+    }
+    else if (!startMonth && hasYearDropdown) {
+        startMonth = startOfYear(addYears(props.today ?? today(), -100));
+    }
+    if (endMonth) {
+        endMonth = endOfMonth(endMonth);
+    }
+    else if (toYear) {
+        endMonth = newDate(toYear, 11, 31);
+    }
+    else if (!endMonth && hasYearDropdown) {
+        endMonth = endOfYear(props.today ?? today());
+    }
+    return [
+        startMonth ? startOfDay(startMonth) : startMonth,
+        endMonth ? startOfDay(endMonth) : endMonth
+    ];
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getNextMonth.js
+/**
+ * Returns the next month the user can navigate to, based on the given options.
+ *
+ * The next month is not always the next calendar month:
+ *
+ * - If it is after the `calendarEndMonth`, it returns `undefined`.
+ * - If paged navigation is enabled, it skips forward by the number of displayed
+ *   months.
+ *
+ * @param firstDisplayedMonth The first month currently displayed in the
+ *   calendar.
+ * @param calendarEndMonth The latest month the user can navigate to.
+ * @param options Navigation options, including `numberOfMonths` and
+ *   `pagedNavigation`.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns The next month, or `undefined` if navigation is not possible.
+ */
+function getNextMonth(firstDisplayedMonth, calendarEndMonth, options, dateLib) {
+    if (options.disableNavigation) {
+        return undefined;
+    }
+    const { pagedNavigation, numberOfMonths = 1 } = options;
+    const { startOfMonth, addMonths, differenceInCalendarMonths } = dateLib;
+    const offset = pagedNavigation ? numberOfMonths : 1;
+    const month = startOfMonth(firstDisplayedMonth);
+    if (!calendarEndMonth) {
+        return addMonths(month, offset);
+    }
+    const monthsDiff = differenceInCalendarMonths(calendarEndMonth, firstDisplayedMonth);
+    if (monthsDiff < numberOfMonths) {
+        return undefined;
+    }
+    return addMonths(month, offset);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getPreviousMonth.js
+/**
+ * Returns the previous month the user can navigate to, based on the given
+ * options.
+ *
+ * The previous month is not always the previous calendar month:
+ *
+ * - If it is before the `calendarStartMonth`, it returns `undefined`.
+ * - If paged navigation is enabled, it skips back by the number of displayed
+ *   months.
+ *
+ * @param firstDisplayedMonth The first month currently displayed in the
+ *   calendar.
+ * @param calendarStartMonth The earliest month the user can navigate to.
+ * @param options Navigation options, including `numberOfMonths` and
+ *   `pagedNavigation`.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns The previous month, or `undefined` if navigation is not possible.
+ */
+function getPreviousMonth(firstDisplayedMonth, calendarStartMonth, options, dateLib) {
+    if (options.disableNavigation) {
+        return undefined;
+    }
+    const { pagedNavigation, numberOfMonths } = options;
+    const { startOfMonth, addMonths, differenceInCalendarMonths } = dateLib;
+    const offset = pagedNavigation ? (numberOfMonths ?? 1) : 1;
+    const month = startOfMonth(firstDisplayedMonth);
+    if (!calendarStartMonth) {
+        return addMonths(month, -offset);
+    }
+    const monthsDiff = differenceInCalendarMonths(month, calendarStartMonth);
+    if (monthsDiff <= 0) {
+        return undefined;
+    }
+    return addMonths(month, -offset);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getWeeks.js
+/**
+ * Returns an array of calendar weeks from an array of calendar months.
+ *
+ * @param months The array of calendar months.
+ * @returns An array of calendar weeks.
+ */
+function getWeeks(months) {
+    const initialWeeks = [];
+    return months.reduce((weeks, month) => {
+        return [...weeks, ...month.weeks];
+    }, initialWeeks);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/useControlledValue.js
+
+/**
+ * A custom hook for managing both controlled and uncontrolled component states.
+ *
+ * This hook allows a component to support both controlled and uncontrolled
+ * states by determining whether the `controlledValue` is provided. If it is
+ * undefined, the hook falls back to using the internal state.
+ *
+ * @example
+ *   // Uncontrolled usage
+ *   const [value, setValue] = useControlledValue(0, undefined);
+ *
+ *   // Controlled usage
+ *   const [value, setValue] = useControlledValue(0, props.value);
+ *
+ * @template T - The type of the value.
+ * @param defaultValue The initial value for the uncontrolled state.
+ * @param controlledValue The value for the controlled state. If undefined, the
+ *   component will use the uncontrolled state.
+ * @returns A tuple where the first element is the current value (either
+ *   controlled or uncontrolled) and the second element is a setter function to
+ *   update the value.
+ */
+function useControlledValue_useControlledValue(defaultValue, controlledValue) {
+    const [uncontrolledValue, setValue] = (0,external_React_.useState)(defaultValue);
+    const value = controlledValue === undefined ? uncontrolledValue : controlledValue;
+    return [value, setValue];
+}
+
+;// ./node_modules/react-day-picker/dist/esm/useCalendar.js
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Provides the calendar object to work with the calendar in custom components.
+ *
+ * @private
+ * @param props - The DayPicker props related to calendar configuration.
+ * @param dateLib - The date utility library instance.
+ * @returns The calendar object containing displayed days, weeks, months, and
+ *   navigation methods.
+ */
+function useCalendar(props, dateLib) {
+    const [navStart, navEnd] = getNavMonths(props, dateLib);
+    const { startOfMonth, endOfMonth } = dateLib;
+    const initialMonth = getInitialMonth(props, dateLib);
+    const [firstMonth, setFirstMonth] = useControlledValue_useControlledValue(initialMonth, 
+    // initialMonth is always computed from props.month if provided
+    props.month ? initialMonth : undefined);
+    (0,external_React_.useEffect)(() => {
+        const newInitialMonth = getInitialMonth(props, dateLib);
+        setFirstMonth(newInitialMonth);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.timeZone]);
+    /** The months displayed in the calendar. */
+    const displayMonths = getDisplayMonths(firstMonth, navEnd, props, dateLib);
+    /** The dates displayed in the calendar. */
+    const dates = getDates(displayMonths, props.endMonth ? endOfMonth(props.endMonth) : undefined, props, dateLib);
+    /** The Months displayed in the calendar. */
+    const months = getMonths(displayMonths, dates, props, dateLib);
+    /** The Weeks displayed in the calendar. */
+    const weeks = getWeeks(months);
+    /** The Days displayed in the calendar. */
+    const days = getDays(months);
+    const previousMonth = getPreviousMonth(firstMonth, navStart, props, dateLib);
+    const nextMonth = getNextMonth(firstMonth, navEnd, props, dateLib);
+    const { disableNavigation, onMonthChange } = props;
+    const isDayInCalendar = (day) => weeks.some((week) => week.days.some((d) => d.isEqualTo(day)));
+    const goToMonth = (date) => {
+        if (disableNavigation) {
+            return;
+        }
+        let newMonth = startOfMonth(date);
+        // if month is before start, use the first month instead
+        if (navStart && newMonth < startOfMonth(navStart)) {
+            newMonth = startOfMonth(navStart);
+        }
+        // if month is after endMonth, use the last month instead
+        if (navEnd && newMonth > startOfMonth(navEnd)) {
+            newMonth = startOfMonth(navEnd);
+        }
+        setFirstMonth(newMonth);
+        onMonthChange?.(newMonth);
+    };
+    const goToDay = (day) => {
+        // is this check necessary?
+        if (isDayInCalendar(day)) {
+            return;
+        }
+        goToMonth(day.date);
+    };
+    const calendar = {
+        months,
+        weeks,
+        days,
+        navStart,
+        navEnd,
+        previousMonth,
+        nextMonth,
+        goToMonth,
+        goToDay
+    };
+    return calendar;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/calculateFocusTarget.js
+
+var FocusTargetPriority;
+(function (FocusTargetPriority) {
+    FocusTargetPriority[FocusTargetPriority["Today"] = 0] = "Today";
+    FocusTargetPriority[FocusTargetPriority["Selected"] = 1] = "Selected";
+    FocusTargetPriority[FocusTargetPriority["LastFocused"] = 2] = "LastFocused";
+    FocusTargetPriority[FocusTargetPriority["FocusedModifier"] = 3] = "FocusedModifier";
+})(FocusTargetPriority || (FocusTargetPriority = {}));
+/**
+ * Determines if a day is focusable based on its modifiers.
+ *
+ * A day is considered focusable if it is not disabled, hidden, or outside the
+ * displayed month.
+ *
+ * @param modifiers The modifiers applied to the day.
+ * @returns `true` if the day is focusable, otherwise `false`.
+ */
+function isFocusableDay(modifiers) {
+    return (!modifiers[DayFlag.disabled] &&
+        !modifiers[DayFlag.hidden] &&
+        !modifiers[DayFlag.outside]);
+}
+/**
+ * Calculates the focus target day based on priority.
+ *
+ * This function determines the day that should receive focus in the calendar,
+ * prioritizing days with specific modifiers (e.g., "focused", "today") or
+ * selection states.
+ *
+ * @param days The array of `CalendarDay` objects to evaluate.
+ * @param getModifiers A function to retrieve the modifiers for a given day.
+ * @param isSelected A function to determine if a day is selected.
+ * @param lastFocused The last focused day, if any.
+ * @returns The `CalendarDay` that should receive focus, or `undefined` if no
+ *   focusable day is found.
+ */
+function calculateFocusTarget(days, getModifiers, isSelected, lastFocused) {
+    let focusTarget;
+    let foundFocusTargetPriority = -1;
+    for (const day of days) {
+        const modifiers = getModifiers(day);
+        if (isFocusableDay(modifiers)) {
+            if (modifiers[DayFlag.focused] &&
+                foundFocusTargetPriority < FocusTargetPriority.FocusedModifier) {
+                focusTarget = day;
+                foundFocusTargetPriority = FocusTargetPriority.FocusedModifier;
+            }
+            else if (lastFocused?.isEqualTo(day) &&
+                foundFocusTargetPriority < FocusTargetPriority.LastFocused) {
+                focusTarget = day;
+                foundFocusTargetPriority = FocusTargetPriority.LastFocused;
+            }
+            else if (isSelected(day.date) &&
+                foundFocusTargetPriority < FocusTargetPriority.Selected) {
+                focusTarget = day;
+                foundFocusTargetPriority = FocusTargetPriority.Selected;
+            }
+            else if (modifiers[DayFlag.today] &&
+                foundFocusTargetPriority < FocusTargetPriority.Today) {
+                focusTarget = day;
+                foundFocusTargetPriority = FocusTargetPriority.Today;
+            }
+        }
+    }
+    if (!focusTarget) {
+        // Return the first day that is focusable
+        focusTarget = days.find((day) => isFocusableDay(getModifiers(day)));
+    }
+    return focusTarget;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getFocusableDate.js
+/**
+ * Calculates the next date that should be focused in the calendar.
+ *
+ * This function determines the next focusable date based on the movement
+ * direction, constraints, and calendar configuration.
+ *
+ * @param moveBy The unit of movement (e.g., "day", "week").
+ * @param moveDir The direction of movement ("before" or "after").
+ * @param refDate The reference date from which to calculate the next focusable
+ *   date.
+ * @param navStart The earliest date the user can navigate to.
+ * @param navEnd The latest date the user can navigate to.
+ * @param props The DayPicker props, including calendar configuration options.
+ * @param dateLib The date library to use for date manipulation.
+ * @returns The next focusable date.
+ */
+function getFocusableDate(moveBy, moveDir, refDate, navStart, navEnd, props, dateLib) {
+    const { ISOWeek, broadcastCalendar } = props;
+    const { addDays, addMonths, addWeeks, addYears, endOfBroadcastWeek, endOfISOWeek, endOfWeek, max, min, startOfBroadcastWeek, startOfISOWeek, startOfWeek } = dateLib;
+    const moveFns = {
+        day: addDays,
+        week: addWeeks,
+        month: addMonths,
+        year: addYears,
+        startOfWeek: (date) => broadcastCalendar
+            ? startOfBroadcastWeek(date, dateLib)
+            : ISOWeek
+                ? startOfISOWeek(date)
+                : startOfWeek(date),
+        endOfWeek: (date) => broadcastCalendar
+            ? endOfBroadcastWeek(date)
+            : ISOWeek
+                ? endOfISOWeek(date)
+                : endOfWeek(date)
+    };
+    let focusableDate = moveFns[moveBy](refDate, moveDir === "after" ? 1 : -1);
+    if (moveDir === "before" && navStart) {
+        focusableDate = max([navStart, focusableDate]);
+    }
+    else if (moveDir === "after" && navEnd) {
+        focusableDate = min([navEnd, focusableDate]);
+    }
+    return focusableDate;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/helpers/getNextFocus.js
+
+
+
+/**
+ * Determines the next focusable day in the calendar.
+ *
+ * This function recursively calculates the next focusable day based on the
+ * movement direction and modifiers applied to the days.
+ *
+ * @param moveBy The unit of movement (e.g., "day", "week").
+ * @param moveDir The direction of movement ("before" or "after").
+ * @param refDay The currently focused day.
+ * @param calendarStartMonth The earliest month the user can navigate to.
+ * @param calendarEndMonth The latest month the user can navigate to.
+ * @param props The DayPicker props, including modifiers and configuration
+ *   options.
+ * @param dateLib The date library to use for date manipulation.
+ * @param attempt The current recursion attempt (used to limit recursion depth).
+ * @returns The next focusable day, or `undefined` if no focusable day is found.
+ */
+function getNextFocus(moveBy, moveDir, refDay, calendarStartMonth, calendarEndMonth, props, dateLib, attempt = 0) {
+    if (attempt > 365) {
+        // Limit the recursion to 365 attempts
+        return undefined;
+    }
+    const focusableDate = getFocusableDate(moveBy, moveDir, refDay.date, calendarStartMonth, calendarEndMonth, props, dateLib);
+    const isDisabled = Boolean(props.disabled && dateMatchModifiers(focusableDate, props.disabled, dateLib));
+    const isHidden = Boolean(props.hidden && dateMatchModifiers(focusableDate, props.hidden, dateLib));
+    const targetMonth = focusableDate;
+    const focusDay = new CalendarDay(focusableDate, targetMonth, dateLib);
+    if (!isDisabled && !isHidden) {
+        return focusDay;
+    }
+    // Recursively attempt to find the next focusable date
+    return getNextFocus(moveBy, moveDir, focusDay, calendarStartMonth, calendarEndMonth, props, dateLib, attempt + 1);
+}
+
+;// ./node_modules/react-day-picker/dist/esm/useFocus.js
+
+
+
+/**
+ * Manages focus behavior for the DayPicker component, including setting,
+ * moving, and blurring focus on calendar days.
+ *
+ * @template T - The type of DayPicker props.
+ * @param props - The DayPicker props.
+ * @param calendar - The calendar object containing the displayed days and
+ *   months.
+ * @param getModifiers - A function to retrieve modifiers for a given day.
+ * @param isSelected - A function to check if a date is selected.
+ * @param dateLib - The date utility library instance.
+ * @returns An object containing focus-related methods and the currently focused
+ *   day.
+ */
+function useFocus(props, calendar, getModifiers, isSelected, dateLib) {
+    const { autoFocus } = props;
+    const [lastFocused, setLastFocused] = (0,external_React_.useState)();
+    const focusTarget = calculateFocusTarget(calendar.days, getModifiers, isSelected || (() => false), lastFocused);
+    const [focusedDay, setFocused] = (0,external_React_.useState)(autoFocus ? focusTarget : undefined);
+    const blur = () => {
+        setLastFocused(focusedDay);
+        setFocused(undefined);
+    };
+    const moveFocus = (moveBy, moveDir) => {
+        if (!focusedDay)
+            return;
+        const nextFocus = getNextFocus(moveBy, moveDir, focusedDay, calendar.navStart, calendar.navEnd, props, dateLib);
+        if (!nextFocus)
+            return;
+        calendar.goToDay(nextFocus);
+        setFocused(nextFocus);
+    };
+    const isFocusTarget = (day) => {
+        return Boolean(focusTarget?.isEqualTo(day));
+    };
+    const useFocus = {
+        isFocusTarget,
+        setFocused,
+        focused: focusedDay,
+        blur,
+        moveFocus
+    };
+    return useFocus;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/selection/useMulti.js
+
+/**
+ * Hook to manage multiple-date selection in the DayPicker component.
+ *
+ * @template T - The type of DayPicker props.
+ * @param props - The DayPicker props.
+ * @param dateLib - The date utility library instance.
+ * @returns An object containing the selected dates, a function to select dates,
+ *   and a function to check if a date is selected.
+ */
+function useMulti(props, dateLib) {
+    const { selected: initiallySelected, required, onSelect } = props;
+    const [internallySelected, setSelected] = useControlledValue_useControlledValue(initiallySelected, onSelect ? initiallySelected : undefined);
+    const selected = !onSelect ? internallySelected : initiallySelected;
+    const { isSameDay } = dateLib;
+    const isSelected = (date) => {
+        return selected?.some((d) => isSameDay(d, date)) ?? false;
+    };
+    const { min, max } = props;
+    const select = (triggerDate, modifiers, e) => {
+        let newDates = [...(selected ?? [])];
+        if (isSelected(triggerDate)) {
+            if (selected?.length === min) {
+                // Min value reached, do nothing
+                return;
+            }
+            if (required && selected?.length === 1) {
+                // Required value already selected do nothing
+                return;
+            }
+            newDates = selected?.filter((d) => !isSameDay(d, triggerDate));
+        }
+        else {
+            if (selected?.length === max) {
+                // Max value reached, reset the selection to date
+                newDates = [triggerDate];
+            }
+            else {
+                // Add the date to the selection
+                newDates = [...newDates, triggerDate];
+            }
+        }
+        if (!onSelect) {
+            setSelected(newDates);
+        }
+        onSelect?.(newDates, triggerDate, modifiers, e);
+        return newDates;
+    };
+    return {
+        selected,
+        select,
+        isSelected
+    };
+}
+
+;// ./node_modules/react-day-picker/dist/esm/utils/addToRange.js
+
+/**
+ * Adds a date to an existing range, considering constraints like minimum and
+ * maximum range size.
+ *
+ * @param date - The date to add to the range.
+ * @param initialRange - The initial range to which the date will be added.
+ * @param min - The minimum number of days in the range.
+ * @param max - The maximum number of days in the range.
+ * @param required - Whether the range must always include at least one date.
+ * @param dateLib - The date utility library instance.
+ * @returns The updated date range, or `undefined` if the range is cleared.
+ * @group Utilities
+ */
+function addToRange(date, initialRange, min = 0, max = 0, required = false, dateLib = DateLib_defaultDateLib) {
+    const { from, to } = initialRange || {};
+    const { isSameDay, isAfter, isBefore } = dateLib;
+    let range;
+    if (!from && !to) {
+        // the range is empty, add the date
+        range = { from: date, to: min > 0 ? undefined : date };
+    }
+    else if (from && !to) {
+        // adding date to an incomplete range
+        if (isSameDay(from, date)) {
+            // adding a date equal to the start of the range
+            if (required) {
+                range = { from, to: undefined };
+            }
+            else {
+                range = undefined;
+            }
+        }
+        else if (isBefore(date, from)) {
+            // adding a date before the start of the range
+            range = { from: date, to: from };
+        }
+        else {
+            // adding a date after the start of the range
+            range = { from, to: date };
+        }
+    }
+    else if (from && to) {
+        // adding date to a complete range
+        if (isSameDay(from, date) && isSameDay(to, date)) {
+            // adding a date that is equal to both start and end of the range
+            if (required) {
+                range = { from, to };
+            }
+            else {
+                range = undefined;
+            }
+        }
+        else if (isSameDay(from, date)) {
+            // adding a date equal to the the start of the range
+            range = { from, to: min > 0 ? undefined : date };
+        }
+        else if (isSameDay(to, date)) {
+            // adding a dare equal to the end of the range
+            range = { from: date, to: min > 0 ? undefined : date };
+        }
+        else if (isBefore(date, from)) {
+            // adding a date before the start of the range
+            range = { from: date, to: to };
+        }
+        else if (isAfter(date, from)) {
+            // adding a date after the start of the range
+            range = { from, to: date };
+        }
+        else if (isAfter(date, to)) {
+            // adding a date after the end of the range
+            range = { from, to: date };
+        }
+        else {
+            throw new Error("Invalid range");
+        }
+    }
+    // check for min / max
+    if (range?.from && range?.to) {
+        const diff = dateLib.differenceInCalendarDays(range.to, range.from);
+        if (max > 0 && diff > max) {
+            range = { from: date, to: undefined };
+        }
+        else if (min > 1 && diff < min) {
+            range = { from: date, to: undefined };
+        }
+    }
+    return range;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/utils/rangeContainsDayOfWeek.js
+
+/**
+ * Checks if a date range contains one or more specified days of the week.
+ *
+ * @since 9.2.2
+ * @param range - The date range to check.
+ * @param dayOfWeek - The day(s) of the week to check for (`0-6`, where `0` is
+ *   Sunday).
+ * @param dateLib - The date utility library instance.
+ * @returns `true` if the range contains the specified day(s) of the week,
+ *   otherwise `false`.
+ * @group Utilities
+ */
+function rangeContainsDayOfWeek(range, dayOfWeek, dateLib = DateLib_defaultDateLib) {
+    const dayOfWeekArr = !Array.isArray(dayOfWeek) ? [dayOfWeek] : dayOfWeek;
+    let date = range.from;
+    const totalDays = dateLib.differenceInCalendarDays(range.to, range.from);
+    // iterate at maximum one week or the total days if the range is shorter than one week
+    const totalDaysLimit = Math.min(totalDays, 6);
+    for (let i = 0; i <= totalDaysLimit; i++) {
+        if (dayOfWeekArr.includes(date.getDay())) {
+            return true;
+        }
+        date = dateLib.addDays(date, 1);
+    }
+    return false;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/utils/rangeOverlaps.js
+
+
+/**
+ * Determines if two date ranges overlap.
+ *
+ * @since 9.2.2
+ * @param rangeLeft - The first date range.
+ * @param rangeRight - The second date range.
+ * @param dateLib - The date utility library instance.
+ * @returns `true` if the ranges overlap, otherwise `false`.
+ * @group Utilities
+ */
+function rangeOverlaps(rangeLeft, rangeRight, dateLib = DateLib_defaultDateLib) {
+    return (rangeIncludesDate(rangeLeft, rangeRight.from, false, dateLib) ||
+        rangeIncludesDate(rangeLeft, rangeRight.to, false, dateLib) ||
+        rangeIncludesDate(rangeRight, rangeLeft.from, false, dateLib) ||
+        rangeIncludesDate(rangeRight, rangeLeft.to, false, dateLib));
+}
+
+;// ./node_modules/react-day-picker/dist/esm/utils/rangeContainsModifiers.js
+
+
+
+
+
+
+/**
+ * Checks if a date range contains dates that match the given modifiers.
+ *
+ * @since 9.2.2
+ * @param range - The date range to check.
+ * @param modifiers - The modifiers to match against.
+ * @param dateLib - The date utility library instance.
+ * @returns `true` if the range contains matching dates, otherwise `false`.
+ * @group Utilities
+ */
+function rangeContainsModifiers(range, modifiers, dateLib = DateLib_defaultDateLib) {
+    const matchers = Array.isArray(modifiers) ? modifiers : [modifiers];
+    // Defer function matchers evaluation as they are the least performant.
+    const nonFunctionMatchers = matchers.filter((matcher) => typeof matcher !== "function");
+    const nonFunctionMatchersResult = nonFunctionMatchers.some((matcher) => {
+        if (typeof matcher === "boolean")
+            return matcher;
+        if (dateLib.isDate(matcher)) {
+            return rangeIncludesDate(range, matcher, false, dateLib);
+        }
+        if (isDatesArray(matcher, dateLib)) {
+            return matcher.some((date) => rangeIncludesDate(range, date, false, dateLib));
+        }
+        if (isDateRange(matcher)) {
+            if (matcher.from && matcher.to) {
+                return rangeOverlaps(range, { from: matcher.from, to: matcher.to }, dateLib);
+            }
+            return false;
+        }
+        if (isDayOfWeekType(matcher)) {
+            return rangeContainsDayOfWeek(range, matcher.dayOfWeek, dateLib);
+        }
+        if (isDateInterval(matcher)) {
+            const isClosedInterval = dateLib.isAfter(matcher.before, matcher.after);
+            if (isClosedInterval) {
+                return rangeOverlaps(range, {
+                    from: dateLib.addDays(matcher.after, 1),
+                    to: dateLib.addDays(matcher.before, -1)
+                }, dateLib);
+            }
+            return (dateMatchModifiers(range.from, matcher, dateLib) ||
+                dateMatchModifiers(range.to, matcher, dateLib));
+        }
+        if (isDateAfterType(matcher) || isDateBeforeType(matcher)) {
+            return (dateMatchModifiers(range.from, matcher, dateLib) ||
+                dateMatchModifiers(range.to, matcher, dateLib));
+        }
+        return false;
+    });
+    if (nonFunctionMatchersResult) {
+        return true;
+    }
+    const functionMatchers = matchers.filter((matcher) => typeof matcher === "function");
+    if (functionMatchers.length) {
+        let date = range.from;
+        const totalDays = dateLib.differenceInCalendarDays(range.to, range.from);
+        for (let i = 0; i <= totalDays; i++) {
+            if (functionMatchers.some((matcher) => matcher(date))) {
+                return true;
+            }
+            date = dateLib.addDays(date, 1);
+        }
+    }
+    return false;
+}
+
+;// ./node_modules/react-day-picker/dist/esm/selection/useRange.js
+
+
+
+/**
+ * Hook to manage range selection in the DayPicker component.
+ *
+ * @template T - The type of DayPicker props.
+ * @param props - The DayPicker props.
+ * @param dateLib - The date utility library instance.
+ * @returns An object containing the selected range, a function to select a
+ *   range, and a function to check if a date is within the range.
+ */
+function useRange(props, dateLib) {
+    const { disabled, excludeDisabled, selected: initiallySelected, required, onSelect } = props;
+    const [internallySelected, setSelected] = useControlledValue_useControlledValue(initiallySelected, onSelect ? initiallySelected : undefined);
+    const selected = !onSelect ? internallySelected : initiallySelected;
+    const isSelected = (date) => selected && rangeIncludesDate(selected, date, false, dateLib);
+    const select = (triggerDate, modifiers, e) => {
+        const { min, max } = props;
+        const newRange = triggerDate
+            ? addToRange(triggerDate, selected, min, max, required, dateLib)
+            : undefined;
+        if (excludeDisabled && disabled && newRange?.from && newRange.to) {
+            if (rangeContainsModifiers({ from: newRange.from, to: newRange.to }, disabled, dateLib)) {
+                // if a disabled days is found, the range is reset
+                newRange.from = triggerDate;
+                newRange.to = undefined;
+            }
+        }
+        if (!onSelect) {
+            setSelected(newRange);
+        }
+        onSelect?.(newRange, triggerDate, modifiers, e);
+        return newRange;
+    };
+    return {
+        selected,
+        select,
+        isSelected
+    };
+}
+
+;// ./node_modules/react-day-picker/dist/esm/selection/useSingle.js
+
+/**
+ * Hook to manage single-date selection in the DayPicker component.
+ *
+ * @template T - The type of DayPicker props.
+ * @param props - The DayPicker props.
+ * @param dateLib - The date utility library instance.
+ * @returns An object containing the selected date, a function to select a date,
+ *   and a function to check if a date is selected.
+ */
+function useSingle(props, dateLib) {
+    const { selected: initiallySelected, required, onSelect } = props;
+    const [internallySelected, setSelected] = useControlledValue_useControlledValue(initiallySelected, onSelect ? initiallySelected : undefined);
+    const selected = !onSelect ? internallySelected : initiallySelected;
+    const { isSameDay } = dateLib;
+    const isSelected = (compareDate) => {
+        return selected ? isSameDay(selected, compareDate) : false;
+    };
+    const select = (triggerDate, modifiers, e) => {
+        let newDate = triggerDate;
+        if (!required && selected && selected && isSameDay(triggerDate, selected)) {
+            // If the date is the same, clear the selection.
+            newDate = undefined;
+        }
+        if (!onSelect) {
+            setSelected(newDate);
+        }
+        if (required) {
+            onSelect?.(newDate, triggerDate, modifiers, e);
+        }
+        else {
+            onSelect?.(newDate, triggerDate, modifiers, e);
+        }
+        return newDate;
+    };
+    return {
+        selected,
+        select,
+        isSelected
+    };
+}
+
+;// ./node_modules/react-day-picker/dist/esm/useSelection.js
+
+
+
+/**
+ * Determines the appropriate selection hook to use based on the selection mode
+ * and returns the corresponding selection object.
+ *
+ * @template T - The type of DayPicker props.
+ * @param props - The DayPicker props.
+ * @param dateLib - The date utility library instance.
+ * @returns The selection object for the specified mode, or `undefined` if no
+ *   mode is set.
+ */
+function useSelection(props, dateLib) {
+    const single = useSingle(props, dateLib);
+    const multi = useMulti(props, dateLib);
+    const range = useRange(props, dateLib);
+    switch (props.mode) {
+        case "single":
+            return single;
+        case "multiple":
+            return multi;
+        case "range":
+            return range;
+        default:
+            return undefined;
+    }
+}
+
+;// ./node_modules/react-day-picker/dist/esm/DayPicker.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Renders the DayPicker calendar component.
+ *
+ * @param initialProps - The props for the DayPicker component.
+ * @returns The rendered DayPicker component.
+ * @group DayPicker
+ * @see https://daypicker.dev
+ */
+function DayPicker(initialProps) {
+    let props = initialProps;
+    if (props.timeZone) {
+        props = {
+            ...initialProps
+        };
+        if (props.today) {
+            props.today = new date_TZDate(props.today, props.timeZone);
+        }
+        if (props.month) {
+            props.month = new date_TZDate(props.month, props.timeZone);
+        }
+        if (props.defaultMonth) {
+            props.defaultMonth = new date_TZDate(props.defaultMonth, props.timeZone);
+        }
+        if (props.startMonth) {
+            props.startMonth = new date_TZDate(props.startMonth, props.timeZone);
+        }
+        if (props.endMonth) {
+            props.endMonth = new date_TZDate(props.endMonth, props.timeZone);
+        }
+        if (props.mode === "single" && props.selected) {
+            props.selected = new date_TZDate(props.selected, props.timeZone);
+        }
+        else if (props.mode === "multiple" && props.selected) {
+            props.selected = props.selected?.map((date) => new date_TZDate(date, props.timeZone));
+        }
+        else if (props.mode === "range" && props.selected) {
+            props.selected = {
+                from: props.selected.from
+                    ? new date_TZDate(props.selected.from, props.timeZone)
+                    : undefined,
+                to: props.selected.to
+                    ? new date_TZDate(props.selected.to, props.timeZone)
+                    : undefined
+            };
+        }
+    }
+    const { components, formatters, labels, dateLib, locale, classNames } = (0,external_React_.useMemo)(() => {
+        const locale = { ...en_US_enUS, ...props.locale };
+        const dateLib = new DateLib({
+            locale,
+            weekStartsOn: props.broadcastCalendar ? 1 : props.weekStartsOn,
+            firstWeekContainsDate: props.firstWeekContainsDate,
+            useAdditionalWeekYearTokens: props.useAdditionalWeekYearTokens,
+            useAdditionalDayOfYearTokens: props.useAdditionalDayOfYearTokens,
+            timeZone: props.timeZone,
+            numerals: props.numerals
+        }, props.dateLib);
+        return {
+            dateLib,
+            components: getComponents(props.components),
+            formatters: getFormatters(props.formatters),
+            labels: { ...labels_namespaceObject, ...props.labels },
+            locale,
+            classNames: { ...getDefaultClassNames(), ...props.classNames }
+        };
+    }, [
+        props.locale,
+        props.broadcastCalendar,
+        props.weekStartsOn,
+        props.firstWeekContainsDate,
+        props.useAdditionalWeekYearTokens,
+        props.useAdditionalDayOfYearTokens,
+        props.timeZone,
+        props.numerals,
+        props.dateLib,
+        props.components,
+        props.formatters,
+        props.labels,
+        props.classNames
+    ]);
+    const { captionLayout, mode, navLayout, numberOfMonths = 1, onDayBlur, onDayClick, onDayFocus, onDayKeyDown, onDayMouseEnter, onDayMouseLeave, onNextClick, onPrevClick, showWeekNumber, styles } = props;
+    const { formatCaption, formatDay, formatMonthDropdown, formatWeekNumber, formatWeekNumberHeader, formatWeekdayName, formatYearDropdown } = formatters;
+    const calendar = useCalendar(props, dateLib);
+    const { days, months, navStart, navEnd, previousMonth, nextMonth, goToMonth } = calendar;
+    const getModifiers = createGetModifiers(days, props, dateLib);
+    const { isSelected, select, selected: selectedValue } = useSelection(props, dateLib) ?? {};
+    const { blur, focused, isFocusTarget, moveFocus, setFocused } = useFocus(props, calendar, getModifiers, isSelected ?? (() => false), dateLib);
+    const { labelDayButton, labelGridcell, labelGrid, labelMonthDropdown, labelNav, labelPrevious, labelNext, labelWeekday, labelWeekNumber, labelWeekNumberHeader, labelYearDropdown } = labels;
+    const weekdays = (0,external_React_.useMemo)(() => getWeekdays(dateLib, props.ISOWeek), [dateLib, props.ISOWeek]);
+    const isInteractive = mode !== undefined || onDayClick !== undefined;
+    const handlePreviousClick = (0,external_React_.useCallback)(() => {
+        if (!previousMonth)
+            return;
+        goToMonth(previousMonth);
+        onPrevClick?.(previousMonth);
+    }, [previousMonth, goToMonth, onPrevClick]);
+    const handleNextClick = (0,external_React_.useCallback)(() => {
+        if (!nextMonth)
+            return;
+        goToMonth(nextMonth);
+        onNextClick?.(nextMonth);
+    }, [goToMonth, nextMonth, onNextClick]);
+    const handleDayClick = (0,external_React_.useCallback)((day, m) => (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setFocused(day);
+        select?.(day.date, m, e);
+        onDayClick?.(day.date, m, e);
+    }, [select, onDayClick, setFocused]);
+    const handleDayFocus = (0,external_React_.useCallback)((day, m) => (e) => {
+        setFocused(day);
+        onDayFocus?.(day.date, m, e);
+    }, [onDayFocus, setFocused]);
+    const handleDayBlur = (0,external_React_.useCallback)((day, m) => (e) => {
+        blur();
+        onDayBlur?.(day.date, m, e);
+    }, [blur, onDayBlur]);
+    const handleDayKeyDown = (0,external_React_.useCallback)((day, modifiers) => (e) => {
+        const keyMap = {
+            ArrowLeft: ["day", props.dir === "rtl" ? "after" : "before"],
+            ArrowRight: ["day", props.dir === "rtl" ? "before" : "after"],
+            ArrowDown: ["week", "after"],
+            ArrowUp: ["week", "before"],
+            PageUp: [e.shiftKey ? "year" : "month", "before"],
+            PageDown: [e.shiftKey ? "year" : "month", "after"],
+            Home: ["startOfWeek", "before"],
+            End: ["endOfWeek", "after"]
+        };
+        if (keyMap[e.key]) {
+            e.preventDefault();
+            e.stopPropagation();
+            const [moveBy, moveDir] = keyMap[e.key];
+            moveFocus(moveBy, moveDir);
+        }
+        onDayKeyDown?.(day.date, modifiers, e);
+    }, [moveFocus, onDayKeyDown, props.dir]);
+    const handleDayMouseEnter = (0,external_React_.useCallback)((day, modifiers) => (e) => {
+        onDayMouseEnter?.(day.date, modifiers, e);
+    }, [onDayMouseEnter]);
+    const handleDayMouseLeave = (0,external_React_.useCallback)((day, modifiers) => (e) => {
+        onDayMouseLeave?.(day.date, modifiers, e);
+    }, [onDayMouseLeave]);
+    const handleMonthChange = (0,external_React_.useCallback)((date) => (e) => {
+        const selectedMonth = Number(e.target.value);
+        const month = dateLib.setMonth(dateLib.startOfMonth(date), selectedMonth);
+        goToMonth(month);
+    }, [dateLib, goToMonth]);
+    const handleYearChange = (0,external_React_.useCallback)((date) => (e) => {
+        const selectedYear = Number(e.target.value);
+        const month = dateLib.setYear(dateLib.startOfMonth(date), selectedYear);
+        goToMonth(month);
+    }, [dateLib, goToMonth]);
+    const { className, style } = (0,external_React_.useMemo)(() => ({
+        className: [classNames[UI_UI.Root], props.className]
+            .filter(Boolean)
+            .join(" "),
+        style: { ...styles?.[UI_UI.Root], ...props.style }
+    }), [classNames, props.className, props.style, styles]);
+    const dataAttributes = getDataAttributes(props);
+    const rootElRef = (0,external_React_.useRef)(null);
+    useAnimation(rootElRef, Boolean(props.animate), {
+        classNames,
+        months,
+        focused,
+        dateLib
+    });
+    const contextValue = {
+        dayPickerProps: props,
+        selected: selectedValue,
+        select: select,
+        isSelected,
+        months,
+        nextMonth,
+        previousMonth,
+        goToMonth,
+        getModifiers,
+        components,
+        classNames,
+        styles,
+        labels,
+        formatters
+    };
+    return (external_React_.createElement(dayPickerContext.Provider, { value: contextValue },
+        external_React_.createElement(components.Root, { rootRef: props.animate ? rootElRef : undefined, className: className, style: style, dir: props.dir, id: props.id, lang: props.lang, nonce: props.nonce, title: props.title, role: props.role, "aria-label": props["aria-label"], ...dataAttributes },
+            external_React_.createElement(components.Months, { className: classNames[UI_UI.Months], style: styles?.[UI_UI.Months] },
+                !props.hideNavigation && !navLayout && (external_React_.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI_UI.Nav], style: styles?.[UI_UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
+                months.map((calendarMonth, displayIndex) => {
+                    const dropdownMonths = getMonthOptions(calendarMonth.date, navStart, navEnd, formatters, dateLib);
+                    const dropdownYears = getYearOptions(navStart, navEnd, formatters, dateLib);
+                    return (external_React_.createElement(components.Month, { "data-animated-month": props.animate ? "true" : undefined, className: classNames[UI_UI.Month], style: styles?.[UI_UI.Month], key: displayIndex, displayIndex: displayIndex, calendarMonth: calendarMonth },
+                        navLayout === "around" &&
+                            !props.hideNavigation &&
+                            displayIndex === 0 && (external_React_.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI_UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick, "data-animated-button": props.animate ? "true" : undefined },
+                            external_React_.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI_UI.Chevron], orientation: props.dir === "rtl" ? "right" : "left" }))),
+                        external_React_.createElement(components.MonthCaption, { "data-animated-caption": props.animate ? "true" : undefined, className: classNames[UI_UI.MonthCaption], style: styles?.[UI_UI.MonthCaption], calendarMonth: calendarMonth, displayIndex: displayIndex }, captionLayout?.startsWith("dropdown") ? (external_React_.createElement(components.DropdownNav, { className: classNames[UI_UI.Dropdowns], style: styles?.[UI_UI.Dropdowns] },
+                            captionLayout === "dropdown" ||
+                                captionLayout === "dropdown-months" ? (external_React_.createElement(components.MonthsDropdown, { className: classNames[UI_UI.MonthsDropdown], "aria-label": labelMonthDropdown(), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleMonthChange(calendarMonth.date), options: dropdownMonths, style: styles?.[UI_UI.Dropdown], value: dateLib.getMonth(calendarMonth.date) })) : (external_React_.createElement("span", null, formatMonthDropdown(calendarMonth.date, dateLib))),
+                            captionLayout === "dropdown" ||
+                                captionLayout === "dropdown-years" ? (external_React_.createElement(components.YearsDropdown, { className: classNames[UI_UI.YearsDropdown], "aria-label": labelYearDropdown(dateLib.options), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleYearChange(calendarMonth.date), options: dropdownYears, style: styles?.[UI_UI.Dropdown], value: dateLib.getYear(calendarMonth.date) })) : (external_React_.createElement("span", null, formatYearDropdown(calendarMonth.date, dateLib))),
+                            external_React_.createElement("span", { role: "status", "aria-live": "polite", style: {
+                                    border: 0,
+                                    clip: "rect(0 0 0 0)",
+                                    height: "1px",
+                                    margin: "-1px",
+                                    overflow: "hidden",
+                                    padding: 0,
+                                    position: "absolute",
+                                    width: "1px",
+                                    whiteSpace: "nowrap",
+                                    wordWrap: "normal"
+                                } }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))) : (external_React_.createElement(components.CaptionLabel, { className: classNames[UI_UI.CaptionLabel], role: "status", "aria-live": "polite" }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))),
+                        navLayout === "around" &&
+                            !props.hideNavigation &&
+                            displayIndex === numberOfMonths - 1 && (external_React_.createElement(components.NextMonthButton, { type: "button", className: classNames[UI_UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick, "data-animated-button": props.animate ? "true" : undefined },
+                            external_React_.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, className: classNames[UI_UI.Chevron], orientation: props.dir === "rtl" ? "left" : "right" }))),
+                        displayIndex === numberOfMonths - 1 &&
+                            navLayout === "after" &&
+                            !props.hideNavigation && (external_React_.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI_UI.Nav], style: styles?.[UI_UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
+                        external_React_.createElement(components.MonthGrid, { role: "grid", "aria-multiselectable": mode === "multiple" || mode === "range", "aria-label": labelGrid(calendarMonth.date, dateLib.options, dateLib) ||
+                                undefined, className: classNames[UI_UI.MonthGrid], style: styles?.[UI_UI.MonthGrid] },
+                            !props.hideWeekdays && (external_React_.createElement(components.Weekdays, { "data-animated-weekdays": props.animate ? "true" : undefined, className: classNames[UI_UI.Weekdays], style: styles?.[UI_UI.Weekdays] },
+                                showWeekNumber && (external_React_.createElement(components.WeekNumberHeader, { "aria-label": labelWeekNumberHeader(dateLib.options), className: classNames[UI_UI.WeekNumberHeader], style: styles?.[UI_UI.WeekNumberHeader], scope: "col" }, formatWeekNumberHeader())),
+                                weekdays.map((weekday, i) => (external_React_.createElement(components.Weekday, { "aria-label": labelWeekday(weekday, dateLib.options, dateLib), className: classNames[UI_UI.Weekday], key: i, style: styles?.[UI_UI.Weekday], scope: "col" }, formatWeekdayName(weekday, dateLib.options, dateLib)))))),
+                            external_React_.createElement(components.Weeks, { "data-animated-weeks": props.animate ? "true" : undefined, className: classNames[UI_UI.Weeks], style: styles?.[UI_UI.Weeks] }, calendarMonth.weeks.map((week, weekIndex) => {
+                                return (external_React_.createElement(components.Week, { className: classNames[UI_UI.Week], key: week.weekNumber, style: styles?.[UI_UI.Week], week: week },
+                                    showWeekNumber && (external_React_.createElement(components.WeekNumber, { week: week, style: styles?.[UI_UI.WeekNumber], "aria-label": labelWeekNumber(week.weekNumber, {
+                                            locale
+                                        }), className: classNames[UI_UI.WeekNumber], scope: "row", role: "rowheader" }, formatWeekNumber(week.weekNumber, dateLib))),
+                                    week.days.map((day) => {
+                                        const { date } = day;
+                                        const modifiers = getModifiers(day);
+                                        modifiers[DayFlag.focused] =
+                                            !modifiers.hidden &&
+                                                Boolean(focused?.isEqualTo(day));
+                                        modifiers[SelectionState.selected] =
+                                            isSelected?.(date) || modifiers.selected;
+                                        if (isDateRange(selectedValue)) {
+                                            // add range modifiers
+                                            const { from, to } = selectedValue;
+                                            modifiers[SelectionState.range_start] = Boolean(from && to && dateLib.isSameDay(date, from));
+                                            modifiers[SelectionState.range_end] = Boolean(from && to && dateLib.isSameDay(date, to));
+                                            modifiers[SelectionState.range_middle] =
+                                                rangeIncludesDate(selectedValue, date, true, dateLib);
+                                        }
+                                        const style = getStyleForModifiers(modifiers, styles, props.modifiersStyles);
+                                        const className = getClassNamesForModifiers(modifiers, classNames, props.modifiersClassNames);
+                                        const ariaLabel = !isInteractive && !modifiers.hidden
+                                            ? labelGridcell(date, modifiers, dateLib.options, dateLib)
+                                            : undefined;
+                                        return (external_React_.createElement(components.Day, { key: `${dateLib.format(date, "yyyy-MM-dd")}_${dateLib.format(day.displayMonth, "yyyy-MM")}`, day: day, modifiers: modifiers, className: className.join(" "), style: style, role: "gridcell", "aria-selected": modifiers.selected || undefined, "aria-label": ariaLabel, "data-day": dateLib.format(date, "yyyy-MM-dd"), "data-month": day.outside
+                                                ? dateLib.format(date, "yyyy-MM")
+                                                : undefined, "data-selected": modifiers.selected || undefined, "data-disabled": modifiers.disabled || undefined, "data-hidden": modifiers.hidden || undefined, "data-outside": day.outside || undefined, "data-focused": modifiers.focused || undefined, "data-today": modifiers.today || undefined }, !modifiers.hidden && isInteractive ? (external_React_.createElement(components.DayButton, { className: classNames[UI_UI.DayButton], style: styles?.[UI_UI.DayButton], type: "button", day: day, modifiers: modifiers, disabled: modifiers.disabled || undefined, tabIndex: isFocusTarget(day) ? 0 : -1, "aria-label": labelDayButton(date, modifiers, dateLib.options, dateLib), onClick: handleDayClick(day, modifiers), onBlur: handleDayBlur(day, modifiers), onFocus: handleDayFocus(day, modifiers), onKeyDown: handleDayKeyDown(day, modifiers), onMouseEnter: handleDayMouseEnter(day, modifiers), onMouseLeave: handleDayMouseLeave(day, modifiers) }, formatDay(date, dateLib.options, dateLib))) : (!modifiers.hidden &&
+                                            formatDay(day.date, dateLib.options, dateLib))));
+                                    })));
+                            })))));
+                })),
+            props.footer && (external_React_.createElement(components.Footer, { className: classNames[UI_UI.Footer], style: styles?.[UI_UI.Footer], role: "status", "aria-live": "polite" }, props.footer)))));
+}
+
+;// ./packages/components/build-module/calendar/utils/day-cell.js
+
+/**
+ * External dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+/**
+ * The dash array and offset are calculated by:
+ * - measuring the path length (eg 92,28384)
+ * - establishing how many segments should the path be split into (eg. 24)
+ * - dividing the path length by the number of segments (eg. 92,28384 / 24 = 3,84516)
+ * - playing with the dash offset to make sure the dashes look good on rounded corners
+ */
+
+/**
+ * Dashed rectangle. The dash array and offset are chosen to make sure dashes
+ * look good on rounded corners and have similar metrics to the other dash
+ * preview shapes.
+ */
+const PreviewDashStartAndEnd = () => {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("svg", {
+    viewBox: "0 0 32 32",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    stroke: "currentColor",
+    strokeDasharray: "3.7677",
+    strokeDashoffset: "3.2",
+    strokeWidth: "1",
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+      d: "M29.5,0.5 h-27 a2,2 0 0 0 -2,2 v27 a2,2 0 0 0 2,2 h27 a2,2 0 0 0 2,-2 v-27 a2,2 0 0 0 -2,-2"
+    })
+  });
+};
+
+/**
+ * Dashed top, left, and bottom sides, with rounded corners. The dash array and
+ * offset are chosen to make sure that multiple days in a row show a seamless
+ * dashed border, and the dashes look good on rounded corners.
+ */
+const PreviewDashStart = () => {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("svg", {
+    viewBox: "0 0 32 32",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    stroke: "currentColor",
+    strokeDasharray: "3.84516",
+    strokeDashoffset: "1.9226",
+    strokeWidth: "1",
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+      d: "M32,0.5 h-29.5 a2,2 0 0 0 -2,2 v27 a2,2 0 0 0 2,2 h30"
+    })
+  });
+};
+/**
+ * Dashed top and bottom sides. The dash array and offset are chosen
+ * to make sure that multiple days in a row show a seamless dashed border.
+ */
+const PreviewDashMiddle = () => {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("svg", {
+    viewBox: "0 0 32 32",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    stroke: "currentColor",
+    strokeDasharray: "3.9 4",
+    strokeDashoffset: "2",
+    strokeWidth: "1",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("line", {
+      x1: "0",
+      y1: "0.5",
+      x2: "100",
+      y2: "0.5"
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("line", {
+      x1: "0",
+      y1: "31.5",
+      x2: "100",
+      y2: "31.5"
+    })]
+  });
+};
+/**
+ * Dashed top, right, and bottom sides, with rounded corners. The dash array and
+ * offset are chosen to make sure that multiple days in a row show a seamless
+ * dashed border, and the dashes look good on rounded corners.
+ */
+const PreviewDashEnd = () => {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("svg", {
+    viewBox: "0 0 32 32",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    stroke: "currentColor",
+    strokeDasharray: "3.84516",
+    strokeDashoffset: "1.9226",
+    strokeWidth: "1",
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+      d: "M0,0.5 h29.5 a2,2 0 0 1 2,2 v27 a2,2 0 0 1 -2,2 h-29.5"
+    })
+  });
+};
+
+/**
+ * Render a grid cell for a specific day in the calendar.
+ *
+ * Handles interaction and focus for the day.
+ * @see https://daypicker.dev/guides/custom-components
+ */
+function day_cell_Day(props) {
+  const {
+    day,
+    modifiers,
+    children,
+    ...tdProps
+  } = props;
+  let PreviewDash;
+  if (modifiers.preview_start && modifiers.preview_end) {
+    PreviewDash = PreviewDashStartAndEnd;
+  } else if (modifiers.preview_start) {
+    PreviewDash = PreviewDashStart;
+  } else if (modifiers.preview_end) {
+    PreviewDash = PreviewDashEnd;
+  } else if (modifiers.preview) {
+    PreviewDash = PreviewDashMiddle;
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("td", {
+    ...tdProps,
+    children: [PreviewDash && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PreviewDash, {}), children]
+  });
+}
+
+;// ./packages/components/build-module/calendar/utils/constants.js
+/**
+ * Internal dependencies
+ */
+
+const CLASSNAMES = {
+  root: 'components-calendar',
+  day: 'components-calendar__day',
+  day_button: 'components-calendar__day-button',
+  caption_label: 'components-calendar__caption-label',
+  button_next: 'components-calendar__button-next',
+  button_previous: 'components-calendar__button-previous',
+  chevron: 'components-calendar__chevron',
+  nav: 'components-calendar__nav',
+  month_caption: 'components-calendar__month-caption',
+  months: 'components-calendar__months',
+  month_grid: 'components-calendar__month-grid',
+  weekday: 'components-calendar__weekday',
+  today: 'components-calendar__day--today',
+  selected: 'components-calendar__day--selected',
+  disabled: 'components-calendar__day--disabled',
+  hidden: 'components-calendar__day--hidden',
+  range_start: 'components-calendar__range-start',
+  range_end: 'components-calendar__range-end',
+  range_middle: 'components-calendar__range-middle',
+  weeks_before_enter: 'components-calendar__weeks-before-enter',
+  weeks_before_exit: 'components-calendar__weeks-before-exit',
+  weeks_after_enter: 'components-calendar__weeks-after-enter',
+  weeks_after_exit: 'components-calendar__weeks-after-exit',
+  caption_after_enter: 'components-calendar__caption-after-enter',
+  caption_after_exit: 'components-calendar__caption-after-exit',
+  caption_before_enter: 'components-calendar__caption-before-enter',
+  caption_before_exit: 'components-calendar__caption-before-exit'
+};
+const MODIFIER_CLASSNAMES = {
+  preview: 'components-calendar__day--preview',
+  preview_start: 'components-calendar__day--preview-start',
+  preview_end: 'components-calendar__day--preview-end'
+};
+const COMMON_PROPS = {
+  animate: true,
+  // Only show days in the current month
+  showOutsideDays: false,
+  // Hide week number column
+  showWeekNumber: false,
+  // Show weekdays row
+  hideWeekdays: false,
+  // Month and year caption are not interactive
+  captionLayout: 'label',
+  // Show a variable number of weeks depending on the month
+  fixedWeeks: false,
+  // Show navigation buttons
+  hideNavigation: false,
+  // Class names
+  classNames: CLASSNAMES,
+  // Default role
+  role: 'application',
+  components: {
+    Day: day_cell_Day
+  }
+};
+
+;// ./packages/components/build-module/calendar/utils/misc.js
+function clampNumberOfMonths(numberOfMonths) {
+  return Math.min(3, Math.max(1, numberOfMonths));
+}
+
+;// ./packages/components/build-module/calendar/utils/use-localization-props.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+function isLocaleRTL(localeCode) {
+  const localeObj = new Intl.Locale(localeCode);
+  if ('getTextInfo' in localeObj) {
+    // @ts-expect-error - getTextInfo is not typed yet
+    // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getTextInfo
+    return localeObj.getTextInfo().direction === 'rtl';
+  }
+  return ['ar',
+  // Arabic
+  'he',
+  // Hebrew
+  'fa',
+  // Persian (Farsi)
+  'ur',
+  // Urdu
+  'ps',
+  // Pashto
+  'syr',
+  // Syriac
+  'dv',
+  // Divehi
+  'ku',
+  // Kurdish (Sorani)
+  'yi' // Yiddish
+  ].includes(localeObj.language);
+}
+
+/**
+ * Returns localization props for the calendar components.
+ *
+ * Notes:
+ * - the following props should be intended as defaults, and should
+ *   be overridden by consumer props if listed as public props.
+ * - It is possible for the translated strings to use a different locale
+ *   than the formatted dates and the computed `dir`. This is because the
+ *   translation function doesn't expose the locale used for the translated
+ *   strings, meaning that the dates are formatted using the `locale` prop.
+ *   For a correct localized experience, consumers should make sure that
+ *   translation context and `locale` prop are consistent.
+ * @param props
+ * @param props.locale
+ * @param props.timeZone
+ * @param props.mode
+ */
+const useLocalizationProps = ({
+  locale,
+  timeZone,
+  mode
+}) => {
+  return (0,external_wp_element_namespaceObject.useMemo)(() => {
+    // ie. April 2025
+    const monthNameFormatter = new Intl.DateTimeFormat(locale.code, {
+      year: 'numeric',
+      month: 'long',
+      timeZone
+    });
+    // ie. M, T, W, T, F, S, S
+    const weekdayNarrowFormatter = new Intl.DateTimeFormat(locale.code, {
+      weekday: 'narrow',
+      timeZone
+    });
+    // ie. Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+    const weekdayLongFormatter = new Intl.DateTimeFormat(locale.code, {
+      weekday: 'long',
+      timeZone
+    });
+    // ie. Monday, April 29, 2025
+    const fullDateFormatter = new Intl.DateTimeFormat(locale.code, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone
+    });
+
+    // Note: the following props should be intended as defaults, and should
+    // be overridden by consumer props if listed as public props.
+    return {
+      'aria-label': mode === 'single' ? (0,external_wp_i18n_namespaceObject.__)('Date calendar') : (0,external_wp_i18n_namespaceObject.__)('Date range calendar'),
+      labels: {
+        /**
+         * The label for the month grid.
+         * @param date
+         */
+        labelGrid: date => monthNameFormatter.format(date),
+        /**
+         * The label for the gridcell, when the calendar is not interactive.
+         * @param date
+         * @param modifiers
+         */
+        labelGridcell: (date, modifiers) => {
+          const formattedDate = fullDateFormatter.format(date);
+          let label = formattedDate;
+          if (modifiers?.today) {
+            label = (0,external_wp_i18n_namespaceObject.sprintf)(
+            // translators: %s is the full date (e.g. "Monday, April 29, 2025")
+            (0,external_wp_i18n_namespaceObject.__)('Today, %s'), formattedDate);
+          }
+          return label;
+        },
+        /** The label for the "next month" button. */
+        labelNext: () => (0,external_wp_i18n_namespaceObject.__)('Go to the Next Month'),
+        /** The label for the "previous month" button. */
+        labelPrevious: () => (0,external_wp_i18n_namespaceObject.__)('Go to the Previous Month'),
+        /**
+         * The label for the day button.
+         * @param date
+         * @param modifiers
+         */
+        labelDayButton: (date, modifiers) => {
+          const formattedDate = fullDateFormatter.format(date);
+          let label = formattedDate;
+          if (modifiers?.today) {
+            label = (0,external_wp_i18n_namespaceObject.sprintf)(
+            // translators: %s is the full date (e.g. "Monday, April 29, 2025")
+            (0,external_wp_i18n_namespaceObject.__)('Today, %s'), formattedDate);
+          }
+          if (modifiers?.selected) {
+            label = (0,external_wp_i18n_namespaceObject.sprintf)(
+            // translators: %s is the full date (e.g. "Monday, April 29, 2025")
+            (0,external_wp_i18n_namespaceObject.__)('%s, selected'), formattedDate);
+          }
+          return label;
+        },
+        /**
+         * The label for the weekday.
+         * @param date
+         */
+        labelWeekday: date => weekdayLongFormatter.format(date)
+      },
+      locale,
+      dir: isLocaleRTL(locale.code) ? 'rtl' : 'ltr',
+      formatters: {
+        formatWeekdayName: date => {
+          return weekdayNarrowFormatter.format(date);
+        },
+        formatCaption: date => {
+          return monthNameFormatter.format(date);
+        }
+      },
+      timeZone
+    };
+  }, [locale, timeZone, mode]);
+};
+
+;// ./packages/components/build-module/calendar/date-calendar/index.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+/**
+ * `DateCalendar` is a React component that provides a customizable calendar
+ * interface for **single date** selection.
+ *
+ * The component is built with accessibility in mind and follows ARIA best
+ * practices for calendar widgets. It provides keyboard navigation, screen reader
+ * support, and customizable labels for internationalization.
+ */
+const DateCalendar = ({
+  defaultSelected,
+  selected: selectedProp,
+  onSelect,
+  numberOfMonths = 1,
+  locale = en_US_enUS,
+  timeZone,
+  ...props
+}) => {
+  const localizationProps = useLocalizationProps({
+    locale,
+    timeZone,
+    mode: 'single'
+  });
+  const onChange = (0,external_wp_element_namespaceObject.useCallback)((selected, triggerDate, modifiers, e) => {
+    // Convert internal `null` to `undefined` for the public event handler.
+    onSelect?.(selected !== null && selected !== void 0 ? selected : undefined, triggerDate, modifiers, e);
+  }, [onSelect]);
+  const [selected, setSelected] = useControlledValue({
+    defaultValue: defaultSelected,
+    value: selectedProp,
+    onChange
+  });
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DayPicker, {
+    ...COMMON_PROPS,
+    ...localizationProps,
+    ...props,
+    mode: "single",
+    numberOfMonths: clampNumberOfMonths(numberOfMonths),
+    selected: selected !== null && selected !== void 0 ? selected : undefined,
+    onSelect: setSelected
+  });
+};
+
+;// ./packages/components/build-module/calendar/date-range-calendar/index.js
+/**
+ * External dependencies
+ */
+
+
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+function usePreviewRange({
+  selected,
+  hoveredDate,
+  excludeDisabled,
+  min,
+  max,
+  disabled
+}) {
+  return (0,external_wp_element_namespaceObject.useMemo)(() => {
+    if (!hoveredDate || !selected?.from) {
+      return;
+    }
+    let previewHighlight;
+    let potentialNewRange;
+
+    // Hovering on a date before the start of the selected range
+    if (hoveredDate < selected.from) {
+      var _selected$to;
+      previewHighlight = {
+        from: hoveredDate,
+        to: selected.from
+      };
+      potentialNewRange = {
+        from: hoveredDate,
+        to: (_selected$to = selected.to) !== null && _selected$to !== void 0 ? _selected$to : selected.from
+      };
+    } else if (selected.to && hoveredDate > selected.from && hoveredDate < selected.to) {
+      // Hovering on a date between the start and end of the selected range
+      previewHighlight = {
+        from: selected.from,
+        to: hoveredDate
+      };
+      potentialNewRange = {
+        from: selected.from,
+        to: hoveredDate
+      };
+    } else if (hoveredDate > selected.from) {
+      var _selected$to2;
+      // Hovering on a date after the end of the selected range (either
+      // because it's greater than selected.to, or because it's not defined)
+      previewHighlight = {
+        from: (_selected$to2 = selected.to) !== null && _selected$to2 !== void 0 ? _selected$to2 : selected.from,
+        to: hoveredDate
+      };
+      potentialNewRange = {
+        from: selected.from,
+        to: hoveredDate
+      };
+    }
+    if (min !== undefined && min > 0 && potentialNewRange && differenceInCalendarDays(potentialNewRange.to, potentialNewRange.from) < min) {
+      previewHighlight = {
+        from: hoveredDate,
+        to: hoveredDate
+      };
+    }
+    if (max !== undefined && max > 0 && potentialNewRange && differenceInCalendarDays(potentialNewRange.to, potentialNewRange.from) > max) {
+      previewHighlight = {
+        from: hoveredDate,
+        to: hoveredDate
+      };
+    }
+    if (excludeDisabled && disabled && potentialNewRange && rangeContainsModifiers(potentialNewRange, disabled)) {
+      previewHighlight = {
+        from: hoveredDate,
+        to: hoveredDate
+      };
+    }
+    return previewHighlight;
+  }, [selected, hoveredDate, excludeDisabled, min, max, disabled]);
+}
+
+/**
+ * `DateRangeCalendar` is a React component that provides a customizable calendar
+ * interface for **date range** selection.
+ *
+ * The component is built with accessibility in mind and follows ARIA best
+ * practices for calendar widgets. It provides keyboard navigation, screen reader
+ * support, and customizable labels for internationalization.
+ */
+const DateRangeCalendar = ({
+  defaultSelected,
+  selected: selectedProp,
+  onSelect,
+  numberOfMonths = 1,
+  excludeDisabled,
+  min,
+  max,
+  disabled,
+  locale = en_US_enUS,
+  timeZone,
+  ...props
+}) => {
+  const localizationProps = useLocalizationProps({
+    locale,
+    timeZone,
+    mode: 'range'
+  });
+  const onChange = (0,external_wp_element_namespaceObject.useCallback)((selected, triggerDate, modifiers, e) => {
+    // Convert internal `null` to `undefined` for the public event handler.
+    onSelect?.(selected !== null && selected !== void 0 ? selected : undefined, triggerDate, modifiers, e);
+  }, [onSelect]);
+  const [selected, setSelected] = useControlledValue({
+    defaultValue: defaultSelected,
+    value: selectedProp,
+    onChange
+  });
+  const [hoveredDate, setHoveredDate] = (0,external_wp_element_namespaceObject.useState)(undefined);
+
+  // Compute the preview range for hover effect
+  const previewRange = usePreviewRange({
+    selected,
+    hoveredDate,
+    excludeDisabled,
+    min,
+    max,
+    disabled
+  });
+  const modifiers = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    return {
+      preview: previewRange,
+      preview_start: previewRange?.from,
+      preview_end: previewRange?.to
+    };
+  }, [previewRange]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DayPicker, {
+    ...COMMON_PROPS,
+    ...localizationProps,
+    ...props,
+    mode: "range",
+    numberOfMonths: clampNumberOfMonths(numberOfMonths),
+    disabled: disabled,
+    excludeDisabled: excludeDisabled,
+    min: min,
+    max: max,
+    selected: selected !== null && selected !== void 0 ? selected : undefined,
+    onSelect: setSelected,
+    onDayMouseEnter: date => setHoveredDate(date),
+    onDayMouseLeave: () => setHoveredDate(undefined),
+    modifiers: modifiers,
+    modifiersClassNames: MODIFIER_CLASSNAMES
+  });
+};
+
+;// ./packages/components/build-module/validated-form-controls/validity-indicator.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function ValidityIndicator({
+  type,
+  message
+}) {
+  const ICON = {
+    valid: library_published,
+    invalid: library_error
+  };
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("p", {
+    className: dist_clsx('components-validated-control__indicator', `is-${type}`),
+    children: [type === 'validating' ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spinner, {
+      className: "components-validated-control__indicator-spinner"
+    }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_icon, {
+      className: "components-validated-control__indicator-icon",
+      icon: ICON[type],
+      size: 16,
+      fill: "currentColor"
+    }), message]
+  });
+}
+
+;// ./packages/components/build-module/validated-form-controls/control-with-error.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function appendRequiredIndicator(label, required, markWhenOptional) {
+  if (required && !markWhenOptional) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+      children: [label, " ", `(${(0,external_wp_i18n_namespaceObject.__)('Required')})`]
+    });
+  }
+  if (!required && markWhenOptional) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+      children: [label, " ", `(${(0,external_wp_i18n_namespaceObject.__)('Optional')})`]
+    });
+  }
+  return label;
+}
+
+/**
+ * HTML elements that support the Constraint Validation API.
+ *
+ * Here, we exclude HTMLButtonElement because although it does technically support the API,
+ * normal buttons are actually exempted from any validation.
+ * @see https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/willValidate
+ */
+
+function UnforwardedControlWithError({
+  required,
+  markWhenOptional,
+  onValidate,
+  customValidity,
+  getValidityTarget,
+  children
+}, forwardedRef) {
+  const [errorMessage, setErrorMessage] = (0,external_wp_element_namespaceObject.useState)();
+  const [statusMessage, setStatusMessage] = (0,external_wp_element_namespaceObject.useState)();
+  const [isTouched, setIsTouched] = (0,external_wp_element_namespaceObject.useState)(false);
+
+  // Ensure that error messages are visible after user attemps to submit a form
+  // with multiple invalid fields.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    const validityTarget = getValidityTarget();
+    const showValidationMessage = () => setErrorMessage(validityTarget?.validationMessage);
+    validityTarget?.addEventListener('invalid', showValidationMessage);
+    return () => {
+      validityTarget?.removeEventListener('invalid', showValidationMessage);
+    };
+  });
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!isTouched) {
+      return;
+    }
+    const validityTarget = getValidityTarget();
+    if (!customValidity?.type) {
+      validityTarget?.setCustomValidity('');
+      setErrorMessage(validityTarget?.validationMessage);
+      setStatusMessage(undefined);
+      return;
+    }
+    switch (customValidity.type) {
+      case 'validating':
+        {
+          // Wait before showing a validating state.
+          const timer = setTimeout(() => {
+            setStatusMessage({
+              type: 'validating',
+              message: customValidity.message
+            });
+          }, 1000);
+          return () => clearTimeout(timer);
+        }
+      case 'valid':
+        {
+          validityTarget?.setCustomValidity('');
+          setErrorMessage(validityTarget?.validationMessage);
+          setStatusMessage({
+            type: 'valid',
+            message: customValidity.message
+          });
+          return;
+        }
+      case 'invalid':
+        {
+          var _customValidity$messa;
+          validityTarget?.setCustomValidity((_customValidity$messa = customValidity.message) !== null && _customValidity$messa !== void 0 ? _customValidity$messa : '');
+          setErrorMessage(validityTarget?.validationMessage);
+          setStatusMessage(undefined);
+          return undefined;
+        }
+    }
+  }, [isTouched, customValidity?.type, customValidity?.message, getValidityTarget]);
+  const onBlur = event => {
+    // Only consider "blurred from the component" if focus has fully left the wrapping div.
+    // This prevents unnecessary blurs from components with multiple focusable elements.
+    if (!event.relatedTarget || !event.currentTarget.contains(event.relatedTarget)) {
+      setIsTouched(true);
+      const validityTarget = getValidityTarget();
+
+      // Prevents a double flash of the native error tooltip when the control is already showing one.
+      if (!validityTarget?.validity.valid) {
+        if (!errorMessage) {
+          setErrorMessage(validityTarget?.validationMessage);
+        }
+        return;
+      }
+      onValidate?.();
+    }
+  };
+  const onChange = (...args) => {
+    children.props.onChange?.(...args);
+
+    // Only validate incrementally if the field has blurred at least once,
+    // or currently has an error message.
+    if (isTouched || errorMessage) {
+      onValidate?.();
+    }
+  };
+  const onKeyDown = event => {
+    // Ensures that custom validators are triggered when the user submits by pressing Enter,
+    // without ever blurring the control.
+    if (event.key === 'Enter') {
+      onValidate?.();
+    }
+  };
+  return (
+    /*#__PURE__*/
+    // Disable reason: Just listening to a bubbled event, not for interaction.
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    (0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "components-validated-control",
+      ref: forwardedRef,
+      onBlur: onBlur,
+      onKeyDown: withIgnoreIMEEvents(onKeyDown),
+      children: [(0,external_wp_element_namespaceObject.cloneElement)(children, {
+        label: appendRequiredIndicator(children.props.label, required, markWhenOptional),
+        onChange,
+        required
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        "aria-live": "polite",
+        children: [errorMessage && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ValidityIndicator, {
+          type: "invalid",
+          message: errorMessage
+        }), !errorMessage && statusMessage && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ValidityIndicator, {
+          type: statusMessage.type,
+          message: statusMessage.message
+        })]
+      })]
+    })
+  );
+}
+const ControlWithError = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedControlWithError);
+
+;// ./packages/components/build-module/validated-form-controls/components/number-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const UnforwardedValidatedNumberControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([forwardedRef, validityTargetRef]);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.value);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+    required: required,
+    markWhenOptional: markWhenOptional,
+    onValidate: () => {
+      return onValidate?.(valueRef.current);
+    },
+    customValidity: customValidity,
+    getValidityTarget: () => validityTargetRef.current,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(number_control, {
+      __next40pxDefaultSize: true,
+      ref: mergedRefs
+      // TODO: Upstream limitation - When form is submitted when value is undefined, it will
+      // automatically set a clamped value (as defined by `min` attribute, so 0 by default).
+      ,
+      onChange: (value, ...args) => {
+        valueRef.current = value;
+        onChange?.(value, ...args);
+      },
+      ...restProps
+    })
+  });
+};
+const ValidatedNumberControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedNumberControl);
+
+;// ./packages/components/build-module/validated-form-controls/components/text-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const UnforwardedValidatedTextControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([forwardedRef, validityTargetRef]);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.value);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+    required: required,
+    markWhenOptional: markWhenOptional,
+    onValidate: () => {
+      return onValidate?.(valueRef.current);
+    },
+    customValidity: customValidity,
+    getValidityTarget: () => validityTargetRef.current,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(text_control, {
+      __next40pxDefaultSize: true,
+      __nextHasNoMarginBottom: true,
+      ref: mergedRefs,
+      onChange: value => {
+        valueRef.current = value;
+        onChange?.(value);
+      },
+      ...restProps
+    })
+  });
+};
+const ValidatedTextControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedTextControl);
+
+;// ./packages/components/build-module/validated-form-controls/components/toggle-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+// TODO: Should we customize the default `missingValue` message? It says to "check this box".
+
+const UnforwardedValidatedToggleControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([forwardedRef, validityTargetRef]);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.checked);
+
+  // TODO: Upstream limitation - The `required` attribute is not passed down to the input,
+  // so we need to set it manually.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (validityTargetRef.current) {
+      validityTargetRef.current.required = required !== null && required !== void 0 ? required : false;
+    }
+  }, [required]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+    required: required,
+    markWhenOptional: markWhenOptional,
+    onValidate: () => {
+      return onValidate?.(valueRef.current);
+    },
+    customValidity: customValidity,
+    getValidityTarget: () => validityTargetRef.current,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(toggle_control, {
+      __nextHasNoMarginBottom: true,
+      ref: mergedRefs,
+      onChange: value => {
+        valueRef.current = value;
+        onChange?.(value);
+      },
+      ...restProps
+    })
+  });
+};
+const ValidatedToggleControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedToggleControl);
+
 ;// ./packages/components/build-module/private-apis.js
 /**
  * Internal dependencies
  */
+
+
 
 
 
@@ -72346,7 +81728,13 @@ lock(privateApis, {
   kebabCase: kebabCase,
   withIgnoreIMEEvents: withIgnoreIMEEvents,
   Badge: badge,
-  normalizeTextString: normalizeTextString
+  normalizeTextString: normalizeTextString,
+  DateCalendar: DateCalendar,
+  DateRangeCalendar: DateRangeCalendar,
+  TZDate: date_TZDate,
+  ValidatedNumberControl: ValidatedNumberControl,
+  ValidatedTextControl: ValidatedTextControl,
+  ValidatedToggleControl: ValidatedToggleControl
 });
 
 ;// ./packages/components/build-module/index.js

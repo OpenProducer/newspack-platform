@@ -2,36 +2,42 @@
  * External dependencies
  */
 import jetpackAnalytics from '@automattic/jetpack-analytics';
-import { JetpackFooter, useBreakpointMatch } from '@automattic/jetpack-components';
-import { shouldUseInternalLinks } from '@automattic/jetpack-shared-extension-utils';
+import { useBreakpointMatch } from '@automattic/jetpack-components';
 import { TabPanel } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { useCallback, useEffect, useMemo } from '@wordpress/element';
 import { __, _x } from '@wordpress/i18n';
-import clsx from 'clsx';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 /**
  * Internal dependencies
  */
+import EmptySpamButton from '../../components/empty-spam-button';
+import EmptyTrashButton from '../../components/empty-trash-button';
 import ExportResponsesButton from '../../inbox/export-responses';
 import { config } from '../../index';
+import { store as dashboardStore } from '../../store';
 import ActionsDropdownMenu from '../actions-dropdown-menu';
 import CreateFormButton from '../create-form-button';
 import JetpackFormsLogo from '../logo';
 
 import './style.scss';
 
-const Layout = ( {
-	className = '',
-	showFooter = false,
-}: {
-	className?: string;
-	showFooter?: boolean;
-} ) => {
+const Layout = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [ isSm ] = useBreakpointMatch( 'sm' );
 
 	const enableIntegrationsTab = config( 'enableIntegrationsTab' );
+
+	const { currentStatus } = useSelect(
+		select => ( {
+			currentStatus: select( dashboardStore ).getCurrentStatus(),
+		} ),
+		[]
+	);
+
+	const isResponsesTrashView = currentStatus.includes( 'trash' );
+	const isResponsesSpamView = currentStatus.includes( 'spam' );
 
 	useEffect( () => {
 		jetpackAnalytics.tracks.recordEvent( 'jetpack_forms_dashboard_page_view', {
@@ -94,17 +100,25 @@ const Layout = ( {
 	);
 
 	return (
-		<div className={ clsx( 'jp-forms__layout', className ) }>
+		<div className="jp-forms__layout">
 			<div className="jp-forms__layout-header">
 				<div className="jp-forms__logo-wrapper">
 					<JetpackFormsLogo />
 				</div>
 				{ isSm ? (
-					<ActionsDropdownMenu exportData={ { show: isResponsesTab } } />
+					<>
+						{ isResponsesTab && isResponsesTrashView && <EmptyTrashButton /> }
+						{ isResponsesTab && isResponsesSpamView && <EmptySpamButton /> }
+						<ActionsDropdownMenu exportData={ { show: isResponsesTab } } />
+					</>
 				) : (
 					<div className="jp-forms__layout-header-actions">
 						{ isResponsesTab && <ExportResponsesButton /> }
-						<CreateFormButton label={ __( 'Create form', 'jetpack-forms' ) } />
+						{ isResponsesTab && isResponsesTrashView && <EmptyTrashButton /> }
+						{ isResponsesTab && isResponsesSpamView && <EmptySpamButton /> }
+						{ ! isResponsesTrashView && ! isResponsesSpamView && (
+							<CreateFormButton label={ __( 'Create form', 'jetpack-forms' ) } />
+						) }
 					</div>
 				) }
 			</div>
@@ -113,16 +127,10 @@ const Layout = ( {
 				tabs={ tabs }
 				initialTabName={ getCurrentTab() }
 				onSelect={ handleTabSelect }
+				key={ getCurrentTab() }
 			>
 				{ () => <Outlet /> }
 			</TabPanel>
-			{ showFooter && (
-				<JetpackFooter
-					className="jp-forms__layout-footer"
-					moduleName={ __( 'Jetpack Forms', 'jetpack-forms' ) }
-					useInternalLinks={ shouldUseInternalLinks() }
-				/>
-			) }
 		</div>
 	);
 };

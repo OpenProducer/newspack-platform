@@ -215,9 +215,10 @@ final class Newspack_Newsletters_Layouts {
 				];
 
 				// Migrate layout defaults from legacy meta, if it exists.
+				$is_esp_manual = 'manual' === Newspack_Newsletters::service_provider();
 				$campaign_defaults = $post->meta['campaign_defaults'];
 				$legacy_meta       = json_decode( get_post_meta( $post->ID, 'layout_defaults', true ), true );
-				if ( empty( $campaign_defaults ) && ! empty( $legacy_meta ) ) {
+				if ( empty( $campaign_defaults ) && ! empty( $legacy_meta ) && ! $is_esp_manual ) {
 					$campaign_defaults = [];
 					if ( ! empty( $legacy_meta['senderName'] ) ) {
 						$campaign_defaults['senderName'] = $legacy_meta['senderName'];

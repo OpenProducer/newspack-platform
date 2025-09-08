@@ -15,12 +15,7 @@ import { API_NAMESPACE } from './constants';
 import EndpointActionsCard from './endpoint-actions-card';
 import EndpointActionsModals from './endpoint-actions-modals';
 import { useWizardApiFetch } from '../../../../../hooks/use-wizard-api-fetch';
-import {
-	Card,
-	Button,
-	Notice,
-	SectionHeader,
-} from '../../../../../../components/src';
+import { Card, Button, Notice, SectionHeader } from '../../../../../../components/src';
 
 const defaultEndpoint: Endpoint = {
 	url: '',
@@ -35,19 +30,12 @@ const defaultEndpoint: Endpoint = {
 };
 
 function Webhooks() {
-	const {
-		setError,
-		resetError,
-		errorMessage,
-		wizardApiFetch,
-		isFetching: inFlight,
-	} = useWizardApiFetch( API_NAMESPACE );
+	const { setError, resetError, errorMessage, wizardApiFetch, isFetching: inFlight } = useWizardApiFetch( API_NAMESPACE );
 
 	const [ action, setAction ] = useState< WebhookActions >( null );
 	const [ actions, setActions ] = useState< string[] >( [] );
 	const [ endpoints, setEndpoints ] = useState< Endpoint[] | null >( null );
-	const [ selectedEndpoint, setSelectedEndpoint ] =
-		useState< Endpoint | null >( null );
+	const [ selectedEndpoint, setSelectedEndpoint ] = useState< Endpoint | null >( null );
 
 	useEffect( () => {
 		fetchActions();
@@ -74,10 +62,7 @@ function Webhooks() {
 		);
 	}
 
-	function setActionHandler(
-		newAction: WebhookActions,
-		id?: number | string
-	) {
+	function setActionHandler( newAction: WebhookActions, id?: number | string ) {
 		resetError();
 		setAction( newAction );
 		if ( newAction === null ) {
@@ -85,13 +70,8 @@ function Webhooks() {
 		} else if ( newAction === 'new' ) {
 			resetError();
 			setSelectedEndpoint( { ...defaultEndpoint } );
-		} else if (
-			endpoints &&
-			[ 'edit', 'delete', 'view', 'toggle' ].includes( newAction )
-		) {
-			setSelectedEndpoint(
-				endpoints.find( endpoint => endpoint.id === id ) || null
-			);
+		} else if ( endpoints && [ 'edit', 'delete', 'view', 'toggle' ].includes( newAction ) ) {
+			setSelectedEndpoint( endpoints.find( endpoint => endpoint.id === id ) || null );
 		}
 	}
 
@@ -107,34 +87,19 @@ function Webhooks() {
 					) }
 					noMargin
 				/>
-				<Button
-					variant="primary"
-					onClick={ () => setActionHandler( 'new' ) }
-					disabled={ inFlight }
-				>
-					{ inFlight
-						? __( 'Loading…', 'newspack-plugin' )
-						: __( 'Add New Endpoint', 'newspack-plugin' ) }
+				<Button variant="primary" onClick={ () => setActionHandler( 'new' ) } disabled={ inFlight }>
+					{ inFlight ? __( 'Loading…', 'newspack-plugin' ) : __( 'Add New Endpoint', 'newspack-plugin' ) }
 				</Button>
 			</div>
 			{ ! inFlight &&
 				( endpoints && endpoints.length > 0 ? (
 					<Fragment>
 						{ endpoints.map( endpoint => (
-							<EndpointActionsCard
-								key={ endpoint.id }
-								endpoint={ endpoint }
-								setAction={ setActionHandler }
-							/>
+							<EndpointActionsCard key={ endpoint.id } endpoint={ endpoint } setAction={ setActionHandler } />
 						) ) }
 					</Fragment>
 				) : (
-					<Notice
-						noticeText={ __(
-							'No endpoints found',
-							'newspack-plugin'
-						) }
-					/>
+					<Notice noticeText={ __( 'No endpoints found', 'newspack-plugin' ) } />
 				) ) }
 			{ selectedEndpoint && (
 				<EndpointActionsModals

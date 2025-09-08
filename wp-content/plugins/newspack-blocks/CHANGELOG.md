@@ -1,3 +1,102 @@
+## [4.15.1](https://github.com/Automattic/newspack-blocks/compare/v4.15.0...v4.15.1) (2025-09-08)
+
+
+### Bug Fixes
+
+* **modal-checkout:** apply newspack-ui styles to subscription confirmation checkbox ([#2193](https://github.com/Automattic/newspack-blocks/issues/2193)) ([02f1e4e](https://github.com/Automattic/newspack-blocks/commit/02f1e4e2cbdd5788230d581582718fcbc7fc8b0c))
+* **modal-checkout:** support stripe optimized checkout ([#2189](https://github.com/Automattic/newspack-blocks/issues/2189)) ([d42e8ca](https://github.com/Automattic/newspack-blocks/commit/d42e8caa7028a612e34543f41834b45d64b77413))
+* show updated date if later than published ([6df3883](https://github.com/Automattic/newspack-blocks/commit/6df388375b0d5b7d58d3025233ee59730f2aa395))
+
+# [4.15.0](https://github.com/Automattic/newspack-blocks/compare/v4.14.8...v4.15.0) (2025-08-25)
+
+
+### Bug Fixes
+
+* skip acct creation on verification request ([#2182](https://github.com/Automattic/newspack-blocks/issues/2182)) [trigger release] ([caec396](https://github.com/Automattic/newspack-blocks/commit/caec3965df53a97b603e289ec0e32eb2b0d46655))
+
+
+### Features
+
+* add hooks around the content loop's content ([#2187](https://github.com/Automattic/newspack-blocks/issues/2187)) ([a2c4c37](https://github.com/Automattic/newspack-blocks/commit/a2c4c37f69b8b02afe9c9a78c98a388b14c97fc3))
+
+## [4.14.8](https://github.com/Automattic/newspack-blocks/compare/v4.14.7...v4.14.8) (2025-08-12)
+
+
+### Bug Fixes
+
+* **modal-checkout:** account for signup fee in price summary ([#2183](https://github.com/Automattic/newspack-blocks/issues/2183)) ([9ba0a6a](https://github.com/Automattic/newspack-blocks/commit/9ba0a6a84fd727e42bec3db2813b2530cab0dbfa))
+
+## [4.14.7](https://github.com/Automattic/newspack-blocks/compare/v4.14.6...v4.14.7) (2025-08-12)
+
+
+### Bug Fixes
+
+* **author-block:** classname application ([#2172](https://github.com/Automattic/newspack-blocks/issues/2172)) ([b689c66](https://github.com/Automattic/newspack-blocks/commit/b689c667d219199e5ae3a4d5a849eb7fb4334b07))
+* skip acct creation on verification request ([#2182](https://github.com/Automattic/newspack-blocks/issues/2182)) ([8aaef1d](https://github.com/Automattic/newspack-blocks/commit/8aaef1db423c8b1d9cbcc3f3f1a53220b0d82743))
+
+## [4.14.6](https://github.com/Automattic/newspack-blocks/compare/v4.14.5...v4.14.6) (2025-07-28)
+
+
+### Bug Fixes
+
+* Fix/author list roles and exclusion ([#2166](https://github.com/Automattic/newspack-blocks/issues/2166)) ([f2dfe4d](https://github.com/Automattic/newspack-blocks/commit/f2dfe4d1297740d483e25ef680f4cf5735ba2a28))
+* remove current page deduplication from logic when deduplication is disabled ([#2169](https://github.com/Automattic/newspack-blocks/issues/2169)) ([4000d85](https://github.com/Automattic/newspack-blocks/commit/4000d858b6931137d883e06b2b6c1200a420dfa7))
+
+## [4.14.5](https://github.com/Automattic/newspack-blocks/compare/v4.14.4...v4.14.5) (2025-07-14)
+
+
+### Bug Fixes
+
+* **modal-checkout:** price formatting with interval and trial handling ([#2153](https://github.com/Automattic/newspack-blocks/issues/2153)) ([6570cd4](https://github.com/Automattic/newspack-blocks/commit/6570cd46d07c9c030c9a5769a66ba646e2a21308))
+
+## [4.14.4](https://github.com/Automattic/newspack-blocks/compare/v4.14.3...v4.14.4) (2025-07-14)
+
+
+### Bug Fixes
+
+* make sure RTL styles are loaded ([#2164](https://github.com/Automattic/newspack-blocks/issues/2164)) ([c4387f5](https://github.com/Automattic/newspack-blocks/commit/c4387f530c46c924d6181bab5962b59d0700ed6d))
+
+## [4.14.3](https://github.com/Automattic/newspack-blocks/compare/v4.14.2...v4.14.3) (2025-07-08)
+
+
+### Bug Fixes
+
+* **modal-checkout:** return array when getting event handlers ([#2162](https://github.com/Automattic/newspack-blocks/issues/2162)) ([c9ba6ec](https://github.com/Automattic/newspack-blocks/commit/c9ba6ec285e2da43d1178451e9d80bba8044974a))
+
+## [4.14.2](https://github.com/Automattic/newspack-blocks/compare/v4.14.1...v4.14.2) (2025-07-02)
+
+
+### Bug Fixes
+
+* revert payment gateway check changes from [#2135](https://github.com/Automattic/newspack-blocks/issues/2135) ([#2160](https://github.com/Automattic/newspack-blocks/issues/2160)) ([0bb9977](https://github.com/Automattic/newspack-blocks/commit/0bb9977a3b1328013b16f59f030faacb64fed9c8))
+
+## [4.14.1](https://github.com/Automattic/newspack-blocks/compare/v4.14.0...v4.14.1) (2025-07-02)
+
+
+### Bug Fixes
+
+* update supported gateway check to improve accuracy ([#2135](https://github.com/Automattic/newspack-blocks/issues/2135)) ([bca370e](https://github.com/Automattic/newspack-blocks/commit/bca370e64ecf0003e4e83213e393a9389518fef4))
+
+# [4.14.0](https://github.com/Automattic/newspack-blocks/compare/v4.13.1...v4.14.0) (2025-06-30)
+
+
+### Bug Fixes
+
+* **homepage-articles:** add styles outside of the block markup ([#2145](https://github.com/Automattic/newspack-blocks/issues/2145)) ([f16ea93](https://github.com/Automattic/newspack-blocks/commit/f16ea93855b33a6513ca018899e8afe89759f51e))
+* **modal-checkout:** better management of modal states ([#2146](https://github.com/Automattic/newspack-blocks/issues/2146)) ([30f3ccc](https://github.com/Automattic/newspack-blocks/commit/30f3ccc0238923c4333d8fb418e91f55b47b46e4))
+
+
+### Features
+
+* **modal-checkout:** change subscription payment method ([#2141](https://github.com/Automattic/newspack-blocks/issues/2141)) ([797223c](https://github.com/Automattic/newspack-blocks/commit/797223c58a25277a9aa3d66be3b2613c2ffb8866))
+
+## [4.13.1](https://github.com/Automattic/newspack-blocks/compare/v4.13.0...v4.13.1) (2025-06-25)
+
+
+### Bug Fixes
+
+* **modal-checkout:** price summary recurrence ([#2152](https://github.com/Automattic/newspack-blocks/issues/2152)) ([35ebab2](https://github.com/Automattic/newspack-blocks/commit/35ebab2771bbb5682bd0a59d32b117942ffa3b50))
+
 # [4.13.0](https://github.com/Automattic/newspack-blocks/compare/v4.12.3...v4.13.0) (2025-06-16)
 
 

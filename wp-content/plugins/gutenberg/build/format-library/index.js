@@ -27,6 +27,18 @@ const formatBold = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)
 });
 /* harmony default export */ const format_bold = (formatBold);
 
+;// external ["wp","privateApis"]
+const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// ./packages/format-library/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/format-library');
+
 ;// ./packages/format-library/build-module/bold/index.js
 /**
  * WordPress dependencies
@@ -36,6 +48,14 @@ const formatBold = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)
 
 
 
+/**
+ * Internal dependencies
+ */
+
+
+const {
+  essentialFormatKey
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 const bold_name = 'core/bold';
 const title = (0,external_wp_i18n_namespaceObject.__)('Bold');
 const bold = {
@@ -43,6 +63,7 @@ const bold = {
   title,
   tagName: 'strong',
   className: null,
+  [essentialFormatKey]: true,
   edit({
     isActive,
     value,
@@ -190,6 +211,21 @@ const external_wp_element_namespaceObject = window["wp"]["element"];
 const ALLOWED_MEDIA_TYPES = ['image'];
 const image_name = 'core/image';
 const image_title = (0,external_wp_i18n_namespaceObject.__)('Inline image');
+
+/**
+ * Extracts the image ID from the className attribute.
+ *
+ * @param {Object} activeObjectAttributes The attributes of the active object.
+ * @return {number|undefined} The extracted image ID or undefined if not found.
+ */
+function getCurrentImageId(activeObjectAttributes) {
+  var _activeObjectAttribut;
+  if (!activeObjectAttributes?.className) {
+    return undefined;
+  }
+  const [, id] = (_activeObjectAttribut = activeObjectAttributes.className.match(/wp-image-(\d+)/)) !== null && _activeObjectAttribut !== void 0 ? _activeObjectAttribut : [];
+  return id ? parseInt(id, 10) : undefined;
+}
 const image_image = {
   name: image_name,
   title: image_title,
@@ -297,6 +333,7 @@ function Edit({
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_blockEditor_namespaceObject.MediaUploadCheck, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.MediaUpload, {
       allowedTypes: ALLOWED_MEDIA_TYPES,
+      value: getCurrentImageId(activeObjectAttributes),
       onSelect: ({
         id,
         url,
@@ -324,7 +361,7 @@ function Edit({
             d: "M4 18.5h16V17H4v1.5zM16 13v1.5h4V13h-4zM5.1 15h7.8c.6 0 1.1-.5 1.1-1.1V6.1c0-.6-.5-1.1-1.1-1.1H5.1C4.5 5 4 5.5 4 6.1v7.8c0 .6.5 1.1 1.1 1.1zm.4-8.5h7V10l-1-1c-.3-.3-.8-.3-1 0l-1.6 1.5-1.2-.7c-.3-.2-.6-.2-.9 0l-1.3 1V6.5zm0 6.1l1.8-1.3 1.3.8c.3.2.7.2.9-.1l1.5-1.4 1.5 1.4v1.5h-7v-.9z"
           })
         }),
-        title: image_title,
+        title: isObjectActive ? (0,external_wp_i18n_namespaceObject.__)('Replace image') : image_title,
         onClick: open,
         isActive: isObjectActive
       })
@@ -361,6 +398,14 @@ const formatItalic = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.js
 
 
 
+/**
+ * Internal dependencies
+ */
+
+
+const {
+  essentialFormatKey: italic_essentialFormatKey
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 const italic_name = 'core/italic';
 const italic_title = (0,external_wp_i18n_namespaceObject.__)('Italic');
 const italic = {
@@ -368,6 +413,7 @@ const italic = {
   title: italic_title,
   tagName: 'em',
   className: null,
+  [italic_essentialFormatKey]: true,
   edit({
     isActive,
     value,
@@ -901,6 +947,10 @@ function getRichTextValueFromSelection(value, isActive) {
 
 
 
+
+const {
+  essentialFormatKey: link_essentialFormatKey
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 const link_name = 'core/link';
 const link_title = (0,external_wp_i18n_namespaceObject.__)('Link');
 function link_Edit({
@@ -1077,6 +1127,7 @@ const build_module_link_link = {
     target: 'target',
     rel: 'rel'
   },
+  [link_essentialFormatKey]: true,
   __unstablePasteRule(value, {
     html,
     plainText
@@ -1217,31 +1268,29 @@ const underline = {
  */
 
 
-/** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
+/**
+ * External dependencies
+ */
 
 /**
  * Return an SVG icon.
  *
- * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifying the icon size in pixels
- *                                                          Other props will be passed to wrapped SVG component
- * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
+ * @param props The component props.
  *
- * @return {JSX.Element}  Icon component
+ * @return Icon component
  */
-function Icon({
+/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(({
   icon,
   size = 24,
   ...props
-}, ref) {
+}, ref) => {
   return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
     width: size,
     height: size,
     ...props,
     ref
   });
-}
-/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
+}));
 
 ;// ./packages/icons/build-module/library/text-color.js
 /**
@@ -1272,18 +1321,6 @@ const color = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
   })
 });
 /* harmony default export */ const library_color = (color);
-
-;// external ["wp","privateApis"]
-const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// ./packages/format-library/build-module/lock-unlock.js
-/**
- * WordPress dependencies
- */
-
-const {
-  lock,
-  unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/format-library');
 
 ;// ./packages/format-library/build-module/text-color/inline.js
 /**
@@ -1728,7 +1765,7 @@ const help = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exter
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M12 4.75a7.25 7.25 0 100 14.5 7.25 7.25 0 000-14.5zM3.25 12a8.75 8.75 0 1117.5 0 8.75 8.75 0 01-17.5 0zM12 8.75a1.5 1.5 0 01.167 2.99c-.465.052-.917.44-.917 1.01V14h1.5v-.845A3 3 0 109 10.25h1.5a1.5 1.5 0 011.5-1.5zM11.25 15v1.5h1.5V15h-1.5z"
+    d: "M12 4a8 8 0 1 1 .001 16.001A8 8 0 0 1 12 4Zm0 1.5a6.5 6.5 0 1 0-.001 13.001A6.5 6.5 0 0 0 12 5.5Zm.75 11h-1.5V15h1.5v1.5Zm-.445-9.234a3 3 0 0 1 .445 5.89V14h-1.5v-1.25c0-.57.452-.958.917-1.01A1.5 1.5 0 0 0 12 8.75a1.5 1.5 0 0 0-1.5 1.5H9a3 3 0 0 1 3.305-2.984Z"
   })
 });
 /* harmony default export */ const library_help = (help);

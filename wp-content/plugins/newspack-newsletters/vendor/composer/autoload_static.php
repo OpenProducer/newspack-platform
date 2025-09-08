@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2ac62e2c670d344e9252df974696065b
+class ComposerStaticInitaf215841decbeeb56934cb417f9b8bb3
 {
     public static $classMap = array (
         'CS_REST_Administrators' => __DIR__ . '/..' . '/campaignmonitor/createsend-php/csrest_administrators.php',
@@ -28,6 +28,8 @@ class ComposerStaticInit2ac62e2c670d344e9252df974696065b
         'Newspack\\Newsletters\\Subscription_List' => __DIR__ . '/../..' . '/includes/class-subscription-list.php',
         'Newspack\\Newsletters\\Subscription_Lists' => __DIR__ . '/../..' . '/includes/class-subscription-lists.php',
         'Newspack_Newsletters' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters.php',
+        'Newspack_Newsletters\\Ads' => __DIR__ . '/../..' . '/includes/ads/class-ads.php',
+        'Newspack_Newsletters\\Ads_Placements' => __DIR__ . '/../..' . '/includes/ads/class-ads-placements.php',
         'Newspack_Newsletters\\CLI\\Sync_Membership_Tied_Subscribers_CLI' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-memberships/class-sync-membership-tied-subscribers-cli.php',
         'Newspack_Newsletters\\Plugins\\Woocommerce_Memberships' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-memberships/class-woocommerce-memberships.php',
         'Newspack_Newsletters\\Tracking\\Admin' => __DIR__ . '/../..' . '/includes/tracking/class-admin.php',
@@ -37,7 +39,6 @@ class ComposerStaticInit2ac62e2c670d344e9252df974696065b
         'Newspack_Newsletters_Active_Campaign' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php',
         'Newspack_Newsletters_Active_Campaign_Controller' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign-controller.php',
         'Newspack_Newsletters_Active_Campaign_Usage_Reports' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign-usage-reports.php',
-        'Newspack_Newsletters_Ads' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-ads.php',
         'Newspack_Newsletters_Blocks' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-blocks.php',
         'Newspack_Newsletters_Bulk_Actions' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-bulk-actions.php',
         'Newspack_Newsletters_Campaign_Monitor' => __DIR__ . '/../..' . '/includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php',
@@ -78,7 +79,7 @@ class ComposerStaticInit2ac62e2c670d344e9252df974696065b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit2ac62e2c670d344e9252df974696065b::$classMap;
+            $loader->classMap = ComposerStaticInitaf215841decbeeb56934cb417f9b8bb3::$classMap;
 
         }, null, ClassLoader::class);
     }

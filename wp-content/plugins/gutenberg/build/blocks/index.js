@@ -6954,6 +6954,19 @@ const i18nBlockSchema = {
  *                                              then no preview is shown.
  */
 
+/**
+ * An object describing a Block Bindings source.
+ *
+ * @typedef {Object} WPBlockBindingsSource
+ *
+ * @property {string}   name               The unique and machine-readable name.
+ * @property {string}   [label]            Human-readable label. Optional when it is defined in the server.
+ * @property {Array}    [usesContext]      Optional array of context needed by the source only in the editor.
+ * @property {Function} [getValues]        Optional function to get the values from the source.
+ * @property {Function} [setValues]        Optional function to update multiple values connected to the source.
+ * @property {Function} [canUserEditValue] Optional function to determine if the user can edit the value.
+ */
+
 function isObject(object) {
   return object !== null && typeof object === 'object';
 }
@@ -7538,13 +7551,7 @@ const unregisterBlockVariation = (blockName, variationName) => {
  *
  * @since 6.7.0 Introduced in WordPress core.
  *
- * @param {Object}   source                    Properties of the source to be registered.
- * @param {string}   source.name               The unique and machine-readable name.
- * @param {string}   [source.label]            Human-readable label. Optional when it is defined in the server.
- * @param {Array}    [source.usesContext]      Optional array of context needed by the source only in the editor.
- * @param {Function} [source.getValues]        Optional function to get the values from the source.
- * @param {Function} [source.setValues]        Optional function to update multiple values connected to the source.
- * @param {Function} [source.canUserEditValue] Optional function to determine if the user can edit the value.
+ * @param {WPBlockBindingsSource} source Object describing a block bindings source.
  *
  * @example
  * ```js
@@ -7737,13 +7744,26 @@ const ICON_COLORS = ['#191e23', '#f8f9f9'];
  * Determines whether the block's attributes are equal to the default attributes
  * which means the block is unmodified.
  *
- * @param {WPBlock} block Block Object
+ * @param {WPBlock} block Block Object.
+ * @param {?string} role  Optional role to filter attributes for modification check.
  *
  * @return {boolean} Whether the block is an unmodified block.
  */
-function isUnmodifiedBlock(block) {
+function isUnmodifiedBlock(block, role) {
   var _getBlockType$attribu;
-  return Object.entries((_getBlockType$attribu = getBlockType(block.name)?.attributes) !== null && _getBlockType$attribu !== void 0 ? _getBlockType$attribu : {}).every(([key, definition]) => {
+  const blockAttributes = (_getBlockType$attribu = getBlockType(block.name)?.attributes) !== null && _getBlockType$attribu !== void 0 ? _getBlockType$attribu : {};
+
+  // Filter attributes by role if a role is provided.
+  const attributesToCheck = role ? Object.entries(blockAttributes).filter(([key, definition]) => {
+    // A special case for the metadata attribute.
+    // It can include block bindings that serve as a source of content,
+    // without directly modifying content attributes.
+    if (role === 'content' && key === 'metadata') {
+      return true;
+    }
+    return definition.role === role || definition.__experimentalRole === role;
+  }) : Object.entries(blockAttributes);
+  return attributesToCheck.every(([key, definition]) => {
     const value = block.attributes[key];
 
     // Every attribute that has a default must match the default.
@@ -7768,11 +7788,12 @@ function isUnmodifiedBlock(block) {
  * to the default attributes which means the block is unmodified.
  *
  * @param {WPBlock} block Block Object
+ * @param {?string} role  Optional role to filter attributes for modification check.
  *
  * @return {boolean} Whether the block is an unmodified default block.
  */
-function isUnmodifiedDefaultBlock(block) {
-  return block.name === getDefaultBlockName() && isUnmodifiedBlock(block);
+function isUnmodifiedDefaultBlock(block, role) {
+  return block.name === getDefaultBlockName() && isUnmodifiedBlock(block, role);
 }
 
 /**
@@ -7902,7 +7923,7 @@ function getAccessibleBlockLabel(blockType, attributes, position, direction = 'v
     (0,external_wp_i18n_namespaceObject.__)('%1$s Block. Column %2$d'), title, position);
   }
   if (hasLabel) {
-    return (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: accessibility text. %1: The block title. %2: The block label. */
+    return (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: accessibility text. 1: The block title. 2: The block label. */
     (0,external_wp_i18n_namespaceObject.__)('%1$s Block. %2$s'), title, label);
   }
   return (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: accessibility text. %s: The block title. */
@@ -9549,6 +9570,7 @@ const processBlockType = (name, blockSettings) => ({
 }) => {
   const bootstrappedBlockType = select.getBootstrappedBlockType(name);
   const blockType = {
+    apiVersion: 1,
     name,
     icon: BLOCK_ICON_DEFAULT,
     keywords: [],
@@ -9566,6 +9588,9 @@ const processBlockType = (name, blockSettings) => ({
     variations: mergeBlockVariations(Array.isArray(bootstrappedBlockType?.variations) ? bootstrappedBlockType.variations : [], Array.isArray(blockSettings?.variations) ? blockSettings.variations : [])
   };
   const settings = (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType', blockType, name, null);
+  if (settings.apiVersion <= 2) {
+     false ? 0 : void 0;
+  }
   if (settings.description && typeof settings.description !== 'string') {
     external_wp_deprecated_default()('Declaring non-string block descriptions', {
       since: '6.2'
@@ -10069,18 +10094,22 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, 
 unlock(store).registerPrivateSelectors(private_selectors_namespaceObject);
 unlock(store).registerPrivateActions(private_actions_namespaceObject);
 
-;// ./packages/blocks/node_modules/uuid/dist/esm-browser/rng.js
+;// ./node_modules/uuid/dist/esm-browser/native.js
+const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+/* harmony default export */ const esm_browser_native = ({
+  randomUUID
+});
+;// ./node_modules/uuid/dist/esm-browser/rng.js
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
 // require the crypto API and do not support built-in fallback to lower quality random number
 // generators (like Math.random()).
-var getRandomValues;
-var rnds8 = new Uint8Array(16);
+let getRandomValues;
+const rnds8 = new Uint8Array(16);
 function rng() {
   // lazy load so that environments that need to polyfill have a chance to do so
   if (!getRandomValues) {
-    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation. Also,
-    // find the complete implementation of crypto (msCrypto) on IE11.
-    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto) || typeof msCrypto !== 'undefined' && typeof msCrypto.getRandomValues === 'function' && msCrypto.getRandomValues.bind(msCrypto);
+    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
 
     if (!getRandomValues) {
       throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
@@ -10089,54 +10118,52 @@ function rng() {
 
   return getRandomValues(rnds8);
 }
-;// ./packages/blocks/node_modules/uuid/dist/esm-browser/regex.js
-/* harmony default export */ const regex = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
-;// ./packages/blocks/node_modules/uuid/dist/esm-browser/validate.js
-
-
-function validate(uuid) {
-  return typeof uuid === 'string' && regex.test(uuid);
-}
-
-/* harmony default export */ const esm_browser_validate = (validate);
-;// ./packages/blocks/node_modules/uuid/dist/esm-browser/stringify.js
+;// ./node_modules/uuid/dist/esm-browser/stringify.js
 
 /**
  * Convert array of 16 byte values to UUID string format of the form:
  * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
  */
 
-var byteToHex = [];
+const byteToHex = [];
 
-for (var stringify_i = 0; stringify_i < 256; ++stringify_i) {
-  byteToHex.push((stringify_i + 0x100).toString(16).substr(1));
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
 }
 
-function stringify(arr) {
-  var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  var uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase(); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+}
+
+function stringify(arr, offset = 0) {
+  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
   // of the following:
   // - One or more input array values don't map to a hex octet (leading to
   // "undefined" in the uuid)
   // - Invalid input values for the RFC `version` or `variant` fields
 
-  if (!esm_browser_validate(uuid)) {
+  if (!validate(uuid)) {
     throw TypeError('Stringified UUID is invalid');
   }
 
   return uuid;
 }
 
-/* harmony default export */ const esm_browser_stringify = (stringify);
-;// ./packages/blocks/node_modules/uuid/dist/esm-browser/v4.js
+/* harmony default export */ const esm_browser_stringify = ((/* unused pure expression or super */ null && (stringify)));
+;// ./node_modules/uuid/dist/esm-browser/v4.js
+
 
 
 
 function v4(options, buf, offset) {
+  if (esm_browser_native.randomUUID && !buf && !options) {
+    return esm_browser_native.randomUUID();
+  }
+
   options = options || {};
-  var rnds = options.random || (options.rng || rng)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  const rnds = options.random || (options.rng || rng)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
 
   rnds[6] = rnds[6] & 0x0f | 0x40;
   rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
@@ -10144,14 +10171,14 @@ function v4(options, buf, offset) {
   if (buf) {
     offset = offset || 0;
 
-    for (var i = 0; i < 16; ++i) {
+    for (let i = 0; i < 16; ++i) {
       buf[offset + i] = rnds[i];
     }
 
     return buf;
   }
 
-  return esm_browser_stringify(rnds);
+  return unsafeStringify(rnds);
 }
 
 /* harmony default export */ const esm_browser_v4 = (v4);

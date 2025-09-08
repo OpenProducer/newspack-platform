@@ -91,7 +91,10 @@ final class Ad_Unit_Block {
 	private static function register_block_placement( $attrs ) {
 		$data = self::get_block_placement_data( $attrs );
 		if ( ! $data['ad_unit'] ) {
-			return;
+			return new \WP_Error(
+				'newspack_ads_block_placement_missing_ad_unit',
+				__( 'Could not determine ad unit for placement', 'newspack-ads' )
+			);
 		}
 		$placement_id     = sprintf( 'block_%s', $data['id'] );
 		$hook_name        = sprintf( 'newspack_ads_%s_render', $placement_id );
