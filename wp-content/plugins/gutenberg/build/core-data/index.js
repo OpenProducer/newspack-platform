@@ -649,6 +649,8 @@ __webpack_require__.d(resolvers_namespaceObject, {
   getEntitiesConfig: () => (resolvers_getEntitiesConfig),
   getEntityRecord: () => (resolvers_getEntityRecord),
   getEntityRecords: () => (resolvers_getEntityRecords),
+  getEntityRecordsTotalItems: () => (resolvers_getEntityRecordsTotalItems),
+  getEntityRecordsTotalPages: () => (resolvers_getEntityRecordsTotalPages),
   getNavigationFallbackId: () => (resolvers_getNavigationFallbackId),
   getRawEntityRecord: () => (resolvers_getRawEntityRecord),
   getRegisteredPostMeta: () => (resolvers_getRegisteredPostMeta),
@@ -1612,7 +1614,8 @@ const rootEntitiesConfig = [{
   baseURLParams: {
     context: 'edit'
   },
-  plural: 'users'
+  plural: 'users',
+  supportsPagination: true
 }, {
   name: 'comment',
   kind: 'root',
@@ -1621,7 +1624,8 @@ const rootEntitiesConfig = [{
     context: 'edit'
   },
   plural: 'comments',
-  label: (0,external_wp_i18n_namespaceObject.__)('Comment')
+  label: (0,external_wp_i18n_namespaceObject.__)('Comment'),
+  supportsPagination: true
 }, {
   name: 'menu',
   kind: 'root',
@@ -1630,7 +1634,8 @@ const rootEntitiesConfig = [{
     context: 'edit'
   },
   plural: 'menus',
-  label: (0,external_wp_i18n_namespaceObject.__)('Menu')
+  label: (0,external_wp_i18n_namespaceObject.__)('Menu'),
+  supportsPagination: true
 }, {
   name: 'menuItem',
   kind: 'root',
@@ -1640,7 +1645,8 @@ const rootEntitiesConfig = [{
   },
   plural: 'menuItems',
   label: (0,external_wp_i18n_namespaceObject.__)('Menu Item'),
-  rawAttributes: ['title']
+  rawAttributes: ['title'],
+  supportsPagination: true
 }, {
   name: 'menuLocation',
   kind: 'root',
@@ -1858,7 +1864,8 @@ async function loadTaxonomyEntities() {
       },
       name,
       label: taxonomy.name,
-      getTitle: record => record?.name
+      getTitle: record => record?.name,
+      supportsPagination: true
     };
   });
 }
@@ -2356,28 +2363,6 @@ const queries = (state = {}, action) => {
 /** @typedef {import('./types').AnyFunction} AnyFunction */
 
 /**
- * Reducer managing terms state. Keyed by taxonomy slug, the value is either
- * undefined (if no request has been made for given taxonomy), null (if a
- * request is in-flight for given taxonomy), or the array of terms for the
- * taxonomy.
- *
- * @param {Object} state  Current state.
- * @param {Object} action Dispatched action.
- *
- * @return {Object} Updated state.
- */
-function terms(state = {}, action) {
-  switch (action.type) {
-    case 'RECEIVE_TERMS':
-      return {
-        ...state,
-        [action.taxonomy]: action.terms
-      };
-  }
-  return state;
-}
-
-/**
  * Reducer managing authors state. Keyed by id.
  *
  * @param {Object} state  Current state.
@@ -2421,22 +2406,6 @@ function currentUser(state = {}, action) {
   switch (action.type) {
     case 'RECEIVE_CURRENT_USER':
       return action.currentUser;
-  }
-  return state;
-}
-
-/**
- * Reducer managing taxonomies.
- *
- * @param {Object} state  Current state.
- * @param {Object} action Dispatched action.
- *
- * @return {Object} Updated state.
- */
-function taxonomies(state = [], action) {
-  switch (action.type) {
-    case 'RECEIVE_TAXONOMIES':
-      return action.taxonomies;
   }
   return state;
 }
@@ -2706,7 +2675,29 @@ function entitiesConfig(state = rootEntitiesConfig, action) {
 const entities = (state = {}, action) => {
   const newConfig = entitiesConfig(state.config, action);
 
-  // Generates a dynamic reducer for the entities.
+  // Generates a reducer for the entities nested by `kind` and `name`.
+  // A config array with shape:
+  // ```
+  // [
+  //   { kind: 'taxonomy', name: 'category' },
+  //   { kind: 'taxonomy', name: 'post_tag' },
+  //   { kind: 'postType', name: 'post' },
+  //   { kind: 'postType', name: 'page' },
+  // ]
+  // ```
+  // generates a reducer for state tree with shape:
+  // ```
+  // {
+  //   taxonomy: {
+  //     category,
+  //     post_tag,
+  //   },
+  //   postType: {
+  //     post,
+  //     page,
+  //   },
+  // }
+  // ```
   let entitiesDataReducer = state.reducer;
   if (!entitiesDataReducer || newConfig !== state.config) {
     const entitiesByKind = newConfig.reduce((acc, record) => {
@@ -2719,14 +2710,10 @@ const entities = (state = {}, action) => {
       acc[kind].push(record);
       return acc;
     }, {});
-    entitiesDataReducer = (0,external_wp_data_namespaceObject.combineReducers)(Object.entries(entitiesByKind).reduce((memo, [kind, subEntities]) => {
-      const kindReducer = (0,external_wp_data_namespaceObject.combineReducers)(subEntities.reduce((kindMemo, entityConfig) => ({
-        ...kindMemo,
-        [entityConfig.name]: entity(entityConfig)
-      }), {}));
-      memo[kind] = kindReducer;
-      return memo;
-    }, {}));
+    entitiesDataReducer = (0,external_wp_data_namespaceObject.combineReducers)(Object.fromEntries(Object.entries(entitiesByKind).map(([kind, subEntities]) => {
+      const kindReducer = (0,external_wp_data_namespaceObject.combineReducers)(Object.fromEntries(subEntities.map(entityConfig => [entityConfig.name, entity(entityConfig)])));
+      return [kind, kindReducer];
+    })));
   }
   const newData = entitiesDataReducer(state.records, action);
   if (newData === state.records && newConfig === state.config && entitiesDataReducer === state.reducer) {
@@ -2911,7 +2898,6 @@ function registeredPostMeta(state = {}, action) {
   return state;
 }
 /* harmony default export */ const build_module_reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
-  terms,
   users,
   currentTheme,
   currentGlobalStylesId,
@@ -2919,7 +2905,6 @@ function registeredPostMeta(state = {}, action) {
   themeGlobalStyleVariations,
   themeBaseGlobalStyles,
   themeGlobalStyleRevisions,
-  taxonomies,
   entities,
   editsReference,
   undoManager,
@@ -3615,7 +3600,7 @@ const getEntityRecordsTotalPages = (state, kind, name, query) => {
   if (!queriedState) {
     return null;
   }
-  if (query.per_page === -1) {
+  if (query?.per_page === -1) {
     return 1;
   }
   const totalItems = getQueriedTotalItems(queriedState, query);
@@ -3624,7 +3609,7 @@ const getEntityRecordsTotalPages = (state, kind, name, query) => {
   }
   // If `per_page` is not set and the query relies on the defaults of the
   // REST endpoint, get the info from query's meta.
-  if (!query.per_page) {
+  if (!query?.per_page) {
     return getQueriedTotalPages(queriedState, query);
   }
   return Math.ceil(totalItems / query.per_page);
@@ -23217,17 +23202,19 @@ const resolvers_getEntityRecords = (kind, name, query = {}) => async ({
         });
         const pageRecords = Object.values(await response.json());
         totalPages = parseInt(response.headers.get('X-WP-TotalPages'));
+        if (!meta) {
+          meta = {
+            totalItems: parseInt(response.headers.get('X-WP-Total')),
+            totalPages: 1
+          };
+        }
         records.push(...pageRecords);
         registry.batch(() => {
-          dispatch.receiveEntityRecords(kind, name, records, query);
+          dispatch.receiveEntityRecords(kind, name, records, query, false, undefined, meta);
           dispatch.finishResolutions('getEntityRecord', getResolutionsArgs(pageRecords));
         });
         page++;
       } while (page <= totalPages);
-      meta = {
-        totalItems: records.length,
-        totalPages: 1
-      };
     } else {
       records = Object.values(await external_wp_apiFetch_default()({
         path
@@ -23297,6 +23284,16 @@ const resolvers_getEntityRecords = (kind, name, query = {}) => async ({
 resolvers_getEntityRecords.shouldInvalidate = (action, kind, name) => {
   return (action.type === 'RECEIVE_ITEMS' || action.type === 'REMOVE_ITEMS') && action.invalidateCache && kind === action.kind && name === action.name;
 };
+
+/**
+ * Requests the total number of entity records.
+ */
+const resolvers_getEntityRecordsTotalItems = forward_resolver('getEntityRecords');
+
+/**
+ * Requests the number of available pages for the given query.
+ */
+const resolvers_getEntityRecordsTotalPages = forward_resolver('getEntityRecords');
 
 /**
  * Requests the current theme.
@@ -24093,6 +24090,7 @@ const external_wp_element_namespaceObject = window["wp"]["element"];
  */
 
 const EntityContext = (0,external_wp_element_namespaceObject.createContext)({});
+EntityContext.displayName = 'EntityContext';
 
 ;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];

@@ -198,8 +198,6 @@ const chevronDown = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx
 const external_wp_notices_namespaceObject = window["wp"]["notices"];
 ;// external ["wp","commands"]
 const external_wp_commands_namespaceObject = window["wp"]["commands"];
-;// external ["wp","coreCommands"]
-const external_wp_coreCommands_namespaceObject = window["wp"]["coreCommands"];
 ;// external ["wp","url"]
 const external_wp_url_namespaceObject = window["wp"]["url"];
 ;// external ["wp","htmlEntities"]
@@ -2700,7 +2698,6 @@ const useMetaBoxInitialization = enabled => {
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -2723,9 +2720,6 @@ const useMetaBoxInitialization = enabled => {
 const {
   getLayoutStyles
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
-const {
-  useCommands: layout_useCommands
-} = unlock(external_wp_coreCommands_namespaceObject.privateApis);
 const {
   useCommandContext
 } = unlock(external_wp_commands_namespaceObject.privateApis);
@@ -2812,6 +2806,9 @@ function MetaBoxesMain({
   // aria-valuenow attribute on the separator.
   const effectSizeConstraints = (0,external_wp_compose_namespaceObject.useRefEffect)(node => {
     const container = node.closest('.interface-interface-skeleton__content');
+    if (!container) {
+      return;
+    }
     const noticeLists = container.querySelectorAll(':scope > .components-notice-list');
     const resizeHandle = container.querySelector('.edit-post-meta-boxes-main__presenter');
     const deriveConstraints = () => {
@@ -2992,7 +2989,6 @@ function Layout({
   settings,
   initialEdits
 }) {
-  layout_useCommands();
   useCommands();
   const shouldIframe = useShouldIframe();
   const {
@@ -3148,7 +3144,7 @@ function Layout({
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SlotFillProvider, {
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_editor_namespaceObject.ErrorBoundary, {
       canCopyContent: true,
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_commands_namespaceObject.CommandMenu, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WelcomeGuide, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WelcomeGuide, {
         postType: currentPostType
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
         className: navigateRegionsProps.className,

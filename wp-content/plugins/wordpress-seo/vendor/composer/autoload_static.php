@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit91347d4778f0a8704858a500d0acfeb6
+class ComposerStaticInit822e1cc45c14db6ed1da857d697dd98b
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -1067,6 +1067,7 @@ class ComposerStaticInit91347d4778f0a8704858a500d0acfeb6
         'Yoast\\WP\\SEO\\Introductions\\Application\\AI_Brand_Insights_Pre_Launch' => __DIR__ . '/../..' . '/src/introductions/application/ai-brand-insights-pre-launch.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Fix_Assessments_Upsell' => __DIR__ . '/../..' . '/src/introductions/application/ai-fix-assessments-upsell.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell' => __DIR__ . '/../..' . '/src/deprecated/src/introductions/application/ai-generate-titles-and-descriptions-introduction-upsell.php',
+        'Yoast\\WP\\SEO\\Introductions\\Application\\Black_Friday_Announcement' => __DIR__ . '/../..' . '/src/introductions/application/black-friday-announcement.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Current_Page_Trait' => __DIR__ . '/../..' . '/src/introductions/application/current-page-trait.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Google_Docs_Addon_Upsell' => __DIR__ . '/../..' . '/src/introductions/application/google-docs-addon-upsell.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Introductions_Collector' => __DIR__ . '/../..' . '/src/introductions/application/introductions-collector.php',
@@ -1148,6 +1149,7 @@ class ComposerStaticInit91347d4778f0a8704858a500d0acfeb6
         'Yoast\\WP\\SEO\\Plans\\Domain\\Add_Ons\\Woo' => __DIR__ . '/../..' . '/src/plans/domain/add-ons/woo.php',
         'Yoast\\WP\\SEO\\Plans\\Infrastructure\\Add_Ons\\Managed_Add_On' => __DIR__ . '/../..' . '/src/plans/infrastructure/add-ons/managed-add-on.php',
         'Yoast\\WP\\SEO\\Plans\\User_Interface\\Plans_Page_Integration' => __DIR__ . '/../..' . '/src/plans/user-interface/plans-page-integration.php',
+        'Yoast\\WP\\SEO\\Plans\\User_Interface\\Upgrade_Sidebar_Menu_Integration' => __DIR__ . '/../..' . '/src/plans/user-interface/upgrade-sidebar-menu-integration.php',
         'Yoast\\WP\\SEO\\Presentations\\Abstract_Presentation' => __DIR__ . '/../..' . '/src/presentations/abstract-presentation.php',
         'Yoast\\WP\\SEO\\Presentations\\Archive_Adjacent' => __DIR__ . '/../..' . '/src/presentations/archive-adjacent-trait.php',
         'Yoast\\WP\\SEO\\Presentations\\Indexable_Author_Archive_Presentation' => __DIR__ . '/../..' . '/src/presentations/indexable-author-archive-presentation.php',
@@ -1337,9 +1339,9 @@ class ComposerStaticInit91347d4778f0a8704858a500d0acfeb6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit91347d4778f0a8704858a500d0acfeb6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit91347d4778f0a8704858a500d0acfeb6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit91347d4778f0a8704858a500d0acfeb6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit822e1cc45c14db6ed1da857d697dd98b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit822e1cc45c14db6ed1da857d697dd98b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit822e1cc45c14db6ed1da857d697dd98b::$classMap;
 
         }, null, ClassLoader::class);
     }

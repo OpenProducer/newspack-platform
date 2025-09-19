@@ -7749,10 +7749,6 @@ unlock(store).registerPrivateActions(private_actions_namespaceObject);
 const external_wp_router_namespaceObject = window["wp"]["router"];
 ;// ./node_modules/clsx/dist/clsx.mjs
 function clsx_r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e)){var o=e.length;for(t=0;t<o;t++)e[t]&&(f=clsx_r(e[t]))&&(n&&(n+=" "),n+=f)}else for(f in e)e[f]&&(n&&(n+=" "),n+=f);return n}function clsx(){for(var e,t,f=0,n="",o=arguments.length;f<o;f++)(e=arguments[f])&&(t=clsx_r(e))&&(n&&(n+=" "),n+=t);return n}/* harmony default export */ const dist_clsx = (clsx);
-;// external ["wp","commands"]
-const external_wp_commands_namespaceObject = window["wp"]["commands"];
-;// external ["wp","coreCommands"]
-const external_wp_coreCommands_namespaceObject = window["wp"]["coreCommands"];
 ;// external ["wp","plugins"]
 const external_wp_plugins_namespaceObject = window["wp"]["plugins"];
 ;// external ["wp","htmlEntities"]
@@ -7774,6 +7770,8 @@ const search = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
 });
 /* harmony default export */ const library_search = (search);
 
+;// external ["wp","commands"]
+const external_wp_commands_namespaceObject = window["wp"]["commands"];
 ;// external ["wp","keycodes"]
 const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// external ["wp","url"]
@@ -7860,6 +7858,8 @@ const external_wp_dom_namespaceObject = window["wp"]["dom"];
 
 
 const SidebarNavigationContext = (0,external_wp_element_namespaceObject.createContext)(() => {});
+SidebarNavigationContext.displayName = 'SidebarNavigationContext';
+
 // Focus a sidebar element after a navigation. The element to focus is either
 // specified by `focusSelector` (when navigating back) or it is the first
 // tabbable element (usually the "Back" button).
@@ -13432,8 +13432,6 @@ function SavePanel() {
 
 
 
-
-
 /**
  * Internal dependencies
  */
@@ -13447,9 +13445,6 @@ function SavePanel() {
 
 
 
-const {
-  useCommands
-} = unlock(external_wp_coreCommands_namespaceObject.privateApis);
 const {
   useGlobalStyle: layout_useGlobalStyle
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
@@ -13471,7 +13466,6 @@ function Layout() {
   const {
     canvas = 'view'
   } = query;
-  useCommands();
   const isMobileViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium', '<');
   const toggleRef = (0,external_wp_element_namespaceObject.useRef)();
   const navigateRegionsProps = (0,external_wp_components_namespaceObject.__unstableUseNavigateRegions)();
@@ -13499,7 +13493,7 @@ function Layout() {
     // Should not depend on the previous canvas mode value but the next.
   }, [canvas]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.UnsavedChangesWarning, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_commands_namespaceObject.CommandMenu, {}), canvas === 'view' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveKeyboardShortcut, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.UnsavedChangesWarning, {}), canvas === 'view' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveKeyboardShortcut, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       ...navigateRegionsProps,
       ref: navigateRegionsProps.ref,
       className: dist_clsx('edit-site-layout', navigateRegionsProps.className, {
@@ -18103,6 +18097,7 @@ const {
 
 
 const FontLibraryContext = (0,external_wp_element_namespaceObject.createContext)({});
+FontLibraryContext.displayName = 'FontLibraryContext';
 function FontLibraryProvider({
   children
 }) {
@@ -26543,8 +26538,6 @@ function SidebarNavigationScreenGlobalStylesContent() {
 
 
 
-
-
 /**
  * Internal dependencies
  */
@@ -26562,13 +26555,7 @@ function ScreenStyleVariations() {
   const isPreviewMode = (0,external_wp_data_namespaceObject.useSelect)(select => {
     return select(external_wp_blockEditor_namespaceObject.store).getSettings().isPreviewMode;
   }, []);
-  const {
-    setDeviceType
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_editor_namespaceObject.store);
   useZoomOut(!isPreviewMode);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    setDeviceType('desktop');
-  }, [setDeviceType]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(header, {
       title: (0,external_wp_i18n_namespaceObject.__)('Browse styles'),
@@ -37678,6 +37665,7 @@ const DataViewsContext = (0,external_wp_element_namespaceObject.createContext)({
     perPageSizes: []
   }
 });
+DataViewsContext.displayName = 'DataViewsContext';
 /* harmony default export */ const dataviews_context = (DataViewsContext);
 
 ;// ./packages/icons/build-module/library/funnel.js
@@ -44959,6 +44947,7 @@ function GridItem({
     item: item,
     field: titleField
   }) : null;
+  const shouldRenderMedia = showMedia && renderedMediaField;
   let mediaA11yProps;
   let titleA11yProps;
   if (isItemClickable(item) && onClickItem) {
@@ -44996,7 +44985,7 @@ function GridItem({
     role: infiniteScrollEnabled ? 'article' : undefined,
     "aria-setsize": infiniteScrollEnabled ? paginationInfo.totalItems : undefined,
     "aria-posinset": posinset,
-    children: [showMedia && renderedMediaField && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemClickWrapper, {
+    children: [shouldRenderMedia && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemClickWrapper, {
       item: item,
       isItemClickable: isItemClickable,
       onClickItem: onClickItem,
@@ -45004,14 +44993,21 @@ function GridItem({
       className: "dataviews-view-grid__media",
       ...mediaA11yProps,
       children: renderedMediaField
-    }), hasBulkActions && showMedia && renderedMediaField && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataViewsSelectionCheckbox, {
+    }), hasBulkActions && shouldRenderMedia && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataViewsSelectionCheckbox, {
       item: item,
       selection: selection,
       onChangeSelection: onChangeSelection,
       getItemId: getItemId,
       titleField: titleField,
       disabled: !hasBulkAction
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+    }), !showTitle && shouldRenderMedia && !!actions?.length && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "dataviews-view-grid__media-actions",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemActions, {
+        item: item,
+        actions: actions,
+        isCompact: true
+      })
+    }), showTitle && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
       justify: "space-between",
       className: "dataviews-view-grid__title-actions",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemClickWrapper, {
@@ -46764,8 +46760,7 @@ function DefaultUI({
   searchLabel = undefined
 }) {
   const {
-    isShowingFilter,
-    config
+    isShowingFilter
   } = (0,external_wp_element_namespaceObject.useContext)(dataviews_context);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
@@ -46780,13 +46775,13 @@ function DefaultUI({
         children: [search && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dataviews_search, {
           label: searchLabel
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FiltersToggle, {})]
-      }), (config || header) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.__experimentalHStack, {
         spacing: 1,
         expanded: false,
         style: {
           flexShrink: 0
         },
-        children: ["config && ", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dataviews_view_config, {}), header]
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dataviews_view_config, {}), header]
       })]
     }), isShowingFilter && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dataviews_filters, {
       className: "dataviews-filters__container"
@@ -46929,6 +46924,7 @@ DataViewsSubComponents.LayoutSwitcher = ViewTypeMenu;
 DataViewsSubComponents.Pagination = DataViewsPagination;
 DataViewsSubComponents.Search = dataviews_search;
 DataViewsSubComponents.ViewConfig = DataviewsViewConfigDropdown;
+DataViewsSubComponents.Footer = DataViewsFooter;
 /* harmony default export */ const dataviews = (DataViewsSubComponents);
 
 ;// ./packages/edit-site/build-module/components/page-patterns/use-pattern-settings.js
@@ -51606,6 +51602,7 @@ function PostList({
 const DataFormContext = (0,external_wp_element_namespaceObject.createContext)({
   fields: []
 });
+DataFormContext.displayName = 'DataFormContext';
 function DataFormProvider({
   fields,
   children
@@ -52243,13 +52240,16 @@ function FormCardField({
       /*#__PURE__*/
       // If it doesn't have a header, keep it open.
       // Otherwise, the card will not be visible.
-      (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
+      (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
         className: "dataforms-layouts-card__field-control",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataFormLayout, {
+        children: [field.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          className: "dataforms-layouts-card__field-description",
+          children: field.description
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataFormLayout, {
           data: data,
           form: form,
           onChange: onChange
-        })
+        })]
       })]
     });
   }

@@ -2790,7 +2790,7 @@ function getCurrentPostType(state) {
  *
  * @param {Object} state Global application state.
  *
- * @return {?number} ID of current post.
+ * @return {?(number|string)} The current post ID (number) or template slug (string).
  */
 function getCurrentPostId(state) {
   return state.postId;
@@ -4348,14 +4348,25 @@ function getNotificationArgumentsForSaveFail(data) {
   }
   const publishStatus = ['publish', 'private', 'future'];
   const isPublished = publishStatus.indexOf(post.status) !== -1;
-  // If the post was being published, we show the corresponding publish error message
-  // Unless we publish an "updating failed" message.
+  if (error.code === 'offline_error') {
+    const messages = {
+      publish: (0,external_wp_i18n_namespaceObject.__)('Publishing failed because you were offline.'),
+      private: (0,external_wp_i18n_namespaceObject.__)('Publishing failed because you were offline.'),
+      future: (0,external_wp_i18n_namespaceObject.__)('Scheduling failed because you were offline.'),
+      default: (0,external_wp_i18n_namespaceObject.__)('Updating failed because you were offline.')
+    };
+    const noticeMessage = !isPublished && edits.status in messages ? messages[edits.status] : messages.default;
+    return [noticeMessage, {
+      id: 'editor-save'
+    }];
+  }
   const messages = {
     publish: (0,external_wp_i18n_namespaceObject.__)('Publishing failed.'),
     private: (0,external_wp_i18n_namespaceObject.__)('Publishing failed.'),
-    future: (0,external_wp_i18n_namespaceObject.__)('Scheduling failed.')
+    future: (0,external_wp_i18n_namespaceObject.__)('Scheduling failed.'),
+    default: (0,external_wp_i18n_namespaceObject.__)('Updating failed.')
   };
-  let noticeMessage = !isPublished && publishStatus.indexOf(edits.status) !== -1 ? messages[edits.status] : (0,external_wp_i18n_namespaceObject.__)('Updating failed.');
+  let noticeMessage = !isPublished && edits.status in messages ? messages[edits.status] : messages.default;
 
   // Check if message string contains HTML. Notice text is currently only
   // supported as plaintext, and stripping the tags may muddle the meaning.
@@ -5580,6 +5591,7 @@ const viewPostRevisions = {
 const DataFormContext = (0,external_wp_element_namespaceObject.createContext)({
   fields: []
 });
+DataFormContext.displayName = 'DataFormContext';
 function DataFormProvider({
   fields,
   children
@@ -11737,13 +11749,16 @@ function FormCardField({
       /*#__PURE__*/
       // If it doesn't have a header, keep it open.
       // Otherwise, the card will not be visible.
-      (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
+      (0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
         className: "dataforms-layouts-card__field-control",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataFormLayout, {
+        children: [field.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          className: "dataforms-layouts-card__field-description",
+          children: field.description
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DataFormLayout, {
           data: data,
           form: form,
           onChange: onChange
-        })
+        })]
       })]
     });
   }
@@ -11995,7 +12010,7 @@ const titleField = {
     item
   }) => getItemTitle(item),
   render: TitleView,
-  enableHiding: false,
+  enableHiding: true,
   enableGlobalSearch: true,
   filterBy: false
 };
@@ -17741,9 +17756,6 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(constants_ST
   actions: store_actions_namespaceObject,
   selectors: store_selectors_namespaceObject
 });
-
-// Once we build a more generic persistence plugin that works across types of stores
-// we'd be able to replace this with a register call.
 (0,external_wp_data_namespaceObject.register)(store);
 
 ;// ./packages/interface/build-module/components/complementary-area-toggle/index.js
@@ -18665,7 +18677,6 @@ function PatternDuplicateModal() {
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -18741,18 +18752,6 @@ const getEditorCommandLoader = () => function useEditorCommandLoader() {
   const {
     getCurrentPostId
   } = (0,external_wp_data_namespaceObject.useSelect)(store_store);
-  const {
-    isBlockBasedTheme,
-    canCreateTemplate
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    return {
-      isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
-      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('create', {
-        kind: 'postType',
-        name: 'wp_template'
-      })
-    };
-  }, []);
   const allowSwitchEditorMode = isCodeEditingEnabled && isRichEditingEnabled;
   if (isPreviewMode) {
     return {
@@ -18915,21 +18914,6 @@ const getEditorCommandLoader = () => function useEditorCommandLoader() {
         window.open(link, `wp-preview-${postId}`);
       }
     });
-  }
-  if (canCreateTemplate && isBlockBasedTheme) {
-    const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
-    if (!isSiteEditor) {
-      commands.push({
-        name: 'core/go-to-site-editor',
-        label: (0,external_wp_i18n_namespaceObject.__)('Open Site Editor'),
-        callback: ({
-          close
-        }) => {
-          close();
-          document.location = 'site-editor.php';
-        }
-      });
-    }
   }
   return {
     commands,
@@ -22030,7 +22014,7 @@ function usePageTypeBadge(postId) {
 
 /** @typedef {import("@wordpress/components").IconType} IconType */
 
-const MotionButton = (0,external_wp_components_namespaceObject.__unstableMotion)(external_wp_components_namespaceObject.Button);
+const MotionButton = external_wp_components_namespaceObject.__unstableMotion.create(external_wp_components_namespaceObject.Button);
 
 /**
  * This component renders a navigation bar at the top of the editor. It displays the title of the current document,
@@ -35779,6 +35763,7 @@ function PreviewDropdown({
             const newRenderingMode = isTemplateHidden ? 'template-locked' : 'post-only';
             setRenderingMode(newRenderingMode);
             setDefaultRenderingMode(newRenderingMode);
+            resetZoomLevel();
           },
           children: (0,external_wp_i18n_namespaceObject.__)('Show template')
         })
@@ -38855,7 +38840,7 @@ function injectThemeAttributeInBlockTemplateContent(block, currentThemeStyleshee
  * Filter all patterns and return only the ones that are compatible with the current template.
  *
  * @param {Array}  patterns An array of patterns.
- * @param {Object} template The current template.
+ * @param {Object} template The current template. Required values are `area`, `name`, and `slug`.
  * @return {Array} Array of patterns that are compatible with the current template.
  */
 function filterPatterns(patterns, template) {
@@ -38882,7 +38867,11 @@ function preparePatterns(patterns, currentThemeStylesheet) {
     }).map(block => injectThemeAttributeInBlockTemplateContent(block, currentThemeStylesheet))
   }));
 }
-function useAvailablePatterns(template) {
+function useAvailablePatterns({
+  area,
+  name,
+  slug
+}) {
   const {
     blockPatterns,
     restBlockPatterns,
@@ -38901,9 +38890,13 @@ function useAvailablePatterns(template) {
   }, []);
   return (0,external_wp_element_namespaceObject.useMemo)(() => {
     const mergedPatterns = [...(blockPatterns || []), ...(restBlockPatterns || [])];
-    const filteredPatterns = filterPatterns(mergedPatterns, template);
-    return preparePatterns(filteredPatterns, template, currentThemeStylesheet);
-  }, [blockPatterns, restBlockPatterns, template, currentThemeStylesheet]);
+    const filteredPatterns = filterPatterns(mergedPatterns, {
+      area,
+      name,
+      slug
+    });
+    return preparePatterns(filteredPatterns, currentThemeStylesheet);
+  }, [area, name, slug, blockPatterns, restBlockPatterns, currentThemeStylesheet]);
 }
 
 ;// ./packages/editor/build-module/components/post-transform-panel/index.js
@@ -38940,7 +38933,9 @@ function post_transform_panel_TemplatesList({
 }
 function PostTransform() {
   const {
-    record,
+    area,
+    name,
+    slug,
     postType,
     postId
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
@@ -38953,16 +38948,23 @@ function PostTransform() {
     } = select(external_wp_coreData_namespaceObject.store);
     const type = getCurrentPostType();
     const id = getCurrentPostId();
+    const record = getEditedEntityRecord('postType', type, id);
     return {
+      area: record?.area,
+      name: record?.name,
+      slug: record?.slug,
       postType: type,
-      postId: id,
-      record: getEditedEntityRecord('postType', type, id)
+      postId: id
     };
   }, []);
   const {
     editEntityRecord
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
-  const availablePatterns = useAvailablePatterns(record);
+  const availablePatterns = useAvailablePatterns({
+    area,
+    name,
+    slug
+  });
   const onTemplateSelect = async selectedTemplate => {
     await editEntityRecord('postType', postType, postId, {
       blocks: selectedTemplate.blocks,
@@ -38974,7 +38976,7 @@ function PostTransform() {
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.PanelBody, {
     title: (0,external_wp_i18n_namespaceObject.__)('Design'),
-    initialOpen: record.type === TEMPLATE_PART_POST_TYPE,
+    initialOpen: postType === TEMPLATE_PART_POST_TYPE,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(post_transform_panel_TemplatesList, {
       availableTemplates: availablePatterns,
       onSelect: onTemplateSelect
