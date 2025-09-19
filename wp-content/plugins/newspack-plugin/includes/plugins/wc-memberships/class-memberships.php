@@ -1133,18 +1133,18 @@ class Memberships {
 			jQuery(document).ready(function($) {
 				function disableFields() {
 					// Disable Status field (Select2-based)
-					$(".plan-details #post_status").prop("disabled", true).css("opacity", "0.6");
+					$(".plan-details #post_status").prop("readonly", true).css("opacity", "0.6");
 					$("#post_status").next(".select2-container").css("opacity", "0.6").css("pointer-events", "none");
 
 					// Disable Member since fields
-					$("#_start_date").prop("disabled", true).css("opacity", "0.6");
+					$("#_start_date").prop("readonly", true).css("opacity", "0.6");
 					$("#_start_date").next(".ui-datepicker-trigger").css("display", "none");
 
 					// Disable Expires fields
-					$("#_end_date").prop("disabled", true).css("opacity", "0.6");
+					$("#_end_date").prop("readonly", true).css("opacity", "0.6");
 					$("#_end_date").next(".ui-datepicker-trigger").css("display", "none");
 
-					// Add visual indication that fields are disabled
+					// Add visual indication that fields are readonly
 					$("#post_status, #_start_date, #_end_date").each(function() {
 						var container = $(this).closest("p, .form-field");
 						if (!container.find(".subscription-linked-notice").length) {

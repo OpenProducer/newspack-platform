@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'the-events-calendar/the-events-calendar',
-        'pretty_version' => 'dev-release/T25.huntress.1',
-        'version' => 'dev-release/T25.huntress.1',
-        'reference' => '994fe16f78b2c18974d79580d9ed53745f6cf83b',
+        'pretty_version' => 'dev-release/T25.ironman',
+        'version' => 'dev-release/T25.ironman',
+        'reference' => '9ac8b1dc5e1d592b7c59cd7ca2ee26871141dda3',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'the-events-calendar/the-events-calendar' => array(
-            'pretty_version' => 'dev-release/T25.huntress.1',
-            'version' => 'dev-release/T25.huntress.1',
-            'reference' => '994fe16f78b2c18974d79580d9ed53745f6cf83b',
+            'pretty_version' => 'dev-release/T25.ironman',
+            'version' => 'dev-release/T25.ironman',
+            'reference' => '9ac8b1dc5e1d592b7c59cd7ca2ee26871141dda3',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

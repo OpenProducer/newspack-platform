@@ -67,10 +67,17 @@ class GoogleSiteKit_Logger {
 	public static function cron_init() {
 		register_deactivation_hook( NEWSPACK_PLUGIN_FILE, [ __CLASS__, 'cron_deactivate' ] );
 
+		// Switch the cadence of the cron job from hourly to daily so we need to unschedule any existing hourly jobs.
+		$cadence_updated_option = 'newspack_googlesitekit_cron_cadence_updated';
+		if ( ! get_option( $cadence_updated_option ) ) {
+			wp_clear_scheduled_hook( self::CRON_HOOK );
+			update_option( $cadence_updated_option, true );
+		}
+
 		if ( defined( 'NEWSPACK_CRON_DISABLE' ) && is_array( NEWSPACK_CRON_DISABLE ) && in_array( self::CRON_HOOK, NEWSPACK_CRON_DISABLE, true ) ) {
 			self::cron_deactivate();
 		} elseif ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-			wp_schedule_event( time(), 'hourly', self::CRON_HOOK );
+			wp_schedule_event( time(), 'daily', self::CRON_HOOK );
 		}
 	}
 

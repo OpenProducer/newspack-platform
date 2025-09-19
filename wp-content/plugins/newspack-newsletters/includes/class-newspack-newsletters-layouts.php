@@ -79,6 +79,7 @@ final class Newspack_Newsletters_Layouts {
 		\register_meta( 'post', 'text_color', $meta_default_params );
 		\register_meta( 'post', 'custom_css', $meta_default_params );
 		\register_meta( 'post', 'campaign_defaults', $meta_default_params );
+		\register_meta( 'post', 'disable_auto_ads', array_merge( $meta_default_params, [ 'type' => 'boolean' ] ) );
 	}
 
 	/**
@@ -212,6 +213,7 @@ final class Newspack_Newsletters_Layouts {
 					'font_header'       => get_post_meta( $post->ID, 'font_header', true ),
 					'custom_css'        => get_post_meta( $post->ID, 'custom_css', true ),
 					'campaign_defaults' => get_post_meta( $post->ID, 'campaign_defaults', true ),
+					'disable_auto_ads'  => boolval( get_post_meta( $post->ID, 'disable_auto_ads', true ) ),
 				];
 
 				// Migrate layout defaults from legacy meta, if it exists.

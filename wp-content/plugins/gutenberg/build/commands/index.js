@@ -3244,7 +3244,8 @@ function commands(state = {}, action) {
           searchLabel: action.searchLabel,
           context: action.context,
           callback: action.callback,
-          icon: action.icon
+          icon: action.icon,
+          keywords: action.keywords
         }
       };
     case 'UNREGISTER_COMMAND':
@@ -3346,6 +3347,7 @@ const reducer = (0,external_wp_data_namespaceObject.combineReducers)({
  * @property {JSX.Element} icon        Command icon.
  * @property {Function}    callback    Command callback.
  * @property {boolean}     disabled    Whether to disable the command.
+ * @property {string[]=}   keywords    Command keywords for search matching.
  */
 
 /**
@@ -3609,6 +3611,7 @@ function CommandMenuLoader({
       var _command$searchLabel;
       return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(He.Item, {
         value: (_command$searchLabel = command.searchLabel) !== null && _command$searchLabel !== void 0 ? _command$searchLabel : command.label,
+        keywords: command.keywords,
         onSelect: () => command.callback({
           close
         }),
@@ -3684,6 +3687,7 @@ function CommandMenuGroup({
       var _command$searchLabel2;
       return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(He.Item, {
         value: (_command$searchLabel2 = command.searchLabel) !== null && _command$searchLabel2 !== void 0 ? _command$searchLabel2 : command.label,
+        keywords: command.keywords,
         onSelect: () => command.callback({
           close
         }),
@@ -3946,12 +3950,13 @@ function useCommand(command) {
       label: command.label,
       searchLabel: command.searchLabel,
       icon: command.icon,
+      keywords: command.keywords,
       callback: (...args) => currentCallbackRef.current(...args)
     });
     return () => {
       unregisterCommand(command.name);
     };
-  }, [command.name, command.label, command.searchLabel, command.icon, command.context, command.disabled, registerCommand, unregisterCommand]);
+  }, [command.name, command.label, command.searchLabel, command.icon, command.context, command.keywords, command.disabled, registerCommand, unregisterCommand]);
 }
 
 ;// ./packages/commands/build-module/hooks/use-command-loader.js
