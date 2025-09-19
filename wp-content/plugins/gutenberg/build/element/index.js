@@ -1477,10 +1477,12 @@ function RawHTML({
 
 /** @typedef {import('react').ReactElement} ReactElement */
 
+const Context = (0,external_React_namespaceObject.createContext)(undefined);
+Context.displayName = 'ElementContext';
 const {
   Provider,
   Consumer
-} = (0,external_React_namespaceObject.createContext)(undefined);
+} = Context;
 const ForwardRef = (0,external_React_namespaceObject.forwardRef)(() => {
   return null;
 });
@@ -1824,9 +1826,9 @@ function renderComponent(Component, props, context, legacyContext = {}) {
 /**
  * Serializes an array of children to string.
  *
- * @param {import('react').ReactNodeArray} children        Children to serialize.
- * @param {Object}                         [context]       Context object.
- * @param {Object}                         [legacyContext] Legacy context object.
+ * @param {ReadonlyArray<import('react').ReactNode>} children        Children to serialize.
+ * @param {Object}                                   [context]       Context object.
+ * @param {Object}                                   [legacyContext] Legacy context object.
  *
  * @return {string} Serialized children.
  */

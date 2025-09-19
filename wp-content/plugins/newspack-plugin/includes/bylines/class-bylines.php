@@ -206,6 +206,11 @@ class Bylines {
 			function( $matches ) {
 				$author_id = $matches[1];
 
+				$author = get_user_by( 'id', $author_id );
+				if ( ! $author ) {
+					return $matches[2];
+				}
+
 				return sprintf(
 					/* translators: 1: Author avatar. 2: author link. */
 					'<span class="author vcard"><a class="url fn n" href="%1$s">%2$s</a></span>',
@@ -229,7 +234,12 @@ class Bylines {
 		$avatars = '';
 
 		foreach ( $author_ids as $author_id ) {
-			$avatars .= '<span class="author-avatar">' . get_avatar( $author_id ) . '</span>';
+			$author = get_user_by( 'id', $author_id );
+			if ( ! $author ) {
+				continue;
+			}
+
+			$avatars .= '<span class="author-avatar">' . get_avatar( $author->ID ) . '</span>';
 		}
 
 		return $avatars;

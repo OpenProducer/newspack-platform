@@ -1,3 +1,24 @@
+## [6.18.3](https://github.com/Automattic/newspack-plugin/compare/v6.18.2...v6.18.3) (2025-09-19)
+
+
+### Bug Fixes
+
+* keep statuses when saving linked memberships ([#4194](https://github.com/Automattic/newspack-plugin/issues/4194)) ([f5417ac](https://github.com/Automattic/newspack-plugin/commit/f5417acbac3210ec51cc0630d698fe5cbf25d532))
+
+## [6.18.2](https://github.com/Automattic/newspack-plugin/compare/v6.18.1...v6.18.2) (2025-09-18)
+
+
+### Bug Fixes
+
+* change sitekit check cadence ([5b2cd55](https://github.com/Automattic/newspack-plugin/commit/5b2cd552cf225d18bea2128979459c8ef6d8ebdc))
+
+## [6.18.1](https://github.com/Automattic/newspack-plugin/compare/v6.18.0...v6.18.1) (2025-09-16)
+
+
+### Bug Fixes
+
+* **bylines:** display inline name for missing users ([#4190](https://github.com/Automattic/newspack-plugin/issues/4190)) ([0b2b5e3](https://github.com/Automattic/newspack-plugin/commit/0b2b5e39a21e3797d2749ef142f633734b32c35c))
+
 # [6.18.0](https://github.com/Automattic/newspack-plugin/compare/v6.17.1...v6.18.0) (2025-09-08)
 
 

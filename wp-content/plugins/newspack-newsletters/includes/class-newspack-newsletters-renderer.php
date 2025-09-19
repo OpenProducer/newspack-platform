@@ -349,9 +349,18 @@ final class Newspack_Newsletters_Renderer {
 		}
 
 		if ( isset( $attrs['style']['spacing']['padding'] ) ) {
-			$padding = $attrs['style']['spacing']['padding'];
+			$padding = array_merge(
+				// Make sure we have all padding values set.
+				[
+					'top'    => '0',
+					'right'  => '0',
+					'bottom' => '0',
+					'left'   => '0',
+				],
+				$attrs['style']['spacing']['padding']
+			);
 			foreach ( $padding as $key => $value ) {
-				$padding[ $key ] = self::get_spacing_value( $value, $key );
+				$padding[ $key ] = self::get_spacing_value( $value );
 			}
 			$attrs['padding'] = sprintf( '%s %s %s %s', $padding['top'], $padding['right'], $padding['bottom'], $padding['left'] );
 		}
@@ -547,7 +556,7 @@ final class Newspack_Newsletters_Renderer {
 		// Default attributes for the column which will envelop the component.
 		$column_attrs = array_merge(
 			array(
-				'padding' => '12px',
+				'padding' => isset( $attrs['padding'] ) ? $attrs['padding'] : '12px',
 			)
 		);
 
@@ -1193,6 +1202,23 @@ final class Newspack_Newsletters_Renderer {
 					}
 				}
 				break;
+
+			/**
+			 * Remote Data Blocks.
+			 */
+			case 'remote-data-blocks/foundation-event':
+			case 'remote-data-blocks/foundation-events':
+			case 'remote-data-blocks/foundation-location':
+			case 'remote-data-blocks/foundation-locations':
+			case 'remote-data-blocks/foundation-movie':
+			case 'remote-data-blocks/foundation-movies':
+			case 'remote-data-blocks/template':
+				foreach ( $inner_blocks as $block ) {
+					$markup .= self::render_mjml_component( $block, false, false, $default_attrs );
+				}
+				$block_mjml_markup = $markup;
+				break;
+
 		}
 
 		$is_posts_inserter_block = 'newspack-newsletters/posts-inserter' == $block_name;

@@ -170,6 +170,12 @@ final class Newspack_Newsletters_Editor {
 			$allowed_actions[] = $hash . 'enqueue_sidebar_plugin_assets';
 		}
 
+		if ( is_plugin_active( 'remote-data-blocks/remote-data-blocks.php' ) ) {
+			$allowed_actions[] = 'RemoteDataBlocks\Editor\BlockManagement\BlockRegistration::enqueue_block_assets';
+			$allowed_actions[] = 'RemoteDataBlocks\Editor\PatternEditor\PatternEditor::enqueue_block_editor_assets';
+			$allowed_actions[] = 'RemoteDataBlocks\Editor\Assets::enqueue_build_assets';
+		}
+
 		/**
 		 * Filters allowed 'enqueue_block_editor_assets' actions inside a newsletter editor.
 		 *
@@ -305,6 +311,12 @@ final class Newspack_Newsletters_Editor {
 			'newspack-newsletters/ad',
 			'newspack-newsletters/posts-inserter',
 			'newspack-newsletters/share',
+			'remote-data-blocks/foundation-event',
+			'remote-data-blocks/foundation-events',
+			'remote-data-blocks/foundation-location',
+			'remote-data-blocks/foundation-locations',
+			'remote-data-blocks/foundation-movie',
+			'remote-data-blocks/foundation-movies',
 		);
 		/**
 		 * Filters the allowed block types for the Newsletter CPT.

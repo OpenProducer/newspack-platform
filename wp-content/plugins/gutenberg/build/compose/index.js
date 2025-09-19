@@ -5000,6 +5000,7 @@ const OPERATOR_EVALUATORS = {
   '<': (breakpointValue, width) => width < breakpointValue
 };
 const ViewportMatchWidthContext = (0,external_wp_element_namespaceObject.createContext)(/** @type {null | number} */null);
+ViewportMatchWidthContext.displayName = 'ViewportMatchWidthContext';
 
 /**
  * Returns true if the viewport matches the given query, or false otherwise.

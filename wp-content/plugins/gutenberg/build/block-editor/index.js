@@ -7555,6 +7555,7 @@ __webpack_require__.d(private_selectors_namespaceObject, {
   hasAllowedPatterns: () => (hasAllowedPatterns),
   isBlockInterfaceHidden: () => (private_selectors_isBlockInterfaceHidden),
   isBlockSubtreeDisabled: () => (isBlockSubtreeDisabled),
+  isContainerInsertableToInWriteMode: () => (isContainerInsertableToInWriteMode),
   isDragging: () => (private_selectors_isDragging),
   isSectionBlock: () => (isSectionBlock),
   isZoomOut: () => (isZoomOut)
@@ -7883,6 +7884,7 @@ const DEFAULT_BLOCK_EDIT_CONTEXT = {
   isSelected: false
 };
 const Context = (0,external_wp_element_namespaceObject.createContext)(DEFAULT_BLOCK_EDIT_CONTEXT);
+Context.displayName = 'BlockEditContext';
 const {
   Provider
 } = Context;
@@ -8982,7 +8984,7 @@ withBlockReset, withPersistentBlockChange, withIgnoredBlockChange, withResetCont
           const newState = new Map(state);
           for (const clientId of action.clientIds) {
             var _action$attributes;
-            const updatedAttributeEntries = Object.entries(action.uniqueByBlock ? action.attributes[clientId] : (_action$attributes = action.attributes) !== null && _action$attributes !== void 0 ? _action$attributes : {});
+            const updatedAttributeEntries = Object.entries(!!action.options?.uniqueByBlock ? action.attributes[clientId] : (_action$attributes = action.attributes) !== null && _action$attributes !== void 0 ? _action$attributes : {});
             if (updatedAttributeEntries.length === 0) {
               continue;
             }
@@ -9815,7 +9817,7 @@ function lastBlockAttributesChange(state = null, action) {
     case 'UPDATE_BLOCK_ATTRIBUTES':
       return action.clientIds.reduce((accumulator, id) => ({
         ...accumulator,
-        [id]: action.uniqueByBlock ? action.attributes[id] : action.attributes
+        [id]: !!action.options?.uniqueByBlock ? action.attributes[id] : action.attributes
       }), {});
   }
   return state;
@@ -10990,6 +10992,7 @@ function getBlockSettings(state, clientId, ...paths) {
  */
 
 
+
 /**
  * Internal dependencies
  */
@@ -10999,6 +11002,9 @@ function getBlockSettings(state, clientId, ...paths) {
 
 
 
+const {
+  isContentBlock: private_selectors_isContentBlock
+} = unlock(external_wp_blocks_namespaceObject.privateApis);
 
 
 /**
@@ -11040,6 +11046,26 @@ const isBlockSubtreeDisabled = (state, clientId) => {
   };
   return getBlockOrder(state, clientId).every(isChildSubtreeDisabled);
 };
+
+/**
+ * Determines if a container (clientId) allows insertion of blocks, considering contentOnly mode restrictions.
+ *
+ * @param {Object} state        Editor state.
+ * @param {string} blockName    The block name to insert.
+ * @param {string} rootClientId The client ID of the root container block.
+ * @return {boolean} Whether the container allows insertion.
+ */
+function isContainerInsertableToInWriteMode(state, blockName, rootClientId) {
+  const isBlockContentBlock = private_selectors_isContentBlock(blockName);
+  const rootBlockName = getBlockName(state, rootClientId);
+  const isContainerContentBlock = private_selectors_isContentBlock(rootBlockName);
+  const isRootBlockMain = getSectionRootClientId(state) === rootClientId;
+
+  // In write mode, containers shouldn't be inserted into unless:
+  // 1. they are a section root;
+  // 2. they are a content block and the block to be inserted is also content.
+  return isRootBlockMain || isContainerContentBlock && isBlockContentBlock;
+}
 function getEnabledClientIdsTreeUnmemoized(state, rootClientId) {
   const blockOrder = getBlockOrder(state, rootClientId);
   const result = [];
@@ -11673,6 +11699,9 @@ function orderBy(items, field, order = 'asc') {
 
 
 
+const {
+  isContentBlock: selectors_isContentBlock
+} = unlock(external_wp_blocks_namespaceObject.privateApis);
 
 /**
  * A block selection object.
@@ -13114,11 +13143,15 @@ const canInsertBlockTypeUnmemoized = (state, blockName, rootClientId = null) => 
   if (isLocked) {
     return false;
   }
-  const _isSectionBlock = !!isSectionBlock(state, rootClientId);
-  if (_isSectionBlock) {
+  const isContentRoleBlock = selectors_isContentBlock(blockName);
+  const isParentSectionBlock = !!isSectionBlock(state, rootClientId);
+  // It shouldn't be possible to insert inside a section block unless in
+  // some cases when the block is a content block.
+  if (isParentSectionBlock && !isContentRoleBlock) {
     return false;
   }
-  if (getBlockEditingMode(state, rootClientId !== null && rootClientId !== void 0 ? rootClientId : '') === 'disabled') {
+  const blockEditingMode = getBlockEditingMode(state, rootClientId !== null && rootClientId !== void 0 ? rootClientId : '');
+  if (blockEditingMode === 'disabled') {
     return false;
   }
   const parentBlockListSettings = getBlockListSettings(state, rootClientId);
@@ -13126,6 +13159,11 @@ const canInsertBlockTypeUnmemoized = (state, blockName, rootClientId = null) => 
   // The parent block doesn't have settings indicating it doesn't support
   // inner blocks, return false.
   if (rootClientId && parentBlockListSettings === undefined) {
+    return false;
+  }
+
+  // In write mode, check if this container allows insertion.
+  if (blockEditingMode === 'contentOnly' && isNavigationMode(state) && !isContainerInsertableToInWriteMode(state, blockName, rootClientId)) {
     return false;
   }
   const parentName = getBlockName(state, rootClientId);
@@ -13224,10 +13262,17 @@ function canRemoveBlock(state, clientId) {
     return false;
   }
   const isBlockWithinSection = !!getParentSectionBlock(state, clientId);
-  if (isBlockWithinSection) {
+  const isContentRoleBlock = selectors_isContentBlock(getBlockName(state, clientId));
+  if (isBlockWithinSection && !isContentRoleBlock) {
     return false;
   }
-  return getBlockEditingMode(state, rootClientId) !== 'disabled';
+  const blockEditingMode = getBlockEditingMode(state, rootClientId);
+
+  // Check if the parent container allows insertion/removal in write mode
+  if (blockEditingMode === 'contentOnly' && isNavigationMode(state) && !isContainerInsertableToInWriteMode(state, getBlockName(state, rootClientId), rootClientId)) {
+    return false;
+  }
+  return blockEditingMode !== 'disabled';
 }
 
 /**
@@ -14956,18 +15001,25 @@ function receiveBlocks(blocks) {
 /**
  * Action that updates attributes of multiple blocks with the specified client IDs.
  *
- * @param {string|string[]} clientIds     Block client IDs.
- * @param {Object}          attributes    Block attributes to be merged. Should be keyed by clientIds if
- *                                        uniqueByBlock is true.
- * @param {boolean}         uniqueByBlock true if each block in clientIds array has a unique set of attributes
+ * @param {string|string[]} clientIds                     Block client IDs.
+ * @param {Object}          attributes                    Block attributes to be merged. Should be keyed by clientIds if `options.uniqueByBlock` is true.
+ * @param {Object}          options                       Updating options.
+ * @param {boolean}         [options.uniqueByBlock=false] Whether each block in clientIds array has a unique set of attributes.
  * @return {Object} Action object.
  */
-function updateBlockAttributes(clientIds, attributes, uniqueByBlock = false) {
+function updateBlockAttributes(clientIds, attributes, options = {
+  uniqueByBlock: false
+}) {
+  if (typeof options === 'boolean') {
+    options = {
+      uniqueByBlock: options
+    };
+  }
   return {
     type: 'UPDATE_BLOCK_ATTRIBUTES',
     clientIds: actions_castArray(clientIds),
     attributes,
-    uniqueByBlock
+    options
   };
 }
 
@@ -18017,6 +18069,7 @@ const DEFAULT_GLOBAL_STYLES_CONTEXT = {
   setUserConfig: () => {}
 };
 const GlobalStylesContext = (0,external_wp_element_namespaceObject.createContext)(DEFAULT_GLOBAL_STYLES_CONTEXT);
+GlobalStylesContext.displayName = 'GlobalStylesContext';
 
 ;// ./packages/block-editor/build-module/components/global-styles/hooks.js
 /**
@@ -21177,6 +21230,7 @@ const defaultLayout = {
   type: 'default'
 };
 const Layout = (0,external_wp_element_namespaceObject.createContext)(defaultLayout);
+Layout.displayName = 'BlockLayoutContext';
 
 /**
  * Allows to define the layout.
@@ -28627,6 +28681,7 @@ function ContrastChecker({
 const BlockRefs = (0,external_wp_element_namespaceObject.createContext)({
   refsMap: (0,external_wp_compose_namespaceObject.observableMap)()
 });
+BlockRefs.displayName = 'BlockRefsContext';
 function BlockRefsProvider({
   children
 }) {
@@ -39515,6 +39570,7 @@ const BlockEditorProvider = props => {
 /** @type {import('react').Context<Record<string,*>>} */
 
 const block_context_Context = (0,external_wp_element_namespaceObject.createContext)({});
+block_context_Context.displayName = 'BlockContext';
 
 /**
  * Component which merges passed value with current consumed block context.
@@ -40136,6 +40192,7 @@ function MultipleUsageWarning({
  */
 
 const PrivateBlockContext = (0,external_wp_element_namespaceObject.createContext)({});
+PrivateBlockContext.displayName = 'PrivateBlockContext';
 
 ;// ./packages/block-editor/build-module/components/block-edit/index.js
 /**
@@ -46624,7 +46681,6 @@ function BlockListAppender({
 
 
 const inbetween_MAX_POPOVER_RECOMPUTE_COUNTER = Number.MAX_SAFE_INTEGER;
-const InsertionPointOpenRef = (0,external_wp_element_namespaceObject.createContext)();
 function BlockPopoverInbetween({
   previousClientId,
   nextClientId,
@@ -46888,7 +46944,8 @@ function BlockDropZonePopover({
 
 
 
-const insertion_point_InsertionPointOpenRef = (0,external_wp_element_namespaceObject.createContext)();
+const InsertionPointOpenRef = (0,external_wp_element_namespaceObject.createContext)();
+InsertionPointOpenRef.displayName = 'InsertionPointOpenRefContext';
 function InbetweenInsertionPointPopover({
   __unstablePopoverSlot,
   __unstableContentRef,
@@ -46899,7 +46956,7 @@ function InbetweenInsertionPointPopover({
     selectBlock,
     hideInsertionPoint
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
-  const openRef = (0,external_wp_element_namespaceObject.useContext)(insertion_point_InsertionPointOpenRef);
+  const openRef = (0,external_wp_element_namespaceObject.useContext)(InsertionPointOpenRef);
   const ref = (0,external_wp_element_namespaceObject.useRef)();
   const {
     orientation,
@@ -47118,7 +47175,7 @@ function InsertionPoint(props) {
 
 
 function useInBetweenInserter() {
-  const openRef = (0,external_wp_element_namespaceObject.useContext)(insertion_point_InsertionPointOpenRef);
+  const openRef = (0,external_wp_element_namespaceObject.useContext)(InsertionPointOpenRef);
   const isInBetweenInserterDisabled = (0,external_wp_data_namespaceObject.useSelect)(select => select(store).getSettings().isDistractionFree || unlock(select(store)).isZoomOut(), []);
   const {
     getBlockListSettings,
@@ -49026,6 +49083,7 @@ function ZoomOutSeparator({
 
 
 const IntersectionObserver = (0,external_wp_element_namespaceObject.createContext)();
+IntersectionObserver.displayName = 'IntersectionObserverContext';
 const pendingBlockVisibilityUpdatesPerRegistry = new WeakMap();
 function Root({
   className,
@@ -53295,6 +53353,7 @@ const useBlockTypesState = (rootClientId, onInsert, isQuick) => {
  */
 
 
+
 /**
  * Internal dependencies
  */
@@ -53302,13 +53361,21 @@ const useBlockTypesState = (rootClientId, onInsert, isQuick) => {
 
 
 
+function InserterListBoxWrapper({
+  key,
+  children
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.Fragment, {
+    children: children
+  }, key);
+}
 function InserterListbox({
   children
 }) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Composite, {
     focusShift: true,
     focusWrap: "horizontal",
-    render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {}),
+    render: InserterListBoxWrapper,
     children: children
   });
 }
@@ -62880,7 +62947,9 @@ function BlockActions({
     const directInsertBlock = rootClientId ? getDirectInsertBlock(rootClientId) : null;
     return {
       canRemove: canRemoveBlocks(clientIds),
-      canInsertBlock: canInsertDefaultBlock || !!directInsertBlock,
+      canInsertBlock: blocks.every(block => {
+        return (canInsertDefaultBlock || !!directInsertBlock) && canInsertBlockType(block.name, rootClientId);
+      }),
       canCopyStyles: blocks.every(block => {
         return !!block && ((0,external_wp_blocks_namespaceObject.hasBlockSupport)(block.name, 'color') || (0,external_wp_blocks_namespaceObject.hasBlockSupport)(block.name, 'typography'));
       }),
@@ -64492,6 +64561,7 @@ function BlockEditVisuallyButton({
  */
 
 const __unstableBlockNameContext = (0,external_wp_element_namespaceObject.createContext)('');
+__unstableBlockNameContext.displayName = '__unstableBlockNameContext';
 /* harmony default export */ const block_name_context = (__unstableBlockNameContext);
 
 ;// ./packages/block-editor/build-module/components/navigable-toolbar/index.js
@@ -65630,7 +65700,7 @@ function BlockTools({
     (0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       ...props,
       onKeyDown: onKeyDown,
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(insertion_point_InsertionPointOpenRef.Provider, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(InsertionPointOpenRef.Provider, {
         value: (0,external_wp_element_namespaceObject.useRef)(false),
         children: [!isTyping && !isZoomOutMode && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InsertionPoint, {
           __unstableContentRef: __unstableContentRef
@@ -66205,6 +66275,7 @@ const listView = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(e
  */
 
 const ListViewContext = (0,external_wp_element_namespaceObject.createContext)({});
+ListViewContext.displayName = 'ListViewContext';
 const useListViewContext = () => (0,external_wp_element_namespaceObject.useContext)(ListViewContext);
 
 ;// ./packages/block-editor/build-module/components/list-view/aria-referenced-text.js
@@ -70914,6 +70985,7 @@ function useTransformImage({
 
 
 const ImageEditingContext = (0,external_wp_element_namespaceObject.createContext)({});
+ImageEditingContext.displayName = 'ImageEditingContext';
 const useImageEditingContext = () => (0,external_wp_element_namespaceObject.useContext)(ImageEditingContext);
 function ImageEditingProvider({
   id,
@@ -74653,7 +74725,9 @@ function withDeprecations(Component) {
 
 
 const keyboardShortcutContext = (0,external_wp_element_namespaceObject.createContext)();
+keyboardShortcutContext.displayName = 'keyboardShortcutContext';
 const inputEventContext = (0,external_wp_element_namespaceObject.createContext)();
+inputEventContext.displayName = 'inputEventContext';
 const instanceIdKey = Symbol('instanceId');
 
 /**
@@ -77210,6 +77284,7 @@ const TypewriterOrIEBypass = isIE ? props => props.children : Typewriter;
 
 
 const RenderedRefsContext = (0,external_wp_element_namespaceObject.createContext)({});
+RenderedRefsContext.displayName = 'RenderedRefsContext';
 
 /**
  * Immutably adds an unique identifier to a set scoped for a given block type.
