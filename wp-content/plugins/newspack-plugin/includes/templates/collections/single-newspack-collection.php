@@ -29,7 +29,7 @@ get_header();
 			 */
 			do_action( 'newspack_collections_single_start', $post );
 
-			get_template_part( Template_Helper::TEMPLATE_PARTS_DIR . 'newspack-collection-intro' );
+			echo wp_kses_post( Template_Helper::render_collections_intro( get_the_ID(), [ 'noPermalinks' => true ] ) );
 
 			/**
 			 * Fires after the collection intro section.
@@ -73,43 +73,20 @@ get_header();
 				endforeach;
 			endif;
 
-			// Get recent collections (excluding current).
-			$recent_collections = Query_Helper::get_recent( [ $collection_id ], 6 );
 
-			if ( $recent_collections ) :
+			/**
+			 * Fires before the recent collections section.
+			 *
+			 * @param int $collection_id The current collection post ID.
+			 */
+			do_action( 'newspack_collections_single_before_recent_collections', $collection_id );
+
+			$recent_collections_html = Template_Helper::render_recent_collections( [ $collection_id ] );
+			if ( $recent_collections_html ) :
 				echo wp_kses_post( Template_Helper::render_separator( 'is-latest-collection' ) );
-				?>
-
-				<!-- Recent Collections Section -->
-				<div class="collections-recent">
-					<div class="collections-recent__header">
-						<h2><?php esc_html_e( 'Recent', 'newspack-plugin' ); ?></h2>
-						<p class="has-medium-gray-color has-text-color has-link-color has-small-font-size">
-							<?php echo wp_kses_post( Template_Helper::render_see_all_link() ); ?>
-						</p>
-					</div>
-
-					<div class="collections-recent__grid">
-						<?php foreach ( $recent_collections as $collection ) : ?>
-							<div class="collection-item">
-								<?php echo wp_kses_post( Template_Helper::render_image( $collection ) ); ?>
-
-								<div class="collection-content">
-									<h3 class="has-normal-font-size">
-										<a href="<?php echo esc_url( get_permalink( $collection->ID ) ); ?>">
-											<?php echo esc_html( get_the_title( $collection->ID ) ); ?>
-										</a>
-									</h3>
-
-									<?php echo wp_kses_post( Template_Helper::render_meta_text( $collection->ID ) ); ?>
-								</div>
-							</div>
-						<?php endforeach; ?>
-					</div>
-				</div> <!-- .collections-recent -->
-			<?php endif; ?>
-
-			<?php
+				echo wp_kses_post( $recent_collections_html );
+			endif;
+			
 			/**
 			 * Fires at the end of the single collection template.
 			 *

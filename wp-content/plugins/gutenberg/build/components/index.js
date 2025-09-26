@@ -82185,6 +82185,98 @@ function UnforwardedControlWithError({
 }
 const ControlWithError = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedControlWithError);
 
+;// ./packages/components/build-module/validated-form-controls/components/input-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const UnforwardedValidatedInputControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([forwardedRef, validityTargetRef]);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.value);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+    required: required,
+    markWhenOptional: markWhenOptional,
+    onValidate: () => {
+      return onValidate?.(valueRef.current);
+    },
+    customValidity: customValidity,
+    getValidityTarget: () => validityTargetRef.current,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(input_control, {
+      __next40pxDefaultSize: true,
+      ref: mergedRefs,
+      onChange: (value, ...args) => {
+        valueRef.current = value;
+        onChange?.(value, ...args);
+      },
+      ...restProps
+    })
+  });
+};
+const ValidatedInputControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedInputControl);
+
+;// ./packages/components/build-module/validated-form-controls/components/checkbox-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const UnforwardedValidatedCheckboxControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([forwardedRef, validityTargetRef]);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.checked);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+    required: required,
+    markWhenOptional: markWhenOptional,
+    ref: mergedRefs,
+    onValidate: () => {
+      return onValidate?.(valueRef.current);
+    },
+    customValidity: customValidity,
+    getValidityTarget: () => validityTargetRef.current?.querySelector('input[type="checkbox"]'),
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(checkbox_control, {
+      __nextHasNoMarginBottom: true,
+      onChange: value => {
+        valueRef.current = value;
+        onChange?.(value);
+      }
+      // TODO: Upstream limitation - CheckboxControl doesn't support uncontrolled mode, visually.
+      ,
+      ...restProps
+    })
+  });
+};
+const ValidatedCheckboxControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedCheckboxControl);
+
 ;// ./packages/components/build-module/validated-form-controls/components/number-control.js
 /**
  * WordPress dependencies
@@ -82233,6 +82325,100 @@ const UnforwardedValidatedNumberControl = ({
 };
 const ValidatedNumberControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedNumberControl);
 
+;// ./packages/components/build-module/validated-form-controls/components/select-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+// Only support single value selection
+
+const UnforwardedValidatedSelectControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([forwardedRef, validityTargetRef]);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.value);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+    required: required,
+    markWhenOptional: markWhenOptional,
+    onValidate: () => {
+      return onValidate?.(valueRef.current);
+    },
+    customValidity: customValidity,
+    getValidityTarget: () => validityTargetRef.current,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(select_control, {
+      __nextHasNoMarginBottom: true,
+      __next40pxDefaultSize: true,
+      ref: mergedRefs,
+      onChange: value => {
+        valueRef.current = value;
+        onChange?.(value);
+      },
+      ...restProps
+    })
+  });
+};
+const ValidatedSelectControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedSelectControl);
+
+;// ./packages/components/build-module/validated-form-controls/components/radio-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const UnforwardedValidatedRadioControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([forwardedRef, validityTargetRef]);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.selected);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+    required: required,
+    markWhenOptional: markWhenOptional
+    // TODO: Upstream limitation - RadioControl does not accept a ref.
+    ,
+    ref: mergedRefs,
+    onValidate: () => {
+      return onValidate?.(valueRef.current);
+    },
+    customValidity: customValidity,
+    getValidityTarget: () => validityTargetRef.current?.querySelector('input[type="radio"]'),
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(radio_control, {
+      onChange: value => {
+        valueRef.current = value;
+        onChange?.(value);
+      },
+      ...restProps
+    })
+  });
+};
+const ValidatedRadioControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedRadioControl);
+
 ;// ./packages/components/build-module/validated-form-controls/components/text-control.js
 /**
  * WordPress dependencies
@@ -82278,6 +82464,51 @@ const UnforwardedValidatedTextControl = ({
   });
 };
 const ValidatedTextControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedTextControl);
+
+;// ./packages/components/build-module/validated-form-controls/components/textarea-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const UnforwardedValidatedTextareaControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([forwardedRef, validityTargetRef]);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.value);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+    required: required,
+    markWhenOptional: markWhenOptional,
+    onValidate: () => {
+      return onValidate?.(valueRef.current);
+    },
+    customValidity: customValidity,
+    getValidityTarget: () => validityTargetRef.current,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(textarea_control, {
+      __nextHasNoMarginBottom: true,
+      ref: mergedRefs,
+      onChange: value => {
+        valueRef.current = value;
+        onChange?.(value);
+      },
+      ...restProps
+    })
+  });
+};
+const ValidatedTextareaControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedTextareaControl);
 
 ;// ./packages/components/build-module/validated-form-controls/components/toggle-control.js
 /**
@@ -82334,10 +82565,73 @@ const UnforwardedValidatedToggleControl = ({
 };
 const ValidatedToggleControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedToggleControl);
 
+;// ./packages/components/build-module/validated-form-controls/components/toggle-group-control.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const UnforwardedValidatedToggleGroupControl = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.value);
+  const nameAttr = (0,external_wp_element_namespaceObject.useId)();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "components-validated-control__wrapper-with-error-delegate",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+      required: required,
+      markWhenOptional: markWhenOptional,
+      onValidate: () => {
+        return onValidate?.(valueRef.current);
+      },
+      customValidity: customValidity,
+      getValidityTarget: () => validityTargetRef.current,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(toggle_group_control_component, {
+        __nextHasNoMarginBottom: true,
+        __next40pxDefaultSize: true,
+        ref: forwardedRef,
+        onChange: value => {
+          valueRef.current = value;
+          onChange?.(value);
+        },
+        ...restProps
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+      className: "components-validated-control__error-delegate",
+      type: "radio",
+      ref: validityTargetRef,
+      required: required,
+      checked: restProps.value !== undefined,
+      tabIndex: -1
+      // A name attribute is needed for the `required` behavior to work.
+      ,
+      name: nameAttr,
+      onChange: () => {},
+      onFocus: e => {
+        e.target.previousElementSibling?.querySelector('[data-active-item="true"]')?.focus();
+      }
+    })]
+  });
+};
+const ValidatedToggleGroupControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedToggleGroupControl);
+
 ;// ./packages/components/build-module/private-apis.js
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -82363,9 +82657,16 @@ lock(privateApis, {
   DateCalendar: DateCalendar,
   DateRangeCalendar: DateRangeCalendar,
   TZDate: date_TZDate,
+  Picker: Picker,
+  ValidatedInputControl: ValidatedInputControl,
+  ValidatedCheckboxControl: ValidatedCheckboxControl,
   ValidatedNumberControl: ValidatedNumberControl,
+  ValidatedSelectControl: ValidatedSelectControl,
+  ValidatedRadioControl: ValidatedRadioControl,
   ValidatedTextControl: ValidatedTextControl,
-  ValidatedToggleControl: ValidatedToggleControl
+  ValidatedTextareaControl: ValidatedTextareaControl,
+  ValidatedToggleControl: ValidatedToggleControl,
+  ValidatedToggleGroupControl: ValidatedToggleGroupControl
 });
 
 ;// ./packages/components/build-module/index.js

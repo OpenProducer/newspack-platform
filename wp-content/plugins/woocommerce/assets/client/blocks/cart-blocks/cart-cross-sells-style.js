@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkwebpackWcBlocksStylingJsonp=globalThis.webpackChunkwebpackWcBlocksStylingJsonp||[]).push([[4946],{12718:(s,c,l)=>{l.r(c),l.d(c,{default:()=>e});var a=l(2328),n=l(10790);const e=({children:s,className:c=""})=>{const{crossSellsProducts:l,cartIsLoading:e}=(0,a.V)();return e||l.length<1?null:(0,n.jsx)("div",{className:c,children:s})}}}]);

@@ -7,7 +7,6 @@
 	}
 	&.aligncenter {
 		form {
-			display: flex;
 			flex-direction: column;
 		}
 		button {
@@ -27,6 +26,10 @@
 	}
 	&.wp-block-button__width-100 button {
 		width: 100%;
+	}
+
+	form {
+		display: flex;
 	}
 
 	.wp-block-button__link {

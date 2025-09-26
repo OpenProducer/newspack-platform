@@ -420,6 +420,7 @@ const VIEW_AS_PREVIEW_LINK_SELECTOR = '#wp-admin-bar-preview a';
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -431,10 +432,22 @@ const VIEW_AS_PREVIEW_LINK_SELECTOR = '#wp-admin-bar-preview a';
  */
 const useUpdatePostLinkListener = () => {
   const {
+    isViewable,
     newPermalink
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => ({
-    newPermalink: select(external_wp_editor_namespaceObject.store).getCurrentPost().link
-  }), []);
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getPostType
+    } = select(external_wp_coreData_namespaceObject.store);
+    const {
+      getCurrentPost,
+      getEditedPostAttribute
+    } = select(external_wp_editor_namespaceObject.store);
+    const postType = getPostType(getEditedPostAttribute('type'));
+    return {
+      isViewable: postType?.viewable,
+      newPermalink: getCurrentPost().link
+    };
+  }, []);
   const nodeToUpdateRef = (0,external_wp_element_namespaceObject.useRef)();
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     nodeToUpdateRef.current = document.querySelector(VIEW_AS_PREVIEW_LINK_SELECTOR) || document.querySelector(VIEW_AS_LINK_SELECTOR);
@@ -443,8 +456,13 @@ const useUpdatePostLinkListener = () => {
     if (!newPermalink || !nodeToUpdateRef.current) {
       return;
     }
+    if (!isViewable) {
+      nodeToUpdateRef.current.style.display = 'none';
+      return;
+    }
+    nodeToUpdateRef.current.style.display = '';
     nodeToUpdateRef.current.setAttribute('href', newPermalink);
-  }, [newPermalink]);
+  }, [newPermalink, isViewable]);
 };
 
 ;// ./packages/edit-post/build-module/components/editor-initialization/index.js

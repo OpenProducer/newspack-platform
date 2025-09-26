@@ -216,7 +216,7 @@ function render_block( $attrs ) {
 									<label for="<?php echo \esc_attr( $checkbox_id ); ?>">
 										<span class="list-title"><?php echo \esc_html( $list['title'] ); ?></span>
 										<?php if ( $attrs['displayDescription'] ) : ?>
-											<span class="list-description"><?php echo \esc_html( $list['description'] ); ?></span>
+											<span class="list-description"><?php echo nl2br( \esc_html( $list['description'] ) ); ?></span>
 										<?php endif; ?>
 									</label>
 								</span>

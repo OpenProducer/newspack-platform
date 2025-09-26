@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkwebpackWcBlocksStylingJsonp=globalThis.webpackChunkwebpackWcBlocksStylingJsonp||[]).push([[8422],{45869:(s,c,l)=>{l.r(c),l.d(c,{default:()=>e});var a=l(10790);const e=({children:s,className:c=""})=>(0,a.jsx)("div",{className:c,children:s})}}]);
