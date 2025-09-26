@@ -38,6 +38,7 @@ class WooCommerce_Connection {
 		include_once __DIR__ . '/class-woocommerce-products.php';
 		include_once __DIR__ . '/class-woocommerce-duplicate-orders.php';
 		include_once __DIR__ . '/class-woocommerce-update-payment-notice.php';
+		include_once __DIR__ . '/class-woocommerce-custom-currency-symbol.php';
 
 		\add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
 		\add_action( 'wp_loaded', [ __CLASS__, 'disable_legacy_form_checkout' ], 1 );

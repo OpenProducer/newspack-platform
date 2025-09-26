@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkwebpackWcBlocksCartCheckoutFrontendJsonp=globalThis.webpackChunkwebpackWcBlocksCartCheckoutFrontendJsonp||[]).push([[855],{8073:(s,a,c)=>{c.r(a),c.d(a,{default:()=>o});var e=c(5460),t=c(5058),n=c(790);const o=({className:s})=>{const{cartItems:a,cartIsLoading:c}=(0,e.V)();return(0,n.jsx)(t.A,{className:s,lineItems:a,isLoading:c})}}}]);

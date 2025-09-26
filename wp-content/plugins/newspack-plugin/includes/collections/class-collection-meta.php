@@ -138,6 +138,7 @@ class Collection_Meta {
 	 */
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
+		add_action( 'rest_api_init', [ __CLASS__, 'register_rest_fields' ] );
 	}
 
 	/**
@@ -207,5 +208,53 @@ class Collection_Meta {
 		}
 
 		return $sanitized_cta;
+	}
+
+	/**
+	 * Register custom REST API fields for collections.
+	 */
+	public static function register_rest_fields() {
+		register_rest_field(
+			Post_Type::get_post_type(),
+			'ctas',
+			[
+				'get_callback' => [ __CLASS__, 'get_collection_ctas_for_rest' ],
+				'schema'       => [
+					'description' => __( 'Collection CTAs', 'newspack-plugin' ),
+					'type'        => 'array',
+					'items'       => [
+						'type'       => 'object',
+						'properties' => [
+							'url'   => [ 'type' => 'string' ],
+							'label' => [ 'type' => 'string' ],
+							'class' => [ 'type' => 'string' ],
+						],
+					],
+					'context'     => [ 'view', 'edit' ],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Get collection CTAs for REST API response.
+	 *
+	 * @param array $post Post data.
+	 * @return array Array of processed CTAs.
+	 *
+	 * @see Query_Helper::get_ctas()
+	 */
+	public static function get_collection_ctas_for_rest( $post ) {
+		return array_map(
+			function ( $cta ) {
+				return [
+					'label' => esc_html( $cta['label'] ?? '' ),
+					'url'   => esc_url( $cta['url'] ?? '' ),
+					'type'  => esc_attr( $cta['type'] ?? '' ),
+					'class' => esc_attr( $cta['class'] ?? '' ),
+				];
+			},
+			Query_Helper::get_ctas( $post['id'] )
+		);
 	}
 }

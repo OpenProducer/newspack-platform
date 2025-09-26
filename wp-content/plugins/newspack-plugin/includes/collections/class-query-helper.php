@@ -168,15 +168,16 @@ class Query_Helper {
 					function ( $cta ) {
 						$label = $cta['label'] ?? '';
 						$url   = '';
+						$type  = $cta['type'] ?? '';
 						$class = $cta['class'] ?? '';
 
-						if ( 'attachment' === ( $cta['type'] ?? '' ) && ! empty( $cta['id'] ) ) {
+						if ( 'attachment' === $type && ! empty( $cta['id'] ) ) {
 							$url = wp_get_attachment_url( $cta['id'] );
 						} elseif ( ! empty( $cta['url'] ) ) {
 							$url = $cta['url'];
 						}
 
-						return ( $label && $url ) ? compact( 'url', 'label', 'class' ) : null;
+						return ( $label && $url ) ? compact( 'url', 'label', 'class', 'type' ) : null;
 					},
 					$ctas
 				)
@@ -540,5 +541,78 @@ class Query_Helper {
 		 * @param int   $limit   Number of items returned.
 		 */
 		return apply_filters( 'newspack_collections_recent', array_slice( $filtered, 0, $limit ), $exclude, $limit );
+	}
+
+	/**
+	 * Build and run the collections query based on block attributes.
+	 *
+	 * @param array $attributes Block attributes (sanitized).
+	 * @return array Array of WP_Post collection objects.
+	 */
+	public static function get_collections_by_attributes( $attributes ) {
+		$query_args = [
+			'post_type'      => Post_Type::get_post_type(),
+			'post_status'    => 'publish',
+			'posts_per_page' => $attributes['numberOfItems'],
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+			'offset'         => $attributes['offset'],
+		];
+
+		// Handle specific collections selection.
+		if ( 'specific' === ( $attributes['queryType'] ?? '' ) && ! empty( $attributes['selectedCollections'] ) ) {
+			$query_args['post__in'] = $attributes['selectedCollections'];
+			$query_args['orderby']  = 'post__in';
+			unset( $query_args['offset'] ); // Offset doesn't apply to specific post selections.
+		}
+
+		// Handle category filtering.
+		if ( ! empty( $attributes['includeCategories'] ) || ! empty( $attributes['excludeCategories'] ) ) {
+			$tax_query = [];
+
+			if ( ! empty( $attributes['includeCategories'] ) ) {
+				$tax_query[] = [
+					'taxonomy' => Collection_Category_Taxonomy::get_taxonomy(),
+					'field'    => 'term_id',
+					'terms'    => $attributes['includeCategories'],
+					'operator' => 'IN',
+				];
+			}
+
+			if ( ! empty( $attributes['excludeCategories'] ) ) {
+				$tax_query[] = [
+					'taxonomy' => Collection_Category_Taxonomy::get_taxonomy(),
+					'field'    => 'term_id',
+					'terms'    => $attributes['excludeCategories'],
+					'operator' => 'NOT IN',
+				];
+			}
+
+			if ( count( $tax_query ) > 1 ) {
+				$tax_query['relation'] = 'AND';
+			}
+
+			$query_args['tax_query'] = $tax_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+		}
+
+		/**
+		 * Generic filter for collections query args.
+		 *
+		 * @param array $query_args Query args.
+		 * @param array $attributes Block attributes.
+		 */
+		$query_args = apply_filters( 'newspack_collections_query_args', $query_args, $attributes );
+
+		$query = new \WP_Query( $query_args );
+		$posts = $query->posts;
+
+		/**
+		 * Filter the collections posts returned by the query.
+		 *
+		 * @param array $posts      Array of WP_Post objects.
+		 * @param array $query_args Final query args.
+		 * @param array $attributes Block attributes.
+		 */
+		return apply_filters( 'newspack_collections_query_posts', $posts, $query_args, $attributes );
 	}
 }

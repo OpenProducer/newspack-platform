@@ -1,3 +1,23 @@
+# [6.19.0](https://github.com/Automattic/newspack-plugin/compare/v6.18.3...v6.19.0) (2025-09-22)
+
+
+### Bug Fixes
+
+* **indesign-export:** remove feature flag ([#4180](https://github.com/Automattic/newspack-plugin/issues/4180)) ([e3c5c7e](https://github.com/Automattic/newspack-plugin/commit/e3c5c7ef29e01fa4c059b83fbe7730b5f6a19a89))
+* **my-account:** missing variable and template hook priority ([#4150](https://github.com/Automattic/newspack-plugin/issues/4150)) ([9886618](https://github.com/Automattic/newspack-plugin/commit/9886618acc6c38b77af305d78ad9b6cbceaa9ed9))
+* **newspack-ui:** border radius and padding for buttons, modals, and segmented controls ([#4162](https://github.com/Automattic/newspack-plugin/issues/4162)) ([be750ef](https://github.com/Automattic/newspack-plugin/commit/be750efdb79f8779031ce0c650bb032a0e27798d))
+* register with empty name fields ([#4175](https://github.com/Automattic/newspack-plugin/issues/4175)) ([7d6680c](https://github.com/Automattic/newspack-plugin/commit/7d6680ca72d66c440d10108c056a07339bf83d99))
+
+
+### Features
+
+* **collections:** add Collections block ([#4166](https://github.com/Automattic/newspack-plugin/issues/4166)) ([ea0917b](https://github.com/Automattic/newspack-plugin/commit/ea0917b6638c0f84cacecba2ee67dbc634212478))
+* **collections:** add logic for opening links in new tabs ([#4174](https://github.com/Automattic/newspack-plugin/issues/4174)) ([ab71461](https://github.com/Automattic/newspack-plugin/commit/ab714610296d7c4bab74439141e6d169ebfc69d4))
+* **collections:** collections block feedback ([#4185](https://github.com/Automattic/newspack-plugin/issues/4185)) ([2f203c1](https://github.com/Automattic/newspack-plugin/commit/2f203c1276efa18cfc80d2b861782aa7dea60a1a))
+* **collections:** replace archive grid with collections block ([#4178](https://github.com/Automattic/newspack-plugin/issues/4178)) ([d601445](https://github.com/Automattic/newspack-plugin/commit/d601445d13c796d487ca7a5e7952c6cbfd44578e))
+* **newspack-ui:** add standalone dropdown button; reorganise dropdown box; add generic spacing ([#4169](https://github.com/Automattic/newspack-plugin/issues/4169)) ([863da1e](https://github.com/Automattic/newspack-plugin/commit/863da1e75ce325b505c170f904112cf603cb86bf))
+* **woocommerce:** add custom currency symbol option ([#4155](https://github.com/Automattic/newspack-plugin/issues/4155)) ([8811a7e](https://github.com/Automattic/newspack-plugin/commit/8811a7ed84154710917cc4b6d9cafc53831da680))
+
 ## [6.18.3](https://github.com/Automattic/newspack-plugin/compare/v6.18.2...v6.18.3) (2025-09-19)
 
 

@@ -58,7 +58,7 @@ final class Checkout_Data {
 						]
 					)
 				);
-			} else {
+			} elseif ( $price !== '{{PRICE}}' ) { // Preserve placeholder for templating.
 				$price = wp_strip_all_tags( wc_price( $price ) );
 			}
 		}

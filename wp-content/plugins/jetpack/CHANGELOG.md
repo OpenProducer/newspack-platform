@@ -2,6 +2,14 @@
 
 ### This is a list detailing changes for all Jetpack releases.
 
+## 15.0.2 - 2025-09-25
+### Bug fixes
+- Resolved conflict with WordPress 6.7.3
+
+## 15.0.1 - 2025-09-25
+### Bug fixes
+- Forms: prevent a conflict between the phone field and WordPress 6.7. [#45120]
+
 ## 15.0 - 2025-09-04
 ### Enhancements
 - Add LaTeX block (Beta) to render mathematical formula. [#44895]

@@ -1,3 +1,15 @@
+# [3.9.0](https://github.com/Automattic/newspack-ads/compare/v3.8.0...v3.9.0) (2025-09-22)
+
+
+### Bug Fixes
+
+* **media-kit:** add correct border-radius to contact patterns ([#990](https://github.com/Automattic/newspack-ads/issues/990)) ([3e3a06e](https://github.com/Automattic/newspack-ads/commit/3e3a06ebdfb48932eb3cc226c3922278f70e46ac))
+
+
+### Features
+
+* **scaip:**  add setting to filter after which blocks ads may be added ([#974](https://github.com/Automattic/newspack-ads/issues/974)) ([8824157](https://github.com/Automattic/newspack-ads/commit/8824157154a288a2b299db391a268d7e29b0d6ee))
+
 # [3.8.0](https://github.com/Automattic/newspack-ads/compare/v3.7.0...v3.8.0) (2025-08-28)
 
 

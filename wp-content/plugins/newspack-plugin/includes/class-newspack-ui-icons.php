@@ -79,59 +79,59 @@ class Newspack_UI_Icons {
 	 * @var array
 	 */
 	public static $ui_icons = array(
-		'account'     =>
+		'account'    =>
 			'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 				<path fill-rule="evenodd" clip-rule="evenodd" d="M7.25 16.4371C6.16445 15.2755 5.5 13.7153 5.5 12C5.5 8.41015 8.41015 5.5 12 5.5C15.5899 5.5 18.5 8.41015 18.5 12C18.5 13.7153 17.8356 15.2755 16.75 16.4371V16C16.75 14.4812 15.5188 13.25 14 13.25L10 13.25C8.48122 13.25 7.25 14.4812 7.25 16V16.4371ZM8.75 17.6304C9.70606 18.1835 10.8161 18.5 12 18.5C13.1839 18.5 14.2939 18.1835 15.25 17.6304V16C15.25 15.3096 14.6904 14.75 14 14.75L10 14.75C9.30964 14.75 8.75 15.3096 8.75 16V17.6304ZM4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12ZM14 10C14 11.1046 13.1046 12 12 12C10.8954 12 10 11.1046 10 10C10 8.89543 10.8954 8 12 8C13.1046 8 14 8.89543 14 10Z" />
 			</svg>',
-		'check'       =>
+		'check'      =>
 			'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 				<path d="M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z" />
 			</svg>',
-		'close'       =>
+		'close'      =>
 			'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
 				<path d="m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"/>
 			</svg>',
-		'closeSmall'  =>
+		'closeSmall' =>
 			'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
 				<path d="M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z"/>
 			</svg>',
-		'email'       =>
+		'email'      =>
 			'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 				<path d="M19.585 11.33L5.08501 4.08001C4.94513 4.01049 4.78703 3.98639 4.63278 4.01106C4.47854 4.03573 4.33585 4.10795 4.22463 4.21763C4.11341 4.32731 4.03921 4.46898 4.01238 4.62286C3.98556 4.77675 4.00746 4.93517 4.07501 5.07601L7.41701 12L4.07501 18.924C4.0071 19.0649 3.98493 19.2235 4.01159 19.3776C4.03826 19.5317 4.11243 19.6736 4.22373 19.7834C4.33503 19.8933 4.47788 19.9656 4.63232 19.9903C4.78675 20.015 4.94503 19.9907 5.08501 19.921L19.585 12.671C19.7097 12.6088 19.8145 12.513 19.8878 12.3945C19.9611 12.276 20 12.1394 20 12C20 11.8607 19.9611 11.7241 19.8878 11.6055C19.8145 11.487 19.7097 11.3923 19.585 11.33ZM6.38101 17.595L8.72101 12.749H12V11.249H8.72001L6.38201 6.40401L17.573 12L6.38101 17.596V17.595Z" />
 			</svg>',
-		'error'       =>
+		'error'      =>
 			'<svg hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 				<path d="M12 20.8C16.8 20.8 20.8 16.9 20.8 12C20.8 7.2 16.9 3.2 12 3.2C7.2 3.2 3.2 7.1 3.2 12C3.2 16.8 7.2 20.8 12 20.8V20.8ZM12 4.8C16 4.8 19.2 8.1 19.2 12C19.2 16 16 19.2 12 19.2C8 19.2 4.8 15.9 4.8 12C4.8 8 8 4.8 12 4.8ZM13 7H11V13H13L13 7ZM13 15H11V17H13V15Z" />
 			</svg>',
-		'google'      =>
+		'google'     =>
 			'<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 				<path fill-rule="evenodd" clip-rule="evenodd" d="M19.6 10.227C19.6 9.51801 19.536 8.83701 19.418 8.18201H10V12.05H15.382C15.2706 12.6619 15.0363 13.2448 14.6932 13.7635C14.3501 14.2822 13.9054 14.726 13.386 15.068V17.578H16.618C18.509 15.836 19.6 13.273 19.6 10.228V10.227Z" fill="#4285F4"></path>
 				<path fill-rule="evenodd" clip-rule="evenodd" d="M9.99996 20C12.7 20 14.964 19.105 16.618 17.577L13.386 15.068C12.491 15.668 11.346 16.023 9.99996 16.023C7.39496 16.023 5.18996 14.263 4.40496 11.9H1.06396V14.49C1.89597 16.1468 3.17234 17.5395 4.7504 18.5126C6.32846 19.4856 8.14603 20.0006 9.99996 20Z" fill="#34A853"></path>
 				<path fill-rule="evenodd" clip-rule="evenodd" d="M4.405 11.9C4.205 11.3 4.091 10.66 4.091 10C4.091 9.34001 4.205 8.70001 4.405 8.10001V5.51001H1.064C0.364015 6.90321 -0.000359433 8.44084 2.66054e-07 10C2.66054e-07 11.614 0.386 13.14 1.064 14.49L4.404 11.9H4.405Z" fill="#FBBC05"></path>
 				<path fill-rule="evenodd" clip-rule="evenodd" d="M9.99996 3.977C11.468 3.977 12.786 4.482 13.823 5.473L16.691 2.605C14.959 0.99 12.695 0 9.99996 0C6.08996 0 2.70996 2.24 1.06396 5.51L4.40396 8.1C5.19196 5.736 7.39596 3.977 9.99996 3.977Z" fill="#EA4335"></path>
 			</svg>',
-		'menu'        =>
+		'menu'       =>
 			'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
 				<path d="M5 5v1.5h14V5H5zm0 7.8h14v-1.5H5v1.5zM5 19h14v-1.5H5V19z"/>
 			</svg>',
-		'info'        =>
+		'info'       =>
 			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
 				<path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"/>
 			</svg>',
-		'arrow-right' =>
+		'arrowRight' =>
 			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
 				<path d="m14.5 6.5-1 1 3.7 3.7H4v1.6h13.2l-3.7 3.7 1 1 5.6-5.5z"/>
 			</svg>',
-		'more'        =>
+		'more'       =>
 			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
 				<path d="M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z"></path>
 			</svg>',
-		'edit'        =>
+		'edit'       =>
 			'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 				<path d="M9.03333 15.1613L19 5.09677L16.8333 3L6.86667 13.0645L6 16L9.03333 15.1613Z" fill="#1E1E1E"/>
 				<path d="M4 20H12M19 5.09677L9.03333 15.1613L6 16L6.86667 13.0645L16.8333 3L19 5.09677Z" stroke="#1E1E1E" stroke-width="1.5"/>
 			</svg>',
-		'trash'       =>
+		'trash'      =>
 			'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 				<path d="M7.46707 5.85748H16.5325C17.188 5.85748 17.6997 6.40405 17.6751 7.04205L17.6624 7.17096L15.9807 18.3135C15.8963 18.8724 15.4161 19.2861 14.8509 19.2862H9.14969C8.61955 19.2862 8.16354 18.9223 8.03934 18.4161L8.01883 18.3135L6.33719 7.17096C6.23286 6.47977 6.7681 5.85768 7.46707 5.85748Z" stroke="#1E1E1E" stroke-width="1.71429"/>
 				<rect x="4" y="5" width="16" height="2" fill="#1E1E1E"/>

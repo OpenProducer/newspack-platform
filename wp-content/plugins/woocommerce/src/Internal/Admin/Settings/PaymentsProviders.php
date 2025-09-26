@@ -9,6 +9,7 @@ use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\AfterpayCle
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Airwallex;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\AmazonPay;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Antom;
+use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Eway;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\GoCardless;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\HelioPay;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Klarna;
@@ -16,6 +17,7 @@ use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\KlarnaCheck
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\MercadoPago;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Mollie;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Monei;
+use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\NexiCheckout;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Payfast;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\PaymentGateway;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Paymob;
@@ -27,9 +29,11 @@ use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\PayUIndia;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Razorpay;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Stripe;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Tilopay;
+use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Visa;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\Vivacom;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\WCCore;
 use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\WooPayments;
+use Automattic\WooCommerce\Internal\Admin\Settings\PaymentsProviders\WooPayments\WooPaymentsService;
 use Automattic\WooCommerce\Internal\Admin\Suggestions\PaymentsExtensionSuggestions as ExtensionSuggestions;
 use Exception;
 use WC_Payment_Gateway;
@@ -82,40 +86,43 @@ class PaymentsProviders {
 	 * @var \class-string[]
 	 */
 	private array $payment_gateways_providers_class_map = array(
-		WC_Gateway_BACS::ID         => WCCore::class,
-		WC_Gateway_Cheque::ID       => WCCore::class,
-		WC_Gateway_COD::ID          => WCCore::class,
-		WC_Gateway_Paypal::ID       => WCCore::class,
-		'woocommerce_payments'      => WooPayments::class,
-		'ppcp-gateway'              => PayPal::class,
-		'stripe'                    => Stripe::class,
-		'stripe_*'                  => Stripe::class,
-		'mollie'                    => Mollie::class,
-		'mollie_wc_gateway_*'       => Mollie::class, // Target all the Mollie gateways.
-		'amazon_payments_advanced*' => AmazonPay::class,
-		'woo-mercado-pago-*'        => MercadoPago::class,
-		'affirm'                    => Affirm::class,
-		'klarna_payments'           => Klarna::class,
-		'afterpay'                  => AfterpayClearpay::class,
-		'clearpay'                  => AfterpayClearpay::class,
-		'antom_*'                   => Antom::class,
-		'razorpay'                  => Razorpay::class,
-		'paystack'                  => Paystack::class,
-		'paystack-*'                => Paystack::class,
-		'payfast'                   => Payfast::class,
-		'payoneer-*'                => Payoneer::class,
-		'payubiz'                   => PayUIndia::class,
-		'paymob'                    => Paymob::class,
-		'paymob-*'                  => Paymob::class,
-		'airwallex_*'               => Airwallex::class,
-		'vivawallet*'               => Vivacom::class,
-		'tilopay'                   => Tilopay::class,
-		'helio'                     => HelioPay::class,
-		'paytrail'                  => Paytrail::class,
-		'monei'                     => Monei::class,
-		'monei_*'                   => Monei::class,
-		'gocardless'                => GoCardless::class,
-		'kco'                       => KlarnaCheckout::class,
+		WC_Gateway_BACS::ID           => WCCore::class,
+		WC_Gateway_Cheque::ID         => WCCore::class,
+		WC_Gateway_COD::ID            => WCCore::class,
+		WC_Gateway_Paypal::ID         => WCCore::class,
+		'woocommerce_payments'        => WooPayments::class,
+		'ppcp-gateway'                => PayPal::class,
+		'stripe'                      => Stripe::class,
+		'stripe_*'                    => Stripe::class,
+		'mollie'                      => Mollie::class,
+		'mollie_wc_gateway_*'         => Mollie::class, // Target all the Mollie gateways.
+		'amazon_payments_advanced*'   => AmazonPay::class,
+		'woo-mercado-pago-*'          => MercadoPago::class,
+		'affirm'                      => Affirm::class,
+		'klarna_payments'             => Klarna::class,
+		'afterpay'                    => AfterpayClearpay::class,
+		'clearpay'                    => AfterpayClearpay::class,
+		'antom_*'                     => Antom::class,
+		'razorpay'                    => Razorpay::class,
+		'paystack'                    => Paystack::class,
+		'paystack-*'                  => Paystack::class,
+		'payfast'                     => Payfast::class,
+		'payoneer-*'                  => Payoneer::class,
+		'payubiz'                     => PayUIndia::class,
+		'paymob'                      => Paymob::class,
+		'paymob-*'                    => Paymob::class,
+		'airwallex_*'                 => Airwallex::class,
+		'vivawallet*'                 => Vivacom::class,
+		'tilopay'                     => Tilopay::class,
+		'helio'                       => HelioPay::class,
+		'paytrail'                    => Paytrail::class,
+		'monei'                       => Monei::class,
+		'monei_*'                     => Monei::class,
+		'gocardless'                  => GoCardless::class,
+		'kco'                         => KlarnaCheckout::class,
+		'visa_acceptance_solutions_*' => Visa::class,
+		'eway'                        => Eway::class,
+		'dibs_easy'                   => NexiCheckout::class,
 	);
 
 	/**
@@ -152,6 +159,9 @@ class PaymentsProviders {
 		ExtensionSuggestions::MONEI             => Monei::class,
 		ExtensionSuggestions::GOCARDLESS        => GoCardless::class,
 		ExtensionSuggestions::KLARNA_CHECKOUT   => KlarnaCheckout::class,
+		ExtensionSuggestions::VISA              => Visa::class,
+		ExtensionSuggestions::EWAY              => Eway::class,
+		ExtensionSuggestions::NEXI_CHECKOUT     => NexiCheckout::class,
 	);
 
 	/**
@@ -235,44 +245,8 @@ class PaymentsProviders {
 			// Handle edge-cases for certain providers.
 			$payment_gateways = $this->handle_non_standard_registration_for_payment_gateways( $payment_gateways );
 
-			// Remove "shell" gateways that are not intended for display.
-			// We consider a gateway to be a "shell" if it has no WC admin title or description.
-			$grouped_payment_gateways = $this->group_gateways_by_extension( $payment_gateways, $country_code );
-			$payment_gateways         = array_filter(
-				$payment_gateways,
-				function ( $gateway ) use ( $grouped_payment_gateways, $country_code ) {
-					// If the gateway is a shell, we only remove it if there are other, non-shell gateways from that extension.
-					// This is to avoid removing all the gateways registered by an extension and
-					// preventing user access to the settings page(s) for that extension.
-					if ( $this->is_shell_payment_gateway( $gateway ) ) {
-						$gateway_details = $this->get_payment_gateway_details( $gateway, 0, $country_code );
-						// In case we don't have the needed extension details,
-						// we allow the gateway to be displayed (aka better safe than sorry).
-						if ( empty( $gateway_details ) || ! isset( $gateway_details['plugin'] ) || empty( $gateway_details['plugin']['file'] ) ) {
-							return true;
-						}
-
-						if ( empty( $grouped_payment_gateways[ $gateway_details['plugin']['file'] ] ) ||
-							count( $grouped_payment_gateways[ $gateway_details['plugin']['file'] ] ) <= 1 ) {
-							// If there are no other gateways from the same extension, we let the shell gateway be displayed.
-							return true;
-						}
-
-						// Check if there are any other gateways from the same extension that are NOT shells.
-						foreach ( $grouped_payment_gateways[ $gateway_details['plugin']['file'] ] as $extension_gateway ) {
-							if ( ! $this->is_shell_payment_gateway( $extension_gateway ) ) {
-								// If we found a gateway from the same extension that is not a shell,
-								// we hide all shells from that extension.
-								return false;
-							}
-						}
-					}
-
-					// By this point, we know that the gateway is not a shell or that it is a shell
-					// but there are no non-shell gateways from the same extension. Include it.
-					return true;
-				}
-			);
+			// Remove "shell" gateways from the list.
+			$payment_gateways = $this->remove_shell_payment_gateways( $payment_gateways, $country_code );
 
 			// Store the entire payment gateways list for display for later use.
 			$this->payment_gateways_for_display_memo[ $country_code ] = $payment_gateways;
@@ -295,6 +269,58 @@ class PaymentsProviders {
 		$this->payment_gateways_memo[ $country_code ] = $payment_gateways;
 
 		return $payment_gateways;
+	}
+
+	/**
+	 * Remove "shell" gateways from the provided payment gateways list.
+	 *
+	 * We consider a gateway to be a "shell" if it has no WC admin title or description.
+	 * The removal is done in a way that ensures we do not remove all gateways from an extension,
+	 * thus preventing user access to the settings page(s) for that extension.
+	 *
+	 * @param array  $payment_gateways The payment gateways list to process.
+	 * @param string $country_code     Optional. The country code for which the payment gateways are being generated.
+	 *                                 This should be an ISO 3166-1 alpha-2 country code.
+	 *
+	 * @return array The processed payment gateways list.
+	 */
+	public function remove_shell_payment_gateways( array $payment_gateways, string $country_code = '' ): array {
+		$grouped_payment_gateways = $this->group_gateways_by_extension( $payment_gateways, $country_code );
+		return array_filter(
+			$payment_gateways,
+			function ( $gateway ) use ( $grouped_payment_gateways, $country_code ) {
+				// If the gateway is a shell, we only remove it if there are other, non-shell gateways from that extension.
+				// This is to avoid removing all the gateways registered by an extension and
+				// preventing user access to the settings page(s) for that extension.
+				if ( $this->is_shell_payment_gateway( $gateway ) ) {
+					$gateway_details = $this->get_payment_gateway_details( $gateway, 0, $country_code );
+					// In case we don't have the needed extension details,
+					// we allow the gateway to be displayed (aka better safe than sorry).
+					if ( empty( $gateway_details ) || ! isset( $gateway_details['plugin'] ) || empty( $gateway_details['plugin']['file'] ) ) {
+						return true;
+					}
+
+					if ( empty( $grouped_payment_gateways[ $gateway_details['plugin']['file'] ] ) ||
+						count( $grouped_payment_gateways[ $gateway_details['plugin']['file'] ] ) <= 1 ) {
+						// If there are no other gateways from the same extension, we let the shell gateway be displayed.
+						return true;
+					}
+
+					// Check if there are any other gateways from the same extension that are NOT shells.
+					foreach ( $grouped_payment_gateways[ $gateway_details['plugin']['file'] ] as $extension_gateway ) {
+						if ( ! $this->is_shell_payment_gateway( $extension_gateway ) ) {
+							// If we found a gateway from the same extension that is not a shell,
+							// we hide all shells from that extension.
+							return false;
+						}
+					}
+				}
+
+				// By this point, we know that the gateway is not a shell or that it is a shell
+				// but there are no non-shell gateways from the same extension. Include it.
+				return true;
+			}
+		);
 	}
 
 	/**
@@ -476,7 +502,7 @@ class PaymentsProviders {
 	/**
 	 * Check if a payment gateway is a shell payment gateway.
 	 *
-	 * A shell payment gateway is one that has no method title or description.
+	 * A shell payment gateway is generally one that has no method title or description.
 	 * This is used to identify gateways that are not intended for display in the admin UI.
 	 *
 	 * @param WC_Payment_Gateway $gateway The payment gateway object.
@@ -484,7 +510,10 @@ class PaymentsProviders {
 	 * @return bool True if the payment gateway is a shell, false otherwise.
 	 */
 	public function is_shell_payment_gateway( WC_Payment_Gateway $gateway ): bool {
-		return empty( $gateway->get_method_title() ) && empty( $gateway->get_method_description() );
+		return ( empty( $gateway->get_method_title() ) && empty( $gateway->get_method_description() ) ) ||
+			// Special case for WooPayments gateways that are not the main one: their method title is "WooPayments",
+			// but their ID is made up of the main gateway ID and a suffix for the payment method.
+			( 'WooPayments' === $gateway->get_method_title() && str_starts_with( $gateway->id, WooPaymentsService::GATEWAY_ID . '_' ) );
 	}
 
 	/**
@@ -1157,16 +1186,14 @@ class PaymentsProviders {
 					ExtensionSuggestions::SQUARE,
 					ExtensionSuggestions::PAYONEER,
 					ExtensionSuggestions::AIRWALLEX,
-					ExtensionSuggestions::COINBASE, // We don't have suggestion details yet.
-					ExtensionSuggestions::AUTHORIZE_NET, // We don't have suggestion details yet.
-					ExtensionSuggestions::BOLT, // We don't have suggestion details yet.
-					ExtensionSuggestions::DEPAY, // We don't have suggestion details yet.
-					ExtensionSuggestions::ELAVON, // We don't have suggestion details yet.
-					ExtensionSuggestions::EWAY, // We don't have suggestion details yet.
-					ExtensionSuggestions::FORTISPAY, // We don't have suggestion details yet.
-					ExtensionSuggestions::NEXI, // We don't have suggestion details yet.
-					ExtensionSuggestions::PAYPAL_ZETTLE, // We don't have suggestion details yet.
-					ExtensionSuggestions::RAPYD, // We don't have suggestion details yet.
+					ExtensionSuggestions::COINBASE,         // We don't have suggestion details yet.
+					ExtensionSuggestions::AUTHORIZE_NET,    // We don't have suggestion details yet.
+					ExtensionSuggestions::BOLT,             // We don't have suggestion details yet.
+					ExtensionSuggestions::DEPAY,            // We don't have suggestion details yet.
+					ExtensionSuggestions::ELAVON,           // We don't have suggestion details yet.
+					ExtensionSuggestions::FORTISPAY,        // We don't have suggestion details yet.
+					ExtensionSuggestions::PAYPAL_ZETTLE,    // We don't have suggestion details yet.
+					ExtensionSuggestions::RAPYD,            // We don't have suggestion details yet.
 					ExtensionSuggestions::PAYPAL_BRAINTREE, // We don't have suggestion details yet.
 				),
 				true
@@ -1290,23 +1317,42 @@ class PaymentsProviders {
 			// This is a best-effort approach, as the plugin might be sitting under a directory (slug) that we can't handle.
 			// Always try the official plugin slug first, then the testing variations.
 			$plugin_slug_variations = Utils::generate_testing_plugin_slugs( $extension_suggestion['plugin']['slug'], true );
+			// Favor active plugins by checking the entire variations list for active plugins first.
+			// This way we handle cases where there are multiple variations installed and one is active.
+			$found = false;
 			foreach ( $plugin_slug_variations as $plugin_slug ) {
-				if ( PluginsHelper::is_plugin_installed( $plugin_slug ) ) {
+				if ( PluginsHelper::is_plugin_active( $plugin_slug ) ) {
+					$found                                    = true;
+					$extension_suggestion['plugin']['status'] = self::EXTENSION_ACTIVE;
 					// Make sure we put in the actual slug and file path that we found.
 					$extension_suggestion['plugin']['slug'] = $plugin_slug;
 					$extension_suggestion['plugin']['file'] = PluginsHelper::get_plugin_path_from_slug( $plugin_slug );
 					// Sanity check.
 					if ( ! is_string( $extension_suggestion['plugin']['file'] ) ) {
 						$extension_suggestion['plugin']['file'] = '';
+						break;
 					}
 					// Remove the .php extension from the file path. The WP API expects it without it.
 					$extension_suggestion['plugin']['file'] = Utils::trim_php_file_extension( $extension_suggestion['plugin']['file'] );
-
-					$extension_suggestion['plugin']['status'] = self::EXTENSION_INSTALLED;
-					if ( PluginsHelper::is_plugin_active( $plugin_slug ) ) {
-						$extension_suggestion['plugin']['status'] = self::EXTENSION_ACTIVE;
-					}
 					break;
+				}
+			}
+			if ( ! $found ) {
+				foreach ( $plugin_slug_variations as $plugin_slug ) {
+					if ( PluginsHelper::is_plugin_installed( $plugin_slug ) ) {
+						$extension_suggestion['plugin']['status'] = self::EXTENSION_INSTALLED;
+						// Make sure we put in the actual slug and file path that we found.
+						$extension_suggestion['plugin']['slug'] = $plugin_slug;
+						$extension_suggestion['plugin']['file'] = PluginsHelper::get_plugin_path_from_slug( $plugin_slug );
+						// Sanity check.
+						if ( ! is_string( $extension_suggestion['plugin']['file'] ) ) {
+							$extension_suggestion['plugin']['file'] = '';
+							break;
+						}
+						// Remove the .php extension from the file path. The WP API expects it without it.
+						$extension_suggestion['plugin']['file'] = Utils::trim_php_file_extension( $extension_suggestion['plugin']['file'] );
+						break;
+					}
 				}
 			}
 		}

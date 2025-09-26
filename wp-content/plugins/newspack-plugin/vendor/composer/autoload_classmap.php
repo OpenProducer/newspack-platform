@@ -175,6 +175,7 @@ return array(
     'Newspack\\WooCommerce_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
     'Newspack\\WooCommerce_Connection' => $baseDir . '/includes/plugins/woocommerce/class-woocommerce-connection.php',
     'Newspack\\WooCommerce_Cover_Fees' => $baseDir . '/includes/plugins/woocommerce/class-woocommerce-cover-fees.php',
+    'Newspack\\WooCommerce_Custom_Currency_Symbol' => $baseDir . '/includes/plugins/woocommerce/class-woocommerce-custom-currency-symbol.php',
     'Newspack\\WooCommerce_Duplicate_Orders' => $baseDir . '/includes/plugins/woocommerce/class-woocommerce-duplicate-orders.php',
     'Newspack\\WooCommerce_Gateway_Stripe' => $baseDir . '/includes/plugins/class-woocommerce-gateway-stripe.php',
     'Newspack\\WooCommerce_Logs' => $baseDir . '/includes/plugins/woocommerce/class-woocommerce-logs.php',

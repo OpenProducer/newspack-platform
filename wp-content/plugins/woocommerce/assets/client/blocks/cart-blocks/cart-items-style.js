@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkwebpackWcBlocksStylingJsonp=globalThis.webpackChunkwebpackWcBlocksStylingJsonp||[]).push([[7646],{97002:(c,s,a)=>{a.r(s),a.d(s,{default:()=>k});var l=a(92902),e=a(4921),n=a(10790);const k=({children:c,className:s})=>(0,n.jsx)(l.A,{className:(0,e.A)("wc-block-cart__main",s),children:c})}}]);

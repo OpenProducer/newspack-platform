@@ -1678,7 +1678,7 @@ final class Reader_Activation {
 					<?php if ( count( $newsletters_lists ) > $default_list_size ) : ?>
 						<button type="button" class="newspack-ui__button newspack-ui__button--wide newspack-ui__button--secondary see-all-button">
 							<span><?php esc_html_e( 'See all', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'arrow-right' ); ?>
+							<?php \Newspack\Newspack_UI_Icons::print_svg( 'arrowRight' ); ?>
 						</button>
 					<?php endif; ?>
 					<button type="submit" class="newspack-ui__button newspack-ui__button--wide newspack-ui__button--primary"><?php echo \esc_html( self::get_reader_activation_labels( 'newsletters_continue' ) ); ?></button>
@@ -2255,6 +2255,8 @@ final class Reader_Activation {
 				]
 			);
 
+			// Unhook from WooCommerce as it's already been canonized above.
+			remove_filter( 'woocommerce_new_customer_data', [ __CLASS__, 'canonize_user_data' ], 10, 1 );
 			if ( function_exists( '\wc_create_new_customer' ) ) {
 				/**
 				 * Create WooCommerce Customer if possible.
@@ -2265,6 +2267,7 @@ final class Reader_Activation {
 				$user_id = \wp_insert_user( $user_data );
 				\wp_new_user_notification( $user_id, null, 'user' );
 			}
+			add_filter( 'woocommerce_new_customer_data', [ __CLASS__, 'canonize_user_data' ], 10, 1 );
 
 			if ( \is_wp_error( $user_id ) ) {
 				Logger::error( 'User registration failed: ' . $user_id->get_error_message() );

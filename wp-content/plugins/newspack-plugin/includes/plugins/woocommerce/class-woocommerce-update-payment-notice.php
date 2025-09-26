@@ -129,6 +129,9 @@ class WooCommerce_Update_Payment_Notice {
 				continue;
 			}
 
+			$product = array_values( $subscription->get_items() )[0]->get_product();
+			$is_donation = Donations::is_donation_product( $product->get_id() );
+
 			$link_attrs = [];
 			$url = $subscription->get_view_order_url();
 
