@@ -9,6 +9,8 @@ namespace Newspack;
 
 defined( 'ABSPATH' ) || exit;
 
+use Newspack\Optional_Modules\Collections;
+
 /**
  * Newspack Blocks Class.
  */
@@ -26,8 +28,12 @@ final class Blocks {
 		if ( wp_is_block_theme() ) {
 			require_once NEWSPACK_ABSPATH . 'src/blocks/avatar/class-avatar-block.php';
 		}
+		if ( Collections::is_module_active() ) {
+			require_once NEWSPACK_ABSPATH . 'src/blocks/collections/index.php';
+		}
 
 		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
+		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_frontend_assets' ] );
 	}
 
 	/**
@@ -57,6 +63,7 @@ final class Blocks {
 				'has_recaptcha'           => Recaptcha::can_use_captcha(),
 				'recaptcha_url'           => admin_url( 'admin.php?page=newspack-settings' ),
 				'corrections_enabled'     => wp_is_block_theme() && class_exists( 'Newspack\Corrections' ),
+				'collections_enabled'     => Collections::is_module_active(),
 			]
 		);
 		\wp_enqueue_style(
@@ -64,6 +71,34 @@ final class Blocks {
 			Newspack::plugin_url() . '/dist/blocks.css',
 			[],
 			NEWSPACK_PLUGIN_VERSION
+		);
+	}
+
+	/**
+	 * Enqueue blocks scripts and styles for frontend.
+	 * Only load if we have blocks on the page that need these styles.
+	 */
+	public static function enqueue_frontend_assets() {
+		if ( self::should_load_block_assets() ) {
+			\wp_enqueue_style(
+				'newspack-blocks-frontend',
+				Newspack::plugin_url() . '/dist/blocks.css',
+				[],
+				NEWSPACK_PLUGIN_VERSION
+			);
+		}
+	}
+
+	/**
+	 * Check if we should load block assets on current page.
+	 *
+	 * @return bool Whether to load block assets.
+	 */
+	private static function should_load_block_assets() {
+		return Collections::is_module_active() && (
+			( is_singular() && has_block( \Newspack\Blocks\Collections\Collections_Block::BLOCK_NAME, get_the_ID() ) ) ||
+			is_post_type_archive( \Newspack\Collections\Post_Type::get_post_type() ) ||
+			is_singular( \Newspack\Collections\Post_Type::get_post_type() )
 		);
 	}
 }

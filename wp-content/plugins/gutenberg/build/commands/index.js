@@ -101,7 +101,8 @@ __webpack_require__.d(__webpack_exports__, {
   privateApis: () => (/* reexport */ privateApis),
   store: () => (/* reexport */ store),
   useCommand: () => (/* reexport */ useCommand),
-  useCommandLoader: () => (/* reexport */ useCommandLoader)
+  useCommandLoader: () => (/* reexport */ useCommandLoader),
+  useCommands: () => (/* reexport */ useCommands)
 });
 
 // NAMESPACE OBJECT: ./packages/commands/build-module/store/actions.js
@@ -3957,6 +3958,85 @@ function useCommand(command) {
       unregisterCommand(command.name);
     };
   }, [command.name, command.label, command.searchLabel, command.icon, command.context, command.keywords, command.disabled, registerCommand, unregisterCommand]);
+}
+
+/**
+ * Attach multiple commands to the command palette. Used for static commands.
+ *
+ * @param {import('../store/actions').WPCommandConfig[]} commands Array of command configs.
+ *
+ * @example
+ * ```js
+ * import { useCommands } from '@wordpress/commands';
+ * import { plus, edit } from '@wordpress/icons';
+ *
+ * useCommands( [
+ *     {
+ *         name: 'myplugin/add-post',
+ *         label: __( 'Add new post' ),
+ *         icon: plus,
+ *         callback: ({ close }) => {
+ *             document.location.href = 'post-new.php';
+ *             close();
+ *         },
+ *     },
+ *     {
+ *         name: 'myplugin/edit-posts',
+ *         label: __( 'Edit posts' ),
+ *         icon: edit,
+ *         callback: ({ close }) => {
+ *             document.location.href = 'edit.php';
+ *             close();
+ *         },
+ *     },
+ * ] );
+ * ```
+ */
+function useCommands(commands) {
+  const {
+    registerCommand,
+    unregisterCommand
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+  const currentCallbacksRef = (0,external_wp_element_namespaceObject.useRef)({});
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!commands) {
+      return;
+    }
+    commands.forEach(command => {
+      if (command.callback) {
+        currentCallbacksRef.current[command.name] = command.callback;
+      }
+    });
+  }, [commands]);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!commands) {
+      return;
+    }
+    commands.forEach(command => {
+      if (command.disabled) {
+        return;
+      }
+      registerCommand({
+        name: command.name,
+        context: command.context,
+        label: command.label,
+        searchLabel: command.searchLabel,
+        icon: command.icon,
+        keywords: command.keywords,
+        callback: (...args) => {
+          const callback = currentCallbacksRef.current[command.name];
+          if (callback) {
+            callback(...args);
+          }
+        }
+      });
+    });
+    return () => {
+      commands.forEach(command => {
+        unregisterCommand(command.name);
+      });
+    };
+  }, [commands, registerCommand, unregisterCommand]);
 }
 
 ;// ./packages/commands/build-module/hooks/use-command-loader.js

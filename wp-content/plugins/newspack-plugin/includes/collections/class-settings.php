@@ -30,6 +30,16 @@ class Settings {
 	public const POST_INDICATOR_STYLE_OPTIONS = [ 'default', 'card' ];
 
 	/**
+	 * Query parameter name for filtering by collection category.
+	 */
+	public const CATEGORY_QUERY_PARAM = 'np_collections_category';
+
+	/**
+	 * Query parameter name for filtering by year.
+	 */
+	public const YEAR_QUERY_PARAM = 'np_collections_year';
+
+	/**
 	 * Get fields definitions to be used in the REST API.
 	 *
 	 * @param string $return_type Whether to return only the default values, keys, or all. Returns all the configuration by default.

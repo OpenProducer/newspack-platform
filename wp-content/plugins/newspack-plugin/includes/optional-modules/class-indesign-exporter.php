@@ -56,14 +56,12 @@ class InDesign_Exporter {
 	 * @return bool True if InDesign Exporter is enabled.
 	 */
 	public static function is_feature_enabled() {
-		$is_enabled = defined( 'NEWSPACK_INDESIGN_EXPORT_ENABLED' ) ? constant( 'NEWSPACK_INDESIGN_EXPORT_ENABLED' ) : false;
-
 		/**
 		 * Filters whether the InDesign Export feature is enabled.
 		 *
 		 * @param bool $is_enabled Whether the InDesign Export module is enabled.
 		 */
-		return apply_filters( 'newspack_indesign_export_enabled', $is_enabled );
+		return apply_filters( 'newspack_indesign_export_enabled', true );
 	}
 
 	/**

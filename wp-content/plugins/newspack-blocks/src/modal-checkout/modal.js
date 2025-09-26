@@ -249,7 +249,14 @@ domReady( () => {
 				customAmount = checkoutData[ `donation_value_${ frequency }` ];
 			} else {
 				donationContainer = donationTiers[ 0 ];
-				customAmount = checkoutData[ `donation_value_${ frequency }_untiered` ];
+				if ( checkoutData[ `donation_value_${ frequency }_untiered` ] ) {
+					customAmount = checkoutData[ `donation_value_${ frequency }_untiered` ];
+				} else {
+					customAmount = checkoutData[ `donation_value_${ frequency }` ];
+					if ( customAmount === 'other' ) {
+						customAmount = checkoutData[ `donation_value_${ frequency }_other` ];
+					}
+				}
 			}
 			const donationData = getCheckoutData( donationContainer );
 			for( const key in donationData ) {

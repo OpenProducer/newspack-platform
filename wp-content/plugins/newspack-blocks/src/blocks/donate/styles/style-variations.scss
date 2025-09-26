@@ -411,7 +411,7 @@
 	.tab-container .freq-label.wpbnbd__button--active::after {
 		background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
 		border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
-		border-radius: var(--newspack-ui-border-radius-xs, 3px);
+		border-radius: var(--newspack-ui-border-radius-s, 4px);
 	}
 
 
@@ -431,7 +431,7 @@
 			background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
 			border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
 			border-bottom: 0;
-			border-radius: var(--newspack-ui-border-radius-m, 6px) var(--newspack-ui-border-radius-m, 6px) 0 0;
+			border-radius: var(--newspack-ui-border-radius-l, 8px) var(--newspack-ui-border-radius-l, 8px) 0 0;
 			display: grid;
 			gap: calc(var(--newspack-ui-spacer-base, 8px) / 2);
 			grid-template-columns: repeat(2, 1fr);
@@ -450,7 +450,7 @@
 			&::after {
 				background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
 				border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
-				border-radius: 0 0 var(--newspack-ui-border-radius-m, 6px) var(--newspack-ui-border-radius-m, 6px);
+				border-radius: 0 0 var(--newspack-ui-border-radius-l, 8px) var(--newspack-ui-border-radius-l, 8px);
 				border-top: 0;
 				bottom: 0;
 				box-sizing: border-box;
@@ -487,7 +487,7 @@
 			.freq-label {
 				border: 1px solid transparent;
 				background: transparent;
-				border-radius: var(--newspack-ui-border-radius-xs, 3px);
+				border-radius: var(--newspack-ui-border-radius-s, 4px);
 				color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
 				font-size: var(--newspack-ui-font-size-xs, 14px);
 				line-height: var(--newspack-ui-spacer-5, 24px);
@@ -523,7 +523,7 @@
 				background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
 				border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
 				border-bottom: 0;
-				border-radius: var(--newspack-ui-border-radius-m, 6px) var(--newspack-ui-border-radius-m, 6px) 0 0;
+				border-radius: var(--newspack-ui-border-radius-l, 8px) var(--newspack-ui-border-radius-l, 8px) 0 0;
 				margin: var(--newspack-ui-spacer-2, 12px) 0 0;
 				padding: var(--newspack-ui-spacer-5, 24px);
 			}
@@ -659,7 +659,7 @@
 				}
 
 				.wpbnbd__button {
-					border-radius: var(--newspack-ui-border-radius-xs, 3px);
+					border-radius: var(--newspack-ui-border-radius-s, 4px);
 					color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
 					font-size: var(--newspack-ui-font-size-xs, 14px);
 					font-weight: 600;

@@ -30,21 +30,18 @@ do_action( 'newspack_collections_archive_start' );
 
 		<?php
 		if ( have_posts() ) :
-			$selected_year = isset( $_GET['np_collections_year'] ) ? sanitize_text_field( $_GET['np_collections_year'] ) : '';
+			global $wp_query;
+
+			$selected_year    = isset( $_GET[ Settings::YEAR_QUERY_PARAM ] ) ? sanitize_text_field( $_GET[ Settings::YEAR_QUERY_PARAM ] ) : '';
+			$highlight_latest = empty( $selected_year ) && ! is_paged() && Settings::get_setting( 'highlight_latest' );
 
 			// Render the intro section only if no year filter is applied, it's the first page of results and "Highlight Most Recent Collection" setting is enabled.
-			if ( empty( $selected_year ) && ! is_paged() && Settings::get_setting( 'highlight_latest' ) ) :
-				get_template_part(
-					Template_Helper::TEMPLATE_PARTS_DIR . 'newspack-collection-intro',
-					null,
-					[
-						'is_latest' => true,
-						'permalink' => true,
-					]
-				);
+			if ( $highlight_latest ) :
+				$latest_collection = $wp_query->posts[0] ?? null;
+				if ( $latest_collection ) {
+					echo wp_kses_post( Template_Helper::render_collections_intro( $latest_collection, [ 'headingText' => __( 'Latest', 'newspack-plugin' ) ] ) );
+				}
 
-				// Advance the loop to the next post so it doesn't render twice.
-				the_post();
 				echo wp_kses_post( Template_Helper::render_separator( 'is-latest-collection' ) );
 			endif;
 			?>
@@ -52,7 +49,7 @@ do_action( 'newspack_collections_archive_start' );
 			<!-- Filter controls -->
 			<form class="collections-filter" method="get">
 				<?php
-				$selected_category = isset( $_GET['np_collections_category'] ) ? sanitize_text_field( $_GET['np_collections_category'] ) : '';
+				$selected_category = isset( $_GET[ Settings::CATEGORY_QUERY_PARAM ] ) ? sanitize_text_field( $_GET[ Settings::CATEGORY_QUERY_PARAM ] ) : '';
 				$available_years   = Query_Helper::get_available_years( $selected_category );
 				?>
 
@@ -98,48 +95,17 @@ do_action( 'newspack_collections_archive_start' );
 			?>
 
 			<!-- Collections grid -->
-			<div class="collections-grid">
-				<?php
-				while ( have_posts() ) :
-					the_post();
-					$collection_id = get_the_ID();
-					?>
-
-					<div class="collection-item">
-						<?php echo wp_kses_post( Template_Helper::render_image( $post ) ); ?>
-
-						<div class="collection-content">
-							<h3 class="has-normal-font-size">
-								<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-							</h3>
-
-							<?php echo wp_kses_post( Template_Helper::render_meta_text( $collection_id ) ); ?>
-						</div>
-
-						<?php
-						$ctas = Query_Helper::get_ctas( $collection_id, 1 );
-						if ( ! empty( $ctas ) ) :
-							?>
-							<div class="collection-buttons">
-								<?php foreach ( $ctas as $cta ) : ?>
-									<?php echo wp_kses_post( Template_Helper::render_cta( $cta ) ); ?>
-								<?php endforeach; ?>
-							</div>
-						<?php endif; ?>
-					</div>
-
-					<?php
-					/**
-					 * Fires after each collection item in the archive grid.
-					 *
-					 * @param int $collection_id The collection post ID.
-					 */
-					do_action( 'newspack_collections_archive_after_item', $collection_id );
-				endwhile;
-				?>
-			</div> <!-- .collections-grid -->
-
 			<?php
+			$collections = $wp_query->posts;
+
+			// Determine if first collection should be excluded (already shown in intro).
+			if ( $highlight_latest && count( $collections ) > 0 ) {
+				$collections = array_slice( $collections, 1 );
+			}
+
+			// Render the grid using the Collections block.
+			echo wp_kses_post( Template_Helper::render_collections_grid( $collections ) );
+
 			/**
 			 * Fires before the navigation in the archive template.
 			 */
