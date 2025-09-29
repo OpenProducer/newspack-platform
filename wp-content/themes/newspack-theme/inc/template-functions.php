@@ -325,33 +325,33 @@ add_filter( 'comment_form_defaults', 'newspack_comment_form_defaults' );
  */
 function newspack_get_the_archive_title() {
 	if ( is_category() ) {
-		$title = esc_html__( 'Category: ', 'newspack' ) . '<span class="page-description">' . single_term_title( '', false ) . '</span>';
+		$title = esc_html__( 'Category: ', 'newspack-theme' ) . '<span class="page-description">' . single_term_title( '', false ) . '</span>';
 	} elseif ( is_tag() ) {
-		$title = esc_html__( 'Tag: ', 'newspack' ) . '<span class="page-description">' . single_term_title( '', false ) . '</span>';
+		$title = esc_html__( 'Tag: ', 'newspack-theme' ) . '<span class="page-description">' . single_term_title( '', false ) . '</span>';
 	} elseif ( is_author() ) {
-		$title = esc_html__( 'Author Archives: ', 'newspack' ) . '<span class="page-description">' . get_the_author_meta( 'display_name' ) . '</span>';
+		$title = esc_html__( 'Author Archives: ', 'newspack-theme' ) . '<span class="page-description">' . get_the_author_meta( 'display_name' ) . '</span>';
 	} elseif ( is_year() ) {
 		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
-		$title = esc_html__( 'Yearly Archives: ', 'newspack' ) . '<span class="page-description">' . get_the_date( _x( 'Y', 'yearly archives date format', 'newspack' ) ) . '</span>';
+		$title = esc_html__( 'Yearly Archives: ', 'newspack-theme' ) . '<span class="page-description">' . get_the_date( _x( 'Y', 'yearly archives date format', 'newspack-theme' ) ) . '</span>';
 		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 	} elseif ( is_month() ) {
 		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
-		$title = esc_html__( 'Monthly Archives: ', 'newspack' ) . '<span class="page-description">' . get_the_date( _x( 'F Y', 'monthly archives date format', 'newspack' ) ) . '</span>';
+		$title = esc_html__( 'Monthly Archives: ', 'newspack-theme' ) . '<span class="page-description">' . get_the_date( _x( 'F Y', 'monthly archives date format', 'newspack-theme' ) ) . '</span>';
 		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 	} elseif ( is_day() ) {
 		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
-		$title = esc_html__( 'Daily Archives: ', 'newspack' ) . '<span class="page-description">' . get_the_date() . '</span>';
+		$title = esc_html__( 'Daily Archives: ', 'newspack-theme' ) . '<span class="page-description">' . get_the_date() . '</span>';
 		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 	} elseif ( is_post_type_archive() ) {
-		$title = esc_html__( 'Post Type Archives: ', 'newspack' ) . '<span class="page-description">' . post_type_archive_title( '', false ) . '</span>';
+		$title = esc_html__( 'Post Type Archives: ', 'newspack-theme' ) . '<span class="page-description">' . post_type_archive_title( '', false ) . '</span>';
 	} elseif ( is_tax() ) {
 		$tax  = get_taxonomy( get_queried_object()->taxonomy );
 		$term = get_queried_object();
 
 		/* translators: %s: Taxonomy singular name */
-		$title = sprintf( esc_html__( '%s Archives:', 'newspack' ), $tax->labels->singular_name ) . '<span class="page-description">' . $term->name . '</span>';
+		$title = sprintf( esc_html__( '%s Archives:', 'newspack-theme' ), $tax->labels->singular_name ) . '<span class="page-description">' . $term->name . '</span>';
 	} else {
-		$title = esc_html__( 'Archives:', 'newspack' );
+		$title = esc_html__( 'Archives:', 'newspack-theme' );
 	}
 	return $title;
 }
@@ -474,8 +474,8 @@ function newspack_add_dropdown_icons( $output, $item, $depth, $args ) {
 					<span class="screen-reader-text" [text]="' . $menu_state . ' ? \'%3$s\' : \'%2$s\'">%2$s</span>
 				</button>',
 			$icon,
-			esc_html__( 'Open dropdown menu', 'newspack' ),
-			esc_html__( 'Close dropdown menu', 'newspack' )
+			esc_html__( 'Open dropdown menu', 'newspack-theme' ),
+			esc_html__( 'Close dropdown menu', 'newspack-theme' )
 		);
 	}
 
@@ -731,7 +731,7 @@ function newspack_math_to_time_ago( $post_time, $format, $post, $updated ) {
 		if ( $cut_off_seconds >= ( $current_time - $org_time ) ) {
 			$post_time = sprintf(
 				/* translators: %s: Time ago date format */
-				esc_html__( '%s ago', 'newspack' ),
+				esc_html__( '%s ago', 'newspack-theme' ),
 				human_time_diff( $org_time, $current_time )
 			);
 		}
@@ -797,7 +797,8 @@ function newspack_should_display_updated_date() {
 
 		$publish_timestamp  = strtotime( $publish_date );
 		$modified_timestamp = strtotime( $modified_date );
-		$modified_cutoff    = strtotime( 'tomorrow midnight', $publish_timestamp );
+		$modified_threshold = get_theme_mod( 'post_updated_date_threshold', 24 );
+		$modified_cutoff    = strtotime( '+' . $modified_threshold . ' hours', $publish_timestamp );
 
 		// Show the updated date either if it's enabled site-wide and more than 24 hours past the publish date, or if it's enabled on this specific post:
 		if ( ( $modified_timestamp > $modified_cutoff && $show_updated_date_sitewide ) || $show_updated_date_post ) {

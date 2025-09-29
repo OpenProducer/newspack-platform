@@ -35,7 +35,7 @@ add_action( 'after_switch_theme', 'newspack_switch_theme' );
  */
 function newspack_upgrade_notice() {
 	/* translators: %s: WordPress version used by current site. */
-	$message = sprintf( __( 'Newspack Theme requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.', 'newspack' ), $GLOBALS['wp_version'] );
+	$message = sprintf( __( 'Newspack Theme requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.', 'newspack-theme' ), $GLOBALS['wp_version'] );
 	printf( '<div class="error"><p>%s</p></div>', $message );
 }
 
@@ -49,7 +49,7 @@ function newspack_upgrade_notice() {
 function newspack_customize() {
 	wp_die(
 		sprintf(
-			__( 'Newspack Theme requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.', 'newspack' ),
+			__( 'Newspack Theme requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.', 'newspack-theme' ),
 			$GLOBALS['wp_version']
 		),
 		'',
@@ -69,7 +69,7 @@ add_action( 'load-customize.php', 'newspack_customize' );
  */
 function newspack_preview() {
 	if ( isset( $_GET['preview'] ) ) {
-		wp_die( sprintf( __( 'Newspack Theme requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.', 'newspack' ), $GLOBALS['wp_version'] ) );
+		wp_die( sprintf( __( 'Newspack Theme requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.', 'newspack-theme' ), $GLOBALS['wp_version'] ) );
 	}
 }
 add_action( 'template_redirect', 'newspack_preview' );

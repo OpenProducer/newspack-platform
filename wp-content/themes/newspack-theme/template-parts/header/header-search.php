@@ -8,8 +8,8 @@
 
 <div class="header-search-contain">
 	<button id="search-toggle" on="tap:AMP.setState( { searchVisible: !searchVisible } ), search-form-2.focus" aria-controls="search-menu" [aria-expanded]="searchVisible ? 'true' : 'false'" aria-expanded="false">
-		<span class="screen-reader-text" [text]="searchVisible ? '<?php esc_html_e( 'Close Search', 'newspack' ); ?>' : '<?php esc_html_e( 'Open Search', 'newspack' ); ?>'">
-			<?php esc_html_e( 'Open Search', 'newspack' ); ?>
+		<span class="screen-reader-text" [text]="searchVisible ? '<?php esc_html_e( 'Close Search', 'newspack-theme' ); ?>' : '<?php esc_html_e( 'Open Search', 'newspack-theme' ); ?>'">
+			<?php esc_html_e( 'Open Search', 'newspack-theme' ); ?>
 		</span>
 		<span class="search-icon"><?php echo wp_kses( newspack_get_icon_svg( 'search', 28 ), newspack_sanitize_svgs() ); ?></span>
 		<span class="close-icon"><?php echo wp_kses( newspack_get_icon_svg( 'close', 28 ), newspack_sanitize_svgs() ); ?></span>

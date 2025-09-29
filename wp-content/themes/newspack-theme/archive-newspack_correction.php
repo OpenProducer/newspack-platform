@@ -16,7 +16,7 @@ get_header();
 
 			<span>
 
-				<h1 class="page-title"><?php esc_html_e( 'Corrections and clarifications', 'newspack' ); ?></h1>
+				<h1 class="page-title"><?php esc_html_e( 'Corrections and clarifications', 'newspack-theme' ); ?></h1>
 
 				<?php do_action( 'newspack_theme_below_archive_title' ); ?>
 
@@ -48,8 +48,8 @@ get_header();
 			the_posts_pagination(
 				array(
 					'mid_size'  => 2,
-					'prev_text' => __( 'Previous', 'newspack' ),
-					'next_text' => __( 'Next', 'newspack' ),
+					'prev_text' => __( 'Previous', 'newspack-theme' ),
+					'next_text' => __( 'Next', 'newspack-theme' ),
 				)
 			);
 

@@ -25,8 +25,8 @@ add_action( 'wp_enqueue_scripts', 'newspack_sponsors_enqueue_styles' );
 function newspack_sponsors_enqueue_scripts() {
 	if ( ! newspack_is_amp() && ( is_single() || is_archive() ) ) {
 		$newspack_l10n = array(
-			'open_info'  => esc_html__( 'Learn More', 'newspack' ),
-			'close_info' => esc_html__( 'Close', 'newspack' ),
+			'open_info'  => esc_html__( 'Learn More', 'newspack-theme' ),
+			'close_info' => esc_html__( 'Close', 'newspack-theme' ),
 		);
 
 		wp_enqueue_script( 'newspack-amp-fallback-sponsors', get_theme_file_uri( '/js/dist/amp-fallback-newspack-sponsors.js' ), array(), wp_get_theme()->get( 'Version' ), true );
@@ -201,10 +201,10 @@ if ( ! function_exists( 'newspack_sponsor_byline' ) ) :
 					$i++;
 					if ( $sponsor_count === $i ) :
 						/* translators: separates last two names; needs a space on either side. */
-						$sep = esc_html__( ' and ', 'newspack' );
+						$sep = esc_html__( ' and ', 'newspack-theme' );
 					elseif ( $sponsor_count > $i ) :
 						/* translators: separates all but the last two names; needs a space at the end. */
-						$sep = esc_html__( ', ', 'newspack' );
+						$sep = esc_html__( ', ', 'newspack-theme' );
 					else :
 						$sep = '';
 					endif;
@@ -268,7 +268,7 @@ if ( ! function_exists( 'newspack_sponsor_label' ) ) :
 					<button id="sponsor-info-toggle" on="tap:AMP.setState( { infoVisible: !infoVisible } )" aria-controls="sponsor-info" [aria-expanded]="infoVisible ? 'true' : 'false'" aria-expanded="false">
 						<?php echo wp_kses( newspack_get_icon_svg( 'help', 16 ), newspack_sanitize_svgs() ); ?>
 						<span class="screen-reader-text">
-							<?php esc_html_e( 'Learn More', 'newspack' ); ?>
+							<?php esc_html_e( 'Learn More', 'newspack-theme' ); ?>
 						</span>
 					</button>
 					<span id="sponsor-info" class="sponsor-info" [aria-expanded]="infoVisible ? 'true' : 'false'" aria-expanded="false">
@@ -378,7 +378,7 @@ if ( ! function_exists( 'newspack_sponsor_footer_bio' ) ) :
 										<?php
 											printf(
 												/* translators: %s is the post's sponsor's name. */
-												esc_html__( 'Learn more about %s', 'newspack' ),
+												esc_html__( 'Learn more about %s', 'newspack-theme' ),
 												esc_html( $sponsor['sponsor_name'] )
 											);
 										?>
@@ -561,7 +561,7 @@ function newspack_sponsored_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'newspack_sponsored_content',
 		array(
-			'title' => esc_html__( 'Sponsored Content', 'newspack' ),
+			'title' => esc_html__( 'Sponsored Content', 'newspack-theme' ),
 		)
 	);
 
@@ -578,8 +578,8 @@ function newspack_sponsored_customize_register( $wp_customize ) {
 			$wp_customize,
 			'sponsored_flag_hex',
 			array(
-				'label'       => esc_html__( 'Sponsored Content Label', 'newspack' ),
-				'description' => esc_html__( 'Changes the background of the sponsored content flag that appears on posts and blocks. It should stand out boldly against your site\'s color scheme.', 'newspack' ),
+				'label'       => esc_html__( 'Sponsored Content Label', 'newspack-theme' ),
+				'description' => esc_html__( 'Changes the background of the sponsored content flag that appears on posts and blocks. It should stand out boldly against your site\'s color scheme.', 'newspack-theme' ),
 				'section'     => 'newspack_sponsored_content',
 			)
 		)

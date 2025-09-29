@@ -36,6 +36,11 @@ if ( function_exists( 'newspack_get_all_sponsors' ) ) {
 		?>
 		<header class="entry-header">
 			<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
+			<?php if ( is_archive() && get_theme_mod( 'archive_show_subtitle', false ) && ! empty( newspack_post_subtitle() ) ) : ?>
+				<div class="newspack-post-subtitle">
+					<?php echo newspack_post_subtitle(); ?>
+				</div>
+			<?php endif; ?>
 		</header><!-- .entry-header -->
 
 		<?php if ( 'page' !== get_post_type() ) : ?>

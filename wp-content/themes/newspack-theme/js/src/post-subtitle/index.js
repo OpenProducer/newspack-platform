@@ -19,25 +19,25 @@ import { appendSubtitleToTitleDOMElement, connectWithSelect } from './utils';
  *
  * https://developer.wordpress.org/block-editor/developers/slotfills/plugin-document-setting-panel/
  */
-const NewspackSubtitlePanel = ( { subtitle } ) => {
+const NewspackSubtitlePanel = ({ subtitle }) => {
 	// Update the DOM when subtitle value changes.
-	useEffect( () => {
-		appendSubtitleToTitleDOMElement( subtitle );
-	}, [ subtitle ] );
+	useEffect(() => {
+		appendSubtitleToTitleDOMElement(subtitle);
+	}, [subtitle]);
 
 	return (
 		<PluginDocumentSettingPanel
 			name="newspack-subtitle"
-			title={ __( 'Article Subtitle', 'newspack' ) }
+			title={__('Article Subtitle', 'newspack-theme')}
 			className="newspack-subtitle"
 		>
-			{ __( 'Set a Subtitle for the Article', 'newspack' ) }
+			{__('Set a Subtitle for the Article', 'newspack-theme')}
 			<SubtitleEditor />
 		</PluginDocumentSettingPanel>
 	);
 };
 
-registerPlugin( 'plugin-document-setting-panel-newspack-subtitle', {
-	render: connectWithSelect( NewspackSubtitlePanel ),
+registerPlugin('plugin-document-setting-panel-newspack-subtitle', {
+	render: connectWithSelect(NewspackSubtitlePanel),
 	icon: null,
-} );
+});

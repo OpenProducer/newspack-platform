@@ -68,7 +68,7 @@ if ( function_exists( 'coauthors_posts_links' ) && is_single() && ! empty( get_c
 								<a class="author-link" href="<?php echo esc_url( $author_url ); ?>" rel="author">
 								<?php
 									/* translators: %s is the current author's name. */
-									printf( esc_html__( 'More by %s', 'newspack' ), esc_html( $author->display_name ) );
+									printf( esc_html__( 'More by %s', 'newspack-theme' ), esc_html( $author->display_name ) );
 								?>
 								</a>
 							<?php endif; ?>
@@ -79,7 +79,7 @@ if ( function_exists( 'coauthors_posts_links' ) && is_single() && ! empty( get_c
 							<a class="author-link" href="<?php echo esc_url( $author_url ); ?>" rel="author">
 								<?php
 									/* translators: %s is the current author's name. */
-									printf( esc_html__( 'More by %s', 'newspack' ), esc_html( $author->display_name ) );
+									printf( esc_html__( 'More by %s', 'newspack-theme' ), esc_html( $author->display_name ) );
 								?>
 							</a>
 						<?php endif; ?>
@@ -137,7 +137,7 @@ elseif ( (bool) get_the_author_meta( 'description' ) && is_single() ) :
 				<a class="author-link" href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" rel="author">
 				<?php
 					/* translators: %s is the current author's name. */
-					printf( esc_html__( 'More by %s', 'newspack' ), esc_html( get_the_author() ) );
+					printf( esc_html__( 'More by %s', 'newspack-theme' ), esc_html( get_the_author() ) );
 				?>
 				</a>
 			</p>
@@ -147,7 +147,7 @@ elseif ( (bool) get_the_author_meta( 'description' ) && is_single() ) :
 			<a class="author-link" href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" rel="author">
 				<?php
 					/* translators: %s is the current author's name. */
-					printf( esc_html__( 'More by %s', 'newspack' ), esc_html( get_the_author() ) );
+					printf( esc_html__( 'More by %s', 'newspack-theme' ), esc_html( get_the_author() ) );
 				?>
 			</a>
 		<?php endif; ?>

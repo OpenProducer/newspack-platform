@@ -25,7 +25,7 @@ function newspack_logo_resizer_customize_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'logo_size',
 		array(
-			'label'       => esc_html__( 'Logo Size', 'newspack' ),
+			'label'       => esc_html__( 'Logo Size', 'newspack-theme' ),
 			'section'     => 'title_tagline',
 			'priority'    => 8,
 			'type'        => 'range',

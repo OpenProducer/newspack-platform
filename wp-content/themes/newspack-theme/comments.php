@@ -46,14 +46,14 @@ if ( $collapse_comments && 1 < (int) $discussion->responses && $on_first_page ) 
 		<?php
 		if ( comments_open() ) {
 			if ( have_comments() ) {
-				echo esc_html( apply_filters( 'newspack_comment_section_title_nocomments', __( 'Join the Conversation', 'newspack' ) ) );
+				echo esc_html( apply_filters( 'newspack_comment_section_title_nocomments', __( 'Join the Conversation', 'newspack-theme' ) ) );
 			} else {
-				echo esc_html( apply_filters( 'newspack_comment_section_title', __( 'Leave a comment', 'newspack' ) ) );
+				echo esc_html( apply_filters( 'newspack_comment_section_title', __( 'Leave a comment', 'newspack-theme' ) ) );
 			}
 		} else {
 			if ( '1' == $discussion->responses ) {
 				/* translators: %s: post title */
-				printf( _x( 'One reply on &ldquo;%s&rdquo;', 'comments title', 'newspack' ), get_the_title() );
+				printf( _x( 'One reply on &ldquo;%s&rdquo;', 'comments title', 'newspack-theme' ), get_the_title() );
 			} else {
 				printf(
 					/* translators: 1: number of comments, 2: post title */
@@ -110,11 +110,11 @@ if ( $collapse_comments && 1 < (int) $discussion->responses && $on_first_page ) 
 			if ( have_comments() ) :
 				$prev_icon     = newspack_get_icon_svg( 'chevron_left', 22 );
 				$next_icon     = newspack_get_icon_svg( 'chevron_right', 22 );
-				$comments_text = apply_filters( 'newspack_comments_name_plural', __( 'Comments', 'newspack' ) );
+				$comments_text = apply_filters( 'newspack_comments_name_plural', __( 'Comments', 'newspack-theme' ) );
 				the_comments_navigation(
 					array(
-						'prev_text' => sprintf( '%s <span class="nav-prev-text"><span class="primary-text">%s</span> <span class="secondary-text">%s</span></span>', $prev_icon, __( 'Previous', 'newspack' ), $comments_text ),
-						'next_text' => sprintf( '<span class="nav-next-text"><span class="primary-text">%s</span> <span class="secondary-text">%s</span></span> %s', __( 'Next', 'newspack' ), $comments_text, $next_icon ),
+						'prev_text' => sprintf( '%s <span class="nav-prev-text"><span class="primary-text">%s</span> <span class="secondary-text">%s</span></span>', $prev_icon, __( 'Previous', 'newspack-theme' ), $comments_text ),
+						'next_text' => sprintf( '<span class="nav-next-text"><span class="primary-text">%s</span> <span class="secondary-text">%s</span></span> %s', __( 'Next', 'newspack-theme' ), $comments_text, $next_icon ),
 					)
 				);
 			endif;
@@ -123,14 +123,14 @@ if ( $collapse_comments && 1 < (int) $discussion->responses && $on_first_page ) 
 		<?php if ( $comments_collapsed ) : ?>
 			</div><!-- .comments-wrapper -->
 			<button class="comments-toggle" id="comments-toggle" on="tap:AMP.setState({showComments: !showComments})">
-				<?php echo wp_kses( newspack_get_icon_svg( 'chevron_left', 24 ), newspack_sanitize_svgs() ); ?><span [text]="showComments ? '<?php esc_html_e( 'Collapse comments', 'newspack' ); ?>' : '<?php esc_html_e( 'Expand comments', 'newspack' ); ?>'"><?php esc_html_e( 'Expand comments', 'newspack' ); ?></span>
+				<?php echo wp_kses( newspack_get_icon_svg( 'chevron_left', 24 ), newspack_sanitize_svgs() ); ?><span [text]="showComments ? '<?php esc_html_e( 'Collapse comments', 'newspack-theme' ); ?>' : '<?php esc_html_e( 'Expand comments', 'newspack-theme' ); ?>'"><?php esc_html_e( 'Expand comments', 'newspack-theme' ); ?></span>
 			</button>
 		<?php endif; ?>
 
 		<?php
 		// Show comment form at bottom if showing newest comments at the bottom.
 		if ( comments_open() && 'asc' === strtolower( get_option( 'comment_order', 'asc' ) ) ) :
-			$leave_comment_text = apply_filters( 'newspack_comments_leave_comment', __( 'Leave a comment', 'newspack' ) );
+			$leave_comment_text = apply_filters( 'newspack_comments_leave_comment', __( 'Leave a comment', 'newspack-theme' ) );
 			?>
 			<div class="comment-form-flex">
 				<span class="screen-reader-text"><?php echo esc_html( $leave_comment_text ); ?></span>
@@ -145,7 +145,7 @@ if ( $collapse_comments && 1 < (int) $discussion->responses && $on_first_page ) 
 			?>
 			<p class="no-comments">
 				<?php
-					echo esc_html( apply_filters( 'newspack_comments_closed', __( 'Comments are closed.', 'newspack' ) ) );
+					echo esc_html( apply_filters( 'newspack_comments_closed', __( 'Comments are closed.', 'newspack-theme' ) ) );
 				?>
 			</p>
 			<?php

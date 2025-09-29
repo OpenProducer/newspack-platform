@@ -14,7 +14,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
 	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
-	$wp_customize->get_control( 'header_text' )->label          = __( 'Display Site Title', 'newspack' );
+	$wp_customize->get_control( 'header_text' )->label          = __( 'Display Site Title', 'newspack-theme' );
 
 	if ( isset( $wp_customize->selective_refresh ) ) {
 		$wp_customize->selective_refresh->add_partial(
@@ -39,7 +39,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_panel(
 		'newspack_header_options',
 		array(
-			'title' => esc_html__( 'Header Settings', 'newspack' ),
+			'title' => esc_html__( 'Header Settings', 'newspack-theme' ),
 		)
 	);
 
@@ -49,7 +49,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'header_section_appearance',
 		array(
-			'title' => esc_html__( 'Appearance', 'newspack' ),
+			'title' => esc_html__( 'Appearance', 'newspack-theme' ),
 			'panel' => 'newspack_header_options',
 		)
 	);
@@ -66,8 +66,8 @@ function newspack_customize_register( $wp_customize ) {
 		'header_center_logo',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Center Logo', 'newspack' ),
-			'description' => esc_html__( 'Check to center the logo in the header.', 'newspack' ),
+			'label'       => esc_html__( 'Center Logo', 'newspack-theme' ),
+			'description' => esc_html__( 'Check to center the logo in the header.', 'newspack-theme' ),
 			'section'     => 'header_section_appearance',
 		)
 	);
@@ -84,8 +84,8 @@ function newspack_customize_register( $wp_customize ) {
 		'header_solid_background',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Solid Background', 'newspack' ),
-			'description' => esc_html__( 'Check to use the primary color as the header background. Can be changed under "Colors".', 'newspack' ),
+			'label'       => esc_html__( 'Solid Background', 'newspack-theme' ),
+			'description' => esc_html__( 'Check to use the primary color as the header background. Can be changed under "Colors".', 'newspack-theme' ),
 			'section'     => 'header_section_appearance',
 		)
 	);
@@ -102,8 +102,8 @@ function newspack_customize_register( $wp_customize ) {
 		'header_simplified',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Short Header', 'newspack' ),
-			'description' => esc_html__( 'Displays header as a shorter, simpler version.', 'newspack' ),
+			'label'       => esc_html__( 'Short Header', 'newspack-theme' ),
+			'description' => esc_html__( 'Displays header as a shorter, simpler version.', 'newspack-theme' ),
 			'section'     => 'header_section_appearance',
 		)
 	);
@@ -120,8 +120,8 @@ function newspack_customize_register( $wp_customize ) {
 		'header_sticky',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Sticky Header', 'newspack' ),
-			'description' => esc_html__( 'Makes header "stick" to the top of the page on scroll. Forces a fixed height.', 'newspack' ),
+			'label'       => esc_html__( 'Sticky Header', 'newspack-theme' ),
+			'description' => esc_html__( 'Makes header "stick" to the top of the page on scroll. Forces a fixed height.', 'newspack-theme' ),
 			'section'     => 'header_section_appearance',
 		)
 	);
@@ -132,7 +132,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'header_section_slideout',
 		array(
-			'title' => esc_html__( 'Slide-out Sidebar', 'newspack' ),
+			'title' => esc_html__( 'Slide-out Sidebar', 'newspack-theme' ),
 			'panel' => 'newspack_header_options',
 		)
 	);
@@ -149,11 +149,11 @@ function newspack_customize_register( $wp_customize ) {
 		'header_show_slideout',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Show Slide-out Sidebar', 'newspack' ),
+			'label'       => esc_html__( 'Show Slide-out Sidebar', 'newspack-theme' ),
 			'description' => sprintf(
 				/* translators: %s: link to Slide Out Sidebar widget panel in Customizer. */
-				esc_html__( 'Show a Slide-out sidebar in the header, which you can populate by adding widgets %1$s.', 'newspack' ),
-				'<a rel="goto-section" href="#sidebar-widgets-header-1">' . __( 'here', 'newspack' ) . '</a>'
+				esc_html__( 'Show a Slide-out sidebar in the header, which you can populate by adding widgets %1$s.', 'newspack-theme' ),
+				'<a rel="goto-section" href="#sidebar-widgets-header-1">' . __( 'here', 'newspack-theme' ) . '</a>'
 			),
 			'section'     => 'header_section_slideout',
 		)
@@ -163,7 +163,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'slideout_label',
 		array(
-			'default'           => esc_html__( 'Menu', 'newspack' ),
+			'default'           => esc_html__( 'Menu', 'newspack-theme' ),
 			'sanitize_callback' => 'sanitize_text_field',
 		)
 	);
@@ -171,8 +171,8 @@ function newspack_customize_register( $wp_customize ) {
 		'slideout_label',
 		array(
 			'type'        => 'text',
-			'label'       => esc_html__( 'Slide-out Sidebar Text', 'newspack' ),
-			'description' => esc_html__( 'Use this field to change the text on the Slide-out Sidebar toggle. The text is not visible when using the short header, but can always be read by screen readers.', 'newspack' ),
+			'label'       => esc_html__( 'Slide-out Sidebar Text', 'newspack-theme' ),
+			'description' => esc_html__( 'Use this field to change the text on the Slide-out Sidebar toggle. The text is not visible when using the short header, but can always be read by screen readers.', 'newspack-theme' ),
 			'section'     => 'header_section_slideout',
 		)
 	);
@@ -189,8 +189,8 @@ function newspack_customize_register( $wp_customize ) {
 		'slideout_widget_mobile',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Add slide-out widgets to mobile menu', 'newspack' ),
-			'description' => esc_html__( 'Adds the widgets assigned to the Slide-out Sidebar area to the mobile menu, too.', 'newspack' ),
+			'label'       => esc_html__( 'Add slide-out widgets to mobile menu', 'newspack-theme' ),
+			'description' => esc_html__( 'Adds the widgets assigned to the Slide-out Sidebar area to the mobile menu, too.', 'newspack-theme' ),
 			'section'     => 'header_section_slideout',
 		)
 	);
@@ -207,10 +207,10 @@ function newspack_customize_register( $wp_customize ) {
 		'slideout_sidebar_side',
 		array(
 			'type'    => 'radio',
-			'label'   => esc_html__( 'Slide-out sidebar side', 'newspack' ),
+			'label'   => esc_html__( 'Slide-out sidebar side', 'newspack-theme' ),
 			'choices' => array(
-				'left'  => _x( 'Left', 'slide-out menu side', 'newspack' ),
-				'right' => _x( 'Right', 'slide-out menu side', 'newspack' ),
+				'left'  => _x( 'Left', 'slide-out menu side', 'newspack-theme' ),
+				'right' => _x( 'Right', 'slide-out menu side', 'newspack-theme' ),
 			),
 			'section' => 'header_section_slideout',
 		)
@@ -222,7 +222,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'header_section_subpages',
 		array(
-			'title' => esc_html__( 'Subpage Header', 'newspack' ),
+			'title' => esc_html__( 'Subpage Header', 'newspack-theme' ),
 			'panel' => 'newspack_header_options',
 		)
 	);
@@ -239,8 +239,8 @@ function newspack_customize_register( $wp_customize ) {
 		'header_sub_simplified',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Use simple header on subpages', 'newspack' ),
-			'description' => esc_html__( 'On posts, pages, archive and search results, use a header that only displays the site logo and search icon, with all menus hidden under a toggle.', 'newspack' ),
+			'label'       => esc_html__( 'Use simple header on subpages', 'newspack-theme' ),
+			'description' => esc_html__( 'On posts, pages, archive and search results, use a header that only displays the site logo and search icon, with all menus hidden under a toggle.', 'newspack-theme' ),
 			'section'     => 'header_section_subpages',
 		)
 	);
@@ -251,7 +251,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'header_section_cta',
 		array(
-			'title' => esc_html__( 'Mobile Call-to-Action', 'newspack' ),
+			'title' => esc_html__( 'Mobile Call-to-Action', 'newspack-theme' ),
 			'panel' => 'newspack_header_options',
 		)
 	);
@@ -268,8 +268,8 @@ function newspack_customize_register( $wp_customize ) {
 		'show_header_cta',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Show Mobile CTA', 'newspack' ),
-			'description' => esc_html__( 'Show an essential call-to-action button in the mobile header, that is always visible.', 'newspack' ),
+			'label'       => esc_html__( 'Show Mobile CTA', 'newspack-theme' ),
+			'description' => esc_html__( 'Show an essential call-to-action button in the mobile header, that is always visible.', 'newspack-theme' ),
 			'section'     => 'header_section_cta',
 		)
 	);
@@ -278,7 +278,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'header_cta_text',
 		array(
-			'default'           => esc_html__( 'Donate', 'newspack' ),
+			'default'           => esc_html__( 'Donate', 'newspack-theme' ),
 			'sanitize_callback' => 'sanitize_text_field',
 		)
 	);
@@ -286,7 +286,7 @@ function newspack_customize_register( $wp_customize ) {
 		'header_cta_text',
 		array(
 			'type'    => 'text',
-			'label'   => esc_html__( 'Button Text', 'newspack' ),
+			'label'   => esc_html__( 'Button Text', 'newspack-theme' ),
 			'section' => 'header_section_cta',
 		)
 	);
@@ -303,7 +303,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'header_cta_url',
 		array(
-			'label'   => esc_html__( 'Button URL', 'newspack' ),
+			'label'   => esc_html__( 'Button URL', 'newspack-theme' ),
 			'type'    => 'text',
 			'section' => 'header_section_cta',
 		)
@@ -321,7 +321,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'header_cta_target',
 		array(
-			'label'   => esc_html__( 'Open link in new window', 'newspack' ),
+			'label'   => esc_html__( 'Open link in new window', 'newspack-theme' ),
 			'type'    => 'checkbox',
 			'section' => 'header_section_cta',
 		)
@@ -342,8 +342,8 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'header_cta_hex',
 			array(
-				'label'       => esc_html__( 'Background Color', 'newspack' ),
-				'description' => __( 'Selecting a strong, non-palette color is recommended to ensure the CTA stands out.', 'newspack' ),
+				'label'       => esc_html__( 'Background Color', 'newspack-theme' ),
+				'description' => __( 'Selecting a strong, non-palette color is recommended to ensure the CTA stands out.', 'newspack-theme' ),
 				'section'     => 'header_section_cta',
 			)
 		)
@@ -361,7 +361,7 @@ function newspack_customize_register( $wp_customize ) {
 		'cta_in_simplified_header',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Show Mobile CTA in Simplfied Subpage Header', 'newspack' ),
+			'label'   => esc_html__( 'Show Mobile CTA in Simplfied Subpage Header', 'newspack-theme' ),
 			'section' => 'header_section_cta',
 		)
 	);
@@ -380,8 +380,8 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'newspack_alternative_logo',
 			array(
-				'label'       => esc_html__( 'Alternative Logo', 'newspack' ),
-				'description' => esc_html__( 'Upload an alternative logo to be used on posts with the featured image behind and featured image beside settings, where the logo will be overlapping.', 'newspack' ),
+				'label'       => esc_html__( 'Alternative Logo', 'newspack-theme' ),
+				'description' => esc_html__( 'Upload an alternative logo to be used on posts with the featured image behind and featured image beside settings, where the logo will be overlapping.', 'newspack-theme' ),
 				'section'     => 'header_section_subpages',
 				'settings'    => 'newspack_alternative_logo',
 				'flex_width'  => false,
@@ -407,10 +407,10 @@ function newspack_customize_register( $wp_customize ) {
 		'theme_colors',
 		array(
 			'type'    => 'radio',
-			'label'   => __( 'Colors', 'newspack' ),
+			'label'   => __( 'Colors', 'newspack-theme' ),
 			'choices' => array(
-				'default' => _x( 'Default', 'primary color', 'newspack' ),
-				'custom'  => _x( 'Custom', 'primary color', 'newspack' ),
+				'default' => _x( 'Default', 'primary color', 'newspack-theme' ),
+				'custom'  => _x( 'Custom', 'primary color', 'newspack-theme' ),
 			),
 			'section' => 'colors',
 		)
@@ -430,7 +430,7 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'primary_color_hex',
 			array(
-				'description' => __( 'Apply a primary custom color.', 'newspack' ),
+				'description' => __( 'Apply a primary custom color.', 'newspack-theme' ),
 				'section'     => 'colors',
 			)
 		)
@@ -450,7 +450,7 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'secondary_color_hex',
 			array(
-				'description' => __( 'Apply a secondary custom color.', 'newspack' ),
+				'description' => __( 'Apply a secondary custom color.', 'newspack-theme' ),
 				'section'     => 'colors',
 			)
 		)
@@ -471,10 +471,10 @@ function newspack_customize_register( $wp_customize ) {
 		'header_color',
 		array(
 			'type'    => 'radio',
-			'label'   => __( 'Header Background Color', 'newspack' ),
+			'label'   => __( 'Header Background Color', 'newspack-theme' ),
 			'choices' => array(
-				'default' => _x( 'Default', 'header background color', 'newspack' ),
-				'custom'  => _x( 'Custom', 'header background color', 'newspack' ),
+				'default' => _x( 'Default', 'header background color', 'newspack-theme' ),
+				'custom'  => _x( 'Custom', 'header background color', 'newspack-theme' ),
 			),
 			'section' => 'colors',
 		)
@@ -494,7 +494,7 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'header_color_hex',
 			array(
-				'description' => __( 'Apply a background color to the header.', 'newspack' ),
+				'description' => __( 'Apply a background color to the header.', 'newspack-theme' ),
 				'section'     => 'colors',
 			)
 		)
@@ -514,7 +514,7 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'header_primary_menu_color_hex',
 			array(
-				'description' => __( 'Apply a background color to the primary menu.', 'newspack' ),
+				'description' => __( 'Apply a background color to the primary menu.', 'newspack-theme' ),
 				'section'     => 'colors',
 			)
 		)
@@ -535,10 +535,10 @@ function newspack_customize_register( $wp_customize ) {
 		'footer_color',
 		array(
 			'type'    => 'radio',
-			'label'   => __( 'Footer Background Color', 'newspack' ),
+			'label'   => __( 'Footer Background Color', 'newspack-theme' ),
 			'choices' => array(
-				'default' => _x( 'Default', 'footer background color', 'newspack' ),
-				'custom'  => _x( 'Custom', 'footer background color', 'newspack' ),
+				'default' => _x( 'Default', 'footer background color', 'newspack-theme' ),
+				'custom'  => _x( 'Custom', 'footer background color', 'newspack-theme' ),
 			),
 			'section' => 'colors',
 		)
@@ -558,7 +558,7 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'footer_color_hex',
 			array(
-				'description' => __( 'Apply a background color to the footer.', 'newspack' ),
+				'description' => __( 'Apply a background color to the footer.', 'newspack-theme' ),
 				'section'     => 'colors',
 			)
 		)
@@ -579,10 +579,10 @@ function newspack_customize_register( $wp_customize ) {
 		'ads_color',
 		array(
 			'type'    => 'radio',
-			'label'   => __( 'Ads Background Color', 'newspack' ),
+			'label'   => __( 'Ads Background Color', 'newspack-theme' ),
 			'choices' => array(
-				'default' => _x( 'Default', 'primary color', 'newspack' ),
-				'custom'  => _x( 'Custom', 'primary color', 'newspack' ),
+				'default' => _x( 'Default', 'primary color', 'newspack-theme' ),
+				'custom'  => _x( 'Custom', 'primary color', 'newspack-theme' ),
 			),
 			'section' => 'colors',
 		)
@@ -602,7 +602,7 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'ads_color_hex',
 			array(
-				'description' => __( 'Apply a background color to the ads.', 'newspack' ),
+				'description' => __( 'Apply a background color to the ads.', 'newspack-theme' ),
 				'section'     => 'colors',
 			)
 		)
@@ -621,7 +621,7 @@ function newspack_customize_register( $wp_customize ) {
 		'header_display_tagline',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Display Tagline', 'newspack' ),
+			'label'   => esc_html__( 'Display Tagline', 'newspack-theme' ),
 			'section' => 'title_tagline',
 		)
 	);
@@ -640,8 +640,8 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'hide_front_page_title',
 		array(
-			'label'       => esc_html__( 'Hide Homepage Title', 'newspack' ),
-			'description' => esc_html__( 'Check to hide the page title, if your homepage is set to display a static page.', 'newspack' ),
+			'label'       => esc_html__( 'Hide Homepage Title', 'newspack-theme' ),
+			'description' => esc_html__( 'Check to hide the page title, if your homepage is set to display a static page.', 'newspack-theme' ),
 			'section'     => 'static_front_page',
 			'priority'    => 10,
 			'type'        => 'checkbox',
@@ -663,8 +663,8 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'newspack_footer_logo',
 			array(
-				'label'       => esc_html__( 'Footer Logo', 'newspack' ),
-				'description' => esc_html__( 'Optional alternative logo to be displayed in the footer.', 'newspack' ),
+				'label'       => esc_html__( 'Footer Logo', 'newspack-theme' ),
+				'description' => esc_html__( 'Optional alternative logo to be displayed in the footer.', 'newspack-theme' ),
 				'section'     => 'title_tagline',
 				'settings'    => 'newspack_footer_logo',
 				'priority'    => 9,
@@ -687,16 +687,16 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'footer_logo_size',
 		array(
-			'label'    => esc_html__( 'Footer Logo Size', 'newspack' ),
+			'label'    => esc_html__( 'Footer Logo Size', 'newspack-theme' ),
 			'section'  => 'title_tagline',
 			'priority' => 9,
 			'type'     => 'select',
 			'settings' => 'footer_logo_size',
 			'choices'  => array(
-				'small'  => esc_html__( 'Small', 'newspack' ),
-				'medium' => esc_html__( 'Medium', 'newspack' ),
-				'large'  => esc_html__( 'Large', 'newspack' ),
-				'xlarge' => esc_html__( 'Extra Large', 'newspack' ),
+				'small'  => esc_html__( 'Small', 'newspack-theme' ),
+				'medium' => esc_html__( 'Medium', 'newspack-theme' ),
+				'large'  => esc_html__( 'Large', 'newspack-theme' ),
+				'xlarge' => esc_html__( 'Extra Large', 'newspack-theme' ),
 			),
 		)
 	);
@@ -707,7 +707,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'author_bio_options',
 		array(
-			'title' => esc_html__( 'Author Bio Settings', 'newspack' ),
+			'title' => esc_html__( 'Author Bio Settings', 'newspack-theme' ),
 		)
 	);
 
@@ -723,8 +723,8 @@ function newspack_customize_register( $wp_customize ) {
 		'show_author_bio',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Display Author Bio', 'newspack' ),
-			'description' => esc_html__( 'Display Author Bio under individual posts.', 'newspack' ),
+			'label'       => esc_html__( 'Display Author Bio', 'newspack-theme' ),
+			'description' => esc_html__( 'Display Author Bio under individual posts.', 'newspack-theme' ),
 			'section'     => 'author_bio_options',
 		)
 	);
@@ -741,8 +741,8 @@ function newspack_customize_register( $wp_customize ) {
 		'show_author_email',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Display Author Email', 'newspack' ),
-			'description' => esc_html__( 'Display Author email with bio on individual posts and author archives.', 'newspack' ),
+			'label'       => esc_html__( 'Display Author Email', 'newspack-theme' ),
+			'description' => esc_html__( 'Display Author email with bio on individual posts and author archives.', 'newspack-theme' ),
 			'section'     => 'author_bio_options',
 		)
 	);
@@ -759,8 +759,8 @@ function newspack_customize_register( $wp_customize ) {
 		'show_author_social',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Display Author Social Media links', 'newspack' ),
-			'description' => esc_html__( 'Display social media links with the author bio on individual posts and author archives (this option requires the Yoast plugin).', 'newspack' ),
+			'label'       => esc_html__( 'Display Author Social Media links', 'newspack-theme' ),
+			'description' => esc_html__( 'Display social media links with the author bio on individual posts and author archives (this option requires the Yoast plugin).', 'newspack-theme' ),
 			'section'     => 'author_bio_options',
 		)
 	);
@@ -777,8 +777,8 @@ function newspack_customize_register( $wp_customize ) {
 		'author_bio_truncate',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Truncate Author Bio', 'newspack' ),
-			'description' => esc_html__( 'Set a specific length for author bios displayed on single posts.', 'newspack' ),
+			'label'       => esc_html__( 'Truncate Author Bio', 'newspack-theme' ),
+			'description' => esc_html__( 'Set a specific length for author bios displayed on single posts.', 'newspack-theme' ),
 			'section'     => 'author_bio_options',
 		)
 	);
@@ -795,8 +795,8 @@ function newspack_customize_register( $wp_customize ) {
 		'author_bio_length',
 		array(
 			'type'        => 'number',
-			'label'       => esc_html__( 'Author Bio Length (in characters)', 'newspack' ),
-			'description' => esc_html__( 'Truncates the author bio on single posts to this approximate character length, but without breaking a word.', 'newspack' ),
+			'label'       => esc_html__( 'Author Bio Length (in characters)', 'newspack-theme' ),
+			'description' => esc_html__( 'Truncates the author bio on single posts to this approximate character length, but without breaking a word.', 'newspack-theme' ),
 			'section'     => 'author_bio_options',
 		)
 	);
@@ -807,7 +807,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_panel(
 		'newspack_template_settings',
 		array(
-			'title' => esc_html__( 'Template Settings', 'newspack' ),
+			'title' => esc_html__( 'Template Settings', 'newspack-theme' ),
 		)
 	);
 
@@ -817,7 +817,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'post_default_settings',
 		array(
-			'title' => esc_html__( 'Post Settings', 'newspack' ),
+			'title' => esc_html__( 'Post Settings', 'newspack-theme' ),
 			'panel' => 'newspack_template_settings',
 		)
 	);
@@ -834,15 +834,15 @@ function newspack_customize_register( $wp_customize ) {
 		'featured_image_default',
 		array(
 			'type'        => 'radio',
-			'label'       => __( 'Featured Image Default Position', 'newspack' ),
-			'description' => esc_html__( 'Affects all posts where the Featured Image Position is set to \'Default\'.', 'newspack' ),
+			'label'       => __( 'Featured Image Default Position', 'newspack-theme' ),
+			'description' => esc_html__( 'Affects all posts where the Featured Image Position is set to \'Default\'.', 'newspack-theme' ),
 			'choices'     => array(
-				'large'  => esc_html__( 'Large', 'newspack' ),
-				'small'  => esc_html__( 'Small', 'newspack' ),
-				'behind' => esc_html__( 'Behind article title', 'newspack' ),
-				'beside' => esc_html__( 'Beside article title', 'newspack' ),
-				'above'  => esc_html__( 'Above article title', 'newspack' ),
-				'hidden' => esc_html__( 'Hidden', 'newspack' ),
+				'large'  => esc_html__( 'Large', 'newspack-theme' ),
+				'small'  => esc_html__( 'Small', 'newspack-theme' ),
+				'behind' => esc_html__( 'Behind article title', 'newspack-theme' ),
+				'beside' => esc_html__( 'Beside article title', 'newspack-theme' ),
+				'above'  => esc_html__( 'Above article title', 'newspack-theme' ),
+				'hidden' => esc_html__( 'Hidden', 'newspack-theme' ),
 			),
 			'section'     => 'post_default_settings',
 		)
@@ -860,17 +860,16 @@ function newspack_customize_register( $wp_customize ) {
 		'post_template_default',
 		array(
 			'type'        => 'select',
-			'label'       => __( 'Default Post Template', 'newspack' ),
-			'description' => esc_html__( 'This option changes the selected template used for newly created posts going forward. The template can still be changed on a per-post basis.', 'newspack' ),
+			'label'       => __( 'Default Post Template', 'newspack-theme' ),
+			'description' => esc_html__( 'This option changes the selected template used for newly created posts going forward. The template can still be changed on a per-post basis.', 'newspack-theme' ),
 			'choices'     => array(
-				'default'            => esc_html__( 'With Sidebar', 'newspack' ),
-				'single-feature.php' => esc_html__( 'One Column', 'newspack' ),
-				'single-wide.php'    => esc_html__( 'One Column Wide', 'newspack' ),
+				'default'            => esc_html__( 'With Sidebar', 'newspack-theme' ),
+				'single-feature.php' => esc_html__( 'One Column', 'newspack-theme' ),
+				'single-wide.php'    => esc_html__( 'One Column Wide', 'newspack-theme' ),
 			),
 			'section'     => 'post_default_settings',
 		)
 	);
-
 	// Add option to use a time ago date format
 	$wp_customize->add_setting(
 		'post_time_ago',
@@ -883,7 +882,7 @@ function newspack_customize_register( $wp_customize ) {
 		'post_time_ago',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Use "time ago" date format', 'newspack' ),
+			'label'   => esc_html__( 'Use "time ago" date format', 'newspack-theme' ),
 			'section' => 'post_default_settings',
 		)
 	);
@@ -900,11 +899,10 @@ function newspack_customize_register( $wp_customize ) {
 		'post_time_ago_cut_off',
 		array(
 			'type'    => 'number',
-			'label'   => esc_html__( 'Cut off for "time ago" date in days.', 'newspack' ),
+			'label'   => esc_html__( 'Cut off for "time ago" date in days.', 'newspack-theme' ),
 			'section' => 'post_default_settings',
 		)
 	);
-
 	// Add option to display updated date.
 	$wp_customize->add_setting(
 		'post_updated_date',
@@ -917,8 +915,25 @@ function newspack_customize_register( $wp_customize ) {
 		'post_updated_date',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Show "last updated" date on single posts', 'newspack' ),
-			'description' => esc_html__( 'When paired with the "time ago" date format, the cut off for that format will automatically be switched to one day.', 'newspack' ),
+			'label'       => esc_html__( 'Show "last updated" date on single posts', 'newspack-theme' ),
+			'description' => esc_html__( 'When paired with the "time ago" date format, the cut off for that format will automatically be switched to one day.', 'newspack-theme' ),
+			'section'     => 'post_default_settings',
+		)
+	);
+	// Add option to determine updated date threshold.
+	$wp_customize->add_setting(
+		'post_updated_date_threshold',
+		array(
+			'default'           => 24,
+			'sanitize_callback' => 'sanitize_text_field',
+		)
+	);
+	$wp_customize->add_control(
+		'post_updated_date_threshold',
+		array(
+			'type'        => 'number',
+			'label'       => esc_html__( 'Updated date threshold', 'newspack-theme' ),
+			'description' => esc_html__( 'The number of hours after publishing a post before updates cause the "last updated" date to appear.', 'newspack-theme' ),
 			'section'     => 'post_default_settings',
 		)
 	);
@@ -936,7 +951,7 @@ function newspack_customize_register( $wp_customize ) {
 			'post_primary_category',
 			array(
 				'type'    => 'checkbox',
-				'label'   => __( 'Use Yoast\'s primary category functionality', 'newspack' ),
+				'label'   => __( 'Use Yoast\'s primary category functionality', 'newspack-theme' ),
 				'section' => 'post_default_settings',
 			)
 		);
@@ -954,7 +969,7 @@ function newspack_customize_register( $wp_customize ) {
 		'post_previous_next',
 		array(
 			'type'    => 'checkbox',
-			'label'   => __( 'Display previous and next links at the bottom of each post.', 'newspack' ),
+			'label'   => __( 'Display previous and next links at the bottom of each post.', 'newspack-theme' ),
 			'section' => 'post_default_settings',
 		)
 	);
@@ -971,7 +986,7 @@ function newspack_customize_register( $wp_customize ) {
 		'post_excerpt_instead_of_subtitle',
 		array(
 			'type'    => 'checkbox',
-			'label'   => __( 'Display the custom excerpt at the top of single posts instead of the article subtitle.', 'newspack' ),
+			'label'   => __( 'Display the custom excerpt at the top of single posts instead of the article subtitle.', 'newspack-theme' ),
 			'section' => 'post_default_settings',
 		)
 	);
@@ -982,7 +997,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'page_default_settings',
 		array(
-			'title' => esc_html__( 'Page Settings', 'newspack' ),
+			'title' => esc_html__( 'Page Settings', 'newspack-theme' ),
 			'panel' => 'newspack_template_settings',
 		)
 	);
@@ -999,15 +1014,15 @@ function newspack_customize_register( $wp_customize ) {
 		'page_featured_image_default',
 		array(
 			'type'        => 'radio',
-			'label'       => __( 'Featured Image Default Position', 'newspack' ),
-			'description' => esc_html__( 'Affects all pages where the Featured Image Position is set to \'Default\'.', 'newspack' ),
+			'label'       => __( 'Featured Image Default Position', 'newspack-theme' ),
+			'description' => esc_html__( 'Affects all pages where the Featured Image Position is set to \'Default\'.', 'newspack-theme' ),
 			'choices'     => array(
-				'large'  => esc_html__( 'Large', 'newspack' ),
-				'small'  => esc_html__( 'Small', 'newspack' ),
-				'behind' => esc_html__( 'Behind article title', 'newspack' ),
-				'beside' => esc_html__( 'Beside article title', 'newspack' ),
-				'above'  => esc_html__( 'Above article title', 'newspack' ),
-				'hidden' => esc_html__( 'Hidden', 'newspack' ),
+				'large'  => esc_html__( 'Large', 'newspack-theme' ),
+				'small'  => esc_html__( 'Small', 'newspack-theme' ),
+				'behind' => esc_html__( 'Behind article title', 'newspack-theme' ),
+				'beside' => esc_html__( 'Beside article title', 'newspack-theme' ),
+				'above'  => esc_html__( 'Above article title', 'newspack-theme' ),
+				'hidden' => esc_html__( 'Hidden', 'newspack-theme' ),
 			),
 			'section'     => 'page_default_settings',
 		)
@@ -1025,12 +1040,12 @@ function newspack_customize_register( $wp_customize ) {
 		'page_template_default',
 		array(
 			'type'        => 'select',
-			'label'       => __( 'Default Page Template', 'newspack' ),
-			'description' => esc_html__( 'This option changes the selected template used for newly created pages going forward. The template can still be changed on a per-page basis.', 'newspack' ),
+			'label'       => __( 'Default Page Template', 'newspack-theme' ),
+			'description' => esc_html__( 'This option changes the selected template used for newly created pages going forward. The template can still be changed on a per-page basis.', 'newspack-theme' ),
 			'choices'     => array(
-				'default'            => esc_html__( 'With Sidebar', 'newspack' ),
-				'single-feature.php' => esc_html__( 'One Column', 'newspack' ),
-				'single-wide.php'    => esc_html__( 'One Column Wide', 'newspack' ),
+				'default'            => esc_html__( 'With Sidebar', 'newspack-theme' ),
+				'single-feature.php' => esc_html__( 'One Column', 'newspack-theme' ),
+				'single-wide.php'    => esc_html__( 'One Column Wide', 'newspack-theme' ),
 			),
 			'section'     => 'page_default_settings',
 		)
@@ -1042,7 +1057,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'archive_options',
 		array(
-			'title' => esc_html__( 'Archive Settings', 'newspack' ),
+			'title' => esc_html__( 'Archive Settings', 'newspack-theme' ),
 			'panel' => 'newspack_template_settings',
 		)
 	);
@@ -1059,7 +1074,24 @@ function newspack_customize_register( $wp_customize ) {
 		'archive_show_excerpt',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Show excerpts for all archives', 'newspack' ),
+			'label'   => esc_html__( 'Show excerpts for all archives', 'newspack-theme' ),
+			'section' => 'archive_options',
+		)
+	);
+
+	// Add option to show subtitles for all archives.
+	$wp_customize->add_setting(
+		'archive_show_subtitle',
+		array(
+			'default'           => false,
+			'sanitize_callback' => 'newspack_sanitize_checkbox',
+		)
+	);
+	$wp_customize->add_control(
+		'archive_show_subtitle',
+		array(
+			'type'    => 'checkbox',
+			'label'   => esc_html__( 'Show subtitles for all archives', 'newspack-theme' ),
 			'section' => 'archive_options',
 		)
 	);
@@ -1076,7 +1108,7 @@ function newspack_customize_register( $wp_customize ) {
 		'archive_enable_cropping',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Crop archive images to a 4:3 aspect ratio (changes require regenerating thumbnails for existing featured images)', 'newspack' ),
+			'label'   => esc_html__( 'Crop archive images to a 4:3 aspect ratio (changes require regenerating thumbnails for existing featured images)', 'newspack-theme' ),
 			'section' => 'archive_options',
 		)
 	);
@@ -1093,7 +1125,7 @@ function newspack_customize_register( $wp_customize ) {
 		'archive_show_captions',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Show image captions in archives and WordPress’s default search results', 'newspack' ),
+			'label'   => esc_html__( 'Show image captions in archives and WordPress’s default search results', 'newspack-theme' ),
 			'section' => 'archive_options',
 		)
 	);
@@ -1110,7 +1142,7 @@ function newspack_customize_register( $wp_customize ) {
 		'archive_show_credits',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Show image credits in archives and WordPress’s default search results', 'newspack' ),
+			'label'   => esc_html__( 'Show image credits in archives and WordPress’s default search results', 'newspack-theme' ),
 			'section' => 'archive_options',
 		)
 	);
@@ -1128,7 +1160,7 @@ function newspack_customize_register( $wp_customize ) {
 		'archive_feature_latest_post',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Use a large, featured display for the latest post in the archives', 'newspack' ),
+			'label'   => esc_html__( 'Use a large, featured display for the latest post in the archives', 'newspack-theme' ),
 			'section' => 'archive_options',
 		)
 	);
@@ -1145,11 +1177,11 @@ function newspack_customize_register( $wp_customize ) {
 		'archive_layout',
 		array(
 			'type'    => 'radio',
-			'label'   => esc_html__( 'Archive Layout', 'newspack' ),
+			'label'   => esc_html__( 'Archive Layout', 'newspack-theme' ),
 			'choices' => array(
-				'default'         => esc_html__( 'With sidebar', 'newspack' ),
-				'one-column'      => esc_html__( 'One column', 'newspack' ),
-				'one-column-wide' => esc_html__( 'One column wide', 'newspack' ),
+				'default'         => esc_html__( 'With sidebar', 'newspack-theme' ),
+				'one-column'      => esc_html__( 'One column', 'newspack-theme' ),
+				'one-column-wide' => esc_html__( 'One column wide', 'newspack-theme' ),
 			),
 			'section' => 'archive_options',
 		)
@@ -1168,11 +1200,11 @@ function newspack_customize_register( $wp_customize ) {
 		'archive_title_format',
 		array(
 			'type'        => 'radio',
-			'label'       => esc_html__( 'Archive Title Format', 'newspack' ),
-			'description' => esc_html__( 'Change the format of the title used on archive pages.', 'newspack' ),
+			'label'       => esc_html__( 'Archive Title Format', 'newspack-theme' ),
+			'description' => esc_html__( 'Change the format of the title used on archive pages.', 'newspack-theme' ),
 			'choices'     => array(
-				'default' => esc_html__( 'Default (eg. "Category: Featured", "Author: Jane Doe")', 'newspack' ),
-				'short'   => esc_html__( 'Only archive name (eg. "Featured", "Jane Doe")', 'newspack' ),
+				'default' => esc_html__( 'Default (eg. "Category: Featured", "Author: Jane Doe")', 'newspack-theme' ),
+				'short'   => esc_html__( 'Only archive name (eg. "Featured", "Jane Doe")', 'newspack-theme' ),
 			),
 			'section'     => 'archive_options',
 		)
@@ -1190,11 +1222,11 @@ function newspack_customize_register( $wp_customize ) {
 			'archive_list_or_grid',
 			array(
 				'type'    => 'radio',
-				'label'   => esc_html__( 'List or Grid Layout', 'newspack' ),
-				'description' => esc_html__( 'When using grid, set the number of posts per page to a number divisible by 12 under Settings > Reading and disable the "Use a large, featured display for the latest post in the archives" above to get a full bottom row of posts.', 'newspack' ),
+				'label'   => esc_html__( 'List or Grid Layout', 'newspack-theme' ),
+				'description' => esc_html__( 'When using grid, set the number of posts per page to a number divisible by 12 under Settings > Reading and disable the "Use a large, featured display for the latest post in the archives" above to get a full bottom row of posts.', 'newspack-theme' ),
 				'choices' => array(
-					'list'         => esc_html__( 'List', 'newspack' ),
-					'grid'      => esc_html__( 'Grid', 'newspack' ),
+					'list'         => esc_html__( 'List', 'newspack-theme' ),
+					'grid'      => esc_html__( 'Grid', 'newspack-theme' ),
 				),
 				'section' => 'archive_options',
 			)
@@ -1206,7 +1238,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'comments_options',
 		array(
-			'title' => esc_html__( 'Comments Settings', 'newspack' ),
+			'title' => esc_html__( 'Comments Settings', 'newspack-theme' ),
 		)
 	);
 
@@ -1222,8 +1254,8 @@ function newspack_customize_register( $wp_customize ) {
 		'collapse_comments',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Collapse Comments', 'newspack' ),
-			'description' => esc_html__( 'When using WordPress\'s default comments, checking this option will collapse the comments section when there is more than one comment, and display a button to expand.', 'newspack' ),
+			'label'       => esc_html__( 'Collapse Comments', 'newspack-theme' ),
+			'description' => esc_html__( 'When using WordPress\'s default comments, checking this option will collapse the comments section when there is more than one comment, and display a button to expand.', 'newspack-theme' ),
 			'section'     => 'comments_options',
 		)
 	);
@@ -1240,8 +1272,8 @@ function newspack_customize_register( $wp_customize ) {
 		'display_comment_policy',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Display comment policy', 'newspack' ),
-			'description' => esc_html__( 'Allows you to add an optional comment policy above the comment form when using WordPress\'s default comments.', 'newspack' ),
+			'label'       => esc_html__( 'Display comment policy', 'newspack-theme' ),
+			'description' => esc_html__( 'Allows you to add an optional comment policy above the comment form when using WordPress\'s default comments.', 'newspack-theme' ),
 			'section'     => 'comments_options',
 		)
 	);
@@ -1258,7 +1290,7 @@ function newspack_customize_register( $wp_customize ) {
 		'comment_policy',
 		array(
 			'type'    => 'textarea',
-			'label'   => esc_html__( 'Comment policy text', 'newspack' ),
+			'label'   => esc_html__( 'Comment policy text', 'newspack-theme' ),
 			'section' => 'comments_options',
 		)
 	);
@@ -1269,7 +1301,7 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'footer_options',
 		array(
-			'title' => esc_html__( 'Footer Settings', 'newspack' ),
+			'title' => esc_html__( 'Footer Settings', 'newspack-theme' ),
 		)
 	);
 
@@ -1285,8 +1317,8 @@ function newspack_customize_register( $wp_customize ) {
 		'footer_show_branding',
 		array(
 			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Show footer branding', 'newspack' ),
-			'description' => esc_html__( 'Display the site logo in the footer when the footer widget area is populated.', 'newspack' ),
+			'label'       => esc_html__( 'Show footer branding', 'newspack-theme' ),
+			'description' => esc_html__( 'Display the site logo in the footer when the footer widget area is populated.', 'newspack-theme' ),
 			'section'     => 'footer_options',
 		)
 	);
@@ -1303,11 +1335,11 @@ function newspack_customize_register( $wp_customize ) {
 		'footer_widget_layout',
 		array(
 			'type'        => 'radio',
-			'label'       => esc_html__( 'Footer Widget Layout', 'newspack' ),
-			'description' => esc_html__( 'Stack the footer widgets, or have them automatically divide into even columns.', 'newspack' ),
+			'label'       => esc_html__( 'Footer Widget Layout', 'newspack-theme' ),
+			'description' => esc_html__( 'Stack the footer widgets, or have them automatically divide into even columns.', 'newspack-theme' ),
 			'choices'     => array(
-				'columns' => esc_html__( 'Columns', 'newspack' ),
-				'stacked' => esc_html__( 'Stacked', 'newspack' ),
+				'columns' => esc_html__( 'Columns', 'newspack-theme' ),
+				'stacked' => esc_html__( 'Stacked', 'newspack-theme' ),
 			),
 			'section'     => 'footer_options',
 		)
@@ -1325,8 +1357,8 @@ function newspack_customize_register( $wp_customize ) {
 		'footer_copyright',
 		array(
 			'type'        => 'text',
-			'label'       => esc_html__( 'Copyright Information', 'newspack' ),
-			'description' => esc_html__( 'Add custom text to be displayed next to a copyright symbol and current year in the footer. By default, it will display your site title.', 'newspack' ),
+			'label'       => esc_html__( 'Copyright Information', 'newspack-theme' ),
+			'description' => esc_html__( 'Add custom text to be displayed next to a copyright symbol and current year in the footer. By default, it will display your site title.', 'newspack-theme' ),
 			'section'     => 'footer_options',
 		)
 	);
@@ -1345,7 +1377,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'newspack_typography',
 		array(
-			'title'    => __( 'Typography', 'newspack' ),
+			'title'    => __( 'Typography', 'newspack-theme' ),
 			'priority' => 50,
 		)
 	);
@@ -1392,7 +1424,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'custom_font_import_code',
 		array(
-			'label'       => __( 'Font Provider Import Code or URL', 'newspack' ),
+			'label'       => __( 'Font Provider Import Code or URL', 'newspack-theme' ),
 			'description' => __( 'Example: &lt;link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"&gt; or https://fonts.googleapis.com/css?family=Open+Sans' ),
 			'section'     => 'newspack_typography',
 			'type'        => 'text',
@@ -1402,7 +1434,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'custom_font_import_code_alternate',
 		array(
-			'label'   => __( 'Secondary Font Provider Import Code or URL', 'newspack' ),
+			'label'   => __( 'Secondary Font Provider Import Code or URL', 'newspack-theme' ),
 			'section' => 'newspack_typography',
 			'type'    => 'text',
 		)
@@ -1411,7 +1443,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'font_header',
 		array(
-			'label'       => __( 'Header Font', 'newspack' ),
+			'label'       => __( 'Header Font', 'newspack-theme' ),
 			'description' => __( 'Example: Open Sans' ),
 			'section'     => 'newspack_typography',
 			'type'        => 'text',
@@ -1427,7 +1459,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'font_header_stack',
 		array(
-			'label'   => __( 'Header Font Fallback Stack', 'newspack' ),
+			'label'   => __( 'Header Font Fallback Stack', 'newspack-theme' ),
 			'section' => 'newspack_typography',
 			'type'    => 'select',
 			'choices' => $font_stacks,
@@ -1437,7 +1469,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'font_body',
 		array(
-			'label'   => __( 'Body Font', 'newspack' ),
+			'label'   => __( 'Body Font', 'newspack-theme' ),
 			'section' => 'newspack_typography',
 			'type'    => 'text',
 		)
@@ -1446,7 +1478,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 	$wp_customize->add_control(
 		'font_body_stack',
 		array(
-			'label'   => __( 'Body Font Fallback Stack', 'newspack' ),
+			'label'   => __( 'Body Font Fallback Stack', 'newspack-theme' ),
 			'section' => 'newspack_typography',
 			'type'    => 'select',
 			'choices' => $font_stacks,
@@ -1465,7 +1497,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 		'accent_allcaps',
 		array(
 			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Use all-caps for accent text.', 'newspack' ),
+			'label'   => esc_html__( 'Use all-caps for accent text.', 'newspack-theme' ),
 			'section' => 'newspack_typography',
 		)
 	);
@@ -1707,3 +1739,12 @@ function newspack_sanitize_font_stack( $stack_id ) {
 	}
 	return null;
 }
+
+/**
+ * Adds CSS to the Customizer controls.
+ */
+function newspack_default_post_template_customize_css() {
+	wp_add_inline_style( 'customize-controls', '#customize-control-post_updated_date_threshold { padding-left: 24px; }' );
+	wp_add_inline_style( 'customize-controls', '#customize-control-post_time_ago_cut_off { padding-left: 24px; }' );
+}
+add_action( 'customize_controls_enqueue_scripts', 'newspack_default_post_template_customize_css' );

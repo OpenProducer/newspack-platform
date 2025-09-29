@@ -45,7 +45,7 @@ endif;
 ?>
 
 <div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#main"><?php _e( 'Skip to content', 'newspack' ); ?></a>
+	<a class="skip-link screen-reader-text" href="#main"><?php _e( 'Skip to content', 'newspack-theme' ); ?></a>
 
 	<?php if ( is_active_sidebar( 'header-2' ) ) : ?>
 		<div class="header-widget above-header-widgets">
@@ -64,7 +64,7 @@ endif;
 						<div class="subpage-toggle-contain">
 							<button class="subpage-toggle" on="tap:subpage-sidebar.toggle">
 								<?php echo wp_kses( newspack_get_icon_svg( 'menu', 20 ), newspack_sanitize_svgs() ); ?>
-								<span class="screen-reader-text"><?php esc_html_e( 'Menu', 'newspack' ); ?></span>
+								<span class="screen-reader-text"><?php esc_html_e( 'Menu', 'newspack-theme' ); ?></span>
 							</button>
 						</div>
 					<?php endif; ?>
@@ -76,7 +76,7 @@ endif;
 					<?php if ( newspack_has_menus() ) : ?>
 						<button class="mobile-menu-toggle" on="tap:mobile-sidebar.toggle">
 							<?php echo wp_kses( newspack_get_icon_svg( 'menu', 20 ), newspack_sanitize_svgs() ); ?>
-							<span><?php esc_html_e( 'Menu', 'newspack' ); ?></span>
+							<span><?php esc_html_e( 'Menu', 'newspack-theme' ); ?></span>
 						</button>
 					<?php endif; ?>
 
@@ -90,7 +90,7 @@ endif;
 						<?php if ( true === $show_slideout_sidebar && 'left' === $slideout_sidebar_side ) : ?>
 							<button class="desktop-menu-toggle" on="tap:desktop-sidebar.toggle">
 								<?php echo wp_kses( newspack_get_icon_svg( 'menu', 20 ), newspack_sanitize_svgs() ); ?>
-								<span><?php echo esc_html( get_theme_mod( 'slideout_label', esc_html__( 'Menu', 'newspack' ) ) ); ?></span>
+								<span><?php echo esc_html( get_theme_mod( 'slideout_label', esc_html__( 'Menu', 'newspack-theme' ) ) ); ?></span>
 							</button>
 						<?php endif; ?>
 
@@ -121,7 +121,7 @@ endif;
 						<?php if ( true === $show_slideout_sidebar && 'right' === $slideout_sidebar_side ) : ?>
 							<button class="desktop-menu-toggle dir-right" on="tap:desktop-sidebar.toggle">
 								<?php echo wp_kses( newspack_get_icon_svg( 'menu', 20 ), newspack_sanitize_svgs() ); ?>
-								<span><?php echo esc_html( get_theme_mod( 'slideout_label', esc_html__( 'Menu', 'newspack' ) ) ); ?></span>
+								<span><?php echo esc_html( get_theme_mod( 'slideout_label', esc_html__( 'Menu', 'newspack-theme' ) ) ); ?></span>
 							</button>
 						<?php endif; ?>
 					</div><!-- .wrapper -->
@@ -133,7 +133,7 @@ endif;
 					<?php if ( true === $show_slideout_sidebar && ! has_nav_menu( 'secondary-menu' ) && 'left' === $slideout_sidebar_side ) : ?>
 						<button class="desktop-menu-toggle" on="tap:desktop-sidebar.toggle">
 							<?php echo wp_kses( newspack_get_icon_svg( 'menu', 20 ), newspack_sanitize_svgs() ); ?>
-							<span><?php echo esc_html( get_theme_mod( 'slideout_label', esc_html__( 'Menu', 'newspack' ) ) ); ?></span>
+							<span><?php echo esc_html( get_theme_mod( 'slideout_label', esc_html__( 'Menu', 'newspack-theme' ) ) ); ?></span>
 						</button>
 					<?php endif; ?>
 
@@ -214,7 +214,7 @@ endif;
 					<?php if ( true === $show_slideout_sidebar && ! has_nav_menu( 'secondary-menu' ) && 'right' === $slideout_sidebar_side ) : ?>
 						<button class="desktop-menu-toggle dir-right" on="tap:desktop-sidebar.toggle">
 							<?php echo wp_kses( newspack_get_icon_svg( 'menu', 20 ), newspack_sanitize_svgs() ); ?>
-							<span><?php echo esc_html( get_theme_mod( 'slideout_label', esc_html__( 'Menu', 'newspack' ) ) ); ?></span>
+							<span><?php echo esc_html( get_theme_mod( 'slideout_label', esc_html__( 'Menu', 'newspack-theme' ) ) ); ?></span>
 						</button>
 					<?php endif; ?>
 
@@ -225,7 +225,7 @@ endif;
 					<?php if ( newspack_has_menus() ) : ?>
 						<button class="mobile-menu-toggle" on="tap:mobile-sidebar.toggle">
 							<?php echo wp_kses( newspack_get_icon_svg( 'menu', 20 ), newspack_sanitize_svgs() ); ?>
-							<span><?php esc_html_e( 'Menu', 'newspack' ); ?></span>
+							<span><?php esc_html_e( 'Menu', 'newspack-theme' ); ?></span>
 						</button>
 					<?php endif; ?>
 
@@ -267,7 +267,7 @@ endif;
 			?>
 				<div class="highlight-menu-contain desktop-only">
 					<div class="wrapper">
-						<nav class="highlight-menu" aria-label="<?php esc_attr_e( 'Highlight Menu', 'newspack' ); ?>">
+						<nav class="highlight-menu" aria-label="<?php esc_attr_e( 'Highlight Menu', 'newspack-theme' ); ?>">
 							<?php
 							wp_nav_menu(
 								array(

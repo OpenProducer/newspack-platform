@@ -23,7 +23,7 @@ $page_hide_title = get_post_meta( $post->ID, 'newspack_hide_page_title', true );
 if ( true === get_theme_mod( 'post_excerpt_instead_of_subtitle', false ) ) {
 	$subtitle = $post->post_excerpt;
 } else {
-	$subtitle = get_post_meta( $post->ID, 'newspack_post_subtitle', true );
+	$subtitle = newspack_post_subtitle();
 }
 ?>
 
@@ -47,26 +47,7 @@ if ( true === get_theme_mod( 'post_excerpt_instead_of_subtitle', false ) ) {
 	<?php endif; ?>
 	<?php if ( $subtitle ) : ?>
 		<div class="newspack-post-subtitle">
-			<?php
-			$allowed_tags = array(
-				'b'      => true,
-				'strong' => true,
-				'i'      => true,
-				'em'     => true,
-				'mark'   => true,
-				'u'      => true,
-				'small'  => true,
-				'sub'    => true,
-				'sup'    => true,
-				'a'      => array(
-					'href'   => true,
-					'target' => true,
-					'rel'    => true,
-				),
-			);
-
-			echo wptexturize( wp_kses( $subtitle, $allowed_tags ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			?>
+			<?php echo $subtitle; ?>
 		</div>
 	<?php endif; ?>
 <?php else : ?>
