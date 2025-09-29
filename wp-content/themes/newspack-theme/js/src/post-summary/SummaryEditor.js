@@ -14,32 +14,32 @@ import { connectWithSelect, META_FIELD_SUMMARY } from './utils';
 
 const decorateSummary = compose(
 	connectWithSelect,
-	withDispatch( dispatch => ( {
+	withDispatch(dispatch => ({
 		saveSummary: summary => {
-			dispatch( 'core/editor' ).editPost( {
+			dispatch('core/editor').editPost({
 				meta: {
-					[ META_FIELD_SUMMARY ]: summary,
+					[META_FIELD_SUMMARY]: summary,
 				},
-			} );
+			});
 		},
-	} ) )
+	}))
 );
 
-const SummaryEditor = ( { summary, saveSummary } ) => {
-	const [ value, setValue ] = useState( summary );
+const SummaryEditor = ({ summary, saveSummary }) => {
+	const [value, setValue] = useState(summary);
 
-	useEffect( () => {
-		saveSummary( value );
-	}, [ value ] );
+	useEffect(() => {
+		saveSummary(value);
+	}, [value]);
 
 	return (
 		<TextareaControl
-			label={ __( 'Body:', 'newspack' ) }
-			value={ value }
-			onChange={ setValue }
-			style={ { width: '100%' } }
+			label={__('Body:', 'newspack-theme')}
+			value={value}
+			onChange={setValue}
+			style={{ width: '100%' }}
 		/>
 	);
 };
 
-export default decorateSummary( SummaryEditor );
+export default decorateSummary(SummaryEditor);

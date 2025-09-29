@@ -391,14 +391,26 @@
 			} );
 		} );
 
-		// Disable 'time ago cutoff' when post updated date is enabled.
 		wp.customize( 'post_updated_date', function ( setting ) {
+			// Disable 'time ago cutoff' when post updated date is enabled.
 			wp.customize.control( 'post_time_ago_cut_off', function ( control ) {
 				const visibility = function () {
 					if ( true === setting.get() ) {
 						$( 'input', control.selector ).prop( 'disabled', true );
 					} else {
 						$( 'input', control.selector ).prop( 'disabled', false );
+					}
+				};
+				visibility();
+				setting.bind( visibility );
+			} );
+			// Only show 'updated date threshold' when post updated date is enabled.
+			wp.customize.control( 'post_updated_date_threshold', function ( control ) {
+				const visibility = function () {
+					if ( true === setting.get() ) {
+						control.container.slideDown( 180 );
+					} else {
+						control.container.slideUp( 180 );
 					}
 				};
 				visibility();

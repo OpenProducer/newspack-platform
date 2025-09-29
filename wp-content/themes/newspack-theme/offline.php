@@ -24,7 +24,7 @@ get_header();
 ?>
 	<section id="primary" class="content-area">
 		<header class="entry-header">
-			<h1 class="entry-title"><?php esc_html_e( 'Offline', 'newspack' ); ?></h1>
+			<h1 class="entry-title"><?php esc_html_e( 'Offline', 'newspack-theme' ); ?></h1>
 		</header><!-- .entry-header -->
 		<main id="main" class="site-main">
 			<?php

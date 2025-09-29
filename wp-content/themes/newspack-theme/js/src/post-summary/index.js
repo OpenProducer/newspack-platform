@@ -23,14 +23,14 @@ const NewspackSummaryPanel = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="newspack-summary"
-			title={ __( 'Article Summary', 'newspack' ) }
+			title={__('Article Summary', 'newspack-theme')}
 			className="newspack-summary"
 		>
 			<p>
-				{ __(
+				{__(
 					'Write a summary that will be appended to the top of the article content.',
 					'newspack'
-				) }
+				)}
 			</p>
 			<SummaryTitleEditor />
 			<SummaryEditor />
@@ -38,7 +38,7 @@ const NewspackSummaryPanel = () => {
 	);
 };
 
-registerPlugin( 'plugin-document-setting-panel-newspack-summary', {
-	render: connectWithSelect( NewspackSummaryPanel ),
+registerPlugin('plugin-document-setting-panel-newspack-summary', {
+	render: connectWithSelect(NewspackSummaryPanel),
 	icon: null,
-} );
+});

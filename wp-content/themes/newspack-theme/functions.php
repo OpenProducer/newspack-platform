@@ -44,7 +44,7 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 		 * If you're building a theme based on Newspack Theme, use a find and replace
 		 * to change 'newspack' to the name of your theme in all the template files.
 		 */
-		load_theme_textdomain( 'newspack', get_template_directory() . '/languages' );
+		load_theme_textdomain( 'newspack-theme', get_template_directory() . '/languages' );
 
 		// Add default posts and comments RSS feed links to head.
 		add_theme_support( 'automatic-feed-links' );
@@ -85,11 +85,11 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 		// This theme uses wp_nav_menu() in two locations.
 		register_nav_menus(
 			array(
-				'primary-menu'   => __( 'Primary Menu', 'newspack' ),
-				'secondary-menu' => __( 'Secondary Menu', 'newspack' ),
-				'tertiary-menu'  => __( 'Tertiary Menu', 'newspack' ),
-				'highlight-menu' => __( 'Topic Highlight Menu', 'newspack' ),
-				'social'         => __( 'Social Links Menu', 'newspack' ),
+				'primary-menu'   => __( 'Primary Menu', 'newspack-theme' ),
+				'secondary-menu' => __( 'Secondary Menu', 'newspack-theme' ),
+				'tertiary-menu'  => __( 'Tertiary Menu', 'newspack-theme' ),
+				'highlight-menu' => __( 'Topic Highlight Menu', 'newspack-theme' ),
+				'social'         => __( 'Social Links Menu', 'newspack-theme' ),
 			)
 		);
 
@@ -144,26 +144,26 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 			'editor-font-sizes',
 			array(
 				array(
-					'name'      => __( 'Small', 'newspack' ),
-					'shortName' => __( 'S', 'newspack' ),
+					'name'      => __( 'Small', 'newspack-theme' ),
+					'shortName' => __( 'S', 'newspack-theme' ),
 					'size'      => 16,
 					'slug'      => 'small',
 				),
 				array(
-					'name'      => __( 'Normal', 'newspack' ),
-					'shortName' => __( 'M', 'newspack' ),
+					'name'      => __( 'Normal', 'newspack-theme' ),
+					'shortName' => __( 'M', 'newspack-theme' ),
 					'size'      => 20,
 					'slug'      => 'normal',
 				),
 				array(
-					'name'      => __( 'Large', 'newspack' ),
-					'shortName' => __( 'L', 'newspack' ),
+					'name'      => __( 'Large', 'newspack-theme' ),
+					'shortName' => __( 'L', 'newspack-theme' ),
 					'size'      => 36,
 					'slug'      => 'large',
 				),
 				array(
-					'name'      => __( 'Huge', 'newspack' ),
-					'shortName' => __( 'XL', 'newspack' ),
+					'name'      => __( 'Huge', 'newspack-theme' ),
+					'shortName' => __( 'XL', 'newspack-theme' ),
 					'size'      => 44,
 					'slug'      => 'huge',
 				),
@@ -186,42 +186,42 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 			'editor-color-palette',
 			array(
 				array(
-					'name'  => __( 'Primary', 'newspack' ),
+					'name'  => __( 'Primary', 'newspack-theme' ),
 					'slug'  => 'primary',
 					'color' => $primary_color,
 				),
 				array(
-					'name'  => __( 'Primary Variation', 'newspack' ),
+					'name'  => __( 'Primary Variation', 'newspack-theme' ),
 					'slug'  => 'primary-variation',
 					'color' => $primary_color_variation,
 				),
 				array(
-					'name'  => __( 'Secondary', 'newspack' ),
+					'name'  => __( 'Secondary', 'newspack-theme' ),
 					'slug'  => 'secondary',
 					'color' => $secondary_color,
 				),
 				array(
-					'name'  => __( 'Secondary Variation', 'newspack' ),
+					'name'  => __( 'Secondary Variation', 'newspack-theme' ),
 					'slug'  => 'secondary-variation',
 					'color' => $secondary_color_variation,
 				),
 				array(
-					'name'  => __( 'Dark Gray', 'newspack' ),
+					'name'  => __( 'Dark Gray', 'newspack-theme' ),
 					'slug'  => 'dark-gray',
 					'color' => '#111111', // color__text-main
 				),
 				array(
-					'name'  => __( 'Medium Gray', 'newspack' ),
+					'name'  => __( 'Medium Gray', 'newspack-theme' ),
 					'slug'  => 'medium-gray',
 					'color' => '#767676', // color__text-light
 				),
 				array(
-					'name'  => __( 'Light Gray', 'newspack' ),
+					'name'  => __( 'Light Gray', 'newspack-theme' ),
 					'slug'  => 'light-gray',
 					'color' => '#EEEEEE', // color__background-pre
 				),
 				array(
-					'name'  => __( 'White', 'newspack' ),
+					'name'  => __( 'White', 'newspack-theme' ),
 					'slug'  => 'white',
 					'color' => '#FFFFFF',
 				),
@@ -232,32 +232,32 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 			'editor-gradient-presets',
 			array(
 				array(
-					'name'     => __( 'Primary to primary variation', 'newspack' ),
+					'name'     => __( 'Primary to primary variation', 'newspack-theme' ),
 					'gradient' => 'linear-gradient( 135deg, ' . esc_attr( newspack_hex_to_rgb( $primary_color ) ) . ' 0%, ' . esc_attr( newspack_hex_to_rgb( $primary_color_variation ) ) . ' 100% )',
 					'slug'     => 'grad-1',
 				),
 				array(
-					'name'     => __( 'Secondary to secondary variation', 'newspack' ),
+					'name'     => __( 'Secondary to secondary variation', 'newspack-theme' ),
 					'gradient' => 'linear-gradient( 135deg, ' . esc_attr( newspack_hex_to_rgb( $secondary_color ) ) . ' 0%, ' . esc_attr( newspack_hex_to_rgb( $secondary_color_variation ) ) . ' 100% )',
 					'slug'     => 'grad-2',
 				),
 				array(
-					'name'     => __( 'Black to medium gray', 'newspack' ),
+					'name'     => __( 'Black to medium gray', 'newspack-theme' ),
 					'gradient' => 'linear-gradient( 135deg, rgb( 17, 17, 17 ) 0%, rgb( 85, 85, 85 ) 100% )',
 					'slug'     => 'grad-3',
 				),
 				array(
-					'name'     => __( 'Dark gray to medium gray', 'newspack' ),
+					'name'     => __( 'Dark gray to medium gray', 'newspack-theme' ),
 					'gradient' => 'linear-gradient( 135deg, rgb( 68, 68, 68 ) 0%, rgb( 136, 136, 136 ) 100% )',
 					'slug'     => 'grad-4',
 				),
 				array(
-					'name'     => __( 'Medium gray to light gray', 'newspack' ),
+					'name'     => __( 'Medium gray to light gray', 'newspack-theme' ),
 					'gradient' => 'linear-gradient( 135deg, rgb( 119, 119, 119 ) 0%, rgb( 221, 221, 221 ) 100% )',
 					'slug'     => 'grad-5',
 				),
 				array(
-					'name'     => __( 'Light gray to white', 'newspack' ),
+					'name'     => __( 'Light gray to white', 'newspack-theme' ),
 					'gradient' => 'linear-gradient( 135deg, rgb( 221, 221, 221 ) 0%, rgb( 255, 255, 255 ) 100% )',
 					'slug'     => 'grad-6',
 				),
@@ -296,9 +296,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Sidebar', 'newspack' ),
+			'name'          => __( 'Sidebar', 'newspack-theme' ),
 			'id'            => 'sidebar-1',
-			'description'   => __( 'Add widgets here to appear in your sidebar.', 'newspack' ),
+			'description'   => __( 'Add widgets here to appear in your sidebar.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title accent-header"><span>',
@@ -308,9 +308,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Slide-out Sidebar', 'newspack' ),
+			'name'          => __( 'Slide-out Sidebar', 'newspack-theme' ),
 			'id'            => 'header-1',
-			'description'   => esc_html__( 'Add widgets here to appear in an off-screen sidebar when it is enabled under the Customizer Header Settings.', 'newspack' ),
+			'description'   => esc_html__( 'Add widgets here to appear in an off-screen sidebar when it is enabled under the Customizer Header Settings.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="below-content widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -320,9 +320,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Above Header', 'newspack' ),
+			'name'          => __( 'Above Header', 'newspack-theme' ),
 			'id'            => 'header-2',
-			'description'   => esc_html__( 'Add widgets here to appear above the site header.', 'newspack' ),
+			'description'   => esc_html__( 'Add widgets here to appear above the site header.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="below-content widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -332,9 +332,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Below Header', 'newspack' ),
+			'name'          => __( 'Below Header', 'newspack-theme' ),
 			'id'            => 'header-3',
-			'description'   => esc_html__( 'Add widgets here to appear below the site header.', 'newspack' ),
+			'description'   => esc_html__( 'Add widgets here to appear below the site header.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="below-content widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -344,9 +344,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Above Footer', 'newspack' ),
+			'name'          => __( 'Above Footer', 'newspack-theme' ),
 			'id'            => 'footer-3',
-			'description'   => esc_html__( 'Add widgets here to appear above the site footer.', 'newspack' ),
+			'description'   => esc_html__( 'Add widgets here to appear above the site footer.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="above-footer widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -356,9 +356,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Footer', 'newspack' ),
+			'name'          => __( 'Footer', 'newspack-theme' ),
 			'id'            => 'footer-1',
-			'description'   => __( 'Add widgets here to appear in your footer.', 'newspack' ),
+			'description'   => __( 'Add widgets here to appear in your footer.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -368,9 +368,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Above Copyright', 'newspack' ),
+			'name'          => __( 'Above Copyright', 'newspack-theme' ),
 			'id'            => 'footer-2',
-			'description'   => __( 'Add widgets here to appear below the footer, above the copyright information.', 'newspack' ),
+			'description'   => __( 'Add widgets here to appear below the footer, above the copyright information.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -380,9 +380,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Article above content', 'newspack' ),
+			'name'          => __( 'Article above content', 'newspack-theme' ),
 			'id'            => 'article-1',
-			'description'   => __( 'Add widgets here to appear above article content.', 'newspack' ),
+			'description'   => __( 'Add widgets here to appear above article content.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="above-content widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -392,9 +392,9 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'Article below content', 'newspack' ),
+			'name'          => __( 'Article below content', 'newspack-theme' ),
 			'id'            => 'article-2',
-			'description'   => __( 'Add widgets here to appear below article content.', 'newspack' ),
+			'description'   => __( 'Add widgets here to appear below article content.', 'newspack-theme' ),
 			'before_widget' => '<section id="%1$s" class="below-content widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -469,14 +469,14 @@ function newspack_scripts() {
 	}
 
 	$newspack_l10n = array(
-		'open_search'         => esc_html__( 'Open Search', 'newspack' ),
-		'close_search'        => esc_html__( 'Close Search', 'newspack' ),
-		'expand_comments'     => esc_html__( 'Expand Comments', 'newspack' ),
-		'collapse_comments'   => esc_html__( 'Collapse Comments', 'newspack' ),
-		'show_order_details'  => esc_html__( 'Show details', 'newspack' ),
-		'hide_order_details'  => esc_html__( 'Hide details', 'newspack' ),
-		'open_dropdown_menu'  => esc_html__( 'Open dropdown menu', 'newspack' ),
-		'close_dropdown_menu' => esc_html__( 'Close dropdown menu', 'newspack' ),
+		'open_search'         => esc_html__( 'Open Search', 'newspack-theme' ),
+		'close_search'        => esc_html__( 'Close Search', 'newspack-theme' ),
+		'expand_comments'     => esc_html__( 'Expand Comments', 'newspack-theme' ),
+		'collapse_comments'   => esc_html__( 'Collapse Comments', 'newspack-theme' ),
+		'show_order_details'  => esc_html__( 'Show details', 'newspack-theme' ),
+		'hide_order_details'  => esc_html__( 'Hide details', 'newspack-theme' ),
+		'open_dropdown_menu'  => esc_html__( 'Open dropdown menu', 'newspack-theme' ),
+		'close_dropdown_menu' => esc_html__( 'Close dropdown menu', 'newspack-theme' ),
 		'is_amp'              => newspack_is_amp(),
 	);
 
@@ -614,7 +614,7 @@ function newspack_enqueue_scripts() {
 		array( 'wp-blocks', 'wp-components' ),
 		$theme_version
 	);
-	wp_set_script_translations( 'newspack-extend-featured-image-script', 'newspack', $languages_path );
+	wp_set_script_translations( 'newspack-extend-featured-image-script', 'newspack-theme', $languages_path );
 	wp_localize_script(
 		'newspack-extend-featured-image-script',
 		'newspack_theme_featured_image_post_types',
@@ -625,10 +625,10 @@ function newspack_enqueue_scripts() {
 	// Article subtitle.
 	if ( 'post' === $post_type ) {
 		wp_enqueue_script( 'newspack-post-subtitle', get_theme_file_uri( '/js/dist/post-subtitle.js' ), array(), $theme_version, true );
-		wp_set_script_translations( 'newspack-post-subtitle', 'newspack', $languages_path );
+		wp_set_script_translations( 'newspack-post-subtitle', 'newspack-theme', $languages_path );
 
 		wp_enqueue_script( 'newspack-post-summary', get_theme_file_uri( '/js/dist/post-summary.js' ), array(), $theme_version, true );
-		wp_set_script_translations( 'newspack-post-summary', 'newspack', $languages_path );
+		wp_set_script_translations( 'newspack-post-summary', 'newspack-theme', $languages_path );
 
 	}
 
@@ -640,7 +640,7 @@ function newspack_enqueue_scripts() {
 		$theme_version,
 		true
 	);
-	wp_set_script_translations( 'newspack-post-meta-toggles', 'newspack', $languages_path );
+	wp_set_script_translations( 'newspack-post-meta-toggles', 'newspack-theme', $languages_path );
 	wp_localize_script(
 		'newspack-post-meta-toggles',
 		'newspack_post_meta_post_types',
@@ -919,7 +919,7 @@ function newspack_register_meta() {
 		'post',
 		'newspack_article_summary_title',
 		array(
-			'default'      => esc_html__( 'Overview:', 'newspack' ),
+			'default'      => esc_html__( 'Overview:', 'newspack-theme' ),
 			'show_in_rest' => true,
 			'single'       => true,
 			'type'         => 'string',

@@ -2,35 +2,40 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack 2.5.0\n"
+"Project-Id-Version: Newspack 2.13.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/newspack-theme\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-12T16:08:08+00:00\n"
+"POT-Creation-Date: 2025-09-08T14:34:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
-"X-Domain: newspack\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: newspack-theme\n"
 
 #. Theme Name of the theme
+#: style.css
 msgid "Newspack"
 msgstr ""
 
 #. Theme URI of the theme
+#: style.css
 msgid "https://github.com/Automattic/newspack-theme"
 msgstr ""
 
 #. Description of the theme
+#: style.css
 msgid "The official theme for Newspack, an all-in-one platform that simplifies publishing and drives audience and revenue right out of the box."
 msgstr ""
 
 #. Author of the theme
+#: style.css
 msgid "Automattic"
 msgstr ""
 
 #. Author URI of the theme
+#: style.css
 msgid "https://newspack.com"
 msgstr ""
 
@@ -48,18 +53,19 @@ msgstr ""
 
 #: archive-newspack_correction.php:51
 #: comments.php:116
-#: inc/template-tags.php:287
+#: inc/template-tags.php:326
 msgid "Previous"
 msgstr ""
 
 #: archive-newspack_correction.php:52
 #: comments.php:117
-#: inc/template-tags.php:285
+#: inc/template-tags.php:324
 msgid "Next"
 msgstr ""
 
 #. translators: %s: comment author link
 #: classes/class-newspack-walker-comment.php:50
+#, php-format
 msgid "%s <span class=\"screen-reader-text says\">says:</span>"
 msgstr ""
 
@@ -69,6 +75,7 @@ msgstr ""
 
 #. translators: 1: comment date, 2: comment time
 #: classes/class-newspack-walker-comment.php:75
+#, php-format
 msgid "%1$s at %2$s"
 msgstr ""
 
@@ -91,17 +98,10 @@ msgstr ""
 
 #. translators: %s: post title
 #: comments.php:56
+#, php-format
 msgctxt "comments title"
 msgid "One reply on &ldquo;%s&rdquo;"
 msgstr ""
-
-#. translators: 1: number of comments, 2: post title
-#: comments.php:60
-msgctxt "comments title"
-msgid "%1$s reply on &ldquo;%2$s&rdquo;"
-msgid_plural "%1$s replies on &ldquo;%2$s&rdquo;"
-msgstr[0] ""
-msgstr[1] ""
 
 #: comments.php:113
 msgid "Comments"
@@ -127,239 +127,239 @@ msgstr ""
 msgid "Powered by Newspack"
 msgstr ""
 
-#: functions.php:85
+#: functions.php:88
 msgid "Primary Menu"
 msgstr ""
 
-#: functions.php:86
-#: inc/template-tags.php:613
+#: functions.php:89
+#: inc/template-tags.php:654
 msgid "Secondary Menu"
 msgstr ""
 
-#: functions.php:87
-#: inc/template-tags.php:644
+#: functions.php:90
+#: inc/template-tags.php:685
 msgid "Tertiary Menu"
 msgstr ""
 
-#: functions.php:88
+#: functions.php:91
 msgid "Topic Highlight Menu"
 msgstr ""
 
-#: functions.php:89
-#: inc/template-tags.php:701
-#: inc/template-tags.php:715
+#: functions.php:92
+#: inc/template-tags.php:742
+#: inc/template-tags.php:756
 msgid "Social Links Menu"
 msgstr ""
 
-#: functions.php:144
+#: functions.php:147
 #: inc/customizer.php:696
 #: inc/customizer.php:841
-#: inc/customizer.php:1006
+#: inc/customizer.php:1021
 #: js/dist/extend-featured-image-editor.js:1
 msgid "Small"
 msgstr ""
 
-#: functions.php:145
+#: functions.php:148
 msgid "S"
 msgstr ""
 
-#: functions.php:150
+#: functions.php:153
 msgid "Normal"
 msgstr ""
 
-#: functions.php:151
+#: functions.php:154
 msgid "M"
 msgstr ""
 
-#: functions.php:156
+#: functions.php:159
 #: inc/customizer.php:698
 #: inc/customizer.php:840
-#: inc/customizer.php:1005
+#: inc/customizer.php:1020
 #: js/dist/extend-featured-image-editor.js:1
 msgid "Large"
 msgstr ""
 
-#: functions.php:157
+#: functions.php:160
 msgid "L"
 msgstr ""
 
-#: functions.php:162
+#: functions.php:165
 msgid "Huge"
 msgstr ""
 
-#: functions.php:163
+#: functions.php:166
 msgid "XL"
 msgstr ""
 
-#: functions.php:186
+#: functions.php:189
 msgid "Primary"
 msgstr ""
 
-#: functions.php:191
+#: functions.php:194
 msgid "Primary Variation"
 msgstr ""
 
-#: functions.php:196
+#: functions.php:199
 msgid "Secondary"
 msgstr ""
 
-#: functions.php:201
+#: functions.php:204
 msgid "Secondary Variation"
 msgstr ""
 
-#: functions.php:206
+#: functions.php:209
 msgid "Dark Gray"
 msgstr ""
 
-#: functions.php:211
+#: functions.php:214
 msgid "Medium Gray"
 msgstr ""
 
-#: functions.php:216
+#: functions.php:219
 msgid "Light Gray"
 msgstr ""
 
-#: functions.php:221
+#: functions.php:224
 msgid "White"
 msgstr ""
 
-#: functions.php:232
+#: functions.php:235
 msgid "Primary to primary variation"
 msgstr ""
 
-#: functions.php:237
+#: functions.php:240
 msgid "Secondary to secondary variation"
 msgstr ""
 
-#: functions.php:242
+#: functions.php:245
 msgid "Black to medium gray"
 msgstr ""
 
-#: functions.php:247
+#: functions.php:250
 msgid "Dark gray to medium gray"
 msgstr ""
 
-#: functions.php:252
+#: functions.php:255
 msgid "Medium gray to light gray"
 msgstr ""
 
-#: functions.php:257
+#: functions.php:260
 msgid "Light gray to white"
 msgstr ""
 
-#: functions.php:296
+#: functions.php:299
 msgid "Sidebar"
 msgstr ""
 
-#: functions.php:298
+#: functions.php:301
 msgid "Add widgets here to appear in your sidebar."
 msgstr ""
 
-#: functions.php:308
+#: functions.php:311
 #: inc/customizer.php:135
 msgid "Slide-out Sidebar"
 msgstr ""
 
-#: functions.php:310
+#: functions.php:313
 msgid "Add widgets here to appear in an off-screen sidebar when it is enabled under the Customizer Header Settings."
 msgstr ""
 
-#: functions.php:320
+#: functions.php:323
 msgid "Above Header"
 msgstr ""
 
-#: functions.php:322
+#: functions.php:325
 msgid "Add widgets here to appear above the site header."
 msgstr ""
 
-#: functions.php:332
+#: functions.php:335
 msgid "Below Header"
 msgstr ""
 
-#: functions.php:334
+#: functions.php:337
 msgid "Add widgets here to appear below the site header."
 msgstr ""
 
-#: functions.php:344
+#: functions.php:347
 msgid "Above Footer"
 msgstr ""
 
-#: functions.php:346
+#: functions.php:349
 msgid "Add widgets here to appear above the site footer."
 msgstr ""
 
-#: functions.php:356
+#: functions.php:359
 #: template-parts/footer/footer-widgets.php:10
 msgid "Footer"
 msgstr ""
 
-#: functions.php:358
+#: functions.php:361
 msgid "Add widgets here to appear in your footer."
 msgstr ""
 
-#: functions.php:368
+#: functions.php:371
 msgid "Above Copyright"
 msgstr ""
 
-#: functions.php:370
+#: functions.php:373
 msgid "Add widgets here to appear below the footer, above the copyright information."
 msgstr ""
 
-#: functions.php:380
+#: functions.php:383
 msgid "Article above content"
 msgstr ""
 
-#: functions.php:382
+#: functions.php:385
 msgid "Add widgets here to appear above article content."
 msgstr ""
 
-#: functions.php:392
+#: functions.php:395
 msgid "Article below content"
 msgstr ""
 
-#: functions.php:394
+#: functions.php:397
 msgid "Add widgets here to appear below article content."
 msgstr ""
 
-#: functions.php:469
+#: functions.php:472
 #: template-parts/header/header-search.php:11
 #: template-parts/header/header-search.php:12
 msgid "Open Search"
 msgstr ""
 
-#: functions.php:470
+#: functions.php:473
 #: template-parts/header/header-search.php:11
 msgid "Close Search"
 msgstr ""
 
-#: functions.php:471
+#: functions.php:474
 msgid "Expand Comments"
 msgstr ""
 
-#: functions.php:472
-#: inc/customizer.php:1205
+#: functions.php:475
+#: inc/customizer.php:1257
 msgid "Collapse Comments"
 msgstr ""
 
-#: functions.php:473
+#: functions.php:476
 msgid "Show details"
 msgstr ""
 
-#: functions.php:474
+#: functions.php:477
 msgid "Hide details"
 msgstr ""
 
-#: functions.php:475
-#: inc/template-functions.php:471
+#: functions.php:478
+#: inc/template-functions.php:477
 msgid "Open dropdown menu"
 msgstr ""
 
-#: functions.php:476
-#: inc/template-functions.php:472
+#: functions.php:479
+#: inc/template-functions.php:478
 msgid "Close dropdown menu"
 msgstr ""
 
-#: functions.php:900
+#: functions.php:922
 msgid "Overview:"
 msgstr ""
 
@@ -408,6 +408,7 @@ msgstr ""
 #: inc/back-compat.php:38
 #: inc/back-compat.php:52
 #: inc/back-compat.php:72
+#, php-format
 msgid "Newspack Theme requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again."
 msgstr ""
 
@@ -461,6 +462,7 @@ msgstr ""
 
 #. translators: %s: link to Slide Out Sidebar widget panel in Customizer.
 #: inc/customizer.php:155
+#, php-format
 msgid "Show a Slide-out sidebar in the header, which you can populate by adding widgets %1$s."
 msgstr ""
 
@@ -523,7 +525,7 @@ msgid "Show an essential call-to-action button in the mobile header, that is alw
 msgstr ""
 
 #: inc/customizer.php:281
-#: inc/template-tags.php:539
+#: inc/template-tags.php:580
 msgid "Donate"
 msgstr ""
 
@@ -716,7 +718,7 @@ msgid "Post Settings"
 msgstr ""
 
 #: inc/customizer.php:837
-#: inc/customizer.php:1002
+#: inc/customizer.php:1017
 msgid "Featured Image Default Position"
 msgstr ""
 
@@ -725,25 +727,25 @@ msgid "Affects all posts where the Featured Image Position is set to 'Default'."
 msgstr ""
 
 #: inc/customizer.php:842
-#: inc/customizer.php:1007
+#: inc/customizer.php:1022
 #: js/dist/extend-featured-image-editor.js:1
 msgid "Behind article title"
 msgstr ""
 
 #: inc/customizer.php:843
-#: inc/customizer.php:1008
+#: inc/customizer.php:1023
 #: js/dist/extend-featured-image-editor.js:1
 msgid "Beside article title"
 msgstr ""
 
 #: inc/customizer.php:844
-#: inc/customizer.php:1009
+#: inc/customizer.php:1024
 #: js/dist/extend-featured-image-editor.js:1
 msgid "Above article title"
 msgstr ""
 
 #: inc/customizer.php:845
-#: inc/customizer.php:1010
+#: inc/customizer.php:1025
 #: js/dist/extend-featured-image-editor.js:1
 msgid "Hidden"
 msgstr ""
@@ -757,212 +759,264 @@ msgid "This option changes the selected template used for newly created posts go
 msgstr ""
 
 #: inc/customizer.php:866
-#: inc/customizer.php:1031
+#: inc/customizer.php:1046
 msgid "With Sidebar"
 msgstr ""
 
 #: inc/customizer.php:867
-#: inc/customizer.php:1032
+#: inc/customizer.php:1047
 msgid "One Column"
 msgstr ""
 
 #: inc/customizer.php:868
-#: inc/customizer.php:1033
+#: inc/customizer.php:1048
 msgid "One Column Wide"
 msgstr ""
 
-#: inc/customizer.php:886
+#: inc/customizer.php:885
 msgid "Use \"time ago\" date format"
 msgstr ""
 
-#: inc/customizer.php:903
+#: inc/customizer.php:902
 msgid "Cut off for \"time ago\" date in days."
 msgstr ""
 
-#: inc/customizer.php:920
+#: inc/customizer.php:918
 msgid "Show \"last updated\" date on single posts"
 msgstr ""
 
-#: inc/customizer.php:921
+#: inc/customizer.php:919
 msgid "When paired with the \"time ago\" date format, the cut off for that format will automatically be switched to one day."
 msgstr ""
 
-#: inc/customizer.php:939
+#: inc/customizer.php:935
+msgid "Updated date threshold"
+msgstr ""
+
+#: inc/customizer.php:936
+msgid "The number of hours after publishing a post before updates cause the \"last updated\" date to appear."
+msgstr ""
+
+#: inc/customizer.php:954
 msgid "Use Yoast's primary category functionality"
 msgstr ""
 
-#: inc/customizer.php:957
+#: inc/customizer.php:972
 msgid "Display previous and next links at the bottom of each post."
 msgstr ""
 
-#: inc/customizer.php:974
+#: inc/customizer.php:989
 msgid "Display the custom excerpt at the top of single posts instead of the article subtitle."
 msgstr ""
 
-#: inc/customizer.php:985
+#: inc/customizer.php:1000
 msgid "Page Settings"
 msgstr ""
 
-#: inc/customizer.php:1003
+#: inc/customizer.php:1018
 msgid "Affects all pages where the Featured Image Position is set to 'Default'."
 msgstr ""
 
-#: inc/customizer.php:1028
+#: inc/customizer.php:1043
 msgid "Default Page Template"
 msgstr ""
 
-#: inc/customizer.php:1029
+#: inc/customizer.php:1044
 msgid "This option changes the selected template used for newly created pages going forward. The template can still be changed on a per-page basis."
 msgstr ""
 
-#: inc/customizer.php:1045
+#: inc/customizer.php:1060
 msgid "Archive Settings"
 msgstr ""
 
-#: inc/customizer.php:1062
+#: inc/customizer.php:1077
 msgid "Show excerpts for all archives"
 msgstr ""
 
-#: inc/customizer.php:1079
+#: inc/customizer.php:1094
+msgid "Show subtitles for all archives"
+msgstr ""
+
+#: inc/customizer.php:1111
 msgid "Crop archive images to a 4:3 aspect ratio (changes require regenerating thumbnails for existing featured images)"
 msgstr ""
 
-#: inc/customizer.php:1096
+#: inc/customizer.php:1128
 msgid "Show image captions in archives and WordPress’s default search results"
 msgstr ""
 
-#: inc/customizer.php:1113
+#: inc/customizer.php:1145
 msgid "Show image credits in archives and WordPress’s default search results"
 msgstr ""
 
-#: inc/customizer.php:1131
+#: inc/customizer.php:1163
+msgid "Use a large, featured display for the latest post in the archives"
+msgstr ""
+
+#: inc/customizer.php:1180
 msgid "Archive Layout"
 msgstr ""
 
-#: inc/customizer.php:1133
+#: inc/customizer.php:1182
 msgid "With sidebar"
 msgstr ""
 
 #. Template Name of the theme
-#: inc/customizer.php:1134
+#: inc/customizer.php:1183
 msgid "One column"
 msgstr ""
 
 #. Template Name of the theme
-#: inc/customizer.php:1135
+#: inc/customizer.php:1184
 msgid "One column wide"
 msgstr ""
 
-#: inc/customizer.php:1155
-msgid "Use a large, featured display for the latest post in the archives"
-msgstr ""
-
-#: inc/customizer.php:1173
+#: inc/customizer.php:1203
 msgid "Archive Title Format"
 msgstr ""
 
-#: inc/customizer.php:1174
+#: inc/customizer.php:1204
 msgid "Change the format of the title used on archive pages."
 msgstr ""
 
-#: inc/customizer.php:1176
+#: inc/customizer.php:1206
 msgid "Default (eg. \"Category: Featured\", \"Author: Jane Doe\")"
 msgstr ""
 
-#: inc/customizer.php:1177
+#: inc/customizer.php:1207
 msgid "Only archive name (eg. \"Featured\", \"Jane Doe\")"
 msgstr ""
 
-#: inc/customizer.php:1189
-msgid "Comments Settings"
+#: inc/customizer.php:1225
+msgid "List or Grid Layout"
 msgstr ""
 
-#: inc/customizer.php:1206
-msgid "When using WordPress's default comments, checking this option will collapse the comments section when there is more than one comment, and display a button to expand."
+#: inc/customizer.php:1226
+msgid "When using grid, set the number of posts per page to a number divisible by 12 under Settings > Reading and disable the \"Use a large, featured display for the latest post in the archives\" above to get a full bottom row of posts."
 msgstr ""
 
-#: inc/customizer.php:1223
-msgid "Display comment policy"
+#: inc/customizer.php:1228
+msgid "List"
 msgstr ""
 
-#: inc/customizer.php:1224
-msgid "Allows you to add an optional comment policy above the comment form when using WordPress's default comments."
+#: inc/customizer.php:1229
+msgid "Grid"
 msgstr ""
 
 #: inc/customizer.php:1241
+msgid "Comments Settings"
+msgstr ""
+
+#: inc/customizer.php:1258
+msgid "When using WordPress's default comments, checking this option will collapse the comments section when there is more than one comment, and display a button to expand."
+msgstr ""
+
+#: inc/customizer.php:1275
+msgid "Display comment policy"
+msgstr ""
+
+#: inc/customizer.php:1276
+msgid "Allows you to add an optional comment policy above the comment form when using WordPress's default comments."
+msgstr ""
+
+#: inc/customizer.php:1293
 msgid "Comment policy text"
 msgstr ""
 
-#: inc/customizer.php:1252
+#: inc/customizer.php:1304
 msgid "Footer Settings"
 msgstr ""
 
-#: inc/customizer.php:1268
+#: inc/customizer.php:1320
 msgid "Show footer branding"
 msgstr ""
 
-#: inc/customizer.php:1269
+#: inc/customizer.php:1321
 msgid "Display the site logo in the footer when the footer widget area is populated."
 msgstr ""
 
-#: inc/customizer.php:1286
+#: inc/customizer.php:1338
 msgid "Footer Widget Layout"
 msgstr ""
 
-#: inc/customizer.php:1287
+#: inc/customizer.php:1339
 msgid "Stack the footer widgets, or have them automatically divide into even columns."
 msgstr ""
 
-#: inc/customizer.php:1289
+#: inc/customizer.php:1341
 msgid "Columns"
 msgstr ""
 
-#: inc/customizer.php:1290
+#: inc/customizer.php:1342
 msgid "Stacked"
 msgstr ""
 
-#: inc/customizer.php:1308
+#: inc/customizer.php:1360
 msgid "Copyright Information"
 msgstr ""
 
-#: inc/customizer.php:1309
+#: inc/customizer.php:1361
 msgid "Add custom text to be displayed next to a copyright symbol and current year in the footer. By default, it will display your site title."
 msgstr ""
 
-#: inc/customizer.php:1328
+#: inc/customizer.php:1380
 msgid "Typography"
 msgstr ""
 
-#: inc/customizer.php:1375
+#: inc/customizer.php:1427
 msgid "Font Provider Import Code or URL"
 msgstr ""
 
-#: inc/customizer.php:1385
+#: inc/customizer.php:1437
 msgid "Secondary Font Provider Import Code or URL"
 msgstr ""
 
-#: inc/customizer.php:1394
+#: inc/customizer.php:1446
 msgid "Header Font"
 msgstr ""
 
-#: inc/customizer.php:1410
+#: inc/customizer.php:1462
 msgid "Header Font Fallback Stack"
 msgstr ""
 
-#: inc/customizer.php:1420
+#: inc/customizer.php:1472
 msgid "Body Font"
 msgstr ""
 
-#: inc/customizer.php:1429
+#: inc/customizer.php:1481
 msgid "Body Font Fallback Stack"
 msgstr ""
 
-#: inc/customizer.php:1448
+#: inc/customizer.php:1500
 msgid "Use all-caps for accent text."
 msgstr ""
 
 #: inc/logo-resizer.php:28
 msgid "Logo Size"
+msgstr ""
+
+#: inc/newspack-multibranded-site-plugin.php:17
+msgid "Primary Color"
+msgstr ""
+
+#: inc/newspack-multibranded-site-plugin.php:22
+msgid "Secondary Color"
+msgstr ""
+
+#: inc/newspack-multibranded-site-plugin.php:27
+msgid "Background color to the ads"
+msgstr ""
+
+#: inc/newspack-multibranded-site-plugin.php:32
+msgid "Header background (Requires the Solid background option to be enabled)"
+msgstr ""
+
+#: inc/newspack-multibranded-site-plugin.php:37
+msgid "Background color to the primary menu (Requires the Solid background option to be enabled)"
+msgstr ""
+
+#: inc/newspack-multibranded-site-plugin.php:42
+msgid "Footer background color"
 msgstr ""
 
 #: inc/newspack-sponsors.php:28
@@ -982,18 +1036,19 @@ msgstr ""
 
 #. translators: separates last two names; needs a space on either side.
 #: inc/newspack-sponsors.php:204
-#: inc/template-tags.php:113
+#: inc/template-tags.php:119
 msgid " and "
 msgstr ""
 
 #. translators: separates all but the last two names; needs a space at the end.
 #: inc/newspack-sponsors.php:207
-#: inc/template-tags.php:116
+#: inc/template-tags.php:122
 msgid ", "
 msgstr ""
 
 #. translators: %s is the post's sponsor's name.
 #: inc/newspack-sponsors.php:381
+#, php-format
 msgid "Learn more about %s"
 msgstr ""
 
@@ -1009,55 +1064,57 @@ msgstr ""
 msgid "Changes the background of the sponsored content flag that appears on posts and blocks. It should stand out boldly against your site's color scheme."
 msgstr ""
 
-#: inc/template-functions.php:322
+#: inc/template-functions.php:328
 msgid "Category: "
 msgstr ""
 
-#: inc/template-functions.php:324
+#: inc/template-functions.php:330
 msgid "Tag: "
 msgstr ""
 
-#: inc/template-functions.php:326
+#: inc/template-functions.php:332
 msgid "Author Archives: "
 msgstr ""
 
-#: inc/template-functions.php:329
+#: inc/template-functions.php:335
 msgid "Yearly Archives: "
 msgstr ""
 
-#: inc/template-functions.php:329
+#: inc/template-functions.php:335
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
-#: inc/template-functions.php:333
+#: inc/template-functions.php:339
 msgid "Monthly Archives: "
 msgstr ""
 
-#: inc/template-functions.php:333
+#: inc/template-functions.php:339
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
-#: inc/template-functions.php:337
+#: inc/template-functions.php:343
 msgid "Daily Archives: "
 msgstr ""
 
-#: inc/template-functions.php:340
+#: inc/template-functions.php:346
 msgid "Post Type Archives: "
 msgstr ""
 
 #. translators: %s: Taxonomy singular name
-#: inc/template-functions.php:346
+#: inc/template-functions.php:352
+#, php-format
 msgid "%s Archives:"
 msgstr ""
 
-#: inc/template-functions.php:348
+#: inc/template-functions.php:354
 msgid "Archives:"
 msgstr ""
 
 #. translators: %s: Time ago date format
-#: inc/template-functions.php:662
+#: inc/template-functions.php:734
+#, php-format
 msgid "%s ago"
 msgstr ""
 
@@ -1065,45 +1122,47 @@ msgstr ""
 msgid "Updated"
 msgstr ""
 
-#: inc/template-tags.php:106
-#: inc/template-tags.php:147
+#: inc/template-tags.php:112
+#: inc/template-tags.php:158
 msgid "by"
 msgstr ""
 
 #. translators: %s: Name of current post. Only visible to screen readers.
-#: inc/template-tags.php:232
+#: inc/template-tags.php:271
+#, php-format
 msgid "Leave a comment<span class=\"screen-reader-text\"> on %s</span>"
 msgstr ""
 
 #. translators: used between list items; followed by a space.
-#: inc/template-tags.php:261
-#: inc/template-tags.php:304
+#: inc/template-tags.php:300
+#: inc/template-tags.php:343
 msgid ","
 msgstr ""
 
-#: inc/template-tags.php:268
+#: inc/template-tags.php:307
 msgid "Posted in"
 msgstr ""
 
-#: inc/template-tags.php:309
+#: inc/template-tags.php:348
 msgid "Tagged:"
 msgstr ""
 
 #. translators: %s: Name of current post; only visible to screen readers.
-#: inc/template-tags.php:320
+#: inc/template-tags.php:359
 #: template-parts/content/content-page.php:42
+#, php-format
 msgid "Edit <span class=\"screen-reader-text\">%s</span>"
 msgstr ""
 
-#: inc/template-tags.php:521
+#: inc/template-tags.php:562
 msgid "Newer posts"
 msgstr ""
 
-#: inc/template-tags.php:525
+#: inc/template-tags.php:566
 msgid "Older posts"
 msgstr ""
 
-#: inc/template-tags.php:581
+#: inc/template-tags.php:622
 msgid "Top Menu"
 msgstr ""
 
@@ -1117,6 +1176,7 @@ msgstr ""
 
 #. translators: %s - site name
 #: inc/trust-indicators.php:57
+#, php-format
 msgid "Why you can trust %s"
 msgstr ""
 
@@ -1142,6 +1202,10 @@ msgstr ""
 
 #: inc/woocommerce.php:85
 msgid "Create an account"
+msgstr ""
+
+#: inc/yoast-bluesky-contact-method.php:25
+msgid "Bluesky profile URL"
 msgstr ""
 
 #. Template Name of the theme
@@ -1177,6 +1241,7 @@ msgstr ""
 
 #. translators: 1: link to WP admin new post page.
 #: template-parts/content/content-none.php:24
+#, php-format
 msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
 msgstr ""
 
@@ -1191,6 +1256,7 @@ msgstr ""
 #. translators: %s: Name of current post. Only visible to screen readers
 #: template-parts/content/content-single.php:49
 #: template-parts/content/content.php:25
+#, php-format
 msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
 msgstr ""
 
@@ -1203,15 +1269,9 @@ msgstr ""
 #: template-parts/post/author-bio.php:96
 #: template-parts/post/author-bio.php:155
 #: template-parts/post/author-bio.php:164
+#, php-format
 msgid "More by %s"
 msgstr ""
-
-#. translators: %1(X comments)$s
-#: template-parts/post/discussion-meta.php:14
-msgid "%d Comment"
-msgid_plural "%d Comments"
-msgstr[0] ""
-msgstr[1] ""
 
 #: template-parts/post/discussion-meta.php:21
 msgid "No comments"
@@ -1272,8 +1332,4 @@ msgstr ""
 
 #: js/dist/post-summary.js:1
 msgid "Article Summary"
-msgstr ""
-
-#: js/dist/post-summary.js:1
-msgid "Write a summary that will be appended to the top of the article content."
 msgstr ""

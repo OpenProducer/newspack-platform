@@ -11,8 +11,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Hide updated date
  */
-const PostStatusExtensions = ( { meta, postType, updateMetaValue } ) => {
-	if ( ! meta ) {
+const PostStatusExtensions = ({ meta, postType, updateMetaValue }) => {
+	if (!meta) {
 		return null;
 	}
 	const {
@@ -27,67 +27,85 @@ const PostStatusExtensions = ( { meta, postType, updateMetaValue } ) => {
 		hide_title = [],
 		show_share_buttons = [],
 	} = window.newspack_post_meta_post_types;
-	const hideDate = 0 <= hide_date.indexOf( postType );
-	const showDate = 0 <= show_date.indexOf( postType );
-	const hideTitle = 0 <= hide_title.indexOf( postType );
-	const showShareButtons = 0 <= show_share_buttons.indexOf( postType );
+	const hideDate = 0 <= hide_date.indexOf(postType);
+	const showDate = 0 <= show_date.indexOf(postType);
+	const hideTitle = 0 <= hide_title.indexOf(postType);
+	const showShareButtons = 0 <= show_share_buttons.indexOf(postType);
 
-	if ( ! hideDate && ! showDate && ! hideTitle && ! showShareButtons ) {
+	if (!hideDate && !showDate && !hideTitle && !showShareButtons) {
 		return null;
 	}
 
 	return (
 		<PluginPostStatusInfo className="newspack__post-meta-toggles">
-			{ hideDate && ( 0 <= hide_date.indexOf( postType ) ) && (
+			{hideDate && (
 				<div>
-					<label htmlFor="hide_updated_date">{ __( 'Hide last updated date', 'newspack' ) }</label>
+					<label htmlFor="hide_updated_date">
+						{__('Hide last updated date', 'newspack-theme')}
+					</label>
 					<FormToggle
-						checked={ newspack_hide_updated_date }
-						onChange={ () =>
-							updateMetaValue( 'newspack_hide_updated_date', ! newspack_hide_updated_date )
+						checked={newspack_hide_updated_date}
+						onChange={() =>
+							updateMetaValue(
+								'newspack_hide_updated_date',
+								!newspack_hide_updated_date
+							)
 						}
 						id="hide_updated_date"
 					/>
 				</div>
-			) }
-			{ showDate && ( 0 <= show_date.indexOf( postType ) ) && (
+			)}
+			{showDate && (
 				<div>
-					<label htmlFor="show_updated_date">{ __( 'Show last updated date', 'newspack' ) }</label>
+					<label htmlFor="show_updated_date">
+						{__('Show last updated date', 'newspack-theme')}
+					</label>
 					<FormToggle
-						checked={ newspack_show_updated_date }
-						onChange={ () =>
-							updateMetaValue( 'newspack_show_updated_date', ! newspack_show_updated_date )
+						checked={newspack_show_updated_date}
+						onChange={() =>
+							updateMetaValue(
+								'newspack_show_updated_date',
+								!newspack_show_updated_date
+							)
 						}
 						id="show_updated_date"
 					/>
 				</div>
-			) }
-			{ hideTitle && 'page' === postType && (
+			)}
+			{hideTitle && 'page' === postType && (
 				<div>
-					<label htmlFor="hide_page_title">{ __( 'Hide page title', 'newspack' ) }</label>
-					<FormToggle
-						checked={ newspack_hide_page_title }
-						onChange={ () =>
-							updateMetaValue( 'newspack_hide_page_title', ! newspack_hide_page_title )
-						}
-						id="hide_page_title"
-					/>
-				</div>
-			) }
-			{ showShareButtons && 'page' === postType && (
-				<div>
-					<label htmlFor="newspack_show_share_buttons">
-						{ __( 'Show Jetpack share buttons', 'newspack' ) }
+					<label htmlFor="hide_page_title">
+						{__('Hide page title', 'newspack-theme')}
 					</label>
 					<FormToggle
-						checked={ newspack_show_share_buttons }
-						onChange={ () =>
-							updateMetaValue( 'newspack_show_share_buttons', ! newspack_show_share_buttons )
+						checked={newspack_hide_page_title}
+						onChange={() =>
+							updateMetaValue(
+								'newspack_hide_page_title',
+								!newspack_hide_page_title
+							)
 						}
 						id="hide_page_title"
 					/>
 				</div>
-			) }
+			)}
+			{showShareButtons && 'page' === postType && (
+				<div>
+					<label htmlFor="newspack_show_share_buttons">
+						{__('Show Jetpack share buttons', 'newspack-theme')}
+					</label>
+					<FormToggle
+						checked={newspack_show_share_buttons}
+						onChange={() =>
+							updateMetaValue(
+								'newspack_show_share_buttons',
+								!newspack_show_share_buttons
+							)
+						}
+						id="hide_page_title"
+					/>
+				</div>
+			)}
 		</PluginPostStatusInfo>
 	);
 };
@@ -96,26 +114,27 @@ const PostStatusExtensions = ( { meta, postType, updateMetaValue } ) => {
  * Map state to props
  */
 const mapStateToProps = select => {
-	const { getCurrentPostType, getEditedPostAttribute } = select( 'core/editor' );
+	const { getCurrentPostType, getEditedPostAttribute } =
+		select('core/editor');
 	return {
-		meta: getEditedPostAttribute( 'meta' ),
+		meta: getEditedPostAttribute('meta'),
 		postType: getCurrentPostType(),
 	};
 };
 
 const mapDispatchToProps = dispatch => {
-	const { editPost } = dispatch( 'core/editor' );
+	const { editPost } = dispatch('core/editor');
 	return {
-		updateMetaValue: ( key, value ) => editPost( { meta: { [ key ]: value } } ),
+		updateMetaValue: (key, value) => editPost({ meta: { [key]: value } }),
 	};
 };
 
 /**
  * Register plugins
  */
-const postStatusSidebar = compose( [
-	withSelect( mapStateToProps ),
-	withDispatch( mapDispatchToProps ),
-] )( PostStatusExtensions );
+const postStatusSidebar = compose([
+	withSelect(mapStateToProps),
+	withDispatch(mapDispatchToProps),
+])(PostStatusExtensions);
 
-registerPlugin( 'post-status-sidebar', { render: postStatusSidebar } );
+registerPlugin('post-status-sidebar', { render: postStatusSidebar });

@@ -54,7 +54,7 @@ function newspack_trust_indicators_output_why_trust_link() {
 	$site_name = get_bloginfo( 'name' );
 
 	/* translators: %s - site name */
-	$message = sprintf( __( 'Why you can trust %s', 'newspack' ), $site_name );
+	$message = sprintf( __( 'Why you can trust %s', 'newspack-theme' ), $site_name );
 	?>
 
 	<a href="<?php echo esc_url( $publishing_principles_url ); ?>" class="trust-label">
