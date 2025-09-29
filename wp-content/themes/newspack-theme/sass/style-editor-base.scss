@@ -135,7 +135,7 @@ figcaption,
 	font-family: var(--newspack-theme-font-heading);
 	font-size: var(--newspack-theme-font-size-xxs);
 	line-height: var(--newspack-theme-font-line-height-body);
-	margin: 0 auto #{0.5 * structure.$size__spacing-unit};
+	margin: 0 auto #{0.5 * structure.$size__spacing-unit} !important;
 	max-width: 810px;
 	padding-left: 0;
 	padding-right: 0;

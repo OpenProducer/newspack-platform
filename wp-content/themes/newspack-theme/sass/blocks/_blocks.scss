@@ -703,6 +703,10 @@ p.has-background {
 //! Button
 .wp-block-buttons {
 	--wp--style--block-gap: 0.5rem;
+}
+
+.wp-block-buttons,
+.wp-block-button {
 	.wp-block-button__link {
 		color: var(--newspack-theme-color-against-secondary);
 	}
@@ -986,6 +990,14 @@ p.has-background {
 	figcaption a,
 	figcaption a:hover {
 		color: #fff;
+	}
+
+	&.alignwide,
+	&.alignfull {
+		figcaption {
+			margin-left: auto;
+			margin-right: auto;
+		}
 	}
 }
 

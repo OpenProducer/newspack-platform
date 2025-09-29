@@ -51,8 +51,8 @@ if ( '' !== get_theme_mod( 'newspack_footer_logo', '' ) && 0 !== get_theme_mod( 
 					<span class="copyright">&copy; <?php echo esc_html( date( 'Y' ) ); ?> <?php echo esc_html( $copyright_info ); ?></span>
 				<?php endif; ?>
 
-				<a target="_blank" href="<?php echo esc_url( __( 'https://newspack.com/', 'newspack' ) ); ?>" class="imprint">
-					<?php echo esc_html__( 'Powered by Newspack', 'newspack' ); ?>
+				<a target="_blank" href="<?php echo esc_url( __( 'https://newspack.com/', 'newspack-theme' ) ); ?>" class="imprint">
+					<?php echo esc_html__( 'Powered by Newspack', 'newspack-theme' ); ?>
 				</a>
 
 				<?php

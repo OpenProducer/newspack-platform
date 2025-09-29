@@ -9,13 +9,13 @@ if ( newspack_is_amp() ) : ?>
 	<amp-sidebar id="mobile-sidebar" layout="nodisplay" side="right" class="mobile-sidebar">
 		<button class="mobile-menu-toggle" on='tap:mobile-sidebar.toggle'>
 			<?php echo wp_kses( newspack_get_icon_svg( 'close', 20 ), newspack_sanitize_svgs() ); ?>
-			<?php esc_html_e( 'Close', 'newspack' ); ?>
+			<?php esc_html_e( 'Close', 'newspack-theme' ); ?>
 		</button>
 <?php else : ?>
 	<aside id="mobile-sidebar-fallback" class="mobile-sidebar">
 		<button class="mobile-menu-toggle">
 			<?php echo wp_kses( newspack_get_icon_svg( 'close', 20 ), newspack_sanitize_svgs() ); ?>
-			<?php esc_html_e( 'Close', 'newspack' ); ?>
+			<?php esc_html_e( 'Close', 'newspack-theme' ); ?>
 		</button>
 <?php endif; ?>
 

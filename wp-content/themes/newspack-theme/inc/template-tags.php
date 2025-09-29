@@ -15,7 +15,7 @@ if ( ! function_exists( 'newspack_posted_on' ) ) :
 		}
 
 		$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
-		if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
+		if ( get_the_time( 'U' ) < get_the_modified_time( 'U' ) ) {
 			$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time>%3$s<time class="updated" datetime="%4$s">%5$s</time>';
 		}
 
@@ -26,7 +26,7 @@ if ( ! function_exists( 'newspack_posted_on' ) ) :
 				$time_string,
 				esc_attr( get_the_date( DATE_W3C ) ),
 				esc_html( get_the_date() ),
-				'<span class="updated-label">' . esc_html__( 'Updated', 'newspack' ) . ' </span>',
+				'<span class="updated-label">' . esc_html__( 'Updated', 'newspack-theme' ) . ' </span>',
 				esc_attr( get_the_modified_date( DATE_W3C ) ),
 				esc_html( get_the_modified_date() )
 			);
@@ -109,17 +109,17 @@ if ( ! function_exists( 'newspack_posted_by' ) ) :
 			?>
 
 			<span class="byline">
-				<span><?php echo esc_html__( 'by', 'newspack' ); ?></span>
+				<span><?php echo esc_html__( 'by', 'newspack-theme' ); ?></span>
 				<?php
 				foreach ( $authors as $author ) {
 
 					$i++;
 					if ( $author_count === $i ) :
 						/* translators: separates last two names; needs a space on either side. */
-						$sep = esc_html__( ' and ', 'newspack' );
+						$sep = esc_html__( ' and ', 'newspack-theme' );
 					elseif ( $author_count > $i ) :
 						/* translators: separates all but the last two names; needs a space at the end. */
-						$sep = esc_html__( ', ', 'newspack' );
+						$sep = esc_html__( ', ', 'newspack-theme' );
 					else :
 						$sep = '';
 					endif;
@@ -146,15 +146,48 @@ if ( ! function_exists( 'newspack_posted_by' ) ) :
 			</span><!-- .byline -->
 			<?php
 		else :
+			$author = get_the_author();
+			if ( empty( $author ) ) {
+				return;
+			}
+
 			printf(
 				/* translators: 1: Author avatar. 2: post author, only visible to screen readers. 3: author link. */
 				'<span class="author-avatar">%1$s</span><span class="byline"><span>%2$s</span> <span class="author vcard"><a class="url fn n" href="%3$s">%4$s</a></span></span>',
 				get_avatar( get_the_author_meta( 'ID' ) ),
-				esc_html__( 'by', 'newspack' ),
+				esc_html__( 'by', 'newspack-theme' ),
 				esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-				esc_html( get_the_author() )
+				esc_html( $author )
 			);
 
+		endif;
+	}
+endif;
+
+if ( ! function_exists( 'newspack_post_subtitle' ) ) :
+	/**
+	 * Prints the post subtitle.
+	 */
+	function newspack_post_subtitle() {
+		$subtitle              = get_post_meta( get_the_ID(), 'newspack_post_subtitle', true );
+		$subtitle_allowed_tags = array(
+			'b'      => true,
+			'strong' => true,
+			'i'      => true,
+			'em'     => true,
+			'mark'   => true,
+			'u'      => true,
+			'small'  => true,
+			'sub'    => true,
+			'sup'    => true,
+			'a'      => array(
+				'href'   => true,
+				'target' => true,
+				'rel'    => true,
+			),
+		);
+		if ( $subtitle ) :
+			return wptexturize( wp_kses( $subtitle, $subtitle_allowed_tags ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		endif;
 	}
 endif;
@@ -235,7 +268,7 @@ if ( ! function_exists( 'newspack_comment_count' ) ) :
 			echo newspack_get_icon_svg( 'comment', 16 );
 
 			/* translators: %s: Name of current post. Only visible to screen readers. */
-			comments_popup_link( sprintf( __( 'Leave a comment<span class="screen-reader-text"> on %s</span>', 'newspack' ), get_the_title() ) );
+			comments_popup_link( sprintf( __( 'Leave a comment<span class="screen-reader-text"> on %s</span>', 'newspack-theme' ), get_the_title() ) );
 
 			echo '</span>';
 		}
@@ -264,14 +297,14 @@ if ( ! function_exists( 'newspack_categories' ) ) :
 
 		if ( ! $categories_list ) {
 			/* translators: used between list items; followed by a space. */
-			$categories_list = get_the_category_list( '<span class="sep">' . esc_html__( ',', 'newspack' ) . ' </span>' );
+			$categories_list = get_the_category_list( '<span class="sep">' . esc_html__( ',', 'newspack-theme' ) . ' </span>' );
 		}
 
 		if ( $categories_list ) {
 			printf(
 				/* translators: 1: posted in label, only visible to screen readers. 2: list of categories. */
 				'<span class="cat-links"><span class="screen-reader-text">%1$s</span>%2$s</span>',
-				esc_html__( 'Posted in', 'newspack' ),
+				esc_html__( 'Posted in', 'newspack-theme' ),
 				apply_filters( 'newspack_theme_categories', $categories_list )
 			); // WPCS: XSS OK.
 		}
@@ -288,9 +321,9 @@ if ( ! function_exists( 'newspack_previous_next' ) ) :
 		if ( true === $show_prev_next_links && is_singular( 'post' ) ) {
 			the_post_navigation(
 				array(
-					'next_text' => '<span class="meta-nav">' . __( 'Next', 'newspack' ) . '</span> ' .
+					'next_text' => '<span class="meta-nav">' . __( 'Next', 'newspack-theme' ) . '</span> ' .
 						'<span class="post-title">%title</span>',
-					'prev_text' => '<span class="meta-nav">' . __( 'Previous', 'newspack' ) . '</span> ' .
+					'prev_text' => '<span class="meta-nav">' . __( 'Previous', 'newspack-theme' ) . '</span> ' .
 						'<span class="post-title">%title</span>',
 				)
 			);
@@ -307,12 +340,12 @@ if ( ! function_exists( 'newspack_entry_footer' ) ) :
 		// Hide author, post date, category and tag text for pages.
 		if ( 'post' === get_post_type() ) {
 			/* translators: used between list items; followed by a space. */
-			$tags_list = get_the_tag_list( '', '<span class="sep">' . esc_html__( ',', 'newspack' ) . '&nbsp;</span>' );
+			$tags_list = get_the_tag_list( '', '<span class="sep">' . esc_html__( ',', 'newspack-theme' ) . '&nbsp;</span>' );
 			if ( $tags_list ) {
 				printf(
 					/* translators: 1: posted in label, only visible to screen readers. 2: list of tags. */
 					'<span class="tags-links"><span>%1$s </span>%2$s</span>',
-					esc_html__( 'Tagged:', 'newspack' ),
+					esc_html__( 'Tagged:', 'newspack-theme' ),
 					$tags_list
 				); // WPCS: XSS OK.
 			}
@@ -323,7 +356,7 @@ if ( ! function_exists( 'newspack_entry_footer' ) ) :
 			sprintf(
 				wp_kses(
 					/* translators: %s: Name of current post; only visible to screen readers. */
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'newspack' ),
+					__( 'Edit <span class="screen-reader-text">%s</span>', 'newspack-theme' ),
 					array(
 						'span' => array(
 							'class' => array(),
@@ -526,11 +559,11 @@ if ( ! function_exists( 'newspack_the_posts_navigation' ) ) :
 				'prev_text' => sprintf(
 					'%s <span class="nav-prev-text">%s</span>',
 					newspack_get_icon_svg( 'chevron_left', 22 ),
-					__( 'Newer posts', 'newspack' )
+					__( 'Newer posts', 'newspack-theme' )
 				),
 				'next_text' => sprintf(
 					'<span class="nav-next-text">%s</span> %s',
-					__( 'Older posts', 'newspack' ),
+					__( 'Older posts', 'newspack-theme' ),
 					newspack_get_icon_svg( 'chevron_right', 22 )
 				),
 			)
@@ -544,7 +577,7 @@ if ( ! function_exists( 'newspack_mobile_cta' ) ) :
 	 */
 	function newspack_mobile_cta() {
 		$cta_show   = get_theme_mod( 'show_header_cta', false );
-		$cta_text   = get_theme_mod( 'header_cta_text', esc_html__( 'Donate', 'newspack' ) );
+		$cta_text   = get_theme_mod( 'header_cta_text', esc_html__( 'Donate', 'newspack-theme' ) );
 		$cta_url    = get_theme_mod( 'header_cta_url', '' );
 		$cta_target = get_theme_mod( 'header_cta_target', false );
 
@@ -586,7 +619,7 @@ if ( ! function_exists( 'newspack_primary_menu' ) ) :
 			$toolbar_attributes = 'toolbar-target="site-navigation" toolbar="(min-width: 767px)"';
 		}
 		?>
-		<nav class="main-navigation nav1 dd-menu" aria-label="<?php esc_attr_e( 'Top Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+		<nav class="main-navigation nav1 dd-menu" aria-label="<?php esc_attr_e( 'Top Menu', 'newspack-theme' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php
 			wp_nav_menu(
 				array(
@@ -618,7 +651,7 @@ if ( ! function_exists( 'newspack_secondary_menu' ) ) :
 		}
 
 		?>
-		<nav class="secondary-menu nav2 dd-menu" aria-label="<?php esc_attr_e( 'Secondary Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+		<nav class="secondary-menu nav2 dd-menu" aria-label="<?php esc_attr_e( 'Secondary Menu', 'newspack-theme' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php
 			wp_nav_menu(
 				array(
@@ -649,7 +682,7 @@ if ( ! function_exists( 'newspack_tertiary_menu' ) ) :
 			$toolbar_attributes = 'toolbar-target="tertiary-nav-contain" toolbar="(min-width: 767px)"';
 		}
 		?>
-			<nav class="tertiary-menu nav3" aria-label="<?php esc_attr_e( 'Tertiary Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+			<nav class="tertiary-menu nav3" aria-label="<?php esc_attr_e( 'Tertiary Menu', 'newspack-theme' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php
 				wp_nav_menu(
 					array(
@@ -706,7 +739,7 @@ function newspack_social_menu_header() {
 		$toolbar_attributes = '';
 	}
 	?>
-	<nav class="social-navigation" aria-label="<?php esc_attr_e( 'Social Links Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<nav class="social-navigation" aria-label="<?php esc_attr_e( 'Social Links Menu', 'newspack-theme' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<?php newspack_social_menu_settings(); ?>
 	</nav><!-- .social-navigation -->
 	<?php
@@ -720,7 +753,7 @@ function newspack_social_menu_footer() {
 		return;
 	}
 	?>
-	<nav class="social-navigation" aria-label="<?php esc_attr_e( 'Social Links Menu', 'newspack' ); ?>">
+	<nav class="social-navigation" aria-label="<?php esc_attr_e( 'Social Links Menu', 'newspack-theme' ); ?>">
 		<?php newspack_social_menu_settings(); ?>
 	</nav><!-- .social-navigation -->
 	<?php

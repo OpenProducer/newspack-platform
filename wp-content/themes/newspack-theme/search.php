@@ -14,7 +14,7 @@ get_header();
 
 		<header class="page-header">
 			<h1 class="page-title">
-				<?php esc_html_e( 'Search results', 'newspack' ); ?>
+				<?php esc_html_e( 'Search results', 'newspack-theme' ); ?>
 			</h1>
 			<?php get_search_form(); ?>
 		</header><!-- .page-header -->
