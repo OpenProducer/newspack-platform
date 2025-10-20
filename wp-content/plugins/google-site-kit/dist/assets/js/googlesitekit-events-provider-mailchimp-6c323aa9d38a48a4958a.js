@@ -1,0 +1,1 @@
+(()=>{var t,e={};e.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),(t=e.g.mc4wp)&&t.forms.on("subscribed",()=>{e.g._googlesitekit?.gtagEvent?.("submit_lead_form",{event_category:"mailchimp"})})})();

@@ -32,9 +32,6 @@ import {
 	AlignmentControl,
 } from '@wordpress/block-editor';
 import {
-	BaseControl,
-	Button,
-	ButtonGroup,
 	PanelBody,
 	Path,
 	Placeholder,
@@ -44,6 +41,10 @@ import {
 	Toolbar,
 	ToggleControl,
 	TextControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -347,7 +348,7 @@ class Edit extends Component< HomepageArticlesProps > {
 						/>
 					</PanelBody>
 				) }
-				<PanelBody title={ __( 'Content', 'newspack-blocks' ) } className="newspack-block__panel is-content">
+				<PanelBody title={ __( 'Settings', 'newspack-blocks' ) } className="newspack-block__panel is-content">
 					<QueryControls
 						numberOfItems={ postsToShow }
 						onNumberOfItemsChange={ ( _postsToShow: number ) =>
@@ -419,50 +420,30 @@ class Edit extends Component< HomepageArticlesProps > {
 					) }
 				</PanelBody>
 				<PanelBody title={ __( 'Display', 'newspack-blocks' ) } className="newspack-block__panel">
-					<BaseControl
+					<ToggleGroupControl
 						label={ __( 'Text', 'newspack-blocks' ) }
-						id="newspack-block__content-display"
-						className="newspack-block__button-group"
+						value={ ( () => {
+							if ( showFullContent ) {
+								return 'full';
+							}
+							if ( showExcerpt ) {
+								return 'excerpt';
+							}
+							return 'none';
+						} )() }
+						onChange={ ( value: string ) => {
+							setAttributes( {
+								showExcerpt: value === 'excerpt',
+								showFullContent: value === 'full'
+							} );
+						} }
+						isBlock
+						__next40pxDefaultSize
 					>
-						<ButtonGroup>
-							<Button
-								variant={ ! showExcerpt && ! showFullContent && 'primary' }
-								aria-pressed={ ! showExcerpt && ! showFullContent }
-								onClick={ () => {
-									setAttributes( {
-										showExcerpt: false,
-										showFullContent: false
-									} )
-								} }
-							>
-								{ __( 'None', 'newspack-blocks' ) }
-							</Button>
-							<Button
-								variant={ showExcerpt && ! showFullContent && 'primary' }
-								aria-pressed={ showExcerpt && ! showFullContent }
-								onClick={ () => {
-									setAttributes( {
-										showExcerpt: ! showExcerpt,
-										showFullContent: showFullContent ? false : showFullContent
-									} )
-								} }
-							>
-								{ __( 'Excerpt', 'newspack-blocks' ) }
-							</Button>
-							<Button
-								variant={ ! showExcerpt && showFullContent && 'primary' }
-								aria-pressed={ ! showExcerpt && showFullContent }
-								onClick={ () => {
-									setAttributes( {
-										showFullContent: ! showFullContent,
-										showExcerpt: showExcerpt ? false : showExcerpt
-									} )
-								} }
-							>
-								{ __( 'Full Post', 'newspack-blocks' ) }
-							</Button>
-						</ButtonGroup>
-					</BaseControl>
+						<ToggleGroupControlOption label={ __( 'None', 'newspack-blocks' ) } value="none" />
+						<ToggleGroupControlOption label={ __( 'Excerpt', 'newspack-blocks' ) } value="excerpt" />
+						<ToggleGroupControlOption label={ __( 'Full Post', 'newspack-blocks' ) } value="full" />
+					</ToggleGroupControl>
 					{ showExcerpt && (
 						<RangeControl
 							label={ __( 'Max number of words in excerpt', 'newspack-blocks' ) }
@@ -528,28 +509,22 @@ class Edit extends Component< HomepageArticlesProps > {
 								checked={ mobileStack }
 								onChange={ () => setAttributes( { mobileStack: ! mobileStack } ) }
 							/>
-							<BaseControl
+							<ToggleGroupControl
 								label={ __( 'Size', 'newspack-blocks' ) }
-								id="newspack-block__featured-image-size"
-								className="newspack-block__button-group"
+								value={ String( imageScale ) }
+								onChange={ ( value: string ) => setAttributes( { imageScale: parseInt( value ) } ) }
+								isBlock
+								__next40pxDefaultSize
 							>
-								<ButtonGroup>
-									{ imageSizeOptions.map( option => {
-										const isCurrent = imageScale === option.value;
-										return (
-											<Button
-												variant={ isCurrent && 'primary' }
-												aria-pressed={ isCurrent }
-												aria-label={ option.label }
-												key={ option.value }
-												onClick={ () => setAttributes( { imageScale: option.value } ) }
-											>
-												{ option.shortName }
-											</Button>
-										);
-									} ) }
-								</ButtonGroup>
-							</BaseControl>
+								{ imageSizeOptions.map( option => (
+									<ToggleGroupControlOption
+										key={ option.value }
+										label={ option.shortName }
+										title={ option.label }
+										value={ String( option.value ) }
+									/>
+								) ) }
+							</ToggleGroupControl>
 						</>
 					) }
 					{ showImage && mediaPosition === 'behind' && (

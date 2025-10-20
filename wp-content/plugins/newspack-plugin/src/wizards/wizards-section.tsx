@@ -27,7 +27,7 @@ export default function WizardSection( {
 	className,
 }: {
 	title?: string;
-	description?: string;
+	description?: string | React.ReactNode;
 	children: React.ReactNode;
 	scrollToAnchor?: string | null;
 	className?: string;

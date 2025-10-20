@@ -215,6 +215,13 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			]
 		);
 
+		if ( ! $body ) {
+			return new \WP_Error(
+				'newspack_newsletters_active_campaign_api_error',
+				! empty( $response['response']['message'] ) ? $response['response']['message'] : __( 'An error occurred while communicating with ActiveCampaign.', 'newspack-newsletters' )
+			);
+		}
+
 		if ( 1 !== $body['result_code'] ) {
 			$message = ! empty( $body['result_message'] ) ? $body['result_message'] : __( 'An error occurred while communicating with ActiveCampaign.', 'newspack-newsletters' );
 			return new \WP_Error(
@@ -326,6 +333,10 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			sprintf( 'contacts/%d/contactTags', $contact_data['id'] ),
 			'GET'
 		);
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
 
 		return array_values(
 			array_map(
@@ -1252,6 +1263,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		}
 		update_post_meta( $post_id, 'ac_campaign_id', $campaign['id'] );
 		$campaign_id = $campaign['id'];
+		// See https://www.activecampaign.com/api/example.php?call=campaign_status.
 		$send_result = $this->api_v1_request(
 			'campaign_status',
 			'GET',
@@ -1259,6 +1271,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 				'query' => [
 					'id'     => $campaign_id,
 					'status' => 1, // 0 = draft, 1 = scheduled, 2 = sending, 3 = paused, 4 = stopped, 5 = completed.
+					'sdate'  => '', // Empty means send immediately.
 				],
 			]
 		);
@@ -1345,7 +1358,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			$contact['metadata'] = [];
 		}
 		$action  = 'contact_add';
-		$email   = $contact['email'];
+		$email   = trim( strtolower( $contact['email'] ) );
 		$payload = [
 			'email' => $email,
 		];
@@ -1411,17 +1424,20 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		}
 
 		$contact_data          = $this->get_contact_data( $email );
-		$existing_email        = isset( $contact['existing_contact_data']['email'] ) ? $contact['existing_contact_data']['email'] : '';
+		$existing_email        = isset( $contact['existing_contact_data']['email'] ) ? trim( strtolower( $contact['existing_contact_data']['email'] ) ) : '';
 		$existing_contact_data = $this->get_contact_data( $existing_email );
 		if ( ! is_wp_error( $contact_data ) || ! is_wp_error( $existing_contact_data ) ) {
 			$action               = 'contact_edit';
 			$payload['id']        = is_wp_error( $contact_data ) ? $existing_contact_data['id'] : $contact_data['id'];
 			$payload['overwrite'] = 0;
-			// If the email address exists, but is different from the one we're trying to upsert, delete the existing contact.
+			// For email changes, if the email address exists, but is different from the one we're trying to upsert, delete the existing contact.
 			if ( ! is_wp_error( $contact_data ) && ! is_wp_error( $existing_contact_data ) && $existing_email !== $email ) {
-				$delete_res = $this->delete_contact( $existing_email );
-				if ( is_wp_error( $delete_res ) ) {
-					Newspack_Newsletters_Logger::log( 'Error deleting existing contact during upsert: ' . $delete_res->get_error_message() );
+				$is_email_change = isset( $contact['is_email_change'] ) && $contact['is_email_change'];
+				if ( $is_email_change ) {
+					$delete_res = $this->delete_contact( $existing_email );
+					if ( is_wp_error( $delete_res ) ) {
+						Newspack_Newsletters_Logger::log( 'Error deleting existing contact during upsert: ' . $delete_res->get_error_message() );
+					}
 				}
 			}
 		}

@@ -323,6 +323,89 @@
             "install-path": "../psr/log"
         },
         {
+            "name": "scssphp/scssphp",
+            "version": "v1.13.0",
+            "version_normalized": "1.13.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scssphp/scssphp.git",
+                "reference": "63d1157457e5554edf00b0c1fabab4c1511d2520"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scssphp/scssphp/zipball/63d1157457e5554edf00b0c1fabab4c1511d2520",
+                "reference": "63d1157457e5554edf00b0c1fabab4c1511d2520",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.4",
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.3 || ^9.4",
+                "sass/sass-spec": "*",
+                "squizlabs/php_codesniffer": "~3.5",
+                "symfony/phpunit-bridge": "^5.1",
+                "thoughtbot/bourbon": "^7.0",
+                "twbs/bootstrap": "~5.0",
+                "twbs/bootstrap4": "4.6.1",
+                "zurb/foundation": "~6.7.0"
+            },
+            "suggest": {
+                "ext-iconv": "Can be used as fallback when ext-mbstring is not available",
+                "ext-mbstring": "For best performance, mbstring should be installed as it is faster than ext-iconv"
+            },
+            "time": "2024-08-17T21:02:11+00:00",
+            "bin": [
+                "bin/pscss"
+            ],
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": false,
+                    "forward-command": false
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "ScssPhp\\ScssPhp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anthon Pang",
+                    "email": "apang@softwaredevelopment.ca",
+                    "homepage": "https://github.com/robocoder"
+                },
+                {
+                    "name": "Cédric Morin",
+                    "email": "cedric@yterium.com",
+                    "homepage": "https://github.com/Cerdic"
+                }
+            ],
+            "description": "scssphp is a compiler for SCSS written in PHP.",
+            "homepage": "http://scssphp.github.io/scssphp/",
+            "keywords": [
+                "css",
+                "less",
+                "sass",
+                "scss",
+                "stylesheet"
+            ],
+            "support": {
+                "issues": "https://github.com/scssphp/scssphp/issues",
+                "source": "https://github.com/scssphp/scssphp/tree/v1.13.0"
+            },
+            "install-path": "../scssphp/scssphp"
+        },
+        {
             "name": "stellarwp/admin-notices",
             "version": "1.2.2",
             "version_normalized": "1.2.2.0",
@@ -977,6 +1060,68 @@
                 "source": "https://github.com/stellarwp/uplink/tree/v2.2.2"
             },
             "install-path": "../stellarwp/uplink"
+        },
+        {
+            "name": "trustedlogin/client",
+            "version": "v1.9.0",
+            "version_normalized": "1.9.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/trustedlogin/client.git",
+                "reference": "b913058ae57b512a7766f449ab8d55952500fe72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/trustedlogin/client/zipball/b913058ae57b512a7766f449ab8d55952500fe72",
+                "reference": "b913058ae57b512a7766f449ab8d55952500fe72",
+                "shasum": ""
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.3.0",
+                "phpcompatibility/phpcompatibility-wp": "^2.1",
+                "phpstan/extension-installer": "^1.3",
+                "phpstan/phpstan": "^1.10",
+                "szepeviktor/phpstan-wordpress": "^1.3",
+                "wp-coding-standards/wpcs": "^3.0",
+                "yoast/phpunit-polyfills": "^1.0.0"
+            },
+            "time": "2024-08-26T01:13:42+00:00",
+            "bin": [
+                "bin/build-sass"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "TEC\\Common\\TrustedLogin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "TrustedLogin",
+                    "email": "support@trustedlogin.com",
+                    "homepage": "https://www.trustedlogin.com"
+                }
+            ],
+            "description": "Easily and securely log in to your customers sites when providing support.",
+            "homepage": "https://www.trustedlogin.com",
+            "keywords": [
+                "login",
+                "security",
+                "support"
+            ],
+            "support": {
+                "issues": "https://github.com/trustedlogin/client/issues",
+                "source": "https://github.com/trustedlogin/client/tree/v1.9.0"
+            },
+            "install-path": "../trustedlogin/client"
         },
         {
             "name": "woocommerce/action-scheduler",

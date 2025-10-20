@@ -25,6 +25,10 @@ const eventKeys = [
 	'product_id',
 	'product_type',
 	'variation_id',
+	'variation_ids',
+	'is_variable',
+	'is_grouped',
+	'child_ids',
 	'price_summary',
 	'newspack_popup_id',
 	'gate_post_id',
@@ -46,6 +50,14 @@ export const sendEvent = (
 		const filteredPayload = {};
 		for ( const key of eventKeys ) {
 			if ( payload[ key ] ) {
+				// Normalize boolean values to 'yes' or 'no'.
+				if ( typeof payload[ key ] === 'boolean' ) {
+					payload[ key ] = payload[ key ] ? 'yes' : 'no';
+				} else if ( payload[ key ] === 'true' ) {
+					payload[ key ] = 'yes';
+				} else if ( payload[ key ] === 'false' ) {
+					payload[ key ] = 'no';
+				}
 				filteredPayload[ key ] = payload[ key ].toString();
 			}
 		}

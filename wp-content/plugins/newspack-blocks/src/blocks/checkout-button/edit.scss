@@ -2,13 +2,6 @@
 
 .newspack-checkout-button {
 	&__product-field {
-		&__selected {
-			.components-button {
-				display: block;
-				width: 100%;
-				text-align: left;
-			}
-		}
 		&__error {
 			color: colors.$color__error;
 			font-size: 0.9em;
@@ -22,9 +15,12 @@
 			position: relative;
 			.components-spinner {
 				position: absolute;
-				top: 2em;
+				top: 12px;
 				right: 0;
 			}
+		}
+		.components-base-control {
+			margin: 0;
 		}
 	}
 }
@@ -34,14 +30,14 @@
 
 	&.alignwide,
 	&.alignfull {
-		div {
+		.wp-block-button__link {
 			width: 100%;
 		}
 	}
-	&.aligncenter {
+	[data-align="center"] & {
 		flex-direction: column;
 
-		div {
+		.wp-block-button__link {
 			margin-left: auto;
 			margin-right: auto;
 		}

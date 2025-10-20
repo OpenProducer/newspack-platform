@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'the-events-calendar/tribe-common',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '6f80b0a7b2a025e85f94bd09f82a814da5e0a81c',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '3f576875721e4dd083b3b343aea1527c940f79e8',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -60,6 +60,15 @@
             'provided' => array(
                 0 => '1.0.0 || 2.0.0 || 3.0.0',
             ),
+        ),
+        'scssphp/scssphp' => array(
+            'pretty_version' => 'v1.13.0',
+            'version' => '1.13.0.0',
+            'reference' => '63d1157457e5554edf00b0c1fabab4c1511d2520',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../scssphp/scssphp',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'stellarwp/admin-notices' => array(
             'pretty_version' => '1.2.2',
@@ -163,11 +172,20 @@
             'dev_requirement' => false,
         ),
         'the-events-calendar/tribe-common' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '6f80b0a7b2a025e85f94bd09f82a814da5e0a81c',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '3f576875721e4dd083b3b343aea1527c940f79e8',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'trustedlogin/client' => array(
+            'pretty_version' => 'v1.9.0',
+            'version' => '1.9.0.0',
+            'reference' => 'b913058ae57b512a7766f449ab8d55952500fe72',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../trustedlogin/client',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

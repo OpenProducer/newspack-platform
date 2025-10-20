@@ -325,6 +325,7 @@ const icons = {
   post: library_post,
   page: library_page,
   wp_template: library_layout,
+  wp_registered_template: library_layout,
   wp_template_part: symbol_filled
 };
 function useDebouncedValue(value) {
@@ -431,7 +432,7 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     return {
       isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
-      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('create', {
+      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('read', {
         kind: 'postType',
         name: templateType
       })
@@ -679,6 +680,10 @@ function useSiteEditorNavigationCommands() {
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-templates',
     hook: getNavigationCommandLoaderPerTemplate('wp_template')
+  });
+  (0,external_wp_commands_namespaceObject.useCommandLoader)({
+    name: 'core/edit-site/navigate-templates',
+    hook: getNavigationCommandLoaderPerTemplate('wp_registered_template')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-template-parts',

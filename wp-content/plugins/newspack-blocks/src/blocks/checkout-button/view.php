@@ -136,9 +136,6 @@ function render_callback( $attributes ) {
 			$min_price = \WC_Name_Your_Price_Helpers::get_minimum_price( $product_id );
 		}
 
-		$is_variable  = $attributes['is_variable'];
-		$variation_id = $attributes['variation'];
-
 		// Check if the button should be output: it needs a price, or needs to be a product with variations to pick.
 		if ( $min_price && ! $price ) {
 			$price = $min_price;
@@ -148,7 +145,6 @@ function render_callback( $attributes ) {
 		}
 
 		$checkout_data = Checkout_Data::get_checkout_data( $product );
-		$checkout_data['is_variable'] = $is_variable;
 
 		$form = sprintf(
 			'<form data-checkout="%1$s">%2$s %3$s</form>',

@@ -153,6 +153,7 @@ return array(
     'Newspack\\Stripe_Connection' => $baseDir . '/includes/reader-revenue/stripe/class-stripe-connection.php',
     'Newspack\\Subscriptions_Confirmation' => $baseDir . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-confirmation.php',
     'Newspack\\Subscriptions_Meta' => $baseDir . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-meta.php',
+    'Newspack\\Subscriptions_Tiers' => $baseDir . '/includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php',
     'Newspack\\Sync_Reader_Data_CLI' => $baseDir . '/includes/reader-activation/cli/class-sync-reader-data-cli.php',
     'Newspack\\Syndication' => $baseDir . '/includes/class-syndication.php',
     'Newspack\\Teams_For_Memberships' => $baseDir . '/includes/plugins/class-teams-for-memberships.php',

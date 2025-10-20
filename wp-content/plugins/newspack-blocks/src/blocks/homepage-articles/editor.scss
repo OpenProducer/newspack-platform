@@ -197,23 +197,6 @@
 			}
 		}
 	}
-
-	&__button-group {
-		flex: 0 0 100%;
-
-		.components-base-control__label {
-			width: 100%;
-		}
-
-		.components-button-group {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-
-			button {
-				justify-content: center;
-			}
-		}
-	}
 }
 
 .components-base-control__field:empty {

@@ -33045,7 +33045,8 @@ function UnforwardedButton(props, ref) {
     'is-link': variant === 'link',
     'is-destructive': isDestructive,
     'has-text': !!icon && (hasChildren || text),
-    'has-icon': !!icon
+    'has-icon': !!icon,
+    'has-icon-right': iconPosition === 'right'
   });
   const trulyDisabled = disabled && !accessibleWhenDisabled;
   const Tag = href !== undefined && !disabled ? 'a' : 'button';
@@ -67097,7 +67098,7 @@ const inputStyleNeutral = /*#__PURE__*/emotion_react_browser_esm_css("box-shadow
 const inputStyleFocus = /*#__PURE__*/emotion_react_browser_esm_css("border-color:", COLORS.theme.accent, ";box-shadow:0 0 0 calc( ", config_values.borderWidthFocus, " - ", config_values.borderWidth, " ) ", COLORS.theme.accent, ";outline:2px solid transparent;" + ( true ? "" : 0),  true ? "" : 0);
 const StyledTextarea = /*#__PURE__*/emotion_styled_base_browser_esm("textarea",  true ? {
   target: "e1w5nnrk0"
-} : 0)("width:100%;display:block;font-family:", font('default.fontFamily'), ";line-height:20px;background:", COLORS.theme.background, ";color:", COLORS.theme.foreground, ";padding:9px 11px;", inputStyleNeutral, ";font-size:", font('mobileTextMinFontSize'), ";", breakpoint('small'), "{font-size:", font('default.fontSize'), ";}&:focus{", inputStyleFocus, ";}&::-webkit-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}.is-dark-theme &{&::-webkit-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}}" + ( true ? "" : 0));
+} : 0)("width:100%;display:block;font-family:", font('default.fontFamily'), ";line-height:20px;background:", COLORS.theme.background, ";color:", COLORS.theme.foreground, ";resize:vertical;padding:9px 11px;", inputStyleNeutral, ";font-size:", font('mobileTextMinFontSize'), ";", breakpoint('small'), "{font-size:", font('default.fontSize'), ";}&:focus{", inputStyleFocus, ";}&::-webkit-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}.is-dark-theme &{&::-webkit-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}}" + ( true ? "" : 0));
 
 ;// ./packages/components/build-module/textarea-control/index.js
 /**
@@ -82627,10 +82628,69 @@ const UnforwardedValidatedToggleGroupControl = ({
 };
 const ValidatedToggleGroupControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedToggleGroupControl);
 
+;// ./packages/components/build-module/validated-form-controls/components/form-token-field.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const UnforwardedValidatedFormTokenField = ({
+  required,
+  onValidate,
+  customValidity,
+  onChange,
+  markWhenOptional,
+  ...restProps
+}, forwardedRef) => {
+  const validityTargetRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const valueRef = (0,external_wp_element_namespaceObject.useRef)(restProps.value);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "components-validated-control__wrapper-with-error-delegate",
+    ref: forwardedRef,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ControlWithError, {
+      required: required,
+      markWhenOptional: markWhenOptional,
+      onValidate: () => {
+        return onValidate?.(valueRef.current);
+      },
+      customValidity: customValidity,
+      getValidityTarget: () => validityTargetRef.current,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FormTokenField, {
+        __next40pxDefaultSize: true,
+        __nextHasNoMarginBottom: true,
+        ...restProps,
+        onChange: (value, ...args) => {
+          valueRef.current = value;
+          onChange?.(value, ...args);
+        }
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+      className: "components-validated-control__error-delegate",
+      type: "text",
+      ref: validityTargetRef,
+      required: required,
+      value: valueRef.current && valueRef.current.length > 0 ? 'hasvalue' : '',
+      tabIndex: -1,
+      onChange: () => {},
+      onFocus: e => {
+        e.target.previousElementSibling?.querySelector('input[type="text"]')?.focus();
+      }
+    })]
+  });
+};
+const ValidatedFormTokenField = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedValidatedFormTokenField);
+
 ;// ./packages/components/build-module/private-apis.js
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -82666,7 +82726,8 @@ lock(privateApis, {
   ValidatedTextControl: ValidatedTextControl,
   ValidatedTextareaControl: ValidatedTextareaControl,
   ValidatedToggleControl: ValidatedToggleControl,
-  ValidatedToggleGroupControl: ValidatedToggleGroupControl
+  ValidatedToggleGroupControl: ValidatedToggleGroupControl,
+  ValidatedFormTokenField: ValidatedFormTokenField
 });
 
 ;// ./packages/components/build-module/index.js

@@ -50,42 +50,22 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		'a8c/posts-carousel',
 		'jetpack/address',
 		'jetpack/ai-assistant',
-		'jetpack/ai-chat',
+		'jetpack/blog-stats',
 		'jetpack/blogging-prompt',
 		'jetpack/blogroll',
 		'jetpack/blogroll-item',
 		'jetpack/business-hours',
 		'jetpack/button',
 		'jetpack/calendly',
-		'jetpack/contact-form',
 		'jetpack/contact-info',
-		'jetpack/cookie-consent',
-		'jetpack/donations',
 		'jetpack/email',
 		'jetpack/event-countdown',
 		'jetpack/eventbrite',
-		'jetpack/field-checkbox',
-		'jetpack/field-checkbox-multiple',
-		'jetpack/field-consent',
-		'jetpack/field-date',
-		'jetpack/field-email',
-		'jetpack/field-name',
-		'jetpack/field-number',
-		'jetpack/field-option-checkbox',
-		'jetpack/field-option-radio',
-		'jetpack/field-radio',
-		'jetpack/field-select',
-		'jetpack/field-telephone',
-		'jetpack/field-text',
-		'jetpack/field-textarea',
-		'jetpack/field-time',
-		'jetpack/field-url',
 		'jetpack/gif',
 		'jetpack/goodreads',
 		'jetpack/google-calendar',
 		'jetpack/image-compare',
 		'jetpack/instagram-gallery',
-		'jetpack/latex',
 		'jetpack/like',
 		'jetpack/mailchimp',
 		'jetpack/map',
@@ -94,7 +74,7 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		'jetpack/opentable',
 		'jetpack/payment-buttons',
 		'jetpack/payments-intro',
-		'jetpack/paywall',
+		'jetpack/paypal-payment-buttons',
 		'jetpack/phone',
 		'jetpack/pinterest',
 		'jetpack/podcast-player',
@@ -106,21 +86,27 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		'jetpack/sharing-button',
 		'jetpack/sharing-buttons',
 		'jetpack/simple-payments',
-		'jetpack/slideshow',
-		'jetpack/story',
 		'jetpack/subscriber-login',
 		'jetpack/subscriptions',
 		'jetpack/tiled-gallery',
 		'jetpack/timeline',
 		'jetpack/timeline-item',
-		'jetpack/tock',
+		'jetpack/top-posts',
 		'jetpack/whatsapp-button',
 		'premium-content/buttons',
 		'premium-content/container',
 		'premium-content/logged-out-view',
 		'premium-content/login-button',
 		'premium-content/subscriber-view',
-		'syntaxhighlighter/code',
+	);
+
+	/**
+	 * List of disallowed core block types.
+	 *
+	 * @var array
+	 */
+	const DISALLOWED_CORE_BLOCKS = array(
+		'core/freeform', // Classic editor - TinyMCE is unavailable in the mobile editor
 	);
 
 	/**
@@ -129,12 +115,15 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 	 * @return array List of core block types.
 	 */
 	private function get_core_block_types() {
-		return array_filter(
+		$core_blocks = array_filter(
 			array_keys( WP_Block_Type_Registry::get_instance()->get_all_registered() ),
 			function ( $block_name ) {
 				return strpos( $block_name, 'core/' ) === 0;
 			}
 		);
+
+		// Remove disallowed core blocks
+		return array_diff( $core_blocks, self::DISALLOWED_CORE_BLOCKS );
 	}
 
 	/**
@@ -270,6 +259,9 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		// Unregister disallowed plugin assets before proceeding with asset collection
 		$this->unregister_disallowed_plugin_assets();
 
+		add_filter( 'script_loader_src', array( $this, 'make_url_absolute' ), 10, 2 );
+		add_filter( 'style_loader_src', array( $this, 'make_url_absolute' ), 10, 2 );
+
 		ob_start();
 		wp_print_styles();
 		$styles = ob_get_clean();
@@ -282,6 +274,9 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		wp_print_head_scripts();
 		wp_print_footer_scripts();
 		$scripts = ob_get_clean();
+
+		remove_filter( 'script_loader_src', array( $this, 'make_url_absolute' ), 10 );
+		remove_filter( 'style_loader_src', array( $this, 'make_url_absolute' ), 10 );
 
 		$wp_styles  = $current_wp_styles;
 		$wp_scripts = $current_wp_scripts;
@@ -376,6 +371,19 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		}
 
 		return false;
+	}
+
+	/**
+	 * Convert relative URLs to absolute URLs.
+	 *
+	 * @param string $src The source URL.
+	 * @return string The absolute URL.
+	 */
+	public function make_url_absolute( $src ) {
+		if ( ! empty( $src ) && str_starts_with( $src, '/' ) && ! str_starts_with( $src, '//' ) ) {
+			return site_url( $src );
+		}
+		return $src;
 	}
 
 	/**

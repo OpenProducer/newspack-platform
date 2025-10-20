@@ -114,32 +114,40 @@ import { domReady } from './utils';
 				 * Handle order review table appearance.
 				 */
 				$( document ).on( 'updated_checkout', function () {
-					const $wrapper = $( '#after_customer_details > .order-review-wrapper' );
+					const $wrapper = $( '.order-review-wrapper' );
 					if ( ! $wrapper.length ) {
 						return;
 					}
 
-					const $el = $wrapper.clone();
+					const $table = $wrapper.find( 'table' );
 
-					// Make sure Transaction Details toggle's aria-expanded value is correct in cloned version.
-					if ( $( '#after_customer_details').hasClass( 'transaction-details-expanded' ) ) {
-						$('[id="order_review_heading"]', $el).attr( 'aria-expanded', 'true' );
-					}
-
-					// Remove existing table from inside the payment methods.
-					$( '#payment .order-review-wrapper' ).remove();
-					const $table = $el.find( 'table' );
 					// Toggle visibility according to table content.
 					if ( $table.is( '.empty' ) ) {
-						$el.addClass( 'hidden' );
+						$wrapper.addClass( 'hidden' );
 					} else {
 						// WooCommerce blocks the order review table while updating.
 						// We need to make sure the cloned table is always unblocked.
 						$table.unblock();
-						$el.removeClass( 'hidden' );
+						$wrapper.removeClass( 'hidden' );
 					}
+
+					const $details = $( '#after_customer_details' );
+					const expanded = $details.hasClass( 'transaction-details-expanded' );
+
 					// Move new order review table to the payment methods.
-					$( '.payment_methods' ).after( $el );
+					const $payment_methods = $( '.payment_methods' );
+					if ( $payment_methods.length ) {
+						const $el = $wrapper.clone();
+						// Make sure Transaction Details toggle's aria-expanded value is correct in cloned version.
+						if ( expanded ) {
+							$('[id="order_review_heading"]', $el).attr( 'aria-expanded', 'true' );
+						}
+						$( '.order-review-wrapper' ).remove();
+						$payment_methods.after( $el );
+					} else if ( ! expanded ) {
+						// If there's no payment method, make sure to expand the Transaction Details on load.
+						$wrapper.find( '#order_review_heading' ).trigger( 'click' );
+					}
 				} );
 
 				/**

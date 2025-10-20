@@ -27,9 +27,8 @@ class Perfmatters {
 	 * Scripts to delay spec.
 	 */
 	private static function scripts_to_delay() {
-		return [
+		$scripts_to_delay = [
 			// Newspack.
-			'newspack-plugin',
 			'newspack-popups',
 			'newspack-blocks',
 			'newspack-newsletters',
@@ -74,6 +73,14 @@ class Perfmatters {
 			'ai_insert_code',
 			'doubleclick.net',
 		];
+
+		// Only delay newspack-plugin if reader activation is not enabled. Because there
+		// are buttons that do things, and they should do those things on the first click.
+		if ( ! Reader_Activation::is_enabled() ) {
+			$scripts_to_delay[] = 'newspack-plugin';
+		}
+
+		return $scripts_to_delay;
 	}
 
 	/**

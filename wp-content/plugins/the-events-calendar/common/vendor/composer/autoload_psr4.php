@@ -9,6 +9,7 @@ return array(
     'Tribe\\' => array($baseDir . '/src/Tribe'),
     'TEC\\Event_Automator\\' => array($baseDir . '/src/Common/Event_Automator'),
     'TEC\\Common\\lucatume\\DI52\\' => array($vendorDir . '/lucatume/di52/src'),
+    'TEC\\Common\\TrustedLogin\\' => array($vendorDir . '/trustedlogin/client/src'),
     'TEC\\Common\\StellarWP\\Uplink\\Views\\' => array($vendorDir . '/stellarwp/uplink/src/views'),
     'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' => array($vendorDir . '/stellarwp/uplink/src/assets'),
     'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' => array($vendorDir . '/stellarwp/uplink/src/admin-views'),
@@ -32,4 +33,5 @@ return array(
     'TEC\\Common\\Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'TEC\\Common\\Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'TEC\\Common\\' => array($baseDir . '/src/Common'),
+    'ScssPhp\\ScssPhp\\' => array($vendorDir . '/scssphp/scssphp/src'),
 );

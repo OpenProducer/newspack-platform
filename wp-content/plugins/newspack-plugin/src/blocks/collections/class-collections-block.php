@@ -318,7 +318,7 @@ final class Collections_Block {
 		if ( $attributes['showPeriod'] ) {
 			$period = Collection_Meta::get( $collection->ID, 'period' );
 			if ( $period ) {
-				$meta_parts[] = esc_html( $period );
+				$meta_parts[] = '<span class="wp-block-newspack-collections__period">' . esc_html( $period ) . '</span>';
 			}
 		}
 
@@ -328,27 +328,37 @@ final class Collections_Block {
 		if ( $attributes['showVolume'] ) {
 			$volume = Collection_Meta::get( $collection->ID, 'volume' );
 			if ( $volume ) {
-				/* translators: %s is the volume number of a collection */
-				$vol_number[] = sprintf( _x( 'Vol. %s', 'collection volume number', 'newspack-plugin' ), esc_html( $volume ) );
+				$vol_number[] = '<span class="wp-block-newspack-collections__volume">' .
+					sprintf(
+						/* translators: %s is the volume number of a collection */
+						_x( 'Vol. %s', 'collection volume number', 'newspack-plugin' ),
+						esc_html( $volume )
+					) .
+					'</span>';
 			}
 		}
 
 		if ( $attributes['showNumber'] ) {
 			$number = Collection_Meta::get( $collection->ID, 'number' );
 			if ( $number ) {
-				/* translators: %s is the issue number of a collection */
-				$vol_number[] = sprintf( _x( 'No. %s', 'collection issue number', 'newspack-plugin' ), esc_html( $number ) );
+				$vol_number[] = '<span class="wp-block-newspack-collections__number">' .
+					sprintf(
+						/* translators: %s is the issue number of a collection */
+						_x( 'No. %s', 'collection issue number', 'newspack-plugin' ),
+						esc_html( $number )
+					) .
+					'</span>';
 			}
 		}
 
 		if ( $vol_number ) {
-			$meta_parts[] = implode( ' / ', $vol_number );
+			$meta_parts[] = implode( ' <span class="wp-block-newspack-collections__divider">/</span> ', $vol_number );
 		}
 
 		// Render meta text.
 		if ( ! empty( $meta_parts ) ) {
 			// Use different separator based on layout.
-			$separator = 'list' === $attributes['layout'] ? ' / ' : '<br>';
+			$separator = 'list' === $attributes['layout'] ? ' <span class="wp-block-newspack-collections__divider">/</span> ' : '<br>';
 			$meta_text = implode( $separator, $meta_parts );
 			?>
 			<div class="wp-block-newspack-collections__meta has-medium-gray-color has-text-color has-small-font-size">

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6a331742da8159fd785046e76644bef8
+class ComposerStaticInit2dddde68cbc24f2f91e5c825017eb3d8
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -1052,6 +1052,7 @@ class ComposerStaticInit6a331742da8159fd785046e76644bef8
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Search_Engines_Discouraged_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/search-engines-discouraged-watcher.php',
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Woocommerce_Beta_Editor_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/woocommerce-beta-editor-watcher.php',
         'Yoast\\WP\\SEO\\Integrations\\XMLRPC' => __DIR__ . '/../..' . '/src/integrations/xmlrpc.php',
+        'Yoast\\WP\\SEO\\Introductions\\Application\\AI_Brand_Insights_Post_Launch' => __DIR__ . '/../..' . '/src/introductions/application/ai-brand-insights-post-launch.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\AI_Brand_Insights_Pre_Launch' => __DIR__ . '/../..' . '/src/introductions/application/ai-brand-insights-pre-launch.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Fix_Assessments_Upsell' => __DIR__ . '/../..' . '/src/introductions/application/ai-fix-assessments-upsell.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Black_Friday_Announcement' => __DIR__ . '/../..' . '/src/introductions/application/black-friday-announcement.php',
@@ -1202,6 +1203,7 @@ class ComposerStaticInit6a331742da8159fd785046e76644bef8
         'Yoast\\WP\\SEO\\Presenters\\Twitter\\Site_Presenter' => __DIR__ . '/../..' . '/src/presenters/twitter/site-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Twitter\\Title_Presenter' => __DIR__ . '/../..' . '/src/presenters/twitter/title-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Url_List_Presenter' => __DIR__ . '/../..' . '/src/presenters/url-list-presenter.php',
+        'Yoast\\WP\\SEO\\Presenters\\Webmaster\\Ahrefs_Presenter' => __DIR__ . '/../..' . '/src/presenters/webmaster/ahrefs-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Webmaster\\Baidu_Presenter' => __DIR__ . '/../..' . '/src/presenters/webmaster/baidu-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Webmaster\\Bing_Presenter' => __DIR__ . '/../..' . '/src/presenters/webmaster/bing-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Webmaster\\Google_Presenter' => __DIR__ . '/../..' . '/src/presenters/webmaster/google-presenter.php',
@@ -1327,9 +1329,9 @@ class ComposerStaticInit6a331742da8159fd785046e76644bef8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6a331742da8159fd785046e76644bef8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6a331742da8159fd785046e76644bef8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6a331742da8159fd785046e76644bef8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2dddde68cbc24f2f91e5c825017eb3d8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2dddde68cbc24f2f91e5c825017eb3d8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2dddde68cbc24f2f91e5c825017eb3d8::$classMap;
 
         }, null, ClassLoader::class);
     }

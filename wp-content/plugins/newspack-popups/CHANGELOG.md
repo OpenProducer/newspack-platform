@@ -1,3 +1,10 @@
+## [3.6.2](https://github.com/Automattic/newspack-popups/compare/v3.6.1...v3.6.2) (2025-10-16)
+
+
+### Bug Fixes
+
+* don’t add overlays to ras store if locked via front-end metering ([#1480](https://github.com/Automattic/newspack-popups/issues/1480)) ([8abfc1d](https://github.com/Automattic/newspack-popups/commit/8abfc1d4c667626742aba445822f77b7a46865f4))
+
 ## [3.6.1](https://github.com/Automattic/newspack-popups/compare/v3.6.0...v3.6.1) (2025-09-08)
 
 

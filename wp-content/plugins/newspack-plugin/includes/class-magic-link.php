@@ -890,7 +890,7 @@ final class Magic_Link {
 		}
 
 		/**
-		 * Filters the metadata to be saved for a reader registered via the auth modal.
+		 * Filters the metadata to be saved for a reader logged in via OTP.
 		 *
 		 * @param array  $metadata Metadata.
 		 * @param string $email    Email address of the reader.
@@ -898,13 +898,18 @@ final class Magic_Link {
 		$metadata = apply_filters(
 			'newspack_otp_login_metadata',
 			[
-				'email'        => $email,
 				'login_method' => 'otp',
 			],
 			$email
 		);
 
-		return self::send_otp_request_response( __( 'Login successful!', 'newspack-plugin' ), true, [ 'metadata' => $metadata ] );
+		$data = [
+			'email'         => $email,
+			'existing_user' => true,
+			'metadata'      => $metadata,
+		];
+
+		return self::send_otp_request_response( __( 'Login successful!', 'newspack-plugin' ), true, $data );
 	}
 
 	/**

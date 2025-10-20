@@ -34,7 +34,7 @@ class My_Account_UI_V0 {
 	public static function enqueue_assets() {
 		if ( function_exists( 'is_account_page' ) && \is_account_page() ) {
 			\wp_enqueue_style(
-				'my-account-v0',
+				'newspack-my-account-v0',
 				\Newspack\Newspack::plugin_url() . '/dist/my-account-v0.css',
 				[],
 				NEWSPACK_PLUGIN_VERSION

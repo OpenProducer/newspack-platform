@@ -141,6 +141,10 @@ class Newspack_Newsletters_Contacts {
 
 		$contact['existing_contact_data'] = \is_wp_error( $existing_contact ) ? false : $existing_contact;
 		$is_updating                      = \is_wp_error( $existing_contact ) ? false : true;
+		// Set a flag to indicate the contact is being updated via an email change action.
+		if ( $is_updating && 'Email_Change' === $context ) {
+			$contact['is_email_change'] = true;
+		}
 
 		/**
 		 * Filters the contact before passing on to the API.
