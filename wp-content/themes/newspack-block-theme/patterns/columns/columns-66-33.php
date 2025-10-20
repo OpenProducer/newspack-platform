@@ -3,6 +3,7 @@
  * Title: 66 / 33
  * Slug: newspack-block-theme/columns-66-33
  * Categories: newspack-block-theme-columns
+ * Inserter: yes
  * Block Types: core/columns
  *
  * @package Newspack_Block_Theme

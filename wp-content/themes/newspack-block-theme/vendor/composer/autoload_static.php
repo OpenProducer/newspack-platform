@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit845b6cb3ad059a70bd5a979f23153f88
+class ComposerStaticInitb14ae94f64fd3bf16461b5a11f36db02
 {
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
@@ -12,12 +12,13 @@ class ComposerStaticInit845b6cb3ad059a70bd5a979f23153f88
         'Newspack_Block_Theme\\Jetpack' => __DIR__ . '/../..' . '/includes/class-jetpack.php',
         'Newspack_Block_Theme\\Patterns' => __DIR__ . '/../..' . '/includes/class-patterns.php',
         'Newspack_Block_Theme\\Subtitle_Block' => __DIR__ . '/../..' . '/includes/blocks/subtitle-block/class-subtitle-block.php',
+        'Newspack_Block_Theme\\WooCommerce' => __DIR__ . '/../..' . '/includes/class-woocommerce.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit845b6cb3ad059a70bd5a979f23153f88::$classMap;
+            $loader->classMap = ComposerStaticInitb14ae94f64fd3bf16461b5a11f36db02::$classMap;
 
         }, null, ClassLoader::class);
     }

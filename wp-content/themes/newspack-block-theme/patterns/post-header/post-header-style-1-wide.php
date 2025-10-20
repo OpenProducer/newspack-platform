@@ -3,6 +3,7 @@
  * Title: Post Header - Style 1 (Wide)
  * Slug: newspack-block-theme/post-header-style-1-wide
  * Categories: newspack-block-theme-post-header
+ * Inserter: yes
  *
  * @package Newspack_Block_Theme
  */

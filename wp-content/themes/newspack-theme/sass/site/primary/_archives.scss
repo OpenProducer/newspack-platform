@@ -206,11 +206,11 @@
 		}
 
 		article.wp-block-newspack-collections__item,
+		&.archive-one-column-wide .site-main article.wp-block-newspack-collections__item,
 		.pagination {
 			width: 100%;
 		}
 	}
-
 }
 
 .page-description {
