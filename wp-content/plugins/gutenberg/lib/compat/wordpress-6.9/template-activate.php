@@ -9,7 +9,7 @@ add_filter( 'register_post_type_args', 'gutenberg_modify_wp_template_post_type_a
 function gutenberg_modify_wp_template_post_type_args( $args, $post_type ) {
 	if ( 'wp_template' === $post_type ) {
 		$args['rest_base']                       = 'wp_template';
-		$args['rest_controller_class']           = 'Gutenberg_REST_Templates_Controller';
+		$args['rest_controller_class']           = 'WP_REST_Posts_Controller';
 		$args['autosave_rest_controller_class']  = null;
 		$args['revisions_rest_controller_class'] = null;
 		$args['supports']                        = array_merge( $args['supports'], array( 'custom-fields' ) );
@@ -22,8 +22,12 @@ function gutenberg_modify_wp_template_post_type_args( $args, $post_type ) {
 //    to lookup the active template for a specific slug, and probably get a list
 //    of all _active_ templates. For that we can keep /lookup.
 add_action( 'rest_api_init', 'gutenberg_maintain_templates_routes' );
+
+/**
+ * @global array $wp_post_types List of post types.
+ */
 function gutenberg_maintain_templates_routes() {
-	// This should later be changed in core so we don't need initialise
+	// This should later be changed in core so we don't need initialize
 	// WP_REST_Templates_Controller with a post type.
 	global $wp_post_types;
 	$wp_post_types['wp_template']->rest_base = 'templates';
@@ -41,9 +45,8 @@ function gutenberg_maintain_templates_routes() {
 				// templates controller, so we need to check if the id is an
 				// integer to make sure it's the proper post type endpoint.
 				if ( ! is_int( $post_arr['id'] ) ) {
-					// See _build_block_template_result_from_file, registered
-					// templates always set the theme to the active theme.
-					return get_stylesheet();
+					$template = get_block_template( $post_arr['id'], 'wp_template' );
+					return $template ? $template->theme : null;
 				}
 				$terms = get_the_terms( $post_arr['id'], 'wp_theme' );
 				if ( is_wp_error( $terms ) || empty( $terms ) ) {
@@ -71,6 +74,10 @@ function gutenberg_maintain_templates_routes() {
 //    I registered this as a post type route because right now the
 //    EditorProvider assumes templates are posts.
 add_action( 'init', 'gutenberg_setup_static_template' );
+
+/**
+ * @global array $wp_post_types List of post types.
+ */
 function gutenberg_setup_static_template() {
 	global $wp_post_types;
 	$wp_post_types['wp_registered_template']                        = clone $wp_post_types['wp_template'];

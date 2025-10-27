@@ -2750,7 +2750,7 @@ function wc_update_890_update_connect_to_woocommerce_note() {
  * Shows an admin notice to inform the store owner that PayPal Standard has been disabled and suggests installing PayPal Payments.
  */
 function wc_update_890_update_paypal_standard_load_eligibility() {
-	$paypal = class_exists( 'WC_Gateway_Paypal' ) ? new WC_Gateway_Paypal() : null;
+	$paypal = class_exists( 'WC_Gateway_Paypal' ) ? WC_Gateway_Paypal::get_instance() : null;
 
 	if ( ! $paypal ) {
 		return;
@@ -3107,4 +3107,21 @@ function wc_update_990_remove_email_notes() {
  */
 function wc_update_1000_remove_patterns_toolkit_transient() {
 	delete_transient( 'ptk_patterns' );
+}
+
+/**
+ * Add an index to (comment_date_gmt, comment_type, comment_approved, comment_post_ID)
+ * on the comments table to improve the admin query that gets the latest 25 comments
+ * while excluding reviews and internal notes.
+ *
+ * @return void
+ */
+function wc_update_1030_add_comments_date_type_index() {
+	global $wpdb;
+	$date_type_index_exists = $wpdb->get_row( "SHOW INDEX FROM {$wpdb->comments} WHERE key_name = 'woo_idx_comment_date_type'" );
+
+	if ( is_null( $date_type_index_exists ) ) {
+		// Improve performance of the admin comments query when fetching the latest 25 comments while excluding reviews and internal notes.
+		$wpdb->query( "ALTER TABLE {$wpdb->comments} ADD INDEX woo_idx_comment_date_type (comment_date_gmt, comment_type, comment_approved, comment_post_ID)" );
+	}
 }

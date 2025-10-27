@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online
 Requires at least: 6.7
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 10.2.1
+Stable tag: 10.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,13 +170,11 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 10.2.2 2025-09-29 =
+= 10.3.3 2025-10-24 =
 
 **WooCommerce**
 
-* Fix - Check if template part is from file system before building the result from file [#61171](https://github.com/woocommerce/woocommerce/pull/61171)
-* Fix - Fix low-resolution images displayed in the Classic Template block gallery [#61182](https://github.com/woocommerce/woocommerce/pull/61182)
-* Fix - Make legacy gallery filters available while rendering blocks [#61173](https://github.com/woocommerce/woocommerce/pull/61173)
+* Dev - Add in deprecated script warnings and backwards compatibility for 3PDs [#61599](https://github.com/woocommerce/woocommerce/pull/61599)
 
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).
