@@ -2,9 +2,9 @@
   'root' => 
   array (
     'name' => 'the-events-calendar/tribe-common',
-    'pretty_version' => 'dev-master',
-    'version' => 'dev-master',
-    'reference' => '6f80b0a7b2a025e85f94bd09f82a814da5e0a81c',
+    'pretty_version' => 'dev-main',
+    'version' => 'dev-main',
+    'reference' => 'a3cf6fef24997150990f0165c358a67046120ed7',
     'type' => 'wordpress-plugin',
     'install_path' => __DIR__ . '/../',
     'aliases' => 
@@ -202,6 +202,18 @@
       'reference' => '5bc1f115efe629dd4244bff08809aea45ed9d8f1',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/uplink',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'trustedlogin/client' => 
+    array (
+      'pretty_version' => 'v1.9.0',
+      'version' => '1.9.0.0',
+      'reference' => 'b913058ae57b512a7766f449ab8d55952500fe72',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../trustedlogin/client',
       'aliases' => 
       array (
       ),

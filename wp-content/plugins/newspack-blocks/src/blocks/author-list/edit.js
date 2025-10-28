@@ -5,8 +5,6 @@ import apiFetch from '@wordpress/api-fetch';
 import { BlockControls, InspectorControls } from '@wordpress/block-editor';
 import {
 	BaseControl,
-	Button,
-	ButtonGroup,
 	CheckboxControl,
 	Notice,
 	PanelBody,
@@ -19,11 +17,14 @@ import {
 	Toolbar,
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalUnitControl as UnitControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { Fragment, useEffect, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import {
-	Icon,
 	columns as columnsIcon,
 	edit,
 	listView,
@@ -262,96 +263,72 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 							postTypeLabel={ __( 'author', 'newspack-blocks' ) }
 							postTypeLabelPlural={ __( 'authors', 'newspack-blocks' ) }
 							selectedItems={ exclude }
+							__next40pxDefaultSize
 						/>
 					</PanelRow>
 				</PanelBody>
 				<PanelBody title={ __( 'Author Profile Settings', 'newspack-blocks' ) }>
-					<BaseControl
-						label={ __( 'Text Size', 'newspack-blocks' ) }
-						id="newspack-blocks__text-size-control"
-					>
-						<PanelRow>
-							<ButtonGroup
-								id="newspack-blocks__text-size-control-buttons"
-								aria-label={ __( 'Text Size', 'newspack-blocks' ) }
-							>
-								{ textSizeOptions.map( option => {
-									const isCurrent = textSize === option.value;
-									return (
-										<Button
-											isPrimary={ isCurrent }
-											aria-pressed={ isCurrent }
-											aria-label={ option.label }
-											key={ option.value }
-											onClick={ () => setAttributes( { textSize: option.value } ) }
-										>
-											{ option.shortName }
-										</Button>
-									);
-								} ) }
-							</ButtonGroup>
-						</PanelRow>
-					</BaseControl>
+				<ToggleGroupControl
+					label={ __( 'Text Size', 'newspack-blocks' ) }
+					value={ textSize }
+					onChange={ value => setAttributes( { textSize: value } ) }
+					isBlock
+					__next40pxDefaultSize
+				>
+					{ textSizeOptions.map( option => (
+						<ToggleGroupControlOption
+							key={ option.value }
+							label={ option.shortName }
+							value={ option.value }
+						/>
+					) ) }
+				</ToggleGroupControl>
 					<AuthorDisplaySettings attributes={ attributes } setAttributes={ setAttributes } />
 				</PanelBody>
-				<PanelBody title={ __( 'Avatar Settings', 'newspack-blocks' ) }>
-					<PanelRow>
+				<PanelBody title={ __( 'Avatar', 'newspack-blocks' ) }>
+					<ToggleControl
+						label={ __( 'Display avatar', 'newspack-blocks' ) }
+						checked={ showAvatar }
+						onChange={ () => setAttributes( { showAvatar: ! showAvatar } ) }
+					/>
+					{ showAvatar && (
 						<ToggleControl
-							label={ __( 'Display avatar', 'newspack-blocks' ) }
-							checked={ showAvatar }
-							onChange={ () => setAttributes( { showAvatar: ! showAvatar } ) }
+							label={ __( 'Hide default avatar', 'newspack-blocks' ) }
+							checked={ avatarHideDefault }
+							onChange={ () => setAttributes( { avatarHideDefault: ! avatarHideDefault } ) }
 						/>
-					</PanelRow>
-					{ showAvatar && (
-						<PanelRow>
-							<ToggleControl
-								label={ __( 'Hide default avatar', 'newspack-blocks' ) }
-								checked={ avatarHideDefault }
-								onChange={ () => setAttributes( { avatarHideDefault: ! avatarHideDefault } ) }
-							/>
-						</PanelRow>
 					) }
 					{ showAvatar && (
-						<BaseControl
-							label={ __( 'Avatar Size', 'newspack-blocks' ) }
-							id="newspack-blocks__avatar-size-control"
+						<ToggleGroupControl
+							label={ __( 'Size', 'newspack-blocks' ) }
+							aria-label={ __( 'Avatar size', 'newspack-blocks' ) }
+							value={ avatarSize }
+							onChange={ value => setAttributes( { avatarSize: value } ) }
+							isBlock
+							__next40pxDefaultSize
 						>
-							<PanelRow>
-								<ButtonGroup
-									id="newspack-blocks__avatar-size-control-buttons"
-									aria-label={ __( 'Avatar Size', 'newspack-blocks' ) }
-								>
-									{ avatarSizeOptions.map( option => {
-										const isCurrent = avatarSize === option.value;
-										return (
-											<Button
-												isPrimary={ isCurrent }
-												aria-pressed={ isCurrent }
-												aria-label={ option.label }
-												key={ option.value }
-												onClick={ () => setAttributes( { avatarSize: option.value } ) }
-											>
-												{ option.shortName }
-											</Button>
-										);
-									} ) }
-								</ButtonGroup>
-							</PanelRow>
-						</BaseControl>
+							{ avatarSizeOptions.map( option => (
+								<ToggleGroupControlOption
+									key={ option.value }
+									label={ option.shortName }
+									value={ option.value }
+								/>
+							) ) }
+						</ToggleGroupControl>
 					) }
 					{ showAvatar && (
-						<PanelRow>
-							<UnitControl
-								label={ __( 'Avatar border radius', 'newspack-blocks' ) }
-								labelPosition="edge"
-								__unstableInputWidth="80px"
-								units={ units }
-								value={ avatarBorderRadius }
-								onChange={ value =>
-									setAttributes( { avatarBorderRadius: 0 > parseFloat( value ) ? '0' : value } )
-								}
-							/>
-						</PanelRow>
+						<UnitControl
+							label={ __( 'Border radius', 'newspack-blocks' ) }
+							aria-label={ __( 'Avatar border radius', 'newspack-blocks' ) }
+							labelPosition="edge"
+							units={ units }
+							value={ avatarBorderRadius }
+							onChange={ value =>
+								setAttributes( { avatarBorderRadius: 0 > parseFloat( value ) ? '0' : value } )
+							}
+							__next40pxDefaultSize
+							__unstableInputWidth="80px"
+						/>
 					) }
 				</PanelBody>
 			</InspectorControls>
@@ -360,7 +337,7 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 					<Toolbar
 						controls={ [
 							{
-								icon: <Icon icon={ listView } />,
+								icon: listView,
 								title: __( 'List', 'newspack-blocks' ),
 								isActive: 'list' === layout,
 								onClick: () => {
@@ -368,7 +345,7 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 								},
 							},
 							{
-								icon: <Icon icon={ columnsIcon } />,
+								icon: columnsIcon,
 								title: __( 'Columns', 'newspack-blocks' ),
 								isActive: isColumns,
 								onClick: () => {
@@ -381,13 +358,13 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 						<Toolbar
 							controls={ [
 								{
-									icon: <Icon icon={ pullLeft } />,
+									icon: pullLeft,
 									title: __( 'Show avatar on left', 'newspack-blocks' ),
 									isActive: avatarAlignment === 'left',
 									onClick: () => setAttributes( { avatarAlignment: 'left' } ),
 								},
 								{
-									icon: <Icon icon={ pullRight } />,
+									icon: pullRight,
 									title: __( 'Show avatar on right', 'newspack-blocks' ),
 									isActive: avatarAlignment === 'right',
 									onClick: () => setAttributes( { avatarAlignment: 'right' } ),
@@ -398,7 +375,7 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 					<Toolbar
 						controls={ [
 							{
-								icon: <Icon icon={ edit } />,
+								icon: edit,
 								title: __( 'Edit selection', 'newspack-blocks' ),
 								onClick: () => {
 									setAttributes( { authorId: 0 } );
@@ -475,7 +452,7 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 				) }
 				{ ( ! authors || isLoading ) && (
 					<Placeholder
-						icon={ <Icon icon={ listView } /> }
+						icon={ listView }
 						label={ __( 'Author List', 'newspack-blocks' ) }
 					>
 						{ error && (

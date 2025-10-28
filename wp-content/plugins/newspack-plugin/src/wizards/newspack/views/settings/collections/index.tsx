@@ -3,8 +3,9 @@
  */
 
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
-import { ToggleControl } from '@wordpress/components';
+import { useState, useEffect, useMemo } from '@wordpress/element';
+import { ExternalLink, ToggleControl } from '@wordpress/components';
+import { cleanForSlug } from '@wordpress/url';
 import WizardSection from '../../../../wizards-section';
 import WizardsActionCard from '../../../../wizards-action-card';
 import useWizardApiFetchToggle from '../../../../hooks/use-wizard-api-fetch-toggle';
@@ -51,6 +52,7 @@ function Collections() {
 	>( {
 		path: '/newspack/v1/wizard/newspack-settings/collections',
 		apiNamespace: 'newspack-settings/collections',
+		refreshOn: [ 'POST' ],
 		data: {
 			...DEFAULT_COLLECTIONS_SETTINGS,
 			module_enabled_collections: false,
@@ -96,6 +98,14 @@ function Collections() {
 			};
 		} );
 	};
+
+	const DEFAULT_SLUG = 'collections';
+	const collectionsArchiveUrl = useMemo( () => {
+		const slug = cleanForSlug( settings.custom_naming_enabled && settings.custom_slug ? settings.custom_slug : DEFAULT_SLUG ) || DEFAULT_SLUG;
+		const base = new URL( window.newspack_urls?.site || window.location.origin );
+		base.pathname = base.pathname + ( ! base.pathname.endsWith( '/' ) ? '/' : '' );
+		return new URL( slug, base ).toString();
+	}, [ settings.custom_naming_enabled, settings.custom_slug ] );
 
 	return (
 		<div className="newspack-wizard__sections">
@@ -149,7 +159,12 @@ function Collections() {
 
 					<WizardSection
 						title={ __( 'Collections Archive', 'newspack-plugin' ) }
-						description={ __( 'Customize the Collections archive page.', 'newspack-plugin' ) }
+						description={
+							<>
+								{ __( 'Customize the Collections archive page.', 'newspack-plugin' ) }{ ' ' }
+								<ExternalLink href={ collectionsArchiveUrl }>{ __( 'Open archive page', 'newspack-plugin' ) }</ExternalLink>
+							</>
+						}
 					>
 						<Grid columns={ 2 } gutter={ 32 }>
 							<SelectControl

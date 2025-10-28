@@ -3603,6 +3603,193 @@ namespace TEC\Common {
       0 => 'StellarWP\\Uplink\\View\\Contracts\\View',
     ),
   ),
+  'TrustedLogin\\Admin' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Admin',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Admin',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Ajax' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Ajax',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Ajax',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Client' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Client',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Client',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Config' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Config',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Config',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Cron' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Cron',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Cron',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Encryption' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Encryption',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Encryption',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Endpoint' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Endpoint',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Endpoint',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Envelope' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Envelope',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Envelope',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Form' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Form',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Form',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Logger' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Logger',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Logger',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Logging' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Logging',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Logging',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Remote' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Remote',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Remote',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\SecurityChecks' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SecurityChecks',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\SecurityChecks',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\SiteAccess' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SiteAccess',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\SiteAccess',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\SupportRole' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SupportRole',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\SupportRole',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\SupportUser' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SupportUser',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\SupportUser',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\Utils' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Utils',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\Utils',
+    'implements' => 
+    array (
+    ),
+  ),
   'Monolog\\Handler\\FormattableHandlerTrait' => 
   array (
     'type' => 'trait',

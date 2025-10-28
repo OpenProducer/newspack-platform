@@ -120,57 +120,57 @@ final class Reader_Activation {
 	 * Enqueue front-end scripts.
 	 */
 	public static function enqueue_scripts() {
+		$authenticated_email = self::get_logged_in_reader_email_address();
+		$script_dependencies = [];
+		$script_data         = [
+			'auth_intention_cookie' => self::AUTH_INTENTION_COOKIE,
+			'cid_cookie'            => NEWSPACK_CLIENT_ID_COOKIE_NAME,
+			'is_logged_in'          => \is_user_logged_in(),
+			'authenticated_email'   => $authenticated_email,
+			'otp_auth_action'       => Magic_Link::OTP_AUTH_ACTION,
+			'otp_rate_interval'     => Magic_Link::RATE_INTERVAL,
+			'auth_action_result'    => Magic_Link::AUTH_ACTION_RESULT,
+			'account_url'           => function_exists( 'wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : '',
+			'is_ras_enabled'        => self::is_enabled(),
+		];
+
+		if ( Recaptcha::can_use_captcha() ) {
+			$recaptcha_version                = Recaptcha::get_setting( 'version' );
+			$script_dependencies[]            = Recaptcha::SCRIPT_HANDLE;
+			if ( 'v3' === $recaptcha_version ) {
+				$script_data['captcha_site_key'] = Recaptcha::get_site_key();
+			}
+		}
+
+		Newspack::load_common_assets();
+
+		/**
+		* Reader Activation Frontend Library.
+		*/
+		\wp_enqueue_script(
+			self::SCRIPT_HANDLE,
+			Newspack::plugin_url() . '/dist/reader-activation.js',
+			$script_dependencies,
+			NEWSPACK_PLUGIN_VERSION,
+			[
+				'strategy'  => 'async',
+				'in_footer' => true,
+			]
+		);
+		\wp_localize_script(
+			self::SCRIPT_HANDLE,
+			'newspack_ras_config',
+			$script_data
+		);
+		\wp_script_add_data( self::SCRIPT_HANDLE, 'async', true );
+		\wp_script_add_data( self::SCRIPT_HANDLE, 'amp-plus', true );
+
 		/**
 		 * Filters whether to enqueue the reader auth scripts.
 		 *
 		 * @param bool $allow_reg_block_render Whether to allow the registration block to render.
 		 */
 		if ( apply_filters( 'newspack_reader_activation_should_render_auth', true ) ) {
-			$authenticated_email = self::get_logged_in_reader_email_address();
-			$script_dependencies = [];
-			$script_data         = [
-				'auth_intention_cookie' => self::AUTH_INTENTION_COOKIE,
-				'cid_cookie'            => NEWSPACK_CLIENT_ID_COOKIE_NAME,
-				'is_logged_in'          => \is_user_logged_in(),
-				'authenticated_email'   => $authenticated_email,
-				'otp_auth_action'       => Magic_Link::OTP_AUTH_ACTION,
-				'otp_rate_interval'     => Magic_Link::RATE_INTERVAL,
-				'auth_action_result'    => Magic_Link::AUTH_ACTION_RESULT,
-				'account_url'           => function_exists( 'wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : '',
-				'is_ras_enabled'        => self::is_enabled(),
-			];
-
-			if ( Recaptcha::can_use_captcha() ) {
-				$recaptcha_version                = Recaptcha::get_setting( 'version' );
-				$script_dependencies[]            = Recaptcha::SCRIPT_HANDLE;
-				if ( 'v3' === $recaptcha_version ) {
-					$script_data['captcha_site_key'] = Recaptcha::get_site_key();
-				}
-			}
-
-			Newspack::load_common_assets();
-
-			/**
-			* Reader Activation Frontend Library.
-			*/
-			\wp_enqueue_script(
-				self::SCRIPT_HANDLE,
-				Newspack::plugin_url() . '/dist/reader-activation.js',
-				$script_dependencies,
-				NEWSPACK_PLUGIN_VERSION,
-				[
-					'strategy'  => 'async',
-					'in_footer' => true,
-				]
-			);
-			\wp_localize_script(
-				self::SCRIPT_HANDLE,
-				'newspack_ras_config',
-				$script_data
-			);
-			\wp_script_add_data( self::SCRIPT_HANDLE, 'async', true );
-			\wp_script_add_data( self::SCRIPT_HANDLE, 'amp-plus', true );
-
 			/**
 			* Reader Authentication
 			*/

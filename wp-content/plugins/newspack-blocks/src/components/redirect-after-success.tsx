@@ -30,11 +30,13 @@ const RedirectAfterSuccess = ( { attributes, setAttributes }: Props ) => (
 			onChange={ ( value: string ) => {
 				setAttributes( { afterSuccessBehavior: value.toString() } );
 			} }
+			__next40pxDefaultSize
 		/>
 		<TextControl
 			label={ __( 'Button Label', 'newspack-blocks' ) }
 			value={ attributes.afterSuccessButtonLabel || '' }
 			onChange={ ( value: string ) => setAttributes( { afterSuccessButtonLabel: value } ) }
+			__next40pxDefaultSize
 		/>
 		{ attributes.afterSuccessBehavior === 'custom' && (
 			<TextControl
@@ -42,6 +44,7 @@ const RedirectAfterSuccess = ( { attributes, setAttributes }: Props ) => (
 				placeholder={ __( 'https://example.com', 'newspack-blocks' ) }
 				value={ attributes.afterSuccessURL || '' }
 				onChange={ ( value: string ) => setAttributes( { afterSuccessURL: value } ) }
+				__next40pxDefaultSize
 			/>
 		) }
 	</>

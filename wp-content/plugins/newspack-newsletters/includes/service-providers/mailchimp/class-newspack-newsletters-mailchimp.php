@@ -59,6 +59,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		$this->controller = new Newspack_Newsletters_Mailchimp_Controller( $this );
 		Newspack_Newsletters_Mailchimp_Cached_Data::init();
 
+		add_filter( 'newspack_newsletters_newsletter_content', [ $this, 'newsletter_content' ], 1, 2 );
 		add_action( 'updated_post_meta', [ $this, 'save' ], 10, 4 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
 		add_filter( 'newspack_newsletters_process_link', [ $this, 'process_link' ], 10, 2 );
@@ -1175,6 +1176,18 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	}
 
 	/**
+	 * Filter newsletter content prior to converting to MJML.
+	 *
+	 * @param string $content The post content.
+	 * @return string The filtered post content.
+	 */
+	public function newsletter_content( $content ) {
+		// Strip protocol prefixes from link-based Mailchimp merge tags.
+		$content = preg_replace( '/href="(?:https?:)?\/\/\*\|/', 'href="*|', $content );
+		return $content;
+	}
+
+	/**
 	 * Update ESP campaign after refreshing the email HTML, which is triggered by post save.
 	 *
 	 * @param int   $meta_id Numeric ID of the meta field being updated.
@@ -1781,7 +1794,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		if ( false === $list_id ) {
 			return new WP_Error( 'newspack_newsletters_mailchimp_list_id', __( 'Missing list id.' ) );
 		}
-		$email_address = $contact['email'];
+		$email_address = trim( strtolower( $contact['email'] ) );
 		// If contact was added in this execution, we can return the previous
 		// result and bail.
 		$cache_key = md5( $list_id . $email_address . wp_json_encode( $tags ) . wp_json_encode( $interests ) );
@@ -1828,9 +1841,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				$update_payload['interests'] = $interests;
 			}
 			$member_hash            = Mailchimp::subscriberHash( $email_address );
-			$existing_email_address = isset( $contact['existing_contact_data']['email_address'] ) ? $contact['existing_contact_data']['email_address'] : null;
+			$existing_email_address = isset( $contact['existing_contact_data']['email_address'] ) ? trim( strtolower( $contact['existing_contact_data']['email_address'] ) ) : null;
 			$existing_member_hash   = $existing_email_address ? Mailchimp::subscriberHash( $existing_email_address ) : null;
-			$is_email_update        = $existing_email_address && $existing_email_address !== $email_address;
+			$is_email_update        = $existing_email_address && isset( $contact['is_email_change'] ) && $contact['is_email_change'] && $existing_email_address !== $email_address;
 			$is_subscribed          = isset( $update_payload['status'] ) && 'subscribed' === $update_payload['status'];
 
 			// Mailchimp only allows subscribed contacts to update the email address field

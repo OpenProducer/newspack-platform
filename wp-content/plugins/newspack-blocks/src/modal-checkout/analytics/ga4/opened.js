@@ -15,6 +15,7 @@ export const manageOpened = ( data ) => {
 	const {
 		amount = '',
 		is_variable = '',
+		is_grouped = '',
 		price = '',
 		variation_id = '',
 	} = data;
@@ -31,6 +32,9 @@ export const manageOpened = ( data ) => {
 	// Change the action when opening the initial variation modal.
 	if ( is_variable && ! variation_id ) {
 		action = 'opened_variations';
+	}
+	if ( is_grouped ) {
+		action = 'opened_grouped';
 	}
 
 	const payload = getEventPayload( action, params );

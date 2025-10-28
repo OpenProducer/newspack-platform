@@ -59,6 +59,7 @@ final class Modal_Checkout {
 		'jquery',
 		'google_gtagjs',
 		// Newspack.
+		'newspack_commons',
 		'newspack-newsletters-',
 		'newspack-blocks-modal',
 		'newspack-blocks-modal-checkout',
@@ -67,6 +68,8 @@ final class Modal_Checkout {
 		'newspack-style',
 		'newspack-recaptcha',
 		'newspack-woocommerce-style',
+		'newspack-reader-activation',
+		'newspack-my-account',
 		// Woo.
 		'woocommerce',
 		'WCPAY',
@@ -301,12 +304,12 @@ final class Modal_Checkout {
 		$after_success_url          = filter_input( INPUT_GET, 'after_success_url', FILTER_SANITIZE_URL );
 		$after_success_button_label = filter_input( INPUT_GET, 'after_success_button_label', FILTER_SANITIZE_SPECIAL_CHARS );
 
-		if ( ! $product_id ) {
-			return;
-		}
-
 		if ( $variation_id ) {
 			$product_id = $variation_id;
+		}
+
+		if ( ! $product_id ) {
+			return;
 		}
 
 		$referer    = wp_get_referer();
@@ -663,6 +666,9 @@ final class Modal_Checkout {
 		if ( ! function_exists( 'WC' ) ) {
 			return;
 		}
+		if ( ! class_exists( 'Newspack\Subscriptions_Tiers' ) || ! method_exists( 'Newspack\Subscriptions_Tiers', 'render_form' ) ) {
+			return;
+		}
 
 		add_filter( 'woocommerce_subscriptions_product_price_string', [ __CLASS__, 'update_subscriptions_product_price_string' ], 10, 1 );
 		add_filter( 'formatted_woocommerce_price', [ __CLASS__, 'maybe_remove_decimal_spaces' ], 10, 1 );
@@ -678,17 +684,16 @@ final class Modal_Checkout {
 		$products = array_keys( self::$products );
 		foreach ( $products as $product_id ) {
 			$product = wc_get_product( $product_id );
-			if ( ! $product || ! $product->is_type( 'variable' ) ) {
+			if ( ! $product || ( ! $product->is_type( 'variable' ) && ! $product->is_type( 'grouped' ) ) ) {
 				continue;
 			}
-			$product_name = $product->get_name();
 			?>
 			<div
 				class="<?php echo esc_attr( "$class_prefix {$class_prefix}__modal-container newspack-blocks__modal-variation" ); ?>"
 				data-product-id="<?php echo esc_attr( $product_id ); ?>"
 			>
 				<div class="<?php echo esc_attr( "{$class_prefix}__modal-container__overlay" ); ?>"></div>
-				<div class="<?php echo esc_attr( "{$class_prefix}__modal" ); ?>" role="dialog" aria-modal="true" aria-labelledby="newspack-modal-checkout-label">
+				<div class="<?php echo esc_attr( "{$class_prefix}__modal {$class_prefix}__modal--small" ); ?>" role="dialog" aria-modal="true" aria-labelledby="newspack-modal-checkout-label">
 					<header class="<?php echo esc_attr( "{$class_prefix}__modal__header" ); ?>">
 						<h2 id="newspack-modal-checkout-label"><?php echo esc_html( $title ); ?></h2>
 						<button class="<?php echo esc_attr( "{$class_prefix}__button {$class_prefix}__button--icon {$class_prefix}__button--ghost {$class_prefix}__modal__close" ); ?>">
@@ -699,54 +704,12 @@ final class Modal_Checkout {
 						</button>
 					</header>
 					<section class="<?php echo esc_attr( "{$class_prefix}__modal__content" ); ?>">
-						<h3><?php echo esc_html( $product_name ); ?></h3>
-						<p><?php esc_html_e( 'Select an option to continue:', 'newspack-blocks' ); ?></p>
-						<div class="<?php echo esc_attr( "{$class_prefix}__selection" ); ?>" data-product-id="<?php echo esc_attr( $product_id ); ?>">
-							<ul class="newspack-blocks__options"">
-								<?php
-								$variations = $product->get_available_variations( 'objects' );
-								foreach ( $variations as $variation ) :
-									$variation_id   = $variation->get_id();
-									$variation_name = wc_get_formatted_variation( $variation, true );
-									$price          = $variation->get_price();
-									$price_html     = $variation->get_price_html();
-
-									// Use suggested price if NYP is active and set for variation.
-									if ( \Newspack_Blocks::can_use_name_your_price() && \WC_Name_Your_Price_Helpers::is_nyp( $variation_id ) ) {
-										$price = \WC_Name_Your_Price_Helpers::get_suggested_price( $variation_id );
-										$min_price = \WC_Name_Your_Price_Helpers::get_minimum_price( $variation_id );
-										if ( ! $price && ! $min_price ) {
-											continue;
-										}
-									}
-
-									// Replace nyp price html for variations.
-									if ( class_exists( '\WC_Name_Your_Price_Helpers' ) && \WC_Name_Your_Price_Helpers::is_nyp( $variation->get_id() ) ) {
-										$price_html = str_replace( ':', '', $price_html );
-										$price_html = str_replace( '<span class="suggested-text">', '<span class="suggested-text"><span class="suggested-prefix">', $price_html );
-										$price_html = str_replace( '<span class="woocommerce-Price-amount amount">', '</span><span class="woocommerce-Price-amount amount">', $price_html );
-									}
-									?>
-									<li class="newspack-blocks__options__item"">
-										<div class="summary">
-											<span class="price"><?php echo $price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-										</div>
-										<div class="variation"><?php echo esc_html( $variation_name ); ?></div>
-										<form data-checkout="<?php echo esc_attr( wp_json_encode( Checkout_Data::get_checkout_data( $variation ) ) ); ?>">
-											<input type="hidden" name="newspack_checkout" value="1" />
-											<button type="submit" class="<?php echo esc_attr( "{$class_prefix}__button {$class_prefix}__button--primary" ); ?> newspack-modal-checkout-variation-selection"><?php echo esc_html( self::get_modal_checkout_labels( 'checkout_confirm_variation' ) ); ?></button>
-										</form>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-						</div>
+						<?php \Newspack\Subscriptions_Tiers::render_form( $product ); ?>
 					</section>
 				</div>
 			</div>
 			<?php
 		}
-		remove_filter( 'woocommerce_subscriptions_product_price_string', [ __CLASS__, 'update_subscriptions_product_price_string' ], 10, 1 );
-		remove_filter( 'formatted_woocommerce_price', [ __CLASS__, 'maybe_remove_decimal_spaces' ], 10, 1 );
 	}
 
 	/**
@@ -1383,6 +1346,9 @@ final class Modal_Checkout {
 		if ( ! empty( $cart->get_fees() ) ) {
 			return true;
 		}
+		if ( method_exists( 'WC_Subscriptions_Switcher', 'cart_contains_switches' ) && \WC_Subscriptions_Switcher::cart_contains_switches( 'any' ) ) {
+			return true;
+		}
 		if ( $cart->needs_shipping_address() ) {
 			$shipping       = \WC()->shipping;
 			$packages       = $shipping->get_packages();
@@ -1505,7 +1471,7 @@ final class Modal_Checkout {
 	}
 
 	/**
-	 * Alternative error message to show when limiting a subscription product's purchase.
+	 * Alternative error message to show when limiting a subscription product's purchase to only one active subscription.
 	 *
 	 * @return string
 	 */
@@ -1518,6 +1484,15 @@ final class Modal_Checkout {
 	}
 
 	/**
+	 * Alternative error message to show when limiting a subscription product's purchase to one of any status.
+	 *
+	 * @return string
+	 */
+	public static function get_subscription_limited_message_any() {
+		return __( "You're already a subscriber! You can only have one subscription at a time. If you wish to renew an expired subscription, please sign in and visit the subscriptions page on your account.", 'newspack-blocks' );
+	}
+
+	/**
 	 * Filters the error message shown when a product can't be added to the cart.
 	 *
 	 * @param string     $message Message.
@@ -1527,9 +1502,15 @@ final class Modal_Checkout {
 	 */
 	public static function woocommerce_cart_product_cannot_be_purchased_message( $message, $product_data ) {
 		if ( method_exists( 'WCS_Limiter', 'is_purchasable' ) ) {
-			$product = \wc_get_product( $product_data->get_id() );
+			$product            = \wc_get_product( $product_data->get_id() );
+			$product_limitation = wcs_get_product_limitation( $product->get_id() );
+
 			if ( ! \WCS_Limiter::is_purchasable( false, $product ) ) {
-				$message = self::get_subscription_limited_message();
+				if ( 'active' === $product_limitation ) {
+					$message = self::get_subscription_limited_message();
+				} else {
+					$message = self::get_subscription_limited_message_any();
+				}
 			}
 		}
 
@@ -1620,6 +1601,11 @@ final class Modal_Checkout {
 
 		// If this isn't a cart, if the cart is empty, or if this is a donation product, bail.
 		if ( ! $cart || $cart->is_empty() || $is_donation ) {
+			return;
+		}
+
+		// Bail if this is a subscription switch.
+		if ( method_exists( 'WC_Subscriptions_Switcher', 'cart_contains_switches' ) && \WC_Subscriptions_Switcher::cart_contains_switches( 'any' ) ) {
 			return;
 		}
 
@@ -2108,8 +2094,10 @@ final class Modal_Checkout {
 		$id_from_email = self::get_user_id_from_email();
 		if ( $id_from_email ) {
 			$is_limited_for_user = wcs_is_product_limited_for_user( $product, $id_from_email );
+			$product_limitation  = wcs_get_product_limitation( $product->get_id() );
+			$callback = 'active' === $product_limitation ? 'get_subscription_limited_message' : 'get_subscription_limited_message_any';
 			if ( $is_limited_for_user ) {
-				add_filter( 'woocommerce_cart_item_removed_message', [ __CLASS__, 'get_subscription_limited_message' ], 10, 2 );
+				add_filter( 'woocommerce_cart_item_removed_message', [ __CLASS__, $callback ], 10, 2 );
 			}
 		}
 		return $is_limited_for_user;

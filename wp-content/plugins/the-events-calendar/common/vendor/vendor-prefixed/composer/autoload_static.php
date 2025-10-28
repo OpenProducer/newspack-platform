@@ -4,12 +4,13 @@
 
 namespace TEC\Common\Composer\Autoload;
 
-class ComposerStaticInitb00368f774d7112e047f1bac07f16bb4
+class ComposerStaticInitbebd373371e7450dba31dd485b4de3db
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
         array (
             'TEC\\Common\\lucatume\\DI52\\' => 25,
+            'TEC\\Common\\TrustedLogin\\' => 24,
             'TEC\\Common\\StellarWP\\Uplink\\Views\\' => 34,
             'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' => 39,
             'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' => 40,
@@ -39,6 +40,10 @@ class ComposerStaticInitb00368f774d7112e047f1bac07f16bb4
         'TEC\\Common\\lucatume\\DI52\\' => 
         array (
             0 => __DIR__ . '/..' . '/lucatume/di52/src',
+        ),
+        'TEC\\Common\\TrustedLogin\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/trustedlogin/client/src',
         ),
         'TEC\\Common\\StellarWP\\Uplink\\Views\\' => 
         array (
@@ -495,6 +500,23 @@ class ComposerStaticInitb00368f774d7112e047f1bac07f16bb4
         'TEC\\Common\\StellarWP\\Uplink\\View\\Exceptions\\FileNotFoundException' => __DIR__ . '/..' . '/stellarwp/uplink/src/Uplink/View/Exceptions/FileNotFoundException.php',
         'TEC\\Common\\StellarWP\\Uplink\\View\\Provider' => __DIR__ . '/..' . '/stellarwp/uplink/src/Uplink/View/Provider.php',
         'TEC\\Common\\StellarWP\\Uplink\\View\\WordPress_View' => __DIR__ . '/..' . '/stellarwp/uplink/src/Uplink/View/WordPress_View.php',
+        'TEC\\Common\\TrustedLogin\\Admin' => __DIR__ . '/..' . '/trustedlogin/client/src/Admin.php',
+        'TEC\\Common\\TrustedLogin\\Ajax' => __DIR__ . '/..' . '/trustedlogin/client/src/Ajax.php',
+        'TEC\\Common\\TrustedLogin\\Client' => __DIR__ . '/..' . '/trustedlogin/client/src/Client.php',
+        'TEC\\Common\\TrustedLogin\\Config' => __DIR__ . '/..' . '/trustedlogin/client/src/Config.php',
+        'TEC\\Common\\TrustedLogin\\Cron' => __DIR__ . '/..' . '/trustedlogin/client/src/Cron.php',
+        'TEC\\Common\\TrustedLogin\\Encryption' => __DIR__ . '/..' . '/trustedlogin/client/src/Encryption.php',
+        'TEC\\Common\\TrustedLogin\\Endpoint' => __DIR__ . '/..' . '/trustedlogin/client/src/Endpoint.php',
+        'TEC\\Common\\TrustedLogin\\Envelope' => __DIR__ . '/..' . '/trustedlogin/client/src/Envelope.php',
+        'TEC\\Common\\TrustedLogin\\Form' => __DIR__ . '/..' . '/trustedlogin/client/src/Form.php',
+        'TEC\\Common\\TrustedLogin\\Logger' => __DIR__ . '/..' . '/trustedlogin/client/src/Logger.php',
+        'TEC\\Common\\TrustedLogin\\Logging' => __DIR__ . '/..' . '/trustedlogin/client/src/Logging.php',
+        'TEC\\Common\\TrustedLogin\\Remote' => __DIR__ . '/..' . '/trustedlogin/client/src/Remote.php',
+        'TEC\\Common\\TrustedLogin\\SecurityChecks' => __DIR__ . '/..' . '/trustedlogin/client/src/SecurityChecks.php',
+        'TEC\\Common\\TrustedLogin\\SiteAccess' => __DIR__ . '/..' . '/trustedlogin/client/src/SiteAccess.php',
+        'TEC\\Common\\TrustedLogin\\SupportRole' => __DIR__ . '/..' . '/trustedlogin/client/src/SupportRole.php',
+        'TEC\\Common\\TrustedLogin\\SupportUser' => __DIR__ . '/..' . '/trustedlogin/client/src/SupportUser.php',
+        'TEC\\Common\\TrustedLogin\\Utils' => __DIR__ . '/..' . '/trustedlogin/client/src/Utils.php',
         'TEC\\Common\\lucatume\\DI52\\App' => __DIR__ . '/..' . '/lucatume/di52/src/App.php',
         'TEC\\Common\\lucatume\\DI52\\Builders\\BuilderInterface' => __DIR__ . '/..' . '/lucatume/di52/src/Builders/BuilderInterface.php',
         'TEC\\Common\\lucatume\\DI52\\Builders\\CallableBuilder' => __DIR__ . '/..' . '/lucatume/di52/src/Builders/CallableBuilder.php',
@@ -515,9 +537,9 @@ class ComposerStaticInitb00368f774d7112e047f1bac07f16bb4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb00368f774d7112e047f1bac07f16bb4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb00368f774d7112e047f1bac07f16bb4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb00368f774d7112e047f1bac07f16bb4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbebd373371e7450dba31dd485b4de3db::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbebd373371e7450dba31dd485b4de3db::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbebd373371e7450dba31dd485b4de3db::$classMap;
 
         }, null, ClassLoader::class);
     }

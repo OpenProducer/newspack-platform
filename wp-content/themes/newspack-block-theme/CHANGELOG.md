@@ -1,3 +1,57 @@
+# [1.21.0](https://github.com/Automattic/newspack-block-theme/compare/v1.20.0...v1.21.0) (2025-09-08)
+
+
+### Bug Fixes
+
+* add missing columns patterns to inserter ([#373](https://github.com/Automattic/newspack-block-theme/issues/373)) ([b34f0c9](https://github.com/Automattic/newspack-block-theme/commit/b34f0c978a82f14356164ea247b0ba0c0be010ea))
+
+
+### Features
+
+* move pattern functionalities to class-patterns ([e1ce70f](https://github.com/Automattic/newspack-block-theme/commit/e1ce70f875a5d7c1e564b7e556a414cc2bad0580))
+
+# [1.21.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.20.0...v1.21.0-alpha.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* add missing columns patterns to inserter ([#373](https://github.com/Automattic/newspack-block-theme/issues/373)) ([b34f0c9](https://github.com/Automattic/newspack-block-theme/commit/b34f0c978a82f14356164ea247b0ba0c0be010ea))
+
+
+### Features
+
+* move pattern functionalities to class-patterns ([e1ce70f](https://github.com/Automattic/newspack-block-theme/commit/e1ce70f875a5d7c1e564b7e556a414cc2bad0580))
+
+# [1.20.0](https://github.com/Automattic/newspack-block-theme/compare/v1.19.0...v1.20.0) (2025-08-25)
+
+
+### Features
+
+* add basic woocommerce support ([#368](https://github.com/Automattic/newspack-block-theme/issues/368)) ([ce04831](https://github.com/Automattic/newspack-block-theme/commit/ce0483187f768925ae757d347309141802a33647))
+* add i18n ([#364](https://github.com/Automattic/newspack-block-theme/issues/364)) ([ebfe854](https://github.com/Automattic/newspack-block-theme/commit/ebfe854cdb352e91b5cec57535fc8c6b0fb14151))
+
+# [1.20.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.19.0...v1.20.0-alpha.1) (2025-08-14)
+
+
+### Features
+
+* add basic woocommerce support ([#368](https://github.com/Automattic/newspack-block-theme/issues/368)) ([ce04831](https://github.com/Automattic/newspack-block-theme/commit/ce0483187f768925ae757d347309141802a33647))
+* add i18n ([#364](https://github.com/Automattic/newspack-block-theme/issues/364)) ([ebfe854](https://github.com/Automattic/newspack-block-theme/commit/ebfe854cdb352e91b5cec57535fc8c6b0fb14151))
+
+# [1.19.0](https://github.com/Automattic/newspack-block-theme/compare/v1.18.1...v1.19.0) (2025-06-30)
+
+
+### Features
+
+* update menu position using JS ([#354](https://github.com/Automattic/newspack-block-theme/issues/354)) ([0227bb5](https://github.com/Automattic/newspack-block-theme/commit/0227bb51f02c887baf8ddcaf72cccbe56ce207a8))
+
+# [1.19.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.18.1...v1.19.0-alpha.1) (2025-06-19)
+
+
+### Features
+
+* update menu position using JS ([#354](https://github.com/Automattic/newspack-block-theme/issues/354)) ([0227bb5](https://github.com/Automattic/newspack-block-theme/commit/0227bb51f02c887baf8ddcaf72cccbe56ce207a8))
+
 ## [1.18.1](https://github.com/Automattic/newspack-block-theme/compare/v1.18.0...v1.18.1) (2025-06-16)
 
 

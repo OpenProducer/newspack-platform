@@ -28,6 +28,7 @@ class WooCommerce_Subscriptions {
 		include_once __DIR__ . '/class-renewal.php';
 		include_once __DIR__ . '/class-subscriptions-meta.php';
 		include_once __DIR__ . '/class-subscriptions-confirmation.php';
+		include_once __DIR__ . '/class-subscriptions-tiers.php';
 
 		On_Hold_Duration::init();
 		Renewal::init();
@@ -62,6 +63,40 @@ class WooCommerce_Subscriptions {
 		 * @param bool $is_enabled
 		 */
 		return apply_filters( 'newspack_subscriptions_expiration_enabled', $is_enabled );
+	}
+
+	/**
+	 * Get the label for a frequency.
+	 *
+	 * @param string $frequency Frequency.
+	 *
+	 * @return string
+	 */
+	public static function get_frequency_label( $frequency ) {
+		$frequencies = [
+			'day'     => __( 'Daily', 'newspack-plugin' ),
+			'week'    => __( 'Weekly', 'newspack-plugin' ),
+			'week_2'  => __( 'Bi-Weekly', 'newspack-plugin' ),
+			'month'   => __( 'Monthly', 'newspack-plugin' ),
+			'month_3' => __( 'Quarterly', 'newspack-plugin' ),
+			'month_6' => __( 'Semi-Annually', 'newspack-plugin' ),
+			'year'    => __( 'Yearly', 'newspack-plugin' ),
+		];
+		// If frequency is not in the array, try to find the frequency without the interval.
+		if ( ! isset( $frequencies[ $frequency ] ) ) {
+			$frequency = explode( '_', $frequency )[0];
+			$label = $frequencies[ $frequency ] ?? ucfirst( $frequency );
+		} else {
+			$label = $frequencies[ $frequency ];
+		}
+
+		/**
+		 * Filters the frequency label.
+		 *
+		 * @param string $label     Frequency label.
+		 * @param string $frequency Frequency.
+		 */
+		return apply_filters( 'newspack_subscriptions_frequency_label', $label, $frequency );
 	}
 }
 WooCommerce_Subscriptions::init();

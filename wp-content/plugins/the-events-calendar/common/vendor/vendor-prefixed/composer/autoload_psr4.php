@@ -7,6 +7,7 @@ $baseDir = dirname(dirname($vendorDir));
 
 return array(
     'TEC\\Common\\lucatume\\DI52\\' => array($vendorDir . '/lucatume/di52/src'),
+    'TEC\\Common\\TrustedLogin\\' => array($vendorDir . '/trustedlogin/client/src'),
     'TEC\\Common\\StellarWP\\Uplink\\Views\\' => array($vendorDir . '/stellarwp/uplink/src/views'),
     'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' => array($vendorDir . '/stellarwp/uplink/src/assets'),
     'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' => array($vendorDir . '/stellarwp/uplink/src/admin-views'),

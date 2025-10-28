@@ -497,7 +497,7 @@ class Guest_Contributor_Role {
 						</label>
 						<p class="description">
 						<?php
-							esc_html_e( 'If this option is checked, the "Non Editing Contributor" role will be added to the user and they will be able to be assigned as a co-author of a post even if they are not allowed to edit posts. For users with edit access, this option has no effect.', 'newspack-plugin' );
+							esc_html_e( 'If this option is checked, the "Guest Contributor" role will be added to the user (on top of their current role) and they will be able to be assigned as a co-author of a post even if they are not allowed to edit posts. For users with edit access, this option has no effect.', 'newspack-plugin' );
 						?>
 						</p>
 					</td>

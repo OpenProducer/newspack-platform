@@ -4,6 +4,7 @@
  * Slug: newspack-block-theme/post-meta-multiple-lines
  * Categories: newspack-block-theme-post-meta
  * Viewport Width: 632
+ * Inserter: yes
  * Block Types: core/post-author, core/post-date, jetpack/sharing-buttons
  *
  * @package Newspack_Block_Theme

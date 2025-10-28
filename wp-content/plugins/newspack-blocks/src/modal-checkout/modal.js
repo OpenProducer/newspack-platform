@@ -270,7 +270,7 @@ domReady( () => {
 			Object.keys( checkoutData ).forEach( key => {
 				const existingInputs = form.querySelectorAll( 'input[name="' +  key + '"]' );
 				if ( 0 === existingInputs.length ) {
-					form.appendChild( createHiddenInput( key, checkoutData[ key ] ) );
+					form.prepend( createHiddenInput( key, checkoutData[ key ] ) );
 				}
 			} );
 		}
@@ -289,7 +289,7 @@ domReady( () => {
 		} );
 
 		// Trigger variation modal if variation is not selected.
-		if ( checkoutData.is_variable && ! checkoutData.variation_id ) {
+		if ( checkoutData.is_grouped || ( checkoutData.is_variable && ! checkoutData.variation_id ) ) {
 			const variationModal = [ ...variationModals ].find(
 				modal => modal.dataset.productId === checkoutData.product_id
 			);
@@ -305,7 +305,7 @@ domReady( () => {
 						].forEach( afterSuccessParam => {
 							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' +  afterSuccessParam + '"]' );
 							if ( 0 === existingInputs.length ) {
-								singleVariationForm.appendChild( createHiddenInput( afterSuccessParam, checkoutData[ afterSuccessParam ] ) );
+								singleVariationForm.prepend( createHiddenInput( afterSuccessParam, checkoutData[ afterSuccessParam ] ) );
 							}
 						} );
 
@@ -316,7 +316,7 @@ domReady( () => {
 							Object.keys( data ).forEach( key => {
 								const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' +  key + '"]' );
 								if ( 0 === existingInputs.length ) {
-									singleVariationForm.appendChild( createHiddenInput( key, data[ key ] ) );
+									singleVariationForm.prepend( createHiddenInput( key, data[ key ] ) );
 								}
 							} );
 						}
@@ -675,7 +675,7 @@ domReady( () => {
 			const forms = element.querySelectorAll( 'form' );
 			forms.forEach( form => {
 				if ( ! newspackBlocksModal.has_unsupported_payment_gateway ) {
-					form.appendChild( modalCheckoutHiddenInput.cloneNode() );
+					form.prepend( modalCheckoutHiddenInput.cloneNode() );
 				}
 				form.target = IFRAME_NAME;
 				form.addEventListener( 'submit', handleCheckoutFormSubmit );

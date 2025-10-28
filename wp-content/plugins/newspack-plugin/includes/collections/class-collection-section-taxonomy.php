@@ -129,13 +129,14 @@ class Collection_Section_Taxonomy {
 		];
 
 		$args = [
-			'labels'            => $labels,
-			'description'       => __( 'Taxonomy for organizing posts into sections within collections.', 'newspack-plugin' ),
-			'public'            => true,
-			'show_in_menu'      => false, // Hide in the posts menu (but show in the collections menu).
-			'show_admin_column' => true,
-			'show_in_rest'      => true,
-			'rewrite'           => [
+			'labels'             => $labels,
+			'description'        => __( 'Taxonomy for organizing posts into sections within collections.', 'newspack-plugin' ),
+			'public'             => true,
+			'show_in_menu'       => false, // Hide in the posts menu (but show in the collections menu).
+			'show_admin_column'  => true,
+			'show_in_quick_edit' => false,
+			'show_in_rest'       => true,
+			'rewrite'            => [
 				'slug' => Settings::get_setting( 'custom_naming_enabled', false ) ? Settings::get_setting( 'custom_slug', 'collection' ) . '-section' : 'collection-section',
 			],
 		];

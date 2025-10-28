@@ -423,17 +423,19 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 						label={ __( 'Button Color', 'newspack-blocks' ) }
 					/>
 				</PanelBody>
-				<PanelBody title={ __( 'Campaign', 'newspack-blocks' ) } initialOpen={ false }>
-					<TextControl
-						label={ __( 'Campaign ID', 'newspack-blocks' ) }
-						value={ attributes.campaign || '' }
-						onChange={ ( value: string ) =>
-							setAttributes( {
-								campaign: value,
-							} )
-						}
-					/>
-				</PanelBody>
+				{ settings.platform === 'nrh' && (
+					<PanelBody title={ __( 'News Revenue Hub Settings', 'newspack-blocks' ) } initialOpen={ false }>
+						<TextControl
+							label={ __( 'Campaign ID', 'newspack-blocks' ) }
+							value={ attributes.campaign || '' }
+							onChange={ ( value: string ) =>
+								setAttributes( {
+									campaign: value,
+								} )
+							}
+						/>
+					</PanelBody>
+				) }
 				{ window.newspack_blocks_data.supports_recaptcha && (
 					<PanelBody title={ __( 'Spam protection', 'newspack' ) }>
 						<p>

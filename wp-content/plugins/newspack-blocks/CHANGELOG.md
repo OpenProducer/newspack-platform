@@ -1,3 +1,30 @@
+# [4.16.0](https://github.com/Automattic/newspack-blocks/compare/v4.15.4...v4.16.0) (2025-10-06)
+
+
+### Bug Fixes
+
+* **checkout-button:** editor's align center ([#2207](https://github.com/Automattic/newspack-blocks/issues/2207)) ([0279b3d](https://github.com/Automattic/newspack-blocks/commit/0279b3debf80c626d8b98008545ac88aa4f83808))
+* clarify NRH dependency for Campaign ID sidebar attribute ([#2214](https://github.com/Automattic/newspack-blocks/issues/2214)) ([a25087c](https://github.com/Automattic/newspack-blocks/commit/a25087c7c85b32d06caeb80589627f2312046347))
+* ga4 events for tiered modal ([#2218](https://github.com/Automattic/newspack-blocks/issues/2218)) ([74cf571](https://github.com/Automattic/newspack-blocks/commit/74cf571dbeb5e963f817f9f3cb02ecd117f9ab50))
+* input hardening ([12a87f1](https://github.com/Automattic/newspack-blocks/commit/12a87f1b03c6c2f762aa9a65e8d14b0ae437953b))
+* update download URL for db.php ([#2208](https://github.com/Automattic/newspack-blocks/issues/2208)) ([d334f82](https://github.com/Automattic/newspack-blocks/commit/d334f8275ade2c1a8b5d53d9ca44bb44db5d28e8))
+
+
+### Features
+
+* better error messages for limited products ([#2202](https://github.com/Automattic/newspack-blocks/issues/2202)) ([5572d62](https://github.com/Automattic/newspack-blocks/commit/5572d623d5cdfc04be9dc4f317d512797d248dfd))
+* **checkout-button:** grouped product support ([#2201](https://github.com/Automattic/newspack-blocks/issues/2201)) ([f053be1](https://github.com/Automattic/newspack-blocks/commit/f053be1d730a99289f6f8b981e3604095033775c))
+* **modal-checkout:** switch subscription support ([#2204](https://github.com/Automattic/newspack-blocks/issues/2204)) ([6906e23](https://github.com/Automattic/newspack-blocks/commit/6906e234dfa23e3ce0dcfd92cb337f63d1b239e1))
+* replace buttongroup with togglegroupcontrol ([#2197](https://github.com/Automattic/newspack-blocks/issues/2197)) ([26920db](https://github.com/Automattic/newspack-blocks/commit/26920db7295d41eb62ce0835e1250576aab2e919))
+* support for iframe auto-resizing ([541af11](https://github.com/Automattic/newspack-blocks/commit/541af116a128dc4fe43281fd717308349f5dfdf8))
+
+## [4.15.4](https://github.com/Automattic/newspack-blocks/compare/v4.15.3...v4.15.4) (2025-10-01)
+
+
+### Bug Fixes
+
+* **iframe-block:** validate file extensions before allowing upload ([#2220](https://github.com/Automattic/newspack-blocks/issues/2220)) ([263e419](https://github.com/Automattic/newspack-blocks/commit/263e419b56814d3f848d6629a5442f54b1dad28d))
+
 ## [4.15.3](https://github.com/Automattic/newspack-blocks/compare/v4.15.2...v4.15.3) (2025-09-25)
 
 
