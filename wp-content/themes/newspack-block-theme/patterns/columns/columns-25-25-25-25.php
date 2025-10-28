@@ -3,6 +3,7 @@
  * Title: 25 / 25 / 25 / 25
  * Slug: newspack-block-theme/columns-25-25-25-25
  * Categories: newspack-block-theme-columns
+ * Inserter: yes
  * Block Types: core/columns
  *
  * @package Newspack_Block_Theme

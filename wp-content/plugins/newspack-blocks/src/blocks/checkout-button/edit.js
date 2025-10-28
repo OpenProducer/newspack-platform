@@ -27,8 +27,11 @@ import {
 	SelectControl,
 	FormTokenField,
 	Button,
-	ButtonGroup,
 	Spinner,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
@@ -58,7 +61,7 @@ function getNYP( product ) {
 	};
 }
 
-function WidthPanel( { selectedWidth, setAttributes } ) {
+function WidthControl( { selectedWidth, setAttributes } ) {
 	function handleChange( newWidth ) {
 		// Check if we are toggling the width off
 		const width = selectedWidth === newWidth ? undefined : newWidth;
@@ -68,22 +71,21 @@ function WidthPanel( { selectedWidth, setAttributes } ) {
 	}
 
 	return (
-		<PanelBody title={ __( 'Width settings', 'newspack-blocks' ) }>
-			<ButtonGroup aria-label={ __( 'Button width', 'newspack-blocks' ) }>
-				{ [ 25, 50, 75, 100 ].map( widthValue => {
-					return (
-						<Button
-							key={ widthValue }
-							size="small"
-							variant={ widthValue === selectedWidth ? 'primary' : undefined }
-							onClick={ () => handleChange( widthValue ) }
-						>
-							{ widthValue }%
-						</Button>
-					);
-				} ) }
-			</ButtonGroup>
-		</PanelBody>
+		<ToggleGroupControl
+			label={ __( 'Width', 'newspack-blocks' ) }
+			value={ selectedWidth ? String( selectedWidth ) : undefined }
+			onChange={ value => handleChange( parseFloat( value ) ) }
+			isBlock
+			__next40pxDefaultSize
+		>
+			{ [ 25, 50, 75, 100 ].map( widthValue => (
+				<ToggleGroupControlOption
+					key={ widthValue }
+					label={ `${ widthValue }%` }
+					value={ String( widthValue ) }
+				/>
+			) ) }
+		</ToggleGroupControl>
 	);
 }
 
@@ -161,19 +163,24 @@ function ProductControl( props ) {
 		return <Spinner />;
 	}
 	return (
-		<div className="newspack-checkout-button__product-field">
+		<div className="newspack-checkout-button__product-field" style={ { marginBottom: '16px' } }>
 			{ selected && ! isChanging ? (
 				<>
 					<BaseControl
-						className="newspack-checkout-button__product-field__selected"
-						help={ __( 'Click to change the selected product', 'newspack-blocks' ) }
+						label={ __( 'Product', 'newspack-blocks' ) }
+						id="selected-product-control"
 					>
+						<TextControl
+							value={ selected.name }
+							__next40pxDefaultSize
+							disabled
+						/>
 						<Button
-							isSecondary
+							variant="link"
 							onClick={ () => setIsChanging( true ) }
 							aria-label={ __( 'Change the selected product', 'newspack-blocks' ) }
 						>
-							{ selected.name }
+							{ __( 'Edit', 'newspack-blocks' ) }
 						</Button>
 					</BaseControl>
 					{ props.children }
@@ -185,16 +192,20 @@ function ProductControl( props ) {
 							placeholder={
 								props.placeholder || __( 'Type to search for a product…', 'newspack-blocks' )
 							}
-							label={ __( 'Select a product', 'newspack-blocks' ) }
+							label={ __( 'Product', 'newspack-blocks' ) }
 							maxLength={ 1 }
 							onChange={ onChange }
 							onInputChange={ handleInputChange }
 							suggestions={ Object.values( suggestions ) }
+							__next40pxDefaultSize
 						/>
 						{ inFlight && <Spinner /> }
 					</div>
 					{ selected && (
-						<Button isSecondary onClick={ () => setIsChanging( false ) }>
+						<Button
+							variant="link"
+							onClick={ () => setIsChanging( false ) }
+						>
 							{ __( 'Cancel', 'newspack-blocks' ) }
 						</Button>
 					) }
@@ -303,7 +314,7 @@ function CheckoutButtonEdit( props ) {
 				/>
 			</div>
 			<InspectorControls>
-				<PanelBody title={ __( 'Product', 'newspack-blocks' ) }>
+				<PanelBody title={ __( 'Settings', 'newspack-blocks' ) }>
 					<ProductControl
 						value={ product }
 						price={ price }
@@ -351,6 +362,7 @@ function CheckoutButtonEdit( props ) {
 							</>
 						) }
 					</ProductControl>
+					<WidthControl selectedWidth={ width } setAttributes={ setAttributes } />
 				</PanelBody>
 				<PanelBody title={ __( 'After purchase', 'newspack-blocks' ) }>
 					<RedirectAfterSuccess setAttributes={ setAttributes } attributes={ attributes } />
@@ -387,12 +399,10 @@ function CheckoutButtonEdit( props ) {
 							min={ parseFloat( nyp.minPrice ) || null }
 							max={ parseFloat( nyp.maxPrice ) || null }
 							onChange={ value => setAttributes( { price: value } ) }
+							__next40pxDefaultSize
 						/>
 					</PanelBody>
 				) }
-			</InspectorControls>
-			<InspectorControls>
-				<WidthPanel selectedWidth={ width } setAttributes={ setAttributes } />
 			</InspectorControls>
 		</>
 	);

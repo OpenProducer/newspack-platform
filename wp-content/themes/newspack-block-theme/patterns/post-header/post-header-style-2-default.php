@@ -4,6 +4,7 @@
  * Slug: newspack-block-theme/post-header-style-2
  * Categories: newspack-block-theme-post-header
  * Viewport Width: 632
+ * Inserter: yes
  *
  * @package Newspack_Block_Theme
  */

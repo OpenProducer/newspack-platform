@@ -4,6 +4,7 @@
  * Slug: newspack-block-theme/author-bio
  * Categories: newspack-block-theme-author-bio
  * Viewport Width: 632
+ * Inserter: yes
  * Block Types: core/post-author-name, core/post-author-biography
  *
  * @package Newspack_Block_Theme

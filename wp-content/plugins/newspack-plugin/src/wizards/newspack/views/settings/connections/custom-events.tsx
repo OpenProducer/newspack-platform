@@ -115,7 +115,7 @@ function CustomEvents() {
 					value={ ga4Credentials.measurement_id }
 					label={ __( 'Measurement ID', 'newspack-plugin' ) }
 					help={ __(
-						'You can find this in Site Kit Settings, or in Google Analytics > Admin > Data Streams and clickng the data stream. Example: G-ABCDE12345',
+						'You can find this in Site Kit Settings, or in Google Analytics > Admin > Data Streams and clicking the data stream. Example: G-ABCDE12345',
 						'newspack-plugin'
 					) }
 					onChange={ ( value: string ) => setGa4Credentials( { ...ga4Credentials, measurement_id: value } ) }

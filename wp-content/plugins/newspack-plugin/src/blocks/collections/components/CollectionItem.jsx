@@ -74,36 +74,60 @@ const CollectionItem = ( { collection, attributes } ) => {
 		return next.slice( 0, numberOfCTAs || 1 );
 	}, [ collection.ctas, showSubscriptionUrl, showOrderUrl, specificCTAs, numberOfCTAs ] );
 
-	// Build meta text, memoized.
-	const metaText = useMemo( () => {
-		const metaParts = [];
+	// Build meta elements, memoized.
+	const metaElements = useMemo( () => {
+		const elements = [];
 
 		// Add period first.
 		if ( showPeriod && period ) {
-			metaParts.push( period );
+			elements.push(
+				<span key="period" className="wp-block-newspack-collections__period">
+					{ period }
+				</span>
+			);
 		}
 
-		const volNumber = [];
+		// Add separator if we have period and will have volume/number.
+		if ( showPeriod && period && ( ( showVolume && volume ) || ( showNumber && number ) ) ) {
+			const separator =
+				layout === 'list' ? (
+					<span key="period-sep" className="wp-block-newspack-collections__divider">
+						{ ' / ' }
+					</span>
+				) : (
+					<br key="period-sep" />
+				);
+			elements.push( separator );
+		}
 
+		// Volume.
 		if ( showVolume && volume ) {
-			volNumber.push( `Vol. ${ volume }` );
+			elements.push(
+				<span key="volume" className="wp-block-newspack-collections__volume">
+					{ `Vol. ${ volume }` }
+				</span>
+			);
 		}
 
+		// Separator between volume and number.
+		if ( showVolume && volume && showNumber && number ) {
+			elements.push(
+				<span key="vol-num-sep" className="wp-block-newspack-collections__divider">
+					{ ' / ' }
+				</span>
+			);
+		}
+
+		// Number.
 		if ( showNumber && number ) {
-			volNumber.push( `No. ${ number }` );
+			elements.push(
+				<span key="number" className="wp-block-newspack-collections__number">
+					{ `No. ${ number }` }
+				</span>
+			);
 		}
 
-		if ( volNumber.length ) {
-			metaParts.push( volNumber.join( ' / ' ) );
-		}
-
-		if ( metaParts.length ) {
-			// Use different separator based on layout.
-			const separator = layout === 'list' ? ' / ' : '<br>';
-			return metaParts.join( separator );
-		}
-
-		return '';
+		return elements;
 	}, [ showPeriod, period, showVolume, volume, showNumber, number, layout ] );
 
 	return (
@@ -143,9 +167,9 @@ const CollectionItem = ( { collection, attributes } ) => {
 					</h3>
 				) }
 
-				{ metaText && (
+				{ metaElements.length > 0 && (
 					<div className="wp-block-newspack-collections__meta has-medium-gray-color has-text-color has-small-font-size">
-						<RawHTML>{ metaText }</RawHTML>
+						{ metaElements }
 					</div>
 				) }
 

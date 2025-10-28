@@ -234,6 +234,18 @@ class Feedback {
 			}
 			return array( 'files' => array() );
 		}
+
+		if ( $type === 'image-select' ) {
+			if ( isset( $post_data[ $key ] ) ) {
+				return self::process_image_select_field_value( $post_data[ $key ] );
+			}
+
+			return array(
+				'type'    => 'image-select',
+				'choices' => array(),
+			);
+		}
+
 		if ( isset( $post_data[ $key ] ) ) {
 			if ( is_array( $post_data[ $key ] ) ) {
 				return array_map( 'sanitize_textarea_field', wp_unslash( $post_data[ $key ] ) );
@@ -275,6 +287,34 @@ class Feedback {
 		return array(
 			'files' => $file_data_array,
 		);
+	}
+
+	/**
+	 * Process the image select field value.
+	 *
+	 * @param array $raw_data The raw post data from the image select field.
+	 *
+	 * @return array The processed image select data.
+	 */
+	public static function process_image_select_field_value( $raw_data ) {
+		$value = array(
+			'type'    => 'image-select',
+			'choices' => array(),
+		);
+
+		$selection_data_array = is_array( $raw_data )
+			? array_map(
+				function ( $json_str ) {
+					return json_decode( stripslashes( $json_str ), true );
+				},
+				$raw_data
+			) : array( json_decode( stripslashes( $raw_data ), true ) );
+
+		if ( ! empty( $selection_data_array ) ) {
+			$value['choices'] = $selection_data_array;
+		}
+
+		return $value;
 	}
 
 	/**
@@ -455,6 +495,13 @@ class Feedback {
 				continue; // Skip fields that are not meant to be rendered.
 			}
 
+			// Don't show the hidden fields in the user context.
+			if ( in_array( $context, array( 'web', 'ajax' ), true ) ) {
+				if ( $field->is_of_type( 'hidden' ) ) {
+					continue;
+				}
+			}
+
 			$label = $field->get_label( $context );
 
 			if ( ! isset( $count_field_labels[ $label ] ) ) {
@@ -548,7 +595,7 @@ class Feedback {
 
 			// Skip any fields that are just a choice from a pre-defined list. They wouldn't have any value
 			// from a spam-filtering point of view.
-			if ( in_array( $field->get_type(), array( 'select', 'checkbox', 'checkbox-multiple', 'radio', 'file' ), true ) ) {
+			if ( in_array( $field->get_type(), array( 'select', 'checkbox', 'checkbox-multiple', 'radio', 'file', 'image-select' ), true ) ) {
 				continue;
 			}
 
@@ -840,6 +887,14 @@ class Feedback {
 		}
 
 		if ( $decoded_content === null ) {
+			// Final fallback: attempt to fix malformed JSON with unescaped quotes
+			// Apply stripslashes first, then fix remaining issues
+			$stripped_content = stripslashes( trim( $post_content ) );
+			$fixed_content    = self::fix_malformed_json( $stripped_content );
+			$decoded_content  = json_decode( $fixed_content, true );
+		}
+
+		if ( $decoded_content === null ) {
 			return array();
 		}
 		$fields = array();
@@ -918,6 +973,104 @@ class Feedback {
 	}
 
 	/**
+	 * Attempt to fix malformed JSON by escaping unescaped quotes in string values.
+	 *
+	 * This method handles cases where JSON contains unescaped quotes within string values,
+	 * which causes json_decode to fail.
+	 *
+	 * @param string $json malformed JSON string.
+	 * @return string The JSON string with escaped quotes.
+	 */
+	public static function fix_malformed_json( $json ) {
+
+		$find    = array();
+		$replace = array();
+
+		// Start of JSON object
+		$find[]    = '{\"';
+		$replace[] = '{"';
+
+		// Key-value separator
+		$find[]    = '\":\"';
+		$replace[] = '":"';
+
+		$find[]    = '\\\"';
+		$replace[] = '\"';
+
+		$find[]    = '\":[\"';
+		$replace[] = '":["';
+
+		$find[]    = '\"],';
+		$replace[] = '"],';
+
+		$find[]    = ',[\"';
+		$replace[] = ',["';
+
+		$find[]    = '\",\"';
+		$replace[] = '","';
+
+		$find[]    = ',\"';
+		$replace[] = ',"';
+
+		$find[]    = '\", \"';
+		$replace[] = '", "';
+
+		$find[]    = '\"],\"';
+		$replace[] = '"],"';
+
+		$find[]    = '\"],"';
+		$replace[] = '"],"';
+
+		$find[]    = '\":[]';
+		$replace[] = '":[]';
+
+		$find[]    = '\"]}';
+		$replace[] = '"]}';
+
+		$find[]    = '\":[';
+		$replace[] = '":[';
+
+		$find[]    = '\":{';
+		$replace[] = '":{';
+
+		$find[]    = '\":true';
+		$replace[] = '":true';
+
+		$find[]    = '\":false';
+		$replace[] = '":false';
+
+		$find[]    = '\":null';
+		$replace[] = '":null';
+
+		for ( $i = 0; $i <= 9; $i++ ) {
+			$find[]    = '\":' . $i;
+			$replace[] = '":' . $i;
+
+			$find[]    = '\",' . $i;
+			$replace[] = '",' . $i;
+		}
+
+		$find[]    = '\",true';
+		$replace[] = '",true';
+
+		$find[]    = '\",false';
+		$replace[] = '",false';
+
+		$find[]    = '\",null';
+		$replace[] = '",null';
+
+		$find[]    = "\'";
+		$replace[] = "'";
+
+		// End of Json object
+		$find[]    = '\"}';
+		$replace[] = '"}';
+
+		// Remove any slashes that are there to start a new string.
+		return str_replace( $find, $replace, addslashes( $json ) );
+	}
+
+	/**
 	 * Split legacy content into comment and field sections.
 	 *
 	 * @param string $post_content The post content to parse.
@@ -984,7 +1137,17 @@ class Feedback {
 	 * @return array Parsed JSON data.
 	 */
 	private function parse_json_data( $field_content ) {
-		$chunks    = explode( "\nJSON_DATA", $field_content );
+		$chunks = explode( "\nJSON_DATA", $field_content );
+
+		if ( ! isset( $chunks[1] ) ) {
+			// Try with 'JSON_DATA' without the newline as a fallback.
+			$chunks = explode( 'JSON_DATA', $field_content );
+			if ( ! isset( $chunks[1] ) ) {
+				// If JSON_DATA is still not found, return an empty array.
+				return array();
+			}
+		}
+
 		$json_data = $chunks[1];
 
 		$all_values = json_decode( $json_data, true );

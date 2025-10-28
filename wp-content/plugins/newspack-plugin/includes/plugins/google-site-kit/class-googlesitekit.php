@@ -198,38 +198,47 @@ class GoogleSiteKit {
 			'logged_in' => is_user_logged_in() ? 'yes' : 'no',
 		];
 
-		// Get current post author name.
-		$author_name = '';
-		if ( function_exists( 'get_coauthors' ) ) {
-			$author_name = implode(
-				', ',
-				array_map(
-					function( $author ) {
-						return $author->display_name;
-					},
-					get_coauthors()
-				)
-			);
-		} else {
-			$post = get_post();
-			if ( null !== $post && is_numeric( $post->post_author ) ) {
-				// For some reason, get_the_author() does not work here.
-				$author_user = get_user_by( 'ID', $post->post_author );
-				if ( $author_user ) {
-					$author_name = $author_user->display_name;
+		$categories = [];
+
+		// Single post params.
+		if ( is_singular() ) {
+			// Post ID.
+			$params['post_id'] = get_the_ID();
+			$categories        = get_the_category();
+
+			// Get current post author name.
+			$author_name = '';
+			if ( function_exists( 'get_coauthors' ) ) {
+				$author_name = implode(
+					', ',
+					array_map(
+						function( $author ) {
+							return $author->display_name;
+						},
+						get_coauthors()
+					)
+				);
+			} else {
+				$post = get_post();
+				if ( null !== $post && is_numeric( $post->post_author ) ) {
+					// For some reason, get_the_author() does not work here.
+					$author_user = get_user_by( 'ID', $post->post_author );
+					if ( $author_user ) {
+						$author_name = $author_user->display_name;
+					}
 				}
 			}
-		}
-		if ( ! empty( $author_name ) ) {
-			$params['author'] = $author_name;
+			if ( ! empty( $author_name ) ) {
+				$params['author'] = $author_name;
+			}
 		}
 
-		// Get current post categories.
+		// Get current post or archive categories.
 		$category_names = array_map(
 			function( $category ) {
 				return $category->name;
 			},
-			get_the_category()
+			is_category() ? [ get_queried_object() ] : $categories
 		);
 		if ( ! empty( $category_names ) ) {
 			$params['categories'] = implode( ', ', $category_names );

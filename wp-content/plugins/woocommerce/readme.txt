@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online
 Requires at least: 6.7
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 10.1.2
+Stable tag: 10.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,16 +170,11 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 10.2.1 2025-09-22 =
+= 10.3.3 2025-10-24 =
 
 **WooCommerce**
 
-* Fix - Address update script issue where refunded $order may not exist, and disable refunded orders tool. [#61022](https://github.com/woocommerce/woocommerce/pull/61022)
-* Fix - Downgrade Emogrifier dependency to avoid conflict [#60997](https://github.com/woocommerce/woocommerce/pull/60997)
-* Fix - Fix product price display in RTL languages [#61000](https://github.com/woocommerce/woocommerce/pull/61000)
-* Update - Improve template slug recognition in mechanism registering product blocks. Assure compatibility with WordPress 6.9 [#61009](https://github.com/woocommerce/woocommerce/pull/61009)
-* Dev - Replace deprecated core/edit-site methods with core/editor methods [#61009](https://github.com/woocommerce/woocommerce/pull/61009)
-* Dev - Stop relying on deprecated core/edit-site methods [#61009](https://github.com/woocommerce/woocommerce/pull/61009)
+* Dev - Add in deprecated script warnings and backwards compatibility for 3PDs [#61599](https://github.com/woocommerce/woocommerce/pull/61599)
 
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

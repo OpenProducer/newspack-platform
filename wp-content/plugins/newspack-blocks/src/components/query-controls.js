@@ -5,11 +5,13 @@ import { __, sprintf } from '@wordpress/i18n';
 import { Component } from '@wordpress/element';
 import {
 	BaseControl,
-	Button,
-	ButtonGroup,
 	CheckboxControl,
 	SelectControl,
-	QueryControls as BasicQueryControls
+	QueryControls as BasicQueryControls,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
@@ -286,33 +288,29 @@ class QueryControls extends Component {
 		return (
 			<>
 				{ enableSpecific && (
-					<BaseControl
+					<ToggleGroupControl
 						label={ __( 'Mode', 'newspack-blocks' ) }
-						id="newspack-block__loop-type"
-						className="newspack-block__button-group"
-						help={ specificMode ? (
-							__( 'The block will display only the specifically selected post(s).', 'newspack-blocks' )
-						) : (
-							__( 'The block will display content based on the filtering settings below.', 'newspack-blocks' )
-						) }
+						value={ specificMode ? 'specific' : 'dynamic' }
+						onChange={ value => {
+							if ( value === 'specific' ) {
+								onSpecificModeChange();
+							} else {
+								onLoopModeChange();
+							}
+						} }
+						isBlock
+						help={
+							specificMode ? (
+								__( 'The block will display only the specifically selected post(s).', 'newspack-blocks' )
+							) : (
+								__( 'The block will display content based on the filtering settings below.', 'newspack-blocks' )
+							)
+						}
+						__next40pxDefaultSize
 					>
-						<ButtonGroup>
-							<Button
-								variant={ ! specificMode && 'primary' }
-								aria-pressed={ ! specificMode }
-								onClick={ onLoopModeChange }
-							>
-								{ __( 'Dynamic', 'newspack-blocks' ) }
-							</Button>
-							<Button
-								variant={ specificMode && 'primary' }
-								aria-pressed={ specificMode }
-								onClick={ onSpecificModeChange }
-							>
-								{ __( 'Static', 'newspack-blocks' ) }
-							</Button>
-						</ButtonGroup>
-					</BaseControl>
+						<ToggleGroupControlOption label={ __( 'Dynamic', 'newspack-blocks' ) } value="dynamic" />
+						<ToggleGroupControlOption label={ __( 'Static', 'newspack-blocks' ) } value="specific" />
+					</ToggleGroupControl>
 				) }
 				{ specificMode ? (
 					<AutocompleteTokenField

@@ -4,12 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
+class ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '3773ef3f09c37da5478d578e32b03a4b' => __DIR__ . '/..' . '/automattic/jetpack-assets/actions.php',
         '7372b7fb88a9723cf5b76d456eb0b738' => __DIR__ . '/..' . '/automattic/jetpack-connection/actions.php',
+        '2d223b650b5c56928c1affa16ee5cfe2' => __DIR__ . '/..' . '/wordpress/abilities-api/includes/bootstrap.php',
         '44e8414cd27982ecf86403af6e48f123' => __DIR__ . '/../..' . '/src/StoreApi/deprecated.php',
         '9ce98895d0a470c71998c4b530020d26' => __DIR__ . '/../..' . '/src/StoreApi/functions.php',
         'c379ea42c3f5964a973a7106b08c5ef0' => __DIR__ . '/../..' . '/src/Blocks/Domain/Services/functions.php',
@@ -17,6 +18,10 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
     );
 
     public static $prefixLengthsPsr4 = array (
+        'W' => 
+        array (
+            'WP\\MCP\\' => 7,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
@@ -51,6 +56,10 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
     );
 
     public static $prefixDirsPsr4 = array (
+        'WP\\MCP\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes',
+        ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
@@ -118,6 +127,7 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Automattic\\Block_Delimiter' => __DIR__ . '/..' . '/automattic/block-delimiter/src/class-block-delimiter.php',
+        'Automattic\\Block_Scanner' => __DIR__ . '/..' . '/automattic/block-delimiter/src/class-block-scanner.php',
         'Automattic\\Jetpack\\A8c_Mc_Stats' => __DIR__ . '/..' . '/automattic/jetpack-a8c-mc-stats/src/class-a8c-mc-stats.php',
         'Automattic\\Jetpack\\Admin_UI\\Admin_Menu' => __DIR__ . '/..' . '/automattic/jetpack-admin-ui/src/class-admin-menu.php',
         'Automattic\\Jetpack\\Assets' => __DIR__ . '/..' . '/automattic/jetpack-assets/src/class-assets.php',
@@ -512,6 +522,7 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptions\\GroupedProductSelector' => __DIR__ . '/../..' . '/src/Blocks/BlockTypes/AddToCartWithOptions/GroupedProductSelector.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptions\\QuantitySelector' => __DIR__ . '/../..' . '/src/Blocks/BlockTypes/AddToCartWithOptions/QuantitySelector.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptions\\Utils' => __DIR__ . '/../..' . '/src/Blocks/BlockTypes/AddToCartWithOptions/Utils.php',
+        'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptions\\VariationDescription' => __DIR__ . '/../..' . '/src/Blocks/BlockTypes/AddToCartWithOptions/VariationDescription.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptions\\VariationSelector' => __DIR__ . '/../..' . '/src/Blocks/BlockTypes/AddToCartWithOptions/VariationSelector.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptions\\VariationSelectorAttribute' => __DIR__ . '/../..' . '/src/Blocks/BlockTypes/AddToCartWithOptions/VariationSelectorAttribute.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartWithOptions\\VariationSelectorAttributeName' => __DIR__ . '/../..' . '/src/Blocks/BlockTypes/AddToCartWithOptions/VariationSelectorAttributeName.php',
@@ -875,23 +886,38 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\EmailEditor\\HttpAwareException' => __DIR__ . '/../..' . '/packages/email-editor/src/exceptions.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Initializer' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/class-initializer.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Abstract_Block_Renderer' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-abstract-block-renderer.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Audio' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-audio.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Button' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-button.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Buttons' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-buttons.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Column' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-column.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Columns' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-columns.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Cover' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-cover.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Embed' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-embed.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Fallback' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-fallback.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Gallery' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-gallery.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Group' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-group.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Image' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-image.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\List_Block' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-list-block.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\List_Item' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-list-item.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Media_Text' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-media-text.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Quote' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-quote.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Social_Link' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-social-link.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Social_Links' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-social-links.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Table' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-table.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Text' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-text.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Video' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Core/Renderer/Blocks/class-video.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Utils\\Dom_Document_Helper' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Utils/class-dom-document-helper.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Utils\\Html_Processing_Helper' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Utils/class-html-processing-helper.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Utils\\Social_Links_Helper' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Utils/class-social-links-helper.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Utils\\Styles_Helper' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Utils/class-styles-helper.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Utils\\Table_Wrapper_Helper' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/Utils/class-table-wrapper-helper.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\WooCommerce\\Initializer' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/WooCommerce/class-initializer.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\WooCommerce\\Renderer\\Blocks\\Abstract_Product_Block_Renderer' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/WooCommerce/Renderer/Blocks/class-abstract-product-block-renderer.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\WooCommerce\\Renderer\\Blocks\\Product_Button' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/WooCommerce/Renderer/Blocks/class-product-button.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\WooCommerce\\Renderer\\Blocks\\Product_Collection' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/WooCommerce/Renderer/Blocks/class-product-collection.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\WooCommerce\\Renderer\\Blocks\\Product_Image' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/WooCommerce/Renderer/Blocks/class-product-image.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\WooCommerce\\Renderer\\Blocks\\Product_Price' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/WooCommerce/Renderer/Blocks/class-product-price.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\WooCommerce\\Renderer\\Blocks\\Product_Sale_Badge' => __DIR__ . '/../..' . '/packages/email-editor/src/Integrations/WooCommerce/Renderer/Blocks/class-product-sale-badge.php',
         'Automattic\\WooCommerce\\EmailEditor\\InvalidStateException' => __DIR__ . '/../..' . '/packages/email-editor/src/exceptions.php',
         'Automattic\\WooCommerce\\EmailEditor\\NewsletterProcessingException' => __DIR__ . '/../..' . '/packages/email-editor/src/exceptions.php',
         'Automattic\\WooCommerce\\EmailEditor\\NotFoundException' => __DIR__ . '/../..' . '/packages/email-editor/src/exceptions.php',
@@ -912,6 +938,7 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\EmailEditor\\Validator\\Validation_Exception' => __DIR__ . '/../..' . '/packages/email-editor/src/Validator/class-validation-exception.php',
         'Automattic\\WooCommerce\\EmailEditor\\Validator\\Validator' => __DIR__ . '/../..' . '/packages/email-editor/src/Validator/class-validator.php',
         'Automattic\\WooCommerce\\Enums\\CatalogVisibility' => __DIR__ . '/../..' . '/src/Enums/CatalogVisibility.php',
+        'Automattic\\WooCommerce\\Enums\\FeaturePluginCompatibility' => __DIR__ . '/../..' . '/src/Enums/FeaturePluginCompatibility.php',
         'Automattic\\WooCommerce\\Enums\\OrderInternalStatus' => __DIR__ . '/../..' . '/src/Enums/OrderInternalStatus.php',
         'Automattic\\WooCommerce\\Enums\\OrderStatus' => __DIR__ . '/../..' . '/src/Enums/OrderStatus.php',
         'Automattic\\WooCommerce\\Enums\\PaymentGatewayFeature' => __DIR__ . '/../..' . '/src/Enums/PaymentGatewayFeature.php',
@@ -919,6 +946,10 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\Enums\\ProductStockStatus' => __DIR__ . '/../..' . '/src/Enums/ProductStockStatus.php',
         'Automattic\\WooCommerce\\Enums\\ProductTaxStatus' => __DIR__ . '/../..' . '/src/Enums/ProductTaxStatus.php',
         'Automattic\\WooCommerce\\Enums\\ProductType' => __DIR__ . '/../..' . '/src/Enums/ProductType.php',
+        'Automattic\\WooCommerce\\Internal\\Abilities\\AbilitiesRegistry' => __DIR__ . '/../..' . '/src/Internal/Abilities/AbilitiesRegistry.php',
+        'Automattic\\WooCommerce\\Internal\\Abilities\\AbilitiesRestBridge' => __DIR__ . '/../..' . '/src/Internal/Abilities/AbilitiesRestBridge.php',
+        'Automattic\\WooCommerce\\Internal\\Abilities\\REST\\RestAbility' => __DIR__ . '/../..' . '/src/Internal/Abilities/REST/RestAbility.php',
+        'Automattic\\WooCommerce\\Internal\\Abilities\\REST\\RestAbilityFactory' => __DIR__ . '/../..' . '/src/Internal/Abilities/REST/RestAbilityFactory.php',
         'Automattic\\WooCommerce\\Internal\\AddressProvider\\AbstractAutomatticAddressProvider' => __DIR__ . '/../..' . '/src/Internal/AddressProvider/AbstractAutomatticAddressProvider.php',
         'Automattic\\WooCommerce\\Internal\\AddressProvider\\AddressProviderController' => __DIR__ . '/../..' . '/src/Internal/AddressProvider/AddressProviderController.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\ActivityPanels' => __DIR__ . '/../..' . '/src/Internal/Admin/ActivityPanels.php',
@@ -1094,6 +1125,7 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\Internal\\CLI\\Migrator\\Commands\\ResetCommand' => __DIR__ . '/../..' . '/src/Internal/CLI/Migrator/Commands/ResetCommand.php',
         'Automattic\\WooCommerce\\Internal\\CLI\\Migrator\\Commands\\SetupCommand' => __DIR__ . '/../..' . '/src/Internal/CLI/Migrator/Commands/SetupCommand.php',
         'Automattic\\WooCommerce\\Internal\\CLI\\Migrator\\Core\\CredentialManager' => __DIR__ . '/../..' . '/src/Internal/CLI/Migrator/Core/CredentialManager.php',
+        'Automattic\\WooCommerce\\Internal\\CLI\\Migrator\\Core\\MigratorTracker' => __DIR__ . '/../..' . '/src/Internal/CLI/Migrator/Core/MigratorTracker.php',
         'Automattic\\WooCommerce\\Internal\\CLI\\Migrator\\Core\\PlatformRegistry' => __DIR__ . '/../..' . '/src/Internal/CLI/Migrator/Core/PlatformRegistry.php',
         'Automattic\\WooCommerce\\Internal\\CLI\\Migrator\\Core\\ProductsController' => __DIR__ . '/../..' . '/src/Internal/CLI/Migrator/Core/ProductsController.php',
         'Automattic\\WooCommerce\\Internal\\CLI\\Migrator\\Core\\WooCommerceProductImporter' => __DIR__ . '/../..' . '/src/Internal/CLI/Migrator/Core/WooCommerceProductImporter.php',
@@ -1113,6 +1145,7 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\Internal\\CostOfGoodsSold\\CogsAwareTrait' => __DIR__ . '/../..' . '/src/Internal/CostOfGoodsSold/CogsAwareTrait.php',
         'Automattic\\WooCommerce\\Internal\\CostOfGoodsSold\\CogsAwareUnitTestSuiteTrait' => __DIR__ . '/../..' . '/src/Internal/CostOfGoodsSold/CogsAwareUnitTestSuiteTrait.php',
         'Automattic\\WooCommerce\\Internal\\CostOfGoodsSold\\CostOfGoodsSoldController' => __DIR__ . '/../..' . '/src/Internal/CostOfGoodsSold/CostOfGoodsSoldController.php',
+        'Automattic\\WooCommerce\\Internal\\Customers\\SearchService' => __DIR__ . '/../..' . '/src/Internal/Customers/SearchService.php',
         'Automattic\\WooCommerce\\Internal\\DataStores\\CustomMetaDataStore' => __DIR__ . '/../..' . '/src/Internal/DataStores/CustomMetaDataStore.php',
         'Automattic\\WooCommerce\\Internal\\DataStores\\Fulfillments\\FulfillmentsDataStore' => __DIR__ . '/../..' . '/src/Internal/DataStores/Fulfillments/FulfillmentsDataStore.php',
         'Automattic\\WooCommerce\\Internal\\DataStores\\Fulfillments\\FulfillmentsDataStoreInterface' => __DIR__ . '/../..' . '/src/Internal/DataStores/Fulfillments/FulfillmentsDataStoreInterface.php',
@@ -1259,6 +1292,8 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\Internal\\Integrations\\WPPostsImporter' => __DIR__ . '/../..' . '/src/Internal/Integrations/WPPostsImporter.php',
         'Automattic\\WooCommerce\\Internal\\Logging\\RemoteLogger' => __DIR__ . '/../..' . '/src/Internal/Logging/RemoteLogger.php',
         'Automattic\\WooCommerce\\Internal\\Logging\\SafeGlobalFunctionProxy' => __DIR__ . '/../..' . '/src/Internal/Logging/SafeGlobalFunctionProxy.php',
+        'Automattic\\WooCommerce\\Internal\\MCP\\MCPAdapterProvider' => __DIR__ . '/../..' . '/src/Internal/MCP/MCPAdapterProvider.php',
+        'Automattic\\WooCommerce\\Internal\\MCP\\Transport\\WooCommerceRestTransport' => __DIR__ . '/../..' . '/src/Internal/MCP/Transport/WooCommerceRestTransport.php',
         'Automattic\\WooCommerce\\Internal\\McStats' => __DIR__ . '/../..' . '/src/Internal/McStats.php',
         'Automattic\\WooCommerce\\Internal\\OrderCouponDataMigrator' => __DIR__ . '/../..' . '/src/Internal/OrderCouponDataMigrator.php',
         'Automattic\\WooCommerce\\Internal\\Orders\\CouponsController' => __DIR__ . '/../..' . '/src/Internal/Orders/CouponsController.php',
@@ -1347,6 +1382,7 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\Internal\\Utilities\\HtmlSanitizer' => __DIR__ . '/../..' . '/src/Internal/Utilities/HtmlSanitizer.php',
         'Automattic\\WooCommerce\\Internal\\Utilities\\LegacyRestApiStub' => __DIR__ . '/../..' . '/src/Internal/Utilities/LegacyRestApiStub.php',
         'Automattic\\WooCommerce\\Internal\\Utilities\\PluginInstaller' => __DIR__ . '/../..' . '/src/Internal/Utilities/PluginInstaller.php',
+        'Automattic\\WooCommerce\\Internal\\Utilities\\ProductUtil' => __DIR__ . '/../..' . '/src/Internal/Utilities/ProductUtil.php',
         'Automattic\\WooCommerce\\Internal\\Utilities\\Types' => __DIR__ . '/../..' . '/src/Internal/Utilities/Types.php',
         'Automattic\\WooCommerce\\Internal\\Utilities\\URL' => __DIR__ . '/../..' . '/src/Internal/Utilities/URL.php',
         'Automattic\\WooCommerce\\Internal\\Utilities\\URLException' => __DIR__ . '/../..' . '/src/Internal/Utilities/URLException.php',
@@ -1358,6 +1394,24 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'Automattic\\WooCommerce\\Proxies\\ActionsProxy' => __DIR__ . '/../..' . '/src/Proxies/ActionsProxy.php',
         'Automattic\\WooCommerce\\Proxies\\LegacyProxy' => __DIR__ . '/../..' . '/src/Proxies/LegacyProxy.php',
         'Automattic\\WooCommerce\\RestApi\\Package' => __DIR__ . '/../..' . '/includes/rest-api/Package.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\AbstractCollectionQuery' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/AbstractCollectionQuery.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\AbstractController' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/AbstractController.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\AbstractSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/AbstractSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\OrderNotes\\CollectionQuery' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/OrderNotes/CollectionQuery.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\OrderNotes\\Controller' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/OrderNotes/Controller.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\OrderNotes\\Schema\\OrderNoteSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/OrderNotes/Schema/OrderNoteSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\CollectionQuery' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/CollectionQuery.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\Controller' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/Controller.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\Schema\\AbstractLineItemSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/Schema/AbstractLineItemSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\Schema\\OrderCouponSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/Schema/OrderCouponSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\Schema\\OrderFeeSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/Schema/OrderFeeSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\Schema\\OrderItemSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/Schema/OrderItemSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\Schema\\OrderSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/Schema/OrderSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\Schema\\OrderShippingSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/Schema/OrderShippingSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\Schema\\OrderTaxSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/Schema/OrderTaxSchema.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\Orders\\UpdateUtils' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/Orders/UpdateUtils.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\ShippingZones\\Controller' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/ShippingZones/Controller.php',
+        'Automattic\\WooCommerce\\RestApi\\Routes\\V4\\ShippingZones\\ShippingZoneSchema' => __DIR__ . '/../..' . '/src/RestApi/Routes/V4/ShippingZones/ShippingZoneSchema.php',
         'Automattic\\WooCommerce\\RestApi\\Server' => __DIR__ . '/../..' . '/includes/rest-api/Server.php',
         'Automattic\\WooCommerce\\RestApi\\Utilities\\ImageAttachment' => __DIR__ . '/../..' . '/includes/rest-api/Utilities/ImageAttachment.php',
         'Automattic\\WooCommerce\\RestApi\\Utilities\\SingletonTrait' => __DIR__ . '/../..' . '/includes/rest-api/Utilities/SingletonTrait.php',
@@ -1928,6 +1982,9 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'WC_REST_Data_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-data-controller.php',
         'WC_REST_Data_Countries_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-data-countries-controller.php',
         'WC_REST_Data_Currencies_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-data-currencies-controller.php',
+        'WC_REST_Email_Settings_V4_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version4/Settings/class-wc-rest-email-settings-v4-controller.php',
+        'WC_REST_Fulfillments_V4_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version4/Fulfillments/class-wc-rest-fulfillments-v4-controller.php',
+        'WC_REST_General_Settings_V4_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version4/Settings/class-wc-rest-general-settings-v4-controller.php',
         'WC_REST_Layout_Templates_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-layout-templates-controller.php',
         'WC_REST_Network_Orders_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-network-orders-controller.php',
         'WC_REST_Network_Orders_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-network-orders-v2-controller.php',
@@ -1942,6 +1999,10 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'WC_REST_Orders_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-orders-v2-controller.php',
         'WC_REST_Payment_Gateways_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php',
         'WC_REST_Payment_Gateways_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php',
+        'WC_REST_Paypal_Buttons_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-paypal-buttons-controller.php',
+        'WC_REST_Paypal_Standard_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-paypal-standard-controller.php',
+        'WC_REST_Paypal_Webhooks_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-paypal-webhooks-controller.php',
+        'WC_REST_Ping_V4_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version4/Ping/class-wc-rest-ping-v4-controller.php',
         'WC_REST_Posts_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php',
         'WC_REST_Product_Attribute_Terms_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-product-attribute-terms-controller.php',
         'WC_REST_Product_Attribute_Terms_V1_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version1/class-wc-rest-product-attribute-terms-v1-controller.php',
@@ -1969,6 +2030,7 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'WC_REST_Products_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-products-controller.php',
         'WC_REST_Products_V1_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version1/class-wc-rest-products-v1-controller.php',
         'WC_REST_Products_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php',
+        'WC_REST_Products_V4_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version4/Products/class-wc-rest-products-v4-controller.php',
         'WC_REST_Refunds_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-refunds-controller.php',
         'WC_REST_Report_Coupons_Totals_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-coupons-totals-controller.php',
         'WC_REST_Report_Customers_Totals_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-report-customers-totals-controller.php',
@@ -1988,6 +2050,7 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'WC_REST_Setting_Options_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php',
         'WC_REST_Settings_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-settings-controller.php',
         'WC_REST_Settings_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-settings-v2-controller.php',
+        'WC_REST_Settings_V4_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version4/class-wc-rest-settings-v4-controller.php',
         'WC_REST_Shipping_Methods_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-shipping-methods-controller.php',
         'WC_REST_Shipping_Methods_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-shipping-methods-v2-controller.php',
         'WC_REST_Shipping_Zone_Locations_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-shipping-zone-locations-controller.php',
@@ -2009,20 +2072,56 @@ class ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6
         'WC_REST_Taxes_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-taxes-v2-controller.php',
         'WC_REST_Telemetry_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Telemetry/class-wc-rest-telemetry-controller.php',
         'WC_REST_Terms_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-terms-controller.php',
+        'WC_REST_V4_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version4/class-wc-rest-v4-controller.php',
+        'WC_REST_Variations_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-variations-controller.php',
         'WC_REST_Webhook_Deliveries_V1_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version1/class-wc-rest-webhook-deliveries-v1-controller.php',
         'WC_REST_Webhook_Deliveries_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-webhook-deliveries-v2-controller.php',
         'WC_REST_Webhooks_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-webhooks-controller.php',
         'WC_REST_Webhooks_V1_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php',
         'WC_REST_Webhooks_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php',
+        'WP\\MCP\\Autoloader' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Autoloader.php',
+        'WP\\MCP\\Core\\McpAdapter' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Core/McpAdapter.php',
+        'WP\\MCP\\Core\\McpServer' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Core/McpServer.php',
+        'WP\\MCP\\Domain\\Prompts\\Contracts\\McpPromptBuilderInterface' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Prompts/Contracts/McpPromptBuilderInterface.php',
+        'WP\\MCP\\Domain\\Prompts\\McpPrompt' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Prompts/McpPrompt.php',
+        'WP\\MCP\\Domain\\Prompts\\McpPromptBuilder' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Prompts/McpPromptBuilder.php',
+        'WP\\MCP\\Domain\\Prompts\\McpPromptValidator' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Prompts/McpPromptValidator.php',
+        'WP\\MCP\\Domain\\Prompts\\RegisterAbilityAsMcpPrompt' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Prompts/RegisterAbilityAsMcpPrompt.php',
+        'WP\\MCP\\Domain\\Resources\\McpResource' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Resources/McpResource.php',
+        'WP\\MCP\\Domain\\Resources\\McpResourceValidator' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Resources/McpResourceValidator.php',
+        'WP\\MCP\\Domain\\Resources\\RegisterAbilityAsMcpResource' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Resources/RegisterAbilityAsMcpResource.php',
+        'WP\\MCP\\Domain\\Tools\\McpTool' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Tools/McpTool.php',
+        'WP\\MCP\\Domain\\Tools\\McpToolValidator' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Tools/McpToolValidator.php',
+        'WP\\MCP\\Domain\\Tools\\RegisterAbilityAsMcpTool' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Tools/RegisterAbilityAsMcpTool.php',
+        'WP\\MCP\\Handlers\\Initialize\\InitializeHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/Initialize/InitializeHandler.php',
+        'WP\\MCP\\Handlers\\Prompts\\PromptsHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/Prompts/PromptsHandler.php',
+        'WP\\MCP\\Handlers\\Resources\\ResourcesHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/Resources/ResourcesHandler.php',
+        'WP\\MCP\\Handlers\\System\\SystemHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/System/SystemHandler.php',
+        'WP\\MCP\\Handlers\\Tools\\ToolsHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/Tools/ToolsHandler.php',
+        'WP\\MCP\\Infrastructure\\ErrorHandling\\Contracts\\McpErrorHandlerInterface' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/ErrorHandling/Contracts/McpErrorHandlerInterface.php',
+        'WP\\MCP\\Infrastructure\\ErrorHandling\\ErrorLogMcpErrorHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/ErrorHandling/ErrorLogMcpErrorHandler.php',
+        'WP\\MCP\\Infrastructure\\ErrorHandling\\McpErrorFactory' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/ErrorHandling/McpErrorFactory.php',
+        'WP\\MCP\\Infrastructure\\ErrorHandling\\NullMcpErrorHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/ErrorHandling/NullMcpErrorHandler.php',
+        'WP\\MCP\\Infrastructure\\Observability\\Contracts\\McpObservabilityHandlerInterface' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/Contracts/McpObservabilityHandlerInterface.php',
+        'WP\\MCP\\Infrastructure\\Observability\\ErrorLogMcpObservabilityHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/ErrorLogMcpObservabilityHandler.php',
+        'WP\\MCP\\Infrastructure\\Observability\\McpObservabilityHelperTrait' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/McpObservabilityHelperTrait.php',
+        'WP\\MCP\\Infrastructure\\Observability\\NullMcpObservabilityHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/NullMcpObservabilityHandler.php',
+        'WP\\MCP\\Plugin' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Plugin.php',
+        'WP\\MCP\\Transport\\Contracts\\McpTransportInterface' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Contracts/McpTransportInterface.php',
+        'WP\\MCP\\Transport\\Http\\RestTransport' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Http/RestTransport.php',
+        'WP\\MCP\\Transport\\Http\\StreamableTransport' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Http/StreamableTransport.php',
+        'WP\\MCP\\Transport\\Infrastructure\\McpRequestRouter' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/McpRequestRouter.php',
+        'WP\\MCP\\Transport\\Infrastructure\\McpTransportContext' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/McpTransportContext.php',
+        'WP\\MCP\\Transport\\Infrastructure\\McpTransportHelperTrait' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/McpTransportHelperTrait.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitae7b5b1ab4cdb2b1bb706ef8f95df4a6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a::$classMap;
 
         }, null, ClassLoader::class);
     }

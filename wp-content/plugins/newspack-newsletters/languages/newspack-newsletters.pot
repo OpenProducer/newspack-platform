@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Newsletters 3.22.1\n"
+"Project-Id-Version: Newspack Newsletters 3.23.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-10T20:03:55+00:00\n"
+"POT-Creation-Date: 2025-09-25T13:32:53+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-newsletters\n"
@@ -925,8 +925,8 @@ msgid "Active Campaign API credentials are missing."
 msgstr ""
 
 #: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:158
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:945
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1028
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:949
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1032
 msgid "ActiveCampaign API credentials are missing."
 msgstr ""
 
@@ -934,96 +934,96 @@ msgstr ""
 msgid "An error occurred while communicating with ActiveCampaign."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:525
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:529
 msgid "Please input ActiveCampaign API URL and Key."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:609
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:613
 msgid "ActiveCampaign supports searching by a single search term only."
 msgstr ""
 
 #. Translators: %s is the segment ID.
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:650
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:654
 #, php-format
 msgid "Untitled %s"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:828
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:832
 msgid "Missing or invalid ActiveCampign credentials."
 msgstr ""
 
 #. translators: %s are comma-separated emails.
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1010
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1014
 #, php-format
 msgid "ActiveCampaign test message sent successfully to %s."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1034
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1038
 #: includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php:572
 #: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:824
 #: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1119
 msgid "The newsletter subject cannot be empty."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1074
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1078
 msgid "Please input sender name and email address."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1080
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1084
 msgid "Please select a list."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1109
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1113
 msgid "ActiveCampaign sync error: "
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1139
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1143
 msgid "Error creating campaign: Message HTML is missing. Campaign not sent."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1191
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1195
 msgid "Campaign is not deletable."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1678
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1682
 msgid "Active Campaign List"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1679
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1683
 msgid "Active Campaign Tag"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1680
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1684
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:527
 #: src/newsletter-editor/sidebar/send-to.js:35
 msgid "list"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1681
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1685
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:528
 msgid "lists"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1682
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1686
 msgid "segment"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1683
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1687
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:530
 msgid "List"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1684
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1688
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:531
 msgid "Lists"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1685
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1689
 msgid "Segments"
 msgstr ""
 
 #. translators: %1$s and %2$s are opening and closing link tag to Active Campaign documentation.
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1704
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1708
 #, php-format
 msgid "Note for Active Campaign: You need to manually create a segment using the above tag to be able to send campaigns to this list. %1$sLearn more%2$s"
 msgstr ""
@@ -1494,7 +1494,7 @@ msgstr ""
 
 #: dist/adsEditor.js:1
 #: src/components/ad-placements/index.js:69
-#: src/components/send-button/index.js:394
+#: src/components/send-button/index.js:395
 #: src/newsletter-editor/layout/index.js:246
 #: src/newsletter-editor/layout/index.js:277
 #: src/newsletter-editor/sidebar/autocomplete.js:123
@@ -2223,23 +2223,23 @@ msgstr ""
 msgid "Saved layouts"
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:68
+#: src/components/init-modal/screens/layout-picker/index.js:67
 msgid "Choose a layout or start with a blank newsletter."
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:113
+#: src/components/init-modal/screens/layout-picker/index.js:112
 msgid "You don’t have any saved layouts yet."
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:116
+#: src/components/init-modal/screens/layout-picker/index.js:115
 msgid "Turn any newsletter to a layout via the \"Layout\" sidebar menu in the editor."
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:129
+#: src/components/init-modal/screens/layout-picker/index.js:128
 msgid "Blank newsletter"
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:136
+#: src/components/init-modal/screens/layout-picker/index.js:135
 msgid "Use selected layout"
 msgstr ""
 
@@ -2306,15 +2306,15 @@ msgstr ""
 msgid "Newsletter HTML"
 msgstr ""
 
-#: src/components/send-button/index.js:331
+#: src/components/send-button/index.js:332
 msgid "Something went wrong when converting the post to email"
 msgstr ""
 
-#: src/components/send-button/index.js:350
+#: src/components/send-button/index.js:351
 msgid "Unschedule"
 msgstr ""
 
-#: src/components/send-button/index.js:366
+#: src/components/send-button/index.js:367
 msgid "Send your newsletter?"
 msgstr ""
 
@@ -2878,31 +2878,31 @@ msgstr ""
 msgid "Error fetching send lists."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:141
+#: src/newsletter-editor/sidebar/index.js:144
 msgid "You must authorize your account before publishing your newsletter."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:164
+#: src/newsletter-editor/sidebar/index.js:167
 msgid "There was an error retrieving campaign data. Please try again."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:182
+#: src/newsletter-editor/sidebar/index.js:185
 msgid "Retrieving campaign data…"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:194
+#: src/newsletter-editor/sidebar/index.js:197
 msgid "Campaign has been sent."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:202
+#: src/newsletter-editor/sidebar/index.js:205
 msgid "Campaign Name"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:210
+#: src/newsletter-editor/sidebar/index.js:213
 msgid "Subject"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:217
+#: src/newsletter-editor/sidebar/index.js:220
 msgid "Preview text"
 msgstr ""
 

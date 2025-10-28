@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack 6.18.0\n"
+"Project-Id-Version: Newspack 6.19.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-09T20:17:33+00:00\n"
+"POT-Creation-Date: 2025-09-25T15:46:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-plugin\n"
@@ -101,7 +101,7 @@ msgstr ""
 
 #: includes/class-magic-link.php:556
 #: includes/class-magic-link.php:586
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:352
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:353
 msgid "Invalid token."
 msgstr ""
 
@@ -263,6 +263,7 @@ msgstr ""
 #: includes/class-newspack-ui.php:1071
 #: includes/class-newspack-ui.php:1108
 #: includes/class-newspack-ui.php:1162
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:433
 #: includes/reader-activation/class-reader-activation.php:1599
 #: includes/reader-activation/class-reader-activation.php:1714
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:16
@@ -333,7 +334,7 @@ msgstr ""
 
 #: includes/class-plugin-manager.php:62
 #: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Google"
 msgstr ""
 
@@ -350,7 +351,7 @@ msgid "Rocketgenius"
 msgstr ""
 
 #: includes/class-plugin-manager.php:80
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Jetpack"
 msgstr ""
 
@@ -400,7 +401,7 @@ msgid "Distribute content across a network of Newspack sites."
 msgstr ""
 
 #: includes/class-plugin-manager.php:132
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Newspack Newsletters"
 msgstr ""
 
@@ -478,12 +479,12 @@ msgid "forgemedia"
 msgstr ""
 
 #: includes/class-plugin-manager.php:193
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Publish to Apple News"
 msgstr ""
 
 #: includes/class-plugin-manager.php:194
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Export and synchronize posts to Apple format."
 msgstr ""
 
@@ -612,12 +613,12 @@ msgid "Jake Goldman, 10up"
 msgstr ""
 
 #: includes/class-plugin-manager.php:296
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Distributor"
 msgstr ""
 
 #: includes/class-plugin-manager.php:297
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Distributor is a WordPress plugin that makes it easy to syndicate and reuse content across your websites — whether in a single multisite or across the web."
 msgstr ""
 
@@ -670,7 +671,7 @@ msgid "Integrate Broadstreet’s business directory and ad-serving features into
 msgstr ""
 
 #: includes/class-plugin-manager.php:337
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Everlit"
 msgstr ""
 
@@ -885,7 +886,7 @@ msgstr ""
 
 #: includes/collections/class-collection-category-taxonomy.php:40
 #: includes/collections/class-collection-meta.php:50
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Subscription URL"
 msgstr ""
 
@@ -895,7 +896,7 @@ msgstr ""
 
 #: includes/collections/class-collection-category-taxonomy.php:52
 #: includes/collections/class-collection-meta.php:61
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Order URL"
 msgstr ""
 
@@ -1017,11 +1018,18 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#: includes/collections/class-collection-meta.php:223
+msgid "Collection CTAs"
+msgstr ""
+
 #: includes/collections/class-collection-section-taxonomy.php:54
 #: includes/collections/class-collection-section-taxonomy.php:70
 #: includes/collections/class-post-meta.php:37
 #: includes/collections/class-post-type.php:72
-#: includes/collections/class-query-helper.php:204
+#: includes/collections/class-query-helper.php:205
+#: src/blocks/collections/class-collections-block.php:381
+#: dist/blocks.js:4
+#: src/blocks/collections/components/CollectionItem.jsx:61
 msgid "Order"
 msgstr ""
 
@@ -1161,11 +1169,14 @@ msgstr ""
 
 #: includes/collections/class-collection-taxonomy.php:228
 #: includes/wizards/newspack/class-newspack-settings.php:110
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:86
+#: src/blocks/collections/index.js:15
 msgid "Collections"
 msgstr ""
 
 #: includes/collections/class-content-inserter.php:140
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Keep reading. There's plenty more to discover."
 msgstr ""
 
@@ -1227,6 +1238,7 @@ msgid "View Collections"
 msgstr ""
 
 #: includes/collections/class-post-type.php:103
+#: src/blocks/collections/class-collections-block.php:110
 msgid "No collections found."
 msgstr ""
 
@@ -1254,40 +1266,51 @@ msgstr ""
 msgid "Collection Details"
 msgstr ""
 
-#: includes/collections/class-query-helper.php:203
+#: includes/collections/class-query-helper.php:204
+#: src/blocks/collections/class-collections-block.php:377
+#: dist/blocks.js:4
+#: src/blocks/collections/components/CollectionItem.jsx:57
 msgid "Subscribe"
 msgstr ""
 
 #. translators: %s is the volume number of a collection
-#: includes/collections/class-template-helper.php:269
+#: includes/collections/class-template-helper.php:253
+#: src/blocks/collections/class-collections-block.php:332
 #, php-format
 msgctxt "collection volume number"
 msgid "Vol. %s"
 msgstr ""
 
 #. translators: %s is the issue number of a collection
-#: includes/collections/class-template-helper.php:274
+#: includes/collections/class-template-helper.php:258
+#: src/blocks/collections/class-collections-block.php:340
 #, php-format
 msgctxt "collection issue number"
 msgid "No. %s"
 msgstr ""
 
 #. translators: %s is the block name
-#: includes/collections/class-template-helper.php:376
+#: includes/collections/class-template-helper.php:364
 #, php-format
 msgid "The %s block is required but not available. Please install and activate the Newspack Blocks plugin."
 msgstr ""
 
-#: includes/collections/class-template-helper.php:423
+#: includes/collections/class-template-helper.php:411
 msgctxt "see all collections link"
 msgid "See all"
 msgstr ""
 
 #. translators: %s is the collection name (e.g., "Collections", "Issues")
-#: includes/collections/class-template-helper.php:426
+#: includes/collections/class-template-helper.php:414
 #, php-format
 msgctxt "see all collections link aria-label"
 msgid "See all %s"
+msgstr ""
+
+#: includes/collections/class-template-helper.php:690
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:76
+msgid "Recent"
 msgstr ""
 
 #. translators: %s: object type
@@ -1471,6 +1494,8 @@ msgid "archive"
 msgstr ""
 
 #: includes/corrections/class-corrections.php:520
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:33
 msgid "loop"
 msgstr ""
 
@@ -1611,14 +1636,16 @@ msgstr ""
 #: includes/wizards/newspack/class-newspack-settings.php:161
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:7
 #: dist/billboard.js:12
+#: dist/blocks.js:4
 #: dist/commons.js:1
 #: dist/memberships-gate-editor.js:37
 #: dist/newsletters.js:4
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 #: dist/other-scripts/emails.js:2
 #: dist/setup.js:7
 #: dist/wizards.js:1
 #: src/blocks/avatar/edit.jsx:23
+#: src/blocks/collections/components/InspectorPanel.jsx:63
 #: src/memberships-gate/editor.js:182
 #: src/other-scripts/emails/index.js:106
 #: src/wizards/advertising/index.js:154
@@ -1634,7 +1661,7 @@ msgid "Enable Lite Site"
 msgstr ""
 
 #: includes/lite-site/class-lite-site.php:105
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "URL Base"
 msgstr ""
 
@@ -1726,7 +1753,7 @@ msgid "Nonce verification failed for id: %s"
 msgstr ""
 
 #: includes/oauth/class-google-login.php:127
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:348
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:349
 #: includes/plugins/woocommerce/my-account/templates/delete-account.php:20
 msgid "Invalid nonce."
 msgstr ""
@@ -1897,10 +1924,10 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:38
 #: dist/billboard.js:1
 #: dist/billboard.js:12
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 #: src/wizards/advertising/views/ad-unit/index.js:167
 #: src/wizards/advertising/views/ad-units/index.js:137
@@ -2063,6 +2090,7 @@ msgid "Every 3 hours"
 msgstr ""
 
 #: includes/optional-modules/class-rss.php:384
+#: includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php:77
 msgid "Daily"
 msgstr ""
 
@@ -2308,7 +2336,7 @@ msgid "Allow this user to be assigned as a co-author of a post."
 msgstr ""
 
 #: includes/plugins/co-authors-plus/class-guest-contributor-role.php:500
-msgid "If this option is checked, the \"Non Editing Contributor\" role will be added to the user and they will be able to be assigned as a co-author of a post even if they are not allowed to edit posts. For users with edit access, this option has no effect."
+msgid "If this option is checked, the \"Guest Contributor\" role will be added to the user (on top of their current role) and they will be able to be assigned as a co-author of a post even if they are not allowed to edit posts. For users with edit access, this option has no effect."
 msgstr ""
 
 #: includes/plugins/co-authors-plus/class-nicename-change-ui.php:64
@@ -2358,23 +2386,23 @@ msgstr ""
 msgid "Another active subscription for this product was found (Subscription ID: %s). Expiry prevented."
 msgstr ""
 
-#: includes/plugins/wc-memberships/class-memberships.php:979
+#: includes/plugins/wc-memberships/class-memberships.php:1002
 msgid "Skip content restriction in RSS feeds"
 msgstr ""
 
-#: includes/plugins/wc-memberships/class-memberships.php:981
+#: includes/plugins/wc-memberships/class-memberships.php:1004
 msgid "If enabled, full content will be available in RSS feeds."
 msgstr ""
 
-#: includes/plugins/wc-memberships/class-memberships.php:1088
+#: includes/plugins/wc-memberships/class-memberships.php:1111
 msgid "Reevaluate status"
 msgstr ""
 
-#: includes/plugins/wc-memberships/class-memberships.php:1090
+#: includes/plugins/wc-memberships/class-memberships.php:1113
 msgid "Reevaluate status based on subscription status."
 msgstr ""
 
-#: includes/plugins/wc-memberships/class-memberships.php:1324
+#: includes/plugins/wc-memberships/class-memberships.php:1347
 msgid "Bulk edit changes were reverted because this membership is linked to a subscription."
 msgstr ""
 
@@ -2408,6 +2436,95 @@ msgstr ""
 msgid "You must agree to the Terms & Conditions before proceeding."
 msgstr ""
 
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:43
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:82
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:454
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:100
+msgid "Change Subscription"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:238
+msgid "Current"
+msgstr ""
+
+#. translators: %s: subscription product name
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:260
+#, php-format
+msgid "You already have %s active."
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:266
+msgid "View Subscription"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:267
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
+msgid "View"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:359
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:431
+msgid "Complete your transaction"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:360
+msgid "Purchase"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-subscriptions-tiers.php:408
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1-passwords.php:239
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:300
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:386
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:524
+#: dist/audience-wizards.c76845edf1a317c1a2e2.js:10
+#: dist/audience-wizards.c76845edf1a317c1a2e2.js:16
+#: dist/billboard.js:1
+#: dist/billboard.js:12
+#: dist/commons.js:13
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: dist/other-scripts/corrections-modal.js:7
+#: src/components/src/with-wizard/index.js:261
+#: src/other-scripts/corrections-modal/index.js:410
+#: src/wizards/advertising/views/ad-unit/index.js:170
+#: src/wizards/advertising/views/placements/index.js:216
+#: src/wizards/advertising/views/providers/index.js:108
+#: src/wizards/audience/components/prompt-action-card/index.js:165
+#: src/wizards/audience/components/settings-modal/index.js:176
+#: src/wizards/audience/views/campaigns/campaigns/index.js:291
+#: src/wizards/audience/views/campaigns/segments/single-segment.js:258
+msgid "Cancel"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php:78
+msgid "Weekly"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php:79
+msgid "Bi-Weekly"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php:80
+#: includes/plugins/woocommerce/class-woocommerce-connection.php:389
+#: includes/plugins/woocommerce/class-woocommerce-connection.php:483
+msgid "Monthly"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php:81
+msgid "Quarterly"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php:82
+msgid "Semi-Annually"
+msgstr ""
+
+#: includes/plugins/woocommerce-subscriptions/class-woocommerce-subscriptions.php:83
+#: includes/plugins/woocommerce/class-woocommerce-connection.php:390
+#: includes/plugins/woocommerce/class-woocommerce-connection.php:484
+msgid "Yearly"
+msgstr ""
+
 #. Translators: %s is the fee percentage.
 #: includes/plugins/woocommerce/class-woocommerce-cli.php:143
 #: includes/plugins/woocommerce/class-woocommerce-cover-fees.php:81
@@ -2429,23 +2546,13 @@ msgstr ""
 msgid "Please wait a moment before trying to add a new payment method."
 msgstr ""
 
-#: includes/plugins/woocommerce/class-woocommerce-connection.php:389
-#: includes/plugins/woocommerce/class-woocommerce-connection.php:483
-msgid "Monthly"
-msgstr ""
-
-#: includes/plugins/woocommerce/class-woocommerce-connection.php:390
-#: includes/plugins/woocommerce/class-woocommerce-connection.php:484
-msgid "Yearly"
-msgstr ""
-
 #: includes/plugins/woocommerce/class-woocommerce-connection.php:419
 #: includes/plugins/woocommerce/class-woocommerce-connection.php:515
 msgid "One-time"
 msgstr ""
 
 #: includes/plugins/woocommerce/class-woocommerce-connection.php:435
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Card"
 msgstr ""
 
@@ -2567,7 +2674,7 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:38
 #: dist/newsletters.js:1
 #: dist/newsletters.js:4
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 #: dist/setup.js:4
 #: dist/setup.js:7
 #: src/wizards/audience/components/active-campaign.js:31
@@ -2628,31 +2735,6 @@ msgstr ""
 msgid "Save password"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1-passwords.php:239
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:299
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:385
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:523
-#: dist/audience-wizards.c76845edf1a317c1a2e2.js:10
-#: dist/audience-wizards.c76845edf1a317c1a2e2.js:16
-#: dist/billboard.js:1
-#: dist/billboard.js:12
-#: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: dist/other-scripts/corrections-modal.js:7
-#: src/components/src/with-wizard/index.js:261
-#: src/other-scripts/corrections-modal/index.js:410
-#: src/wizards/advertising/views/ad-unit/index.js:170
-#: src/wizards/advertising/views/placements/index.js:216
-#: src/wizards/advertising/views/providers/index.js:108
-#: src/wizards/audience/components/prompt-action-card/index.js:165
-#: src/wizards/audience/components/settings-modal/index.js:176
-#: src/wizards/audience/views/campaigns/campaigns/index.js:291
-#: src/wizards/audience/views/campaigns/segments/single-segment.js:258
-msgid "Cancel"
-msgstr ""
-
 #: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:97
 msgid "Renew subscription"
 msgstr ""
@@ -2665,78 +2747,78 @@ msgstr ""
 msgid "Change payment method"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:185
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:186
 msgid "Payment information"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:226
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:358
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:452
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:227
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:359
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:453
 msgid "Are you sure?"
 msgstr ""
 
 #. Translators: %s will be displayed only if the user has active subscriptions or newsletter subscriptions.
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:233
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:234
 #, php-format
 msgid "Deleting your account is permanent and cannot be undone. All your data will be removed from our systems. %s"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:234
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:235
 msgid "Your newsletter subscriptions and all recurring payments will be cancelled."
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:242
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:243
 msgid "Instead of deleting your account, you may want to:"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:251
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:252
 #: includes/wizards/audience/class-audience-subscriptions.php:47
 #: includes/wizards/newspack/class-newspack-dashboard.php:70
 #: includes/wizards/newspack/class-newspack-dashboard.php:218
 msgid "Subscriptions"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:252
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:253
 msgid "Review and cancel active subscriptions."
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:256
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:257
 msgid "Manage subscriptions"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:264
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:265
 #: includes/wizards/newspack/class-newspack-dashboard.php:81
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:16
 #: src/wizards/audience/views/campaigns/segments/single-segment.js:208
 msgid "Newsletters"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:265
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:266
 msgid "Update your newsletter preferences."
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:269
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:270
 msgid "Manage newsletters"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:281
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:286
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:325
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:374
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:381
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:282
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:287
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:326
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:375
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:382
 #: includes/plugins/woocommerce/my-account/templates/v1/account-settings.php:265
 msgid "Delete account"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:314
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:315
 msgid "Your account deletion has been requested."
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:316
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:317
 msgid "We just sent instructions on how to delete your account to"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:330
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:331
 #: includes/reader-activation/class-reader-activation.php:274
 #: includes/reader-activation/class-reader-activation.php:302
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:38
@@ -2744,44 +2826,44 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:361
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:362
 #: includes/plugins/woocommerce/my-account/templates/delete-account.php:39
 msgid "Confirm to delete your account permanently."
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:362
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:363
 #: includes/plugins/woocommerce/my-account/templates/delete-account.php:45
 msgid "Caution, this action is irreversible!"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:417
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:418
 msgid "Your account has been successfully deleted."
 msgstr ""
 
 #. Translators: %s is either the next payment date, or a generic explanation of when the subscription will end if cancelled.
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:459
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:460
 #, php-format
 msgid "If you cancel now, your subscription will remain active until %s."
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:460
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:461
 msgid "the end of your current billing period"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:466
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:467
 msgid "After this, your subscription access will end unless you choose to renew."
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:473
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:477
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:474
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:478
 msgid "Cancel subscription"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:482
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:483
 msgid "Keep subscription"
 msgstr ""
 
-#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:515
+#: includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php:516
 msgid "Add Payment Method"
 msgstr ""
 
@@ -3041,9 +3123,9 @@ msgstr ""
 
 #: includes/plugins/woocommerce/my-account/templates/v1/payment-information.php:47
 #: dist/componentsDemo.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 #: src/wizards/componentsDemo/index.js:556
 #: src/wizards/componentsDemo/index.js:562
@@ -3441,7 +3523,7 @@ msgid "This email will be used as \"Reply-To\" for transactional emails as well.
 msgstr ""
 
 #: includes/reader-activation/class-reader-activation.php:895
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "reCAPTCHA"
 msgstr ""
 
@@ -4013,32 +4095,28 @@ msgstr ""
 msgid "PASTE DDHQ JS SNIPPET HERE! (Should be provided to you by DDHQ)"
 msgstr ""
 
-#: includes/templates/collections/archive-newspack-collection.php:60
+#: includes/templates/collections/archive-newspack-collection.php:42
+msgid "Latest"
+msgstr ""
+
+#: includes/templates/collections/archive-newspack-collection.php:57
 msgid "Year:"
 msgstr ""
 
-#: includes/templates/collections/archive-newspack-collection.php:62
-#: includes/templates/collections/archive-newspack-collection.php:77
+#: includes/templates/collections/archive-newspack-collection.php:59
+#: includes/templates/collections/archive-newspack-collection.php:74
 #: dist/commons.js:4
 #: src/blocks/correction-box/edit.jsx:68
 msgid "All"
 msgstr ""
 
-#: includes/templates/collections/archive-newspack-collection.php:75
+#: includes/templates/collections/archive-newspack-collection.php:72
 msgctxt "collections category filter label"
 msgid "Publication:"
 msgstr ""
 
-#: includes/templates/collections/parts/newspack-collection-intro.php:59
-msgid "Latest"
-msgstr ""
-
 #: includes/templates/collections/single-newspack-collection.php:63
 msgid "Cover Stories"
-msgstr ""
-
-#: includes/templates/collections/single-newspack-collection.php:86
-msgid "Recent"
 msgstr ""
 
 #: includes/templates/reader-activation-emails/change-email-cancel.php:30
@@ -4743,12 +4821,12 @@ msgid "Google Ad Manager"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-dashboard.php:277
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "Disconnected"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-dashboard.php:290
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Google Analytics"
 msgstr ""
 
@@ -4765,40 +4843,40 @@ msgid "Open data dashboard"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-settings.php:48
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Connections"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-settings.php:81
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Emails"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-settings.php:93
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Social"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-settings.php:96
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Syndication"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-settings.php:99
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "SEO"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-settings.php:102
 #: dist/componentsDemo.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 #: src/wizards/componentsDemo/index.js:607
 msgid "Theme and Brand"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-settings.php:105
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Advanced Settings"
 msgstr ""
 
@@ -4807,7 +4885,7 @@ msgid "Print"
 msgstr ""
 
 #: includes/wizards/newspack/class-newspack-settings.php:121
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Additional Brands"
 msgstr ""
 
@@ -4827,6 +4905,25 @@ msgstr ""
 msgid "Stacked"
 msgstr ""
 
+#. translators: 1: current number of metered views, 2: total metered views.
+#: src/blocks/content-gate-countdown/class-content-gate-countdown-block.php:76
+#: dist/blocks.js:5
+#: dist/content-gate-countdown-block.js:1
+#: src/blocks/content-gate-countdown/edit.jsx:100
+#: src/blocks/content-gate-countdown/view.js:33
+#, php-format,js-format
+msgid "%1$d/%2$d"
+msgstr ""
+
+#. translators: %s - metered content period (week, month, etc.
+#. translators: %s is the metered period, e.g. "month" or "week".
+#: src/blocks/content-gate-countdown/class-content-gate-countdown-block.php:84
+#: dist/blocks.js:5
+#: src/blocks/content-gate-countdown/edit.jsx:55
+#, php-format,js-format
+msgid "free articles this %s"
+msgstr ""
+
 #. Translators: %s is a link to My Account.
 #: src/blocks/reader-registration/index.php:104
 #, php-format
@@ -4842,7 +4939,7 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:1
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:16
 #: dist/billboard.js:12
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 #: src/wizards/advertising/views/ad-units/options-popover.js:34
 #: src/wizards/audience/components/campaign-management-popover/index.js:32
 #: src/wizards/audience/components/prompt-popovers/primary.js:41
@@ -4893,7 +4990,7 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:16
 #: dist/billboard.js:12
 #: dist/componentsDemo.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 #: dist/other-scripts/corrections-modal.js:1
 #: src/other-scripts/corrections-modal/index.js:300
 #: src/wizards/advertising/views/ad-unit/index.js:155
@@ -4927,8 +5024,8 @@ msgstr ""
 #: dist/billboard.js:12
 #: dist/componentsDemo.js:1
 #: dist/newsletters.js:4
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 #: dist/setup.js:7
 #: src/wizards/advertising/views/ad-units/options-popover.js:37
 #: src/wizards/audience/components/prompt-action-card/index.js:140
@@ -5235,7 +5332,9 @@ msgstr ""
 
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:7
 #: dist/billboard.js:12
+#: dist/blocks.js:4
 #: dist/memberships-gate-editor.js:34
+#: src/blocks/collections/components/InspectorPanel.jsx:182
 #: src/memberships-gate/editor.js:162
 #: src/wizards/advertising/components/ad-unit-size-control/index.js:66
 #: src/wizards/advertising/views/ad-unit/index.js:117
@@ -5331,7 +5430,7 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:10
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:16
 #: dist/billboard.js:12
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 #: src/wizards/advertising/views/ad-units/options-popover.js:28
 #: src/wizards/audience/components/prompt-action-card/index.js:78
 #: src/wizards/audience/views/campaigns/segments/segments-list.js:177
@@ -5513,7 +5612,7 @@ msgid "(archived)"
 msgstr ""
 
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:16
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 #: src/wizards/audience/views/campaigns/campaigns/index.js:222
 msgid "Actions"
 msgstr ""
@@ -5700,9 +5799,9 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:41
 #: dist/billboard.js:12
 #: dist/newsletters.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:4
 #: src/wizards/advertising/components/suppression/index.js:69
 #: src/wizards/audience/components/cover-fees-settings/index.js:83
@@ -5793,7 +5892,7 @@ msgstr ""
 #. Translators: %s: Plugin status
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:20
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:35
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 #, js-format
 msgid "Status: %s"
 msgstr ""
@@ -5802,7 +5901,7 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:32
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:38
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:41
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 #: src/wizards/audience/components/payment-methods/index.js:39
 #: src/wizards/audience/components/payment-methods/index.js:54
 #: src/wizards/audience/components/payment-methods/payment-gateway.js:70
@@ -5817,7 +5916,7 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:20
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:35
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:41
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/other-scripts/corrections-modal.js:7
 #: src/other-scripts/corrections-modal/index.js:391
 msgid "Saving…"
@@ -5961,7 +6060,7 @@ msgstr ""
 
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:32
 #: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 #: src/components/src/image-upload/index.js:98
 #: src/components/src/sortable-newsletter-list-control/index.js:59
 msgid "Remove"
@@ -6264,9 +6363,9 @@ msgstr ""
 #: dist/billboard.js:1
 #: dist/commons.js:13
 #: dist/componentsDemo.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: src/components/src/plugin-toggle/index.js:172
 #: src/wizards/advertising/views/providers/index.js:74
 #: src/wizards/advertising/views/providers/index.js:92
@@ -6315,12 +6414,12 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:38
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:41
 #: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 #: src/components/src/autocomplete-with-suggestions/index.js:289
 #: src/components/src/plugin-toggle/index.js:163
@@ -6341,8 +6440,8 @@ msgstr ""
 
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:38
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:41
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: src/wizards/audience/components/payment-methods/payment-gateway.js:47
 #: src/wizards/audience/components/payment-methods/stripe.js:51
 #: src/wizards/audience/components/payment-methods/woopayments.js:47
@@ -6357,8 +6456,8 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:38
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:41
 #: dist/commons.js:16
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: src/wizards/audience/components/payment-methods/payment-gateway.js:42
 #: src/wizards/audience/components/payment-methods/stripe.js:43
 #: src/wizards/audience/components/payment-methods/woopayments.js:42
@@ -6368,8 +6467,8 @@ msgstr ""
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:38
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:41
 #: dist/commons.js:16
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: src/wizards/audience/components/payment-methods/payment-gateway.js:89
 #: src/wizards/audience/components/payment-methods/stripe.js:102
 #: src/wizards/audience/components/payment-methods/woopayments.js:89
@@ -6524,7 +6623,7 @@ msgstr ""
 
 #: dist/audience-wizards.c76845edf1a317c1a2e2.js:41
 #: dist/collections-admin.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 #: src/collections/admin/collection-meta-ctas-field.js:225
 msgid "URL"
 msgstr ""
@@ -6575,7 +6674,9 @@ msgstr ""
 
 #: dist/avatar-block.js:1
 #: dist/blocks.js:1
+#: dist/blocks.js:4
 #: src/blocks/avatar/index.js:31
+#: src/blocks/collections/index.js:36
 msgid "newspack"
 msgstr ""
 
@@ -6962,7 +7063,7 @@ msgid "Disconnected from GAM."
 msgstr ""
 
 #: dist/billboard.js:12
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 #: src/wizards/advertising/components/ad-unit-size-control/index.js:73
 msgid "Custom"
@@ -6991,8 +7092,8 @@ msgid "Ad Unit Details"
 msgstr ""
 
 #: dist/billboard.js:12
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: src/wizards/advertising/views/ad-unit/index.js:79
 msgid "Name"
 msgstr ""
@@ -7028,7 +7129,7 @@ msgid "The ad unit must have at least one valid size or fluid size enabled."
 msgstr ""
 
 #: dist/billboard.js:12
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:17
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:17
 #: src/wizards/advertising/views/ad-unit/index.js:120
 msgid "Action"
 msgstr ""
@@ -7220,6 +7321,344 @@ msgstr ""
 #: dist/blocks.js:4
 #: src/blocks/reader-registration/edit.js:363
 msgid "Logged in message…"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:65
+msgid "Mode"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:71
+msgid "The block will display the most recent collection(s)."
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:72
+msgid "The block will display only the specifically selected collection(s)."
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:77
+msgid "Static"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:87
+msgid "Begin typing any word in a collection title. Click on an autocomplete result to select it."
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:95
+msgid "Number of collections"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:104
+msgid "Offset"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:109
+msgid "Number of collections to skip from the beginning"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:118
+msgid "Included categories"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:128
+msgid "Excluded categories"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:137
+msgid "Grid"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:139
+msgid "Columns"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:149
+msgid "Featured Image"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:151
+msgid "Show featured image"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:158
+msgid "Alignment"
+msgstr ""
+
+#. translators: Overlay Position
+#: dist/blocks.js:4
+#: dist/memberships-gate-editor.js:3
+#: src/blocks/collections/components/InspectorPanel.jsx:165
+#: src/components/src/position-control/index.js:27
+msgid "Top"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:167
+#: src/blocks/collections/edit.jsx:41
+msgid "Show image on top"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:170
+msgid "Left"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:172
+#: src/blocks/collections/edit.jsx:47
+msgid "Show image on left"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:175
+msgid "Right"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:177
+#: src/blocks/collections/edit.jsx:53
+msgid "Show image on right"
+msgstr ""
+
+#: dist/blocks.js:4
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: dist/setup.js:7
+#: src/blocks/collections/components/InspectorPanel.jsx:189
+msgid "S"
+msgstr ""
+
+#: dist/blocks.js:4
+#: dist/componentsDemo.js:1
+#: dist/memberships-gate-editor.js:25
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: src/blocks/collections/components/InspectorPanel.jsx:191
+#: src/memberships-gate/editor.js:30
+#: src/wizards/componentsDemo/index.js:510
+#: src/wizards/componentsDemo/index.js:584
+msgid "Small"
+msgstr ""
+
+#: dist/blocks.js:4
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: dist/setup.js:7
+#: src/blocks/collections/components/InspectorPanel.jsx:194
+msgid "M"
+msgstr ""
+
+#: dist/blocks.js:4
+#: dist/memberships-gate-editor.js:25
+#: src/blocks/collections/components/InspectorPanel.jsx:196
+#: src/memberships-gate/editor.js:31
+msgid "Medium"
+msgstr ""
+
+#: dist/blocks.js:4
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: dist/setup.js:7
+#: src/blocks/collections/components/InspectorPanel.jsx:199
+msgid "L"
+msgstr ""
+
+#: dist/blocks.js:4
+#: dist/memberships-gate-editor.js:25
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: src/blocks/collections/components/InspectorPanel.jsx:201
+#: src/memberships-gate/editor.js:32
+msgid "Large"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:208
+msgid "Collection Meta"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:210
+msgid "Show title"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:216
+msgid "Show category"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:222
+msgid "Show excerpt"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:228
+msgid "Show period"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:234
+msgid "Show volume"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:240
+msgid "Show number"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:246
+msgid "Show CTAs"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:254
+msgid "Number of CTAs"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:259
+msgid "Maximum number of CTAs to display"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:264
+msgid "Show subscription URL"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:270
+msgid "Show order URL"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:277
+msgid "Specific CTAs (comma-separated)"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/components/InspectorPanel.jsx:278
+msgid "Enter specific CTA to show, e.g. \"Digital Edition\" (should match existing CTA label). Leave empty to show first available CTAs."
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:28
+msgid "collections"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:29
+msgid "issues"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:30
+msgid "magazine"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:31
+msgid "publications"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:32
+msgid "content"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:34
+msgid "query"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:35
+msgid "latest"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/index.js:38
+msgid "An advanced block that allows displaying collections based on different parameters and visual configurations."
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/edit.jsx:23
+msgid "List view"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/edit.jsx:29
+msgid "Grid view"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/edit.jsx:113
+msgid "Loading collections…"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/collections/edit.jsx:120
+msgid "No collections found"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/content-gate-countdown/index.js:16
+msgid "Content Gate Countdown"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/content-gate-countdown/index.js:28
+msgid "countdown"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/content-gate-countdown/index.js:28
+msgid "content gate"
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/content-gate-countdown/index.js:29
+msgid "A countdown for content gate metering functionality."
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/content-gate-countdown/edit.jsx:28
+msgid "Get unlimited access."
+msgstr ""
+
+#: dist/blocks.js:4
+#: src/blocks/content-gate-countdown/edit.jsx:35
+msgid "Subscribe now"
+msgstr ""
+
+#: dist/blocks.js:5
+#: src/blocks/content-gate-countdown/edit.jsx:84
+msgid "Countdown Settings"
+msgstr ""
+
+#: dist/blocks.js:5
+#: src/blocks/content-gate-countdown/edit.jsx:86
+msgid "Countdown text"
+msgstr ""
+
+#: dist/blocks.js:5
+#: src/blocks/content-gate-countdown/edit.jsx:88
+msgid "The text that appears next to the countdown."
+msgstr ""
+
+#: dist/blocks.js:5
+#: src/blocks/content-gate-countdown/edit.jsx:71
+msgid "The content gate countdown block will only display in restricted content when metering is enabled."
 msgstr ""
 
 #: dist/bylines.js:1
@@ -7567,7 +8006,7 @@ msgstr ""
 
 #: dist/commons.js:13
 #: dist/componentsDemo.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 #: src/components/src/plugin-toggle/index.js:149
 #: src/wizards/componentsDemo/index.js:287
 msgid "Installing…"
@@ -7604,7 +8043,7 @@ msgid "Selected"
 msgstr ""
 
 #: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: src/components/src/style-card/index.js:45
 #: src/components/src/style-card/index.js:48
 msgid "Select"
@@ -7713,38 +8152,38 @@ msgid "Unable to read file"
 msgstr ""
 
 #: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "Invalid Mailchimp API Key."
 msgstr ""
 
 #: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "Missing Google refresh token. Please re-authenticate site."
 msgstr ""
 
 #: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "Popup blocked by browser. Disable any popup blocking settings and try again."
 msgstr ""
 
 #: dist/commons.js:13
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "URL is invalid. Please try again or contact support if the issue persists."
 msgstr ""
 
 #. Translators: connected user's email address.
 #. translators: %s: username
 #: dist/commons.js:16
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #, js-format
 msgid "Connected as %s"
 msgstr ""
 
 #: dist/commons.js:16
 #: dist/componentsDemo.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: src/wizards/componentsDemo/index.js:379
 msgid "Disconnect"
 msgstr ""
@@ -8221,15 +8660,6 @@ msgid "Label for disabled Select"
 msgstr ""
 
 #: dist/componentsDemo.js:1
-#: dist/memberships-gate-editor.js:25
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: src/memberships-gate/editor.js:30
-#: src/wizards/componentsDemo/index.js:510
-#: src/wizards/componentsDemo/index.js:584
-msgid "Small"
-msgstr ""
-
-#: dist/componentsDemo.js:1
 #: src/wizards/componentsDemo/index.js:527
 msgid "Multi-select"
 msgstr ""
@@ -8270,7 +8700,7 @@ msgid "Buttons"
 msgstr ""
 
 #: dist/componentsDemo.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 #: src/wizards/componentsDemo/index.js:559
 #: src/wizards/componentsDemo/index.js:570
@@ -8278,7 +8708,7 @@ msgid "Primary"
 msgstr ""
 
 #: dist/componentsDemo.js:1
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 #: src/wizards/componentsDemo/index.js:560
 #: src/wizards/componentsDemo/index.js:573
@@ -8466,12 +8896,6 @@ msgid "Define a custom tag name to be used in the Tagged Text export."
 msgstr ""
 
 #. translators: Overlay Position
-#: dist/memberships-gate-editor.js:3
-#: src/components/src/position-control/index.js:27
-msgid "Top"
-msgstr ""
-
-#. translators: Overlay Position
 #: dist/memberships-gate-editor.js:5
 #: dist/memberships-gate-editor.js:17
 #: src/components/src/position-control/index.js:32
@@ -8556,17 +8980,6 @@ msgstr ""
 #: dist/memberships-gate-editor.js:25
 #: src/memberships-gate/editor.js:29
 msgid "Extra Small"
-msgstr ""
-
-#: dist/memberships-gate-editor.js:25
-#: src/memberships-gate/editor.js:31
-msgid "Medium"
-msgstr ""
-
-#: dist/memberships-gate-editor.js:25
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: src/memberships-gate/editor.js:32
-msgid "Large"
 msgstr ""
 
 #: dist/memberships-gate-editor.js:25
@@ -8843,1292 +9256,1273 @@ msgstr ""
 msgid "Newsletters / Tracking"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "Quick actions"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "Add missing dependencies"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "Fetching…"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:1
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:1
 msgid "Click to navigate to configuration"
 msgstr ""
 
 #. translators: %s is a comma separated list of needed dependencies.
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:4
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:4
 msgid "Missing dependency"
 msgid_plural "Missing dependencies"
 msgstr[0] ""
 msgstr[1] ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:4
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:4
 msgid "Install dependency"
 msgid_plural "Install dependencies"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d is the HTTP status code
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 #, js-format
 msgid "Request failed - %d"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Site status"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Site brands"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "You have no saved brands."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Add New Brand"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Fetching brands…"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Create brands to enhance your readers experience."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Brand"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Set your brand identity"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Brand Name"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Fetching logo…"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Logo"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Colors"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "These are the colors you can customize for this brand in the active theme"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Reset default color"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Homepage"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Slug"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Show on Front"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Latest posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "A page"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Homepage URL"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Select a Page"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Menus"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Customize the menus for this brand"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Same as site"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Brands"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Configure brands settings"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:5
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:5
 msgid "Are you sure you want to delete this brand?"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "X (formerly Twitter) Handle"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "username"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "X handle cannot exceed 15 characters!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "X handle may only contain letters, numbers, and underscores!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Facebook"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Instagram"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "YouTube"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "LinkedIn"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Pinterest"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Field cannot be empty!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Invalid URL!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Value cannot be empty!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Value cannot be zero!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Value may only contain numbers!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Value may only contain numbers and letters."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "X Pixel"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Add the X pixel (formerly known as Twitter pixel) to your site."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Pixel ID"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "The X Pixel ID. You only need to add the number, not the full code. Example: 123456789123456789. You can get this information <linkToFb>here</linkToFb>."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Meta Pixel"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Add the Meta pixel (formerly known as Facebook pixel) to your site."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "The Meta Pixel ID. You only need to add the number, not the full code. Example: 123456789123456789. You can get this information <linkToFb>here</linkToFb>."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Page reloading…"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:8
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:8
 msgid "Page redirecting…"
 msgstr ""
 
 #. translators: %s: Plugin name
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:9
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:9
 #, js-format
 msgid "Install %s"
 msgstr ""
 
 #. translators: %s: Plugin name
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:10
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:10
 #, js-format
 msgid "Activate %s"
 msgstr ""
 
 #. translators: %s: Plugin name
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
 #, js-format
 msgid "Configure %s"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
 msgid "Complete Setup"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
 msgid "Status: Error!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
 msgid "Connected."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
 msgid "Not connected."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Inactive."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:11
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:11
 msgid "Uninstalled."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Publicize"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Publicize makes it easy to share your site's posts on several social media networks automatically when you publish a new post."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Activate Jetpack"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Newspack uses Newspack Newsletters to handle editing email-type content. Please activate this plugin to proceed."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Until this feature is configured, default receipts will be used."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Newspack Newsletters is the plugin that powers Newspack email receipts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "This email is not active."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "This email is not active. The default receipt will be used."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "This email is not active. The receipt template will be used if active."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Reset"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Are you sure you want to reset the contents of this email?"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Site Kit by Google"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Not connected for this user"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "AI-Generated Audio Stories"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Complete setup and licensing agreement to unlock 5 free audio stories per month."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Not installed."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Pending."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "URL is required."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "HTTPS protocol is required for the endpoint URL."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Invalid URL format."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Endpoint Actions"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Close Endpoint Actions"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "View Requests"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Endpoint disabled due to error"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Actions:"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:14
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:14
 msgid "Latest Requests"
 msgstr ""
 
 #. translators: %s is the endpoint title (shortened URL).
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:17
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:17
 #, js-format
 msgid "Most recent requests for %s"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:17
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:17
 msgid "Error"
 msgstr ""
 
 #. translators: %s is a human-readable time difference.
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:20
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:20
 #, js-format
 msgid "sending in %s"
 msgstr ""
 
 #. translators: %s is a human-readable time difference.
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:23
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:23
 #, js-format
 msgid "processed %s"
 msgstr ""
 
 #. translators: %s is the number of errors.
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 #, js-format
 msgid "Attempt #%s"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "This endpoint hasn't received any requests yet."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "Webhook Endpoint"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "This webhook endpoint is currently disabled."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "Request Error: "
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "The URL to send requests to. It's required for the URL to be under a valid TLS/SSL certificate. You can use the test button below to verify the endpoint response."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "Authentication token (optional)"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "If your endpoint requires a token authentication, enter it here. It will be sent as a Bearer token in the Authorization header."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "Send a test request"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "Label (optional)"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "A label to help you identify this endpoint. It will not be sent to the endpoint."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "Select which actions should trigger this endpoint:"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "At least one action is required."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "Confirm"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:26
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:26
 msgid "Remove Endpoint"
 msgstr ""
 
 #. translators: %s: endpoint title
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:27
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:27
 #, js-format
 msgid "Are you sure you want to remove the endpoint %s?"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:27
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:27
 msgid "Enable Endpoint"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:27
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:27
 msgid "Disable Endpoint"
 msgstr ""
 
 #. translators: %s: endpoint title
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:28
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:28
 #, js-format
 msgid "Are you sure you want to enable the endpoint %s?"
 msgstr ""
 
 #. translators: %s: endpoint title
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 #, js-format
 msgid "Are you sure you want to disable the endpoint %s?"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Webhook Endpoints"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Register webhook endpoints to integrate reader activity data to third-party services or private APIs"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Add New Endpoint"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "No endpoints found"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
-msgid "View"
-msgstr ""
-
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Site Key cannot be empty!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Site Secret cannot be empty"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Threshold cannot be less than 0.1"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Threshold cannot be greater than 1"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Your site key and secret must match the selected reCAPTCHA version. Please enter new credentials."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "You need a valid Measurement ID (e.g. \"G-ABCDE12345\") to activate Newspack Custom Events."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "You need a valid Measurement API Secret to activate Newspack Custom Events."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Use reCAPTCHA"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Enabling reCAPTCHA can help protect your site against bot attacks and credit card testing."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Get started"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "reCAPTCHA Version"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Learn more about reCAPTCHA versions"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Score based (v3)"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Challenge (v2) - invisible reCAPTCHA badge"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Site Key"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Site Secret"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Threshold"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Learn more about the threshold value"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Error fetching settings."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Error updating settings."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Force two-factor authentication"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Improve security by requiring two-factor authentication via WordPress.com for users with higher capabilities."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Two-factor authentication is currently enforced for all users via Jetpack configuration."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Customize which capabilties to enforce 2FA by untoggling the “Require accounts to use WordPress.com Two-Step Authentication” option in Jetpack settings."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Select the user capability to enforce two-factor authentication"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Capability"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:29
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:29
 msgid "Obfuscate restricted accounts by throwing WP’s “user not found” errors on login form attempts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Add Mailchimp API Key"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Mailchimp API Key"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Find or generate your API key"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Connecting…"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Newspack already sends some custom event data to your GA account, but adding the credentials below enables enhanced events that are fired from your site's backend. For example, when a donation is confirmed or when a user successfully subscribes to a newsletter."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Measurement ID"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-msgid "You can find this in Site Kit Settings, or in Google Analytics > Admin > Data Streams and clickng the data stream. Example: G-ABCDE12345"
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+msgid "You can find this in Site Kit Settings, or in Google Analytics > Admin > Data Streams and clicking the data stream. Example: G-ABCDE12345"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Measurement Protocol API Secret"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Generate an API secret from your GA dashboard in Admin > Data Streams and opening your data stream. Select \"Measurement Protocol API secrets\" under the Events section. Create a new secret."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Are you sure you want to reset the GA4 credentials?"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Create and manage customized RSS feeds for syndication partners"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Related Posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Automatically add related content at the bottom of each post."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "If set, posts will be shown as related content only if published within the past number of months. If 0, any published post can be shown, regardless of publish date."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Maximum age of related content, in months"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Author Bio"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Display an author bio under individual posts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Author Email"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Display the author email with bio on individual posts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Length"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Truncates the author bio on single posts to this approximate character length, but without breaking a word. The full bio appears on the author archive page."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "You have more than 1000 posts. Applying these settings might take a moment."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Featured image position for all posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Set a featured image position for all posts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Select to change all posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Behind article title"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Beside article title"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Hidden"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "After saving the settings with this option selected, all posts will be updated. This cannot be undone."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Template for all posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Set a template for all posts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "With sidebar"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "One Column"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "One Column Wide"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Default featured image position for new posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Set a default featured image position for new posts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Default template for new posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Set a default template for new posts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Credit Class Name"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "A CSS class name to be applied to all image credit elements. Leave blank to display no class name."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Credit Label"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "A label to prefix all media credits. Leave blank to display no prefix."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Placeholder Image"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "A placeholder image to be displayed in place of images without credits. If none is chosen, the image will be displayed normally whether or not it has a credit."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Auto-populate image credits"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Automatically populate image credits from EXIF or IPTC metadata when uploading new images."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Create Page"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Edit Page"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Edit and Publish Page"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Your accessibility statement page has been moved to trash or deleted. Click \"Create Page\" to create a new one."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Your accessibility statement page is published."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Your accessibility statement page is not yet published. Please review and make edits before publishing."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Your accessibility statement page has been moved to trash. Click \"Create Page\" to create a new one."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Accessibility Statement Page"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Edit and publish an accessibility statement page. Once published, a link to this page will display in the footer of your site."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "An accessibility statement helps your readers understand how your site supports accessibility standards and what to do if they encounter accessibility issues. "
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "What makes a good accessibility statement."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "The page you create here will include a boilerplate accessibility statement. "
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Please review and make edits to ensure it meets the requirements before publishing. "
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "You can also use the W3C Accessibility Statement Generator to create a custom statement. "
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Try out the Accessibility Statement Generator."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Learn more about this feature in our documentation."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Fullscreen"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Standalone"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Minimal UI"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Browser"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Web App Display Mode"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Choose how your site appears when installed as a Progressive Web App. Fullscreen: Full screen without browser UI. Standalone: Looks like a standalone app. Minimal UI: Minimal browser controls. Browser: Standard browser experience."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "This setting controls how your site appears when users install it as a Progressive Web App on their devices."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Activate Layout"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Serif"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Sans Serif"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Display"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Monospace"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "XS"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: dist/setup.js:7
-msgid "S"
-msgstr ""
-
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: dist/setup.js:7
-msgid "M"
-msgstr ""
-
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
-#: dist/setup.js:7
-msgid "L"
-msgstr ""
-
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "XL"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Headings"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Body"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Font provider import code or URL"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Font name"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Font fallback stack"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Typography Options"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 #: dist/setup.js:7
 msgid "Use all-caps for accent text"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Customize collections naming schema"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Override labels, messages and other reader-facing elements with custom naming."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Name to be used instead of \"Collections\" (e.g., \"Issues\", \"Magazines\")"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Singular name"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Singular name to be used instead of \"Collection\" (e.g., \"Issue\", \"Magazine\")"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Permalink base slug"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Base slug to be used in permalinks and the REST API (e.g., \"issues\", \"magazine\"). Default: \"collections\"."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Plugins"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "APIs"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Jetpack SSO"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Analytics"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Activate Newspack Custom Events"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Allows Newspack to send enhanced custom event data to your Google Analytics."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Invalid Google verification code!"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:30
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:30
 msgid "Invalid Bing verification code!"
 msgstr ""
 
 #. translators: %1$s: label, %2$s: placeholder
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #, js-format
 msgid "Invalid URL for \"%1$s\", correct format is \"%2$s\""
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Webmaster Tools"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Add verification meta tags to your site"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Social Accounts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Let search engines know which social profiles are associated to your site"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Theme"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Update your sites theme."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Select a homepage layout."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Pick your primary and secondary colors."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Typography"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Define the font pairing to use throughout your site"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Header"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Update the header and add your logo."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Footer"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Personalize the footer of your site."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 #: dist/setup.js:7
 msgid "Finish"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Recirculation"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Default Featured Image Position And Post Template"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Modify how the featured image and post template settings are applied to new posts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Featured Image Position And Post Template For All Posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Modify how the featured image and post template settings are applied to existing posts. Warning: saving these options will override all posts."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Media Credits"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Progressive Web App"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Saving will overwrite existing posts, this cannot be undone. Are you sure you want to proceed?"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Open Customizer"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Manage print editions and other collections of content with custom ordering and organization."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Collections Settings"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Collections Module"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Global CTAs"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Renderd in Collections-related pages. Can be overridden on a per-category or per-collection basis."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "URL for the \"Subscribe\" button that will be displayed in the Collections archive page when no subscription URL is set for the Collection or its parent category."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "URL for the \"Order\" button that will be displayed in the Collections archive page when no order URL is set for the Collection or its parent category."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Collections Archive"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Customize the Collections archive page."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Collections per page"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Number of collections to display per page in the Collections archive page."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Category Filter Label"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Custom label for the category filter dropdown (e.g., \"Collection:\", \"Type:\", \"Series:\"). Leave empty to use the default \"Publication:\"."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Publication:"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Highlight Most Recent Collection"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Feature the latest Collection prominently at the top of the archive page, showcasing its content and any associated CTAs."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Collection Single"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Customize individual collection pages."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Show Category"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Display the category information for posts when rendering them on collection pages."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Show Cover Story Images"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Display featured images for cover stories on collection pages. Individual collections can override this setting."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Collection Posts"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Customize post single pages when they belong to a collection."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Collection Indicator Style"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "How collection indicators should be displayed on posts. When choosing the default style, an indicator with a link will be displayed at the bottom of the post content."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Card Message"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Custom message displayed in the card style indicator, along with the featured image and a button to view the collection."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Allows editors to export article content in Adobe InDesign Tagged Text format."
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Adobe Indesign"
 msgstr ""
 
-#: dist/newspack-wizards.ccef7f3383dcb0735b9a.js:31
+#: dist/newspack-wizards.e4dc31cc28d268fd4131.js:31
 msgid "Enable InDesign Export"
 msgstr ""
 
@@ -10369,6 +10763,48 @@ msgstr ""
 
 #: src/wizards/audience/views/campaigns/analytics/index.js:33
 msgid "View the help page"
+msgstr ""
+
+#: dist/blocks/collections/block.json
+#: src/blocks/collections/block.json
+msgctxt "block title"
+msgid "Collections"
+msgstr ""
+
+#: dist/blocks/collections/block.json
+#: src/blocks/collections/block.json
+msgctxt "block description"
+msgid "An advanced block that allows displaying collections based on different parameters and visual configurations."
+msgstr ""
+
+#: dist/blocks/collections/block.json
+#: src/blocks/collections/block.json
+msgctxt "block keyword"
+msgid "collections"
+msgstr ""
+
+#: dist/blocks/collections/block.json
+#: src/blocks/collections/block.json
+msgctxt "block keyword"
+msgid "issues"
+msgstr ""
+
+#: dist/blocks/collections/block.json
+#: src/blocks/collections/block.json
+msgctxt "block keyword"
+msgid "publications"
+msgstr ""
+
+#: dist/blocks/collections/block.json
+#: src/blocks/collections/block.json
+msgctxt "block keyword"
+msgid "magazines"
+msgstr ""
+
+#: dist/blocks/collections/block.json
+#: src/blocks/collections/block.json
+msgctxt "block keyword"
+msgid "groups"
 msgstr ""
 
 #: dist/blocks/reader-registration/block.json

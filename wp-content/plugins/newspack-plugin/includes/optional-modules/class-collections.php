@@ -57,15 +57,12 @@ class Collections {
 	 * @return bool True if Collections is enabled.
 	 */
 	public static function is_feature_enabled() {
-		// Check if the feature is enabled.
-		$is_enabled = defined( 'NEWSPACK_COLLECTIONS_ENABLED' ) ? constant( 'NEWSPACK_COLLECTIONS_ENABLED' ) : false;
-
 		/**
 		 * Filters whether the Collections feature is enabled.
 		 *
 		 * @param bool $is_enabled Whether the Collections module is enabled.
 		 */
-		return apply_filters( 'newspack_collections_enabled', $is_enabled );
+		return apply_filters( 'newspack_collections_enabled', true );
 	}
 
 	/**

@@ -87,15 +87,16 @@ class Collection_Taxonomy {
 		];
 
 		$args = [
-			'labels'            => $labels,
-			'description'       => __( 'Internal taxonomy for associating collections with posts.', 'newspack-plugin' ),
-			'public'            => false,
-			'show_ui'           => true,
-			'show_in_menu'      => false,
-			'show_admin_column' => true,
-			'query_var'         => false,
-			'rewrite'           => false,
-			'show_in_rest'      => true,
+			'labels'             => $labels,
+			'description'        => __( 'Internal taxonomy for associating collections with posts.', 'newspack-plugin' ),
+			'public'             => false,
+			'show_ui'            => true,
+			'show_in_menu'       => false,
+			'show_admin_column'  => true,
+			'show_in_quick_edit' => false,
+			'query_var'          => false,
+			'rewrite'            => false,
+			'show_in_rest'       => true,
 		];
 
 		register_taxonomy( self::get_taxonomy(), [ 'post' ], $args );

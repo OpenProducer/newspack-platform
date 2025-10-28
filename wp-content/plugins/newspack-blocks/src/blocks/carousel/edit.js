@@ -15,14 +15,15 @@ import { InspectorControls } from '@wordpress/block-editor';
 import { dateI18n, __experimentalGetSettings } from '@wordpress/date';
 import { Component, createRef, Fragment, RawHTML } from '@wordpress/element';
 import {
-	BaseControl,
-	Button,
-	ButtonGroup,
 	PanelBody,
 	Placeholder,
 	RangeControl,
 	Spinner,
 	ToggleControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
@@ -357,7 +358,7 @@ class Edit extends Component {
 				</div>
 
 				<InspectorControls>
-					<PanelBody title={ __( 'Content', 'newspack-blocks' ) } className='newspack-block__panel is-content'>
+					<PanelBody title={ __( 'Settings', 'newspack-blocks' ) } className='newspack-block__panel is-content'>
 						{ postsToShow && (
 							<QueryControls
 								numberOfItems={ postsToShow }
@@ -440,33 +441,26 @@ class Edit extends Component {
 						) }
 					</PanelBody>
 					<PanelBody title={ __( 'Featured Image', 'newspack-blocks' ) } className="newspack-block__panel">
-					<BaseControl
+						<ToggleGroupControl
 							label={ __( 'Aspect ratio', 'newspack-blocks' ) }
 							help={ __(
 								'All slides will share the same aspect ratio, for consistency.',
 								'newspack-blocks'
 							) }
-							id="newspack-blocks__aspect-ratio-control"
-							className="newspack-block__button-group"
+							value={ String( aspectRatio ) }
+							onChange={ value => setAttributes( { aspectRatio: parseFloat( value ) } ) }
+							isBlock
+							__next40pxDefaultSize
 						>
-							<ButtonGroup>
-								{ aspectRatioOptions.map( option => {
-									const isCurrent = aspectRatio === option.value;
-									return (
-										<Button
-											isPrimary={ isCurrent }
-											aria-pressed={ isCurrent }
-											aria-label={ option.label }
-											key={ option.value }
-											onClick={ () => setAttributes( { aspectRatio: option.value } ) }
-										>
-											{ option.shortName }
-										</Button>
-									);
-								} ) }
-							</ButtonGroup>
-						</BaseControl>
-						<BaseControl
+							{ aspectRatioOptions.map( option => (
+								<ToggleGroupControlOption
+									key={ option.value }
+									label={ option.shortName }
+									value={ String( option.value ) }
+								/>
+							) ) }
+						</ToggleGroupControl>
+						<ToggleGroupControl
 							label={ __( 'Fit', 'newspack-blocks' ) }
 							help={
 								'cover' === imageFit
@@ -478,28 +472,14 @@ class Edit extends Component {
 										'newspack-blocks'
 									)
 							}
-							id="newspack-blocks__blocks__image-fit-control"
-							className="newspack-block__button-group"
+							value={ imageFit }
+							onChange={ value => setAttributes( { imageFit: value } ) }
+							isBlock
+							__next40pxDefaultSize
 						>
-							<ButtonGroup>
-								<Button
-									isPrimary={ 'cover' === imageFit }
-									aria-pressed={ 'cover' === imageFit }
-									aria-label={ __( 'Cover', 'newspack-blocks' ) }
-									onClick={ () => setAttributes( { imageFit: 'cover' } ) }
-								>
-									{ __( 'Cover', 'newspack-blocks' ) }
-								</Button>
-								<Button
-									isPrimary={ 'contain' === imageFit }
-									aria-pressed={ 'contain' === imageFit }
-									aria-label={ __( 'Contain', 'newspack-blocks' ) }
-									onClick={ () => setAttributes( { imageFit: 'contain' } ) }
-								>
-									{ __( 'Contain', 'newspack-blocks' ) }
-								</Button>
-							</ButtonGroup>
-						</BaseControl>
+							<ToggleGroupControlOption label={ __( 'Cover', 'newspack-blocks' ) } value="cover" />
+							<ToggleGroupControlOption label={ __( 'Contain', 'newspack-blocks' ) } value="contain" />
+						</ToggleGroupControl>
 						<ToggleControl
 							label={ __( 'Show caption', 'newspack-blocks' ) }
 							checked={ showCaption }

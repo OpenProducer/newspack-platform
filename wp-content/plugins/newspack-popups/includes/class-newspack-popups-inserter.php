@@ -653,6 +653,7 @@ final class Newspack_Popups_Inserter {
 			\wp_enqueue_style( $admin_script_handle );
 		}
 
+		// Note: always enqueue scripts even when prompts are disabled, to allow page view logging.
 		$script_handle = 'newspack-popups-view';
 
 		if ( ! self::is_amp() ) {

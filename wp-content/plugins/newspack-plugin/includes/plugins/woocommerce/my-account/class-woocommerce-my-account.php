@@ -285,14 +285,14 @@ class WooCommerce_My_Account {
 			|| self::is_reorder_checkout_page()
 		) {
 			\wp_enqueue_script(
-				'my-account',
+				'newspack-my-account',
 				\Newspack\Newspack::plugin_url() . '/dist/my-account.js',
 				[],
 				NEWSPACK_PLUGIN_VERSION,
 				true
 			);
 			\wp_localize_script(
-				'my-account',
+				'newspack-my-account',
 				'newspack_my_account',
 				[
 					'labels'                               => [
