@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { ColorPicker, Grid } from '../../../../../components/src';
+import { ColorPicker, Grid } from '../../../../../../packages/components/src';
 
 export default function Colors( { themeMods, updateColors }: { themeMods: ThemeMods; updateColors: ( a: ThemeMods ) => void } ) {
 	return (

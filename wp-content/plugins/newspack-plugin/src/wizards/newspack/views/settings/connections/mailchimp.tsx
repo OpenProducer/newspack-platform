@@ -16,7 +16,7 @@ import { useEffect, useState, useRef, Fragment } from '@wordpress/element';
 import WizardsActionCard from '../../../../wizards-action-card';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
 import { WIZARD_ERROR_MESSAGES, WizardError } from '../../../../errors';
-import { Button, Card, Grid, Modal, TextControl } from '../../../../../components/src';
+import { Button, Card, Grid, Modal, TextControl } from '../../../../../../packages/components/src';
 
 function Mailchimp() {
 	const [ isModalOpen, setIsModalOpen ] = useState( false );

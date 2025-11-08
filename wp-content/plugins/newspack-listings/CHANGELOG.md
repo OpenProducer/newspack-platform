@@ -1,3 +1,10 @@
+## [3.4.1](https://github.com/Automattic/newspack-listings/compare/v3.4.0...v3.4.1) (2025-10-30)
+
+
+### Bug Fixes
+
+* update download URL for db.php ([#549](https://github.com/Automattic/newspack-listings/issues/549)) ([995a289](https://github.com/Automattic/newspack-listings/commit/995a2898e2d7083b6da4e431111e29b5d41997a0))
+
 # [3.4.0](https://github.com/Automattic/newspack-listings/compare/v3.3.1...v3.4.0) (2025-08-25)
 
 

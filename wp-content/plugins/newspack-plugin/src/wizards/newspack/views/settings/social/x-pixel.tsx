@@ -12,7 +12,7 @@ import { createInterpolateElement } from '@wordpress/element';
  * Internal dependencies
  */
 import { PAGE_NAMESPACE } from '../constants';
-import { TextControl } from '../../../../../components/src';
+import { TextControl } from '../../../../../../packages/components/src';
 import WizardsToggleHeaderCard from '../../../../wizards-toggle-header-card';
 
 const XPixel = () => {

@@ -8,11 +8,13 @@
  * @package Newspack_Blocks
  */
 
+namespace Newspack_Blocks;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 ?>
-<form id="order_review" method="post">
+<form id="order_review" class="change-payment-method" method="post">
 
 	<div id="payment">
 		<?php
@@ -23,9 +25,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		$pay_order_button_text     = apply_filters( 'woocommerce_change_payment_button_text', $pay_order_button_text );
-		$customer_subscription_ids = WCS_Customer_Store::instance()->get_users_subscription_ids( $subscription->get_customer_id() );
-		$payment_gateways_handler  = WC_Subscriptions_Core_Plugin::instance()->get_gateways_handler_class();
-		$available_gateways        = WC()->payment_gateways->get_available_payment_gateways();
+		$customer_subscription_ids = \WCS_Customer_Store::instance()->get_users_subscription_ids( $subscription->get_customer_id() );
+		$payment_gateways_handler  = \WC_Subscriptions_Core_Plugin::instance()->get_gateways_handler_class();
+		$available_gateways        = \WC()->payment_gateways->get_available_payment_gateways();
 
 		if ( $available_gateways ) :
 			?>
@@ -85,8 +87,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				)
 			);
 			?>
-
 			<?php do_action( 'woocommerce_subscriptions_change_payment_after_submit' ); ?>
+			<button class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--wide" id="checkout_cancel" type="button"><?php echo esc_html( Modal_Checkout::get_modal_checkout_labels( 'checkout_cancel' ) ); ?></button>
 
 			<input type="hidden" name="woocommerce_change_payment" value="<?php echo esc_attr( $subscription->get_id() ); ?>" />
 		</div>

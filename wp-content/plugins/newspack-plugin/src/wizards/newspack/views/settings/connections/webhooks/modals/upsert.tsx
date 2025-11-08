@@ -14,7 +14,7 @@ import { CheckboxControl as WpCheckboxControl, TextControl } from '@wordpress/co
  */
 import { ENDPOINTS_CACHE_KEY } from '../constants';
 import { WizardApiError } from '../../../../../../errors';
-import { Card, Button, Notice, Modal, Grid } from '../../../../../../../components/src';
+import { Card, Button, Notice, Modal, Grid } from '../../../../../../../../packages/components/src';
 import { validateEndpoint, validateUrl } from '../utils';
 
 /**

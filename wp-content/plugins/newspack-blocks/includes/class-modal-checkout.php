@@ -200,6 +200,7 @@ final class Modal_Checkout {
 
 		// Wrap required checkbox text in a span so it works nicely with the Newspack UI grid layout.
 		add_filter( 'woocommerce_form_field_checkbox', [ __CLASS__, 'wrap_required_checkbox_text' ], 10, 4 );
+		add_filter( 'woocommerce_available_payment_gateways', [ __CLASS__, 'filter_available_payment_gateways' ] );
 
 		/**
 		 * Ensure that options to limit the number of subscriptions per product are respected.
@@ -267,21 +268,43 @@ final class Modal_Checkout {
 	}
 
 	/**
+	 * Filter available payment gateways to only supported ones in modal checkout.
+	 *
+	 * @param array $available_gateways Available payment gateways.
+	 *
+	 * @return array Filtered available payment gateways.
+	 */
+	public static function filter_available_payment_gateways( $available_gateways ) {
+		if ( ! self::is_modal_checkout() ) {
+			return $available_gateways;
+		}
+
+		$supported_gateways = self::get_supported_payment_gateways();
+		foreach ( $available_gateways as $id => $gateway ) {
+			if ( ! in_array( $id, $supported_gateways, true ) ) {
+				unset( $available_gateways[ $id ] );
+			}
+		}
+
+		return $available_gateways;
+	}
+
+	/**
 	 * Whether any available payment gateways are not suppored in modal checkout.
 	 *
 	 * @return boolean
 	 */
-	public static function has_unsupported_payment_gateway() {
-		$supported_gateways          = self::get_supported_payment_gateways();
-		$available_gateways          = function_exists( 'WC' ) ? \WC()->payment_gateways->get_available_payment_gateways() : [];
-		$unsupported_payment_gateway = false;
+	public static function has_supported_payment_gateway() {
+		$supported_gateways = self::get_supported_payment_gateways();
+		$available_gateways = function_exists( 'WC' ) ? \WC()->payment_gateways->get_available_payment_gateways() : [];
+		$has_supported      = false;
 		foreach ( $available_gateways as $id => $gateway ) {
-			if ( ! in_array( $id, $supported_gateways, true ) ) {
-				$unsupported_payment_gateway = true;
+			if ( in_array( $id, $supported_gateways, true ) ) {
+				$has_supported = true;
 				break;
 			}
 		}
-		return $unsupported_payment_gateway;
+		return $has_supported;
 	}
 
 	/**
@@ -390,7 +413,7 @@ final class Modal_Checkout {
 			$query_args['referer_categories'] = implode( ',', $referer_categories );
 		}
 
-		if ( ! self::has_unsupported_payment_gateway() ) {
+		if ( self::has_supported_payment_gateway() ) {
 			$query_args['modal_checkout'] = 1;
 		}
 
@@ -958,13 +981,13 @@ final class Modal_Checkout {
 			'newspack-blocks-modal',
 			'newspackBlocksModal',
 			[
-				'ajax_url'                        => admin_url( 'admin-ajax.php' ),
-				'checkout_registration_flag'      => self::CHECKOUT_REGISTRATION_FLAG,
-				'newspack_class_prefix'           => self::get_class_prefix(),
-				'is_registration_required'        => self::is_registration_required(),
-				'has_unsupported_payment_gateway' => self::has_unsupported_payment_gateway(),
-				'checkout_url'                    => remove_query_arg( 'my_account_checkout', add_query_arg( 'modal_checkout', '1', wc_get_checkout_url() ) ),
-				'labels'                          => [
+				'ajax_url'                      => admin_url( 'admin-ajax.php' ),
+				'checkout_registration_flag'    => self::CHECKOUT_REGISTRATION_FLAG,
+				'newspack_class_prefix'         => self::get_class_prefix(),
+				'is_registration_required'      => self::is_registration_required(),
+				'has_supported_payment_gateway' => self::has_supported_payment_gateway(),
+				'checkout_url'                  => remove_query_arg( 'my_account_checkout', add_query_arg( 'modal_checkout', '1', wc_get_checkout_url() ) ),
+				'labels'                        => [
 					'auth_modal_title'     => self::get_modal_checkout_labels( 'auth_modal_title' ),
 					'checkout_modal_title' => self::get_modal_checkout_labels( 'checkout_modal_title' ),
 					'register_modal_title' => self::get_modal_checkout_labels( 'register_modal_title' ),
@@ -1089,7 +1112,7 @@ final class Modal_Checkout {
 	 * @return string
 	 */
 	public static function woocommerce_get_return_url( $url, $order ) {
-		if ( ! self::is_modal_checkout() || self::has_unsupported_payment_gateway() ) {
+		if ( ! self::is_modal_checkout() || ! self::has_supported_payment_gateway() ) {
 			return $url;
 		}
 
@@ -1294,7 +1317,7 @@ final class Modal_Checkout {
 		if (
 			1 === count( array_values( $cart_items ) ) &&
 			method_exists( 'WCS_Gifting', 'email_belongs_to_current_user' ) &&
-			method_exists( 'WCS_Gifting', 'update_cart_item_key' ) &&
+			method_exists( 'WCS_Gifting', 'update_cart_item_recipient' ) &&
 			method_exists( 'WCSG_Cart', 'is_giftable_item' )
 		) {
 			$is_gift   = ! empty( filter_input( INPUT_POST, 'newspack_wcsg_is_gift', FILTER_SANITIZE_SPECIAL_CHARS ) );
@@ -1307,7 +1330,7 @@ final class Modal_Checkout {
 
 				// If no errors, attach the recipient's email address to the subscription item.
 				if ( $is_valid_email ) {
-					\WCS_Gifting::update_cart_item_key( $cart_item, $cart_item_key, $recipient_email );
+					\WCS_Gifting::update_cart_item_recipient( $cart_item, $cart_item_key, $recipient_email );
 				} else {
 					$notice = $self_gifting
 						? __( 'Please enter someone else\' email address to receive this gift.', 'newspack-blocks' )
@@ -1998,7 +2021,8 @@ final class Modal_Checkout {
 				),
 				'checkout_confirm'           => __( 'Complete transaction', 'newspack-blocks' ),
 				'checkout_confirm_variation' => __( 'Purchase', 'newspack-blocks' ),
-				'checkout_back'              => __( 'Back', 'newspack-blocks' ),
+				'checkout_edit_billing'      => __( 'Edit billing information', 'newspack-blocks' ),
+				'checkout_cancel'            => __( 'Cancel', 'newspack-blocks' ),
 				'checkout_success'           => __( 'Transaction successful', 'newspack-blocks' ),
 				'checkout_nyp'               => __( "Your contribution directly funds our work. If you're moved to do so, you can opt to pay more than the standard rate.", 'newspack-blocks' ),
 				'checkout_nyp_thankyou'      => __( "Thank you for your generosity! We couldn't do this without you!", 'newspack-blocks' ),

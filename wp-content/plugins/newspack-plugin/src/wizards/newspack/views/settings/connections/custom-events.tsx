@@ -13,7 +13,7 @@ import { useState, useEffect } from '@wordpress/element';
  */
 import { WizardError } from '../../../../errors';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
-import { Button, Grid, Notice, TextControl, utils } from '../../../../../components/src';
+import { Button, Grid, Notice, TextControl, utils } from '../../../../../../packages/components/src';
 import { ERROR_MESSAGES } from './constants';
 
 /**

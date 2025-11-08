@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Newsletters 3.23.1\n"
+"Project-Id-Version: Newspack Newsletters 3.23.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-25T13:32:53+00:00\n"
+"POT-Creation-Date: 2025-10-15T19:07:42+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-newsletters\n"
@@ -337,8 +337,8 @@ msgid_plural "%d newsletters now have public page disabled."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-newspack-newsletters-contacts.php:314
-#: includes/class-newspack-newsletters-contacts.php:349
+#: includes/class-newspack-newsletters-contacts.php:318
+#: includes/class-newspack-newsletters-contacts.php:353
 #: includes/class-newspack-newsletters-subscription.php:617
 msgid "Not supported for this provider"
 msgstr ""
@@ -925,105 +925,106 @@ msgid "Active Campaign API credentials are missing."
 msgstr ""
 
 #: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:158
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:949
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1032
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:956
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1039
 msgid "ActiveCampaign API credentials are missing."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:219
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:221
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:226
 msgid "An error occurred while communicating with ActiveCampaign."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:529
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:536
 msgid "Please input ActiveCampaign API URL and Key."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:613
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:620
 msgid "ActiveCampaign supports searching by a single search term only."
 msgstr ""
 
 #. Translators: %s is the segment ID.
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:654
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:661
 #, php-format
 msgid "Untitled %s"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:832
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:839
 msgid "Missing or invalid ActiveCampign credentials."
 msgstr ""
 
 #. translators: %s are comma-separated emails.
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1014
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1021
 #, php-format
 msgid "ActiveCampaign test message sent successfully to %s."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1038
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1045
 #: includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php:572
 #: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:824
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1119
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1120
 msgid "The newsletter subject cannot be empty."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1078
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1085
 msgid "Please input sender name and email address."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1084
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1091
 msgid "Please select a list."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1113
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1120
 msgid "ActiveCampaign sync error: "
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1143
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1150
 msgid "Error creating campaign: Message HTML is missing. Campaign not sent."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1195
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1202
 msgid "Campaign is not deletable."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1682
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1694
 msgid "Active Campaign List"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1683
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1695
 msgid "Active Campaign Tag"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1684
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1696
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:527
 #: src/newsletter-editor/sidebar/send-to.js:35
 msgid "list"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1685
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1697
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:528
 msgid "lists"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1686
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1698
 msgid "segment"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1687
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1699
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:530
 msgid "List"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1688
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1700
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:531
 msgid "Lists"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1689
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1701
 msgid "Segments"
 msgstr ""
 
 #. translators: %1$s and %2$s are opening and closing link tag to Active Campaign documentation.
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1708
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1720
 #, php-format
 msgid "Note for Active Campaign: You need to manually create a segment using the above tag to be able to send campaigns to this list. %1$sLearn more%2$s"
 msgstr ""
@@ -1277,176 +1278,176 @@ msgstr ""
 msgid "Mailchimp API key is not set."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:142
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:143
 msgid "Please input a Mailchimp API key."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:155
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:156
 msgid "Please input a valid Mailchimp API key."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:357
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:397
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:959
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1241
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1324
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:358
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:398
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:960
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1254
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1337
 msgid "Mailchimp campaign ID not found."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:520
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1116
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:521
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1117
 msgid "Missing or invalid Mailchimp credentials."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:896
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:897
 msgid "Error retrieving verified domains from Mailchimp."
 msgstr ""
 
 #. Translators: explanation that current domain is not verified, list of verified options.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:931
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:932
 #, php-format
 msgid "%1$s is not a verified domain. Verified domains for the linked Mailchimp account are: %2$s."
 msgstr ""
 
 #. translators: Message after successful test email.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:981
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:982
 #, php-format
 msgid "Mailchimp test sent successfully to %s."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1081
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1082
 msgid "Could not fetch segment criteria for segment "
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1233
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1246
 msgid "Unable to synchronize with Mailchimp."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1331
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1344
 msgid "Invalid Mailchimp Interest."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1346
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1359
 msgid "Mailchimp list ID not found."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1426
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1439
 msgid "We'll need to subscribe this email address manually. Please contact our support team."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1440
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1453
 msgid "An unknown Mailchimp error occurred."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1606
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1619
 msgid "Response returned no merge_fields"
 msgstr ""
 
 #. Translators: %1$s is the merge field key, %2$s is the error message.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1684
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1697
 #, php-format
 msgid "Failed to create merge field %1$s. Error response: %2$s"
 msgstr ""
 
 #. Translators: %1$s is the merge field key, %2$s is the merge field tag.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1691
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1704
 #, php-format
 msgid "Created merge field %1$s with tag %2$s."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1867
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1880
 msgid "Error upserting contact to Mailchimp."
 msgstr ""
 
 #. Translators: 1 is a hash value representing the contact's new ID. 2 is the contact's new email address.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1877
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1890
 #, php-format
 msgid "Contact requested email change. Migrated to %1$s (%2$s)."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1883
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1896
 msgid "Error adding migration note to existing contact."
 msgstr ""
 
 #. Translators: 1 is a hash value representing the contact's previous ID. 2 is the contact's previous email address.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1891
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1904
 #, php-format
 msgid "Contact requested email change. Migrated from %1$s (%2$s)."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1897
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1910
 msgid "Error adding migration note to new contact."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1901
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1914
 msgid "Error deleting existing contact."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2058
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2071
 msgid "Error reaching to search-members endpoint"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2063
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2076
 msgid "Contact not found"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2172
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2185
 msgid "audience"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2173
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2186
 msgid "audiences"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2174
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2187
 msgid "group, segment, or tag"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2175
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2188
 msgid "Audience"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2176
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2189
 msgid "Audiences"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2177
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2190
 msgid "Group, Segment, or Tag"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2178
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2191
 msgid "Mailchimp Audience"
 msgstr ""
 
 #. translators: %s is the name of the group category. "Newspack newsletters" by default.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2180
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2193
 #, php-format
 msgid "Mailchimp Group under the %s category"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2182
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2195
 msgid "Once this list is saved, a Group will be created for it."
 msgstr ""
 
 #. translators: %s is the name of the group category. "Newspack newsletters" by default.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2184
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2197
 #, php-format
 msgid "Group created for this list under %s:"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2187
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2200
 msgid "Mailchimp Group"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2190
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2203
 msgid "Mailchimp Tag"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2206
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2219
 msgid "Note for Mailchimp: The group is a subset of the Audience selected above. When a reader subscribes to this List, they will also be subscribed to the selected Audience."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2221
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2234
 msgid "Error sending test email. Please enter a name and email in the \"FROM\" section."
 msgstr ""
 
@@ -2679,44 +2680,48 @@ msgstr ""
 msgid "I'd like to share this newsletter with you: [LINK]"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:34
+#: src/editor/blocks/visibility-attribute/index.js:39
 msgid "Email and Web"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:38
+#: src/editor/blocks/visibility-attribute/index.js:43
 msgid "Email only"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:42
+#: src/editor/blocks/visibility-attribute/index.js:47
 msgid "Web only"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:75
-#: src/editor/blocks/visibility-attribute/index.js:107
+#: src/editor/blocks/visibility-attribute/index.js:81
+#: src/editor/blocks/visibility-attribute/index.js:114
 msgid "Visibility"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:109
+#: src/editor/blocks/visibility-attribute/index.js:116
 msgid "Where should this block be visible?"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:115
+#: src/editor/blocks/visibility-attribute/index.js:123
+msgid "This block is only available in the email version of the newsletter."
+msgstr ""
+
+#: src/editor/blocks/visibility-attribute/index.js:126
 msgid "If the newsletter is going to be viewable publicly on this site, select here if you'd like this block to be visible in a particular version."
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:153
+#: src/editor/blocks/visibility-attribute/index.js:166
 msgid "Newsletter is not public, this block will not be visible."
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:162
+#: src/editor/blocks/visibility-attribute/index.js:175
 msgid "Clear visibility attribute"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:168
+#: src/editor/blocks/visibility-attribute/index.js:181
 msgid "Only visible on public newsletter page."
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:170
+#: src/editor/blocks/visibility-attribute/index.js:183
 msgid "Only visible in the sent email."
 msgstr ""
 

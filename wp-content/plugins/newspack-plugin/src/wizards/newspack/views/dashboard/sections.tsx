@@ -16,7 +16,7 @@ import { Icon } from '@wordpress/icons';
  */
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import { icons } from '../../components/icons';
-import { Grid, Card } from '../../../../components/src';
+import { Grid, Card } from '../../../../../packages/components/src';
 
 const {
 	newspackDashboard: { sections: dashSections },

@@ -15,7 +15,7 @@ import ThemeSelection from './theme-select';
 import WizardsTab from '../../../../wizards-tab';
 import WizardSection from '../../../../wizards-section';
 import { HomepageSelect } from './homepage-select';
-import { Button, Router } from '../../../../../components/src';
+import { Button, Router } from '../../../../../../packages/components/src';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
 import Header from './header';
 import Footer from './footer';

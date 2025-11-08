@@ -23,19 +23,19 @@ return array(
 		'path'    => $vendorDir . '/wordpress/abilities-api/includes/bootstrap.php'
 	),
 	'44e8414cd27982ecf86403af6e48f123' => array(
-		'version' => '10.3.3.0',
+		'version' => '10.3.4.0',
 		'path'    => $baseDir . '/src/StoreApi/deprecated.php'
 	),
 	'9ce98895d0a470c71998c4b530020d26' => array(
-		'version' => '10.3.3.0',
+		'version' => '10.3.4.0',
 		'path'    => $baseDir . '/src/StoreApi/functions.php'
 	),
 	'c379ea42c3f5964a973a7106b08c5ef0' => array(
-		'version' => '10.3.3.0',
+		'version' => '10.3.4.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/functions.php'
 	),
 	'cd726a73edeabe4da44e314a8eebc9bb' => array(
-		'version' => '10.3.3.0',
+		'version' => '10.3.4.0',
 		'path'    => $baseDir . '/src/Deprecated.php'
 	),
 );

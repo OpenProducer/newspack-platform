@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Newspack Campaigns plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Campaigns 3.6.0\n"
+"Project-Id-Version: Newspack Campaigns 3.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-08-26T08:44:45+00:00\n"
+"POT-Creation-Date: 2025-10-04T12:30:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-popups\n"
@@ -217,89 +217,89 @@ msgstr ""
 msgid "If enabled, readers can dismiss overlay prompts by tapping on the colored overlay background underneath the prompt content. This will make it easier for readers to dismiss prompts, but potentially result in less reader engagement."
 msgstr ""
 
-#: includes/class-newspack-popups.php:150
+#: includes/class-newspack-popups.php:151
 msgctxt "post type general name"
 msgid "Prompts"
 msgstr ""
 
-#: includes/class-newspack-popups.php:151
+#: includes/class-newspack-popups.php:152
 msgctxt "post type singular name"
 msgid "Prompt"
 msgstr ""
 
-#: includes/class-newspack-popups.php:152
+#: includes/class-newspack-popups.php:153
 msgctxt "admin menu"
 msgid "Prompts"
 msgstr ""
 
-#: includes/class-newspack-popups.php:153
+#: includes/class-newspack-popups.php:154
 msgctxt "add new on admin bar"
 msgid "Prompt"
 msgstr ""
 
-#: includes/class-newspack-popups.php:154
+#: includes/class-newspack-popups.php:155
 msgctxt "popup"
 msgid "Add New"
 msgstr ""
 
-#: includes/class-newspack-popups.php:155
+#: includes/class-newspack-popups.php:156
 msgid "Add New Prompt"
 msgstr ""
 
-#: includes/class-newspack-popups.php:156
+#: includes/class-newspack-popups.php:157
 msgid "New Prompt"
 msgstr ""
 
-#: includes/class-newspack-popups.php:157
+#: includes/class-newspack-popups.php:158
 msgid "Edit Prompt"
 msgstr ""
 
-#: includes/class-newspack-popups.php:158
+#: includes/class-newspack-popups.php:159
 msgid "View Prompt"
 msgstr ""
 
-#: includes/class-newspack-popups.php:159
+#: includes/class-newspack-popups.php:160
 msgid "All Prompts"
 msgstr ""
 
-#: includes/class-newspack-popups.php:160
+#: includes/class-newspack-popups.php:161
 msgid "Search Prompts"
 msgstr ""
 
-#: includes/class-newspack-popups.php:161
+#: includes/class-newspack-popups.php:162
 msgid "Parent Prompts:"
 msgstr ""
 
-#: includes/class-newspack-popups.php:162
+#: includes/class-newspack-popups.php:163
 msgid "No Prompts found."
 msgstr ""
 
-#: includes/class-newspack-popups.php:163
+#: includes/class-newspack-popups.php:164
 msgid "No Prompts found in Trash."
 msgstr ""
 
-#: includes/class-newspack-popups.php:630
+#: includes/class-newspack-popups.php:631
 msgid "Campaigns"
 msgstr ""
 
-#: includes/class-newspack-popups.php:631
+#: includes/class-newspack-popups.php:632
 msgid "Campaign"
 msgstr ""
 
-#: includes/class-newspack-popups.php:632
+#: includes/class-newspack-popups.php:633
 msgid "Add Campaign"
 msgstr ""
 
-#: includes/class-newspack-popups.php:805
+#: includes/class-newspack-popups.php:806
 #: dist/editor.js:43
 #: src/editor/Sidebar.js:81
 msgid "Inline"
 msgstr ""
 
 #. translators: %s: Duplicate prompt title
-#: includes/class-newspack-popups.php:1211
-#: includes/class-newspack-popups.php:1217
-#: includes/class-newspack-popups.php:1244
+#: includes/class-newspack-popups.php:1212
+#: includes/class-newspack-popups.php:1218
+#: includes/class-newspack-popups.php:1245
 #, php-format
 msgid "%s copy"
 msgstr ""
@@ -356,6 +356,40 @@ msgstr ""
 
 #: includes/class-newspack-segments-model.php:601
 msgid "Failed to sort due to outdated segment data. Please refresh and try again."
+msgstr ""
+
+#: includes/cli/class-delete-all.php:66
+msgid "Requested data deleted!"
+msgstr ""
+
+#: includes/cli/class-delete-all.php:81
+msgid "Deleted 1 campaign"
+msgstr ""
+
+#. translators: %d is the number of deleted campaigns.
+#: includes/cli/class-delete-all.php:84
+#, php-format
+msgid "Deleted %d campaigns"
+msgstr ""
+
+#: includes/cli/class-delete-all.php:100
+msgid "Deleted 1 segment"
+msgstr ""
+
+#. translators: %d is the number of deleted segments.
+#: includes/cli/class-delete-all.php:103
+#, php-format
+msgid "Deleted %d segments"
+msgstr ""
+
+#: includes/cli/class-delete-all.php:125
+msgid "Deleted 1 prompt"
+msgstr ""
+
+#. translators: %d is the number of deleted prompts.
+#: includes/cli/class-delete-all.php:128
+#, php-format
+msgid "Deleted %d prompts"
 msgstr ""
 
 #. translators: %d is the number of campaigns imported.

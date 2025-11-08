@@ -5,16 +5,171 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [6.9.0] - 2025-10-08
-### Added
-- Forms: add actions on dashboard inbox's single response view [#45352]
-- Forms: Added required indicator settings, made forms with a sinble input required by default. [#45300]
-
+## [6.15.0] - 2025-11-04
 ### Changed
-- Forms: optimize inbox data loading with _fields parameter to reduce payload size. [#45376]
+- Change field's attribute width to enum to support both integers and string. [#45741]
+- Use `flex-basis: 0` for auto width as it will deal better adjusting to content and not extra space. [#45747]
 
 ### Fixed
-- Forms: fix telephone field block country selector dropdown so it shows in front of other blocks while selected [#45380]
+- Fix error overlapping on single input forms after using position: absolute and turning the main container to `display: flex`. [#45749]
+
+## [6.14.0] - 2025-11-03
+### Added
+- Device detection: Add a method that returns the browser display name. [#45674]
+- Add "auto" width for fields and detect when a form has a single input in it to show prettier validation errors. [#45689]
+- Add a new jwt filter. [#45731]
+- Add emoji flag to the response email next to the IP Address. [#45645]
+- Add error codes to submission errors. [#45628]
+- Add first and last name variations. [#45517]
+- Add flag next to the IP address. [#45643]
+- Add time field. [#45665]
+- Add visibility support for field labels. [#45722]
+- Enable forms push notifications functionality.. [#45682]
+- Link IP to lookup service. [#45653]
+- Release Image Select Field to production. [#45577]
+- Start storing the country code with the form responses based on the IP address. [#45599]
+
+### Changed
+- Add browser info to form responses exports. [#45709]
+- Add details for JWT decoding errors. [#45646]
+- Add the IP address as a default field in the forms dashboard. [#45704]
+- Create new integrations list component. [#45648]
+- Default to notify the post author when the notification recipients list is empty. [#45633]
+- Disable Jetpack CRM integration by default. [#45667]
+- Move storage setting lower in sidebar. [#45727]
+- Revert CRM frontend default to true. [#45669]
+- Show gravatars also for rows without emails. [#45726]
+- Use a dropdown selector to list eligible users to receive form notifications. [#45634]
+- Use jetpack logo on dashboard header. [#45609]
+- Use table to render response meta. [#45656]
+- Improve empty state centering and fix scrolling by consolidating layout min-height rules and improving flexbox handling. [#45649]
+- Update package dependencies. [#45652]
+
+### Fixed
+- Fix a bug with the default email in the editor. [#45711]
+- Fix a consoler error triggered by iterable without key prop. [#45690]
+- Fix an error on phone field controls due to lack of key prop. [#45659]
+- Fix react error due to nesting tr as direct descendant of table, needs tbody. [#45691]
+- Fix response selection filtering bug caused by type mismatch. [#45611]
+- Fix tooltip in response IP link. [#45705]
+- Fix where notices show up so they don't overlap the bottom action bar. [#45616]
+- Make sure fields is array before attempting a count. [#45739]
+- Simplify the selection so that it changes every time to only the valid set of items. [#45618]
+- Update counts after landing on a mark as spam link. [#45644]
+- Phan: Address PhanRedundantCondition, PhanRedundantArrayValuesCall, and PhanPluginRedundantAssignment violations. [#45681]
+
+## [6.13.0] - 2025-10-27
+### Changed
+- Add 'create new form' CTA to inbox empty state. [#45589]
+- Add shared ConsentToggle component. [#45556]
+- Align layout grid/components with DataViews table grid. [#45559]
+- Improve the performance of loading the form responses dashboard. [#45565]
+- Integrate `@wordpress/admin-ui` Page component into dashboard layout. [#45610]
+- Record tracks events for inbox actions. [#45606]
+- Remove About page from dashboard. [#45615]
+- Store the user agent used on form submissions. [#45586]
+- Update visual representation of "image select field" responses at inbox. [#45585]
+- Update package dependencies. [#45551] [#45592] [#45598]
+
+### Removed
+- Remove custom green buttons. [#45613]
+- Remove hovercards from inbox list. [#45572]
+
+### Fixed
+- Fix textarea submission on enter. [#45602]
+- Reduce rerenders in the dashboard. [#45567]
+- Update feedback form screenshot. [#45578]
+- Adjust UX and accessibility for image select field. [#45560]
+
+## [6.12.0] - 2025-10-21
+### Added
+- Show gravatar on dataviews list. [#45555]
+
+### Changed
+- Merge email and push notification settings panels. [#45548]
+- Stop preloading the integrations endpoint. [#45558]
+
+### Deprecated
+- Remove unused `useFormsConfig` hook. [#45554]
+
+### Fixed
+- Fix bug where the responsive modal is not able to be closed. [#45541] [#45557]
+- Fix renderable status of image select field. [#45542]
+- Make integrations background white. [#45562]
+- Reset the selection on tab switch. [#45543]
+
+## [6.11.0] - 2025-10-20
+### Added
+- Add Hostinger Reach integration. [#45271]
+- Add programmatic initialization support via `window.jetpackFormsInit()`. [#45531]
+- Add unread/read filter to the dashboard. [#45514]
+
+### Changed
+- Add new useConfigValue hook and start using it on the dashboard. [#45472]
+- De-clutter InboxView component and move data processing to hook. [#45489]
+- Make dashboard initialization idempotent for SPA environments by using data attribute to track state. [#45539]
+- Move view actions to modal header on mobile. [#45410]
+- Remove logo from dashboard and align header styles with CIAB. [#45535]
+- Remove old file and add tests for hook. [#45497]
+- Remove unused `hasAI` from config. [#45522]
+- Split components and hooks into their own files. [#45494]
+- Trim empty options and display custom placeholder. [#45528]
+- Update "Action after submit" sidebar section. [#45502]
+- UX improvements for Image Select field. [#45516]
+
+### Deprecated
+- Remove Creative Mail promotion. [#45524]
+
+### Fixed
+- Improve handling of custom submission message formatting. [#45487]
+- Send emails to the author of the form only if they are able to edit it. [#45515]
+- Fix PHP warning for when a site doesn't have the JWT token yet. [#45501]
+- Fix plugin activation state. [#45471]
+- Prevent required text from being removed from required fields when creating a form from a pattern. [#45495]
+- Store the feedback source info with more context. [#45231]
+- Strip period from Terms submission label on the post-submission page. [#45509]
+
+## [6.10.0] - 2025-10-13
+### Added
+- Add integrations store. [#45372] [#45432]
+- Add notification settings panel. [#45396]
+- Add read and unread state. [#45350]
+
+### Changed
+- Add optimistic count updates to Forms inbox for immediate UI feedback when moving items between inbox, spam, and trash. [#45424]
+- Avoid typographic orphans in Forms panels in editor. [#45455]
+- Change how phone field interactivity API is initialized with more atomic registration of the elements. [#45290]
+- Fix preload middleware registration to properly cache API requests and support both path formats. [#45454]
+- Fix preload parameters to match actual feedback endpoint requests and avoid duplicate HTTP requests. [#45453]
+- Hide Google export card if disabled. [#45375]
+- Improve loading state to show spinner immediately when data hasn't loaded. [#45379]
+- Inbox: Remove view action for desktop. [#45444]
+- Inbox: Update empty state notices. [#45421]
+- Inbox: Preload initial data and essential endpoints for faster page load. [#45378]
+- Reorganize settings to a single panel for rating, slider and phone fields. [#45196]
+- Reverse copy of 'go back' toggle. [#45446]
+- Update read/unread counts optimistically in the sidebar. [#45425]
+- Replace separate count REST API requests with one optimized database query using CASE statements to improve inbox performance. [#45427]
+- Update package dependencies. [#45428] [#45429] [#45430]
+
+### Fixed
+- Fix missing tooltip on unread/read quick action button. [#45433]
+- Fix multistep dropdown showing "Unlabeled" instead of default step titles like "Step 1", "Step 2", etc. [#45463]
+- Limit the amount of data sent by the endpoint to prevent exposing data. [#45439]
+- Fix sticky loading state for trash view action. [#45411]
+- Improve cross plugin compatibility. [#45315]
+- Optimize `has_feedback()` query to improve dashboard load performance by limiting query to fetch only one ID instead of loading all feedback posts. [#45361]
+
+## [6.9.0] - 2025-10-08
+### Added
+- Add actions on dashboard inbox's single response view. [#45352]
+- Add required indicator settings and make forms with a sinble input required by default. [#45300]
+
+### Changed
+- Optimize inbox data loading with `_fields` parameter to reduce payload size. [#45376]
+
+### Fixed
+- Fix telephone field block country selector dropdown so it shows in front of other blocks while selected. [#45380]
 
 ## [6.8.0] - 2025-10-06
 ### Added
@@ -1651,6 +1806,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a new jetpack/forms package [#28409]
 - Added a public load_contact_form method for initializing the contact form module. [#28416]
 
+[6.15.0]: https://github.com/automattic/jetpack-forms/compare/v6.14.0...v6.15.0
+[6.14.0]: https://github.com/automattic/jetpack-forms/compare/v6.13.0...v6.14.0
+[6.13.0]: https://github.com/automattic/jetpack-forms/compare/v6.12.0...v6.13.0
+[6.12.0]: https://github.com/automattic/jetpack-forms/compare/v6.11.0...v6.12.0
+[6.11.0]: https://github.com/automattic/jetpack-forms/compare/v6.10.0...v6.11.0
+[6.10.0]: https://github.com/automattic/jetpack-forms/compare/v6.9.0...v6.10.0
 [6.9.0]: https://github.com/automattic/jetpack-forms/compare/v6.8.0...v6.9.0
 [6.8.0]: https://github.com/automattic/jetpack-forms/compare/v6.7.0...v6.8.0
 [6.7.0]: https://github.com/automattic/jetpack-forms/compare/v6.6.0...v6.7.0

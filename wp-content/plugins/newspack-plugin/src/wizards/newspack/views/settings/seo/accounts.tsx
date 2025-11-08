@@ -6,7 +6,7 @@
  * WordPress dependencies.
  */
 import { ACCOUNTS } from './constants';
-import { Grid, TextControl } from '../../../../../components/src';
+import { Grid, TextControl } from '../../../../../../packages/components/src';
 
 /**
  * Internal dependencies.

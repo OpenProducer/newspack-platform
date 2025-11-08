@@ -4,7 +4,7 @@
  * Displaying stored logo and header bg color in a header
  */
 
-import { BoxContrast } from '../../../components/src';
+import { BoxContrast } from '../../../../packages/components/src';
 
 const { settings } = window.newspackDashboard;
 

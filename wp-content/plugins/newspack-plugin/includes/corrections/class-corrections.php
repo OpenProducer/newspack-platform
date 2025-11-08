@@ -46,7 +46,7 @@ class Corrections {
 	 */
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
-		add_filter( 'the_content', [ __CLASS__, 'output_corrections_on_post' ] );
+		add_filter( 'the_content', [ __CLASS__, 'output_corrections_on_post' ], 1 );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'wp_enqueue_scripts' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'wp_enqueue_scripts' ] );
 		add_action( 'rest_api_init', [ __CLASS__, 'register_rest_routes' ] );

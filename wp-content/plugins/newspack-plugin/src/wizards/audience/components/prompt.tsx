@@ -17,7 +17,7 @@ import { stringify } from 'qs';
 /**
  * Internal dependencies
  */
-import { ActionCard, Button, Grid, ImageUpload, Notice, TextControl, WebPreview, hooks } from '../../../components/src';
+import { ActionCard, Button, Grid, ImageUpload, Notice, TextControl, WebPreview, hooks } from '../../../../packages/components/src';
 
 type Attachment = {
 	id?: number;

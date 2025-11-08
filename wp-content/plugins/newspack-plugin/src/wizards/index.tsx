@@ -13,7 +13,7 @@ import { createRoot, lazy, Suspense } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import * as Components from '../components/src';
+import * as Components from '../../packages/components/src';
 
 /**
  * Internal dependencies

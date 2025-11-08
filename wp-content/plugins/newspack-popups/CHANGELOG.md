@@ -1,3 +1,15 @@
+# [3.7.0](https://github.com/Automattic/newspack-popups/compare/v3.6.2...v3.7.0) (2025-10-30)
+
+
+### Bug Fixes
+
+* update download URL for db.php ([#1474](https://github.com/Automattic/newspack-popups/issues/1474)) ([6296100](https://github.com/Automattic/newspack-popups/commit/62961006f008964a17e18cbb7980f0d4223a5d4f))
+
+
+### Features
+
+* update ras default with modern style ([#1477](https://github.com/Automattic/newspack-popups/issues/1477)) ([96028e7](https://github.com/Automattic/newspack-popups/commit/96028e794ef7c6ed0a39f400b910d36359150e06))
+
 ## [3.6.2](https://github.com/Automattic/newspack-popups/compare/v3.6.1...v3.6.2) (2025-10-16)
 
 

@@ -13,6 +13,7 @@ use Newspack\Wizard;
 use Newspack\Reader_Activation;
 use Newspack\Reader_Revenue_Emails;
 use Newspack\Everlit_Configuration_Manager;
+use Newspack\WooCommerce_Emails;
 use function Newspack\google_site_kit_available;
 
 defined( 'ABSPATH' ) || exit;
@@ -81,11 +82,12 @@ class Newspack_Settings extends Wizard {
 				'label'    => __( 'Emails', 'newspack-plugin' ),
 				'sections' => [
 					'emails' => [
-						'dependencies' => [
+						'dependencies'              => [
 							'newspackNewsletters' => is_plugin_active( 'newspack-newsletters/newspack-newsletters.php' ),
 						],
-						'all'          => Emails::get_emails( Reader_Activation::is_enabled() ? [] : array_values( Reader_Revenue_Emails::EMAIL_TYPES ), false ),
-						'postType'     => Emails::POST_TYPE,
+						'all'                       => Emails::get_emails( Reader_Activation::is_enabled() ? [] : array_values( Reader_Revenue_Emails::EMAIL_TYPES ), false ),
+						'postType'                  => Emails::POST_TYPE,
+						'isEmailEnhancementsActive' => WooCommerce_Emails::is_active(),
 					],
 				],
 			],

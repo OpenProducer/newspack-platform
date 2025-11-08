@@ -18,7 +18,7 @@ import sections from './sections';
 import BrandHeader from '../../components/brand-header';
 import QuickActions from '../../components/quick-actions';
 import SiteStatuses from '../../components/site-statuses';
-import { GlobalNotices, Notice, Wizard } from '../../../../components/src';
+import { GlobalNotices, Notice, Wizard } from '../../../../../packages/components/src';
 
 const {
 	newspack_aux_data: { is_debug_mode: isDebugMode = false },

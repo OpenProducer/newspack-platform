@@ -6,7 +6,7 @@ import { useSelect } from '@wordpress/data';
 /**
  * Internal dependencies.
  */
-import { WIZARD_STORE_NAMESPACE } from '../components/src/wizard/store';
+import { WIZARD_STORE_NAMESPACE } from '../../packages/components/src/wizard/store';
 
 /**
  * Wizards Tab component.

@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { ToggleControl } from '@wordpress/components';
 
-import { Grid, TextControl } from '../../../../../components/src';
+import { Grid, TextControl } from '../../../../../../packages/components/src';
 
 export default function AuthorBio( { data, isFetching, update }: ThemeModComponentProps< AdvancedSettings > ) {
 	return (

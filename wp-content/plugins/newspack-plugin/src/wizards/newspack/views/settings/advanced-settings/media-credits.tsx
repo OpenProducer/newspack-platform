@@ -12,7 +12,7 @@ import { useEffect, useState, Fragment } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { Grid, ImageUpload, TextControl } from '../../../../../components/src';
+import { Grid, ImageUpload, TextControl } from '../../../../../../packages/components/src';
 
 export default function MediaCredits( { data, update }: ThemeModComponentProps< AdvancedSettings > ) {
 	const [ imageThumbnail, setImageThumbnail ] = useState< null | string >( null );

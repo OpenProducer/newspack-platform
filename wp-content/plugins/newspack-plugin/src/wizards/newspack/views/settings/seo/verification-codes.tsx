@@ -12,7 +12,7 @@ import { ExternalLink } from '@wordpress/components';
 /**
  * Internal dependencies.
  */
-import { Grid, TextControl } from '../../../../../components/src';
+import { Grid, TextControl } from '../../../../../../packages/components/src';
 
 function VerificationCodes( { data, setData }: { data: SeoData[ 'verification' ]; setData: ( v: SeoData[ 'verification' ] ) => void } ) {
 	return (

@@ -1,0 +1,24 @@
+/**
+ * Newspack Icon
+ */
+
+.newspack-icon {
+	background: var(--wp-admin-theme-color);
+	fill: white;
+	padding: 12px;
+
+	&--white {
+		background: white;
+		fill: var(--wp-admin-theme-color);
+	}
+
+	&--simple {
+		background: none;
+		fill: var(--wp-admin-theme-color);
+		padding: 0;
+	}
+
+	&#{&}--simple#{&}--white {
+		fill: white;
+	}
+}

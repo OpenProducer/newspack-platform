@@ -466,6 +466,7 @@ class Lite_Site {
 				'href'  => true,
 				'title' => true,
 			],
+			'br'         => [],
 		];
 
 		// Strip all HTML except allowed elements.

@@ -145,23 +145,33 @@ final class Checkout_Data {
 	/**
 	 * Returns the action type: checkout_button or donation.
 	 *
-	 * @param string $product_id Product's ID.
+	 * @param string    $product_id Product's ID.
+	 * @param \WC_Order $order      Optional order to check if it's a subscription switch.
 	 */
-	public static function get_action_type( $product_id ) {
+	public static function get_action_type( $product_id, $order = null ) {
 		$action_type = 'checkout_button';
+
 		// Check if it's a donation product, and update action_type, product_type.
 		if ( method_exists( 'Newspack\Donations', 'is_donation_product' ) ) {
 			if ( \Newspack\Donations::is_donation_product( $product_id ) ) {
 				$action_type = 'donation';
 			}
 		}
+
 		// Check if it's a subscription switch.
-		if ( method_exists( 'WC_Subscriptions_Switcher', 'cart_contains_switches' ) && \WC_Subscriptions_Switcher::cart_contains_switches( 'any' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( $order ) {
+			if ( function_exists( 'wcs_order_contains_switch' ) && wcs_order_contains_switch( $order ) ) {
+				$action_type = 'subscription_switch';
+			}
+		} elseif ( method_exists( 'WC_Subscriptions_Switcher', 'cart_contains_switches' ) && \WC_Subscriptions_Switcher::cart_contains_switches( 'any' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$action_type = 'subscription_switch';
 		}
+
+		// Check if the action type is set in the URL.
 		if ( isset( $_GET['action_type'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$action_type = sanitize_text_field( wp_unslash( $_GET['action_type'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
+
 		return $action_type;
 	}
 
@@ -298,7 +308,7 @@ final class Checkout_Data {
 		}
 
 		$data = [
-			'action_type'  => self::get_action_type( $product_id ),
+			'action_type'  => self::get_action_type( $product_id, $order ),
 			'currency'     => function_exists( 'get_woocommerce_currency' ) ? \get_woocommerce_currency() : 'USD',
 			'product_id'   => strval( $product_id ? $product_id : '' ),
 			'product_type' => $product_type,

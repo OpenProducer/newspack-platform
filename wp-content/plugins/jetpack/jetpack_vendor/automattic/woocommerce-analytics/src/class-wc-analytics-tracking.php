@@ -8,6 +8,8 @@
 namespace Automattic\Woocommerce_Analytics;
 
 use Automattic\Jetpack\Connection\Manager as Jetpack_Connection;
+use Automattic\Jetpack\Device_Detection\User_Agent_Info;
+use WC_Site_Tracking;
 use WC_Tracks;
 use WC_Tracks_Client;
 use WC_Tracks_Event;
@@ -30,26 +32,6 @@ class WC_Analytics_Tracking extends WC_Tracks {
 	 * @var string
 	 */
 	const DAILY_SALT_OPTION = 'woocommerce_analytics_daily_salt';
-
-	/**
-	 * Allowed ClickHouse events.
-	 *
-	 * @var array
-	 */
-	const ALLOWED_CH_EVENTS = array(
-		'woocommerceanalytics_session_started',
-		'woocommerceanalytics_session_engagement',
-		'woocommerceanalytics_product_view',
-		'woocommerceanalytics_cart_view',
-		'woocommerceanalytics_add_to_cart',
-		'woocommerceanalytics_remove_from_cart',
-		'woocommerceanalytics_checkout_view',
-		'woocommerceanalytics_product_checkout',
-		'woocommerceanalytics_product_purchase',
-		'woocommerceanalytics_order_confirmation_view',
-		'woocommerceanalytics_search',
-		'woocommerceanalytics_page_view',
-	);
 
 	/**
 	 * Event queue.
@@ -86,6 +68,11 @@ class WC_Analytics_Tracking extends WC_Tracks {
 			return true; // Skip recording.
 		}
 
+		// Skip recording if the request is coming from a bot.
+		if ( User_Agent_Info::is_bot() ) {
+			return true;
+		}
+
 		$prefixed_event_name = self::PREFIX . $event_name;
 		$properties          = self::get_properties( $prefixed_event_name, $event_properties );
 
@@ -98,7 +85,7 @@ class WC_Analytics_Tracking extends WC_Tracks {
 
 		// Record ClickHouse event, if applicable.
 		$ch_error = null;
-		if ( self::should_send_to_clickhouse( $prefixed_event_name ) ) {
+		if ( Features::is_clickhouse_enabled() ) {
 			$properties['ch'] = 1;
 			$ch_result        = self::record_ch_event( $properties );
 			if ( is_wp_error( $ch_result ) ) {
@@ -221,7 +208,31 @@ class WC_Analytics_Tracking extends WC_Tracks {
 			)
 			: array();
 
-		return array_merge( $properties, $required_properties );
+		$all_properties = array_merge( $properties, $required_properties );
+
+		// Convert array values to a comma-separated string and URL-encode them to ensure compatibility with JavaScript's encodeURIComponent() for pixel URL transmission.
+		foreach ( $all_properties as $key => $value ) {
+			if ( ! is_array( $value ) ) {
+				continue;
+			}
+
+			if ( empty( $value ) ) {
+				$all_properties[ $key ] = '';
+				continue;
+			}
+
+			$is_indexed_array = array_keys( $value ) === range( 0, count( $value ) - 1 );
+			if ( $is_indexed_array ) {
+				$value_string           = implode( ',', $value );
+				$all_properties[ $key ] = rawurlencode( $value_string );
+				continue;
+			}
+
+			// Serialize non-indexed arrays to JSON strings.
+			$all_properties[ $key ] = wp_json_encode( $value );
+		}
+
+		return $all_properties;
 	}
 
 	/**
@@ -244,7 +255,15 @@ class WC_Analytics_Tracking extends WC_Tracks {
 	 * @return array Server details.
 	 */
 	public static function get_server_details() {
-		$data = parent::get_server_details();
+		$data = array();
+
+		if ( method_exists( parent::class, 'get_server_details' ) ) {
+			$data = parent::get_server_details();
+		} elseif ( method_exists( WC_Site_Tracking::class, 'get_server_details' ) ) {
+			// WC < 6.8
+			$data = WC_Site_Tracking::get_server_details(); // @phan-suppress-current-line PhanUndeclaredStaticMethod -- method is available in WC < 6.8
+		}
+
 		return array_merge(
 			$data,
 			array(
@@ -255,6 +274,22 @@ class WC_Analytics_Tracking extends WC_Tracks {
 				'_lg'      => isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ), 0, 5 ) : '',
 			)
 		);
+	}
+
+	/**
+	 * Get the blog details.
+	 *
+	 * @param int $blog_id The blog ID.
+	 * @return array The blog details.
+	 */
+	public static function get_blog_details( $blog_id ) {
+		if ( method_exists( parent::class, 'get_blog_details' ) ) {
+			return parent::get_blog_details( $blog_id );
+		} elseif ( method_exists( WC_Site_Tracking::class, 'get_blog_details' ) ) {
+			// WC < 6.8
+			return WC_Site_Tracking::get_blog_details( $blog_id ); // @phan-suppress-current-line PhanUndeclaredStaticMethod -- method is available in WC < 6.8
+		}
+		return array();
 	}
 
 	/**
@@ -297,19 +332,34 @@ class WC_Analytics_Tracking extends WC_Tracks {
 			return self::$cached_visitor_id;
 		}
 
-		self::$cached_visitor_id = null;
-		return null;
-	}
+		// Generate a new anonId and try to save it in the browser's cookies.
+		// Note that base64-encoding an 18 character string generates a 24-character anon id.
+		$binary = '';
+		for ( $i = 0; $i < 18; ++$i ) {
+			$binary .= chr( wp_rand( 0, 255 ) );
+		}
 
-	/**
-	 * Check if the event should be sent to ClickHouse
-	 *
-	 * @param string $event The event name.
-	 * @return bool True if it should be sent to ClickHouse
-	 */
-	private static function should_send_to_clickhouse( $event ) {
-		return Features::is_clickhouse_enabled() &&
-			in_array( $event, self::ALLOWED_CH_EVENTS, true );
+		self::$cached_visitor_id = base64_encode( $binary ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+
+
+		if ( ! headers_sent()
+			&& ! ( defined( 'REST_REQUEST' ) && REST_REQUEST )
+			&& ! ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST )
+		) {
+			setcookie(
+				'tk_ai',
+				self::$cached_visitor_id,
+				array(
+					'expires'  => time() + ( 365 * 24 * 60 * 60 ), // 1 year
+					'path'     => '/',
+					'domain'   => COOKIE_DOMAIN,
+					'secure'   => is_ssl(),
+					'httponly' => true,
+					'samesite' => 'Strict',
+				)
+			);
+		}
+		return self::$cached_visitor_id;
 	}
 
 	/**

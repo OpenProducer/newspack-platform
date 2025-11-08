@@ -11,7 +11,7 @@ import { Fragment, useEffect, useState, useCallback } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { Grid, Button } from '../components/src';
+import { Grid, Button } from '../../packages/components/src';
 import WizardsActionCard from './wizards-action-card';
 import WizardError from './errors/class-wizard-error';
 import { useWizardApiFetch } from './hooks/use-wizard-api-fetch';

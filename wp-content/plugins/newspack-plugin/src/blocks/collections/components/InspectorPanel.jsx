@@ -12,7 +12,7 @@ import {
 } from '@wordpress/components';
 import { useCallback } from '@wordpress/element';
 
-import { AutocompleteTokenField } from '../../../components/src';
+import { AutocompleteTokenField } from '../../../../packages/components/src';
 import {
 	fetchCategorySuggestions as fetchCategorySuggestionsRaw,
 	fetchSavedCategories as fetchSavedCategoriesRaw,

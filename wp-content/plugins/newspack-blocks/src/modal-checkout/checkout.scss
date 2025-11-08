@@ -1,9 +1,9 @@
-@use "../shared/sass/colors";
+@use "newspack-colors" as np-colors;
 
 // stylelint-disable-next-line selector-id-pattern
 #newspack_modal_checkout_container {
 	outline: none;
-	background: var(--newspack-ui-color-neutral-0, #fff);
+	background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
 	padding: var(--newspack-ui-spacer-5, 24px);
 
 	form p {
@@ -41,7 +41,7 @@
 
 	// Required fields.
 	.woocommerce form .form-row .required {
-		color: var(--newspack-ui-color-error-50, colors.$color__error);
+		color: var(--newspack-ui-color-error-50, np-colors.$error-500);
 	}
 
 	// Billing & Shipping fields
@@ -300,20 +300,20 @@
 
 				&.short,
 				&.bad {
-					color: var(--newspack-ui-color-error-50, #d63638);
+					color: var(--newspack-ui-color-error-50, np-colors.$error-500);
 				}
 
 				&.good {
-					color: var(--newspack-ui-color-warning-40, #bd8600);
+					color: var(--newspack-ui-color-warning-40, np-colors.$warning-400);
 				}
 
 				&.strong {
-					color: var(--newspack-ui-color-success-50, #008a20);
+					color: var(--newspack-ui-color-success-50, np-colors.$success-500);
 				}
 			}
 
 			.woocommerce-password-hint {
-				color: var(--newspack-ui-color-neutral-60, #6c6c6c);
+				color: var(--newspack-ui-color-neutral-60, np-colors.$neutral-600);
 				font-size: var(--newspack-ui-font-size-xs, 14px);
 				line-height: var(--newspack-ui-line-height-xs, 1.4286);
 			}
@@ -378,7 +378,7 @@
 		p:first-of-type {
 			align-items: center;
 			display: flex;
-			gap: var(--newspack-ui-spacer-base, colors.$newspack-ui-color-neutral-90);
+			gap: var(--newspack-ui-spacer-base, np-colors.$neutral-900);
 
 			input,
 			button {
@@ -417,12 +417,15 @@
 				margin-top: var(--newspack-ui-spacer-2, 12px);
 			}
 
-			&:first-child:last-child {
+			&:only-child {
 				> span.newspack-ui__input-card {
 					grid-template-columns: 0;
 					gap: 0;
+					border: none;
+					padding: 0;
+					background-color: transparent;
 
-					> label::before {
+					> label {
 						display: none;
 					}
 				}
@@ -434,10 +437,9 @@
 				padding: 0;
 
 				p {
-					color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+					color: var(--newspack-ui-color-neutral-60, np-colors.$neutral-600);
 					font-size: var(--newspack-ui-font-size-xs, 14px);
 					line-height: var(--newspack-ui-line-height-xs, 1.4286);
-					margin: 0;
 				}
 
 				ul.wc-saved-payment-methods {
@@ -452,14 +454,15 @@
 						}
 
 						label {
-							font-size: var(--newspack-ui-font-size-xs, 14px);
+							font-size: var(--newspack-ui-font-size-s, 16px);
 							font-weight: normal;
-							line-height: inherit;
+							line-height: var(--newspack-ui-line-height-s, 1.5);
 							margin: 0;
 						}
 
 						input {
 							margin-right: var(--newspack-ui-spacer-base, 8px);
+							margin-top: calc((var(--newspack-ui-font-size-s, 16px) * var(--newspack-ui-line-height-s, 1.5) - 20px) / 2);
 						}
 					}
 				}
@@ -497,8 +500,8 @@
 				.newspack-cover-fees,
 				.woocommerce-SavedPaymentMethods-saveNew {
 					label {
-						font-size: var(--newspack-ui-font-size-xs, 14px);
-						line-height: var(--newspack-ui-line-height-xs, 1.4286);
+						font-size: var(--newspack-ui-font-size-s, 16px);
+						line-height: var(--newspack-ui-line-height-s, 1.5);
 					}
 
 					&::before {
@@ -523,17 +526,17 @@
 			line-height: var(--newspack-ui-line-height-s, 1.5);
 			margin-bottom: var(--newspack-ui-spacer-5);
 			margin-top: calc(var(--newspack-ui-spacer-2) * -1);
-			padding: var(--newspack-ui-spacer-3, 16px) !important;
+			padding: var(--newspack-ui-spacer-3, 16px);
 			transition: background-color 125ms ease-in-out, border-color 125ms ease-in-out;
 
 			&:has(> input) {
-				background: var(--newspack-ui-color-neutral-0, #fff) !important;
-				border-color: var(--newspack-ui-color-border, #ddd) !important;
+				background: var(--newspack-ui-color-neutral-0, #fff);
+				border-color: var(--newspack-ui-color-border, #ddd);
 			}
 
 			&:has(> input:checked) {
-				background: var(--newspack-ui-color-neutral-5, #f7f7f7) !important;
-				border-color: var(--newspack-ui-color-neutral-90, #1e1e1e) !important;
+				background: var(--newspack-ui-color-neutral-5, #f7f7f7);
+				border-color: var(--newspack-ui-color-neutral-90, #1e1e1e);
 			}
 
 			// For labels containing radio, checkbox inputs:
@@ -640,7 +643,7 @@
 		}
 		.wc-stripe-elements-field,
 		.wc-stripe-iban-element-field {
-			border: 1px solid var(--newspack-ui-color-input-border, colors.$newspack-ui-color-neutral-30);
+			border: 1px solid var(--newspack-ui-color-input-border, np-colors.$neutral-300);
 			border-radius: var(--newspack-ui-border-radius-m, 6px);
 			display: block;
 			font-family: var(--newspack-ui-font-family, system-ui);
@@ -652,16 +655,16 @@
 		&:has(div.stripe-source-errors[role="alert"]:not(:empty)) {
 			.wc-stripe-elements-field,
 			.wc-stripe-iban-element-field {
-				border-color: var(--newspack-ui-color-error-50, colors.$color__error);
+				border-color: var(--newspack-ui-color-error-50, np-colors.$error-500);
 			}
 
 			label {
-				color: var(--newspack-ui-color-error-50, colors.$color__error);
+				color: var(--newspack-ui-color-error-50, np-colors.$error-500);
 			}
 
 			.woocommerce_error {
 				background: transparent;
-				color: var(--newspack-ui-color-error-50, colors.$color__error);
+				color: var(--newspack-ui-color-error-50, np-colors.$error-500);
 				font-family: var(--newspack-ui-font-family, system-ui);
 				font-size: var(--newspack-ui-font-size-xs, 14px);
 				line-height: var(--newspack-ui-line-height-xs, 1.4286);
@@ -848,15 +851,15 @@
 		input,
 		textarea,
 		.select2-container--default .select2-selection--single {
-			border-color: var(--newspack-ui-color-error-50, colors.$color__error);
+			border-color: var(--newspack-ui-color-error-50, np-colors.$error-500);
 
 			&:focus {
-				outline-color: var(--newspack-ui-color-error-50, colors.$color__error);
+				outline-color: var(--newspack-ui-color-error-50, np-colors.$error-500);
 			}
 		}
 
 		label {
-			color: var(--newspack-ui-color-error-50, colors.$color__error);
+			color: var(--newspack-ui-color-error-50, np-colors.$error-500);
 		}
 	}
 
@@ -866,7 +869,7 @@
 
 		// Privacy Policy
 		.woocommerce-privacy-policy-text {
-			color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+			color: var(--newspack-ui-color-neutral-60, np-colors.$neutral-600);
 		}
 
 		.woocommerce-terms-and-conditions {
@@ -883,8 +886,8 @@
 	p#newspack_subscription_confirmation_field,
 	//Terms and Conditions checkbox
 	.woocommerce-terms-and-conditions-wrapper > p.form-row {
-		background: var(--newspack-ui-color-neutral-5, #f7f7f7);
-		border-color: var(--newspack-ui-color-border, #ddd);
+		background: var(--newspack-ui-color-neutral-5, np-colors.$neutral-050);
+		border-color: var(--newspack-ui-color-border, np-colors.$neutral-300);
 		box-shadow: none;
 		font-size: var(--newspack-ui-font-size-xs, 14px);
 		line-height: var(--newspack-ui-line-height-xs, 1.4286);
@@ -937,8 +940,14 @@
 	}
 
 	// stylelint-disable-next-line selector-id-pattern
-	#checkout_back {
+	#checkout_edit_billing {
 		margin-top: 0;
+	}
+
+	// stylelint-disable-next-line selector-id-pattern
+	#checkout_cancel {
+		margin-top: var(--newspack-ui-spacer-2);
+		margin-bottom: 0;
 	}
 
 	// stylelint-disable-next-line selector-id-pattern
@@ -990,21 +999,30 @@
 	 * Change Payment Method form.
 	 */
 	/* stylelint-disable-next-line selector-id-pattern */
-	#order_review {
-		.wc_payment_methods {
-			.wc_payment_method:only-child {
-				> label {
-					background: transparent;
-					border-color: transparent;
-					padding: 0;
-				}
-			}
+	.woocommerce-info:has(+ #order_review.change-payment-method) {
+		background: transparent;
+		font-size: var(--newspack-ui-font-size-s, 16px);
+		line-height: var(--newspack-ui-line-height-s, 1.5);
+		padding: 0;
+	}
+	/* stylelint-disable-next-line selector-id-pattern */
+	#order_review.change-payment-method {
+		.payment_box ul.wc-saved-payment-methods {
+			margin-top: 0;
 		}
+
 		.update-all-subscriptions-payment-method-wrap {
 			label {
 				font-weight: normal;
-				font-size: var(--newspack-ui-font-size-xs, 14px);
+				font-size: var(--newspack-ui-font-size-s, 16px);
+				line-height: var(--newspack-ui-line-height-s, 1.5);
 			}
+		}
+	}
+	/* stylelint-disable-next-line selector-id-pattern */
+	#update_all_subscriptions_payment_method_field {
+		label {
+			margin-bottom: 0;
 		}
 	}
 }

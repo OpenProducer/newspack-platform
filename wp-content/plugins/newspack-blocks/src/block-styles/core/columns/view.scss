@@ -1,3 +1,4 @@
+@use "newspack-colors" as np-colors;
 @use "../../../shared/sass/variables";
 @use "../../../shared/sass/mixins";
 
@@ -38,7 +39,7 @@ body:not(.is-block-theme) div.wp-block-columns {
 			position: relative;
 
 			&::after {
-				border: 0 solid variables.$color__border;
+				border: 0 solid np-colors.$neutral-300;
 				border-top-width: 1px;
 				bottom: -32px;
 				content: "";

@@ -298,5 +298,57 @@ class Metering {
 		self::$article_view = $activity;
 		return $activity;
 	}
+
+	/**
+	 * Get the metering period for a post.
+	 *
+	 * @param int|null $post_id Post ID. Default is current post.
+	 *
+	 * @return string Metered period (day, week, month).
+	 */
+	public static function get_metering_period( $post_id = null ) {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+		$gate_post_id = Memberships::get_gate_post_id( $post_id );
+		return \get_post_meta( $gate_post_id, 'metering_period', true );
+	}
+
+	/**
+	 * Get number of metered views for the current user.
+	 *
+	 * @return int Number of metered views.
+	 */
+	public static function get_current_user_metered_views() {
+		if ( ! is_user_logged_in() ) {
+			return 0;
+		}
+
+		$gate_post_id  = Memberships::get_gate_post_id();
+		$meta_key      = self::METERING_META_KEY . '_' . $gate_post_id;
+		$metering_data = \get_user_meta( get_current_user_id(), $meta_key, true );
+		if ( ! is_array( $metering_data ) || ! isset( $metering_data['content'] ) ) {
+			return 0;
+		}
+		return count( $metering_data['content'] );
+	}
+
+	/**
+	 * Get total number of metered views for current post.
+	 *
+	 * @param boolean $is_logged_in Whether to check for logged-in or anonymous users. Default is false (anonymous).
+	 *
+	 * @return int|boolean Total number of metered views if metering is enabled, otherwise false.
+	 */
+	public static function get_total_metered_views( $is_logged_in = false ) {
+		$gate_post_id = Memberships::get_gate_post_id( get_the_ID() );
+		if ( ! $gate_post_id ) {
+			return false;
+		}
+		if ( ! $is_logged_in ) {
+			return (int) \get_post_meta( $gate_post_id, 'metering_anonymous_count', true );
+		}
+		return (int) \get_post_meta( $gate_post_id, 'metering_registered_count', true );
+	}
 }
 Metering::init();

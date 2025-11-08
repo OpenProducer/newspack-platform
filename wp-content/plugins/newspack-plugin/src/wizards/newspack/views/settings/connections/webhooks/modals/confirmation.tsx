@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { Card, Button, Modal } from '../../../../../../../components/src';
+import { Card, Button, Modal } from '../../../../../../../../packages/components/src';
 
 function Confirmation( {
 	disabled,

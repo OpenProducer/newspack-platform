@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
 
 import WizardsActionCard from '../../../../wizards-action-card';
-import { Button, Card, Grid, TextControl, Waiting } from '../../../../../components/src';
+import { Button, Card, Grid, TextControl, Waiting } from '../../../../../../packages/components/src';
 
 export default function Recirculation( { data, update, isFetching }: ThemeModComponentProps< Recirculation > ) {
 	return (

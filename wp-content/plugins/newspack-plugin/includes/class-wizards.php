@@ -49,6 +49,7 @@ class Wizards {
 				[
 					'sections' => [
 						'custom-events' => 'Newspack\Wizards\Newspack\Custom_Events_Section',
+						'emails'        => 'Newspack\Wizards\Newspack\Emails_Section',
 						'social-pixels' => 'Newspack\Wizards\Newspack\Pixels_Section',
 						'recirculation' => 'Newspack\Wizards\Newspack\Recirculation_Section',
 						'syndication'   => 'Newspack\Wizards\Newspack\Syndication_Section',

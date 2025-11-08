@@ -11,7 +11,7 @@ import { useState, Fragment } from '@wordpress/element';
 /**
  * Internal dependencies.
  */
-import { Notice, utils } from '../../../../../components/src';
+import { Notice, utils } from '../../../../../../packages/components/src';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
 import WizardsActionCard from '../../../../wizards-action-card';
 import WizardsPluginCard from '../../../../wizards-plugin-card';
