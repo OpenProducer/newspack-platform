@@ -261,12 +261,14 @@ class Newspack_Blocks {
 
 		$editor_style = plugins_url( NEWSPACK_BLOCKS__BLOCKS_DIRECTORY . 'editor.css', NEWSPACK_BLOCKS__PLUGIN_FILE );
 
+		$handle = 'newspack-blocks-editor';
 		wp_enqueue_style(
-			'newspack-blocks-editor',
+			$handle,
 			$editor_style,
 			array(),
 			NEWSPACK_BLOCKS__VERSION
 		);
+		wp_style_add_data( $handle, 'rtl', 'replace' );
 	}
 
 	/**

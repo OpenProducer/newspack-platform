@@ -9,7 +9,7 @@
  */
 // WordPress
 import { __ } from '@wordpress/i18n';
-import { PluginInstaller, Modal } from '../../../../components/src';
+import { PluginInstaller, Modal } from '../../../../../packages/components/src';
 
 const SiteActionModal = ( { onRequestClose, plugins, onSuccess }: SiteActionModal ) => {
 	return (

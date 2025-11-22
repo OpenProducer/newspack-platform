@@ -9,7 +9,7 @@ import apiFetch from '@wordpress/api-fetch';
 /**
  * Internal dependencies
  */
-import { ActionCard, Button, Grid, Notice, SelectControl } from '../../../../../components/src';
+import { ActionCard, Button, Grid, Notice, SelectControl } from '../../../../../../packages/components/src';
 
 const isValidError = ( e: unknown ): e is WpRestApiError => {
 	return e instanceof Error && 'message' in e;

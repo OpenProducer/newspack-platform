@@ -1,5 +1,52 @@
 <?php
 
+// Migrate existing "edited" templates. By existing, it means that the template
+// is active.
+function gutenberg_get_migrated_active_templates() {
+	// Query all templates in the database. See `get_block_templates`.
+	$wp_query_args = array(
+		'post_status'         => 'publish',
+		'post_type'           => 'wp_template',
+		'posts_per_page'      => -1,
+		'no_found_rows'       => true,
+		'lazy_load_term_meta' => false,
+		'tax_query'           => array(
+			array(
+				'taxonomy' => 'wp_theme',
+				'field'    => 'name',
+				'terms'    => get_stylesheet(),
+			),
+		),
+		// Only get templates that are not inactive by default.
+		'meta_query'          => array(
+			'relation' => 'OR',
+			array(
+				'key'     => 'is_inactive_by_default',
+				'compare' => 'NOT EXISTS',
+			),
+			array(
+				'key'     => 'is_inactive_by_default',
+				'value'   => false,
+				'compare' => '=',
+			),
+		),
+	);
+
+	$template_query   = new WP_Query( $wp_query_args );
+	$active_templates = array();
+
+	foreach ( $template_query->posts as $post ) {
+		$active_templates[ $post->post_name ] = $post->ID;
+	}
+
+	return $active_templates;
+}
+
+// Only load template activation system if the experiment is enabled.
+if ( ! gutenberg_is_experiment_enabled( 'active_templates' ) ) {
+	return;
+}
+
 require_once __DIR__ . '/class-gutenberg-rest-old-templates-controller.php';
 
 // How does this work?
@@ -8,7 +55,7 @@ require_once __DIR__ . '/class-gutenberg-rest-old-templates-controller.php';
 add_filter( 'register_post_type_args', 'gutenberg_modify_wp_template_post_type_args', 10, 2 );
 function gutenberg_modify_wp_template_post_type_args( $args, $post_type ) {
 	if ( 'wp_template' === $post_type ) {
-		$args['rest_base']                       = 'wp_template';
+		$args['rest_base']                       = 'created-templates';
 		$args['rest_controller_class']           = 'WP_REST_Posts_Controller';
 		$args['autosave_rest_controller_class']  = null;
 		$args['revisions_rest_controller_class'] = null;
@@ -21,7 +68,8 @@ function gutenberg_modify_wp_template_post_type_args( $args, $post_type ) {
 //    need to deprecate /templates eventually, but we'll still want to be able
 //    to lookup the active template for a specific slug, and probably get a list
 //    of all _active_ templates. For that we can keep /lookup.
-add_action( 'rest_api_init', 'gutenberg_maintain_templates_routes' );
+// Priority 100, after `create_initial_rest_routes`.
+add_action( 'rest_api_init', 'gutenberg_maintain_templates_routes', 100 );
 
 /**
  * @global array $wp_post_types List of post types.
@@ -30,10 +78,46 @@ function gutenberg_maintain_templates_routes() {
 	// This should later be changed in core so we don't need initialize
 	// WP_REST_Templates_Controller with a post type.
 	global $wp_post_types;
+	// Register the old templates endpoints. The WP_REST_Templates_Controller
+	// and sub-controllers used to be linked to the wp_template post type, but
+	// are no longer. They still require a post type object when contructing the
+	// class. To maintain backward and changes to these controller classes, we
+	// make use that the wp_template post type has the right information it
+	// needs.
 	$wp_post_types['wp_template']->rest_base = 'templates';
-	$controller                              = new Gutenberg_REST_Old_Templates_Controller( 'wp_template' );
-	$wp_post_types['wp_template']->rest_base = 'wp_template';
+	// Store the classes so they can be restored.
+	$original_rest_controller_class           = $wp_post_types['wp_template']->rest_controller_class;
+	$original_autosave_rest_controller_class  = $wp_post_types['wp_template']->autosave_rest_controller_class;
+	$original_revisions_rest_controller_class = $wp_post_types['wp_template']->revisions_rest_controller_class;
+	// Temporarily set the old classes.
+	$wp_post_types['wp_template']->rest_controller_class           = 'WP_REST_Templates_Controller';
+	$wp_post_types['wp_template']->autosave_rest_controller_class  = 'WP_REST_Template_Autosaves_Controller';
+	$wp_post_types['wp_template']->revisions_rest_controller_class = 'WP_REST_Template_Revisions_Controller';
+	// Initialize the controllers. The order is important: the autosave
+	// controller needs both the templates and revisions controllers.
+	$controller                                    = new Gutenberg_REST_Old_Templates_Controller( 'wp_template' );
+	$wp_post_types['wp_template']->rest_controller = $controller;
+	$revisions_controller                          = new WP_REST_Template_Revisions_Controller( 'wp_template' );
+	$wp_post_types['wp_template']->revisions_rest_controller = $revisions_controller;
+	$autosaves_controller                                    = new WP_REST_Template_Autosaves_Controller( 'wp_template' );
+	// Unset the controller cache, it will be re-initialized when
+	// get_rest_controller is called.
+	$wp_post_types['wp_template']->rest_controller           = null;
+	$wp_post_types['wp_template']->revisions_rest_controller = null;
+	// Restore the original classes.
+	$wp_post_types['wp_template']->rest_controller_class           = $original_rest_controller_class;
+	$wp_post_types['wp_template']->autosave_rest_controller_class  = $original_autosave_rest_controller_class;
+	$wp_post_types['wp_template']->revisions_rest_controller_class = $original_revisions_rest_controller_class;
+	// Restore the original base.
+	$wp_post_types['wp_template']->rest_base = 'created-templates';
+
+	// Register the old routes.
+	$autosaves_controller->register_routes();
+	$revisions_controller->register_routes();
 	$controller->register_routes();
+
+	$registered_template_controller = new Gutenberg_REST_Static_Templates_Controller();
+	$registered_template_controller->register_routes();
 
 	// Add the same field as wp_registered_template.
 	register_rest_field(
@@ -79,12 +163,6 @@ add_action( 'init', 'gutenberg_setup_static_template' );
  * @global array $wp_post_types List of post types.
  */
 function gutenberg_setup_static_template() {
-	global $wp_post_types;
-	$wp_post_types['wp_registered_template']                        = clone $wp_post_types['wp_template'];
-	$wp_post_types['wp_registered_template']->name                  = 'wp_registered_template';
-	$wp_post_types['wp_registered_template']->rest_base             = 'wp_registered_template';
-	$wp_post_types['wp_registered_template']->rest_controller_class = 'Gutenberg_REST_Static_Templates_Controller';
-
 	register_setting(
 		'reading',
 		'active_templates',
@@ -226,19 +304,9 @@ function gutenberg_resolve_block_template( $template_type, $template_hierarchy, 
 	// START CORE MODIFICATIONS //
 	//////////////////////////////
 
-	$object            = get_queried_object();
-	$specific_template = $object ? get_page_template_slug( $object ) : null;
+	$object_id         = get_queried_object_id();
+	$specific_template = $object_id ? get_page_template_slug( $object_id ) : null;
 	$active_templates  = (array) get_option( 'active_templates', array() );
-
-	// Remove templates slugs that are deactivated, except if it's the specific
-	// template or index.
-	$slugs = array_filter(
-		$slugs,
-		function ( $slug ) use ( $specific_template, $active_templates ) {
-			$should_ignore = $slug === $specific_template || 'index' === $slug;
-			return $should_ignore || ( ! isset( $active_templates[ $slug ] ) || false !== $active_templates[ $slug ] );
-		}
-	);
 
 	// We expect one template for each slug. Use the active template if it is
 	// set and exists. Otherwise use the static template.
@@ -288,12 +356,14 @@ function gutenberg_resolve_block_template( $template_type, $template_hierarchy, 
 	}
 
 	// For any remaining slugs, use the static template.
-	$query     = array(
-		'slug__in' => $remaining_slugs,
-	);
-	$templates = array_merge( $templates, gutenberg_get_registered_block_templates( $query ) );
+	if ( ! empty( $remaining_slugs ) ) {
+		$query     = array(
+			'slug__in' => $remaining_slugs,
+		);
+		$templates = array_merge( $templates, gutenberg_get_registered_block_templates( $query ) );
+	}
 
-	if ( $specific_template ) {
+	if ( $specific_template && in_array( $specific_template, $remaining_slugs, true ) ) {
 		$templates = array_merge( $templates, get_block_templates( array( 'slug__in' => array( $specific_template ) ) ) );
 	}
 
@@ -460,10 +530,10 @@ function gutenberg_locate_block_template( $template, $type, array $templates ) {
 // https://github.com/WordPress/wordpress-develop/blob/b2c8d8d2c8754cab5286b06efb4c11e2b6aa92d5/src/wp-includes/rest-api/endpoints/class-wp-rest-templates-controller.php#L571-L578
 // Priority 9 so it runs before default hooks like
 // `inject_ignored_hooked_blocks_metadata_attributes`.
+remove_action( 'rest_pre_insert_wp_template', 'wp_assign_new_template_to_theme', 9 );
 add_action( 'rest_pre_insert_wp_template', 'gutenberg_set_active_template_theme', 9, 2 );
 function gutenberg_set_active_template_theme( $changes, $request ) {
-	$template = $request['id'] ? get_block_template( $request['id'], 'wp_template' ) : null;
-	if ( $template ) {
+	if ( str_starts_with( $request->get_route(), '/wp/v2/templates' ) ) {
 		return $changes;
 	}
 	$changes->tax_input = array(
@@ -475,55 +545,6 @@ function gutenberg_set_active_template_theme( $changes, $request ) {
 		'is_inactive_by_default' => true,
 	);
 	return $changes;
-}
-
-// Migrate existing "edited" templates. By existing, it means that the template
-// is active.
-add_action( 'init', 'gutenberg_migrate_existing_templates' );
-function gutenberg_migrate_existing_templates() {
-	$active_templates = get_option( 'active_templates', false );
-
-	if ( false !== $active_templates ) {
-		return;
-	}
-
-	// Query all templates in the database. See `get_block_templates`.
-	$wp_query_args = array(
-		'post_status'         => 'publish',
-		'post_type'           => 'wp_template',
-		'posts_per_page'      => -1,
-		'no_found_rows'       => true,
-		'lazy_load_term_meta' => false,
-		'tax_query'           => array(
-			array(
-				'taxonomy' => 'wp_theme',
-				'field'    => 'name',
-				'terms'    => get_stylesheet(),
-			),
-		),
-		// Only get templates that are not inactive by default.
-		'meta_query'          => array(
-			'relation' => 'OR',
-			array(
-				'key'     => 'is_inactive_by_default',
-				'compare' => 'NOT EXISTS',
-			),
-			array(
-				'key'     => 'is_inactive_by_default',
-				'value'   => false,
-				'compare' => '=',
-			),
-		),
-	);
-
-	$template_query   = new WP_Query( $wp_query_args );
-	$active_templates = array();
-
-	foreach ( $template_query->posts as $post ) {
-		$active_templates[ $post->post_name ] = $post->ID;
-	}
-
-	update_option( 'active_templates', $active_templates );
 }
 
 add_action( 'save_post_wp_template', 'gutenberg_maybe_update_active_templates' );
@@ -568,8 +589,6 @@ function gutenberg_get_block_template( $output, $id, $template_type ) {
 					return $template;
 				}
 			}
-		} elseif ( false === $active_templates[ $slug ] ) {
-			return null;
 		}
 	}
 	////////////////////////////

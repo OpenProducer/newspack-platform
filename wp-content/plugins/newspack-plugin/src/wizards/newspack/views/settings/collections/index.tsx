@@ -9,7 +9,7 @@ import { cleanForSlug } from '@wordpress/url';
 import WizardSection from '../../../../wizards-section';
 import WizardsActionCard from '../../../../wizards-action-card';
 import useWizardApiFetchToggle from '../../../../hooks/use-wizard-api-fetch-toggle';
-import { TextControl, SelectControl, Button, Grid } from '../../../../../components/src';
+import { TextControl, SelectControl, Button, Grid } from '../../../../../../packages/components/src';
 import CustomNamingCard from './custom-naming-card';
 
 // Collections per page options.

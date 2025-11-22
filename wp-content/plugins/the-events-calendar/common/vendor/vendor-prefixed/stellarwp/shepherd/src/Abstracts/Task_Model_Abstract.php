@@ -17,6 +17,7 @@ use TEC\Common\StellarWP\Shepherd\Config;
 use TEC\Common\StellarWP\Shepherd\Contracts\Task;
 use TEC\Common\StellarWP\Shepherd\Action_Scheduler_Methods;
 use TEC\Common\StellarWP\Shepherd\Exceptions\ShepherdTaskAlreadyExistsException;
+use TEC\Common\StellarWP\Shepherd\Tasks\Herding;
 /**
  * The Shepherd task model abstract.
  *
@@ -232,11 +233,12 @@ abstract class Task_Model_Abstract extends Model_Abstract implements Task_Model
      * Saves the task.
      *
      * @since 0.0.1
+     * @since 0.0.8 Updated to delete stale tasks from the database.
      *
      * @return int The id of the saved task.
      *
      * @throws ShepherdTaskAlreadyExistsException If multiple tasks are found with the same arguments hash.
-     * @throws RuntimeException                 If multiple tasks are found with the same arguments hash.
+     * @throws RuntimeException                   If multiple tasks are found with the same arguments hash.
      */
     public function save(): int
     {
@@ -247,14 +249,18 @@ abstract class Task_Model_Abstract extends Model_Abstract implements Task_Model
             return $task_id;
         }
         $action_ids = array_map(fn(Task $task) => $task->get_action_id(), $tasks);
+        [$pending_actions, $non_pending_actions] = Action_Scheduler_Methods::get_pending_and_non_pending_actions_by_ids($action_ids);
+        $stale_task_ids = array_map(fn(Task $task) => $task->get_id(), array_filter($tasks, fn(Task $task) => in_array($task->get_action_id(), array_keys($non_pending_actions), true)));
+        if (!empty($stale_task_ids)) {
+            Herding::delete_data_of_tasks($stale_task_ids);
+        }
+        if (count($pending_actions) > 1) {
+            throw new RuntimeException(esc_html_x('Multiple tasks found with the same arguments hash.', 'This error is thrown when multiple tasks are found with the same arguments hash while they are also pending.', 'stellarwp-shepherd'));
+        }
         $number_of_actions = count($action_ids);
         $number_of_unique_actions = count(array_unique($action_ids));
         if ($number_of_actions !== $number_of_unique_actions) {
-            throw new ShepherdTaskAlreadyExistsException('Multiple tasks found with the same arguments hash.');
-        }
-        $pending_actions = Action_Scheduler_Methods::get_pending_actions_by_ids($action_ids);
-        if (count($pending_actions) > 1) {
-            throw new RuntimeException('Multiple tasks found with the same arguments hash.');
+            throw new ShepherdTaskAlreadyExistsException(esc_html_x('Multiple tasks found with the same arguments hash.', 'This error is thrown when multiple tasks are found with the same arguments hash.', 'stellarwp-shepherd'));
         }
         return $task_id;
     }

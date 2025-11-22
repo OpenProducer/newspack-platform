@@ -13,12 +13,12 @@ namespace TEC\Common\StellarWP\Shepherd\Tasks;
 use TEC\Common\StellarWP\Shepherd\Config;
 use TEC\Common\StellarWP\Shepherd\Abstracts\Task_Abstract;
 use TEC\Common\StellarWP\Shepherd\Tables\Task_Logs;
+use TEC\Common\StellarWP\Shepherd\Tables\AS_Logs;
 use TEC\Common\StellarWP\Shepherd\Contracts\Logger;
-use TEC\Common\StellarWP\Shepherd\Loggers\ActionScheduler_DB_Logger;
-use TEC\Common\StellarWP\Shepherd\Loggers\DB_Logger;
 use TEC\Common\StellarWP\Shepherd\Tables\Tasks;
 use TEC\Common\StellarWP\DB\DB;
 use Generator;
+use TEC\Common\StellarWP\DB\Database\Exceptions\DatabaseQueryException;
 /**
  * Shepherd's herding task.
  *
@@ -32,30 +32,13 @@ class Herding extends Task_Abstract
      * Processes the herding task.
      *
      * @since 0.0.1
+     * @since 0.0.8 Moved logic to reusable static method `delete_data_of_tasks`.
      */
     public function process(): void
     {
         DB::beginTransaction();
-        $logger = Config::get_container()->get(Logger::class);
-        $logs_at_as_table = false;
-        $logs_at_own_table = false;
-        if ($logger instanceof ActionScheduler_DB_Logger) {
-            $logs_at_as_table = true;
-        }
-        if ($logger instanceof DB_Logger) {
-            $logs_at_own_table = true;
-        }
         foreach ($this->get_task_ids() as $task_ids) {
-            $imploded_task_ids = implode(',', $task_ids);
-            if ($logs_at_own_table) {
-                DB::query(DB::prepare("DELETE FROM %i WHERE task_id IN ({$imploded_task_ids})", Task_Logs::table_name()));
-            }
-            if ($logs_at_as_table) {
-                foreach ($task_ids as $task_id) {
-                    DB::query(DB::prepare('DELETE FROM %i WHERE message LIKE %s', DB::prefix('actionscheduler_logs'), 'shepherd_' . Config::get_hook_prefix() . '||' . $task_id . '||%'));
-                }
-            }
-            DB::query(DB::prepare("DELETE FROM %i WHERE %i IN ({$imploded_task_ids})", Tasks::table_name(), Tasks::uid_column()));
+            self::delete_data_of_tasks($task_ids);
         }
         DB::commit();
         /**
@@ -103,6 +86,35 @@ class Herding extends Task_Abstract
                 break;
             }
             yield $results;
+        }
+    }
+    /**
+     * Deletes the data of the tasks.
+     *
+     * @since 0.0.8
+     *
+     * @param array $task_ids The task IDs.
+     */
+    public static function delete_data_of_tasks(array $task_ids = []): void
+    {
+        if (empty($task_ids)) {
+            return;
+        }
+        $logger = Config::get_container()->get(Logger::class);
+        $imploded_task_ids = implode(',', $task_ids);
+        try {
+            if ($logger->uses_own_table()) {
+                DB::query(DB::prepare("DELETE FROM %i WHERE task_id IN ({$imploded_task_ids})", Task_Logs::table_name()));
+            }
+            if ($logger->uses_as_table()) {
+                foreach ($task_ids as $task_id) {
+                    DB::query(DB::prepare('DELETE FROM %i WHERE message LIKE %s', AS_Logs::table_name(), 'shepherd_' . Config::get_hook_prefix() . '||' . $task_id . '||%'));
+                }
+            }
+            DB::query(DB::prepare("DELETE FROM %i WHERE %i IN ({$imploded_task_ids})", Tasks::table_name(), Tasks::uid_column()));
+        } catch (DatabaseQueryException $e) {
+            // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+            // No need to be loud about the failed deletion.
         }
     }
 }

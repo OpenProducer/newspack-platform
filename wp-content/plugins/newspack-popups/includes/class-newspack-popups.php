@@ -140,6 +140,7 @@ final class Newspack_Popups {
 		WP_CLI::add_command( 'newspack-popups export', 'Newspack\Campaigns\CLI\Export' );
 		WP_CLI::add_command( 'newspack-popups import', 'Newspack\Campaigns\CLI\Import' );
 		WP_CLI::add_command( 'newspack-popups prune-data', 'Newspack\Campaigns\CLI\Prune_Data' );
+		WP_CLI::add_command( 'newspack-popups delete-all', 'Newspack\Campaigns\CLI\Delete_All' );
 	}
 
 	/**

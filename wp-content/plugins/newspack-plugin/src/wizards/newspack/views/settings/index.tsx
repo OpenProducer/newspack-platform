@@ -15,8 +15,8 @@ import { Fragment } from '@wordpress/element';
  */
 import './style.scss';
 import sections from './sections';
-import Wizard from '../../../../components/src/wizard';
-import { GlobalNotices, Notice } from '../../../../components/src/';
+import Wizard from '../../../../../packages/components/src/wizard';
+import { GlobalNotices, Notice } from '../../../../../packages/components/src/';
 
 const {
 	newspack_aux_data: { is_debug_mode: isDebugMode = false },

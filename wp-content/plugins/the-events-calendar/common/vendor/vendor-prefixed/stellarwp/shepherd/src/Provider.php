@@ -55,6 +55,7 @@ class Provider extends Provider_Abstract
      * Registers Shepherd's specific providers and starts core functionality
      *
      * @since 0.0.1
+     * @since 0.0.7 Updated to register the regulator after the tables are registered successfully.
      *
      * @return void The method does not return any value.
      */
@@ -71,16 +72,31 @@ class Provider extends Provider_Abstract
         $this->container->singleton(Logger::class, Config::get_logger());
         $this->container->singleton(Tables_Provider::class);
         $this->container->singleton(Regulator::class);
+        $prefix = Config::get_hook_prefix();
+        add_action("shepherd_{$prefix}_tables_registered", [$this, 'register_regulator']);
+        if (!has_action("shepherd_{$prefix}_tables_error")) {
+            _doing_it_wrong(__METHOD__, esc_html__('Your software should be handling the case where Shepherd tables are not registered successfully and notify your end users about it.', 'stellarwp-shepherd'), '0.0.7');
+        }
         $this->container->get(Tables_Provider::class)->register();
-        $this->container->get(Regulator::class)->register();
         add_action('action_scheduler_deleted_action', [$this, 'delete_tasks_on_action_deletion']);
         self::$has_registered = true;
+    }
+    /**
+     * Registers the regulator.
+     *
+     * @since 0.0.7
+     *
+     * @return void
+     */
+    public function register_regulator(): void
+    {
+        $this->container->get(Regulator::class)->register();
     }
     /**
      * Requires Action Scheduler.
      *
      * @since 0.0.1
-     * @since 0.0.2
+     * @since 0.0.2 Look into multiple places for the action scheduler main file.
      *
      * @return void
      *
@@ -131,6 +147,7 @@ class Provider extends Provider_Abstract
      * Deletes tasks on action deletion.
      *
      * @since 0.0.1
+     * @since 0.0.8 Check that the DB Logger is used before trying to delete task logs from there.
      *
      * @param int $action_id The action ID.
      */
@@ -141,7 +158,9 @@ class Provider extends Provider_Abstract
             return;
         }
         $task_ids = implode(',', array_unique(array_map('intval', $task_ids)));
-        DB::query(DB::prepare("DELETE FROM %i WHERE %i IN ({$task_ids})", Task_Logs::table_name(), 'task_id'));
+        if ($this->container->get(Logger::class)->uses_own_table()) {
+            DB::query(DB::prepare("DELETE FROM %i WHERE %i IN ({$task_ids})", Task_Logs::table_name(), 'task_id'));
+        }
         DB::query(DB::prepare("DELETE FROM %i WHERE %i IN ({$task_ids})", Tasks::table_name(), Tasks::uid_column()));
     }
 }

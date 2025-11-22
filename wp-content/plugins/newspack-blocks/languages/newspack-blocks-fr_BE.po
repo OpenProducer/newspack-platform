@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Newspack Blocks 1.0.0-alpha.25\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
-"POT-Creation-Date: 2025-09-25T18:26:23+00:00\n"
+"POT-Creation-Date: 2025-10-17T12:49:09+00:00\n"
 "PO-Revision-Date: 2024-08-30 08:46-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -185,34 +185,39 @@ msgid "Purchase"
 msgstr ""
 
 #: includes/class-modal-checkout.php:2001
-msgid "Back"
+msgid "Edit billing information"
 msgstr ""
 
-#: includes/class-modal-checkout.php:2002
-msgid "Transaction successful"
+#: includes/class-modal-checkout.php:2002 dist/editor.js:29
+#: src/blocks/checkout-button/edit.js:209
+msgid "Cancel"
 msgstr ""
 
 #: includes/class-modal-checkout.php:2003
+msgid "Transaction successful"
+msgstr ""
+
+#: includes/class-modal-checkout.php:2004
 msgid ""
 "Your contribution directly funds our work. If you're moved to do so, you can "
 "opt to pay more than the standard rate."
 msgstr ""
 
-#: includes/class-modal-checkout.php:2004
+#: includes/class-modal-checkout.php:2005
 msgid "Thank you for your generosity! We couldn't do this without you!"
 msgstr ""
 
-#: includes/class-modal-checkout.php:2005
+#: includes/class-modal-checkout.php:2006
 msgid "Increase your support"
 msgstr ""
 
-#: includes/class-modal-checkout.php:2006
+#: includes/class-modal-checkout.php:2007
 #: src/modal-checkout/templates/form-coupon.php:20
 msgid "Apply"
 msgstr ""
 
 #. Translators: %s is the site name.
-#: includes/class-modal-checkout.php:2143
+#: includes/class-modal-checkout.php:2144
 #, php-format
 msgid ""
 "Thank you for supporting %s. Your transaction was completed successfully."
@@ -249,50 +254,50 @@ msgstr ""
 msgid "Newspack Subscribe"
 msgstr ""
 
-#: includes/class-newspack-blocks.php:900
+#: includes/class-newspack-blocks.php:902
 msgid "Common"
 msgstr ""
 
 #. translators: separates last two sponsor names; needs a space on either side.
-#: includes/class-newspack-blocks.php:1001
+#: includes/class-newspack-blocks.php:1003
 msgid " and "
 msgstr " et "
 
 #. translators: separates all but the last two sponsor names; needs a space at the end.
-#: includes/class-newspack-blocks.php:1004
+#: includes/class-newspack-blocks.php:1006
 msgid ", "
 msgstr ""
 
-#: includes/class-newspack-blocks.php:1305
+#: includes/class-newspack-blocks.php:1307
 msgid "Jetpack donations is disabled in favour of Newspack donations."
 msgstr ""
 
-#: includes/class-newspack-blocks.php:1338 dist/editor.js:8
+#: includes/class-newspack-blocks.php:1340 dist/editor.js:8
 #: src/shared/js/utils.js:56
 msgid "Draft"
 msgstr ""
 
-#: includes/class-newspack-blocks.php:1339 dist/editor.js:8
+#: includes/class-newspack-blocks.php:1341 dist/editor.js:8
 #: src/shared/js/utils.js:56
 msgid "Scheduled"
 msgstr ""
 
 #. Translators: %s is the %s is the frequency.
-#: includes/class-newspack-blocks.php:1497 dist/editor.js:35
+#: includes/class-newspack-blocks.php:1499 dist/editor.js:35
 #, php-format
 msgid "per %s"
 msgstr ""
 
-#: includes/class-newspack-blocks.php:1528 dist/editor.js:29
+#: includes/class-newspack-blocks.php:1530 dist/editor.js:29
 msgid " once"
 msgstr ""
 
-#: includes/class-newspack-blocks.php:1531
+#: includes/class-newspack-blocks.php:1533
 msgid " per "
 msgstr ""
 
-#: includes/modal-checkout/class-checkout-data.php:259 dist/editor.js:35
-#: src/blocks/donate/index.js:25
+#: includes/modal-checkout/class-checkout-data.php:291 dist/editor.js:35
+#: src/blocks/donate/index.js:31
 msgid "Donate"
 msgstr ""
 
@@ -553,27 +558,28 @@ msgid " and "
 msgstr " et "
 
 #. Translators: %s is a list of supported file extensions for uploading.
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:261
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:274
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:371
 msgid ""
 "Unsupported filetype. Please make sure it's one of the supported filetypes: "
 "% s"
 msgstr ""
 
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:270
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:283
 msgid "Could not upload this file."
 msgstr ""
 
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:304
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:311
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:317
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:324
 msgid "Please choose a valid (.zip) assets archive."
 msgstr ""
 
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:379
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:407
 msgid "Could not upload your document."
 msgstr ""
 
 #. Translators: %s is a list of supported file extensions for uploading.
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:397
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:425
 #, php-format
 msgid ""
 "Error reading the archive. Please make sure it's a valid .zip archive file "
@@ -581,9 +587,17 @@ msgid ""
 msgstr ""
 
 #. translators: %s: iframe entry file (e.g. index,html)
-#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:482
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:517
 #, php-format
 msgid "Required %s entrypoint file was not found in the archive."
+msgstr ""
+
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:565
+msgid "Could not delete the directory. Invalid path."
+msgstr ""
+
+#: src/blocks/iframe/class-wp-rest-newspack-iframe-controller.php:580
+msgid "Could not delete the directory."
 msgstr ""
 
 #: src/modal-checkout/templates/form-checkout.php:22
@@ -804,7 +818,7 @@ msgid "Edit selection"
 msgstr ""
 
 #: dist/editor.js:3 dist/editor.js:26 src/blocks/author-profile/edit.js:318
-#: src/blocks/author-profile/index.js:23
+#: src/blocks/author-profile/index.js:28
 msgid "Author Profile"
 msgstr ""
 
@@ -827,8 +841,8 @@ msgid "(no name)"
 msgstr ""
 
 #: dist/editor.js:3 dist/editor.js:17 dist/editor.js:26
-#: src/blocks/author-list/edit.js:263 src/blocks/author-list/index.js:40
-#: src/blocks/author-profile/edit.js:396 src/blocks/author-profile/index.js:40
+#: src/blocks/author-list/edit.js:263 src/blocks/author-list/index.js:45
+#: src/blocks/author-profile/edit.js:396 src/blocks/author-profile/index.js:45
 msgid "author"
 msgstr ""
 
@@ -986,31 +1000,31 @@ msgstr ""
 msgid "Show avatar"
 msgstr ""
 
-#: dist/editor.js:5 src/blocks/carousel/index.js:23
+#: dist/editor.js:5 src/blocks/carousel/index.js:28
 msgid "Content Carousel"
 msgstr ""
 
-#: dist/editor.js:5 dist/editor.js:47 src/blocks/carousel/index.js:45
-#: src/blocks/homepage-articles/index.js:48
+#: dist/editor.js:5 dist/editor.js:47 src/blocks/carousel/index.js:39
+#: src/blocks/homepage-articles/index.js:41
 msgid "posts"
 msgstr ""
 
-#: dist/editor.js:5 dist/editor.js:47 src/blocks/carousel/index.js:46
-#: src/blocks/homepage-articles/index.js:49
+#: dist/editor.js:5 dist/editor.js:47 src/blocks/carousel/index.js:40
+#: src/blocks/homepage-articles/index.js:42
 msgid "articles"
 msgstr ""
 
-#: dist/editor.js:5 dist/editor.js:47 src/blocks/carousel/index.js:47
-#: src/blocks/homepage-articles/index.js:50
+#: dist/editor.js:5 dist/editor.js:47 src/blocks/carousel/index.js:41
+#: src/blocks/homepage-articles/index.js:43
 msgid "latest"
 msgstr ""
 
-#: dist/editor.js:5 dist/editor.js:47 src/blocks/carousel/index.js:48
-#: src/blocks/homepage-articles/index.js:52
+#: dist/editor.js:5 dist/editor.js:47 src/blocks/carousel/index.js:42
+#: src/blocks/homepage-articles/index.js:45
 msgid "query"
 msgstr ""
 
-#: dist/editor.js:5 src/blocks/carousel/index.js:50
+#: dist/editor.js:5 src/blocks/carousel/index.js:44
 msgid ""
 "An advanced block that displays content in a carousel format with "
 "customizable parameters and visual configurations."
@@ -1203,28 +1217,28 @@ msgstr ""
 #. Translators: %s: The name of the type.
 #. Translators: %s: the name of a post type.
 #: dist/editor.js:17 dist/editor.js:26 src/blocks/author-list/edit.js:456
-#: src/blocks/author-list/index.js:23
+#: src/blocks/author-list/index.js:28
 msgid "Author List"
 msgstr ""
 
-#: dist/editor.js:17 dist/editor.js:26 src/blocks/author-list/index.js:40
-#: src/blocks/author-profile/index.js:40
+#: dist/editor.js:17 dist/editor.js:26 src/blocks/author-list/index.js:45
+#: src/blocks/author-profile/index.js:45
 msgid "profile"
 msgstr ""
 
-#: dist/editor.js:17 src/blocks/author-list/index.js:41
+#: dist/editor.js:17 src/blocks/author-list/index.js:46
 msgid "Display a list of author profile cards."
 msgstr ""
 
 #: dist/editor.js:17 dist/editor.js:26 dist/editor.js:47
-#: src/blocks/author-list/index.js:43 src/blocks/author-profile/index.js:43
-#: src/blocks/homepage-articles/index.js:61
+#: src/blocks/author-list/index.js:48 src/blocks/author-profile/index.js:48
+#: src/blocks/homepage-articles/index.js:54
 msgctxt "block style"
 msgid "Default"
 msgstr ""
 
-#: dist/editor.js:17 dist/editor.js:26 src/blocks/author-list/index.js:44
-#: src/blocks/author-profile/index.js:44
+#: dist/editor.js:17 dist/editor.js:26 src/blocks/author-list/index.js:49
+#: src/blocks/author-profile/index.js:49
 msgctxt "block style"
 msgid "Centered"
 msgstr ""
@@ -1328,12 +1342,12 @@ msgstr ""
 msgid "Fetching authors…"
 msgstr ""
 
-#: dist/editor.js:26 src/blocks/author-profile/index.js:41
+#: dist/editor.js:26 src/blocks/author-profile/index.js:46
 msgid "Display an author profile card."
 msgstr ""
 
 #: dist/editor.js:26 dist/editor.js:50 src/blocks/checkout-button/edit.js:75
-#: src/blocks/iframe/edit.js:238
+#: src/blocks/iframe/edit.js:233
 msgid "Width"
 msgstr ""
 
@@ -1357,10 +1371,6 @@ msgstr ""
 
 #: dist/editor.js:29 src/blocks/checkout-button/edit.js:193
 msgid "Type to search for a product…"
-msgstr ""
-
-#: dist/editor.js:29 src/blocks/checkout-button/edit.js:209
-msgid "Cancel"
 msgstr ""
 
 #: dist/editor.js:29 src/blocks/checkout-button/edit.js:327
@@ -1452,24 +1462,24 @@ msgstr ""
 msgid "High-tier"
 msgstr ""
 
-#: dist/editor.js:35 src/blocks/donate/index.js:45
+#: dist/editor.js:35 src/blocks/donate/index.js:41
 msgid "donate"
 msgstr ""
 
-#: dist/editor.js:35 src/blocks/donate/index.js:46
+#: dist/editor.js:35 src/blocks/donate/index.js:42
 msgid "memberships"
 msgstr ""
 
-#: dist/editor.js:35 src/blocks/donate/index.js:47
+#: dist/editor.js:35 src/blocks/donate/index.js:43
 msgid "subscriptions"
 msgstr ""
 
-#: dist/editor.js:35 src/blocks/donate/index.js:52
+#: dist/editor.js:35 src/blocks/donate/index.js:48
 msgid "Manually place a donation block on any post or page on your site."
 msgstr ""
 
-#: dist/editor.js:35 dist/editor.js:50 src/blocks/donate/index.js:58
-#: src/blocks/iframe/index.js:37
+#: dist/editor.js:35 dist/editor.js:50 src/blocks/donate/index.js:54
+#: src/blocks/iframe/index.js:42
 msgid "Support reference"
 msgstr ""
 
@@ -1563,15 +1573,15 @@ msgstr ""
 msgid "Campaign ID"
 msgstr ""
 
-#: dist/editor.js:41 src/blocks/donate/index.js:73
+#: dist/editor.js:41 src/blocks/donate/index.js:69
 msgid "Alternate"
 msgstr ""
 
-#: dist/editor.js:41 src/blocks/donate/index.js:78
+#: dist/editor.js:41 src/blocks/donate/index.js:74
 msgid "Minimal"
 msgstr ""
 
-#: dist/editor.js:41 src/blocks/donate/index.js:83
+#: dist/editor.js:41 src/blocks/donate/index.js:79
 msgid "Modern"
 msgstr ""
 
@@ -1714,21 +1724,21 @@ msgstr ""
 msgid "Sorry, no posts were found."
 msgstr ""
 
-#: dist/editor.js:47 src/blocks/homepage-articles/index.js:25
+#: dist/editor.js:47 src/blocks/homepage-articles/index.js:30
 msgid "Content Loop"
 msgstr ""
 
-#: dist/editor.js:47 src/blocks/homepage-articles/index.js:51
+#: dist/editor.js:47 src/blocks/homepage-articles/index.js:44
 msgid "homepage"
 msgstr ""
 
-#: dist/editor.js:47 src/blocks/homepage-articles/index.js:54
+#: dist/editor.js:47 src/blocks/homepage-articles/index.js:47
 msgid ""
 "An advanced block that allows displaying content based on different "
 "parameters and visual configurations."
 msgstr ""
 
-#: dist/editor.js:47 src/blocks/homepage-articles/index.js:66
+#: dist/editor.js:47 src/blocks/homepage-articles/index.js:59
 msgctxt "block style"
 msgid "Borders"
 msgstr ""
@@ -1768,60 +1778,60 @@ msgstr ""
 msgid "Embed from URL"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/index.js:20
+#: dist/editor.js:50 src/blocks/iframe/index.js:25
 msgid "Iframe"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/index.js:32
+#: dist/editor.js:50 src/blocks/iframe/index.js:37
 msgid "iframe"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/index.js:32
+#: dist/editor.js:50 src/blocks/iframe/index.js:37
 msgid "project iframe"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/index.js:35
+#: dist/editor.js:50 src/blocks/iframe/index.js:40
 msgid "Embed an iframe."
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:167
+#: dist/editor.js:50 src/blocks/iframe/edit.js:162
 msgid "Hide iframe preview"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:168
+#: dist/editor.js:50 src/blocks/iframe/edit.js:163
 msgid "Show iframe preview"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:182
+#: dist/editor.js:50 src/blocks/iframe/edit.js:177
 msgid "This block will take over the page content."
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:188
+#: dist/editor.js:50 src/blocks/iframe/edit.js:183
 msgid "Newspack embedded iframe"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:73 src/blocks/iframe/edit.js:108
+#: dist/editor.js:50 src/blocks/iframe/edit.js:68 src/blocks/iframe/edit.js:103
 msgid "An error occured when uploading the iframe archive."
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:142
+#: dist/editor.js:50 src/blocks/iframe/edit.js:137
 msgid "An error occured when setting the iframe from the archive media."
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:222
+#: dist/editor.js:50 src/blocks/iframe/edit.js:217
 msgid "Iframe Settings"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:225
+#: dist/editor.js:50 src/blocks/iframe/edit.js:220
 msgid "Fullscreen"
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:226
+#: dist/editor.js:50 src/blocks/iframe/edit.js:221
 msgid ""
 "If enabled, the iframe will be full screen and hide all the post content."
 msgstr ""
 
-#: dist/editor.js:50 src/blocks/iframe/edit.js:244
+#: dist/editor.js:50 src/blocks/iframe/edit.js:239
 msgid "Height"
 msgstr ""
 
@@ -1836,23 +1846,23 @@ msgid ""
 "<a href=\"%2$s\">embedded</a> into post or page content."
 msgstr ""
 
-#: dist/editor.js:53 src/blocks/video-playlist/index.js:18
+#: dist/editor.js:53 src/blocks/video-playlist/index.js:23
 msgid "YouTube Video Playlist (DEPRECATED)"
 msgstr ""
 
-#: dist/editor.js:53 src/blocks/video-playlist/index.js:40
+#: dist/editor.js:53 src/blocks/video-playlist/index.js:33
 msgid "video"
 msgstr ""
 
-#: dist/editor.js:53 src/blocks/video-playlist/index.js:41
+#: dist/editor.js:53 src/blocks/video-playlist/index.js:34
 msgid "playlist"
 msgstr ""
 
-#: dist/editor.js:53 src/blocks/video-playlist/index.js:42
+#: dist/editor.js:53 src/blocks/video-playlist/index.js:35
 msgid "youtube"
 msgstr ""
 
-#: dist/editor.js:53 src/blocks/video-playlist/index.js:44
+#: dist/editor.js:53 src/blocks/video-playlist/index.js:37
 msgid "Embed a playlist of latest YouTube videos."
 msgstr ""
 

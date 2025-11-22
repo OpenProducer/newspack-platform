@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import SiteStatus from './site-status';
-import { Grid } from '../../../../components/src';
+import { Grid } from '../../../../../packages/components/src';
 import './index.scss';
 
 const {

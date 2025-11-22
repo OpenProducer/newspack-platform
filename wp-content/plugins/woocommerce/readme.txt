@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online
 Requires at least: 6.7
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 10.3.0
+Stable tag: 10.3.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,11 +170,19 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 10.3.3 2025-10-24 =
+= 10.3.5 2025-11-12 =
 
 **WooCommerce**
 
-* Dev - Add in deprecated script warnings and backwards compatibility for 3PDs [#61599](https://github.com/woocommerce/woocommerce/pull/61599)
+* Fix - Add a new line when concatenating translations in a script for the Mini-Cart block [#61918](https://github.com/woocommerce/woocommerce/pull/61918)
+* Fix - Disable the Deactivate menu option for bundled payment gateways. [#61841](https://github.com/woocommerce/woocommerce/pull/61841)
+* Fix - Fix 'shows password form in products protected with password' e2e tests in WP 6.9 [#61911](https://github.com/woocommerce/woocommerce/pull/61911)
+* Fix - Fixes CSV import where hierarchical brands could not be imported. [#61873](https://github.com/woocommerce/woocommerce/pull/61873)
+* Fix - Legacy assets: respect theme support when using Classic Template or Product Image Gallery blocks with block themes. [#61837](https://github.com/woocommerce/woocommerce/pull/61837)
+* Fix - WP 6.9: load WP Button block styles when rendering the Add to Cart Button [#61911](https://github.com/woocommerce/woocommerce/pull/61911)
+* Update - Onboarding: Remove onboarding step to Customize Your Store flow [#61911](https://github.com/woocommerce/woocommerce/pull/61911)
+* Dev - e2e tests: skip block-based product editor tests [#61911](https://github.com/woocommerce/woocommerce/pull/61911)
+* Dev - Remove price filter widget accounting script deprecation notice [#61844](https://github.com/woocommerce/woocommerce/pull/61844)
 
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

@@ -106,7 +106,7 @@ abstract class Model_Abstract implements Model
     public function to_array(): array
     {
         $table_interface = $this->get_table_interface();
-        $columns = array_keys($table_interface::get_columns());
+        $columns = $table_interface::get_columns()->get_names();
         $model = [];
         foreach ($columns as $column) {
             $method = 'get_' . $column;

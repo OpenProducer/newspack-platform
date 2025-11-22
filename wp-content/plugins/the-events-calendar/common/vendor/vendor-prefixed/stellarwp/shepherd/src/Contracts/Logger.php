@@ -30,4 +30,20 @@ interface Logger extends LoggerInterface
      * @return Log[] The logs for the task.
      */
     public function retrieve_logs(int $task_id): array;
+    /**
+     * Indicates if the logger uses its own table.
+     *
+     * @since 0.0.8
+     *
+     * @return bool
+     */
+    public function uses_own_table(): bool;
+    /**
+     * Indicates if the logger uses the Action Scheduler table.
+     *
+     * @since 0.0.8
+     *
+     * @return bool
+     */
+    public function uses_as_table(): bool;
 }

@@ -21,11 +21,6 @@ class WooCommerce_Update_Payment_Notice {
 	 * Initialize the class.
 	 */
 	public static function init() {
-		// Only for My Account UI v1 and above.
-		if ( version_compare( WooCommerce_My_Account::get_version(), '1.0.0', '<' ) ) {
-			return;
-		}
-
 		add_action( 'wp', [ __CLASS__, 'maybe_add_wc_notices' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'maybe_add_newspack_notices' ] );
 		add_action( 'newspack_ui_notice_dismissed', [ __CLASS__, 'handle_notice_dismissed' ] );
@@ -35,6 +30,11 @@ class WooCommerce_Update_Payment_Notice {
 	 * Maybe add WC notices.
 	 */
 	public static function maybe_add_wc_notices() {
+		// Only for My Account UI v1 and above.
+		if ( version_compare( WooCommerce_My_Account::get_version(), '1.0.0', '<' ) ) {
+			return;
+		}
+
 		// Only use WC notices on account pages.
 		if ( ! function_exists( 'is_account_page' ) || ! is_account_page() ) {
 			return;
@@ -70,6 +70,11 @@ class WooCommerce_Update_Payment_Notice {
 	 * Maybe add Newspack UI snackbar.
 	 */
 	public static function maybe_add_newspack_notices() {
+		// Only for My Account UI v1 and above.
+		if ( version_compare( WooCommerce_My_Account::get_version(), '1.0.0', '<' ) ) {
+			return;
+		}
+
 		// Under "My Account" page we use WC notices.
 		if ( function_exists( 'is_account_page' ) && is_account_page() ) {
 			return;

@@ -12,7 +12,7 @@ import { Fragment } from '@wordpress/element';
  * Internal dependencies
  */
 import Brand from './brand';
-import { Card, Button, Router } from '../../../../../components/src';
+import { Card, Button, Router } from '../../../../../../packages/components/src';
 import { TAB_PATH } from './constants';
 
 const { NavLink } = Router;

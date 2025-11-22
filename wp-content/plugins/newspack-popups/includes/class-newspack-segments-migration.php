@@ -34,7 +34,7 @@ final class Newspack_Segments_Migration {
 	/**
 	 * Option name for whether we should bother trying to migrate reader data.
 	 * If there are no legacy reader tables, then there's no need to migrate.
-	 * 
+	 *
 	 * @var string
 	 */
 	const SHOULD_MIGRATE_READER_DATA_OPTION_NAME = 'newspack_should_migrate_reader_data';

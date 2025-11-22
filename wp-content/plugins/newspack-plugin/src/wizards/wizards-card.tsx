@@ -5,7 +5,7 @@
 /**
  * Internal dependencies.
  */
-import { Card } from '../components/src';
+import { Card } from '../../packages/components/src';
 
 /**
  * Wizards Card component.

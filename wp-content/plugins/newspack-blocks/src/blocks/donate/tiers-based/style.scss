@@ -1,4 +1,4 @@
-@use "../../../shared/sass/colors";
+@use "newspack-colors" as np-colors;
 @use "../../../shared/sass/variables";
 
 .wpbnbd--tiers-based {
@@ -10,7 +10,7 @@
 			border-radius: 0;
 			background: none;
 			&--active {
-				border-color: variables.$color__border;
+				border-color: np-colors.$neutral-300;
 			}
 		}
 		&__tiers {
@@ -51,7 +51,7 @@
 							height: 8px;
 							width: 36px;
 							border-radius: 50px;
-							background: variables.$color__border;
+							background: np-colors.$neutral-300;
 							margin: 0 5px;
 						}
 					}
@@ -71,11 +71,11 @@
 				margin-left: 10px;
 				margin-right: 10px;
 				padding: 19px 14px;
-				background: colors.$color__background-body;
-				border: 1px solid variables.$color__border;
+				background: np-colors.$neutral-000;
+				border: 1px solid np-colors.$neutral-300;
 				border-radius: 5px;
 				&--recommended {
-					border: 2px solid colors.$color__text-main;
+					border: 2px solid np-colors.$neutral-900;
 				}
 			}
 			&__top {
@@ -92,8 +92,8 @@
 				height: 17px;
 				padding: 2px 7px;
 				margin: 0;
-				background-color: colors.$color__gray;
-				color: white;
+				background-color: np-colors.$neutral-600;
+				color: np-colors.$neutral-000;
 				border-radius: 2px;
 				font-size: 11px;
 			}
@@ -119,13 +119,13 @@
 				background: none;
 				padding: 0;
 				margin-bottom: 13px;
-				color: colors.$color__text-light;
+				color: np-colors.$neutral-600;
 				span {
 					text-decoration: underline;
 				}
 				&:hover,
 				&:focus {
-					color: colors.$color__text-main;
+					color: np-colors.$neutral-900;
 					background: none;
 				}
 			}
@@ -134,7 +134,7 @@
 				justify-content: space-between;
 				margin-bottom: 17px;
 				padding: 5px 14px 16px;
-				border: 2px solid colors.$color__text-main;
+				border: 2px solid np-colors.$neutral-900;
 				border-radius: 4px;
 				h2 {
 					font-size: 0.8em;

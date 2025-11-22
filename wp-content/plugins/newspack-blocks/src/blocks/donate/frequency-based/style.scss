@@ -1,11 +1,11 @@
-@use "../../../shared/sass/colors";
+@use "newspack-colors" as np-colors;
 @use "../../../shared/sass/mixins";
 @use "../../../shared/sass/variables";
 
 .wpbnbd--frequency-based {
-	background: colors.$color__background-body;
-	border: 1px solid variables.$color__border;
-	color: colors.$color__text-main;
+	background: np-colors.$neutral-000;
+	border: 1px solid np-colors.$neutral-300;
+	color: np-colors.$neutral-900;
 	position: relative;
 	width: 100%;
 
@@ -22,8 +22,8 @@
 	}
 
 	input[readonly] {
-		background-color: colors.$color__background-screen;
-		color: #666;
+		background-color: np-colors.$neutral-050;
+		color: np-colors.$neutral-600;
 	}
 
 	.freq-label,
@@ -61,7 +61,7 @@
 	}
 
 	.thanks {
-		color: colors.$color__text-light;
+		color: np-colors.$neutral-600;
 		font-size: variables.$font__size-sm;
 		margin: 0.38rem 0.76rem 0.76rem;
 		display: none;
@@ -88,27 +88,27 @@
 		}
 
 		.tier-label {
-			border: 1px solid variables.$color__border;
+			border: 1px solid np-colors.$neutral-300;
 			border-radius: 5px;
 			margin: 0.38rem;
 			padding: 0.38rem 0.76rem;
 
 			&:hover {
-				background: colors.$color__background-screen;
+				background: np-colors.$neutral-050;
 			}
 		}
 
 		input[type="radio"] {
 			&:focus + .tier-label {
-				background: colors.$color__background-screen;
+				background: np-colors.$neutral-050;
 				outline: 1px dotted currentcolor;
 				outline-offset: -4px;
 			}
 
 			&:checked + .tier-label {
-				background-color: colors.$color__gray;
+				background-color: np-colors.$neutral-600;
 				border-color: transparent;
-				color: colors.$color__background-body;
+				color: np-colors.$neutral-000;
 			}
 		}
 
@@ -172,13 +172,13 @@
 	align-items: center;
 	position: relative;
 	max-width: 200px;
-	background-color: colors.$color__background-input;
+	background-color: np-colors.$neutral-000;
 	border-radius: 3px;
-	border: 1px solid variables.$color__border;
+	border: 1px solid np-colors.$neutral-300;
 
 	&:focus-within {
-		border-color: colors.$color__text-input-focus;
-		outline: thin solid rgba(colors.$color__text-input-focus, 0.15);
+		border-color: np-colors.$neutral-900;
+		outline: thin solid rgba(np-colors.$neutral-900, 0.15);
 		outline-offset: -4px;
 	}
 
@@ -223,7 +223,7 @@
 			margin: 0;
 
 			&.wpbnbd__button--active {
-				color: colors.$color__text-main;
+				color: np-colors.$neutral-900;
 			}
 
 			&:focus {

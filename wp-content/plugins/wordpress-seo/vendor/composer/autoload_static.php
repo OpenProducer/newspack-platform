@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita55712f227f685a57099bd044b4ce723
+class ComposerStaticInite71881f120241935b4a150fdfc91fa1a
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -566,10 +566,12 @@ class ComposerStaticInita55712f227f685a57099bd044b4ce723
         'Yoast\\WP\\SEO\\Actions\\Wincher\\Wincher_Keyphrases_Action' => __DIR__ . '/../..' . '/src/actions/wincher/wincher-keyphrases-action.php',
         'Yoast\\WP\\SEO\\Actions\\Wincher\\Wincher_Login_Action' => __DIR__ . '/../..' . '/src/actions/wincher/wincher-login-action.php',
         'Yoast\\WP\\SEO\\Alerts\\Application\\Default_SEO_Data\\Default_SEO_Data_Alert' => __DIR__ . '/../..' . '/src/alerts/application/default-seo-data/default-seo-data-alert.php',
+        'Yoast\\WP\\SEO\\Alerts\\Application\\Ping_Other_Admins\\Ping_Other_Admins_Alert' => __DIR__ . '/../..' . '/src/alerts/application/ping-other-admins/ping-other-admins-alert.php',
         'Yoast\\WP\\SEO\\Alerts\\Infrastructure\\Default_SEO_Data\\Default_SEO_Data_Collector' => __DIR__ . '/../..' . '/src/alerts/infrastructure/default-seo-data/default-seo-data-collector.php',
         'Yoast\\WP\\SEO\\Alerts\\User_Interface\\Default_SEO_Data\\Default_SEO_Data_Cron_Callback_Integration' => __DIR__ . '/../..' . '/src/alerts/user-interface/default-seo-data/default-seo-data-cron-callback-integration.php',
         'Yoast\\WP\\SEO\\Alerts\\User_Interface\\Default_SEO_Data\\Default_SEO_Data_Watcher' => __DIR__ . '/../..' . '/src/alerts/user-interface/default-seo-data/default-seo-data-watcher.php',
         'Yoast\\WP\\SEO\\Alerts\\User_Interface\\Default_Seo_Data\\Default_SEO_Data_Cron_Scheduler' => __DIR__ . '/../..' . '/src/alerts/user-interface/default-seo-data/default-seo-data-cron-scheduler.php',
+        'Yoast\\WP\\SEO\\Alerts\\User_Interface\\Resolve_Alert_Route' => __DIR__ . '/../..' . '/src/alerts/user-interface/resolve-alert-route.php',
         'Yoast\\WP\\SEO\\Analytics\\Application\\Missing_Indexables_Collector' => __DIR__ . '/../..' . '/src/analytics/application/missing-indexables-collector.php',
         'Yoast\\WP\\SEO\\Analytics\\Application\\To_Be_Cleaned_Indexables_Collector' => __DIR__ . '/../..' . '/src/analytics/application/to-be-cleaned-indexables-collector.php',
         'Yoast\\WP\\SEO\\Analytics\\Domain\\Missing_Indexable_Bucket' => __DIR__ . '/../..' . '/src/analytics/domain/missing-indexable-bucket.php',
@@ -865,6 +867,7 @@ class ComposerStaticInita55712f227f685a57099bd044b4ce723
         'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Empty_Token_Exception' => __DIR__ . '/../..' . '/src/exceptions/oauth/tokens/empty-token-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Failed_Storage_Exception' => __DIR__ . '/../..' . '/src/exceptions/oauth/tokens/failed-storage-exception.php',
         'Yoast\\WP\\SEO\\General\\User_Interface\\General_Page_Integration' => __DIR__ . '/../..' . '/src/general/user-interface/general-page-integration.php',
+        'Yoast\\WP\\SEO\\General\\User_Interface\\Opt_In_Route' => __DIR__ . '/../..' . '/src/general/user-interface/opt-in-route.php',
         'Yoast\\WP\\SEO\\Generated\\Cached_Container' => __DIR__ . '/../..' . '/src/generated/container.php',
         'Yoast\\WP\\SEO\\Generators\\Breadcrumbs_Generator' => __DIR__ . '/../..' . '/src/generators/breadcrumbs-generator.php',
         'Yoast\\WP\\SEO\\Generators\\Generator_Interface' => __DIR__ . '/../..' . '/src/generators/generator-interface.php',
@@ -954,6 +957,7 @@ class ComposerStaticInita55712f227f685a57099bd044b4ce723
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Addon_Installation\\Installation_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/addon-installation/installation-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Admin_Columns_Cache_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/admin-columns-cache-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Background_Indexing_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/background-indexing-integration.php',
+        'Yoast\\WP\\SEO\\Integrations\\Admin\\Brand_Insights_Page' => __DIR__ . '/../..' . '/src/integrations/admin/brand-insights-page.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Check_Required_Version' => __DIR__ . '/../..' . '/src/integrations/admin/check-required-version.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Crawl_Settings_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/crawl-settings-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Cron_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/cron-integration.php',
@@ -1338,9 +1342,9 @@ class ComposerStaticInita55712f227f685a57099bd044b4ce723
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita55712f227f685a57099bd044b4ce723::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita55712f227f685a57099bd044b4ce723::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita55712f227f685a57099bd044b4ce723::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$classMap;
 
         }, null, ClassLoader::class);
     }

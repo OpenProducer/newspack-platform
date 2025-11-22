@@ -13,7 +13,7 @@ import { createRoot, lazy, Suspense } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import * as Components from '../components/src';
+import * as Components from '../../packages/components/src';
 
 /**
  * Internal dependencies
@@ -42,6 +42,10 @@ const components: Record< string, any > = {
 	'newspack-audience-campaigns': {
 		label: __( 'Audience Campaigns', 'newspack-plugin' ),
 		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/campaigns' ) ),
+	},
+	'newspack-audience-content-gates': {
+		label: __( 'Audience Content Gates', 'newspack-plugin' ),
+		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/content-gates' ) ),
 	},
 	'newspack-audience-donations': {
 		label: __( 'Audience Donations', 'newspack-plugin' ),

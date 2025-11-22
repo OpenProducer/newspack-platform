@@ -1,0 +1,45 @@
+/**
+ * Section Header
+ */
+
+@use "~@wordpress/base-styles/colors" as wp-colors;
+
+.newspack-section-header {
+	margin: 64px 0 32px;
+
+	&__container:not(:first-child) {
+		margin-top: 48px;
+	}
+
+	&--no-margin,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin: 0 !important;
+	}
+
+	&--is-centered {
+		text-align: center;
+	}
+
+	&:not( #{&}--no-margin ) + *:not( #{&} ) {
+		margin-top: -16px !important;
+	}
+
+	&#{&}--is-white {
+		> * {
+			color: white;
+		}
+	}
+
+	p {
+		color: wp-colors.$gray-700;
+	}
+
+	.newspack-wizard__content &:first-child {
+		margin-top: 32px;
+	}
+}

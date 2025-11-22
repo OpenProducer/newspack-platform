@@ -16,7 +16,7 @@ import { ERROR_MESSAGES } from './constants';
 import WizardsActionCard from '../../../../wizards-action-card';
 import WizardError from '../../../../errors/class-wizard-error';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
-import { Grid, Button, TextControl, SelectControl } from '../../../../../components/src';
+import { Grid, Button, TextControl, SelectControl } from '../../../../../../packages/components/src';
 
 const settingsDefault: RecaptchaData = {
 	threshold: '',

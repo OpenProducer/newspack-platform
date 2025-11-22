@@ -16,7 +16,7 @@ import { ACCOUNTS } from './constants';
 import WizardsTab from '../../../../wizards-tab';
 import VerificationCodes from './verification-codes';
 import WizardSection from '../../../../wizards-section';
-import { Button, Notice } from '../../../../../components/src';
+import { Button, Notice } from '../../../../../../packages/components/src';
 import WizardsActionCard from '../../../../wizards-action-card';
 import useFieldsValidation from '../../../../hooks/use-fields-validation';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';

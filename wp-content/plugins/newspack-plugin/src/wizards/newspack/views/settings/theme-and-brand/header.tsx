@@ -12,7 +12,7 @@ import { ToggleControl } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import { ColorPicker, Grid, ImageUpload, SelectControl } from '../../../../../components/src';
+import { ColorPicker, Grid, ImageUpload, SelectControl } from '../../../../../../packages/components/src';
 import { LOGO_SIZE_OPTIONS, parseLogoSize } from './utils';
 
 export default function Header( { themeMods, updateHeader }: { themeMods: ThemeMods; updateHeader: ( a: ThemeMods ) => void } ) {

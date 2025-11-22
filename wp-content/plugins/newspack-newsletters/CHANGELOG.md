@@ -1,3 +1,23 @@
+## [3.24.1](https://github.com/Automattic/newspack-newsletters/compare/v3.24.0...v3.24.1) (2025-11-05)
+
+
+### Bug Fixes
+
+* potential fatal errors due to assumed data types ([#1959](https://github.com/Automattic/newspack-newsletters/issues/1959)) ([d42ad7d](https://github.com/Automattic/newspack-newsletters/commit/d42ad7d7699569e89cf6ea876732a1d3a63503ba))
+
+# [3.24.0](https://github.com/Automattic/newspack-newsletters/compare/v3.23.7...v3.24.0) (2025-10-30)
+
+
+### Bug Fixes
+
+* better handling for padding and border style attributes in newsletters ([#1948](https://github.com/Automattic/newspack-newsletters/issues/1948)) ([42d8ee1](https://github.com/Automattic/newspack-newsletters/commit/42d8ee1766ea9253cd54c70ad25e7fcbbc495334))
+* **dependencies:** restore last known working package version ([#1949](https://github.com/Automattic/newspack-newsletters/issues/1949)) ([a6d1c3e](https://github.com/Automattic/newspack-newsletters/commit/a6d1c3e08386ec2a8b3483ba5e1a2b366bb4493c))
+
+
+### Features
+
+* **visibility-attribute:** support email-only blocks ([#1941](https://github.com/Automattic/newspack-newsletters/issues/1941)) ([017673c](https://github.com/Automattic/newspack-newsletters/commit/017673c0d4e294cfb691902f92f153162e08a447))
+
 ## [3.23.7](https://github.com/Automattic/newspack-newsletters/compare/v3.23.6...v3.23.7) (2025-10-14)
 
 

@@ -8,9 +8,9 @@ import { CheckboxControl } from '@wordpress/components';
 /**
  * Internal dependencies.
  */
-import { Button, Grid } from '../../../../components/src';
-import { useWizardData } from '../../../../components/src/wizard/store/utils';
-import { WIZARD_STORE_NAMESPACE } from '../../../../components/src/wizard/store';
+import { Button, Grid } from '../../../../../packages/components/src';
+import { useWizardData } from '../../../../../packages/components/src/wizard/store/utils';
+import { WIZARD_STORE_NAMESPACE } from '../../../../../packages/components/src/wizard/store';
 import WizardsSection from '../../../wizards-section';
 
 const BillingFields = () => {

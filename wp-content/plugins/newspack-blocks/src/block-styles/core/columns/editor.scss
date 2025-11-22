@@ -1,3 +1,4 @@
+@use "newspack-colors" as np-colors;
 @use "../../../shared/sass/variables";
 @use "../../../shared/sass/mixins";
 
@@ -20,7 +21,7 @@ body:not(.is-block-theme) .editor-styles-wrapper div.wp-block-columns {
 
 	&.is-style-borders {
 		> [data-type="core/column"] {
-			border-bottom: 1px solid variables.$color__border;
+			border-bottom: 1px solid np-colors.$neutral-300;
 			position: relative;
 
 			&:last-child,
@@ -32,7 +33,7 @@ body:not(.is-block-theme) .editor-styles-wrapper div.wp-block-columns {
 				border-bottom: 0;
 
 				&::after {
-					border-right: 1px solid variables.$color__border;
+					border-right: 1px solid np-colors.$neutral-300;
 					bottom: 0;
 					content: "";
 					position: absolute;
@@ -41,7 +42,7 @@ body:not(.is-block-theme) .editor-styles-wrapper div.wp-block-columns {
 				}
 
 				&:nth-child(odd)::after {
-					border-color: variables.$color__border;
+					border-color: np-colors.$neutral-300;
 				}
 
 				&:last-child::after,
@@ -52,7 +53,7 @@ body:not(.is-block-theme) .editor-styles-wrapper div.wp-block-columns {
 
 			@include mixins.media( tablet ) {
 				&::after {
-					border-color: variables.$color__border;
+					border-color: np-colors.$neutral-300;
 				}
 			}
 		}

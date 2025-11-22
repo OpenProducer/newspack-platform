@@ -7,7 +7,7 @@
 
 namespace Newspack\Data_Events;
 
-use Newspack\Memberships as NewspackMemberships;
+use Newspack\Content_Gate;
 use Newspack\Reader_Activation;
 use Newspack\Data_Events;
 use WP_Error;
@@ -17,7 +17,7 @@ use WP_Error;
  */
 final class Memberships {
 
-	const METADATA_NAME = 'memberships_content_gate';
+	const METADATA_NAME = 'gate_post_id';
 
 	/**
 	 * The name of the action for form submissions
@@ -74,7 +74,7 @@ final class Memberships {
 	 */
 	public static function checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
 		if ( ! empty( $values[ self::METADATA_NAME ] ) ) {
-			$order->add_meta_data( '_memberships_content_gate', $values[ self::METADATA_NAME ] );
+			$order->add_meta_data( '_gate_post_id', $values[ self::METADATA_NAME ] );
 		}
 	}
 
@@ -149,7 +149,7 @@ final class Memberships {
 			return;
 		}
 		$data = array_merge(
-			NewspackMemberships::get_gate_metadata(),
+			Content_Gate::get_gate_metadata(),
 			[
 				'action'      => self::FORM_SUBMISSION,
 				'action_type' => 'registration',
@@ -182,7 +182,7 @@ final class Memberships {
 			$action = self::FORM_SUBMISSION_FAILURE;
 		}
 		$data = array_merge(
-			NewspackMemberships::get_gate_metadata(),
+			Content_Gate::get_gate_metadata(),
 			[
 				'action'      => $action,
 				'action_type' => 'registration',
@@ -202,13 +202,13 @@ final class Memberships {
 	 * @return ?array
 	 */
 	private static function get_order_data( $order_id, $order ) {
-		$is_from_gate = $order->get_meta( '_memberships_content_gate' );
+		$is_from_gate = $order->get_meta( '_gate_post_id' ) ? $order->get_meta( '_gate_post_id' ) : $order->get_meta( '_memberships_content_gate' ); // Handle legacy _memberships_content_gate meta key.
 		if ( ! $is_from_gate ) {
 			return;
 		}
 		$item = array_shift( $order->get_items() );
 		$data = array_merge(
-			NewspackMemberships::get_gate_metadata(),
+			Content_Gate::get_gate_metadata(),
 			[
 				'action_type' => 'paid_membership',
 				'order_id'    => $order_id,

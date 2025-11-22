@@ -12,6 +12,7 @@ import { __ } from '@wordpress/i18n';
  */
 import XPixel from './x-pixel';
 import MetaPixel from './meta-pixel';
+import Nextdoor from './nextdoor';
 
 /**
  * Internal dependencies
@@ -28,6 +29,7 @@ function Social() {
 				<Publicize />
 				<MetaPixel />
 				<XPixel />
+				<Nextdoor />
 			</Section>
 		</div>
 	);

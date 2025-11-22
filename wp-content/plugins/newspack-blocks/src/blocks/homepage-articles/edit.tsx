@@ -19,6 +19,11 @@ import { PostTypesPanel, PostStatusesPanel } from '../../components/editor-panel
 import classNames from 'classnames';
 
 /**
+ * Newspack dependencies
+ */
+import { aspectLandscape, aspectPortrait, aspectSquare } from 'newspack-icons';
+
+/**
  * WordPress dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
@@ -33,11 +38,9 @@ import {
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
-	Path,
 	Placeholder,
 	RangeControl,
 	Spinner,
-	SVG,
 	Toolbar,
 	ToggleControl,
 	TextControl,
@@ -69,36 +72,6 @@ if (
 ) {
 	IS_SUBTITLE_SUPPORTED_IN_THEME = true;
 }
-
-const landscapeIcon = (
-	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-		<Path
-			clipRule="evenodd"
-			d="M18.714 7.5H5.286a.786.786 0 00-.786.786v7.428c0 .434.352.786.786.786h13.428a.786.786 0 00.786-.786V8.286a.786.786 0 00-.786-.786zM5.286 6A2.286 2.286 0 003 8.286v7.428A2.286 2.286 0 005.286 18h13.428A2.286 2.286 0 0021 15.714V8.286A2.286 2.286 0 0018.714 6H5.286z"
-			fillRule="evenodd"
-		/>
-	</SVG>
-);
-
-const portraitIcon = (
-	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-		<Path
-			clipRule="evenodd"
-			d="M15.714 4.5H8.286a.786.786 0 00-.786.786v13.428c0 .434.352.786.786.786h7.428a.786.786 0 00.786-.786V5.286a.786.786 0 00-.786-.786zM8.286 3A2.286 2.286 0 006 5.286v13.428A2.286 2.286 0 008.286 21h7.428A2.286 2.286 0 0018 18.714V5.286A2.286 2.286 0 0015.714 3H8.286z"
-			fillRule="evenodd"
-		/>
-	</SVG>
-);
-
-const squareIcon = (
-	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-		<Path
-			clipRule="evenodd"
-			d="M18.714 4.5H5.286a.786.786 0 00-.786.786v13.428c0 .434.352.786.786.786h13.428a.786.786 0 00.786-.786V5.286a.786.786 0 00-.786-.786zM5.286 3A2.286 2.286 0 003 5.286v13.428A2.286 2.286 0 005.286 21h13.428A2.286 2.286 0 0021 18.714V5.286A2.286 2.286 0 0018.714 3H5.286z"
-			fillRule="evenodd"
-		/>
-	</SVG>
-);
 
 class Edit extends Component< HomepageArticlesProps > {
 	renderPost = ( post: Post ) => {
@@ -735,19 +708,19 @@ class Edit extends Component< HomepageArticlesProps > {
 
 		const blockControlsImageShape = [
 			{
-				icon: landscapeIcon,
+				icon: aspectLandscape,
 				title: __( 'Landscape image shape', 'newspack-blocks' ),
 				isActive: imageShape === 'landscape',
 				onClick: () => setAttributes( { imageShape: 'landscape' } ),
 			},
 			{
-				icon: portraitIcon,
+				icon: aspectPortrait,
 				title: __( 'portrait image shape', 'newspack-blocks' ),
 				isActive: imageShape === 'portrait',
 				onClick: () => setAttributes( { imageShape: 'portrait' } ),
 			},
 			{
-				icon: squareIcon,
+				icon: aspectSquare,
 				title: __( 'Square image shape', 'newspack-blocks' ),
 				isActive: imageShape === 'square',
 				onClick: () => setAttributes( { imageShape: 'square' } ),

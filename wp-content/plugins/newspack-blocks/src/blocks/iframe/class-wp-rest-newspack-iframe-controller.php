@@ -453,24 +453,25 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 
 		$contains_valid_files = false;
 
-		// Validate all files inside the archive. Only extract files of allowed types.
+		// Validate all files inside the archive. Throw error if we encounter any unsupported files.
 		for ( $file_index = 0; $file_index < $zip->numFiles; $file_index++ ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			if ( ! $this->validate_file_extension( $zip->getNameIndex( $file_index ), true ) ) {
-				continue;
+				return $invalid_file_error;
 			}
 			$contents = $zip->getFromIndex( $file_index );
-			if ( $this->validate_archive_file_contents( $contents ) ) {
-				$stat = $zip->statIndex( $file_index );
-				if ( $stat && isset( $stat['name'] ) ) {
-					if ( ! file_exists( dirname( $iframe_path . $stat['name'] ) ) ) {
-						wp_mkdir_p( dirname( $iframe_path . $stat['name'] ) );
-					}
-					$put = $wp_filesystem->put_contents( $iframe_path . $stat['name'], $contents );
-					if ( ! $put ) {
-						return $invalid_file_error;
-					}
-					$contains_valid_files = true;
+			if ( ! $this->validate_archive_file_contents( $contents ) ) {
+				return $invalid_file_error;
+			}
+			$stat = $zip->statIndex( $file_index );
+			if ( $stat && isset( $stat['name'] ) ) {
+				if ( ! file_exists( dirname( $iframe_path . $stat['name'] ) ) ) {
+					wp_mkdir_p( dirname( $iframe_path . $stat['name'] ) );
 				}
+				$put = $wp_filesystem->put_contents( $iframe_path . $stat['name'], $contents );
+				if ( ! $put ) {
+					return $invalid_file_error;
+				}
+				$contains_valid_files = true;
 			}
 		}
 

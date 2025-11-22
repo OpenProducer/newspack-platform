@@ -17,7 +17,7 @@ import moment from 'moment';
 /**
  * Internal dependencies
  */
-import { Notice, Modal } from '../../../../../../../components/src';
+import { Notice, Modal } from '../../../../../../../../packages/components/src';
 import { getEndpointLabel, getRequestStatusIcon, hasEndpointErrors } from '../utils';
 
 const View = ( { endpoint, setAction }: { endpoint: ModalComponentProps[ 'endpoint' ]; setAction: ModalComponentProps[ 'setAction' ] } ) => {

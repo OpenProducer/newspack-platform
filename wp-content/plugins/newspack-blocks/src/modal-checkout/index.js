@@ -17,9 +17,12 @@ import { domReady } from './utils';
 			return;
 		}
 
+		const container = document.querySelector( '#newspack_modal_checkout_container' );
+
 		const CLASS_PREFIX = newspackBlocksModalCheckout.newspack_class_prefix;
 		const readyEvent = new CustomEvent( 'checkout-ready' );
 		const completeEvent = new CustomEvent( 'checkout-complete' );
+		const cancelEvent = new CustomEvent( 'checkout-cancel' );
 
 		function getEventHandlers( element, event ) {
 			const events = $._data( element, 'events' );
@@ -42,7 +45,6 @@ import { domReady } from './utils';
 		 * Set the checkout as ready so the modal can resolve the loading state.
 		 */
 		function setReady( init_modal_opened = true ) {
-			const container = document.querySelector( '#newspack_modal_checkout_container' );
 			container.checkoutReady = true;
 			container.dispatchEvent( readyEvent );
 			if ( init_modal_opened ) {
@@ -57,7 +59,6 @@ import { domReady } from './utils';
 			/**
 			 * Set the checkout as complete so the modal can resolve post checkout flows.
 			 */
-			const container = document.querySelector( '#newspack_modal_checkout_container' );
 			if ( container ) {
 				container.checkoutComplete = true;
 				container.dispatchEvent( completeEvent );
@@ -72,6 +73,13 @@ import { domReady } from './utils';
 				let originalFormHandlers = [];
 
 				const $form = $( 'form.checkout' );
+
+				const $checkout_cancel = $( '#checkout_cancel' );
+				if ( $checkout_cancel.length ) {
+					$checkout_cancel.on( 'click', function () {
+						container.dispatchEvent( cancelEvent );
+					} );
+				}
 
 				if ( ! $form.length ) {
 					console.warn( 'Checkout form is not available' ); // eslint-disable-line no-console
@@ -694,13 +702,13 @@ import { domReady } from './utils';
 							const success = ! result.messages;
 							if ( success ) {
 								setEditingDetails( false );
-								// If click #checkout_back event handler doesn't already exist add it to the form.
+								// If click #checkout_edit_billing event handler doesn't already exist add it to the form.
 								if (
 									! $._data( $form[ 0 ], 'events' )?.click?.some(
-										handler => handler.selector === '#checkout_back'
+										handler => handler.selector === '#checkout_edit_billing'
 									)
 								) {
-									$form.on( 'click', '#checkout_back', function ( ev ) {
+									$form.on( 'click', '#checkout_edit_billing', function ( ev ) {
 										ev.preventDefault();
 										setEditingDetails( true );
 										managePagination( 'back' );

@@ -283,7 +283,7 @@ class Metadata {
 	 *
 	 * @return mixed|null Metadata value or null if not found.
 	 */
-	private static function get_key_value( $key, $metadata ) {
+	public static function get_key_value( $key, $metadata ) {
 		if ( isset( $metadata[ $key ] ) ) {
 			return $metadata[ $key ];
 		}

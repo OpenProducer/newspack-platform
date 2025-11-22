@@ -1,9 +1,9 @@
-@use "../../shared/sass/colors";
+@use "newspack-colors" as np-colors;
 
 .newspack-checkout-button {
 	&__product-field {
 		&__error {
-			color: colors.$color__error;
+			color: np-colors.$error-500;
 			font-size: 0.9em;
 			margin-top: 0.5em;
 		}

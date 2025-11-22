@@ -25,7 +25,7 @@ import {
 	RadioControl,
 	hooks,
 	Notice,
-} from '../../../../../components/src';
+} from '../../../../../../packages/components/src';
 
 import './style.scss';
 import { TAB_PATH } from './constants';

@@ -12,7 +12,7 @@ import { TextareaControl, ToggleControl } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import { Grid, SelectControl, TextControl } from '../../../../../components/src';
+import { Grid, SelectControl, TextControl } from '../../../../../../packages/components/src';
 import { getFontImportURL, getFontsList, isFontInOptions, TYPOGRAPHY_OPTIONS } from './utils';
 
 /**

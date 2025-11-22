@@ -1,4 +1,9 @@
 /**
+ * Newspack dependencies
+ */
+import colors from 'newspack-colors';
+
+/**
  * WordPress dependencies
  */
 import { button } from '@wordpress/icons';
@@ -19,7 +24,7 @@ export const settings = {
 	...metadata,
 	icon: {
 		src: button,
-		foreground: '#406ebc',
+		foreground: colors['primary-400'],
 	},
 	edit,
 	deprecated,

@@ -1,4 +1,9 @@
 /**
+ * Newspack dependencies
+ */
+import colors from 'newspack-colors';
+
+/**
  * WordPress dependencies
  */
 import { __, _x } from '@wordpress/i18n';
@@ -35,7 +40,7 @@ export const settings = {
 	title,
 	icon: {
 		src: postAuthor,
-		foreground: '#406ebc',
+		foreground: colors['primary-400'],
 	},
 	keywords: [ __( 'author', 'newspack-blocks' ), __( 'profile', 'newspack-blocks' ) ],
 	description: __( 'Display an author profile card.', 'newspack-blocks' ),

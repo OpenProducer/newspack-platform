@@ -22,6 +22,7 @@ class ComposerStaticInit255377624e345cb4a574b037575b1281
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Newspack\\Campaigns\\CLI\\Delete_All' => __DIR__ . '/../..' . '/includes/cli/class-delete-all.php',
         'Newspack\\Campaigns\\CLI\\Export' => __DIR__ . '/../..' . '/includes/cli/class-export.php',
         'Newspack\\Campaigns\\CLI\\Import' => __DIR__ . '/../..' . '/includes/cli/class-import.php',
         'Newspack\\Campaigns\\CLI\\Prune_Data' => __DIR__ . '/../..' . '/includes/cli/class-prune-data.php',

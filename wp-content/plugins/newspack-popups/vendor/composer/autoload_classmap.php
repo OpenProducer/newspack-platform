@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Newspack\\Campaigns\\CLI\\Delete_All' => $baseDir . '/includes/cli/class-delete-all.php',
     'Newspack\\Campaigns\\CLI\\Export' => $baseDir . '/includes/cli/class-export.php',
     'Newspack\\Campaigns\\CLI\\Import' => $baseDir . '/includes/cli/class-import.php',
     'Newspack\\Campaigns\\CLI\\Prune_Data' => $baseDir . '/includes/cli/class-prune-data.php',

@@ -391,6 +391,17 @@ div[data-align="full"] {
 		max-width: 100%;
 		width: 100% !important; // !important to override inline styles.
 	}
+
+	.everlit-no-audio:has(> .wp-block-image) {
+		max-width: 50%;
+		width: 50%;
+
+		.wp-block-image {
+			display: inline-block;
+			max-width: 100%;
+			width: 100%;
+		}
+	}
 }
 
 /** === Gallery === */
@@ -403,6 +414,10 @@ div[data-align="full"] {
 		a:hover {
 			color: #fff;
 		}
+	}
+
+	.everlit-no-audio {
+		display: contents;
 	}
 }
 
@@ -440,6 +455,10 @@ div[data-align="full"] {
 /** === Button === */
 .wp-block-buttons {
 	--wp--style--block-gap: 10px;
+
+	.everlit-no-audio {
+		display: contents;
+	}
 }
 
 .wp-block-button__link {
@@ -595,36 +614,50 @@ div[data-align="full"] {
 	}
 }
 
-[data-align="left"] .wp-block-pullquote,
-[data-align="right"] .wp-block-pullquote {
-	max-width: 50%;
-	width: 50%;
-
-	@include utilities.media( tablet ) {
-		border-bottom: 0;
-	}
-
-	&:not(.is-style-solid-color) {
-		padding: 0;
-	}
-
-	&.is-style-solid-color,
-	&.has-background,
-	&[style*="border-style"][style*="border-width"] {
-		padding: structure.$size__spacing-unit #{2 * structure.$size__spacing-unit};
-	}
-
-	&.is-style-solid-color blockquote p,
-	p {
-		font-size: 1rem;
+// stylelint-disable-next-line no-duplicate-selectors
+[data-align="left"],
+[data-align="right"] {
+	.wp-block-pullquote {
+		max-width: 50%;
+		width: 50%;
 
 		@include utilities.media( tablet ) {
-			font-size: var(--newspack-theme-font-size-md);
+			border-bottom: 0;
+		}
+
+		&:not(.is-style-solid-color) {
+			padding: 0;
+		}
+
+		&.is-style-solid-color,
+		&.has-background,
+		&[style*="border-style"][style*="border-width"] {
+			padding: structure.$size__spacing-unit #{2 * structure.$size__spacing-unit};
+		}
+
+		&.is-style-solid-color blockquote p,
+		p {
+			font-size: 1rem;
+
+			@include utilities.media( tablet ) {
+				font-size: var(--newspack-theme-font-size-md);
+			}
+		}
+
+		&.has-text-align-center {
+			text-align: center;
 		}
 	}
 
-	&.has-text-align-center {
-		text-align: center;
+	.everlit-no-audio:has(.wp-block-pullquote) {
+		max-width: 50%;
+		width: 50%;
+
+		.wp-block-pullquote {
+			display: inline-block;
+			max-width: 100%;
+			width: 100%;
+		}
 	}
 }
 

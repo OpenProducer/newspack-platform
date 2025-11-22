@@ -24,6 +24,14 @@ if ( function_exists( 'coauthors_posts_links' ) && is_single() && ! empty( get_c
 			// avatar_img_tag is a property added by Newspack Network plugin to distributed posts.
 			$author_avatar = $author->avatar_img_tag ?? coauthors_get_avatar( $author, 80 );
 			$author_url    = get_author_posts_url( $author->ID, $author->user_nicename );
+
+			/**
+			 * Filter to control whether to display co-author email in author bio.
+			 *
+			 * @param bool $should_display_author_email Whether to display co-author email. Default to the value of 'show_author_email' theme mod.
+			 * @param int  $author_id                   The co-author user ID.
+			 */
+			$should_display_author_email = apply_filters( 'newspack_show_coauthor_email', get_theme_mod( 'show_author_email', false ), $author->ID );
 			?>
 
 			<div class="author-bio">
@@ -59,9 +67,9 @@ if ( function_exists( 'coauthors_posts_links' ) && is_single() && ! empty( get_c
 								<?php endif; ?>
 							</h2>
 
-							<?php if ( ( true === get_theme_mod( 'show_author_email', false ) && '' !== $author->user_email ) || true === get_theme_mod( 'show_author_social', false ) ) : ?>
+							<?php if ( ( $should_display_author_email && '' !== $author->user_email ) || true === get_theme_mod( 'show_author_social', false ) ) : ?>
 								<div class="author-meta">
-									<?php if ( true === get_theme_mod( 'show_author_email', false ) && '' !== $author->user_email ) : ?>
+									<?php if ( $should_display_author_email && true === get_theme_mod( 'show_author_email', false ) && '' !== $author->user_email ) : ?>
 										<a class="author-email" href="<?php echo 'mailto:' . esc_attr( $author->user_email ); ?>">
 											<?php echo wp_kses( newspack_get_social_icon_svg( 'mail', 18 ), newspack_sanitize_svgs() ); ?>
 											<?php echo esc_html( $author->user_email ); ?>

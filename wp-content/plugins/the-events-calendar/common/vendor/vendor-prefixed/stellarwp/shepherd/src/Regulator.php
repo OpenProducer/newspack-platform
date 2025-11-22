@@ -83,6 +83,7 @@ class Regulator extends Provider_Abstract
      * Registers the regulator.
      *
      * @since 0.0.1
+     * @since 0.0.7 Updated to use the `wp_loaded` hook instead of the `init` hook to schedule the cleanup task.
      */
     public function register(): void
     {
@@ -92,7 +93,7 @@ class Regulator extends Provider_Abstract
         add_action('action_scheduler_execution_ignored', [$this, 'untrack_action'], 1, 0);
         add_action('action_scheduler_failed_execution', [$this, 'untrack_action'], 1, 0);
         add_action('action_scheduler_after_process_queue', [$this, 'handle_reschedule_of_failed_task'], 1, 0);
-        add_action('init', [$this, 'schedule_cleanup_task'], 20, 0);
+        add_action('wp_loaded', [$this, 'schedule_cleanup_task'], 20, 0);
     }
     /**
      * Handles the rescheduling of a failed task.
@@ -133,6 +134,10 @@ class Regulator extends Provider_Abstract
      * Dispatches a task to be processed later.
      *
      * @since 0.0.1
+     * @since 0.0.7 Updated to check if the Shepherd tables have been registered already.
+     * @since 0.0.7 Updated to use the `action_scheduler_init` hook instead of the `init` hook to check if Action Scheduler is initialized.
+     * @since 0.0.8 Updated to use the delay to determine if the task should be dispatched synchronously.
+     * @since 0.0.9 Added a filter `shepherd_{prefix}_dispatch_handler` to allow for custom dispatch handlers.
      *
      * @param Task $task  The task to dispatch.
      * @param int  $delay The delay in seconds before the task is processed.
@@ -141,11 +146,58 @@ class Regulator extends Provider_Abstract
      */
     public function dispatch(Task $task, int $delay = 0): self
     {
-        if (did_action('init') || doing_action('init')) {
+        $prefix = Config::get_hook_prefix();
+        /**
+         * Filters the dispatch handler.
+         *
+         * @since TBD
+         *
+         * @param callable|null $handler The dispatch handler.
+         * @param Task          $task    The task to dispatch.
+         * @param int           $delay   The delay in seconds before the task is processed.
+         */
+        $handler = apply_filters("shepherd_{$prefix}_dispatch_handler", null, $task, $delay);
+        if (null !== $handler && is_callable($handler)) {
+            try {
+                $handler($task, $delay);
+            } catch (Exception $e) {
+                /**
+                 * Documented in the dispatch_callback method.
+                 */
+                do_action('shepherd_' . Config::get_hook_prefix() . '_task_scheduling_failed', $task, new RuntimeException($e->getMessage(), $e->getCode(), $e));
+            }
+            return $this;
+        }
+        if (!did_action("shepherd_{$prefix}_tables_registered")) {
+            /**
+             * Filters whether to dispatch a task synchronously.
+             *
+             * @since 0.0.7
+             * @since 0.0.8 Updated to be true by default only when there should be no delay.
+             *
+             * @param bool $should_dispatch_sync Whether to dispatch a task synchronously.
+             * @param Task $task                 The task that should be dispatched synchronously.
+             */
+            if (!apply_filters("shepherd_{$prefix}_should_dispatch_sync_on_tables_unavailable", 0 === $delay, $task)) {
+                return $this;
+            }
+            // Process the task immediately if the tables are not registered.
+            $task->process();
+            /**
+             * Fires an action when a task is dispatched synchronously.
+             *
+             * @since 0.0.7
+             *
+             * @param Task $task The task that was dispatched synchronously.
+             */
+            do_action("shepherd_{$prefix}_dispatched_sync", $task);
+            return $this;
+        }
+        if (did_action('action_scheduler_init') || doing_action('action_scheduler_init')) {
             $this->dispatch_callback($task, $delay);
             return $this;
         }
-        add_action('init', function () use ($task, $delay): void {
+        add_action('action_scheduler_init', function () use ($task, $delay): void {
             $this->dispatch_callback($task, $delay);
         }, 10);
         return $this;
@@ -154,6 +206,7 @@ class Regulator extends Provider_Abstract
      * Dispatches a task to be processed later.
      *
      * @since 0.0.1
+     * @since 0.0.8 Made strings translatable.
      *
      * @param Task $task  The task to dispatch.
      * @param int  $delay The delay in seconds before the task is processed.
@@ -168,12 +221,12 @@ class Regulator extends Provider_Abstract
         try {
             DB::beginTransaction();
             if (Action_Scheduler_Methods::has_scheduled_action($this->process_task_hook, [$args_hash], $group)) {
-                throw new ShepherdTaskAlreadyExistsException('The task is already scheduled.');
+                throw new ShepherdTaskAlreadyExistsException(esc_html_x('The task is already scheduled.', 'This error is thrown when a task is already scheduled.', 'stellarwp-shepherd'));
             }
             $previous_action_id = $task->get_action_id();
             $action_id = Action_Scheduler_Methods::schedule_single_action(time() + $delay, $this->process_task_hook, [$args_hash], $group, false, $task->get_priority());
             if (!$action_id) {
-                throw new RuntimeException('Failed to schedule the task.');
+                throw new RuntimeException(esc_html_x('Failed to schedule the task.', 'This error is thrown when a task fails to be scheduled.', 'stellarwp-shepherd'));
             }
             $task->set_action_id($action_id);
             $this->scheduled_tasks[] = $task->save();
@@ -258,14 +311,15 @@ class Regulator extends Provider_Abstract
      * Processes a task.
      *
      * @since 0.0.1
+     * @since 0.0.8 Made strings translatable.
      *
      * @param string $args_hash The arguments hash.
      *
-     * @throws RuntimeException                    If no action ID is found, no Shepherd task is found with the action ID, or the task arguments hash does not match the expected hash.
+     * @throws RuntimeException                      If no action ID is found, no Shepherd task is found with the action ID, or the task arguments hash does not match the expected hash.
      * @throws ShepherdTaskException                 If the task fails to be processed.
      * @throws ShepherdTaskFailWithoutRetryException If the task fails to be processed without retry.
-     * @throws Exception                           If the task fails to be processed.
-     * @throws Throwable                           If the task fails to be processed.
+     * @throws Exception                             If the task fails to be processed.
+     * @throws Throwable                             If the task fails to be processed.
      */
     public function process_task(string $args_hash): void
     {
@@ -273,13 +327,15 @@ class Regulator extends Provider_Abstract
         if (!$this->current_action_id) {
             $task = Tasks_Table::get_by_args_hash($args_hash);
             if (!$task) {
-                throw new RuntimeException('No Shepherd task found with args hash ' . $args_hash . '.');
+                // translators: %s is the arguments hash.
+                throw new RuntimeException(sprintf(esc_html_x('No Shepherd task found with args hash %s.', 'This error is thrown when a task is not found with the arguments hash.', 'stellarwp-shepherd'), $args_hash));
             }
             $task = array_shift($task);
         }
         $task ??= Tasks_Table::get_by_action_id($this->current_action_id);
         if (!$task) {
-            throw new RuntimeException('No Shepherd task found with action ID ' . $this->current_action_id . '.');
+            // translators: %d is the action ID.
+            throw new RuntimeException(sprintf(esc_html_x('No Shepherd task found with action ID %d.', 'This error is thrown when a task is not found with the action ID.', 'stellarwp-shepherd'), $this->current_action_id));
         }
         $log_data = ['action_id' => $this->current_action_id, 'current_try' => $task->get_current_try()];
         /**
@@ -335,7 +391,7 @@ class Regulator extends Provider_Abstract
              */
             do_action('shepherd_' . Config::get_hook_prefix() . '_task_failed', $task, $e);
             if ($this->should_retry($task)) {
-                throw new ShepherdTaskException(__('The task failed, but will be retried.', 'stellarwp-shepherd'));
+                throw new ShepherdTaskException(esc_html_x('The task failed, but will be retried.', 'This error is thrown when a task fails to be processed, but will be retried.', 'stellarwp-shepherd'));
             }
             $this->log_failed($task->get_id(), array_merge($log_data, ['exception' => $e->getMessage()]));
             throw $e;
@@ -350,7 +406,7 @@ class Regulator extends Provider_Abstract
              */
             do_action('shepherd_' . Config::get_hook_prefix() . '_task_failed', $task, $e);
             if ($this->should_retry($task)) {
-                throw new ShepherdTaskException(__('The task failed, but will be retried.', 'stellarwp-shepherd'));
+                throw new ShepherdTaskException(esc_html_x('The task failed, but will be retried.', 'This error is thrown when a task fails to be processed, but will be retried.', 'stellarwp-shepherd'));
             }
             $this->log_failed($task->get_id(), array_merge($log_data, ['exception' => $e->getMessage()]));
             throw $e;
@@ -389,9 +445,31 @@ class Regulator extends Provider_Abstract
      * Schedules the cleanup task.
      *
      * @since 0.0.1
+     * @since 0.0.8 Updated to check if the Shepherd tables have been registered before scheduling the cleanup task.
      */
     public function schedule_cleanup_task(): void
     {
-        $this->dispatch(new Herding(), 6 * HOUR_IN_SECONDS);
+        $prefix = Config::get_hook_prefix();
+        if (!did_action("shepherd_{$prefix}_tables_registered")) {
+            return;
+        }
+        /**
+         * Filters whether to schedule the cleanup task.
+         *
+         * @since 0.0.8
+         *
+         * @param int $schedule_every_x_time The time in seconds to schedule the cleanup task. Default is 12 hours.
+         */
+        $schedule_every_x_time = (int) apply_filters("shepherd_{$prefix}_schedule_cleanup_task_every", 12 * HOUR_IN_SECONDS);
+        if (0 === $schedule_every_x_time) {
+            return;
+        }
+        $this->dispatch(new Herding(), $schedule_every_x_time);
+        /**
+         * Fires when the cleanup task is scheduled.
+         *
+         * @since 0.0.8
+         */
+        do_action('shepherd_' . Config::get_hook_prefix() . '_cleanup_task_scheduled');
     }
 }

@@ -16,7 +16,7 @@ import Brands from './brands';
 import BrandUpsert from './brand-upsert';
 import WizardsTab from '../../../../wizards-tab';
 import WizardSection from '../../../../wizards-section';
-import { Router, utils } from '../../../../../components/src';
+import { Router, utils } from '../../../../../../packages/components/src';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
 import { TAB_PATH } from './constants';
 

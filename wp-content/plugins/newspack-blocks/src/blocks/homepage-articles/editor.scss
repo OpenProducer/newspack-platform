@@ -1,6 +1,6 @@
+@use "newspack-colors" as np-colors;
 @use "../../shared/sass/variables";
 @use "../../shared/sass/placeholder";
-@use "../../shared/sass/colors";
 @use "../../shared/sass/mixins";
 
 .wpnbha {
@@ -156,7 +156,7 @@
 
 .newspack-block {
 	&--error.components-placeholder {
-		color: colors.$color__error;
+		color: np-colors.$error-500;
 	}
 	&--disabled {
 		position: relative;
@@ -168,7 +168,7 @@
 			height: 100%;
 			top: 0;
 			left: 0;
-			background-color: #fff;
+			background-color: np-colors.$neutral-000;
 			opacity: 0.6;
 		}
 	}

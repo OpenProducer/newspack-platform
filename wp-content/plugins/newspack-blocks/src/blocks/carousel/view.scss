@@ -1,6 +1,6 @@
+@use "newspack-colors" as np-colors;
 @use "../../shared/sass/variables";
 @use "../../shared/sass/mixins";
-@use "../../shared/sass/colors";
 @use "../../shared/sass/preview";
 
 .wp-block-newspack-blocks-carousel {
@@ -15,12 +15,12 @@
 		word-break: break-word;
 		overflow-wrap: break-word;
 		a {
-			color: #fff;
+			color: np-colors.$neutral-000;
 
 			&:active,
 			&:focus,
 			&:hover {
-				color: rgba(255, 255, 255, 0.75);
+				color: rgba(np-colors.$neutral-000, 0.75);
 			}
 		}
 		.entry-title {
@@ -53,27 +53,27 @@
 		}
 		.entry-wrapper {
 			bottom: 0;
-			background-color: rgba(black, 0.5);
-			color: white;
+			background-color: rgba(np-colors.$neutral-1000, 0.5);
+			color: np-colors.$neutral-000;
 			left: 0;
 			padding: 1.5em;
 			position: absolute;
 			right: 0;
 		}
 		.entry-meta {
-			color: #fff;
+			color: np-colors.$neutral-000;
 			margin-bottom: 0;
 			font-size: 0.8em;
 
 			a {
-				color: #fff;
+				color: np-colors.$neutral-000;
 				font-weight: bold;
 				text-decoration: none;
 
 				&:active,
 				&:focus,
 				&:hover {
-					color: rgba(255, 255, 255, 0.75);
+					color: rgba(np-colors.$neutral-000, 0.75);
 				}
 			}
 		}
@@ -83,7 +83,7 @@
 			width: 100%;
 
 			figcaption {
-				color: #fff;
+				color: np-colors.$neutral-000;
 				font-size: var(--wp--preset--font-size--x-small, var(--newspack-theme-font-size-sm, 0.8em));
 				line-height: var(--wp--custom--line-height--x-small, var(--newspack-theme-font-line-height-body, 1.6));
 
@@ -114,7 +114,7 @@
 	}
 	&__placeholder {
 		height: 420px;
-		background: colors.$color__background-screen;
+		background: np-colors.$neutral-050;
 	}
 	.swiper-initialized .wp-block-newspack-blocks-carousel__placeholder {
 		height: 100%;
@@ -133,7 +133,7 @@
 		position: relative;
 	}
 	.swiper-pagination-bullet {
-		background: black;
+		background: np-colors.$neutral-1000;
 		border-radius: 6px;
 		display: inline-block;
 		height: 12px;
@@ -143,7 +143,7 @@
 		transition: box-shadow 250ms, opacity 250ms, width 250ms;
 		width: 12px;
 		&:focus {
-			box-shadow: 0 0 0 2px white, 0 0 0 4px black;
+			box-shadow: 0 0 0 2px np-colors.$neutral-000, 0 0 0 4px np-colors.$neutral-100;
 			outline: 0;
 		}
 		&.swiper-pagination-bullet-active,
@@ -158,7 +158,7 @@
 		}
 	}
 	.swiper-button {
-		background-color: rgba(black, 0.5);
+		background-color: rgba(np-colors.$neutral-1000, 0.5);
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: 24px;
@@ -173,10 +173,10 @@
 		width: 48px;
 		&:focus,
 		&:hover {
-			background-color: rgba(black, 0.75);
+			background-color: np-colors.$neutral-700;
 		}
 		&:focus {
-			box-shadow: inset 0 0 0 2px rgba(black, 0.75), inset 0 0 0 4px white;
+			box-shadow: inset 0 0 0 2px np-colors.$neutral-700, inset 0 0 0 4px np-colors.$neutral-000;
 			outline: 0;
 		}
 	}
@@ -237,7 +237,7 @@
 	.entry-title {
 		margin: 0 0 0.25em;
 		a {
-			color: #fff;
+			color: np-colors.$neutral-000;
 			text-decoration: none;
 		}
 	}
@@ -253,7 +253,7 @@
 		}
 	}
 	.cat-links {
-		color: #fff;
+		color: np-colors.$neutral-000;
 		font-size: 0.6em;
 		font-weight: bold;
 		margin: 0 0 0.5em;

@@ -12,7 +12,7 @@ import { useState, useCallback, useEffect, useRef } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { WIZARD_STORE_NAMESPACE } from '../../components/src/wizard/store';
+import { WIZARD_STORE_NAMESPACE } from '../../../packages/components/src/wizard/store';
 import { WizardApiError } from '../errors';
 
 /**
