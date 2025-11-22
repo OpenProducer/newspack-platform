@@ -26,7 +26,7 @@ final class Checkout_Data {
 			$price = '0';
 		}
 
-		if ( function_exists( 'wcs_price_string' ) && function_exists( 'wc_price' ) ) {
+		if ( function_exists( 'wcs_price_string' ) && function_exists( 'wc_price' ) && function_exists( 'wc_get_product' ) && class_exists( 'WC_Subscriptions_Product' ) ) {
 			if ( $frequency && $frequency !== 'once' ) {
 				// Get additional subscription details if product_id is provided.
 				$subscription_interval = 1;
@@ -35,10 +35,11 @@ final class Checkout_Data {
 				$initial_amount        = 0;
 
 				if ( $product_id ) {
-					$subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
-					$trial_length = get_post_meta( $product_id, '_subscription_trial_length', true );
-					$trial_period = get_post_meta( $product_id, '_subscription_trial_period', true );
-					$initial_amount = get_post_meta( $product_id, '_subscription_sign_up_fee', true );
+					$product = wc_get_product( $product_id );
+					$subscription_interval = \WC_Subscriptions_Product::get_interval( $product );
+					$trial_length = \WC_Subscriptions_Product::get_trial_length( $product );
+					$trial_period = \WC_Subscriptions_Product::get_trial_period( $product );
+					$initial_amount = \WC_Subscriptions_Product::get_sign_up_fee( $product );
 
 					if ( empty( $subscription_interval ) ) {
 						$subscription_interval = 1;
@@ -81,13 +82,21 @@ final class Checkout_Data {
 	 * Returns whether a product is a one time purchase, or recurring and when.
 	 *
 	 * @param string $product_id Product's ID.
+	 *
+	 * @return string The purchase recurrence.
 	 */
 	public static function get_purchase_recurrence( $product_id ) {
-		$recurrence = get_post_meta( $product_id, '_subscription_period', true );
-		if ( empty( $recurrence ) ) {
-			$recurrence = 'once';
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return 'once';
 		}
-		return $recurrence;
+		$product = \wc_get_product( $product_id );
+		if ( $product && ( $product->is_type( 'subscription' ) || $product->is_type( 'subscription_variation' ) ) ) {
+			$recurrence = get_post_meta( $product_id, '_subscription_period', true );
+			if ( ! empty( $recurrence ) ) {
+				return $recurrence;
+			}
+		}
+		return 'once';
 	}
 
 	/**
@@ -145,23 +154,33 @@ final class Checkout_Data {
 	/**
 	 * Returns the action type: checkout_button or donation.
 	 *
-	 * @param string $product_id Product's ID.
+	 * @param string    $product_id Product's ID.
+	 * @param \WC_Order $order      Optional order to check if it's a subscription switch.
 	 */
-	public static function get_action_type( $product_id ) {
+	public static function get_action_type( $product_id, $order = null ) {
 		$action_type = 'checkout_button';
+
 		// Check if it's a donation product, and update action_type, product_type.
 		if ( method_exists( 'Newspack\Donations', 'is_donation_product' ) ) {
 			if ( \Newspack\Donations::is_donation_product( $product_id ) ) {
 				$action_type = 'donation';
 			}
 		}
+
 		// Check if it's a subscription switch.
-		if ( method_exists( 'WC_Subscriptions_Switcher', 'cart_contains_switches' ) && \WC_Subscriptions_Switcher::cart_contains_switches( 'any' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( $order ) {
+			if ( function_exists( 'wcs_order_contains_switch' ) && wcs_order_contains_switch( $order ) ) {
+				$action_type = 'subscription_switch';
+			}
+		} elseif ( method_exists( 'WC_Subscriptions_Switcher', 'cart_contains_switches' ) && \WC_Subscriptions_Switcher::cart_contains_switches( 'any' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$action_type = 'subscription_switch';
 		}
+
+		// Check if the action type is set in the URL.
 		if ( isset( $_GET['action_type'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$action_type = sanitize_text_field( wp_unslash( $_GET['action_type'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
+
 		return $action_type;
 	}
 
@@ -298,7 +317,7 @@ final class Checkout_Data {
 		}
 
 		$data = [
-			'action_type'  => self::get_action_type( $product_id ),
+			'action_type'  => self::get_action_type( $product_id, $order ),
 			'currency'     => function_exists( 'get_woocommerce_currency' ) ? \get_woocommerce_currency() : 'USD',
 			'product_id'   => strval( $product_id ? $product_id : '' ),
 			'product_type' => $product_type,
@@ -353,13 +372,13 @@ final class Checkout_Data {
 		$gate_post_id = null;
 		$newspack_popup_id = null;
 		if ( $order ) {
-			$gate_post_id = $order->get_meta( '_memberships_content_gate' );
+			$gate_post_id = $order->get_meta( '_gate_post_id' );
 			$newspack_popup_id = $order->get_meta( '_newspack_popup_id' );
 		} elseif ( $cart_item ) {
-			$gate_post_id = $cart_item['memberships_content_gate'] ?? null;
+			$gate_post_id = $cart_item['gate_post_id'] ?? null;
 			$newspack_popup_id = $cart_item['newspack_popup_id'] ?? null;
 		} else {
-			$gate_post_id = filter_input( INPUT_GET, 'memberships_content_gate', FILTER_SANITIZE_NUMBER_INT );
+			$gate_post_id = filter_input( INPUT_GET, 'gate_post_id', FILTER_SANITIZE_NUMBER_INT );
 			$newspack_popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
 		}
 		if ( $gate_post_id ) {

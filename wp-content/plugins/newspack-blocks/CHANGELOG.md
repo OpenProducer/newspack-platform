@@ -1,3 +1,69 @@
+## [4.17.6](https://github.com/Automattic/newspack-blocks/compare/v4.17.5...v4.17.6) (2025-11-19)
+
+
+### Bug Fixes
+
+* don’t show trial info in modal checkout if not applicable ([#2245](https://github.com/Automattic/newspack-blocks/issues/2245)) ([26de0b9](https://github.com/Automattic/newspack-blocks/commit/26de0b9cf223dd3e5c5d4ee56ba6a8a915554baf))
+
+## [4.17.5](https://github.com/Automattic/newspack-blocks/compare/v4.17.4...v4.17.5) (2025-11-18)
+
+
+### Bug Fixes
+
+* **modal-checkout:** check product type to get recurrence data ([#2259](https://github.com/Automattic/newspack-blocks/issues/2259)) ([0c2ed81](https://github.com/Automattic/newspack-blocks/commit/0c2ed81a0ec2f68ae1aff3eb98633ed52def3218))
+
+## [4.17.4](https://github.com/Automattic/newspack-blocks/compare/v4.17.3...v4.17.4) (2025-11-13)
+
+
+### Bug Fixes
+
+* content gate metadata methods and params ([163e07f](https://github.com/Automattic/newspack-blocks/commit/163e07f56653b39eee68145659419d917606693d))
+* content gate metadata methods and params ([#2249](https://github.com/Automattic/newspack-blocks/issues/2249)) ([fe6cc18](https://github.com/Automattic/newspack-blocks/commit/fe6cc18898349d978af8f0dd9d62b65ed92df652))
+
+## [4.17.3](https://github.com/Automattic/newspack-blocks/compare/v4.17.2...v4.17.3) (2025-11-11)
+
+
+### Bug Fixes
+
+* content loop load more for custom taxs ([#2244](https://github.com/Automattic/newspack-blocks/issues/2244)) ([a2c5040](https://github.com/Automattic/newspack-blocks/commit/a2c5040cc27fc4a0adb6826505eda736edee5552))
+
+## [4.17.2](https://github.com/Automattic/newspack-blocks/compare/v4.17.1...v4.17.2) (2025-11-03)
+
+
+### Bug Fixes
+
+* handle multiple responsive iframe blocks ([#2242](https://github.com/Automattic/newspack-blocks/issues/2242)) ([dc218ea](https://github.com/Automattic/newspack-blocks/commit/dc218ea08ecc5f134b5a1dd4e7d4d6a25a8d71e5))
+
+## [4.17.1](https://github.com/Automattic/newspack-blocks/compare/v4.17.0...v4.17.1) (2025-11-03)
+
+
+### Bug Fixes
+
+* render modal checkout with filtered supported gateways ([#2240](https://github.com/Automattic/newspack-blocks/issues/2240)) ([ba74667](https://github.com/Automattic/newspack-blocks/commit/ba74667f28f674eb028dd1dc613e6b3c90206efa))
+
+# [4.17.0](https://github.com/Automattic/newspack-blocks/compare/v4.16.1...v4.17.0) (2025-10-30)
+
+
+### Bug Fixes
+
+* correct RTL styles for the Content Loop ([#2215](https://github.com/Automattic/newspack-blocks/issues/2215)) ([a8e2f42](https://github.com/Automattic/newspack-blocks/commit/a8e2f42655c63dbea3a6a8cf3fd0c497ae038365))
+* ga4 events for tiered modal ([#2218](https://github.com/Automattic/newspack-blocks/issues/2218)) ([a08981d](https://github.com/Automattic/newspack-blocks/commit/a08981dd7c7ea168825a12bddc74840493560d3e))
+* handle invalid file errors when processing archive ([#2221](https://github.com/Automattic/newspack-blocks/issues/2221)) ([2ba3d26](https://github.com/Automattic/newspack-blocks/commit/2ba3d26fc2864f8f28705d26866deb136d32a7e8))
+* **modal-checkout:** skip newsletter signup on subscription switch ([#2235](https://github.com/Automattic/newspack-blocks/issues/2235)) ([e6feccc](https://github.com/Automattic/newspack-blocks/commit/e6feccc5277dfdfcf909603e134a1f21d64fc938))
+* **modal-checkout:** style improvements to single-gateway ([#2223](https://github.com/Automattic/newspack-blocks/issues/2223)) ([3c0014a](https://github.com/Automattic/newspack-blocks/commit/3c0014a463649545a3d5680c4ca16eca2c23de5e))
+
+
+### Features
+
+* add newspack-colors and newspack-icons packages ([#2222](https://github.com/Automattic/newspack-blocks/issues/2222)) ([f6bdf20](https://github.com/Automattic/newspack-blocks/commit/f6bdf20434f34e813b13856266372ad355f31f19))
+
+## [4.16.1](https://github.com/Automattic/newspack-blocks/compare/v4.16.0...v4.16.1) (2025-10-27)
+
+
+### Bug Fixes
+
+* update subscriptions gifting method ([#2232](https://github.com/Automattic/newspack-blocks/issues/2232)) ([6b5e665](https://github.com/Automattic/newspack-blocks/commit/6b5e665c6797cb26228613fb7cdc96c8889455c5))
+
 # [4.16.0](https://github.com/Automattic/newspack-blocks/compare/v4.15.4...v4.16.0) (2025-10-06)
 
 

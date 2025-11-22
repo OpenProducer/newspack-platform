@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { SelectControl } from '@wordpress/components';
 
-import { Grid, Notice } from '../../../../../components/src';
+import { Grid, Notice } from '../../../../../../packages/components/src';
 
 interface PwaDisplayModeProps extends ThemeModComponentProps< AdvancedSettings > {}
 

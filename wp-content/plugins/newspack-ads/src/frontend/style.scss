@@ -116,6 +116,8 @@
 
 .newspack_global_ad.left_side_rail {
 	left: 0;
+	justify-content: flex-end;
+	padding-right: 32px;
 	.ad-slot {
 		@starting-style {
 			transform: translateX(-20%);
@@ -128,6 +130,8 @@
 
 .newspack_global_ad.right_side_rail {
 	right: 0;
+	justify-content: flex-start;
+	padding-left: 32px;
 	.ad-slot {
 		@starting-style {
 			transform: translateX(20%);

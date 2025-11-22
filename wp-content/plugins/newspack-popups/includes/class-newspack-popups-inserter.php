@@ -448,8 +448,8 @@ final class Newspack_Popups_Inserter {
 		}
 		$is_restricted = ! is_user_logged_in() || ! current_user_can( 'wc_memberships_view_restricted_post_content', $post_id ); // phpcs:ignore WordPress.WP.Capabilities.Unknown
 		// Detect Content Gate Metering.
-		if ( $is_restricted && method_exists( 'Newspack\Memberships\Metering', 'is_metering' ) ) {
-			$is_restricted = ! Newspack\Memberships\Metering::is_metering();
+		if ( $is_restricted && method_exists( 'Newspack\Metering', 'is_metering' ) ) {
+			$is_restricted = ! \Newspack\Metering::is_metering();
 		}
 		return $is_restricted;
 	}

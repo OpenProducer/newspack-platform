@@ -308,6 +308,9 @@ final class Reader_Activation {
 				'newsletters_success'      => __( 'Signup successful!', 'newspack-plugin' ),
 				'newsletters_title'        => __( 'Sign up for newsletters', 'newspack-plugin' ),
 				'auth_form_action'         => self::AUTH_FORM_ACTION,
+				// Subscription tiers labels.
+				'sign_in_to_upgrade'       => __( 'Sign in to upgrade', 'newspack-plugin' ),
+				'register_to_upgrade'      => __( 'Register to upgrade', 'newspack-plugin' ),
 			];
 
 			/**
@@ -1096,8 +1099,8 @@ final class Reader_Activation {
 	/**
 	 * Whether the user is a reader.
 	 *
-	 * @param WP_User $user   User object.
-	 * @param bool    $strict Whether to check if the user was created through reader registration. Default false.
+	 * @param \WP_User $user   User object.
+	 * @param bool     $strict Whether to check if the user was created through reader registration. Default false.
 	 *
 	 * @return bool Whether the user is a reader.
 	 */
@@ -2508,9 +2511,9 @@ final class Reader_Activation {
 	/**
 	 * If a non-reader account attempts to use reader account flows, send an email reminder to use standard WP login.
 	 *
-	 * @param WP_User $user WP_User to send the email to.
+	 * @param \WP_User $user WP_User to send the email to.
 	 *
-	 * @return bool|WP_Error
+	 * @return bool|\WP_Error
 	 */
 	public static function send_non_reader_login_reminder( $user ) {
 		/** Rate limit control */
@@ -2604,7 +2607,7 @@ final class Reader_Activation {
 	/**
 	 * Filters args sent to wp_mail when a password change email is sent.
 	 *
-	 * @param array   $defaults {
+	 * @param array    $defaults {
 	 *       The default notification email arguments. Used to build wp_mail().
 	 *
 	 *     @type string $to      The intended recipient - user email address.
@@ -2612,9 +2615,9 @@ final class Reader_Activation {
 	 *     @type string $message The body of the email.
 	 *     @type string $headers The headers of the email.
 	 * }
-	 * @param string  $key        The activation key.
-	 * @param string  $user_login The username for the user.
-	 * @param WP_User $user       WP_User object.
+	 * @param string   $key        The activation key.
+	 * @param string   $user_login The username for the user.
+	 * @param \WP_User $user       WP_User object.
 	 *
 	 * @return array The filtered $defaults.
 	 */
@@ -2687,7 +2690,7 @@ final class Reader_Activation {
 	/**
 	 * Login a reader after they have successfully reset their password.
 	 *
-	 * @param WP_User $user WP_User object.
+	 * @param \WP_User $user WP_User object.
 	 */
 	public static function login_after_password_reset( $user ) {
 		if ( ! self::is_enabled() ) {

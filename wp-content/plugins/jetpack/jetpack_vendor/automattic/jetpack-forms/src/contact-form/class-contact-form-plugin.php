@@ -11,6 +11,7 @@ use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Constants;
 use Automattic\Jetpack\Extensions\Contact_Form\Contact_Form_Block;
 use Automattic\Jetpack\Forms\Jetpack_Forms;
+use Automattic\Jetpack\Forms\Service\Hostinger_Reach_Integration;
 use Automattic\Jetpack\Forms\Service\MailPoet_Integration;
 use Automattic\Jetpack\Forms\Service\Post_To_Url;
 use Automattic\Jetpack\Status;
@@ -21,6 +22,9 @@ use WP_Block;
 use WP_Block_Patterns_Registry;
 use WP_Block_Type_Registry;
 use WP_Error;
+
+// Load the Form_Submission_Error class.
+require_once __DIR__ . '/class-form-submission-error.php';
 
 /**
  * Sets up various actions, filters, post types, post statuses, shortcodes.
@@ -335,6 +339,16 @@ class Contact_Form_Plugin {
 				4
 			);
 		}
+
+		// Register Hostinger Reach integration hook after the class is loaded.
+		if ( Jetpack_Forms::is_hostinger_reach_enabled() ) {
+			add_action(
+				'grunion_after_feedback_post_inserted',
+				array( Hostinger_Reach_Integration::class, 'handle_hostinger_reach_integration' ),
+				16,
+				4
+			);
+		}
 	}
 
 	/**
@@ -496,6 +510,9 @@ class Contact_Form_Plugin {
 					$atts['labelclasses']                    .= isset( $label_attrs['class'] ) ? ' ' . $label_attrs['class'] : '';
 					$atts['labelstyles']                      = $label_attrs['style'] ?? null;
 					$add_block_style_classes_to_field_wrapper = true;
+
+					// check if the block has been hidden by blockVisibility support
+					$atts['labelhiddenbyblockvisibility'] = isset( $inner_block['attrs']['metadata']['blockVisibility'] ) && false === $inner_block['attrs']['metadata']['blockVisibility'];
 
 					continue;
 				}
@@ -1406,68 +1423,89 @@ class Contact_Form_Plugin {
 	 * Display the count of new feedback entries received. It's reset when user visits the Feedback screen.
 	 *
 	 * @since 4.1.0
-	 *
-	 * @param object $screen Information about the current screen.
 	 */
-	public function unread_count( $screen ) {
-		if ( isset( $screen->post_type ) && 'feedback' === $screen->post_type || $screen->id === 'jetpack_page_jetpack-forms-admin' ) {
-			update_option( 'feedback_unread_count', 0 );
-		} else {
-			global $submenu, $menu;
-			if ( apply_filters( 'jetpack_forms_use_new_menu_parent', true ) && current_user_can( 'edit_pages' ) ) {
-				// show the count on Jetpack and Jetpack → Forms
-				$unread = get_option( 'feedback_unread_count', 0 );
+	public function unread_count() {
 
-				if ( $unread > 0 && isset( $submenu['jetpack'] ) && is_array( $submenu['jetpack'] ) && ! empty( $submenu['jetpack'] ) ) {
-					$forms_unread_count_tag = " <span class='count-{$unread} awaiting-mod'><span>" . number_format_i18n( $unread ) . '</span></span>';
-					$jetpack_badge_count    = $unread;
+		global $submenu, $menu;
+		if ( apply_filters( 'jetpack_forms_use_new_menu_parent', true ) && current_user_can( 'edit_pages' ) ) {
+			// show the count on Jetpack and Jetpack → Forms
+			$unread = self::get_unread_count();
 
-					// Main menu entries
-					foreach ( $menu as $index => $main_menu_item ) {
-						if ( isset( $main_menu_item[1] ) && 'jetpack_admin_page' === $main_menu_item[1] ) {
-							// Parse the menu item
-							$jetpack_menu_item = $this->parse_menu_item( $menu[ $index ][0] );
+			if ( isset( $submenu['jetpack'] ) && is_array( $submenu['jetpack'] ) && ! empty( $submenu['jetpack'] ) ) {
+				$forms_unread_count_tag = " <span class='jp-feedback-unread-counter count-{$unread} awaiting-mod'><span class='feedback-unread-counter'>" . number_format_i18n( $unread ) . '</span></span>';
+				$jetpack_badge_count    = $unread;
 
-							if ( isset( $jetpack_menu_item['badge'] ) && is_numeric( $jetpack_menu_item['badge'] ) && intval( $jetpack_menu_item['badge'] ) ) {
-								$jetpack_badge_count += intval( $jetpack_menu_item['badge'] );
-							}
+				// Main menu entries
+				foreach ( $menu as $index => $main_menu_item ) {
+					if ( isset( $main_menu_item[1] ) && 'jetpack_admin_page' === $main_menu_item[1] ) {
+						// Parse the menu item
+						$jetpack_menu_item = $this->parse_menu_item( $menu[ $index ][0] );
 
-							if ( isset( $jetpack_menu_item['count'] ) && is_numeric( $jetpack_menu_item['count'] ) && intval( $jetpack_menu_item['count'] ) ) {
-								$jetpack_badge_count += intval( $jetpack_menu_item['count'] );
-							}
-
-							$jetpack_unread_tag = " <span class='count-{$jetpack_badge_count} awaiting-mod'><span>" . number_format_i18n( $jetpack_badge_count ) . '</span></span>';
-
-							// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-							$menu[ $index ][0] = $jetpack_menu_item['title'] . ' ' . $jetpack_unread_tag;
+						if ( isset( $jetpack_menu_item['badge'] ) && is_numeric( $jetpack_menu_item['badge'] ) && intval( $jetpack_menu_item['badge'] ) ) {
+							$jetpack_badge_count += intval( $jetpack_menu_item['badge'] );
 						}
-					}
 
-					// Jetpack submenu entries
-					foreach ( $submenu['jetpack'] as $index => $menu_item ) {
-						if ( 'jetpack-forms-admin' === $menu_item[2] ) {
-							// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-							$submenu['jetpack'][ $index ][0] .= $forms_unread_count_tag;
+						if ( isset( $jetpack_menu_item['count'] ) && is_numeric( $jetpack_menu_item['count'] ) && intval( $jetpack_menu_item['count'] ) ) {
+							$jetpack_badge_count += intval( $jetpack_menu_item['count'] );
 						}
+
+						$jetpack_unread_tag = " <span data-unread-diff='" . ( $jetpack_badge_count - $unread ) . "' class='jp-feedback-unread-counter count-{$jetpack_badge_count} awaiting-mod'><span class='feedback-unread-counter'>" . number_format_i18n( $jetpack_badge_count ) . '</span></span>';
+
+						// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+						$menu[ $index ][0] = $jetpack_menu_item['title'] . ' ' . $jetpack_unread_tag;
 					}
 				}
-				return;
-			}
-			if ( isset( $submenu['feedback'] ) && is_array( $submenu['feedback'] ) && ! empty( $submenu['feedback'] ) ) {
-				foreach ( $submenu['feedback'] as $index => $menu_item ) {
-					if ( 'edit.php?post_type=feedback' === $menu_item[2] ) {
-						$unread = get_option( 'feedback_unread_count', 0 );
-						if ( $unread > 0 ) {
-							$unread_count = current_user_can( 'publish_pages' ) ? " <span class='feedback-unread count-{$unread} awaiting-mod'><span class='feedback-unread-count'>" . number_format_i18n( $unread ) . '</span></span>' : '';
 
-							// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-							$submenu['feedback'][ $index ][0] .= $unread_count;
-						}
-						break;
+				// Jetpack submenu entries
+				foreach ( $submenu['jetpack'] as $index => $menu_item ) {
+					if ( 'jetpack-forms-admin' === $menu_item[2] ) {
+						// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+						$submenu['jetpack'][ $index ][0] .= $forms_unread_count_tag;
 					}
+				}
+			}
+			return;
+		}
+
+		if ( isset( $submenu['feedback'] ) && is_array( $submenu['feedback'] ) && ! empty( $submenu['feedback'] ) ) {
+			foreach ( $submenu['feedback'] as $index => $menu_item ) {
+				if ( 'edit.php?post_type=feedback' === $menu_item[2] ) {
+					$unread = self::get_unread_count();
+
+					if ( $unread > 0 ) {
+						$unread_count = current_user_can( 'publish_pages' ) ? " <span class='feedback-unread jp-feedback-unread-counter count-{$unread} awaiting-mod'><span class='feedback-unread-count'>" . number_format_i18n( $unread ) . '</span></span>' : '';
+
+						// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+						$submenu['feedback'][ $index ][0] .= $unread_count;
+					}
+					break;
 				}
 			}
 		}
+	}
+
+	/**
+	 * Get the count of unread feedback entries.
+	 *
+	 * @since 6.10.0
+	 *
+	 * @return int The count of unread feedback entries.
+	 */
+	public static function get_unread_count() {
+		return (int) get_option( 'jetpack_feedback_unread_count', 0 ); // previously defaulted named "feedback_unread_count".
+	}
+
+	/**
+	 * Recalculate the count of unread feedback entries.
+	 *
+	 * @since 6.10.0
+	 *
+	 * @return int The count of unread feedback entries.
+	 */
+	public static function recalculate_unread_count() {
+		$count = Feedback::get_unread_count();
+		update_option( 'jetpack_feedback_unread_count', $count );
+		return $count;
 	}
 
 	/**
@@ -1486,7 +1524,7 @@ class Contact_Form_Plugin {
 		// phpcs:enable
 
 		if ( ! is_string( $id ) || ! is_string( $hash ) ) {
-			return false;
+			return Form_Submission_Error::system_error( 'invalid_form_id_or_hash', __( 'Invalid form ID or hash.', 'jetpack-forms' ) );
 		}
 
 		if ( is_user_logged_in() ) {
@@ -1498,10 +1536,16 @@ class Contact_Form_Plugin {
 		$is_block_template_part = str_starts_with( $id, 'block-template-part-' );
 
 		if ( isset( $_POST['jetpack_contact_form_jwt'] ) ) {
-			$form = Contact_Form::get_instance_from_jwt( sanitize_text_field( wp_unslash( $_POST['jetpack_contact_form_jwt'] ) ) );
-			if ( ! $form ) { // fail early if the JWT is invalid.
-				// If the JWT is invalid, we can't process the form.
-				return false;
+			$jwt = sanitize_text_field( wp_unslash( $_POST['jetpack_contact_form_jwt'] ) );
+
+			try {
+				$form = Contact_Form::get_instance_from_jwt( $jwt, true );
+			} catch ( \Exception $e ) {
+				// Fail early if the JWT is invalid with detailed error information.
+				return Form_Submission_Error::system_error(
+					'invalid_jwt',
+					$e->getMessage()
+				);
 			}
 
 			$form->validate();
@@ -1613,12 +1657,12 @@ class Contact_Form_Plugin {
 
 			if ( ! is_post_publicly_viewable( $id ) && ! current_user_can( 'read_post', $id ) ) {
 				// The user can't see the post.
-				return false;
+				return Form_Submission_Error::system_error( 'post_not_viewable', __( 'You do not have permission to view this form.', 'jetpack-forms' ) );
 			}
 
 			if ( post_password_required( $id ) ) {
 				// The post is password-protected and the password is not provided.
-				return false;
+				return Form_Submission_Error::system_error( 'post_password_required', __( 'This form requires a password.', 'jetpack-forms' ) );
 			}
 
 			$post = get_post( $id );
@@ -1670,11 +1714,11 @@ class Contact_Form_Plugin {
 		}
 
 		if ( ! $form ) {
-			return false;
+			return Form_Submission_Error::system_error( 'form_not_found', __( 'Form not found.', 'jetpack-forms' ) );
 		}
 
 		if ( $form->has_errors() ) {
-			return false;
+			return $form->errors;
 		}
 
 		if ( ! empty( $form->attributes['salesforceData'] ) || ! empty( $form->attributes['postToUrl'] ) ) {
@@ -1693,19 +1737,27 @@ class Contact_Form_Plugin {
 	public function ajax_request() {
 		$submission_result = self::process_form_submission();
 		$accepts_json      = isset( $_SERVER['HTTP_ACCEPT'] ) && false !== strpos( strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_ACCEPT'] ) ) ), 'application/json' );
+		$is_system_error   = Form_Submission_Error::is_system_error( $submission_result );
 
-		if ( ! $submission_result ) {
+		if ( ! $submission_result || $is_system_error ) {
+			$error_code    = $is_system_error ? $submission_result->get_error_code() : 'unknown';
+			$error_details = $is_system_error ? $submission_result->get_error_message() : null;
+
 			/**
 			 * Action when we want to log a jetpack_forms event.
 			 *
 			 * @since 6.3.0
 			 *
 			 * @param string $log_message The log message.
+			 * @param string $error_code The error code (optional).
+			 * @param string $error_details The error details (optional).
 			 */
-			do_action( 'jetpack_forms_log', 'submission_failed' );
+			do_action( 'jetpack_forms_log', 'submission_failed', $error_code, $error_details );
+
 			$accepts_json && wp_send_json_error(
 				array(
 					'error' => __( 'An error occurred. Please try again later.', 'jetpack-forms' ),
+					'code'  => $error_code,
 				),
 				500
 			);
@@ -1715,10 +1767,11 @@ class Contact_Form_Plugin {
 			echo '<div class="form-error"><ul class="form-errors"><li class="form-error-message">';
 			esc_html_e( 'An error occurred. Please try again later.', 'jetpack-forms' );
 			echo '</li></ul></div>';
-			die();
 
+			die();
 		} elseif ( is_wp_error( $submission_result ) ) {
 			do_action( 'jetpack_forms_log', $submission_result->get_error_message() );
+
 			$accepts_json && wp_send_json_error(
 				array(
 					'error' => $submission_result->get_error_message(),
@@ -1731,6 +1784,7 @@ class Contact_Form_Plugin {
 			echo '<div class="form-error"><ul class="form-errors"><li class="form-error-message">';
 			echo esc_html( $submission_result->get_error_message() );
 			echo '</li></ul></div>';
+
 			die();
 		}
 
@@ -2395,6 +2449,11 @@ class Contact_Form_Plugin {
 				'value' => $feedback->get_ip_address(),
 			);
 
+			$post_export_data[] = array(
+				'name'  => __( 'Country code', 'jetpack-forms' ),
+				'value' => $feedback->get_country_code(),
+			);
+
 			$export_data[] = array(
 				'group_id'    => 'feedback',
 				'group_label' => __( 'Feedback', 'jetpack-forms' ),
@@ -2638,8 +2697,10 @@ class Contact_Form_Plugin {
 				$results[ $single_field_name ][] = $feedback->get_field_value_by_label( $single_field_name, 'csv' );
 			}
 
-			$results[ __( 'Consent', 'jetpack-forms' ) ][]    = $feedback->has_consent() ? __( 'Yes', 'jetpack-forms' ) : __( 'No', 'jetpack-forms' );
-			$results[ __( 'IP Address', 'jetpack-forms' ) ][] = $feedback->get_ip_address();
+			$results[ __( 'Consent', 'jetpack-forms' ) ][]      = $feedback->has_consent() ? __( 'Yes', 'jetpack-forms' ) : __( 'No', 'jetpack-forms' );
+			$results[ __( 'IP Address', 'jetpack-forms' ) ][]   = $feedback->get_ip_address();
+			$results[ __( 'Country code', 'jetpack-forms' ) ][] = $feedback->get_country_code();
+			$results[ __( 'Browser', 'jetpack-forms' ) ][]      = $feedback->get_browser();
 
 		}
 		return $results;
@@ -2679,6 +2740,8 @@ class Contact_Form_Plugin {
 			'-3_response_date' => __( 'Response Date', 'jetpack-forms' ),
 			'90_consent'       => _x( 'Consent', 'noun', 'jetpack-forms' ),
 			'93_ip_address'    => __( 'IP Address', 'jetpack-forms' ),
+			'94_country_code'  => __( 'Country code', 'jetpack-forms' ),
+			'95_browser'       => __( 'Browser', 'jetpack-forms' ),
 		);
 	}
 

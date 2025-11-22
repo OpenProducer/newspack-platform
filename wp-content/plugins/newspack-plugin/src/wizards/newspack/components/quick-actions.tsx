@@ -13,7 +13,7 @@ import { Icon } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import { Card, Grid } from '../../../components/src';
+import { Card, Grid } from '../../../../packages/components/src';
 import { icons } from './icons';
 
 const {

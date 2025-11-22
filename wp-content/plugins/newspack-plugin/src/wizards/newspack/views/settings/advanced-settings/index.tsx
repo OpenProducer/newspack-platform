@@ -14,7 +14,7 @@ import { useEffect } from '@wordpress/element';
 import { DEFAULT_THEME_MODS } from '../constants';
 import WizardsTab from '../../../../wizards-tab';
 import WizardSection from '../../../../wizards-section';
-import { Button, hooks, Notice, utils } from '../../../../../components/src';
+import { Button, hooks, Notice, utils } from '../../../../../../packages/components/src';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
 import Recirculation from './recirculation';
 import AuthorBio from './author-bio';

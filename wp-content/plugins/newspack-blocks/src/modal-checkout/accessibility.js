@@ -29,23 +29,13 @@ export function trapFocus( currentModal, iframe = false ) {
 			if ( e.shiftKey ) {
 				if ( document.activeElement === firstFocusableEl ) {
 					const iframeBody = iframe.contentWindow.document,
-						customerDetails = iframeBody.getElementById( 'customer_details' ), // Get billing page 1 wrapper.
-						afterCustomerDetails = iframeBody.getElementById( 'after_customer_details' ), // Get billing page 2 wrapper.
 						afterSuccess = iframeBody.getElementById( 'checkout-after-success' ); // Get after success button.
 
 					// If the after success button is visible, make it the last element.
 					if ( afterSuccess !== null ) {
 						lastFocusableEl = afterSuccess;
 					} else {
-						/* eslint-disable no-lonely-if */
-						if ( customerDetails.offsetParent !== null ) {
-							// If the first billing screen is visible, make the Continue button the last element.
-							lastFocusableEl = iframeBody.getElementById( 'checkout_continue' );
-						} else if ( afterCustomerDetails.offsetParent !== null ) {
-							// If the second billing screen is visible, make the Back button the last element.
-							lastFocusableEl = iframeBody.getElementById( 'checkout_back' );
-						}
-						/* eslint-enable no-lonely-if */
+						lastFocusableEl = iframeBody.getElementById( 'checkout_cancel' );
 					}
 
 					lastFocusableEl.focus();

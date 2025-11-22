@@ -282,6 +282,9 @@ class Newspack_SVG_Icons {
 			'oldbytes.space',
 			'pawoo.net',
 		),
+		'nextdoor'    => array(
+			'nextdoor.com',
+		),
 		'phone'       => array(
 			'tel:',
 		),
@@ -494,6 +497,12 @@ class Newspack_SVG_Icons {
 </g>
 </svg>
 ',
+
+		'nextdoor'    => '
+<svg viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<path d="M8.07664 5.53693V3H4.82086V7.64405L1 10.1163L2.73222 12.9556L4.82086 11.6035V21H19.1791V11.6035L21.2678 12.9556L23 10.1163L11.9991 3L8.07664 5.53693Z" />
+</svg>',
+
 		'patreon'     => '
 <svg viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g>

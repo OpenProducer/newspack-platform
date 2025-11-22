@@ -7,8 +7,8 @@ import { ExternalLink } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import { ActionCard, Button, Grid, TextControl } from '../../../components/src';
-import { HANDOFF_KEY } from '../../../components/src/consts';
+import { ActionCard, Button, Grid, TextControl } from '../../../../packages/components/src';
+import { HANDOFF_KEY } from '../../../../packages/components/src/consts';
 
 /**
  * Expandable ActionCard for RAS prerequisites checklist.

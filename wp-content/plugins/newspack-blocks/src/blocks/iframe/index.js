@@ -1,4 +1,10 @@
 /**
+ * Newspack dependencies
+ */
+import colors from 'newspack-colors';
+import { iframe as icon } from 'newspack-icons';
+
+/**
  * WordPress dependencies
  */
 import { ExternalLink } from '@wordpress/components';
@@ -15,7 +21,6 @@ const { name, attributes, category } = metadata;
  * Style dependencies - will load in editor
  */
 import './editor.scss';
-import { iframeIcon } from './icons';
 
 export const title = __( 'Iframe', 'newspack-blocks' );
 
@@ -25,8 +30,8 @@ export { name };
 export const settings = {
 	title,
 	icon: {
-		src: iframeIcon,
-		foreground: '#406ebc',
+		src: icon,
+		foreground: colors['primary-400'],
 	},
 	category,
 	keywords: [ __( 'iframe', 'newspack-blocks' ), __( 'project iframe', 'newspack-blocks' ) ],

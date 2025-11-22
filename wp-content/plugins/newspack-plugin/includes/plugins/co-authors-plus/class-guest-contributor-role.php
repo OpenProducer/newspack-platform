@@ -85,6 +85,7 @@ class Guest_Contributor_Role {
 
 		// Hide author email on the frontend, if it's a placeholder email.
 		\add_filter( 'theme_mod_show_author_email', [ __CLASS__, 'should_display_author_email' ] );
+		\add_filter( 'newspack_show_coauthor_email', [ __CLASS__, 'should_display_coauthor_email' ], 10, 2 );
 
 		// Make sure we check again if the site has guest authors every hour.
 		$re_check_guest_authors = 'newspack_re_check_guest_authors';
@@ -169,6 +170,16 @@ class Guest_Contributor_Role {
 	 */
 	private static function is_guest_author( WP_User $user ) {
 		return 1 === count( $user->roles ) && self::CONTRIBUTOR_NO_EDIT_ROLE_NAME === current( $user->roles );
+	}
+
+	/**
+	 * Determines whether a user has the guest contributor role.
+	 *
+	 * @param WP_User $user The user to check.
+	 * @return bool
+	 */
+	private static function has_guest_contributor_role( WP_User $user ) {
+		return in_array( self::CONTRIBUTOR_NO_EDIT_ROLE_NAME, $user->roles, true );
 	}
 
 	/**
@@ -545,12 +556,40 @@ class Guest_Contributor_Role {
 	 * @param bool $value Whether to show the author email.
 	 */
 	public static function should_display_author_email( $value ) {
-		if ( is_author() || is_singular() ) { // Run on archive pages and single posts/pages.
+		global $coauthors_plus;
+		// This filter is onl used to occasionally hide the email, so if the value is already false, just return it.
+		if ( ! $value ) {
+			return $value;
+		}
+
+		$is_coauthors_plus_active = is_object( $coauthors_plus ) && method_exists( $coauthors_plus, 'search_authors' );
+
+		if ( is_author() || ( is_singular() && ! $is_coauthors_plus_active ) ) {
 			$author_id = get_the_author_meta( 'ID' );
 			$user = get_userdata( $author_id );
-			if ( $user && self::is_guest_author( $user ) && self::is_dummy_email_address( $user->user_email ) ) {
+
+			if ( $user && self::has_guest_contributor_role( $user ) && self::is_dummy_email_address( $user->user_email ) ) {
 				return false;
 			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Hide the author email on the frontend if it's a placeholder email.
+	 *
+	 * @param bool $value Whether to show the author email.
+	 * @param int  $user_id The user ID.
+	 */
+	public static function should_display_coauthor_email( $value, $user_id ) {
+		if ( ! $value ) {
+			return $value;
+		}
+
+		$user = get_userdata( $user_id );
+		if ( $user && self::has_guest_contributor_role( $user ) && self::is_dummy_email_address( $user->user_email ) ) {
+			return false;
 		}
 		return $value;
 	}

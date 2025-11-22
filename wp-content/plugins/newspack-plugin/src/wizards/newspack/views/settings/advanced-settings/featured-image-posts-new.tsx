@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { Grid, SelectControl } from '../../../../../components/src';
+import { Grid, SelectControl } from '../../../../../../packages/components/src';
 
 export default function FeaturedImagePostsNew( { data, update }: ThemeModComponentProps< AdvancedSettings > ) {
 	return (

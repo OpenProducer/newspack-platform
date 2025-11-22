@@ -1,9 +1,25 @@
 <?php
 
+/**
+ * Collection of tables.
+ *
+ * @since 1.0.0
+ *
+ * @package \TEC\Common\StellarWP\Schema\Tables
+ */
+declare (strict_types=1);
 namespace TEC\Common\StellarWP\Schema\Tables;
 
-use TEC\Common\StellarWP\Schema\Tables\Contracts\Schema_Interface;
-class Collection implements \ArrayAccess, \Countable, \Iterator
+use TEC\Common\StellarWP\Schema\Tables\Contracts\Table_Interface;
+use ArrayAccess;
+use Countable;
+use Iterator;
+/**
+ * Collection of tables.
+ *
+ * @since 1.0.0
+ */
+class Collection implements ArrayAccess, Countable, Iterator
 {
     /**
      * Table groups.
@@ -22,11 +38,11 @@ class Collection implements \ArrayAccess, \Countable, \Iterator
      *
      * @since 1.0.0
      *
-     * @param Schema_Interface $table Table instance.
+     * @param Table_Interface $table Table instance.
      *
      * @return mixed
      */
-    public function add(Schema_Interface $table)
+    public function add(Table_Interface $table)
     {
         $this->offsetSet($table::base_table_name(), $table);
         $this->register_group($table);
@@ -54,9 +70,9 @@ class Collection implements \ArrayAccess, \Countable, \Iterator
      *
      * @param string $key Table base name.
      *
-     * @return Schema_Interface
+     * @return Table_Interface
      */
-    public function get(string $key): Schema_Interface
+    public function get(string $key): Table_Interface
     {
         return $this->offsetGet($key);
     }
@@ -70,7 +86,7 @@ class Collection implements \ArrayAccess, \Countable, \Iterator
      *
      * @return Filters\Group_FilterIterator
      */
-    public function get_by_group($groups, $iterator = null): \TEC\Common\StellarWP\Schema\Tables\Filters\Group_FilterIterator
+    public function get_by_group($groups, $iterator = null): Filters\Group_FilterIterator
     {
         return new Filters\Group_FilterIterator((array) $groups, $iterator ?: $this);
     }
@@ -83,7 +99,7 @@ class Collection implements \ArrayAccess, \Countable, \Iterator
      *
      * @return Filters\Needs_Update_FilterIterator
      */
-    public function get_tables_needing_updates($iterator = null): \TEC\Common\StellarWP\Schema\Tables\Filters\Needs_Update_FilterIterator
+    public function get_tables_needing_updates($iterator = null): Filters\Needs_Update_FilterIterator
     {
         return new Filters\Needs_Update_FilterIterator($iterator ?: $this);
     }
@@ -133,7 +149,7 @@ class Collection implements \ArrayAccess, \Countable, \Iterator
     /**
      * Registers a group in the group array for the given table.
      *
-     * @param Schema_Interface $table Table instance.
+     * @param Table_Interface $table Table instance.
      */
     private function register_group($table)
     {
@@ -166,11 +182,11 @@ class Collection implements \ArrayAccess, \Countable, \Iterator
      * @since 1.0.0
      *
      * @param string $name Table name.
-     * @param Schema_Interface $table Table instance.
+     * @param Table_Interface $table Table instance.
      *
      * @return mixed
      */
-    public function set($name, Schema_Interface $table)
+    public function set($name, Table_Interface $table)
     {
         $this->offsetSet($name, $table);
         $this->register_group($table);

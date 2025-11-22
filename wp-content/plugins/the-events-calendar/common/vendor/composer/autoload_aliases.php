@@ -2098,6 +2098,17 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'StellarWP\\Models\\Exceptions\\ReadOnlyPropertyException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ReadOnlyPropertyException',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Models\\Exceptions',
+    'extends' => 'TEC\\Common\\StellarWP\\Models\\Exceptions\\ReadOnlyPropertyException',
+    'implements' => 
+    array (
+    ),
+  ),
   'StellarWP\\Models\\Model' => 
   array (
     'type' => 'class',
@@ -2112,13 +2123,37 @@ namespace TEC\Common {
       2 => 'JsonSerializable',
     ),
   ),
-  'StellarWP\\Models\\ModelFactory' => 
+  'StellarWP\\Models\\ModelProperty' => 
   array (
     'type' => 'class',
-    'classname' => 'ModelFactory',
-    'isabstract' => true,
+    'classname' => 'ModelProperty',
+    'isabstract' => false,
     'namespace' => 'StellarWP\\Models',
-    'extends' => 'TEC\\Common\\StellarWP\\Models\\ModelFactory',
+    'extends' => 'TEC\\Common\\StellarWP\\Models\\ModelProperty',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Models\\ModelPropertyCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ModelPropertyCollection',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Models',
+    'extends' => 'TEC\\Common\\StellarWP\\Models\\ModelPropertyCollection',
+    'implements' => 
+    array (
+      0 => 'Countable',
+      1 => 'IteratorAggregate',
+    ),
+  ),
+  'StellarWP\\Models\\ModelPropertyDefinition' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ModelPropertyDefinition',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Models',
+    'extends' => 'TEC\\Common\\StellarWP\\Models\\ModelPropertyDefinition',
     'implements' => 
     array (
     ),
@@ -2130,6 +2165,41 @@ namespace TEC\Common {
     'isabstract' => false,
     'namespace' => 'StellarWP\\Models',
     'extends' => 'TEC\\Common\\StellarWP\\Models\\ModelQueryBuilder',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Models\\ModelRelationship' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ModelRelationship',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Models',
+    'extends' => 'TEC\\Common\\StellarWP\\Models\\ModelRelationship',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Models\\ModelRelationshipCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ModelRelationshipCollection',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Models',
+    'extends' => 'TEC\\Common\\StellarWP\\Models\\ModelRelationshipCollection',
+    'implements' => 
+    array (
+      0 => 'Countable',
+      1 => 'IteratorAggregate',
+    ),
+  ),
+  'StellarWP\\Models\\ModelRelationshipDefinition' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ModelRelationshipDefinition',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Models',
+    'extends' => 'TEC\\Common\\StellarWP\\Models\\ModelRelationshipDefinition',
     'implements' => 
     array (
     ),
@@ -2156,6 +2226,52 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'StellarWP\\SchemaModels\\Exceptions\\BadMethodCallSchemaModelException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'BadMethodCallSchemaModelException',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\SchemaModels\\Exceptions',
+    'extends' => 'TEC\\Common\\StellarWP\\SchemaModels\\Exceptions\\BadMethodCallSchemaModelException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\SchemaModels\\Exceptions\\SchemaModelException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SchemaModelException',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\SchemaModels\\Exceptions',
+    'extends' => 'TEC\\Common\\StellarWP\\SchemaModels\\Exceptions\\SchemaModelException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\SchemaModels\\Relationships\\ManyToManyWithPosts' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ManyToManyWithPosts',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\SchemaModels\\Relationships',
+    'extends' => 'TEC\\Common\\StellarWP\\SchemaModels\\Relationships\\ManyToManyWithPosts',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\SchemaModels\\Contracts\\Relationships\\ManyToManyWithPosts',
+    ),
+  ),
+  'StellarWP\\SchemaModels\\SchemaModel' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SchemaModel',
+    'isabstract' => true,
+    'namespace' => 'StellarWP\\SchemaModels',
+    'extends' => 'TEC\\Common\\StellarWP\\SchemaModels\\SchemaModel',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\SchemaModels\\Contracts\\SchemaModel',
+    ),
+  ),
   'StellarWP\\Schema\\Activation' => 
   array (
     'type' => 'class',
@@ -2178,6 +2294,232 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'StellarWP\\Schema\\Collections\\Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Collection',
+    'isabstract' => true,
+    'namespace' => 'StellarWP\\Schema\\Collections',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Collections\\Collection',
+    'implements' => 
+    array (
+      0 => 'ArrayAccess',
+      1 => 'Iterator',
+      2 => 'Countable',
+      3 => 'JsonSerializable',
+    ),
+  ),
+  'StellarWP\\Schema\\Collections\\Column_Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Column_Collection',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Collections',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Collections\\Column_Collection',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Collections\\Index_Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Index_Collection',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Collections',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Collections\\Index_Collection',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Binary_Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Binary_Column',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Binary_Column',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Blob_Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Blob_Column',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Blob_Column',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Boolean_Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Boolean_Column',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Boolean_Column',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Column_Types' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Column_Types',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Column_Types',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Column',
+    'isabstract' => true,
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Column',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Schema\\Columns\\Contracts\\Column_Interface',
+      1 => 'StellarWP\\Schema\\Columns\\Contracts\\Indexable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Created_At' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Created_At',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Created_At',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Datetime_Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Datetime_Column',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Datetime_Column',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Float_Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Float_Column',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Float_Column',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Schema\\Columns\\Contracts\\Lengthable',
+      1 => 'StellarWP\\Schema\\Columns\\Contracts\\Signable',
+      2 => 'StellarWP\\Schema\\Columns\\Contracts\\Precisionable',
+      3 => 'StellarWP\\Schema\\Columns\\Contracts\\Uniquable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\ID' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ID',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\ID',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Integer_Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Integer_Column',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Integer_Column',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Schema\\Columns\\Contracts\\Lengthable',
+      1 => 'StellarWP\\Schema\\Columns\\Contracts\\Signable',
+      2 => 'StellarWP\\Schema\\Columns\\Contracts\\Auto_Incrementable',
+      3 => 'StellarWP\\Schema\\Columns\\Contracts\\Uniquable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Last_Changed' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Last_Changed',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Last_Changed',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\PHP_Types' => 
+  array (
+    'type' => 'class',
+    'classname' => 'PHP_Types',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\PHP_Types',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Referenced_ID' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Referenced_ID',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Referenced_ID',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\String_Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'String_Column',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\String_Column',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Schema\\Columns\\Contracts\\Lengthable',
+      1 => 'StellarWP\\Schema\\Columns\\Contracts\\Uniquable',
+      2 => 'StellarWP\\Schema\\Columns\\Contracts\\Primarable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Text_Column' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Text_Column',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Text_Column',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Updated_At' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Updated_At',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Columns',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Updated_At',
+    'implements' => 
+    array (
+    ),
+  ),
   'StellarWP\\Schema\\Config' => 
   array (
     'type' => 'class',
@@ -2189,44 +2531,6 @@ namespace TEC\Common {
     array (
     ),
   ),
-  'StellarWP\\Schema\\Fields\\Collection' => 
-  array (
-    'type' => 'class',
-    'classname' => 'Collection',
-    'isabstract' => false,
-    'namespace' => 'StellarWP\\Schema\\Fields',
-    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Fields\\Collection',
-    'implements' => 
-    array (
-      0 => 'ArrayAccess',
-      1 => 'Countable',
-      2 => 'Iterator',
-    ),
-  ),
-  'StellarWP\\Schema\\Fields\\Contracts\\Field' => 
-  array (
-    'type' => 'class',
-    'classname' => 'Field',
-    'isabstract' => true,
-    'namespace' => 'StellarWP\\Schema\\Fields\\Contracts',
-    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Fields\\Contracts\\Field',
-    'implements' => 
-    array (
-      0 => 'StellarWP\\Schema\\Fields\\Contracts\\Schema_Interface',
-    ),
-  ),
-  'StellarWP\\Schema\\Fields\\Filters\\Table_FilterIterator' => 
-  array (
-    'type' => 'class',
-    'classname' => 'Table_FilterIterator',
-    'isabstract' => false,
-    'namespace' => 'StellarWP\\Schema\\Fields\\Filters',
-    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Fields\\Filters\\Table_FilterIterator',
-    'implements' => 
-    array (
-      0 => 'Countable',
-    ),
-  ),
   'StellarWP\\Schema\\Full_Activation_Provider' => 
   array (
     'type' => 'class',
@@ -2234,6 +2538,62 @@ namespace TEC\Common {
     'isabstract' => false,
     'namespace' => 'StellarWP\\Schema',
     'extends' => 'TEC\\Common\\StellarWP\\Schema\\Full_Activation_Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Indexes\\Classic_Index' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Classic_Index',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Indexes',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Indexes\\Classic_Index',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Indexes\\Contracts\\Abstract_Index' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Abstract_Index',
+    'isabstract' => true,
+    'namespace' => 'StellarWP\\Schema\\Indexes\\Contracts',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Indexes\\Contracts\\Abstract_Index',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Schema\\Indexes\\Contracts\\Index',
+    ),
+  ),
+  'StellarWP\\Schema\\Indexes\\Fulltext_Index' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Fulltext_Index',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Indexes',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Indexes\\Fulltext_Index',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Indexes\\Primary_Key' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Primary_Key',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Indexes',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Indexes\\Primary_Key',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Schema\\Indexes\\Unique_Key' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Unique_Key',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Indexes',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Indexes\\Unique_Key',
     'implements' => 
     array (
     ),
@@ -2283,7 +2643,7 @@ namespace TEC\Common {
     'extends' => 'TEC\\Common\\StellarWP\\Schema\\Tables\\Contracts\\Table',
     'implements' => 
     array (
-      0 => 'StellarWP\\Schema\\Tables\\Contracts\\Schema_Interface',
+      0 => 'StellarWP\\Schema\\Tables\\Contracts\\Table_Interface',
     ),
   ),
   'StellarWP\\Schema\\Tables\\Filters\\Group_FilterIterator' => 
@@ -2308,6 +2668,18 @@ namespace TEC\Common {
     'implements' => 
     array (
       0 => 'Countable',
+    ),
+  ),
+  'StellarWP\\Schema\\Tables\\Table_Schema' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Table_Schema',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Schema\\Tables',
+    'extends' => 'TEC\\Common\\StellarWP\\Schema\\Tables\\Table_Schema',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Schema\\Tables\\Contracts\\Table_Schema_Interface',
     ),
   ),
   'StellarWP\\Shepherd\\Abstracts\\Model_Abstract' => 
@@ -3990,14 +4362,24 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\StellarWP\\DB\\QueryBuilder\\Concerns\\WhereClause',
     ),
   ),
-  'StellarWP\\Shepherd\\Traits\\Custom_Table_Query_Methods' => 
+  'StellarWP\\Schema\\Traits\\Custom_Table_Query_Methods' => 
   array (
     'type' => 'trait',
     'traitname' => 'Custom_Table_Query_Methods',
-    'namespace' => 'StellarWP\\Shepherd\\Traits',
+    'namespace' => 'StellarWP\\Schema\\Traits',
     'use' => 
     array (
-      0 => 'TEC\\Common\\StellarWP\\Shepherd\\Traits\\Custom_Table_Query_Methods',
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Traits\\Custom_Table_Query_Methods',
+    ),
+  ),
+  'StellarWP\\Schema\\Traits\\Indexable' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'Indexable',
+    'namespace' => 'StellarWP\\Schema\\Traits',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Traits\\Indexable',
     ),
   ),
   'StellarWP\\Shepherd\\Traits\\Loggable' => 
@@ -4230,44 +4612,14 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\StellarWP\\Models\\Contracts\\Model',
     ),
   ),
-  'StellarWP\\Models\\Contracts\\ModelCrud' => 
+  'StellarWP\\Models\\Contracts\\ModelPersistable' => 
   array (
     'type' => 'interface',
-    'interfacename' => 'ModelCrud',
+    'interfacename' => 'ModelPersistable',
     'namespace' => 'StellarWP\\Models\\Contracts',
     'extends' => 
     array (
-      0 => 'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelCrud',
-    ),
-  ),
-  'StellarWP\\Models\\Contracts\\ModelFromQueryBuilderObject' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'ModelFromQueryBuilderObject',
-    'namespace' => 'StellarWP\\Models\\Contracts',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelFromQueryBuilderObject',
-    ),
-  ),
-  'StellarWP\\Models\\Contracts\\ModelHasFactory' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'ModelHasFactory',
-    'namespace' => 'StellarWP\\Models\\Contracts',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelHasFactory',
-    ),
-  ),
-  'StellarWP\\Models\\Contracts\\ModelReadOnly' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'ModelReadOnly',
-    'namespace' => 'StellarWP\\Models\\Contracts',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelReadOnly',
+      0 => 'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelPersistable',
     ),
   ),
   'StellarWP\\Models\\Repositories\\Contracts\\Deletable' => 
@@ -4300,24 +4652,144 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\StellarWP\\Models\\Repositories\\Contracts\\Updatable',
     ),
   ),
-  'StellarWP\\Schema\\Fields\\Contracts\\Schema_Interface' => 
+  'StellarWP\\SchemaModels\\Contracts\\Relationships\\ManyToManyWithPosts' => 
   array (
     'type' => 'interface',
-    'interfacename' => 'Schema_Interface',
-    'namespace' => 'StellarWP\\Schema\\Fields\\Contracts',
+    'interfacename' => 'ManyToManyWithPosts',
+    'namespace' => 'StellarWP\\SchemaModels\\Contracts\\Relationships',
     'extends' => 
     array (
-      0 => 'TEC\\Common\\StellarWP\\Schema\\Fields\\Contracts\\Schema_Interface',
+      0 => 'TEC\\Common\\StellarWP\\SchemaModels\\Contracts\\Relationships\\ManyToManyWithPosts',
     ),
   ),
-  'StellarWP\\Schema\\Tables\\Contracts\\Schema_Interface' => 
+  'StellarWP\\SchemaModels\\Contracts\\Relationships\\RelationshipCRUD' => 
   array (
     'type' => 'interface',
-    'interfacename' => 'Schema_Interface',
+    'interfacename' => 'RelationshipCRUD',
+    'namespace' => 'StellarWP\\SchemaModels\\Contracts\\Relationships',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\SchemaModels\\Contracts\\Relationships\\RelationshipCRUD',
+    ),
+  ),
+  'StellarWP\\SchemaModels\\Contracts\\SchemaModel' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'SchemaModel',
+    'namespace' => 'StellarWP\\SchemaModels\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\SchemaModels\\Contracts\\SchemaModel',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Auto_Incrementable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Auto_Incrementable',
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Auto_Incrementable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Column_Interface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Column_Interface',
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Column_Interface',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Indexable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Indexable',
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Indexable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Lengthable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Lengthable',
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Lengthable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Precisionable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Precisionable',
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Precisionable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Primarable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Primarable',
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Primarable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Signable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Signable',
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Signable',
+    ),
+  ),
+  'StellarWP\\Schema\\Columns\\Contracts\\Uniquable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Uniquable',
+    'namespace' => 'StellarWP\\Schema\\Columns\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Uniquable',
+    ),
+  ),
+  'StellarWP\\Schema\\Indexes\\Contracts\\Index' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Index',
+    'namespace' => 'StellarWP\\Schema\\Indexes\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Indexes\\Contracts\\Index',
+    ),
+  ),
+  'StellarWP\\Schema\\Tables\\Contracts\\Table_Interface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Table_Interface',
     'namespace' => 'StellarWP\\Schema\\Tables\\Contracts',
     'extends' => 
     array (
-      0 => 'TEC\\Common\\StellarWP\\Schema\\Tables\\Contracts\\Schema_Interface',
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Tables\\Contracts\\Table_Interface',
+    ),
+  ),
+  'StellarWP\\Schema\\Tables\\Contracts\\Table_Schema_Interface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Table_Schema_Interface',
+    'namespace' => 'StellarWP\\Schema\\Tables\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Schema\\Tables\\Contracts\\Table_Schema_Interface',
     ),
   ),
   'StellarWP\\Shepherd\\Contracts\\Log_Model' => 

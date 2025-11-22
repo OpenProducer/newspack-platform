@@ -15,6 +15,33 @@
 		margin-bottom: 0;
 	}
 
+	&.aligncenter {
+		margin-left: auto;
+		margin-right: auto;
+
+		@include utilities.media( tablet ) {
+			margin-left: 0;
+			margin-right: 0;
+		}
+	}
+
+	@include utilities.media( notdesktop ) {
+		&.wp-block-embed {
+			&.alignleft,
+			&.alignright {
+				float: none;
+				margin-left: auto;
+				margin-right: auto;
+				max-width: 100%;
+			}
+		}
+	}
+}
+
+.entry .entry-content > *,
+.newspack-inline-popup > *,
+.everlit-no-audio > *,
+[id="pico"] > * {
 	// When the image block is aligned left or right, the markup changes,
 	// making a slighly different selector necessary.
 	&.wp-block-image .alignleft,
@@ -40,28 +67,6 @@
 	.alignleft:not(:first-child),
 	.alignright:not(:first-child) {
 		margin-top: 0;
-	}
-
-	&.aligncenter {
-		margin-left: auto;
-		margin-right: auto;
-
-		@include utilities.media( tablet ) {
-			margin-left: 0;
-			margin-right: 0;
-		}
-	}
-
-	@include utilities.media( notdesktop ) {
-		&.wp-block-embed {
-			&.alignleft,
-			&.alignright {
-				float: none;
-				margin-left: auto;
-				margin-right: auto;
-				max-width: 100%;
-			}
-		}
 	}
 }
 
@@ -703,6 +708,10 @@ p.has-background {
 //! Button
 .wp-block-buttons {
 	--wp--style--block-gap: 0.5rem;
+
+	.everlit-no-audio {
+		display: contents;
+	}
 }
 
 .wp-block-buttons,
@@ -998,6 +1007,10 @@ p.has-background {
 			margin-left: auto;
 			margin-right: auto;
 		}
+	}
+
+	.everlit-no-audio {
+		display: contents;
 	}
 }
 

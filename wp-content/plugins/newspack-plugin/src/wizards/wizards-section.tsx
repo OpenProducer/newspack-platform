@@ -5,7 +5,7 @@
 /**
  * Internal dependencies.
  */
-import { SectionHeader } from '../components/src';
+import { SectionHeader } from '../../packages/components/src';
 
 /**
  * Section component.

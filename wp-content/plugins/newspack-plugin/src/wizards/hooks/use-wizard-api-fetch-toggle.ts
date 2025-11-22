@@ -7,7 +7,7 @@ import { useState, useEffect, createElement } from '@wordpress/element';
 /**
  * Internal dependencies.
  */
-import { Waiting } from '../../components/src';
+import { Waiting } from '../../../packages/components/src';
 import { useWizardApiFetch } from './use-wizard-api-fetch';
 
 /**

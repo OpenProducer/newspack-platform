@@ -5,7 +5,7 @@
 /**
  * Internal dependencies
  */
-import { ActionCard } from '../components/src';
+import { ActionCard } from '../../packages/components/src';
 
 const WizardsActionCard = ( { description, error, isChecked, notificationLevel = 'error', children, ...props }: ActionCardProps ) => {
 	let checkbox: 'checked' | 'unchecked' | undefined;

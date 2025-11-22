@@ -83,13 +83,17 @@ class WooCommerce_My_Account {
 			\add_action( 'profile_update', [ __CLASS__, 'handle_admin_email_change_request' ], 10, 3 );
 			\add_action( self::SYNC_ESP_EMAIL_CHANGE_CRON_HOOK, [ __CLASS__, 'sync_email_change_with_esp' ], 10, 3 );
 
-			// Decide which My Account UI version to load.
-			if ( version_compare( self::get_version(), '1.0.0', '<' ) ) {
-				include_once __DIR__ . '/class-my-account-ui-v0.php';
-			} else {
-				include_once __DIR__ . '/class-my-account-ui-v1.php';
-				include_once __DIR__ . '/class-my-account-ui-v1-passwords.php';
-			}
+			\add_action(
+				'init',
+				function() {
+					if ( version_compare( self::get_version(), '1.0.0', '<' ) ) {
+						include_once __DIR__ . '/class-my-account-ui-v0.php';
+					} else {
+						include_once __DIR__ . '/class-my-account-ui-v1.php';
+						include_once __DIR__ . '/class-my-account-ui-v1-passwords.php';
+					}
+				}
+			);
 		}
 	}
 
@@ -102,7 +106,13 @@ class WooCommerce_My_Account {
 	 */
 	public static function get_version() {
 		$version = defined( 'NEWSPACK_MY_ACCOUNT_VERSION' ) ? NEWSPACK_MY_ACCOUNT_VERSION : '0.0.0'; // Increment this version number to default to a newer My Account version.
-		return $version;
+
+		/**
+		 * Filters the version number of the Newspack My Account UI.
+		 *
+		 * @param string $version The version number.
+		 */
+		return apply_filters( 'newspack_my_account_version', $version );
 	}
 
 	/**
@@ -402,7 +412,9 @@ class WooCommerce_My_Account {
 			if ( isset( $items['subscriptions'] ) ) {
 				$items = [ 'subscriptions' => $items['subscriptions'] ] + $items;
 			}
-			$items = [ 'edit-account' => $items['edit-account'] ] + $items;
+			if ( isset( $items['edit-account'] ) ) {
+				$items = [ 'edit-account' => $items['edit-account'] ] + $items;
+			}
 		}
 
 		return $items;

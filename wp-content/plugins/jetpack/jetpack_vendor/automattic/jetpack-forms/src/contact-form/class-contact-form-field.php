@@ -109,69 +109,71 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 	public function __construct( $attributes, $content = null, $form = null ) {
 		$attributes = shortcode_atts(
 			array(
-				'label'                    => null,
-				'togglelabel'              => null,
-				'type'                     => 'text',
-				'required'                 => false,
-				'requiredtext'             => null,
-				'requiredindicator'        => true,
-				'options'                  => array(),
-				'optionsdata'              => array(),
-				'id'                       => null,
-				'style'                    => null,
-				'fieldbackgroundcolor'     => null,
-				'buttonbackgroundcolor'    => null,
-				'buttonborderradius'       => null,
-				'buttonborderwidth'        => null,
-				'textcolor'                => null,
-				'default'                  => null,
-				'values'                   => null,
-				'placeholder'              => null,
-				'class'                    => null,
-				'width'                    => null,
-				'consenttype'              => null,
-				'dateformat'               => null,
-				'implicitconsentmessage'   => null,
-				'explicitconsentmessage'   => null,
-				'borderradius'             => null,
-				'borderwidth'              => null,
-				'lineheight'               => null,
-				'labellineheight'          => null,
-				'bordercolor'              => null,
-				'inputcolor'               => null,
-				'labelcolor'               => null,
-				'labelfontsize'            => null,
-				'fieldfontsize'            => null,
-				'labelclasses'             => null,
-				'labelstyles'              => null,
-				'inputclasses'             => null,
-				'inputstyles'              => null,
-				'optionclasses'            => null,
-				'optionstyles'             => null,
-				'min'                      => null,
-				'max'                      => null,
-				'minlabel'                 => null,
-				'maxlabel'                 => null,
-				'step'                     => null,
-				'maxfiles'                 => null,
-				'fieldwrapperclasses'      => null,
-				'stylevariationattributes' => array(),
-				'stylevariationclasses'    => null,
-				'stylevariationstyles'     => null,
-				'optionsclasses'           => null,
-				'optionsstyles'            => null,
-				'align'                    => null,
-				'variation'                => null,
-				'iconstyle'                => null, // For rating field icon style (lowercase for shortcode compatibility)
+				'label'                        => null,
+				'togglelabel'                  => null,
+				'type'                         => 'text',
+				'required'                     => false,
+				'requiredtext'                 => null,
+				'requiredindicator'            => true,
+				'options'                      => array(),
+				'optionsdata'                  => array(),
+				'id'                           => null,
+				'style'                        => null,
+				'fieldbackgroundcolor'         => null,
+				'buttonbackgroundcolor'        => null,
+				'buttonborderradius'           => null,
+				'buttonborderwidth'            => null,
+				'textcolor'                    => null,
+				'default'                      => null,
+				'values'                       => null,
+				'placeholder'                  => null,
+				'class'                        => null,
+				'width'                        => null,
+				'consenttype'                  => null,
+				'dateformat'                   => null,
+				'implicitconsentmessage'       => null,
+				'explicitconsentmessage'       => null,
+				'borderradius'                 => null,
+				'borderwidth'                  => null,
+				'lineheight'                   => null,
+				'labellineheight'              => null,
+				'bordercolor'                  => null,
+				'inputcolor'                   => null,
+				'labelcolor'                   => null,
+				'labelfontsize'                => null,
+				'fieldfontsize'                => null,
+				'labelclasses'                 => null,
+				'labelstyles'                  => null,
+				'inputclasses'                 => null,
+				'inputstyles'                  => null,
+				'optionclasses'                => null,
+				'optionstyles'                 => null,
+				'min'                          => null,
+				'max'                          => null,
+				'minlabel'                     => null,
+				'maxlabel'                     => null,
+				'step'                         => null,
+				'maxfiles'                     => null,
+				'fieldwrapperclasses'          => null,
+				'stylevariationattributes'     => array(),
+				'stylevariationclasses'        => null,
+				'stylevariationstyles'         => null,
+				'optionsclasses'               => null,
+				'optionsstyles'                => null,
+				'align'                        => null,
+				'variation'                    => null,
+				'iconstyle'                    => null, // For rating field icon style (lowercase for shortcode compatibility)
 				// full phone field attributes, might become a standalone country list input block
-				'showcountryselector'      => false,
-				'searchplaceholder'        => false,
+				'showcountryselector'          => false,
+				'searchplaceholder'            => false,
 				// Image select field attributes
-				'ismultiple'               => null,
-				'showlabels'               => null,
-				'issupersized'             => null,
-				'randomizeoptions'         => null,
-				'showotheroption'          => null,
+				'ismultiple'                   => null,
+				'showlabels'                   => null,
+				'issupersized'                 => null,
+				'randomizeoptions'             => null,
+				'showotheroption'              => null,
+				// derived from block metadata for blockVisibility support
+				'labelhiddenbyblockvisibility' => null,
 			),
 			$attributes,
 			'contact-field'
@@ -774,6 +776,9 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 	 * @return string HTML
 	 */
 	public function render_label( $type, $id, $label, $required, $required_field_text, $extra_attrs = array(), $always_render = false, $required_indicator = true ) {
+		if ( $this->attributes['labelhiddenbyblockvisibility'] ) {
+			return '';
+		}
 		$form_style = $this->get_form_style();
 
 		if ( ! empty( $form_style ) && $form_style !== 'default' ) {
@@ -894,6 +899,11 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 		// this is a hack for Firefox to prevent users from falsely entering a something other than a number into a number field.
 		if ( $type === 'number' ) {
 			$extra_attrs_string .= " data-wp-on--keypress='actions.handleNumberKeyPress' ";
+		}
+
+		if ( $this->get_attribute( 'labelhiddenbyblockvisibility' ) ) {
+			$aria_label          = ! empty( $placeholder ) ? $placeholder : Contact_Form_Plugin::strip_tags( $this->get_attribute( 'label' ) );
+			$extra_attrs_string .= " aria-label='" . esc_attr( $aria_label ) . "' ";
 		}
 
 		return "<input
@@ -1041,7 +1051,6 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 			class="jetpack-field__input-phone-wrapper <?php echo esc_attr( $this->get_attribute( 'stylevariationclasses' ) ); ?> <?php echo esc_attr( $class_names ); ?>"
 			style="<?php echo ( ! empty( $this->field_styles ) && is_string( $this->field_styles ) ? esc_attr( $this->field_styles ) : '' ); ?>"
 			data-wp-on--jetpack-form-reset='actions.phoneResetHandler'
-			data-wp-init="callbacks.initializePhoneField"
 			data-wp-class--is-combobox-open="context.comboboxOpen"
 			<?php
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- function is supposed to work this way
@@ -1068,7 +1077,6 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 			>
 				<div class="jetpack-field__input-prefix"
 					data-wp-bind--hidden="!context.showCountrySelector"
-					data-wp-init="callbacks.initializePhoneFieldCustomComboBox"
 					data-wp-on-document--click="actions.phoneComboboxDocumentClickHandler">
 					<div class="jetpack-custom-combobox">
 
@@ -1100,8 +1108,9 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 								type="text"
 								placeholder="<?php echo esc_attr( $search_placeholder ); ?>"
 								data-wp-on--input="actions.phoneComboboxInputHandler"
-								data-wp-on--keydown="actions.phoneComboboxKeydownHandler">
-							<div class="jetpack-combobox-options">
+								data-wp-on--keydown="actions.phoneComboboxKeydownHandler"
+								data-wp-init="callbacks.registerPhoneComboboxSearchInput">
+							<div class="jetpack-combobox-options" data-wp-init="callbacks.registerPhoneComboboxOptionsList">
 								<template
 									data-wp-each--filtered="context.filteredCountries"
 									data-wp-each-key="context.filtered.code">
@@ -1138,6 +1147,11 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 					data-wp-on--blur='actions.onFieldBlur'
 					data-wp-on--focus='actions.phoneNumberFocusHandler'
 					data-wp-class--has-value='context.phoneNumber'
+					data-wp-init="callbacks.registerPhoneInput"
+					data-wp-init--phone-field-custom-combobox="callbacks.initializePhoneFieldCustomComboBox"
+					<?php if ( $this->get_attribute( 'labelhiddenbyblockvisibility' ) ) { ?>
+						aria-label="<?php echo esc_attr( $this->get_attribute( 'label' ) ); ?>"
+					<?php } ?>
 					/>
 				<input type="hidden"
 					id="<?php echo esc_attr( $id ); ?>"
@@ -1192,8 +1206,9 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 			$value = '';
 		}
 
-		$field  = $this->render_label( 'textarea', 'contact-form-comment-' . $id, $label, $required, $required_field_text, array(), false, $required_indicator );
-		$field .= "<textarea
+		$field      = $this->render_label( 'textarea', 'contact-form-comment-' . $id, $label, $required, $required_field_text, array(), false, $required_indicator );
+		$aria_label = ! empty( $placeholder ) ? $placeholder : Contact_Form_Plugin::strip_tags( $this->get_attribute( 'label' ) );
+		$field     .= "<textarea
 		                style='" . $this->field_styles . "'
 		                name='" . esc_attr( $id ) . "'
 		                id='contact-form-comment-" . esc_attr( $id ) . "'
@@ -1203,9 +1218,11 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 						data-wp-on--blur='actions.onFieldBlur'
 						data-wp-class--has-value='state.hasFieldValue'
 						data-wp-bind--aria-invalid='state.fieldHasErrors'
-						data-wp-on--keydown='actions.onKeyDownTextarea'
 						aria-errormessage='" . esc_attr( $id ) . "-textarea-error-message'
 						"
+						. ( $this->get_attribute( 'labelhiddenbyblockvisibility' )
+							? "aria-label='" . esc_attr( $aria_label ) . "'"
+							: '' )
 						. $class
 						. $placeholder
 						. ' ' . ( $required ? "required aria-required='true'" : '' ) .
@@ -1806,10 +1823,13 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 	 * @return string HTML
 	 */
 	public function render_select_field( $id, $label, $value, $class, $required, $required_field_text, $required_indicator = true ) {
-		$field  = $this->render_label( 'select', $id, $label, $required, $required_field_text, array(), false, $required_indicator );
-		$class  = preg_replace( "/class=['\"]([^'\"]*)['\"]/", 'class="contact-form__select-wrapper $1"', $class );
-		$field .= "<div {$class} style='" . esc_attr( $this->field_styles ) . "'>";
-		$field .= "\t<span class='contact-form__select-element-wrapper'><select name='" . esc_attr( $id ) . "' id='" . esc_attr( $id ) . "' " . ( $required ? "required aria-required='true'" : '' ) . " data-wp-on--change='actions.onFieldChange' data-wp-bind--aria-invalid='state.fieldHasErrors'>\n";
+		$field      = $this->render_label( 'select', $id, $label, $required, $required_field_text, array(), false, $required_indicator );
+		$class      = preg_replace( "/class=['\"]([^'\"]*)['\"]/", 'class="contact-form__select-wrapper $1"', $class );
+		$field     .= "<div {$class} style='" . esc_attr( $this->field_styles ) . "'>";
+		$aria_label = ! empty( $this->get_attribute( 'togglelabel' ) )
+			? Contact_Form_Plugin::strip_tags( $this->get_attribute( 'togglelabel' ) )
+			: __( 'Select an option', 'jetpack-forms' ); // selects don't have a default label
+		$field     .= "\t<span class='contact-form__select-element-wrapper'><select name='" . esc_attr( $id ) . "' id='" . esc_attr( $id ) . "' " . ( $required ? "required aria-required='true'" : '' ) . " data-wp-on--change='actions.onFieldChange' data-wp-bind--aria-invalid='state.fieldHasErrors' " . ( $this->get_attribute( 'labelhiddenbyblockvisibility' ) ? "aria-label='" . esc_attr( $aria_label ) . "'" : '' ) . ">\n";
 
 		if ( $this->get_attribute( 'togglelabel' ) ) {
 			$field .= "\t\t<option value=''>" . $this->get_attribute( 'togglelabel' ) . "</option>\n";
@@ -2012,141 +2032,190 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 		$field .= "<div class='" . esc_attr( $options_classes ) . " jetpack-field jetpack-fieldset-image-options' style='" . esc_attr( $options_styles ) . "'>";
 		$field .= "<div class='jetpack-fieldset-image-options__wrapper'>";
 
-		$options_data  = $this->get_attribute( 'optionsdata' );
+		$options_data = $this->get_attribute( 'optionsdata' );
+
+		// Filter out empty options from the end
+		$options_data = $this->trim_image_select_options( $options_data );
+
 		$used_html_ids = array();
 
-		if ( ! empty( $options_data ) ) {
-			// Create a separate array of original letters in sequence (A, B, C...)
-			$perceived_letters = array();
+		// Create a separate array of original letters in sequence (A, B, C...)
+		$perceived_letters = array();
 
-			foreach ( $options_data as $option ) {
-				$perceived_letters[] = Contact_Form_Plugin::strip_tags( $option['letter'] );
+		foreach ( $options_data as $option ) {
+			$perceived_letters[] = Contact_Form_Plugin::strip_tags( $option['letter'] );
+		}
+
+		// Create a working copy of options for potential randomization
+		$working_options = $options_data;
+
+		// Randomize options if requested, but preserve original letter values
+		if ( $randomize_options ) {
+			shuffle( $working_options );
+
+			// Trims options after randomization to ensure the last option has a label or image.
+			$working_options = $this->trim_image_select_options( $working_options );
+		}
+
+		// Calculate row options count for CSS variable
+		$total_options_count = count( $working_options );
+		// Those values are halved on mobile via CSS media query
+		$max_images_per_row = $is_supersized ? 2 : 4;
+		$row_options_count  = min( $total_options_count, $max_images_per_row );
+
+		foreach ( $working_options as $option_index => $option ) {
+			$option_label  = Contact_Form_Plugin::strip_tags( $option['label'] );
+			$option_letter = Contact_Form_Plugin::strip_tags( $option['letter'] );
+			$image_block   = $option['image'];
+
+			$rendered_image_block = render_block( $image_block );
+			// Remove any links from the rendered block
+			$rendered_image_block = preg_replace( '/<a[^>]*>(.*?)<\/a>/s', '$1', $rendered_image_block );
+
+			// Extract image src from rendered block
+			$image_src = '';
+
+			if ( ! empty( $rendered_image_block ) ) {
+				if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\'][^>]*>/i', $rendered_image_block, $matches ) ) {
+					$extracted_src = $matches[1];
+
+					if ( filter_var( $extracted_src, FILTER_VALIDATE_URL ) || str_starts_with( $extracted_src, 'data:' ) ) {
+						$image_src = $extracted_src;
+					}
+				}
+			} else {
+				$rendered_image_block = '<figure class="wp-block-image jetpack-input-image-option__empty-image"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" style="aspect-ratio:1;object-fit:cover"/></figure>';
 			}
 
-			// Create a working copy of options for potential randomization
-			$working_options = $options_data;
+			$option_value                = wp_json_encode(
+				array(
+					'perceived'  => $perceived_letters[ $option_index ],
+					'selected'   => $option_letter,
+					'label'      => $option_label,
+					'showLabels' => $show_labels,
+					'image'      => array(
+						'id'  => $image_block['attrs']['id'] ?? null,
+						'src' => $image_src ?? null,
+					),
+				)
+			);
+			$option_id                   = $id . '-' . $option_letter;
+			$used_html_ids[ $option_id ] = true;
 
-			// Randomize options if requested, but preserve original letter values
-			if ( $randomize_options ) {
-				shuffle( $working_options );
+			$figcaption_id = esc_attr( $option_id . '-figcaption' );
+
+			// Add id attribute to figcaption for accessibility
+			if ( ! empty( $rendered_image_block ) && strpos( $rendered_image_block, '<figcaption' ) !== false ) {
+				$rendered_image_block = preg_replace( '/(<figcaption[^>]*)(>)/', '$1 id="' . $figcaption_id . '"$2', $rendered_image_block );
 			}
 
-			// Calculate row options count for CSS variable
-			$total_options_count = count( $options_data );
-			// Those values are halved on mobile via CSS media query
-			$max_images_per_row = $is_supersized ? 2 : 4;
-			$row_options_count  = min( $total_options_count, $max_images_per_row );
+			// To be able to apply the backdrop-filter for the hover effect, we need to separate the background into an outer div.
+			// This outer div needs the color styles separately, and also the border radius to match the inner div without sticking out.
+			$option_outer_classes = 'jetpack-input-image-option__outer ' . ( isset( $option['classcolor'] ) ? $option['classcolor'] : '' );
 
-			foreach ( $working_options as $option_index => $option ) {
-				$option_label  = Contact_Form_Plugin::strip_tags( $option['label'] );
-				$option_letter = Contact_Form_Plugin::strip_tags( $option['letter'] );
-				$image_block   = $option['image'];
+			if ( $is_supersized ) {
+				$option_outer_classes .= ' is-supersized';
+			}
 
-				// Extract image src from rendered block
-				$rendered_image_block = render_block( $image_block );
-				$image_src            = '';
+			$border_styles = '';
+			if ( ! empty( $option['style'] ) ) {
+				preg_match( '/border-radius:([^;]+)/', $option['style'], $radius_match );
+				preg_match( '/border-width:([^;]+)/', $option['style'], $width_match );
 
-				if ( ! empty( $rendered_image_block ) ) {
-					if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\'][^>]*>/i', $rendered_image_block, $matches ) ) {
-						$extracted_src = $matches[1];
+				if ( ! empty( $radius_match[1] ) ) {
+					$radius_value = trim( $radius_match[1] );
 
-						if ( filter_var( $extracted_src, FILTER_VALIDATE_URL ) || str_starts_with( $extracted_src, 'data:' ) ) {
-							$image_src = $extracted_src;
-						}
+					if ( ! empty( $width_match[1] ) ) {
+							$width_value   = trim( $width_match[1] );
+							$border_styles = "border-radius:calc({$radius_value} + {$width_value});";
+					} else {
+							$border_styles = "border-radius:{$radius_value};";
 					}
 				} else {
-					$rendered_image_block = '<figure class="wp-block-image"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" style="aspect-ratio:1;object-fit:cover"/></figure>';
-				}
+					// Handle individual border radius properties when border-radius is not present
+					preg_match( '/border-top-left-radius:([^;]+)/', $option['style'], $top_left_match );
+					preg_match( '/border-top-right-radius:([^;]+)/', $option['style'], $top_right_match );
+					preg_match( '/border-bottom-right-radius:([^;]+)/', $option['style'], $bottom_right_match );
+					preg_match( '/border-bottom-left-radius:([^;]+)/', $option['style'], $bottom_left_match );
 
-				$option_value                = wp_json_encode(
-					array(
-						'perceived'  => $perceived_letters[ $option_index ],
-						'selected'   => $option_letter,
-						'label'      => $option_label,
-						'showLabels' => $show_labels,
-						'image'      => array(
-							'id'  => $image_block['attrs']['id'] ?? null,
-							'src' => $image_src ?? null,
-						),
-					)
-				);
-				$option_id                   = $id . '-' . $option_letter;
-				$used_html_ids[ $option_id ] = true;
+					if ( ! empty( $top_left_match[1] ) || ! empty( $top_right_match[1] ) || ! empty( $bottom_right_match[1] ) || ! empty( $bottom_left_match[1] ) ) {
+						$width_value = ! empty( $width_match[1] ) ? trim( $width_match[1] ) : '1px';
 
-				// To be able to apply the backdrop-filter for the hover effect, we need to separate the background into an outer div.
-				// This outer div needs the color styles separately, and also the border radius to match the inner div without sticking out.
-				$option_outer_classes = 'jetpack-input-image-option__outer ' . ( isset( $option['classcolor'] ) ? $option['classcolor'] : '' );
+						$top_left     = ! empty( $top_left_match[1] ) ? trim( $top_left_match[1] ) : '4px';
+						$top_right    = ! empty( $top_right_match[1] ) ? trim( $top_right_match[1] ) : '4px';
+						$bottom_right = ! empty( $bottom_right_match[1] ) ? trim( $bottom_right_match[1] ) : '4px';
+						$bottom_left  = ! empty( $bottom_left_match[1] ) ? trim( $bottom_left_match[1] ) : '4px';
 
-				if ( $is_supersized ) {
-					$option_outer_classes .= ' is-supersized';
-				}
-
-				$border_styles = '';
-				if ( ! empty( $option['style'] ) ) {
-					preg_match( '/border-radius:([^;]+)/', $option['style'], $radius_match );
-					preg_match( '/border-width:([^;]+)/', $option['style'], $width_match );
-
-					if ( ! empty( $radius_match[1] ) ) {
-						$radius_value = trim( $radius_match[1] );
-
-						if ( ! empty( $width_match[1] ) ) {
-								$width_value   = trim( $width_match[1] );
-								$border_styles = "border-radius:calc({$radius_value} + {$width_value});";
-						} else {
-								$border_styles = "border-radius:{$radius_value};";
-						}
+						$border_styles = "border-radius:calc({$top_left} + {$width_value}) calc({$top_right} + {$width_value}) calc({$bottom_right} + {$width_value}) calc({$bottom_left} + {$width_value});";
 					}
 				}
-
-				$option_outer_styles  = ( empty( $option['stylecolor'] ) ? '' : $option['stylecolor'] ) . $border_styles;
-				$option_outer_styles .= "--row-options-count: {$row_options_count};";
-				$option_outer_styles  = empty( $option_outer_styles ) ? '' : "style='" . esc_attr( $option_outer_styles ) . "'";
-
-				$field .= "<div class='{$option_outer_classes}' {$option_outer_styles}>";
-
-				$default_classes = 'jetpack-field jetpack-input-image-option';
-				$option_styles   = empty( $option['style'] ) ? '' : "style='" . esc_attr( $option['style'] ) . "'";
-				$option_classes  = "class='" . ( empty( $option['class'] ) ? $default_classes : $default_classes . ' ' . $option['class'] ) . "'";
-
-				$field .= "<div {$option_classes} {$option_styles} data-wp-on--click='actions.onImageOptionClick'>";
-
-				$input_id = esc_attr( $option_id );
-
-				$context             = array(
-					'inputId' => $input_id,
-				);
-				$interactivity_attrs = ' data-wp-interactive="jetpack/form" ' . wp_interactivity_data_wp_context( $context ) . ' ';
-
-				$field .= "<div class='jetpack-input-image-option__wrapper'>";
-				$field .= "<input
-				id='" . $input_id . "'
-				class='jetpack-input-image-option__input'
-				type='" . esc_attr( $input_type ) . "'
-				name='" . esc_attr( $input_name ) . "'
-				value='" . esc_attr( $option_value ) . "'
-				" . $interactivity_attrs . "
-				data-wp-init='callbacks.setImageOptionCheckColor'
-				data-wp-on--keydown='actions.onKeyDownImageOption'
-				data-wp-on--change='" . ( $is_multiple ? 'actions.onMultipleFieldChange' : 'actions.onFieldChange' ) . "' "
-				. $class
-				. ( $is_multiple ? checked( in_array( $option_value, (array) $value, true ), true, false ) : checked( $option_value, $value, false ) ) . ' '
-				. ( $required ? "required aria-required='true'" : '' )
-				. '/> ';
-
-				$field .= $rendered_image_block;
-				$field .= '</div>';
-
-				$field .= "<div class='jetpack-input-image-option__label-wrapper'>";
-				$field .= "<div class='jetpack-input-image-option__label-code'>" . esc_html( $perceived_letters[ $option_index ] ) . '</div>';
-
-				$label_classes  = 'jetpack-input-image-option__label';
-				$label_classes .= $show_labels ? '' : ' visually-hidden';
-				$field         .= "<span class='{$label_classes}'>" . esc_html( $option_label ) . '</span>';
-				$field         .= '</div></div></div>';
 			}
+
+			$option_outer_styles  = ( empty( $option['stylecolor'] ) ? '' : $option['stylecolor'] ) . $border_styles;
+			$option_outer_styles .= "--row-options-count: {$row_options_count};";
+			$option_outer_styles  = empty( $option_outer_styles ) ? '' : "style='" . esc_attr( $option_outer_styles ) . "'";
+
+			$field .= "<div class='{$option_outer_classes}' {$option_outer_styles}>";
+
+			$default_classes = 'jetpack-field jetpack-input-image-option';
+			$option_styles   = empty( $option['style'] ) ? '' : "style='" . esc_attr( $option['style'] ) . "'";
+			$option_classes  = "class='" . ( empty( $option['class'] ) ? $default_classes : $default_classes . ' ' . $option['class'] ) . "'";
+
+			$field .= "<div {$option_classes} {$option_styles} data-wp-on--click='actions.onImageOptionClick' data-wp-init='callbacks.setImageOptionOutlineColor'>";
+
+			$input_id = esc_attr( $option_id );
+			$label_id = esc_attr( $option_id . '-label' );
+
+			/* translators: %s is the letter associated with the option, e.g. "Option A" */
+			$aria_label_parts = array( sprintf( __( 'Option %s', 'jetpack-forms' ), $perceived_letters[ $option_index ] ) );
+
+			if ( ! empty( $option_label ) ) {
+				$aria_label_parts[] = $option_label;
+			}
+
+			$aria_label = implode( ': ', $aria_label_parts );
+
+			// Build aria-describedby to reference label and figcaption
+			$aria_describedby_parts = array( $label_id );
+
+			if ( ! empty( $rendered_image_block ) && strpos( $rendered_image_block, '<figcaption' ) !== false ) {
+				$aria_describedby_parts[] = $figcaption_id;
+			}
+
+			$aria_describedby = implode( ' ', $aria_describedby_parts );
+
+			$field .= "<div class='jetpack-input-image-option__wrapper'>";
+			$field .= "<input
+			id='" . $input_id . "'
+			class='jetpack-input-image-option__input'
+			type='" . esc_attr( $input_type ) . "'
+			name='" . esc_attr( $input_name ) . "'
+			value='" . esc_attr( $option_value ) . "'
+			aria-label='" . esc_attr( $aria_label ) . "'
+			aria-describedby='" . esc_attr( $aria_describedby ) . "'
+			data-wp-init='callbacks.setImageOptionCheckColor'
+			data-wp-on--keydown='actions.onKeyDownImageOption'
+			data-wp-on--change='" . ( $is_multiple ? 'actions.onMultipleFieldChange' : 'actions.onFieldChange' ) . "' "
+			. $class
+			. ( $is_multiple ? checked( in_array( $option_value, (array) $value, true ), true, false ) : checked( $option_value, $value, false ) ) . ' '
+			. ( $required ? "required aria-required='true'" : '' )
+			. '/> ';
+
+			$field .= $rendered_image_block;
+			$field .= '</div>';
+
+			$field .= "<div class='jetpack-input-image-option__label-wrapper'>";
+			$field .= "<div class='jetpack-input-image-option__label-code'>" . esc_html( $perceived_letters[ $option_index ] ) . '</div>';
+
+			$label_classes  = 'jetpack-input-image-option__label';
+			$label_classes .= $show_labels ? '' : ' visually-hidden';
+			$field         .= "<span id='{$label_id}' class='{$label_classes}'>" . esc_html( $option_label ) . '</span>';
+			$field         .= '</div></div></div>';
 		}
 
 		$field .= '</div></div>';
+
+		$field .= $this->get_error_div( $id, 'image-select' );
 
 		$field .= '</fieldset>';
 
@@ -2629,7 +2698,7 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 	public function is_field_renderable( $type ) {
 		// Check that radio, select, multiple choice, and image select
 		// fields have at least one valid option.
-		if ( $type === 'radio' || $type === 'checkbox-multiple' || $type === 'select' || $type === 'image-select' ) {
+		if ( $type === 'radio' || $type === 'checkbox-multiple' || $type === 'select' ) {
 			$options           = (array) $this->get_attribute( 'options' );
 			$non_empty_options = array_filter(
 				$options,
@@ -2640,16 +2709,11 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 			return count( $non_empty_options ) > 0;
 		}
 
-		// File field requires Jetpack to be active
-		if ( $type === 'file' ) {
-			/**
-			 * Check if Jetpack is active for file uploads.
-			 *
-			 * @since 5.3.0
-			 *
-			 * @return bool
-			 */
-			return apply_filters( 'jetpack_forms_is_file_field_renderable', defined( 'JETPACK__PLUGIN_DIR' ) );
+		if ( $type === 'image-select' ) {
+			$options_data         = (array) $this->get_attribute( 'optionsdata' );
+			$trimmed_options_data = $this->trim_image_select_options( $options_data );
+
+			return ! empty( $trimmed_options_data );
 		}
 
 		return true;
@@ -3217,5 +3281,45 @@ class Contact_Form_Field extends Contact_Form_Shortcode {
 			array( '@wordpress/interactivity' ),
 			$version
 		);
+	}
+
+	/**
+	 * Trims the image select options from the end of the array if they are empty.
+	 *
+	 * @param array $options The options to trim.
+	 *
+	 * @return array The trimmed options array.
+	 */
+	private function trim_image_select_options( $options ) {
+		if ( empty( $options ) ) {
+			return $options;
+		}
+
+		// Work backwards through the array to find the last valid option
+		$last_valid_index = -1;
+
+		for ( $i = count( $options ) - 1; $i >= 0; $i-- ) {
+			$option = $options[ $i ];
+
+			// Check if option has a label
+			$has_label = ! empty( $option['label'] );
+
+			// Check if option has an image with src
+			$has_image = false;
+
+			if ( isset( $option['image']['innerHTML'] ) ) {
+				// Extract src from innerHTML using regex
+				preg_match( '/src="([^"]*)"/', $option['image']['innerHTML'], $matches );
+				$has_image = ! empty( $matches[1] );
+			}
+
+			// If this option has either a label or an image, it's valid
+			if ( $has_label || $has_image ) {
+				$last_valid_index = $i;
+				break;
+			}
+		}
+
+		return array_slice( $options, 0, $last_valid_index + 1 );
 	}
 }

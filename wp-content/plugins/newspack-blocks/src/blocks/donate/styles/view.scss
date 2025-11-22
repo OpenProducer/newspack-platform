@@ -1,21 +1,20 @@
-@use "../../../shared/sass/colors";
+@use "newspack-colors" as np-colors;
 @use "../../../shared/sass/variables";
-
 @use "./style-variations";
 
 .wpbnbd {
 	&__button,
 	.tab-container .freq-label {
-		border: 0 solid variables.$color__border;
-		background: colors.$color__background-body;
-		color: colors.$color__text-light;
+		border: 0 solid np-colors.$neutral-300;
+		background: np-colors.$neutral-000;
+		color: np-colors.$neutral-600;
 		line-height: variables.$font__line-height-body;
 		text-overflow: ellipsis;
 		text-align: center;
 		&--active,
 		&:focus,
 		&:hover {
-			color: colors.$color__text-main;
+			color: np-colors.$neutral-900;
 		}
 	}
 

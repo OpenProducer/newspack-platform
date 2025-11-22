@@ -12,7 +12,7 @@ import { Notice } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import { Grid, SelectControl } from '../../../../../components/src';
+import { Grid, SelectControl } from '../../../../../../packages/components/src';
 
 export default function FeaturedImagePostsAll( { data, update, postCount }: ThemeModComponentProps< AdvancedSettings > & { postCount: string } ) {
 	return (

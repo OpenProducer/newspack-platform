@@ -244,22 +244,21 @@ class GoogleSiteKit {
 			$params['categories'] = implode( ', ', $category_names );
 		}
 
-		$params['is_reader'] = 'no';
-		if ( is_user_logged_in() ) {
-			$current_user = wp_get_current_user();
-			$params['is_reader'] = Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
+		$current_user = wp_get_current_user();
+		$is_logged_in = 0 < $current_user->ID;
+		$params['is_reader'] = $is_logged_in && Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
+		if ( ! empty( $current_user->user_email ) ) {
 			$params['email_hash'] = md5( $current_user->user_email );
-
-			if ( method_exists( 'Newspack\Reader_Data', 'get_data' ) ) {
-				$reader_data = \Newspack\Reader_Data::get_data( get_current_user_id() );
-				// If the reader is signed up for any newsletters.
-				$params['is_newsletter_subscriber'] = empty( $reader_data['is_newsletter_subscriber'] ) ? 'no' : 'yes';
-				// If reader has donated.
-				$params['is_donor'] = empty( $reader_data['is_donor'] ) ? 'no' : 'yes';
-				// If reader has any currently active non-donation subscriptions.
-				$params['is_subscriber'] = empty( $reader_data['active_subscriptions'] ) ? 'no' : 'yes';
-			}
 		}
+
+		$reader_data = method_exists( 'Newspack\Reader_Data', 'get_data' ) ? Reader_Data::get_data( $current_user->ID ) : [];
+
+		// If the reader is signed up for any newsletters.
+		$params['is_newsletter_subscriber'] = empty( $reader_data['is_newsletter_subscriber'] ) ? 'no' : 'yes';
+		// If reader has donated.
+		$params['is_donor'] = empty( $reader_data['is_donor'] ) ? 'no' : 'yes';
+		// If reader has any currently active non-donation subscriptions.
+		$params['is_subscriber'] = empty( $reader_data['active_subscriptions'] ) ? 'no' : 'yes';
 
 		/**
 		 * Filters the custom parameters passed to GA4.

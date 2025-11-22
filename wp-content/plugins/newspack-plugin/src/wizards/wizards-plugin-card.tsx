@@ -11,7 +11,7 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { Button, hooks, Waiting } from '../components/src';
+import { Button, hooks, Waiting } from '../../packages/components/src';
 import WizardsActionCard from './wizards-action-card';
 import { useWizardApiFetch } from './hooks/use-wizard-api-fetch';
 

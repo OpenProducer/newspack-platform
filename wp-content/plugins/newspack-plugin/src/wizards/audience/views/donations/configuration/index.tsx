@@ -3,15 +3,15 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { useDispatch } from '@wordpress/data';
-import { ToggleControl } from '@wordpress/components';
+import { ToggleControl, ExternalLink } from '@wordpress/components';
 
 /**
  * Internal dependencies.
  */
 import MoneyInput from '../../../components/money-input';
-import { Button, Card, Grid, Notice, SectionHeader, SelectControl, TextControl } from '../../../../../components/src';
-import { useWizardData } from '../../../../../components/src/wizard/store/utils';
-import { WIZARD_STORE_NAMESPACE } from '../../../../../components/src/wizard/store';
+import { Button, Card, Grid, Notice, SectionHeader, SelectControl, TextControl } from '../../../../../../packages/components/src';
+import { useWizardData } from '../../../../../../packages/components/src/wizard/store/utils';
+import { WIZARD_STORE_NAMESPACE } from '../../../../../../packages/components/src/wizard/store';
 import WizardsTab from '../../../../wizards-tab';
 import { AUDIENCE_DONATIONS_WIZARD_SLUG } from '../../../constants';
 import { CoverFeesSettings } from '../../../components/cover-fees-settings';
@@ -253,8 +253,50 @@ const Donation = () => {
 			auxData: { saveDonationProduct: true },
 		} );
 
+	// Check for product validation errors.
+	const validationResults = Object.values( wizardData.product_validation || {} );
+	const hasInvalidProducts = validationResults.some( product => product.issues.length > 0 );
+
 	return (
 		<WizardsTab title={ __( 'Configuration', 'newspack-plugin' ) }>
+			{ /* Display product validation issues */ }
+			{ hasInvalidProducts ? (
+				<Notice
+					isWarning
+					noticeText={ __( 'Some donation products are invalid. Please correct the following issues:', 'newspack-plugin' ) }
+					style={ { marginBottom: '16px' } }
+				>
+					<ul style={ { marginTop: '8px', marginBottom: '0' } }>
+						{ validationResults.map( ( product: ProductValidation ) => {
+							if ( product.issues && product.issues.length > 0 ) {
+								return (
+									<li key={ product.product_id } style={ { marginBottom: '8px' } }>
+										<strong>
+											{ product.product_name ||
+												sprintf(
+													// translators: %d: Product ID.
+													__( 'Product ID %d', 'newspack-plugin' ),
+													product.product_id
+												) }
+											{ product.frequency && ` (${ product.frequency })` }:
+										</strong>{ ' ' }
+										<ExternalLink href={ `/wp-admin/post.php?post=${ product.product_id }&action=edit` }>
+											{ __( 'edit', 'newspack-plugin' ) }
+										</ExternalLink>
+										<ul style={ { marginTop: '4px', marginLeft: '20px' } }>
+											{ product.issues.map( ( warning: string, index: number ) => (
+												<li key={ index }>{ warning }</li>
+											) ) }
+										</ul>
+									</li>
+								);
+							}
+							return null;
+						} ) }
+					</ul>
+				</Notice>
+			) : null }
+
 			{ wizardData.donation_page && (
 				<>
 					<Card noBorder headerActions>

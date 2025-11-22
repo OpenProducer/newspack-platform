@@ -1,5 +1,5 @@
 import { render, Fragment } from '@wordpress/element';
-import { NewspackIcon } from '../../components/src';
+import { NewspackIcon } from '../../../packages/components/src';
 import './style.scss';
 
 export function WizardsAdminHeader( {

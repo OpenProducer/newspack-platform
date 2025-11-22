@@ -13,7 +13,7 @@ const isMultibrandedEnabled = settingsTabs && 'additional-brands' in settingsTab
 /**
  * Internal dependencies
  */
-import { ColorPicker, Grid, ImageUpload, SelectControl, TextControl } from '../../../../../components/src';
+import { ColorPicker, Grid, ImageUpload, SelectControl, TextControl } from '../../../../../../packages/components/src';
 
 export default function Footer( { themeMods, onUpdate }: { themeMods: ThemeMods; onUpdate: ( a: ThemeMods ) => void } ) {
 	function updateThemeMods( themeModChanges: Partial< ThemeMods > ) {

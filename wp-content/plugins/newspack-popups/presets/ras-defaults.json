@@ -129,7 +129,7 @@
 			"status": "draft",
 			"slug": "ras_newsletter_overlay",
 			"title": "Newsletter Signup Overlay",
-			"content": "<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-newsletters/subscribe {\"label\":\"{{button_label}}\",\"successMessage\":\"{{success_message}}\",{{lists}}} /-->",
+			"content": "<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-newsletters/subscribe {\"className\":\"is-style-modern\",\"label\":\"{{button_label}}\",\"successMessage\":\"{{success_message}}\",{{lists}}} /-->",
 			"segments": [
 				{
 					"id": 1002,
@@ -254,7 +254,7 @@
 			"status": "draft",
 			"slug": "ras_donation_overlay",
 			"title": "Donation Overlay",
-			"content": "<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-blocks\/donate {\"className\":\"is-style-alternate\",\"amounts\":{\"once\":[9,20,90,20],\"month\":[7,15,30,15],\"year\":[84,180,360,180]},\"disabledFrequencies\":{\"once\":false,\"month\":false,\"year\":false},\"thanksText\":\"{{thanks_message}}\",\"buttonText\": \"{{button_label}}\",\"minimumDonation\":5} \/-->",
+			"content": "<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-blocks\/donate {\"className\":\"is-style-modern\",\"amounts\":{\"once\":[9,20,90,20],\"month\":[7,15,30,15],\"year\":[84,180,360,180]},\"disabledFrequencies\":{\"once\":false,\"month\":false,\"year\":false},\"thanksText\":\"{{thanks_message}}\",\"buttonText\": \"{{button_label}}\",\"minimumDonation\":5} \/-->",
 			"segments": [
 				{
 					"id": 1001,
@@ -371,7 +371,7 @@
 			"status": "draft",
 			"slug": "ras_newsletter_inline",
 			"title": "Inline Newsletter Signup (secondary)",
-			"content": "<!-- wp:paragraph -->\n<p>{{body}}</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:newspack-newsletters/subscribe {\"label\":\"{{button_label}}\",\"successMessage\":\"{{success_message}}\",{{lists}}} /-->",
+			"content": "<!-- wp:paragraph -->\n<p>{{body}}</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:newspack-newsletters/subscribe {\"className\":\"is-style-modern\",\"label\":\"{{button_label}}\",\"successMessage\":\"{{success_message}}\",{{lists}}} /-->",
 			"segments": [
 				{
 					"id": 1002,
@@ -481,7 +481,7 @@
 			"status": "draft",
 			"slug": "ras_donation_inline",
 			"title": "Inline Donation (secondary)",
-			"content": "<!-- wp:separator -->\n<hr class=\"wp-block-separator has-alpha-channel-opacity\"\/>\n<!-- \/wp:separator -->\n\n<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-blocks\/donate {\"className\":\"is-style-alternate\",\"amounts\":{\"once\":[9,20,90,20],\"month\":[7,15,30,15],\"year\":[84,180,360,180]},\"disabledFrequencies\":{\"once\":false,\"month\":false,\"year\":false},\"thanksText\":\"{{thanks_message}}\",\"buttonText\": \"{{button_label}}\",\"minimumDonation\":5} \/-->",
+			"content": "<!-- wp:separator -->\n<hr class=\"wp-block-separator has-alpha-channel-opacity\"\/>\n<!-- \/wp:separator -->\n\n<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-blocks\/donate {\"className\":\"is-style-modern\",\"amounts\":{\"once\":[9,20,90,20],\"month\":[7,15,30,15],\"year\":[84,180,360,180]},\"disabledFrequencies\":{\"once\":false,\"month\":false,\"year\":false},\"thanksText\":\"{{thanks_message}}\",\"buttonText\": \"{{button_label}}\",\"minimumDonation\":5} \/-->",
 			"options": {
 				"background_color": "#FFFFFF",
 				"hide_border": true,

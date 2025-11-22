@@ -1,7 +1,7 @@
 import React from 'react';
 import { __ } from '@wordpress/i18n';
 import WizardsActionCard from '../../../../wizards-action-card';
-import { TextControl, Grid } from '../../../../../components/src';
+import { TextControl, Grid } from '../../../../../../packages/components/src';
 
 interface CustomNamingCardProps {
 	settings: Partial< CollectionsSettingsData >;

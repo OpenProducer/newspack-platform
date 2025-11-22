@@ -15,7 +15,7 @@ import { API_NAMESPACE } from './constants';
 import EndpointActionsCard from './endpoint-actions-card';
 import EndpointActionsModals from './endpoint-actions-modals';
 import { useWizardApiFetch } from '../../../../../hooks/use-wizard-api-fetch';
-import { Card, Button, Notice, SectionHeader } from '../../../../../../components/src';
+import { Card, Button, Notice, SectionHeader } from '../../../../../../../packages/components/src';
 
 const defaultEndpoint: Endpoint = {
 	url: '',

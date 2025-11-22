@@ -219,12 +219,6 @@ export function getCheckoutData( element ) {
 		data.action_type = url.searchParams.get( 'action_type' );
 	}
 
-	// Replace 'memberships_content_gate' with 'gate_post_id'.
-	if ( data.memberships_content_gate ) {
-		data.gate_post_id = data.memberships_content_gate;
-		delete data.memberships_content_gate;
-	}
-
 	return data;
 }
 

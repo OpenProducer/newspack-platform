@@ -5,7 +5,7 @@ namespace TEC\Common\StellarWP\Schema;
 use TEC\Common\StellarWP\Schema\Config;
 class Schema
 {
-    const VERSION = '1.1.0';
+    const VERSION = '3.0.0';
     /**
      * Container object.
      *
@@ -23,18 +23,6 @@ class Schema
     {
         static::init();
         return Config::get_container()->get(Builder::class);
-    }
-    /**
-     * Gets the field collection.
-     *
-     * @since 1.0.0
-     *
-     * @return Fields\Collection
-     */
-    public static function fields()
-    {
-        static::init();
-        return Config::get_container()->get(\TEC\Common\StellarWP\Schema\Fields\Collection::class);
     }
     /**
      * Initializes the service provider.
@@ -76,7 +64,6 @@ class Schema
     {
         $this->container->singleton(static::class, $this);
         $this->container->singleton(Builder::class);
-        $this->container->singleton(\TEC\Common\StellarWP\Schema\Fields\Collection::class);
         $this->container->singleton(\TEC\Common\StellarWP\Schema\Tables\Collection::class);
         /**
          * These providers should be the ones that extend the bulk of features for CT1,

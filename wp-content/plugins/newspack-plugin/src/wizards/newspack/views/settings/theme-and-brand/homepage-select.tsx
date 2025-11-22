@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { Grid, StyleCard } from '../../../../../components/src';
+import { Grid, StyleCard } from '../../../../../../packages/components/src';
 
 /**
  * Temporary loading cards to show while fetching data.

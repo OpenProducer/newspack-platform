@@ -1,7 +1,6 @@
 @use "~@wordpress/base-styles/colors" as wp-colors;
-@use "../../../shared/sass/colors";
+@use "newspack-colors" as np-colors;
 @use "../../../shared/sass/variables";
-
 @use "../frequency-based/style" as frequency-based;
 @use "../tiers-based/style" as tiers-based;
 
@@ -49,7 +48,7 @@
 	.submit-button {
 		border-radius: 5px;
 		box-sizing: border-box;
-		color: colors.$color__background-body;
+		color: np-colors.$neutral-000;
 		line-height: 3;
 		padding-left: 20px;
 		padding-right: 20px;
@@ -81,7 +80,7 @@
 .wp-block-newspack-blocks-donate__tiers
 input[type="radio"]:checked + .tier-select-label {
 	background: transparent;
-	color: colors.$color__text-main;
+	color: np-colors.$neutral-900;
 }
 
 .components-frequency-donations {
@@ -106,7 +105,7 @@ input[type="radio"]:checked + .tier-select-label {
 	}
 
 	&__error {
-		color: colors.$color__error;
+		color: np-colors.$error-500;
 	}
 }
 

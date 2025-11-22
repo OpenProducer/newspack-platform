@@ -15,7 +15,7 @@ import { MenuItem } from '@wordpress/components';
  * Internal dependencies.
  */
 import WizardsActionCard from '../../../../wizards-action-card';
-import { Button, Popover, Router } from '../../../../../components/src';
+import { Button, Popover, Router } from '../../../../../../packages/components/src';
 import { TAB_PATH } from './constants';
 
 const { useHistory } = Router;

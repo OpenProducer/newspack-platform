@@ -8,7 +8,7 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import { ExternalLink } from '@wordpress/components';
-import { Button, Card, Notice, SectionHeader } from '../../../../../components/src';
+import { Button, Card, Notice, SectionHeader } from '../../../../../../packages/components/src';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
 
 interface AccessibilityStatementProps {

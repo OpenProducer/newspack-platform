@@ -1,4 +1,4 @@
-@use "../../../shared/sass/colors";
+@use "newspack-colors" as np-colors;
 @use "../../../shared/sass/mixins";
 @use "../../../shared/sass/variables";
 
@@ -10,7 +10,7 @@
 			padding: 0.38rem 0.76rem;
 			&:focus,
 			&:hover {
-				background: colors.$color__background-screen;
+				background: np-colors.$neutral-050;
 			}
 		}
 		&__tiers {
@@ -26,7 +26,7 @@
 		.wpbnbd__button {
 			border-width: 0 0 1px;
 			&--active {
-				background: #fff;
+				background: np-colors.$neutral-000;
 				border-bottom: 0;
 			}
 		}
@@ -46,7 +46,7 @@
 /* Alternate Style */
 
 .wpbnbd.is-style-alternate {
-	border-color: colors.$color__background-screen;
+	border-color: np-colors.$neutral-050;
 	border-radius: 5px;
 
 	.thanks {
@@ -71,8 +71,8 @@
 	&.tiered {
 		.tiers {
 			.tier-label {
-				background: colors.$color__background-screen;
-				border-color: colors.$color__background-screen;
+				background: np-colors.$neutral-050;
+				border-color: np-colors.$neutral-050;
 				margin: 0;
 				text-align: center;
 			}
@@ -87,8 +87,8 @@
 
 	.tab-container .freq-label,
 	.wpbnbd__tiers__selection {
-		background: colors.$color__background-screen;
-		border-color: colors.$color__background-screen;
+		background: np-colors.$neutral-050;
+		border-color: np-colors.$neutral-050;
 	}
 
 	.wpbnbd__tiers__selection {
@@ -98,7 +98,7 @@
 		padding: 5px;
 		border-radius: 5px;
 		.wpbnbd__button {
-			color: colors.$color__text-main;
+			color: np-colors.$neutral-900;
 			padding: 0 15px;
 		}
 	}
@@ -108,16 +108,16 @@
 		border: 0.19rem solid transparent;
 
 		&--active {
-			border-color: white;
+			border-color: np-colors.$neutral-000;
 		}
 	}
 
 	.wpbnbd__tiers .wpbnbd__button--active,
 	/* Frequency-based version. */
 	.tab-container .freq-label.wpbnbd__button--active::after {
-		background: white;
+		background: np-colors.$neutral-000;
 		border-radius: 5px;
-		box-shadow: 0 0 0 1px variables.$color__border;
+		box-shadow: 0 0 0 1px np-colors.$neutral-300;
 	}
 
 	.tab-container {
@@ -130,7 +130,7 @@
 			}
 
 			&.wpbnbd__button--active {
-				color: colors.$color__text-main;
+				color: np-colors.$neutral-900;
 				&::after {
 					box-sizing: content-box;
 					content: "";
@@ -140,7 +140,7 @@
 					z-index: -1;
 				}
 				&:hover {
-					background: colors.$color__background-screen;
+					background: np-colors.$neutral-050;
 				}
 			}
 		}
@@ -217,7 +217,7 @@
 					content: "";
 					display: block;
 					height: 1px;
-					background: variables.$color__border;
+					background: np-colors.$neutral-300;
 					width: 100%;
 					left: 0;
 					bottom: 0;
@@ -225,7 +225,7 @@
 				&--active {
 					&::after {
 						height: 3px;
-						background: colors.$color__text-main;
+						background: np-colors.$neutral-900;
 					}
 				}
 			}
@@ -243,7 +243,7 @@
 				display: grid;
 				background: transparent;
 				border: none;
-				color: colors.$color__text-light;
+				color: np-colors.$neutral-600;
 				font-family: inherit;
 				font-weight: inherit;
 				grid-gap: 0.25rem;
@@ -253,10 +253,10 @@
 				text-align: left;
 
 				&::before {
-					background: white;
-					border: 1px solid variables.$color__border;
+					background: np-colors.$neutral-000;
+					border: 1px solid np-colors.$neutral-300;
 					border-radius: 100%;
-					box-shadow: inset 0 0 0 3px white;
+					box-shadow: inset 0 0 0 3px np-colors.$neutral-000;
 					content: "";
 					display: block;
 					height: 20px;
@@ -290,7 +290,7 @@
 		.freq-label {
 			background: transparent;
 			border: none;
-			box-shadow: 0 3px 0 white, 0 4px 0 0 variables.$color__border;
+			box-shadow: 0 3px 0 np-colors.$neutral-000, 0 4px 0 0 np-colors.$neutral-300;
 			padding: 0.38rem 0;
 			transition: none;
 
@@ -301,7 +301,7 @@
 
 			&::before {
 				border-width: 1px;
-				border-color: variables.$color__border;
+				border-color: np-colors.$neutral-300;
 			}
 
 			&.wpbnbd__button--active {
@@ -350,11 +350,11 @@
 	position: relative;
 
 	.thanks {
-		background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
-		border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+		background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
+		border: 1px solid var(--newspack-ui-color-neutral-30, np-colors.$neutral-300);
 		border-bottom: 0;
 		border-top: 0;
-		color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+		color: var(--newspack-ui-color-neutral-60, np-colors.$neutral-600);
 		font-size: var(--newspack-ui-font-size-s, 16px);
 		line-height: var(--newspack-ui-line-height-s, 1.5);
 		margin: 0;
@@ -362,8 +362,8 @@
 	}
 
 	.money-input {
-		border-color: var(--newspack-ui-color-input-border, colors.$newspack-ui-color-neutral-40);
-		color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+		border-color: var(--newspack-ui-color-input-border, np-colors.$neutral-400);
+		color: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 		font-size: var(--newspack-ui-font-size-s, 16px);
 		left: var(--newspack-ui-spacer-5, 24px);
 		line-height: var(--newspack-ui-line-height-s, 1.5);
@@ -373,13 +373,13 @@
 		transition: border-color 125ms ease-in-out, outline 125ms ease-in-out;
 
 		&:focus-within {
-			border-color: var(--newspack-ui-color-input-border-focus, colors.$newspack-ui-color-neutral-90);
-			outline: 2px solid var(--newspack-ui-color-input-border-focus, colors.$newspack-ui-color-neutral-90);
+			border-color: var(--newspack-ui-color-input-border-focus, np-colors.$neutral-900);
+			outline: 2px solid var(--newspack-ui-color-input-border-focus, np-colors.$neutral-900);
 			outline-offset: -1px;
 		}
 
 		.currency {
-			background: var(--newspack-ui-color-neutral-5, colors.$newspack-ui-color-neutral-5);
+			background: var(--newspack-ui-color-neutral-5, np-colors.$neutral-050);
 			font-size: var(--newspack-ui-font-size-xs, 14px);
 			font-weight: 600;
 			line-height: var(--newspack-ui-spacer-9, 48px);
@@ -402,15 +402,15 @@
 
 	.tab-container .freq-label,
 	.wpbnbd__tiers__selection {
-		background: var(--newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10);
+		background: var(--newspack-ui-color-neutral-10, np-colors.$neutral-100);
 		border: none;
 	}
 
 	.wpbnbd__tiers .wpbnbd__button--active,
 	/* Frequency-based version. */
 	.tab-container .freq-label.wpbnbd__button--active::after {
-		background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
-		border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+		background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
+		border: 1px solid var(--newspack-ui-color-neutral-30, np-colors.$neutral-300);
 		border-radius: var(--newspack-ui-border-radius-s, 4px);
 	}
 
@@ -428,8 +428,8 @@
 		line-height: var(--newspack-ui-line-height-s, 1.5);
 
 		input[type="radio"]:checked ~ .tiers {
-			background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
-			border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+			background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
+			border: 1px solid var(--newspack-ui-color-neutral-30, np-colors.$neutral-300);
 			border-bottom: 0;
 			border-radius: var(--newspack-ui-border-radius-l, 8px) var(--newspack-ui-border-radius-l, 8px) 0 0;
 			display: grid;
@@ -448,8 +448,8 @@
 	&.wpbnbd--frequency-based {
 		form {
 			&::after {
-				background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
-				border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+				background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
+				border: 1px solid var(--newspack-ui-color-neutral-30, np-colors.$neutral-300);
 				border-radius: 0 0 var(--newspack-ui-border-radius-l, 8px) var(--newspack-ui-border-radius-l, 8px);
 				border-top: 0;
 				bottom: 0;
@@ -465,7 +465,7 @@
 		}
 
 		.tab-container {
-			background: var(--newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10);
+			background: var(--newspack-ui-color-neutral-10, np-colors.$neutral-100);
 			border-radius: var(--newspack-ui-border-radius-m, 6px);
 			gap: calc(var(--newspack-ui-spacer-base, 8px) / 2);
 			margin-left: auto;
@@ -488,7 +488,7 @@
 				border: 1px solid transparent;
 				background: transparent;
 				border-radius: var(--newspack-ui-border-radius-s, 4px);
-				color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+				color: var(--newspack-ui-color-neutral-60, np-colors.$neutral-600);
 				font-size: var(--newspack-ui-font-size-xs, 14px);
 				line-height: var(--newspack-ui-spacer-5, 24px);
 				padding: calc(var(--newspack-ui-spacer-base, 8px) - 1px) calc(var(--newspack-ui-spacer-3, 16px) - 1px);
@@ -497,7 +497,7 @@
 				width: auto;
 
 				&:hover {
-					color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					color: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 				}
 
 				&:focus {
@@ -506,22 +506,22 @@
 				}
 
 				&:focus-visible {
-					outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					outline: 2px solid var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 					outline-offset: 1px;
 				}
 
 				&.wpbnbd__button--active {
-					background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
-					border-color: var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
-					color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
+					border-color: var(--newspack-ui-color-neutral-30, np-colors.$neutral-300);
+					color: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 				}
 			}
 		}
 
 		&.untiered {
 			.input-container {
-				background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
-				border: 1px solid var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+				background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
+				border: 1px solid var(--newspack-ui-color-neutral-30, np-colors.$neutral-300);
 				border-bottom: 0;
 				border-radius: var(--newspack-ui-border-radius-l, 8px) var(--newspack-ui-border-radius-l, 8px) 0 0;
 				margin: var(--newspack-ui-spacer-2, 12px) 0 0;
@@ -544,11 +544,11 @@
 			line-height: var(--newspack-ui-line-height-s, 1.5);
 
 			.tiers {
-				color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+				color: var(--newspack-ui-color-neutral-60, np-colors.$neutral-600);
 				position: relative;
 
 				.tier-label {
-					background: var(--newspack-ui-color-neutral-10, colors.$newspack-ui-color-neutral-10);
+					background: var(--newspack-ui-color-neutral-10, np-colors.$neutral-100);
 					border: 0;
 					border-radius: var(--newspack-ui-border-radius-s, 4px);
 					color: inherit;
@@ -560,13 +560,13 @@
 					transition: background 125ms ease-in-out, color 125ms ease-in-out;
 
 					&:hover {
-						color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+						color: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 					}
 				}
 
 				.odl {
 					bottom: calc(var(--newspack-ui-spacer-5, 24px) + var(--newspack-ui-spacer-9, 48px) + var(--newspack-ui-spacer-base, 8px));
-					color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					color: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 					font-weight: 600;
 					left: 0;
 					padding: 0 var(--newspack-ui-spacer-5, 24px);
@@ -583,14 +583,14 @@
 				input[type="radio"]:focus,
 				input[type="radio"]:checked {
 					+ .tier-label {
-						background: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
-						color: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+						background: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
+						color: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
 						outline: none;
 					}
 				}
 
 				input[type="radio"]:focus-visible + .tier-label {
-					outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					outline: 2px solid var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 					outline-offset: 1px;
 				}
 			}
@@ -629,7 +629,7 @@
 			}
 
 			&:focus {
-				outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+				outline: 2px solid var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 				outline-offset: 1px;
 			}
 		}
@@ -637,7 +637,7 @@
 
 	/* Layout: Tiers */
 	&.wpbnbd--tiers-based {
-		color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+		color: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 
 		.wpbnbd__tiers {
 			&__selection {
@@ -660,7 +660,7 @@
 
 				.wpbnbd__button {
 					border-radius: var(--newspack-ui-border-radius-s, 4px);
-					color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+					color: var(--newspack-ui-color-neutral-60, np-colors.$neutral-600);
 					font-size: var(--newspack-ui-font-size-xs, 14px);
 					font-weight: 600;
 					line-height: var(--newspack-ui-spacer-5, 24px);
@@ -671,7 +671,7 @@
 
 					&:hover,
 					&--active {
-						color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+						color: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 					}
 
 					&:focus {
@@ -679,7 +679,7 @@
 					}
 
 					&:focus-visible {
-						outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+						outline: 2px solid var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 						outline-offset: 1px;
 					}
 				}
@@ -699,16 +699,16 @@
 			}
 
 			&__tier {
-				background: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
-				border-color: var(--newspack-ui-color-neutral-30, colors.$newspack-ui-color-neutral-30);
+				background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
+				border-color: var(--newspack-ui-color-neutral-30, np-colors.$neutral-300);
 				border-radius: var(--newspack-ui-border-radius-m, 6px);
 				margin-left: calc(var(--newspack-ui-spacer-2, 12px) / 2);
 				margin-right: calc(var(--newspack-ui-spacer-2, 12px) / 2);
 				padding: var(--newspack-ui-spacer-5, 24px);
 
 				&--recommended {
-					border: 1px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
-					outline: 1px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					border: 1px solid var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
+					outline: 1px solid var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 					outline-offset: -2px;
 				}
 
@@ -716,7 +716,7 @@
 					button[type="submit"],
 					.submit-button {
 						&:hover {
-							background: var(--newspack-ui-color-neutral-5, colors.$newspack-ui-color-neutral-5) !important;
+							background: var(--newspack-ui-color-neutral-5, np-colors.$neutral-050) !important;
 							opacity: 1;
 						}
 					}
@@ -731,9 +731,9 @@
 			}
 
 			&__recommend-label {
-				background: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+				background: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 				border-radius: var(--newspack-ui-border-radius-2xs, 2px);
-				color: var(--newspack-ui-color-neutral-0, colors.$newspack-ui-color-neutral-0);
+				color: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
 				font-family: inherit;
 				font-size: var(--newspack-ui-font-size-xs, 14px);
 				font-weight: 600;
@@ -747,13 +747,13 @@
 				margin-bottom: var(--newspack-ui-spacer-5, 24px);
 
 				&__value {
-					color: var(--newspack-ui-color-neutral-60, colors.$newspack-ui-color-neutral-60);
+					color: var(--newspack-ui-color-neutral-60, np-colors.$neutral-600);
 					font-size: var(--newspack-ui-font-size-2xs, 12px);
 					line-height: var(--newspack-ui-line-height-2xs, 1.3333);
 				}
 
 				.amount {
-					color: var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					color: var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 					font-family: inherit;
 					font-size: var(--newspack-ui-font-size-xl, clamp(1.375rem, 0.394rem + 2.008vw, 2rem));
 					line-height: var(--newspack-ui-line-height-xl, 1.375);
@@ -783,7 +783,7 @@
 				}
 
 				&:focus {
-					outline: 2px solid var(--newspack-ui-color-neutral-90, colors.$newspack-ui-color-neutral-90);
+					outline: 2px solid var(--newspack-ui-color-neutral-90, np-colors.$neutral-900);
 					outline-offset: 1px;
 				}
 			}

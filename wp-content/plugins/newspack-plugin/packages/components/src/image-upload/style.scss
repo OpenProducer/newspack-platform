@@ -1,0 +1,103 @@
+/**
+ * Image Upload
+ */
+
+@use "~@wordpress/base-styles/colors" as wp-colors;
+
+.newspack-image-upload {
+	margin: 32px 0;
+	&__header {
+		display: flex;
+	}
+	&__label {
+		margin: 0 0 8px;
+	}
+	&__image {
+		align-items: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+		border: 1px dashed wp-colors.$gray-700;
+		border-radius: 2px;
+		display: flex;
+		justify-content: center;
+		max-width: 100%;
+		min-height: 48px;
+		position: relative;
+		&--covering {
+			background-size: cover;
+		}
+		&:not(&--has-image) {
+			.newspack-button {
+				background: white !important;
+				border-radius: 2px !important;
+				padding: 4px 16px !important;
+
+				&:active,
+				&:focus,
+				&:hover {
+					background: white !important;
+				}
+
+				&:focus {
+					outline-offset: -3px !important;
+				}
+			}
+		}
+		&--has-image {
+			border: none;
+			overflow: hidden;
+			&::before,
+			&::after {
+				border: 1px solid rgba(black, 0.54);
+				border-radius: 2px;
+				content: "";
+				inset: 0;
+				position: absolute;
+				z-index: 0;
+			}
+			button,
+			&::after {
+				opacity: 0;
+				transition: opacity 125ms;
+			}
+			button {
+				z-index: 1;
+				position: relative;
+			}
+			&::after {
+				background: rgba(white, 0.9);
+				border-color: wp-colors.$gray-700;
+			}
+			&:focus-within,
+			&:hover {
+				button,
+				&::after {
+					opacity: 1;
+				}
+			}
+			img {
+				max-height: 100%;
+				max-width: 100%;
+			}
+			.sep {
+				background: transparent;
+				display: block;
+				height: 8px;
+				margin: 0;
+				width: 100%;
+			}
+		}
+	}
+	&__image + &__help {
+		color: wp-colors.$gray-700;
+		font-size: 12px;
+		margin: 1em 0 0;
+	}
+	&__controls {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+	}
+}

@@ -14,12 +14,10 @@ use TEC\Common\StellarWP\Shepherd\Config;
 use TEC\Common\StellarWP\Shepherd\Contracts\Log_Model;
 use TEC\Common\StellarWP\Shepherd\Tables\Task_Logs as Task_Logs_Table;
 use TEC\Common\StellarWP\Shepherd\Tables\AS_Logs as AS_Logs_Table;
-use TEC\Common\StellarWP\Shepherd\Loggers\ActionScheduler_DB_Logger;
-use TEC\Common\StellarWP\Shepherd\Loggers\DB_Logger;
 use TEC\Common\StellarWP\Shepherd\Contracts\Logger;
 use TEC\Common\StellarWP\Shepherd\Abstracts\Model_Abstract;
 use DateTimeInterface;
-use TEC\Common\StellarWP\Shepherd\Abstracts\Table_Abstract;
+use TEC\Common\StellarWP\Schema\Tables\Contracts\Table;
 use TEC\Common\Psr\Log\LogLevel;
 use InvalidArgumentException;
 use DateTime;
@@ -252,19 +250,20 @@ class Log extends Model_Abstract implements Log_Model
      * Gets the table interface for the log.
      *
      * @since 0.0.1
+     * @since 0.0.8 Updated to return Table instead.
      *
-     * @return Table_Abstract The table interface.
+     * @return Table The table interface.
      *
      * @throws RuntimeException If the log table interface is invalid.
      */
-    public function get_table_interface(): Table_Abstract
+    public function get_table_interface(): Table
     {
         $logger = Config::get_container()->get(Logger::class);
         $table = null;
-        if ($logger instanceof ActionScheduler_DB_Logger) {
+        if ($logger->uses_as_table()) {
             $table = AS_Logs_Table::class;
         }
-        if ($logger instanceof DB_Logger) {
+        if ($logger->uses_own_table()) {
             $table = Task_Logs_Table::class;
         }
         $table = apply_filters('shepherd_' . Config::get_hook_prefix() . '_log_table_interface', $table, $logger);
@@ -283,7 +282,7 @@ class Log extends Model_Abstract implements Log_Model
     public function to_array(): array
     {
         $table_interface = Task_Logs_Table::class;
-        $columns = array_keys($table_interface::get_columns());
+        $columns = $table_interface::get_columns()->get_names();
         $model = [];
         foreach ($columns as $column) {
             $method = 'get_' . $column;

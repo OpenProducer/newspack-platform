@@ -1,0 +1,37 @@
+/**
+ * Color Picker
+ */
+
+.newspack-color-picker {
+	position: relative;
+
+	&__label {
+		margin-bottom: 8px;
+	}
+
+	&__expander {
+		box-shadow: inset 0 0 0 1px rgb(0 0 0 / 20%);
+		border-radius: 2px;
+		height: 64px;
+		padding: 12px;
+		text-align: right;
+		text-transform: uppercase;
+
+		&:focus-visible {
+			box-shadow: 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+			border-color: white;
+		}
+	}
+
+	&__main {
+		background: white;
+		box-shadow: 0 0 8px 4px rgba(black, 0.08);
+		margin: 12px 0;
+		position: absolute;
+		z-index: 2;
+
+		&:empty {
+			display: none;
+		}
+	}
+}

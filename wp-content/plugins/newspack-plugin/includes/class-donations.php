@@ -241,7 +241,7 @@ class Donations {
 	/**
 	 * Get the child products of the main donation product.
 	 */
-	private static function get_donation_product_child_products_ids() {
+	public static function get_donation_product_child_products_ids() {
 		$child_products_ids = [
 			'once'  => false,
 			'month' => false,
@@ -278,8 +278,12 @@ class Donations {
 	 * @return boolean True if a donation product, false if not.
 	 */
 	public static function is_donation_product( $product_id ) {
+		$parent_product = self::get_parent_donation_product();
+		if ( ! $parent_product ) {
+			return false;
+		}
 		$donation_product_ids = array_values( self::get_donation_product_child_products_ids() );
-		return in_array( $product_id, $donation_product_ids, true );
+		return in_array( $product_id, $donation_product_ids, true ) || $product_id === $parent_product->get_id();
 	}
 
 	/**
