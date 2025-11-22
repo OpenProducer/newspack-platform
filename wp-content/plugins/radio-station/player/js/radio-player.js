@@ -1,6 +1,6 @@
 /* =============================== */
 /* === Radio Player Javascript === */
-/* --------- Version 1.0.2 ------- */
+/* --------- Version 1.0.3 ------- */
 /* =============================== */
 
 /* === Debounce Delay Callback === */
@@ -40,7 +40,7 @@ radio_player_cookie = {
 		return null;
 	},
 	delete: function(name) {
-		setCookie('radio_player_' + name, '', -1);
+		radio_player_cookie.set(name,'',-1);
 	}
 }
 
@@ -88,21 +88,21 @@ function radio_player_check_format(data) {
 
 	/* check formats against available scripts */
 	if (!script) {
-		if ((format in radio_player.formats.amplitude) && ('amplitude' in scripts)) {script = 'amplitude';}
-		else if ((format in radio_player.formats.jplayer) && ('jplayer' in scripts)) {script = 'jplayer';}
-		/* else if ((format in radio_player.formats.howler) && ('howler' in scripts)) {script = 'howler';} */
-		/* else if ((format in radio_player.formats.mediaelements) && ('mediaelements' in scripts)) {script = 'mediaelements';} */
+		if (('amplitude' in scripts) && (format in radio_player.formats.amplitude)) {script = 'amplitude';}
+		else if (('jplayer' in scripts) && (format in radio_player.formats.jplayer)) {script = 'jplayer';}
+		else if (('howler' in scripts) && (format in radio_player.formats.howler)) {script = 'howler';}
+		/* else if (('mediaelements' in scripts) && (format in radio_player.formats.mediaelements)) {script = 'mediaelements';} */
 		if (!script) {
-			if ((fformat in radio_player.formats.amplitude) && ('amplitude' in scripts)) {script = 'amplitude';}
-			else if ((fformat in radio_player.formats.jplayer) && ('howler' in scripts)) {script = 'jplayer';}
-			/* else if ((fformat in radio_player.formats.howler) && ('jplayer' in scripts)) {script = 'howler';} */
-			/* else if ((fformat in radio_player.formats.mediaelements) && ('mediaelements' in scripts)) {script = 'mediaelements';} */
+			if (('amplitude' in scripts) && (fformat in radio_player.formats.amplitude)) {script = 'amplitude';}
+			else if (('jplayer' in scripts) && (fformat in radio_player.formats.jplayer)) {script = 'jplayer';}
+			else if (('howler' in scripts) && (fformat in radio_player.formats.howler)) {script = 'howler';}
+			/* else if (('mediaelements' in scripts) && (fformat in radio_player.formats.mediaelements)) {script = 'mediaelements';} */
 			if (script) {a = url; b = format; url = fallback; format = fformat; fallback = a; fformat = b;}
 		}
 		if (!script) {
 			if ('amplitude' in scripts) {script = 'amplitude';}
 			else if ('jplayer' in scripts) {script = 'jplayer';}
-			/* else if ('howler' in scripts) {script = 'howler';} */
+			else if ('howler' in scripts) {script = 'howler';}
 		}
 	}
 
@@ -129,7 +129,9 @@ function radio_player_load_station(instance, station, data, start) {
 
 	data = radio_player_check_format(data); script = data.script;
 	player = radio_player_load_audio(script, instance, data, start);
-	if (player && start) {radio_player_play_on_load(player, script, instance);}
+	if (player && start) {
+		setTimeout(function() {radio_player_play_on_load(player, script, instance);}, 250);
+	}
 }
 
 /* --- load a stream --- */
@@ -137,11 +139,13 @@ function radio_player_load_stream(script, instance, data, start) {
 
 	/* set channel ID for instance */
 	if (!instance) {instance = radio_player_default_instance();}
-	radio_player_data.types[instance] = 'stream'; radio_player_data.channels[instance] = data;
+	radio_player_data.types[instance] = 'stream';
+	radio_player_data.channels[instance] = data;
 	if (radio_player.debug) {console.log('Set Stream Data '+data+' on Instance '+instance);}
 
 	/* load the audio stream */
 	data = radio_player_check_format(data); script = data.script;
+	/* console.log('Script: '+script+' - Instance: '+instance+' URL: '+data.url+' Format: '+data.format+' Start:'+start); */
 	player = radio_player_load_audio(script, instance, data, start);
 	if (player && start) {radio_player_play_on_load(player, script, instance);}
 }
@@ -274,7 +278,7 @@ function radio_player_check_script(script) {
 
 /* --- player failed fallback to another script --- */
 function radio_player_player_fallback(instance, script) {
-	if (typeof radio_player.delayer_player != 'undefined') {clearInterval(radio_player.delayed_player);}
+	if (typeof radio_player.delayed_player != 'undefined') {clearInterval(radio_player.delayed_player);}
 	if (typeof radio_player_data.failed[instance] != 'undefined') {j = radio_player_data.failed[instance].length;}
 	else {radio_player_data.failed[instance] = new Array(); j = 0;}
 	if (!(script in radio_player_data.failed[instance])) {radio_player_data.failed[instance][j] = script;}
@@ -298,6 +302,7 @@ function radio_player_player_fallback(instance, script) {
 		if (radio_player.debug) {console.log('Exhausted All Player Script Type Attempts');}
 		radio_player_data.failed = new Array(); /* reset */
 		/* maybe swap to fallback stream data to retry */
+		data = radio_player_data.data[instance];
 		if (data.fallback != '') {
 			if (radio_player.debug) {console.log('Switching to Fallback Stream');}
 			tmpa = data.url; data.url = data.fallback; data.fallback = tmpa;
@@ -331,12 +336,23 @@ function radio_player_switch_script(instance, script) {
 /* === Player Functions and Event Callbacks === */
 
 /* --- play player instance --- */
+// 2.5.13: add retry cycle for missed
+var radio_player_retry = {}
 function radio_player_play_instance(instance) {
+	if (typeof radio_player_autoresume == 'object') {radio_player_autoresume.cancelled = true;}
 	radio_player.loading = true;
 	player = radio_player_data.players[instance]; script = radio_player_data.scripts[instance];
-	if ((script == 'amplitude') || (script == 'howler')) {player.play();}
+	console.log(player); console.log(script);
+	if (script == 'amplitude') {
+		player.play(); radio_player_retry.player = player;
+		radio_player_retry.cycle = setInterval(function() {
+			player = radio_player_retry.player;
+			if (player.getPlayerState() == 'stopped') {player.play();}
+			else {clearInterval(radio_player_retry.cycle); radio_player_retry = {};}
+		}, 250);
+	} else if (script == 'howler') {player.play();}
 	else if (script == 'jplayer') {player.jPlayer('play');}
-	if (radio_player.debug) {console.log('Playing '+script+' Player Instance '+instance); radio_player_is_playing(instance);}
+	if (radio_player.debug) {console.log('Playing '+script+' Player Instance '+instance); console.log(radio_player_is_playing(instance));}
 	radio_player_custom_event('rp-play', {player: player, script: script, instance: instance});
 }
 
@@ -345,6 +361,7 @@ function radio_player_pause_instance(instance) {
 	radio_player.loading = false;
 	player = radio_player_data.players[instance]; script = radio_player_data.scripts[instance];
 	if (radio_player.debug) {console.log('Pausing '+script+' Player Instance '+instance); radio_player_is_playing(instance);}
+	if (radio_player_retry.hasOwnProperty('cycle')) {clearInterval(radio_player_retry.cycle); radio_player_retry = {};}
 	if ((script == 'amplitude') || (script == 'howler')) {player.pause();}
 	else if (script == 'jplayer') {player.jPlayer('pause');}
 	radio_player_custom_event('rp-pause', {player:player, script:script, instance: instance});
@@ -355,6 +372,7 @@ function radio_player_stop_instance(instance, fadeout) {
 	radio_player.loading = false;
 	player = radio_player_data.players[instance]; script = radio_player_data.scripts[instance];
 	if (radio_player.debug) {console.log('Stopping '+script+' Player Instance '+instance); radio_player_is_playing(instance);}
+	if (radio_player_retry.hasOwnProperty('cycle')) {clearInterval(radio_player_retry.cycle); radio_player_retry = {};}
 	if (fadeout) {radio_player_fade_volume(instance, fadeout, 0, 'stop');}
 	else {
 		if (script == 'amplitude') {
@@ -527,8 +545,7 @@ function radio_player_pause_others(instance) {
 				/* TODO: if the stream is the same, maybe swap-fade players ? */
 				if (radio_player.debug) {console.log('Pausing Player Instance '+i);}
 				/* temporarily disabled as conflicting with multiple instances usage */
-				/* radio_player_pause_instance(instance); */
-				/* player = radio_player_data.players[instance]; script = radio_player_data.scripts[instance];
+				/* player = radio_player_data.players[i]; script = radio_player_data.scripts[i];
 				if ((script == 'amplitude') || (script == 'howler')) {player.pause();}
 				else if (script == 'jplayer') {player.jPlayer('pause');} */
 			}
@@ -657,7 +674,7 @@ function radio_player_set_state(key, value) {
 
 /* --- store player instance data */
 function radio_player_set_data_state(script, instance, data, start) {
-	url = data.url; format = data.format; fallback = data.fallback; fformat = data.fformat; /* 2.5.6: fix to fallback format */
+	url = data.url; format = data.format; fallback = data.fallback; fformat = data.fformat;
 	if (typeof radio_player_data.data[instance] != 'undefined') {
 		cdata = radio_player_data.data[instance];
 		if ( (cdata.script != script) || (cdata.url != url) || (cdata.format != format) || (cdata.fallback != fallback) || (cdata.fformat != fformat) || (cdata.start != start) ) {
@@ -703,6 +720,7 @@ function radio_player_save_user_state() {
 /* --- volume change audio test --- */
 /* ref: https://stackoverflow.com/a/62094756/5240159 */
 /* 2.5.6: fix radio.debug to radio_player.debug */
+/* 2.5.13: append testaudio to document body for more robust test */
 function radio_player_volume_test() {
 	isIOS = ['iPad Simulator','iPhone Simulator','iPod Simulator','iPad','iPhone','iPod'].includes(navigator.platform);
 	if (radio_player.debug && isIOS) {console.log('iOS Mobile Device Detected. ');}
@@ -710,7 +728,7 @@ function radio_player_volume_test() {
 	if (radio_player.debug && isAppleDevice) {console.log('Apple Device Detected.');}
     isTouchScreen = navigator.maxTouchPoints >= 1;
 	if (radio_player.debug && isTouchScreen) {console.log('Touch Screen Detected. ');}
-	iosAudioFailure = false; testaudio = new Audio();
+	iosAudioFailure = false; testaudio = new Audio(); document.body.appendChild(testaudio);
 	try {testaudio.volume = 0.5;} catch(e) {if (radio_player.debug) {console.log('Caught Volume Change Error.');} iosAudioFailure = true;}
 	if (testaudio.volume === 1) {if (radio_player.debug) {console.log('Volume could not be changed.');} iosAudioFailure = true;}
     return isIOS || (isAppleDevice && (isTouchScreen || iosAudioFailure));
@@ -879,7 +897,7 @@ function radio_player_amplitude(instance, url, format, fallback, fformat) {
 	audio.addEventListener('error', function(e) {
 		instance = radio_player_event_instance(e, 'Error', 'amplitude');
 		if (radio_player.debug) {console.log(e);}
-		radio_player_event_handler('error', {instance:instance, script:'amplitude'});
+		/* radio_player_event_handler('error', {instance:instance, script:'amplitude'}); */
 		radio_player_player_fallback(instance, 'amplitude', 'Amplitude Error');
 	}, false);
 	

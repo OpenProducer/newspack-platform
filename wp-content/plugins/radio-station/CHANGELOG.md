@@ -7,6 +7,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+= 2.5.17 =
+* Updated: Bump version number to fix release bug
+
+= 2.5.16 =
+* Fixed: Player Block control color style preview / loading
+
+= 2.5.15 =
+* Improved: AJAX player style output moved to footer
+* Option: Use Stream Player for latest Show file playback
+* Option: Use Stream Player for Episode file playback (Pro)
+
+= 2.5.14 =
+* Fixed: Player resume (play/pause/play) glitch for Amplitude
+* Fixed: Keep active day when changing schedule weeks on Grid view
+* Fixed: Schedule Override list Override Date column display
+* Fixed: jPlayer change old fallback SWF path to empty string
+
+= 2.5.13 =
+* Updated: Freemius SDK (2.12.0)
+* Fixed: load text domain too early notice
+* Fixed: added nonce checks to offer dismissals
+
 = 2.5.12 =
 * Updated: Block translation and element functions
 * Fixed: preload player settings when Block editing

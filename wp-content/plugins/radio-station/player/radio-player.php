@@ -13,7 +13,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 // - Player Output
 // - Store Player Instance Args
 // - Player Shortcode
-// - Player AJAX Display
+// - AJAX: Player Display
 // - Add Inline Styles
 // - Print Footer Styles
 // - Sanitize Shortcode Values
@@ -30,7 +30,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 // - Dynamic Load Script via AJAX
 // - Get Player Settings
 // - User State Iframe
-// - AJAX Update User State
+// - AJAX: Update User State
 // - Load Amplitude Function
 // - Load JPlayer Function
 // - Load Howler Function
@@ -38,6 +38,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 // - Get Default Player Script
 // - Enqueue Player Styles
 // - Player Control Styles
+// - AJAX: Control Styles
 // === Standalone Compatibility ===
 // x Output Script Tag
 // x Output Style Tag
@@ -174,13 +175,13 @@ function radio_player_set_debug_mode() {
 		return;
 	}
 	$debug = false;
+	if ( function_exists( 'radio_station_get_setting' ) ) {
+		$debug = radio_station_get_setting( 'player_debug' );
+	} 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( wp_unslash( $_REQUEST['player-debug'] ) ) ) ) {
 		$debug = true;
 	}
-	if ( function_exists( 'radio_station_get_setting' ) ) {
-		$debug = radio_station_get_setting( 'player_debug' );
-	} 
 	if ( function_exists( 'apply_filters' ) ) {
 		$debug = apply_filters( 'radio_station_player_debug', $debug );
 		$debug = apply_filters( 'radio_player_debug', $debug );
@@ -278,7 +279,11 @@ function radio_player_output( $args = array(), $echo = false ) {
 	if ( RADIO_PLAYER_DEBUG ) {
 		echo '<span style="display:none;">Parsed Radio Player Output Arguments: ' . esc_html( print_r( $args, true ) ) . '</span>';
 	}
-		
+
+	// --- set allowed tags for KSES ---
+	// 2.5.13: added for output filtering
+	$allowed = function_exists( 'radio_station_allowed_html' ) ? radio_station_allowed_html( 'widget', 'player' ) : 'post';
+
 	// --- set instanced container IDs ---
 	$player_id = 'radio_player_' . $instance;
 	$container_id = 'radio_container_' . $instance;
@@ -315,6 +320,8 @@ function radio_player_output( $args = array(), $echo = false ) {
 			$html['player_open'] .= '<link rel="dns-prefetch" href="' . esc_url( $url_host ) . '">' . "\n";
 		}
 		$classes[] = 'rp-audio-stream';
+	} elseif ( 'file' == $args['media'] ) {
+		$classes[] = 'rp-media-file';
 	}
 
 	// 2.5.0: added filter for radio container class
@@ -366,27 +373,28 @@ function radio_player_output( $args = array(), $echo = false ) {
 		$html['station'] .= '	<div class="rp-station-text">' . "\n";
 
 			// --- station title ---
-			$station_text_html = '		<div class="rp-station-title" aria-label="' . esc_attr( __( 'Station Name', 'radio-station' ) ) . '">';
+			$title_display = '';
 			if ( ( '0' != (string)$args['title'] ) && ( 0 !== $args['title'] ) && ( '' != $args['title'] ) ) {
-				$station_text_html .= esc_html( $args['title'] );
+				$title_display .= esc_html( $args['title'] );
 			}
-			$station_text_html .= '		</div>' . "\n";
+			$title_display = apply_filters( 'radio_player_station_display', $title_display, $args, $instance );
+			$station_text_html = '<div class="rp-station-title" aria-label="' . esc_attr( __( 'Station Name', 'radio-station' ) ) . '">' . wp_kses( $title_display, $allowed ) . '</div>' . "\n";
 
 			// --- station timezone / location / frequency ---
 			// 2.5.0: add filters for timezone / frequency / location display
 			// TODO: add timezone / frequency / location attributes ?
 			$timezone_display = isset( $args['timezone'] ) ? $args['timezone'] : '';
 			$timezone_display = apply_filters( 'radio_player_timezone_display', $timezone_display, $args, $instance );
-			$station_text_html .= '<div class="rp-station-timezone">' . esc_html( $timezone_display ) . '</div>' . "\n";
+			$station_text_html .= '<div class="rp-station-timezone">' . wp_kses( $timezone_display, $allowed ) . '</div>' . "\n";
 
 			$frequency_display = isset( $args['frequency'] ) ? $args['frequency'] : '';
 			$frequency_display = apply_filters( 'radio_player_frequency_display', $frequency_display, $args, $instance );
-			$station_text_html .= '<div class="rp-station-frequency"></div>' . "\n";
+			$station_text_html .= '<div class="rp-station-frequency">' . wp_kses( $frequency_display, $allowed ) . '</div>' . "\n";
 
 			// 2.5.0: fix to mismatched location variable and class
 			$location_display = isset( $args['location'] ) ? $args['location'] : '';
 			$location_display = apply_filters( 'radio_player_location_display', $location_display, $args, $instance );
-			$station_text_html .= '<div class="rp-station-location"></div>' . "\n";
+			$station_text_html .= '<div class="rp-station-location">' . wp_kses( $location_display, $allowed ) . '</div>' . "\n";
 			
 			$html['station'] .= $station_text_html;
 
@@ -579,9 +587,9 @@ function radio_player_output( $args = array(), $echo = false ) {
 	}
 
 	// 2.5.10: added direct output option
-	// note: wp_kses_post will disable switcher control in popup/ajax call
+	// 2.5.13: use wp_kses not wp_kses_post
 	if ( $echo ) {
-		echo wp_kses_post( $player );
+		echo wp_kses( $player, $allowed );
 	}
 	
 	return $player;
@@ -614,6 +622,75 @@ if ( function_exists( 'add_shortcode' ) ) {
 }
 function radio_player_shortcode_output( $atts, $content, $tag ) {
 	return radio_player_shortcode( $atts );
+}
+// 2.5.16: add shortcode block function with wrapper
+function radio_player_block_shortcode( $atts, $content ) {
+	
+	global $radio_player;
+	
+	// --- get block output with wrapper ---
+	$block = '<div class="radio-player-block"';
+	$colors = array( 'text', 'background', 'playing', 'buttons', 'track', 'thumb' );
+	$found = false;
+	foreach ( $colors as $color ) {
+		if ( isset( $atts[$color . '_color'] ) && ( '' != $atts[$color . '_color'] ) ) {
+			$found = true;
+			$block .= ' data-' . $color . '="' . $atts[$color . '_color'] . '"';
+		}
+	}
+	if ( $found ) {
+		$block .= ' data="colors"';
+	}
+	$block .= '>' . "\n";
+		$block .= radio_player_shortcode( $atts );
+	$block .= '</div>' . "\n";
+
+	// --- javascript to load control colors ---
+	if ( $found && !isset( $radio_player['control_styles_script'] ) ) {
+		$js = "document.addEventListener('DOMContentLoaded', function() {
+			playerblocks = document.querySelectorAll('.radio-player-block');
+			playerblocks.forEach(block => {
+				if (block.getAttribute('data') == 'colors') {
+					atts = {}
+					atts.text = block.getAttribute('data-text');
+					atts.background = block.getAttribute('data-background');
+					atts.playing = block.getAttribute('data-playing');
+					atts.buttons = block.getAttribute('data-buttons');
+					atts.track = block.getAttribute('data-track');
+					atts.thumb = block.getAttribute('data-thumb');
+
+					container = block.querySelector('.radio-container');
+					instance = container.getAttribute('id').replace('radio_container_','');
+					url = radio_player.settings.ajaxurl+'?action=player_control_styles&instance='+instance+'&text='+encodeURIComponent(atts.text)+'&background='+encodeURIComponent(atts.background)+'&playing='+encodeURIComponent(atts.playing)+'&buttons='+encodeURIComponent(atts.buttons)+'&track='+encodeURIComponent(atts.track)+'&thumb='+encodeURIComponent(atts.thumb);
+					jQuery.ajax({
+						type: 'GET',
+						url: url,
+						data: {'action':'player_control_styles', 'instance':instance, 'text':atts.text, 'background':atts.background, 'playing':atts.playing, 'buttons':atts.buttons, 'track':atts.track, 'thumb':atts.thumb},
+						processData: false,
+						beforeSend: function(request, settings) {
+							request._data = settings.data; 
+						},
+						success: function(data, success, request) {
+							if (data.success) {
+								console.log('Load Control Styles Success: '+data.message);
+								if (jQuery('#radio-player-control-styles-'+data.instance).length) {jQuery('#radio-player-control-styles-'+data.instance).remove();}
+								jQuery('body').append('<style id=\"radio-player-control-styles-'+data.instance+'\">'+data.css+'</style>');
+							} else {console.log('Load Control Styles Failed: '+data.message); console.log(request);}
+						},
+						fail: function(request, textStatus, errorThrown) {
+							console.log(request); console.log(textStatus); console.log(errorThrown);
+						}
+					}).catch(function(error) {
+						console.log(error); console.log(jQuery(this));
+					});
+				}
+			});
+		});";
+		radio_player_inline_script( $js );
+		$radio_player['control_styles_script'] = true;
+	}
+
+	return $block;
 }
 // 2.5.10: added optional echo argument
 function radio_player_shortcode( $atts, $echo = false ) {
@@ -934,9 +1011,9 @@ function radio_player_default_colors( $atts ) {
 	return $atts;
 }
 
-// -------------------
-// Player AJAX Display
-// -------------------
+// --------------------
+// AJAX: Player Display
+// --------------------
 add_action( 'wp_ajax_radio_player', 'radio_player_ajax' );
 add_action( 'wp_ajax_nopriv_radio_player', 'radio_player_ajax' );
 function radio_player_ajax() {
@@ -978,7 +1055,8 @@ function radio_player_ajax() {
 		$text_color = $atts['text'];
 		unset( $atts['text_color'] );
 	} elseif ( function_exists( 'apply_filters' ) ) {
-		$text_color = apply_filters( 'radio_player_text_color', $text_color );
+		// 2.5.14: add instance argument for consistency
+		$text_color = apply_filters( 'radio_player_text_color', $text_color, false );
 	}
 
 	// 2.5.0: strip background color attribute (applied to window body)
@@ -993,36 +1071,32 @@ function radio_player_ajax() {
 		$background_color = $atts['background'];
 		unset( $atts['background'] );
 	} elseif ( function_exists( 'apply_filters' ) ) {
-		// 2.5.0: fallaback to apply_filters
-		$background_color = apply_filters( 'radio_player_background_color', $background_color );
+		// 2.5.0: fallback to apply_filters
+		// 2.5.14: add instance argument for consistency
+		$background_color = apply_filters( 'radio_player_background_color', $background_color, false );
 	}
 
 	// --- maybe add text color ---
 	// 2.5.0: added for matching with background color
 	// 2.5.6: fix for undefined variable css
 	// 2.5.10: moved up so that inline style can be in header
+	// 2.5.14: add body prefix to selector
 	$css = '';
 	if ( '' != $text_color ) {
 		if ( ( 'rgb' != substr( $text_color, 0, 3 ) ) && ( '#' != substr( $text_color, 0, 1 ) ) ) {
 			$text_color = '#' . $text_color;
 		}
-		$css .= '#player-contents {color: ' . esc_attr( $text_color ) . ';}' . "\n";
+		$css .= 'body #player-contents {color: ' . esc_attr( $text_color ) . ';}' . "\n";
 	}
 
 	// --- maybe add background color ---
+	// 2.5.14: add body prefix to selector
 	if ( '' != $background_color ) {
 		if ( ( 'rgb' != substr( $background_color, 0, 3 ) ) && ( '#' != substr( $background_color, 0, 1 ) ) ) {
 			$background_color = '#' . $background_color;
 		}
-		$css .= 'body {background: ' . esc_attr( $background_color ) . ';}' . "\n";
+		$css .= 'body, body #player-contents {background-color: ' . esc_attr( $background_color ) . ';}' . "\n";
 	}
-
-	// --- output extra player styles ---
-	$css = apply_filters( 'radio_station_player_ajax_styles', $css, $atts );
-	$css = apply_filters( 'radio_player_ajax_styles', $css, $atts );
-	// 2.5.6: use wp_kses_post instead of wp_strip_all_tags
-	// 2.5.6: use radio_player_add_inline_style (with fallback)
-	radio_player_add_inline_style( $css );
 
 	// 2.5.10: set document title with javascript
 	if ( isset( $atts['title'] ) && $atts['title'] && ( '' != $atts['title'] ) ) {
@@ -1089,6 +1163,14 @@ function radio_player_ajax() {
 
 	// --- output (hidden) footer for scripts ---
 	echo '<div style="display:none;">' . "\n";
+
+		// --- output extra player styles ---
+		// 2.5.14: move add inline style to before footer
+		$css = apply_filters( 'radio_station_player_ajax_styles', $css, $atts );
+		$css = apply_filters( 'radio_player_ajax_styles', $css, $atts );
+		// 2.5.6: use wp_kses_post instead of wp_strip_all_tags
+		// 2.5.6: use radio_player_add_inline_style (with fallback)
+		radio_player_add_inline_style( $css );
 
 		// --- call wp_footer actions ---
 		wp_footer();
@@ -1545,7 +1627,7 @@ function radio_player_enqueue_script( $script ) {
 	// --- set specific script as enqueued ---
 	$radio_player['enqeued_' . $script] = true;
 
-	if ( isset( $radio_player['enqueue_inline_scripts'] ) && $radio_player['enqueue_inline_scripts'] ) {
+	if ( isset( $radio_player['enqueued_inline_scripts'] ) && $radio_player['enqueued_inline_scripts'] ) {
 		return;
 	}
 
@@ -1577,7 +1659,8 @@ function radio_player_enqueue_script( $script ) {
 	}
 	
 	// --- set specific script as enqueued ---
-	$radio_player['enqeued_inline_scripts'] = true;
+	// 2.5.15: fix to mismatching enqueued flag
+	$radio_player['enqueued_inline_scripts'] = true;
 
 }
 
@@ -1894,11 +1977,12 @@ function radio_player_get_player_settings( $echo = false ) {
 
 	// --- set radio player settings ---
 	// 2.5.7: disable swf fallback support
+	// 2.5.13: set swf_path to empty string to prevent jplayer error
 	echo "player_settings = {";
 		echo "'ajaxurl': '" . esc_url( $admin_ajax ) . "', ";
 		echo "'saveinterval':" . esc_js( $save_interval ) . ", ";
 		// echo "'swf_path': '" . esc_url( $swf_path ) . "', ";
-		echo "'swf_path': false, ";
+		echo "'swf_path': '', ";
 		echo "'script': '" . esc_js( $player_script ). "', ";
 		echo "'title': '" . esc_js( $player_title ) . "', ";
 		echo "'image': '" . esc_url( $player_image ) . "', ";
@@ -1981,9 +2065,9 @@ function radio_player_get_player_settings( $echo = false ) {
 	// [Media Elements] Audio: mp3, wma, wav +Video: mp4, ogg, webm, wmv
 	// 2.5.7: disable Howler format list
 	echo "formats = {";
-		// echo "'howler': ['mp3','opus','ogg','oga','wav','aac','m4a','mp4','webm','weba','flac'], ";
-		echo "'jplayer': ['mp3','m4a','webm','oga','rtmpa','wav','flac'], ";
 		echo "'amplitude': ['mp3','aac'], ";
+		echo "'jplayer': ['mp3','m4a','webm','oga','rtmpa','wav','flac'], ";
+		echo "'howler': ['mp3','opus','ogg','oga','wav','aac','m4a','mp4','webm','weba','flac'], ";
 		// $js .= "'mediaelements': ['mp3','wma','wav'], ";
 	echo "}" . "\n";
 
@@ -2053,12 +2137,18 @@ function radio_player_get_player_settings( $echo = false ) {
 		// 2.5.7: set currently playing data only if script supported
 		$set_data = false;
 		foreach ( $data as $key => $value ) {
-			if ( ( 'script' == $key ) && in_array( $value, array( 'jplayer', 'amplitude' ) ) ) {
+			if ( ( 'script' == $key ) && in_array( $value, array( 'jplayer', 'amplitude', 'howler' ) ) ) {
 				$set_data = true;
 			}
 		}
 		if ( $set_data ) {
 			foreach ( $data as $key => $value ) {
+				// TODO: attempt auto-fix for secure https stream ?
+				/* if ( ( 'url' == $key ) || ( 'fallback' == $key ) ) {
+					if ( is_ssl() && strstr( $value, 'http://' ) ) {
+						$value = str_replace( 'http://', 'https://', $value );
+					}
+				} */
 				echo "radio_player_data.state.data['" . esc_js( $key ) . "'] = '" . esc_js( $value ) . "';" . "\n";
 			}
 		}
@@ -2104,9 +2194,9 @@ function radio_player_get_player_settings( $echo = false ) {
 	// }
 // }
 
-// ----------------------
-// AJAX Update User State
-// ----------------------
+// -----------------------
+// AJAX: Update User State
+// -----------------------
 // note: only triggered for WordPress logged in users
 if ( function_exists( 'add_action' ) ) {
 	add_action( 'wp_ajax_radio_player_state', 'radio_player_state' );
@@ -2993,7 +3083,8 @@ function radio_player_enqueue_styles( $script = false, $skin = false ) {
 // ---------------------
 // Player Control Styles
 // ---------------------
-function radio_player_control_styles( $instance ) {
+// 2.5.16: add optional attribute overrides argument
+function radio_player_control_styles( $instance, $atts = false ) {
 
 	global $radio_player;
 
@@ -3015,6 +3106,14 @@ function radio_player_control_styles( $instance ) {
 		$colors['thumb'] = radio_station_get_setting( 'player_thumb_color' );
 		$colors['track'] = radio_station_get_setting( 'player_range_color' );
 	}
+
+	// 2.5.16: maybe apply override attributes
+	if ( $atts ) {
+		foreach ( $atts as $key => $value ) {
+			$colors[$key] = $value;
+		}
+	}
+
 	if ( function_exists( 'apply_filters' ) ) {
 		$colors['text'] = apply_filters( 'radio_station_player_text_color', $colors['text'], $instance );
 		$colors['text'] = apply_filters( 'radio_player_text_color', $colors['text'], $instance );
@@ -3208,6 +3307,44 @@ function radio_player_control_styles( $instance ) {
 	}
 
 	return $css;
+}
+
+// --------------------
+// AJAX: Control Styles
+// --------------------
+// 2.5.16: added separate control styles load for block editor
+add_action( 'wp_ajax_player_control_styles', 'radio_player_control_styles_ajax' );
+add_action( 'wp_ajax_nopriv_player_control_styles', 'radio_player_control_styles_ajax' );
+function radio_player_control_styles_ajax() {
+
+	// --- get provided parameters ---
+	$instance = absint( $_REQUEST['instance'] );
+	$atts['text'] = sanitize_text_field( wp_unslash( $_REQUEST['text'] ) );
+	$atts['background'] = sanitize_text_field( wp_unslash( $_REQUEST['background'] ) );
+	$atts['playing'] = sanitize_text_field( wp_unslash( $_REQUEST['playing'] ) );
+	$atts['buttons'] = sanitize_text_field( wp_unslash( $_REQUEST['buttons'] ) );
+	$atts['thumb'] = sanitize_text_field( wp_unslash( $_REQUEST['thumb'] ) );
+	$atts['track'] = sanitize_text_field( wp_unslash( $_REQUEST['track'] ) );
+	
+	// --- generate control styles ---
+	$css = radio_player_control_styles( $instance, $atts );
+	
+	// --- return result ---
+	if ( '' != $css ) {
+		$data = array(
+			'success'	=> 1,
+			'message'	=> 'Generated Control Colors for Player Instance ' . $instance,
+			'instance'	=> $instance,
+			'css'		=> $css
+		);
+	} else {
+		$data = array(
+			'success'	=> 0,
+			'message'	=> 'Empty Styles for Player Instance ' . $instance,
+			'instance'	=> $instance,
+		);
+	}
+	wp_send_json( $data );
 }
 
 // ------------------
