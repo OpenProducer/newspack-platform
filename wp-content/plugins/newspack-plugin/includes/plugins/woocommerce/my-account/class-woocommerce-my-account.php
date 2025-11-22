@@ -412,7 +412,9 @@ class WooCommerce_My_Account {
 			if ( isset( $items['subscriptions'] ) ) {
 				$items = [ 'subscriptions' => $items['subscriptions'] ] + $items;
 			}
-			$items = [ 'edit-account' => $items['edit-account'] ] + $items;
+			if ( isset( $items['edit-account'] ) ) {
+				$items = [ 'edit-account' => $items['edit-account'] ] + $items;
+			}
 		}
 
 		return $items;

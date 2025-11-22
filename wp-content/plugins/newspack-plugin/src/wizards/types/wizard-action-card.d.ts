@@ -2,6 +2,7 @@
  * Wizard Action Card Props
  */
 type ActionCardProps = Partial< {
+	id: string | number;
 	title: string | React.ReactNode;
 	titleLink: string;
 	href: string;
@@ -29,6 +30,11 @@ type ActionCardProps = Partial< {
 	secondaryActionText: string;
 	onSecondaryActionClick: () => void;
 	secondaryDestructive: boolean;
+	draggable: boolean;
+	dragIndex: number;
+	onDragCallback: ( index: number ) => void;
+	dragWrapperRef?: React.MutableRefObject< HTMLDivElement | null >;
+	expandable: boolean;
 } >;
 
 /**

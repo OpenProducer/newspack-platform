@@ -32,13 +32,6 @@ var wp;
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/data
   var require_data = __commonJS({
     "package-external:@wordpress/data"(exports, module) {
@@ -71,6 +64,13 @@ var wp;
   var require_primitives = __commonJS({
     "package-external:@wordpress/primitives"(exports, module) {
       module.exports = window.wp.primitives;
+    }
+  });
+
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
     }
   });
 
@@ -111,7 +111,6 @@ var wp;
   });
 
   // packages/preferences/build-module/components/preference-toggle-menu-item/index.js
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var import_data3 = __toESM(require_data());
   var import_components = __toESM(require_components());
   var import_i18n = __toESM(require_i18n());
@@ -130,18 +129,18 @@ var wp;
   );
 
   // packages/icons/build-module/library/check.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_primitives = __toESM(require_primitives());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var check_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
 
   // packages/icons/build-module/library/chevron-left.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var import_primitives2 = __toESM(require_primitives());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var chevron_left_default = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_primitives2.Path, { d: "M14.6 7l-1.2-1L8 12l5.4 6 1.2-1-4.6-5z" }) });
 
   // packages/icons/build-module/library/chevron-right.js
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var import_primitives3 = __toESM(require_primitives());
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var chevron_right_default = /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_primitives3.Path, { d: "M10.6 6L9.4 7l4.6 5-4.6 5 1.2 1 5.4-6z" }) });
 
   // packages/preferences/build-module/components/preference-toggle-menu-item/index.js
@@ -292,6 +291,7 @@ var wp;
   (0, import_data2.register)(store);
 
   // packages/preferences/build-module/components/preference-toggle-menu-item/index.js
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   function PreferenceToggleMenuItem({
     scope,
     name,
@@ -348,8 +348,8 @@ var wp;
   }
 
   // packages/preferences/build-module/components/preference-base-option/index.js
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var import_components2 = __toESM(require_components());
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   function BaseOption({
     help,
     label,
@@ -374,8 +374,8 @@ var wp;
   var preference_base_option_default = BaseOption;
 
   // packages/preferences/build-module/components/preference-toggle-control/index.js
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   var import_data4 = __toESM(require_data());
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   function PreferenceToggleControl(props) {
     const {
       scope,
@@ -405,9 +405,9 @@ var wp;
   var preference_toggle_control_default = PreferenceToggleControl;
 
   // packages/preferences/build-module/components/preferences-modal/index.js
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var import_components3 = __toESM(require_components());
   var import_i18n2 = __toESM(require_i18n());
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   function PreferencesModal({
     closeModal,
     children
@@ -435,7 +435,6 @@ var wp;
   var preferences_modal_section_default = Section;
 
   // packages/preferences/build-module/components/preferences-modal-tabs/index.js
-  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
   var import_compose = __toESM(require_compose());
   var import_components4 = __toESM(require_components());
   var import_element2 = __toESM(require_element());
@@ -449,6 +448,7 @@ var wp;
   );
 
   // packages/preferences/build-module/components/preferences-modal-tabs/index.js
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
   var { Tabs } = unlock(import_components4.privateApis);
   var PREFERENCES_MENU = "preferences-menu";
   function PreferencesModalTabs({

@@ -57,6 +57,10 @@ declare global {
 			} >;
 			upgrade_subscription_url: string;
 		};
+		newspackAudienceContentGates: {
+			api: string;
+			available_rules: AccessRules;
+		};
 	}
 }
 

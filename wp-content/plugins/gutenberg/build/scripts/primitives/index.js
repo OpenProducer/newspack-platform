@@ -32,17 +32,17 @@ var wp;
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/element
   var require_element = __commonJS({
     "package-external:@wordpress/element"(exports, module) {
       module.exports = window.wp.element;
+    }
+  });
+
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
     }
   });
 
@@ -65,9 +65,6 @@ var wp;
     View: () => View
   });
 
-  // packages/primitives/build-module/svg/index.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
-
   // node_modules/clsx/dist/clsx.mjs
   function r(e) {
     var t, f, n = "";
@@ -86,6 +83,7 @@ var wp;
 
   // packages/primitives/build-module/svg/index.js
   var import_element = __toESM(require_element());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Circle = (props) => (0, import_element.createElement)("circle", props);
   var G = (props) => (0, import_element.createElement)("g", props);
   var Line = (props) => (0, import_element.createElement)("line", props);

@@ -1,3 +1,32 @@
+## [4.17.6](https://github.com/Automattic/newspack-blocks/compare/v4.17.5...v4.17.6) (2025-11-19)
+
+
+### Bug Fixes
+
+* don’t show trial info in modal checkout if not applicable ([#2245](https://github.com/Automattic/newspack-blocks/issues/2245)) ([26de0b9](https://github.com/Automattic/newspack-blocks/commit/26de0b9cf223dd3e5c5d4ee56ba6a8a915554baf))
+
+## [4.17.5](https://github.com/Automattic/newspack-blocks/compare/v4.17.4...v4.17.5) (2025-11-18)
+
+
+### Bug Fixes
+
+* **modal-checkout:** check product type to get recurrence data ([#2259](https://github.com/Automattic/newspack-blocks/issues/2259)) ([0c2ed81](https://github.com/Automattic/newspack-blocks/commit/0c2ed81a0ec2f68ae1aff3eb98633ed52def3218))
+
+## [4.17.4](https://github.com/Automattic/newspack-blocks/compare/v4.17.3...v4.17.4) (2025-11-13)
+
+
+### Bug Fixes
+
+* content gate metadata methods and params ([163e07f](https://github.com/Automattic/newspack-blocks/commit/163e07f56653b39eee68145659419d917606693d))
+* content gate metadata methods and params ([#2249](https://github.com/Automattic/newspack-blocks/issues/2249)) ([fe6cc18](https://github.com/Automattic/newspack-blocks/commit/fe6cc18898349d978af8f0dd9d62b65ed92df652))
+
+## [4.17.3](https://github.com/Automattic/newspack-blocks/compare/v4.17.2...v4.17.3) (2025-11-11)
+
+
+### Bug Fixes
+
+* content loop load more for custom taxs ([#2244](https://github.com/Automattic/newspack-blocks/issues/2244)) ([a2c5040](https://github.com/Automattic/newspack-blocks/commit/a2c5040cc27fc4a0adb6826505eda736edee5552))
+
 ## [4.17.2](https://github.com/Automattic/newspack-blocks/compare/v4.17.1...v4.17.2) (2025-11-03)
 
 

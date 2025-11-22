@@ -32,13 +32,6 @@ var wp;
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/element
   var require_element = __commonJS({
     "package-external:@wordpress/element"(exports, module) {
@@ -60,6 +53,13 @@ var wp;
     }
   });
 
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
+    }
+  });
+
   // package-external:@wordpress/private-apis
   var require_private_apis = __commonJS({
     "package-external:@wordpress/private-apis"(exports, module) {
@@ -72,9 +72,6 @@ var wp;
   __export(index_exports, {
     privateApis: () => privateApis
   });
-
-  // packages/router/build-module/router.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
 
   // node_modules/route-recognizer/dist/route-recognizer.es.js
   var createObject = Object.create;
@@ -970,6 +967,7 @@ var wp;
   var import_element = __toESM(require_element());
   var import_url = __toESM(require_url());
   var import_compose = __toESM(require_compose());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var history = createBrowserHistory();
   var RoutesContext = (0, import_element.createContext)(null);
   RoutesContext.displayName = "RoutesContext";
@@ -1134,9 +1132,9 @@ var wp;
   }
 
   // packages/router/build-module/link.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var import_element2 = __toESM(require_element());
   var import_url2 = __toESM(require_url());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   function useLink(to2, options = {}) {
     const history2 = useHistory();
     const { pathArg, beforeNavigate } = (0, import_element2.useContext)(ConfigContext);

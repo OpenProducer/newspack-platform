@@ -1526,9 +1526,9 @@ var wp;
   var if_condition_default = ifCondition;
 
   // packages/compose/build-module/higher-order/pure/index.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var import_is_shallow_equal = __toESM(require_is_shallow_equal());
   var import_element = __toESM(require_element());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var pure = createHigherOrderComponent(function(WrappedComponent) {
     if (WrappedComponent.prototype instanceof import_element.Component) {
       return class extends WrappedComponent {
@@ -1549,7 +1549,6 @@ var wp;
   var pure_default = pure;
 
   // packages/compose/build-module/higher-order/with-global-events/index.js
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var import_element2 = __toESM(require_element());
   var import_deprecated = __toESM(require_deprecated());
 
@@ -1589,6 +1588,7 @@ var wp;
   var listener_default = Listener;
 
   // packages/compose/build-module/higher-order/with-global-events/index.js
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var listener = new listener_default();
   function withGlobalEvents(eventTypesToHandlers) {
     (0, import_deprecated.default)("wp.compose.withGlobalEvents", {
@@ -1616,7 +1616,6 @@ var wp;
           const handler = eventTypesToHandlers[
             /** @type {keyof GlobalEventHandlersEventMap} */
             event.type
-            /* eslint-enable jsdoc/no-undefined-types */
           ];
           if (typeof this.wrappedRef[handler] === "function") {
             this.wrappedRef[handler](event);
@@ -1644,9 +1643,6 @@ var wp;
     }, "withGlobalEvents");
   }
 
-  // packages/compose/build-module/higher-order/with-instance-id/index.js
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
-
   // packages/compose/build-module/hooks/use-instance-id/index.js
   var import_element3 = __toESM(require_element());
   var instanceMap = /* @__PURE__ */ new WeakMap();
@@ -1667,6 +1663,7 @@ var wp;
   var use_instance_id_default = useInstanceId;
 
   // packages/compose/build-module/higher-order/with-instance-id/index.js
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var withInstanceId = createHigherOrderComponent(
     (WrappedComponent) => {
       return (props) => {
@@ -1679,8 +1676,8 @@ var wp;
   var with_instance_id_default = withInstanceId;
 
   // packages/compose/build-module/higher-order/with-safe-timeout/index.js
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var import_element4 = __toESM(require_element());
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var withSafeTimeout = createHigherOrderComponent(
     (OriginalComponent) => {
       return class WrappedComponent extends import_element4.Component {
@@ -1728,9 +1725,9 @@ var wp;
   var with_safe_timeout_default = withSafeTimeout;
 
   // packages/compose/build-module/higher-order/with-state/index.js
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   var import_element5 = __toESM(require_element());
   var import_deprecated2 = __toESM(require_deprecated());
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   function withState(initialState = {}) {
     (0, import_deprecated2.default)("wp.compose.withState", {
       since: "5.8",
@@ -2323,10 +2320,7 @@ var wp;
         const bindFn = bindGlobal ? "bindGlobal" : "bind";
         mousetrap[bindFn](
           shortcut,
-          (...args) => (
-            /* eslint-enable jsdoc/valid-types */
-            currentCallbackRef.current(...args)
-          ),
+          (...args) => currentCallbackRef.current(...args),
           eventName
         );
       });
@@ -2539,8 +2533,8 @@ var wp;
   }
 
   // packages/compose/build-module/hooks/use-resize-observer/legacy/index.js
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var import_element23 = __toESM(require_element());
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var extractSize = (entry) => {
     let entrySize;
     if (!entry.contentBoxSize) {

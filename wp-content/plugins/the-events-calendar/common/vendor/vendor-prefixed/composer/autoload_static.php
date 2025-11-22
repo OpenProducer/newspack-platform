@@ -4,7 +4,7 @@
 
 namespace TEC\Common\Composer\Autoload;
 
-class ComposerStaticInit5b8ec872b15b9f357affcbf35729b276
+class ComposerStaticInita04a5f17980117a8db724fd4a3e52d85
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -20,6 +20,7 @@ class ComposerStaticInit5b8ec872b15b9f357affcbf35729b276
             'TEC\\Common\\StellarWP\\Telemetry\\' => 31,
             'TEC\\Common\\StellarWP\\Shepherd\\' => 30,
             'TEC\\Common\\StellarWP\\Schema\\' => 28,
+            'TEC\\Common\\StellarWP\\SchemaModels\\' => 34,
             'TEC\\Common\\StellarWP\\Models\\' => 28,
             'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' => 41,
             'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' => 43,
@@ -80,6 +81,10 @@ class ComposerStaticInit5b8ec872b15b9f357affcbf35729b276
         'TEC\\Common\\StellarWP\\Schema\\' => 
         array (
             0 => __DIR__ . '/..' . '/stellarwp/schema/src/Schema',
+        ),
+        'TEC\\Common\\StellarWP\\SchemaModels\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/schema-models/src',
         ),
         'TEC\\Common\\StellarWP\\Models\\' => 
         array (
@@ -338,34 +343,77 @@ class ComposerStaticInit5b8ec872b15b9f357affcbf35729b276
         'TEC\\Common\\StellarWP\\Models\\Config' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Config.php',
         'TEC\\Common\\StellarWP\\Models\\Contracts\\Arrayable' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/Arrayable.php',
         'TEC\\Common\\StellarWP\\Models\\Contracts\\Model' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/Model.php',
-        'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelCrud' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/ModelCrud.php',
-        'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelFromQueryBuilderObject' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/ModelFromQueryBuilderObject.php',
-        'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelHasFactory' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/ModelHasFactory.php',
-        'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelReadOnly' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/ModelReadOnly.php',
+        'TEC\\Common\\StellarWP\\Models\\Contracts\\ModelPersistable' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/ModelPersistable.php',
         'TEC\\Common\\StellarWP\\Models\\DataTransferObject' => __DIR__ . '/..' . '/stellarwp/models/src/Models/DataTransferObject.php',
+        'TEC\\Common\\StellarWP\\Models\\Exceptions\\ReadOnlyPropertyException' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Exceptions/ReadOnlyPropertyException.php',
         'TEC\\Common\\StellarWP\\Models\\Model' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Model.php',
-        'TEC\\Common\\StellarWP\\Models\\ModelFactory' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ModelFactory.php',
+        'TEC\\Common\\StellarWP\\Models\\ModelProperty' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ModelProperty.php',
+        'TEC\\Common\\StellarWP\\Models\\ModelPropertyCollection' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ModelPropertyCollection.php',
+        'TEC\\Common\\StellarWP\\Models\\ModelPropertyDefinition' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ModelPropertyDefinition.php',
         'TEC\\Common\\StellarWP\\Models\\ModelQueryBuilder' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ModelQueryBuilder.php',
+        'TEC\\Common\\StellarWP\\Models\\ModelRelationship' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ModelRelationship.php',
+        'TEC\\Common\\StellarWP\\Models\\ModelRelationshipCollection' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ModelRelationshipCollection.php',
+        'TEC\\Common\\StellarWP\\Models\\ModelRelationshipDefinition' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ModelRelationshipDefinition.php',
         'TEC\\Common\\StellarWP\\Models\\Repositories\\Contracts\\Deletable' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Repositories/Contracts/Deletable.php',
         'TEC\\Common\\StellarWP\\Models\\Repositories\\Contracts\\Insertable' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Repositories/Contracts/Insertable.php',
         'TEC\\Common\\StellarWP\\Models\\Repositories\\Contracts\\Updatable' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Repositories/Contracts/Updatable.php',
         'TEC\\Common\\StellarWP\\Models\\Repositories\\Repository' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Repositories/Repository.php',
         'TEC\\Common\\StellarWP\\Models\\ValueObjects\\Relationship' => __DIR__ . '/..' . '/stellarwp/models/src/Models/ValueObjects/Relationship.php',
+        'TEC\\Common\\StellarWP\\SchemaModels\\Contracts\\Relationships\\ManyToManyWithPosts' => __DIR__ . '/..' . '/stellarwp/schema-models/src/Contracts/Relationships/ManyToManyWithPosts.php',
+        'TEC\\Common\\StellarWP\\SchemaModels\\Contracts\\Relationships\\RelationshipCRUD' => __DIR__ . '/..' . '/stellarwp/schema-models/src/Contracts/Relationships/RelationshipCRUD.php',
+        'TEC\\Common\\StellarWP\\SchemaModels\\Contracts\\SchemaModel' => __DIR__ . '/..' . '/stellarwp/schema-models/src/Contracts/SchemaModel.php',
+        'TEC\\Common\\StellarWP\\SchemaModels\\Exceptions\\BadMethodCallSchemaModelException' => __DIR__ . '/..' . '/stellarwp/schema-models/src/Exceptions/BadMethodCallSchemaModelException.php',
+        'TEC\\Common\\StellarWP\\SchemaModels\\Exceptions\\SchemaModelException' => __DIR__ . '/..' . '/stellarwp/schema-models/src/Exceptions/SchemaModelException.php',
+        'TEC\\Common\\StellarWP\\SchemaModels\\Relationships\\ManyToManyWithPosts' => __DIR__ . '/..' . '/stellarwp/schema-models/src/Relationships/ManyToManyWithPosts.php',
+        'TEC\\Common\\StellarWP\\SchemaModels\\SchemaModel' => __DIR__ . '/..' . '/stellarwp/schema-models/src/SchemaModel.php',
         'TEC\\Common\\StellarWP\\Schema\\Activation' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Activation.php',
         'TEC\\Common\\StellarWP\\Schema\\Builder' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Builder.php',
+        'TEC\\Common\\StellarWP\\Schema\\Collections\\Collection' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Collections/Collection.php',
+        'TEC\\Common\\StellarWP\\Schema\\Collections\\Column_Collection' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Collections/Column_Collection.php',
+        'TEC\\Common\\StellarWP\\Schema\\Collections\\Index_Collection' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Collections/Index_Collection.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Binary_Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Binary_Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Blob_Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Blob_Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Boolean_Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Boolean_Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Column_Types' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Column_Types.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Auto_Incrementable' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Auto_Incrementable.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Column_Interface' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Column_Interface.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Indexable' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Indexable.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Lengthable' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Lengthable.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Precisionable' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Precisionable.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Primarable' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Primarable.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Signable' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Signable.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Contracts\\Uniquable' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Contracts/Uniquable.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Created_At' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Created_At.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Datetime_Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Datetime_Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Float_Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Float_Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\ID' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/ID.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Integer_Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Integer_Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Last_Changed' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Last_Changed.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\PHP_Types' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/PHP_Types.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Referenced_ID' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Referenced_ID.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\String_Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/String_Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Text_Column' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Text_Column.php',
+        'TEC\\Common\\StellarWP\\Schema\\Columns\\Updated_At' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Columns/Updated_At.php',
         'TEC\\Common\\StellarWP\\Schema\\Config' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Config.php',
-        'TEC\\Common\\StellarWP\\Schema\\Fields\\Collection' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Fields/Collection.php',
-        'TEC\\Common\\StellarWP\\Schema\\Fields\\Contracts\\Field' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Fields/Contracts/Field.php',
-        'TEC\\Common\\StellarWP\\Schema\\Fields\\Contracts\\Schema_Interface' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Fields/Contracts/Schema_Interface.php',
-        'TEC\\Common\\StellarWP\\Schema\\Fields\\Filters\\Table_FilterIterator' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Fields/Filters/Table_FilterIterator.php',
         'TEC\\Common\\StellarWP\\Schema\\Full_Activation_Provider' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Full_Activation_Provider.php',
+        'TEC\\Common\\StellarWP\\Schema\\Indexes\\Classic_Index' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Indexes/Classic_Index.php',
+        'TEC\\Common\\StellarWP\\Schema\\Indexes\\Contracts\\Abstract_Index' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Indexes/Contracts/Abstract_Index.php',
+        'TEC\\Common\\StellarWP\\Schema\\Indexes\\Contracts\\Index' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Indexes/Contracts/Index.php',
+        'TEC\\Common\\StellarWP\\Schema\\Indexes\\Fulltext_Index' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Indexes/Fulltext_Index.php',
+        'TEC\\Common\\StellarWP\\Schema\\Indexes\\Primary_Key' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Indexes/Primary_Key.php',
+        'TEC\\Common\\StellarWP\\Schema\\Indexes\\Unique_Key' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Indexes/Unique_Key.php',
         'TEC\\Common\\StellarWP\\Schema\\Register' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Register.php',
         'TEC\\Common\\StellarWP\\Schema\\Schema' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Schema.php',
         'TEC\\Common\\StellarWP\\Schema\\Tables\\Collection' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Tables/Collection.php',
-        'TEC\\Common\\StellarWP\\Schema\\Tables\\Contracts\\Schema_Interface' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Tables/Contracts/Schema_Interface.php',
         'TEC\\Common\\StellarWP\\Schema\\Tables\\Contracts\\Table' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Tables/Contracts/Table.php',
+        'TEC\\Common\\StellarWP\\Schema\\Tables\\Contracts\\Table_Interface' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Tables/Contracts/Table_Interface.php',
+        'TEC\\Common\\StellarWP\\Schema\\Tables\\Contracts\\Table_Schema_Interface' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Tables/Contracts/Table_Schema_Interface.php',
         'TEC\\Common\\StellarWP\\Schema\\Tables\\Filters\\Group_FilterIterator' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Tables/Filters/Group_FilterIterator.php',
         'TEC\\Common\\StellarWP\\Schema\\Tables\\Filters\\Needs_Update_FilterIterator' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Tables/Filters/Needs_Update_FilterIterator.php',
+        'TEC\\Common\\StellarWP\\Schema\\Tables\\Table_Schema' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Tables/Table_Schema.php',
+        'TEC\\Common\\StellarWP\\Schema\\Traits\\Custom_Table_Query_Methods' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Traits/Custom_Table_Query_Methods.php',
+        'TEC\\Common\\StellarWP\\Schema\\Traits\\Indexable' => __DIR__ . '/..' . '/stellarwp/schema/src/Schema/Traits/Indexable.php',
         'TEC\\Common\\StellarWP\\Shepherd\\Abstracts\\Model_Abstract' => __DIR__ . '/..' . '/stellarwp/shepherd/src/Abstracts/Model_Abstract.php',
         'TEC\\Common\\StellarWP\\Shepherd\\Abstracts\\Provider_Abstract' => __DIR__ . '/..' . '/stellarwp/shepherd/src/Abstracts/Provider_Abstract.php',
         'TEC\\Common\\StellarWP\\Shepherd\\Abstracts\\Table_Abstract' => __DIR__ . '/..' . '/stellarwp/shepherd/src/Abstracts/Table_Abstract.php',
@@ -395,7 +443,6 @@ class ComposerStaticInit5b8ec872b15b9f357affcbf35729b276
         'TEC\\Common\\StellarWP\\Shepherd\\Tasks\\Email' => __DIR__ . '/..' . '/stellarwp/shepherd/src/Tasks/Email.php',
         'TEC\\Common\\StellarWP\\Shepherd\\Tasks\\HTTP_Request' => __DIR__ . '/..' . '/stellarwp/shepherd/src/Tasks/HTTP_Request.php',
         'TEC\\Common\\StellarWP\\Shepherd\\Tasks\\Herding' => __DIR__ . '/..' . '/stellarwp/shepherd/src/Tasks/Herding.php',
-        'TEC\\Common\\StellarWP\\Shepherd\\Traits\\Custom_Table_Query_Methods' => __DIR__ . '/..' . '/stellarwp/shepherd/src/Traits/Custom_Table_Query_Methods.php',
         'TEC\\Common\\StellarWP\\Shepherd\\Traits\\Loggable' => __DIR__ . '/..' . '/stellarwp/shepherd/src/Traits/Loggable.php',
         'TEC\\Common\\StellarWP\\Telemetry\\Admin\\Admin_Subscriber' => __DIR__ . '/..' . '/stellarwp/telemetry/src/Telemetry/Admin/Admin_Subscriber.php',
         'TEC\\Common\\StellarWP\\Telemetry\\Admin\\Resources' => __DIR__ . '/..' . '/stellarwp/telemetry/src/Telemetry/Admin/Resources.php',
@@ -537,9 +584,9 @@ class ComposerStaticInit5b8ec872b15b9f357affcbf35729b276
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5b8ec872b15b9f357affcbf35729b276::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5b8ec872b15b9f357affcbf35729b276::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5b8ec872b15b9f357affcbf35729b276::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita04a5f17980117a8db724fd4a3e52d85::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita04a5f17980117a8db724fd4a3e52d85::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita04a5f17980117a8db724fd4a3e52d85::$classMap;
 
         }, null, ClassLoader::class);
     }

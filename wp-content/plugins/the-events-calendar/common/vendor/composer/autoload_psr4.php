@@ -19,6 +19,7 @@ return array(
     'TEC\\Common\\StellarWP\\Telemetry\\' => array($vendorDir . '/stellarwp/telemetry/src/Telemetry'),
     'TEC\\Common\\StellarWP\\Shepherd\\' => array($vendorDir . '/stellarwp/shepherd/src'),
     'TEC\\Common\\StellarWP\\Schema\\' => array($vendorDir . '/stellarwp/schema/src/Schema'),
+    'TEC\\Common\\StellarWP\\SchemaModels\\' => array($vendorDir . '/stellarwp/schema-models/src'),
     'TEC\\Common\\StellarWP\\Models\\' => array($vendorDir . '/stellarwp/models/src/Models'),
     'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' => array($vendorDir . '/stellarwp/installer/src/assets/js'),
     'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' => array($vendorDir . '/stellarwp/installer/src/admin-views'),

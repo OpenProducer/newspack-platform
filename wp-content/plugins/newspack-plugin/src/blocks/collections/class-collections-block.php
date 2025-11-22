@@ -358,7 +358,7 @@ final class Collections_Block {
 		// Render meta text.
 		if ( ! empty( $meta_parts ) ) {
 			// Use different separator based on layout.
-			$separator = 'list' === $attributes['layout'] ? ' <span class="wp-block-newspack-collections__divider">/</span> ' : '<br>';
+			$separator = 'list' === $attributes['layout'] ? ' <span class="wp-block-newspack-collections__divider">/</span> ' : '';
 			$meta_text = implode( $separator, $meta_parts );
 			?>
 			<div class="wp-block-newspack-collections__meta has-medium-gray-color has-text-color has-small-font-size">

@@ -263,8 +263,8 @@ var wp;
   }
 
   // packages/keyboard-shortcuts/build-module/components/shortcut-provider.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_element3 = __toESM(require_element());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var { Provider } = context;
   function ShortcutProvider(props) {
     const [keyboardShortcuts] = (0, import_element3.useState)(() => /* @__PURE__ */ new Set());

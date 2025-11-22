@@ -45,13 +45,6 @@ var wp;
     }
   });
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/compose
   var require_compose = __commonJS({
     "package-external:@wordpress/compose"(exports, module) {
@@ -84,6 +77,13 @@ var wp;
   var require_primitives = __commonJS({
     "package-external:@wordpress/primitives"(exports, module) {
       module.exports = window.wp.primitives;
+    }
+  });
+
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
     }
   });
 
@@ -220,7 +220,6 @@ var wp;
   });
 
   // packages/nux/build-module/components/dot-tip/index.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var import_compose = __toESM(require_compose());
   var import_components = __toESM(require_components());
   var import_i18n = __toESM(require_i18n());
@@ -228,11 +227,12 @@ var wp;
   var import_element = __toESM(require_element());
 
   // packages/icons/build-module/library/close.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_primitives = __toESM(require_primitives());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var close_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z" }) });
 
   // packages/nux/build-module/components/dot-tip/index.js
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   function onClick(event) {
     event.stopPropagation();
   }

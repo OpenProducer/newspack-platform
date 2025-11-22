@@ -32,13 +32,6 @@ var wp;
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/element
   var require_element = __commonJS({
     "package-external:@wordpress/element"(exports, module) {
@@ -53,6 +46,13 @@ var wp;
     }
   });
 
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
+    }
+  });
+
   // packages/react-i18n/build-module/index.js
   var index_exports = {};
   __export(index_exports, {
@@ -60,9 +60,9 @@ var wp;
     useI18n: () => useI18n,
     withI18n: () => withI18n
   });
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_element = __toESM(require_element());
   var import_i18n = __toESM(require_i18n());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   function makeContextValue(i18n) {
     return {
       __: i18n.__.bind(i18n),

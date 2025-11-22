@@ -31,13 +31,6 @@ var wp;
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/element
   var require_element = __commonJS({
     "package-external:@wordpress/element"(exports, module) {
@@ -94,6 +87,13 @@ var wp;
     }
   });
 
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
+    }
+  });
+
   // packages/server-side-render/build-module/index.js
   var index_exports = {};
   __export(index_exports, {
@@ -103,7 +103,6 @@ var wp;
   });
 
   // packages/server-side-render/build-module/server-side-render.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_element2 = __toESM(require_element());
   var import_i18n = __toESM(require_i18n());
   var import_components = __toESM(require_components());
@@ -209,6 +208,7 @@ var wp;
   }
 
   // packages/server-side-render/build-module/server-side-render.js
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var EMPTY_OBJECT = {};
   function DefaultEmptyResponsePlaceholder({ className }) {
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.Placeholder, { className, children: (0, import_i18n.__)("Block rendered as empty.") });

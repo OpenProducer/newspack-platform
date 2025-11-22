@@ -3,9 +3,9 @@
 Contributors: theeventscalendar, stellarwp, borkweb, bordoni, brianjessee, aguseo, camwynsp, jentheo, leahkoerper, lucatume, neillmcshea, vicskf, zbtirrell
 Tags: events, calendar, event, schedule, organizer
 Donate link: https://evnt.is/29
-Stable tag: 6.15.11
+Stable tag: 6.15.12.2
 Requires at least: 6.6
-Tested up to: 6.8.2
+Tested up to: 6.8
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -231,6 +231,44 @@ Previous versions of The Events Calendar are not cross-compatible with 6.X add-o
 Remember to always make a backup of your database and files before updating!
 
 == Changelog ==
+
+= [6.15.12.2] 2025-11-20 =
+
+* Fix - Removes the <main /> element as a wrapper in events related pages, avoiding the calendar page rendering issues for many themes. Adds a `role="main"` to the first element printed by The Events Calendar on those pages to maintain accessibility. [TEC-5729]
+
+= [6.15.12.1] 2025-11-19 =
+
+* Fix - Provides context to a translatable placeholder which could result in an error when using existing translation. [TEC-5728]
+* Language - 1 new strings added, 5 updated, 0 fuzzied, and 0 obsoleted.
+
+= [6.15.12] 2025-11-18 =
+
+* Version - The Events Calendar 6.15.12 is only compatible with Event Tickets 5.27.0 or higher.
+* Version - The Events Calendar 6.15.12 is only compatible with Events Pro 7.7.11 or higher.
+* Fix - Correct use of globals in admin scripts.
+* Tweak - Added filters: `tec_events_rest_v1_events_read_params`, `tec_events_rest_v1_venues_read_params`, `tec_events_main_container_id`
+* Tweak - Removed filters: `tec_events_rest_v1_events_read_args`, `tec_events_rest_v1_venues_read_args`
+* Tweak - Changed views: `v2/components/content-title`, `v2/day/time-separator`, `v2/list/event/title`, `v2/list/month-separator`, `v2/month/calendar-body/day/date`
+* Tweak - Correct notice display on the troubleshooting page. [TEC-5724]
+* Tweak - Updates Shepherd library to 0.0.9 from 0.0.6 including various improvements. Shepherd's changelog can be found here https://github.com/stellarwp/shepherd/blob/0.0.9/CHANGELOG.md
+* Tweak - Improve Day View accessibility by using semantic H2 headings for time separators to create a proper heading hierarchy. [TEC-5627]
+* Tweak - Improve mini calendar accessibility by adding descriptive ARIA labels and clarifying focus indicators for color-based event markers. [TEC-5630]
+* Tweak - Update heading levels for “Events at this venue” and “Events from this organizer” to improve accessibility and semantic hierarchy. [TEC-5636]
+* Accessibility - Add filter to wrap event content in a main landmark if needed, which allows for the 'Skip to Content' button to work. [TEC-5628]
+* Compatibility - Make method signatures in Builder explicitly nullable to resolve PHP 8.4 deprecation warnings. [TEC-5725]
+* Compatibility - Updates to support TEC v1 REST API Changes.
+* Language - 3 new strings added, 75 updated, 0 fuzzied, and 1 obsoleted.
+
+= [6.15.11] 2025-11-04 =
+
+* Tweak - Add JavaScript logic to move keyboard focus to expanded date content and announce event counts for screen reader users in month view mobile calendar [TEC-5231]
+* Tweak - Avoid logging a warning when bulk deleting events. [TEC-5721]
+* Tweak - Changed views: `blocks/parts/details`, `blocks/parts/organizer`, `blocks/parts/venue`, `modules/meta/details`, `modules/meta/organizer`, `modules/meta/venue`, `v2/month`, `v2/month/calendar-body/day/date-extras`, `v2/month/calendar-body/day/date`, `v2/month/calendar-header`
+* Tweak - Improve accessibility in the mini calendar by replacing <em> elements used for event dots with semantic <span>s and removing redundant aria-label and title attributes [TEC-5228]
+* Accessibility - Improve screen reader accessibility for weekday headers in month view calendar. [TEC-5719]
+* Accessibility - Remove the presentational role from the Month View table. [TEC-5719]
+* Accessibility - Replace misuse of definition list (`<dl>/<dt>/<dd>`) tags with semantic unordered lists (`<ul>/<li>`) in event details, organizer, and venue meta sections to improve screen reader accessibility and reduce confusion.[TEC-5224]
+* Language - 3 new strings added, 53 updated, 1 fuzzied, and 4 obsoleted.
 
 = [6.15.10] 2025-10-28 =
 

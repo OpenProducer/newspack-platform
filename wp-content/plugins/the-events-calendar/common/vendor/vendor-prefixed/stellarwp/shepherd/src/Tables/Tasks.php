@@ -9,35 +9,36 @@
  */
 namespace TEC\Common\StellarWP\Shepherd\Tables;
 
-use TEC\Common\StellarWP\Shepherd\Abstracts\Table_Abstract as Table;
+use TEC\Common\StellarWP\Shepherd\Abstracts\Table_Abstract;
 use TEC\Common\StellarWP\Shepherd\Contracts\Task;
+use TEC\Common\StellarWP\Schema\Collections\Column_Collection;
+use TEC\Common\StellarWP\Schema\Columns\ID;
+use TEC\Common\StellarWP\Schema\Columns\Referenced_ID;
+use TEC\Common\StellarWP\Schema\Columns\String_Column;
+use TEC\Common\StellarWP\Schema\Columns\Text_Column;
+use TEC\Common\StellarWP\Schema\Columns\Integer_Column;
+use TEC\Common\StellarWP\Schema\Tables\Table_Schema;
 use InvalidArgumentException;
 /**
  * Tasks table schema.
  *
  * @since 0.0.1
+ * @since 0.0.8 Updated to be compatible with the updated contract.
  *
  * @package \TEC\Common\StellarWP\Shepherd\Tables;
  */
-class Tasks extends Table
+class Tasks extends Table_Abstract
 {
-    /**
-     * The indexes for the table.
-     *
-     * @since 0.0.1
-     *
-     * @var array<array<string, string>>
-     */
-    public const INDEXES = [['name' => 'action_id', 'columns' => 'action_id'], ['name' => 'args_hash', 'columns' => 'args_hash'], ['name' => 'class_hash', 'columns' => 'class_hash']];
     /**
      * The schema version.
      *
      * @since 0.0.1
      * @since 0.0.3 Updated to 0.0.2.
+     * @since 0.0.7 Updated to 0.0.3 to fix typo in the version string.
      *
      * @var string
      */
-    const SCHEMA_VERSION = '0.0.2s';
+    const SCHEMA_VERSION = '0.0.3';
     /**
      * The base table name, without the table prefix.
      *
@@ -71,15 +72,33 @@ class Tasks extends Table
      */
     protected static $uid_column = 'id';
     /**
-     * An array of all the columns in the table.
+     * Gets the schema history for the table.
      *
-     * @since 0.0.1
+     * @since 0.0.8
      *
-     * @return array<string, array<string, bool|int|string>>
+     * @return array<string, callable> The schema history for the table.
      */
-    public static function get_columns(): array
+    public static function get_schema_history(): array
     {
-        return [static::$uid_column => ['type' => self::COLUMN_TYPE_BIGINT, 'php_type' => self::PHP_TYPE_INT, 'length' => 20, 'unsigned' => true, 'auto_increment' => true, 'nullable' => false], 'action_id' => ['type' => self::COLUMN_TYPE_BIGINT, 'php_type' => self::PHP_TYPE_INT, 'length' => 20, 'unsigned' => true, 'nullable' => false], 'class_hash' => ['type' => self::COLUMN_TYPE_VARCHAR, 'php_type' => self::PHP_TYPE_STRING, 'length' => 191, 'nullable' => false], 'args_hash' => ['type' => self::COLUMN_TYPE_VARCHAR, 'php_type' => self::PHP_TYPE_STRING, 'length' => 191, 'nullable' => false], 'data' => ['type' => self::COLUMN_TYPE_LONGTEXT, 'php_type' => self::PHP_TYPE_STRING, 'nullable' => true], 'current_try' => ['type' => self::COLUMN_TYPE_BIGINT, 'php_type' => self::PHP_TYPE_INT, 'length' => 20, 'unsigned' => true, 'nullable' => false, 'default' => 0]];
+        return [self::SCHEMA_VERSION => [self::class, 'get_schema_version_0_0_3']];
+    }
+    /**
+     * Gets the schema for version 0.0.3.
+     *
+     * @since 0.0.8
+     *
+     * @return Table_Schema The schema for version 0.0.3.
+     */
+    public static function get_schema_version_0_0_3(): Table_Schema
+    {
+        $columns = new Column_Collection();
+        $columns[] = new ID('id');
+        $columns[] = new Referenced_ID('action_id');
+        $columns[] = (new String_Column('class_hash'))->set_length(191)->set_is_index(true);
+        $columns[] = (new String_Column('args_hash'))->set_length(191)->set_is_index(true);
+        $columns[] = (new Text_Column('data'))->set_nullable(true);
+        $columns[] = (new Integer_Column('current_try'))->set_length(20)->set_signed(false)->set_default(0);
+        return new Table_Schema(self::table_name(true), $columns);
     }
     /**
      * Gets a task by its action ID.
@@ -122,7 +141,7 @@ class Tasks extends Table
      *
      * @throws InvalidArgumentException If the task class does not exist or does not implement the Task interface.
      */
-    protected static function get_model_from_array(array $task_array): Task
+    public static function transform_from_array(array $task_array): Task
     {
         $task_data = json_decode($task_array['data'] ?? '[]', true);
         $task_class = $task_data['task_class'] ?? '';

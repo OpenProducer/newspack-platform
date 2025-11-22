@@ -56,6 +56,7 @@ class Wizards {
 						'seo'           => 'Newspack\Wizards\Newspack\Seo_Section',
 						'collections'   => 'Newspack\Wizards\Newspack\Collections_Section',
 						'print'         => 'Newspack\Wizards\Newspack\Print_Section',
+						'nextdoor'      => 'Newspack\Wizards\Newspack\Nextdoor_Section',
 					],
 				]
 			),
@@ -63,6 +64,7 @@ class Wizards {
 			'advertising-sponsors'    => new Advertising_Sponsors(),
 			'audience'                => new Audience_Wizard(),
 			'audience-campaigns'      => new Audience_Campaigns(),
+			'audience-content-gates'  => new Audience_Content_Gates(),
 			'audience-donations'      => new Audience_Donations(),
 			'listings'                => new Listings_Wizard(),
 			'network'                 => new Network_Wizard(),

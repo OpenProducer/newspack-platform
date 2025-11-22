@@ -10,8 +10,6 @@ namespace Newspack;
 defined( 'ABSPATH' ) || exit;
 
 use Newspack\Optional_Modules\Collections;
-use Newspack\Memberships;
-use Newspack\Memberships\Metering;
 use Newspack\Content_Gate_Countdown_Block;
 
 /**

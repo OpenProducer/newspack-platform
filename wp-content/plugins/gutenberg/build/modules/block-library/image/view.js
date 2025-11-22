@@ -3,15 +3,29 @@ import {
   store,
   getContext,
   getElement,
-  withSyncEvent
+  withSyncEvent,
+  withScope
 } from "@wordpress/interactivity";
+
+// packages/block-library/build-module/image/constants.js
+var IMAGE_PRELOAD_DELAY = 200;
+
+// packages/block-library/build-module/image/view.js
 var isTouching = false;
 var lastTouchTime = 0;
+function getImageSrc({ uploadedSrc }) {
+  return uploadedSrc || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+}
+function getImageSrcset({ lightboxSrcset }) {
+  return lightboxSrcset || "";
+}
 var { state, actions, callbacks } = store(
   "core/image",
   {
     state: {
       currentImageId: null,
+      preloadTimers: /* @__PURE__ */ new Map(),
+      preloadedImageIds: /* @__PURE__ */ new Set(),
       get currentImage() {
         return state.metadata[state.currentImageId];
       },
@@ -25,7 +39,10 @@ var { state, actions, callbacks } = store(
         return state.overlayOpened ? "true" : null;
       },
       get enlargedSrc() {
-        return state.currentImage.uploadedSrc || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+        return getImageSrc(state.currentImage);
+      },
+      get enlargedSrcset() {
+        return getImageSrcset(state.currentImage);
       },
       get figureStyles() {
         return state.overlayOpened && `${state.currentImage.figureStyles?.replace(
@@ -111,6 +128,43 @@ var { state, actions, callbacks } = store(
               state.scrollTopReset
             );
           }
+        }
+      },
+      preloadImage() {
+        const { imageId } = getContext();
+        if (state.preloadedImageIds.has(imageId)) {
+          return;
+        }
+        const imageMetadata = state.metadata[imageId];
+        const imageLink = document.createElement("link");
+        imageLink.rel = "preload";
+        imageLink.as = "image";
+        imageLink.href = getImageSrc(imageMetadata);
+        const srcset = getImageSrcset(imageMetadata);
+        if (srcset) {
+          imageLink.setAttribute("imagesrcset", srcset);
+          imageLink.setAttribute("imagesizes", "100vw");
+        }
+        document.head.appendChild(imageLink);
+        state.preloadedImageIds.add(imageId);
+      },
+      preloadImageWithDelay() {
+        const { imageId } = getContext();
+        actions.cancelPreload();
+        const timerId = setTimeout(
+          withScope(() => {
+            actions.preloadImage();
+            state.preloadTimers.delete(imageId);
+          }),
+          IMAGE_PRELOAD_DELAY
+        );
+        state.preloadTimers.set(imageId, timerId);
+      },
+      cancelPreload() {
+        const { imageId } = getContext();
+        if (state.preloadTimers.has(imageId)) {
+          clearTimeout(state.preloadTimers.get(imageId));
+          state.preloadTimers.delete(imageId);
         }
       }
     },

@@ -6,7 +6,13 @@ var wp;
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __commonJS = (cb, mod) => function __require() {
+  var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+    get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+  }) : x)(function(x) {
+    if (typeof require !== "undefined") return require.apply(this, arguments);
+    throw Error('Dynamic require of "' + x + '" is not supported');
+  });
+  var __commonJS = (cb, mod) => function __require2() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
   var __copyProps = (to, from, except, desc) => {
@@ -30,13 +36,6 @@ var wp;
   var require_rich_text = __commonJS({
     "package-external:@wordpress/rich-text"(exports, module) {
       module.exports = window.wp.richText;
-    }
-  });
-
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
     }
   });
 
@@ -65,6 +64,13 @@ var wp;
   var require_primitives = __commonJS({
     "package-external:@wordpress/primitives"(exports, module) {
       module.exports = window.wp.primitives;
+    }
+  });
+
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
     }
   });
 
@@ -117,18 +123,10 @@ var wp;
     }
   });
 
-  // package-external:@wordpress/latex-to-mathml
-  var require_latex_to_mathml = __commonJS({
-    "package-external:@wordpress/latex-to-mathml"(exports, module) {
-      module.exports = window.wp.latexToMathml;
-    }
-  });
-
   // packages/format-library/build-module/index.js
   var import_rich_text18 = __toESM(require_rich_text());
 
   // packages/format-library/build-module/bold/index.js
-  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   var import_i18n = __toESM(require_i18n());
   var import_rich_text = __toESM(require_rich_text());
   var import_block_editor = __toESM(require_block_editor());
@@ -147,68 +145,68 @@ var wp;
   );
 
   // packages/icons/build-module/library/button.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_primitives = __toESM(require_primitives());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var button_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "M8 12.5h8V11H8v1.5Z M19 6.5H5a2 2 0 0 0-2 2V15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a2 2 0 0 0-2-2ZM5 8h14a.5.5 0 0 1 .5.5V15a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V8.5A.5.5 0 0 1 5 8Z" }) });
 
   // packages/icons/build-module/library/code.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var import_primitives2 = __toESM(require_primitives());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var code_default = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_primitives2.SVG, { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_primitives2.Path, { d: "M20.8 10.7l-4.3-4.3-1.1 1.1 4.3 4.3c.1.1.1.3 0 .4l-4.3 4.3 1.1 1.1 4.3-4.3c.7-.8.7-1.9 0-2.6zM4.2 11.8l4.3-4.3-1-1-4.3 4.3c-.7.7-.7 1.8 0 2.5l4.3 4.3 1.1-1.1-4.3-4.3c-.2-.1-.2-.3-.1-.4z" }) });
 
   // packages/icons/build-module/library/color.js
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var import_primitives3 = __toESM(require_primitives());
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var color_default = /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_primitives3.SVG, { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_primitives3.Path, { d: "M17.2 10.9c-.5-1-1.2-2.1-2.1-3.2-.6-.9-1.3-1.7-2.1-2.6L12 4l-1 1.1c-.6.9-1.3 1.7-2 2.6-.8 1.2-1.5 2.3-2 3.2-.6 1.2-1 2.2-1 3 0 3.4 2.7 6.1 6.1 6.1s6.1-2.7 6.1-6.1c0-.8-.3-1.8-1-3zm-5.1 7.6c-2.5 0-4.6-2.1-4.6-4.6 0-.3.1-1 .8-2.3.5-.9 1.1-1.9 2-3.1.7-.9 1.3-1.7 1.8-2.3.7.8 1.3 1.6 1.8 2.3.8 1.1 1.5 2.2 2 3.1.7 1.3.8 2 .8 2.3 0 2.5-2.1 4.6-4.6 4.6z" }) });
 
   // packages/icons/build-module/library/format-bold.js
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var import_primitives4 = __toESM(require_primitives());
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var format_bold_default = /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_primitives4.Path, { d: "M14.7 11.3c1-.6 1.5-1.6 1.5-3 0-2.3-1.3-3.4-4-3.4H7v14h5.8c1.4 0 2.5-.3 3.3-1 .8-.7 1.2-1.7 1.2-2.9.1-1.9-.8-3.1-2.6-3.7zm-5.1-4h2.3c.6 0 1.1.1 1.4.4.3.3.5.7.5 1.2s-.2 1-.5 1.2c-.3.3-.8.4-1.4.4H9.6V7.3zm4.6 9c-.4.3-1 .4-1.7.4H9.6v-3.9h2.9c.7 0 1.3.2 1.7.5.4.3.6.8.6 1.5s-.2 1.2-.6 1.5z" }) });
 
   // packages/icons/build-module/library/format-italic.js
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var import_primitives5 = __toESM(require_primitives());
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var format_italic_default = /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_primitives5.Path, { d: "M12.5 5L10 19h1.9l2.5-14z" }) });
 
   // packages/icons/build-module/library/format-strikethrough.js
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   var import_primitives6 = __toESM(require_primitives());
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   var format_strikethrough_default = /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_primitives6.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_primitives6.Path, { d: "M9.1 9v-.5c0-.6.2-1.1.7-1.4.5-.3 1.2-.5 2-.5.7 0 1.4.1 2.1.3.7.2 1.4.5 2.1.9l.2-1.9c-.6-.3-1.2-.5-1.9-.7-.8-.1-1.6-.2-2.4-.2-1.5 0-2.7.3-3.6 1-.8.7-1.2 1.5-1.2 2.6V9h2zM20 12H4v1h8.3c.3.1.6.2.8.3.5.2.9.5 1.1.8.3.3.4.7.4 1.2 0 .7-.2 1.1-.8 1.5-.5.3-1.2.5-2.1.5-.8 0-1.6-.1-2.4-.3-.8-.2-1.5-.5-2.2-.8L7 18.1c.5.2 1.2.4 2 .6.8.2 1.6.3 2.4.3 1.7 0 3-.3 3.9-1 .9-.7 1.3-1.6 1.3-2.8 0-.9-.2-1.7-.7-2.2H20v-1z" }) });
 
   // packages/icons/build-module/library/help.js
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var import_primitives7 = __toESM(require_primitives());
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var help_default = /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_primitives7.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_primitives7.Path, { d: "M12 4a8 8 0 1 1 .001 16.001A8 8 0 0 1 12 4Zm0 1.5a6.5 6.5 0 1 0-.001 13.001A6.5 6.5 0 0 0 12 5.5Zm.75 11h-1.5V15h1.5v1.5Zm-.445-9.234a3 3 0 0 1 .445 5.89V14h-1.5v-1.25c0-.57.452-.958.917-1.01A1.5 1.5 0 0 0 12 8.75a1.5 1.5 0 0 0-1.5 1.5H9a3 3 0 0 1 3.305-2.984Z" }) });
 
   // packages/icons/build-module/library/language.js
-  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   var import_primitives8 = __toESM(require_primitives());
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   var language_default = /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_primitives8.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_primitives8.Path, { d: "M17.5 10h-1.7l-3.7 10.5h1.7l.9-2.6h3.9l.9 2.6h1.7L17.5 10zm-2.2 6.3 1.4-4 1.4 4h-2.8zm-4.8-3.8c1.6-1.8 2.9-3.6 3.7-5.7H16V5.2h-5.8V3H8.8v2.2H3v1.5h9.6c-.7 1.6-1.8 3.1-3.1 4.6C8.6 10.2 7.8 9 7.2 8H5.6c.6 1.4 1.7 2.9 2.9 4.4l-2.4 2.4c-.3.4-.7.8-1.1 1.2l1 1 1.2-1.2c.8-.8 1.6-1.5 2.3-2.3.8.9 1.7 1.7 2.5 2.5l.6-1.5c-.7-.6-1.4-1.3-2.1-2z" }) });
 
   // packages/icons/build-module/library/link.js
-  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
   var import_primitives9 = __toESM(require_primitives());
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
   var link_default = /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_primitives9.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_primitives9.Path, { d: "M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z" }) });
 
   // packages/icons/build-module/library/math.js
-  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
   var import_primitives10 = __toESM(require_primitives());
+  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
   var math_default = /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_primitives10.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_primitives10.Path, { d: "M11.2 6.8c-.7 0-1.4.5-1.6 1.1l-2.8 7.5-1.2-1.8c-.1-.2-.4-.3-.6-.3H3v1.5h1.6l1.2 1.8c.6.9 1.9.7 2.2-.3l2.9-7.9s.1-.2.2-.2h7.8V6.7h-7.8Zm5.3 3.4-1.9 1.9-1.9-1.9-1.1 1.1 1.9 1.9-1.9 1.9 1.1 1.1 1.9-1.9 1.9 1.9 1.1-1.1-1.9-1.9 1.9-1.9-1.1-1.1Z" }) });
 
   // packages/icons/build-module/library/subscript.js
-  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
   var import_primitives11 = __toESM(require_primitives());
+  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
   var subscript_default = /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_primitives11.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_primitives11.Path, { d: "M16.9 18.3l.8-1.2c.4-.6.7-1.2.9-1.6.2-.4.3-.8.3-1.2 0-.3-.1-.7-.2-1-.1-.3-.4-.5-.6-.7-.3-.2-.6-.3-1-.3s-.8.1-1.1.2c-.3.1-.7.3-1 .6l.2 1.3c.3-.3.5-.5.8-.6s.6-.2.9-.2c.3 0 .5.1.7.2.2.2.2.4.2.7 0 .3-.1.5-.2.8-.1.3-.4.7-.8 1.3L15 19.4h4.3v-1.2h-2.4zM14.1 7.2h-2L9.5 11 6.9 7.2h-2l3.6 5.3L4.7 18h2l2.7-4 2.7 4h2l-3.8-5.5 3.8-5.3z" }) });
 
   // packages/icons/build-module/library/superscript.js
-  var import_jsx_runtime12 = __toESM(require_jsx_runtime());
   var import_primitives12 = __toESM(require_primitives());
+  var import_jsx_runtime12 = __toESM(require_jsx_runtime());
   var superscript_default = /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives12.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives12.Path, { d: "M16.9 10.3l.8-1.3c.4-.6.7-1.2.9-1.6.2-.4.3-.8.3-1.2 0-.3-.1-.7-.2-1-.2-.2-.4-.4-.7-.6-.3-.2-.6-.3-1-.3s-.8.1-1.1.2c-.3.1-.7.3-1 .6l.1 1.3c.3-.3.5-.5.8-.6s.6-.2.9-.2c.3 0 .5.1.7.2.2.2.2.4.2.7 0 .3-.1.5-.2.8-.1.3-.4.7-.8 1.3l-1.8 2.8h4.3v-1.2h-2.2zm-2.8-3.1h-2L9.5 11 6.9 7.2h-2l3.6 5.3L4.7 18h2l2.7-4 2.7 4h2l-3.8-5.5 3.8-5.3z" }) });
 
   // packages/icons/build-module/library/text-color.js
-  var import_jsx_runtime13 = __toESM(require_jsx_runtime());
   var import_primitives13 = __toESM(require_primitives());
+  var import_jsx_runtime13 = __toESM(require_jsx_runtime());
   var text_color_default = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives13.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives13.Path, { d: "M12.9 6h-2l-4 11h1.9l1.1-3h4.2l1.1 3h1.9L12.9 6zm-2.5 6.5l1.5-4.9 1.7 4.9h-3.2z" }) });
 
   // packages/format-library/build-module/lock-unlock.js
@@ -219,6 +217,7 @@ var wp;
   );
 
   // packages/format-library/build-module/bold/index.js
+  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   var { essentialFormatKey } = unlock(import_block_editor.privateApis);
   var name = "core/bold";
   var title = (0, import_i18n.__)("Bold");
@@ -269,10 +268,10 @@ var wp;
   };
 
   // packages/format-library/build-module/code/index.js
-  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   var import_i18n2 = __toESM(require_i18n());
   var import_rich_text2 = __toESM(require_rich_text());
   var import_block_editor2 = __toESM(require_block_editor());
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   var name2 = "core/code";
   var title2 = (0, import_i18n2.__)("Inline code");
   var code = {
@@ -333,12 +332,12 @@ var wp;
   };
 
   // packages/format-library/build-module/image/index.js
-  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var import_components = __toESM(require_components());
   var import_i18n3 = __toESM(require_i18n());
   var import_element2 = __toESM(require_element());
   var import_rich_text3 = __toESM(require_rich_text());
   var import_block_editor3 = __toESM(require_block_editor());
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var ALLOWED_MEDIA_TYPES = ["image"];
   var name3 = "core/image";
   var title3 = (0, import_i18n3.__)("Inline image");
@@ -521,10 +520,10 @@ var wp;
   }
 
   // packages/format-library/build-module/italic/index.js
-  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
   var import_i18n4 = __toESM(require_i18n());
   var import_rich_text4 = __toESM(require_rich_text());
   var import_block_editor4 = __toESM(require_block_editor());
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
   var { essentialFormatKey: essentialFormatKey2 } = unlock(import_block_editor4.privateApis);
   var name4 = "core/italic";
   var title4 = (0, import_i18n4.__)("Italic");
@@ -575,7 +574,6 @@ var wp;
   };
 
   // packages/format-library/build-module/link/index.js
-  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   var import_i18n7 = __toESM(require_i18n());
   var import_element5 = __toESM(require_element());
   var import_rich_text6 = __toESM(require_rich_text());
@@ -585,7 +583,6 @@ var wp;
   var import_a11y2 = __toESM(require_a11y());
 
   // packages/format-library/build-module/link/inline.js
-  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
   var import_element4 = __toESM(require_element());
   var import_i18n6 = __toESM(require_i18n());
   var import_a11y = __toESM(require_a11y());
@@ -730,11 +727,11 @@ var wp;
   var walkToEnd = partialRight(walkToBoundary, "forwards");
 
   // packages/format-library/build-module/link/css-classes-setting.js
-  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
   var import_element3 = __toESM(require_element());
   var import_compose = __toESM(require_compose());
   var import_i18n5 = __toESM(require_i18n());
   var import_components2 = __toESM(require_components());
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
   var CSSClassesSettingComponent = ({ setting, value, onChange }) => {
     const hasValue = value ? value?.cssClasses?.length > 0 : false;
     const [isSettingActive, setIsSettingActive] = (0, import_element3.useState)(hasValue);
@@ -790,6 +787,7 @@ var wp;
   var css_classes_setting_default = CSSClassesSettingComponent;
 
   // packages/format-library/build-module/link/inline.js
+  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
   var LINK_SETTINGS = [
     ...import_block_editor5.LinkControl.DEFAULT_LINK_SETTINGS,
     {
@@ -1012,6 +1010,7 @@ var wp;
   var inline_default = InlineLinkUI;
 
   // packages/format-library/build-module/link/index.js
+  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   var { essentialFormatKey: essentialFormatKey3 } = unlock(import_block_editor6.privateApis);
   var name5 = "core/link";
   var title5 = (0, import_i18n7.__)("Link");
@@ -1197,10 +1196,10 @@ var wp;
   };
 
   // packages/format-library/build-module/strikethrough/index.js
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   var import_i18n8 = __toESM(require_i18n());
   var import_rich_text7 = __toESM(require_rich_text());
   var import_block_editor7 = __toESM(require_block_editor());
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   var name6 = "core/strikethrough";
   var title6 = (0, import_i18n8.__)("Strikethrough");
   var strikethrough = {
@@ -1237,10 +1236,10 @@ var wp;
   };
 
   // packages/format-library/build-module/underline/index.js
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   var import_i18n9 = __toESM(require_i18n());
   var import_rich_text8 = __toESM(require_rich_text());
   var import_block_editor8 = __toESM(require_block_editor());
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   var name7 = "core/underline";
   var title7 = (0, import_i18n9.__)("Underline");
   var underline = {
@@ -1284,20 +1283,19 @@ var wp;
   };
 
   // packages/format-library/build-module/text-color/index.js
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   var import_i18n11 = __toESM(require_i18n());
   var import_element7 = __toESM(require_element());
   var import_block_editor10 = __toESM(require_block_editor());
   var import_rich_text10 = __toESM(require_rich_text());
 
   // packages/format-library/build-module/text-color/inline.js
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var import_element6 = __toESM(require_element());
   var import_data2 = __toESM(require_data());
   var import_rich_text9 = __toESM(require_rich_text());
   var import_block_editor9 = __toESM(require_block_editor());
   var import_components4 = __toESM(require_components());
   var import_i18n10 = __toESM(require_i18n());
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var { Tabs } = unlock(import_components4.privateApis);
   var TABS = [
     { name: "color", title: (0, import_i18n10.__)("Text") },
@@ -1438,6 +1436,7 @@ var wp;
   }
 
   // packages/format-library/build-module/text-color/index.js
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   var transparentValue = "rgba(0, 0, 0, 0)";
   var name8 = "core/text-color";
   var title8 = (0, import_i18n11.__)("Highlight");
@@ -1529,10 +1528,10 @@ var wp;
   };
 
   // packages/format-library/build-module/subscript/index.js
-  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
   var import_i18n12 = __toESM(require_i18n());
   var import_rich_text11 = __toESM(require_rich_text());
   var import_block_editor11 = __toESM(require_block_editor());
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
   var name9 = "core/subscript";
   var title9 = (0, import_i18n12.__)("Subscript");
   var subscript = {
@@ -1562,10 +1561,10 @@ var wp;
   };
 
   // packages/format-library/build-module/superscript/index.js
-  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
   var import_i18n13 = __toESM(require_i18n());
   var import_rich_text12 = __toESM(require_rich_text());
   var import_block_editor12 = __toESM(require_block_editor());
+  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
   var name10 = "core/superscript";
   var title10 = (0, import_i18n13.__)("Superscript");
   var superscript = {
@@ -1595,10 +1594,10 @@ var wp;
   };
 
   // packages/format-library/build-module/keyboard/index.js
-  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
   var import_i18n14 = __toESM(require_i18n());
   var import_rich_text13 = __toESM(require_rich_text());
   var import_block_editor13 = __toESM(require_block_editor());
+  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
   var name11 = "core/keyboard";
   var title11 = (0, import_i18n14.__)("Keyboard input");
   var keyboard = {
@@ -1628,10 +1627,10 @@ var wp;
   };
 
   // packages/format-library/build-module/unknown/index.js
-  var import_jsx_runtime28 = __toESM(require_jsx_runtime());
   var import_i18n15 = __toESM(require_i18n());
   var import_rich_text14 = __toESM(require_rich_text());
   var import_block_editor14 = __toESM(require_block_editor());
+  var import_jsx_runtime28 = __toESM(require_jsx_runtime());
   var name12 = "core/unknown";
   var title12 = (0, import_i18n15.__)("Clear Unknown Formatting");
   function selectionContainsUnknownFormats(value) {
@@ -1670,12 +1669,12 @@ var wp;
   };
 
   // packages/format-library/build-module/language/index.js
-  var import_jsx_runtime29 = __toESM(require_jsx_runtime());
   var import_i18n16 = __toESM(require_i18n());
   var import_block_editor15 = __toESM(require_block_editor());
   var import_components5 = __toESM(require_components());
   var import_element8 = __toESM(require_element());
   var import_rich_text15 = __toESM(require_rich_text());
+  var import_jsx_runtime29 = __toESM(require_jsx_runtime());
   var name13 = "core/language";
   var title13 = (0, import_i18n16.__)("Language");
   var language = {
@@ -1802,12 +1801,12 @@ var wp;
   }
 
   // packages/format-library/build-module/math/index.js
-  var import_jsx_runtime30 = __toESM(require_jsx_runtime());
   var import_i18n17 = __toESM(require_i18n());
   var import_element9 = __toESM(require_element());
   var import_rich_text16 = __toESM(require_rich_text());
   var import_block_editor16 = __toESM(require_block_editor());
   var import_components6 = __toESM(require_components());
+  var import_jsx_runtime30 = __toESM(require_jsx_runtime());
   var { Badge } = unlock(import_components6.privateApis);
   var name14 = "core/math";
   var title14 = (0, import_i18n17.__)("Math");
@@ -1827,14 +1826,16 @@ var wp;
       settings: math
     });
     const handleLatexChange = (newLatex) => {
-      let mathML;
+      let mathML = "";
       setLatex(newLatex);
-      try {
-        mathML = latexToMathML(newLatex, { displayMode: false });
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-        return;
+      if (newLatex) {
+        try {
+          mathML = latexToMathML(newLatex, { displayMode: false });
+          setError(null);
+        } catch (err) {
+          setError(err.message);
+          return;
+        }
       }
       const newReplacements = value.replacements.slice();
       newReplacements[value.start] = {
@@ -1868,7 +1869,8 @@ var wp;
               value: latex,
               onChange: handleLatexChange,
               placeholder: (0, import_i18n17.__)("e.g., x^2, \\frac{a}{b}"),
-              autoComplete: "off"
+              autoComplete: "off",
+              className: "block-editor-format-toolbar__math-input"
             }
           ),
           error && /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(import_jsx_runtime30.Fragment, { children: [
@@ -1896,7 +1898,7 @@ var wp;
   }) {
     const [latexToMathML, setLatexToMathML] = (0, import_element9.useState)();
     (0, import_element9.useEffect)(() => {
-      Promise.resolve().then(() => __toESM(require_latex_to_mathml())).then((module) => {
+      import("@wordpress/latex-to-mathml").then((module) => {
         setLatexToMathML(() => module.default);
       });
     }, []);
@@ -1946,10 +1948,10 @@ var wp;
   };
 
   // packages/format-library/build-module/non-breaking-space/index.js
-  var import_jsx_runtime31 = __toESM(require_jsx_runtime());
   var import_i18n18 = __toESM(require_i18n());
   var import_rich_text17 = __toESM(require_rich_text());
   var import_block_editor17 = __toESM(require_block_editor());
+  var import_jsx_runtime31 = __toESM(require_jsx_runtime());
   var name15 = "core/non-breaking-space";
   var title15 = (0, import_i18n18.__)("Non breaking space");
   var nonBreakingSpace = {

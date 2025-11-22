@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit03aade0bfe92fe7286fca15a65b82f2d
+class ComposerStaticInite71881f120241935b4a150fdfc91fa1a
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -867,6 +867,7 @@ class ComposerStaticInit03aade0bfe92fe7286fca15a65b82f2d
         'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Empty_Token_Exception' => __DIR__ . '/../..' . '/src/exceptions/oauth/tokens/empty-token-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Failed_Storage_Exception' => __DIR__ . '/../..' . '/src/exceptions/oauth/tokens/failed-storage-exception.php',
         'Yoast\\WP\\SEO\\General\\User_Interface\\General_Page_Integration' => __DIR__ . '/../..' . '/src/general/user-interface/general-page-integration.php',
+        'Yoast\\WP\\SEO\\General\\User_Interface\\Opt_In_Route' => __DIR__ . '/../..' . '/src/general/user-interface/opt-in-route.php',
         'Yoast\\WP\\SEO\\Generated\\Cached_Container' => __DIR__ . '/../..' . '/src/generated/container.php',
         'Yoast\\WP\\SEO\\Generators\\Breadcrumbs_Generator' => __DIR__ . '/../..' . '/src/generators/breadcrumbs-generator.php',
         'Yoast\\WP\\SEO\\Generators\\Generator_Interface' => __DIR__ . '/../..' . '/src/generators/generator-interface.php',
@@ -1341,9 +1342,9 @@ class ComposerStaticInit03aade0bfe92fe7286fca15a65b82f2d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit03aade0bfe92fe7286fca15a65b82f2d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit03aade0bfe92fe7286fca15a65b82f2d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit03aade0bfe92fe7286fca15a65b82f2d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -369,6 +369,10 @@ class Audience_Donations extends Wizard {
 	protected function validate_donation_products() {
 		$validation_results = [];
 
+		if ( ! Donations::is_platform_wc() ) {
+			return $validation_results;
+		}
+
 		// Check if WooCommerce is active.
 		if ( ! class_exists( '\Newspack\WooCommerce_Product_Validator' ) ) {
 			return $validation_results;

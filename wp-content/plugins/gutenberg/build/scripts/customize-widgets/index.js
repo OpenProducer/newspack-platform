@@ -31,13 +31,6 @@ var wp;
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/element
   var require_element = __commonJS({
     "package-external:@wordpress/element"(exports, module) {
@@ -112,6 +105,13 @@ var wp;
   var require_hooks = __commonJS({
     "package-external:@wordpress/hooks"(exports, module) {
       module.exports = window.wp.hooks;
+    }
+  });
+
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
     }
   });
 
@@ -233,7 +233,6 @@ var wp;
     initialize: () => initialize,
     store: () => store
   });
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   var import_element17 = __toESM(require_element());
   var import_block_library2 = __toESM(require_block_library());
   var import_widgets5 = __toESM(require_widgets());
@@ -242,18 +241,17 @@ var wp;
   var import_preferences4 = __toESM(require_preferences());
 
   // packages/customize-widgets/build-module/components/customize-widgets/index.js
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   var import_element16 = __toESM(require_element());
   var import_components8 = __toESM(require_components());
 
   // packages/customize-widgets/build-module/components/error-boundary/index.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_element = __toESM(require_element());
   var import_i18n = __toESM(require_i18n());
   var import_components = __toESM(require_components());
   var import_block_editor = __toESM(require_block_editor());
   var import_compose = __toESM(require_compose());
   var import_hooks = __toESM(require_hooks());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   function CopyButton({ text, children }) {
     const ref = (0, import_compose.useCopyToClipboard)(text);
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_components.Button, { size: "compact", variant: "secondary", ref, children });
@@ -288,7 +286,6 @@ var wp;
   };
 
   // packages/customize-widgets/build-module/components/sidebar-block-editor/index.js
-  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
   var import_compose3 = __toESM(require_compose());
   var import_core_data = __toESM(require_core_data());
   var import_data12 = __toESM(require_data());
@@ -299,12 +296,12 @@ var wp;
   var import_block_library = __toESM(require_block_library());
 
   // packages/customize-widgets/build-module/components/block-inspector-button/index.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var import_element2 = __toESM(require_element());
   var import_i18n2 = __toESM(require_i18n());
   var import_components2 = __toESM(require_components());
   var import_data = __toESM(require_data());
   var import_block_editor2 = __toESM(require_block_editor());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   function BlockInspectorButton({ inspector, closeMenu, ...props }) {
     const selectedBlockClientId = (0, import_data.useSelect)(
       (select) => select(import_block_editor2.store).getSelectedBlockClientId(),
@@ -330,9 +327,6 @@ var wp;
   }
   var block_inspector_button_default = BlockInspectorButton;
 
-  // packages/customize-widgets/build-module/components/header/index.js
-  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
-
   // node_modules/clsx/dist/clsx.mjs
   function r(e) {
     var t, f, n = "";
@@ -357,37 +351,36 @@ var wp;
   var import_i18n7 = __toESM(require_i18n());
 
   // packages/icons/build-module/library/close-small.js
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var import_primitives = __toESM(require_primitives());
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var close_small_default = /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_primitives.Path, { d: "M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z" }) });
 
   // packages/icons/build-module/library/external.js
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var import_primitives2 = __toESM(require_primitives());
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var external_default = /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_primitives2.Path, { d: "M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z" }) });
 
   // packages/icons/build-module/library/more-vertical.js
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var import_primitives3 = __toESM(require_primitives());
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var more_vertical_default = /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_primitives3.Path, { d: "M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z" }) });
 
   // packages/icons/build-module/library/plus.js
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   var import_primitives4 = __toESM(require_primitives());
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   var plus_default = /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_primitives4.Path, { d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z" }) });
 
   // packages/icons/build-module/library/redo.js
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var import_primitives5 = __toESM(require_primitives());
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var redo_default = /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_primitives5.Path, { d: "M15.6 6.5l-1.1 1 2.9 3.3H8c-.9 0-1.7.3-2.3.9-1.4 1.5-1.4 4.2-1.4 5.6v.2h1.5v-.3c0-1.1 0-3.5 1-4.5.3-.3.7-.5 1.3-.5h9.2L14.5 15l1.1 1.1 4.6-4.6-4.6-5z" }) });
 
   // packages/icons/build-module/library/undo.js
-  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   var import_primitives6 = __toESM(require_primitives());
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   var undo_default = /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_primitives6.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_primitives6.Path, { d: "M18.3 11.7c-.6-.6-1.4-.9-2.3-.9H6.7l2.9-3.3-1.1-1-4.5 5L8.5 16l1-1-2.7-2.7H16c.5 0 .9.2 1.3.5 1 1 1 3.4 1 4.5v.3h1.5v-.2c0-1.5 0-4.3-1.5-5.7z" }) });
 
   // packages/customize-widgets/build-module/components/inserter/index.js
-  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
   var import_i18n3 = __toESM(require_i18n());
   var import_block_editor3 = __toESM(require_block_editor());
   var import_components3 = __toESM(require_components());
@@ -455,6 +448,7 @@ var wp;
   (0, import_data3.register)(store);
 
   // packages/customize-widgets/build-module/components/inserter/index.js
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
   function Inserter({ setIsOpened }) {
     const inserterTitleId = (0, import_compose2.useInstanceId)(
       Inserter,
@@ -505,7 +499,6 @@ var wp;
   var inserter_default = Inserter;
 
   // packages/customize-widgets/build-module/components/more-menu/index.js
-  var import_jsx_runtime13 = __toESM(require_jsx_runtime());
   var import_components5 = __toESM(require_components());
   var import_element5 = __toESM(require_element());
   var import_i18n6 = __toESM(require_i18n());
@@ -514,7 +507,6 @@ var wp;
   var import_preferences = __toESM(require_preferences());
 
   // packages/customize-widgets/build-module/components/keyboard-shortcut-help-modal/index.js
-  var import_jsx_runtime12 = __toESM(require_jsx_runtime());
   var import_components4 = __toESM(require_components());
   var import_i18n5 = __toESM(require_i18n());
   var import_keyboard_shortcuts2 = __toESM(require_keyboard_shortcuts());
@@ -582,9 +574,9 @@ var wp;
   ];
 
   // packages/customize-widgets/build-module/components/keyboard-shortcut-help-modal/shortcut.js
-  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
   var import_element3 = __toESM(require_element());
   var import_keycodes = __toESM(require_keycodes());
+  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
   function KeyCombination({ keyCombination, forceAriaLabel }) {
     const shortcut = keyCombination.modifier ? import_keycodes.displayShortcutList[keyCombination.modifier](
       keyCombination.character
@@ -640,9 +632,9 @@ var wp;
   var shortcut_default = Shortcut;
 
   // packages/customize-widgets/build-module/components/keyboard-shortcut-help-modal/dynamic-shortcut.js
-  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
   var import_data5 = __toESM(require_data());
   var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts());
+  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
   function DynamicShortcut({ name }) {
     const { keyCombination, description, aliases } = (0, import_data5.useSelect)(
       (select) => {
@@ -674,6 +666,7 @@ var wp;
   var dynamic_shortcut_default = DynamicShortcut;
 
   // packages/customize-widgets/build-module/components/keyboard-shortcut-help-modal/index.js
+  var import_jsx_runtime12 = __toESM(require_jsx_runtime());
   var ShortcutList = ({ shortcuts }) => (
     /*
      * Disable reason: The `list` ARIA role is redundant but
@@ -808,6 +801,7 @@ var wp;
   }
 
   // packages/customize-widgets/build-module/components/more-menu/index.js
+  var import_jsx_runtime13 = __toESM(require_jsx_runtime());
   function MoreMenu() {
     const [
       isKeyboardShortcutsModalActive,
@@ -923,6 +917,7 @@ var wp;
   }
 
   // packages/customize-widgets/build-module/components/header/index.js
+  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   function Header({
     sidebar,
     inserter,
@@ -1039,7 +1034,6 @@ var wp;
   }
 
   // packages/customize-widgets/build-module/components/sidebar-block-editor/sidebar-editor-provider.js
-  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var import_block_editor6 = __toESM(require_block_editor());
 
   // packages/customize-widgets/build-module/components/sidebar-block-editor/use-sidebar-block-editor.js
@@ -1224,8 +1218,8 @@ var wp;
   var import_widgets3 = __toESM(require_widgets());
 
   // packages/customize-widgets/build-module/components/focus-control/index.js
-  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   var import_element9 = __toESM(require_element());
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   var FocusControlContext = (0, import_element9.createContext)();
   FocusControlContext.displayName = "FocusControlContext";
   function FocusControl({ api, sidebarControls, children }) {
@@ -1314,6 +1308,7 @@ var wp;
   );
 
   // packages/customize-widgets/build-module/components/sidebar-block-editor/sidebar-editor-provider.js
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   var { ExperimentalBlockEditorProvider } = unlock(import_block_editor6.privateApis);
   function SidebarEditorProvider({
     sidebar,
@@ -1336,11 +1331,11 @@ var wp;
   }
 
   // packages/customize-widgets/build-module/components/welcome-guide/index.js
-  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
   var import_i18n8 = __toESM(require_i18n());
   var import_components7 = __toESM(require_components());
   var import_data9 = __toESM(require_data());
   var import_preferences2 = __toESM(require_preferences());
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
   function WelcomeGuide({ sidebar }) {
     const { toggle } = (0, import_data9.useDispatch)(import_preferences2.store);
     const isEntirelyBlockWidgets = sidebar.getWidgets().every((widget) => widget.id.startsWith("block-"));
@@ -1484,10 +1479,10 @@ var wp;
   var keyboard_shortcuts_default = KeyboardShortcuts;
 
   // packages/customize-widgets/build-module/components/block-appender/index.js
-  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
   var import_element12 = __toESM(require_element());
   var import_block_editor7 = __toESM(require_block_editor());
   var import_data11 = __toESM(require_data());
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
   function BlockAppender(props) {
     const ref = (0, import_element12.useRef)();
     const isBlocksListEmpty = (0, import_data11.useSelect)(
@@ -1505,6 +1500,7 @@ var wp;
   }
 
   // packages/customize-widgets/build-module/components/sidebar-block-editor/index.js
+  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
   var { ExperimentalBlockCanvas: BlockCanvas } = unlock(
     import_block_editor8.privateApis
   );
@@ -1624,8 +1620,8 @@ var wp;
   }
 
   // packages/customize-widgets/build-module/components/sidebar-controls/index.js
-  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   var import_element14 = __toESM(require_element());
+  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   var SidebarControlsContext = (0, import_element14.createContext)();
   SidebarControlsContext.displayName = "SidebarControlsContext";
   function SidebarControls({
@@ -1699,6 +1695,7 @@ var wp;
   }
 
   // packages/customize-widgets/build-module/components/customize-widgets/index.js
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   function CustomizeWidgets({
     api,
     sidebarControls,
@@ -2295,12 +2292,12 @@ var wp;
   }
 
   // packages/customize-widgets/build-module/filters/move-to-sidebar.js
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   var import_block_editor10 = __toESM(require_block_editor());
   var import_compose4 = __toESM(require_compose());
   var import_data16 = __toESM(require_data());
   var import_hooks2 = __toESM(require_hooks());
   var import_widgets4 = __toESM(require_widgets());
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   var withMoveToSidebarToolbarItem = (0, import_compose4.createHigherOrderComponent)(
     (BlockEdit) => (props) => {
       let widgetId = (0, import_widgets4.getWidgetIdFromBlock)(props);
@@ -2393,9 +2390,9 @@ var wp;
   );
 
   // packages/customize-widgets/build-module/filters/wide-widget-display.js
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var import_compose5 = __toESM(require_compose());
   var import_hooks4 = __toESM(require_hooks());
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var { wp: wp2 } = window;
   var withWideWidgetDisplay = (0, import_compose5.createHigherOrderComponent)(
     (BlockEdit) => (props) => {
@@ -2414,6 +2411,7 @@ var wp;
   );
 
   // packages/customize-widgets/build-module/index.js
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   var { wp: wp3 } = window;
   var DISABLED_BLOCKS = [
     "core/more",

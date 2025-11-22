@@ -9,9 +9,6 @@ namespace Newspack;
 
 defined( 'ABSPATH' ) || exit;
 
-use Newspack\Memberships;
-use Newspack\Memberships\Metering;
-
 /**
  * Content Gate Countdown Block class.
  */
@@ -36,7 +33,7 @@ class Content_Gate_Countdown_Block {
 		wp_enqueue_script(
 			'newspack-content-gate-countdown-block',
 			\Newspack\Newspack::plugin_url() . '/dist/content-gate-countdown-block.js',
-			[ 'wp-i18n', 'newspack-memberships-gate-metering' ],
+			[ 'wp-i18n', 'newspack-content-gate-metering' ],
 			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
@@ -63,7 +60,10 @@ class Content_Gate_Countdown_Block {
 	 * @return string The block HTML.
 	 */
 	public static function render_block( array $attributes, string $content ) {
-		if ( ! Metering::is_metering() || ! Memberships::is_post_restricted() ) {
+		if ( ! Metering::is_metering() || ! Content_Gate::is_post_restricted() ) {
+			return '';
+		}
+		if ( Content_Gate::is_gated() ) {
 			return '';
 		}
 		$total_views = Metering::get_total_metered_views( \is_user_logged_in() );

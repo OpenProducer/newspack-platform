@@ -2995,17 +2995,17 @@ var wp;
     }
   });
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/element
   var require_element = __commonJS({
     "package-external:@wordpress/element"(exports, module) {
       module.exports = window.wp.element;
+    }
+  });
+
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
     }
   });
 
@@ -14819,7 +14819,7 @@ var wp;
         __unstable_rest_base: postType.rest_base,
         supportsPagination: true,
         getRevisionsUrl: (parentId, revisionId) => `/${namespace}/${postType.rest_base}/${parentId}/revisions${revisionId ? "/" + revisionId : ""}`,
-        revisionKey: DEFAULT_ENTITY_KEY
+        revisionKey: isTemplate && !window?.__experimentalTemplateActivate ? "wp_id" : DEFAULT_ENTITY_KEY
       };
       if (window.__experimentalEnableSync) {
         if (true) {
@@ -15462,6 +15462,20 @@ var wp;
     }
     return state;
   }
+  function editorSettings(state = null, action) {
+    switch (action.type) {
+      case "RECEIVE_EDITOR_SETTINGS":
+        return action.settings;
+    }
+    return state;
+  }
+  function editorAssets(state = null, action) {
+    switch (action.type) {
+      case "RECEIVE_EDITOR_ASSETS":
+        return action.assets;
+    }
+    return state;
+  }
   var reducer_default2 = (0, import_data3.combineReducers)({
     users,
     currentTheme,
@@ -15481,7 +15495,9 @@ var wp;
     userPatternCategories,
     navigationFallbackId,
     defaultTemplates,
-    registeredPostMeta
+    registeredPostMeta,
+    editorSettings,
+    editorAssets
   });
 
   // packages/core-data/build-module/selectors.js
@@ -16095,6 +16111,8 @@ var wp;
   var private_selectors_exports = {};
   __export(private_selectors_exports, {
     getBlockPatternsForPostType: () => getBlockPatternsForPostType,
+    getEditorAssets: () => getEditorAssets,
+    getEditorSettings: () => getEditorSettings,
     getEntityRecordPermissions: () => getEntityRecordPermissions,
     getEntityRecordsPermissions: () => getEntityRecordsPermissions,
     getHomePage: () => getHomePage,
@@ -16262,6 +16280,12 @@ var wp;
       });
     }
   );
+  function getEditorSettings(state) {
+    return state.editorSettings;
+  }
+  function getEditorAssets(state) {
+    return state.editorAssets;
+  }
 
   // packages/core-data/build-module/actions.js
   var actions_exports = {};
@@ -16599,7 +16623,7 @@ var wp;
       });
       let hasError = false;
       let { baseURL } = entityConfig;
-      if (kind === "postType" && name === "wp_template" && recordId && typeof recordId === "string" && !/^\d+$/.test(recordId)) {
+      if (kind === "postType" && name === "wp_template" && (recordId && typeof recordId === "string" && !/^\d+$/.test(recordId) || !window?.__experimentalTemplateActivate)) {
         baseURL = baseURL.slice(0, baseURL.lastIndexOf("/")) + "/templates";
       }
       try {
@@ -16767,7 +16791,7 @@ var wp;
       let error;
       let hasError = false;
       let { baseURL } = entityConfig;
-      if (kind === "postType" && name === "wp_template" && recordId && typeof recordId === "string" && !/^\d+$/.test(recordId)) {
+      if (kind === "postType" && name === "wp_template" && (recordId && typeof recordId === "string" && !/^\d+$/.test(recordId) || !window?.__experimentalTemplateActivate)) {
         baseURL = baseURL.slice(0, baseURL.lastIndexOf("/")) + "/templates";
       }
       try {
@@ -17043,6 +17067,8 @@ var wp;
   var private_actions_exports = {};
   __export(private_actions_exports, {
     editMediaEntity: () => editMediaEntity,
+    receiveEditorAssets: () => receiveEditorAssets,
+    receiveEditorSettings: () => receiveEditorSettings,
     receiveRegisteredPostMeta: () => receiveRegisteredPostMeta
   });
   var import_api_fetch4 = __toESM(require_api_fetch());
@@ -17121,6 +17147,18 @@ var wp;
       dispatch.__unstableReleaseStoreLock(lock2);
     }
   };
+  function receiveEditorSettings(settings) {
+    return {
+      type: "RECEIVE_EDITOR_SETTINGS",
+      settings
+    };
+  }
+  function receiveEditorAssets(assets) {
+    return {
+      type: "RECEIVE_EDITOR_ASSETS",
+      assets
+    };
+  }
 
   // packages/core-data/build-module/resolvers.js
   var resolvers_exports = {};
@@ -17140,6 +17178,8 @@ var wp;
     getCurrentUser: () => getCurrentUser2,
     getDefaultTemplateId: () => getDefaultTemplateId2,
     getEditedEntityRecord: () => getEditedEntityRecord2,
+    getEditorAssets: () => getEditorAssets2,
+    getEditorSettings: () => getEditorSettings2,
     getEmbedPreview: () => getEmbedPreview2,
     getEntitiesConfig: () => getEntitiesConfig2,
     getEntityRecord: () => getEntityRecord2,
@@ -17166,7 +17206,7 @@ var wp;
   var import_url5 = __toESM(require_url());
   var import_html_entities = __toESM(require_html_entities());
   var import_i18n2 = __toESM(require_i18n());
-  async function fetchLinkSuggestions(search, searchOptions = {}, editorSettings = {}) {
+  async function fetchLinkSuggestions(search, searchOptions = {}, editorSettings2 = {}) {
     const searchOptionsToUse = searchOptions.isInitialSuggestions && searchOptions.initialSuggestionsSearchOptions ? {
       ...searchOptions,
       ...searchOptions.initialSuggestionsSearchOptions
@@ -17177,7 +17217,7 @@ var wp;
       page,
       perPage = searchOptions.isInitialSuggestions ? 3 : 20
     } = searchOptionsToUse;
-    const { disablePostFormats = false } = editorSettings;
+    const { disablePostFormats = false } = editorSettings2;
     const queries2 = [];
     if (!type || type === "post") {
       queries2.push(
@@ -17408,7 +17448,7 @@ var wp;
         }
       }
       let { baseURL } = entityConfig;
-      if (kind === "postType" && name === "wp_template" && key && typeof key === "string" && !/^\d+$/.test(key)) {
+      if (kind === "postType" && name === "wp_template" && (key && typeof key === "string" && !/^\d+$/.test(key) || !window?.__experimentalTemplateActivate)) {
         baseURL = baseURL.slice(0, baseURL.lastIndexOf("/")) + "/templates";
       }
       const path = (0, import_url7.addQueryArgs)(baseURL + (key ? "/" + key : ""), {
@@ -18075,6 +18115,18 @@ var wp;
     } catch {
     }
   };
+  var getEditorSettings2 = () => async ({ dispatch }) => {
+    const settings = await (0, import_api_fetch8.default)({
+      path: "/wp-block-editor/v1/settings"
+    });
+    dispatch.receiveEditorSettings(settings);
+  };
+  var getEditorAssets2 = () => async ({ dispatch }) => {
+    const assets = await (0, import_api_fetch8.default)({
+      path: "/wp-block-editor/v1/assets"
+    });
+    dispatch.receiveEditorAssets(assets);
+  };
 
   // packages/core-data/build-module/locks/utils.js
   function deepCopyLocksTreePath(tree, path) {
@@ -18256,7 +18308,6 @@ var wp;
   var dynamicSelectors;
 
   // packages/core-data/build-module/entity-provider.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_element2 = __toESM(require_element());
 
   // packages/core-data/build-module/entity-context.js
@@ -18265,6 +18316,7 @@ var wp;
   EntityContext.displayName = "EntityContext";
 
   // packages/core-data/build-module/entity-provider.js
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   function EntityProvider({ kind, type: name, id: id2, children }) {
     const parent = (0, import_element2.useContext)(EntityContext);
     const childContext = (0, import_element2.useMemo)(

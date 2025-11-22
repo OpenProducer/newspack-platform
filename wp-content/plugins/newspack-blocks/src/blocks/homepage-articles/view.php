@@ -323,19 +323,6 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 		$styles = 'color: ' . $attributes['customTextColor'] . ';';
 	}
 
-	// Handle custom taxonomies.
-	if ( isset( $attributes['customTaxonomies'] ) ) {
-		$custom_taxes = $attributes['customTaxonomies'];
-		unset( $attributes['customTaxonomies'] );
-		if ( is_array( $custom_taxes ) && ! empty( $custom_taxes ) ) {
-			foreach ( $custom_taxes as $tax ) {
-				if ( ! empty( $tax['slug'] ) && ! empty( $tax['terms'] ) ) {
-					$attributes[ $tax['slug'] ] = $tax['terms'];
-				}
-			}
-		}
-	}
-
 	$articles_rest_url = add_query_arg(
 		array_merge(
 			map_deep(

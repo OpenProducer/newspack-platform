@@ -852,6 +852,7 @@ return array(
     'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Empty_Token_Exception' => $baseDir . '/src/exceptions/oauth/tokens/empty-token-exception.php',
     'Yoast\\WP\\SEO\\Exceptions\\OAuth\\Tokens\\Failed_Storage_Exception' => $baseDir . '/src/exceptions/oauth/tokens/failed-storage-exception.php',
     'Yoast\\WP\\SEO\\General\\User_Interface\\General_Page_Integration' => $baseDir . '/src/general/user-interface/general-page-integration.php',
+    'Yoast\\WP\\SEO\\General\\User_Interface\\Opt_In_Route' => $baseDir . '/src/general/user-interface/opt-in-route.php',
     'Yoast\\WP\\SEO\\Generated\\Cached_Container' => $baseDir . '/src/generated/container.php',
     'Yoast\\WP\\SEO\\Generators\\Breadcrumbs_Generator' => $baseDir . '/src/generators/breadcrumbs-generator.php',
     'Yoast\\WP\\SEO\\Generators\\Generator_Interface' => $baseDir . '/src/generators/generator-interface.php',

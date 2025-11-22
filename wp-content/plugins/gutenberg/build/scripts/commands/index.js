@@ -31,13 +31,6 @@ var wp;
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // vendor-external:react
   var require_react = __commonJS({
     "vendor-external:react"(exports, module) {
@@ -94,6 +87,13 @@ var wp;
     }
   });
 
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
+    }
+  });
+
   // package-external:@wordpress/private-apis
   var require_private_apis = __commonJS({
     "package-external:@wordpress/private-apis"(exports, module) {
@@ -111,9 +111,6 @@ var wp;
     useCommandLoader: () => useCommandLoader,
     useCommands: () => useCommands
   });
-
-  // packages/commands/build-module/components/command-menu.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
 
   // packages/commands/node_modules/cmdk/dist/chunk-NZJY6EH4.mjs
   var U = 1;
@@ -2477,8 +2474,8 @@ var wp;
   );
 
   // packages/icons/build-module/library/search.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_primitives = __toESM(require_primitives());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var search_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "M13 5c-3.3 0-6 2.7-6 6 0 1.4.5 2.7 1.3 3.7l-3.8 3.8 1.1 1.1 3.8-3.8c1 .8 2.3 1.3 3.7 1.3 3.3 0 6-2.7 6-6S16.3 5 13 5zm0 10.5c-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5 4.5 2 4.5 4.5-2 4.5-4.5 4.5z" }) });
 
   // packages/commands/build-module/store/index.js
@@ -2655,6 +2652,7 @@ var wp;
   unlock(store).registerPrivateActions(private_actions_exports);
 
   // packages/commands/build-module/components/command-menu.js
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var inputLabel = (0, import_i18n.__)("Search commands and settings");
   function CommandMenuLoader({ name, search, hook, setLoader, close: close2 }) {
     const { isLoading, commands: commands2 = [] } = hook({ search }) ?? {};

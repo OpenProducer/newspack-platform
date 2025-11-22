@@ -144,8 +144,8 @@ var wp;
   var import_compose3 = __toESM(require_compose());
 
   // packages/viewport/build-module/with-viewport-match.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_compose2 = __toESM(require_compose());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var withViewportMatch = (queries) => {
     const queryEntries = Object.entries(queries);
     const useViewPortQueriesResult = () => Object.fromEntries(

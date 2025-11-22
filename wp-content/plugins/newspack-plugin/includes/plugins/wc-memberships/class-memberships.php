@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use Newspack\Memberships\Metering;
+use Newspack\Content_Gate;
 use Newspack\WooCommerce_Connection;
 
 defined( 'ABSPATH' ) || exit;
@@ -17,15 +17,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Memberships {
 
-	const GATE_CPT = 'np_memberships_gate';
 	const SKIP_RESTRICTION_IN_RSS_OPTION_NAME = 'newspack_skip_content_restriction_in_rss_feeds';
-
-	/**
-	 * Whether the gate has been rendered in this execution.
-	 *
-	 * @var boolean
-	 */
-	private static $gate_rendered = false;
 
 	/**
 	 * Membership statuses that should grant access to restricted content.
@@ -39,12 +31,15 @@ class Memberships {
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
-		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
-		add_action( 'init', [ __CLASS__, 'register_meta' ] );
-		add_action( 'admin_init', [ __CLASS__, 'redirect_cpt' ] );
-		add_action( 'admin_init', [ __CLASS__, 'handle_edit_gate' ] );
-		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
-		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
+		// Hook into the Content Gate.
+		add_action( 'admin_init', [ __CLASS__, 'handle_edit_plan_gate' ] );
+		add_filter( 'newspack_content_gate_post_id', [ __CLASS__, 'get_gate_post_id' ], 10, 2 );
+		add_filter( 'newspack_is_post_restricted', [ __CLASS__, 'is_post_restricted' ], 10, 2 );
+
+		// Handle restriction when using metering.
+		add_action( 'wp', [ __CLASS__, 'handle_metering_restriction' ], 5 ); // Before Woo Memberships' restriction handler, which was lowered to 9 in 1.27.2.
+
+		// WC Memberships hooks.
 		add_filter( 'wc_memberships_notice_html', [ __CLASS__, 'wc_memberships_notice_html' ], 100, 4 );
 		add_filter( 'wc_memberships_restricted_content_excerpt', [ __CLASS__, 'wc_memberships_excerpt' ], 100, 3 );
 		add_filter( 'wc_memberships_message_excerpt_apply_the_content_filter', '__return_false' );
@@ -53,9 +48,6 @@ class Memberships {
 		add_filter( 'wc_memberships_is_post_public', [ __CLASS__, 'wc_memberships_is_post_public' ] );
 		add_action( 'wc_memberships_user_membership_actions', [ __CLASS__, 'user_membership_meta_box_actions' ], 1, 2 );
 		add_action( 'admin_init', [ __CLASS__, 'handle_reevaluation_request' ] );
-		add_action( 'wp_footer', [ __CLASS__, 'render_overlay_gate' ], 1 );
-		add_filter( 'newspack_popups_assess_has_disabled_popups', [ __CLASS__, 'disable_popups' ] );
-		add_filter( 'newspack_reader_activity_article_view', [ __CLASS__, 'suppress_article_view_activity' ], 100 );
 		add_filter( 'user_has_cap', [ __CLASS__, 'user_has_cap' ], 10, 3 );
 		add_action( 'wp', [ __CLASS__, 'remove_unnecessary_content_restriction' ], 11 );
 		add_filter( 'body_class', [ __CLASS__, 'add_body_class' ] );
@@ -65,20 +57,6 @@ class Memberships {
 		add_action( 'load-edit.php', [ __CLASS__, 'store_original_membership_data_before_bulk_edit' ] );
 		add_action( 'bulk_edit_posts', [ __CLASS__, 'prevent_bulk_edit_subscription_linked_memberships' ], 10, 2 );
 
-		/** Add gate content filters to mimic 'the_content'. See 'wp-includes/default-filters.php' for reference. */
-		add_filter( 'newspack_gate_content', 'capital_P_dangit', 11 );
-		add_filter( 'newspack_gate_content', [ __CLASS__, 'do_blocks' ], 9 ); // Custom implementation of do_blocks().
-		add_filter( 'newspack_gate_content', 'wptexturize' );
-		add_filter( 'newspack_gate_content', 'convert_smilies', 20 );
-		add_filter( 'newspack_gate_content', 'wpautop' );
-		add_filter( 'newspack_gate_content', 'shortcode_unautop' );
-		add_filter( 'newspack_gate_content', 'prepend_attachment' );
-		add_filter( 'newspack_gate_content', 'wp_filter_content_tags' );
-		add_filter( 'newspack_gate_content', 'wp_replace_insecure_home_url' );
-		add_filter( 'newspack_gate_content', 'do_shortcode', 11 ); // AFTER wpautop().
-
-		include __DIR__ . '/class-block-patterns.php';
-		include __DIR__ . '/class-metering.php';
 		include __DIR__ . '/class-import-export.php';
 		include __DIR__ . '/class-membership-expiry.php';
 	}
@@ -91,207 +69,14 @@ class Memberships {
 	}
 
 	/**
-	 * Parses dynamic blocks out of `post_content` and re-renders them.
-	 *
-	 * This is a copy of `do_blocks()` from `wp-includes/blocks.php` but with
-	 * a different filter name for the `wpautop` filter handling.
-	 *
-	 * @param string $content Post content.
-	 *
-	 * @return string Updated post content.
-	 */
-	public static function do_blocks( $content ) {
-		$blocks = parse_blocks( $content );
-		$output = '';
-
-		foreach ( $blocks as $block ) {
-			$output .= render_block( $block );
-		}
-
-		// If there are blocks in this content, we shouldn't run wpautop() on it later.
-		$priority = has_filter( 'newspack_gate_content', 'wpautop' );
-		if ( false !== $priority && doing_filter( 'newspack_gate_content' ) && has_blocks( $content ) ) {
-			remove_filter( 'newspack_gate_content', 'wpautop', $priority );
-			add_filter( 'newspack_gate_content', '_restore_wpautop_hook', $priority + 1 );
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Register post type for custom gate.
-	 */
-	public static function register_post_type() {
-		// Bail if Woo Memberships is not active.
-		if ( ! class_exists( 'WC_Memberships' ) ) {
-			return false;
-		}
-		\register_post_type(
-			self::GATE_CPT,
-			[
-				'label'        => __( 'Memberships Gate', 'newspack' ),
-				'labels'       => [
-					'item_published'         => __( 'Memberships Gate published.', 'newspack' ),
-					'item_reverted_to_draft' => __( 'Memberships Gate reverted to draft.', 'newspack' ),
-					'item_updated'           => __( 'Memberships Gate updated.', 'newspack' ),
-					'new_item'               => __( 'New Memberships Gate', 'newspack' ),
-					'edit_item'              => __( 'Edit Memberships Gate', 'newspack' ),
-					'view_item'              => __( 'View Memberships Gate', 'newspack' ),
-				],
-				'public'       => false,
-				'show_ui'      => true,
-				'show_in_menu' => false,
-				'show_in_rest' => true,
-				'supports'     => [ 'editor', 'custom-fields', 'revisions' ],
-			]
-		);
-	}
-
-	/**
-	 * Register gate meta.
-	 */
-	public static function register_meta() {
-		// Bail if Woo Memberships is not active.
-		if ( ! class_exists( 'WC_Memberships' ) ) {
-			return false;
-		}
-		$meta = [
-			'style'              => [
-				'type'    => 'string',
-				'default' => 'inline',
-			],
-			'inline_fade'        => [
-				'type'    => 'boolean',
-				'default' => true,
-			],
-			'use_more_tag'       => [
-				'type'    => 'boolean',
-				'default' => true,
-			],
-			'visible_paragraphs' => [
-				'type'    => 'integer',
-				'default' => 2,
-			],
-			'overlay_position'   => [
-				'type'    => 'string',
-				'default' => 'center',
-			],
-			'overlay_size'       => [
-				'type'    => 'string',
-				'default' => 'medium',
-			],
-		];
-		foreach ( $meta as $key => $config ) {
-			\register_meta(
-				'post',
-				$key,
-				[
-					'object_subtype' => self::GATE_CPT,
-					'show_in_rest'   => true,
-					'type'           => $config['type'],
-					'default'        => $config['default'],
-					'single'         => true,
-				]
-			);
-		}
-	}
-
-	/**
-	 * Redirect the custom gate CPT to the Memberships wizard
-	 */
-	public static function redirect_cpt() {
-		global $pagenow;
-		if ( 'edit.php' === $pagenow && isset( $_GET['post_type'] ) && self::GATE_CPT === $_GET['post_type'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			\wp_safe_redirect( \admin_url( 'admin.php?page=newspack-audience#/content-gating' ) );
-			exit;
-		}
-	}
-
-	/**
-	 * Enqueue frontend scripts and styles for gated content.
-	 */
-	public static function enqueue_scripts() {
-		if ( ! self::has_gate() ) {
-			return;
-		}
-		if ( ! is_singular() || ! self::is_post_restricted() ) {
-			return;
-		}
-		$handle = 'newspack-memberships-gate';
-		\wp_enqueue_script(
-			$handle,
-			Newspack::plugin_url() . '/dist/memberships-gate.js',
-			[],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/memberships-gate.js' ),
-			true
-		);
-		\wp_script_add_data( $handle, 'async', true );
-		\wp_localize_script(
-			$handle,
-			'newspack_memberships_gate',
-			[
-				'metadata' => self::get_gate_metadata(),
-			]
-		);
-		\wp_enqueue_style(
-			$handle,
-			Newspack::plugin_url() . '/dist/memberships-gate.css',
-			[],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/memberships-gate.css' )
-		);
-	}
-
-	/**
-	 * Enqueue block editor assets.
-	 */
-	public static function enqueue_block_editor_assets() {
-		if ( self::GATE_CPT !== get_post_type() ) {
-			return;
-		}
-		\wp_enqueue_script(
-			'newspack-memberships-gate',
-			Newspack::plugin_url() . '/dist/memberships-gate-editor.js',
-			[],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/memberships-gate-editor.js' ),
-			true
-		);
-		\wp_localize_script(
-			'newspack-memberships-gate',
-			'newspack_memberships_gate',
-			[
-				'has_campaigns' => class_exists( 'Newspack_Popups' ),
-				'plans'         => self::get_plans(),
-				'gate_plans'    => self::get_gate_plans( get_the_ID() ),
-				'edit_gate_url' => self::get_edit_gate_url(),
-			]
-		);
-
-		\wp_enqueue_style(
-			'newspack-memberships-gate',
-			Newspack::plugin_url() . '/dist/memberships-gate-editor.css',
-			[],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/memberships-gate-editor.css' )
-		);
-	}
-
-	/**
-	 * Set the post ID of the custom gate.
-	 *
-	 * @param int $post_id Post ID.
-	 */
-	public static function set_gate_post_id( $post_id ) {
-		\update_option( 'newspack_memberships_gate_post_id', $post_id );
-	}
-
-	/**
 	 * Get the post ID of the custom gate.
 	 *
-	 * @param int $post_id Post ID to find gate for.
+	 * @param int $gate_post_id Gate post ID.
+	 * @param int $post_id      Post ID to find gate for.
 	 *
 	 * @return int|false Post ID or false if not set.
 	 */
-	public static function get_gate_post_id( $post_id = null ) {
-		$gate_post_id = (int) \get_option( 'newspack_memberships_gate_post_id' );
+	public static function get_gate_post_id( $gate_post_id, $post_id = null ) {
 		if ( is_singular() ) {
 			$post_id = $post_id ? $post_id : get_queried_object_id();
 		}
@@ -305,25 +90,71 @@ class Memberships {
 				}
 			}
 		}
-		return $gate_post_id ? $gate_post_id : false;
+		return $gate_post_id;
 	}
 
 	/**
-	 * Get gate metadata to be used for analytics purposes.
+	 * Get the URL for editing the custom gate.
 	 *
-	 * @return array {
-	 *   The gate metadata.
+	 * @param int|false $plan_id Plan ID.
 	 *
-	 *   @type int    $gate_post_id The gate post ID.
-	 *   @type array  $gate_blocks  Names of unique blocks in the gate post.
-	 * }
+	 * @return string
 	 */
-	public static function get_gate_metadata() {
-		$post_id = self::get_gate_post_id();
-		return [
-			'gate_post_id' => $post_id,
-			'logged_in'    => \is_user_logged_in() ? 'yes' : 'no',
-		];
+	public static function get_edit_plan_gate_url( $plan_id = false ) {
+		$action = 'newspack_edit_memberships_plan_gate';
+		$url    = \add_query_arg( '_wpnonce', \wp_create_nonce( $action ), \admin_url( 'admin.php?action=' . $action ) );
+		if ( $plan_id ) {
+			$url = \add_query_arg( 'plan_id', $plan_id, $url );
+		}
+		return str_replace( \site_url(), '', $url );
+	}
+
+	/**
+	 * Create a post for the custom gate.
+	 */
+	public static function handle_edit_plan_gate() {
+		if ( ! isset( $_GET['action'] ) || 'newspack_edit_memberships_plan_gate' !== $_GET['action'] ) {
+			return;
+		}
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		check_admin_referer( 'newspack_edit_memberships_plan_gate' );
+
+		$plan_id = isset( $_GET['plan_id'] ) ? \absint( $_GET['plan_id'] ) : false;
+		if ( ! $plan_id ) {
+			\wp_die( esc_html( __( 'Plan ID is required.', 'newspack' ) ) );
+		}
+
+		$gate_post_id = self::get_plan_gate_id( $plan_id );
+
+		if ( $gate_post_id && get_post( $gate_post_id ) ) {
+			// Untrash post if it's in the trash.
+			if ( 'trash' === get_post_status( $gate_post_id ) ) {
+				\wp_untrash_post( $gate_post_id );
+			}
+			// Gate found, edit it.
+			\wp_safe_redirect( \admin_url( 'post.php?post=' . $gate_post_id . '&action=edit' ) );
+			exit;
+		} else {
+			// Gate not found, create it.
+			$plan = \wc_memberships_get_membership_plan( $plan_id );
+			if ( ! $plan ) {
+				\wp_die( esc_html( __( 'Plan not found.', 'newspack' ) ) );
+			}
+			$post_title = sprintf(
+				// Translators: %s is the plan name.
+				__( '%s Gate', 'newspack' ),
+				$plan->get_name()
+			);
+			$gate_post_id = Content_Gate::create_gate( $post_title );
+			if ( is_wp_error( $gate_post_id ) ) {
+				\wp_die( esc_html( $gate_post_id->get_error_message() ) );
+			}
+			\update_post_meta( $gate_post_id, 'plans', [ $plan_id ] );
+			\wp_safe_redirect( \admin_url( 'post.php?post=' . $gate_post_id . '&action=edit' ) );
+			exit;
+		}
 	}
 
 	/**
@@ -333,10 +164,10 @@ class Memberships {
 	 *
 	 * @return int|false Gate post ID or false if not found.
 	 */
-	private static function get_plan_gate_id( $plan_id ) {
+	public static function get_plan_gate_id( $plan_id ) {
 		$gates = get_posts(
 			[
-				'post_type'      => self::GATE_CPT,
+				'post_type'      => Content_Gate::GATE_CPT,
 				'post_status'    => [ 'publish', 'draft', 'trash', 'pending', 'future' ],
 				'posts_per_page' => -1,
 			]
@@ -357,7 +188,7 @@ class Memberships {
 	 *
 	 * @return string[] Plan names keyed by plan ID.
 	 */
-	private static function get_gate_plans( $gate_id ) {
+	public static function get_gate_plans( $gate_id ) {
 		if ( ! self::is_active() || ! function_exists( 'wc_memberships_get_membership_plan' ) ) {
 			return [];
 		}
@@ -465,7 +296,7 @@ class Memberships {
 	 *
 	 * @return int[] Array of plan IDs.
 	 */
-	private static function get_restricted_post_plans( $post_id ) {
+	public static function get_restricted_post_plans( $post_id ) {
 		if ( ! class_exists( 'WC_Memberships' ) ) {
 			return [];
 		}
@@ -484,33 +315,19 @@ class Memberships {
 	}
 
 	/**
-	 * Whether the gate is available.
-	 *
-	 * @return bool
-	 */
-	public static function has_gate() {
-		if ( ! class_exists( 'WC_Memberships' ) ) {
-			return false;
-		}
-		$post_id = self::get_gate_post_id();
-		return $post_id && 'publish' === get_post_status( $post_id );
-	}
-
-	/**
-	 * Public method for marking the gate as rendered.
-	 */
-	public static function mark_gate_as_rendered() {
-		self::$gate_rendered = true;
-	}
-
-	/**
 	 * Whether the post is restricted for the current user.
 	 *
-	 * @param int $post_id Post ID.
+	 * @param bool $is_post_restricted Whether the post is restricted for the current user.
+	 * @param int  $post_id            Post ID.
 	 *
 	 * @return bool
 	 */
-	public static function is_post_restricted( $post_id = null ) {
+	public static function is_post_restricted( $is_post_restricted, $post_id = null ) {
+		// Return early if the post is already restricted for the current user.
+		if ( $is_post_restricted ) {
+			return $is_post_restricted;
+		}
+
 		if ( ! class_exists( 'WC_Memberships' ) ) {
 			return false;
 		}
@@ -524,98 +341,21 @@ class Memberships {
 	}
 
 	/**
-	 * Get the URL for editing the custom gate.
-	 *
-	 * @param int|false $plan_id Plan ID.
-	 *
-	 * @return string
+	 * Custom handling of content restriction when using metering.
 	 */
-	public static function get_edit_gate_url( $plan_id = false ) {
-		$action = 'newspack_edit_memberships_gate';
-		$url    = \add_query_arg( '_wpnonce', \wp_create_nonce( $action ), \admin_url( 'admin.php?action=' . $action ) );
-		return str_replace( \site_url(), '', $url );
-	}
-
-	/**
-	 * Create a post for the custom gate.
-	 */
-	public static function handle_edit_gate() {
-		if ( ! isset( $_GET['action'] ) || 'newspack_edit_memberships_gate' !== $_GET['action'] ) {
+	public static function handle_metering_restriction() {
+		if ( ! class_exists( 'WC_Memberships' ) ) {
 			return;
 		}
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! \is_singular() || ! Content_Gate::is_post_restricted() || ! Metering::is_metering() ) {
 			return;
 		}
-		check_admin_referer( 'newspack_edit_memberships_gate' );
-		$plan_id      = isset( $_GET['plan_id'] ) ? \absint( $_GET['plan_id'] ) : false;
-		$gate_post_id = $plan_id ? self::get_plan_gate_id( $plan_id ) : self::get_gate_post_id();
-		if ( $gate_post_id && get_post( $gate_post_id ) ) {
-			// Untrash post if it's in the trash.
-			if ( 'trash' === get_post_status( $gate_post_id ) ) {
-				\wp_untrash_post( $gate_post_id );
-			}
-			// Gate found, edit it.
-			\wp_safe_redirect( \admin_url( 'post.php?post=' . $gate_post_id . '&action=edit' ) );
-			exit;
-		} else {
-			// Gate not found, create it.
-			$post_title = __( 'Memberships Gate', 'newspack' );
-			if ( $plan_id ) {
-				$plan = \wc_memberships_get_membership_plan( $plan_id );
-				if ( $plan ) {
-					$post_title = sprintf(
-						// Translators: %s is the plan name.
-						__( '%s Gate', 'newspack' ),
-						$plan->get_name()
-					);
-				}
-			}
-			$gate_post_id = \wp_insert_post(
-				[
-					'post_title'   => $post_title,
-					'post_type'    => self::GATE_CPT,
-					'post_status'  => 'draft',
-					'post_content' => '<!-- wp:paragraph --><p>' . __( 'This post is only available to members.', 'newspack' ) . '</p><!-- /wp:paragraph -->',
-				]
-			);
-			if ( is_wp_error( $gate_post_id ) ) {
-				\wp_die( esc_html( $gate_post_id->get_error_message() ) );
-			}
-			// If not a plan-specific gate, set as primary gate.
-			if ( ! $plan_id ) {
-				self::set_gate_post_id( $gate_post_id );
-			} else {
-				\update_post_meta( $gate_post_id, 'plans', [ $plan_id ] );
-			}
-			\wp_safe_redirect( \admin_url( 'post.php?post=' . $gate_post_id . '&action=edit' ) );
-			exit;
-		}
-	}
 
-	/**
-	 * Get the inline gate content for rendering.
-	 *
-	 * @return string
-	 */
-	public static function get_inline_gate_content() {
-		$gate_post_id = self::get_gate_post_id();
-		$style        = \get_post_meta( $gate_post_id, 'style', true );
-		if ( 'inline' !== $style ) {
-			return '';
-		}
-		$gate = \apply_filters( 'newspack_gate_content', \get_the_content( null, null, \get_post( $gate_post_id ) ), $gate_post_id );
-
-		// Add clearfix to the gate.
-		$gate = '<div style=\'content:"";clear:both;display:table;\'></div>' . $gate;
-
-		// Apply inline fade.
-		if ( \get_post_meta( $gate_post_id, 'inline_fade', true ) ) {
-			$gate = '<div style="pointer-events: none; height: 10em; margin-top: -10em; width: 100%; position: absolute; background: linear-gradient(180deg, rgba(255,255,255,0) 14%, rgba(255,255,255,1) 76%);"></div>' . $gate;
-		}
-
-		// Wrap gate in a div for styling.
-		$gate = '<div class="newspack-memberships__gate newspack-memberships__inline-gate">' . $gate . '</div>';
-		return $gate;
+		// Remove the default restriction handler from 'SkyVerge\WooCommerce\Memberships\Restrictions\Posts::restrict_post'.
+		$restriction_instance = \wc_memberships()->get_restrictions_instance()->get_posts_restrictions_instance();
+		\remove_action( 'wp', spl_object_hash( $restriction_instance ) . 'handle_restriction_modes', 9 );
+		\remove_action( 'wp', spl_object_hash( $restriction_instance ) . 'handle_restriction_modes' ); // For compatibility with Woo Memberships < 1.27.2.
+		\add_filter( 'wc_memberships_restrictable_comment_types', '__return_empty_array' );
 	}
 
 	/**
@@ -629,7 +369,7 @@ class Memberships {
 	public static function wc_memberships_notice_html( $notice, $message_body, $message_code, $message_args ) {
 		// If the gate is not available, don't mess with the notice.
 		// Membership notices are only displayed on products with discounts from plans. The is_product() check makes sure that still works as normal.
-		if ( ! self::has_gate() || is_product() ) {
+		if ( ! Content_Gate::has_gate() || is_product() ) {
 			return $notice;
 		}
 		// Don't show gate unless attached to a specific post.
@@ -640,8 +380,8 @@ class Memberships {
 		if ( get_queried_object_id() !== get_the_ID() ) {
 			return '';
 		}
-		self::$gate_rendered = true;
-		return self::get_inline_gate_content();
+		Content_Gate::mark_gate_as_rendered();
+		return Content_Gate::get_inline_gate_html();
 	}
 
 	/**
@@ -656,142 +396,14 @@ class Memberships {
 	public static function wc_memberships_excerpt( $excerpt, $post, $message_code ) {
 		// If the gate is not available, don't mess with the excerpt.
 		// Products with discounts from plans also display this excerpt; the is_product() check makes sure that still works as normal.
-		if ( ! self::has_gate() || is_product() ) {
+		if ( ! Content_Gate::has_gate() || is_product() ) {
 			return $excerpt;
 		}
 		// If rendering the content in a loop, don't truncate the excerpt.
 		if ( get_queried_object_id() !== $post->ID ) {
 			return $excerpt;
 		}
-		return self::get_restricted_post_excerpt( $post );
-	}
-
-	/**
-	 * Get the post excerpt to be displayed in the gate.
-	 *
-	 * @param WP_Post $post Post object.
-	 *
-	 * @return string
-	 */
-	public static function get_restricted_post_excerpt( $post ) {
-		$gate_post_id = self::get_gate_post_id();
-
-		$content = $post->post_content;
-
-		$style = \get_post_meta( $gate_post_id, 'style', true );
-
-		$use_more_tag = get_post_meta( $gate_post_id, 'use_more_tag', true );
-		// Use <!--more--> as threshold if it exists.
-		if ( $use_more_tag && strpos( $content, '<!--more-->' ) ) {
-			$content = explode( '<!--more-->', $content )[0];
-		} else {
-			$count = (int) get_post_meta( $gate_post_id, 'visible_paragraphs', true );
-			// Remove all spaces.
-			$content = preg_replace( '/\s+/', ' ', $content );
-			/**
-			 * Filter the list of blocks to exclude from the excerpt.
-			 *
-			 * @param array $excluded_blocks Array of blocks to exclude. i.e. [ 'core/image', 'newspack/content-gate-countdown-box' ].
-			 *
-			 * @return array
-			 */
-			$excluded_blocks = apply_filters( 'newspack_memberships_excerpt_excluded_blocks', [ 'newspack/content-gate-countdown-box' ] );
-			// Remove unwanted blocks from the content.
-			foreach ( $excluded_blocks as $block ) {
-				[ $category, $name ] = explode( '/', $block );
-				if ( ! $category || ! $name ) {
-					continue;
-				}
-				if ( 'core' === $category ) {
-					$regex = $name;
-				} else {
-					$regex = "$category\/$name";
-				}
-				$content = preg_replace( "/<!-- wp:$regex {?.*?}? -->.*?<!-- \/wp:$regex -->/s", '', $content );
-			}
-			// Split into paragraphs.
-			$content = explode( '</p>', $content );
-			// Extract the first $x paragraphs only.
-			$content = array_slice( $content, 0, $count ?? 2 );
-			if ( 'overlay' === $style ) {
-				// Append ellipsis to the last paragraph.
-				$content[ count( $content ) - 1 ] .= ' [&hellip;]';
-			}
-			// Rejoin the paragraphs into a single string again.
-			$content = \force_balance_tags( \wp_kses_post( implode( '</p>', $content ) . '</p>' ) );
-		}
-		return $content;
-	}
-
-	/**
-	 * Render the overlay gate.
-	 */
-	public static function render_overlay_gate() {
-		if ( ! self::has_gate() ) {
-			return;
-		}
-		// Only render overlay gate for a restricted singular content.
-		if ( ! is_singular() || ! self::is_post_restricted() ) {
-			return;
-		}
-		// Bail if metering allows rendering the content.
-		if ( ! Metering::is_frontend_metering() && Metering::is_logged_in_metering_allowed() ) {
-			return;
-		}
-		$gate_post_id = self::get_gate_post_id();
-		$style        = \get_post_meta( $gate_post_id, 'style', true );
-		if ( 'overlay' !== $style ) {
-			return;
-		}
-		global $post;
-		$_post = $post;
-		$post  = \get_post( $gate_post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		setup_postdata( $post );
-		$position = \get_post_meta( $gate_post_id, 'overlay_position', true );
-		$size     = \get_post_meta( $gate_post_id, 'overlay_size', true );
-		?>
-		<div class="newspack-memberships__gate newspack-memberships__overlay-gate" style="display:none;" data-position="<?php echo \esc_attr( $position ); ?>" data-size="<?php echo \esc_attr( $size ); ?>">
-			<div class="newspack-memberships__overlay-gate__container">
-				<div class="newspack-memberships__overlay-gate__content">
-					<?php echo \apply_filters( 'newspack_gate_content', \get_the_content( null, null, $gate_post_id ) );  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				</div>
-			</div>
-		</div>
-		<?php
-		self::$gate_rendered = true;
-		wp_reset_postdata();
-		$post = $_post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-	}
-
-	/**
-	 * Disable popups if rendering a restricted post.
-	 *
-	 * @param bool $disabled Whether popups are disabled.
-	 *
-	 * @return bool
-	 */
-	public static function disable_popups( $disabled ) {
-		if (
-			is_singular() &&
-			self::has_gate() &&
-			self::is_post_restricted() &&
-			! Metering::is_metering()
-		) {
-			return true;
-		}
-		return $disabled;
-	}
-
-	/**
-	 * Suppress 'article_view' reader activity on locked posts.
-	 *
-	 * @param array $activity Activity.
-	 */
-	public static function suppress_article_view_activity( $activity ) {
-		if ( Metering::is_frontend_metering() || ( self::is_post_restricted() && ! Metering::is_logged_in_metering_allowed() ) ) {
-			return false;
-		}
-		return $activity;
+		return Content_Gate::get_restricted_post_excerpt( $post );
 	}
 
 	/**

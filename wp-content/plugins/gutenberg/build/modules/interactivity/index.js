@@ -2448,7 +2448,6 @@ var directives_default = () => {
             performance.measure(
               `interactivity api init ${entry.namespace}`,
               {
-                // eslint-disable-next-line no-undef
                 start,
                 end: performance.now(),
                 detail: {
@@ -2507,7 +2506,6 @@ var directives_default = () => {
               performance.measure(
                 `interactivity api on ${entry.namespace}`,
                 {
-                  // eslint-disable-next-line no-undef
                   start,
                   end: performance.now(),
                   detail: {

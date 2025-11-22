@@ -13,6 +13,7 @@ namespace TEC\Common\StellarWP\Shepherd;
 use ActionScheduler;
 use ActionScheduler_Action;
 use ActionScheduler_FinishedAction;
+use ActionScheduler_NullAction;
 use RuntimeException;
 /**
  * Shepherd's wrapper of Action Scheduler methods.
@@ -42,6 +43,7 @@ class Action_Scheduler_Methods
      * Schedules a single action.
      *
      * @since 0.0.1
+     * @since 0.0.7 Updated to return 0 if the action ID is not an integer.
      *
      * @param int    $timestamp The timestamp of the action.
      * @param string $hook      The hook of the action.
@@ -54,7 +56,8 @@ class Action_Scheduler_Methods
      */
     public static function schedule_single_action(int $timestamp, string $hook, array $args = [], string $group = '', bool $unique = false, int $priority = 10): int
     {
-        return as_schedule_single_action($timestamp, $hook, $args, $group, $unique, $priority);
+        $action_id = as_schedule_single_action($timestamp, $hook, $args, $group, $unique, $priority);
+        return is_int($action_id) ? $action_id : 0;
     }
     /**
      * Gets an action by its ID.
@@ -104,6 +107,7 @@ class Action_Scheduler_Methods
      * Gets pending actions by their IDs.
      *
      * @since 0.0.1
+     * @since 0.0.7 Updated to filter out null actions.
      *
      * @param array $action_ids The action IDs.
      *
@@ -112,6 +116,33 @@ class Action_Scheduler_Methods
     public static function get_pending_actions_by_ids(array $action_ids): array
     {
         $actions = self::get_actions_by_ids($action_ids);
-        return array_filter($actions, fn(ActionScheduler_Action $action) => !$action instanceof ActionScheduler_FinishedAction);
+        return array_filter($actions, static fn(ActionScheduler_Action $action) => !$action instanceof ActionScheduler_FinishedAction && !$action instanceof ActionScheduler_NullAction);
+    }
+    /**
+     * Gets non-pending actions by their IDs.
+     *
+     * @since 0.0.8
+     *
+     * @param array $action_ids The action IDs.
+     *
+     * @return ActionScheduler_Action[] The non-pending actions.
+     */
+    public static function get_non_pending_actions_by_ids(array $action_ids): array
+    {
+        $actions = self::get_actions_by_ids($action_ids);
+        return array_filter($actions, static fn(ActionScheduler_Action $action) => $action instanceof ActionScheduler_FinishedAction || $action instanceof ActionScheduler_NullAction);
+    }
+    /**
+     * Gets pending and non-pending actions by their IDs.
+     *
+     * @since 0.0.8
+     *
+     * @param array $action_ids The action IDs.
+     *
+     * @return array<ActionScheduler_Action[], ActionScheduler_Action[]> The pending and non-pending actions.
+     */
+    public static function get_pending_and_non_pending_actions_by_ids(array $action_ids): array
+    {
+        return [self::get_pending_actions_by_ids($action_ids), self::get_non_pending_actions_by_ids($action_ids)];
     }
 }

@@ -32,13 +32,6 @@ var wp;
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/element
   var require_element = __commonJS({
     "package-external:@wordpress/element"(exports, module) {
@@ -74,6 +67,13 @@ var wp;
     }
   });
 
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
+    }
+  });
+
   // package-external:@wordpress/primitives
   var require_primitives = __commonJS({
     "package-external:@wordpress/primitives"(exports, module) {
@@ -92,9 +92,6 @@ var wp;
     usePluginContext: () => usePluginContext,
     withPluginContext: () => withPluginContext
   });
-
-  // packages/plugins/build-module/components/plugin-area/index.js
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
 
   // node_modules/memize/dist/index.js
   function memize(fn, options) {
@@ -170,10 +167,10 @@ var wp;
   var import_is_shallow_equal = __toESM(require_is_shallow_equal());
 
   // packages/plugins/build-module/components/plugin-context/index.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_element = __toESM(require_element());
   var import_compose = __toESM(require_compose());
   var import_deprecated = __toESM(require_deprecated());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Context = (0, import_element.createContext)({
     name: null,
     icon: null
@@ -227,8 +224,8 @@ var wp;
   var import_hooks = __toESM(require_hooks());
 
   // packages/icons/build-module/library/plugins.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var import_primitives = __toESM(require_primitives());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var plugins_default = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_primitives.Path, { d: "M10.5 4v4h3V4H15v4h1.5a1 1 0 011 1v4l-3 4v2a1 1 0 01-1 1h-3a1 1 0 01-1-1v-2l-3-4V9a1 1 0 011-1H9V4h1.5zm.5 12.5v2h2v-2l3-4v-3H8v3l3 4z" }) });
 
   // packages/plugins/build-module/api/index.js
@@ -303,6 +300,7 @@ var wp;
   }
 
   // packages/plugins/build-module/components/plugin-area/index.js
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var getPluginContext = memize(
     (icon, name) => ({
       icon,

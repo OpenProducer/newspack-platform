@@ -376,13 +376,6 @@ var wp;
     }
   });
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
-    }
-  });
-
   // package-external:@wordpress/priority-queue
   var require_priority_queue = __commonJS({
     "package-external:@wordpress/priority-queue"(exports, module) {
@@ -401,6 +394,13 @@ var wp;
   var require_is_shallow_equal = __commonJS({
     "package-external:@wordpress/is-shallow-equal"(exports, module) {
       module.exports = window.wp.isShallowEqual;
+    }
+  });
+
+  // vendor-external:react/jsx-runtime
+  var require_jsx_runtime = __commonJS({
+    "vendor-external:react/jsx-runtime"(exports, module) {
+      module.exports = window.ReactJSXRuntime;
     }
   });
 
@@ -2153,7 +2153,6 @@ var wp;
   var persistence_default = persistencePlugin;
 
   // packages/data/build-module/components/with-select/index.js
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var import_compose2 = __toESM(require_compose());
 
   // packages/data/build-module/components/use-select/index.js
@@ -2348,6 +2347,7 @@ var wp;
   }
 
   // packages/data/build-module/components/with-select/index.js
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var withSelect = (mapSelectToProps) => (0, import_compose2.createHigherOrderComponent)(
     (WrappedComponent) => (0, import_compose2.pure)((ownProps) => {
       const mapSelect = (select3, registry) => mapSelectToProps(select3, ownProps, registry);
@@ -2359,7 +2359,6 @@ var wp;
   var with_select_default = withSelect;
 
   // packages/data/build-module/components/with-dispatch/index.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var import_compose4 = __toESM(require_compose());
 
   // packages/data/build-module/components/use-dispatch/use-dispatch.js
@@ -2403,6 +2402,7 @@ var wp;
   var use_dispatch_with_map_default = useDispatchWithMap;
 
   // packages/data/build-module/components/with-dispatch/index.js
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var withDispatch = (mapDispatchToProps) => (0, import_compose4.createHigherOrderComponent)(
     (WrappedComponent) => (ownProps) => {
       const mapDispatch = (dispatch3, registry) => mapDispatchToProps(dispatch3, ownProps, registry);
@@ -2414,8 +2414,8 @@ var wp;
   var with_dispatch_default = withDispatch;
 
   // packages/data/build-module/components/with-registry/index.js
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var import_compose5 = __toESM(require_compose());
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var withRegistry = (0, import_compose5.createHigherOrderComponent)(
     (OriginalComponent) => (props) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(RegistryConsumer, { children: (registry) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(OriginalComponent, { ...props, registry }) }),
     "withRegistry"

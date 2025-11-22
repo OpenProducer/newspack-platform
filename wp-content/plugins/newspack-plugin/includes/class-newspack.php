@@ -125,6 +125,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-syndication.php';
 		include_once NEWSPACK_ABSPATH . 'includes/bylines/class-bylines.php';
 		include_once NEWSPACK_ABSPATH . 'includes/lite-site/class-lite-site.php';
+		include_once NEWSPACK_ABSPATH . 'includes/content-gate/class-content-gate.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-provider.php';
 		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-generated.php';
@@ -162,6 +163,7 @@ final class Newspack {
 		// Audience Wizard.
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-campaigns.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-content-gates.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-donations.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/audience/class-audience-subscriptions.php';
 
@@ -219,6 +221,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-woo-member-commenting.php';
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-collections.php';
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-indesign-exporter.php';
+		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-nextdoor.php';
 
 		if ( Donations::is_platform_nrh() ) {
 			include_once NEWSPACK_ABSPATH . 'includes/class-nrh.php';

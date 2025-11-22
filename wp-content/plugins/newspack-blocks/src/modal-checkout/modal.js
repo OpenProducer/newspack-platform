@@ -301,15 +301,17 @@ domReady( () => {
 				variationModal
 					.querySelectorAll( `form[target="${ IFRAME_NAME }"]` )
 					.forEach( singleVariationForm => {
-						// Fill in the after success variables in the variation modal.
+						// Fill in the hidden params in the variation modal.
 						[
 							'after_success_behavior',
 							'after_success_url',
 							'after_success_button_label',
-						].forEach( afterSuccessParam => {
-							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' +  afterSuccessParam + '"]' );
+							'gate_post_id',
+							'newspack_popup_id',
+						].forEach( hiddenParams => {
+							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' +  hiddenParams + '"]' );
 							if ( 0 === existingInputs.length ) {
-								singleVariationForm.prepend( createHiddenInput( afterSuccessParam, checkoutData[ afterSuccessParam ] ) );
+								singleVariationForm.prepend( createHiddenInput( hiddenParams, checkoutData[ hiddenParams ] ) );
 							}
 						} );
 
