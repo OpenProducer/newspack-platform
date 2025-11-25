@@ -55,9 +55,7 @@ const appendSubtitleToTitleDOMElement = ( subtitle, callback ) => {
  * registered in the post editor – this block will only be registered in the site editor.
  */
 const NewspackSubtitlePanel = () => {
-	const subtitle = useSelect(
-		select => select( 'core/editor' ).getEditedPostAttribute( 'meta' )[ META_FIELD_NAME ]
-	);
+	const subtitle = useSelect( select => select( 'core/editor' ).getEditedPostAttribute( 'meta' )[ META_FIELD_NAME ] );
 	const dispatch = useDispatch();
 	const saveSubtitle = updatedSubtitle => {
 		dispatch( 'core/editor' ).editPost( {

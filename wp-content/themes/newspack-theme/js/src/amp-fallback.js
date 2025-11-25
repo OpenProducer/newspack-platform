@@ -190,8 +190,7 @@
 	if (
 		body.classList.contains( 'h-stk' ) &&
 		body.classList.contains( 'h-sub' ) &&
-		( body.classList.contains( 'single-featured-image-behind' ) ||
-			body.classList.contains( 'single-featured-image-beside' ) )
+		( body.classList.contains( 'single-featured-image-behind' ) || body.classList.contains( 'single-featured-image-beside' ) )
 	) {
 		let scrollTimer,
 			lastScrollFireTime = 0;

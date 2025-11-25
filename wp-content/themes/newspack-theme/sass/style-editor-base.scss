@@ -433,13 +433,31 @@ div[data-align="full"] {
 }
 
 /** === Group === */
-.wp-block[data-align="left"] > .wp-block-group,
-.wp-block[data-align="right"] > .wp-block-group {
-	max-width: 50%;
+.wp-block-group .is-layout-flex > * {
+	max-width: 100%;
+}
 
-	@include utilities.media( mobile ) {
-		iframe[style="width: 100%; height: 600px; max-width: 100%; max-height: 100%;"] {
-			width: 400px !important; // !important to override inline style.
+html :where(.wp-block)[data-align="left"],
+html :where(.wp-block)[data-align="right"] {
+	&:has(.wp-block-group) {
+		@include utilities.media( mobileonly ) {
+			height: auto;
+		}
+	}
+
+	& > .wp-block-group {
+		@include utilities.media( mobileonly ) {
+			float: none !important;
+			margin-left: 0 !important;
+			margin-right: 0 !important;
+		}
+
+		@include utilities.media( mobile ) {
+			max-width: 50%;
+
+			iframe[style="width: 100%; height: 600px; max-width: 100%; max-height: 100%;"] {
+				width: 400px !important; // !important to override inline style.
+			}
 		}
 	}
 }
@@ -1098,6 +1116,68 @@ ul.wp-block-list {
 	+ .wp-block-details {
 		border-top: 0;
 		margin-top: -28px;
+	}
+}
+
+/** === Accordion block === */
+.wp-block-accordion {
+	.wp-block-accordion-item {
+		border: solid var(--newspack-theme-color-border);
+		border-width: 1px 0;
+		padding: 0.5rem;
+
+		+ .wp-block-accordion-item {
+			border-top: 0;
+			margin-top: -28px; // Offset some classic theme styles coming from WordPress.
+		}
+
+		.wp-block-accordion-panel {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	.wp-block-accordion-heading {
+		font-size: var(--newspack-theme-font-size-base);
+	}
+
+	.wp-block-accordion-heading__toggle:hover .wp-block-accordion-heading__toggle-title {
+		text-decoration: none;
+	}
+}
+
+/** === Accordion Group Block (Woocommerce) === */
+.wp-block-woocommerce-accordion-group {
+	.wp-block-woocommerce-accordion-item {
+		border: solid var(--newspack-theme-color-border);
+		border-width: 1px 0;
+		padding: 0.5rem;
+
+		+ .wp-block-woocommerce-accordion-item {
+			border-top: 0;
+			margin-top: -28px; // Offset some classic theme styles coming from WordPress.
+		}
+	}
+
+	.wp-block-woocommerce-accordion-header {
+		font-size: var(--newspack-theme-font-size-base);
+
+		.accordion-item__toggle {
+			&:hover,
+			&:active,
+			&:focus {
+				background: transparent !important;
+				color: var(--newspack-theme-color-text-main) !important;
+			}
+
+			&:focus {
+				outline: none;
+			}
+
+			&:focus-visible {
+				outline: thin dotted;
+			}
+		}
 	}
 }
 

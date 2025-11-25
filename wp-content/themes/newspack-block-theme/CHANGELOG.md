@@ -1,3 +1,17 @@
+# [1.22.0](https://github.com/Automattic/newspack-block-theme/compare/v1.21.0...v1.22.0) (2025-11-24)
+
+
+### Features
+
+* Merge pull request [#393](https://github.com/Automattic/newspack-block-theme/issues/393) from Automattic/trunk ([7c7531d](https://github.com/Automattic/newspack-block-theme/commit/7c7531df5ee70793ff1d0b054b47d577af62c232))
+
+# [1.22.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.21.0...v1.22.0-alpha.1) (2025-11-13)
+
+
+### Features
+
+* Merge pull request [#393](https://github.com/Automattic/newspack-block-theme/issues/393) from Automattic/trunk ([7c7531d](https://github.com/Automattic/newspack-block-theme/commit/7c7531df5ee70793ff1d0b054b47d577af62c232))
+
 # [1.21.0](https://github.com/Automattic/newspack-block-theme/compare/v1.20.0...v1.21.0) (2025-09-08)
 
 
