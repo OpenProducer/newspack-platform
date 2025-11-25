@@ -367,11 +367,14 @@ p.has-background {
 //! Newspack Newlsetter Subscription Block
 .wp-block-newspack-newsletters-subscribe {
 	// Make sure custom colors don't override the color that should be used for the modern style.
-	&.is-style-modern input[type="checkbox"]::before {
-		background:
-			transparent
-			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z' fill='white' %3E%3C/path%3E%3C/svg%3E")
-			0 0 no-repeat;
+	&.is-style-modern,
+	&.is-style-modern--grid {
+		input[type="checkbox"]::before {
+			background:
+				transparent
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z' fill='white' %3E%3C/path%3E%3C/svg%3E")
+				0 0 no-repeat;
+		}
 	}
 }
 
@@ -1207,6 +1210,10 @@ hr {
 	& > .wp-block-group-is-layout-grid > * {
 		margin: 0;
 	}
+
+	&.is-layout-flex > * {
+		max-width: 100%;
+	}
 }
 
 .entry .entry-content > .wp-block-group.alignleft,
@@ -1280,6 +1287,61 @@ hr {
 	+ .wp-block-details {
 		border-top: 0;
 		margin-top: -32px;
+	}
+}
+
+//! Accordion block
+.wp-block-accordion {
+	.wp-block-accordion-item {
+		border: solid var(--newspack-theme-color-border);
+		border-width: 1px 0;
+		padding: 0.5rem;
+
+		+ .wp-block-accordion-item {
+			border-top: 0;
+		}
+	}
+
+	.wp-block-accordion-heading {
+		font-size: var(--newspack-theme-font-size-base);
+	}
+
+	.wp-block-accordion-heading__toggle:hover .wp-block-accordion-heading__toggle-title {
+		text-decoration: none;
+	}
+}
+
+//! Accordion Group Block (Woocommerce)
+.wp-block-woocommerce-accordion-group {
+	.wp-block-woocommerce-accordion-item {
+		border: solid var(--newspack-theme-color-border);
+		border-width: 1px 0;
+		padding: 0.5rem;
+
+		+ .wp-block-woocommerce-accordion-item {
+			border-top: 0;
+		}
+	}
+
+	.wp-block-woocommerce-accordion-header {
+		font-size: var(--newspack-theme-font-size-base);
+
+		.accordion-item__toggle {
+			&:hover,
+			&:active,
+			&:focus {
+				background: transparent !important;
+				color: var(--newspack-theme-color-text-main) !important;
+			}
+
+			&:focus {
+				outline: none;
+			}
+
+			&:focus-visible {
+				outline: thin dotted;
+			}
+		}
 	}
 }
 
@@ -1533,7 +1595,8 @@ $colors: (
 	.is-style-outline .wp-block-button__link.has-#{$name}-color:not( :hover ), //legacy selector
 	.wp-block-button__link.is-style-outline.has-#{$name}-color:not( :hover ),
 	.wp-block-search__button.has-#{$name}-color,
-	.newspack-newsletters-subscribe input[type='submit'].has-#{$name}-color {
+	.newspack-newsletters-subscribe input[type='submit'].has-#{$name}-color,
+	.wp-block-woocommerce-accordion-item .accordion-item__heading.has-#{$name}-color {
 		color: $hex;
 	}
 

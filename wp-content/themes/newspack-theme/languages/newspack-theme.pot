@@ -2,14 +2,14 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack 2.14.3\n"
+"Project-Id-Version: Newspack 2.15.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/newspack-theme\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-17T15:10:06+00:00\n"
+"POT-Creation-Date: 2025-11-18T22:39:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-theme\n"
@@ -1265,10 +1265,10 @@ msgid "Below Footer"
 msgstr ""
 
 #. translators: %s is the current author's name.
-#: template-parts/post/author-bio.php:84
-#: template-parts/post/author-bio.php:96
-#: template-parts/post/author-bio.php:155
-#: template-parts/post/author-bio.php:164
+#: template-parts/post/author-bio.php:92
+#: template-parts/post/author-bio.php:104
+#: template-parts/post/author-bio.php:163
+#: template-parts/post/author-bio.php:172
 #, php-format
 msgid "More by %s"
 msgstr ""

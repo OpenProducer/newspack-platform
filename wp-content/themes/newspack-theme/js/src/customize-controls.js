@@ -56,10 +56,7 @@
 				const visibility = function () {
 					if ( 'custom' === setting.get() ) {
 						// Make sure the site is set to use a solid header background.
-						if (
-							true === wp.customize.value( 'header_solid_background' )() &&
-							'custom' === wp.customize.value( 'header_color' )()
-						) {
+						if ( true === wp.customize.value( 'header_solid_background' )() && 'custom' === wp.customize.value( 'header_color' )() ) {
 							control.container.slideDown( 180 );
 						}
 					} else {
@@ -136,10 +133,7 @@
 			wp.customize.control( 'header_color_hex', function ( control ) {
 				const visibility = function () {
 					if ( true === setting.get() ) {
-						if (
-							'custom' === wp.customize.value( 'header_color' )() &&
-							'custom' === wp.customize.value( 'theme_colors' )()
-						) {
+						if ( 'custom' === wp.customize.value( 'header_color' )() && 'custom' === wp.customize.value( 'theme_colors' )() ) {
 							control.container.slideDown( 180 );
 						}
 					} else {
@@ -195,10 +189,7 @@
 			wp.customize.control( 'header_color_hex', function ( control ) {
 				const visibility = function () {
 					if ( 'custom' === setting.get() ) {
-						if (
-							true === wp.customize.value( 'header_solid_background' )() &&
-							'custom' === wp.customize.value( 'theme_colors' )()
-						) {
+						if ( true === wp.customize.value( 'header_solid_background' )() && 'custom' === wp.customize.value( 'theme_colors' )() ) {
 							control.container.slideDown( 180 );
 						}
 					} else {

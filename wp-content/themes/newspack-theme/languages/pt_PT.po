@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Newspack 1.0.0-alpha.33\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/newspack-theme\n"
-"POT-Creation-Date: 2025-10-17T15:10:06+00:00\n"
+"POT-Creation-Date: 2025-11-18T22:39:30+00:00\n"
 "PO-Revision-Date: 2025-03-12 09:13-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1300,9 +1300,9 @@ msgid "Below Footer"
 msgstr "Abaixo do Rodapé"
 
 #. translators: %s is the current author's name.
-#: template-parts/post/author-bio.php:84 template-parts/post/author-bio.php:96
-#: template-parts/post/author-bio.php:155
-#: template-parts/post/author-bio.php:164
+#: template-parts/post/author-bio.php:92 template-parts/post/author-bio.php:104
+#: template-parts/post/author-bio.php:163
+#: template-parts/post/author-bio.php:172
 #, php-format
 msgid "More by %s"
 msgstr "Mais por %s"

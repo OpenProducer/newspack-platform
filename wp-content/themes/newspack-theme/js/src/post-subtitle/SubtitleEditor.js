@@ -31,13 +31,7 @@ const SubtitleEditor = ( { subtitle, saveSubtitle } ) => {
 		saveSubtitle( value );
 	}, [ value ] );
 
-	return (
-		<TextareaControl
-			value={ value }
-			onChange={ setValue }
-			style={ { marginTop: '10px', width: '100%' } }
-		/>
-	);
+	return <TextareaControl value={ value } onChange={ setValue } style={ { marginTop: '10px', width: '100%' } } />;
 };
 
 export default decorate( SubtitleEditor );

@@ -14,32 +14,25 @@ import { connectWithSelect, META_FIELD_TITLE } from './utils';
 
 const decorateTitle = compose(
 	connectWithSelect,
-	withDispatch(dispatch => ({
+	withDispatch( dispatch => ( {
 		saveSummaryTitle: summaryTitle => {
-			dispatch('core/editor').editPost({
+			dispatch( 'core/editor' ).editPost( {
 				meta: {
-					[META_FIELD_TITLE]: summaryTitle,
+					[ META_FIELD_TITLE ]: summaryTitle,
 				},
-			});
+			} );
 		},
-	}))
+	} ) )
 );
 
-const SummaryTitleEditor = ({ summaryTitle, saveSummaryTitle }) => {
-	const [value, setValue] = useState(summaryTitle);
+const SummaryTitleEditor = ( { summaryTitle, saveSummaryTitle } ) => {
+	const [ value, setValue ] = useState( summaryTitle );
 
-	useEffect(() => {
-		saveSummaryTitle(value);
-	}, [value]);
+	useEffect( () => {
+		saveSummaryTitle( value );
+	}, [ value ] );
 
-	return (
-		<TextControl
-			label={__('Title:', 'newspack-theme')}
-			value={value}
-			onChange={setValue}
-			style={{ width: '100%' }}
-		/>
-	);
+	return <TextControl label={ __( 'Title:', 'newspack-theme' ) } value={ value } onChange={ setValue } style={ { width: '100%' } } />;
 };
 
-export default decorateTitle(SummaryTitleEditor);
+export default decorateTitle( SummaryTitleEditor );
