@@ -11,25 +11,14 @@ namespace WP\MCP\Handlers\Tools;
 
 use WP\MCP\Core\McpServer;
 use WP\MCP\Domain\Tools\McpTool;
+use WP\MCP\Handlers\HandlerHelperTrait;
 use WP\MCP\Infrastructure\ErrorHandling\McpErrorFactory;
 
 /**
  * Handles tools-related MCP methods.
  */
 class ToolsHandler {
-	/**
-	 * Error categories keyed by throwable class name.
-	 *
-	 * @used-by ::categorize_error() method.
-	*/
-	private static array $error_categories = array(
-		\ArgumentCountError::class       => 'arguments',
-		\Error::class                    => 'system',
-		\InvalidArgumentException::class => 'validation',
-		\LogicException::class           => 'logic',
-		\RuntimeException::class         => 'execution',
-		\TypeError::class                => 'type',
-	);
+	use HandlerHelperTrait;
 
 	/**
 	 * The WordPress MCP instance.
@@ -63,7 +52,11 @@ class ToolsHandler {
 		}
 
 		return array(
-			'tools' => $safe_tools,
+			'tools'     => $safe_tools,
+			'_metadata' => array(
+				'component_type' => 'tools',
+				'tools_count'    => count( $safe_tools ),
+			),
 		);
 	}
 
@@ -86,7 +79,11 @@ class ToolsHandler {
 		}
 
 		return array(
-			'tools' => $safe_tools,
+			'tools'     => $safe_tools,
+			'_metadata' => array(
+				'component_type' => 'tools',
+				'tools_count'    => count( $safe_tools ),
+			),
 		);
 	}
 
@@ -99,11 +96,17 @@ class ToolsHandler {
 	 * @return array
 	 */
 	public function call_tool( array $message, int $request_id = 0 ): array {
-		// Handle both direct params and nested params structure.
-		$request_params = $message['params'] ?? $message;
+		// Extract parameters using helper method.
+		$request_params = $this->extract_params( $message );
 
 		if ( ! isset( $request_params['name'] ) ) {
-			return array( 'error' => McpErrorFactory::missing_parameter( $request_id, 'name' )['error'] );
+			return array(
+				'error'     => McpErrorFactory::missing_parameter( $request_id, 'tool name' )['error'],
+				'_metadata' => array(
+					'component_type' => 'tool',
+					'failure_reason' => 'missing_parameter',
+				),
+			);
 		}
 
 		try {
@@ -111,10 +114,43 @@ class ToolsHandler {
 			$result = $this->handle_tool_call( $request_params, $request_id );
 
 			// Check if the result contains an error.
+			// Distinguish between protocol errors (JSON-RPC format) and tool execution errors (isError format).
 			if ( isset( $result['error'] ) ) {
-				return $result; // Return error directly.
+				$failure_reason = $result['_metadata']['failure_reason'] ?? '';
+
+				// Protocol errors (keep JSON-RPC error format):
+				// - not_found (tool doesn't exist)
+				// - ability_retrieval_failed (internal error getting ability)
+				$protocol_errors = array( 'not_found', 'ability_retrieval_failed' );
+
+				if ( in_array( $failure_reason, $protocol_errors, true ) ) {
+					// Return as JSON-RPC error
+					return $result;
+				}
+
+				// Tool execution errors (convert to isError: true format):
+				// - permission_denied, permission_check_failed
+				// - wp_error, execution_failed
+				$error_message = $result['error']['message'] ?? 'An error occurred while executing the tool.';
+				$response      = array(
+					'content' => array(
+						array(
+							'type' => 'text',
+							'text' => $error_message,
+						),
+					),
+					'isError' => true,
+				);
+
+				// Preserve metadata if present.
+				if ( isset( $result['_metadata'] ) ) {
+					$response['_metadata'] = $result['_metadata'];
+				}
+
+				return $response;
 			}
 
+			// Successful tool execution - format the response.
 			$response = array(
 				'content' => array(
 					array(
@@ -122,6 +158,15 @@ class ToolsHandler {
 					),
 				),
 			);
+
+			// Extract and store metadata before adding result to response content.
+			$response['_metadata'] = $result['_metadata'] ?? array(
+				'component_type' => 'tool',
+				'tool_name'      => $request_params['name'],
+			);
+
+			// Remove metadata from result so it doesn't appear in content or structuredContent.
+			unset( $result['_metadata'] );
 
 			// @todo: add support for EmbeddedResource schema.ts:619.
 			if ( isset( $result['type'] ) && 'image' === $result['type'] ) {
@@ -137,17 +182,23 @@ class ToolsHandler {
 
 			return $response;
 		} catch ( \Throwable $exception ) {
-			if ( $this->mcp->error_handler ) {
-				$this->mcp->error_handler->log(
-					'Error calling tool',
-					array(
-						'tool'      => $request_params['name'],
-						'exception' => $exception->getMessage(),
-					)
-				);
-			}
+			$this->mcp->error_handler->log(
+				'Error calling tool',
+				array(
+					'tool'      => $request_params['name'],
+					'exception' => $exception->getMessage(),
+				)
+			);
 
-			return array( 'error' => McpErrorFactory::internal_error( $request_id, 'Failed to execute tool' )['error'] );
+			return array(
+				'error'     => McpErrorFactory::internal_error( $request_id, 'Failed to execute tool' )['error'],
+				'_metadata' => array(
+					'component_type' => 'tool',
+					'tool_name'      => $request_params['name'],
+					'failure_reason' => 'exception',
+					'error_type'     => get_class( $exception ),
+				),
+			);
 		}
 	}
 
@@ -192,140 +243,176 @@ class ToolsHandler {
 	/**
 	 * Handle tool call request.
 	 *
-	 * @param array $message    The message.
+	 * @param array $params     The request parameters.
 	 * @param int   $request_id The request ID for JSON-RPC.
 	 *
 	 * @return array
 	 */
-	public function handle_tool_call( array $message, int $request_id = 0 ): array {
-		$tool_name = $message['params']['name'] ?? $message['name'] ?? '';
-		$args      = $message['params']['arguments'] ?? $message['arguments'] ?? array();
+	public function handle_tool_call( array $params, int $request_id = 0 ): array {
+		$tool_name = $params['name'];
+		$args      = $params['arguments'] ?? array();
 
 		// Get the tool callbacks.
-		$tool = $this->mcp->get_tool( $tool_name );
+		$tool = $this->mcp->get_tool( $params['name'] );
 
 		// Check if the tool exists.
 		if ( ! $tool ) {
-			if ( $this->mcp->error_handler ) {
-				$this->mcp->error_handler->log(
-					'Tool not found',
-					array(
-						'tool' => $tool_name,
-					)
-				);
-			}
-
-			// Track tool not found event.
-			$this->mcp->observability_handler::record_event(
-				'mcp.tool.not_found',
+			$this->mcp->error_handler->log(
+				'Tool not found',
 				array(
-					'tool_name' => $tool_name,
-					'server_id' => $this->mcp->get_server_id(),
+					'tool' => $tool_name,
 				)
 			);
 
-			return array( 'error' => McpErrorFactory::tool_not_found( $request_id, $tool_name )['error'] );
+			return array(
+				'error'     => McpErrorFactory::tool_not_found( $request_id, $tool_name )['error'],
+				'_metadata' => array(
+					'component_type' => 'tool',
+					'tool_name'      => $tool_name,
+					'failure_reason' => 'not_found',
+				),
+			);
 		}
 
 		/**
-		 * Assume tools can only be registered with valid abilities.
-		 * If not, the has_permission() will let us know in the try-catch block.
+		 * Get the ability
 		 *
-		 * @var \WP_Ability $ability
+		 * @var \WP_Ability|\WP_Error $ability
 		 */
 		$ability = $tool->get_ability();
 
-		// Run ability Permission Callback.
-		try {
-			$has_permission = $ability->has_permission( $args );
-			if ( true !== $has_permission ) {
-				// Track permission denied event.
-				$this->mcp->observability_handler::record_event(
-					'mcp.tool.permission_denied',
-					array(
-						'tool_name'    => $tool_name,
-						'ability_name' => $ability->get_name(),
-						'server_id'    => $this->mcp->get_server_id(),
-					)
-				);
-
-				return array( 'error' => McpErrorFactory::permission_denied( $request_id, 'Access denied for tool: ' . $tool_name )['error'] );
-			}
-		} catch ( \Throwable $e ) {
-			if ( $this->mcp->error_handler ) {
-				$this->mcp->error_handler->log(
-					'Error running ability permission callback',
-					array(
-						'ability'   => $ability->get_name(),
-						'exception' => $e->getMessage(),
-					)
-				);
-			}
-
-			// Track permission check error event.
-			$this->mcp->observability_handler::record_event(
-				'mcp.tool.permission_check_failed',
+		// Check if getting the ability returned an error
+		if ( is_wp_error( $ability ) ) {
+			$this->mcp->error_handler->log(
+				'Failed to get ability for tool',
 				array(
-					'tool_name'    => $tool_name,
-					'ability_name' => $ability->get_name(),
-					'error_type'   => get_class( $e ),
-					'server_id'    => $this->mcp->get_server_id(),
+					'tool'          => $tool_name,
+					'error_message' => $ability->get_error_message(),
 				)
 			);
 
-			return array( 'error' => McpErrorFactory::internal_error( $request_id, 'Error running ability permission callback' )['error'] );
+			return array(
+				'error'     => McpErrorFactory::internal_error( $request_id, $ability->get_error_message() )['error'],
+				'_metadata' => array(
+					'component_type' => 'tool',
+					'tool_name'      => $tool_name,
+					'failure_reason' => 'ability_retrieval_failed',
+					'error_code'     => $ability->get_error_code(),
+				),
+			);
+		}
+
+		// If ability has no input schema and args is empty, pass null instead
+		$ability_input_schema = $ability->get_input_schema();
+		if ( empty( $ability_input_schema ) && empty( $args ) ) {
+			$args = null;
+		}
+
+		// Run ability Permission Callback.
+		try {
+			$has_permission = $ability->check_permissions( $args );
+			if ( true !== $has_permission ) {
+				// Extract detailed error message and code if WP_Error was returned
+				$error_message  = 'Access denied for tool: ' . $tool_name;
+				$failure_reason = 'permission_denied';
+
+				if ( is_wp_error( $has_permission ) ) {
+					$error_message  = $has_permission->get_error_message();
+					$failure_reason = $has_permission->get_error_code(); // Use WP_Error code as failure_reason
+				}
+
+				return array(
+					'error'     => McpErrorFactory::permission_denied( $request_id, $error_message )['error'],
+					'_metadata' => array(
+						'component_type' => 'tool',
+						'tool_name'      => $tool_name,
+						'ability_name'   => $ability->get_name(),
+						'failure_reason' => $failure_reason,
+					),
+				);
+			}
+		} catch ( \Throwable $e ) {
+			$this->mcp->error_handler->log(
+				'Error running ability permission callback',
+				array(
+					'ability'   => $ability->get_name(),
+					'exception' => $e->getMessage(),
+				)
+			);
+
+			return array(
+				'error'     => McpErrorFactory::internal_error( $request_id, 'Error running ability permission callback' )['error'],
+				'_metadata' => array(
+					'component_type' => 'tool',
+					'tool_name'      => $tool_name,
+					'ability_name'   => $ability->get_name(),
+					'failure_reason' => 'permission_check_failed',
+					'error_type'     => get_class( $e ),
+				),
+			);
 		}
 
 		// Execute the tool callback.
 		try {
 			$result = $ability->execute( $args );
 
-			// Track successful tool execution.
-			$this->mcp->observability_handler::record_event(
-				'mcp.tool.execution_success',
-				array(
-					'tool_name'    => $tool_name,
-					'ability_name' => $ability->get_name(),
-					'server_id'    => $this->mcp->get_server_id(),
-				)
+			// Handle WP_Error objects that weren't converted by the ability.
+			if ( is_wp_error( $result ) ) {
+				$this->mcp->error_handler->log(
+					'Ability returned WP_Error object',
+					array(
+						'ability'       => $ability->get_name(),
+						'error_code'    => $result->get_error_code(),
+						'error_message' => $result->get_error_message(),
+					)
+				);
+
+				// Return error for conversion to isError format by call_tool().
+				return array(
+					'error'     => array(
+						'message' => $result->get_error_message(),
+						'code'    => $result->get_error_code(),
+					),
+					'_metadata' => array(
+						'component_type' => 'tool',
+						'tool_name'      => $tool_name,
+						'ability_name'   => $ability->get_name(),
+						'failure_reason' => 'wp_error',
+						'error_code'     => $result->get_error_code(),
+					),
+				);
+			}
+
+			// Successful execution - add metadata.
+			$result['_metadata'] = array(
+				'component_type' => 'tool',
+				'tool_name'      => $tool_name,
+				'ability_name'   => $ability->get_name(),
 			);
 
 			return $result;
 		} catch ( \Throwable $e ) {
-			if ( $this->mcp->error_handler ) {
-				$this->mcp->error_handler->log(
-					'Tool execution failed',
-					array(
-						'tool'      => $tool_name,
-						'exception' => $e->getMessage(),
-					)
-				);
-			}
-
-			// Track tool execution error event.
-			$this->mcp->observability_handler::record_event(
-				'mcp.tool.execution_failed',
+			$this->mcp->error_handler->log(
+				'Tool execution failed',
 				array(
-					'tool_name'      => $tool_name,
-					'ability_name'   => $ability->get_name(),
-					'error_type'     => get_class( $e ),
-					'error_category' => $this->categorize_error( $e ),
-					'server_id'      => $this->mcp->get_server_id(),
+					'tool'      => $tool_name,
+					'exception' => $e->getMessage(),
 				)
 			);
 
-			return array( 'error' => McpErrorFactory::internal_error( $request_id, 'Error executing tool' )['error'] );
+			// Return error for conversion to isError format by call_tool().
+			return array(
+				'error'     => array(
+					'message' => $e->getMessage(),
+				),
+				'_metadata' => array(
+					'component_type' => 'tool',
+					'tool_name'      => $tool_name,
+					'ability_name'   => $ability->get_name(),
+					'failure_reason' => 'execution_failed',
+					'error_type'     => get_class( $e ),
+				),
+			);
 		}
-	}
-
-	/**
-	 * Categorize an exception into a general error category.
-	 *
-	 * @param \Throwable $exception The exception to categorize.
-	 *
-	 * @return string
-	 */
-	private function categorize_error( \Throwable $exception ): string {
-		return self::$error_categories[ get_class( $exception ) ] ?? 'unknown';
 	}
 }

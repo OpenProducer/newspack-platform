@@ -101,6 +101,11 @@ class Listings_Wizard extends Wizard {
 	 * Replaces Listings Plugin's 'admin_menu' action => Newspack_Listings\Core => 'add_plugin_page'
 	 */
 	public function add_page() {
+		$icon = sprintf(
+			'data:image/svg+xml;base64,%s',
+			base64_encode( Newspack_UI_Icons::get_svg( 'curatedList' ) )
+		);
+
 		// Top-level menu item.
 		add_menu_page(
 			__( 'Newspack Listings', 'newspack-plugin' ),
@@ -108,7 +113,7 @@ class Listings_Wizard extends Wizard {
 			'edit_posts', // Copied from Listings plugin...see docblock note above.
 			$this->slug,
 			'',
-			'data:image/svg+xml;base64,' . base64_encode( '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="none" stroke="none" d="M18 5.5H6a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h12a.5.5 0 0 0 .5-.5V6a.5.5 0 0 0-.5-.5ZM6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm1 5h1.5v1.5H7V9Zm1.5 4.5H7V15h1.5v-1.5ZM10 9h7v1.5h-7V9Zm7 4.5h-7V15h7v-1.5Z"></path></svg>' )
+			$icon
 		);
 
 		if ( is_callable( [ Newspack_Listings_Settings::class, 'create_admin_page' ] ) ) {

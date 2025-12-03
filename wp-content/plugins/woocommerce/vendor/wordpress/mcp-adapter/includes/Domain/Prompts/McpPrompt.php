@@ -10,7 +10,6 @@ declare( strict_types=1 );
 namespace WP\MCP\Domain\Prompts;
 
 use WP\MCP\Core\McpServer;
-use WP_Ability;
 
 /**
  * Represents an MCP prompt according to the Model Context Protocol specification.
@@ -58,6 +57,13 @@ class McpPrompt {
 	private array $arguments;
 
 	/**
+	 * Optional properties describing prompt metadata.
+	 *
+	 * @var array
+	 */
+	private array $annotations;
+
+	/**
 	 * The MCP server instance this prompt belongs to.
 	 *
 	 * @var \WP\MCP\Core\McpServer
@@ -72,19 +78,22 @@ class McpPrompt {
 	 * @param string|null $title Optional human-readable name for display.
 	 * @param string|null $description Optional human-readable description.
 	 * @param array       $arguments Optional list of arguments for customization.
+	 * @param array       $annotations Optional properties describing prompt metadata.
 	 */
 	public function __construct(
 		string $ability,
 		string $name,
 		?string $title = null,
 		?string $description = null,
-		array $arguments = array()
+		array $arguments = array(),
+		array $annotations = array()
 	) {
 		$this->ability     = $ability;
 		$this->name        = $name;
 		$this->title       = $title;
 		$this->description = $description;
 		$this->arguments   = $arguments;
+		$this->annotations = $annotations;
 	}
 
 	/**
@@ -124,12 +133,32 @@ class McpPrompt {
 	}
 
 	/**
+	 * Get the annotations.
+	 *
+	 * @return array
+	 */
+	public function get_annotations(): array {
+		return $this->annotations;
+	}
+
+	/**
 	 * Get the ability name.
 	 *
-	 * @return \WP_Ability|null
+	 * @return \WP_Ability|\WP_Error WP_Ability instance on success, WP_Error on failure.
 	 */
-	public function get_ability(): ?WP_Ability {
-		return wp_get_ability( $this->ability );
+	public function get_ability() {
+		$ability = wp_get_ability( $this->ability );
+		if ( ! $ability ) {
+			return new \WP_Error(
+				'ability_not_found',
+				sprintf(
+					/* translators: %s: ability name */
+					esc_html__( "WordPress ability '%s' does not exist.", 'mcp-adapter' ),
+					esc_html( $this->ability )
+				)
+			);
+		}
+		return $ability;
 	}
 
 	/**
@@ -163,6 +192,17 @@ class McpPrompt {
 	 */
 	public function set_arguments( array $arguments ): void {
 		$this->arguments = $arguments;
+	}
+
+	/**
+	 * Set the annotations.
+	 *
+	 * @param array $annotations The annotations to set.
+	 *
+	 * @return void
+	 */
+	public function set_annotations( array $annotations ): void {
+		$this->annotations = $annotations;
 	}
 
 	/**
@@ -223,6 +263,29 @@ class McpPrompt {
 	}
 
 	/**
+	 * Add an annotation.
+	 *
+	 * @param string $key The annotation key.
+	 * @param mixed  $value The annotation value.
+	 *
+	 * @return void
+	 */
+	public function add_annotation( string $key, $value ): void {
+		$this->annotations[ $key ] = $value;
+	}
+
+	/**
+	 * Remove an annotation.
+	 *
+	 * @param string $key The annotation key to remove.
+	 *
+	 * @return void
+	 */
+	public function remove_annotation( string $key ): void {
+		unset( $this->annotations[ $key ] );
+	}
+
+	/**
 	 * Convert the prompt to an array representation according to MCP specification.
 	 *
 	 * @return array
@@ -245,6 +308,10 @@ class McpPrompt {
 			$prompt_data['arguments'] = $this->arguments;
 		}
 
+		if ( ! empty( $this->annotations ) ) {
+			$prompt_data['annotations'] = $this->annotations;
+		}
+
 		return $prompt_data;
 	}
 
@@ -254,7 +321,8 @@ class McpPrompt {
 	 * @return string
 	 */
 	public function to_json(): string {
-		return wp_json_encode( $this->to_array() );
+		$json = wp_json_encode( $this->to_array() );
+		return false !== $json ? $json : '{}';
 	}
 
 	/**
@@ -263,16 +331,16 @@ class McpPrompt {
 	 * @param array     $data Array containing prompt data.
 	 * @param \WP\MCP\Core\McpServer $mcp_server The MCP server instance.
 	 *
-	 * @return \WP\MCP\Domain\Prompts\McpPrompt Returns a new McpPrompt instance.
-	 * @throws \InvalidArgumentException If required fields are missing or validation fails.
+	 * @return self|\WP_Error Returns a new McpPrompt instance or WP_Error if validation fails.
 	 */
-	public static function from_array( array $data, McpServer $mcp_server ): self {
+	public static function from_array( array $data, McpServer $mcp_server ) {
 		$prompt = new self(
 			$data['ability'] ?? '',
 			$data['name'] ?? '',
 			$data['title'] ?? null,
 			$data['description'] ?? null,
-			$data['arguments'] ?? array()
+			$data['arguments'] ?? array(),
+			$data['annotations'] ?? array()
 		);
 
 		$prompt->set_mcp_server( $mcp_server );
@@ -285,16 +353,19 @@ class McpPrompt {
 	 *
 	 * @param string $context Optional context for error messages.
 	 *
-	 * @return self Returns the validated tool instance.
-	 * @throws \InvalidArgumentException If validation fails.
+	 * @return self|\WP_Error Returns the validated prompt instance or WP_Error if validation fails.
 	 */
-	public function validate( string $context = '' ): self {
+	public function validate( string $context = '' ) {
 		if ( ! $this->mcp_server->is_mcp_validation_enabled() ) {
 			return $this;
 		}
 
-		$context_to_use = $context ?: "McpPrompt::{$this->name}";
-		McpPromptValidator::validate_prompt_instance( $this, $context_to_use );
+		$context_to_use    = $context ?: "McpPrompt::{$this->name}";
+		$validation_result = McpPromptValidator::validate_prompt_instance( $this, $context_to_use );
+
+		if ( is_wp_error( $validation_result ) ) {
+			return $validation_result;
+		}
 
 		return $this;
 	}

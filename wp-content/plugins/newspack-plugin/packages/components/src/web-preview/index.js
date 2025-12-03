@@ -3,8 +3,8 @@
  */
 import { Component, createRef, Fragment, createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { closeSmall, desktop, mobile, tablet } from '@wordpress/icons';
-import { Button, ButtonGroup } from '@wordpress/components';
+import { close, desktop, mobile, tablet, check } from '@wordpress/icons';
+import { Button, DropdownMenu, MenuItem } from '@wordpress/components';
 
 /**
  * Internal dependencies.
@@ -62,7 +62,7 @@ class WebPreview extends Component {
 	 * Create JSX for the modal
 	 */
 	getWebPreviewModal = () => {
-		const { beforeLoad = () => {}, onClose = () => {}, url } = this.props;
+		const { beforeLoad = () => {}, onClose = () => {}, url, title } = this.props;
 		const { device, loaded, isPreviewVisible } = this.state;
 
 		if ( ! this.modalDOMElement || ! isPreviewVisible ) {
@@ -70,40 +70,68 @@ class WebPreview extends Component {
 		}
 
 		const classes = classnames( 'newspack-web-preview', device, loaded && 'is-loaded' );
+		let icon = mobile;
+		if ( device === 'desktop' ) {
+			icon = desktop;
+		} else if ( device === 'tablet' ) {
+			icon = tablet;
+		}
 		beforeLoad();
 		return createPortal(
 			<div className={ classes }>
 				<div className="newspack-web-preview__interior">
 					<div className="newspack-web-preview__toolbar">
-						<div className="newspack-web-preview__toolbar-left">
-							<ButtonGroup>
-								<Button
-									onClick={ () => this.setState( { device: 'desktop' } ) }
-									variant={ 'desktop' === device && 'primary' }
-									icon={ desktop }
-									label={ __( 'Preview Desktop Size', 'newspack-plugin' ) }
-								/>
-								<Button
-									onClick={ () => this.setState( { device: 'tablet' } ) }
-									variant={ 'tablet' === device && 'primary' }
-									icon={ tablet }
-									label={ __( 'Preview Tablet Size', 'newspack-plugin' ) }
-								/>
-								<Button
-									onClick={ () => this.setState( { device: 'phone' } ) }
-									variant={ 'phone' === device && 'primary' }
-									icon={ mobile }
-									label={ __( 'Preview Phone Size', 'newspack-plugin' ) }
-								/>
-							</ButtonGroup>
-						</div>
+						{ title && (
+							<div className="newspack-web-preview__toolbar-left">
+								<h2>{ title }</h2>
+							</div>
+						) }
 						<div className="newspack-web-preview__toolbar-right">
+							<DropdownMenu icon={ icon } label={ __( 'Preview Size', 'newspack-plugin' ) }>
+								{ ( { onClose: onDropdownClose } ) => (
+									<>
+										<MenuItem
+											icon={ device === 'desktop' ? check : null }
+											role="menuitemradio"
+											isSelected={ device === 'desktop' }
+											onClick={ () => {
+												this.setState( { device: 'desktop' } );
+												onDropdownClose();
+											} }
+										>
+											{ __( 'Desktop', 'newspack-plugin' ) }
+										</MenuItem>
+										<MenuItem
+											icon={ device === 'tablet' ? check : null }
+											role="menuitemradio"
+											isSelected={ device === 'tablet' }
+											onClick={ () => {
+												this.setState( { device: 'tablet' } );
+												onDropdownClose();
+											} }
+										>
+											{ __( 'Tablet', 'newspack-plugin' ) }
+										</MenuItem>
+										<MenuItem
+											icon={ device === 'phone' ? check : null }
+											role="menuitemradio"
+											isSelected={ device === 'phone' }
+											onClick={ () => {
+												this.setState( { device: 'phone' } );
+												onDropdownClose();
+											} }
+										>
+											{ __( 'Phone', 'newspack-plugin' ) }
+										</MenuItem>
+									</>
+								) }
+							</DropdownMenu>
 							<Button
 								onClick={ () => {
 									onClose();
 									this.setState( { isPreviewVisible: false, loaded: false } );
 								} }
-								icon={ closeSmall }
+								icon={ close }
 								label={ __( 'Close Preview', 'newspack-plugin' ) }
 							/>
 						</div>

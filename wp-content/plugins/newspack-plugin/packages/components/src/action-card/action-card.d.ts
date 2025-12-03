@@ -15,6 +15,7 @@ export interface ActionCardProps {
 	hasGreyHeader?: boolean;
 	toggleChecked?: boolean;
 	toggleOnChange?: ( a: boolean ) => void;
+	togglePosition?: 'leading' | 'trailing';
 	actionContent?: boolean | React.ReactNode | null;
 	error?: Error | string | null;
 	handoff?: string | null;

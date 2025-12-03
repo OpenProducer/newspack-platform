@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Newspack Listings plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Listings 3.4.0\n"
+"Project-Id-Version: Newspack Listings 3.4.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-15T16:15:45+00:00\n"
+"POT-Creation-Date: 2025-11-03T18:29:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-listings\n"
@@ -18,7 +18,7 @@ msgstr ""
 #: newspack-listings.php
 #: includes/class-block-patterns.php:61
 #: dist/editor.js:4
-#: src/editor/sidebar/index.js:48
+#: src/editor/sidebar/index.js:42
 msgid "Newspack Listings"
 msgstr ""
 
@@ -360,8 +360,8 @@ msgstr ""
 #: includes/class-core.php:301
 #: dist/editor.js:10
 #: dist/editor.js:30
-#: src/editor/featured-listings/index.js:157
-#: src/editor/sidebar/index.js:93
+#: src/editor/featured-listings/index.js:126
+#: src/editor/sidebar/index.js:84
 msgid "Expiration Date"
 msgstr ""
 
@@ -415,7 +415,7 @@ msgstr ""
 
 #: includes/class-core.php:453
 #: dist/editor.js:39
-#: src/blocks/price/edit.js:82
+#: src/blocks/price/edit.js:70
 #: src/blocks/price/index.js:17
 msgid "Price"
 msgstr ""
@@ -426,7 +426,7 @@ msgstr ""
 
 #: includes/class-core.php:477
 #: dist/editor.js:4
-#: src/editor/sidebar/index.js:62
+#: src/editor/sidebar/index.js:56
 msgid "Hide listing author"
 msgstr ""
 
@@ -441,7 +441,7 @@ msgstr ""
 
 #: includes/class-core.php:515
 #: dist/editor.js:7
-#: src/editor/sidebar/index.js:75
+#: src/editor/sidebar/index.js:69
 msgid "Hide publish date"
 msgstr ""
 
@@ -518,7 +518,7 @@ msgstr ""
 
 #: includes/class-products.php:435
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:192
+#: src/components/sidebar-query-controls.js:173
 msgid "Event"
 msgstr ""
 
@@ -599,7 +599,7 @@ msgstr ""
 #: src/blocks/curated-list/index.js:29
 #: src/blocks/event-dates/index.js:27
 #: src/blocks/list-container/index.js:31
-#: src/blocks/listing/index.js:33
+#: src/blocks/listing/index.js:31
 #: src/blocks/price/index.js:27
 #: src/blocks/self-serve-listings/index.js:25
 msgid "listings"
@@ -718,12 +718,12 @@ msgstr ""
 #: includes/importer/class-importer.php:517
 #: dist/editor.js:24
 #: dist/editor.js:27
-#: src/blocks/listing/edit.js:117
-#: src/blocks/listing/edit.js:138
-#: src/components/sidebar-query-controls.js:80
-#: src/components/sidebar-query-controls.js:95
-#: src/components/sidebar-query-controls.js:117
-#: src/components/sidebar-query-controls.js:132
+#: src/blocks/listing/edit.js:102
+#: src/blocks/listing/edit.js:120
+#: src/components/sidebar-query-controls.js:72
+#: src/components/sidebar-query-controls.js:87
+#: src/components/sidebar-query-controls.js:109
+#: src/components/sidebar-query-controls.js:124
 msgid "(no title)"
 msgstr ""
 
@@ -864,8 +864,8 @@ msgstr ""
 
 #: includes/products/class-products-ui.php:276
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:319
-#: src/blocks/listing/edit.js:191
+#: src/blocks/curated-list/edit.js:312
+#: src/blocks/listing/edit.js:169
 msgid "Edit this listing"
 msgstr ""
 
@@ -989,16 +989,11 @@ msgctxt "Date separator"
 msgid "–"
 msgstr ""
 
-#. Translators: Sponsorship attribution.
 #: src/templates/listing.php:140
-#: dist/editor.js:15
-#: src/blocks/listing/listing.js:93
 msgid " and "
 msgstr ""
 
 #: src/templates/listing.php:144
-#: dist/editor.js:15
-#: src/blocks/listing/listing.js:97
 msgctxt "separator character"
 msgid ", "
 msgstr ""
@@ -1008,8 +1003,6 @@ msgid "By"
 msgstr ""
 
 #: src/templates/listing.php:173
-#: dist/editor.js:15
-#: src/blocks/listing/listing.js:112
 msgid "Tagged: "
 msgstr ""
 
@@ -1026,8 +1019,8 @@ msgstr ""
 #: dist/editor.js:24
 #: dist/editor.js:42
 #: src/blocks/self-serve-listings/edit.js:211
-#: src/components/sidebar-query-controls.js:179
-#: src/components/sidebar-query-controls.js:187
+#: src/components/sidebar-query-controls.js:160
+#: src/components/sidebar-query-controls.js:168
 msgid "Listing Type"
 msgstr ""
 
@@ -1063,7 +1056,7 @@ msgstr ""
 
 #: src/templates/sort-ui.php:63
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:37
+#: src/blocks/list-container/edit.js:34
 msgid "Sort by:"
 msgstr ""
 
@@ -1073,478 +1066,495 @@ msgstr ""
 
 #: src/templates/sort-ui.php:80
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:167
+#: src/components/sidebar-query-controls.js:148
 msgid "Event Date"
 msgstr ""
 
 #: src/templates/sort-ui.php:89
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:160
+#: src/components/sidebar-query-controls.js:141
 msgid "Publish Date"
 msgstr ""
 
 #: src/templates/sort-ui.php:97
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:161
+#: src/components/sidebar-query-controls.js:142
 msgid "Title"
 msgstr ""
 
 #: src/templates/sort-ui.php:118
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:174
+#: src/components/sidebar-query-controls.js:155
 msgid "Author"
 msgstr ""
 
 #: src/templates/sort-ui.php:127
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:55
+#: src/blocks/list-container/edit.js:49
 msgid "Sort order:"
 msgstr ""
 
 #: src/templates/sort-ui.php:140
 #: dist/editor.js:24
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:68
-#: src/components/sidebar-query-controls.js:289
+#: src/blocks/list-container/edit.js:61
+#: src/components/sidebar-query-controls.js:257
 msgid "Ascending"
 msgstr ""
 
 #: src/templates/sort-ui.php:154
 #: dist/editor.js:24
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:82
-#: src/components/sidebar-query-controls.js:290
+#: src/blocks/list-container/edit.js:73
+#: src/components/sidebar-query-controls.js:258
 msgid "Descending"
 msgstr ""
 
-#. Translators: Listing post type sidebar settings label.
+#. translators: %s: listing post type.
 #: dist/editor.js:4
-#: src/editor/sidebar/index.js:47
+#: src/editor/sidebar/index.js:41
 #, js-format
 msgid "%s Settings"
 msgstr ""
 
 #: dist/editor.js:4
-#: src/editor/sidebar/index.js:53
-msgid "Overrides "
+#: src/editor/sidebar/index.js:47
+msgid "Overrides"
 msgstr ""
 
 #: dist/editor.js:4
-#: src/editor/sidebar/index.js:55
+#: src/editor/sidebar/index.js:49
 msgid "global settings"
 msgstr ""
 
-#. Translators: Show or hide author byline toggle label.
+#. translators: %s: show or hide author byline toggle label.
 #: dist/editor.js:7
-#: src/editor/sidebar/index.js:65
+#: src/editor/sidebar/index.js:59
 #, js-format
 msgid "%s the author byline for this listing."
 msgstr ""
 
 #: dist/editor.js:7
 #: dist/editor.js:10
-#: src/editor/sidebar/index.js:66
-#: src/editor/sidebar/index.js:79
+#: src/editor/sidebar/index.js:60
+#: src/editor/sidebar/index.js:73
 msgid "Hide"
 msgstr ""
 
 #: dist/editor.js:7
 #: dist/editor.js:10
-#: src/editor/sidebar/index.js:66
-#: src/editor/sidebar/index.js:79
+#: src/editor/sidebar/index.js:60
+#: src/editor/sidebar/index.js:73
 msgid "Show"
 msgstr ""
 
-#. Translators: Show or hide publish date toggle label.
+#. translators: %s: show or hide publish date toggle label.
 #: dist/editor.js:10
-#: src/editor/sidebar/index.js:78
+#: src/editor/sidebar/index.js:72
 #, js-format
 msgid "%s the publish and updated dates for this listing."
 msgstr ""
 
 #: dist/editor.js:10
-#: src/editor/sidebar/index.js:89
+#: src/editor/sidebar/index.js:83
 msgid "If set, the listing will be automatically unpublished after this date."
 msgstr ""
 
-#. Translators: warning when listings customer tries to extend expiration beyond allowed range.
+#. translators: %s: warning when listings customer tries to extend expiration beyond allowed range.
 #: dist/editor.js:13
-#: src/editor/sidebar/index.js:121
+#: src/editor/sidebar/index.js:108
 #, js-format
 msgid "Cannot set expiration date beyond %s."
 msgstr ""
 
 #: dist/editor.js:13
-#: src/editor/sidebar/index.js:153
+#: src/editor/sidebar/index.js:138
 msgid "Expiration date must be after publish date."
+msgstr ""
+
+#. Translators: Sponsorship attribution.
+#: dist/editor.js:15
+#: src/blocks/listing/listing.js:76
+msgid "and"
+msgstr ""
+
+#: dist/editor.js:15
+#: src/blocks/listing/listing.js:79
+msgctxt "separator character"
+msgid ","
+msgstr ""
+
+#: dist/editor.js:15
+#: src/blocks/listing/listing.js:92
+msgid "Tagged:"
 msgstr ""
 
 #. Translators: %s: The name of the type.
 #. Translators: %s: the name of a post type.
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:44
-#: src/components/sidebar-query-controls.js:58
+#: src/components/sidebar-query-controls.js:36
+#: src/components/sidebar-query-controls.js:50
 msgid "(no name)"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:191
+#: src/components/sidebar-query-controls.js:172
 msgid "Any"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:193
+#: src/components/sidebar-query-controls.js:174
 msgid "Generic"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:194
+#: src/components/sidebar-query-controls.js:175
 msgid "Marketplace"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:195
+#: src/components/sidebar-query-controls.js:176
 msgid "Place"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:205
+#: src/components/sidebar-query-controls.js:186
 msgid "Authors"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:216
+#: src/components/sidebar-query-controls.js:195
 msgid "Categories"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:225
+#: src/components/sidebar-query-controls.js:204
 msgid "Tags"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:230
+#: src/components/sidebar-query-controls.js:209
 msgid "Max number of items"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:231
+#: src/components/sidebar-query-controls.js:210
 msgid "Maximum number of listings to show at a time. If using the \"load more\" option, the results will be paginated by this number."
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:246
+#: src/components/sidebar-query-controls.js:223
 msgid "Will be shown only if there more listings to load."
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:247
+#: src/components/sidebar-query-controls.js:224
 msgid "Show \"load more\" button"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:255
+#: src/components/sidebar-query-controls.js:232
 msgid "\"Load more\" button text"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:266
+#: src/components/sidebar-query-controls.js:239
 msgid "Hide Advanced Filters"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:267
+#: src/components/sidebar-query-controls.js:239
 msgid "Show Advanced Filters"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:274
+#: src/components/sidebar-query-controls.js:246
 msgid "Sort By"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:283
+#: src/components/sidebar-query-controls.js:253
 msgid "Sort Order"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:302
+#: src/components/sidebar-query-controls.js:268
 msgid "Excluded Categories"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/components/sidebar-query-controls.js:313
+#: src/components/sidebar-query-controls.js:277
 msgid "Excluded Tags"
 msgstr ""
 
 #. translators: label for small size option
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:351
+#: src/blocks/curated-list/edit.js:338
 msgid "Small"
 msgstr ""
 
 #. translators: abbreviation for small size
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:352
+#: src/blocks/curated-list/edit.js:339
 msgid "S"
 msgstr ""
 
 #. translators: label for medium size option
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:356
+#: src/blocks/curated-list/edit.js:343
 msgid "Medium"
 msgstr ""
 
 #. translators: abbreviation for medium size
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:357
+#: src/blocks/curated-list/edit.js:344
 msgid "M"
 msgstr ""
 
 #. translators: label for large size option
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:361
+#: src/blocks/curated-list/edit.js:348
 msgid "Large"
 msgstr ""
 
 #. translators: abbreviation for large size
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:362
+#: src/blocks/curated-list/edit.js:349
 msgid "L"
 msgstr ""
 
 #. translators: label for extra large size option
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:366
+#: src/blocks/curated-list/edit.js:353
 msgid "Extra Large"
 msgstr ""
 
 #. translators: abbreviation for extra large size
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:370
+#: src/blocks/curated-list/edit.js:354
 msgid "XL"
 msgstr ""
 
 #: dist/editor.js:24
 #: dist/editor.js:42
-#: src/blocks/curated-list/edit.js:382
-#: src/blocks/curated-list/edit.js:396
+#: src/blocks/curated-list/edit.js:363
+#: src/blocks/curated-list/edit.js:375
 #: src/blocks/curated-list/index.js:19
 msgid "Curated List"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:413
+#: src/blocks/curated-list/edit.js:392
 msgid "Query"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:418
+#: src/blocks/curated-list/edit.js:397
 msgid "Specific Listings"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:431
+#: src/blocks/curated-list/edit.js:410
 msgid "Query Settings"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:442
+#: src/blocks/curated-list/edit.js:421
 msgid "List Settings"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:445
+#: src/blocks/curated-list/edit.js:424
 msgid "Show list item numbers"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:454
+#: src/blocks/curated-list/edit.js:433
 msgid "Show map"
 msgstr ""
 
-#. Translators: Help message for map behavior.
+#. translators: %d: maximum number of items to display on the map.
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:457
+#: src/blocks/curated-list/edit.js:436
 #, js-format
 msgid "The map will display locations for up to %d items in the list, regardless of the current number of items shown."
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:470
+#: src/blocks/curated-list/edit.js:449
 msgid "Show sort UI"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:476
+#: src/blocks/curated-list/edit.js:455
 msgid "Featured Image Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:479
+#: src/blocks/curated-list/edit.js:458
 msgid "Show Featured Image"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:489
+#: src/blocks/curated-list/edit.js:468
 msgid "Show Featured Image Caption"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:495
+#: src/blocks/curated-list/edit.js:474
 msgid "Featured Image Position"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:499
+#: src/blocks/curated-list/edit.js:478
 msgid "Top"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:500
+#: src/blocks/curated-list/edit.js:479
 msgid "Left"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:501
+#: src/blocks/curated-list/edit.js:480
 msgid "Right"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:510
-#: src/blocks/curated-list/edit.js:516
+#: src/blocks/curated-list/edit.js:488
+#: src/blocks/curated-list/edit.js:490
 msgid "Featured Image Size"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:541
+#: src/blocks/curated-list/edit.js:514
 msgid "Minimum height"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:542
+#: src/blocks/curated-list/edit.js:515
 msgid "Sets a minimum height for the block, using a percentage of the screen's current height."
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:554
+#: src/blocks/curated-list/edit.js:527
 msgid "Post Control Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:557
+#: src/blocks/curated-list/edit.js:530
 msgid "Show Excerpt"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:564
+#: src/blocks/curated-list/edit.js:537
 msgid "Type Scale"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:573
+#: src/blocks/curated-list/edit.js:546
 msgid "Color Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:579
+#: src/blocks/curated-list/edit.js:552
 msgid "Text Color"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:584
+#: src/blocks/curated-list/edit.js:557
 msgid "Background Color"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:588
+#: src/blocks/curated-list/edit.js:561
 msgid "Meta Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:591
+#: src/blocks/curated-list/edit.js:564
 msgid "Show Author"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:598
+#: src/blocks/curated-list/edit.js:571
 msgid "Show Category"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:605
+#: src/blocks/curated-list/edit.js:578
 msgid "Show Tags"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:45
+#: src/blocks/list-container/edit.js:42
 msgid "Sort by"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/listing/edit.js:102
-msgid "Search for a "
+#: src/blocks/listing/edit.js:90
+msgid "Search for a"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/listing/edit.js:104
-msgid " listing to display."
+#: src/blocks/listing/edit.js:90
+msgid "listing to display."
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/listing/edit.js:161
+#: src/blocks/listing/edit.js:143
 msgid "Cancel"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/editor/featured-listings/index.js:66
-#: src/editor/featured-listings/index.js:76
+#: src/editor/featured-listings/index.js:52
+#: src/editor/featured-listings/index.js:59
 msgid "There was an error updating the feature priority for this post. Please try saving again."
 msgstr ""
 
 #: dist/editor.js:27
-#: src/editor/featured-listings/index.js:104
+#: src/editor/featured-listings/index.js:83
 msgid "There was an error fetching the priority for this post. Please refresh the editor."
 msgstr ""
 
 #: dist/editor.js:27
-#: src/editor/featured-listings/index.js:117
+#: src/editor/featured-listings/index.js:93
 msgid "Featured Listing Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/editor/featured-listings/index.js:122
+#: src/editor/featured-listings/index.js:98
 msgid "Featured Listing"
 msgstr ""
 
-#. Translators: Feature status help message.
+#. translators: %s: feature status.
 #: dist/editor.js:30
-#: src/editor/featured-listings/index.js:125
+#: src/editor/featured-listings/index.js:101
 #, js-format
 msgid "This listing is %sfeatured."
 msgstr ""
 
 #: dist/editor.js:30
-#: src/editor/featured-listings/index.js:128
-msgid "not "
+#: src/editor/featured-listings/index.js:102
+msgid "not"
 msgstr ""
 
 #: dist/editor.js:30
-#: src/editor/featured-listings/index.js:139
+#: src/editor/featured-listings/index.js:113
 msgid "Priority Level"
 msgstr ""
 
 #: dist/editor.js:30
-#: src/editor/featured-listings/index.js:140
+#: src/editor/featured-listings/index.js:114
 msgid "Relative importance of the featured item. Higher numbers mean higher priority."
 msgstr ""
 
 #: dist/editor.js:30
 #: dist/editor.js:36
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:92
-#: src/blocks/event-dates/edit.js:130
-#: src/editor/featured-listings/index.js:181
+#: src/blocks/event-dates/edit.js:81
+#: src/blocks/event-dates/edit.js:111
+#: src/editor/featured-listings/index.js:139
 msgid "Reset"
 msgstr ""
 
@@ -1580,7 +1590,7 @@ msgstr ""
 #: src/blocks/curated-list/index.js:28
 #: src/blocks/event-dates/index.js:26
 #: src/blocks/list-container/index.js:30
-#: src/blocks/listing/index.js:32
+#: src/blocks/listing/index.js:31
 #: src/blocks/price/index.js:26
 msgid "lists"
 msgstr ""
@@ -1591,19 +1601,19 @@ msgstr ""
 #: src/blocks/curated-list/index.js:30
 #: src/blocks/event-dates/index.js:28
 #: src/blocks/list-container/index.js:32
-#: src/blocks/listing/index.js:34
+#: src/blocks/listing/index.js:31
 #: src/blocks/price/index.js:28
 msgid "latest"
 msgstr ""
 
 #: dist/editor.js:30
-#: src/blocks/event-dates/edit.js:33
+#: src/blocks/event-dates/edit.js:26
 msgid "Show Times"
 msgstr ""
 
-#. Translators: End date/time help message.
+#. translators: %s: end date/time label.
 #: dist/editor.js:33
-#: src/blocks/event-dates/edit.js:43
+#: src/blocks/event-dates/edit.js:36
 #, js-format
 msgid "Show End %s"
 msgstr ""
@@ -1611,43 +1621,43 @@ msgstr ""
 #: dist/editor.js:33
 #: dist/editor.js:36
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:44
-#: src/blocks/event-dates/edit.js:64
-#: src/blocks/event-dates/edit.js:102
+#: src/blocks/event-dates/edit.js:37
+#: src/blocks/event-dates/edit.js:57
+#: src/blocks/event-dates/edit.js:91
 msgid "Time"
 msgstr ""
 
 #: dist/editor.js:33
 #: dist/editor.js:36
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:44
-#: src/blocks/event-dates/edit.js:64
-#: src/blocks/event-dates/edit.js:102
+#: src/blocks/event-dates/edit.js:37
+#: src/blocks/event-dates/edit.js:57
+#: src/blocks/event-dates/edit.js:91
 msgid "Date"
 msgstr ""
 
-#. Translators: Help message for Event start date/time.
+#. translators: %1$s: start date/time label, %2$s: start date/time label.
 #: dist/editor.js:36
-#: src/blocks/event-dates/edit.js:62
+#: src/blocks/event-dates/edit.js:55
 #, js-format
 msgid "Event %1$s %2$s"
 msgstr ""
 
 #: dist/editor.js:36
-#: src/blocks/event-dates/edit.js:63
+#: src/blocks/event-dates/edit.js:56
 msgid "Start"
 msgstr ""
 
 #: dist/editor.js:36
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:81
-#: src/blocks/event-dates/edit.js:119
+#: src/blocks/event-dates/edit.js:72
+#: src/blocks/event-dates/edit.js:102
 msgid "Event end must be after event start."
 msgstr ""
 
-#. Translators: Help message for Event end date/time.
+#. translators: %s: end date/time label.
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:101
+#: src/blocks/event-dates/edit.js:90
 #, js-format
 msgid "Event End %s"
 msgstr ""
@@ -1658,23 +1668,23 @@ msgid "price"
 msgstr ""
 
 #: dist/editor.js:39
-#: src/blocks/price/edit.js:51
+#: src/blocks/price/edit.js:44
 msgid "Select currency"
 msgstr ""
 
 #: dist/editor.js:39
-#: src/blocks/price/edit.js:67
+#: src/blocks/price/edit.js:60
 msgid "Show decimals"
 msgstr ""
 
 #: dist/editor.js:39
-#: src/blocks/price/edit.js:68
+#: src/blocks/price/edit.js:61
 msgid "If disabled, the price shown will be rounded to the nearest integer."
 msgstr ""
 
-#. Translators: Price currency help message.
+#. translators: %s: currency.
 #: dist/editor.js:42
-#: src/blocks/price/edit.js:88
+#: src/blocks/price/edit.js:74
 #, js-format
 msgid "Price in %s"
 msgstr ""

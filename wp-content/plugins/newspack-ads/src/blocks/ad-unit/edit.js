@@ -9,15 +9,7 @@ import classNames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { Fragment, useState, useEffect } from '@wordpress/element';
 import { BlockControls, useBlockProps } from '@wordpress/block-editor';
-import {
-	SVG,
-	ToolbarGroup,
-	ToolbarButton,
-	Placeholder,
-	Spinner,
-	Notice,
-	Button,
-} from '@wordpress/components';
+import { SVG, ToolbarGroup, ToolbarButton, Placeholder, Spinner, Notice, Button } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { pencil } from '@wordpress/icons';
 
@@ -82,22 +74,13 @@ function Edit( { attributes, setAttributes } ) {
 					{ ! inFlight && (
 						<BlockControls>
 							<ToolbarGroup>
-								<ToolbarButton
-									icon={ pencil }
-									label={ __( 'Edit', 'newspack-ads' ) }
-									onClick={ () => setIsEditing( true ) }
-								/>
+								<ToolbarButton icon={ pencil } label={ __( 'Edit', 'newspack-ads' ) } onClick={ () => setIsEditing( true ) } />
 							</ToolbarGroup>
 						</BlockControls>
 					) }
 					{ error && <Notice isError noticeText={ error } isDismissible={ false } /> }
-					{ provider === 'gam' && biddersError && (
-						<Notice isWarning noticeText={ biddersError } isDismissible={ false } />
-					) }
-					<div
-						className="newspack-ads-ad-block-placeholder"
-						style={ { width: containerWidth, height: containerHeight } }
-					>
+					{ provider === 'gam' && biddersError && <Notice isWarning noticeText={ biddersError } isDismissible={ false } /> }
+					<div className="newspack-ads-ad-block-placeholder" style={ { width: containerWidth, height: containerHeight } }>
 						<Fragment>
 							<SVG
 								className="newspack-ads-ad-block-mock"

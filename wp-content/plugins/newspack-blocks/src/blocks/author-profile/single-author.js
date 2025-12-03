@@ -23,17 +23,7 @@ const MaybeLink = ( { author, children, showArchiveLink } ) =>
 	);
 
 export const SingleAuthor = ( { author, attributes } ) => {
-	const {
-		showBio,
-		showSocial,
-		showEmail,
-		showArchiveLink,
-		showAvatar,
-		textSize,
-		avatarAlignment,
-		avatarBorderRadius,
-		avatarSize,
-	} = attributes;
+	const { showBio, showSocial, showEmail, showArchiveLink, showAvatar, textSize, avatarAlignment, avatarBorderRadius, avatarSize } = attributes;
 
 	// Combine social links and email, which are shown together.
 	const socialLinks = ( showSocial && author && author.social ) || {};
@@ -48,10 +38,7 @@ export const SingleAuthor = ( { author, attributes } ) => {
 		delete socialLinks.newspack_phone_number;
 	}
 
-	const employment = [
-		attributes.shownewspack_role && author.newspack_role,
-		attributes.shownewspack_employer && author.newspack_employer,
-	]
+	const employment = [ attributes.shownewspack_role && author.newspack_role, attributes.shownewspack_employer && author.newspack_employer ]
 		.filter( Boolean )
 		.join( ', ' );
 	const socialLinksItems = Object.keys( socialLinks );
@@ -84,13 +71,9 @@ export const SingleAuthor = ( { author, attributes } ) => {
 					</MaybeLink>
 				</h3>
 				{ attributes.shownewspack_job_title && author.newspack_job_title && (
-					<p className="wp-block-newspack-blocks-author-profile__job-title">
-						{ author.newspack_job_title }
-					</p>
+					<p className="wp-block-newspack-blocks-author-profile__job-title">{ author.newspack_job_title }</p>
 				) }
-				{ employment && (
-					<p className="wp-block-newspack-blocks-author-profile__employment">{ employment }</p>
-				) }
+				{ employment && <p className="wp-block-newspack-blocks-author-profile__employment">{ employment }</p> }
 				{ showBio && author.bio && (
 					<p>
 						<RawHTML>{ autop( author.bio ) } </RawHTML>
@@ -106,12 +89,8 @@ export const SingleAuthor = ( { author, attributes } ) => {
 						{ socialLinksItems.map( service => (
 							<li key={ service }>
 								<a href="#" className="no-op">
-									{ socialLinks[ service ].svg && (
-										<span dangerouslySetInnerHTML={ { __html: socialLinks[ service ].svg } } />
-									) }
-									<span className={ socialLinks[ service ].svg ? 'hidden' : 'visible' }>
-										{ service }
-									</span>
+									{ socialLinks[ service ].svg && <span dangerouslySetInnerHTML={ { __html: socialLinks[ service ].svg } } /> }
+									<span className={ socialLinks[ service ].svg ? 'hidden' : 'visible' }>{ service }</span>
 								</a>
 							</li>
 						) ) }

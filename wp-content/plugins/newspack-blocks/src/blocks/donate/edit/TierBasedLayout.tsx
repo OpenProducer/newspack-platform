@@ -15,32 +15,26 @@ import { FREQUENCIES, DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX } from '../const
 
 const TierBasedLayout = ( props: ComponentProps ) => {
 	const { amounts, availableFrequencies, attributes } = props;
-	const [ currentFrequency, setCurrencyFrequency ] = useState( availableFrequencies[ 0 ] );
+	const [ currentFrequency, setCurrencyFrequency ] = useState( attributes.defaultFrequency || availableFrequencies[ 0 ] );
 
-	const displayedAmounts = amounts[ currentFrequency ].slice(
-		0,
-		DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX
-	);
+	const displayedAmounts = amounts[ currentFrequency ].slice( 0, DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX );
 
 	useEffect( () => {
-		setCurrencyFrequency( availableFrequencies[ 0 ] );
-	}, [ availableFrequencies.length ] );
+		setCurrencyFrequency( attributes.defaultFrequency || availableFrequencies[ 0 ] );
+	}, [ availableFrequencies.length, attributes.defaultFrequency ] );
 
-	const handleTierOptionChange =
-		( tierIndex: number, optionKey: keyof TierBasedOptionValue ) => ( value: string ) => {
-			const tiersBasedOptions: DonateBlockAttributes[ 'tiersBasedOptions' ] = [
-				...attributes.tiersBasedOptions, // The value has to be copied in order for the block editor to pick up the change.
-			];
-			tiersBasedOptions[ tierIndex ] = {
-				...tiersBasedOptions[ tierIndex ],
-				[ optionKey ]: value,
-			};
-			props.setAttributes( { tiersBasedOptions } );
+	const handleTierOptionChange = ( tierIndex: number, optionKey: keyof TierBasedOptionValue ) => ( value: string ) => {
+		const tiersBasedOptions: DonateBlockAttributes[ 'tiersBasedOptions' ] = [
+			...attributes.tiersBasedOptions, // The value has to be copied in order for the block editor to pick up the change.
+		];
+		tiersBasedOptions[ tierIndex ] = {
+			...tiersBasedOptions[ tierIndex ],
+			[ optionKey ]: value,
 		};
+		props.setAttributes( { tiersBasedOptions } );
+	};
 
-	const isAnyRecommended = attributes.tiersBasedOptions.some( tier =>
-		Boolean( tier.recommendLabel )
-	);
+	const isAnyRecommended = attributes.tiersBasedOptions.some( tier => Boolean( tier.recommendLabel ) );
 
 	return (
 		<form className="wpbnbd__tiers" onSubmit={ e => e.preventDefault() }>
@@ -61,7 +55,7 @@ const TierBasedLayout = ( props: ComponentProps ) => {
 						);
 					} ) }
 				</div>
-			)}
+			) }
 			<div className="wpbnbd__tiers__options">
 				{ displayedAmounts.map( ( amount, index ) => {
 					const recommendLabel = attributes.tiersBasedOptions[ index ].recommendLabel || '';
@@ -81,10 +75,7 @@ const TierBasedLayout = ( props: ComponentProps ) => {
 										tagName="span"
 									/>
 								</h2>
-								<h3
-									className="wpbnbd__tiers__recommend-label"
-									style={ { opacity: recommendLabel ? 1 : 0.5 } }
-								>
+								<h3 className="wpbnbd__tiers__recommend-label" style={ { opacity: recommendLabel ? 1 : 0.5 } }>
 									<RichText
 										onChange={ handleTierOptionChange( index, 'recommendLabel' ) }
 										placeholder={ __( '…', 'newspack-blocks' ) }
@@ -107,12 +98,13 @@ const TierBasedLayout = ( props: ComponentProps ) => {
 									borderColor: attributes.buttonColor,
 									...( isAnyRecommended && ! recommendLabel
 										? {
-											backgroundColor: 'transparent',
-											color: attributes.buttonColor,
-										} : {
-											backgroundColor: attributes.buttonColor,
-											color: getColorForContrast( attributes.buttonColor ),
-										} ),
+												backgroundColor: 'transparent',
+												color: attributes.buttonColor,
+										  }
+										: {
+												backgroundColor: attributes.buttonColor,
+												color: getColorForContrast( attributes.buttonColor ),
+										  } ),
 								} }
 							>
 								<RichText

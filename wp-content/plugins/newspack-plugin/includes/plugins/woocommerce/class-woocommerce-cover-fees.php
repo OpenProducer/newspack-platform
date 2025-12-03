@@ -108,16 +108,15 @@ class WooCommerce_Cover_Fees {
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 			return false;
 		}
-		if ( ! Donations::is_donation_cart() ) {
-			// Only allow covering fees for donations.
-			return false;
-		}
 		if ( 0 < count( WC()->cart->get_coupon_discount_totals() ) ) {
 			// If the checkout has coupons applied, bail. This can be develped in the future,
 			// but at this point handling coupons + covering fees is an edge case.
 			return false;
 		}
 		if ( true !== boolval( get_option( 'newspack_donations_allow_covering_fees', true ) ) ) {
+			return false;
+		}
+		if ( ! Donations::is_donation_cart() && true == boolval( get_option( 'newspack_donations_allow_covering_fees_donations_only', true ) ) ) {
 			return false;
 		}
 		return true;

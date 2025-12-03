@@ -132,7 +132,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 			collapse={ prompt.ready && ! isSavingFromPreview }
 			title={ prompt.title }
 			description={ sprintf(
-				// Translators: Status of the prompt.
+				// translators: %s: status of the prompt.
 				__( 'Status: %s', 'newspack-plugin' ),
 				isDirty
 					? __( 'Unsaved changes', 'newspack-plugin' )
@@ -307,7 +307,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 								{ inFlight
 									? __( 'Saving…', 'newspack-plugin' )
 									: sprintf(
-											// Translators: Save or Update settings.
+											// translators: %s: save or update settings.
 											__( '%s prompt settings', 'newspack-plugin' ),
 											prompt.ready ? __( 'Update', 'newspack-plugin' ) : __( 'Save', 'newspack-plugin' )
 									  ) }

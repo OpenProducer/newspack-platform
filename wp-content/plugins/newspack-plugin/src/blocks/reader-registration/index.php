@@ -8,6 +8,7 @@
 namespace Newspack\Blocks\ReaderRegistration;
 
 use Newspack;
+use Newspack\Newspack_UI_Icons;
 use Newspack\Reader_Activation;
 use Newspack\Recaptcha;
 
@@ -184,9 +185,7 @@ function render_block( $attrs, $content ) {
 		<?php if ( $registered ) : ?>
 			<div class="newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
 				<span class="newspack-ui__icon newspack-ui__icon--success">
-					<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-						<path d="M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z" />
-					</svg>
+					<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				</span>
 				<?php echo $success_registration_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
@@ -296,17 +295,13 @@ function render_block( $attrs, $content ) {
 			</form>
 			<div class="newspack-registration__registration-success newspack-registration--hidden newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
 				<span class="newspack-ui__icon newspack-ui__icon--success">
-					<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-						<path d="M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z" />
-					</svg>
+					<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				</span>
 				<?php echo $success_registration_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 			<div class="newspack-registration__login-success newspack-registration--hidden newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
 				<span class="newspack-ui__icon newspack-ui__icon--success">
-					<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-						<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5854 12.6708C19.8395 12.5438 20 12.2841 20 12C20 11.7159 19.8395 11.4562 19.5854 11.3292L5.08543 4.0792C4.79841 3.93569 4.45187 3.99069 4.22339 4.21602C3.9949 4.44135 3.93509 4.78709 4.07461 5.07608L7.4172 12L4.07461 18.924C3.93509 19.213 3.9949 19.5587 4.22339 19.784C4.45187 20.0094 4.79841 20.0644 5.08543 19.9208L19.5854 12.6708ZM8.72077 11.25L6.38144 6.40425L17.573 12L6.38144 17.5958L8.72079 12.75H12V11.25H8.72077Z" />
-					</svg>
+					<?php Newspack_UI_Icons::print_svg( 'emailSend' ); ?>
 				</span>
 				<?php echo \wp_kses_post( $success_login_markup ); ?>
 			</div>

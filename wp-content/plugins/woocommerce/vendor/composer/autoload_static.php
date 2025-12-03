@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a
+class ComposerStaticInitc433f2e0744104f73ad290380d910d2d
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -18,35 +18,35 @@ class ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a
     );
 
     public static $prefixLengthsPsr4 = array (
-        'W' => 
+        'W' =>
         array (
             'WP\\MCP\\' => 7,
         ),
-        'S' => 
+        'S' =>
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Sabberworm\\CSS\\' => 15,
         ),
-        'P' => 
+        'P' =>
         array (
             'Pelago\\Emogrifier\\' => 18,
         ),
-        'O' => 
+        'O' =>
         array (
             'Opis\\Uri\\' => 9,
             'Opis\\String\\' => 12,
             'Opis\\JsonSchema\\' => 16,
         ),
-        'M' => 
+        'M' =>
         array (
             'MaxMind\\Db\\' => 11,
         ),
-        'C' => 
+        'C' =>
         array (
             'Composer\\Installers\\' => 20,
         ),
-        'A' => 
+        'A' =>
         array (
             'Automattic\\WooCommerce\\Vendor\\' => 30,
             'Automattic\\WooCommerce\\Blueprint\\' => 33,
@@ -56,68 +56,68 @@ class ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a
     );
 
     public static $prefixDirsPsr4 = array (
-        'WP\\MCP\\' => 
+        'WP\\MCP\\' =>
         array (
             0 => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes',
         ),
-        'Symfony\\Polyfill\\Php80\\' => 
+        'Symfony\\Polyfill\\Php80\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
         ),
-        'Symfony\\Component\\CssSelector\\' => 
+        'Symfony\\Component\\CssSelector\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/css-selector',
         ),
-        'Sabberworm\\CSS\\' => 
+        'Sabberworm\\CSS\\' =>
         array (
             0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
         ),
-        'Pelago\\Emogrifier\\' => 
+        'Pelago\\Emogrifier\\' =>
         array (
             0 => __DIR__ . '/..' . '/pelago/emogrifier/src',
         ),
-        'Opis\\Uri\\' => 
+        'Opis\\Uri\\' =>
         array (
             0 => __DIR__ . '/..' . '/opis/uri/src',
         ),
-        'Opis\\String\\' => 
+        'Opis\\String\\' =>
         array (
             0 => __DIR__ . '/..' . '/opis/string/src',
         ),
-        'Opis\\JsonSchema\\' => 
+        'Opis\\JsonSchema\\' =>
         array (
             0 => __DIR__ . '/..' . '/opis/json-schema/src',
         ),
-        'MaxMind\\Db\\' => 
+        'MaxMind\\Db\\' =>
         array (
             0 => __DIR__ . '/..' . '/maxmind-db/reader/src/MaxMind/Db',
         ),
-        'Composer\\Installers\\' => 
+        'Composer\\Installers\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
-        'Automattic\\WooCommerce\\Vendor\\' => 
+        'Automattic\\WooCommerce\\Vendor\\' =>
         array (
             0 => __DIR__ . '/../..' . '/lib/packages',
         ),
-        'Automattic\\WooCommerce\\Blueprint\\' => 
+        'Automattic\\WooCommerce\\Blueprint\\' =>
         array (
             0 => __DIR__ . '/../..' . '/packages/blueprint/src',
         ),
-        'Automattic\\WooCommerce\\' => 
+        'Automattic\\WooCommerce\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'Automattic\\Jetpack\\Autoloader\\' => 
+        'Automattic\\Jetpack\\Autoloader\\' =>
         array (
             0 => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src',
         ),
     );
 
     public static $prefixesPsr0 = array (
-        'A' => 
+        'A' =>
         array (
-            'Automattic\\WooCommerce\\Vendor\\' => 
+            'Automattic\\WooCommerce\\Vendor\\' =>
             array (
                 0 => __DIR__ . '/../..' . '/lib/packages',
             ),
@@ -947,6 +947,8 @@ class ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a
         'Automattic\\WooCommerce\\Enums\\ProductTaxStatus' => __DIR__ . '/../..' . '/src/Enums/ProductTaxStatus.php',
         'Automattic\\WooCommerce\\Enums\\ProductType' => __DIR__ . '/../..' . '/src/Enums/ProductType.php',
         'Automattic\\WooCommerce\\Gateways\\PayPal\\AddressRequirements' => __DIR__ . '/../..' . '/src/Gateways/PayPal/AddressRequirements.php',
+        'Automattic\\WooCommerce\\Internal\\AbilitiesApi\\AbilitiesClient' => __DIR__ . '/../..' . '/src/Internal/AbilitiesApi/AbilitiesClient.php',
+        'Automattic\\WooCommerce\\Internal\\Abilities\\AbilitiesCategories' => __DIR__ . '/../..' . '/src/Internal/Abilities/AbilitiesCategories.php',
         'Automattic\\WooCommerce\\Internal\\Abilities\\AbilitiesRegistry' => __DIR__ . '/../..' . '/src/Internal/Abilities/AbilitiesRegistry.php',
         'Automattic\\WooCommerce\\Internal\\Abilities\\AbilitiesRestBridge' => __DIR__ . '/../..' . '/src/Internal/Abilities/AbilitiesRestBridge.php',
         'Automattic\\WooCommerce\\Internal\\Abilities\\REST\\RestAbility' => __DIR__ . '/../..' . '/src/Internal/Abilities/REST/RestAbility.php',
@@ -2088,9 +2090,17 @@ class ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a
         'WC_REST_Webhooks_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version3/class-wc-rest-webhooks-controller.php',
         'WC_REST_Webhooks_V1_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php',
         'WC_REST_Webhooks_V2_Controller' => __DIR__ . '/../..' . '/includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php',
+        'WP\\MCP\\Abilities\\DiscoverAbilitiesAbility' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Abilities/DiscoverAbilitiesAbility.php',
+        'WP\\MCP\\Abilities\\ExecuteAbilityAbility' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Abilities/ExecuteAbilityAbility.php',
+        'WP\\MCP\\Abilities\\GetAbilityInfoAbility' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Abilities/GetAbilityInfoAbility.php',
+        'WP\\MCP\\Abilities\\McpAbilityHelperTrait' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Abilities/McpAbilityHelperTrait.php',
         'WP\\MCP\\Autoloader' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Autoloader.php',
+        'WP\\MCP\\Cli\\McpCommand' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Cli/McpCommand.php',
+        'WP\\MCP\\Cli\\StdioServerBridge' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Cli/StdioServerBridge.php',
         'WP\\MCP\\Core\\McpAdapter' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Core/McpAdapter.php',
+        'WP\\MCP\\Core\\McpComponentRegistry' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Core/McpComponentRegistry.php',
         'WP\\MCP\\Core\\McpServer' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Core/McpServer.php',
+        'WP\\MCP\\Core\\McpTransportFactory' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Core/McpTransportFactory.php',
         'WP\\MCP\\Domain\\Prompts\\Contracts\\McpPromptBuilderInterface' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Prompts/Contracts/McpPromptBuilderInterface.php',
         'WP\\MCP\\Domain\\Prompts\\McpPrompt' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Prompts/McpPrompt.php',
         'WP\\MCP\\Domain\\Prompts\\McpPromptBuilder' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Prompts/McpPromptBuilder.php',
@@ -2102,6 +2112,7 @@ class ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a
         'WP\\MCP\\Domain\\Tools\\McpTool' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Tools/McpTool.php',
         'WP\\MCP\\Domain\\Tools\\McpToolValidator' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Tools/McpToolValidator.php',
         'WP\\MCP\\Domain\\Tools\\RegisterAbilityAsMcpTool' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Domain/Tools/RegisterAbilityAsMcpTool.php',
+        'WP\\MCP\\Handlers\\HandlerHelperTrait' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/HandlerHelperTrait.php',
         'WP\\MCP\\Handlers\\Initialize\\InitializeHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/Initialize/InitializeHandler.php',
         'WP\\MCP\\Handlers\\Prompts\\PromptsHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/Prompts/PromptsHandler.php',
         'WP\\MCP\\Handlers\\Resources\\ResourcesHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Handlers/Resources/ResourcesHandler.php',
@@ -2111,26 +2122,33 @@ class ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a
         'WP\\MCP\\Infrastructure\\ErrorHandling\\ErrorLogMcpErrorHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/ErrorHandling/ErrorLogMcpErrorHandler.php',
         'WP\\MCP\\Infrastructure\\ErrorHandling\\McpErrorFactory' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/ErrorHandling/McpErrorFactory.php',
         'WP\\MCP\\Infrastructure\\ErrorHandling\\NullMcpErrorHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/ErrorHandling/NullMcpErrorHandler.php',
+        'WP\\MCP\\Infrastructure\\Observability\\ConsoleObservabilityHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/ConsoleObservabilityHandler.php',
         'WP\\MCP\\Infrastructure\\Observability\\Contracts\\McpObservabilityHandlerInterface' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/Contracts/McpObservabilityHandlerInterface.php',
         'WP\\MCP\\Infrastructure\\Observability\\ErrorLogMcpObservabilityHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/ErrorLogMcpObservabilityHandler.php',
         'WP\\MCP\\Infrastructure\\Observability\\McpObservabilityHelperTrait' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/McpObservabilityHelperTrait.php',
         'WP\\MCP\\Infrastructure\\Observability\\NullMcpObservabilityHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Infrastructure/Observability/NullMcpObservabilityHandler.php',
         'WP\\MCP\\Plugin' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Plugin.php',
+        'WP\\MCP\\Servers\\DefaultServerFactory' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Servers/DefaultServerFactory.php',
+        'WP\\MCP\\Transport\\Contracts\\McpRestTransportInterface' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Contracts/McpRestTransportInterface.php',
         'WP\\MCP\\Transport\\Contracts\\McpTransportInterface' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Contracts/McpTransportInterface.php',
-        'WP\\MCP\\Transport\\Http\\RestTransport' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Http/RestTransport.php',
-        'WP\\MCP\\Transport\\Http\\StreamableTransport' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Http/StreamableTransport.php',
-        'WP\\MCP\\Transport\\Infrastructure\\McpRequestRouter' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/McpRequestRouter.php',
+        'WP\\MCP\\Transport\\HttpTransport' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/HttpTransport.php',
+        'WP\\MCP\\Transport\\Infrastructure\\HttpRequestContext' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/HttpRequestContext.php',
+        'WP\\MCP\\Transport\\Infrastructure\\HttpRequestHandler' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/HttpRequestHandler.php',
+        'WP\\MCP\\Transport\\Infrastructure\\HttpSessionValidator' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/HttpSessionValidator.php',
+        'WP\\MCP\\Transport\\Infrastructure\\JsonRpcResponseBuilder' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/JsonRpcResponseBuilder.php',
         'WP\\MCP\\Transport\\Infrastructure\\McpTransportContext' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/McpTransportContext.php',
         'WP\\MCP\\Transport\\Infrastructure\\McpTransportHelperTrait' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/McpTransportHelperTrait.php',
+        'WP\\MCP\\Transport\\Infrastructure\\RequestRouter' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/RequestRouter.php',
+        'WP\\MCP\\Transport\\Infrastructure\\SessionManager' => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes/Transport/Infrastructure/SessionManager.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit3aa316fbb8a87613846bb8dd45006c5a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc433f2e0744104f73ad290380d910d2d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc433f2e0744104f73ad290380d910d2d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitc433f2e0744104f73ad290380d910d2d::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitc433f2e0744104f73ad290380d910d2d::$classMap;
 
         }, null, ClassLoader::class);
     }

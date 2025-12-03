@@ -55,7 +55,7 @@
 			.components-toggle-control {
 				margin-bottom: 16px;
 
-				@media screen and ( min-width: 744px ) {
+				@media screen and (min-width: 744px) {
 					margin-bottom: 0;
 					margin-right: 16px;
 				}
@@ -75,10 +75,6 @@
 
 		code {
 			padding: 0 4px;
-		}
-
-		& + & {
-			margin-top: -16px;
 		}
 
 		&.mv0 {
@@ -122,7 +118,7 @@
 			.components-toggle-control {
 				margin-bottom: 16px;
 
-				@media screen and ( min-width: 744px ) {
+				@media screen and (min-width: 744px) {
 					margin-bottom: 0;
 					margin-right: 16px;
 				}
@@ -132,7 +128,7 @@
 		.newspack-action-card__region-left {
 			margin-bottom: 16px;
 
-			@media screen and ( min-width: 744px ) {
+			@media screen and (min-width: 744px) {
 				margin-bottom: 0;
 				margin-right: 16px;
 			}
@@ -252,7 +248,7 @@
 		padding: 24px;
 		display: block;
 
-		@media screen and ( min-width: 744px ) {
+		@media screen and (min-width: 744px) {
 			display: flex;
 		}
 
@@ -261,9 +257,19 @@
 			margin-bottom: 24px;
 			margin-top: 0;
 
-			@media screen and ( min-width: 744px ) {
+			@media screen and (min-width: 744px) {
 				margin-bottom: 0;
 				margin-right: 24px;
+
+				&.is-toggle-trailing {
+					margin-left: 24px;
+					margin-right: 0;
+					order: 999;
+				}
+			}
+
+			label {
+				display: none;
 			}
 
 			.components-base-control__field {
@@ -308,7 +314,7 @@
 	.newspack-action-card__region-left {
 		margin-bottom: 24px;
 
-		@media screen and ( min-width: 744px ) {
+		@media screen and (min-width: 744px) {
 			margin-bottom: 0;
 			margin-right: 24px;
 		}
@@ -335,7 +341,7 @@
 		margin-top: 24px;
 		text-align: right;
 
-		@media screen and ( min-width: 744px ) {
+		@media screen and (min-width: 744px) {
 			align-items: flex-end;
 			flex-direction: column;
 			margin-left: 24px;
@@ -557,7 +563,6 @@
 		}
 
 		.newspack-action-card__region-top {
-			flex: 1 1 auto;
 			padding: 8px 16px 8px 0 !important;
 			flex: 1;
 		}

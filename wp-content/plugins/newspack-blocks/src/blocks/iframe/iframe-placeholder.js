@@ -37,17 +37,7 @@ const InsertFromURLPopover = ( { src, onChange, onSubmit, onClose } ) => (
 	</URLPopover>
 );
 
-const IframePlaceholder = ( {
-	icon,
-	label,
-	src,
-	onSelectURL,
-	onSelectMedia,
-	isUploadingArchive,
-	archiveFolder,
-	uploadIframeArchive,
-	error,
-} ) => {
+const IframePlaceholder = ( { icon, label, src, onSelectURL, onSelectMedia, isUploadingArchive, archiveFolder, uploadIframeArchive, error } ) => {
 	const [ isURLInputVisible, setIsURLInputVisible ] = useState( false );
 	const [ urlFieldValue, setUrlFieldValue ] = useState( src );
 
@@ -105,15 +95,8 @@ const IframePlaceholder = ( {
 		return (
 			onSelectURL && (
 				<div className="wp-block-newspack-blocks-iframe__url-input-container">
-					<Button
-						isTertiary
-						onClick={ openURLInput }
-						isPressed={ isURLInputVisible }
-						variant="tertiary"
-					>
-						{ isUpdate
-							? __( 'Update from URL', 'newspack-blocks' )
-							: __( 'Embed from URL', 'newspack-blocks' ) }
+					<Button isTertiary onClick={ openURLInput } isPressed={ isURLInputVisible } variant="tertiary">
+						{ isUpdate ? __( 'Update from URL', 'newspack-blocks' ) : __( 'Embed from URL', 'newspack-blocks' ) }
 					</Button>
 					{ isURLInputVisible && (
 						<InsertFromURLPopover
@@ -135,23 +118,14 @@ const IframePlaceholder = ( {
 			className="wp-block-newspack-blocks-iframe"
 			instructions={ sprintf(
 				// Translators: %s: describes what kinds of files/embeds the current user can use.
-				__(
-					'Upload a document file (PDF, Word, Excel sheet, or a PPT), choose one from the media library, %s.',
-					'newspack-blocks'
-				),
+				__( 'Upload a document file (PDF, Word, Excel sheet, or a PPT), choose one from the media library, %s.', 'newspack-blocks' ),
 				newspack_blocks_data?.iframe_can_upload_archives || false
-					? __(
-						'embed from a URL, or upload a .zip archive containing HTML assets',
-						'newspack-blocks'
-					) : __( 'or embed from a URL', 'newspack-blocks' )
+					? __( 'embed from a URL, or upload a .zip archive containing HTML assets', 'newspack-blocks' )
+					: __( 'or embed from a URL', 'newspack-blocks' )
 			) }
 		>
 			{ error && (
-				<Notice
-					status="error"
-					className="wp-block-newspack-blocks-iframe-notice"
-					isDismissible={ false }
-				>
+				<Notice status="error" className="wp-block-newspack-blocks-iframe-notice" isDismissible={ false }>
 					{ error }
 				</Notice>
 			) }
@@ -176,9 +150,7 @@ const IframePlaceholder = ( {
 									) }
 									onClick={ openFileDialog }
 								>
-									{ archiveFolder
-										? __( 'Update', 'newspack-blocks' )
-										: __( 'Upload', 'newspack-blocks' ) }
+									{ archiveFolder ? __( 'Update', 'newspack-blocks' ) : __( 'Upload', 'newspack-blocks' ) }
 								</Button>
 								{ renderMediaLibraryButton( onSelectImage ) }
 								{ renderUrlSelectionUI( '' !== archiveFolder ) }

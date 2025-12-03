@@ -1,3 +1,10 @@
+# [3.10.0](https://github.com/Automattic/newspack-ads/compare/v3.9.2...v3.10.0) (2025-11-24)
+
+
+### Features
+
+* Merge pull request [#1001](https://github.com/Automattic/newspack-ads/issues/1001) from Automattic/trunk ([3af6ff9](https://github.com/Automattic/newspack-ads/commit/3af6ff9f21b8c13165e0235059329e1b486bcc75))
+
 ## [3.9.2](https://github.com/Automattic/newspack-ads/compare/v3.9.1...v3.9.2) (2025-10-30)
 
 

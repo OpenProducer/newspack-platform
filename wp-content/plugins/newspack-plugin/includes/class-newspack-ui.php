@@ -27,11 +27,14 @@ class Newspack_UI {
 	 */
 	public static function init() {
 		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
+		\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
 		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_assets' ] );
 		\add_filter( 'the_content', [ __CLASS__, 'load_demo' ] );
+		\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'theme_colors_css' ] );
 		// Only run if the site is using a block theme.
 		if ( wp_theme_has_theme_json() ) {
 			\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'colors_css_wrap' ] );
+			\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'colors_css_wrap' ] );
 		}
 		add_action( 'wp_footer', [ __CLASS__, 'print_notices' ], 100 );
 
@@ -144,6 +147,29 @@ class Newspack_UI {
 		 */
 		do_action( 'newspack_ui_notice_dismissed', $notice_id );
 		wp_send_json_success( 'Notice dismissed' );
+	}
+
+	/**
+	 * Adds inline styles CSS for the theme colors.
+	 */
+	public static function theme_colors_css() {
+		if ( ! function_exists( 'newspack_get_colors' ) || ! function_exists( 'newspack_color_with_contrast' ) ) {
+			return;
+		}
+		$colors = newspack_get_colors();
+		$custom_css = ':root {';
+		$custom_css .= '--newspack-theme-color-primary: ' . esc_attr( $colors['primary'] ) . ';';
+		$custom_css .= '--newspack-theme-color-primary-variation: ' . esc_attr( newspack_adjust_brightness( $colors['primary'], -30 ) ) . ';';
+		$custom_css .= '--newspack-theme-color-secondary: ' . esc_attr( $colors['secondary'] ) . ' !important;';
+		$custom_css .= '--newspack-theme-color-secondary-variation: ' . esc_attr( newspack_adjust_brightness( $colors['secondary'], -40 ) ) . ';';
+		$custom_css .= '--newspack-theme-color-primary-against-white: ' . esc_attr( newspack_color_with_contrast( $colors['primary'] ) ) . ';';
+		$custom_css .= '--newspack-theme-color-secondary-against-white: ' . esc_attr( newspack_color_with_contrast( $colors['secondary'] ) ) . ';';
+		$custom_css .= '--newspack-theme-color-primary-variation-against-white: ' . esc_attr( newspack_color_with_contrast( newspack_adjust_brightness( $colors['primary'], -30 ) ) ) . ';';
+		$custom_css .= '--newspack-theme-color-secondary-variation-against-white: ' . esc_attr( newspack_color_with_contrast( newspack_adjust_brightness( $colors['secondary'], -40 ) ) ) . ';';
+		$custom_css .= '--newspack-theme-color-against-primary: ' . esc_attr( $colors['primary_contrast'] ) . ';';
+		$custom_css .= '--newspack-theme-color-against-secondary: ' . esc_attr( $colors['secondary_contrast'] ) . ';';
+		$custom_css .= '}';
+		wp_add_inline_style( 'newspack-ui', $custom_css );
 	}
 
 	/**
@@ -364,7 +390,7 @@ class Newspack_UI {
 
 			<div class="newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
 				<span class="newspack-ui__icon newspack-ui__icon--success">
-					<?php \Newspack\Newspack_UI_Icons::print_svg( 'check' ); ?>
+					<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				</span>
 				<p>
 					<strong>Success box style, plus icon + <code>newspack-ui__box--text-center</code> class.</strong>
@@ -374,7 +400,7 @@ class Newspack_UI {
 
 			<div class="newspack-ui__box newspack-ui__box--warning newspack-ui__box--text-center">
 				<span class="newspack-ui__icon newspack-ui__icon--warning">
-					<?php \Newspack\Newspack_UI_Icons::print_svg( 'check' ); ?>
+					<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				</span>
 				<p>
 					<strong>Warning box style, plus icon + <code>newspack-ui__box--text-center</code> class.</strong>
@@ -384,7 +410,7 @@ class Newspack_UI {
 
 			<div class="newspack-ui__box newspack-ui__box--error newspack-ui__box--text-center">
 				<span class="newspack-ui__icon newspack-ui__icon--error">
-					<?php \Newspack\Newspack_UI_Icons::print_svg( 'check' ); ?>
+					<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				</span>
 				<p>
 					<strong>Error box style, plus icon + <code>newspack-ui__box--text-center</code> class.</strong>
@@ -396,7 +422,7 @@ class Newspack_UI {
 				<p>Box<br />with "more"-style dropdown menu</p>
 				<div class="newspack-ui__dropdown">
 					<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
-						<?php \Newspack\Newspack_UI_Icons::print_svg( 'more' ); ?>
+						<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
 						<span class="screen-reader-text">More</span>
 					</button>
 					<div class="newspack-ui__dropdown__content">
@@ -416,7 +442,7 @@ class Newspack_UI {
 					<span class="newspack-ui__badge newspack-ui__badge--primary">Badge</span>
 					<div class="newspack-ui__dropdown">
 						<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'more' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
 							<span class="screen-reader-text">More</span>
 						</button>
 						<div class="newspack-ui__dropdown__content">
@@ -460,28 +486,28 @@ class Newspack_UI {
 			</div>
 
 			<div class="newspack-ui__notice">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'info' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'info' ); ?>
 				<div>
 					<p>Default notice with icon style</p>
 				</div>
 			</div>
 
 			<div class="newspack-ui__notice newspack-ui__notice--success">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'check' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				<div>
 					<p>"Success" notice with icon style</p>
 				</div>
 			</div>
 
 			<div class="newspack-ui__notice newspack-ui__notice--warning">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'info' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'info' ); ?>
 				<div>
 					<p>"Warning" notice with icon style</p>
 				</div>
 			</div>
 
 			<div class="newspack-ui__notice newspack-ui__notice--error">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'error' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'error' ); ?>
 				<div>
 					<p>"Error" notice with icon style</p>
 				</div>
@@ -709,7 +735,7 @@ class Newspack_UI {
 			<button class="newspack-ui__button newspack-ui__button--destructive newspack-ui__button--ghost">Destructive Ghost Button</button><br>
 			<button class="newspack-ui__button newspack-ui__button--destructive newspack-ui__button--ghost" disabled>Destructive Ghost Button Disabled</button><br>
 			<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--google-oauth">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'google' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'google' ); ?>
 				<span>
 					Sign in with Google
 				</span>
@@ -721,7 +747,7 @@ class Newspack_UI {
 			<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--wide">Secondary Button</button>
 			<button class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--wide">Ghost Button</button>
 			<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--wide">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'google' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'google' ); ?>
 				<span>
 					Sign up with Google
 				</span>
@@ -731,7 +757,7 @@ class Newspack_UI {
 			<div class="newspack-ui__dropdown">
 				<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__dropdown__toggle">
 					<span>More</span>
-					<?php \Newspack\Newspack_UI_Icons::print_svg( 'more' ); ?>
+					<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
 				</button>
 				<div class="newspack-ui__dropdown__content">
 					<ul>
@@ -746,7 +772,7 @@ class Newspack_UI {
 			<div class="newspack-ui__dropdown">
 				<button class="newspack-ui__button newspack-ui__button--outline newspack-ui__button--small newspack-ui__dropdown__toggle">
 					<span>Actions</span>
-					<?php \Newspack\Newspack_UI_Icons::print_svg( 'arrowRight' ); ?>
+					<?php Newspack_UI_Icons::print_svg( 'arrowRight' ); ?>
 				</button>
 				<div class="newspack-ui__dropdown__content">
 					<ul>
@@ -764,29 +790,29 @@ class Newspack_UI {
 
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--x-small">X-Small Button</button><br />
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--x-small">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'account' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'account' ); ?>
 				X-Small Button
 			</button><br />
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--x-small">
 				X-Small Button
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'account' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'account' ); ?>
 			</button><br />
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--small">Small Button</button><br />
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--small">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'account' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'account' ); ?>
 				Small Button
 			</button><br />
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--small">
 				Small Button
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'account' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'account' ); ?>
 			</button><br />
 			<button class="newspack-ui__button newspack-ui__button--primary">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'account' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'account' ); ?>
 				Medium Button (default)
 			</button><br />
 			<button class="newspack-ui__button newspack-ui__button--primary">
 				Medium Button (default)
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'account' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'account' ); ?>
 			</button>
 
 			<hr>
@@ -868,43 +894,43 @@ class Newspack_UI {
 
 			<p>Uses the same classes as the <code>newspack-ui__button</code> but we add an extra class to it <code>newspack-ui__button--icon</code></p>
 			<button class="newspack-ui__button newspack-ui__button--icon">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--icon">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 			<button class="newspack-ui__button newspack-ui__button--accent newspack-ui__button--icon">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 			<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--icon">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 			<button class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--icon">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 			<button class="newspack-ui__button newspack-ui__button--outline newspack-ui__button--icon">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 			<button class="newspack-ui__button newspack-ui__button--destructive newspack-ui__button--icon">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 
 			<p>Uses the <code>newspack-ui__button--small</code> and <code>newspack-ui__button--medium</code> CSS classes to get different sizes (x-small is the default).</p>
 
 			<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--small">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 
 			<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--medium">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'menu' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Open Menu', 'newspack-plugin' ); ?></span>
 			</button>
 
@@ -919,7 +945,7 @@ class Newspack_UI {
 						<h2>This is a header</h2>
 						<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 						</button>
 					</header>
 
@@ -942,14 +968,14 @@ class Newspack_UI {
 
 						<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 						</button>
 					</header>
 
 					<section class="newspack-ui__modal__content">
 
 						<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--google-oauth newspack-ui__button--wide">
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'google' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'google' ); ?>
 							Sign in with Google
 						</button>
 
@@ -981,7 +1007,7 @@ class Newspack_UI {
 
 						<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 						</button>
 					</header>
 
@@ -1016,7 +1042,7 @@ class Newspack_UI {
 
 						<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 						</button>
 					</header>
 
@@ -1024,7 +1050,7 @@ class Newspack_UI {
 
 						<div class="newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
 							<span class="newspack-ui__icon newspack-ui__icon--success">
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'check' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 							</span>
 
 							<p>
@@ -1048,7 +1074,7 @@ class Newspack_UI {
 
 						<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 						</button>
 					</header>
 
@@ -1056,7 +1082,7 @@ class Newspack_UI {
 
 						<div class="newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
 							<span class="newspack-ui__icon newspack-ui__icon--success">
-								<?php \Newspack\Newspack_UI_Icons::print_svg( 'check' ); ?>
+								<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 							</span>
 
 							<p>
@@ -1096,7 +1122,7 @@ class Newspack_UI {
 
 						<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 						</button>
 					</header>
 
@@ -1133,7 +1159,7 @@ class Newspack_UI {
 
 						<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 						</button>
 					</header>
 
@@ -1187,14 +1213,14 @@ class Newspack_UI {
 
 							<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 								<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-								<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+								<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 							</button>
 						</header>
 
 						<section class="newspack-ui__modal__content">
 
 							<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__button--google-oauth newspack-ui__button--wide">
-								<?php \Newspack\Newspack_UI_Icons::print_svg( 'google', 20 ); ?>
+								<?php Newspack_UI_Icons::print_svg( 'google', 20 ); ?>
 								Sign in with Google
 							</button>
 

@@ -25,12 +25,13 @@ class Accessibility_Statement_Page {
 	/**
 	 * Create an accessibility statement page.
 	 *
+	 * @param bool $force_create Whether to force creation of a new page even if theme_mod exists.
 	 * @return array|null|WP_Error The created page data, null if it has been trashed or deleted, or error.
 	 */
-	public static function create_page() {
+	public static function create_page( $force_create = false ) {
 		// Check if page ID is stored in theme_mods.
 		$page_id = get_theme_mod( 'accessibility_statement_page_id' );
-		if ( $page_id ) {
+		if ( $page_id && ! $force_create ) {
 			$page = get_post( $page_id );
 			// Check if page exists and is either published or draft.
 			if ( $page && 'page' === $page->post_type && in_array( get_post_status( $page->ID ), [ 'publish', 'draft' ] ) ) {
@@ -97,8 +98,7 @@ class Accessibility_Statement_Page {
 
 		$page = get_post( $page_id );
 		if ( ! $page || 'page' !== $page->post_type || 'trash' === get_post_status( $page->ID ) ) {
-			// If page doesn't exist, isn't a page, or is in trash, clear the stored ID.
-			remove_theme_mod( 'accessibility_statement_page_id' );
+			// If page doesn't exist, isn't a page, or is in trash, return false but keep theme_mod.
 			return false;
 		}
 
@@ -139,10 +139,12 @@ class Accessibility_Statement_Page {
 	/**
 	 * API callback for creating accessibility statement page.
 	 *
+	 * @param WP_REST_Request $request The request object.
 	 * @return WP_REST_Response|WP_Error Response object.
 	 */
-	public static function api_create_page() {
-		$result = self::create_page();
+	public static function api_create_page( $request ) {
+		$force_create = $request->get_param( 'force_create' ) === 'true';
+		$result = self::create_page( $force_create );
 		if ( is_wp_error( $result ) ) {
 			return $result;
 		}

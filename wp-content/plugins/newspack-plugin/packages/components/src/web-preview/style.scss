@@ -14,7 +14,7 @@
 	--wp-admin-theme-color-darker-20: #{colors.$primary-800};
 	--wp-admin-theme-color-darker-20--rgb: #{colors.$primary-800--rgb};
 
-	background: #{colors.$neutral-700};
+	background: colors.$neutral-700;
 	box-sizing: border-box;
 	height: 100%;
 	left: 0;
@@ -27,11 +27,11 @@
 	z-index: 99999;
 
 	&.phone iframe {
-		max-width: 380px;
+		max-width: 360px;
 	}
 
 	&.tablet iframe {
-		max-width: 768px;
+		max-width: 780px;
 	}
 
 	&.is-loaded iframe {
@@ -46,7 +46,7 @@
 		animation: appear-animation 125ms ease-in-out;
 		animation-fill-mode: forwards;
 		background: white;
-		border-radius: 2px;
+		border-radius: 8px;
 		overflow: hidden;
 		height: 100%;
 		width: 100%;
@@ -54,19 +54,18 @@
 
 	&__content {
 		background: wp-colors.$gray-100;
-		height: calc(100% - 49px);
+		height: calc(100% - 72px);
 		-webkit-overflow-scrolling: touch;
 		overflow-x: hidden;
 		width: 100%;
 
 		iframe {
-			background: #fff;
+			background: white;
 			display: block;
 			height: 100%;
 			margin: 0 auto;
 			max-width: 100%;
 			opacity: 0;
-			outline: 1px solid wp-colors.$gray-300;
 			padding: 0;
 			pointer-events: all;
 			transition: max-width 125ms ease-in-out, opacity 250ms ease-in-out;
@@ -85,62 +84,23 @@
 	}
 
 	&__toolbar {
+		align-items: center;
 		border-bottom: 1px solid wp-colors.$gray-300;
 		display: flex;
-		padding: 6px;
+		justify-content: space-between;
+		height: 72px;
+		padding: 0 24px;
 
 		&-left {
-			flex: 0 0 auto;
-
-			.newspack-button-group {
-				display: flex;
-				margin: 0;
-			}
-
-			.newspack-button {
-				display: none;
-				padding: 0 !important;
-
-				&.is-selected {
-					background: var(--wp-admin-theme-color);
-					color: white;
-
-					&:active,
-					&:focus,
-					&:hover {
-						box-shadow: none !important;
-						color: white;
-						outline: none;
-					}
-
-					&:focus {
-						box-shadow: inset 0 0 0 1px var(--wp-admin-theme-color), inset 0 0 0 3px white !important;
-					}
-				}
-
-				@media screen and ( min-width: 528px ) {
-					&.is-phone,
-					&.is-tablet {
-						display: flex;
-					}
-				}
-
-				@media screen and ( min-width: 816px ) {
-					&.is-desktop {
-						display: flex;
-					}
-				}
-			}
+			display: flex;
 		}
 
 		&-right {
-			display: flex;
-			flex: 1;
-			justify-content: flex-end;
-		}
-
-		.newspack-button {
-			border-radius: 0 !important;
+			display: grid;
+			gap: 8px;
+			grid-template-columns: repeat(2, 1fr);
+			justify-self: end;
+			margin-left: auto;
 		}
 	}
 }

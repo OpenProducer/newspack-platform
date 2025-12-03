@@ -99,7 +99,11 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 	public static function render( $attributes ) {
 		$configuration             = self::get_configuration( $attributes );
 		$displayed_frequencies     = array_keys( $configuration['frequencies'] );
-		$intial_selected_frequency = $displayed_frequencies[0];
+		if ( isset( $attributes['defaultFrequency'] ) && in_array( $attributes['defaultFrequency'], $displayed_frequencies, true ) ) {
+			$intial_selected_frequency = $attributes['defaultFrequency'];
+		} else {
+			$intial_selected_frequency = $displayed_frequencies[0];
+		}
 
 		$displayed_amounts          = self::get_displayed_amounts( $configuration['amounts'][ $intial_selected_frequency ] );
 		$config_related_attributes  = array_map(

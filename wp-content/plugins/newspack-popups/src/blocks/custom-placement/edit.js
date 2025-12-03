@@ -42,10 +42,7 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 			setPrompts( response );
 			setLoading( false );
 		} catch ( e ) {
-			setError(
-				e.message ||
-					__( 'There was an error fetching prompts for this custom placement.', 'newspack-popups' )
-			);
+			setError( e.message || __( 'There was an error fetching prompts for this custom placement.', 'newspack-popups' ) );
 			setLoading( false );
 		}
 	};
@@ -86,9 +83,7 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 			<SelectControl
 				id="newspack-popups__custom-placement-select"
 				onChange={ _customPlacement => setAttributes( { customPlacement: _customPlacement } ) }
-				value={
-					-1 < Object.keys( customPlacements ).indexOf( customPlacement ) ? customPlacement : ''
-				}
+				value={ -1 < Object.keys( customPlacements ).indexOf( customPlacement ) ? customPlacement : '' }
 				options={ customPlacementOptions }
 			/>
 
@@ -113,7 +108,7 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 						<>
 							<p>
 								{ sprintf(
-									// Translators: Max. number of popups displayed; plural modifier.
+									// translators: %1$s: max number of popups displayed. %2$s: plural modifier.
 									__(
 										'This custom placement will display at most %1$sthe following active prompt%2$s, depending on the reader’s top-priority segment:',
 										'newspack-popups'
@@ -132,17 +127,17 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 													href={ `/wp-admin/admin.php?page=newspack-audience-campaigns#/campaigns/${ segmentId }` }
 												>
 													{ sprintf(
-														// Translators: Segment name.
+														// translators: %s: segment name.
 														__( 'Segment: %s', 'newspack-popups' ),
 														segmentName
 													) }
 												</ExternalLink>
 											) : (
 												[
-													'Everyone' !== segmentName ? __( 'Segment: ', 'newspack-popups' ) : '',
+													'Everyone' !== segmentName ? __( 'Segment:', 'newspack-popups' ) : '',
 													segmentName || '',
 													'Everyone' === segmentName && 1 < Object.keys( segments ).length
-														? __( ' else', 'newspack-popups' )
+														? __( 'else', 'newspack-popups' )
 														: '',
 												]
 											) }
@@ -150,9 +145,7 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 										<ul>
 											{ segments[ segmentName ].prompts.map( prompt => (
 												<li key={ prompt.id }>
-													<ExternalLink
-														href={ `/wp-admin/post.php?post=${ prompt.id }&action=edit` }
-													>
+													<ExternalLink href={ `/wp-admin/post.php?post=${ prompt.id }&action=edit` }>
 														{ prompt.title }
 													</ExternalLink>
 												</li>

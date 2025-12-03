@@ -104,22 +104,12 @@ class Edit extends Component {
 		}
 
 		if ( error.length ) {
-			return (
-				<Placeholder
-					icon="warning"
-					label={ __( 'Error', 'newspack-blocks' ) }
-					instructions={ error }
-				/>
-			);
+			return <Placeholder icon="warning" label={ __( 'Error', 'newspack-blocks' ) } instructions={ error } />;
 		}
 
 		if ( ! embed.length ) {
 			return (
-				<Placeholder
-					icon="warning"
-					label={ __( 'Error', 'newspack-blocks' ) }
-					instructions={ __( 'No videos found', 'newspack-blocks' ) }
-				/>
+				<Placeholder icon="warning" label={ __( 'Error', 'newspack-blocks' ) } instructions={ __( 'No videos found', 'newspack-blocks' ) } />
 			);
 		}
 
@@ -179,16 +169,21 @@ class Edit extends Component {
 		const Warning = () => (
 			<>
 				<h2>{ __( 'The YouTube Video Playlist block is deprecated', 'newspack-plugin' ) }</h2>
-				<p dangerouslySetInnerHTML={ {
-					__html: sprintf(
-						// translators: %1$s is the link to Google's help doc on creating YouTube playlists. %2$s is the link to the help doc on embedding playlists.
-						__( 'Consider using <a href="%1$s">YouTube Playlists</a> instead, which can be <a href="%2$s">embedded</a> into post or page content.', 'newspack-blocks' ),
-						'https://support.google.com/youtube/answer/57792',
-						'https://support.google.com/youtube/answer/171780'
-					),
-				} } />
+				<p
+					dangerouslySetInnerHTML={ {
+						__html: sprintf(
+							// translators: %1$s is the link to Google's help doc on creating YouTube playlists. %2$s is the link to the help doc on embedding playlists.
+							__(
+								'Consider using <a href="%1$s">YouTube Playlists</a> instead, which can be <a href="%2$s">embedded</a> into post or page content.',
+								'newspack-blocks'
+							),
+							'https://support.google.com/youtube/answer/57792',
+							'https://support.google.com/youtube/answer/171780'
+						),
+					} }
+				/>
 			</>
-		)
+		);
 
 		return (
 			<Fragment>

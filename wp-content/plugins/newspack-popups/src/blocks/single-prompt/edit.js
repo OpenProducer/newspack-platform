@@ -36,11 +36,8 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 			if ( 0 === response.length ) {
 				setError(
 					sprintf(
-						// Translators: An id of a popup.
-						__(
-							'No active prompts found with ID %s. Try choosing another prompt.',
-							'newspack-popups'
-						),
+						// translators: %s: an id of a popup.
+						__( 'No active prompts found with ID %s. Try choosing another prompt.', 'newspack-popups' ),
 						promptId
 					)
 				);
@@ -53,7 +50,7 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 			setError(
 				e.message ||
 					sprintf(
-						// Translators: An id of a popup.
+						// translators: %s: an id of a popup.
 						__( 'There was an error fetching prompt with ID %s.', 'newspack-popups' ),
 						promptId
 					)
@@ -73,14 +70,9 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 			<div className="newspack-popups__single-prompt">
 				<h4 className="newspack-popups__single-prompt-title">
 					{ prompt.title || __( '(no title)', 'newspack-popups' ) }{ ' ' }
-					<ExternalLink href={ `/wp-admin/post.php?post=${ promptId }&action=edit` }>
-						{ __( 'edit', 'newspack-popups' ) }
-					</ExternalLink>
+					<ExternalLink href={ `/wp-admin/post.php?post=${ promptId }&action=edit` }>{ __( 'edit', 'newspack-popups' ) }</ExternalLink>
 				</h4>
-				<div
-					className="newspack-popup newspack-inline-popup"
-					dangerouslySetInnerHTML={ { __html: prompt.content } }
-				/>
+				<div className="newspack-popup newspack-inline-popup" dangerouslySetInnerHTML={ { __html: prompt.content } } />
 				<Button
 					isSecondary
 					onClick={ () => {
@@ -95,15 +87,11 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 	}
 
 	return (
-		<Placeholder
-			className="newspack-popups__single-prompt-placeholder"
-			label={ __( 'Single Prompt', 'newspack-popups' ) }
-			icon={ megaphone }
-		>
+		<Placeholder className="newspack-popups__single-prompt-placeholder" label={ __( 'Single Prompt', 'newspack-popups' ) } icon={ megaphone }>
 			{ loading && (
 				<div className="is-loading">
 					{ sprintf(
-						// Translators: An id of a popup.
+						// translators: %s: an id of a popup.
 						__( 'Loading prompt with ID %s…', 'newspack-popups' ),
 						promptId
 					) }
@@ -120,10 +108,7 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 			{ ! prompt && ! loading && (
 				<AutocompleteWithSuggestions
 					label={ __( 'Search for an inline or manual-only prompt:', 'newspack' ) }
-					help={ __(
-						'Begin typing prompt title, click autocomplete result to select.',
-						'newspack'
-					) }
+					help={ __( 'Begin typing prompt title, click autocomplete result to select.', 'newspack' ) }
 					fetchSavedPosts={ async postIDs => {
 						const posts = await apiFetch( {
 							path: addQueryArgs( endpoint, {

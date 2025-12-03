@@ -28,11 +28,7 @@ const OrderPopover = ( { disabled = false, isDraft, onEdit, onArchive, gamLink }
 				tooltipPosition="bottom center"
 			/>
 			{ ! disabled && isVisible && (
-				<Popover
-					position="bottom left"
-					onFocusOutside={ toggleVisible }
-					onKeyDown={ event => ESCAPE === event.keyCode && toggleVisible }
-				>
+				<Popover position="bottom left" onFocusOutside={ toggleVisible } onKeyDown={ event => ESCAPE === event.keyCode && toggleVisible }>
 					<MenuItem onClick={ toggleVisible } className="screen-reader-text">
 						{ __( 'Close Popover', 'newspack-ads' ) }
 					</MenuItem>

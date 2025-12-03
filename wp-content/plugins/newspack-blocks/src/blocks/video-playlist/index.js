@@ -26,14 +26,10 @@ export const settings = {
 	title,
 	icon: {
 		src: icon,
-		foreground: colors['primary-400'],
+		foreground: colors[ 'primary-400' ],
 	},
 	category: 'newspack',
-	keywords: [
-		__( 'video', 'newspack-blocks' ),
-		__( 'playlist', 'newspack-blocks' ),
-		__( 'youtube', 'newspack-blocks' ),
-	],
+	keywords: [ __( 'video', 'newspack-blocks' ), __( 'playlist', 'newspack-blocks' ), __( 'youtube', 'newspack-blocks' ) ],
 	description: __( 'Embed a playlist of latest YouTube videos.', 'newspack-blocks' ),
 	attributes: {
 		className: {

@@ -74,7 +74,9 @@ export const PostTypesPanel = ( { attributes, setAttributes } ) => {
 export const PostStatusesPanel = ( { attributes, setAttributes } ) => {
 	return (
 		<PanelBody title={ __( 'Additional Post Statuses', 'newspack-blocks' ) } initialOpen={ false }>
-			<BaseControl help={ __( 'Selection here has effect only for editors, regular users will only see published posts.', 'newspack-blocks' ) } />
+			<BaseControl
+				help={ __( 'Selection here has effect only for editors, regular users will only see published posts.', 'newspack-blocks' ) }
+			/>
 			<CheckboxesGroup
 				values={ attributes.includedPostStatuses }
 				options={ [

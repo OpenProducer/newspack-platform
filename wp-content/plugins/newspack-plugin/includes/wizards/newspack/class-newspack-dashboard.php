@@ -337,7 +337,11 @@ class Newspack_Dashboard extends Wizard {
 	 * Add a parent menu for Newspack and the first submenu item.
 	 */
 	public function add_page() {
-		$icon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMjIgMTJjMCA1LjUyMy00LjQ3NyAxMC0xMCAxMFMyIDE3LjUyMyAyIDEyIDYuNDc3IDIgMTIgMnMxMCA0LjQ3NyAxMCAxMFptLTUuNDU1IDQuNTQ2LTkuMDktOS4wOTF2OS4wOWgxLjgxOHYtNC42OTdsNC42OTcgNC42OTdoMi41NzVabS01LjE1MS03LjcyOGg1LjE1MlY3LjQ1NUgxMC4wM2wxLjM2NCAxLjM2M1ptNS4xNTIgMi41NzZIMTMuOTdsLTEuMzY0LTEuMzY0aDMuOTR2MS4zNjRabTAgMS4yMTJ2MS4zNjRsLTEuMzY0LTEuMzY0aDEuMzY0WiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PC9zdmc+';
+		$icon = sprintf(
+			'data:image/svg+xml;base64,%s',
+			base64_encode( Newspack_UI_Icons::get_svg( 'newspack' ) )
+		);
+
 		add_menu_page(
 			$this->get_name(),
 			$this->get_name(),

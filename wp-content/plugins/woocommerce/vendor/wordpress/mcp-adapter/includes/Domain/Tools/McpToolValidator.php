@@ -27,10 +27,9 @@ class McpToolValidator {
 	 * @param array  $tool_data The tool data to validate.
 	 * @param string $context Optional context for error messages.
 	 *
-	 * @return void
-	 * @throws \InvalidArgumentException If validation fails.
+	 * @return bool|\WP_Error True if valid, WP_Error if validation fails.
 	 */
-	public static function validate_tool_data( array $tool_data, string $context = '' ): void {
+	public static function validate_tool_data( array $tool_data, string $context = '' ) {
 		$validation_errors = self::get_validation_errors( $tool_data );
 
 		if ( ! empty( $validation_errors ) ) {
@@ -40,8 +39,10 @@ class McpToolValidator {
 				__( 'Tool validation failed: %s', 'mcp-adapter' ),
 				implode( ', ', $validation_errors )
 			);
-			throw new \InvalidArgumentException( esc_html( $error_message ) );
+			return new \WP_Error( 'tool_validation_failed', esc_html( $error_message ) );
 		}
+
+		return true;
 	}
 
 	/**
@@ -50,12 +51,15 @@ class McpToolValidator {
 	 * @param \WP\MCP\Domain\Tools\McpTool $tool The tool instance to validate.
 	 * @param string  $context Optional context for error messages.
 	 *
-	 * @return void
-	 * @throws \InvalidArgumentException If validation fails.
+	 * @return bool|\WP_Error True if valid, WP_Error if validation fails.
 	 */
-	public static function validate_tool_instance( McpTool $tool, string $context = '' ): void {
-		self::validate_tool_uniqueness( $tool, $context );
-		self::validate_tool_data( $tool->to_array(), $context );
+	public static function validate_tool_instance( McpTool $tool, string $context = '' ) {
+		$uniqueness_result = self::validate_tool_uniqueness( $tool, $context );
+		if ( is_wp_error( $uniqueness_result ) ) {
+			return $uniqueness_result;
+		}
+
+		return self::validate_tool_data( $tool->to_array(), $context );
 	}
 
 	/**
@@ -184,13 +188,14 @@ class McpToolValidator {
 				}
 
 				// Each property should have a type (though not strictly required by JSON Schema).
-				if ( ! isset( $property['type'] ) || is_string( $property['type'] ) ) {
+				if ( ! isset( $property['type'] ) || is_string( $property['type'] ) || is_array( $property['type'] ) ) {
 					continue;
 				}
 
+				// If type is neither string nor array, it's invalid.
 				$errors[] = sprintf(
 				/* translators: %1$s: field name, %2$s: property name */
-					__( 'Tool %1$s property \'%2$s\' type must be a string', 'mcp-adapter' ),
+					__( 'Tool %1$s property \'%2$s\' type must be a string or array of strings (union type)', 'mcp-adapter' ),
 					$field_name,
 					$property_name
 				);
@@ -256,11 +261,7 @@ class McpToolValidator {
 		}
 
 		// Only allow letters, numbers, hyphens, and underscores.
-		if ( ! preg_match( '/^[a-zA-Z0-9_-]+$/', $name ) ) {
-			return false;
-		}
-
-		return true;
+		return (bool) preg_match( '/^[a-zA-Z0-9_-]+$/', $name );
 	}
 
 	/**
@@ -269,10 +270,9 @@ class McpToolValidator {
 	 * @param \WP\MCP\Domain\Tools\McpTool $tool The tool instance to validate.
 	 * @param string  $context Optional context for error messages.
 	 *
-	 * @return void
-	 * @throws \InvalidArgumentException If the tool name is not unique.
+	 * @return bool|\WP_Error True if unique, WP_Error if the tool name is not unique.
 	 */
-	public static function validate_tool_uniqueness( McpTool $tool, string $context = '' ): void {
+	public static function validate_tool_uniqueness( McpTool $tool, string $context = '' ) {
 		$this_tool_name = $tool->get_name();
 		$server         = $tool->get_mcp_server();
 		$existing_tool  = $server->get_tool( $this_tool_name );
@@ -286,7 +286,9 @@ class McpToolValidator {
 				$this_tool_name,
 				$server->get_server_id()
 			);
-			throw new \InvalidArgumentException( esc_html( $error_message ) );
+			return new \WP_Error( 'tool_not_unique', esc_html( $error_message ) );
 		}
+
+		return true;
 	}
 }
