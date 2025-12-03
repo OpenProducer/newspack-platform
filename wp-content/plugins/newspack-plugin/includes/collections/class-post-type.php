@@ -51,6 +51,7 @@ class Post_Type {
 			[ 'before_delete_post', [ Sync::class, 'handle_post_deleted' ] ],
 			[ 'wp_trash_post', [ Sync::class, 'handle_post_trashed' ] ],
 			[ 'untrashed_post', [ Sync::class, 'handle_post_untrashed' ] ],
+			[ 'pre_post_update', [ __CLASS__, 'validate_collection_title' ], 10, 2 ],
 		];
 	}
 
@@ -107,11 +108,9 @@ class Post_Type {
 			'item_updated'       => __( 'Collection updated', 'newspack-plugin' ),
 		];
 
-		$svg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5.5 17.0009V18.5009H7.5V17.0009H5.5ZM5.5 20.0009C4.67188 20.0009 4 19.329 4 18.5009V17.0009V16.2509V15.5009V8.50092V7.75092V7.00092V5.50092C4 4.6728 4.67188 4.00092 5.5 4.00092C7.33333 4.00092 9.16667 4.00092 11 4.00092C11.6438 4.00092 12.1906 4.40405 12.4062 4.9728C12.5813 4.78217 12.8094 4.63842 13.075 4.56655L14.9344 4.05092C15.7063 3.83842 16.5 4.3103 16.7063 5.10717L17.2688 7.26967L17.4563 7.99467L19.3875 15.4415L19.575 16.1665L19.9469 17.604C20.1531 18.4009 19.6969 19.2197 18.925 19.4322L17.0625 19.9478C16.2906 20.1603 15.4969 19.6884 15.2906 18.8915L14.7281 16.729L14.5406 16.004L12.6125 8.5603L12.5 8.13217V8.50092V15.5009V16.2509V17.0009V18.5009C12.5 19.329 11.8281 20.0009 11 20.0009C9.08318 20.0009 7.41682 20.0009 5.5 20.0009ZM9 18.5009H11V17.0009H9V18.5009ZM7.5 5.50092H5.5V7.00092H7.5V5.50092ZM7.5 8.50092H5.5V15.5009H7.5V8.50092ZM9 7.00092H11V5.50092H9V7.00092ZM11 15.5009V8.50092H9V15.5009H11ZM17.7531 15.1165L16.0094 8.3978L14.2437 8.8853L15.9875 15.604L17.7531 15.1165ZM16.3656 17.0572L16.7375 18.4853L18.5 17.9978C18.5 17.9947 18.5 17.9915 18.5 17.9884V17.9853L18.1344 16.5728L16.3687 17.0603L16.3656 17.0572ZM13.8687 7.43217L15.6344 6.94467L15.2625 5.51655L13.5 6.00405C13.5 6.00717 13.5 6.0103 13.5 6.01655L13.8656 7.42905L13.8687 7.43217Z" /></svg>';
-
 		$icon = sprintf(
 			'data:image/svg+xml;base64,%s',
-			base64_encode( $svg )
+			base64_encode( \Newspack\Newspack_UI_Icons::get_svg( 'collections' ) )
 		);
 
 		$args = [
@@ -184,6 +183,69 @@ class Post_Type {
 					'panelTitle'      => __( 'Collection Details', 'newspack-plugin' ),
 				]
 			);
+		}
+	}
+
+	/**
+	 * Check if a collection title already exists.
+	 *
+	 * @param string $title     The title to check.
+	 * @param int    $exclude_id Post ID to exclude from the check.
+	 * @return bool True if a collection with this title exists, false otherwise.
+	 */
+	public static function title_exists( $title, $exclude_id = 0 ) {
+		$args = [
+			'post_type'      => self::get_post_type(),
+			'post_status'    => [ 'publish', 'private', 'future', 'pending', 'draft' ],
+			's'              => $title,
+			'posts_per_page' => 100,
+			'fields'         => 'ids',
+		];
+
+		if ( ! empty( $exclude_id ) ) {
+			$args['post__not_in'] = [ $exclude_id ]; // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
+		}
+
+		$posts = get_posts( $args );
+
+		// Check for exact title match.
+		foreach ( $posts as $post_id ) {
+			$post = get_post( $post_id );
+			if ( $post && trim( $post->post_title ) === trim( $title ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Validate collection title to ensure it's unique.
+	 *
+	 * @param int   $post_id The post ID.
+	 * @param array $data Array of unslashed post data.
+	 */
+	public static function validate_collection_title( $post_id, $data ) {
+		// Only validate for collection post type.
+		if ( self::get_post_type() !== $data['post_type'] ) {
+			return $data;
+		}
+
+		// Skip validation for auto-drafts and revisions.
+		if ( 'auto-draft' === $data['post_status'] || ! empty( $data['post_parent'] ) ) {
+			return $data;
+		}
+
+		$title = trim( $data['post_title'] );
+		if ( empty( $title ) ) {
+			return $data;
+		}
+
+		$exclude_id = ! empty( $post_id ) ? $post_id : 0;
+		$title_exists = self::title_exists( $title, $exclude_id );
+
+		if ( $title_exists ) {
+			wp_die( __( 'This collection could not be saved because a collection with the same title already exists. Please choose a different title and try again.', 'newspack-plugin' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 }

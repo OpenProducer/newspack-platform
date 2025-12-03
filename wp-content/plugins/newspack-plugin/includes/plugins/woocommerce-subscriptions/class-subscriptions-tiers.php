@@ -414,6 +414,9 @@ class Subscriptions_Tiers {
 			$price = $product->get_price_html();
 		}
 
+		$should_render_description = ! defined( 'NEWSPACK_DISABLE_SUBSCRIPTION_DESCRIPTION' ) || ! NEWSPACK_DISABLE_SUBSCRIPTION_DESCRIPTION;
+		$description               = $product->get_description();
+
 		?>
 		<label class="newspack-ui__input-card <?php echo $current ? esc_attr( 'current' ) : ''; ?>">
 			<?php if ( $current ) : ?>
@@ -421,6 +424,9 @@ class Subscriptions_Tiers {
 			<?php endif; ?>
 			<input type="radio" name="product_id" value="<?php echo esc_attr( $product->get_id() ); ?>" <?php echo esc_attr( $selected ? 'checked' : '' ); ?>>
 			<strong><?php echo esc_html( self::get_product_title( $product, $show_variation_attributes ) ); ?></strong>
+			<?php if ( $should_render_description && $description ) : ?>
+				<span class="newspack-ui__helper-text"><?php echo $description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+			<?php endif; ?>
 			<span class="newspack-ui__helper-text"><?php echo $price; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 		</label>
 		<?php

@@ -4,17 +4,17 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite71881f120241935b4a150fdfc91fa1a
+class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
 {
     public static $prefixLengthsPsr4 = array (
-        'C' => 
+        'C' =>
         array (
             'Composer\\Installers\\' => 20,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Composer\\Installers\\' => 
+        'Composer\\Installers\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
@@ -444,6 +444,8 @@ class ComposerStaticInite71881f120241935b4a150fdfc91fa1a
         'YoastSEO_Vendor\\Psr\\Log\\LoggerTrait' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/LoggerTrait.php',
         'YoastSEO_Vendor\\Psr\\Log\\NullLogger' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/NullLogger.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\Argument\\RewindableGenerator' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/Argument/RewindableGenerator.php',
+        'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\Argument\\ServiceLocator' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/Argument/ServiceLocator.php',
+        'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\Argument\\ServiceLocatorArgument' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/Argument/ServiceLocatorArgument.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\Container' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/Container.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ContainerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ContainerInterface.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\Exception\\EnvNotFoundException' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/Exception/EnvNotFoundException.php',
@@ -458,7 +460,10 @@ class ComposerStaticInite71881f120241935b4a150fdfc91fa1a
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ParameterBag\\FrozenParameterBag' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ParameterBag/FrozenParameterBag.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBag' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ParameterBag/ParameterBag.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBagInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ParameterBag/ParameterBagInterface.php',
-        'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ResettableContainerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ResettableContainerInterface.php',
+        'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ServiceLocator' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ServiceLocator.php',
+        'YoastSEO_Vendor\\Symfony\\Contracts\\Service\\ResetInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/service-contracts/ResetInterface.php',
+        'YoastSEO_Vendor\\Symfony\\Contracts\\Service\\ServiceLocatorTrait' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/service-contracts/ServiceLocatorTrait.php',
+        'YoastSEO_Vendor\\Symfony\\Contracts\\Service\\ServiceProviderInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/service-contracts/ServiceProviderInterface.php',
         'Yoast\\WP\\Lib\\Abstract_Main' => __DIR__ . '/../..' . '/lib/abstract-main.php',
         'Yoast\\WP\\Lib\\Dependency_Injection\\Container_Registry' => __DIR__ . '/../..' . '/lib/dependency-injection/container-registry.php',
         'Yoast\\WP\\Lib\\Migrations\\Adapter' => __DIR__ . '/../..' . '/lib/migrations/adapter.php',
@@ -1342,9 +1347,9 @@ class ComposerStaticInite71881f120241935b4a150fdfc91fa1a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite71881f120241935b4a150fdfc91fa1a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit88e18481b877a4240af60ad16111d9f3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit88e18481b877a4240af60ad16111d9f3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit88e18481b877a4240af60ad16111d9f3::$classMap;
 
         }, null, ClassLoader::class);
     }

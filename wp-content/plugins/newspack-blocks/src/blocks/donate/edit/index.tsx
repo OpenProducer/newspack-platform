@@ -31,29 +31,14 @@ import { Icon, formatListBullets, grid } from '@wordpress/icons';
  * Internal dependencies
  */
 import { getMigratedAmount } from '../utils';
-import type {
-	DonationSettings,
-	DonationFrequencySlug,
-	DonationAmountsArray,
-	EditState,
-	EditProps,
-} from '../types';
+import type { DonationSettings, DonationFrequencySlug, DonationAmountsArray, EditState, EditProps } from '../types';
 import TierBasedLayout from './TierBasedLayout';
 import FrequencyBasedLayout from './FrequencyBasedLayout';
 import { AmountValueInput } from './components';
-import {
-	FREQUENCIES,
-	FREQUENCY_SLUGS,
-	LAYOUT_OPTIONS,
-	DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX,
-} from '../consts';
+import { FREQUENCIES, FREQUENCY_SLUGS, LAYOUT_OPTIONS, DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX } from '../consts';
 import RedirectAfterSuccess from '../../../components/redirect-after-success';
 
-const TIER_LABELS = [
-	__( 'Low-tier', 'newspack-blocks' ),
-	__( 'Mid-tier', 'newspack-blocks' ),
-	__( 'High-tier', 'newspack-blocks' ),
-];
+const TIER_LABELS = [ __( 'Low-tier', 'newspack-blocks' ), __( 'Mid-tier', 'newspack-blocks' ), __( 'High-tier', 'newspack-blocks' ) ];
 
 const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 	const [ isLoading, setIsLoading ] = useState( true );
@@ -95,13 +80,8 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 				}
 
 				// Migrate old attributes.
-				if (
-					isEmpty( attributes.amounts ) &&
-					attributes.suggestedAmounts &&
-					attributes.suggestedAmounts.length
-				) {
-					const untieredAmount =
-						attributes.suggestedAmountUntiered || donationSettings.amounts.month[ 3 ];
+				if ( isEmpty( attributes.amounts ) && attributes.suggestedAmounts && attributes.suggestedAmounts.length ) {
+					const untieredAmount = attributes.suggestedAmountUntiered || donationSettings.amounts.month[ 3 ];
 					setAttributes( {
 						suggestedAmounts: undefined,
 						suggestedAmountUntiered: undefined,
@@ -195,9 +175,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 	const minimumDonation = isManual ? attributes.minimumDonation : settings.minimumDonation;
 	const displayedAmounts = { ...amounts };
 	Object.keys( amounts ).forEach( frequency => {
-		const amountsWithMinimum = amounts[ frequency ].map( amount =>
-			Math.max( amount, minimumDonation )
-		) as DonationAmountsArray;
+		const amountsWithMinimum = amounts[ frequency ].map( amount => Math.max( amount, minimumDonation ) ) as DonationAmountsArray;
 		displayedAmounts[ frequency ] = amountsWithMinimum;
 	} );
 
@@ -213,11 +191,8 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 	const renderMinAmountWarning = () => (
 		<p className="components-frequency-donations__error">
 			{ sprintf(
-				// Translators: %s is the currency symbol, %d is the minimum donation amount.
-				__(
-					'Warning: suggested donations should be at least the minimum donation amount (%1$s%2$d).',
-					'newspack-blocks'
-				),
+				// translators: %1$s: currency symbol, %2$d: minimum donation amount.
+				__( 'Warning: suggested donations should be at least the minimum donation amount (%1$s%2$d).', 'newspack-blocks' ),
 				settings.currencySymbol,
 				minimumDonation
 			) }
@@ -237,11 +212,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 				</>
 			) : (
 				<div className={ getWrapperClassNames( [ isTiered ? 'tiered' : 'untiered' ] ) }>
-					<FrequencyBasedLayout
-						isTiered={ isTiered }
-						{ ...componentProps }
-						amounts={ displayedAmounts }
-					/>
+					<FrequencyBasedLayout isTiered={ isTiered } { ...componentProps } amounts={ displayedAmounts } />
 				</div>
 			) }
 
@@ -250,8 +221,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 					{ canUseNameYourPrice && (
 						<div className="newspack-blocks-donate__layout-selector">
 							{ LAYOUT_OPTIONS.map( ( { label, key } ) => {
-								const isSelected =
-									key === 'tiers' ? isTierBasedLayoutEnabled : ! isTierBasedLayoutEnabled;
+								const isSelected = key === 'tiers' ? isTierBasedLayoutEnabled : ! isTierBasedLayoutEnabled;
 								return (
 									<Button
 										key={ key }
@@ -269,25 +239,18 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 					) }
 					{ canUseNameYourPrice && ! isTiered && (
 						<Notice isDismissible={ false } className="newspack-blocks-donate__notice">
-							{ __(
-								'Tiers layout is disabled if the block is set to render untiered.',
-								'newspack-blocks'
-							) }
+							{ __( 'Tiers layout is disabled if the block is set to render untiered.', 'newspack-blocks' ) }
 						</Notice>
 					) }
-					{ ! isTierBasedLayoutEnabled && (
-						<SelectControl
-							label={ __( 'Default Tab', 'newspack-blocks' ) }
-							value={ attributes.defaultFrequency }
-							options={ availableFrequencies.map( key => ( {
-								label: FREQUENCIES[ key ],
-								value: key,
-							} ) ) }
-							onChange={ ( defaultFrequency: DonationFrequencySlug ) =>
-								setAttributes( { defaultFrequency } )
-							}
-						/>
-					) }
+					<SelectControl
+						label={ __( 'Default Tab', 'newspack-blocks' ) }
+						value={ attributes.defaultFrequency }
+						options={ availableFrequencies.map( key => ( {
+							label: FREQUENCIES[ key ],
+							value: key,
+						} ) ) }
+						onChange={ ( defaultFrequency: DonationFrequencySlug ) => setAttributes( { defaultFrequency } ) }
+					/>
 				</PanelBody>
 				{ canUseNameYourPrice && (
 					<PanelBody title={ __( 'Suggested Donations', 'newspack-blocks' ) }>
@@ -311,8 +274,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 												const disabledDisplayedFrequencyCount = Object.values(
 													pick( attributes.disabledFrequencies, FREQUENCY_SLUGS )
 												).filter( Boolean ).length;
-												const isOnlyOneFrequencyActive =
-													FREQUENCY_SLUGS.length - disabledDisplayedFrequencyCount === 1;
+												const isOnlyOneFrequencyActive = FREQUENCY_SLUGS.length - disabledDisplayedFrequencyCount === 1;
 												return (
 													<Fragment key={ frequency }>
 														<CheckboxControl
@@ -332,9 +294,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 															<div className="wp-block-newspack-blocks-donate__panel-inputs">
 																{ amounts[ frequency ].reduce(
 																	( acc: boolean, suggestedAmount: number ) =>
-																		! suggestedAmount || suggestedAmount < minimumDonation
-																			? true
-																			: acc,
+																		! suggestedAmount || suggestedAmount < minimumDonation ? true : acc,
 																	false
 																) && renderMinAmountWarning() }
 
@@ -371,8 +331,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 										<div className="wp-block-newspack-blocks-donate__panel-inputs">
 											{ FREQUENCY_SLUGS.reduce(
 												( acc: boolean, frequencySlug: DonationFrequencySlug ) =>
-													! amounts[ frequencySlug ][ 3 ] ||
-													amounts[ frequencySlug ][ 3 ] < attributes.minimumDonation
+													! amounts[ frequencySlug ][ 3 ] || amounts[ frequencySlug ][ 3 ] < attributes.minimumDonation
 														? true
 														: acc,
 												false
@@ -442,9 +401,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 							{ sprintf(
 								// translators: %s is either 'enabled' or 'disabled'.
 								__( 'reCAPTCHA is currently %s.', 'newspack' ),
-								window.newspack_blocks_data.has_recaptcha
-									? __( 'enabled', 'newspack' )
-									: __( 'disabled', 'newspack' )
+								window.newspack_blocks_data.has_recaptcha ? __( 'enabled', 'newspack' ) : __( 'disabled', 'newspack' )
 							) }
 						</p>
 						{ ! window.newspack_blocks_data.has_recaptcha && (
@@ -456,9 +413,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 							</p>
 						) }
 						<p>
-							<a href={ window.newspack_blocks_data.recaptcha_url }>
-								{ __( 'Configure your reCAPTCHA settings.', 'newspack' ) }
-							</a>
+							<a href={ window.newspack_blocks_data.recaptcha_url }>{ __( 'Configure your reCAPTCHA settings.', 'newspack' ) }</a>
 						</p>
 					</PanelBody>
 				) }

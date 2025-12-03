@@ -10,8 +10,8 @@ import { applyFilters } from '@wordpress/hooks';
  *
  * @return {Array} The list of children
  */
-function prepareChildren(children) {
-	return !Array.isArray(children) ? [children] : children;
+function prepareChildren( children ) {
+	return ! Array.isArray( children ) ? [ children ] : children;
 }
 
 /**
@@ -20,8 +20,8 @@ function prepareChildren(children) {
  * @param {string} filterName The name of the filter to create
  * @return {Function} The component
  */
-export default function createFilterableComponent(filterName) {
-	return ({ children, blockProps }) => {
-		return applyFilters(filterName, prepareChildren(children), blockProps);
+export default function createFilterableComponent( filterName ) {
+	return ( { children, blockProps } ) => {
+		return applyFilters( filterName, prepareChildren( children ), blockProps );
 	};
 }

@@ -63,9 +63,7 @@ const getProviderUnitsForSelect = provider => {
  */
 const hasAnySize = ( sizes, sizesToCheck ) => {
 	return sizesToCheck.some( sizeToCheck => {
-		return ( sizes || [] ).find(
-			size => size[ 0 ] === sizeToCheck[ 0 ] && size[ 1 ] === sizeToCheck[ 1 ]
-		);
+		return ( sizes || [] ).find( size => size[ 0 ] === sizeToCheck[ 0 ] && size[ 1 ] === sizeToCheck[ 1 ] );
 	} );
 };
 
@@ -80,8 +78,7 @@ const PlacementControl = ( {
 	const [ biddersErrors, setBiddersErrors ] = useState( {} );
 
 	// Default provider is GAM or first index if GAM is not active.
-	const placementProvider =
-		providers.find( provider => provider?.id === ( value.provider || 'gam' ) ) || providers[ 0 ];
+	const placementProvider = providers.find( provider => provider?.id === ( value.provider || 'gam' ) ) || providers[ 0 ];
 
 	useEffect( () => {
 		const errors = {};
@@ -93,23 +90,17 @@ const PlacementControl = ( {
 				! value.ad_unit || ! unit || supported
 					? null
 					: sprintf(
-						// Translators: Ad bidder name.
-						__( '%s does not support the selected ad unit sizes.', 'newspack' ),
-						bidder.name,
-						''
-					);
+							// translators: %s: Ad bidder name.
+							__( '%s does not support the selected ad unit sizes.', 'newspack' ),
+							bidder.name,
+							''
+					  );
 		} );
 		setBiddersErrors( errors );
 	}, [ providers, value.ad_unit ] );
 
 	if ( ! providers.length ) {
-		return (
-			<Notice
-				isWarning
-				noticeText={ __( 'There is no provider available.', 'newspack-ads' ) }
-				isDismissible={ false }
-			/>
-		);
+		return <Notice isWarning noticeText={ __( 'There is no provider available.', 'newspack-ads' ) } isDismissible={ false } />;
 	}
 
 	return (
@@ -138,7 +129,7 @@ const PlacementControl = ( {
 			{ placementProvider?.id === 'gam' &&
 				Object.keys( bidders ).map( bidderKey => {
 					const bidder = bidders[ bidderKey ];
-					// Translators: Bidder name.
+					// translators: %s: Bidder name.
 					const bidderLabel = sprintf( __( '%s Placement ID', 'newspack-ads' ), bidder.name );
 					return (
 						<TextControl

@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Version of the plugin.
 if ( ! defined( 'WP_ABILITIES_API_VERSION' ) ) {
-	define( 'WP_ABILITIES_API_VERSION', '0.1.0' );
+	define( 'WP_ABILITIES_API_VERSION', '0.3.0' );
 }
 
 // Load core classes if they are not already defined (for non-Composer installs or direct includes).
@@ -28,6 +28,12 @@ if ( ! class_exists( 'WP_Ability' ) ) {
 }
 if ( ! class_exists( 'WP_Abilities_Registry' ) ) {
 	require_once __DIR__ . '/abilities-api/class-wp-abilities-registry.php';
+}
+if ( ! class_exists( 'WP_Ability_Category' ) ) {
+	require_once __DIR__ . '/abilities-api/class-wp-ability-category.php';
+}
+if ( ! class_exists( 'WP_Abilities_Category_Registry' ) ) {
+	require_once __DIR__ . '/abilities-api/class-wp-abilities-category-registry.php';
 }
 
 // Ensure procedural functions are available, too.
@@ -42,5 +48,16 @@ if ( ! class_exists( 'WP_REST_Abilities_Init' ) ) {
 	// Initialize REST API routes when WordPress is available.
 	if ( function_exists( 'add_action' ) ) {
 		add_action( 'rest_api_init', array( 'WP_REST_Abilities_Init', 'register_routes' ) );
+	}
+}
+
+// Load assets init class for plugin bootstrap.
+if ( ! class_exists( 'WP_Abilities_Assets_Init' ) ) {
+	require_once __DIR__ . '/assets/class-wp-abilities-assets-init.php';
+
+	// Initialize client assets when WordPress is available.
+	if ( function_exists( 'add_action' ) ) {
+		add_action( 'init', array( 'WP_Abilities_Assets_Init', 'register_assets' ) );
+		add_action( 'admin_enqueue_scripts', array( 'WP_Abilities_Assets_Init', 'admin_enqueue_scripts' ) );
 	}
 }

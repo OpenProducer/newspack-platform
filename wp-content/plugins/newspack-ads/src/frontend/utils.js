@@ -7,8 +7,8 @@
  *
  * @return {void}
  */
-export function domReady(callback) {
-	if (typeof document === 'undefined') {
+export function domReady( callback ) {
+	if ( typeof document === 'undefined' ) {
 		return;
 	}
 	if (
@@ -18,7 +18,7 @@ export function domReady(callback) {
 		return void callback();
 	}
 	// DOMContentLoaded has not fired yet, delay callback until then.
-	document.addEventListener('DOMContentLoaded', callback);
+	document.addEventListener( 'DOMContentLoaded', callback );
 }
 
 /**
@@ -27,7 +27,7 @@ export function domReady(callback) {
  * @return {boolean} Whether the site has a sticky header.
  */
 export function hasStickyHeader() {
-	return document.body.classList.contains('h-stk');
+	return document.body.classList.contains( 'h-stk' );
 }
 
 /**
@@ -38,11 +38,11 @@ export function hasStickyHeader() {
  *
  * @return {Function} The debounced function.
  */
-export function debounce(fn, delay) {
+export function debounce( fn, delay ) {
 	let timeoutId;
-	return function (...args) {
-		clearTimeout(timeoutId);
-		timeoutId = setTimeout(() => fn.apply(this, args), delay);
+	return function ( ...args ) {
+		clearTimeout( timeoutId );
+		timeoutId = setTimeout( () => fn.apply( this, args ), delay );
 	};
 }
 
@@ -54,24 +54,14 @@ export function debounce(fn, delay) {
  *
  * @return {boolean} Whether the element is colliding with any of the given elements.
  */
-export function elementCollides(element, elements) {
+export function elementCollides( element, elements ) {
 	const rect = element.getBoundingClientRect();
 	// Out of screen bounds.
-	if (
-		rect.left < 0 ||
-		window.innerWidth < rect.right ||
-		rect.top < 0 ||
-		window.innerHeight < rect.bottom
-	) {
+	if ( rect.left < 0 || window.innerWidth < rect.right || rect.top < 0 || window.innerHeight < rect.bottom ) {
 		return true;
 	}
-	return [...elements].some(el => {
+	return [ ...elements ].some( el => {
 		const targetRect = el.getBoundingClientRect();
-		return !(
-			rect.right <= targetRect.left ||
-			rect.left >= targetRect.right ||
-			rect.bottom <= targetRect.top ||
-			rect.top >= targetRect.bottom
-		);
-	});
+		return ! ( rect.right <= targetRect.left || rect.left >= targetRect.right || rect.bottom <= targetRect.top || rect.top >= targetRect.bottom );
+	} );
 }

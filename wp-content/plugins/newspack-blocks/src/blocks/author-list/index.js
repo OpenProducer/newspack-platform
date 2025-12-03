@@ -40,7 +40,7 @@ export const settings = {
 	title,
 	icon: {
 		src: listView,
-		foreground: colors['primary-400'],
+		foreground: colors[ 'primary-400' ],
 	},
 	keywords: [ __( 'author', 'newspack-blocks' ), __( 'profile', 'newspack-blocks' ) ],
 	description: __( 'Display a list of author profile cards.', 'newspack-blocks' ),

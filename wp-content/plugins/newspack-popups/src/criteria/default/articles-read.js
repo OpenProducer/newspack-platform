@@ -18,11 +18,7 @@ setMatchingAttribute( 'articles_read_in_session', ras => {
 	}
 	// Increment until the gap between views is greater than 30 minutes.
 	let i = 0;
-	while (
-		i < views.length &&
-		views[ i + 1 ] &&
-		views[ i ].timestamp - views[ i + 1 ].timestamp < 30 * 60 * 1000
-	) {
+	while ( i < views.length && views[ i + 1 ] && views[ i ].timestamp - views[ i + 1 ].timestamp < 30 * 60 * 1000 ) {
 		i++;
 	}
 	return 1 + i; // Add 1 to account for the most recent view.

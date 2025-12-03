@@ -67,7 +67,7 @@ export function iframeReady( iframe, cb, onReset ) {
 	}
 
 	function readyState() {
-		if ( this.readyState === "complete" ) {
+		if ( this.readyState === 'complete' ) {
 			ready.call( this );
 		}
 	}
@@ -93,7 +93,7 @@ export function iframeReady( iframe, cb, onReset ) {
 			return;
 		}
 		const doc = iframe.contentDocument || iframe.contentWindow?.document;
-		if ( doc && doc.URL.indexOf('about:') !== 0 ) {
+		if ( doc && doc.URL.indexOf( 'about:' ) !== 0 ) {
 			if ( doc?.readyState === 'complete' ) {
 				ready.call( doc );
 			} else {
@@ -117,8 +117,8 @@ export function iframeReady( iframe, cb, onReset ) {
 
 	// Set up MutationObserver to watch for src changes
 	if ( ! iframe._observer ) {
-		iframe._observer = new MutationObserver( ( mutations ) => {
-			mutations.forEach( ( mutation ) => {
+		iframe._observer = new MutationObserver( mutations => {
+			mutations.forEach( mutation => {
 				if ( mutation.type === 'attributes' && mutation.attributeName === 'src' ) {
 					fired = false;
 					cleanup();
@@ -148,6 +148,62 @@ export function onCheckoutReady( container, callback ) {
 		callback();
 	} else {
 		container.addEventListener( 'checkout-ready', callback );
+	}
+}
+
+/**
+ * Run a callback when the checkout is canceled.
+ *
+ * @param {Object}   container The container element inside the iframe document.
+ * @param {Function} callback  The callback to execute when the checkout is canceled.
+ */
+export function onCheckoutCancel( container, callback ) {
+	if ( container.checkoutCancel ) {
+		callback();
+	} else {
+		container.addEventListener( 'checkout-cancel', callback );
+	}
+}
+
+/**
+ * Run a callback when the checkout place order starts.
+ *
+ * @param {Object}   container The container element inside the iframe document.
+ * @param {Function} callback  The callback to execute when the checkout place order starts.
+ */
+export function onCheckoutPlaceOrderStart( container, callback ) {
+	if ( container.checkoutPlaceOrderStart ) {
+		callback();
+	} else {
+		container.addEventListener( 'checkout-place-order-start', callback );
+	}
+}
+
+/**
+ * Run a callback when the checkout place order succeeds.
+ *
+ * @param {Object}   container The container element inside the iframe document.
+ * @param {Function} callback  The callback to execute when the checkout place order succeeds.
+ */
+export function onCheckoutPlaceOrderSuccess( container, callback ) {
+	if ( container.checkoutPlaceOrderSuccess ) {
+		callback();
+	} else {
+		container.addEventListener( 'checkout-place-order-success', callback );
+	}
+}
+
+/**
+ * Run a callback when the checkout place order fails.
+ *
+ * @param {Object}   container The container element inside the iframe document.
+ * @param {Function} callback  The callback to execute when the checkout place order fails.
+ */
+export function onCheckoutPlaceOrderError( container, callback ) {
+	if ( container.checkoutPlaceOrderError ) {
+		callback();
+	} else {
+		container.addEventListener( 'checkout-place-order-error', callback );
 	}
 }
 
@@ -221,7 +277,6 @@ export function getCheckoutData( element ) {
 
 	return data;
 }
-
 
 /**
  * Get formatted amount for price summary display.

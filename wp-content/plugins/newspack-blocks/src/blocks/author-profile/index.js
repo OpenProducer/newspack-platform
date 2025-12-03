@@ -40,7 +40,7 @@ export const settings = {
 	title,
 	icon: {
 		src: postAuthor,
-		foreground: colors['primary-400'],
+		foreground: colors[ 'primary-400' ],
 	},
 	keywords: [ __( 'author', 'newspack-blocks' ), __( 'profile', 'newspack-blocks' ) ],
 	description: __( 'Display an author profile card.', 'newspack-blocks' ),

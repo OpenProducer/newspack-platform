@@ -45,14 +45,8 @@ export function registerCriteria( id, config = {} ) {
 		}
 
 		// Configure matching function.
-		if (
-			typeof criteria.matchingFunction === 'string' &&
-			matchingFunctions[ criteria.matchingFunction ]
-		) {
-			criteria.matchingFunction = matchingFunctions[ criteria.matchingFunction ].bind(
-				null,
-				criteria
-			);
+		if ( typeof criteria.matchingFunction === 'string' && matchingFunctions[ criteria.matchingFunction ] ) {
+			criteria.matchingFunction = matchingFunctions[ criteria.matchingFunction ].bind( null, criteria );
 		}
 
 		// Bail if unable to configure matching function.
@@ -81,12 +75,10 @@ export function registerCriteria( id, config = {} ) {
 				return ras.store.get( criteria.matchingAttribute );
 			}
 			// eslint-disable-next-line no-console
-			console.warn(
-				`Reader data library not loaded. Unable to fetch value for '${ criteria.id }'`
-			);
+			console.warn( `Reader data library not loaded. Unable to fetch value for '${ criteria.id }'` );
 		}
 		return criteria.value;
-	}
+	};
 
 	// Check if the criteria matches the segment config.
 	criteria._matched = {}; // Cache results.

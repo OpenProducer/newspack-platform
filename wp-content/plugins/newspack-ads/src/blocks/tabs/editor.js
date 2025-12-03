@@ -15,8 +15,8 @@ import metadata from './block.json';
 const { name } = metadata;
 
 const labels = {
-	title: __('Tabs', 'newspack-ads'),
-	description: __('Add tabbed content.', 'newspack-ads'),
+	title: __( 'Tabs', 'newspack-ads' ),
+	description: __( 'Add tabbed content.', 'newspack-ads' ),
 };
 
 const tabs = {
@@ -35,6 +35,6 @@ const tabs = {
 
 // Register the block
 // wp.domReady is required for core filters to work with this custom block. See - https://github.com/WordPress/gutenberg/issues/9757
-wp.domReady(function () {
-	registerBlock(tabs);
-});
+wp.domReady( function () {
+	registerBlock( tabs );
+} );

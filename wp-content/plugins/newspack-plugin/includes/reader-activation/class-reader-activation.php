@@ -60,6 +60,11 @@ final class Reader_Activation {
 	const SSO_REGISTRATION_METHODS = [ 'google' ];
 
 	/**
+	 * OAuth routes to intercept for RAS login redirection.
+	 */
+	const OAUTH_REDIRECT_ROUTES = [ '/oauth/authorize' ];
+
+	/**
 	 * Newsletters signup form.
 	 */
 	const NEWSLETTERS_SIGNUP_FORM_ACTION = 'reader-activation-newsletters-signup';
@@ -113,6 +118,7 @@ final class Reader_Activation {
 			\add_action( 'lostpassword_post', [ __CLASS__, 'set_password_reset_mail_content_type' ] );
 			\add_filter( 'lostpassword_errors', [ __CLASS__, 'rate_limit_lost_password' ], 10, 2 );
 			\add_filter( 'newspack_esp_sync_contact', [ __CLASS__, 'set_mailchimp_sync_contact_status' ], 10, 2 );
+			\add_filter( 'login_url', [ __CLASS__, 'redirect_oauth_to_ras_login' ], 10, 3 );
 		}
 	}
 
@@ -379,6 +385,7 @@ final class Reader_Activation {
 			'woocommerce_enable_terms_confirmation'        => false,
 			'woocommerce_terms_confirmation_text'          => self::get_terms_confirmation_text(),
 			'woocommerce_terms_confirmation_url'           => self::get_terms_confirmation_url(),
+			'oauth_redirect_to_ras'                        => false,
 		];
 
 		/**
@@ -1416,7 +1423,7 @@ final class Reader_Activation {
 
 		$link  = '<a class="' . \esc_attr( $class() ) . '" data-labels="' . \esc_attr( htmlspecialchars( \wp_json_encode( $labels ), ENT_QUOTES, 'UTF-8' ) ) . '" href="' . \esc_url_raw( $href ) . '" data-newspack-reader-account-link>';
 		$link .= '<span class="' . \esc_attr( $class( 'icon' ) ) . '">';
-		$link .= \Newspack\Newspack_UI_Icons::get_svg( 'account' );
+		$link .= Newspack_UI_Icons::get_svg( 'account' );
 		$link .= '</span>';
 		$link .= '<span class="' . \esc_attr( $class( 'label' ) ) . '">' . \esc_html( $labels[ $label ] ) . '</span>';
 		$link .= '</a>';
@@ -1480,7 +1487,8 @@ final class Reader_Activation {
 		$referer           = \wp_parse_url( \wp_get_referer() );
 		$labels            = self::get_reader_activation_labels( 'signin' );
 		// If there is a redirect parameter, use it as the auth callback URL.
-		$auth_callback_url = filter_input( INPUT_GET, 'redirect', FILTER_SANITIZE_URL ) ?? '#';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$auth_callback_url = isset( $_GET['redirect'] ) ? \esc_url_raw( \wp_unslash( $_GET['redirect'] ) ) : '#';
 		if ( '#' === $auth_callback_url ) {
 			if ( Renewal::is_subscriptions_page() ) {
 				// If we are on the subscriptions page, set the auth callback URL to the subscriptions page.
@@ -1508,7 +1516,7 @@ final class Reader_Activation {
 			<?php } ?>
 			<div class="newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center" data-action="success">
 				<span class="newspack-ui__icon newspack-ui__icon--success">
-					<?php \Newspack\Newspack_UI_Icons::print_svg( 'check' ); ?>
+					<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				</span>
 				<p>
 					<strong class="success-title"></strong>
@@ -1600,7 +1608,7 @@ final class Reader_Activation {
 					<h2 id="newspack-reader-auth-modal-label"><?php echo \esc_html( $label ); ?></h2>
 					<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 						<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-						<?php \Newspack\Newspack_UI_Icons::print_svg( 'close' ); ?>
+						<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 					</button>
 				</div>
 				<div class="newspack-ui__modal__content">
@@ -1681,7 +1689,7 @@ final class Reader_Activation {
 					<?php if ( count( $newsletters_lists ) > $default_list_size ) : ?>
 						<button type="button" class="newspack-ui__button newspack-ui__button--wide newspack-ui__button--secondary see-all-button">
 							<span><?php esc_html_e( 'See all', 'newspack-plugin' ); ?></span>
-							<?php \Newspack\Newspack_UI_Icons::print_svg( 'arrowRight' ); ?>
+							<?php Newspack_UI_Icons::print_svg( 'arrowRight' ); ?>
 						</button>
 					<?php endif; ?>
 					<button type="submit" class="newspack-ui__button newspack-ui__button--wide newspack-ui__button--primary"><?php echo \esc_html( self::get_reader_activation_labels( 'newsletters_continue' ) ); ?></button>
@@ -1715,9 +1723,7 @@ final class Reader_Activation {
 					<h2><?php echo \esc_html( self::get_reader_activation_labels( 'newsletters_title' ) ); ?></h2>
 					<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 						<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
-							<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
-						</svg>
+						<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 					</button>
 				</div>
 				<div class="newspack-ui__modal__content">
@@ -1824,6 +1830,7 @@ final class Reader_Activation {
 			$labels  = self::get_reader_activation_labels( 'signin' );
 			$message = $is_error ? $data->get_error_message() : $labels['success_message'];
 		}
+
 		\wp_send_json( compact( 'message', 'data' ), \is_wp_error( $data ) ? 400 : 200 );
 	}
 
@@ -1934,7 +1941,7 @@ final class Reader_Activation {
 		?>
 		<div class="newspack-ui">
 			<button type="button" class="newspack-ui__button newspack-ui__button--wide newspack-ui__button--secondary newspack-ui__button--google-oauth">
-				<?php \Newspack\Newspack_UI_Icons::print_svg( 'google' ); ?>
+				<?php Newspack_UI_Icons::print_svg( 'google' ); ?>
 				<?php echo \esc_html__( 'Sign in with Google', 'newspack-plugin' ); ?>
 			</button>
 			<div class="newspack-ui__word-divider">
@@ -2697,6 +2704,70 @@ final class Reader_Activation {
 			return;
 		}
 		self::set_current_reader( $user );
+	}
+
+	/**
+	 * Check if a URL matches an OAuth redirect route.
+	 *
+	 * @param string $url The URL to check.
+	 * @return bool True if the URL path contains an OAuth route.
+	 */
+	private static function is_oauth_redirect( $url ) {
+		$url_path = \wp_parse_url( $url, PHP_URL_PATH ) ?? '';
+
+		/**
+		 * Filters the list of OAuth routes that should redirect to RAS login.
+		 *
+		 * @param array  $routes Array of OAuth route paths.
+		 * @param string $url_path The URL path being checked.
+		 */
+		$routes = apply_filters( 'newspack_ras_oauth_redirect_routes', self::OAUTH_REDIRECT_ROUTES, $url_path );
+
+		return ! empty(
+			array_filter(
+				$routes,
+				fn( $route ) => str_contains( $url_path, $route )
+			)
+		);
+	}
+
+	/**
+	 * Redirect OAuth authorization requests to RAS login instead of wp-login.php.
+	 *
+	 * This enables OAuth clients to use the RAS login screen which provides
+	 * Google SSO and a better user experience while maintaining PKCE OAuth 2.0 compatibility.
+	 *
+	 * This is a generic OAuth + RAS integration, not specific to any particular OAuth client.
+	 *
+	 * @param string $login_url    The login URL.
+	 * @param string $redirect     The path to redirect to on login.
+	 * @param bool   $force_reauth Whether to force reauthentication.
+	 * @return string Modified login URL for OAuth flows, original URL otherwise.
+	 */
+	public static function redirect_oauth_to_ras_login( $login_url, $redirect, $force_reauth ) {
+		// Only intercept OAuth authorization requests if the setting is enabled.
+		if ( ! self::get_setting( 'oauth_redirect_to_ras' ) || ! self::is_oauth_redirect( $redirect ) || ! function_exists( 'wc_get_page_permalink' ) ) {
+			return $login_url;
+		}
+
+		// Redirect to RAS My Account page with OAuth redirect preserved.
+		$my_account_url = \wc_get_page_permalink( 'myaccount' );
+		$url            = add_query_arg( 'redirect', rawurlencode( $redirect ), $my_account_url );
+
+		// Preserve force_reauth if needed (for prompt=login flow).
+		if ( $force_reauth ) {
+			$url = add_query_arg( 'reauth', '1', $url );
+		}
+
+		/**
+		 * Filters the OAuth redirect URL before returning.
+		 *
+		 * @param string $url          The RAS login URL with OAuth redirect parameters.
+		 * @param string $login_url    The original login URL.
+		 * @param string $redirect     The OAuth redirect URL.
+		 * @param bool   $force_reauth Whether to force reauthentication.
+		 */
+		return apply_filters( 'newspack_ras_oauth_redirect_url', $url, $login_url, $redirect, $force_reauth );
 	}
 
 	/**

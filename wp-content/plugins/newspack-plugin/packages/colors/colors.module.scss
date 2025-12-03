@@ -6,7 +6,7 @@
 @use "sass:color";
 
 @function to-rgb($color) {
-	@return color.red($color) + ", " + color.green($color) + ", " + color.blue($color);
+	@return color.channel($color, "red", $space: rgb) + ", " + color.channel($color, "green", $space: rgb) + ", " + color.channel($color, "blue", $space: rgb);
 }
 
 // Primary: Hex

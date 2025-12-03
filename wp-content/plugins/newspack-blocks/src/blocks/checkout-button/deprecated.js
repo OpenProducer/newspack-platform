@@ -22,14 +22,13 @@ const v1 = {
 	attributes: {
 		...metadata.attributes,
 		afterSuccessButtonLabel: {
-			type: "string",
-			default: "Continue browsing"
+			type: 'string',
+			default: 'Continue browsing',
 		},
 	},
 
 	save( { attributes, className } ) {
-		const { textAlign, fontSize, style, text, product, price, variation, is_variable, width } =
-			attributes;
+		const { textAlign, fontSize, style, text, product, price, variation, is_variable, width } = attributes;
 
 		if ( ! text || ! product ) {
 			return null;
@@ -38,17 +37,12 @@ const v1 = {
 		const borderProps = getBorderClassesAndStyles( attributes );
 		const colorProps = getColorClassesAndStyles( attributes );
 		const spacingProps = getSpacingClassesAndStyles( attributes );
-		const buttonClasses = classnames(
-			'wp-block-button__link',
-			colorProps.className,
-			borderProps.className,
-			{
-				[ `has-text-align-${ textAlign }` ]: textAlign,
-				// For backwards compatibility add style that isn't provided via
-				// block support.
-				'no-border-radius': style?.border?.radius === 0,
-			}
-		);
+		const buttonClasses = classnames( 'wp-block-button__link', colorProps.className, borderProps.className, {
+			[ `has-text-align-${ textAlign }` ]: textAlign,
+			// For backwards compatibility add style that isn't provided via
+			// block support.
+			'no-border-radius': style?.border?.radius === 0,
+		} );
 		const buttonStyle = {
 			...borderProps.style,
 			...colorProps.style,
@@ -63,12 +57,7 @@ const v1 = {
 		return (
 			<div { ...useBlockProps.save( { className: wrapperClasses } ) }>
 				<form>
-					<RichText.Content
-						tagName="button"
-						className={ buttonClasses }
-						style={ buttonStyle }
-						value={ text }
-					/>
+					<RichText.Content tagName="button" className={ buttonClasses } style={ buttonStyle } value={ text } />
 					<input type="hidden" name="product_id" value={ product } />
 					<input type="hidden" name="newspack_checkout" value="1" />
 
@@ -77,30 +66,16 @@ const v1 = {
 					{ is_variable && <input type="hidden" name="is_variable" value="1" /> }
 
 					{ attributes.afterSuccessBehavior && (
-						<input
-							type="hidden"
-							name="after_success_behavior"
-							value={ attributes.afterSuccessBehavior }
-						/>
+						<input type="hidden" name="after_success_behavior" value={ attributes.afterSuccessBehavior } />
 					) }
 
 					{ attributes.afterSuccessButtonLabel && (
-						<input
-							type="hidden"
-							name="after_success_button_label"
-							value={ attributes.afterSuccessButtonLabel }
-						/>
+						<input type="hidden" name="after_success_button_label" value={ attributes.afterSuccessButtonLabel } />
 					) }
-					{ attributes.afterSuccessBehavior && (
-						<input
-							type="hidden"
-							name="after_success_url"
-							value={ attributes.afterSuccessURL || '' }
-						/>
-					) }
+					{ attributes.afterSuccessBehavior && <input type="hidden" name="after_success_url" value={ attributes.afterSuccessURL || '' } /> }
 				</form>
 			</div>
 		);
-	}
-}
+	},
+};
 export default [ v1 ];

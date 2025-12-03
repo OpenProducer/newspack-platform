@@ -15,6 +15,9 @@ import {
 	iframeReady,
 	onCheckoutReady,
 	onCheckoutComplete,
+	onCheckoutCancel,
+	onCheckoutPlaceOrderStart,
+	onCheckoutPlaceOrderError,
 	createHiddenInput,
 	triggerFormSubmit,
 	getCheckoutData,
@@ -27,6 +30,8 @@ const IFRAME_CONTAINER_ID = 'newspack_modal_checkout_container';
 const MODAL_CHECKOUT_ID = 'newspack_modal_checkout';
 const MODAL_CLASS_PREFIX = `${ CLASS_PREFIX }__modal`;
 const VARIATON_MODAL_CLASS_PREFIX = 'newspack-blocks__modal-variation';
+const PROCESSING_PAYMENT_TEXT_CLASS = `${ CLASS_PREFIX }__processing-payment-text`;
+const PROCESSING_PAYMENT_MESSAGES = newspackBlocksModal.processing_payment_messages;
 
 // Track the checkout intent to avoid multiple analytics events.
 let inCheckoutIntent = false;
@@ -51,7 +56,7 @@ window.onpageshow = event => {
 		document.querySelectorAll( '.non-modal-checkout-loading' ).forEach( el => el.classList.remove( 'non-modal-checkout-loading' ) );
 		document.querySelectorAll( `.${ MODAL_CLASS_PREFIX }-container` ).forEach( el => closeModal( el ) );
 	}
-}
+};
 
 // Register the "checkout closed" event.
 const checkoutClosedEvent = new CustomEvent( 'checkout-closed' );
@@ -67,7 +72,7 @@ domReady( () => {
 	const modalContent = modalCheckout.querySelector( `.${ MODAL_CLASS_PREFIX }__content` );
 	const modalCheckoutHiddenInput = createHiddenInput( 'modal_checkout', '1' );
 	const spinner = modalContent.querySelector( `.${ CLASS_PREFIX }__spinner` );
-	let modalTrigger = document.querySelector( '.newspack-reader__account-link' )?.[0];
+	let modalTrigger = document.querySelector( '.newspack-reader__account-link' )?.[ 0 ];
 	// Initialize empty iframe.
 	const initialHeight = '600px'; // Fixed initial height to avoid too much layout shift.
 	const iframe = document.createElement( 'iframe' );
@@ -89,7 +94,7 @@ domReady( () => {
 			iframe.style.visibility = 'visible';
 		}
 		iframe._ready = true;
-	}
+	};
 
 	/**
 	 * Handle iframe load state.
@@ -115,9 +120,42 @@ domReady( () => {
 		const productDetails = container.querySelector( '#modal-checkout-product-details' );
 		const checkoutData = getCheckoutData( productDetails );
 
-		container.addEventListener( 'checkout-cancel', () => {
+		const processingPaymentText = document.createElement( 'p' );
+		processingPaymentText.classList.add( PROCESSING_PAYMENT_TEXT_CLASS );
+		let processingPaymentTimeouts = [];
+
+		const clearProcessingPaymentTimeouts = () => {
+			processingPaymentTimeouts.forEach( timeoutId => clearTimeout( timeoutId ) );
+			processingPaymentTimeouts = [];
+		};
+
+		const renderProcessingPaymentScreen = () => {
+			spinner.querySelectorAll( `.${ PROCESSING_PAYMENT_TEXT_CLASS }` ).forEach( node => node.remove() );
+			spinner.style.display = 'flex';
+			clearProcessingPaymentTimeouts();
+			processingPaymentText.textContent = PROCESSING_PAYMENT_MESSAGES[ 0 ]?.text ?? '';
+			PROCESSING_PAYMENT_MESSAGES.slice( 1 ).forEach( ( { text, delay } ) => {
+				const timeoutId = setTimeout( () => {
+					processingPaymentText.textContent = text;
+				}, delay );
+				processingPaymentTimeouts.push( timeoutId );
+			} );
+			spinner.appendChild( processingPaymentText );
+		};
+
+		const hideProcessingPaymentScreen = () => {
+			spinner.style.display = 'none';
+			clearProcessingPaymentTimeouts();
+			spinner.querySelectorAll( `.${ PROCESSING_PAYMENT_TEXT_CLASS }` ).forEach( node => node.remove() );
+		};
+
+		onCheckoutCancel( container, () => {
 			closeCheckout();
 		} );
+
+		onCheckoutPlaceOrderStart( container, renderProcessingPaymentScreen );
+
+		onCheckoutPlaceOrderError( container, hideProcessingPaymentScreen );
 
 		onCheckoutReady( container, () => {
 			// Make sure the order summary renders the correct text.
@@ -151,6 +189,8 @@ domReady( () => {
 			setModalTitle( newspackBlocksModal.labels.thankyou_modal_title );
 			setModalReady( container );
 			a11y.trapFocus( modalCheckout.querySelector( `.${ MODAL_CLASS_PREFIX }` ) );
+
+			hideProcessingPaymentScreen();
 		} );
 	}
 
@@ -169,7 +209,7 @@ domReady( () => {
 	 *
 	 * @return {Promise} The promise that resolves with the checkout URL.
 	 */
-	const generateCart = ( checkoutData ) => {
+	const generateCart = checkoutData => {
 		return new Promise( ( resolve, reject ) => {
 			const urlParams = new URLSearchParams( checkoutData );
 			urlParams.append( 'action', 'modal_checkout_request' );
@@ -186,27 +226,24 @@ domReady( () => {
 				} )
 				.catch( reject );
 		} );
-	}
+	};
 
 	/**
 	 * Empty cart via ajax.
 	 */
 	const emptyCart = async () => {
 		const body = new FormData();
-		if ( newspackBlocksModal.has_supported_payment_gateway ) {
+		if ( ! newspackBlocksModal.has_unsupported_payment_gateway ) {
 			body.append( 'modal_checkout', '1' );
 		}
 		body.append( 'action', 'abandon_modal_checkout' );
 		body.append( '_wpnonce', modalCheckout.checkout_nonce );
 		modalCheckout.checkout_nonce = null;
 		try {
-			await fetch(
-				newspackBlocksModal.ajax_url,
-				{
-					method: 'POST',
-					body,
-				}
-			);
+			await fetch( newspackBlocksModal.ajax_url, {
+				method: 'POST',
+				body,
+			} );
 		} catch ( error ) {
 			console.warn( 'Unable to empty cart:', error ); // eslint-disable-line no-console
 		}
@@ -215,13 +252,12 @@ domReady( () => {
 	/**
 	 * Whether reader should be prompted with registration.
 	 */
-	const shouldPromptRegistration = () => (
+	const shouldPromptRegistration = () =>
 		typeof newspack_ras_config !== 'undefined' &&
 		! newspack_ras_config?.is_logged_in &&
 		! window?.newspackReaderActivation?.getReader?.()?.authenticated &&
 		newspackBlocksModal?.is_registration_required &&
-		window?.newspackReaderActivation?.openAuthModal
-	);
+		window?.newspackReaderActivation?.openAuthModal;
 
 	/**
 	 * Handle checkout form submit.
@@ -229,7 +265,7 @@ domReady( () => {
 	 * @param {Event} ev
 	 */
 	const handleCheckoutFormSubmit = ev => {
-		const isModalCheckout = newspackBlocksModal.has_supported_payment_gateway;
+		const isModalCheckout = ! newspackBlocksModal.has_unsupported_payment_gateway;
 		if ( ! isModalCheckout ) {
 			ev.preventDefault();
 		}
@@ -241,11 +277,7 @@ domReady( () => {
 		const isDonateBlock = checkoutData.newspack_donate;
 		if ( isDonateBlock ) {
 			const frequency = checkoutData.donation_frequency;
-			const donationTiers = [
-				...form.querySelectorAll(
-					`.donation-tier__${ frequency }, .donation-frequency__${ frequency }`
-				)
-			];
+			const donationTiers = [ ...form.querySelectorAll( `.donation-tier__${ frequency }, .donation-frequency__${ frequency }` ) ];
 			const donationTierIndex = checkoutData.donation_tier_index;
 			let donationContainer, customAmount;
 			if ( donationTierIndex ) {
@@ -263,16 +295,19 @@ domReady( () => {
 				}
 			}
 			const donationData = getCheckoutData( donationContainer );
-			for( const key in donationData ) {
+			for ( const key in donationData ) {
 				checkoutData[ key ] = donationData[ key ];
 			}
 			checkoutData.amount = customAmount;
-			checkoutData.price_summary = checkoutData.summary_template.replace( '{{PRICE}}', getFormattedAmount( checkoutData.amount, checkoutData.currency ) );
+			checkoutData.price_summary = checkoutData.summary_template.replace(
+				'{{PRICE}}',
+				getFormattedAmount( checkoutData.amount, checkoutData.currency )
+			);
 		}
 
 		if ( checkoutData ) {
 			Object.keys( checkoutData ).forEach( key => {
-				const existingInputs = form.querySelectorAll( 'input[name="' +  key + '"]' );
+				const existingInputs = form.querySelectorAll( 'input[name="' + key + '"]' );
 				if ( 0 === existingInputs.length ) {
 					form.prepend( createHiddenInput( key, checkoutData[ key ] ) );
 				}
@@ -294,39 +329,31 @@ domReady( () => {
 
 		// Trigger variation modal if variation is not selected.
 		if ( checkoutData.is_grouped || ( checkoutData.is_variable && ! checkoutData.variation_id ) ) {
-			const variationModal = [ ...variationModals ].find(
-				modal => modal.dataset.productId === checkoutData.product_id
-			);
+			const variationModal = [ ...variationModals ].find( modal => modal.dataset.productId === checkoutData.product_id );
 			if ( variationModal ) {
-				variationModal
-					.querySelectorAll( `form[target="${ IFRAME_NAME }"]` )
-					.forEach( singleVariationForm => {
-						// Fill in the hidden params in the variation modal.
-						[
-							'after_success_behavior',
-							'after_success_url',
-							'after_success_button_label',
-							'gate_post_id',
-							'newspack_popup_id',
-						].forEach( hiddenParams => {
-							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' +  hiddenParams + '"]' );
+				variationModal.querySelectorAll( `form[target="${ IFRAME_NAME }"]` ).forEach( singleVariationForm => {
+					// Fill in the hidden params in the variation modal.
+					[ 'after_success_behavior', 'after_success_url', 'after_success_button_label', 'gate_post_id', 'newspack_popup_id' ].forEach(
+						hiddenParam => {
+							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' + hiddenParam + '"]' );
 							if ( 0 === existingInputs.length ) {
-								singleVariationForm.prepend( createHiddenInput( hiddenParams, checkoutData[ hiddenParams ] ) );
+								singleVariationForm.prepend( createHiddenInput( hiddenParam, checkoutData[ hiddenParam ] ) );
+							}
+						}
+					);
+
+					// Append the product data hidden inputs.
+					const variationData = singleVariationForm.dataset.checkout;
+					if ( variationData ) {
+						const data = JSON.parse( variationData );
+						Object.keys( data ).forEach( key => {
+							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' + key + '"]' );
+							if ( 0 === existingInputs.length ) {
+								singleVariationForm.prepend( createHiddenInput( key, data[ key ] ) );
 							}
 						} );
-
-						// Append the product data hidden inputs.
-						const variationData = singleVariationForm.dataset.checkout;
-						if ( variationData ) {
-							const data = JSON.parse( variationData );
-							Object.keys( data ).forEach( key => {
-								const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' +  key + '"]' );
-								if ( 0 === existingInputs.length ) {
-									singleVariationForm.prepend( createHiddenInput( key, data[ key ] ) );
-								}
-							} );
-						}
-					} );
+					}
+				} );
 
 				// Open the variations modal.
 				ev.preventDefault();
@@ -342,9 +369,7 @@ domReady( () => {
 				}
 
 				// Append product data info to the modal itself, so we can grab it for manageDismissed:
-				document
-					.getElementById( 'newspack_modal_checkout' )
-					.setAttribute( 'data-checkout', JSON.stringify( checkoutData ) );
+				document.getElementById( 'newspack_modal_checkout' ).setAttribute( 'data-checkout', JSON.stringify( checkoutData ) );
 				return;
 			}
 		}
@@ -379,7 +404,9 @@ domReady( () => {
 			ev.preventDefault();
 
 			const priceSummary = checkoutData.price_summary;
-			const content = priceSummary ? `<div class="order-details-summary ${ CLASS_PREFIX }__box ${ CLASS_PREFIX }__box--text-center"><p><strong>${ priceSummary }</strong></p></div>` : '';
+			const content = priceSummary
+				? `<div class="order-details-summary ${ CLASS_PREFIX }__box ${ CLASS_PREFIX }__box--text-center"><p><strong>${ priceSummary }</strong></p></div>`
+				: '';
 
 			// Generate cart asynchroneously.
 			const cartReq = generateCart( checkoutData );
@@ -392,24 +419,25 @@ domReady( () => {
 			window.newspackReaderActivation.openAuthModal( {
 				title: newspackBlocksModal.labels.auth_modal_title,
 				onSuccess: ( message, authData ) => {
-					cartReq.then( url => {
-						// If registered and in a modal checkout, append the registration flag query param to the url.
-						if ( authData?.registered && isModalCheckout ) {
-							url += `&${ newspackBlocksModal.checkout_registration_flag }=1`;
-						}
-						// Populate cart and redirect to checkout if there is an unsupported payment gateway.
-						if ( ! isModalCheckout ) {
-							// Remove modal checkout query string, and trailing question mark (if any).
-							generateCart( checkoutData ).then( window.location.href = url );
-						} else {
-							const checkoutForm = generateCheckoutPageForm( url );
-							triggerFormSubmit( checkoutForm );
-						}
-					} )
-					.catch( error => {
-						console.warn( 'Unable to generate cart:', error ); // eslint-disable-line no-console
-						closeCheckout();
-					} );
+					cartReq
+						.then( url => {
+							// If registered and in a modal checkout, append the registration flag query param to the url.
+							if ( authData?.registered && isModalCheckout ) {
+								url += `&${ newspackBlocksModal.checkout_registration_flag }=1`;
+							}
+							// Populate cart and redirect to checkout if there is an unsupported payment gateway.
+							if ( ! isModalCheckout ) {
+								// Remove modal checkout query string, and trailing question mark (if any).
+								generateCart( checkoutData ).then( ( window.location.href = url ) );
+							} else {
+								const checkoutForm = generateCheckoutPageForm( url );
+								triggerFormSubmit( checkoutForm );
+							}
+						} )
+						.catch( error => {
+							console.warn( 'Unable to generate cart:', error ); // eslint-disable-line no-console
+							closeCheckout();
+						} );
 				},
 				onError: () => {
 					closeCheckout();
@@ -438,9 +466,7 @@ domReady( () => {
 			// Otherwise initialize checkout.
 			openCheckout();
 			// Append product data info to the modal, so we can grab it for GA4 events outside of the iframe.
-			document
-				.getElementById( 'newspack_modal_checkout' )
-				.setAttribute( 'data-checkout', JSON.stringify( checkoutData ) );
+			document.getElementById( 'newspack_modal_checkout' ).setAttribute( 'data-checkout', JSON.stringify( checkoutData ) );
 		}
 	};
 
@@ -465,7 +491,7 @@ domReady( () => {
 
 		checkoutForm.addEventListener( 'submit', handleCheckoutFormSubmit );
 		return checkoutForm;
-	}
+	};
 
 	const iframeResizeObserver = new ResizeObserver( entries => {
 		if ( ! entries || ! entries.length ) {
@@ -495,9 +521,7 @@ domReady( () => {
 	const closeCheckout = () => {
 		const container = iframe?.contentDocument?.querySelector( `#${ IFRAME_CONTAINER_ID }` );
 		const afterSuccessUrlInput = container?.querySelector( 'input[name="after_success_url"]' );
-		const afterSuccessBehaviorInput = container?.querySelector(
-			'input[name="after_success_behavior"]'
-		);
+		const afterSuccessBehaviorInput = container?.querySelector( 'input[name="after_success_behavior"]' );
 		const hasNewsletterPopup = document?.querySelector( '.newspack-newsletters-signup-modal' );
 
 		const checkoutData = getCheckoutData( container?.querySelector( '#modal-checkout-product-details' ) );
@@ -576,7 +600,7 @@ domReady( () => {
 		document.removeEventListener( 'keydown', handleKeydown );
 	};
 
-	const openCheckout = ( url ) => {
+	const openCheckout = url => {
 		if ( url ) {
 			iframe.src = url;
 		}
@@ -675,20 +699,17 @@ domReady( () => {
 	 * Handle modal checkout triggers.
 	 */
 	document
-		.querySelectorAll(
-			'.wpbnbd.wpbnbd--platform-wc, .wp-block-newspack-blocks-checkout-button, .newspack-blocks__modal-variation'
-		)
+		.querySelectorAll( '.wpbnbd.wpbnbd--platform-wc, .wp-block-newspack-blocks-checkout-button, .newspack-blocks__modal-variation' )
 		.forEach( element => {
 			const forms = element.querySelectorAll( 'form' );
 			forms.forEach( form => {
-				if ( newspackBlocksModal.has_supported_payment_gateway ) {
+				if ( ! newspackBlocksModal.has_unsupported_payment_gateway ) {
 					form.prepend( modalCheckoutHiddenInput.cloneNode() );
 				}
 				form.target = IFRAME_NAME;
 				form.addEventListener( 'submit', handleCheckoutFormSubmit );
 			} );
 		} );
-
 
 	/**
 	 * Handle donation form triggers.
@@ -700,48 +721,48 @@ domReady( () => {
 	 */
 	const triggerDonationForm = ( layout, frequency, amount, other = null ) => {
 		let form;
-		document.querySelectorAll( '.wpbnbd.wpbnbd--platform-wc form' )
-			.forEach( donationForm => {
-				const frequencyInput = donationForm.querySelector( `input[name="donation_frequency"][value="${ frequency }"]` );
-				if ( ! frequencyInput ) {
+		document.querySelectorAll( '.wpbnbd.wpbnbd--platform-wc form' ).forEach( donationForm => {
+			const frequencyInput = donationForm.querySelector( `input[name="donation_frequency"][value="${ frequency }"]` );
+			if ( ! frequencyInput ) {
+				return;
+			}
+			if ( layout === 'tiered' ) {
+				const frequencyButton = document.querySelector( `button[data-frequency-slug="${ frequency }"]` );
+				if ( ! frequencyButton ) {
 					return;
 				}
-				if ( layout === 'tiered' ) {
-					const frequencyButton = document.querySelector( `button[data-frequency-slug="${ frequency }"]` );
-					if ( ! frequencyButton ) {
-						return;
-					}
-					frequencyButton.click();
-					const submitButton = donationForm.querySelector( `button[type="submit"][name="donation_value_${ frequency }"][value="${ amount }"]` );
-					if ( ! submitButton ) {
-						return;
-					}
-					submitButton.click();
-				} else {
-					const amountInput = ( layout === 'untiered' ) ?
-						donationForm.querySelector( `input[name="donation_value_${ frequency }_untiered"]` ) :
-						donationForm.querySelector( `input[name="donation_value_${ frequency }"][value="${ amount }"]` );
-					if ( frequencyInput && amountInput ) {
-						frequencyInput.checked = true;
-						if ( layout === 'untiered' ) {
-							amountInput.value = amount;
-						} else if ( amount === 'other' ) {
-							amountInput.click();
-							const otherInput = donationForm.querySelector( `input[name="donation_value_${ frequency }_other"]` );
-							if ( otherInput && other ) {
-								otherInput.value = other;
-							}
-						} else {
-							amountInput.checked = true;
-						}
-						form = donationForm;
-					}
+				frequencyButton.click();
+				const submitButton = donationForm.querySelector( `button[type="submit"][name="donation_value_${ frequency }"][value="${ amount }"]` );
+				if ( ! submitButton ) {
+					return;
 				}
-			} );
+				submitButton.click();
+			} else {
+				const amountInput =
+					layout === 'untiered'
+						? donationForm.querySelector( `input[name="donation_value_${ frequency }_untiered"]` )
+						: donationForm.querySelector( `input[name="donation_value_${ frequency }"][value="${ amount }"]` );
+				if ( frequencyInput && amountInput ) {
+					frequencyInput.checked = true;
+					if ( layout === 'untiered' ) {
+						amountInput.value = amount;
+					} else if ( amount === 'other' ) {
+						amountInput.click();
+						const otherInput = donationForm.querySelector( `input[name="donation_value_${ frequency }_other"]` );
+						if ( otherInput && other ) {
+							otherInput.value = other;
+						}
+					} else {
+						amountInput.checked = true;
+					}
+					form = donationForm;
+				}
+			}
+		} );
 		if ( form ) {
 			triggerFormSubmit( form );
 		}
-	}
+	};
 
 	/**
 	 * Handle checkout button form triggers.
@@ -753,9 +774,7 @@ domReady( () => {
 		let form;
 		if ( variationId && variationId !== productId ) {
 			const variationModals = document.querySelectorAll( `.${ VARIATON_MODAL_CLASS_PREFIX }` );
-			const variationModal = [ ...variationModals ].find(
-				modal => modal.dataset.productId === productId
-			);
+			const variationModal = [ ...variationModals ].find( modal => modal.dataset.productId === productId );
 			if ( variationModal ) {
 				const forms = variationModal.querySelectorAll( `form[target="${ IFRAME_NAME }"]` );
 				forms.forEach( variationForm => {
@@ -781,7 +800,7 @@ domReady( () => {
 		if ( form ) {
 			triggerFormSubmit( form );
 		}
-	}
+	};
 
 	/**
 	 * Handle modal checkout url param triggers.
@@ -849,7 +868,7 @@ domReady( () => {
 		/**
 		 * Start with the default checkout URL.
 		 */
-		 url = new URL( url || newspackBlocksModal.checkout_url );
+		url = new URL( url || newspackBlocksModal.checkout_url );
 
 		/**
 		 * For integration purposes, remove `my_account_checkout` from the URL if it exists.

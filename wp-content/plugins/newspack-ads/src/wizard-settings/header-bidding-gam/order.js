@@ -12,16 +12,7 @@ import { Card, Notice, TextControl, SelectControl, Button, ProgressBar } from 'n
 
 const { lica_batch_size } = window.newspack_ads_bidding_gam;
 
-const Order = ( {
-	orderId = null,
-	defaultName = '',
-	onPending = () => {},
-	onError,
-	onSuccess,
-	onUnrecoverable,
-	onCancel,
-	...props
-} ) => {
+const Order = ( { orderId = null, defaultName = '', onPending = () => {}, onError, onSuccess, onUnrecoverable, onCancel, ...props } ) => {
 	const [ inFlight, setInFlight ] = useState( false );
 	const [ bidders, setBidders ] = useState( props.bidders || {} );
 	const [ error, setError ] = useState( null );
@@ -37,9 +28,7 @@ const Order = ( {
 		bidders: [],
 	} );
 
-	const hasIssues = () =>
-		order?.order_id &&
-		( ! order?.line_item_ids?.length || totalBatches > ( order?.lica_batch_count || 0 ) );
+	const hasIssues = () => order?.order_id && ( ! order?.line_item_ids?.length || totalBatches > ( order?.lica_batch_count || 0 ) );
 
 	const canSubmit = () =>
 		hasIssues() ||
@@ -47,11 +36,9 @@ const Order = ( {
 		parseInt( config.revenueShare ) !== parseInt( order?.revenue_share ) ||
 		JSON.stringify( config.bidders ) !== JSON.stringify( order?.bidders );
 
-	const buttonText = () =>
-		orderId ? __( 'Update Order', 'newspack-ads' ) : __( 'Create Order', 'newspack-ads' );
+	const buttonText = () => ( orderId ? __( 'Update Order', 'newspack-ads' ) : __( 'Create Order', 'newspack-ads' ) );
 
-	const fetchLicaConfig = async id =>
-		await apiFetch( { path: `/newspack-ads/v1/bidding/gam/lica_config?id=${ id }` } );
+	const fetchLicaConfig = async id => await apiFetch( { path: `/newspack-ads/v1/bidding/gam/lica_config?id=${ id }` } );
 
 	const getStepName = () => {
 		switch ( step ) {
@@ -75,7 +62,7 @@ const Order = ( {
 				setError( err );
 			}
 			if ( orderId ) {
-			// Fetch order.
+				// Fetch order.
 				try {
 					const data = await apiFetch( {
 						path: `/newspack-ads/v1/bidding/gam/order?id=${ orderId }`,
@@ -289,21 +276,10 @@ const Order = ( {
 					} )
 				}
 			/>
-			{ ! inFlight && hasIssues() && (
-				<Notice
-					isWarning
-					noticeText={ __( "Order exists but it's misconfigured.", 'newspack-ads' ) }
-				/>
-			) }
+			{ ! inFlight && hasIssues() && <Notice isWarning noticeText={ __( "Order exists but it's misconfigured.", 'newspack-ads' ) } /> }
 			{ step && stepName ? (
 				<Fragment>
-					<Notice
-						isWarning
-						noticeText={ __(
-							'This may take up to 15 minutes, please do not close the window.',
-							'newspack-ads'
-						) }
-					/>
+					<Notice isWarning noticeText={ __( 'This may take up to 15 minutes, please do not close the window.', 'newspack-ads' ) } />
 					<ProgressBar completed={ step } total={ totalSteps } label={ stepName } />
 				</Fragment>
 			) : null }

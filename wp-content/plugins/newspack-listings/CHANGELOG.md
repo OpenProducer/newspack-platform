@@ -1,3 +1,10 @@
+# [3.5.0](https://github.com/Automattic/newspack-listings/compare/v3.4.1...v3.5.0) (2025-11-24)
+
+
+### Features
+
+* Merge pull request [#566](https://github.com/Automattic/newspack-listings/issues/566) from Automattic/trunk ([0bd2509](https://github.com/Automattic/newspack-listings/commit/0bd2509571893f6c84494b59c5ac031dadb6372c))
+
 ## [3.4.1](https://github.com/Automattic/newspack-listings/compare/v3.4.0...v3.4.1) (2025-10-30)
 
 

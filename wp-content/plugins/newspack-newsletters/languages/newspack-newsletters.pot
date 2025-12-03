@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Newsletters 3.23.7\n"
+"Project-Id-Version: Newspack Newsletters 3.24.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-15T19:07:42+00:00\n"
+"POT-Creation-Date: 2025-11-20T22:26:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-newsletters\n"
@@ -116,7 +116,7 @@ msgid "Newsletters Ads"
 msgstr ""
 
 #: includes/ads/class-ads.php:190
-#: src/editor/blocks/ad/edit.js:102
+#: src/editor/blocks/ad/edit.js:89
 msgid "Ads"
 msgstr ""
 
@@ -303,13 +303,13 @@ msgstr ""
 
 #: includes/ads/class-ads.php:601
 #: dist/adsEditor.js:19
-#: src/ads/editor/index.js:357
+#: src/ads/editor/index.js:263
 msgid "Expiration Date"
 msgstr ""
 
 #: includes/ads/class-ads.php:602
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:140
+#: src/ads/editor/index.js:96
 msgid "Price"
 msgstr ""
 
@@ -339,7 +339,7 @@ msgstr[1] ""
 
 #: includes/class-newspack-newsletters-contacts.php:318
 #: includes/class-newspack-newsletters-contacts.php:353
-#: includes/class-newspack-newsletters-subscription.php:617
+#: includes/class-newspack-newsletters-subscription.php:620
 msgid "Not supported for this provider"
 msgstr ""
 
@@ -380,12 +380,12 @@ msgid "Make newsletter page public?"
 msgstr ""
 
 #: includes/class-newspack-newsletters-settings.php:66
-#: src/components/init-modal/screens/api-keys/index.js:123
+#: src/components/init-modal/screens/api-keys/index.js:117
 msgid "Manual / Other"
 msgstr ""
 
 #: includes/class-newspack-newsletters-settings.php:72
-#: src/components/init-modal/screens/api-keys/index.js:100
+#: src/components/init-modal/screens/api-keys/index.js:94
 msgid "Service Provider"
 msgstr ""
 
@@ -398,17 +398,17 @@ msgid "Constant Contact API Key"
 msgstr ""
 
 #: includes/class-newspack-newsletters-settings.php:97
-#: src/components/init-modal/screens/api-keys/index.js:165
+#: src/components/init-modal/screens/api-keys/index.js:152
 msgid "Constant Contact API Secret"
 msgstr ""
 
 #: includes/class-newspack-newsletters-settings.php:104
-#: src/components/init-modal/screens/api-keys/index.js:226
+#: src/components/init-modal/screens/api-keys/index.js:204
 msgid "ActiveCampaign API URL"
 msgstr ""
 
 #: includes/class-newspack-newsletters-settings.php:111
-#: src/components/init-modal/screens/api-keys/index.js:234
+#: src/components/init-modal/screens/api-keys/index.js:212
 msgid "ActiveCampaign API Key"
 msgstr ""
 
@@ -470,7 +470,7 @@ msgstr ""
 #: includes/class-subscription-lists.php:125
 #: includes/class-subscription-lists.php:127
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:218
+#: src/blocks/subscribe/edit.js:204
 msgid "Subscription Lists"
 msgstr ""
 
@@ -496,8 +496,8 @@ msgstr ""
 
 #: includes/class-newspack-newsletters-settings.php:329
 #: dist/adsEditor.js:1
-#: src/components/ad-placements/index.js:98
-#: src/newsletter-editor/sidebar/autocomplete.js:52
+#: src/components/ad-placements/index.js:78
+#: src/newsletter-editor/sidebar/autocomplete.js:39
 msgid "Edit"
 msgstr ""
 
@@ -511,9 +511,9 @@ msgstr ""
 
 #: includes/class-newspack-newsletters-settings.php:449
 #: includes/class-newspack-newsletters-settings.php:455
-#: includes/class-newspack-newsletters-subscription.php:768
-#: includes/class-newspack-newsletters-subscription.php:866
+#: includes/class-newspack-newsletters-subscription.php:771
 #: includes/class-newspack-newsletters-subscription.php:869
+#: includes/class-newspack-newsletters-subscription.php:872
 msgid "Invalid request."
 msgstr ""
 
@@ -536,68 +536,68 @@ msgid "Provider does not handle the contact-exists check."
 msgstr ""
 
 #. translators: %s: User display name.
-#: includes/class-newspack-newsletters-subscription.php:795
+#: includes/class-newspack-newsletters-subscription.php:798
 #, php-format
 msgid "Hello, %s!"
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:796
+#: includes/class-newspack-newsletters-subscription.php:799
 msgid "Verify your email address by visiting the following address:"
 msgstr ""
 
 #. translators: %s Site title.
-#: includes/class-newspack-newsletters-subscription.php:813
+#: includes/class-newspack-newsletters-subscription.php:816
 #, php-format
 msgid "[%s] Verify your email"
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:847
+#: includes/class-newspack-newsletters-subscription.php:850
 msgid "Check your email address for a verification link."
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:861
+#: includes/class-newspack-newsletters-subscription.php:864
 msgid "You're not logged in."
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:877
+#: includes/class-newspack-newsletters-subscription.php:880
 msgid "Your email has been verified."
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:930
+#: includes/class-newspack-newsletters-subscription.php:933
 msgid "Newsletters"
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:948
+#: includes/class-newspack-newsletters-subscription.php:951
 msgid "Please verify your email address before managing your newsletters subscriptions."
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:952
+#: includes/class-newspack-newsletters-subscription.php:955
 msgid "Verify Email"
 msgstr ""
 
 #. translators: %s: Error message.
-#: includes/class-newspack-newsletters-subscription.php:973
+#: includes/class-newspack-newsletters-subscription.php:976
 #, php-format
 msgid "Error while attempting to subscribe: %s"
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:981
+#: includes/class-newspack-newsletters-subscription.php:984
 msgid "Manage your newsletter preferences."
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:1015
+#: includes/class-newspack-newsletters-subscription.php:1018
 msgid "Update subscriptions"
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:1033
+#: includes/class-newspack-newsletters-subscription.php:1036
 msgid "You must be logged in and verified to update your subscriptions."
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:1051
+#: includes/class-newspack-newsletters-subscription.php:1054
 msgid "You must select newsletters to update."
 msgstr ""
 
-#: includes/class-newspack-newsletters-subscription.php:1053
+#: includes/class-newspack-newsletters-subscription.php:1056
 msgid "Your subscriptions were updated."
 msgstr ""
 
@@ -627,7 +627,7 @@ msgid "Add New"
 msgstr ""
 
 #: includes/class-newspack-newsletters.php:556
-#: src/components/init-modal/index.js:29
+#: src/components/init-modal/index.js:26
 msgid "Add New Newsletter"
 msgstr ""
 
@@ -996,7 +996,7 @@ msgstr ""
 
 #: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1696
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:527
-#: src/newsletter-editor/sidebar/send-to.js:35
+#: src/newsletter-editor/sidebar/send-to.js:39
 msgid "list"
 msgstr ""
 
@@ -1158,7 +1158,7 @@ msgid "ERROR: Sending a newsletter failed"
 msgstr ""
 
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:529
-#: src/newsletter-editor/sidebar/send-to.js:36
+#: src/newsletter-editor/sidebar/send-to.js:40
 msgid "sublist"
 msgstr ""
 
@@ -1489,420 +1489,420 @@ msgid "You must select a list."
 msgstr ""
 
 #: dist/adsEditor.js:1
-#: src/components/ad-placements/index.js:61
+#: src/components/ad-placements/index.js:55
 msgid "Placement Name"
 msgstr ""
 
 #: dist/adsEditor.js:1
-#: src/components/ad-placements/index.js:69
-#: src/components/send-button/index.js:395
-#: src/newsletter-editor/layout/index.js:246
-#: src/newsletter-editor/layout/index.js:277
-#: src/newsletter-editor/sidebar/autocomplete.js:123
+#: src/components/ad-placements/index.js:59
+#: src/components/send-button/index.js:358
+#: src/newsletter-editor/layout/index.js:226
+#: src/newsletter-editor/layout/index.js:257
+#: src/newsletter-editor/sidebar/autocomplete.js:101
 msgid "Cancel"
 msgstr ""
 
 #: dist/adsEditor.js:1
-#: src/components/ad-placements/index.js:77
-#: src/newsletter-editor/layout/index.js:243
+#: src/components/ad-placements/index.js:62
+#: src/newsletter-editor/layout/index.js:223
 msgid "Save"
 msgstr ""
 
 #: dist/adsEditor.js:1
-#: src/components/ad-placements/index.js:107
+#: src/components/ad-placements/index.js:86
 msgid "Are you sure you want to delete this placement?"
 msgstr ""
 
 #: dist/adsEditor.js:1
-#: src/components/ad-placements/index.js:122
-#: src/components/init-modal/screens/layout-picker/SingleLayoutPreview.js:105
+#: src/components/ad-placements/index.js:92
+#: src/components/init-modal/screens/layout-picker/SingleLayoutPreview.js:95
 msgid "Delete"
 msgstr ""
 
 #: dist/adsEditor.js:1
-#: src/components/ad-placements/index.js:129
+#: src/components/ad-placements/index.js:99
 msgid "Tip: Use the \"Newsletter Ad\" block to insert the ad placements into your newsletter content."
 msgstr ""
 
 #: dist/adsEditor.js:1
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:198
-#: src/components/ad-placements/index.js:141
+#: src/ads/editor/index.js:149
+#: src/components/ad-placements/index.js:103
 msgid "New Placement"
 msgstr ""
 
 #: dist/adsEditor.js:1
-#: src/ads/editor/index.js:73
+#: src/ads/editor/index.js:47
 msgid "The expiration date is set in the past. This ad will not be displayed."
 msgstr ""
 
 #. translators: %s: date.
 #: dist/adsEditor.js:4
-#: src/ads/editor/index.js:83
+#: src/ads/editor/index.js:53
 #, js-format
 msgid "The expiration date is set before the start date (%s). This ad will not be displayed."
 msgstr ""
 
 #. translators: %1$s: date, %2$s: date.
 #: dist/adsEditor.js:7
-#: src/ads/editor/index.js:95
+#: src/ads/editor/index.js:62
 #, js-format
 msgid "This ad will be displayed between %1$s and %2$s."
 msgstr ""
 
 #. translators: %s: date.
 #: dist/adsEditor.js:10
-#: src/ads/editor/index.js:105
+#: src/ads/editor/index.js:69
 #, js-format
 msgid "This ad will be displayed starting %s."
 msgstr ""
 
 #. translators: %s: date.
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:114
+#: src/ads/editor/index.js:75
 #, js-format
 msgid "This ad will be displayed until %s."
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:136
+#: src/ads/editor/index.js:93
 msgid "Ad settings"
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:148
+#: src/ads/editor/index.js:104
 msgid "Insertion strategy"
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:149
+#: src/ads/editor/index.js:105
 msgid "Whether to insert the ad at a percentage or block count of the newsletter content or assigned to a placement."
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:160
+#: src/ads/editor/index.js:114
 msgid "Percentage"
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:164
+#: src/ads/editor/index.js:118
 msgid "Block count"
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:168
-#: src/ads/editor/index.js:175
-#: src/editor/blocks/ad/edit.js:71
+#: src/ads/editor/index.js:122
+#: src/ads/editor/index.js:129
+#: src/editor/blocks/ad/edit.js:65
 msgid "Placement"
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:191
+#: src/ads/editor/index.js:145
 msgid "Select a placement"
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:211
+#: src/ads/editor/index.js:159
 msgid "New Placement Name"
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:215
+#: src/ads/editor/index.js:160
 msgid "Press Enter to save the new placement."
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:270
+#: src/ads/editor/index.js:193
 msgid "Manage placements"
 msgstr ""
 
 #: dist/adsEditor.js:13
-#: src/ads/editor/index.js:274
+#: src/ads/editor/index.js:197
 msgid "Manage Ad Placements"
 msgstr ""
 
-#. translators: %d: number.
+#. translators: %s: percentage.
 #: dist/adsEditor.js:16
-#: src/ads/editor/index.js:302
+#: src/ads/editor/index.js:218
 #, js-format
 msgid "The ad will be automatically inserted about %s into the newsletter content."
 msgstr ""
 
 #. translators: %d: number.
 #: dist/adsEditor.js:19
-#: src/ads/editor/index.js:325
+#: src/ads/editor/index.js:236
 #, js-format
 msgid "The ad will be automatically inserted after %d blocks of newsletter content."
 msgstr ""
 
 #: dist/adsEditor.js:19
-#: src/ads/editor/index.js:336
+#: src/ads/editor/index.js:244
 msgid "Custom Start Date"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:44
+#: src/blocks/subscribe/edit.js:30
 msgid "Initial"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:45
+#: src/blocks/subscribe/edit.js:31
 msgid "Success"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:150
+#: src/blocks/subscribe/edit.js:136
 msgid "Form settings"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:152
+#: src/blocks/subscribe/edit.js:138
 msgid "Display input labels"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:157
+#: src/blocks/subscribe/edit.js:143
 msgid "Email placeholder"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:162
+#: src/blocks/subscribe/edit.js:148
 msgid "Display name field"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:169
-#: src/service-providers/example/index.js:34
+#: src/blocks/subscribe/edit.js:155
+#: src/service-providers/example/index.js:32
 msgid "Name placeholder"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:174
+#: src/blocks/subscribe/edit.js:160
 msgid "Display \"Last Name\" field"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:180
+#: src/blocks/subscribe/edit.js:166
 msgid "\"Last Name\" placeholder"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:189
+#: src/blocks/subscribe/edit.js:175
 msgid "Display list description"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:195
+#: src/blocks/subscribe/edit.js:181
 msgid "Styles"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:197
+#: src/blocks/subscribe/edit.js:183
 msgid "Make sure to pick a color that will contrast against the rest of your site's color scheme, to help this block stand out!"
 msgstr ""
 
 #: dist/blocks.js:1
 #: dist/editorBlocks.js:5
-#: src/blocks/subscribe/edit.js:208
-#: src/newsletter-editor/styling/index.js:236
+#: src/blocks/subscribe/edit.js:194
+#: src/newsletter-editor/styling/index.js:231
 msgid "Text color"
 msgstr ""
 
 #: dist/blocks.js:1
 #: dist/editorBlocks.js:5
-#: src/blocks/subscribe/edit.js:213
-#: src/newsletter-editor/styling/index.js:226
+#: src/blocks/subscribe/edit.js:199
+#: src/newsletter-editor/styling/index.js:221
 msgid "Background color"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:223
+#: src/blocks/subscribe/edit.js:209
 msgid "You must enable lists for subscription."
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:230
+#: src/blocks/subscribe/edit.js:216
 msgid "You must select at least one list."
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:250
+#: src/blocks/subscribe/edit.js:235
 msgid "Manage your subscription lists"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:255
+#: src/blocks/subscribe/edit.js:239
 msgid "Mailchimp Settings"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:257
+#: src/blocks/subscribe/edit.js:241
 msgid "Enable double opt-in"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:258
+#: src/blocks/subscribe/edit.js:242
 msgid "Whether the new contact will have its status as \"pending\" until email confirmation"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/subscribe/edit.js:268
+#: src/blocks/subscribe/edit.js:252
 msgid "Spam protection"
 msgstr ""
 
 #. translators: %s is either 'enabled' or 'disabled'.
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:272
+#: src/blocks/subscribe/edit.js:256
 #, js-format
 msgid "reCAPTCHA is currently %s."
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:274
+#: src/blocks/subscribe/edit.js:258
 msgid "enabled"
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:275
+#: src/blocks/subscribe/edit.js:259
 msgid "disabled"
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:280
+#: src/blocks/subscribe/edit.js:264
 msgid "It's highly recommended that you enable reCAPTCHA protection to prevent spambots from using this form!"
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:288
+#: src/blocks/subscribe/edit.js:272
 msgid "Configure your reCAPTCHA settings."
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:296
+#: src/blocks/subscribe/edit.js:280
 msgid "Edited State"
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:324
+#: src/blocks/subscribe/edit.js:308
 msgid "A previously selected list is no longer available. Please, revise the subscription lists selection."
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:367
-#: src/newsletter-editor/sidebar/sender.js:55
+#: src/blocks/subscribe/edit.js:354
+#: src/newsletter-editor/sidebar/sender.js:44
 msgid "Name"
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:381
+#: src/blocks/subscribe/edit.js:368
 msgid "Last Name"
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:397
+#: src/blocks/subscribe/edit.js:384
 msgid "Email Address"
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:407
+#: src/blocks/subscribe/edit.js:394
 msgid "Sign up"
 msgstr ""
 
 #: dist/blocks.js:4
-#: src/blocks/subscribe/edit.js:421
+#: src/blocks/subscribe/edit.js:408
 msgid "Success message"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/utils.js:107
+#: src/editor/blocks/posts-inserter/utils.js:105
 msgctxt "comma separator for multiple authors"
 msgid ","
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:37
-#: src/editor/blocks/posts-inserter/query-controls.js:148
-#: src/editor/blocks/posts-inserter/query-controls.js:161
-#: src/editor/blocks/posts-inserter/query-controls.js:176
-#: src/editor/blocks/posts-inserter/query-controls.js:193
-#: src/editor/blocks/posts-inserter/query-controls.js:208
+#: src/editor/blocks/posts-inserter/query-controls.js:30
+#: src/editor/blocks/posts-inserter/query-controls.js:139
+#: src/editor/blocks/posts-inserter/query-controls.js:152
+#: src/editor/blocks/posts-inserter/query-controls.js:167
+#: src/editor/blocks/posts-inserter/query-controls.js:184
+#: src/editor/blocks/posts-inserter/query-controls.js:199
 msgid "(no title)"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:216
+#: src/editor/blocks/posts-inserter/query-controls.js:207
 msgid "Post type"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:222
+#: src/editor/blocks/posts-inserter/query-controls.js:213
 msgid "Display specific posts"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:228
+#: src/editor/blocks/posts-inserter/query-controls.js:219
 msgid "Display sponsored posts"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:237
+#: src/editor/blocks/posts-inserter/query-controls.js:228
 msgid "Add posts"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:264
+#: src/editor/blocks/posts-inserter/query-controls.js:255
 msgid "Hide Advanced Filters"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:265
+#: src/editor/blocks/posts-inserter/query-controls.js:256
 msgid "Show Advanced Filters"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:276
+#: src/editor/blocks/posts-inserter/query-controls.js:267
 msgid "Tags"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:284
+#: src/editor/blocks/posts-inserter/query-controls.js:275
 msgid "Excluded Categories"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:292
+#: src/editor/blocks/posts-inserter/query-controls.js:283
 msgid "Excluded Tags"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:296
+#: src/editor/blocks/posts-inserter/query-controls.js:287
 msgid "Order by"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:300
+#: src/editor/blocks/posts-inserter/query-controls.js:291
 msgid "Newest to oldest"
 msgstr ""
 
 #: dist/editorBlocks.js:1
-#: src/editor/blocks/posts-inserter/query-controls.js:304
+#: src/editor/blocks/posts-inserter/query-controls.js:295
 msgid "Oldest to newest"
 msgstr ""
 
 #. translators: label for ordering posts by title in ascending order
 #: dist/editorBlocks.js:3
-#: src/editor/blocks/posts-inserter/query-controls.js:309
+#: src/editor/blocks/posts-inserter/query-controls.js:300
 msgid "A → Z"
 msgstr ""
 
 #. translators: label for ordering posts by title in descending order
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/query-controls.js:314
+#: src/editor/blocks/posts-inserter/query-controls.js:305
 msgid "Z → A"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/components/select-control-with-optgroup/index.js:65
+#: src/components/select-control-with-optgroup/index.js:58
 msgid "-- Select --"
 msgstr ""
 
@@ -1962,150 +1962,150 @@ msgid "Courier"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/newsletter-editor/styling/index.js:205
+#: src/newsletter-editor/styling/index.js:201
 msgid "Typography"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/newsletter-editor/styling/index.js:209
+#: src/newsletter-editor/styling/index.js:204
 msgid "Headings font"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/newsletter-editor/styling/index.js:217
+#: src/newsletter-editor/styling/index.js:212
 msgid "Body font"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/newsletter-editor/styling/index.js:224
+#: src/newsletter-editor/styling/index.js:219
 msgid "Color"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/newsletter-editor/styling/index.js:248
-#: src/newsletter-editor/styling/index.js:254
-#: src/newsletter-editor/styling/index.js:265
+#: src/newsletter-editor/styling/index.js:241
+#: src/newsletter-editor/styling/index.js:245
+#: src/newsletter-editor/styling/index.js:256
 msgid "Custom CSS"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/newsletter-editor/styling/index.js:255
+#: src/newsletter-editor/styling/index.js:246
 msgid "This is an advanced feature and may result in unpredictable behavior. Custom CSS will be appended to default styles in sent emails only."
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/newsletter-editor/styling/index.js:266
+#: src/newsletter-editor/styling/index.js:257
 msgid "Write custom CSS…"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:122
+#: src/editor/blocks/posts-inserter/index.js:119
 msgid "Show image on top"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:128
+#: src/editor/blocks/posts-inserter/index.js:125
 msgid "Show image on left"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:134
+#: src/editor/blocks/posts-inserter/index.js:131
 msgid "Show image on right"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:143
+#: src/editor/blocks/posts-inserter/index.js:140
 msgid "Small"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:147
+#: src/editor/blocks/posts-inserter/index.js:144
 msgid "Medium"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:151
+#: src/editor/blocks/posts-inserter/index.js:148
 msgid "Large"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:158
+#: src/editor/blocks/posts-inserter/index.js:155
 msgid "Post content settings"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:160
+#: src/editor/blocks/posts-inserter/index.js:157
 msgid "Post subtitle"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:165
+#: src/editor/blocks/posts-inserter/index.js:162
 msgid "Post excerpt"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:171
+#: src/editor/blocks/posts-inserter/index.js:168
 msgid "Max number of words in excerpt"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:179
+#: src/editor/blocks/posts-inserter/index.js:176
 msgid "Date"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:184
+#: src/editor/blocks/posts-inserter/index.js:181
 msgid "Featured image"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:189
+#: src/editor/blocks/posts-inserter/index.js:186
 msgid "Author's name"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:194
+#: src/editor/blocks/posts-inserter/index.js:191
 msgid "\"Continue reading…\" link"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:199
+#: src/editor/blocks/posts-inserter/index.js:196
 msgid "Sorting and filtering"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:202
+#: src/editor/blocks/posts-inserter/index.js:199
 msgid "Text style"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:216
+#: src/editor/blocks/posts-inserter/index.js:213
 msgid "Heading style"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:228
+#: src/editor/blocks/posts-inserter/index.js:225
 msgid "Subtitle style"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:250
+#: src/editor/blocks/posts-inserter/index.js:245
 msgid "Image Size"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:293
+#: src/editor/blocks/posts-inserter/index.js:282
 msgid "Posts Inserter"
 msgstr ""
 
 #: dist/editorBlocks.js:5
-#: src/editor/blocks/posts-inserter/index.js:309
+#: src/editor/blocks/posts-inserter/index.js:292
 msgid "Insert posts"
 msgstr ""
 
 #: dist/newsletterAdsEditor.js:1
 #: src/ads/newsletter-editor/disable-auto-ads.js:27
-#: src/editor/blocks/ad/edit.js:31
+#: src/editor/blocks/ad/edit.js:27
 msgid "ads"
 msgstr ""
 
@@ -2115,40 +2115,40 @@ msgid "Enable automatic insertion of ads"
 msgstr ""
 
 #: dist/newsletterAdsEditor.js:1
-#: src/ads/newsletter-editor/disable-auto-ads.js:70
+#: src/ads/newsletter-editor/disable-auto-ads.js:69
 msgid "Automatic ads insertion is disabled because this post contains manually inserted ad blocks."
 msgstr ""
 
-#. Translators: help message showing number of active ads.
+#. translators: %1$d: number of active ads, %2$s: ad label.
 #: dist/newsletterAdsEditor.js:4
-#: src/ads/newsletter-editor/disable-auto-ads.js:81
+#: src/ads/newsletter-editor/disable-auto-ads.js:76
 #, js-format
 msgid "There is %1$d active %2$s."
 msgid_plural "There are %1$d active %2$ss."
 msgstr[0] ""
 msgstr[1] ""
 
-#. Translators: "manage ad" message.
+#. translators: %s: ad label.
 #: dist/newsletterAdsEditor.js:7
-#: src/ads/newsletter-editor/disable-auto-ads.js:101
+#: src/ads/newsletter-editor/disable-auto-ads.js:91
 #, js-format
 msgid "Manage %ss"
 msgstr ""
 
 #: dist/newsletterAdsEditor.js:7
-#: src/ads/newsletter-editor/index.js:13
+#: src/ads/newsletter-editor/index.js:11
 msgid "Advertising"
 msgstr ""
 
-#: src/components/copy-html/index.js:34
+#: src/components/copy-html/index.js:29
 msgid "Copied!"
 msgstr ""
 
-#: src/components/copy-html/index.js:35
+#: src/components/copy-html/index.js:29
 msgid "Copy to clipboard"
 msgstr ""
 
-#: src/components/init-modal/index.js:28
+#: src/components/init-modal/index.js:26
 msgid "Configure Plugin"
 msgstr ""
 
@@ -2156,63 +2156,63 @@ msgstr ""
 msgid "Only administrators can set API keys."
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:98
+#: src/components/init-modal/screens/api-keys/index.js:92
 msgid "Select your email service provider"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:108
+#: src/components/init-modal/screens/api-keys/index.js:102
 msgid "Select service provider"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:128
+#: src/components/init-modal/screens/api-keys/index.js:122
 msgid "Enter your Mailchimp API key"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:130
+#: src/components/init-modal/screens/api-keys/index.js:124
 msgid "Mailchimp API key"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:143
+#: src/components/init-modal/screens/api-keys/index.js:135
 msgid "Find or generate your API key"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:151
+#: src/components/init-modal/screens/api-keys/index.js:142
 msgid "Enter your Constant Contact API key and access token"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:157
+#: src/components/init-modal/screens/api-keys/index.js:144
 msgid "Constant Contact API key"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:178
+#: src/components/init-modal/screens/api-keys/index.js:163
 msgid "Get Constant Contact API key"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:182
+#: src/components/init-modal/screens/api-keys/index.js:167
 msgid "Get Constant Contact access token"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:190
+#: src/components/init-modal/screens/api-keys/index.js:174
 msgid "Enter your Campaign Monitor API key and client ID"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:196
+#: src/components/init-modal/screens/api-keys/index.js:176
 msgid "Campaign Monitor API key"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:204
+#: src/components/init-modal/screens/api-keys/index.js:184
 msgid "Campaign Monitor Client ID"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:217
+#: src/components/init-modal/screens/api-keys/index.js:195
 msgid "Get Campaign Monitor API key and Client ID"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:224
+#: src/components/init-modal/screens/api-keys/index.js:202
 msgid "Enter your ActiveCampaign API URL and Key"
 msgstr ""
 
-#: src/components/init-modal/screens/api-keys/index.js:247
+#: src/components/init-modal/screens/api-keys/index.js:223
 msgid "Get ActiveCampaign API URL and Key"
 msgstr ""
 
@@ -2224,23 +2224,23 @@ msgstr ""
 msgid "Saved layouts"
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:67
+#: src/components/init-modal/screens/layout-picker/index.js:66
 msgid "Choose a layout or start with a blank newsletter."
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:112
+#: src/components/init-modal/screens/layout-picker/index.js:104
 msgid "You don’t have any saved layouts yet."
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:115
+#: src/components/init-modal/screens/layout-picker/index.js:107
 msgid "Turn any newsletter to a layout via the \"Layout\" sidebar menu in the editor."
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:128
+#: src/components/init-modal/screens/layout-picker/index.js:120
 msgid "Blank newsletter"
 msgstr ""
 
-#: src/components/init-modal/screens/layout-picker/index.js:135
+#: src/components/init-modal/screens/layout-picker/index.js:123
 msgid "Use selected layout"
 msgstr ""
 
@@ -2248,79 +2248,79 @@ msgstr ""
 msgid "Are you sure you want to delete this layout?"
 msgstr ""
 
-#: src/components/send-button/index.js:65
-#: src/components/send-button/index.js:93
-#: src/components/send-button/index.js:97
+#: src/components/send-button/index.js:58
+#: src/components/send-button/index.js:83
+#: src/components/send-button/index.js:87
 msgid "Preview email"
 msgstr ""
 
-#: src/components/send-button/index.js:202
+#: src/components/send-button/index.js:187
 msgid "Sending"
 msgstr ""
 
-#: src/components/send-button/index.js:205
+#: src/components/send-button/index.js:189
 msgid "Sent and Published"
 msgstr ""
 
-#: src/components/send-button/index.js:206
+#: src/components/send-button/index.js:189
 msgid "Sent"
 msgstr ""
 
-#: src/components/send-button/index.js:211
-#: src/components/send-button/index.js:221
+#: src/components/send-button/index.js:194
+#: src/components/send-button/index.js:202
 msgid "Send"
 msgstr ""
 
-#: src/components/send-button/index.js:214
+#: src/components/send-button/index.js:197
 msgid "Scheduled"
 msgstr ""
 
-#: src/components/send-button/index.js:217
+#: src/components/send-button/index.js:200
 msgid "Schedule sending"
 msgstr ""
 
-#: src/components/send-button/index.js:220
+#: src/components/send-button/index.js:202
 msgid "Send and Publish"
 msgstr ""
 
-#: src/components/send-button/index.js:226
+#: src/components/send-button/index.js:207
 msgid "Updating…"
 msgstr ""
 
-#: src/components/send-button/index.js:228
+#: src/components/send-button/index.js:209
 msgid "Update and copy HTML"
 msgstr ""
 
-#: src/components/send-button/index.js:230
+#: src/components/send-button/index.js:211
 msgid "Update"
 msgstr ""
 
-#: src/components/send-button/index.js:251
+#: src/components/send-button/index.js:229
 msgid "Mark as sent and publish"
 msgstr ""
 
-#: src/components/send-button/index.js:252
+#: src/components/send-button/index.js:229
 msgid "Mark as sent"
 msgstr ""
 
-#: src/components/send-button/index.js:296
+#: src/components/send-button/index.js:273
 msgid "Newsletter HTML"
 msgstr ""
 
-#: src/components/send-button/index.js:332
+#: src/components/send-button/index.js:304
 msgid "Something went wrong when converting the post to email"
 msgstr ""
 
-#: src/components/send-button/index.js:351
+#: src/components/send-button/index.js:323
 msgid "Unschedule"
 msgstr ""
 
-#: src/components/send-button/index.js:367
+#: src/components/send-button/index.js:339
 msgid "Send your newsletter?"
 msgstr ""
 
 #: src/components/with-api-handler/index.js:12
-msgid "Campaign sent on "
+msgid "Campaign sent on"
 msgstr ""
 
 #: src/editor/blocks-validation/blocks-filters.js:16
@@ -2331,50 +2331,50 @@ msgstr ""
 msgid "Nested group"
 msgstr ""
 
-#: src/editor/blocks-validation/blocks-filters.js:49
+#: src/editor/blocks-validation/blocks-filters.js:48
 msgid "Unequal middle alignment. All or none of the columns should be middle-aligned."
 msgstr ""
 
-#: src/editor/blocks-validation/blocks-filters.js:60
+#: src/editor/blocks-validation/blocks-filters.js:55
 msgid "Nested columns"
 msgstr ""
 
-#: src/editor/blocks-validation/blocks-filters.js:67
+#: src/editor/blocks-validation/blocks-filters.js:62
 msgid "Full width"
 msgstr ""
 
-#: src/editor/blocks-validation/blocks-filters.js:73
+#: src/editor/blocks-validation/blocks-filters.js:68
 msgid "Inline image"
 msgstr ""
 
-#: src/editor/blocks-validation/blocks-filters.js:76
+#: src/editor/blocks-validation/blocks-filters.js:71
 msgid "Drop cap"
 msgstr ""
 
-#: src/editor/blocks-validation/blocks-filters.js:89
+#: src/editor/blocks-validation/blocks-filters.js:84
 msgid "These features will not be displayed correctly in an email, please remove them:"
 msgstr ""
 
-#: src/editor/blocks/ad/edit.js:59
-#: src/editor/blocks/ad/edit.js:88
+#: src/editor/blocks/ad/edit.js:55
+#: src/editor/blocks/ad/edit.js:81
 msgid "Automatic selection"
 msgstr ""
 
 #. translators: %s is the placement name
-#: src/editor/blocks/ad/edit.js:68
+#: src/editor/blocks/ad/edit.js:62
 #, js-format
 msgid "Placement: %s"
 msgstr ""
 
-#: src/editor/blocks/ad/edit.js:91
+#: src/editor/blocks/ad/edit.js:82
 msgid "Placements"
 msgstr ""
 
-#: src/editor/blocks/ad/edit.js:112
+#: src/editor/blocks/ad/edit.js:99
 msgid "By not selecting an ad, the system automatically chooses which ad should be rendered in this position."
 msgstr ""
 
-#: src/editor/blocks/ad/edit.js:120
+#: src/editor/blocks/ad/edit.js:107
 msgid "No ads are available. Make sure you have created ads and that they are scheduled to run on the newsletter's publish date."
 msgstr ""
 
@@ -2427,11 +2427,11 @@ msgstr ""
 msgid "No suitable content found to display in email format."
 msgstr ""
 
-#: src/editor/blocks/embed/index.js:117
+#: src/editor/blocks/embed/index.js:108
 msgid "Preview email format"
 msgstr ""
 
-#: src/editor/blocks/embed/index.js:125
+#: src/editor/blocks/embed/index.js:116
 msgid "Preview web format"
 msgstr ""
 
@@ -2443,204 +2443,204 @@ msgstr ""
 msgid "Creates a \"View this email in your browser link\" to your campaign page."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:23
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:20
 msgid "Displays the unique ID for your campaign."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:27
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:24
 msgid "Adds the Referral badge to your campaign."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:31
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:28
 msgid "Adds a text-only version of the Rewards link."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:35
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:32
 msgid "Inserts links to translate your sent campaign into different languages."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:42
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:36
 msgid "Adds a list of links to translate the content in your campaign. Replace xx with the code for the language your campaign is written in, and we'll display other available languages."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:49
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:43
 msgid "Displays the language code for a particular subscriber. For example, if your subscriber's language is set to English, the merge tag output will display the code en."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:56
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:50
 msgid "Displays the plain-text language for a particular subscriber. All languages are written English, so if your subscriber's language is set to German we'll display \"German\" instead of Deutsch."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:63
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:57
 msgid "Use to show the current date in a given format. Replace X with the format of your choice."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:70
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:61
 msgid "Displays a list of links to recent campaigns sent to the audience indicated. Replace X with the number of campaigns to show."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:77
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:68
 msgid "Creates a linked table of contents in your campaign."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:81
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:72
 msgid "Creates a table of contents in your campaigns as plain-text."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:88
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:76
 msgid "Use this merge tag to generate preview text in a custom-coded campaign."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:95
-msgid "Creates a poll to record subscriber ratings of 1-10."
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:80
+msgid "Creates a poll to record subscriber ratings of 1–10."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:99
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:84
 msgid "Creates a one-question survey with a set number of responses that subscribers can choose from."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:106
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:88
 msgid "Use this tag to include a promo code in a campaign. Replace the “x” variables in your Promo Code merge tag to specify what promo code to display."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:116
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:98
 msgid "Inserts your subscriber's first name if it's available in your audience."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:124
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:103
 msgid "Inserts your subscriber's last name if it's available in your audience."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:132
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:108
 msgid "Inserts your subscriber's email address."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:136
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:112
 msgid "Inserts your subscriber’s phone number if it’s available in your audience."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:143
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:116
 msgid "Inserts your subscriber’s address if it’s available in your audience."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:153
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:227
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:123
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:188
 msgid "Inserts the name of your audience."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:157
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:127
 msgid "Inserts the name of your company or organization that's listed in the required email footer content for your audience."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:164
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:134
 msgid "Inserts the number of subscribers in your audience in plain-text."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:171
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:138
 msgid "Inserts the company or organization name listed under Primary Account Contact info in your Mailchimp account."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:178
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:145
 msgid "Displays MM/DD/YYYY or DD/MM/YYYY based on your settings in your account Details."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:185
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:149
 msgid "Displays the current year. This is great if you include a copyright date in your campaign, because it will update automatically every year."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:195
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:159
 msgid "Gives your subscribers the opportunity to unsubscribe from your emails. (Required by law and Mailchimp's Terms of Use.)."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:202
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:166
 msgid "Inserts your audience's permission reminder"
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:206
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:170
 msgid "Inserts in your mailing address and the \"Add us to your address book\" link that points to the vcard (.vcf) file with your address details."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:213
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:177
 msgid "Inserts an \"Add us to your address book\" link to your campaign."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:220
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:181
 msgid "Inserts a text URL that points to your vcard (.vcf) file of your address details. Use this as a link's Web Address to create a linked version."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:231
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:192
 msgid "Creates a link to the About Your List page."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:235
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:196
 msgid "Inserts your audience's unique ID from your audience's hosted forms."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:242
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:200
 msgid "Inserts the website URL set in the Required Email Footer Content for this audience."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:249
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:204
 msgid "Inserts your company or organization postal mailing address or P.O. Box as plain text."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:256
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:208
 msgid "Inserts your mailing address as plain text on a single line."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:263
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:212
 msgid "Inserts your company or organization telephone number."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:267
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:216
 msgid "Inserts your company or organization name."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:271
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:220
 msgid "Inserts the email address located in the Required Email Footer Content for this audience."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:278
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:224
 msgid "Inserts the URL for your audience's hosted signup form."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:282
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:228
 msgid "Inserts a link to the contact's update profile page."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:286
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:232
 msgid "Inserts the URL to your audience's Forward to a Friend form."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:296
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:239
 msgid "Displays a number. You can use this with a text blurb. For example, if you have 100 subscribers, and input \"*|LIST:SUBSCRIBERS|* Happy Customers are currently enjoying our newsletters\" in your campaign, we'll display \"100 Happy Customers are currently enjoying our newsletters.\""
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:306
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:249
 msgid "Populates your campaign with your Twitter avatar, follower, tweet, and following counts; a follow link, and your latest tweets."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:313
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:256
 msgid "Populates your campaign with your Twitter avatar, follower, tweet, and following counts; and a follow link. Doesn't include your latest tweets."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:320
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:263
 msgid "Displays your direct Twitter profile URL. For example: http://www.twitter.com/mailchimp."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:327
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:267
 msgid "This lets you control the number of tweets to show in your campaign. Replace 2 with the number of tweets you'd like to display."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:334
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:274
 msgid "Can be used to insert multiple Twitter profiles in your Mailchimp campaign. Replace TWITTERUSERNAME with the Twitter display name of any profile you want to show in your campaign."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:341
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:281
 msgid "Adds a Tweet button to your campaign that allows subscribers to share your campaign page link."
 msgstr ""
 
-#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:348
+#: src/editor/blocks/mailchimp-merge-tags/merge-tags.js:285
 msgid "Includes your own custom text, as opposed to the subject line of your newsletter in your Tweet. Also includes a link to your campaign page."
 msgstr ""
 
@@ -2676,165 +2676,165 @@ msgstr ""
 msgid "Thanks for reading. If you liked it, please send to a friend!"
 msgstr ""
 
-#: src/editor/blocks/share/index.js:33
+#: src/editor/blocks/share/index.js:30
 msgid "I'd like to share this newsletter with you: [LINK]"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:39
+#: src/editor/blocks/visibility-attribute/index.js:29
 msgid "Email and Web"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:43
+#: src/editor/blocks/visibility-attribute/index.js:33
 msgid "Email only"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:47
+#: src/editor/blocks/visibility-attribute/index.js:37
 msgid "Web only"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:81
-#: src/editor/blocks/visibility-attribute/index.js:114
+#: src/editor/blocks/visibility-attribute/index.js:70
+#: src/editor/blocks/visibility-attribute/index.js:99
 msgid "Visibility"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:116
+#: src/editor/blocks/visibility-attribute/index.js:101
 msgid "Where should this block be visible?"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:123
+#: src/editor/blocks/visibility-attribute/index.js:109
 msgid "This block is only available in the email version of the newsletter."
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:126
+#: src/editor/blocks/visibility-attribute/index.js:110
 msgid "If the newsletter is going to be viewable publicly on this site, select here if you'd like this block to be visible in a particular version."
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:166
+#: src/editor/blocks/visibility-attribute/index.js:150
 msgid "Newsletter is not public, this block will not be visible."
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:175
+#: src/editor/blocks/visibility-attribute/index.js:156
 msgid "Clear visibility attribute"
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:181
+#: src/editor/blocks/visibility-attribute/index.js:161
 msgid "Only visible on public newsletter page."
 msgstr ""
 
-#: src/editor/blocks/visibility-attribute/index.js:183
+#: src/editor/blocks/visibility-attribute/index.js:162
 msgid "Only visible in the sent email."
 msgstr ""
 
-#: src/editor/index.js:90
+#: src/editor/index.js:86
 msgid "Circle Black"
 msgstr ""
 
-#: src/editor/index.js:95
+#: src/editor/index.js:91
 msgid "Circle White"
 msgstr ""
 
-#: src/editor/index.js:100
+#: src/editor/index.js:96
 msgid "Black"
 msgstr ""
 
-#: src/editor/index.js:105
+#: src/editor/index.js:101
 msgid "White"
 msgstr ""
 
-#: src/editor/mjml/index.js:138
+#: src/editor/mjml/index.js:115
 msgid "Failed to refresh email HTML"
 msgstr ""
 
-#: src/editor/mjml/index.js:157
+#: src/editor/mjml/index.js:134
 msgid "Error refreshing email HTML."
 msgstr ""
 
 #. translators: %s: service provider name.
-#: src/newsletter-editor/campaign-link/index.js:28
+#: src/newsletter-editor/campaign-link/index.js:23
 #, js-format
 msgid "View Campaign in %s"
 msgstr ""
 
-#: src/newsletter-editor/debug-send/index.js:25
+#: src/newsletter-editor/debug-send/index.js:23
 msgid "Send Errors"
 msgstr ""
 
-#: src/newsletter-editor/debug-send/index.js:28
+#: src/newsletter-editor/debug-send/index.js:24
 msgid "The following errors occurred when trying to send the newsletter:"
 msgstr ""
 
-#: src/newsletter-editor/debug-send/index.js:47
+#: src/newsletter-editor/debug-send/index.js:38
 msgid "Only the last 10 errors are stored."
 msgstr ""
 
-#: src/newsletter-editor/editor/index.js:150
+#: src/newsletter-editor/editor/index.js:131
 msgid "\"Custom Fields\" meta box is active in the UI. This will prevent the newsletter editor from functioning correctly. Please disable this meta box in the \"Panels\" section of the Editor Preferences."
 msgstr ""
 
-#: src/newsletter-editor/editor/index.js:159
+#: src/newsletter-editor/editor/index.js:140
 msgid "Open Editor Preferences"
 msgstr ""
 
 #. translators: %s: error message
-#: src/newsletter-editor/editor/index.js:172
+#: src/newsletter-editor/editor/index.js:153
 #, js-format
 msgid "Error sending newsletter: %s"
 msgstr ""
 
-#: src/newsletter-editor/editor/index.js:187
+#: src/newsletter-editor/editor/index.js:168
 msgid "Email content is too long and may get clipped by email clients."
 msgstr ""
 
-#: src/newsletter-editor/index.js:93
+#: src/newsletter-editor/index.js:84
 msgid "Error communicating with service provider."
 msgstr ""
 
-#: src/newsletter-editor/index.js:108
+#: src/newsletter-editor/index.js:99
 msgid "Newsletter Styles"
 msgstr ""
 
-#: src/newsletter-editor/index.js:131
+#: src/newsletter-editor/index.js:115
 msgid "Newsletter Campaign"
 msgstr ""
 
-#: src/newsletter-editor/index.js:146
+#: src/newsletter-editor/index.js:122
 msgid "Testing"
 msgstr ""
 
-#: src/newsletter-editor/index.js:157
+#: src/newsletter-editor/index.js:126
 msgid "Layout"
 msgstr ""
 
-#: src/newsletter-editor/layout/index.js:152
+#: src/newsletter-editor/layout/index.js:139
 msgid "Are you sure you want to overwrite this layout?"
 msgstr ""
 
-#: src/newsletter-editor/layout/index.js:197
+#: src/newsletter-editor/layout/index.js:182
 msgid "Save new layout"
 msgstr ""
 
-#: src/newsletter-editor/layout/index.js:208
+#: src/newsletter-editor/layout/index.js:193
 msgid "Update layout"
 msgstr ""
 
-#: src/newsletter-editor/layout/index.js:219
-#: src/newsletter-editor/layout/index.js:274
+#: src/newsletter-editor/layout/index.js:204
+#: src/newsletter-editor/layout/index.js:254
 msgid "Reset layout"
 msgstr ""
 
-#: src/newsletter-editor/layout/index.js:226
+#: src/newsletter-editor/layout/index.js:211
 msgid "Save newsletter as a layout"
 msgstr ""
 
-#: src/newsletter-editor/layout/index.js:231
+#: src/newsletter-editor/layout/index.js:216
 msgid "Title"
 msgstr ""
 
-#: src/newsletter-editor/layout/index.js:255
+#: src/newsletter-editor/layout/index.js:235
 msgid "Reset newsletter layout?"
 msgstr ""
 
-#: src/newsletter-editor/layout/index.js:260
+#: src/newsletter-editor/layout/index.js:240
 msgid "Resetting the layout will remove all customizations and edits you’ve made. This action cannot be undone."
 msgstr ""
 
@@ -2847,178 +2847,178 @@ msgid "Choose whether this newsletter will be publicly viewable as an article af
 msgstr ""
 
 #. Translators: If available, show a contact count alongside the selected item's type. %s is the number of contacts in the item.
-#: src/newsletter-editor/sidebar/autocomplete.js:39
+#: src/newsletter-editor/sidebar/autocomplete.js:31
 #, js-format
 msgid "%s contact"
 msgid_plural "%s contacts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/newsletter-editor/sidebar/autocomplete.js:60
+#: src/newsletter-editor/sidebar/autocomplete.js:42
 msgid "Clear"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/autocomplete.js:71
-#: src/newsletter-editor/sidebar/sender.js:112
+#: src/newsletter-editor/sidebar/autocomplete.js:53
+#: src/newsletter-editor/sidebar/sender.js:95
 msgid "Manage"
 msgstr ""
 
 #. Translators: Message shown while fetching list or sublist info. %s is the provider's label for the given entity type (list or sublist).
-#: src/newsletter-editor/sidebar/autocomplete.js:86
+#: src/newsletter-editor/sidebar/autocomplete.js:70
 #, js-format
 msgid "Fetching %s info…"
 msgstr ""
 
 #. Translators: SendTo autocomplete field label. %s is the provider's label for the given entity type (list or sublist).
-#: src/newsletter-editor/sidebar/autocomplete.js:93
+#: src/newsletter-editor/sidebar/autocomplete.js:78
 #, js-format
 msgid "Select %s"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/autocomplete.js:104
+#: src/newsletter-editor/sidebar/autocomplete.js:89
 msgid "Start typing to search by name or type"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/autocomplete.js:111
+#: src/newsletter-editor/sidebar/autocomplete.js:95
 msgid "Error fetching send lists."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:144
+#: src/newsletter-editor/sidebar/index.js:139
 msgid "You must authorize your account before publishing your newsletter."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:167
+#: src/newsletter-editor/sidebar/index.js:158
 msgid "There was an error retrieving campaign data. Please try again."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:185
+#: src/newsletter-editor/sidebar/index.js:178
 msgid "Retrieving campaign data…"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:197
+#: src/newsletter-editor/sidebar/index.js:190
 msgid "Campaign has been sent."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:205
+#: src/newsletter-editor/sidebar/index.js:198
 msgid "Campaign Name"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:213
+#: src/newsletter-editor/sidebar/index.js:206
 msgid "Subject"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/index.js:220
+#: src/newsletter-editor/sidebar/index.js:213
 msgid "Preview text"
 msgstr ""
 
 #. Translators: Error shown when we can't find the selected list for a newsletter. %s is the ESP's label for the list entity.
 #. Translators: Error shown when we can't find the selected sublist for a newsletter. %s is the ESP's label for the sublist entity or entities.
-#: src/newsletter-editor/sidebar/send-to.js:81
-#: src/newsletter-editor/sidebar/send-to.js:93
+#: src/newsletter-editor/sidebar/send-to.js:85
+#: src/newsletter-editor/sidebar/send-to.js:97
 #, js-format
 msgid "Could not find the selected %s. It may have been deleted in your email service provider."
 msgstr ""
 
 #. Translators: A summary of which list the campaign is set to send to, and the total number of contacts, if available. %1$s is the number of contacts. %2$s is the label of the list (ex: Main), %3$s is the label for the type of the list (ex: "list" on Active Campaign and "audience" on Mailchimp).
-#: src/newsletter-editor/sidebar/send-to.js:108
+#: src/newsletter-editor/sidebar/send-to.js:112
 #, js-format
 msgid "This newsletter will be sent to <strong>%1$s contact</strong> in the <strong>%2$s</strong> %3$s."
 msgid_plural "This newsletter will be sent to <strong>all %1$s contacts</strong> in the <strong>%2$s</strong> %3$s."
 msgstr[0] ""
 msgstr[1] ""
 
-#. Translators: A summary of which list the campaign is set to send to, and the total number of contacts, if available. %1$s is the number of contacts. %2$s is the label of the list (ex: Main), %3$s is the label for the type of the list (ex: "list" on Active Campaign and "audience" on Mailchimp).
-#: src/newsletter-editor/sidebar/send-to.js:122
+#. translators: %1$s: number of contacts, %2$s: list label, %3$s: list type, %4$s: sublist label, %5$s: sublist type.
+#: src/newsletter-editor/sidebar/send-to.js:126
 #, js-format
 msgid "This newsletter will be sent to <strong>%1$s contact</strong> in the <strong>%2$s</strong> %3$s who is part of the <strong>%4$s</strong> %5$s."
 msgid_plural "This newsletter will be sent to <strong>all %1$s contacts</strong> in the <strong>%2$s</strong> %3$s who are part of the <strong>%4$s</strong> %5$s."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/newsletter-editor/sidebar/send-to.js:149
+#: src/newsletter-editor/sidebar/send-to.js:152
 msgid "Send to"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/send-to.js:159
+#: src/newsletter-editor/sidebar/send-to.js:160
 msgid "Updated send-to info fetched from ESP."
 msgstr ""
 
 #. Translators: Error shown when we can't find info on the selected list. %s is the ESP's label for the list entity.
 #. Translators: Error shown when we can't find info on the selected sublist. %s is the ESP's label for the sublist entity or entities.
 #: src/newsletter-editor/sidebar/send-to.js:173
-#: src/newsletter-editor/sidebar/send-to.js:206
+#: src/newsletter-editor/sidebar/send-to.js:207
 #, js-format
 msgid "Invalid %s selection."
 msgstr ""
 
 #. translators: %s: list of allowed domains
-#: src/newsletter-editor/sidebar/sender.js:37
+#: src/newsletter-editor/sidebar/sender.js:30
 #, js-format
 msgid "Sender email must contain one of the following domains: %s"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:45
+#: src/newsletter-editor/sidebar/sender.js:37
 msgid "Sender"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:50
+#: src/newsletter-editor/sidebar/sender.js:40
 msgid "Updated sender info fetched from ESP."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:60
+#: src/newsletter-editor/sidebar/sender.js:49
 msgid "The campaign’s sender name."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:64
-#: src/newsletter-editor/sidebar/sender.js:83
+#: src/newsletter-editor/sidebar/sender.js:53
+#: src/newsletter-editor/sidebar/sender.js:76
 msgid "Email"
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:65
+#: src/newsletter-editor/sidebar/sender.js:56
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:71
+#: src/newsletter-editor/sidebar/sender.js:64
 msgid "The campaign’s sender email."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:78
+#: src/newsletter-editor/sidebar/sender.js:71
 msgid "There are no verified email addresses."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:84
+#: src/newsletter-editor/sidebar/sender.js:77
 msgid "Select a verified sender email."
 msgstr ""
 
-#: src/newsletter-editor/sidebar/sender.js:92
+#: src/newsletter-editor/sidebar/sender.js:82
 msgid "-- Select a sender email --"
 msgstr ""
 
-#: src/newsletter-editor/testing/index.js:70
+#: src/newsletter-editor/testing/index.js:58
 msgid "Test email sent."
 msgstr ""
 
-#: src/newsletter-editor/testing/index.js:76
+#: src/newsletter-editor/testing/index.js:61
 msgid "Error sending test email."
 msgstr ""
 
-#: src/newsletter-editor/testing/index.js:102
+#: src/newsletter-editor/testing/index.js:86
 msgid "Send a test to"
 msgstr ""
 
-#: src/newsletter-editor/testing/index.js:104
+#: src/newsletter-editor/testing/index.js:89
 msgid "Use commas to separate multiple emails. Any unsaved changes will be saved."
 msgstr ""
 
-#: src/newsletter-editor/testing/index.js:105
+#: src/newsletter-editor/testing/index.js:90
 msgid "Any unsaved changes will be saved."
 msgstr ""
 
-#: src/newsletter-editor/testing/index.js:121
+#: src/newsletter-editor/testing/index.js:106
 msgid "Sending test email…"
 msgstr ""
 
-#: src/newsletter-editor/testing/index.js:122
+#: src/newsletter-editor/testing/index.js:107
 msgid "Send a test email"
 msgstr ""
 
@@ -3034,54 +3034,54 @@ msgstr ""
 msgid "You’re about to send an ActiveCampaign newsletter to the following list:"
 msgstr ""
 
-#: src/service-providers/active_campaign/index.js:42
+#: src/service-providers/active_campaign/index.js:39
 msgid ", segmented to:"
 msgstr ""
 
-#: src/service-providers/active_campaign/index.js:46
+#: src/service-providers/active_campaign/index.js:43
 msgid "Are you sure you want to proceed?"
 msgstr ""
 
 #: src/service-providers/campaign_monitor/index.js:41
 #: src/service-providers/constant_contact/index.js:43
-#: src/service-providers/example/index.js:73
-#: src/service-providers/mailchimp/index.js:57
+#: src/service-providers/example/index.js:71
+#: src/service-providers/mailchimp/index.js:59
 msgid "You're sending a newsletter to:"
 msgstr ""
 
-#. Translators: subscriber count help message.
+#. translators: %d: subscriber count.
 #: src/service-providers/campaign_monitor/index.js:49
 #: src/service-providers/constant_contact/index.js:51
-#: src/service-providers/example/index.js:87
-#: src/service-providers/mailchimp/index.js:72
+#: src/service-providers/example/index.js:85
+#: src/service-providers/mailchimp/index.js:74
 #, js-format
 msgid "%d subscriber"
 msgid_plural "%d subscribers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/service-providers/example/index.js:29
+#: src/service-providers/example/index.js:28
 msgid "Provider-specific sidebar content"
 msgstr ""
 
-#: src/service-providers/example/index.js:31
-msgid "Post ID: "
+#: src/service-providers/example/index.js:29
+msgid "Post ID:"
 msgstr ""
 
-#: src/service-providers/mailchimp/ProviderSidebar.js:26
+#: src/service-providers/mailchimp/ProviderSidebar.js:22
 msgid "Can’t unset folder"
 msgstr ""
 
-#: src/service-providers/mailchimp/ProviderSidebar.js:26
+#: src/service-providers/mailchimp/ProviderSidebar.js:22
 msgid "No folder"
 msgstr ""
 
-#: src/service-providers/mailchimp/ProviderSidebar.js:36
+#: src/service-providers/mailchimp/ProviderSidebar.js:32
 msgid "Campaign Folder"
 msgstr ""
 
-#: src/service-providers/manual/index.js:36
-#: src/service-providers/manual/index.js:50
+#: src/service-providers/manual/index.js:35
+#: src/service-providers/manual/index.js:44
 msgid "Copy the HTML code below to manually publish your newsletter with your provider."
 msgstr ""
 

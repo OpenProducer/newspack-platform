@@ -1,3 +1,34 @@
+## [3.25.1](https://github.com/Automattic/newspack-newsletters/compare/v3.25.0...v3.25.1) (2025-11-26)
+
+
+### Bug Fixes
+
+* **mjml:** escape values when converting post to MJML ([#1976](https://github.com/Automattic/newspack-newsletters/issues/1976)) ([8a61355](https://github.com/Automattic/newspack-newsletters/commit/8a61355813650901851b4218a79c66319feecdf9))
+
+# [3.25.0](https://github.com/Automattic/newspack-newsletters/compare/v3.24.2...v3.25.0) (2025-11-24)
+
+
+### Bug Fixes
+
+* `alpha` conflicts with `release` ([da3938a](https://github.com/Automattic/newspack-newsletters/commit/da3938a214aff6e33a59959c8f3337ff1f62cd3d))
+* `alpha` conflicts with `release` ([#1973](https://github.com/Automattic/newspack-newsletters/issues/1973)) ([ca54c51](https://github.com/Automattic/newspack-newsletters/commit/ca54c5198572dea428aa2961c378e259bba5a552))
+* remove 'hide block' option for Newsletters ([#1968](https://github.com/Automattic/newspack-newsletters/issues/1968)) ([c7ae6e2](https://github.com/Automattic/newspack-newsletters/commit/c7ae6e24f18fddbe9b9eaf2fe71b3b1375efbc60))
+* remove 'hide block' option for Newsletters ([#1968](https://github.com/Automattic/newspack-newsletters/issues/1968)) ([74d3c39](https://github.com/Automattic/newspack-newsletters/commit/74d3c396d5e7f64e6fdfbc37d4d6bb28e9cf8a9d))
+* remove stretchy paragraphy, heading block variations from newsletter ([#1967](https://github.com/Automattic/newspack-newsletters/issues/1967)) ([0eaf738](https://github.com/Automattic/newspack-newsletters/commit/0eaf7385fc01889132ee83e97eab87ffd80a6183))
+* remove stretchy paragraphy, heading block variations from newsletter ([#1967](https://github.com/Automattic/newspack-newsletters/issues/1967)) ([39ce7b8](https://github.com/Automattic/newspack-newsletters/commit/39ce7b82e3872cf3a1182d7e68c05b829582f341))
+
+
+### Features
+
+* Merge pull request [#1960](https://github.com/Automattic/newspack-newsletters/issues/1960) from Automattic/trunk ([79b9539](https://github.com/Automattic/newspack-newsletters/commit/79b95391af644956e3bb29828c69172e8bc51694))
+
+## [3.24.2](https://github.com/Automattic/newspack-newsletters/compare/v3.24.1...v3.24.2) (2025-11-24)
+
+
+### Bug Fixes
+
+* allow updates to scheduled newsletter posts ([#1966](https://github.com/Automattic/newspack-newsletters/issues/1966)) ([3e165ff](https://github.com/Automattic/newspack-newsletters/commit/3e165ff0264cf4320a77174fe8a775338f70ded7))
+
 ## [3.24.1](https://github.com/Automattic/newspack-newsletters/compare/v3.24.0...v3.24.1) (2025-11-05)
 
 

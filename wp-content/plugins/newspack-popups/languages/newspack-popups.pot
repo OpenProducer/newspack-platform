@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Newspack Campaigns plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Campaigns 3.6.2\n"
+"Project-Id-Version: Newspack Campaigns 3.7.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-20T19:32:53+00:00\n"
+"POT-Creation-Date: 2025-11-03T18:36:21+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-popups\n"
@@ -160,8 +160,8 @@ msgstr ""
 #: includes/class-newspack-popups-settings.php:31
 #: dist/editor.js:47
 #: dist/settings.js:1
-#: src/editor/index.js:88
-#: src/settings/index.js:126
+#: src/editor/index.js:80
+#: src/settings/index.js:99
 msgid "Settings"
 msgstr ""
 
@@ -292,7 +292,7 @@ msgstr ""
 
 #: includes/class-newspack-popups.php:806
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:81
+#: src/editor/Sidebar.js:75
 msgid "Inline"
 msgstr ""
 
@@ -763,76 +763,76 @@ msgid "Choose a custom placement"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/custom-placement/edit.js:47
+#: src/blocks/custom-placement/edit.js:45
 msgid "There was an error fetching prompts for this custom placement."
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/custom-placement/edit.js:83
+#: src/blocks/custom-placement/edit.js:80
 msgid "Custom Placement"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/custom-placement/edit.js:109
+#: src/blocks/custom-placement/edit.js:104
 msgid "No active prompts found for this custom placement."
 msgstr ""
 
-#. Translators: Max. number of popups displayed; plural modifier.
+#. translators: %1$s: max number of popups displayed. %2$s: plural modifier.
 #: dist/blocks.js:4
-#: src/blocks/custom-placement/edit.js:117
+#: src/blocks/custom-placement/edit.js:112
 #, js-format
 msgid "This custom placement will display at most %1$sthe following active prompt%2$s, depending on the reader’s top-priority segment:"
 msgstr ""
 
-#. Translators: Segment name.
+#. translators: %s: segment name.
 #: dist/blocks.js:7
-#: src/blocks/custom-placement/edit.js:136
+#: src/blocks/custom-placement/edit.js:131
 #, js-format
 msgid "Segment: %s"
 msgstr ""
 
 #: dist/blocks.js:7
-#: src/blocks/custom-placement/edit.js:142
-msgid "Segment: "
+#: src/blocks/custom-placement/edit.js:137
+msgid "Segment:"
 msgstr ""
 
 #: dist/blocks.js:7
-#: src/blocks/custom-placement/edit.js:145
-msgid " else"
+#: src/blocks/custom-placement/edit.js:140
+msgid "else"
 msgstr ""
 
-#. Translators: An id of a popup.
+#. translators: %s: an id of a popup.
 #: dist/blocks.js:19
 #: src/blocks/single-prompt/edit.js:40
 #, js-format
 msgid "No active prompts found with ID %s. Try choosing another prompt."
 msgstr ""
 
-#. Translators: An id of a popup.
+#. translators: %s: an id of a popup.
 #: dist/blocks.js:22
-#: src/blocks/single-prompt/edit.js:57
+#: src/blocks/single-prompt/edit.js:54
 #, js-format
 msgid "There was an error fetching prompt with ID %s."
 msgstr ""
 
 #: dist/blocks.js:22
-#: src/blocks/single-prompt/edit.js:75
+#: src/blocks/single-prompt/edit.js:72
 msgid "(no title)"
 msgstr ""
 
 #: dist/blocks.js:22
-#: src/blocks/single-prompt/edit.js:77
+#: src/blocks/single-prompt/edit.js:73
 msgid "edit"
 msgstr ""
 
 #: dist/blocks.js:22
-#: src/blocks/single-prompt/edit.js:100
+#: src/blocks/single-prompt/edit.js:90
 msgid "Single Prompt"
 msgstr ""
 
-#. Translators: An id of a popup.
+#. translators: %s: an id of a popup.
 #: dist/blocks.js:25
-#: src/blocks/single-prompt/edit.js:107
+#: src/blocks/single-prompt/edit.js:95
 #, js-format
 msgid "Loading prompt with ID %s…"
 msgstr ""
@@ -882,12 +882,12 @@ msgid "single"
 msgstr ""
 
 #: dist/documentSettings.js:1
-#: src/document-settings/index.js:14
+#: src/document-settings/index.js:12
 msgid "Newspack Campaigns Settings"
 msgstr ""
 
 #: dist/documentSettings.js:1
-#: src/document-settings/index.js:19
+#: src/document-settings/index.js:16
 msgid "Disable prompts on this post or page"
 msgstr ""
 
@@ -901,7 +901,7 @@ msgstr ""
 #: dist/editor.js:5
 #: dist/editor.js:17
 #: src/editor/PositionPlacementControl.js:27
-#: src/editor/PositionPlacementControl.js:58
+#: src/editor/PositionPlacementControl.js:59
 msgid "Center"
 msgstr ""
 
@@ -913,54 +913,54 @@ msgstr ""
 
 #. translators: Overlay Prompt Position
 #: dist/editor.js:9
-#: src/editor/PositionPlacementControl.js:38
+#: src/editor/PositionPlacementControl.js:39
 msgid "Top Left"
 msgstr ""
 
 #. translators: Overlay Prompt Position
 #: dist/editor.js:11
-#: src/editor/PositionPlacementControl.js:43
+#: src/editor/PositionPlacementControl.js:44
 msgid "Top Center"
 msgstr ""
 
 #. translators: Overlay Prompt Position
 #: dist/editor.js:13
-#: src/editor/PositionPlacementControl.js:48
+#: src/editor/PositionPlacementControl.js:49
 msgid "Top Right"
 msgstr ""
 
 #. translators: Overlay Prompt Position
 #: dist/editor.js:15
-#: src/editor/PositionPlacementControl.js:53
+#: src/editor/PositionPlacementControl.js:54
 msgid "Center Left"
 msgstr ""
 
 #. translators: Overlay Prompt Position
 #: dist/editor.js:19
-#: src/editor/PositionPlacementControl.js:63
+#: src/editor/PositionPlacementControl.js:64
 msgid "Center Right"
 msgstr ""
 
 #. translators: Overlay Prompt Position
 #: dist/editor.js:21
-#: src/editor/PositionPlacementControl.js:68
+#: src/editor/PositionPlacementControl.js:69
 msgid "Bottom Left"
 msgstr ""
 
 #. translators: Overlay Prompt Position
 #: dist/editor.js:23
-#: src/editor/PositionPlacementControl.js:73
+#: src/editor/PositionPlacementControl.js:74
 msgid "Bottom Center"
 msgstr ""
 
 #. translators: Overlay Prompt Position
 #: dist/editor.js:25
-#: src/editor/PositionPlacementControl.js:78
+#: src/editor/PositionPlacementControl.js:79
 msgid "Bottom Right"
 msgstr ""
 
 #: dist/editor.js:25
-#: src/editor/PositionPlacementControl.js:84
+#: src/editor/PositionPlacementControl.js:85
 msgid "Select Position"
 msgstr ""
 
@@ -990,71 +990,71 @@ msgid "Custom"
 msgstr ""
 
 #: dist/editor.js:25
-#: src/editor/Preview.js:56
+#: src/editor/Preview.js:48
 msgid "Preview"
 msgstr ""
 
 #: dist/editor.js:25
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:45
-#: src/editor/Duplicate.js:147
-msgid " copy"
+#: src/editor/Duplicate.js:38
+#: src/editor/Duplicate.js:131
+msgid "copy"
 msgstr ""
 
 #: dist/editor.js:25
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:78
-#: src/editor/Duplicate.js:151
+#: src/editor/Duplicate.js:66
+#: src/editor/Duplicate.js:135
 msgid "Duplicate"
 msgstr ""
 
-#. Translators: Title of the duplicated popup.
+#. translators: %s: title of the duplicated popup.
 #: dist/editor.js:25
-#: src/editor/Duplicate.js:84
+#: src/editor/Duplicate.js:72
 #, js-format
 msgid "Duplicate “%s”"
 msgstr ""
 
-#. Translators: Title of the duplicated popup.
+#. translators: %s: title of the duplicated popup.
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:97
+#: src/editor/Duplicate.js:85
 #, js-format
 msgid "Duplicate of “%s” created as a draft."
 msgstr ""
 
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:103
+#: src/editor/Duplicate.js:91
 msgid "This prompt is currently not assigned to any campaign."
 msgstr ""
 
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:111
+#: src/editor/Duplicate.js:96
 msgid "Close"
 msgstr ""
 
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:114
+#: src/editor/Duplicate.js:99
 msgid "Edit"
 msgstr ""
 
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:122
+#: src/editor/Duplicate.js:107
 msgid "This prompt will not be assigned to any campaign."
 msgstr ""
 
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:127
+#: src/editor/Duplicate.js:112
 msgid "Title"
 msgstr ""
 
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:139
+#: src/editor/Duplicate.js:124
 msgid "Cancel"
 msgstr ""
 
 #: dist/editor.js:28
-#: src/editor/Duplicate.js:60
-#: src/editor/Duplicate.js:66
+#: src/editor/Duplicate.js:53
+#: src/editor/Duplicate.js:59
 msgid "Error duplicating prompt."
 msgstr ""
 
@@ -1063,215 +1063,215 @@ msgstr ""
 msgid "Merge tags"
 msgstr ""
 
-#. Translators: Custom placement name.
+#. translators: %s: custom placement name.
 #: dist/editor.js:31
-#: src/editor/utils.js:193
+#: src/editor/utils.js:184
 #, js-format
 msgid "The prompt will appear where %s is inserted using the Custom Placement block."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:197
+#: src/editor/utils.js:185
 msgid "this custom placement"
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:203
+#: src/editor/utils.js:191
 msgid "The prompt will be displayed as an overlay at the center of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:208
+#: src/editor/utils.js:193
 msgid "The prompt will be displayed as an overlay at the center left of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:213
+#: src/editor/utils.js:195
 msgid "The prompt will be displayed as an overlay at the center right of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:218
+#: src/editor/utils.js:197
 msgid "The prompt will be displayed as an overlay at the top of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:223
+#: src/editor/utils.js:199
 msgid "The prompt will be displayed as an overlay at the top left of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:228
+#: src/editor/utils.js:201
 msgid "The prompt will be displayed as an overlay at the top right of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:233
+#: src/editor/utils.js:203
 msgid "The prompt will be displayed as an overlay at the bottom of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:238
+#: src/editor/utils.js:205
 msgid "The prompt will be displayed as an overlay at the bottom left of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:243
+#: src/editor/utils.js:207
 msgid "The prompt will be displayed as an overlay at the bottom right of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:248
+#: src/editor/utils.js:209
 msgid "The prompt will be automatically inserted at the very top of the page, above the header."
 msgstr ""
 
-#. Translators: Blocks count until insertion.
+#. translators: %s: blocks count until insertion.
 #: dist/editor.js:34
-#: src/editor/utils.js:256
+#: src/editor/utils.js:214
 #, js-format
 msgid "The prompt will be automatically inserted after %s block of content."
 msgid_plural "The prompt will be automatically inserted after %s blocks of content."
 msgstr[0] ""
 msgstr[1] ""
 
-#. Translators: Article percentage count until insertion.
+#. translators: %s: article percentage count until insertion.
 #: dist/editor.js:37
-#: src/editor/utils.js:265
+#: src/editor/utils.js:224
 #, js-format
 msgid "The prompt will be automatically inserted about %s into article content."
 msgstr ""
 
-#. Translators: Insertion period.
+#. translators: %d: insertion period.
 #: dist/editor.js:40
-#: src/editor/utils.js:275
+#: src/editor/utils.js:231
 #, js-format
 msgid "The prompt will be automatically inserted every %d articles in the archive pages."
 msgstr ""
 
-#. Translators: Insertion period articles count.
+#. translators: %d: insertion period articles count.
 #: dist/editor.js:43
-#: src/editor/utils.js:283
+#: src/editor/utils.js:236
 #, js-format
 msgid "The prompt will be automatically inserted after %d articles in the archive pages."
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/utils.js:290
+#: src/editor/utils.js:240
 msgid "The prompt will appear only where inserted using the Single Prompt block or a shortcode."
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/utils.js:295
+#: src/editor/utils.js:242
 msgid "The placement where the prompt can appear."
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:78
+#: src/editor/Sidebar.js:72
 msgid "Prompt type"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:82
+#: src/editor/Sidebar.js:76
 msgid "Overlay"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:89
+#: src/editor/Sidebar.js:83
 msgid "Size"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:96
+#: src/editor/Sidebar.js:90
 msgid "Position"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:110
+#: src/editor/Sidebar.js:104
 msgid "In article content"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:112
+#: src/editor/Sidebar.js:106
 msgid "Above site header"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:113
+#: src/editor/Sidebar.js:107
 msgid "Manual only"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:126
+#: src/editor/Sidebar.js:120
 msgid "Trigger"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:127
+#: src/editor/Sidebar.js:121
 msgid "The event to trigger the prompt."
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:130
+#: src/editor/Sidebar.js:124
 msgid "Timer"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:131
+#: src/editor/Sidebar.js:125
 msgid "Scroll Progress"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:137
+#: src/editor/Sidebar.js:131
 msgid "Scroll Progress (percent)"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:145
+#: src/editor/Sidebar.js:139
 msgid "Delay (seconds)"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:157
+#: src/editor/Sidebar.js:151
 msgid "Insertion position"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:158
+#: src/editor/Sidebar.js:152
 msgid "The position at which to insert the prompt."
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:161
+#: src/editor/Sidebar.js:155
 msgid "Percentage"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:162
+#: src/editor/Sidebar.js:156
 msgid "Blocks Count"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:168
+#: src/editor/Sidebar.js:162
 msgid "Number of blocks before the prompt"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:175
+#: src/editor/Sidebar.js:169
 msgid "Approximate Position (in percent)"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:187
+#: src/editor/Sidebar.js:181
 msgid "Number of articles before prompt"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:196
+#: src/editor/Sidebar.js:189
 msgid "Archive Page Types"
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/Sidebar.js:215
+#: src/editor/Sidebar.js:205
 msgid "Repeat prompt"
 msgstr ""
 
@@ -1358,122 +1358,122 @@ msgid "Content Background Color"
 msgstr ""
 
 #: dist/editor.js:46
-#: src/editor/ColorsSidebar.js:32
+#: src/editor/ColorsSidebar.js:33
 msgid "Customize close button background"
 msgstr ""
 
 #: dist/editor.js:46
-#: src/editor/ColorsSidebar.js:41
+#: src/editor/ColorsSidebar.js:42
 msgid "Close Button Background Color"
 msgstr ""
 
 #: dist/editor.js:46
-#: src/editor/ColorsSidebar.js:47
+#: src/editor/ColorsSidebar.js:49
 msgid "Display overlay background"
 msgstr ""
 
 #: dist/editor.js:46
-#: src/editor/ColorsSidebar.js:57
+#: src/editor/ColorsSidebar.js:59
 msgid "Overlay Background Color"
 msgstr ""
 
 #: dist/editor.js:46
-#: src/editor/ColorsSidebar.js:60
+#: src/editor/ColorsSidebar.js:62
 msgid "Overlay Background Opacity"
 msgstr ""
 
 #. translators: %s is the expiration date
 #: dist/editor.js:47
-#: src/editor/ExpirationPanel.js:80
+#: src/editor/ExpirationPanel.js:67
 msgid "If set, the prompt will be automatically unpublished at midnight on this date."
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/AdvancedSidebar.js:27
+#: src/editor/AdvancedSidebar.js:22
 msgid "Additional CSS class(es)"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/AdvancedSidebar.js:28
+#: src/editor/AdvancedSidebar.js:23
 msgid "Separate multiple classes with spaces."
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/AdvancedSidebar.js:38
+#: src/editor/AdvancedSidebar.js:33
 msgid "Excluded Categories"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/AdvancedSidebar.js:39
+#: src/editor/AdvancedSidebar.js:34
 msgid "The prompt will not be shown on posts that have any these categories."
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/AdvancedSidebar.js:52
+#: src/editor/AdvancedSidebar.js:44
 msgid "Excluded Tags"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/AdvancedSidebar.js:53
+#: src/editor/AdvancedSidebar.js:45
 msgid "The prompt will not be shown on posts that have any these tags."
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:76
+#: src/editor/index.js:71
 msgid "Styles"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:101
+#: src/editor/index.js:90
 msgid "Frequency"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:114
+#: src/editor/index.js:100
 msgid "Color"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:126
+#: src/editor/index.js:109
 msgid "Post Types"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:138
+#: src/editor/index.js:118
 msgid "Expiration"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:178
+#: src/editor/index.js:142
 msgid "Advanced Settings"
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:253
+#: src/editor/index.js:215
 msgid "The prompt will be shown to all readers."
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:257
+#: src/editor/index.js:217
 msgid "The prompt will be shown only to readers who match the selected segment."
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:265
+#: src/editor/index.js:220
 msgid "The prompt will be shown only to readers who match the selected segments."
 msgstr ""
 
 #: dist/editor.js:47
-#: src/editor/index.js:274
+#: src/editor/index.js:225
 msgid "Manage segments"
 msgstr ""
 
 #: dist/settings.js:1
-#: src/settings/index.js:55
+#: src/settings/index.js:45
 msgid "Error updating settings."
 msgstr ""
 
 #: dist/settings.js:1
-#: src/settings/index.js:141
+#: src/settings/index.js:111
 msgid "Save"
 msgstr ""

@@ -3,8 +3,7 @@ import { parseTiersBasedConfig } from './utils';
 
 const BUTTON_ACTIVE_CLASSNAME = 'wpbnbd__button--active';
 
-const getSelectedAmountSelector = ( frequency: string ) =>
-	`.wpbnbd__tiers__amount [data-frequency-slug="${ frequency }"]`;
+const getSelectedAmountSelector = ( frequency: string ) => `.wpbnbd__tiers__amount [data-frequency-slug="${ frequency }"]`;
 
 type SelectedFrequency = 'month' | 'year';
 
@@ -14,9 +13,7 @@ export default ( parentEl: HTMLElement ) => {
 		return;
 	}
 	const frequencyButtonsEls = parentEl.querySelectorAll( '.wpbnbd__tiers__selection button' );
-	const amountsEls: NodeListOf< HTMLElement > = parentEl.querySelectorAll(
-		'.wpbnbd__tiers__amount [data-frequency-slug]'
-	);
+	const amountsEls: NodeListOf< HTMLElement > = parentEl.querySelectorAll( '.wpbnbd__tiers__amount [data-frequency-slug]' );
 	const frequencyInputEl = parentEl.querySelector( `input[name="${ config.params.frequency }"]` );
 	const initFormEl = parentEl.querySelector( 'form[data-is-init-form]' );
 	if ( ! frequencyButtonsEls || ! amountsEls || ! frequencyInputEl || ! initFormEl ) {
@@ -30,9 +27,7 @@ export default ( parentEl: HTMLElement ) => {
 	// Frequency choosing interaction.
 	frequencyButtonsEls.forEach( buttonEl => {
 		buttonEl.addEventListener( 'click', () => {
-			const maybeSelectedFrequency = buttonEl.getAttribute(
-				'data-frequency-slug'
-			) as SelectedFrequency | null;
+			const maybeSelectedFrequency = buttonEl.getAttribute( 'data-frequency-slug' ) as SelectedFrequency | null;
 			if ( ! maybeSelectedFrequency ) {
 				return;
 			}
@@ -44,9 +39,7 @@ export default ( parentEl: HTMLElement ) => {
 
 			// Toggle the amount & frequency UI.
 			amountsEls.forEach( amountEl => ( amountEl.style.display = 'none' ) );
-			const selectedAmountEls: NodeListOf< HTMLElement > = parentEl.querySelectorAll(
-				getSelectedAmountSelector( selectedFrequency )
-			);
+			const selectedAmountEls: NodeListOf< HTMLElement > = parentEl.querySelectorAll( getSelectedAmountSelector( selectedFrequency ) );
 			selectedAmountEls.forEach( el => ( el.style.display = 'inline' ) );
 
 			// Toggle the frequency buttons' active states.
@@ -67,9 +60,7 @@ export default ( parentEl: HTMLElement ) => {
 				_buttonEl.setAttribute( 'name', `${ config.params.tierPrefix }${ selectedFrequency }` );
 				const buttonTierIndex = _buttonEl.getAttribute( 'data-tier-index' );
 				const amountEl = document.querySelector(
-					`${ getSelectedAmountSelector(
-						selectedFrequency
-					) }[data-tier-index="${ buttonTierIndex }"]`
+					`${ getSelectedAmountSelector( selectedFrequency ) }[data-tier-index="${ buttonTierIndex }"]`
 				);
 				if ( ! amountEl ) {
 					return;
@@ -86,8 +77,7 @@ export default ( parentEl: HTMLElement ) => {
 	const backButton = parentEl.querySelector( 'button.wpbnbd__tiers__back-button' ) as HTMLElement;
 	const tierSelectionButtonsEls = parentEl.querySelectorAll( '.wpbnbd__tiers__tier button' );
 	const viewEls = parentEl.querySelectorAll( '.wpbnbd__tiers__view' );
-	const toggleView = () =>
-		viewEls.forEach( viewEl => viewEl.classList.toggle( 'wpbnbd__tiers__view--hidden' ) );
+	const toggleView = () => viewEls.forEach( viewEl => viewEl.classList.toggle( 'wpbnbd__tiers__view--hidden' ) );
 
 	tierSelectionButtonsEls.forEach( buttonEl => {
 		buttonEl.addEventListener( 'click', () => {
@@ -115,32 +105,16 @@ export default ( parentEl: HTMLElement ) => {
 			initFormEl.appendChild( indexInputEl );
 			initFormEl.appendChild( valueInputEl );
 
-			const tierHeadingEl: HTMLElement | null = parentEl.querySelector(
-				'.wpbnbd__tiers__tier-tile h2'
-			);
-			const tierAmountEl: HTMLElement | null = parentEl.querySelector(
-				'.wpbnbd__tiers__tier-tile span[data-amount]'
-			);
-			const tierFrequencyLabelEl: HTMLElement | null = parentEl.querySelector(
-				'.wpbnbd__tiers__tier-tile span[data-frequency]'
-			);
-			const renewsOnEl: HTMLElement | null = parentEl.querySelector(
-				'.wpbnbd__tiers__tier-tile span[data-renews-date]'
-			);
-			if (
-				isNaN( tierIndex ) ||
-				! tierHeadingEl ||
-				! tierAmountEl ||
-				! tierFrequencyLabelEl ||
-				! renewsOnEl
-			) {
+			const tierHeadingEl: HTMLElement | null = parentEl.querySelector( '.wpbnbd__tiers__tier-tile h2' );
+			const tierAmountEl: HTMLElement | null = parentEl.querySelector( '.wpbnbd__tiers__tier-tile span[data-amount]' );
+			const tierFrequencyLabelEl: HTMLElement | null = parentEl.querySelector( '.wpbnbd__tiers__tier-tile span[data-frequency]' );
+			const renewsOnEl: HTMLElement | null = parentEl.querySelector( '.wpbnbd__tiers__tier-tile span[data-renews-date]' );
+			if ( isNaN( tierIndex ) || ! tierHeadingEl || ! tierAmountEl || ! tierFrequencyLabelEl || ! renewsOnEl ) {
 				return;
 			}
 
 			const tierOption = config.tiersBasedOptions[ tierIndex ];
-			const frequencyLabel = parentEl
-				.querySelector( `[data-frequency-slug="${ selectedFrequency }"]` )
-				?.getAttribute( 'data-frequency-label' );
+			const frequencyLabel = parentEl.querySelector( `[data-frequency-slug="${ selectedFrequency }"]` )?.getAttribute( 'data-frequency-label' );
 			tierHeadingEl.textContent = tierOption.heading;
 			tierFrequencyLabelEl.textContent = frequencyLabel || '';
 			tierAmountEl.textContent = config.amounts[ selectedFrequency ][ tierIndex ];

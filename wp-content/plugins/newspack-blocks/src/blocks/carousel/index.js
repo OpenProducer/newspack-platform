@@ -31,7 +31,7 @@ export const settings = {
 	title,
 	icon: {
 		src: icon,
-		foreground: colors['primary-400'],
+		foreground: colors[ 'primary-400' ],
 	},
 	attributes,
 	category,

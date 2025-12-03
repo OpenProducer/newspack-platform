@@ -1,38 +1,22 @@
 {
 	"name": "@automattic/newspack-blocks",
-	"version": "4.17.6",
+	"version": "4.18.0",
 	"author": "Automattic",
-	"devDependencies": {
-		"@rushstack/eslint-patch": "^1.12.0",
-		"@testing-library/dom": "^10.4.1",
-		"@testing-library/user-event": "^14.6.1",
-		"@types/lodash": "^4.17.20",
-		"@wordpress/browserslist-config": "^6.32.0",
-		"eslint": "^8.57.0",
-		"fetch-mock-jest": "^1.5.1",
-		"html-entities": "^2.6.0",
-		"identity-obj-proxy": "^3.0.0",
-		"lint-staged": "^16.2.4",
-		"newspack-components": "^3.1.0",
-		"newspack-scripts": "^5.5.2",
-		"postcss-scss": "^4.0.9"
-	},
 	"description": "=== Newspack Blocks === Contributors: (this should be a list of wordpress.org userid's) Donate link: https://example.com/ Tags: comments, spam Requires at least: 4.5 Tested up to: 5.1.1 Stable tag: 0.1.0 License: GPLv2 or later License URI: https://www.gnu.org/licenses/gpl-2.0.html",
-	"dependencies": {
-		"classnames": "^2.5.1",
-		"newspack-colors": "^1.0.0",
-		"newspack-icons": "^1.0.1",
-		"redux": "^5.0.0",
-		"redux-saga": "^1.3.0",
-		"regenerator-runtime": "^0.14.1",
-		"swiper": "11.2.10"
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Automattic/newspack-blocks.git"
+	},
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/Automattic/newspack-blocks/issues"
 	},
 	"scripts": {
 		"cm": "newspack-scripts commit",
 		"semantic-release": "newspack-scripts release --files=newspack-blocks.php",
 		"clean": "rm -rf dist",
 		"build": "npm run clean && newspack-scripts wp-scripts build",
-		"start": "npm ci --legacy-peer-deps && npm run watch",
+		"start": "npm ci && npm run watch",
 		"watch": "npm run clean && newspack-scripts wp-scripts start",
 		"test": "newspack-scripts test",
 		"lint": "npm run lint:scss && npm run lint:js",
@@ -47,23 +31,30 @@
 		"lint:scss:staged": "newspack-scripts wp-scripts lint-style --customSyntax postcss-scss",
 		"format:scss": "newspack-scripts wp-scripts lint-style '**/{src,includes}/**/*.scss' --customSyntax postcss-scss --fix",
 		"i18n": "NODE_ENV=production npm run build; bash ./bin/update-translations.sh",
-		"typescript:check": "newspack-scripts typescript-check",
 		"release": "npm run build && npm run semantic-release",
 		"release:archive": "rm -rf release && mkdir -p release && rsync -r . ./release/newspack-blocks --exclude-from='./.distignore' && cd release && zip -r newspack-blocks.zip newspack-blocks"
 	},
 	"lint-staged": {
+		"*.{js,jsx,ts,tsx}": "npm run lint:js:staged",
 		"*.scss": "npm run lint:scss:staged",
-		"*.(js|jsx)": "npm run lint:js:staged",
-		"*.(ts|tsx)": "npm run typescript:check",
 		"*.php": "npm run lint:php:staged"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Automattic/newspack-blocks.git"
+	"browserslist": [
+		"extends @wordpress/browserslist-config"
+	],
+	"dependencies": {
+		"classnames": "^2.5.1",
+		"newspack-colors": "^1.1.0",
+		"newspack-icons": "^1.0.5",
+		"redux": "^5.0.0",
+		"redux-saga": "^1.4.2",
+		"regenerator-runtime": "^0.14.1",
+		"swiper": "12.0.3"
 	},
-	"license": "GPL-3.0-or-later",
-	"bugs": {
-		"url": "https://github.com/Automattic/newspack-blocks/issues"
+	"devDependencies": {
+		"@types/lodash": "^4.17.20",
+		"newspack-components": "^4.2.0",
+		"newspack-scripts": "^5.8.0"
 	},
 	"overrides": {
 		"path-to-regexp": "1.7.0"

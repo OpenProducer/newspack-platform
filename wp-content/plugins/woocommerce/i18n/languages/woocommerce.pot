@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 10.3.5\n"
+"Project-Id-Version: WooCommerce 10.3.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-12T13:17:51+00:00\n"
+"POT-Creation-Date: 2025-11-27T13:06:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: woocommerce\n"
@@ -9306,7 +9306,7 @@ msgstr ""
 msgid "Total:"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2512
+#: includes/abstracts/abstract-wc-order.php:2517
 #: includes/admin/class-wc-admin-dashboard.php:496
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:123
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:214
@@ -13241,7 +13241,7 @@ msgid " You don't have a subscription, <a href=\"%1$s\" class=\"woocommerce-purc
 msgstr ""
 
 #. translators: %s: URL of WooCommerce.com subscriptions tab.
-#: includes/admin/helper/class-wc-helper-updater.php:837
+#: includes/admin/helper/class-wc-helper-updater.php:864
 #, php-format
 msgid "Please visit the <a href=\"%s\" target=\"_blank\">subscriptions page</a> and renew to continue receiving updates."
 msgstr ""
@@ -40477,6 +40477,14 @@ msgstr ""
 msgid "Compatibility mode disabled."
 msgstr ""
 
+#: src/Internal/Abilities/AbilitiesCategories.php:46
+msgid "WooCommerce REST API"
+msgstr ""
+
+#: src/Internal/Abilities/AbilitiesCategories.php:47
+msgid "REST API operations for WooCommerce resources including products, orders, and other store data."
+msgstr ""
+
 #: src/Internal/Abilities/AbilitiesRestBridge.php:37
 msgid "List Products"
 msgstr ""
@@ -40545,8 +40553,8 @@ msgstr ""
 msgid "Update an existing order by modifying status, customer information, line items, or other order details."
 msgstr ""
 
-#: src/Internal/Abilities/REST/RestAbilityFactory.php:115
-#: src/Internal/Abilities/REST/RestAbilityFactory.php:138
+#: src/Internal/Abilities/REST/RestAbilityFactory.php:125
+#: src/Internal/Abilities/REST/RestAbilityFactory.php:148
 msgid "Unique identifier for the resource"
 msgstr ""
 

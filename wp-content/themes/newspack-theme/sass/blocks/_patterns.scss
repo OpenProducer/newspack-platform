@@ -2,6 +2,49 @@
 @use "../mixins/utilities";
 
 .newspack-pattern {
+
+	/* Contribution Style 1 */
+
+	&.contribution__style-1 {
+		--wp--preset--spacing--80: var(--wp--preset--spacing--60);
+
+		.wp-block-group__inner-container {
+			> .wp-block-columns {
+				gap: 0;
+
+				.wp-block-group.is-vertical {
+					gap: var(--wp--preset--spacing--80);
+				}
+			}
+		}
+	}
+
+	/* Contribution Style 2 */
+
+	&.contribution__style-2 {
+		--wp--preset--spacing--80: var(--wp--preset--spacing--60);
+
+		.wp-block-cover__inner-container {
+			> .wp-block-group {
+				gap: var(--wp--preset--spacing--80);
+			}
+		}
+		.wp-block-button__link {
+			color: var(--newspack-theme-color-against-secondary);
+		}
+	}
+
+	/* Contribution Style 3 */
+
+	&.contribution__style-3 {
+		.wp-block-group__inner-container {
+			> * {
+				margin-bottom: 0;
+				margin-top: 0;
+			}
+		}
+	}
+
 	/* Subscribe Style 5 */
 
 	&.subscribe__style-5 {

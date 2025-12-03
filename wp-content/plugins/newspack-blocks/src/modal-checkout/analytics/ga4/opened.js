@@ -5,20 +5,14 @@ import { getEventPayload, sendEvent } from './utils';
  *
  * @param {Object} data Information about the purchase being made.
  */
-export const manageOpened = ( data ) => {
+export const manageOpened = data => {
 	if ( 'function' !== typeof window.gtag ) {
 		return;
 	}
 
 	let action = 'opened';
 
-	const {
-		amount = '',
-		is_variable = '',
-		is_grouped = '',
-		price = '',
-		variation_id = '',
-	} = data;
+	const { amount = '', is_variable = '', is_grouped = '', price = '', variation_id = '' } = data;
 
 	const params = {
 		...data,

@@ -42,10 +42,7 @@ const eventKeys = [
  * @param {Object} payload   Event payload.
  * @param {string} eventName Name of the event. Defaults to `np_modal_checkout_interaction` but can be overriden if necessary.
  */
-export const sendEvent = (
-	payload,
-	eventName = 'np_modal_checkout_interaction'
-) => {
+export const sendEvent = ( payload, eventName = 'np_modal_checkout_interaction' ) => {
 	if ( 'function' === typeof window.gtag && payload ) {
 		const filteredPayload = {};
 		for ( const key of eventKeys ) {
