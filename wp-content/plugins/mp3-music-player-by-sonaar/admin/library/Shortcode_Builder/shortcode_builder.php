@@ -400,6 +400,8 @@ class SRMP3_ShortcodeBuilder {
             'slide_source',
             'slider_play_on_hover',
             'slidesPerView',
+            'slidesPerViewTablet',
+            'slidesPerViewMobile',
             'effect',
             'loop',
             'navigation',
@@ -797,6 +799,14 @@ class SRMP3_ShortcodeBuilder {
                 unset($shortcode_attrs['audio_meta_field']);
                 unset($shortcode_attrs['post_id_to_test']);
                 break;
+            case 'from_user_purchased':
+                $shortcode_attrs['albums'] = 'from_user_purchased';
+                unset($shortcode_attrs['category']);
+                unset($shortcode_attrs['rss_feed']);
+                unset($shortcode_attrs['feed']);
+                unset($shortcode_attrs['audio_meta_field']);
+                unset($shortcode_attrs['post_id_to_test']);
+                break;
             case 'from_feed':
                 unset($shortcode_attrs['albums']);
                 unset($shortcode_attrs['category']);
@@ -849,9 +859,12 @@ class SRMP3_ShortcodeBuilder {
         }
         if ($shortcode_attrs['slider'] == "true") {
             // Assemble the slider parameters into a JSON-like string
+            $slidesPerViewDesktop = isset($shortcode_attrs['slidesPerView']) ? $shortcode_attrs['slidesPerView'] : 3;
+            $slidesPerViewTablet = isset($shortcode_attrs['slidesPerViewTablet']) &&  $shortcode_attrs['slidesPerViewTablet'] != '' ? $shortcode_attrs['slidesPerViewTablet'] : $slidesPerViewDesktop;
             $slider_param = "{";
             $slider_param .= "effect:'" . (isset($shortcode_attrs['effect']) ? $shortcode_attrs['effect'] : 'coverflow') . "',";
-            $slider_param .= "slidesPerView:" . (isset($shortcode_attrs['slidesPerView']) ? $shortcode_attrs['slidesPerView'] : 3) . ",";
+            $slider_param .= "slidesPerView:" . (isset($shortcode_attrs['slidesPerViewMobile']) ? $shortcode_attrs['slidesPerViewMobile'] : 1) . ",";
+            $slider_param .= "breakpoints:{ 767:{ slidesPerView:" . $slidesPerViewTablet . " }, 1024:{ slidesPerView:" . $slidesPerViewDesktop . " }},";
             $slider_param .= "loop:" . (isset($shortcode_attrs['loop']) ? ($shortcode_attrs['loop'] == 'true' ? 'true' : 'false') : 'true') . ",";
             $slider_param .= "spaceBetween:" . (isset($shortcode_attrs['spaceBetween']) ? $shortcode_attrs['spaceBetween'] : 5) . ",";
             $slider_param .= "coverflowEffect:{" .  $shortcode_attrs['coverflowEffect'] . "},";
@@ -963,6 +976,8 @@ class SRMP3_ShortcodeBuilder {
         unset($shortcode_attrs['spectro_enabled']);
         unset($shortcode_attrs['effect']);
         unset($shortcode_attrs['slidesPerView']);
+        unset($shortcode_attrs['slidesPerViewTablet']);
+        unset($shortcode_attrs['slidesPerViewMobile']);
         unset($shortcode_attrs['coverflowEffect']);
         unset($shortcode_attrs['loop']);
         unset($shortcode_attrs['spaceBetween']);
@@ -3705,7 +3720,7 @@ class SRMP3_ShortcodeBuilder {
                 'post_id' => 'Post ID',
                 'post_date' => 'Post Date',
                 'post_modified' => 'Post Modified',
-                'playlist-cat' => 'Playlist Category',
+                'playlist-category' => 'Playlist Category',
                 'playlist-tag' => 'Playlist Tag',
                 'podcast-show' => 'Podcast Show',
                 'product_cat' => 'Product Category',
@@ -4436,7 +4451,7 @@ class SRMP3_ShortcodeBuilder {
             ),
         ) );
         $shortcode_options->add_field( array(
-            'name'          => esc_html__('Slides Per View', 'sonaar-music'),
+            'name'          => esc_html__('Slides Per View (Desktop)', 'sonaar-music'),
             'id'            => 'slidesPerView',
             'type'          => 'select',
             'options' 		=> [
@@ -4452,6 +4467,44 @@ class SRMP3_ShortcodeBuilder {
                 '10' 			=> __( '10', 'sonaar-music' ),
             ],
             'default'    => '3',
+            'attributes'  => array(
+                'data-conditional-id'    => 'slider',
+                'data-conditional-value' => 'true', 
+            ),
+        ) );
+        $shortcode_options->add_field( array(
+            'name'          => esc_html__('Slides Per View (Tablet)', 'sonaar-music'),
+            'id'            => 'slidesPerViewTablet',
+            'type'          => 'select',
+            'options' 		=> [
+                '' 		    => __( 'Same as Desktop', 'sonaar-music' ),
+                '1' 		    => __( '1', 'sonaar-music' ),
+                '2' 			=> __( '2', 'sonaar-music' ),
+                '3' 			=> __( '3', 'sonaar-music' ),
+                '4' 			=> __( '4', 'sonaar-music' ),
+                '5' 			=> __( '5', 'sonaar-music' ),
+                '6' 			=> __( '6', 'sonaar-music' ),
+                '7' 			=> __( '7', 'sonaar-music' ),
+                '8' 			=> __( '8', 'sonaar-music' ),
+                '9' 			=> __( '9', 'sonaar-music' ),
+                '10' 			=> __( '10', 'sonaar-music' ),
+            ],
+            'default'    => '',
+            'attributes'  => array(
+                'data-conditional-id'    => 'slider',
+                'data-conditional-value' => 'true', 
+            ),
+        ) );
+        $shortcode_options->add_field( array(
+            'name'          => esc_html__('Slides Per View (Mobile)', 'sonaar-music'),
+            'id'            => 'slidesPerViewMobile',
+            'type'          => 'select',
+            'options' 		=> [
+                '1' 		    => __( '1', 'sonaar-music' ),
+                '2' 			=> __( '2', 'sonaar-music' ),
+                '3' 			=> __( '3', 'sonaar-music' ),
+            ],
+            'default'    => '1',
             'attributes'  => array(
                 'data-conditional-id'    => 'slider',
                 'data-conditional-value' => 'true', 

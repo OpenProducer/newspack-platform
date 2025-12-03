@@ -51,12 +51,14 @@ class Sonaar_Music_Review {
 
 	public function sonaar_music_review_notices() {
 		
-		$is_hidden = get_option( 'sonaar_music_hide_review_box' );
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return;
+		}
 
+		$is_hidden = get_option( 'sonaar_music_hide_review_box' );
         if( $is_hidden !== false) {
            return;
         }
-
 
         $current_count = get_option( 'sonaar_music_show_review_box_after');
         if($current_count === false ) {

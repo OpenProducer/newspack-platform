@@ -101,7 +101,7 @@ class Plugin {
 	public function __construct() {
 
 		// Register widget scripts
-		add_action( 'elementor/init', [ $this, 'init_panel_section' ], 0 );
+		add_action( 'elementor/elements/categories_registered', [ $this, 'init_panel_section' ] );
 
 		// Register widgets
 		add_action( 'elementor/widgets/register', [ $this, 'register_widgets' ] );

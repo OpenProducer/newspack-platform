@@ -140,7 +140,7 @@ class Sonaar_Music {
 		
 		$plugin_admin = new Sonaar_Music_Admin( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_action( 'init', $plugin_admin, 'initCPT');
-		$this->loader->add_action( 'init', $plugin_admin, 'srmp3_create_postType');
+		$this->loader->add_action( 'init', $plugin_admin, 'srmp3_create_postType', 15);
 		$this->loader->add_action( 'init', $plugin_admin, 'srmp3_add_shortcode' );
 		$this->loader->add_action( 'init', $plugin_admin, 'srmp3_clear_cookie' );
 		$this->loader->add_action( 'widgets_init', $plugin_admin, 'register_widget' );

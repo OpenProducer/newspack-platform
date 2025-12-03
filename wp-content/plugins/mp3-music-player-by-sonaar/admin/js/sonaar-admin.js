@@ -820,6 +820,14 @@
 				if ($this.data('iris')) {  // Handle color picker
 					value = $this.iris('color') || value;  // Use color picker value if available
 				}
+				if (targetSelector && targetSelector.includes('.srp_meta_0') ) { //Increment to selector from repeatable group
+					const matches = [...name.matchAll(/\[(\d+)\]/g)];
+					if (matches.length > 0) {
+						const lastIndex = matches[matches.length - 1][1]; 
+						const newSelector = '.srp_meta_' + lastIndex;
+						targetSelector = targetSelector.replace(/\.srp_meta_0/g, '.srp_meta_' + lastIndex);
+					}
+				}
 				data[name] = { value: value, selector: targetSelector };
 			}
 		});
@@ -868,6 +876,20 @@
 				})
 				if (IRON.audioPlayer && typeof IRON.audioPlayer.setIronAudioplayers === 'function') {
 					IRON.audioPlayer.setIronAudioplayers();
+				}
+
+				var source = $('#source').val();
+
+				if (
+					(source === 'from_cpt' || source === 'from_cat_all' || source === 'from_cat' || source === 'from_current_post') &&
+					$('#srmp3-player-preview ul.srp_list').length > 0
+				) {
+					if ($('#srmp3-player-preview ul.srp_list li').length === 0) {
+						console.log("yo");
+						$('#srmp3-player-preview').html(
+							'<li class="no-audio-track" style="background:#fff;color:#000;padding:15px;"><span>' + sonaar_admin_ajax.translations.sb_no_audio_track_found + '</span></li>'
+						);
+					}
 				}
 				setShortcodeColors();
 
@@ -2193,108 +2215,112 @@
 
 	function addTrackTitletoTrackRepeater(el = null) {
 		// Get all the elements containing both the track title and filename
-		if(el){
-			var trackElements = el;
-		}else{
-			var trackElements = document.querySelectorAll('#alb_tracklist_repeat .cmb-repeatable-grouping');
-
-		}
-		if(!addNewTrackButtonLabel){
+		var trackElements = el || document.querySelectorAll('#alb_tracklist_repeat .cmb-repeatable-grouping');
+	
+		if (!addNewTrackButtonLabel && trackElements[0]) {
 			addNewTrackButtonLabel = trackElements[0].querySelector('.cmb2-upload-button').value;
 		}
+	
 		// Loop through each track element
 		trackElements.forEach(function(trackElement) {
-			// Find the track title span within this track element
 			var trackTitle = trackElement.querySelector('.cmb-group-title.cmbhandle-title');
-		
 			var selectElement = trackElement.querySelector('select[name$="[FileOrStream]"]');
 			var selectedOptionValue = selectElement.value;
-
+	
 			var $track;
 			var audioURL = '';
-			
+			var targetLocation;
+	
 			switch (selectedOptionValue) {
 				case 'mp3':
-					let mp3Element = trackElement.querySelector('.srmp3-cmb2-file .cmb2-media-status strong');
-					audioURL = trackElement.querySelector('.srmp3-cmb2-file .cmb2-media-status a');
-					if(audioURL && audioURL.attributes){
-						audioURL = audioURL.attributes.href.value;
-					}else{
-						audioURL = '';
-					}
-					var targetLocation = trackElement.querySelector('.cmb2-upload-file-id').parentNode;
-
-					$track = mp3Element ? mp3Element.innerText : '';
+					let mp3Field = trackElement.querySelector('[name$="[track_mp3]"]');
+					let mp3Container = mp3Field?.closest('.cmb-td');
+					let mp3Status = mp3Container?.querySelector('.cmb2-media-status');
+	
+					$track = mp3Status?.querySelector('strong')?.innerText || '';
+					audioURL = mp3Status?.querySelector('a')?.getAttribute('href') || '';
+					targetLocation = mp3Container;
 					break;
-			
+	
 				case 'stream':
-					let streamElement = trackElement.querySelector('.srmp3-cmb2-file input[name$="[stream_title]"]');
-					audioURL = trackElement.querySelector('.sr-stream-url-field input[name$="[stream_link]"]');
-					audioURL = audioURL ? audioURL.value : '';
-					var targetLocation = trackElement.querySelector('.cmb2-text-url').parentNode;
-					$track = streamElement ? streamElement.value : '';
+					let streamTitle = trackElement.querySelector('[name$="[stream_title]"]');
+					let streamLink = trackElement.querySelector('[name$="[stream_link]"]');
+					$track = streamTitle?.value || '';
+					audioURL = streamLink?.value || '';
+					targetLocation = streamLink?.closest('.cmb-td');
 					break;
-			
+	
 				case 'icecast':
-					let icecastElement = trackElement.querySelector('.srmp3-cmb2-file input[name$="[icecast_link]"]');
-					audioURL = icecastElement ? icecastElement.value : '';
-					var targetLocation = icecastElement ? icecastElement.closest('.cmb-td') : null;
-					$track = icecastElement ? icecastElement.value : '';
+					let icecastLink = trackElement.querySelector('[name$="[icecast_link]"]');
+					$track = icecastLink?.value || '';
+					audioURL = icecastLink?.value || '';
+					targetLocation = icecastLink?.closest('.cmb-td');
 					break;
-			
+	
 				default:
 					$track = '';
 			}
-			
+	
 			var playerContainer = trackElement.querySelector('.srmp3-admin-track-player-container');
-			// Now check if the playerContainer is already at the targetLocation
-			if (playerContainer.parentNode !== targetLocation) {
-			  // Move the playerContainer to the target location only if necessary
-			  targetLocation.appendChild(playerContainer);
+			if (playerContainer && playerContainer.parentNode !== targetLocation) {
+				targetLocation?.appendChild(playerContainer);
 			}
-		  
-			// Display the audio player
-			if(audioURL){
-
+	
+			var audioElement = playerContainer?.querySelector('audio');
+			var audioSourceElement = audioElement?.querySelector('source');
+	
+			if (audioURL) {
 				trackElement.querySelector('.cmb2-upload-button').value = 'Edit Track Details';
-
-				audioElement = trackElement.querySelector('.srmp3-admin-track-player-container audio');
-				var audioSourceElement = trackElement.querySelector('.srmp3-admin-track-player-container audio source');
 				if (audioSourceElement) {
 					audioSourceElement.setAttribute('src', audioURL);
 				}
-
-				audioElement.load();
-
-				trackElement.querySelector('.srmp3-admin-track-player-container').style.display = 'block';
-
-			}else{
+				audioElement?.load();
+				playerContainer.style.display = 'block';
+			} else {
 				trackElement.querySelector('.cmb2-upload-button').value = addNewTrackButtonLabel;
-				trackElement.querySelector('.srmp3-admin-track-player-container').style.display = 'none';
+				playerContainer.style.display = 'none';
+				if (audioSourceElement) {
+					audioSourceElement.removeAttribute('src');
+				}
+				audioElement?.load();
 			}
+			// Handle preview for track_source_purchased (independent field)
+			let purchasedField = trackElement.querySelector('[name$="[track_source_purchased]"]');
+			let purchasedAudioURL = purchasedField?.value || '';
+			let purchasedContainer = purchasedField?.closest('.cmb-td');
+			let purchasedPlayer = purchasedContainer?.querySelector('.srmp3-admin-track-player-container');
+			let purchasedAudioElement = purchasedPlayer?.querySelector('audio');
+			let purchasedAudioSource = purchasedAudioElement?.querySelector('source');
 
+			if (purchasedPlayer) {
+				if (purchasedAudioURL) {
+					purchasedPlayer.style.display = 'block';
+					purchasedAudioSource?.setAttribute('src', purchasedAudioURL);
+					purchasedAudioElement?.load();
+				} else {
+					purchasedPlayer.style.display = 'none';
+					purchasedAudioSource?.removeAttribute('src');
+					purchasedAudioElement?.load();
+				}
+			}
 			// Set Track Title and Number
 			if (trackTitle && $track) {
-				// Extract the track number
 				var trackNumber = trackTitle.innerText.split(' : ')[0];
-
-				// Create a new filename span element
 				var fileNameSpan = document.createElement('span');
 				fileNameSpan.className = 'srp-cmb2-filename';
 				fileNameSpan.innerText = $track;
-
-				// Remove any existing filename span element
+	
 				var existingFileNameSpan = trackTitle.querySelector('.srp-cmb2-filename');
 				if (existingFileNameSpan) {
 					existingFileNameSpan.remove();
 				}
-
-				// Set the track title text content and append the filename span element
+	
 				trackTitle.innerText = trackNumber + ' : ';
 				trackTitle.appendChild(fileNameSpan);
 			}
 		});
 	}
+	
 
 	//Load Music player Content (For Gutenberg ?!)
 	function setIronAudioplayers(){

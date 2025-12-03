@@ -120,6 +120,7 @@ function srp_elementor_select_authors() {
         if(function_exists( 'run_sonaar_music_pro' ) &&  get_site_option('SRMP3_ecommerce') == '1'){
             $options['from_favorites'] = 'User Favorites';
             $options['recently_played'] = 'User Recently Played Tracks';
+            $options['from_user_purchased'] = 'User Purchased Tracks';
         }
 
         if($shortcodebuilder){    
@@ -134,6 +135,7 @@ function srp_elementor_select_authors() {
                     'pro4'              => '[Pro Feature - Starter Plan] Current Term',
                     'pro5'              => '[Pro Feature - Business Plan] User Favorites',
                     'pro6'              => '[Pro Feature - Business Plan] User Recently Played Tracks',
+                    'pro7'              => '[Pro Feature - Business Plan] User Purchased Tracks',
                 );
             }else{
                 $options = array(
@@ -146,6 +148,7 @@ function srp_elementor_select_authors() {
                     'from_rss'          => 'RSS Feed',
                     'pro1'              => '[Pro Feature - Business Plan] User Favorites',
                     'pro2'              => '[Pro Feature - Business Plan] User Recently Played Tracks',
+                    'pro3'              => '[Pro Feature - Business Plan] User Purchased Tracks',
                 );
             }
             if(function_exists( 'run_sonaar_music_pro' ) &&  get_site_option('SRMP3_ecommerce') == '1' && !empty(get_site_option('sonaar_music_licence'))){
@@ -159,6 +162,7 @@ function srp_elementor_select_authors() {
                     'from_rss'          => 'RSS Feed',
                     'from_favorites'    => 'User Favorites',
                     'recently_played'   => 'User Recently Played Tracks',
+                    'from_user_purchased' => 'User Purchased Tracks',
                 );
             }
            

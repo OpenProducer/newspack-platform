@@ -95,7 +95,7 @@ class Sonaar_Music_Widget extends WP_Widget{
             if($show_playlist){
                 $show_playlist = ($this->shortcodeParams['show_playlist']=="true" || $this->shortcodeParams['show_playlist']==1) ? : false;      
             }
-            $lazy_load = ( isset( $this->shortcodeParams['lazy_load'] ) && $this->shortcodeParams['lazy_load'] === 'true' && ( isset($this->shortcodeParams['show_playlist']) && $this->shortcodeParams['show_playlist'] === "true" ) )? true : false;
+            $lazy_load = ( isset( $this->shortcodeParams['lazy_load'] ) && $this->shortcodeParams['lazy_load'] === 'true' && ( isset($this->shortcodeParams['show_playlist']) && ( $this->shortcodeParams['show_playlist'] === "true" || $this->shortcodeParams['show_playlist'] === "1") ) )? true : false;
             $posts_per_pages = (isset($this->shortcodeParams['posts_per_page']) && $this->shortcodeParams['posts_per_page'] !== '') ? (int)$this->shortcodeParams['posts_per_page'] : -1;
             $audio_meta_field =  ( function_exists( 'run_sonaar_music_pro' ) &&  isset( $this->shortcodeParams['audio_meta_field'] ) ) ? $this->shortcodeParams['audio_meta_field'] : '';
             $repeater_meta_field =  ( function_exists( 'run_sonaar_music_pro' ) && isset( $this->shortcodeParams['repeater_meta_field'] ) ) ? $this->shortcodeParams['repeater_meta_field'] : '';
@@ -103,6 +103,7 @@ class Sonaar_Music_Widget extends WP_Widget{
             $adaptiveColorsFreeze = ( isset( $this->shortcodeParams['adaptive_colors_freeze'] )) ? $this->shortcodeParams['adaptive_colors_freeze'] : false;
             $isPlayer_Favorite = false;
             $isPlayer_recentlyPlayed = false;
+            $isPlayer_purchasedTrack = false;
             $fav_label_notfound = (Sonaar_Music::get_option('fav_label_notfound', 'srmp3_settings_favorites') !== null ) ? Sonaar_Music::get_option('fav_label_notfound', 'srmp3_settings_favorites') : esc_html__( 'You haven\'t liked any tracks yet.', 'sonaar-music' );
             $fav_icon_add = (Sonaar_Music::get_option('srp_fav_add_icon', 'srmp3_settings_favorites')) ? Sonaar_Music::get_option('srp_fav_add_icon', 'srmp3_settings_favorites') : 'sricon-heart-fill';
             $fav_icon_remove = (Sonaar_Music::get_option('srp_fav_remove_icon', 'srmp3_settings_favorites')) ? Sonaar_Music::get_option('srp_fav_remove_icon', 'srmp3_settings_favorites') : 'sricon-heart';
@@ -227,17 +228,49 @@ class Sonaar_Music_Widget extends WP_Widget{
                         $albums = array_column($favoriteTracks, 'postId');
                     }
                 }
-            }
-            if(function_exists( 'run_sonaar_music_pro' ) &&  get_site_option('SRMP3_ecommerce') == '1'){
                 if( $albums == 'recentlyplayed' ){
                     $isPlayer_recentlyPlayed = true;
                     $albums = [];
                     $mostRecentTracks = $this->loadUserPlaylists_fromCookies('RecentlyPlayed');
                     if($mostRecentTracks){
-
                         $albums = array_column($mostRecentTracks, 'postId');
                     }
                 }
+
+                if ( $albums == 'from_user_purchased' ) {
+                    $isPlayer_purchasedTrack = true;
+                    $albums = [];
+                
+                    if ( class_exists( 'WooCommerce' ) ) {
+                        $user_id = get_current_user_id();
+                        if ( $user_id ) {
+                            $orders = wc_get_orders( array(
+                                'customer_id' => $user_id,
+                                'status'      => array( 'completed', 'processing' ),
+                                'limit'       => -1,
+                                'return'      => 'ids',
+                            ) );
+                
+                            foreach ( $orders as $order_id ) {
+                                $order = wc_get_order( $order_id );
+                                foreach ( $order->get_items() as $item ) {
+                                    $product_id = $item->get_product_id();
+                                    $variation_id = $item->get_variation_id();
+                
+                                    if ( $product_id ) {
+                                        $albums[] = $product_id;
+                                    }
+                                    if ( $variation_id ) {
+                                        $albums[] = $variation_id;
+                                    }
+                                }
+                            }
+                
+                            $albums = array_unique( $albums );
+                        }
+                    }
+                }
+
             }
            
             if ( is_array($albums)) {
@@ -258,7 +291,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                 $playlatestalbum = true;
             }
 
-            if($playlatestalbum && $category == false && !$isPlayer_Favorite && !$isPlayer_recentlyPlayed){
+            if($playlatestalbum && $category == false && !$isPlayer_Favorite && !$isPlayer_recentlyPlayed && !$isPlayer_purchasedTrack) {
                 $recent_posts = wp_get_recent_posts(array('post_type'=>$this->sr_playlist_cpt, 'post_status' => 'publish', 'numberposts' => 1));
                 if (!empty($recent_posts)){
                     $albums = $recent_posts[0]["ID"];
@@ -315,7 +348,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                     return;
                 }
                 
-                if (!$feed && !$trackSet && !$isPlayer_Favorite && !$lazy_load && !$isPlayer_recentlyPlayed){
+                if (!$feed && !$trackSet && !$isPlayer_Favorite && !$lazy_load && !$isPlayer_recentlyPlayed && !$isPlayer_purchasedTrack) {
                     return;
                 }
             }
@@ -442,6 +475,7 @@ class Sonaar_Music_Widget extends WP_Widget{
             $labelNoResult1 = (Sonaar_Music::get_option('tracklist_no_result_1_label', 'srmp3_settings_widget_player')) ? Sonaar_Music::get_option('tracklist_no_result_1_label', 'srmp3_settings_widget_player') : esc_html__('Sorry, no results.', 'sonaar-music'); 
             $labelNoResult2 = (Sonaar_Music::get_option('tracklist_no_result_2_label', 'srmp3_settings_widget_player')) ? Sonaar_Music::get_option('tracklist_no_result_2_label', 'srmp3_settings_widget_player') : esc_html__('Please try another keyword', 'sonaar-music'); 
             $labelNoRecentTrack = (Sonaar_Music::get_option('tracklist_no_recent_track_label', 'srmp3_settings_widget_player')) ? Sonaar_Music::get_option('tracklist_no_recent_track_label', 'srmp3_settings_widget_player') : esc_html__('Play history is empty', 'sonaar-music');
+            $labelNoPurchasedTrack = (Sonaar_Music::get_option('tracklist_no_purchased_track_label', 'srmp3_settings_widget_player')) ? Sonaar_Music::get_option('tracklist_no_purchased_track_label', 'srmp3_settings_widget_player') : esc_html__('No track has been purchased yet', 'sonaar-music');
 
             $show_cf_headings = false;
             $tracks_per_page = ( !empty( $this->shortcodeParams['tracks_per_page'] ) )? $this->shortcodeParams['tracks_per_page']: null;
@@ -714,6 +748,7 @@ class Sonaar_Music_Widget extends WP_Widget{
         $ironAudioClass .= ( $remove_player || $hide_timeline )? ' srp_hide_player': '' ;
         $ironAudioClass .= ( $isPlayer_Favorite )? ' srp_player_is_favorite': '' ;
         $ironAudioClass .= ( $isPlayer_recentlyPlayed )? ' srp_player_is_recentlyPlayed': '' ;
+        $ironAudioClass .= ( $isPlayer_purchasedTrack )? ' srp_player_is_purchased_track': '' ;
         $ironAudioClass .= ( $hide_progressbar )? ' srp_hide_progressbar': '' ;
         $ironAudioClass .= ( $spectro_hide_tablet ) ? ' srp_hide_spectro_tablet' : '';
         $ironAudioClass .= ( $spectro_hide_mobile ) ? ' srp_hide_spectro_mobile' : '';
@@ -762,8 +797,10 @@ class Sonaar_Music_Widget extends WP_Widget{
         $hasTracklistSoundwave = ( function_exists( 'run_sonaar_music_pro' ) && isset($this->shortcodeParams['tracklist_soundwave_show']) && $this->shortcodeParams['tracklist_soundwave_show'] == 'true' )? true : false ;
         $hasTracklistCursor = ( $hasTracklistSoundwave && isset($this->shortcodeParams['tracklist_soundwave_cursor']) && $this->shortcodeParams['tracklist_soundwave_cursor'] == 'true' )? true : false ;
         $miniPlayer_metas = '';
-        
         foreach( $playlist['tracks'] as $key1 => $track){
+            if(!array_key_exists('sourcePostID', $track)){
+                continue;
+            }
             $allAlbums = explode(', ', $albums);
             if(! isset( $track['poster'] ) || $track['poster'] === null){
                 $track['poster'] = '';
@@ -858,6 +895,9 @@ class Sonaar_Music_Widget extends WP_Widget{
             $trackTitle .= ( Sonaar_Music::get_option('show_artist_name', 'srmp3_settings_general') )?  '<span class="srp_trackartist">' . esc_html($artistSeparator_string) . esc_html($track['track_artist']) .'</span>': '';
             $noteButton =  $this->addNoteButton($track['sourcePostID'], abs($trackCountFromPlaylist), $trackTitle, $trackdescEscapedValue, $excerptTrimmed, $track_desc_postcontent ); // We are using abs() here, because when the "reverse order" option is enable, the "$trackCountFromPlaylist" variable has a negative value 
             $playlistItemClass = (isset($trackdescEscapedValue) || $noteButton != null ) ? 'sr-playlist-item' : 'sr-playlist-item sr-playlist-item-flex';
+            if( isset($track['user_has_purchased']) ){
+                $playlistItemClass .= ' srp_track_purchased';
+            }
             if($trackLinkedToPost && ! $this->getOptionValue('track_artwork_play_button') && ! $tracklistGrid ){
                 $track_artwork_value = '<a href="' . $trackLinkedToPost . '" target="_self">' . $track_artwork_value;
                 $track_artwork_value .= '</a>';
@@ -1419,39 +1459,39 @@ class Sonaar_Music_Widget extends WP_Widget{
         $widgetPart_control .= '<div class="control">';
         if ( $this->getOptionValue('show_skip_bt') ){
             $widgetPart_control .=
-            '<div class="sr_skipBackward sricon-15s" aria-label="Rewind 15 seconds" title="' . esc_html(Sonaar_Music::get_option('tooltip_rwd_btn', 'srmp3_settings_widget_player')) .'"></div>';
+            '<div role="button" tabindex="0" class="sr_skipBackward sricon-15s" aria-label="Rewind 15 seconds" title="' . esc_html(Sonaar_Music::get_option('tooltip_rwd_btn', 'srmp3_settings_widget_player')) .'"></div>';
         }
         $prev_play_next_Controls = '';
         if(count($playlist['tracks']) > 1 ){
             $prev_play_next_Controls .= 
-            '<div class="previous sricon-back" style="opacity:0;" aria-label="Previous Track" title="' . esc_html(Sonaar_Music::get_option('tooltip_prev_btn', 'srmp3_settings_widget_player')) .'"></div>';
+            '<div role="button" tabindex="0" class="previous sricon-back" style="opacity:0;" aria-label="Previous Track" title="' . esc_html(Sonaar_Music::get_option('tooltip_prev_btn', 'srmp3_settings_widget_player')) .'"></div>';
         }
             $prev_play_next_Controls .=
-            '<div class="play" style="opacity:0;" aria-label="Play" title="' . esc_html(Sonaar_Music::get_option('tooltip_play_btn', 'srmp3_settings_widget_player')) .'">
+            '<div role="button" tabindex="0" class="play" style="opacity:0;" aria-label="Play" title="' . esc_html(Sonaar_Music::get_option('tooltip_play_btn', 'srmp3_settings_widget_player')) .'">
                 <i class="sricon-play"></i>
             </div>';
         if(count($playlist['tracks']) > 1 ){
             $prev_play_next_Controls .=
-            '<div class="next sricon-forward" style="opacity:0;" aria-label="Next Track" title="' . esc_html(Sonaar_Music::get_option('tooltip_next_btn', 'srmp3_settings_widget_player')) .'"></div>';
+            '<div role="button" tabindex="0" class="next sricon-forward" style="opacity:0;" aria-label="Next Track" title="' . esc_html(Sonaar_Music::get_option('tooltip_next_btn', 'srmp3_settings_widget_player')) .'"></div>';
         };
         $widgetPart_control .= $prev_play_next_Controls;
        
         if ( $this->getOptionValue('show_skip_bt') ){
             $widgetPart_control .= 
-            '<div class="sr_skipForward sricon-30s" aria-label="Forward 30 seconds" title="' . esc_html(Sonaar_Music::get_option('tooltip_fwrd_btn', 'srmp3_settings_widget_player')) .'"></div>';
+            '<div role="button" tabindex="0" class="sr_skipForward sricon-30s" aria-label="Forward 30 seconds" title="' . esc_html(Sonaar_Music::get_option('tooltip_fwrd_btn', 'srmp3_settings_widget_player')) .'"></div>';
         }
         $widgetPart_control .= ( $playerWidgetTemplate == 'skin_float_tracklist' )?'</div><div class="control">':'';
         if ( $this->getOptionValue('show_shuffle_bt') ){
-            $widgetPart_control .= '<div class="sr_shuffle sricon-shuffle" aria-label="Shuffle Track" title="' . esc_html(Sonaar_Music::get_option('tooltip_shuffle_btn', 'srmp3_settings_widget_player')) .'"></div>';
+            $widgetPart_control .= '<div role="button" tabindex="0" class="sr_shuffle sricon-shuffle" aria-label="Shuffle Track" title="' . esc_html(Sonaar_Music::get_option('tooltip_shuffle_btn', 'srmp3_settings_widget_player')) .'"></div>';
         }
         if ( $this->getOptionValue('show_repeat_bt') && !$notrackskip){
-            $widgetPart_control .= '<div class="srp_repeat sricon-repeat " aria-label="Repeat" data-repeat-status="playlist" title="' . esc_html(Sonaar_Music::get_option('tooltip_repeat_track_btn', 'srmp3_settings_widget_player')) .'"></div>';
+            $widgetPart_control .= '<div role="button" tabindex="0" class="srp_repeat sricon-repeat " aria-label="Repeat" data-repeat-status="playlist" title="' . esc_html(Sonaar_Music::get_option('tooltip_repeat_track_btn', 'srmp3_settings_widget_player')) .'"></div>';
         }
         if ( $this->getOptionValue('show_speed_bt') ){
-                $widgetPart_control .= '<div class="sr_speedRate" aria-label="Speed Rate" title="' . esc_html(Sonaar_Music::get_option('tooltip_speed_btn', 'srmp3_settings_widget_player')) .'"><div>1X</div></div>';
+                $widgetPart_control .= '<div role="button" tabindex="0" class="sr_speedRate" aria-label="Speed Rate" title="' . esc_html(Sonaar_Music::get_option('tooltip_speed_btn', 'srmp3_settings_widget_player')) .'"><div>1X</div></div>';
         }
         if ( $this->getOptionValue('show_volume_bt') ){
-                $widgetPart_control .= '<div class="volume" aria-label="Volume" title="' . esc_html(Sonaar_Music::get_option('tooltip_volume_btn', 'srmp3_settings_widget_player')) .'">
+                $widgetPart_control .= '<div role="button" class="volume" aria-label="Volume" title="' . esc_html(Sonaar_Music::get_option('tooltip_volume_btn', 'srmp3_settings_widget_player')) .'">
                 <div class="sricon-volume">
                     <div class="slider-container">
                     <div class="slide"></div>
@@ -1528,7 +1568,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                 $slideClasses = 'swiper-slide';
                 $widgetPart_slider .= '<div class="' . $slideClasses . '" data-post-id="' . $slidePostId . '" data-track-pos="' . $slideTrackPos . '" data-slide-id="' . $slideId . '" data-slide-id="' . $slideId . '" data-slide-index="' . $index . '"><div class="srp_swiper-album-art" style="background-image:url(' . $slideArtwork . ')"><div class="srp_swiper_overlay"></div>'; 
 
-                $widgetPart_slider .= '<div class="srp_swiper-control"><div class="srp_play" aria-label="Play"><i class="sricon-play"></i></div></div>';
+                $widgetPart_slider .= '<div class="srp_swiper-control"><div role="button" tabindex="0" class="srp_play" aria-label="Play"><i class="sricon-play"></i></div></div>';
                 //$widgetPart_slider .= ( $slideArtwork != '')? '<img alt="album-art" src="' .  $slideArtwork . '">' : '';
                 $widgetPart_slider_content = '<div class="srp_swiper-titles">';
                 $widgetPart_slider_content .= '<div class="srp_index">' .($index + 1) . '</div>';
@@ -1669,6 +1709,8 @@ class Sonaar_Music_Widget extends WP_Widget{
             $pagination = ($tracks_per_page) ? '<div class="srp_pagination_container"><div class="srp_pagination_arrows srp_pagination--prev sricon-back"></div><ul class="srp_pagination"></ul><div class="srp_pagination_arrows srp_pagination--next sricon-forward"></div></div>' : '' ;
             if($isPlayer_recentlyPlayed){
                 $noresulthtml = ($outputNoResultDom) ? '<div class="srp_notfound"><div class="srp_notfound--subtitle">'. esc_html($labelNoRecentTrack) .'</div></div>' : '';
+            }else if($isPlayer_purchasedTrack){
+                $noresulthtml = ($outputNoResultDom) ? '<div class="srp_notfound"><div class="srp_notfound--subtitle">'. esc_html($labelNoPurchasedTrack) .'</div></div>' : '';
             }else{
                 $noresulthtml = ($outputNoResultDom) ? '<div class="srp_notfound"><div class="srp_notfound--title">'. esc_html($labelNoResult1) .'</div><div class="srp_notfound--subtitle">'. esc_html($labelNoResult2) .'</div></div>' : '';
             }
@@ -1691,11 +1733,11 @@ class Sonaar_Music_Widget extends WP_Widget{
     
             $widgetPart_playButton = ( $usePlayLabel ) ? '
             <div class="srp-play-button play srp-play-button-label-container' . $extraClass . $extraClassForlabelOnly . '" href="#" style="' . esc_attr( $extraStyle ) . '">
-                <div class="srp-play-button-label" aria-label="Play">' . esc_html($labelPlayTxt) .'</div>
-                <div class="srp-pause-button-label" aria-label="Pause">' . esc_html($labelPauseTxt) .'</div>
+                <div role="button" tabindex="0" class="srp-play-button-label" aria-label="Play">' . esc_html($labelPlayTxt) .'</div>
+                <div role="button" tabindex="0" class="srp-pause-button-label" aria-label="Pause">' . esc_html($labelPauseTxt) .'</div>
             </div>'
             :'
-            <div class="srp-play-button play' . $extraClass . '" href="#" aria-label="Play">
+            <div role="button" tabindex="0" class="srp-play-button play' . $extraClass . '" href="#" aria-label="Play">
                 <i class="sricon-play"></i>
                 <div class="srp-play-circle"></div>
             </div>';
@@ -2100,10 +2142,19 @@ class Sonaar_Music_Widget extends WP_Widget{
                                 $or_queries[$clean_key] = array();
                             }
                             foreach ($meta_values as $value) {
+                                $clean_value = trim($value);
                                 $or_queries[$clean_key][] = array(
-                                    'key'     => $clean_key,
-                                    'value'   => trim($value),
-                                    'compare' => 'LIKE',
+                                    'relation' => 'OR',
+                                    array(
+                                        'key'     => $clean_key,
+                                        'value'   => $clean_value,
+                                        'compare' => '=',
+                                    ),
+                                    array(
+                                        'key'     => $clean_key,
+                                        'value'   => '"' . $clean_value . '"',
+                                        'compare' => 'LIKE',
+                                    ),
                                 );
                             }
                         } elseif (substr($meta_key, -7) === '_minmax') {
@@ -2129,10 +2180,19 @@ class Sonaar_Music_Widget extends WP_Widget{
                             }
                         }else {
                             foreach ($meta_values as $value) {
+                                $clean_value = trim($value);
                                 $meta_query[] = array(
-                                    'key'     => $meta_key,
-                                    'value'   => trim($value),
-                                    'compare' => 'LIKE',
+                                    'relation' => 'OR',
+                                    array(
+                                        'key'     => $meta_key,
+                                        'value'   => $clean_value,
+                                        'compare' => '=',
+                                    ),
+                                    array(
+                                        'key'     => $meta_key,
+                                        'value'   => '"' . $clean_value . '"',
+                                        'compare' => 'LIKE',
+                                    ),
                                 );
                             }
                         }
@@ -3027,7 +3087,7 @@ class Sonaar_Music_Widget extends WP_Widget{
         if (!is_a($product, 'WC_Product')) {
             return;
         }
-        $product_price = $product->get_price();
+        $product_price = wc_get_price_to_display($product);
 
         return strip_tags(wc_price($product_price));
     }
@@ -3241,7 +3301,61 @@ class Sonaar_Music_Widget extends WP_Widget{
         return $store_list;
 
     }
-    private function push_woocart_in_storelist($post, $is_variable_product = null, $wc_add_to_cart = false, $wc_buynow_bt = false){
+
+    private $purchased_product_ids = null;
+
+    private function hasPurchased($product_id) {
+        if ( ! is_user_logged_in() || ! function_exists('wc_get_orders') || ! function_exists('run_sonaar_music_pro')) {
+            return false;
+        }
+    
+        if ( is_null($this->purchased_product_ids) ) {
+            $this->purchased_product_ids = $this->getAllPurchasedProductIds();
+        }
+    
+        return in_array($product_id, $this->purchased_product_ids, true);
+    }
+    
+    private function getAllPurchasedProductIds() {
+        $user_id = get_current_user_id();
+        $cache_key = 'sonaar_purchased_ids_' . $user_id;
+    
+        if ( ! function_exists('wc_get_orders') ) {
+            return [];
+        }
+    
+        $cached = get_transient($cache_key);
+        if ( $cached !== false ) {
+            return $cached;
+        }
+    
+        $orders = wc_get_orders([
+            'customer_id' => $user_id,
+            'status'      => ['completed', 'processing', 'on-hold'],
+            'limit'       => -1,
+            'return'      => 'objects',
+        ]);
+    
+        $product_ids = [];
+    
+        foreach ( $orders as $order ) {
+            foreach ( $order->get_items() as $item ) {
+                $product_ids[] = $item->get_product_id();
+                $variation_id = $item->get_variation_id();
+                if ( $variation_id ) {
+                    $product_ids[] = $variation_id;
+                }
+            }
+        }
+    
+        $product_ids = array_unique($product_ids);
+        set_transient($cache_key, $product_ids, MINUTE_IN_SECONDS * 5);
+        return $product_ids;
+    }
+    
+
+    
+    private function push_woocart_in_storelist($post, $is_variable_product = null, $wc_add_to_cart = false, $wc_buynow_bt = false, $audioSrc = null){
         if (  !defined( 'WC_VERSION' ) || ( defined( 'WC_VERSION' ) && !function_exists( 'run_sonaar_music_pro' ) && get_site_option('SRMP3_ecommerce') != '1' ) ){
             return false;
 		}
@@ -3297,11 +3411,38 @@ class Sonaar_Music_Widget extends WP_Widget{
                 $label = ($wc_bt_type == 'wc_bt_type_price') ? '' : $label . ' ';
             }
 
+
+            $css_class  = '';
+            $thelabel   = $label . $product_price;
+
+
+            // If user has purchased the item, replace the price button by "Already Purchased" 
+            $has_purchased = $this->hasPurchased($post_id);
+           
+            if($has_purchased){
+                $css_class  = 'sr_has_already_purchased';
+
+                if(Sonaar_Music::get_option('wc_bt_purchased_action', 'srmp3_settings_woocommerce') === 'action_replace'){
+                    $storeicon  = (Sonaar_Music::get_option('wc_bt_purchased_icon', 'srmp3_settings_woocommerce') != '') ? Sonaar_Music::get_option('wc_bt_purchased_icon', 'srmp3_settings_woocommerce') : $storeicon;
+                    $thelabel   = ( Sonaar_Music::get_option('wc_bt_purchased_label', 'srmp3_settings_woocommerce') != '' ) ? Sonaar_Music::get_option('wc_bt_purchased_label', 'srmp3_settings_woocommerce') : $thelabel;
+                    $css_class .= ' sr_cta_disabled';
+                }
+                if(Sonaar_Music::get_option('wc_bt_purchased_action', 'srmp3_settings_woocommerce') === 'action_download'){
+                    $storeicon  = (Sonaar_Music::get_option('wc_bt_purchased_icon', 'srmp3_settings_woocommerce') != '') ? Sonaar_Music::get_option('wc_bt_purchased_icon', 'srmp3_settings_woocommerce') : $storeicon;
+                    $thelabel   = ( Sonaar_Music::get_option('wc_bt_purchased_label', 'srmp3_settings_woocommerce') != '' ) ? Sonaar_Music::get_option('wc_bt_purchased_label', 'srmp3_settings_woocommerce') : $thelabel;
+                    $css_class .= ' sr_cta_download';
+                    $pageUrl = $audioSrc;
+                }
+                if(Sonaar_Music::get_option('wc_bt_purchased_action', 'srmp3_settings_woocommerce') === 'action_hide'){
+                    return $store_list;
+                }
+            }
             $storeListArgs = [
                 'store-icon'    => $storeicon,
                 'store-link'    => $pageUrl,
-                'store-name'    => $label . $product_price,
+                'store-name'    => $thelabel,
                 'store-target'  => '_self',
+                'cta-class'     => $css_class,
                 'show-label'    => true,
                 'has-variation' => $is_variable_product == 1,
                 'product-id'    =>$post_id
@@ -3507,7 +3648,7 @@ class Sonaar_Music_Widget extends WP_Widget{
          if ($response['link'] === '#srp_ask_email') { 
             $ctaClass .= ' sr_store_ask_email'; 
             $storeName = (Sonaar_Music::get_option('download_settings_afe_button_label', 'srmp3_settings_download') && Sonaar_Music::get_option('download_settings_afe_button_label', 'srmp3_settings_download') != '') ? Sonaar_Music::get_option('download_settings_afe_button_label', 'srmp3_settings_download') : $storeName; 
-        } 
+        }
         return [
             [
                 'store-icon'    => 'fas fa-download',
@@ -4231,6 +4372,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                 if ( get_post_meta( $a->ID, 'reverse_post_tracklist', true) ){
                     $playlist['tracks'] = array_reverse($playlist['tracks']); //reverse tracklist order POST option
                 }
+                
             
                 if (is_array($playlist)) {
             
@@ -4248,9 +4390,12 @@ class Sonaar_Music_Widget extends WP_Widget{
                 }
 
             }
+            if ( $reverse_tracklist ){
+                $playlist['tracks'] = array_reverse($playlist['tracks']); 
+            }
         } else {      
             $tracks = [];
-
+            
             foreach ( $albums as $a ) {
 
                 $hasAccess = $this->wc_memberships_user_has_access($a->ID);
@@ -4300,7 +4445,9 @@ class Sonaar_Music_Widget extends WP_Widget{
                     //
                     //
                     */
-                   
+
+
+                    $has_purchased = $this->hasPurchased($a->ID);
 
                     for($i = 0 ; $i < count($album_tracks) ; $i++) {
                         
@@ -4330,7 +4477,6 @@ class Sonaar_Music_Widget extends WP_Widget{
                         $track_description = false;
                         $audioSrc = '';
                         $song_store_list = isset($album_tracks[$i]["song_store_list"]) ? $album_tracks[$i]["song_store_list"] : '' ;
-                        $album_store_list = ($wc_add_to_cart == 'true' || $wc_buynow_bt == 'true') ? $this->push_woocart_in_storelist($a, $is_variable_product, $wc_add_to_cart, $wc_buynow_bt) : false;
                        
                       
                         $has_song_store = false;
@@ -4342,7 +4488,14 @@ class Sonaar_Music_Widget extends WP_Widget{
                         $showLoading = false;
                         $track_length = false;
                         $has_lyric = (isset($album_tracks[$i]['track_lyrics']) && $album_tracks[$i]['track_lyrics'] != false)? true : false;
-
+                        $has_track_source_purchased_set = (isset($album_tracks[$i]['track_source_purchased']) && $album_tracks[$i]['track_source_purchased'] != false)? true : false;
+                        if($has_purchased){
+                           if (array_key_exists ( "track_source_purchased" , $album_tracks[$i] ) && $album_tracks[$i]["track_source_purchased"] !== '' ){
+                            $album_tracks[$i]["track_mp3"] = $album_tracks[$i]["track_source_purchased"];
+                            $album_tracks[$i]["track_mp3_id"] = $album_tracks[$i]["track_source_purchased_id"];
+                            $fileOrStream = 'mp3';
+                           }
+                        }
                         switch ($fileOrStream) {
                             case 'mp3':
                                 if ( isset( $album_tracks[$i]["track_mp3"] ) ) {
@@ -4397,6 +4550,16 @@ class Sonaar_Music_Widget extends WP_Widget{
                                 $album_tracks[$i] = array();
                                 break;
                         }
+                        
+                        if (
+                            !$has_purchased &&
+                            $has_track_source_purchased_set &&
+                            !$audioSrc
+                        ) {
+                            unset($album_tracks[$i]);
+                            continue;
+                        }
+
                         $isPreview = false;
                         if ($isPreviewEnabled) {
                             if (isset($album_tracks[$i]["audio_preview"]) && $album_tracks[$i]["audio_preview"] != '') {
@@ -4428,7 +4591,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                                 }
                             }
                         }
-                        
+
                         $num = 1;
                         $album_tracks[$i] = array();
                         
@@ -4448,7 +4611,10 @@ class Sonaar_Music_Widget extends WP_Widget{
                         $album_tracks[$i]["release_date"] = get_post_meta($a->ID, 'alb_release_date', true);
                         $album_tracks[$i]["song_store_list"] = $song_store_list;
                         $album_tracks[$i]["has_song_store"] = $has_song_store;
+
+                        $album_store_list = ($wc_add_to_cart == 'true' || $wc_buynow_bt == 'true') ? $this->push_woocart_in_storelist($a, $is_variable_product, $wc_add_to_cart, $wc_buynow_bt,$audioSrc) : false;
                         $album_tracks[$i]["album_store_list"] = $album_store_list;
+
                         $album_tracks[$i]['sourcePostID'] = $a->ID;
                         $album_tracks[$i]['has_lyric'] = $has_lyric;
 
@@ -4469,13 +4635,13 @@ class Sonaar_Music_Widget extends WP_Widget{
                             // Depending on the number of parts, calculate the total seconds differently
                             switch (count($parts)) {
                                 case 3: // HH:MM:SS
-                                    $totalSeconds = $parts[0] * 3600 + $parts[1] * 60 + $parts[2];
+                                    $totalSeconds = (int)$parts[0] * 3600 + (int)$parts[1] * 60 + (int)$parts[2];
                                     break;
                                 case 2: // MM:SS
-                                    $totalSeconds = $parts[0] * 60 + $parts[1];
+                                    $totalSeconds = (int)$parts[0] * 60 + (int)$parts[1];
                                     break;
                                 case 1: // SS
-                                    $totalSeconds = $parts[0];
+                                    $totalSeconds = (int)$parts[0];
                                     break;
                             }
                         
@@ -4531,7 +4697,10 @@ class Sonaar_Music_Widget extends WP_Widget{
                         if ($isPlayer_recentlyPlayed){
                             $album_tracks[$i]['recently_played'] = $trackRecentlyPlayed;
                         }
-
+                        if($has_purchased){
+                            $album_tracks[$i]["user_has_purchased"] = true; 
+                        }
+                      
                     }
                     
                 }

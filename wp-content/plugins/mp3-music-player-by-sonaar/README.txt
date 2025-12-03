@@ -3,9 +3,9 @@ Contributors: sonaar, eduplessis
 Tags: MP3, music player, podcast player, audio player, woocommerce
 Donate link: https://sonaar.io
 Requires at least: 4.7
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 5.9.5
+Stable tag: 5.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -342,6 +342,37 @@ Yes, with the pro version, you can click on the 'Add to Favorite' icon to store 
 10. Shortcode Builder: Create, Import and Customize audio players using shortcodes in real-time
 
 == Changelog ==
+= 5.10 =
+- New: WooCommerce – Added option to set separate Preview and Purchased audio files. After buying a track, customers can instantly download and listen to their purchased version on the frontend, and the Add to Cart button can automatically adjust based on purchase status. All new settings are available under MP3 Player > Settings > WooCommerce
+- New: WooCommerce - Create a player widget which contains all tracks purchased by the user
+- New: Semantic accessibility: add role "button" to control buttons
+- Fix: special characters issue with the sticky player
+- Fix: Streaming: Album artwork was often the wrong one. We have improved the fetch
+- Fix: Streaming - Update for Public Radio Co
+- Fix: Filters - Lazyload filters now match exact values (e.g. Male is treated separately from Female).
+- Fix: Filters - Filter condition OR parameter with no lazyload
+- Fix: Elementor editor - Conditon issue with tracklist play button options
+- Fix: Shortcode builder - Add responsive carousel slide per view options and meta title group styling
+- Fix: Issue with Lazy load applied through the gutenberg extra parameter option
+- Fix: Show Control On Hover condition now working
+- Fix: CPT Categories created with JetEngine is now supported 
+- Fix: Gutenberg - Scrollbar option issue
+- Fix: Image size in the email-capture popu
+- Fix: Shuffle order after filtering when sticky is disabled
+- Fix: Pagination issue in rare condition
+- Fix: Mobile Popup CTA
+- Fix: RSS Feed - Reverse tracklist parameter now working
+- Fix: Plugin conflict with other CMB2 plugins in some case
+- Fix: Now display whats currently playing for Citrus Streams
+- Fix: PHP warning regarding sonaar_license when WC is not activated
+- Fix: PHP Warning with WC 3.0+
+- Fix: PHP 8.2 notice with html2pdf library
+- Tweak: Load Elementor Categories the right way. Fix conflict with other plugins in some case
+- Tweak: Show track not found warning from search or specific player only
+- Tweak: WooCommerce - Display correct WC price if using geolocation
+- Tweak: Make sure plugin review admin notice is not shown if not admin
+- Tweak: Shortcode Builder - Add visual helper when no track found
+
 = 5.9.5 =
 - New: Add "Order" option to the playlist/episode post type to allow manual ordering
 - Fix: Icecast: Force Optional Image when no image is provided by the json

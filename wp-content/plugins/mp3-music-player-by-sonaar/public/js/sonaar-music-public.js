@@ -280,13 +280,21 @@ IRON = window.IRON || {};
         if (!imSticky && progressType == "simplebar" || imSticky && sonaar_music.option.waveformType == "simplebar") return;
 
         const container = sr_canvas_container;
-        const $waveCut = $(container).parents('.sonaar_fake_wave').find('.sonaar_wave_cut');
+        const $waveParent = $(container).parents('.sonaar_fake_wave');
+        const $waveCut = $waveParent.find('.sonaar_wave_cut');
+
         $waveCut.css('display', 'none');
         if( !$waveCut.attr('style').includes('width:') ){
           $waveCut.css('width', '0px');
         }
         waveBaseDiv         = container.closest(".sonaar_fake_wave");
-        waveBaseWidth       = waveBaseDiv.clientWidth;
+        if(typeof $waveParent.data('width') === 'undefined'){
+          waveBaseWidth       = waveBaseDiv.clientWidth;
+          $waveParent.data('width', waveBaseWidth);
+        }else{
+          waveBaseWidth       = $waveParent.data('width');
+        }
+
         canvasWidth         = (waveBaseWidth != 0) ? waveBaseWidth : 1000; //Set the width to 1000 when `waveBaseWidth` is 0 to prevent players from tabs, accordions, and other hidden elements from having a canvas width of 0.
         canvasHeight        = container.height;
        

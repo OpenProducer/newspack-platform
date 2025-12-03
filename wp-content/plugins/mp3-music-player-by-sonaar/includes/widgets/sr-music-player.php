@@ -3809,7 +3809,6 @@ class SR_Audio_Player extends Widget_Base {
 					'return_value' 				=> 'yes',
 					'condition' 					=> [
 						'sr_player_on_artwork' 		=> 'yes',
-						'artwork_set_background_hideMainImage!' => 'yes',
 					]
 				]
 			);
@@ -8221,6 +8220,25 @@ class SR_Audio_Player extends Widget_Base {
 										'value' => 'grid'
 									],
 									[
+										'name' => 'track_artwork_show',
+										'operator' => '!=',
+										'value' => 'yes'
+									]
+								]
+							],[
+								'relation' => 'and',
+								'terms' => [
+									[
+										'name' => 'trackList_layout',
+										'operator' => '!=',
+										'value' => 'grid'
+									],
+									[
+										'name' => 'track_artwork_show',
+										'operator' => '==',
+										'value' => 'yes'
+									],
+									[
 										'name' => 'track_artwork_play_button',
 										'operator' => '!=',
 										'value' => 'yes'
@@ -8272,8 +8290,32 @@ class SR_Audio_Player extends Widget_Base {
 										'value' => ''
 									],
 									[
+										'name' => 'track_artwork_show',
+										'operator' => '!=',
+										'value' => 'yes'
+									]
+								]
+							],					[
+								'relation' => 'and',
+								'terms' => [
+									[
+										'name' => 'trackList_layout',
+										'operator' => '!=',
+										'value' => 'grid'
+									],
+									[
+										'name' => 'play_pause_bt_show',
+										'operator' => '==',
+										'value' => ''
+									],
+									[
 										'name' => 'track_artwork_play_button',
 										'operator' => '!=',
+										'value' => 'yes'
+									],
+									[
+										'name' => 'track_artwork_show',
+										'operator' => '==',
 										'value' => 'yes'
 									]
 								]
@@ -8334,8 +8376,33 @@ class SR_Audio_Player extends Widget_Base {
 										'value' => ''
 									],
 									[
+										'name' => 'track_artwork_show',
+										'operator' => '!=',
+										'value' => 'yes'
+									]
+								]
+							],
+							[
+								'relation' => 'and',
+								'terms' => [
+									[
+										'name' => 'trackList_layout',
+										'operator' => '!=',
+										'value' => 'grid'
+									],
+									[
+										'name' => 'play_pause_bt_show',
+										'operator' => '==',
+										'value' => ''
+									],
+									[
 										'name' => 'track_artwork_play_button',
 										'operator' => '!=',
+										'value' => 'yes'
+									],
+									[
+										'name' => 'track_artwork_show',
+										'operator' => '==',
 										'value' => 'yes'
 									]
 								]
@@ -12226,6 +12293,9 @@ class SR_Audio_Player extends Widget_Base {
 			$shortcode .= 'albums="favorites" ';
 		}else if($settings['playlist_source']=='recently_played'){
 			$shortcode .= 'albums="recentlyplayed" ';
+			$shortcode .= (isset($settings['posts_per_page'])) ? 'posts_per_page="' . $settings['posts_per_page'] . '" ' : '';
+		}else if($settings['playlist_source']=='from_user_purchased'){
+			$shortcode .= 'albums="from_user_purchased" ';
 			$shortcode .= (isset($settings['posts_per_page'])) ? 'posts_per_page="' . $settings['posts_per_page'] . '" ' : '';
 		}else{
 			$display_playlist_ar = $settings['playlist_list'];

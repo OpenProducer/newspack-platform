@@ -196,7 +196,7 @@ class Sonaar_Music_Admin {
             foreach ($value as $key => $track) {
                 if ( $track['FileOrStream'] === 'mp3' && empty($track['track_mp3_id']) ) {
                     //if either audio_preview or track_description or track_image or track_lyrics is set, we keep the track
-                    if ( empty($track['audio_preview']) && empty($track['track_description']) && empty($track['track_image']) && empty($track['track_lyrics']) ) {
+                    if ( empty($track['audio_preview']) && empty($track['track_description']) && empty($track['track_image']) && empty($track['track_lyrics']) && empty($track['track_source_purchased'])) {
                         //error_log("" . print_r($value[$key], true));
                         unset($value[$key]);
                     }
@@ -497,6 +497,7 @@ class Sonaar_Music_Admin {
                 'shortcode_template_imported' => esc_html__('Template imported successfully!', 'sonaar-music'),
                 'notice_from_current_post' => esc_html__('This is a dynamic shortcode and will fetch your single post\'s track(s).', 'sonaar-music'),
                 'category_not_found' => esc_html__('Category is empty. Please assign a track\'s post to a category first.', 'sonaar-music'),
+                'sb_no_audio_track_found' => wp_kses_post(__('⚠️ First, select a source in the <strong>Audio Source</strong> panel.<br>Then, make sure the selected source has an audio file. <a href="https://drops.sonaar.io/i/Vmoopl" target="_blank">See screenshot</a>', 'sonaar-music')),
                 
             );
 
@@ -643,13 +644,13 @@ class Sonaar_Music_Admin {
             
             if ( Sonaar_Music::get_option('player_type', 'srmp3_settings_general') == 'podcast' ){
                 $taxonomies =  array(
-                    'playlist-cat'  => 'Podcast Categories',
+                    'playlist-category'  => 'Podcast Categories',
                     'playlist-tag'  => 'Podcast Tags',
                     'podcast-show'  => 'Podcast Show'
                 );
             }else{
                 $taxonomies = array(
-                    'playlist-cat' => 'Playlist Categories',
+                    'playlist-category' => 'Playlist Categories',
                     'playlist-tag' => 'Playlist Tags',
                 );
             }
@@ -1967,6 +1968,18 @@ class Sonaar_Music_Admin {
                         'after'         => 'srmp3_add_tooltip_to_label',
                         'tooltip'       => array(
                             'text'      => esc_html__('Label displayed in the User Most Recent Track player when user history is empty and no tack has been played yet.', 'sonaar-music'),
+                            'pro'       => true,
+                        ),
+                    ) );
+                    $widget_player_options->add_field( array(
+                        'name'          => esc_html__('No track purchased yet', 'sonaar-music'),
+                        'id'            => 'tracklist_no_purchased_track_label',
+                        'type'          => 'text_medium',
+                        'default'       => esc_html__('No track has been purchased yet', 'sonaar-music'),
+                        'attributes'    => array( 'placeholder' => esc_html__( 'No track has been purchased yet', 'sonaar-music' ) ),
+                        'after'         => 'srmp3_add_tooltip_to_label',
+                        'tooltip'       => array(
+                            'text'      => esc_html__('Label displayed in the User Purchased Track player when user have not made a purchase yet.', 'sonaar-music'),
                             'pro'       => true,
                         ),
                     ) );
@@ -3646,6 +3659,71 @@ class Sonaar_Music_Admin {
                                 'text'      => esc_html__('Show a small cart icon beside the button text label', 'sonaar-music'),
                                 'image'     => 'wc_noicon.svg',
                                 'pro'       => true,
+                            ),
+                        ) );
+                        $woocommerce_options->add_field( array(
+                            'name'          => esc_html__('Once user has purchased a track:', 'sonaar-music'),
+                            'id'            => 'wc_bt_purchased_action',
+                            'type'          => 'select',
+                            'options'       => array(
+                                ''                  => esc_html__('Keep the Add to Cart Button unchanged (default)', 'sonaar-music'),
+                                'action_download'   => esc_html__('Switch Add to Cart Button for a Download Button', 'sonaar-music'),
+                                'action_replace'    => esc_html__('Switch Add to Cart Button for a custom label (eg: Unlocked)', 'sonaar-music'),
+                                'action_hide'       => esc_html__('Hide Add to Cart Button in the player', 'sonaar-music'),
+                            ),
+                            'default'       => '',
+                        ) );
+                        $woocommerce_options->add_field( array(
+                            'name'          => esc_html__('Purchased Button Label', 'sonaar-music'),
+                            'classes'       => 'srmp3-settings--subitem',
+                            'id'            => 'wc_bt_purchased_label',
+                            'type'          => 'text_medium',
+                            'default'       => esc_html__('Unlocked', 'sonaar-music'),
+                            'attributes'  => array(
+                                'placeholder' => esc_html__('Unlocked', 'sonaar-music'),
+                                'data-conditional-id'    => 'wc_bt_purchased_action',
+                                'data-conditional-value' => wp_json_encode( array( 'action_replace', 'action_download' ) ),
+                            ),
+                        ) );
+                        $woocommerce_options->add_field( array(
+                            'id'            => 'wc_bt_purchased_txt_color',
+                            'type'          => 'colorpicker',
+                            'name'          => esc_html__('Text Color', 'sonaar-music'),
+                            'classes'         => 'color srmp3-settings--subitem',
+                            'default'       => 'rgb(255, 255, 255)',
+                            'options'       => array(
+                                'alpha'         => true, // Make this a rgba color picker.
+                            ),
+                            'attributes'    => array(
+                                  'data-colorpicker' => setDefaultColorPalettes(),
+                                  'data-conditional-id'    => 'wc_bt_purchased_action',
+                                  'data-conditional-value' => wp_json_encode( array( 'action_replace', 'action_download' ) ),
+                            ),
+                        ) );
+                        $woocommerce_options->add_field( array(
+                            'id'            => 'wc_bt_purchased_bg_color',
+                            'type'          => 'colorpicker',
+                            'name'          => esc_html__('Background Color', 'sonaar-music'),
+                            'classes'         => 'color srmp3-settings--subitem',
+                            'default'       => 'rgba(0, 0, 0, 1)',
+                            'options'       => array(
+                                'alpha'         => true, // Make this a rgba color picker.
+                            ),
+                            'attributes'    => array(
+                                  'data-colorpicker' => setDefaultColorPalettes(),
+                                  'data-conditional-id'    => 'wc_bt_purchased_action',
+                                  'data-conditional-value' => wp_json_encode( array( 'action_replace', 'action_download' ) ),
+                            ),
+                        ) );
+                        $woocommerce_options->add_field( array(
+                            'name' => esc_html__( 'Icon', 'sonaar-music' ),
+                            'classes'   => 'color srmp3-settings--subitem',
+                            'id'   => 'wc_bt_purchased_icon',
+                            'type' => 'faiconselect',
+                            'options_cb' => 'srmp3_returnRayFaPre',
+                            'attributes'  => array(
+                                'data-conditional-id'    => 'wc_bt_purchased_action',
+                                'data-conditional-value' => wp_json_encode( array( 'action_replace', 'action_download' ) ),
                             ),
                         ) );
                         $woocommerce_options->add_field( array(
@@ -5880,7 +5958,7 @@ class Sonaar_Music_Admin {
                         'type'          => 'multicheck',
                         'select_all_button' => false,
                         'options'    => index_get_taxonomies(),
-                        'default'       => array('playlist-cat', 'playlist-tag', 'podcast-show', 'product_cat', 'product_tag'),
+                        'default'       => array('playlist-category', 'playlist-tag', 'podcast-show', 'product_cat', 'product_tag'),
                     ) );
                     
 
@@ -7405,6 +7483,30 @@ class Sonaar_Music_Admin {
                 'data-conditional-value' => 'icecast',
             )
         ));
+        if ( function_exists( 'run_sonaar_music_pro' ) && defined( 'WC_VERSION' ) && get_site_option('SRMP3_ecommerce') == '1') {
+            $cmb_album->add_group_field($tracklist, array(
+                'description'   => $player,
+                'classes'       => 'srmp3-cmb2-file srmp3-settings--subitem',
+                'show_on_cb'    => 'sr_check_if_wc',
+                'id'            => 'track_source_purchased',
+                'object_types'  => 'product',
+                'name'          => esc_html__('MP3 File to Play After Purchase (Optional)', 'sonaar-music'),
+                'label_cb'      => 'srmp3_add_tooltip_to_label',
+                'tooltip'       => array(
+                    'title'     => esc_html__('Audio File for Purchased Users', 'sonaar-music'),
+                    'text'      => esc_html__('If set, this MP3 will replace the default track and play in the audio player only for users who have purchased this product.', 'sonaar-music'),
+                    'pro'       => true,
+                ),
+                'type'          => 'file',
+                'query_args'    => array(
+                    'type'          => 'audio',
+                ),
+                'options' => array(
+                    'url' => false, // Hide the text input for the url
+                ),  
+            ));       
+            
+        }
         if ( !function_exists( 'run_sonaar_music_pro' ) || get_site_option('SRMP3_ecommerce') !== '1' || get_site_option('SRMP3_purchased_plan') == false ){
             $cmb_album->add_group_field($tracklist, array(
                 'name'          => esc_html__('Audio Preview & Ads', 'sonaar-music'),
