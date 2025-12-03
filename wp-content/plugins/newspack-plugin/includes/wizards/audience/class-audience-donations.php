@@ -124,46 +124,6 @@ class Audience_Donations extends Wizard {
 			]
 		);
 
-		// Save additional settings.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/settings/',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_update_additional_settings' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'fee_multiplier'              => [
-						'sanitize_callback' => 'Newspack\newspack_clean',
-						'validate_callback' => function ( $value ) {
-							if ( (float) $value > 10 ) {
-								return new WP_Error(
-									'newspack_invalid_param',
-									__( 'Fee multiplier must be smaller than 10.', 'newspack' )
-								);
-							}
-							return true;
-						},
-					],
-					'fee_static'                  => [
-						'sanitize_callback' => 'Newspack\newspack_clean',
-					],
-					'allow_covering_fees'         => [
-						'sanitize_callback' => 'Newspack\newspack_string_to_bool',
-					],
-					'allow_covering_fees_default' => [
-						'sanitize_callback' => 'Newspack\newspack_string_to_bool',
-					],
-					'allow_covering_fees_label'   => [
-						'sanitize_callback' => 'Newspack\newspack_clean',
-					],
-					'location_code'               => [
-						'sanitize_callback' => 'Newspack\newspack_clean',
-					],
-				],
-			]
-		);
-
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
 			'/wizard/' . $this->slug . '/emails/(?P<id>\d+)',
@@ -173,44 +133,6 @@ class Audience_Donations extends Wizard {
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
-	}
-
-	/**
-	 * Handler for setting additional settings.
-	 *
-	 * @param object $settings Settings.
-	 * @return WP_REST_Response with the latest settings.
-	 */
-	public function update_additional_settings( $settings ) {
-		if ( isset( $settings['allow_covering_fees'] ) ) {
-			update_option( 'newspack_donations_allow_covering_fees', intval( $settings['allow_covering_fees'] ) );
-		}
-		if ( isset( $settings['allow_covering_fees_default'] ) ) {
-			update_option( 'newspack_donations_allow_covering_fees_default', $settings['allow_covering_fees_default'] );
-		}
-
-		if ( isset( $settings['allow_covering_fees_label'] ) ) {
-			update_option( 'newspack_donations_allow_covering_fees_label', sanitize_text_field( $settings['allow_covering_fees_label'] ) );
-		}
-		if ( isset( $settings['fee_multiplier'] ) ) {
-			update_option( 'newspack_blocks_donate_fee_multiplier', $settings['fee_multiplier'] );
-		}
-		if ( isset( $settings['fee_static'] ) ) {
-			update_option( 'newspack_blocks_donate_fee_static', $settings['fee_static'] );
-		}
-		return $this->fetch_all_data();
-	}
-
-	/**
-	 * Save additional payment method settings (e.g. transaction fees).
-	 *
-	 * @param WP_REST_Request $request Request object.
-	 * @return WP_REST_Response Response.
-	 */
-	public function api_update_additional_settings( $request ) {
-		$params = $request->get_params();
-		$result = $this->update_additional_settings( $params );
-		return \rest_ensure_response( $result );
 	}
 
 	/**
@@ -246,19 +168,12 @@ class Audience_Donations extends Wizard {
 		$platform = Donations::get_platform_slug();
 
 		$args = [
-			'platform_data'       => [
+			'platform_data'      => [
 				'platform' => $platform,
 			],
-			'additional_settings' => [
-				'allow_covering_fees'         => boolval( get_option( 'newspack_donations_allow_covering_fees', true ) ),
-				'allow_covering_fees_default' => boolval( get_option( 'newspack_donations_allow_covering_fees_default', false ) ),
-				'allow_covering_fees_label'   => get_option( 'newspack_donations_allow_covering_fees_label', '' ),
-				'fee_multiplier'              => get_option( 'newspack_blocks_donate_fee_multiplier', '2.9' ),
-				'fee_static'                  => get_option( 'newspack_blocks_donate_fee_static', '0.3' ),
-			],
-			'donation_data'       => Donations::get_donation_settings(),
-			'donation_page'       => Donations::get_donation_page_info(),
-			'product_validation'  => $this->validate_donation_products(),
+			'donation_data'      => Donations::get_donation_settings(),
+			'donation_page'      => Donations::get_donation_page_info(),
+			'product_validation' => $this->validate_donation_products(),
 		];
 		if ( 'wc' === $platform ) {
 			$plugin_status    = true;

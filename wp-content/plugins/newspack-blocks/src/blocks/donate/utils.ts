@@ -27,9 +27,7 @@ export const getColorForContrast = ( color?: string ): string => {
 		0.7152 * Math.pow( backgroundColorRGB[ 1 ] / 255, 2.2 ) +
 		0.0722 * Math.pow( backgroundColorRGB[ 2 ] / 255, 2.2 );
 	const l2 =
-		0.2126 * Math.pow( blackRGB[ 0 ] / 255, 2.2 ) +
-		0.7152 * Math.pow( blackRGB[ 1 ] / 255, 2.2 ) +
-		0.0722 * Math.pow( blackRGB[ 2 ] / 255, 2.2 );
+		0.2126 * Math.pow( blackRGB[ 0 ] / 255, 2.2 ) + 0.7152 * Math.pow( blackRGB[ 1 ] / 255, 2.2 ) + 0.0722 * Math.pow( blackRGB[ 2 ] / 255, 2.2 );
 
 	const contrastRatio = l1 > l2 ? ( l1 + 0.05 ) / ( l2 + 0.05 ) : ( l2 + 0.05 ) / ( l1 + 0.05 );
 
@@ -42,37 +40,29 @@ export const getMigratedAmount = (
 	untieredAmount: number
 ): [ number, number, number, number ] => {
 	const multiplier = frequency === 'month' ? 1 : 12;
-	return [
-		amounts[ 0 ] * multiplier,
-		amounts[ 1 ] * multiplier,
-		amounts[ 2 ] * multiplier,
-		untieredAmount * multiplier,
-	];
+	return [ amounts[ 0 ] * multiplier, amounts[ 1 ] * multiplier, amounts[ 2 ] * multiplier, untieredAmount * multiplier ];
 };
 
-export const getFrequencyLabel = (
-	frequencySlug: DonationFrequencySlug,
-	hideOnceLabel = false
-) => {
+export const getFrequencyLabel = ( frequencySlug: DonationFrequencySlug, hideOnceLabel = false ) => {
 	// eslint-disable-next-line no-nested-ternary
 	return frequencySlug === 'once'
 		? hideOnceLabel
 			? ''
-			: __( ' once', 'newspack-blocks' )
+			: __( 'once', 'newspack-blocks' )
 		: sprintf(
-			// Translators: %s is the frequency (e.g. per month, per year).
-			_x( ' per %s', 'per `Frequency`', 'newspack-blocks' ),
-			frequencySlug
-		);
-}
+				// Translators: %s is the frequency (e.g. per month, per year).
+				_x( 'per %s', 'per `Frequency`', 'newspack-blocks' ),
+				frequencySlug
+		  );
+};
 
 export const getFormattedAmount = ( amount: number, withCurrency = false ) => {
 	type NumberFormatOptions = {
 		minimumFractionDigits: number;
 		style?: string;
 		currency?: string;
-	}
-	const options = <NumberFormatOptions>{
+	};
+	const options = < NumberFormatOptions >{
 		minimumFractionDigits: 0 === amount % 1 ? 0 : 2,
 	};
 	if ( withCurrency ) {
@@ -82,13 +72,9 @@ export const getFormattedAmount = ( amount: number, withCurrency = false ) => {
 	const formatter = new Intl.NumberFormat( navigator?.language || 'en-US', options as object );
 
 	return formatter.format( amount );
-}
+};
 
-export const getFrequencyLabelWithAmount = (
-	amount: number,
-	frequencySlug: DonationFrequencySlug,
-	hideOnceLabel = false
-) => {
+export const getFrequencyLabelWithAmount = ( amount: number, frequencySlug: DonationFrequencySlug, hideOnceLabel = false ) => {
 	const template = window.newspack_blocks_data?.tier_amounts_template;
 
 	if ( ! template ) {
@@ -97,10 +83,10 @@ export const getFrequencyLabelWithAmount = (
 				frequencySlug === 'once'
 					? frequencySlug
 					: sprintf(
-						// Translators: %s is the %s is the frequency.
-						__( 'per %s', 'newspack-blocks' ),
-						frequencySlug
-					);
+							// Translators: %s is the %s is the frequency.
+							__( 'per %s', 'newspack-blocks' ),
+							frequencySlug
+					  );
 
 			const formattedPrice =
 				'<span class="price-amount">' +
@@ -117,7 +103,5 @@ export const getFrequencyLabelWithAmount = (
 
 	const frequency = getFrequencyLabel( frequencySlug, hideOnceLabel );
 
-	return template
-		.replace( 'AMOUNT_PLACEHOLDER', getFormattedAmount( amount ) )
-		.replace( 'FREQUENCY_PLACEHOLDER', frequency );
+	return template.replace( 'AMOUNT_PLACEHOLDER', getFormattedAmount( amount ) ).replace( 'FREQUENCY_PLACEHOLDER', frequency );
 };

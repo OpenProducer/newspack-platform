@@ -55,8 +55,20 @@ trait McpObservabilityHelperTrait {
 
 		foreach ( $tags as $key => $value ) {
 			// Convert to string and limit length to prevent log bloat.
-			$key   = substr( (string) $key, 0, 50 );
-			$value = substr( (string) $value, 0, 100 );
+			$key = substr( (string) $key, 0, 64 );
+
+			// Convert value to string, handling null specially.
+			if ( null === $value ) {
+				$value = '';
+			} elseif ( is_scalar( $value ) ) {
+				$value = (string) $value;
+			} else {
+				$value = wp_json_encode( $value );
+				// wp_json_encode can return false on failure, ensure we have a string.
+				if ( false === $value ) {
+					$value = '';
+				}
+			}
 
 			// Remove potentially sensitive information patterns.
 			$value = preg_replace( '/\b(?:password|token|key|secret|auth)\b/i', '[REDACTED]', $value );
@@ -84,9 +96,9 @@ trait McpObservabilityHelperTrait {
 		$metric = strtolower( $metric );
 		$metric = (string) preg_replace( '/[^a-z0-9_\.]/', '.', $metric );
 		$metric = (string) preg_replace( '/\.+/', '.', $metric ); // Remove duplicate dots.
-		$metric = trim( $metric, '.' ); // Remove leading/trailing dots.
+		// Remove leading/trailing dots.
 
-		return $metric;
+		return trim( $metric, '.' );
 	}
 
 	/**
@@ -101,28 +113,6 @@ trait McpObservabilityHelperTrait {
 		$merged_tags  = array_merge( $default_tags, $tags );
 
 		return self::sanitize_tags( $merged_tags );
-	}
-
-	/**
-	 * Record an error event with standardized error categorization.
-	 *
-	 * @param string     $base_event The base event name (e.g., 'mcp.tool.execution').
-	 * @param \Throwable $exception The exception that occurred.
-	 * @param array      $additional_tags Additional context tags.
-	 *
-	 * @return void
-	 */
-	public static function record_error_event( string $base_event, \Throwable $exception, array $additional_tags = array() ): void {
-		$error_tags = array_merge(
-			array(
-				'error_type'         => get_class( $exception ),
-				'error_category'     => self::categorize_error( $exception ),
-				'error_message_hash' => substr( md5( $exception->getMessage() ), 0, 8 ), // For grouping similar errors.
-			),
-			$additional_tags
-		);
-
-		static::record_event( $base_event . '_failed', $error_tags );
 	}
 
 	/**

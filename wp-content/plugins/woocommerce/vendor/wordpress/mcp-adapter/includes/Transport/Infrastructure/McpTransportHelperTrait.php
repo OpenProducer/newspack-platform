@@ -9,8 +9,6 @@ declare( strict_types=1 );
 
 namespace WP\MCP\Transport\Infrastructure;
 
-use WP\MCP\Infrastructure\ErrorHandling\McpErrorFactory;
-
 /**
  * Trait McpTransportHelperTrait
  *
@@ -37,20 +35,5 @@ trait McpTransportHelperTrait {
 
 		// Fallback to 'unknown' if extraction fails.
 		return ! empty( $transport_name ) ? $transport_name : 'unknown';
-	}
-
-	/**
-	 * Create a standardized method not found error.
-	 *
-	 * This provides a default implementation that can be overridden by transports
-	 * that need specific error formats.
-	 *
-	 * @param string $method The method that was not found.
-	 * @return array
-	 */
-	protected function create_method_not_found_error( string $method ): array {
-		return array(
-			'error' => McpErrorFactory::method_not_found( 0, $method )['error'],
-		);
 	}
 }

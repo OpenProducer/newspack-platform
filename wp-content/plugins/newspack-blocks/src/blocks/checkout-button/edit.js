@@ -52,9 +52,7 @@ function getVariationName( variation ) {
 
 function getNYP( product ) {
 	return {
-		isNYP:
-			newspack_blocks_data?.can_use_name_your_price &&
-			product?.meta_data?.some( meta => meta.key === '_nyp' && meta.value === 'yes' ),
+		isNYP: newspack_blocks_data?.can_use_name_your_price && product?.meta_data?.some( meta => meta.key === '_nyp' && meta.value === 'yes' ),
 		suggestedPrice: product?.meta_data?.find( meta => meta.key === '_suggested_price' )?.value,
 		minPrice: product?.meta_data?.find( meta => meta.key === '_min_price' )?.value,
 		maxPrice: product?.meta_data?.find( meta => meta.key === '_maximum_price' )?.value,
@@ -79,11 +77,7 @@ function WidthControl( { selectedWidth, setAttributes } ) {
 			__next40pxDefaultSize
 		>
 			{ [ 25, 50, 75, 100 ].map( widthValue => (
-				<ToggleGroupControlOption
-					key={ widthValue }
-					label={ `${ widthValue }%` }
-					value={ String( widthValue ) }
-				/>
+				<ToggleGroupControlOption key={ widthValue } label={ `${ widthValue }%` } value={ String( widthValue ) } />
 			) ) }
 		</ToggleGroupControl>
 	);
@@ -106,7 +100,8 @@ function ProductControl( props ) {
 			.then( products => {
 				const _suggestions = {};
 				products.forEach( product => {
-					if ( '' !== product.price || getNYP( product ).isNYP ) { // Variable products will populate price with one of the variations prices.
+					if ( '' !== product.price || getNYP( product ).isNYP ) {
+						// Variable products will populate price with one of the variations prices.
 						_suggestions[ product.id ] = `${ product.id }: ${ product.name }`;
 					}
 				} );
@@ -166,15 +161,8 @@ function ProductControl( props ) {
 		<div className="newspack-checkout-button__product-field" style={ { marginBottom: '16px' } }>
 			{ selected && ! isChanging ? (
 				<>
-					<BaseControl
-						label={ __( 'Product', 'newspack-blocks' ) }
-						id="selected-product-control"
-					>
-						<TextControl
-							value={ selected.name }
-							__next40pxDefaultSize
-							disabled
-						/>
+					<BaseControl label={ __( 'Product', 'newspack-blocks' ) } id="selected-product-control">
+						<TextControl value={ selected.name } __next40pxDefaultSize disabled />
 						<Button
 							variant="link"
 							onClick={ () => setIsChanging( true ) }
@@ -189,9 +177,7 @@ function ProductControl( props ) {
 				<>
 					<div className="newspack-checkout-button__product-field__tokenfield">
 						<FormTokenField
-							placeholder={
-								props.placeholder || __( 'Type to search for a product…', 'newspack-blocks' )
-							}
+							placeholder={ props.placeholder || __( 'Type to search for a product…', 'newspack-blocks' ) }
 							label={ __( 'Product', 'newspack-blocks' ) }
 							maxLength={ 1 }
 							onChange={ onChange }
@@ -202,10 +188,7 @@ function ProductControl( props ) {
 						{ inFlight && <Spinner /> }
 					</div>
 					{ selected && (
-						<Button
-							variant="link"
-							onClick={ () => setIsChanging( false ) }
-						>
+						<Button variant="link" onClick={ () => setIsChanging( false ) }>
 							{ __( 'Cancel', 'newspack-blocks' ) }
 						</Button>
 					) }
@@ -324,10 +307,7 @@ function CheckoutButtonEdit( props ) {
 						{ productData?.variations?.length > 0 && (
 							<>
 								<CheckboxControl
-									label={ __(
-										'Allow the reader to select the variation before checkout.',
-										'newspack-blocks'
-									) }
+									label={ __( 'Allow the reader to select the variation before checkout.', 'newspack-blocks' ) }
 									checked={ ! variation }
 									onChange={ value =>
 										setAttributes( {
@@ -339,10 +319,7 @@ function CheckoutButtonEdit( props ) {
 								{ variations.length ? (
 									<SelectControl
 										label={ __( 'Variation', 'newspack-blocks' ) }
-										help={ __(
-											'Select the product variation to be added to cart.',
-											'newspack-blocks'
-										) }
+										help={ __( 'Select the product variation to be added to cart.', 'newspack-blocks' ) }
 										value={ variation }
 										disabled={ ! variation }
 										options={ [
@@ -352,9 +329,7 @@ function CheckoutButtonEdit( props ) {
 												value: item.id,
 											} ) ),
 										] }
-										onChange={ value =>
-											setAttributes( { variation: value.toString(), price: '' } )
-										}
+										onChange={ value => setAttributes( { variation: value.toString(), price: '' } ) }
 									/>
 								) : (
 									<Spinner />
@@ -376,8 +351,7 @@ function CheckoutButtonEdit( props ) {
 							) }
 						</p>
 						<p>
-							<strong>{ __( 'Suggested price:', 'newspack-blocks' ) }</strong>{ ' ' }
-							{ nyp.suggestedPrice || 0 }
+							<strong>{ __( 'Suggested price:', 'newspack-blocks' ) }</strong> { nyp.suggestedPrice || 0 }
 							{ nyp.minPrice && (
 								<>
 									<br />

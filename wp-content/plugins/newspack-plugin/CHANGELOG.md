@@ -1,3 +1,57 @@
+# [6.26.0](https://github.com/Automattic/newspack-plugin/compare/v6.25.1...v6.26.0) (2025-12-02)
+
+
+### Features
+
+* **content-gifting:** metering support and CTA auth links ([#4331](https://github.com/Automattic/newspack-plugin/issues/4331)) ([8d5f500](https://github.com/Automattic/newspack-plugin/commit/8d5f50058fc5661f985066306cacc8d03f1c3d20))
+
+## [6.25.1](https://github.com/Automattic/newspack-plugin/compare/v6.25.0...v6.25.1) (2025-11-25)
+
+
+### Bug Fixes
+
+* **memberships:** use gate ID for metering meta key ([#4316](https://github.com/Automattic/newspack-plugin/issues/4316)) ([a190a47](https://github.com/Automattic/newspack-plugin/commit/a190a477ad7af079af4fd27659cc8f735f735f42))
+
+# [6.25.0](https://github.com/Automattic/newspack-plugin/compare/v6.24.3...v6.25.0) (2025-11-24)
+
+
+### Bug Fixes
+
+* **content-gifting:** ux tweaks and other fixes ([#4318](https://github.com/Automattic/newspack-plugin/issues/4318)) ([ae2de8f](https://github.com/Automattic/newspack-plugin/commit/ae2de8f4cbdf1bd44f5418d7d4fccc468fb82c2d))
+* **contrib-meter:** ensure percentage follows bar progress when using linear style ([#4320](https://github.com/Automattic/newspack-plugin/issues/4320)) ([3b9208b](https://github.com/Automattic/newspack-plugin/commit/3b9208b739997a5f56cab7e8eca435bef800740a))
+* display an error when a Collection title already exists ([#4268](https://github.com/Automattic/newspack-plugin/issues/4268)) ([8055c83](https://github.com/Automattic/newspack-plugin/commit/8055c8339f3ea291a912a83b3a2f45e011000c44))
+* **newspack-ui:** remove margin-top for helper text when inside input-card ([#4285](https://github.com/Automattic/newspack-plugin/issues/4285)) ([007d2c1](https://github.com/Automattic/newspack-plugin/commit/007d2c19d5ca54ba2cd988c02265553255a4c285))
+* prevent spawning of Accessibility Statement pages ([#4237](https://github.com/Automattic/newspack-plugin/issues/4237)) ([e1d12b4](https://github.com/Automattic/newspack-plugin/commit/e1d12b481df8cb33391f0750405389747d1ecc75))
+* repeat button block styles in collections for WP 6.9 ([#4319](https://github.com/Automattic/newspack-plugin/issues/4319)) ([e1386c9](https://github.com/Automattic/newspack-plugin/commit/e1386c927ed7814fecfbb0e1420b3e036c881e43))
+* **stripe-gateway:** disable Link by default on new installs ([#4288](https://github.com/Automattic/newspack-plugin/issues/4288)) ([213a252](https://github.com/Automattic/newspack-plugin/commit/213a252b1b1af424687152e24a82ba93c0e12808))
+
+
+### Features
+
+* content gifting ([#4207](https://github.com/Automattic/newspack-plugin/issues/4207)) ([f0c4d8f](https://github.com/Automattic/newspack-plugin/commit/f0c4d8fbc312cbbf427fdfaa9747b144418e6a5d))
+* content gifting ([#4207](https://github.com/Automattic/newspack-plugin/issues/4207)) ([3880833](https://github.com/Automattic/newspack-plugin/commit/38808330077008994eff46d59566fcef1c064571))
+* **content-gifting:** custom article link expiration ([#4313](https://github.com/Automattic/newspack-plugin/issues/4313)) ([566ad6d](https://github.com/Automattic/newspack-plugin/commit/566ad6d5a23b50062f6f48417f3023f6db4b5836))
+* **contrib-meter:** add contribution meter block ([#4305](https://github.com/Automattic/newspack-plugin/issues/4305)) ([5634314](https://github.com/Automattic/newspack-plugin/commit/56343140bee7f674353129997d442ec8d038d127))
+* **contrib-meter:** add contribution meter block ([#4305](https://github.com/Automattic/newspack-plugin/issues/4305)) ([dc894bd](https://github.com/Automattic/newspack-plugin/commit/dc894bd130ca68667f345536df1f964c571a1b44))
+* **contrib-meter:** create block patterns ([#4311](https://github.com/Automattic/newspack-plugin/issues/4311)) ([e318c01](https://github.com/Automattic/newspack-plugin/commit/e318c0178e901875f26400035b51cd3396749621))
+* **contrib-meter:** update cache invalidation logic and end date ([#4314](https://github.com/Automattic/newspack-plugin/issues/4314)) ([d7b54aa](https://github.com/Automattic/newspack-plugin/commit/d7b54aa36ab26fadf9d6aea24a40dfa239bec147))
+* **cover-fees:** support non-donation purchases ([#4298](https://github.com/Automattic/newspack-plugin/issues/4298)) ([87e126f](https://github.com/Automattic/newspack-plugin/commit/87e126f71b9518438f1ba97f2a54074cf886af88))
+* fix user login problem ([f834b3a](https://github.com/Automattic/newspack-plugin/commit/f834b3a2e4911aa22652b63651754e6cdb63e721))
+* merge remote-tracking branch 'origin/trunk' into alpha ([748702f](https://github.com/Automattic/newspack-plugin/commit/748702fc0d7c89294b1481a025bb5b0884e23c6a))
+* **my-account:** update mobile navigation to use hamburger menu and display current page title ([#4303](https://github.com/Automattic/newspack-plugin/issues/4303)) ([764a7d3](https://github.com/Automattic/newspack-plugin/commit/764a7d3dc41bb86bfa0e970d2d6acfe070431ebc))
+* **my-account:** use newspack-ui in the sidebar ([#4302](https://github.com/Automattic/newspack-plugin/issues/4302)) ([87cf937](https://github.com/Automattic/newspack-plugin/commit/87cf937d848f8690c923959cc3e430aee2aad19d))
+* **newspack-icons:** add key ([#4278](https://github.com/Automattic/newspack-plugin/issues/4278)) ([f275328](https://github.com/Automattic/newspack-plugin/commit/f27532845616e39dd229db4a185c6e6dd38da98f))
+* **newspack-ui-icons:** align icons with WordPress/Newspack set and use shared class ([#4281](https://github.com/Automattic/newspack-plugin/issues/4281)) ([52a0eac](https://github.com/Automattic/newspack-plugin/commit/52a0eacfd915f7eb9a822eb5e2d118fb630fc82d))
+* **ras:** implement OAuth redirect handling for RAS login ([#4290](https://github.com/Automattic/newspack-plugin/issues/4290)) ([b84aae1](https://github.com/Automattic/newspack-plugin/commit/b84aae16740d1d9f8986168ed64e9c75bb8e0e81))
+* **ras:** implement OAuth redirect handling for RAS login ([#4290](https://github.com/Automattic/newspack-plugin/issues/4290)) ([22586e1](https://github.com/Automattic/newspack-plugin/commit/22586e1deb47a9e5d472bf08ddf23a890e1731a7))
+* **rss:** allow RSS feed customization with new extra tags filters ([#4231](https://github.com/Automattic/newspack-plugin/issues/4231)) ([34c235e](https://github.com/Automattic/newspack-plugin/commit/34c235e7ca5b98ed6b92a61afa5ae7ff85b218eb))
+* **rss:** change rss media hook and use CDATA on media desc ([#4280](https://github.com/Automattic/newspack-plugin/issues/4280)) ([8292c7a](https://github.com/Automattic/newspack-plugin/commit/8292c7a0d8868510792a884079a5e6f4e28f5ae1))
+* **subscriptions:** change frequency intervals strategy ([#4301](https://github.com/Automattic/newspack-plugin/issues/4301)) ([b652dba](https://github.com/Automattic/newspack-plugin/commit/b652dbaa2a79e2ff4bf015e677aee780b5d58208))
+* trigger alpha release ([617fa29](https://github.com/Automattic/newspack-plugin/commit/617fa2914bf6e16f909cc51bca68e840029b3127))
+* **ui:** spinner tweaks ([#4300](https://github.com/Automattic/newspack-plugin/issues/4300)) ([31f3e5e](https://github.com/Automattic/newspack-plugin/commit/31f3e5eb8519715b61e03f0d9651f34a42dcb24a))
+* **variation-modal:** display variation description ([#4286](https://github.com/Automattic/newspack-plugin/issues/4286)) ([0f5e017](https://github.com/Automattic/newspack-plugin/commit/0f5e017f66353ea89a972f0a3d5005b6e007a07f))
+* **web-preview:** update components with new dropdown menu and title ([#4292](https://github.com/Automattic/newspack-plugin/issues/4292)) ([6015eae](https://github.com/Automattic/newspack-plugin/commit/6015eae8cd2ae58468ef6fd808e6032e9d45b461))
+
 ## [6.24.3](https://github.com/Automattic/newspack-plugin/compare/v6.24.2...v6.24.3) (2025-11-13)
 
 

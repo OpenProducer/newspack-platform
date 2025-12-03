@@ -5,7 +5,7 @@ import { getCheckoutData } from '../../utils';
  *
  * @param {Object} data The data to send with the event.
  */
-export const manageDismissed = ( data ) => {
+export const manageDismissed = data => {
 	if ( 'function' !== typeof window.gtag ) {
 		return;
 	}

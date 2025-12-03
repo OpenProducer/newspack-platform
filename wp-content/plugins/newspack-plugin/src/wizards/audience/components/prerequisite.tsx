@@ -83,7 +83,7 @@ export default function Prerequisite( { slug, config, getSharedProps, inFlight, 
 										{ inFlight
 											? __( 'Saving…', 'newspack-plugin' )
 											: sprintf(
-													// Translators: Save or Update settings.
+													// translators: %s: save or update settings.
 													__( '%s settings', 'newspack-plugin' ),
 													isValid ? __( 'Update', 'newspack-plugin' ) : __( 'Save', 'newspack-plugin' )
 											  ) }
@@ -105,7 +105,7 @@ export default function Prerequisite( { slug, config, getSharedProps, inFlight, 
 														HANDOFF_KEY,
 														JSON.stringify( {
 															message: sprintf(
-																// Translators: %s is specific instructions for satisfying the prerequisite.
+																// translators: %1$s: specific instructions for satisfying the prerequisite. %2$s: opening <a> tag for the link to the Audience Configuration page. %3$s: closing </a> tag.
 																__(
 																	'%1$s%2$sReturn to the Audience Configuration page to complete the settings and activate%3$s.',
 																	'newspack-plugin'

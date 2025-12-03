@@ -71,6 +71,16 @@ class Content_Gate {
 		include __DIR__ . '/class-content-restriction-control.php';
 		include __DIR__ . '/class-block-patterns.php';
 		include __DIR__ . '/class-metering.php';
+		include __DIR__ . '/content-gifting/class-content-gifting.php';
+	}
+
+	/**
+	 * Whether the first-party Newspack feature is enabled.
+	 *
+	 * @return bool
+	 */
+	public static function is_newspack_feature_enabled() {
+		return defined( 'NEWSPACK_CONTENT_GATES' ) && NEWSPACK_CONTENT_GATES;
 	}
 
 	/**
@@ -167,6 +177,11 @@ class Content_Gate {
 	 * Register post type for custom gate.
 	 */
 	public static function register_post_type() {
+		$icon = sprintf(
+			'data:image/svg+xml;base64,%s',
+			base64_encode( Newspack_UI_Icons::get_svg( 'key' ) )
+		);
+
 		\register_post_type(
 			self::GATE_CPT,
 			[
@@ -183,6 +198,7 @@ class Content_Gate {
 				'show_ui'      => true,
 				'show_in_menu' => true,
 				'show_in_rest' => true,
+				'menu_icon'    => $icon,
 				'supports'     => [ 'editor', 'custom-fields', 'revisions', 'title' ],
 				'taxonomies'   => [ 'category', 'post_tag' ],
 			]
@@ -467,6 +483,27 @@ class Content_Gate {
 	}
 
 	/**
+	 * Whether the post has restrictions
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return bool
+	 */
+	public static function post_has_restrictions( $post_id = null ) {
+		$post_id = $post_id ? $post_id : get_the_ID();
+
+		// TODO: Content Gate content rules check.
+
+		/**
+		 * Filters whether the post has restrictions.
+		 *
+		 * @param bool $has_restrictions Whether the post has restrictions.
+		 * @param int  $post_id          Post ID.
+		 */
+		return apply_filters( 'newspack_post_has_restrictions', false, $post_id );
+	}
+
+	/**
 	 * Whether the post is restricted for the current user.
 	 *
 	 * @param int $post_id Post ID.
@@ -653,6 +690,16 @@ class Content_Gate {
 		if ( ! self::has_gate() ) {
 			return;
 		}
+		if (
+			/**
+			 * Filters whether the overlay gate can be rendered.
+			 *
+			 * @param bool $can_render Whether the overlay gate can be rendered.
+			 */
+			! apply_filters( 'newspack_can_render_overlay_gate', true )
+		) {
+			return;
+		}
 		// Only render overlay gate for a restricted singular content.
 		if ( ! is_singular() || ! self::is_post_restricted() ) {
 			return;
@@ -734,6 +781,7 @@ class Content_Gate {
 
 		return [
 			'id'            => $post->ID,
+			'status'        => $post->post_status,
 			'title'         => $post->post_title,
 			'description'   => $post->post_excerpt,
 			'metering'      => Metering::get_metering_settings( $post->ID ),

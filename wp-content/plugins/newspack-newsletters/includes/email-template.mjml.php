@@ -10,7 +10,7 @@
 
 <mjml>
 	<mj-head>
-		<mj-title><?php echo $title; ?></mj-title>
+		<mj-title><?php echo esc_html( $title ); ?></mj-title>
 		<mj-style>
 		<?php
 			$default_css = file_get_contents( dirname( __FILE__ ) . '/email-template-mjml.css' );
@@ -22,14 +22,14 @@
 		?>
 		</mj-style>
 		<?php if ( isset( $preview_text ) ): ?>
-			<mj-preview><?php echo $preview_text; ?></mj-preview>
+			<mj-preview><?php echo esc_html( $preview_text ); ?></mj-preview>
 		<?php endif; ?>
 		<mj-attributes>
-			<mj-all color="<?php echo $text_color ?? '#000000'; ?>" />
-			<mj-text color="<?php echo $text_color ?? '#000000'; ?>" />
+			<mj-all color="<?php echo esc_attr( $text_color ?? '#000000' ); ?>" />
+			<mj-text color="<?php echo esc_attr( $text_color ?? '#000000' ); ?>" />
 		</mj-attributes>
 	</mj-head>
-	<mj-body background-color="<?php echo $background_color; ?>" css-class="updated-<?php echo $updated; ?>">
+	<mj-body background-color="<?php echo esc_attr( $background_color ); ?>" css-class="updated-<?php echo esc_attr( $updated ); ?>">
 		<?php echo $body; ?>
 		<?php do_action( 'newspack_newsletters_editor_mjml_body', $post ); ?>
 	</mj-body>

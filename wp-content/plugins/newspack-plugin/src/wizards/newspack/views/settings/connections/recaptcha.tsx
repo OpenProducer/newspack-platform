@@ -28,7 +28,7 @@ const settingsDefault: RecaptchaData = {
 	},
 };
 
-type RecaptchaDependsOn = { [ k in keyof RecaptchaData ]?: string };
+type RecaptchaDependsOn = Record< keyof RecaptchaData, string >;
 
 const fieldValidationMap = new Map<
 	keyof Omit< RecaptchaData, 'use_captcha' >,

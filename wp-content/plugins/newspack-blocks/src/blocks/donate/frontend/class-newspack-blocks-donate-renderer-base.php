@@ -203,7 +203,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 			<input type='hidden' name='frequency_ids' value='<?php echo esc_attr( wp_json_encode( $donate_child_ids ) ); ?>' />
 		<?php
 
-		if ( \Newspack_Blocks\Modal_Checkout::has_supported_payment_gateway() ) {
+		if ( ! \Newspack_Blocks\Modal_Checkout::has_unsupported_payment_gateway() ) {
 			foreach ( [ [ 'afterSuccessBehavior', 'after_success_behavior' ], [ 'afterSuccessButtonLabel', 'after_success_button_label' ], [ 'afterSuccessURL', 'after_success_url' ] ] as $attribute ) {
 				$attribute_name = $attribute[0];
 				$param_name     = $attribute[1];

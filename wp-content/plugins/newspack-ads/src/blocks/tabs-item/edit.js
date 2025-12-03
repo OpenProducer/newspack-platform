@@ -18,12 +18,8 @@ import { decodeEntities } from '@wordpress/html-entities';
  */
 import createFilterableComponent from '../utils/createFilterableComponent';
 
-const FilterableTabsItemHeader = createFilterableComponent(
-	'newspack.tabsItem.header'
-);
-const FilterableTabsItemFooter = createFilterableComponent(
-	'newspack.tabsItem.footer'
-);
+const FilterableTabsItemHeader = createFilterableComponent( 'newspack.tabsItem.header' );
+const FilterableTabsItemFooter = createFilterableComponent( 'newspack.tabsItem.footer' );
 
 const TabsItemEdit = props => {
 	const {
@@ -36,56 +32,43 @@ const TabsItemEdit = props => {
 		attributes: { header },
 	} = props;
 
-	const classes =
-		isSelected || hasSelectedInnerBlock()
-			? 'newspack-ads__tab-content is-active'
-			: 'newspack-ads__tab-content';
+	const classes = isSelected || hasSelectedInnerBlock() ? 'newspack-ads__tab-content is-active' : 'newspack-ads__tab-content';
 
 	return (
 		<>
-			<FilterableTabsItemHeader blockProps={props} />
-			<div className={classes}>
-				<div
-					data-tab-block={clientId}
-					className={`tab-header orientation-horizontal position-${position}`}
-				>
-					{/* The reason we don't have the RichText field in the parent block is so that when you are editing tab header text you are selecting
-					the child block. */}
+			<FilterableTabsItemHeader blockProps={ props } />
+			<div className={ classes }>
+				<div data-tab-block={ clientId } className={ `tab-header orientation-horizontal position-${ position }` }>
+					{ /* The reason we don't have the RichText field in the parent block is so that when you are editing tab header text you are selecting
+					the child block. */ }
 					<RichText
 						tagName="div"
-						value={header}
-						placeholder={__('Tab Header', 'newspack-ads')}
-						onChange={newHeader => {
-							setAttributes({
-								header: decodeEntities(newHeader).replace(
-									/<\/?[a-z][^>]*?>/gi,
-									' '
-								),
-							});
-						}}
-						allowedFormats={[]}
+						value={ header }
+						placeholder={ __( 'Tab Header', 'newspack-ads' ) }
+						onChange={ newHeader => {
+							setAttributes( {
+								header: decodeEntities( newHeader ).replace( /<\/?[a-z][^>]*?>/gi, ' ' ),
+							} );
+						} }
+						allowedFormats={ [] }
 					/>
 				</div>
 
 				<InnerBlocks
 					templateInsertUpdatesSelection
 					__experimentalCaptureToolbars
-					allowedBlocks={applyFilters(
-						'newspack.tabs.allowedBlocks',
-						true,
-						name
-					)}
+					allowedBlocks={ applyFilters( 'newspack.tabs.allowedBlocks', true, name ) }
 				/>
 			</div>
-			<FilterableTabsItemFooter blockProps={props} />
+			<FilterableTabsItemFooter blockProps={ props } />
 		</>
 	);
 };
 
 TabsItemEdit.propTypes = {
-	attributes: PropTypes.shape({
+	attributes: PropTypes.shape( {
 		header: PropTypes.string.isRequired,
-	}).isRequired,
+	} ).isRequired,
 	clientId: PropTypes.string.isRequired,
 	isSelected: PropTypes.bool.isRequired,
 	setAttributes: PropTypes.func.isRequired,
@@ -93,26 +76,25 @@ TabsItemEdit.propTypes = {
 };
 
 export default compose(
-	withSelect((select, { clientId }) => {
-		const { hasSelectedInnerBlock, getBlockParents, getBlock } =
-			select('core/block-editor');
+	withSelect( ( select, { clientId } ) => {
+		const { hasSelectedInnerBlock, getBlockParents, getBlock } = select( 'core/block-editor' );
 
-		const parentBlockIds = getBlockParents(clientId);
-		const parentBlockId = parentBlockIds[parentBlockIds.length - 1];
+		const parentBlockIds = getBlockParents( clientId );
+		const parentBlockId = parentBlockIds[ parentBlockIds.length - 1 ];
 
-		const parentBlock = getBlock(parentBlockId);
+		const parentBlock = getBlock( parentBlockId );
 
 		let position = 0;
 
-		parentBlock.innerBlocks.forEach((parentInnerBlock, key) => {
-			if (parentInnerBlock.clientId === clientId) {
+		parentBlock.innerBlocks.forEach( ( parentInnerBlock, key ) => {
+			if ( parentInnerBlock.clientId === clientId ) {
 				position = key;
 			}
-		});
+		} );
 
 		return {
 			position,
 			hasSelectedInnerBlock,
 		};
-	})
-)(TabsItemEdit);
+	} )
+)( TabsItemEdit );

@@ -1,3 +1,22 @@
+# [4.18.0](https://github.com/Automattic/newspack-blocks/compare/v4.17.6...v4.18.0) (2025-11-24)
+
+
+### Bug Fixes
+
+* linting issues ([#2254](https://github.com/Automattic/newspack-blocks/issues/2254)) ([ae580a3](https://github.com/Automattic/newspack-blocks/commit/ae580a3a5eb864c20e99c0fc692d19c2c3fec55f))
+
+
+### Features
+
+* **content-loop:** setting labels more generic ([#2246](https://github.com/Automattic/newspack-blocks/issues/2246)) ([9a635e9](https://github.com/Automattic/newspack-blocks/commit/9a635e9ffd86fd558365df1fec08d7943e08941c))
+* **donate-block:** default frequency for tiered layout ([#2248](https://github.com/Automattic/newspack-blocks/issues/2248)) ([2d07c11](https://github.com/Automattic/newspack-blocks/commit/2d07c111cd678138ad09cec2b768fc7c98e1d35b))
+* **modal-checkout:** processing payment screen ([#2247](https://github.com/Automattic/newspack-blocks/issues/2247)) ([8beea1e](https://github.com/Automattic/newspack-blocks/commit/8beea1e4fc67b150fc06b5a3b46c827a7d908f1c))
+
+
+### Reverts
+
+* Revert "fix: render modal checkout with filtered supported gateways ([#2240](https://github.com/Automattic/newspack-blocks/issues/2240))" ([#2243](https://github.com/Automattic/newspack-blocks/issues/2243)) ([200412b](https://github.com/Automattic/newspack-blocks/commit/200412bf969fc825090ffbe9b567886827e8eac4))
+
 ## [4.17.6](https://github.com/Automattic/newspack-blocks/compare/v4.17.5...v4.17.6) (2025-11-19)
 
 

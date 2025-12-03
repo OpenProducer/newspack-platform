@@ -18,13 +18,8 @@ class WooCommerce_Gateway_Stripe {
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
-		/**
-		 * Disable Stripe Express Checkout feature flags.
-		 * This is a workaround for the Stripe Express Checkout feature flags
-		 * being enabled by default on new installs.
-		 */
-		add_filter( 'pre_update_option__wcstripe_feature_ece', [ __CLASS__, 'disable_express_checkout_feature_flag' ], 9, 2 );
-		add_filter( 'pre_update_option_woocommerce_stripe_settings', [ __CLASS__, 'disable_express_checkout_in_main_settings' ], 11, 2 );
+		add_filter( 'wc_stripe_settings', [ __CLASS__, 'disable_express_checkout_by_default' ] );
+		add_filter( 'pre_update_option_woocommerce_stripe_settings', [ __CLASS__, 'disable_link_by_default' ], 11, 2 );
 
 		add_filter( 'wc_stripe_generate_payment_request', [ __CLASS__, 'add_payment_request_metadata' ], 10, 2 );
 		add_filter( 'wc_stripe_intent_metadata', [ __CLASS__, 'add_intent_metadata' ], 10, 2 );
@@ -134,52 +129,48 @@ class WooCommerce_Gateway_Stripe {
 	 * Disable Stripe Express Checkout feature flag.
 	 *
 	 * @param array $flag Stripe Express Checkout feature flag.
-	 * @param array $old_value Old Stripe Express Checkout feature flag.
+	 * @param array $old_settings Old Stripe Express Checkout feature flag.
 	 * @return string
 	 */
-	public static function disable_express_checkout_feature_flag( $flag, $old_value ) {
+	public static function disable_express_checkout_feature_flag( $flag, $old_settings ) {
 		/**
 		 * If the Stripe Express Checkout feature flag is empty, it means this is a new install.
 		 * Save the settings as 'no' to prevent the Stripe Express Checkout from being enabled.
 		 */
-		if ( empty( $old_value ) && 'yes' === $flag ) {
+		if ( empty( $old_settings ) && 'yes' === $flag ) {
 			$flag = 'no';
 		}
 		return $flag;
 	}
 
 	/**
-	 * Disable Stripe Express Checkout in main settings.
+	 * Disable Apple/Google Pay by default.
 	 *
-	 * @param array $settings Stripe settings.
-	 * @param array $old_settings Old Stripe settings.
+	 * @param array $settings Stripe settings config.
 	 * @return array
 	 */
-	public static function disable_express_checkout_in_main_settings( $settings, $old_settings ) {
-		/**
-		 * If the old stripe settings are empty, it means this is a new install.
-		 */
-		if ( ! empty( $old_settings ) ) {
-			return $settings;
+	public static function disable_express_checkout_by_default( $settings ) {
+		if ( isset( $settings['payment_request']['default'] ) && 'yes' === $settings['payment_request']['default'] ) {
+			$settings['payment_request']['default'] = 'no';
 		}
+		return $settings;
+	}
 
-		// Disable Apple Pay/Google Pay for new installs.
-		if ( 'yes' === $settings['payment_request'] ) {
-			$settings['payment_request'] = 'no';
-		}
-
-		// Disable Link by Stripe for new installs.
+	/**
+	 * Disable Stripe Link by default. This is a workaround for undoing enabling link by default for new installs.
+	 *
+	 * @param string $settings The new value of the option.
+	 * @param string $old_settings The old value of the option.
+	 */
+	public static function disable_link_by_default( $settings, $old_settings ) {
 		if (
-			is_array( $settings['upe_checkout_experience_accepted_payments'] ) &&
-			! empty( $settings['upe_checkout_experience_accepted_payments'] ) &&
-			in_array( 'link', $settings['upe_checkout_experience_accepted_payments'], true )
+			! isset( $old_settings['upe_checkout_experience_accepted_payments'] ) && // Old setting is empty, so this is a new install.
+			isset( $settings['upe_checkout_experience_accepted_payments'] ) && // New setting has been set.
+			is_array( $settings['upe_checkout_experience_accepted_payments'] ) && // New setting is an array.
+			in_array( 'link', $settings['upe_checkout_experience_accepted_payments'], true ) // New setting contains 'link'.
 		) {
-			$settings['upe_checkout_experience_accepted_payments'] = array_diff(
-				$settings['upe_checkout_experience_accepted_payments'],
-				[ 'link' ]
-			);
+			$settings['upe_checkout_experience_accepted_payments'] = array_diff( $settings['upe_checkout_experience_accepted_payments'], [ 'link' ] );
 		}
-
 		return $settings;
 	}
 }

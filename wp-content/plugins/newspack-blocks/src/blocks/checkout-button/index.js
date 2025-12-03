@@ -24,7 +24,7 @@ export const settings = {
 	...metadata,
 	icon: {
 		src: button,
-		foreground: colors['primary-400'],
+		foreground: colors[ 'primary-400' ],
 	},
 	edit,
 	deprecated,

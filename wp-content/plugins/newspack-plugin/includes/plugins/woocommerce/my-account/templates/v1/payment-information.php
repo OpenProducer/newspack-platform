@@ -17,7 +17,7 @@ $types         = \wc_get_account_payment_methods_types();
 \do_action( 'newspack_woocommerce_before_account_payment_methods', $has_methods ); ?>
 
 <section id="payment-methods">
-	<h1 class="newspack-ui__font--m"><?php \esc_html_e( 'Payment methods', 'newspack-plugin' ); ?></h1>
+	<h4 class="newspack-ui__font--m newspack-ui__spacing-top--0"><?php \esc_html_e( 'Payment methods', 'newspack-plugin' ); ?></h4>
 	<?php if ( $has_methods ) : ?>
 
 		<div class="newspack-my-account__payment-methods newspack-ui__row newspack-ui__row--no-padding">
@@ -106,7 +106,7 @@ $types         = \wc_get_account_payment_methods_types();
 									?>
 									<div class="newspack-ui__dropdown">
 										<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
-											<?php \Newspack\Newspack_UI_Icons::print_svg( 'more' ); ?>
+											<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
 											<span class="screen-reader-text">More</span>
 										</button>
 										<div class="newspack-ui__dropdown__content">
@@ -168,7 +168,7 @@ $types         = \wc_get_account_payment_methods_types();
 </section>
 
 <section id="addresses">
-	<h1 class="newspack-ui__font--m"><?php \esc_html_e( 'Addresses', 'newspack-plugin' ); ?></h1>
+	<h4 class="newspack-ui__font--m"><?php \esc_html_e( 'Addresses', 'newspack-plugin' ); ?></h4>
 	<?php
 	$address_types = [ 'billing' => __( 'Billing', 'newspack-plugin' ) ];
 	if ( ! \wc_ship_to_billing_address_only() && \wc_shipping_enabled() ) {
@@ -207,7 +207,7 @@ $types         = \wc_get_account_payment_methods_types();
 						</div>
 						<div class="newspack-ui__dropdown">
 							<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
-								<?php \Newspack\Newspack_UI_Icons::print_svg( 'more' ); ?>
+								<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
 								<span class="screen-reader-text">More</span>
 							</button>
 							<div class="newspack-ui__dropdown__content">

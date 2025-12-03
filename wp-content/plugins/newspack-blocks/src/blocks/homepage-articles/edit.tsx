@@ -5,12 +5,7 @@
  */
 import QueryControls from '../../components/query-controls';
 import { postsBlockSelector, postsBlockDispatch, isBlogPrivate, shouldReflow } from './utils';
-import {
-	getBylineHTML,
-	formatSponsorLogos,
-	formatSponsorByline,
-	getPostStatusLabel,
-} from '../../shared/js/utils';
+import { getBylineHTML, formatSponsorLogos, formatSponsorByline, getPostStatusLabel } from '../../shared/js/utils';
 import { PostTypesPanel, PostStatusesPanel } from '../../components/editor-panels';
 
 /**
@@ -28,14 +23,7 @@ import { aspectLandscape, aspectPortrait, aspectSquare } from 'newspack-icons';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { Component, Fragment, RawHTML } from '@wordpress/element';
-import {
-	BlockControls,
-	InspectorControls,
-	PanelColorSettings,
-	RichText,
-	withColors,
-	AlignmentControl,
-} from '@wordpress/block-editor';
+import { BlockControls, InspectorControls, PanelColorSettings, RichText, withColors, AlignmentControl } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	Placeholder,
@@ -52,24 +40,10 @@ import {
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { decodeEntities } from '@wordpress/html-entities';
-import {
-	fullscreen,
-	grid,
-	image,
-	list,
-	postFeaturedImage,
-	pullLeft,
-	pullRight,
-	sidesAll,
-	textColor as typeScaleIcon,
-} from '@wordpress/icons';
+import { fullscreen, grid, image, list, postFeaturedImage, pullLeft, pullRight, sidesAll, textColor as typeScaleIcon } from '@wordpress/icons';
 
 let IS_SUBTITLE_SUPPORTED_IN_THEME: boolean;
-if (
-	typeof window === 'object' &&
-	window.newspack_blocks_data &&
-	window.newspack_blocks_data.post_subtitle
-) {
+if ( typeof window === 'object' && window.newspack_blocks_data && window.newspack_blocks_data.post_subtitle ) {
 	IS_SUBTITLE_SUPPORTED_IN_THEME = true;
 }
 
@@ -96,18 +70,8 @@ class Edit extends Component< HomepageArticlesProps > {
 		} = attributes;
 
 		const styles = {
-			minHeight:
-				( mediaPosition === 'behind' &&
-					showImage &&
-					post.newspack_featured_image_src &&
-					minHeight + 'vh' ) ||
-				undefined,
-			paddingTop:
-				( mediaPosition === 'behind' &&
-					showImage &&
-					post.newspack_featured_image_src &&
-					minHeight / 5 + 'vh' ) ||
-				undefined,
+			minHeight: ( mediaPosition === 'behind' && showImage && post.newspack_featured_image_src && minHeight + 'vh' ) || undefined,
+			paddingTop: ( mediaPosition === 'behind' && showImage && post.newspack_featured_image_src && minHeight / 5 + 'vh' ) || undefined,
 		};
 
 		const postClasses = classNames(
@@ -125,18 +89,10 @@ class Edit extends Component< HomepageArticlesProps > {
 				{ showImage && post.newspack_featured_image_src && (
 					<figure className="post-thumbnail" key="thumbnail">
 						<a href="#">
-							{ imageShape === 'landscape' && (
-								<img src={ post.newspack_featured_image_src.landscape } alt="" />
-							) }
-							{ imageShape === 'portrait' && (
-								<img src={ post.newspack_featured_image_src.portrait } alt="" />
-							) }
-							{ imageShape === 'square' && (
-								<img src={ post.newspack_featured_image_src.square } alt="" />
-							) }
-							{ imageShape === 'uncropped' && (
-								<img src={ post.newspack_featured_image_src.uncropped } alt="" />
-							) }
+							{ imageShape === 'landscape' && <img src={ post.newspack_featured_image_src.landscape } alt="" /> }
+							{ imageShape === 'portrait' && <img src={ post.newspack_featured_image_src.portrait } alt="" /> }
+							{ imageShape === 'square' && <img src={ post.newspack_featured_image_src.square } alt="" /> }
+							{ imageShape === 'uncropped' && <img src={ post.newspack_featured_image_src.uncropped } alt="" /> }
 						</a>
 						{ ( showCaption || showCredit ) && (
 							<div
@@ -149,16 +105,10 @@ class Edit extends Component< HomepageArticlesProps > {
 				) }
 
 				<div className="entry-wrapper">
-					{ ( post.newspack_post_sponsors ||
-						( showCategory && 0 < post.newspack_category_info.length ) ) && (
-						<div
-							className={ 'cat-links' + ( post.newspack_post_sponsors ? ' sponsor-label' : '' ) }
-						>
-							{ post.newspack_post_sponsors && (
-								<span className="flag">{ post.newspack_post_sponsors[ 0 ].flag }</span>
-							) }
-							{ showCategory &&
-								( ! post.newspack_post_sponsors || post.newspack_sponsors_show_categories ) && (
+					{ ( post.newspack_post_sponsors || ( showCategory && 0 < post.newspack_category_info.length ) ) && (
+						<div className={ 'cat-links' + ( post.newspack_post_sponsors ? ' sponsor-label' : '' ) }>
+							{ post.newspack_post_sponsors && <span className="flag">{ post.newspack_post_sponsors[ 0 ].flag }</span> }
+							{ showCategory && ( ! post.newspack_post_sponsors || post.newspack_sponsors_show_categories ) && (
 								<RawHTML>{ decodeEntities( post.newspack_category_info ) }</RawHTML>
 							) }
 						</div>
@@ -173,10 +123,7 @@ class Edit extends Component< HomepageArticlesProps > {
 						</h3>
 					) }
 					{ IS_SUBTITLE_SUPPORTED_IN_THEME && showSubtitle && (
-						<RawHTML
-							key="subtitle"
-							className="newspack-post-subtitle newspack-post-subtitle--in-homepage-block"
-						>
+						<RawHTML key="subtitle" className="newspack-post-subtitle newspack-post-subtitle--in-homepage-block">
 							{ post.meta.newspack_post_subtitle || '' }
 						</RawHTML>
 					) }
@@ -197,11 +144,7 @@ class Edit extends Component< HomepageArticlesProps > {
 					) }
 					<div className="entry-meta">
 						{ post.newspack_post_sponsors && (
-							<span
-								className={ `entry-sponsors ${
-									post.newspack_sponsors_show_author ? 'plus-author' : ''
-								}` }
-							>
+							<span className={ `entry-sponsors ${ post.newspack_sponsors_show_author ? 'plus-author' : '' }` }>
 								{ formatSponsorLogos( post.newspack_post_sponsors ) }
 								{ formatSponsorByline( post.newspack_post_sponsors ) }
 							</span>
@@ -209,9 +152,9 @@ class Edit extends Component< HomepageArticlesProps > {
 
 						{ showAuthor &&
 							! post.newspack_listings_hide_author &&
-							( ! post.newspack_post_sponsors || post.newspack_sponsors_show_author ) &&
-							<RawHTML className="byline-container">{ getBylineHTML( post, showAvatar ) }</RawHTML>
-						}
+							( ! post.newspack_post_sponsors || post.newspack_sponsors_show_author ) && (
+								<RawHTML className="byline-container">{ getBylineHTML( post, showAvatar ) }</RawHTML>
+							) }
 
 						{ showDate && ! post.newspack_listings_hide_publish_date && (
 							<time className="entry-date published" key="pub-date">
@@ -292,19 +235,12 @@ class Edit extends Component< HomepageArticlesProps > {
 			},
 			{
 				value: 4,
-				label: /* translators: label for extra large size option */ __(
-					'Extra Large',
-					'newspack-blocks'
-				),
-				shortName: /* translators: abbreviation for extra large size */ __(
-					'XL',
-					'newspack-blocks'
-				),
+				label: /* translators: label for extra large size option */ __( 'Extra Large', 'newspack-blocks' ),
+				shortName: /* translators: abbreviation for extra large size */ __( 'XL', 'newspack-blocks' ),
 			},
 		];
 
-		const handleAttributeChange = ( key: HomepageArticlesAttributesKey ) => ( value: any ) =>
-			setAttributes( { [ key ]: value } );
+		const handleAttributeChange = ( key: HomepageArticlesAttributesKey ) => ( value: any ) => setAttributes( { [ key ]: value } );
 
 		return (
 			<Fragment>
@@ -324,9 +260,7 @@ class Edit extends Component< HomepageArticlesProps > {
 				<PanelBody title={ __( 'Settings', 'newspack-blocks' ) } className="newspack-block__panel is-content">
 					<QueryControls
 						numberOfItems={ postsToShow }
-						onNumberOfItemsChange={ ( _postsToShow: number ) =>
-							setAttributes( { postsToShow: _postsToShow || 1 } )
-						}
+						onNumberOfItemsChange={ ( _postsToShow: number ) => setAttributes( { postsToShow: _postsToShow || 1 } ) }
 						specificMode={ specificMode }
 						onSpecificModeChange={ () => setAttributes( { specificMode: true } ) }
 						onLoopModeChange={ () => setAttributes( { specificMode: false } ) }
@@ -353,11 +287,8 @@ class Edit extends Component< HomepageArticlesProps > {
 						postType={ postType }
 					/>
 					<ToggleControl
-						label={ __( 'Allow duplicate stories', 'newspack-blocks' ) }
-						help={ __(
-							"Exclude this block from the page's deduplication logic.",
-							'newspack-blocks'
-						) }
+						label={ __( 'Allow duplicate content', 'newspack-blocks' ) }
+						help={ __( "Exclude this block from the page's deduplication logic.", 'newspack-blocks' ) }
 						checked={ ! attributes.deduplicate }
 						onChange={ ( value: boolean ) => setAttributes( { deduplicate: ! value } ) }
 					/>
@@ -407,7 +338,7 @@ class Edit extends Component< HomepageArticlesProps > {
 						onChange={ ( value: string ) => {
 							setAttributes( {
 								showExcerpt: value === 'excerpt',
-								showFullContent: value === 'full'
+								showFullContent: value === 'full',
 							} );
 						} }
 						isBlock
@@ -429,26 +360,22 @@ class Edit extends Component< HomepageArticlesProps > {
 					) }
 					{ ! showFullContent && (
 						<ToggleControl
-							label={
-								sprintf(
-									// translators: %s is the read more label'.
-									__( 'Show "%s" link', 'newspack-block' ),
-									readMoreLabel ? readMoreLabel : __( 'Keep reading', 'newspack-blocks' )
-								)
-							}
+							label={ sprintf(
+								// translators: %s is the read more label'.
+								__( 'Show "%s" link', 'newspack-block' ),
+								readMoreLabel ? readMoreLabel : __( 'Keep reading', 'newspack-blocks' )
+							) }
 							checked={ showReadMore }
 							onChange={ () => setAttributes( { showReadMore: ! showReadMore } ) }
 						/>
 					) }
 					{ ! showFullContent && showReadMore && (
 						<TextControl
-							label={
-								sprintf(
-									// translators: %s is the read more label'.
-									__( '"%s" link text', 'newspack-block' ),
-									readMoreLabel ? readMoreLabel : __( 'Keep reading', 'newspack-blocks' )
-								)
-							}
+							label={ sprintf(
+								// translators: %s is the read more label'.
+								__( '"%s" link text', 'newspack-block' ),
+								readMoreLabel ? readMoreLabel : __( 'Keep reading', 'newspack-blocks' )
+							) }
 							hideLabelFromVision={ true }
 							value={ readMoreLabel }
 							placeholder={ readMoreLabel }
@@ -569,10 +496,7 @@ class Edit extends Component< HomepageArticlesProps > {
 						},
 					] }
 				/>
-				<PanelBody
-					title={ __( 'Typography', 'newspack-blocks' ) }
-					className="newpack-block__panel"
-				>
+				<PanelBody title={ __( 'Typography', 'newspack-blocks' ) } className="newpack-block__panel">
 					<RangeControl
 						label={ __( 'Type Scale', 'newspack-blocks' ) }
 						beforeIcon={ typeScaleIcon }
@@ -625,8 +549,7 @@ class Edit extends Component< HomepageArticlesProps > {
 		 * Constants
 		 */
 
-		const { attributes, className, setAttributes, isSelected, latestPosts, textColor, error } =
-			this.props;
+		const { attributes, className, setAttributes, isSelected, latestPosts, textColor, error } = this.props;
 
 		const {
 			showImage,
@@ -754,13 +677,9 @@ class Edit extends Component< HomepageArticlesProps > {
 						{ latestPosts && ! latestPosts.length && (
 							<Placeholder>{ __( 'Sorry, no posts were found.', 'newspack-blocks' ) }</Placeholder>
 						) }
-						{ ! latestPosts && ! error && (
-							<Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />
-						) }
+						{ ! latestPosts && ! error && <Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" /> }
 						{ ! latestPosts && error && (
-							<Placeholder className="component-placeholder__align-center newspack-block--error">
-								{ error }
-							</Placeholder>
+							<Placeholder className="component-placeholder__align-center newspack-block--error">{ error }</Placeholder>
 						) }
 
 						{ latestPosts && latestPosts.map( post => this.renderPost( post ) ) }
@@ -805,8 +724,6 @@ class Edit extends Component< HomepageArticlesProps > {
 	}
 }
 
-export default compose( [
-	withColors( { textColor: 'color' } ),
-	withSelect( postsBlockSelector ),
-	withDispatch( postsBlockDispatch ),
-] as any )( Edit );
+export default compose( [ withColors( { textColor: 'color' } ), withSelect( postsBlockSelector ), withDispatch( postsBlockDispatch ) ] as any )(
+	Edit
+);

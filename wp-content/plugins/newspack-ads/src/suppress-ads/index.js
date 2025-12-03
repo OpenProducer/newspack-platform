@@ -17,18 +17,9 @@ import { withDispatch, withSelect } from '@wordpress/data';
 class NewspackSuppressAdsPanel extends Component {
 	render() {
 		const placements = window.newspackAdsSuppressAds?.placements || {};
-		const {
-			newspack_ads_suppress_ads,
-			newspack_ads_suppress_ads_placements,
-			updateSuppressAds,
-			updateSuppressPlacements,
-		} = this.props;
+		const { newspack_ads_suppress_ads, newspack_ads_suppress_ads_placements, updateSuppressAds, updateSuppressPlacements } = this.props;
 		return (
-			<PluginDocumentSettingPanel
-				name="newspack-ad-free"
-				title={ __( 'Newspack Ads Settings', 'newspack-ads' ) }
-				className="newspack-subtitle"
-			>
+			<PluginDocumentSettingPanel name="newspack-ad-free" title={ __( 'Newspack Ads Settings', 'newspack-ads' ) } className="newspack-subtitle">
 				<ToggleControl
 					label={ __( "Don't show ads on this content", 'newspack-ads' ) }
 					checked={ newspack_ads_suppress_ads }
@@ -44,8 +35,7 @@ class NewspackSuppressAdsPanel extends Component {
 								key={ placementKey }
 								label={ placements[ placementKey ].name }
 								checked={
-									newspack_ads_suppress_ads_placements &&
-									newspack_ads_suppress_ads_placements.indexOf( placementKey ) !== -1
+									newspack_ads_suppress_ads_placements && newspack_ads_suppress_ads_placements.indexOf( placementKey ) !== -1
 								}
 								onChange={ () => {
 									const suppressPlacements = newspack_ads_suppress_ads_placements?.length

@@ -13,9 +13,7 @@ import './preview.scss';
 				const containerClasses = placement.container[ 0 ].classList;
 				const hookClass = [ ...containerClasses ].find( className => /^hook-/.test( className ) );
 				if ( hookClass ) {
-					placement.container
-						.find( `.newspack-ads__ad-placement-mock:not(.${ hookClass })` )
-						.hide();
+					placement.container.find( `.newspack-ads__ad-placement-mock:not(.${ hookClass })` ).hide();
 				}
 				/**
 				 * Toggle `stick-to-top` class on the placement container.

@@ -57,7 +57,11 @@ return array(
     'Newspack\\Configuration_Managers' => $baseDir . '/includes/configuration_managers/class-configuration-managers.php',
     'Newspack\\Content_Gate' => $baseDir . '/includes/content-gate/class-content-gate.php',
     'Newspack\\Content_Gate\\Block_Patterns' => $baseDir . '/includes/content-gate/class-block-patterns.php',
+    'Newspack\\Content_Gifting' => $baseDir . '/includes/content-gate/content-gifting/class-content-gifting.php',
+    'Newspack\\Content_Gifting_CTA' => $baseDir . '/includes/content-gate/content-gifting/class-content-gifting-cta.php',
     'Newspack\\Content_Restriction_Control' => $baseDir . '/includes/content-gate/class-content-restriction-control.php',
+    'Newspack\\Contribution_Meter\\Block_Patterns' => $baseDir . '/includes/contribution-meter/class-block-patterns.php',
+    'Newspack\\Contribution_Meter\\Contribution_Meter' => $baseDir . '/includes/contribution-meter/class-contribution-meter.php',
     'Newspack\\Corrections' => $baseDir . '/includes/corrections/class-corrections.php',
     'Newspack\\Data_Events' => $baseDir . '/includes/data-events/class-data-events.php',
     'Newspack\\Data_Events\\Api' => $baseDir . '/includes/data-events/class-api.php',
@@ -201,4 +205,5 @@ return array(
     'Newspack\\Woo_Member_Commenting' => $baseDir . '/includes/optional-modules/class-woo-member-commenting.php',
     'Newspack\\WordPress_SEO_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
     'Newspack\\Yoast' => $baseDir . '/includes/plugins/class-yoast.php',
+    'Newspack_Jetpack_Gift_Article' => $baseDir . '/includes/content-gate/content-gifting/class-newspack-jetpack-gift-article.php',
 );

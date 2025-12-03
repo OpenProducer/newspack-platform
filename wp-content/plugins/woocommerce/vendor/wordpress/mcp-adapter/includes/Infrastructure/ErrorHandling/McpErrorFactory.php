@@ -27,15 +27,16 @@ class McpErrorFactory {
 	public const INTERNAL_ERROR   = -32603;
 
 	/**
-	 * MCP-specific error codes (above -32000 as per JSON-RPC spec).
+	 * Implementation-defined server error codes (in -32000 to -32099 range as per JSON-RPC spec).
+	 * Using conservative, well-established error codes only.
 	 */
-	public const MCP_DISABLED       = -32000;
-	public const MISSING_PARAMETER  = -32001;
-	public const RESOURCE_NOT_FOUND = -32002;
-	public const TOOL_NOT_FOUND     = -32003;
-	public const PROMPT_NOT_FOUND   = -32004;
-	public const PERMISSION_DENIED  = -32008;
-	public const UNAUTHORIZED       = -32010;
+	public const SERVER_ERROR       = -32000; // Generic server error (includes MCP disabled)
+	public const TIMEOUT_ERROR      = -32001; // Request timeout
+	public const RESOURCE_NOT_FOUND = -32002; // Resource not found
+	public const TOOL_NOT_FOUND     = -32003; // Tool not found
+	public const PROMPT_NOT_FOUND   = -32004; // Prompt not found
+	public const PERMISSION_DENIED  = -32008; // Access denied/forbidden
+	public const UNAUTHORIZED       = -32010; // Authentication required
 
 	/**
 	 * Create a standardized JSON-RPC error response.
@@ -162,8 +163,28 @@ class McpErrorFactory {
 	public static function mcp_disabled( int $id ): array {
 		return self::create_error_response(
 			$id,
-			self::MCP_DISABLED,
+			self::SERVER_ERROR,
 			__( 'MCP functionality is currently disabled', 'mcp-adapter' )
+		);
+	}
+
+	/**
+	 * Create a validation error response (uses standard invalid params error).
+	 *
+	 * @param int    $id The request ID.
+	 * @param string $details Validation error details.
+	 *
+	 * @return array
+	 */
+	public static function validation_error( int $id, string $details ): array {
+		return self::create_error_response(
+			$id,
+			self::INVALID_PARAMS,
+			sprintf(
+				/* translators: %s: validation details */
+				__( 'Validation error: %s', 'mcp-adapter' ),
+				$details
+			)
 		);
 	}
 
@@ -178,7 +199,7 @@ class McpErrorFactory {
 	public static function missing_parameter( int $id, string $parameter ): array {
 		return self::create_error_response(
 			$id,
-			self::MISSING_PARAMETER,
+			self::INVALID_PARAMS,
 			sprintf(
 				/* translators: %s: parameter name */
 				__( 'Missing required parameter: %s', 'mcp-adapter' ),
@@ -223,6 +244,26 @@ class McpErrorFactory {
 				/* translators: %s: tool name */
 				__( 'Tool not found: %s', 'mcp-adapter' ),
 				$tool
+			)
+		);
+	}
+
+	/**
+	 * Create a tool not found error response.
+	 *
+	 * @param int    $id The request ID.
+	 * @param string $ability The tool name.
+	 *
+	 * @return array
+	 */
+	public static function ability_not_found( int $id, string $ability ): array {
+		return self::create_error_response(
+			$id,
+			self::TOOL_NOT_FOUND,
+			sprintf(
+				/* translators: %s: tool name */
+				__( 'Ability not found: %s', 'mcp-adapter' ),
+				$ability
 			)
 		);
 	}
@@ -279,6 +320,75 @@ class McpErrorFactory {
 		}
 
 		return self::create_error_response( $id, self::UNAUTHORIZED, $message );
+	}
+
+	/**
+	 * Translate MCP error code to appropriate HTTP status code.
+	 *
+	 * Maps JSON-RPC error codes to HTTP status codes according to best practices:
+	 * - Transport-level errors (malformed JSON-RPC) → HTTP 4xx
+	 * - Application-level errors (business logic) → HTTP 200 with JSON-RPC error
+	 *
+	 * @param int|string $mcp_error_code The MCP/JSON-RPC error code (integer or string).
+	 *
+	 * @return int The appropriate HTTP status code.
+	 */
+	public static function mcp_error_to_http_status( $mcp_error_code ): int {
+		// Handle integer error codes (existing logic)
+		switch ( $mcp_error_code ) {
+			// Transport-level errors - these indicate malformed requests
+			case self::PARSE_ERROR:      // Invalid JSON - syntactic error
+				return 400;
+
+			case self::INVALID_REQUEST:  // Invalid JSON-RPC structure - syntactic error
+				return 400;
+
+			// Authentication and authorization errors
+			case self::UNAUTHORIZED:     // Authentication required
+				return 401;
+
+			case self::PERMISSION_DENIED: // Access forbidden
+				return 403;
+
+			// Resource not found errors
+			case self::RESOURCE_NOT_FOUND:
+			case self::TOOL_NOT_FOUND:
+			case self::PROMPT_NOT_FOUND:
+			case self::METHOD_NOT_FOUND:
+				return 404;
+
+			// Server errors
+			case self::INTERNAL_ERROR:
+			case self::SERVER_ERROR:
+				return 500;
+
+			case self::TIMEOUT_ERROR:
+				return 504;
+
+			// Application-level errors - return 200 with JSON-RPC error
+			case self::INVALID_PARAMS:
+			default:
+				return 200;
+		}
+	}
+
+	/**
+	 * Determine if an MCP error should return HTTP 200 or an HTTP error status.
+	 *
+	 * This method helps distinguish between transport-level errors (which should
+	 * return HTTP error codes) and application-level errors (which should return
+	 * HTTP 200 with a JSON-RPC error response).
+	 *
+	 * @param array $error_response The MCP error response array.
+	 *
+	 * @return int The appropriate HTTP status code.
+	 */
+	public static function get_http_status_for_error( array $error_response ): int {
+		if ( ! isset( $error_response['error']['code'] ) ) {
+			return 500; // Invalid error response structure
+		}
+
+		return self::mcp_error_to_http_status( $error_response['error']['code'] );
 	}
 
 	/**

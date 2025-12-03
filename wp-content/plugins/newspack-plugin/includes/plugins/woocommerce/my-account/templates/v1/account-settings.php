@@ -49,7 +49,7 @@ endif;
 ?>
 
 <section id="account-profile">
-	<h1 class="newspack-ui__font--m"><?php \esc_html_e( 'Profile', 'newspack-plugin' ); ?></h1>
+	<h4 class="newspack-ui__font--m newspack-ui__spacing-top--0"><?php \esc_html_e( 'Profile', 'newspack-plugin' ); ?></h4>
 	<form class="woocommerce-EditAccountForm edit-profile" action="" name="edit_account" method="post" <?php \do_action( 'newspack_woocommerce_edit_account_form_tag' ); ?> >
 
 		<?php \do_action( 'newspack_woocommerce_edit_account_form_start' ); ?>
@@ -191,7 +191,7 @@ endif;
 
 <?php if ( $is_reader ) : ?>
 <section id="account-password">
-	<h1 class="newspack-ui__font--m"><?php \esc_html_e( 'Password', 'newspack-plugin' ); ?></h1>
+	<h4 class="newspack-ui__font--m"><?php \esc_html_e( 'Password', 'newspack-plugin' ); ?></h4>
 	<?php if ( $without_password || ! empty( filter_input( INPUT_GET, My_Account_UI_V1_Passwords::RESET_PASSWORD_URL_PARAM, FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ) ) : ?>
 	<p>
 		<?php echo \esc_html( $without_password ? __( 'Create a password to secure your account.', 'newspack-plugin' ) : __( 'Reset your account password.', 'newspack-plugin' ) ); ?>
@@ -262,7 +262,7 @@ endif;
 
 <section id="delete-account">
 
-	<h1 class="newspack-ui__font--m is-destructive"><?php \esc_html_e( 'Delete account', 'newspack-plugin' ); ?></h1>
+	<h4 class="newspack-ui__font--m is-destructive"><?php \esc_html_e( 'Delete account', 'newspack-plugin' ); ?></h4>
 	<p>
 		<?php \esc_html_e( 'Please note, account deletion is final, and there will be no way to restore your account.', 'newspack-plugin' ); ?>
 	</p>

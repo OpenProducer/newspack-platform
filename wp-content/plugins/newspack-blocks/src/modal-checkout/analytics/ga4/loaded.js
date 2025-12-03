@@ -5,7 +5,7 @@ import { domReady, getCheckoutData } from '../../utils';
  * Event fired when the modal checkout content is loaded.
  */
 export const manageLoaded = () => {
-	domReady( function() {
+	domReady( function () {
 		if ( 'function' !== typeof window.gtag ) {
 			return;
 		}

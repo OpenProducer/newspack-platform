@@ -34,7 +34,7 @@ const handleOtherValue = ( container: HTMLElement ) => {
 	const submitButton = container.querySelector( 'button[type="submit"]' );
 	frequencies.forEach( frequency => {
 		const tiers = frequency.querySelectorAll( 'input[type="radio"]' );
-		const input = <HTMLInputElement>frequency.querySelector( '.money-input input' );
+		const input = < HTMLInputElement >frequency.querySelector( '.money-input input' );
 		if ( ! tiers?.length || ! input ) {
 			return;
 		}
@@ -43,9 +43,7 @@ const handleOtherValue = ( container: HTMLElement ) => {
 			input.value = originalValue || '';
 		};
 		const toggleSubmit = () => {
-			const checkedTier = <HTMLInputElement>(
-				frequency.querySelector( 'input[type="radio"]:checked' )
-			);
+			const checkedTier = < HTMLInputElement >frequency.querySelector( 'input[type="radio"]:checked' );
 			if ( ! checkedTier ) {
 				return;
 			}
@@ -70,16 +68,11 @@ const handleOtherValue = ( container: HTMLElement ) => {
 
 const addAccessibleTabs = ( container: HTMLElement ) => {
 	// Get the block's tabs, panels, and radio buttons associated with donation frequency.
-	const tabList = container.querySelectorAll(
-		'div[role="tablist"] [role="tab"]'
-	) as NodeListOf< HTMLElement >;
+	const tabList = container.querySelectorAll( 'div[role="tablist"] [role="tab"]' ) as NodeListOf< HTMLElement >;
 	const panels = container.querySelectorAll( 'div[role="tabpanel"]' ) as NodeListOf< HTMLElement >;
-	const radioButtons = container.querySelectorAll(
-		'input[type="radio"][name="donation_frequency"]'
-	) as NodeListOf< HTMLInputElement >;
+	const radioButtons = container.querySelectorAll( 'input[type="radio"][name="donation_frequency"]' ) as NodeListOf< HTMLInputElement >;
 	// Figure out which radio button is currently selected.
-	const checkedRadioId =
-		Array.from( radioButtons ).find( ( radio: HTMLInputElement ) => radio.checked )?.id || null;
+	const checkedRadioId = Array.from( radioButtons ).find( ( radio: HTMLInputElement ) => radio.checked )?.id || null;
 
 	// Set the tab associated to the radio button to selected.
 	if ( checkedRadioId ) {
@@ -130,9 +123,7 @@ const selectTab = (
 };
 
 export const processFrequencyBasedElements = ( parentEl = document ) => {
-	const elements = parentEl.querySelectorAll(
-		'.wpbnbd--frequency-based'
-	) as NodeListOf< HTMLElement >;
+	const elements = parentEl.querySelectorAll( '.wpbnbd--frequency-based' ) as NodeListOf< HTMLElement >;
 	elements.forEach( container => {
 		handleOtherValue( container );
 		addAccessibleTabs( container );

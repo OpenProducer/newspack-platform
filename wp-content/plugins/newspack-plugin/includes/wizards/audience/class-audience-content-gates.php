@@ -91,7 +91,7 @@ class Audience_Content_Gates extends Wizard {
 	 * @return bool
 	 */
 	public function is_feature_enabled() {
-		return defined( 'NEWSPACK_CONTENT_GATES' ) && NEWSPACK_CONTENT_GATES;
+		return Content_Gate::is_newspack_feature_enabled();
 	}
 
 	/**

@@ -60,6 +60,7 @@ const ActionCard = ( {
 	titleLink,
 	toggleChecked = false,
 	toggleOnChange,
+	togglePosition = 'leading',
 	hasGreyHeader,
 	hasWhiteHeader,
 	noBorder,
@@ -109,6 +110,7 @@ const ActionCard = ( {
 		return url ? { backgroundImage: `url(${ url })` } : {};
 	};
 	const titleProps = toggleOnChange && ! titleLink && ! disabled ? { onClick: () => toggleOnChange( ! toggleChecked ), tabIndex: '0' } : {};
+	const togglePositionClass = togglePosition === 'trailing' ? 'is-toggle-trailing' : 'is-toggle-leading';
 	const hasInternalLink = href && href.indexOf( 'http' ) !== 0;
 	const isDisplayingSecondaryAction = secondaryActionText && onSecondaryActionClick;
 	const badges = ! Array.isArray( badge ) && badge ? [ badge ] : badge;
@@ -116,7 +118,9 @@ const ActionCard = ( {
 	const cardContent = (
 		<>
 			<div className="newspack-action-card__region newspack-action-card__region-top">
-				{ toggleOnChange && <ToggleControl checked={ toggleChecked } onChange={ toggleOnChange } disabled={ disabled } /> }
+				{ toggleOnChange && (
+					<ToggleControl checked={ toggleChecked } onChange={ toggleOnChange } disabled={ disabled } className={ togglePositionClass } />
+				) }
 				{ image && ! toggleOnChange && (
 					<div className="newspack-action-card__region newspack-action-card__region-left">
 						<a href={ imageLink }>

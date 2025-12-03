@@ -1130,7 +1130,16 @@ class RSS {
 		$post = get_post();
 
 		if ( $settings['use_image_tags'] ) {
-			$thumbnail_url = get_the_post_thumbnail_url( $post, RSS_Add_Image::RSS_IMAGE_SIZE );
+			/**
+			 * Filter the image size used for RSS feed images in <image> tags.
+			 *
+			 * @param string  $size     The image size slug. Default is `Newspack\RSS_Add_Image::RSS_IMAGE_SIZE`.
+			 * @param array   $settings The feed settings array.
+			 * @param WP_Post $post     The current post object.
+			 */
+			$image_size    = apply_filters( 'newspack_rss_image_size', RSS_Add_Image::RSS_IMAGE_SIZE, $settings, $post );
+			$thumbnail_url = get_the_post_thumbnail_url( $post, $image_size );
+
 			if ( $thumbnail_url ) :
 				?>
 				<image><?php echo esc_url( $thumbnail_url ); ?></image>
@@ -1151,28 +1160,89 @@ class RSS {
 			$tags         = ( ! is_array( $tags ) ) ? [] : $tags;
 			$all_terms    = array_merge( $cats, $tags );
 			$terms_string = implode( ',', wp_list_pluck( $all_terms, 'name' ) );
-			?>
-			<tags><?php echo esc_html( $terms_string ); ?></tags>
-			<?php
+
+			/**
+			 * Filter the tags output format for RSS feeds.
+			 *
+			 * Return false to skip the default <tags> wrapper and output custom format.
+			 * Return a string to replace the default comma-separated format.
+			 * Allowed tags: <tag> (no attributes).
+			 *
+			 * @param string|false $output    Default comma-separated escaped string, or false to skip wrapper.
+			 * @param array        $all_terms Array of WP_Term objects (categories and tags merged).
+			 * @param array        $settings  The feed settings array.
+			 * @param WP_Post      $post      The current post object.
+			 */
+			$tags_output = apply_filters( 'newspack_rss_tags_output', esc_html( $terms_string ), $all_terms, $settings, $post );
+
+			if ( false !== $tags_output ) {
+				?>
+				<tags><?php echo wp_kses( $tags_output, [ 'tag' => [] ] ); ?></tags>
+				<?php
+			}
 		}
 
 		if ( $settings['use_media_tags'] ) {
 			$thumbnail_id = get_post_thumbnail_id();
 			if ( $thumbnail_id ) {
-				$thumbnail_data = wp_get_attachment_image_src( $thumbnail_id, RSS_Add_Image::RSS_IMAGE_SIZE );
+				/** This filter is documented above in the use_image_tags block */
+				$image_size     = apply_filters( 'newspack_rss_image_size', RSS_Add_Image::RSS_IMAGE_SIZE, $settings, $post );
+				$thumbnail_data = wp_get_attachment_image_src( $thumbnail_id, $image_size );
+
 				if ( $thumbnail_data ) {
 					$caption = get_the_post_thumbnail_caption();
+					/**
+					 * Filter the media content URL for RSS feeds.
+					 *
+					 * Allows URL transformations (e.g., wp_specialchars_decode for mobile apps).
+					 *
+					 * @param string  $url          The thumbnail URL from wp_get_attachment_image_src.
+					 * @param int     $thumbnail_id The attachment post ID.
+					 * @param array   $settings     The feed settings array.
+					 * @param WP_Post $post         The current post object.
+					 */
+					$media_url = apply_filters( 'newspack_rss_media_content_url', $thumbnail_data[0], $thumbnail_id, $settings, $post );
 					?>
-					<media:content type="<?php echo esc_attr( get_post_mime_type( $thumbnail_id ) ); ?>" url="<?php echo esc_url( $thumbnail_data[0] ); ?>">
+					<media:content type="<?php echo esc_attr( get_post_mime_type( $thumbnail_id ) ); ?>" url="<?php echo esc_url( $media_url ); ?>">
 						<?php if ( ! empty( $caption ) ) : ?>
-						<media:description><?php echo esc_html( $caption ); ?></media:description>
+						<media:description><![CDATA[<?php echo esc_html( $caption ); ?>]]></media:description>
 						<?php endif; ?>
-						<media:thumbnail url="<?php echo esc_url( $thumbnail_data[0] ); ?>" width="<?php echo esc_attr( $thumbnail_data[1] ); ?>" height="<?php echo esc_attr( $thumbnail_data[2] ); ?>" />
+						<media:thumbnail url="<?php echo esc_url( $media_url ); ?>" width="<?php echo esc_attr( $thumbnail_data[1] ); ?>" height="<?php echo esc_attr( $thumbnail_data[2] ); ?>" />
+						<?php
+						/**
+						 * Fires inside the media:content element.
+						 *
+						 * @param int         $thumbnail_id   The attachment post ID.
+						 * @param array|false $thumbnail_data Array with [url, width, height] or false.
+						 * @param string      $caption        The image caption from get_the_post_thumbnail_caption().
+						 * @param array       $settings       The feed settings array.
+						 * @param WP_Post     $post           The current post object.
+						 */
+						do_action( 'newspack_rss_media_content', $thumbnail_id, $thumbnail_data, $caption, $settings, $post );
+						?>
 					</media:content>
 					<?php
 				}
 			}
 		}
+
+		/**
+		 * Fires after all standard RSS extra tags have been output.
+		 *
+		 * Use this hook to add completely custom tags to feed items (e.g., for mobile app
+		 * integrations like Pugpig, or other third-party services).
+		 *
+		 * Example:
+		 *     add_action( 'newspack_rss_after_extra_tags', function( $settings, $post ) {
+		 *         if ( my_is_special_feed() ) {
+		 *             echo '<custom_field>' . esc_html( get_post_meta( $post->ID, 'custom', true ) ) . '</custom_field>';
+		 *         }
+		 *     }, 10, 2 );
+		 *
+		 * @param array   $settings The feed settings array from get_feed_settings().
+		 * @param WP_Post $post     The current post object.
+		 */
+		do_action( 'newspack_rss_after_extra_tags', $settings, $post );
 	}
 
 	/**

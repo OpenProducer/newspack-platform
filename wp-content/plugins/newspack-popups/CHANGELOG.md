@@ -1,3 +1,10 @@
+# [3.8.0](https://github.com/Automattic/newspack-popups/compare/v3.7.1...v3.8.0) (2025-11-24)
+
+
+### Features
+
+* trigger alpha release ([3860726](https://github.com/Automattic/newspack-popups/commit/38607266ccffbbf83d8db2c9999f8b4611faf9d4))
+
 ## [3.7.1](https://github.com/Automattic/newspack-popups/compare/v3.7.0...v3.7.1) (2025-11-10)
 
 

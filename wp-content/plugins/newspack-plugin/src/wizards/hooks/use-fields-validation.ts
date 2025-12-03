@@ -49,7 +49,7 @@ type ValidationMap< TData, TConfig > = [
 	keyof TData,
 	keyof typeof knownValidationCallbacks | ( ( inputValue: string ) => string ),
 	( TConfig & {
-		dependsOn?: { [ k in keyof TData ]?: string };
+		dependsOn?: Record< keyof TData, string >;
 		message?: string;
 	} )?,
 ][];

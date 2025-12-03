@@ -34,6 +34,7 @@ class Memberships {
 		// Hook into the Content Gate.
 		add_action( 'admin_init', [ __CLASS__, 'handle_edit_plan_gate' ] );
 		add_filter( 'newspack_content_gate_post_id', [ __CLASS__, 'get_gate_post_id' ], 10, 2 );
+		add_filter( 'newspack_post_has_restrictions', [ __CLASS__, 'post_has_restrictions' ], 10, 2 );
 		add_filter( 'newspack_is_post_restricted', [ __CLASS__, 'is_post_restricted' ], 10, 2 );
 
 		// Handle restriction when using metering.
@@ -312,6 +313,21 @@ class Memberships {
 			}
 		}
 		return $plans;
+	}
+
+	/**
+	 * Whether the post has restrictions.
+	 *
+	 * @param bool $has_restrictions Whether the post has restrictions.
+	 * @param int  $post_id          Post ID.
+	 *
+	 * @return bool
+	 */
+	public static function post_has_restrictions( $has_restrictions, $post_id = null ) {
+		if ( ! self::is_active() || ! function_exists( 'wc_memberships_is_post_content_restricted' ) ) {
+			return $has_restrictions;
+		}
+		return \wc_memberships_is_post_content_restricted( $post_id );
 	}
 
 	/**

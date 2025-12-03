@@ -70,9 +70,7 @@ const HeaderBiddingGAM = () => {
 		return ! inFlight && ! isManaging && error?.data?.status !== '500';
 	};
 	const getMissingOrderMessage = () => {
-		return inFlight
-			? __( 'Loading…', 'newspack-ads' )
-			: __( 'There are no orders configured.', 'newspack-ads' );
+		return inFlight ? __( 'Loading…', 'newspack-ads' ) : __( 'There are no orders configured.', 'newspack-ads' );
 	};
 
 	useEffect( () => {
@@ -112,9 +110,7 @@ const HeaderBiddingGAM = () => {
 
 	const activeOrders = getActiveOrders();
 
-	const cardActionText = activeOrders.length
-		? __( 'Manage Orders', 'newspack-ads' )
-		: __( 'Create Order', 'newspack-ads' );
+	const cardActionText = activeOrders.length ? __( 'Manage Orders', 'newspack-ads' ) : __( 'Create Order', 'newspack-ads' );
 
 	return (
 		<Fragment>
@@ -129,15 +125,16 @@ const HeaderBiddingGAM = () => {
 							<span className="newspack-ads__header-bidding-gam__order-description">
 								{ activeOrders.length
 									? sprintf(
-										// Translators: Number of line items in the order.
-										_n(
-											'There is %s available order.',
-											'There are %s available orders.',
-											activeOrders.length,
-											'newspack-ads'
-										),
-										activeOrders.length
-									) : getMissingOrderMessage() }
+											// translators: %s: Number of line items in the order.
+											_n(
+												'There is %s available order.',
+												'There are %s available orders.',
+												activeOrders.length,
+												'newspack-ads'
+											),
+											activeOrders.length
+									  )
+									: getMissingOrderMessage() }
 							</span>
 						) }
 					</Fragment>
@@ -146,10 +143,7 @@ const HeaderBiddingGAM = () => {
 				onClick={ () => ( activeOrders.length ? setIsManaging( true ) : setEditingOrder( 0 ) ) }
 			/>
 			{ isManaging && editingOrder === false && (
-				<Modal
-					title={ __( 'Manage Orders', 'newspack-ads' ) }
-					onRequestClose={ () => ! inFlight && setIsManaging( false ) }
-				>
+				<Modal title={ __( 'Manage Orders', 'newspack-ads' ) } onRequestClose={ () => ! inFlight && setIsManaging( false ) }>
 					{ activeOrders.length && (
 						<>
 							<Card noBorder>
@@ -161,18 +155,16 @@ const HeaderBiddingGAM = () => {
 										description={ () => (
 											<span>
 												{ sprintf(
-													// Translators: the bidder revenue share for this order.
+													// translators: %1$d: the bidder revenue share for this order.
 													__( 'Bidder Revenue Share: %1$d%%', 'newspack-ads' ),
 													order.revenue_share || 0
 												) }{ ' ' }
 												|{ ' ' }
 												{ sprintf(
-													// Translators: comma-separated list of adapters for the order or "any" if undefined.
+													// translators: %s: comma-separated list of adapters for the order or "any" if undefined.
 													__( 'Bidders: %s', 'newspack-ads' ),
 													order.bidders?.length
-														? order.bidders
-															.map( bidderKey => bidders[ bidderKey ]?.name || bidderKey )
-															.join( ', ' )
+														? order.bidders.map( bidderKey => bidders[ bidderKey ]?.name || bidderKey ).join( ', ' )
 														: __( 'any', 'newspack-ads' )
 												) }
 											</span>
@@ -184,9 +176,7 @@ const HeaderBiddingGAM = () => {
 												onArchive={ async () => {
 													if (
 														// eslint-disable-next-line no-alert
-														confirm(
-															__( "Are you sure you'd like to archive this order?", 'newspack-ads' )
-														)
+														confirm( __( "Are you sure you'd like to archive this order?", 'newspack-ads' ) )
 													) {
 														setInFlight( true );
 														await archiveOrder( order.id );
@@ -207,10 +197,7 @@ const HeaderBiddingGAM = () => {
 								// Display warning if a bidder is being targeted by more than one order.
 								Object.keys( bidders ).map( bidderKey => {
 									const bidderOrders = activeOrders.filter(
-										order =>
-											order.bidders?.includes( bidderKey ) ||
-											! order.bidders ||
-											! order.bidders.length
+										order => order.bidders?.includes( bidderKey ) || ! order.bidders || ! order.bidders.length
 									);
 									return (
 										bidderOrders.length > 1 && (
@@ -242,9 +229,7 @@ const HeaderBiddingGAM = () => {
 			) }
 			{ editingOrder !== false && (
 				<Modal
-					title={
-						editingOrder ? __( 'Edit Order', 'newspack-ads' ) : __( 'Create Order', 'newspack-ads' )
-					}
+					title={ editingOrder ? __( 'Edit Order', 'newspack-ads' ) : __( 'Create Order', 'newspack-ads' ) }
 					onRequestClose={ () => ! inFlight && setEditingOrder( false ) }
 				>
 					{ unrecoverable && (
@@ -287,13 +272,9 @@ const HeaderBiddingGAM = () => {
 	);
 };
 
-addFilter(
-	'newspack.settingSection.bidding.beforeControls',
-	'newspack-ads/header-bidding-gam',
-	( AfterControls, props ) => {
-		if ( props.sectionKey === 'bidding' ) {
-			return <HeaderBiddingGAM { ...props } />;
-		}
-		return AfterControls;
+addFilter( 'newspack.settingSection.bidding.beforeControls', 'newspack-ads/header-bidding-gam', ( AfterControls, props ) => {
+	if ( props.sectionKey === 'bidding' ) {
+		return <HeaderBiddingGAM { ...props } />;
 	}
-);
+	return AfterControls;
+} );

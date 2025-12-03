@@ -43,27 +43,31 @@ final class WP_Abilities_Registry {
 	 *
 	 * @see wp_register_ability()
 	 *
-	 * @param string              $name       The name of the ability. The name must be a string containing a namespace
-	 *                                        prefix, i.e. `my-plugin/my-ability`. It can only contain lowercase
-	 *                                        alphanumeric characters, dashes and the forward slash.
-	 * @param array<string,mixed> $properties An associative array of properties for the ability. This should include
-	 *                                        `label`, `description`, `input_schema`, `output_schema`,
-	 *                                        `execute_callback`, `permission_callback`, `meta`, and ability_class.
+	 * @param string              $name The name of the ability. The name must be a string containing a namespace
+	 *                                  prefix, i.e. `my-plugin/my-ability`. It can only contain lowercase
+	 *                                  alphanumeric characters, dashes and the forward slash.
+	 * @param array<string,mixed> $args An associative array of arguments for the ability. See wp_register_ability() for
+	 *                                  details.
 	 * @return ?\WP_Ability The registered ability instance on success, null on failure.
 	 *
 	 * @phpstan-param array{
 	 *   label?: string,
 	 *   description?: string,
+	 *   category?: string,
+	 *   execute_callback?: callable( mixed $input= ): (mixed|\WP_Error),
+	 *   permission_callback?: callable( mixed $input= ): (bool|\WP_Error),
 	 *   input_schema?: array<string,mixed>,
 	 *   output_schema?: array<string,mixed>,
-	 *   execute_callback?: callable( array<string,mixed> $input): (mixed|\WP_Error),
-	 *   permission_callback?: ?callable( array<string,mixed> $input ): (bool|\WP_Error),
-	 *   meta?: array<string,mixed>,
+	 *   meta?: array{
+	 *     annotations?: array<string,(bool|string)>,
+	 *     show_in_rest?: bool,
+	 *     ...<string, mixed>
+	 *   },
 	 *   ability_class?: class-string<\WP_Ability>,
 	 *   ...<string, mixed>
-	 * } $properties
+	 * } $args
 	 */
-	public function register( string $name, array $properties = array() ): ?WP_Ability {
+	public function register( string $name, array $args ): ?WP_Ability {
 		if ( ! preg_match( '/^[a-z0-9-]+\/[a-z0-9-]+$/', $name ) ) {
 			_doing_it_wrong(
 				__METHOD__,
@@ -85,24 +89,51 @@ final class WP_Abilities_Registry {
 			return null;
 		}
 
+		/**
+		 * Filters the ability arguments before they are validated and used to instantiate the ability.
+		 *
+		 * @since 0.2.0
+		 *
+		 * @param array<string,mixed> $args The arguments used to instantiate the ability.
+		 * @param string              $name The name of the ability, with its namespace.
+		 */
+		$args = apply_filters( 'register_ability_args', $args, $name );
+
+		// Validate category exists if provided (will be validated as required in WP_Ability).
+		if ( isset( $args['category'] ) ) {
+			$category_registry = WP_Abilities_Category_Registry::get_instance();
+			if ( ! $category_registry->is_registered( $args['category'] ) ) {
+				_doing_it_wrong(
+					__METHOD__,
+					sprintf(
+						/* translators: %1$s: ability category slug, %2$s: ability name */
+						esc_html__( 'Ability category "%1$s" is not registered. Please register the category before assigning it to ability "%2$s".' ),
+						esc_attr( $args['category'] ),
+						esc_attr( $name )
+					),
+					'0.3.0'
+				);
+				return null;
+			}
+		}
+
 		// The class is only used to instantiate the ability, and is not a property of the ability itself.
-		if ( isset( $properties['ability_class'] ) && ! is_a( $properties['ability_class'], WP_Ability::class, true ) ) {
+		if ( isset( $args['ability_class'] ) && ! is_a( $args['ability_class'], WP_Ability::class, true ) ) {
 			_doing_it_wrong(
 				__METHOD__,
-				esc_html__( 'The ability properties should provide a valid `ability_class` that extends WP_Ability.' ),
+				esc_html__( 'The ability args should provide a valid `ability_class` that extends WP_Ability.' ),
 				'0.1.0'
 			);
 			return null;
 		}
-		$ability_class = $properties['ability_class'] ?? WP_Ability::class;
-		unset( $properties['ability_class'] );
+
+		/** @var class-string<\WP_Ability> */
+		$ability_class = $args['ability_class'] ?? WP_Ability::class;
+		unset( $args['ability_class'] );
 
 		try {
-			// WP_Ability::validate_properties() will throw an exception if the properties are invalid.
-			$ability = new $ability_class(
-				$name,
-				$properties
-			);
+			// WP_Ability::prepare_properties() will throw an exception if the properties are invalid.
+			$ability = new $ability_class( $name, $args );
 		} catch ( \InvalidArgumentException $e ) {
 			_doing_it_wrong(
 				__METHOD__,
@@ -209,6 +240,10 @@ final class WP_Abilities_Registry {
 	public static function get_instance(): self {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
+
+			// Ensure category registry is initialized first to allow categories to be registered
+			// before abilities that depend on them.
+			WP_Abilities_Category_Registry::get_instance();
 
 			/**
 			 * Fires when preparing abilities registry.

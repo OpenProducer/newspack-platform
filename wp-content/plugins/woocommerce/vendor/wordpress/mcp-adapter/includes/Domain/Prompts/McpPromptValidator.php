@@ -25,10 +25,9 @@ class McpPromptValidator {
 	 * @param array  $prompt_data The prompt data to validate.
 	 * @param string $context Optional context for error messages.
 	 *
-	 * @return void
-	 * @throws \InvalidArgumentException If validation fails.
+	 * @return bool|\WP_Error True if valid, WP_Error if validation fails.
 	 */
-	public static function validate_prompt_data( array $prompt_data, string $context = '' ): void {
+	public static function validate_prompt_data( array $prompt_data, string $context = '' ) {
 		$validation_errors = self::get_validation_errors( $prompt_data );
 
 		if ( ! empty( $validation_errors ) ) {
@@ -38,8 +37,10 @@ class McpPromptValidator {
 				__( 'Prompt validation failed: %s', 'mcp-adapter' ),
 				implode( ', ', $validation_errors )
 			);
-			throw new \InvalidArgumentException( esc_html( $error_message ) );
+			return new \WP_Error( 'prompt_validation_failed', esc_html( $error_message ) );
 		}
+
+		return true;
 	}
 
 	/**
@@ -48,12 +49,15 @@ class McpPromptValidator {
 	 * @param \WP\MCP\Domain\Prompts\McpPrompt $prompt The prompt instance to validate.
 	 * @param string    $context Optional context for error messages.
 	 *
-	 * @return void
-	 * @throws \InvalidArgumentException If validation fails.
+	 * @return bool|\WP_Error True if valid, WP_Error if validation fails.
 	 */
-	public static function validate_prompt_instance( McpPrompt $prompt, string $context = '' ): void {
-		self::validate_prompt_uniqueness( $prompt, $context );
-		self::validate_prompt_data( $prompt->to_array(), $context );
+	public static function validate_prompt_instance( McpPrompt $prompt, string $context = '' ) {
+		$uniqueness_result = self::validate_prompt_uniqueness( $prompt, $context );
+		if ( is_wp_error( $uniqueness_result ) ) {
+			return $uniqueness_result;
+		}
+
+		return self::validate_prompt_data( $prompt->to_array(), $context );
 	}
 
 
@@ -63,9 +67,9 @@ class McpPromptValidator {
 	 * @param \WP\MCP\Domain\Prompts\McpPrompt $prompt The resource instance to validate.
 	 * @param string    $context Optional context for error messages.
 	 *
-	 * @throws \InvalidArgumentException If the resource URI is not unique.
+	 * @return bool|\WP_Error True if unique, WP_Error if the prompt name is not unique.
 	 */
-	public static function validate_prompt_uniqueness( McpPrompt $prompt, string $context = '' ): void {
+	public static function validate_prompt_uniqueness( McpPrompt $prompt, string $context = '' ) {
 		$this_prompt_name  = $prompt->get_name();
 		$existing_resource = $prompt->get_mcp_server()->get_prompt( $this_prompt_name );
 		if ( $existing_resource ) {
@@ -75,8 +79,10 @@ class McpPromptValidator {
 				__( "Prompt name '%s' is not unique. It already exists in the MCP server.", 'mcp-adapter' ),
 				$this_prompt_name
 			);
-			throw new \InvalidArgumentException( esc_html( $error_message ) );
+			return new \WP_Error( 'prompt_not_unique', esc_html( $error_message ) );
 		}
+
+		return true;
 	}
 
 	/**
@@ -121,6 +127,11 @@ class McpPromptValidator {
 			if ( ! empty( $arguments_errors ) ) {
 				$errors = array_merge( $errors, $arguments_errors );
 			}
+		}
+
+		// Validate annotations (optional field)
+		if ( isset( $prompt_data['annotations'] ) && ! is_array( $prompt_data['annotations'] ) ) {
+			$errors[] = __( 'Prompt annotations must be an array if provided', 'mcp-adapter' );
 		}
 
 		return $errors;
@@ -383,12 +394,95 @@ class McpPromptValidator {
 		}
 
 		// Check optional annotations
-		if ( isset( $content['annotations'] ) && ! is_array( $content['annotations'] ) ) {
-			$errors[] = sprintf(
-			/* translators: %d: message index */
-				__( 'Message %d content annotations must be an array if provided', 'mcp-adapter' ),
-				$message_index
+		if ( isset( $content['annotations'] ) ) {
+			$annotation_errors = self::get_content_annotation_validation_errors( $content['annotations'], $message_index );
+			if ( ! empty( $annotation_errors ) ) {
+				$errors = array_merge( $errors, $annotation_errors );
+			}
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Get validation errors for message content annotations.
+	 *
+	 * @param array|mixed $annotations The annotations to validate.
+	 * @param int         $message_index The message index for error reporting.
+	 *
+	 * @return array Array of validation errors, empty if valid.
+	 */
+	private static function get_content_annotation_validation_errors( $annotations, int $message_index ): array {
+		$errors = array();
+
+		// Annotations must be an array
+		if ( ! is_array( $annotations ) ) {
+			return array(
+				sprintf(
+				/* translators: %d: message index */
+					__( 'Message %d content annotations must be an array if provided', 'mcp-adapter' ),
+					$message_index
+				),
 			);
+		}
+
+		// Validate audience field if present
+		if ( isset( $annotations['audience'] ) ) {
+			if ( ! is_array( $annotations['audience'] ) ) {
+				$errors[] = sprintf(
+				/* translators: %d: message index */
+					__( 'Message %d content annotation \'audience\' must be an array', 'mcp-adapter' ),
+					$message_index
+				);
+			} else {
+				$valid_audiences = array( 'user', 'assistant' );
+				foreach ( $annotations['audience'] as $audience ) {
+					if ( in_array( $audience, $valid_audiences, true ) ) {
+						continue;
+					}
+
+					$errors[] = sprintf(
+					/* translators: %1$d: message index, %2$s: audience value */
+						__( 'Message %1$d content annotation audience \'%2$s\' must be \'user\' or \'assistant\'', 'mcp-adapter' ),
+						$message_index,
+						$audience
+					);
+				}
+			}
+		}
+
+		// Validate priority field if present
+		if ( isset( $annotations['priority'] ) ) {
+			if ( ! is_numeric( $annotations['priority'] ) ) {
+				$errors[] = sprintf(
+				/* translators: %d: message index */
+					__( 'Message %d content annotation \'priority\' must be a number', 'mcp-adapter' ),
+					$message_index
+				);
+			} elseif ( $annotations['priority'] < 0.0 || $annotations['priority'] > 1.0 ) {
+				$errors[] = sprintf(
+				/* translators: %d: message index */
+					__( 'Message %d content annotation \'priority\' must be between 0.0 and 1.0', 'mcp-adapter' ),
+					$message_index
+				);
+			}
+		}
+
+		// Validate lastModified field if present
+		if ( isset( $annotations['lastModified'] ) ) {
+			if ( ! is_string( $annotations['lastModified'] ) ) {
+				$errors[] = sprintf(
+				/* translators: %d: message index */
+					__( 'Message %d content annotation \'lastModified\' must be a string', 'mcp-adapter' ),
+					$message_index
+				);
+			} elseif ( ! self::validate_iso8601_timestamp( $annotations['lastModified'] ) ) {
+				$errors[] = sprintf(
+				/* translators: %d: message index */
+					__( 'Message %d content annotation \'lastModified\' must be a valid ISO 8601 timestamp', 'mcp-adapter' ),
+					$message_index
+				);
+			}
 		}
 
 		return $errors;
@@ -424,11 +518,7 @@ class McpPromptValidator {
 		}
 
 		// Only allow letters, numbers, hyphens, and underscores
-		if ( ! preg_match( '/^[a-zA-Z0-9_-]+$/', $name ) ) {
-			return false;
-		}
-
-		return true;
+		return (bool) preg_match( '/^[a-zA-Z0-9_-]+$/', $name );
 	}
 
 	/**
@@ -450,11 +540,7 @@ class McpPromptValidator {
 		}
 
 		// Only allow letters, numbers, hyphens, and underscores
-		if ( ! preg_match( '/^[a-zA-Z0-9_-]+$/', $name ) ) {
-			return false;
-		}
-
-		return true;
+		return (bool) preg_match( '/^[a-zA-Z0-9_-]+$/', $name );
 	}
 
 	/**
@@ -514,5 +600,37 @@ class McpPromptValidator {
 		);
 
 		return in_array( strtolower( $mime_type ), $valid_audio_types, true );
+	}
+
+	/**
+	 * Validate ISO 8601 timestamp format.
+	 *
+	 * @param string $timestamp The timestamp to validate.
+	 *
+	 * @return bool True if valid ISO 8601 timestamp, false otherwise.
+	 */
+	public static function validate_iso8601_timestamp( string $timestamp ): bool {
+		// Try to parse as DateTime with ISO 8601 format
+		$datetime = \DateTime::createFromFormat( \DateTime::ATOM, $timestamp );
+		if ( $datetime && $datetime->format( \DateTime::ATOM ) === $timestamp ) {
+			return true;
+		}
+
+		// Try alternative ISO 8601 formats
+		$formats = array(
+			'Y-m-d\TH:i:s\Z',           // UTC format
+			'Y-m-d\TH:i:sP',            // With timezone offset
+			'Y-m-d\TH:i:s.u\Z',         // With microseconds UTC
+			'Y-m-d\TH:i:s.uP',          // With microseconds and timezone
+		);
+
+		foreach ( $formats as $format ) {
+			$datetime = \DateTime::createFromFormat( $format, $timestamp );
+			if ( $datetime && $datetime->format( $format ) === $timestamp ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

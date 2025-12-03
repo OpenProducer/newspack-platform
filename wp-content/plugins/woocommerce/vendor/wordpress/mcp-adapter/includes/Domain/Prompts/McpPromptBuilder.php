@@ -10,7 +10,6 @@ declare( strict_types=1 );
 namespace WP\MCP\Domain\Prompts;
 
 use WP\MCP\Domain\Prompts\Contracts\McpPromptBuilderInterface;
-use WP_Ability;
 
 /**
  * Abstract base class for building MCP prompts.
@@ -49,6 +48,13 @@ abstract class McpPromptBuilder implements McpPromptBuilderInterface {
 	protected array $arguments = array();
 
 	/**
+	 * The prompt annotations.
+	 *
+	 * @var array
+	 */
+	protected array $annotations = array();
+
+	/**
 	 * Build and return the MCP prompt instance.
 	 *
 	 * @return \WP\MCP\Domain\Prompts\McpPrompt The built prompt.
@@ -57,12 +63,9 @@ abstract class McpPromptBuilder implements McpPromptBuilderInterface {
 	public function build(): McpPrompt {
 		$this->configure();
 
-		if ( empty( $this->name ) ) {
-			throw new \InvalidArgumentException( 'Prompt name is required' );
-		}
-
 		// Create a synthetic ability name for the prompt
-		$synthetic_ability = 'synthetic/' . $this->name;
+		// Use empty string if name is empty (validation will catch it)
+		$synthetic_ability = empty( $this->name ) ? 'synthetic/' : 'synthetic/' . $this->name;
 
 		// Create a builder-based prompt that completely bypasses abilities
 		$builder = $this;
@@ -72,6 +75,7 @@ abstract class McpPromptBuilder implements McpPromptBuilderInterface {
 			$this->title,
 			$this->description,
 			$this->arguments,
+			$this->annotations,
 			$builder
 		) extends McpPrompt {
 			private McpPromptBuilderInterface $builder;
@@ -82,9 +86,10 @@ abstract class McpPromptBuilder implements McpPromptBuilderInterface {
 				?string $title,
 				?string $description,
 				array $arguments,
+				array $annotations,
 				McpPromptBuilderInterface $builder
 			) {
-				parent::__construct( $ability, $name, $title, $description, $arguments );
+				parent::__construct( $ability, $name, $title, $description, $arguments, $annotations );
 				$this->builder = $builder;
 			}
 
@@ -103,10 +108,17 @@ abstract class McpPromptBuilder implements McpPromptBuilderInterface {
 				return $this->builder->has_permission( $arguments );
 			}
 
-			// Fallback for ability-based execution (should not be used)
-			public function get_ability(): ?WP_Ability {
+			/**
+			 * Fallback for ability-based execution (should not be used).
+			 *
+			 * @return \WP_Error Always returns an error as builder-based prompts don't have abilities.
+			 */
+			public function get_ability(): \WP_Error {
 				// This should not be called for builder-based prompts
-				return null;
+				return new \WP_Error(
+					'builder_has_no_ability',
+					esc_html__( 'Builder-based prompts do not have an associated ability.', 'mcp-adapter' )
+				);
 			}
 		};
 
@@ -163,6 +175,19 @@ abstract class McpPromptBuilder implements McpPromptBuilderInterface {
 		}
 
 		return $this->arguments;
+	}
+
+	/**
+	 * Get the prompt annotations.
+	 *
+	 * @return array The prompt annotations.
+	 */
+	public function get_annotations(): array {
+		if ( empty( $this->name ) ) {
+			$this->configure();
+		}
+
+		return $this->annotations;
 	}
 
 	/**

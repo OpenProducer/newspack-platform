@@ -17,8 +17,4 @@ namespace YoastSEO_Vendor\Symfony\Component\DependencyInjection\Exception;
  */
 class EnvNotFoundException extends \YoastSEO_Vendor\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
 {
-    public function __construct($name)
-    {
-        parent::__construct(\sprintf('Environment variable not found: "%s".', $name));
-    }
 }

@@ -64,6 +64,9 @@ export default function AccessibilityStatement( { isFetching }: AccessibilitySta
 			{
 				path: '/newspack/v1/wizard/newspack-settings/accessibility-statement',
 				method: 'POST',
+				data: {
+					force_create: 'true', // Force creation of a new page
+				},
 			},
 			{
 				onSuccess: response => {

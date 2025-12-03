@@ -6,23 +6,19 @@ export type DonationFormInputName = `donation_value_${ DonationFrequencySlug }`;
 type DonationFormInputOtherName = `donation_value_${ DonationFrequencySlug }_other`;
 type DonationFormInputUntieredName = `donation_value_${ DonationFrequencySlug }_untiered`;
 
-export type DonationFormValues = {
-	[ key in DonationFormInputName ]: string;
-} & {
-	[ key in DonationFormInputOtherName ]: string;
-} & {
-	[ key in DonationFormInputUntieredName ]: string;
-} & {
-	amount: string;
-	donation_frequency: DonationFrequencySlug;
-	email: string;
-	full_name: string;
-	cid?: string;
-	agree_to_pay_fees?: string;
-	newsletter_opt_in?: string;
-	newspack_popup_id?: string;
-	_wp_http_referer?: string;
-};
+export type DonationFormValues = Record< DonationFormInputName, string > &
+	Record< DonationFormInputOtherName, string > &
+	Record< DonationFormInputUntieredName, string > & {
+		amount: string;
+		donation_frequency: DonationFrequencySlug;
+		email: string;
+		full_name: string;
+		cid?: string;
+		agree_to_pay_fees?: string;
+		newsletter_opt_in?: string;
+		newspack_popup_id?: string;
+		_wp_http_referer?: string;
+	};
 
 export type DonationSettings = {
 	currency: string;
@@ -37,28 +33,19 @@ export type DonationSettings = {
 	minimumDonation: number;
 	amounts: DonationAmounts;
 	tiered: boolean;
-	disabledFrequencies: {
-		[ Key in DonationFrequencySlug as string ]: boolean;
-	};
+	disabledFrequencies: Record< DonationFrequencySlug, boolean >;
 	platform: string;
 };
 
-export type EditState = Pick<
-	DonationSettings,
-	'amounts' | 'currencySymbol' | 'tiered' | 'disabledFrequencies' | 'minimumDonation' | 'platform'
->;
+export type EditState = Pick< DonationSettings, 'amounts' | 'currencySymbol' | 'tiered' | 'disabledFrequencies' | 'minimumDonation' | 'platform' >;
 
 export type DonationAmountsArray = [ number, number, number, number ];
-export type DonationAmounts = {
-	[ Key in DonationFrequencySlug as string ]: DonationAmountsArray;
-};
+export type DonationAmounts = Record< DonationFrequencySlug, DonationAmountsArray >;
 
 export type OverridableConfiguration = {
 	amounts: DonationAmounts;
 	tiered: boolean;
-	disabledFrequencies: {
-		[ Key in DonationFrequencySlug as string ]: boolean;
-	};
+	disabledFrequencies: Record< DonationFrequencySlug, boolean >;
 	minimumDonation: number;
 };
 

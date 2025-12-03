@@ -25,11 +25,7 @@ export const settings = {
 		foreground: '#406ebc',
 	},
 	category: getCategories().some( ( { slug } ) => slug === 'newspack' ) ? 'newspack' : 'common',
-	keywords: [
-		__( 'ad', 'newspack-ads' ),
-		__( 'advert', 'newspack-ads' ),
-		__( 'ads', 'newspack-ads' ),
-	],
+	keywords: [ __( 'ad', 'newspack-ads' ), __( 'advert', 'newspack-ads' ), __( 'ads', 'newspack-ads' ) ],
 	description: __( 'Render an ad unit from your inventory.', 'newspack-ads' ),
 	attributes: {
 		provider: {

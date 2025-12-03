@@ -23,6 +23,7 @@ export { default as emailSend } from './src/email-send';
 export { default as gift } from './src/gift';
 export { default as hand } from './src/hand';
 export { default as iframe } from './src/iframe';
+export { default as key } from './src/key';
 export { default as logout } from './src/logout';
 export { default as mergeTags } from './src/merge-tags';
 export { default as newspack } from './src/newspack';
