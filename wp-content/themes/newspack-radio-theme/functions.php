@@ -24,27 +24,6 @@ add_action( 'wp_head', 'chld_thm_cfg_add_parent_dep', 2 );
 
 // END ENQUEUE PARENT ACTION
 
-/**
- ** Add support for custom post types so they show up in home page posts and whatnot
-*/
-add_post_type_support( 'tribe_events', 'newspack_blocks' );
-add_post_type_support( 'tribe_events', array(
-    'event_date' ));
-add_post_type_support( 'show', 'newspack_blocks' );
-
-
-
-
-add_filter(
-  'tribe_events_views_v2_view_list_repository_args',
-  function ( $args ) {
-    $args['orderby'] = 'event_date';
-    $args['order'] = 'DESC';
- 
-    return $args;
-  }
-);
-
 // Inject categories, event date, and venue into the carousel block
 function inject_event_categories_date_and_venue_into_carousel($block_content, $block) {
     // Check if the block is a newspack-blocks/carousel
