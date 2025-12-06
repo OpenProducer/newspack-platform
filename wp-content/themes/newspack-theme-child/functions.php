@@ -101,7 +101,22 @@ function inject_event_categories_date_and_venue_into_carousel($block_content, $b
                 }
 
                 // Add venue underneath the date
-                $venue = get_post_meta($post_id, '_EventVenue', true);
+                $venue = '';
+
+                // Prefer TEC venue ID; fallback to the old meta key if it exists.
+                $venue_id = get_post_meta($post_id, '_EventVenueID', true);
+                if ($venue_id) {
+                    if (function_exists('tribe_get_venue')) {
+                        $venue = tribe_get_venue($venue_id);
+                    } else {
+                        $venue = get_the_title($venue_id);
+                    }
+                }
+
+                if (!$venue) {
+                    $venue = get_post_meta($post_id, '_EventVenue', true);
+                }
+
                 if ($venue) {
                     $venue_element = $xpath->query('.//div[contains(@class, "entry-meta")]', $article_data['node'])->item(0);
                     if ($venue_element) {
