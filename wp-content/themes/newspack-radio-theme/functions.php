@@ -2,27 +2,15 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-// BEGIN ENQUEUE PARENT ACTION
-// AUTO GENERATED - Do not modify or remove comment markers above or below:
+// Enqueue parent and child theme styles
+function newspack_radio_enqueue_styles() {
+    $parent_handle = 'newspack-style';
+    $version = wp_get_theme()->get( 'Version' );
 
-if ( !function_exists( 'chld_thm_cfg_locale_css' ) ):
-    function chld_thm_cfg_locale_css( $uri ){
-        if ( empty( $uri ) && is_rtl() && file_exists( get_template_directory() . '/rtl.css' ) )
-            $uri = get_template_directory_uri() . '/rtl.css';
-        return $uri;
-    }
-endif;
-add_filter( 'locale_stylesheet_uri', 'chld_thm_cfg_locale_css' );
-
-if ( !function_exists( 'chld_thm_cfg_add_parent_dep' ) ):
-function chld_thm_cfg_add_parent_dep() {
-    global $wp_styles;
-    array_unshift( $wp_styles->registered[ 'newspack-style' ]->deps, 'newspack-print-style' );
+    wp_enqueue_style( $parent_handle, get_template_directory_uri() . '/style.css', [], $version );
+    wp_enqueue_style( 'newspack-radio-style', get_stylesheet_directory_uri() . '/style.css', [ $parent_handle ], $version );
 }
-endif;
-add_action( 'wp_head', 'chld_thm_cfg_add_parent_dep', 2 );
-
-// END ENQUEUE PARENT ACTION
+add_action( 'wp_enqueue_scripts', 'newspack_radio_enqueue_styles' );
 
 // Inject categories, event date, and venue into the carousel block
 function inject_event_categories_date_and_venue_into_carousel($block_content, $block) {

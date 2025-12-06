@@ -1,9 +1,13 @@
 <?php
 // Enqueue parent and child theme styles
 function newspack_child_enqueue_styles() {
-    wp_enqueue_style('parent-style', get_template_directory_uri() . '/style.css');
+    $parent_handle = 'newspack-style';
+    $version = wp_get_theme()->get( 'Version' );
+
+    wp_enqueue_style( $parent_handle, get_template_directory_uri() . '/style.css', [], $version );
+    wp_enqueue_style( 'newspack-child-style', get_stylesheet_directory_uri() . '/style.css', [ $parent_handle ], $version );
 }
-add_action('wp_enqueue_scripts', 'newspack_child_enqueue_styles');
+add_action( 'wp_enqueue_scripts', 'newspack_child_enqueue_styles' );
 
 // Inject categories, event date, and venue into the carousel block
 function inject_event_categories_date_and_venue_into_carousel($block_content, $block) {
