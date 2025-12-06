@@ -92,11 +92,18 @@ function inject_event_categories_date_and_venue_into_carousel($block_content, $b
 
                 $event_date = get_post_meta($post_id, '_EventStartDate', true);
                 if ($event_date) {
-                    $formatted_date = date_i18n(get_option('date_format'), strtotime($event_date));
+                    $formatted_date = date_i18n(get_option('date_format') . ' @ ' . get_option('time_format'), strtotime($event_date));
                     $date_element = $xpath->query('.//time[contains(@class, "entry-date")]', $article_data['node'])->item(0);
                     if ($date_element) {
                         $date_element->nodeValue = $formatted_date;
                         $date_element->setAttribute('datetime', date('c', strtotime($event_date)));
+
+                        // Wrap the date in its own block to ensure it sits on a separate line.
+                        $date_wrapper = $dom->createElement('div');
+                        $date_wrapper->setAttribute('class', 'event-date');
+                        $date_parent = $date_element->parentNode;
+                        $date_parent->replaceChild($date_wrapper, $date_element);
+                        $date_wrapper->appendChild($date_element);
                     }
                 }
 
