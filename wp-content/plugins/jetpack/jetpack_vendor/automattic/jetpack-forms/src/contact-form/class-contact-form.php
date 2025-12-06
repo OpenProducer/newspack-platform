@@ -207,8 +207,10 @@ class Contact_Form extends Contact_Form_Shortcode {
 			'saveResponses'          => 'yes',
 			'emailNotifications'     => 'yes',
 			'notificationRecipients' => array(), // Array of user IDs who should receive form response notifications.
+			'webhooks'               => array(), // Array of webhooks to send the form data to.
 			'disableGoBack'          => $attributes['disableGoBack'] ?? false,
 			'disableSummary'         => $attributes['disableSummary'] ?? false,
+			'formTitle'              => $attributes['formTitle'] ?? '',
 		);
 
 		$attributes = shortcode_atts( $this->defaults, $attributes, 'contact-form' );
@@ -262,23 +264,111 @@ class Contact_Form extends Contact_Form_Shortcode {
 	public static function get_instance_from_jwt( $jwt_token, $throw_exception = false ) {
 		$secret = self::get_secret();
 
+		// Derive separate keys using HKDF for proper key separation and context binding
+		$jwt_signing_key = hash_hkdf( 'sha256', $secret, 32, 'jetpack-forms-jwt-hmac-v2' );
+		$encryption_key  = hash_hkdf( 'sha256', $secret, 32, 'jetpack-forms-aes-gcm-v2' );
+
 		try {
-			$data = JWT::decode( $jwt_token, $secret, array( 'HS256' ), true );
+			$data = JWT::decode( $jwt_token, $jwt_signing_key, array( 'HS256' ), true );
 		} catch ( \Exception $e ) {
-			// Re-throw with more context about the failure.
-			if ( $throw_exception ) {
-				throw new \Exception(
-					sprintf(
-						/* translators: %s is the original exception message */
-						__( 'Failed to decode JWT token: %s', 'jetpack-forms' ),
-						$e->getMessage()
-					),
-					0,
-					$e
-				);
+			try {
+				// Retry to decode the token using the secret key instead of the derived key
+				$data = JWT::decode( $jwt_token, $secret, array( 'HS256' ), true );
+			} catch ( \Exception $e ) {
+				// Re-throw with more context about the failure.
+				if ( $throw_exception ) {
+					/**
+					 * Filter the failure to decode a JWT token for a contact form.
+					 *
+					 * @param null $value The value to return. Default null.
+					 * @param string      $jwt_token The JWT token that failed to decode.
+					 * @param \Exception  $e The exception that was thrown during decoding.
+					 *
+					 * @return Contact_Form|null The value to return.
+					 */
+					$filtered = apply_filters( 'jetpack_forms_jwt_decode_failure', null, $jwt_token, $e );
+					if ( $filtered !== null ) {
+						return $filtered;
+					}
+					throw new \Exception(
+						sprintf(
+							/* translators: %s is the original exception message */
+							__( 'Failed to decode JWT token: %s', 'jetpack-forms' ),
+							$e->getMessage()
+						),
+						0,
+						$e
+					);
+				}
+				return apply_filters( 'jetpack_forms_jwt_decode_failure', null, $jwt_token, $e );
+			}
+		}
+
+		$version = isset( $data['version'] ) ? absint( $data['version'] ) : 1;
+
+		if ( 2 === $version ) {
+			if ( ! isset( $data['encrypted_attributes'] ) ) {
+				throw new \Exception( 'Invalid JWT format - encrypted attributes required' );
 			}
 
-			return null;
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Base64 decoding required for encrypted data
+			$encrypted_blob = base64_decode( $data['encrypted_attributes'], true ); // Strict mode
+			if ( $encrypted_blob === false ) {
+				throw new \Exception( 'Invalid base64 encoding in encrypted data' );
+			}
+
+			// Determine which cipher was used (stored in JWT or default to GCM)
+			$cipher = isset( $data['cipher'] ) ? $data['cipher'] : 'aes-256-gcm';
+
+			// Check if the cipher is available on this server
+			$available_cipher_methods = array_map( 'strtolower', openssl_get_cipher_methods() );
+			if ( ! in_array( strtolower( $cipher ), $available_cipher_methods, true ) ) {
+				throw new \Exception( 'Required encryption cipher ' . $cipher . ' is not available on this server' );
+			}
+
+			// Determine IV and tag sizes based on cipher
+			$is_gcm = stripos( $cipher, 'gcm' ) !== false;
+			if ( $is_gcm ) {
+				// GCM: 12-byte IV + 16-byte tag + ciphertext
+				if ( strlen( $encrypted_blob ) < 29 ) { // 12 + 16 + at least 1 byte
+					throw new \Exception( 'Invalid encrypted data format - too short for GCM' );
+				}
+				$iv        = substr( $encrypted_blob, 0, 12 );  // 12-byte IV (96-bit)
+				$tag       = substr( $encrypted_blob, 12, 16 ); // 16-byte auth tag
+				$encrypted = substr( $encrypted_blob, 28 );     // Remaining ciphertext
+			} else {
+				// CBC: 16-byte IV + ciphertext (no tag)
+				if ( strlen( $encrypted_blob ) < 17 ) { // 16 + at least 1 byte
+					throw new \Exception( 'Invalid encrypted data format - too short for CBC' );
+				}
+				$iv        = substr( $encrypted_blob, 0, 16 );  // 16-byte IV (128-bit)
+				$tag       = null; // No tag for CBC
+				$encrypted = substr( $encrypted_blob, 16 );     // Remaining ciphertext
+			}
+
+			$decrypted = openssl_decrypt(
+				$encrypted,
+				$cipher,
+				$encryption_key,
+				OPENSSL_RAW_DATA, // Expect raw binary data
+				$iv,
+				$tag ?? ''
+			);
+
+			if ( $decrypted === false ) {
+				throw new \Exception( 'Decryption failed - invalid token' );
+			}
+
+			$decrypted_attributes = json_decode( $decrypted, true );
+			if ( $decrypted_attributes === null ) {
+				throw new \Exception( 'Invalid attributes format' );
+			}
+
+			// Reconstruct data with decrypted attributes and unencrypted fields
+			$data['attributes'] = $decrypted_attributes;
+			// content, hash, and source are already in $data (unencrypted)
+		} elseif ( ! in_array( $version, array( 0, 1 ), true ) ) {
+			throw new \Exception( 'Unsupported JWT version' );
 		}
 
 		$source = $data['source'] ?? array();
@@ -306,6 +396,17 @@ class Contact_Form extends Contact_Form_Shortcode {
 		$form->has_verified_jwt = true;
 
 		return $form;
+	}
+
+	/**
+	 * Set the source object for the contact form.
+	 *
+	 * @param Feedback_Source $source The source object.
+	 *
+	 * @return void
+	 */
+	public function set_source( $source ) {
+		$this->source = $source;
 	}
 
 	/**
@@ -431,19 +532,92 @@ class Contact_Form extends Contact_Form_Shortcode {
 	 * Get the JWT token for the contact form instance.
 	 *
 	 * @return string The JWT token.
+	 * @throws \Exception If encryption fails.
 	 */
 	public function get_jwt() {
+		$secret = self::get_secret();
+
+		// Derive separate keys using HKDF for proper key separation and context binding
+		$jwt_signing_key = hash_hkdf( 'sha256', $secret, 32, 'jetpack-forms-jwt-hmac-v2' );
+		$encryption_key  = hash_hkdf( 'sha256', $secret, 32, 'jetpack-forms-aes-gcm-v2' );
+
 		$attributes   = $this->attributes;
 		$this->source = Feedback_Source::get_current( $attributes );
-		return JWT::encode(
-			array(
-				'attributes' => $attributes,
-				'content'    => $this->content,
-				'hash'       => $this->hash,
-				'source'     => $this->source->serialize(),
-			),
-			self::get_secret()
+
+		// Only encrypt the attributes field as it contains sensitive information
+		// Content, hash, and source are not sensitive and can remain unencrypted
+
+		// Check cipher availability with fallback support
+		$available_cipher_methods = openssl_get_cipher_methods();
+		$cipher                   = null;
+		$cipher_fallback          = null;
+		$use_encryption           = false;
+		$iv_length                = 12; // Default for GCM
+
+		// Try to find AES-256-GCM first (case-insensitive search)
+		foreach ( $available_cipher_methods as $method ) {
+			if ( strtolower( $method ) === 'aes-256-gcm' ) {
+				$cipher         = $method; // Use the actual name with original casing
+				$use_encryption = true;
+				// IV length already set to 12 (NIST recommended for AES-GCM)
+				break;
+			}
+			// If AES-256-GCM not found, try fallback to AES-256-CBC
+			if ( strtolower( $method ) === 'aes-256-cbc' ) {
+				$cipher_fallback = $method; // Use the actual name with original casing
+				$use_encryption  = true;
+			}
+		}
+
+		// Use the fallback cipher if the primary cipher is not available.
+		if ( $cipher === null && $cipher_fallback !== null ) {
+			$cipher    = $cipher_fallback;
+			$iv_length = 16; // 16-byte (128-bit) IV for AES-CBC
+		}
+
+		// Lazy fallback payload in case encryption fails or is unavailable.
+		$unencrypted_payload = array(
+			'attributes' => $attributes,
+			'content'    => $this->content,
+			'hash'       => $this->hash,
+			'source'     => $this->source->serialize(),
+			// No version field = version 1 (unencrypted)
 		);
+
+		if ( $use_encryption ) {
+			$iv        = random_bytes( $iv_length );
+			$tag       = ''; // Will be populated by openssl_encrypt for GCM
+			$encrypted = openssl_encrypt(
+				wp_json_encode( $attributes ),
+				$cipher,
+				$encryption_key,
+				OPENSSL_RAW_DATA, // Return raw binary data, not base64
+				$iv,
+				$tag
+			);
+
+			if ( $encrypted === false ) {
+				do_action( 'jetpack_forms_log', 'jwt_encryption_failed', openssl_error_string() );
+				return JWT::encode( $unencrypted_payload, $jwt_signing_key );
+			}
+			// For GCM, include the authentication tag; for CBC, tag will be empty
+			$encrypted_blob = stripos( $cipher, 'GCM' ) !== false ? $iv . $tag . $encrypted : $iv . $encrypted;
+
+			return JWT::encode(
+				array(
+					'encrypted_attributes' => base64_encode( $encrypted_blob ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Base64 encoding required for encrypted data storage
+					'content'              => $this->content,
+					'hash'                 => $this->hash,
+					'source'               => $this->source->serialize(),
+					'version'              => 2,
+					'cipher'               => $cipher, // Store which cipher was used
+				),
+				$jwt_signing_key
+			);
+		}
+
+		// No encryption available - fall back to version 1 format (unencrypted)
+		return JWT::encode( $unencrypted_payload, $jwt_signing_key );
 	}
 
 	/**
@@ -806,6 +980,7 @@ class Contact_Form extends Contact_Form_Shortcode {
 			'submissionSuccess'       => $submission_success,
 			'submissionError'         => null,
 			'elementId'               => $element_id,
+			'isSingleInputForm'       => $is_single_input_form,
 		);
 
 		if ( $is_multistep ) {
@@ -2146,11 +2321,21 @@ class Contact_Form extends Contact_Form_Shortcode {
 		);
 		$footer_ip = null;
 		if ( $comment_author_ip ) {
-			$comment_author_ip_with_flag = $comment_author_ip . ( $response->get_country_flag() ? ' ' . $response->get_country_flag() : '' );
+			$ip_lookup_url               = sprintf( 'https://jetpack.com/redirect/?source=ip-lookup&path=%s', rawurlencode( $comment_author_ip ) );
+			$comment_author_ip_with_link = '<a href="' . esc_url( $ip_lookup_url ) . '">' . esc_html( $comment_author_ip ) . '</a>';
+			$comment_author_ip_with_flag = ( $response->get_country_flag() ? $response->get_country_flag() . ' ' : '' ) . $comment_author_ip_with_link;
 			$footer_ip                   = sprintf(
 				/* translators: Placeholder is the IP address of the person who submitted a form. */
 				esc_html__( 'IP Address: %1$s', 'jetpack-forms' ),
 				$comment_author_ip_with_flag
+			);
+		}
+		$footer_browser = null;
+		if ( $response->get_browser() ) {
+			$footer_browser = sprintf(
+				/* translators: Placeholder is the browser and platform used to submit a form. */
+				esc_html__( 'Browser: %1$s', 'jetpack-forms' ),
+				$response->get_browser()
 			) . '<br />';
 		}
 
@@ -2194,6 +2379,7 @@ class Contact_Form extends Contact_Form_Shortcode {
 						'<span style="font-size: 12px">',
 						$footer_time . '<br />',
 						$footer_ip ? $footer_ip . '<br />' : null,
+						$footer_browser ? $footer_browser . '<br />' : null,
 						$footer_url . '<br /><br />',
 						$footer_mark_as_spam_url ? $footer_mark_as_spam_url . '<br />' : null,
 						$sent_by_text,

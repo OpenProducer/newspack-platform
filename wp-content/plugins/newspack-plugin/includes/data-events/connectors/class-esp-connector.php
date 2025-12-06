@@ -11,6 +11,7 @@ use Newspack\Data_Events;
 use Newspack\Reader_Activation;
 use Newspack\Reader_Activation\Sync;
 use Newspack_Newsletters_Contacts;
+use Newspack\WooCommerce_Connection;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -118,7 +119,7 @@ class ESP_Connector extends Reader_Activation\ESP_Sync {
 		$customer = new \WC_Customer( $data['user_id'] );
 
 		// If user is not a Woo customer, don't need to sync them.
-		if ( ! $customer->get_order_count() ) {
+		if ( ! $customer->get_order_count() && empty( WooCommerce_Connection::get_active_subscriptions_for_user( $data['user_id'] ) ) ) {
 			return;
 		}
 

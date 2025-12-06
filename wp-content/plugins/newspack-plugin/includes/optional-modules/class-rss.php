@@ -1188,6 +1188,10 @@ class RSS {
 				/** This filter is documented above in the use_image_tags block */
 				$image_size     = apply_filters( 'newspack_rss_image_size', RSS_Add_Image::RSS_IMAGE_SIZE, $settings, $post );
 				$thumbnail_data = wp_get_attachment_image_src( $thumbnail_id, $image_size );
+				$thumbnail_position = get_post_meta( $post->ID, 'newspack_featured_image_position', true );
+				if ( empty( $thumbnail_position ) ) {
+					$thumbnail_position = 'default';
+				}
 
 				if ( $thumbnail_data ) {
 					$caption = get_the_post_thumbnail_caption();
@@ -1203,6 +1207,7 @@ class RSS {
 					 */
 					$media_url = apply_filters( 'newspack_rss_media_content_url', $thumbnail_data[0], $thumbnail_id, $settings, $post );
 					?>
+					<thumbnail_position><?php echo esc_html( $thumbnail_position ); ?></thumbnail_position>
 					<media:content type="<?php echo esc_attr( get_post_mime_type( $thumbnail_id ) ); ?>" url="<?php echo esc_url( $media_url ); ?>">
 						<?php if ( ! empty( $caption ) ) : ?>
 						<media:description><![CDATA[<?php echo esc_html( $caption ); ?>]]></media:description>

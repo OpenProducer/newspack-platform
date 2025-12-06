@@ -2,6 +2,73 @@
 
 ### This is a list detailing changes for all Jetpack releases.
 
+## 15.3.1 - 2025-12-04
+- Forms: Use the correct case on cipher names. [#46189]
+
+## 15.3 - 2025-12-03
+### Enhancements
+- Forms: Add browser info to the form response email notification. [#45710]
+- Forms: Add form response webhook support. [#46059]
+- Forms: Add integrations to dashboard mobile menu. [#45744]
+- Forms: Add keyboard navigation to go through reponses quickly. [#45811]
+- Forms: Add WordPress Abilities API integration for form submissions management and integrations access. [#45998]
+- Forms: Change integrations modal width. [#45855]
+- Forms: Improve MailPoet subscriber handling. [#45905]
+- Forms: Improve name variation handling. [#46054]
+- Forms: Remove related-posts from API calls. [#45928]
+- Forms: Update dashboard header buttons. [#45983]
+- Forms: Use core WP colors for basic primitive components such as buttons at Forms dashboard. [#45845]
+- Forms: Use first/last name for author. [#45944]
+- Premium Content Block: Added email rendering callback. [#46006]
+- Social: Improve auto-share UI in the editor by streamlining the notices and descriptions. [#45970]
+- Social: Improve the sidebar by making titles more descriptive and combining sections. [#46007]
+- Social: Update the connections list in the editor to a vertical toggle list with labels and icons. [#45939]
+
+### Improved compatibility
+- Replace icons removed from @wordpress/icons with alternatives. [#45760]
+
+### Bug fixes
+- Cookies & Consents Banner Widget: ensure form headings are properly displayed. [#46144]
+- Fix a compatibility bug with the Gutenberg plugin. [#45967]
+- Forms: Do not link to empty source link. [#46133]
+- Forms: Ensure we show duplicate form field values on export. [#45809]
+- Forms: Fix integrations modal flash. [#45775]
+- Forms: Fix name variation isActive setting. [#46028]
+- Forms: Fix the flickering between the sidebar loading on different browser widths.
+- Forms: Reject form submissions when the parent post/page with the form has been deleted or is no longer published. [#46103]
+- Forms: Remove clashing between meta dn field names on export. [#46130]
+- GifBlock: Ensure url is not reset when publishing post. [#45900]
+- Google Docs: Ensure that slides/sheets embeds render on the front-end. [#45776]
+- GSheets embed: Give time for the iframe to finish before showing an error. [#46109]
+- My Jetpack: Fix expiring renewal prompt to show all products. [#45995]
+- Remove `getIconColor` functions for block icons. [#45992]
+- Restrict inline file preview to only image formats and PDFs, force download for other file types for security.
+- Social: Fix connection icon not reflecting the change when profile picture is updated. [#45937]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- About page: Remove Co-Authors Plus from and add ActivityPub to list of featured plugins. [#45792]
+- Blocks: Add filter to disable Jetpack block collection in editor. [#46077]
+- Editor assets endpoint: Filter returned assets with exclude query parameter. [#45715]
+- Editor assets endpoint: Mitigate hook errors originating from plugins referencing conditionally defined functions via `is_admin()`, which is false for the REST API. [#45924]
+- Editor assets endpoint: Refactor to reduce complexity. [#45714]
+- Improve PHP 8.5 compatibility. [#45771]
+- Jetpack AI: Remove tooltip for reading grade score. [#45847]
+- Likes: Update filter docblock formatting. [#46009]
+- Media Summary: Allow skipping excerpt and text counts. [#46091]
+- Newsletters: Add skeleton for new settings screen. [#46049]
+- Phan: Address PhanPossiblyUndeclaredVariable violations. [#45911]
+- Podcasts block: Prevent warnings when podcast content is malformed. [#46083]
+- Shortcodes: Extract the jmpress.js dependency into pnpm. [#45707]
+- Tests: Ensure PHP 8.5 compatibility. [#45769]
+- Updated Jetpack sidebar labels for post editor sidebar. [#46098]
+- Update Jetpack notifications script tag to use wp_print_inline_script_tag. This allows for injection of a nonce attribute and CSP compatibility. [#45878]
+- Update package dependencies. [#45737] [#45756] [#45758]
+- Update package dependencies. [#45915] [#45958]
+- Update package dependencies. [#45961]
+- Update package dependencies. [#46072] [#46079] [#46143]
+- Update Social preview to show title as well with the preview. [#45938]
+- Update to-test.md file. [#46042]
+
 ## 15.2 - 2025-11-04
 ### Enhancements
 - Forms: Add browser info to form responses exports. [#45709]
@@ -34,7 +101,7 @@
 - Don't translate product names. [#43961]
 - Sharing Buttons block: Update Reddit logo to match updated design. [#45484]
 - Sitemaps: Use XMLWriter by default for more performant sitemap generation. [#45527]
-- Subscription forms: provide autocomplete attribute for email fields, to help with filling in email addresses. [#44929]
+- Subscription forms: Provide autocomplete attribute for email fields, to help with filling in email addresses. [#44929]
 
 ### Improved compatibility
 - Custom post types: Ensure features remain available when theme support is added. [#45407]
@@ -68,7 +135,7 @@
 - Editor assets endpoint: Mock current screen to avoid fatal errors from plugins/themes. [#45617]
 - External media: Prevent site editor performance issues by bringing back previous script enqueue approach. [#45546]
 - Fix duplicate tracking event for carousel. [#45720]
-- Flex sites: Return the is_wpcom_flex flag from the sites API for deleted sites. [#45719]
+- Flex sites: Return the `is_wpcom_flex` flag from the sites API for deleted sites. [#45719]
 - Flex sites: Return the `is_wpcom_flex` flag from the sites API. [#45395]
 - Forms: Add browser info to form responses detail view. [#45674]
 - Forms: Fix plugin activation state. [#45471]
@@ -83,8 +150,7 @@
 - Slideshow block: Fix sizing for lazy-loaded images. [#45164]
 - Sync: Handle lazy-loading of `WP_User` object properties. [#45450]
 - Tests: Update WooCommerce sync related tests to account for whitelisting order item meta. [#45684]
-- Update package dependencies. [#45478]
-- Update package dependencies. [#45652] [#45676] [#45677]
+- Update package dependencies. [#45478] [#45652] [#45676] [#45677]
 
 ## 15.1.1 - 2025-10-10
 ### Bug fixes

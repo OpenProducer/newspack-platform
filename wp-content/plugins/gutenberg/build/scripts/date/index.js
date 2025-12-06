@@ -1732,7 +1732,7 @@ var wp;
       datetime: "F j, Y g: i a",
       datetimeAbbreviated: "M j, Y g: i a"
     },
-    timezone: { offset: "0", offsetFormatted: "0", string: "", abbr: "" }
+    timezone: { offset: 0, offsetFormatted: "0", string: "", abbr: "" }
   };
   function setSettings(dateSettings) {
     settings = dateSettings;

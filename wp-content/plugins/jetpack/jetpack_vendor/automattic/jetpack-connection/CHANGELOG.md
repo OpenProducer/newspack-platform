@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.19.9] - 2025-12-01
+### Changed
+- SSO: Revised copy for flagging external collaborators. [#46108]
+- Update package dependencies. [#46143]
+
+## [6.19.8] - 2025-11-20
+### Fixed
+- Phan: Address PhanPossiblyUndeclaredVariable violations. [#45911]
+
+## [6.19.7] - 2025-11-18
+### Changed
+- Update package dependencies. [#45961]
+
+## [6.19.6] - 2025-11-17
+### Changed
+- Update package dependencies. [#45915]
+
+## [6.19.5] - 2025-11-12
+### Fixed
+- OAuth: fix the 'body-hash' error triggered during app authorization. [#45820]
+
+## [6.19.4] - 2025-11-10
+### Changed
+- Tests: Improve compatibility with PHP 8.5. [#45769] [#45771]
+
 ## [6.19.3] - 2025-11-03
 ### Changed
 - Update dependencies. [#45493]
@@ -1631,6 +1656,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Separate the connection library into its own package.
 
+[6.19.9]: https://github.com/Automattic/jetpack-connection/compare/v6.19.8...v6.19.9
+[6.19.8]: https://github.com/Automattic/jetpack-connection/compare/v6.19.7...v6.19.8
+[6.19.7]: https://github.com/Automattic/jetpack-connection/compare/v6.19.6...v6.19.7
+[6.19.6]: https://github.com/Automattic/jetpack-connection/compare/v6.19.5...v6.19.6
+[6.19.5]: https://github.com/Automattic/jetpack-connection/compare/v6.19.4...v6.19.5
+[6.19.4]: https://github.com/Automattic/jetpack-connection/compare/v6.19.3...v6.19.4
 [6.19.3]: https://github.com/Automattic/jetpack-connection/compare/v6.19.2...v6.19.3
 [6.19.2]: https://github.com/Automattic/jetpack-connection/compare/v6.19.1...v6.19.2
 [6.19.1]: https://github.com/Automattic/jetpack-connection/compare/v6.19.0...v6.19.1
