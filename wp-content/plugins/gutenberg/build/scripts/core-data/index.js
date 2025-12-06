@@ -17949,7 +17949,7 @@ var wp;
       path: (0, import_url7.addQueryArgs)("/wp/v2/templates/lookup", query)
     });
     await resolveSelect.getEntitiesConfig("postType");
-    const id2 = template?.wp_id || template?.id;
+    const id2 = window?.__experimentalTemplateActivate ? template?.wp_id || template?.id : template?.id;
     if (id2) {
       template.id = id2;
       registry.batch(() => {

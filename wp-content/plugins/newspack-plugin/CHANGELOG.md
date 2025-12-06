@@ -1,3 +1,31 @@
+## [6.26.4](https://github.com/Automattic/newspack-plugin/compare/v6.26.3...v6.26.4) (2025-12-04)
+
+
+### Bug Fixes
+
+* add thumbnail position to rss feeds ([#4336](https://github.com/Automattic/newspack-plugin/issues/4336)) ([cf4a668](https://github.com/Automattic/newspack-plugin/commit/cf4a668f7c502b0b4800f2d4da0c5610ab584652))
+
+## [6.26.3](https://github.com/Automattic/newspack-plugin/compare/v6.26.2...v6.26.3) (2025-12-04)
+
+
+### Bug Fixes
+
+* workaround issue and conflict with teams ([#4342](https://github.com/Automattic/newspack-plugin/issues/4342)) ([c9b3f5c](https://github.com/Automattic/newspack-plugin/commit/c9b3f5cca05fd1f9507fd551f17047712c6dd2d8))
+
+## [6.26.2](https://github.com/Automattic/newspack-plugin/compare/v6.26.1...v6.26.2) (2025-12-04)
+
+
+### Bug Fixes
+
+* hide block visibility from all blocks ([#4339](https://github.com/Automattic/newspack-plugin/issues/4339)) ([9cadf45](https://github.com/Automattic/newspack-plugin/commit/9cadf45d8b51df494f8f34b9191be5f9271a1fd1))
+
+## [6.26.1](https://github.com/Automattic/newspack-plugin/compare/v6.26.0...v6.26.1) (2025-12-03)
+
+
+### Bug Fixes
+
+* Hotfix/active subscription checks ([#4334](https://github.com/Automattic/newspack-plugin/issues/4334)) ([486a1e7](https://github.com/Automattic/newspack-plugin/commit/486a1e766f506d0103234a93e7a05c21df0da351))
+
 # [6.26.0](https://github.com/Automattic/newspack-plugin/compare/v6.25.1...v6.26.0) (2025-12-02)
 
 

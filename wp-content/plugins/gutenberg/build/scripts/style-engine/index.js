@@ -312,7 +312,18 @@ var wp;
       );
     }
   };
-  var dimensions_default = [minHeight, aspectRatio];
+  var width2 = {
+    name: "width",
+    generate: (style, options) => {
+      return generateRule(
+        style,
+        options,
+        ["dimensions", "width"],
+        "width"
+      );
+    }
+  };
+  var dimensions_default = [minHeight, aspectRatio, width2];
 
   // packages/style-engine/build-module/styles/background/index.js
   var backgroundImage = {
@@ -419,13 +430,13 @@ var wp;
       return generateRule(style, options, path, ruleKey);
     }
   };
-  var width2 = {
+  var width3 = {
     name: "width",
     generate: (style, options, path = ["outline", "width"], ruleKey = "outlineWidth") => {
       return generateRule(style, options, path, ruleKey);
     }
   };
-  var outline_default = [color2, outlineStyle, offset, width2];
+  var outline_default = [color2, outlineStyle, offset, width3];
 
   // packages/style-engine/build-module/styles/spacing/padding.js
   var padding = {

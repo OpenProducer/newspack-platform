@@ -2268,6 +2268,13 @@ final class Reader_Activation {
 			// Unhook from WooCommerce as it's already been canonized above.
 			remove_filter( 'woocommerce_new_customer_data', [ __CLASS__, 'canonize_user_data' ], 10, 1 );
 			if ( function_exists( '\wc_create_new_customer' ) ) {
+
+				// Avoid an issue with Teams for Memberships plugin that messes up billing first and last name and display name.
+				// See SkyVerge\WooCommerce\Memberships\Teams\Frontend::save_team_member_name().
+				if ( function_exists( 'wc_memberships_for_teams' ) ) {
+					remove_action( 'woocommerce_created_customer', [ wc_memberships_for_teams()->get_frontend_instance(), 'save_team_member_name' ] );
+				}
+
 				/**
 				 * Create WooCommerce Customer if possible.
 				 * Email notification for WooCommerce is handled by the plugin.

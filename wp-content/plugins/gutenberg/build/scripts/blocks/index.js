@@ -5097,6 +5097,11 @@ var wp;
       support: ["dimensions", "minHeight"],
       useEngine: true
     },
+    width: {
+      value: ["dimensions", "width"],
+      support: ["dimensions", "width"],
+      useEngine: true
+    },
     padding: {
       value: ["spacing", "padding"],
       support: ["spacing", "padding"],
@@ -10229,8 +10234,10 @@ ${p3}`
   }
 
   // packages/blocks/build-module/api/index.js
+  var fieldsKey = Symbol("fields");
+  var formKey = Symbol("form");
   var privateApis = {};
-  lock(privateApis, { isContentBlock });
+  lock(privateApis, { isContentBlock, fieldsKey, formKey });
 
   // packages/blocks/build-module/deprecated.js
   var import_deprecated11 = __toESM(require_deprecated());

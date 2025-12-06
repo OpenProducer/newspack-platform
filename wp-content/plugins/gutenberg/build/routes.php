@@ -37,7 +37,7 @@ $register_routes_callback = function ( $page_routes, $page_slug_underscore, $reg
 				$content_asset_path = __DIR__ . "/routes/{$route['name']}/content.min.asset.php";
 				if ( file_exists( $content_asset_path ) ) {
 					$content_asset = require $content_asset_path;
-					$content_handle = 'wordpress/routes/' . $route['name'] . '/content';
+					$content_handle = 'wp/routes/' . $route['name'] . '/content';
 					$extension = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
 					wp_register_script_module(
 						$content_handle,
@@ -53,7 +53,7 @@ $register_routes_callback = function ( $page_routes, $page_slug_underscore, $reg
 				$route_asset_path = __DIR__ . "/routes/{$route['name']}/route.min.asset.php";
 				if ( file_exists( $route_asset_path ) ) {
 					$route_asset = require $route_asset_path;
-					$route_handle = 'wordpress/routes/' . $route['name'] . '/route';
+					$route_handle = 'wp/routes/' . $route['name'] . '/route';
 					$extension = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
 					wp_register_script_module(
 						$route_handle,

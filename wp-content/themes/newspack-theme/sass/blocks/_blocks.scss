@@ -228,7 +228,7 @@ h6 {
 }
 
 //! Paragraphs
-.has-drop-cap:not(:focus)::first-letter {
+p.has-drop-cap:not(:focus)::first-letter {
 	font-size: 4em;
 	line-height: 0.75;
 	margin: 0.125em #{0.75 * structure.$size__spacing-unit} 0 0;

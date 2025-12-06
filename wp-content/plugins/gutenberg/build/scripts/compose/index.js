@@ -1909,11 +1909,23 @@ var wp;
       if (node.contains(node.ownerDocument?.activeElement ?? null)) {
         return;
       }
-      if (focusOnMountRef.current !== "firstElement") {
+      if (focusOnMountRef.current !== "firstElement" && focusOnMountRef.current !== "firstInputElement") {
         setFocus(node);
         return;
       }
       timerIdRef.current = setTimeout(() => {
+        if (focusOnMountRef.current === "firstInputElement") {
+          let formInput = null;
+          if (typeof window !== "undefined" && node instanceof window.Element) {
+            formInput = node.querySelector(
+              'input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled])'
+            );
+          }
+          if (formInput) {
+            setFocus(formInput);
+            return;
+          }
+        }
         const firstTabbable = import_dom2.focus.tabbable.find(node)[0];
         if (firstTabbable) {
           setFocus(firstTabbable);

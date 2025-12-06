@@ -174,7 +174,7 @@ var wp;
     text = text.replace(/\n<\/p>$/g, "</p>");
     preTags.forEach((preTag) => {
       const [name, original] = preTag;
-      text = text.replace(name, original);
+      text = text.replace(name, () => original);
     });
     if (-1 !== text.indexOf("<!-- wpnl -->")) {
       text = text.replace(/\s?<!-- wpnl -->\s?/g, "\n");
