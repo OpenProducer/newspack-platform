@@ -2370,18 +2370,6 @@ var wp;
   // packages/customize-widgets/build-module/filters/replace-media-upload.js
   var import_hooks3 = __toESM(require_hooks());
   var import_media_utils2 = __toESM(require_media_utils());
-  var { MediaUploadModal: MediaUploadModalComponent } = unlock(
-    import_media_utils2.privateApis
-  );
-  if (window.__experimentalDataViewsMediaModal) {
-    (0, import_hooks3.addFilter)(
-      "editor.MediaUploadModal",
-      "core/customize-widgets/replace-media-upload-modal",
-      () => {
-        return MediaUploadModalComponent;
-      }
-    );
-  }
   var replaceMediaUpload = () => import_media_utils2.MediaUpload;
   (0, import_hooks3.addFilter)(
     "editor.MediaUpload",
@@ -2427,7 +2415,7 @@ var wp;
     });
     (0, import_data17.dispatch)(import_blocks2.store).reapplyBlockTypeFilters();
     const coreBlocks = (0, import_block_library2.__experimentalGetCoreBlocks)().filter((block) => {
-      return !(DISABLED_BLOCKS.includes(block.name) || block.name.startsWith("core/post") || block.name.startsWith("core/query") || block.name.startsWith("core/site") || block.name.startsWith("core/navigation"));
+      return !(DISABLED_BLOCKS.includes(block.name) || block.name.startsWith("core/post") || block.name.startsWith("core/query") || block.name.startsWith("core/site") || block.name.startsWith("core/navigation") || block.name.startsWith("core/term"));
     });
     (0, import_block_library2.registerCoreBlocks)(coreBlocks);
     (0, import_widgets5.registerLegacyWidgetBlock)();

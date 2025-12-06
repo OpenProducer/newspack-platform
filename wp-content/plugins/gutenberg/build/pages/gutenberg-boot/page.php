@@ -39,12 +39,13 @@ if ( ! function_exists( 'register_gutenberg_boot_menu_item' ) ) {
 	/**
 	 * Register a menu item for the gutenberg-boot page.
 	 *
-	 * @param string $id        Menu item ID.
-	 * @param string $label     Display label.
-	 * @param string $to        Route path to navigate to.
-	 * @param string $parent_id Optional. Parent menu item ID.
+	 * @param string $id          Menu item ID.
+	 * @param string $label       Display label.
+	 * @param string $to          Route path to navigate to.
+	 * @param string $parent_id   Optional. Parent menu item ID.
+	 * @param string $parent_type Optional. Parent type: 'drilldown' or 'dropdown'.
 	 */
-	function register_gutenberg_boot_menu_item( $id, $label, $to, $parent_id = '' ) {
+	function register_gutenberg_boot_menu_item( $id, $label, $to, $parent_id = '', $parent_type = '' ) {
 		global $gutenberg_gutenberg_boot_menu_items;
 
 		$menu_item = array(
@@ -55,6 +56,10 @@ if ( ! function_exists( 'register_gutenberg_boot_menu_item' ) ) {
 
 		if ( ! empty( $parent_id ) ) {
 			$menu_item['parent'] = $parent_id;
+		}
+
+		if ( ! empty( $parent_type ) && in_array( $parent_type, array( 'drilldown', 'dropdown' ), true ) ) {
+			$menu_item['parent_type'] = $parent_type;
 		}
 
 		$gutenberg_gutenberg_boot_menu_items[] = $menu_item;
@@ -157,13 +162,15 @@ if ( ! function_exists( 'gutenberg_boot_render_page' ) ) {
 			wp_register_script( 'gutenberg-boot-prerequisites', '', $asset['dependencies'], $asset['version'], true );
 
 			// Add inline script to initialize the app
+			$init_modules = ["@wordpress/edit-site-init"];
 			wp_add_inline_script(
 				'gutenberg-boot-prerequisites',
 				sprintf(
-					'import("@wordpress/boot").then(mod => mod.init({mountId: "%s", menuItems: %s, routes: %s}));',
+					'import("@wordpress/boot").then(mod => mod.init({mountId: "%s", menuItems: %s, routes: %s, initModules: %s}));',
 					'gutenberg-boot-app',
 					wp_json_encode( $menu_items, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ),
-					wp_json_encode( $routes, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES )
+					wp_json_encode( $routes, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ),
+					wp_json_encode( $init_modules, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES )
 				)
 			);
 
@@ -183,6 +190,9 @@ if ( ! function_exists( 'gutenberg_boot_render_page' ) ) {
 					'id'     => '@wordpress/boot',
 				),
 			);
+
+			// Add init modules as static dependencies
+			$boot_dependencies[] = array( 'import' => 'static', 'id' => '@wordpress/edit-site-init' );
 
 			// Add all registered routes as dependencies
 			foreach ( $routes as $route ) {

@@ -16,7 +16,7 @@ class WooCommerce_Connection {
 	/**
 	 * Statuses considered active.
 	 */
-	const ACTIVE_SUBSCRIPTION_STATUSES = [ 'active', 'pending', 'pending-cancel' ];
+	const ACTIVE_SUBSCRIPTION_STATUSES = [ 'active', 'pending-cancel' ];
 	const ACTIVE_ORDER_STATUSES = [ 'processing', 'completed' ];
 
 
@@ -270,6 +270,8 @@ class WooCommerce_Connection {
 	 * Can optionally pass an array of product IDs. If given, only subscriptions
 	 * that have at least one of the given product IDs will be returned.
 	 *
+	 * If the subscription was a gift, it will return true only if the given user is the recipient.
+	 *
 	 * @param int   $user_id User ID.
 	 * @param array $product_ids Optional array of product IDs to filter by.
 	 *
@@ -281,17 +283,23 @@ class WooCommerce_Connection {
 		}
 		$subcriptions = array_reduce(
 			array_keys( \wcs_get_users_subscriptions( $user_id ) ),
-			function( $acc, $subscription_id ) use ( $product_ids ) {
+			function( $acc, $subscription_id ) use ( $product_ids, $user_id ) {
 				$subscription = \wcs_get_subscription( $subscription_id );
+				$has_required_products = false;
 				if ( $subscription->has_status( self::ACTIVE_SUBSCRIPTION_STATUSES ) ) {
 					if ( ! empty( $product_ids ) ) {
 						foreach ( $product_ids as $product_id ) {
 							if ( $subscription->has_product( $product_id ) ) {
-								$acc[] = $subscription_id;
-								return $acc;
+								$has_required_products = true;
+								break;
 							}
 						}
 					} else {
+						$has_required_products = true;
+					}
+				}
+				if ( $has_required_products ) {
+					if ( ! class_exists( 'WCS_Gifting' ) || ! \WCS_Gifting::is_gifted_subscription( $subscription ) || (int) \WCS_Gifting::get_recipient_user( $subscription ) === (int) $user_id ) {
 						$acc[] = $subscription_id;
 					}
 				}

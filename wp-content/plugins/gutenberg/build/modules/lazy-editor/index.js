@@ -66,6 +66,13 @@ var require_style_engine = __commonJS({
   }
 });
 
+// package-external:@wordpress/i18n
+var require_i18n = __commonJS({
+  "package-external:@wordpress/i18n"(exports, module) {
+    module.exports = window.wp.i18n;
+  }
+});
+
 // package-external:@wordpress/blocks
 var require_blocks = __commonJS({
   "package-external:@wordpress/blocks"(exports, module) {
@@ -87,7 +94,14 @@ var require_jsx_runtime = __commonJS({
   }
 });
 
-// packages/lazy-editor/build-module/component.js
+// package-external:@wordpress/block-editor
+var require_block_editor = __commonJS({
+  "package-external:@wordpress/block-editor"(exports, module) {
+    module.exports = window.wp.blockEditor;
+  }
+});
+
+// packages/lazy-editor/build-module/components/editor/index.js
 var import_editor = __toESM(require_editor());
 var import_core_data5 = __toESM(require_core_data());
 var import_data6 = __toESM(require_data());
@@ -97,7 +111,7 @@ var import_element4 = __toESM(require_element());
 // packages/lazy-editor/build-module/hooks/use-styles-id.js
 var import_core_data = __toESM(require_core_data());
 var import_data = __toESM(require_data());
-function useStylesId({ templateId }) {
+function useStylesId({ templateId } = {}) {
   const { globalStylesId, stylesId } = (0, import_data.useSelect)(
     (select2) => {
       const coreDataSelect = select2(import_core_data.store);
@@ -171,6 +185,7 @@ var VALID_SETTINGS = [
   "custom",
   "dimensions.aspectRatio",
   "dimensions.minHeight",
+  "dimensions.width",
   "layout.contentSize",
   "layout.definitions",
   "layout.wideSize",
@@ -1098,6 +1113,7 @@ var ELEMENT_CLASS_NAMES = {
 var BLOCK_SUPPORT_FEATURE_LEVEL_SELECTORS = {
   __experimentalBorder: "border",
   color: "color",
+  dimensions: "dimensions",
   spacing: "spacing",
   typography: "typography"
 };
@@ -1935,12 +1951,12 @@ function updateConfigWithSeparator(config) {
   }
   return config;
 }
-function processCSSNesting(css, blockSelector) {
+function processCSSNesting(css2, blockSelector) {
   let processedCSS = "";
-  if (!css || css.trim() === "") {
+  if (!css2 || css2.trim() === "") {
     return processedCSS;
   }
-  const parts = css.split("&");
+  const parts = css2.split("&");
   parts.forEach((part) => {
     if (!part || part.trim() === "") {
       return;
@@ -1973,7 +1989,8 @@ function generateGlobalStyles(config = {}, blockTypes = [], options = {}) {
     hasBlockGapSupport: hasBlockGapSupportOption,
     hasFallbackGapSupport: hasFallbackGapSupportOption,
     disableLayoutStyles = false,
-    disableRootPadding = false
+    disableRootPadding = false,
+    styleOptions = {}
   } = options;
   const blocks = blockTypes.length > 0 ? blockTypes : (0, import_blocks.getBlockTypes)();
   const blockGap = getSetting(config, "spacing.blockGap");
@@ -1994,7 +2011,8 @@ function generateGlobalStyles(config = {}, blockTypes = [], options = {}) {
     hasBlockGapSupport,
     hasFallbackGapSupport,
     disableLayoutStyles,
-    disableRootPadding
+    disableRootPadding,
+    styleOptions
   );
   const svgs = generateSvgFilters(updatedConfig, blockSelectors);
   const styles = [
@@ -2130,6 +2148,41 @@ function useEditorSettings({ stylesId }) {
 }
 
 // packages/asset-loader/build-module/index.js
+function injectImportMap(scriptModules) {
+  if (!scriptModules || Object.keys(scriptModules).length === 0) {
+    return;
+  }
+  const existingMapElement = document.querySelector(
+    "script#wp-importmap[type=importmap]"
+  );
+  if (existingMapElement) {
+    try {
+      const existingMap = JSON.parse(existingMapElement.text);
+      if (!existingMap.imports) {
+        existingMap.imports = {};
+      }
+      existingMap.imports = {
+        ...existingMap.imports,
+        ...scriptModules
+      };
+      existingMapElement.text = JSON.stringify(existingMap, null, 2);
+    } catch (error) {
+      console.error("Failed to parse or update import map:", error);
+    }
+  } else {
+    const script = document.createElement("script");
+    script.type = "importmap";
+    script.id = "wp-importmap";
+    script.text = JSON.stringify(
+      {
+        imports: scriptModules
+      },
+      null,
+      2
+    );
+    document.head.appendChild(script);
+  }
+}
 function loadStylesheet(handle, styleData) {
   return new Promise((resolve) => {
     if (!styleData.src) {
@@ -2248,7 +2301,10 @@ async function performScriptLoad(scriptElements, destination) {
   await Promise.all(parallel);
   parallel = [];
 }
-async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles) {
+async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles, htmlTemplates, scriptModules) {
+  if (scriptModules) {
+    injectImportMap(scriptModules);
+  }
   const orderedStyles = buildDependencyOrderedList(stylesData);
   const orderedScripts = buildDependencyOrderedList(scriptsData);
   const stylePromises = [];
@@ -2263,11 +2319,8 @@ async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles) 
       injectInlineStyle(handle, afterInline, "after");
     }
   }
-  const scriptElementsHead = [];
-  const scriptElementsBody = [];
+  const scriptElements = [];
   for (const handle of orderedScripts) {
-    const inFooter = scriptsData[handle].in_footer || false;
-    const scriptElements = inFooter ? scriptElementsBody : scriptElementsHead;
     const beforeInline = inlineScripts.before?.[handle];
     if (beforeInline) {
       scriptElements.push(
@@ -2282,11 +2335,30 @@ async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles) 
       );
     }
   }
-  const scriptsPromise = (async () => {
-    await performScriptLoad(scriptElementsHead, document.head);
-    await performScriptLoad(scriptElementsBody, document.body);
-  })();
+  const scriptsPromise = performScriptLoad(scriptElements, document.body);
   await Promise.all([Promise.all(stylePromises), scriptsPromise]);
+  if (htmlTemplates && htmlTemplates.length > 0) {
+    htmlTemplates.forEach((templateHtml) => {
+      const scriptMatch = templateHtml.match(
+        /<script([^>]*)>(.*?)<\/script>/is
+      );
+      if (scriptMatch) {
+        const attributes = scriptMatch[1];
+        const content = scriptMatch[2];
+        const script = document.createElement("script");
+        const idMatch = attributes.match(/id=["']([^"']+)["']/);
+        if (idMatch) {
+          script.id = idMatch[1];
+        }
+        const typeMatch = attributes.match(/type=["']([^"']+)["']/);
+        if (typeMatch) {
+          script.type = typeMatch[1];
+        }
+        script.textContent = content;
+        document.body.appendChild(script);
+      }
+    });
+  }
 }
 var index_default = loadAssets;
 
@@ -2304,7 +2376,9 @@ async function loadEditorAssets() {
       editorAssets.scripts || {},
       editorAssets.inline_scripts || { before: {}, after: {} },
       editorAssets.styles || {},
-      editorAssets.inline_styles || { before: {}, after: {} }
+      editorAssets.inline_styles || { before: {}, after: {} },
+      editorAssets.html_templates || [],
+      editorAssets.script_modules || {}
     );
   };
   if (!loadAssetsPromise) {
@@ -2332,7 +2406,7 @@ function useEditorAssets() {
   };
 }
 
-// packages/lazy-editor/build-module/component.js
+// packages/lazy-editor/build-module/components/editor/index.js
 var import_jsx_runtime = __toESM(require_jsx_runtime());
 var { Editor: PrivateEditor, BackButton } = unlock(import_editor.privateApis);
 function Editor({
@@ -2341,20 +2415,32 @@ function Editor({
   settings,
   backButton
 }) {
-  const templateId = (0, import_data6.useSelect)(
+  const homePage = (0, import_data6.useSelect)(
     (select2) => {
-      if (!postType || !postId) {
-        return void 0;
+      if (postType || postId) {
+        return null;
       }
-      if (postType === "wp_template") {
-        return postId;
-      }
-      return unlock(select2(import_core_data5.store)).getTemplateId(
-        postType,
-        postId
-      );
+      const { getHomePage } = unlock(select2(import_core_data5.store));
+      return getHomePage();
     },
     [postType, postId]
+  );
+  const resolvedPostType = postType || homePage?.postType;
+  const resolvedPostId = postId || homePage?.postId;
+  const templateId = (0, import_data6.useSelect)(
+    (select2) => {
+      if (!resolvedPostType || !resolvedPostId) {
+        return void 0;
+      }
+      if (resolvedPostType === "wp_template") {
+        return resolvedPostId;
+      }
+      return unlock(select2(import_core_data5.store)).getTemplateId(
+        resolvedPostType,
+        resolvedPostId
+      );
+    },
+    [resolvedPostType, resolvedPostId]
   );
   const stylesId = useStylesId({ templateId });
   const { isReady: settingsReady, editorSettings } = useEditorSettings({
@@ -2385,8 +2471,8 @@ function Editor({
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     PrivateEditor,
     {
-      postType,
-      postId,
+      postType: resolvedPostType,
+      postId: resolvedPostId,
       templateId,
       settings: finalSettings,
       styles: finalSettings.styles,
@@ -2394,7 +2480,139 @@ function Editor({
     }
   );
 }
+
+// packages/lazy-editor/build-module/components/preview/index.js
+var import_i18n = __toESM(require_i18n());
+var import_element5 = __toESM(require_element());
+var import_block_editor = __toESM(require_block_editor());
+var import_editor2 = __toESM(require_editor());
+var import_blocks2 = __toESM(require_blocks());
+var import_jsx_runtime2 = __toESM(require_jsx_runtime());
+var css = `/**
+ * SCSS Variables.
+ *
+ * Please use variables from this sheet to ensure consistency across the UI.
+ * Don't add to this sheet unless you're pretty sure the value will be reused in many places.
+ * For example, don't add rules to this sheet that affect block visuals. It's purely for UI.
+ */
+/**
+ * Colors
+ */
+/**
+ * Fonts & basic variables.
+ */
+/**
+ * Typography
+ */
+/**
+ * Grid System.
+ * https://make.wordpress.org/design/2019/10/31/proposal-a-consistent-spacing-system-for-wordpress/
+ */
+/**
+ * Radius scale.
+ */
+/**
+ * Elevation scale.
+ */
+/**
+ * Dimensions.
+ */
+/**
+ * Mobile specific styles
+ */
+/**
+ * Editor styles.
+ */
+/**
+ * Block & Editor UI.
+ */
+/**
+ * Block paddings.
+ */
+/**
+ * React Native specific.
+ * These variables do not appear to be used anywhere else.
+ */
+.lazy-editor-block-preview__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 4px;
+}
+.dataviews-view-grid .lazy-editor-block-preview__container .block-editor-block-preview__container {
+  height: 100%;
+}
+.dataviews-view-table .lazy-editor-block-preview__container {
+  width: 96px;
+  flex-grow: 0;
+  text-wrap: balance;
+  text-wrap: pretty;
+}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL2hvbWUvcnVubmVyL3dvcmsvZ3V0ZW5iZXJnL2d1dGVuYmVyZy9wYWNrYWdlcy9sYXp5LWVkaXRvci9zcmMvY29tcG9uZW50cy9wcmV2aWV3Iiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvQHdvcmRwcmVzcy9iYXNlLXN0eWxlcy9fdmFyaWFibGVzLnNjc3MiLCIuLi8uLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvQHdvcmRwcmVzcy9iYXNlLXN0eWxlcy9fY29sb3JzLnNjc3MiLCJzdHlsZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FDQUE7QUFBQTtBQUFBO0FEVUE7QUFBQTtBQUFBO0FBT0E7QUFBQTtBQUFBO0FBNkJBO0FBQUE7QUFBQTtBQUFBO0FBaUJBO0FBQUE7QUFBQTtBQVdBO0FBQUE7QUFBQTtBQWdCQTtBQUFBO0FBQUE7QUF5QkE7QUFBQTtBQUFBO0FBS0E7QUFBQTtBQUFBO0FBZUE7QUFBQTtBQUFBO0FBbUJBO0FBQUE7QUFBQTtBQVNBO0FBQUE7QUFBQTtBQUFBO0FFaktBO0VBQ0M7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBLGVGNkRlOztBRTFEZDtFQUNDOztBQUlGO0VBQ0M7RUFDQTtFQUNBO0VBQ0EiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIFNDU1MgVmFyaWFibGVzLlxuICpcbiAqIFBsZWFzZSB1c2UgdmFyaWFibGVzIGZyb20gdGhpcyBzaGVldCB0byBlbnN1cmUgY29uc2lzdGVuY3kgYWNyb3NzIHRoZSBVSS5cbiAqIERvbid0IGFkZCB0byB0aGlzIHNoZWV0IHVubGVzcyB5b3UncmUgcHJldHR5IHN1cmUgdGhlIHZhbHVlIHdpbGwgYmUgcmV1c2VkIGluIG1hbnkgcGxhY2VzLlxuICogRm9yIGV4YW1wbGUsIGRvbid0IGFkZCBydWxlcyB0byB0aGlzIHNoZWV0IHRoYXQgYWZmZWN0IGJsb2NrIHZpc3VhbHMuIEl0J3MgcHVyZWx5IGZvciBVSS5cbiAqL1xuXG5AdXNlIFwiLi9jb2xvcnNcIjtcblxuLyoqXG4gKiBGb250cyAmIGJhc2ljIHZhcmlhYmxlcy5cbiAqL1xuXG4kZGVmYXVsdC1mb250OiAtYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsXCJTZWdvZSBVSVwiLCBSb2JvdG8sIE94eWdlbi1TYW5zLCBVYnVudHUsIENhbnRhcmVsbCxcIkhlbHZldGljYSBOZXVlXCIsIHNhbnMtc2VyaWY7IC8vIFRvZG86IGRlcHJlY2F0ZSBpbiBmYXZvciBvZiAkZmFtaWx5IHZhcmlhYmxlc1xuJGRlZmF1bHQtbGluZS1oZWlnaHQ6IDEuNDsgLy8gVG9kbzogZGVwcmVjYXRlIGluIGZhdm9yIG9mICRsaW5lLWhlaWdodCB0b2tlbnNcblxuLyoqXG4gKiBUeXBvZ3JhcGh5XG4gKi9cblxuLy8gU2l6ZXNcbiRmb250LXNpemUteC1zbWFsbDogMTFweDtcbiRmb250LXNpemUtc21hbGw6IDEycHg7XG4kZm9udC1zaXplLW1lZGl1bTogMTNweDtcbiRmb250LXNpemUtbGFyZ2U6IDE1cHg7XG4kZm9udC1zaXplLXgtbGFyZ2U6IDIwcHg7XG4kZm9udC1zaXplLTJ4LWxhcmdlOiAzMnB4O1xuXG4vLyBMaW5lIGhlaWdodHNcbiRmb250LWxpbmUtaGVpZ2h0LXgtc21hbGw6IDE2cHg7XG4kZm9udC1saW5lLWhlaWdodC1zbWFsbDogMjBweDtcbiRmb250LWxpbmUtaGVpZ2h0LW1lZGl1bTogMjRweDtcbiRmb250LWxpbmUtaGVpZ2h0LWxhcmdlOiAyOHB4O1xuJGZvbnQtbGluZS1oZWlnaHQteC1sYXJnZTogMzJweDtcbiRmb250LWxpbmUtaGVpZ2h0LTJ4LWxhcmdlOiA0MHB4O1xuXG4vLyBXZWlnaHRzXG4kZm9udC13ZWlnaHQtcmVndWxhcjogNDAwO1xuJGZvbnQtd2VpZ2h0LW1lZGl1bTogNDk5OyAvLyBlbnN1cmVzIGZhbGxiYWNrIHRvIDQwMCAoaW5zdGVhZCBvZiA2MDApXG5cbi8vIEZhbWlsaWVzXG4kZm9udC1mYW1pbHktaGVhZGluZ3M6IC1hcHBsZS1zeXN0ZW0sIFwic3lzdGVtLXVpXCIsIFwiU2Vnb2UgVUlcIiwgUm9ib3RvLCBPeHlnZW4tU2FucywgVWJ1bnR1LCBDYW50YXJlbGwsIFwiSGVsdmV0aWNhIE5ldWVcIiwgc2Fucy1zZXJpZjtcbiRmb250LWZhbWlseS1ib2R5OiAtYXBwbGUtc3lzdGVtLCBcInN5c3RlbS11aVwiLCBcIlNlZ29lIFVJXCIsIFJvYm90bywgT3h5Z2VuLVNhbnMsIFVidW50dSwgQ2FudGFyZWxsLCBcIkhlbHZldGljYSBOZXVlXCIsIHNhbnMtc2VyaWY7XG4kZm9udC1mYW1pbHktbW9ubzogTWVubG8sIENvbnNvbGFzLCBtb25hY28sIG1vbm9zcGFjZTtcblxuLyoqXG4gKiBHcmlkIFN5c3RlbS5cbiAqIGh0dHBzOi8vbWFrZS53b3JkcHJlc3Mub3JnL2Rlc2lnbi8yMDE5LzEwLzMxL3Byb3Bvc2FsLWEtY29uc2lzdGVudC1zcGFjaW5nLXN5c3RlbS1mb3Itd29yZHByZXNzL1xuICovXG5cbiRncmlkLXVuaXQ6IDhweDtcbiRncmlkLXVuaXQtMDU6IDAuNSAqICRncmlkLXVuaXQ7XHQvLyA0cHhcbiRncmlkLXVuaXQtMTA6IDEgKiAkZ3JpZC11bml0O1x0XHQvLyA4cHhcbiRncmlkLXVuaXQtMTU6IDEuNSAqICRncmlkLXVuaXQ7XHQvLyAxMnB4XG4kZ3JpZC11bml0LTIwOiAyICogJGdyaWQtdW5pdDtcdFx0Ly8gMTZweFxuJGdyaWQtdW5pdC0zMDogMyAqICRncmlkLXVuaXQ7XHRcdC8vIDI0cHhcbiRncmlkLXVuaXQtNDA6IDQgKiAkZ3JpZC11bml0O1x0XHQvLyAzMnB4XG4kZ3JpZC11bml0LTUwOiA1ICogJGdyaWQtdW5pdDtcdFx0Ly8gNDBweFxuJGdyaWQtdW5pdC02MDogNiAqICRncmlkLXVuaXQ7XHRcdC8vIDQ4cHhcbiRncmlkLXVuaXQtNzA6IDcgKiAkZ3JpZC11bml0O1x0XHQvLyA1NnB4XG4kZ3JpZC11bml0LTgwOiA4ICogJGdyaWQtdW5pdDtcdFx0Ly8gNjRweFxuXG4vKipcbiAqIFJhZGl1cyBzY2FsZS5cbiAqL1xuXG4kcmFkaXVzLXgtc21hbGw6IDFweDsgICAvLyBBcHBsaWVkIHRvIGVsZW1lbnRzIGxpa2UgYnV0dG9ucyBuZXN0ZWQgd2l0aGluIHByaW1pdGl2ZXMgbGlrZSBpbnB1dHMuXG4kcmFkaXVzLXNtYWxsOiAycHg7ICAgICAvLyBBcHBsaWVkIHRvIG1vc3QgcHJpbWl0aXZlcy5cbiRyYWRpdXMtbWVkaXVtOiA0cHg7ICAgIC8vIEFwcGxpZWQgdG8gY29udGFpbmVycyB3aXRoIHNtYWxsZXIgcGFkZGluZy5cbiRyYWRpdXMtbGFyZ2U6IDhweDsgICAgIC8vIEFwcGxpZWQgdG8gY29udGFpbmVycyB3aXRoIGxhcmdlciBwYWRkaW5nLlxuJHJhZGl1cy1mdWxsOiA5OTk5cHg7ICAgLy8gRm9yIHBpbGxzLlxuJHJhZGl1cy1yb3VuZDogNTAlOyAgICAgLy8gRm9yIGNpcmNsZXMgYW5kIG92YWxzLlxuXG4vKipcbiAqIEVsZXZhdGlvbiBzY2FsZS5cbiAqL1xuXG4vLyBGb3Igc2VjdGlvbnMgYW5kIGNvbnRhaW5lcnMgdGhhdCBncm91cCByZWxhdGVkIGNvbnRlbnQgYW5kIGNvbnRyb2xzLCB3aGljaCBtYXkgb3ZlcmxhcCBvdGhlciBjb250ZW50LiBFeGFtcGxlOiBQcmV2aWV3IEZyYW1lLlxuJGVsZXZhdGlvbi14LXNtYWxsOiAwIDFweCAxcHggcmdiYShjb2xvcnMuJGJsYWNrLCAwLjAzKSwgMCAxcHggMnB4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wMiksIDAgM3B4IDNweCByZ2JhKGNvbG9ycy4kYmxhY2ssIDAuMDIpLCAwIDRweCA0cHggcmdiYShjb2xvcnMuJGJsYWNrLCAwLjAxKTtcblxuLy8gRm9yIGNvbXBvbmVudHMgdGhhdCBwcm92aWRlIGNvbnRleHR1YWwgZmVlZGJhY2sgd2l0aG91dCBiZWluZyBpbnRydXNpdmUuIEdlbmVyYWxseSBub24taW50ZXJydXB0aXZlLiBFeGFtcGxlOiBUb29sdGlwcywgU25hY2tiYXIuXG4kZWxldmF0aW9uLXNtYWxsOiAwIDFweCAycHggcmdiYShjb2xvcnMuJGJsYWNrLCAwLjA1KSwgMCAycHggM3B4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wNCksIDAgNnB4IDZweCByZ2JhKGNvbG9ycy4kYmxhY2ssIDAuMDMpLCAwIDhweCA4cHggcmdiYShjb2xvcnMuJGJsYWNrLCAwLjAyKTtcblxuLy8gRm9yIGNvbXBvbmVudHMgdGhhdCBvZmZlciBhZGRpdGlvbmFsIGFjdGlvbnMuIEV4YW1wbGU6IE1lbnVzLCBDb21tYW5kIFBhbGV0dGVcbiRlbGV2YXRpb24tbWVkaXVtOiAwIDJweCAzcHggcmdiYShjb2xvcnMuJGJsYWNrLCAwLjA1KSwgMCA0cHggNXB4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wNCksIDAgMTJweCAxMnB4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wMyksIDAgMTZweCAxNnB4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wMik7XG5cbi8vIEZvciBjb21wb25lbnRzIHRoYXQgY29uZmlybSBkZWNpc2lvbnMgb3IgaGFuZGxlIG5lY2Vzc2FyeSBpbnRlcnJ1cHRpb25zLiBFeGFtcGxlOiBNb2RhbHMuXG4kZWxldmF0aW9uLWxhcmdlOiAwIDVweCAxNXB4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wOCksIDAgMTVweCAyN3B4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wNyksIDAgMzBweCAzNnB4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wNCksIDAgNTBweCA0M3B4IHJnYmEoY29sb3JzLiRibGFjaywgMC4wMik7XG5cbi8qKlxuICogRGltZW5zaW9ucy5cbiAqL1xuXG4kaWNvbi1zaXplOiAyNHB4O1xuJGJ1dHRvbi1zaXplOiAzNnB4O1xuJGJ1dHRvbi1zaXplLW5leHQtZGVmYXVsdC00MHB4OiA0MHB4OyAvLyB0cmFuc2l0aW9uYXJ5IHZhcmlhYmxlIGZvciBuZXh0IGRlZmF1bHQgYnV0dG9uIHNpemVcbiRidXR0b24tc2l6ZS1zbWFsbDogMjRweDtcbiRidXR0b24tc2l6ZS1jb21wYWN0OiAzMnB4O1xuJGhlYWRlci1oZWlnaHQ6IDY0cHg7XG4kcGFuZWwtaGVhZGVyLWhlaWdodDogJGdyaWQtdW5pdC02MDtcbiRuYXYtc2lkZWJhci13aWR0aDogMzAwcHg7XG4kYWRtaW4tYmFyLWhlaWdodDogMzJweDtcbiRhZG1pbi1iYXItaGVpZ2h0LWJpZzogNDZweDtcbiRhZG1pbi1zaWRlYmFyLXdpZHRoOiAxNjBweDtcbiRhZG1pbi1zaWRlYmFyLXdpZHRoLWJpZzogMTkwcHg7XG4kYWRtaW4tc2lkZWJhci13aWR0aC1jb2xsYXBzZWQ6IDM2cHg7XG4kbW9kYWwtbWluLXdpZHRoOiAzNTBweDtcbiRtb2RhbC13aWR0aC1zbWFsbDogMzg0cHg7XG4kbW9kYWwtd2lkdGgtbWVkaXVtOiA1MTJweDtcbiRtb2RhbC13aWR0aC1sYXJnZTogODQwcHg7XG4kc3Bpbm5lci1zaXplOiAxNnB4O1xuJGNhbnZhcy1wYWRkaW5nOiAkZ3JpZC11bml0LTIwO1xuJHBhbGV0dGUtbWF4LWhlaWdodDogMzY4cHg7XG5cbi8qKlxuICogTW9iaWxlIHNwZWNpZmljIHN0eWxlc1xuICovXG4kbW9iaWxlLXRleHQtbWluLWZvbnQtc2l6ZTogMTZweDsgLy8gQW55IGZvbnQgc2l6ZSBiZWxvdyAxNnB4IHdpbGwgY2F1c2UgTW9iaWxlIFNhZmFyaSB0byBcInpvb20gaW5cIi5cblxuLyoqXG4gKiBFZGl0b3Igc3R5bGVzLlxuICovXG5cbiRzaWRlYmFyLXdpZHRoOiAyODBweDtcbiRjb250ZW50LXdpZHRoOiA4NDBweDtcbiR3aWRlLWNvbnRlbnQtd2lkdGg6IDExMDBweDtcbiR3aWRnZXQtYXJlYS13aWR0aDogNzAwcHg7XG4kc2Vjb25kYXJ5LXNpZGViYXItd2lkdGg6IDM1MHB4O1xuJGVkaXRvci1mb250LXNpemU6IDE2cHg7XG4kZGVmYXVsdC1ibG9jay1tYXJnaW46IDI4cHg7IC8vIFRoaXMgdmFsdWUgcHJvdmlkZXMgYSBjb25zaXN0ZW50LCBjb250aWd1b3VzIHNwYWNpbmcgYmV0d2VlbiBibG9ja3MuXG4kdGV4dC1lZGl0b3ItZm9udC1zaXplOiAxNXB4O1xuJGVkaXRvci1saW5lLWhlaWdodDogMS44O1xuJGVkaXRvci1odG1sLWZvbnQ6ICRmb250LWZhbWlseS1tb25vO1xuXG4vKipcbiAqIEJsb2NrICYgRWRpdG9yIFVJLlxuICovXG5cbiRibG9jay10b29sYmFyLWhlaWdodDogJGdyaWQtdW5pdC02MDtcbiRib3JkZXItd2lkdGg6IDFweDtcbiRib3JkZXItd2lkdGgtZm9jdXMtZmFsbGJhY2s6IDJweDsgLy8gVGhpcyBleGlzdHMgYXMgYSBmYWxsYmFjaywgYW5kIGlzIGlkZWFsbHkgb3ZlcnJpZGRlbiBieSB2YXIoLS13cC1hZG1pbi1ib3JkZXItd2lkdGgtZm9jdXMpIHVubGVzcyBpbiBzb21lIFNBU1MgbWF0aCBjYXNlcy5cbiRib3JkZXItd2lkdGgtdGFiOiAxLjVweDtcbiRoZWxwdGV4dC1mb250LXNpemU6IDEycHg7XG4kcmFkaW8taW5wdXQtc2l6ZTogMTZweDtcbiRyYWRpby1pbnB1dC1zaXplLXNtOiAyNHB4OyAvLyBXaWR0aCAmIGhlaWdodCBmb3Igc21hbGwgdmlld3BvcnRzLlxuXG4vLyBEZXByZWNhdGVkLCBwbGVhc2UgYXZvaWQgdXNpbmcgdGhlc2UuXG4kYmxvY2stcGFkZGluZzogMTRweDsgLy8gVXNlZCB0byBkZWZpbmUgc3BhY2UgYmV0d2VlbiBibG9jayBmb290cHJpbnQgYW5kIHN1cnJvdW5kaW5nIGJvcmRlcnMuXG4kcmFkaXVzLWJsb2NrLXVpOiAkcmFkaXVzLXNtYWxsO1xuJHNoYWRvdy1wb3BvdmVyOiAkZWxldmF0aW9uLXgtc21hbGw7XG4kc2hhZG93LW1vZGFsOiAkZWxldmF0aW9uLWxhcmdlO1xuJGRlZmF1bHQtZm9udC1zaXplOiAkZm9udC1zaXplLW1lZGl1bTtcblxuLyoqXG4gKiBCbG9jayBwYWRkaW5ncy5cbiAqL1xuXG4vLyBQYWRkaW5nIGZvciBibG9ja3Mgd2l0aCBhIGJhY2tncm91bmQgY29sb3IgKGUuZy4gcGFyYWdyYXBoIG9yIGdyb3VwKS5cbiRibG9jay1iZy1wYWRkaW5nLS12OiAxLjI1ZW07XG4kYmxvY2stYmctcGFkZGluZy0taDogMi4zNzVlbTtcblxuXG4vKipcbiAqIFJlYWN0IE5hdGl2ZSBzcGVjaWZpYy5cbiAqIFRoZXNlIHZhcmlhYmxlcyBkbyBub3QgYXBwZWFyIHRvIGJlIHVzZWQgYW55d2hlcmUgZWxzZS5cbiAqL1xuXG4vLyBEaW1lbnNpb25zLlxuJG1vYmlsZS1oZWFkZXItdG9vbGJhci1oZWlnaHQ6IDQ0cHg7XG4kbW9iaWxlLWhlYWRlci10b29sYmFyLWV4cGFuZGVkLWhlaWdodDogNTJweDtcbiRtb2JpbGUtZmxvYXRpbmctdG9vbGJhci1oZWlnaHQ6IDQ0cHg7XG4kbW9iaWxlLWZsb2F0aW5nLXRvb2xiYXItbWFyZ2luOiA4cHg7XG4kbW9iaWxlLWNvbG9yLXN3YXRjaDogNDhweDtcblxuLy8gQmxvY2sgVUkuXG4kbW9iaWxlLWJsb2NrLXRvb2xiYXItaGVpZ2h0OiA0NHB4O1xuJGRpbW1lZC1vcGFjaXR5OiAxO1xuJGJsb2NrLWVkZ2UtdG8tY29udGVudDogMTZweDtcbiRzb2xpZC1ib3JkZXItc3BhY2U6IDEycHg7XG4kZGFzaGVkLWJvcmRlci1zcGFjZTogNnB4O1xuJGJsb2NrLXNlbGVjdGVkLW1hcmdpbjogM3B4O1xuJGJsb2NrLXNlbGVjdGVkLWJvcmRlci13aWR0aDogMXB4O1xuJGJsb2NrLXNlbGVjdGVkLXBhZGRpbmc6IDA7XG4kYmxvY2stc2VsZWN0ZWQtY2hpbGQtbWFyZ2luOiA1cHg7XG4kYmxvY2stc2VsZWN0ZWQtdG8tY29udGVudDogJGJsb2NrLWVkZ2UtdG8tY29udGVudCAtICRibG9jay1zZWxlY3RlZC1tYXJnaW4gLSAkYmxvY2stc2VsZWN0ZWQtYm9yZGVyLXdpZHRoO1xuIiwiLyoqXG4gKiBDb2xvcnNcbiAqL1xuXG4vLyBXb3JkUHJlc3MgZ3JheXMuXG4kYmxhY2s6ICMwMDA7XHRcdFx0Ly8gVXNlIG9ubHkgd2hlbiB5b3UgdHJ1bHkgbmVlZCBwdXJlIGJsYWNrLiBGb3IgVUksIHVzZSAkZ3JheS05MDAuXG4kZ3JheS05MDA6ICMxZTFlMWU7XG4kZ3JheS04MDA6ICMyZjJmMmY7XG4kZ3JheS03MDA6ICM3NTc1NzU7XHRcdC8vIE1lZXRzIDQuNjoxICg0LjU6MSBpcyBtaW5pbXVtKSB0ZXh0IGNvbnRyYXN0IGFnYWluc3Qgd2hpdGUuXG4kZ3JheS02MDA6ICM5NDk0OTQ7XHRcdC8vIE1lZXRzIDM6MSBVSSBvciBsYXJnZSB0ZXh0IGNvbnRyYXN0IGFnYWluc3Qgd2hpdGUuXG4kZ3JheS00MDA6ICNjY2M7XG4kZ3JheS0zMDA6ICNkZGQ7XHRcdC8vIFVzZWQgZm9yIG1vc3QgYm9yZGVycy5cbiRncmF5LTIwMDogI2UwZTBlMDtcdFx0Ly8gVXNlZCBzcGFyaW5nbHkgZm9yIGxpZ2h0IGJvcmRlcnMuXG4kZ3JheS0xMDA6ICNmMGYwZjA7XHRcdC8vIFVzZWQgZm9yIGxpZ2h0IGdyYXkgYmFja2dyb3VuZHMuXG4kd2hpdGU6ICNmZmY7XG5cbi8vIE9wYWNpdGllcyAmIGFkZGl0aW9uYWwgY29sb3JzLlxuJGRhcmstZ3JheS1wbGFjZWhvbGRlcjogcmdiYSgkZ3JheS05MDAsIDAuNjIpO1xuJG1lZGl1bS1ncmF5LXBsYWNlaG9sZGVyOiByZ2JhKCRncmF5LTkwMCwgMC41NSk7XG4kbGlnaHQtZ3JheS1wbGFjZWhvbGRlcjogcmdiYSgkd2hpdGUsIDAuNjUpO1xuXG4vLyBBbGVydCBjb2xvcnMuXG4kYWxlcnQteWVsbG93OiAjZjBiODQ5O1xuJGFsZXJ0LXJlZDogI2NjMTgxODtcbiRhbGVydC1ncmVlbjogIzRhYjg2NjtcblxuLy8gRGVwcmVjYXRlZCwgcGxlYXNlIGF2b2lkIHVzaW5nIHRoZXNlLlxuJGRhcmstdGhlbWUtZm9jdXM6ICR3aGl0ZTtcdC8vIEZvY3VzIGNvbG9yIHdoZW4gdGhlIHRoZW1lIGlzIGRhcmsuXG4iLCJAdXNlIFwiQHdvcmRwcmVzcy9iYXNlLXN0eWxlcy92YXJpYWJsZXNcIiBhcyAqO1xuXG4ubGF6eS1lZGl0b3ItYmxvY2stcHJldmlld19fY29udGFpbmVyIHtcblx0ZGlzcGxheTogZmxleDtcblx0anVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG5cdGFsaWduLWl0ZW1zOiBjZW50ZXI7XG5cdGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG5cdGhlaWdodDogMTAwJTtcblx0Ym9yZGVyLXJhZGl1czogJHJhZGl1cy1tZWRpdW07XG5cblx0LmRhdGF2aWV3cy12aWV3LWdyaWQgJiB7XG5cdFx0LmJsb2NrLWVkaXRvci1ibG9jay1wcmV2aWV3X19jb250YWluZXIge1xuXHRcdFx0aGVpZ2h0OiAxMDAlO1xuXHRcdH1cblx0fVxuXG5cdC5kYXRhdmlld3Mtdmlldy10YWJsZSAmIHtcblx0XHR3aWR0aDogOTZweDtcblx0XHRmbGV4LWdyb3c6IDA7XG5cdFx0dGV4dC13cmFwOiBiYWxhbmNlOyAvLyBGYWxsYmFjayBmb3IgU2FmYXJpLlxuXHRcdHRleHQtd3JhcDogcHJldHR5O1xuXHR9XG59XG4iXX0= */`;
+document.head.appendChild(document.createElement("style")).appendChild(document.createTextNode(css));
+var { useStyle } = unlock(import_editor2.privateApis);
+function PreviewContent({
+  blocks,
+  content,
+  description
+}) {
+  const descriptionId = (0, import_element5.useId)();
+  const backgroundColor = useStyle("color.background");
+  const actualBlocks = (0, import_element5.useMemo)(() => {
+    return blocks ?? (0, import_blocks2.parse)(content, {
+      __unstableSkipMigrationLogs: true
+    });
+  }, [content, blocks]);
+  const isEmpty = !actualBlocks?.length;
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    "div",
+    {
+      className: "lazy-editor-block-preview__container",
+      style: { backgroundColor },
+      "aria-describedby": !!description ? descriptionId : void 0,
+      children: [
+        isEmpty && (0, import_i18n.__)("Empty."),
+        !isEmpty && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_block_editor.BlockPreview.Async, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_block_editor.BlockPreview, { blocks: actualBlocks }) }),
+        !!description && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { hidden: true, id: descriptionId, children: description })
+      ]
+    }
+  );
+}
+function Preview({
+  blocks,
+  content,
+  description
+}) {
+  const stylesId = useStylesId();
+  const { isReady: settingsReady, editorSettings } = useEditorSettings({
+    stylesId
+  });
+  const { isReady: assetsReady } = useEditorAssets();
+  const finalSettings = (0, import_element5.useMemo)(
+    () => ({
+      ...editorSettings,
+      isPreviewMode: true
+    }),
+    [editorSettings]
+  );
+  if (!settingsReady || !assetsReady) {
+    return null;
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_block_editor.BlockEditorProvider, { settings: finalSettings, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    PreviewContent,
+    {
+      blocks,
+      content,
+      description
+    }
+  ) });
+}
 export {
-  Editor
+  Editor,
+  Preview,
+  loadEditorAssets,
+  useEditorAssets
 };
 //# sourceMappingURL=index.js.map

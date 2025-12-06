@@ -1,7 +1,7 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, arsihasi, azaozz, barry, batmoo, beaulebens, bindlegirl, biskobe, bjorsch, blobaugh, brbrr, brileyhooper, cainm, cena, cfinke, cgastrell, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, daniloercoli, davoraltman, delawski, designsimply, dkmyta, dllh, drawmyface, dsmart, dun2mis, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, joen, jblz, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lhkowalski, lschuyler, macmanx, martinremy, matt, mattwiebe, matveb, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, miguelxavierpenha, mikeyarce, mkaz, nancythanki, nickmomrik, njweller, nunyvega, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, renatoagds, retrofox, richardmtl, richardmuscat, robertbpugh, roccotripaldi, ryancowles, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, thehenridev, tmoorewp, tyxla, Viper007Bond, westi, williamvianas, wpkaren, yoavf, zinigor
 Tags: Security, backup, malware, scan, performance
-Stable tag: 15.2
+Stable tag: 15.3.1
 Requires at least: 6.7
 Requires PHP: 7.2
 Tested up to: 6.9
@@ -326,63 +326,49 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 
 
 == Changelog ==
-### 15.2 - 2025-11-04
+### 15.3.1 - 2025-12-04
+#### Bug fixes
+- Forms: Use the correct case on cipher names.
+
+### 15.3 - 2025-12-03
 #### Enhancements
-- Forms: Add browser info to form responses exports.
-- Forms: Add emoji flag to the response email next to the IP address.
-- Forms: Add first and last name variations.
-- Forms: Add flag next to the IP Address.
-- Forms: Add integrations store.
-- Forms: Add new integrations list component.
-- Forms: Add notification settings panel.
-- Forms: Add read and unread state for new form responses.
-- Forms: Add required indicator settings and make forms with a single input required by default.
-- Forms: Add shared ConsentToggle component.
-- Forms: Add the IP address as the default field in the responses dashboard.
-- Forms: Add time field.
-- Forms: Avoid typographic orphans in Forms panels in editor.
-- Forms: Disable Jetpack CRM integration by default.
-- Forms: Enable forms push notifications functionality.
-- Forms: Hide Google export card if disabled.
-- Forms: Improve the performance of loading the form responses.
-- Forms: Link IP to lookup service.
-- Forms: merged email and push notification settings panels.
-- Forms: Release Image Select Field to production.
-- Forms: Remove Inbox view action for desktop and leave it just for mobile.
-- Forms: Reorganize settings to a single panel for rating, slider and phone fields.
-- Forms: Start storing the country_code based on the IP with the form responses.
-- Forms: Update "Action after submit" sidebar section.
-- Forms: Update Inbox empty state notices.
-- Instant Search: Add global WooCommerce Product Attributes as filter options.
-- Instant Search: Fix issue where Safari's 'Use advanced tracking and fingerprinting protection' setting breaks Search.
-- Don't translate product names.
-- Sharing Buttons block: Update Reddit logo to match updated design.
-- Sitemaps: Use XMLWriter by default for more performant sitemap generation.
-- Subscription forms: provide autocomplete attribute for email fields, to help with filling in email addresses.
+- Forms: Add browser info to the form response email notification.
+- Forms: Add form response webhook support.
+- Forms: Add integrations to dashboard mobile menu.
+- Forms: Add keyboard navigation to go through reponses quickly.
+- Forms: Add WordPress Abilities API integration for form submissions management and integrations access.
+- Forms: Change integrations modal width.
+- Forms: Improve MailPoet subscriber handling.
+- Forms: Improve name variation handling.
+- Forms: Remove related-posts from API calls.
+- Forms: Update dashboard header buttons.
+- Forms: Use core WP colors for basic primitive components such as buttons at Forms dashboard.
+- Forms: Use first/last name for author.
+- Premium Content Block: Added email rendering callback.
+- Social: Improve auto-share UI in the editor by streamlining the notices and descriptions.
+- Social: Improve the sidebar by making titles more descriptive and combining sections.
+- Social: Update the connections list in the editor to a vertical toggle list with labels and icons.
 
 #### Improved compatibility
-- Custom post types: Ensure features remain available when theme support is added.
-- Forms: Remove Creative Mail promotion.
-- Tested up to WordPress 6.9.
+- Replace icons removed from @wordpress/icons with alternatives.
 
 #### Bug fixes
-- Forms: Fix a bug where ther responsive modal is not able to be closed.
-- Forms: Fix textarea submission on enter.
-- Forms: Fix where notices show up so they don't overlap the bottom action bar.
-- Forms: Prevent the required text from being removed from required fields when creating a form from a pattern.
-- Forms: Reset the selection on tab switch in dashboard.
-- Forms: Send emails to the author of the form only if they are able to edit it.
-- Forms: Simplify the selection on the responses dashboard so that it changes every time to only the valid set of items.
-- Forms: Stop preloading the integrations endpoint.
-- Forms: Store the feedback source info with more context.
-- Instant Search: Handle browser privacy settings stripping out the search query value.
-- Maps Block: Fix compatibility with MapKit JS version 5.80.0+.
-- My Jetpack page: Fix visual compatibility issue with Hello Dolly plugin.
-- Newsletter: Update wording to clarify how the reply-to settings can be used.
-- Podcast feed: Prevent fatals when content is empty.
-- Related Posts: Prevent PHP errors when settings are malformed.
-- Slideshow block: Ensure image size selection is correctly reflected in editor at all times.
-- Stats: Prevent fatal when chart response is invalid.
+- Cookies & Consents Banner Widget: ensure form headings are properly displayed.
+- Fix a compatibility bug with the Gutenberg plugin.
+- Forms: Do not link to empty source link.
+- Forms: Ensure we show duplicate form field values on export.
+- Forms: Fix integrations modal flash.
+- Forms: Fix name variation isActive setting.
+- Forms: Fix the flickering between the sidebar loading on different browser widths.
+- Forms: Reject form submissions when the parent post/page with the form has been deleted or is no longer published.
+- Forms: Remove clashing between meta dn field names on export.
+- GifBlock: Ensure url is not reset when publishing post.
+- Google Docs: Ensure that slides/sheets embeds render on the front-end.
+- GSheets embed: Give time for the iframe to finish before showing an error.
+- My Jetpack: Fix expiring renewal prompt to show all products.
+- Remove `getIconColor` functions for block icons.
+- Restrict inline file preview to only image formats and PDFs, force download for other file types for security.
+- Social: Fix connection icon not reflecting the change when profile picture is updated.
 
 --------
 

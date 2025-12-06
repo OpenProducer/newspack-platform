@@ -1,4 +1,4 @@
-import type { ILanguage } from '../contact-form/libs/date-picker/interfaces';
+import type { ILanguage } from '../contact-form/libs/date-picker/interfaces.ts';
 import type { ReactNode } from 'react';
 
 /**
@@ -114,6 +114,8 @@ export interface FormResponse {
 	is_unread: boolean;
 	/** The fields of the response. */
 	fields: Record< string, unknown >;
+	/** The URL to edit the form that the response was submitted to. */
+	edit_form_url: string;
 }
 
 /**
@@ -232,6 +234,8 @@ export interface FormsConfigData {
 	isHostingerReachEnabled?: boolean;
 	/** Whether integrations UI is enabled (feature-flagged). */
 	isIntegrationsEnabled?: boolean;
+	/** Whether webhooks are enabled (feature-flagged). */
+	isWebhooksEnabled?: boolean;
 	/** Whether the current user can install plugins (install_plugins). */
 	canInstallPlugins?: boolean;
 	/** Whether the current user can activate plugins (activate_plugins). */
