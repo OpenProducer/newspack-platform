@@ -185,7 +185,7 @@ final class Utils
      * @param StreamInterface $stream    Stream to read from
      * @param int|null        $maxLength Maximum buffer length
      */
-    public static function readLine(\YoastSEO_Vendor\Psr\Http\Message\StreamInterface $stream, int $maxLength = null) : string
+    public static function readLine(\YoastSEO_Vendor\Psr\Http\Message\StreamInterface $stream, ?int $maxLength = null) : string
     {
         $buffer = '';
         $size = 0;
@@ -200,6 +200,17 @@ final class Utils
             }
         }
         return $buffer;
+    }
+    /**
+     * Redact the password in the user info part of a URI.
+     */
+    public static function redactUserInfo(\YoastSEO_Vendor\Psr\Http\Message\UriInterface $uri) : \YoastSEO_Vendor\Psr\Http\Message\UriInterface
+    {
+        $userInfo = $uri->getUserInfo();
+        if (\false !== ($pos = \strpos($userInfo, ':'))) {
+            return $uri->withUserInfo(\substr($userInfo, 0, $pos), '***');
+        }
+        return $uri;
     }
     /**
      * Create a new stream based on the input type.
@@ -312,7 +323,7 @@ final class Utils
         }
         \restore_error_handler();
         if ($ex) {
-            /** @var $ex \RuntimeException */
+            /** @var \RuntimeException $ex */
             throw $ex;
         }
         return $handle;
@@ -346,7 +357,7 @@ final class Utils
         }
         \restore_error_handler();
         if ($ex) {
-            /** @var $ex \RuntimeException */
+            /** @var \RuntimeException $ex */
             throw $ex;
         }
         return $contents;

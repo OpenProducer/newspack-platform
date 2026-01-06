@@ -38,7 +38,7 @@ final class TransferStats
      * @param mixed                  $handlerErrorData Handler error data.
      * @param array                  $handlerStats     Handler specific stats.
      */
-    public function __construct(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, \YoastSEO_Vendor\Psr\Http\Message\ResponseInterface $response = null, float $transferTime = null, $handlerErrorData = null, array $handlerStats = [])
+    public function __construct(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, ?\YoastSEO_Vendor\Psr\Http\Message\ResponseInterface $response = null, ?float $transferTime = null, $handlerErrorData = null, array $handlerStats = [])
     {
         $this->request = $request;
         $this->response = $response;

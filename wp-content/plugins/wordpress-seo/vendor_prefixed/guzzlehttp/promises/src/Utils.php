@@ -20,7 +20,7 @@ final class Utils
      *
      * @param TaskQueueInterface|null $assign Optionally specify a new queue instance.
      */
-    public static function queue(\YoastSEO_Vendor\GuzzleHttp\Promise\TaskQueueInterface $assign = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\TaskQueueInterface
+    public static function queue(?\YoastSEO_Vendor\GuzzleHttp\Promise\TaskQueueInterface $assign = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\TaskQueueInterface
     {
         static $queue;
         if ($assign) {
@@ -127,7 +127,9 @@ final class Utils
         $promise = \YoastSEO_Vendor\GuzzleHttp\Promise\Each::of($promises, function ($value, $idx) use(&$results) : void {
             $results[$idx] = $value;
         }, function ($reason, $idx, \YoastSEO_Vendor\GuzzleHttp\Promise\Promise $aggregate) : void {
-            $aggregate->reject($reason);
+            if (\YoastSEO_Vendor\GuzzleHttp\Promise\Is::pending($aggregate)) {
+                $aggregate->reject($reason);
+            }
         })->then(function () use(&$results) {
             \ksort($results);
             return $results;

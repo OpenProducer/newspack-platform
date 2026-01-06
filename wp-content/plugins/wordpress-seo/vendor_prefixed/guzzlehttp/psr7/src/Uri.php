@@ -80,7 +80,7 @@ class Uri implements \YoastSEO_Vendor\Psr\Http\Message\UriInterface, \JsonSerial
     {
         // If IPv6
         $prefix = '';
-        if (\preg_match('%^(.*://\\[[0-9:a-f]+\\])(.*?)$%', $url, $matches)) {
+        if (\preg_match('%^(.*://\\[[0-9:a-fA-F]+\\])(.*?)$%', $url, $matches)) {
             /** @var array{0:string, 1:string, 2:string} $matches */
             $prefix = $matches[1];
             $url = $matches[2];
@@ -216,7 +216,7 @@ class Uri implements \YoastSEO_Vendor\Psr\Http\Message\UriInterface, \JsonSerial
      *
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-4.4
      */
-    public static function isSameDocumentReference(\YoastSEO_Vendor\Psr\Http\Message\UriInterface $uri, \YoastSEO_Vendor\Psr\Http\Message\UriInterface $base = null) : bool
+    public static function isSameDocumentReference(\YoastSEO_Vendor\Psr\Http\Message\UriInterface $uri, ?\YoastSEO_Vendor\Psr\Http\Message\UriInterface $base = null) : bool
     {
         if ($base !== null) {
             $uri = \YoastSEO_Vendor\GuzzleHttp\Psr7\UriResolver::resolve($base, $uri);

@@ -43,6 +43,7 @@ var wp;
     "@wordpress/edit-site",
     "@wordpress/edit-widgets",
     "@wordpress/editor",
+    "@wordpress/font-list-route",
     "@wordpress/format-library",
     "@wordpress/patterns",
     "@wordpress/preferences",

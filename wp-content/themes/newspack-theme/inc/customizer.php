@@ -649,6 +649,28 @@ function newspack_customize_register( $wp_customize ) {
 		)
 	);
 
+	// Turn the homepage into a 'splash' page: no header and no footer.
+	$wp_customize->add_setting(
+		'splash_page_home',
+		array(
+			'default'           => false,
+			'type'              => 'theme_mod',
+			'sanitize_callback' => 'newspack_sanitize_checkbox',
+		)
+	);
+
+	$wp_customize->add_control(
+		'splash_page_home',
+		array(
+			'label'       => esc_html__( 'Make the homepage a splash page', 'newspack-theme' ),
+			'description' => esc_html__( 'Hide the header and footer on the homepage so it can be a splash page or placeholder for a site under development.', 'newspack-theme' ),
+			'section'     => 'static_front_page',
+			'priority'    => 10,
+			'type'        => 'checkbox',
+			'settings'    => 'splash_page_home',
+		)
+	);
+
 	// Add option to upload logo specifically for the footer.
 	$wp_customize->add_setting(
 		'newspack_footer_logo',

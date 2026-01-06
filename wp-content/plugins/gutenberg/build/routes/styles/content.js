@@ -122,40 +122,46 @@ NavigableRegion.displayName = "NavigableRegion";
 var navigable_region_default = NavigableRegion;
 
 // packages/admin-ui/build-module/page/header.js
+var import_components2 = __toESM(require_components());
+
+// packages/admin-ui/build-module/page/sidebar-toggle-slot.js
 var import_components = __toESM(require_components());
+var { Fill: SidebarToggleFill, Slot: SidebarToggleSlot } = (0, import_components.createSlotFill)("SidebarToggle");
+
+// packages/admin-ui/build-module/page/header.js
 var import_jsx_runtime2 = __toESM(require_jsx_runtime());
 function Header({
   breadcrumbs,
   badges,
   title,
   subTitle,
-  actions
+  actions,
+  showSidebarToggle = true
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_components.__experimentalVStack, { className: "admin-ui-page__header", as: "header", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
-      import_components.__experimentalHStack,
-      {
-        className: "admin-ui-page__header-title",
-        justify: "space-between",
-        spacing: 2,
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_components.__experimentalHStack, { spacing: 2, children: [
-            title && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_components.__experimentalHeading, { as: "h2", level: 3, weight: 500, truncate: true, children: title }),
-            breadcrumbs,
-            badges
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-            import_components.__experimentalHStack,
-            {
-              style: { width: "auto", flexShrink: 0 },
-              spacing: 2,
-              className: "admin-ui-page__header-actions",
-              children: actions
-            }
-          )
-        ]
-      }
-    ),
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_components2.__experimentalVStack, { className: "admin-ui-page__header", as: "header", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_components2.__experimentalHStack, { justify: "space-between", spacing: 2, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_components2.__experimentalHStack, { spacing: 2, justify: "left", children: [
+        showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          SidebarToggleSlot,
+          {
+            bubblesVirtually: true,
+            className: "admin-ui-page__sidebar-toggle-slot"
+          }
+        ),
+        title && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_components2.__experimentalHeading, { as: "h2", level: 3, weight: 500, truncate: true, children: title }),
+        breadcrumbs,
+        badges
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        import_components2.__experimentalHStack,
+        {
+          style: { width: "auto", flexShrink: 0 },
+          spacing: 2,
+          className: "admin-ui-page__header-actions",
+          children: actions
+        }
+      )
+    ] }),
     subTitle && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "admin-ui-page__header-subtitle", children: subTitle })
   ] });
 }
@@ -170,7 +176,8 @@ function Page({
   children,
   className,
   actions,
-  hasPadding = false
+  hasPadding = false,
+  showSidebarToggle = true
 }) {
   const classes = clsx_default("admin-ui-page", className);
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(navigable_region_default, { className: classes, ariaLabel: title, children: [
@@ -181,19 +188,21 @@ function Page({
         badges,
         title,
         subTitle,
-        actions
+        actions,
+        showSidebarToggle
       }
     ),
     hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "admin-ui-page__content has-padding", children }) : children
   ] });
 }
+Page.SidebarToggleFill = SidebarToggleFill;
 var page_default = Page;
 
 // routes/styles/stage.tsx
 var import_i18n = __toESM(require_i18n());
 var import_editor = __toESM(require_editor());
 var import_compose = __toESM(require_compose());
-var import_components2 = __toESM(require_components());
+var import_components3 = __toESM(require_components());
 
 // packages/icons/build-module/library/seen.js
 var import_primitives = __toESM(require_primitives());
@@ -262,13 +271,6 @@ var css = `/**
   overflow-y: auto;
   padding-left: 0;
   padding-right: 0;
-}
-.routes-styles__page .global-styles-ui-sidebar__navigator-provider .global-styles-ui-sidebar__navigator-screen {
-  padding-top: 12px;
-  padding-left: 12px;
-  padding-right: 12px;
-  padding-bottom: 12px;
-  outline: none;
 }`;
 document.head.appendChild(document.createElement("style")).appendChild(document.createTextNode(css));
 
@@ -300,8 +302,8 @@ function Stage() {
   return /* @__PURE__ */ React.createElement(
     page_default,
     {
-      actions: !isMobileViewport ? /* @__PURE__ */ React.createElement(import_components2.__experimentalHStack, null, /* @__PURE__ */ React.createElement(
-        import_components2.Button,
+      actions: !isMobileViewport ? /* @__PURE__ */ React.createElement(import_components3.__experimentalHStack, null, /* @__PURE__ */ React.createElement(
+        import_components3.Button,
         {
           size: "compact",
           isPressed: isStyleBookOpened,
@@ -344,7 +346,7 @@ var stage = Stage;
 
 // routes/styles/canvas.tsx
 var import_editor2 = __toESM(require_editor());
-var import_components3 = __toESM(require_components());
+var import_components4 = __toESM(require_components());
 import { useNavigate as useNavigate2, useSearch as useSearch2 } from "@wordpress/route";
 import { useEditorAssets } from "@wordpress/lazy-editor";
 var { StyleBookPreview } = unlock(import_editor2.privateApis);
@@ -372,7 +374,7 @@ function Canvas() {
           height: "100%"
         }
       },
-      /* @__PURE__ */ React.createElement(import_components3.Spinner, null)
+      /* @__PURE__ */ React.createElement(import_components4.Spinner, null)
     );
   }
   return /* @__PURE__ */ React.createElement(StyleBookPreview, { path: section, onPathChange: onChangeSection });

@@ -435,6 +435,9 @@ final class Pixel {
 					self::rotate_log_file();
 				}
 			}
+		} else {
+			// If the log file doesn't exist, create a new one.
+			self::rotate_log_file();
 		}
 	}
 

@@ -6,7 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     '3773ef3f09c37da5478d578e32b03a4b' => $vendorDir . '/automattic/jetpack-assets/actions.php',
     '7372b7fb88a9723cf5b76d456eb0b738' => $vendorDir . '/automattic/jetpack-connection/actions.php',
     '2d223b650b5c56928c1affa16ee5cfe2' => $vendorDir . '/wordpress/abilities-api/includes/bootstrap.php',

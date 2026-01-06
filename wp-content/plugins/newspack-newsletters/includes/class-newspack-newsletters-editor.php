@@ -415,6 +415,13 @@ final class Newspack_Newsletters_Editor {
 				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/newsletterEditor.js' ),
 				true
 			);
+			\wp_localize_script(
+				'newspack-newsletters-newsletter-editor',
+				'newspack_newsletters_editor_data',
+				[
+					'mailchimp_default_footer' => wp_kses_post( Newspack_Newsletters_Mailchimp_Default_Footer::get_footer_content() ),
+				]
+			);
 			\wp_enqueue_script(
 				'newspack-newsletters-ads-editor',
 				plugins_url( '../dist/newsletterAdsEditor.js', __FILE__ ),

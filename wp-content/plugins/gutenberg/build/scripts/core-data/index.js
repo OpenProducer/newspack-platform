@@ -3048,7 +3048,7 @@ var wp;
   var import_es64 = __toESM(require_es6());
   var import_compose2 = __toESM(require_compose());
   var import_data3 = __toESM(require_data());
-  var import_undo_manager = __toESM(require_undo_manager());
+  var import_undo_manager2 = __toESM(require_undo_manager());
 
   // packages/core-data/build-module/utils/conservative-map-item.js
   var import_es6 = __toESM(require_es6());
@@ -13921,9 +13921,265 @@ var wp;
     return providerCreators;
   }
 
+  // packages/sync/build-module/y-utilities/y-multidoc-undomanager.js
+  var popStackItem2 = (mum, type) => {
+    const stack = type === "undo" ? mum.undoStack : mum.redoStack;
+    while (stack.length > 0) {
+      const um = (
+        /** @type {Y.UndoManager} */
+        stack.pop()
+      );
+      const prevUmStack = type === "undo" ? um.undoStack : um.redoStack;
+      const stackItem = (
+        /** @type {any} */
+        prevUmStack.pop()
+      );
+      let actionPerformed = false;
+      if (type === "undo") {
+        um.undoStack = [stackItem];
+        actionPerformed = um.undo() !== null;
+        um.undoStack = prevUmStack;
+      } else {
+        um.redoStack = [stackItem];
+        actionPerformed = um.redo() !== null;
+        um.redoStack = prevUmStack;
+      }
+      if (actionPerformed) {
+        return stackItem;
+      }
+    }
+    return null;
+  };
+  var YMultiDocUndoManager = class extends Observable {
+    /**
+     * @param {Y.AbstractType<any>|Array<Y.AbstractType<any>>} typeScope Accepts either a single type, or an array of types
+     * @param {ConstructorParameters<typeof Y.UndoManager>[1]} opts
+     */
+    constructor(typeScope = [], opts = {}) {
+      super();
+      this.docs = /* @__PURE__ */ new Map();
+      this.trackedOrigins = opts.trackedOrigins || /* @__PURE__ */ new Set([null]);
+      opts.trackedOrigins = this.trackedOrigins;
+      this._defaultOpts = opts;
+      this.undoStack = [];
+      this.redoStack = [];
+      this.addToScope(typeScope);
+    }
+    /**
+     * @param {Array<Y.AbstractType<any>> | Y.AbstractType<any>} ytypes
+     */
+    addToScope(ytypes) {
+      ytypes = isArray(ytypes) ? ytypes : [ytypes];
+      ytypes.forEach((ytype) => {
+        const ydoc = (
+          /** @type {Y.Doc} */
+          ytype.doc
+        );
+        const um = setIfUndefined(this.docs, ydoc, () => {
+          const um2 = new UndoManager([ytype], this._defaultOpts);
+          um2.on(
+            "stack-cleared",
+            /** @param {any} opts */
+            ({
+              undoStackCleared,
+              redoStackCleared
+            }) => {
+              this.clear(undoStackCleared, redoStackCleared);
+            }
+          );
+          ydoc.on("destroy", () => {
+            this.docs.delete(ydoc);
+            this.undoStack = this.undoStack.filter(
+              (um3) => um3.doc !== ydoc
+            );
+            this.redoStack = this.redoStack.filter(
+              (um3) => um3.doc !== ydoc
+            );
+          });
+          um2.on(
+            "stack-item-added",
+            /** @param {any} change */
+            (change) => {
+              const stack = change.type === "undo" ? this.undoStack : this.redoStack;
+              stack.push(um2);
+              this.emit("stack-item-added", [
+                { ...change, ydoc },
+                this
+              ]);
+            }
+          );
+          um2.on(
+            "stack-item-updated",
+            /** @param {any} change */
+            (change) => {
+              this.emit("stack-item-updated", [
+                { ...change, ydoc },
+                this
+              ]);
+            }
+          );
+          um2.on(
+            "stack-item-popped",
+            /** @param {any} change */
+            (change) => {
+              this.emit("stack-item-popped", [
+                { ...change, ydoc },
+                this
+              ]);
+            }
+          );
+          return um2;
+        });
+        if (um.scope.every((yt) => yt !== ytype)) {
+          um.scope.push(ytype);
+        }
+      });
+    }
+    /**
+     * @param {any} origin
+     */
+    /* c8 ignore next 3 */
+    addTrackedOrigin(origin) {
+      this.trackedOrigins.add(origin);
+    }
+    /**
+     * @param {any} origin
+     */
+    /* c8 ignore next 3 */
+    removeTrackedOrigin(origin) {
+      this.trackedOrigins.delete(origin);
+    }
+    /**
+     * Undo last changes on type.
+     *
+     * @return {any?} Returns StackItem if a change was applied
+     */
+    undo() {
+      return popStackItem2(this, "undo");
+    }
+    /**
+     * Redo last undo operation.
+     *
+     * @return {any?} Returns StackItem if a change was applied
+     */
+    redo() {
+      return popStackItem2(this, "redo");
+    }
+    clear(clearUndoStack = true, clearRedoStack = true) {
+      if (clearUndoStack && this.canUndo() || clearRedoStack && this.canRedo()) {
+        this.docs.forEach((um) => {
+          clearUndoStack && (this.undoStack = []);
+          clearRedoStack && (this.redoStack = []);
+          um.clear(clearUndoStack, clearRedoStack);
+        });
+        this.emit("stack-cleared", [
+          {
+            undoStackCleared: clearUndoStack,
+            redoStackCleared: clearRedoStack
+          }
+        ]);
+      }
+    }
+    /* c8 ignore next 5 */
+    stopCapturing() {
+      this.docs.forEach((um) => {
+        um.stopCapturing();
+      });
+    }
+    /**
+     * Are undo steps available?
+     *
+     * @return {boolean} `true` if undo is possible
+     */
+    canUndo() {
+      return this.undoStack.length > 0;
+    }
+    /**
+     * Are redo steps available?
+     *
+     * @return {boolean} `true` if redo is possible
+     */
+    canRedo() {
+      return this.redoStack.length > 0;
+    }
+    destroy() {
+      this.docs.forEach((um) => um.destroy());
+      super.destroy();
+    }
+  };
+
+  // packages/sync/build-module/undo-manager.js
+  function createUndoManager() {
+    const yUndoManager = new YMultiDocUndoManager([], {
+      // Throttle undo/redo captures. (default: 500ms)
+      captureTimeout: 200,
+      // Ensure that we only scope the undo/redo to the current editor.
+      // The yjs document's clientID is added once it's available.
+      trackedOrigins: /* @__PURE__ */ new Set([LOCAL_EDITOR_ORIGIN])
+    });
+    return {
+      /**
+       * Record changes into the history.
+       * Since Yjs automatically tracks changes, this method translates the WordPress
+       * HistoryRecord format into Yjs operations.
+       *
+       * @param _record   A record of changes to record.
+       * @param _isStaged Whether to immediately create an undo point or not.
+       */
+      addRecord(_record, _isStaged = false) {
+      },
+      /**
+       * Add a Yjs map to the scope of the undo manager.
+       *
+       * @param {Y.Map< any >} ymap The Yjs map to add to the scope.
+       */
+      addToScope(ymap) {
+        yUndoManager.addToScope(ymap);
+      },
+      /**
+       * Undo the last recorded changes.
+       *
+       */
+      undo() {
+        if (!yUndoManager.canUndo()) {
+          return;
+        }
+        yUndoManager.undo();
+        return [];
+      },
+      /**
+       * Redo the last undone changes.
+       */
+      redo() {
+        if (!yUndoManager.canRedo()) {
+          return;
+        }
+        yUndoManager.redo();
+        return [];
+      },
+      /**
+       * Check if there are changes that can be undone.
+       *
+       * @return {boolean} Whether there are changes to undo.
+       */
+      hasUndo() {
+        return yUndoManager.canUndo();
+      },
+      /**
+       * Check if there are changes that can be redone.
+       *
+       * @return {boolean} Whether there are changes to redo.
+       */
+      hasRedo() {
+        return yUndoManager.canRedo();
+      }
+    };
+  }
+
   // packages/sync/build-module/manager.js
   function createSyncManager() {
     const entityStates = /* @__PURE__ */ new Map();
+    const undoManager2 = createUndoManager();
     async function loadEntity(syncConfig, objectType, objectId, record, handlers) {
       const providerCreators2 = getProviderCreators();
       if (0 === providerCreators2.length) {
@@ -13947,6 +14203,7 @@ var wp;
         }
         void updateEntityRecord(objectType, objectId);
       };
+      undoManager2.addToScope(recordMap);
       const entityState = {
         handlers,
         objectId,
@@ -14032,6 +14289,7 @@ var wp;
     return {
       createMeta: createEntityMeta,
       load: loadEntity,
+      undoManager: undoManager2,
       unload: unloadEntity,
       update: updateCRDTDoc
     };
@@ -14747,6 +15005,15 @@ var wp;
       kind: "root",
       baseURL: "/wp/v2/registered-templates",
       key: "id"
+    },
+    {
+      label: (0, import_i18n.__)("Font Collections"),
+      name: "fontCollection",
+      kind: "root",
+      baseURL: "/wp/v2/font-collections",
+      baseURLParams: { context: "view" },
+      plural: "fontCollections",
+      key: "slug"
     }
   ];
   var deprecatedEntities = {
@@ -15355,7 +15622,7 @@ var wp;
       config: newConfig
     };
   };
-  function undoManager(state = (0, import_undo_manager.createUndoManager)()) {
+  function undoManager(state = (0, import_undo_manager2.createUndoManager)()) {
     return state;
   }
   function editsReference(state = {}, action) {
@@ -15555,12 +15822,36 @@ var wp;
     isRequestingEmbedPreview: () => isRequestingEmbedPreview,
     isSavingEntityRecord: () => isSavingEntityRecord
   });
-  var import_data4 = __toESM(require_data());
+  var import_data5 = __toESM(require_data());
   var import_url3 = __toESM(require_url());
   var import_deprecated2 = __toESM(require_deprecated());
 
   // packages/core-data/build-module/name.js
   var STORE_NAME = "core";
+
+  // packages/core-data/build-module/private-selectors.js
+  var private_selectors_exports = {};
+  __export(private_selectors_exports, {
+    getBlockPatternsForPostType: () => getBlockPatternsForPostType,
+    getEditorAssets: () => getEditorAssets,
+    getEditorSettings: () => getEditorSettings,
+    getEntityRecordPermissions: () => getEntityRecordPermissions,
+    getEntityRecordsPermissions: () => getEntityRecordsPermissions,
+    getHomePage: () => getHomePage,
+    getNavigationFallbackId: () => getNavigationFallbackId,
+    getPostsPageId: () => getPostsPageId,
+    getRegisteredPostMeta: () => getRegisteredPostMeta,
+    getTemplateId: () => getTemplateId,
+    getUndoManager: () => getUndoManager
+  });
+  var import_data4 = __toESM(require_data());
+
+  // packages/core-data/build-module/lock-unlock.js
+  var import_private_apis = __toESM(require_private_apis());
+  var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
+    "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
+    "@wordpress/core-data"
+  );
 
   // packages/core-data/build-module/utils/log-entity-deprecation.js
   var import_deprecated = __toESM(require_deprecated());
@@ -15591,9 +15882,170 @@ var wp;
     }, 0);
   }
 
+  // packages/core-data/build-module/private-selectors.js
+  function getUndoManager(state) {
+    if (window.__experimentalEnableSync) {
+      if (true) {
+        return getSyncManager()?.undoManager ?? state.undoManager;
+      }
+    }
+    return state.undoManager;
+  }
+  function getNavigationFallbackId(state) {
+    return state.navigationFallbackId;
+  }
+  var getBlockPatternsForPostType = (0, import_data4.createRegistrySelector)(
+    (select) => (0, import_data4.createSelector)(
+      (state, postType) => select(STORE_NAME).getBlockPatterns().filter(
+        ({ postTypes }) => !postTypes || Array.isArray(postTypes) && postTypes.includes(postType)
+      ),
+      () => [select(STORE_NAME).getBlockPatterns()]
+    )
+  );
+  var getEntityRecordsPermissions = (0, import_data4.createRegistrySelector)(
+    (select) => (0, import_data4.createSelector)(
+      (state, kind, name, ids) => {
+        const normalizedIds = Array.isArray(ids) ? ids : [ids];
+        return normalizedIds.map((id2) => ({
+          delete: select(STORE_NAME).canUser("delete", {
+            kind,
+            name,
+            id: id2
+          }),
+          update: select(STORE_NAME).canUser("update", {
+            kind,
+            name,
+            id: id2
+          })
+        }));
+      },
+      (state) => [state.userPermissions]
+    )
+  );
+  function getEntityRecordPermissions(state, kind, name, id2) {
+    logEntityDeprecation(kind, name, "getEntityRecordPermissions");
+    return getEntityRecordsPermissions(state, kind, name, id2)[0];
+  }
+  function getRegisteredPostMeta(state, postType) {
+    return state.registeredPostMeta?.[postType] ?? {};
+  }
+  function normalizePageId(value) {
+    if (!value || !["number", "string"].includes(typeof value)) {
+      return null;
+    }
+    if (Number(value) === 0) {
+      return null;
+    }
+    return value.toString();
+  }
+  var getHomePage = (0, import_data4.createRegistrySelector)(
+    (select) => (0, import_data4.createSelector)(
+      () => {
+        const siteData = select(STORE_NAME).getEntityRecord(
+          "root",
+          "__unstableBase"
+        );
+        if (!siteData) {
+          return null;
+        }
+        const homepageId = siteData?.show_on_front === "page" ? normalizePageId(siteData.page_on_front) : null;
+        if (homepageId) {
+          return { postType: "page", postId: homepageId };
+        }
+        const frontPageTemplateId = select(
+          STORE_NAME
+        ).getDefaultTemplateId({
+          slug: "front-page"
+        });
+        if (!frontPageTemplateId) {
+          return null;
+        }
+        return { postType: "wp_template", postId: frontPageTemplateId };
+      },
+      (state) => [
+        // Even though getDefaultTemplateId.shouldInvalidate returns true when root/site changes,
+        // it doesn't seem to invalidate this cache, I'm not sure why.
+        getEntityRecord(state, "root", "site"),
+        getEntityRecord(state, "root", "__unstableBase"),
+        getDefaultTemplateId(state, {
+          slug: "front-page"
+        })
+      ]
+    )
+  );
+  var getPostsPageId = (0, import_data4.createRegistrySelector)((select) => () => {
+    const siteData = select(STORE_NAME).getEntityRecord(
+      "root",
+      "__unstableBase"
+    );
+    return siteData?.show_on_front === "page" ? normalizePageId(siteData.page_for_posts) : null;
+  });
+  var getTemplateId = (0, import_data4.createRegistrySelector)(
+    (select) => (state, postType, postId) => {
+      const homepage = unlock(select(STORE_NAME)).getHomePage();
+      if (!homepage) {
+        return;
+      }
+      if (postType === "page" && postType === homepage?.postType && postId.toString() === homepage?.postId) {
+        const templates = select(STORE_NAME).getEntityRecords(
+          "postType",
+          "wp_template",
+          {
+            per_page: -1
+          }
+        );
+        if (!templates) {
+          return;
+        }
+        const id2 = templates.find(({ slug }) => slug === "front-page")?.id;
+        if (id2) {
+          return id2;
+        }
+      }
+      const editedEntity = select(STORE_NAME).getEditedEntityRecord(
+        "postType",
+        postType,
+        postId
+      );
+      if (!editedEntity) {
+        return;
+      }
+      const postsPageId = unlock(select(STORE_NAME)).getPostsPageId();
+      if (postType === "page" && postsPageId === postId.toString()) {
+        return select(STORE_NAME).getDefaultTemplateId({
+          slug: "home"
+        });
+      }
+      const currentTemplateSlug = editedEntity.template;
+      if (currentTemplateSlug) {
+        const currentTemplate = select(STORE_NAME).getEntityRecords("postType", "wp_template", {
+          per_page: -1
+        })?.find(({ slug }) => slug === currentTemplateSlug);
+        if (currentTemplate) {
+          return currentTemplate.id;
+        }
+      }
+      let slugToCheck;
+      if (editedEntity.slug) {
+        slugToCheck = postType === "page" ? `${postType}-${editedEntity.slug}` : `single-${postType}-${editedEntity.slug}`;
+      } else {
+        slugToCheck = postType === "page" ? "page" : `single-${postType}`;
+      }
+      return select(STORE_NAME).getDefaultTemplateId({
+        slug: slugToCheck
+      });
+    }
+  );
+  function getEditorSettings(state) {
+    return state.editorSettings;
+  }
+  function getEditorAssets(state) {
+    return state.editorAssets;
+  }
+
   // packages/core-data/build-module/selectors.js
   var EMPTY_OBJECT = {};
-  var isRequestingEmbedPreview = (0, import_data4.createRegistrySelector)(
+  var isRequestingEmbedPreview = (0, import_data5.createRegistrySelector)(
     (select) => (state, url) => {
       return select(STORE_NAME).isResolving("getEmbedPreview", [
         url
@@ -15614,7 +16066,7 @@ var wp;
   function getCurrentUser(state) {
     return state.currentUser;
   }
-  var getUserQueryResults = (0, import_data4.createSelector)(
+  var getUserQueryResults = (0, import_data5.createSelector)(
     (state, queryID) => {
       const queryResults = state.users.queries[queryID] ?? [];
       return queryResults.map((id2) => state.users.byId[id2]);
@@ -15631,7 +16083,7 @@ var wp;
     });
     return getEntitiesConfig(state, kind);
   }
-  var getEntitiesConfig = (0, import_data4.createSelector)(
+  var getEntitiesConfig = (0, import_data5.createSelector)(
     (state, kind) => state.entities.config.filter((entity2) => entity2.kind === kind),
     /* eslint-disable @typescript-eslint/no-unused-vars */
     (state, kind) => state.entities.config
@@ -15650,7 +16102,7 @@ var wp;
       (config) => config.kind === kind && config.name === name
     );
   }
-  var getEntityRecord = (0, import_data4.createSelector)(
+  var getEntityRecord = (0, import_data5.createSelector)(
     ((state, kind, name, key, query) => {
       logEntityDeprecation(kind, name, "getEntityRecord");
       const queriedState = state.entities.records?.[kind]?.[name]?.queriedData;
@@ -15725,7 +16177,7 @@ var wp;
   function __experimentalGetEntityRecordNoResolver(state, kind, name, key) {
     return getEntityRecord(state, kind, name, key);
   }
-  var getRawEntityRecord = (0, import_data4.createSelector)(
+  var getRawEntityRecord = (0, import_data5.createSelector)(
     (state, kind, name, key) => {
       logEntityDeprecation(kind, name, "getRawEntityRecord");
       const record = getEntityRecord(
@@ -15790,7 +16242,7 @@ var wp;
     }
     return Math.ceil(totalItems / query.per_page);
   };
-  var __experimentalGetDirtyEntityRecords = (0, import_data4.createSelector)(
+  var __experimentalGetDirtyEntityRecords = (0, import_data5.createSelector)(
     (state) => {
       const {
         entities: { records }
@@ -15830,7 +16282,7 @@ var wp;
     },
     (state) => [state.entities.records]
   );
-  var __experimentalGetEntitiesBeingSaved = (0, import_data4.createSelector)(
+  var __experimentalGetEntitiesBeingSaved = (0, import_data5.createSelector)(
     (state) => {
       const {
         entities: { records }
@@ -15870,7 +16322,7 @@ var wp;
     logEntityDeprecation(kind, name, "getEntityRecordEdits");
     return state.entities.records?.[kind]?.[name]?.edits?.[recordId];
   }
-  var getEntityRecordNonTransientEdits = (0, import_data4.createSelector)(
+  var getEntityRecordNonTransientEdits = (0, import_data5.createSelector)(
     (state, kind, name, recordId) => {
       logEntityDeprecation(kind, name, "getEntityRecordNonTransientEdits");
       const { transientEdits } = getEntityConfig(state, kind, name) || {};
@@ -15896,7 +16348,7 @@ var wp;
       getEntityRecordNonTransientEdits(state, kind, name, recordId)
     ).length > 0;
   }
-  var getEditedEntityRecord = (0, import_data4.createSelector)(
+  var getEditedEntityRecord = (0, import_data5.createSelector)(
     (state, kind, name, recordId) => {
       logEntityDeprecation(kind, name, "getEditedEntityRecord");
       const raw = getRawEntityRecord(state, kind, name, recordId);
@@ -15953,10 +16405,10 @@ var wp;
     return void 0;
   }
   function hasUndo(state) {
-    return state.undoManager.hasUndo();
+    return getUndoManager(state).hasUndo();
   }
   function hasRedo(state) {
-    return state.undoManager.hasRedo();
+    return getUndoManager(state).hasRedo();
   }
   function getCurrentTheme(state) {
     if (!state.currentTheme) {
@@ -16011,7 +16463,7 @@ var wp;
       (autosave) => autosave.author === authorId
     );
   }
-  var hasFetchedAutosaves = (0, import_data4.createRegistrySelector)(
+  var hasFetchedAutosaves = (0, import_data5.createRegistrySelector)(
     (select) => (state, postType, postId) => {
       return select(STORE_NAME).hasFinishedResolution("getAutosaves", [
         postType,
@@ -16067,7 +16519,7 @@ var wp;
     }
     return getQueriedItems(queriedStateRevisions, query);
   };
-  var getRevision = (0, import_data4.createSelector)(
+  var getRevision = (0, import_data5.createSelector)(
     (state, kind, name, recordKey, revisionKey, query) => {
       logEntityDeprecation(kind, name, "getRevision");
       const queriedState = state.entities.records?.[kind]?.[name]?.revisions?.[recordKey];
@@ -16106,186 +16558,6 @@ var wp;
       ];
     }
   );
-
-  // packages/core-data/build-module/private-selectors.js
-  var private_selectors_exports = {};
-  __export(private_selectors_exports, {
-    getBlockPatternsForPostType: () => getBlockPatternsForPostType,
-    getEditorAssets: () => getEditorAssets,
-    getEditorSettings: () => getEditorSettings,
-    getEntityRecordPermissions: () => getEntityRecordPermissions,
-    getEntityRecordsPermissions: () => getEntityRecordsPermissions,
-    getHomePage: () => getHomePage,
-    getNavigationFallbackId: () => getNavigationFallbackId,
-    getPostsPageId: () => getPostsPageId,
-    getRegisteredPostMeta: () => getRegisteredPostMeta,
-    getTemplateId: () => getTemplateId,
-    getUndoManager: () => getUndoManager
-  });
-  var import_data5 = __toESM(require_data());
-
-  // packages/core-data/build-module/lock-unlock.js
-  var import_private_apis = __toESM(require_private_apis());
-  var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
-    "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
-    "@wordpress/core-data"
-  );
-
-  // packages/core-data/build-module/private-selectors.js
-  function getUndoManager(state) {
-    return state.undoManager;
-  }
-  function getNavigationFallbackId(state) {
-    return state.navigationFallbackId;
-  }
-  var getBlockPatternsForPostType = (0, import_data5.createRegistrySelector)(
-    (select) => (0, import_data5.createSelector)(
-      (state, postType) => select(STORE_NAME).getBlockPatterns().filter(
-        ({ postTypes }) => !postTypes || Array.isArray(postTypes) && postTypes.includes(postType)
-      ),
-      () => [select(STORE_NAME).getBlockPatterns()]
-    )
-  );
-  var getEntityRecordsPermissions = (0, import_data5.createRegistrySelector)(
-    (select) => (0, import_data5.createSelector)(
-      (state, kind, name, ids) => {
-        const normalizedIds = Array.isArray(ids) ? ids : [ids];
-        return normalizedIds.map((id2) => ({
-          delete: select(STORE_NAME).canUser("delete", {
-            kind,
-            name,
-            id: id2
-          }),
-          update: select(STORE_NAME).canUser("update", {
-            kind,
-            name,
-            id: id2
-          })
-        }));
-      },
-      (state) => [state.userPermissions]
-    )
-  );
-  function getEntityRecordPermissions(state, kind, name, id2) {
-    logEntityDeprecation(kind, name, "getEntityRecordPermissions");
-    return getEntityRecordsPermissions(state, kind, name, id2)[0];
-  }
-  function getRegisteredPostMeta(state, postType) {
-    return state.registeredPostMeta?.[postType] ?? {};
-  }
-  function normalizePageId(value) {
-    if (!value || !["number", "string"].includes(typeof value)) {
-      return null;
-    }
-    if (Number(value) === 0) {
-      return null;
-    }
-    return value.toString();
-  }
-  var getHomePage = (0, import_data5.createRegistrySelector)(
-    (select) => (0, import_data5.createSelector)(
-      () => {
-        const siteData = select(STORE_NAME).getEntityRecord(
-          "root",
-          "__unstableBase"
-        );
-        if (!siteData) {
-          return null;
-        }
-        const homepageId = siteData?.show_on_front === "page" ? normalizePageId(siteData.page_on_front) : null;
-        if (homepageId) {
-          return { postType: "page", postId: homepageId };
-        }
-        const frontPageTemplateId = select(
-          STORE_NAME
-        ).getDefaultTemplateId({
-          slug: "front-page"
-        });
-        if (!frontPageTemplateId) {
-          return null;
-        }
-        return { postType: "wp_template", postId: frontPageTemplateId };
-      },
-      (state) => [
-        // Even though getDefaultTemplateId.shouldInvalidate returns true when root/site changes,
-        // it doesn't seem to invalidate this cache, I'm not sure why.
-        getEntityRecord(state, "root", "site"),
-        getEntityRecord(state, "root", "__unstableBase"),
-        getDefaultTemplateId(state, {
-          slug: "front-page"
-        })
-      ]
-    )
-  );
-  var getPostsPageId = (0, import_data5.createRegistrySelector)((select) => () => {
-    const siteData = select(STORE_NAME).getEntityRecord(
-      "root",
-      "__unstableBase"
-    );
-    return siteData?.show_on_front === "page" ? normalizePageId(siteData.page_for_posts) : null;
-  });
-  var getTemplateId = (0, import_data5.createRegistrySelector)(
-    (select) => (state, postType, postId) => {
-      const homepage = unlock(select(STORE_NAME)).getHomePage();
-      if (!homepage) {
-        return;
-      }
-      if (postType === "page" && postType === homepage?.postType && postId.toString() === homepage?.postId) {
-        const templates = select(STORE_NAME).getEntityRecords(
-          "postType",
-          "wp_template",
-          {
-            per_page: -1
-          }
-        );
-        if (!templates) {
-          return;
-        }
-        const id2 = templates.find(({ slug }) => slug === "front-page")?.id;
-        if (id2) {
-          return id2;
-        }
-      }
-      const editedEntity = select(STORE_NAME).getEditedEntityRecord(
-        "postType",
-        postType,
-        postId
-      );
-      if (!editedEntity) {
-        return;
-      }
-      const postsPageId = unlock(select(STORE_NAME)).getPostsPageId();
-      if (postType === "page" && postsPageId === postId.toString()) {
-        return select(STORE_NAME).getDefaultTemplateId({
-          slug: "home"
-        });
-      }
-      const currentTemplateSlug = editedEntity.template;
-      if (currentTemplateSlug) {
-        const currentTemplate = select(STORE_NAME).getEntityRecords("postType", "wp_template", {
-          per_page: -1
-        })?.find(({ slug }) => slug === currentTemplateSlug);
-        if (currentTemplate) {
-          return currentTemplate.id;
-        }
-      }
-      let slugToCheck;
-      if (editedEntity.slug) {
-        slugToCheck = postType === "page" ? `${postType}-${editedEntity.slug}` : `single-${postType}-${editedEntity.slug}`;
-      } else {
-        slugToCheck = postType === "page" ? "page" : `single-${postType}`;
-      }
-      return select(STORE_NAME).getDefaultTemplateId({
-        slug: slugToCheck
-      });
-    }
-  );
-  function getEditorSettings(state) {
-    return state.editorSettings;
-  }
-  function getEditorAssets(state) {
-    return state.editorAssets;
-  }
 
   // packages/core-data/build-module/actions.js
   var actions_exports = {};
@@ -16524,7 +16796,7 @@ var wp;
       entities: entities2
     };
   }
-  function receiveEntityRecords(kind, name, records, query, invalidateCache = false, edits, meta) {
+  function receiveEntityRecords(kind, name, records, query = void 0, invalidateCache = false, edits = void 0, meta = void 0) {
     if (kind === "postType") {
       records = (Array.isArray(records) ? records : [records]).map(
         (record) => record.status === "auto-draft" ? { ...record, title: "" } : record
@@ -17473,7 +17745,7 @@ var wp;
           { kind, name, id: key }
         ]);
       }
-      if (window.__experimentalEnableSync && entityConfig.syncConfig && !query) {
+      if (window.__experimentalEnableSync && entityConfig.syncConfig && isNumericID(key) && !query) {
         if (true) {
           const objectType = `${kind}/${name}`;
           const objectId = key;

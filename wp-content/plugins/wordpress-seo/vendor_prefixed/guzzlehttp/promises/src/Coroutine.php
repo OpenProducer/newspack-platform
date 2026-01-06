@@ -76,7 +76,7 @@ final class Coroutine implements \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInte
     {
         return new self($generatorFn);
     }
-    public function then(callable $onFulfilled = null, callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         return $this->result->then($onFulfilled, $onRejected);
     }

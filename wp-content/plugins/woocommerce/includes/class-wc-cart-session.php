@@ -86,6 +86,8 @@ final class WC_Cart_Session {
 		add_action( 'woocommerce_add_to_cart', array( $this, 'maybe_set_cart_cookies' ) );
 		add_action( 'wp', array( $this, 'maybe_set_cart_cookies' ), 99 );
 		add_action( 'shutdown', array( $this, 'maybe_set_cart_cookies' ), 0 );
+
+		add_action( 'template_redirect', array( $this, 'clean_up_removed_cart_contents' ) );
 	}
 
 	/**
@@ -690,5 +692,33 @@ final class WC_Cart_Session {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Removes items from the removed cart contents on next user initiated request.
+	 *
+	 * @return void
+	 */
+	public function clean_up_removed_cart_contents() {
+		// Limit to page requests initiated by the user.
+		$is_page = is_singular() || is_archive() || is_search();
+
+		if ( is_404() || ! $is_page ) {
+			return;
+		}
+
+		// Don't cleanup if user just removed an item (undo link is being displayed).
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['removed_item'] ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['undo_item'] ) ) {
+			return;
+		}
+
+		WC()->session->set( 'removed_cart_contents', null );
+		$this->cart->set_removed_cart_contents( array() );
 	}
 }

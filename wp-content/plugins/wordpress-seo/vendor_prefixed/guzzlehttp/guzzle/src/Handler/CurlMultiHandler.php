@@ -2,6 +2,7 @@
 
 namespace YoastSEO_Vendor\GuzzleHttp\Handler;
 
+use Closure;
 use YoastSEO_Vendor\GuzzleHttp\Promise as P;
 use YoastSEO_Vendor\GuzzleHttp\Promise\Promise;
 use YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface;
@@ -129,6 +130,8 @@ class CurlMultiHandler
                 }
             }
         }
+        // Run curl_multi_exec in the queue to enable other async tasks to run
+        \YoastSEO_Vendor\GuzzleHttp\Promise\Utils::queue()->add(\Closure::fromCallable([$this, 'tickInQueue']));
         // Step through the task queue which may add additional requests.
         \YoastSEO_Vendor\GuzzleHttp\Promise\Utils::queue()->run();
         if ($this->active && \curl_multi_select($this->_mh, $this->selectTimeout) === -1) {
@@ -137,8 +140,20 @@ class CurlMultiHandler
             \usleep(250);
         }
         while (\curl_multi_exec($this->_mh, $this->active) === \CURLM_CALL_MULTI_PERFORM) {
+            // Prevent busy looping for slow HTTP requests.
+            \curl_multi_select($this->_mh, $this->selectTimeout);
         }
         $this->processMessages();
+    }
+    /**
+     * Runs \curl_multi_exec() inside the event loop, to prevent busy looping
+     */
+    private function tickInQueue() : void
+    {
+        if (\curl_multi_exec($this->_mh, $this->active) === \CURLM_CALL_MULTI_PERFORM) {
+            \curl_multi_select($this->_mh, 0);
+            \YoastSEO_Vendor\GuzzleHttp\Promise\Utils::queue()->add(\Closure::fromCallable([$this, 'tickInQueue']));
+        }
     }
     /**
      * Runs until all outstanding connections have completed.
@@ -184,7 +199,9 @@ class CurlMultiHandler
         $handle = $this->handles[$id]['easy']->handle;
         unset($this->delays[$id], $this->handles[$id]);
         \curl_multi_remove_handle($this->_mh, $handle);
-        \curl_close($handle);
+        if (\PHP_VERSION_ID < 80000) {
+            \curl_close($handle);
+        }
         return \true;
     }
     private function processMessages() : void
