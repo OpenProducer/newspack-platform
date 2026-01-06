@@ -5500,12 +5500,13 @@ var wp;
   var ICON_COLORS = ["#191e23", "#f8f9f9"];
   function isUnmodifiedBlock(block, role) {
     const blockAttributes = getBlockType(block.name)?.attributes ?? {};
-    const attributesToCheck = role ? Object.entries(blockAttributes).filter(([key, definition]) => {
+    const attributesByRole = role ? Object.entries(blockAttributes).filter(([key, definition]) => {
       if (role === "content" && key === "metadata") {
-        return true;
+        return Object.keys(block.attributes[key]?.bindings ?? {}).length > 0;
       }
       return definition.role === role || definition.__experimentalRole === role;
-    }) : Object.entries(blockAttributes);
+    }) : [];
+    const attributesToCheck = !!attributesByRole.length ? attributesByRole : Object.entries(blockAttributes);
     return attributesToCheck.every(([key, definition]) => {
       const value = block.attributes[key];
       if (definition.hasOwnProperty("default")) {
@@ -6043,6 +6044,7 @@ var wp;
   __export(private_selectors_exports, {
     getAllBlockBindingsSources: () => getAllBlockBindingsSources,
     getBlockBindingsSource: () => getBlockBindingsSource2,
+    getBlockBindingsSourceFieldsList: () => getBlockBindingsSourceFieldsList,
     getBootstrappedBlockType: () => getBootstrappedBlockType,
     getSupportedStyles: () => getSupportedStyles,
     getUnprocessedBlockTypes: () => getUnprocessedBlockTypes,
@@ -6152,6 +6154,27 @@ var wp;
   function getBlockBindingsSource2(state, sourceName) {
     return state.blockBindingsSources[sourceName];
   }
+  var getBlockBindingsSourceFieldsList = (0, import_data3.createRegistrySelector)(
+    (select3) => (0, import_data3.createSelector)(
+      (state, source, blockContext) => {
+        if (!source.getFieldsList) {
+          return [];
+        }
+        const context = {};
+        if (source?.usesContext?.length) {
+          for (const key of source.usesContext) {
+            context[key] = blockContext[key];
+          }
+        }
+        return source.getFieldsList({ select: select3, context });
+      },
+      (state, source, blockContext) => [
+        source.getFieldsList,
+        source.usesContext,
+        blockContext
+      ]
+    )
+  );
   var hasContentRoleAttribute = (state, blockTypeName) => {
     const blockType = getBlockType2(state, blockTypeName);
     if (!blockType) {
@@ -9612,7 +9635,25 @@ See: https://developer.wordpress.org/block-editor/reference-guides/block-api/blo
     return getBlockContentSchemaFromTransforms(getRawTransforms(), context);
   }
   function isPlain(HTML) {
-    return !/<(?!br[ />])/i.test(HTML);
+    if (!/<(?!br[ />])/i.test(HTML)) {
+      return true;
+    }
+    const doc = document.implementation.createHTMLDocument("");
+    doc.body.innerHTML = HTML;
+    if (doc.body.children.length !== 1) {
+      return false;
+    }
+    const wrapper = doc.body.children.item(0);
+    const descendants = wrapper.getElementsByTagName("*");
+    for (let i2 = 0; i2 < descendants.length; i2++) {
+      if (descendants.item(i2).tagName !== "BR") {
+        return false;
+      }
+    }
+    if (wrapper.tagName !== "SPAN") {
+      return false;
+    }
+    return true;
   }
   function deepFilterNodeList(nodeList, filters, doc, schema) {
     Array.from(nodeList).forEach((node) => {

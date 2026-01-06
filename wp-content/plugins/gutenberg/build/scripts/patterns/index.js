@@ -407,8 +407,7 @@ var wp;
         label: (0, import_i18n2.__)("Categories"),
         tokenizeOnBlur: true,
         __experimentalExpandOnFocus: true,
-        __next40pxDefaultSize: true,
-        __nextHasNoMarginBottom: true
+        __next40pxDefaultSize: true
       }
     );
   }

@@ -579,7 +579,16 @@ final class Newspack_Newsletters {
 			'item_link_description'    => __( 'A link to a newsletter.', 'newspack-newsletters' ),
 		];
 
-		$supports = [ 'author', 'editor', 'title', 'custom-fields', 'newspack_blocks', 'revisions', 'thumbnail', 'excerpt' ];
+		$supports = [
+			'author',
+			'editor' => [ 'notes' => true ],
+			'title',
+			'custom-fields',
+			'newspack_blocks',
+			'revisions',
+			'thumbnail',
+			'excerpt',
+		];
 
 		if ( get_option( 'newspack_newsletters_support_comments' ) ) {
 			$supports[] = 'comments';

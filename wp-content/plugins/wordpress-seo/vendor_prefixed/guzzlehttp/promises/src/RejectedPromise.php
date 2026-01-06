@@ -24,7 +24,7 @@ class RejectedPromise implements \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInte
         }
         $this->reason = $reason;
     }
-    public function then(callable $onFulfilled = null, callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         // If there's no onRejected callback then just return self.
         if (!$onRejected) {

@@ -1,9 +1,13 @@
 <?php
 // Enqueue parent and child theme styles
 function newspack_child_enqueue_styles() {
-    wp_enqueue_style('parent-style', get_template_directory_uri() . '/style.css');
+    $parent_handle = 'newspack-style';
+    $version = wp_get_theme()->get( 'Version' );
+
+    wp_enqueue_style( $parent_handle, get_template_directory_uri() . '/style.css', [], $version );
+    wp_enqueue_style( 'newspack-child-style', get_stylesheet_directory_uri() . '/style.css', [ $parent_handle ], $version );
 }
-add_action('wp_enqueue_scripts', 'newspack_child_enqueue_styles');
+add_action( 'wp_enqueue_scripts', 'newspack_child_enqueue_styles' );
 
 // Inject categories, event date, and venue into the carousel block
 function inject_event_categories_date_and_venue_into_carousel($block_content, $block) {
@@ -87,25 +91,55 @@ function inject_event_categories_date_and_venue_into_carousel($block_content, $b
                 }
 
                 $event_date = get_post_meta($post_id, '_EventStartDate', true);
-                if ($event_date) {
-                    $formatted_date = date_i18n(get_option('date_format'), strtotime($event_date));
-                    $date_element = $xpath->query('.//time[contains(@class, "entry-date")]', $article_data['node'])->item(0);
-                    if ($date_element) {
-                        $date_element->nodeValue = $formatted_date;
-                        $date_element->setAttribute('datetime', date('c', strtotime($event_date)));
-                    }
+                $date_element = $xpath->query('.//time[contains(@class, "entry-date")]', $article_data['node'])->item(0);
+                if ($event_date && $date_element) {
+                    $formatted_date = date_i18n(get_option('date_format') . ' @ ' . get_option('time_format'), strtotime($event_date));
+                    $date_element->nodeValue = $formatted_date;
+                    $date_element->setAttribute('datetime', date('c', strtotime($event_date)));
                 }
 
                 // Add venue underneath the date
-                $venue = get_post_meta($post_id, '_EventVenue', true);
-                if ($venue) {
-                    $venue_element = $xpath->query('.//div[contains(@class, "entry-meta")]', $article_data['node'])->item(0);
-                    if ($venue_element) {
-                        $venue_html = '<div class="event-venue">' . esc_html($venue) . '</div>';
-                        $fragment = $dom->createDocumentFragment();
-                        $fragment->appendXML($venue_html);
-                        $venue_element->appendChild($fragment);
+                $venue = '';
+
+                // Prefer TEC venue ID; fallback to the old meta key if it exists.
+                $venue_id = get_post_meta($post_id, '_EventVenueID', true);
+                if ($venue_id) {
+                    if (function_exists('tribe_get_venue')) {
+                        $venue = tribe_get_venue($venue_id);
+                    } else {
+                        $venue = get_the_title($venue_id);
                     }
+                }
+
+                if (!$venue) {
+                    $venue = get_post_meta($post_id, '_EventVenue', true);
+                }
+
+                $entry_meta = $xpath->query('.//div[contains(@class, "entry-meta")]', $article_data['node'])->item(0);
+                if ($entry_meta) {
+                    // Group date and venue into a single column to force stacking.
+                    $when_where = $dom->createElement('div');
+                    $when_where->setAttribute('class', 'event-when-where');
+
+                    if ($date_element) {
+                        if ($date_element->parentNode) {
+                            $date_element->parentNode->removeChild($date_element);
+                        }
+                        $date_wrapper = $dom->createElement('div');
+                        $date_wrapper->setAttribute('class', 'event-date');
+                        $date_wrapper->appendChild($date_element);
+                        $when_where->appendChild($date_wrapper);
+                    }
+
+                    if ($venue) {
+                        $venue_wrapper = $dom->createElement('div');
+                        $venue_wrapper->setAttribute('class', 'event-venue');
+                        $venue_wrapper->appendChild($dom->createTextNode($venue));
+                        $when_where->appendChild($venue_wrapper);
+                    }
+
+                    // Place the group inside entry-meta.
+                    $entry_meta->appendChild($when_where);
                 }
             }
         }

@@ -61,6 +61,7 @@ class ComposerStaticInitaf215841decbeeb56934cb417f9b8bb3
         'Newspack_Newsletters_Mailchimp_Api' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-api.php',
         'Newspack_Newsletters_Mailchimp_Cached_Data' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-cached-data.php',
         'Newspack_Newsletters_Mailchimp_Controller' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-controller.php',
+        'Newspack_Newsletters_Mailchimp_Default_Footer' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-default-footer.php',
         'Newspack_Newsletters_Mailchimp_Groups' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-groups.php',
         'Newspack_Newsletters_Mailchimp_Notes' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-notes.php',
         'Newspack_Newsletters_Mailchimp_Subscription_List_Trait' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-subscription-list-trait.php',

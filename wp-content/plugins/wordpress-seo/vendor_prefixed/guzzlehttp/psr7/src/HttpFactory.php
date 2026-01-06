@@ -23,7 +23,7 @@ use YoastSEO_Vendor\Psr\Http\Message\UriInterface;
  */
 final class HttpFactory implements \YoastSEO_Vendor\Psr\Http\Message\RequestFactoryInterface, \YoastSEO_Vendor\Psr\Http\Message\ResponseFactoryInterface, \YoastSEO_Vendor\Psr\Http\Message\ServerRequestFactoryInterface, \YoastSEO_Vendor\Psr\Http\Message\StreamFactoryInterface, \YoastSEO_Vendor\Psr\Http\Message\UploadedFileFactoryInterface, \YoastSEO_Vendor\Psr\Http\Message\UriFactoryInterface
 {
-    public function createUploadedFile(\YoastSEO_Vendor\Psr\Http\Message\StreamInterface $stream, int $size = null, int $error = \UPLOAD_ERR_OK, string $clientFilename = null, string $clientMediaType = null) : \YoastSEO_Vendor\Psr\Http\Message\UploadedFileInterface
+    public function createUploadedFile(\YoastSEO_Vendor\Psr\Http\Message\StreamInterface $stream, ?int $size = null, int $error = \UPLOAD_ERR_OK, ?string $clientFilename = null, ?string $clientMediaType = null) : \YoastSEO_Vendor\Psr\Http\Message\UploadedFileInterface
     {
         if ($size === null) {
             $size = $stream->getSize();

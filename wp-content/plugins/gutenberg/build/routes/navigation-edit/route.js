@@ -38,11 +38,41 @@ var require_core_data = __commonJS({
   }
 });
 
+// package-external:@wordpress/html-entities
+var require_html_entities = __commonJS({
+  "package-external:@wordpress/html-entities"(exports, module) {
+    module.exports = window.wp.htmlEntities;
+  }
+});
+
+// package-external:@wordpress/i18n
+var require_i18n = __commonJS({
+  "package-external:@wordpress/i18n"(exports, module) {
+    module.exports = window.wp.i18n;
+  }
+});
+
 // routes/navigation-edit/route.ts
 var import_data = __toESM(require_data());
 var import_core_data = __toESM(require_core_data());
+var import_html_entities = __toESM(require_html_entities());
+var import_i18n = __toESM(require_i18n());
 var NAVIGATION_POST_TYPE = "wp_navigation";
 var route = {
+  title: async ({
+    params
+  }) => {
+    const navigationId = parseInt(params.id);
+    const navigation = await (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord(
+      "postType",
+      NAVIGATION_POST_TYPE,
+      navigationId
+    );
+    if (navigation?.title?.rendered) {
+      return (0, import_html_entities.decodeEntities)(navigation.title.rendered);
+    }
+    return (0, import_i18n.__)("Navigation");
+  },
   canvas: async ({
     params
   }) => {

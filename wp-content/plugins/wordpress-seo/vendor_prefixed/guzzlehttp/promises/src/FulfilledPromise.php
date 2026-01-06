@@ -24,7 +24,7 @@ class FulfilledPromise implements \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInt
         }
         $this->value = $value;
     }
-    public function then(callable $onFulfilled = null, callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         // Return itself if there is no onFulfilled function.
         if (!$onFulfilled) {

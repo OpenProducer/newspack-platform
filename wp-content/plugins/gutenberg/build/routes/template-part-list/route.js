@@ -38,6 +38,13 @@ var require_core_data = __commonJS({
   }
 });
 
+// package-external:@wordpress/i18n
+var require_i18n = __commonJS({
+  "package-external:@wordpress/i18n"(exports, module) {
+    module.exports = window.wp.i18n;
+  }
+});
+
 // package-external:@wordpress/element
 var require_element = __commonJS({
   "package-external:@wordpress/element"(exports, module) {
@@ -55,6 +62,7 @@ var require_preferences = __commonJS({
 // routes/template-part-list/route.ts
 var import_data4 = __toESM(require_data());
 var import_core_data2 = __toESM(require_core_data());
+var import_i18n = __toESM(require_i18n());
 
 // packages/views/build-module/preference-keys.js
 function generatePreferenceKey(kind, name, slug) {
@@ -150,6 +158,20 @@ var DEFAULT_VIEWS = [
     }
   },
   {
+    slug: "overlay",
+    label: "Overlays",
+    view: {
+      ...DEFAULT_VIEW,
+      filters: [
+        {
+          field: "area",
+          operator: "is",
+          value: "overlay"
+        }
+      ]
+    }
+  },
+  {
     slug: "uncategorized",
     label: "General",
     view: {
@@ -207,6 +229,7 @@ function viewToQuery(view) {
 
 // routes/template-part-list/route.ts
 var route = {
+  title: () => (0, import_i18n.__)("Template Parts"),
   async canvas(context) {
     const { params, search } = context;
     const view = await ensureView(params.area, {

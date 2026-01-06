@@ -1836,7 +1836,13 @@ var wp;
           setError(null);
         } catch (err) {
           setError(err.message);
-          (0, import_a11y3.speak)(err.message);
+          (0, import_a11y3.speak)(
+            (0, import_i18n17.sprintf)(
+              /* translators: %s: error message returned when parsing LaTeX. */
+              (0, import_i18n17.__)("Error parsing mathematical expression: %s"),
+              err.message
+            )
+          );
           return;
         }
       }
@@ -1882,7 +1888,11 @@ var wp;
               {
                 intent: "error",
                 className: "wp-block-math__error",
-                children: error
+                children: (0, import_i18n17.sprintf)(
+                  /* translators: %s: error message returned when parsing LaTeX. */
+                  (0, import_i18n17.__)("Error: %s"),
+                  error
+                )
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("style", { children: ".wp-block-math__error .components-badge__content{white-space:normal}" })

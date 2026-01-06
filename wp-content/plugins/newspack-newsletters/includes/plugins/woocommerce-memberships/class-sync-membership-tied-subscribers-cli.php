@@ -171,12 +171,12 @@ Note that if a member has unsubscribed from a list, but has an active membership
 					}
 
 					$restricted_lists = [];
-					foreach ( $rule->get_object_ids() as $list_id ) {
+					foreach ( $rule->get_object_ids() as $restricted_list_id ) {
 						try {
-							$list = new \Newspack\Newsletters\Subscription_List( $list_id );
+							$list = new \Newspack\Newsletters\Subscription_List( $restricted_list_id );
 							$restricted_lists[] = $list;
 						} catch ( \Throwable $th ) {
-							\WP_CLI::warning( sprintf( 'Could not get subscription list for ID %d: %s', $list_id, $th->getMessage() ) );
+							\WP_CLI::warning( sprintf( 'Could not get subscription list for ID %d: %s', $restricted_list_id, $th->getMessage() ) );
 							continue;
 						}
 					}

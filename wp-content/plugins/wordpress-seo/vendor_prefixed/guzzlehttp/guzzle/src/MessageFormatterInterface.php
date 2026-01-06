@@ -13,5 +13,5 @@ interface MessageFormatterInterface
      * @param ResponseInterface|null $response Response that was received
      * @param \Throwable|null        $error    Exception that was received
      */
-    public function format(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, \YoastSEO_Vendor\Psr\Http\Message\ResponseInterface $response = null, \Throwable $error = null) : string;
+    public function format(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, ?\YoastSEO_Vendor\Psr\Http\Message\ResponseInterface $response = null, ?\Throwable $error = null) : string;
 }

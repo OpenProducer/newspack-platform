@@ -2433,14 +2433,15 @@ var wp;
   }
 
   // packages/data/build-module/index.js
+  var defaultRegistry = default_registry_default;
   var combineReducers2 = combineReducers;
-  var resolveSelect2 = default_registry_default.resolveSelect;
-  var suspendSelect = default_registry_default.suspendSelect;
-  var subscribe = default_registry_default.subscribe;
-  var registerGenericStore = default_registry_default.registerGenericStore;
-  var registerStore = default_registry_default.registerStore;
-  var use = default_registry_default.use;
-  var register = default_registry_default.register;
+  var resolveSelect2 = (storeNameOrDescriptor) => defaultRegistry.resolveSelect(storeNameOrDescriptor);
+  var suspendSelect = (storeNameOrDescriptor) => defaultRegistry.suspendSelect(storeNameOrDescriptor);
+  var subscribe = (listener, storeNameOrDescriptor) => defaultRegistry.subscribe(listener, storeNameOrDescriptor);
+  var registerGenericStore = defaultRegistry.registerGenericStore;
+  var registerStore = defaultRegistry.registerStore;
+  var use = defaultRegistry.use;
+  var register = (store) => defaultRegistry.register(store);
   return __toCommonJS(index_exports);
 })();
 /*! Bundled license information:

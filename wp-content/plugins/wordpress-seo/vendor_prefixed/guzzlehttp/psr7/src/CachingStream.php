@@ -25,7 +25,7 @@ final class CachingStream implements \YoastSEO_Vendor\Psr\Http\Message\StreamInt
      * @param StreamInterface $stream Stream to cache. The cursor is assumed to be at the beginning of the stream.
      * @param StreamInterface $target Optionally specify where data is cached
      */
-    public function __construct(\YoastSEO_Vendor\Psr\Http\Message\StreamInterface $stream, \YoastSEO_Vendor\Psr\Http\Message\StreamInterface $target = null)
+    public function __construct(\YoastSEO_Vendor\Psr\Http\Message\StreamInterface $stream, ?\YoastSEO_Vendor\Psr\Http\Message\StreamInterface $target = null)
     {
         $this->remoteStream = $stream;
         $this->stream = $target ?: new \YoastSEO_Vendor\GuzzleHttp\Psr7\Stream(\YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::tryFopen('php://temp', 'r+'));

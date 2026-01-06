@@ -270,6 +270,12 @@ function viewToQuery(view, postType) {
 
 // routes/post-list/route.ts
 var route = {
+  title: async ({ params }) => {
+    const postType = await (0, import_data4.resolveSelect)(import_core_data2.store).getPostType(
+      params.type
+    );
+    return postType?.labels?.name || params.type;
+  },
   async canvas(context) {
     const { params, search } = context;
     const view = await ensureView(params.type, params.slug, {

@@ -1015,7 +1015,7 @@ class Newspack_Newsletters_Subscription {
 							<?php endforeach; ?>
 						</ul>
 					</div>
-					<button type="submit"><?php _e( 'Update subscriptions', 'newspack-newsletters' ); ?></button>
+					<button class="newspack-ui__button newspack-ui__button--primary" type="submit"><?php _e( 'Update subscriptions', 'newspack-newsletters' ); ?></button>
 				</form>
 			<?php endif; ?>
 		</div>

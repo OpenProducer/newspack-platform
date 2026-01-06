@@ -60,6 +60,7 @@ return array(
     'Newspack_Newsletters_Mailchimp_Api' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-api.php',
     'Newspack_Newsletters_Mailchimp_Cached_Data' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-cached-data.php',
     'Newspack_Newsletters_Mailchimp_Controller' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-controller.php',
+    'Newspack_Newsletters_Mailchimp_Default_Footer' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-default-footer.php',
     'Newspack_Newsletters_Mailchimp_Groups' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-groups.php',
     'Newspack_Newsletters_Mailchimp_Notes' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-notes.php',
     'Newspack_Newsletters_Mailchimp_Subscription_List_Trait' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-subscription-list-trait.php',

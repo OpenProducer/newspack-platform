@@ -20,7 +20,7 @@ final class Each
      *
      * @param mixed $iterable Iterator or array to iterate over.
      */
-    public static function of($iterable, callable $onFulfilled = null, callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
+    public static function of($iterable, ?callable $onFulfilled = null, ?callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         return (new \YoastSEO_Vendor\GuzzleHttp\Promise\EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected]))->promise();
     }
@@ -35,7 +35,7 @@ final class Each
      * @param mixed        $iterable
      * @param int|callable $concurrency
      */
-    public static function ofLimit($iterable, $concurrency, callable $onFulfilled = null, callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
+    public static function ofLimit($iterable, $concurrency, ?callable $onFulfilled = null, ?callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         return (new \YoastSEO_Vendor\GuzzleHttp\Promise\EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected, 'concurrency' => $concurrency]))->promise();
     }
@@ -47,7 +47,7 @@ final class Each
      * @param mixed        $iterable
      * @param int|callable $concurrency
      */
-    public static function ofLimitAll($iterable, $concurrency, callable $onFulfilled = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
+    public static function ofLimitAll($iterable, $concurrency, ?callable $onFulfilled = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         return self::ofLimit($iterable, $concurrency, $onFulfilled, function ($reason, $idx, \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface $aggregate) : void {
             $aggregate->reject($reason);

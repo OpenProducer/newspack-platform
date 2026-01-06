@@ -22,12 +22,12 @@ class Promise implements \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
      * @param callable $waitFn   Fn that when invoked resolves the promise.
      * @param callable $cancelFn Fn that when invoked cancels the promise.
      */
-    public function __construct(callable $waitFn = null, callable $cancelFn = null)
+    public function __construct(?callable $waitFn = null, ?callable $cancelFn = null)
     {
         $this->waitFn = $waitFn;
         $this->cancelFn = $cancelFn;
     }
-    public function then(callable $onFulfilled = null, callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         if ($this->state === self::PENDING) {
             $p = new \YoastSEO_Vendor\GuzzleHttp\Promise\Promise(null, [$this, 'cancel']);
