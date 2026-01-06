@@ -7,7 +7,12 @@
  * @package Newspack
  */
 
-get_header();
+$is_splash_page = get_theme_mod( 'splash_page_home', false );
+if ( true === $is_splash_page ) {
+	get_template_part( 'template-parts/header/no-header', 'header' );
+} else {
+	get_header();
+}
 ?>
 	<section id="primary" class="content-area">
 		<main id="main" class="site-main">
@@ -38,4 +43,8 @@ get_header();
 	</section><!-- #primary -->
 
 <?php
-get_footer();
+if ( true === $is_splash_page ) {
+	get_template_part( 'template-parts/footer/no-footer', 'footer' );
+} else {
+	get_footer();
+}

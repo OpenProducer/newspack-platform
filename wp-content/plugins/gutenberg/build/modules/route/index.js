@@ -5478,6 +5478,13 @@ function RouterProvider({ router, ...rest }) {
   return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(RouterContextProvider, { router, ...rest, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Matches, {}) });
 }
 
+// node_modules/@tanstack/react-router/dist/esm/useLocation.js
+function useLocation(opts) {
+  return useRouterState({
+    select: (state) => opts?.select ? opts.select(state.location) : state.location
+  });
+}
+
 // node_modules/@tanstack/react-router/dist/esm/useCanGoBack.js
 function useCanGoBack() {
   return useRouterState({ select: (s) => s.location.state.__TSR_index !== 0 });
@@ -5505,6 +5512,8 @@ lock(privateApis, {
   redirect,
   createLink,
   useCanGoBack,
+  useLoaderData,
+  useLocation,
   useMatches,
   useRouter,
   // History utilities

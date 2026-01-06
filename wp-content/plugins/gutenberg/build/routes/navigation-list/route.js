@@ -38,9 +38,17 @@ var require_core_data = __commonJS({
   }
 });
 
+// package-external:@wordpress/i18n
+var require_i18n = __commonJS({
+  "package-external:@wordpress/i18n"(exports, module) {
+    module.exports = window.wp.i18n;
+  }
+});
+
 // routes/navigation-list/route.ts
 var import_data = __toESM(require_data());
 var import_core_data = __toESM(require_core_data());
+var import_i18n = __toESM(require_i18n());
 var NAVIGATION_POST_TYPE = "wp_navigation";
 var PRELOADED_NAVIGATION_MENUS_QUERY = {
   per_page: -1,
@@ -49,6 +57,7 @@ var PRELOADED_NAVIGATION_MENUS_QUERY = {
   orderby: "date"
 };
 var route = {
+  title: () => (0, import_i18n.__)("Navigation"),
   canvas: async ({
     search
   }) => {

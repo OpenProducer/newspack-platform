@@ -36,7 +36,7 @@ class RetryMiddleware
      *                                                                         and returns the number of
      *                                                                         milliseconds to delay.
      */
-    public function __construct(callable $decider, callable $nextHandler, callable $delay = null)
+    public function __construct(callable $decider, callable $nextHandler, ?callable $delay = null)
     {
         $this->decider = $decider;
         $this->nextHandler = $nextHandler;
@@ -83,7 +83,7 @@ class RetryMiddleware
             return $this->doRetry($req, $options);
         };
     }
-    private function doRetry(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, array $options, \YoastSEO_Vendor\Psr\Http\Message\ResponseInterface $response = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
+    private function doRetry(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, array $options, ?\YoastSEO_Vendor\Psr\Http\Message\ResponseInterface $response = null) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         $options['delay'] = ($this->delay)(++$options['retries'], $response, $request);
         return $this($request, $options);

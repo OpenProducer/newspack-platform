@@ -35,31 +35,10 @@ var require_data = __commonJS({
   }
 });
 
-// package-external:@wordpress/api-fetch
-var require_api_fetch = __commonJS({
-  "package-external:@wordpress/api-fetch"(exports, module) {
-    module.exports = window.wp.apiFetch;
-  }
-});
-
-// package-external:@wordpress/url
-var require_url = __commonJS({
-  "package-external:@wordpress/url"(exports, module) {
-    module.exports = window.wp.url;
-  }
-});
-
 // package-external:@wordpress/i18n
 var require_i18n = __commonJS({
   "package-external:@wordpress/i18n"(exports, module) {
     module.exports = window.wp.i18n;
-  }
-});
-
-// package-external:@wordpress/core-data
-var require_core_data = __commonJS({
-  "package-external:@wordpress/core-data"(exports, module) {
-    module.exports = window.wp.coreData;
   }
 });
 
@@ -7137,28 +7116,21 @@ var require_dist2 = __commonJS({
 });
 
 // packages/abilities/build-module/api.js
-var import_data5 = __toESM(require_data());
-var import_api_fetch = __toESM(require_api_fetch());
-var import_url = __toESM(require_url());
-var import_i18n3 = __toESM(require_i18n());
+var import_data4 = __toESM(require_data());
+var import_i18n2 = __toESM(require_i18n());
 
 // packages/abilities/build-module/store/index.js
-var import_data4 = __toESM(require_data());
-var import_core_data2 = __toESM(require_core_data());
-var import_i18n2 = __toESM(require_i18n());
+var import_data3 = __toESM(require_data());
 
 // packages/abilities/build-module/store/reducer.js
 var import_data = __toESM(require_data());
 
 // packages/abilities/build-module/store/constants.js
 var STORE_NAME = "core/abilities";
-var ENTITY_KIND = "root";
-var ENTITY_NAME = "abilities";
-var ENTITY_NAME_CATEGORIES = "ability-categories";
-var RECEIVE_ABILITIES = "RECEIVE_ABILITIES";
+var ABILITY_NAME_PATTERN = /^[a-z0-9-]+\/[a-z0-9-]+$/;
+var CATEGORY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 var REGISTER_ABILITY = "REGISTER_ABILITY";
 var UNREGISTER_ABILITY = "UNREGISTER_ABILITY";
-var RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES";
 var REGISTER_ABILITY_CATEGORY = "REGISTER_ABILITY_CATEGORY";
 var UNREGISTER_ABILITY_CATEGORY = "UNREGISTER_ABILITY_CATEGORY";
 
@@ -7194,16 +7166,6 @@ function sanitizeCategory(category) {
 var DEFAULT_STATE = {};
 function abilitiesByName(state = DEFAULT_STATE, action) {
   switch (action.type) {
-    case RECEIVE_ABILITIES: {
-      if (!action.abilities) {
-        return state;
-      }
-      const newState = {};
-      action.abilities.forEach((ability) => {
-        newState[ability.name] = sanitizeAbility(ability);
-      });
-      return newState;
-    }
     case REGISTER_ABILITY: {
       if (!action.ability) {
         return state;
@@ -7214,7 +7176,7 @@ function abilitiesByName(state = DEFAULT_STATE, action) {
       };
     }
     case UNREGISTER_ABILITY: {
-      if (!action.name || !state[action.name]) {
+      if (!state[action.name]) {
         return state;
       }
       const { [action.name]: _, ...newState } = state;
@@ -7227,16 +7189,6 @@ function abilitiesByName(state = DEFAULT_STATE, action) {
 var DEFAULT_CATEGORIES_STATE = {};
 function categoriesBySlug(state = DEFAULT_CATEGORIES_STATE, action) {
   switch (action.type) {
-    case RECEIVE_CATEGORIES: {
-      if (!action.categories) {
-        return state;
-      }
-      const newState = {};
-      action.categories.forEach((category) => {
-        newState[category.slug] = sanitizeCategory(category);
-      });
-      return newState;
-    }
     case REGISTER_ABILITY_CATEGORY: {
       if (!action.category) {
         return state;
@@ -7247,7 +7199,7 @@ function categoriesBySlug(state = DEFAULT_CATEGORIES_STATE, action) {
       };
     }
     case UNREGISTER_ABILITY_CATEGORY: {
-      if (!action.slug || !state[action.slug]) {
+      if (!state[action.slug]) {
         return state;
       }
       const { [action.slug]: _, ...newState } = state;
@@ -7265,33 +7217,29 @@ var reducer_default = (0, import_data.combineReducers)({
 // packages/abilities/build-module/store/actions.js
 var actions_exports = {};
 __export(actions_exports, {
-  receiveAbilities: () => receiveAbilities,
-  receiveCategories: () => receiveCategories,
   registerAbility: () => registerAbility,
   registerAbilityCategory: () => registerAbilityCategory,
   unregisterAbility: () => unregisterAbility,
   unregisterAbilityCategory: () => unregisterAbilityCategory
 });
 var import_i18n = __toESM(require_i18n());
-var import_data2 = __toESM(require_data());
-function receiveAbilities(abilities) {
-  return {
-    type: RECEIVE_ABILITIES,
-    abilities
-  };
-}
-function receiveCategories(categories) {
-  return {
-    type: RECEIVE_CATEGORIES,
-    categories
-  };
+function filterAnnotations(sourceAnnotations, allowedKeys) {
+  const annotations = {};
+  if (sourceAnnotations) {
+    for (const key of allowedKeys) {
+      if (sourceAnnotations[key] !== void 0) {
+        annotations[key] = sourceAnnotations[key];
+      }
+    }
+  }
+  return annotations;
 }
 function registerAbility(ability) {
-  return async ({ select, dispatch: dispatch3 }) => {
+  return ({ select: select2, dispatch: dispatch2 }) => {
     if (!ability.name) {
       throw new Error("Ability name is required");
     }
-    if (!/^[a-z0-9-]+\/[a-z0-9-]+$/.test(ability.name)) {
+    if (!ABILITY_NAME_PATTERN.test(ability.name)) {
       throw new Error(
         'Ability name must be a string containing a namespace prefix, i.e. "my-plugin/my-ability". It can only contain lowercase alphanumeric characters, dashes and the forward slash.'
       );
@@ -7311,16 +7259,16 @@ function registerAbility(ability) {
         (0, import_i18n.sprintf)('Ability "%s" must have a category', ability.name)
       );
     }
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(ability.category)) {
+    if (!CATEGORY_SLUG_PATTERN.test(ability.category)) {
       throw new Error(
         (0, import_i18n.sprintf)(
-          'Ability "%1$s" has an invalid category. Category must be lowercase alphanumeric with dashes only Got: "%2$s"',
+          'Ability "%1$s" has an invalid category. Category must be lowercase alphanumeric with dashes only. Got: "%2$s"',
           ability.name,
           ability.category
         )
       );
     }
-    const categories = await (0, import_data2.resolveSelect)(STORE_NAME).getAbilityCategories();
+    const categories = select2.getAbilityCategories();
     const existingCategory = categories.find(
       (cat) => cat.slug === ability.category
     );
@@ -7341,15 +7289,29 @@ function registerAbility(ability) {
         )
       );
     }
-    const existingAbility = select.getAbility(ability.name);
+    const existingAbility = select2.getAbility(ability.name);
     if (existingAbility) {
       throw new Error(
         (0, import_i18n.sprintf)('Ability "%s" is already registered', ability.name)
       );
     }
-    dispatch3({
+    const annotations = filterAnnotations(ability.meta?.annotations, [
+      "readonly",
+      "destructive",
+      "idempotent",
+      "serverRegistered",
+      "clientRegistered"
+    ]);
+    if (!annotations.serverRegistered) {
+      annotations.clientRegistered = true;
+    }
+    const meta = { annotations };
+    dispatch2({
       type: REGISTER_ABILITY,
-      ability
+      ability: {
+        ...ability,
+        meta
+      }
     });
   };
 }
@@ -7360,17 +7322,16 @@ function unregisterAbility(name) {
   };
 }
 function registerAbilityCategory(slug, args) {
-  return async ({ select, dispatch: dispatch3 }) => {
+  return ({ select: select2, dispatch: dispatch2 }) => {
     if (!slug) {
       throw new Error("Category slug is required");
     }
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    if (!CATEGORY_SLUG_PATTERN.test(slug)) {
       throw new Error(
         "Category slug must contain only lowercase alphanumeric characters and dashes."
       );
     }
-    await (0, import_data2.resolveSelect)(STORE_NAME).getAbilityCategories();
-    const existingCategory = select.getAbilityCategory(slug);
+    const existingCategory = select2.getAbilityCategory(slug);
     if (existingCategory) {
       throw new Error(
         (0, import_i18n.sprintf)('Category "%s" is already registered.', slug)
@@ -7391,18 +7352,21 @@ function registerAbilityCategory(slug, args) {
         "The category properties should provide a valid `meta` object."
       );
     }
+    const annotations = filterAnnotations(args.meta?.annotations, [
+      "serverRegistered",
+      "clientRegistered"
+    ]);
+    if (!annotations.serverRegistered) {
+      annotations.clientRegistered = true;
+    }
+    const meta = { annotations };
     const category = {
       slug,
       label: args.label,
       description: args.description,
-      meta: {
-        ...args.meta || {},
-        // Internal implementation note: Client-registered categories will have `meta._clientRegistered` set to `true` to differentiate them from server-fetched categories.
-        // This is used internally by the resolver to determine whether to fetch categories from the server.
-        _clientRegistered: true
-      }
+      meta
     };
-    dispatch3({
+    dispatch2({
       type: REGISTER_ABILITY_CATEGORY,
       category
     });
@@ -7423,8 +7387,8 @@ __export(selectors_exports, {
   getAbilityCategories: () => getAbilityCategories,
   getAbilityCategory: () => getAbilityCategory
 });
-var import_data3 = __toESM(require_data());
-var getAbilities = (0, import_data3.createSelector)(
+var import_data2 = __toESM(require_data());
+var getAbilities = (0, import_data2.createSelector)(
   (state, { category } = {}) => {
     const abilities = Object.values(state.abilitiesByName);
     if (category) {
@@ -7434,7 +7398,7 @@ var getAbilities = (0, import_data3.createSelector)(
     }
     return abilities;
   },
-  (state, category) => [
+  (state, { category } = {}) => [
     state.abilitiesByName,
     category
   ]
@@ -7442,7 +7406,7 @@ var getAbilities = (0, import_data3.createSelector)(
 function getAbility(state, name) {
   return state.abilitiesByName[name];
 }
-var getAbilityCategories = (0, import_data3.createSelector)(
+var getAbilityCategories = (0, import_data2.createSelector)(
   (state) => {
     return Object.values(state.categoriesBySlug);
   },
@@ -7452,114 +7416,13 @@ function getAbilityCategory(state, slug) {
   return state.categoriesBySlug[slug];
 }
 
-// packages/abilities/build-module/store/resolvers.js
-var resolvers_exports = {};
-__export(resolvers_exports, {
-  getAbilities: () => getAbilities2,
-  getAbility: () => getAbility2,
-  getAbilityCategories: () => getAbilityCategories2,
-  getAbilityCategory: () => getAbilityCategory2
-});
-var import_core_data = __toESM(require_core_data());
-function getAbilities2() {
-  return async ({ dispatch: dispatch3, registry, select }) => {
-    const existingAbilities = select.getAbilities();
-    const hasServerAbilities = existingAbilities.some(
-      (ability) => !ability.callback
-    );
-    if (hasServerAbilities) {
-      return;
-    }
-    const abilities = await registry.resolveSelect(import_core_data.store).getEntityRecords(ENTITY_KIND, ENTITY_NAME, {
-      per_page: -1
-    });
-    dispatch3(receiveAbilities(abilities || []));
-  };
-}
-function getAbility2(name) {
-  return async ({ dispatch: dispatch3, registry, select }) => {
-    const existingAbility = select.getAbility(name);
-    if (existingAbility) {
-      return;
-    }
-    try {
-      const ability = await registry.resolveSelect(import_core_data.store).getEntityRecord(ENTITY_KIND, ENTITY_NAME, name);
-      if (ability) {
-        await dispatch3(registerAbility(ability));
-      }
-    } catch (error) {
-      console.debug(`Ability not found: ${name}`);
-    }
-  };
-}
-function getAbilityCategories2() {
-  return async ({ dispatch: dispatch3, registry, select }) => {
-    const existingCategories = select.getAbilityCategories();
-    const hasServerCategories = existingCategories.some(
-      (category) => !category.meta?._clientRegistered
-    );
-    if (hasServerCategories) {
-      return;
-    }
-    const categories = await registry.resolveSelect(import_core_data.store).getEntityRecords(ENTITY_KIND, ENTITY_NAME_CATEGORIES, {
-      per_page: -1
-    });
-    dispatch3(receiveCategories(categories || []));
-  };
-}
-function getAbilityCategory2(slug) {
-  return async ({ dispatch: dispatch3, registry, select }) => {
-    const existingCategory = select.getAbilityCategory(slug);
-    if (existingCategory) {
-      return;
-    }
-    try {
-      const category = await registry.resolveSelect(import_core_data.store).getEntityRecord(ENTITY_KIND, ENTITY_NAME_CATEGORIES, slug);
-      if (category) {
-        await dispatch3(
-          registerAbilityCategory(category.slug, {
-            label: category.label,
-            description: category.description,
-            meta: category.meta
-          })
-        );
-      }
-    } catch (error) {
-      console.debug(`Category not found: ${slug}`);
-    }
-  };
-}
-
 // packages/abilities/build-module/store/index.js
-var store = (0, import_data4.createReduxStore)(STORE_NAME, {
+var store = (0, import_data3.createReduxStore)(STORE_NAME, {
   reducer: reducer_default,
   actions: actions_exports,
-  selectors: selectors_exports,
-  resolvers: resolvers_exports
+  selectors: selectors_exports
 });
-(0, import_data4.register)(store);
-(0, import_data4.dispatch)(import_core_data2.store).addEntities([
-  {
-    name: ENTITY_NAME,
-    kind: ENTITY_KIND,
-    key: "name",
-    baseURL: "/wp-abilities/v1/abilities",
-    baseURLParams: { context: "edit" },
-    plural: "abilities",
-    label: (0, import_i18n2.__)("Abilities"),
-    supportsPagination: true
-  },
-  {
-    name: ENTITY_NAME_CATEGORIES,
-    kind: ENTITY_KIND,
-    key: "slug",
-    baseURL: "/wp-abilities/v1/categories",
-    baseURLParams: { context: "edit" },
-    plural: "ability-categories",
-    label: (0, import_i18n2.__)("Ability Categories"),
-    supportsPagination: true
-  }
-]);
+(0, import_data3.register)(store);
 
 // packages/abilities/build-module/validation.js
 var import_ajv_draft_04 = __toESM(require_dist());
@@ -7668,35 +7531,39 @@ function validateValueFromSchema(value, args, param = "") {
 }
 
 // packages/abilities/build-module/api.js
-async function getAbilities3(args = {}) {
-  return await (0, import_data5.resolveSelect)(store).getAbilities(args);
+function getAbilities2(args = {}) {
+  return (0, import_data4.select)(store).getAbilities(args);
 }
-async function getAbility3(name) {
-  return await (0, import_data5.resolveSelect)(store).getAbility(name);
+function getAbility2(name) {
+  return (0, import_data4.select)(store).getAbility(name);
 }
-async function getAbilityCategories3() {
-  return await (0, import_data5.resolveSelect)(store).getAbilityCategories();
+function getAbilityCategories2() {
+  return (0, import_data4.select)(store).getAbilityCategories();
 }
-async function getAbilityCategory3(slug) {
-  return await (0, import_data5.resolveSelect)(store).getAbilityCategory(slug);
+function getAbilityCategory2(slug) {
+  return (0, import_data4.select)(store).getAbilityCategory(slug);
 }
-async function registerAbility2(ability) {
-  await (0, import_data5.dispatch)(store).registerAbility(ability);
+function registerAbility2(ability) {
+  (0, import_data4.dispatch)(store).registerAbility(ability);
 }
 function unregisterAbility2(name) {
-  (0, import_data5.dispatch)(store).unregisterAbility(name);
+  (0, import_data4.dispatch)(store).unregisterAbility(name);
 }
-async function registerAbilityCategory2(slug, args) {
-  await (0, import_data5.dispatch)(store).registerAbilityCategory(slug, args);
+function registerAbilityCategory2(slug, args) {
+  (0, import_data4.dispatch)(store).registerAbilityCategory(slug, args);
 }
 function unregisterAbilityCategory2(slug) {
-  (0, import_data5.dispatch)(store).unregisterAbilityCategory(slug);
+  (0, import_data4.dispatch)(store).unregisterAbilityCategory(slug);
 }
-async function executeClientAbility(ability, input) {
+async function executeAbility(name, input) {
+  const ability = getAbility2(name);
+  if (!ability) {
+    throw new Error((0, import_i18n2.sprintf)("Ability not found: %s", name));
+  }
   if (!ability.callback) {
     throw new Error(
-      (0, import_i18n3.sprintf)(
-        "Client ability %s is missing callback function",
+      (0, import_i18n2.sprintf)(
+        'Ability "%s" is missing callback. Please ensure the ability is properly registered.',
         ability.name
       )
     );
@@ -7705,7 +7572,7 @@ async function executeClientAbility(ability, input) {
     const hasPermission = await ability.permissionCallback(input);
     if (!hasPermission) {
       const error = new Error(
-        (0, import_i18n3.sprintf)("Permission denied for ability: %s", ability.name)
+        (0, import_i18n2.sprintf)("Permission denied for ability: %s", ability.name)
       );
       error.code = "ability_permission_denied";
       throw error;
@@ -7719,7 +7586,7 @@ async function executeClientAbility(ability, input) {
     );
     if (inputValidation !== true) {
       const error = new Error(
-        (0, import_i18n3.sprintf)(
+        (0, import_i18n2.sprintf)(
           'Ability "%1$s" has invalid input. Reason: %2$s',
           ability.name,
           inputValidation
@@ -7733,10 +7600,7 @@ async function executeClientAbility(ability, input) {
   try {
     result = await ability.callback(input);
   } catch (error) {
-    console.error(
-      `Error executing client ability ${ability.name}:`,
-      error
-    );
+    console.error(`Error executing ability ${ability.name}:`, error);
     throw error;
   }
   if (ability.output_schema) {
@@ -7747,7 +7611,7 @@ async function executeClientAbility(ability, input) {
     );
     if (outputValidation !== true) {
       const error = new Error(
-        (0, import_i18n3.sprintf)(
+        (0, import_i18n2.sprintf)(
           'Ability "%1$s" has invalid output. Reason: %2$s',
           ability.name,
           outputValidation
@@ -7759,48 +7623,12 @@ async function executeClientAbility(ability, input) {
   }
   return result;
 }
-async function executeServerAbility(ability, input) {
-  let method = "POST";
-  if (!!ability.meta?.annotations?.readonly) {
-    method = "GET";
-  } else if (!!ability.meta?.annotations?.destructive && !!ability.meta?.annotations?.idempotent) {
-    method = "DELETE";
-  }
-  let path = `/wp-abilities/v1/abilities/${ability.name}/run`;
-  const options = {
-    method
-  };
-  if (["GET", "DELETE"].includes(method) && input !== null) {
-    path = (0, import_url.addQueryArgs)(path, { input });
-  } else if (method === "POST" && input !== null) {
-    options.data = { input };
-  }
-  try {
-    return await (0, import_api_fetch.default)({
-      path,
-      ...options
-    });
-  } catch (error) {
-    console.error(`Error executing ability ${ability.name}:`, error);
-    throw error;
-  }
-}
-async function executeAbility(name, input) {
-  const ability = await getAbility3(name);
-  if (!ability) {
-    throw new Error((0, import_i18n3.sprintf)("Ability not found: %s", name));
-  }
-  if (ability.callback) {
-    return executeClientAbility(ability, input);
-  }
-  return executeServerAbility(ability, input);
-}
 export {
   executeAbility,
-  getAbilities3 as getAbilities,
-  getAbility3 as getAbility,
-  getAbilityCategories3 as getAbilityCategories,
-  getAbilityCategory3 as getAbilityCategory,
+  getAbilities2 as getAbilities,
+  getAbility2 as getAbility,
+  getAbilityCategories2 as getAbilityCategories,
+  getAbilityCategory2 as getAbilityCategory,
   registerAbility2 as registerAbility,
   registerAbilityCategory2 as registerAbilityCategory,
   store,

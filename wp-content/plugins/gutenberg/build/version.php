@@ -7,5 +7,5 @@
  */
 
 if ( ! defined( 'GUTENBERG_VERSION' ) ) {
-	define( 'GUTENBERG_VERSION', '22.2.0' );
+	define( 'GUTENBERG_VERSION', '22.3.0' );
 }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
+class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
 {
     public static $prefixLengthsPsr4 = array (
         'C' =>
@@ -407,6 +407,7 @@ class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Token\\AccessToken' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Token/AccessToken.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Token\\AccessTokenInterface' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Token/AccessTokenInterface.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Token\\ResourceOwnerAccessTokenInterface' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Token/ResourceOwnerAccessTokenInterface.php',
+        'YoastSEO_Vendor\\League\\OAuth2\\Client\\Token\\SettableRefreshTokenInterface' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Token/SettableRefreshTokenInterface.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Tool\\ArrayAccessorTrait' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Tool/ArrayAccessorTrait.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Tool\\BearerAuthorizationTrait' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Tool/BearerAuthorizationTrait.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Tool\\GuardedPropertyTrait' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Tool/GuardedPropertyTrait.php',
@@ -637,6 +638,7 @@ class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
         'Yoast\\WP\\SEO\\Conditionals\\SEMrush_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/semrush-enabled-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Settings_Conditional' => __DIR__ . '/../..' . '/src/conditionals/settings-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Should_Index_Links_Conditional' => __DIR__ . '/../..' . '/src/conditionals/should-index-links-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Task_List_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/task-list-enabled-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Text_Formality_Conditional' => __DIR__ . '/../..' . '/src/conditionals/text-formality-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/elementor-activated-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Edit_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/elementor-edit-conditional.php',
@@ -927,6 +929,7 @@ class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
         'Yoast\\WP\\SEO\\Helpers\\Require_File_Helper' => __DIR__ . '/../..' . '/src/helpers/require-file-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Robots_Helper' => __DIR__ . '/../..' . '/src/helpers/robots-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Robots_Txt_Helper' => __DIR__ . '/../..' . '/src/helpers/robots-txt-helper.php',
+        'Yoast\\WP\\SEO\\Helpers\\Route_Helper' => __DIR__ . '/../..' . '/src/helpers/route-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Sanitization_Helper' => __DIR__ . '/../..' . '/src/helpers/sanitization-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Schema\\Article_Helper' => __DIR__ . '/../..' . '/src/helpers/schema/article-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Schema\\HTML_Helper' => __DIR__ . '/../..' . '/src/helpers/schema/html-helper.php',
@@ -1100,6 +1103,7 @@ class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
         'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Intro_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/intro-builder.php',
         'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Link_Lists_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/link-lists-builder.php',
         'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Markdown_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/markdown-builder.php',
+        'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Optional_Link_List_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/optional-link-list-builder.php',
         'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Builders\\Title_Builder' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-builders/title-builder.php',
         'Yoast\\WP\\SEO\\Llms_Txt\\Application\\Markdown_Escaper' => __DIR__ . '/../..' . '/src/llms-txt/application/markdown-escaper.php',
         'Yoast\\WP\\SEO\\Llms_Txt\\Domain\\Available_Posts\\Data_Provider\\Available_Posts_Data' => __DIR__ . '/../..' . '/src/llms-txt/domain/available-posts/data-provider/available-posts-data.php',
@@ -1150,6 +1154,7 @@ class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
         'Yoast\\WP\\SEO\\Models\\SEO_Links' => __DIR__ . '/../..' . '/src/models/seo-links.php',
         'Yoast\\WP\\SEO\\Models\\SEO_Meta' => __DIR__ . '/../..' . '/src/models/seo-meta.php',
         'Yoast\\WP\\SEO\\Plans\\Application\\Add_Ons_Collector' => __DIR__ . '/../..' . '/src/plans/application/add-ons-collector.php',
+        'Yoast\\WP\\SEO\\Plans\\Application\\Duplicate_Post_Manager' => __DIR__ . '/../..' . '/src/plans/application/duplicate-post-manager.php',
         'Yoast\\WP\\SEO\\Plans\\Domain\\Add_Ons\\Add_On_Interface' => __DIR__ . '/../..' . '/src/plans/domain/add-ons/add-on-interface.php',
         'Yoast\\WP\\SEO\\Plans\\Domain\\Add_Ons\\Premium' => __DIR__ . '/../..' . '/src/plans/domain/add-ons/premium.php',
         'Yoast\\WP\\SEO\\Plans\\Domain\\Add_Ons\\Woo' => __DIR__ . '/../..' . '/src/plans/domain/add-ons/woo.php',
@@ -1286,6 +1291,37 @@ class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
         'Yoast\\WP\\SEO\\Surfaces\\Schema_Helpers_Surface' => __DIR__ . '/../..' . '/src/surfaces/schema-helpers-surface.php',
         'Yoast\\WP\\SEO\\Surfaces\\Twitter_Helpers_Surface' => __DIR__ . '/../..' . '/src/surfaces/twitter-helpers-surface.php',
         'Yoast\\WP\\SEO\\Surfaces\\Values\\Meta' => __DIR__ . '/../..' . '/src/surfaces/values/meta.php',
+        'Yoast\\WP\\SEO\\Task_List\\Application\\Configuration\\Task_List_Configuration' => __DIR__ . '/../..' . '/src/task-list/application/configuration/task-list-configuration.php',
+        'Yoast\\WP\\SEO\\Task_List\\Application\\Endpoints\\Endpoints_Repository' => __DIR__ . '/../..' . '/src/task-list/application/endpoints/endpoints-repository.php',
+        'Yoast\\WP\\SEO\\Task_List\\Application\\Tasks\\Complete_FTC' => __DIR__ . '/../..' . '/src/task-list/application/tasks/complete-ftc.php',
+        'Yoast\\WP\\SEO\\Task_List\\Application\\Tasks\\Create_New_Content' => __DIR__ . '/../..' . '/src/task-list/application/tasks/create-new-content.php',
+        'Yoast\\WP\\SEO\\Task_List\\Application\\Tasks\\Delete_Hello_World' => __DIR__ . '/../..' . '/src/task-list/application/tasks/delete-hello-world.php',
+        'Yoast\\WP\\SEO\\Task_List\\Application\\Tasks\\Enable_Llms_Txt' => __DIR__ . '/../..' . '/src/task-list/application/tasks/enable-llms-txt.php',
+        'Yoast\\WP\\SEO\\Task_List\\Application\\Tasks\\Set_Search_Appearance_Templates' => __DIR__ . '/../..' . '/src/task-list/application/tasks/set-search-appearance-templates.php',
+        'Yoast\\WP\\SEO\\Task_List\\Application\\Tasks_Repository' => __DIR__ . '/../..' . '/src/task-list/application/tasks-repository.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Components\\Call_To_Action_Entry' => __DIR__ . '/../..' . '/src/task-list/domain/components/call-to-action-entry.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Components\\Copy_Set' => __DIR__ . '/../..' . '/src/task-list/domain/components/copy-set.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Endpoint\\Endpoint_Interface' => __DIR__ . '/../..' . '/src/task-list/domain/endpoint/endpoint-interface.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Endpoint\\Endpoint_List' => __DIR__ . '/../..' . '/src/task-list/domain/endpoint/endpoint-list.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Exceptions\\Complete_Hello_World_Task_Exception' => __DIR__ . '/../..' . '/src/task-list/domain/exceptions/complete-hello-world-task-exception.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Exceptions\\Complete_LLMS_Task_Exception' => __DIR__ . '/../..' . '/src/task-list/domain/exceptions/complete-llms-task-exception.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Exceptions\\Invalid_Post_Type_Tasks_Exception' => __DIR__ . '/../..' . '/src/task-list/domain/exceptions/invalid-post-type-tasks-exception.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Exceptions\\Invalid_Tasks_Exception' => __DIR__ . '/../..' . '/src/task-list/domain/exceptions/invalid-tasks-exception.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Exceptions\\Task_Not_Found_Exception' => __DIR__ . '/../..' . '/src/task-list/domain/exceptions/task-not-found-exception.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Tasks\\Abstract_Completeable_Task' => __DIR__ . '/../..' . '/src/task-list/domain/tasks/abstract-completeable-task.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Tasks\\Abstract_Post_Type_Task' => __DIR__ . '/../..' . '/src/task-list/domain/tasks/abstract-post-type-task.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Tasks\\Abstract_Task' => __DIR__ . '/../..' . '/src/task-list/domain/tasks/abstract-task.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Tasks\\Completeable_Task_Interface' => __DIR__ . '/../..' . '/src/task-list/domain/tasks/completeable-task-interface.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Tasks\\Post_Type_Task_Interface' => __DIR__ . '/../..' . '/src/task-list/domain/tasks/post-type-task-interface.php',
+        'Yoast\\WP\\SEO\\Task_List\\Domain\\Tasks\\Task_Interface' => __DIR__ . '/../..' . '/src/task-list/domain/tasks/task-interface.php',
+        'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Endpoints\\Complete_Task_Endpoint' => __DIR__ . '/../..' . '/src/task-list/infrastructure/endpoints/complete-task-endpoint.php',
+        'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Endpoints\\Get_Tasks_Endpoint' => __DIR__ . '/../..' . '/src/task-list/infrastructure/endpoints/get-tasks-endpoint.php',
+        'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Register_Post_Type_Tasks_Integration' => __DIR__ . '/../..' . '/src/task-list/infrastructure/register-post-type-tasks-integration.php',
+        'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Cached_Tasks_Collector' => __DIR__ . '/../..' . '/src/task-list/infrastructure/tasks-collectors/cached-tasks-collector.php',
+        'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector' => __DIR__ . '/../..' . '/src/task-list/infrastructure/tasks-collectors/tasks-collector.php',
+        'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector_Interface' => __DIR__ . '/../..' . '/src/task-list/infrastructure/tasks-collectors/tasks-collector-interface.php',
+        'Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Complete_Task_Route' => __DIR__ . '/../..' . '/src/task-list/user-interface/tasks/complete-task-route.php',
+        'Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Get_Tasks_Route' => __DIR__ . '/../..' . '/src/task-list/user-interface/tasks/get-tasks-route.php',
         'Yoast\\WP\\SEO\\User_Meta\\Application\\Additional_Contactmethods_Collector' => __DIR__ . '/../..' . '/src/user-meta/application/additional-contactmethods-collector.php',
         'Yoast\\WP\\SEO\\User_Meta\\Application\\Cleanup_Service' => __DIR__ . '/../..' . '/src/user-meta/application/cleanup-service.php',
         'Yoast\\WP\\SEO\\User_Meta\\Application\\Custom_Meta_Collector' => __DIR__ . '/../..' . '/src/user-meta/application/custom-meta-collector.php',
@@ -1347,9 +1383,9 @@ class ComposerStaticInit88e18481b877a4240af60ad16111d9f3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit88e18481b877a4240af60ad16111d9f3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit88e18481b877a4240af60ad16111d9f3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit88e18481b877a4240af60ad16111d9f3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitae21fa458dac9ca3c112516ae205afa0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitae21fa458dac9ca3c112516ae205afa0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitae21fa458dac9ca3c112516ae205afa0::$classMap;
 
         }, null, ClassLoader::class);
     }
