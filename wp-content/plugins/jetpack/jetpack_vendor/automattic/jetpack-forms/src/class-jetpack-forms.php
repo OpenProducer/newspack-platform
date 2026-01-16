@@ -14,7 +14,7 @@ use Automattic\Jetpack\Forms\Dashboard\Dashboard;
  */
 class Jetpack_Forms {
 
-	const PACKAGE_VERSION = '6.21.2';
+	const PACKAGE_VERSION = '7.2.0';
 
 	/**
 	 * Load the contact form module.
@@ -137,5 +137,62 @@ class Jetpack_Forms {
 		 * @param bool false Whether webhooks should be enabled. Default false.
 		 */
 		return apply_filters( 'jetpack_forms_webhooks_enabled', false );
+	}
+
+	/**
+	 * Returns true if the Integrations UI should be shown in the Forms dashboard.
+	 *
+	 * @since 6.22.0
+	 *
+	 * @return boolean
+	 */
+	public static function show_dashboard_integrations() {
+		/**
+		 * Whether to show Integrations UI in the Forms dashboard.
+		 *
+		 * @since 6.22.0
+		 *
+		 * @param bool true Whether to show the Integrations UI in the dashboard. Default true.
+		 */
+		return apply_filters( 'jetpack_forms_show_dashboard_integrations', true );
+	}
+
+	/**
+	 * Returns true if the Integrations UI should be shown in the Form block editor.
+	 *
+	 * @since 6.22.0
+	 *
+	 * @return boolean
+	 */
+	public static function show_block_integrations() {
+		/**
+		 * Whether to show Integrations UI in the Form block editor.
+		 *
+		 * @since 6.22.0
+		 *
+		 * @param bool true Whether to show the Integrations UI in the editor. Default true.
+		 */
+		return apply_filters( 'jetpack_forms_show_block_integrations', true );
+	}
+
+	/**
+	 * Returns true if integration icons should be shown (editor sidebar and integrations modal).
+	 *
+	 * @since 6.22.0
+	 *
+	 * @return boolean
+	 */
+	public static function show_integration_icons() {
+		/**
+		 * Whether to show integration icons in the UI.
+		 *
+		 * If set to false, the ActiveIntegrations component (editor sidebar) will be hidden
+		 * and integration icons in the integrations modal will not be rendered.
+		 *
+		 * @since 6.22.0
+		 *
+		 * @param bool true Whether to show integration icons. Default true.
+		 */
+		return apply_filters( 'jetpack_forms_show_integration_icons', true );
 	}
 }
