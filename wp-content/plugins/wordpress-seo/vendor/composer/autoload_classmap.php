@@ -604,7 +604,7 @@ return array(
     'Yoast\\WP\\SEO\\Conditionals\\Feature_Flag_Conditional' => $baseDir . '/src/conditionals/feature-flag-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Front_End_Conditional' => $baseDir . '/src/conditionals/front-end-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Get_Request_Conditional' => $baseDir . '/src/conditionals/get-request-conditional.php',
-    'Yoast\\WP\\SEO\\Conditionals\\Google_Site_Kit_Feature_Conditional' => $baseDir . '/src/conditionals/google-site-kit-feature-conditional.php',
+    'Yoast\\WP\\SEO\\Conditionals\\Google_Site_Kit_Feature_Conditional' => $baseDir . '/src/deprecated/src/conditionals/google-site-kit-feature-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Headless_Rest_Endpoints_Enabled_Conditional' => $baseDir . '/src/conditionals/headless-rest-endpoints-enabled-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Import_Tool_Selected_Conditional' => $baseDir . '/src/conditionals/import-tool-selected-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional' => $baseDir . '/src/conditionals/jetpack-conditional.php',

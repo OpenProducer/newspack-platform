@@ -5,6 +5,87 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.2.0] - 2026-01-06
+### Added
+- Add support for setting custom ID on hidden field blocks from block settings. [#46360]
+- Add a new filter that lets us control when we want to to show the powered by wording in the email. [#46158]
+- Add list view sidebar for easier field management. [#46403]
+- Allow using the Gutenberg Core Button block as the submit control in Contact Form. The block gets the same interactivity bindings and loading spinner as the Jetpack Button, and all form variations now insert a core button by default. [#46166]
+- Support Math and Code blocks inside forms. [#46421]
+
+### Changed
+- Use core/button instead of jetpack/button. [#46166]
+- Refactor Feedback_Test.php into 8 focused test classes for better organization and maintainability. [#46394]
+- Update radio button styling to use ::before pseudo-element approach for consistency with checkboxes. [#46392]
+
+### Fixed
+- Fix combobox dropdown styling overrides for phone input field. [#46408]
+- Fix checkbox-multiple styling by removing incorrect button style selector. [#46412]
+- Fix combobox dropdown occlusion by adding z-index when open. [#46401]
+- Fix React console error on checkbox/radio option inputs by providing an onChange handler. [#46439]
+- Don't allow ::after pseudo element manipulation on Jetpack Forms radio and checkbox input elements. [#46393]
+- Fixing form checkboxes and radio styles for dark background themes. [#46411]
+- Update 'Learn more' link in form notification settings. [#46385]
+- Improve phone field styling to better mimic theme input styles, including focus outline and filter CSS properties. [#46432]
+
+## [7.1.0] - 2025-12-22
+### Added
+- Add wp-build based form responses route for DataViews integration. [#46206]
+
+### Changed
+- Allow CSV files to be uploaded via contact forms. [#46308]
+- Update package dependencies. [#46352]
+
+### Removed
+- Remove admin class files. [#46255]
+
+### Fixed
+- Fix textarea placeholders to match input placeholder styling. [#46310]
+- Fix button padding. [#46331]
+- Strip HTML from styled labels in error summary. [#46319]
+
+## [7.0.0] - 2025-12-15
+### Added
+- Add Jetpack Form custom post type for reusable forms with REST API support and feature flag integration. [#46202]
+- Add CTA to install/activate Akismet on empty spam dashboard. [#46212]
+
+### Changed
+- Add `jetpack_forms_extra_webhooks` filter and include feedback ID in `jetpack_forms_before_webhook_request` filter. [#46228]
+- Auto-generate webhook id so users don't have to fill it. [#46270]
+- Refactor how we retrieve form submission fields to send in the webhook payload. [#46201]
+- Track webhook requests done in wpcom infrastructure. [#46273]
+- Track when users enable and disable webhooks. [#46277]
+- Use entire button area for selecting multi-select options. [#46263]
+- Replace use of confusing `esc_js` with `wp_json_encode`. [#46229]
+- Tests: Replace PHPUnit mocks with anonymous classes to eliminate PHPUnit 12 strictness warnings. [#46256]
+- Update package dependencies. [#46244]
+
+### Removed
+- Removes classic Admin initialization code. [#46254]
+
+### Fixed
+- Fix export functionality to handle null values properly for IP Address, Country code, and Browser fields. [#46250]
+- Fix `Contact_Form_Endpoint_Test::test_resend_email` attempting to actually send email. [#46261]
+- Ensure submission summary is contained within 100% width. [#46264]
+- Fix dashboard height. [#46276]
+- Fix slider field text labels showing borders in editor when using certain themes like Assembler. [#46182]
+- Fix validation accessibility. [#46275]
+- Make form buttons take full width on mobile devices. [#46154]
+
+## [6.22.0] - 2025-12-08
+### Added
+- Add filter to hide integration icons. [#46188]
+- Add integrations display filters. [#46156]
+
+### Changed
+- Update package dependencies. [#45914]
+
+### Fixed
+- Ensure proper flags are used with `json_encode()`. [#46092]
+- Decode HTML entities in exported form names to prevent codes like `&#8211;` appearing in CSV exports. [#46178]
+- Fix PHP warning when global gets overwritten. [#46141]
+- Set `from` field as primary on dashboard. [#46170]
+
 ## [6.21.2] - 2025-12-04
 ### Fixed
 - Forms: Use the correct case on cipher names [#46189]
@@ -1942,6 +2023,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a new jetpack/forms package [#28409]
 - Added a public load_contact_form method for initializing the contact form module. [#28416]
 
+[7.2.0]: https://github.com/automattic/jetpack-forms/compare/v7.1.0...v7.2.0
+[7.1.0]: https://github.com/automattic/jetpack-forms/compare/v7.0.0...v7.1.0
+[7.0.0]: https://github.com/automattic/jetpack-forms/compare/v6.22.0...v7.0.0
+[6.22.0]: https://github.com/automattic/jetpack-forms/compare/v6.21.2...v6.22.0
 [6.21.2]: https://github.com/automattic/jetpack-forms/compare/v6.21.1...v6.21.2
 [6.21.1]: https://github.com/automattic/jetpack-forms/compare/v6.21.0...v6.21.1
 [6.21.0]: https://github.com/automattic/jetpack-forms/compare/v6.20.0...v6.21.0

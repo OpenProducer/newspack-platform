@@ -39,6 +39,13 @@ class Contact_Form extends Contact_Form_Shortcode {
 	public $shortcode_name = 'contact-form';
 
 	/**
+	 * The custom post type for forms.
+	 *
+	 * @var string
+	 */
+	const POST_TYPE = 'jetpack_form';
+
+	/**
 	 *
 	 * Stores form submission errors.
 	 *
@@ -169,9 +176,15 @@ class Contact_Form extends Contact_Form_Shortcode {
 		}
 
 		if ( $set_id ) {
-			$attributes['id'] = self::compute_id( $attributes, $this->current_post, $page );
+			$page_number      = is_numeric( $page ) ? intval( $page ) : 1;
+			$attributes['id'] = self::compute_id( $attributes, $this->current_post, $page_number );
 		}
-		$this->hash = sha1( wp_json_encode( $attributes ) );
+		$this->hash = sha1(
+			wp_json_encode(
+				$attributes,
+				0 // phpcs:ignore Jetpack.Functions.JsonEncodeFlags.ZeroFound -- No `json_encode()` flags because we don't want to disrupt the current hash index.
+			)
+		);
 
 		if ( $set_id ) {
 			self::$forms[ $this->hash ] = $this; // This increments the form count.
@@ -382,7 +395,7 @@ class Contact_Form extends Contact_Form_Shortcode {
 				// create a fallback source
 				$source = array(
 					'source_id'   => $post->ID,
-					'entry_title' => $post->post_title,
+					'entry_title' => html_entity_decode( $post->post_title, ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
 					'entry_page'  => 1,
 					'source_type' => 'single',
 					'request_url' => get_permalink( $post ),
@@ -447,6 +460,73 @@ class Contact_Form extends Contact_Form_Shortcode {
 			return;
 		}
 		self::$forms_context[ $context ] = self::get_forms_context_count( $context ) + 1;
+	}
+
+	/**
+	 * Register the jetpack_form custom post type.
+	 */
+	public static function register_post_type() {
+
+		$labels = array(
+			'name'                     => __( 'Forms', 'jetpack-forms' ),
+			'singular_name'            => __( 'Form', 'jetpack-forms' ),
+			'add_new'                  => __( 'Add Form', 'jetpack-forms' ),
+			'add_new_item'             => __( 'Add Form', 'jetpack-forms' ),
+			'new_item'                 => __( 'New Form', 'jetpack-forms' ),
+			'edit_item'                => __( 'Edit Block Form', 'jetpack-forms' ),
+			'view_item'                => __( 'View Form', 'jetpack-forms' ),
+			'view_items'               => __( 'View Forms', 'jetpack-forms' ),
+			'all_items'                => __( 'All Forms', 'jetpack-forms' ),
+			'search_items'             => __( 'Search Forms', 'jetpack-forms' ),
+			'not_found'                => __( 'No forms found.', 'jetpack-forms' ),
+			'not_found_in_trash'       => __( 'No forms found in Trash.', 'jetpack-forms' ),
+			'filter_items_list'        => __( 'Filter forms list', 'jetpack-forms' ),
+			'items_list_navigation'    => __( 'Forms list navigation', 'jetpack-forms' ),
+			'items_list'               => __( 'Forms list', 'jetpack-forms' ),
+			'item_published'           => __( 'Form published.', 'jetpack-forms' ),
+			'item_published_privately' => __( 'Form published privately.', 'jetpack-forms' ),
+			'item_reverted_to_draft'   => __( 'Form reverted to draft.', 'jetpack-forms' ),
+			'item_scheduled'           => __( 'Form scheduled.', 'jetpack-forms' ),
+			'item_updated'             => __( 'Form updated.', 'jetpack-forms' ),
+		);
+
+		$capabilities = array(
+			// You need to be able to edit posts, in order to read blocks in their raw form.
+			'read'                   => 'edit_posts',
+			// You need to be able to publish posts, in order to create blocks.
+			'create_posts'           => 'publish_posts',
+			'edit_posts'             => 'edit_posts',
+			'edit_published_posts'   => 'edit_published_posts',
+			'delete_published_posts' => 'delete_published_posts',
+			// Enables trashing draft posts as well.
+			'delete_posts'           => 'delete_posts',
+			'edit_others_posts'      => 'edit_others_posts',
+			'delete_others_posts'    => 'delete_others_posts',
+		);
+
+		$args = array(
+			'public'                => false,
+			'show_ui'               => true, // not sure we need this.
+			'show_in_menu'          => false,
+			'rewrite'               => false,
+			'query_var'             => false,
+			'show_in_rest'          => true,
+			'rest_base'             => 'jetpack-forms',
+			'rest_controller_class' => 'Automattic\Jetpack\Forms\ContactForm\Jetpack_Form_Endpoint',
+			'capability_type'       => 'post',
+			'capabilities'          => $capabilities,
+			'map_meta_cap'          => true,
+			'labels'                => $labels,
+			'hierarchical'          => false,
+			'supports'              => array(
+				'title',
+				'editor',
+				'revisions',
+				'author',
+			),
+		);
+
+		register_post_type( self::POST_TYPE, $args );
 	}
 
 	/**
@@ -588,7 +668,10 @@ class Contact_Form extends Contact_Form_Shortcode {
 			$iv        = random_bytes( $iv_length );
 			$tag       = ''; // Will be populated by openssl_encrypt for GCM
 			$encrypted = openssl_encrypt(
-				wp_json_encode( $attributes ),
+				wp_json_encode(
+					$attributes,
+					JSON_UNESCAPED_SLASHES
+				),
 				$cipher,
 				$encryption_key,
 				OPENSSL_RAW_DATA, // Return raw binary data, not base64
@@ -1060,7 +1143,7 @@ class Contact_Form extends Contact_Form_Shortcode {
 			 * @param int $id Contact Form ID.
 			 */
 			$url                     = apply_filters( 'grunion_contact_form_form_action', $url, $GLOBALS['post'], $id, $page );
-			$has_submit_button_block = str_contains( $content, 'wp-block-jetpack-button' );
+			$has_submit_button_block = str_contains( $content, 'wp-block-jetpack-button' ) || str_contains( $content, 'wp-block-button' );
 			$form_classes            = 'contact-form commentsblock';
 			if ( $submission_success ) {
 				$form_classes .= ' submission-success';
@@ -1095,8 +1178,16 @@ class Contact_Form extends Contact_Form_Shortcode {
 				$r = preg_replace( '/<div class="wp-block-jetpack-form-step-navigation__wrapper/', self::render_error_wrapper() . ' <div class="wp-block-jetpack-form-step-navigation__wrapper', $r, 1 );
 			} elseif ( $has_submit_button_block && ! $is_single_input_form ) {
 				// Place the error wrapper before the FIRST button block only to avoid duplicates (e.g., navigation buttons in multistep forms).
-				// Replace only the first occurrence.
+				// Replace only the first occurrence of a wp-block-jetpack-button prepending it with the error wrapper.
+				// Fallback with same strategy for new core button blocks.
 				$r = preg_replace( '/<div class="wp-block-jetpack-button/', self::render_error_wrapper() . ' <div class="wp-block-jetpack-button', $r, 1 );
+				if ( str_contains( $r, 'wp-block-button' ) ) {
+					$r = preg_replace( '/<div class="wp-block-button/', self::render_error_wrapper() . ' <div class="wp-block-button', $r, 1 );
+				}
+			}
+
+			if ( $has_submit_button_block ) {
+				$r = self::prepare_submit_button( $r );
 			}
 
 			// In new versions of the contact form block the button is an inner block
@@ -1175,6 +1266,49 @@ class Contact_Form extends Contact_Form_Shortcode {
 		 * @param string $r The contact form HTML.
 		 */
 		return apply_filters( 'jetpack_contact_form_html', $r );
+	}
+
+	/**
+	 * Prepare the submit button for the contact form.
+	 * Add interactivity attributes to the LAST submit button found in the content.
+	 *
+	 * @param string $content - the content of the submit button.
+	 *
+	 * @return string - the prepared content of the submit button.
+	 */
+	private static function prepare_submit_button( $content ) {
+		if ( ! class_exists( \WP_HTML_Tag_Processor::class ) ) {
+			return $content;
+		}
+		$button_count = 0;
+		$p            = new \WP_HTML_Tag_Processor( $content );
+		while ( $p->next_tag(
+			array(
+				'tag_name' => 'button',
+				'type'     => 'submit',
+			)
+		) ) {
+			++$button_count;
+		}
+		if ( $button_count === 0 ) {
+			return $content;
+		}
+		$occurrence = 0;
+		$p          = new \WP_HTML_Tag_Processor( $content );
+		while ( $p->next_tag(
+			array(
+				'tag_name' => 'button',
+				'type'     => 'submit',
+			)
+		) ) {
+			if ( $occurrence === $button_count - 1 ) {
+				$p->set_attribute( 'data-wp-class--is-submitting', 'state.isSubmitting' );
+				$p->set_attribute( 'data-wp-bind--aria-disabled', 'state.isAriaDisabled' );
+				$p->set_attribute( 'data-wp-bind--disabled', 'state.isAriaDisabled' );
+			}
+			++$occurrence;
+		}
+		return $p->get_updated_html();
 	}
 
 	/**
@@ -2540,7 +2674,9 @@ class Contact_Form extends Contact_Form_Shortcode {
 					'success'     => true,
 					'data'        => $data,
 					'refreshArgs' => $refresh_args,
-				)
+				),
+				null, // @phan-suppress-current-line PhanTypeMismatchArgumentProbablyReal -- It takes null, but its phpdoc only says int.
+				JSON_UNESCAPED_SLASHES
 			);
 		}
 
@@ -2747,6 +2883,35 @@ class Contact_Form extends Contact_Form_Shortcode {
 		 * @param string the filename of the HTML template used for response emails to the form owner.
 		 */
 		require apply_filters( 'jetpack_forms_response_email_template', __DIR__ . '/templates/email-response.php' );
+
+		/**
+		 * Filter the HTML for the powered by section in the email.
+		 *
+		 * @module contact-form
+		 *
+		 * @since 7.2.0
+		 *
+		 * @param string $powered_by_html The HTML for the powered by section in the email.
+		 */
+		$powered_by_html = apply_filters(
+			'jetpack_forms_email_powered_by_html',
+			str_replace(
+				"\t",
+				'',
+				'
+				<tr>
+					<td class="content-block powered-by">
+					' .
+					sprintf(
+						// translators: %1$s is a link to the Jetpack Forms page.
+						__( 'Powered by %1$s', 'jetpack-forms' ),
+						'<a href="https://jetpack.com/forms/?utm_source=jetpack-forms&utm_medium=email&utm_campaign=form-submissions">Jetpack Forms</a>'
+					) . '
+					</td>
+				</tr>'
+			)
+		);
+
 		$html_message = sprintf(
 			// The tabs are just here so that the raw code is correctly formatted for developers
 			// They're removed so that they don't affect the final message sent to users
@@ -2762,7 +2927,8 @@ class Contact_Form extends Contact_Form_Shortcode {
 			$footer,
 			$style,
 			$tracking_pixel,
-			$actions
+			$actions,
+			$powered_by_html
 		);
 
 		return $html_message;
