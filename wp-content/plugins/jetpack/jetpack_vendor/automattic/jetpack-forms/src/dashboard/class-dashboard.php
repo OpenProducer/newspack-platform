@@ -21,6 +21,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handles the Jetpack Forms dashboard.
  */
 class Dashboard {
+
+	/**
+	 * Load wp-build generated files if available.
+	 * This is for the new DataViews-based responses list.
+	 */
+	public static function load_wp_build() {
+		$wp_build_index = dirname( __DIR__, 2 ) . '/build/index.php';
+		if ( file_exists( $wp_build_index ) ) {
+			require_once $wp_build_index;
+		}
+	}
 	/**
 	 * Script handle for the JS file we enqueue in the Feedback admin page.
 	 *
@@ -42,7 +53,18 @@ class Dashboard {
 	 * Initialize the dashboard.
 	 */
 	public function init() {
+		$is_wp_build_enabled = apply_filters( 'jetpack_forms_alpha', false );
+
+		if ( $is_wp_build_enabled ) {
+			// Load wp-build generated files for the new DataViews-based UI.
+			self::load_wp_build();
+		}
+
 		add_action( 'admin_menu', array( $this, 'add_new_admin_submenu' ), self::MENU_PRIORITY );
+
+		if ( $is_wp_build_enabled ) {
+			add_action( 'admin_menu', array( $this, 'add_forms2_submenu' ), self::MENU_PRIORITY );
+		}
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_scripts' ) );
 
@@ -123,7 +145,7 @@ class Dashboard {
 			self::SCRIPT_HANDLE,
 			sprintf(
 				'wp.apiFetch.use( wp.apiFetch.createPreloadingMiddleware( %s ) );',
-				wp_json_encode( $preload_data )
+				wp_json_encode( $preload_data, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP )
 			),
 			'before'
 		);
@@ -141,6 +163,22 @@ class Dashboard {
 			self::ADMIN_SLUG,
 			array( $this, 'render_dashboard' ),
 			10
+		);
+	}
+
+	/**
+	 * Register Forms2 submenu under Jetpack menu using wp-build page.
+	 */
+	public function add_forms2_submenu() {
+		$url = admin_url( 'admin.php?page=jetpack-forms-responses-wp-admin&p=' . rawurlencode( '/responses/inbox' ) );
+
+		Admin_Menu::add_menu(
+			'Forms2',
+			'Forms2',
+			'edit_pages',
+			$url,
+			null,
+			11
 		);
 	}
 

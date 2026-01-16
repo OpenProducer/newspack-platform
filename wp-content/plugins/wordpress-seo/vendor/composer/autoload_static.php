@@ -7,14 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
 {
     public static $prefixLengthsPsr4 = array (
-        'C' =>
+        'C' => 
         array (
             'Composer\\Installers\\' => 20,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Composer\\Installers\\' =>
+        'Composer\\Installers\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
@@ -619,7 +619,7 @@ class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
         'Yoast\\WP\\SEO\\Conditionals\\Feature_Flag_Conditional' => __DIR__ . '/../..' . '/src/conditionals/feature-flag-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Front_End_Conditional' => __DIR__ . '/../..' . '/src/conditionals/front-end-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Get_Request_Conditional' => __DIR__ . '/../..' . '/src/conditionals/get-request-conditional.php',
-        'Yoast\\WP\\SEO\\Conditionals\\Google_Site_Kit_Feature_Conditional' => __DIR__ . '/../..' . '/src/conditionals/google-site-kit-feature-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Google_Site_Kit_Feature_Conditional' => __DIR__ . '/../..' . '/src/deprecated/src/conditionals/google-site-kit-feature-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Headless_Rest_Endpoints_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/headless-rest-endpoints-enabled-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Import_Tool_Selected_Conditional' => __DIR__ . '/../..' . '/src/conditionals/import-tool-selected-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional' => __DIR__ . '/../..' . '/src/conditionals/jetpack-conditional.php',

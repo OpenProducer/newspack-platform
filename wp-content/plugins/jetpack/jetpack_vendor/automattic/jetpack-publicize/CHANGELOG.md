@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.69.1] - 2026-01-06
+### Removed
+- Remove the unused Dismissed_Notices class. [#46398]
+- Remove unused feature flag logic. [#46386]
+
+## [0.69.0] - 2025-12-22
+### Added
+- Added Share post action to the post list screen. Shows automatically for plans with republicize support, and supports the `jetpack_post_list_display_share_action` filter for custom overrides. [#46323]
+
+### Changed
+- Update dependencies. [#46381]
+
+## [0.68.1] - 2025-12-15
+### Changed
+- Replace use of confusing `esc_js` with `wp_json_encode`. [#46229]
+
+### Removed
+- Social: Remove the usage of useAdminUiV1 feature flag. [#46280]
+
+## [0.68.0] - 2025-12-08
+### Added
+- Added new media selector UI. [#46085]
+
+### Fixed
+- Ensure proper flags are used with `json_encode()`. [#46092]
+
 ## [0.67.7] - 2025-12-01
 ### Changed
 - Update package dependencies. [#46143]
@@ -1167,6 +1193,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated package dependencies.
 - Update package.json metadata.
 
+[0.69.1]: https://github.com/Automattic/jetpack-publicize/compare/v0.69.0...v0.69.1
+[0.69.0]: https://github.com/Automattic/jetpack-publicize/compare/v0.68.1...v0.69.0
+[0.68.1]: https://github.com/Automattic/jetpack-publicize/compare/v0.68.0...v0.68.1
+[0.68.0]: https://github.com/Automattic/jetpack-publicize/compare/v0.67.7...v0.68.0
 [0.67.7]: https://github.com/Automattic/jetpack-publicize/compare/v0.67.6...v0.67.7
 [0.67.6]: https://github.com/Automattic/jetpack-publicize/compare/v0.67.5...v0.67.6
 [0.67.5]: https://github.com/Automattic/jetpack-publicize/compare/v0.67.4...v0.67.5
