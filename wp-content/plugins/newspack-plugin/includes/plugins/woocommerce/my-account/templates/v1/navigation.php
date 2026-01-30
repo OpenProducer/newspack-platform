@@ -5,7 +5,6 @@
  * @package Newspack
  */
 
-use Newspack;
 use Newspack\Newspack_UI_Icons;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -51,9 +50,20 @@ foreach ( $account_menu_items as $endpoint => $label ) {
 		</a>
 
 		<ul>
+			<?php
+			// Check if viewing a single subscription page.
+			$is_viewing_single_subscription = false;
+			if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'view-subscription' ) ) {
+				$is_viewing_single_subscription = true;
+			}
+			?>
 			<?php foreach ( wc_get_account_menu_items() as $endpoint => $label ) : ?>
+				<?php
+				// Highlight subscriptions menu item if viewing a single subscription.
+				$is_current_item = wc_is_current_account_menu_item( $endpoint ) || ( $is_viewing_single_subscription && 'subscriptions' === $endpoint );
+				?>
 				<li class="<?php echo esc_attr( wc_get_account_menu_item_classes( $endpoint ) ); ?>">
-					<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>" <?php echo wc_is_current_account_menu_item( $endpoint ) ? 'aria-current="page"' : ''; ?> class="newspack-ui__button newspack-ui__button--small <?php echo wc_is_current_account_menu_item( $endpoint ) ? 'newspack-ui__button--accent' : 'newspack-ui__button--ghost'; ?>">
+					<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>" <?php echo $is_current_item ? 'aria-current="page"' : ''; ?> class="newspack-ui__button newspack-ui__button--small <?php echo $is_current_item ? 'newspack-ui__button--accent' : 'newspack-ui__button--ghost'; ?>">
 						<?php echo esc_html( $label ); ?>
 					</a>
 				</li>

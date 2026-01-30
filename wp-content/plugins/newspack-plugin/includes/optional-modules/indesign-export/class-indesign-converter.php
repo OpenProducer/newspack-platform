@@ -276,7 +276,7 @@ class InDesign_Converter {
 			'/<(?!pstyle:)(p[^>]*)>/'              => $this->styles['paragraph'],
 
 			// Lists. TODO: Handle numbered and nested lists.
-			'/<li[^>]*>/'                          => '<bnListType:Bullet>',
+			'/<li[^>]*>(.*)<\/li>/U'               => '<bnListType:Bullet>$1<bnListType:>',
 
 			// Line breaks.
 			'/<br[^>]*>/'                          => '<0x000A>',
@@ -299,8 +299,8 @@ class InDesign_Converter {
 			// Remove unsupported tags while preserving content.
 			'/<(?:div|ol|ul|a|img|figure)[^>]*>/'  => '',
 
-			// Replace paragraphs and lists end tags with line breaks.
-			'/<\/(?:p|li|ul|ol)[^>]*>/'            => "\r\n",
+			// Replace paragraphs and remaining lists end tags with line breaks.
+			'/<\/(?:p|ul|ol)[^>]*>/'               => "\r\n",
 
 			// Remove all remaining closing tags.
 			'/<\/[^>]*>/'                          => '',
@@ -468,10 +468,10 @@ class InDesign_Converter {
 
 			$tag_content .= "\r\n";
 			if ( $caption ) {
-				$tag_content .= '<pstyle:PhotoCaption>' . $caption . "\r\n";
+				$tag_content .= '<pstyle:PhotoCaption>' . $this->get_transformed_text( $caption ) . "\r\n";
 			}
 			if ( $credit ) {
-				$tag_content .= '<pstyle:PhotoCredit>' . $credit . "\r\n";
+				$tag_content .= '<pstyle:PhotoCredit>' . $this->get_transformed_text( $credit ) . "\r\n";
 			}
 		}
 

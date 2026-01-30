@@ -50,7 +50,7 @@ class Access_Rules {
 		if ( ! isset( $config['id'] ) ) {
 			return new \WP_Error( 'invalid_rule_id', __( 'Rule ID is required.', 'newspack' ) );
 		}
-		if ( isset( self::$registered_rules[ $config['id'] ] ) ) {
+		if ( isset( self::$rules[ $config['id'] ] ) ) {
 			return new \WP_Error( 'rule_already_registered', __( 'Rule already registered.', 'newspack' ) );
 		}
 		if ( ! isset( $config['callback'] ) ) {
@@ -62,7 +62,7 @@ class Access_Rules {
 		$rule = wp_parse_args(
 			$config,
 			[
-				'label'       => ucwords( str_replace( '_', ' ', $config['id'] ) ),
+				'name'        => ucwords( str_replace( '_', ' ', $config['id'] ) ),
 				'description' => '',
 				'default'     => ! empty( $config['options'] ) ? [] : '',
 				'options'     => [],

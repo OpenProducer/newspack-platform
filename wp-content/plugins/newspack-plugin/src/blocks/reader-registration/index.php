@@ -421,7 +421,7 @@ function process_form() {
 		$metadata['lists'] = $lists;
 	}
 	$metadata['referer']             = \wp_get_raw_referer(); // wp_get_referer() will return false because it's a POST request to the same page.
-	$metadata['current_page_url']    = home_url( add_query_arg( array(), $metadata['referer'] ) );
+	$metadata['current_page_url']    = $current_page_url;
 	$metadata['registration_method'] = 'registration-block';
 
 	/**

@@ -39,6 +39,71 @@ final class Newspack_Popups_Inserter {
 	public static $the_content_has_rendered = false;
 
 	/**
+	 * Whether we're exporting to Apple News.
+	 *
+	 * @var boolean
+	 */
+	private static $is_apple_news_exporting = false;
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		add_filter( 'the_content', [ $this, 'insert_popups_in_content' ], 1 );
+		add_shortcode( 'newspack-popup', [ $this, 'popup_shortcode' ] );
+		add_action( 'after_header', [ $this, 'insert_popups_after_header' ] ); // This is a Newspack theme hook. When used with other themes, popups won't be inserted on archive pages.
+		add_action( 'wp_body_open', [ $this, 'insert_before_header' ] );
+		add_action( 'after_archive_post', [ $this, 'insert_inline_prompt_in_archive_pages' ] );
+		add_action( 'wp_before_admin_bar_render', [ $this, 'add_preview_toggle' ] );
+
+		// Always enqueue scripts, since this plugin's scripts are handling pageview sending via GTAG.
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		add_action( 'apple_news_do_fetch_exporter', [ __CLASS__, 'apple_news_do_fetch_exporter' ] );
+		add_filter( 'newspack_popups_assess_has_disabled_popups', [ __CLASS__, 'disable_prompts' ] );
+
+		// These hooks are fired before and after rendering posts in the Homepage Posts block.
+		// By removing the the_content filter before rendering, we avoid incorrectly injecting popup content into excerpts in the block.
+		add_action(
+			'newspack_blocks_homepage_posts_before_render',
+			function() {
+				remove_filter( 'the_content', [ $this, 'insert_popups_in_content' ], 1 );
+			}
+		);
+
+		add_action(
+			'newspack_blocks_homepage_posts_after_render',
+			function() {
+				add_filter( 'the_content', [ $this, 'insert_popups_in_content' ], 1 );
+			}
+		);
+	}
+
+	/**
+	 * Disable prompts for specific conditions.
+	 *
+	 * @param bool $disabled Whether prompts are disabled.
+	 * @return bool Whether prompts are disabled.
+	 */
+	public static function disable_prompts( $disabled ) {
+		// If the post has been set to disable prompts.
+		if ( get_post_meta( get_the_ID(), 'newspack_popups_has_disabled_popups', true ) ) {
+			return true;
+		}
+
+		// The suppress filter used to be named 'newspack_newsletters_assess_has_disabled_popups'.
+		// Maintain that filter for backwards compatibility.
+		if ( apply_filters( 'newspack_newsletters_assess_has_disabled_popups', false ) ) {
+			return true;
+		}
+
+		// If exporting to Apple News.
+		if ( self::$is_apple_news_exporting ) {
+			return true;
+		}
+		return $disabled;
+	}
+
+	/**
 	 * Retrieve the appropriate popups for the current post.
 	 *
 	 * @return array Popup objects.
@@ -82,73 +147,6 @@ final class Newspack_Popups_Inserter {
 		}
 
 		return $popups_to_display;
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		add_filter( 'the_content', [ $this, 'insert_popups_in_content' ], 1 );
-		add_shortcode( 'newspack-popup', [ $this, 'popup_shortcode' ] );
-		add_action( 'after_header', [ $this, 'insert_popups_after_header' ] ); // This is a Newspack theme hook. When used with other themes, popups won't be inserted on archive pages.
-		add_action( 'wp_body_open', [ $this, 'insert_before_header' ] );
-		add_action( 'after_archive_post', [ $this, 'insert_inline_prompt_in_archive_pages' ] );
-		add_action( 'wp_before_admin_bar_render', [ $this, 'add_preview_toggle' ] );
-
-		// Always enqueue scripts, since this plugin's scripts are handling pageview sending via GTAG.
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-
-		add_filter(
-			'newspack_popups_assess_has_disabled_popups',
-			function ( $disabled ) {
-				if ( get_post_meta( get_the_ID(), 'newspack_popups_has_disabled_popups', true ) ) {
-					return true;
-				}
-
-				return $disabled;
-			}
-		);
-
-		// Suppress popups on product pages.
-		// Until the popups non-AMP refactoring happens, they will break Add to Cart buttons.
-		add_filter(
-			'newspack_popups_assess_has_disabled_popups',
-			function( $disabled ) {
-				if ( function_exists( 'is_product' ) && is_product() ) {
-					return true;
-				}
-				return $disabled;
-			}
-		);
-
-		// The suppress filter used to be named 'newspack_newsletters_assess_has_disabled_popups'.
-		// Maintain that filter for backwards compatibility.
-		add_filter(
-			'newspack_popups_assess_has_disabled_popups',
-			function( $disabled ) {
-				if ( apply_filters( 'newspack_newsletters_assess_has_disabled_popups', false ) ) {
-					return true;
-				}
-
-				return $disabled;
-			}
-		);
-
-		// These hooks are fired before and after rendering posts in the Homepage Posts block.
-		// By removing the the_content filter before rendering, we avoid incorrectly injecting popup content into excerpts in the block.
-		add_action(
-			'newspack_blocks_homepage_posts_before_render',
-			function() {
-				remove_filter( 'the_content', [ $this, 'insert_popups_in_content' ], 1 );
-			}
-		);
-
-		add_action(
-			'newspack_blocks_homepage_posts_after_render',
-			function() {
-				add_filter( 'the_content', [ $this, 'insert_popups_in_content' ], 1 );
-			}
-		);
 	}
 
 	/**
@@ -466,11 +464,13 @@ final class Newspack_Popups_Inserter {
 			return $content;
 		}
 
-		$filtered_content = explode( "\n", $content );
+		$filtered_content = explode( "\n", self::get_validation_content( $content ) );
 		$post_content     = explode( "\n", $post->post_content );
 		if (
+			// If prompts are disabled for this post.
+			self::assess_has_disabled_popups()
 			// Avoid duplicate execution.
-			true === self::$the_content_has_rendered
+			|| true === self::$the_content_has_rendered
 			// Not Frontend.
 			|| is_admin()
 			// Content is empty.
@@ -604,6 +604,34 @@ final class Newspack_Popups_Inserter {
 		$is_amp_plus = $is_amp && self::is_amp_plus();
 
 		return Newspack_Popups_Segmentation::is_admin_user() && ( ! $is_amp || $is_amp_plus ) && ! is_admin();
+	}
+
+	/**
+	 * Filter specific blocks to be ignored when validating content.
+	 *
+	 * @param string $content The content.
+	 *
+	 * @return string Filtered content.
+	 */
+	private static function get_validation_content( $content ) {
+		$blocks   = parse_blocks( $content );
+		$filtered = array_filter(
+			$blocks,
+			function ( $block ) {
+				$excluded_blocks = [
+					// Corrections are always added to the start or end of the content, so we can ignore them.
+					'newspack/correction-box',
+					'newspack/correction-item',
+				];
+				return ! in_array( $block['blockName'], $excluded_blocks, true );
+			}
+		);
+
+		$filtered_html = '';
+		foreach ( $filtered as $block ) {
+			$filtered_html .= serialize_block( $block );
+		}
+		return trim( $filtered_html );
 	}
 
 	/**
@@ -895,10 +923,6 @@ final class Newspack_Popups_Inserter {
 		if ( Newspack_Popups::is_account_related_post( get_post() ) ) {
 			return false;
 		}
-		// Custom and manual placements should override context conditions, since they are placed arbitrarily.
-		if ( Newspack_Popups_Custom_Placements::is_custom_placement_or_manual( $popup ) ) {
-			return true;
-		}
 
 		// Context in which the popup appears.
 		// 1. the taxonomy of the post.
@@ -952,6 +976,13 @@ final class Newspack_Popups_Inserter {
 				],
 			]
 		);
+	}
+
+	/**
+	 * Mark this request as an Apple News exporter request.
+	 */
+	public static function apple_news_do_fetch_exporter() {
+		self::$is_apple_news_exporting = true;
 	}
 }
 $newspack_popups_inserter = new Newspack_Popups_Inserter();

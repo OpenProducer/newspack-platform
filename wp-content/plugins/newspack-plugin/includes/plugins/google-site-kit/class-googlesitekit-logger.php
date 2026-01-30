@@ -99,7 +99,7 @@ class GoogleSiteKit_Logger {
 			if ( isset( $connection_info['details'] ) ) {
 				$message .= ' (' . $connection_info['details'] . ')';
 			}
-			self::log( self::LOG_CODE_DISCONNECTED, $message, false, 3 );
+			self::log( self::LOG_CODE_DISCONNECTED, $message, false, 4 );
 		}
 	}
 

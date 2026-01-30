@@ -1,11 +1,11 @@
 declare global {
 	interface Window {
 		newspackWizardsAdminHeader: {
-			tabs: Array< {
+			tabs: Array<{
 				textContent: string;
 				href: string;
 				forceSelected: boolean;
-			} >;
+			}>;
 			title: string;
 		};
 		newspackAudience: {
@@ -14,7 +14,7 @@ declare global {
 			new_subscription_lists_url: string;
 			reader_activation_url: string;
 			preview_query_keys: {
-				[ K in PromptOptionsBaseKey ]: string;
+				[K in PromptOptionsBaseKey]: string;
 			};
 			preview_post: string;
 			preview_archive: string;
@@ -25,25 +25,25 @@ declare global {
 			preview_archive: string;
 			frontend_url: string;
 			custom_placements: {
-				[ key: string ]: string;
+				[key: string]: string;
 			};
 			overlay_placements: string[];
-			overlay_sizes: Array< {
+			overlay_sizes: Array<{
 				value: string;
 				label: string;
-			} >;
+			}>;
 			preview_query_keys: {
-				[ K in PromptOptionsBaseKey ]: string;
+				[K in PromptOptionsBaseKey]: string;
 			};
 			experimental: boolean;
-			criteria: Array< {
+			criteria: Array<{
 				category: string;
 				description: string;
 				id: string;
 				matching_attribute: string;
 				matching_function: string;
 				name: string;
-			} >;
+			}>;
 		};
 		newspackAudienceDonations: {
 			can_use_name_your_price: boolean;
@@ -51,17 +51,18 @@ declare global {
 		newspackAudienceSubscriptions: {
 			memberships_url: string;
 			primary_product: string;
-			eligible_products: Array< {
+			eligible_products: Array<{
 				id: string;
 				title: string;
-			} >;
+			}>;
 			upgrade_subscription_url: string;
 		};
 		newspackAudienceContentGates: {
 			api: string;
-			available_rules: AccessRules;
+			available_access_rules: AccessRules;
+			available_content_rules: ContentRules;
 		};
 	}
 }
 
-export {};
+export { };

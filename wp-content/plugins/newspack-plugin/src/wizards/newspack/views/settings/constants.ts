@@ -60,6 +60,8 @@ export const ADVANCED_SETTINGS_DEFAULTS = {
 	newspack_image_credits_auto_populate: false,
 	// PWA Display Mode.
 	pwa_display_mode: 'minimal-ui',
+	// Post content fallback image.
+	newspack_default_image_url: undefined,
 };
 
 export const DEFAULT_THEME_MODS: ThemeMods = {

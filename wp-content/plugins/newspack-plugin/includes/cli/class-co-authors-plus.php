@@ -8,6 +8,7 @@
 namespace Newspack\CLI;
 
 use WP_CLI;
+use Newspack\Nicename_Change;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,6 +20,7 @@ class Co_Authors_Plus {
 	private static $verbose = true; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 	private static $user_logins = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 	private static $guest_author_ids = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
+	private static $sideload_avatar = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 
 	/**
 	 * Migrate Co-Authors Plus guest authors to regular users with the [Guest Contributor role](https://help.newspack.com/publishing-and-appearance/guest-contributors/).
@@ -35,7 +37,10 @@ class Co_Authors_Plus {
 	 * : Comma-separated list of user logins. If provided, only WP Users with these logins will be processed.
 	 *
 	 * [--guest_author_ids]
-	 * : Comma-separated list of Guest Author IDs. If provided, only Gues Authors with these IDs will be processed.
+	 * : Comma-separated list of Guest Author IDs. If provided, only Guest Authors with these IDs will be processed.
+	 *
+	 * [--sideload_avatar]
+	 * : Whether to sideload the avatar image and create a new attachment instead of just assigning the existing attachment to the user. Defaults to false.
 	 *
 	 * @param array $args Positional arguments.
 	 * @param array $assoc_args Assoc arguments.
@@ -48,6 +53,7 @@ class Co_Authors_Plus {
 		self::$verbose = isset( $assoc_args['verbose'] ) ? true : false;
 		self::$user_logins = isset( $assoc_args['user_logins'] ) ? explode( ',', $assoc_args['user_logins'] ) : false;
 		self::$guest_author_ids = isset( $assoc_args['guest_author_ids'] ) ? explode( ',', $assoc_args['guest_author_ids'] ) : false;
+		self::$sideload_avatar = isset( $assoc_args['sideload_avatar'] ) ? true : false;
 
 		if ( self::$live ) {
 			WP_CLI::log( 'Live mode - data will be changed.' );
@@ -244,10 +250,21 @@ class Co_Authors_Plus {
 				add_user_meta( $existing_user->ID, '_np_cap_guest_author_migration_data', $migration_data );
 			} else {
 				$created_users_count++;
+				$needs_nicename_change = false;
+				$old_nicename = '';
 
 				// For new users, we need to remove the cap- prefix from the login, otherwise CAP won't find them when getting the authors of a post
 				// See https://github.com/Automattic/Co-Authors-Plus/blob/30602dbd59c6cd73bd4aa3ff8a3e6eda0c1bccea/template-tags.php#L20.
 				$user_login_for_new_user = preg_replace( '/^cap-/', '', $guest_author_login );
+
+				WP_CLI::log( sprintf( 'Creating new user with login %s.', $user_login_for_new_user ) );
+
+				if ( strlen( $user_login_for_new_user ) > 50 ) {
+					$old_nicename = $user_login_for_new_user;
+					$user_login_for_new_user = substr( $user_login_for_new_user, 0, 50 );
+					$needs_nicename_change = true;
+					WP_CLI::log( sprintf( 'Nicename %s is too long and was updated to %s.', $old_nicename, $user_login_for_new_user ) );
+				}
 
 				$user_data['role']            = \Newspack\Guest_Contributor_Role::CONTRIBUTOR_NO_EDIT_ROLE_NAME;
 				$user_data['user_registered'] = $guest_author->post_date;
@@ -258,7 +275,8 @@ class Co_Authors_Plus {
 				if ( ! empty( $post_meta['cap-user_email'] ) ) {
 					$user_data['user_email'] = $post_meta['cap-user_email'];
 				} else {
-					$dummy_email = \Newspack\Guest_Contributor_Role::get_dummy_email_address( '_migrated-' . $guest_author->ID . '-' . $guest_author_login );
+					// emails can't be bigger than 100 chars in WP, let's use the $user_login_for_new_user to create a dummy email, as it's capped at 50 chars. This leaves room for the prefix and the domain.
+					$dummy_email = \Newspack\Guest_Contributor_Role::get_dummy_email_address( '_migrated-' . $guest_author->ID . '-' . $user_login_for_new_user );
 					$user_data['user_email'] = $dummy_email;
 					if ( self::$verbose ) {
 						WP_CLI::log( sprintf( 'Missing email for Guest Author, email address will be updated to %s.', $dummy_email ) );
@@ -295,7 +313,23 @@ class Co_Authors_Plus {
 					WP_CLI::warning( sprintf( 'Could not create/update user: %s', $user_id->get_error_message() ) );
 					continue;
 				}
+
+				if ( ! is_int( $user_id ) || $user_id <= 0 ) {
+					WP_CLI::warning( 'Could not create/update user: Could not get the user ID after creation/update.' );
+					continue;
+				}
+
 				WP_CLI::success( sprintf( 'User created/updated successfully (#%d).', $user_id ) );
+
+				if ( $needs_nicename_change ) {
+					WP_CLI::log( 'Making sure the original nicename redirects to the shortned one.' );
+
+					// Make sure to update the CAP term.
+					Nicename_Change::update_author_term( $user_id, $old_nicename, $user_login_for_new_user );
+
+					// Make sure to redirect from old nicename to new one.
+					Nicename_Change::handle_old_nicename_meta( $user_id, $old_nicename, $user_login_for_new_user );
+				}
 
 				self::assign_user_avatar( $guest_author, $user_id );
 				self::delete_guest_author_post( $guest_author->ID );
@@ -554,25 +588,35 @@ class Co_Authors_Plus {
 			return false;
 		}
 
-		// TODO: consider just assigning the attachement ID directly, instead of sideloading the image again. Not sure why we did it this way.
-
-		if ( ! function_exists( 'media_sideload_image' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/media.php';
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-			require_once ABSPATH . 'wp-admin/includes/image.php';
-		}
-		$avatar_id = media_sideload_image( $guest_author_featured_image_url, 0, null, 'id' );
-
-		if ( is_wp_error( $avatar_id ) ) {
-			WP_CLI::warning( sprintf( 'Error sideloading avatar: %s', $avatar_id->get_error_message() ) );
-			return false;
-		}
-		if ( is_int( $avatar_id ) ) {
-			$simple_local_avatars->assign_new_user_avatar( $avatar_id, $user_id );
+		if ( ! self::$sideload_avatar ) {
+			$simple_local_avatars->assign_new_user_avatar( $guest_author_featured_image_id, $user_id );
 			if ( self::$verbose ) {
-				WP_CLI::success( sprintf( 'Assigned new image with ID #%d to user #%d', $avatar_id, $user_id ) );
+				WP_CLI::success( sprintf( 'Assigned existing image with ID #%d to user #%d', $guest_author_featured_image_id, $user_id ) );
 			}
-			return true;
+		} else {
+
+			/**
+			 * Leaving sideloading avatar as an option because this was in the original implementation of this function.
+			 * Not sure if there are any edge cases where the image ID can't be used directly.
+			 */
+			if ( ! function_exists( 'media_sideload_image' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/media.php';
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+				require_once ABSPATH . 'wp-admin/includes/image.php';
+			}
+			$avatar_id = media_sideload_image( $guest_author_featured_image_url, 0, null, 'id' );
+
+			if ( is_wp_error( $avatar_id ) ) {
+				WP_CLI::warning( sprintf( 'Error sideloading avatar: %s', $avatar_id->get_error_message() ) );
+				return false;
+			}
+			if ( is_int( $avatar_id ) ) {
+				$simple_local_avatars->assign_new_user_avatar( $avatar_id, $user_id );
+				if ( self::$verbose ) {
+					WP_CLI::success( sprintf( 'Assigned new image with ID #%d to user #%d', $avatar_id, $user_id ) );
+				}
+				return true;
+			}
 		}
 	}
 

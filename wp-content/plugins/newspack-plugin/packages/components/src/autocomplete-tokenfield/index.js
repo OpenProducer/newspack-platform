@@ -120,7 +120,7 @@ class AutocompleteTokenField extends Component {
 				Object.keys( validValues ).forEach( key => {
 					if ( validValues[ key ] === label ) {
 						// Preserve numeric or string type of values. Object.keys will convert numbers to strings.
-						const value = isNaN( parseInt( key ) ) ? key.toString() : parseInt( key );
+						const value = /^\d+$/.test( key.toString() ) ? parseInt( key ) : key.toString();
 						acc.push( { value, label } );
 					}
 				} );
@@ -131,7 +131,7 @@ class AutocompleteTokenField extends Component {
 
 		return labels.map( label =>
 			Object.keys( validValues )
-				.map( key => ( isNaN( parseInt( key ) ) ? key.toString() : parseInt( key ) ) )
+				.map( key => ( /^\d+$/.test( key.toString() ) ? parseInt( key ) : key.toString() ) )
 				.find( key => validValues[ key ] === label )
 		);
 	}

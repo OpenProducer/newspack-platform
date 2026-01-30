@@ -131,7 +131,12 @@ class Woo_Member_Commenting {
 			$require_membership_to_comment = false;
 		} else {
 			$memberships_required_plans    = array_filter(
-				wc_memberships_get_user_memberships(),
+				wc_memberships_get_user_memberships(
+					get_current_user_id(),
+					[
+						'status' => Memberships::$active_statuses,
+					]
+				),
 				fn( $membership ) => in_array( $membership->get_plan()->get_slug(), self::get_plan_slugs() )
 			);
 			$require_membership_to_comment = empty( $memberships_required_plans );

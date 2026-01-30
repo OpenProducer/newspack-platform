@@ -15,6 +15,7 @@ namespace Newspack;
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php bloginfo( 'name' ); ?></title>
 	<?php require __DIR__ . '/lite-site-styles.php'; ?>
+	<?php Lite_Site::get_ga4_snippet(); ?>
 </head>
 <body>
 	<header class="back">
@@ -22,7 +23,7 @@ namespace Newspack;
 	</header>
 	<h1><?php bloginfo( 'name' ); ?></h1>
 	<hr class="separator">
-	<ul>
+	<ul class="post-list">
 	<?php
 	$query_args = [
 		'posts_per_page' => Lite_Site::get_number_of_posts(),

@@ -22,11 +22,11 @@ namespace Newspack;
 		line-height: 1.25;
 		margin: 0 0 2rem;
 	}
-	ul {
+	ul.post-list {
 		list-style: none;
 		padding-left: 0;
 	}
-	li {
+	.post-list li {
 		margin-bottom: 1rem;
 	}
 	a {

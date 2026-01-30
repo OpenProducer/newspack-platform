@@ -17,6 +17,8 @@ defined( 'ABSPATH' ) || exit;
  */
 class Memberships {
 
+	const GATE_CPT = 'np_memberships_gate';
+
 	const SKIP_RESTRICTION_IN_RSS_OPTION_NAME = 'newspack_skip_content_restriction_in_rss_feeds';
 
 	/**
@@ -25,15 +27,18 @@ class Memberships {
 	 *
 	 * @var array
 	 */
-	public static $active_statuses = [ 'active', 'complimentary', 'free-trial', 'pending' ];
+	public static $active_statuses = [ 'active', 'complimentary', 'free_trial', 'pending' ];
 
 	/**
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
 		// Hook into the Content Gate.
+		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
+		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'admin_init', [ __CLASS__, 'handle_edit_plan_gate' ] );
-		add_filter( 'newspack_content_gate_post_id', [ __CLASS__, 'get_gate_post_id' ], 10, 2 );
+		add_action( 'admin_init', [ __CLASS__, 'handle_edit_gate' ] );
+		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
 		add_filter( 'newspack_post_has_restrictions', [ __CLASS__, 'post_has_restrictions' ], 10, 2 );
 		add_filter( 'newspack_is_post_restricted', [ __CLASS__, 'is_post_restricted' ], 10, 2 );
 
@@ -70,14 +75,192 @@ class Memberships {
 	}
 
 	/**
+	 * Register post type for custom gate.
+	 */
+	public static function register_post_type() {
+		\register_post_type(
+			self::GATE_CPT,
+			[
+				'label'        => __( 'Memberships Gate', 'newspack' ),
+				'labels'       => [
+					'item_published'         => __( 'Memberships Gate published.', 'newspack' ),
+					'item_reverted_to_draft' => __( 'Memberships Gate reverted to draft.', 'newspack' ),
+					'item_updated'           => __( 'Memberships Gate updated.', 'newspack' ),
+					'new_item'               => __( 'New Memberships Gate', 'newspack' ),
+					'edit_item'              => __( 'Edit Memberships Gate', 'newspack' ),
+					'view_item'              => __( 'View Memberships Gate', 'newspack' ),
+				],
+				'public'       => false,
+				'show_ui'      => true,
+				'show_in_menu' => false,
+				'show_in_rest' => true,
+				'supports'     => [ 'editor', 'custom-fields', 'revisions', 'title' ],
+			]
+		);
+	}
+
+	/**
+	 * Register gate meta.
+	 */
+	public static function register_meta() {
+		$meta = [
+			'style'              => [
+				'type'    => 'string',
+				'default' => 'inline',
+			],
+			'inline_fade'        => [
+				'type'    => 'boolean',
+				'default' => true,
+			],
+			'use_more_tag'       => [
+				'type'    => 'boolean',
+				'default' => true,
+			],
+			'visible_paragraphs' => [
+				'type'    => 'integer',
+				'default' => 2,
+			],
+			'overlay_position'   => [
+				'type'    => 'string',
+				'default' => 'center',
+			],
+			'overlay_size'       => [
+				'type'    => 'string',
+				'default' => 'medium',
+			],
+		];
+
+		foreach ( $meta as $key => $config ) {
+			\register_meta(
+				'post',
+				$key,
+				[
+					'object_subtype' => self::GATE_CPT,
+					'show_in_rest'   => $config['show_in_rest'] ?? true,
+					'type'           => $config['type'],
+					'default'        => $config['default'],
+					'single'         => true,
+				]
+			);
+		}
+	}
+
+	/**
+	 * Redirect the custom gate CPT to the Content Gating wizard
+	 */
+	public static function redirect_cpt() {
+		if ( ! self::is_active() ) {
+			return;
+		}
+		global $pagenow;
+		if ( 'edit.php' === $pagenow && isset( $_GET['post_type'] ) && $_GET['post_type'] === self::GATE_CPT ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			\wp_safe_redirect( \admin_url( 'admin.php?page=newspack-audience#/content-gating' ) );
+			exit;
+		}
+	}
+
+	/**
+	 * Get the URL for editing the custom gate.
+	 *
+	 * @param int|false $gate_id Gate ID.
+	 *
+	 * @return string
+	 */
+	public static function get_edit_gate_url( $gate_id = false ) {
+		$action = 'newspack_edit_memberships_gate';
+		$url    = \add_query_arg( '_wpnonce', \wp_create_nonce( $action ), \admin_url( 'admin.php?action=' . $action ) );
+		if ( $gate_id ) {
+			$url = \add_query_arg( 'gate_id', $gate_id, $url );
+		}
+		return str_replace( \site_url(), '', $url );
+	}
+
+	/**
+	 * Handle editing the content gate.
+	 */
+	public static function handle_edit_gate() {
+		if ( ! isset( $_GET['action'] ) || 'newspack_edit_memberships_gate' !== $_GET['action'] ) {
+			return;
+		}
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		check_admin_referer( 'newspack_edit_memberships_gate' );
+
+		$gate_post_id = Content_Gate::get_gate_post_id();
+		$is_primary   = true;
+
+		if ( isset( $_GET['gate_post_id'] ) ) {
+			$gate_post_id = absint( $_GET['gate_post_id'] );
+			$is_primary   = false;
+			if ( ! $gate_post_id || ! get_post( $gate_post_id ) ) {
+				\wp_die( esc_html( __( 'Invalid gate post ID.', 'newspack' ) ) );
+			}
+		}
+
+		if ( $gate_post_id && get_post( $gate_post_id ) ) {
+			// Untrash post if it's in the trash.
+			if ( 'trash' === get_post_status( $gate_post_id ) ) {
+				\wp_untrash_post( $gate_post_id );
+			}
+			// Gate found, edit it.
+			\wp_safe_redirect( \admin_url( 'post.php?post=' . $gate_post_id . '&action=edit' ) );
+			exit;
+		} else {
+			// Gate not found, create it.
+			$post_title   = __( 'Content Gate', 'newspack' );
+			$gate_post_id = Content_Gate::create_gate( $post_title, self::GATE_CPT );
+			if ( is_wp_error( $gate_post_id ) ) {
+				\wp_die( esc_html( $gate_post_id->get_error_message() ) );
+			}
+			if ( $is_primary ) {
+				self::set_gate_post_id( $gate_post_id );
+			}
+			\wp_safe_redirect( \admin_url( 'post.php?post=' . $gate_post_id . '&action=edit' ) );
+			exit;
+		}
+	}
+
+	/**
+	 * Enqueue block editor assets.
+	 */
+	public static function enqueue_block_editor_assets() {
+		if ( get_post_type() !== self::GATE_CPT ) {
+			return;
+		}
+		\wp_localize_script(
+			'newspack-content-gate',
+			'newspack_memberships_gate',
+			[
+				'edit_gate_url'      => self::get_edit_gate_url(),
+				'plans'              => self::get_plans(),
+				'gate_plans'         => self::get_gate_plans( get_the_ID() ),
+				'edit_plan_gate_url' => self::get_edit_plan_gate_url(),
+			]
+		);
+	}
+
+	/**
+	 * Set the post ID of the custom Memberships gate.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public static function set_gate_post_id( $post_id ) {
+		\update_option( 'newspack_memberships_gate_post_id', $post_id );
+	}
+
+	/**
 	 * Get the post ID of the custom gate.
 	 *
-	 * @param int $gate_post_id Gate post ID.
 	 * @param int $post_id      Post ID to find gate for.
 	 *
 	 * @return int|false Post ID or false if not set.
 	 */
-	public static function get_gate_post_id( $gate_post_id, $post_id = null ) {
+	public static function get_gate_post_id( $post_id = null ) {
+		$gate_post_id = intval( \get_option( 'newspack_memberships_gate_post_id' ) );
+		if ( ! $gate_post_id ) {
+			$gate_post_id = false;
+		}
 		if ( is_singular() ) {
 			$post_id = $post_id ? $post_id : get_queried_object_id();
 		}
@@ -92,6 +275,13 @@ class Memberships {
 			}
 		}
 		return $gate_post_id;
+	}
+
+	/**
+	 * Get all gates.
+	 */
+	public static function get_gates() {
+		return Content_Gate::get_gates( self::GATE_CPT );
 	}
 
 	/**
@@ -148,7 +338,7 @@ class Memberships {
 				__( '%s Gate', 'newspack' ),
 				$plan->get_name()
 			);
-			$gate_post_id = Content_Gate::create_gate( $post_title );
+			$gate_post_id = Content_Gate::create_gate( $post_title, self::GATE_CPT );
 			if ( is_wp_error( $gate_post_id ) ) {
 				\wp_die( esc_html( $gate_post_id->get_error_message() ) );
 			}
@@ -168,7 +358,7 @@ class Memberships {
 	public static function get_plan_gate_id( $plan_id ) {
 		$gates = get_posts(
 			[
-				'post_type'      => Content_Gate::GATE_CPT,
+				'post_type'      => self::GATE_CPT,
 				'post_status'    => [ 'publish', 'draft', 'trash', 'pending', 'future' ],
 				'posts_per_page' => -1,
 			]

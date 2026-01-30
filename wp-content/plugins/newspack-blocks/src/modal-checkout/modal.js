@@ -18,6 +18,7 @@ import {
 	onCheckoutCancel,
 	onCheckoutPlaceOrderStart,
 	onCheckoutPlaceOrderError,
+	onCheckoutPlaceOrderCriticalError,
 	createHiddenInput,
 	triggerFormSubmit,
 	getCheckoutData,
@@ -38,6 +39,9 @@ let inCheckoutIntent = false;
 
 // Checkout title.
 let checkoutTitle = newspackBlocksModal.labels.checkout_modal_title;
+
+// Last-submitted checkout form.
+let activeCheckoutForm = null;
 
 // Close the modal.
 const closeModal = el => {
@@ -129,13 +133,14 @@ domReady( () => {
 			processingPaymentTimeouts = [];
 		};
 
-		const renderProcessingPaymentScreen = () => {
+		const renderProcessingPaymentScreen = event => {
 			spinner.querySelectorAll( `.${ PROCESSING_PAYMENT_TEXT_CLASS }` ).forEach( node => node.remove() );
 			spinner.style.display = 'flex';
 			clearProcessingPaymentTimeouts();
 			processingPaymentText.textContent = PROCESSING_PAYMENT_MESSAGES[ 0 ]?.text ?? '';
 			PROCESSING_PAYMENT_MESSAGES.slice( 1 ).forEach( ( { text, delay } ) => {
 				const timeoutId = setTimeout( () => {
+					event.target.dispatchEvent( new CustomEvent( 'checkout-place-order-processing' ) );
 					processingPaymentText.textContent = text;
 				}, delay );
 				processingPaymentTimeouts.push( timeoutId );
@@ -162,6 +167,15 @@ domReady( () => {
 			const summaryTextNode = productDetails?.querySelector( 'strong' );
 			if ( summaryTextNode ) {
 				summaryTextNode.textContent = checkoutData.price_summary;
+			}
+
+			// Display initial errors if any.
+			if ( modalCheckout.initialErrors ) {
+				const errorContainer = document.createElement( 'div' );
+				errorContainer.classList.add( 'woocommerce-error' );
+				errorContainer.textContent = modalCheckout.initialErrors;
+				container.prepend( errorContainer );
+				delete modalCheckout.initialErrors;
 			}
 
 			// Revert modal title and width default value.
@@ -192,6 +206,20 @@ domReady( () => {
 
 			hideProcessingPaymentScreen();
 		} );
+
+		// Resubmit modal checkout form if an unrecoverable error is encountered.
+		const refreshCheckout = form => {
+			if ( ! form ) {
+				return;
+			}
+			closeCheckout();
+			spinner.style.display = 'none';
+			modalCheckout.initialErrors = newspackBlocksModal.labels.critical_error;
+			form.requestSubmit( form.querySelector( 'button[type="submit"]' ) );
+			hideProcessingPaymentScreen();
+		};
+
+		onCheckoutPlaceOrderCriticalError( container, () => refreshCheckout( activeCheckoutForm ) );
 	}
 
 	iframeReady( iframe, handleIframeReady, () => {
@@ -468,6 +496,7 @@ domReady( () => {
 			// Append product data info to the modal, so we can grab it for GA4 events outside of the iframe.
 			document.getElementById( 'newspack_modal_checkout' ).setAttribute( 'data-checkout', JSON.stringify( checkoutData ) );
 		}
+		activeCheckoutForm = form;
 	};
 
 	/**

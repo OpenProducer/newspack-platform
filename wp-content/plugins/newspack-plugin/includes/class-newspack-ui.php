@@ -198,6 +198,7 @@ class Newspack_UI {
 	 *     @type string $id The modal ID.
 	 *     @type string $title The modal title.
 	 *     @type string $content The modal content HTML.
+	 *     @type bool   $content_is_safe Whether the content is already safe HTML.
 	 *     @type string $footer The modal footer HTML.
 	 *     @type string $form The form method to use. If given, modal content and action buttons will be wrapped in a form element.
 	 *     @type array $actions {
@@ -247,53 +248,57 @@ class Newspack_UI {
 				<section class="newspack-ui__modal__content">
 				<?php endif; ?>
 						<?php
-						echo wp_kses(
-							$args['content'],
-							array_merge(
-								\wp_kses_allowed_html( 'post' ),
-								Newspack_UI_Icons::sanitize_svgs(),
-								[
-									'input'    => [
-										'type'          => true,
-										'name'          => true,
-										'id'            => true,
-										'class'         => true,
-										'tabindex'      => true,
-										'placeholder'   => true,
-										'required'      => true,
-										'aria-hidden'   => true,
-										'aria-required' => true,
-										'value'         => true,
-										'disabled'      => true,
-										'checked'       => true,
-									],
-									'select'   => [
-										'name'             => true,
-										'id'               => true,
-										'class'            => true,
-										'tabindex'         => true,
-										'required'         => true,
-										'aria-hidden'      => true,
-										'aria-required'    => true,
-										'value'            => true,
-										'disabled'         => true,
-										'multiple'         => true,
-										'autocomplete'     => true,
-										'data-label'       => true,
-										'data-placeholder' => true,
-									],
-									'option'   => [
-										'value'    => true,
-										'selected' => true,
-										'disabled' => true,
-									],
-									'noscript' => [],
-									'iframe'   => [
-										'src' => true,
-									],
-								]
-							)
-						);
+						if ( ! empty( $args['content_is_safe'] ) ) {
+							echo $args['content']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						} else {
+							echo wp_kses(
+								$args['content'],
+								array_merge(
+									\wp_kses_allowed_html( 'post' ),
+									Newspack_UI_Icons::sanitize_svgs(),
+									[
+										'input'    => [
+											'type'        => true,
+											'name'        => true,
+											'id'          => true,
+											'class'       => true,
+											'tabindex'    => true,
+											'placeholder' => true,
+											'required'    => true,
+											'aria-hidden' => true,
+											'aria-required' => true,
+											'value'       => true,
+											'disabled'    => true,
+											'checked'     => true,
+										],
+										'select'   => [
+											'name'         => true,
+											'id'           => true,
+											'class'        => true,
+											'tabindex'     => true,
+											'required'     => true,
+											'aria-hidden'  => true,
+											'aria-required' => true,
+											'value'        => true,
+											'disabled'     => true,
+											'multiple'     => true,
+											'autocomplete' => true,
+											'data-label'   => true,
+											'data-placeholder' => true,
+										],
+										'option'   => [
+											'value'    => true,
+											'selected' => true,
+											'disabled' => true,
+										],
+										'noscript' => [],
+										'iframe'   => [
+											'src' => true,
+										],
+									]
+								)
+							);
+						}
 						?>
 						<?php
 						if ( ! empty( $args['actions'] ) ) :

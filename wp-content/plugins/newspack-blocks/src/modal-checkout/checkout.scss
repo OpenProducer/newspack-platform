@@ -985,6 +985,10 @@
 		margin-top: 0;
 	}
 
+	.woocommerce .woocommerce-notices-wrapper .woocommerce-error.newspack-ui__notice--error {
+		padding: var(--newspack-ui-spacer-2, 12px);
+	}
+
 	.modal-processing {
 		opacity: 0.5;
 	}

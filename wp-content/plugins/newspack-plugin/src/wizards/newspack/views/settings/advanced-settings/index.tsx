@@ -11,10 +11,10 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies.
  */
-import { DEFAULT_THEME_MODS } from '../constants';
+import { ADVANCED_SETTINGS_DEFAULTS } from '../constants';
 import WizardsTab from '../../../../wizards-tab';
 import WizardSection from '../../../../wizards-section';
-import { Button, hooks, Notice, utils } from '../../../../../../packages/components/src';
+import { Button, Grid, hooks, ImageUpload, Notice, utils } from '../../../../../../packages/components/src';
 import { useWizardApiFetch } from '../../../../hooks/use-wizard-api-fetch';
 import Recirculation from './recirculation';
 import AuthorBio from './author-bio';
@@ -26,7 +26,7 @@ import PwaDisplayMode from './pwa-display-mode';
 
 export default function AdvancedSettings() {
 	const [ data, setData ] = hooks.useObjectState< AdvancedSettings >( {
-		...DEFAULT_THEME_MODS,
+		...ADVANCED_SETTINGS_DEFAULTS,
 	} );
 	const [ etc, setEtc ] = hooks.useObjectState< Etc >( {
 		post_count: '0',
@@ -124,7 +124,7 @@ export default function AdvancedSettings() {
 				<AuthorBio update={ setData } data={ data } isFetching={ isFetching } />
 			</WizardSection>
 			<WizardSection
-				title={ __( 'Default Featured Image Position And Post Template', 'newspack-plugin' ) }
+				title={ __( 'Default Featured Image Position and Post Template', 'newspack-plugin' ) }
 				description={ __( 'Modify how the featured image and post template settings are applied to new posts.', 'newspack-plugin' ) }
 			>
 				<FeaturedImagePostsNew data={ data } update={ setData } />
@@ -140,6 +140,18 @@ export default function AdvancedSettings() {
 			</WizardSection>
 			<WizardSection title={ __( 'Media Credits', 'newspack-plugin' ) }>
 				<MediaCredits data={ data } update={ setData } />
+			</WizardSection>
+			<WizardSection
+				title={ __( 'Image fallback', 'newspack-plugin' ) }
+				description={ __( 'Select a fallback image to display when an image inside post content cannot be found.', 'newspack-plugin' ) }
+			>
+				<Grid>
+					<ImageUpload
+						image={ data.post_content_fallback_image ? { url: data.post_content_fallback_image } : null }
+						buttonLabel={ __( 'Select', 'newspack-plugin' ) }
+						onChange={ ( image: null | PlaceholderImage ) => setData( { post_content_fallback_image: image?.url || null } ) }
+					/>
+				</Grid>
 			</WizardSection>
 			<WizardSection>
 				<AccessibilityStatement isFetching={ isFetching } />

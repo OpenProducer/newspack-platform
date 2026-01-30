@@ -53,11 +53,13 @@ if ( ! function_exists( 'gutenberg_register_package_scripts' ) ) {
 	 * Register all package scripts.
 	 */
 	function gutenberg_register_package_scripts( $scripts ) {
-		$default_version = defined( 'GUTENBERG_VERSION' ) && ! SCRIPT_DEBUG ? GUTENBERG_VERSION : time();
+		// Load build constants
+		$build_constants = require __DIR__ . '/constants.php';
+		$default_version = ! SCRIPT_DEBUG ? $build_constants['version'] : time();
 		$extension       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
 
 		$scripts_dir  = __DIR__ . '/scripts';
-		$scripts_file = $scripts_dir . '/index.php';
+		$scripts_file = $scripts_dir . '/registry.php';
 
 		if ( ! file_exists( $scripts_file ) ) {
 			return;
@@ -75,7 +77,7 @@ if ( ! function_exists( 'gutenberg_register_package_scripts' ) ) {
 			gutenberg_override_script(
 				$scripts,
 				$script_data['handle'],
-				plugins_url( 'build/scripts/' . $script_data['path'] . $extension, $plugin_dir ),
+				$build_constants['build_url'] . 'scripts/' . $script_data['path'] . $extension,
 				$dependencies,
 				$version,
 				true
