@@ -1,6 +1,10 @@
 @use "newspack-colors" as np-colors;
 @use "../../shared/sass/placeholder";
 
+.wp-block:has(> .wpnbpc) {
+	max-width: 100%;
+}
+
 .wp-block-newspack-blocks-carousel {
 	.swiper-wrapper {
 		height: auto;
@@ -43,6 +47,7 @@
 		margin-right: 1.5em;
 	}
 }
+
 .editor-block-list__layout .editor-block-list__block .wpnbpc .entry-title a,
 .editor-block-list__layout .editor-block-list__block .wpnbpc .entry-meta .byline a {
 	color: inherit;

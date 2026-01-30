@@ -76,6 +76,7 @@ class Collection_Category_Taxonomy {
 		add_action( self::get_taxonomy() . '_edit_form_fields', [ __CLASS__, 'edit_term_meta_fields' ] );
 		add_action( 'created_' . self::get_taxonomy(), [ __CLASS__, 'save_term_meta' ] );
 		add_action( 'edited_' . self::get_taxonomy(), [ __CLASS__, 'save_term_meta' ] );
+		add_filter( 'newspack_content_gate_supported_taxonomies', [ __CLASS__, 'add_support_for_content_gates' ] );
 	}
 
 	/**
@@ -207,5 +208,19 @@ class Collection_Category_Taxonomy {
 			}
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	}
+
+	/**
+	 * Add support for content gates.
+	 *
+	 * @param array $taxonomies Taxonomies.
+	 * @return array Taxonomies.
+	 */
+	public static function add_support_for_content_gates( $taxonomies ) {
+		$taxonomies[] = [
+			'slug'  => self::get_taxonomy(),
+			'label' => __( 'Collection Categories', 'newspack-plugin' ),
+		];
+		return $taxonomies;
 	}
 }

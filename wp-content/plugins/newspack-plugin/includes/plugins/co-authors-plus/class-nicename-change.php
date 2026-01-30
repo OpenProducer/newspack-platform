@@ -270,7 +270,7 @@ class Nicename_Change {
 	 */
 	public static function old_nicename_redirect() {
 
-		if ( is_404() && '' !== get_query_var( 'author_name' ) ) {
+		if ( ( is_404() || ! is_author() ) && '' !== get_query_var( 'author_name' ) ) {
 
 			global $wpdb;
 

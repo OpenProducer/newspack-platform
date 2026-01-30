@@ -119,6 +119,11 @@ final class Reader_Activation {
 			\add_filter( 'lostpassword_errors', [ __CLASS__, 'rate_limit_lost_password' ], 10, 2 );
 			\add_filter( 'newspack_esp_sync_contact', [ __CLASS__, 'set_mailchimp_sync_contact_status' ], 10, 2 );
 			\add_filter( 'login_url', [ __CLASS__, 'redirect_oauth_to_ras_login' ], 10, 3 );
+
+			/**
+			 * If RAS is enabled, we assume that any user created by Woo is a reader, without a password and unverified.
+			 */
+			\add_action( 'woocommerce_created_customer', [ __CLASS__, 'add_default_reader_metadata' ] );
 		}
 	}
 
@@ -2291,14 +2296,7 @@ final class Reader_Activation {
 				return $user_id;
 			}
 
-			/**
-			 * Add default reader related meta.
-			 */
-			\update_user_meta( $user_id, self::READER, true );
-			/** Email is not yet verified. */
-			\update_user_meta( $user_id, self::EMAIL_VERIFIED, false );
-			/** User hasn't set their own password yet. */
-			\update_user_meta( $user_id, self::WITHOUT_PASSWORD, true );
+			self::add_default_reader_metadata( $user_id );
 
 			Logger::log( 'Created new reader user with ID ' . $user_id );
 
@@ -2719,7 +2717,7 @@ final class Reader_Activation {
 	 * @param string $url The URL to check.
 	 * @return bool True if the URL path contains an OAuth route.
 	 */
-	private static function is_oauth_redirect( $url ) {
+	public static function is_oauth_redirect( $url ) {
 		$url_path = \wp_parse_url( $url, PHP_URL_PATH ) ?? '';
 
 		/**
@@ -2920,6 +2918,19 @@ final class Reader_Activation {
 			'woocommerce_terms_confirmation_text'          => self::get_terms_confirmation_text(),
 			'woocommerce_terms_confirmation_url'           => self::get_terms_confirmation_url(),
 		];
+	}
+
+	/**
+	 * Add default reader related meta to a user that was just created.
+	 *
+	 * @param int $customer_id User ID.
+	 */
+	public static function add_default_reader_metadata( $customer_id ) {
+		\update_user_meta( $customer_id, self::READER, true );
+		/** Email is not yet verified. */
+		\update_user_meta( $customer_id, self::EMAIL_VERIFIED, false );
+		/** User hasn't set their own password yet. */
+		\update_user_meta( $customer_id, self::WITHOUT_PASSWORD, true );
 	}
 }
 Reader_Activation::init();

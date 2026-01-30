@@ -615,14 +615,14 @@ final class Ads {
 		if ( 'start_date' === $column_name ) {
 			$start_date = get_post_meta( $post_id, 'start_date', true );
 			if ( ! empty( $start_date ) ) {
-				echo esc_html( wp_date( get_option( 'date_format' ), strtotime( $start_date ) ) );
+				echo esc_html( wp_date( __( 'F j, Y' ), strtotime( $start_date ) ) );
 			} else {
 				echo '—';
 			}
 		} elseif ( 'expiry_date' === $column_name ) {
 			$expiry_date = get_post_meta( $post_id, 'expiry_date', true );
 			if ( ! empty( $expiry_date ) ) {
-				echo esc_html( wp_date( get_option( 'date_format' ), strtotime( $expiry_date ) ) );
+				echo esc_html( wp_date( __( 'F j, Y' ), strtotime( $expiry_date ) ) );
 			} else {
 				echo '—';
 			}

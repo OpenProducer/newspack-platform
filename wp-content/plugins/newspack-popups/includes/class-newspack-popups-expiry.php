@@ -70,11 +70,18 @@ final class Newspack_Popups_Expiry {
 	 * @return bool True if the date is expired, false otherwise.
 	 */
 	public static function is_expired( $date ) {
-		$expiration_date = strtotime( $date );
-		if ( $expiration_date && $expiration_date <= strtotime( 'tomorrow' ) ) {
-			return true;
+		if ( ! $date ) {
+			return false;
 		}
-		return false;
+		$expiration_date = date_create_immutable( $date, wp_timezone() );
+		if ( false === $expiration_date ) {
+			return false;
+		}
+
+		$now      = current_datetime(); // Site timezone aware.
+		$tomorrow = $now->setTime( 0, 0 )->modify( '+1 day' ); // Next occurring midnight in the site's timezone.
+
+		return $expiration_date < $tomorrow;
 	}
 
 	/**

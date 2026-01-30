@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { BaseControl, CheckboxControl } from '@wordpress/components';
+import { BaseControl, CheckboxControl, ExternalLink } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 
@@ -63,13 +63,9 @@ const JetpackSSO = () => {
 			<ActionCard
 				isMedium
 				title={ __( 'Force two-factor authentication', 'newspack-plugin' ) }
-				description={ () => (
-					<>
-						{ __(
-							'Improve security by requiring two-factor authentication via WordPress.com for users with higher capabilities.',
-							'newspack-plugin'
-						) }
-					</>
+				description={ __(
+					'Improve security by requiring two-factor authentication via WordPress.com for users with higher capabilities.',
+					'newspack-plugin'
 				) }
 				hasGreyHeader={ !! settings.force_2fa }
 				toggleChecked={ !! settings.force_2fa }
@@ -92,16 +88,18 @@ const JetpackSSO = () => {
 						{ error && <Notice isError noticeText={ error } /> }
 						{ settings.jetpack_sso_force_2fa && (
 							<>
-								<Notice
-									isError
-									noticeText={ __(
+								<Notice isWarning>
+									{ __(
 										'Two-factor authentication is currently enforced for all users via Jetpack configuration.',
 										'newspack-plugin'
-									) }
-								/>
+									) }{ ' ' }
+									<ExternalLink href="/wp-admin/admin.php?page=jetpack#/settings">
+										{ __( 'Jetpack Settings', 'newspack-plugin' ) }
+									</ExternalLink>
+								</Notice>
 								<p>
 									{ __(
-										'Customize which capabilties to enforce 2FA by untoggling the “Require accounts to use WordPress.com Two-Step Authentication” option in Jetpack settings.',
+										'Customize which capabilities to enforce 2FA by untoggling the “Require accounts to use WordPress.com Two-Step Authentication” option in Jetpack settings.',
 										'newspack-plugin'
 									) }
 								</p>

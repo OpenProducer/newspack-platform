@@ -7,7 +7,7 @@
  */
 import { ActionCard } from '../../packages/components/src';
 
-const WizardsActionCard = ( { description, error, isChecked, notificationLevel = 'error', children, ...props }: ActionCardProps ) => {
+const WizardsActionCard = ( { description, error, isChecked, notificationLevel = 'error', children, ...props }: WizardActionCardProps ) => {
 	let checkbox: 'checked' | 'unchecked' | undefined;
 	if ( typeof isChecked !== 'undefined' ) {
 		checkbox = isChecked ? 'checked' : 'unchecked';

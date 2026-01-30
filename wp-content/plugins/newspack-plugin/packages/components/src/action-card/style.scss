@@ -443,12 +443,20 @@
 			text-decoration: inherit;
 		}
 
-		.newspack-action-card__region-children {
-			border-top: 1px solid wp-colors.$gray-100;
+		> .newspack-action-card__region-children {
+			border-top: 1px solid wp-colors.$gray-300;
 			padding-top: 24px;
 
 			+ .newspack-action-card__region-children {
 				border-top: none;
+			}
+
+			> * + * {
+				margin-top: 24px !important;
+			}
+
+			.newspack-action-card__region-children:has(> div:not(:empty)) {
+				margin-top: 16px;
 			}
 		}
 
@@ -478,6 +486,11 @@
 		.components-button + .components-button {
 			margin-left: 8px;
 		}
+	}
+
+	hr {
+		background: wp-colors.$gray-100;
+		margin: 0;
 	}
 }
 

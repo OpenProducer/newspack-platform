@@ -416,10 +416,36 @@ final class Recaptcha {
 
 		// If the reCaptcha verification request fails.
 		if ( \is_wp_error( $captcha_verify ) ) {
+			// Log the error for debugging purposes.
+			Logger::newspack_log(
+				'newspack_recaptcha_verify',
+				'reCAPTCHA verification error',
+				[
+					'type' => 'debug',
+					'data' => [
+						'error'   => $captcha_verify->get_error_message(),
+						'version' => $version,
+					],
+				],
+				'error'
+			);
 			return $captcha_verify;
 		}
 
-		$captcha_verify = json_decode( $captcha_verify['body'], true );
+		$captcha_verify  = json_decode( $captcha_verify['body'], true );
+		$data            = $captcha_verify;
+		$data['version'] = $version;
+
+		// Log the verification response for debugging purposes.
+		Logger::newspack_log(
+			'newspack_recaptcha_verify',
+			'reCAPTCHA verification response',
+			[
+				'type' => 'debug',
+				'data' => $data,
+			],
+			'debug'
+		);
 
 		// If the reCaptcha verification request succeeds, but with error.
 		if ( ! boolval( $captcha_verify['success'] ) ) {

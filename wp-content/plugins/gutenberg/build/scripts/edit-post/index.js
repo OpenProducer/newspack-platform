@@ -213,7 +213,7 @@ var wp;
     }
   });
 
-  // packages/edit-post/build-module/index.js
+  // packages/edit-post/build-module/index.mjs
   var index_exports = {};
   __export(index_exports, {
     PluginBlockSettingsMenuItem: () => PluginBlockSettingsMenuItem,
@@ -231,14 +231,14 @@ var wp;
     reinitializeEditor: () => reinitializeEditor,
     store: () => store
   });
-  var import_blocks3 = __toESM(require_blocks());
-  var import_block_library2 = __toESM(require_block_library());
-  var import_deprecated4 = __toESM(require_deprecated());
-  var import_element13 = __toESM(require_element());
-  var import_data26 = __toESM(require_data());
-  var import_preferences11 = __toESM(require_preferences());
-  var import_widgets = __toESM(require_widgets());
-  var import_editor20 = __toESM(require_editor());
+  var import_blocks3 = __toESM(require_blocks(), 1);
+  var import_block_library2 = __toESM(require_block_library(), 1);
+  var import_deprecated4 = __toESM(require_deprecated(), 1);
+  var import_element13 = __toESM(require_element(), 1);
+  var import_data26 = __toESM(require_data(), 1);
+  var import_preferences11 = __toESM(require_preferences(), 1);
+  var import_widgets = __toESM(require_widgets(), 1);
+  var import_editor20 = __toESM(require_editor(), 1);
 
   // node_modules/clsx/dist/clsx.mjs
   function r(e) {
@@ -256,9 +256,9 @@ var wp;
   }
   var clsx_default = clsx;
 
-  // packages/admin-ui/build-module/navigable-region/index.js
-  var import_element = __toESM(require_element());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  // packages/admin-ui/build-module/navigable-region/index.mjs
+  var import_element = __toESM(require_element(), 1);
+  var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
   var NavigableRegion = (0, import_element.forwardRef)(
     ({ children, className, ariaLabel, as: Tag = "div", ...props }, ref) => {
       return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
@@ -278,22 +278,22 @@ var wp;
   NavigableRegion.displayName = "NavigableRegion";
   var navigable_region_default = NavigableRegion;
 
-  // packages/edit-post/build-module/components/layout/index.js
-  var import_editor18 = __toESM(require_editor());
-  var import_data25 = __toESM(require_data());
-  var import_block_editor2 = __toESM(require_block_editor());
+  // packages/edit-post/build-module/components/layout/index.mjs
+  var import_editor18 = __toESM(require_editor(), 1);
+  var import_data25 = __toESM(require_data(), 1);
+  var import_block_editor2 = __toESM(require_block_editor(), 1);
 
-  // packages/global-styles-engine/build-module/utils/common.js
-  var import_style_engine = __toESM(require_style_engine());
+  // packages/global-styles-engine/build-module/utils/common.mjs
+  var import_style_engine = __toESM(require_style_engine(), 1);
   var ROOT_BLOCK_SELECTOR = "body";
   var ROOT_CSS_PROPERTIES_SELECTOR = ":root";
 
-  // packages/global-styles-engine/build-module/core/render.js
-  var import_blocks = __toESM(require_blocks());
-  var import_style_engine2 = __toESM(require_style_engine());
-  var import_data = __toESM(require_data());
+  // packages/global-styles-engine/build-module/core/render.mjs
+  var import_blocks = __toESM(require_blocks(), 1);
+  var import_style_engine2 = __toESM(require_style_engine(), 1);
+  var import_data = __toESM(require_data(), 1);
 
-  // packages/global-styles-engine/build-module/utils/spacing.js
+  // packages/global-styles-engine/build-module/utils/spacing.mjs
   function getSpacingPresetCssVar(value) {
     if (!value) {
       return;
@@ -305,7 +305,7 @@ var wp;
     return `var(--wp--preset--spacing--${slug[1]})`;
   }
 
-  // packages/global-styles-engine/build-module/utils/gap.js
+  // packages/global-styles-engine/build-module/utils/gap.mjs
   function getGapBoxControlValueFromStyle(blockGapValue) {
     if (!blockGapValue) {
       return null;
@@ -326,7 +326,7 @@ var wp;
     return row === column ? row : `${row} ${column}`;
   }
 
-  // packages/global-styles-engine/build-module/utils/layout.js
+  // packages/global-styles-engine/build-module/utils/layout.mjs
   var LAYOUT_DEFINITIONS = {
     default: {
       name: "default",
@@ -499,7 +499,7 @@ var wp;
     }
   };
 
-  // packages/global-styles-engine/build-module/core/render.js
+  // packages/global-styles-engine/build-module/core/render.mjs
   function getLayoutStyles({
     layoutDefinitions = LAYOUT_DEFINITIONS,
     style,
@@ -587,60 +587,60 @@ var wp;
     return ruleset;
   }
 
-  // packages/edit-post/build-module/components/layout/index.js
-  var import_plugins = __toESM(require_plugins());
-  var import_i18n14 = __toESM(require_i18n());
-  var import_element12 = __toESM(require_element());
+  // packages/edit-post/build-module/components/layout/index.mjs
+  var import_plugins = __toESM(require_plugins(), 1);
+  var import_i18n14 = __toESM(require_i18n(), 1);
+  var import_element12 = __toESM(require_element(), 1);
 
-  // packages/icons/build-module/library/arrow-up-left.js
-  var import_primitives = __toESM(require_primitives());
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
+  // packages/icons/build-module/library/arrow-up-left.mjs
+  var import_primitives = __toESM(require_primitives(), 1);
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
   var arrow_up_left_default = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_primitives.Path, { d: "M14 6H6v8h1.5V8.5L17 18l1-1-9.5-9.5H14V6Z" }) });
 
-  // packages/icons/build-module/library/chevron-down.js
-  var import_primitives2 = __toESM(require_primitives());
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  // packages/icons/build-module/library/chevron-down.mjs
+  var import_primitives2 = __toESM(require_primitives(), 1);
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
   var chevron_down_default = /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_primitives2.SVG, { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_primitives2.Path, { d: "M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z" }) });
 
-  // packages/icons/build-module/library/chevron-up.js
-  var import_primitives3 = __toESM(require_primitives());
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
+  // packages/icons/build-module/library/chevron-up.mjs
+  var import_primitives3 = __toESM(require_primitives(), 1);
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
   var chevron_up_default = /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_primitives3.SVG, { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_primitives3.Path, { d: "M6.5 12.4L12 8l5.5 4.4-.9 1.2L12 10l-4.5 3.6-1-1.2z" }) });
 
-  // packages/icons/build-module/library/fullscreen.js
-  var import_primitives4 = __toESM(require_primitives());
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
+  // packages/icons/build-module/library/fullscreen.mjs
+  var import_primitives4 = __toESM(require_primitives(), 1);
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
   var fullscreen_default = /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_primitives4.Path, { d: "M6 4a2 2 0 0 0-2 2v3h1.5V6a.5.5 0 0 1 .5-.5h3V4H6Zm3 14.5H6a.5.5 0 0 1-.5-.5v-3H4v3a2 2 0 0 0 2 2h3v-1.5Zm6 1.5v-1.5h3a.5.5 0 0 0 .5-.5v-3H20v3a2 2 0 0 1-2 2h-3Zm3-16a2 2 0 0 1 2 2v3h-1.5V6a.5.5 0 0 0-.5-.5h-3V4h3Z" }) });
 
-  // packages/icons/build-module/library/wordpress.js
-  var import_primitives5 = __toESM(require_primitives());
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
+  // packages/icons/build-module/library/wordpress.mjs
+  var import_primitives5 = __toESM(require_primitives(), 1);
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
   var wordpress_default = /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "-2 -2 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_primitives5.Path, { d: "M20 10c0-5.51-4.49-10-10-10C4.48 0 0 4.49 0 10c0 5.52 4.48 10 10 10 5.51 0 10-4.48 10-10zM7.78 15.37L4.37 6.22c.55-.02 1.17-.08 1.17-.08.5-.06.44-1.13-.06-1.11 0 0-1.45.11-2.37.11-.18 0-.37 0-.58-.01C4.12 2.69 6.87 1.11 10 1.11c2.33 0 4.45.87 6.05 2.34-.68-.11-1.65.39-1.65 1.58 0 .74.45 1.36.9 2.1.35.61.55 1.36.55 2.46 0 1.49-1.4 5-1.4 5l-3.03-8.37c.54-.02.82-.17.82-.17.5-.05.44-1.25-.06-1.22 0 0-1.44.12-2.38.12-.87 0-2.33-.12-2.33-.12-.5-.03-.56 1.2-.06 1.22l.92.08 1.26 3.41zM17.41 10c.24-.64.74-1.87.43-4.25.7 1.29 1.05 2.71 1.05 4.25 0 3.29-1.73 6.24-4.4 7.78.97-2.59 1.94-5.2 2.92-7.78zM6.1 18.09C3.12 16.65 1.11 13.53 1.11 10c0-1.3.23-2.48.72-3.59C3.25 10.3 4.67 14.2 6.1 18.09zm4.03-6.63l2.58 6.98c-.86.29-1.76.45-2.71.45-.79 0-1.57-.11-2.29-.33.81-2.38 1.62-4.74 2.42-7.1z" }) });
 
-  // packages/edit-post/build-module/components/layout/index.js
-  var import_notices3 = __toESM(require_notices());
-  var import_preferences10 = __toESM(require_preferences());
-  var import_commands2 = __toESM(require_commands());
-  var import_block_library = __toESM(require_block_library());
-  var import_url5 = __toESM(require_url());
-  var import_html_entities = __toESM(require_html_entities());
-  var import_core_data6 = __toESM(require_core_data());
-  var import_components9 = __toESM(require_components());
-  var import_compose3 = __toESM(require_compose());
+  // packages/edit-post/build-module/components/layout/index.mjs
+  var import_notices3 = __toESM(require_notices(), 1);
+  var import_preferences10 = __toESM(require_preferences(), 1);
+  var import_commands2 = __toESM(require_commands(), 1);
+  var import_block_library = __toESM(require_block_library(), 1);
+  var import_url5 = __toESM(require_url(), 1);
+  var import_html_entities = __toESM(require_html_entities(), 1);
+  var import_core_data6 = __toESM(require_core_data(), 1);
+  var import_components9 = __toESM(require_components(), 1);
+  var import_compose3 = __toESM(require_compose(), 1);
 
-  // packages/edit-post/build-module/components/back-button/index.js
-  var import_editor2 = __toESM(require_editor());
-  var import_components2 = __toESM(require_components());
+  // packages/edit-post/build-module/components/back-button/index.mjs
+  var import_editor2 = __toESM(require_editor(), 1);
+  var import_components2 = __toESM(require_components(), 1);
 
-  // packages/edit-post/build-module/components/back-button/fullscreen-mode-close.js
-  var import_data2 = __toESM(require_data());
-  var import_components = __toESM(require_components());
-  var import_i18n = __toESM(require_i18n());
-  var import_url = __toESM(require_url());
-  var import_editor = __toESM(require_editor());
-  var import_core_data = __toESM(require_core_data());
-  var import_compose = __toESM(require_compose());
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/back-button/fullscreen-mode-close.mjs
+  var import_data2 = __toESM(require_data(), 1);
+  var import_components = __toESM(require_components(), 1);
+  var import_i18n = __toESM(require_i18n(), 1);
+  var import_url = __toESM(require_url(), 1);
+  var import_editor = __toESM(require_editor(), 1);
+  var import_core_data = __toESM(require_core_data(), 1);
+  var import_compose = __toESM(require_compose(), 1);
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
   var siteIconVariants = {
     edit: {
       clipPath: "inset(0% round 0px)"
@@ -760,15 +760,15 @@ var wp;
   }
   var fullscreen_mode_close_default = FullscreenModeClose;
 
-  // packages/edit-post/build-module/lock-unlock.js
-  var import_private_apis = __toESM(require_private_apis());
+  // packages/edit-post/build-module/lock-unlock.mjs
+  var import_private_apis = __toESM(require_private_apis(), 1);
   var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
     "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
     "@wordpress/edit-post"
   );
 
-  // packages/edit-post/build-module/components/back-button/index.js
-  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/back-button/index.mjs
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
   var { BackButton: BackButtonFill } = unlock(import_editor2.privateApis);
   var slideX = {
     hidden: { x: "-100%" },
@@ -793,18 +793,18 @@ var wp;
   }
   var back_button_default = BackButton;
 
-  // packages/edit-post/build-module/components/editor-initialization/listener-hooks.js
-  var import_data3 = __toESM(require_data());
-  var import_element2 = __toESM(require_element());
-  var import_editor3 = __toESM(require_editor());
-  var import_core_data2 = __toESM(require_core_data());
+  // packages/edit-post/build-module/components/editor-initialization/listener-hooks.mjs
+  var import_data3 = __toESM(require_data(), 1);
+  var import_element2 = __toESM(require_element(), 1);
+  var import_editor3 = __toESM(require_editor(), 1);
+  var import_core_data2 = __toESM(require_core_data(), 1);
 
-  // packages/edit-post/build-module/store/constants.js
+  // packages/edit-post/build-module/store/constants.mjs
   var STORE_NAME = "core/edit-post";
   var VIEW_AS_LINK_SELECTOR = "#wp-admin-bar-view a";
   var VIEW_AS_PREVIEW_LINK_SELECTOR = "#wp-admin-bar-preview a";
 
-  // packages/edit-post/build-module/components/editor-initialization/listener-hooks.js
+  // packages/edit-post/build-module/components/editor-initialization/listener-hooks.mjs
   var useUpdatePostLinkListener = () => {
     const { isViewable, newPermalink } = (0, import_data3.useSelect)((select3) => {
       const { getPostType } = select3(import_core_data2.store);
@@ -832,23 +832,23 @@ var wp;
     }, [newPermalink, isViewable]);
   };
 
-  // packages/edit-post/build-module/components/editor-initialization/index.js
+  // packages/edit-post/build-module/components/editor-initialization/index.mjs
   function EditorInitialization() {
     useUpdatePostLinkListener();
     return null;
   }
 
-  // packages/edit-post/build-module/components/keyboard-shortcuts/index.js
-  var import_element3 = __toESM(require_element());
-  var import_data7 = __toESM(require_data());
-  var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts());
-  var import_i18n3 = __toESM(require_i18n());
+  // packages/edit-post/build-module/components/keyboard-shortcuts/index.mjs
+  var import_element3 = __toESM(require_element(), 1);
+  var import_data7 = __toESM(require_data(), 1);
+  var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts(), 1);
+  var import_i18n3 = __toESM(require_i18n(), 1);
 
-  // packages/edit-post/build-module/store/index.js
-  var import_data6 = __toESM(require_data());
+  // packages/edit-post/build-module/store/index.mjs
+  var import_data6 = __toESM(require_data(), 1);
 
-  // packages/edit-post/build-module/store/reducer.js
-  var import_data4 = __toESM(require_data());
+  // packages/edit-post/build-module/store/reducer.mjs
+  var import_data4 = __toESM(require_data(), 1);
   function isSavingMetaBoxes(state = false, action) {
     switch (action.type) {
       case "REQUEST_META_BOX_UPDATES":
@@ -907,7 +907,7 @@ var wp;
     metaBoxes
   });
 
-  // packages/edit-post/build-module/store/actions.js
+  // packages/edit-post/build-module/store/actions.mjs
   var actions_exports = {};
   __export(actions_exports, {
     __experimentalSetPreviewDeviceType: () => __experimentalSetPreviewDeviceType,
@@ -939,16 +939,16 @@ var wp;
     togglePublishSidebar: () => togglePublishSidebar,
     updatePreferredStyleVariations: () => updatePreferredStyleVariations
   });
-  var import_api_fetch = __toESM(require_api_fetch());
-  var import_preferences = __toESM(require_preferences());
-  var import_editor4 = __toESM(require_editor());
-  var import_deprecated = __toESM(require_deprecated());
-  var import_hooks = __toESM(require_hooks());
-  var import_core_data3 = __toESM(require_core_data());
-  var import_notices = __toESM(require_notices());
-  var import_i18n2 = __toESM(require_i18n());
+  var import_api_fetch = __toESM(require_api_fetch(), 1);
+  var import_preferences = __toESM(require_preferences(), 1);
+  var import_editor4 = __toESM(require_editor(), 1);
+  var import_deprecated = __toESM(require_deprecated(), 1);
+  var import_hooks = __toESM(require_hooks(), 1);
+  var import_core_data3 = __toESM(require_core_data(), 1);
+  var import_notices = __toESM(require_notices(), 1);
+  var import_i18n2 = __toESM(require_i18n(), 1);
 
-  // packages/edit-post/build-module/utils/meta-boxes.js
+  // packages/edit-post/build-module/utils/meta-boxes.mjs
   var getMetaBoxContainer = (location) => {
     const area = document.querySelector(
       `.edit-post-meta-boxes-area.is-${location} .metabox-location-${location}`
@@ -959,7 +959,7 @@ var wp;
     return document.querySelector("#metaboxes .metabox-location-" + location);
   };
 
-  // packages/edit-post/build-module/store/actions.js
+  // packages/edit-post/build-module/store/actions.mjs
   var { interfaceStore } = unlock(import_editor4.privateApis);
   var openGeneralSidebar = (name) => ({ registry }) => {
     registry.dispatch(interfaceStore).enableComplementaryArea("core", name);
@@ -1204,7 +1204,7 @@ var wp;
     );
   };
 
-  // packages/edit-post/build-module/store/selectors.js
+  // packages/edit-post/build-module/store/selectors.mjs
   var selectors_exports = {};
   __export(selectors_exports, {
     __experimentalGetInsertionPoint: () => __experimentalGetInsertionPoint,
@@ -1236,11 +1236,11 @@ var wp;
     isPublishSidebarOpened: () => isPublishSidebarOpened,
     isSavingMetaBoxes: () => isSavingMetaBoxes2
   });
-  var import_data5 = __toESM(require_data());
-  var import_preferences2 = __toESM(require_preferences());
-  var import_core_data4 = __toESM(require_core_data());
-  var import_editor5 = __toESM(require_editor());
-  var import_deprecated2 = __toESM(require_deprecated());
+  var import_data5 = __toESM(require_data(), 1);
+  var import_preferences2 = __toESM(require_preferences(), 1);
+  var import_core_data4 = __toESM(require_core_data(), 1);
+  var import_editor5 = __toESM(require_editor(), 1);
+  var import_deprecated2 = __toESM(require_deprecated(), 1);
   var { interfaceStore: interfaceStore2 } = unlock(import_editor5.privateApis);
   var EMPTY_ARRAY = [];
   var EMPTY_OBJECT = {};
@@ -1489,7 +1489,7 @@ var wp;
     }
   );
 
-  // packages/edit-post/build-module/store/index.js
+  // packages/edit-post/build-module/store/index.mjs
   var store = (0, import_data6.createReduxStore)(STORE_NAME, {
     reducer: reducer_default,
     actions: actions_exports,
@@ -1497,7 +1497,7 @@ var wp;
   });
   (0, import_data6.register)(store);
 
-  // packages/edit-post/build-module/components/keyboard-shortcuts/index.js
+  // packages/edit-post/build-module/components/keyboard-shortcuts/index.mjs
   function KeyboardShortcuts() {
     const { toggleFullscreenMode: toggleFullscreenMode2 } = (0, import_data7.useDispatch)(store);
     const { registerShortcut } = (0, import_data7.useDispatch)(import_keyboard_shortcuts.store);
@@ -1519,13 +1519,13 @@ var wp;
   }
   var keyboard_shortcuts_default = KeyboardShortcuts;
 
-  // packages/edit-post/build-module/components/init-pattern-modal/index.js
-  var import_data8 = __toESM(require_data());
-  var import_i18n4 = __toESM(require_i18n());
-  var import_components3 = __toESM(require_components());
-  var import_element4 = __toESM(require_element());
-  var import_editor6 = __toESM(require_editor());
-  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/init-pattern-modal/index.mjs
+  var import_data8 = __toESM(require_data(), 1);
+  var import_i18n4 = __toESM(require_i18n(), 1);
+  var import_components3 = __toESM(require_components(), 1);
+  var import_element4 = __toESM(require_element(), 1);
+  var import_editor6 = __toESM(require_editor(), 1);
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
   function InitPatternModal() {
     const { editPost } = (0, import_data8.useDispatch)(import_editor6.store);
     const [syncType, setSyncType] = (0, import_element4.useState)(void 0);
@@ -1568,14 +1568,12 @@ var wp;
                   onChange: setTitle,
                   placeholder: (0, import_i18n4.__)("My pattern"),
                   className: "patterns-create-modal__name-input",
-                  __nextHasNoMarginBottom: true,
                   __next40pxDefaultSize: true
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
                 import_components3.ToggleControl,
                 {
-                  __nextHasNoMarginBottom: true,
                   label: (0, import_i18n4._x)("Synced", "pattern (singular)"),
                   help: (0, import_i18n4.__)(
                     "Sync this pattern across multiple locations."
@@ -1606,11 +1604,11 @@ var wp;
     ) });
   }
 
-  // packages/edit-post/build-module/components/browser-url/index.js
-  var import_element5 = __toESM(require_element());
-  var import_data9 = __toESM(require_data());
-  var import_url2 = __toESM(require_url());
-  var import_editor7 = __toESM(require_editor());
+  // packages/edit-post/build-module/components/browser-url/index.mjs
+  var import_element5 = __toESM(require_element(), 1);
+  var import_data9 = __toESM(require_data(), 1);
+  var import_url2 = __toESM(require_url(), 1);
+  var import_editor7 = __toESM(require_editor(), 1);
   function getPostEditURL(postId) {
     return (0, import_url2.addQueryArgs)("post.php", { post: postId, action: "edit" });
   }
@@ -1644,14 +1642,14 @@ var wp;
     return null;
   }
 
-  // packages/edit-post/build-module/components/meta-boxes/index.js
-  var import_data12 = __toESM(require_data());
+  // packages/edit-post/build-module/components/meta-boxes/index.mjs
+  var import_data12 = __toESM(require_data(), 1);
 
-  // packages/edit-post/build-module/components/meta-boxes/meta-boxes-area/index.js
-  var import_element6 = __toESM(require_element());
-  var import_components4 = __toESM(require_components());
-  var import_data10 = __toESM(require_data());
-  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/meta-boxes/meta-boxes-area/index.mjs
+  var import_element6 = __toESM(require_element(), 1);
+  var import_components4 = __toESM(require_components(), 1);
+  var import_data10 = __toESM(require_data(), 1);
+  var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
   function MetaBoxesArea({ location }) {
     const container = (0, import_element6.useRef)(null);
     const formRef = (0, import_element6.useRef)(null);
@@ -1688,10 +1686,10 @@ var wp;
   }
   var meta_boxes_area_default = MetaBoxesArea;
 
-  // packages/edit-post/build-module/components/meta-boxes/meta-box-visibility.js
-  var import_element7 = __toESM(require_element());
-  var import_data11 = __toESM(require_data());
-  var import_editor8 = __toESM(require_editor());
+  // packages/edit-post/build-module/components/meta-boxes/meta-box-visibility.mjs
+  var import_element7 = __toESM(require_element(), 1);
+  var import_data11 = __toESM(require_data(), 1);
+  var import_editor8 = __toESM(require_editor(), 1);
   function MetaBoxVisibility({ id }) {
     const isVisible = (0, import_data11.useSelect)(
       (select3) => {
@@ -1715,8 +1713,8 @@ var wp;
     return null;
   }
 
-  // packages/edit-post/build-module/components/meta-boxes/index.js
-  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/meta-boxes/index.mjs
+  var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
   function MetaBoxes({ location }) {
     const metaBoxes2 = (0, import_data12.useSelect)(
       (select3) => select3(store).getMetaBoxesPerLocation(location),
@@ -1728,20 +1726,20 @@ var wp;
     ] });
   }
 
-  // packages/edit-post/build-module/components/more-menu/index.js
-  var import_i18n10 = __toESM(require_i18n());
-  var import_compose2 = __toESM(require_compose());
-  var import_editor14 = __toESM(require_editor());
-  var import_keycodes = __toESM(require_keycodes());
-  var import_preferences8 = __toESM(require_preferences());
+  // packages/edit-post/build-module/components/more-menu/index.mjs
+  var import_i18n10 = __toESM(require_i18n(), 1);
+  var import_compose2 = __toESM(require_compose(), 1);
+  var import_editor14 = __toESM(require_editor(), 1);
+  var import_keycodes = __toESM(require_keycodes(), 1);
+  var import_preferences8 = __toESM(require_preferences(), 1);
 
-  // packages/edit-post/build-module/components/more-menu/manage-patterns-menu-item.js
-  var import_components5 = __toESM(require_components());
-  var import_core_data5 = __toESM(require_core_data());
-  var import_data13 = __toESM(require_data());
-  var import_i18n5 = __toESM(require_i18n());
-  var import_url3 = __toESM(require_url());
-  var import_jsx_runtime12 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/more-menu/manage-patterns-menu-item.mjs
+  var import_components5 = __toESM(require_components(), 1);
+  var import_core_data5 = __toESM(require_core_data(), 1);
+  var import_data13 = __toESM(require_data(), 1);
+  var import_i18n5 = __toESM(require_i18n(), 1);
+  var import_url3 = __toESM(require_url(), 1);
+  var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
   function ManagePatternsMenuItem() {
     const url = (0, import_data13.useSelect)((select3) => {
       const { canUser } = select3(import_core_data5.store);
@@ -1760,12 +1758,12 @@ var wp;
   }
   var manage_patterns_menu_item_default = ManagePatternsMenuItem;
 
-  // packages/edit-post/build-module/components/more-menu/welcome-guide-menu-item.js
-  var import_data14 = __toESM(require_data());
-  var import_preferences3 = __toESM(require_preferences());
-  var import_i18n6 = __toESM(require_i18n());
-  var import_editor9 = __toESM(require_editor());
-  var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/more-menu/welcome-guide-menu-item.mjs
+  var import_data14 = __toESM(require_data(), 1);
+  var import_preferences3 = __toESM(require_preferences(), 1);
+  var import_i18n6 = __toESM(require_i18n(), 1);
+  var import_editor9 = __toESM(require_editor(), 1);
+  var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuideMenuItem() {
     const isEditingTemplate2 = (0, import_data14.useSelect)(
       (select3) => select3(import_editor9.store).getCurrentPostType() === "wp_template",
@@ -1781,26 +1779,26 @@ var wp;
     );
   }
 
-  // packages/edit-post/build-module/components/preferences-modal/index.js
-  var import_i18n9 = __toESM(require_i18n());
-  var import_preferences7 = __toESM(require_preferences());
-  var import_editor13 = __toESM(require_editor());
+  // packages/edit-post/build-module/components/preferences-modal/index.mjs
+  var import_i18n9 = __toESM(require_i18n(), 1);
+  var import_preferences7 = __toESM(require_preferences(), 1);
+  var import_editor13 = __toESM(require_editor(), 1);
 
-  // packages/edit-post/build-module/components/preferences-modal/meta-boxes-section.js
-  var import_i18n8 = __toESM(require_i18n());
-  var import_data17 = __toESM(require_data());
-  var import_editor12 = __toESM(require_editor());
-  var import_preferences6 = __toESM(require_preferences());
+  // packages/edit-post/build-module/components/preferences-modal/meta-boxes-section.mjs
+  var import_i18n8 = __toESM(require_i18n(), 1);
+  var import_data17 = __toESM(require_data(), 1);
+  var import_editor12 = __toESM(require_editor(), 1);
+  var import_preferences6 = __toESM(require_preferences(), 1);
 
-  // packages/edit-post/build-module/components/preferences-modal/enable-custom-fields.js
-  var import_element8 = __toESM(require_element());
-  var import_i18n7 = __toESM(require_i18n());
-  var import_components6 = __toESM(require_components());
-  var import_data15 = __toESM(require_data());
-  var import_editor10 = __toESM(require_editor());
-  var import_preferences4 = __toESM(require_preferences());
-  var import_url4 = __toESM(require_url());
-  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/preferences-modal/enable-custom-fields.mjs
+  var import_element8 = __toESM(require_element(), 1);
+  var import_i18n7 = __toESM(require_i18n(), 1);
+  var import_components6 = __toESM(require_components(), 1);
+  var import_data15 = __toESM(require_data(), 1);
+  var import_editor10 = __toESM(require_editor(), 1);
+  var import_preferences4 = __toESM(require_preferences(), 1);
+  var import_url4 = __toESM(require_url(), 1);
+  var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
   var { PreferenceBaseOption } = unlock(import_preferences4.privateApis);
   function submitCustomFieldsForm() {
     const customFieldsForm = document.getElementById(
@@ -1848,11 +1846,11 @@ var wp;
     );
   }
 
-  // packages/edit-post/build-module/components/preferences-modal/enable-panel.js
-  var import_data16 = __toESM(require_data());
-  var import_editor11 = __toESM(require_editor());
-  var import_preferences5 = __toESM(require_preferences());
-  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/preferences-modal/enable-panel.mjs
+  var import_data16 = __toESM(require_data(), 1);
+  var import_editor11 = __toESM(require_editor(), 1);
+  var import_preferences5 = __toESM(require_preferences(), 1);
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
   var { PreferenceBaseOption: PreferenceBaseOption2 } = unlock(import_preferences5.privateApis);
   function EnablePanelOption(props) {
     const { toggleEditorPanelEnabled: toggleEditorPanelEnabled2 } = (0, import_data16.useDispatch)(import_editor11.store);
@@ -1879,8 +1877,8 @@ var wp;
     );
   }
 
-  // packages/edit-post/build-module/components/preferences-modal/meta-boxes-section.js
-  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/preferences-modal/meta-boxes-section.mjs
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
   var { PreferencesModalSection } = unlock(import_preferences6.privateApis);
   function MetaBoxesSection({
     areCustomFieldsRegistered,
@@ -1915,8 +1913,8 @@ var wp;
     };
   })(MetaBoxesSection);
 
-  // packages/edit-post/build-module/components/preferences-modal/index.js
-  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/preferences-modal/index.mjs
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
   var { PreferenceToggleControl } = unlock(import_preferences7.privateApis);
   var { PreferencesModal } = unlock(import_editor13.privateApis);
   function EditPostPreferencesModal() {
@@ -1935,8 +1933,8 @@ var wp;
     return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(PreferencesModal, { extraSections });
   }
 
-  // packages/edit-post/build-module/components/more-menu/index.js
-  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/more-menu/index.mjs
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
   var { ToolsMoreMenuGroup, ViewMoreMenuGroup } = unlock(import_editor14.privateApis);
   var MoreMenu = () => {
     const isLargeViewport = (0, import_compose2.useViewportMatch)("large");
@@ -1964,17 +1962,17 @@ var wp;
   };
   var more_menu_default = MoreMenu;
 
-  // packages/edit-post/build-module/components/welcome-guide/index.js
-  var import_data20 = __toESM(require_data());
+  // packages/edit-post/build-module/components/welcome-guide/index.mjs
+  var import_data20 = __toESM(require_data(), 1);
 
-  // packages/edit-post/build-module/components/welcome-guide/default.js
-  var import_data18 = __toESM(require_data());
-  var import_components7 = __toESM(require_components());
-  var import_i18n11 = __toESM(require_i18n());
-  var import_element9 = __toESM(require_element());
+  // packages/edit-post/build-module/components/welcome-guide/default.mjs
+  var import_data18 = __toESM(require_data(), 1);
+  var import_components7 = __toESM(require_components(), 1);
+  var import_i18n11 = __toESM(require_i18n(), 1);
+  var import_element9 = __toESM(require_element(), 1);
 
-  // packages/edit-post/build-module/components/welcome-guide/image.js
-  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/welcome-guide/image.mjs
+  var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuideImage({ nonAnimatedSrc, animatedSrc }) {
     return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("picture", { className: "edit-post-welcome-guide__image", children: [
       /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
@@ -1988,8 +1986,8 @@ var wp;
     ] });
   }
 
-  // packages/edit-post/build-module/components/welcome-guide/default.js
-  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/welcome-guide/default.mjs
+  var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuideDefault() {
     const { toggleFeature: toggleFeature2 } = (0, import_data18.useDispatch)(store);
     return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
@@ -2088,11 +2086,11 @@ var wp;
     );
   }
 
-  // packages/edit-post/build-module/components/welcome-guide/template.js
-  var import_data19 = __toESM(require_data());
-  var import_components8 = __toESM(require_components());
-  var import_i18n12 = __toESM(require_i18n());
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/welcome-guide/template.mjs
+  var import_data19 = __toESM(require_data(), 1);
+  var import_components8 = __toESM(require_components(), 1);
+  var import_i18n12 = __toESM(require_i18n(), 1);
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuideTemplate() {
     const { toggleFeature: toggleFeature2 } = (0, import_data19.useDispatch)(store);
     return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
@@ -2123,8 +2121,8 @@ var wp;
     );
   }
 
-  // packages/edit-post/build-module/components/welcome-guide/index.js
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/welcome-guide/index.mjs
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuide({ postType }) {
     const { isActive, isEditingTemplate: isEditingTemplate2 } = (0, import_data20.useSelect)(
       (select3) => {
@@ -2144,12 +2142,12 @@ var wp;
     return isEditingTemplate2 ? /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(WelcomeGuideTemplate, {}) : /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(WelcomeGuideDefault, {});
   }
 
-  // packages/edit-post/build-module/commands/use-commands.js
-  var import_data21 = __toESM(require_data());
-  var import_i18n13 = __toESM(require_i18n());
-  var import_commands = __toESM(require_commands());
-  var import_preferences9 = __toESM(require_preferences());
-  var import_notices2 = __toESM(require_notices());
+  // packages/edit-post/build-module/commands/use-commands.mjs
+  var import_data21 = __toESM(require_data(), 1);
+  var import_i18n13 = __toESM(require_i18n(), 1);
+  var import_commands = __toESM(require_commands(), 1);
+  var import_preferences9 = __toESM(require_preferences(), 1);
+  var import_notices2 = __toESM(require_notices(), 1);
   function useCommands() {
     const { isFullscreen } = (0, import_data21.useSelect)((select3) => {
       const { get } = select3(import_preferences9.store);
@@ -2185,11 +2183,11 @@ var wp;
     });
   }
 
-  // packages/edit-post/build-module/components/layout/use-should-iframe.js
-  var import_editor15 = __toESM(require_editor());
-  var import_data22 = __toESM(require_data());
-  var import_blocks2 = __toESM(require_blocks());
-  var import_block_editor = __toESM(require_block_editor());
+  // packages/edit-post/build-module/components/layout/use-should-iframe.mjs
+  var import_editor15 = __toESM(require_editor(), 1);
+  var import_data22 = __toESM(require_data(), 1);
+  var import_blocks2 = __toESM(require_blocks(), 1);
+  var import_block_editor = __toESM(require_block_editor(), 1);
   var isGutenbergPlugin = true ? true : false;
   function useShouldIframe() {
     return (0, import_data22.useSelect)((select3) => {
@@ -2208,15 +2206,23 @@ var wp;
     }, []);
   }
 
-  // packages/edit-post/build-module/hooks/use-navigate-to-entity-record.js
-  var import_element10 = __toESM(require_element());
-  var import_data23 = __toESM(require_data());
-  var import_editor16 = __toESM(require_editor());
+  // packages/edit-post/build-module/hooks/use-navigate-to-entity-record.mjs
+  var import_element10 = __toESM(require_element(), 1);
+  var import_data23 = __toESM(require_data(), 1);
+  var import_editor16 = __toESM(require_editor(), 1);
+  var { useGenerateBlockPath } = unlock(import_editor16.privateApis);
   function useNavigateToEntityRecord(initialPostId, initialPostType, defaultRenderingMode) {
+    const generateBlockPath = useGenerateBlockPath();
     const [postHistory, dispatch2] = (0, import_element10.useReducer)(
-      (historyState, { type, post: post2, previousRenderingMode: previousRenderingMode2 }) => {
+      (historyState, { type, post: post2, previousRenderingMode: previousRenderingMode2, selectedBlockPath: selectedBlockPath2 }) => {
         if (type === "push") {
-          return [...historyState, { post: post2, previousRenderingMode: previousRenderingMode2 }];
+          const updatedHistory = [...historyState];
+          const currentIndex = updatedHistory.length - 1;
+          updatedHistory[currentIndex] = {
+            ...updatedHistory[currentIndex],
+            selectedBlockPath: selectedBlockPath2
+          };
+          return [...updatedHistory, { post: post2, previousRenderingMode: previousRenderingMode2 }];
         }
         if (type === "pop") {
           if (historyState.length > 1) {
@@ -2231,23 +2237,32 @@ var wp;
         }
       ]
     );
-    const { post, previousRenderingMode } = postHistory[postHistory.length - 1];
+    const { post, previousRenderingMode, selectedBlockPath } = postHistory[postHistory.length - 1];
     const { getRenderingMode } = (0, import_data23.useSelect)(import_editor16.store);
     const { setRenderingMode } = (0, import_data23.useDispatch)(import_editor16.store);
     const onNavigateToEntityRecord = (0, import_element10.useCallback)(
       (params) => {
+        const blockPath = params.selectedBlockClientId ? generateBlockPath(params.selectedBlockClientId) : null;
         dispatch2({
           type: "push",
           post: { postId: params.postId, postType: params.postType },
           // Save the current rendering mode so we can restore it when navigating back.
-          previousRenderingMode: getRenderingMode()
+          previousRenderingMode: getRenderingMode(),
+          selectedBlockPath: blockPath
         });
         setRenderingMode(defaultRenderingMode);
       },
-      [getRenderingMode, setRenderingMode, defaultRenderingMode]
+      [
+        getRenderingMode,
+        setRenderingMode,
+        defaultRenderingMode,
+        generateBlockPath
+      ]
     );
     const onNavigateToPreviousEntityRecord = (0, import_element10.useCallback)(() => {
-      dispatch2({ type: "pop" });
+      dispatch2({
+        type: "pop"
+      });
       if (previousRenderingMode) {
         setRenderingMode(previousRenderingMode);
       }
@@ -2255,14 +2270,16 @@ var wp;
     return {
       currentPost: post,
       onNavigateToEntityRecord,
-      onNavigateToPreviousEntityRecord: postHistory.length > 1 ? onNavigateToPreviousEntityRecord : void 0
+      onNavigateToPreviousEntityRecord: postHistory.length > 1 ? onNavigateToPreviousEntityRecord : void 0,
+      // Return the selected block path from the current history item
+      previousSelectedBlockPath: selectedBlockPath
     };
   }
 
-  // packages/edit-post/build-module/components/meta-boxes/use-meta-box-initialization.js
-  var import_data24 = __toESM(require_data());
-  var import_editor17 = __toESM(require_editor());
-  var import_element11 = __toESM(require_element());
+  // packages/edit-post/build-module/components/meta-boxes/use-meta-box-initialization.mjs
+  var import_data24 = __toESM(require_data(), 1);
+  var import_editor17 = __toESM(require_editor(), 1);
+  var import_element11 = __toESM(require_element(), 1);
   var useMetaBoxInitialization = (enabled) => {
     const isEnabledAndEditorReady = (0, import_data24.useSelect)(
       (select3) => enabled && select3(import_editor17.store).__unstableIsEditorReady(),
@@ -2276,8 +2293,8 @@ var wp;
     }, [isEnabledAndEditorReady, initializeMetaBoxes2]);
   };
 
-  // packages/edit-post/build-module/components/layout/index.js
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/components/layout/index.mjs
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
   var { useCommandContext } = unlock(import_commands2.privateApis);
   var { Editor, FullscreenMode } = unlock(import_editor18.privateApis);
   var { BlockKeyboardShortcuts } = unlock(import_block_library.privateApis);
@@ -2548,7 +2565,8 @@ var wp;
     const {
       currentPost: { postId: currentPostId, postType: currentPostType },
       onNavigateToEntityRecord,
-      onNavigateToPreviousEntityRecord
+      onNavigateToPreviousEntityRecord,
+      previousSelectedBlockPath
     } = useNavigateToEntityRecord(
       initialPostId,
       initialPostType,
@@ -2723,6 +2741,7 @@ var wp;
               disableIframe: !shouldIframe,
               autoFocus: !isWelcomeGuideVisible,
               onActionPerformed,
+              initialSelection: previousSelectedBlockPath,
               extraSidebarPanels: showMetaBoxes && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(MetaBoxes, { location: "side" }),
               extraContent: !isDistractionFree && showMetaBoxes && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
                 MetaBoxesMain,
@@ -2755,11 +2774,11 @@ var wp;
   }
   var layout_default = Layout;
 
-  // packages/edit-post/build-module/deprecated.js
-  var import_editor19 = __toESM(require_editor());
-  var import_url6 = __toESM(require_url());
-  var import_deprecated3 = __toESM(require_deprecated());
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/deprecated.mjs
+  var import_editor19 = __toESM(require_editor(), 1);
+  var import_url6 = __toESM(require_url(), 1);
+  var import_deprecated3 = __toESM(require_deprecated(), 1);
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
   var { PluginPostExcerpt } = unlock(import_editor19.privateApis);
   var isSiteEditor = (0, import_url6.getPath)(window.location.href)?.includes(
     "site-editor.php"
@@ -2838,8 +2857,8 @@ var wp;
     return PluginPostExcerpt;
   }
 
-  // packages/edit-post/build-module/index.js
-  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
+  // packages/edit-post/build-module/index.mjs
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
   var {
     BackButton: __experimentalMainDashboardButton,
     registerCoreBlockBindingsSources

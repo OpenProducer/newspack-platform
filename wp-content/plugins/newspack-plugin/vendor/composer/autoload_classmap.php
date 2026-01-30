@@ -100,6 +100,7 @@ return array(
     'Newspack\\Memberships\\Import_Export' => $baseDir . '/includes/plugins/wc-memberships/class-import-export.php',
     'Newspack\\Meta_Pixel' => $baseDir . '/includes/tracking/class-meta-pixel.php',
     'Newspack\\Metering' => $baseDir . '/includes/content-gate/class-metering.php',
+    'Newspack\\Metering_Countdown' => $baseDir . '/includes/content-gate/class-metering-countdown.php',
     'Newspack\\My_Account_UI_V0' => $baseDir . '/includes/plugins/woocommerce/my-account/class-my-account-ui-v0.php',
     'Newspack\\My_Account_UI_V1' => $baseDir . '/includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php',
     'Newspack\\My_Account_UI_V1_Passwords' => $baseDir . '/includes/plugins/woocommerce/my-account/class-my-account-ui-v1-passwords.php',

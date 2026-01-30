@@ -384,6 +384,9 @@ class Setup_Wizard extends Wizard {
 		// Append PWA display mode option.
 		$theme_mods['pwa_display_mode'] = get_option( 'newspack_pwa_display_mode', 'minimal-ui' );
 
+		// Append post content fallback image option.
+		$theme_mods['post_content_fallback_image'] = get_option( Default_Image::OPTION_NAME, null );
+
 		return rest_ensure_response(
 			[
 				'theme'             => Starter_Content::get_theme(),
@@ -527,6 +530,12 @@ class Setup_Wizard extends Wizard {
 			// PWA display mode is an option, not a theme mod.
 			if ( 'pwa_display_mode' === $key ) {
 				update_option( 'newspack_pwa_display_mode', $value );
+				continue;
+			}
+
+			// Post content fallback image is an option, not a theme mod.
+			if ( 'post_content_fallback_image' === $key ) {
+				update_option( Default_Image::OPTION_NAME, $value );
 				continue;
 			}
 

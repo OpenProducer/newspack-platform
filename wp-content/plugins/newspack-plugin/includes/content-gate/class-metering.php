@@ -86,18 +86,20 @@ class Metering {
 				'default' => 'week',
 			],
 		];
-		foreach ( $meta as $key => $config ) {
-			\register_meta(
-				'post',
-				$key,
-				[
-					'object_subtype' => Content_Gate::GATE_CPT,
-					'show_in_rest'   => true,
-					'type'           => $config['type'],
-					'default'        => $config['default'],
-					'single'         => true,
-				]
-			);
+		foreach ( Content_Gate::get_gate_post_types() as $cpt ) {
+			foreach ( $meta as $key => $config ) {
+				\register_meta(
+					'post',
+					$key,
+					[
+						'object_subtype' => $cpt,
+						'show_in_rest'   => true,
+						'type'           => $config['type'],
+						'default'        => $config['default'],
+						'single'         => true,
+					]
+				);
+			}
 		}
 	}
 
@@ -273,6 +275,11 @@ class Metering {
 			return false;
 		}
 
+		// Not in checkout modals.
+		if ( method_exists( 'Newspack_Blocks\Modal_Checkout', 'is_modal_checkout' ) && \Newspack_Blocks\Modal_Checkout::is_modal_checkout() ) {
+			return false;
+		}
+
 		$gate_post_id = Content_Gate::get_gate_post_id();
 		$metering     = \get_post_meta( $gate_post_id, 'metering', true );
 		$priority     = \get_post_meta( $gate_post_id, 'gate_priority', true );
@@ -288,7 +295,7 @@ class Metering {
 		}
 
 		// Aggregate metering by gate priority, if available.
-		$suffix = Content_Gate::is_newspack_feature_enabled() && $priority ? $priority : $gate_post_id;
+		$suffix = Content_Gate::is_newspack_feature_enabled() && ! Memberships::is_active() && $priority ? $priority : $gate_post_id;
 		$user_meta_key = self::METERING_META_KEY . '_' . $suffix;
 
 		$updated_user_data  = false;

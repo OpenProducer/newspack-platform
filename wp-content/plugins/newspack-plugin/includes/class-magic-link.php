@@ -516,11 +516,27 @@ final class Magic_Link {
 				'value'    => $token_data['otp']['code'],
 			];
 		}
-		return Emails::send_email(
+
+		/**
+		 * Filters the email config name for magic link/OTP authentication emails.
+		 * Allows overriding the email template used based on the current context.
+		 *
+		 * @param string   $email_config_name The email config name (e.g., 'reader-activation-otp-authentication').
+		 * @param string   $email_type        The email type key (e.g., 'OTP_AUTH', 'MAGIC_LINK').
+		 * @param \WP_User $user              The user receiving the email.
+		 * @param string   $redirect_to       The redirect URL after authentication.
+		 * @param array    $token_data        The token data including OTP information.
+		 */
+		$email_config_name = \apply_filters(
+			'newspack_magic_link_email_config',
 			Reader_Activation_Emails::EMAIL_TYPES[ $email_type ],
-			$user->user_email,
-			$email_placeholders
+			$email_type,
+			$user,
+			$redirect_to,
+			$token_data
 		);
+
+		return Emails::send_email( $email_config_name, $user->user_email, $email_placeholders );
 	}
 
 	/**

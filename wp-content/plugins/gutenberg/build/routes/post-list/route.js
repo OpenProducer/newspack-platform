@@ -56,19 +56,19 @@ var require_preferences = __commonJS({
 var import_data4 = __toESM(require_data());
 var import_core_data2 = __toESM(require_core_data());
 
-// packages/views/build-module/preference-keys.js
+// packages/views/build-module/preference-keys.mjs
 function generatePreferenceKey(kind, name, slug) {
   return `dataviews-${kind}-${name}-${slug}`;
 }
 
-// packages/views/build-module/use-view.js
-var import_element = __toESM(require_element());
-var import_data = __toESM(require_data());
-var import_preferences = __toESM(require_preferences());
+// packages/views/build-module/use-view.mjs
+var import_element = __toESM(require_element(), 1);
+var import_data = __toESM(require_data(), 1);
+var import_preferences = __toESM(require_preferences(), 1);
 
-// packages/views/build-module/load-view.js
-var import_data2 = __toESM(require_data());
-var import_preferences2 = __toESM(require_preferences());
+// packages/views/build-module/load-view.mjs
+var import_data2 = __toESM(require_data(), 1);
+var import_preferences2 = __toESM(require_preferences(), 1);
 async function loadView(config) {
   const { kind, name, slug, defaultView, queryParams } = config;
   const preferenceKey = generatePreferenceKey(kind, name, slug);

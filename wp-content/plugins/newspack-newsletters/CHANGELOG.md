@@ -1,3 +1,15 @@
+# [3.27.0](https://github.com/Automattic/newspack-newsletters/compare/v3.26.0...v3.27.0) (2026-01-19)
+
+
+### Bug Fixes
+
+* **ads:** start/end date value format ([#2005](https://github.com/Automattic/newspack-newsletters/issues/2005)) ([4cf8f4e](https://github.com/Automattic/newspack-newsletters/commit/4cf8f4e38f375d4a8f9d32011114f1be48a7f365))
+
+
+### Features
+
+* rename tracking ([#1999](https://github.com/Automattic/newspack-newsletters/issues/1999)) ([0ae58db](https://github.com/Automattic/newspack-newsletters/commit/0ae58db0e092f3ab919573c07db530ebee7da66f))
+
 # [3.26.0](https://github.com/Automattic/newspack-newsletters/compare/v3.25.5...v3.26.0) (2026-01-05)
 
 

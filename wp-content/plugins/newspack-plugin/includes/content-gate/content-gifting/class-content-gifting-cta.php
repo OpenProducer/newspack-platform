@@ -40,18 +40,18 @@ class Content_Gifting_CTA {
 	}
 
 	/**
-	 * Get cta label.
+	 * Get CTA label.
 	 *
-	 * @return string The cta label.
+	 * @return string The CTA label.
 	 */
 	public static function get_cta_label() {
 		return (string) get_option( 'newspack_content_gifting_cta_label', __( 'This article has been gifted to you by someone who values great journalism.', 'newspack-plugin' ) );
 	}
 
 	/**
-	 * Set cta label.
+	 * Set CTA label.
 	 *
-	 * @param string $label The cta label.
+	 * @param string $label The CTA label.
 	 *
 	 * @return void
 	 */
@@ -60,18 +60,67 @@ class Content_Gifting_CTA {
 	}
 
 	/**
-	 * Get cta url.
+	 * Get CTA type: product or url.
 	 *
-	 * @return string The cta url.
+	 * @return string The CTA type.
+	 */
+	public static function get_cta_type() {
+		$type = (string) get_option( 'newspack_content_gifting_cta_type', 'product' );
+		return in_array( $type, [ 'product', 'url' ], true ) ? $type : 'product';
+	}
+
+	/**
+	 * Set CTA type.
+	 *
+	 * @param string $type The CTA type.
+	 *
+	 * @return void
+	 */
+	public static function set_cta_type( $type ) {
+		$type = in_array( $type, [ 'product', 'url' ], true ) ? $type : 'product';
+		update_option( 'newspack_content_gifting_cta_type', $type );
+	}
+
+	/**
+	 * Get CTA product ID. Used if the CTA type is `product`.
+	 * Defaults to the primary subscription tier product, if available.
+	 *
+	 * @return int The CTA product ID.
+	 */
+	public static function get_cta_product_id() {
+		$primary_product = Subscriptions_Tiers::get_primary_subscription_tier_product();
+		$product_id = get_option( 'newspack_content_gifting_cta_product_id', $primary_product ? $primary_product->get_id() : 0 );
+		return $product_id;
+	}
+
+	/**
+	 * Set CTA product IDs.
+	 *
+	 * @param int $product_id The CTA product ID.
+	 *
+	 * @return void
+	 */
+	public static function set_cta_product_id( $product_id ) {
+		if ( function_exists( 'wc_get_product' ) && ! \wc_get_product( $product_id ) ) {
+			$primary_product = Subscriptions_Tiers::get_primary_subscription_tier_product();
+			$product_id = $primary_product ? $primary_product->get_id() : 0;
+		}
+		update_option( 'newspack_content_gifting_cta_product_id', (int) $product_id );
+	}
+
+	/**
+	 * Get CTA url.  Used if the CTA type is `url`.
+	 *
+	 * @return string The CTA url.
 	 */
 	public static function get_cta_url() {
 		return (string) get_option( 'newspack_content_gifting_cta_url', '' );
 	}
 
 	/**
-	 * Set cta url.
+	 * Set CTA url.
 	 *
-	 * @param string $url The cta url.
+	 * @param string $url The CTA url.
 	 *
 	 * @return void
 	 */
@@ -109,32 +158,38 @@ class Content_Gifting_CTA {
 		$button_label = self::get_button_label();
 		$button_class = 'dark' === self::get_style() ? 'newspack-ui__button--primary-light' : 'newspack-ui__button--accent';
 
-		$cta_url = self::get_cta_url();
-		if ( $cta_url ) {
-			?>
-			<a href="<?php echo esc_url( $cta_url ); ?>" class="newspack-ui__button newspack-ui__button--x-small <?php echo esc_attr( $button_class ); ?>"><?php echo esc_html( $button_label ); ?></a>
-			<?php
-			return;
+		$cta_type = self::get_cta_type();
+		if ( $cta_type === 'url' ) {
+			$cta_url = self::get_cta_url();
+			if ( $cta_url ) {
+				?>
+				<a href="<?php echo esc_url( $cta_url ); ?>" class="newspack-ui__button newspack-ui__button--x-small <?php echo esc_attr( $button_class ); ?>"><?php echo esc_html( $button_label ); ?></a>
+				<?php
+				return;
+			}
 		}
 
-		// If CTA url is not provided, try a modal checkout using the primary subscription tier product.
-		$product = Subscriptions_Tiers::get_primary_subscription_tier_product();
-		if ( ! $product ) {
-			return;
+		// If CTA type is 'product', try a modal checkout using the primary subscription tier product.
+		if ( $cta_type === 'product' ) {
+			$product_id = self::get_cta_product_id();
+			$product    = function_exists( 'wc_get_product' ) ? \wc_get_product( $product_id ) : null;
+			if ( ! $product ) {
+				return;
+			}
+			\Newspack_Blocks\Modal_Checkout::enqueue_modal( $product_id );
+			\Newspack_Blocks::enqueue_view_assets( 'checkout-button' );
+			$checkout_data = \Newspack_Blocks\Modal_Checkout\Checkout_Data::get_checkout_data( $product );
+			?>
+			<div class="wp-block-newspack-blocks-checkout-button">
+				<form data-checkout="<?php echo esc_attr( wp_json_encode( $checkout_data ) ); ?>" target="newspack_modal_checkout_iframe">
+					<input type="hidden" name="newspack_checkout" value="1" />
+					<input type="hidden" name="modal_checkout" value="1" />
+					<input type="hidden" name="product_id" value="<?php echo esc_attr( $product_id ); ?>" />
+					<button type="submit" class="newspack-ui__button newspack-ui__button--x-small <?php echo esc_attr( $button_class ); ?>"><?php echo esc_html( $button_label ); ?></button>
+				</form>
+			</div>
+			<?php
 		}
-		\Newspack_Blocks\Modal_Checkout::enqueue_modal( $product->get_id() );
-		\Newspack_Blocks::enqueue_view_assets( 'checkout-button' );
-		$checkout_data = \Newspack_Blocks\Modal_Checkout\Checkout_Data::get_checkout_data( $product );
-		?>
-		<div class="wp-block-newspack-blocks-checkout-button">
-			<form data-checkout="<?php echo esc_attr( wp_json_encode( $checkout_data ) ); ?>" target="newspack_modal_checkout_iframe">
-				<input type="hidden" name="newspack_checkout" value="1" />
-				<input type="hidden" name="modal_checkout" value="1" />
-				<input type="hidden" name="product_id" value="<?php echo esc_attr( $product->get_id() ); ?>" />
-				<button type="submit" class="newspack-ui__button newspack-ui__button--x-small <?php echo esc_attr( $button_class ); ?>"><?php echo esc_html( $button_label ); ?></button>
-			</form>
-		</div>
-		<?php
 	}
 
 	/**

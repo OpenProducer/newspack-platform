@@ -46,6 +46,7 @@ class Newspack_Image_Credits {
 		add_filter( 'ajax_query_attachments_args', [ __CLASS__, 'filter_ajax_query_attachments' ] );
 		add_filter( 'wp_generate_attachment_metadata', [ __CLASS__, 'populate_credit' ], 10, 3 );
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
+		add_action( 'newspack_rss_media_content', [ __CLASS__, 'add_media_credit_to_feeds' ] );
 	}
 
 	/**
@@ -577,6 +578,20 @@ class Newspack_Image_Credits {
 					'show_in_rest'   => true,
 				]
 			);
+		}
+	}
+
+	/**
+	 * Add media credit inside media content for Custom RSS feeds.
+	 *
+	 * @param int $thumbnail_id Thumbnail attachment ID.
+	 */
+	public static function add_media_credit_to_feeds( $thumbnail_id ): void {
+		$media_credit = get_post_meta( $thumbnail_id, self::MEDIA_CREDIT_META, true );
+		if ( ! empty( $media_credit ) ) {
+			?>
+			<media:credit><![CDATA[<?php echo esc_html( $media_credit ); ?>]]></media:credit>
+			<?php
 		}
 	}
 }

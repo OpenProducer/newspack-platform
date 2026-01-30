@@ -1,18 +1,18 @@
 /**
  * WordPress dependencies.
  */
-import { CheckboxControl, SelectControl, TextControl } from '@wordpress/components';
+import { CheckboxControl, TextControl } from '@wordpress/components';
+
+/**
+ * Internal dependencies
+ */
+import { FormTokenField } from '../../../../../packages/components/src';
 
 const noop = () => {};
 
-type AccessRuleControlProps = {
-	slug: string;
-	value: string | string[] | boolean;
-	onChange: ( value: string | string[] | boolean ) => void;
-};
+export default function AccessRuleControl( { slug, value, onChange }: GateAccessRuleControlProps ) {
+	const rule = window.newspackAudienceContentGates.available_access_rules[ slug ];
 
-export default function AccessRuleControl( { slug, value, onChange }: AccessRuleControlProps ) {
-	const rule = window.newspackAudienceContentGates.available_rules[ slug ];
 	if ( ! rule ) {
 		return null;
 	}
@@ -21,14 +21,15 @@ export default function AccessRuleControl( { slug, value, onChange }: AccessRule
 	}
 	if ( rule.options && rule.options.length > 0 ) {
 		return (
-			<SelectControl
+			<FormTokenField
 				label={ rule.name }
-				value={ value as string }
-				onChange={ onChange }
-				options={ rule.options.map( option => ( { value: option.value, label: option.label } ) ) }
-				help={ rule.description }
+				value={ rule.options.filter( o => value.includes( o.value ) ).map( o => o.label ) }
+				onChange={ ( items: string[] ) => onChange( rule.options?.filter( o => items.includes( o.label ) ).map( o => o.value ) ?? [] ) }
+				suggestions={ rule.options.map( o => o.label ) }
+				__experimentalExpandOnFocus
+				__next40pxDefaultSize
 			/>
 		);
 	}
-	return <TextControl label={ rule.name } value={ value as string } onChange={ onChange } help={ rule.description } />;
+	return <TextControl label={ rule.name } value={ value as string } onChange={ onChange } help={ rule.description } __next40pxDefaultSize />;
 }

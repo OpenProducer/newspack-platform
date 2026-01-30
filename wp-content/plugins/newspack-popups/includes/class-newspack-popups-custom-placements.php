@@ -258,7 +258,7 @@ final class Newspack_Popups_Custom_Placements {
 	 */
 	public static function is_custom_placement_or_manual( $prompt ) {
 		return (
-			'manual' === $prompt['options']['frequency'] ||
+			'manual' === $prompt['options']['placement'] ||
 			in_array( $prompt['options']['placement'], self::get_custom_placement_values() )
 		);
 	}

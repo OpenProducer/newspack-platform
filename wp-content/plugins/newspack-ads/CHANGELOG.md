@@ -1,3 +1,10 @@
+## [3.10.1](https://github.com/Automattic/newspack-ads/compare/v3.10.0...v3.10.1) (2026-01-19)
+
+
+### Bug Fixes
+
+* **providers:** harden `get_provider()` argument check ([#1009](https://github.com/Automattic/newspack-ads/issues/1009)) ([efd4b83](https://github.com/Automattic/newspack-ads/commit/efd4b83ae0c646ba0bc2767fa1335084cbd69373))
+
 # [3.10.0](https://github.com/Automattic/newspack-ads/compare/v3.9.2...v3.10.0) (2025-11-24)
 
 

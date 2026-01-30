@@ -37,6 +37,9 @@ final class Woo_User_Registration {
 
 		// created a user?
 		add_action( 'woocommerce_created_customer', [ __CLASS__, 'created_customer' ], 1 );
+
+		// checkout order processed?
+		add_action( 'woocommerce_checkout_order_processed', [ __CLASS__, 'checkout_order_processed' ] );
 	}
 
 	/**
@@ -98,6 +101,19 @@ final class Woo_User_Registration {
 		 * @param array          $metadata      Metadata.
 		 */
 		\do_action( 'newspack_registered_reader_via_woo', $user->user_email, $user_id, self::$metadata );
+	}
+
+	/**
+	 * After a checkout order is processed, prevent the modal checkout from reloading.
+	 *
+	 * @param int $order_id The ID of the processed order.
+	 * @return void
+	 */
+	public static function checkout_order_processed( $order_id ) {
+		// Prevent the modal checkout from reloading after the user is created.
+		if ( method_exists( 'Newspack_Blocks\Modal_Checkout', 'is_modal_checkout' ) && \Newspack_Blocks\Modal_Checkout::is_modal_checkout() ) {
+			\WC()->session->set( 'reload_checkout', null );
+		}
 	}
 }
 

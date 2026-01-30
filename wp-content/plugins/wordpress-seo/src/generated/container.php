@@ -129,6 +129,7 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Conditionals\\Primary_Category_Conditional' => 'getPrimaryCategoryConditionalService',
             'Yoast\\WP\\SEO\\Conditionals\\Robots_Txt_Conditional' => 'getRobotsTxtConditionalService',
             'Yoast\\WP\\SEO\\Conditionals\\SEMrush_Enabled_Conditional' => 'getSEMrushEnabledConditionalService',
+            'Yoast\\WP\\SEO\\Conditionals\\Schema_Disabled_Conditional' => 'getSchemaDisabledConditionalService',
             'Yoast\\WP\\SEO\\Conditionals\\Settings_Conditional' => 'getSettingsConditionalService',
             'Yoast\\WP\\SEO\\Conditionals\\Should_Index_Links_Conditional' => 'getShouldIndexLinksConditionalService',
             'Yoast\\WP\\SEO\\Conditionals\\Task_List_Enabled_Conditional' => 'getTaskListEnabledConditionalService',
@@ -446,6 +447,8 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Routes\\Wincher_Route' => 'getWincherRouteService',
             'Yoast\\WP\\SEO\\Routes\\Workouts_Route' => 'getWorkoutsRouteService',
             'Yoast\\WP\\SEO\\Routes\\Yoast_Head_REST_Field' => 'getYoastHeadRESTFieldService',
+            'Yoast\\WP\\SEO\\Schema\\Application\\Configuration\\Schema_Configuration' => 'getSchemaConfigurationService',
+            'Yoast\\WP\\SEO\\Schema\\Infrastructure\\Disable_Schema_Integration' => 'getDisableSchemaIntegrationService',
             'Yoast\\WP\\SEO\\Services\\Health_Check\\Default_Tagline_Check' => 'getDefaultTaglineCheckService',
             'Yoast\\WP\\SEO\\Services\\Health_Check\\Default_Tagline_Reports' => 'getDefaultTaglineReportsService',
             'Yoast\\WP\\SEO\\Services\\Health_Check\\Default_Tagline_Runner' => 'getDefaultTaglineRunnerService',
@@ -477,6 +480,7 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Register_Post_Type_Tasks_Integration' => 'getRegisterPostTypeTasksIntegrationService',
             'Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Complete_Task_Route' => 'getCompleteTaskRouteService',
             'Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Get_Tasks_Route' => 'getGetTasksRouteService',
+            'Yoast\\WP\\SEO\\Tracking\\Infrastructure\\Tracking_On_Page_Load_Integration' => 'getTrackingOnPageLoadIntegrationService',
             'Yoast\\WP\\SEO\\User_Meta\\Application\\Additional_Contactmethods_Collector' => 'getAdditionalContactmethodsCollectorService',
             'Yoast\\WP\\SEO\\User_Meta\\Application\\Custom_Meta_Collector' => 'getCustomMetaCollectorService',
             'Yoast\\WP\\SEO\\User_Meta\\User_Interface\\Additional_Contactmethods_Integration' => 'getAdditionalContactmethodsIntegrationService',
@@ -749,6 +753,8 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Endpoints\\Get_Tasks_Endpoint' => true,
             'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Cached_Tasks_Collector' => true,
             'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector' => true,
+            'Yoast\\WP\\SEO\\Tracking\\Application\\Action_Tracker' => true,
+            'Yoast\\WP\\SEO\\Tracking\\Infrastructure\\Tracking_Link_Adapter' => true,
             'Yoast\\WP\\SEO\\User_Meta\\Application\\Cleanup_Service' => true,
             'Yoast\\WP\\SEO\\User_Meta\\Framework\\Additional_Contactmethods\\Facebook' => true,
             'Yoast\\WP\\SEO\\User_Meta\\Framework\\Additional_Contactmethods\\Instagram' => true,
@@ -2098,6 +2104,16 @@ class Cached_Container extends Container
     protected function getSEMrushEnabledConditionalService()
     {
         return $this->services['Yoast\\WP\\SEO\\Conditionals\\SEMrush_Enabled_Conditional'] = new \Yoast\WP\SEO\Conditionals\SEMrush_Enabled_Conditional(($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Conditionals\Schema_Disabled_Conditional' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Conditionals\Schema_Disabled_Conditional
+     */
+    protected function getSchemaDisabledConditionalService()
+    {
+        return $this->services['Yoast\\WP\\SEO\\Conditionals\\Schema_Disabled_Conditional'] = new \Yoast\WP\SEO\Conditionals\Schema_Disabled_Conditional(($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())));
     }
 
     /**
@@ -3996,7 +4012,7 @@ class Cached_Container extends Container
      */
     protected function getIntegrationsPageService()
     {
-        return $this->services['Yoast\\WP\\SEO\\Integrations\\Admin\\Integrations_Page'] = new \Yoast\WP\SEO\Integrations\Admin\Integrations_Page(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper'] = new \Yoast\WP\SEO\Helpers\Woocommerce_Helper())), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional'] = new \Yoast\WP\SEO\Conditionals\Third_Party\Elementor_Activated_Conditional())), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional'] = new \Yoast\WP\SEO\Conditionals\Jetpack_Conditional())), ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Integrations\\Site_Kit'] ?? $this->getSiteKitService()), ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Site_Kit_Consent_Management_Endpoint'] ?? ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Site_Kit_Consent_Management_Endpoint'] = new \Yoast\WP\SEO\Dashboard\Infrastructure\Endpoints\Site_Kit_Consent_Management_Endpoint())));
+        return $this->services['Yoast\\WP\\SEO\\Integrations\\Admin\\Integrations_Page'] = new \Yoast\WP\SEO\Integrations\Admin\Integrations_Page(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional'] = new \Yoast\WP\SEO\Conditionals\Third_Party\Elementor_Activated_Conditional())), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional'] = new \Yoast\WP\SEO\Conditionals\Jetpack_Conditional())), ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Integrations\\Site_Kit'] ?? $this->getSiteKitService()), ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Site_Kit_Consent_Management_Endpoint'] ?? ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Site_Kit_Consent_Management_Endpoint'] = new \Yoast\WP\SEO\Dashboard\Infrastructure\Endpoints\Site_Kit_Consent_Management_Endpoint())), ($this->services['Yoast\\WP\\SEO\\Schema\\Application\\Configuration\\Schema_Configuration'] ?? $this->getSchemaConfigurationService()));
     }
 
     /**
@@ -4446,7 +4462,7 @@ class Cached_Container extends Container
         $b = ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper()));
         $c = ($this->privates['Yoast\\WP\\SEO\\Llms_Txt\\Application\\Health_Check\\File_Runner'] ?? ($this->privates['Yoast\\WP\\SEO\\Llms_Txt\\Application\\Health_Check\\File_Runner'] = new \Yoast\WP\SEO\Llms_Txt\Application\Health_Check\File_Runner()));
 
-        return $this->services['Yoast\\WP\\SEO\\Integrations\\Settings_Integration'] = new \Yoast\WP\SEO\Integrations\Settings_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['WPSEO_Replace_Vars'] ?? $this->getWPSEOReplaceVarsService()), ($this->services['Yoast\\WP\\SEO\\Config\\Schema_Types'] ?? ($this->services['Yoast\\WP\\SEO\\Config\\Schema_Types'] = new \Yoast\WP\SEO\Config\Schema_Types())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), $a, ($this->services['Yoast\\WP\\SEO\\Helpers\\Language_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Language_Helper'] = new \Yoast\WP\SEO\Helpers\Language_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Taxonomy_Helper'] ?? $this->getTaxonomyHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] = new \Yoast\WP\SEO\Helpers\Product_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper'] = new \Yoast\WP\SEO\Helpers\Woocommerce_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Schema\\Article_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Schema\\Article_Helper'] = new \Yoast\WP\SEO\Helpers\Schema\Article_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())), $b, ($this->privates['Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Dismiss_Notifications'] ?? $this->getContentTypeVisibilityDismissNotificationsService()), new \Yoast\WP\SEO\Llms_Txt\Application\Configuration\Llms_Txt_Configuration($c, $a, $b), ($this->privates['Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\Content\\Manual_Post_Collection'] ?? $this->getManualPostCollectionService()), $c, ($this->services['Yoast\\WP\\SEO\\Helpers\\Route_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Route_Helper'] = new \Yoast\WP\SEO\Helpers\Route_Helper())));
+        return $this->services['Yoast\\WP\\SEO\\Integrations\\Settings_Integration'] = new \Yoast\WP\SEO\Integrations\Settings_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['WPSEO_Replace_Vars'] ?? $this->getWPSEOReplaceVarsService()), ($this->services['Yoast\\WP\\SEO\\Config\\Schema_Types'] ?? ($this->services['Yoast\\WP\\SEO\\Config\\Schema_Types'] = new \Yoast\WP\SEO\Config\Schema_Types())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), $a, ($this->services['Yoast\\WP\\SEO\\Helpers\\Language_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Language_Helper'] = new \Yoast\WP\SEO\Helpers\Language_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Taxonomy_Helper'] ?? $this->getTaxonomyHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] = new \Yoast\WP\SEO\Helpers\Product_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper'] = new \Yoast\WP\SEO\Helpers\Woocommerce_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Schema\\Article_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Schema\\Article_Helper'] = new \Yoast\WP\SEO\Helpers\Schema\Article_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())), $b, ($this->privates['Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Dismiss_Notifications'] ?? $this->getContentTypeVisibilityDismissNotificationsService()), new \Yoast\WP\SEO\Llms_Txt\Application\Configuration\Llms_Txt_Configuration($c, $a, $b), ($this->privates['Yoast\\WP\\SEO\\Llms_Txt\\Infrastructure\\Content\\Manual_Post_Collection'] ?? $this->getManualPostCollectionService()), $c, ($this->services['Yoast\\WP\\SEO\\Helpers\\Route_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Route_Helper'] = new \Yoast\WP\SEO\Helpers\Route_Helper())), ($this->services['Yoast\\WP\\SEO\\Schema\\Application\\Configuration\\Schema_Configuration'] ?? $this->getSchemaConfigurationService()));
     }
 
     /**
@@ -5200,9 +5216,11 @@ class Cached_Container extends Container
         $instance->register_route('Yoast\\WP\\SEO\\Routes\\Wincher_Route');
         $instance->register_route('Yoast\\WP\\SEO\\Routes\\Workouts_Route');
         $instance->register_route('Yoast\\WP\\SEO\\Routes\\Yoast_Head_REST_Field');
+        $instance->register_integration('Yoast\\WP\\SEO\\Schema\\Infrastructure\\Disable_Schema_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Register_Post_Type_Tasks_Integration');
         $instance->register_route('Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Complete_Task_Route');
         $instance->register_route('Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Get_Tasks_Route');
+        $instance->register_integration('Yoast\\WP\\SEO\\Tracking\\Infrastructure\\Tracking_On_Page_Load_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\User_Meta\\User_Interface\\Additional_Contactmethods_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\User_Meta\\User_Interface\\Cleanup_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\User_Meta\\User_Interface\\Custom_Meta_Integration');
@@ -5250,7 +5268,7 @@ class Cached_Container extends Container
     {
         $a = ($this->services['WPSEO_Addon_Manager'] ?? $this->getWPSEOAddonManagerService());
 
-        return $this->services['Yoast\\WP\\SEO\\Plans\\User_Interface\\Plans_Page_Integration'] = new \Yoast\WP\SEO\Plans\User_Interface\Plans_Page_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), new \Yoast\WP\SEO\Plans\Application\Add_Ons_Collector(new \Yoast\WP\SEO\Plans\Domain\Add_Ons\Premium($a), new \Yoast\WP\SEO\Plans\Domain\Add_Ons\Woo($a)), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Short_Link_Helper'] ?? $this->getShortLinkHelperService()), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional'] = new \Yoast\WP\SEO\Conditionals\Admin_Conditional())), ($this->services['Yoast\\WP\\SEO\\Promotions\\Application\\Promotion_Manager'] ?? $this->getPromotionManagerService()), new \Yoast\WP\SEO\Plans\Application\Duplicate_Post_Manager());
+        return $this->services['Yoast\\WP\\SEO\\Plans\\User_Interface\\Plans_Page_Integration'] = new \Yoast\WP\SEO\Plans\User_Interface\Plans_Page_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), new \Yoast\WP\SEO\Plans\Application\Add_Ons_Collector($a, new \Yoast\WP\SEO\Plans\Domain\Add_Ons\Premium($a), new \Yoast\WP\SEO\Plans\Domain\Add_Ons\Woo($a)), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Short_Link_Helper'] ?? $this->getShortLinkHelperService()), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional'] = new \Yoast\WP\SEO\Conditionals\Admin_Conditional())), ($this->services['Yoast\\WP\\SEO\\Promotions\\Application\\Promotion_Manager'] ?? $this->getPromotionManagerService()), new \Yoast\WP\SEO\Plans\Application\Duplicate_Post_Manager());
     }
 
     /**
@@ -5642,6 +5660,26 @@ class Cached_Container extends Container
     }
 
     /**
+     * Gets the public 'Yoast\WP\SEO\Schema\Application\Configuration\Schema_Configuration' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Schema\Application\Configuration\Schema_Configuration
+     */
+    protected function getSchemaConfigurationService()
+    {
+        return $this->services['Yoast\\WP\\SEO\\Schema\\Application\\Configuration\\Schema_Configuration'] = new \Yoast\WP\SEO\Schema\Application\Configuration\Schema_Configuration(($this->services['Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Woocommerce_Helper'] = new \Yoast\WP\SEO\Helpers\Woocommerce_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] = new \Yoast\WP\SEO\Helpers\Product_Helper())), ($this->services['WPSEO_Addon_Manager'] ?? $this->getWPSEOAddonManagerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Schema\Infrastructure\Disable_Schema_Integration' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Schema\Infrastructure\Disable_Schema_Integration
+     */
+    protected function getDisableSchemaIntegrationService()
+    {
+        return $this->services['Yoast\\WP\\SEO\\Schema\\Infrastructure\\Disable_Schema_Integration'] = new \Yoast\WP\SEO\Schema\Infrastructure\Disable_Schema_Integration();
+    }
+
+    /**
      * Gets the public 'Yoast\WP\SEO\Services\Health_Check\Default_Tagline_Check' shared autowired service.
      *
      * @return \Yoast\WP\SEO\Services\Health_Check\Default_Tagline_Check
@@ -5942,7 +5980,7 @@ class Cached_Container extends Container
      */
     protected function getCompleteTaskRouteService()
     {
-        return $this->services['Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Complete_Task_Route'] = new \Yoast\WP\SEO\Task_List\User_Interface\Tasks\Complete_Task_Route(($this->privates['Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector'] ?? $this->getTasksCollectorService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] = new \Yoast\WP\SEO\Helpers\Capability_Helper())));
+        return $this->services['Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Complete_Task_Route'] = new \Yoast\WP\SEO\Task_List\User_Interface\Tasks\Complete_Task_Route(($this->privates['Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector'] ?? $this->getTasksCollectorService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] = new \Yoast\WP\SEO\Helpers\Capability_Helper())), ($this->privates['Yoast\\WP\\SEO\\Tracking\\Application\\Action_Tracker'] ?? $this->getActionTrackerService()));
     }
 
     /**
@@ -5952,7 +5990,17 @@ class Cached_Container extends Container
      */
     protected function getGetTasksRouteService()
     {
-        return $this->services['Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Get_Tasks_Route'] = new \Yoast\WP\SEO\Task_List\User_Interface\Tasks\Get_Tasks_Route(new \Yoast\WP\SEO\Task_List\Application\Tasks_Repository(new \Yoast\WP\SEO\Task_List\Infrastructure\Tasks_Collectors\Cached_Tasks_Collector(($this->privates['Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector'] ?? $this->getTasksCollectorService()))), ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] = new \Yoast\WP\SEO\Helpers\Capability_Helper())));
+        return $this->services['Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Get_Tasks_Route'] = new \Yoast\WP\SEO\Task_List\User_Interface\Tasks\Get_Tasks_Route(new \Yoast\WP\SEO\Task_List\Application\Tasks_Repository(new \Yoast\WP\SEO\Task_List\Infrastructure\Tasks_Collectors\Cached_Tasks_Collector(($this->privates['Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector'] ?? $this->getTasksCollectorService()))), ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] = new \Yoast\WP\SEO\Helpers\Capability_Helper())), ($this->privates['Yoast\\WP\\SEO\\Tracking\\Application\\Action_Tracker'] ?? $this->getActionTrackerService()));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Tracking\Infrastructure\Tracking_On_Page_Load_Integration' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Tracking\Infrastructure\Tracking_On_Page_Load_Integration
+     */
+    protected function getTrackingOnPageLoadIntegrationService()
+    {
+        return $this->services['Yoast\\WP\\SEO\\Tracking\\Infrastructure\\Tracking_On_Page_Load_Integration'] = new \Yoast\WP\SEO\Tracking\Infrastructure\Tracking_On_Page_Load_Integration(($this->privates['Yoast\\WP\\SEO\\Tracking\\Application\\Action_Tracker'] ?? $this->getActionTrackerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Capability_Helper'] = new \Yoast\WP\SEO\Helpers\Capability_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())));
     }
 
     /**
@@ -6310,6 +6358,20 @@ class Cached_Container extends Container
      */
     protected function getTasksCollectorService()
     {
-        return $this->privates['Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector'] = new \Yoast\WP\SEO\Task_List\Infrastructure\Tasks_Collectors\Tasks_Collector(new \Yoast\WP\SEO\Task_List\Application\Tasks\Complete_FTC(($this->services['Yoast\\WP\\SEO\\Helpers\\First_Time_Configuration_Notice_Helper'] ?? $this->getFirstTimeConfigurationNoticeHelperService())), new \Yoast\WP\SEO\Task_List\Application\Tasks\Create_New_Content(($this->services['Yoast\\WP\\SEO\\Helpers\\Post_Type_Helper'] ?? $this->getPostTypeHelperService())), new \Yoast\WP\SEO\Task_List\Application\Tasks\Delete_Hello_World(), new \Yoast\WP\SEO\Task_List\Application\Tasks\Enable_Llms_Txt(($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper()))), ($this->privates['Yoast\\WP\\SEO\\Task_List\\Application\\Tasks\\Set_Search_Appearance_Templates'] ?? $this->getSetSearchAppearanceTemplatesService()));
+        $this->privates['Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector'] = $instance = new \Yoast\WP\SEO\Task_List\Infrastructure\Tasks_Collectors\Tasks_Collector(new \Yoast\WP\SEO\Task_List\Application\Tasks\Complete_FTC(($this->services['Yoast\\WP\\SEO\\Helpers\\First_Time_Configuration_Notice_Helper'] ?? $this->getFirstTimeConfigurationNoticeHelperService())), new \Yoast\WP\SEO\Task_List\Application\Tasks\Create_New_Content(($this->services['Yoast\\WP\\SEO\\Helpers\\Post_Type_Helper'] ?? $this->getPostTypeHelperService())), new \Yoast\WP\SEO\Task_List\Application\Tasks\Delete_Hello_World(), new \Yoast\WP\SEO\Task_List\Application\Tasks\Enable_Llms_Txt(($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper()))), ($this->privates['Yoast\\WP\\SEO\\Task_List\\Application\\Tasks\\Set_Search_Appearance_Templates'] ?? $this->getSetSearchAppearanceTemplatesService()));
+
+        $instance->set_tracking_link_adapter(new \Yoast\WP\SEO\Tracking\Infrastructure\Tracking_Link_Adapter());
+
+        return $instance;
+    }
+
+    /**
+     * Gets the private 'Yoast\WP\SEO\Tracking\Application\Action_Tracker' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Tracking\Application\Action_Tracker
+     */
+    protected function getActionTrackerService()
+    {
+        return $this->privates['Yoast\\WP\\SEO\\Tracking\\Application\\Action_Tracker'] = new \Yoast\WP\SEO\Tracking\Application\Action_Tracker(($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())));
     }
 }

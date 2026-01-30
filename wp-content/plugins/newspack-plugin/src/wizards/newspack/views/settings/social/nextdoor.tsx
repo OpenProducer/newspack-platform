@@ -32,6 +32,7 @@ function Nextdoor() {
 	const [ status, setStatus ] = useState< NextdoorStatus >( {
 		is_connected: false,
 		has_credentials: false,
+		has_centralized_credentials: false,
 		has_tokens: false,
 		has_page: false,
 		token_valid: false,
@@ -47,6 +48,7 @@ function Nextdoor() {
 			connection_status: {
 				is_connected: false,
 				has_credentials: false,
+				has_centralized_credentials: false,
 				has_tokens: false,
 				has_page: false,
 				token_valid: false,

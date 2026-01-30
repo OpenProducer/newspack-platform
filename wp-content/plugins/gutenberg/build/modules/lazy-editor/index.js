@@ -101,16 +101,16 @@ var require_block_editor = __commonJS({
   }
 });
 
-// packages/lazy-editor/build-module/components/editor/index.js
-var import_editor = __toESM(require_editor());
-var import_core_data5 = __toESM(require_core_data());
-var import_data6 = __toESM(require_data());
-var import_components = __toESM(require_components());
-var import_element4 = __toESM(require_element());
+// packages/lazy-editor/build-module/components/editor/index.mjs
+var import_editor = __toESM(require_editor(), 1);
+var import_core_data5 = __toESM(require_core_data(), 1);
+var import_data6 = __toESM(require_data(), 1);
+var import_components = __toESM(require_components(), 1);
+var import_element4 = __toESM(require_element(), 1);
 
-// packages/lazy-editor/build-module/hooks/use-styles-id.js
-var import_core_data = __toESM(require_core_data());
-var import_data = __toESM(require_data());
+// packages/lazy-editor/build-module/hooks/use-styles-id.mjs
+var import_core_data = __toESM(require_core_data(), 1);
+var import_data = __toESM(require_data(), 1);
 function useStylesId({ templateId } = {}) {
   const { globalStylesId, stylesId } = (0, import_data.useSelect)(
     (select2) => {
@@ -130,7 +130,7 @@ function useStylesId({ templateId } = {}) {
   return stylesId || globalStylesId;
 }
 
-// packages/global-styles-engine/build-module/utils/object.js
+// packages/global-styles-engine/build-module/utils/object.mjs
 function setImmutably(object, path, value) {
   path = Array.isArray(path) ? [...path] : [path];
   object = Array.isArray(object) ? [...object] : { ...object };
@@ -152,7 +152,7 @@ var getValueFromObjectPath = (object, path, defaultValue) => {
   return value ?? defaultValue;
 };
 
-// packages/global-styles-engine/build-module/settings/get-setting.js
+// packages/global-styles-engine/build-module/settings/get-setting.mjs
 var VALID_SETTINGS = [
   "appearanceTools",
   "useRootPaddingAwareAlignments",
@@ -184,8 +184,10 @@ var VALID_SETTINGS = [
   "color.text",
   "custom",
   "dimensions.aspectRatio",
+  "dimensions.height",
   "dimensions.minHeight",
   "dimensions.width",
+  "dimensions.dimensionSizes",
   "layout.contentSize",
   "layout.definitions",
   "layout.wideSize",
@@ -238,10 +240,10 @@ function getSetting(globalStyles, path, blockName) {
   return result;
 }
 
-// packages/global-styles-engine/build-module/utils/common.js
-var import_style_engine = __toESM(require_style_engine());
+// packages/global-styles-engine/build-module/utils/common.mjs
+var import_style_engine = __toESM(require_style_engine(), 1);
 
-// packages/global-styles-engine/build-module/utils/fluid.js
+// packages/global-styles-engine/build-module/utils/fluid.mjs
 var DEFAULT_MAXIMUM_VIEWPORT_WIDTH = "1600px";
 var DEFAULT_MINIMUM_VIEWPORT_WIDTH = "320px";
 var DEFAULT_SCALE_FACTOR = 1;
@@ -384,7 +386,7 @@ function roundToPrecision(value, digits = 3) {
   return Math.round(value * base) / base;
 }
 
-// packages/global-styles-engine/build-module/utils/typography.js
+// packages/global-styles-engine/build-module/utils/typography.mjs
 function isFluidTypographyEnabled(typographySettings) {
   const fluidSettings = typographySettings?.fluid;
   return true === fluidSettings || fluidSettings && typeof fluidSettings === "object" && Object.keys(fluidSettings).length > 0;
@@ -427,7 +429,7 @@ function getTypographyFontSizeValue(preset, settings) {
   return defaultSize;
 }
 
-// packages/global-styles-engine/build-module/utils/common.js
+// packages/global-styles-engine/build-module/utils/common.mjs
 var ROOT_BLOCK_SELECTOR = "body";
 var ROOT_CSS_PROPERTIES_SELECTOR = ":root";
 var PRESET_METADATA = [
@@ -497,6 +499,12 @@ var PRESET_METADATA = [
     path: ["border", "radiusSizes"],
     valueKey: "size",
     cssVarInfix: "border-radius",
+    classes: []
+  },
+  {
+    path: ["dimensions", "dimensionSizes"],
+    valueKey: "size",
+    cssVarInfix: "dimension",
     classes: []
   }
 ];
@@ -601,12 +609,12 @@ function getResolvedValue(ruleValue, tree) {
   return resolvedValue;
 }
 
-// packages/global-styles-engine/build-module/core/render.js
-var import_blocks = __toESM(require_blocks());
-var import_style_engine2 = __toESM(require_style_engine());
-var import_data2 = __toESM(require_data());
+// packages/global-styles-engine/build-module/core/render.mjs
+var import_blocks = __toESM(require_blocks(), 1);
+var import_style_engine2 = __toESM(require_style_engine(), 1);
+var import_data2 = __toESM(require_data(), 1);
 
-// packages/global-styles-engine/build-module/core/selectors.js
+// packages/global-styles-engine/build-module/core/selectors.mjs
 function getBlockSelector(blockType, target = "root", options = {}) {
   if (!target) {
     return null;
@@ -818,7 +826,7 @@ var w = function(r2) {
   return r2 instanceof j ? r2 : new j(r2);
 };
 
-// packages/global-styles-engine/build-module/utils/duotone.js
+// packages/global-styles-engine/build-module/utils/duotone.mjs
 function getValuesFromColors(colors = []) {
   const values = {
     r: [],
@@ -869,12 +877,12 @@ function getDuotoneFilter(id, colors) {
 </svg>`;
 }
 
-// packages/global-styles-engine/build-module/utils/string.js
+// packages/global-styles-engine/build-module/utils/string.mjs
 function kebabCase(str) {
   return str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/([0-9])([a-zA-Z])/g, "$1-$2").replace(/([a-zA-Z])([0-9])/g, "$1-$2").replace(/[\s_]+/g, "-").toLowerCase();
 }
 
-// packages/global-styles-engine/build-module/utils/spacing.js
+// packages/global-styles-engine/build-module/utils/spacing.mjs
 function getSpacingPresetCssVar(value) {
   if (!value) {
     return;
@@ -886,7 +894,7 @@ function getSpacingPresetCssVar(value) {
   return `var(--wp--preset--spacing--${slug[1]})`;
 }
 
-// packages/global-styles-engine/build-module/utils/gap.js
+// packages/global-styles-engine/build-module/utils/gap.mjs
 function getGapBoxControlValueFromStyle(blockGapValue) {
   if (!blockGapValue) {
     return null;
@@ -907,7 +915,7 @@ function getGapCSSValue(blockGapValue, defaultValue = "0") {
   return row === column ? row : `${row} ${column}`;
 }
 
-// packages/global-styles-engine/build-module/utils/background.js
+// packages/global-styles-engine/build-module/utils/background.mjs
 var BACKGROUND_BLOCK_DEFAULT_VALUES = {
   backgroundSize: "cover",
   backgroundPosition: "50% 50%"
@@ -932,7 +940,7 @@ function setBackgroundStyleDefaults(backgroundStyle) {
   return backgroundStylesWithDefaults;
 }
 
-// packages/global-styles-engine/build-module/utils/layout.js
+// packages/global-styles-engine/build-module/utils/layout.mjs
 var LAYOUT_DEFINITIONS = {
   default: {
     name: "default",
@@ -1105,7 +1113,7 @@ var LAYOUT_DEFINITIONS = {
   }
 };
 
-// packages/global-styles-engine/build-module/core/render.js
+// packages/global-styles-engine/build-module/core/render.mjs
 var ELEMENT_CLASS_NAMES = {
   button: "wp-element-button",
   caption: "wp-element-caption"
@@ -2048,15 +2056,15 @@ function generateGlobalStyles(config = {}, blockTypes = [], options = {}) {
   return [styles, updatedConfig.settings];
 }
 
-// packages/lazy-editor/build-module/hooks/use-editor-settings.js
-var import_core_data3 = __toESM(require_core_data());
-var import_element2 = __toESM(require_element());
-var import_data4 = __toESM(require_data());
+// packages/lazy-editor/build-module/hooks/use-editor-settings.mjs
+var import_core_data3 = __toESM(require_core_data(), 1);
+var import_element2 = __toESM(require_element(), 1);
+var import_data4 = __toESM(require_data(), 1);
 
-// packages/lazy-editor/build-module/hooks/use-global-styles.js
-var import_core_data2 = __toESM(require_core_data());
-var import_data3 = __toESM(require_data());
-var import_element = __toESM(require_element());
+// packages/lazy-editor/build-module/hooks/use-global-styles.mjs
+var import_core_data2 = __toESM(require_core_data(), 1);
+var import_data3 = __toESM(require_data(), 1);
+var import_element = __toESM(require_element(), 1);
 function useUserGlobalStyles(id) {
   const { userGlobalStyles } = (0, import_data3.useSelect)(
     (select2) => {
@@ -2106,14 +2114,14 @@ function useUserGlobalStyles(id) {
   }, [userGlobalStyles]);
 }
 
-// packages/lazy-editor/build-module/lock-unlock.js
-var import_private_apis = __toESM(require_private_apis());
+// packages/lazy-editor/build-module/lock-unlock.mjs
+var import_private_apis = __toESM(require_private_apis(), 1);
 var { unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
   "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
   "@wordpress/lazy-editor"
 );
 
-// packages/lazy-editor/build-module/hooks/use-editor-settings.js
+// packages/lazy-editor/build-module/hooks/use-editor-settings.mjs
 function useEditorSettings({ stylesId }) {
   const { editorSettings } = (0, import_data4.useSelect)(
     (select2) => ({
@@ -2147,7 +2155,7 @@ function useEditorSettings({ stylesId }) {
   };
 }
 
-// packages/asset-loader/build-module/index.js
+// packages/asset-loader/build-module/index.mjs
 function injectImportMap(scriptModules) {
   if (!scriptModules || Object.keys(scriptModules).length === 0) {
     return;
@@ -2362,10 +2370,10 @@ async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles, 
 }
 var index_default = loadAssets;
 
-// packages/lazy-editor/build-module/hooks/use-editor-assets.js
-var import_core_data4 = __toESM(require_core_data());
-var import_element3 = __toESM(require_element());
-var import_data5 = __toESM(require_data());
+// packages/lazy-editor/build-module/hooks/use-editor-assets.mjs
+var import_core_data4 = __toESM(require_core_data(), 1);
+var import_element3 = __toESM(require_element(), 1);
+var import_data5 = __toESM(require_data(), 1);
 var loadAssetsPromise;
 async function loadEditorAssets() {
   const load = async () => {
@@ -2406,8 +2414,8 @@ function useEditorAssets() {
   };
 }
 
-// packages/lazy-editor/build-module/components/editor/index.js
-var import_jsx_runtime = __toESM(require_jsx_runtime());
+// packages/lazy-editor/build-module/components/editor/index.mjs
+var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
 var { Editor: PrivateEditor, BackButton } = unlock(import_editor.privateApis);
 function Editor({
   postType,
@@ -2481,13 +2489,13 @@ function Editor({
   );
 }
 
-// packages/lazy-editor/build-module/components/preview/index.js
-var import_i18n = __toESM(require_i18n());
-var import_element5 = __toESM(require_element());
-var import_block_editor = __toESM(require_block_editor());
-var import_editor2 = __toESM(require_editor());
-var import_blocks2 = __toESM(require_blocks());
-var import_jsx_runtime2 = __toESM(require_jsx_runtime());
+// packages/lazy-editor/build-module/components/preview/index.mjs
+var import_i18n = __toESM(require_i18n(), 1);
+var import_element5 = __toESM(require_element(), 1);
+var import_block_editor = __toESM(require_block_editor(), 1);
+var import_editor2 = __toESM(require_editor(), 1);
+var import_blocks2 = __toESM(require_blocks(), 1);
+var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
 var css = `/**
  * SCSS Variables.
  *

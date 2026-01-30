@@ -58,7 +58,7 @@ export default function MediaCredits( { data, update }: ThemeModComponentProps< 
 								  }
 								: null
 						}
-						label={ __( 'Placeholder Image', 'newspack-plugin' ) }
+						label={ __( 'Image for Uncredited Media', 'newspack-plugin' ) }
 						buttonLabel={ __( 'Select', 'newspack-plugin' ) }
 						onChange={ ( image: null | PlaceholderImage ) => {
 							setImageThumbnail( image?.url || null );
@@ -68,7 +68,7 @@ export default function MediaCredits( { data, update }: ThemeModComponentProps< 
 							} );
 						} }
 						help={ __(
-							'A placeholder image to be displayed in place of images without credits. If none is chosen, the image will be displayed normally whether or not it has a credit.',
+							'Image shown in place of images that do not have a credit attached. Leave empty to display uncredited images as normal.',
 							'newspack-plugin'
 						) }
 					/>
