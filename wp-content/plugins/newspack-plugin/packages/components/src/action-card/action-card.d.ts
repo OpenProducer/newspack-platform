@@ -6,6 +6,7 @@ export interface ActionCardProps {
 	description?: string | React.ReactNode;
 	actionText?: React.ReactNode | string | null;
 	badge?: string;
+	badgeLevel?: 'success' | 'info' | 'warning' | 'error';
 	className?: string;
 	indent?: string;
 	notification?: string | Error | null;
@@ -13,8 +14,9 @@ export interface ActionCardProps {
 	isMedium?: boolean;
 	disabled?: boolean | string;
 	hasGreyHeader?: boolean;
+	heading?: number;
 	toggleChecked?: boolean;
-	toggleOnChange?: ( a: boolean ) => void;
+	toggleOnChange?: (a: boolean) => void;
 	togglePosition?: 'leading' | 'trailing';
 	actionContent?: boolean | React.ReactNode | null;
 	error?: Error | string | null;
@@ -34,8 +36,9 @@ export interface ActionCardProps {
 	noMargin?: boolean;
 	collapse?: boolean;
 	expandable?: boolean;
+	isExpanded?: boolean;
 	draggable?: boolean;
 	dragIndex?: number;
-	onDragCallback?: ( index: number ) => void;
-	dragWrapperRef?: React.MutableRefObject< HTMLDivElement | null >;
+	onDragCallback?: (index: number) => void;
+	dragWrapperRef?: React.MutableRefObject<HTMLDivElement | null>;
 }

@@ -36,6 +36,7 @@ const ActionCard = ( {
 	collapse,
 	disabled,
 	title,
+	heading = 2,
 	description,
 	handoff,
 	editLink,
@@ -66,6 +67,7 @@ const ActionCard = ( {
 	noBorder,
 	isPending,
 	expandable = false,
+	isExpanded,
 	isButtonEnabled = false,
 	// Draggable props. All are required to enable drag sorting.
 	draggable = false,
@@ -73,10 +75,16 @@ const ActionCard = ( {
 	dragWrapperRef,
 	onDragCallback,
 } ) => {
-	const [ expanded, setExpanded ] = useState( false );
+	const [ expanded, setExpanded ] = useState( Boolean( isExpanded ) );
 	const [ dragging, setDragging ] = useState( false );
 	const [ targetIndex, setTargetIndex ] = useState( null );
 	const [ dragRef, setDragRef ] = useState( null );
+
+	useEffect( () => {
+		if ( typeof isExpanded === 'boolean' ) {
+			setExpanded( isExpanded );
+		}
+	}, [ isExpanded ] );
 
 	useEffect( () => {
 		if ( dragWrapperRef && ! dragRef ) {
@@ -114,6 +122,7 @@ const ActionCard = ( {
 	const hasInternalLink = href && href.indexOf( 'http' ) !== 0;
 	const isDisplayingSecondaryAction = secondaryActionText && onSecondaryActionClick;
 	const badges = ! Array.isArray( badge ) && badge ? [ badge ] : badge;
+	const HeadingTag = `h${ heading }`;
 
 	const cardContent = (
 		<>
@@ -144,7 +153,7 @@ const ActionCard = ( {
 				) }
 				<div className="newspack-action-card__region newspack-action-card__region-center">
 					<Grid columns={ 1 } gutter={ 8 } noMargin>
-						<h2>
+						<HeadingTag>
 							<span className="newspack-action-card__title" { ...titleProps }>
 								{ titleLink && <a href={ titleLink }>{ title }</a> }
 								{ ! titleLink && expandable && (
@@ -163,7 +172,7 @@ const ActionCard = ( {
 										{ badgeText }
 									</span>
 								) ) }
-						</h2>
+						</HeadingTag>
 						{ description && (
 							<p>
 								{ typeof description === 'string' && description }
@@ -228,9 +237,9 @@ const ActionCard = ( {
 					{ 'warning' === notificationLevel && <Notice noticeText={ notification } isWarning rawHTML={ notificationHTML } /> }
 				</div>
 			) }
-			{ children && ( ( expandable && expanded ) || ! expandable ) && (
+			{ children && ( ( expandable && expanded ) || ! expandable ) ? (
 				<div className="newspack-action-card__region-children">{ children }</div>
-			) }
+			) : null }
 		</>
 	);
 

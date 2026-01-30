@@ -62,8 +62,8 @@ final class Admin {
 	public static function add_settings_page() {
 		\add_submenu_page(
 			'edit.php?post_type=' . \Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-			esc_html__( 'Newsletters Tracking Options', 'newspack-newsletters' ),
-			esc_html__( 'Tracking', 'newspack-newsletters' ),
+			esc_html__( 'Newsletters Ads Tracking Options', 'newspack-newsletters' ),
+			esc_html__( 'Ads Tracking', 'newspack-newsletters' ),
 			'manage_options',
 			'newspack-newsletters-tracking',
 			[ __CLASS__, 'render_settings_page' ]
@@ -76,7 +76,7 @@ final class Admin {
 	public static function render_settings_page() {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Newsletters Tracking Options', 'newspack-newsletters' ); ?></h1>
+			<h1><?php esc_html_e( 'Newsletters Ads Tracking Options', 'newspack-newsletters' ); ?></h1>
 			<form method="post" action="options.php">
 				<?php
 				\settings_fields( 'newspack_newsletters_tracking' );
@@ -99,7 +99,7 @@ final class Admin {
 				'name'              => 'newspack_newsletters_use_tracking_pixel',
 				'type'              => 'boolean',
 				'label_for'         => 'use_tracking_pixel',
-				'description'       => __( 'Enable tracking pixel', 'newspack-newsletters' ),
+				'description'       => __( 'Track the impressions of ads in your newsletter', 'newspack-newsletters' ),
 				'sanitize_callback' => [ __CLASS__, 'sanitize_boolean' ],
 				'default'           => true,
 			],
@@ -107,7 +107,7 @@ final class Admin {
 				'name'              => 'newspack_newsletters_use_click_tracking',
 				'type'              => 'boolean',
 				'label_for'         => 'use_click_tracking',
-				'description'       => __( 'Enable click-tracking', 'newspack-newsletters' ),
+				'description'       => __( 'Track the clicks on ads in your newsletter', 'newspack-newsletters' ),
 				'sanitize_callback' => [ __CLASS__, 'sanitize_boolean' ],
 				'default'           => true,
 			],

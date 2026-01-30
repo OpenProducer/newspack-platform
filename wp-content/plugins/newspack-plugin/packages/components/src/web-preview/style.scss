@@ -87,12 +87,17 @@
 		align-items: center;
 		border-bottom: 1px solid wp-colors.$gray-300;
 		display: flex;
+		gap: 16px;
 		justify-content: space-between;
-		height: 72px;
-		padding: 0 24px;
+		min-height: 71px;
+		padding: 12px 24px;
 
 		&-left {
 			display: flex;
+
+			h3 {
+				margin: 0;
+			}
 		}
 
 		&-right {

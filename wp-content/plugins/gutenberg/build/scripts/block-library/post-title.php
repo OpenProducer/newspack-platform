@@ -27,7 +27,7 @@ function gutenberg_render_block_core_post_title( $attributes, $content, $block )
 	 */
 	$title = get_the_title();
 
-	if ( ! strip_tags( $title ) ) {
+	if ( ! $title ) {
 		return '';
 	}
 

@@ -21,6 +21,7 @@ class WooCommerce_Subscriptions_Gifting {
 		\add_filter( 'wcsg_require_shipping_address_for_virtual_products', '__return_false' );
 		\add_filter( 'default_option_woocommerce_subscriptions_gifting_gifting_checkbox_text', [ __CLASS__, 'default_gifting_checkbox_text' ] );
 		\add_filter( 'newpack_reader_activation_reader_is_without_password', [ __CLASS__, 'is_reader_without_password' ], 10, 2 );
+		\add_filter( 'wcs_view_subscription_actions', [ __CLASS__, 'view_subscription_actions' ], 12, 3 );
 	}
 
 	/**
@@ -79,6 +80,24 @@ class WooCommerce_Subscriptions_Gifting {
 			return 'true' === $user_needs_account_update;
 		}
 		return $is_reader_without_password;
+	}
+
+	/**
+	 * Remove actions from the gifted subscription page.
+	 *
+	 * Only the purchaser of the subscription should see the actions.
+	 *
+	 * @param array            $actions      Actions.
+	 * @param \WC_Subscription $subscription Subscription.
+	 * @param int              $user_id      The user ID.
+	 *
+	 * @return array
+	 */
+	public static function view_subscription_actions( $actions, $subscription, $user_id ) {
+		if ( function_exists( 'is_account_page' ) && is_account_page() && $subscription->get_customer_id() !== $user_id ) {
+			return [];
+		}
+		return $actions;
 	}
 }
 WooCommerce_Subscriptions_Gifting::init();

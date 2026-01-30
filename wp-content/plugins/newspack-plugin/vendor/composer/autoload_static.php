@@ -179,6 +179,7 @@ class ComposerStaticInitcd506e00bbd2bbf41c61d65382d6f343
         'Newspack\\Memberships\\Import_Export' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-import-export.php',
         'Newspack\\Meta_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-meta-pixel.php',
         'Newspack\\Metering' => __DIR__ . '/../..' . '/includes/content-gate/class-metering.php',
+        'Newspack\\Metering_Countdown' => __DIR__ . '/../..' . '/includes/content-gate/class-metering-countdown.php',
         'Newspack\\My_Account_UI_V0' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/my-account/class-my-account-ui-v0.php',
         'Newspack\\My_Account_UI_V1' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/my-account/class-my-account-ui-v1.php',
         'Newspack\\My_Account_UI_V1_Passwords' => __DIR__ . '/../..' . '/includes/plugins/woocommerce/my-account/class-my-account-ui-v1-passwords.php',

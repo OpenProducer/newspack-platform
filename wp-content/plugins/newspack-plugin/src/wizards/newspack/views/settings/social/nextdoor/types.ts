@@ -12,6 +12,7 @@ export interface NextdoorSettings {
 export interface NextdoorStatus {
 	is_connected: boolean;
 	has_credentials: boolean;
+	has_centralized_credentials: boolean;
 	has_tokens: boolean;
 	has_page: boolean;
 	token_valid: boolean;

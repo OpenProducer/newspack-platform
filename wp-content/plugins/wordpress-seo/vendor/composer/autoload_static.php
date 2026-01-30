@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
+class ComposerStaticInitb9198e53d086c24d4ddd7ecbf945ad09
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -235,6 +235,7 @@ class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
         'WPSEO_Option_Tabs' => __DIR__ . '/../..' . '/admin/class-option-tabs.php',
         'WPSEO_Option_Tabs_Formatter' => __DIR__ . '/../..' . '/admin/class-option-tabs-formatter.php',
         'WPSEO_Option_Titles' => __DIR__ . '/../..' . '/inc/options/class-wpseo-option-titles.php',
+        'WPSEO_Option_Tracking_Only' => __DIR__ . '/../..' . '/inc/options/class-wpseo-option-tracking-only.php',
         'WPSEO_Option_Wpseo' => __DIR__ . '/../..' . '/inc/options/class-wpseo-option-wpseo.php',
         'WPSEO_Options' => __DIR__ . '/../..' . '/inc/options/class-wpseo-options.php',
         'WPSEO_Paper_Presenter' => __DIR__ . '/../..' . '/admin/class-paper-presenter.php',
@@ -636,6 +637,7 @@ class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
         'Yoast\\WP\\SEO\\Conditionals\\Primary_Category_Conditional' => __DIR__ . '/../..' . '/src/conditionals/primary-category-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Robots_Txt_Conditional' => __DIR__ . '/../..' . '/src/conditionals/robots-txt-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\SEMrush_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/semrush-enabled-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Schema_Disabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/schema-disabled-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Settings_Conditional' => __DIR__ . '/../..' . '/src/conditionals/settings-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Should_Index_Links_Conditional' => __DIR__ . '/../..' . '/src/conditionals/should-index-links-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Task_List_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/task-list-enabled-conditional.php',
@@ -1259,6 +1261,8 @@ class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
         'Yoast\\WP\\SEO\\Routes\\Wincher_Route' => __DIR__ . '/../..' . '/src/routes/wincher-route.php',
         'Yoast\\WP\\SEO\\Routes\\Workouts_Route' => __DIR__ . '/../..' . '/src/routes/workouts-route.php',
         'Yoast\\WP\\SEO\\Routes\\Yoast_Head_REST_Field' => __DIR__ . '/../..' . '/src/routes/yoast-head-rest-field.php',
+        'Yoast\\WP\\SEO\\Schema\\Application\\Configuration\\Schema_Configuration' => __DIR__ . '/../..' . '/src/schema/application/configuration/schema-configuration.php',
+        'Yoast\\WP\\SEO\\Schema\\Infrastructure\\Disable_Schema_Integration' => __DIR__ . '/../..' . '/src/schema/infrastructure/disable-schema-integration.php',
         'Yoast\\WP\\SEO\\Services\\Health_Check\\Default_Tagline_Check' => __DIR__ . '/../..' . '/src/services/health-check/default-tagline-check.php',
         'Yoast\\WP\\SEO\\Services\\Health_Check\\Default_Tagline_Reports' => __DIR__ . '/../..' . '/src/services/health-check/default-tagline-reports.php',
         'Yoast\\WP\\SEO\\Services\\Health_Check\\Default_Tagline_Runner' => __DIR__ . '/../..' . '/src/services/health-check/default-tagline-runner.php',
@@ -1322,6 +1326,9 @@ class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
         'Yoast\\WP\\SEO\\Task_List\\Infrastructure\\Tasks_Collectors\\Tasks_Collector_Interface' => __DIR__ . '/../..' . '/src/task-list/infrastructure/tasks-collectors/tasks-collector-interface.php',
         'Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Complete_Task_Route' => __DIR__ . '/../..' . '/src/task-list/user-interface/tasks/complete-task-route.php',
         'Yoast\\WP\\SEO\\Task_List\\User_Interface\\Tasks\\Get_Tasks_Route' => __DIR__ . '/../..' . '/src/task-list/user-interface/tasks/get-tasks-route.php',
+        'Yoast\\WP\\SEO\\Tracking\\Application\\Action_Tracker' => __DIR__ . '/../..' . '/src/tracking/application/action-tracker.php',
+        'Yoast\\WP\\SEO\\Tracking\\Infrastructure\\Tracking_Link_Adapter' => __DIR__ . '/../..' . '/src/tracking/infrastructure/tracking-link-adapter.php',
+        'Yoast\\WP\\SEO\\Tracking\\Infrastructure\\Tracking_On_Page_Load_Integration' => __DIR__ . '/../..' . '/src/tracking/infrastructure/tracking-on-page-load-integration.php',
         'Yoast\\WP\\SEO\\User_Meta\\Application\\Additional_Contactmethods_Collector' => __DIR__ . '/../..' . '/src/user-meta/application/additional-contactmethods-collector.php',
         'Yoast\\WP\\SEO\\User_Meta\\Application\\Cleanup_Service' => __DIR__ . '/../..' . '/src/user-meta/application/cleanup-service.php',
         'Yoast\\WP\\SEO\\User_Meta\\Application\\Custom_Meta_Collector' => __DIR__ . '/../..' . '/src/user-meta/application/custom-meta-collector.php',
@@ -1383,9 +1390,9 @@ class ComposerStaticInitae21fa458dac9ca3c112516ae205afa0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitae21fa458dac9ca3c112516ae205afa0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitae21fa458dac9ca3c112516ae205afa0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitae21fa458dac9ca3c112516ae205afa0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb9198e53d086c24d4ddd7ecbf945ad09::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb9198e53d086c24d4ddd7ecbf945ad09::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb9198e53d086c24d4ddd7ecbf945ad09::$classMap;
 
         }, null, ClassLoader::class);
     }

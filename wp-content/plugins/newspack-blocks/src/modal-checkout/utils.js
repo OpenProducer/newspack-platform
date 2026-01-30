@@ -180,16 +180,16 @@ export function onCheckoutPlaceOrderStart( container, callback ) {
 }
 
 /**
- * Run a callback when the checkout place order succeeds.
+ * Run a callback when the checkout place order is processing.
  *
  * @param {Object}   container The container element inside the iframe document.
- * @param {Function} callback  The callback to execute when the checkout place order succeeds.
+ * @param {Function} callback  The callback to execute when the checkout place order is processing.
  */
-export function onCheckoutPlaceOrderSuccess( container, callback ) {
-	if ( container.checkoutPlaceOrderSuccess ) {
+export function onCheckoutPlaceOrderProcessing( container, callback ) {
+	if ( container.checkoutPlaceOrderProcessing ) {
 		callback();
 	} else {
-		container.addEventListener( 'checkout-place-order-success', callback );
+		container.addEventListener( 'checkout-place-order-processing', callback );
 	}
 }
 
@@ -204,6 +204,20 @@ export function onCheckoutPlaceOrderError( container, callback ) {
 		callback();
 	} else {
 		container.addEventListener( 'checkout-place-order-error', callback );
+	}
+}
+
+/**
+ * Run a callback when the checkout place order fails in an unrecoverable state.
+ *
+ * @param {Object}   container The container element inside the iframe document.
+ * @param {Function} callback  The callback to execute when the checkout place order fails in an unrecoverable state.
+ */
+export function onCheckoutPlaceOrderCriticalError( container, callback ) {
+	if ( container.checkoutPlaceOrderCriticalError ) {
+		callback();
+	} else {
+		container.addEventListener( 'checkout-place-order-critical-error', callback );
 	}
 }
 

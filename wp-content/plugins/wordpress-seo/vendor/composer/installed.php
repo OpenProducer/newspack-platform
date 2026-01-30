@@ -3,7 +3,7 @@
         'name' => 'yoast/wordpress-seo',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '77e35ab51d428173ce7f339ff4c47baaea131917',
+        'reference' => 'ee9ec53dd900fb77cef15cdf7740ce15242f3bd8',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'yoast/wordpress-seo' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '77e35ab51d428173ce7f339ff4c47baaea131917',
+            'reference' => 'ee9ec53dd900fb77cef15cdf7740ce15242f3bd8',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

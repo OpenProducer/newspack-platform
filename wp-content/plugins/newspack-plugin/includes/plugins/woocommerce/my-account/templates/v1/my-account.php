@@ -32,7 +32,17 @@
 					?>
 
 					<div class="main-content">
-						<?php the_content(); ?>
+						<?php
+						/**
+						 * Given the highly customized grid layout, we'll be rendering the
+						 * shortcode directly and rely on a separate strategy to render
+						 * content around the shortcode.
+						 *
+						 * See My_Account_UI_V1::render_content_around_shortcode() for more
+						 * details.
+						 */
+						echo do_shortcode( '[woocommerce_my_account]' );
+						?>
 					</div>
 
 				<?php endwhile; ?>

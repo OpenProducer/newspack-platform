@@ -80,6 +80,11 @@ class WooCommerce_Update_Payment_Notice {
 			return;
 		}
 
+		// Don't show notices on the checkout page.
+		if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+			return;
+		}
+
 		$notices = self::get_notices();
 		if ( empty( $notices ) ) {
 			return;
@@ -110,7 +115,7 @@ class WooCommerce_Update_Payment_Notice {
 	 * @return string[] The notices.
 	 */
 	private static function get_notices() {
-		if ( ! function_exists( 'wcs_get_subscriptions' ) ) {
+		if ( ! function_exists( 'wcs_get_subscriptions' ) || ! function_exists( 'wc_get_product' ) ) {
 			return [];
 		}
 
@@ -134,7 +139,25 @@ class WooCommerce_Update_Payment_Notice {
 				continue;
 			}
 
-			$product = array_values( $subscription->get_items() )[0]->get_product();
+			$line_item = reset( $subscription->get_items() );
+			$product   = wc_get_product( $line_item->get_product_id() );
+			// If the product has a parent, use the parent product.
+			if ( $product->get_parent_id() ) {
+				$product = wc_get_product( $product->get_parent_id() );
+			}
+			// If the product belongs to a grouped product, use the grouped product.
+			if ( class_exists( 'WC_Subscriptions_Product' ) && method_exists( 'WC_Subscriptions_Product', 'get_visible_grouped_parent_product_ids' ) ) {
+				$parent = \WC_Subscriptions_Product::get_visible_grouped_parent_product_ids( $product );
+				if ( ! empty( $parent ) ) {
+					$product = wc_get_product( reset( $parent ) );
+				}
+			}
+			// Check if there's another active subscription of the same grouped or variable product.
+			$active_subscriptions = WooCommerce_Subscriptions::get_user_subscription( $product );
+			if ( $active_subscriptions ) {
+				continue;
+			}
+
 			$is_donation = Donations::is_donation_product( $product->get_id() );
 
 			$link_attrs = [];

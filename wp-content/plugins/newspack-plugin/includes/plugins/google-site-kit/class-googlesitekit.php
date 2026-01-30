@@ -112,7 +112,7 @@ class GoogleSiteKit {
 	/**
 	 * Get Site Kit's GA4 settings.
 	 */
-	private static function get_sitekit_ga4_settings() {
+	public static function get_sitekit_ga4_settings() {
 		$option_name = self::get_sitekit_ga4_settings_option_name();
 		if ( false === $option_name ) {
 			return false;

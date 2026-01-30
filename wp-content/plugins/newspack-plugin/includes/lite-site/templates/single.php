@@ -23,6 +23,7 @@ if ( ! $current_post ) {
 	<title><?php echo esc_html( $current_post->post_title ); ?> - <?php bloginfo( 'name' ); ?></title>
 	<link rel="canonical" href="<?php echo esc_url( get_permalink( $current_post ) ); ?>">
 	<?php require __DIR__ . '/lite-site-styles.php'; ?>
+	<?php Lite_Site::get_ga4_snippet(); ?>
 </head>
 <body>
 	<header class="back">

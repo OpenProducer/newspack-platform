@@ -424,6 +424,11 @@ class Newsletters_Wizard extends Wizard {
 				];
 			}
 
+			$tabs[] = [
+				'textContent' => esc_html__( 'Tracking', 'newspack-plugin' ),
+				'href'        => admin_url( 'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT . '&page=' . $this->slug . '#/tracking' ),
+			];
+
 			return $tabs;
 		}
 

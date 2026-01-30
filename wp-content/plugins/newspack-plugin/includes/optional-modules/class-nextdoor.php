@@ -130,6 +130,47 @@ class Nextdoor {
 	}
 
 	/**
+	 * Get centralized API credentials from environment variables or constants.
+	 *
+	 * This method checks for credentials in the following order:
+	 * 1. PHP constants
+	 * 2. Environment variables
+	 *
+	 * @return array credentials.
+	 */
+	public static function get_centralized_credentials() {
+		$client_id     = '';
+		$client_secret = '';
+
+		if ( defined( 'NEWSPACK_NEXTDOOR_CLIENT_ID' ) ) {
+			$client_id = NEWSPACK_NEXTDOOR_CLIENT_ID;
+		} elseif ( getenv( 'NEWSPACK_NEXTDOOR_CLIENT_ID' ) ) {
+			$client_id = getenv( 'NEWSPACK_NEXTDOOR_CLIENT_ID' );
+		}
+
+		if ( defined( 'NEWSPACK_NEXTDOOR_CLIENT_SECRET' ) ) {
+			$client_secret = NEWSPACK_NEXTDOOR_CLIENT_SECRET;
+		} elseif ( getenv( 'NEWSPACK_NEXTDOOR_CLIENT_SECRET' ) ) {
+			$client_secret = getenv( 'NEWSPACK_NEXTDOOR_CLIENT_SECRET' );
+		}
+
+		return [
+			'client_id'     => $client_id,
+			'client_secret' => $client_secret,
+		];
+	}
+
+	/**
+	 * Check if centralized credentials are configured.
+	 *
+	 * @return bool True credentials are set, false otherwise.
+	 */
+	public static function has_centralized_credentials() {
+		$credentials = self::get_centralized_credentials();
+		return ! empty( $credentials['client_id'] ) && ! empty( $credentials['client_secret'] );
+	}
+
+	/**
 	 * Get Nextdoor settings.
 	 *
 	 * @return array
@@ -164,7 +205,7 @@ class Nextdoor {
 		$saved_settings = get_option( self::SETTINGS_SLUG, [] );
 
 		if ( ! is_array( $saved_settings ) ) {
-			return $default_settings;
+			$saved_settings = [];
 		}
 
 		/**
@@ -175,7 +216,17 @@ class Nextdoor {
 		 */
 		$saved_settings = apply_filters( 'newspack_nextdoor_settings', $saved_settings );
 
-		return shortcode_atts( $default_settings, $saved_settings );
+		$settings = shortcode_atts( $default_settings, $saved_settings );
+
+		$centralized_credentials = self::get_centralized_credentials();
+		if ( ! empty( $centralized_credentials['client_id'] ) ) {
+			$settings['client_id'] = $centralized_credentials['client_id'];
+		}
+		if ( ! empty( $centralized_credentials['client_secret'] ) ) {
+			$settings['client_secret'] = $centralized_credentials['client_secret'];
+		}
+
+		return $settings;
 	}
 
 	/**

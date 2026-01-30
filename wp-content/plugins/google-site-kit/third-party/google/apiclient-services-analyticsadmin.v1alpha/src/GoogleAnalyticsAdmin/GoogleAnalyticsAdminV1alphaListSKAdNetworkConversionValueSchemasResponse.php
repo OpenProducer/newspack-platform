@@ -1,0 +1,72 @@
+<?php
+
+/*
+ * Copyright 2014 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha;
+
+class GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse extends \Google\Site_Kit_Dependencies\Google\Collection
+{
+    protected $collection_key = 'skadnetworkConversionValueSchemas';
+    /**
+     * A token, which can be sent as `page_token` to retrieve the next page. If
+     * this field is omitted, there are no subsequent pages. Currently, Google
+     * Analytics supports only one SKAdNetworkConversionValueSchema per
+     * dataStream, so this will never be populated.
+     *
+     * @var string
+     */
+    public $nextPageToken;
+    protected $skadnetworkConversionValueSchemasType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class;
+    protected $skadnetworkConversionValueSchemasDataType = 'array';
+    /**
+     * A token, which can be sent as `page_token` to retrieve the next page. If
+     * this field is omitted, there are no subsequent pages. Currently, Google
+     * Analytics supports only one SKAdNetworkConversionValueSchema per
+     * dataStream, so this will never be populated.
+     *
+     * @param string $nextPageToken
+     */
+    public function setNextPageToken($nextPageToken)
+    {
+        $this->nextPageToken = $nextPageToken;
+    }
+    /**
+     * @return string
+     */
+    public function getNextPageToken()
+    {
+        return $this->nextPageToken;
+    }
+    /**
+     * List of SKAdNetworkConversionValueSchemas. This will have at most one
+     * value.
+     *
+     * @param GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema[] $skadnetworkConversionValueSchemas
+     */
+    public function setSkadnetworkConversionValueSchemas($skadnetworkConversionValueSchemas)
+    {
+        $this->skadnetworkConversionValueSchemas = $skadnetworkConversionValueSchemas;
+    }
+    /**
+     * @return GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema[]
+     */
+    public function getSkadnetworkConversionValueSchemas()
+    {
+        return $this->skadnetworkConversionValueSchemas;
+    }
+}
+// Adding a class alias for backwards compatibility with the previous class name.
+\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse');

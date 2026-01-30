@@ -20,6 +20,62 @@ class WooCommerce_Subscriptions {
 		add_action( 'plugins_loaded', [ __CLASS__, 'woocommerce_subscriptions_integration_init' ] );
 		add_filter( 'woocommerce_subscriptions_product_limited_for_user', [ __CLASS__, 'maybe_limit_subscription_product_for_user' ], 10, 3 );
 		add_filter( 'woocommerce_subscriptions_product_trial_length', [ __CLASS__, 'limit_free_trials_to_one_per_user' ], 10, 2 );
+		add_filter( 'wcs_get_users_subscriptions', [ __CLASS__, 'filter_subscriptions_for_account_page' ], 10, 1 );
+		add_filter( 'woocommerce_subscriptions_can_item_be_switched', [ __CLASS__, 'allow_migrated_subscription_switch' ], 10, 3 );
+	}
+
+	/**
+	 * Filter to allow migrated subscription without a last order date to switch.
+	 *
+	 * This filter will also populate the subscription's last order date meta with
+	 * the scheduled start date.
+	 *
+	 * @param bool                   $can_switch   Whether the item can be switched.
+	 * @param \WC_Order_Item_Product $item         An order item on the subscription to switch, or cart item to add.
+	 * @param \WC_Subscription       $subscription An instance of WC_Subscription.
+	 *
+	 * @return bool Whether the item can be switched.
+	 */
+	public static function allow_migrated_subscription_switch( $can_switch, $item, $subscription ) {
+		if ( ! $can_switch ) {
+			$no_last_order_date = 0 === $subscription->get_date( 'last_order_date_created' );
+
+			// Bail if the subscription has a last order date, as we're only handling
+			// subscriptions without it.
+			if ( ! $no_last_order_date ) {
+				return $can_switch;
+			}
+
+			// Detect whether it's a migrated subscription.
+			$migrated_meta = [ '_piano_subscription_id', '_stripe_subscription_id' ];
+			$migrated = false;
+			foreach ( $migrated_meta as $meta ) {
+				if ( $subscription->get_meta( $meta ) ) {
+					$migrated = true;
+					break;
+				}
+			}
+			if ( ! $migrated ) {
+				return $can_switch;
+			}
+
+			// Set the last order date meta to the scheduled start date.
+			$subscription->set_last_order_date_created( $subscription->get_date( 'start' ) );
+			$subscription->save();
+
+			$product_id = wcs_get_canonical_product_id( $item );
+			// Run other standard checks to see if the item can be switched.
+			// @see WC_Subscriptions_Switcher::can_user_perform_action().
+			$is_product_switchable = 'line_item' === $item['type'] && wcs_is_product_switchable_type( $product_id );
+			$is_active             = $subscription->has_status( 'active' );
+			$can_be_updated        = $subscription->payment_method_supports( 'subscription_amount_changes' ) && $subscription->payment_method_supports( 'subscription_date_changes' );
+
+			if ( $is_product_switchable && $is_active && $can_be_updated ) {
+				return true;
+			}
+		}
+
+		return $can_switch;
 	}
 
 	/**
@@ -65,6 +121,42 @@ class WooCommerce_Subscriptions {
 		 * @param bool $is_enabled
 		 */
 		return apply_filters( 'newspack_subscriptions_expiration_enabled', $is_enabled );
+	}
+
+	/**
+	 * Get the user's subscription within a grouped or variable subscription product.
+	 *
+	 * @param \WC_Product $product Product.
+	 * @param int|null    $user_id User ID. Defaults to the current user.
+	 *
+	 * @return \WC_Subscription|null Subscription or null if the user does not have a subscription.
+	 */
+	public static function get_user_subscription( $product, $user_id = null ) {
+		if ( ! function_exists( 'wcs_get_users_subscriptions' ) || ! function_exists( 'wc_get_product' ) ) {
+			return null;
+		}
+
+		$user_id = $user_id ?? get_current_user_id();
+		if ( ! $user_id ) {
+			return null;
+		}
+
+		$products           = $product->get_children();
+		$user_subscriptions = wcs_get_users_subscriptions( $user_id );
+
+		foreach ( $products as $product ) {
+			$product = wc_get_product( $product );
+			if ( ! $product ) {
+				continue;
+			}
+			foreach ( $user_subscriptions as $subscription ) {
+				if ( $subscription->has_product( $product->get_id() ) && $subscription->has_status( 'active' ) ) {
+					return $subscription;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -155,6 +247,21 @@ class WooCommerce_Subscriptions {
 	 * @return int The trial length.
 	 */
 	public static function limit_free_trials_to_one_per_user( $trial_length, $product ) {
+		/**
+		 * Bail if this is a subscription switch.
+		 *
+		 * Subscription switches mock a free trial on the cart item to make sure
+		 * the switch total doesn't include any recurring amount.
+		 *
+		 * With this method, if the product being switched to is a subscription
+		 * already owned, it'll charge the full subscription amount + proration.
+		 *
+		 * @see https://github.com/woocommerce/woocommerce-subscriptions/blob/8a3cd300786218d76eb51d28b8d2d9ff5eee3ef6/includes/switching/class-wc-subscriptions-switcher.php#L134
+		 */
+		if ( class_exists( 'WC_Subscriptions_Switcher' ) && \WC_Subscriptions_Switcher::cart_contains_switches() ) {
+			return $trial_length;
+		}
+
 		$user_id = get_current_user_id();
 
 		// If not logged in, try to get the user ID from the billing email.
@@ -164,13 +271,31 @@ class WooCommerce_Subscriptions {
 		if ( $trial_length && $user_id && $product && $product->is_type( [ 'subscription', 'subscription_variation', 'variable-subscription' ] ) ) {
 			$user_subscriptions = array_values( \wcs_get_users_subscriptions( $user_id ) );
 			foreach ( $user_subscriptions as $subscription ) {
-				if ( $subscription->has_product( $product->get_id() ) ) {
+				if ( $subscription->has_product( $product->get_id() ) && 'trash' !== $subscription->get_status() ) {
 					return 0;
 				}
 			}
 		}
 
 		return $trial_length;
+	}
+
+	/**
+	 * Remove 'trash' subscriptions from the subscriptions list on the My Account page.
+	 *
+	 * @param array $subscriptions The subscriptions.
+	 * @return array The filtered subscriptions.
+	 */
+	public static function filter_subscriptions_for_account_page( $subscriptions ) {
+		if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+			$subscriptions = array_filter(
+				$subscriptions,
+				function( $subscription ) {
+					return ! $subscription->has_status( 'trash' );
+				}
+			);
+		}
+		return $subscriptions;
 	}
 }
 WooCommerce_Subscriptions::init();

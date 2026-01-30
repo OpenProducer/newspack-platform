@@ -656,8 +656,14 @@ class Emails {
 				wc_get_account_endpoint_url( 'lost-password' )
 			);
 		}
-
-		return wp_lostpassword_url();
+		return add_query_arg(
+			[
+				'action' => 'rp',
+				'key'    => $key,
+				'login'  => rawurlencode( $user->user_login ),
+			],
+			wp_lostpassword_url()
+		);
 	}
 
 	/**

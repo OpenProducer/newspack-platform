@@ -21,6 +21,25 @@ import { OnboardingProps } from '../types';
 import './style.scss';
 
 /**
+ * Step configuration.
+ */
+const STEPS = {
+	// When auth is managed by Newspack
+	centralized: {
+		ACCOUNT_AUTH: 1,
+		CLAIM_PAGE: 2,
+		SUCCESS: 3,
+	},
+	// When user provides their own credentials
+	manual: {
+		CREDENTIALS: 1,
+		ACCOUNT_AUTH: 2,
+		CLAIM_PAGE: 3,
+		SUCCESS: 4,
+	},
+} as const;
+
+/**
  * Onboarding component.
  */
 export const Onboarding = ( { settings, status, error, updateSettings, startOAuthFlow, claimPage, disconnect, setError }: OnboardingProps ) => {
@@ -36,14 +55,18 @@ export const Onboarding = ( { settings, status, error, updateSettings, startOAut
 	const countryOptions = window.newspackSettings?.social?.nextdoor?.country_options || [];
 	const redirectUri = window.newspackSettings?.social?.nextdoor?.redirect_uri || '';
 
+	// Decide steps/UI based on auth.
+	const steps = status.has_centralized_credentials ? STEPS.centralized : STEPS.manual;
+	const isManualMode = 'CREDENTIALS' in steps;
+
 	useEffect( () => {
 		// Check URL params for OAuth success
 		const urlParams = new URLSearchParams( window.location.search );
 		if ( urlParams.get( 'oauth_success' ) === '1' ) {
-			setCurrentStep( 3 );
+			setCurrentStep( steps.CLAIM_PAGE );
 			setError( null );
 		}
-	}, [] );
+	}, [ steps.CLAIM_PAGE ] );
 
 	useEffect( () => {
 		// Check for OAuth error in URL params
@@ -56,17 +79,17 @@ export const Onboarding = ( { settings, status, error, updateSettings, startOAut
 	}, [] );
 
 	useEffect( () => {
-		// Determine current step based on status
+		// Determine current step based on connection status
 		if ( status.is_connected ) {
-			setCurrentStep( 4 );
+			setCurrentStep( steps.SUCCESS );
 		} else if ( status.has_tokens ) {
-			setCurrentStep( 3 );
+			setCurrentStep( steps.CLAIM_PAGE );
 		} else if ( status.has_credentials ) {
-			setCurrentStep( 2 );
+			setCurrentStep( steps.ACCOUNT_AUTH );
 		} else {
 			setCurrentStep( 1 );
 		}
-	}, [ status ] );
+	}, [ status, steps ] );
 
 	const handleSaveCredentials = async () => {
 		if ( ! clientId || ! clientSecret ) {
@@ -140,8 +163,8 @@ export const Onboarding = ( { settings, status, error, updateSettings, startOAut
 		<>
 			{ error && <Notice noticeText={ error } isError onClose={ () => setError( null ) } /> }
 
-			{ /* Step 1: API Credentials */ }
-			{ currentStep === 1 && (
+			{ /* Step 1: API Credentials - Only shown in manual mode */ }
+			{ isManualMode && currentStep === STEPS.manual.CREDENTIALS && (
 				<Card>
 					<p>{ __( 'To get started, you need to register your site with Nextdoor and obtain API credentials.', 'newspack-plugin' ) }</p>
 					<div className="nextdoor-onboarding__redirect-uri-box">
@@ -190,7 +213,7 @@ export const Onboarding = ( { settings, status, error, updateSettings, startOAut
 			) }
 
 			{ /* Step 2: Account Authentication */ }
-			{ currentStep === 2 && (
+			{ currentStep === steps.ACCOUNT_AUTH && (
 				<Card>
 					<p>{ __( 'Connect your Nextdoor account to authorize publishing articles.', 'newspack-plugin' ) }</p>
 
@@ -215,15 +238,17 @@ export const Onboarding = ( { settings, status, error, updateSettings, startOAut
 						<Button variant="primary" onClick={ handleStartOAuth } disabled={ ! email || isSaving } isBusy={ isSaving }>
 							{ __( 'Connect Account', 'newspack-plugin' ) }
 						</Button>
-						<Button variant="secondary" onClick={ () => setCurrentStep( 1 ) }>
-							{ __( 'Back', 'newspack-plugin' ) }
-						</Button>
+						{ isManualMode && (
+							<Button variant="secondary" onClick={ () => setCurrentStep( STEPS.manual.CREDENTIALS ) }>
+								{ __( 'Back', 'newspack-plugin' ) }
+							</Button>
+						) }
 					</div>
 				</Card>
 			) }
 
 			{ /* Step 3: Claim Page */ }
-			{ currentStep === 3 && (
+			{ currentStep === steps.CLAIM_PAGE && (
 				<Card>
 					<p>{ __( 'Claim your news page on Nextdoor to start publishing articles.', 'newspack-plugin' ) }</p>
 
@@ -242,7 +267,7 @@ export const Onboarding = ( { settings, status, error, updateSettings, startOAut
 						<Button variant="primary" onClick={ handleClaimPage } disabled={ ! publicationUrl || isSaving } isBusy={ isSaving }>
 							{ __( 'Claim Page', 'newspack-plugin' ) }
 						</Button>
-						<Button variant="secondary" onClick={ () => setCurrentStep( 2 ) }>
+						<Button variant="secondary" onClick={ () => setCurrentStep( steps.ACCOUNT_AUTH ) }>
 							{ __( 'Back', 'newspack-plugin' ) }
 						</Button>
 					</div>
@@ -250,7 +275,7 @@ export const Onboarding = ( { settings, status, error, updateSettings, startOAut
 			) }
 
 			{ /* Step 4: Success */ }
-			{ currentStep === 4 && status.is_connected && (
+			{ currentStep === steps.SUCCESS && status.is_connected && (
 				<ActionCard
 					title={ __( 'Nextdoor Connected Successfully!', 'newspack-plugin' ) }
 					description={ __(
@@ -265,20 +290,32 @@ export const Onboarding = ( { settings, status, error, updateSettings, startOAut
 			) }
 
 			{ /* Connection Status */ }
-			{ currentStep > 1 && (
+			{ ( ! isManualMode || currentStep > STEPS.manual.CREDENTIALS ) && (
 				<Card>
 					<Grid columns={ 2 } gutter={ 16 }>
 						<div>
-							<div className="nextdoor-onboarding__status-label">{ __( 'API Credentials:', 'newspack-plugin' ) }</div>
-							{ status.has_credentials ? (
-								<span className="nextdoor-onboarding__status-value nextdoor-onboarding__status-value--success">
-									{ __( 'Configured', 'newspack-plugin' ) }
-								</span>
-							) : (
-								<span className="nextdoor-onboarding__status-value nextdoor-onboarding__status-value--error">
-									{ __( 'Not configured', 'newspack-plugin' ) }
-								</span>
-							) }
+							<div className="nextdoor-onboarding__status-label">{ __( 'Authorization:', 'newspack-plugin' ) }</div>
+							{ ( () => {
+								if ( ! isManualMode ) {
+									return (
+										<span className="nextdoor-onboarding__status-value nextdoor-onboarding__status-value--success">
+											{ __( 'Managed by Newspack', 'newspack-plugin' ) }
+										</span>
+									);
+								}
+								if ( status.has_credentials ) {
+									return (
+										<span className="nextdoor-onboarding__status-value nextdoor-onboarding__status-value--success">
+											{ __( 'Configured', 'newspack-plugin' ) }
+										</span>
+									);
+								}
+								return (
+									<span className="nextdoor-onboarding__status-value nextdoor-onboarding__status-value--error">
+										{ __( 'Not configured', 'newspack-plugin' ) }
+									</span>
+								);
+							} )() }
 						</div>
 						<div>
 							<div className="nextdoor-onboarding__status-label">{ __( 'Account Connected:', 'newspack-plugin' ) }</div>

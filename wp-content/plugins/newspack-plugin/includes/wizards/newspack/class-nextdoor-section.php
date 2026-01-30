@@ -95,15 +95,17 @@ class Nextdoor_Section extends Wizard_Section {
 		$settings          = [];
 
 		if ( $is_enabled ) {
-			$is_connected = Nextdoor_Module::is_connected();
-			$settings     = Nextdoor_Module::get_settings();
+			$is_connected                = Nextdoor_Module::is_connected();
+			$settings                    = Nextdoor_Module::get_settings();
+			$has_centralized_credentials = Nextdoor_Module::has_centralized_credentials();
 
 			$connection_status = [
-				'is_connected'    => $is_connected,
-				'has_credentials' => ! empty( $settings['client_id'] ) && ! empty( $settings['client_secret'] ),
-				'has_tokens'      => ! empty( $settings['access_token'] ),
-				'has_page'        => ! empty( $settings['page_id'] ),
-				'token_valid'     => Auth::validate_token(),
+				'is_connected'                => $is_connected,
+				'has_credentials'             => ! empty( $settings['client_id'] ) && ! empty( $settings['client_secret'] ),
+				'has_centralized_credentials' => $has_centralized_credentials,
+				'has_tokens'                  => ! empty( $settings['access_token'] ),
+				'has_page'                    => ! empty( $settings['page_id'] ),
+				'token_valid'                 => Auth::validate_token(),
 			];
 
 			$settings = [

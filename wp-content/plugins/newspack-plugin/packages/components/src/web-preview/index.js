@@ -48,21 +48,55 @@ class WebPreview extends Component {
 	}
 
 	/**
-	 * Add or remove applicable body classes
+	 * Add or remove applicable body classes and keyboard event listeners
 	 */
-	componentDidUpdate() {
+	componentDidUpdate( prevProps, prevState ) {
 		if ( this.state.isPreviewVisible === true ) {
 			document.body.classList.add( 'newspack-web-preview--open' );
+			if ( prevState.isPreviewVisible === false ) {
+				// Add event listener when modal opens
+				document.addEventListener( 'keydown', this.handleKeyDown );
+			}
 		} else {
 			document.body.classList.remove( 'newspack-web-preview--open' );
+			if ( prevState.isPreviewVisible === true ) {
+				// Remove event listener when modal closes
+				document.removeEventListener( 'keydown', this.handleKeyDown );
+			}
 		}
 	}
+
+	/**
+	 * Clean up event listeners on unmount
+	 */
+	componentWillUnmount() {
+		document.removeEventListener( 'keydown', this.handleKeyDown );
+		document.body.classList.remove( 'newspack-web-preview--open' );
+	}
+
+	/**
+	 * Handle keyboard events
+	 */
+	handleKeyDown = event => {
+		if ( event.key === 'Escape' && this.state.isPreviewVisible ) {
+			this.closePreview();
+		}
+	};
+
+	/**
+	 * Close the preview modal
+	 */
+	closePreview = () => {
+		const { onClose = () => {} } = this.props;
+		onClose();
+		this.setState( { isPreviewVisible: false, loaded: false } );
+	};
 
 	/**
 	 * Create JSX for the modal
 	 */
 	getWebPreviewModal = () => {
-		const { beforeLoad = () => {}, onClose = () => {}, url, title } = this.props;
+		const { beforeLoad = () => {}, url, title } = this.props;
 		const { device, loaded, isPreviewVisible } = this.state;
 
 		if ( ! this.modalDOMElement || ! isPreviewVisible ) {
@@ -83,7 +117,7 @@ class WebPreview extends Component {
 					<div className="newspack-web-preview__toolbar">
 						{ title && (
 							<div className="newspack-web-preview__toolbar-left">
-								<h2>{ title }</h2>
+								<h3>{ title }</h3>
 							</div>
 						) }
 						<div className="newspack-web-preview__toolbar-right">
@@ -126,14 +160,7 @@ class WebPreview extends Component {
 									</>
 								) }
 							</DropdownMenu>
-							<Button
-								onClick={ () => {
-									onClose();
-									this.setState( { isPreviewVisible: false, loaded: false } );
-								} }
-								icon={ close }
-								label={ __( 'Close Preview', 'newspack-plugin' ) }
-							/>
+							<Button onClick={ this.closePreview } icon={ close } label={ __( 'Close Preview', 'newspack-plugin' ) } />
 						</div>
 					</div>
 					<div className="newspack-web-preview__content">

@@ -40,10 +40,10 @@ class Content_Gifting {
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'hook_gift_button' ] );
 		add_action( 'wp', [ __CLASS__, 'unrestrict_content' ], 5 );
-		add_filter( 'newspack_content_gate_restrict_post', [ __CLASS__, 'restrict_post' ] );
+		add_filter( 'newspack_content_gate_restrict_post', [ __CLASS__, 'restrict_post' ], 10, 2 );
 		add_filter( 'newspack_content_gate_metering_short_circuit', [ __CLASS__, 'short_circuit_metering' ] );
-		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
-		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'localize_assets' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'localize_assets' ] );
 		add_action( 'wp_ajax_' . self::GENERATE_ACTION, [ __CLASS__, 'ajax_generate_content_key' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'print_gift_modal' ] );
 		add_action( 'newspack_content_gifting_enabled_status_changed', [ __CLASS__, 'update_jetpack_sharing_services' ] );
@@ -212,6 +212,8 @@ class Content_Gifting {
 			'expiration_time_unit' => self::get_expiration_time_unit(),
 			'cta_label'            => Content_Gifting_CTA::get_cta_label(),
 			'button_label'         => Content_Gifting_CTA::get_button_label(),
+			'cta_type'             => Content_Gifting_CTA::get_cta_type(),
+			'cta_product_id'       => Content_Gifting_CTA::get_cta_product_id(),
 			'cta_url'              => Content_Gifting_CTA::get_cta_url(),
 			'style'                => Content_Gifting_CTA::get_style(),
 		];
@@ -438,20 +440,29 @@ class Content_Gifting {
 	}
 
 	/**
-	 * Enqueue assets.
+	 * Should assets be enqueued?
+	 *
+	 * @return bool
 	 */
-	public static function enqueue_assets() {
+	public static function should_enqueue_assets() {
 		// Enqueue assets only if the user can gift the post, being accessed with a content key, in the admin or customizer.
-		if ( ! self::can_gift_post() && ! self::is_gifted_post() && ! isset( $_GET[ self::QUERY_ARG ] ) && ! is_admin() && ! is_customize_preview() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( self::can_gift_post() || self::is_gifted_post() || isset( $_GET[ self::QUERY_ARG ] ) || is_customize_preview() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Localize assets.
+	 */
+	public static function localize_assets() {
+		if ( ! self::should_enqueue_assets() ) {
 			return;
 		}
-		wp_enqueue_style( 'newspack-content-gifting', Newspack::plugin_url() . '/dist/content-gifting.css', [], NEWSPACK_PLUGIN_VERSION );
 
 		if ( is_singular() ) {
-			$asset = require_once dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/content-gifting.asset.php';
-			wp_enqueue_script( 'newspack-content-gifting', Newspack::plugin_url() . '/dist/content-gifting.js', $asset['dependencies'], NEWSPACK_PLUGIN_VERSION, true );
 			wp_localize_script(
-				'newspack-content-gifting',
+				'newspack-content-banner',
 				'newspack_content_gifting',
 				[
 					'ajax_url'        => add_query_arg(

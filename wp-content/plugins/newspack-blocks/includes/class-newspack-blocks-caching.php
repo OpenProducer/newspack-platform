@@ -164,7 +164,7 @@ class Newspack_Blocks_Caching {
 	 * @param string $message Message to log.
 	 */
 	protected static function debug_log( $message ) {
-		if ( defined( 'NEWSPACK_LOG_LEVEL' ) && (int) NEWSPACK_LOG_LEVEL >= 2 && class_exists( 'Newspack\Logger' ) ) {
+		if ( defined( 'NEWSPACK_LOG_LEVEL' ) && (int) NEWSPACK_LOG_LEVEL >= 4 && class_exists( 'Newspack\Logger' ) ) {
 			Newspack\Logger::log( $message );
 		}
 	}
