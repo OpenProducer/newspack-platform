@@ -33,6 +33,7 @@ class Metering {
 	 */
 	public static function init() {
 		add_filter( 'newspack_content_gate_restrict_post', [ __CLASS__, 'restrict_post' ] );
+		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ], 11 ); // Render after gate layout editor.
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'enqueue_scripts' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'render_frontend_metering_gate' ] );
@@ -51,6 +52,17 @@ class Metering {
 			return false;
 		}
 		return $restrict;
+	}
+
+	/**
+	 * Block editor assets for metering settings.
+	 */
+	public static function enqueue_block_editor_assets() {
+		if ( ! in_array( get_post_type(), Content_Gate::get_gate_post_types(), true ) ) {
+			return;
+		}
+		$asset = require dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/content-gate-editor-metering.asset.php';
+		wp_enqueue_script( 'newspack-content-gate-editor-metering', Newspack::plugin_url() . '/dist/content-gate-editor-metering.js', $asset['dependencies'], $asset['version'], true );
 	}
 
 	/**

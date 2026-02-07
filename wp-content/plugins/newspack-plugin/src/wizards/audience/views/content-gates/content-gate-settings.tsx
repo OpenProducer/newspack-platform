@@ -8,11 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import AccessRules from './access-rules';
-import ContentRules from './content-rules';
-import Metering from './metering';
 import { AUDIENCE_CONTENT_GATES_WIZARD_SLUG } from './consts';
 import { useWizardApiFetch } from '../../../hooks/use-wizard-api-fetch';
+import ContentRules from './content-rules';
+import Registration from './registration';
+import CustomAccess from './custom-access';
 
 type ContentGateSettingsProps = {
 	gate: Gate;
@@ -22,22 +22,22 @@ type ContentGateSettingsProps = {
 
 export default function ContentGateSettings( { gate, onDelete, onSave }: ContentGateSettingsProps ) {
 	const { wizardApiFetch } = useWizardApiFetch( AUDIENCE_CONTENT_GATES_WIZARD_SLUG );
-	const [ accessRules, setAccessRules ] = useState< GateAccessRule[] >( gate.access_rules );
 	const [ contentRules, setContentRules ] = useState< GateContentRule[] >( gate.content_rules );
-	const [ metering, setMetering ] = useState< Metering >( gate.metering );
+	const [ registration, setRegistration ] = useState< Registration >( gate.registration );
+	const [ customAccess, setCustomAccess ] = useState< CustomAccess >( gate.custom_access );
 	const [ status, setStatus ] = useState< GateStatus >( gate.status );
 	const [ isEditingStatus, setIsEditingStatus ] = useState( false );
 
 	const isReady = useMemo( () => {
-		return contentRules.length > 0 && accessRules.length > 0;
-	}, [ contentRules, accessRules ] );
+		return contentRules.length > 0 && ( registration.active || ( customAccess.active && customAccess.access_rules.length > 0 ) );
+	}, [ contentRules, registration, customAccess ] );
 
 	const handleSave = useCallback( () => {
 		const _gate = {
 			...gate,
-			access_rules: accessRules,
 			content_rules: contentRules,
-			metering,
+			registration,
+			custom_access: customAccess,
 			status,
 		};
 		wizardApiFetch< Gate >(
@@ -58,7 +58,7 @@ export default function ContentGateSettings( { gate, onDelete, onSave }: Content
 				},
 			}
 		);
-	}, [ accessRules, contentRules, metering, status ] );
+	}, [ contentRules, registration, customAccess, status ] );
 
 	// Update status and trigger save.
 	useEffect( () => {
@@ -86,10 +86,8 @@ export default function ContentGateSettings( { gate, onDelete, onSave }: Content
 	return (
 		<>
 			<ContentRules rules={ contentRules } onChange={ setContentRules } />
-			<hr />
-			<AccessRules rules={ accessRules } onChange={ setAccessRules } />
-			<hr />
-			<Metering metering={ metering } onChange={ setMetering } />
+			<Registration gateId={ gate.id } registration={ registration } onChange={ setRegistration } />
+			<CustomAccess gateId={ gate.id } customAccess={ customAccess } onChange={ setCustomAccess } />
 			<div className="newspack-buttons-card">
 				{ gate.status === 'draft' && (
 					<Button disabled={ ! isReady } variant="primary" onClick={ handlePublish }>

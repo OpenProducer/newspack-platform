@@ -60,6 +60,9 @@ final class Woo_User_Registration {
 			if ( ! empty( $values['newspack_popup_id'] ) ) {
 				self::$metadata['newspack_popup_id'] = $values['newspack_popup_id'];
 			}
+			if ( ! empty( $values['prompt_title'] ) ) {
+				self::$metadata['prompt_title'] = $values['prompt_title'];
+			}
 			if ( ! empty( $values['referer'] ) ) {
 				self::$metadata['referer'] = $values['referer'];
 			}

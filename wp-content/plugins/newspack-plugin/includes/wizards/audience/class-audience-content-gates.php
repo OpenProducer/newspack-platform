@@ -96,6 +96,7 @@ class Audience_Content_Gates extends Wizard {
 				'api'                     => '/' . NEWSPACK_API_NAMESPACE . '/wizard/' . $this->slug,
 				'available_access_rules'  => Access_Rules::get_access_rules(),
 				'available_content_rules' => Content_Gate::get_content_rules(),
+				'edit_gate_layout_url'    => Content_Gate::get_edit_gate_layout_url(),
 			]
 		);
 
@@ -309,7 +310,6 @@ class Audience_Content_Gates extends Wizard {
 						'sanitize_callback' => [ $this, 'sanitize_gate' ],
 						'properties'        => [
 							'title'         => [ 'type' => 'string' ],
-							'description'   => [ 'type' => 'string' ],
 							'status'        => [ 'type' => 'string' ],
 							'metering'      => [
 								'type'       => 'object',
@@ -320,16 +320,6 @@ class Audience_Content_Gates extends Wizard {
 									'period'           => [ 'type' => 'string' ],
 								],
 							],
-							'access_rules'  => [
-								'type'  => 'array',
-								'items' => [
-									'type'       => 'object',
-									'properties' => [
-										'slug'  => [ 'type' => 'string' ],
-										'value' => [ 'type' => 'mixed' ],
-									],
-								],
-							],
 							'content_rules' => [
 								'type'  => 'array',
 								'items' => [
@@ -338,6 +328,53 @@ class Audience_Content_Gates extends Wizard {
 										'slug'      => [ 'type' => 'string' ],
 										'value'     => [ 'type' => 'mixed' ],
 										'exclusion' => [ 'type' => 'boolean' ],
+									],
+								],
+							],
+							'registration'  => [
+								'type'       => 'object',
+								'properties' => [
+									'active'               => [ 'type' => 'boolean' ],
+									'require_verification' => [ 'type' => 'boolean' ],
+									'gate_layout_id'       => [
+										'type'     => 'integer',
+										'required' => false,
+									],
+									'metering'             => [
+										'type'       => 'object',
+										'properties' => [
+											'enabled' => [ 'type' => 'boolean' ],
+											'count'   => [ 'type' => 'integer' ],
+											'period'  => [ 'type' => 'string' ],
+										],
+									],
+								],
+							],
+							'custom_access' => [
+								'type'       => 'object',
+								'properties' => [
+									'active'         => [ 'type' => 'boolean' ],
+									'metering'       => [
+										'type'       => 'object',
+										'properties' => [
+											'enabled' => [ 'type' => 'boolean' ],
+											'count'   => [ 'type' => 'integer' ],
+											'period'  => [ 'type' => 'string' ],
+										],
+									],
+									'gate_layout_id' => [
+										'type'     => 'integer',
+										'required' => false,
+									],
+									'access_rules'   => [
+										'type'  => 'array',
+										'items' => [
+											'type'       => 'object',
+											'properties' => [
+												'slug'  => [ 'type' => 'string' ],
+												'value' => [ 'type' => 'mixed' ],
+											],
+										],
 									],
 								],
 							],
@@ -360,12 +397,50 @@ class Audience_Content_Gates extends Wizard {
 	public function sanitize_gate( $gate ) {
 		return [
 			'title'         => isset( $gate['title'] ) ? sanitize_text_field( $gate['title'] ) : __( 'Untitled Content Gate', 'newspack-plugin' ),
-			'metering'      => $this->sanitize_metering( $gate['metering'] ),
-			'access_rules'  => $this->sanitize_rules( $gate['access_rules'] ),
-			'content_rules' => $this->sanitize_rules( $gate['content_rules'], 'content' ),
 			'priority'      => intval( $gate['priority'] ),
 			'status'        => $this->sanitize_status( $gate['status'], $gate['id'] ),
+			'content_rules' => $this->sanitize_rules( $gate['content_rules'], 'content' ),
+			'registration'  => $this->sanitize_registration( $gate['registration'] ),
+			'custom_access' => $this->sanitize_custom_access( $gate['custom_access'] ),
 		];
+	}
+
+	/**
+	 * Sanitize registration settings.
+	 *
+	 * @param array $registration The registration settings.
+	 *
+	 * @return array The sanitized registration.
+	 */
+	public function sanitize_registration( $registration ) {
+		$registration = [
+			'active'               => boolval( $registration['active'] ),
+			'metering'             => $this->sanitize_metering( $registration['metering'] ),
+			'require_verification' => boolval( $registration['require_verification'] ),
+		];
+		if ( isset( $registration['gate_layout_id'] ) ) {
+			$registration['gate_layout_id'] = absint( $registration['gate_layout_id'] );
+		}
+		return $registration;
+	}
+
+	/**
+	 * Sanitize custom access settings.
+	 *
+	 * @param array $custom_access The custom access settings.
+	 *
+	 * @return array The sanitized custom access.
+	 */
+	public function sanitize_custom_access( $custom_access ) {
+		$custom_access = [
+			'active'       => boolval( $custom_access['active'] ),
+			'metering'     => $this->sanitize_metering( $custom_access['metering'] ),
+			'access_rules' => $this->sanitize_rules( $custom_access['access_rules'], 'access' ),
+		];
+		if ( isset( $custom_access['gate_layout_id'] ) ) {
+			$custom_access['gate_layout_id'] = absint( $custom_access['gate_layout_id'] );
+		}
+		return $custom_access;
 	}
 
 	/**
@@ -379,17 +454,15 @@ class Audience_Content_Gates extends Wizard {
 		$metering = wp_parse_args(
 			$metering,
 			[
-				'enabled'          => false,
-				'anonymous_count'  => 0,
-				'registered_count' => 0,
-				'period'           => 'month',
+				'enabled' => false,
+				'count'   => 0,
+				'period'  => 'month',
 			]
 		);
 		return [
-			'enabled'          => boolval( $metering['enabled'] ),
-			'anonymous_count'  => intval( $metering['anonymous_count'] ),
-			'registered_count' => intval( $metering['registered_count'] ),
-			'period'           => sanitize_text_field( $metering['period'] ),
+			'enabled' => boolval( $metering['enabled'] ),
+			'count'   => intval( $metering['count'] ),
+			'period'  => sanitize_text_field( $metering['period'] ),
 		];
 	}
 

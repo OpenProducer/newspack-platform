@@ -17,6 +17,8 @@ defined( 'ABSPATH' ) || exit;
  */
 class Memberships {
 
+	use Content_Gate_Layout;
+
 	const GATE_CPT = 'np_memberships_gate';
 
 	const SKIP_RESTRICTION_IN_RSS_OPTION_NAME = 'newspack_skip_content_restriction_in_rss_feeds';
@@ -35,10 +37,9 @@ class Memberships {
 	public static function init() {
 		// Hook into the Content Gate.
 		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
-		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'admin_init', [ __CLASS__, 'handle_edit_plan_gate' ] );
 		add_action( 'admin_init', [ __CLASS__, 'handle_edit_gate' ] );
-		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
+		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ], 9 ); // Render before gate layout editor.
 		add_filter( 'newspack_post_has_restrictions', [ __CLASS__, 'post_has_restrictions' ], 10, 2 );
 		add_filter( 'newspack_is_post_restricted', [ __CLASS__, 'is_post_restricted' ], 10, 2 );
 
@@ -78,71 +79,7 @@ class Memberships {
 	 * Register post type for custom gate.
 	 */
 	public static function register_post_type() {
-		\register_post_type(
-			self::GATE_CPT,
-			[
-				'label'        => __( 'Memberships Gate', 'newspack' ),
-				'labels'       => [
-					'item_published'         => __( 'Memberships Gate published.', 'newspack' ),
-					'item_reverted_to_draft' => __( 'Memberships Gate reverted to draft.', 'newspack' ),
-					'item_updated'           => __( 'Memberships Gate updated.', 'newspack' ),
-					'new_item'               => __( 'New Memberships Gate', 'newspack' ),
-					'edit_item'              => __( 'Edit Memberships Gate', 'newspack' ),
-					'view_item'              => __( 'View Memberships Gate', 'newspack' ),
-				],
-				'public'       => false,
-				'show_ui'      => true,
-				'show_in_menu' => false,
-				'show_in_rest' => true,
-				'supports'     => [ 'editor', 'custom-fields', 'revisions', 'title' ],
-			]
-		);
-	}
-
-	/**
-	 * Register gate meta.
-	 */
-	public static function register_meta() {
-		$meta = [
-			'style'              => [
-				'type'    => 'string',
-				'default' => 'inline',
-			],
-			'inline_fade'        => [
-				'type'    => 'boolean',
-				'default' => true,
-			],
-			'use_more_tag'       => [
-				'type'    => 'boolean',
-				'default' => true,
-			],
-			'visible_paragraphs' => [
-				'type'    => 'integer',
-				'default' => 2,
-			],
-			'overlay_position'   => [
-				'type'    => 'string',
-				'default' => 'center',
-			],
-			'overlay_size'       => [
-				'type'    => 'string',
-				'default' => 'medium',
-			],
-		];
-
-		foreach ( $meta as $key => $config ) {
-			\register_meta(
-				'post',
-				$key,
-				[
-					'object_subtype' => self::GATE_CPT,
-					'show_in_rest'   => $config['show_in_rest'] ?? true,
-					'type'           => $config['type'],
-					'default'        => $config['default'],
-					'single'         => true,
-				]
-			);
-		}
+		self::register_layout_post_type( self::GATE_CPT, __( 'Memberships Gate', 'newspack' ) );
 	}
 
 	/**
@@ -228,8 +165,15 @@ class Memberships {
 		if ( get_post_type() !== self::GATE_CPT ) {
 			return;
 		}
+		wp_enqueue_script(
+			'newspack-content-gate-memberships',
+			Newspack::plugin_url() . '/dist/content-gate-editor-memberships.js',
+			[],
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/content-gate-editor-memberships.js' ),
+			true
+		);
 		\wp_localize_script(
-			'newspack-content-gate',
+			'newspack-content-gate-memberships',
 			'newspack_memberships_gate',
 			[
 				'edit_gate_url'      => self::get_edit_gate_url(),

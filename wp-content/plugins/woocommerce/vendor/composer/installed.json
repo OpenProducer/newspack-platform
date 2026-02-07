@@ -1226,12 +1226,12 @@
         },
         {
             "name": "woocommerce/email-editor",
-            "version": "2.0.0",
-            "version_normalized": "2.0.0.0",
+            "version": "2.3.0",
+            "version_normalized": "2.3.0.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/php/email-editor",
-                "reference": "ebb815c2599b07e7054387174551ca20674d82e8"
+                "reference": "47291f4dc0ddd0b30bbc50f89a9f9c12f6e2d579"
             },
             "require": {
                 "php": ">=7.4"
@@ -1313,17 +1313,17 @@
         },
         {
             "name": "wordpress/abilities-api",
-            "version": "v0.3.0",
-            "version_normalized": "0.3.0.0",
+            "version": "v0.4.0",
+            "version_normalized": "0.4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/abilities-api.git",
-                "reference": "a6805fbc3a59b510b1b342d7dadcf8f93333f547"
+                "reference": "0759075aed37c4247adbf273bdebec096d52e825"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/abilities-api/zipball/a6805fbc3a59b510b1b342d7dadcf8f93333f547",
-                "reference": "a6805fbc3a59b510b1b342d7dadcf8f93333f547",
+                "url": "https://api.github.com/repos/WordPress/abilities-api/zipball/0759075aed37c4247adbf273bdebec096d52e825",
+                "reference": "0759075aed37c4247adbf273bdebec096d52e825",
                 "shasum": ""
             },
             "require": {
@@ -1347,7 +1347,7 @@
                 "wpackagist-plugin/plugin-check": "^1.6",
                 "yoast/phpunit-polyfills": "^4.0"
             },
-            "time": "2025-10-17T06:54:28+00:00",
+            "time": "2025-10-29T05:35:31+00:00",
             "type": "library",
             "extra": {
                 "installer-paths": {

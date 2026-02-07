@@ -13,72 +13,72 @@ class ComposerStaticInitcd506e00bbd2bbf41c61d65382d6f343
     );
 
     public static $prefixLengthsPsr4 = array (
-        'j' => 
+        'j' =>
         array (
             'joshtronic\\' => 11,
         ),
-        'P' => 
+        'P' =>
         array (
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'Psr\\Cache\\' => 10,
         ),
-        'G' => 
+        'G' =>
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'Google\\Auth\\' => 12,
         ),
-        'F' => 
+        'F' =>
         array (
             'Firebase\\JWT\\' => 13,
         ),
-        'C' => 
+        'C' =>
         array (
             'Composer\\Installers\\' => 20,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'joshtronic\\' => 
+        'joshtronic\\' =>
         array (
             0 => __DIR__ . '/..' . '/joshtronic/php-loremipsum/src',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Psr\\Http\\Client\\' => 
+        'Psr\\Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
-        'Psr\\Cache\\' => 
+        'Psr\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
-        'GuzzleHttp\\Psr7\\' => 
+        'GuzzleHttp\\Psr7\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'GuzzleHttp\\Promise\\' => 
+        'GuzzleHttp\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
         ),
-        'GuzzleHttp\\' => 
+        'GuzzleHttp\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
-        'Google\\Auth\\' => 
+        'Google\\Auth\\' =>
         array (
             0 => __DIR__ . '/..' . '/google/auth/src',
         ),
-        'Firebase\\JWT\\' => 
+        'Firebase\\JWT\\' =>
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
-        'Composer\\Installers\\' => 
+        'Composer\\Installers\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
@@ -136,6 +136,7 @@ class ComposerStaticInitcd506e00bbd2bbf41c61d65382d6f343
         'Newspack\\Configuration_Managers' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-managers.php',
         'Newspack\\Content_Gate' => __DIR__ . '/../..' . '/includes/content-gate/class-content-gate.php',
         'Newspack\\Content_Gate\\Block_Patterns' => __DIR__ . '/../..' . '/includes/content-gate/class-block-patterns.php',
+        'Newspack\\Content_Gate_Layout' => __DIR__ . '/../..' . '/includes/content-gate/trait-content-gate-layout.php',
         'Newspack\\Content_Gifting' => __DIR__ . '/../..' . '/includes/content-gate/content-gifting/class-content-gifting.php',
         'Newspack\\Content_Gifting_CTA' => __DIR__ . '/../..' . '/includes/content-gate/content-gifting/class-content-gifting-cta.php',
         'Newspack\\Content_Restriction_Control' => __DIR__ . '/../..' . '/includes/content-gate/class-content-restriction-control.php',
@@ -161,6 +162,9 @@ class ComposerStaticInitcd506e00bbd2bbf41c61d65382d6f343
         'Newspack\\Google_OAuth' => __DIR__ . '/../..' . '/includes/oauth/class-google-oauth.php',
         'Newspack\\Google_Services_Connection' => __DIR__ . '/../..' . '/includes/oauth/class-google-services-connection.php',
         'Newspack\\GravityForms' => __DIR__ . '/../..' . '/includes/plugins/class-gravityforms.php',
+        'Newspack\\Group_Subscription' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/group-subscription/class-group-subscription.php',
+        'Newspack\\Group_Subscription_API' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/group-subscription/class-group-subscription-api.php',
+        'Newspack\\Group_Subscription_Settings' => __DIR__ . '/../..' . '/includes/plugins/woocommerce-subscriptions/group-subscription/class-group-subscription-settings.php',
         'Newspack\\Guest_Contributor_Role' => __DIR__ . '/../..' . '/includes/plugins/co-authors-plus/class-guest-contributor-role.php',
         'Newspack\\Handoff_Banner' => __DIR__ . '/../..' . '/includes/class-handoff-banner.php',
         'Newspack\\Jetpack' => __DIR__ . '/../..' . '/includes/plugins/class-jetpack.php',

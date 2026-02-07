@@ -596,7 +596,7 @@ class RSS {
 								action: 'newspack_rss_search_terms',
 								taxonomy: jQuery( this ).data( 'taxonomy' ),
 								search: params.term,
-								nonce: '<?php echo wp_create_nonce( 'newspack_rss_search_terms' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>'
+								nonce: '<?php echo esc_attr( wp_create_nonce( 'newspack_rss_search_terms' ) ); ?>'
 							};
 						},
 						processResults: function( data ) {

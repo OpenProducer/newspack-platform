@@ -252,8 +252,6 @@ const ContentGates = () => {
 							id={ gate.id }
 							key={ gate.id }
 							title={ gate.title }
-							titleLink={ `/wp-admin/post.php?post=${ gate.id }&action=edit` }
-							description={ gate.description }
 							isMedium={ gates.length > 1 }
 							toggleChecked={ true }
 							dragIndex={ index }

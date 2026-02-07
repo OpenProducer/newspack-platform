@@ -20,29 +20,16 @@ interface AccessRulesProps {
 }
 
 export default function AccessRules( { rules, onChange }: AccessRulesProps ) {
-	const isRuleDisabled = useCallback(
-		( slug: string ): boolean => {
-			const conflicts = availableAccessRules[ slug ].conflicts;
-			// Check whether any conflicting rule is enabled.
-			if ( conflicts?.some( conflict => rules.find( r => r.slug === conflict ) ) ) {
-				return true;
-			}
-			return false;
-		},
-		[ rules ]
-	);
-
 	const choices = useMemo( () => {
 		return Object.keys( availableAccessRules ).map( slug => {
 			const rule = availableAccessRules[ slug ];
 			return {
 				label: rule.name,
 				value: slug,
-				disabled: isRuleDisabled( slug ),
 				info: rule.description,
 			};
 		} );
-	}, [ rules, isRuleDisabled ] );
+	}, [] );
 
 	const handleToggle = useCallback(
 		( slug: string ) => {

@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('wp-core-data', 'wp-data', 'wp-element', 'wp-preferences'), 'version' => '8f8aab606a6702f05195');
+<?php return array('dependencies' => array('wp-core-data', 'wp-data', 'wp-element', 'wp-preferences'), 'module_dependencies' => array(array('id' => '@wordpress/route', 'import' => 'static')), 'version' => '8ab889f9e30704171168');

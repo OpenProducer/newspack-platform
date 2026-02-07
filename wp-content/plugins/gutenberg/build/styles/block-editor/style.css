@@ -1760,6 +1760,9 @@ iframe[name=editor-canvas] {
   background: linear-gradient(-45deg, transparent 48%, #ddd 48%, #ddd 52%, transparent 52%);
 }
 
+.block-editor-global-styles-advanced-panel__custom-css-input {
+  margin-bottom: 16px;
+}
 .block-editor-global-styles-advanced-panel__custom-css-input textarea {
   font-family: Menlo, Consolas, monaco, monospace;
   /*rtl:ignore*/

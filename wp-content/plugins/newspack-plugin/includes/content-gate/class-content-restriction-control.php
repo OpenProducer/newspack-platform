@@ -115,6 +115,12 @@ class Content_Restriction_Control {
 			if ( 'publish' !== $gate['status'] ) {
 				continue;
 			}
+
+			// Skip gates that have neither registration nor custom access active.
+			if ( empty( $gate['registration']['active'] ) && empty( $gate['custom_access']['active'] ) ) {
+				continue;
+			}
+
 			$content_rules = $gate['content_rules'];
 			if ( empty( $content_rules ) ) {
 				continue;
@@ -176,15 +182,42 @@ class Content_Restriction_Control {
 		}
 
 		foreach ( $post_gates as $gate ) {
-			$access_rules = $gate['access_rules'];
-			if ( empty( $access_rules ) ) {
-				continue;
-			}
-			foreach ( $access_rules as $rule ) {
-				if ( ! Access_Rules::evaluate_rule( $rule['slug'], $rule['value'] ?? null ) ) {
-					self::$post_gate_id_map[ $post_id ] = $gate['id'];
-					return true;
+			$gate_layout_id = null;
+			$is_restricted  = false;
+
+			// Check custom_access mode first (higher priority).
+			if ( ! empty( $gate['custom_access']['active'] ) ) {
+				$access_rules = $gate['custom_access']['access_rules'] ?? [];
+				if ( ! empty( $access_rules ) ) {
+					foreach ( $access_rules as $rule ) {
+						if ( ! Access_Rules::evaluate_rule( $rule['slug'], $rule['value'] ?? null ) ) {
+							$is_restricted  = true;
+							$gate_layout_id = $gate['custom_access']['gate_layout_id'] ?? $gate['id'];
+							break;
+						}
+					}
 				}
+			}
+
+			// If custom_access didn't restrict and registration mode is active.
+			if ( ! $is_restricted && ! empty( $gate['registration']['active'] ) ) {
+				// Check if user is logged in.
+				if ( ! \is_user_logged_in() ) {
+					$is_restricted  = true;
+					$gate_layout_id = $gate['registration']['gate_layout_id'] ?? $gate['id'];
+				} elseif ( ! empty( $gate['registration']['require_verification'] ) ) {
+					// Check if email verification is required.
+					$user = \wp_get_current_user();
+					if ( ! \get_user_meta( $user->ID, Reader_Activation::EMAIL_VERIFIED, true ) ) {
+						$is_restricted  = true;
+						$gate_layout_id = $gate['registration']['gate_layout_id'] ?? $gate['id'];
+					}
+				}
+			}
+
+			if ( $is_restricted && $gate_layout_id ) {
+				self::$post_gate_id_map[ $post_id ] = $gate_layout_id;
+				return true;
 			}
 		}
 		return false;

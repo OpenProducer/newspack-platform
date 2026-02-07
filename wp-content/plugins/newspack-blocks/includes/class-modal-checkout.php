@@ -1488,9 +1488,13 @@ final class Modal_Checkout {
 		if ( self::is_modal_checkout() ) {
 			$params = [ 'modal_checkout' => 1 ];
 			$newspack_popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
+			$prompt_title = filter_input( INPUT_GET, 'prompt_title', FILTER_SANITIZE_SPECIAL_CHARS );
 			$gate_post_id      = filter_input( INPUT_GET, 'gate_post_id', FILTER_SANITIZE_NUMBER_INT );
 			if ( $newspack_popup_id ) {
 				$params['newspack_popup_id'] = $newspack_popup_id;
+			}
+			if ( $prompt_title ) {
+				$params['prompt_title'] = $prompt_title;
 			}
 			if ( $gate_post_id ) {
 				$params['gate_post_id'] = $gate_post_id;

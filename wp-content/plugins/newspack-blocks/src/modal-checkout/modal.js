@@ -361,14 +361,19 @@ domReady( () => {
 			if ( variationModal ) {
 				variationModal.querySelectorAll( `form[target="${ IFRAME_NAME }"]` ).forEach( singleVariationForm => {
 					// Fill in the hidden params in the variation modal.
-					[ 'after_success_behavior', 'after_success_url', 'after_success_button_label', 'gate_post_id', 'newspack_popup_id' ].forEach(
-						hiddenParam => {
-							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' + hiddenParam + '"]' );
-							if ( 0 === existingInputs.length ) {
-								singleVariationForm.prepend( createHiddenInput( hiddenParam, checkoutData[ hiddenParam ] ) );
-							}
+					[
+						'after_success_behavior',
+						'after_success_url',
+						'after_success_button_label',
+						'gate_post_id',
+						'newspack_popup_id',
+						'prompt_title',
+					].forEach( hiddenParam => {
+						const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' + hiddenParam + '"]' );
+						if ( 0 === existingInputs.length ) {
+							singleVariationForm.prepend( createHiddenInput( hiddenParam, checkoutData[ hiddenParam ] ) );
 						}
-					);
+					} );
 
 					// Append the product data hidden inputs.
 					const variationData = singleVariationForm.dataset.checkout;

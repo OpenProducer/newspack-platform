@@ -23,6 +23,7 @@ export const managePagination = ( action = 'continue' ) => {
 		variation_id = '',
 		gate_post_id = '',
 		newspack_popup_id = '',
+		prompt_title = '',
 	} = getCheckoutData( 'modal-checkout-product-details' );
 
 	const params = {
@@ -45,9 +46,12 @@ export const managePagination = ( action = 'continue' ) => {
 		params.gate_post_id = gate_post_id;
 	}
 
-	// If this checkout started from a campaign prompt, add the popup ID to the payload.
+	// If this checkout started from a campaign prompt, add the popup ID and title to the payload.
 	if ( newspack_popup_id ) {
 		params.newspack_popup_id = newspack_popup_id;
+	}
+	if ( prompt_title ) {
+		params.prompt_title = prompt_title;
 	}
 
 	const payload = getEventPayload( action, params );

@@ -40,7 +40,6 @@ class Access_Rules {
 	 *     @type string   $description The rule description.
 	 *     @type string   $default     The rule default value.
 	 *     @type array    $options     The rule options.
-	 *     @type array    $conflicts   IDs of rules that conflict with this rule.
 	 *     @type callable $callback    The rule callback.
 	 * }
 	 *
@@ -66,7 +65,6 @@ class Access_Rules {
 				'description' => '',
 				'default'     => ! empty( $config['options'] ) ? [] : '',
 				'options'     => [],
-				'conflicts'   => [],
 				'is_boolean'  => false,
 			]
 		);
@@ -87,19 +85,11 @@ class Access_Rules {
 	 */
 	public static function register_default_rules() {
 		$rules = [
-			'registration' => [
-				'name'        => 'Is Registered',
-				'description' => 'The user must be logged into a reader account.',
-				'callback'    => 'is_user_logged_in',
-				'conflicts'   => [ 'subscription' ],
-				'is_boolean'  => true,
-			],
 			'subscription' => [
 				'name'        => 'Has Active Subscription',
 				'description' => 'The user must be logged into a reader account and have an active subscription with one of the selected products.',
 				'options'     => [ __CLASS__, 'get_subscription_products_options' ],
 				'callback'    => [ __CLASS__, 'has_active_subscription' ],
-				'conflicts'   => [ 'registration' ],
 			],
 			'email_domain' => [
 				'name'        => __( 'Has Whitelisted Email Domain', 'newspack-plugin' ),
@@ -145,30 +135,6 @@ class Access_Rules {
 	 */
 	public static function get_rule( $slug ) {
 		return self::$rules[ $slug ] ?? null;
-	}
-
-	/**
-	 * Get access rules for bypassing a content gate.
-	 *
-	 * @param int $post_id Post ID.
-	 *
-	 * @return array Array of post access rules.
-	 */
-	public static function get_post_access_rules( $post_id ) {
-		$rules = \get_post_meta( $post_id, self::META_KEY, true );
-		return $rules ? $rules : [];
-	}
-
-	/**
-	 * Update access rules for bypassing a content gate.
-	 *
-	 * @param int   $post_id Post ID.
-	 * @param array $rules   Array of post access rules.
-	 *
-	 * @return void
-	 */
-	public static function update_post_access_rules( $post_id, $rules ) {
-		\update_post_meta( $post_id, self::META_KEY, $rules );
 	}
 
 	/**

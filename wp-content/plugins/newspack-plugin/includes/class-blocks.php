@@ -31,6 +31,7 @@ final class Blocks {
 		}
 		if ( wp_is_block_theme() ) {
 			require_once NEWSPACK_ABSPATH . 'src/blocks/avatar/class-avatar-block.php';
+			require_once NEWSPACK_ABSPATH . 'src/blocks/byline/class-byline-block.php';
 		}
 		if ( Collections::is_module_active() ) {
 			require_once NEWSPACK_ABSPATH . 'src/blocks/collections/index.php';
@@ -74,6 +75,7 @@ final class Blocks {
 			'reader_activation_url'            => Reader_Activation::get_setting( 'terms_url' ),
 			'has_recaptcha'                    => Recaptcha::can_use_captcha(),
 			'recaptcha_url'                    => admin_url( 'admin.php?page=newspack-settings' ),
+			'is_block_theme'                   => wp_is_block_theme(),
 			'corrections_enabled'              => wp_is_block_theme() && class_exists( 'Newspack\Corrections' ),
 			'collections_enabled'              => Collections::is_module_active(),
 			'has_memberships'                  => Memberships::is_active(),

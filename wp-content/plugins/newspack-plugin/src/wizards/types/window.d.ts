@@ -61,6 +61,7 @@ declare global {
 			api: string;
 			available_access_rules: AccessRules;
 			available_content_rules: ContentRules;
+			edit_gate_layout_url: string;
 		};
 	}
 }

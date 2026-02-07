@@ -123,14 +123,12 @@ class Patches {
 	}
 
 	/**
-	 * Remove some site editor links from the Appearance menu:
-	 * - The Appearance > Patterns link added in WordPress 6.6.
-	 * - The Appearance > Design link added in WordPress 6.8.
-	 *
-	 * Once WordPress 6.8 is released, the code to remove the Patterns link can be removed.
+	 * Remove the Design link from the Appearance menu for the Classic theme.
 	 */
 	public static function remove_core_appearance_menu_links() {
-		remove_submenu_page( 'themes.php', 'site-editor.php?path=/patterns' );
+		if ( wp_is_block_theme() ) {
+			return;
+		}
 		remove_submenu_page( 'themes.php', 'site-editor.php' );
 	}
 

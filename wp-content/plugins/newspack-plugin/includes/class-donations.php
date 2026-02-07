@@ -749,6 +749,7 @@ class Donations {
 					'nyp'               => class_exists( 'WC_Name_Your_Price_Helpers' ) ? (float) \WC_Name_Your_Price_Helpers::standardize_number( $donation_value ) : null,
 					'referer'           => $referer,
 					'newspack_popup_id' => filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT ),
+					'prompt_title'      => filter_input( INPUT_GET, 'prompt_title', FILTER_SANITIZE_SPECIAL_CHARS ),
 				]
 			);
 			\WC()->cart->add_to_cart(
@@ -821,6 +822,9 @@ class Donations {
 	public static function checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
 		if ( ! empty( $values['newspack_popup_id'] ) ) {
 			$order->add_meta_data( '_newspack_popup_id', $values['newspack_popup_id'] );
+		}
+		if ( ! empty( $values['prompt_title'] ) ) {
+			$order->add_meta_data( '_prompt_title', $values['prompt_title'] );
 		}
 		if ( ! empty( $values['referer'] ) ) {
 			$order->add_meta_data( '_newspack_referer', $values['referer'] );

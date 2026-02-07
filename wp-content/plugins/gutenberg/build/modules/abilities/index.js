@@ -7305,7 +7305,10 @@ function registerAbility(ability) {
     if (!annotations.serverRegistered) {
       annotations.clientRegistered = true;
     }
-    const meta = { annotations };
+    const meta = {
+      ...ability.meta || {},
+      annotations
+    };
     dispatch2({
       type: REGISTER_ABILITY,
       ability: {
@@ -7359,7 +7362,10 @@ function registerAbilityCategory(slug, args) {
     if (!annotations.serverRegistered) {
       annotations.clientRegistered = true;
     }
-    const meta = { annotations };
+    const meta = {
+      ...args.meta || {},
+      annotations
+    };
     const category = {
       slug,
       label: args.label,

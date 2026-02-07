@@ -1,3 +1,10 @@
+## [3.27.1](https://github.com/Automattic/newspack-newsletters/compare/v3.27.0...v3.27.1) (2026-02-02)
+
+
+### Bug Fixes
+
+* **newsletters:** hide Jetpack stats column on newsletters ([#2013](https://github.com/Automattic/newspack-newsletters/issues/2013)) ([4cdae19](https://github.com/Automattic/newspack-newsletters/commit/4cdae19ca40f4bb05b2732583311c5e0523e4730))
+
 # [3.27.0](https://github.com/Automattic/newspack-newsletters/compare/v3.26.0...v3.27.0) (2026-01-19)
 
 

@@ -212,10 +212,27 @@ class Controller extends AbstractController {
 				'embeddable' => true,
 			),
 			'order-notes'     => array(
-				'href'       => rest_url( sprintf( '/%s/order-notes?order_id=%d', $this->namespace, $item->get_id() ) ),
+				'href'       => add_query_arg(
+					array( 'order_id' => (int) $item->get_id() ),
+					rest_url( sprintf( '/%s/order-notes', $this->namespace ) )
+				),
+				'embeddable' => true,
+			),
+			'refunds'         => array(
+				'href'       => add_query_arg(
+					array( 'order_id' => (int) $item->get_id() ),
+					rest_url( sprintf( '/%s/refunds', $this->namespace ) )
+				),
 				'embeddable' => true,
 			),
 		);
+
+		if ( $item->get_payment_method() ) {
+			$links['payment_gateway'] = array(
+				'href'       => rest_url( sprintf( '/%s/settings/payment-gateways/%s', $this->namespace, rawurlencode( $item->get_payment_method() ) ) ),
+				'embeddable' => true,
+			);
+		}
 
 		if ( $item->get_customer_id() ) {
 			$links['customer'] = array(
