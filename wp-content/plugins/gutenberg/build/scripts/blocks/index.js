@@ -5138,6 +5138,11 @@ var wp;
       support: ["typography", "__experimentalLetterSpacing"],
       useEngine: true
     },
+    textIndent: {
+      value: ["typography", "textIndent"],
+      support: ["typography", "textIndent"],
+      useEngine: true
+    },
     writingMode: {
       value: ["typography", "writingMode"],
       support: ["typography", "__experimentalWritingMode"],
@@ -6076,6 +6081,7 @@ var wp;
     "blockGap",
     "textAlign",
     "textDecoration",
+    "textIndent",
     "textTransform",
     "letterSpacing"
   ];
@@ -6095,6 +6101,9 @@ var wp;
       if (support === "letterSpacing" && !name && !(["heading", "h1", "h2", "h3", "h4", "h5", "h6"].includes(
         element
       ) || element === "button" || element === "caption" || element === "text")) {
+        return false;
+      }
+      if (support === "textIndent" && !name) {
         return false;
       }
       if (support === "textColumns" && !name) {
@@ -6457,11 +6466,11 @@ var wp;
       null
     );
     if (settings.apiVersion <= 2) {
-      (0, import_warning2.default)(
-        `The block "${name}" is registered with API version 2 or lower. This means that the post editor may work as a non-iframe editor.
-Since all editors are planned to work as iframes in the future, set the \`apiVersion\` field to 3 and test the block inside the iframe editor.
-See: https://developer.wordpress.org/block-editor/reference-guides/block-api/block-api-versions/#version-3-wordpress-6-3`
-      );
+      (0, import_deprecated4.default)("Block with API version 2 or lower", {
+        since: "6.9",
+        hint: `The block "${name}" is registered with API version ${settings.apiVersion}. This means that the post editor may work as a non-iframe editor. Since all editors are planned to work as iframes in the future, set the \`apiVersion\` field to 3 and test the block inside the iframe editor.`,
+        link: "https://developer.wordpress.org/block-editor/reference-guides/block-api/block-api-versions/block-migration-for-iframe-editor-compatibility/"
+      });
     }
     if (settings.description && typeof settings.description !== "string") {
       (0, import_deprecated4.default)("Declaring non-string block descriptions", {
@@ -10114,6 +10123,8 @@ ${p3}`
     mode = "AUTO",
     tagName
   }) {
+    log("Received HTML (pasteHandler):\n\n", HTML);
+    log("Received plain text (pasteHandler):\n\n", plainText);
     HTML = HTML.replace(/<meta[^>]+>/g, "");
     HTML = HTML.replace(
       /^\s*<html[^>]*>\s*<body[^>]*>(?:\s*<!--\s*StartFragment\s*-->)?/i,
@@ -10329,7 +10340,12 @@ ${p3}`
   var fieldsKey = /* @__PURE__ */ Symbol("fields");
   var formKey = /* @__PURE__ */ Symbol("form");
   var privateApis = {};
-  lock(privateApis, { isContentBlock, fieldsKey, formKey });
+  lock(privateApis, {
+    isContentBlock,
+    fieldsKey,
+    formKey,
+    parseRawBlock
+  });
 
   // packages/blocks/build-module/deprecated.mjs
   var import_deprecated11 = __toESM(require_deprecated(), 1);

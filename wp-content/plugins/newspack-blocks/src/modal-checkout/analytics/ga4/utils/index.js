@@ -31,6 +31,7 @@ const eventKeys = [
 	'child_ids',
 	'price_summary',
 	'newspack_popup_id',
+	'prompt_title',
 	'gate_post_id',
 	'recurrence',
 	'referrer',

@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Newsletters 3.26.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
+"Project-Id-Version: Newspack Newsletters 3.27.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/newspack-newsletters\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-06T13:35:29+00:00\n"
+"POT-Creation-Date: 2026-02-03T16:28:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-newsletters\n"
@@ -605,176 +605,176 @@ msgstr ""
 msgid "Your subscriptions were updated."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:551
+#: includes/class-newspack-newsletters.php:552
 msgctxt "post type general name"
 msgid "Newsletters"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:552
+#: includes/class-newspack-newsletters.php:553
 msgctxt "post type singular name"
 msgid "Newsletter"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:553
+#: includes/class-newspack-newsletters.php:554
 msgctxt "admin menu"
 msgid "Newsletters"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:554
+#: includes/class-newspack-newsletters.php:555
 msgctxt "add new on admin bar"
 msgid "Newsletter"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:555
+#: includes/class-newspack-newsletters.php:556
 msgctxt "newsletter"
 msgid "Add New"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:556
+#: includes/class-newspack-newsletters.php:557
 #: src/components/init-modal/index.js:26
 msgid "Add New Newsletter"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:557
+#: includes/class-newspack-newsletters.php:558
 msgid "New Newsletter"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:558
+#: includes/class-newspack-newsletters.php:559
 msgid "Edit Newsletter"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:559
+#: includes/class-newspack-newsletters.php:560
 msgid "View Newsletter"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:560
+#: includes/class-newspack-newsletters.php:561
 msgid "View Newsletters"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:561
+#: includes/class-newspack-newsletters.php:562
 msgid "All Newsletters"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:562
+#: includes/class-newspack-newsletters.php:563
 msgid "Search Newsletters"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:563
+#: includes/class-newspack-newsletters.php:564
 msgid "Parent Newsletters:"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:564
+#: includes/class-newspack-newsletters.php:565
 msgid "No newsletters found."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:565
+#: includes/class-newspack-newsletters.php:566
 msgid "No newsletters found in Trash."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:566
+#: includes/class-newspack-newsletters.php:567
 msgid "Newsletter Archives"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:567
+#: includes/class-newspack-newsletters.php:568
 msgid "Newsletter Attributes"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:568
+#: includes/class-newspack-newsletters.php:569
 msgid "Insert into newsletter"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:569
+#: includes/class-newspack-newsletters.php:570
 msgid "Uploaded to this newsletter"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:570
+#: includes/class-newspack-newsletters.php:571
 msgid "Filter newsletters list"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:571
+#: includes/class-newspack-newsletters.php:572
 msgid "Newsletters list navigation"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:572
+#: includes/class-newspack-newsletters.php:573
 msgid "Newsletters list"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:573
+#: includes/class-newspack-newsletters.php:574
 msgid "Newsletter sent."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:574
+#: includes/class-newspack-newsletters.php:575
 msgid "Newsletter published privately."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:575
+#: includes/class-newspack-newsletters.php:576
 msgid "Newsletter reverted to draft."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:576
+#: includes/class-newspack-newsletters.php:577
 msgid "Newsletter scheduled."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:577
+#: includes/class-newspack-newsletters.php:578
 msgid "Newsletter updated."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:578
+#: includes/class-newspack-newsletters.php:579
 msgid "Newsletter Link"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:579
+#: includes/class-newspack-newsletters.php:580
 msgid "A link to a newsletter."
 msgstr ""
 
 #. translators: Relative time stamp of sent/published date
-#: includes/class-newspack-newsletters.php:721
+#: includes/class-newspack-newsletters.php:722
 #, php-format
 msgid "Sent %1$s ago"
 msgstr ""
 
 #. translators:  Absolute time stamp of sent/published date
-#: includes/class-newspack-newsletters.php:724
+#: includes/class-newspack-newsletters.php:725
 #, php-format
 msgid "Sent %1$s"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:739
+#: includes/class-newspack-newsletters.php:740
 msgid "Public page"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:754
+#: includes/class-newspack-newsletters.php:767
 msgid "No"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:754
+#: includes/class-newspack-newsletters.php:767
 msgid "Yes"
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:951
+#: includes/class-newspack-newsletters.php:964
 msgid "Please select a newsletter service provider."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:962
+#: includes/class-newspack-newsletters.php:975
 msgid "Please input credentials."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:1026
-#: includes/class-newspack-newsletters.php:1045
+#: includes/class-newspack-newsletters.php:1039
+#: includes/class-newspack-newsletters.php:1058
 msgid "You cannot use this resource."
 msgstr ""
 
 #. translators: urge users to input their API credentials on settings page.
-#: includes/class-newspack-newsletters.php:1147
+#: includes/class-newspack-newsletters.php:1160
 #, php-format
 msgid "Thank you for activating Newspack Newsletters. Please <a href=\"%s\">head to settings</a> to set up your API credentials."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:1288
+#: includes/class-newspack-newsletters.php:1301
 msgid "Lists not available while using manual configuration."
 msgstr ""
 
-#: includes/class-newspack-newsletters.php:1294
+#: includes/class-newspack-newsletters.php:1307
 msgid "Lists not available for the current Newsletters setup."
 msgstr ""
 

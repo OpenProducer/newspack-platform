@@ -8,7 +8,7 @@
  * Add child theme-specific custom colours.
  */
 function newspack_katharine_custom_colors_css() {
-	$header_color    = '#333';
+	$header_color = '#333';
 
 	if ( 'default' !== get_theme_mod( 'theme_colors', 'default' ) ) {
 		if ( 'default' !== get_theme_mod( 'header_color', 'default' ) ) {
@@ -16,8 +16,7 @@ function newspack_katharine_custom_colors_css() {
 		}
 
 		if ( 'default' !== get_theme_mod( 'footer_color', 'default' ) ) {
-			$footer_color          = get_theme_mod( 'footer_color_hex', '' );
-			$footer_color_contrast = newspack_get_color_contrast( $footer_color );
+			$footer_color = get_theme_mod( 'footer_color_hex', '' );
 		}
 	}
 
@@ -25,7 +24,7 @@ function newspack_katharine_custom_colors_css() {
 	$editor_css = '';
 
 	// Set colour contrasts.
-	$header_color_contrast    = newspack_get_color_contrast( $header_color );
+	$header_color_contrast = newspack_get_color_contrast( $header_color );
 
 	if ( true === get_theme_mod( 'header_solid_background', false ) ) {
 		if ( 'default' !== get_theme_mod( 'header_color', 'default' ) ) {

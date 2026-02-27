@@ -1,3 +1,88 @@
+# [6.33.0](https://github.com/Automattic/newspack-plugin/compare/v6.32.0...v6.33.0) (2026-02-27)
+
+
+### Features
+
+* trigger release with ip check landing page ([7fbcdcd](https://github.com/Automattic/newspack-plugin/commit/7fbcdcda69e43ef70fe1cfba00db30bbbc13647c))
+
+# [6.32.0](https://github.com/Automattic/newspack-plugin/compare/v6.31.1...v6.32.0) (2026-02-16)
+
+
+### Bug Fixes
+
+* add check for my account before switching error notice ([#4484](https://github.com/Automattic/newspack-plugin/issues/4484)) ([9e13eca](https://github.com/Automattic/newspack-plugin/commit/9e13eca7441cfdd29652bf7333ed87c2c3cbccef))
+* **collections:** hide indicator for unpublished collections ([#4434](https://github.com/Automattic/newspack-plugin/issues/4434)) ([3eda622](https://github.com/Automattic/newspack-plugin/commit/3eda622316f57a41edd4c6fc81292b30d5548e5f))
+* **content-gate:** persist restricted content ([#4420](https://github.com/Automattic/newspack-plugin/issues/4420)) ([856695d](https://github.com/Automattic/newspack-plugin/commit/856695da41637cc93cf48493783c61d094bdeab8))
+* decrease image size for Collections in certain cases ([#4395](https://github.com/Automattic/newspack-plugin/issues/4395)) ([de3c001](https://github.com/Automattic/newspack-plugin/commit/de3c0014bc95909130ef8154f3ce5138cf261657))
+* **my-account:** "order again" checkout redirect ([#4427](https://github.com/Automattic/newspack-plugin/issues/4427)) ([3a9e7fb](https://github.com/Automattic/newspack-plugin/commit/3a9e7fb9be42131e947b3a3294f696035c13b731))
+* remove alignments from the My Account Block button ([#4438](https://github.com/Automattic/newspack-plugin/issues/4438)) ([8de3526](https://github.com/Automattic/newspack-plugin/commit/8de352691441601b1ce1141a0c4719a651b6be2e))
+
+
+### Features
+
+* Add My Account button block ([#4409](https://github.com/Automattic/newspack-plugin/issues/4409)) ([b0c414f](https://github.com/Automattic/newspack-plugin/commit/b0c414fcc2746a49cf204295dd08e9922b92f3f7))
+* **avatar:** add custom byline support ([#4424](https://github.com/Automattic/newspack-plugin/issues/4424)) ([152b1af](https://github.com/Automattic/newspack-plugin/commit/152b1af8b72a20752f8dfc7e375a033b7de65de2))
+* **content-gate:** grouped access rules evaluation and normalization ([#4435](https://github.com/Automattic/newspack-plugin/issues/4435)) ([aa182c9](https://github.com/Automattic/newspack-plugin/commit/aa182c9800f24f64c47b7c1f7eb58980b346ea56))
+* **content-gate:** layout deletion and default content handling ([#4436](https://github.com/Automattic/newspack-plugin/issues/4436)) ([f0b3b18](https://github.com/Automattic/newspack-plugin/commit/f0b3b18378f3106500511aa044a41c89602a85a8))
+* **content-gate:** support group subscriptions access rule ([#4442](https://github.com/Automattic/newspack-plugin/issues/4442)) ([416cd13](https://github.com/Automattic/newspack-plugin/commit/416cd13462dbefe3025875ee5f0e2e75ca462f17))
+* **content-gate:** support new metering schema ([#4419](https://github.com/Automattic/newspack-plugin/issues/4419)) ([e3f2f56](https://github.com/Automattic/newspack-plugin/commit/e3f2f568e5593ee999c6eda493e71778322ba39d))
+* **my-account:** new layout for single subscription pages ([#4425](https://github.com/Automattic/newspack-plugin/issues/4425)) ([6425dbf](https://github.com/Automattic/newspack-plugin/commit/6425dbfc4604a9f4534a4ecc89c95a60ad81647d)), closes [#4428](https://github.com/Automattic/newspack-plugin/issues/4428) [#4432](https://github.com/Automattic/newspack-plugin/issues/4432) [#4409](https://github.com/Automattic/newspack-plugin/issues/4409) [#4419](https://github.com/Automattic/newspack-plugin/issues/4419) [#4413](https://github.com/Automattic/newspack-plugin/issues/4413) [#4434](https://github.com/Automattic/newspack-plugin/issues/4434)
+
+## [6.31.1](https://github.com/Automattic/newspack-plugin/compare/v6.31.0...v6.31.1) (2026-02-16)
+
+
+### Bug Fixes
+
+* adjust lazy loading logic ([#4485](https://github.com/Automattic/newspack-plugin/issues/4485)) ([29f0458](https://github.com/Automattic/newspack-plugin/commit/29f0458a717568b170fc98e098d7bf0d359218e6))
+
+# [6.31.0](https://github.com/Automattic/newspack-plugin/compare/v6.30.2...v6.31.0) (2026-02-10)
+
+
+### Features
+
+* release the redesign of the My Account dashboard ([#4468](https://github.com/Automattic/newspack-plugin/issues/4468)) ([20a374c](https://github.com/Automattic/newspack-plugin/commit/20a374c1ef5b97e2487d55b07b76bbb747e2410b))
+
+## [6.30.2](https://github.com/Automattic/newspack-plugin/compare/v6.30.1...v6.30.2) (2026-02-09)
+
+
+### Bug Fixes
+
+* **my-account:** activate first payment method on load ([#4463](https://github.com/Automattic/newspack-plugin/issues/4463)) ([680a48e](https://github.com/Automattic/newspack-plugin/commit/680a48ecf308ce4b4348d709738876e83a5aa008))
+
+## [6.30.1](https://github.com/Automattic/newspack-plugin/compare/v6.30.0...v6.30.1) (2026-02-05)
+
+
+### Bug Fixes
+
+* **my-account:** teams for memberships navigation ([#4457](https://github.com/Automattic/newspack-plugin/issues/4457)) ([e776e4d](https://github.com/Automattic/newspack-plugin/commit/e776e4d641942491ce692e20da6fb21380530278))
+
+# [6.30.0](https://github.com/Automattic/newspack-plugin/compare/v6.29.5...v6.30.0) (2026-02-02)
+
+
+### Bug Fixes
+
+* **content-gate:** handle floating elements within content gate excerpt ([#4394](https://github.com/Automattic/newspack-plugin/issues/4394)) ([7b66b1b](https://github.com/Automattic/newspack-plugin/commit/7b66b1bfe2e37aefb0e9c6f59b4f0db8b657522b))
+* **guest-contributors:** preserve special characters in guest contributor display names ([#4411](https://github.com/Automattic/newspack-plugin/issues/4411)) ([20a612b](https://github.com/Automattic/newspack-plugin/commit/20a612bbf9f2a5301cf3e8dca7964cdc495bf9b4))
+* **memberships:** handle expired team subscription resubscribes ([#4387](https://github.com/Automattic/newspack-plugin/issues/4387)) ([155f85b](https://github.com/Automattic/newspack-plugin/commit/155f85b6ea27305680f840f2670eeccb7c31b0a1))
+* merge conflict ([52c2ae1](https://github.com/Automattic/newspack-plugin/commit/52c2ae18fed736ef1153f2de8f3c80d557fd7a83))
+* **my-acount:** navigation margin without favicon ([#4388](https://github.com/Automattic/newspack-plugin/issues/4388)) ([e1ae7e1](https://github.com/Automattic/newspack-plugin/commit/e1ae7e18b72e39e57b5cbe49eca0c985c19a890b))
+* remove duplicate method ([0619143](https://github.com/Automattic/newspack-plugin/commit/0619143a0f56d81ddbca1b5b6ecb27625ba2c41f))
+* show_if_newspack_group_subsription_enabled misspelling ([#4447](https://github.com/Automattic/newspack-plugin/issues/4447)) ([54b128f](https://github.com/Automattic/newspack-plugin/commit/54b128f452ad19a98bb6d64ee8bcbf35db981d97))
+* update prompt_id to newspack_popup_id in the data events readme ([#4378](https://github.com/Automattic/newspack-plugin/issues/4378)) ([57cb730](https://github.com/Automattic/newspack-plugin/commit/57cb730696259a8694876a21cea39c316ac4bfa5))
+* verify reader accounts post checkokut ([#4410](https://github.com/Automattic/newspack-plugin/issues/4410)) ([25073e3](https://github.com/Automattic/newspack-plugin/commit/25073e343ccdc37800c038ed3d049f9a30514631))
+
+
+### Features
+
+* **byline:** add byline block with custom byline and CAP support ([#4405](https://github.com/Automattic/newspack-plugin/issues/4405)) ([2746005](https://github.com/Automattic/newspack-plugin/commit/274600563036c7e3cb7bd1c0ce1e2273c9904f09))
+* **content-gate:** create layout and improve asset management ([#4399](https://github.com/Automattic/newspack-plugin/issues/4399)) ([edf4613](https://github.com/Automattic/newspack-plugin/commit/edf461399828a729cf93102a3fa459b5757e40b7))
+* **content-gate:** new schema and layout trait ([#4370](https://github.com/Automattic/newspack-plugin/issues/4370)) ([abd748e](https://github.com/Automattic/newspack-plugin/commit/abd748e855398f630f4bc1274495b276c9bef0f3))
+* **content-gating:** add group subscription product options ([#4371](https://github.com/Automattic/newspack-plugin/issues/4371)) ([f715be5](https://github.com/Automattic/newspack-plugin/commit/f715be55ed0d45b5f55893a67b30581a83e188ec))
+* enable authors filter ([#4393](https://github.com/Automattic/newspack-plugin/issues/4393)) ([e2e0d7f](https://github.com/Automattic/newspack-plugin/commit/e2e0d7fbabf39c323bb8f01283c32034b3455a88))
+* **group-subscriptions:** handle group subscription members ([#4397](https://github.com/Automattic/newspack-plugin/issues/4397)) ([da5f2fa](https://github.com/Automattic/newspack-plugin/commit/da5f2fad5cf2b310827ce49e2cc9ba3e1fba30ec))
+* include prompt_title with newspack_popup_id for data events ([#4377](https://github.com/Automattic/newspack-plugin/issues/4377)) ([83597ed](https://github.com/Automattic/newspack-plugin/commit/83597ed95204fd2311211b54761d82fea498fa52))
+* reinstate the Appearance > Editor link for block themes ([#4407](https://github.com/Automattic/newspack-plugin/issues/4407)) ([be897c4](https://github.com/Automattic/newspack-plugin/commit/be897c412a83c683262c62c9260a903e48d428bc))
+
 ## [6.29.5](https://github.com/Automattic/newspack-plugin/compare/v6.29.4...v6.29.5) (2026-01-29)
 
 

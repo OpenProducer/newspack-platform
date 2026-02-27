@@ -19,14 +19,36 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle;
 
 class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
 {
+    /**
+     * This value is used if the state is omitted.
+     */
+    public const ONBOARDING_STATE_ONBOARDING_STATE_UNSPECIFIED = 'ONBOARDING_STATE_UNSPECIFIED';
+    /**
+     * Publication exists but is inactive, user must return to their admin console
+     * to either finish their setup or address a configuration error.
+     */
+    public const ONBOARDING_STATE_ONBOARDING_ACTION_REQUIRED = 'ONBOARDING_ACTION_REQUIRED';
+    /**
+     * Publication is pending an external verification step. No immediate action
+     * is required.
+     */
+    public const ONBOARDING_STATE_PENDING_VERIFICATION = 'PENDING_VERIFICATION';
+    /**
+     * Publication onboarding is complete and ready to serve end users.
+     */
+    public const ONBOARDING_STATE_ONBOARDING_COMPLETE = 'ONBOARDING_COMPLETE';
     protected $collection_key = 'verifiedDomains';
     protected $contentPolicyStatusType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ContentPolicyStatus::class;
     protected $contentPolicyStatusDataType = '';
     /**
+     * The publication's readable name.
+     *
      * @var string
      */
     public $displayName;
     /**
+     * Current onboarding state of the Publication.
+     *
      * @var string
      */
     public $onboardingState;
@@ -35,15 +57,22 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $productsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Product::class;
     protected $productsDataType = 'array';
     /**
+     * Unique key for publications within SwG.
+     *
      * @var string
      */
     public $publicationId;
     /**
+     * Domains for which ownerhip has been verified with Search Console.
+     *
      * @var string[]
      */
     public $verifiedDomains;
     /**
-     * @param ContentPolicyStatus
+     * Reports whether a publication has any active or pending content policy
+     * violations.
+     *
+     * @param ContentPolicyStatus $contentPolicyStatus
      */
     public function setContentPolicyStatus(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ContentPolicyStatus $contentPolicyStatus)
     {
@@ -57,7 +86,9 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
         return $this->contentPolicyStatus;
     }
     /**
-     * @param string
+     * The publication's readable name.
+     *
+     * @param string $displayName
      */
     public function setDisplayName($displayName)
     {
@@ -71,21 +102,28 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
         return $this->displayName;
     }
     /**
-     * @param string
+     * Current onboarding state of the Publication.
+     *
+     * Accepted values: ONBOARDING_STATE_UNSPECIFIED, ONBOARDING_ACTION_REQUIRED,
+     * PENDING_VERIFICATION, ONBOARDING_COMPLETE
+     *
+     * @param self::ONBOARDING_STATE_* $onboardingState
      */
     public function setOnboardingState($onboardingState)
     {
         $this->onboardingState = $onboardingState;
     }
     /**
-     * @return string
+     * @return self::ONBOARDING_STATE_*
      */
     public function getOnboardingState()
     {
         return $this->onboardingState;
     }
     /**
-     * @param PaymentOptions
+     * The payment option used by a SwG Publication.
+     *
+     * @param PaymentOptions $paymentOptions
      */
     public function setPaymentOptions(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PaymentOptions $paymentOptions)
     {
@@ -99,7 +137,9 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
         return $this->paymentOptions;
     }
     /**
-     * @param Product[]
+     * SwG products.
+     *
+     * @param Product[] $products
      */
     public function setProducts($products)
     {
@@ -113,7 +153,9 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
         return $this->products;
     }
     /**
-     * @param string
+     * Unique key for publications within SwG.
+     *
+     * @param string $publicationId
      */
     public function setPublicationId($publicationId)
     {
@@ -127,7 +169,9 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
         return $this->publicationId;
     }
     /**
-     * @param string[]
+     * Domains for which ownerhip has been verified with Search Console.
+     *
+     * @param string[] $verifiedDomains
      */
     public function setVerifiedDomains($verifiedDomains)
     {

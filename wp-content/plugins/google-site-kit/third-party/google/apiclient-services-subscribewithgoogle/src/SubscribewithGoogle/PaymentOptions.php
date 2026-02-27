@@ -20,23 +20,34 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle;
 class PaymentOptions extends \Google\Site_Kit_Dependencies\Google\Model
 {
     /**
+     * If true, the publication uses contributions for payment.
+     *
      * @var bool
      */
     public $contributions;
     /**
+     * If true, the publication has no payment option.
+     *
      * @var bool
      */
     public $noPayment;
     /**
+     * If true, the publication uses subscriptions for payment.
+     *
      * @var bool
      */
     public $subscriptions;
     /**
+     * If true, the publication uses Thank With Google stickers for payment.
+     *
+     * @deprecated
      * @var bool
      */
     public $thankStickers;
     /**
-     * @param bool
+     * If true, the publication uses contributions for payment.
+     *
+     * @param bool $contributions
      */
     public function setContributions($contributions)
     {
@@ -50,7 +61,9 @@ class PaymentOptions extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->contributions;
     }
     /**
-     * @param bool
+     * If true, the publication has no payment option.
+     *
+     * @param bool $noPayment
      */
     public function setNoPayment($noPayment)
     {
@@ -64,7 +77,9 @@ class PaymentOptions extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->noPayment;
     }
     /**
-     * @param bool
+     * If true, the publication uses subscriptions for payment.
+     *
+     * @param bool $subscriptions
      */
     public function setSubscriptions($subscriptions)
     {
@@ -78,13 +93,17 @@ class PaymentOptions extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->subscriptions;
     }
     /**
-     * @param bool
+     * If true, the publication uses Thank With Google stickers for payment.
+     *
+     * @deprecated
+     * @param bool $thankStickers
      */
     public function setThankStickers($thankStickers)
     {
         $this->thankStickers = $thankStickers;
     }
     /**
+     * @deprecated
      * @return bool
      */
     public function getThankStickers()

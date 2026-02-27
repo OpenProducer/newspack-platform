@@ -2,7 +2,9 @@
 /**
  * My Account navigation menu.
  *
- * @package Newspack
+ * @author   Newspack
+ * @category WooCommerce Subscriptions/Templates
+ * @package  Newspack
  */
 
 use Newspack\Newspack_UI_Icons;
@@ -22,6 +24,17 @@ foreach ( $account_menu_items as $endpoint => $label ) {
 		$current_page_name = $label;
 		break;
 	}
+}
+
+// Teams for WooCommerce Memberships.
+$is_teams_area_page = false;
+$team = null;
+$teams_area_sections = [];
+if ( function_exists( 'wc_memberships_for_teams' ) ) {
+	$teams_area = wc_memberships_for_teams()->get_frontend_instance()->get_teams_area_instance();
+	$is_teams_area_page = $teams_area->is_teams_area();
+	$team = $teams_area->get_teams_area_team();
+	$teams_area_sections = $teams_area->get_teams_area_navigation_items( $team );
 }
 ?>
 
@@ -44,31 +57,53 @@ foreach ( $account_menu_items as $endpoint => $label ) {
 		</a>
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="newspack-my-account__home-link newspack-ui__button newspack-ui__button--small newspack-ui__button--ghost-light">
-			<?php Newspack_UI_Icons::print_svg( 'chevronLeft' ); ?>
-			<?php _e( 'Back to Homepage', 'newspack-plugin' ); ?>
-		</a>
-
-		<ul>
-			<?php
-			// Check if viewing a single subscription page.
-			$is_viewing_single_subscription = false;
-			if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'view-subscription' ) ) {
-				$is_viewing_single_subscription = true;
-			}
+		<?php
+		if ( $team ) :
+			$back_section = array_shift( $teams_area_sections );
 			?>
-			<?php foreach ( wc_get_account_menu_items() as $endpoint => $label ) : ?>
+			<a href="<?php echo esc_url( $back_section['url'] ); ?>" class="newspack-my-account__home-link newspack-ui__button newspack-ui__button--small newspack-ui__button--ghost-light">
+				<?php Newspack_UI_Icons::print_svg( 'chevronLeft' ); ?>
+				<?php echo esc_html( $back_section['label'] ); ?>
+			</a>
+			<ul>
 				<?php
-				// Highlight subscriptions menu item if viewing a single subscription.
-				$is_current_item = wc_is_current_account_menu_item( $endpoint ) || ( $is_viewing_single_subscription && 'subscriptions' === $endpoint );
+				foreach ( $teams_area_sections as $section_id => $section_data ) :
+					$classes = wc_get_account_menu_item_classes( $section_id ) . ' ' . $section_data['class'];
+					$is_current_item = strpos( $classes, 'is-active' ) !== false;
+					?>
+					<li class="<?php echo esc_attr( $classes ); ?>">
+						<a href="<?php echo esc_url( $section_data['url'] ); ?>" class="newspack-ui__button newspack-ui__button--small <?php echo $is_current_item ? 'newspack-ui__button--accent' : 'newspack-ui__button--ghost'; ?>">
+							<?php echo esc_html( $section_data['label'] ); ?>
+						</a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		<?php else : ?>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="newspack-my-account__home-link newspack-ui__button newspack-ui__button--small newspack-ui__button--ghost-light">
+				<?php Newspack_UI_Icons::print_svg( 'chevronLeft' ); ?>
+				<?php _e( 'Back to Homepage', 'newspack-plugin' ); ?>
+			</a>
+			<ul>
+				<?php
+				// Check if viewing a single subscription page.
+				$is_viewing_single_subscription = false;
+				if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'view-subscription' ) ) {
+					$is_viewing_single_subscription = true;
+				}
 				?>
-				<li class="<?php echo esc_attr( wc_get_account_menu_item_classes( $endpoint ) ); ?>">
-					<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>" <?php echo $is_current_item ? 'aria-current="page"' : ''; ?> class="newspack-ui__button newspack-ui__button--small <?php echo $is_current_item ? 'newspack-ui__button--accent' : 'newspack-ui__button--ghost'; ?>">
-						<?php echo esc_html( $label ); ?>
-					</a>
-				</li>
-			<?php endforeach; ?>
-		</ul>
+				<?php foreach ( $account_menu_items as $endpoint => $label ) : ?>
+					<?php
+					// Highlight subscriptions menu item if viewing a single subscription.
+					$is_current_item = wc_is_current_account_menu_item( $endpoint ) || ( $is_viewing_single_subscription && 'subscriptions' === $endpoint );
+					?>
+					<li class="<?php echo esc_attr( wc_get_account_menu_item_classes( $endpoint ) ); ?>">
+						<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>" <?php echo $is_current_item ? 'aria-current="page"' : ''; ?> class="newspack-ui__button newspack-ui__button--small <?php echo $is_current_item ? 'newspack-ui__button--accent' : 'newspack-ui__button--ghost'; ?>">
+							<?php echo esc_html( $label ); ?>
+						</a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
 	</div>
 
 	<div class="newspack-my-account__navigation-footer">

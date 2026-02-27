@@ -72,31 +72,24 @@ class Author_Filter {
 			return;
 		}
 
-		// Disable this for sites with co authors plus enabled until we fix its issue with large sites.
-		if ( self::is_coauthors_plus_enabled( $post_type ) ) {
-			return;
-		}
-
 		$type_object = get_post_type_object( $post_type );
 
 		if ( ! $type_object instanceof WP_Post_Type ) {
 			return;
 		}
 
+		$value_field = 'user_nicename';
+		$select_name = 'author_name';
+		$capability  = Guest_Contributor_Role::ASSIGNABLE_TO_POSTS_CAPABILITY_NAME; // This includes both Guest Contributors and regular Authors.
+		$users       = self::get_options_from_users( $capability );
+
 		if ( self::is_coauthors_plus_enabled( $post_type ) ) {
 			// When using Coauthors plugin, dont show the filter if user is browsing the "Mine" tab. It can lead to inconsistent UI.
 			if ( ! empty( $_GET['author'] ) && get_current_user_id() === (int) $_GET['author'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				return;
 			}
-			$value_field = 'user_login';
-			$select_name = 'author_name';
-			$users       = self::get_options_from_coauthors();
-		} else {
-			$value_field = 'ID';
-			$select_name = 'author';
-			$capability  = $type_object->cap->edit_posts;  // only users who can edit posts of this post type.
-			$users       = self::get_options_from_users( $capability );
 		}
+
 
 		$selected = ! empty( $_GET[ $select_name ] ) ? sanitize_text_field( $_GET[ $select_name ] ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$options  = array(
@@ -132,22 +125,10 @@ class Author_Filter {
 			'orderby'    => 'display_name',
 			'order'      => 'ASC',
 			'capability' => [ $capability ],
-			'fields'     => [ 'ID', 'display_name' ],
+			'fields'     => [ 'ID', 'display_name', 'user_nicename' ],
 		);
 		$query = new WP_User_Query( $args );
 		return $query->get_results();
-	}
-
-	/**
-	 * Retrieve the list of authors from the Co Authors Plus plugin
-	 *
-	 * This list includes regular and guest users
-	 *
-	 * @return array
-	 */
-	private static function get_options_from_coauthors() {
-		global $coauthors_plus;
-		return $coauthors_plus->search_authors();
 	}
 }
 

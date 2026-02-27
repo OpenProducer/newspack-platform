@@ -1079,8 +1079,9 @@ function newspack_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'archive_options',
 		array(
-			'title' => esc_html__( 'Archive Settings', 'newspack-theme' ),
-			'panel' => 'newspack_template_settings',
+			'title'       => esc_html__( 'Archive Settings', 'newspack-theme' ),
+			'panel'       => 'newspack_template_settings',
+			'description' => esc_html__( 'These settings affect all archives, including the blog posts page.', 'newspack-theme' ),
 		)
 	);
 
@@ -1243,14 +1244,14 @@ function newspack_customize_register( $wp_customize ) {
 		$wp_customize->add_control(
 			'archive_list_or_grid',
 			array(
-				'type'    => 'radio',
-				'label'   => esc_html__( 'List or Grid Layout', 'newspack-theme' ),
+				'type'        => 'radio',
+				'label'       => esc_html__( 'List or Grid Layout', 'newspack-theme' ),
 				'description' => esc_html__( 'When using grid, set the number of posts per page to a number divisible by 12 under Settings > Reading and disable the "Use a large, featured display for the latest post in the archives" above to get a full bottom row of posts.', 'newspack-theme' ),
-				'choices' => array(
-					'list'         => esc_html__( 'List', 'newspack-theme' ),
-					'grid'      => esc_html__( 'Grid', 'newspack-theme' ),
+				'choices'     => array(
+					'list' => esc_html__( 'List', 'newspack-theme' ),
+					'grid' => esc_html__( 'Grid', 'newspack-theme' ),
 				),
-				'section' => 'archive_options',
+				'section'     => 'archive_options',
 			)
 		);
 
@@ -1447,6 +1448,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 		'custom_font_import_code',
 		array(
 			'label'       => __( 'Font Provider Import Code or URL', 'newspack-theme' ),
+			// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- This is example text, not actual code.
 			'description' => __( 'Example: &lt;link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"&gt; or https://fonts.googleapis.com/css?family=Open+Sans' ),
 			'section'     => 'newspack_typography',
 			'type'        => 'text',
@@ -1474,7 +1476,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 
 	$font_stacks = newspack_get_font_stacks_as_select_choices();
 
-	foreach ( $font_stacks as $key => &$stack ) {
+	foreach ( $font_stacks as &$stack ) {
 		$stack = wp_kses( $stack, null );
 	}
 
@@ -1678,12 +1680,12 @@ function newspack_sanitize_slideout_sidebar_side( $choice ) {
 /**
  * Sanitize the checkbox.
  *
- * @param boolean $input Value of checkbox.
+ * @param bool|int|string $input Value of checkbox.
  *
- * @return boolean true if is 1 or '1', false if anything else
+ * @return boolean true if is true, 1, or '1'; false otherwise
  */
 function newspack_sanitize_checkbox( $input ) {
-	if ( 1 == $input ) {
+	if ( is_scalar( $input ) && '1' === (string) $input ) {
 		return true;
 	} else {
 		return false;
@@ -1741,7 +1743,7 @@ function newspack_sanitize_font_provider_url( $code ) {
 	$url = isset( $matches[0] ) ? $matches[0] : null;
 
 	$url_info = wp_parse_url( $url );
-	if ( isset( $url_info['host'] ) && in_array( $url_info['host'], array_values( $font_service_urls ) ) ) {
+	if ( isset( $url_info['host'] ) && in_array( $url_info['host'], array_values( $font_service_urls ), true ) ) {
 		return $url;
 	}
 	return null;
@@ -1756,7 +1758,7 @@ function newspack_sanitize_font_provider_url( $code ) {
  */
 function newspack_sanitize_font_stack( $stack_id ) {
 	$stacks = newspack_get_font_stacks();
-	if ( in_array( $stack_id, array_keys( $stacks ) ) ) {
+	if ( in_array( $stack_id, array_keys( $stacks ), true ) ) {
 		return $stack_id;
 	}
 	return null;

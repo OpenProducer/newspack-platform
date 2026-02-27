@@ -105,8 +105,8 @@ final class Newspack_Popups_Data_Api {
 			return $data;
 		}
 
-		$data['prompt_id']    = $popup['id'];
-		$data['prompt_title'] = $popup['title'];
+		$data['newspack_popup_id'] = $popup['id'];
+		$data['prompt_title']      = $popup['title'];
 
 		if ( isset( $popup['options'] ) ) {
 			$data['prompt_frequency'] = self::get_frequency_summary( $popup );
@@ -186,8 +186,11 @@ final class Newspack_Popups_Data_Api {
 	 */
 	public static function get_rendered_popups( $popup ) {
 		$data = self::get_popup_metadata( $popup );
-		if ( ! empty( $data['prompt_id'] ) ) {
-			self::$popups[ $data['prompt_id'] ] = $data;
+		if ( ! empty( $data['newspack_popup_id'] ) ) {
+			self::$popups[ $data['newspack_popup_id'] ] = $data;
+		}
+		if ( ! empty( $data['prompt_title'] ) ) {
+			self::$popups[ $data['prompt_title'] ] = $data;
 		}
 	}
 
@@ -203,7 +206,7 @@ final class Newspack_Popups_Data_Api {
 	 */
 	public static function prepare_popup_params_for_ga( $popup_params ) {
 		// Invalid input.
-		if ( ! is_array( $popup_params ) || ! isset( $popup_params['prompt_id'] ) ) {
+		if ( ! is_array( $popup_params ) || ! isset( $popup_params['newspack_popup_id'] ) ) {
 			return [];
 		}
 
@@ -256,6 +259,10 @@ final class Newspack_Popups_Data_Api {
 		if ( ! empty( $popup_id ) ) {
 			$cart_item_data['newspack_popup_id'] = $popup_id;
 		}
+		$prompt_title = filter_input( INPUT_GET, 'prompt_title', FILTER_SANITIZE_SPECIAL_CHARS );
+		if ( ! empty( $prompt_title ) ) {
+			$cart_item_data['prompt_title'] = $prompt_title;
+		}
 		return $cart_item_data;
 	}
 
@@ -271,6 +278,9 @@ final class Newspack_Popups_Data_Api {
 	public static function checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
 		if ( ! empty( $values['newspack_popup_id'] ) ) {
 			$order->add_meta_data( '_newspack_popup_id', $values['newspack_popup_id'] );
+		}
+		if ( ! empty( $values['prompt_title'] ) ) {
+			$order->add_meta_data( '_prompt_title', $values['prompt_title'] );
 		}
 	}
 

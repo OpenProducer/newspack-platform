@@ -32,8 +32,13 @@
 				<!-- /wp:button -->
 			</div>
 			<!-- /wp:buttons -->
+
+			<?php if ( class_exists( 'Newspack\Reader_Activation' ) && \Newspack\Reader_Activation::is_enabled() ) : ?>
+				<!-- wp:newspack/my-account-button {"lock":{"move":true,"remove":false},"style":{"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}}},"backgroundColor":"base-2","textColor":"contrast","className":"has-x-small-size","fontSize":"x-small"} /-->
+			<?php endif; ?>
 		</div>
 		<!-- /wp:group -->
+
 	</div>
 	<!-- /wp:group -->
 

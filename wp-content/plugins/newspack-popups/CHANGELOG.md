@@ -1,3 +1,39 @@
+## [3.9.2](https://github.com/Automattic/newspack-popups/compare/v3.9.1...v3.9.2) (2026-02-13)
+
+
+### Bug Fixes
+
+* emoji encoding in DOM::loadHTML ([71a6d3f](https://github.com/Automattic/newspack-popups/commit/71a6d3fbc150fd2c8c53980fab975c603cea06db))
+
+## [3.9.1](https://github.com/Automattic/newspack-popups/compare/v3.9.0...v3.9.1) (2026-02-05)
+
+
+### Bug Fixes
+
+* migrate expiry check from daily to hourly ([#1523](https://github.com/Automattic/newspack-popups/issues/1523)) ([14f30d7](https://github.com/Automattic/newspack-popups/commit/14f30d7e77fd0f5147bf2130ab2b8d9a6986a487)), closes [#1524](https://github.com/Automattic/newspack-popups/issues/1524)
+* trigger release ([0fee161](https://github.com/Automattic/newspack-popups/commit/0fee16130f1cd7fadd485c71280643b38fd54374))
+
+## [3.9.1](https://github.com/Automattic/newspack-popups/compare/v3.9.0...v3.9.1) (2026-02-05)
+
+
+### Bug Fixes
+
+* migrate expiry check from daily to hourly ([#1523](https://github.com/Automattic/newspack-popups/issues/1523)) ([14f30d7](https://github.com/Automattic/newspack-popups/commit/14f30d7e77fd0f5147bf2130ab2b8d9a6986a487)), closes [#1524](https://github.com/Automattic/newspack-popups/issues/1524)
+
+# [3.9.0](https://github.com/Automattic/newspack-popups/compare/v3.8.4...v3.9.0) (2026-02-02)
+
+
+### Bug Fixes
+
+* force alpha release ([9dfc1fe](https://github.com/Automattic/newspack-popups/commit/9dfc1fe46bbb7de5424345afae078651f9459d04))
+* remove form_submission from prompt data events ([#1510](https://github.com/Automattic/newspack-popups/issues/1510)) ([2c615e4](https://github.com/Automattic/newspack-popups/commit/2c615e4e909817f0232d2cbfd178a7fb992e7cbb))
+* rename prompt_id to newspack_popup_id for consistency ([#1509](https://github.com/Automattic/newspack-popups/issues/1509)) ([b9b1048](https://github.com/Automattic/newspack-popups/commit/b9b10489578603c2f3a1f505ae7666ea0213468d))
+
+
+### Features
+
+* make prompt_title available to modal checkout data events when available ([#1508](https://github.com/Automattic/newspack-popups/issues/1508)) ([3ea5e50](https://github.com/Automattic/newspack-popups/commit/3ea5e50cee0fce54c50f54672672bb8022c48c29))
+
 ## [3.8.4](https://github.com/Automattic/newspack-popups/compare/v3.8.3...v3.8.4) (2026-01-19)
 
 

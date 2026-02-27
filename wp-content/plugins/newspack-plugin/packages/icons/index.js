@@ -1,6 +1,7 @@
 export { default as accessibility } from './src/accessibility';
 export { default as activity } from './src/activity';
 export { default as ad } from './src/ad';
+export { default as account } from './src/account';
 export { default as ai } from './src/ai';
 export { default as aiText } from './src/ai-text';
 export { default as archiveLoop } from './src/archive-loop';

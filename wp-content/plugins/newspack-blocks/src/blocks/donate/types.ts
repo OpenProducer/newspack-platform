@@ -17,6 +17,7 @@ export type DonationFormValues = Record< DonationFormInputName, string > &
 		agree_to_pay_fees?: string;
 		newsletter_opt_in?: string;
 		newspack_popup_id?: string;
+		prompt_title?: string;
 		_wp_http_referer?: string;
 	};
 

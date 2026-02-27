@@ -24,6 +24,8 @@ class WooCommerce_Products {
 		\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_scripts' ] );
 		\add_filter( 'product_type_options', [ __CLASS__, 'show_custom_product_options' ] );
 		\add_action( 'woocommerce_variation_options', [ __CLASS__, 'show_custom_variation_options' ], 10, 3 );
+		\add_action( 'woocommerce_product_options_pricing', [ __CLASS__, 'show_custom_product_pricing_options' ] );
+		\add_action( 'woocommerce_variation_options_pricing', [ __CLASS__, 'show_custom_variation_pricing_options' ], 10, 3 );
 		\add_action( 'woocommerce_process_product_meta', [ __CLASS__, 'save_custom_product_options' ] );
 		\add_action( 'woocommerce_admin_process_variation_object', [ __CLASS__, 'save_custom_variation_options' ], 30, 2 );
 		\add_filter( 'woocommerce_order_item_needs_processing', [ __CLASS__, 'require_order_processing' ], 10, 2 );
@@ -35,6 +37,13 @@ class WooCommerce_Products {
 	 * Enqueue admin scripts.
 	 */
 	public static function admin_enqueue_scripts() {
+		if ( ! function_exists( 'wcs_get_page_screen_id' ) ) {
+			return;
+		}
+		$screen = get_current_screen();
+		if ( $screen->id !== 'product' ) {
+			return;
+		}
 		wp_enqueue_script(
 			'newspack-products-custom-options',
 			Newspack::plugin_url() . '/dist/other-scripts/custom-product-options.js',
@@ -51,7 +60,7 @@ class WooCommerce_Products {
 	 * @return array Keyed array of custom product options.
 	 */
 	public static function get_custom_options() {
-		return [
+		$custom_options = [
 			'newspack_autocomplete_orders' => [
 				'id'            => '_newspack_autocomplete_orders',
 				'wrapper_class' => '',
@@ -59,8 +68,30 @@ class WooCommerce_Products {
 				'description'   => __( 'Allow orders containing this product to automatically complete upon successful payment.', 'newspack-plugin' ),
 				'default'       => 'yes',
 				'product_types' => [ 'simple', 'variation', 'subscription', 'subscription_variation' ],
+				'type'          => 'boolean',
 			],
 		];
+
+		/**
+		 * Filters the custom product options.
+		 *
+		 * @param array $custom_options Keyed array of custom product options.
+		 */
+		return apply_filters( 'newspack_custom_product_options', $custom_options );
+	}
+
+	/**
+	 * Get custom product pricing options.
+	 *
+	 * @return array Keyed array of custom product pricing options.
+	 */
+	public static function get_custom_product_pricing_options() {
+		/**
+		 * Filters the custom product pricing options.
+		 *
+		 * @param array $custom_product_pricing_options Keyed array of custom product pricing options.
+		 */
+		return apply_filters( 'newspack_custom_product_pricing_options', [] );
 	}
 
 	/**
@@ -76,7 +107,7 @@ class WooCommerce_Products {
 	}
 
 	/**
-	 * Get the value of a custom product option, taking defaults into account.
+	 * Get the value of a custom product option or pricing option, taking defaults into account.
 	 *
 	 * @param \WC_Product|int $product The product object or ID.
 	 * @param string          $option_name The name of the option.
@@ -85,7 +116,7 @@ class WooCommerce_Products {
 	 *                   or null if the product or option isn't valid.
 	 */
 	public static function get_custom_option_value( $product, $option_name ) {
-		$custom_options = self::get_custom_options();
+		$custom_options = array_merge( self::get_custom_options(), self::get_custom_product_pricing_options() );
 		if ( ! isset( $custom_options[ $option_name ] ) ) {
 			return null;
 		}
@@ -95,10 +126,19 @@ class WooCommerce_Products {
 			return null;
 		}
 
-		$custom_option = $custom_options[ $option_name ];
+		$custom_option = isset( $custom_options[ $option_name ] ) ? $custom_options[ $option_name ] : null;
+		if ( ! $custom_option ) {
+			return null;
+		}
 		$meta_key      = $custom_option['id'];
 		$option_value  = $product->meta_exists( $meta_key ) ? $product->get_meta( $meta_key ) : $custom_option['default'];
-		return \wc_string_to_bool( $option_value );
+		$value_type    = $custom_option['type'];
+		if ( $value_type === 'boolean' ) {
+			return \wc_string_to_bool( $option_value );
+		} elseif ( $value_type === 'number' ) {
+			return intval( $option_value );
+		}
+		return $option_value;
 	}
 
 	/**
@@ -117,7 +157,9 @@ class WooCommerce_Products {
 
 		$custom_options = self::get_custom_options();
 		foreach ( $custom_options as $option_key => $option_config ) {
-			if ( isset( $option_config['product_types'] ) && ! in_array( $product->get_type(), $option_config['product_types'], true ) ) {
+			$product_type   = $product->get_type();
+			$is_new_product = $product_type === 'simple' && $product->get_status() === 'auto-draft' && ! $product->get_date_created() && ! $product->get_date_modified();
+			if ( isset( $option_config['product_types'] ) && ! $is_new_product && ! in_array( $product_type, $option_config['product_types'], true ) ) {
 				continue;
 			}
 			if ( ! isset( $options[ $option_key ] ) ) {
@@ -143,6 +185,9 @@ class WooCommerce_Products {
 		$variation      = \wc_get_product( $variation->ID );
 
 		foreach ( $custom_options as $option_key => $option_config ) {
+			if ( isset( $option_config['product_types'] ) && ! in_array( $variation->get_type(), $option_config['product_types'], true ) ) {
+				continue;
+			}
 			$meta_key = $option_config['id'];
 			?>
 			<label class="tips" data-tip="<?php echo esc_attr( $option_config['description'] ); ?>">
@@ -154,6 +199,73 @@ class WooCommerce_Products {
 				/>
 			</label>
 			<?php
+		}
+	}
+
+	/**
+	 * Add custom pricing options to the Product Data panel.
+	 *
+	 * @param array $options Keyed array of product pricing options.
+	 *
+	 * @return array
+	 */
+	public static function show_custom_product_pricing_options( $options ) {
+		$product = \wc_get_product( get_the_ID() );
+		if ( ! $product ) {
+			return $options;
+		}
+
+		$custom_options = self::get_custom_product_pricing_options();
+		foreach ( $custom_options as $option_key => $option_config ) {
+			$product_type   = $product->get_type();
+			$is_new_product = $product_type === 'simple' && $product->get_status() === 'auto-draft' && ! $product->get_date_created() && ! $product->get_date_modified();
+			if ( isset( $option_config['product_types'] ) && ! $is_new_product && ! in_array( $product_type, $option_config['product_types'], true ) ) {
+				continue;
+			}
+			$option_type = $option_config['type'];
+			if ( $option_type === 'select' && isset( $option_config['options'] ) ) {
+				\woocommerce_wp_select( $option_config );
+			}
+			if ( $option_type === 'number' || $option_type === 'text' ) {
+				\woocommerce_wp_text_input( $option_config );
+			}
+		}
+	}
+
+	/**
+	 * Add custom pricing options to product variations.
+	 *
+	 * @param int     $loop The index of the variation within its parent product.
+	 * @param array   $variation_data The variation data.
+	 * @param WP_Post $variation The variation's post object.
+	 */
+	public static function show_custom_variation_pricing_options( $loop, $variation_data, $variation ) {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return;
+		}
+
+
+		$custom_options = self::get_custom_product_pricing_options();
+		$variation      = \wc_get_product( $variation->ID );
+		foreach ( $custom_options as $option_key => $option_config ) {
+			if ( isset( $option_config['product_types'] ) && ! in_array( $variation->get_type(), $option_config['product_types'], true ) ) {
+				continue;
+			}
+			$option_id             = $option_config['id'];
+			$option_type           = $option_config['type'];
+			$option_config['value'] = isset( $variation_data[ $option_id ][0] ) ? $variation_data[ $option_id ][0] : null;
+			$option_config['id']    = $option_id . '_' . $loop;
+			$option_config['name']  = $option_id . '[' . $loop . ']';
+
+			// Add form-row class for variations.
+			$option_config['wrapper_class'] = isset( $option_config['wrapper_class'] ) ? $option_config['wrapper_class'] . ' form-row' : 'form-row';
+
+			if ( $option_type === 'select' && isset( $option_config['options'] ) ) {
+				\woocommerce_wp_select( $option_config );
+			}
+			if ( $option_type === 'number' || $option_type === 'text' ) {
+				\woocommerce_wp_text_input( $option_config );
+			}
 		}
 	}
 
@@ -172,10 +284,21 @@ class WooCommerce_Products {
 			return;
 		}
 
-		$custom_options = self::get_custom_options();
+		$custom_options = array_merge( self::get_custom_options(), self::get_custom_product_pricing_options() );
 		foreach ( $custom_options as $option_key => $option_config ) {
-			$meta_key = $option_config['id'];
-			$option_value = isset( $_POST[ $meta_key ] ) ? \wc_bool_to_string( true ) : \wc_bool_to_string( false ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( isset( $option_config['product_types'] ) && ! in_array( $product->get_type(), $option_config['product_types'], true ) ) {
+				continue;
+			}
+			$meta_key   = $option_config['id'];
+			$value_type = $option_config['type'];
+			$option_value = null;
+			if ( $value_type === 'boolean' ) {
+				$option_value = isset( $_POST[ $meta_key ] ) ? \wc_bool_to_string( true ) : \wc_bool_to_string( false ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			} elseif ( $value_type === 'number' ) {
+				$option_value = isset( $_POST[ $meta_key ] ) ? intval( $_POST[ $meta_key ] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			} else {
+				$option_value = isset( $_POST[ $meta_key ] ) ? sanitize_text_field( $_POST[ $meta_key ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			}
 			$product->update_meta_data( $option_config['id'], $option_value );
 		}
 
@@ -199,11 +322,22 @@ class WooCommerce_Products {
 			return;
 		}
 
-		$custom_options = self::get_custom_options();
+		$custom_options = array_merge( self::get_custom_options(), self::get_custom_product_pricing_options() );
 		foreach ( $custom_options as $option_key => $option_config ) {
-			$meta_key = $option_config['id'];
-			$option_value = isset( $_POST[ $meta_key ] ) ? \wc_bool_to_string( true ) : \wc_bool_to_string( false ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$variation->update_meta_data( $option_config['id'], $option_value );
+			if ( isset( $option_config['product_types'] ) && ! in_array( $variation->get_type(), $option_config['product_types'], true ) ) {
+				continue;
+			}
+			$meta_key   = $option_config['id'];
+			$value_type = $option_config['type'];
+			$option_value = null;
+			if ( $value_type === 'boolean' ) {
+				$option_value = isset( $_POST[ $meta_key ][ $i ] ) && ( $_POST[ $meta_key ][ $i ] === 'yes' || $_POST[ $meta_key ][ $i ] === 'on' ) ? \wc_bool_to_string( true ) : \wc_bool_to_string( false ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			} elseif ( $value_type === 'number' ) {
+				$option_value = isset( $_POST[ $meta_key ][ $i ] ) ? intval( $_POST[ $meta_key ][ $i ] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			} else {
+				$option_value = isset( $_POST[ $meta_key ][ $i ] ) ? sanitize_text_field( $_POST[ $meta_key ][ $i ] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			}
+			$variation->update_meta_data( $meta_key, $option_value );
 		}
 
 		// Save the meta on WC<3.8.

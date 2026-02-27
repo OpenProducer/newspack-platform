@@ -1,3 +1,15 @@
+# [4.24.0](https://github.com/Automattic/newspack-blocks/compare/v4.23.0...v4.24.0) (2026-02-02)
+
+
+### Bug Fixes
+
+* force alpha release ([7e6ace4](https://github.com/Automattic/newspack-blocks/commit/7e6ace4c8ae429c93556da173ef30a4c2f3cbd64))
+
+
+### Features
+
+* add prompt_title to the modal checkout data events ([#2271](https://github.com/Automattic/newspack-blocks/issues/2271)) ([238c7e9](https://github.com/Automattic/newspack-blocks/commit/238c7e931e7168ab3d0755ad73702746418d706a))
+
 # [4.23.0](https://github.com/Automattic/newspack-blocks/compare/v4.22.0...v4.23.0) (2026-01-19)
 
 

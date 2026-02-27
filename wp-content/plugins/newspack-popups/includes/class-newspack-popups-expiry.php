@@ -17,12 +17,40 @@ final class Newspack_Popups_Expiry {
 	const CRON_HOOK = 'newspack_popups_check_expiry';
 
 	/**
+	 * Option name to track whether the migration from daily to hourly has been completed.
+	 */
+	const HOURLY_MIGRATION_OPTION = 'newspack_popups_expiry_migrated_to_hourly';
+
+	/**
 	 * Init Newspack Popups Expiry.
 	 */
 	public static function init() {
 		add_action( 'transition_post_status', [ __CLASS__, 'transition_post_status' ], 10, 3 );
+		add_action( 'init', [ __CLASS__, 'maybe_migrate_to_hourly' ] );
 		add_action( 'init', [ __CLASS__, 'register_recurring_event' ] );
 		add_action( self::CRON_HOOK, [ __CLASS__, 'revert_expired_to_draft' ] );
+	}
+
+	/**
+	 * Migrate from daily to hourly expiry checks. Runs once.
+	 *
+	 * @return void
+	 */
+	public static function maybe_migrate_to_hourly() {
+		if ( get_option( self::HOURLY_MIGRATION_OPTION ) ) {
+			return;
+		}
+
+		// Set the migration flag immediately to prevent race conditions.
+		update_option( self::HOURLY_MIGRATION_OPTION, true );
+
+		// Remove any existing daily WP Cron event.
+		wp_clear_scheduled_hook( self::CRON_HOOK );
+
+		// Remove any existing daily Action Scheduler event.
+		if ( function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( self::CRON_HOOK );
+		}
 	}
 
 	/**
@@ -39,7 +67,7 @@ final class Newspack_Popups_Expiry {
 				add_action( 'action_scheduler_ensure_recurring_actions', [ __CLASS__, 'register_check_expiry_as_event' ] );
 			}
 		} elseif ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-			wp_schedule_event( strtotime( 'tomorrow' ), 'daily', self::CRON_HOOK );
+			wp_schedule_event( time(), 'hourly', self::CRON_HOOK );
 		}
 	}
 
@@ -52,8 +80,8 @@ final class Newspack_Popups_Expiry {
 		if ( false === wp_cache_get( 'newspack_popups_recurring_action_scheduled' ) ) {
 			if ( ! as_has_scheduled_action( self::CRON_HOOK ) ) {
 				as_schedule_recurring_action(
-					strtotime( 'tomorrow' ) + 60, // plus 60 to avoid race conditions.
-					DAY_IN_SECONDS,
+					time() + 60, // plus 60 to avoid race conditions.
+					HOUR_IN_SECONDS,
 					self::CRON_HOOK
 				);
 			}

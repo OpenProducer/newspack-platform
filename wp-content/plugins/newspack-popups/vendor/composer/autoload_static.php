@@ -7,14 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInit255377624e345cb4a574b037575b1281
 {
     public static $prefixLengthsPsr4 = array (
-        'D' => 
+        'D' =>
         array (
             'DrewM\\MailChimp\\' => 16,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'DrewM\\MailChimp\\' => 
+        'DrewM\\MailChimp\\' =>
         array (
             0 => __DIR__ . '/..' . '/drewm/mailchimp-api/src',
         ),

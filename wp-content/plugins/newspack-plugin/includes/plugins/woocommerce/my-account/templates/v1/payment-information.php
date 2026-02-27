@@ -2,8 +2,9 @@
 /**
  * My Account Payment Information page. Replaces both "Payment Methods" and "Addresses" pages.
  *
- * @package Newspack
- * @version 8.7.0
+ * @author   Newspack
+ * @category WooCommerce Subscriptions/Templates
+ * @package  Newspack
  */
 
 namespace Newspack;
@@ -105,9 +106,9 @@ $types         = \wc_get_account_payment_methods_types();
 									ksort( $method['actions'] );
 									?>
 									<div class="newspack-ui__dropdown">
-										<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
+										<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__button--small">
 											<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
-											<span class="screen-reader-text">More</span>
+											<span class="screen-reader-text"><?php \esc_html_e( 'More', 'newspack-plugin' ); ?></span>
 										</button>
 										<div class="newspack-ui__dropdown__content">
 											<ul>
@@ -206,9 +207,9 @@ $types         = \wc_get_account_payment_methods_types();
 							<span class="newspack-ui__badge newspack-ui__badge--secondary"><?php echo \esc_html( $address_label ); ?></span>
 						</div>
 						<div class="newspack-ui__dropdown">
-							<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
+							<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__button--small">
 								<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
-								<span class="screen-reader-text">More</span>
+								<span class="screen-reader-text"><?php \esc_html_e( 'More', 'newspack-plugin' ); ?></span>
 							</button>
 							<div class="newspack-ui__dropdown__content">
 								<ul>

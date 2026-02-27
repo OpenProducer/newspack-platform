@@ -19,39 +19,75 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle;
 
 class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collection
 {
+    /**
+     * Unspecified.
+     */
+    public const PLAN_TYPE_PLAN_TYPE_UNSPECIFIED = 'PLAN_TYPE_UNSPECIFIED';
+    /**
+     * Revenue model is Subscription.
+     */
+    public const PLAN_TYPE_SUBSCRIPTION = 'SUBSCRIPTION';
+    /**
+     * Revenue model is Recurring contribution.
+     */
+    public const PLAN_TYPE_RECURRING_CONTRIBUTIONS = 'RECURRING_CONTRIBUTIONS';
+    /**
+     * Revenue model is one time contribution.
+     */
+    public const PLAN_TYPE_ONE_TIME_CONTRIBUTION = 'ONE_TIME_CONTRIBUTION';
     protected $collection_key = 'planEntitlements';
     /**
+     * The resource name of the entitlementplan. Entitlementplans names have the
+     * form `publications/{publication_id}/readers/{user_id}/entitlementplans/{pla
+     * n_id}`.
+     *
      * @var string
      */
     public $name;
     protected $planEntitlementsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PlanEntitlement::class;
     protected $planEntitlementsDataType = 'array';
     /**
+     * Unique id for the plan shared externally.
+     *
      * @var string
      */
     public $planId;
     /**
+     * Indicates the type of revenue model associated with this plan.
+     *
      * @var string
      */
     public $planType;
     /**
+     * Unique id for the publication within RRM.
+     *
      * @var string
      */
     public $publicationId;
     protected $purchaseInfoType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PurchaseInfo::class;
     protected $purchaseInfoDataType = '';
     /**
+     * Unique id for reader shared externally. This field is to replace user_id
+     * for better name.
+     *
      * @var string
      */
     public $readerId;
     protected $recurringPlanDetailsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurringPlanDetails::class;
     protected $recurringPlanDetailsDataType = '';
     /**
+     * Unique id for the user shared externally.
+     *
+     * @deprecated
      * @var string
      */
     public $userId;
     /**
-     * @param string
+     * The resource name of the entitlementplan. Entitlementplans names have the
+     * form `publications/{publication_id}/readers/{user_id}/entitlementplans/{pla
+     * n_id}`.
+     *
+     * @param string $name
      */
     public function setName($name)
     {
@@ -65,7 +101,9 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
         return $this->name;
     }
     /**
-     * @param PlanEntitlement[]
+     * Entitlements granted under the given plan for the user.
+     *
+     * @param PlanEntitlement[] $planEntitlements
      */
     public function setPlanEntitlements($planEntitlements)
     {
@@ -79,7 +117,9 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
         return $this->planEntitlements;
     }
     /**
-     * @param string
+     * Unique id for the plan shared externally.
+     *
+     * @param string $planId
      */
     public function setPlanId($planId)
     {
@@ -93,21 +133,28 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
         return $this->planId;
     }
     /**
-     * @param string
+     * Indicates the type of revenue model associated with this plan.
+     *
+     * Accepted values: PLAN_TYPE_UNSPECIFIED, SUBSCRIPTION,
+     * RECURRING_CONTRIBUTIONS, ONE_TIME_CONTRIBUTION
+     *
+     * @param self::PLAN_TYPE_* $planType
      */
     public function setPlanType($planType)
     {
         $this->planType = $planType;
     }
     /**
-     * @return string
+     * @return self::PLAN_TYPE_*
      */
     public function getPlanType()
     {
         return $this->planType;
     }
     /**
-     * @param string
+     * Unique id for the publication within RRM.
+     *
+     * @param string $publicationId
      */
     public function setPublicationId($publicationId)
     {
@@ -121,7 +168,11 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
         return $this->publicationId;
     }
     /**
-     * @param PurchaseInfo
+     * Contains details about the purchase of the given entitlement plan. This
+     * info would be filled on a best effort basis and might not be available for
+     * all sources.
+     *
+     * @param PurchaseInfo $purchaseInfo
      */
     public function setPurchaseInfo(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PurchaseInfo $purchaseInfo)
     {
@@ -135,7 +186,10 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
         return $this->purchaseInfo;
     }
     /**
-     * @param string
+     * Unique id for reader shared externally. This field is to replace user_id
+     * for better name.
+     *
+     * @param string $readerId
      */
     public function setReaderId($readerId)
     {
@@ -149,7 +203,11 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
         return $this->readerId;
     }
     /**
-     * @param RecurringPlanDetails
+     * Contains plan details if plan type is SUBSCRIPTION or
+     * RECURRING_CONTRIBUTION. This will be set to the default value while the
+     * subscription is initially being activated.
+     *
+     * @param RecurringPlanDetails $recurringPlanDetails
      */
     public function setRecurringPlanDetails(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurringPlanDetails $recurringPlanDetails)
     {
@@ -163,13 +221,17 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
         return $this->recurringPlanDetails;
     }
     /**
-     * @param string
+     * Unique id for the user shared externally.
+     *
+     * @deprecated
+     * @param string $userId
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
     }
     /**
+     * @deprecated
      * @return string
      */
     public function getUserId()

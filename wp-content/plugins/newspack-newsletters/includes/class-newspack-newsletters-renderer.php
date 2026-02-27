@@ -167,11 +167,13 @@ final class Newspack_Newsletters_Renderer {
 			'facebook'  => '#1977f2',
 			'instagram' => '#f00075',
 			'linkedin'  => '#0577b5',
+			'mastodon'  => '#6364ff',
 			'threads'   => '#000000',
 			'tiktok'    => '#000000',
 			'tumblr'    => '#011835',
 			'twitter'   => '#21a1f3',
 			'x'         => '#000000',
+			'whatsapp'  => '#25d366',
 			'wordpress' => '#3499cd',
 			'youtube'   => '#ff0100',
 		];
@@ -498,6 +500,344 @@ final class Newspack_Newsletters_Renderer {
 	}
 
 	/**
+	 * Get Remote Data Blocks context from a container block.
+	 *
+	 * @param array $block The block array.
+	 * @return array The remote data context or empty array if not found.
+	 */
+	private static function get_rdb_context( $block ) {
+		// Remote data is stored in the block's remoteData attribute.
+		if ( isset( $block['attrs']['remoteData'] ) ) {
+			return $block['attrs']['remoteData'];
+		}
+		return [];
+	}
+
+	/**
+	 * Expand template blocks for multiple query results.
+	 * Creates a copy of inner blocks for each result with the appropriate index.
+	 *
+	 * Heavily inspired by new RDB preview rendering.  See changes to
+	 * src/block-editor/binding-sources/remote-data-binding.ts at
+	 * https://github.com/Automattic/remote-data-blocks/commit/a4b9249e248140c741e987f949b215be5edabf1d
+	 *
+	 * @param array $inner_blocks The inner blocks to clone.
+	 * @param array $results      The query results.
+	 * @param array $remote_data  The full remote data context.
+	 * @return array Expanded array of blocks with indices set.
+	 */
+	private static function expand_rdb_template_blocks( $inner_blocks, $results, $remote_data ) {
+		$expanded_blocks = [];
+
+		foreach ( $results as $index => $result ) {
+			$source_args = [
+				'block'            => $remote_data['blockName'] ?? '',
+				'enabledOverrides' => $remote_data['enabledOverrides'] ?? [],
+				'index'            => $index,
+				'queryKey'         => $remote_data['queryKey'] ?? null,
+				'queryInputs'      => $remote_data['queryInputs'] ?? null,
+			];
+
+			$cloned_blocks = self::clone_blocks_with_index( $inner_blocks, $source_args );
+			$expanded_blocks = array_merge( $expanded_blocks, $cloned_blocks );
+		}
+
+		return $expanded_blocks;
+	}
+
+	/**
+	 * Deep clone blocks and merge source args into all binding configurations.
+	 *
+	 * @param array $blocks      The blocks to clone.
+	 * @param array $source_args The source args to merge (including index).
+	 * @return array Cloned blocks with updated binding args.
+	 */
+	private static function clone_blocks_with_index( $blocks, $source_args ) {
+		$cloned = [];
+
+		foreach ( $blocks as $block ) {
+			$cloned_block = $block;
+
+			// Update bindings in the block's attributes metadata.
+			if ( isset( $cloned_block['attrs']['metadata']['bindings'] ) ) {
+				foreach ( $cloned_block['attrs']['metadata']['bindings'] as $target => $binding ) {
+					if ( isset( $binding['source'] ) && 'remote-data/binding' === $binding['source'] ) {
+						$cloned_block['attrs']['metadata']['bindings'][ $target ]['args'] = array_merge(
+							$binding['args'] ?? [],
+							$source_args
+						);
+					}
+				}
+			}
+
+			// Recursively process inner blocks.
+			if ( ! empty( $cloned_block['innerBlocks'] ) ) {
+				$cloned_block['innerBlocks'] = self::clone_blocks_with_index( $cloned_block['innerBlocks'], $source_args );
+			}
+
+			$cloned[] = $cloned_block;
+		}
+
+		return $cloned;
+	}
+
+	/**
+	 * Resolve Remote Data Blocks bindings for a block and its children.
+	 * Updates innerHTML with resolved values.
+	 *
+	 * @param array $block       The block to resolve.
+	 * @param array $remote_data The remote data context.
+	 * @return array The block with resolved bindings and updated innerHTML.
+	 */
+	private static function resolve_rdb_block_bindings( $block, $remote_data ) {
+		// Check if RDB's BlockBindings class is available.
+		if ( ! class_exists( 'RemoteDataBlocks\Editor\DataBinding\BlockBindings' ) ) {
+			return $block;
+		}
+
+		$resolved_block = $block;
+
+		// Check if block has bindings.
+		if ( isset( $resolved_block['attrs']['metadata']['bindings'] ) ) {
+			$resolved_attrs = [];
+
+			// Build a block array with injected context for BlockBindings::get_value().
+			$block_with_context = [
+				'context'    => [
+					'remote-data-blocks/remoteData' => $remote_data,
+				],
+				'attributes' => $resolved_block['attrs'],
+				'name'       => $resolved_block['blockName'],
+			];
+
+			foreach ( $resolved_block['attrs']['metadata']['bindings'] as $target => $binding ) {
+				if ( isset( $binding['source'] ) && 'remote-data/binding' === $binding['source'] ) {
+					$source_args = $binding['args'] ?? [];
+					$value = \RemoteDataBlocks\Editor\DataBinding\BlockBindings::get_value(
+						$source_args,
+						$block_with_context,
+						$target
+					);
+
+					if ( null !== $value ) {
+						$resolved_attrs[ $target ] = $value;
+					}
+				}
+			}
+
+			// Persist resolved values to block attrs and update innerHTML where needed.
+			if ( ! empty( $resolved_attrs ) ) {
+				if ( ! isset( $resolved_block['attrs'] ) || ! is_array( $resolved_block['attrs'] ) ) {
+					$resolved_block['attrs'] = [];
+				}
+				foreach ( $resolved_attrs as $attr_key => $attr_value ) {
+					$resolved_block['attrs'][ $attr_key ] = $attr_value;
+				}
+				$resolved_block = self::update_block_inner_html( $resolved_block, $resolved_attrs );
+			}
+		}
+
+		// Recursively resolve inner blocks.
+		if ( ! empty( $resolved_block['innerBlocks'] ) ) {
+			$resolved_inner_blocks = [];
+			foreach ( $resolved_block['innerBlocks'] as $inner_block ) {
+				$resolved_inner_blocks[] = self::resolve_rdb_block_bindings( $inner_block, $remote_data );
+			}
+			$resolved_block['innerBlocks'] = $resolved_inner_blocks;
+		}
+
+		return $resolved_block;
+	}
+
+	/**
+	 * Update block innerHTML based on resolved attribute values.
+	 *
+	 * @param array $block          The block to update.
+	 * @param array $resolved_attrs The resolved attribute values.
+	 * @return array The block with updated innerHTML.
+	 */
+	private static function update_block_inner_html( $block, $resolved_attrs ) {
+		$block_name = $block['blockName'];
+		$inner_html = $block['innerHTML'] ?? '';
+
+		switch ( $block_name ) {
+			case 'core/paragraph':
+				if ( isset( $resolved_attrs['content'] ) ) {
+					$inner_html = self::reconstruct_paragraph_html( $inner_html, $resolved_attrs['content'] );
+				}
+				break;
+
+			case 'core/heading':
+				if ( isset( $resolved_attrs['content'] ) ) {
+					$level = $block['attrs']['level'] ?? 2;
+					$inner_html = self::reconstruct_heading_html( $inner_html, $resolved_attrs['content'], $level );
+				}
+				break;
+
+			case 'core/image':
+				if ( isset( $resolved_attrs['url'] ) ) {
+					$inner_html = self::update_src_in_html( $inner_html, $resolved_attrs['url'] );
+				}
+				if ( isset( $resolved_attrs['alt'] ) ) {
+					$inner_html = self::update_alt_in_html( $inner_html, $resolved_attrs['alt'] );
+				}
+				break;
+
+			case 'core/button':
+				if ( isset( $resolved_attrs['url'] ) ) {
+					$inner_html = self::update_href_in_html( $inner_html, $resolved_attrs['url'] );
+				}
+				if ( isset( $resolved_attrs['text'] ) ) {
+					$inner_html = self::update_link_text_in_html( $inner_html, $resolved_attrs['text'] );
+				}
+				break;
+		}
+
+		$block['innerHTML'] = $inner_html;
+
+		// Also update innerContent to match.
+		if ( isset( $block['innerContent'] ) && is_array( $block['innerContent'] ) ) {
+			// For blocks without inner blocks, innerContent is typically a single-element array.
+			if ( count( $block['innerContent'] ) === 1 && null !== $block['innerContent'][0] ) {
+				$block['innerContent'][0] = $inner_html;
+			}
+		}
+
+		return $block;
+	}
+
+	/**
+	 * Reconstruct paragraph HTML with new content.
+	 *
+	 * @param string $original_html The original innerHTML.
+	 * @param string $content       The new content.
+	 * @return string The reconstructed HTML.
+	 */
+	private static function reconstruct_paragraph_html( $original_html, $content ) {
+		$clean_content = self::cleanup_rdb_html( $content );
+
+		// Try to preserve existing attributes by replacing content within <p> tags.
+		if ( preg_match( '/<p([^>]*)>.*<\/p>/is', $original_html, $matches ) ) {
+			return '<p' . $matches[1] . '>' . $clean_content . '</p>';
+		}
+		// Fallback: create simple paragraph.
+		return '<p>' . $clean_content . '</p>';
+	}
+
+	/**
+	 * Reconstruct heading HTML with new content.
+	 *
+	 * @param string $original_html The original innerHTML.
+	 * @param string $content       The new content.
+	 * @param int    $level         The heading level.
+	 * @return string The reconstructed HTML.
+	 */
+	private static function reconstruct_heading_html( $original_html, $content, $level ) {
+		$clean_content = self::cleanup_rdb_html( $content );
+		$tag = 'h' . intval( $level );
+		// Try to preserve existing attributes.
+		if ( preg_match( '/<' . $tag . '([^>]*)>.*<\/' . $tag . '>/is', $original_html, $matches ) ) {
+			return '<' . $tag . $matches[1] . '>' . $clean_content . '</' . $tag . '>';
+		}
+		// Fallback: create simple heading.
+		return '<' . $tag . '>' . $clean_content . '</' . $tag . '>';
+	}
+
+	/**
+	 * Update src attribute in HTML (for images).
+	 *
+	 * @param string $html The original HTML.
+	 * @param string $url  The new URL.
+	 * @return string The updated HTML.
+	 */
+	private static function update_src_in_html( $html, $url ) {
+		// Replace src attribute value.
+		return preg_replace_callback(
+			'/src="[^"]*"/',
+			function ( $matches ) use ( $url ) {
+				return 'src="' . esc_url( $url ) . '"';
+			},
+			$html
+		);
+	}
+
+	/**
+	 * Update alt attribute in HTML (for images).
+	 *
+	 * @param string $html The original HTML.
+	 * @param string $alt  The new alt text.
+	 * @return string The updated HTML.
+	 */
+	private static function update_alt_in_html( $html, $alt ) {
+		// Replace alt attribute value.
+		if ( preg_match( '/alt="[^"]*"/', $html ) ) {
+			return preg_replace_callback(
+				'/alt="[^"]*"/',
+				function ( $matches ) use ( $alt ) {
+					return 'alt="' . esc_attr( $alt ) . '"';
+				},
+				$html
+			);
+		}
+
+		// Add alt if not present.
+		return preg_replace_callback(
+			'/<img/',
+			function ( $matches ) use ( $alt ) {
+				return '<img alt="' . esc_attr( $alt ) . '"';
+			},
+			$html
+		);
+	}
+
+	/**
+	 * Update href attribute in HTML (for links/buttons).
+	 *
+	 * @param string $html The original HTML.
+	 * @param string $href The new href value.
+	 * @return string The updated HTML.
+	 */
+	private static function update_href_in_html( $html, $href ) {
+		return preg_replace_callback(
+			'/href="[^"]*"/',
+			function ( $matches ) use ( $href ) {
+				return 'href="' . esc_url( $href ) . '"';
+			},
+			$html
+		);
+	}
+
+	/**
+	 * Update link text in HTML.
+	 *
+	 * @param string $html The original HTML.
+	 * @param string $text The new link text.
+	 * @return string The updated HTML.
+	 */
+	private static function update_link_text_in_html( $html, $text ) {
+		return preg_replace_callback(
+			'/(<a[^>]*>)(.*?)(<\/a>)/s',
+			function ( $matches ) use ( $text ) {
+				return $matches[1] . wp_kses_post( $text ) . $matches[3];
+			},
+			$html
+		);
+	}
+
+	/**
+	 * RDB-specific HTML fixes.
+	 *
+	 * @param string $content Content from block binding.
+	 * @return string Content with RDB-specific fixes applied.
+	 */
+	private static function cleanup_rdb_html( $content ) {
+		if ( preg_match( '/^(.*<span class="rdb-block-label">.*<\/span>)(.*)$/is', $content, $matches ) ) {
+			$content = $matches[1] . ': ' . $matches[2];
+		}
+		return wp_kses_post( $content );
+	}
+
+	/**
 	 * Convert a Gutenberg block to an MJML component.
 	 * MJML component will be put in an mj-column in an mj-section for consistent layout,
 	 * unless it's a group or a columns block.
@@ -820,16 +1160,17 @@ final class Newspack_Newsletters_Renderer {
 					$dom = new DomDocument();
 					libxml_use_internal_errors( true );
 					$dom->loadHTML( htmlspecialchars_decode( htmlentities( mb_convert_encoding( $button_block['innerHTML'], 'UTF-8', get_bloginfo( 'charset' ) ) ) ) );
-					$xpath         = new DOMXpath( $dom );
-					$anchor        = $xpath->query( '//a' )[0];
-					$attrs         = self::process_attributes( $button_block['attrs'] );
-					$text          = $anchor->textContent; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-					$border_radius = isset( $attrs['borderRadius'] ) ? $attrs['borderRadius'] : '999px';
-					$is_outlined   = isset( $attrs['className'] ) && 'is-style-outline' == $attrs['className'];
+					$xpath  = new DOMXpath( $dom );
+					$anchor = $xpath->query( '//a' )[0];
 
 					if ( ! $anchor ) {
 						break;
 					}
+
+					$attrs         = self::process_attributes( $button_block['attrs'] );
+					$text          = $anchor->textContent; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					$border_radius = isset( $attrs['borderRadius'] ) ? $attrs['borderRadius'] : '999px';
+					$is_outlined   = isset( $attrs['className'] ) && 'is-style-outline' == $attrs['className'];
 
 					$default_button_attrs = array(
 						'align'         => $alignment,
@@ -1239,6 +1580,12 @@ final class Newspack_Newsletters_Renderer {
 
 			/**
 			 * Remote Data Blocks.
+			 *
+			 * These blocks use WordPress Block Bindings API--values are
+			 * resolved at render time, not persisted to post content.
+			 *
+			 * Following recent changes, binding values are not persisted to
+			 * post content; we resolve using RDB's BlockBindings methods.
 			 */
 			case 'remote-data-blocks/foundation-event':
 			case 'remote-data-blocks/foundation-events':
@@ -1247,8 +1594,47 @@ final class Newspack_Newsletters_Renderer {
 			case 'remote-data-blocks/foundation-movie':
 			case 'remote-data-blocks/foundation-movies':
 			case 'remote-data-blocks/template':
-				foreach ( $inner_blocks as $block ) {
-					$markup .= self::render_mjml_component( $block, false, false, $default_attrs );
+				// Existing (broken) handling if no RDB support available.
+				if ( ! class_exists( 'RemoteDataBlocks\Editor\DataBinding\BlockBindings' ) ) {
+					$markup = '';
+					foreach ( $inner_blocks as $block ) {
+						$markup .= self::render_mjml_component( $block, $is_in_column, $is_in_group, $default_attrs );
+					}
+					$block_mjml_markup = $markup;
+					break;
+				}
+
+				// Attempt to propagate RDB context to inner blocks.
+				$remote_data = self::get_rdb_context( $block );
+				$results = $remote_data['results'] ?? [];
+
+				// Expand for multiple results, or add index 0 for single result.
+				if ( count( $results ) > 1 ) {
+					$blocks_to_render = self::expand_rdb_template_blocks( $inner_blocks, $results, $remote_data );
+				} else {
+					// Single result or empty - add index 0.
+					$source_args = [
+						'block'            => $remote_data['blockName'] ?? '',
+						'enabledOverrides' => $remote_data['enabledOverrides'] ?? [],
+						'index'            => 0,
+						'queryKey'         => $remote_data['queryKey'] ?? null,
+						'queryInputs'      => $remote_data['queryInputs'] ?? null,
+					];
+					$blocks_to_render = self::clone_blocks_with_index( $inner_blocks, $source_args );
+				}
+
+				// Resolve bindings and update innerHTML.
+				$resolved_blocks = array_map(
+					function ( $b ) use ( $remote_data ) {
+						return self::resolve_rdb_block_bindings( $b, $remote_data );
+					},
+					$blocks_to_render
+				);
+
+				// Render through normal MJML pipeline.
+				$markup = '';
+				foreach ( $resolved_blocks as $resolved_block ) {
+					$markup .= self::render_mjml_component( $resolved_block, $is_in_column, $is_in_group, $default_attrs );
 				}
 				$block_mjml_markup = $markup;
 				break;
@@ -1257,11 +1643,14 @@ final class Newspack_Newsletters_Renderer {
 
 		$is_posts_inserter_block = 'newspack-newsletters/posts-inserter' == $block_name;
 		$is_grouped_block        = in_array( $block_name, [ 'core/group', 'core/list', 'core/list-item', 'core/quote' ], true );
+		// Remote Data Blocks require special handling to resolve bindings.
+		$is_rdb_block = strpos( $block_name, 'remote-data-blocks/' ) === 0;
 
 		if (
 			! $is_in_column &&
 			! $is_in_list_or_quote &&
 			! $is_grouped_block &&
+			! $is_rdb_block &&
 			'core/buttons' != $block_name &&
 			'core/columns' != $block_name &&
 			'core/column' != $block_name &&
@@ -1272,7 +1661,7 @@ final class Newspack_Newsletters_Renderer {
 			$block_mjml_markup     = '<mj-column ' . self::array_to_attributes( $column_attrs ) . '>' . $block_mjml_markup . '</mj-column>';
 		}
 
-		if ( ! $is_in_column && ! $is_in_list_or_quote && ! $is_posts_inserter_block ) {
+		if ( ! $is_in_column && ! $is_in_list_or_quote && ! $is_posts_inserter_block && ! $is_rdb_block ) {
 			$block_mjml_markup = '<mj-section ' . self::array_to_attributes( $section_attrs ) . '>' . $block_mjml_markup . '</mj-section>';
 		}
 

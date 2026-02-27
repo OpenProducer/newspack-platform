@@ -6,6 +6,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 		return array(
 			'activity-panels' => true,
 			'analytics' => true,
+			'analytics-scheduled-import' => true,
 			'product-block-editor' => true,
 			'product-data-views' => false,
 			'experimental-blocks' => false,

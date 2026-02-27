@@ -68,6 +68,7 @@ function newspack_customize_logo_resize( $html ) {
 		$logo_max_width = ( $logo['width'] > 600 ) ? 600 : $logo['width'];
 
 		// Check for max height and width, default to image sizes if none set in theme
+		$max           = array();
 		$max['height'] = isset( $sizes[0]['height'] ) ? $sizes[0]['height'] : $logo['height'];
 		$max['width']  = isset( $sizes[0]['width'] ) ? $sizes[0]['width'] : $logo_max_width;
 
@@ -85,7 +86,7 @@ function newspack_customize_logo_resize( $html ) {
 				'height' => $output['short'],
 				'width'  => $output['long'],
 			);
-		// portrait
+			// portrait
 		} elseif ( $logo['width'] < $logo['height'] ) {
 			$output = newspack_logo_resize_min_max( $logo['width'], $logo['height'], $max['width'], $max['height'], $size, $min );
 			$img    = array(
@@ -157,11 +158,13 @@ add_filter( 'get_custom_logo', 'newspack_customize_logo_resize' );
  */
 function newspack_logo_resize_min_max( $short, $long, $short_max, $long_max, $percent, $min ) {
 	$ratio        = ( $long / $short );
+	$max          = array();
 	$max['long']  = ( $long_max >= $long ) ? $long : $long_max;
 	$max['short'] = ( $short_max >= ( $max['long'] / $ratio ) ) ? floor( $max['long'] / $ratio ) : $short_max;
 
 	$ppp = ( $max['short'] - $min ) / 100;
 
+	$size          = array();
 	$size['short'] = round( $min + ( $percent * $ppp ) );
 	$size['long']  = round( $size['short'] / ( $short / $long ) );
 

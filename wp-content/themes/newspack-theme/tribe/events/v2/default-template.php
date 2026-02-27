@@ -10,6 +10,7 @@
  * @link http://evnt.is/1aiy
  *
  * @version 5.0.0
+ * @package Newspack
  */
 
 use Tribe\Events\Views\V2\Template_Bootstrap;

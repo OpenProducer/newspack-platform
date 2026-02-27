@@ -8,6 +8,7 @@
 namespace Newspack\Blocks\Avatar;
 
 use Newspack;
+use Newspack\Bylines;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -75,12 +76,10 @@ final class Avatar_Block {
 
 		$image_size     = $attributes['size'] ?? 48;
 		$link_to_author = $attributes['linkToAuthorArchive'] ?? false;
-		$authors        = [];
+		$authors        = self::get_avatar_authors( $post_id );
 
-		if ( function_exists( 'get_coauthors' ) ) {
-			$authors = get_coauthors( $post_id );
-		} else {
-			$authors[] = get_userdata( get_post_field( 'post_author', $post_id ) );
+		if ( empty( $authors ) ) {
+			return '';
 		}
 
 		$wrapper_attributes = get_block_wrapper_attributes( [ 'style' => '--avatar-size: ' . esc_attr( $image_size ) . 'px;' ] );
@@ -137,13 +136,51 @@ final class Avatar_Block {
 	}
 
 	/**
+	 * Get the authors whose avatars should be displayed.
+	 *
+	 * Resolution order:
+	 * 1. Custom byline authors (if byline feature is enabled and active for this post).
+	 *    If the byline is active but contains no author shortcodes, returns empty — the
+	 *    avatar block should not render for text-only bylines like "By Staff Reporter".
+	 * 2. CoAuthors Plus authors.
+	 * 3. Default WordPress post author.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return array Author objects, or empty array if no authors to display.
+	 */
+	private static function get_avatar_authors( $post_id ) {
+		// Custom byline takes full control when active.
+		if ( class_exists( 'Newspack\Bylines' ) && Bylines::is_enabled() ) {
+			$byline_is_active = get_post_meta( $post_id, Bylines::META_KEY_ACTIVE, true );
+			if ( $byline_is_active ) {
+				$byline_authors = Bylines::get_post_byline_authors( $post_id );
+				// Return whatever the byline provides — even if empty. A text-only byline
+				// (no [Author] shortcodes) intentionally produces no avatars.
+				return ! empty( $byline_authors ) ? array_filter( $byline_authors ) : [];
+			}
+		}
+
+		// CoAuthors Plus.
+		if ( function_exists( 'get_coauthors' ) ) {
+			$coauthors = get_coauthors( $post_id );
+			if ( ! empty( $coauthors ) ) {
+				return $coauthors;
+			}
+		}
+
+		// Default WordPress author.
+		$default_author = get_userdata( get_post_field( 'post_author', $post_id ) );
+		return $default_author ? [ $default_author ] : [];
+	}
+
+	/**
 	 * This function is used to get the duotone class name from the preset value.
 	 *
 	 * @param  mixed $preset_value Duotone preset value.
 	 * @return string Constructed class name.
 	 */
 	public static function newspack_get_duotone_class_name( $preset_value ) {
-		if ( str_starts_with( $preset_value, 'var:preset|duotone|' ) ) {
+		if ( is_string( $preset_value ) && str_starts_with( $preset_value, 'var:preset|duotone|' ) ) {
 			$slug = str_replace( 'var:preset|duotone|', '', $preset_value );
 			return 'wp-duotone-' . sanitize_title( $slug );
 		}

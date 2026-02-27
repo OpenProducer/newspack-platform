@@ -428,7 +428,7 @@ class Newspack_UI {
 				<div class="newspack-ui__dropdown">
 					<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
 						<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
-						<span class="screen-reader-text">More</span>
+						<span class="screen-reader-text"><?php esc_html_e( 'More', 'newspack-plugin' ); ?></span>
 					</button>
 					<div class="newspack-ui__dropdown__content">
 						<ul>
@@ -448,7 +448,7 @@ class Newspack_UI {
 					<div class="newspack-ui__dropdown">
 						<button class="newspack-ui__dropdown__toggle newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost">
 							<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
-							<span class="screen-reader-text">More</span>
+							<span class="screen-reader-text"><?php esc_html_e( 'More', 'newspack-plugin' ); ?></span>
 						</button>
 						<div class="newspack-ui__dropdown__content">
 							<ul>
@@ -518,15 +518,17 @@ class Newspack_UI {
 				</div>
 			</div>
 			<button id="show-snackbar-example" class="newspack-ui__button newspack-ui__button--primary">Show snackbar</button>
-			<div id="snackbar-example" class="newspack-ui__snackbar newspack-ui__snackbar--top-right newspack-ui__snackbar--success">
-				This is a snackbar message
+			<div class="newspack-ui__snackbar newspack-ui__snackbar--top-right">
+				<div id="snackbar-example" class="newspack-ui__snackbar__item newspack-ui__snackbar__item--success" data-autohide="true">
+					<div class="newspack-ui__snackbar__content">This is a snackbar message</div>
+				</div>
 			</div>
 			<script>
 				( function() {
 					const snackbar = document.getElementById( 'snackbar-example' );
 					const button = document.getElementById( 'show-snackbar-example' );
 					button.addEventListener( 'click', function() {
-						snackbar.classList.add( 'active' );
+						newspackUI.notices.openNotice( snackbar, false );
 					} );
 				} )();
 			</script>
@@ -761,7 +763,7 @@ class Newspack_UI {
 			<h3>Dropdown buttons</h3>
 			<div class="newspack-ui__dropdown">
 				<button class="newspack-ui__button newspack-ui__button--secondary newspack-ui__dropdown__toggle">
-					<span>More</span>
+					<span><?php esc_html_e( 'More', 'newspack-plugin' ); ?></span>
 					<?php Newspack_UI_Icons::print_svg( 'more' ); ?>
 				</button>
 				<div class="newspack-ui__dropdown__content">

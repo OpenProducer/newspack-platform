@@ -1,15 +1,15 @@
-# Copyright (C) 2025 Automattic
+# Copyright (C) 2026 Automattic
 # This file is distributed under the same license as the Newspack Campaigns plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Campaigns 3.8.1\n"
+"Project-Id-Version: Newspack Campaigns 3.8.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-12T23:15:16+00:00\n"
+"POT-Creation-Date: 2026-01-20T14:13:59+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-popups\n"
@@ -67,12 +67,12 @@ msgstr ""
 msgid "resetting every %s"
 msgstr ""
 
-#: includes/class-newspack-popups-inserter.php:645
-#: includes/class-newspack-popups-inserter.php:944
+#: includes/class-newspack-popups-inserter.php:673
+#: includes/class-newspack-popups-inserter.php:972
 msgid "Prompts Visible"
 msgstr ""
 
-#: includes/class-newspack-popups-inserter.php:646
+#: includes/class-newspack-popups-inserter.php:674
 msgid "Prompts Hidden"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr ""
 msgid "draft"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:1126
+#: includes/class-newspack-popups-model.php:1131
 msgid "Close Pop-up"
 msgstr ""
 

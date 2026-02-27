@@ -371,21 +371,28 @@ final class Checkout_Data {
 		 */
 		$gate_post_id = null;
 		$newspack_popup_id = null;
+		$prompt_title = null;
 		if ( $order ) {
 			$gate_post_id = $order->get_meta( '_gate_post_id' );
 			$newspack_popup_id = $order->get_meta( '_newspack_popup_id' );
+			$prompt_title = $order->get_meta( '_prompt_title' );
 		} elseif ( $cart_item ) {
 			$gate_post_id = $cart_item['gate_post_id'] ?? null;
 			$newspack_popup_id = $cart_item['newspack_popup_id'] ?? null;
+			$prompt_title = $cart_item['prompt_title'] ?? null;
 		} else {
 			$gate_post_id = filter_input( INPUT_GET, 'gate_post_id', FILTER_SANITIZE_NUMBER_INT );
 			$newspack_popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
+			$prompt_title = filter_input( INPUT_GET, 'prompt_title', FILTER_SANITIZE_SPECIAL_CHARS );
 		}
 		if ( $gate_post_id ) {
 			$data['gate_post_id'] = $gate_post_id;
 		}
 		if ( $newspack_popup_id ) {
 			$data['newspack_popup_id'] = $newspack_popup_id;
+		}
+		if ( $prompt_title ) {
+			$data['prompt_title'] = $prompt_title;
 		}
 
 		/**

@@ -19,6 +19,6 @@
 <?php do_action( 'wp_body_open' ); ?>
 
 <div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#main"><?php _e( 'Skip to content', 'newspack-theme' ); ?></a>
+	<a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Skip to content', 'newspack-theme' ); ?></a>
 
 	<div id="content" class="site-content">

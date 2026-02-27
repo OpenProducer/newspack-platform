@@ -20,39 +20,58 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle;
 class Reader extends \Google\Site_Kit_Dependencies\Google\Model
 {
     /**
+     * display_name
+     *
      * @var string
      */
     public $displayName;
     /**
+     * example_address@example.com
+     *
      * @var string
      */
     public $emailAddress;
     /**
+     * last_name
+     *
      * @var string
      */
     public $familyName;
     /**
+     * first_name
+     *
      * @var string
      */
     public $givenName;
     /**
+     * determine if name and email are available due to wipeout policy.
+     *
      * @var bool
      */
     public $isReaderInfoAvailable;
     /**
+     * Identifier. The resource name of the reader. Reader names have the form
+     * `publications/{publication_id}/readers/{reader_id}`.
+     *
      * @var string
      */
     public $name;
     /**
+     * obfuscated gaia id of the reader.
+     *
      * @var string
      */
     public $readerGoogleId;
     /**
+     * Output only. Unique id for the reader shared externally.
+     *
      * @var string
      */
     public $readerId;
     /**
-     * @param string
+     * display_name
+     *
+     * @param string $displayName
      */
     public function setDisplayName($displayName)
     {
@@ -66,7 +85,9 @@ class Reader extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->displayName;
     }
     /**
-     * @param string
+     * example_address@example.com
+     *
+     * @param string $emailAddress
      */
     public function setEmailAddress($emailAddress)
     {
@@ -80,7 +101,9 @@ class Reader extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->emailAddress;
     }
     /**
-     * @param string
+     * last_name
+     *
+     * @param string $familyName
      */
     public function setFamilyName($familyName)
     {
@@ -94,7 +117,9 @@ class Reader extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->familyName;
     }
     /**
-     * @param string
+     * first_name
+     *
+     * @param string $givenName
      */
     public function setGivenName($givenName)
     {
@@ -108,7 +133,9 @@ class Reader extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->givenName;
     }
     /**
-     * @param bool
+     * determine if name and email are available due to wipeout policy.
+     *
+     * @param bool $isReaderInfoAvailable
      */
     public function setIsReaderInfoAvailable($isReaderInfoAvailable)
     {
@@ -122,7 +149,10 @@ class Reader extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->isReaderInfoAvailable;
     }
     /**
-     * @param string
+     * Identifier. The resource name of the reader. Reader names have the form
+     * `publications/{publication_id}/readers/{reader_id}`.
+     *
+     * @param string $name
      */
     public function setName($name)
     {
@@ -136,7 +166,9 @@ class Reader extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->name;
     }
     /**
-     * @param string
+     * obfuscated gaia id of the reader.
+     *
+     * @param string $readerGoogleId
      */
     public function setReaderGoogleId($readerGoogleId)
     {
@@ -150,7 +182,9 @@ class Reader extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->readerGoogleId;
     }
     /**
-     * @param string
+     * Output only. Unique id for the reader shared externally.
+     *
+     * @param string $readerId
      */
     public function setReaderId($readerId)
     {

@@ -92,7 +92,7 @@ if ( ! function_exists( 'newspack_posted_by' ) ) :
 		$byline = apply_filters( 'pre_newspack_posted_by', false );
 
 		if ( $byline ) :
-			echo $byline;
+			echo wp_kses_post( $byline );
 			return;
 		elseif ( function_exists( 'coauthors_posts_links' ) && ! empty( get_coauthors() ) ) : // phpcs:ignore PHPCompatibility.LanguageConstructs.NewEmptyNonVariable.Found
 
@@ -113,7 +113,7 @@ if ( ! function_exists( 'newspack_posted_by' ) ) :
 				<?php
 				foreach ( $authors as $author ) {
 
-					$i++;
+					++$i;
 					if ( $author_count === $i ) :
 						/* translators: separates last two names; needs a space on either side. */
 						$sep = esc_html__( ' and ', 'newspack-theme' );
@@ -265,7 +265,7 @@ if ( ! function_exists( 'newspack_comment_count' ) ) :
 	function newspack_comment_count() {
 		if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
 			echo '<span class="comments-link">';
-			echo newspack_get_icon_svg( 'comment', 16 );
+			echo wp_kses( newspack_get_icon_svg( 'comment', 16 ), newspack_sanitize_svgs() );
 
 			/* translators: %s: Name of current post. Only visible to screen readers. */
 			comments_popup_link( sprintf( __( 'Leave a comment<span class="screen-reader-text"> on %s</span>', 'newspack-theme' ), get_the_title() ) );
@@ -305,8 +305,8 @@ if ( ! function_exists( 'newspack_categories' ) ) :
 				/* translators: 1: posted in label, only visible to screen readers. 2: list of categories. */
 				'<span class="cat-links"><span class="screen-reader-text">%1$s</span>%2$s</span>',
 				esc_html__( 'Posted in', 'newspack-theme' ),
-				apply_filters( 'newspack_theme_categories', $categories_list )
-			); // WPCS: XSS OK.
+				wp_kses_post( apply_filters( 'newspack_theme_categories', $categories_list ) )
+			);
 		}
 	}
 endif;
@@ -346,8 +346,8 @@ if ( ! function_exists( 'newspack_entry_footer' ) ) :
 					/* translators: 1: posted in label, only visible to screen readers. 2: list of tags. */
 					'<span class="tags-links"><span>%1$s </span>%2$s</span>',
 					esc_html__( 'Tagged:', 'newspack-theme' ),
-					$tags_list
-				); // WPCS: XSS OK.
+					wp_kses_post( $tags_list )
+				);
 			}
 		}
 
@@ -401,7 +401,7 @@ if ( ! function_exists( 'newspack_post_thumbnail' ) ) :
 				<?php
 
 				// If using the behind or beside image styles, add the object-fit argument for AMP.
-				if ( in_array( newspack_featured_image_position(), array( 'behind', 'beside' ) ) ) :
+				if ( in_array( newspack_featured_image_position(), array( 'behind', 'beside' ), true ) ) :
 
 					the_post_thumbnail(
 						$size,

@@ -21,13 +21,17 @@ class ListOrdersResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'orders';
     /**
+     * A token to retrieve the next page of results.
+     *
      * @var string
      */
     public $nextPageToken;
     protected $ordersType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Order::class;
     protected $ordersDataType = 'array';
     /**
-     * @param string
+     * A token to retrieve the next page of results.
+     *
+     * @param string $nextPageToken
      */
     public function setNextPageToken($nextPageToken)
     {
@@ -41,7 +45,9 @@ class ListOrdersResponse extends \Google\Site_Kit_Dependencies\Google\Collection
         return $this->nextPageToken;
     }
     /**
-     * @param Order[]
+     * Orders for a given publication.
+     *
+     * @param Order[] $orders
      */
     public function setOrders($orders)
     {

@@ -18,7 +18,7 @@ function newspack_theme_yoast_init() {
 		require_once get_template_directory() . '/inc/yoast-bluesky-contact-method.php';
 		add_filter(
 			'wpseo_additional_contactmethods',
-			function( $contact_methods ) {
+			function ( $contact_methods ) {
 
 				// Bail if the Bluesky contact method is already registered.
 				foreach ( $contact_methods as $contact_method ) {

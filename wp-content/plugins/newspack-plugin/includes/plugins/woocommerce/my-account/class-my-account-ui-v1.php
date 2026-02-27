@@ -47,6 +47,8 @@ class My_Account_UI_V1 {
 		\add_action( 'woocommerce_after_save_address_validation', [ __CLASS__, 'handle_delete_address_submission' ], 10, 4 );
 		\add_filter( 'woocommerce_address_to_edit', [ __CLASS__, 'reorder_address_fields' ], PHP_INT_MAX, 2 );
 		\add_action( 'woocommerce_account_content', [ __CLASS__, 'render_content_around_shortcode' ], 0 );
+		\add_action( 'newspack_subscription_header', [ __CLASS__, 'render_subscription_header' ] );
+		\add_filter( 'woocommerce_my_subscriptions_payment_method', [ __CLASS__, 'formatted_payment_method' ], 10, 2 );
 	}
 
 	/**
@@ -168,6 +170,29 @@ class My_Account_UI_V1 {
 				return __DIR__ . '/templates/v1/form-edit-address.php';
 			case 'myaccount/my-subscriptions.php':
 				return __DIR__ . '/templates/v1/my-subscriptions.php';
+			case 'myaccount/view-subscription.php':
+				return __DIR__ . '/templates/v1/view-subscription.php';
+			case 'myaccount/subscription-details.php':
+				return __DIR__ . '/templates/v1/subscription-details.php';
+			case 'myaccount/subscription-totals-table.php':
+				return __DIR__ . '/templates/v1/subscription-totals-table.php';
+			case 'myaccount/related-orders.php':
+				return __DIR__ . '/templates/v1/related-orders.php';
+			case 'myaccount/related-subscriptions.php':
+				return __DIR__ . '/templates/v1/related-subscriptions.php';
+			case 'order/order-again.php':
+				return __DIR__ . '/templates/v1/order-again.php';
+			case 'notices/error.php':
+				// Only override error notices on My Account pages to avoid breaking checkout validation.
+				// Guard is_account_page() to avoid running before the main query.
+				if ( function_exists( 'is_account_page' ) && function_exists( 'did_action' ) && \did_action( 'wp' ) && \is_account_page() ) {
+					return __DIR__ . '/templates/v1/notices/error.php';
+				}
+				return $template;
+			case 'notices/notice.php':
+				return __DIR__ . '/templates/v1/notices/notice.php';
+			case 'notices/success.php':
+				return __DIR__ . '/templates/v1/notices/success.php';
 			default:
 				return $template;
 		}
@@ -914,6 +939,36 @@ class My_Account_UI_V1 {
 				11 // Right after the shortcode.
 			);
 		}
+	}
+
+	/**
+	 * Render subscription actions as a dropdown menu.
+	 *
+	 * @param \WC_Subscription $subscription Subscription.
+	 */
+	public static function render_subscription_header( $subscription ) {
+		if ( ! function_exists( 'is_account_page' ) || ! \is_account_page() ) {
+			return;
+		}
+		$args = [
+			'actions'      => \wcs_get_all_user_actions_for_subscription( $subscription, \get_current_user_id() ),
+			'subscription' => $subscription,
+		];
+		\load_template( __DIR__ . '/templates/v1/subscription-header.php', true, $args );
+	}
+
+	/**
+	 * Format the payment method for the subscription details table.
+	 *
+	 * @param string           $payment_method The payment method.
+	 * @param \WC_Subscription $subscription The subscription.
+	 *
+	 * @return string The formatted payment method.
+	 */
+	public static function formatted_payment_method( $payment_method, $subscription ) {
+		// Strip "via" from the payment method (case-insensitive).
+		$payment_method = str_ireplace( 'via ', '', $payment_method );
+		return $payment_method;
 	}
 }
 My_Account_UI_V1::init();
