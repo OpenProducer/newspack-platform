@@ -45,7 +45,7 @@ endif;
 ?>
 
 <div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#main"><?php _e( 'Skip to content', 'newspack-theme' ); ?></a>
+	<a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Skip to content', 'newspack-theme' ); ?></a>
 
 	<?php if ( is_active_sidebar( 'header-2' ) ) : ?>
 		<div class="header-widget above-header-widgets">
@@ -108,7 +108,7 @@ endif;
 							( false === $header_center_logo && false === $header_simplified ) ||
 							( true === $header_simplified )
 							) :
-						?>
+							?>
 							<div id="social-nav-contain">
 								<?php
 								if ( ! newspack_is_amp() ) {
@@ -140,7 +140,7 @@ endif;
 					<?php
 					// Centered logo AND NOT short header.
 					if ( true === $header_center_logo && false === $header_simplified ) :
-					?>
+						?>
 						<div id="social-nav-contain" class="desktop-only">
 							<?php
 							if ( ! newspack_is_amp() ) {
@@ -153,7 +153,7 @@ endif;
 					<?php
 					// Centered logo AND short header.
 					if ( true === $header_center_logo && true === $header_simplified ) :
-					?>
+						?>
 
 						<div class="nav-wrapper desktop-only">
 							<div id="site-navigation">
@@ -172,7 +172,7 @@ endif;
 					<?php
 					// Short header:
 					if ( true === $header_simplified && false === $header_center_logo ) :
-					?>
+						?>
 
 						<div class="nav-wrapper desktop-only">
 							<div id="site-navigation">
@@ -205,8 +205,8 @@ endif;
 
 						<?php
 							// Header is simplified OR logo is centered:
-							if ( true === $header_simplified || true === $header_center_logo ) :
-								get_template_part( 'template-parts/header/header', 'search' );
+						if ( true === $header_simplified || true === $header_center_logo ) :
+							get_template_part( 'template-parts/header/header', 'search' );
 							endif;
 						?>
 					</div><!-- .nav-wrapper -->
@@ -238,7 +238,7 @@ endif;
 			<?php
 			// Header is NOT short:
 			if ( false === $header_simplified ) :
-			?>
+				?>
 				<div class="bottom-header-contain desktop-only">
 					<div class="wrapper">
 						<div id="site-navigation">
@@ -257,14 +257,14 @@ endif;
 						?>
 					</div><!-- .wrapper -->
 				</div><!-- .bottom-header-contain -->
-			<?php
+				<?php
 			endif;
 
 			/**
 			 * Displays 'highlight' menu; created a function to reduce duplication.
 			 */
 			if ( has_nav_menu( 'highlight-menu' ) ) :
-			?>
+				?>
 				<div class="highlight-menu-contain desktop-only">
 					<div class="wrapper">
 						<nav class="highlight-menu" aria-label="<?php esc_attr_e( 'Highlight Menu', 'newspack-theme' ); ?>">
@@ -290,8 +290,8 @@ endif;
 	</header><!-- #masthead -->
 
 	<?php
-	if ( function_exists('yoast_breadcrumb') ) {
-		yoast_breadcrumb( '<div class="site-breadcrumb desktop-only"><div class="wrapper">','</div></div>' );
+	if ( function_exists( 'yoast_breadcrumb' ) ) {
+		yoast_breadcrumb( '<div class="site-breadcrumb desktop-only"><div class="wrapper">', '</div></div>' );
 	}
 	?>
 

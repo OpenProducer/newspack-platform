@@ -49,7 +49,7 @@ var wp;
   }
   function escapeAttribute(value) {
     return __unstableEscapeGreaterThan(
-      escapeQuotationMark(escapeAmpersand(value))
+      escapeLessThan(escapeQuotationMark(escapeAmpersand(value)))
     );
   }
   function escapeHTML(value) {

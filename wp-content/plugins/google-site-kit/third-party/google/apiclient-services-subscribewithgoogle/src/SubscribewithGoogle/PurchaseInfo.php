@@ -20,13 +20,17 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle;
 class PurchaseInfo extends \Google\Site_Kit_Dependencies\Google\Model
 {
     /**
+     * Latest order id of the purchase.
+     *
      * @var string
      */
     public $latestOrderId;
     protected $totalAmountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Money::class;
     protected $totalAmountDataType = '';
     /**
-     * @param string
+     * Latest order id of the purchase.
+     *
+     * @param string $latestOrderId
      */
     public function setLatestOrderId($latestOrderId)
     {
@@ -40,7 +44,9 @@ class PurchaseInfo extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->latestOrderId;
     }
     /**
-     * @param Money
+     * Represents the total amount of the purchase.
+     *
+     * @param Money $totalAmount
      */
     public function setTotalAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Money $totalAmount)
     {

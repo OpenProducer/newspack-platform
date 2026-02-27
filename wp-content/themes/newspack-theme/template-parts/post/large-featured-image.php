@@ -5,10 +5,8 @@
  * @package Newspack
  */
 
-$header_sticky = get_theme_mod( 'header_sticky', false );
-
 if ( 'behind' === newspack_featured_image_position() ) :
-?>
+	?>
 
 	<div class="featured-image-behind">
 		<?php newspack_post_thumbnail( 'newspack-featured-image-large' ); ?>

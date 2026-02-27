@@ -124,6 +124,7 @@ final class Reader_Activation {
 			 * If RAS is enabled, we assume that any user created by Woo is a reader, without a password and unverified.
 			 */
 			\add_action( 'woocommerce_created_customer', [ __CLASS__, 'add_default_reader_metadata' ] );
+			\add_action( 'woocommerce_payment_complete', [ __CLASS__, 'verify_reader_account' ] );
 		}
 	}
 
@@ -1111,12 +1112,18 @@ final class Reader_Activation {
 	/**
 	 * Whether the user is a reader.
 	 *
-	 * @param \WP_User $user   User object.
-	 * @param bool     $strict Whether to check if the user was created through reader registration. Default false.
+	 * @param \WP_User|int $user   User object or ID.
+	 * @param bool         $strict Whether to check if the user was created through reader registration. Default false.
 	 *
 	 * @return bool Whether the user is a reader.
 	 */
 	public static function is_user_reader( $user, $strict = false ) {
+		if ( ! is_a( $user, 'WP_User' ) ) {
+			$user = \get_user_by( 'id', $user );
+		}
+		if ( ! $user ) {
+			return false;
+		}
 		$is_reader = (bool) \get_user_meta( $user->ID, self::READER, true );
 		$user_data = \get_userdata( $user->ID );
 
@@ -2931,6 +2938,29 @@ final class Reader_Activation {
 		\update_user_meta( $customer_id, self::EMAIL_VERIFIED, false );
 		/** User hasn't set their own password yet. */
 		\update_user_meta( $customer_id, self::WITHOUT_PASSWORD, true );
+	}
+
+	/**
+	 * Verify unverified reader accounts after successful payment completion.
+	 *
+	 * @param int $order_id The order ID.
+	 */
+	public static function verify_reader_account( $order_id ) {
+		if ( ! self::is_enabled() ) {
+			return;
+		}
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return;
+		}
+		$customer = $order->get_user();
+		if ( ! $customer ) {
+			return;
+		}
+		$is_verified = self::is_reader_verified( $customer );
+		if ( false === $is_verified ) {
+			self::set_reader_verified( $customer );
+		}
 	}
 }
 Reader_Activation::init();

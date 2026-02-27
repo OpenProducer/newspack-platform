@@ -27,6 +27,7 @@ class Teams_For_Memberships {
 		add_filter( 'newspack_ras_metadata_keys', [ __CLASS__, 'add_teams_metadata_keys' ] );
 		add_filter( 'newspack_esp_sync_contact', [ __CLASS__, 'handle_esp_sync_contact' ] );
 		add_filter( 'newspack_my_account_disabled_pages', [ __CLASS__, 'enable_members_area_for_team_members' ] );
+		add_action( 'woocommerce_checkout_subscription_created', [ __CLASS__, 'update_team_subscription_on_resubscribe' ], 21, 2 );
 	}
 
 	/**
@@ -243,6 +244,70 @@ class Teams_For_Memberships {
 			$disabled_wc_menu_items = array_values( array_diff( $disabled_wc_menu_items, [ 'members-area' ] ) );
 		}
 		return $disabled_wc_menu_items;
+	}
+
+
+	/**
+	 * Updates related subscription data on resubscribe from expired subscription.
+	 *
+	 * This function replicates the behavior from teams but for expired subscriptions.
+	 * Teams does not handle expired subscriptions on resubscribe by default but since we force
+	 * subscriptions to expire on failed renewals, we need to handle this case.
+	 *
+	 * @param WC_Subscription $new_subscription  the new subscription object.
+	 * @param \WC_Order       $resubscribe_order the order that created a new subscription.
+	 */
+	public static function update_team_subscription_on_resubscribe( $new_subscription, $resubscribe_order ) {
+		if ( ! method_exists( '\SkyVerge\WooCommerce\Memberships\Teams\Integrations\Subscriptions', 'get_teams_from_subscription' ) ) {
+			return;
+		}
+
+		if ( ! method_exists( '\WC_Memberships_Integration_Subscriptions_User_Membership', 'set_subscription_id' ) ) {
+			return;
+		}
+
+		$new_order_id        = $resubscribe_order->get_id();
+		$new_subscription_id = $new_subscription->get_id();
+		$old_subscription_id = $new_subscription_id > 0 ? $new_subscription->get_meta( '_subscription_resubscribe' ) : 0;
+		$old_subscription    = $old_subscription_id > 0 ? wcs_get_subscription( $old_subscription_id ) : null;
+
+		if ( $old_subscription && in_array( $old_subscription->get_status(), [ 'expired' ] ) ) {
+			$team_subscriptions = new \SkyVerge\WooCommerce\Memberships\Teams\Integrations\Subscriptions();
+			$existing_teams     = $team_subscriptions->get_teams_from_subscription( $old_subscription_id );
+			if ( ! empty( $existing_teams ) ) {
+				foreach ( $existing_teams as $existing_team ) {
+					// update the team's subscription link and the order link.
+					update_post_meta( $existing_team->get_id(), '_subscription_id', $new_subscription_id );
+					update_post_meta( $existing_team->get_id(), '_order_id', $new_order_id );
+					// Update end dates for all team memberships before reactivating.
+					foreach ( $existing_team->get_user_memberships() as $user_membership ) {
+						$user_membership->set_end_date( $new_subscription->get_date( 'end' ) );
+						// set the membership's subscription ID.
+						$subscription_membership = new \WC_Memberships_Integration_Subscriptions_User_Membership( $user_membership->post );
+						$subscription_membership->set_subscription_id( $new_subscription->get_id() );
+						// bail if not associated with an order.
+						if ( ! $resubscribe_order instanceof \WC_Order ) {
+							continue;
+						}
+						$note    = '';
+						$product = $existing_team->get_product();
+						$subscription_membership->set_order_id( $new_order_id );
+						if ( $product instanceof \WC_Product ) {
+							$subscription_membership->set_product_id( $product->get_id() );
+							$note = sprintf(
+								/* translators: Placeholders: %1$s - subscription product name, %2%s - order number */
+								__( 'Membership re-activated due to subscription re-purchase (%1$s, Order %2$s).', 'newspack-plugin' ),
+								$product->get_title(),
+								'<a href="' . esc_url( admin_url( 'post.php?post=' . $new_order_id . '&action=edit' ) ) . '" >' . esc_html( $new_order_id ) . '</a>'
+							);
+						}
+						if ( $subscription_membership->has_status( [ 'pending', 'cancelled' ] ) ) {
+							$subscription_membership->update_status( 'active', $note );
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

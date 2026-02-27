@@ -1,5 +1,29 @@
 # Changelog
 
+### [6.15.17] 2026-02-25
+
+* Tweak - Changed views: `modules/meta/organizer`, `v2/components/content-title`, `v2/components/header`, `v2/day/nav`, `v2/day/top-bar/nav`, `v2/month/calendar-body/day/cell-title`, `v2/month/calendar-body/day/date`, `v2/month/top-bar/nav`
+* Tweak - Custom SEO titles set in Yoast SEO for Event Categories and Event Tags are now correctly applied to both the page `<title>` tag and `og:title` meta tag. [TEC-4952]
+* Tweak - Restore `post_tag` for events after `change_locale` action, which was being overwritten for fr_FR, causing the tags to not show with the block editor. [TEC-4996]
+* Accessibility - Add an outline on hover for the datepicker. [TEC-5740]
+* Accessibility - Increase contrast of text for past event times. [TEC-5741]
+* Language - 0 new strings added, 109 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.15.16.1] 2026-02-24
+
+* Security - Strengthen user permission checks. [SVUL-48]
+
+### [6.15.16] 2026-02-11
+
+* Fix - Evaluate correctly whether the email and phone field of a non-password protected organizer should display and by default the organizer's website opens in a new tab.[TEC-5744]
+* Tweak - Add aria-label attribute to events navigation. [TEC-5732]
+* Tweak - Changed views: `modules/meta/organizer`, `v2/components/content-title`, `v2/components/header`, `v2/day/nav`, `v2/day/top-bar/nav`, `v2/month/calendar-body/day/cell-title`, `v2/month/calendar-body/day/date`, `v2/month/top-bar/nav`
+* Tweak - Improve Day View content title to display contextual "Events for [Date]" format at the top of the view. [TEC-5733]
+* Tweak - Improve heading hierarchy in month view by making date headings only when events are present. [TEC-5622]
+* Tweak - Improve keyboard focus order in zoomed/mobile layouts to follow a more logical and predictable sequence, aligning with WCAG best practices. [TEC-5193]
+* Tweak - Improve mini calendar accessibility by adding non-color indicators for past, current, and upcoming days. [TEC-5735]
+* Language - 3 new strings added, 11 updated, 0 fuzzied, and 1 obsoleted.
+
 ### [6.15.15] 2026-01-28
 
 * Tweak - Correct datepicker navigation to include icons on click. [TEC-5736]

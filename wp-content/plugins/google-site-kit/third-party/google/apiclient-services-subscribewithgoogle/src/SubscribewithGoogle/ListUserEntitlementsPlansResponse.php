@@ -21,13 +21,17 @@ class ListUserEntitlementsPlansResponse extends \Google\Site_Kit_Dependencies\Go
 {
     protected $collection_key = 'userEntitlementsPlans';
     /**
+     * A token to retrieve the next page of results.
+     *
      * @var string
      */
     public $nextPageToken;
     protected $userEntitlementsPlansType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\UserEntitlementsPlan::class;
     protected $userEntitlementsPlansDataType = 'array';
     /**
-     * @param string
+     * A token to retrieve the next page of results.
+     *
+     * @param string $nextPageToken
      */
     public function setNextPageToken($nextPageToken)
     {
@@ -41,7 +45,9 @@ class ListUserEntitlementsPlansResponse extends \Google\Site_Kit_Dependencies\Go
         return $this->nextPageToken;
     }
     /**
-     * @param UserEntitlementsPlan[]
+     * Entitlements plans for a given user and publication.
+     *
+     * @param UserEntitlementsPlan[] $userEntitlementsPlans
      */
     public function setUserEntitlementsPlans($userEntitlementsPlans)
     {

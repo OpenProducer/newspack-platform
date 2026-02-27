@@ -1279,6 +1279,14 @@ var splitTask = typeof window.scheduler?.yield === "function" ? window.scheduler
     setTimeout(resolve2, 0);
   });
 };
+var onDOMReady = (callback) => {
+  const [navigation] = performance.getEntriesByType("navigation");
+  if (navigation.domContentLoadedEventStart > 0) {
+    callback();
+  } else {
+    document.addEventListener("DOMContentLoaded", callback);
+  }
+};
 function createFlusher(compute, notify) {
   let flush = () => void 0;
   const dispose = E2(function() {
@@ -1950,23 +1958,23 @@ var parseServerData = (dom = document) => {
   }
   return {};
 };
-var populateServerData = (data2) => {
+var populateServerData = (data) => {
   serverStates.clear();
   storeConfigs.clear();
-  if (isPlainObject(data2?.state)) {
-    Object.entries(data2.state).forEach(([namespace, state]) => {
+  if (isPlainObject(data?.state)) {
+    Object.entries(data.state).forEach(([namespace, state]) => {
       const st = store(namespace, {}, { lock: universalUnlock });
       deepMerge(st.state, state, false);
       serverStates.set(namespace, state);
     });
   }
-  if (isPlainObject(data2?.config)) {
-    Object.entries(data2.config).forEach(([namespace, config]) => {
+  if (isPlainObject(data?.config)) {
+    Object.entries(data.config).forEach(([namespace, config]) => {
       storeConfigs.set(namespace, config);
     });
   }
-  if (isPlainObject(data2?.derivedStateClosures)) {
-    Object.entries(data2.derivedStateClosures).forEach(
+  if (isPlainObject(data?.derivedStateClosures)) {
+    Object.entries(data.derivedStateClosures).forEach(
       ([namespace, paths]) => {
         const st = store(
           namespace,
@@ -1992,8 +2000,6 @@ var populateServerData = (data2) => {
     );
   }
 };
-var data = parseServerData();
-populateServerData(data);
 
 // packages/interactivity/build-module/hooks.mjs
 function isNonDefaultDirectiveSuffix(entry) {
@@ -2157,7 +2163,7 @@ l.vnode = (vnode) => {
 var warnUniqueIdWithTwoHyphens = (prefix, suffix, uniqueId) => {
   if (true) {
     warn(
-      `The usage of data-wp-${prefix}--${suffix}${uniqueId ? `--${uniqueId}` : ""} (two hyphens for unique ID) is deprecated and will stop working in WordPress 7.0. Please use data-wp-${prefix}${uniqueId ? `--${suffix}---${uniqueId}` : `---${suffix}`} (three hyphens for unique ID) from now on.`
+      `The usage of data-wp-${prefix}--${suffix}${uniqueId ? `--${uniqueId}` : ""} (two hyphens for unique ID) is deprecated and will stop working in WordPress 7.1. Please use data-wp-${prefix}${uniqueId ? `--${suffix}---${uniqueId}` : `---${suffix}`} (three hyphens for unique ID) from now on.`
     );
   }
 };
@@ -2387,8 +2393,8 @@ var directives_default = () => {
     },
     { priority: 5 }
   );
-  directive("watch", ({ directives: { watch }, evaluate }) => {
-    watch.forEach((entry) => {
+  directive("watch", ({ directives: { watch: watch2 }, evaluate }) => {
+    watch2.forEach((entry) => {
       if (true) {
         if (entry.suffix) {
           warnUniqueIdWithTwoHyphens("watch", entry.suffix);
@@ -2425,8 +2431,8 @@ var directives_default = () => {
       });
     });
   });
-  directive("init", ({ directives: { init: init2 }, evaluate }) => {
-    init2.forEach((entry) => {
+  directive("init", ({ directives: { init }, evaluate }) => {
+    init.forEach((entry) => {
       if (true) {
         if (entry.suffix) {
           warnUniqueIdWithTwoHyphens("init", entry.suffix);
@@ -2867,7 +2873,7 @@ var directives_default = () => {
   );
 };
 
-// packages/interactivity/build-module/init.mjs
+// packages/interactivity/build-module/hydration.mjs
 init_preact_module();
 
 // packages/interactivity/build-module/vdom.mjs
@@ -3054,7 +3060,7 @@ function toVdom(root) {
   return vdom;
 }
 
-// packages/interactivity/build-module/init.mjs
+// packages/interactivity/build-module/hydration.mjs
 var regionRootFragments = /* @__PURE__ */ new WeakMap();
 var getRegionRootFragment = (regions) => {
   const region = Array.isArray(regions) ? regions[0] : regions;
@@ -3070,11 +3076,8 @@ var getRegionRootFragment = (regions) => {
   return regionRootFragments.get(region);
 };
 var initialVdom = /* @__PURE__ */ new WeakMap();
-var init = async () => {
+var hydrateRegions = async () => {
   const nodes = document.querySelectorAll(`[data-wp-interactive]`);
-  await new Promise((resolve2) => {
-    setTimeout(resolve2, 0);
-  });
   for (const node of nodes) {
     if (!hydratedIslands.has(node)) {
       await splitTask();
@@ -3091,6 +3094,7 @@ var init = async () => {
 if (true) {
   await Promise.resolve().then(() => (init_debug_module(), debug_module_exports));
 }
+var watch = E2;
 var requiredConsent = "I acknowledge that using private APIs means my theme or plugin will inevitably break in the next version of WordPress.";
 var privateApis = (lock) => {
   if (lock === requiredConsent) {
@@ -3109,13 +3113,15 @@ var privateApis = (lock) => {
       batch: r3,
       routerRegions,
       deepReadOnly,
-      navigationSignal
+      navigationSignal,
+      warn
     };
   }
   throw new Error("Forbidden access.");
 };
+populateServerData(parseServerData());
 directives_default();
-init();
+onDOMReady(hydrateRegions);
 export {
   getConfig,
   getContext,
@@ -3133,6 +3139,7 @@ export {
   A2 as useRef,
   h2 as useState,
   useWatch,
+  watch,
   withScope,
   withSyncEvent
 };

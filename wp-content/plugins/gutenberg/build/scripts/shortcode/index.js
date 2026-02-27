@@ -219,8 +219,8 @@ var wp;
         this.attrs = attributes;
       } else {
         Object.entries(attributes).forEach(([key, value]) => {
-          if (typeof value === "string" || typeof value === "undefined") {
-            this.set(key, value);
+          if (value !== void 0) {
+            this.set(key, String(value));
           }
         });
       }

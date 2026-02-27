@@ -29,13 +29,10 @@ if ( isset( $_GET['is_error'] ) ) { // phpcs:ignore WordPress.Security.NonceVeri
 ?>
 
 <?php
-if ( $message ) :
-	?>
-	<div class="newspack-wc-message <?php echo $is_error ? 'newspack-wc-message--error' : ''; ?>">
-		<p><?php echo \esc_html( $message ); ?></p>
-	</div>
-	<?php
-endif;
+if ( $message ) {
+	\wc_add_notice( $message, $is_error ? 'error' : 'notice' );
+	\wc_print_notices();
+}
 
 $magic_link_args                                     = [];
 $magic_link_args[ $newspack_send_magic_link_arg ]    = wp_create_nonce( $newspack_send_magic_link_arg );

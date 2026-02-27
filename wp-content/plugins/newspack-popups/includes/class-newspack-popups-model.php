@@ -906,6 +906,11 @@ final class Newspack_Popups_Model {
 				type="hidden"
 				value="<?php echo esc_attr( self::$form_hooks_popup_id ); ?>"
 			/>
+			<input
+				name="prompt_title"
+				type="hidden"
+				value="<?php echo esc_attr( get_the_title( self::$form_hooks_popup_id ) ); ?>"
+			/>
 		<?php
 	}
 

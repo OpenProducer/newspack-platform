@@ -227,8 +227,9 @@ class Perfmatters {
 		if ( ! isset( $options['lazyload'] ) ) {
 			$options['lazyload'] = [];
 		}
-		$options['lazyload']['lazy_loading_iframes']       = true;
-		$options['lazyload']['youtube_preview_thumbnails'] = true;
+		$options['lazyload']['lazy_loading']               = false;
+		$options['lazyload']['lazy_loading_iframes']       = false;
+		$options['lazyload']['youtube_preview_thumbnails'] = false;
 		$options['lazyload']['image_dimensions']           = true;
 
 		$parent_exclusions = empty( $options['lazyload']['lazy_loading_parent_exclusions'] ) ? [] : $options['lazyload']['lazy_loading_parent_exclusions'];

@@ -3,8 +3,9 @@
  * My Account Account Settings page.
  * Based on woocommerce/templates/myaccount/form-edit-account.php.
  *
- * @package Newspack
- * @version 8.7.0
+ * @author   Newspack
+ * @category WooCommerce Subscriptions/Templates
+ * @package  Newspack
  */
 
 namespace Newspack;
@@ -39,13 +40,10 @@ $display_email           = $is_pending_email_change ? $user->get( WooCommerce_My
 ?>
 
 <?php
-if ( $message ) :
-	?>
-	<div class="newspack-wc-message <?php echo $is_error ? 'newspack-wc-message--error' : ''; ?>">
-		<p><?php echo \esc_html( $message ); ?></p>
-	</div>
-	<?php
-endif;
+if ( $message ) {
+	\wc_add_notice( $message, $is_error ? 'error' : 'notice' );
+	\wc_print_notices();
+}
 ?>
 
 <section id="account-profile">

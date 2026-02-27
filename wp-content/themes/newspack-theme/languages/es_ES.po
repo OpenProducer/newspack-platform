@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Newspack\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/newspack-theme\n"
-"POT-Creation-Date: 2025-12-01T20:26:00+00:00\n"
+"POT-Creation-Date: 2026-01-29T18:48:18+00:00\n"
 "PO-Revision-Date: 2025-03-14 10:01-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -336,7 +336,7 @@ msgstr "Cerrar Búsqueda"
 msgid "Expand Comments"
 msgstr ""
 
-#: functions.php:475 inc/customizer.php:1279
+#: functions.php:475 inc/customizer.php:1280
 msgid "Collapse Comments"
 msgstr ""
 
@@ -348,11 +348,11 @@ msgstr ""
 msgid "Hide details"
 msgstr ""
 
-#: functions.php:478 inc/template-functions.php:484
+#: functions.php:478 inc/template-functions.php:488
 msgid "Open dropdown menu"
 msgstr ""
 
-#: functions.php:479 inc/template-functions.php:485
+#: functions.php:479 inc/template-functions.php:489
 msgid "Close dropdown menu"
 msgstr ""
 
@@ -857,71 +857,75 @@ msgstr ""
 msgid "Archive Settings"
 msgstr ""
 
-#: inc/customizer.php:1099
+#: inc/customizer.php:1084
+msgid "These settings affect all archives, including the blog posts page."
+msgstr ""
+
+#: inc/customizer.php:1100
 msgid "Show excerpts for all archives"
 msgstr ""
 
-#: inc/customizer.php:1116
+#: inc/customizer.php:1117
 msgid "Show subtitles for all archives"
 msgstr ""
 
-#: inc/customizer.php:1133
+#: inc/customizer.php:1134
 msgid ""
 "Crop archive images to a 4:3 aspect ratio (changes require regenerating "
 "thumbnails for existing featured images)"
 msgstr ""
 
-#: inc/customizer.php:1150
+#: inc/customizer.php:1151
 msgid "Show image captions in archives and WordPress’s default search results"
 msgstr ""
 
-#: inc/customizer.php:1167
+#: inc/customizer.php:1168
 msgid "Show image credits in archives and WordPress’s default search results"
 msgstr ""
 
-#: inc/customizer.php:1185
+#: inc/customizer.php:1186
 msgid "Use a large, featured display for the latest post in the archives"
 msgstr ""
 
-#: inc/customizer.php:1202
+#: inc/customizer.php:1203
 msgid "Archive Layout"
 msgstr ""
 
-#: inc/customizer.php:1204
+#: inc/customizer.php:1205
 msgid "With sidebar"
 msgstr ""
 
 #. Template Name of the theme
-#: inc/customizer.php:1205
+#: inc/customizer.php:1206
 msgid "One column"
 msgstr ""
 
 #. Template Name of the theme
-#: inc/customizer.php:1206
+#: inc/customizer.php:1207
 msgid "One column wide"
 msgstr ""
 
-#: inc/customizer.php:1225
+#: inc/customizer.php:1226
 msgid "Archive Title Format"
 msgstr ""
 
-#: inc/customizer.php:1226
+#: inc/customizer.php:1227
 msgid "Change the format of the title used on archive pages."
 msgstr ""
 
-#: inc/customizer.php:1228
+#: inc/customizer.php:1229
 msgid "Default (eg. \"Category: Featured\", \"Author: Jane Doe\")"
 msgstr ""
 
-#: inc/customizer.php:1229
+#: inc/customizer.php:1230
 msgid "Only archive name (eg. \"Featured\", \"Jane Doe\")"
 msgstr ""
 
-#: inc/customizer.php:1247
+#: inc/customizer.php:1248
 msgid "List or Grid Layout"
 msgstr ""
 
-#: inc/customizer.php:1248
+#: inc/customizer.php:1249
 msgid ""
 "When using grid, set the number of posts per page to a number divisible by "
 "12 under Settings > Reading and disable the \"Use a large, featured display "
@@ -929,109 +933,109 @@ msgid ""
 "posts."
 msgstr ""
 
-#: inc/customizer.php:1250
+#: inc/customizer.php:1251
 msgid "List"
 msgstr ""
 
-#: inc/customizer.php:1251
+#: inc/customizer.php:1252
 msgid "Grid"
 msgstr ""
 
-#: inc/customizer.php:1263
+#: inc/customizer.php:1264
 msgid "Comments Settings"
 msgstr ""
 
-#: inc/customizer.php:1280
+#: inc/customizer.php:1281
 msgid ""
 "When using WordPress's default comments, checking this option will collapse "
 "the comments section when there is more than one comment, and display a "
 "button to expand."
 msgstr ""
 
-#: inc/customizer.php:1297
+#: inc/customizer.php:1298
 msgid "Display comment policy"
 msgstr ""
 
-#: inc/customizer.php:1298
+#: inc/customizer.php:1299
 msgid ""
 "Allows you to add an optional comment policy above the comment form when "
 "using WordPress's default comments."
 msgstr ""
 
-#: inc/customizer.php:1315
+#: inc/customizer.php:1316
 msgid "Comment policy text"
 msgstr ""
 
-#: inc/customizer.php:1326
+#: inc/customizer.php:1327
 msgid "Footer Settings"
 msgstr ""
 
-#: inc/customizer.php:1342
+#: inc/customizer.php:1343
 msgid "Show footer branding"
 msgstr ""
 
-#: inc/customizer.php:1343
+#: inc/customizer.php:1344
 msgid ""
 "Display the site logo in the footer when the footer widget area is populated."
 msgstr ""
 
-#: inc/customizer.php:1360
+#: inc/customizer.php:1361
 msgid "Footer Widget Layout"
 msgstr ""
 
-#: inc/customizer.php:1361
+#: inc/customizer.php:1362
 msgid ""
 "Stack the footer widgets, or have them automatically divide into even "
 "columns."
 msgstr ""
 
-#: inc/customizer.php:1363
+#: inc/customizer.php:1364
 msgid "Columns"
 msgstr ""
 
-#: inc/customizer.php:1364
+#: inc/customizer.php:1365
 msgid "Stacked"
 msgstr ""
 
-#: inc/customizer.php:1382
+#: inc/customizer.php:1383
 msgid "Copyright Information"
 msgstr ""
 
-#: inc/customizer.php:1383
+#: inc/customizer.php:1384
 msgid ""
 "Add custom text to be displayed next to a copyright symbol and current year "
 "in the footer. By default, it will display your site title."
 msgstr ""
 
-#: inc/customizer.php:1402
+#: inc/customizer.php:1403
 msgid "Typography"
 msgstr "Tipografía"
 
-#: inc/customizer.php:1449
+#: inc/customizer.php:1450
 msgid "Font Provider Import Code or URL"
 msgstr ""
 
-#: inc/customizer.php:1459
+#: inc/customizer.php:1460
 msgid "Secondary Font Provider Import Code or URL"
 msgstr ""
 
-#: inc/customizer.php:1468
+#: inc/customizer.php:1469
 msgid "Header Font"
 msgstr "Fuente de cabecera"
 
-#: inc/customizer.php:1484
+#: inc/customizer.php:1485
 msgid "Header Font Fallback Stack"
 msgstr ""
 
-#: inc/customizer.php:1494
+#: inc/customizer.php:1495
 msgid "Body Font"
 msgstr "Fuente del cuerpo"
 
-#: inc/customizer.php:1503
+#: inc/customizer.php:1504
 msgid "Body Font Fallback Stack"
 msgstr ""
 
-#: inc/customizer.php:1522
+#: inc/customizer.php:1523
 msgid "Use all-caps for accent text."
 msgstr ""
 
@@ -1108,56 +1112,56 @@ msgid ""
 "and blocks. It should stand out boldly against your site's color scheme."
 msgstr ""
 
-#: inc/template-functions.php:334
+#: inc/template-functions.php:338
 msgid "Category: "
 msgstr "Categoría: "
 
-#: inc/template-functions.php:336
+#: inc/template-functions.php:340
 msgid "Tag: "
 msgstr "Etiqueta: "
 
-#: inc/template-functions.php:338
+#: inc/template-functions.php:342
 msgid "Author Archives: "
 msgstr "Archivo del autor: "
 
-#: inc/template-functions.php:341
+#: inc/template-functions.php:345
 msgid "Yearly Archives: "
 msgstr "Archivos anuales: "
 
-#: inc/template-functions.php:341
+#: inc/template-functions.php:345
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr "Y"
 
-#: inc/template-functions.php:345
+#: inc/template-functions.php:349
 msgid "Monthly Archives: "
 msgstr "Archivos mensuales: "
 
-#: inc/template-functions.php:345
+#: inc/template-functions.php:349
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr "F Y"
 
-#: inc/template-functions.php:349
+#: inc/template-functions.php:353
 msgid "Daily Archives: "
 msgstr "Archivos diarios: "
 
-#: inc/template-functions.php:352
+#: inc/template-functions.php:356
 msgid "Post Type Archives: "
 msgstr "Archivo de tipo de contenido: "
 
 #. translators: %s: Taxonomy singular name
-#: inc/template-functions.php:358
+#: inc/template-functions.php:362
 #, php-format
 msgid "%s Archives:"
 msgstr "Archivo de %s:"
 
-#: inc/template-functions.php:360
+#: inc/template-functions.php:364
 msgid "Archives:"
 msgstr "Archivos:"
 
 #. translators: %s: Time ago date format
-#: inc/template-functions.php:741
+#: inc/template-functions.php:745
 #, php-format
 msgid "%s ago"
 msgstr "%s antes"

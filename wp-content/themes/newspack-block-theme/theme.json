@@ -949,6 +949,33 @@
 					"fontSize": "var( --wp--preset--font-size--small )",
 					"lineHeight": "var( --wp--custom--line-height--small )"
 				}
+			},
+			"newspack/byline": {
+				"color": {
+					"text": "var( --wp--preset--color--contrast-3 )"
+				},
+				"elements": {
+					"link": {
+						"color": {
+							"text": "var( --wp--preset--color--contrast-3 )"
+						},
+						":hover": {
+							"color": {
+								"text": "var( --wp--preset--color--contrast )"
+							},
+							"typography": {
+								"textDecoration": "none"
+							}
+						},
+						"typography": {
+							"textDecoration": "underline"
+						}
+					}
+				},
+				"typography": {
+					"fontSize": "var( --wp--preset--font-size--x-small )",
+					"lineHeight": "var( --wp--custom--line-height--x-small )"
+				}
 			}
 		},
 		"color": {

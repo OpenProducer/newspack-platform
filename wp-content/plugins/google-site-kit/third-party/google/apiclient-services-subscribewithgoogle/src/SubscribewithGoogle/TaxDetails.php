@@ -22,11 +22,15 @@ class TaxDetails extends \Google\Site_Kit_Dependencies\Google\Model
     protected $amountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Money::class;
     protected $amountDataType = '';
     /**
+     * The tax category.
+     *
      * @var string
      */
     public $taxCategory;
     /**
-     * @param Money
+     * The amount of tax to collect.
+     *
+     * @param Money $amount
      */
     public function setAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Money $amount)
     {
@@ -40,7 +44,9 @@ class TaxDetails extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->amount;
     }
     /**
-     * @param string
+     * The tax category.
+     *
+     * @param string $taxCategory
      */
     public function setTaxCategory($taxCategory)
     {

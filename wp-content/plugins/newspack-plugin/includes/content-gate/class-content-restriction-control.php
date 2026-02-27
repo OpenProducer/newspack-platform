@@ -7,8 +7,6 @@
 
 namespace Newspack;
 
-use Newspack\Access_Rules;
-
 /**
  * Main class.
  */
@@ -16,9 +14,16 @@ class Content_Restriction_Control {
 	/**
 	 * Map of post IDs to gate IDs.
 	 *
-	 * @var array
+	 * @var int[]
 	 */
 	private static $post_gate_id_map = [];
+
+	/**
+	 * Map of post IDs to gate layout IDs.
+	 *
+	 * @var int[]
+	 */
+	private static $post_gate_layout_id_map = [];
 
 	/**
 	 * Initialize hooks and filters.
@@ -115,6 +120,12 @@ class Content_Restriction_Control {
 			if ( 'publish' !== $gate['status'] ) {
 				continue;
 			}
+
+			// Skip gates that have neither registration nor custom access active.
+			if ( empty( $gate['registration']['active'] ) && empty( $gate['custom_access']['active'] ) ) {
+				continue;
+			}
+
 			$content_rules = $gate['content_rules'];
 			if ( empty( $content_rules ) ) {
 				continue;
@@ -176,15 +187,38 @@ class Content_Restriction_Control {
 		}
 
 		foreach ( $post_gates as $gate ) {
-			$access_rules = $gate['access_rules'];
-			if ( empty( $access_rules ) ) {
-				continue;
-			}
-			foreach ( $access_rules as $rule ) {
-				if ( ! Access_Rules::evaluate_rule( $rule['slug'], $rule['value'] ?? null ) ) {
-					self::$post_gate_id_map[ $post_id ] = $gate['id'];
-					return true;
+			$gate_layout_id = null;
+			$is_restricted  = false;
+
+			// If registration mode is active.
+			if ( ! empty( $gate['registration']['active'] ) ) {
+				// Check if user is logged in.
+				if ( ! \is_user_logged_in() ) {
+					$is_restricted  = true;
+					$gate_layout_id = $gate['registration']['gate_layout_id'] ?? $gate['id'];
+				} elseif ( ! empty( $gate['registration']['require_verification'] ) ) {
+					// Check if email verification is required.
+					$user = \wp_get_current_user();
+					if ( ! \get_user_meta( $user->ID, Reader_Activation::EMAIL_VERIFIED, true ) ) {
+						$is_restricted  = true;
+						$gate_layout_id = $gate['registration']['gate_layout_id'] ?? $gate['id'];
+					}
 				}
+			}
+
+			// If custom_access mode is active.
+			if ( ! $is_restricted && ! empty( $gate['custom_access']['active'] ) ) {
+				$access_rules = $gate['custom_access']['access_rules'] ?? [];
+				if ( ! empty( $access_rules ) && ! Access_Rules::evaluate_rules( $access_rules ) ) {
+					$is_restricted  = true;
+					$gate_layout_id = $gate['custom_access']['gate_layout_id'] ?? $gate['id'];
+				}
+			}
+
+			if ( $is_restricted && $gate_layout_id ) {
+				self::$post_gate_id_map[ $post_id ] = $gate['id'];
+				self::$post_gate_layout_id_map[ $post_id ] = $gate_layout_id;
+				return true;
 			}
 		}
 		return false;
@@ -209,6 +243,29 @@ class Content_Restriction_Control {
 		}
 		if ( ! empty( self::$post_gate_id_map[ $post_id ] ) ) {
 			return self::$post_gate_id_map[ $post_id ];
+		}
+		return false;
+	}
+
+	/**
+	 * Get the current gate layout ID.
+	 *
+	 * @param int $post_id Post ID. If not given, uses the current post ID.
+	 *
+	 * @return int|false
+	 */
+	public static function get_gate_layout_id( $post_id = null ) {
+		if ( ! Content_Gate::is_newspack_feature_enabled() ) {
+			return false;
+		}
+		if ( is_singular() ) {
+			$post_id = $post_id ? $post_id : get_queried_object_id();
+		}
+		if ( ! $post_id ) {
+			return false;
+		}
+		if ( ! empty( self::$post_gate_layout_id_map[ $post_id ] ) ) {
+			return self::$post_gate_layout_id_map[ $post_id ];
 		}
 		return false;
 	}

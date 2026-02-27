@@ -1,3 +1,50 @@
+## [3.28.4](https://github.com/Automattic/newspack-newsletters/compare/v3.28.3...v3.28.4) (2026-02-16)
+
+
+### Bug Fixes
+
+* release-wporg script ([#2036](https://github.com/Automattic/newspack-newsletters/issues/2036)) ([c991aae](https://github.com/Automattic/newspack-newsletters/commit/c991aae0d37b24578db1f05c308ae99f92c2c2a7))
+
+## [3.28.3](https://github.com/Automattic/newspack-newsletters/compare/v3.28.2...v3.28.3) (2026-02-16)
+
+
+### Bug Fixes
+
+* try adding build-distributable job before release-wporg ([835ac05](https://github.com/Automattic/newspack-newsletters/commit/835ac05a424b3664f54bd6df06519e6acc903107))
+
+## [3.28.2](https://github.com/Automattic/newspack-newsletters/compare/v3.28.1...v3.28.2) (2026-02-16)
+
+
+### Bug Fixes
+
+* pass plugin name to release-wporg job ([#2035](https://github.com/Automattic/newspack-newsletters/issues/2035)) ([a0ba538](https://github.com/Automattic/newspack-newsletters/commit/a0ba538bcd8e46b9436795419b6015b920839970))
+
+## [3.28.1](https://github.com/Automattic/newspack-newsletters/compare/v3.28.0...v3.28.1) (2026-02-16)
+
+
+### Bug Fixes
+
+* force release ([b028a56](https://github.com/Automattic/newspack-newsletters/commit/b028a56f7a6704f966af958533b281f6e7aca9e3))
+
+# [3.28.0](https://github.com/Automattic/newspack-newsletters/compare/v3.27.1...v3.28.0) (2026-02-16)
+
+
+### Bug Fixes
+
+* restore newsletter rendering of RDB blocks using get_value() ([2815bea](https://github.com/Automattic/newspack-newsletters/commit/2815bea44a5edc44328ed2da1847bf11125a25d0))
+
+
+### Features
+
+* add mastodon and whatsapp to social link icons ([#2008](https://github.com/Automattic/newspack-newsletters/issues/2008)) ([69843cf](https://github.com/Automattic/newspack-newsletters/commit/69843cf76c14e6d0678ce3d474baf08d0af11a75))
+
+## [3.27.1](https://github.com/Automattic/newspack-newsletters/compare/v3.27.0...v3.27.1) (2026-02-02)
+
+
+### Bug Fixes
+
+* **newsletters:** hide Jetpack stats column on newsletters ([#2013](https://github.com/Automattic/newspack-newsletters/issues/2013)) ([4cdae19](https://github.com/Automattic/newspack-newsletters/commit/4cdae19ca40f4bb05b2732583311c5e0523e4730))
+
 # [3.27.0](https://github.com/Automattic/newspack-newsletters/compare/v3.26.0...v3.27.0) (2026-01-19)
 
 

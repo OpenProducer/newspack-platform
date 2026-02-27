@@ -13,10 +13,10 @@ if ( function_exists( 'newspack_get_all_sponsors' ) ) {
 		get_the_id(),
 		null,
 		'post',
-		[
+		array(
 			'maxwidth'  => 150,
 			'maxheight' => 100,
-		]
+		)
 	);
 	$native_sponsors      = newspack_get_native_sponsors( $all_sponsors );
 	$underwriter_sponsors = newspack_get_underwriter_sponsors( $all_sponsors );

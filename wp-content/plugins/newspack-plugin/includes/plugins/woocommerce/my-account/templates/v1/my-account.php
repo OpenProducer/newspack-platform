@@ -2,7 +2,9 @@
 /**
  * My Account page template with no header or footer.
  *
- * @package Newspack
+ * @author   Newspack
+ * @category WooCommerce Subscriptions/Templates
+ * @package  Newspack
  */
 
 ?><!doctype html>

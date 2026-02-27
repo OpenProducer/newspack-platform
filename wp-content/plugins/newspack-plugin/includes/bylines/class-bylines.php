@@ -251,7 +251,7 @@ class Bylines {
 	 * @param string $byline  Byline with author shortcodes on it.
 	 */
 	public static function extract_author_ids_from_shortcode( $byline ) {
-		preg_match_all( '/\[Author id=(\d+)\]/', $byline, $matches );
+		preg_match_all( '/\[Author\s+id\s*=\s*(\d+)\]/i', $byline, $matches );
 		return array_map( 'intval', $matches[1] );
 	}
 

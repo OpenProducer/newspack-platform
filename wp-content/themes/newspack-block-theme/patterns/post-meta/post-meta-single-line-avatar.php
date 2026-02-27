@@ -5,7 +5,7 @@
  * Categories: newspack-block-theme-post-meta
  * Viewport Width: 632
  * Inserter: yes
- * Block Types: core/avatar, core/post-author, core/post-date, jetpack/sharing-buttons
+ * Block Types: newspack/byline, newspack/avatar, core/avatar, core/post-author, core/post-date, jetpack/sharing-buttons
  *
  * @package Newspack_Block_Theme
  */
@@ -18,18 +18,14 @@ $registry = WP_Block_Type_Registry::get_instance();
 <!-- wp:group {"lock":{"move":false,"remove":true},"metadata":{"name":"Meta"},"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"center","verticalAlignment":"center"}} -->
 <div class="wp-block-group">
 
-<?php if ( $registry->get_registered( 'co-authors-plus/coauthors' ) ) : ?>
+<?php if ( $registry->get_registered( 'newspack/byline' ) ) : ?>
 
 	<!-- wp:group {"templateLock":"all","lock":{"move":true,"remove":true},"metadata":{"name":"Avatar + Byline"},"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 	<div class="wp-block-group">
 
-	<!-- wp:co-authors-plus/coauthors {"layout":{"type":"flex","orientation":"horizontal"},"prefix":"","style":{"spacing":{"blockGap":"0"}},"className":"cap-avatar"} -->
-	<div class="wp-block-co-authors-plus-coauthors cap-avatar"><!-- wp:co-authors-plus/avatar /--></div>
-	<!-- /wp:co-authors-plus/coauthors -->
+	<!-- wp:newspack/avatar {"size":24,"linkToAuthorArchive":true,"lock":{"move":true,"remove":true}} /-->
 
-	<!-- wp:co-authors-plus/coauthors {"lock":{"move":true,"remove":true}} -->
-	<div class="wp-block-co-authors-plus-coauthors"><!-- wp:co-authors-plus/name {"isLink":true,"lock":{"move":true,"remove":true}} /--></div>
-	<!-- /wp:co-authors-plus/coauthors -->
+	<!-- wp:newspack/byline {"lock":{"move":true,"remove":true}} /-->
 
 	</div>
 	<!-- /wp:group -->

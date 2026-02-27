@@ -19,13 +19,13 @@ if ( newspack_is_amp() ) : ?>
 			<?php echo wp_kses( newspack_get_icon_svg( 'close', 20 ), newspack_sanitize_svgs() ); ?>
 			<?php esc_html_e( 'Close', 'newspack-theme' ); ?>
 		</button>
-<?php
+	<?php
 endif;
 
 dynamic_sidebar( 'header-1' );
 
 if ( newspack_is_amp() ) :
-?>
+	?>
 	</amp-sidebar>
 <?php else : ?>
 	</aside>

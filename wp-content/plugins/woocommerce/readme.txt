@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online
 Requires at least: 6.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 10.4.2
+Stable tag: 10.5.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,14 +170,11 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 10.4.3 2025-12-22 =
+= 10.5.2 2026-02-13 =
 
 **WooCommerce**
 
-* Fix - Ensure guest orders cannot be read by customers without providing the key and billing address. [#62557](https://github.com/woocommerce/woocommerce/pull/62557)
-* Fix - Fix undo button after cart item removal in the cart shortcode [#62529](https://github.com/woocommerce/woocommerce/pull/62529)
-* Fix - Improve handling of order modified date during HPOS sync on read to prevent infinite loops. [#62532](https://github.com/woocommerce/woocommerce/pull/62532)
-* Update - Add automatic currency transition from BGN to EUR for Bulgaria effective January 1, 2026 [#62478](https://github.com/woocommerce/woocommerce/pull/62478)
+* Fix - Fix variable products add-to-cart button appearing disabled in some stores [#63262](https://github.com/woocommerce/woocommerce/pull/63262)
 
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

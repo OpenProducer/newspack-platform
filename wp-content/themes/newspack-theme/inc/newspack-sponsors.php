@@ -46,7 +46,7 @@ add_action( 'enqueue_block_editor_assets', 'newspack_sponsor_editor_styles' );
 /**
  * Returns post or taxonomy sponsors.
  */
-function newspack_get_all_sponsors( $id = null, $scope = null, $type = null, $logo_options = [] ) {
+function newspack_get_all_sponsors( $id = null, $scope = null, $type = null, $logo_options = array() ) {
 	if ( function_exists( '\Newspack_Sponsors\get_all_sponsors' ) ) {
 		return \Newspack_Sponsors\get_all_sponsors( $id, $scope, $type, $logo_options );
 	}
@@ -60,7 +60,7 @@ function newspack_get_all_sponsors( $id = null, $scope = null, $type = null, $lo
  * @param array $sponsors Array of sponsors.
  * @return array|boolean Native sponsors only, or false if $sponsors is invalid.
  */
-function newspack_get_native_sponsors( $sponsors = [] ) {
+function newspack_get_native_sponsors( $sponsors = array() ) {
 	if ( empty( $sponsors ) || ! is_array( $sponsors ) ) {
 		return false;
 	}
@@ -74,13 +74,13 @@ function newspack_get_native_sponsors( $sponsors = [] ) {
 
 	// Scope override: if post is set to display as underwritten, return nothing.
 	if ( 'underwritten' === $scope_override ) {
-		return [];
+		return array();
 	}
 
 	return array_values(
 		array_filter(
 			$sponsors,
-			function( $sponsor ) {
+			function ( $sponsor ) {
 				return isset( $sponsor['sponsor_scope'] ) && 'native' === $sponsor['sponsor_scope'];
 			}
 		)
@@ -93,7 +93,7 @@ function newspack_get_native_sponsors( $sponsors = [] ) {
  * @param array $sponsors Array of sponsors.
  * @return array|boolean Underwriter sponsors only, or false if $sponsors is invalid.
  */
-function newspack_get_underwriter_sponsors( $sponsors = [] ) {
+function newspack_get_underwriter_sponsors( $sponsors = array() ) {
 	if ( empty( $sponsors ) || ! is_array( $sponsors ) ) {
 		return false;
 	}
@@ -102,7 +102,7 @@ function newspack_get_underwriter_sponsors( $sponsors = [] ) {
 
 	// Scope override: if post is set to display as native-sponsored, return nothing.
 	if ( 'native' === $scope_override ) {
-		return [];
+		return array();
 	}
 
 	// Scope override: if post is set to display as underwritten, return all sponsors.
@@ -113,7 +113,7 @@ function newspack_get_underwriter_sponsors( $sponsors = [] ) {
 	return array_values(
 		array_filter(
 			$sponsors,
-			function( $sponsor ) {
+			function ( $sponsor ) {
 				return isset( $sponsor['sponsor_scope'] ) && 'underwritten' === $sponsor['sponsor_scope'];
 			}
 		)
@@ -198,7 +198,7 @@ if ( ! function_exists( 'newspack_sponsor_byline' ) ) :
 				echo '<span>' . esc_html( $sponsors[0]['sponsor_byline'] ) . '</span> ';
 
 				foreach ( $sponsors as $sponsor ) {
-					$i++;
+					++$i;
 					if ( $sponsor_count === $i ) :
 						/* translators: separates last two names; needs a space on either side. */
 						$sep = esc_html__( ' and ', 'newspack-theme' );
@@ -241,7 +241,6 @@ if ( ! function_exists( 'newspack_sponsor_label' ) ) :
 		}
 
 		if ( ! empty( $sponsors ) ) :
-			$sponsor_flag       = $sponsors[0]['sponsor_flag'];
 			$sponsor_disclaimer = $sponsors[0]['sponsor_disclaimer'];
 			?>
 
@@ -333,7 +332,7 @@ if ( ! function_exists( 'newspack_sponsor_footer_bio' ) ) :
 		);
 		add_filter(
 			'the_content',
-			function( $content ) use ( $sponsors ) {
+			function ( $content ) use ( $sponsors ) {
 				ob_start();
 				if ( ! empty( $sponsors ) ) {
 					foreach ( $sponsors as $sponsor ) {
@@ -470,10 +469,10 @@ function newspack_sponsored_underwriters_info( $sponsors = null, $id = null, $sc
 
 		add_filter(
 			'the_content',
-			function( $content ) use ( $sponsors, $override_style, $override_placement ) {
+			function ( $content ) use ( $sponsors, $override_style, $override_placement ) {
 				$underwriters_top    = array_filter(
 					$sponsors,
-					function( $sponsor ) use ( $override_placement ) {
+					function ( $sponsor ) use ( $override_placement ) {
 						if ( 'top' === $override_placement ) {
 							return true;
 						}
@@ -486,7 +485,7 @@ function newspack_sponsored_underwriters_info( $sponsors = null, $id = null, $sc
 				);
 				$underwriters_bottom = array_filter(
 					$sponsors,
-					function( $sponsor ) use ( $override_placement ) {
+					function ( $sponsor ) use ( $override_placement ) {
 						if ( 'bottom' === $override_placement ) {
 							return true;
 						}
@@ -513,6 +512,13 @@ function newspack_sponsored_underwriters_info( $sponsors = null, $id = null, $sc
 	}
 }
 
+/**
+ * Get underwriter content HTML for a sponsor.
+ *
+ * @param array  $sponsor Sponsor data array.
+ * @param string $style   Display style ('standard' or 'simple').
+ * @return string HTML content for the underwriter display.
+ */
 function newspack_sponsors_get_underwriter_content( $sponsor, $style = 'standard' ) {
 	ob_start();
 	if (

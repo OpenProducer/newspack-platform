@@ -77,6 +77,7 @@ final class Newspack_Newsletters {
 		add_action( 'wp_head', [ __CLASS__, 'public_newsletter_custom_style' ], 10, 2 );
 		add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
 		add_filter( 'manage_' . self::NEWSPACK_NEWSLETTERS_CPT . '_posts_columns', [ __CLASS__, 'add_public_page_column' ] );
+		add_filter( 'manage_' . self::NEWSPACK_NEWSLETTERS_CPT . '_posts_columns', [ __CLASS__, 'remove_stats_column' ], 99 );
 		add_action( 'manage_' . self::NEWSPACK_NEWSLETTERS_CPT . '_posts_custom_column', [ __CLASS__, 'public_page_column_content' ], 10, 2 );
 		add_filter( 'post_row_actions', [ __CLASS__, 'display_view_or_preview_link_in_admin' ] );
 		add_filter( 'jetpack_relatedposts_filter_options', [ __CLASS__, 'disable_jetpack_related_posts' ] );
@@ -737,6 +738,18 @@ final class Newspack_Newsletters {
 	 */
 	public static function add_public_page_column( $columns ) {
 		return array_merge( $columns, [ 'public_page' => __( 'Public page', 'newspack-newsletters' ) ] );
+	}
+
+	/**
+	 * Remove the Jetpack Stats column from the Newsletters admin list table.
+	 *
+	 * @param array $columns Newsletters columns.
+	 *
+	 * @return array
+	 */
+	public static function remove_stats_column( $columns ) {
+		unset( $columns['stats'] );
+		return $columns;
 	}
 
 	/**

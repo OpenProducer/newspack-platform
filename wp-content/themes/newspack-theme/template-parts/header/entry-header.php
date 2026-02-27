@@ -5,13 +5,10 @@
  * @package Newspack
  */
 
-$discussion = ! is_page() && newspack_can_show_post_thumbnail() ? newspack_get_discussion_data() : null;
-
 // Get sponsors for this post.
 if ( function_exists( 'newspack_get_all_sponsors' ) ) {
 	$all_sponsors                    = newspack_get_all_sponsors( get_the_id() );
 	$native_sponsors                 = newspack_get_native_sponsors( $all_sponsors );
-	$underwriter_sponsors            = newspack_get_underwriter_sponsors( $all_sponsors );
 	$display_sponsors_and_categories = newspack_display_sponsors_and_categories( $native_sponsors );
 	$display_sponsors_and_authors    = newspack_display_sponsors_and_authors( $native_sponsors );
 }
@@ -47,7 +44,7 @@ if ( true === get_theme_mod( 'post_excerpt_instead_of_subtitle', false ) ) {
 	<?php endif; ?>
 	<?php if ( $subtitle ) : ?>
 		<div class="newspack-post-subtitle">
-			<?php echo $subtitle; ?>
+			<?php echo wp_kses_post( $subtitle ); ?>
 		</div>
 	<?php endif; ?>
 <?php else : ?>
@@ -68,7 +65,7 @@ if ( $sharing_enabled ) :
 				<?php
 				// If showing both authors and sponsors, show the byline and date first.
 				if ( $display_sponsors_and_authors ) :
-				?>
+					?>
 					<div class="entry-meta">
 						<?php
 						newspack_posted_by();
@@ -83,9 +80,9 @@ if ( $sharing_enabled ) :
 							newspack_sponsor_byline( $native_sponsors );
 
 							// If not showing the author, we still need to show the date.
-							if ( ! $display_sponsors_and_authors ) {
-								newspack_posted_on();
-							}
+						if ( ! $display_sponsors_and_authors ) {
+							newspack_posted_on();
+						}
 							do_action( 'newspack_theme_entry_meta' );
 						?>
 					</span>

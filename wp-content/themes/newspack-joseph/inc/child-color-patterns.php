@@ -8,7 +8,7 @@
  * Add child theme-specific custom colours.
  */
 function newspack_joseph_custom_colors_css() {
-	$header_color    = '#111';
+	$header_color = '#111';
 
 	if ( 'default' !== get_theme_mod( 'theme_colors', 'default' ) ) {
 		if ( 'default' !== get_theme_mod( 'header_color', 'default' ) ) {
@@ -21,7 +21,7 @@ function newspack_joseph_custom_colors_css() {
 	}
 
 	// Set colour contrasts.
-	$header_color_contrast    = newspack_get_color_contrast( $header_color );
+	$header_color_contrast = newspack_get_color_contrast( $header_color );
 
 	$theme_css = '
 		@media only screen and (min-width: 782px) {

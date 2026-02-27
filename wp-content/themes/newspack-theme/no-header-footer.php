@@ -18,7 +18,7 @@ get_template_part( 'template-parts/header/no-header', 'header' );
 					the_post();
 
 					// Template part for large featured images.
-					if ( in_array( newspack_featured_image_position(), array( 'large', 'behind', 'beside', 'above' ) ) ) :
+					if ( in_array( newspack_featured_image_position(), array( 'large', 'behind', 'beside', 'above' ), true ) ) :
 						get_template_part( 'template-parts/post/large-featured-image' );
 					else :
 						?>
@@ -32,7 +32,7 @@ get_template_part( 'template-parts/header/no-header', 'header' );
 						<?php
 						// Place smaller featured images inside of 'content' area.
 						if ( 'small' === newspack_featured_image_position() ) {
-							newspack_post_thumbnail( 'newspack-featured-image-small');
+							newspack_post_thumbnail( 'newspack-featured-image-small' );
 						}
 
 						get_template_part( 'template-parts/content/content', 'page' );

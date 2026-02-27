@@ -24,6 +24,88 @@ class Email_Log_Batch_Query {
 	const MAX_ATTEMPTS = 3;
 
 	/**
+	 * Email log statuses.
+	 *
+	 * @since 1.172.0
+	 *
+	 * @var string[]
+	 */
+	const EMAIL_LOG_STATUSES = array(
+		Email_Log::STATUS_SENT,
+		Email_Log::STATUS_FAILED,
+		Email_Log::STATUS_SCHEDULED,
+	);
+
+	/**
+	 * Gets the total count of email log entries by status.
+	 *
+	 * @since 1.173.0
+	 *
+	 * @param string $status Post status to count.
+	 * @return int
+	 */
+	public function get_total_count_by_status( $status ) {
+		if ( ! post_type_exists( Email_Log::POST_TYPE ) ) {
+			return 0;
+		}
+
+		$query = new WP_Query(
+			array(
+				'post_type'              => Email_Log::POST_TYPE,
+				'post_status'            => (string) $status,
+				'posts_per_page'         => 1,
+				'fields'                 => 'ids',
+				'no_found_rows'          => false,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
+
+		return (int) $query->found_posts;
+	}
+
+	/**
+	 * Gets sent/failed counts for a batch of email log entries.
+	 *
+	 * Returns zeros if any entry in the batch is still scheduled.
+	 *
+	 * @since 1.173.0
+	 *
+	 * @param array<int> $post_ids Post IDs in the batch.
+	 * @return array{sent:int,failed:int}
+	 */
+	public function get_batch_counts( array $post_ids ) {
+		$default = array(
+			'sent'   => 0,
+			'failed' => 0,
+		);
+
+		if ( empty( $post_ids ) ) {
+			return $default;
+		}
+
+		foreach ( $post_ids as $post_id ) {
+			if ( Email_Log::STATUS_SCHEDULED === get_post_status( $post_id ) ) {
+				return $default;
+			}
+		}
+
+		$counts = $default;
+
+		foreach ( $post_ids as $post_id ) {
+			$status = get_post_status( $post_id );
+
+			if ( Email_Log::STATUS_SENT === $status ) {
+				++$counts['sent'];
+			} elseif ( Email_Log::STATUS_FAILED === $status ) {
+				++$counts['failed'];
+			}
+		}
+
+		return $counts;
+	}
+
+	/**
 	 * Retrieves IDs for pending logs within a batch.
 	 *
 	 * @since 1.167.0
@@ -73,11 +155,7 @@ class Email_Log_Batch_Query {
 		return new WP_Query(
 			array(
 				'post_type'              => Email_Log::POST_TYPE,
-				'post_status'            => array(
-					Email_Log::STATUS_SCHEDULED,
-					Email_Log::STATUS_SENT,
-					Email_Log::STATUS_FAILED,
-				),
+				'post_status'            => self::EMAIL_LOG_STATUSES,
 				// phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_posts_per_page
 				'posts_per_page'         => 10000,
 				'fields'                 => 'ids',
@@ -150,5 +228,87 @@ class Email_Log_Batch_Query {
 				'post_status' => $status,
 			)
 		);
+	}
+
+	/**
+	 * Gets the post IDs for the latest email log batch.
+	 *
+	 * @since 1.166.0
+	 *
+	 * @return array<int>
+	 */
+	public function get_latest_batch_post_ids() {
+		$latest_post = new \WP_Query(
+			array(
+				'post_type'      => Email_Log::POST_TYPE,
+				'post_status'    => self::EMAIL_LOG_STATUSES,
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+				'no_found_rows'  => true,
+			)
+		);
+
+		if ( empty( $latest_post->posts ) ) {
+			return array();
+		}
+
+		$latest_post_id = (int) $latest_post->posts[0];
+		$batch_id       = get_post_meta( $latest_post_id, Email_Log::META_BATCH_ID, true );
+
+		if ( empty( $batch_id ) ) {
+			return array();
+		}
+
+		$batch_query = new \WP_Query(
+			array(
+				'post_type'      => Email_Log::POST_TYPE,
+				'post_status'    => self::EMAIL_LOG_STATUSES,
+				// phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_posts_per_page
+				'posts_per_page' => 10000,
+				'fields'         => 'ids',
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+				'no_found_rows'  => true,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'meta_query'     => array(
+					array(
+						'key'   => Email_Log::META_BATCH_ID,
+						'value' => $batch_id,
+					),
+				),
+			)
+		);
+
+		return array_map( 'intval', $batch_query->posts );
+	}
+
+	/**
+	 * Gets the error details of the first email log
+	 * if ALL emails in the latest batch failed.
+	 *
+	 * @since 1.172.0
+	 *
+	 * @return string|null Error details or null if no error.
+	 */
+	public function get_latest_batch_error() {
+		$batch_post_ids = $this->get_latest_batch_post_ids();
+
+		if ( empty( $batch_post_ids ) ) {
+			return null;
+		}
+
+		foreach ( $batch_post_ids as $post_id ) {
+			$status = get_post_status( $post_id );
+
+			$attempts = (int) get_post_meta( $post_id, Email_Log::META_SEND_ATTEMPTS, true );
+
+			if ( Email_Log::STATUS_FAILED !== $status || $attempts < self::MAX_ATTEMPTS ) {
+				return null;
+			}
+		}
+
+		return get_post_meta( $batch_post_ids[0], Email_Log::META_ERROR_DETAILS, true );
 	}
 }
