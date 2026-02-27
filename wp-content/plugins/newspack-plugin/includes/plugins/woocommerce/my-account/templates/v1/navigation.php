@@ -2,7 +2,9 @@
 /**
  * My Account navigation menu.
  *
- * @package Newspack
+ * @author   Newspack
+ * @category WooCommerce Subscriptions/Templates
+ * @package  Newspack
  */
 
 use Newspack\Newspack_UI_Icons;

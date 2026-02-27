@@ -44,6 +44,13 @@ class Content_Gate {
 	public static $valid_gate_post_statuses = [ 'publish', 'draft', 'pending', 'future', 'private', 'trash' ];
 
 	/**
+	 * Restricted content per post ID.
+	 *
+	 * @var string[]
+	 */
+	private static $restricted_content = [];
+
+	/**
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
@@ -52,10 +59,12 @@ class Content_Gate {
 		add_action( 'admin_init', [ __CLASS__, 'handle_edit_gate_layout' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'render_overlay_gate' ], 1 );
+		add_action( 'before_delete_post', [ __CLASS__, 'delete_gate_layouts' ], 10, 2 );
 		add_filter( 'newspack_popups_assess_has_disabled_popups', [ __CLASS__, 'disable_popups' ] );
 		add_filter( 'newspack_reader_activity_article_view', [ __CLASS__, 'suppress_article_view_activity' ], 100 );
 
 		add_action( 'the_post', [ __CLASS__, 'restrict_post' ], 10, 2 );
+		add_filter( 'the_content', [ __CLASS__, 'handle_restricted_content' ], PHP_INT_MAX );
 
 		/** Add gate content filters to mimic 'the_content'. See 'wp-includes/default-filters.php' for reference. */
 		add_filter( 'newspack_gate_content', 'capital_P_dangit', 11 );
@@ -75,6 +84,7 @@ class Content_Gate {
 		include __DIR__ . '/class-metering.php';
 		include __DIR__ . '/class-metering-countdown.php';
 		include __DIR__ . '/content-gifting/class-content-gifting.php';
+		include __DIR__ . '/class-ip-access-rule.php';
 	}
 
 	/**
@@ -157,11 +167,28 @@ class Content_Gate {
 
 		$content = self::get_restricted_post_excerpt( $post );
 
-		$post->post_content   = $content . self::get_inline_gate_content();
+		$post->post_content   = $content . self::get_inline_gate_html();
 		$post->post_excerpt   = $content;
 		$post->comment_status = 'closed';
 		$post->comment_count  = 0;
+
+		self::$restricted_content[ $post->ID ] = $post->post_content;
+
 		self::mark_gate_as_rendered();
+	}
+
+	/**
+	 * Handle restricted post content filtering.
+	 *
+	 * @param string $content Content.
+	 *
+	 * @return string
+	 */
+	public static function handle_restricted_content( $content ) {
+		if ( ! isset( self::$restricted_content[ get_the_ID() ] ) ) {
+			return $content;
+		}
+		return self::$restricted_content[ get_the_ID() ];
 	}
 
 	/**
@@ -344,6 +371,25 @@ class Content_Gate {
 	}
 
 	/**
+	 * Get the gate layout ID for the post.
+	 *
+	 * @param int $post_id Post ID. If not given, uses the current post ID.
+	 *
+	 * @return int|false
+	 */
+	public static function get_gate_layout_id( $post_id = null ) {
+		$gate_layout_id = Memberships::is_active() ? Memberships::get_gate_post_id( $post_id ) : Content_Restriction_Control::get_gate_layout_id( $post_id );
+
+		/**
+		 * Filters the gate layout ID.
+		 *
+		 * @param int $gate_layout_id Gate layout ID.
+		 * @param int $post_id      Post ID.
+		 */
+		return apply_filters( 'newspack_content_gate_layout_id', $gate_layout_id, $post_id );
+	}
+
+	/**
 	 * Get gate metadata to be used for analytics purposes.
 	 *
 	 * @return array {
@@ -452,37 +498,118 @@ class Content_Gate {
 	 */
 	public static function create_gate( $title = '', $post_type = self::GATE_CPT ) {
 		$all_gates = self::get_gates();
-		return \wp_insert_post(
+		$gate_id   = \wp_insert_post(
 			[
 				'post_title'   => $title,
 				'post_type'    => $post_type,
 				'post_status'  => 'draft',
-				'post_content' => '<!-- wp:paragraph --><p>' . __( 'This post is only available to members.', 'newspack' ) . '</p><!-- /wp:paragraph -->',
+				'post_content' => self::get_default_gate_content(),
 				'meta_input'   => [
 					'gate_priority' => count( $all_gates ),
 				],
-			]
+			],
+			true // Return WP_Error on failure.
 		);
+
+		if ( is_wp_error( $gate_id ) ) {
+			return $gate_id;
+		}
+
+		// Create default layouts for registration and custom_access modes.
+		$registration_content   = self::get_block_pattern_content( 'registration-card' );
+		$registration_layout_id = self::create_gate_layout(
+			__( 'Registration Access Layout', 'newspack' ),
+			$registration_content
+		);
+		if ( ! is_wp_error( $registration_layout_id ) ) {
+			self::update_registration_settings( $gate_id, [ 'gate_layout_id' => $registration_layout_id ] );
+		}
+
+		$custom_access_layout_id = self::create_gate_layout(
+			__( 'Paid Access Layout', 'newspack' )
+		);
+		if ( ! is_wp_error( $custom_access_layout_id ) ) {
+			self::update_custom_access_settings( $gate_id, [ 'gate_layout_id' => $custom_access_layout_id ] );
+		}
+
+		return $gate_id;
+	}
+
+	/**
+	 * Delete gate layouts when a gate is permanently deleted.
+	 *
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
+	 */
+	public static function delete_gate_layouts( $post_id, $post ) {
+		if ( self::GATE_CPT !== $post->post_type ) {
+			return;
+		}
+
+		$gate = self::get_gate( $post_id );
+		if ( is_wp_error( $gate ) ) {
+			return;
+		}
+
+		// Delete registration layout if it exists.
+		if ( ! empty( $gate['registration']['gate_layout_id'] ) ) {
+			\wp_delete_post( $gate['registration']['gate_layout_id'], true );
+		}
+
+		// Delete custom access layout if it exists.
+		if ( ! empty( $gate['custom_access']['gate_layout_id'] ) ) {
+			\wp_delete_post( $gate['custom_access']['gate_layout_id'], true );
+		}
 	}
 
 	/**
 	 * Create a new gate layout post.
 	 *
-	 * @param string $title Optional gate layout title. Defaults to 'Content Gate Layout'.
+	 * @param string $title   Optional gate layout title. Defaults to 'Content Gate Layout'.
+	 * @param string $content Optional post content. Defaults to a simple paragraph.
 	 *
 	 * @return int|\WP_Error The gate layout post ID or error if not created.
 	 */
-	public static function create_gate_layout( $title = '' ) {
+	public static function create_gate_layout( $title = '', $content = '' ) {
 		if ( empty( $title ) ) {
 			$title = __( 'Content Gate Layout', 'newspack' );
+		}
+		if ( empty( $content ) ) {
+			$content = self::get_default_gate_content();
 		}
 		return \wp_insert_post(
 			[
 				'post_title'   => $title,
 				'post_type'    => self::GATE_LAYOUT_CPT,
-				'post_content' => '<!-- wp:paragraph --><p>' . __( 'This post is only available to members.', 'newspack' ) . '</p><!-- /wp:paragraph -->',
-			]
+				'post_content' => $content,
+			],
+			true // Return WP_Error on failure.
 		);
+	}
+
+	/**
+	 * Get block pattern content by slug.
+	 *
+	 * @param string $pattern_slug The pattern slug (e.g., 'registration-wall').
+	 *
+	 * @return string The pattern content, or empty string if not found.
+	 */
+	public static function get_block_pattern_content( $pattern_slug ) {
+		$patterns_dir = realpath( __DIR__ . '/block-patterns' );
+		if ( ! $patterns_dir ) {
+			return '';
+		}
+
+		$path = realpath( $patterns_dir . '/' . $pattern_slug . '.php' );
+
+		// Ensure the resolved path is within the block-patterns directory to prevent directory traversal.
+		if ( ! $path || strpos( $path, $patterns_dir . DIRECTORY_SEPARATOR ) !== 0 ) {
+			return '';
+		}
+
+		ob_start();
+		require $path;
+		return ob_get_clean();
 	}
 
 	/**
@@ -553,7 +680,9 @@ class Content_Gate {
 			\wp_safe_redirect( \get_edit_post_link( $gate_layout_id, 'edit' ) );
 			exit;
 		} else {
-			$gate_layout_id = self::create_gate_layout( $gate_layout_default_title );
+			// Use registration pattern for registration mode, default content for custom_access.
+			$gate_layout_content = 'registration' === $gate_mode ? self::get_block_pattern_content( 'registration-card' ) : '';
+			$gate_layout_id      = self::create_gate_layout( $gate_layout_default_title, $gate_layout_content );
 			if ( is_wp_error( $gate_layout_id ) ) {
 				\wp_die( esc_html( $gate_layout_id->get_error_message() ) );
 			}
@@ -568,8 +697,7 @@ class Content_Gate {
 	 * Get the inline gate content.
 	 */
 	public static function get_inline_gate_content() {
-		$gate_post_id = self::get_gate_post_id();
-		return self::get_inline_gate_content_for_post( $gate_post_id );
+		return self::get_inline_gate_content_for_post( self::get_gate_layout_id() );
 	}
 
 	/**
@@ -590,9 +718,7 @@ class Content_Gate {
 	 */
 	public static function get_restricted_post_excerpt( $post ) {
 		self::$is_gated = true;
-
-		$gate_post_id = self::get_gate_post_id();
-		return self::get_restricted_post_excerpt_for_gate( $post, $gate_post_id );
+		return self::get_restricted_post_excerpt_for_gate( $post, self::get_gate_layout_id() );
 	}
 
 	/**
@@ -620,8 +746,8 @@ class Content_Gate {
 		if ( ! Metering::is_frontend_metering() && Metering::is_logged_in_metering_allowed() ) {
 			return;
 		}
-		$gate_post_id = self::get_gate_post_id();
-		$style        = \get_post_meta( $gate_post_id, 'style', true );
+		$gate_layout_id = self::get_gate_layout_id();
+		$style          = \get_post_meta( $gate_layout_id, 'style', true );
 		if ( 'overlay' !== $style ) {
 			return;
 		}
@@ -629,10 +755,10 @@ class Content_Gate {
 
 		global $post;
 		$_post = $post;
-		$post  = \get_post( $gate_post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$post  = \get_post( $gate_layout_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		setup_postdata( $post );
 
-		self::render_overlay_gate_html( $gate_post_id );
+		self::render_overlay_gate_html( $gate_layout_id );
 
 		self::mark_gate_as_rendered();
 		wp_reset_postdata();
@@ -683,9 +809,15 @@ class Content_Gate {
 			$registration = [];
 		}
 
+		$default_metering = [
+			'enabled' => false,
+			'count'   => 0,
+			'period'  => 'month',
+		];
+
 		return [
 			'active'               => isset( $registration['active'] ) ? (bool) $registration['active'] : false,
-			'metering'             => isset( $registration['metering'] ) ? $registration['metering'] : Metering::get_metering_settings( $gate_id ),
+			'metering'             => isset( $registration['metering'] ) ? $registration['metering'] : $default_metering,
 			'require_verification' => isset( $registration['require_verification'] ) ? (bool) $registration['require_verification'] : false,
 			'gate_layout_id'       => isset( $registration['gate_layout_id'] ) ? (int) $registration['gate_layout_id'] : 0,
 		];
@@ -720,10 +852,21 @@ class Content_Gate {
 			$custom_access = [];
 		}
 
+		$access_rules = isset( $custom_access['access_rules'] ) ? $custom_access['access_rules'] : [];
+
+		// Normalize legacy flat rules to grouped format.
+		$access_rules = Access_Rules::normalize_rules( $access_rules );
+
+		$default_metering = [
+			'enabled' => false,
+			'count'   => 0,
+			'period'  => 'month',
+		];
+
 		return [
 			'active'         => isset( $custom_access['active'] ) ? (bool) $custom_access['active'] : false,
-			'metering'       => isset( $custom_access['metering'] ) ? $custom_access['metering'] : Metering::get_metering_settings( $gate_id ),
-			'access_rules'   => isset( $custom_access['access_rules'] ) ? $custom_access['access_rules'] : [],
+			'metering'       => isset( $custom_access['metering'] ) ? $custom_access['metering'] : $default_metering,
+			'access_rules'   => $access_rules,
 			'gate_layout_id' => isset( $custom_access['gate_layout_id'] ) ? (int) $custom_access['gate_layout_id'] : 0,
 		];
 	}

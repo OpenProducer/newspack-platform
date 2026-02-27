@@ -18,7 +18,7 @@ class Group_Subscription_API {
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		add_action( 'rest_api_init', [ __CLASS__, 'register_routes' ] );
+		\add_action( 'rest_api_init', [ __CLASS__, 'register_routes' ] );
 	}
 
 	/**
@@ -84,7 +84,7 @@ class Group_Subscription_API {
 	 * Permission callback for the add_members route.
 	 */
 	public static function permission_callback() {
-		return current_user_can( 'manage_woocommerce' );
+		return \current_user_can( 'manage_woocommerce' );
 	}
 
 	/**
@@ -126,14 +126,14 @@ class Group_Subscription_API {
 			)
 		);
 		$exclude = array_values( array_unique( array_merge( $exclude, array_column( $query1, 'ID' ) ) ) );
-		$query2  = get_users(
+		$query2  = \get_users(
 			/**
 			 * Filter the user query args for searching for group subscription users.
 			 *
 			 * @param array $query_args Query args.
 			 * @param string $query_type Query type: main_query or meta_query.
 			 */
-			apply_filters(
+			\apply_filters(
 				'newspack_group_subscription_user_query_args',
 				[
 					'fields'     => [ 'ID', 'user_email' ],

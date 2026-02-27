@@ -52,6 +52,18 @@ trait Content_Gate_Layout {
 	}
 
 	/**
+	 * Get the default value for a layout meta field.
+	 *
+	 * @param string $key The meta field key.
+	 *
+	 * @return mixed The default value, or null if not found.
+	 */
+	protected static function get_layout_meta_default( $key ) {
+		$config = self::get_layout_meta_config();
+		return $config[ $key ]['default'] ?? null;
+	}
+
+	/**
 	 * Register layout meta fields for a given post type.
 	 *
 	 * @param string $post_type The post type to register meta for.
@@ -146,56 +158,93 @@ trait Content_Gate_Layout {
 	 */
 	protected static function get_visible_paragraphs( $gate_post_id ) {
 		$visible_paragraphs = \get_post_meta( $gate_post_id, 'visible_paragraphs', true );
-		return '' === $visible_paragraphs ? 2 : max( 0, (int) $visible_paragraphs );
+		return '' === $visible_paragraphs ? self::get_layout_meta_default( 'visible_paragraphs' ) : max( 0, (int) $visible_paragraphs );
+	}
+
+	/**
+	 * Get the default gate content.
+	 *
+	 * @return string
+	 */
+	protected static function get_default_gate_content() {
+		return '<!-- wp:paragraph --><p>' . __( 'This post is only available to members.', 'newspack' ) . '</p><!-- /wp:paragraph -->';
 	}
 
 	/**
 	 * Get the inline gate content with fade effect.
 	 *
-	 * @param int $gate_post_id The gate post ID.
+	 * @param int $gate_layout_id The gate layout ID.
 	 *
 	 * @return string The inline gate HTML content.
 	 */
-	public static function get_inline_gate_content_for_post( $gate_post_id ) {
-		$style = \get_post_meta( $gate_post_id, 'style', true );
+	public static function get_inline_gate_content_for_post( $gate_layout_id ) {
+		$gate_layout_post = \get_post( $gate_layout_id );
+
+		// Get style, defaulting if post doesn't exist or meta is not set.
+		$style = $gate_layout_post ? \get_post_meta( $gate_layout_id, 'style', true ) : '';
+		if ( empty( $style ) ) {
+			$style = self::get_layout_meta_default( 'style' );
+		}
+
 		if ( 'inline' !== $style ) {
 			return '';
 		}
-		$gate = \get_the_content( null, false, \get_post( $gate_post_id ) );
 
-		// Add clearfix to the gate.
-		$gate = '<div style=\'content:"";clear:both;display:table;\'></div>' . $gate;
+		// Build gate content.
+		$gate_content = '<div style=\'content:"";clear:both;display:table;\'></div>';
+		if ( $gate_layout_post ) {
+			$gate_content        .= \get_the_content( null, false, $gate_layout_post );
+			$visible_paragraphs   = self::get_visible_paragraphs( $gate_layout_id );
+			$inline_fade          = \get_post_meta( $gate_layout_id, 'inline_fade', true );
+		} else {
+			// Use defaults when layout post doesn't exist.
+			$gate_content       .= self::get_default_gate_content();
+			$visible_paragraphs  = self::get_layout_meta_default( 'visible_paragraphs' );
+			$inline_fade         = self::get_layout_meta_default( 'inline_fade' );
+		}
 
 		// Apply inline fade.
-		$visible_paragraphs = self::get_visible_paragraphs( $gate_post_id );
-		if ( $visible_paragraphs > 0 && \get_post_meta( $gate_post_id, 'inline_fade', true ) ) {
-			$gate = '<div style="pointer-events: none; height: 10em; margin-top: -10em; width: 100%; position: absolute; background: linear-gradient(180deg, rgba(255,255,255,0) 14%, rgba(255,255,255,1) 76%);"></div>' . $gate;
+		if ( $visible_paragraphs > 0 && $inline_fade ) {
+			$gate_content = '<div style="pointer-events: none; height: 10em; margin-top: -10em; width: 100%; position: absolute; background: linear-gradient(180deg, rgba(255,255,255,0) 14%, rgba(255,255,255,1) 76%);"></div>' . $gate_content;
 		}
 
 		// Wrap gate in a div for styling.
-		$gate = '<div class="newspack-content-gate__gate newspack-content-gate__inline-gate">' . $gate . '</div>';
-		return $gate;
+		$gate_content = '<div class="newspack-content-gate__gate newspack-content-gate__inline-gate">' . $gate_content . '</div>';
+		return $gate_content;
 	}
 
 	/**
 	 * Get the restricted post excerpt based on gate settings.
 	 *
 	 * @param \WP_Post $post         The post object to get excerpt from.
-	 * @param int      $gate_post_id The gate post ID containing layout settings.
+	 * @param int      $gate_layout_id The gate layout ID.
 	 *
 	 * @return string The restricted post excerpt HTML.
 	 */
-	public static function get_restricted_post_excerpt_for_gate( $post, $gate_post_id ) {
-		$content = $post->post_content;
+	public static function get_restricted_post_excerpt_for_gate( $post, $gate_layout_id ) {
+		$content          = $post->post_content;
+		$gate_layout_post = \get_post( $gate_layout_id );
 
-		$style = \get_post_meta( $gate_post_id, 'style', true );
+		// Get settings from layout post, or use defaults if post doesn't exist.
+		if ( $gate_layout_post ) {
+			$style        = \get_post_meta( $gate_layout_id, 'style', true );
+			$use_more_tag = \get_post_meta( $gate_layout_id, 'use_more_tag', true );
+			$count        = self::get_visible_paragraphs( $gate_layout_id );
+		} else {
+			$style        = '';
+			$use_more_tag = self::get_layout_meta_default( 'use_more_tag' );
+			$count        = self::get_layout_meta_default( 'visible_paragraphs' );
+		}
 
-		$use_more_tag = get_post_meta( $gate_post_id, 'use_more_tag', true );
+		// Default to configured style if not set.
+		if ( empty( $style ) ) {
+			$style = self::get_layout_meta_default( 'style' );
+		}
+
 		// Use <!--more--> as threshold if it exists.
 		if ( $use_more_tag && strpos( $content, '<!--more-->' ) ) {
 			$content = apply_filters( 'newspack_gate_content', explode( '<!--more-->', $content )[0] );
 		} else {
-			$count = self::get_visible_paragraphs( $gate_post_id );
 			if ( 0 === $count ) {
 				return '';
 			}

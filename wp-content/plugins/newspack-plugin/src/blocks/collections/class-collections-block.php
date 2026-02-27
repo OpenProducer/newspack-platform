@@ -65,6 +65,18 @@ final class Collections_Block {
 	 */
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'register_block' ] );
+		add_action( 'after_setup_theme', [ __CLASS__, 'register_image_sizes' ] );
+	}
+
+	/**
+	 * Register custom image sizes for collections block.
+	 *
+	 * @return void
+	 */
+	public static function register_image_sizes() {
+		add_image_size( 'newspack_collection_small', 550, 9999 );
+		add_image_size( 'newspack_collection_medium', 800, 9999 );
+		add_image_size( 'newspack_collection_large', 1200, 9999 );
 	}
 
 	/**
@@ -264,19 +276,27 @@ final class Collections_Block {
 	 * @return string Image size name.
 	 */
 	public static function get_image_size_from_attributes( $attributes ) {
+		if ( isset( $attributes['layout'], $attributes['columns'] ) && 'grid' === $attributes['layout'] && 4 <= $attributes['columns'] ) {
+			return 'newspack_collection_small';
+		}
+
+		if ( isset( $attributes['layout'], $attributes['columns'] ) && 'grid' === $attributes['layout'] && 3 === $attributes['columns'] ) {
+			return 'newspack_collection_medium';
+		}
+
 		if ( ! isset( $attributes['layout'] ) || 'grid' === $attributes['layout'] ) {
-			return 'post-thumbnail';
+			return 'newspack_collection_large';
 		}
 
 		$size = isset( $attributes['imageSize'] ) ? $attributes['imageSize'] : 'small';
 		switch ( $size ) {
 			case 'large':
-				return 'full';
+				return 'newspack_collection_large';
 			case 'medium':
-				return 'medium_large';
+				return 'newspack_collection_medium';
 			case 'small':
 			default:
-				return 'medium';
+				return 'newspack_collection_small';
 		}
 	}
 

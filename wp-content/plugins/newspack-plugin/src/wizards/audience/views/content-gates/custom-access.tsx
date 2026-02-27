@@ -20,6 +20,9 @@ interface CustomAccessProps {
 }
 
 export default function CustomAccess( { gateId, customAccess, onChange, cardProps = {} }: CustomAccessProps ) {
+	// Get the first group of rules (UI currently only supports a single group).
+	const currentRules = customAccess.access_rules[ 0 ] || [];
+
 	const handleChange = useCallback(
 		( value: Partial< CustomAccess > ) => {
 			onChange( {
@@ -31,6 +34,16 @@ export default function CustomAccess( { gateId, customAccess, onChange, cardProp
 		},
 		[ customAccess, onChange ]
 	);
+
+	const handleRulesChange = useCallback(
+		( rules: GateAccessRule[] ) => {
+			// Wrap rules in a single group to maintain grouped format.
+			// If no rules, set empty array to avoid [ [] ] which would pass readiness checks.
+			handleChange( { access_rules: rules.length ? [ rules ] : [] } );
+		},
+		[ handleChange ]
+	);
+
 	return (
 		<ActionCard
 			title={ __( 'Paid Access', 'newspack-plugin' ) }
@@ -43,10 +56,7 @@ export default function CustomAccess( { gateId, customAccess, onChange, cardProp
 		>
 			{ customAccess.active && (
 				<Card noBorder>
-					<AccessRules
-						rules={ customAccess.access_rules }
-						onChange={ ( rules: GateAccessRule[] ) => handleChange( { access_rules: rules } ) }
-					/>
+					<AccessRules rules={ currentRules } onChange={ handleRulesChange } />
 					<hr />
 					<Metering metering={ customAccess.metering } onChange={ ( metering: Metering ) => handleChange( { metering } ) } />
 				</Card>

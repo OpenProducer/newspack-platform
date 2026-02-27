@@ -123,11 +123,83 @@ class Metering {
 	 * @return array Metering settings.
 	 */
 	public static function get_metering_settings( $gate_id ) {
+		$anonymous_settings  = self::get_anonymous_settings( $gate_id );
+		$registered_settings = self::get_registered_settings( $gate_id );
+		return [
+			'enabled'           => $anonymous_settings['enabled'] || $registered_settings['enabled'],
+			'period'            => $anonymous_settings['period'], // Legacy property, equivalent to anonymous_period.
+			'anonymous_count'   => $anonymous_settings['count'],
+			'anonymous_period'  => $anonymous_settings['period'],
+			'registered_count'  => $registered_settings['count'],
+			'registered_period' => $registered_settings['period'],
+		];
+	}
+
+	/**
+	 * Get legacy metering settings for a gate.
+	 *
+	 * @param int $gate_id Gate ID.
+	 *
+	 * @return array Metering settings.
+	 */
+	protected static function get_legacy_metering_settings( $gate_id ) {
 		return [
 			'enabled'          => (bool) \get_post_meta( $gate_id, 'metering', true ),
-			'anonymous_count'  => \get_post_meta( $gate_id, 'metering_anonymous_count', true ),
-			'registered_count' => \get_post_meta( $gate_id, 'metering_registered_count', true ),
+			'anonymous_count'  => absint( \get_post_meta( $gate_id, 'metering_anonymous_count', true ) ),
+			'registered_count' => absint( \get_post_meta( $gate_id, 'metering_registered_count', true ) ),
 			'period'           => \get_post_meta( $gate_id, 'metering_period', true ),
+		];
+	}
+
+	/**
+	 * Get anonymous metering settings for a gate.
+	 *
+	 * @param int $gate_id Gate ID.
+	 *
+	 * @return array Anonymous metering settings.
+	 */
+	public static function get_anonymous_settings( $gate_id ) {
+		if ( Memberships::is_active() ) {
+			// Fetch from legacy metering settings.
+			$metering = self::get_legacy_metering_settings( $gate_id );
+			return [
+				'enabled' => $metering['enabled'],
+				'count'   => $metering['anonymous_count'],
+				'period'  => $metering['period'],
+			];
+		}
+
+		$registration = Content_Gate::get_registration_settings( $gate_id );
+		return [
+			'enabled' => $registration['metering']['enabled'],
+			'count'   => absint( $registration['metering']['count'] ),
+			'period'  => $registration['metering']['period'],
+		];
+	}
+
+	/**
+	 * Get registered metering settings for a gate.
+	 *
+	 * @param int $gate_id Gate ID.
+	 *
+	 * @return array Registered metering settings.
+	 */
+	public static function get_registered_settings( $gate_id ) {
+		if ( Memberships::is_active() ) {
+			// Fetch from legacy metering settings.
+			$metering = self::get_legacy_metering_settings( $gate_id );
+			return [
+				'enabled' => $metering['enabled'],
+				'count'   => $metering['registered_count'],
+				'period'  => $metering['period'],
+			];
+		}
+
+		$custom_access = Content_Gate::get_custom_access_settings( $gate_id );
+		return [
+			'enabled' => $custom_access['metering']['enabled'],
+			'count'   => absint( $custom_access['metering']['count'] ),
+			'period'  => $custom_access['metering']['period'],
 		];
 	}
 
@@ -156,7 +228,8 @@ class Metering {
 		if ( ! \is_singular() || ! Content_Gate::is_post_restricted() || ! self::is_frontend_metering() ) {
 			return;
 		}
-		$gate_post_id = Content_Gate::get_gate_post_id();
+		$gate_layout_id = Content_Gate::get_gate_layout_id();
+		$gate_post_id   = Content_Gate::get_gate_post_id();
 		$handle       = 'newspack-content-gate-metering';
 		\wp_enqueue_script(
 			$handle,
@@ -165,14 +238,15 @@ class Metering {
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/content-gate-metering.js' ),
 			true
 		);
+		$settings = self::get_metering_settings( $gate_post_id );
 		\wp_localize_script(
 			$handle,
 			'newspack_metering_settings',
 			[
-				'visible_paragraphs' => \get_post_meta( $gate_post_id, 'visible_paragraphs', true ),
-				'use_more_tag'       => \get_post_meta( $gate_post_id, 'use_more_tag', true ),
-				'count'              => \get_post_meta( $gate_post_id, 'metering_anonymous_count', true ),
-				'period'             => \get_post_meta( $gate_post_id, 'metering_period', true ),
+				'visible_paragraphs' => \get_post_meta( $gate_layout_id, 'visible_paragraphs', true ),
+				'use_more_tag'       => \get_post_meta( $gate_layout_id, 'use_more_tag', true ),
+				'count'              => $settings['anonymous_count'],
+				'period'             => $settings['anonymous_period'],
 				'gate_id'            => $gate_post_id,
 				'post_id'            => get_the_ID(),
 				'article_view'       => self::$article_view,
@@ -184,10 +258,15 @@ class Metering {
 	/**
 	 * Get the metering expiration time for the given date.
 	 *
+	 * @param string|null $period Metering period. Default is null, which will use the gate's metering period.
+	 *
 	 * @return int Timestamp of the expiration time.
 	 */
-	private static function get_expiration_time() {
-		$period = \get_post_meta( Content_Gate::get_gate_post_id(), 'metering_period', true );
+	private static function get_expiration_time( $period = null ) {
+		if ( ! $period ) {
+			$settings = self::get_metering_settings( Content_Gate::get_gate_post_id() );
+			$period = $settings['period'];
+		}
 		switch ( $period ) {
 			case 'day':
 				return strtotime( 'tomorrow' );
@@ -212,16 +291,13 @@ class Metering {
 			$post_id = get_the_ID();
 		}
 		$gate_post_id = Content_Gate::get_gate_post_id( $post_id );
-		$metering     = \get_post_meta( $gate_post_id, 'metering', true );
-		if ( ! $metering ) {
-			return false;
+
+		$settings = self::get_metering_settings( $gate_post_id );
+		if ( $settings['enabled'] && ( $settings['anonymous_count'] > 0 || $settings['registered_count'] > 0 ) ) {
+			return true;
 		}
-		$anonymous_count  = \get_post_meta( $gate_post_id, 'metering_anonymous_count', true );
-		$registered_count = \get_post_meta( $gate_post_id, 'metering_registered_count', true );
-		if ( ! $anonymous_count && ! $registered_count ) {
-			return false;
-		}
-		return true;
+
+		return false;
 	}
 
 	/**
@@ -248,11 +324,9 @@ class Metering {
 			return false;
 		}
 
-		$gate_post_id    = Content_Gate::get_gate_post_id();
-		$metering        = \get_post_meta( $gate_post_id, 'metering', true );
-		$anonymous_count = \get_post_meta( $gate_post_id, 'metering_anonymous_count', true );
-
-		$is_frontend_metering = $metering && ! empty( $anonymous_count );
+		$gate_post_id         = Content_Gate::get_gate_post_id();
+		$settings             = self::get_anonymous_settings( $gate_post_id );
+		$is_frontend_metering = $settings['enabled'] && $settings['count'] > 0;
 
 		/**
 		 * Filters whether to use the frontend metering strategy.
@@ -293,11 +367,11 @@ class Metering {
 		}
 
 		$gate_post_id = Content_Gate::get_gate_post_id();
-		$metering     = \get_post_meta( $gate_post_id, 'metering', true );
+		$settings     = self::get_registered_settings( $gate_post_id );
 		$priority     = \get_post_meta( $gate_post_id, 'gate_priority', true );
 
 		// Bail if metering is not enabled.
-		if ( ! $metering ) {
+		if ( ! $settings['enabled'] || $settings['count'] <= 0 ) {
 			return false;
 		}
 
@@ -307,8 +381,7 @@ class Metering {
 		}
 
 		// Aggregate metering by gate priority, if available.
-		$suffix = Content_Gate::is_newspack_feature_enabled() && ! Memberships::is_active() && $priority ? $priority : $gate_post_id;
-		$user_meta_key = self::METERING_META_KEY . '_' . $suffix;
+		$user_meta_key = self::METERING_META_KEY . '_' . $gate_post_id;
 
 		$updated_user_data  = false;
 		$user_metering_data = \get_user_meta( get_current_user_id(), $user_meta_key, true );
@@ -318,7 +391,7 @@ class Metering {
 
 		$user_expiration = isset( $user_metering_data['expiration'] ) ? $user_metering_data['expiration'] : 0;
 
-		$current_expiration = self::get_expiration_time();
+		$current_expiration = self::get_expiration_time( $settings['period'] );
 		if ( $user_expiration !== $current_expiration ) {
 			// Clear content if expired.
 			if ( $user_expiration < $current_expiration ) {
@@ -329,9 +402,7 @@ class Metering {
 			$updated_user_data                = true;
 		}
 
-		$count = (int) \get_post_meta( $gate_post_id, 'metering_registered_count', true );
-
-		$limited          = count( $user_metering_data['content'] ) >= $count;
+		$limited          = count( $user_metering_data['content'] ) >= $settings['count'];
 		$accessed_content = in_array( $post_id, $user_metering_data['content'], true );
 		if ( ! $limited && ! $accessed_content ) {
 			$user_metering_data['content'][] = $post_id;
@@ -409,7 +480,8 @@ class Metering {
 			$post_id = get_the_ID();
 		}
 		$gate_post_id = Content_Gate::get_gate_post_id( $post_id );
-		return \get_post_meta( $gate_post_id, 'metering_period', true );
+		$settings     = self::get_metering_settings( $gate_post_id );
+		return $settings['period'];
 	}
 
 	/**
@@ -439,14 +511,15 @@ class Metering {
 	 * @return int|boolean Total number of metered views if metering is enabled, otherwise false.
 	 */
 	public static function get_total_metered_views( $is_logged_in = false ) {
-		$gate_post_id = Content_Gate::get_gate_post_id( get_the_ID() );
+		$gate_post_id = Content_Gate::get_gate_post_id();
 		if ( ! $gate_post_id ) {
 			return false;
 		}
+		$metering_settings = self::get_metering_settings( $gate_post_id );
 		if ( ! $is_logged_in ) {
-			return (int) \get_post_meta( $gate_post_id, 'metering_anonymous_count', true );
+			return $metering_settings['anonymous_count'];
 		}
-		return (int) \get_post_meta( $gate_post_id, 'metering_registered_count', true );
+		return $metering_settings['registered_count'];
 	}
 }
 Metering::init();

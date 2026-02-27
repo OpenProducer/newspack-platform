@@ -57,6 +57,7 @@ return array(
     'Newspack\\Configuration_Managers' => $baseDir . '/includes/configuration_managers/class-configuration-managers.php',
     'Newspack\\Content_Gate' => $baseDir . '/includes/content-gate/class-content-gate.php',
     'Newspack\\Content_Gate\\Block_Patterns' => $baseDir . '/includes/content-gate/class-block-patterns.php',
+    'Newspack\\Content_Gate\\IP_Access_Rule' => $baseDir . '/includes/content-gate/class-ip-access-rule.php',
     'Newspack\\Content_Gate_Layout' => $baseDir . '/includes/content-gate/trait-content-gate-layout.php',
     'Newspack\\Content_Gifting' => $baseDir . '/includes/content-gate/content-gifting/class-content-gifting.php',
     'Newspack\\Content_Gifting_CTA' => $baseDir . '/includes/content-gate/content-gifting/class-content-gifting-cta.php',

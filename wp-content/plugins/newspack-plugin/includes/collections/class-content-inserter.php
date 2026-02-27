@@ -64,7 +64,13 @@ class Content_Inserter {
 			return;
 		}
 
-		$collections = Query_Helper::get_post_collections( $post );
+		// Only show indicators for published collections.
+		$collections = array_filter(
+			Query_Helper::get_post_collections( $post ),
+			function ( $collection_id ) {
+				return 'publish' === get_post_status( $collection_id );
+			}
+		);
 		if ( empty( $collections ) ) {
 			return;
 		}

@@ -1,0 +1,53 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "newspack/my-account-button",
+	"title": "My Account Button",
+	"category": "newspack",
+	"description": "Button linking readers to their account or sign-in modal.",
+	"keywords": [
+		"account",
+		"signin",
+		"login",
+		"button"
+	],
+	"textdomain": "newspack-plugin",
+	"attributes": {
+		"signedInLabel": {
+			"type": "string",
+			"default": "My Account"
+		},
+		"signedOutLabel": {
+			"type": "string",
+			"default": "Sign in"
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"align": false,
+		"color": {
+			"background": true,
+			"text": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalTextTransform": true,
+			"__experimentalTextDecoration": true,
+			"__experimentalLetterSpacing": true
+		},
+		"spacing": {
+			"padding": true
+		},
+		"__experimentalBorder": {
+			"radius": true
+		},
+		"shadow": true
+	},
+	"editorStyle": "file:../../../dist/blocks.css",
+	"style": "file:../../../dist/blocks.css"
+}
+

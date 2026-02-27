@@ -617,6 +617,7 @@ class ComposerStaticInitf5e005b8bffa35368fcae0b8114b69c4
         'Yoast\\WP\\SEO\\Conditionals\\Conditional' => __DIR__ . '/../..' . '/src/conditionals/conditional-interface.php',
         'Yoast\\WP\\SEO\\Conditionals\\Deactivating_Yoast_Seo_Conditional' => __DIR__ . '/../..' . '/src/conditionals/deactivating-yoast-seo-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Development_Conditional' => __DIR__ . '/../..' . '/src/conditionals/development-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Dynamic_Product_Permalinks_Conditional' => __DIR__ . '/../..' . '/src/conditionals/dynamic-product-permalinks-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Feature_Flag_Conditional' => __DIR__ . '/../..' . '/src/conditionals/feature-flag-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Front_End_Conditional' => __DIR__ . '/../..' . '/src/conditionals/front-end-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Get_Request_Conditional' => __DIR__ . '/../..' . '/src/conditionals/get-request-conditional.php',

@@ -31,14 +31,14 @@ class Group_Subscription_Settings {
 	 */
 	public static function init() {
 		// Add Group Subscription options to subscription and variable subscription product admin pages.
-		add_filter( 'newspack_custom_product_options', [ __CLASS__, 'add_custom_product_options' ] );
-		add_filter( 'newspack_custom_product_pricing_options', [ __CLASS__, 'add_custom_product_pricing_options' ] );
+		\add_filter( 'newspack_custom_product_options', [ __CLASS__, 'add_custom_product_options' ] );
+		\add_filter( 'newspack_custom_product_pricing_options', [ __CLASS__, 'add_custom_product_pricing_options' ] );
 
 		// Add Group Subscription options to subscription admin pages.
-		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_scripts' ] );
-		add_action( 'add_meta_boxes', [ __CLASS__, 'add_group_subscription_meta_box' ], 26, 2 );
-		add_action( 'woocommerce_process_shop_order_meta', [ __CLASS__, 'save_group_subscription_meta' ], 10, 2 );
-		add_action( 'wp_ajax_newspack_group_subscription_search_users', [ __CLASS__, 'ajax_search_users' ] );
+		\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_scripts' ] );
+		\add_action( 'add_meta_boxes', [ __CLASS__, 'add_group_subscription_meta_box' ], 26, 2 );
+		\add_action( 'woocommerce_process_shop_order_meta', [ __CLASS__, 'save_group_subscription_meta' ], 10, 2 );
+		\add_action( 'wp_ajax_newspack_group_subscription_search_users', [ __CLASS__, 'ajax_search_users' ] );
 	}
 
 	/**
@@ -48,13 +48,13 @@ class Group_Subscription_Settings {
 		if ( ! function_exists( 'wcs_get_page_screen_id' ) ) {
 			return;
 		}
-		$screen = get_current_screen();
+		$screen = \get_current_screen();
 		$is_subscription_screen = in_array(
 			$screen->id,
 			[
 				'edit-shop_subscription',
 				'shop_subscription',
-				wcs_get_page_screen_id( 'shop_subscription' ),
+				\wcs_get_page_screen_id( 'shop_subscription' ),
 			],
 			true
 		);
@@ -167,30 +167,6 @@ class Group_Subscription_Settings {
 	}
 
 	/**
-	 * Get the product ID for a subscription.
-	 *
-	 * @param WC_Subscription|int $subscription The subscription object or ID.
-	 *
-	 * @return int|false The product ID, or false if no product is found.
-	 */
-	public static function get_subscription_product_id( $subscription ) {
-		if ( ! is_a( $subscription, 'WC_Subscription' ) ) {
-			$subscription = \wcs_get_subscription( $subscription );
-		}
-		if ( ! $subscription ) {
-			return false;
-		}
-		$product_id = false;
-		foreach ( $subscription->get_items() as $item ) {
-			$product_id = \wcs_get_canonical_product_id( $item );
-			if ( $product_id ) {
-				break;
-			}
-		}
-		return $product_id;
-	}
-
-	/**
 	 * Get the group subscription settings for a subscription.
 	 *
 	 * @param WC_Subscription|int $subscription The subscription object or ID.
@@ -207,7 +183,7 @@ class Group_Subscription_Settings {
 		if ( ! $subscription ) {
 			return self::DEFAULT_SETTINGS;
 		}
-		$product_id          = self::get_subscription_product_id( $subscription );
+		$product_id          = WooCommerce_Subscriptions::get_subscription_product_id( $subscription );
 		$settings            = self::get_product_settings( $product_id );
 		$settings['enabled'] = $subscription->get_meta( self::GROUP_SUBSCRIPTION_META_PREFIX . 'enabled', true ) ? \wc_string_to_bool( $subscription->get_meta( self::GROUP_SUBSCRIPTION_META_PREFIX . 'enabled', true ) ) : $settings['enabled'];
 		$settings['limit']   = (int) $subscription->get_meta( self::GROUP_SUBSCRIPTION_META_PREFIX . 'limit', true ) ?: $settings['limit']; // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
@@ -286,7 +262,7 @@ class Group_Subscription_Settings {
 			return;
 		}
 		$settings = self::get_subscription_settings( $subscription );
-		$product  = \wc_get_product( self::get_subscription_product_id( $subscription ) );
+		$product  = \wc_get_product( WooCommerce_Subscriptions::get_subscription_product_id( $subscription ) );
 		$members  = Group_Subscription::get_members( $subscription );
 		?>
 		<div class="newspack-group-subscription--container" data-subscription-id="<?php echo \esc_attr( $subscription->get_id() ); ?>">

@@ -1,3 +1,10 @@
+## [3.9.2](https://github.com/Automattic/newspack-popups/compare/v3.9.1...v3.9.2) (2026-02-13)
+
+
+### Bug Fixes
+
+* emoji encoding in DOM::loadHTML ([71a6d3f](https://github.com/Automattic/newspack-popups/commit/71a6d3fbc150fd2c8c53980fab975c603cea06db))
+
 ## [3.9.1](https://github.com/Automattic/newspack-popups/compare/v3.9.0...v3.9.1) (2026-02-05)
 
 

@@ -21,7 +21,7 @@ class Group_Subscription {
 	/**
 	 * Check if a subscription is a group subscription.
 	 *
-	 * @param WC_Subscription|int $subscription The subscription object or ID.
+	 * @param \WC_Subscription|int $subscription The subscription object or ID.
 	 *
 	 * @return bool Whether the subscription is a group subscription.
 	 */
@@ -33,7 +33,7 @@ class Group_Subscription {
 	/**
 	 * Get the managers of a group subscription.
 	 *
-	 * @param WC_Subscription|int $subscription The subscription object or ID.
+	 * @param \WC_Subscription|int $subscription The subscription object or ID.
 	 *
 	 * @return int[] The group manager user IDs.
 	 */
@@ -55,7 +55,7 @@ class Group_Subscription {
 	/**
 	 * Get the members of a group subscription.
 	 *
-	 * @param WC_Subscription|int $subscription The subscription object or ID.
+	 * @param \WC_Subscription|int $subscription The subscription object or ID.
 	 *
 	 * @return int[] Array of user IDs for the group subscription members.
 	 */
@@ -88,7 +88,7 @@ class Group_Subscription {
 		 * Filter the members of a group subscription.
 		 *
 		 * @param int[] $members Array of user IDs for group subscription members.
-		 * @param WC_Subscription $subscription The subscription object.
+		 * @param \WC_Subscription $subscription The subscription object.
 		 */
 		return apply_filters( 'newspack_group_subscription_members', $members, $subscription );
 	}
@@ -96,11 +96,11 @@ class Group_Subscription {
 	/**
 	 * Update the member IDs for a group subscription.
 	 *
-	 * @param WC_Subscription|int $subscription The subscription object or ID.
-	 * @param int[]               $members_to_add Group member user IDs to add the subscription.
-	 * @param int[]               $members_to_remove Group member user IDs to remove from the subscription.
+	 * @param \WC_Subscription|int $subscription The subscription object or ID.
+	 * @param int[]                $members_to_add Group member user IDs to add the subscription.
+	 * @param int[]                $members_to_remove Group member user IDs to remove from the subscription.
 	 *
-	 * @return object|WP_Error Added/removed results.
+	 * @return array|\WP_Error Added/removed results.
 	 */
 	public static function update_members( $subscription, $members_to_add, $members_to_remove = [] ) {
 		if ( ! function_exists( 'wcs_get_subscription' ) ) {
@@ -168,8 +168,8 @@ class Group_Subscription {
 	/**
 	 * Check if a user is a member or manager of a group subscription.
 	 *
-	 * @param int                 $user_id The user ID.
-	 * @param WC_Subscription|int $subscription The subscription object or ID.
+	 * @param int                  $user_id The user ID.
+	 * @param \WC_Subscription|int $subscription The subscription object or ID.
 	 *
 	 * @return bool|null Whether the user has access to the group subscription, or null if not a group subscription.
 	 */
@@ -190,7 +190,7 @@ class Group_Subscription {
 		 *
 		 * @param bool|null $is_member Whether the user is a member or manager of the group subscription, or null if not a group subscription.
 		 * @param int $user_id The user ID.
-		 * @param WC_Subscription|int $subscription The subscription object or ID.
+		 * @param \WC_Subscription|int $subscription The subscription object or ID.
 		 */
 		return apply_filters( 'newspack_group_subscription_user_is_member', $is_member, $user_id, $subscription );
 	}
@@ -202,7 +202,7 @@ class Group_Subscription {
 	 * @param int  $user_id The user ID.
 	 * @param bool $ids_only If true, return only the subscription IDs instead of the subscription objects.
 	 *
-	 * @return WC_Subscription[]|int[] The group subscriptions or subscription IDs the user is a member of.
+	 * @return \WC_Subscription[]|int[] The group subscriptions or subscription IDs the user is a member of.
 	 */
 	public static function get_group_subscriptions_for_user( $user_id, $ids_only = false ) {
 		if ( ! function_exists( 'wcs_get_subscription' ) ) {
@@ -220,7 +220,7 @@ class Group_Subscription {
 		/**
 		 * Filter the group subscriptions a user is a member of.
 		 *
-		 * @param WC_Subscription[]|int[] $subscriptions The group subscriptions or subscription IDs the user is a member of.
+		 * @param \WC_Subscription[]|int[] $subscriptions The group subscriptions or subscription IDs the user is a member of.
 		 * @param int $user_id The user ID.
 		 */
 		return apply_filters( 'newspack_group_subscriptions_for_user', $subscriptions, $user_id );

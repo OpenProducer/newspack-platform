@@ -369,10 +369,13 @@ class Audience_Content_Gates extends Wizard {
 									'access_rules'   => [
 										'type'  => 'array',
 										'items' => [
-											'type'       => 'object',
-											'properties' => [
-												'slug'  => [ 'type' => 'string' ],
-												'value' => [ 'type' => 'mixed' ],
+											'type'  => 'array',
+											'items' => [
+												'type' => 'object',
+												'properties' => [
+													'slug' => [ 'type' => 'string' ],
+													'value' => [ 'type' => 'mixed' ],
+												],
 											],
 										],
 									],
@@ -472,20 +475,79 @@ class Audience_Content_Gates extends Wizard {
 	 * @param array  $rules The rules.
 	 * @param string $type The type of rules to sanitize.
 	 *
-	 * @return array The sanitized access rules.
+	 * @return array The sanitized rules.
 	 */
 	public function sanitize_rules( $rules, $type = 'access' ) {
-		$sanitized_rules = [];
 		if ( ! is_array( $rules ) ) {
-			return $sanitized_rules;
+			return [];
 		}
+
+		// For access rules, handle grouped format.
+		if ( 'access' === $type ) {
+			return $this->sanitize_access_rules_grouped( $rules );
+		}
+
+		// For content rules, use flat format.
+		$sanitized_rules = [];
 		foreach ( $rules as $rule ) {
-			$sanitized = $type === 'access' ? $this->sanitize_access_rule( $rule ) : $this->sanitize_content_rule( $rule );
+			$sanitized = $this->sanitize_content_rule( $rule );
 			if ( ! is_wp_error( $sanitized ) ) {
 				$sanitized_rules[] = $sanitized;
 			}
 		}
 		return $sanitized_rules;
+	}
+
+	/**
+	 * Sanitize access rules in grouped format.
+	 *
+	 * Accepts both flat format [ rule1, rule2 ] and grouped format [ [ rule1, rule2 ], [ rule3 ] ].
+	 * Always returns grouped format [ [ rule1, rule2 ], [ rule3 ] ].
+	 *
+	 * @param array $rules The access rules.
+	 *
+	 * @return array The sanitized access rules in grouped format.
+	 */
+	public function sanitize_access_rules_grouped( $rules ) {
+		if ( empty( $rules ) ) {
+			return [];
+		}
+
+		// Normalize rules (flat or grouped) to a consistent grouped format.
+		$rules = Access_Rules::normalize_rules( $rules );
+
+		// Sanitize each group.
+		$sanitized_groups = [];
+		foreach ( $rules as $group ) {
+			$sanitized_group = $this->sanitize_access_rules_group( $group );
+			if ( ! empty( $sanitized_group ) ) {
+				$sanitized_groups[] = $sanitized_group;
+			}
+		}
+
+		return $sanitized_groups;
+	}
+
+	/**
+	 * Sanitize a single group of access rules.
+	 *
+	 * @param array $group The group of access rules.
+	 *
+	 * @return array The sanitized group.
+	 */
+	public function sanitize_access_rules_group( $group ) {
+		if ( ! is_array( $group ) ) {
+			return [];
+		}
+
+		$sanitized_group = [];
+		foreach ( $group as $rule ) {
+			$sanitized = $this->sanitize_access_rule( $rule );
+			if ( ! is_wp_error( $sanitized ) ) {
+				$sanitized_group[] = $sanitized;
+			}
+		}
+		return $sanitized_group;
 	}
 
 	/**

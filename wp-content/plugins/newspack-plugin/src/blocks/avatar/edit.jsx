@@ -47,16 +47,22 @@ const AvatarInspectorControls = ( { setAttributes, attributes } ) => (
 
 const AvatarWrapper = ( { avatar, size, attributes } ) => {
 	const { className } = useBlockProps();
+	const borderProps = useBorderProps( attributes );
+
+	const avatarSrc = avatar?.src;
+	if ( ! avatarSrc ) {
+		return null;
+	}
+
 	const duotoneClassName = className ? className.split( ' ' ).filter( classes => classes.includes( 'wp-duotone' ) ) : '';
 	const classNames = clsx( 'newspack-avatar-wrapper', duotoneClassName );
-	const borderProps = useBorderProps( attributes );
-	const doubledSizedSrc = addQueryArgs( removeQueryArgs( avatar?.src, [ 's' ] ), {
+	const doubledSizedSrc = addQueryArgs( removeQueryArgs( avatarSrc, [ 's' ] ), {
 		s: attributes?.size * 2,
 	} );
 	const avatarImage = (
 		<img
 			src={ doubledSizedSrc }
-			alt={ avatar.alt }
+			alt={ avatar.alt || '' }
 			className={ clsx( 'avatar', 'avatar-' + size, 'photo', 'wp-block-newspack-avatar__image', borderProps.className ) }
 			style={ {
 				width: size,
@@ -105,10 +111,8 @@ const Edit = ( { attributes, context, setAttributes } ) => {
 			{ authors?.length
 				? authors.map( ( author, index ) => {
 						const currentAvatar = {
-							src: author?.avatar_urls?.[ '96' ],
-							alt: author?.name,
-							minSize: 16,
-							maxSize: 128,
+							src: author.avatarSrc,
+							alt: author?.name || author?.display_name || '',
 						};
 						return renderAvatar( currentAvatar, author.id || index );
 				  } )

@@ -15,8 +15,8 @@ import { Spinner } from '@wordpress/components';
  */
 import './style.scss';
 import { parseBylineForDisplay, formatAuthorsList } from './utils';
-import { useCustomByline } from './hooks/use-custom-byline';
-import { useCoAuthors } from './hooks/use-coauthors';
+import { useCustomByline } from '../../shared/hooks/use-custom-byline';
+import { useCoAuthors } from '../../shared/hooks/use-coauthors';
 import { useDefaultAuthor } from './hooks/use-default-author';
 import { BylineInspectorControls } from './inspector.jsx';
 

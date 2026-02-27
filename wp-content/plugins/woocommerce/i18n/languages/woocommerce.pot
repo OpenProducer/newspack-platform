@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 10.5.0\n"
+"Project-Id-Version: WooCommerce 10.5.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-02-04T23:46:34+00:00\n"
+"POT-Creation-Date: 2026-02-13T14:46:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: woocommerce\n"
@@ -9317,7 +9317,7 @@ msgid "Total:"
 msgstr ""
 
 #: includes/abstracts/abstract-wc-order.php:2531
-#: includes/admin/class-wc-admin-dashboard.php:566
+#: includes/admin/class-wc-admin-dashboard.php:518
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:123
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:214
 #: includes/admin/reports/class-wc-report-downloads.php:87
@@ -10624,15 +10624,14 @@ msgid "reviewed by %s"
 msgstr ""
 
 #: includes/admin/class-wc-admin-dashboard.php:472
-#: includes/admin/class-wc-admin-dashboard.php:527
 msgid "There are no product reviews yet."
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:559
+#: includes/admin/class-wc-admin-dashboard.php:511
 msgid "Loading network orders"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:567
+#: includes/admin/class-wc-admin-dashboard.php:519
 #: includes/admin/class-wc-admin-menus.php:190
 #: includes/admin/class-wc-admin-webhooks-table-list.php:51
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:125
@@ -10664,7 +10663,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:568
+#: includes/admin/class-wc-admin-dashboard.php:520
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:128
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:263
 #: includes/admin/meta-boxes/views/html-order-item.php:158
@@ -10696,25 +10695,25 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:577
+#: includes/admin/class-wc-admin-dashboard.php:529
 #: includes/class-wc-post-types.php:502
 msgid "No orders found"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:626
+#: includes/admin/class-wc-admin-dashboard.php:578
 #: src/Admin/API/Reports/PerformanceIndicators/Controller.php:147
 msgid "Sorry, fetching performance indicators failed."
 msgstr ""
 
 #. translators: 1: total income 2: days
-#: includes/admin/class-wc-admin-dashboard.php:704
+#: includes/admin/class-wc-admin-dashboard.php:656
 #: includes/admin/reports/class-wc-admin-report.php:639
 #, php-format
 msgid "Sold %1$s worth in the last %2$d days"
 msgstr ""
 
 #. translators: 1: total items sold 2: days
-#: includes/admin/class-wc-admin-dashboard.php:707
+#: includes/admin/class-wc-admin-dashboard.php:659
 #: includes/admin/reports/class-wc-admin-report.php:642
 #, php-format
 msgid "Sold %1$d item in the last %2$d days"
@@ -40599,31 +40598,31 @@ msgid ". Authorization ID: %1$s not found. Please log into your %2$sPayPal accou
 msgstr ""
 
 #. translators: %1$s: PayPal order ID
-#: src/Gateways/PayPal/WebhookHandler.php:91
+#: src/Gateways/PayPal/WebhookHandler.php:96
 #, php-format
 msgid "PayPal payment approved. PayPal Order ID: %1$s"
 msgstr ""
 
 #. translators: %1$s: PayPal order ID, %2$s: Status
-#: src/Gateways/PayPal/WebhookHandler.php:111
+#: src/Gateways/PayPal/WebhookHandler.php:116
 #, php-format
 msgid "PayPal payment approval failed. PayPal Order ID: %1$s. Status: %2$s"
 msgstr ""
 
 #. translators: %1$s: Transaction ID
-#: src/Gateways/PayPal/WebhookHandler.php:149
+#: src/Gateways/PayPal/WebhookHandler.php:154
 #, php-format
 msgid "PayPal payment captured. Transaction ID: %1$s."
 msgstr ""
 
 #. translators: %s: reason
-#: src/Gateways/PayPal/WebhookHandler.php:184
+#: src/Gateways/PayPal/WebhookHandler.php:189
 #, php-format
 msgid "Payment pending (reason: %s)."
 msgstr ""
 
 #. translators: %1$s: Transaction ID
-#: src/Gateways/PayPal/WebhookHandler.php:216
+#: src/Gateways/PayPal/WebhookHandler.php:221
 #, php-format
 msgid "PayPal payment authorized. Transaction ID: %1$s. Change payment status to processing or complete to capture funds."
 msgstr ""

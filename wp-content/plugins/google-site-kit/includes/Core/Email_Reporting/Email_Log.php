@@ -29,7 +29,7 @@ final class Email_Log {
 	 *
 	 * @since 1.166.0
 	 */
-	const POST_TYPE = 'gsk_email_log';
+	const POST_TYPE = 'googlesitekit_email';
 
 	/**
 	 * Report frequency meta key.
@@ -74,15 +74,22 @@ final class Email_Log {
 	const META_REPORT_REFERENCE_DATES = '_report_reference_dates';
 
 	/**
+	 * Site ID meta key.
+	 *
+	 * @since 1.172.0
+	 */
+	const META_SITE_ID = '_site_id';
+
+	/**
 	 * Email log post statuses.
 	 *
 	 * Slugs must stay within the posts table varchar(20) limit.
 	 *
 	 * @since 1.166.0
 	 */
-	const STATUS_SENT      = 'gsk_email_sent';
-	const STATUS_FAILED    = 'gsk_email_failed';
-	const STATUS_SCHEDULED = 'gsk_email_scheduled';
+	const STATUS_SENT      = 'email_sent';
+	const STATUS_FAILED    = 'email_failed';
+	const STATUS_SCHEDULED = 'email_scheduled';
 
 	/**
 	 * Extracts a normalized date range array from an email log post.
@@ -334,6 +341,17 @@ final class Email_Log {
 				'sanitize_callback' => array( __CLASS__, 'sanitize_reference_dates' ),
 			)
 		);
+
+		register_post_meta(
+			self::POST_TYPE,
+			self::META_SITE_ID,
+			array(
+				'type'              => 'integer',
+				'single'            => true,
+				'auth_callback'     => $auth_callback,
+				'sanitize_callback' => array( __CLASS__, 'sanitize_site_id' ),
+			)
+		);
 	}
 
 	/**
@@ -452,6 +470,18 @@ final class Email_Log {
 		$encoded    = wp_json_encode( $normalized, JSON_UNESCAPED_UNICODE );
 
 		return is_string( $encoded ) ? $encoded : '';
+	}
+
+	/**
+	 * Sanitizes the site ID meta value.
+	 *
+	 * @since 1.172.0
+	 *
+	 * @param mixed $value Meta value.
+	 * @return int Sanitized site ID.
+	 */
+	public static function sanitize_site_id( $value ) {
+		return absint( $value );
 	}
 
 	/**

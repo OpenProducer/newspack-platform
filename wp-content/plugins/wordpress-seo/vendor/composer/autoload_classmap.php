@@ -602,6 +602,7 @@ return array(
     'Yoast\\WP\\SEO\\Conditionals\\Conditional' => $baseDir . '/src/conditionals/conditional-interface.php',
     'Yoast\\WP\\SEO\\Conditionals\\Deactivating_Yoast_Seo_Conditional' => $baseDir . '/src/conditionals/deactivating-yoast-seo-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Development_Conditional' => $baseDir . '/src/conditionals/development-conditional.php',
+    'Yoast\\WP\\SEO\\Conditionals\\Dynamic_Product_Permalinks_Conditional' => $baseDir . '/src/conditionals/dynamic-product-permalinks-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Feature_Flag_Conditional' => $baseDir . '/src/conditionals/feature-flag-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Front_End_Conditional' => $baseDir . '/src/conditionals/front-end-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Get_Request_Conditional' => $baseDir . '/src/conditionals/get-request-conditional.php',

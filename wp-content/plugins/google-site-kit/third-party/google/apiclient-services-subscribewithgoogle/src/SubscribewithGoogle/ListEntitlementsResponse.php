@@ -23,11 +23,19 @@ class ListEntitlementsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
     protected $entitlementsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Entitlement::class;
     protected $entitlementsDataType = 'array';
     /**
+     * A token to retrieve next page of results. Pass this value in the
+     * ListEntitlementsRequest.page_token field in the subsequent call to
+     * `ListEntitlements` method to retrieve the next page of results.
+     *
      * @var string
      */
     public $nextPageToken;
     /**
-     * @param Entitlement[]
+     * There could be 0-N entitlements from different sources. The sources of
+     * entitlements could include Google (Play, News, etc), or it could be the
+     * publication's own entitlements.
+     *
+     * @param Entitlement[] $entitlements
      */
     public function setEntitlements($entitlements)
     {
@@ -41,7 +49,11 @@ class ListEntitlementsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
         return $this->entitlements;
     }
     /**
-     * @param string
+     * A token to retrieve next page of results. Pass this value in the
+     * ListEntitlementsRequest.page_token field in the subsequent call to
+     * `ListEntitlements` method to retrieve the next page of results.
+     *
+     * @param string $nextPageToken
      */
     public function setNextPageToken($nextPageToken)
     {

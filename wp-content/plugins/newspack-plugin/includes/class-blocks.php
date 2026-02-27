@@ -21,6 +21,7 @@ final class Blocks {
 	 */
 	public static function init() {
 		require_once NEWSPACK_ABSPATH . 'src/blocks/reader-registration/index.php';
+		require_once NEWSPACK_ABSPATH . 'src/blocks/my-account-button/class-my-account-button-block.php';
 		require_once NEWSPACK_ABSPATH . 'src/blocks/content-gate/countdown/class-content-gate-countdown-block.php';
 		require_once NEWSPACK_ABSPATH . 'src/blocks/content-gate/countdown-box/class-content-gate-countdown-box-block.php';
 		require_once NEWSPACK_ABSPATH . 'src/blocks/contribution-meter/index.php';

@@ -169,6 +169,87 @@ class Access_Rules {
 	}
 
 	/**
+	 * Evaluate access rules with OR logic between groups and AND logic within groups.
+	 *
+	 * Rules structure: [ [ rule1, rule2 ], [ rule3, rule4 ] ]
+	 * - Groups use OR logic: reader must pass at least one group
+	 * - Rules within a group use AND logic: reader must pass all rules in the group
+	 *
+	 * @param array $access_rules The access rules (array of groups, each group is an array of rules).
+	 *
+	 * @return bool True if access is granted, false if restricted.
+	 */
+	public static function evaluate_rules( $access_rules ) {
+		if ( empty( $access_rules ) ) {
+			return true;
+		}
+
+		// Normalize legacy flat rules structure to grouped format.
+		$access_rules = self::normalize_rules( $access_rules );
+
+		// Evaluate each group with OR logic - if any group passes, grant access.
+		foreach ( $access_rules as $group ) {
+			if ( self::evaluate_rules_group( $group ) ) {
+				return true;
+			}
+		}
+
+		// No group passed - restrict access.
+		return false;
+	}
+
+	/**
+	 * Evaluate a single group of access rules with AND logic.
+	 *
+	 * @param array $group Array of rules in the group.
+	 *
+	 * @return bool True if all rules in the group pass, false otherwise.
+	 */
+	private static function evaluate_rules_group( $group ) {
+		if ( empty( $group ) || ! is_array( $group ) ) {
+			return true;
+		}
+
+		foreach ( $group as $rule ) {
+			if ( ! isset( $rule['slug'] ) ) {
+				continue;
+			}
+			if ( ! self::evaluate_rule( $rule['slug'], $rule['value'] ?? null ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Normalize access rules to grouped format.
+	 *
+	 * Converts legacy flat rules [ rule1, rule2 ] to grouped format [ [ rule1, rule2 ] ].
+	 *
+	 * @param array $access_rules The access rules.
+	 *
+	 * @return array Normalized access rules in grouped format.
+	 */
+	public static function normalize_rules( $access_rules ) {
+		if ( empty( $access_rules ) ) {
+			return [];
+		}
+
+		// Check if already in grouped format (array of arrays with rules).
+		// A grouped format has arrays as first-level elements.
+		// A flat format has rule objects (with 'slug' key) as first-level elements.
+		$first_element = reset( $access_rules );
+		if ( is_array( $first_element ) && ! isset( $first_element['slug'] ) ) {
+			// Already in grouped format.
+			return $access_rules;
+		}
+
+		// Convert flat format to single group.
+		return [ $access_rules ];
+	}
+
+	/**
 	 * Get subscriptions eligible for access rules.
 	 *
 	 * @return array Active subscription IDs.
@@ -195,13 +276,50 @@ class Access_Rules {
 
 	/**
 	 * Whether the user has an active subscription for one of the given products.
+	 * Also checks if the user is a member of a group subscription with the required products.
 	 *
 	 * @param int   $user_id User ID.
 	 * @param array $product_ids Required product IDs.
 	 * @return bool
 	 */
 	public static function has_active_subscription( $user_id, $product_ids ) {
-		return ! empty( WooCommerce_Connection::get_active_subscriptions_for_user( $user_id, $product_ids ) );
+		$has_subscription = false;
+
+		// Check user's own subscriptions.
+		if ( ! empty( WooCommerce_Connection::get_active_subscriptions_for_user( $user_id, $product_ids ) ) ) {
+			$has_subscription = true;
+		}
+
+		// Check group subscriptions the user is a member of.
+		if ( ! $has_subscription && function_exists( 'wcs_get_subscription' ) ) {
+			$group_subscriptions = Group_Subscription::get_group_subscriptions_for_user( $user_id );
+			foreach ( $group_subscriptions as $subscription ) {
+				if ( ! $subscription || ! $subscription->has_status( WooCommerce_Connection::ACTIVE_SUBSCRIPTION_STATUSES ) ) {
+					continue;
+				}
+				// If no product filter, any active group subscription grants access.
+				if ( empty( $product_ids ) ) {
+					$has_subscription = true;
+					break;
+				}
+				// Check if the subscription has any of the required products.
+				foreach ( $product_ids as $product_id ) {
+					if ( $subscription->has_product( $product_id ) ) {
+						$has_subscription = true;
+						break 2;
+					}
+				}
+			}
+		}
+
+		/**
+		 * Filters whether a user has an active subscription for the given products.
+		 *
+		 * @param bool  $has_subscription Whether the user has an active subscription.
+		 * @param int   $user_id          User ID.
+		 * @param array $product_ids      Required product IDs.
+		 */
+		return apply_filters( 'newspack_access_rules_has_active_subscription', $has_subscription, $user_id, $product_ids );
 	}
 
 	/**

@@ -297,5 +297,29 @@ class WooCommerce_Subscriptions {
 		}
 		return $subscriptions;
 	}
+
+	/**
+	 * Get the product ID for a subscription.
+	 *
+	 * @param WC_Subscription|int $subscription The subscription object or ID.
+	 *
+	 * @return int|false The product ID, or false if no product is found.
+	 */
+	public static function get_subscription_product_id( $subscription ) {
+		if ( ! is_a( $subscription, 'WC_Subscription' ) ) {
+			$subscription = \wcs_get_subscription( $subscription );
+		}
+		if ( ! $subscription ) {
+			return false;
+		}
+		$product_id = false;
+		foreach ( $subscription->get_items() as $item ) {
+			$product_id = \wcs_get_canonical_product_id( $item );
+			if ( $product_id ) {
+				break;
+			}
+		}
+		return $product_id;
+	}
 }
 WooCommerce_Subscriptions::init();

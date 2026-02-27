@@ -105,7 +105,7 @@ class WooCommerce_My_Account {
 	 * @return string The version number.
 	 */
 	public static function get_version() {
-		$version = defined( 'NEWSPACK_MY_ACCOUNT_VERSION' ) ? NEWSPACK_MY_ACCOUNT_VERSION : '0.0.0'; // Increment this version number to default to a newer My Account version.
+		$version = defined( 'NEWSPACK_MY_ACCOUNT_VERSION' ) ? NEWSPACK_MY_ACCOUNT_VERSION : '1.0.0'; // Increment this version number to default to a newer My Account version.
 
 		/**
 		 * Filters the version number of the Newspack My Account UI.

@@ -216,6 +216,7 @@ var VALID_SETTINGS = [
   "typography.textAlign",
   "typography.textColumns",
   "typography.textDecoration",
+  "typography.textIndent",
   "typography.textTransform",
   "typography.writingMode"
 ];
@@ -1242,6 +1243,26 @@ function concatFeatureVariationSelectorString(featureSelector, styleVariationSel
   });
   return combinedSelectors.join(", ");
 }
+var updateParagraphTextIndentSelector = (featureDeclarations, settings, blockName) => {
+  if (blockName !== "core/paragraph") {
+    return featureDeclarations;
+  }
+  const blockSettings = settings?.blocks?.["core/paragraph"];
+  const textIndentSetting = blockSettings?.typography?.textIndent ?? settings?.typography?.textIndent ?? "subsequent";
+  if (textIndentSetting !== "all") {
+    return featureDeclarations;
+  }
+  const oldSelector = ".wp-block-paragraph + .wp-block-paragraph";
+  const newSelector = ".wp-block-paragraph";
+  if (oldSelector in featureDeclarations) {
+    const declarations = featureDeclarations[oldSelector];
+    const updated = { ...featureDeclarations };
+    delete updated[oldSelector];
+    updated[newSelector] = declarations;
+    return updated;
+  }
+  return featureDeclarations;
+};
 var getFeatureDeclarations = (selectors, styles) => {
   const declarations = {};
   Object.entries(selectors).forEach(([feature, selector]) => {
@@ -1593,7 +1614,8 @@ var getNodesWithStyles = (tree, blockSelectors) => {
           selector: blockSelectors[blockName].selector,
           styles: blockStyles,
           featureSelectors: blockSelectors[blockName].featureSelectors,
-          styleVariationSelectors: blockSelectors[blockName].styleVariationSelectors
+          styleVariationSelectors: blockSelectors[blockName].styleVariationSelectors,
+          name: blockName
         });
       }
       Object.entries(typedNode?.elements ?? {}).forEach(
@@ -1718,12 +1740,18 @@ var transformToStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGa
         hasLayoutSupport,
         featureSelectors,
         styleVariationSelectors,
-        skipSelectorWrapper
+        skipSelectorWrapper,
+        name
       }) => {
         if (featureSelectors) {
-          const featureDeclarations = getFeatureDeclarations(
+          let featureDeclarations = getFeatureDeclarations(
             featureSelectors,
             styles
+          );
+          featureDeclarations = updateParagraphTextIndentSelector(
+            featureDeclarations,
+            tree.settings,
+            name
           );
           Object.entries(featureDeclarations).forEach(
             ([cssSelector, declarations]) => {
@@ -1781,9 +1809,14 @@ var transformToStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGa
               const styleVariations = styles?.variations?.[styleVariationName];
               if (styleVariations) {
                 if (featureSelectors) {
-                  const featureDeclarations = getFeatureDeclarations(
+                  let featureDeclarations = getFeatureDeclarations(
                     featureSelectors,
                     styleVariations
+                  );
+                  featureDeclarations = updateParagraphTextIndentSelector(
+                    featureDeclarations,
+                    tree.settings,
+                    name
                   );
                   Object.entries(
                     featureDeclarations

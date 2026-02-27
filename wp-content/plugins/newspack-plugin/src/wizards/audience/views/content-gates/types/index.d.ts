@@ -80,11 +80,13 @@ type Registration = {
 	gate_layout_id: number;
 };
 
+type GateAccessRuleGroup = GateAccessRule[];
+
 type CustomAccess = {
 	active: boolean;
 	metering: Metering;
 	gate_layout_id: number;
-	access_rules: GateAccessRule[];
+	access_rules: GateAccessRuleGroup[];
 };
 
 type ContentGiftingConfig = {

@@ -136,6 +136,7 @@ class ComposerStaticInitcd506e00bbd2bbf41c61d65382d6f343
         'Newspack\\Configuration_Managers' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-managers.php',
         'Newspack\\Content_Gate' => __DIR__ . '/../..' . '/includes/content-gate/class-content-gate.php',
         'Newspack\\Content_Gate\\Block_Patterns' => __DIR__ . '/../..' . '/includes/content-gate/class-block-patterns.php',
+        'Newspack\\Content_Gate\\IP_Access_Rule' => __DIR__ . '/../..' . '/includes/content-gate/class-ip-access-rule.php',
         'Newspack\\Content_Gate_Layout' => __DIR__ . '/../..' . '/includes/content-gate/trait-content-gate-layout.php',
         'Newspack\\Content_Gifting' => __DIR__ . '/../..' . '/includes/content-gate/content-gifting/class-content-gifting.php',
         'Newspack\\Content_Gifting_CTA' => __DIR__ . '/../..' . '/includes/content-gate/content-gifting/class-content-gifting-cta.php',

@@ -558,7 +558,7 @@ button.wp-block-navigation-item__content {
 .wp-block-navigation__responsive-container.disable-default-overlay .wp-block-navigation__responsive-close {
   max-width: none;
 }
-.wp-block-navigation__responsive-container.disable-default-overlay.is-menu-open .wp-block-navigation__responsive-container-content > .wp-block-navigation__container {
+.wp-block-navigation__responsive-container.disable-default-overlay.is-menu-open .wp-block-navigation__responsive-container-content > *:not(.wp-block-navigation__overlay-container) {
   display: none;
 }
 .wp-block-navigation__responsive-container.disable-default-overlay.is-menu-open .wp-block-navigation__responsive-container-content .wp-block-navigation__overlay-container {
@@ -666,11 +666,11 @@ button.wp-block-navigation-item__content {
   position: relative;
 }
 
-.has-modal-open .admin-bar .is-menu-open:not(.disable-default-overlay) .wp-block-navigation__responsive-dialog {
+.has-modal-open .admin-bar .is-menu-open:where(:not(.disable-default-overlay)) .wp-block-navigation__responsive-dialog {
   margin-top: 46px;
 }
 @media (min-width: 782px) {
-  .has-modal-open .admin-bar .is-menu-open:not(.disable-default-overlay) .wp-block-navigation__responsive-dialog {
+  .has-modal-open .admin-bar .is-menu-open:where(:not(.disable-default-overlay)) .wp-block-navigation__responsive-dialog {
     margin-top: 32px;
   }
 }

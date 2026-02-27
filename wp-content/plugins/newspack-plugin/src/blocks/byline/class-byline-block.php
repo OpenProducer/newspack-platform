@@ -56,7 +56,7 @@ final class Byline_Block {
 		}
 
 		// 1. Check for custom byline (use post meta check).
-		if ( class_exists( 'Newspack\Bylines' ) ) {
+		if ( class_exists( 'Newspack\Bylines' ) && Bylines::is_enabled() ) {
 			$byline_active = get_post_meta( $post_id, Bylines::META_KEY_ACTIVE, true );
 			if ( $byline_active ) {
 				// Use Bylines::get_post_byline_html() as the authoritative source.
