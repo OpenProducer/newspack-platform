@@ -11,7 +11,6 @@
 if ( function_exists( 'newspack_get_all_sponsors' ) ) {
 	$all_sponsors                    = newspack_get_all_sponsors( get_the_id(), null, 'post' );
 	$native_sponsors                 = newspack_get_native_sponsors( $all_sponsors );
-	$underwriter_sponsors            = newspack_get_underwriter_sponsors( $all_sponsors );
 	$display_sponsors_and_categories = newspack_display_sponsors_and_categories( $native_sponsors );
 	$display_sponsors_and_authors    = newspack_display_sponsors_and_authors( $native_sponsors );
 }
@@ -38,7 +37,7 @@ if ( function_exists( 'newspack_get_all_sponsors' ) ) {
 			<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
 			<?php if ( is_archive() && get_theme_mod( 'archive_show_subtitle', false ) && ! empty( newspack_post_subtitle() ) ) : ?>
 				<div class="newspack-post-subtitle">
-					<?php echo newspack_post_subtitle(); ?>
+					<?php echo wp_kses_post( newspack_post_subtitle() ); ?>
 				</div>
 			<?php endif; ?>
 		</header><!-- .entry-header -->

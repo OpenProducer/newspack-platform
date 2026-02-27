@@ -31,6 +31,10 @@ final class WooCommerce {
 		// Register theme features.
 		\add_action( 'after_setup_theme', [ __CLASS__, 'theme_support' ] );
 		\add_filter( 'hooked_block_types', [ __CLASS__, 'remove_wc_hooked_blocks' ], 10, 4 );
+
+		// Remove WooCommerce styles.
+		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'remove_woocommerce_blocktheme_styles' ], 100 );
+		\add_filter( 'woocommerce_enqueue_styles', [ __CLASS__, 'remove_woocommerce_general_styles' ] );
 	}
 
 	/**
@@ -51,6 +55,31 @@ final class WooCommerce {
 		\add_theme_support( 'wc-product-gallery-zoom' );
 		\add_theme_support( 'wc-product-gallery-lightbox' );
 		\add_theme_support( 'wc-product-gallery-slider' );
+	}
+
+	/**
+	 * Remove WooCommerce block theme styles.
+	 *
+	 * @since Newspack Block Theme 1.0.22
+	 *
+	 * @return void
+	 */
+	public static function remove_woocommerce_blocktheme_styles() {
+		\wp_dequeue_style( 'woocommerce-blocktheme' );
+		\wp_deregister_style( 'woocommerce-blocktheme' );
+	}
+
+	/**
+	 * Remove WooCommerce general styles.
+	 *
+	 * @since Newspack Block Theme 1.0.22
+	 *
+	 * @param array $enqueue_styles The styles to enqueue.
+	 * @return array The modified styles.
+	 */
+	public static function remove_woocommerce_general_styles( $enqueue_styles ) {
+		unset( $enqueue_styles['woocommerce-general'] );
+		return $enqueue_styles;
 	}
 
 	/**

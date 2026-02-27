@@ -56,7 +56,7 @@ function newspack_scott_typography_css_wrap() {
 		<?php echo newspack_scott_custom_typography_css(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	</style>
 
-<?php
+	<?php
 }
 add_action( 'wp_head', 'newspack_scott_typography_css_wrap' );
 
@@ -80,7 +80,7 @@ function newspack_scott_editor_customizer_styles() {
 	// If there are any, add those styles inline.
 	if ( $theme_customizations ) {
 		// Enqueue a non-existant file to hook our inline styles to:
-		wp_register_style( 'newspack-scott-editor-inline-styles', false );
+		wp_register_style( 'newspack-scott-editor-inline-styles', false ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_style( 'newspack-scott-editor-inline-styles' );
 		// Add inline styles:
 		wp_add_inline_style( 'newspack-scott-editor-inline-styles', $theme_customizations );

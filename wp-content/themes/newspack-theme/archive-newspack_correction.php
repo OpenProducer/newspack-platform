@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore WordPress.Files.FileName.NotHyphenatedLowercase -- Filename must match post type slug for WordPress template hierarchy.
 /**
  * The template for displaying archive pages for the newspack_correction post type
  *
@@ -6,6 +6,7 @@
  *
  * @package Newspack
  */
+
 get_header();
 
 ?>
@@ -35,7 +36,7 @@ get_header();
 
 			// Start the Loop.
 			while ( have_posts() ) :
-				$post_count++;
+				++$post_count;
 				the_post();
 
 				get_template_part( 'template-parts/content/content', 'corrections' );

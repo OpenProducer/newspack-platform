@@ -11,7 +11,7 @@
 
 
 $show_footer_branding = get_theme_mod( 'footer_show_branding', true );
-$has_footer_logo = false;
+$has_footer_logo      = false;
 if ( '' !== get_theme_mod( 'newspack_footer_logo', '' ) && 0 !== get_theme_mod( 'newspack_footer_logo', '' ) ) {
 	$has_footer_logo = true;
 }
@@ -43,12 +43,12 @@ if ( '' !== get_theme_mod( 'newspack_footer_logo', '' ) && 0 !== get_theme_mod( 
 				<?php
 					$copyright_info   = get_bloginfo( 'name' );
 					$custom_copyright = get_theme_mod( 'footer_copyright', '' );
-					if ( ! empty( $custom_copyright ) ) {
-						$copyright_info = $custom_copyright;
-					}
+				if ( ! empty( $custom_copyright ) ) {
+					$copyright_info = $custom_copyright;
+				}
 				?>
 				<?php if ( ! empty( $copyright_info ) ) : ?>
-					<span class="copyright">&copy; <?php echo esc_html( date( 'Y' ) ); ?> <?php echo esc_html( $copyright_info ); ?></span>
+					<span class="copyright">&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php echo esc_html( $copyright_info ); ?></span>
 				<?php endif; ?>
 
 				<a target="_blank" href="<?php echo esc_url( __( 'https://newspack.com/', 'newspack-theme' ) ); ?>" class="imprint">

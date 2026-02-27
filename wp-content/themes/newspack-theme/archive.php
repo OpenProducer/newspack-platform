@@ -119,7 +119,7 @@ if ( class_exists( '\Newspack\Optional_Modules\Collections' ) &&
 
 			// Start the Loop.
 			while ( have_posts() ) :
-				$post_count++;
+				++$post_count;
 				the_post();
 
 				// Check if you're on the first post of the first page and if it should be styled differently, or if excerpts are enabled.

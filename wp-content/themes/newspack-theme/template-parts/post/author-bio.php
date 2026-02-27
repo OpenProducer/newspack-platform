@@ -14,9 +14,7 @@ $author_bio_length = get_theme_mod( 'author_bio_length', 200 );
 
 if ( function_exists( 'coauthors_posts_links' ) && is_single() && ! empty( get_coauthors() ) ) : // phpcs:ignore PHPCompatibility.LanguageConstructs.NewEmptyNonVariable.Found
 
-	$authors      = get_coauthors();
-	$author_count = count( $authors );
-	$i            = 1;
+	$authors = get_coauthors();
 
 	foreach ( $authors as $author ) {
 

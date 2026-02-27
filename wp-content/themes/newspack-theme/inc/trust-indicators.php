@@ -89,21 +89,21 @@ function newspack_trust_indicators_output_author_info() {
 	<div class="trust-indicators author-meta">
 		<?php if ( $author_email ) : ?>
 			<a class="author-expanded-social-link" href="mailto:<?php echo esc_attr( $author_email ); ?>">
-				<?php echo newspack_get_social_icon_svg( 'mail', 20 ); ?>
+				<?php echo wp_kses( newspack_get_social_icon_svg( 'mail', 20 ), newspack_sanitize_svgs() ); ?>
 				<?php echo esc_html( $author_email ); ?>
 			</a>
 		<?php endif; ?>
 
 		<?php if ( $author_twitter ) : ?>
-			<a class="author-expanded-social-link" href="<?php echo esc_attr( 'https://twitter.com/' . $author_twitter ); ?>" target="_blank">
-				<?php echo newspack_get_social_icon_svg( 'twitter', 20 ); ?>
+			<a class="author-expanded-social-link" href="<?php echo esc_url( 'https://twitter.com/' . $author_twitter ); ?>" target="_blank">
+				<?php echo wp_kses( newspack_get_social_icon_svg( 'twitter', 20 ), newspack_sanitize_svgs() ); ?>
 				<?php echo esc_html( $author_twitter ); ?>
 			</a>
 		<?php endif; ?>
 
 		<?php if ( $author_phone ) : ?>
 			<span class="author-expanded-social-link">
-				<?php echo newspack_get_social_icon_svg( 'phone', 20 ); ?>
+				<?php echo wp_kses( newspack_get_social_icon_svg( 'phone', 20 ), newspack_sanitize_svgs() ); ?>
 				<?php echo esc_html( $author_phone ); ?>
 			</span>
 		<?php endif; ?>
@@ -146,10 +146,13 @@ add_filter( 'newspack_author_bio_name', 'newspack_trust_indicators_author_bio_na
 
 /**
  * Gets author role to add to single post author bios.
+ *
+ * @param int $author_id The author ID.
+ * @return string|void The author role.
  */
-function newspack_trust_indicators_job_title_single( $author_ID ) {
-	if ( '' !== $author_ID ) {
-		$role = get_user_meta( $author_ID, 'title', true );
+function newspack_trust_indicators_job_title_single( $author_id ) {
+	if ( '' !== $author_id ) {
+		$role = get_user_meta( $author_id, 'title', true );
 		return $role;
 	}
 }
@@ -165,12 +168,12 @@ function newspack_trust_indicators_output_author_details() {
 	$author = get_queried_object();
 
 	$all_settings_fields = Trust_Indicators_User_Settings::get_fields();
-	$fields              = [
+	$fields              = array(
 		'location',
 		'languages_spoken',
 		'areas_of_expertise',
 		'location_expertise',
-	];
+	);
 
 	?>
 	<div class="author-additional-infos">

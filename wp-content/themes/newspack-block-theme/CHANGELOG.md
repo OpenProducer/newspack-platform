@@ -1,3 +1,38 @@
+# [1.24.0](https://github.com/Automattic/newspack-block-theme/compare/v1.23.0...v1.24.0) (2026-02-16)
+
+
+### Bug Fixes
+
+* dequeue some Woo styles from the theme ([#401](https://github.com/Automattic/newspack-block-theme/issues/401)) ([821f81c](https://github.com/Automattic/newspack-block-theme/commit/821f81ceb53a396957e1bcbf5d1ab01e51d3ed1b))
+* update single post template widths ([#407](https://github.com/Automattic/newspack-block-theme/issues/407)) ([a99b2cf](https://github.com/Automattic/newspack-block-theme/commit/a99b2cf2307380acf1ff386d08bcec96677400fe))
+
+
+### Features
+
+* Add My Account button block  ([#400](https://github.com/Automattic/newspack-block-theme/issues/400)) ([7c99f35](https://github.com/Automattic/newspack-block-theme/commit/7c99f35e6b01d412650e9c96b867e5fc654caa46))
+* add My Account button block to all header patterns ([#404](https://github.com/Automattic/newspack-block-theme/issues/404)) ([d7b8b4a](https://github.com/Automattic/newspack-block-theme/commit/d7b8b4a3a501b77b6b9a404fa0fc155ea12dc43c))
+
+# [1.24.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.23.0...v1.24.0-alpha.1) (2026-02-05)
+
+
+### Bug Fixes
+
+* dequeue some Woo styles from the theme ([#401](https://github.com/Automattic/newspack-block-theme/issues/401)) ([821f81c](https://github.com/Automattic/newspack-block-theme/commit/821f81ceb53a396957e1bcbf5d1ab01e51d3ed1b))
+* update single post template widths ([#407](https://github.com/Automattic/newspack-block-theme/issues/407)) ([a99b2cf](https://github.com/Automattic/newspack-block-theme/commit/a99b2cf2307380acf1ff386d08bcec96677400fe))
+
+
+### Features
+
+* Add My Account button block  ([#400](https://github.com/Automattic/newspack-block-theme/issues/400)) ([7c99f35](https://github.com/Automattic/newspack-block-theme/commit/7c99f35e6b01d412650e9c96b867e5fc654caa46))
+* add My Account button block to all header patterns ([#404](https://github.com/Automattic/newspack-block-theme/issues/404)) ([d7b8b4a](https://github.com/Automattic/newspack-block-theme/commit/d7b8b4a3a501b77b6b9a404fa0fc155ea12dc43c))
+
+# [1.23.0](https://github.com/Automattic/newspack-block-theme/compare/v1.22.0...v1.23.0) (2026-02-02)
+
+
+### Features
+
+* **byline:** add byline block support to patterns and templates ([#399](https://github.com/Automattic/newspack-block-theme/issues/399)) ([c0d8a90](https://github.com/Automattic/newspack-block-theme/commit/c0d8a906c8c309f949bdb418ee58309eccd03b03))
+
 # [1.22.0](https://github.com/Automattic/newspack-block-theme/compare/v1.21.0...v1.22.0) (2025-11-24)
 
 

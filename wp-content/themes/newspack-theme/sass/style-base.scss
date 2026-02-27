@@ -61,6 +61,10 @@
 
 @use "plugins/yoast-breadcrumb";
 
+/* Newspack Plugin support */
+
+@use "plugins/newspack-plugin";
+
 /* Newspack Listings support */
 
 @use "plugins/newspack-listings";

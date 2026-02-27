@@ -141,7 +141,7 @@ function newspack_get_font_stacks() {
 				'Consolas',
 				'Courier New',
 				'Courier',
-				'monospace'
+				'monospace',
 			),
 		),
 	);

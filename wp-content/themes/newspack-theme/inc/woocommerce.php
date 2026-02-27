@@ -33,10 +33,10 @@ add_action( 'after_setup_theme', 'newspack_woocommerce_setup' );
  */
 function newspack_woocommerce_scripts() {
 	if (
-		function_exists( 'is_woocommerce' ) && is_woocommerce()
-		|| function_exists( 'is_cart' ) && is_cart()
-		|| function_exists( 'is_checkout' ) && is_checkout()
-		|| function_exists( 'is_account_page' ) && is_account_page()
+		( function_exists( 'is_woocommerce' ) && is_woocommerce() )
+		|| ( function_exists( 'is_cart' ) && is_cart() )
+		|| ( function_exists( 'is_checkout' ) && is_checkout() )
+		|| ( function_exists( 'is_account_page' ) && is_account_page() )
 	) {
 		wp_enqueue_style( 'newspack-woocommerce-style', get_template_directory_uri() . '/styles/woocommerce.css', array( 'newspack-style' ), wp_get_theme()->get( 'Version' ) );
 		wp_style_add_data( 'newspack-woocommerce-style', 'rtl', 'replace' );
@@ -85,7 +85,6 @@ function newspack_woo_account_registration_heading() {
 		<h3><?php esc_html_e( 'Create an account', 'newspack-theme' ); ?></h3>
 		<?php
 	endif;
-
 }
 add_action( 'woocommerce_before_checkout_registration_form', 'newspack_woo_account_registration_heading' );
 

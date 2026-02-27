@@ -10,39 +10,39 @@
  */
 add_filter(
 	'newspack_multibranded_site_theme_colors',
-	function() {
-		return [
-			[
+	function () {
+		return array(
+			array(
 				'theme_mod_name' => 'primary_color_hex',
 				'label'          => __( 'Primary Color', 'newspack-theme' ),
 				'default'        => 'default' !== get_theme_mod( 'theme_colors' ) ? get_theme_mod( 'primary_color_hex', newspack_get_primary_color() ) : newspack_get_primary_color(),
-			],
-			[
+			),
+			array(
 				'theme_mod_name' => 'secondary_color_hex',
 				'label'          => __( 'Secondary Color', 'newspack-theme' ),
 				'default'        => 'default' !== get_theme_mod( 'theme_colors' ) ? get_theme_mod( 'secondary_color_hex', newspack_get_secondary_color() ) : newspack_get_secondary_color(),
-			],
-			[
+			),
+			array(
 				'theme_mod_name' => 'ads_color_hex',
 				'label'          => __( 'Background color to the ads', 'newspack-theme' ),
 				'default'        => get_theme_mod( 'ads_color_hex', '#ffffff' ),
-			],
-			[
+			),
+			array(
 				'theme_mod_name' => 'header_color_hex',
 				'label'          => __( 'Header background (Requires the Solid background option to be enabled)', 'newspack-theme' ),
 				'default'        => get_theme_mod( 'header_color_hex', '#666666' ),
-			],
-			[
+			),
+			array(
 				'theme_mod_name' => 'header_primary_menu_color_hex',
 				'label'          => __( 'Background color to the primary menu (Requires the Solid background option to be enabled)', 'newspack-theme' ),
 				'default'        => get_theme_mod( 'header_primary_menu_color_hex', '' ),
-			],
-			[
+			),
+			array(
 				'theme_mod_name' => 'footer_color_hex',
 				'label'          => __( 'Footer background color', 'newspack-theme' ),
 				'default'        => get_theme_mod( 'footer_color_hex', '#666666' ),
-			],
-		];
+			),
+		);
 	}
 );
 
@@ -51,11 +51,11 @@ add_filter(
  */
 add_filter(
 	'theme_mod_ads_color',
-	function( $value ) {
+	function ( $value ) {
 		if ( ( defined( 'WP_CLI' ) && WP_CLI ) || is_admin() || ! class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
 			return $value;
 		}
-		if ( Newspack_Multibranded_Site\Customizations\Theme_Colors::current_brand_has_custom_colors( [ 'ads_color_hex' ] ) ) {
+		if ( Newspack_Multibranded_Site\Customizations\Theme_Colors::current_brand_has_custom_colors( array( 'ads_color_hex' ) ) ) {
 			return 'custom';
 		}
 		return $value;
@@ -67,11 +67,11 @@ add_filter(
  */
 add_filter(
 	'theme_mod_theme_colors',
-	function( $value ) {
+	function ( $value ) {
 		if ( ( defined( 'WP_CLI' ) && WP_CLI ) || is_admin() || ! class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
 			return $value;
 		}
-		if ( Newspack_Multibranded_Site\Customizations\Theme_Colors::current_brand_has_custom_colors( [ 'primary_color_hex', 'secondary_color_hex' ] ) ) {
+		if ( Newspack_Multibranded_Site\Customizations\Theme_Colors::current_brand_has_custom_colors( array( 'primary_color_hex', 'secondary_color_hex' ) ) ) {
 			return 'custom';
 		}
 		return $value;
@@ -83,11 +83,11 @@ add_filter(
  */
 add_filter(
 	'theme_mod_header_color',
-	function( $value ) {
+	function ( $value ) {
 		if ( ( defined( 'WP_CLI' ) && WP_CLI ) || is_admin() || ! class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
 			return $value;
 		}
-		if ( Newspack_Multibranded_Site\Customizations\Theme_Colors::current_brand_has_custom_colors( [ 'header_color_hex', 'header_primary_menu_color_hex', 'header_primary_menu_color_hex' ] ) ) {
+		if ( Newspack_Multibranded_Site\Customizations\Theme_Colors::current_brand_has_custom_colors( array( 'header_color_hex', 'header_primary_menu_color_hex', 'header_primary_menu_color_hex' ) ) ) {
 			return 'custom';
 		}
 		return $value;
@@ -99,11 +99,11 @@ add_filter(
  */
 add_filter(
 	'theme_mod_footer_color',
-	function( $value ) {
+	function ( $value ) {
 		if ( ( defined( 'WP_CLI' ) && WP_CLI ) || is_admin() || ! class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
 			return $value;
 		}
-		if ( Newspack_Multibranded_Site\Customizations\Theme_Colors::current_brand_has_custom_colors( [ 'footer_color_hex' ] ) ) {
+		if ( Newspack_Multibranded_Site\Customizations\Theme_Colors::current_brand_has_custom_colors( array( 'footer_color_hex' ) ) ) {
 			return 'custom';
 		}
 		return $value;
@@ -123,20 +123,24 @@ function newspack_multibranded_remove_customizer_options( $wp_customize ) {
 	// Remove the alternative logo control from Header Settings > Subpage Header.
 	$wp_customize->remove_control( 'newspack_alternative_logo' );
 }
-add_action( "customize_register", "newspack_multibranded_remove_customizer_options" );
+add_action( 'customize_register', 'newspack_multibranded_remove_customizer_options' );
 
 /**
  * Filter the footer logo to return nothing when plugin is active.
+ *
+ * @param mixed $_newspack_footer_logo Original value (unused, always returns empty).
  */
-function newspack_multibranded_unset_footer_logo( $newspack_footer_logo ) {
+function newspack_multibranded_unset_footer_logo( $_newspack_footer_logo ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	return '';
 }
 add_filter( 'theme_mod_newspack_footer_logo', 'newspack_multibranded_unset_footer_logo' );
 
 /**
  * Filter the Subpage Header alternative logo to return nothing when plugin is active.
+ *
+ * @param mixed $_newspack_alternative_logo Original value (unused, always returns empty).
  */
-function newspack_multibranded_unset_alternative( $newspack_alternative_logo ) {
+function newspack_multibranded_unset_alternative( $_newspack_alternative_logo ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	return '';
 }
 add_filter( 'theme_mod_newspack_alternative_logo', 'newspack_multibranded_unset_alternative' );
