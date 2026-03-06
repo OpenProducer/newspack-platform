@@ -1,3 +1,10 @@
+## [3.28.5](https://github.com/Automattic/newspack-newsletters/compare/v3.28.4...v3.28.5) (2026-02-17)
+
+
+### Bug Fixes
+
+* no parallel post-release jobs ([#2037](https://github.com/Automattic/newspack-newsletters/issues/2037)) ([90023db](https://github.com/Automattic/newspack-newsletters/commit/90023dbd68082e37e8bdba5dca54be0052f168fe))
+
 ## [3.28.4](https://github.com/Automattic/newspack-newsletters/compare/v3.28.3...v3.28.4) (2026-02-16)
 
 

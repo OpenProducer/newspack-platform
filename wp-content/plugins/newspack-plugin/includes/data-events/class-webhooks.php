@@ -732,7 +732,7 @@ final class Webhooks {
 				$time,
 				'newspack_webhooks_as_process_request',
 				[ $request_id ],
-				'newspack-data-events',
+				'newspack',
 				false,
 				self::get_request_priority( $request_id )
 			);

@@ -1,3 +1,11 @@
+## [4.24.1](https://github.com/Automattic/newspack-blocks/compare/v4.24.0...v4.24.1) (2026-03-02)
+
+
+### Bug Fixes
+
+* **modal-checkout:** reduce gap between text and chevron ([#2291](https://github.com/Automattic/newspack-blocks/issues/2291)) ([645b92e](https://github.com/Automattic/newspack-blocks/commit/645b92e5529492ad1f0eff65b294308296492bfd))
+* **modal-checkout:** show transaction details for subscription renewals ([#2295](https://github.com/Automattic/newspack-blocks/issues/2295)) ([41268cb](https://github.com/Automattic/newspack-blocks/commit/41268cbd55dc55cbccd466cd78c38d6db871dd66))
+
 # [4.24.0](https://github.com/Automattic/newspack-blocks/compare/v4.23.0...v4.24.0) (2026-02-02)
 
 

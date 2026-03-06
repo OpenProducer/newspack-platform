@@ -10,6 +10,7 @@ import { Component } from '@wordpress/element';
 /**
  * Internal dependencies
  */
+import CoreCard from './core-card';
 import './style.scss';
 
 /**
@@ -22,7 +23,40 @@ class Card extends Component {
 	 * Render
 	 */
 	render() {
-		const { buttonsCard, className, headerActions, isNarrow, isMedium, isSmall, isWhite, noBorder, ...otherProps } = this.props;
+		const {
+			buttonsCard,
+			className,
+			headerActions,
+			isNarrow,
+			isMedium,
+			isSmall,
+			isWhite,
+			noBorder,
+			// Pass as `true` to render using WP Core's Card component: https://wordpress.github.io/gutenberg/?path=/docs/components-card--docs
+			__experimentalCoreCard,
+			// Pass props supported by WP Core's Card component in this single prop.
+			__experimentalCoreProps = {
+				actionType: null, // chevron | toggle | button | link | none
+				header: null, // Pass a React component to render in a CardHeader component.
+				icon: null,
+				footer: null, // Pass a React component to render in a CardFooter component.
+			},
+			...otherProps
+		} = this.props;
+		if ( __experimentalCoreCard ) {
+			const props = {
+				buttonsCard,
+				className,
+				isMedium,
+				isNarrow,
+				isSmall,
+				isWhite,
+				noBorder,
+				...otherProps,
+				...__experimentalCoreProps,
+			};
+			return <CoreCard { ...props } />;
+		}
 		const classes = classNames(
 			'newspack-card',
 			className,

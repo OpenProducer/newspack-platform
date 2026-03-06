@@ -1390,9 +1390,16 @@ final class Modal_Checkout {
 				return true;
 			}
 		}
+
 		if ( class_exists( 'WC_Subscriptions_Cart' ) && \WC_Subscriptions_Cart::cart_contains_subscription() ) {
 			return true;
 		}
+
+		// Show details if the cart contains a subscription renewal.
+		if ( function_exists( 'wcs_cart_contains_renewal' ) && \wcs_cart_contains_renewal() ) {
+			return true;
+		}
+
 		return false;
 	}
 

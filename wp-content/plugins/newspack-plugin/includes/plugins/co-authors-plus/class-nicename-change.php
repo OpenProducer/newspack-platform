@@ -224,7 +224,7 @@ class Nicename_Change {
 	 * @param string $new_nicename  The new nicename.
 	 */
 	public static function handle_old_nicename_meta( $user_id, $old_nicename, $new_nicename ) {
-		$old_nicename_meta = (array) get_user_meta( $user_id, self::OLD_NICENAME_META_KEY );
+		$old_nicename_meta = (array) get_user_meta( $user_id, self::OLD_NICENAME_META_KEY, false );
 
 		// If we haven't added this old nicename before, add it now.
 		if ( ! empty( $old_nicename ) && ! in_array( $old_nicename, $old_nicename_meta, true ) ) {

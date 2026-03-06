@@ -707,6 +707,9 @@ class WooCommerce_Connection {
 		if ( ! function_exists( 'WC' ) ) {
 			return false;
 		}
+		if ( wp_is_block_theme() ) {
+			return false;
+		}
 		return is_checkout() || is_cart() || is_account_page();
 	}
 

@@ -13,6 +13,8 @@
 	--wp-admin-theme-color-darker-10--rgb: #{colors.$primary-700--rgb};
 	--wp-admin-theme-color-darker-20: #{colors.$primary-800};
 	--wp-admin-theme-color-darker-20--rgb: #{colors.$primary-800--rgb};
+	--wp-admin-theme-color-lighter-10: #{colors.$primary-000};
+	--wp-admin-theme-color-lighter-10--rgb: #{colors.$primary-000--rgb};
 
 	color: wp-colors.$gray-900;
 
@@ -44,12 +46,39 @@
 	}
 
 	&__header {
+		align-items: center;
 		background: white;
+		border-bottom: 1px solid wp-colors.$gray-300;
+		display: flex;
+		.newspack-wizard__fixed-header & {
+			position: sticky;
+			top: 0;
+			width: 100%;
+			z-index: 1000;
+			.admin-bar & {
+				@media only screen and ( min-width: 601px ) {
+					top: 46px;
+				}
+				@media only screen and ( min-width: 782px ) {
+					top: 32px;
+				}
+			}
+		}
+		&__inner {
+			flex: 1;
+		}
+		&__actions {
+			align-items: center;
+			display: flex;
+			flex: 1 1 auto;
+			gap: 8px;
+			justify-content: flex-end;
+			padding: 0 24px 0 0;
+		}
 	}
 
 	&__title {
 		align-items: center;
-		border-bottom: 1px solid wp-colors.$gray-300;
 		display: flex;
 
 		h2 {
@@ -62,7 +91,7 @@
 			display: flex;
 			padding: 0 24px;
 
-			span {
+			> span {
 				color: wp-colors.$gray-700;
 				display: none;
 				margin-left: 8px;
@@ -121,12 +150,8 @@
 
 	&__content {
 		margin: 0 auto;
-		max-width: 1208px;
-		padding: 0 16px;
-
-		@media screen and ( min-width: 744px ) {
-			padding: 40px 84px;
-		}
+		max-width: calc(calc(var(--newspack-wizard-section-space) * 2) + var(--newspack-wizard-section-width));
+		padding: calc(var(--newspack-wizard-section-space) * 2) var(--newspack-wizard-section-space) 0;
 
 		// Typography
 
@@ -141,11 +166,11 @@
 
 		// Thematic Break
 
-		hr {
+		hr:not(.newspack-divider) {
 			background: wp-colors.$gray-300;
 			border: 0;
 			height: 1px;
-			margin: 48px 0;
+			margin: 32px 0;
 
 			@media screen and ( min-width: 744px ) {
 				margin: 64px 0;

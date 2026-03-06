@@ -5,12 +5,15 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useEffect, useRef } from '@wordpress/element';
+import { Tooltip } from '@wordpress/components'; // eslint-disable-line @wordpress/no-unsafe-wp-apis
+import { Icon, chevronLeft } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
-import { Grid } from '..';
+import { Badge, Button, Grid } from '..';
 import './style.scss';
 
 /**
@@ -22,14 +25,20 @@ import classnames from 'classnames';
  * Represents a section header component.
  *
  * @typedef {Object} SectionHeaderProps
- * @property {boolean}           [centered=false] - Indicates if the header is centered.
- * @property {?string}           [className=null] - Additional CSS class name.
- * @property {string|Function|*} [description]    - Description of the section.
- * @property {number}            [heading=2]      - HTML heading level, e.g., 1 for h1, 2 for h2, etc.
- * @property {boolean}           [isWhite=false]  - Indicates if the header should use a white theme.
- * @property {boolean}           [noMargin=false] - Indicates if the header should have no margin.
- * @property {string}            title            - The title of the section.
- * @property {?string}           [id=null]        - Optional ID for the header element.
+ * @property {string}             [backNav='']       - URL to navigate back to.
+ * @property {string|string[]}    [badge]            - Badge to display in the header.
+ * @property {string}             [badgeLevel]       - Badge level, e.g., 'success', 'info', 'warning', 'error'.
+ * @property {boolean}            [centered=false]   - Indicates if the header is centered.
+ * @property {?string}            [className=null]   - Additional CSS class name.
+ * @property {string|Function|*}  [description]      - Description of the section.
+ * @property {number}             [heading=2]        - HTML heading level, e.g., 1 for h1, 2 for h2, etc.
+ * @property {string|Function|*}  [icon]             - Icon to display in the header.
+ * @property {boolean}            [isWhite=false]    - Indicates if the header should use a white theme.
+ * @property {boolean}            [noMargin=false]   - Indicates if the header should have no margin.
+ * @property {boolean}            [pageHeader=false] - Indicates if the header is used as a page header.
+ * @property {string}             title              - The title of the section.
+ * @property {?string}            [id=null]          - Optional ID for the header element.
+ * @property {?string|Function|*} [children=null]    - Optional children to display in the header.
  */
 
 /**
@@ -38,14 +47,19 @@ import classnames from 'classnames';
  * @param {SectionHeaderProps} props - The properties for the section header.
  */
 const SectionHeader = ( {
+	backNav = '',
+	badges,
 	centered = false,
 	className = null,
 	description = '',
 	heading = 2,
+	icon = null,
 	isWhite = false,
 	noMargin = false,
+	pageHeader = false,
 	title,
 	id = null,
+	children = null,
 } ) => {
 	// If id is in the URL as a scrollTo param, scroll to it on render.
 	const ref = useRef();
@@ -65,19 +79,44 @@ const SectionHeader = ( {
 		centered && 'newspack-section-header--is-centered',
 		isWhite && 'newspack-section-header--is-white',
 		noMargin && 'newspack-section-header--no-margin',
+		pageHeader && 'newspack-section-header--page-header',
 		className
 	);
 
-	const HeadingTag = `h${ heading }`;
+	const HeadingTag = pageHeader ? 'h1' : `h${ heading }`;
 
 	return (
-		<div id={ id } className="newspack-section-header__container" ref={ ref }>
+		<div
+			id={ id }
+			className={ classnames( 'newspack-section-header__container', backNav && 'newspack-section-header--has-back-nav' ) }
+			ref={ ref }
+		>
 			<Grid columns={ 1 } gutter={ 8 } className={ classes }>
-				{ typeof title === 'string' && <HeadingTag>{ title }</HeadingTag> }
+				{ icon && (
+					<div className="newspack-section-header__icon">
+						<Icon icon={ icon } size={ 48 } />
+					</div>
+				) }
+				{ backNav && (
+					<div className="newspack-section-header__back-nav">
+						<Tooltip text={ __( 'Go back', 'newspack-plugin' ) }>
+							<Button href={ backNav } icon={ chevronLeft } variant="tertiary" />
+						</Tooltip>
+					</div>
+				) }
+				{ typeof title === 'string' && (
+					<div className="newspack-section-header__title-container">
+						<HeadingTag>{ title }</HeadingTag>
+						{ badges?.length
+							? badges.map( ( badge, i ) => <Badge key={ i } text={ badge.label } level={ badge.level || 'default' } /> )
+							: null }
+					</div>
+				) }
 				{ typeof title === 'function' && <HeadingTag>{ title() }</HeadingTag> }
 				{ description && typeof description === 'string' && <p>{ description }</p> }
 				{ typeof description === 'function' && <p>{ description() }</p> }
 				{ description && typeof description !== 'string' && typeof description !== 'function' && <p>{ description }</p> }
+				{ children && <div className="newspack-section-header__children">{ children }</div> }
 			</Grid>
 		</div>
 	);

@@ -42,7 +42,7 @@ if ( function_exists( 'wc_memberships_for_teams' ) ) {
 	<h1 class="newspack-ui__font--s newspack-ui__spacing-top--0 newspack-ui__spacing-bottom--0"><?php echo esc_html( $current_page_name ); ?></h1>
 
 	<div class="newspack-my-account__navigation-topbar__button">
-		<button class="newspack-ui__button newspack-ui__button--x-small newspack-ui__button--ghost newspack-ui__button--icon" aria-expanded="false" aria-label="<?php esc_attr_e( 'Open navigation', 'newspack-plugin' ); ?>" data-label-close="<?php esc_attr_e( 'Close navigation', 'newspack-plugin' ); ?>" data-label-open="<?php esc_attr_e( 'Open navigation', 'newspack-plugin' ); ?>">
+		<button class="newspack-ui__button newspack-ui__button--medium newspack-ui__button--ghost newspack-ui__button--icon" aria-expanded="false" aria-label="<?php esc_attr_e( 'Open navigation', 'newspack-plugin' ); ?>" data-label-close="<?php esc_attr_e( 'Close navigation', 'newspack-plugin' ); ?>" data-label-open="<?php esc_attr_e( 'Open navigation', 'newspack-plugin' ); ?>">
 			<?php Newspack_UI_Icons::print_svg( 'menu' ); ?>
 			<?php Newspack_UI_Icons::print_svg( 'close' ); ?>
 		</button>

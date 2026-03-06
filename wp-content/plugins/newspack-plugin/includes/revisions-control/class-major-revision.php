@@ -60,7 +60,7 @@ class Major_Revision {
 	 * @return array
 	 */
 	public function get_post_revisions() {
-		$ids = get_post_meta( $this->post_id, self::MAJOR_IDS_META_KEY );
+		$ids = get_post_meta( $this->post_id, self::MAJOR_IDS_META_KEY, false );
 		if ( empty( $ids ) ) {
 			return [];
 		}

@@ -133,11 +133,11 @@
 
 	// Thematic Break
 
-	hr {
+	hr:not(.newspack-divider) {
 		background: wp-colors.$gray-300;
 		border: 0;
 		height: 1px;
-		margin: 48px 0;
+		margin: 32px 0;
 
 		@media screen and ( min-width: 744px ) {
 			margin: 64px 0;

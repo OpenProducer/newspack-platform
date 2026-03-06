@@ -35,7 +35,7 @@ const ContentGiftingSettings = () => {
 		resetError();
 		wizardApiFetch(
 			{
-				path: '/newspack/v1/wizard/newspack-audience-content-gates/content-gifting',
+				path: '/newspack/v1/wizard/newspack-audience-access-control/content-gifting',
 				method: 'POST',
 				quiet: true,
 				data: newConfig.content_gifting,
