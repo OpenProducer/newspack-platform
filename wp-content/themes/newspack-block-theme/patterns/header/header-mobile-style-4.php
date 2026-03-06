@@ -1,7 +1,7 @@
 <?php
 /**
- * Title: Header (Mobile) - Style 3
- * Slug: newspack-block-theme/header-mobile-style-3
+ * Title: Header (Mobile) - Style 4
+ * Slug: newspack-block-theme/header-mobile-style-4
  * Viewport Width: 632
  * Inserter: no
  * Block Types: core/template-part/header
@@ -16,13 +16,9 @@
 	<!-- wp:group {"lock":{"move":true,"remove":true},"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"grid","columnCount":7,"minimumColumnWidth":null}} -->
 	<div class="wp-block-group alignwide">
 
-		<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"},"layout":{"columnSpan":2}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+		<!-- wp:group {"style":{"layout":{"columnSpan":2}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 		<div class="wp-block-group">
 			<!-- wp:template-part {"slug":"mobile-menu","theme":"newspack-block-theme","tagName":"div","lock":{"move":false,"remove":true},"className":"mobile-menu"} /-->
-
-			<?php if ( class_exists( 'Newspack\Reader_Activation' ) && \Newspack\Reader_Activation::is_enabled() ) : ?>
-				<!-- wp:newspack/my-account-button {"lock":{"move":false,"remove":true},"className":"is-style-icon-only has-x-small-size","style":{"spacing":{"padding":{"top":"0.375rem","bottom":"0.375rem","left":"0.375rem","right":"0.375rem"}},"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}}},"backgroundColor":"base","textColor":"contrast","fontSize":"x-small"} /-->
-			<?php endif; ?>
 		</div>
 		<!-- /wp:group -->
 
@@ -34,13 +30,11 @@
 
 		<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"},"layout":{"columnSpan":2}},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"}} -->
 		<div class="wp-block-group">
-			<!-- wp:buttons {"layout":{"type":"flex","flexWrap":"nowrap"},"style":{"spacing":{"blockGap":"var:preset|spacing|20"}}} -->
-			<div class="wp-block-buttons">
-				<!-- wp:button {"className":"has-x-small-size","fontSize":"x-small"} -->
-				<div class="wp-block-button has-custom-font-size has-x-small-size has-x-small-font-size"><a class="wp-block-button__link wp-element-button"></a></div>
-				<!-- /wp:button -->
-			</div>
-			<!-- /wp:buttons -->
+			<!-- wp:template-part {"slug":"search-menu","theme":"newspack-block-theme","tagName":"div","className":"search-menu"} /-->
+
+			<?php if ( class_exists( 'Newspack\Reader_Activation' ) && \Newspack\Reader_Activation::is_enabled() ) : ?>
+				<!-- wp:newspack/my-account-button {"lock":{"move":false,"remove":true},"className":"is-style-icon-only has-x-small-size","style":{"spacing":{"padding":{"top":"0.375rem","bottom":"0.375rem","left":"0.375rem","right":"0.375rem"}},"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}}},"backgroundColor":"base","textColor":"contrast","fontSize":"x-small"} /-->
+			<?php endif; ?>
 		</div>
 		<!-- /wp:group -->
 
