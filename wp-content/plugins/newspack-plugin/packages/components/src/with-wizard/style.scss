@@ -3,11 +3,21 @@
  */
 
 @use "~@wordpress/base-styles/colors" as wp-colors;
+@use "../../../colors/colors.module" as colors;
 
 // Styling for full-page-react Wizards (ignoring admin-header-only wizards).
 body.newspack-wizard-page:not(.newspack-admin-header) {
+	--wp-admin-theme-color: #{colors.$primary-600};
+	--wp-admin-theme-color--rgb: #{colors.$primary-600--rgb};
+	--wp-admin-theme-color-darker-10: #{colors.$primary-700};
+	--wp-admin-theme-color-darker-10--rgb: #{colors.$primary-700--rgb};
+	--wp-admin-theme-color-darker-20: #{colors.$primary-800};
+	--wp-admin-theme-color-darker-20--rgb: #{colors.$primary-800--rgb};
+	--wp-admin-theme-color-lighter-10: #{colors.$primary-000};
+	--wp-admin-theme-color-lighter-10--rgb: #{colors.$primary-000--rgb};
+	--wp-components-color-accent: #{colors.$primary-600};
 
-	background: white;
+	background: #{wp-colors.$white};
 
 	// Reset Padding
 	#wpcontent {
@@ -17,6 +27,14 @@ body.newspack-wizard-page:not(.newspack-admin-header) {
 	#wpbody-content {
 		padding-bottom: 220px;
 		min-height: 100vh;
+
+		@media screen and ( min-width: 600px ) {
+			min-height: calc(100vh - 46px);
+		}
+
+		@media screen and ( min-width: 783px ) {
+			min-height: calc(100vh - 32px);
+		}
 
 		// For admin notices directly ">" at top of page above the Wizard header.
 		// PHP code should hide these notices, but just incase add this style.
@@ -29,8 +47,8 @@ body.newspack-wizard-page:not(.newspack-admin-header) {
 			padding-bottom: 202px;
 		}
 
-		@media screen and ( min-width: 1128px ) {
-			padding-bottom: 168px;
+		@media screen and ( min-width: 1054px ) {
+			padding-bottom: 136px;
 		}
 	}
 }
@@ -134,7 +152,7 @@ svg {
 			0 96px 0 0 wp-colors.$gray-700;
 		height: 24px;
 		margin: 68px auto 0;
-		max-width: 1040px;
+		max-width: 1006px;
 		width: calc(100% - ( 32px * 2 ));
 
 		@media screen and ( min-width: 744px ) {
@@ -250,7 +268,7 @@ svg {
 			0 96px 0 0 wp-colors.$gray-700;
 		height: 24px;
 		margin: 0 auto;
-		max-width: 1040px;
+		max-width: 1006px;
 		width: 100%;
 
 		@media screen and ( min-width: 744px ) {

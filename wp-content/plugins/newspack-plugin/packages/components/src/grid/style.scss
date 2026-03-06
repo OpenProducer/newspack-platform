@@ -77,6 +77,14 @@
 		&__columns-3,
 		&__columns-4 {
 			grid-template-columns: repeat(2, 1fr);
+
+			> [start] {
+				grid-column-start: 1;
+			}
+
+			> [end] {
+				grid-column-end: -1;
+			}
 		}
 
 		&__columns-6 {
@@ -84,8 +92,8 @@
 		}
 	}
 
-	// Media Queries - 1128px
-	@media screen and ( min-width: 1128px ) {
+	// Media Queries - 1054px
+	@media screen and ( min-width: 1054px ) {
 		// Columns 3
 		&__columns-3 {
 			grid-template-columns: repeat(3, 1fr);
@@ -94,6 +102,14 @@
 		// Columns 4
 		&__columns-4 {
 			grid-template-columns: repeat(4, 1fr);
+
+			> [start="2"] {
+				grid-column-start: 2;
+			}
+
+			> [end="4"] {
+				grid-column-end: 4;
+			}
 		}
 
 		// Columns 6

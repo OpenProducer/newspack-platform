@@ -15,6 +15,7 @@
 
 	<!-- wp:group {"lock":{"move":true,"remove":true},"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"flex","justifyContent":"space-between","flexWrap":"nowrap"}} -->
 	<div class="wp-block-group alignwide">
+
 		<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 		<div class="wp-block-group">
 			<!-- wp:template-part {"slug":"mobile-menu","theme":"newspack-block-theme","tagName":"div","lock":{"move":false,"remove":true},"className":"mobile-menu"} /-->
@@ -25,17 +26,17 @@
 
 		<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 		<div class="wp-block-group">
+			<?php if ( class_exists( 'Newspack\Reader_Activation' ) && \Newspack\Reader_Activation::is_enabled() ) : ?>
+				<!-- wp:newspack/my-account-button {"lock":{"move":false,"remove":true},"className":"is-style-icon-only has-x-small-size","style":{"spacing":{"padding":{"top":"0.375rem","bottom":"0.375rem","left":"0.375rem","right":"0.375rem"}},"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}}},"backgroundColor":"base","textColor":"contrast","fontSize":"x-small"} /-->
+			<?php endif; ?>
+
 			<!-- wp:buttons {"layout":{"type":"flex","flexWrap":"nowrap"},"style":{"spacing":{"blockGap":"var:preset|spacing|20"}}} -->
 			<div class="wp-block-buttons">
 				<!-- wp:button {"className":"has-x-small-size","fontSize":"x-small"} -->
-				<div class="wp-block-button has-custom-font-size has-x-small-size has-x-small-font-size"><a class="wp-block-button__link wp-element-button"><?php esc_html_e( 'Donate', 'newspack-block-theme' ); ?></a></div>
+				<div class="wp-block-button has-custom-font-size has-x-small-size has-x-small-font-size"><a class="wp-block-button__link wp-element-button"></a></div>
 				<!-- /wp:button -->
 			</div>
 			<!-- /wp:buttons -->
-
-			<?php if ( class_exists( 'Newspack\Reader_Activation' ) && \Newspack\Reader_Activation::is_enabled() ) : ?>
-				<!-- wp:newspack/my-account-button {"lock":{"move":true,"remove":false},"style":{"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}}},"backgroundColor":"base-2","textColor":"contrast","className":"has-x-small-size","fontSize":"x-small"} /-->
-			<?php endif; ?>
 		</div>
 		<!-- /wp:group -->
 

@@ -10,8 +10,9 @@ namespace Newspack;
 defined( 'ABSPATH' ) || exit;
 
 use Newspack\Donations;
-use Newspack\Reader_Activation\Sync;
-use Newspack\Data_Events\Connectors\ESP_Connector;
+use Newspack\Reader_Activation\Sync\Woocommerce as Sync_WooCommerce;
+use Newspack\Reader_Activation\Sync\Metadata as Sync_Metadata;
+use Newspack\Reader_Activation\Contact_Sync;
 
 /**
  * Main class.
@@ -88,7 +89,7 @@ class Teams_For_Memberships {
 	 * Register handlers.
 	 */
 	public static function register_handlers() {
-		if ( ! ESP_Connector::can_esp_sync() || ! self::is_enabled() ) {
+		if ( ! Contact_Sync::has_one_syncable_integration() || ! self::is_enabled() ) {
 			return;
 		}
 		Data_Events::register_handler( [ __CLASS__, 'sync_owner' ], 'team_created' );
@@ -108,8 +109,8 @@ class Teams_For_Memberships {
 			return;
 		}
 
-		$contact = Sync\WooCommerce::get_contact_from_customer( new \WC_Customer( $data['user_id'] ) );
-		ESP_Connector::sync( $contact, 'WooCommerce Memberships for Teams: team created' );
+		$contact = Sync_WooCommerce::get_contact_from_customer( new \WC_Customer( $data['user_id'] ) );
+		Contact_Sync::sync( $contact, 'WooCommerce Memberships for Teams: team created' );
 	}
 
 	/**
@@ -124,8 +125,8 @@ class Teams_For_Memberships {
 			return;
 		}
 
-		$contact = Sync\WooCommerce::get_contact_from_customer( new \WC_Customer( $data['user_id'] ) );
-		ESP_Connector::sync( $contact, 'WooCommerce Memberships for Teams: user added to team' );
+		$contact = Sync_WooCommerce::get_contact_from_customer( new \WC_Customer( $data['user_id'] ) );
+		Contact_Sync::sync( $contact, 'WooCommerce Memberships for Teams: user added to team' );
 	}
 
 	/**
@@ -146,9 +147,9 @@ class Teams_For_Memberships {
 		if ( 0 < $customer->get_order_count() || empty( \wc_memberships_for_teams_get_teams( $data['user_id'], [ 'role' => 'member' ] ) ) ) {
 			return;
 		}
-		$contact = Sync\WooCommerce::get_contact_from_customer( $customer );
+		$contact = Sync_WooCommerce::get_contact_from_customer( $customer );
 
-		ESP_Connector::sync( $contact, 'RAS Reader login' );
+		Contact_Sync::sync( $contact, 'RAS Reader login' );
 	}
 
 	/**
@@ -185,7 +186,7 @@ class Teams_For_Memberships {
 			return $contact;
 		}
 
-		$filtered_enabled_fields = Sync\Metadata::filter_enabled_fields( [ 'woo_team' ] );
+		$filtered_enabled_fields = Sync_Metadata::filter_enabled_fields( [ 'woo_team' ] );
 
 		if ( empty( $contact['email'] ) ) {
 			return $contact;
@@ -206,7 +207,7 @@ class Teams_For_Memberships {
 			return $contact;
 		}
 
-		if ( empty( Sync\Metadata::get_key_value( 'membership_status', $contact['metadata'] ) ) ) {
+		if ( empty( Sync_Metadata::get_key_value( 'membership_status', $contact['metadata'] ) ) ) {
 			$contact['metadata']['membership_status'] = 'team member';
 		}
 

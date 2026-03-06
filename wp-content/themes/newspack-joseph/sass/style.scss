@@ -5,7 +5,7 @@
 @use "../../newspack-theme/sass/variables-site/structure";
 
 /* Body */
-body {
+body:not(.newspack-ui) {
 	outline: 1px solid;
 	outline-offset: -#{0.5 * structure.$size__spacing-unit};
 	padding: #{0.5 * structure.$size__spacing-unit};

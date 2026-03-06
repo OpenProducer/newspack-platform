@@ -1,4 +1,9 @@
+/**
+ * WordPress dependencies.
+ */
+import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
+
 /**
  * Get edit gate layout URL.
  */
@@ -21,3 +26,11 @@ export function getEditGateLayoutUrl( gateId: number, gateMode: string ) {
 	}
 	return url;
 }
+
+export const getGateStatus = ( status: GateStatus ) => {
+	return status === 'publish' ? __( 'Active', 'newspack-plugin' ) : __( 'Inactive', 'newspack-plugin' );
+};
+
+export const getGateStatusBadgeLevel = ( status: GateStatus ) => {
+	return status === 'publish' ? 'success' : 'default';
+};

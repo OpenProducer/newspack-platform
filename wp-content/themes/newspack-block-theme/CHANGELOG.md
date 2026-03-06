@@ -1,3 +1,19 @@
+# [1.25.0](https://github.com/Automattic/newspack-block-theme/compare/v1.24.0...v1.25.0) (2026-03-02)
+
+
+### Features
+
+* allow parent to dictate position when it has the position class ([#409](https://github.com/Automattic/newspack-block-theme/issues/409)) ([94e3ce7](https://github.com/Automattic/newspack-block-theme/commit/94e3ce72de544214fadcfe9915de5029a70b5dd2))
+* make My Account button only show icon on mobile ([#406](https://github.com/Automattic/newspack-block-theme/issues/406)) ([c04788b](https://github.com/Automattic/newspack-block-theme/commit/c04788b8b73f72e24fb1f4eccee14746e3bf5939))
+
+# [1.25.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.24.0...v1.25.0-alpha.1) (2026-02-19)
+
+
+### Features
+
+* allow parent to dictate position when it has the position class ([#409](https://github.com/Automattic/newspack-block-theme/issues/409)) ([94e3ce7](https://github.com/Automattic/newspack-block-theme/commit/94e3ce72de544214fadcfe9915de5029a70b5dd2))
+* make My Account button only show icon on mobile ([#406](https://github.com/Automattic/newspack-block-theme/issues/406)) ([c04788b](https://github.com/Automattic/newspack-block-theme/commit/c04788b8b73f72e24fb1f4eccee14746e3bf5939))
+
 # [1.24.0](https://github.com/Automattic/newspack-block-theme/compare/v1.23.0...v1.24.0) (2026-02-16)
 
 

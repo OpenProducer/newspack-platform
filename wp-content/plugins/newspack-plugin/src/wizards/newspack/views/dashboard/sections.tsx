@@ -16,7 +16,7 @@ import { Icon } from '@wordpress/icons';
  */
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import { icons } from '../../components/icons';
-import { Grid, Card } from '../../../../../packages/components/src';
+import { Card, Divider, Grid } from '../../../../../packages/components/src';
 
 const {
 	newspackDashboard: { sections: dashSections },
@@ -38,7 +38,7 @@ export default [
 			return dashSectionsKeys.map( sectionKey => {
 				return (
 					<Fragment key={ sectionKey }>
-						<hr />
+						<Divider variant="tertiary" />
 						<div className="newspack-dashboard__section">
 							<h3>{ dashSections[ sectionKey ].title }</h3>
 							<p>{ dashSections[ sectionKey ].desc }</p>

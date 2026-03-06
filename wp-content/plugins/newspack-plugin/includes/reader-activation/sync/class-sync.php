@@ -85,4 +85,79 @@ class Sync {
 
 		return true;
 	}
+
+	/**
+	 * Whether at least one integration is enabled and can sync.
+	 *
+	 * @param bool $return_errors Optional. Whether to return a WP_Error object. Default false.
+	 *
+	 * @return bool|WP_Error True if at least one integration can sync, false otherwise. WP_Error if return_errors is true.
+	 */
+	public static function has_one_syncable_integration( $return_errors = false ) {
+
+		// Check if integrations have been registered.
+		if ( ! Integrations::are_integrations_registered() ) {
+			$message = __( 'This method was called before integrations were registered. Integrations are registered on the "init" hook with priority 5. Make sure to call this method after that hook has fired.', 'newspack-plugin' );
+
+			_doing_it_wrong(
+				__METHOD__,
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- _doing_it_wrong expects translated string.
+				$message,
+				'6.29.3'
+			);
+
+			if ( $return_errors ) {
+				return new \WP_Error(
+					'integrations_not_registered',
+					$message
+				);
+			}
+
+			return false;
+		}
+
+		$can_sync = static::can_sync( $return_errors );
+
+		if ( $return_errors && is_wp_error( $can_sync ) && $can_sync->has_errors() ) {
+			return $can_sync;
+		}
+
+		if ( ! $return_errors && false === $can_sync ) {
+			return false;
+		}
+
+		$integrations = Integrations::get_active_integrations();
+
+		// If there are no active integrations, return false or an error.
+		if ( empty( $integrations ) ) {
+			if ( $return_errors ) {
+				return new \WP_Error( 'no_active_integrations', __( 'No active integrations found.', 'newspack-plugin' ) );
+			}
+			return false;
+		}
+
+		$result = new \WP_Error();
+
+		foreach ( $integrations as $integration ) {
+			$can_sync_integration = $integration->can_sync( true );
+
+			// If any integration can sync, return true.
+			if ( ! $can_sync_integration->has_errors() ) {
+				if ( $return_errors ) {
+					return $result;
+				} else {
+					return true;
+				}
+			}
+
+			$result->merge_from( $can_sync_integration );
+		}
+
+		if ( $return_errors ) {
+			return $result;
+		}
+
+		// If we've checked all integrations and none can sync, return false.
+		return false;
+	}
 }

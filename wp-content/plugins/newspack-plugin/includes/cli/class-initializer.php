@@ -24,7 +24,7 @@ class Initializer {
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'register_comands' ] );
 		include_once NEWSPACK_ABSPATH . 'includes/cli/class-ras.php';
-		include_once NEWSPACK_ABSPATH . 'includes/cli/class-ras-esp-sync.php';
+		include_once NEWSPACK_ABSPATH . 'includes/cli/class-ras-contact-sync.php';
 		include_once NEWSPACK_ABSPATH . 'includes/cli/class-co-authors-plus.php';
 		include_once NEWSPACK_ABSPATH . 'includes/cli/class-mailchimp.php';
 		include_once NEWSPACK_ABSPATH . 'includes/cli/class-optional-modules.php';
@@ -57,7 +57,7 @@ class Initializer {
 
 		WP_CLI::add_command(
 			'newspack esp sync',
-			[ 'Newspack\CLI\RAS_ESP_Sync', 'cli_sync_contacts' ]
+			[ 'Newspack\CLI\RAS_Contact_Sync', 'cli_sync_contacts' ]
 		);
 
 		WP_CLI::add_command(

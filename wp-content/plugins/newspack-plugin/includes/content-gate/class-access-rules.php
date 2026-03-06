@@ -86,20 +86,20 @@ class Access_Rules {
 	public static function register_default_rules() {
 		$rules = [
 			'subscription' => [
-				'name'        => 'Has Active Subscription',
-				'description' => 'The user must be logged into a reader account and have an active subscription with one of the selected products.',
+				'name'        => __( 'Active subscription', 'newspack-plugin' ),
+				'description' => __( 'Requires an active subscription to selected products.', 'newspack-plugin' ),
 				'options'     => [ __CLASS__, 'get_subscription_products_options' ],
 				'callback'    => [ __CLASS__, 'has_active_subscription' ],
 			],
 			'email_domain' => [
-				'name'        => __( 'Has Whitelisted Email Domain', 'newspack-plugin' ),
-				'description' => 'The user must be logged into a reader account whose email address contains one of these domains. Specify multiple domains by separating them with a comma or line break.',
-				'placeholder' => 'example.com,another.com',
+				'name'        => __( 'Whitelisted email domain', 'newspack-plugin' ),
+				'description' => __( 'Only allow readers with specific email domains.', 'newspack-plugin' ),
+				'placeholder' => __( 'example.com,another.com', 'newspack-plugin' ),
 				'callback'    => [ __CLASS__, 'is_email_domain_whitelisted' ],
 			],
 			'reader_data'  => [
-				'name'        => __( 'Reader Data', 'newspack-plugin' ),
-				'description' => 'Determine reader data key-values the reader must have.',
+				'name'        => __( 'Reader data', 'newspack-plugin' ),
+				'description' => __( 'Set custom conditions based on reader data key/value pairs.', 'newspack-plugin' ),
 				'callback'    => [ __CLASS__, 'has_reader_data' ],
 			],
 		];

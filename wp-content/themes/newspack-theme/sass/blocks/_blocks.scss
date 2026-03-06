@@ -78,7 +78,8 @@
 .newspack-front-page,
 .post-template-single-wide,
 .page-template-single-wide {
-	.entry .entry-content {
+	.entry .entry-content,
+	.newspack-content-gate__inline-gate {
 		.alignwide {
 			@include utilities.media( tablet ) {
 				margin-left: calc(25% - 25vw);
@@ -1645,6 +1646,7 @@ $colors: (
 .page-template-single-feature,
 .page-template-no-header-footer {
 	.entry .entry-content > *,
+	.newspack-content-gate__inline-gate > *,
 	[id="pico"] > * {
 		&.alignwide {
 			@include utilities.media( tablet ) {

@@ -35,7 +35,7 @@ const CountdownBannerSettings = () => {
 		resetError();
 		wizardApiFetch(
 			{
-				path: '/newspack/v1/wizard/newspack-audience-content-gates/countdown-banner',
+				path: '/newspack/v1/wizard/newspack-audience-access-control/countdown-banner',
 				method: 'POST',
 				quiet: true,
 				data: newConfig.countdown_banner,

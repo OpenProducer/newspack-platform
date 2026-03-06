@@ -20,6 +20,10 @@
 		"signedOutLabel": {
 			"type": "string",
 			"default": "Sign in"
+		},
+		"className": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {

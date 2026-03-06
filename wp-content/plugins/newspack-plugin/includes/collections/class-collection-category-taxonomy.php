@@ -218,8 +218,9 @@ class Collection_Category_Taxonomy {
 	 */
 	public static function add_support_for_content_gates( $taxonomies ) {
 		$taxonomies[] = [
-			'slug'  => self::get_taxonomy(),
-			'label' => __( 'Collection Categories', 'newspack-plugin' ),
+			'slug'        => self::get_taxonomy(),
+			'label'       => __( 'Collection categories', 'newspack-plugin' ),
+			'description' => __( 'Categories specific to your collections.', 'newspack-plugin' ),
 		];
 		return $taxonomies;
 	}
