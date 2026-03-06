@@ -1,3 +1,51 @@
+## [6.34.3](https://github.com/Automattic/newspack-plugin/compare/v6.34.2...v6.34.3) (2026-03-06)
+
+
+### Bug Fixes
+
+* setcookie call ([#4534](https://github.com/Automattic/newspack-plugin/issues/4534)) ([27f473a](https://github.com/Automattic/newspack-plugin/commit/27f473a988793081d4a9cda6c043f058f3c6a91e))
+
+## [6.34.2](https://github.com/Automattic/newspack-plugin/compare/v6.34.1...v6.34.2) (2026-03-04)
+
+
+### Bug Fixes
+
+* **wizard:** restore PluginInstaller routing when required plugins unsatisfied ([#4545](https://github.com/Automattic/newspack-plugin/issues/4545)) ([f7105ce](https://github.com/Automattic/newspack-plugin/commit/f7105ce1d2fa28c5dd546d0e04878ad72e786ccb))
+
+## [6.34.1](https://github.com/Automattic/newspack-plugin/compare/v6.34.0...v6.34.1) (2026-03-02)
+
+
+### Bug Fixes
+
+* enable payment method deletion for Braintree ([5eb5797](https://github.com/Automattic/newspack-plugin/commit/5eb5797a38b7c1557350cde783e6abde1e11bbf7))
+* enable payment method deletion for Braintree ([f0600c8](https://github.com/Automattic/newspack-plugin/commit/f0600c8f194a7444fbd48c9509aed8976dae3ba6))
+
+# [6.34.0](https://github.com/Automattic/newspack-plugin/compare/v6.33.0...v6.34.0) (2026-03-02)
+
+
+### Bug Fixes
+
+* add bock theme check before switching templates to prevent warnings ([#4412](https://github.com/Automattic/newspack-plugin/issues/4412)) ([dfb5b63](https://github.com/Automattic/newspack-plugin/commit/dfb5b63cf1daaae3b1950cd312bebc1211bc3151))
+* add check for my account before switching error notice ([#4484](https://github.com/Automattic/newspack-plugin/issues/4484)) ([0cb3ae8](https://github.com/Automattic/newspack-plugin/commit/0cb3ae81af5dd4b13530e092ac52c7a8556eec07))
+* add fallback selector for the content gate in block theme ([#4431](https://github.com/Automattic/newspack-plugin/issues/4431)) ([dd0b2b1](https://github.com/Automattic/newspack-plugin/commit/dd0b2b1e58dc6e4dba30422d7b899d2960909a7d))
+* **avatar:** show placeholder for text-only custom bylines in editor ([#4456](https://github.com/Automattic/newspack-plugin/issues/4456)) ([56d3278](https://github.com/Automattic/newspack-plugin/commit/56d3278ffdb22a46f8544dff7561688e426d36d1))
+* **content-gate:** create gate layout with 'publish' status ([#4483](https://github.com/Automattic/newspack-plugin/issues/4483)) ([108215a](https://github.com/Automattic/newspack-plugin/commit/108215a0adc3a4c9d7fafbaae9e0a090ddf30131))
+* **content-gate:** prevent metering from bypassing account verification requirement ([#4459](https://github.com/Automattic/newspack-plugin/issues/4459)) ([90aed19](https://github.com/Automattic/newspack-plugin/commit/90aed1952b35894fe67712b4b0c9df825e876865))
+* **my-account:** hide payment method dropdown if only has one child and is disabled ([#4472](https://github.com/Automattic/newspack-plugin/issues/4472)) ([6e3c3f5](https://github.com/Automattic/newspack-plugin/commit/6e3c3f5e7f3fd7fc927da75ec1f6c3934b653362))
+* **my-account:** missing padding on labels ([#4479](https://github.com/Automattic/newspack-plugin/issues/4479)) ([6c6d183](https://github.com/Automattic/newspack-plugin/commit/6c6d18378bcbf2409c21110ad9705a2abd3bb42a))
+* tweak inline gate styles for block theme ([#4445](https://github.com/Automattic/newspack-plugin/issues/4445)) ([d867a53](https://github.com/Automattic/newspack-plugin/commit/d867a53b8ce26577c0ddb4cee709adca8ba05b11))
+
+
+### Features
+
+* **content-gating:** new UI for adding/editing content gates ([#4474](https://github.com/Automattic/newspack-plugin/issues/4474)) ([a193ecc](https://github.com/Automattic/newspack-plugin/commit/a193eccaba844ab61691beb747b3020b6d830fdf))
+* **data-events:** handler retry and ActionScheduler support ([#4469](https://github.com/Automattic/newspack-plugin/issues/4469)) ([c997f38](https://github.com/Automattic/newspack-plugin/commit/c997f389841abc0ef1b5762c71f23f837066055f))
+* integrations - rename classes and move can_sync ([#4451](https://github.com/Automattic/newspack-plugin/issues/4451)) ([877ce4f](https://github.com/Automattic/newspack-plugin/commit/877ce4fae49c499e7451f83f5eed21100b349fe0))
+* integrations barebones ([#4433](https://github.com/Automattic/newspack-plugin/issues/4433)) ([79bf9a7](https://github.com/Automattic/newspack-plugin/commit/79bf9a78070e73ef22d8158bb639bfea58aa5af7))
+* **my-account:** block theme styles ([#4430](https://github.com/Automattic/newspack-plugin/issues/4430)) ([1629465](https://github.com/Automattic/newspack-plugin/commit/16294656e4c7f60e1a603226a4bede792cfb6f67))
+* **my-account:** improve navigation on small screens ([#4471](https://github.com/Automattic/newspack-plugin/issues/4471)) ([3404a66](https://github.com/Automattic/newspack-plugin/commit/3404a66dd75a9ef52933286040756af194212438))
+* **newspack-components:** add divider component ([#4462](https://github.com/Automattic/newspack-plugin/issues/4462)) ([f080d72](https://github.com/Automattic/newspack-plugin/commit/f080d721fd2c1d93ac2b8248c242d477b38298f4))
+
 # [6.33.0](https://github.com/Automattic/newspack-plugin/compare/v6.32.0...v6.33.0) (2026-02-27)
 
 

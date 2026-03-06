@@ -10,9 +10,9 @@ import { __ } from '@wordpress/i18n';
  */
 import { AUDIENCE_CONTENT_GATES_WIZARD_SLUG } from './consts';
 import { useWizardApiFetch } from '../../../hooks/use-wizard-api-fetch';
-import ContentRules from './content-rules';
-import Registration from './registration';
-import CustomAccess from './custom-access';
+import ContentRules from './edit/content-rules';
+import Registration from './edit/registration';
+import CustomAccess from './edit/custom-access';
 
 type ContentGateSettingsProps = {
 	gate: Gate;

@@ -337,6 +337,9 @@ class Woocommerce_Memberships {
 
 		// No need to re-add the user to the lists they are already subscribed to.
 		$current_user_lists = \Newspack_Newsletters_Subscription::get_contact_lists( $user_email );
+		if ( ! is_array( $current_user_lists ) ) {
+			$current_user_lists = [];
+		}
 
 		// If a list is shown in the post-checkout newsletter signup modal, we only want to add the reader to membership-tied lists if:
 		// - The membership is going from `paused` to `active` status (when a prior subscription is renewed).

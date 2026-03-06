@@ -485,7 +485,7 @@ class Audience_Wizard extends Wizard {
 				'config'               => Reader_Activation::get_settings(),
 				'prerequisites_status' => Reader_Activation::get_prerequisites_status(),
 				'memberships'          => self::get_memberships_settings(),
-				'can_esp_sync'         => Reader_Activation\ESP_Sync::can_esp_sync( true ),
+				'can_esp_sync'         => Reader_Activation\Contact_Sync::has_one_syncable_integration( true ),
 			]
 		);
 	}
@@ -508,7 +508,7 @@ class Audience_Wizard extends Wizard {
 				'config'               => Reader_Activation::get_settings(),
 				'prerequisites_status' => Reader_Activation::get_prerequisites_status(),
 				'memberships'          => self::get_memberships_settings(),
-				'can_esp_sync'         => Reader_Activation\ESP_Sync::can_esp_sync( true ),
+				'can_esp_sync'         => Reader_Activation\Contact_Sync::has_one_syncable_integration( true ),
 			]
 		);
 	}
@@ -593,7 +593,7 @@ class Audience_Wizard extends Wizard {
 				'config'               => Reader_Activation::get_settings(),
 				'prerequisites_status' => Reader_Activation::get_prerequisites_status(),
 				'memberships'          => self::get_memberships_settings(),
-				'can_esp_sync'         => Reader_Activation\ESP_Sync::can_esp_sync( true ),
+				'can_esp_sync'         => Reader_Activation\Contact_Sync::has_one_syncable_integration( true ),
 			]
 		);
 	}

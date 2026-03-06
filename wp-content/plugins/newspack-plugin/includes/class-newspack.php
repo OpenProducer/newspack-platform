@@ -90,8 +90,10 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/sync/class-sync.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/sync/class-metadata.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/sync/class-woocommerce.php';
-		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/sync/class-esp-sync.php';
-		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/sync/class-esp-sync-admin.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/sync/class-contact-sync.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/sync/class-contact-sync-admin.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/class-integrations.php';
+		\Newspack\Reader_Activation\Integrations::init();
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-utils.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-data-events.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-webhooks.php';
@@ -99,7 +101,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/listeners.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-popups.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-memberships.php';
-		include_once NEWSPACK_ABSPATH . 'includes/data-events/connectors/class-esp-connector.php';
+		include_once NEWSPACK_ABSPATH . 'includes/data-events/connectors/class-contact-sync-connector.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-woo-user-registration.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';

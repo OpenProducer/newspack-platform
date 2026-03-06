@@ -6,22 +6,38 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies.
  */
-import { useSelect } from '@wordpress/data';
-import { useState, forwardRef } from '@wordpress/element';
+import { DropdownMenu, MenuItem } from '@wordpress/components';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { useEffect, useState, forwardRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { category } from '@wordpress/icons';
+import { category, moreVertical } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
-import { Footer, Notice, Button, NewspackIcon, TabbedNavigation, PluginInstaller, HandoffMessage } from '../';
+import { Footer, Notice, Button, NewspackIcon, TabbedNavigation, PluginInstaller, SectionHeader, HandoffMessage } from '../';
 import Router from '../proxied-imports/router';
 import registerStore, { WIZARD_STORE_NAMESPACE } from './store';
 import WizardError from './components/WizardError';
 
 registerStore();
 
-const { HashRouter, Redirect, Route, Switch } = Router;
+const { HashRouter, Redirect, Route, Switch, useLocation } = Router;
+
+/**
+ * Reset the header data when a new section is rendered.
+ */
+const ResetHeaderData = () => {
+	const location = useLocation();
+	const { resetHeaderData, setError } = useDispatch( WIZARD_STORE_NAMESPACE );
+
+	useEffect( () => {
+		resetHeaderData();
+		setError( null );
+	}, [ location.pathname, setError, resetHeaderData ] );
+
+	return null;
+};
 
 /**
  * @typedef  {Object}     WizardProps
@@ -49,17 +65,24 @@ const Wizard = (
 		sections = [],
 		headerText,
 		apiSlug,
+		sharedProps = {},
 		subHeaderText,
 		hasSimpleFooter,
 		className,
 		renderAboveSections,
 		requiredPlugins = [],
 		isInitialFetchTriggered = true,
+		fixedHeader = false,
 	},
 	ref
 ) => {
 	const isLoading = useSelect( select => select( WIZARD_STORE_NAMESPACE ).isLoading() );
 	const isQuietLoading = useSelect( select => select( WIZARD_STORE_NAMESPACE ).isQuietLoading() );
+	const headerData = useSelect( select => select( WIZARD_STORE_NAMESPACE ).getHeaderData() );
+	const { actions, backNav, badges, sectionName, sectionTitle } = headerData;
+
+	const mainActions = actions?.filter( action => action.type === 'primary' || action.type === 'secondary' );
+	const moreActions = actions?.filter( action => action.type === 'more' );
 
 	// Trigger initial data fetch. Some sections might not use the wizard data,
 	// but for consistency, fetching is triggered regardless of the section.
@@ -80,6 +103,10 @@ const Wizard = (
 		];
 	}
 
+	// When plugins are required but not yet satisfied, `displayedSections` is replaced with
+	// the PluginInstaller. Use it for routing so the installer actually mounts and runs.
+	const routedSections = pluginRequirementsSatisfied ? sections : displayedSections;
+
 	const urlWithoutHash = window.location.href.split( '#' )[ 0 ];
 
 	return (
@@ -87,11 +114,12 @@ const Wizard = (
 			<div
 				className={ classnames( isLoading ? 'newspack-wizard__is-loading' : 'newspack-wizard__is-loaded', {
 					'newspack-wizard__is-loading-quiet': isQuietLoading,
+					'newspack-wizard__fixed-header': fixedHeader,
 				} ) }
 			>
 				<HashRouter hashType="slash">
 					{ newspack_aux_data.is_debug_mode && <Notice debugMode /> }
-					<div className="bg-white">
+					<div className="newspack-wizard__header">
 						<div className="newspack-wizard__header__inner">
 							<div className="newspack-wizard__title">
 								{ newspack_urls.dashboard !== urlWithoutHash ? (
@@ -109,11 +137,53 @@ const Wizard = (
 									<NewspackIcon size={ 36 } />
 								) }
 								<div>
-									{ headerText && <h2>{ headerText }</h2> }
+									{ headerText && (
+										<h2 className="newspack-wizard__header__title">
+											{ headerText }
+											{ sectionName && (
+												<span className="newspack-wizard__header__section">
+													<span className="newspack-wizard__header__section__separator"> / </span> { sectionName }
+												</span>
+											) }
+										</h2>
+									) }
 									{ subHeaderText && <span>{ subHeaderText }</span> }
 								</div>
 							</div>
 						</div>
+						{ actions?.length > 0 && (
+							<div className="newspack-wizard__header__actions">
+								{ mainActions.map( ( action, index ) => (
+									<Button
+										key={ index }
+										icon={ action.icon }
+										variant={ action.type }
+										onClick={ action.action }
+										disabled={ action.disabled || false }
+										isDestructive={ action.destructive || false }
+									>
+										{ action.label }
+									</Button>
+								) ) }
+								{ moreActions.length > 0 && (
+									<DropdownMenu icon={ moreVertical } label={ __( 'More', 'newspack-plugin' ) }>
+										{ () =>
+											moreActions.map( ( action, index ) => (
+												<MenuItem
+													key={ index }
+													icon={ action.icon }
+													onClick={ action.action }
+													disabled={ action.disabled || false }
+													isDestructive={ action.destructive || false }
+												>
+													{ action.label }
+												</MenuItem>
+											) )
+										}
+									</DropdownMenu>
+								) }
+							</div>
+						) }
 					</div>
 
 					{ displayedSections.length > 1 && (
@@ -123,16 +193,27 @@ const Wizard = (
 					) }
 					<HandoffMessage />
 
+					{ sections.length > 1 && <ResetHeaderData /> }
+
 					<Switch>
-						{ displayedSections.map( ( section, index ) => {
+						{ routedSections.map( ( section, index ) => {
 							const SectionComponent = section.render;
+							const sectionProps = section.props || {};
 							return (
-								<Route key={ index } exact={ section.exact ?? false } path={ section.path }>
-									<div className={ classnames( 'newspack-wizard__content', className ) }>
-										{ 'function' === typeof renderAboveSections ? renderAboveSections() : null }
-										<SectionComponent />
-									</div>
-								</Route>
+								<Route
+									key={ index }
+									exact={ section.exact ?? false }
+									path={ section.path }
+									render={ routerProps => (
+										<div className={ classnames( 'newspack-wizard__content', className ) }>
+											{ 'function' === typeof renderAboveSections ? renderAboveSections() : null }
+											{ sectionTitle && (
+												<SectionHeader backNav={ backNav } heading={ 1 } title={ sectionTitle } badges={ badges } noMargin />
+											) }
+											<SectionComponent { ...routerProps } { ...sectionProps } { ...sharedProps } />
+										</div>
+									) }
+								/>
 							);
 						} ) }
 						<Redirect to={ displayedSections[ 0 ].path } />

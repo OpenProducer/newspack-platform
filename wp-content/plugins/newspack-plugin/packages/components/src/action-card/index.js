@@ -29,7 +29,7 @@ import classnames from 'classnames';
  */
 const ActionCard = ( {
 	badge,
-	badgeLevel = 'info',
+	badgeLevel,
 	className,
 	checkbox,
 	children,

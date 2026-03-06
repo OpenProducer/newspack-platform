@@ -14,7 +14,7 @@ import { CheckboxControl as WpCheckboxControl, TextControl } from '@wordpress/co
  */
 import { ENDPOINTS_CACHE_KEY } from '../constants';
 import { WizardApiError } from '../../../../../../errors';
-import { Card, Button, Notice, Modal, Grid } from '../../../../../../../../packages/components/src';
+import { Card, Button, Notice, Modal, Grid, Divider } from '../../../../../../../../packages/components/src';
 import { validateEndpoint, validateUrl } from '../utils';
 
 /**
@@ -153,7 +153,7 @@ const Upsert = ( {
 						</Button>
 					</Card>
 				</Grid>
-				<hr />
+				<Divider alignment="full-width" variant="tertiary" />
 				<TextControl
 					label={ __( 'Label (optional)', 'newspack-plugin' ) }
 					help={ __( 'A label to help you identify this endpoint. It will not be sent to the endpoint.', 'newspack-plugin' ) }

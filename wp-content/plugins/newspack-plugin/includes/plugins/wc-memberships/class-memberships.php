@@ -146,7 +146,7 @@ class Memberships {
 		} else {
 			// Gate not found, create it.
 			$post_title   = __( 'Content Gate', 'newspack' );
-			$gate_post_id = Content_Gate::create_gate( $post_title, self::GATE_CPT );
+			$gate_post_id = Content_Gate::create_gate( [ 'title' => $post_title ], self::GATE_CPT );
 			if ( is_wp_error( $gate_post_id ) ) {
 				\wp_die( esc_html( $gate_post_id->get_error_message() ) );
 			}
@@ -282,7 +282,7 @@ class Memberships {
 				__( '%s Gate', 'newspack' ),
 				$plan->get_name()
 			);
-			$gate_post_id = Content_Gate::create_gate( $post_title, self::GATE_CPT );
+			$gate_post_id = Content_Gate::create_gate( [ 'title' => $post_title ], self::GATE_CPT );
 			if ( is_wp_error( $gate_post_id ) ) {
 				\wp_die( esc_html( $gate_post_id->get_error_message() ) );
 			}

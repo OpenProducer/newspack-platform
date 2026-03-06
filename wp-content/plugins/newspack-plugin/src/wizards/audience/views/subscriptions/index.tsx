@@ -1,11 +1,10 @@
-/* eslint @wordpress/no-unsafe-wp-apis: 0 */
 /**
  * WordPress dependencies.
  */
 import { sprintf, __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { forwardRef, useState, useEffect } from '@wordpress/element';
-import { __experimentalHStack as HStack, ExternalLink } from '@wordpress/components';
+import { ExternalLink, __experimentalHStack as HStack } from '@wordpress/components'; // eslint-disable-line @wordpress/no-unsafe-wp-apis
 
 /**
  * Internal dependencies.

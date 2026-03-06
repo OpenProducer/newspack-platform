@@ -361,6 +361,13 @@ class Metering {
 			return false;
 		}
 
+		// Bail if the gate requires account verification and the reader is not verified.
+		// Non-reader users (admins, editors) are exempt - they have full access through other means.
+		$user = \wp_get_current_user();
+		if ( Content_Gate::requires_account_verification() && Reader_Activation::is_user_reader( $user ) && ! Reader_Activation::is_reader_verified( $user ) ) {
+			return false;
+		}
+
 		// Not in checkout modals.
 		if ( method_exists( 'Newspack_Blocks\Modal_Checkout', 'is_modal_checkout' ) && \Newspack_Blocks\Modal_Checkout::is_modal_checkout() ) {
 			return false;
@@ -368,7 +375,6 @@ class Metering {
 
 		$gate_post_id = Content_Gate::get_gate_post_id();
 		$settings     = self::get_registered_settings( $gate_post_id );
-		$priority     = \get_post_meta( $gate_post_id, 'gate_priority', true );
 
 		// Bail if metering is not enabled.
 		if ( ! $settings['enabled'] || $settings['count'] <= 0 ) {
@@ -380,7 +386,6 @@ class Metering {
 			return self::$logged_in_metering_cache[ $post_id ];
 		}
 
-		// Aggregate metering by gate priority, if available.
 		$user_meta_key = self::METERING_META_KEY . '_' . $gate_post_id;
 
 		$updated_user_data  = false;

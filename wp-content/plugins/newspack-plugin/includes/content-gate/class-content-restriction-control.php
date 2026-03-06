@@ -82,12 +82,14 @@ class Content_Restriction_Control {
 	public static function get_available_taxonomies() {
 		$available_taxonomies = [
 			[
-				'slug'  => 'category',
-				'label' => 'Categories',
+				'slug'        => 'category',
+				'label'       => 'Categories',
+				'description' => __( 'Content within specific categories.', 'newspack-plugin' ),
 			],
 			[
-				'slug'  => 'post_tag',
-				'label' => 'Tags',
+				'slug'        => 'post_tag',
+				'label'       => 'Tags',
+				'description' => __( 'Content labeled with certain tags.', 'newspack-plugin' ),
 			],
 		];
 

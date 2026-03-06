@@ -19,11 +19,6 @@ class On_Hold_Duration {
 	const AS_HOOK = 'newspack_expire_manual_subscription';
 
 	/**
-	 * The group name for the manual subscription expiration scheduled action.
-	 */
-	const AS_GROUP = 'newspack_expire_manual_subscription';
-
-	/**
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
@@ -141,8 +136,8 @@ class On_Hold_Duration {
 	 * @param int $timestamp       Timestamp.
 	 */
 	public static function schedule_expiration( $subscription_id, $timestamp ) {
-		if ( ! as_has_scheduled_action( self::AS_HOOK, [ $subscription_id ], self::AS_GROUP ) ) {
-			as_schedule_single_action( $timestamp, self::AS_HOOK, [ $subscription_id ], self::AS_GROUP );
+		if ( ! as_has_scheduled_action( self::AS_HOOK, [ $subscription_id ], 'newspack' ) ) {
+			as_schedule_single_action( $timestamp, self::AS_HOOK, [ $subscription_id ], 'newspack' );
 		}
 	}
 
@@ -152,8 +147,8 @@ class On_Hold_Duration {
 	 * @param \WC_Subscription $subscription The Subscription.
 	 */
 	public static function maybe_unschedule_expiration( $subscription ) {
-		if ( false !== as_has_scheduled_action( self::AS_HOOK, [ $subscription->get_id() ], self::AS_GROUP ) ) {
-			as_unschedule_action( self::AS_HOOK, [ $subscription->get_id() ], self::AS_GROUP );
+		if ( false !== as_has_scheduled_action( self::AS_HOOK, [ $subscription->get_id() ], 'newspack' ) ) {
+			as_unschedule_action( self::AS_HOOK, [ $subscription->get_id() ], 'newspack' );
 		}
 	}
 

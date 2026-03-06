@@ -93,18 +93,31 @@ final class My_Account_Button_Block {
 		$default_attrs = [
 			'signedInLabel'  => __( 'My Account', 'newspack-plugin' ),
 			'signedOutLabel' => __( 'Sign in', 'newspack-plugin' ),
+			'className'      => '',
 		];
 		$attrs         = \wp_parse_args( $attrs, $default_attrs );
 
-		$is_signed_in = \is_user_logged_in();
-		$label        = $is_signed_in ? $attrs['signedInLabel'] : $attrs['signedOutLabel'];
-		if ( '' === trim( (string) $label ) ) {
-			return '';
+		$is_signed_in     = \is_user_logged_in();
+		$signed_in_label  = '' === trim( (string) $attrs['signedInLabel'] ) ? $default_attrs['signedInLabel'] : $attrs['signedInLabel'];
+		$signed_out_label = '' === trim( (string) $attrs['signedOutLabel'] ) ? $default_attrs['signedOutLabel'] : $attrs['signedOutLabel'];
+		$label            = $is_signed_in ? $signed_in_label : $signed_out_label;
+
+		// Display mode from block style class in className (default = icon + text).
+		$classes = explode( ' ', (string) $attrs['className'] );
+		if ( in_array( 'is-style-icon-only', $classes, true ) ) {
+			$show_label = false;
+			$show_icon  = true;
+		} elseif ( in_array( 'is-style-text-only', $classes, true ) ) {
+			$show_label = true;
+			$show_icon  = false;
+		} else {
+			$show_label = true;
+			$show_icon  = true;
 		}
 
 		$account_url = self::get_account_url();
 
-		/** Do not render link for authenticated readers if account page doesn't exist. */
+		// Do not render link for authenticated readers if account page doesn't exist.
 		if ( empty( $account_url ) && \is_user_logged_in() ) {
 			return '';
 		}
@@ -118,8 +131,8 @@ final class My_Account_Button_Block {
 		}
 
 		$labels = [
-			'signedin'  => $attrs['signedInLabel'],
-			'signedout' => $attrs['signedOutLabel'],
+			'signedin'  => $signed_in_label,
+			'signedout' => $signed_out_label,
 		];
 
 		$extra_classes = [
@@ -128,45 +141,50 @@ final class My_Account_Button_Block {
 			'newspack-reader__account-link',
 		];
 
-		/** Get default wrapper attributes to extract custom classes */
+		// Get default wrapper attributes to extract custom classes.
 		$default_wrapper_attributes = \get_block_wrapper_attributes();
 
-		/** Extract custom classes (everything except the default block class) */
-		$default_block_class = 'wp-block-newspack-my-account-button';
-		$custom_classes      = [];
+		// Extract custom classes (everything except the default block class).
+		$custom_classes = [];
 
-		/** Parse class attribute from default wrapper */
+		// Parse class attribute from default wrapper.
 		if ( \preg_match( '/class=["\']([^"\']+)["\']/', $default_wrapper_attributes, $matches ) ) {
 			$all_classes = \explode( ' ', $matches[1] );
 			foreach ( $all_classes as $class ) {
 				$class = \trim( $class );
-				/** Only include classes that contain "-size" (e.g., has-small-size) */
+				// Only include classes that contain "-size" (e.g., has-small-size).
 				if ( ! empty( $class ) && \strpos( $class, '-size' ) !== false ) {
 					$custom_classes[] = $class;
 				}
 			}
 		}
 
-		/** Build wrapper div classes */
-		$wrapper_div_classes = [ 'wp-block-buttons' ];
+		// Build wrapper div classes.
+		$wrapper_div_classes = [ 'wp-block-buttons', 'is-layout-flex' ];
 		if ( ! empty( $custom_classes ) ) {
 			$wrapper_div_classes = \array_merge( $wrapper_div_classes, $custom_classes );
 		}
 
-		$wrapper_attributes = \get_block_wrapper_attributes(
-			[
-				'class' => implode( ' ', $extra_classes ),
-				'href'  => \esc_url_raw( $href ),
-			]
-		);
+		$wrapper_attribute_args = [
+			'class'                   => implode( ' ', $extra_classes ),
+			'href'                    => \esc_url_raw( $href ),
+			'data-newspack-logged-in' => $is_signed_in ? '1' : '0',
+		];
+		$wrapper_attributes    = \get_block_wrapper_attributes( $wrapper_attribute_args );
 
 		$link = '<div class="' . \esc_attr( implode( ' ', $wrapper_div_classes ) ) . '">';
 		$link .= '<div class="wp-block-button">';
 		$link .= '<a ' . $wrapper_attributes . ' data-labels="' . \esc_attr( \wp_json_encode( $labels ) ) . '" ' . $should_modal_trigger . '>';
-		$link .= '<span class="wp-block-newspack-my-account-button__icon" aria-hidden="true">';
-		$link .= Newspack_UI_Icons::get_svg( 'account' );
-		$link .= '</span>';
-		$link .= '<span class="newspack-reader__account-link__label">' . \esc_html( $label ) . '</span>';
+		if ( $show_icon ) {
+			$link .= '<span class="wp-block-newspack-my-account-button__icon" aria-hidden="true">';
+			$link .= Newspack_UI_Icons::get_svg( 'account' );
+			$link .= '</span>';
+		}
+		$label_classes = [ 'newspack-reader__account-link__label' ];
+		if ( ! $show_label ) {
+			$label_classes[] = 'screen-reader-text';
+		}
+		$link .= '<span class="' . \esc_attr( implode( ' ', $label_classes ) ) . '">' . \esc_html( $label ) . '</span>';
 		$link .= '</a>';
 		$link .= '</div>';
 		$link .= '</div>';

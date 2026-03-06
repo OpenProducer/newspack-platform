@@ -488,7 +488,7 @@
 		}
 	}
 
-	hr {
+	hr:not(.newspack-divider) {
 		background: wp-colors.$gray-100;
 		margin: 0;
 	}
