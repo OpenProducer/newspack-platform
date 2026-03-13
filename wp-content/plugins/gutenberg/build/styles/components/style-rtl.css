@@ -440,6 +440,7 @@
 .components-button {
   display: inline-flex;
   text-decoration: none;
+  word-break: break-word;
   font-family: inherit;
   font-size: 13px;
   font-weight: 499;
@@ -2003,6 +2004,7 @@ body.is-dragging-components-draggable {
   flex: 1;
   font-family: inherit;
   font-size: 16px;
+  line-height: 1;
   width: 100%;
   max-width: 100%;
   margin-right: 4px;

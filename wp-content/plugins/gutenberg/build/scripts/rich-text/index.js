@@ -2789,17 +2789,17 @@ var wp;
   var import_dom = __toESM(require_dom(), 1);
   function getFormatElement(range, editableContentElement, tagName, className) {
     let element = range.startContainer;
-    if (element.nodeType === element.TEXT_NODE && range.startOffset === element.length && element.nextSibling) {
+    if (element.nodeType === element.TEXT_NODE && element instanceof window.Text && range.startOffset === element.length && element.nextSibling) {
       element = element.nextSibling;
       while (element.firstChild) {
         element = element.firstChild;
       }
     }
     if (element.nodeType !== element.ELEMENT_NODE) {
+      if (!element.parentElement) {
+        return;
+      }
       element = element.parentElement;
-    }
-    if (!element) {
-      return;
     }
     if (element === editableContentElement) {
       return;
@@ -2808,18 +2808,26 @@ var wp;
       return;
     }
     const selector = tagName + (className ? "." + className : "");
-    while (element !== editableContentElement) {
-      if (element.matches(selector)) {
-        return element;
-      }
-      element = element.parentElement;
+    if (!(element instanceof window.HTMLElement)) {
+      return;
     }
+    let closestElement = element;
+    while (closestElement && closestElement !== editableContentElement) {
+      if (closestElement.matches(selector)) {
+        return closestElement;
+      }
+      closestElement = closestElement.parentElement;
+    }
+    return void 0;
   }
   function createVirtualAnchorElement(range, editableContentElement) {
     return {
       contextElement: editableContentElement,
       getBoundingClientRect() {
-        return editableContentElement.contains(range.startContainer) ? (0, import_dom.getRectangleFromRange)(range) : editableContentElement.getBoundingClientRect();
+        if (editableContentElement.contains(range.startContainer)) {
+          return (0, import_dom.getRectangleFromRange)(range) ?? range.getBoundingClientRect();
+        }
+        return editableContentElement.getBoundingClientRect();
       }
     };
   }
@@ -2829,7 +2837,7 @@ var wp;
     }
     const { ownerDocument } = editableContentElement;
     const { defaultView } = ownerDocument;
-    const selection = defaultView.getSelection();
+    const selection = defaultView?.getSelection();
     if (!selection) {
       return;
     }
@@ -2851,10 +2859,18 @@ var wp;
     }
     return createVirtualAnchorElement(range, editableContentElement);
   }
-  function useAnchor({ editableContentElement, settings = {} }) {
-    const { tagName, className, isActive } = settings;
+  var DEFAULT_SETTINGS = {
+    tagName: "",
+    className: ""
+  };
+  function useAnchor({
+    editableContentElement,
+    settings
+  }) {
+    const { tagName, className } = settings ?? DEFAULT_SETTINGS;
+    const isActive = !!(settings && "isActive" in settings && settings.isActive);
     const [anchor, setAnchor] = (0, import_element7.useState)(
-      () => getAnchor(editableContentElement, tagName, className)
+      () => getAnchor(editableContentElement, tagName, className ?? "")
     );
     const wasActive = (0, import_compose3.usePrevious)(isActive);
     (0, import_element7.useLayoutEffect)(() => {
@@ -2863,7 +2879,7 @@ var wp;
       }
       function callback() {
         setAnchor(
-          getAnchor(editableContentElement, tagName, className)
+          getAnchor(editableContentElement, tagName, className ?? "")
         );
       }
       function attach() {
@@ -2879,7 +2895,7 @@ var wp;
       // When we _remove_ the color, it switches from a `<mark>` element to a virtual anchor.
       wasActive && !isActive) {
         setAnchor(
-          getAnchor(editableContentElement, tagName, className)
+          getAnchor(editableContentElement, tagName, className ?? "")
         );
         attach();
       }
