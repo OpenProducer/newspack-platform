@@ -228,11 +228,13 @@ function Page({
   children,
   className,
   actions,
+  ariaLabel,
   hasPadding = false,
   showSidebarToggle = true
 }) {
   const classes = clsx_default("admin-ui-page", className);
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(navigable_region_default, { className: classes, ariaLabel: title, children: [
+  const effectiveAriaLabel = ariaLabel ?? (typeof title === "string" ? title : "");
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
     (title || breadcrumbs || badges) && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
       Header,
       {
@@ -264,7 +266,7 @@ var import_components5 = __toESM(require_components());
 import { useEditorAssets } from "@wordpress/lazy-editor";
 
 // routes/navigation-edit/editor/style.scss
-if (typeof document !== "undefined" && !document.head.querySelector("style[data-wp-hash='023c02af3d']")) {
+if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='023c02af3d']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "023c02af3d");
   style.appendChild(document.createTextNode(".navigation-edit-editor__hidden-blocks{display:none}"));
@@ -501,6 +503,7 @@ function NavigationEditStage() {
   return /* @__PURE__ */ React.createElement(
     page_default,
     {
+      ariaLabel: (0, import_html_entities.decodeEntities)(menuTitle),
       breadcrumbs: /* @__PURE__ */ React.createElement(
         breadcrumbs_default,
         {

@@ -1,3 +1,10 @@
+## [6.34.4](https://github.com/Automattic/newspack-plugin/compare/v6.34.3...v6.34.4) (2026-03-11)
+
+
+### Bug Fixes
+
+* change ip check cookie lifetime ([#4556](https://github.com/Automattic/newspack-plugin/issues/4556)) ([0be6eab](https://github.com/Automattic/newspack-plugin/commit/0be6eab56381b0c3bfdc66df921f7df376c354a6))
+
 ## [6.34.3](https://github.com/Automattic/newspack-plugin/compare/v6.34.2...v6.34.3) (2026-03-06)
 
 

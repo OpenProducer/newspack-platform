@@ -1198,11 +1198,6 @@ iframe[name=editor-canvas] {
   text-align-last: center;
 }
 
-.block-editor-block-styles__block-preview-container,
-.block-editor-block-styles__block-preview-container * {
-  box-sizing: border-box !important;
-}
-
 .components-popover.block-editor-block-switcher__popover .components-popover__content {
   min-width: 300px;
 }
@@ -1236,14 +1231,6 @@ iframe[name=editor-canvas] {
 }
 .block-editor-block-switcher__popover-preview .block-editor-block-switcher__preview.is-pattern-list-preview {
   overflow: unset;
-}
-
-.block-editor-block-switcher__preview-title {
-  margin-bottom: 12px;
-  color: #757575;
-  text-transform: uppercase;
-  font-size: 11px;
-  font-weight: 499;
 }
 
 .block-editor-block-switcher__preview-patterns-container {

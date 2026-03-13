@@ -1,4 +1,4 @@
-.wp-block-playlist.is-placeholder {
-  padding: 0;
-  border: none;
+.wp-block-playlist li.block-list-appender.block-list-appender {
+  position: initial;
+  margin-top: var(--wp--preset--spacing--30, 1em);
 }

@@ -66,7 +66,7 @@ class IP_Access_Rule {
 		$valid_ip = apply_filters( 'newspack_content_gate_check_ip', false );
 
 		if ( $valid_ip ) {
-			setcookie( self::COOKIE_NAME, '1', time() + DAY_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN ); // phpcs:ignore
+			setcookie( self::COOKIE_NAME, '1', time() + MONTH_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN ); // phpcs:ignore
 		}
 
 		wp_safe_redirect( home_url( '/' ) );

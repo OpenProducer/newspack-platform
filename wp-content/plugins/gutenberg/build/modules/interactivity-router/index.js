@@ -672,6 +672,7 @@ var {
   routerRegions,
   h: createElement,
   navigationSignal,
+  sessionId,
   warn
 } = privateApis(
   "I acknowledge that using private APIs means my theme or plugin will inevitably break in the next version of WordPress."
@@ -934,7 +935,7 @@ var { state, actions } = store("core/router", {
           }
           renderPage(page);
         });
-        window.history[options.replace ? "replaceState" : "pushState"]({}, "", href);
+        window.history[options.replace ? "replaceState" : "pushState"]({ wpInteractivityId: sessionId }, "", href);
         if (screenReaderAnnouncement) {
           a11ySpeak("loaded");
         }
