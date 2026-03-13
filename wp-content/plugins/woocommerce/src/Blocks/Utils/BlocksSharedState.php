@@ -87,7 +87,6 @@ class BlocksSharedState {
 
 		wp_interactivity_config( self::$settings_namespace, self::get_currency_data() );
 		wp_interactivity_config( self::$settings_namespace, self::get_locale_data() );
-		wp_interactivity_config( self::$settings_namespace, self::get_core_data() );
 	}
 
 	/**
@@ -124,17 +123,6 @@ class BlocksSharedState {
 				)
 			);
 		}
-	}
-
-	/**
-	 * Get core data to include in settings.
-	 *
-	 * @return array
-	 */
-	private static function get_core_data(): array {
-		return array(
-			'isBlockTheme' => wp_is_block_theme(),
-		);
 	}
 
 	/**
@@ -189,5 +177,38 @@ class BlocksSharedState {
 			self::$settings_namespace,
 			array( 'placeholderImgSrc' => wc_placeholder_img_src() )
 		);
+	}
+
+	/**
+	 * Get cart errors formatted as notices for the store-notices interactivity store.
+	 *
+	 * Returns errors from the hydrated cart state in the format expected by
+	 * the store-notices store context.
+	 *
+	 * @param string $consent_statement The consent statement string.
+	 * @return array Array of notices with id, notice, type, and dismissible keys.
+	 * @throws InvalidArgumentException If consent statement doesn't match.
+	 */
+	public static function get_cart_error_notices( string $consent_statement ): array {
+		self::check_consent( $consent_statement );
+
+		// Ensure cart state is loaded so this method works independently.
+		if ( null === self::$blocks_shared_cart_state ) {
+			self::load_cart_state( $consent_statement );
+		}
+
+		$errors  = self::$blocks_shared_cart_state['errors'] ?? array();
+		$notices = array();
+
+		foreach ( $errors as $error ) {
+			$notices[] = array(
+				'id'          => wp_unique_id( 'store-notice-' ),
+				'notice'      => $error['message'] ?? '',
+				'type'        => 'error',
+				'dismissible' => true,
+			);
+		}
+
+		return $notices;
 	}
 }

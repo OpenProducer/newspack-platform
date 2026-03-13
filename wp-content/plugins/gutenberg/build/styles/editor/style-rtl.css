@@ -1611,6 +1611,25 @@ button.font-library__upload-area {
     transition: padding ease-out 0.1s;
   }
 }
+.dataviews-no-results.is-refreshing {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media not (prefers-reduced-motion) {
+  .dataviews-no-results.is-refreshing {
+    opacity: 1;
+    animation: dataviews-pulse 1s ease-in-out infinite;
+  }
+}
+@keyframes dataviews-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
 .dataviews-loading-more {
   text-align: center;
 }
@@ -2289,17 +2308,28 @@ button.font-library__upload-area {
   z-index: 2;
 }
 
+.dataviews-footer .is-refreshing {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media not (prefers-reduced-motion) {
+  .dataviews-footer .is-refreshing {
+    opacity: 1;
+    animation: dataviews-pulse 1s ease-in-out infinite;
+  }
+}
 @container (max-width: 560px) {
-  .dataviews-footer {
+  .dataviews-footer__content {
     flex-direction: column !important;
   }
-  .dataviews-footer .dataviews-bulk-actions-footer__container {
+  .dataviews-footer__content .dataviews-bulk-actions-footer__container {
     width: 100%;
   }
-  .dataviews-footer .dataviews-bulk-actions-footer__item-count {
+  .dataviews-footer__content .dataviews-bulk-actions-footer__item-count {
     flex-grow: 1;
   }
-  .dataviews-footer .dataviews-pagination {
+  .dataviews-footer__content .dataviews-pagination {
     width: 100%;
     justify-content: space-between;
   }
@@ -2318,6 +2348,10 @@ button.font-library__upload-area {
 }
 .dataviews-action-modal {
   z-index: 1000001;
+}
+
+.dataviews-item-actions .components-button:not(.dataviews-all-actions-button) {
+  padding: 0 4px;
 }
 
 .dataviews-selection-checkbox {
@@ -2594,6 +2628,17 @@ button.font-library__upload-area {
   padding-bottom: 12px;
 }
 
+.dataviews-view-grid.is-refreshing {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media not (prefers-reduced-motion) {
+  .dataviews-view-grid.is-refreshing {
+    opacity: 1;
+    animation: dataviews-pulse 1s ease-in-out infinite;
+  }
+}
 .dataviews-view-grid__field-value:empty,
 .dataviews-view-grid__field:empty {
   display: none;
@@ -2856,7 +2901,6 @@ div.dataviews-view-list {
 }
 
 .dataviews-view-list .dataviews-view-list__field-wrapper {
-  min-height: 52px;
   flex-grow: 1;
   min-width: 0;
 }
@@ -2906,10 +2950,6 @@ div.dataviews-view-list {
   height: 32px;
 }
 
-.dataviews-view-list.has-compact-density div[role=row] .dataviews-view-list__field-wrapper {
-  min-height: 32px;
-}
-
 .dataviews-view-list.has-compact-density div[role=row] .dataviews-view-list__fields {
   gap: 8px;
   row-gap: 4px;
@@ -2934,10 +2974,6 @@ div.dataviews-view-list {
   height: 64px;
 }
 
-.dataviews-view-list.has-comfortable-density div[role=row] .dataviews-view-list__field-wrapper {
-  min-height: 64px;
-}
-
 .dataviews-view-list.has-comfortable-density div[role=row] .dataviews-view-list__fields {
   gap: 16px;
   row-gap: 8px;
@@ -2948,6 +2984,17 @@ div.dataviews-view-list {
   line-height: 24px;
 }
 
+.dataviews-view-list.is-refreshing {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media not (prefers-reduced-motion) {
+  .dataviews-view-list.is-refreshing {
+    opacity: 1;
+    animation: dataviews-pulse 1s ease-in-out infinite;
+  }
+}
 .dataviews-view-list__group-header {
   font-size: 15px;
   font-weight: 499;
@@ -3097,11 +3144,11 @@ div.dataviews-view-list {
 }
 
 .dataviews-view-table thead th:has(.dataviews-view-table-header-button):first-child {
-  padding-right: 40px;
+  padding-right: 16px;
 }
 
 .dataviews-view-table thead th:has(.dataviews-view-table-header-button):last-child {
-  padding-left: 40px;
+  padding-left: 16px;
 }
 
 .dataviews-view-table tbody td {
@@ -3117,6 +3164,7 @@ div.dataviews-view-list {
 
 .dataviews-view-table tbody .dataviews-view-table__cell-content-wrapper.dataviews-view-table__cell-align-end {
   justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
 }
 
 .dataviews-view-table tbody .dataviews-view-table__cell-content-wrapper.dataviews-view-table__cell-align-center {
@@ -3229,10 +3277,21 @@ div.dataviews-view-list {
 }
 
 /* Column width intents via colgroup: make non-primary columns shrink-to-fit */
-.dataviews-view-table col[class^=dataviews-view-table__col-]:not(.dataviews-view-table__col-first-data) {
+.dataviews-view-table col[class^=dataviews-view-table__col-]:not(.dataviews-view-table__col-first-data):not(.dataviews-view-table__col-expand) {
   width: 1%;
 }
 
+.dataviews-view-table.is-refreshing {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media not (prefers-reduced-motion) {
+  .dataviews-view-table.is-refreshing {
+    opacity: 1;
+    animation: dataviews-pulse 1s ease-in-out infinite;
+  }
+}
 .dataviews-view-picker-grid .dataviews-view-picker-grid__card {
   height: 100%;
   justify-content: flex-start;
@@ -3625,6 +3684,17 @@ div.dataviews-view-list {
   background-color: #ddd;
 }
 
+.dataviews-view-activity.is-refreshing {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media not (prefers-reduced-motion) {
+  .dataviews-view-activity.is-refreshing {
+    opacity: 1;
+    animation: dataviews-pulse 1s ease-in-out infinite;
+  }
+}
 .dataviews-view-activity + .dataviews-pagination {
   justify-content: space-between;
 }
@@ -3684,7 +3754,7 @@ div.dataviews-view-list {
 
 .dataforms-layouts-panel__field-trigger--label-side {
   flex-direction: row;
-  gap: var(--wpds-dimension-gap-md);
+  gap: var(--wpds-dimension-gap-md, 12px);
 }
 
 .dataforms-layouts-panel__field-trigger--label-top {
@@ -3714,7 +3784,7 @@ div.dataviews-view-list {
 
 .dataforms-layouts-panel__field-trigger.is-disabled .dataforms-layouts-panel__field-control {
   color: #757575;
-  font-weight: var(--wpds-font-weight-regular);
+  font-weight: var(--wpds-font-weight-regular, 400);
 }
 
 .dataforms-layouts-panel__field-trigger--edit-always .dataforms-layouts-panel__field-trigger-icon {
@@ -3731,12 +3801,12 @@ div.dataviews-view-list {
   color: var(--wp-admin-theme-color);
   flex: 0 0 auto;
   opacity: 0;
-  border-radius: var(--wpds-border-radius-xs);
+  border-radius: var(--wpds-border-radius-xs, 1px);
 }
 
 .dataforms-layouts-panel__field-trigger-icon:focus-visible {
   opacity: 1;
-  outline: var(--wpds-border-width-focus) solid var(--wp-admin-theme-color);
+  outline: var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px)) solid var(--wp-admin-theme-color);
 }
 
 .dataforms-layouts-panel__field-dropdown-anchor {
@@ -3756,6 +3826,7 @@ div.dataviews-view-list {
   line-height: 20px;
   hyphens: auto;
   color: #757575;
+  text-transform: capitalize;
 }
 
 .dataforms-layouts-panel__field-label .components-base-control__label {
@@ -3787,11 +3858,12 @@ div.dataviews-view-list {
   flex-grow: 1;
   min-width: 0;
   min-height: 24px;
-  line-height: var(--wpds-font-line-height-md);
+  line-height: var(--wpds-font-line-height-md, 24px);
   display: flex;
   align-items: center;
   overflow: hidden;
-  font-weight: var(--wpds-font-weight-medium);
+  word-break: break-word;
+  font-weight: var(--wpds-font-weight-medium, 499);
 }
 
 .dataforms-layouts-panel__field-control > * {
@@ -3836,8 +3908,9 @@ div.dataviews-view-list {
 }
 
 .dataforms-layouts-regular__field .components-base-control__label,
-.dataforms-layouts-regular__field .components-input-control__label {
-  color: #757575;
+.dataforms-layouts-regular__field .components-input-control__label,
+.dataforms-layouts-regular__field .components-form-token-field__label {
+  color: #1e1e1e;
 }
 
 .dataforms-layouts-regular__field-label {
@@ -3887,6 +3960,7 @@ div.dataviews-view-list {
   display: flex;
   flex-direction: row;
   gap: 16px;
+  align-items: center;
 }
 
 .dataforms-layouts-details__summary-content {
@@ -5946,16 +6020,12 @@ div.dataviews-view-list {
   margin-left: 8px;
 }
 
-.editor-sync-connection-modal__container {
-  align-items: center;
-  display: flex;
-  margin: auto;
-  max-width: 30rem;
+.editor-sync-connection-modal p {
+  margin: 0;
 }
 
-.editor-sync-connection-modal__description {
-  font-size: 1.3rem;
-  text-align: center;
+.editor-sync-connection-modal__retry-countdown {
+  color: #757575;
 }
 
 .editor-post-template__swap-template-modal {
@@ -6097,11 +6167,6 @@ textarea.editor-post-text-editor::placeholder {
 
 .editor-post-url__input input.components-input-control__input {
   padding-inline-start: 0 !important;
-}
-
-.editor-post-url__panel-toggle,
-.editor-post-parent__panel-toggle {
-  word-break: break-word;
 }
 
 .editor-post-url__intro {

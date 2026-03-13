@@ -754,7 +754,20 @@ return array(
 				'enum' => array(
 					'pills',
 					'dropdown'
-				)
+				),
+				'default' => 'pills'
+			),
+			'autoselect' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
+			'disabledAttributesAction' => array(
+				'type' => 'string',
+				'enum' => array(
+					'disable',
+					'hide'
+				),
+				'default' => 'disable'
 			)
 		),
 		'textdomain' => 'woocommerce',

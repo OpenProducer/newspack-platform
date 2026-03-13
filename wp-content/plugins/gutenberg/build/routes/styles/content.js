@@ -176,11 +176,13 @@ function Page({
   children,
   className,
   actions,
+  ariaLabel,
   hasPadding = false,
   showSidebarToggle = true
 }) {
   const classes = clsx_default("admin-ui-page", className);
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(navigable_region_default, { className: classes, ariaLabel: title, children: [
+  const effectiveAriaLabel = ariaLabel ?? (typeof title === "string" ? title : "");
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
     (title || breadcrumbs || badges) && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
       Header,
       {
@@ -213,7 +215,7 @@ var seen_default = /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_primitive
 var import_element2 = __toESM(require_element());
 
 // routes/styles/style.scss
-if (typeof document !== "undefined" && !document.head.querySelector("style[data-wp-hash='7be460f5dc']")) {
+if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='7be460f5dc']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "7be460f5dc");
   style.appendChild(document.createTextNode(".routes-styles__page .global-styles-ui-screen-root{box-shadow:none}.routes-styles__page .global-styles-ui-screen-root>div>hr{display:none}.routes-styles__page .global-styles-ui-sidebar__navigator-provider .components-tools-panel{border-top:none}.routes-styles__page .global-styles-ui-sidebar__navigator-provider{overflow-y:auto;padding-left:0;padding-right:0}"));

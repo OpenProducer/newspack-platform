@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'woocommerce/woocommerce',
-        'pretty_version' => '10.5.3',
-        'version' => '10.5.3.0',
+        'pretty_version' => '10.6.1',
+        'version' => '10.6.1.0',
         'reference' => null,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -185,17 +185,17 @@
             'dev_requirement' => false,
         ),
         'woocommerce/email-editor' => array(
-            'pretty_version' => '2.3.0',
-            'version' => '2.3.0.0',
-            'reference' => '47291f4dc0ddd0b30bbc50f89a9f9c12f6e2d579',
+            'pretty_version' => '2.7.0',
+            'version' => '2.7.0.0',
+            'reference' => '66314d88b125128fe533a9fa9a3a87ffc39ad852',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../packages/email-editor',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'woocommerce/woocommerce' => array(
-            'pretty_version' => '10.5.3',
-            'version' => '10.5.3.0',
+            'pretty_version' => '10.6.1',
+            'version' => '10.6.1.0',
             'reference' => null,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
