@@ -39,11 +39,11 @@ class AccountsContainersWorkspacesTransformations extends \Google\Site_Kit_Depen
      * @return Transformation
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation $postBody, $optParams = [])
+    public function create($parent, Transformation $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Transformation::class);
     }
     /**
      * Deletes a GTM Transformation. (transformations.delete)
@@ -55,7 +55,7 @@ class AccountsContainersWorkspacesTransformations extends \Google\Site_Kit_Depen
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -69,8 +69,8 @@ class AccountsContainersWorkspacesTransformations extends \Google\Site_Kit_Depen
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Transformation::class);
     }
     /**
      * Lists all GTM Transformations of a GTM container workspace.
@@ -87,8 +87,8 @@ class AccountsContainersWorkspacesTransformations extends \Google\Site_Kit_Depen
     public function listAccountsContainersWorkspacesTransformations($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListTransformationsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListTransformationsResponse::class);
     }
     /**
      * Reverts changes to a GTM Transformation in a GTM Workspace.
@@ -105,8 +105,8 @@ class AccountsContainersWorkspacesTransformations extends \Google\Site_Kit_Depen
     public function revert($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('revert', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertTransformationResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('revert', [$params], RevertTransformationResponse::class);
     }
     /**
      * Updates a GTM Transformation. (transformations.update)
@@ -120,12 +120,12 @@ class AccountsContainersWorkspacesTransformations extends \Google\Site_Kit_Depen
      * @return Transformation
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation $postBody, $optParams = [])
+    public function update($path, Transformation $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Transformation::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesTransformations::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesTransformations');
+class_alias(AccountsContainersWorkspacesTransformations::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesTransformations');

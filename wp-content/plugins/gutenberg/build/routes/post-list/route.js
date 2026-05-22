@@ -52,9 +52,16 @@ var require_preferences = __commonJS({
   }
 });
 
+// package-external:@wordpress/private-apis
+var require_private_apis = __commonJS({
+  "package-external:@wordpress/private-apis"(exports, module) {
+    module.exports = window.wp.privateApis;
+  }
+});
+
 // routes/post-list/route.ts
-var import_data4 = __toESM(require_data());
-var import_core_data2 = __toESM(require_core_data());
+var import_data5 = __toESM(require_data());
+var import_core_data3 = __toESM(require_core_data());
 import { notFound } from "@wordpress/route";
 
 // packages/views/build-module/use-view.mjs
@@ -140,20 +147,34 @@ async function loadView(config) {
   const baseView = persistedView ?? defaultView;
   const page = queryParams?.page ?? 1;
   const search = queryParams?.search ?? "";
+  const rawDefaults = config.defaultLayouts?.[baseView?.type];
+  const layoutTypeDefaults = !rawDefaults || rawDefaults === true ? {} : rawDefaults;
+  const combinedOverrides = { ...layoutTypeDefaults, ...activeViewOverrides };
   return mergeActiveViewOverrides(
     {
       ...baseView,
       page,
       search
     },
-    activeViewOverrides,
+    combinedOverrides,
     defaultView
   );
 }
 
+// packages/views/build-module/use-view-config.mjs
+var import_data3 = __toESM(require_data(), 1);
+var import_core_data = __toESM(require_core_data(), 1);
+
+// packages/views/build-module/lock-unlock.mjs
+var import_private_apis = __toESM(require_private_apis(), 1);
+var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
+  "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
+  "@wordpress/views"
+);
+
 // routes/post-list/view-utils.ts
-var import_data3 = __toESM(require_data());
-var import_core_data = __toESM(require_core_data());
+var import_data4 = __toESM(require_data());
+var import_core_data2 = __toESM(require_core_data());
 var DEFAULT_VIEW = {
   type: "table",
   sort: {
@@ -165,11 +186,23 @@ var DEFAULT_VIEW = {
   mediaField: "featured_media",
   descriptionField: "excerpt"
 };
+var DEFAULT_TABLE_LAYOUT = {
+  layout: {
+    styles: {
+      author: {
+        align: "start"
+      }
+    }
+  }
+};
 function getActiveViewOverridesForTab(slug) {
   if (slug === "all") {
-    return {};
+    return {
+      ...DEFAULT_TABLE_LAYOUT
+    };
   }
   return {
+    ...DEFAULT_TABLE_LAYOUT,
     filters: [
       {
         field: "status",
@@ -186,7 +219,7 @@ function getDefaultView(postType) {
   };
 }
 async function ensureView(type, slug, search) {
-  const postTypeObject = await (0, import_data3.resolveSelect)(import_core_data.store).getPostType(type);
+  const postTypeObject = await (0, import_data4.resolveSelect)(import_core_data2.store).getPostType(type);
   const defaultView = getDefaultView(postTypeObject);
   return loadView({
     kind: "postType",
@@ -198,7 +231,7 @@ async function ensureView(type, slug, search) {
   });
 }
 function viewToQuery(view, postType) {
-  const result = {};
+  const result = { _embed: "author,wp:featuredmedia" };
   if (void 0 !== view.perPage) {
     result.per_page = view.perPage;
   }
@@ -271,7 +304,7 @@ function viewToQuery(view, postType) {
 var route = {
   beforeLoad: async ({ params }) => {
     try {
-      const postType = await (0, import_data4.resolveSelect)(import_core_data2.store).getPostType(
+      const postType = await (0, import_data5.resolveSelect)(import_core_data3.store).getPostType(
         params.type
       );
       if (!postType) {
@@ -282,7 +315,7 @@ var route = {
     }
   },
   title: async ({ params }) => {
-    const postType = await (0, import_data4.resolveSelect)(import_core_data2.store).getPostType(
+    const postType = await (0, import_data5.resolveSelect)(import_core_data3.store).getPostType(
       params.type
     );
     return postType?.labels?.name || params.type;
@@ -306,7 +339,7 @@ var route = {
       };
     }
     const query = viewToQuery(view, params.type);
-    const posts = await (0, import_data4.resolveSelect)(import_core_data2.store).getEntityRecords(
+    const posts = await (0, import_data5.resolveSelect)(import_core_data3.store).getEntityRecords(
       "postType",
       params.type,
       { ...query, per_page: 1 }

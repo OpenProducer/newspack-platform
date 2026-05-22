@@ -76,7 +76,7 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $state;
-    protected $timeZoneType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\TimeZone::class;
+    protected $timeZoneType = TimeZone::class;
     protected $timeZoneDataType = '';
     /**
      * Output only. Creation time of the account.
@@ -186,7 +186,7 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param TimeZone $timeZone
      */
-    public function setTimeZone(\Google\Site_Kit_Dependencies\Google\Service\Adsense\TimeZone $timeZone)
+    public function setTimeZone(TimeZone $timeZone)
     {
         $this->timeZone = $timeZone;
     }
@@ -199,4 +199,4 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Account::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Account');
+class_alias(Account::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Account');

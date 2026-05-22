@@ -35,16 +35,16 @@ class Service
     private $client;
     public function __construct($clientOrConfig = [])
     {
-        if ($clientOrConfig instanceof \Google\Site_Kit_Dependencies\Google\Client) {
+        if ($clientOrConfig instanceof Client) {
             $this->client = $clientOrConfig;
-        } elseif (\is_array($clientOrConfig)) {
-            $this->client = new \Google\Site_Kit_Dependencies\Google\Client($clientOrConfig ?: []);
+        } elseif (is_array($clientOrConfig)) {
+            $this->client = new Client($clientOrConfig ?: []);
         } else {
-            $errorMessage = 'Google\\Site_Kit_Dependencies\\constructor must be array or instance of Google\\Client';
-            if (\class_exists('TypeError')) {
-                throw new \TypeError($errorMessage);
+            $errorMessage = 'constructor must be array or instance of Google\Client';
+            if (class_exists('TypeError')) {
+                throw new TypeError($errorMessage);
             }
-            \trigger_error($errorMessage, \E_USER_ERROR);
+            trigger_error($errorMessage, \E_USER_ERROR);
         }
     }
     /**
@@ -62,6 +62,6 @@ class Service
      */
     public function createBatch()
     {
-        return new \Google\Site_Kit_Dependencies\Google\Http\Batch($this->client, \false, $this->rootUrlTemplate ?? $this->rootUrl, $this->batchPath);
+        return new Batch($this->client, \false, $this->rootUrlTemplate ?? $this->rootUrl, $this->batchPath);
     }
 }

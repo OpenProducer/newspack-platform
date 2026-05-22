@@ -87,8 +87,8 @@ class AccountsReports extends \Google\Site_Kit_Dependencies\Google\Service\Resou
     public function generate($account, $optParams = [])
     {
         $params = ['account' => $account];
-        $params = \array_merge($params, $optParams);
-        return $this->call('generate', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ReportResult::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('generate', [$params], ReportResult::class);
     }
     /**
      * Generates a csv formatted ad hoc report. (reports.generateCsv)
@@ -147,8 +147,8 @@ class AccountsReports extends \Google\Site_Kit_Dependencies\Google\Service\Resou
     public function generateCsv($account, $optParams = [])
     {
         $params = ['account' => $account];
-        $params = \array_merge($params, $optParams);
-        return $this->call('generateCsv', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\HttpBody::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('generateCsv', [$params], HttpBody::class);
     }
     /**
      * Gets the saved report from the given resource name. (reports.getSaved)
@@ -162,9 +162,9 @@ class AccountsReports extends \Google\Site_Kit_Dependencies\Google\Service\Resou
     public function getSaved($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getSaved', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\SavedReport::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getSaved', [$params], SavedReport::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsReports::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsReports');
+class_alias(AccountsReports::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsReports');

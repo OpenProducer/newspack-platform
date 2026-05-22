@@ -23,7 +23,7 @@ import { aspectLandscape, aspectPortrait, aspectSquare } from 'newspack-icons';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { Component, Fragment, RawHTML } from '@wordpress/element';
-import { BlockControls, InspectorControls, PanelColorSettings, RichText, withColors, AlignmentControl } from '@wordpress/block-editor';
+import { BlockControls, InspectorControls, PanelColorSettings, RichText, withColors, AlignmentControl, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	Placeholder,
@@ -285,12 +285,8 @@ class Edit extends Component< HomepageArticlesProps > {
 						customTaxonomyExclusions={ customTaxonomyExclusions }
 						onCustomTaxonomyExclusionsChange={ handleAttributeChange( 'customTaxonomyExclusions' ) }
 						postType={ postType }
-					/>
-					<ToggleControl
-						label={ __( 'Allow duplicate content', 'newspack-blocks' ) }
-						help={ __( "Exclude this block from the page's deduplication logic.", 'newspack-blocks' ) }
-						checked={ ! attributes.deduplicate }
-						onChange={ ( value: boolean ) => setAttributes( { deduplicate: ! value } ) }
+						allowDedupeCurrentValue={ ! attributes.deduplicate }
+						onAllowDedupeChange={ ( value: boolean ) => setAttributes( { deduplicate: ! value } ) }
 					/>
 					{ ! specificMode && isBlogPrivate() ? (
 						/*
@@ -549,7 +545,7 @@ class Edit extends Component< HomepageArticlesProps > {
 		 * Constants
 		 */
 
-		const { attributes, className, setAttributes, isSelected, latestPosts, textColor, error } = this.props;
+		const { attributes, setAttributes, isSelected, latestPosts, textColor, error, blockProps } = this.props;
 
 		const {
 			showImage,
@@ -570,7 +566,7 @@ class Edit extends Component< HomepageArticlesProps > {
 			textAlign,
 		} = attributes;
 
-		const classes = classNames( className, {
+		const classes = classNames( blockProps.className, {
 			'is-grid': postLayout === 'grid',
 			'show-image': showImage,
 			[ `columns-${ columns }` ]: postLayout === 'grid',
@@ -658,7 +654,23 @@ class Edit extends Component< HomepageArticlesProps > {
 
 		return (
 			<Fragment>
+				<BlockControls>
+					<Toolbar>
+						<AlignmentControl
+							value={ textAlign }
+							onChange={ ( nextAlign: string ) => {
+								setAttributes( { textAlign: nextAlign } );
+							} }
+						/>
+					</Toolbar>
+					<Toolbar controls={ blockControls } />
+					{ showImage && <Toolbar controls={ blockControlsImages } /> }
+					{ showImage && <Toolbar controls={ blockControlsImageShape } /> }
+				</BlockControls>
+				<InspectorControls>{ this.renderInspectorControls() }</InspectorControls>
+				<InspectorControls group="styles">{ this.renderStylesInspectorControls() }</InspectorControls>
 				<div
+					{ ...blockProps }
 					className={ classes }
 					style={ {
 						color: textColor.color,
@@ -684,46 +696,35 @@ class Edit extends Component< HomepageArticlesProps > {
 
 						{ latestPosts && latestPosts.map( post => this.renderPost( post ) ) }
 					</div>
-				</div>
 
-				{ ! specificMode && latestPosts && moreButton && ! isBlogPrivate() && (
-					/*
-					 * The "More" button option is hidden for private sites, so we should
-					 * also hide the button in case it was previously enabled.
-					 */
-					<div className="wpnbha__wp-block-button__wrapper">
-						<div className="wp-block-button">
-							<RichText
-								placeholder={ __( 'Load more posts', 'newspack-blocks' ) }
-								value={ moreButtonText }
-								onChange={ ( value: string ) => setAttributes( { moreButtonText: value } ) }
-								className="wp-block-button__link"
-								allowedFormats={ [] }
-							/>
+					{ ! specificMode && latestPosts && moreButton && ! isBlogPrivate() && (
+						/*
+						 * The "More" button option is hidden for private sites, so we should
+						 * also hide the button in case it was previously enabled.
+						 */
+						<div className="wpnbha__wp-block-button__wrapper">
+							<div className="wp-block-button">
+								<RichText
+									placeholder={ __( 'Load more posts', 'newspack-blocks' ) }
+									value={ moreButtonText }
+									onChange={ ( value: string ) => setAttributes( { moreButtonText: value } ) }
+									className="wp-block-button__link"
+									allowedFormats={ [] }
+								/>
+							</div>
 						</div>
-					</div>
-				) }
-
-				<BlockControls>
-					<Toolbar>
-						<AlignmentControl
-							value={ textAlign }
-							onChange={ ( nextAlign: string ) => {
-								setAttributes( { textAlign: nextAlign } );
-							} }
-						/>
-					</Toolbar>
-					<Toolbar controls={ blockControls } />
-					{ showImage && <Toolbar controls={ blockControlsImages } /> }
-					{ showImage && <Toolbar controls={ blockControlsImageShape } /> }
-				</BlockControls>
-				<InspectorControls>{ this.renderInspectorControls() }</InspectorControls>
-				<InspectorControls group="styles">{ this.renderStylesInspectorControls() }</InspectorControls>
+					) }
+				</div>
 			</Fragment>
 		);
 	}
 }
 
+const EditWithBlockProps = ( props: any ) => {
+	const blockProps = useBlockProps();
+	return <Edit { ...props } blockProps={ blockProps } />;
+};
+
 export default compose( [ withColors( { textColor: 'color' } ), withSelect( postsBlockSelector ), withDispatch( postsBlockDispatch ) ] as any )(
-	Edit
+	EditWithBlockProps
 );

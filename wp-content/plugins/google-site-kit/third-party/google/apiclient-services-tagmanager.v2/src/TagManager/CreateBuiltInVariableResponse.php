@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class CreateBuiltInVariableResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'builtInVariable';
-    protected $builtInVariableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\BuiltInVariable::class;
+    protected $builtInVariableType = BuiltInVariable::class;
     protected $builtInVariableDataType = 'array';
     /**
      * List of created built-in variables.
@@ -40,4 +40,4 @@ class CreateBuiltInVariableResponse extends \Google\Site_Kit_Dependencies\Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\CreateBuiltInVariableResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_CreateBuiltInVariableResponse');
+class_alias(CreateBuiltInVariableResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_CreateBuiltInVariableResponse');

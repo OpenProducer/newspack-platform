@@ -20,11 +20,11 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaRunAccessReportResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'rows';
-    protected $dimensionHeadersType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessDimensionHeader::class;
+    protected $dimensionHeadersType = GoogleAnalyticsAdminV1betaAccessDimensionHeader::class;
     protected $dimensionHeadersDataType = 'array';
-    protected $metricHeadersType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessMetricHeader::class;
+    protected $metricHeadersType = GoogleAnalyticsAdminV1betaAccessMetricHeader::class;
     protected $metricHeadersDataType = 'array';
-    protected $quotaType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessQuota::class;
+    protected $quotaType = GoogleAnalyticsAdminV1betaAccessQuota::class;
     protected $quotaDataType = '';
     /**
      * The total number of rows in the query result. `rowCount` is independent of
@@ -38,7 +38,7 @@ class GoogleAnalyticsAdminV1betaRunAccessReportResponse extends \Google\Site_Kit
      * @var int
      */
     public $rowCount;
-    protected $rowsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessRow::class;
+    protected $rowsType = GoogleAnalyticsAdminV1betaAccessRow::class;
     protected $rowsDataType = 'array';
     /**
      * The header for a column in the report that corresponds to a specific
@@ -82,7 +82,7 @@ class GoogleAnalyticsAdminV1betaRunAccessReportResponse extends \Google\Site_Kit
      *
      * @param GoogleAnalyticsAdminV1betaAccessQuota $quota
      */
-    public function setQuota(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessQuota $quota)
+    public function setQuota(GoogleAnalyticsAdminV1betaAccessQuota $quota)
     {
         $this->quota = $quota;
     }
@@ -133,4 +133,4 @@ class GoogleAnalyticsAdminV1betaRunAccessReportResponse extends \Google\Site_Kit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaRunAccessReportResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaRunAccessReportResponse');
+class_alias(GoogleAnalyticsAdminV1betaRunAccessReportResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaRunAccessReportResponse');

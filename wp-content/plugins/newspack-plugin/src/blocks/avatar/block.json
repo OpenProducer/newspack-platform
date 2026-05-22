@@ -1,4 +1,6 @@
 {
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
 	"name": "newspack/avatar",
 	"category": "newspack",
 	"attributes": {
@@ -47,9 +49,9 @@
 	"selectors": {
 		"border": "img.wp-block-newspack-avatar__image",
 		"filter": {
-			"duotone": ".newspack-avatar-wrapper img"
+			"duotone": ".wp-block-newspack-avatar .newspack-avatar-wrapper img"
 		}
 	},
-	"usesContext": ["postId", "postType"],
+	"usesContext": ["postId", "postType", "newspack-blocks/author"],
 	"textdomain": "newspack-plugin"
 }

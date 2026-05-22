@@ -376,4 +376,4 @@ class Environment extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Environment');
+class_alias(Environment::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Environment');

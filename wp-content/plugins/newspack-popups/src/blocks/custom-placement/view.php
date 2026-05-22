@@ -20,6 +20,7 @@ function register_block() {
 	register_block_type(
 		$block_json['name'],
 		[
+			'api_version'     => $block_json['apiVersion'],
 			'attributes'      => $block_json['attributes'],
 			'render_callback' => __NAMESPACE__ . '\render_block',
 		]
@@ -34,7 +35,11 @@ function register_block() {
 function render_block( $attributes ) {
 	$content             = '';
 	$custom_placement_id = \Newspack_Popups_Custom_Placements::validate_custom_placement_id( $attributes['customPlacement'] );
-	$class_names         = isset( $attributes['className'] ) ? ' class="' . $attributes['className'] . '"' : '';
+	$class_names         = isset( $attributes['className'] )
+		? ' class="' . esc_attr( $attributes['className'] ) . '"'
+		: '';
+	$in_post_content     = doing_filter( 'the_content' );
+	$is_block_theme      = function_exists( 'wp_is_block_theme' ) && wp_is_block_theme();
 
 	if ( empty( $custom_placement_id ) ) {
 		return $content;
@@ -60,7 +65,12 @@ function render_block( $attributes ) {
 			$content .= '<!-- Newspack Campaigns: Start custom placement ' . $custom_placement_id . '-->';
 		}
 		foreach ( $prompts as $prompt_id ) {
-			$content .= '<!-- wp:shortcode -->[newspack-popup id="' . $prompt_id . '"' . $class_names . ']<!-- /wp:shortcode -->';
+			$shortcode = '[newspack-popup id="' . $prompt_id . '"' . $class_names . ']';
+			$should_render = ! $in_post_content && $is_block_theme;
+			$render_shortcode = apply_filters( 'newspack_popups_render_custom_placement_shortcode', $should_render, $attributes, $custom_placement_id, $prompt_id );
+			$content  .= $render_shortcode
+				? do_shortcode( $shortcode )
+				: '<!-- wp:shortcode -->' . $shortcode . '<!-- /wp:shortcode -->';
 		}
 		if ( defined( 'WP_NEWSPACK_DEBUG' ) && WP_NEWSPACK_DEBUG ) {
 			$content .= '<!-- Newspack Campaigns: End custom placement ' . $custom_placement_id . '-->';

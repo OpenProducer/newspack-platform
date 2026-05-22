@@ -41,11 +41,11 @@ class PropertiesDataStreamsEventEditRules extends \Google\Site_Kit_Dependencies\
      * @return GoogleAnalyticsAdminV1alphaEventEditRule
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventEditRule $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaEventEditRule $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventEditRule::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaEventEditRule::class);
     }
     /**
      * Deletes an EventEditRule. (eventEditRules.delete)
@@ -59,8 +59,8 @@ class PropertiesDataStreamsEventEditRules extends \Google\Site_Kit_Dependencies\
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single EventEditRule. (eventEditRules.get)
@@ -74,8 +74,8 @@ class PropertiesDataStreamsEventEditRules extends \Google\Site_Kit_Dependencies\
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventEditRule::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaEventEditRule::class);
     }
     /**
      * Lists EventEditRules on a web data stream.
@@ -98,8 +98,8 @@ class PropertiesDataStreamsEventEditRules extends \Google\Site_Kit_Dependencies\
     public function listPropertiesDataStreamsEventEditRules($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListEventEditRulesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListEventEditRulesResponse::class);
     }
     /**
      * Updates an EventEditRule. (eventEditRules.patch)
@@ -117,11 +117,11 @@ class PropertiesDataStreamsEventEditRules extends \Google\Site_Kit_Dependencies\
      * @return GoogleAnalyticsAdminV1alphaEventEditRule
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventEditRule $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaEventEditRule $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventEditRule::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaEventEditRule::class);
     }
     /**
      * Changes the processing order of event edit rules on the specified stream.
@@ -134,12 +134,12 @@ class PropertiesDataStreamsEventEditRules extends \Google\Site_Kit_Dependencies\
      * @return GoogleProtobufEmpty
      * @throws \Google\Service\Exception
      */
-    public function reorder($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReorderEventEditRulesRequest $postBody, $optParams = [])
+    public function reorder($parent, GoogleAnalyticsAdminV1alphaReorderEventEditRulesRequest $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('reorder', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('reorder', [$params], GoogleProtobufEmpty::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesDataStreamsEventEditRules::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDataStreamsEventEditRules');
+class_alias(PropertiesDataStreamsEventEditRules::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDataStreamsEventEditRules');

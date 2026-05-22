@@ -41,7 +41,7 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter ex
      * @var string
      */
     public $operation;
-    protected $valueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue::class;
+    protected $valueType = GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue::class;
     protected $valueDataType = '';
     /**
      * Required. The operation applied to a numeric filter.
@@ -66,7 +66,7 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter ex
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $value
      */
-    public function setValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $value)
+    public function setValue(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $value)
     {
         $this->value = $value;
     }
@@ -79,4 +79,4 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter ex
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter');

@@ -40,9 +40,9 @@ class PublicationsReaders extends \Google\Site_Kit_Dependencies\Google\Service\R
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Reader::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Reader::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Resource\PublicationsReaders::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_Resource_PublicationsReaders');
+class_alias(PublicationsReaders::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_Resource_PublicationsReaders');

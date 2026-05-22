@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class Row extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'cells';
-    protected $cellsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Cell::class;
+    protected $cellsType = Cell::class;
     protected $cellsDataType = 'array';
     /**
      * Cells in the row.
@@ -40,4 +40,4 @@ class Row extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Row::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Row');
+class_alias(Row::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Row');

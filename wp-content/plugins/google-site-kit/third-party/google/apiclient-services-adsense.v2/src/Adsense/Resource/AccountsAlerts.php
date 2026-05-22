@@ -46,9 +46,9 @@ class AccountsAlerts extends \Google\Site_Kit_Dependencies\Google\Service\Resour
     public function listAccountsAlerts($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListAlertsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListAlertsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsAlerts::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsAlerts');
+class_alias(AccountsAlerts::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsAlerts');

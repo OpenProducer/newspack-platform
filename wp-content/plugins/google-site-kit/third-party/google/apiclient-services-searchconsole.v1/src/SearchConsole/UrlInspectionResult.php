@@ -19,9 +19,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 
 class UrlInspectionResult extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $ampResultType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\AmpInspectionResult::class;
+    protected $ampResultType = AmpInspectionResult::class;
     protected $ampResultDataType = '';
-    protected $indexStatusResultType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\IndexStatusInspectionResult::class;
+    protected $indexStatusResultType = IndexStatusInspectionResult::class;
     protected $indexStatusResultDataType = '';
     /**
      * Link to Search Console URL inspection.
@@ -29,16 +29,16 @@ class UrlInspectionResult extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $inspectionResultLink;
-    protected $mobileUsabilityResultType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\MobileUsabilityInspectionResult::class;
+    protected $mobileUsabilityResultType = MobileUsabilityInspectionResult::class;
     protected $mobileUsabilityResultDataType = '';
-    protected $richResultsResultType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RichResultsInspectionResult::class;
+    protected $richResultsResultType = RichResultsInspectionResult::class;
     protected $richResultsResultDataType = '';
     /**
      * Result of the AMP analysis. Absent if the page is not an AMP page.
      *
      * @param AmpInspectionResult $ampResult
      */
-    public function setAmpResult(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\AmpInspectionResult $ampResult)
+    public function setAmpResult(AmpInspectionResult $ampResult)
     {
         $this->ampResult = $ampResult;
     }
@@ -54,7 +54,7 @@ class UrlInspectionResult extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param IndexStatusInspectionResult $indexStatusResult
      */
-    public function setIndexStatusResult(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\IndexStatusInspectionResult $indexStatusResult)
+    public function setIndexStatusResult(IndexStatusInspectionResult $indexStatusResult)
     {
         $this->indexStatusResult = $indexStatusResult;
     }
@@ -87,7 +87,7 @@ class UrlInspectionResult extends \Google\Site_Kit_Dependencies\Google\Model
      * @deprecated
      * @param MobileUsabilityInspectionResult $mobileUsabilityResult
      */
-    public function setMobileUsabilityResult(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\MobileUsabilityInspectionResult $mobileUsabilityResult)
+    public function setMobileUsabilityResult(MobileUsabilityInspectionResult $mobileUsabilityResult)
     {
         $this->mobileUsabilityResult = $mobileUsabilityResult;
     }
@@ -105,7 +105,7 @@ class UrlInspectionResult extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param RichResultsInspectionResult $richResultsResult
      */
-    public function setRichResultsResult(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RichResultsInspectionResult $richResultsResult)
+    public function setRichResultsResult(RichResultsInspectionResult $richResultsResult)
     {
         $this->richResultsResult = $richResultsResult;
     }
@@ -118,4 +118,4 @@ class UrlInspectionResult extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\UrlInspectionResult::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_UrlInspectionResult');
+class_alias(UrlInspectionResult::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_UrlInspectionResult');

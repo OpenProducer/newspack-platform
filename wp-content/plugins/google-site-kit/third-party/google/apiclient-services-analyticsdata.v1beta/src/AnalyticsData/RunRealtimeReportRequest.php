@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class RunRealtimeReportRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'orderBys';
-    protected $dimensionFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $dimensionFilterType = FilterExpression::class;
     protected $dimensionFilterDataType = '';
-    protected $dimensionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Dimension::class;
+    protected $dimensionsType = Dimension::class;
     protected $dimensionsDataType = 'array';
     /**
      * The number of rows to return. If unspecified, 10,000 rows are returned. The
@@ -43,13 +43,13 @@ class RunRealtimeReportRequest extends \Google\Site_Kit_Dependencies\Google\Coll
      * @var string[]
      */
     public $metricAggregations;
-    protected $metricFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $metricFilterType = FilterExpression::class;
     protected $metricFilterDataType = '';
-    protected $metricsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Metric::class;
+    protected $metricsType = Metric::class;
     protected $metricsDataType = 'array';
-    protected $minuteRangesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MinuteRange::class;
+    protected $minuteRangesType = MinuteRange::class;
     protected $minuteRangesDataType = 'array';
-    protected $orderBysType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\OrderBy::class;
+    protected $orderBysType = OrderBy::class;
     protected $orderBysDataType = 'array';
     /**
      * Toggles whether to return the current state of this Google Analytics
@@ -64,7 +64,7 @@ class RunRealtimeReportRequest extends \Google\Site_Kit_Dependencies\Google\Coll
      *
      * @param FilterExpression $dimensionFilter
      */
-    public function setDimensionFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression $dimensionFilter)
+    public function setDimensionFilter(FilterExpression $dimensionFilter)
     {
         $this->dimensionFilter = $dimensionFilter;
     }
@@ -136,7 +136,7 @@ class RunRealtimeReportRequest extends \Google\Site_Kit_Dependencies\Google\Coll
      *
      * @param FilterExpression $metricFilter
      */
-    public function setMetricFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression $metricFilter)
+    public function setMetricFilter(FilterExpression $metricFilter)
     {
         $this->metricFilter = $metricFilter;
     }
@@ -219,4 +219,4 @@ class RunRealtimeReportRequest extends \Google\Site_Kit_Dependencies\Google\Coll
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunRealtimeReportRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_RunRealtimeReportRequest');
+class_alias(RunRealtimeReportRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_RunRealtimeReportRequest');

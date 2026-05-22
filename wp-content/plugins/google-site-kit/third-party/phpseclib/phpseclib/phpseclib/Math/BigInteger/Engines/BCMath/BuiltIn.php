@@ -18,7 +18,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class BuiltIn extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath
+abstract class BuiltIn extends BCMath
 {
     /**
      * Performs modular exponentiation.
@@ -28,10 +28,10 @@ abstract class BuiltIn extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
      * @param BCMath $n
      * @return BCMath
      */
-    protected static function powModHelper(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $x, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $n)
+    protected static function powModHelper(BCMath $x, BCMath $e, BCMath $n)
     {
-        $temp = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath();
-        $temp->value = \bcpowmod($x->value, $e->value, $n->value);
+        $temp = new BCMath();
+        $temp->value = bcpowmod($x->value, $e->value, $n->value, 0);
         return $x->normalize($temp);
     }
 }

@@ -18,6 +18,6 @@
 namespace Google\Site_Kit_Dependencies\Google;
 
 use Exception as BaseException;
-class Exception extends \Exception
+class Exception extends BaseException
 {
 }

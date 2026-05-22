@@ -29,7 +29,7 @@ use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
  * @phpstan-import-type Record from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
  */
-class SamplingHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractHandler implements \Google\Site_Kit_Dependencies\Monolog\Handler\ProcessableHandlerInterface, \Google\Site_Kit_Dependencies\Monolog\Handler\FormattableHandlerInterface
+class SamplingHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
     /**
@@ -52,17 +52,17 @@ class SamplingHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
         parent::__construct();
         $this->handler = $handler;
         $this->factor = $factor;
-        if (!$this->handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface && !\is_callable($this->handler)) {
-            throw new \RuntimeException("The given handler (" . \json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
+        if (!$this->handler instanceof HandlerInterface && !is_callable($this->handler)) {
+            throw new \RuntimeException("The given handler (" . json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
         }
     }
-    public function isHandling(array $record) : bool
+    public function isHandling(array $record): bool
     {
         return $this->getHandler($record)->isHandling($record);
     }
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
-        if ($this->isHandling($record) && \mt_rand(1, $this->factor) === 1) {
+        if ($this->isHandling($record) && mt_rand(1, $this->factor) === 1) {
             if ($this->processors) {
                 /** @var Record $record */
                 $record = $this->processRecord($record);
@@ -82,9 +82,9 @@ class SamplingHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      */
     public function getHandler(?array $record = null)
     {
-        if (!$this->handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface) {
+        if (!$this->handler instanceof HandlerInterface) {
             $this->handler = ($this->handler)($record, $this);
-            if (!$this->handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface) {
+            if (!$this->handler instanceof HandlerInterface) {
                 throw new \RuntimeException("The factory callable should return a HandlerInterface");
             }
         }
@@ -93,24 +93,24 @@ class SamplingHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         $handler = $this->getHandler();
-        if ($handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\FormattableHandlerInterface) {
+        if ($handler instanceof FormattableHandlerInterface) {
             $handler->setFormatter($formatter);
             return $this;
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($handler) . ' does not support formatters.');
     }
     /**
      * {@inheritDoc}
      */
-    public function getFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         $handler = $this->getHandler();
-        if ($handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\FormattableHandlerInterface) {
+        if ($handler instanceof FormattableHandlerInterface) {
             return $handler->getFormatter();
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($handler) . ' does not support formatters.');
     }
 }

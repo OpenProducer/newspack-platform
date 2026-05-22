@@ -26,7 +26,7 @@ class ListUserPermissionsResponse extends \Google\Site_Kit_Dependencies\Google\C
      * @var string
      */
     public $nextPageToken;
-    protected $userPermissionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission::class;
+    protected $userPermissionType = UserPermission::class;
     protected $userPermissionDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListUserPermissionsResponse extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListUserPermissionsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListUserPermissionsResponse');
+class_alias(ListUserPermissionsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListUserPermissionsResponse');

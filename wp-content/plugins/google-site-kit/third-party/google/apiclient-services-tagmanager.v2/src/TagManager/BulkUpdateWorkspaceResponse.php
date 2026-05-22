@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class BulkUpdateWorkspaceResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'changes';
-    protected $changesType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity::class;
+    protected $changesType = Entity::class;
     protected $changesDataType = 'array';
     /**
      * The entities that were added or updated during the bulk-update. Does not
@@ -41,4 +41,4 @@ class BulkUpdateWorkspaceResponse extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\BulkUpdateWorkspaceResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_BulkUpdateWorkspaceResponse');
+class_alias(BulkUpdateWorkspaceResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_BulkUpdateWorkspaceResponse');

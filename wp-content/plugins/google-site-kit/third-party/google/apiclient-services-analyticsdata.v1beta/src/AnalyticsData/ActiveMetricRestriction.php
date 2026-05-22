@@ -66,4 +66,4 @@ class ActiveMetricRestriction extends \Google\Site_Kit_Dependencies\Google\Colle
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ActiveMetricRestriction::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_ActiveMetricRestriction');
+class_alias(ActiveMetricRestriction::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_ActiveMetricRestriction');

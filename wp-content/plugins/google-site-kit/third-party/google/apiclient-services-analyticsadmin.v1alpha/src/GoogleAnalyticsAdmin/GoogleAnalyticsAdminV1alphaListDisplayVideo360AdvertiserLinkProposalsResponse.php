@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinkProposalsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'displayVideo360AdvertiserLinkProposals';
-    protected $displayVideo360AdvertiserLinkProposalsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class;
+    protected $displayVideo360AdvertiserLinkProposalsType = GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class;
     protected $displayVideo360AdvertiserLinkProposalsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinkProposalsRespo
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinkProposalsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinkProposalsResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinkProposalsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinkProposalsResponse');

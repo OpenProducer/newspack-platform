@@ -7,6 +7,8 @@
 
 namespace Newspack\Data_Events;
 
+use Newspack\Reader_Activation;
+
 /**
  * Class that triggers a registration event with Newspack metadata for users registered during the Woocommerce checkout process.
  */
@@ -94,6 +96,14 @@ final class Woo_User_Registration {
 		// For modal checkout, the referer is actually what we want to capture as the registration page.
 		if ( ! empty( self::$metadata['referer'] ) && method_exists( 'Newspack_Blocks\Modal_Checkout', 'is_modal_checkout' ) && \Newspack_Blocks\Modal_Checkout::is_modal_checkout() ) {
 			self::$metadata['current_page_url'] = self::$metadata['referer'];
+		}
+
+		if ( isset( self::$metadata['registration_method'] ) ) {
+			\update_user_meta( $user_id, Reader_Activation::REGISTRATION_METHOD, self::$metadata['registration_method'] );
+		}
+
+		if ( isset( self::$metadata['current_page_url'] ) ) {
+			\update_user_meta( $user_id, Reader_Activation::REGISTRATION_PAGE, self::$metadata['current_page_url'] );
 		}
 
 		/**

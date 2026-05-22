@@ -44,7 +44,7 @@ class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function delete($siteUrl, $feedpath, $optParams = [])
     {
         $params = ['siteUrl' => $siteUrl, 'feedpath' => $feedpath];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -61,8 +61,8 @@ class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function get($siteUrl, $feedpath, $optParams = [])
     {
         $params = ['siteUrl' => $siteUrl, 'feedpath' => $feedpath];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\WmxSitemap::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], WmxSitemap::class);
     }
     /**
      * Lists the [sitemaps-entries](/webmaster-tools/v3/sitemaps) submitted for this
@@ -81,8 +81,8 @@ class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listSitemaps($siteUrl, $optParams = [])
     {
         $params = ['siteUrl' => $siteUrl];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\SitemapsListResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], SitemapsListResponse::class);
     }
     /**
      * Submits a sitemap for a site. (sitemaps.submit)
@@ -97,9 +97,9 @@ class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function submit($siteUrl, $feedpath, $optParams = [])
     {
         $params = ['siteUrl' => $siteUrl, 'feedpath' => $feedpath];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('submit', [$params]);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Resource\Sitemaps::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_Resource_Sitemaps');
+class_alias(Sitemaps::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_Resource_Sitemaps');

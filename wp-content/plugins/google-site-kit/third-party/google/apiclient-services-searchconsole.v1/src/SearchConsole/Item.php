@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 class Item extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'issues';
-    protected $issuesType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RichResultsIssue::class;
+    protected $issuesType = RichResultsIssue::class;
     protected $issuesDataType = 'array';
     /**
      * The user-provided name of this item.
@@ -62,4 +62,4 @@ class Item extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Item::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_Item');
+class_alias(Item::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_Item');

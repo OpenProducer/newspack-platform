@@ -40,11 +40,11 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * @return GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
     }
     /**
      * Deletes target MeasurementProtocolSecret. (measurementProtocolSecrets.delete)
@@ -59,8 +59,8 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single MeasurementProtocolSecret.
@@ -76,8 +76,8 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
     }
     /**
      * Returns child MeasurementProtocolSecrets under the specified parent Property.
@@ -103,8 +103,8 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
     public function listPropertiesDataStreamsMeasurementProtocolSecrets($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListMeasurementProtocolSecretsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListMeasurementProtocolSecretsResponse::class);
     }
     /**
      * Updates a measurement protocol secret. (measurementProtocolSecrets.patch)
@@ -120,12 +120,12 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * @return GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesDataStreamsMeasurementProtocolSecrets::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDataStreamsMeasurementProtocolSecrets');
+class_alias(PropertiesDataStreamsMeasurementProtocolSecrets::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDataStreamsMeasurementProtocolSecrets');

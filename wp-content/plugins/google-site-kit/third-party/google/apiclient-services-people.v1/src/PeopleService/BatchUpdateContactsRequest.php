@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class BatchUpdateContactsRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'sources';
-    protected $contactsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $contactsType = Person::class;
     protected $contactsDataType = 'map';
     /**
      * Required. A field mask to restrict which fields on each person are
@@ -139,4 +139,4 @@ class BatchUpdateContactsRequest extends \Google\Site_Kit_Dependencies\Google\Co
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchUpdateContactsRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_BatchUpdateContactsRequest');
+class_alias(BatchUpdateContactsRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_BatchUpdateContactsRequest');

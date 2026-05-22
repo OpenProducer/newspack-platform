@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class ListLinkedAdUnitsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'adUnits';
-    protected $adUnitsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit::class;
+    protected $adUnitsType = AdUnit::class;
     protected $adUnitsDataType = 'array';
     /**
      * Continuation token used to page through ad units. To retrieve the next page
@@ -64,4 +64,4 @@ class ListLinkedAdUnitsResponse extends \Google\Site_Kit_Dependencies\Google\Col
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListLinkedAdUnitsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListLinkedAdUnitsResponse');
+class_alias(ListLinkedAdUnitsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListLinkedAdUnitsResponse');

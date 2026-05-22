@@ -12,6 +12,6 @@
  */
 namespace Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Curves;
 
-final class nistk409 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Curves\sect409k1
+final class nistk409 extends sect409k1
 {
 }

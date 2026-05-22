@@ -39,7 +39,7 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -56,8 +56,8 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], ContainerVersion::class);
     }
     /**
      * Gets the live (i.e. published) container version (versions.live)
@@ -70,8 +70,8 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
     public function live($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('live', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('live', [$params], ContainerVersion::class);
     }
     /**
      * Publishes a Container Version. (versions.publish)
@@ -87,8 +87,8 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
     public function publish($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('publish', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\PublishContainerVersionResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('publish', [$params], PublishContainerVersionResponse::class);
     }
     /**
      * Sets the latest version used for synchronization of workspaces when detecting
@@ -102,8 +102,8 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
     public function set_latest($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('set_latest', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('set_latest', [$params], ContainerVersion::class);
     }
     /**
      * Undeletes a Container Version. (versions.undelete)
@@ -116,8 +116,8 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
     public function undelete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('undelete', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('undelete', [$params], ContainerVersion::class);
     }
     /**
      * Updates a Container Version. (versions.update)
@@ -131,12 +131,12 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
      * @return ContainerVersion
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion $postBody, $optParams = [])
+    public function update($path, ContainerVersion $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], ContainerVersion::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersVersions::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersVersions');
+class_alias(AccountsContainersVersions::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersVersions');

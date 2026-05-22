@@ -66,4 +66,4 @@ class ZoneTypeRestriction extends \Google\Site_Kit_Dependencies\Google\Collectio
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ZoneTypeRestriction::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ZoneTypeRestriction');
+class_alias(ZoneTypeRestriction::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ZoneTypeRestriction');

@@ -7,14 +7,14 @@
  * Author URI:      https://newspack.com
  * Text Domain:     newspack-popups
  * Domain Path:     /languages
- * Version:         3.9.2
+ * Version:         3.12.0
  *
  * @package         Newspack_Popups
  */
 
 defined( 'ABSPATH' ) || exit;
 
-// Define NEWSPACK_ADS_PLUGIN_FILE.
+// Define the plugin file path.
 if ( ! defined( 'NEWSPACK_POPUPS_PLUGIN_FILE' ) ) {
 	define( 'NEWSPACK_POPUPS_PLUGIN_FILE', __FILE__ );
 }

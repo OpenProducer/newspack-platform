@@ -19,11 +19,11 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle;
 
 class StateDetails extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $amountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Money::class;
+    protected $amountType = Money::class;
     protected $amountDataType = '';
-    protected $amountDetailsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\AmountDetails::class;
+    protected $amountDetailsType = AmountDetails::class;
     protected $amountDetailsDataType = '';
-    protected $merchantRevenueDataType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\MerchantRevenueData::class;
+    protected $merchantRevenueDataType = MerchantRevenueData::class;
     protected $merchantRevenueDataDataType = '';
     /**
      * Output only. The state of current state details.
@@ -44,7 +44,7 @@ class StateDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Money $amount
      */
-    public function setAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Money $amount)
+    public function setAmount(Money $amount)
     {
         $this->amount = $amount;
     }
@@ -60,7 +60,7 @@ class StateDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param AmountDetails $amountDetails
      */
-    public function setAmountDetails(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\AmountDetails $amountDetails)
+    public function setAmountDetails(AmountDetails $amountDetails)
     {
         $this->amountDetails = $amountDetails;
     }
@@ -76,7 +76,7 @@ class StateDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param MerchantRevenueData $merchantRevenueData
      */
-    public function setMerchantRevenueData(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\MerchantRevenueData $merchantRevenueData)
+    public function setMerchantRevenueData(MerchantRevenueData $merchantRevenueData)
     {
         $this->merchantRevenueData = $merchantRevenueData;
     }
@@ -121,4 +121,4 @@ class StateDetails extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\StateDetails::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_StateDetails');
+class_alias(StateDetails::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_StateDetails');

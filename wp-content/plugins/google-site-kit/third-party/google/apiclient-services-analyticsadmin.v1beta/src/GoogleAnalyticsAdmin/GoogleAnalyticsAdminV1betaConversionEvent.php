@@ -57,7 +57,7 @@ class GoogleAnalyticsAdminV1betaConversionEvent extends \Google\Site_Kit_Depende
      * @var bool
      */
     public $custom;
-    protected $defaultConversionValueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue::class;
+    protected $defaultConversionValueType = GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue::class;
     protected $defaultConversionValueDataType = '';
     /**
      * Output only. If set, this event can currently be deleted with
@@ -143,7 +143,7 @@ class GoogleAnalyticsAdminV1betaConversionEvent extends \Google\Site_Kit_Depende
      *
      * @param GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue $defaultConversionValue
      */
-    public function setDefaultConversionValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue $defaultConversionValue)
+    public function setDefaultConversionValue(GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue $defaultConversionValue)
     {
         $this->defaultConversionValue = $defaultConversionValue;
     }
@@ -207,4 +207,4 @@ class GoogleAnalyticsAdminV1betaConversionEvent extends \Google\Site_Kit_Depende
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEvent::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaConversionEvent');
+class_alias(GoogleAnalyticsAdminV1betaConversionEvent::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaConversionEvent');

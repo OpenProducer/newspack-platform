@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1betaAccessFilter extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $betweenFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessBetweenFilter::class;
+    protected $betweenFilterType = GoogleAnalyticsAdminV1betaAccessBetweenFilter::class;
     protected $betweenFilterDataType = '';
     /**
      * The dimension name or metric name.
@@ -27,18 +27,18 @@ class GoogleAnalyticsAdminV1betaAccessFilter extends \Google\Site_Kit_Dependenci
      * @var string
      */
     public $fieldName;
-    protected $inListFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessInListFilter::class;
+    protected $inListFilterType = GoogleAnalyticsAdminV1betaAccessInListFilter::class;
     protected $inListFilterDataType = '';
-    protected $numericFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessNumericFilter::class;
+    protected $numericFilterType = GoogleAnalyticsAdminV1betaAccessNumericFilter::class;
     protected $numericFilterDataType = '';
-    protected $stringFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessStringFilter::class;
+    protected $stringFilterType = GoogleAnalyticsAdminV1betaAccessStringFilter::class;
     protected $stringFilterDataType = '';
     /**
      * A filter for two values.
      *
      * @param GoogleAnalyticsAdminV1betaAccessBetweenFilter $betweenFilter
      */
-    public function setBetweenFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessBetweenFilter $betweenFilter)
+    public function setBetweenFilter(GoogleAnalyticsAdminV1betaAccessBetweenFilter $betweenFilter)
     {
         $this->betweenFilter = $betweenFilter;
     }
@@ -70,7 +70,7 @@ class GoogleAnalyticsAdminV1betaAccessFilter extends \Google\Site_Kit_Dependenci
      *
      * @param GoogleAnalyticsAdminV1betaAccessInListFilter $inListFilter
      */
-    public function setInListFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessInListFilter $inListFilter)
+    public function setInListFilter(GoogleAnalyticsAdminV1betaAccessInListFilter $inListFilter)
     {
         $this->inListFilter = $inListFilter;
     }
@@ -86,7 +86,7 @@ class GoogleAnalyticsAdminV1betaAccessFilter extends \Google\Site_Kit_Dependenci
      *
      * @param GoogleAnalyticsAdminV1betaAccessNumericFilter $numericFilter
      */
-    public function setNumericFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessNumericFilter $numericFilter)
+    public function setNumericFilter(GoogleAnalyticsAdminV1betaAccessNumericFilter $numericFilter)
     {
         $this->numericFilter = $numericFilter;
     }
@@ -102,7 +102,7 @@ class GoogleAnalyticsAdminV1betaAccessFilter extends \Google\Site_Kit_Dependenci
      *
      * @param GoogleAnalyticsAdminV1betaAccessStringFilter $stringFilter
      */
-    public function setStringFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessStringFilter $stringFilter)
+    public function setStringFilter(GoogleAnalyticsAdminV1betaAccessStringFilter $stringFilter)
     {
         $this->stringFilter = $stringFilter;
     }
@@ -115,4 +115,4 @@ class GoogleAnalyticsAdminV1betaAccessFilter extends \Google\Site_Kit_Dependenci
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessFilter');
+class_alias(GoogleAnalyticsAdminV1betaAccessFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessFilter');

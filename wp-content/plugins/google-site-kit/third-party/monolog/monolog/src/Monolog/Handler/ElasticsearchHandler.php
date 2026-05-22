@@ -43,7 +43,7 @@ use Google\Site_Kit_Dependencies\Elastic\Elasticsearch\Client as Client8;
  *
  * @author Avtandil Kikabidze <akalongman@gmail.com>
  */
-class ElasticsearchHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class ElasticsearchHandler extends AbstractProcessingHandler
 {
     /**
      * @var Client|Client8
@@ -61,21 +61,21 @@ class ElasticsearchHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
      * @param Client|Client8 $client  Elasticsearch Client object
      * @param mixed[]        $options Handler configuration
      */
-    public function __construct($client, array $options = [], $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct($client, array $options = [], $level = Logger::DEBUG, bool $bubble = \true)
     {
-        if (!$client instanceof \Google\Site_Kit_Dependencies\Elasticsearch\Client && !$client instanceof \Google\Site_Kit_Dependencies\Elastic\Elasticsearch\Client) {
-            throw new \TypeError('Elasticsearch\\Client or Elastic\\Elasticsearch\\Client instance required');
+        if (!$client instanceof Client && !$client instanceof Client8) {
+            throw new \TypeError('Elasticsearch\Client or Elastic\Elasticsearch\Client instance required');
         }
         parent::__construct($level, $bubble);
         $this->client = $client;
-        $this->options = \array_merge([
+        $this->options = array_merge([
             'index' => 'monolog',
             // Elastic index name
             'type' => '_doc',
             // Elastic document type
             'ignore_error' => \false,
         ], $options);
-        if ($client instanceof \Google\Site_Kit_Dependencies\Elastic\Elasticsearch\Client || $client::VERSION[0] === '7') {
+        if ($client instanceof Client8 || $client::VERSION[0] === '7') {
             $this->needsType = \false;
             // force the type to _doc for ES8/ES7
             $this->options['type'] = '_doc';
@@ -86,40 +86,40 @@ class ElasticsearchHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $this->bulkSend([$record['formatted']]);
     }
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
-        if ($formatter instanceof \Google\Site_Kit_Dependencies\Monolog\Formatter\ElasticsearchFormatter) {
+        if ($formatter instanceof ElasticsearchFormatter) {
             return parent::setFormatter($formatter);
         }
-        throw new \InvalidArgumentException('ElasticsearchHandler is only compatible with ElasticsearchFormatter');
+        throw new InvalidArgumentException('ElasticsearchHandler is only compatible with ElasticsearchFormatter');
     }
     /**
      * Getter options
      *
      * @return mixed[]
      */
-    public function getOptions() : array
+    public function getOptions(): array
     {
         return $this->options;
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        return new \Google\Site_Kit_Dependencies\Monolog\Formatter\ElasticsearchFormatter($this->options['index'], $this->options['type']);
+        return new ElasticsearchFormatter($this->options['index'], $this->options['type']);
     }
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         $documents = $this->getFormatter()->formatBatch($records);
         $this->bulkSend($documents);
@@ -130,7 +130,7 @@ class ElasticsearchHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
      * @param  array[]           $records Records + _index/_type keys
      * @throws \RuntimeException
      */
-    protected function bulkSend(array $records) : void
+    protected function bulkSend(array $records): void
     {
         try {
             $params = ['body' => []];
@@ -144,9 +144,9 @@ class ElasticsearchHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
             if ($responses['errors'] === \true) {
                 throw $this->createExceptionFromResponses($responses);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if (!$this->options['ignore_error']) {
-                throw new \RuntimeException('Error sending messages to Elasticsearch', 0, $e);
+                throw new RuntimeException('Error sending messages to Elasticsearch', 0, $e);
             }
         }
     }
@@ -157,7 +157,7 @@ class ElasticsearchHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
      *
      * @param mixed[]|Elasticsearch $responses returned by $this->client->bulk()
      */
-    protected function createExceptionFromResponses($responses) : \Throwable
+    protected function createExceptionFromResponses($responses): Throwable
     {
         // @phpstan-ignore offsetAccess.nonOffsetAccessible
         foreach ($responses['items'] ?? [] as $item) {
@@ -165,22 +165,22 @@ class ElasticsearchHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
                 return $this->createExceptionFromError($item['index']['error']);
             }
         }
-        if (\class_exists(\Google\Site_Kit_Dependencies\Elastic\Elasticsearch\Exception\InvalidArgumentException::class)) {
-            return new \Google\Site_Kit_Dependencies\Elastic\Elasticsearch\Exception\InvalidArgumentException('Elasticsearch failed to index one or more records.');
+        if (class_exists(ElasticInvalidArgumentException::class)) {
+            return new ElasticInvalidArgumentException('Elasticsearch failed to index one or more records.');
         }
-        return new \Google\Site_Kit_Dependencies\Elasticsearch\Common\Exceptions\RuntimeException('Elasticsearch failed to index one or more records.');
+        return new ElasticsearchRuntimeException('Elasticsearch failed to index one or more records.');
     }
     /**
      * Creates elasticsearch exception from error array
      *
      * @param mixed[] $error
      */
-    protected function createExceptionFromError(array $error) : \Throwable
+    protected function createExceptionFromError(array $error): Throwable
     {
         $previous = isset($error['caused_by']) ? $this->createExceptionFromError($error['caused_by']) : null;
-        if (\class_exists(\Google\Site_Kit_Dependencies\Elastic\Elasticsearch\Exception\InvalidArgumentException::class)) {
-            return new \Google\Site_Kit_Dependencies\Elastic\Elasticsearch\Exception\InvalidArgumentException($error['type'] . ': ' . $error['reason'], 0, $previous);
+        if (class_exists(ElasticInvalidArgumentException::class)) {
+            return new ElasticInvalidArgumentException($error['type'] . ': ' . $error['reason'], 0, $previous);
         }
-        return new \Google\Site_Kit_Dependencies\Elasticsearch\Common\Exceptions\RuntimeException($error['type'] . ': ' . $error['reason'], 0, $previous);
+        return new ElasticsearchRuntimeException($error['type'] . ': ' . $error['reason'], 0, $previous);
     }
 }

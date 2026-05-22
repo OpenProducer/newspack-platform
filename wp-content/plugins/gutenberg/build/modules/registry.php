@@ -73,14 +73,14 @@ return array(
 		'asset' => 'boot/index.min.asset.php',
 	),
 	array(
-		'id' => '@wordpress/boot',
-		'path' => 'boot/index',
-		'asset' => 'boot/index.min.asset.php',
-	),
-	array(
 		'id' => '@wordpress/connectors',
 		'path' => 'connectors/index',
 		'asset' => 'connectors/index.min.asset.php',
+	),
+	array(
+		'id' => '@wordpress/content-types',
+		'path' => 'content-types/index',
+		'asset' => 'content-types/index.min.asset.php',
 	),
 	array(
 		'id' => '@wordpress/core-abilities',
@@ -128,11 +128,6 @@ return array(
 		'asset' => 'route/index.min.asset.php',
 	),
 	array(
-		'id' => '@wordpress/route',
-		'path' => 'route/index',
-		'asset' => 'route/index.min.asset.php',
-	),
-	array(
 		'id' => '@wordpress/vips/loader',
 		'path' => 'vips/loader',
 		'asset' => 'vips/loader.min.asset.php',
@@ -141,6 +136,7 @@ return array(
 		'id' => '@wordpress/vips/worker',
 		'path' => 'vips/worker',
 		'asset' => 'vips/worker.min.asset.php',
+		'min_only' => true,
 	),
 	array(
 		'id' => '@wordpress/workflow',

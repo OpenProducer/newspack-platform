@@ -134,4 +134,4 @@ class GoogleAnalyticsAdminV1betaPropertySummary extends \Google\Site_Kit_Depende
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaPropertySummary::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaPropertySummary');
+class_alias(GoogleAnalyticsAdminV1betaPropertySummary::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaPropertySummary');

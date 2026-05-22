@@ -32,7 +32,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Keys\PKCS8
+abstract class PKCS8 extends Progenitor
 {
     /**
      * OID Name
@@ -69,7 +69,7 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
             $components['isPublicKey'] = \true;
             $type = 'public';
         }
-        $result = $components + \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\Formats\Keys\PKCS1::load($key[$type . 'Key']);
+        $result = $components + PKCS1::load($key[$type . 'Key']);
         if (isset($key['meta'])) {
             $result['meta'] = $key['meta'];
         }
@@ -88,10 +88,10 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      * @param array $options optional
      * @return string
      */
-    public static function savePrivateKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
+    public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
     {
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\Formats\Keys\PKCS1::savePrivateKey($n, $e, $d, $primes, $exponents, $coefficients);
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::extractBER($key);
+        $key = PKCS1::savePrivateKey($n, $e, $d, $primes, $exponents, $coefficients);
+        $key = ASN1::extractBER($key);
         return self::wrapPrivateKey($key, [], null, $password, null, '', $options);
     }
     /**
@@ -102,10 +102,10 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      * @param array $options optional
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e, array $options = [])
+    public static function savePublicKey(BigInteger $n, BigInteger $e, array $options = [])
     {
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\Formats\Keys\PKCS1::savePublicKey($n, $e);
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::extractBER($key);
+        $key = PKCS1::savePublicKey($n, $e);
+        $key = ASN1::extractBER($key);
         return self::wrapPublicKey($key, null, null, $options);
     }
 }

@@ -27,7 +27,7 @@ class RecurrenceTerms extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $accountOnHoldMillis;
-    protected $freeTrialPeriodType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceDuration::class;
+    protected $freeTrialPeriodType = RecurrenceDuration::class;
     protected $freeTrialPeriodDataType = '';
     /**
      * Indicates the period in milliseconds for which this plan can be in
@@ -36,7 +36,7 @@ class RecurrenceTerms extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $gracePeriodMillis;
-    protected $recurrencePeriodType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceDuration::class;
+    protected $recurrencePeriodType = RecurrenceDuration::class;
     protected $recurrencePeriodDataType = '';
     /**
      * Indicates the period in milliseconds until which this plan can be in
@@ -61,7 +61,7 @@ class RecurrenceTerms extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param RecurrenceDuration $freeTrialPeriod
      */
-    public function setFreeTrialPeriod(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceDuration $freeTrialPeriod)
+    public function setFreeTrialPeriod(RecurrenceDuration $freeTrialPeriod)
     {
         $this->freeTrialPeriod = $freeTrialPeriod;
     }
@@ -94,7 +94,7 @@ class RecurrenceTerms extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param RecurrenceDuration $recurrencePeriod
      */
-    public function setRecurrencePeriod(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceDuration $recurrencePeriod)
+    public function setRecurrencePeriod(RecurrenceDuration $recurrencePeriod)
     {
         $this->recurrencePeriod = $recurrencePeriod;
     }
@@ -107,4 +107,4 @@ class RecurrenceTerms extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceTerms::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_RecurrenceTerms');
+class_alias(RecurrenceTerms::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_RecurrenceTerms');

@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListDataStreamsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'dataStreams';
-    protected $dataStreamsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream::class;
+    protected $dataStreamsType = GoogleAnalyticsAdminV1betaDataStream::class;
     protected $dataStreamsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1betaListDataStreamsResponse extends \Google\Site_Kit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListDataStreamsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListDataStreamsResponse');
+class_alias(GoogleAnalyticsAdminV1betaListDataStreamsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListDataStreamsResponse');

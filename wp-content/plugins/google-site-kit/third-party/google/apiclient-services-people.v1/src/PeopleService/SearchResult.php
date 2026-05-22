@@ -19,14 +19,14 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class SearchResult extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $personType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $personType = Person::class;
     protected $personDataType = '';
     /**
      * The matched Person.
      *
      * @param Person $person
      */
-    public function setPerson(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person $person)
+    public function setPerson(Person $person)
     {
         $this->person = $person;
     }
@@ -39,4 +39,4 @@ class SearchResult extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\SearchResult::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_SearchResult');
+class_alias(SearchResult::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_SearchResult');

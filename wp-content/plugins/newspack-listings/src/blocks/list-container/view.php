@@ -25,6 +25,7 @@ function register_block() {
 	register_block_type(
 		'newspack-listings/list-container',
 		[
+			'api_version'     => 3,
 			'attributes'      => $parent_block_json['attributes'],
 			'render_callback' => __NAMESPACE__ . '\render_block',
 		]

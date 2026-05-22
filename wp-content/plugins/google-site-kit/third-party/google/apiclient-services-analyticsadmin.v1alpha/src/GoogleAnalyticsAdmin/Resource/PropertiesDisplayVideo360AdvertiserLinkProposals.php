@@ -47,11 +47,11 @@ class PropertiesDisplayVideo360AdvertiserLinkProposals extends \Google\Site_Kit_
      * @return GoogleAnalyticsAdminV1alphaApproveDisplayVideo360AdvertiserLinkProposalResponse
      * @throws \Google\Service\Exception
      */
-    public function approve($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaApproveDisplayVideo360AdvertiserLinkProposalRequest $postBody, $optParams = [])
+    public function approve($name, GoogleAnalyticsAdminV1alphaApproveDisplayVideo360AdvertiserLinkProposalRequest $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('approve', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaApproveDisplayVideo360AdvertiserLinkProposalResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('approve', [$params], GoogleAnalyticsAdminV1alphaApproveDisplayVideo360AdvertiserLinkProposalResponse::class);
     }
     /**
      * Cancels a DisplayVideo360AdvertiserLinkProposal. Cancelling can mean either:
@@ -68,11 +68,11 @@ class PropertiesDisplayVideo360AdvertiserLinkProposals extends \Google\Site_Kit_
      * @return GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal
      * @throws \Google\Service\Exception
      */
-    public function cancel($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCancelDisplayVideo360AdvertiserLinkProposalRequest $postBody, $optParams = [])
+    public function cancel($name, GoogleAnalyticsAdminV1alphaCancelDisplayVideo360AdvertiserLinkProposalRequest $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('cancel', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('cancel', [$params], GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class);
     }
     /**
      * Creates a DisplayVideo360AdvertiserLinkProposal.
@@ -84,11 +84,11 @@ class PropertiesDisplayVideo360AdvertiserLinkProposals extends \Google\Site_Kit_
      * @return GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class);
     }
     /**
      * Deletes a DisplayVideo360AdvertiserLinkProposal on a property. This can only
@@ -105,8 +105,8 @@ class PropertiesDisplayVideo360AdvertiserLinkProposals extends \Google\Site_Kit_
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single DisplayVideo360AdvertiserLinkProposal.
@@ -122,8 +122,8 @@ class PropertiesDisplayVideo360AdvertiserLinkProposals extends \Google\Site_Kit_
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class);
     }
     /**
      * Lists DisplayVideo360AdvertiserLinkProposals on a property. (displayVideo360A
@@ -146,9 +146,9 @@ class PropertiesDisplayVideo360AdvertiserLinkProposals extends \Google\Site_Kit_
     public function listPropertiesDisplayVideo360AdvertiserLinkProposals($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinkProposalsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinkProposalsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesDisplayVideo360AdvertiserLinkProposals::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDisplayVideo360AdvertiserLinkProposals');
+class_alias(PropertiesDisplayVideo360AdvertiserLinkProposals::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDisplayVideo360AdvertiserLinkProposals');

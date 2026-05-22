@@ -22,6 +22,7 @@ export const registerSinglePromptBlock = () => {
 	}
 
 	registerBlockType( name, {
+		...metadata,
 		title: __( 'Campaigns: Single Prompt', 'newspack-popups' ),
 		icon: {
 			src: <Icon icon={ megaphone } />,

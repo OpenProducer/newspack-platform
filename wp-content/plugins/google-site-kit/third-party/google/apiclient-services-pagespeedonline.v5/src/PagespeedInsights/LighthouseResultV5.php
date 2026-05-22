@@ -20,17 +20,17 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights;
 class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'stackPacks';
-    protected $auditsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseAuditResultV5::class;
+    protected $auditsType = LighthouseAuditResultV5::class;
     protected $auditsDataType = 'map';
-    protected $categoriesType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Categories::class;
+    protected $categoriesType = Categories::class;
     protected $categoriesDataType = '';
-    protected $categoryGroupsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\CategoryGroupV5::class;
+    protected $categoryGroupsType = CategoryGroupV5::class;
     protected $categoryGroupsDataType = 'map';
-    protected $configSettingsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\ConfigSettings::class;
+    protected $configSettingsType = ConfigSettings::class;
     protected $configSettingsDataType = '';
-    protected $entitiesType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LhrEntity::class;
+    protected $entitiesType = LhrEntity::class;
     protected $entitiesDataType = 'array';
-    protected $environmentType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Environment::class;
+    protected $environmentType = Environment::class;
     protected $environmentDataType = '';
     /**
      * The time that this run was fetched.
@@ -57,7 +57,7 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var array
      */
     public $fullPageScreenshot;
-    protected $i18nType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\I18n::class;
+    protected $i18nType = I18n::class;
     protected $i18nDataType = '';
     /**
      * The lighthouse version that was used to generate this LHR.
@@ -83,11 +83,11 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var array[]
      */
     public $runWarnings;
-    protected $runtimeErrorType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\RuntimeError::class;
+    protected $runtimeErrorType = RuntimeError::class;
     protected $runtimeErrorDataType = '';
-    protected $stackPacksType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\StackPack::class;
+    protected $stackPacksType = StackPack::class;
     protected $stackPacksDataType = 'array';
-    protected $timingType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Timing::class;
+    protected $timingType = Timing::class;
     protected $timingDataType = '';
     /**
      * The user agent that was used to run this LHR.
@@ -116,7 +116,7 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Categories $categories
      */
-    public function setCategories(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Categories $categories)
+    public function setCategories(Categories $categories)
     {
         $this->categories = $categories;
     }
@@ -148,7 +148,7 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param ConfigSettings $configSettings
      */
-    public function setConfigSettings(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\ConfigSettings $configSettings)
+    public function setConfigSettings(ConfigSettings $configSettings)
     {
         $this->configSettings = $configSettings;
     }
@@ -180,7 +180,7 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Environment $environment
      */
-    public function setEnvironment(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Environment $environment)
+    public function setEnvironment(Environment $environment)
     {
         $this->environment = $environment;
     }
@@ -261,7 +261,7 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param I18n $i18n
      */
-    public function setI18n(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\I18n $i18n)
+    public function setI18n(I18n $i18n)
     {
         $this->i18n = $i18n;
     }
@@ -342,7 +342,7 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param RuntimeError $runtimeError
      */
-    public function setRuntimeError(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\RuntimeError $runtimeError)
+    public function setRuntimeError(RuntimeError $runtimeError)
     {
         $this->runtimeError = $runtimeError;
     }
@@ -374,7 +374,7 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Timing $timing
      */
-    public function setTiming(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Timing $timing)
+    public function setTiming(Timing $timing)
     {
         $this->timing = $timing;
     }
@@ -403,4 +403,4 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseResultV5::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_LighthouseResultV5');
+class_alias(LighthouseResultV5::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_LighthouseResultV5');

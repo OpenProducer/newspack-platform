@@ -1,6 +1,6 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "newspack/reader-registration",
   "title": "Reader Registration",
   "category": "newspack",
@@ -19,7 +19,7 @@
     },
     "label": {
       "type": "string",
-      "default": "Sign up",
+      "default": "Continue",
       "required": true
     },
     "privacyLabel": {
@@ -53,13 +53,9 @@
       "type": "object",
       "default": {}
     },
-    "signInLabel": {
-      "type": "string",
-      "default": "Sign in to an existing account"
-    },
-    "signedInLabel": {
-      "type": "string",
-      "default": "An account was already registered with this email. Please check your inbox for an authentication link."
+    "hideOauth": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {

@@ -19,10 +19,11 @@ const { useHistory } = Router;
 type OriginalButtonProps = typeof BaseComponent.defaultProps;
 type Props = OriginalButtonProps & {
 	href?: string;
+	loading?: boolean;
 	onClick?: () => void;
 };
 
-const Button = ( { href, onClick, ...otherProps }: Props ) => {
+const Button = ( { href, loading = undefined, onClick, ...otherProps }: Props ) => {
 	const history = useHistory();
 	const [ isAwaitingOnClick, setIsAwaitingOnClick ] = useState( false );
 
@@ -42,7 +43,7 @@ const Button = ( { href, onClick, ...otherProps }: Props ) => {
 		otherProps.disabled = true;
 	}
 	// @ts-expect-error - @wordpress/components' Button can only have either href or onClick, not both.
-	return <BaseComponent { ...otherProps } />;
+	return <BaseComponent loading={ loading ? true : undefined } { ...otherProps } />;
 };
 
 export default Button;

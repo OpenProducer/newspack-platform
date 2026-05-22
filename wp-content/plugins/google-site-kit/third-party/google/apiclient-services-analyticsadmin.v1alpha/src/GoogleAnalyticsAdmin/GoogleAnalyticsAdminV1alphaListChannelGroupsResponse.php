@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaListChannelGroupsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'channelGroups';
-    protected $channelGroupsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroup::class;
+    protected $channelGroupsType = GoogleAnalyticsAdminV1alphaChannelGroup::class;
     protected $channelGroupsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -65,4 +65,4 @@ class GoogleAnalyticsAdminV1alphaListChannelGroupsResponse extends \Google\Site_
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListChannelGroupsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListChannelGroupsResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListChannelGroupsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListChannelGroupsResponse');

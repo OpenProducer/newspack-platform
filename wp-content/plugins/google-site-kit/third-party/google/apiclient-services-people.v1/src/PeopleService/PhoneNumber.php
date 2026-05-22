@@ -34,7 +34,7 @@ class PhoneNumber extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $formattedType;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The type of the phone number. The type can be custom or one of these
@@ -91,7 +91,7 @@ class PhoneNumber extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -139,4 +139,4 @@ class PhoneNumber extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\PhoneNumber::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_PhoneNumber');
+class_alias(PhoneNumber::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_PhoneNumber');

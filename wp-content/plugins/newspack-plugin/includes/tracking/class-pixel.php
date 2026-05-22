@@ -148,7 +148,15 @@ abstract class Pixel {
 		if ( $this->is_amp() || ! $this->is_configured() ) {
 			return;
 		}
-		echo str_replace( '__PIXEL_ID__', $this->get_pixel_id(), $payload ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		$payload = str_replace( '__PIXEL_ID__', $this->get_pixel_id(), $payload );
+
+		/**
+		 * Filters the pixel JS output.
+		 *
+		 * @param string $payload Pixel JS.
+		 */
+		echo apply_filters( 'newspack_pixel_script_markup', $payload ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

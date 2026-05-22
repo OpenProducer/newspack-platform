@@ -11,6 +11,7 @@ import {
 import { useSelect, useDispatch } from '@wordpress/data';
 import { PluginPrePublishPanel, store as editorStore } from '@wordpress/editor';
 import { useCallback, useMemo, useState } from '@wordpress/element';
+import { decodeEntities } from '@wordpress/html-entities';
 import { __, _n, _nx, _x, sprintf } from '@wordpress/i18n';
 import { store as noticesStore } from '@wordpress/notices';
 /**
@@ -68,6 +69,8 @@ const SettingRow = ( {
  *
  * @return {object} The form block attributes, clientId, and whether it has fields.
  */
+const EMPTY_ATTRIBUTES: Record< string, unknown > = {};
+
 const useFormAttributes = () => {
 	return useSelect( select => {
 		const { getBlocks } = select( blockEditorStore ) as {
@@ -79,7 +82,7 @@ const useFormAttributes = () => {
 		const hasFields = formBlock?.innerBlocks?.length;
 
 		return {
-			attributes: ( formBlock?.attributes || {} ) as Record< string, unknown >,
+			attributes: ( formBlock?.attributes as Record< string, unknown > ) ?? EMPTY_ATTRIBUTES,
 			clientId: formBlock?.clientId || '',
 			hasFields,
 		};
@@ -278,7 +281,7 @@ export const FormPrePublishPanel = () => {
 					{ formBlockSettings.icon.src() }
 				</span>
 				<span className="jetpack-form-pre-publish__form-title">
-					{ postTitle || __( 'Untitled Form', 'jetpack-forms' ) }
+					{ decodeEntities( postTitle ) || __( 'Untitled Form', 'jetpack-forms' ) }
 				</span>
 			</div>
 			<Button

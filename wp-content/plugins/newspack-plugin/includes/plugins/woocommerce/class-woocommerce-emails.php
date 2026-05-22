@@ -103,6 +103,17 @@ class WooCommerce_Emails {
 	 * @return bool
 	 */
 	public static function is_active() {
+		/**
+		 * Enables Newspack WooCommerce email enhancements including
+		 * improved templates and transactional email customizations.
+		 *
+		 * @constant NEWSPACK_EMAIL_ENHANCEMENTS
+		 * @type     bool
+		 * @default  Email enhancements disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_EMAIL_ENHANCEMENTS', true );
+		 */
 		return defined( 'NEWSPACK_EMAIL_ENHANCEMENTS' ) && NEWSPACK_EMAIL_ENHANCEMENTS;
 	}
 }

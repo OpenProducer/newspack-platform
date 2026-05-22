@@ -157,7 +157,7 @@ function isURL(url) {
   try {
     new URL(url);
     return true;
-  } catch (_) {
+  } catch {
     return false;
   }
 }
@@ -386,7 +386,7 @@ async function fetchModule(url, fetchOpts, parent) {
   let res;
   try {
     res = await fetch(url, fetchOpts);
-  } catch (e) {
+  } catch {
     throw Error(`Network error${fetching(url, parent)}.`);
   }
   if (!res.ok) {
@@ -663,7 +663,7 @@ var importScriptModules = (modules) => Promise.all(modules.map((m) => importPrel
 // packages/interactivity-router/build-module/index.mjs
 var {
   getRegionRootFragment,
-  initialVdom,
+  initialVdomPromise,
   toVdom,
   render,
   parseServerData,
@@ -690,7 +690,7 @@ var parseRegionAttribute = (region) => {
   try {
     const { id, attachTo } = JSON.parse(value);
     return { id, attachTo };
-  } catch (e) {
+  } catch {
     return { id: value };
   }
 };
@@ -722,7 +722,7 @@ var fetchPage = async (url, { html }) => {
     }
     const dom = new window.DOMParser().parseFromString(html, "text/html");
     return await preparePage(url, dom);
-  } catch (e) {
+  } catch {
     return false;
   }
 };
@@ -832,14 +832,17 @@ document.querySelectorAll(regionsSelector).forEach((region) => {
   }
 });
 window.document.querySelectorAll("script[type=module][src]").forEach(({ src }) => markScriptModuleAsResolved(src));
-pages.set(
-  getPagePath(window.location.href),
-  Promise.resolve(
-    preparePage(getPagePath(window.location.href), document, {
-      vdom: initialVdom
-    })
-  )
-);
+(async () => {
+  const initialVdomMap = await initialVdomPromise;
+  pages.set(
+    getPagePath(window.location.href),
+    Promise.resolve(
+      preparePage(getPagePath(window.location.href), document, {
+        vdom: initialVdomMap
+      })
+    )
+  );
+})();
 var navigatingTo = "";
 var hasLoadedNavigationTextsData = false;
 var navigationTexts = {

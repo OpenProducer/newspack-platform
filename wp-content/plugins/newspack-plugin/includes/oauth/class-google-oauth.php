@@ -469,6 +469,17 @@ class Google_OAuth {
 	 * Is Google OAuth configured?
 	 */
 	public static function is_oauth_configured() {
+		/**
+		 * Disables Google OAuth integration even if the OAuth proxy is configured.
+		 * Use this to prevent Google sign-in on specific environments.
+		 *
+		 * @constant NEWSPACK_DISABLE_GOOGLE_OAUTH
+		 * @type     bool
+		 * @default  Google OAuth enabled (if proxy configured)
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_DISABLE_GOOGLE_OAUTH', true );
+		 */
 		return OAuth::is_proxy_configured( 'google' ) && ( ! defined( 'NEWSPACK_DISABLE_GOOGLE_OAUTH' ) || ! NEWSPACK_DISABLE_GOOGLE_OAUTH );
 	}
 }

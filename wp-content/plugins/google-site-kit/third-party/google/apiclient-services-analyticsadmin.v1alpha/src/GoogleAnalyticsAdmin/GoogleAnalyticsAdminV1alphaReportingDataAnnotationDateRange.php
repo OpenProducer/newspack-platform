@@ -19,9 +19,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $endDateType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleTypeDate::class;
+    protected $endDateType = GoogleTypeDate::class;
     protected $endDateDataType = '';
-    protected $startDateType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleTypeDate::class;
+    protected $startDateType = GoogleTypeDate::class;
     protected $startDateDataType = '';
     /**
      * Required. The end date for this range. Must be a valid date with year,
@@ -30,7 +30,7 @@ class GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange extends \Googl
      *
      * @param GoogleTypeDate $endDate
      */
-    public function setEndDate(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleTypeDate $endDate)
+    public function setEndDate(GoogleTypeDate $endDate)
     {
         $this->endDate = $endDate;
     }
@@ -47,7 +47,7 @@ class GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange extends \Googl
      *
      * @param GoogleTypeDate $startDate
      */
-    public function setStartDate(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleTypeDate $startDate)
+    public function setStartDate(GoogleTypeDate $startDate)
     {
         $this->startDate = $startDate;
     }
@@ -60,4 +60,4 @@ class GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange extends \Googl
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange');
+class_alias(GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange');

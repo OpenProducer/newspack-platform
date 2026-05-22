@@ -41,6 +41,11 @@
 		grid-gap: 32px;
 	}
 
+	// Gutter 64
+	&__gutter-64 {
+		grid-gap: 64px;
+	}
+
 	// Row Gap 0
 	&__row-gap-0 {
 		grid-row-gap: 0;
@@ -59,11 +64,6 @@
 	// Row Gap 32
 	&__row-gap-32 {
 		grid-row-gap: 32px;
-	}
-
-	// Gutter 64
-	&__gutter-64 {
-		grid-gap: 64px;
 	}
 
 	// Columns 6
@@ -117,6 +117,11 @@
 			grid-template-columns: repeat(6, 1fr);
 		}
 
+		// Columns 12
+		&__columns-12 {
+			grid-template-columns: repeat(12, 1fr);
+		}
+
 		// Gutter 48
 		&__gutter-48 {
 			grid-gap: 48px;
@@ -132,6 +137,44 @@
 	> * {
 		margin-bottom: 0 !important;
 		margin-top: 0 !important;
+		> h1:first-child,
+		> h2:first-child,
+		> h3:first-child,
+		> h4:first-child,
+		> h5:first-child,
+		> h6:first-child {
+			margin-top: 0;
+		}
+	}
+
+	// Borders
+	&__borders {
+		grid-gap: 0 !important;
+		> * {
+			border-bottom: 1px solid wp-colors.$gray-300;
+			&:last-child {
+				border-bottom: none;
+			}
+			@media screen and ( min-width: 744px ) {
+				border-bottom: none;
+				border-right: 1px solid wp-colors.$gray-300;
+				&:last-child {
+					border-right: none;
+				}
+			}
+		}
+		&.newspack-grid__gutter-8 > * {
+			padding: 8px;
+		}
+		&.newspack-grid__gutter-16 > * {
+			padding: 16px;
+		}
+		&.newspack-grid__gutter-32 > * {
+			padding: 32px;
+		}
+		&.newspack-grid__gutter-64 > * {
+			padding: 64px;
+		}
 	}
 
 	.components-base-control {

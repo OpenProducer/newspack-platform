@@ -25,7 +25,7 @@ class PurchaseInfo extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $latestOrderId;
-    protected $totalAmountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Money::class;
+    protected $totalAmountType = Money::class;
     protected $totalAmountDataType = '';
     /**
      * Latest order id of the purchase.
@@ -48,7 +48,7 @@ class PurchaseInfo extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Money $totalAmount
      */
-    public function setTotalAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Money $totalAmount)
+    public function setTotalAmount(Money $totalAmount)
     {
         $this->totalAmount = $totalAmount;
     }
@@ -61,4 +61,4 @@ class PurchaseInfo extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PurchaseInfo::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_PurchaseInfo');
+class_alias(PurchaseInfo::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_PurchaseInfo');

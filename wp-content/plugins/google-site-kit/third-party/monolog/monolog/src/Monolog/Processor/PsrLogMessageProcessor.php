@@ -19,7 +19,7 @@ use Google\Site_Kit_Dependencies\Monolog\Utils;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class PsrLogMessageProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\ProcessorInterface
+class PsrLogMessageProcessor implements ProcessorInterface
 {
     public const SIMPLE_DATE = "Y-m-d\\TH:i:s.uP";
     /** @var string|null */
@@ -38,18 +38,18 @@ class PsrLogMessageProcessor implements \Google\Site_Kit_Dependencies\Monolog\Pr
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record) : array
+    public function __invoke(array $record): array
     {
-        if (\false === \strpos($record['message'], '{')) {
+        if (\false === strpos($record['message'], '{')) {
             return $record;
         }
         $replacements = [];
         foreach ($record['context'] as $key => $val) {
             $placeholder = '{' . $key . '}';
-            if (\strpos($record['message'], $placeholder) === \false) {
+            if (strpos($record['message'], $placeholder) === \false) {
                 continue;
             }
-            if (\is_null($val) || \is_scalar($val) || \is_object($val) && \method_exists($val, "__toString")) {
+            if (is_null($val) || is_scalar($val) || is_object($val) && method_exists($val, "__toString")) {
                 $replacements[$placeholder] = $val;
             } elseif ($val instanceof \DateTimeInterface) {
                 if (!$this->dateFormat && $val instanceof \Google\Site_Kit_Dependencies\Monolog\DateTimeImmutable) {
@@ -61,18 +61,18 @@ class PsrLogMessageProcessor implements \Google\Site_Kit_Dependencies\Monolog\Pr
                 }
             } elseif ($val instanceof \UnitEnum) {
                 $replacements[$placeholder] = $val instanceof \BackedEnum ? $val->value : $val->name;
-            } elseif (\is_object($val)) {
-                $replacements[$placeholder] = '[object ' . \Google\Site_Kit_Dependencies\Monolog\Utils::getClass($val) . ']';
-            } elseif (\is_array($val)) {
-                $replacements[$placeholder] = 'array' . \Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode($val, null, \true);
+            } elseif (is_object($val)) {
+                $replacements[$placeholder] = '[object ' . Utils::getClass($val) . ']';
+            } elseif (is_array($val)) {
+                $replacements[$placeholder] = 'array' . Utils::jsonEncode($val, null, \true);
             } else {
-                $replacements[$placeholder] = '[' . \gettype($val) . ']';
+                $replacements[$placeholder] = '[' . gettype($val) . ']';
             }
             if ($this->removeUsedContextFields) {
                 unset($record['context'][$key]);
             }
         }
-        $record['message'] = \strtr($record['message'], $replacements);
+        $record['message'] = strtr($record['message'], $replacements);
         return $record;
     }
 }

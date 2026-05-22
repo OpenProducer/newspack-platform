@@ -25,5 +25,5 @@ interface ActivationStrategyInterface
      *
      * @phpstan-param Record $record
      */
-    public function isHandlerActivated(array $record) : bool;
+    public function isHandlerActivated(array $record): bool;
 }

@@ -15,6 +15,7 @@ use Newspack\Reader_Revenue_Emails;
 use Newspack\Everlit_Configuration_Manager;
 use Newspack\Nextdoor;
 use Newspack\WooCommerce_Emails;
+use Newspack\Complianz;
 use function Newspack\google_site_kit_available;
 
 defined( 'ABSPATH' ) || exit;
@@ -113,6 +114,11 @@ class Newspack_Settings extends Wizard {
 				'label' => __( 'Advanced Settings', 'newspack-plugin' ),
 			],
 		];
+		if ( Complianz::is_complianz_active() ) {
+			$newspack_settings['privacy'] = [
+				'label' => __( 'Privacy', 'newspack-plugin' ),
+			];
+		}
 		if ( \Newspack\Optional_Modules\Collections::is_feature_enabled() ) {
 			$newspack_settings['collections'] = [
 				'label' => __( 'Collections', 'newspack-plugin' ),
@@ -147,6 +153,17 @@ class Newspack_Settings extends Wizard {
 				],
 			];
 		}
+		$experimental_tools = \Newspack\Experimental_Tools::get_tools();
+		if ( ! empty( $experimental_tools ) ) {
+			$newspack_settings['experimental-tools'] = [
+				'label'          => __( 'Experimental tools', 'newspack-plugin' ),
+				'activeTabPaths' => [ '/experimental-tools/*' ],
+				'sections'       => [
+					'tools' => $experimental_tools,
+				],
+			];
+		}
+
 		return $newspack_settings;
 	}
 

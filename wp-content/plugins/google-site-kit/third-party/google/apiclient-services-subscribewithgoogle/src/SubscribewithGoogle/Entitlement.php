@@ -173,4 +173,4 @@ class Entitlement extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Entitlement::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_Entitlement');
+class_alias(Entitlement::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_Entitlement');

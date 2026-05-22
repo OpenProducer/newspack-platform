@@ -38,7 +38,7 @@ export default function AccessRules( { rules, onChange }: AccessRulesProps ) {
 
 	return (
 		<>
-			{ Object.keys( availableAccessRules ).map( slug => {
+			{ Object.keys( availableAccessRules ).map( ( slug, index ) => {
 				const ruleConfig = availableAccessRules[ slug ];
 				const rule = rules.find( r => r.slug === slug );
 				return (
@@ -51,7 +51,7 @@ export default function AccessRules( { rules, onChange }: AccessRulesProps ) {
 							onChange={ handleChange( slug ) }
 							onToggle={ handleToggle }
 						/>
-						<CardDivider />
+						{ index < Object.keys( availableAccessRules ).length - 1 && <CardDivider key={ index } /> }
 					</Fragment>
 				);
 			} ) }

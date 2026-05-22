@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class Row extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'metricValues';
-    protected $dimensionValuesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionValue::class;
+    protected $dimensionValuesType = DimensionValue::class;
     protected $dimensionValuesDataType = 'array';
-    protected $metricValuesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricValue::class;
+    protected $metricValuesType = MetricValue::class;
     protected $metricValuesDataType = 'array';
     /**
      * List of requested dimension values. In a PivotReport, dimension_values are
@@ -59,4 +59,4 @@ class Row extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Row::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Row');
+class_alias(Row::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Row');

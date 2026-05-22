@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class RunPivotReportResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'rows';
-    protected $aggregatesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Row::class;
+    protected $aggregatesType = Row::class;
     protected $aggregatesDataType = 'array';
-    protected $dimensionHeadersType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionHeader::class;
+    protected $dimensionHeadersType = DimensionHeader::class;
     protected $dimensionHeadersDataType = 'array';
     /**
      * Identifies what kind of resource this message is. This `kind` is always the
@@ -32,15 +32,15 @@ class RunPivotReportResponse extends \Google\Site_Kit_Dependencies\Google\Collec
      * @var string
      */
     public $kind;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ResponseMetaData::class;
+    protected $metadataType = ResponseMetaData::class;
     protected $metadataDataType = '';
-    protected $metricHeadersType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricHeader::class;
+    protected $metricHeadersType = MetricHeader::class;
     protected $metricHeadersDataType = 'array';
-    protected $pivotHeadersType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PivotHeader::class;
+    protected $pivotHeadersType = PivotHeader::class;
     protected $pivotHeadersDataType = 'array';
-    protected $propertyQuotaType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PropertyQuota::class;
+    protected $propertyQuotaType = PropertyQuota::class;
     protected $propertyQuotaDataType = '';
-    protected $rowsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Row::class;
+    protected $rowsType = Row::class;
     protected $rowsDataType = 'array';
     /**
      * Aggregation of metric values. Can be totals, minimums, or maximums. The
@@ -101,7 +101,7 @@ class RunPivotReportResponse extends \Google\Site_Kit_Dependencies\Google\Collec
      *
      * @param ResponseMetaData $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ResponseMetaData $metadata)
+    public function setMetadata(ResponseMetaData $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -158,7 +158,7 @@ class RunPivotReportResponse extends \Google\Site_Kit_Dependencies\Google\Collec
      *
      * @param PropertyQuota $propertyQuota
      */
-    public function setPropertyQuota(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PropertyQuota $propertyQuota)
+    public function setPropertyQuota(PropertyQuota $propertyQuota)
     {
         $this->propertyQuota = $propertyQuota;
     }
@@ -187,4 +187,4 @@ class RunPivotReportResponse extends \Google\Site_Kit_Dependencies\Google\Collec
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunPivotReportResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_RunPivotReportResponse');
+class_alias(RunPivotReportResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_RunPivotReportResponse');

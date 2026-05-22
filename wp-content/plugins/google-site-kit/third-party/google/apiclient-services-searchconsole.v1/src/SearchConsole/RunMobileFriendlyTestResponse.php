@@ -38,13 +38,13 @@ class RunMobileFriendlyTestResponse extends \Google\Site_Kit_Dependencies\Google
      * @var string
      */
     public $mobileFriendliness;
-    protected $mobileFriendlyIssuesType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\MobileFriendlyIssue::class;
+    protected $mobileFriendlyIssuesType = MobileFriendlyIssue::class;
     protected $mobileFriendlyIssuesDataType = 'array';
-    protected $resourceIssuesType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\ResourceIssue::class;
+    protected $resourceIssuesType = ResourceIssue::class;
     protected $resourceIssuesDataType = 'array';
-    protected $screenshotType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Image::class;
+    protected $screenshotType = Image::class;
     protected $screenshotDataType = '';
-    protected $testStatusType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\TestStatus::class;
+    protected $testStatusType = TestStatus::class;
     protected $testStatusDataType = '';
     /**
      * Test verdict, whether the page is mobile friendly or not.
@@ -102,7 +102,7 @@ class RunMobileFriendlyTestResponse extends \Google\Site_Kit_Dependencies\Google
      *
      * @param Image $screenshot
      */
-    public function setScreenshot(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Image $screenshot)
+    public function setScreenshot(Image $screenshot)
     {
         $this->screenshot = $screenshot;
     }
@@ -118,7 +118,7 @@ class RunMobileFriendlyTestResponse extends \Google\Site_Kit_Dependencies\Google
      *
      * @param TestStatus $testStatus
      */
-    public function setTestStatus(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\TestStatus $testStatus)
+    public function setTestStatus(TestStatus $testStatus)
     {
         $this->testStatus = $testStatus;
     }
@@ -131,4 +131,4 @@ class RunMobileFriendlyTestResponse extends \Google\Site_Kit_Dependencies\Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RunMobileFriendlyTestResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_RunMobileFriendlyTestResponse');
+class_alias(RunMobileFriendlyTestResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_RunMobileFriendlyTestResponse');

@@ -3,9 +3,11 @@
  */
 
 @use "~@wordpress/base-styles/colors" as wp-colors;
+@use "~@wordpress/base-styles/variables" as wp-vars;
 @use "../../../colors/colors.module" as colors;
 
 .newspack-section-header {
+	flex: 1;
 	margin: 64px 0 32px;
 
 	&__container {
@@ -13,26 +15,38 @@
 		&:not(:first-child) {
 			margin-top: 48px;
 		}
-		&.newspack-section-header--has-back-nav {
-			--back-nav-button-size: 36px;
-			margin-left: calc(var(--back-nav-button-size) + 8px);
+		&.newspack-section-header--has-primary-action {
+			display: flex;
+			flex-direction: column;
+			gap: 32px;
 			@media (min-width: 782px) {
-				margin-left: 0;
+				align-items: flex-start;
+				flex-direction: row;
+			}
+		}
+		&.newspack-section-header--has-back-nav {
+			@media (min-width: 782px) {
+				.newspack-section-header__title-container,
+				p {
+					max-width: calc(50% - 16px);
+				}
 			}
 		}
 	}
 
 	&__back-nav {
-		left: calc((var(--back-nav-button-size) + 8px) * -1);
-		position: absolute;
-		top: calc(50% - (var(--back-nav-button-size) / 2));
+		@media (min-width: 1280px) {
+			left: 0;
+			position: absolute;
+			top: 50%;
+			transform: translate(calc(-100% - 8px), -50%);
+		}
 		a,
 		button {
 			color: inherit !important;
 		}
 	}
 
-	&--no-margin,
 	h1,
 	h2,
 	h3,
@@ -45,11 +59,15 @@
 		margin: 0 !important;
 	}
 
+	&--no-margin {
+		margin: 0 !important;
+	}
+
 	&--is-centered {
 		text-align: center;
 	}
 
-	&:not( #{&}--no-margin ) + *:not( #{&} ) {
+	&:not( #{&}--no-margin ) + *:not( #{&} ):not(.newspack-wizard__section-header):not(.newspack-section-header__primary-action) {
 		margin-top: -16px !important;
 	}
 
@@ -68,9 +86,34 @@
 		display: flex;
 		gap: 8px;
 
-		.newspack-badge {
-			margin-top: 4px;
+		h2 {
+			font-size: wp-vars.$font-size-x-large;
+			font-weight: wp-vars.$font-weight-medium;
+			line-height: wp-vars.$font-line-height-x-large;
 		}
+
+		.newspack-section-header__menu,
+		.newspack-section-header__secondary-action,
+		.newspack-badge {
+			margin-top: 8px;
+		}
+	}
+
+	&__menu {
+		align-self: center;
+	}
+
+	&__primary-action {
+		@media (min-width: 782px) {
+			display: flex;
+			flex: 1;
+			justify-content: flex-end;
+		}
+	}
+
+	&__secondary-action {
+		display: flex;
+		margin-left: 8px;
 	}
 
 	&__children {
@@ -116,9 +159,9 @@
 			}
 		}
 		h1 {
-			font-size: 1.25rem;
-			font-weight: 500;
-			line-height: 1.5;
+			font-size: wp-vars.$font-size-x-large;
+			font-weight: wp-vars.$font-weight-medium;
+			line-height: wp-vars.$font-line-height-x-large;
 		}
 	}
 }

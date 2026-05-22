@@ -56,6 +56,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\AsymmetricKey;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\Formats\Keys\PSS;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\PrivateKey;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\PublicKey;
+use Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException;
 use Google\Site_Kit_Dependencies\phpseclib3\Exception\InconsistentSetupException;
 use Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException;
 use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
@@ -64,7 +65,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\AsymmetricKey
+abstract class RSA extends AsymmetricKey
 {
     /**
      * Algorithm Name
@@ -207,13 +208,6 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
      */
     protected static $enableBlinding = \true;
     /**
-     * OpenSSL configuration file name.
-     *
-     * @see self::createKey()
-     * @var ?string
-     */
-    protected static $configFile;
-    /**
      * Smallest Prime
      *
      * Per <http://cseweb.ucsd.edu/~hovav/dist/survey.pdf#page=5>, this number ought not result in primes smaller
@@ -232,6 +226,13 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
      * @var Math\BigInteger
      */
     protected $publicExponent;
+    /**
+     * Forced Engine
+     *
+     * @var ?string
+     * @see parent::forceEngine()
+     */
+    protected static $forcedEngine = null;
     /**
      * Sets the public exponent for key generation
      *
@@ -255,17 +256,6 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
         self::$smallestPrime = $val;
     }
     /**
-     * Sets the OpenSSL config file path
-     *
-     * Set to the empty string to use the default config file
-     *
-     * @param string $val
-     */
-    public static function setOpenSSLConfigPath($val)
-    {
-        self::$configFile = $val;
-    }
-    /**
      * Create a private key
      *
      * The public key can be extracted from the private key
@@ -280,36 +270,43 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
         if ($class->isFinal()) {
             throw new \RuntimeException('createKey() should not be called from final classes (' . static::class . ')');
         }
+        if (self::$forcedEngine == 'libsodium' || self::$forcedEngine == 'OpenSSL' && !function_exists('openssl_pkey_new')) {
+            throw new BadConfigurationException('Engine ' . self::$forcedEngine . ' is forced but unsupported for RSA');
+        }
         $regSize = $bits >> 1;
         // divide by two to see how many bits P and Q would be
         if ($regSize > self::$smallestPrime) {
-            $num_primes = \floor($bits / self::$smallestPrime);
+            $num_primes = floor($bits / self::$smallestPrime);
             $regSize = self::$smallestPrime;
         } else {
             $num_primes = 2;
         }
         if ($num_primes == 2 && $bits >= 384 && self::$defaultExponent == 65537) {
-            if (!isset(self::$engines['PHP'])) {
-                self::useBestEngine();
-            }
-            // OpenSSL uses 65537 as the exponent and requires RSA keys be 384 bits minimum
-            if (self::$engines['OpenSSL']) {
+            // at this point the only two supported values for self::$forcedEngine are OpenSSL, PHP and null
+            // if it's either OpenSSL or null we'll use OpenSSL (if it's available)
+            if (self::$forcedEngine !== 'PHP' && function_exists('openssl_pkey_new')) {
                 $config = [];
                 if (self::$configFile) {
                     $config['config'] = self::$configFile;
                 }
-                $rsa = \openssl_pkey_new(['private_key_bits' => $bits] + $config);
-                \openssl_pkey_export($rsa, $privatekeystr, null, $config);
-                // clear the buffer of error strings stemming from a minimalistic openssl.cnf
-                // https://github.com/php/php-src/issues/11054 talks about other errors this'll pick up
-                while (\openssl_error_string() !== \false) {
+                // OpenSSL uses 65537 as the exponent and requires RSA keys be 384 bits minimum
+                $rsa = openssl_pkey_new(['private_key_bits' => $bits] + $config);
+                if (!$rsa || !openssl_pkey_export($rsa, $privatekeystr, null, $config)) {
+                    if (isset(self::$forcedEngine)) {
+                        throw new BadConfigurationException('Engine OpenSSL is forced but produced an error - ' . openssl_error_string());
+                    }
+                } else {
+                    // clear the buffer of error strings stemming from a minimalistic openssl.cnf
+                    // https://github.com/php/php-src/issues/11054 talks about other errors this'll pick up
+                    while (openssl_error_string() !== \false) {
+                    }
+                    return RSA::load($privatekeystr);
                 }
-                return \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA::load($privatekeystr);
             }
         }
         static $e;
         if (!isset($e)) {
-            $e = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(self::$defaultExponent);
+            $e = new BigInteger(self::$defaultExponent);
         }
         $n = clone self::$one;
         $exponents = $coefficients = $primes = [];
@@ -317,16 +314,15 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
         do {
             for ($i = 1; $i <= $num_primes; $i++) {
                 if ($i != $num_primes) {
-                    $primes[$i] = \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger::randomPrime($regSize);
+                    $primes[$i] = BigInteger::randomPrime($regSize);
                 } else {
-                    \extract(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger::minMaxBits($bits));
-                    /** @var BigInteger $min
-                     *  @var BigInteger $max
-                     */
+                    $minMax = BigInteger::minMaxBits($bits);
+                    $min = $minMax['min'];
+                    $max = $minMax['max'];
                     list($min) = $min->divide($n);
                     $min = $min->add(self::$one);
                     list($max) = $max->divide($n);
-                    $primes[$i] = \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger::randomRangePrime($min, $max);
+                    $primes[$i] = BigInteger::randomRangePrime($min, $max);
                 }
                 // the first coefficient is calculated differently from the rest
                 // ie. instead of being $primes[1]->modInverse($primes[2]), it's $primes[2]->modInverse($primes[1])
@@ -363,7 +359,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
         //     coefficient       INTEGER,  -- (inverse of q) mod p
         //     otherPrimeInfos   OtherPrimeInfos OPTIONAL
         // }
-        $privatekey = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\PrivateKey();
+        $privatekey = new PrivateKey();
         $privatekey->modulus = $n;
         $privatekey->k = $bits >> 3;
         $privatekey->publicExponent = $e;
@@ -388,7 +384,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
      */
     protected static function onLoad(array $components)
     {
-        $key = $components['isPublicKey'] ? new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\PublicKey() : new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\PrivateKey();
+        $key = $components['isPublicKey'] ? new PublicKey() : new PrivateKey();
         $key->modulus = $components['modulus'];
         $key->publicExponent = $components['publicExponent'];
         $key->k = $key->modulus->getLengthInBytes();
@@ -401,7 +397,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
             $key->exponents = $components['exponents'];
             $key->coefficients = $components['coefficients'];
         }
-        if ($components['format'] == \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\Formats\Keys\PSS::class) {
+        if ($components['format'] == PSS::class) {
             // in the X509 world RSA keys are assumed to use PKCS1 padding by default. only if the key is
             // explicitly a PSS key is the use of PSS assumed. phpseclib does not work like this. phpseclib
             // uses PSS padding by default. it assumes the more secure method by default and altho it provides
@@ -423,16 +419,6 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
         return $key;
     }
     /**
-     * Initialize static variables
-     */
-    protected static function initialize_static_variables()
-    {
-        if (!isset(self::$configFile)) {
-            self::$configFile = \dirname(__FILE__) . '/../openssl.cnf';
-        }
-        parent::initialize_static_variables();
-    }
-    /**
      * Constructor
      *
      * PublicKey and PrivateKey objects can only be created from abstract RSA class
@@ -441,7 +427,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
     {
         parent::__construct();
         $this->hLen = $this->hash->getLengthInBytes();
-        $this->mgfHash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash('sha256');
+        $this->mgfHash = new Hash('sha256');
         $this->mgfHLen = $this->mgfHash->getLengthInBytes();
     }
     /**
@@ -459,10 +445,10 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
             return \false;
         }
         $x = $x->toBytes();
-        if (\strlen($x) > $xLen) {
+        if (strlen($x) > $xLen) {
             throw new \OutOfRangeException('Resultant string length out of range');
         }
-        return \str_pad($x, $xLen, \chr(0), \STR_PAD_LEFT);
+        return str_pad($x, $xLen, chr(0), \STR_PAD_LEFT);
     }
     /**
      * Octet-String-to-Integer primitive
@@ -474,7 +460,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
      */
     protected function os2ip($x)
     {
-        return new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($x, 256);
+        return new BigInteger($x, 256);
     }
     /**
      * EMSA-PKCS1-V1_5-ENCODE
@@ -518,13 +504,29 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
                 break;
             case 'sha512/256':
                 $t = "010\r\x06\t`\x86H\x01e\x03\x04\x02\x06\x05\x00\x04 ";
+                break;
+            // the following 3x algorithms are not specified in PKCS1 v2.2, however, some standards none-the-less do use them:
+            // https://sk-eid.github.io/smart-id-documentation/rp-api/changes.html#_security_enhancements
+            // the OIDs are from this URL:
+            // https://csrc.nist.gov/projects/computer-security-objects-register/algorithm-registration#Hash
+            case 'sha3/224':
+                $t = "0-0\r\x06\t`\x86H\x01e\x03\x04\x02\x07\x05\x00\x04\x1c";
+                break;
+            case 'sha3/256':
+                $t = "0-0\r\x06\t`\x86H\x01e\x03\x04\x02\x08\x05\x00\x04 ";
+                break;
+            case 'sha3/384':
+                $t = "0-0\r\x06\t`\x86H\x01e\x03\x04\x02\t\x05\x00\x040";
+                break;
+            case 'sha3/512':
+                $t = "0-0\r\x06\t`\x86H\x01e\x03\x04\x02\n\x05\x00\x04@";
         }
         $t .= $h;
-        $tLen = \strlen($t);
+        $tLen = strlen($t);
         if ($emLen < $tLen + 11) {
             throw new \LengthException('Intended encoded message length too short');
         }
-        $ps = \str_repeat(\chr(0xff), $emLen - $tLen - 3);
+        $ps = str_repeat(chr(0xff), $emLen - $tLen - 3);
         $em = "\x00\x01{$ps}\x00{$t}";
         return $em;
     }
@@ -569,15 +571,31 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
             case 'sha512/256':
                 $t = "0/0\v\x06\t`\x86H\x01e\x03\x04\x02\x06\x04 ";
                 break;
+            // the following 3x algorithms are not specified in PKCS1 v2.2, however, some standards none-the-less do use them:
+            // https://sk-eid.github.io/smart-id-documentation/rp-api/changes.html#_security_enhancements
+            // the OIDs are from this URL:
+            // https://csrc.nist.gov/projects/computer-security-objects-register/algorithm-registration#Hash
+            case 'sha3/224':
+                $t = "0+0\v\x06\t`\x86H\x01e\x03\x04\x02\x07\x04\x1c";
+                break;
+            case 'sha3/256':
+                $t = "0+0\v\x06\t`\x86H\x01e\x03\x04\x02\x08\x04 ";
+                break;
+            case 'sha3/384':
+                $t = "0+0\v\x06\t`\x86H\x01e\x03\x04\x02\t\x040";
+                break;
+            case 'sha3/512':
+                $t = "0+0\v\x06\t`\x86H\x01e\x03\x04\x02\n\x04@";
+                break;
             default:
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('md2 and md5 require NULLs');
+                throw new UnsupportedAlgorithmException('md2 and md5 require NULLs');
         }
         $t .= $h;
-        $tLen = \strlen($t);
+        $tLen = strlen($t);
         if ($emLen < $tLen + 11) {
             throw new \LengthException('Intended encoded message length too short');
         }
-        $ps = \str_repeat(\chr(0xff), $emLen - $tLen - 3);
+        $ps = str_repeat(chr(0xff), $emLen - $tLen - 3);
         $em = "\x00\x01{$ps}\x00{$t}";
         return $em;
     }
@@ -594,12 +612,12 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
     {
         // if $maskLen would yield strings larger than 4GB, PKCS#1 suggests a "Mask too long" error be output.
         $t = '';
-        $count = \ceil($maskLen / $this->mgfHLen);
+        $count = ceil($maskLen / $this->mgfHLen);
         for ($i = 0; $i < $count; $i++) {
-            $c = \pack('N', $i);
+            $c = pack('N', $i);
             $t .= $this->mgfHash->hash($mgfSeed . $c);
         }
-        return \substr($t, 0, $maskLen);
+        return substr($t, 0, $maskLen);
     }
     /**
      * Returns the key size
@@ -624,7 +642,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
     {
         $new = clone $this;
         // Crypt\Hash supports algorithms that PKCS#1 doesn't support.  md5-96 and sha1-96, for example.
-        switch (\strtolower($hash)) {
+        switch (strtolower($hash)) {
             case 'md2':
             case 'md5':
             case 'sha1':
@@ -634,10 +652,14 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
             case 'sha224':
             case 'sha512/224':
             case 'sha512/256':
-                $new->hash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash($hash);
+            case 'sha3/224':
+            case 'sha3/256':
+            case 'sha3/384':
+            case 'sha3/512':
+                $new->hash = new Hash($hash);
                 break;
             default:
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('The only supported hash algorithms are: md2, md5, sha1, sha256, sha384, sha512, sha224, sha512/224, sha512/256');
+                throw new UnsupportedAlgorithmException("The only supported hash algorithms are: md2, md5, sha1, sha256, sha384, sha512, sha224, sha512/224, sha512/256 - {$hash} provided");
         }
         $new->hLen = $new->hash->getLengthInBytes();
         return $new;
@@ -654,7 +676,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
     {
         $new = clone $this;
         // Crypt\Hash supports algorithms that PKCS#1 doesn't support.  md5-96 and sha1-96, for example.
-        switch (\strtolower($hash)) {
+        switch (strtolower($hash)) {
             case 'md2':
             case 'md5':
             case 'sha1':
@@ -664,10 +686,14 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
             case 'sha224':
             case 'sha512/224':
             case 'sha512/256':
-                $new->mgfHash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash($hash);
+            case 'sha3/224':
+            case 'sha3/256':
+            case 'sha3/384':
+            case 'sha3/512':
+                $new->mgfHash = new Hash($hash);
                 break;
             default:
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('The only supported hash algorithms are: md2, md5, sha1, sha256, sha384, sha512, sha224, sha512/224, sha512/256');
+                throw new UnsupportedAlgorithmException("The only supported hash algorithms are: md2, md5, sha1, sha256, sha384, sha512, sha224, sha512/224, sha512/256 - {$hash} provided");
         }
         $new->mgfHLen = $new->mgfHash->getLengthInBytes();
         return $new;
@@ -753,7 +779,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
             }
         }
         if ($encryptedCount > 1) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\InconsistentSetupException('Multiple encryption padding modes have been selected; at most only one should be selected');
+            throw new InconsistentSetupException('Multiple encryption padding modes have been selected; at most only one should be selected');
         }
         $encryptionPadding = $selected;
         $masks = [self::SIGNATURE_PSS, self::SIGNATURE_RELAXED_PKCS1, self::SIGNATURE_PKCS1];
@@ -766,7 +792,7 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
             }
         }
         if ($signatureCount > 1) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\InconsistentSetupException('Multiple signature padding modes have been selected; at most only one should be selected');
+            throw new InconsistentSetupException('Multiple signature padding modes have been selected; at most only one should be selected');
         }
         $signaturePadding = $selected;
         $new = clone $this;
@@ -787,25 +813,6 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
         return $this->signaturePadding | $this->encryptionPadding;
     }
     /**
-     * Returns the current engine being used
-     *
-     * OpenSSL is only used in this class (and it's subclasses) for key generation
-     * Even then it depends on the parameters you're using. It's not used for
-     * multi-prime RSA nor is it used if the key length is outside of the range
-     * supported by OpenSSL
-     *
-     * @see self::useInternalEngine()
-     * @see self::useBestEngine()
-     * @return string
-     */
-    public function getEngine()
-    {
-        if (!isset(self::$engines['PHP'])) {
-            self::useBestEngine();
-        }
-        return self::$engines['OpenSSL'] && self::$defaultExponent == 65537 ? 'OpenSSL' : 'PHP';
-    }
-    /**
      * Enable RSA Blinding
      *
      */
@@ -820,5 +827,129 @@ abstract class RSA extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
     public static function disableBlinding()
     {
         static::$enableBlinding = \false;
+    }
+    /**
+     * Handles OpenSSL encryption / decryption / signature creation / verification
+     *
+     * @param string $func
+     * @param string $message
+     * @param ?string $signature
+     * @return bool|string|null
+     */
+    protected function handleOpenSSL($func, $message, $signature = null)
+    {
+        switch ($func) {
+            case 'openssl_verify':
+            case 'openssl_sign':
+                $paddingType = 'signaturePadding';
+                break;
+            case 'openssl_public_encrypt':
+            case 'openssl_private_decrypt':
+                $paddingType = 'encryptionPadding';
+        }
+        if (self::$forcedEngine === 'libsodium') {
+            throw new BadConfigurationException('Engine libsodium is not supported for RSA');
+        }
+        if (isset(self::$forcedEngine) && self::$forcedEngine !== 'PHP' && $this->{$paddingType} === self::SIGNATURE_RELAXED_PKCS1) {
+            throw new BadConfigurationException('Only the PHP engine can be used with relaxed PKCS1 padding');
+        }
+        if (self::$forcedEngine !== 'PHP') {
+            if (self::$forcedEngine === 'OpenSSL' && !function_exists($func)) {
+                throw new BadConfigurationException('Engine OpenSSL is forced but unavailable for RSA');
+            }
+            if ($this->{$paddingType} === self::SIGNATURE_PSS) {
+                switch (\true) {
+                    case !defined('OPENSSL_PKCS1_PSS_PADDING'):
+                        $error = 'Engine OpenSSL is forced but PSS encryption requires PHP >= 8.5.0';
+                        break;
+                    case $this->hash->getHash() !== $this->mgfHash->getHash():
+                        $error = 'Engine OpenSSL is forced but can\'t be used because the Hash and MGF Hash do not match';
+                        break;
+                    case $this->getSaltLength() !== $this->hLen:
+                        $error = 'Engine OpenSSL is forced but can\'t be used because the salt length doesn\'t match the hash length';
+                }
+            }
+            if ($this->{$paddingType} === self::ENCRYPTION_OAEP) {
+                switch (\true) {
+                    case $this->hash->getHash() !== $this->mgfHash->getHash():
+                        $error = 'Engine OpenSSL is forced but can\'t be used because the Hash and MGF Hash do not match';
+                        break;
+                    case $this->hash->getHash() !== 'sha1' && \PHP_VERSION_ID < 80500:
+                        $error = 'Engine OpenSSL is forced but non-sha1 hashes are only supported on PHP 8.5.0+';
+                        break;
+                    case strlen($this->label):
+                        $error = 'Engine OpenSSL is forced but can\'t be used because the label is not the empty string';
+                }
+            }
+            if (isset($error)) {
+                if (self::$forcedEngine === 'OpenSSL') {
+                    throw new BadConfigurationException($error);
+                }
+            } elseif ($paddingType === 'signaturePadding') {
+                switch (\true) {
+                    case $this->signaturePadding === self::SIGNATURE_PSS && defined('OPENSSL_PKCS1_PSS_PADDING'):
+                    case $this->signaturePadding !== self::SIGNATURE_PSS && function_exists($func):
+                        $key = $this instanceof PrivateKey ? $this->withPassword()->toString('PKCS8') : $this->toString('PKCS8');
+                        if ($func === 'openssl_sign' && strpos($key, 'PUBLIC') !== \false) {
+                            if (self::$forcedEngine === 'OpenSSL') {
+                                throw new BadConfigurationException('Engine OpenSSL is forced but cannot be used because the private key does not have the prime components within it');
+                            }
+                            break;
+                        }
+                        $hash = $this->hash->getHash();
+                        // on github actions, php 7.0 and 7.1 on windows emit the following warning:
+                        // openssl_sign(): supplied key param cannot be coerced into a private key
+                        set_error_handler(function ($errno, $errstr) {
+                            throw new BadConfigurationException("Engine OpenSSL is forced but got error: {$errstr}");
+                        });
+                        try {
+                            $result = $this->signaturePadding === self::SIGNATURE_PSS ? $func($message, $signature, $key, $hash, \OPENSSL_PKCS1_PSS_PADDING) : $func($message, $signature, $key, $hash);
+                        } catch (BadConfigurationException $e) {
+                            if (self::$forcedEngine === 'OpenSSL') {
+                                throw $e;
+                            }
+                            $result = \false;
+                        } finally {
+                            restore_error_handler();
+                        }
+                        if ($func === 'openssl_verify' && $result !== -1 && $result !== \false) {
+                            return (bool) $result;
+                        }
+                        if ($result) {
+                            return $signature;
+                        }
+                        if (self::$forcedEngine === 'OpenSSL') {
+                            throw new BadConfigurationException('Engine OpenSSL is forced but was unable to create signature because of ' . openssl_error_string());
+                        }
+                }
+            } else if ($this->encryptionPadding !== self::ENCRYPTION_OAEP || \PHP_VERSION_ID >= 80500) {
+                $key = $this->toString('PKCS8');
+                if ($func === 'openssl_private_decrypt' && strpos($key, 'PUBLIC') !== \false) {
+                    if ($this->encryptionPadding === self::ENCRYPTION_OAEP) {
+                        if (self::$forcedEngine === 'OpenSSL') {
+                            throw new BadConfigurationException('Engine OpenSSL is forced but cannot be used because openssl_public_decrypt() doesn\'t have a hash parameter like openssl_private_decrypt() does');
+                        }
+                        return null;
+                    }
+                    $func = 'openssl_public_decrypt';
+                }
+                $hash = $this->hash->getHash();
+                $output = '';
+                switch ($this->encryptionPadding) {
+                    case self::ENCRYPTION_NONE:
+                    case self::ENCRYPTION_PKCS1:
+                        $padding = $this->encryptionPadding === self::ENCRYPTION_NONE ? \OPENSSL_NO_PADDING : \OPENSSL_PKCS1_PADDING;
+                        $result = $func($message, $output, $key, $padding);
+                        break;
+                    //case self::ENCRYPTION_OAEP:
+                    default:
+                        $result = $func($message, $output, $key, \OPENSSL_PKCS1_OAEP_PADDING, $hash);
+                }
+                if ($result) {
+                    return $output;
+                }
+            }
+            return null;
+        }
     }
 }

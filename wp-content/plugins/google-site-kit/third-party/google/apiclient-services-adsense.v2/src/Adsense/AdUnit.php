@@ -33,7 +33,7 @@ class AdUnit extends \Google\Site_Kit_Dependencies\Google\Model
      * ads.
      */
     public const STATE_ARCHIVED = 'ARCHIVED';
-    protected $contentAdsSettingsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\ContentAdsSettings::class;
+    protected $contentAdsSettingsType = ContentAdsSettings::class;
     protected $contentAdsSettingsDataType = '';
     /**
      * Required. Display name of the ad unit, as provided when the ad unit was
@@ -67,7 +67,7 @@ class AdUnit extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param ContentAdsSettings $contentAdsSettings
      */
-    public function setContentAdsSettings(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ContentAdsSettings $contentAdsSettings)
+    public function setContentAdsSettings(ContentAdsSettings $contentAdsSettings)
     {
         $this->contentAdsSettings = $contentAdsSettings;
     }
@@ -149,4 +149,4 @@ class AdUnit extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_AdUnit');
+class_alias(AdUnit::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_AdUnit');

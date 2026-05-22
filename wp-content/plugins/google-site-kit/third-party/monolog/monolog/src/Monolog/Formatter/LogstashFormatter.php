@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Monolog\Formatter;
  *
  * @author Tim Mower <timothy.mower@gmail.com>
  */
-class LogstashFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\NormalizerFormatter
+class LogstashFormatter extends NormalizerFormatter
 {
     /**
      * @var string the name of the system for the Logstash log message, used to fill the @source field
@@ -46,8 +46,8 @@ class LogstashFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\
     public function __construct(string $applicationName, ?string $systemName = null, string $extraKey = 'extra', string $contextKey = 'context')
     {
         // logstash requires a ISO 8601 format date with optional millisecond precision.
-        parent::__construct('Y-m-d\\TH:i:s.uP');
-        $this->systemName = $systemName === null ? (string) \gethostname() : $systemName;
+        parent::__construct('Y-m-d\TH:i:s.uP');
+        $this->systemName = $systemName === null ? (string) gethostname() : $systemName;
         $this->applicationName = $applicationName;
         $this->extraKey = $extraKey;
         $this->contextKey = $contextKey;
@@ -55,11 +55,11 @@ class LogstashFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\
     /**
      * {@inheritDoc}
      */
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         $record = parent::format($record);
         if (empty($record['datetime'])) {
-            $record['datetime'] = \gmdate('c');
+            $record['datetime'] = gmdate('c');
         }
         $message = ['@timestamp' => $record['datetime'], '@version' => 1, 'host' => $this->systemName];
         if (isset($record['message'])) {

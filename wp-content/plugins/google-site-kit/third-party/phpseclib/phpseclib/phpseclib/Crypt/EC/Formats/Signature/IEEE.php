@@ -32,16 +32,16 @@ abstract class IEEE
      */
     public static function load($sig)
     {
-        if (!\is_string($sig)) {
+        if (!is_string($sig)) {
             return \false;
         }
-        $len = \strlen($sig);
+        $len = strlen($sig);
         if ($len & 1) {
             return \false;
         }
-        $r = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(\substr($sig, 0, $len >> 1), 256);
-        $s = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(\substr($sig, $len >> 1), 256);
-        return \compact('r', 's');
+        $r = new BigInteger(substr($sig, 0, $len >> 1), 256);
+        $s = new BigInteger(substr($sig, $len >> 1), 256);
+        return compact('r', 's');
     }
     /**
      * Returns a signature in the appropriate format
@@ -52,11 +52,11 @@ abstract class IEEE
      * @param int $length
      * @return string
      */
-    public static function save(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $r, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $s, $curve, $length)
+    public static function save(BigInteger $r, BigInteger $s, $curve, $length)
     {
         $r = $r->toBytes();
         $s = $s->toBytes();
-        $length = (int) \ceil($length / 8);
-        return \str_pad($r, $length, "\x00", \STR_PAD_LEFT) . \str_pad($s, $length, "\x00", \STR_PAD_LEFT);
+        $length = (int) ceil($length / 8);
+        return str_pad($r, $length, "\x00", \STR_PAD_LEFT) . str_pad($s, $length, "\x00", \STR_PAD_LEFT);
     }
 }

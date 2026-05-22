@@ -27,7 +27,7 @@ class GoogleAnalyticsAdminV1alphaListRollupPropertySourceLinksResponse extends \
      * @var string
      */
     public $nextPageToken;
-    protected $rollupPropertySourceLinksType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaRollupPropertySourceLink::class;
+    protected $rollupPropertySourceLinksType = GoogleAnalyticsAdminV1alphaRollupPropertySourceLink::class;
     protected $rollupPropertySourceLinksDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListRollupPropertySourceLinksResponse extends \
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListRollupPropertySourceLinksResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListRollupPropertySourceLinksResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListRollupPropertySourceLinksResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListRollupPropertySourceLinksResponse');

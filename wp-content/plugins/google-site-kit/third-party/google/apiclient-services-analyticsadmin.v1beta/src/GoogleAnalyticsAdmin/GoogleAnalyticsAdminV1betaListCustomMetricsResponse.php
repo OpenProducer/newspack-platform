@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListCustomMetricsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'customMetrics';
-    protected $customMetricsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomMetric::class;
+    protected $customMetricsType = GoogleAnalyticsAdminV1betaCustomMetric::class;
     protected $customMetricsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1betaListCustomMetricsResponse extends \Google\Site_K
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListCustomMetricsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListCustomMetricsResponse');
+class_alias(GoogleAnalyticsAdminV1betaListCustomMetricsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListCustomMetricsResponse');

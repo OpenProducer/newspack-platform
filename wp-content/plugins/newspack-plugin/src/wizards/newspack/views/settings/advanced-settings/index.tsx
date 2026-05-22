@@ -21,8 +21,11 @@ import AuthorBio from './author-bio';
 import FeaturedImagePostsAll from './featured-image-posts-all';
 import FeaturedImagePostsNew from './featured-image-posts-new';
 import MediaCredits from './media-credits';
+import PostDate from './post-date';
 import AccessibilityStatement from './accessibility-statement';
 import PwaDisplayMode from './pwa-display-mode';
+import PrivateTags from './private-tags';
+import PrimaryCategory from './primary-category';
 
 export default function AdvancedSettings() {
 	const [ data, setData ] = hooks.useObjectState< AdvancedSettings >( {
@@ -44,6 +47,13 @@ export default function AdvancedSettings() {
 	const { wizardApiFetch: wizardApiFetchRecirculation, isFetching: isFetchingRecirculation } = useWizardApiFetch(
 		'newspack-settings/advanced-settings/recirculation'
 	);
+	const { wizardApiFetch: wizardApiFetchPrimaryCategory, isFetching: isFetchingPrimaryCategory } =
+		useWizardApiFetch( 'newspack-settings/primary-category' );
+
+	const [ primaryCategoryData, setPrimaryCategoryData ] = hooks.useObjectState< PrimaryCategoryData >( {
+		enabled: true,
+		yoast_active: false,
+	} );
 
 	const fetchThemeMods = () => {
 		wizardApiFetch< ThemeData >(
@@ -67,6 +77,14 @@ export default function AdvancedSettings() {
 			},
 			{
 				onSuccess: setRecirculationData,
+			}
+		);
+		wizardApiFetchPrimaryCategory< PrimaryCategoryData >(
+			{
+				path: '/newspack/v1/wizard/newspack-settings/primary-category',
+			},
+			{
+				onSuccess: setPrimaryCategoryData,
 			}
 		);
 	}, [] );
@@ -112,10 +130,26 @@ export default function AdvancedSettings() {
 				},
 			}
 		);
+		if ( primaryCategoryData.yoast_active ) {
+			wizardApiFetchPrimaryCategory< PrimaryCategoryData >(
+				{
+					path: '/newspack/v1/wizard/newspack-settings/primary-category',
+					method: 'POST',
+					updateCacheMethods: [ 'GET' ],
+					data: primaryCategoryData,
+				},
+				{
+					onSuccess: setPrimaryCategoryData,
+				}
+			);
+		}
 	}
 
 	return (
-		<WizardsTab title={ __( 'Advanced Settings', 'newspack-plugin' ) } isFetching={ isFetching || isFetchingRecirculation }>
+		<WizardsTab
+			title={ __( 'Advanced Settings', 'newspack-plugin' ) }
+			isFetching={ isFetching || isFetchingRecirculation || isFetchingPrimaryCategory }
+		>
 			<WizardSection title={ __( 'Recirculation', 'newspack-plugin' ) }>
 				<Recirculation isFetching={ isFetchingRecirculation } update={ setRecirculationData } data={ recirculationData } />
 			</WizardSection>
@@ -138,6 +172,14 @@ export default function AdvancedSettings() {
 			>
 				<FeaturedImagePostsAll data={ data } postCount={ etc.post_count } update={ setData } />
 			</WizardSection>
+			<WizardSection title={ __( 'Post Date', 'newspack-plugin' ) }>
+				<PostDate update={ setData } data={ data } isFetching={ isFetching } />
+			</WizardSection>
+			{ primaryCategoryData.yoast_active ? (
+				<WizardSection title={ __( 'Primary Category', 'newspack-plugin' ) }>
+					<PrimaryCategory data={ primaryCategoryData } update={ setPrimaryCategoryData } isFetching={ isFetchingPrimaryCategory } />
+				</WizardSection>
+			) : null }
 			<WizardSection title={ __( 'Media Credits', 'newspack-plugin' ) }>
 				<MediaCredits data={ data } update={ setData } />
 			</WizardSection>
@@ -159,6 +201,11 @@ export default function AdvancedSettings() {
 			{ etc.has_pwa_plugin ? (
 				<WizardSection title={ __( 'Progressive Web App', 'newspack-plugin' ) }>
 					<PwaDisplayMode data={ data } update={ setData } isFetching={ isFetching } />
+				</WizardSection>
+			) : null }
+			{ data.newspack_private_tags_settings ? (
+				<WizardSection title={ __( 'Private Tags', 'newspack-plugin' ) }>
+					<PrivateTags data={ data } update={ setData } isFetching={ isFetching } />
 				</WizardSection>
 			) : null }
 			{ errorMessage && <Notice /> }

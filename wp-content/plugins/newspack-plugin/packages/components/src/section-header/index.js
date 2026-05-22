@@ -7,8 +7,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useEffect, useRef } from '@wordpress/element';
-import { Tooltip } from '@wordpress/components'; // eslint-disable-line @wordpress/no-unsafe-wp-apis
-import { Icon, chevronLeft } from '@wordpress/icons';
+import { DropdownMenu, MenuItem, Tooltip, __experimentalHStack as HStack } from '@wordpress/components'; // eslint-disable-line @wordpress/no-unsafe-wp-apis
+import { Icon, chevronLeft, moreVertical } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -59,6 +59,9 @@ const SectionHeader = ( {
 	pageHeader = false,
 	title,
 	id = null,
+	menu,
+	primaryAction,
+	secondaryAction,
 	children = null,
 } ) => {
 	// If id is in the URL as a scrollTo param, scroll to it on render.
@@ -79,16 +82,62 @@ const SectionHeader = ( {
 		centered && 'newspack-section-header--is-centered',
 		isWhite && 'newspack-section-header--is-white',
 		noMargin && 'newspack-section-header--no-margin',
-		pageHeader && 'newspack-section-header--page-header',
-		className
+		pageHeader && 'newspack-section-header--page-header'
 	);
 
 	const HeadingTag = pageHeader ? 'h1' : `h${ heading }`;
 
+	let titleContent = null;
+
+	if ( typeof title === 'string' ) {
+		titleContent = (
+			<div className="newspack-section-header__title-container">
+				<HeadingTag>
+					{ title }
+					{ badges?.length
+						? badges.map( ( badge, i ) => <Badge key={ i } text={ badge.label } level={ badge.level || 'default' } /> )
+						: null }
+				</HeadingTag>
+				{ menu?.length > 0 && (
+					<DropdownMenu className="newspack-section-header__menu" icon={ moreVertical } label={ __( 'More options', 'newspack-plugin' ) }>
+						{ () =>
+							menu.map( ( item, index ) => (
+								<MenuItem
+									key={ index }
+									icon={ item.icon }
+									href={ item.href }
+									onClick={ item.action }
+									disabled={ item.disabled || false }
+									isDestructive={ item.destructive || false }
+								>
+									{ item.label }
+								</MenuItem>
+							) )
+						}
+					</DropdownMenu>
+				) }
+				{ secondaryAction && (
+					<div className="newspack-section-header__secondary-action">
+						<Button variant="link" href={ secondaryAction.href } onClick={ secondaryAction.action }>
+							{ secondaryAction.label }
+						</Button>
+					</div>
+				) }
+			</div>
+		);
+	} else if ( typeof title === 'function' ) {
+		titleContent = <HeadingTag>{ title() }</HeadingTag>;
+	}
+
 	return (
 		<div
 			id={ id }
-			className={ classnames( 'newspack-section-header__container', backNav && 'newspack-section-header--has-back-nav' ) }
+			className={ classnames(
+				'newspack-section-header__container',
+				backNav && 'newspack-section-header--has-back-nav',
+				primaryAction && 'newspack-section-header--has-primary-action',
+				className
+			) }
 			ref={ ref }
 		>
 			<Grid columns={ 1 } gutter={ 8 } className={ classes }>
@@ -97,27 +146,30 @@ const SectionHeader = ( {
 						<Icon icon={ icon } size={ 48 } />
 					</div>
 				) }
-				{ backNav && (
-					<div className="newspack-section-header__back-nav">
-						<Tooltip text={ __( 'Go back', 'newspack-plugin' ) }>
-							<Button href={ backNav } icon={ chevronLeft } variant="tertiary" />
-						</Tooltip>
-					</div>
+				{ backNav ? (
+					<HStack alignment="left" style={ { position: 'relative' } }>
+						<div className="newspack-section-header__back-nav">
+							<Tooltip text={ __( 'Go back', 'newspack-plugin' ) }>
+								<Button href={ backNav } icon={ chevronLeft } variant="tertiary" />
+							</Tooltip>
+						</div>
+						{ titleContent }
+					</HStack>
+				) : (
+					titleContent
 				) }
-				{ typeof title === 'string' && (
-					<div className="newspack-section-header__title-container">
-						<HeadingTag>{ title }</HeadingTag>
-						{ badges?.length
-							? badges.map( ( badge, i ) => <Badge key={ i } text={ badge.label } level={ badge.level || 'default' } /> )
-							: null }
-					</div>
-				) }
-				{ typeof title === 'function' && <HeadingTag>{ title() }</HeadingTag> }
 				{ description && typeof description === 'string' && <p>{ description }</p> }
 				{ typeof description === 'function' && <p>{ description() }</p> }
 				{ description && typeof description !== 'string' && typeof description !== 'function' && <p>{ description }</p> }
 				{ children && <div className="newspack-section-header__children">{ children }</div> }
 			</Grid>
+			{ primaryAction && (
+				<div className="newspack-section-header__primary-action">
+					<Button href={ primaryAction.href } variant="primary" onClick={ primaryAction.action }>
+						{ primaryAction.label }
+					</Button>
+				</div>
+			) }
 		</div>
 	);
 };

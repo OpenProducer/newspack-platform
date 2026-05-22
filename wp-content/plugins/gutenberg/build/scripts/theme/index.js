@@ -72,7 +72,8 @@ var wp;
   var import_element = __toESM(require_element(), 1);
   var ThemeContext = (0, import_element.createContext)({
     resolvedSettings: {
-      color: {}
+      color: {},
+      cursor: void 0
     }
   });
 
@@ -3176,7 +3177,7 @@ var wp;
   var CONTRAST_EPSILON = 4e-3;
   var MAX_BISECTION_ITERATIONS = 10;
   var DEFAULT_SEED_COLORS = {
-    bg: "#f8f8f8",
+    bg: "#fcfcfc",
     primary: "#3858e9",
     info: "#0090ff",
     success: "#4ab866",
@@ -4030,7 +4031,7 @@ var wp;
     ],
     [
       "--wp-components-color-background",
-      "var(--wpds-color-bg-surface-neutral-strong, #ffffff)"
+      "var(--wpds-color-bg-surface-neutral-strong, #fff)"
     ],
     [
       "--wp-components-color-foreground",
@@ -4038,31 +4039,31 @@ var wp;
     ],
     [
       "--wp-components-color-foreground-inverted",
-      "var(--wpds-color-bg-surface-neutral, #f8f8f8)"
+      "var(--wpds-color-bg-surface-neutral, #fcfcfc)"
     ],
     [
       "--wp-components-color-gray-100",
-      "var(--wpds-color-bg-surface-neutral, #f8f8f8)"
+      "var(--wpds-color-bg-surface-neutral, #fcfcfc)"
     ],
     [
       "--wp-components-color-gray-200",
-      "var(--wpds-color-stroke-surface-neutral, #d8d8d8)"
+      "var(--wpds-color-stroke-surface-neutral, #dbdbdb)"
     ],
     [
       "--wp-components-color-gray-300",
-      "var(--wpds-color-stroke-surface-neutral, #d8d8d8)"
+      "var(--wpds-color-stroke-surface-neutral, #dbdbdb)"
     ],
     [
       "--wp-components-color-gray-400",
-      "var(--wpds-color-stroke-interactive-neutral, #8a8a8a)"
+      "var(--wpds-color-stroke-interactive-neutral, #8d8d8d)"
     ],
     [
       "--wp-components-color-gray-600",
-      "var(--wpds-color-stroke-interactive-neutral, #8a8a8a)"
+      "var(--wpds-color-stroke-interactive-neutral, #8d8d8d)"
     ],
     [
       "--wp-components-color-gray-700",
-      "var(--wpds-color-fg-content-neutral-weak, #6d6d6d)"
+      "var(--wpds-color-fg-content-neutral-weak, #707070)"
     ],
     [
       "--wp-components-color-gray-800",
@@ -4131,21 +4132,24 @@ var wp;
     );
   }
   function useThemeProviderStyles({
-    color = {}
+    color = {},
+    cursor
   } = {}) {
     const { resolvedSettings: inheritedSettings } = (0, import_element2.useContext)(ThemeContext);
     const primary = color.primary ?? inheritedSettings.color?.primary ?? DEFAULT_SEED_COLORS.primary;
     const bg = color.bg ?? inheritedSettings.color?.bg ?? DEFAULT_SEED_COLORS.bg;
+    const cursorControl = cursor?.control ?? inheritedSettings.cursor?.control;
     const resolvedSettings = (0, import_element2.useMemo)(
       () => ({
         color: {
           primary,
           bg
-        }
+        },
+        cursor: cursorControl ? { control: cursorControl } : void 0
       }),
-      [primary, bg]
+      [primary, bg, cursorControl]
     );
-    const themeProviderStyles = (0, import_element2.useMemo)(() => {
+    const colorStyles = (0, import_element2.useMemo)(() => {
       const seeds = {
         ...DEFAULT_SEED_COLORS,
         bg,
@@ -4168,6 +4172,15 @@ var wp;
         computedColorRamps
       });
     }, [primary, bg]);
+    const themeProviderStyles = (0, import_element2.useMemo)(
+      () => ({
+        ...colorStyles,
+        ...cursorControl && {
+          "--wpds-cursor-control": cursorControl
+        }
+      }),
+      [colorStyles, cursorControl]
+    );
     return {
       resolvedSettings,
       themeProviderStyles
@@ -4176,11 +4189,88 @@ var wp;
 
   // packages/theme/build-module/theme-provider.mjs
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-  if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='662a5161a8']")) {
-    const style = document.createElement("style");
-    style.setAttribute("data-wp-hash", "662a5161a8");
-    style.appendChild(document.createTextNode(".dba930ea7a9438fd__root{display:contents}"));
-    document.head.appendChild(style);
+  var STYLE_HASH_ATTRIBUTE = "data-wp-hash";
+  function getRuntime() {
+    const globalScope = globalThis;
+    if (globalScope.__wpStyleRuntime) {
+      return globalScope.__wpStyleRuntime;
+    }
+    globalScope.__wpStyleRuntime = {
+      documents: /* @__PURE__ */ new Map(),
+      styles: /* @__PURE__ */ new Map(),
+      injectedStyles: /* @__PURE__ */ new WeakMap()
+    };
+    if (typeof document !== "undefined") {
+      registerDocument(document);
+    }
+    return globalScope.__wpStyleRuntime;
+  }
+  function documentContainsStyleHash(targetDocument, hash) {
+    if (!targetDocument.head) {
+      return false;
+    }
+    for (const style of targetDocument.head.querySelectorAll(
+      `style[${STYLE_HASH_ATTRIBUTE}]`
+    )) {
+      if (style.getAttribute(STYLE_HASH_ATTRIBUTE) === hash) {
+        return true;
+      }
+    }
+    return false;
+  }
+  function injectStyle(targetDocument, hash, css) {
+    if (!targetDocument.head) {
+      return;
+    }
+    const runtime = getRuntime();
+    let injectedStyles = runtime.injectedStyles.get(targetDocument);
+    if (!injectedStyles) {
+      injectedStyles = /* @__PURE__ */ new Set();
+      runtime.injectedStyles.set(targetDocument, injectedStyles);
+    }
+    if (injectedStyles.has(hash)) {
+      return;
+    }
+    if (documentContainsStyleHash(targetDocument, hash)) {
+      injectedStyles.add(hash);
+      return;
+    }
+    const style = targetDocument.createElement("style");
+    style.setAttribute(STYLE_HASH_ATTRIBUTE, hash);
+    style.appendChild(targetDocument.createTextNode(css));
+    targetDocument.head.appendChild(style);
+    injectedStyles.add(hash);
+  }
+  function registerDocument(targetDocument) {
+    const runtime = getRuntime();
+    runtime.documents.set(
+      targetDocument,
+      (runtime.documents.get(targetDocument) ?? 0) + 1
+    );
+    for (const [hash, css] of runtime.styles) {
+      injectStyle(targetDocument, hash, css);
+    }
+    return () => {
+      const count = runtime.documents.get(targetDocument);
+      if (count === void 0) {
+        return;
+      }
+      if (count <= 1) {
+        runtime.documents.delete(targetDocument);
+        return;
+      }
+      runtime.documents.set(targetDocument, count - 1);
+    };
+  }
+  function registerStyle(hash, css) {
+    const runtime = getRuntime();
+    runtime.styles.set(hash, css);
+    for (const targetDocument of runtime.documents.keys()) {
+      injectStyle(targetDocument, hash, css);
+    }
+  }
+  if (typeof process === "undefined" || true) {
+    registerStyle("f4e6e06c6a", ".dba930ea7a9438fd__root{display:contents}");
   }
   var style_default = { "root": "dba930ea7a9438fd__root" };
   function cssObjectToText(values) {
@@ -4204,12 +4294,14 @@ var wp;
   var ThemeProvider = ({
     children,
     color = {},
+    cursor,
     isRoot = false,
     density
   }) => {
     const instanceId = (0, import_element3.useId)();
     const { themeProviderStyles, resolvedSettings } = useThemeProviderStyles({
-      color
+      color,
+      cursor
     });
     const contextValue = (0, import_element3.useMemo)(
       () => ({

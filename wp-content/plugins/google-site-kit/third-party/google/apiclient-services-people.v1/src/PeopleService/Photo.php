@@ -26,7 +26,7 @@ class Photo extends \Google\Site_Kit_Dependencies\Google\Model
      * @var bool
      */
     public $default;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The URL of the photo. You can change the desired size by appending a query
@@ -59,7 +59,7 @@ class Photo extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -91,4 +91,4 @@ class Photo extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Photo::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Photo');
+class_alias(Photo::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Photo');

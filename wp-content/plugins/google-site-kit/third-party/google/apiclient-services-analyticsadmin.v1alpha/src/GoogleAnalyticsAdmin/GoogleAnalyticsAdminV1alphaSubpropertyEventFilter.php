@@ -26,7 +26,7 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilter extends \Google\Site_Kit
      * @var string
      */
     public $applyToProperty;
-    protected $filterClausesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause::class;
+    protected $filterClausesType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause::class;
     protected $filterClausesDataType = 'array';
     /**
      * Output only. Format: properties/{ordinary_property_id}/subpropertyEventFilt
@@ -90,4 +90,4 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilter extends \Google\Site_Kit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilter');
+class_alias(GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilter');

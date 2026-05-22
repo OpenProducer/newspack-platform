@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Psr\Log\LogLevel;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class NullHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Handler
+class NullHandler extends Handler
 {
     /**
      * @var int
@@ -35,21 +35,21 @@ class NullHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Handler
      *
      * @phpstan-param Level|LevelName|LogLevel::* $level
      */
-    public function __construct($level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG)
+    public function __construct($level = Logger::DEBUG)
     {
-        $this->level = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($level);
+        $this->level = Logger::toMonologLevel($level);
     }
     /**
      * {@inheritDoc}
      */
-    public function isHandling(array $record) : bool
+    public function isHandling(array $record): bool
     {
         return $record['level'] >= $this->level;
     }
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         return $record['level'] >= $this->level;
     }

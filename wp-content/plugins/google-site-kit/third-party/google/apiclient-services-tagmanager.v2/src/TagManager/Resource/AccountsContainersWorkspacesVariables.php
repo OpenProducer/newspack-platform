@@ -39,11 +39,11 @@ class AccountsContainersWorkspacesVariables extends \Google\Site_Kit_Dependencie
      * @return Variable
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable $postBody, $optParams = [])
+    public function create($parent, Variable $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Variable::class);
     }
     /**
      * Deletes a GTM Variable. (variables.delete)
@@ -55,7 +55,7 @@ class AccountsContainersWorkspacesVariables extends \Google\Site_Kit_Dependencie
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -69,8 +69,8 @@ class AccountsContainersWorkspacesVariables extends \Google\Site_Kit_Dependencie
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Variable::class);
     }
     /**
      * Lists all GTM Variables of a Container.
@@ -87,8 +87,8 @@ class AccountsContainersWorkspacesVariables extends \Google\Site_Kit_Dependencie
     public function listAccountsContainersWorkspacesVariables($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListVariablesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListVariablesResponse::class);
     }
     /**
      * Reverts changes to a GTM Variable in a GTM Workspace. (variables.revert)
@@ -104,8 +104,8 @@ class AccountsContainersWorkspacesVariables extends \Google\Site_Kit_Dependencie
     public function revert($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('revert', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertVariableResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('revert', [$params], RevertVariableResponse::class);
     }
     /**
      * Updates a GTM Variable. (variables.update)
@@ -119,12 +119,12 @@ class AccountsContainersWorkspacesVariables extends \Google\Site_Kit_Dependencie
      * @return Variable
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable $postBody, $optParams = [])
+    public function update($path, Variable $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Variable::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesVariables::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesVariables');
+class_alias(AccountsContainersWorkspacesVariables::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesVariables');

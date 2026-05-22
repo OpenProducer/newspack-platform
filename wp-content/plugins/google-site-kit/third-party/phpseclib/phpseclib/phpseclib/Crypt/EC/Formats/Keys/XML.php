@@ -55,13 +55,16 @@ abstract class XML
     public static function load($key, $password = '')
     {
         self::initialize_static_variables();
-        if (!\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::is_stringable($key)) {
-            throw new \UnexpectedValueException('Key should be a string - not a ' . \gettype($key));
+        if (!Strings::is_stringable($key)) {
+            throw new \UnexpectedValueException('Key should be a string - not a ' . gettype($key));
         }
-        if (!\class_exists('DOMDocument')) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException('The dom extension is not setup correctly on this system');
+        if (!class_exists('DOMDocument')) {
+            throw new BadConfigurationException('The dom extension is not setup correctly on this system');
         }
-        $use_errors = \libxml_use_internal_errors(\true);
+        $use_errors = libxml_use_internal_errors(\true);
+        if (substr($key, 0, 5) != '<?xml') {
+            $key = '<xml>' . $key . '</xml>';
+        }
         $temp = self::isolateNamespace($key, 'http://www.w3.org/2009/xmldsig11#');
         if ($temp) {
             $key = $temp;
@@ -71,20 +74,17 @@ abstract class XML
             $key = $temp;
         }
         $dom = new \DOMDocument();
-        if (\substr($key, 0, 5) != '<?xml') {
-            $key = '<xml>' . $key . '</xml>';
-        }
         if (!$dom->loadXML($key)) {
-            \libxml_use_internal_errors($use_errors);
+            libxml_use_internal_errors($use_errors);
             throw new \UnexpectedValueException('Key does not appear to contain XML');
         }
         $xpath = new \DOMXPath($dom);
-        \libxml_use_internal_errors($use_errors);
+        libxml_use_internal_errors($use_errors);
         $curve = self::loadCurveByParam($xpath);
         $pubkey = self::query($xpath, 'publickey', 'Public Key is not present');
         $QA = self::query($xpath, 'ecdsakeyvalue')->length ? self::extractPointRFC4050($xpath, $curve) : self::extractPoint("\x00" . $pubkey, $curve);
-        \libxml_use_internal_errors($use_errors);
-        return \compact('curve', 'QA');
+        libxml_use_internal_errors($use_errors);
+        return compact('curve', 'QA');
     }
     /**
      * Case-insensitive xpath query
@@ -98,7 +98,7 @@ abstract class XML
     private static function query(\DOMXPath $xpath, $name, $error = null, $decode = \true)
     {
         $query = '/';
-        $names = \explode('/', $name);
+        $names = explode('/', $name);
         foreach ($names as $name) {
             $query .= "/*[translate(local-name(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$name}']";
         }
@@ -142,7 +142,7 @@ abstract class XML
      */
     private static function decodeValue($value)
     {
-        return \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_decode(\str_replace(["\r", "\n", ' ', "\t"], '', $value));
+        return Strings::base64_decode(str_replace(["\r", "\n", ' ', "\t"], '', $value));
     }
     /**
      * Extract points from an XML document
@@ -151,7 +151,7 @@ abstract class XML
      * @param BaseCurve $curve
      * @return object[]
      */
-    private static function extractPointRFC4050(\DOMXPath $xpath, \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Base $curve)
+    private static function extractPointRFC4050(\DOMXPath $xpath, BaseCurve $curve)
     {
         $x = self::query($xpath, 'publickey/x');
         $y = self::query($xpath, 'publickey/y');
@@ -161,7 +161,7 @@ abstract class XML
         if (!$y->length || !$y->item(0)->hasAttribute('Value')) {
             throw new \RuntimeException('Public Key / Y coordinate not found');
         }
-        $point = [$curve->convertInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($x->item(0)->getAttribute('Value'))), $curve->convertInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($y->item(0)->getAttribute('Value')))];
+        $point = [$curve->convertInteger(new BigInteger($x->item(0)->getAttribute('Value'))), $curve->convertInteger(new BigInteger($y->item(0)->getAttribute('Value')))];
         if (!$curve->verifyPoint($point)) {
             throw new \RuntimeException('Unable to verify that point exists on curve');
         }
@@ -179,14 +179,14 @@ abstract class XML
         $namedCurve = self::query($xpath, 'namedcurve');
         if ($namedCurve->length == 1) {
             $oid = $namedCurve->item(0)->getAttribute('URN');
-            $oid = \preg_replace('#[^\\d.]#', '', $oid);
-            $name = \array_search($oid, self::$curveOIDs);
+            $oid = preg_replace('#[^\d.]#', '', $oid);
+            $name = array_search($oid, self::$curveOIDs);
             if ($name === \false) {
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedCurveException('Curve with OID of ' . $oid . ' is not supported');
+                throw new UnsupportedCurveException('Curve with OID of ' . $oid . ' is not supported');
             }
-            $curve = '\\Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\EC\\Curves\\' . $name;
-            if (!\class_exists($curve)) {
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedCurveException('Named Curve of ' . $name . ' is not supported');
+            $curve = '\\Google\\Site_Kit_Dependencies\\phpseclib3\Crypt\EC\Curves\\' . $name;
+            if (!class_exists($curve)) {
+                throw new UnsupportedCurveException('Named Curve of ' . $name . ' is not supported');
             }
             return new $curve();
         }
@@ -205,7 +205,7 @@ abstract class XML
                 if (!$result->length) {
                     continue 2;
                 }
-                $param = \preg_replace('#.*/#', '', $query);
+                $param = preg_replace('#.*/#', '', $query);
                 ${$param} = self::decodeValue($result->item(0)->textContent);
             }
             break;
@@ -216,18 +216,18 @@ abstract class XML
         $order = self::query($xpath, 'order', 'Order is not present');
         switch ($type) {
             case 'prime-field':
-                $curve = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Prime();
-                $curve->setModulo(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($p, 256));
-                $curve->setCoefficients(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($a, 256), new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($b, 256));
+                $curve = new PrimeCurve();
+                $curve->setModulo(new BigInteger($p, 256));
+                $curve->setCoefficients(new BigInteger($a, 256), new BigInteger($b, 256));
                 $point = self::extractPoint("\x00" . $base, $curve);
                 $curve->setBasePoint(...$point);
-                $curve->setOrder(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($order, 256));
+                $curve->setOrder(new BigInteger($order, 256));
                 return $curve;
             case 'gnb':
             case 'tnb':
             case 'pnb':
             default:
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedCurveException('Field Type of ' . $type . ' is not supported');
+                throw new UnsupportedCurveException('Field Type of ' . $type . ' is not supported');
         }
     }
     /**
@@ -246,7 +246,7 @@ abstract class XML
                 if (!$result->length) {
                     continue 2;
                 }
-                $param = \preg_replace('#.*/#', '', $query);
+                $param = preg_replace('#.*/#', '', $query);
                 ${$param} = $result->item(0)->textContent;
             }
             break;
@@ -258,20 +258,20 @@ abstract class XML
         $order = self::query($xpath, 'order', 'Order is not present', \false);
         switch ($type) {
             case 'prime-field':
-                $curve = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Prime();
-                $p = \str_replace(["\r", "\n", ' ', "\t"], '', $p);
-                $curve->setModulo(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($p));
-                $a = \str_replace(["\r", "\n", ' ', "\t"], '', $a);
-                $b = \str_replace(["\r", "\n", ' ', "\t"], '', $b);
-                $curve->setCoefficients(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($a), new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($b));
-                $x = \str_replace(["\r", "\n", ' ', "\t"], '', $x);
-                $y = \str_replace(["\r", "\n", ' ', "\t"], '', $y);
-                $curve->setBasePoint(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($x), new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($y));
-                $order = \str_replace(["\r", "\n", ' ', "\t"], '', $order);
-                $curve->setOrder(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($order));
+                $curve = new PrimeCurve();
+                $p = str_replace(["\r", "\n", ' ', "\t"], '', $p);
+                $curve->setModulo(new BigInteger($p));
+                $a = str_replace(["\r", "\n", ' ', "\t"], '', $a);
+                $b = str_replace(["\r", "\n", ' ', "\t"], '', $b);
+                $curve->setCoefficients(new BigInteger($a), new BigInteger($b));
+                $x = str_replace(["\r", "\n", ' ', "\t"], '', $x);
+                $y = str_replace(["\r", "\n", ' ', "\t"], '', $y);
+                $curve->setBasePoint(new BigInteger($x), new BigInteger($y));
+                $order = str_replace(["\r", "\n", ' ', "\t"], '', $order);
+                $curve->setOrder(new BigInteger($order));
                 return $curve;
             default:
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedCurveException('Field Type of ' . $type . ' is not supported');
+                throw new UnsupportedCurveException('Field Type of ' . $type . ' is not supported');
         }
     }
     /**
@@ -307,11 +307,11 @@ abstract class XML
      * @param array $options optional
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Base $curve, array $publicKey, array $options = [])
+    public static function savePublicKey(BaseCurve $curve, array $publicKey, array $options = [])
     {
         self::initialize_static_variables();
-        if ($curve instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\TwistedEdwards || $curve instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Montgomery) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedCurveException('TwistedEdwards and Montgomery Curves are not supported');
+        if ($curve instanceof TwistedEdwardsCurve || $curve instanceof MontgomeryCurve) {
+            throw new UnsupportedCurveException('TwistedEdwards and Montgomery Curves are not supported');
         }
         if (empty(static::$namespace)) {
             $pre = $post = '';
@@ -323,7 +323,7 @@ abstract class XML
             return '<' . $pre . 'ECDSAKeyValue xmlns' . $post . '="http://www.w3.org/2001/04/xmldsig-more#">' . "\r\n" . self::encodeXMLParameters($curve, $pre, $options) . "\r\n" . '<' . $pre . 'PublicKey>' . "\r\n" . '<' . $pre . 'X Value="' . $publicKey[0] . '" />' . "\r\n" . '<' . $pre . 'Y Value="' . $publicKey[1] . '" />' . "\r\n" . '</' . $pre . 'PublicKey>' . "\r\n" . '</' . $pre . 'ECDSAKeyValue>';
         }
         $publicKey = "\x04" . $publicKey[0]->toBytes() . $publicKey[1]->toBytes();
-        return '<' . $pre . 'ECDSAKeyValue xmlns' . $post . '="http://www.w3.org/2009/xmldsig11#">' . "\r\n" . self::encodeXMLParameters($curve, $pre, $options) . "\r\n" . '<' . $pre . 'PublicKey>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($publicKey) . '</' . $pre . 'PublicKey>' . "\r\n" . '</' . $pre . 'ECDSAKeyValue>';
+        return '<' . $pre . 'ECDSAKeyValue xmlns' . $post . '="http://www.w3.org/2009/xmldsig11#">' . "\r\n" . self::encodeXMLParameters($curve, $pre, $options) . "\r\n" . '<' . $pre . 'PublicKey>' . Strings::base64_encode($publicKey) . '</' . $pre . 'PublicKey>' . "\r\n" . '</' . $pre . 'ECDSAKeyValue>';
     }
     /**
      * Encode Parameters
@@ -333,12 +333,12 @@ abstract class XML
      * @param array $options optional
      * @return string|false
      */
-    private static function encodeXMLParameters(\Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Base $curve, $pre, array $options = [])
+    private static function encodeXMLParameters(BaseCurve $curve, $pre, array $options = [])
     {
         $result = self::encodeParameters($curve, \true, $options);
         if (isset($result['namedCurve'])) {
             $namedCurve = '<' . $pre . 'NamedCurve URI="urn:oid:' . self::$curveOIDs[$result['namedCurve']] . '" />';
-            return self::$rfc4050 ? '<DomainParameters>' . \str_replace('URI', 'URN', $namedCurve) . '</DomainParameters>' : $namedCurve;
+            return self::$rfc4050 ? '<DomainParameters>' . str_replace('URI', 'URN', $namedCurve) . '</DomainParameters>' : $namedCurve;
         }
         if (self::$rfc4050) {
             $xml = '<' . $pre . 'ExplicitParams>' . "\r\n" . '<' . $pre . 'FieldParams>' . "\r\n";
@@ -351,7 +351,7 @@ abstract class XML
                     list($x, $y) = $curve->getBasePoint();
                     break;
                 default:
-                    throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedCurveException('Field Type of ' . $temp['fieldID']['fieldType'] . ' is not supported');
+                    throw new UnsupportedCurveException('Field Type of ' . $temp['fieldID']['fieldType'] . ' is not supported');
             }
             $xml .= '</' . $pre . 'FieldParams>' . "\r\n" . '<' . $pre . 'CurveParamsType>' . "\r\n" . '<' . $pre . 'A>' . $a . '</' . $pre . 'A>' . "\r\n" . '<' . $pre . 'B>' . $b . '</' . $pre . 'B>' . "\r\n" . '</' . $pre . 'CurveParamsType>' . "\r\n" . '<' . $pre . 'BasePointParams>' . "\r\n" . '<' . $pre . 'BasePoint>' . "\r\n" . '<' . $pre . 'ECPointType>' . "\r\n" . '<' . $pre . 'X>' . $x . '</' . $pre . 'X>' . "\r\n" . '<' . $pre . 'Y>' . $y . '</' . $pre . 'Y>' . "\r\n" . '</' . $pre . 'ECPointType>' . "\r\n" . '</' . $pre . 'BasePoint>' . "\r\n" . '<' . $pre . 'Order>' . $curve->getOrder() . '</' . $pre . 'Order>' . "\r\n" . '</' . $pre . 'BasePointParams>' . "\r\n" . '</' . $pre . 'ExplicitParams>' . "\r\n";
             return $xml;
@@ -361,12 +361,12 @@ abstract class XML
             $temp = $result['specifiedCurve'];
             switch ($temp['fieldID']['fieldType']) {
                 case 'prime-field':
-                    $xml .= '<' . $pre . 'Prime>' . "\r\n" . '<' . $pre . 'P>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($temp['fieldID']['parameters']->toBytes()) . '</' . $pre . 'P>' . "\r\n" . '</' . $pre . 'Prime>' . "\r\n";
+                    $xml .= '<' . $pre . 'Prime>' . "\r\n" . '<' . $pre . 'P>' . Strings::base64_encode($temp['fieldID']['parameters']->toBytes()) . '</' . $pre . 'P>' . "\r\n" . '</' . $pre . 'Prime>' . "\r\n";
                     break;
                 default:
-                    throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedCurveException('Field Type of ' . $temp['fieldID']['fieldType'] . ' is not supported');
+                    throw new UnsupportedCurveException('Field Type of ' . $temp['fieldID']['fieldType'] . ' is not supported');
             }
-            $xml .= '</' . $pre . 'FieldID>' . "\r\n" . '<' . $pre . 'Curve>' . "\r\n" . '<' . $pre . 'A>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($temp['curve']['a']) . '</' . $pre . 'A>' . "\r\n" . '<' . $pre . 'B>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($temp['curve']['b']) . '</' . $pre . 'B>' . "\r\n" . '</' . $pre . 'Curve>' . "\r\n" . '<' . $pre . 'Base>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($temp['base']) . '</' . $pre . 'Base>' . "\r\n" . '<' . $pre . 'Order>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($temp['order']) . '</' . $pre . 'Order>' . "\r\n" . '</' . $pre . 'ECParameters>';
+            $xml .= '</' . $pre . 'FieldID>' . "\r\n" . '<' . $pre . 'Curve>' . "\r\n" . '<' . $pre . 'A>' . Strings::base64_encode($temp['curve']['a']) . '</' . $pre . 'A>' . "\r\n" . '<' . $pre . 'B>' . Strings::base64_encode($temp['curve']['b']) . '</' . $pre . 'B>' . "\r\n" . '</' . $pre . 'Curve>' . "\r\n" . '<' . $pre . 'Base>' . Strings::base64_encode($temp['base']) . '</' . $pre . 'Base>' . "\r\n" . '<' . $pre . 'Order>' . Strings::base64_encode($temp['order']) . '</' . $pre . 'Order>' . "\r\n" . '</' . $pre . 'ECParameters>';
             return $xml;
         }
     }

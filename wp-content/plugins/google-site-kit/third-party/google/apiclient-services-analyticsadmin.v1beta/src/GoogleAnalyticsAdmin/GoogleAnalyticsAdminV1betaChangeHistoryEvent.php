@@ -48,7 +48,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryEvent extends \Google\Site_Kit_Depe
      * @var string
      */
     public $changeTime;
-    protected $changesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaChangeHistoryChange::class;
+    protected $changesType = GoogleAnalyticsAdminV1betaChangeHistoryChange::class;
     protected $changesDataType = 'array';
     /**
      * If true, then the list of changes returned was filtered, and does not
@@ -175,4 +175,4 @@ class GoogleAnalyticsAdminV1betaChangeHistoryEvent extends \Google\Site_Kit_Depe
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaChangeHistoryEvent::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaChangeHistoryEvent');
+class_alias(GoogleAnalyticsAdminV1betaChangeHistoryEvent::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaChangeHistoryEvent');

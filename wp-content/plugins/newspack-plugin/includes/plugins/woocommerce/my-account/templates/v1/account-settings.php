@@ -22,28 +22,11 @@ defined( 'ABSPATH' ) || exit;
 $newspack_reset_password_arg = WooCommerce_My_Account::RESET_PASSWORD_URL_PARAM;
 $newspack_delete_account_arg = WooCommerce_My_Account::DELETE_ACCOUNT_URL_PARAM;
 
-$message = false;
-if ( isset( $_GET['message'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$message = $_GET['message']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-}
-
-$is_error = false;
-if ( isset( $_GET['is_error'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$is_error = $_GET['is_error']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-}
-
 $without_password        = true === Reader_Activation::is_reader_without_password( $user );
 $is_reader               = true === Reader_Activation::is_user_reader( $user );
 $is_email_change_enabled = true === WooCommerce_My_Account::is_email_change_enabled();
 $is_pending_email_change = $user->get( WooCommerce_My_Account::PENDING_EMAIL_CHANGE_META ) ? true : false;
 $display_email           = $is_pending_email_change ? $user->get( WooCommerce_My_Account::PENDING_EMAIL_CHANGE_META ) : $user->user_email;
-?>
-
-<?php
-if ( $message ) {
-	\wc_add_notice( $message, $is_error ? 'error' : 'notice' );
-	\wc_print_notices();
-}
 ?>
 
 <section id="account-profile">

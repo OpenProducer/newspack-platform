@@ -55,8 +55,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single Account. (accounts.get)
@@ -70,8 +70,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccount::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaAccount::class);
     }
     /**
      * Get data sharing settings on an account. Data sharing settings are
@@ -87,8 +87,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function getDataSharingSettings($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getDataSharingSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataSharingSettings::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getDataSharingSettings', [$params], GoogleAnalyticsAdminV1alphaDataSharingSettings::class);
     }
     /**
      * Returns all accounts accessible by the caller. Note that these accounts might
@@ -115,8 +115,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listAccounts($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListAccountsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListAccountsResponse::class);
     }
     /**
      * Updates an account. (accounts.patch)
@@ -133,11 +133,11 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1alphaAccount
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccount $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaAccount $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccount::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaAccount::class);
     }
     /**
      * Requests a ticket for creating an account. (accounts.provisionAccountTicket)
@@ -147,11 +147,11 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1alphaProvisionAccountTicketResponse
      * @throws \Google\Service\Exception
      */
-    public function provisionAccountTicket(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProvisionAccountTicketRequest $postBody, $optParams = [])
+    public function provisionAccountTicket(GoogleAnalyticsAdminV1alphaProvisionAccountTicketRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('provisionAccountTicket', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProvisionAccountTicketResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('provisionAccountTicket', [$params], GoogleAnalyticsAdminV1alphaProvisionAccountTicketResponse::class);
     }
     /**
      * Returns a customized report of data access records. The report provides
@@ -183,11 +183,11 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1alphaRunAccessReportResponse
      * @throws \Google\Service\Exception
      */
-    public function runAccessReport($entity, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaRunAccessReportRequest $postBody, $optParams = [])
+    public function runAccessReport($entity, GoogleAnalyticsAdminV1alphaRunAccessReportRequest $postBody, $optParams = [])
     {
         $params = ['entity' => $entity, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('runAccessReport', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaRunAccessReportResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('runAccessReport', [$params], GoogleAnalyticsAdminV1alphaRunAccessReportResponse::class);
     }
     /**
      * Searches through all changes to an account or its children given the
@@ -202,12 +202,12 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse
      * @throws \Google\Service\Exception
      */
-    public function searchChangeHistoryEvents($account, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsRequest $postBody, $optParams = [])
+    public function searchChangeHistoryEvents($account, GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsRequest $postBody, $optParams = [])
     {
         $params = ['account' => $account, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('searchChangeHistoryEvents', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('searchChangeHistoryEvents', [$params], GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\Accounts::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_Accounts');
+class_alias(Accounts::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_Accounts');

@@ -19,28 +19,28 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccount::class;
+    protected $accountType = GoogleAnalyticsAdminV1betaAccount::class;
     protected $accountDataType = '';
-    protected $conversionEventType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEvent::class;
+    protected $conversionEventType = GoogleAnalyticsAdminV1betaConversionEvent::class;
     protected $conversionEventDataType = '';
-    protected $dataRetentionSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings::class;
+    protected $dataRetentionSettingsType = GoogleAnalyticsAdminV1betaDataRetentionSettings::class;
     protected $dataRetentionSettingsDataType = '';
-    protected $dataStreamType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream::class;
+    protected $dataStreamType = GoogleAnalyticsAdminV1betaDataStream::class;
     protected $dataStreamDataType = '';
-    protected $firebaseLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaFirebaseLink::class;
+    protected $firebaseLinkType = GoogleAnalyticsAdminV1betaFirebaseLink::class;
     protected $firebaseLinkDataType = '';
-    protected $googleAdsLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaGoogleAdsLink::class;
+    protected $googleAdsLinkType = GoogleAnalyticsAdminV1betaGoogleAdsLink::class;
     protected $googleAdsLinkDataType = '';
-    protected $measurementProtocolSecretType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret::class;
+    protected $measurementProtocolSecretType = GoogleAnalyticsAdminV1betaMeasurementProtocolSecret::class;
     protected $measurementProtocolSecretDataType = '';
-    protected $propertyType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class;
+    protected $propertyType = GoogleAnalyticsAdminV1betaProperty::class;
     protected $propertyDataType = '';
     /**
      * A snapshot of an Account resource in change history.
      *
      * @param GoogleAnalyticsAdminV1betaAccount $account
      */
-    public function setAccount(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccount $account)
+    public function setAccount(GoogleAnalyticsAdminV1betaAccount $account)
     {
         $this->account = $account;
     }
@@ -56,7 +56,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends
      *
      * @param GoogleAnalyticsAdminV1betaConversionEvent $conversionEvent
      */
-    public function setConversionEvent(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEvent $conversionEvent)
+    public function setConversionEvent(GoogleAnalyticsAdminV1betaConversionEvent $conversionEvent)
     {
         $this->conversionEvent = $conversionEvent;
     }
@@ -72,7 +72,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends
      *
      * @param GoogleAnalyticsAdminV1betaDataRetentionSettings $dataRetentionSettings
      */
-    public function setDataRetentionSettings(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings $dataRetentionSettings)
+    public function setDataRetentionSettings(GoogleAnalyticsAdminV1betaDataRetentionSettings $dataRetentionSettings)
     {
         $this->dataRetentionSettings = $dataRetentionSettings;
     }
@@ -88,7 +88,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends
      *
      * @param GoogleAnalyticsAdminV1betaDataStream $dataStream
      */
-    public function setDataStream(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream $dataStream)
+    public function setDataStream(GoogleAnalyticsAdminV1betaDataStream $dataStream)
     {
         $this->dataStream = $dataStream;
     }
@@ -104,7 +104,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends
      *
      * @param GoogleAnalyticsAdminV1betaFirebaseLink $firebaseLink
      */
-    public function setFirebaseLink(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaFirebaseLink $firebaseLink)
+    public function setFirebaseLink(GoogleAnalyticsAdminV1betaFirebaseLink $firebaseLink)
     {
         $this->firebaseLink = $firebaseLink;
     }
@@ -120,7 +120,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends
      *
      * @param GoogleAnalyticsAdminV1betaGoogleAdsLink $googleAdsLink
      */
-    public function setGoogleAdsLink(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaGoogleAdsLink $googleAdsLink)
+    public function setGoogleAdsLink(GoogleAnalyticsAdminV1betaGoogleAdsLink $googleAdsLink)
     {
         $this->googleAdsLink = $googleAdsLink;
     }
@@ -136,7 +136,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends
      *
      * @param GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $measurementProtocolSecret
      */
-    public function setMeasurementProtocolSecret(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $measurementProtocolSecret)
+    public function setMeasurementProtocolSecret(GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $measurementProtocolSecret)
     {
         $this->measurementProtocolSecret = $measurementProtocolSecret;
     }
@@ -152,7 +152,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends
      *
      * @param GoogleAnalyticsAdminV1betaProperty $property
      */
-    public function setProperty(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty $property)
+    public function setProperty(GoogleAnalyticsAdminV1betaProperty $property)
     {
         $this->property = $property;
     }
@@ -165,4 +165,4 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource');
+class_alias(GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource');

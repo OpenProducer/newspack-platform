@@ -41,11 +41,11 @@ class PropertiesSubpropertyEventFilters extends \Google\Site_Kit_Dependencies\Go
      * @return GoogleAnalyticsAdminV1alphaSubpropertyEventFilter
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaSubpropertyEventFilter $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class);
     }
     /**
      * Deletes a subproperty event filter. (subpropertyEventFilters.delete)
@@ -61,8 +61,8 @@ class PropertiesSubpropertyEventFilters extends \Google\Site_Kit_Dependencies\Go
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single subproperty Event Filter. (subpropertyEventFilters.get)
@@ -78,8 +78,8 @@ class PropertiesSubpropertyEventFilters extends \Google\Site_Kit_Dependencies\Go
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class);
     }
     /**
      * List all subproperty Event Filters on a property.
@@ -104,8 +104,8 @@ class PropertiesSubpropertyEventFilters extends \Google\Site_Kit_Dependencies\Go
     public function listPropertiesSubpropertyEventFilters($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListSubpropertyEventFiltersResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListSubpropertyEventFiltersResponse::class);
     }
     /**
      * Updates a subproperty Event Filter. (subpropertyEventFilters.patch)
@@ -123,12 +123,12 @@ class PropertiesSubpropertyEventFilters extends \Google\Site_Kit_Dependencies\Go
      * @return GoogleAnalyticsAdminV1alphaSubpropertyEventFilter
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaSubpropertyEventFilter $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesSubpropertyEventFilters::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesSubpropertyEventFilters');
+class_alias(PropertiesSubpropertyEventFilters::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesSubpropertyEventFilters');

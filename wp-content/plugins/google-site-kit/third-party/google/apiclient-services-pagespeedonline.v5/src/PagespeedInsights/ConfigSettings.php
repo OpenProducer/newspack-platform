@@ -140,4 +140,4 @@ class ConfigSettings extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\ConfigSettings::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_ConfigSettings');
+class_alias(ConfigSettings::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_ConfigSettings');

@@ -18,6 +18,6 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath\Reduc
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class DefaultEngine extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath\Reductions\Barrett
+abstract class DefaultEngine extends Barrett
 {
 }

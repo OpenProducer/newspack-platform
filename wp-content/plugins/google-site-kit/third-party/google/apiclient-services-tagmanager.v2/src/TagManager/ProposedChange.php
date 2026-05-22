@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ProposedChange extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'changes';
-    protected $changesType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity::class;
+    protected $changesType = Entity::class;
     protected $changesDataType = 'array';
     /**
      * The list of workspace changes to be applied.
@@ -40,4 +40,4 @@ class ProposedChange extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ProposedChange::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ProposedChange');
+class_alias(ProposedChange::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ProposedChange');

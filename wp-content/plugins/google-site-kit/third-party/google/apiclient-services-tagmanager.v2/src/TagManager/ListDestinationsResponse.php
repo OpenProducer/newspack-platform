@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListDestinationsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'destination';
-    protected $destinationType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Destination::class;
+    protected $destinationType = Destination::class;
     protected $destinationDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListDestinationsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListDestinationsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListDestinationsResponse');
+class_alias(ListDestinationsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListDestinationsResponse');

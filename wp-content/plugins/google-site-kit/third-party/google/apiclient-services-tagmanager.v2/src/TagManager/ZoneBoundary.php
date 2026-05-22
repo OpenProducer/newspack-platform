@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ZoneBoundary extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'customEvaluationTriggerId';
-    protected $conditionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Condition::class;
+    protected $conditionType = Condition::class;
     protected $conditionDataType = 'array';
     /**
      * Custom evaluation trigger IDs. A zone will evaluate its boundary conditions
@@ -64,4 +64,4 @@ class ZoneBoundary extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ZoneBoundary::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ZoneBoundary');
+class_alias(ZoneBoundary::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ZoneBoundary');

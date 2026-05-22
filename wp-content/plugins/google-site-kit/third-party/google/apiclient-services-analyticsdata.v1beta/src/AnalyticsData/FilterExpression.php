@@ -19,20 +19,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 
 class FilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $andGroupType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpressionList::class;
+    protected $andGroupType = FilterExpressionList::class;
     protected $andGroupDataType = '';
-    protected $filterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Filter::class;
+    protected $filterType = Filter::class;
     protected $filterDataType = '';
-    protected $notExpressionType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $notExpressionType = FilterExpression::class;
     protected $notExpressionDataType = '';
-    protected $orGroupType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpressionList::class;
+    protected $orGroupType = FilterExpressionList::class;
     protected $orGroupDataType = '';
     /**
      * The FilterExpressions in and_group have an AND relationship.
      *
      * @param FilterExpressionList $andGroup
      */
-    public function setAndGroup(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpressionList $andGroup)
+    public function setAndGroup(FilterExpressionList $andGroup)
     {
         $this->andGroup = $andGroup;
     }
@@ -49,7 +49,7 @@ class FilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Filter $filter
      */
-    public function setFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Filter $filter)
+    public function setFilter(Filter $filter)
     {
         $this->filter = $filter;
     }
@@ -65,7 +65,7 @@ class FilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FilterExpression $notExpression
      */
-    public function setNotExpression(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression $notExpression)
+    public function setNotExpression(FilterExpression $notExpression)
     {
         $this->notExpression = $notExpression;
     }
@@ -81,7 +81,7 @@ class FilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FilterExpressionList $orGroup
      */
-    public function setOrGroup(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpressionList $orGroup)
+    public function setOrGroup(FilterExpressionList $orGroup)
     {
         $this->orGroup = $orGroup;
     }
@@ -94,4 +94,4 @@ class FilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_FilterExpression');
+class_alias(FilterExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_FilterExpression');

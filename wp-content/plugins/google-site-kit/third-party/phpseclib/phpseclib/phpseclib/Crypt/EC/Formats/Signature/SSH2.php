@@ -31,10 +31,10 @@ abstract class SSH2
      */
     public static function load($sig)
     {
-        if (!\is_string($sig)) {
+        if (!is_string($sig)) {
             return \false;
         }
-        $result = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('ss', $sig);
+        $result = Strings::unpackSSH2('ss', $sig);
         if ($result === \false) {
             return \false;
         }
@@ -48,7 +48,7 @@ abstract class SSH2
             default:
                 return \false;
         }
-        $result = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('ii', $blob);
+        $result = Strings::unpackSSH2('ii', $blob);
         if ($result === \false) {
             return \false;
         }
@@ -62,7 +62,7 @@ abstract class SSH2
      * @param string $curve
      * @return string
      */
-    public static function save(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $r, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $s, $curve)
+    public static function save(BigInteger $r, BigInteger $s, $curve)
     {
         switch ($curve) {
             case 'secp256r1':
@@ -77,7 +77,7 @@ abstract class SSH2
             default:
                 return \false;
         }
-        $blob = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ii', $r, $s);
-        return \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ss', 'ecdsa-sha2-' . $curve, $blob);
+        $blob = Strings::packSSH2('ii', $r, $s);
+        return Strings::packSSH2('ss', 'ecdsa-sha2-' . $curve, $blob);
     }
 }

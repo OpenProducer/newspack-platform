@@ -27,7 +27,7 @@ class GoogleAnalyticsAdminV1alphaListSubpropertyEventFiltersResponse extends \Go
      * @var string
      */
     public $nextPageToken;
-    protected $subpropertyEventFiltersType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class;
+    protected $subpropertyEventFiltersType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class;
     protected $subpropertyEventFiltersDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListSubpropertyEventFiltersResponse extends \Go
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListSubpropertyEventFiltersResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSubpropertyEventFiltersResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListSubpropertyEventFiltersResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSubpropertyEventFiltersResponse');

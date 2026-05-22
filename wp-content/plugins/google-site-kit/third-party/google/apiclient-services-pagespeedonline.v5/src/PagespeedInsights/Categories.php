@@ -20,22 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights;
 class Categories extends \Google\Site_Kit_Dependencies\Google\Model
 {
     protected $internal_gapi_mappings = ["bestPractices" => "best-practices"];
-    protected $accessibilityType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5::class;
+    protected $accessibilityType = LighthouseCategoryV5::class;
     protected $accessibilityDataType = '';
-    protected $bestPracticesType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5::class;
+    protected $bestPracticesType = LighthouseCategoryV5::class;
     protected $bestPracticesDataType = '';
-    protected $performanceType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5::class;
+    protected $performanceType = LighthouseCategoryV5::class;
     protected $performanceDataType = '';
-    protected $pwaType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5::class;
+    protected $pwaType = LighthouseCategoryV5::class;
     protected $pwaDataType = '';
-    protected $seoType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5::class;
+    protected $seoType = LighthouseCategoryV5::class;
     protected $seoDataType = '';
     /**
      * The accessibility category, containing all accessibility related audits.
      *
      * @param LighthouseCategoryV5 $accessibility
      */
-    public function setAccessibility(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5 $accessibility)
+    public function setAccessibility(LighthouseCategoryV5 $accessibility)
     {
         $this->accessibility = $accessibility;
     }
@@ -51,7 +51,7 @@ class Categories extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param LighthouseCategoryV5 $bestPractices
      */
-    public function setBestPractices(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5 $bestPractices)
+    public function setBestPractices(LighthouseCategoryV5 $bestPractices)
     {
         $this->bestPractices = $bestPractices;
     }
@@ -67,7 +67,7 @@ class Categories extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param LighthouseCategoryV5 $performance
      */
-    public function setPerformance(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5 $performance)
+    public function setPerformance(LighthouseCategoryV5 $performance)
     {
         $this->performance = $performance;
     }
@@ -85,7 +85,7 @@ class Categories extends \Google\Site_Kit_Dependencies\Google\Model
      * @deprecated
      * @param LighthouseCategoryV5 $pwa
      */
-    public function setPwa(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5 $pwa)
+    public function setPwa(LighthouseCategoryV5 $pwa)
     {
         $this->pwa = $pwa;
     }
@@ -103,7 +103,7 @@ class Categories extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param LighthouseCategoryV5 $seo
      */
-    public function setSeo(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5 $seo)
+    public function setSeo(LighthouseCategoryV5 $seo)
     {
         $this->seo = $seo;
     }
@@ -116,4 +116,4 @@ class Categories extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Categories::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_Categories');
+class_alias(Categories::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_Categories');

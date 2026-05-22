@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaAccessFilterExpressionList extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'expressions';
-    protected $expressionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpression::class;
+    protected $expressionsType = GoogleAnalyticsAdminV1betaAccessFilterExpression::class;
     protected $expressionsDataType = 'array';
     /**
      * A list of filter expressions.
@@ -40,4 +40,4 @@ class GoogleAnalyticsAdminV1betaAccessFilterExpressionList extends \Google\Site_
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpressionList::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessFilterExpressionList');
+class_alias(GoogleAnalyticsAdminV1betaAccessFilterExpressionList::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessFilterExpressionList');

@@ -51,9 +51,9 @@ class Pagespeedapi extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function runpagespeed($url, $optParams = [])
     {
         $params = ['url' => $url];
-        $params = \array_merge($params, $optParams);
-        return $this->call('runpagespeed', [$params], \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\PagespeedApiPagespeedResponseV5::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('runpagespeed', [$params], PagespeedApiPagespeedResponseV5::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Resource\Pagespeedapi::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_Resource_Pagespeedapi');
+class_alias(Pagespeedapi::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_Resource_Pagespeedapi');

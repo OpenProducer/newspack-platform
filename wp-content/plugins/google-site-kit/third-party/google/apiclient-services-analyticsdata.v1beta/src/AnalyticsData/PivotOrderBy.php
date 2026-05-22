@@ -27,7 +27,7 @@ class PivotOrderBy extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $metricName;
-    protected $pivotSelectionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PivotSelection::class;
+    protected $pivotSelectionsType = PivotSelection::class;
     protected $pivotSelectionsDataType = 'array';
     /**
      * In the response to order by, order rows by this column. Must be a metric
@@ -67,4 +67,4 @@ class PivotOrderBy extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PivotOrderBy::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_PivotOrderBy');
+class_alias(PivotOrderBy::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_PivotOrderBy');

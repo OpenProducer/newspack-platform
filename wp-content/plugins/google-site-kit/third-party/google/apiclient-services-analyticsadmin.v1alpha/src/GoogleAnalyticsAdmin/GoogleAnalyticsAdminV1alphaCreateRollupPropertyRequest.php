@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaCreateRollupPropertyRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'sourceProperties';
-    protected $rollupPropertyType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty::class;
+    protected $rollupPropertyType = GoogleAnalyticsAdminV1alphaProperty::class;
     protected $rollupPropertyDataType = '';
     /**
      * Optional. The resource names of properties that will be sources to the
@@ -34,7 +34,7 @@ class GoogleAnalyticsAdminV1alphaCreateRollupPropertyRequest extends \Google\Sit
      *
      * @param GoogleAnalyticsAdminV1alphaProperty $rollupProperty
      */
-    public function setRollupProperty(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty $rollupProperty)
+    public function setRollupProperty(GoogleAnalyticsAdminV1alphaProperty $rollupProperty)
     {
         $this->rollupProperty = $rollupProperty;
     }
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaCreateRollupPropertyRequest extends \Google\Sit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCreateRollupPropertyRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaCreateRollupPropertyRequest');
+class_alias(GoogleAnalyticsAdminV1alphaCreateRollupPropertyRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaCreateRollupPropertyRequest');

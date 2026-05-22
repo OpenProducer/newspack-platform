@@ -29,86 +29,6 @@ class Audience_Content_Gates extends Wizard {
 	protected $parent_slug = 'newspack-audience';
 
 	/**
-	 * Gate schema properites.
-	 *
-	 * @var array
-	 */
-	protected $gate_properties = [
-		'title'         => [ 'type' => 'string' ],
-		'status'        => [ 'type' => 'string' ],
-		'metering'      => [
-			'type'       => 'object',
-			'properties' => [
-				'enabled'          => [ 'type' => 'boolean' ],
-				'anonymous_count'  => [ 'type' => 'integer' ],
-				'registered_count' => [ 'type' => 'integer' ],
-				'period'           => [ 'type' => 'string' ],
-			],
-		],
-		'content_rules' => [
-			'type'  => 'array',
-			'items' => [
-				'type'       => 'object',
-				'properties' => [
-					'slug'      => [ 'type' => 'string' ],
-					'value'     => [ 'type' => [ 'string', 'array' ] ],
-					'exclusion' => [ 'type' => 'boolean' ],
-				],
-			],
-		],
-		'registration'  => [
-			'type'       => 'object',
-			'properties' => [
-				'active'               => [ 'type' => 'boolean' ],
-				'require_verification' => [ 'type' => 'boolean' ],
-				'gate_layout_id'       => [
-					'type'     => 'integer',
-					'required' => false,
-				],
-				'metering'             => [
-					'type'       => 'object',
-					'properties' => [
-						'enabled' => [ 'type' => 'boolean' ],
-						'count'   => [ 'type' => 'integer' ],
-						'period'  => [ 'type' => 'string' ],
-					],
-				],
-			],
-		],
-		'custom_access' => [
-			'type'       => 'object',
-			'properties' => [
-				'active'         => [ 'type' => 'boolean' ],
-				'metering'       => [
-					'type'       => 'object',
-					'properties' => [
-						'enabled' => [ 'type' => 'boolean' ],
-						'count'   => [ 'type' => 'integer' ],
-						'period'  => [ 'type' => 'string' ],
-					],
-				],
-				'gate_layout_id' => [
-					'type'     => 'integer',
-					'required' => false,
-				],
-				'access_rules'   => [
-					'type'  => 'array',
-					'items' => [
-						'type'  => 'array',
-						'items' => [
-							'type'       => 'object',
-							'properties' => [
-								'slug'  => [ 'type' => 'string' ],
-								'value' => [ 'type' => [ 'string', 'array' ] ],
-							],
-						],
-					],
-				],
-			],
-		],
-	];
-
-	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -154,7 +74,7 @@ class Audience_Content_Gates extends Wizard {
 	 * @return string The wizard name.
 	 */
 	public function get_name() {
-		return esc_html__( 'Audience Management / Access Control', 'newspack-plugin' );
+		return esc_html__( 'Audience Management / Access control', 'newspack-plugin' );
 	}
 
 	/**
@@ -175,7 +95,7 @@ class Audience_Content_Gates extends Wizard {
 			[
 				'api'                     => '/' . NEWSPACK_API_NAMESPACE . '/wizard/' . $this->slug,
 				'available_access_rules'  => Access_Rules::get_access_rules(),
-				'available_content_rules' => Content_Gate::get_content_rules(),
+				'available_content_rules' => Content_Rules::get_content_rules(),
 				'edit_gate_layout_url'    => Content_Gate::get_edit_gate_layout_url(),
 			]
 		);
@@ -184,8 +104,9 @@ class Audience_Content_Gates extends Wizard {
 			'newspack-wizards',
 			'newspackAudience',
 			[
-				'available_products' => Content_Gate::get_purchasable_product_options(),
-				'content_gifting'    => [
+				'available_products'       => Content_Gate::get_purchasable_product_options(),
+				'institutional_access_url' => home_url( Content_Gate\IP_Access_Rule::ENDPOINT ),
+				'content_gifting'          => [
 					'can_use_gifting' => Content_Gifting::can_use_gifting(),
 					'has_metering'    => Content_Gate::is_metering_enabled(),
 				],
@@ -207,7 +128,7 @@ class Audience_Content_Gates extends Wizard {
 		add_submenu_page(
 			$this->parent_slug,
 			$this->get_name(),
-			esc_html__( 'Access Control', 'newspack-plugin' ),
+			esc_html__( 'Access control', 'newspack-plugin' ),
 			$this->capability,
 			$this->slug,
 			[ $this, 'render_wizard' ]
@@ -238,6 +159,24 @@ class Audience_Content_Gates extends Wizard {
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'get_config' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/settings',
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'update_settings' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'advanced_settings' => [
+						'type'       => 'object',
+						'properties' => [
+							'restrict_feeds' => [ 'type' => 'boolean' ],
+						],
+					],
+				],
 			]
 		);
 
@@ -328,8 +267,8 @@ class Audience_Content_Gates extends Wizard {
 				'args'                => [
 					'gate' => [
 						'type'              => 'object',
-						'sanitize_callback' => [ $this, 'sanitize_gate' ],
-						'properties'        => $this->gate_properties,
+						'sanitize_callback' => [ 'Newspack\Content_Gate_API', 'sanitize_gate' ],
+						'properties'        => Content_Gate_API::$gate_properties,
 					],
 				],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
@@ -384,272 +323,40 @@ class Audience_Content_Gates extends Wizard {
 				'args'                => [
 					'gate' => [
 						'type'              => 'object',
-						'sanitize_callback' => [ $this, 'sanitize_gate' ],
-						'properties'        => $this->gate_properties,
+						'sanitize_callback' => [ 'Newspack\Content_Gate_API', 'sanitize_gate' ],
+						'properties'        => Content_Gate_API::$gate_properties,
 					],
 				],
 			]
 		);
-	}
 
-	/**
-	 * Sanitize the gate.
-	 *
-	 * TODO: Handle errors from each sanitization method.
-	 *
-	 * @param array $gate The gate.
-	 *
-	 * @return array The sanitized gate.
-	 */
-	public function sanitize_gate( $gate ) {
-		return [
-			'title'         => isset( $gate['title'] ) ? sanitize_text_field( $gate['title'] ) : __( 'Untitled Content Gate', 'newspack-plugin' ),
-			'priority'      => isset( $gate['priority'] ) ? intval( $gate['priority'] ) : 0,
-			'status'        => isset( $gate['status'] ) && ! empty( $gate['id'] ) ? $this->sanitize_status( $gate['status'], $gate['id'] ) : 'draft',
-			'content_rules' => isset( $gate['content_rules'] ) ? $this->sanitize_rules( $gate['content_rules'], 'content' ) : [],
-			'registration'  => isset( $gate['registration'] ) ? $this->sanitize_registration( $gate['registration'] ) : [],
-			'custom_access' => isset( $gate['custom_access'] ) ? $this->sanitize_custom_access( $gate['custom_access'] ) : [],
-		];
-	}
-
-	/**
-	 * Sanitize registration settings.
-	 *
-	 * @param array $registration The registration settings.
-	 *
-	 * @return array The sanitized registration.
-	 */
-	public function sanitize_registration( $registration ) {
-		$registration = [
-			'active'               => boolval( $registration['active'] ),
-			'metering'             => $this->sanitize_metering( $registration['metering'] ),
-			'require_verification' => boolval( $registration['require_verification'] ),
-		];
-		if ( isset( $registration['gate_layout_id'] ) ) {
-			$registration['gate_layout_id'] = absint( $registration['gate_layout_id'] );
-		}
-		return $registration;
-	}
-
-	/**
-	 * Sanitize custom access settings.
-	 *
-	 * @param array $custom_access The custom access settings.
-	 *
-	 * @return array The sanitized custom access.
-	 */
-	public function sanitize_custom_access( $custom_access ) {
-		$custom_access = [
-			'active'       => boolval( $custom_access['active'] ),
-			'metering'     => $this->sanitize_metering( $custom_access['metering'] ),
-			'access_rules' => $this->sanitize_rules( $custom_access['access_rules'], 'access' ),
-		];
-		if ( isset( $custom_access['gate_layout_id'] ) ) {
-			$custom_access['gate_layout_id'] = absint( $custom_access['gate_layout_id'] );
-		}
-		return $custom_access;
-	}
-
-	/**
-	 * Sanitize the metering.
-	 *
-	 * @param array $metering The metering.
-	 *
-	 * @return array The sanitized metering.
-	 */
-	public function sanitize_metering( $metering ) {
-		$metering = wp_parse_args(
-			$metering,
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/posts-search',
 			[
-				'enabled' => false,
-				'count'   => 0,
-				'period'  => 'month',
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'posts_search' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'search'   => [
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'include'  => [
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'per_page' => [
+						'type'              => 'integer',
+						'default'           => 10,
+						'minimum'           => 1,
+						'maximum'           => 100,
+						'sanitize_callback' => 'absint',
+						'validate_callback' => 'rest_validate_request_arg',
+					],
+				],
 			]
 		);
-		return [
-			'enabled' => boolval( $metering['enabled'] ),
-			'count'   => intval( $metering['count'] ),
-			'period'  => sanitize_text_field( $metering['period'] ),
-		];
-	}
-
-	/**
-	 * Sanitize rules.
-	 *
-	 * @param array  $rules The rules.
-	 * @param string $type The type of rules to sanitize.
-	 *
-	 * @return array The sanitized rules.
-	 */
-	public function sanitize_rules( $rules, $type = 'access' ) {
-		if ( ! is_array( $rules ) ) {
-			return [];
-		}
-
-		// For access rules, handle grouped format.
-		if ( 'access' === $type ) {
-			return $this->sanitize_access_rules_grouped( $rules );
-		}
-
-		// For content rules, use flat format.
-		$sanitized_rules = [];
-		foreach ( $rules as $rule ) {
-			$sanitized = $this->sanitize_content_rule( $rule );
-			if ( ! is_wp_error( $sanitized ) ) {
-				$sanitized_rules[] = $sanitized;
-			}
-		}
-		return $sanitized_rules;
-	}
-
-	/**
-	 * Sanitize access rules in grouped format.
-	 *
-	 * Accepts both flat format [ rule1, rule2 ] and grouped format [ [ rule1, rule2 ], [ rule3 ] ].
-	 * Always returns grouped format [ [ rule1, rule2 ], [ rule3 ] ].
-	 *
-	 * @param array $rules The access rules.
-	 *
-	 * @return array The sanitized access rules in grouped format.
-	 */
-	public function sanitize_access_rules_grouped( $rules ) {
-		if ( empty( $rules ) ) {
-			return [];
-		}
-
-		// Normalize rules (flat or grouped) to a consistent grouped format.
-		$rules = Access_Rules::normalize_rules( $rules );
-
-		// Sanitize each group.
-		$sanitized_groups = [];
-		foreach ( $rules as $group ) {
-			$sanitized_group = $this->sanitize_access_rules_group( $group );
-			if ( ! empty( $sanitized_group ) ) {
-				$sanitized_groups[] = $sanitized_group;
-			}
-		}
-
-		return $sanitized_groups;
-	}
-
-	/**
-	 * Sanitize a single group of access rules.
-	 *
-	 * @param array $group The group of access rules.
-	 *
-	 * @return array The sanitized group.
-	 */
-	public function sanitize_access_rules_group( $group ) {
-		if ( ! is_array( $group ) ) {
-			return [];
-		}
-
-		$sanitized_group = [];
-		foreach ( $group as $rule ) {
-			$sanitized = $this->sanitize_access_rule( $rule );
-			if ( ! is_wp_error( $sanitized ) ) {
-				$sanitized_group[] = $sanitized;
-			}
-		}
-		return $sanitized_group;
-	}
-
-	/**
-	 * Sanitize access rule.
-	 *
-	 * @param array $access_rule The access rule.
-	 *
-	 * @return mixed|\WP_Error The sanitized access rule or error if invalid.
-	 */
-	public function sanitize_access_rule( $access_rule ) {
-		$rules = Access_Rules::get_access_rules();
-		$slug  = sanitize_text_field( $access_rule['slug'] );
-
-		if ( empty( $slug ) || ! isset( $rules[ $slug ] ) ) {
-			return new \WP_Error( 'invalid_access_rule_slug', __( 'Invalid access rule slug.', 'newspack-plugin' ), [ 'status' => 400 ] );
-		}
-
-		$value = null;
-		$rule  = $rules[ $slug ];
-		if ( $rule['is_boolean'] ) {
-			$value = true; // Boolean rules are always true.
-		} elseif ( ! empty( $rule['options'] ) ) {
-			if ( ! is_array( $access_rule['value'] ) ) {
-				return new \WP_Error( 'invalid_access_rule_value', __( 'Invalid access rule value.', 'newspack-plugin' ), [ 'status' => 400 ] );
-			}
-			$value = array_values(
-				array_filter(
-					array_map(
-						function( $value ) {
-							return is_numeric( $value ) ? intval( $value ) : sanitize_text_field( $value );
-						},
-						$access_rule['value']
-					)
-				)
-			);
-		} else {
-			$value = sanitize_text_field( $access_rule['value'] );
-		}
-
-		return [
-			'slug'  => $slug,
-			'value' => $value,
-		];
-	}
-
-	/**
-	 * Sanitize content rule.
-	 *
-	 * @param array $content_rule The content rule.
-	 *
-	 * @return mixed|\WP_Error The sanitized content rule or error if invalid.
-	 */
-	public function sanitize_content_rule( $content_rule ) {
-		$rules = Content_Gate::get_content_rules();
-		$slug  = sanitize_text_field( $content_rule['slug'] );
-
-		if ( empty( $slug ) || ! isset( $rules[ $slug ] ) ) {
-			return new \WP_Error( 'invalid_content_rule_slug', __( 'Invalid content rule slug.', 'newspack-plugin' ), [ 'status' => 400 ] );
-		}
-
-		$rule = $rules[ $slug ];
-		if ( ! empty( $rule['options'] ) ) {
-			$allowed = array_column( $rule['options'], 'value' );
-			$invalid = array_diff( $content_rule['value'], $allowed );
-			if ( ! empty( $invalid ) ) {
-				return new \WP_Error( 'invalid_content_rule_value', __( 'Invalid content rule value.', 'newspack-plugin' ), [ 'status' => 400 ] );
-			}
-		}
-
-		$value     = array_values( array_filter( array_map( 'sanitize_text_field', $content_rule['value'] ) ) );
-		$exclusion = isset( $content_rule['exclusion'] ) ? boolval( $content_rule['exclusion'] ) : false;
-
-		$sanitized_rule = [
-			'slug'  => $slug,
-			'value' => $value,
-		];
-		if ( $exclusion ) {
-			$sanitized_rule['exclusion'] = $exclusion;
-		}
-
-		return $sanitized_rule;
-	}
-
-	/**
-	 * Sanitize the gate post status.
-	 *
-	 * @param string $status Post status.
-	 * @param int    $gate_id Gate ID.
-	 *
-	 * @return string The sanitized post status.
-	 */
-	public function sanitize_status( $status, $gate_id ) {
-		$sanitized = sanitize_text_field( $status );
-		$valid = in_array( $sanitized, Content_Gate::get_post_statuses(), true );
-		if ( ! $valid ) {
-			$sanitized = $gate_id ? get_post_status( $gate_id ) : 'draft';
-		}
-		return $sanitized;
 	}
 
 	/**
@@ -661,11 +368,25 @@ class Audience_Content_Gates extends Wizard {
 		$config = [
 			'gates'  => Content_Gate::get_gates(),
 			'config' => [
-				'countdown_banner' => Metering_Countdown::get_settings(),
-				'content_gifting'  => Content_Gifting::get_settings(),
+				'countdown_banner'  => Metering_Countdown::get_settings(),
+				'content_gifting'   => Content_Gifting::get_settings(),
+				'advanced_settings' => Content_Gate_Advanced_Settings::get_settings(),
 			],
 		];
 		return rest_ensure_response( $config );
+	}
+
+	/**
+	 * Update advanced settings.
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 *
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function update_settings( $request ) {
+		$settings = $request->get_param( 'advanced_settings' );
+		$updated = Content_Gate_Advanced_Settings::update_settings( $settings );
+		return rest_ensure_response( $updated );
 	}
 
 	/**
@@ -794,5 +515,73 @@ class Audience_Content_Gates extends Wizard {
 			$updated_gates[] = $updated_gate;
 		}
 		return rest_ensure_response( $updated_gates );
+	}
+
+	/**
+	 * REST callback: search published posts across all post types supported by content gates.
+	 *
+	 * Returns items in the shape consumed by ContentRuleControlTokenField:
+	 * `[{ id, name, type_label }]`. Supports `search` (by title/content) and `include`
+	 * (comma-separated IDs to hydrate saved tokens regardless of search match).
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 * @return \WP_REST_Response
+	 */
+	public function posts_search( $request ) {
+		$post_types = array_column( Content_Restriction_Control::get_available_post_types(), 'value' );
+
+		$args = [
+			'post_type'      => $post_types,
+			'post_status'    => 'publish',
+			'posts_per_page' => (int) $request->get_param( 'per_page' ),
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+			'no_found_rows'  => true,
+		];
+
+		$include = $request->get_param( 'include' );
+		if ( ! empty( $include ) ) {
+			$ids = array_filter( array_map( 'absint', explode( ',', $include ) ) );
+			if ( empty( $ids ) ) {
+				return rest_ensure_response( [] );
+			}
+			// Broader status filter when hydrating saved tokens so the editor
+			// keeps showing items whose status changed since the gate was saved.
+			$args['post_status']    = [ 'publish', 'draft', 'pending', 'private', 'future' ];
+			$args['post__in']       = $ids;
+			$args['posts_per_page'] = min( count( $ids ), 100 );
+			$args['orderby']        = 'post__in';
+		}
+
+		$search = $request->get_param( 'search' );
+		if ( ! empty( $search ) ) {
+			// Numeric search: treat as a post ID lookup.
+			if ( is_numeric( $search ) ) {
+				$args['p'] = absint( $search );
+			} else {
+				$args['s'] = $search;
+			}
+		}
+
+		$query = new \WP_Query( $args );
+
+		$labels = [];
+		foreach ( $post_types as $pt ) {
+			$obj = get_post_type_object( $pt );
+			$labels[ $pt ] = $obj && isset( $obj->labels->singular_name ) ? $obj->labels->singular_name : $pt;
+		}
+
+		$data = array_map(
+			function( $post ) use ( $labels ) {
+				return [
+					'id'         => (int) $post->ID,
+					'name'       => $post->post_title !== '' ? $post->post_title : sprintf( '#%d', $post->ID ),
+					'type_label' => $labels[ $post->post_type ] ?? $post->post_type,
+				];
+			},
+			$query->posts
+		);
+
+		return rest_ensure_response( $data );
 	}
 }

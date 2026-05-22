@@ -65,4 +65,4 @@ class GoogleAnalyticsAdminV1alphaKeyEventDefaultValue extends \Google\Site_Kit_D
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaKeyEventDefaultValue::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaKeyEventDefaultValue');
+class_alias(GoogleAnalyticsAdminV1alphaKeyEventDefaultValue::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaKeyEventDefaultValue');

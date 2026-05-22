@@ -175,4 +175,4 @@ class GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink extends \Google\S
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink');
+class_alias(GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink');

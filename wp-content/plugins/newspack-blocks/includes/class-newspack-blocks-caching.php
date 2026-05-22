@@ -20,6 +20,13 @@ class Newspack_Blocks_Caching {
 	private static $can_serve_all_blocks_from_cache = true;
 
 	/**
+	 * Track visited reusable block IDs to spot recursion.
+	 *
+	 * @var array<int, bool>
+	 */
+	private static $visited_reusable_blocks = [];
+
+	/**
 	 * Store the current block index. This will be incremented with each cache reading,
 	 * in order to add specificity to the cache key. The cache key consists of the
 	 * hashed block attributes – which may be duplicated on a page – and a unique index.
@@ -47,8 +54,20 @@ class Newspack_Blocks_Caching {
 			add_filter( 'pre_render_block', [ __CLASS__, 'maybe_serve_cached_block' ], 10, 2 );
 			add_filter( 'render_block', [ __CLASS__, 'maybe_cache_block' ], 9999, 2 );
 
+			/**
+			 * Cache duration in seconds for Newspack blocks (Homepage Posts, etc.).
+			 * Blocks are cached for non-logged-in users to improve performance.
+			 * Set to 0 to disable caching.
+			 *
+			 * @constant NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME
+			 * @type     int
+			 * @default  120 (two minutes)
+			 * @status   draft
+			 *
+			 * @example define( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME', 300 );
+			 */
 			if ( ! defined( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME' ) ) {
-				define( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME', 120 ); // Two minutes.
+				define( 'NEWSPACK_BLOCKS_CACHE_BLOCKS_TIME', 120 );
 			}
 		}
 	}
@@ -61,6 +80,7 @@ class Newspack_Blocks_Caching {
 		if ( is_singular() ) {
 			$post = get_post();
 			if ( $post && property_exists( $post, 'post_content' ) ) {
+				self::$visited_reusable_blocks = [];
 				self::check_block_cache_status( parse_blocks( $post->post_content ) );
 				// Reset the index after initial checks.
 				self::$current_block_index = 0;
@@ -77,11 +97,19 @@ class Newspack_Blocks_Caching {
 		$cacheable_block_names = self::get_cacheable_blocks_names();
 		foreach ( $blocks as $block_data ) {
 			// Special treatment for reusable blocks, which are blocks stored in the posts table.
-			if ( $block_data['blockName'] === 'core/block' ) {
-				$reusable_block_post = get_post( $block_data['attrs']['ref'] );
+			if ( $block_data['blockName'] === 'core/block' && ! empty( $block_data['attrs']['ref'] ) ) {
+				$ref = $block_data['attrs']['ref'];
+				// Skip blocks we've seen before to avoid infinite recursion.
+				// Based on core's render_block_core_block().
+				if ( isset( self::$visited_reusable_blocks[ $ref ] ) ) {
+					continue;
+				}
+				self::$visited_reusable_blocks[ $ref ] = true;
+				$reusable_block_post = get_post( $ref );
 				if ( $reusable_block_post && property_exists( $reusable_block_post, 'post_content' ) ) {
 					self::check_block_cache_status( parse_blocks( $reusable_block_post->post_content ) );
 				}
+				unset( self::$visited_reusable_blocks[ $ref ] );
 			}
 			if ( in_array( $block_data['blockName'], $cacheable_block_names, true ) ) {
 				if ( ! self::get_cached_block_data( $block_data ) ) {

@@ -28,7 +28,7 @@ class BatchRunPivotReportsResponse extends \Google\Site_Kit_Dependencies\Google\
      * @var string
      */
     public $kind;
-    protected $pivotReportsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunPivotReportResponse::class;
+    protected $pivotReportsType = RunPivotReportResponse::class;
     protected $pivotReportsDataType = 'array';
     /**
      * Identifies what kind of resource this message is. This `kind` is always the
@@ -66,4 +66,4 @@ class BatchRunPivotReportsResponse extends \Google\Site_Kit_Dependencies\Google\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BatchRunPivotReportsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_BatchRunPivotReportsResponse');
+class_alias(BatchRunPivotReportsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_BatchRunPivotReportsResponse');

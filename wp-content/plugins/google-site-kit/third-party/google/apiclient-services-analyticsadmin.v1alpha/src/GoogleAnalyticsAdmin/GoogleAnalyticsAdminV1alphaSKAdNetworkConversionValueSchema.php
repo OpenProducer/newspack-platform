@@ -37,11 +37,11 @@ class GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema extends \Googl
      * @var string
      */
     public $name;
-    protected $postbackWindowOneType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaPostbackWindow::class;
+    protected $postbackWindowOneType = GoogleAnalyticsAdminV1alphaPostbackWindow::class;
     protected $postbackWindowOneDataType = '';
-    protected $postbackWindowThreeType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaPostbackWindow::class;
+    protected $postbackWindowThreeType = GoogleAnalyticsAdminV1alphaPostbackWindow::class;
     protected $postbackWindowThreeDataType = '';
-    protected $postbackWindowTwoType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaPostbackWindow::class;
+    protected $postbackWindowTwoType = GoogleAnalyticsAdminV1alphaPostbackWindow::class;
     protected $postbackWindowTwoDataType = '';
     /**
      * If enabled, the GA SDK will set conversion values using this schema
@@ -90,7 +90,7 @@ class GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema extends \Googl
      *
      * @param GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowOne
      */
-    public function setPostbackWindowOne(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowOne)
+    public function setPostbackWindowOne(GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowOne)
     {
         $this->postbackWindowOne = $postbackWindowOne;
     }
@@ -111,7 +111,7 @@ class GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema extends \Googl
      *
      * @param GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowThree
      */
-    public function setPostbackWindowThree(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowThree)
+    public function setPostbackWindowThree(GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowThree)
     {
         $this->postbackWindowThree = $postbackWindowThree;
     }
@@ -131,7 +131,7 @@ class GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema extends \Googl
      *
      * @param GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowTwo
      */
-    public function setPostbackWindowTwo(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowTwo)
+    public function setPostbackWindowTwo(GoogleAnalyticsAdminV1alphaPostbackWindow $postbackWindowTwo)
     {
         $this->postbackWindowTwo = $postbackWindowTwo;
     }
@@ -144,4 +144,4 @@ class GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema extends \Googl
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema');
+class_alias(GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema');

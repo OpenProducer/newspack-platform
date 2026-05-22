@@ -10,7 +10,6 @@ import { __ } from '@wordpress/i18n';
 import { Fragment, useState, useEffect } from '@wordpress/element';
 import { BlockControls, useBlockProps } from '@wordpress/block-editor';
 import { SVG, ToolbarGroup, ToolbarButton, Placeholder, Spinner, Notice, Button } from '@wordpress/components';
-import apiFetch from '@wordpress/api-fetch';
 import { pencil } from '@wordpress/icons';
 
 /**
@@ -18,6 +17,7 @@ import { pencil } from '@wordpress/icons';
  */
 import PlacementControl from '../../placements/placement-control';
 import { ad as icon } from '../utils/icons';
+import { fetchProviders, fetchBidders } from './store';
 
 function Edit( { attributes, setAttributes } ) {
 	const [ inFlight, setInFlight ] = useState( false );
@@ -44,15 +44,15 @@ function Edit( { attributes, setAttributes } ) {
 			}
 
 			setInFlight( true );
-			// Fetch providers.
+			// Fetch providers (shared across all ad unit blocks).
 			try {
-				setProviders( await apiFetch( { path: '/newspack-ads/v1/providers' } ) );
+				setProviders( await fetchProviders() );
 			} catch ( err ) {
 				setError( err );
 			}
-			// Fetch bidders.
+			// Fetch bidders (shared across all ad unit blocks).
 			try {
-				setBidders( await apiFetch( { path: '/newspack-ads/v1/bidders' } ) );
+				setBidders( await fetchBidders() );
 			} catch ( err ) {
 				setBiddersError( err );
 			}

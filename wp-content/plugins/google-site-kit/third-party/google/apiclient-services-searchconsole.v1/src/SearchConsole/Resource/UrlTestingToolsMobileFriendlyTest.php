@@ -37,12 +37,12 @@ class UrlTestingToolsMobileFriendlyTest extends \Google\Site_Kit_Dependencies\Go
      * @return RunMobileFriendlyTestResponse
      * @throws \Google\Service\Exception
      */
-    public function run(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RunMobileFriendlyTestRequest $postBody, $optParams = [])
+    public function run(RunMobileFriendlyTestRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('run', [$params], \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RunMobileFriendlyTestResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('run', [$params], RunMobileFriendlyTestResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Resource\UrlTestingToolsMobileFriendlyTest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_Resource_UrlTestingToolsMobileFriendlyTest');
+class_alias(UrlTestingToolsMobileFriendlyTest::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_Resource_UrlTestingToolsMobileFriendlyTest');

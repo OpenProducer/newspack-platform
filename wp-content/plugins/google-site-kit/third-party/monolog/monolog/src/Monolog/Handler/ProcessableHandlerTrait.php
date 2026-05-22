@@ -30,20 +30,20 @@ trait ProcessableHandlerTrait
     /**
      * {@inheritDoc}
      */
-    public function pushProcessor(callable $callback) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
+    public function pushProcessor(callable $callback): HandlerInterface
     {
-        \array_unshift($this->processors, $callback);
+        array_unshift($this->processors, $callback);
         return $this;
     }
     /**
      * {@inheritDoc}
      */
-    public function popProcessor() : callable
+    public function popProcessor(): callable
     {
         if (!$this->processors) {
             throw new \LogicException('You tried to pop from an empty processor stack.');
         }
-        return \array_shift($this->processors);
+        return array_shift($this->processors);
     }
     /**
      * Processes a record.
@@ -51,17 +51,17 @@ trait ProcessableHandlerTrait
      * @phpstan-param  Record $record
      * @phpstan-return Record
      */
-    protected function processRecord(array $record) : array
+    protected function processRecord(array $record): array
     {
         foreach ($this->processors as $processor) {
             $record = $processor($record);
         }
         return $record;
     }
-    protected function resetProcessors() : void
+    protected function resetProcessors(): void
     {
         foreach ($this->processors as $processor) {
-            if ($processor instanceof \Google\Site_Kit_Dependencies\Monolog\ResettableInterface) {
+            if ($processor instanceof ResettableInterface) {
                 $processor->reset();
             }
         }

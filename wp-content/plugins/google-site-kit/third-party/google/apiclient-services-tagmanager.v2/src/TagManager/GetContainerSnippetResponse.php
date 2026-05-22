@@ -65,4 +65,4 @@ class GetContainerSnippetResponse extends \Google\Site_Kit_Dependencies\Google\M
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\GetContainerSnippetResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_GetContainerSnippetResponse');
+class_alias(GetContainerSnippetResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_GetContainerSnippetResponse');

@@ -19,13 +19,13 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaAccessFilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $accessFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilter::class;
+    protected $accessFilterType = GoogleAnalyticsAdminV1alphaAccessFilter::class;
     protected $accessFilterDataType = '';
-    protected $andGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpressionList::class;
+    protected $andGroupType = GoogleAnalyticsAdminV1alphaAccessFilterExpressionList::class;
     protected $andGroupDataType = '';
-    protected $notExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpression::class;
+    protected $notExpressionType = GoogleAnalyticsAdminV1alphaAccessFilterExpression::class;
     protected $notExpressionDataType = '';
-    protected $orGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpressionList::class;
+    protected $orGroupType = GoogleAnalyticsAdminV1alphaAccessFilterExpressionList::class;
     protected $orGroupDataType = '';
     /**
      * A primitive filter. In the same FilterExpression, all of the filter's field
@@ -33,7 +33,7 @@ class GoogleAnalyticsAdminV1alphaAccessFilterExpression extends \Google\Site_Kit
      *
      * @param GoogleAnalyticsAdminV1alphaAccessFilter $accessFilter
      */
-    public function setAccessFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilter $accessFilter)
+    public function setAccessFilter(GoogleAnalyticsAdminV1alphaAccessFilter $accessFilter)
     {
         $this->accessFilter = $accessFilter;
     }
@@ -49,7 +49,7 @@ class GoogleAnalyticsAdminV1alphaAccessFilterExpression extends \Google\Site_Kit
      *
      * @param GoogleAnalyticsAdminV1alphaAccessFilterExpressionList $andGroup
      */
-    public function setAndGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpressionList $andGroup)
+    public function setAndGroup(GoogleAnalyticsAdminV1alphaAccessFilterExpressionList $andGroup)
     {
         $this->andGroup = $andGroup;
     }
@@ -65,7 +65,7 @@ class GoogleAnalyticsAdminV1alphaAccessFilterExpression extends \Google\Site_Kit
      *
      * @param GoogleAnalyticsAdminV1alphaAccessFilterExpression $notExpression
      */
-    public function setNotExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpression $notExpression)
+    public function setNotExpression(GoogleAnalyticsAdminV1alphaAccessFilterExpression $notExpression)
     {
         $this->notExpression = $notExpression;
     }
@@ -81,7 +81,7 @@ class GoogleAnalyticsAdminV1alphaAccessFilterExpression extends \Google\Site_Kit
      *
      * @param GoogleAnalyticsAdminV1alphaAccessFilterExpressionList $orGroup
      */
-    public function setOrGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpressionList $orGroup)
+    public function setOrGroup(GoogleAnalyticsAdminV1alphaAccessFilterExpressionList $orGroup)
     {
         $this->orGroup = $orGroup;
     }
@@ -94,4 +94,4 @@ class GoogleAnalyticsAdminV1alphaAccessFilterExpression extends \Google\Site_Kit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAccessFilterExpression');
+class_alias(GoogleAnalyticsAdminV1alphaAccessFilterExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAccessFilterExpression');

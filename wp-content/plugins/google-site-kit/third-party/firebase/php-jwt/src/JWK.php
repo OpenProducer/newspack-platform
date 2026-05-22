@@ -49,14 +49,14 @@ class JWK
      *
      * @uses parseKey
      */
-    public static function parseKeySet(array $jwks, string $defaultAlg = null) : array
+    public static function parseKeySet(array $jwks, string $defaultAlg = null): array
     {
         $keys = [];
         if (!isset($jwks['keys'])) {
-            throw new \UnexpectedValueException('"keys" member must exist in the JWK Set');
+            throw new UnexpectedValueException('"keys" member must exist in the JWK Set');
         }
         if (empty($jwks['keys'])) {
-            throw new \InvalidArgumentException('JWK Set did not contain any keys');
+            throw new InvalidArgumentException('JWK Set did not contain any keys');
         }
         foreach ($jwks['keys'] as $k => $v) {
             $kid = isset($v['kid']) ? $v['kid'] : $k;
@@ -65,7 +65,7 @@ class JWK
             }
         }
         if (0 === \count($keys)) {
-            throw new \UnexpectedValueException('No supported algorithms found in JWK Set');
+            throw new UnexpectedValueException('No supported algorithms found in JWK Set');
         }
         return $keys;
     }
@@ -84,13 +84,13 @@ class JWK
      *
      * @uses createPemFromModulusAndExponent
      */
-    public static function parseKey(array $jwk, string $defaultAlg = null) : ?\Google\Site_Kit_Dependencies\Firebase\JWT\Key
+    public static function parseKey(array $jwk, string $defaultAlg = null): ?Key
     {
         if (empty($jwk)) {
-            throw new \InvalidArgumentException('JWK must not be empty');
+            throw new InvalidArgumentException('JWK must not be empty');
         }
         if (!isset($jwk['kty'])) {
-            throw new \UnexpectedValueException('JWK must contain a "kty" parameter');
+            throw new UnexpectedValueException('JWK must contain a "kty" parameter');
         }
         if (!isset($jwk['alg'])) {
             if (\is_null($defaultAlg)) {
@@ -98,57 +98,57 @@ class JWK
                 // for parsing in this library. Use the $defaultAlg parameter when parsing the
                 // key set in order to prevent this error.
                 // @see https://datatracker.ietf.org/doc/html/rfc7517#section-4.4
-                throw new \UnexpectedValueException('JWK must contain an "alg" parameter');
+                throw new UnexpectedValueException('JWK must contain an "alg" parameter');
             }
             $jwk['alg'] = $defaultAlg;
         }
         switch ($jwk['kty']) {
             case 'RSA':
                 if (!empty($jwk['d'])) {
-                    throw new \UnexpectedValueException('RSA private keys are not supported');
+                    throw new UnexpectedValueException('RSA private keys are not supported');
                 }
                 if (!isset($jwk['n']) || !isset($jwk['e'])) {
-                    throw new \UnexpectedValueException('RSA keys must contain values for both "n" and "e"');
+                    throw new UnexpectedValueException('RSA keys must contain values for both "n" and "e"');
                 }
                 $pem = self::createPemFromModulusAndExponent($jwk['n'], $jwk['e']);
                 $publicKey = \openssl_pkey_get_public($pem);
                 if (\false === $publicKey) {
-                    throw new \DomainException('OpenSSL error: ' . \openssl_error_string());
+                    throw new DomainException('OpenSSL error: ' . \openssl_error_string());
                 }
-                return new \Google\Site_Kit_Dependencies\Firebase\JWT\Key($publicKey, $jwk['alg']);
+                return new Key($publicKey, $jwk['alg']);
             case 'EC':
                 if (isset($jwk['d'])) {
                     // The key is actually a private key
-                    throw new \UnexpectedValueException('Key data must be for a public key');
+                    throw new UnexpectedValueException('Key data must be for a public key');
                 }
                 if (empty($jwk['crv'])) {
-                    throw new \UnexpectedValueException('crv not set');
+                    throw new UnexpectedValueException('crv not set');
                 }
                 if (!isset(self::EC_CURVES[$jwk['crv']])) {
-                    throw new \DomainException('Unrecognised or unsupported EC curve');
+                    throw new DomainException('Unrecognised or unsupported EC curve');
                 }
                 if (empty($jwk['x']) || empty($jwk['y'])) {
-                    throw new \UnexpectedValueException('x and y not set');
+                    throw new UnexpectedValueException('x and y not set');
                 }
                 $publicKey = self::createPemFromCrvAndXYCoordinates($jwk['crv'], $jwk['x'], $jwk['y']);
-                return new \Google\Site_Kit_Dependencies\Firebase\JWT\Key($publicKey, $jwk['alg']);
+                return new Key($publicKey, $jwk['alg']);
             case 'OKP':
                 if (isset($jwk['d'])) {
                     // The key is actually a private key
-                    throw new \UnexpectedValueException('Key data must be for a public key');
+                    throw new UnexpectedValueException('Key data must be for a public key');
                 }
                 if (!isset($jwk['crv'])) {
-                    throw new \UnexpectedValueException('crv not set');
+                    throw new UnexpectedValueException('crv not set');
                 }
                 if (empty(self::OKP_SUBTYPES[$jwk['crv']])) {
-                    throw new \DomainException('Unrecognised or unsupported OKP key subtype');
+                    throw new DomainException('Unrecognised or unsupported OKP key subtype');
                 }
                 if (empty($jwk['x'])) {
-                    throw new \UnexpectedValueException('x not set');
+                    throw new UnexpectedValueException('x not set');
                 }
                 // This library works internally with EdDSA keys (Ed25519) encoded in standard base64.
-                $publicKey = \Google\Site_Kit_Dependencies\Firebase\JWT\JWT::convertBase64urlToBase64($jwk['x']);
-                return new \Google\Site_Kit_Dependencies\Firebase\JWT\Key($publicKey, $jwk['alg']);
+                $publicKey = JWT::convertBase64urlToBase64($jwk['x']);
+                return new Key($publicKey, $jwk['alg']);
             default:
                 break;
         }
@@ -163,10 +163,10 @@ class JWK
      *
      * @return  string
      */
-    private static function createPemFromCrvAndXYCoordinates(string $crv, string $x, string $y) : string
+    private static function createPemFromCrvAndXYCoordinates(string $crv, string $x, string $y): string
     {
-        $pem = self::encodeDER(self::ASN1_SEQUENCE, self::encodeDER(self::ASN1_SEQUENCE, self::encodeDER(self::ASN1_OBJECT_IDENTIFIER, self::encodeOID(self::OID)) . self::encodeDER(self::ASN1_OBJECT_IDENTIFIER, self::encodeOID(self::EC_CURVES[$crv]))) . self::encodeDER(self::ASN1_BIT_STRING, \chr(0x0) . \chr(0x4) . \Google\Site_Kit_Dependencies\Firebase\JWT\JWT::urlsafeB64Decode($x) . \Google\Site_Kit_Dependencies\Firebase\JWT\JWT::urlsafeB64Decode($y)));
-        return \sprintf("-----BEGIN PUBLIC KEY-----\n%s\n-----END PUBLIC KEY-----\n", \wordwrap(\base64_encode($pem), 64, "\n", \true));
+        $pem = self::encodeDER(self::ASN1_SEQUENCE, self::encodeDER(self::ASN1_SEQUENCE, self::encodeDER(self::ASN1_OBJECT_IDENTIFIER, self::encodeOID(self::OID)) . self::encodeDER(self::ASN1_OBJECT_IDENTIFIER, self::encodeOID(self::EC_CURVES[$crv]))) . self::encodeDER(self::ASN1_BIT_STRING, \chr(0x0) . \chr(0x4) . JWT::urlsafeB64Decode($x) . JWT::urlsafeB64Decode($y)));
+        return sprintf("-----BEGIN PUBLIC KEY-----\n%s\n-----END PUBLIC KEY-----\n", wordwrap(base64_encode($pem), 64, "\n", \true));
     }
     /**
      * Create a public key represented in PEM format from RSA modulus and exponent information
@@ -178,10 +178,10 @@ class JWK
      *
      * @uses encodeLength
      */
-    private static function createPemFromModulusAndExponent(string $n, string $e) : string
+    private static function createPemFromModulusAndExponent(string $n, string $e): string
     {
-        $mod = \Google\Site_Kit_Dependencies\Firebase\JWT\JWT::urlsafeB64Decode($n);
-        $exp = \Google\Site_Kit_Dependencies\Firebase\JWT\JWT::urlsafeB64Decode($e);
+        $mod = JWT::urlsafeB64Decode($n);
+        $exp = JWT::urlsafeB64Decode($e);
         $modulus = \pack('Ca*a*', 2, self::encodeLength(\strlen($mod)), $mod);
         $publicExponent = \pack('Ca*a*', 2, self::encodeLength(\strlen($exp)), $exp);
         $rsaPublicKey = \pack('Ca*a*a*', 48, self::encodeLength(\strlen($modulus) + \strlen($publicExponent)), $modulus, $publicExponent);
@@ -202,7 +202,7 @@ class JWK
      * @param int $length
      * @return string
      */
-    private static function encodeLength(int $length) : string
+    private static function encodeLength(int $length): string
     {
         if ($length <= 0x7f) {
             return \chr($length);
@@ -218,7 +218,7 @@ class JWK
      * @param   string  $value the value to encode
      * @return  string  the encoded object
      */
-    private static function encodeDER(int $type, string $value) : string
+    private static function encodeDER(int $type, string $value): string
     {
         $tag_header = 0;
         if ($type === self::ASN1_SEQUENCE) {
@@ -236,12 +236,12 @@ class JWK
      * @param   string $oid the OID string
      * @return  string the binary DER-encoded OID
      */
-    private static function encodeOID(string $oid) : string
+    private static function encodeOID(string $oid): string
     {
-        $octets = \explode('.', $oid);
+        $octets = explode('.', $oid);
         // Get the first octet
-        $first = (int) \array_shift($octets);
-        $second = (int) \array_shift($octets);
+        $first = (int) array_shift($octets);
+        $second = (int) array_shift($octets);
         $oid = \chr($first * 40 + $second);
         // Iterate over subsequent octets
         foreach ($octets as $octet) {
@@ -256,8 +256,8 @@ class JWK
             }
             $bin[0] = $bin[0] & \chr(0x7f);
             // Convert to big endian if necessary
-            if (\pack('V', 65534) == \pack('L', 65534)) {
-                $oid .= \strrev($bin);
+            if (pack('V', 65534) == pack('L', 65534)) {
+                $oid .= strrev($bin);
             } else {
                 $oid .= $bin;
             }

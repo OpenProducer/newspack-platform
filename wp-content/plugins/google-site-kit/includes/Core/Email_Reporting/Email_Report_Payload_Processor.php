@@ -10,6 +10,8 @@
 
 namespace Google\Site_Kit\Core\Email_Reporting;
 
+use Google\Site_Kit\Core\Util\BC_Functions;
+
 /**
  * Helper class to normalize and process report payloads for email sections.
  *
@@ -94,20 +96,20 @@ class Email_Report_Payload_Processor {
 		}
 
 		// Ensure dates are localized strings (Y-m-d) using site timezone.
-		$timezone = function_exists( 'wp_timezone' ) ? wp_timezone() : null;
+		$timezone = BC_Functions::wp_timezone();
 		if ( function_exists( 'wp_date' ) && $timezone ) {
-			$start_timestamp = strtotime( $start );
-			$end_timestamp   = strtotime( $end );
-			if ( $start_timestamp && $end_timestamp ) {
-				$start = wp_date( 'Y-m-d', $start_timestamp, $timezone );
-				$end   = wp_date( 'Y-m-d', $end_timestamp, $timezone );
+			$start_date = date_create_immutable( $start, $timezone );
+			$end_date   = date_create_immutable( $end, $timezone );
+			if ( $start_date && $end_date ) {
+				$start = wp_date( 'Y-m-d', $start_date->getTimestamp(), $timezone );
+				$end   = wp_date( 'Y-m-d', $end_date->getTimestamp(), $timezone );
 			}
 			if ( null !== $compare_start && null !== $compare_end ) {
-				$compare_start_timestamp = strtotime( $compare_start );
-				$compare_end_timestamp   = strtotime( $compare_end );
-				if ( $compare_start_timestamp && $compare_end_timestamp ) {
-					$compare_start = wp_date( 'Y-m-d', $compare_start_timestamp, $timezone );
-					$compare_end   = wp_date( 'Y-m-d', $compare_end_timestamp, $timezone );
+				$compare_start_date = date_create_immutable( $compare_start, $timezone );
+				$compare_end_date   = date_create_immutable( $compare_end, $timezone );
+				if ( $compare_start_date && $compare_end_date ) {
+					$compare_start = wp_date( 'Y-m-d', $compare_start_date->getTimestamp(), $timezone );
+					$compare_end   = wp_date( 'Y-m-d', $compare_end_date->getTimestamp(), $timezone );
 				}
 			}
 		}
@@ -173,7 +175,7 @@ class Email_Report_Payload_Processor {
 				}
 				$metadata['metrics'][] = array(
 					'name' => $metric['name'],
-					'type' => isset( $metric['type'] ) ? $metric['type'] : 'TYPE_INTEGER',
+					'type' => $metric['type'] ?? 'TYPE_INTEGER',
 				);
 			}
 		}
@@ -182,7 +184,7 @@ class Email_Report_Payload_Processor {
 			$metadata['title'] = $report['title'];
 		}
 
-		$metadata['row_count'] = isset( $report['rowCount'] ) ? $report['rowCount'] : 0;
+		$metadata['row_count'] = $report['rowCount'] ?? 0;
 
 		return $metadata;
 	}

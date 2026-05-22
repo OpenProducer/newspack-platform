@@ -27,7 +27,7 @@ class PersonResponse extends \Google\Site_Kit_Dependencies\Google\Model
      * @var int
      */
     public $httpStatusCode;
-    protected $personType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $personType = Person::class;
     protected $personDataType = '';
     /**
      * The original requested resource name. May be different than the resource
@@ -38,7 +38,7 @@ class PersonResponse extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $requestedResourceName;
-    protected $statusType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Status::class;
+    protected $statusType = Status::class;
     protected $statusDataType = '';
     /**
      * **DEPRECATED** (Please use status instead) [HTTP 1.1 status code]
@@ -64,7 +64,7 @@ class PersonResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Person $person
      */
-    public function setPerson(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person $person)
+    public function setPerson(Person $person)
     {
         $this->person = $person;
     }
@@ -99,7 +99,7 @@ class PersonResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Status $status
      */
-    public function setStatus(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Status $status)
+    public function setStatus(Status $status)
     {
         $this->status = $status;
     }
@@ -112,4 +112,4 @@ class PersonResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\PersonResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_PersonResponse');
+class_alias(PersonResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_PersonResponse');

@@ -55,7 +55,7 @@ class Variable extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $fingerprint;
-    protected $formatValueType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\VariableFormatValue::class;
+    protected $formatValueType = VariableFormatValue::class;
     protected $formatValueDataType = '';
     /**
      * Variable display name.
@@ -69,7 +69,7 @@ class Variable extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $notes;
-    protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $parameterType = Parameter::class;
     protected $parameterDataType = 'array';
     /**
      * Parent folder id.
@@ -209,7 +209,7 @@ class Variable extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param VariableFormatValue $formatValue
      */
-    public function setFormatValue(\Google\Site_Kit_Dependencies\Google\Service\TagManager\VariableFormatValue $formatValue)
+    public function setFormatValue(VariableFormatValue $formatValue)
     {
         $this->formatValue = $formatValue;
     }
@@ -398,4 +398,4 @@ class Variable extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Variable');
+class_alias(Variable::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Variable');

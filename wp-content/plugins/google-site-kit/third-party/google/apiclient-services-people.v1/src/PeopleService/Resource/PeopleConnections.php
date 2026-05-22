@@ -87,9 +87,9 @@ class PeopleConnections extends \Google\Site_Kit_Dependencies\Google\Service\Res
     public function listPeopleConnections($resourceName, $optParams = [])
     {
         $params = ['resourceName' => $resourceName];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListConnectionsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListConnectionsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Resource\PeopleConnections::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Resource_PeopleConnections');
+class_alias(PeopleConnections::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Resource_PeopleConnections');

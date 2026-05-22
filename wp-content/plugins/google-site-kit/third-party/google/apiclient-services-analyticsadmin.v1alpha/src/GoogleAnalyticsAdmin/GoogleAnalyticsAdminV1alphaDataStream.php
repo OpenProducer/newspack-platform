@@ -35,7 +35,7 @@ class GoogleAnalyticsAdminV1alphaDataStream extends \Google\Site_Kit_Dependencie
      * iOS app data stream.
      */
     public const TYPE_IOS_APP_DATA_STREAM = 'IOS_APP_DATA_STREAM';
-    protected $androidAppStreamDataType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStreamAndroidAppStreamData::class;
+    protected $androidAppStreamDataType = GoogleAnalyticsAdminV1alphaDataStreamAndroidAppStreamData::class;
     protected $androidAppStreamDataDataType = '';
     /**
      * Output only. Time when this stream was originally created.
@@ -50,7 +50,7 @@ class GoogleAnalyticsAdminV1alphaDataStream extends \Google\Site_Kit_Dependencie
      * @var string
      */
     public $displayName;
-    protected $iosAppStreamDataType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStreamIosAppStreamData::class;
+    protected $iosAppStreamDataType = GoogleAnalyticsAdminV1alphaDataStreamIosAppStreamData::class;
     protected $iosAppStreamDataDataType = '';
     /**
      * Output only. Resource name of this Data Stream. Format:
@@ -72,7 +72,7 @@ class GoogleAnalyticsAdminV1alphaDataStream extends \Google\Site_Kit_Dependencie
      * @var string
      */
     public $updateTime;
-    protected $webStreamDataType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStreamWebStreamData::class;
+    protected $webStreamDataType = GoogleAnalyticsAdminV1alphaDataStreamWebStreamData::class;
     protected $webStreamDataDataType = '';
     /**
      * Data specific to Android app streams. Must be populated if type is
@@ -80,7 +80,7 @@ class GoogleAnalyticsAdminV1alphaDataStream extends \Google\Site_Kit_Dependencie
      *
      * @param GoogleAnalyticsAdminV1alphaDataStreamAndroidAppStreamData $androidAppStreamData
      */
-    public function setAndroidAppStreamData(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStreamAndroidAppStreamData $androidAppStreamData)
+    public function setAndroidAppStreamData(GoogleAnalyticsAdminV1alphaDataStreamAndroidAppStreamData $androidAppStreamData)
     {
         $this->androidAppStreamData = $androidAppStreamData;
     }
@@ -130,7 +130,7 @@ class GoogleAnalyticsAdminV1alphaDataStream extends \Google\Site_Kit_Dependencie
      *
      * @param GoogleAnalyticsAdminV1alphaDataStreamIosAppStreamData $iosAppStreamData
      */
-    public function setIosAppStreamData(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStreamIosAppStreamData $iosAppStreamData)
+    public function setIosAppStreamData(GoogleAnalyticsAdminV1alphaDataStreamIosAppStreamData $iosAppStreamData)
     {
         $this->iosAppStreamData = $iosAppStreamData;
     }
@@ -199,7 +199,7 @@ class GoogleAnalyticsAdminV1alphaDataStream extends \Google\Site_Kit_Dependencie
      *
      * @param GoogleAnalyticsAdminV1alphaDataStreamWebStreamData $webStreamData
      */
-    public function setWebStreamData(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStreamWebStreamData $webStreamData)
+    public function setWebStreamData(GoogleAnalyticsAdminV1alphaDataStreamWebStreamData $webStreamData)
     {
         $this->webStreamData = $webStreamData;
     }
@@ -212,4 +212,4 @@ class GoogleAnalyticsAdminV1alphaDataStream extends \Google\Site_Kit_Dependencie
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStream::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaDataStream');
+class_alias(GoogleAnalyticsAdminV1alphaDataStream::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaDataStream');

@@ -122,26 +122,26 @@ use Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCipher;
  * @author  Jim Wigginton <terrafrost@php.net>
  * @author  Hans-Juergen Petrich <petrich@tronic-media.com>
  */
-class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCipher
+class Blowfish extends BlockCipher
 {
     /**
      * Block Length of the cipher
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::block_size
+     * @see Common\SymmetricKey::block_size
      * @var int
      */
     protected $block_size = 8;
     /**
      * The mcrypt specific name of the cipher
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cipher_name_mcrypt
+     * @see Common\SymmetricKey::cipher_name_mcrypt
      * @var string
      */
     protected $cipher_name_mcrypt = 'blowfish';
     /**
      * Optimizing value while CFB-encrypting
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cfb_init_len
+     * @see Common\SymmetricKey::cfb_init_len
      * @var int
      */
     protected $cfb_init_len = 500;
@@ -180,7 +180,7 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
      *    derive this from $key_length or vice versa, but that'd mean we'd have to do multiple shift operations, so in lieu
      *    of that, we'll just precompute it once.}
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::setKeyLength()
+     * @see Common\SymmetricKey::setKeyLength()
      * @var int
      */
     protected $key_length = 16;
@@ -217,7 +217,7 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
      *
      * This is mainly just a wrapper to set things up for \phpseclib3\Crypt\Common\SymmetricKey::isValidEngine()
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::isValidEngine()
+     * @see Common\SymmetricKey::isValidEngine()
      * @param int $engine
      * @return bool
      */
@@ -230,7 +230,7 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
             // quoting https://www.openssl.org/news/openssl-3.0-notes.html, OpenSSL 3.0.1
             // "Moved all variations of the EVP ciphers CAST5, BF, IDEA, SEED, RC2, RC4, RC5, and DES to the legacy provider"
             // in theory openssl_get_cipher_methods() should catch this but, on GitHub Actions, at least, it does not
-            if (\defined('OPENSSL_VERSION_TEXT') && \version_compare(\preg_replace('#OpenSSL (\\d+\\.\\d+\\.\\d+) .*#', '$1', \OPENSSL_VERSION_TEXT), '3.0.1', '>=')) {
+            if (defined('OPENSSL_VERSION_TEXT') && version_compare(preg_replace('#OpenSSL (\d+\.\d+\.\d+) .*#', '$1', \OPENSSL_VERSION_TEXT), '3.0.1', '>=')) {
                 return \false;
             }
             $this->cipher_name_openssl_ecb = 'bf-ecb';
@@ -241,7 +241,7 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
     /**
      * Setup the key (expansion)
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::_setupKey()
+     * @see Common\SymmetricKey::_setupKey()
      */
     protected function setupKey()
     {
@@ -253,8 +253,8 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
         /* key-expanding p[] and S-Box building sb[] */
         $this->bctx = ['p' => [], 'sb' => self::$sbox];
         // unpack binary string in unsigned chars
-        $key = \array_values(\unpack('C*', $this->key));
-        $keyl = \count($key);
+        $key = array_values(unpack('C*', $this->key));
+        $keyl = count($key);
         // with bcrypt $keyl will always be 16 (because the key is the sha512 of the key you provide)
         for ($j = 0, $i = 0; $i < 18; ++$i) {
             // xor P1 with the first 32-bits of the key, xor P2 with the second 32-bits ...
@@ -264,19 +264,19 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
                     $j = 0;
                 }
             }
-            $this->bctx['p'][] = self::$parray[$i] ^ \intval($data);
+            $this->bctx['p'][] = self::$parray[$i] ^ intval($data);
         }
         // encrypt the zero-string, replace P1 and P2 with the encrypted data,
         // encrypt P3 and P4 with the new P1 and P2, do it with all P-array and subkeys
         $data = "\x00\x00\x00\x00\x00\x00\x00\x00";
         for ($i = 0; $i < 18; $i += 2) {
-            list($l, $r) = \array_values(\unpack('N*', $data = $this->encryptBlock($data)));
+            list($l, $r) = array_values(unpack('N*', $data = $this->encryptBlock($data)));
             $this->bctx['p'][$i] = $l;
             $this->bctx['p'][$i + 1] = $r;
         }
         for ($i = 0; $i < 0x400; $i += 0x100) {
             for ($j = 0; $j < 256; $j += 2) {
-                list($l, $r) = \array_values(\unpack('N*', $data = $this->encryptBlock($data)));
+                list($l, $r) = array_values(unpack('N*', $data = $this->encryptBlock($data)));
                 $this->bctx['sb'][$i | $j] = $l;
                 $this->bctx['sb'][$i | $j + 1] = $r;
             }
@@ -287,9 +287,9 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
      */
     protected static function initialize_static_variables()
     {
-        if (\is_float(self::$sbox[0x200])) {
-            self::$sbox = \array_map('intval', self::$sbox);
-            self::$parray = \array_map('intval', self::$parray);
+        if (is_float(self::$sbox[0x200])) {
+            self::$sbox = array_map([self::class, 'safe_intval'], self::$sbox);
+            self::$parray = array_map([self::class, 'safe_intval'], self::$parray);
         }
         parent::initialize_static_variables();
     }
@@ -305,9 +305,9 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
     {
         $p = self::$parray;
         $sbox = self::$sbox;
-        $cdata = \array_values(\unpack('N*', 'OxychromaticBlowfishSwatDynamite'));
-        $sha2pass = \array_values(\unpack('N*', $sha2pass));
-        $sha2salt = \array_values(\unpack('N*', $sha2salt));
+        $cdata = array_values(unpack('N*', 'OxychromaticBlowfishSwatDynamite'));
+        $sha2pass = array_values(unpack('N*', $sha2pass));
+        $sha2salt = array_values(unpack('N*', $sha2salt));
         self::expandstate($sha2salt, $sha2pass, $sbox, $p);
         for ($i = 0; $i < 64; $i++) {
             self::expand0state($sha2salt, $sbox, $p);
@@ -319,7 +319,7 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
                 list($cdata[$j], $cdata[$j + 1]) = self::encryptBlockHelperFast($cdata[$j], $cdata[$j + 1], $sbox, $p);
             }
         }
-        return \pack('V*', ...$cdata);
+        return pack('V*', ...$cdata);
     }
     /**
      * Performs OpenSSH-style bcrypt
@@ -337,15 +337,15 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
         if (\PHP_INT_SIZE == 4) {
             throw new \RuntimeException('bcrypt is far too slow to be practical on 32-bit versions of PHP');
         }
-        $sha2pass = \hash('sha512', $pass, \true);
+        $sha2pass = hash('sha512', $pass, \true);
         $results = [];
         $count = 1;
-        while (32 * \count($results) < $keylen) {
-            $countsalt = $salt . \pack('N', $count++);
-            $sha2salt = \hash('sha512', $countsalt, \true);
+        while (32 * count($results) < $keylen) {
+            $countsalt = $salt . pack('N', $count++);
+            $sha2salt = hash('sha512', $countsalt, \true);
             $out = $tmpout = self::bcrypt_hash($sha2pass, $sha2salt);
             for ($i = 1; $i < $rounds; $i++) {
-                $sha2salt = \hash('sha512', $tmpout, \true);
+                $sha2salt = hash('sha512', $tmpout, \true);
                 $tmpout = self::bcrypt_hash($sha2pass, $sha2salt);
                 $out ^= $tmpout;
             }
@@ -357,7 +357,7 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
                 $output .= $result[$i];
             }
         }
-        return \substr($output, 0, $keylen);
+        return substr($output, 0, $keylen);
     }
     /**
      * Key expansion without salt
@@ -431,11 +431,11 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
         $p = $this->bctx['p'];
         // extract($this->bctx['sb'], EXTR_PREFIX_ALL, 'sb'); // slower
         $sb = $this->bctx['sb'];
-        $in = \unpack('N*', $in);
+        $in = unpack('N*', $in);
         $l = $in[1];
         $r = $in[2];
         list($r, $l) = \PHP_INT_SIZE == 4 ? self::encryptBlockHelperSlow($l, $r, $sb, $p) : self::encryptBlockHelperFast($l, $r, $sb, $p);
-        return \pack("N*", $r, $l);
+        return pack("N*", $r, $l);
     }
     /**
      * Fast helper function for block encryption
@@ -510,7 +510,7 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
     {
         $p = $this->bctx['p'];
         $sb = $this->bctx['sb'];
-        $in = \unpack('N*', $in);
+        $in = unpack('N*', $in);
         $l = $in[1];
         $r = $in[2];
         for ($i = 17; $i > 2; $i -= 2) {
@@ -519,12 +519,12 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
             $r ^= $p[$i - 1];
             $l ^= self::safe_intval((self::safe_intval($sb[$r >> 24 & 0xff] + $sb[0x100 + ($r >> 16 & 0xff)]) ^ $sb[0x200 + ($r >> 8 & 0xff)]) + $sb[0x300 + ($r & 0xff)]);
         }
-        return \pack('N*', $r ^ $p[0], $l ^ $p[1]);
+        return pack('N*', $r ^ $p[0], $l ^ $p[1]);
     }
     /**
      * Setup the performance-optimized function for de/encrypt()
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::_setupInlineCrypt()
+     * @see Common\SymmetricKey::_setupInlineCrypt()
      */
     protected function setupInlineCrypt()
     {
@@ -545,12 +545,12 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
         for ($i = 0; $i < 16; $i += 2) {
             $encrypt_block .= '
                 $l^= ' . $p[$i] . ';
-                $r^= ' . \sprintf($safeint, '(' . \sprintf($safeint, '$sb[$l >> 24 & 0xff] + $sb[0x100 + ($l >> 16 & 0xff)]') . ' ^
+                $r^= ' . sprintf($safeint, '(' . sprintf($safeint, '$sb[$l >> 24 & 0xff] + $sb[0x100 + ($l >> 16 & 0xff)]') . ' ^
                       $sb[0x200 + ($l >>  8 & 0xff)]) +
                       $sb[0x300 + ($l       & 0xff)]') . ';
 
                 $r^= ' . $p[$i + 1] . ';
-                $l^= ' . \sprintf($safeint, '(' . \sprintf($safeint, '$sb[$r >> 24 & 0xff] + $sb[0x100 + ($r >> 16 & 0xff)]') . '  ^
+                $l^= ' . sprintf($safeint, '(' . sprintf($safeint, '$sb[$r >> 24 & 0xff] + $sb[0x100 + ($r >> 16 & 0xff)]') . '  ^
                       $sb[0x200 + ($r >>  8 & 0xff)]) +
                       $sb[0x300 + ($r       & 0xff)]') . ';
             ';
@@ -570,12 +570,12 @@ class Blowfish extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Blo
         for ($i = 17; $i > 2; $i -= 2) {
             $decrypt_block .= '
                 $l^= ' . $p[$i] . ';
-                $r^= ' . \sprintf($safeint, '(' . \sprintf($safeint, '$sb[$l >> 24 & 0xff] + $sb[0x100 + ($l >> 16 & 0xff)]') . ' ^
+                $r^= ' . sprintf($safeint, '(' . sprintf($safeint, '$sb[$l >> 24 & 0xff] + $sb[0x100 + ($l >> 16 & 0xff)]') . ' ^
                       $sb[0x200 + ($l >>  8 & 0xff)]) +
                       $sb[0x300 + ($l       & 0xff)]') . ';
 
                 $r^= ' . $p[$i - 1] . ';
-                $l^= ' . \sprintf($safeint, '(' . \sprintf($safeint, '$sb[$r >> 24 & 0xff] + $sb[0x100 + ($r >> 16 & 0xff)]') . ' ^
+                $l^= ' . sprintf($safeint, '(' . sprintf($safeint, '$sb[$r >> 24 & 0xff] + $sb[0x100 + ($r >> 16 & 0xff)]') . ' ^
                       $sb[0x200 + ($r >>  8 & 0xff)]) +
                       $sb[0x300 + ($r       & 0xff)]') . ';
             ';

@@ -17,7 +17,7 @@ final class HeaderProcessor
      *
      * @throws \RuntimeException
      */
-    public static function parseHeaders(array $headers) : array
+    public static function parseHeaders(array $headers): array
     {
         if ($headers === []) {
             throw new \RuntimeException('Expected a non-empty array of header data');
@@ -31,6 +31,6 @@ final class HeaderProcessor
         if ($status === null) {
             throw new \RuntimeException('HTTP status code missing from header data');
         }
-        return [$version, (int) $status, $parts[2] ?? null, \Google\Site_Kit_Dependencies\GuzzleHttp\Utils::headersFromLines($headers)];
+        return [$version, (int) $status, $parts[2] ?? null, Utils::headersFromLines($headers)];
     }
 }

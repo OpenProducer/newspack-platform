@@ -43,8 +43,8 @@ class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Depe
     public function create($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\CreateBuiltInVariableResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], CreateBuiltInVariableResponse::class);
     }
     /**
      * Deletes one or more GTM Built-In Variables. (built_in_variables.delete)
@@ -58,7 +58,7 @@ class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Depe
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -76,8 +76,8 @@ class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Depe
     public function listAccountsContainersWorkspacesBuiltInVariables($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListEnabledBuiltInVariablesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListEnabledBuiltInVariablesResponse::class);
     }
     /**
      * Reverts changes to a GTM Built-In Variables in a GTM Workspace.
@@ -93,9 +93,9 @@ class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Depe
     public function revert($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('revert', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertBuiltInVariableResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('revert', [$params], RevertBuiltInVariableResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesBuiltInVariables::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesBuiltInVariables');
+class_alias(AccountsContainersWorkspacesBuiltInVariables::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesBuiltInVariables');

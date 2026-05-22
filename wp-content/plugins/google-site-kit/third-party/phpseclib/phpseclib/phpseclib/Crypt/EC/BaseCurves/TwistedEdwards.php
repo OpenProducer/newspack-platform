@@ -33,7 +33,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\PrimeField\Integer as PrimeInte
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class TwistedEdwards extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Base
+class TwistedEdwards extends Base
 {
     /**
      * The modulo
@@ -80,18 +80,18 @@ class TwistedEdwards extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\B
     /**
      * Sets the modulo
      */
-    public function setModulo(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $modulo)
+    public function setModulo(BigInteger $modulo)
     {
         $this->modulo = $modulo;
-        $this->factory = new \Google\Site_Kit_Dependencies\phpseclib3\Math\PrimeField($modulo);
-        $this->zero = $this->factory->newInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(0));
-        $this->one = $this->factory->newInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(1));
-        $this->two = $this->factory->newInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(2));
+        $this->factory = new PrimeField($modulo);
+        $this->zero = $this->factory->newInteger(new BigInteger(0));
+        $this->one = $this->factory->newInteger(new BigInteger(1));
+        $this->two = $this->factory->newInteger(new BigInteger(2));
     }
     /**
      * Set coefficients a and b
      */
-    public function setCoefficients(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $a, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $d)
+    public function setCoefficients(BigInteger $a, BigInteger $d)
     {
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
@@ -105,15 +105,15 @@ class TwistedEdwards extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\B
     public function setBasePoint($x, $y)
     {
         switch (\true) {
-            case !$x instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger && !$x instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\PrimeField\Integer:
-                throw new \UnexpectedValueException('Google\\Site_Kit_Dependencies\\Argument 1 passed to Prime::setBasePoint() must be an instance of either BigInteger or PrimeField\\Integer');
-            case !$y instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger && !$y instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\PrimeField\Integer:
-                throw new \UnexpectedValueException('Google\\Site_Kit_Dependencies\\Argument 2 passed to Prime::setBasePoint() must be an instance of either BigInteger or PrimeField\\Integer');
+            case !$x instanceof BigInteger && !$x instanceof PrimeInteger:
+                throw new \UnexpectedValueException('Argument 1 passed to Prime::setBasePoint() must be an instance of either BigInteger or PrimeField\Integer');
+            case !$y instanceof BigInteger && !$y instanceof PrimeInteger:
+                throw new \UnexpectedValueException('Argument 2 passed to Prime::setBasePoint() must be an instance of either BigInteger or PrimeField\Integer');
         }
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        $this->p = [$x instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger ? $this->factory->newInteger($x) : $x, $y instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger ? $this->factory->newInteger($y) : $y];
+        $this->p = [$x instanceof BigInteger ? $this->factory->newInteger($x) : $x, $y instanceof BigInteger ? $this->factory->newInteger($y) : $y];
     }
     /**
      * Returns the a coefficient
@@ -153,7 +153,7 @@ class TwistedEdwards extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\B
     /**
      * Returns the affine point
      *
-     * @return PrimeField\Integer[]
+     * @return PrimeInteger[]
      */
     public function convertToAffine(array $p)
     {

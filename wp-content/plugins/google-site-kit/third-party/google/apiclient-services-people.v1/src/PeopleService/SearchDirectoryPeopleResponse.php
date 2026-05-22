@@ -27,7 +27,7 @@ class SearchDirectoryPeopleResponse extends \Google\Site_Kit_Dependencies\Google
      * @var string
      */
     public $nextPageToken;
-    protected $peopleType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $peopleType = Person::class;
     protected $peopleDataType = 'array';
     /**
      * The total number of items in the list without pagination.
@@ -86,4 +86,4 @@ class SearchDirectoryPeopleResponse extends \Google\Site_Kit_Dependencies\Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\SearchDirectoryPeopleResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_SearchDirectoryPeopleResponse');
+class_alias(SearchDirectoryPeopleResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_SearchDirectoryPeopleResponse');

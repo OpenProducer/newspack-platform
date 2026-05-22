@@ -88,6 +88,19 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	}
 
 	/**
+	 * Test the ActiveCampaign API connection.
+	 *
+	 * @return true|WP_Error True if the connection is successful, WP_Error otherwise.
+	 */
+	public function test_connection() {
+		$result = $this->api_v3_request( 'users/me' );
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+		return true;
+	}
+
+	/**
 	 * Perform v3 API request.
 	 *
 	 * @param string $resource Resource path.
@@ -654,8 +667,8 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 				return $segments;
 			}
 			foreach ( $segments as $segment ) {
-				$segment_name = ! empty( $segment['name'] ) ?
-					$segment['name'] . ' (ID ' . $segment['id'] . ')' :
+				$segment_name = ! empty( $segment['attributes']['name'] ) ?
+					$segment['attributes']['name'] :
 					sprintf(
 						// Translators: %s is the segment ID.
 						__( 'Untitled %s', 'newspack-newsletters' ),
@@ -669,7 +682,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 						'parent_id'   => $args['parent_id'] ?? null,
 						'name'        => $segment_name,
 						'entity_type' => 'segment',
-						'count'       => $segment['subscriber_count'] ?? null,
+						'count'       => $segment['attributes']['counts']['last_active_total']['count'] ?? null,
 					]
 				);
 			}
@@ -712,7 +725,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 					array_filter(
 						$this->segments,
 						function ( $segment ) use ( $args ) {
-							return Send_Lists::matches_search( $args['search'], [ $segment['name'] ] );
+							return Send_Lists::matches_search( $args['search'], [ $segment['attributes']['name'] ] );
 						}
 					)
 				);
@@ -721,11 +734,11 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			return $this->segments;
 		}
 
-		$query_args           = $args;
-		$query_args['limit']  = $args['limit'] ?? 100;
-		$query_args['offset'] = 0;
+		$query_args               = $args;
+		$query_args['page_size']  = $args['limit'] ?? 500;
+		$query_args['page']       = 1;
 		$result = $this->api_v3_request(
-			'segments',
+			'audiences',
 			'GET',
 			[
 				'query' => $query_args,
@@ -734,17 +747,17 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
-		$segments = $result['segments'];
+		$segments = $result['data'];
 		if ( isset( $args['limit'] ) ) {
 			return $segments;
 		}
 
 		// If not passed a limit, get all the segments.
-		$total = $result['meta']['total'];
-		while ( $total > $query_args['offset'] + $query_args['limit'] ) {
-			$query_args['offset'] = $query_args['offset'] + $query_args['limit'];
+		$total = $result['meta']['page']['total'];
+		while ( $total > $query_args['page_size'] * $query_args['page'] ) {
+			$query_args['page'] = $query_args['page'] + 1;
 			$result = $this->api_v3_request(
-				'segments',
+				'audiences',
 				'GET',
 				[
 					'query' => $query_args,
@@ -753,7 +766,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			if ( is_wp_error( $result ) ) {
 				return $result;
 			}
-			$segments = array_merge( $segments, $result['segments'] );
+			$segments = array_merge( $segments, $result['data'] );
 		}
 
 		$this->segments = $segments;
@@ -780,6 +793,18 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	 * @return int
 	 */
 	private function get_address_id() {
+		/**
+		 * Specifies the ActiveCampaign address ID to use for campaigns.
+		 * If not set, ActiveCampaign's default address will be used.
+		 * Find your address ID in ActiveCampaign under Settings > Addresses.
+		 *
+		 * @constant NEWSPACK_NEWSLETTERS_ACTIVE_CAMPAIGN_ADDRESS_ID
+		 * @type     int
+		 * @default  0 (uses ActiveCampaign default address)
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_NEWSLETTERS_ACTIVE_CAMPAIGN_ADDRESS_ID', 1 );
+		 */
 		if ( ! defined( 'NEWSPACK_NEWSLETTERS_ACTIVE_CAMPAIGN_ADDRESS_ID' ) ) {
 			return 0;
 		}
@@ -1172,6 +1197,18 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			'm[' . $sync_result['message_id'] . ']' => 100, // 100 = 100% of contacts will receive this.
 			'addressid'                             => $this->get_address_id(),
 		];
+		/**
+		 * Disables link click tracking in ActiveCampaign campaigns.
+		 * When enabled, ActiveCampaign will not track which links
+		 * subscribers click in your emails.
+		 *
+		 * @constant NEWSPACK_NEWSLETTERS_AC_DISABLE_LINK_TRACKING
+		 * @type     bool
+		 * @default  Link tracking enabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_NEWSLETTERS_AC_DISABLE_LINK_TRACKING', true );
+		 */
 		if ( defined( 'NEWSPACK_NEWSLETTERS_AC_DISABLE_LINK_TRACKING' ) && NEWSPACK_NEWSLETTERS_AC_DISABLE_LINK_TRACKING ) {
 			$campaign_data['tracklinks'] = 'none';
 		}
@@ -1574,7 +1611,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	 *
 	 * @param number $offset Offset for pagination.
 	 */
-	private function get_contact_fields( $offset ) {
+	private function fetch_contact_fields( $offset ) {
 		return $this->api_v3_request(
 			'fields',
 			'GET',
@@ -1593,7 +1630,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	 * @param number $offset Offset for pagination.
 	 */
 	private function get_all_contact_fields( $offset = 0 ) {
-		$response = $this->get_contact_fields( $offset );
+		$response = $this->fetch_contact_fields( $offset );
 		if ( \is_wp_error( $response ) ) {
 			return $response;
 		}
@@ -1740,5 +1777,152 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	public function get_usage_report() {
 		$ac_usage_reports = new Newspack_Newsletters_Active_Campaign_Usage_Reports();
 		return $ac_usage_reports->get_usage_report();
+	}
+
+	/**
+	 * Object cache group for the integrations field schema and per-field option lists.
+	 */
+	const INTEGRATIONS_CACHE_GROUP = 'newspack_newsletters_active_campaign';
+
+	/**
+	 * Get contact fields for Newspack integrations.
+	 *
+	 * @param string|null $list_id The List ID (unused — ActiveCampaign contact fields are global).
+	 * @return array|WP_Error
+	 */
+	public function get_contact_fields_for_integrations( $list_id = null ) {
+		$cache_key     = $this->integrations_cache_key( 'fields' );
+		$cached_fields = wp_cache_get( $cache_key, self::INTEGRATIONS_CACHE_GROUP );
+		if ( false !== $cached_fields ) {
+			return $cached_fields;
+		}
+		$all_fields = $this->get_all_contact_fields();
+		if ( is_wp_error( $all_fields ) ) {
+			return $all_fields;
+		}
+		$fields = [];
+		foreach ( $all_fields as $field ) {
+			$mapped = $this->map_contact_field_to_integration_schema( $field );
+			if ( null !== $mapped ) {
+				$fields[] = $mapped;
+			}
+		}
+		wp_cache_set( $cache_key, $fields, self::INTEGRATIONS_CACHE_GROUP, 5 * MINUTE_IN_SECONDS );
+		return $fields;
+	}
+
+	/**
+	 * Build a cache key for integrations data, namespaced by the configured AC account URL.
+	 *
+	 * Two sites sharing an object cache backend can be configured against different AC accounts;
+	 * a flat global key would let one site's cached schema leak into the other.
+	 *
+	 * @param string $suffix Per-call key suffix (e.g. 'fields', 'options:34').
+	 * @return string
+	 */
+	private function integrations_cache_key( $suffix ) {
+		$credentials = $this->api_credentials();
+		if ( ! empty( $credentials['url'] ) ) {
+			$account_hash = substr( md5( (string) $credentials['url'] ), 0, 12 );
+		} else {
+			// Defensive fallback for a code path that bypasses credential checks; salt with
+			// the blog id so two unconfigured sites sharing an object cache don't collide.
+			$account_hash = 'noaccount-' . get_current_blog_id();
+		}
+		return $account_hash . ':' . $suffix;
+	}
+
+	/**
+	 * Map an ActiveCampaign contact field to the Newspack integrations schema.
+	 *
+	 * AC types eligible for access-rule / segmentation defaults: text, textarea, date, datetime,
+	 * dropdown, radio, listbox, checkbox, multiselect. Hidden and NULL-typed fields are exposed
+	 * but not promoted by default.
+	 *
+	 * Matching function depends on selection cardinality. Per AC's Contact Custom Fields API
+	 * Guide, dropdown / radio / listbox are single-selection types (their stored value is the
+	 * raw chosen option), so 'default' (strict equality) matching is correct. Checkbox and
+	 * multiselect are multi-selection types: AC stores the chosen options with a `||` delimiter
+	 * (e.g. `||Option A||Option C||`), which `default` matching cannot resolve — those types
+	 * use 'list__in', and the consumer's parse_list_value() recognizes the delimiter.
+	 *
+	 * @param array $field Raw field from the ActiveCampaign v3 /fields endpoint.
+	 * @return array|null Mapped field, or null if no usable identifier is available.
+	 */
+	private function map_contact_field_to_integration_schema( $field ) {
+		$perstag = isset( $field['perstag'] ) ? (string) $field['perstag'] : '';
+		if ( '' === $perstag ) {
+			return null;
+		}
+
+		$type                       = isset( $field['type'] ) ? $field['type'] : 'text';
+		$single_select_enum_types   = [ 'dropdown', 'radio', 'listbox' ];
+		$multi_select_enum_types    = [ 'checkbox', 'multiselect' ];
+		$enumerated_types           = array_merge( $single_select_enum_types, $multi_select_enum_types );
+		$eligible_types             = array_merge( [ 'text', 'textarea', 'date', 'datetime' ], $enumerated_types );
+		$is_promoted_by_default     = in_array( $type, $eligible_types, true );
+		$is_multi_select            = in_array( $type, $multi_select_enum_types, true );
+
+		$options = [];
+		if ( in_array( $type, $enumerated_types, true ) && ! empty( $field['id'] ) ) {
+			$options = $this->fetch_field_options( $field['id'] );
+		}
+
+		return [
+			'key'                 => $perstag,
+			'name'                => ! empty( $field['title'] ) ? $field['title'] : $perstag,
+			'value_type'          => 'string',
+			'matching_function'   => $is_multi_select ? 'list__in' : 'default',
+			'options'             => $options,
+			'description'         => ! empty( $field['descript'] ) ? $field['descript'] : '',
+			'is_access_rule'      => $is_promoted_by_default,
+			'is_segment_criteria' => $is_promoted_by_default,
+		];
+	}
+
+	/**
+	 * Fetch the option list for an enumerated ActiveCampaign field.
+	 *
+	 * Cached per field with a longer TTL than the parent schema (1h vs 5min). Option lists
+	 * change much less often than the field roster, and a misaligned TTL means the parent
+	 * cache miss only re-fetches options for fields whose own per-field cache has lapsed.
+	 * Tradeoff: an option-label edit in AC can take up to 1h to surface in the admin UI.
+	 *
+	 * @param int|string $field_id The AC field ID.
+	 * @return array Array of [ 'value' => ..., 'label' => ... ] pairs (empty on failure).
+	 */
+	private function fetch_field_options( $field_id ) {
+		$cache_key = $this->integrations_cache_key( 'options:' . $field_id );
+		$cached    = wp_cache_get( $cache_key, self::INTEGRATIONS_CACHE_GROUP );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+		$response = $this->api_v3_request( 'fields/' . rawurlencode( (string) $field_id ) . '/options', 'GET' );
+		if ( is_wp_error( $response ) ) {
+			Newspack_Newsletters_Logger::log(
+				sprintf(
+					'ActiveCampaign: failed to fetch options for field %s: %s',
+					$field_id,
+					$response->get_error_message()
+				)
+			);
+			return [];
+		}
+		if ( empty( $response['fieldOptions'] ) ) {
+			wp_cache_set( $cache_key, [], self::INTEGRATIONS_CACHE_GROUP, HOUR_IN_SECONDS );
+			return [];
+		}
+		$options = [];
+		foreach ( $response['fieldOptions'] as $option ) {
+			if ( ! isset( $option['value'] ) ) {
+				continue;
+			}
+			$options[] = [
+				'value' => $option['value'],
+				'label' => isset( $option['label'] ) ? $option['label'] : $option['value'],
+			];
+		}
+		wp_cache_set( $cache_key, $options, self::INTEGRATIONS_CACHE_GROUP, HOUR_IN_SECONDS );
+		return $options;
 	}
 }

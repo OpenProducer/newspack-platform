@@ -10,7 +10,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
  *
  * Example: the target host name can not be resolved or the connection failed.
  */
-interface NetworkExceptionInterface extends \Google\Site_Kit_Dependencies\Psr\Http\Client\ClientExceptionInterface
+interface NetworkExceptionInterface extends ClientExceptionInterface
 {
     /**
      * Returns the request.
@@ -19,5 +19,5 @@ interface NetworkExceptionInterface extends \Google\Site_Kit_Dependencies\Psr\Ht
      *
      * @return RequestInterface
      */
-    public function getRequest() : \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
+    public function getRequest(): RequestInterface;
 }

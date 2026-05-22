@@ -96,4 +96,4 @@ class RecurrenceDuration extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceDuration::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_RecurrenceDuration');
+class_alias(RecurrenceDuration::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_RecurrenceDuration');

@@ -38,7 +38,7 @@ class TagConsentSetting extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $consentStatus;
-    protected $consentTypeType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $consentTypeType = Parameter::class;
     protected $consentTypeDataType = '';
     /**
      * The tag's consent status. If set to NEEDED, the runtime will check that the
@@ -66,7 +66,7 @@ class TagConsentSetting extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Parameter $consentType
      */
-    public function setConsentType(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $consentType)
+    public function setConsentType(Parameter $consentType)
     {
         $this->consentType = $consentType;
     }
@@ -79,4 +79,4 @@ class TagConsentSetting extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\TagConsentSetting::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_TagConsentSetting');
+class_alias(TagConsentSetting::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_TagConsentSetting');

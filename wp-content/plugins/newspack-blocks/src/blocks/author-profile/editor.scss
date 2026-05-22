@@ -1,29 +1,28 @@
-@use "view";
 @use "../../shared/sass/mixins";
 
 .editor-styles-wrapper {
+	// Author Profile block disabled state (custom byline active)
+	.newspack-author-profile-disabled {
+		.components-notice {
+			margin: 0;
+		}
+	}
+
+	// Mode selector buttons in placeholder
+	.newspack-blocks-author-profile {
+		.components-placeholder__fieldset {
+			align-items: center;
+		}
+	}
+
 	.wp-block-newspack-blocks-author-profile {
 		.components-notice {
 			margin: 0 0 2rem;
 			width: 100%;
 		}
 
-		.is-loading {
-			align-items: center;
-			display: flex;
-
-			.components-spinner {
-				margin-right: 0;
-				margin-top: 0;
-			}
-		}
-
 		a.no-op {
 			pointer-events: none;
-		}
-
-		p {
-			font-size: 1em;
 		}
 
 		&__bio {
@@ -53,5 +52,10 @@
 				color: inherit;
 			}
 		}
+	}
+
+	// Prevent flex layout on the block wrapper (flex is for individual author cards).
+	[data-type="newspack-blocks/author-profile"]:not(.is-nested-mode) {
+		display: block;
 	}
 }

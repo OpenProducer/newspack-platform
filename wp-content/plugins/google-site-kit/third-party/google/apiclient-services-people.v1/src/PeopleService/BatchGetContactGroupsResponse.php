@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class BatchGetContactGroupsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'responses';
-    protected $responsesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroupResponse::class;
+    protected $responsesType = ContactGroupResponse::class;
     protected $responsesDataType = 'array';
     /**
      * The list of responses for each requested contact group resource.
@@ -40,4 +40,4 @@ class BatchGetContactGroupsResponse extends \Google\Site_Kit_Dependencies\Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchGetContactGroupsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_BatchGetContactGroupsResponse');
+class_alias(BatchGetContactGroupsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_BatchGetContactGroupsResponse');

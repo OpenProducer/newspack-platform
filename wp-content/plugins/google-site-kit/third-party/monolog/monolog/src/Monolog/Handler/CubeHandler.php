@@ -20,7 +20,7 @@ use Google\Site_Kit_Dependencies\Monolog\Utils;
  * @author Wan Chen <kami@kamisama.me>
  * @deprecated Since 2.8.0 and 3.2.0, Cube appears abandoned and thus we will drop this handler in Monolog 4
  */
-class CubeHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class CubeHandler extends AbstractProcessingHandler
 {
     /** @var resource|\Socket|null */
     private $udpConnection = null;
@@ -41,14 +41,14 @@ class CubeHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
      *                                   A valid url must consist of three parts : protocol://host:port
      *                                   Only valid protocols used by Cube are http and udp
      */
-    public function __construct(string $url, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct(string $url, $level = Logger::DEBUG, bool $bubble = \true)
     {
-        $urlInfo = \parse_url($url);
+        $urlInfo = parse_url($url);
         if ($urlInfo === \false || !isset($urlInfo['scheme'], $urlInfo['host'], $urlInfo['port'])) {
             throw new \UnexpectedValueException('URL "' . $url . '" is not valid');
         }
-        if (!\in_array($urlInfo['scheme'], $this->acceptedSchemes)) {
-            throw new \UnexpectedValueException('Invalid protocol (' . $urlInfo['scheme'] . ').' . ' Valid options are ' . \implode(', ', $this->acceptedSchemes));
+        if (!in_array($urlInfo['scheme'], $this->acceptedSchemes)) {
+            throw new \UnexpectedValueException('Invalid protocol (' . $urlInfo['scheme'] . ').' . ' Valid options are ' . implode(', ', $this->acceptedSchemes));
         }
         $this->scheme = $urlInfo['scheme'];
         $this->host = $urlInfo['host'];
@@ -61,17 +61,17 @@ class CubeHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
      * @throws \LogicException           when unable to connect to the socket
      * @throws MissingExtensionException when there is no socket extension
      */
-    protected function connectUdp() : void
+    protected function connectUdp(): void
     {
-        if (!\extension_loaded('sockets')) {
-            throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The sockets extension is required to use udp URLs with the CubeHandler');
+        if (!extension_loaded('sockets')) {
+            throw new MissingExtensionException('The sockets extension is required to use udp URLs with the CubeHandler');
         }
-        $udpConnection = \socket_create(\AF_INET, \SOCK_DGRAM, 0);
+        $udpConnection = socket_create(\AF_INET, \SOCK_DGRAM, 0);
         if (\false === $udpConnection) {
             throw new \LogicException('Unable to create a socket');
         }
         $this->udpConnection = $udpConnection;
-        if (!\socket_connect($this->udpConnection, $this->host, $this->port)) {
+        if (!socket_connect($this->udpConnection, $this->host, $this->port)) {
             throw new \LogicException('Unable to connect to the socket at ' . $this->host . ':' . $this->port);
         }
     }
@@ -81,26 +81,26 @@ class CubeHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
      * @throws \LogicException           when unable to connect to the socket
      * @throws MissingExtensionException when no curl extension
      */
-    protected function connectHttp() : void
+    protected function connectHttp(): void
     {
-        if (!\extension_loaded('curl')) {
-            throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The curl extension is required to use http URLs with the CubeHandler');
+        if (!extension_loaded('curl')) {
+            throw new MissingExtensionException('The curl extension is required to use http URLs with the CubeHandler');
         }
-        $httpConnection = \curl_init('http://' . $this->host . ':' . $this->port . '/1.0/event/put');
+        $httpConnection = curl_init('http://' . $this->host . ':' . $this->port . '/1.0/event/put');
         if (\false === $httpConnection) {
             throw new \LogicException('Unable to connect to ' . $this->host . ':' . $this->port);
         }
         $this->httpConnection = $httpConnection;
-        \curl_setopt($this->httpConnection, \CURLOPT_CUSTOMREQUEST, "POST");
-        \curl_setopt($this->httpConnection, \CURLOPT_RETURNTRANSFER, \true);
+        curl_setopt($this->httpConnection, \CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($this->httpConnection, \CURLOPT_RETURNTRANSFER, \true);
     }
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $date = $record['datetime'];
-        $data = ['time' => $date->format('Y-m-d\\TH:i:s.uO')];
+        $data = ['time' => $date->format('Y-m-d\TH:i:s.uO')];
         unset($record['datetime']);
         if (isset($record['context']['type'])) {
             $data['type'] = $record['context']['type'];
@@ -111,19 +111,19 @@ class CubeHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
         $data['data'] = $record['context'];
         $data['data']['level'] = $record['level'];
         if ($this->scheme === 'http') {
-            $this->writeHttp(\Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode($data));
+            $this->writeHttp(Utils::jsonEncode($data));
         } else {
-            $this->writeUdp(\Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode($data));
+            $this->writeUdp(Utils::jsonEncode($data));
         }
     }
-    private function writeUdp(string $data) : void
+    private function writeUdp(string $data): void
     {
         if (!$this->udpConnection) {
             $this->connectUdp();
         }
-        \socket_send($this->udpConnection, $data, \strlen($data), 0);
+        socket_send($this->udpConnection, $data, strlen($data), 0);
     }
-    private function writeHttp(string $data) : void
+    private function writeHttp(string $data): void
     {
         if (!$this->httpConnection) {
             $this->connectHttp();
@@ -131,8 +131,8 @@ class CubeHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
         if (null === $this->httpConnection) {
             throw new \LogicException('No connection could be established');
         }
-        \curl_setopt($this->httpConnection, \CURLOPT_POSTFIELDS, '[' . $data . ']');
-        \curl_setopt($this->httpConnection, \CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Content-Length: ' . \strlen('[' . $data . ']')]);
-        \Google\Site_Kit_Dependencies\Monolog\Handler\Curl\Util::execute($this->httpConnection, 5, \false);
+        curl_setopt($this->httpConnection, \CURLOPT_POSTFIELDS, '[' . $data . ']');
+        curl_setopt($this->httpConnection, \CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Content-Length: ' . strlen('[' . $data . ']')]);
+        Curl\Util::execute($this->httpConnection, 5, \false);
     }
 }

@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class CheckCompatibilityResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'metricCompatibilities';
-    protected $dimensionCompatibilitiesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionCompatibility::class;
+    protected $dimensionCompatibilitiesType = DimensionCompatibility::class;
     protected $dimensionCompatibilitiesDataType = 'array';
-    protected $metricCompatibilitiesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricCompatibility::class;
+    protected $metricCompatibilitiesType = MetricCompatibility::class;
     protected $metricCompatibilitiesDataType = 'array';
     /**
      * The compatibility of each dimension.
@@ -58,4 +58,4 @@ class CheckCompatibilityResponse extends \Google\Site_Kit_Dependencies\Google\Co
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CheckCompatibilityResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_CheckCompatibilityResponse');
+class_alias(CheckCompatibilityResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_CheckCompatibilityResponse');

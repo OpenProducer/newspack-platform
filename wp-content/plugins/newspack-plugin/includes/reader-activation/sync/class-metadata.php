@@ -8,8 +8,7 @@
 namespace Newspack\Reader_Activation\Sync;
 
 use Newspack\Donations;
-use Newspack\Reader_Activation;
-use Newspack\Logger;
+use Newspack\Reader_Activation\Integrations;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,6 +22,13 @@ class Metadata {
 	const PREFIX_OPTION = '_newspack_metadata_prefix';
 
 	/**
+	 * The schema version for the metadata. Legacy is the default and fallsback to how things were before Newspack Integrations.
+	 *
+	 * @var string
+	 */
+	public static $version = 'legacy';
+
+	/**
 	 * The option name for choosing which metadata fields to sync.
 	 *
 	 * @var string
@@ -30,11 +36,58 @@ class Metadata {
 	const FIELDS_OPTION = '_newspack_metadata_fields';
 
 	/**
-	 * Metadata keys map for Reader Activation.
+	 * Get the metadata classes to be used for syncing contact metadata to the ESP.
 	 *
-	 * @var array
+	 * These are the metadata classes that will be used to build the full set of contact metadata fields.
+	 *
+	 * @return array List of metadata classes.
 	 */
-	public static $keys = [];
+	protected static function get_metadata_classes() {
+		if ( 'legacy' === self::get_version() ) {
+			$classes = [
+				'Legacy_Basic',
+				'Legacy_Payment',
+				'Content_Gate',
+			];
+		} else {
+			$classes = [
+				'Identity',
+				'Registration',
+				'Engagement',
+				'Subscription',
+				'Donation',
+				'Content_Gate',
+			];
+		}
+
+		$classnames = [];
+
+		foreach ( $classes as $class ) {
+			$classname = __NAMESPACE__ . '\\Contact_Metadata\\' . $class;
+			if ( class_exists( $classname ) ) {
+				$classnames[] = $classname;
+			}
+		}
+		return $classnames;
+	}
+
+	/**
+	 * Get the current metadata schema version.
+	 *
+	 * @return string
+	 */
+	public static function get_version() {
+		if ( defined( 'NEWSPACK_SYNC_METADATA_VERSION' ) ) {
+			return NEWSPACK_SYNC_METADATA_VERSION;
+		}
+
+		// boolean version of the feature flag.
+		if ( defined( 'NEWSPACK_SYNC_METADATA_VERSION_1' ) && NEWSPACK_SYNC_METADATA_VERSION_1 ) {
+			return '1.0';
+		}
+
+		return self::$version;
+	}
 
 	/**
 	 * Get the metadata keys map for Reader Activation.
@@ -42,27 +95,31 @@ class Metadata {
 	 * @return array List of fields.
 	 */
 	public static function get_keys() {
-		if ( empty( self::$keys ) ) {
-			// Only get Woo fields if using Woo.
-			$fields = Donations::is_platform_wc() ? self::get_all_fields() : self::get_basic_fields();
-
-			/**
-			 * Filters the list of key/value pairs for metadata fields to be synced to the connected ESP.
-			 *
-			 * @param array $keys The list of key/value pairs for metadata fields to be synced to the connected ESP.
-			 */
-			self::$keys = \apply_filters( 'newspack_ras_metadata_keys', $fields );
-		}
-		return self::$keys;
+		return self::get_all_fields( true );
 	}
 
 	/**
 	 * Fetch the prefix for synced metadata fields.
 	 * Default is NP_ but it can be configured in the Reader Activation settings page.
 	 *
+	 * This method is deprecated. Now, each integration has its own metadata prefix, which can be retrieved with Integration::get_metadata_prefix().
+	 * As a fallback, this method returns the metadata prefix for the ESP Integration.
+	 *
+	 * @deprecated Use Integration::get_metadata_prefix() instead.
+	 *
 	 * @return string
 	 */
 	public static function get_prefix() {
+		$esp_integration = Integrations::get_integration( 'esp' );
+		if ( $esp_integration ) {
+			$prefix = $esp_integration->get_metadata_prefix();
+			if ( ! empty( $prefix ) ) {
+				/** This filter is documented below. */
+				return apply_filters( 'newspack_ras_metadata_prefix', $prefix );
+			}
+		}
+
+		// Fallback for edge case where integration isn't registered yet (before init priority 5).
 		$prefix = \get_option( self::PREFIX_OPTION, self::PREFIX );
 
 		// Guard against empty strings and falsy values.
@@ -86,11 +143,8 @@ class Metadata {
 	 * @return boolean True if updated, false otherwise.
 	 */
 	public static function update_prefix( $prefix ) {
-		if ( empty( $prefix ) ) {
-			$prefix = self::PREFIX;
-		}
-
-		return \update_option( self::PREFIX_OPTION, $prefix );
+		$esp_integration = Integrations::get_integration( 'esp' );
+		return $esp_integration ? $esp_integration->update_metadata_prefix( $prefix ) : false;
 	}
 
 	/**
@@ -103,75 +157,99 @@ class Metadata {
 	}
 
 	/**
+	 * Get payment-related metadata fields.
+	 *
+	 * @return array List of fields.
+	 */
+	public static function get_payment_fields() {
+		// Not sure yet if this method will be useful in the new schema, so keeping it here for now.
+		// It's used in the Woocommerce class when we want to clear payment fields, so we might still need to have a list of "Woocommerce related fields".
+		return Legacy_Metadata::get_payment_fields();
+	}
+
+	/**
 	 * Get the list of fields to be synced.
 	 *
+	 * This method is deprecated. Now, each integration has its own set of enabled fields, which can be retrieved with Integration::get_enabled_outgoing_fields().
+	 * As a fallback, this method returns the fields enabled for the ESP Integration.
+	 *
+	 * @deprecated Use Integration::get_enabled_outgoing_fields() instead.
 	 * @return string[] List of fields to be synced.
 	 */
 	public static function get_fields() {
-		return array_values( \get_option( self::FIELDS_OPTION, self::get_default_fields() ) );
+		$esp_integration = Integrations::get_integration( 'esp' );
+		return $esp_integration ? $esp_integration->get_enabled_outgoing_fields() : [];
 	}
 
 	/**
 	 * Get enabled fields which match provided keys.
 	 * Will return key-value pairs of enabled fields which match the keys provided.
 	 *
+	 * This method is deprecated. Now, each integration has its own set of enabled fields.
+	 * As a fallback, this method delegates to the ESP Integration.
+	 *
+	 * @deprecated Use Integration::filter_enabled_outgoing_fields() instead.
 	 * @param string[] $keys Array of keys to match.
 	 */
 	public static function filter_enabled_fields( $keys ) {
-		$enabled_fields = self::get_fields();
-		return array_filter(
-			self::get_keys(),
-			function( $val, $key ) use ( $keys, $enabled_fields ) {
-				return in_array( $key, $keys ) && in_array( $val, $enabled_fields );
-			},
-			ARRAY_FILTER_USE_BOTH
-		);
+		$esp_integration = Integrations::get_integration( 'esp' );
+		return $esp_integration ? $esp_integration->filter_enabled_outgoing_fields( $keys ) : [];
 	}
 
 	/**
 	 * Update the list of fields to be synced.
 	 *
+	 * This method is deprecated. Now, each integration has its own set of enabled fields.
+	 * As a fallback, this method will update the fields enabled for the ESP Integration.
+	 *
 	 * @param array $fields List of fields to sync.
 	 *
+	 * @deprecated Use Integration::update_enabled_outgoing_fields() instead.
 	 * @return boolean True if updated, false otherwise.
 	 */
 	public static function update_fields( $fields ) {
-		// Only allow fields that are in the metadata keys map.
-		$fields = array_intersect( self::get_default_fields(), $fields );
-		return \update_option( self::FIELDS_OPTION, array_values( $fields ) );
+		$esp_integration = Integrations::get_integration( 'esp' );
+		return $esp_integration ? $esp_integration->update_enabled_outgoing_fields( $fields ) : false;
 	}
 
 	/**
 	 * Get the "raw" unprefixed metadata keys. Only return fields selected to sync.
 	 *
+	 * This method is deprecated. Now, each integration has its own set of enabled fields.
+	 * As a fallback, this method delegates to the ESP Integration.
+	 *
+	 * @deprecated Use Integration::get_enabled_outgoing_fields_keys() instead.
 	 * @return string[] List of raw metadata keys.
 	 */
 	public static function get_raw_keys() {
-		$fields_to_sync = self::get_fields();
-		$raw_keys       = [];
-
-		foreach ( self::get_keys() as $raw_key => $field_name ) {
-			if ( in_array( $field_name, $fields_to_sync, true ) ) {
-				$raw_keys[] = $raw_key;
-			}
-		}
-
-		return array_unique( $raw_keys );
+		$esp_integration = Integrations::get_integration( 'esp' );
+		return $esp_integration ? $esp_integration->get_enabled_outgoing_fields_keys() : [];
 	}
 
 	/**
 	 * Get the "prefixed" metadata keys. Only return fields selected to sync.
 	 *
+	 * This method is deprecated. Now, each integration has its own set of enabled fields.
+	 * As a fallback, this method delegates to the ESP Integration.
+	 *
+	 * @deprecated Use Integration::get_enabled_outgoing_fields_keys() instead.
 	 * @return string[] List of prefixed metadata keys.
 	 */
 	public static function get_prefixed_keys() {
-		$fields_to_sync = self::get_fields();
-		$prefixed_keys  = [];
+		$esp_integration = Integrations::get_integration( 'esp' );
+		return $esp_integration ? $esp_integration->get_enabled_outgoing_fields_keys( true ) : [];
+	}
+
+	/**
+	 * Get all "prefixed" metadata keys.
+	 *
+	 * @return string[] List of prefixed metadata keys.
+	 */
+	public static function get_all_prefixed_keys() {
+		$prefixed_keys = [];
 
 		foreach ( self::get_keys() as $raw_key => $field_name ) {
-			if ( in_array( $field_name, $fields_to_sync, true ) ) {
-				$prefixed_keys[] = self::get_key( $raw_key );
-			}
+			$prefixed_keys[] = self::get_key( $raw_key );
 		}
 
 		return array_unique( $prefixed_keys );
@@ -204,59 +282,113 @@ class Metadata {
 	}
 
 	/**
-	 * Get basic metadata fields.
+	 * Get the list of possible fields to be synced, grouped by section.
 	 *
-	 * @return array List of fields.
+	 * Returns an array of groups, each with a 'section' label and 'fields' array.
+	 * Only includes non-legacy classes with a section name. Fields are intersected
+	 * with the filtered available fields list so extensions using the
+	 * `newspack_ras_metadata_keys` filter are respected. Fields added by the filter
+	 * that don't belong to any class are collected in an "Additional" group.
+	 *
+	 * @return array<int, array{section: string, fields: list<string>}> List of
+	 *   groups, each with a non-empty section label and an ordered list of field
+	 *   names. May be filtered by `newspack_ras_grouped_metadata_fields`.
 	 */
-	public static function get_basic_fields() {
-		return [
-			'account'              => 'Account',
-			'registration_date'    => 'Registration Date',
-			'connected_account'    => 'Connected Account',
-			'signup_page_utm'      => 'Signup UTM: ',
-			'newsletter_selection' => 'Newsletter Selection',
-			'referer'              => 'Referrer Path',
-			'registration_page'    => 'Registration Page',
-			'current_page_url'     => 'Registration Page',
-			'registration_method'  => 'Registration Method',
-		];
+	public static function get_grouped_default_fields(): array {
+		$classes          = self::get_metadata_classes();
+		$available_fields = array_values( array_unique( array_values( self::get_all_fields( true ) ) ) );
+		$groups           = [];
+		$grouped_fields   = [];
+
+		foreach ( $classes as $class ) {
+			if ( $class::is_available() ) {
+				$section = $class::get_section_name();
+				if ( empty( $section ) ) {
+					continue;
+				}
+
+				$fields = array_values( array_unique( array_values( $class::get_fields() ) ) );
+				$fields = array_values( array_intersect( $fields, $available_fields ) );
+
+				if ( empty( $fields ) ) {
+					continue;
+				}
+
+				$groups[]       = [
+					'section' => $section,
+					'fields'  => $fields,
+				];
+				$grouped_fields = array_merge( $grouped_fields, $fields );
+			}
+		}
+
+		$ungrouped_fields = array_values( array_diff( $available_fields, array_unique( $grouped_fields ) ) );
+		if ( ! empty( $ungrouped_fields ) ) {
+			$groups[] = [
+				'section' => __( 'Additional', 'newspack-plugin' ),
+				'fields'  => $ungrouped_fields,
+			];
+		}
+
+		/**
+		 * Filters the list of possible metadata fields to be synced, grouped by section.
+		 *
+		 * @param array[]  $groups           Array of [ 'section' => string, 'fields' => string[] ].
+		 * @param string[] $available_fields Flat list of filtered available metadata field names.
+		 */
+		return \apply_filters( 'newspack_ras_grouped_metadata_fields', $groups, $available_fields );
 	}
 
 	/**
-	 * Get payment-related metadata fields.
+	 * Get all metadata fields
 	 *
+	 * @param boolean $only_available Whether to return only available fields or all fields.
 	 * @return array List of fields.
 	 */
-	public static function get_payment_fields() {
-		return [
-			'membership_status'   => 'Membership Status',
-			// URL of the page on which the payment has happened.
-			'payment_page'        => 'Payment Page',
-			'payment_page_utm'    => 'Payment UTM: ',
-			'sub_start_date'      => 'Current Subscription Start Date',
-			'sub_end_date'        => 'Current Subscription End Date',
-			'cancellation_reason' => 'Subscription Cancellation Reason',
-			// At what interval does the recurring payment occur – e.g. day, week, month or year.
-			'billing_cycle'       => 'Billing Cycle',
-			// The total value of the recurring payment.
-			'recurring_payment'   => 'Recurring Payment',
-			'last_payment_date'   => 'Last Payment Date',
-			'last_payment_amount' => 'Last Payment Amount',
-			// Product name, as it appears in WooCommerce.
-			'product_name'        => 'Product Name',
-			'next_payment_date'   => 'Next Payment Date',
-			// Total value spent by this customer on the site.
-			'total_paid'          => 'Total Paid',
-		];
+	public static function get_all_fields( $only_available = false ) {
+		$classes = self::get_metadata_classes();
+		$keys    = [];
+		foreach ( $classes as $class ) {
+			if ( ! $only_available || $class::is_available() ) {
+				$fields = $class::get_fields();
+				$keys = array_merge( $keys, $fields );
+			}
+		}
+		/**
+		 * Filters the list of key/value pairs for metadata fields to be synced to the connected ESP.
+		 *
+		 * @param array $keys The list of key/value pairs for metadata fields to be synced to the connected ESP.
+		 * @param boolean $only_available Whether the list of fields is filtered to only available fields or not.
+		 */
+		return \apply_filters( 'newspack_ras_metadata_keys', $keys, $only_available );
 	}
 
+
+
 	/**
-	 * Get all metadata fields.
+	 * Get a contact array with email and metadata for the given user, customer or order.
 	 *
-	 * @return array List of fields.
+	 * @param \WP_User|\WC_Customer|\WC_Order|int $user_customer_or_order WP_User, WC_Customer, WC_Order object or ID.
+	 *
+	 * @return array Contact array with 'email' and 'metadata' keys.
 	 */
-	public static function get_all_fields() {
-		return array_merge( self::get_basic_fields(), self::get_payment_fields() );
+	public static function get_contact_with_metadata( $user_customer_or_order ) {
+		$core_contact = new Contact_Metadata\Core_Contact( $user_customer_or_order );
+		$classes      = self::get_metadata_classes();
+		$metadata     = [];
+
+		foreach ( $classes as $class ) {
+			if ( $class::is_available() ) {
+				$instance = new $class( $user_customer_or_order );
+				$metadata = array_merge( $metadata, $instance->get_metadata() );
+			}
+		}
+
+		return [
+			'email'    => $core_contact->get_email(),
+			'name'     => $core_contact->get_full_name(),
+			'metadata' => $metadata,
+		];
 	}
 
 	/**
@@ -269,7 +401,7 @@ class Metadata {
 	 *
 	 * @return boolean
 	 */
-	private static function has_key( $key, $metadata ) {
+	public static function has_key( $key, $metadata ) {
 		return isset( $metadata[ $key ] ) || isset( $metadata[ self::get_key( $key ) ] );
 	}
 
@@ -294,159 +426,21 @@ class Metadata {
 	}
 
 	/**
-	 * Get the UTM key from a raw or prefixed key.
-	 * The returned key must have a suffix (source, medium, campaign, content).
-	 *
-	 * @param string $key Key to check.
-	 *
-	 * @return string|false Formatted key if it is a UTM key, false otherwise.
-	 */
-	public static function get_utm_key( $key ) {
-		$keys     = [ 'signup_page_utm', 'payment_page_utm' ];
-		$raw_keys = self::get_raw_keys();
-		foreach ( $keys as $utm_key ) {
-			if ( ! in_array( $utm_key, $raw_keys, true ) ) { // Skip if the UTM key is not in the list of fields to sync.
-				continue;
-			}
-			$prefixed_key = self::get_key( $utm_key );
-			if ( 0 === strpos( $key, $utm_key ) ) {
-				$suffix = str_replace( $utm_key . '_', '', $key );
-				return ! empty( trim( $suffix ) ) && $suffix !== $key ? $prefixed_key . $suffix : false;
-			}
-			if ( 0 === strpos( $key, $prefixed_key ) && $key !== $prefixed_key ) {
-				return $key;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Add user's registration-related data to the given metadata.
-	 * These won't be included in every sync request, but they might be stored as user meta.
-	 *
-	 * @param array $metadata Metadata to add to.
-	 *
-	 * @return array Metadata with registration data added.
-	 */
-	private static function add_registration_data( $metadata ) {
-		$user = self::has_key( 'account', $metadata ) ? \get_user_by( 'id', self::get_key_value( 'account', $metadata ) ) : false;
-		if ( ! $user ) {
-			return $metadata;
-		}
-
-		$registration_method = self::has_key( 'registration_method', $metadata ) ? self::get_key_value( 'registration_method', $metadata ) : \get_user_meta( $user->ID, Reader_Activation::REGISTRATION_METHOD, true );
-		if ( ! empty( $registration_method ) ) {
-			$metadata['registration_method'] = $registration_method;
-		}
-
-		$connected_account = self::has_key( 'connected_account', $metadata ) ? self::get_key_value( 'connected_account', $metadata ) : \get_user_meta( $user->ID, Reader_Activation::CONNECTED_ACCOUNT, true );
-		if ( ! empty( $connected_account ) && in_array( $connected_account, Reader_Activation::SSO_REGISTRATION_METHODS ) ) {
-			$metadata['connected_account'] = $connected_account;
-		} elseif ( ! empty( $registration_method ) && in_array( $registration_method, Reader_Activation::SSO_REGISTRATION_METHODS ) ) {
-			$metadata['connected_account'] = $registration_method;
-		}
-
-		return $metadata;
-	}
-
-	/**
-	 * Add UTM fields to the given metadata.
-	 *
-	 * @param array $metadata Metadata to add to.
-	 *
-	 * @return array Metadata with UTM fields added.
-	 */
-	public static function add_utm_data( $metadata ) {
-		// Capture UTM params and signup/payment page URLs as meta for registration or payment.
-		if ( self::has_key( 'current_page_url', $metadata ) || self::has_key( 'registration_page', $metadata ) || self::has_key( 'payment_page', $metadata ) ) {
-			$payment_page = self::has_key( 'payment_page', $metadata ) ? self::get_key_value( 'payment_page', $metadata ) : false;
-			$raw_url    = false;
-			if ( ! empty( $payment_page ) ) {
-				$raw_url = self::get_key_value( 'payment_page', $metadata );
-			} elseif ( self::has_key( 'current_page_url', $metadata ) ) {
-				$raw_url = self::get_key_value( 'current_page_url', $metadata );
-			} else {
-				$raw_url = self::get_key_value( 'registration_page', $metadata );
-			}
-
-			$parsed_url = \wp_parse_url( $raw_url );
-
-			// Maybe set UTM meta.
-			if ( ! empty( $parsed_url['query'] ) ) {
-				$utm_key_prefix = ! empty( $payment_page ) ? 'payment_page_utm' : 'signup_page_utm';
-				$params         = [];
-				\wp_parse_str( $parsed_url['query'], $params );
-				foreach ( $params as $param => $value ) {
-					$param = \sanitize_text_field( $param );
-					if ( 'utm' === substr( $param, 0, 3 ) ) {
-						$param = str_replace( 'utm_', '', $param );
-						$key   = self::get_key( $utm_key_prefix ) . $param;
-						if ( ! isset( $metadata[ $key ] ) || empty( $metadata[ $key ] ) ) {
-							$metadata[ $key ] = $value;
-						}
-					}
-				}
-			}
-		}
-
-		return $metadata;
-	}
-
-	/**
 	 * Normalizes contact metadata keys before syncing to ESP.
 	 *
 	 * @param array $contact Contact data.
 	 * @return array Normalized contact data.
 	 */
 	public static function normalize_contact_data( $contact ) {
+		if ( 'legacy' === self::get_version() ) {
+			return Legacy_Metadata::normalize_contact_data( $contact );
+		}
+
 		if ( ! isset( $contact['metadata'] ) ) {
 			$contact['metadata'] = [];
 		}
 
-		$metadata            = $contact['metadata'];
-		$metadata            = self::add_registration_data( $metadata );
-		$metadata            = self::add_utm_data( $metadata );
-		$raw_keys            = self::get_raw_keys();
-		$prefixed_keys       = self::get_prefixed_keys();
-		$normalized_metadata = [];
-
-		// Keys allowed to pass through without prefixing.
-		$allowed_keys = [ 'status', 'status_if_new' ];
-
-		// UTM keys must be suffixed.
-		$disallowed_keys = [
-			'payment_page_utm',
-			'payment_page_utm_',
-			'signup_page_utm',
-			'signup_page_utm_',
-			self::get_key( 'payment_page_utm' ),
-			self::get_key( 'signup_page_utm' ),
-		];
-
-		foreach ( $metadata as $meta_key => $meta_value ) {
-			if ( in_array( $meta_key, $raw_keys, true ) && ! in_array( $meta_key, $disallowed_keys, true ) ) { // Handle raw keys.
-				$normalized_metadata[ self::get_key( $meta_key ) ] = $meta_value;
-			} elseif ( in_array( $meta_key, $prefixed_keys, true ) && ! in_array( $meta_key, $disallowed_keys, true ) ) { // Handle prefixed keys.
-				$normalized_metadata[ $meta_key ] = $meta_value;
-			} elseif ( self::get_utm_key( $meta_key ) ) { // Handle UTM keys.
-				$normalized_metadata[ self::get_utm_key( $meta_key ) ] = $meta_value;
-			} elseif ( in_array( $meta_key, $allowed_keys, true ) ) { // Handle allowed keys.
-				$normalized_metadata[ $meta_key ] = $meta_value;
-			} else { // If the key is not in the list of fields to sync, ignore it.
-				Logger::log( 'Ignoring metadata key: ' . $meta_key );
-			}
-		}
-
-		$contact['metadata'] = $normalized_metadata;
-
-		Logger::log( 'Normalizing contact data for reader ESP sync:' );
-		Logger::log( $contact );
-
-		/**
-		 * Filters the normalized contact data before syncing to the ESP.
-		 *
-		 * @param array $contact Contact data.
-		 */
-		return apply_filters( 'newspack_esp_sync_normalize_contact', $contact );
+		// TODO: Do something new.
+		return $contact;
 	}
 }

@@ -74,4 +74,4 @@ class ContainerAccess extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerAccess::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ContainerAccess');
+class_alias(ContainerAccess::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ContainerAccess');

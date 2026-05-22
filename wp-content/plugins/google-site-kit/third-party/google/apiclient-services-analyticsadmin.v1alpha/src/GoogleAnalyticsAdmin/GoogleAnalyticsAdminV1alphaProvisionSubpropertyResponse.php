@@ -19,16 +19,16 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaProvisionSubpropertyResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $subpropertyType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty::class;
+    protected $subpropertyType = GoogleAnalyticsAdminV1alphaProperty::class;
     protected $subpropertyDataType = '';
-    protected $subpropertyEventFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class;
+    protected $subpropertyEventFilterType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilter::class;
     protected $subpropertyEventFilterDataType = '';
     /**
      * The created subproperty.
      *
      * @param GoogleAnalyticsAdminV1alphaProperty $subproperty
      */
-    public function setSubproperty(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty $subproperty)
+    public function setSubproperty(GoogleAnalyticsAdminV1alphaProperty $subproperty)
     {
         $this->subproperty = $subproperty;
     }
@@ -44,7 +44,7 @@ class GoogleAnalyticsAdminV1alphaProvisionSubpropertyResponse extends \Google\Si
      *
      * @param GoogleAnalyticsAdminV1alphaSubpropertyEventFilter $subpropertyEventFilter
      */
-    public function setSubpropertyEventFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilter $subpropertyEventFilter)
+    public function setSubpropertyEventFilter(GoogleAnalyticsAdminV1alphaSubpropertyEventFilter $subpropertyEventFilter)
     {
         $this->subpropertyEventFilter = $subpropertyEventFilter;
     }
@@ -57,4 +57,4 @@ class GoogleAnalyticsAdminV1alphaProvisionSubpropertyResponse extends \Google\Si
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProvisionSubpropertyResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaProvisionSubpropertyResponse');
+class_alias(GoogleAnalyticsAdminV1alphaProvisionSubpropertyResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaProvisionSubpropertyResponse');

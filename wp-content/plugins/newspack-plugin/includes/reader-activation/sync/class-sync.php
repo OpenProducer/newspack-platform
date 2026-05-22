@@ -60,7 +60,18 @@ class Sync {
 		}
 
 		$site_url = strtolower( \untrailingslashit( \get_site_url() ) );
-		// If not a production site, only sync if the NEWSPACK_ALLOW_READER_SYNC constant is set.
+		/**
+		 * Enables reader data syncing to ESP on staging or non-production sites.
+		 * By default, syncing is disabled on staging sites to prevent test data
+		 * from being sent to production ESP lists.
+		 *
+		 * @constant NEWSPACK_ALLOW_READER_SYNC
+		 * @type     bool
+		 * @default  Sync disabled on staging/non-production sites
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_ALLOW_READER_SYNC', true );
+		 */
 		if (
 			(
 				false !== stripos( $site_url, '.newspackstaging.com' ) ||

@@ -35,7 +35,7 @@ class WmxSitemap extends \Google\Site_Kit_Dependencies\Google\Collection
      */
     public const TYPE_OCEANFRONT = 'OCEANFRONT';
     protected $collection_key = 'contents';
-    protected $contentsType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\WmxSitemapContent::class;
+    protected $contentsType = WmxSitemapContent::class;
     protected $contentsDataType = 'array';
     /**
      * Number of errors in the sitemap. These are issues with the sitemap itself
@@ -242,4 +242,4 @@ class WmxSitemap extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\WmxSitemap::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_WmxSitemap');
+class_alias(WmxSitemap::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_WmxSitemap');

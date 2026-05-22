@@ -19,9 +19,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 
 class Filter extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $betweenFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BetweenFilter::class;
+    protected $betweenFilterType = BetweenFilter::class;
     protected $betweenFilterDataType = '';
-    protected $emptyFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\EmptyFilter::class;
+    protected $emptyFilterType = EmptyFilter::class;
     protected $emptyFilterDataType = '';
     /**
      * The dimension name or metric name. In most methods, dimensions & metrics
@@ -32,18 +32,18 @@ class Filter extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $fieldName;
-    protected $inListFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\InListFilter::class;
+    protected $inListFilterType = InListFilter::class;
     protected $inListFilterDataType = '';
-    protected $numericFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericFilter::class;
+    protected $numericFilterType = NumericFilter::class;
     protected $numericFilterDataType = '';
-    protected $stringFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\StringFilter::class;
+    protected $stringFilterType = StringFilter::class;
     protected $stringFilterDataType = '';
     /**
      * A filter for two values.
      *
      * @param BetweenFilter $betweenFilter
      */
-    public function setBetweenFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BetweenFilter $betweenFilter)
+    public function setBetweenFilter(BetweenFilter $betweenFilter)
     {
         $this->betweenFilter = $betweenFilter;
     }
@@ -59,7 +59,7 @@ class Filter extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param EmptyFilter $emptyFilter
      */
-    public function setEmptyFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\EmptyFilter $emptyFilter)
+    public function setEmptyFilter(EmptyFilter $emptyFilter)
     {
         $this->emptyFilter = $emptyFilter;
     }
@@ -94,7 +94,7 @@ class Filter extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param InListFilter $inListFilter
      */
-    public function setInListFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\InListFilter $inListFilter)
+    public function setInListFilter(InListFilter $inListFilter)
     {
         $this->inListFilter = $inListFilter;
     }
@@ -110,7 +110,7 @@ class Filter extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param NumericFilter $numericFilter
      */
-    public function setNumericFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericFilter $numericFilter)
+    public function setNumericFilter(NumericFilter $numericFilter)
     {
         $this->numericFilter = $numericFilter;
     }
@@ -126,7 +126,7 @@ class Filter extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param StringFilter $stringFilter
      */
-    public function setStringFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\StringFilter $stringFilter)
+    public function setStringFilter(StringFilter $stringFilter)
     {
         $this->stringFilter = $stringFilter;
     }
@@ -139,4 +139,4 @@ class Filter extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Filter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Filter');
+class_alias(Filter::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Filter');

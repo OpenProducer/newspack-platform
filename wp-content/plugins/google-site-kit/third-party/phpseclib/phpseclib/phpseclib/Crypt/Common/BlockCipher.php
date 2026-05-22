@@ -18,6 +18,6 @@ namespace Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class BlockCipher extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\SymmetricKey
+abstract class BlockCipher extends SymmetricKey
 {
 }

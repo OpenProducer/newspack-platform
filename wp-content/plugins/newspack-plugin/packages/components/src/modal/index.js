@@ -18,12 +18,21 @@ import './style.scss';
  */
 import classnames from 'classnames';
 
-function Modal( { className, isWide, isNarrow, hideTitle, ...otherProps }, ref ) {
+const sizeClassMap = {
+	small: 'newspack-modal--size-small',
+	medium: 'newspack-modal--size-medium',
+	large: 'newspack-modal--size-large',
+	'x-large': 'newspack-modal--size-x-large',
+	full: 'newspack-modal--size-full',
+};
+
+const getSizeClassName = size => sizeClassMap[ size ] || sizeClassMap.medium;
+
+function Modal( { className, size = 'medium', hideTitle, ...otherProps }, ref ) {
 	const classes = classnames(
 		'newspack-modal',
-		isWide && 'newspack-modal--wide',
-		isNarrow && 'newspack-modal--narrow',
 		hideTitle && 'newspack-modal--hide-title', // Note: also hides the X close button.
+		getSizeClassName( size ),
 		className
 	);
 

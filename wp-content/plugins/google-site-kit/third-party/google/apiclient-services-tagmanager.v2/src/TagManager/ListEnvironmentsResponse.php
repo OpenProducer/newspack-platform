@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListEnvironmentsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'environment';
-    protected $environmentType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment::class;
+    protected $environmentType = Environment::class;
     protected $environmentDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListEnvironmentsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListEnvironmentsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListEnvironmentsResponse');
+class_alias(ListEnvironmentsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListEnvironmentsResponse');

@@ -30,7 +30,7 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter extends \Google
      * @var bool
      */
     public $atAnyPointInTime;
-    protected $betweenFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter::class;
+    protected $betweenFilterType = GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter::class;
     protected $betweenFilterDataType = '';
     /**
      * Required. Immutable. The dimension name or metric name to filter. If the
@@ -56,11 +56,11 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter extends \Google
      * @var int
      */
     public $inAnyNDayPeriod;
-    protected $inListFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterInListFilter::class;
+    protected $inListFilterType = GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterInListFilter::class;
     protected $inListFilterDataType = '';
-    protected $numericFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter::class;
+    protected $numericFilterType = GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter::class;
     protected $numericFilterDataType = '';
-    protected $stringFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterStringFilter::class;
+    protected $stringFilterType = GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterStringFilter::class;
     protected $stringFilterDataType = '';
     /**
      * Optional. Indicates whether this filter needs dynamic evaluation or not. If
@@ -89,7 +89,7 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter extends \Google
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter $betweenFilter
      */
-    public function setBetweenFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter $betweenFilter)
+    public function setBetweenFilter(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter $betweenFilter)
     {
         $this->betweenFilter = $betweenFilter;
     }
@@ -149,7 +149,7 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter extends \Google
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterInListFilter $inListFilter
      */
-    public function setInListFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterInListFilter $inListFilter)
+    public function setInListFilter(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterInListFilter $inListFilter)
     {
         $this->inListFilter = $inListFilter;
     }
@@ -165,7 +165,7 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter extends \Google
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter $numericFilter
      */
-    public function setNumericFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter $numericFilter)
+    public function setNumericFilter(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericFilter $numericFilter)
     {
         $this->numericFilter = $numericFilter;
     }
@@ -181,7 +181,7 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter extends \Google
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterStringFilter $stringFilter
      */
-    public function setStringFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterStringFilter $stringFilter)
+    public function setStringFilter(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterStringFilter $stringFilter)
     {
         $this->stringFilter = $stringFilter;
     }
@@ -194,4 +194,4 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter extends \Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter');

@@ -71,8 +71,8 @@ class AccountsReportsSaved extends \Google\Site_Kit_Dependencies\Google\Service\
     public function generate($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('generate', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ReportResult::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('generate', [$params], ReportResult::class);
     }
     /**
      * Generates a csv formatted saved report. (saved.generateCsv)
@@ -115,8 +115,8 @@ class AccountsReportsSaved extends \Google\Site_Kit_Dependencies\Google\Service\
     public function generateCsv($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('generateCsv', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\HttpBody::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('generateCsv', [$params], HttpBody::class);
     }
     /**
      * Lists saved reports. (saved.listAccountsReportsSaved)
@@ -139,9 +139,9 @@ class AccountsReportsSaved extends \Google\Site_Kit_Dependencies\Google\Service\
     public function listAccountsReportsSaved($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListSavedReportsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListSavedReportsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsReportsSaved::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsReportsSaved');
+class_alias(AccountsReportsSaved::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsReportsSaved');

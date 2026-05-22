@@ -32,7 +32,7 @@ class ContactGroup extends \Google\Site_Kit_Dependencies\Google\Collection
      */
     public const GROUP_TYPE_SYSTEM_CONTACT_GROUP = 'SYSTEM_CONTACT_GROUP';
     protected $collection_key = 'memberResourceNames';
-    protected $clientDataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\GroupClientData::class;
+    protected $clientDataType = GroupClientData::class;
     protected $clientDataDataType = 'array';
     /**
      * The [HTTP entity tag](https://en.wikipedia.org/wiki/HTTP_ETag) of the
@@ -70,7 +70,7 @@ class ContactGroup extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string[]
      */
     public $memberResourceNames;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroupMetadata::class;
+    protected $metadataType = ContactGroupMetadata::class;
     protected $metadataDataType = '';
     /**
      * The contact group name set by the group owner or a system provided name for
@@ -200,7 +200,7 @@ class ContactGroup extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param ContactGroupMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroupMetadata $metadata)
+    public function setMetadata(ContactGroupMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -251,4 +251,4 @@ class ContactGroup extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ContactGroup');
+class_alias(ContactGroup::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ContactGroup');

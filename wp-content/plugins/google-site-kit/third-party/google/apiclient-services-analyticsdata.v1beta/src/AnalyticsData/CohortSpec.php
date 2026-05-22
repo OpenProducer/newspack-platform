@@ -20,18 +20,18 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class CohortSpec extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'cohorts';
-    protected $cohortReportSettingsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CohortReportSettings::class;
+    protected $cohortReportSettingsType = CohortReportSettings::class;
     protected $cohortReportSettingsDataType = '';
-    protected $cohortsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Cohort::class;
+    protected $cohortsType = Cohort::class;
     protected $cohortsDataType = 'array';
-    protected $cohortsRangeType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CohortsRange::class;
+    protected $cohortsRangeType = CohortsRange::class;
     protected $cohortsRangeDataType = '';
     /**
      * Optional settings for a cohort report.
      *
      * @param CohortReportSettings $cohortReportSettings
      */
-    public function setCohortReportSettings(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CohortReportSettings $cohortReportSettings)
+    public function setCohortReportSettings(CohortReportSettings $cohortReportSettings)
     {
         $this->cohortReportSettings = $cohortReportSettings;
     }
@@ -66,7 +66,7 @@ class CohortSpec extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param CohortsRange $cohortsRange
      */
-    public function setCohortsRange(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CohortsRange $cohortsRange)
+    public function setCohortsRange(CohortsRange $cohortsRange)
     {
         $this->cohortsRange = $cohortsRange;
     }
@@ -79,4 +79,4 @@ class CohortSpec extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CohortSpec::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_CohortSpec');
+class_alias(CohortSpec::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_CohortSpec');

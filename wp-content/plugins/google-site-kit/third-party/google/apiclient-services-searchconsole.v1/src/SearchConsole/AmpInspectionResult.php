@@ -156,7 +156,7 @@ class AmpInspectionResult extends \Google\Site_Kit_Dependencies\Google\Collectio
      * @var string
      */
     public $indexingState;
-    protected $issuesType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\AmpIssue::class;
+    protected $issuesType = AmpIssue::class;
     protected $issuesDataType = 'array';
     /**
      * Last time this AMP version was crawled by Google. Absent if the URL was
@@ -332,4 +332,4 @@ class AmpInspectionResult extends \Google\Site_Kit_Dependencies\Google\Collectio
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\AmpInspectionResult::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_AmpInspectionResult');
+class_alias(AmpInspectionResult::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_AmpInspectionResult');

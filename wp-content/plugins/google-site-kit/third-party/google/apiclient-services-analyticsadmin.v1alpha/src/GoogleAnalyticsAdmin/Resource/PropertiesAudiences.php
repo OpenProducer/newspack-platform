@@ -40,11 +40,11 @@ class PropertiesAudiences extends \Google\Site_Kit_Dependencies\Google\Service\R
      * @return GoogleProtobufEmpty
      * @throws \Google\Service\Exception
      */
-    public function archive($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaArchiveAudienceRequest $postBody, $optParams = [])
+    public function archive($name, GoogleAnalyticsAdminV1alphaArchiveAudienceRequest $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('archive', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('archive', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Creates an Audience. (audiences.create)
@@ -55,11 +55,11 @@ class PropertiesAudiences extends \Google\Site_Kit_Dependencies\Google\Service\R
      * @return GoogleAnalyticsAdminV1alphaAudience
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudience $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaAudience $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudience::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaAudience::class);
     }
     /**
      * Lookup for a single Audience. Audiences created before 2020 may not be
@@ -75,8 +75,8 @@ class PropertiesAudiences extends \Google\Site_Kit_Dependencies\Google\Service\R
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudience::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaAudience::class);
     }
     /**
      * Lists Audiences on a property. Audiences created before 2020 may not be
@@ -99,8 +99,8 @@ class PropertiesAudiences extends \Google\Site_Kit_Dependencies\Google\Service\R
     public function listPropertiesAudiences($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListAudiencesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListAudiencesResponse::class);
     }
     /**
      * Updates an Audience on a property. (audiences.patch)
@@ -117,12 +117,12 @@ class PropertiesAudiences extends \Google\Site_Kit_Dependencies\Google\Service\R
      * @return GoogleAnalyticsAdminV1alphaAudience
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudience $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaAudience $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudience::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaAudience::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesAudiences::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesAudiences');
+class_alias(PropertiesAudiences::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesAudiences');

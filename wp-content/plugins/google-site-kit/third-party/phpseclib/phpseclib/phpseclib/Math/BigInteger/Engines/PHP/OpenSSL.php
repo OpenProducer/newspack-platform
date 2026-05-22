@@ -18,6 +18,6 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\OpenSSL as P
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class OpenSSL extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\OpenSSL
+abstract class OpenSSL extends Progenitor
 {
 }

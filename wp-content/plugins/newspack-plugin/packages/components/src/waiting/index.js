@@ -23,11 +23,12 @@ class Waiting extends Component {
 	 * Render
 	 */
 	render() {
-		const { className, isRight, isLeft, isCenter, ...otherProps } = this.props;
+		const { className, isRight, isLeft, isCenter, noMargin, ...otherProps } = this.props;
 		const classes = classnames( 'newspack-waiting', className, {
 			'is-right': isRight,
 			'is-left': isLeft,
 			'is-center': isCenter,
+			'no-margin': noMargin,
 		} );
 		return <Spinner className={ classes } { ...otherProps } />;
 	}

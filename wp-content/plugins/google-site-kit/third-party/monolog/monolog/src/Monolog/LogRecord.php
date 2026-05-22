@@ -29,5 +29,5 @@ interface LogRecord extends \ArrayAccess
     /**
      * @phpstan-return Record
      */
-    public function toArray() : array;
+    public function toArray(): array;
 }

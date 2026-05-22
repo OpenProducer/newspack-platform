@@ -118,4 +118,4 @@ class GoogleAnalyticsAdminV1betaAccessStringFilter extends \Google\Site_Kit_Depe
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessStringFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessStringFilter');
+class_alias(GoogleAnalyticsAdminV1betaAccessStringFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessStringFilter');

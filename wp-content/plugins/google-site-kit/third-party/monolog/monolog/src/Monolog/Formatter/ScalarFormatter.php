@@ -17,14 +17,14 @@ namespace Google\Site_Kit_Dependencies\Monolog\Formatter;
  *
  * @author Andrew Lawson <adlawson@gmail.com>
  */
-class ScalarFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\NormalizerFormatter
+class ScalarFormatter extends NormalizerFormatter
 {
     /**
      * {@inheritDoc}
      *
      * @phpstan-return array<string, scalar|null> $record
      */
-    public function format(array $record) : array
+    public function format(array $record): array
     {
         $result = [];
         foreach ($record as $key => $value) {
@@ -39,7 +39,7 @@ class ScalarFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\No
     protected function normalizeValue($value)
     {
         $normalized = $this->normalize($value);
-        if (\is_array($normalized)) {
+        if (is_array($normalized)) {
             return $this->toJson($normalized, \true);
         }
         return $normalized;

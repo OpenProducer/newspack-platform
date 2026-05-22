@@ -52,7 +52,7 @@ class ProxyAuthTokenMiddleware
      * @param callable $httpHandler (optional) callback which delivers psr7 request
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      */
-    public function __construct(\Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
+    public function __construct(FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
         $this->fetcher = $fetcher;
         $this->httpHandler = $httpHandler;
@@ -85,14 +85,14 @@ class ProxyAuthTokenMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options) use($handler) {
+        return function (RequestInterface $request, array $options) use ($handler) {
             // Requests using "proxy_auth"="google_auth" will be authorized.
             if (!isset($options['proxy_auth']) || $options['proxy_auth'] !== 'google_auth') {
                 return $handler($request, $options);
             }
             $request = $request->withHeader('proxy-authorization', 'Bearer ' . $this->fetchToken());
             if ($quotaProject = $this->getQuotaProject()) {
-                $request = $request->withHeader(\Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
+                $request = $request->withHeader(GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
             }
             return $handler($request, $options);
         };
@@ -105,14 +105,14 @@ class ProxyAuthTokenMiddleware
     private function fetchToken()
     {
         $auth_tokens = $this->fetcher->fetchAuthToken($this->httpHandler);
-        if (\array_key_exists('access_token', $auth_tokens)) {
+        if (array_key_exists('access_token', $auth_tokens)) {
             // notify the callback if applicable
             if ($this->tokenCallback) {
-                \call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $auth_tokens['access_token']);
+                call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $auth_tokens['access_token']);
             }
             return $auth_tokens['access_token'];
         }
-        if (\array_key_exists('id_token', $auth_tokens)) {
+        if (array_key_exists('id_token', $auth_tokens)) {
             return $auth_tokens['id_token'];
         }
         return null;
@@ -122,7 +122,7 @@ class ProxyAuthTokenMiddleware
      */
     private function getQuotaProject()
     {
-        if ($this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface) {
+        if ($this->fetcher instanceof GetQuotaProjectInterface) {
             return $this->fetcher->getQuotaProject();
         }
         return null;

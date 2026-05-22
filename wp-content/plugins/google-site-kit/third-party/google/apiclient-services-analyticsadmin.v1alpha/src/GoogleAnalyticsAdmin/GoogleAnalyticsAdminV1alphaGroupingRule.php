@@ -25,7 +25,7 @@ class GoogleAnalyticsAdminV1alphaGroupingRule extends \Google\Site_Kit_Dependenc
      * @var string
      */
     public $displayName;
-    protected $expressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression::class;
+    protected $expressionType = GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression::class;
     protected $expressionDataType = '';
     /**
      * Required. Customer defined display name for the channel.
@@ -48,7 +48,7 @@ class GoogleAnalyticsAdminV1alphaGroupingRule extends \Google\Site_Kit_Dependenc
      *
      * @param GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression $expression
      */
-    public function setExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression $expression)
+    public function setExpression(GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression $expression)
     {
         $this->expression = $expression;
     }
@@ -61,4 +61,4 @@ class GoogleAnalyticsAdminV1alphaGroupingRule extends \Google\Site_Kit_Dependenc
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaGroupingRule::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaGroupingRule');
+class_alias(GoogleAnalyticsAdminV1alphaGroupingRule::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaGroupingRule');

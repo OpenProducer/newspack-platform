@@ -22,7 +22,7 @@ import edit from './edit';
 import './editor.scss';
 import './view.scss';
 import metadata from './block.json';
-const { name, attributes, category } = metadata;
+const { name, attributes, apiVersion, category } = metadata;
 
 // Name must be exported separately.
 export { name };
@@ -30,6 +30,7 @@ export { name };
 export const title = __( 'Content Loop', 'newspack-blocks' );
 
 export const settings = {
+	apiVersion,
 	title,
 	icon: {
 		src: icon,

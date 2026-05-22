@@ -45,7 +45,7 @@ class GtagConfig extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $gtagConfigId;
-    protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $parameterType = Parameter::class;
     protected $parameterDataType = 'array';
     /**
      * Google tag config's API relative path.
@@ -218,4 +218,4 @@ class GtagConfig extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_GtagConfig');
+class_alias(GtagConfig::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_GtagConfig');

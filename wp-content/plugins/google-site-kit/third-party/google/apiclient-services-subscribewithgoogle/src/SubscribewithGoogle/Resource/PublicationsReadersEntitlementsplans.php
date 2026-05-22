@@ -43,11 +43,11 @@ class PublicationsReadersEntitlementsplans extends \Google\Site_Kit_Dependencies
      * @return UserEntitlementsPlan
      * @throws \Google\Service\Exception
      */
-    public function cancel($name, \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\CancelUserEntitlementsPlanRequest $postBody, $optParams = [])
+    public function cancel($name, CancelUserEntitlementsPlanRequest $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('cancel', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\UserEntitlementsPlan::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('cancel', [$params], UserEntitlementsPlan::class);
     }
     /**
      * Gets the entitlements plan identitfied by plan id for a given user under the
@@ -62,8 +62,8 @@ class PublicationsReadersEntitlementsplans extends \Google\Site_Kit_Dependencies
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\UserEntitlementsPlan::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], UserEntitlementsPlan::class);
     }
     /**
      * Lists all the entitlements plans for a given user under a given publication.
@@ -87,9 +87,9 @@ class PublicationsReadersEntitlementsplans extends \Google\Site_Kit_Dependencies
     public function listPublicationsReadersEntitlementsplans($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ListUserEntitlementsPlansResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListUserEntitlementsPlansResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Resource\PublicationsReadersEntitlementsplans::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_Resource_PublicationsReadersEntitlementsplans');
+class_alias(PublicationsReadersEntitlementsplans::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_Resource_PublicationsReadersEntitlementsplans');

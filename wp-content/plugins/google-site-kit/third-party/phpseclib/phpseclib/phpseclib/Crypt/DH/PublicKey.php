@@ -17,7 +17,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-final class PublicKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH
+final class PublicKey extends DH
 {
     use Common\Traits\Fingerprint;
     /**

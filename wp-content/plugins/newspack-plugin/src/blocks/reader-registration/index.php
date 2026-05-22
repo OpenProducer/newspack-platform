@@ -32,6 +32,14 @@ function register_block() {
 	if ( ! Reader_Activation::is_enabled() ) {
 		return;
 	}
+
+	\register_block_style(
+		'newspack/reader-registration',
+		[
+			'name'  => 'inline',
+			'label' => __( 'Inline', 'newspack-plugin' ),
+		]
+	);
 }
 add_action( 'init', __NAMESPACE__ . '\\register_block' );
 
@@ -65,6 +73,15 @@ function enqueue_scripts() {
 	);
 	\wp_script_add_data( $handle, 'async', true );
 	\wp_script_add_data( $handle, 'amp-plus', true );
+	\wp_localize_script(
+		$handle,
+		'reader_registration_block_config',
+		[
+			'require_account_verification' => \Newspack\Content_Gate::requires_account_verification(),
+			'verification_url'             => \admin_url( 'admin-ajax.php' ),
+			'verification_nonce'           => \wp_create_nonce( 'newspack_reader_registration_verification' ),
+		]
+	);
 }
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_scripts' );
 
@@ -83,6 +100,128 @@ function get_form_id() {
 }
 
 /**
+ * Render the verification box markup for the registration block.
+ *
+ * @return void
+ */
+function render_verification_box() {
+	$email = '%EMAIL%';
+	if ( \is_user_logged_in() ) {
+		$current_user = \wp_get_current_user();
+		$email = $current_user->user_email;
+	}
+	?>
+	<div class="newspack__reader-verification newspack-ui__box newspack-ui__box--x-large newspack-ui__box--text-center" data-verify-email="<?php echo esc_attr( $email ); ?>">
+			<span class="newspack-ui__icon newspack-ui__icon--neutral">
+				<?php Newspack_UI_Icons::print_svg( 'login' ); ?>
+			</span>
+			<p>
+				<?php
+				echo wp_kses_post(
+					sprintf(
+						// translators: %s is the user's email address.
+						__( 'We\'ll send a verification code to %s.', 'newspack-plugin' ),
+						'<strong class="email-address">' . esc_html( $email ) . '</strong>'
+					)
+				);
+				?>
+			</p>
+			<p>
+				<button type="button" class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--wide" data-send-otp>
+					<?php esc_html_e( 'Send code', 'newspack-plugin' ); ?>
+				</button>
+			</p>
+	</div>
+	<?php
+}
+
+/**
+ * Render the verification modal for the registration block.
+ *
+ * @return void
+ */
+function render_verification_modal() {
+	if ( ! \Newspack\Content_Gate::requires_account_verification() ) {
+		return;
+	}
+	$email = '%EMAIL%';
+	if ( \is_user_logged_in() ) {
+		$current_user = \wp_get_current_user();
+		$email = $current_user->user_email;
+	}
+	ob_start();
+	?>
+	<div class="newspack-ui__box newspack-ui__box--text-center">
+		<span class="newspack-ui__icon newspack-ui__icon--neutral">
+			<?php Newspack_UI_Icons::print_svg( 'login' ); ?>
+		</span>
+		<p>
+			<?php
+			printf(
+				// translators: %s is the user's email address.
+				esc_html__( 'We\'ll send a verification code to %s.', 'newspack-plugin' ),
+				'<strong class="email-address">' . esc_html( $email ) . '</strong>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			);
+			?>
+		</p>
+	</div>
+	<button type="button" class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--wide" data-send-otp>
+		<?php esc_html_e( 'Send code', 'newspack-plugin' ); ?>
+	</button>
+	<button type="button" class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--wide newspack-ui__modal__close">
+		<?php esc_html_e( 'Go back', 'newspack-plugin' ); ?>
+	</button>
+	<?php
+	$content = ob_get_clean();
+	?>
+	<div class="newspack-ui newspack__reader-verification">
+		<?php
+		\Newspack\Newspack_UI::generate_modal(
+			[
+				'id'      => 'newspack-reader-verification',
+				'title'   => __( 'Sign in', 'newspack-plugin' ),
+				'content' => $content,
+			]
+		);
+		?>
+	</div>
+	<?php
+}
+add_action( 'wp_footer', __NAMESPACE__ . '\\render_verification_modal' );
+
+/**
+ * Process the verification request.
+ *
+ * @return never
+ */
+function process_verification_request() {
+	if ( ! \wp_is_json_request() ) {
+		\wp_die( \esc_html__( 'Unsupported request method', 'newspack-plugin' ) );
+	}
+
+	if ( ! \check_ajax_referer( 'newspack_reader_registration_verification', 'nonce', false ) ) {
+		\wp_send_json_error( \__( 'Invalid request. Please refresh the page and try again.', 'newspack-plugin' ) );
+	}
+
+	if ( ! \is_user_logged_in() ) {
+		\wp_send_json_error( \__( 'User not logged in', 'newspack-plugin' ) );
+	}
+
+	$current_user = \wp_get_current_user();
+	if ( ! Reader_Activation::is_user_reader( $current_user ) || Reader_Activation::is_reader_verified( $current_user ) ) {
+		\wp_send_json_error( __( 'User is not a reader or is already verified', 'newspack-plugin' ) );
+	}
+
+	$otp_sent = \Newspack\Magic_Link::send_email( $current_user );
+	if ( \is_wp_error( $otp_sent ) ) {
+		\wp_send_json_error( $otp_sent->get_error_message() );
+	}
+
+	\wp_send_json_success( __( 'OTP sent', 'newspack-plugin' ) );
+}
+add_action( 'wp_ajax_newspack_reader_registration_verification', __NAMESPACE__ . '\\process_verification_request' );
+
+/**
  * Render Registration Block.
  *
  * @param array[] $attrs Block attributes.
@@ -94,9 +233,11 @@ function render_block( $attrs, $content ) {
 		return '';
 	}
 
-	$registered      = false;
-	$my_account_url  = function_exists( 'wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : false;
-	$message         = '';
+	$registered = false;
+	$show_pending_verification = false;
+
+	$my_account_url = function_exists( 'wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : false;
+	$message = '';
 	$success_message = __( 'Success! Your account was created and you’re signed in.', 'newspack-plugin' ) . '<br />';
 
 	if ( $my_account_url ) {
@@ -109,21 +250,14 @@ function render_block( $attrs, $content ) {
 
 	/** Handle default attributes. */
 	$default_attrs = [
-		'label'           => __( 'Sign up', 'newspack-plugin' ),
+		'label'           => __( 'Continue', 'newspack-plugin' ),
 		'newsletterLabel' => __( 'Subscribe to our newsletter', 'newspack-plugin' ),
-		'signInLabel'     => __( 'Sign in to an existing account', 'newspack-plugin' ),
-		'signedInLabel'   => __( 'An account was already registered with this email. Please check your inbox for an authentication link.', 'newspack-plugin' ),
 	];
 	$attrs         = \wp_parse_args( $attrs, $default_attrs );
 	foreach ( $default_attrs as $key => $value ) {
 		if ( empty( $attrs[ $key ] ) ) {
 			$attrs[ $key ] = $value;
 		}
-	}
-
-	$sign_in_url = \wp_login_url();
-	if ( function_exists( 'wc_get_account_endpoint_url' ) ) {
-		$sign_in_url = $my_account_url;
 	}
 
 	/** Setup list subscription */
@@ -142,32 +276,28 @@ function render_block( $attrs, $content ) {
 
 	$is_admin_preview = method_exists( 'Newspack_Popups', 'is_user_admin' ) && \Newspack_Popups::is_user_admin();
 
-	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	if (
 		! \is_preview() &&
 		! $is_admin_preview &&
 		( ! method_exists( '\Newspack_Popups', 'is_preview_request' ) || ! \Newspack_Popups::is_preview_request() ) &&
 		(
 			\is_user_logged_in() ||
-			( isset( $_GET['newspack_reader'] ) && absint( $_GET['newspack_reader'] ) )
+			( isset( $_GET['newspack_reader'] ) && absint( $_GET['newspack_reader'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		)
 	) {
 		$registered = true;
-		$message    = $success_message;
+		if ( \is_user_logged_in() && ! Reader_Activation::is_reader_verified( \wp_get_current_user() ) && \Newspack\Content_Gate::is_gated() ) {
+			$show_pending_verification = true;
+		}
 	}
-	if ( isset( $_GET['newspack_reader'] ) && isset( $_GET['message'] ) ) {
-		$message = \sanitize_text_field( $_GET['message'] );
+
+	if ( isset( $_GET['newspack_reader'] ) && isset( $_GET['message'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$message = \sanitize_text_field( $_GET['message'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
-	// phpcs:enable
 
 	$success_registration_markup = $content;
 	if ( empty( \wp_strip_all_tags( $content ) ) ) {
 		$success_registration_markup = '<p>' . $success_message . '</p>';
-	}
-
-	$success_login_markup = $attrs['signedInLabel'];
-	if ( ! empty( \wp_strip_all_tags( $attrs['signedInLabel'] ) ) ) {
-		$success_login_markup = '<p>' . $attrs['signedInLabel'] . '</p>';
 	}
 
 	$checked = [];
@@ -182,7 +312,11 @@ function render_block( $attrs, $content ) {
 	ob_start();
 	?>
 	<div class="newspack-registration newspack-ui <?php echo esc_attr( get_block_classes( $attrs ) ); ?>">
-		<?php if ( $registered ) : ?>
+		<?php
+		if ( $show_pending_verification ) :
+			render_verification_box();
+		elseif ( $registered ) :
+			?>
 			<div class="newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
 				<span class="newspack-ui__icon newspack-ui__icon--success">
 					<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
@@ -238,7 +372,9 @@ function render_block( $attrs, $content ) {
 					?>
 					<div class="newspack-registration__main">
 						<div>
-							<?php Reader_Activation::render_third_party_auth(); ?>
+							<?php if ( empty( $attrs['hideOauth'] ) ) : ?>
+								<?php Reader_Activation::render_third_party_auth(); ?>
+							<?php endif; ?>
 							<div class="newspack-registration__inputs">
 								<input
 								<?php
@@ -270,11 +406,6 @@ function render_block( $attrs, $content ) {
 						</div>
 					</div>
 				</div>
-				<div class="newspack-registration__have-account">
-					<a href="<?php echo \esc_url( $sign_in_url ); ?>" data-newspack-reader-account-link class="newspack-ui__button newspack-ui__button--ghost">
-						<?php echo \wp_kses_post( $attrs['signInLabel'] ); ?>
-					</a>
-				</div>
 				<div class="newspack-registration__help-text">
 					<p>
 						<?php
@@ -293,17 +424,11 @@ function render_block( $attrs, $content ) {
 					</p>
 				</div>
 			</form>
-			<div class="newspack-registration__registration-success newspack-registration--hidden newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
+			<div class="newspack-registration__registration-success newspack-registration--hidden newspack-ui__box newspack-ui__box--x-large newspack-ui__box--success newspack-ui__box--text-center">
 				<span class="newspack-ui__icon newspack-ui__icon--success">
 					<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				</span>
 				<?php echo $success_registration_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			</div>
-			<div class="newspack-registration__login-success newspack-registration--hidden newspack-ui__box newspack-ui__box--success newspack-ui__box--text-center">
-				<span class="newspack-ui__icon newspack-ui__icon--success">
-					<?php Newspack_UI_Icons::print_svg( 'emailSend' ); ?>
-				</span>
-				<?php echo \wp_kses_post( $success_login_markup ); ?>
 			</div>
 		<?php endif; ?>
 	</div>
@@ -397,11 +522,11 @@ function process_form() {
 	}
 
 	// reCAPTCHA test.
-	$current_page_url = \wp_parse_url( \wp_get_raw_referer() );
-	if ( ! empty( $current_page_url['path'] ) ) {
-		$current_page_url = \esc_url( \home_url( $current_page_url['path'] ) );
-	}
-	if ( apply_filters( 'newspack_recaptcha_verify_captcha', Recaptcha::can_use_captcha(), $current_page_url, 'registration_block' ) ) {
+	$raw_referer      = \wp_get_raw_referer();
+	$parsed_referer   = \wp_parse_url( $raw_referer );
+	$current_page_url = ! empty( $parsed_referer['path'] ) ? \esc_url( $raw_referer ) : $raw_referer;
+	$recaptcha_url    = ! empty( $parsed_referer['path'] ) ? \esc_url( \home_url( $parsed_referer['path'] ) ) : $current_page_url;
+	if ( apply_filters( 'newspack_recaptcha_verify_captcha', Recaptcha::can_use_captcha(), $recaptcha_url, 'registration_block' ) ) {
 		$captcha_result = Recaptcha::verify_captcha();
 		if ( \is_wp_error( $captcha_result ) ) {
 			return send_form_response( $captcha_result );
@@ -449,13 +574,33 @@ function process_form() {
 
 	$user_logged_in = false !== $user_id;
 
-	return send_form_response(
-		[
-			'email'         => $email,
-			'authenticated' => $user_logged_in,
-			'existing_user' => ! $user_logged_in,
-			'metadata'      => $metadata,
-		]
-	);
+	// For existing users, determine if they need password or OTP authentication.
+	$response = [
+		'email'         => $email,
+		'authenticated' => $user_logged_in,
+		'existing_user' => ! $user_logged_in,
+		'metadata'      => $metadata,
+	];
+
+	// Include verified status for newly registered users.
+	if ( $user_logged_in ) {
+		$user = \get_user_by( 'id', $user_id );
+		if ( $user ) {
+			$response['verified'] = Reader_Activation::is_reader_verified( $user );
+			// Signal frontend to open OTP verification flow.
+			if ( ! $response['verified'] && \Newspack\Content_Gate::requires_account_verification() ) {
+				$response['action']             = 'otp';
+				$response['verification_nonce'] = \wp_create_nonce( 'newspack_reader_registration_verification' );
+			}
+		}
+	} else {
+		$existing_user = \get_user_by( 'email', $email );
+		if ( $existing_user && Reader_Activation::is_user_reader( $existing_user ) ) {
+			// Return the action type - frontend will check OTP hash validity and request fresh OTP if needed.
+			$response['action'] = Reader_Activation::is_reader_without_password( $existing_user ) ? 'otp' : 'pwd';
+		}
+	}
+
+	return send_form_response( $response );
 }
 add_action( 'template_redirect', __NAMESPACE__ . '\\process_form' );

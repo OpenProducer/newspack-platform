@@ -31,7 +31,7 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition extends \Google
      * @var bool
      */
     public $nullFilter;
-    protected $stringFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterConditionStringFilter::class;
+    protected $stringFilterType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilterConditionStringFilter::class;
     protected $stringFilterDataType = '';
     /**
      * Required. The field that is being filtered.
@@ -70,7 +70,7 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition extends \Google
      *
      * @param GoogleAnalyticsAdminV1alphaSubpropertyEventFilterConditionStringFilter $stringFilter
      */
-    public function setStringFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterConditionStringFilter $stringFilter)
+    public function setStringFilter(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterConditionStringFilter $stringFilter)
     {
         $this->stringFilter = $stringFilter;
     }
@@ -83,4 +83,4 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition extends \Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition');
+class_alias(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition');

@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class RSAPublicKey
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['modulus' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER], 'publicExponent' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['modulus' => ['type' => ASN1::TYPE_INTEGER], 'publicExponent' => ['type' => ASN1::TYPE_INTEGER]]];
 }

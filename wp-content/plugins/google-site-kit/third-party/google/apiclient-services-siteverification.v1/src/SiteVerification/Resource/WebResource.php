@@ -41,7 +41,7 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function delete($id, $optParams = [])
     {
         $params = ['id' => $id];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -55,8 +55,8 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function get($id, $optParams = [])
     {
         $params = ['id' => $id];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], SiteVerificationWebResourceResource::class);
     }
     /**
      * Get a verification token for placing on a website or domain.
@@ -67,11 +67,11 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return SiteVerificationWebResourceGettokenResponse
      * @throws \Google\Service\Exception
      */
-    public function getToken(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenRequest $postBody, $optParams = [])
+    public function getToken(SiteVerificationWebResourceGettokenRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getToken', [$params], \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getToken', [$params], SiteVerificationWebResourceGettokenResponse::class);
     }
     /**
      * Attempt verification of a website or domain. (webResource.insert)
@@ -83,11 +83,11 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return SiteVerificationWebResourceResource
      * @throws \Google\Service\Exception
      */
-    public function insert($verificationMethod, \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource $postBody, $optParams = [])
+    public function insert($verificationMethod, SiteVerificationWebResourceResource $postBody, $optParams = [])
     {
         $params = ['verificationMethod' => $verificationMethod, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('insert', [$params], \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('insert', [$params], SiteVerificationWebResourceResource::class);
     }
     /**
      * Get the list of your verified websites and domains.
@@ -100,8 +100,8 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listWebResource($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceListResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], SiteVerificationWebResourceListResponse::class);
     }
     /**
      * Modify the list of owners for your website or domain. This method supports
@@ -113,11 +113,11 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return SiteVerificationWebResourceResource
      * @throws \Google\Service\Exception
      */
-    public function patch($id, \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource $postBody, $optParams = [])
+    public function patch($id, SiteVerificationWebResourceResource $postBody, $optParams = [])
     {
         $params = ['id' => $id, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], SiteVerificationWebResourceResource::class);
     }
     /**
      * Modify the list of owners for your website or domain. (webResource.update)
@@ -128,12 +128,12 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return SiteVerificationWebResourceResource
      * @throws \Google\Service\Exception
      */
-    public function update($id, \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource $postBody, $optParams = [])
+    public function update($id, SiteVerificationWebResourceResource $postBody, $optParams = [])
     {
         $params = ['id' => $id, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], SiteVerificationWebResourceResource::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\Resource\WebResource::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SiteVerification_Resource_WebResource');
+class_alias(WebResource::class, 'Google\Site_Kit_Dependencies\Google_Service_SiteVerification_Resource_WebResource');

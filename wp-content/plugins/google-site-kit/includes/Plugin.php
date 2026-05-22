@@ -226,6 +226,7 @@ final class Plugin {
 				( new Core\Util\Migration_1_129_0( $this->context, $options ) )->register();
 				( new Core\Util\Migration_1_150_0( $this->context, $options ) )->register();
 				( new Core\Util\Migration_1_163_0( $this->context, $options ) )->register();
+				( new Core\Util\Migration_1_177_0( $this->context, $options ) )->register();
 				( new Core\Dashboard_Sharing\Dashboard_Sharing( $this->context ) )->register();
 				( new Core\Key_Metrics\Key_Metrics( $this->context, $user_options, $options ) )->register();
 				( new Core\Prompts\Prompts( $this->context, $user_options ) )->register();
@@ -239,7 +240,6 @@ final class Plugin {
 					$data_requests = new Core\Email_Reporting\Email_Reporting_Data_Requests(
 						$this->context,
 						$modules,
-						$conversion_tracking,
 						$transients,
 						$user_options,
 					);
@@ -321,7 +321,7 @@ final class Plugin {
 		}
 
 		if ( file_exists( GOOGLESITEKIT_PLUGIN_DIR_PATH . 'dist/config.php' ) ) {
-			$config = include GOOGLESITEKIT_PLUGIN_DIR_PATH . 'dist/config.php'; // @phpstan-ignore include.fileNotFound
+			$config = include GOOGLESITEKIT_PLUGIN_DIR_PATH . 'dist/config.php';
 			Feature_Flags::set_features( (array) $config['features'] );
 		}
 

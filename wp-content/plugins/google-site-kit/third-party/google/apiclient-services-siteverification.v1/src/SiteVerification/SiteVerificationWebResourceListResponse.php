@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SiteVerification;
 class SiteVerificationWebResourceListResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'items';
-    protected $itemsType = \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource::class;
+    protected $itemsType = SiteVerificationWebResourceResource::class;
     protected $itemsDataType = 'array';
     /**
      * The list of sites that are owned by the authenticated user.
@@ -40,4 +40,4 @@ class SiteVerificationWebResourceListResponse extends \Google\Site_Kit_Dependenc
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceListResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SiteVerification_SiteVerificationWebResourceListResponse');
+class_alias(SiteVerificationWebResourceListResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_SiteVerification_SiteVerificationWebResourceListResponse');

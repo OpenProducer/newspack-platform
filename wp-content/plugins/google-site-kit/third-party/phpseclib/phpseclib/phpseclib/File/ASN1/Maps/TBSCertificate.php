@@ -21,21 +21,21 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
 abstract class TBSCertificate
 {
     // assert($TBSCertificate['children']['signature'] == $Certificate['children']['signatureAlgorithm'])
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => [
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => [
         // technically, default implies optional, but we'll define it as being optional, none-the-less, just to
         // reenforce that fact
-        'version' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER, 'constant' => 0, 'optional' => \true, 'explicit' => \true, 'mapping' => ['v1', 'v2', 'v3'], 'default' => 'v1'],
-        'serialNumber' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\CertificateSerialNumber::MAP,
-        'signature' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\AlgorithmIdentifier::MAP,
-        'issuer' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Name::MAP,
-        'validity' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Validity::MAP,
-        'subject' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Name::MAP,
-        'subjectPublicKeyInfo' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\SubjectPublicKeyInfo::MAP,
+        'version' => ['type' => ASN1::TYPE_INTEGER, 'constant' => 0, 'optional' => \true, 'explicit' => \true, 'mapping' => ['v1', 'v2', 'v3'], 'default' => 'v1'],
+        'serialNumber' => CertificateSerialNumber::MAP,
+        'signature' => AlgorithmIdentifier::MAP,
+        'issuer' => Name::MAP,
+        'validity' => Validity::MAP,
+        'subject' => Name::MAP,
+        'subjectPublicKeyInfo' => SubjectPublicKeyInfo::MAP,
         // implicit means that the T in the TLV structure is to be rewritten, regardless of the type
-        'issuerUniqueID' => ['constant' => 1, 'optional' => \true, 'implicit' => \true] + \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\UniqueIdentifier::MAP,
-        'subjectUniqueID' => ['constant' => 2, 'optional' => \true, 'implicit' => \true] + \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\UniqueIdentifier::MAP,
+        'issuerUniqueID' => ['constant' => 1, 'optional' => \true, 'implicit' => \true] + UniqueIdentifier::MAP,
+        'subjectUniqueID' => ['constant' => 2, 'optional' => \true, 'implicit' => \true] + UniqueIdentifier::MAP,
         // <http://tools.ietf.org/html/rfc2459#page-74> doesn't use the EXPLICIT keyword but if
         // it's not IMPLICIT, it's EXPLICIT
-        'extensions' => ['constant' => 3, 'optional' => \true, 'explicit' => \true] + \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Extensions::MAP,
+        'extensions' => ['constant' => 3, 'optional' => \true, 'explicit' => \true] + Extensions::MAP,
     ]];
 }

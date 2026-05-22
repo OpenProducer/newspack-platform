@@ -15,5 +15,5 @@ interface ClientInterface
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface If an error happens while processing the request.
      */
-    public function sendRequest(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request) : \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface;
+    public function sendRequest(RequestInterface $request): ResponseInterface;
 }

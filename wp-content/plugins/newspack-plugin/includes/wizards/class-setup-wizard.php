@@ -387,6 +387,16 @@ class Setup_Wizard extends Wizard {
 		// Append post content fallback image option.
 		$theme_mods['post_content_fallback_image'] = get_option( Default_Image::OPTION_NAME, null );
 
+		/**
+		 * Filters the settings returned by the Setup Wizard's theme/settings endpoint.
+		 *
+		 * Hooked callbacks can add non-theme-mod settings (e.g. feature options
+		 * stored as wp_options) to the response array.
+		 *
+		 * @param array $theme_mods The settings array (mix of theme mods and custom settings).
+		 */
+		$theme_mods = apply_filters( 'newspack_setup_wizard_settings', $theme_mods );
+
 		return rest_ensure_response(
 			[
 				'theme'             => Starter_Content::get_theme(),
@@ -521,6 +531,20 @@ class Setup_Wizard extends Wizard {
 
 		$theme_mods = $request['theme_mods'];
 		foreach ( $theme_mods as $key => $value ) {
+			/**
+			 * Filters whether a setting was already handled by a hooked callback.
+			 *
+			 * Callbacks should check $key and, if recognized, save the value and return
+			 * true to prevent the wizard from calling set_theme_mod() for that key.
+			 *
+			 * @param bool   $handled Whether the setting has been handled.
+			 * @param string $key     The setting key.
+			 * @param mixed  $value   The setting value.
+			 */
+			if ( apply_filters( 'newspack_setup_wizard_update_setting', false, $key, $value ) ) {
+				continue;
+			}
+
 			// Media credits are actually options, not theme mods.
 			if ( 'newspack_image_credits' === substr( $key, 0, 22 ) ) {
 				Newspack_Image_Credits::update_setting( $key, $value );

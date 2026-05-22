@@ -18,14 +18,14 @@ class Key
      */
     public function __construct($keyMaterial, string $algorithm)
     {
-        if (!\is_string($keyMaterial) && !$keyMaterial instanceof \OpenSSLAsymmetricKey && !$keyMaterial instanceof \OpenSSLCertificate && !\is_resource($keyMaterial)) {
-            throw new \TypeError('Key material must be a string, resource, or OpenSSLAsymmetricKey');
+        if (!\is_string($keyMaterial) && !$keyMaterial instanceof OpenSSLAsymmetricKey && !$keyMaterial instanceof OpenSSLCertificate && !\is_resource($keyMaterial)) {
+            throw new TypeError('Key material must be a string, resource, or OpenSSLAsymmetricKey');
         }
         if (empty($keyMaterial)) {
-            throw new \InvalidArgumentException('Key material must not be empty');
+            throw new InvalidArgumentException('Key material must not be empty');
         }
         if (empty($algorithm)) {
-            throw new \InvalidArgumentException('Algorithm must not be empty');
+            throw new InvalidArgumentException('Algorithm must not be empty');
         }
         // TODO: Remove in PHP 8.0 in favor of class constructor property promotion
         $this->keyMaterial = $keyMaterial;
@@ -36,7 +36,7 @@ class Key
      *
      * @return string
      */
-    public function getAlgorithm() : string
+    public function getAlgorithm(): string
     {
         return $this->algorithm;
     }

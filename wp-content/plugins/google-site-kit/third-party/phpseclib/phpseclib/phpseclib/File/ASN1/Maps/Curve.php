@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class Curve
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['a' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\FieldElement::MAP, 'b' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\FieldElement::MAP, 'seed' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_BIT_STRING, 'optional' => \true]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['a' => FieldElement::MAP, 'b' => FieldElement::MAP, 'seed' => ['type' => ASN1::TYPE_BIT_STRING, 'optional' => \true]]];
 }

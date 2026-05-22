@@ -38,7 +38,7 @@ class CustomTemplate extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $fingerprint;
-    protected $galleryReferenceType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\GalleryReference::class;
+    protected $galleryReferenceType = GalleryReference::class;
     protected $galleryReferenceDataType = '';
     /**
      * Custom Template display name.
@@ -130,7 +130,7 @@ class CustomTemplate extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param GalleryReference $galleryReference
      */
-    public function setGalleryReference(\Google\Site_Kit_Dependencies\Google\Service\TagManager\GalleryReference $galleryReference)
+    public function setGalleryReference(GalleryReference $galleryReference)
     {
         $this->galleryReference = $galleryReference;
     }
@@ -239,4 +239,4 @@ class CustomTemplate extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_CustomTemplate');
+class_alias(CustomTemplate::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_CustomTemplate');

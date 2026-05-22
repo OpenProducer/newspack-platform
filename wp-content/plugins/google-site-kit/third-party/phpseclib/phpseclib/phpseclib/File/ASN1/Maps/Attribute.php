@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class Attribute
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\AttributeType::MAP, 'value' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SET, 'min' => 1, 'max' => -1, 'children' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\AttributeValue::MAP]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['type' => AttributeType::MAP, 'value' => ['type' => ASN1::TYPE_SET, 'min' => 1, 'max' => -1, 'children' => AttributeValue::MAP]]];
 }

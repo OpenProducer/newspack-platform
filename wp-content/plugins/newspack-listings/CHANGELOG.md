@@ -1,3 +1,24 @@
+## [3.6.1](https://github.com/Automattic/newspack-listings/compare/v3.6.0...v3.6.1) (2026-04-13)
+
+
+### Bug Fixes
+
+* correct mismatched `htmlFor` and `id` attributes ([bee1091](https://github.com/Automattic/newspack-listings/commit/bee10917eeae012580c82ef49a81b0795d87a6ed))
+* keep wrapper `<div>` because it anchors tab styles ([f34724b](https://github.com/Automattic/newspack-listings/commit/f34724b7989c48a59a061374ef09e751d20b1324))
+* move InspectorControls out of blockProps ([1558a8a](https://github.com/Automattic/newspack-listings/commit/1558a8a17b8cfcfd4e337413a49027c1b0f58b9e))
+* properly mark display-only text fields in editor-side block previews ([ed95005](https://github.com/Automattic/newspack-listings/commit/ed950056a571025b13053be846c29765efefe09e))
+* redo `htmlFor` and `id` patch ([d450b8e](https://github.com/Automattic/newspack-listings/commit/d450b8e84c03a019f992ec70e0fbb75d94928f83))
+* update blocks for compatibility with iframe-based Post Editor ([e6a5181](https://github.com/Automattic/newspack-listings/commit/e6a51810493988769aad00d4f200694276a638db))
+* update blocks for compatibility with iframe-based Post Editor ([5babc7d](https://github.com/Automattic/newspack-listings/commit/5babc7d053c468b16d1cb6b58e9d9f3707ac9b11))
+* update existing code to use `className` to silence React warnings ([94a446b](https://github.com/Automattic/newspack-listings/commit/94a446beab30f2fc18c67585c6019812e55f6e0d))
+
+# [3.6.0](https://github.com/Automattic/newspack-listings/compare/v3.5.0...v3.6.0) (2026-03-30)
+
+
+### Features
+
+* add AI agent guidelines ([#576](https://github.com/Automattic/newspack-listings/issues/576)) ([00300ab](https://github.com/Automattic/newspack-listings/commit/00300ab986820a87744d89a24f2375131cee0037))
+
 # [3.5.0](https://github.com/Automattic/newspack-listings/compare/v3.4.1...v3.5.0) (2025-11-24)
 
 

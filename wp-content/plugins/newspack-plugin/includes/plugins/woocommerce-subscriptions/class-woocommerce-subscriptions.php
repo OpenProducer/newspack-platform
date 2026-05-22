@@ -22,6 +22,7 @@ class WooCommerce_Subscriptions {
 		add_filter( 'woocommerce_subscriptions_product_trial_length', [ __CLASS__, 'limit_free_trials_to_one_per_user' ], 10, 2 );
 		add_filter( 'wcs_get_users_subscriptions', [ __CLASS__, 'filter_subscriptions_for_account_page' ], 10, 1 );
 		add_filter( 'woocommerce_subscriptions_can_item_be_switched', [ __CLASS__, 'allow_migrated_subscription_switch' ], 10, 3 );
+		add_filter( 'wcs_can_user_resubscribe_to_subscription', [ __CLASS__, 'allow_migrated_subscription_to_resubscribe' ], 10, 3 );
 	}
 
 	/**
@@ -124,7 +125,27 @@ class WooCommerce_Subscriptions {
 	}
 
 	/**
-	 * Get the user's subscription within a grouped or variable subscription product.
+	 * Sanitize and validate a subscription ID or object as a WC_Subscription object.
+	 *
+	 * @param int|WC_Subscription $subscription The subscription ID or object.
+	 *
+	 * @return WC_Subscription|false The subscription object, or false if the subscription is not valid.
+	 */
+	public static function sanitize_subscription( $subscription ) {
+		if ( ! function_exists( 'wcs_get_subscription' ) ) {
+			return false;
+		}
+		if ( ! is_a( $subscription, 'WC_Subscription' ) ) {
+			$subscription = \wcs_get_subscription( $subscription );
+		}
+		if ( ! $subscription ) {
+			return false;
+		}
+		return $subscription;
+	}
+
+	/**
+	 * Get the user's active subscription for a product (simple, grouped, or variable).
 	 *
 	 * @param \WC_Product $product Product.
 	 * @param int|null    $user_id User ID. Defaults to the current user.
@@ -141,16 +162,19 @@ class WooCommerce_Subscriptions {
 			return null;
 		}
 
-		$products           = $product->get_children();
+		$children           = $product->get_children();
 		$user_subscriptions = wcs_get_users_subscriptions( $user_id );
 
-		foreach ( $products as $product ) {
-			$product = wc_get_product( $product );
-			if ( ! $product ) {
+		// Simple products have no children; check their status directly.
+		$product_ids = ! empty( $children ) ? $children : [ $product->get_id() ];
+
+		foreach ( $product_ids as $product_id ) {
+			$product_to_check = wc_get_product( $product_id );
+			if ( ! $product_to_check ) {
 				continue;
 			}
 			foreach ( $user_subscriptions as $subscription ) {
-				if ( $subscription->has_product( $product->get_id() ) && $subscription->has_status( 'active' ) ) {
+				if ( $subscription->has_product( $product_to_check->get_id() ) && $subscription->has_status( WooCommerce_Connection::ACTIVE_SUBSCRIPTION_STATUSES ) ) {
 					return $subscription;
 				}
 			}
@@ -320,6 +344,48 @@ class WooCommerce_Subscriptions {
 			}
 		}
 		return $product_id;
+	}
+
+	/**
+	 * Allow migrated subscription to resubscribe.
+	 *
+	 * The original function only allows resubscriptions if there are payments
+	 * associated with the subscription to avoid circumventing the sign-up fees.
+	 * This filter allows resubscriptions for migrated subscriptions, which don't
+	 * have any payments associated with them.
+	 *
+	 * @param bool             $can_resubscribe Whether the user can resubscribe to the subscription.
+	 * @param \WC_Subscription $subscription    The subscription.
+	 * @param int              $user_id         The user ID.
+	 *
+	 * @return bool Whether the user can resubscribe to the subscription.
+	 */
+	public static function allow_migrated_subscription_to_resubscribe( $can_resubscribe, $subscription, $user_id ) {
+		if ( $can_resubscribe ) {
+			return $can_resubscribe;
+		}
+
+		/**
+		 * Replicate the original checks.
+		 */
+		if (
+			empty( $subscription ) ||
+			! user_can( $user_id, 'subscribe_again', $subscription->get_id() ) || // phpcs:ignore WordPress.WP.Capabilities.Unknown
+			! $subscription->has_status( [ 'pending-cancel', 'cancelled', 'expired', 'trash' ] ) ||
+			$subscription->get_total() <= 0 ||
+			$subscription->contains_unavailable_product()
+		) {
+			return false;
+		}
+
+		$migrated_meta = [ '_piano_subscription_id', '_stripe_subscription_id' ];
+		foreach ( $migrated_meta as $meta ) {
+			if ( $subscription->get_meta( $meta ) ) {
+				$can_resubscribe = true;
+				break;
+			}
+		}
+		return $can_resubscribe;
 	}
 }
 WooCommerce_Subscriptions::init();

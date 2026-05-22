@@ -42,13 +42,13 @@ class CheckCompatibilityRequest extends \Google\Site_Kit_Dependencies\Google\Col
      * @var string
      */
     public $compatibilityFilter;
-    protected $dimensionFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $dimensionFilterType = FilterExpression::class;
     protected $dimensionFilterDataType = '';
-    protected $dimensionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Dimension::class;
+    protected $dimensionsType = Dimension::class;
     protected $dimensionsDataType = 'array';
-    protected $metricFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $metricFilterType = FilterExpression::class;
     protected $metricFilterDataType = '';
-    protected $metricsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Metric::class;
+    protected $metricsType = Metric::class;
     protected $metricsDataType = 'array';
     /**
      * Filters the dimensions and metrics in the response to just this
@@ -76,7 +76,7 @@ class CheckCompatibilityRequest extends \Google\Site_Kit_Dependencies\Google\Col
      *
      * @param FilterExpression $dimensionFilter
      */
-    public function setDimensionFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression $dimensionFilter)
+    public function setDimensionFilter(FilterExpression $dimensionFilter)
     {
         $this->dimensionFilter = $dimensionFilter;
     }
@@ -110,7 +110,7 @@ class CheckCompatibilityRequest extends \Google\Site_Kit_Dependencies\Google\Col
      *
      * @param FilterExpression $metricFilter
      */
-    public function setMetricFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression $metricFilter)
+    public function setMetricFilter(FilterExpression $metricFilter)
     {
         $this->metricFilter = $metricFilter;
     }
@@ -140,4 +140,4 @@ class CheckCompatibilityRequest extends \Google\Site_Kit_Dependencies\Google\Col
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CheckCompatibilityRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_CheckCompatibilityRequest');
+class_alias(CheckCompatibilityRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_CheckCompatibilityRequest');

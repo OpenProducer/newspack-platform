@@ -124,8 +124,13 @@ final class Modal_Checkout {
 		'cod', // Cash on delivery.
 		'ppcp-gateway', // PayPal Payments.
 		'stripe',
-		'stripe-link',
+		'stripe_link', // Stripe Link.
+		'stripe_amazon_pay', // Stripe Amazon Pay.
 		'woocommerce_payments',
+		'woocommerce_payments_apple_pay', // WooPayments Apple Pay.
+		'woocommerce_payments_google_pay', // WooPayments Google Pay.
+		'ppcp-axo-gateway', // PayPal Accelerated Checkout, used by WooPayments.
+
 	];
 
 	/**
@@ -138,6 +143,7 @@ final class Modal_Checkout {
 		add_action( 'wp', [ __CLASS__, 'process_checkout_request' ] );
 		add_action( 'wp_ajax_abandon_modal_checkout', [ __CLASS__, 'process_abandon_checkout' ] );
 		add_action( 'wp_ajax_nopriv_abandon_modal_checkout', [ __CLASS__, 'process_abandon_checkout' ] );
+		add_action( 'wp_loaded', [ __CLASS__, 'process_checkout_action' ], 21 );
 
 		add_filter( 'wp_redirect', [ __CLASS__, 'pass_url_param_on_redirect' ] );
 		add_filter( 'woocommerce_cart_product_cannot_be_purchased_message', [ __CLASS__, 'woocommerce_cart_product_cannot_be_purchased_message' ], 10, 2 );
@@ -168,8 +174,10 @@ final class Modal_Checkout {
 		add_action( 'option_woocommerce_default_customer_address', [ __CLASS__, 'ensure_base_default_customer_address' ] );
 		add_action( 'default_option_woocommerce_default_customer_address', [ __CLASS__, 'ensure_base_default_customer_address' ] );
 		add_action( 'wp_ajax_process_name_your_price_request', [ __CLASS__, 'process_name_your_price_request' ] );
+		add_action( 'wp_ajax_nopriv_process_name_your_price_request', [ __CLASS__, 'process_name_your_price_request' ] );
 		add_filter( 'option_woocommerce_woocommerce_payments_settings', [ __CLASS__, 'filter_woocommerce_payments_settings' ] );
 		add_action( 'init', [ __CLASS__, 'unhook_woocommerce_payments_update_billing_fields' ] );
+		add_action( 'init', [ __CLASS__, 'unhook_woocommerce_payments_express_checkout_buttons' ], 20 );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'update_password_strength_message' ], 9999 );
 		add_filter( 'woocommerce_enforce_password_strength_meter_on_checkout', '__return_true' );
 
@@ -267,21 +275,72 @@ final class Modal_Checkout {
 	}
 
 	/**
-	 * Whether any available payment gateways are not suppored in modal checkout.
+	 * Whether any enabled payment gateways are not supported in modal checkout.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function has_unsupported_payment_gateway() {
-		$supported_gateways          = self::get_supported_payment_gateways();
-		$available_gateways          = function_exists( 'WC' ) ? \WC()->payment_gateways->get_available_payment_gateways() : [];
-		$unsupported_payment_gateway = false;
-		foreach ( $available_gateways as $id => $gateway ) {
-			if ( ! in_array( $id, $supported_gateways, true ) ) {
-				$unsupported_payment_gateway = true;
-				break;
+		if ( ! function_exists( 'WC' ) ) {
+			return false;
+		}
+
+		$supported_gateways = self::get_supported_payment_gateways();
+		$all_gateways       = \WC()->payment_gateways()->payment_gateways();
+
+		// Check unsupported gateways directly against admin settings. Some gateways
+		// can be omitted from runtime availability due to constraints (like Wompi).
+		foreach ( array_keys( $all_gateways ) as $id ) {
+			if ( in_array( $id, $supported_gateways, true ) ) {
+				continue;
+			}
+			$settings = get_option( 'woocommerce_' . $id . '_settings', [] );
+			if ( is_array( $settings ) && isset( $settings['enabled'] ) && 'yes' === $settings['enabled'] ) {
+				return true;
 			}
 		}
-		return $unsupported_payment_gateway;
+
+		return false;
+	}
+
+	/**
+	 * Process checkout handler for form validation and order complete.
+	 */
+	public static function process_checkout_action() {
+		if ( ! self::is_modal_checkout() || ! isset( $_POST['newspack_blocks_checkout_action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
+		}
+
+		$nonce = isset( $_POST['newspack_checkout_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['newspack_checkout_nonce'] ) ) : '';
+		if ( ! wp_verify_nonce( $nonce, 'newspack_modal_checkout_nonce' ) ) {
+			wp_send_json_error( [ 'message' => __( 'Invalid nonce.', 'newspack-blocks' ) ] );
+			wp_die();
+		}
+
+		wc_nocache_headers();
+
+		if ( \WC()->cart->is_empty() ) {
+			wp_safe_redirect( wc_get_cart_url() );
+			exit;
+		}
+
+		// If checkout is already defined as being processed, don't run process_checkout().
+		if ( defined( 'WOOCOMMERCE_CHECKOUT' ) && WOOCOMMERCE_CHECKOUT ) {
+			return;
+		}
+
+		wc_maybe_define_constant( 'WOOCOMMERCE_CHECKOUT', true );
+
+		// Generate a fresh WC nonce so process_checkout() passes its internal verification.
+		// We take this approach to ensure compatibility with block theme which causes WC to no longer
+		// rely on this checkout nonce requried by process checkout.
+		$_REQUEST['woocommerce-process-checkout-nonce'] = wp_create_nonce( 'woocommerce-process_checkout' );
+
+		// If this is a validation-only request, set the flag that tells process_checkout() to only validate the order.
+		if ( isset( $_POST['is_validation_only'] ) ) {
+			$_POST['woocommerce_checkout_update_totals'] = '1';
+		}
+
+		\WC()->checkout()->process_checkout();
 	}
 
 	/**
@@ -507,6 +566,43 @@ final class Modal_Checkout {
 		}
 	}
 
+	/**
+	 * Unhook WooCommerce Payments' express checkout buttons during modal checkout.
+	 *
+	 * WooPayments 10.4 split Apple Pay / Google Pay into separate gateways. The display
+	 * handler attaches display_express_checkout_buttons to woocommerce_checkout_before_customer_details
+	 * at init priority 15; when Stripe's express checkout is also active the modal renders
+	 * duplicate Apple Pay / Google Pay rows. Removing the hook here suppresses WooPayments'
+	 * buttons while leaving Stripe's intact. Hooked on init at priority 20 so WooPayments'
+	 * init callback has already attached its actions.
+	 */
+	public static function unhook_woocommerce_payments_express_checkout_buttons() {
+		if ( ! self::is_modal_checkout() ) {
+			return;
+		}
+		if ( ! class_exists( 'WC_Payments' ) || ! class_exists( 'WC_Stripe' ) ) {
+			return;
+		}
+		// Only suppress WooPayments when Stripe is also providing express checkout. Otherwise
+		// WooPayments is the only source of Apple Pay / Google Pay in the modal and must render.
+		$stripe_settings = get_option( 'woocommerce_stripe_settings', [] );
+		if ( 'yes' !== ( $stripe_settings['enabled'] ?? '' )
+			|| 'yes' !== ( $stripe_settings['express_checkout'] ?? '' ) ) {
+			return;
+		}
+		if ( ! isset( $GLOBALS['wp_filter']['woocommerce_checkout_before_customer_details'] ) ) {
+			return;
+		}
+		$hook      = $GLOBALS['wp_filter']['woocommerce_checkout_before_customer_details'];
+		$callbacks = $hook instanceof \WP_Hook ? $hook->callbacks : (array) $hook;
+		foreach ( $callbacks as $priority => $priority_callbacks ) {
+			foreach ( array_keys( $priority_callbacks ) as $key ) {
+				if ( strpos( $key, 'display_express_checkout_buttons' ) !== false ) {
+					remove_action( 'woocommerce_checkout_before_customer_details', $key, $priority );
+				}
+			}
+		}
+	}
 
 	/**
 	 * Process name your price request for modal.
@@ -776,6 +872,17 @@ final class Modal_Checkout {
 	 * Dequeue scripts not needed in the modal checkout.
 	 */
 	public static function dequeue_scripts() {
+		/**
+		 * Prevents dequeuing of scripts in modal checkout. By default,
+		 * Newspack removes unnecessary scripts to improve modal checkout performance.
+		 *
+		 * @constant NEWSPACK_ALLOW_ALL_CHECKOUT_SCRIPTS
+		 * @type     bool
+		 * @default  Unnecessary scripts dequeued in modal checkout
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_ALLOW_ALL_CHECKOUT_SCRIPTS', true );
+		 */
 		if (
 			! self::is_modal_checkout() ||
 			( defined( 'NEWSPACK_ALLOW_ALL_CHECKOUT_SCRIPTS' ) && NEWSPACK_ALLOW_ALL_CHECKOUT_SCRIPTS )
@@ -1826,7 +1933,18 @@ final class Modal_Checkout {
 			return $option_value;
 		}
 
-		// Escape hatch in case we want the standard behavior even in modal checkout.
+		/**
+		 * Prevents forcing the WooCommerce base location as the default
+		 * customer address in modal checkout. Use if you need standard
+		 * geolocation behavior.
+		 *
+		 * @constant NEWSPACK_PREVENT_FORCE_BASE_DEFAULT_CUSTOMER_ADDRESS
+		 * @type     bool
+		 * @default  Base address forced in modal checkout
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_PREVENT_FORCE_BASE_DEFAULT_CUSTOMER_ADDRESS', true );
+		 */
 		if ( defined( 'NEWSPACK_PREVENT_FORCE_BASE_DEFAULT_CUSTOMER_ADDRESS' ) && NEWSPACK_PREVENT_FORCE_BASE_DEFAULT_CUSTOMER_ADDRESS ) {
 			return $option_value;
 		}

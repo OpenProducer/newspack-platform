@@ -42,8 +42,8 @@ class PublicationsReadersOrders extends \Google\Site_Kit_Dependencies\Google\Ser
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Order::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Order::class);
     }
     /**
      * List all orders based on the filter, only the orders from the requested
@@ -75,8 +75,8 @@ class PublicationsReadersOrders extends \Google\Site_Kit_Dependencies\Google\Ser
     public function listPublicationsReadersOrders($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ListOrdersResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListOrdersResponse::class);
     }
     /**
      * Refunds the order identified by order id for a given user under the given
@@ -90,12 +90,12 @@ class PublicationsReadersOrders extends \Google\Site_Kit_Dependencies\Google\Ser
      * @return Order
      * @throws \Google\Service\Exception
      */
-    public function refund($name, \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RefundOrderRequest $postBody, $optParams = [])
+    public function refund($name, RefundOrderRequest $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('refund', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Order::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('refund', [$params], Order::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Resource\PublicationsReadersOrders::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_Resource_PublicationsReadersOrders');
+class_alias(PublicationsReadersOrders::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_Resource_PublicationsReadersOrders');

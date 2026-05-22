@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class BraggingRights extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The bragging rights; for example, `climbed mount everest`.
@@ -32,7 +32,7 @@ class BraggingRights extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -61,4 +61,4 @@ class BraggingRights extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BraggingRights::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_BraggingRights');
+class_alias(BraggingRights::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_BraggingRights');

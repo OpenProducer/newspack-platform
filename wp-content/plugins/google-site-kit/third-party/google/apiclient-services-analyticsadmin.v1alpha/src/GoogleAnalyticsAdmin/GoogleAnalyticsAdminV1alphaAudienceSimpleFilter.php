@@ -36,7 +36,7 @@ class GoogleAnalyticsAdminV1alphaAudienceSimpleFilter extends \Google\Site_Kit_D
      * any session.
      */
     public const SCOPE_AUDIENCE_FILTER_SCOPE_ACROSS_ALL_SESSIONS = 'AUDIENCE_FILTER_SCOPE_ACROSS_ALL_SESSIONS';
-    protected $filterExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
+    protected $filterExpressionType = GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
     protected $filterExpressionDataType = '';
     /**
      * Required. Immutable. Specifies the scope for this filter.
@@ -50,7 +50,7 @@ class GoogleAnalyticsAdminV1alphaAudienceSimpleFilter extends \Google\Site_Kit_D
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceFilterExpression $filterExpression
      */
-    public function setFilterExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression $filterExpression)
+    public function setFilterExpression(GoogleAnalyticsAdminV1alphaAudienceFilterExpression $filterExpression)
     {
         $this->filterExpression = $filterExpression;
     }
@@ -84,4 +84,4 @@ class GoogleAnalyticsAdminV1alphaAudienceSimpleFilter extends \Google\Site_Kit_D
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceSimpleFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceSimpleFilter');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceSimpleFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceSimpleFilter');

@@ -67,7 +67,7 @@ class Source extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $id;
-    protected $profileMetadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ProfileMetadata::class;
+    protected $profileMetadataType = ProfileMetadata::class;
     protected $profileMetadataDataType = '';
     /**
      * The source type.
@@ -122,7 +122,7 @@ class Source extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param ProfileMetadata $profileMetadata
      */
-    public function setProfileMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ProfileMetadata $profileMetadata)
+    public function setProfileMetadata(ProfileMetadata $profileMetadata)
     {
         $this->profileMetadata = $profileMetadata;
     }
@@ -171,4 +171,4 @@ class Source extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Source::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Source');
+class_alias(Source::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Source');

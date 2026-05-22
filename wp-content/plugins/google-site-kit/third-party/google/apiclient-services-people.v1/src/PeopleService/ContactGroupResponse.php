@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class ContactGroupResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $contactGroupType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class;
+    protected $contactGroupType = ContactGroup::class;
     protected $contactGroupDataType = '';
     /**
      * The original requested resource name.
@@ -27,14 +27,14 @@ class ContactGroupResponse extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $requestedResourceName;
-    protected $statusType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Status::class;
+    protected $statusType = Status::class;
     protected $statusDataType = '';
     /**
      * The contact group.
      *
      * @param ContactGroup $contactGroup
      */
-    public function setContactGroup(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup $contactGroup)
+    public function setContactGroup(ContactGroup $contactGroup)
     {
         $this->contactGroup = $contactGroup;
     }
@@ -66,7 +66,7 @@ class ContactGroupResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Status $status
      */
-    public function setStatus(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Status $status)
+    public function setStatus(Status $status)
     {
         $this->status = $status;
     }
@@ -79,4 +79,4 @@ class ContactGroupResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroupResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ContactGroupResponse');
+class_alias(ContactGroupResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ContactGroupResponse');

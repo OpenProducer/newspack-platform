@@ -26,7 +26,7 @@ class ListWorkspacesResponse extends \Google\Site_Kit_Dependencies\Google\Collec
      * @var string
      */
     public $nextPageToken;
-    protected $workspaceType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace::class;
+    protected $workspaceType = Workspace::class;
     protected $workspaceDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListWorkspacesResponse extends \Google\Site_Kit_Dependencies\Google\Collec
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListWorkspacesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListWorkspacesResponse');
+class_alias(ListWorkspacesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListWorkspacesResponse');
