@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 class SitesListResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'siteEntry';
-    protected $siteEntryType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\WmxSite::class;
+    protected $siteEntryType = WmxSite::class;
     protected $siteEntryDataType = 'array';
     /**
      * Contains permission level information about a Search Console site. For more
@@ -42,4 +42,4 @@ class SitesListResponse extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\SitesListResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_SitesListResponse');
+class_alias(SitesListResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_SitesListResponse');

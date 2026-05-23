@@ -32,7 +32,7 @@ class Condition extends \Google\Site_Kit_Dependencies\Google\Collection
     public const TYPE_cssSelector = 'cssSelector';
     public const TYPE_urlMatches = 'urlMatches';
     protected $collection_key = 'parameter';
-    protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $parameterType = Parameter::class;
     protected $parameterDataType = 'array';
     /**
      * The type of operator for this condition.
@@ -85,4 +85,4 @@ class Condition extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Condition::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Condition');
+class_alias(Condition::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Condition');

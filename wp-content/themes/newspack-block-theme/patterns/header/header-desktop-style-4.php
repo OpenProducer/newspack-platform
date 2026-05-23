@@ -16,7 +16,12 @@
 	<div class="wp-block-group">
 		<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 		<div class="wp-block-group">
-			<!-- wp:pattern {"slug":"newspack-block-theme/drawer-menu"} /-->
+			<!-- wp:newspack/overlay-menu {"instanceId":"fedb5a226df2"} -->
+				<div class="wp-block-newspack-overlay-menu"><!-- wp:newspack/overlay-menu-trigger {"triggerText":"<?php esc_html_e( 'MENU', 'newspack-block-theme' ); ?>","style":{"color":{"background":"#ffffff00"},"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}},"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"textColor":"contrast"} /-->
+				<!-- wp:newspack/overlay-menu-panel -->
+				<div class="wp-block-newspack-overlay-menu-panel"><!-- wp:navigation {"className":"is-style-flatten","layout":{"type":"flex","setCascadingProperties":true,"orientation":"vertical"}} /--></div>
+				<!-- /wp:newspack/overlay-menu-panel --></div>
+			<!-- /wp:newspack/overlay-menu -->
 
 			<!-- wp:site-logo {"width":256,"lock":{"move":true,"remove":true}} /-->
 

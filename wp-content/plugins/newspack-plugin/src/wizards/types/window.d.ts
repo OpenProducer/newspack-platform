@@ -57,6 +57,9 @@ declare global {
 			}>;
 			upgrade_subscription_url: string;
 		};
+		newspackAudienceIntegrations: {
+			integrations_settings_enabled: boolean;
+		};
 		newspackAudienceContentGates: {
 			api: string;
 			available_access_rules: AccessRules;

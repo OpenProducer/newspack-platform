@@ -41,8 +41,8 @@ class AccountsSites extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\Site::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Site::class);
     }
     /**
      * Lists all the sites available in an account. (sites.listAccountsSites)
@@ -65,9 +65,9 @@ class AccountsSites extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     public function listAccountsSites($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListSitesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListSitesResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsSites::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsSites');
+class_alias(AccountsSites::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsSites');

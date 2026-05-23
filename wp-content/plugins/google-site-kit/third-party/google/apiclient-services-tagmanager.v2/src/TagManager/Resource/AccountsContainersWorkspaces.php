@@ -53,11 +53,11 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @return BulkUpdateWorkspaceResponse
      * @throws \Google\Service\Exception
      */
-    public function bulk_update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\ProposedChange $postBody, $optParams = [])
+    public function bulk_update($path, ProposedChange $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('bulk_update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\BulkUpdateWorkspaceResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('bulk_update', [$params], BulkUpdateWorkspaceResponse::class);
     }
     /**
      * Creates a Workspace. (workspaces.create)
@@ -68,11 +68,11 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @return Workspace
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace $postBody, $optParams = [])
+    public function create($parent, Workspace $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Workspace::class);
     }
     /**
      * Creates a Container Version from the entities present in the workspace,
@@ -85,11 +85,11 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @return CreateContainerVersionResponse
      * @throws \Google\Service\Exception
      */
-    public function create_version($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\CreateContainerVersionRequestVersionOptions $postBody, $optParams = [])
+    public function create_version($path, CreateContainerVersionRequestVersionOptions $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create_version', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\CreateContainerVersionResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create_version', [$params], CreateContainerVersionResponse::class);
     }
     /**
      * Deletes a Workspace. (workspaces.delete)
@@ -101,7 +101,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -115,8 +115,8 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Workspace::class);
     }
     /**
      * Finds conflicting and modified entities in the workspace.
@@ -130,8 +130,8 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
     public function getStatus($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getStatus', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\GetWorkspaceStatusResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getStatus', [$params], GetWorkspaceStatusResponse::class);
     }
     /**
      * Lists all Workspaces that belong to a GTM Container.
@@ -148,8 +148,8 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
     public function listAccountsContainersWorkspaces($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListWorkspacesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListWorkspacesResponse::class);
     }
     /**
      * Quick previews a workspace by creating a fake container version from all
@@ -163,8 +163,8 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
     public function quick_preview($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('quick_preview', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\QuickPreviewResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('quick_preview', [$params], QuickPreviewResponse::class);
     }
     /**
      * Resolves a merge conflict for a workspace entity by updating it to the
@@ -178,10 +178,10 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * fingerprint of the entity_in_workspace in the merge conflict.
      * @throws \Google\Service\Exception
      */
-    public function resolve_conflict($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity $postBody, $optParams = [])
+    public function resolve_conflict($path, Entity $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('resolve_conflict', [$params]);
     }
     /**
@@ -197,8 +197,8 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
     public function sync($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('sync', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\SyncWorkspaceResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('sync', [$params], SyncWorkspaceResponse::class);
     }
     /**
      * Updates a Workspace. (workspaces.update)
@@ -212,12 +212,12 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @return Workspace
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace $postBody, $optParams = [])
+    public function update($path, Workspace $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Workspace::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspaces::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspaces');
+class_alias(AccountsContainersWorkspaces::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspaces');

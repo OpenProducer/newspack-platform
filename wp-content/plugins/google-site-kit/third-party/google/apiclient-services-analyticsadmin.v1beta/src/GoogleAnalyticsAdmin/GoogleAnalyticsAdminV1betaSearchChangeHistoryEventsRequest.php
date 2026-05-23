@@ -228,4 +228,4 @@ class GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest extends \Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest');
+class_alias(GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest');

@@ -25,7 +25,7 @@ class UserDefined extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $key;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The end user specified value of the user defined data.
@@ -54,7 +54,7 @@ class UserDefined extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -83,4 +83,4 @@ class UserDefined extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\UserDefined::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_UserDefined');
+class_alias(UserDefined::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_UserDefined');

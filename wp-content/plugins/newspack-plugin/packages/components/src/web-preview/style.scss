@@ -16,7 +16,7 @@
 	--wp-admin-theme-color-lighter-10: #{colors.$primary-000};
 	--wp-admin-theme-color-lighter-10--rgb: #{colors.$primary-000--rgb};
 
-	background: colors.$neutral-700;
+	background: color-mix(in srgb, colors.$neutral-1000, transparent 65%);
 	box-sizing: border-box;
 	height: 100%;
 	left: 0;

@@ -20,7 +20,7 @@ use AMQPExchange;
 /**
  * @phpstan-import-type Record from \Monolog\Logger
  */
-class AmqpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class AmqpHandler extends AbstractProcessingHandler
 {
     /**
      * @var AMQPExchange|AMQPChannel $exchange
@@ -31,7 +31,7 @@ class AmqpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
     /**
      * @return array<string, mixed>
      */
-    public function getExtraAttributes() : array
+    public function getExtraAttributes(): array
     {
         return $this->extraAttributes;
     }
@@ -44,7 +44,7 @@ class AmqpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
      *                                               or reply_to, headers.
      * @return AmqpHandler
      */
-    public function setExtraAttributes(array $extraAttributes) : self
+    public function setExtraAttributes(array $extraAttributes): self
     {
         $this->extraAttributes = $extraAttributes;
         return $this;
@@ -57,14 +57,14 @@ class AmqpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
      * @param AMQPExchange|AMQPChannel $exchange     AMQPExchange (php AMQP ext) or PHP AMQP lib channel, ready for use
      * @param string|null              $exchangeName Optional exchange name, for AMQPChannel (PhpAmqpLib) only
      */
-    public function __construct($exchange, ?string $exchangeName = null, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct($exchange, ?string $exchangeName = null, $level = Logger::DEBUG, bool $bubble = \true)
     {
-        if ($exchange instanceof \Google\Site_Kit_Dependencies\PhpAmqpLib\Channel\AMQPChannel) {
+        if ($exchange instanceof AMQPChannel) {
             $this->exchangeName = (string) $exchangeName;
-        } elseif (!$exchange instanceof \AMQPExchange) {
-            throw new \InvalidArgumentException('PhpAmqpLib\\Channel\\AMQPChannel or AMQPExchange instance required');
+        } elseif (!$exchange instanceof AMQPExchange) {
+            throw new \InvalidArgumentException('PhpAmqpLib\Channel\AMQPChannel or AMQPExchange instance required');
         } elseif ($exchangeName) {
-            @\trigger_error('The $exchangeName parameter can only be passed when using PhpAmqpLib, if using an AMQPExchange instance configure it beforehand', \E_USER_DEPRECATED);
+            @trigger_error('The $exchangeName parameter can only be passed when using PhpAmqpLib, if using an AMQPExchange instance configure it beforehand', \E_USER_DEPRECATED);
         }
         $this->exchange = $exchange;
         parent::__construct($level, $bubble);
@@ -72,14 +72,14 @@ class AmqpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $data = $record["formatted"];
         $routingKey = $this->getRoutingKey($record);
-        if ($this->exchange instanceof \AMQPExchange) {
+        if ($this->exchange instanceof AMQPExchange) {
             $attributes = ['delivery_mode' => 2, 'content_type' => 'application/json'];
             if ($this->extraAttributes) {
-                $attributes = \array_merge($attributes, $this->extraAttributes);
+                $attributes = array_merge($attributes, $this->extraAttributes);
             }
             $this->exchange->publish($data, $routingKey, 0, $attributes);
         } else {
@@ -89,9 +89,9 @@ class AmqpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
-        if ($this->exchange instanceof \AMQPExchange) {
+        if ($this->exchange instanceof AMQPExchange) {
             parent::handleBatch($records);
             return;
         }
@@ -111,24 +111,24 @@ class AmqpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstract
      *
      * @phpstan-param Record $record
      */
-    protected function getRoutingKey(array $record) : string
+    protected function getRoutingKey(array $record): string
     {
-        $routingKey = \sprintf('%s.%s', $record['level_name'], $record['channel']);
-        return \strtolower($routingKey);
+        $routingKey = sprintf('%s.%s', $record['level_name'], $record['channel']);
+        return strtolower($routingKey);
     }
-    private function createAmqpMessage(string $data) : \Google\Site_Kit_Dependencies\PhpAmqpLib\Message\AMQPMessage
+    private function createAmqpMessage(string $data): AMQPMessage
     {
         $attributes = ['delivery_mode' => 2, 'content_type' => 'application/json'];
         if ($this->extraAttributes) {
-            $attributes = \array_merge($attributes, $this->extraAttributes);
+            $attributes = array_merge($attributes, $this->extraAttributes);
         }
-        return new \Google\Site_Kit_Dependencies\PhpAmqpLib\Message\AMQPMessage($data, $attributes);
+        return new AMQPMessage($data, $attributes);
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        return new \Google\Site_Kit_Dependencies\Monolog\Formatter\JsonFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\JsonFormatter::BATCH_MODE_JSON, \false);
+        return new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, \false);
     }
 }

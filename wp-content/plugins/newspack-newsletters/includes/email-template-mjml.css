@@ -82,7 +82,11 @@ blockquote cite,
 }
 blockquote p,
 .wp-block-quote p {
-	padding-bottom: 12px;
+	padding: 0;
+}
+blockquote p + p,
+.wp-block-quote p + p {
+	padding-top: 12px;
 }
 .wp-block-quote.is-style-plain,
 .wp-block-quote.is-style-large {

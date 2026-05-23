@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class GetPeopleResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'responses';
-    protected $responsesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\PersonResponse::class;
+    protected $responsesType = PersonResponse::class;
     protected $responsesDataType = 'array';
     /**
      * The response for each requested resource name.
@@ -40,4 +40,4 @@ class GetPeopleResponse extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\GetPeopleResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_GetPeopleResponse');
+class_alias(GetPeopleResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_GetPeopleResponse');

@@ -79,4 +79,4 @@ class AmpIssue extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\AmpIssue::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_AmpIssue');
+class_alias(AmpIssue::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_AmpIssue');

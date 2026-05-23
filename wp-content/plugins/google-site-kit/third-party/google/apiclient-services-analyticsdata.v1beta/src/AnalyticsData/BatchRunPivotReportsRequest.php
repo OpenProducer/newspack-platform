@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class BatchRunPivotReportsRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'requests';
-    protected $requestsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunPivotReportRequest::class;
+    protected $requestsType = RunPivotReportRequest::class;
     protected $requestsDataType = 'array';
     /**
      * Individual requests. Each request has a separate pivot report response.
@@ -41,4 +41,4 @@ class BatchRunPivotReportsRequest extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BatchRunPivotReportsRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_BatchRunPivotReportsRequest');
+class_alias(BatchRunPivotReportsRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_BatchRunPivotReportsRequest');

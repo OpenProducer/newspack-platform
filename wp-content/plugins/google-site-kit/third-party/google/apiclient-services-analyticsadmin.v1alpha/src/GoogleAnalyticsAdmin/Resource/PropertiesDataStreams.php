@@ -42,11 +42,11 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @return GoogleAnalyticsAdminV1alphaDataStream
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStream $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaDataStream $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStream::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaDataStream::class);
     }
     /**
      * Deletes a DataStream on a property. (dataStreams.delete)
@@ -60,8 +60,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single DataStream. (dataStreams.get)
@@ -75,8 +75,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStream::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaDataStream::class);
     }
     /**
      * Lookup for a single DataRedactionSettings.
@@ -92,8 +92,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function getDataRedactionSettings($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getDataRedactionSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataRedactionSettings::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getDataRedactionSettings', [$params], GoogleAnalyticsAdminV1alphaDataRedactionSettings::class);
     }
     /**
      * Returns the enhanced measurement settings for this data stream. Note that the
@@ -110,8 +110,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function getEnhancedMeasurementSettings($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getEnhancedMeasurementSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getEnhancedMeasurementSettings', [$params], GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings::class);
     }
     /**
      * Returns the Site Tag for the specified web stream. Site Tags are immutable
@@ -128,8 +128,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function getGlobalSiteTag($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getGlobalSiteTag', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaGlobalSiteTag::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getGlobalSiteTag', [$params], GoogleAnalyticsAdminV1alphaGlobalSiteTag::class);
     }
     /**
      * Lists DataStreams on a property. (dataStreams.listPropertiesDataStreams)
@@ -150,8 +150,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function listPropertiesDataStreams($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListDataStreamsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListDataStreamsResponse::class);
     }
     /**
      * Updates a DataStream on a property. (dataStreams.patch)
@@ -168,11 +168,11 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @return GoogleAnalyticsAdminV1alphaDataStream
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStream $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaDataStream $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStream::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaDataStream::class);
     }
     /**
      * Updates a DataRedactionSettings on a property.
@@ -192,11 +192,11 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @return GoogleAnalyticsAdminV1alphaDataRedactionSettings
      * @throws \Google\Service\Exception
      */
-    public function updateDataRedactionSettings($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataRedactionSettings $postBody, $optParams = [])
+    public function updateDataRedactionSettings($name, GoogleAnalyticsAdminV1alphaDataRedactionSettings $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('updateDataRedactionSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataRedactionSettings::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('updateDataRedactionSettings', [$params], GoogleAnalyticsAdminV1alphaDataRedactionSettings::class);
     }
     /**
      * Updates the enhanced measurement settings for this data stream. Note that the
@@ -217,12 +217,12 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @return GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings
      * @throws \Google\Service\Exception
      */
-    public function updateEnhancedMeasurementSettings($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings $postBody, $optParams = [])
+    public function updateEnhancedMeasurementSettings($name, GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('updateEnhancedMeasurementSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('updateEnhancedMeasurementSettings', [$params], GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesDataStreams::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDataStreams');
+class_alias(PropertiesDataStreams::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDataStreams');

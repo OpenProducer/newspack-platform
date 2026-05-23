@@ -51,11 +51,11 @@ class Registry
      * @throws \InvalidArgumentException If $overwrite set to false and named Logger instance already exists
      * @return void
      */
-    public static function addLogger(\Google\Site_Kit_Dependencies\Monolog\Logger $logger, ?string $name = null, bool $overwrite = \false)
+    public static function addLogger(Logger $logger, ?string $name = null, bool $overwrite = \false)
     {
         $name = $name ?: $logger->getName();
         if (isset(self::$loggers[$name]) && !$overwrite) {
-            throw new \InvalidArgumentException('Logger with the given name already exists');
+            throw new InvalidArgumentException('Logger with the given name already exists');
         }
         self::$loggers[$name] = $logger;
     }
@@ -64,10 +64,10 @@ class Registry
      *
      * @param string|Logger $logger Name or logger instance
      */
-    public static function hasLogger($logger) : bool
+    public static function hasLogger($logger): bool
     {
-        if ($logger instanceof \Google\Site_Kit_Dependencies\Monolog\Logger) {
-            $index = \array_search($logger, self::$loggers, \true);
+        if ($logger instanceof Logger) {
+            $index = array_search($logger, self::$loggers, \true);
             return \false !== $index;
         }
         return isset(self::$loggers[$logger]);
@@ -77,10 +77,10 @@ class Registry
      *
      * @param string|Logger $logger Name or logger instance
      */
-    public static function removeLogger($logger) : void
+    public static function removeLogger($logger): void
     {
-        if ($logger instanceof \Google\Site_Kit_Dependencies\Monolog\Logger) {
-            if (\false !== ($idx = \array_search($logger, self::$loggers, \true))) {
+        if ($logger instanceof Logger) {
+            if (\false !== $idx = array_search($logger, self::$loggers, \true)) {
                 unset(self::$loggers[$idx]);
             }
         } else {
@@ -90,7 +90,7 @@ class Registry
     /**
      * Clears the registry
      */
-    public static function clear() : void
+    public static function clear(): void
     {
         self::$loggers = [];
     }
@@ -100,10 +100,10 @@ class Registry
      * @param  string                    $name Name of the requested Logger instance
      * @throws \InvalidArgumentException If named Logger instance is not in the registry
      */
-    public static function getInstance($name) : \Google\Site_Kit_Dependencies\Monolog\Logger
+    public static function getInstance($name): Logger
     {
         if (!isset(self::$loggers[$name])) {
-            throw new \InvalidArgumentException(\sprintf('Requested "%s" logger instance is not in the registry', $name));
+            throw new InvalidArgumentException(sprintf('Requested "%s" logger instance is not in the registry', $name));
         }
         return self::$loggers[$name];
     }

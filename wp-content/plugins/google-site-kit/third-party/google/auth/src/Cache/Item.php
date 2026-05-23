@@ -29,7 +29,7 @@ use TypeError;
  * on PHP 7.4 and below. It is compatible with psr/cache 1.0 and 2.0 (PSR-6).
  * @see TypedItem for compatiblity with psr/cache 3.0.
  */
-final class Item implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemInterface
+final class Item implements CacheItemInterface
 {
     /**
      * @var string
@@ -99,15 +99,15 @@ final class Item implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemInt
             $this->expiration = $expiration;
             return $this;
         }
-        $error = \sprintf('Argument 1 passed to %s::expiresAt() must implement interface DateTimeInterface, %s given', \get_class($this), \gettype($expiration));
-        throw new \TypeError($error);
+        $error = sprintf('Argument 1 passed to %s::expiresAt() must implement interface DateTimeInterface, %s given', get_class($this), gettype($expiration));
+        throw new TypeError($error);
     }
     /**
      * {@inheritdoc}
      */
     public function expiresAfter($time)
     {
-        if (\is_int($time)) {
+        if (is_int($time)) {
             $this->expiration = $this->currentTime()->add(new \DateInterval("PT{$time}S"));
         } elseif ($time instanceof \DateInterval) {
             $this->expiration = $this->currentTime()->add($time);
@@ -115,8 +115,8 @@ final class Item implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemInt
             $this->expiration = $time;
         } else {
             $message = 'Argument 1 passed to %s::expiresAfter() must be an ' . 'instance of DateInterval or of the type integer, %s given';
-            $error = \sprintf($message, \get_class($this), \gettype($time));
-            throw new \TypeError($error);
+            $error = sprintf($message, get_class($this), gettype($time));
+            throw new TypeError($error);
         }
         return $this;
     }
@@ -131,7 +131,7 @@ final class Item implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemInt
         if ($expiration === null) {
             return \true;
         }
-        if ($expiration instanceof \DateTimeInterface) {
+        if ($expiration instanceof DateTimeInterface) {
             return \true;
         }
         return \false;
@@ -141,6 +141,6 @@ final class Item implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemInt
      */
     protected function currentTime()
     {
-        return new \DateTime('now', new \DateTimeZone('UTC'));
+        return new DateTime('now', new DateTimeZone('UTC'));
     }
 }

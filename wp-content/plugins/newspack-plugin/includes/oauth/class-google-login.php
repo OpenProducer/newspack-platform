@@ -315,7 +315,9 @@ class Google_Login {
 				return $result;
 			}
 
+			$current_user = \wp_get_current_user();
 			$data['metadata'] = $metadata;
+			$data['verified'] = $current_user ? Reader_Activation::is_reader_verified( $current_user ) : false;
 			return \rest_ensure_response(
 				[
 					'data'    => $data,

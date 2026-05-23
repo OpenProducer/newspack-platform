@@ -6,6 +6,11 @@
 	background: var(--newspack-ui-color-neutral-0, np-colors.$neutral-000);
 	padding: var(--newspack-ui-spacer-5, 24px);
 
+	a,
+	a:hover {
+	  text-decoration: none;
+    }
+
 	form p {
 		margin: 0 0 var(--newspack-ui-spacer-5, 24px);
 
@@ -16,6 +21,11 @@
 	}
 
 	table.woocommerce-checkout-review-order-table {
+		tr,
+		th {
+			font-weight: normal;
+		}
+
 		thead > tr > th {
 			font-weight: var(--newspack-ui-font-weight-strong, 600);
 		}
@@ -821,6 +831,8 @@
 
 	// Order review table.
 	.woocommerce-checkout-review-order-table {
+		width: 100%;
+
 		th,
 		td,
 		label,
@@ -841,6 +853,22 @@
 				margin: 0;
 			}
 		}
+
+		td,
+		th {
+			border: 1px solid var(--newspack-ui-color-border, #ddd);
+			border-width: 0 0 1px;
+			word-break: break-all;
+		}
+
+        tfoot {
+          tr:last-child {
+              td,
+              th {
+                  border-bottom: 0;
+              }
+          }
+        }
 	}
 
 	.woocommerce .first-payment-date {
@@ -984,6 +1012,9 @@
 	.woocommerce .woocommerce-notices-wrapper:not(:empty) {
 		margin-bottom: var(--newspack-ui-spacer-5, 24px);
 		margin-top: 0;
+		/* Prevent duplicated padding and border from Newspack UI notices */
+		padding: 0 !important;
+		border-left: none;
 	}
 
 	.woocommerce .woocommerce-notices-wrapper .woocommerce-error.newspack-ui__notice--error {

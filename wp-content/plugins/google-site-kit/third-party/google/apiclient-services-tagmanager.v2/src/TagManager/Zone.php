@@ -26,9 +26,9 @@ class Zone extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $accountId;
-    protected $boundaryType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ZoneBoundary::class;
+    protected $boundaryType = ZoneBoundary::class;
     protected $boundaryDataType = '';
-    protected $childContainerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ZoneChildContainer::class;
+    protected $childContainerType = ZoneChildContainer::class;
     protected $childContainerDataType = 'array';
     /**
      * GTM Container ID.
@@ -67,7 +67,7 @@ class Zone extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $tagManagerUrl;
-    protected $typeRestrictionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ZoneTypeRestriction::class;
+    protected $typeRestrictionType = ZoneTypeRestriction::class;
     protected $typeRestrictionDataType = '';
     /**
      * GTM Workspace ID.
@@ -102,7 +102,7 @@ class Zone extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param ZoneBoundary $boundary
      */
-    public function setBoundary(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ZoneBoundary $boundary)
+    public function setBoundary(ZoneBoundary $boundary)
     {
         $this->boundary = $boundary;
     }
@@ -231,7 +231,7 @@ class Zone extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param ZoneTypeRestriction $typeRestriction
      */
-    public function setTypeRestriction(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ZoneTypeRestriction $typeRestriction)
+    public function setTypeRestriction(ZoneTypeRestriction $typeRestriction)
     {
         $this->typeRestriction = $typeRestriction;
     }
@@ -276,4 +276,4 @@ class Zone extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Zone::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Zone');
+class_alias(Zone::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Zone');

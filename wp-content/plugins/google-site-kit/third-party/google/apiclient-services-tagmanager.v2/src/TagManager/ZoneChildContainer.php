@@ -65,4 +65,4 @@ class ZoneChildContainer extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ZoneChildContainer::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ZoneChildContainer');
+class_alias(ZoneChildContainer::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ZoneChildContainer');

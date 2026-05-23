@@ -26,7 +26,7 @@ class ListUserEntitlementsPlansResponse extends \Google\Site_Kit_Dependencies\Go
      * @var string
      */
     public $nextPageToken;
-    protected $userEntitlementsPlansType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\UserEntitlementsPlan::class;
+    protected $userEntitlementsPlansType = UserEntitlementsPlan::class;
     protected $userEntitlementsPlansDataType = 'array';
     /**
      * A token to retrieve the next page of results.
@@ -62,4 +62,4 @@ class ListUserEntitlementsPlansResponse extends \Google\Site_Kit_Dependencies\Go
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ListUserEntitlementsPlansResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_ListUserEntitlementsPlansResponse');
+class_alias(ListUserEntitlementsPlansResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_ListUserEntitlementsPlansResponse');

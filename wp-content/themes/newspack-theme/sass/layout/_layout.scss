@@ -56,6 +56,28 @@
 	}
 }
 
+// These image positions use 100vw widths that overflow on browsers with classic
+// scrollbars. Use 'hidden' as a safe fallback, then prefer 'clip' (where supported)
+// to contain the overflow without creating a new block formatting context that would
+// break position: sticky on descendant elements (e.g. sticky ads in the sidebar).
+.single-featured-image-behind,
+.single-featured-image-beside,
+.single-featured-image-above {
+	.site-content {
+		overflow: hidden;
+	}
+}
+
+@supports (overflow: clip) {
+	.single-featured-image-behind,
+	.single-featured-image-beside,
+	.single-featured-image-above {
+		.site-content {
+			overflow: clip;
+		}
+	}
+}
+
 #primary {
 	margin: auto;
 	max-width: 90vw;

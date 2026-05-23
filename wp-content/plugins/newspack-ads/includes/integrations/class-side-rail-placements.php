@@ -17,6 +17,17 @@ class Side_Rail_Placements {
 	 * Initialize hooks.
 	 */
 	public static function init() {
+		/**
+		 * Enables experimental side rail ad placements that display ads
+		 * in sticky positions along the left and right margins of the content area.
+		 *
+		 * @constant NEWSPACK_ADS_SIDE_RAIL_PLACEMENTS
+		 * @type     bool
+		 * @default  Side rail ad placements disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_ADS_SIDE_RAIL_PLACEMENTS', true );
+		 */
 		if ( ! defined( 'NEWSPACK_ADS_SIDE_RAIL_PLACEMENTS' ) || ! NEWSPACK_ADS_SIDE_RAIL_PLACEMENTS ) {
 			return;
 		}

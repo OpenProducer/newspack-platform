@@ -20,16 +20,16 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaCreateRollupPropertyResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'rollupPropertySourceLinks';
-    protected $rollupPropertyType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty::class;
+    protected $rollupPropertyType = GoogleAnalyticsAdminV1alphaProperty::class;
     protected $rollupPropertyDataType = '';
-    protected $rollupPropertySourceLinksType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaRollupPropertySourceLink::class;
+    protected $rollupPropertySourceLinksType = GoogleAnalyticsAdminV1alphaRollupPropertySourceLink::class;
     protected $rollupPropertySourceLinksDataType = 'array';
     /**
      * The created roll-up property.
      *
      * @param GoogleAnalyticsAdminV1alphaProperty $rollupProperty
      */
-    public function setRollupProperty(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty $rollupProperty)
+    public function setRollupProperty(GoogleAnalyticsAdminV1alphaProperty $rollupProperty)
     {
         $this->rollupProperty = $rollupProperty;
     }
@@ -58,4 +58,4 @@ class GoogleAnalyticsAdminV1alphaCreateRollupPropertyResponse extends \Google\Si
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCreateRollupPropertyResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaCreateRollupPropertyResponse');
+class_alias(GoogleAnalyticsAdminV1alphaCreateRollupPropertyResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaCreateRollupPropertyResponse');

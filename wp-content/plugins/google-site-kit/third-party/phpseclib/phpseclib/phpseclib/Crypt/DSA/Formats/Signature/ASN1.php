@@ -33,14 +33,14 @@ abstract class ASN1
      */
     public static function load($sig)
     {
-        if (!\is_string($sig)) {
+        if (!is_string($sig)) {
             return \false;
         }
-        $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($sig);
+        $decoded = Encoder::decodeBER($sig);
         if (empty($decoded)) {
             return \false;
         }
-        $components = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DssSigValue::MAP);
+        $components = Encoder::asn1map($decoded[0], Maps\DssSigValue::MAP);
         return $components;
     }
     /**
@@ -50,8 +50,8 @@ abstract class ASN1
      * @param BigInteger $s
      * @return string
      */
-    public static function save(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $r, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $s)
+    public static function save(BigInteger $r, BigInteger $s)
     {
-        return \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER(\compact('r', 's'), \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DssSigValue::MAP);
+        return Encoder::encodeDER(compact('r', 's'), Maps\DssSigValue::MAP);
     }
 }

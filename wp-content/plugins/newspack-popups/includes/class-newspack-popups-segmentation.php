@@ -186,6 +186,17 @@ final class Newspack_Popups_Segmentation {
 	}
 
 	/**
+	 * Check if a Mailchimp merge field value should be considered as a positive donor indicator.
+	 *
+	 * @param mixed $field_value The merge field value to check.
+	 * @return bool Whether the value indicates the contact is a donor.
+	 */
+	public static function is_donor_merge_field_value( $field_value ) {
+		$falsy_values = [ 'no', 'none', 'false', '0', '' ];
+		return ! in_array( strtolower( (string) $field_value ), $falsy_values, true );
+	}
+
+	/**
 	 * When a reader logs in and the connected ESP is Mailchimp, check their donation status.
 	 * If they have a non-empty value in a merge field which matches the newspack_popups_mc_donor_merge_field
 	 * setting, then they should be segmented as a donor.
@@ -224,7 +235,7 @@ final class Newspack_Popups_Segmentation {
 			$donor_merge_field = Newspack_Popups_Settings::get_setting( 'newspack_popups_mc_donor_merge_field' );
 
 			foreach ( $merge_fields as $field_name => $field_value ) {
-				if ( false !== strpos( $field_name, $donor_merge_field ) && ! empty( $field_value ) ) {
+				if ( false !== strpos( $field_name, $donor_merge_field ) && self::is_donor_merge_field_value( $field_value ) ) {
 					if ( method_exists( '\Newspack\Logger', 'log' ) ) {
 						\Newspack\Logger::log(
 							sprintf(

@@ -41,11 +41,11 @@ class PropertiesDataStreamsSKAdNetworkConversionValueSchema extends \Google\Site
      * @return GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class);
     }
     /**
      * Deletes target SKAdNetworkConversionValueSchema.
@@ -62,8 +62,8 @@ class PropertiesDataStreamsSKAdNetworkConversionValueSchema extends \Google\Site
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Looks up a single SKAdNetworkConversionValueSchema.
@@ -79,8 +79,8 @@ class PropertiesDataStreamsSKAdNetworkConversionValueSchema extends \Google\Site
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class);
     }
     /**
      * Lists SKAdNetworkConversionValueSchema on a stream. Properties can have at
@@ -107,8 +107,8 @@ class PropertiesDataStreamsSKAdNetworkConversionValueSchema extends \Google\Site
     public function listPropertiesDataStreamsSKAdNetworkConversionValueSchema($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse::class);
     }
     /**
      * Updates a SKAdNetworkConversionValueSchema.
@@ -126,12 +126,12 @@ class PropertiesDataStreamsSKAdNetworkConversionValueSchema extends \Google\Site
      * @return GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesDataStreamsSKAdNetworkConversionValueSchema::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDataStreamsSKAdNetworkConversionValueSchema');
+class_alias(PropertiesDataStreamsSKAdNetworkConversionValueSchema::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDataStreamsSKAdNetworkConversionValueSchema');

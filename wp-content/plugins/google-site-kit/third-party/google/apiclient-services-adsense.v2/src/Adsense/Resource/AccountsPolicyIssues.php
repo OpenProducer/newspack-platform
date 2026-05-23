@@ -41,8 +41,8 @@ class AccountsPolicyIssues extends \Google\Site_Kit_Dependencies\Google\Service\
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\PolicyIssue::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], PolicyIssue::class);
     }
     /**
      * Lists all the policy issues where the specified account is involved, both
@@ -67,9 +67,9 @@ class AccountsPolicyIssues extends \Google\Site_Kit_Dependencies\Google\Service\
     public function listAccountsPolicyIssues($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListPolicyIssuesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListPolicyIssuesResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsPolicyIssues::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsPolicyIssues');
+class_alias(AccountsPolicyIssues::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsPolicyIssues');

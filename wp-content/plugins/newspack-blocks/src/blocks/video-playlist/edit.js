@@ -5,7 +5,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { Component, Fragment } from '@wordpress/element';
 import { Notice, Placeholder, Spinner, PanelBody } from '@wordpress/components';
-import { InspectorControls } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { addQueryArgs } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 
@@ -187,19 +187,6 @@ class Edit extends Component {
 
 		return (
 			<Fragment>
-				<div>
-					{ ( isLoading || '' === embed ) && this.renderPlaceholder() }
-					{ ! ( isLoading || '' === embed ) && (
-						<div className="wpbnbvp-preview">
-							<div dangerouslySetInnerHTML={ { __html: embed } } />
-						</div>
-					) }
-					{ ! isLoading && (
-						<div className="wpbnbvp__overlay">
-							<Warning />
-						</div>
-					) }
-				</div>
 				<InspectorControls>
 					<PanelBody title={ __( 'Settings', 'newspack-blocks' ) } initialOpen={ true }>
 						<Notice status="warning" isDismissible={ false }>
@@ -207,9 +194,29 @@ class Edit extends Component {
 						</Notice>
 					</PanelBody>
 				</InspectorControls>
+				<div { ...this.props.blockProps }>
+					<div>
+						{ ( isLoading || '' === embed ) && this.renderPlaceholder() }
+						{ ! ( isLoading || '' === embed ) && (
+							<div className="wpbnbvp-preview">
+								<div dangerouslySetInnerHTML={ { __html: embed } } />
+							</div>
+						) }
+						{ ! isLoading && (
+							<div className="wpbnbvp__overlay">
+								<Warning />
+							</div>
+						) }
+					</div>
+				</div>
 			</Fragment>
 		);
 	}
 }
 
-export default Edit;
+const EditWithBlockProps = props => {
+	const blockProps = useBlockProps();
+	return <Edit { ...props } blockProps={ blockProps } />;
+};
+
+export default EditWithBlockProps;

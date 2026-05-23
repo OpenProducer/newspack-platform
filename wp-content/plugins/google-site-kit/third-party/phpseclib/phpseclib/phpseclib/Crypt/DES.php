@@ -46,7 +46,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Exception\BadModeException;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCipher
+class DES extends BlockCipher
 {
     /**
      * Contains $keys[self::ENCRYPT]
@@ -65,35 +65,35 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * Block Length of the cipher
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::block_size
+     * @see Common\SymmetricKey::block_size
      * @var int
      */
     protected $block_size = 8;
     /**
      * Key Length (in bytes)
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::setKeyLength()
+     * @see Common\SymmetricKey::setKeyLength()
      * @var int
      */
     protected $key_length = 8;
     /**
      * The mcrypt specific name of the cipher
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cipher_name_mcrypt
+     * @see Common\SymmetricKey::cipher_name_mcrypt
      * @var string
      */
     protected $cipher_name_mcrypt = 'des';
     /**
      * The OpenSSL names of the cipher / modes
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::openssl_mode_names
+     * @see Common\SymmetricKey::openssl_mode_names
      * @var array
      */
     protected $openssl_mode_names = [self::MODE_ECB => 'des-ecb', self::MODE_CBC => 'des-cbc', self::MODE_CFB => 'des-cfb', self::MODE_OFB => 'des-ofb'];
     /**
      * Optimizing value while CFB-encrypting
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cfb_init_len
+     * @see Common\SymmetricKey::cfb_init_len
      * @var int
      */
     protected $cfb_init_len = 500;
@@ -216,7 +216,7 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     {
         parent::__construct($mode);
         if ($this->mode == self::MODE_STREAM) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\BadModeException('Block ciphers cannot be ran in stream mode');
+            throw new BadModeException('Block ciphers cannot be ran in stream mode');
         }
     }
     /**
@@ -224,7 +224,7 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
      *
      * This is mainly just a wrapper to set things up for \phpseclib3\Crypt\Common\SymmetricKey::isValidEngine()
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::isValidEngine()
+     * @see Common\SymmetricKey::isValidEngine()
      * @param int $engine
      * @return bool
      */
@@ -235,7 +235,7 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
                 // quoting https://www.openssl.org/news/openssl-3.0-notes.html, OpenSSL 3.0.1
                 // "Moved all variations of the EVP ciphers CAST5, BF, IDEA, SEED, RC2, RC4, RC5, and DES to the legacy provider"
                 // in theory openssl_get_cipher_methods() should catch this but, on GitHub Actions, at least, it does not
-                if (\defined('OPENSSL_VERSION_TEXT') && \version_compare(\preg_replace('#OpenSSL (\\d+\\.\\d+\\.\\d+) .*#', '$1', \OPENSSL_VERSION_TEXT), '3.0.1', '>=')) {
+                if (defined('OPENSSL_VERSION_TEXT') && version_compare(preg_replace('#OpenSSL (\d+\.\d+\.\d+) .*#', '$1', \OPENSSL_VERSION_TEXT), '3.0.1', '>=')) {
                     return \false;
                 }
                 $this->cipher_name_openssl_ecb = 'des-ecb';
@@ -251,13 +251,13 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
      *
      * DES also requires that every eighth bit be a parity bit, however, we'll ignore that.
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::setKey()
+     * @see Common\SymmetricKey::setKey()
      * @param string $key
      */
     public function setKey($key)
     {
-        if (!$this instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\TripleDES && \strlen($key) != 8) {
-            throw new \LengthException('Key of size ' . \strlen($key) . ' not supported by this algorithm. Only keys of size 8 are supported');
+        if (!$this instanceof TripleDES && strlen($key) != 8) {
+            throw new \LengthException('Key of size ' . strlen($key) . ' not supported by this algorithm. Only keys of size 8 are supported');
         }
         // Sets the key
         parent::setKey($key);
@@ -265,8 +265,8 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * Encrypts a block
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::encryptBlock()
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::encrypt()
+     * @see Common\SymmetricKey::encryptBlock()
+     * @see Common\SymmetricKey::encrypt()
      * @see self::encrypt()
      * @param string $in
      * @return string
@@ -278,8 +278,8 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * Decrypts a block
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::decryptBlock()
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::decrypt()
+     * @see Common\SymmetricKey::decryptBlock()
+     * @see Common\SymmetricKey::decrypt()
      * @see self::decrypt()
      * @param string $in
      * @return string
@@ -305,14 +305,14 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     {
         static $sbox1, $sbox2, $sbox3, $sbox4, $sbox5, $sbox6, $sbox7, $sbox8, $shuffleip, $shuffleinvip;
         if (!$sbox1) {
-            $sbox1 = \array_map('intval', self::$sbox1);
-            $sbox2 = \array_map('intval', self::$sbox2);
-            $sbox3 = \array_map('intval', self::$sbox3);
-            $sbox4 = \array_map('intval', self::$sbox4);
-            $sbox5 = \array_map('intval', self::$sbox5);
-            $sbox6 = \array_map('intval', self::$sbox6);
-            $sbox7 = \array_map('intval', self::$sbox7);
-            $sbox8 = \array_map('intval', self::$sbox8);
+            $sbox1 = array_map([self::class, 'safe_intval'], self::$sbox1);
+            $sbox2 = array_map([self::class, 'safe_intval'], self::$sbox2);
+            $sbox3 = array_map([self::class, 'safe_intval'], self::$sbox3);
+            $sbox4 = array_map([self::class, 'safe_intval'], self::$sbox4);
+            $sbox5 = array_map([self::class, 'safe_intval'], self::$sbox5);
+            $sbox6 = array_map([self::class, 'safe_intval'], self::$sbox6);
+            $sbox7 = array_map([self::class, 'safe_intval'], self::$sbox7);
+            $sbox8 = array_map([self::class, 'safe_intval'], self::$sbox8);
             /* Merge $shuffle with $[inv]ipmap */
             for ($i = 0; $i < 256; ++$i) {
                 $shuffleip[] = self::$shuffle[self::$ipmap[$i]];
@@ -322,11 +322,11 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
         $keys = $this->keys[$mode];
         $ki = -1;
         // Do the initial IP permutation.
-        $t = \unpack('Nl/Nr', $block);
+        $t = unpack('Nl/Nr', $block);
         list($l, $r) = [$t['l'], $t['r']];
         $block = $shuffleip[$r & 0xff] & "\x80\x80\x80\x80\x80\x80\x80\x80" | $shuffleip[$r >> 8 & 0xff] & "@@@@@@@@" | $shuffleip[$r >> 16 & 0xff] & "        " | $shuffleip[$r >> 24 & 0xff] & "\x10\x10\x10\x10\x10\x10\x10\x10" | $shuffleip[$l & 0xff] & "\x08\x08\x08\x08\x08\x08\x08\x08" | $shuffleip[$l >> 8 & 0xff] & "\x04\x04\x04\x04\x04\x04\x04\x04" | $shuffleip[$l >> 16 & 0xff] & "\x02\x02\x02\x02\x02\x02\x02\x02" | $shuffleip[$l >> 24 & 0xff] & "\x01\x01\x01\x01\x01\x01\x01\x01";
         // Extract L0 and R0.
-        $t = \unpack('Nl/Nr', $block);
+        $t = unpack('Nl/Nr', $block);
         list($l, $r) = [$t['l'], $t['r']];
         for ($des_round = 0; $des_round < $this->des_rounds; ++$des_round) {
             // Perform the 16 steps.
@@ -353,7 +353,7 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * Creates the key schedule
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::setupKey()
+     * @see Common\SymmetricKey::setupKey()
      */
     protected function setupKey()
     {
@@ -394,15 +394,15 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
         $keys = [];
         for ($des_round = 0; $des_round < $this->des_rounds; ++$des_round) {
             // pad the key and remove extra characters as appropriate.
-            $key = \str_pad(\substr($this->key, $des_round * 8, 8), 8, "\x00");
+            $key = str_pad(substr($this->key, $des_round * 8, 8), 8, "\x00");
             // Perform the PC/1 transformation and compute C and D.
-            $t = \unpack('Nl/Nr', $key);
+            $t = unpack('Nl/Nr', $key);
             list($l, $r) = [$t['l'], $t['r']];
             $key = self::$shuffle[$pc1map[$r & 0xff]] & "\x80\x80\x80\x80\x80\x80\x80\x00" | self::$shuffle[$pc1map[$r >> 8 & 0xff]] & "@@@@@@@\x00" | self::$shuffle[$pc1map[$r >> 16 & 0xff]] & "       \x00" | self::$shuffle[$pc1map[$r >> 24 & 0xff]] & "\x10\x10\x10\x10\x10\x10\x10\x00" | self::$shuffle[$pc1map[$l & 0xff]] & "\x08\x08\x08\x08\x08\x08\x08\x00" | self::$shuffle[$pc1map[$l >> 8 & 0xff]] & "\x04\x04\x04\x04\x04\x04\x04\x00" | self::$shuffle[$pc1map[$l >> 16 & 0xff]] & "\x02\x02\x02\x02\x02\x02\x02\x00" | self::$shuffle[$pc1map[$l >> 24 & 0xff]] & "\x01\x01\x01\x01\x01\x01\x01\x00";
-            $key = \unpack('Nc/Nd', $key);
+            $key = unpack('Nc/Nd', $key);
             $c = $key['c'] >> 4 & 0xfffffff;
             $d = $key['d'] >> 4 & 0xffffff0 | $key['c'] & 0xf;
-            $keys[$des_round] = [self::ENCRYPT => [], self::DECRYPT => \array_fill(0, 32, 0)];
+            $keys[$des_round] = [self::ENCRYPT => [], self::DECRYPT => array_fill(0, 32, 0)];
             for ($i = 0, $ki = 31; $i < 16; ++$i, $ki -= 2) {
                 $c <<= $shifts[$i];
                 $c = ($c | $c >> 28) & 0xfffffff;
@@ -412,8 +412,8 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
                 $cp = $pc2mapc1[$c >> 24] | $pc2mapc2[$c >> 16 & 0xff] | $pc2mapc3[$c >> 8 & 0xff] | $pc2mapc4[$c & 0xff];
                 $dp = $pc2mapd1[$d >> 24] | $pc2mapd2[$d >> 16 & 0xff] | $pc2mapd3[$d >> 8 & 0xff] | $pc2mapd4[$d & 0xff];
                 // Reorder: odd bytes/even bytes. Push the result in key schedule.
-                $val1 = $cp & \intval(0xff000000) | $cp << 8 & 0xff0000 | $dp >> 16 & 0xff00 | $dp >> 8 & 0xff;
-                $val2 = $cp << 8 & \intval(0xff000000) | $cp << 16 & 0xff0000 | $dp >> 8 & 0xff00 | $dp & 0xff;
+                $val1 = $cp & self::safe_intval(0xff000000) | $cp << 8 & 0xff0000 | $dp >> 16 & 0xff00 | $dp >> 8 & 0xff;
+                $val2 = $cp << 8 & self::safe_intval(0xff000000) | $cp << 16 & 0xff0000 | $dp >> 8 & 0xff00 | $dp & 0xff;
                 $keys[$des_round][self::ENCRYPT][] = $val1;
                 $keys[$des_round][self::DECRYPT][$ki - 1] = $val1;
                 $keys[$des_round][self::ENCRYPT][] = $val2;
@@ -423,7 +423,7 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
         switch ($this->des_rounds) {
             case 3:
                 // 3DES keys
-                $this->keys = [self::ENCRYPT => \array_merge($keys[0][self::ENCRYPT], $keys[1][self::DECRYPT], $keys[2][self::ENCRYPT]), self::DECRYPT => \array_merge($keys[2][self::DECRYPT], $keys[1][self::ENCRYPT], $keys[0][self::DECRYPT])];
+                $this->keys = [self::ENCRYPT => array_merge($keys[0][self::ENCRYPT], $keys[1][self::DECRYPT], $keys[2][self::ENCRYPT]), self::DECRYPT => array_merge($keys[2][self::DECRYPT], $keys[1][self::ENCRYPT], $keys[0][self::DECRYPT])];
                 break;
             // case 1: // DES keys
             default:
@@ -433,7 +433,7 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * Setup the performance-optimized function for de/encrypt()
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::setupInlineCrypt()
+     * @see Common\SymmetricKey::setupInlineCrypt()
      */
     protected function setupInlineCrypt()
     {
@@ -443,14 +443,14 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
         $des_rounds = $this->des_rounds;
         $init_crypt = 'static $sbox1, $sbox2, $sbox3, $sbox4, $sbox5, $sbox6, $sbox7, $sbox8, $shuffleip, $shuffleinvip;
             if (!$sbox1) {
-                $sbox1 = array_map("intval", self::$sbox1);
-                $sbox2 = array_map("intval", self::$sbox2);
-                $sbox3 = array_map("intval", self::$sbox3);
-                $sbox4 = array_map("intval", self::$sbox4);
-                $sbox5 = array_map("intval", self::$sbox5);
-                $sbox6 = array_map("intval", self::$sbox6);
-                $sbox7 = array_map("intval", self::$sbox7);
-                $sbox8 = array_map("intval", self::$sbox8);' . '
+                $sbox1 = array_map("self::safe_intval", self::$sbox1);
+                $sbox2 = array_map("self::safe_intval", self::$sbox2);
+                $sbox3 = array_map("self::safe_intval", self::$sbox3);
+                $sbox4 = array_map("self::safe_intval", self::$sbox4);
+                $sbox5 = array_map("self::safe_intval", self::$sbox5);
+                $sbox6 = array_map("self::safe_intval", self::$sbox6);
+                $sbox7 = array_map("self::safe_intval", self::$sbox7);
+                $sbox8 = array_map("self::safe_intval", self::$sbox8);' . '
                 for ($i = 0; $i < 256; ++$i) {
                     $shuffleip[]    =  self::$shuffle[self::$ipmap[$i]];
                     $shuffleinvip[] =  self::$shuffle[self::$invipmap[$i]];
@@ -469,14 +469,14 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
                 $l  = $in[1];
                 $r  = $in[2];
                 $in = unpack("N*",
-                    ($shuffleip[ $r        & 0xFF] & "\\x80\\x80\\x80\\x80\\x80\\x80\\x80\\x80") |
-                    ($shuffleip[($r >>  8) & 0xFF] & "\\x40\\x40\\x40\\x40\\x40\\x40\\x40\\x40") |
-                    ($shuffleip[($r >> 16) & 0xFF] & "\\x20\\x20\\x20\\x20\\x20\\x20\\x20\\x20") |
-                    ($shuffleip[($r >> 24) & 0xFF] & "\\x10\\x10\\x10\\x10\\x10\\x10\\x10\\x10") |
-                    ($shuffleip[ $l        & 0xFF] & "\\x08\\x08\\x08\\x08\\x08\\x08\\x08\\x08") |
-                    ($shuffleip[($l >>  8) & 0xFF] & "\\x04\\x04\\x04\\x04\\x04\\x04\\x04\\x04") |
-                    ($shuffleip[($l >> 16) & 0xFF] & "\\x02\\x02\\x02\\x02\\x02\\x02\\x02\\x02") |
-                    ($shuffleip[($l >> 24) & 0xFF] & "\\x01\\x01\\x01\\x01\\x01\\x01\\x01\\x01")
+                    ($shuffleip[ $r        & 0xFF] & "\x80\x80\x80\x80\x80\x80\x80\x80") |
+                    ($shuffleip[($r >>  8) & 0xFF] & "\x40\x40\x40\x40\x40\x40\x40\x40") |
+                    ($shuffleip[($r >> 16) & 0xFF] & "\x20\x20\x20\x20\x20\x20\x20\x20") |
+                    ($shuffleip[($r >> 24) & 0xFF] & "\x10\x10\x10\x10\x10\x10\x10\x10") |
+                    ($shuffleip[ $l        & 0xFF] & "\x08\x08\x08\x08\x08\x08\x08\x08") |
+                    ($shuffleip[($l >>  8) & 0xFF] & "\x04\x04\x04\x04\x04\x04\x04\x04") |
+                    ($shuffleip[($l >> 16) & 0xFF] & "\x02\x02\x02\x02\x02\x02\x02\x02") |
+                    ($shuffleip[($l >> 24) & 0xFF] & "\x01\x01\x01\x01\x01\x01\x01\x01")
                 );
                 ' . '
                 $l = $in[1];
@@ -506,14 +506,14 @@ class DES extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
             }
             // Perform the inverse IP permutation.
             $crypt_block[$c] .= '$in =
-                ($shuffleinvip[($l >> 24) & 0xFF] & "\\x80\\x80\\x80\\x80\\x80\\x80\\x80\\x80") |
-                ($shuffleinvip[($r >> 24) & 0xFF] & "\\x40\\x40\\x40\\x40\\x40\\x40\\x40\\x40") |
-                ($shuffleinvip[($l >> 16) & 0xFF] & "\\x20\\x20\\x20\\x20\\x20\\x20\\x20\\x20") |
-                ($shuffleinvip[($r >> 16) & 0xFF] & "\\x10\\x10\\x10\\x10\\x10\\x10\\x10\\x10") |
-                ($shuffleinvip[($l >>  8) & 0xFF] & "\\x08\\x08\\x08\\x08\\x08\\x08\\x08\\x08") |
-                ($shuffleinvip[($r >>  8) & 0xFF] & "\\x04\\x04\\x04\\x04\\x04\\x04\\x04\\x04") |
-                ($shuffleinvip[ $l        & 0xFF] & "\\x02\\x02\\x02\\x02\\x02\\x02\\x02\\x02") |
-                ($shuffleinvip[ $r        & 0xFF] & "\\x01\\x01\\x01\\x01\\x01\\x01\\x01\\x01");
+                ($shuffleinvip[($l >> 24) & 0xFF] & "\x80\x80\x80\x80\x80\x80\x80\x80") |
+                ($shuffleinvip[($r >> 24) & 0xFF] & "\x40\x40\x40\x40\x40\x40\x40\x40") |
+                ($shuffleinvip[($l >> 16) & 0xFF] & "\x20\x20\x20\x20\x20\x20\x20\x20") |
+                ($shuffleinvip[($r >> 16) & 0xFF] & "\x10\x10\x10\x10\x10\x10\x10\x10") |
+                ($shuffleinvip[($l >>  8) & 0xFF] & "\x08\x08\x08\x08\x08\x08\x08\x08") |
+                ($shuffleinvip[($r >>  8) & 0xFF] & "\x04\x04\x04\x04\x04\x04\x04\x04") |
+                ($shuffleinvip[ $l        & 0xFF] & "\x02\x02\x02\x02\x02\x02\x02\x02") |
+                ($shuffleinvip[ $r        & 0xFF] & "\x01\x01\x01\x01\x01\x01\x01\x01");
             ';
         }
         // Creates the inline-crypt function

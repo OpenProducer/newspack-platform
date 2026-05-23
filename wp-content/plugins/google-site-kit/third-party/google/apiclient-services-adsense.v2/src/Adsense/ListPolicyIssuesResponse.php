@@ -27,7 +27,7 @@ class ListPolicyIssuesResponse extends \Google\Site_Kit_Dependencies\Google\Coll
      * @var string
      */
     public $nextPageToken;
-    protected $policyIssuesType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\PolicyIssue::class;
+    protected $policyIssuesType = PolicyIssue::class;
     protected $policyIssuesDataType = 'array';
     /**
      * Continuation token used to page through policy issues. To retrieve the next
@@ -64,4 +64,4 @@ class ListPolicyIssuesResponse extends \Google\Site_Kit_Dependencies\Google\Coll
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListPolicyIssuesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListPolicyIssuesResponse');
+class_alias(ListPolicyIssuesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListPolicyIssuesResponse');

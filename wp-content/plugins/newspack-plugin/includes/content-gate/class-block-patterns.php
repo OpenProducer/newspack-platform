@@ -51,16 +51,82 @@ class Block_Patterns {
 	 */
 	public static function get_block_patterns() {
 		return [
-			'registration-card'          => __( 'Registration Card', 'newspack' ),
-			'registration-card-compact'  => __( 'Registration Card (Compact)', 'newspack' ),
-			'registration-wall'          => __( 'Registration Wall', 'newspack' ),
-			'donation-wall'              => __( 'Donation Wall', 'newspack' ),
-			'pay-wall-one-tier'          => __( 'Paywall with One Tier', 'newspack' ),
-			'pay-wall-one-tier-metering' => __( 'Paywall with One Tier and Metering', 'newspack' ),
-			'pay-wall-two-tiers'         => __( 'Paywall with Two Tiers', 'newspack' ),
-			'pay-wall-two-tiers-alt'     => __( 'Paywall with Two Tiers (Alt)', 'newspack' ),
-			'pay-wall-three-tiers'       => __( 'Paywall with Three Tiers', 'newspack' ),
-			'pay-wall-three-tiers-alt'   => __( 'Paywall with Three Tiers (Alt)', 'newspack' ),
+			'registration-banner'             => __( 'Registration Banner', 'newspack-plugin' ),
+			'registration-wall'               => __( 'Registration Wall', 'newspack-plugin' ),
+			'donation-wall'                   => __( 'Donation Wall', 'newspack-plugin' ),
+			'pay-wall-one-tier'               => __( 'Paywall with One Tier', 'newspack-plugin' ),
+			'pay-wall-one-tier-metering'      => __( 'Paywall with One Tier and Metering', 'newspack-plugin' ),
+			'pay-wall-one-tier-metering-wide' => __( 'Paywall with One Tier and Metering (Wide)', 'newspack-plugin' ),
+			'pay-wall-two-tiers'              => __( 'Paywall with Two Tiers', 'newspack-plugin' ),
+			'pay-wall-two-tiers-alt'          => __( 'Paywall with Two Tiers (Alt)', 'newspack-plugin' ),
+			'pay-wall-three-tiers'            => __( 'Paywall with Three Tiers', 'newspack-plugin' ),
+			'pay-wall-three-tiers-alt'        => __( 'Paywall with Three Tiers (Alt)', 'newspack-plugin' ),
+		];
+	}
+
+	/**
+	 * Strip extra whitespace from pattern content.
+	 *
+	 * Pattern template files use indentation and line breaks for readability,
+	 * but this whitespace is rendered as visible text nodes in the block editor.
+	 * This method collapses newlines and leading whitespace between HTML tags
+	 * and their content so the editor renders cleanly.
+	 *
+	 * @param string $content The pattern content.
+	 * @return string The content with extra whitespace stripped.
+	 */
+	public static function strip_pattern_whitespace( $content ) {
+		// Collapse whitespace (newlines + tabs/spaces) between an opening tag and content.
+		$content = preg_replace( '/(<[^\/][^>]*>)\s+/', '$1', $content );
+		// Collapse whitespace before closing tags.
+		$content = preg_replace( '/\s+(<\/[^>]+>)/', '$1', $content );
+		return $content;
+	}
+
+	/**
+	 * Get the first purchasable subscription product ID from custom access rules.
+	 *
+	 * @param array $pattern_context The pattern context with custom_access_settings.
+	 * @return int The product ID, or 0 if none found.
+	 */
+	public static function get_subscription_product_id( $pattern_context ) {
+		if ( empty( $pattern_context['custom_access_settings']['access_rules'] ) || ! function_exists( 'wc_get_product' ) ) {
+			return 0;
+		}
+		foreach ( $pattern_context['custom_access_settings']['access_rules'] as $group ) {
+			foreach ( $group as $rule ) {
+				if ( 'subscription' === ( $rule['slug'] ?? '' ) && ! empty( $rule['value'] ) ) {
+					$product = \wc_get_product( absint( is_array( $rule['value'] ) ? reset( $rule['value'] ) : $rule['value'] ) );
+					if ( $product && $product->is_purchasable() ) {
+						return $product->get_id();
+					}
+				}
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Extract metering settings from custom access context, with defaults.
+	 *
+	 * @param array $pattern_context The pattern context with custom_access_settings.
+	 * @return array { count: int, period: string }
+	 */
+	public static function get_metering_settings( $pattern_context ) {
+		$count  = 4;
+		$period = __( 'month', 'newspack-plugin' );
+		if ( ! empty( $pattern_context['custom_access_settings']['metering'] ) ) {
+			$metering = $pattern_context['custom_access_settings']['metering'];
+			if ( ! empty( $metering['count'] ) ) {
+				$count = absint( $metering['count'] );
+			}
+			if ( ! empty( $metering['period'] ) ) {
+				$period = sanitize_text_field( $metering['period'] );
+			}
+		}
+		return [
+			'count'  => $count,
+			'period' => $period,
 		];
 	}
 
@@ -68,13 +134,14 @@ class Block_Patterns {
 	 * Register block patterns.
 	 */
 	public static function register_block_patterns() {
-		\register_block_pattern_category( 'newspack-content-gate', [ 'label' => __( 'Newspack Content Gate', 'newspack' ) ] );
+		\register_block_pattern_category( 'newspack-content-gate', [ 'label' => __( 'Newspack Access Control', 'newspack-plugin' ) ] );
 		$patterns = self::get_block_patterns();
 		foreach ( $patterns as $slug => $title ) {
 			$path = __DIR__ . '/block-patterns/' . $slug . '.php';
 			if ( ! file_exists( $path ) ) {
 				continue;
 			}
+			$pattern_context = []; // No gate context available for the pattern inserter.
 			ob_start();
 			require $path;
 			$content = ob_get_clean();
@@ -86,8 +153,8 @@ class Block_Patterns {
 				[
 					'categories'  => [ 'newspack-content-gate' ],
 					'title'       => $title,
-					'description' => _x( 'Invite your reader to become a member before continuing reading the article', 'Block pattern description', 'newspack' ),
-					'content'     => $content,
+					'description' => _x( 'Invite your reader to become a member before continuing reading the article', 'Block pattern description', 'newspack-plugin' ),
+					'content'     => self::strip_pattern_whitespace( $content ),
 				]
 			);
 		}

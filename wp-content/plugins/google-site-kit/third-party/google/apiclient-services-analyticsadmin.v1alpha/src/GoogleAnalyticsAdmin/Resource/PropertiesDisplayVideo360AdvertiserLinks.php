@@ -43,11 +43,11 @@ class PropertiesDisplayVideo360AdvertiserLinks extends \Google\Site_Kit_Dependen
      * @return GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class);
     }
     /**
      * Deletes a DisplayVideo360AdvertiserLink on a property.
@@ -63,8 +63,8 @@ class PropertiesDisplayVideo360AdvertiserLinks extends \Google\Site_Kit_Dependen
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Look up a single DisplayVideo360AdvertiserLink
@@ -79,8 +79,8 @@ class PropertiesDisplayVideo360AdvertiserLinks extends \Google\Site_Kit_Dependen
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class);
     }
     /**
      * Lists all DisplayVideo360AdvertiserLinks on a property.
@@ -103,8 +103,8 @@ class PropertiesDisplayVideo360AdvertiserLinks extends \Google\Site_Kit_Dependen
     public function listPropertiesDisplayVideo360AdvertiserLinks($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse::class);
     }
     /**
      * Updates a DisplayVideo360AdvertiserLink on a property.
@@ -123,12 +123,12 @@ class PropertiesDisplayVideo360AdvertiserLinks extends \Google\Site_Kit_Dependen
      * @return GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesDisplayVideo360AdvertiserLinks::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDisplayVideo360AdvertiserLinks');
+class_alias(PropertiesDisplayVideo360AdvertiserLinks::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesDisplayVideo360AdvertiserLinks');

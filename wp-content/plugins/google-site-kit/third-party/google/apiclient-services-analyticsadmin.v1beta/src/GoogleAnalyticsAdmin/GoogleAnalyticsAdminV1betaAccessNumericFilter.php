@@ -49,7 +49,7 @@ class GoogleAnalyticsAdminV1betaAccessNumericFilter extends \Google\Site_Kit_Dep
      * @var string
      */
     public $operation;
-    protected $valueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaNumericValue::class;
+    protected $valueType = GoogleAnalyticsAdminV1betaNumericValue::class;
     protected $valueDataType = '';
     /**
      * The operation type for this filter.
@@ -75,7 +75,7 @@ class GoogleAnalyticsAdminV1betaAccessNumericFilter extends \Google\Site_Kit_Dep
      *
      * @param GoogleAnalyticsAdminV1betaNumericValue $value
      */
-    public function setValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaNumericValue $value)
+    public function setValue(GoogleAnalyticsAdminV1betaNumericValue $value)
     {
         $this->value = $value;
     }
@@ -88,4 +88,4 @@ class GoogleAnalyticsAdminV1betaAccessNumericFilter extends \Google\Site_Kit_Dep
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessNumericFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessNumericFilter');
+class_alias(GoogleAnalyticsAdminV1betaAccessNumericFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessNumericFilter');

@@ -23,7 +23,7 @@ use Google\Site_Kit_Dependencies\Monolog\Logger;
  *
  * @author Kolja Zuelsdorf <koljaz@web.de>
  */
-class ProcessHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class ProcessHandler extends AbstractProcessingHandler
 {
     /**
      * Holds the process to receive data on its STDIN.
@@ -59,7 +59,7 @@ class ProcessHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
      * @param  string|null               $cwd     "Current working directory" (CWD) for the process to be executed in.
      * @throws \InvalidArgumentException
      */
-    public function __construct(string $command, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true, ?string $cwd = null)
+    public function __construct(string $command, $level = Logger::DEBUG, bool $bubble = \true, ?string $cwd = null)
     {
         if ($command === '') {
             throw new \InvalidArgumentException('The command argument must be a non-empty string.');
@@ -76,22 +76,22 @@ class ProcessHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
      *
      * @throws \UnexpectedValueException
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $this->ensureProcessIsStarted();
         $this->writeProcessInput($record['formatted']);
         $errors = $this->readProcessErrors();
         if (empty($errors) === \false) {
-            throw new \UnexpectedValueException(\sprintf('Errors while writing to process: %s', $errors));
+            throw new \UnexpectedValueException(sprintf('Errors while writing to process: %s', $errors));
         }
     }
     /**
      * Makes sure that the process is actually started, and if not, starts it,
      * assigns the stream pipes, and handles startup errors, if any.
      */
-    private function ensureProcessIsStarted() : void
+    private function ensureProcessIsStarted(): void
     {
-        if (\is_resource($this->process) === \false) {
+        if (is_resource($this->process) === \false) {
             $this->startProcess();
             $this->handleStartupErrors();
         }
@@ -99,11 +99,11 @@ class ProcessHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
     /**
      * Starts the actual process and sets all streams to non-blocking.
      */
-    private function startProcess() : void
+    private function startProcess(): void
     {
-        $this->process = \proc_open($this->command, static::DESCRIPTOR_SPEC, $this->pipes, $this->cwd);
+        $this->process = proc_open($this->command, static::DESCRIPTOR_SPEC, $this->pipes, $this->cwd);
         foreach ($this->pipes as $pipe) {
-            \stream_set_blocking($pipe, \false);
+            stream_set_blocking($pipe, \false);
         }
     }
     /**
@@ -111,15 +111,15 @@ class ProcessHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
      *
      * @throws \UnexpectedValueException
      */
-    private function handleStartupErrors() : void
+    private function handleStartupErrors(): void
     {
         $selected = $this->selectErrorStream();
         if (\false === $selected) {
             throw new \UnexpectedValueException('Something went wrong while selecting a stream.');
         }
         $errors = $this->readProcessErrors();
-        if (\is_resource($this->process) === \false || empty($errors) === \false) {
-            throw new \UnexpectedValueException(\sprintf('The process "%s" could not be opened: ' . $errors, $this->command));
+        if (is_resource($this->process) === \false || empty($errors) === \false) {
+            throw new \UnexpectedValueException(sprintf('The process "%s" could not be opened: ' . $errors, $this->command));
         }
     }
     /**
@@ -131,7 +131,7 @@ class ProcessHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
     {
         $empty = [];
         $errorPipes = [$this->pipes[2]];
-        return \stream_select($errorPipes, $empty, $empty, 1);
+        return stream_select($errorPipes, $empty, $empty, 1);
     }
     /**
      * Reads the errors of the process, if there are any.
@@ -139,29 +139,29 @@ class ProcessHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
      * @codeCoverageIgnore
      * @return string Empty string if there are no errors.
      */
-    protected function readProcessErrors() : string
+    protected function readProcessErrors(): string
     {
-        return (string) \stream_get_contents($this->pipes[2]);
+        return (string) stream_get_contents($this->pipes[2]);
     }
     /**
      * Writes to the input stream of the opened process.
      *
      * @codeCoverageIgnore
      */
-    protected function writeProcessInput(string $string) : void
+    protected function writeProcessInput(string $string): void
     {
-        \fwrite($this->pipes[0], $string);
+        fwrite($this->pipes[0], $string);
     }
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
-        if (\is_resource($this->process)) {
+        if (is_resource($this->process)) {
             foreach ($this->pipes as $pipe) {
-                \fclose($pipe);
+                fclose($pipe);
             }
-            \proc_close($this->process);
+            proc_close($this->process);
             $this->process = null;
         }
     }

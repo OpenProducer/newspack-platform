@@ -13,12 +13,13 @@ namespace Google\Site_Kit_Dependencies\phpseclib3\Crypt\DSA;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\DSA;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\DSA\Formats\Signature\ASN1 as ASN1Signature;
+use Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException;
 /**
  * DSA Public Key
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-final class PublicKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DSA implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\PublicKey
+final class PublicKey extends DSA implements Common\PublicKey
 {
     use Common\Traits\Fingerprint;
     /**
@@ -31,17 +32,28 @@ final class PublicKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DSA
      */
     public function verify($message, $signature)
     {
+        if (self::$forcedEngine === 'libsodium') {
+            throw new BadConfigurationException('Engine libsodium is forced but unsupported for DSA');
+        }
+        if (self::$forcedEngine === 'OpenSSL' && !function_exists('openssl_get_md_methods')) {
+            throw new BadConfigurationException('Engine OpenSSL is forced but unsupported for DSA');
+        }
         $format = $this->sigFormat;
         $params = $format::load($signature);
-        if ($params === \false || \count($params) != 2) {
+        if ($params === \false || count($params) != 2) {
             return \false;
         }
-        \extract($params);
-        if (self::$engines['OpenSSL'] && \in_array($this->hash->getHash(), \openssl_get_md_methods())) {
-            $sig = $format != 'ASN1' ? \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DSA\Formats\Signature\ASN1::save($r, $s) : $signature;
-            $result = \openssl_verify($message, $sig, $this->toString('PKCS8'), $this->hash->getHash());
-            if ($result != -1) {
-                return (bool) $result;
+        $r = $params['r'];
+        $s = $params['s'];
+        if (function_exists('openssl_get_md_methods') && self::$forcedEngine !== 'PHP') {
+            if (in_array($this->hash->getHash(), openssl_get_md_methods())) {
+                $sig = $format != 'ASN1' ? ASN1Signature::save($r, $s) : $signature;
+                $result = openssl_verify($message, $sig, $this->toString('PKCS8'), $this->hash->getHash());
+                if ($result != -1) {
+                    return (bool) $result;
+                }
+            } elseif (self::$forcedEngine === 'OpenSSL') {
+                throw new BadConfigurationException('Engine OpenSSL is forced but unsupported for DSA / ' . $this->hash->getHash());
             }
         }
         $q_1 = $this->q->subtract(self::$one);

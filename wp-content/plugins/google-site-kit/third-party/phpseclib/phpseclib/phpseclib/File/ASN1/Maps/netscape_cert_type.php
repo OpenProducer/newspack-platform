@@ -22,5 +22,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class netscape_cert_type
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_BIT_STRING, 'mapping' => ['SSLClient', 'SSLServer', 'Email', 'ObjectSigning', 'Reserved', 'SSLCA', 'EmailCA', 'ObjectSigningCA']];
+    const MAP = ['type' => ASN1::TYPE_BIT_STRING, 'mapping' => ['SSLClient', 'SSLServer', 'Email', 'ObjectSigning', 'Reserved', 'SSLCA', 'EmailCA', 'ObjectSigningCA']];
 }

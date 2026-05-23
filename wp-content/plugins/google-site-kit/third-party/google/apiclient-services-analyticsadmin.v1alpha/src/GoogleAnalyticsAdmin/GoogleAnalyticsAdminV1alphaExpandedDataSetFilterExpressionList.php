@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'filterExpressions';
-    protected $filterExpressionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression::class;
+    protected $filterExpressionsType = GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression::class;
     protected $filterExpressionsDataType = 'array';
     /**
      * A list of ExpandedDataSet filter expressions.
@@ -40,4 +40,4 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList extends \Go
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList');
+class_alias(GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList');

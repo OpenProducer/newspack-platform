@@ -71,4 +71,4 @@ class GoogleAnalyticsAdminV1alphaAdSenseLink extends \Google\Site_Kit_Dependenci
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAdSenseLink::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAdSenseLink');
+class_alias(GoogleAnalyticsAdminV1alphaAdSenseLink::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAdSenseLink');

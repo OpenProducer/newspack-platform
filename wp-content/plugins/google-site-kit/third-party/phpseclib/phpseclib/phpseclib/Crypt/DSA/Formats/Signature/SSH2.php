@@ -31,18 +31,18 @@ abstract class SSH2
      */
     public static function load($sig)
     {
-        if (!\is_string($sig)) {
+        if (!is_string($sig)) {
             return \false;
         }
-        $result = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('ss', $sig);
+        $result = Strings::unpackSSH2('ss', $sig);
         if ($result === \false) {
             return \false;
         }
         list($type, $blob) = $result;
-        if ($type != 'ssh-dss' || \strlen($blob) != 40) {
+        if ($type != 'ssh-dss' || strlen($blob) != 40) {
             return \false;
         }
-        return ['r' => new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(\substr($blob, 0, 20), 256), 's' => new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(\substr($blob, 20), 256)];
+        return ['r' => new BigInteger(substr($blob, 0, 20), 256), 's' => new BigInteger(substr($blob, 20), 256)];
     }
     /**
      * Returns a signature in the appropriate format
@@ -51,11 +51,11 @@ abstract class SSH2
      * @param BigInteger $s
      * @return string
      */
-    public static function save(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $r, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $s)
+    public static function save(BigInteger $r, BigInteger $s)
     {
         if ($r->getLength() > 160 || $s->getLength() > 160) {
             return \false;
         }
-        return \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ss', 'ssh-dss', \str_pad($r->toBytes(), 20, "\x00", \STR_PAD_LEFT) . \str_pad($s->toBytes(), 20, "\x00", \STR_PAD_LEFT));
+        return Strings::packSSH2('ss', 'ssh-dss', str_pad($r->toBytes(), 20, "\x00", \STR_PAD_LEFT) . str_pad($s->toBytes(), 20, "\x00", \STR_PAD_LEFT));
     }
 }

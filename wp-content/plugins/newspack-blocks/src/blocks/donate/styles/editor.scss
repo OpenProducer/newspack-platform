@@ -35,7 +35,7 @@
 
 	button,
 	.submit-button {
-		font-family: var(--newspack-theme-font-heading);
+		font-family: var(--newspack-theme-font-heading, sans-serif);
 		font-size: variables.$font__size-sm;
 		font-weight: bold;
 		outline: none;

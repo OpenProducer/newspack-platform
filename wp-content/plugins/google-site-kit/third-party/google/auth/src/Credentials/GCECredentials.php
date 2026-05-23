@@ -55,7 +55,7 @@ use InvalidArgumentException;
  *
  *   $res = $client->get('myproject/taskqueues/myqueue');
  */
-class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader implements \Google\Site_Kit_Dependencies\Google\Auth\SignBlobInterface, \Google\Site_Kit_Dependencies\Google\Auth\ProjectIdProviderInterface, \Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface
+class GCECredentials extends CredentialsLoader implements SignBlobInterface, ProjectIdProviderInterface, GetQuotaProjectInterface
 {
     use IamSignerTrait;
     // phpcs:disable
@@ -166,18 +166,18 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      * @param string $universeDomain [optional] Specify a universe domain to use
      *   instead of fetching one from the metadata server.
      */
-    public function __construct(?\Google\Site_Kit_Dependencies\Google\Auth\Iam $iam = null, $scope = null, $targetAudience = null, $quotaProject = null, $serviceAccountIdentity = null, ?string $universeDomain = null)
+    public function __construct(?Iam $iam = null, $scope = null, $targetAudience = null, $quotaProject = null, $serviceAccountIdentity = null, ?string $universeDomain = null)
     {
         $this->iam = $iam;
         if ($scope && $targetAudience) {
-            throw new \InvalidArgumentException('Scope and targetAudience cannot both be supplied');
+            throw new InvalidArgumentException('Scope and targetAudience cannot both be supplied');
         }
         $tokenUri = self::getTokenUri($serviceAccountIdentity);
         if ($scope) {
-            if (\is_string($scope)) {
-                $scope = \explode(' ', $scope);
+            if (is_string($scope)) {
+                $scope = explode(' ', $scope);
             }
-            $scope = \implode(',', $scope);
+            $scope = implode(',', $scope);
             $tokenUri = $tokenUri . '?scopes=' . $scope;
         } elseif ($targetAudience) {
             $tokenUri = self::getIdTokenUri($serviceAccountIdentity);
@@ -201,7 +201,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
         $base = 'http://' . self::METADATA_IP . '/computeMetadata/';
         $base .= self::TOKEN_URI_PATH;
         if ($serviceAccountIdentity) {
-            return \str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
+            return str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
         }
         return $base;
     }
@@ -217,7 +217,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
         $base = 'http://' . self::METADATA_IP . '/computeMetadata/';
         $base .= self::CLIENT_ID_URI_PATH;
         if ($serviceAccountIdentity) {
-            return \str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
+            return str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
         }
         return $base;
     }
@@ -233,7 +233,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
         $base = 'http://' . self::METADATA_IP . '/computeMetadata/';
         $base .= self::ID_TOKEN_URI_PATH;
         if ($serviceAccountIdentity) {
-            return \str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
+            return str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
         }
         return $base;
     }
@@ -265,7 +265,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      */
     public static function onAppEngineFlexible()
     {
-        return \substr((string) \getenv('GAE_INSTANCE'), 0, 4) === 'aef-';
+        return substr((string) getenv('GAE_INSTANCE'), 0, 4) === 'aef-';
     }
     /**
      * Determines if this a GCE instance, by accessing the expected metadata
@@ -277,7 +277,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      */
     public static function onGce(?callable $httpHandler = null)
     {
-        $httpHandler = $httpHandler ?: \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build(\Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+        $httpHandler = $httpHandler ?: HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         $checkUri = 'http://' . self::METADATA_IP;
         for ($i = 1; $i <= self::MAX_COMPUTE_PING_TRIES; $i++) {
             try {
@@ -289,12 +289,12 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
                 // could lead to false negatives in the event that we are on GCE, but
                 // the metadata resolution was particularly slow. The latter case is
                 // "unlikely".
-                $resp = $httpHandler(new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('GET', $checkUri, [self::FLAVOR_HEADER => 'Google']), ['timeout' => self::COMPUTE_PING_CONNECTION_TIMEOUT_S]);
+                $resp = $httpHandler(new Request('GET', $checkUri, [self::FLAVOR_HEADER => 'Google']), ['timeout' => self::COMPUTE_PING_CONNECTION_TIMEOUT_S]);
                 return $resp->getHeaderLine(self::FLAVOR_HEADER) == 'Google';
-            } catch (\Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ClientException $e) {
-            } catch (\Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ServerException $e) {
-            } catch (\Google\Site_Kit_Dependencies\GuzzleHttp\Exception\RequestException $e) {
-            } catch (\Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ConnectException $e) {
+            } catch (ClientException $e) {
+            } catch (ServerException $e) {
+            } catch (RequestException $e) {
+            } catch (ConnectException $e) {
             }
         }
         if (\PHP_OS === 'Windows') {
@@ -304,11 +304,11 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
         // Detect GCE residency on Linux
         return self::detectResidencyLinux(self::GKE_PRODUCT_NAME_FILE);
     }
-    private static function detectResidencyLinux(string $productNameFile) : bool
+    private static function detectResidencyLinux(string $productNameFile): bool
     {
-        if (\file_exists($productNameFile)) {
-            $productName = \trim((string) \file_get_contents($productNameFile));
-            return 0 === \strpos($productName, 'Google');
+        if (file_exists($productNameFile)) {
+            $productName = trim((string) file_get_contents($productNameFile));
+            return 0 === strpos($productName, 'Google');
         }
         return \false;
     }
@@ -332,7 +332,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      */
     public function fetchAuthToken(?callable $httpHandler = null)
     {
-        $httpHandler = $httpHandler ?: \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build(\Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+        $httpHandler = $httpHandler ?: HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         if (!$this->hasCheckedOnGce) {
             $this->isOnGce = self::onGce($httpHandler);
             $this->hasCheckedOnGce = \true;
@@ -345,10 +345,10 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
         if ($this->targetAudience) {
             return $this->lastReceivedToken = ['id_token' => $response];
         }
-        if (null === ($json = \json_decode($response, \true))) {
+        if (null === $json = json_decode($response, \true)) {
             throw new \Exception('Invalid JSON response');
         }
-        $json['expires_at'] = \time() + $json['expires_in'];
+        $json['expires_at'] = time() + $json['expires_in'];
         // store this so we can retrieve it later
         $this->lastReceivedToken = $json;
         return $json;
@@ -366,7 +366,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
     public function getLastReceivedToken()
     {
         if ($this->lastReceivedToken) {
-            if (\array_key_exists('id_token', $this->lastReceivedToken)) {
+            if (array_key_exists('id_token', $this->lastReceivedToken)) {
                 return $this->lastReceivedToken;
             }
             return ['access_token' => $this->lastReceivedToken['access_token'], 'expires_at' => $this->lastReceivedToken['expires_at']];
@@ -386,7 +386,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
         if ($this->clientName) {
             return $this->clientName;
         }
-        $httpHandler = $httpHandler ?: \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build(\Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+        $httpHandler = $httpHandler ?: HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         if (!$this->hasCheckedOnGce) {
             $this->isOnGce = self::onGce($httpHandler);
             $this->hasCheckedOnGce = \true;
@@ -410,7 +410,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
         if ($this->projectId) {
             return $this->projectId;
         }
-        $httpHandler = $httpHandler ?: \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build(\Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+        $httpHandler = $httpHandler ?: HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         if (!$this->hasCheckedOnGce) {
             $this->isOnGce = self::onGce($httpHandler);
             $this->hasCheckedOnGce = \true;
@@ -427,19 +427,19 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      * @param callable $httpHandler Callback which delivers psr7 request
      * @return string
      */
-    public function getUniverseDomain(?callable $httpHandler = null) : string
+    public function getUniverseDomain(?callable $httpHandler = null): string
     {
         if (null !== $this->universeDomain) {
             return $this->universeDomain;
         }
-        $httpHandler = $httpHandler ?: \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build(\Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+        $httpHandler = $httpHandler ?: HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         if (!$this->hasCheckedOnGce) {
             $this->isOnGce = self::onGce($httpHandler);
             $this->hasCheckedOnGce = \true;
         }
         try {
             $this->universeDomain = $this->getFromMetadata($httpHandler, self::getUniverseDomainUri());
-        } catch (\Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ClientException $e) {
+        } catch (ClientException $e) {
             // If the metadata server exists, but returns a 404 for the universe domain, the auth
             // libraries should safely assume this is an older metadata server running in GCU, and
             // should return the default universe domain.
@@ -464,7 +464,7 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      */
     private function getFromMetadata(callable $httpHandler, $uri)
     {
-        $resp = $httpHandler(new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('GET', $uri, [self::FLAVOR_HEADER => 'Google']));
+        $resp = $httpHandler(new Request('GET', $uri, [self::FLAVOR_HEADER => 'Google']));
         return (string) $resp->getBody();
     }
     /**

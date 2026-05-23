@@ -25,11 +25,11 @@ class OrderBy extends \Google\Site_Kit_Dependencies\Google\Model
      * @var bool
      */
     public $desc;
-    protected $dimensionType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionOrderBy::class;
+    protected $dimensionType = DimensionOrderBy::class;
     protected $dimensionDataType = '';
-    protected $metricType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricOrderBy::class;
+    protected $metricType = MetricOrderBy::class;
     protected $metricDataType = '';
-    protected $pivotType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PivotOrderBy::class;
+    protected $pivotType = PivotOrderBy::class;
     protected $pivotDataType = '';
     /**
      * If true, sorts by descending order.
@@ -52,7 +52,7 @@ class OrderBy extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param DimensionOrderBy $dimension
      */
-    public function setDimension(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionOrderBy $dimension)
+    public function setDimension(DimensionOrderBy $dimension)
     {
         $this->dimension = $dimension;
     }
@@ -68,7 +68,7 @@ class OrderBy extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param MetricOrderBy $metric
      */
-    public function setMetric(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricOrderBy $metric)
+    public function setMetric(MetricOrderBy $metric)
     {
         $this->metric = $metric;
     }
@@ -84,7 +84,7 @@ class OrderBy extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param PivotOrderBy $pivot
      */
-    public function setPivot(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PivotOrderBy $pivot)
+    public function setPivot(PivotOrderBy $pivot)
     {
         $this->pivot = $pivot;
     }
@@ -97,4 +97,4 @@ class OrderBy extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\OrderBy::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_OrderBy');
+class_alias(OrderBy::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_OrderBy');

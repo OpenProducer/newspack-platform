@@ -40,7 +40,7 @@ class MobileUsabilityInspectionResult extends \Google\Site_Kit_Dependencies\Goog
      */
     public const VERDICT_NEUTRAL = 'NEUTRAL';
     protected $collection_key = 'issues';
-    protected $issuesType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\MobileUsabilityIssue::class;
+    protected $issuesType = MobileUsabilityIssue::class;
     protected $issuesDataType = 'array';
     /**
      * High-level mobile-usability inspection result for this URL.
@@ -84,4 +84,4 @@ class MobileUsabilityInspectionResult extends \Google\Site_Kit_Dependencies\Goog
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\MobileUsabilityInspectionResult::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_MobileUsabilityInspectionResult');
+class_alias(MobileUsabilityInspectionResult::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_MobileUsabilityInspectionResult');

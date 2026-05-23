@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class PublicKeyAndChallenge
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['spki' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\SubjectPublicKeyInfo::MAP, 'challenge' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_IA5_STRING]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['spki' => SubjectPublicKeyInfo::MAP, 'challenge' => ['type' => ASN1::TYPE_IA5_STRING]]];
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Class Google\Site_Kit\Core\Util\URL
+ * Class Google\Site_Kit\Core\Util\Date
  *
  * @package   Google\Site_Kit\Core\Util
  * @copyright 2023 Google LLC
@@ -20,13 +20,50 @@ namespace Google\Site_Kit\Core\Util;
 class Date {
 
 	/**
+	 * Gets the reference date.
+	 *
+	 * @since 1.174.0
+	 *
+	 * @return string|null Reference date in 'Y-m-d' format or null.
+	 */
+	public static function reference_date() {
+		/**
+		 * Filter to allow setting a custom reference date for testing purposes.
+		 *
+		 * @since 1.174.0
+		 *
+		 * @return string|null Reference date in 'Y-m-d' format or null.
+		 */
+		return apply_filters( 'googlesitekit_reference_date', null );
+	}
+
+	/**
+	 * Gets the current time.
+	 *
+	 * @since 1.177.0
+	 *
+	 * @return int Current time.
+	 */
+	public static function now() {
+		$reference_date = self::reference_date();
+		if ( $reference_date ) {
+			$time = strtotime( $reference_date );
+			if ( $time ) {
+				return $time;
+			}
+		}
+
+		return time();
+	}
+
+	/**
 	 * Parses a date range string into a start date and an end date.
 	 *
 	 * @since 1.99.0
 	 *
 	 * @param string $range         Date range string. Either 'last-7-days', 'last-14-days', 'last-90-days', or
 	 *                              'last-28-days' (default).
-	 * @param string $multiplier    Optional. How many times the date range to get. This value can be specified if the
+	 * @param int    $multiplier    Optional. How many times the date range to get. This value can be specified if the
 	 *                              range should be request multiple times back. Default 1.
 	 * @param int    $offset        Days the range should be offset by. Default 1. Used by Search Console where
 	 *                              data is delayed by two days.

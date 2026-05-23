@@ -47,9 +47,9 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChange extends \Google\Site_Kit_Dep
      * @var string
      */
     public $resource;
-    protected $resourceAfterChangeType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource::class;
+    protected $resourceAfterChangeType = GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource::class;
     protected $resourceAfterChangeDataType = '';
-    protected $resourceBeforeChangeType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource::class;
+    protected $resourceBeforeChangeType = GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource::class;
     protected $resourceBeforeChangeDataType = '';
     /**
      * The type of action that changed this resource.
@@ -91,7 +91,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChange extends \Google\Site_Kit_Dep
      *
      * @param GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource $resourceAfterChange
      */
-    public function setResourceAfterChange(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource $resourceAfterChange)
+    public function setResourceAfterChange(GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource $resourceAfterChange)
     {
         $this->resourceAfterChange = $resourceAfterChange;
     }
@@ -108,7 +108,7 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChange extends \Google\Site_Kit_Dep
      *
      * @param GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource $resourceBeforeChange
      */
-    public function setResourceBeforeChange(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource $resourceBeforeChange)
+    public function setResourceBeforeChange(GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource $resourceBeforeChange)
     {
         $this->resourceBeforeChange = $resourceBeforeChange;
     }
@@ -121,4 +121,4 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChange extends \Google\Site_Kit_Dep
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaChangeHistoryChange::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaChangeHistoryChange');
+class_alias(GoogleAnalyticsAdminV1betaChangeHistoryChange::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaChangeHistoryChange');

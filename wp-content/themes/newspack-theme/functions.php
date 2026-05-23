@@ -15,9 +15,6 @@ if ( version_compare( $GLOBALS['wp_version'], '4.7', '<' ) ) {
 	return;
 }
 
-// Default for the "time ago" date format. Dates older than this cutoff will be displayed as a full date.
-const NP_DEFAULT_POST_TIME_AGO_CUT_OFF_DAYS = 14;
-
 if ( ! function_exists( 'newspack_is_amp' ) ) {
 	/**
 	 * Determine whether it is an AMP response.
@@ -429,7 +426,7 @@ add_action( 'template_redirect', 'newspack_content_width', 0 );
  * Return the list of custom fonts in use.
  */
 function newspack_get_used_custom_fonts(): array {
-	return array_filter( array( get_theme_mod( 'font_header', '' ), get_theme_mod( 'font_body', '' ) ) );
+	return array_values( array_filter( [ get_theme_mod( 'font_header', '' ), get_theme_mod( 'font_body', '' ) ] ) );
 }
 
 /**
@@ -504,25 +501,6 @@ function newspack_scripts() {
 			'fonts' => newspack_get_used_custom_fonts(),
 		)
 	);
-
-	if ( get_theme_mod( 'post_time_ago' ) ) {
-		wp_register_script( 'newspack-relative-time', get_theme_file_uri( '/js/dist/relative-time.js' ), array(), wp_get_theme()->get( 'Version' ), true );
-
-		$cutoff_in_days = get_theme_mod( 'post_time_ago_cut_off', NP_DEFAULT_POST_TIME_AGO_CUT_OFF_DAYS );
-		if ( get_theme_mod( 'post_updated_date' ) ) {
-			// Switch cut off to 24 hours if we are also displaying the updated date.
-			$cutoff_in_days = 1;
-		}
-		wp_localize_script(
-			'newspack-relative-time',
-			'newspack_relative_time',
-			array(
-				'language_tag' => str_replace( '_', '-', get_locale() ), // The language tag in the format of 'en-US' for example.
-				'cutoff'       => $cutoff_in_days,
-			)
-		);
-		wp_enqueue_script( 'newspack-relative-time' );
-	}
 }
 add_action( 'wp_enqueue_scripts', 'newspack_scripts' );
 
@@ -666,6 +644,18 @@ add_action( 'enqueue_block_editor_assets', 'newspack_enqueue_scripts' );
  * @return array List of allowed FSE blocks.
  */
 function newspack_is_fse_blocks_allowed() {
+	/**
+	 * Specifies additional Full Site Editing (FSE) blocks to allow in the
+	 * editor. By default, Newspack theme removes certain FSE blocks for
+	 * compatibility. Use this constant to re-enable specific blocks.
+	 *
+	 * @constant NEWSPACK_FSE_BLOCKS_ALLOWED
+	 * @type     array
+	 * @default  No additional FSE blocks allowed
+	 * @status   draft
+	 *
+	 * @example define( 'NEWSPACK_FSE_BLOCKS_ALLOWED', ['core/avatar', 'core/loginout'] );
+	 */
 	if ( defined( 'NEWSPACK_FSE_BLOCKS_ALLOWED' ) ) {
 		return NEWSPACK_FSE_BLOCKS_ALLOWED;
 	}
@@ -765,8 +755,12 @@ function newspack_is_sticky_animated_header() {
  * Enqueue supplemental block editor styles.
  */
 function newspack_editor_customizer_styles() {
+	// In the iframe editor, canvas styles are loaded via block assets.
+	if ( ! is_admin() ) {
+		return;
+	}
 
-	wp_enqueue_style( 'newspack-editor-customizer-styles', get_theme_file_uri( '/styles/style-editor-customizer.css' ), false, '1.1', 'all' );
+	wp_enqueue_style( 'newspack-editor-customizer-styles', get_theme_file_uri( '/styles/style-editor-customizer.css' ), false, wp_get_theme()->get( 'Version' ), 'all' );
 
 	// Check for color or font customizations.
 	$theme_customizations = '';
@@ -793,7 +787,7 @@ function newspack_editor_customizer_styles() {
 		wp_enqueue_style( 'newspack-font-alternative-import', newspack_custom_typography_link( 'custom_font_import_code_alternate' ), array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 	}
 }
-add_action( 'enqueue_block_editor_assets', 'newspack_editor_customizer_styles' );
+add_action( 'enqueue_block_assets', 'newspack_editor_customizer_styles' );
 
 /**
  * Determine if current editor page is the static front page.
@@ -817,26 +811,39 @@ function newspack_check_current_template() {
 
 /**
  * Add body class on editor pages if editing the static front page.
+ *
+ * The 'admin-color-' prefix is used to make sure the classes get moved to the <body> tag in the iframed editor as a work-around.
+ * See https://github.com/WordPress/gutenberg/issues/28538 for more details.
  */
 function newspack_filter_admin_body_class( $classes ) {
+	if ( ! function_exists( 'get_current_screen' ) ) {
+		return $classes;
+	}
+
+	$current_screen = get_current_screen();
+	if ( ! $current_screen || ! method_exists( $current_screen, 'is_block_editor' ) || ! $current_screen->is_block_editor() ) {
+		return $classes;
+	}
+
+	global $post;
+	if ( ! ( $post && isset( $post->ID ) ) ) {
+		return $classes;
+	}
 
 	if ( newspack_is_static_front_page() ) {
-		$classes .= ' newspack-static-front-page';
+		$classes .= ' admin-color-newspack-static-front-page';
 	}
 
-	if ( ! is_active_sidebar( 'sidebar-1' ) ) {
-		$classes .= ' no-sidebar';
-	}
-
+	$template = newspack_check_current_template();
 	if (
-		'single-feature.php' === newspack_check_current_template()
-		|| 'no-header-footer.php' === newspack_check_current_template()
+		'single-feature.php' === $template
+		|| 'no-header-footer.php' === $template
 	) {
-		$classes .= ' newspack-single-column-template';
-	} elseif ( 'single-wide.php' === newspack_check_current_template() ) {
-		$classes .= ' newspack-single-wide-template';
+		$classes .= ' admin-color-newspack-single-column-template';
+	} elseif ( 'single-wide.php' === $template ) {
+		$classes .= ' admin-color-newspack-single-wide-template';
 	} else {
-		$classes .= ' newspack-default-template';
+		$classes .= ' admin-color-newspack-default-template';
 	}
 
 	return $classes;
@@ -848,9 +855,14 @@ add_filter( 'admin_body_class', 'newspack_filter_admin_body_class', 10, 1 );
  * Enqueue CSS styles for the editor that use the <body> tag.
  */
 function newspack_enqueue_editor_override_assets() {
-	wp_enqueue_style( 'newspack-editor-overrides', get_theme_file_uri( '/styles/style-editor-overrides.css' ), false, '1.1', 'all' );
+	// In the iframe editor, canvas styles are loaded via block assets.
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	wp_enqueue_style( 'newspack-editor-overrides', get_theme_file_uri( '/styles/style-editor-overrides.css' ), false, wp_get_theme()->get( 'Version' ), 'all' );
 }
-add_action( 'enqueue_block_editor_assets', 'newspack_enqueue_editor_override_assets' );
+add_action( 'enqueue_block_assets', 'newspack_enqueue_editor_override_assets' );
 
 /**
  * Use front-page.php when Front page displays is set to a static page.
@@ -934,30 +946,6 @@ function newspack_register_meta() {
 			'type'         => 'string',
 		)
 	);
-
-	$updated_date_post_types = newspack_get_updated_date_supported_post_types();
-
-	foreach ( $updated_date_post_types as $post_type ) {
-		register_post_meta(
-			$post_type,
-			'newspack_hide_updated_date',
-			array(
-				'show_in_rest' => true,
-				'single'       => true,
-				'type'         => 'boolean',
-			)
-		);
-
-		register_post_meta(
-			$post_type,
-			'newspack_show_updated_date',
-			array(
-				'show_in_rest' => true,
-				'single'       => true,
-				'type'         => 'boolean',
-			)
-		);
-	}
 
 	register_post_meta(
 		'page',
@@ -1182,39 +1170,16 @@ function newspack_get_featured_image_post_types() {
 }
 
 /**
- * Get post types that support the hiding date and page title settings.
+ * Get post types that support the page title and share button toggle settings.
  *
  * @return array Array of post type slugs.
  */
 function newspack_get_post_toggle_post_types() {
-	$hide_date_post_types = array();
-	$show_date_post_types = array();
-	if ( true === get_theme_mod( 'post_updated_date', false ) ) {
-		$hide_date_post_types = newspack_get_updated_date_supported_post_types();
-	} else {
-		$show_date_post_types = newspack_get_updated_date_supported_post_types();
-	}
-
 	return array(
-		'hide_date'          => $hide_date_post_types,
-		'show_date'          => $show_date_post_types,
 		'hide_title'         => array( 'page' ),
 		'show_share_buttons' => function_exists( 'sharing_display' ) ? array( 'page' ) : array(),
 	);
 }
-
-/**
- * Co-authors in RSS and other feeds
- * /wp-includes/feed-rss2.php uses the_author(), so we selectively filter the_author value
- */
-function newspack_coauthors_in_rss( $the_author ) {
-	if ( ! is_feed() || ! function_exists( 'coauthors' ) ) {
-		return $the_author;
-	} else {
-		return coauthors( null, null, null, null, false );
-	}
-}
-add_filter( 'the_author', 'newspack_coauthors_in_rss' );
 
 /**
  * Should a particular Ad deployment use responsive placement.
@@ -1400,9 +1365,3 @@ if ( class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) 
  */
 require get_template_directory() . '/woocommerce/templates.php';
 
-/**
- * Yoast customizations
- */
-if ( class_exists( 'WPSEO_Options' ) ) {
-	require get_template_directory() . '/inc/yoast.php';
-}

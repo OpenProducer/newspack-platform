@@ -19,11 +19,11 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $andGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList::class;
+    protected $andGroupType = GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList::class;
     protected $andGroupDataType = '';
-    protected $filterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilter::class;
+    protected $filterType = GoogleAnalyticsAdminV1alphaExpandedDataSetFilter::class;
     protected $filterDataType = '';
-    protected $notExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression::class;
+    protected $notExpressionType = GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression::class;
     protected $notExpressionDataType = '';
     /**
      * A list of expressions to be AND’ed together. It must contain a
@@ -33,7 +33,7 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression extends \Google
      *
      * @param GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList $andGroup
      */
-    public function setAndGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList $andGroup)
+    public function setAndGroup(GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpressionList $andGroup)
     {
         $this->andGroup = $andGroup;
     }
@@ -50,7 +50,7 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression extends \Google
      *
      * @param GoogleAnalyticsAdminV1alphaExpandedDataSetFilter $filter
      */
-    public function setFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilter $filter)
+    public function setFilter(GoogleAnalyticsAdminV1alphaExpandedDataSetFilter $filter)
     {
         $this->filter = $filter;
     }
@@ -68,7 +68,7 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression extends \Google
      *
      * @param GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression $notExpression
      */
-    public function setNotExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression $notExpression)
+    public function setNotExpression(GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression $notExpression)
     {
         $this->notExpression = $notExpression;
     }
@@ -81,4 +81,4 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression extends \Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression');
+class_alias(GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression');

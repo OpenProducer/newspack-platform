@@ -18,7 +18,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class DefaultEngine extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP
+abstract class DefaultEngine extends GMP
 {
     /**
      * Performs modular exponentiation.
@@ -28,10 +28,10 @@ abstract class DefaultEngine extends \Google\Site_Kit_Dependencies\phpseclib3\Ma
      * @param GMP $n
      * @return GMP
      */
-    protected static function powModHelper(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $x, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $n)
+    protected static function powModHelper(GMP $x, GMP $e, GMP $n)
     {
-        $temp = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP();
-        $temp->value = \gmp_powm($x->value, $e->value, $n->value);
+        $temp = new GMP();
+        $temp->value = gmp_powm($x->value, $e->value, $n->value);
         return $x->normalize($temp);
     }
 }

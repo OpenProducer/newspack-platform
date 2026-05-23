@@ -39,11 +39,11 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
      * @return Tag
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag $postBody, $optParams = [])
+    public function create($parent, Tag $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Tag::class);
     }
     /**
      * Deletes a GTM Tag. (tags.delete)
@@ -55,7 +55,7 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -69,8 +69,8 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Tag::class);
     }
     /**
      * Lists all GTM Tags of a Container.
@@ -87,8 +87,8 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
     public function listAccountsContainersWorkspacesTags($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListTagsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListTagsResponse::class);
     }
     /**
      * Reverts changes to a GTM Tag in a GTM Workspace. (tags.revert)
@@ -104,8 +104,8 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
     public function revert($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('revert', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertTagResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('revert', [$params], RevertTagResponse::class);
     }
     /**
      * Updates a GTM Tag. (tags.update)
@@ -119,12 +119,12 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
      * @return Tag
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag $postBody, $optParams = [])
+    public function update($path, Tag $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Tag::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesTags::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesTags');
+class_alias(AccountsContainersWorkspacesTags::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesTags');

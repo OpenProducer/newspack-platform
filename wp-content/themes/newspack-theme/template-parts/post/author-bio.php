@@ -11,6 +11,8 @@ if ( false === get_theme_mod( 'show_author_bio', true ) || true === apply_filter
 }
 
 $author_bio_length = get_theme_mod( 'author_bio_length', 200 );
+// Shared avatar image size for author archive + author bio templates.
+$author_avatar_size = get_theme_mod( 'author_avatar_size', 120 );
 
 if ( function_exists( 'coauthors_posts_links' ) && is_single() && ! empty( get_coauthors() ) ) : // phpcs:ignore PHPCompatibility.LanguageConstructs.NewEmptyNonVariable.Found
 
@@ -20,7 +22,7 @@ if ( function_exists( 'coauthors_posts_links' ) && is_single() && ! empty( get_c
 
 		if ( '' !== $author->description ) {
 			// avatar_img_tag is a property added by Newspack Network plugin to distributed posts.
-			$author_avatar = $author->avatar_img_tag ?? coauthors_get_avatar( $author, 80 );
+			$author_avatar = $author->avatar_img_tag ?? coauthors_get_avatar( $author, absint( $author_avatar_size ) );
 			$author_url    = get_author_posts_url( $author->ID, $author->user_nicename );
 
 			/**
@@ -113,7 +115,7 @@ if ( function_exists( 'coauthors_posts_links' ) && is_single() && ! empty( get_c
 	}
 
 elseif ( (bool) get_the_author_meta( 'description' ) && is_single() ) :
-	$author_avatar = get_avatar( get_the_author_meta( 'ID' ), 80 );
+	$author_avatar = get_avatar( get_the_author_meta( 'ID' ), absint( $author_avatar_size ) );
 	?>
 
 <div class="author-bio">

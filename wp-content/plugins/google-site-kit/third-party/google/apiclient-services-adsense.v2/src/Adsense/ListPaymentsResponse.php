@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class ListPaymentsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'payments';
-    protected $paymentsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Payment::class;
+    protected $paymentsType = Payment::class;
     protected $paymentsDataType = 'array';
     /**
      * The payments returned in this list response.
@@ -40,4 +40,4 @@ class ListPaymentsResponse extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListPaymentsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListPaymentsResponse');
+class_alias(ListPaymentsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListPaymentsResponse');

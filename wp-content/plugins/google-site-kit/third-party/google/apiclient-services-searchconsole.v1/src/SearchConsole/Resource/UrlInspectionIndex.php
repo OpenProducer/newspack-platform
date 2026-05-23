@@ -37,12 +37,12 @@ class UrlInspectionIndex extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @return InspectUrlIndexResponse
      * @throws \Google\Service\Exception
      */
-    public function inspect(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\InspectUrlIndexRequest $postBody, $optParams = [])
+    public function inspect(InspectUrlIndexRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('inspect', [$params], \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\InspectUrlIndexResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('inspect', [$params], InspectUrlIndexResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Resource\UrlInspectionIndex::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_Resource_UrlInspectionIndex');
+class_alias(UrlInspectionIndex::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_Resource_UrlInspectionIndex');

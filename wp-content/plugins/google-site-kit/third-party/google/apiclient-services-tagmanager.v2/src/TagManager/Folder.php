@@ -221,4 +221,4 @@ class Folder extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Folder');
+class_alias(Folder::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Folder');

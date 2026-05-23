@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertVariableResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $variableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class;
+    protected $variableType = Variable::class;
     protected $variableDataType = '';
     /**
      * Variable as it appears in the latest container version since the last
@@ -28,7 +28,7 @@ class RevertVariableResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Variable $variable
      */
-    public function setVariable(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable $variable)
+    public function setVariable(Variable $variable)
     {
         $this->variable = $variable;
     }
@@ -41,4 +41,4 @@ class RevertVariableResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertVariableResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertVariableResponse');
+class_alias(RevertVariableResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertVariableResponse');

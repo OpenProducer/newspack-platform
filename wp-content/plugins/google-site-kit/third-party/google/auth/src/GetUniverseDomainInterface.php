@@ -30,5 +30,5 @@ interface GetUniverseDomainInterface
      *
      * @return string
      */
-    public function getUniverseDomain() : string;
+    public function getUniverseDomain(): string;
 }

@@ -80,9 +80,7 @@
 			<div class="wp-block-group has-x-small-font-size" style="padding-bottom:var(--wp--preset--spacing--50)">
 				<!-- wp:group {"lock":{"move":false,"remove":true},"metadata":{"name":"<?php esc_html_e( 'Copyright', 'newspack-block-theme' ); ?>"},"style":{"spacing":{"blockGap":"0.25em"}},"layout":{"type":"flex","flexWrap":"wrap"}} -->
 				<div class="wp-block-group">
-					<!-- wp:paragraph -->
-					<p><strong>©</strong></p>
-					<!-- /wp:paragraph -->
+					<!-- wp:newspack/copyright-date /-->
 
 					<!-- wp:site-title {"style":{"typography":{"fontStyle":"normal","fontWeight":"400"}},"fontSize":"x-small"} /-->
 				</div>

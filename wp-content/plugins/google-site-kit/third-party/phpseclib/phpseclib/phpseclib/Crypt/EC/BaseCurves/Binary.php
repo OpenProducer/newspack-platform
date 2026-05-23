@@ -28,7 +28,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField\Integer as BinaryIn
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class Binary extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Base
+class Binary extends Base
 {
     /**
      * Binary Field Integer factory
@@ -78,7 +78,7 @@ class Binary extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurve
     public function setModulo(...$modulo)
     {
         $this->modulo = $modulo;
-        $this->factory = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField(...$modulo);
+        $this->factory = new BinaryField(...$modulo);
         $this->one = $this->factory->newInteger("\x01");
     }
     /**
@@ -92,8 +92,8 @@ class Binary extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurve
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        $this->a = $this->factory->newInteger(\pack('H*', $a));
-        $this->b = $this->factory->newInteger(\pack('H*', $b));
+        $this->a = $this->factory->newInteger(pack('H*', $a));
+        $this->b = $this->factory->newInteger(pack('H*', $b));
     }
     /**
      * Set x and y coordinates for the base point
@@ -104,15 +104,15 @@ class Binary extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurve
     public function setBasePoint($x, $y)
     {
         switch (\true) {
-            case !\is_string($x) && !$x instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField\Integer:
-                throw new \UnexpectedValueException('Google\\Site_Kit_Dependencies\\Argument 1 passed to Binary::setBasePoint() must be a string or an instance of BinaryField\\Integer');
-            case !\is_string($y) && !$y instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField\Integer:
-                throw new \UnexpectedValueException('Google\\Site_Kit_Dependencies\\Argument 2 passed to Binary::setBasePoint() must be a string or an instance of BinaryField\\Integer');
+            case !is_string($x) && !$x instanceof BinaryInteger:
+                throw new \UnexpectedValueException('Argument 1 passed to Binary::setBasePoint() must be a string or an instance of BinaryField\Integer');
+            case !is_string($y) && !$y instanceof BinaryInteger:
+                throw new \UnexpectedValueException('Argument 2 passed to Binary::setBasePoint() must be a string or an instance of BinaryField\Integer');
         }
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        $this->p = [\is_string($x) ? $this->factory->newInteger(\pack('H*', $x)) : $x, \is_string($y) ? $this->factory->newInteger(\pack('H*', $y)) : $y];
+        $this->p = [is_string($x) ? $this->factory->newInteger(pack('H*', $x)) : $x, is_string($y) ? $this->factory->newInteger(pack('H*', $y)) : $y];
     }
     /**
      * Retrieve the base point as an array
@@ -141,11 +141,11 @@ class Binary extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurve
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        if (!\count($p) || !\count($q)) {
-            if (\count($q)) {
+        if (!count($p) || !count($q)) {
+            if (count($q)) {
                 return $q;
             }
-            if (\count($p)) {
+            if (count($p)) {
                 return $p;
             }
             return [];
@@ -203,7 +203,7 @@ class Binary extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurve
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        if (!\count($p)) {
+        if (!count($p)) {
             return [];
         }
         if (!isset($p[2])) {

@@ -27,6 +27,7 @@ function newspack_blocks_register_author_list() {
 	register_block_type(
 		'newspack-blocks/' . $block_json['name'],
 		[
+			'api_version'     => $block_json['apiVersion'],
 			'attributes'      => $block_json['attributes'],
 			'render_callback' => 'newspack_blocks_render_block_author_list',
 		]

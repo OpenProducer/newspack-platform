@@ -89,7 +89,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 		return `${ previewURL }?${ stringify( { ...abbreviatedKeys } ) }`;
 	};
 
-	const unblock = hooks.usePrompt( isDirty, __( 'You have unsaved changes. Discard changes?', 'newspack-plugin' ) );
+	const unblock = hooks.usePrompt( isDirty, __( 'You have unsaved changes that will be lost. Discard changes?', 'newspack-plugin' ) );
 
 	const savePrompt = ( slug: string, data: InputValues ) => {
 		return new Promise< void >( ( res, rej ) => {

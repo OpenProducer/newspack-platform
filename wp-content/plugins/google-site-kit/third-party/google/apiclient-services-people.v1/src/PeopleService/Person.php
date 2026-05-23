@@ -36,7 +36,7 @@ class Person extends \Google\Site_Kit_Dependencies\Google\Collection
      */
     public const AGE_RANGE_TWENTY_ONE_OR_OLDER = 'TWENTY_ONE_OR_OLDER';
     protected $collection_key = 'userDefined';
-    protected $addressesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Address::class;
+    protected $addressesType = Address::class;
     protected $addressesDataType = 'array';
     /**
      * Output only. **DEPRECATED** (Please use `person.ageRanges` instead) The
@@ -46,21 +46,21 @@ class Person extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $ageRange;
-    protected $ageRangesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\AgeRangeType::class;
+    protected $ageRangesType = AgeRangeType::class;
     protected $ageRangesDataType = 'array';
-    protected $biographiesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Biography::class;
+    protected $biographiesType = Biography::class;
     protected $biographiesDataType = 'array';
-    protected $birthdaysType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Birthday::class;
+    protected $birthdaysType = Birthday::class;
     protected $birthdaysDataType = 'array';
-    protected $braggingRightsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\BraggingRights::class;
+    protected $braggingRightsType = BraggingRights::class;
     protected $braggingRightsDataType = 'array';
-    protected $calendarUrlsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\CalendarUrl::class;
+    protected $calendarUrlsType = CalendarUrl::class;
     protected $calendarUrlsDataType = 'array';
-    protected $clientDataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ClientData::class;
+    protected $clientDataType = ClientData::class;
     protected $clientDataDataType = 'array';
-    protected $coverPhotosType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\CoverPhoto::class;
+    protected $coverPhotosType = CoverPhoto::class;
     protected $coverPhotosDataType = 'array';
-    protected $emailAddressesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\EmailAddress::class;
+    protected $emailAddressesType = EmailAddress::class;
     protected $emailAddressesDataType = 'array';
     /**
      * The [HTTP entity tag](https://en.wikipedia.org/wiki/HTTP_ETag) of the
@@ -69,47 +69,47 @@ class Person extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $etag;
-    protected $eventsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Event::class;
+    protected $eventsType = Event::class;
     protected $eventsDataType = 'array';
-    protected $externalIdsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ExternalId::class;
+    protected $externalIdsType = ExternalId::class;
     protected $externalIdsDataType = 'array';
-    protected $fileAsesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FileAs::class;
+    protected $fileAsesType = FileAs::class;
     protected $fileAsesDataType = 'array';
-    protected $gendersType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Gender::class;
+    protected $gendersType = Gender::class;
     protected $gendersDataType = 'array';
-    protected $imClientsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ImClient::class;
+    protected $imClientsType = ImClient::class;
     protected $imClientsDataType = 'array';
-    protected $interestsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Interest::class;
+    protected $interestsType = Interest::class;
     protected $interestsDataType = 'array';
-    protected $localesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Locale::class;
+    protected $localesType = Locale::class;
     protected $localesDataType = 'array';
-    protected $locationsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Location::class;
+    protected $locationsType = Location::class;
     protected $locationsDataType = 'array';
-    protected $membershipsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Membership::class;
+    protected $membershipsType = Membership::class;
     protected $membershipsDataType = 'array';
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\PersonMetadata::class;
+    protected $metadataType = PersonMetadata::class;
     protected $metadataDataType = '';
-    protected $miscKeywordsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\MiscKeyword::class;
+    protected $miscKeywordsType = MiscKeyword::class;
     protected $miscKeywordsDataType = 'array';
-    protected $namesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Name::class;
+    protected $namesType = Name::class;
     protected $namesDataType = 'array';
-    protected $nicknamesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Nickname::class;
+    protected $nicknamesType = Nickname::class;
     protected $nicknamesDataType = 'array';
-    protected $occupationsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Occupation::class;
+    protected $occupationsType = Occupation::class;
     protected $occupationsDataType = 'array';
-    protected $organizationsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Organization::class;
+    protected $organizationsType = Organization::class;
     protected $organizationsDataType = 'array';
-    protected $phoneNumbersType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\PhoneNumber::class;
+    protected $phoneNumbersType = PhoneNumber::class;
     protected $phoneNumbersDataType = 'array';
-    protected $photosType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Photo::class;
+    protected $photosType = Photo::class;
     protected $photosDataType = 'array';
-    protected $relationsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Relation::class;
+    protected $relationsType = Relation::class;
     protected $relationsDataType = 'array';
-    protected $relationshipInterestsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\RelationshipInterest::class;
+    protected $relationshipInterestsType = RelationshipInterest::class;
     protected $relationshipInterestsDataType = 'array';
-    protected $relationshipStatusesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\RelationshipStatus::class;
+    protected $relationshipStatusesType = RelationshipStatus::class;
     protected $relationshipStatusesDataType = 'array';
-    protected $residencesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Residence::class;
+    protected $residencesType = Residence::class;
     protected $residencesDataType = 'array';
     /**
      * The resource name for the person, assigned by the server. An ASCII string
@@ -118,15 +118,15 @@ class Person extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $resourceName;
-    protected $sipAddressesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\SipAddress::class;
+    protected $sipAddressesType = SipAddress::class;
     protected $sipAddressesDataType = 'array';
-    protected $skillsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Skill::class;
+    protected $skillsType = Skill::class;
     protected $skillsDataType = 'array';
-    protected $taglinesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Tagline::class;
+    protected $taglinesType = Tagline::class;
     protected $taglinesDataType = 'array';
-    protected $urlsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Url::class;
+    protected $urlsType = Url::class;
     protected $urlsDataType = 'array';
-    protected $userDefinedType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\UserDefined::class;
+    protected $userDefinedType = UserDefined::class;
     protected $userDefinedDataType = 'array';
     /**
      * The person's street addresses.
@@ -465,7 +465,7 @@ class Person extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param PersonMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\PersonMetadata $metadata)
+    public function setMetadata(PersonMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -766,4 +766,4 @@ class Person extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Person');
+class_alias(Person::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Person');

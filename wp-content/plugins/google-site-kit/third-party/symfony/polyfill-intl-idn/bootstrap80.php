@@ -116,15 +116,15 @@ if (!\defined('IDNA_ERROR_BIDI')) {
 if (!\defined('IDNA_ERROR_CONTEXTJ')) {
     \define('IDNA_ERROR_CONTEXTJ', 4096);
 }
-if (!\function_exists('idn_to_ascii')) {
-    function idn_to_ascii(?string $domain, ?int $flags = \IDNA_DEFAULT, ?int $variant = \INTL_IDNA_VARIANT_UTS46, &$idna_info = null) : string|false
+if (!\function_exists('idn_to_ascii') && !\function_exists('Google\Site_Kit_Dependencies\idn_to_ascii')) {
+    function idn_to_ascii(?string $domain, ?int $flags = \IDNA_DEFAULT, ?int $variant = \INTL_IDNA_VARIANT_UTS46, &$idna_info = null): string|false
     {
-        return \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Idn\Idn::idn_to_ascii((string) $domain, (int) $flags, (int) $variant, $idna_info);
+        return p\Idn::idn_to_ascii((string) $domain, (int) $flags, (int) $variant, $idna_info);
     }
 }
-if (!\function_exists('idn_to_utf8')) {
-    function idn_to_utf8(?string $domain, ?int $flags = \IDNA_DEFAULT, ?int $variant = \INTL_IDNA_VARIANT_UTS46, &$idna_info = null) : string|false
+if (!\function_exists('idn_to_utf8') && !\function_exists('Google\Site_Kit_Dependencies\idn_to_utf8')) {
+    function idn_to_utf8(?string $domain, ?int $flags = \IDNA_DEFAULT, ?int $variant = \INTL_IDNA_VARIANT_UTS46, &$idna_info = null): string|false
     {
-        return \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Idn\Idn::idn_to_utf8((string) $domain, (int) $flags, (int) $variant, $idna_info);
+        return p\Idn::idn_to_utf8((string) $domain, (int) $flags, (int) $variant, $idna_info);
     }
 }

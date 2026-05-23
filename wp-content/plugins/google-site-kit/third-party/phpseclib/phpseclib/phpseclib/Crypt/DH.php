@@ -27,15 +27,21 @@ use Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\AsymmetricKey;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\Parameters;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\PrivateKey;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\PublicKey;
+use Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Curves\Curve25519;
+use Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Curves\Curve448;
+use Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Formats\Keys\PKCS1;
+use Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException;
 use Google\Site_Kit_Dependencies\phpseclib3\Exception\NoKeyLoadedException;
 use Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedOperationException;
+use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
+use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps;
 use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
 /**
  * Pure-PHP (EC)DH implementation
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\AsymmetricKey
+abstract class DH extends AsymmetricKey
 {
     /**
      * Algorithm Name
@@ -79,19 +85,19 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
         if ($class->isFinal()) {
             throw new \RuntimeException('createParameters() should not be called from final classes (' . static::class . ')');
         }
-        $params = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\Parameters();
-        if (\count($args) == 2 && $args[0] instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger && $args[1] instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger) {
+        $params = new Parameters();
+        if (count($args) == 2 && $args[0] instanceof BigInteger && $args[1] instanceof BigInteger) {
             //if (!$args[0]->isPrime()) {
             //    throw new \InvalidArgumentException('The first parameter should be a prime number');
             //}
             $params->prime = $args[0];
             $params->base = $args[1];
             return $params;
-        } elseif (\count($args) == 1 && \is_numeric($args[0])) {
-            $params->prime = \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger::randomPrime($args[0]);
-            $params->base = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(2);
+        } elseif (count($args) == 1 && is_numeric($args[0])) {
+            $params->prime = BigInteger::randomPrime($args[0]);
+            $params->base = new BigInteger(2);
             return $params;
-        } elseif (\count($args) != 1 || !\is_string($args[0])) {
+        } elseif (count($args) != 1 || !is_string($args[0])) {
             throw new \InvalidArgumentException('Valid parameters are either: two BigInteger\'s (prime and base), a single integer (the length of the prime; base is assumed to be 2) or a string');
         }
         switch ($args[0]) {
@@ -129,8 +135,8 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
             default:
                 throw new \InvalidArgumentException('Invalid named prime provided');
         }
-        $params->prime = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($prime, 16);
-        $params->base = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(2);
+        $params->prime = new BigInteger($prime, 16);
+        $params->base = new BigInteger(2);
         return $params;
     }
     /**
@@ -150,23 +156,23 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      * @param int $length optional
      * @return PrivateKey
      */
-    public static function createKey(\Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\Parameters $params, $length = 0)
+    public static function createKey(Parameters $params, $length = 0)
     {
         $class = new \ReflectionClass(static::class);
         if ($class->isFinal()) {
             throw new \RuntimeException('createKey() should not be called from final classes (' . static::class . ')');
         }
-        $one = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(1);
+        $one = new BigInteger(1);
         if ($length) {
             $max = $one->bitwise_leftShift($length);
             $max = $max->subtract($one);
         } else {
             $max = $params->prime->subtract($one);
         }
-        $key = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\PrivateKey();
+        $key = new PrivateKey();
         $key->prime = $params->prime;
         $key->base = $params->base;
-        $key->privateKey = \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger::randomRange($one, $max);
+        $key->privateKey = BigInteger::randomRange($one, $max);
         $key->publicKey = $key->base->powMod($key->privateKey, $key->prime);
         return $key;
     }
@@ -179,39 +185,69 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      */
     public static function computeSecret($private, $public)
     {
-        if ($private instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\PrivateKey) {
+        if ($private instanceof PrivateKey) {
             // DH\PrivateKey
             switch (\true) {
-                case $public instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\PublicKey:
+                case $public instanceof PublicKey:
                     if (!$private->prime->equals($public->prime) || !$private->base->equals($public->base)) {
                         throw new \InvalidArgumentException('The public and private key do not share the same prime and / or base numbers');
                     }
                     return $public->publicKey->powMod($private->privateKey, $private->prime)->toBytes(\true);
-                case \is_string($public):
-                    $public = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($public, -256);
+                case is_string($public):
+                    $public = new BigInteger($public, -256);
                 // fall-through
-                case $public instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger:
+                case $public instanceof BigInteger:
                     return $public->powMod($private->privateKey, $private->prime)->toBytes(\true);
                 default:
-                    throw new \InvalidArgumentException('$public needs to be an instance of DH\\PublicKey, a BigInteger or a string');
+                    throw new \InvalidArgumentException('$public needs to be an instance of DH\PublicKey, a BigInteger or a string');
             }
         }
-        if ($private instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\PrivateKey) {
+        if ($private instanceof EC\PrivateKey) {
+            $privateCurve = $private->getCurve();
             switch (\true) {
-                case $public instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\PublicKey:
+                case $public instanceof EC\PublicKey:
+                    if ($privateCurve !== $public->getCurve()) {
+                        throw new \InvalidArgumentException("The public key curve (" . $public->getCurve() . ") and private key curve ({$privateCurve}) need to match");
+                    }
+                    $orig = $public;
                     $public = $public->getEncodedCoordinates();
                 // fall-through
-                case \is_string($public):
-                    $point = $private->multiply($public);
-                    switch ($private->getCurve()) {
-                        case 'Curve25519':
-                        case 'Curve448':
-                            $secret = $point;
-                            break;
-                        default:
-                            // according to https://www.secg.org/sec1-v2.pdf#page=33 only X is returned
-                            $secret = \substr($point, 1, \strlen($point) - 1 >> 1);
+                case is_string($public):
+                    $forcedEngine = EC::getForcedEngine();
+                    if ($forcedEngine === 'libsodium' && $privateCurve !== 'Curve25519') {
+                        throw new BadConfigurationException('Engine libsodium is forced but can only used with Curve25519 for ECDH');
                     }
+                    if (!isset($forcedEngine) || $forcedEngine === 'OpenSSL') {
+                        // PHP 7.3.0 introduced the openssl_pkey_derive() function
+                        // openssl_dh_computee_key() has been around since PHP 5.3.0+ BUT it did not support ECDH
+                        // until PHP 8.1.0 / OpenSSL 3.0.0
+                        if ($forcedEngine === 'OpenSSL' && !function_exists('openssl_pkey_derive')) {
+                            throw new BadConfigurationException('Engine OpenSSL is forced but unsupported for ECDH');
+                        }
+                        if (function_exists('openssl_pkey_derive')) {
+                            $privateStr = (string) $private->withPassword();
+                            $publicStr = (string) (isset($orig) ? $orig : EC::convertPointToPublicKey($private->getCurve(), $public));
+                            $result = openssl_pkey_derive($publicStr, $privateStr);
+                            if ($result) {
+                                return $result;
+                            }
+                            if ($forcedEngine === 'OpenSSL') {
+                                // i suppose we _could_ try openssl_dh_compute_key() at this point
+                                // quoting https://www.php.net/openssl-dh-compute-key "ECDH is only supported as of PHP 8.1.0 and OpenSSL 3.0.0". ie.
+                                // PHP_VERSION_ID >= 80100 && OPENSSL_VERSION_NUMBER >= 0x3000000f
+                                // but i think that's overkill. if openssl_pkey_derive() doesn't work it seems doubtful to me that openssl_dh_compute_key() would
+                                throw new BadConfigurationException('Engine OpenSSL is forced but was unable to perform ECDH because of ' . openssl_error_string());
+                            }
+                        }
+                    }
+                    $curveName = $private->getCurve();
+                    $isMontgomeryCurve = $curveName == 'Curve25519' || $curveName == 'Curve448';
+                    if (!$isMontgomeryCurve) {
+                        $public = EC::convertPointToPublicKey($curveName, $public, \false);
+                    }
+                    $point = $private->multiply($public);
+                    // according to https://www.secg.org/sec1-v2.pdf#page=33 only X is returned
+                    $secret = $isMontgomeryCurve ? $point : substr($point, 1, strlen($point) - 1 >> 1);
                     /*
                     if (($secret[0] & "\x80") === "\x80") {
                         $secret = "\0$secret";
@@ -219,7 +255,7 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
                     */
                     return $secret;
                 default:
-                    throw new \InvalidArgumentException('$public needs to be an instance of EC\\PublicKey or a string (an encoded coordinate)');
+                    throw new \InvalidArgumentException('$public needs to be an instance of EC\PublicKey or a string (an encoded coordinate)');
             }
         }
     }
@@ -233,8 +269,8 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
     public static function load($key, $password = \false)
     {
         try {
-            return \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC::load($key, $password);
-        } catch (\Google\Site_Kit_Dependencies\phpseclib3\Exception\NoKeyLoadedException $e) {
+            return EC::load($key, $password);
+        } catch (NoKeyLoadedException $e) {
         }
         return parent::load($key, $password);
     }
@@ -246,9 +282,9 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
     protected static function onLoad(array $components)
     {
         if (!isset($components['privateKey']) && !isset($components['publicKey'])) {
-            $new = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\Parameters();
+            $new = new Parameters();
         } else {
-            $new = isset($components['privateKey']) ? new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\PrivateKey() : new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH\PublicKey();
+            $new = isset($components['privateKey']) ? new PrivateKey() : new PublicKey();
         }
         $new->prime = $components['prime'];
         $new->base = $components['base'];
@@ -267,7 +303,7 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      */
     public function withHash($hash)
     {
-        throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedOperationException('DH does not use a hash algorithm');
+        throw new UnsupportedOperationException('DH does not use a hash algorithm');
     }
     /**
      * Returns the hash algorithm currently being used
@@ -275,7 +311,7 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      */
     public function getHash()
     {
-        throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedOperationException('DH does not use a hash algorithm');
+        throw new UnsupportedOperationException('DH does not use a hash algorithm');
     }
     /**
      * Returns the parameters
@@ -288,8 +324,8 @@ abstract class DH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      */
     public function getParameters()
     {
-        $type = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH::validatePlugin('Keys', 'PKCS1', 'saveParameters');
+        $type = DH::validatePlugin('Keys', 'PKCS1', 'saveParameters');
         $key = $type::saveParameters($this->prime, $this->base);
-        return \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH::load($key, 'PKCS1');
+        return DH::load($key, 'PKCS1');
     }
 }

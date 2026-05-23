@@ -21,7 +21,7 @@ use Google\Site_Kit_Dependencies\Monolog\Handler\Slack\SlackRecord;
  * @author Haralan Dobrev <hkdobrev@gmail.com>
  * @see    https://api.slack.com/incoming-webhooks
  */
-class SlackWebhookHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class SlackWebhookHandler extends AbstractProcessingHandler
 {
     /**
      * Slack Webhook token
@@ -43,45 +43,45 @@ class SlackWebhookHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\
      * @param bool        $includeContextAndExtra Whether the attachment should include context and extra data
      * @param string[]    $excludeFields          Dot separated list of fields to exclude from slack message. E.g. ['context.field1', 'extra.field2']
      */
-    public function __construct(string $webhookUrl, ?string $channel = null, ?string $username = null, bool $useAttachment = \true, ?string $iconEmoji = null, bool $useShortAttachment = \false, bool $includeContextAndExtra = \false, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL, bool $bubble = \true, array $excludeFields = array())
+    public function __construct(string $webhookUrl, ?string $channel = null, ?string $username = null, bool $useAttachment = \true, ?string $iconEmoji = null, bool $useShortAttachment = \false, bool $includeContextAndExtra = \false, $level = Logger::CRITICAL, bool $bubble = \true, array $excludeFields = array())
     {
-        if (!\extension_loaded('curl')) {
-            throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The curl extension is needed to use the SlackWebhookHandler');
+        if (!extension_loaded('curl')) {
+            throw new MissingExtensionException('The curl extension is needed to use the SlackWebhookHandler');
         }
         parent::__construct($level, $bubble);
         $this->webhookUrl = $webhookUrl;
-        $this->slackRecord = new \Google\Site_Kit_Dependencies\Monolog\Handler\Slack\SlackRecord($channel, $username, $useAttachment, $iconEmoji, $useShortAttachment, $includeContextAndExtra, $excludeFields);
+        $this->slackRecord = new SlackRecord($channel, $username, $useAttachment, $iconEmoji, $useShortAttachment, $includeContextAndExtra, $excludeFields);
     }
-    public function getSlackRecord() : \Google\Site_Kit_Dependencies\Monolog\Handler\Slack\SlackRecord
+    public function getSlackRecord(): SlackRecord
     {
         return $this->slackRecord;
     }
-    public function getWebhookUrl() : string
+    public function getWebhookUrl(): string
     {
         return $this->webhookUrl;
     }
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $postData = $this->slackRecord->getSlackData($record);
-        $postString = \Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode($postData);
-        $ch = \curl_init();
+        $postString = Utils::jsonEncode($postData);
+        $ch = curl_init();
         $options = array(\CURLOPT_URL => $this->webhookUrl, \CURLOPT_POST => \true, \CURLOPT_RETURNTRANSFER => \true, \CURLOPT_HTTPHEADER => array('Content-type: application/json'), \CURLOPT_POSTFIELDS => $postString);
-        if (\defined('CURLOPT_SAFE_UPLOAD')) {
+        if (defined('CURLOPT_SAFE_UPLOAD')) {
             $options[\CURLOPT_SAFE_UPLOAD] = \true;
         }
-        \curl_setopt_array($ch, $options);
-        \Google\Site_Kit_Dependencies\Monolog\Handler\Curl\Util::execute($ch);
+        curl_setopt_array($ch, $options);
+        Curl\Util::execute($ch);
     }
-    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         parent::setFormatter($formatter);
         $this->slackRecord->setFormatter($formatter);
         return $this;
     }
-    public function getFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         $formatter = parent::getFormatter();
         $this->slackRecord->setFormatter($formatter);

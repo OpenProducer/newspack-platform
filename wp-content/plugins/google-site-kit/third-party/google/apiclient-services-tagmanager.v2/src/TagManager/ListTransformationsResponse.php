@@ -26,7 +26,7 @@ class ListTransformationsResponse extends \Google\Site_Kit_Dependencies\Google\C
      * @var string
      */
     public $nextPageToken;
-    protected $transformationType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation::class;
+    protected $transformationType = Transformation::class;
     protected $transformationDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListTransformationsResponse extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListTransformationsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListTransformationsResponse');
+class_alias(ListTransformationsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListTransformationsResponse');

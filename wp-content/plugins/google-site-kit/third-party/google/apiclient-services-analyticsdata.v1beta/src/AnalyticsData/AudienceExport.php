@@ -71,7 +71,7 @@ class AudienceExport extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var int
      */
     public $creationQuotaTokensCharged;
-    protected $dimensionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\V1betaAudienceDimension::class;
+    protected $dimensionsType = V1betaAudienceDimension::class;
     protected $dimensionsDataType = 'array';
     /**
      * Output only. Error message is populated when an audience export fails
@@ -273,4 +273,4 @@ class AudienceExport extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\AudienceExport::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_AudienceExport');
+class_alias(AudienceExport::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_AudienceExport');

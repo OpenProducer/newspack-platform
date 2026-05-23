@@ -39,11 +39,11 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * @return Trigger
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger $postBody, $optParams = [])
+    public function create($parent, Trigger $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Trigger::class);
     }
     /**
      * Deletes a GTM Trigger. (triggers.delete)
@@ -55,7 +55,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -69,8 +69,8 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Trigger::class);
     }
     /**
      * Lists all GTM Triggers of a Container.
@@ -87,8 +87,8 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
     public function listAccountsContainersWorkspacesTriggers($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListTriggersResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListTriggersResponse::class);
     }
     /**
      * Reverts changes to a GTM Trigger in a GTM Workspace. (triggers.revert)
@@ -104,8 +104,8 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
     public function revert($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('revert', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertTriggerResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('revert', [$params], RevertTriggerResponse::class);
     }
     /**
      * Updates a GTM Trigger. (triggers.update)
@@ -119,12 +119,12 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * @return Trigger
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger $postBody, $optParams = [])
+    public function update($path, Trigger $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Trigger::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesTriggers::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesTriggers');
+class_alias(AccountsContainersWorkspacesTriggers::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesTriggers');

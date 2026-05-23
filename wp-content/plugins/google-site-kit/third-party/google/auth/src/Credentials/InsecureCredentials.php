@@ -23,7 +23,7 @@ use Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface;
  * This is useful for APIs which do not require authentication, for local
  * service emulators, and for testing.
  */
-class InsecureCredentials implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface
+class InsecureCredentials implements FetchAuthTokenInterface
 {
     /**
      * @var array{access_token:string}

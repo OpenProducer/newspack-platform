@@ -88,7 +88,7 @@ final class Newspack_Popups {
 		add_action( 'init', [ __CLASS__, 'register_taxonomy' ] );
 		add_action( 'init', [ __CLASS__, 'disable_prompts_for_protected_pages' ] );
 		add_action( 'init', [ __CLASS__, 'maybe_create_temp_reader_session' ] );
-		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
+		add_action( 'enqueue_block_assets', [ __CLASS__, 'enqueue_block_assets' ] );
 		add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
 		add_action( 'save_post_' . self::NEWSPACK_POPUPS_CPT, [ __CLASS__, 'popup_default_fields' ], 10, 3 );
 		add_action( 'transition_post_status', [ __CLASS__, 'prevent_default_category_on_publish' ], 10, 3 );
@@ -516,7 +516,8 @@ final class Newspack_Popups {
 					],
 				],
 				'type'           => 'array',
-				'default'        => Newspack_Popups_Model::get_default_popup_archive_page_types(),
+				// Must match the wp_parse_args fallback in Newspack_Popups_Model::create_popup_options().
+				'default'        => Newspack_Popups_Model::get_archive_page_types_meta_default(),
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 			]
@@ -689,7 +690,10 @@ final class Newspack_Popups {
 	/**
 	 * Load up common JS/CSS for the editor.
 	 */
-	public static function enqueue_block_editor_assets() {
+	public static function enqueue_block_assets() {
+		if ( ! is_admin() ) {
+			return;
+		}
 		$screen = get_current_screen();
 
 		// Block assets for Custom Placement and Prompt blocks.
@@ -943,6 +947,7 @@ final class Newspack_Popups {
 		update_post_meta( $post_id, 'trigger_blocks_count', 3 );
 		update_post_meta( $post_id, 'archive_insertion_posts_count', 0 );
 		update_post_meta( $post_id, 'archive_insertion_is_repeating', false );
+		update_post_meta( $post_id, 'archive_page_types', Newspack_Popups_Model::get_default_popup_archive_page_types() );
 		update_post_meta( $post_id, 'utm_suppression', '' );
 
 		if ( $group ) {

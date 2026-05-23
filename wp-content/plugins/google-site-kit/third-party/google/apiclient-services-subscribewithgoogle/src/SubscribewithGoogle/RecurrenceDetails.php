@@ -25,7 +25,7 @@ class RecurrenceDetails extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $planId;
-    protected $recurrencePeriodType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrencePeriod::class;
+    protected $recurrencePeriodType = RecurrencePeriod::class;
     protected $recurrencePeriodDataType = '';
     /**
      * The plan id associated with the order.
@@ -48,7 +48,7 @@ class RecurrenceDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param RecurrencePeriod $recurrencePeriod
      */
-    public function setRecurrencePeriod(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrencePeriod $recurrencePeriod)
+    public function setRecurrencePeriod(RecurrencePeriod $recurrencePeriod)
     {
         $this->recurrencePeriod = $recurrencePeriod;
     }
@@ -61,4 +61,4 @@ class RecurrenceDetails extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceDetails::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_RecurrenceDetails');
+class_alias(RecurrenceDetails::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_RecurrenceDetails');

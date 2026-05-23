@@ -35,7 +35,7 @@ class RedirectMiddleware
     {
         $this->nextHandler = $nextHandler;
     }
-    public function __invoke(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public function __invoke(RequestInterface $request, array $options): PromiseInterface
     {
         $fn = $this->nextHandler;
         if (empty($options['allow_redirects'])) {
@@ -52,14 +52,14 @@ class RedirectMiddleware
         if (empty($options['allow_redirects']['max'])) {
             return $fn($request, $options);
         }
-        return $fn($request, $options)->then(function (\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response) use($request, $options) {
+        return $fn($request, $options)->then(function (ResponseInterface $response) use ($request, $options) {
             return $this->checkRedirect($request, $options, $response);
         });
     }
     /**
      * @return ResponseInterface|PromiseInterface
      */
-    public function checkRedirect(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response)
+    public function checkRedirect(RequestInterface $request, array $options, ResponseInterface $response)
     {
         if (\strpos((string) $response->getStatusCode(), '3') !== 0 || !$response->hasHeader('Location')) {
             return $response;
@@ -67,7 +67,7 @@ class RedirectMiddleware
         $this->guardMax($request, $response, $options);
         $nextRequest = $this->modifyRequest($request, $options, $response);
         // If authorization is handled by curl, unset it if URI is cross-origin.
-        if (\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\UriComparator::isCrossOrigin($request->getUri(), $nextRequest->getUri()) && \defined('\\CURLOPT_HTTPAUTH')) {
+        if (Psr7\UriComparator::isCrossOrigin($request->getUri(), $nextRequest->getUri()) && defined('\CURLOPT_HTTPAUTH')) {
             unset($options['curl'][\CURLOPT_HTTPAUTH], $options['curl'][\CURLOPT_USERPWD]);
         }
         if (isset($options['allow_redirects']['on_redirect'])) {
@@ -83,9 +83,9 @@ class RedirectMiddleware
     /**
      * Enable tracking on promise.
      */
-    private function withTracking(\Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface $promise, string $uri, int $statusCode) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    private function withTracking(PromiseInterface $promise, string $uri, int $statusCode): PromiseInterface
     {
-        return $promise->then(static function (\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response) use($uri, $statusCode) {
+        return $promise->then(static function (ResponseInterface $response) use ($uri, $statusCode) {
             // Note that we are pushing to the front of the list as this
             // would be an earlier response than what is currently present
             // in the history header.
@@ -101,16 +101,16 @@ class RedirectMiddleware
      *
      * @throws TooManyRedirectsException Too many redirects.
      */
-    private function guardMax(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response, array &$options) : void
+    private function guardMax(RequestInterface $request, ResponseInterface $response, array &$options): void
     {
         $current = $options['__redirect_count'] ?? 0;
         $options['__redirect_count'] = $current + 1;
         $max = $options['allow_redirects']['max'];
         if ($options['__redirect_count'] > $max) {
-            throw new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\TooManyRedirectsException("Will not follow more than {$max} redirects", $request, $response);
+            throw new TooManyRedirectsException("Will not follow more than {$max} redirects", $request, $response);
         }
     }
-    public function modifyRequest(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response) : \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface
+    public function modifyRequest(RequestInterface $request, array $options, ResponseInterface $response): RequestInterface
     {
         // Request modifications to apply.
         $modify = [];
@@ -122,16 +122,16 @@ class RedirectMiddleware
         if ($statusCode == 303 || $statusCode <= 302 && !$options['allow_redirects']['strict']) {
             $safeMethods = ['GET', 'HEAD', 'OPTIONS'];
             $requestMethod = $request->getMethod();
-            $modify['method'] = \in_array($requestMethod, $safeMethods) ? $requestMethod : 'GET';
+            $modify['method'] = in_array($requestMethod, $safeMethods) ? $requestMethod : 'GET';
             $modify['body'] = '';
         }
         $uri = self::redirectUri($request, $response, $protocols);
         if (isset($options['idn_conversion']) && $options['idn_conversion'] !== \false) {
             $idnOptions = $options['idn_conversion'] === \true ? \IDNA_DEFAULT : $options['idn_conversion'];
-            $uri = \Google\Site_Kit_Dependencies\GuzzleHttp\Utils::idnUriConvert($uri, $idnOptions);
+            $uri = Utils::idnUriConvert($uri, $idnOptions);
         }
         $modify['uri'] = $uri;
-        \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Message::rewindBody($request);
+        Psr7\Message::rewindBody($request);
         // Add the Referer header if it is told to do so and only
         // add the header if we are not redirecting from https to http.
         if ($options['allow_redirects']['referer'] && $modify['uri']->getScheme() === $request->getUri()->getScheme()) {
@@ -141,21 +141,21 @@ class RedirectMiddleware
             $modify['remove_headers'][] = 'Referer';
         }
         // Remove Authorization and Cookie headers if URI is cross-origin.
-        if (\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\UriComparator::isCrossOrigin($request->getUri(), $modify['uri'])) {
+        if (Psr7\UriComparator::isCrossOrigin($request->getUri(), $modify['uri'])) {
             $modify['remove_headers'][] = 'Authorization';
             $modify['remove_headers'][] = 'Cookie';
         }
-        return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::modifyRequest($request, $modify);
+        return Psr7\Utils::modifyRequest($request, $modify);
     }
     /**
      * Set the appropriate URL on the request based on the location header.
      */
-    private static function redirectUri(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response, array $protocols) : \Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface
+    private static function redirectUri(RequestInterface $request, ResponseInterface $response, array $protocols): UriInterface
     {
-        $location = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\UriResolver::resolve($request->getUri(), new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Uri($response->getHeaderLine('Location')));
+        $location = Psr7\UriResolver::resolve($request->getUri(), new Psr7\Uri($response->getHeaderLine('Location')));
         // Ensure that the redirect URI is allowed based on the protocols.
         if (!\in_array($location->getScheme(), $protocols)) {
-            throw new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\BadResponseException(\sprintf('Redirect URI, %s, does not use one of the allowed redirect protocols: %s', $location, \implode(', ', $protocols)), $request, $response);
+            throw new BadResponseException(\sprintf('Redirect URI, %s, does not use one of the allowed redirect protocols: %s', $location, \implode(', ', $protocols)), $request, $response);
         }
         return $location;
     }

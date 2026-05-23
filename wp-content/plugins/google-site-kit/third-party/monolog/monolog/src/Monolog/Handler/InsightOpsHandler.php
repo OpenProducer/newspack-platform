@@ -18,7 +18,7 @@ use Google\Site_Kit_Dependencies\Monolog\Logger;
  * @author Robert Kaufmann III <rok3@rok3.me>
  * @author Gabriel Machado <gabriel.ms1@hotmail.com>
  */
-class InsightOpsHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\SocketHandler
+class InsightOpsHandler extends SocketHandler
 {
     /**
      * @var string
@@ -31,10 +31,10 @@ class InsightOpsHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\So
      *
      * @throws MissingExtensionException If SSL encryption is set to true and OpenSSL is missing
      */
-    public function __construct(string $token, string $region = 'us', bool $useSSL = \true, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
+    public function __construct(string $token, string $region = 'us', bool $useSSL = \true, $level = Logger::DEBUG, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
     {
-        if ($useSSL && !\extension_loaded('openssl')) {
-            throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The OpenSSL PHP plugin is required to use SSL encrypted connection for InsightOpsHandler');
+        if ($useSSL && !extension_loaded('openssl')) {
+            throw new MissingExtensionException('The OpenSSL PHP plugin is required to use SSL encrypted connection for InsightOpsHandler');
         }
         $endpoint = $useSSL ? 'ssl://' . $region . '.data.logs.insight.rapid7.com:443' : $region . '.data.logs.insight.rapid7.com:80';
         parent::__construct($endpoint, $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
@@ -43,7 +43,7 @@ class InsightOpsHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\So
     /**
      * {@inheritDoc}
      */
-    protected function generateDataStream(array $record) : string
+    protected function generateDataStream(array $record): string
     {
         return $this->logToken . ' ' . $record['formatted'];
     }

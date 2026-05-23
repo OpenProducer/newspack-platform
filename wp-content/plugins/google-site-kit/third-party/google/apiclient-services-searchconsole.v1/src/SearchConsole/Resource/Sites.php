@@ -39,7 +39,7 @@ class Sites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function add($siteUrl, $optParams = [])
     {
         $params = ['siteUrl' => $siteUrl];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('add', [$params]);
     }
     /**
@@ -54,7 +54,7 @@ class Sites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function delete($siteUrl, $optParams = [])
     {
         $params = ['siteUrl' => $siteUrl];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -69,8 +69,8 @@ class Sites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function get($siteUrl, $optParams = [])
     {
         $params = ['siteUrl' => $siteUrl];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\WmxSite::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], WmxSite::class);
     }
     /**
      * Lists the user's Search Console sites. (sites.listSites)
@@ -82,9 +82,9 @@ class Sites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listSites($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\SitesListResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], SitesListResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Resource\Sites::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_Resource_Sites');
+class_alias(Sites::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_Resource_Sites');

@@ -19,7 +19,7 @@ use Throwable;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+class NormalizerFormatter implements FormatterInterface
 {
     public const SIMPLE_DATE = "Y-m-d\\TH:i:sP";
     /** @var string */
@@ -29,14 +29,14 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
     /** @var int */
     protected $maxNormalizeItemCount = 1000;
     /** @var int */
-    private $jsonEncodeOptions = \Google\Site_Kit_Dependencies\Monolog\Utils::DEFAULT_JSON_FLAGS;
+    private $jsonEncodeOptions = Utils::DEFAULT_JSON_FLAGS;
     /**
      * @param string|null $dateFormat The format of the timestamp: one supported by DateTime::format
      */
     public function __construct(?string $dateFormat = null)
     {
         $this->dateFormat = null === $dateFormat ? static::SIMPLE_DATE : $dateFormat;
-        if (!\function_exists('json_encode')) {
+        if (!function_exists('json_encode')) {
             throw new \RuntimeException('PHP\'s json extension is required to use Monolog\'s NormalizerFormatter');
         }
     }
@@ -59,11 +59,11 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
         }
         return $records;
     }
-    public function getDateFormat() : string
+    public function getDateFormat(): string
     {
         return $this->dateFormat;
     }
-    public function setDateFormat(string $dateFormat) : self
+    public function setDateFormat(string $dateFormat): self
     {
         $this->dateFormat = $dateFormat;
         return $this;
@@ -71,11 +71,11 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
     /**
      * The maximum number of normalization levels to go through
      */
-    public function getMaxNormalizeDepth() : int
+    public function getMaxNormalizeDepth(): int
     {
         return $this->maxNormalizeDepth;
     }
-    public function setMaxNormalizeDepth(int $maxNormalizeDepth) : self
+    public function setMaxNormalizeDepth(int $maxNormalizeDepth): self
     {
         $this->maxNormalizeDepth = $maxNormalizeDepth;
         return $this;
@@ -83,11 +83,11 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
     /**
      * The maximum number of items to normalize per level
      */
-    public function getMaxNormalizeItemCount() : int
+    public function getMaxNormalizeItemCount(): int
     {
         return $this->maxNormalizeItemCount;
     }
-    public function setMaxNormalizeItemCount(int $maxNormalizeItemCount) : self
+    public function setMaxNormalizeItemCount(int $maxNormalizeItemCount): self
     {
         $this->maxNormalizeItemCount = $maxNormalizeItemCount;
         return $this;
@@ -95,7 +95,7 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
     /**
      * Enables `json_encode` pretty print.
      */
-    public function setJsonPrettyPrint(bool $enable) : self
+    public function setJsonPrettyPrint(bool $enable): self
     {
         if ($enable) {
             $this->jsonEncodeOptions |= \JSON_PRETTY_PRINT;
@@ -113,23 +113,23 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
         if ($depth > $this->maxNormalizeDepth) {
             return 'Over ' . $this->maxNormalizeDepth . ' levels deep, aborting normalization';
         }
-        if (null === $data || \is_scalar($data)) {
-            if (\is_float($data)) {
-                if (\is_infinite($data)) {
+        if (null === $data || is_scalar($data)) {
+            if (is_float($data)) {
+                if (is_infinite($data)) {
                     return ($data > 0 ? '' : '-') . 'INF';
                 }
-                if (\is_nan($data)) {
+                if (is_nan($data)) {
                     return 'NaN';
                 }
             }
             return $data;
         }
-        if (\is_array($data)) {
+        if (is_array($data)) {
             $normalized = [];
             $count = 1;
             foreach ($data as $key => $value) {
                 if ($count++ > $this->maxNormalizeItemCount) {
-                    $normalized['...'] = 'Over ' . $this->maxNormalizeItemCount . ' items (' . \count($data) . ' total), aborting normalization';
+                    $normalized['...'] = 'Over ' . $this->maxNormalizeItemCount . ' items (' . count($data) . ' total), aborting normalization';
                     break;
                 }
                 $normalized[$key] = $this->normalize($value, $depth + 1);
@@ -139,8 +139,8 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
         if ($data instanceof \DateTimeInterface) {
             return $this->formatDate($data);
         }
-        if (\is_object($data)) {
-            if ($data instanceof \Throwable) {
+        if (is_object($data)) {
+            if ($data instanceof Throwable) {
                 return $this->normalizeException($data, $depth);
             }
             if ($data instanceof \JsonSerializable) {
@@ -149,25 +149,25 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
             } elseif (\get_class($data) === '__PHP_Incomplete_Class') {
                 $accessor = new \ArrayObject($data);
                 $value = (string) $accessor['__PHP_Incomplete_Class_Name'];
-            } elseif (\method_exists($data, '__toString')) {
+            } elseif (method_exists($data, '__toString')) {
                 /** @var string $value */
                 $value = $data->__toString();
             } else {
                 // the rest is normalized by json encoding and decoding it
                 /** @var null|scalar|array<array|scalar|null> $value */
-                $value = \json_decode($this->toJson($data, \true), \true);
+                $value = json_decode($this->toJson($data, \true), \true);
             }
-            return [\Google\Site_Kit_Dependencies\Monolog\Utils::getClass($data) => $value];
+            return [Utils::getClass($data) => $value];
         }
-        if (\is_resource($data)) {
-            return \sprintf('[resource(%s)]', \get_resource_type($data));
+        if (is_resource($data)) {
+            return sprintf('[resource(%s)]', get_resource_type($data));
         }
-        return '[unknown(' . \gettype($data) . ')]';
+        return '[unknown(' . gettype($data) . ')]';
     }
     /**
      * @return mixed[]
      */
-    protected function normalizeException(\Throwable $e, int $depth = 0)
+    protected function normalizeException(Throwable $e, int $depth = 0)
     {
         if ($depth > $this->maxNormalizeDepth) {
             return ['Over ' . $this->maxNormalizeDepth . ' levels deep, aborting normalization'];
@@ -175,7 +175,7 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
         if ($e instanceof \JsonSerializable) {
             return (array) $e->jsonSerialize();
         }
-        $data = ['class' => \Google\Site_Kit_Dependencies\Monolog\Utils::getClass($e), 'message' => $e->getMessage(), 'code' => (int) $e->getCode(), 'file' => $e->getFile() . ':' . $e->getLine()];
+        $data = ['class' => Utils::getClass($e), 'message' => $e->getMessage(), 'code' => (int) $e->getCode(), 'file' => $e->getFile() . ':' . $e->getLine()];
         if ($e instanceof \SoapFault) {
             if (isset($e->faultcode)) {
                 $data['faultcode'] = $e->faultcode;
@@ -184,9 +184,9 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
                 $data['faultactor'] = $e->faultactor;
             }
             if (isset($e->detail)) {
-                if (\is_string($e->detail)) {
+                if (is_string($e->detail)) {
                     $data['detail'] = $e->detail;
-                } elseif (\is_object($e->detail) || \is_array($e->detail)) {
+                } elseif (is_object($e->detail) || is_array($e->detail)) {
                     $data['detail'] = $this->toJson($e->detail, \true);
                 }
             }
@@ -209,9 +209,9 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
      * @throws \RuntimeException if encoding fails and errors are not ignored
      * @return string            if encoding fails and ignoreErrors is true 'null' is returned
      */
-    protected function toJson($data, bool $ignoreErrors = \false) : string
+    protected function toJson($data, bool $ignoreErrors = \false): string
     {
-        return \Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode($data, $this->jsonEncodeOptions, $ignoreErrors);
+        return Utils::jsonEncode($data, $this->jsonEncodeOptions, $ignoreErrors);
     }
     /**
      * @return string
@@ -220,17 +220,17 @@ class NormalizerFormatter implements \Google\Site_Kit_Dependencies\Monolog\Forma
     {
         // in case the date format isn't custom then we defer to the custom DateTimeImmutable
         // formatting logic, which will pick the right format based on whether useMicroseconds is on
-        if ($this->dateFormat === self::SIMPLE_DATE && $date instanceof \Google\Site_Kit_Dependencies\Monolog\DateTimeImmutable) {
+        if ($this->dateFormat === self::SIMPLE_DATE && $date instanceof DateTimeImmutable) {
             return (string) $date;
         }
         return $date->format($this->dateFormat);
     }
-    public function addJsonEncodeOption(int $option) : self
+    public function addJsonEncodeOption(int $option): self
     {
         $this->jsonEncodeOptions |= $option;
         return $this;
     }
-    public function removeJsonEncodeOption(int $option) : self
+    public function removeJsonEncodeOption(int $option): self
     {
         $this->jsonEncodeOptions &= ~$option;
         return $this;

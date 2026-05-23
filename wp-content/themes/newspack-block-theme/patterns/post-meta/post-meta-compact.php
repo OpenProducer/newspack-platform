@@ -27,5 +27,7 @@ $registry = WP_Block_Type_Registry::get_instance();
 
 <!-- wp:post-date {"fontSize":"x-small"} /-->
 
+<!-- wp:post-date {"metadata":{"bindings":{"datetime":{"source":"core/post-data","args":{"field":"modified"}}}},"className":"wp-block-post-date__modified-date","fontSize":"x-small"} /-->
+
 </div>
 <!-- /wp:group -->

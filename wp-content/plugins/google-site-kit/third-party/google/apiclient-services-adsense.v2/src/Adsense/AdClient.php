@@ -136,4 +136,4 @@ class AdClient extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\AdClient::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_AdClient');
+class_alias(AdClient::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_AdClient');

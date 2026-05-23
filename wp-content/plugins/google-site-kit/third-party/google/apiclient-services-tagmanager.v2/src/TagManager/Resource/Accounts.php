@@ -40,8 +40,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Account::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Account::class);
     }
     /**
      * Lists all GTM Accounts that a user has access to. (accounts.listAccounts)
@@ -58,8 +58,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listAccounts($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListAccountsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListAccountsResponse::class);
     }
     /**
      * Updates a GTM Account. (accounts.update)
@@ -73,12 +73,12 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return Account
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Account $postBody, $optParams = [])
+    public function update($path, Account $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Account::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Account::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\Accounts::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_Accounts');
+class_alias(Accounts::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_Accounts');

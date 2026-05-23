@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class BatchUpdateContactsResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $updateResultType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\PersonResponse::class;
+    protected $updateResultType = PersonResponse::class;
     protected $updateResultDataType = 'map';
     /**
      * A map of resource names to the contacts that were updated, unless the
@@ -40,4 +40,4 @@ class BatchUpdateContactsResponse extends \Google\Site_Kit_Dependencies\Google\M
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchUpdateContactsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_BatchUpdateContactsResponse');
+class_alias(BatchUpdateContactsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_BatchUpdateContactsResponse');

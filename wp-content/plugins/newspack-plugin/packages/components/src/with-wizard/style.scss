@@ -51,6 +51,10 @@ body.newspack-wizard-page:not(.newspack-admin-header) {
 			padding-bottom: 136px;
 		}
 	}
+
+	.components-popover__content {
+		min-width: 192px;
+	}
 }
 
 // Styling for wizards that are admin-header-only.
@@ -78,37 +82,6 @@ svg {
 	}
 	&.newspack--success {
 		fill: wp-colors.$alert-green;
-	}
-}
-
-// Blue Screen
-.newspack-wizard__blue {
-	#wpwrap {
-		background: var(--wp-admin-theme-color);
-	}
-
-	.newspack-footer {
-		background: var(--wp-admin-theme-color);
-		border-color: var(--wp-admin-theme-color);
-		justify-content: center;
-
-		&__logo {
-			background: inherit;
-		}
-	}
-
-	#wpfooter {
-		color: white;
-
-		a {
-			color: inherit;
-
-			&:active,
-			&:focus,
-			&:hover {
-				opacity: 0.75;
-			}
-		}
 	}
 }
 
@@ -171,29 +144,6 @@ svg {
 				512px 96px 0 0 white,
 				0 96px 0 0 wp-colors.$gray-700;
 			width: calc(100% - ( 64px * 2 ));
-		}
-	}
-
-	// Blue Screen
-	.newspack-wizard__blue & {
-		background: var(--wp-admin-theme-color);
-
-		&::before {
-			animation: loading-quiet 1.25s ease-in-out infinite;
-			background: white;
-			border-radius: 0;
-			box-shadow: 0;
-			height: 8px;
-			left: 0;
-			margin: 0;
-			position: absolute;
-			right: 100%;
-			top: 0;
-			width: auto;
-		}
-
-		&::after {
-			display: none;
 		}
 	}
 

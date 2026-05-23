@@ -40,11 +40,11 @@ class PropertiesAdSenseLinks extends \Google\Site_Kit_Dependencies\Google\Servic
      * @return GoogleAnalyticsAdminV1alphaAdSenseLink
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAdSenseLink $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaAdSenseLink $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAdSenseLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaAdSenseLink::class);
     }
     /**
      * Deletes an AdSenseLink. (adSenseLinks.delete)
@@ -59,8 +59,8 @@ class PropertiesAdSenseLinks extends \Google\Site_Kit_Dependencies\Google\Servic
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Looks up a single AdSenseLink. (adSenseLinks.get)
@@ -75,8 +75,8 @@ class PropertiesAdSenseLinks extends \Google\Site_Kit_Dependencies\Google\Servic
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAdSenseLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaAdSenseLink::class);
     }
     /**
      * Lists AdSenseLinks on a property. (adSenseLinks.listPropertiesAdSenseLinks)
@@ -98,9 +98,9 @@ class PropertiesAdSenseLinks extends \Google\Site_Kit_Dependencies\Google\Servic
     public function listPropertiesAdSenseLinks($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListAdSenseLinksResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListAdSenseLinksResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesAdSenseLinks::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesAdSenseLinks');
+class_alias(PropertiesAdSenseLinks::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesAdSenseLinks');

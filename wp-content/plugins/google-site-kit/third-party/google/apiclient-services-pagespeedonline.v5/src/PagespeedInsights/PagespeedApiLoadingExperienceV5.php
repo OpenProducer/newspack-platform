@@ -32,7 +32,7 @@ class PagespeedApiLoadingExperienceV5 extends \Google\Site_Kit_Dependencies\Goog
      * @var string
      */
     public $initialUrl;
-    protected $metricsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\UserPageLoadMetricV5::class;
+    protected $metricsType = UserPageLoadMetricV5::class;
     protected $metricsDataType = 'map';
     /**
      * True if the result is an origin fallback from a page, false otherwise.
@@ -128,4 +128,4 @@ class PagespeedApiLoadingExperienceV5 extends \Google\Site_Kit_Dependencies\Goog
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\PagespeedApiLoadingExperienceV5::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_PagespeedApiLoadingExperienceV5');
+class_alias(PagespeedApiLoadingExperienceV5::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_PagespeedApiLoadingExperienceV5');

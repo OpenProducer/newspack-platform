@@ -32,5 +32,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class ECParameters
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_CHOICE, 'children' => ['namedCurve' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_OBJECT_IDENTIFIER], 'implicitCurve' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_NULL], 'specifiedCurve' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\SpecifiedECDomain::MAP]];
+    const MAP = ['type' => ASN1::TYPE_CHOICE, 'children' => ['namedCurve' => ['type' => ASN1::TYPE_OBJECT_IDENTIFIER], 'implicitCurve' => ['type' => ASN1::TYPE_NULL], 'specifiedCurve' => SpecifiedECDomain::MAP]];
 }

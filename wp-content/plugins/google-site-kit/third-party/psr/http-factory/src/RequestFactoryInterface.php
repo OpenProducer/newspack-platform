@@ -14,5 +14,5 @@ interface RequestFactoryInterface
      *
      * @return RequestInterface
      */
-    public function createRequest(string $method, $uri) : \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
+    public function createRequest(string $method, $uri): RequestInterface;
 }

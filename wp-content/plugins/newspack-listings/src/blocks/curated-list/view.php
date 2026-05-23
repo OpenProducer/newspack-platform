@@ -15,17 +15,10 @@ use Newspack_Listings\Utils;
  * Dynamic block registration.
  */
 function register_block() {
-	// Listings block attributes.
-	$block_json = json_decode(
-		file_get_contents( __DIR__ . '/block.json' ), // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		true
-	);
-
 	// Register Curated List block.
 	register_block_type(
-		$block_json['name'],
+		__DIR__,
 		[
-			'attributes'      => $block_json['attributes'],
 			'render_callback' => __NAMESPACE__ . '\render_block',
 		]
 	);

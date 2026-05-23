@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertTagResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $tagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class;
+    protected $tagType = Tag::class;
     protected $tagDataType = '';
     /**
      * Tag as it appears in the latest container version since the last workspace
@@ -28,7 +28,7 @@ class RevertTagResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Tag $tag
      */
-    public function setTag(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag $tag)
+    public function setTag(Tag $tag)
     {
         $this->tag = $tag;
     }
@@ -41,4 +41,4 @@ class RevertTagResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertTagResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertTagResponse');
+class_alias(RevertTagResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertTagResponse');

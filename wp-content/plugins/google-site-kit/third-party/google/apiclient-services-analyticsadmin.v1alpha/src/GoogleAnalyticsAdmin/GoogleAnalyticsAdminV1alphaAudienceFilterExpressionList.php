@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'filterExpressions';
-    protected $filterExpressionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
+    protected $filterExpressionsType = GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
     protected $filterExpressionsDataType = 'array';
     /**
      * A list of Audience filter expressions.
@@ -40,4 +40,4 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList extends \Google\Si
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList');

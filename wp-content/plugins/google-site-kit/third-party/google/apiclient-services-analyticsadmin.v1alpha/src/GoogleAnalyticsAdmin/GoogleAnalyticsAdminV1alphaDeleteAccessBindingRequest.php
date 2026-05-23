@@ -45,4 +45,4 @@ class GoogleAnalyticsAdminV1alphaDeleteAccessBindingRequest extends \Google\Site
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDeleteAccessBindingRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaDeleteAccessBindingRequest');
+class_alias(GoogleAnalyticsAdminV1alphaDeleteAccessBindingRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaDeleteAccessBindingRequest');

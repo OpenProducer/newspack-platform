@@ -65,4 +65,4 @@ class RuntimeError extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\RuntimeError::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_RuntimeError');
+class_alias(RuntimeError::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_RuntimeError');

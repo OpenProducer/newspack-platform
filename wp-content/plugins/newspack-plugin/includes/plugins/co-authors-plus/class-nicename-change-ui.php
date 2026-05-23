@@ -20,6 +20,17 @@ class Nicename_Change_UI {
 	 */
 	public static function init() {
 
+		/**
+		 * Enables a UI for changing user nicenames (URL slugs) in the admin.
+		 * Useful for Co-Authors Plus guest author management.
+		 *
+		 * @constant NEWSPACK_CHANGE_NICENAME_UI
+		 * @type     bool
+		 * @default  Nicename change UI disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_CHANGE_NICENAME_UI', true );
+		 */
 		if ( ! defined( 'NEWSPACK_CHANGE_NICENAME_UI' ) || ! NEWSPACK_CHANGE_NICENAME_UI ) {
 			return;
 		}

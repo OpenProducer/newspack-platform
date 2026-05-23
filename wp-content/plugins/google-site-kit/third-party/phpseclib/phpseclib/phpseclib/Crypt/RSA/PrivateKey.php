@@ -21,7 +21,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\PrivateKey
+final class PrivateKey extends RSA implements Common\PrivateKey
 {
     use Common\Traits\PasswordProtected;
     /**
@@ -55,7 +55,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
      *
      * @return bool|BigInteger
      */
-    private function rsadp(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $c)
+    private function rsadp(BigInteger $c)
     {
         if ($c->compare(self::$zero) < 0 || $c->compare($this->modulus) > 0) {
             throw new \OutOfRangeException('Ciphertext representative out of range');
@@ -69,7 +69,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
      *
      * @return bool|BigInteger
      */
-    private function rsasp1(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $m)
+    private function rsasp1(BigInteger $m)
     {
         if ($m->compare(self::$zero) < 0 || $m->compare($this->modulus) > 0) {
             throw new \OutOfRangeException('Signature representative out of range');
@@ -82,7 +82,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
      * @param BigInteger $x
      * @return BigInteger
      */
-    protected function exponentiate(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $x)
+    protected function exponentiate(BigInteger $x)
     {
         switch (\true) {
             case empty($this->primes):
@@ -93,7 +93,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
             case $this->exponents[1]->equals(self::$zero):
                 return $x->modPow($this->exponent, $this->modulus);
         }
-        $num_primes = \count($this->primes);
+        $num_primes = count($this->primes);
         if (!static::$enableBlinding) {
             $m_i = [1 => $x->modPow($this->exponents[1], $this->primes[1]), 2 => $x->modPow($this->exponents[2], $this->primes[2])];
             $h = $m_i[1]->subtract($m_i[2]);
@@ -116,7 +116,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
                     $smallest = $this->primes[$i];
                 }
             }
-            $r = \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger::randomRange(self::$one, $smallest->subtract(self::$one));
+            $r = BigInteger::randomRange(self::$one, $smallest->subtract(self::$one));
             $m_i = [1 => $this->blind($x, $r, 1), 2 => $this->blind($x, $r, 2)];
             $h = $m_i[1]->subtract($m_i[2]);
             $h = $h->multiply($this->coefficients[2]);
@@ -145,7 +145,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
      * @param int $i
      * @return BigInteger
      */
-    private function blind(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $x, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $r, $i)
+    private function blind(BigInteger $x, BigInteger $r, $i)
     {
         $x = $x->multiply($r->modPow($this->publicExponent, $this->primes[$i]));
         $x = $x->modPow($this->exponents[$i], $this->primes[$i]);
@@ -175,16 +175,16 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
         if ($emLen < $this->hLen + $sLen + 2) {
             throw new \LengthException('RSA modulus too short');
         }
-        $salt = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Random::string($sLen);
+        $salt = Random::string($sLen);
         $m2 = "\x00\x00\x00\x00\x00\x00\x00\x00" . $mHash . $salt;
         $h = $this->hash->hash($m2);
-        $ps = \str_repeat(\chr(0), $emLen - $sLen - $this->hLen - 2);
-        $db = $ps . \chr(1) . $salt;
+        $ps = str_repeat(chr(0), $emLen - $sLen - $this->hLen - 2);
+        $db = $ps . chr(1) . $salt;
         $dbMask = $this->mgf1($h, $emLen - $this->hLen - 1);
         // ie. stlren($db)
         $maskedDB = $db ^ $dbMask;
-        $maskedDB[0] = ~\chr(0xff << ($emBits & 7)) & $maskedDB[0];
-        $em = $maskedDB . $h . \chr(0xbc);
+        $maskedDB[0] = ~chr(256 - (1 << ($emBits & 7))) & $maskedDB[0];
+        $em = $maskedDB . $h . chr(0xbc);
         return $em;
     }
     /**
@@ -241,6 +241,10 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
      */
     public function sign($message)
     {
+        $result = $this->handleOpenSSL('openssl_sign', $message);
+        if ($result !== null) {
+            return $result;
+        }
         switch ($this->signaturePadding) {
             case self::SIGNATURE_PKCS1:
             case self::SIGNATURE_RELAXED_PKCS1:
@@ -261,7 +265,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
     private function rsaes_pkcs1_v1_5_decrypt($c)
     {
         // Length checking
-        if (\strlen($c) != $this->k) {
+        if (strlen($c) != $this->k) {
             // or if k < 11
             throw new \LengthException('Ciphertext representative too long');
         }
@@ -270,12 +274,12 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
         $m = $this->rsadp($c);
         $em = $this->i2osp($m, $this->k);
         // EME-PKCS1-v1_5 decoding
-        if (\ord($em[0]) != 0 || \ord($em[1]) > 2) {
+        if (ord($em[0]) != 0 || ord($em[1]) > 2) {
             throw new \RuntimeException('Decryption error');
         }
-        $ps = \substr($em, 2, \strpos($em, \chr(0), 2) - 2);
-        $m = \substr($em, \strlen($ps) + 3);
-        if (\strlen($ps) < 8) {
+        $ps = substr($em, 2, strpos($em, chr(0), 2) - 2);
+        $m = substr($em, strlen($ps) + 3);
+        if (strlen($ps) < 8) {
             throw new \RuntimeException('Decryption error');
         }
         // Output M
@@ -303,7 +307,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
         // Length checking
         // if $l is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
-        if (\strlen($c) != $this->k || $this->k < 2 * $this->hLen + 2) {
+        if (strlen($c) != $this->k || $this->k < 2 * $this->hLen + 2) {
             throw new \LengthException('Ciphertext representative too long');
         }
         // RSA decryption
@@ -312,20 +316,20 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
         $em = $this->i2osp($m, $this->k);
         // EME-OAEP decoding
         $lHash = $this->hash->hash($this->label);
-        $y = \ord($em[0]);
-        $maskedSeed = \substr($em, 1, $this->hLen);
-        $maskedDB = \substr($em, $this->hLen + 1);
+        $y = ord($em[0]);
+        $maskedSeed = substr($em, 1, $this->hLen);
+        $maskedDB = substr($em, $this->hLen + 1);
         $seedMask = $this->mgf1($maskedDB, $this->hLen);
         $seed = $maskedSeed ^ $seedMask;
         $dbMask = $this->mgf1($seed, $this->k - $this->hLen - 1);
         $db = $maskedDB ^ $dbMask;
-        $lHash2 = \substr($db, 0, $this->hLen);
-        $m = \substr($db, $this->hLen);
-        $hashesMatch = \hash_equals($lHash, $lHash2);
+        $lHash2 = substr($db, 0, $this->hLen);
+        $m = substr($db, $this->hLen);
+        $hashesMatch = hash_equals($lHash, $lHash2);
         $leadingZeros = 1;
         $patternMatch = 0;
         $offset = 0;
-        for ($i = 0; $i < \strlen($m); $i++) {
+        for ($i = 0; $i < strlen($m); $i++) {
             $patternMatch |= $leadingZeros & $m[$i] === "\x01";
             $leadingZeros &= $m[$i] === "\x00";
             $offset += $patternMatch ? 0 : 1;
@@ -336,7 +340,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
             throw new \RuntimeException('Decryption error');
         }
         // Output the message M
-        return \substr($m, $offset + 1);
+        return substr($m, $offset + 1);
     }
     /**
      * Raw Encryption / Decryption
@@ -349,7 +353,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
      */
     private function raw_encrypt($m)
     {
-        if (\strlen($m) > $this->k) {
+        if (strlen($m) > $this->k) {
             throw new \LengthException('Ciphertext representative too long');
         }
         $temp = $this->os2ip($m);
@@ -365,6 +369,10 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
      */
     public function decrypt($ciphertext)
     {
+        $result = $this->handleOpenSSL('openssl_private_decrypt', $ciphertext);
+        if ($result !== null) {
+            return $result;
+        }
         switch ($this->encryptionPadding) {
             case self::ENCRYPTION_NONE:
                 return $this->raw_encrypt($ciphertext);
@@ -387,7 +395,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
             throw new \RuntimeException('Public key components not found');
         }
         $key = $type::savePublicKey($this->modulus, $this->publicExponent);
-        return \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA::loadFormat('PKCS8', $key)->withHash($this->hash->getHash())->withMGFHash($this->mgfHash->getHash())->withSaltLength($this->sLen)->withLabel($this->label)->withPadding($this->signaturePadding | $this->encryptionPadding);
+        return RSA::loadFormat('PKCS8', $key)->withHash($this->hash->getHash())->withMGFHash($this->mgfHash->getHash())->withSaltLength($this->sLen)->withLabel($this->label)->withPadding($this->signaturePadding | $this->encryptionPadding);
     }
     /**
      * Returns the private key
@@ -399,11 +407,11 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RS
     public function toString($type, array $options = [])
     {
         $type = self::validatePlugin('Keys', $type, empty($this->primes) ? 'savePublicKey' : 'savePrivateKey');
-        if ($type == \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\Formats\Keys\PSS::class) {
+        if ($type == PSS::class) {
             if ($this->signaturePadding == self::SIGNATURE_PSS) {
                 $options += ['hash' => $this->hash->getHash(), 'MGFHash' => $this->mgfHash->getHash(), 'saltLength' => $this->getSaltLength()];
             } else {
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedFormatException('The PSS format can only be used when the signature method has been explicitly set to PSS');
+                throw new UnsupportedFormatException('The PSS format can only be used when the signature method has been explicitly set to PSS');
             }
         }
         if (empty($this->primes)) {

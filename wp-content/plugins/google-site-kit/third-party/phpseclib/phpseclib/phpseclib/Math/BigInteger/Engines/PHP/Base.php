@@ -18,7 +18,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class Base extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP
+abstract class Base extends PHP
 {
     /**
      * Cache constants
@@ -70,7 +70,7 @@ abstract class Base extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInt
      * @param string $class
      * @return PHP
      */
-    protected static function powModHelper(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP $x, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP $n, $class)
+    protected static function powModHelper(PHP $x, PHP $e, PHP $n, $class)
     {
         if (empty($e->value)) {
             $temp = new $class();

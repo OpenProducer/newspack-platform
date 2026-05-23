@@ -18,6 +18,7 @@ class Yoast {
 	 */
 	public static function init() {
 		add_filter( 'wpseo_image_image_weight_limit', [ __CLASS__, 'ignore_yoast_weight_limit' ] );
+		add_filter( 'wpseo_additional_contactmethods', [ __CLASS__, 'add_bluesky_contact_method' ] );
 	}
 
 	/**
@@ -30,6 +31,24 @@ class Yoast {
 	 */
 	public static function ignore_yoast_weight_limit( $limit ) {
 		return PHP_INT_MAX;
+	}
+
+	/**
+	 * Add Bluesky as an additional Yoast SEO contact method while Yoast
+	 * does not include it natively.
+	 *
+	 * @param array $contact_methods Registered contact methods.
+	 * @return array Modified contact methods.
+	 */
+	public static function add_bluesky_contact_method( $contact_methods ) {
+		foreach ( $contact_methods as $contact_method ) {
+			if ( 'bluesky' === $contact_method->get_key() ) {
+				return $contact_methods;
+			}
+		}
+		$contact_methods[] = new Yoast_Bluesky_Contact_Method();
+
+		return $contact_methods;
 	}
 }
 Yoast::init();

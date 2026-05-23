@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class ListAlertsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'alerts';
-    protected $alertsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Alert::class;
+    protected $alertsType = Alert::class;
     protected $alertsDataType = 'array';
     /**
      * The alerts returned in this list response.
@@ -40,4 +40,4 @@ class ListAlertsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListAlertsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListAlertsResponse');
+class_alias(ListAlertsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListAlertsResponse');

@@ -16,12 +16,12 @@ namespace Google\Site_Kit_Dependencies\Monolog\Handler;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-abstract class Handler implements \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
+abstract class Handler implements HandlerInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         foreach ($records as $record) {
             $this->handle($record);
@@ -30,7 +30,7 @@ abstract class Handler implements \Google\Site_Kit_Dependencies\Monolog\Handler\
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
     }
     public function __destruct()

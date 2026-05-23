@@ -46,7 +46,7 @@ abstract class Base
      *
      * @return object
      */
-    public function convertInteger(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $x)
+    public function convertInteger(BigInteger $x)
     {
         return $this->factory->newInteger($x);
     }
@@ -78,12 +78,12 @@ abstract class Base
      *
      * @return array
      */
-    public function multiplyPoint(array $p, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $d)
+    public function multiplyPoint(array $p, BigInteger $d)
     {
         $alreadyInternal = isset($p[2]);
         $r = $alreadyInternal ? [[], $p] : [[], $this->convertToInternal($p)];
         $d = $d->toBits();
-        for ($i = 0; $i < \strlen($d); $i++) {
+        for ($i = 0; $i < strlen($d); $i++) {
             $d_i = (int) $d[$i];
             $r[1 - $d_i] = $this->addPoint($r[0], $r[1]);
             $r[$d_i] = $this->doublePoint($r[$d_i]);
@@ -99,18 +99,18 @@ abstract class Base
     {
         static $one;
         if (!isset($one)) {
-            $one = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(1);
+            $one = new BigInteger(1);
         }
-        return \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger::randomRange($one, $this->order->subtract($one));
+        return BigInteger::randomRange($one, $this->order->subtract($one));
     }
     /**
      * Performs range check
      */
-    public function rangeCheck(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $x)
+    public function rangeCheck(BigInteger $x)
     {
         static $zero;
         if (!isset($zero)) {
-            $zero = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger();
+            $zero = new BigInteger();
         }
         if (!isset($this->order)) {
             throw new \RuntimeException('setOrder needs to be called before this method');
@@ -122,7 +122,7 @@ abstract class Base
     /**
      * Sets the Order
      */
-    public function setOrder(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $order)
+    public function setOrder(BigInteger $order)
     {
         $this->order = $order;
     }

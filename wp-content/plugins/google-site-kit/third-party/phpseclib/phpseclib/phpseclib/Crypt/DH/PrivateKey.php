@@ -17,7 +17,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH
+final class PrivateKey extends DH
 {
     use Common\Traits\PasswordProtected;
     /**
@@ -44,7 +44,7 @@ final class PrivateKey extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH
             $this->publicKey = $this->base->powMod($this->privateKey, $this->prime);
         }
         $key = $type::savePublicKey($this->prime, $this->base, $this->publicKey);
-        return \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DH::loadFormat('PKCS8', $key);
+        return DH::loadFormat('PKCS8', $key);
     }
     /**
      * Returns the private key

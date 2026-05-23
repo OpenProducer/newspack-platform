@@ -19,14 +19,14 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 
 class ResourceIssue extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $blockedResourceType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\BlockedResource::class;
+    protected $blockedResourceType = BlockedResource::class;
     protected $blockedResourceDataType = '';
     /**
      * Describes a blocked resource issue.
      *
      * @param BlockedResource $blockedResource
      */
-    public function setBlockedResource(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\BlockedResource $blockedResource)
+    public function setBlockedResource(BlockedResource $blockedResource)
     {
         $this->blockedResource = $blockedResource;
     }
@@ -39,4 +39,4 @@ class ResourceIssue extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\ResourceIssue::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_ResourceIssue');
+class_alias(ResourceIssue::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_ResourceIssue');

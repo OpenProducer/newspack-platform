@@ -304,4 +304,4 @@ class MetricMetadata extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricMetadata::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_MetricMetadata');
+class_alias(MetricMetadata::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_MetricMetadata');

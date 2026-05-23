@@ -87,7 +87,6 @@ blockquote {
 }
 
 .wp-block-pullquote {
-	border-width: 16px 0 4px;
 	font-weight: bold;
 
 	blockquote {
@@ -117,12 +116,18 @@ blockquote {
 		opacity: 0.9;
 		text-transform: uppercase;
 	}
+
+	&:not([style*="border-"]) {
+		border-width: 16px 0 4px;
+		border-color: currentcolor;
+	}
 }
 
 [data-align="left"] .wp-block-pullquote,
 [data-align="right"] .wp-block-pullquote {
 	border-width: 0;
 	position: relative;
+	text-align: left;
 
 	blockquote {
 		margin-top: #{1.5 * structure.$size__spacing-unit};
@@ -146,7 +151,7 @@ blockquote {
 	}
 
 	&.is-style-solid-color::before,
-	&[style*="border-width"]::before {
+	&[style*="border-"]::before {
 		display: none;
 	}
 }

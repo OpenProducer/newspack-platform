@@ -19,9 +19,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class MergeConflict extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $entityInBaseVersionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity::class;
+    protected $entityInBaseVersionType = Entity::class;
     protected $entityInBaseVersionDataType = '';
-    protected $entityInWorkspaceType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity::class;
+    protected $entityInWorkspaceType = Entity::class;
     protected $entityInWorkspaceDataType = '';
     /**
      * The base version entity (since the latest sync operation) that has
@@ -30,7 +30,7 @@ class MergeConflict extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Entity $entityInBaseVersion
      */
-    public function setEntityInBaseVersion(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity $entityInBaseVersion)
+    public function setEntityInBaseVersion(Entity $entityInBaseVersion)
     {
         $this->entityInBaseVersion = $entityInBaseVersion;
     }
@@ -48,7 +48,7 @@ class MergeConflict extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Entity $entityInWorkspace
      */
-    public function setEntityInWorkspace(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity $entityInWorkspace)
+    public function setEntityInWorkspace(Entity $entityInWorkspace)
     {
         $this->entityInWorkspace = $entityInWorkspace;
     }
@@ -61,4 +61,4 @@ class MergeConflict extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\MergeConflict::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_MergeConflict');
+class_alias(MergeConflict::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_MergeConflict');

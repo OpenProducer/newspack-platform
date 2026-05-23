@@ -44,7 +44,7 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
      * @var string
      */
     public $name;
-    protected $planEntitlementsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PlanEntitlement::class;
+    protected $planEntitlementsType = PlanEntitlement::class;
     protected $planEntitlementsDataType = 'array';
     /**
      * Unique id for the plan shared externally.
@@ -64,7 +64,7 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
      * @var string
      */
     public $publicationId;
-    protected $purchaseInfoType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PurchaseInfo::class;
+    protected $purchaseInfoType = PurchaseInfo::class;
     protected $purchaseInfoDataType = '';
     /**
      * Unique id for reader shared externally. This field is to replace user_id
@@ -73,7 +73,7 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
      * @var string
      */
     public $readerId;
-    protected $recurringPlanDetailsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurringPlanDetails::class;
+    protected $recurringPlanDetailsType = RecurringPlanDetails::class;
     protected $recurringPlanDetailsDataType = '';
     /**
      * Unique id for the user shared externally.
@@ -174,7 +174,7 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
      *
      * @param PurchaseInfo $purchaseInfo
      */
-    public function setPurchaseInfo(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PurchaseInfo $purchaseInfo)
+    public function setPurchaseInfo(PurchaseInfo $purchaseInfo)
     {
         $this->purchaseInfo = $purchaseInfo;
     }
@@ -209,7 +209,7 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
      *
      * @param RecurringPlanDetails $recurringPlanDetails
      */
-    public function setRecurringPlanDetails(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurringPlanDetails $recurringPlanDetails)
+    public function setRecurringPlanDetails(RecurringPlanDetails $recurringPlanDetails)
     {
         $this->recurringPlanDetails = $recurringPlanDetails;
     }
@@ -240,4 +240,4 @@ class UserEntitlementsPlan extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\UserEntitlementsPlan::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_UserEntitlementsPlan');
+class_alias(UserEntitlementsPlan::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_UserEntitlementsPlan');

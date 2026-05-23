@@ -16,14 +16,14 @@ namespace Google\Site_Kit_Dependencies\Monolog\Processor;
  *
  * @author Andreas Hörnicke
  */
-class ProcessIdProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\ProcessorInterface
+class ProcessIdProcessor implements ProcessorInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record) : array
+    public function __invoke(array $record): array
     {
-        $record['extra']['process_id'] = \getmypid();
+        $record['extra']['process_id'] = getmypid();
         return $record;
     }
 }

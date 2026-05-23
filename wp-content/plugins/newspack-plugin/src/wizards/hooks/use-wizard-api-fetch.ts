@@ -93,6 +93,12 @@ export function useWizardApiFetch( slug: string ) {
 	const requests = useRef< string[] >( [] );
 
 	useEffect( () => {
+		if ( wizardData?.error !== error ) {
+			setError( wizardData?.error ?? null );
+		}
+	}, [ wizardData?.error, error ] );
+
+	useEffect( () => {
 		updateWizardSettings( {
 			slug,
 			path: [ 'error' ],

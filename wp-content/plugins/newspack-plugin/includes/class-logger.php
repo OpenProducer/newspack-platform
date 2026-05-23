@@ -21,6 +21,22 @@ class Logger {
 	 * @param string $type Type of the message.
 	 */
 	public static function log( $payload, $header = 'NEWSPACK', $type = 'info' ) {
+		/**
+		 * Controls logging verbosity across Newspack plugins.
+		 *
+		 * Levels:
+		 * - 0: Disabled (default)
+		 * - 1: Basic logging
+		 * - 2: Include caller function info
+		 * - 3+: Include data payload
+		 *
+		 * @constant NEWSPACK_LOG_LEVEL
+		 * @type     int
+		 * @default  Logging disabled (0)
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_LOG_LEVEL', 2 );
+		 */
 		if ( ! defined( 'NEWSPACK_LOG_LEVEL' ) || 0 >= (int) NEWSPACK_LOG_LEVEL ) {
 			return;
 		}

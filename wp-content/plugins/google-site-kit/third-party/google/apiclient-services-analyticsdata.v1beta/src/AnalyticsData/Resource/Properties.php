@@ -55,11 +55,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return BatchRunPivotReportsResponse
      * @throws \Google\Service\Exception
      */
-    public function batchRunPivotReports($property, \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BatchRunPivotReportsRequest $postBody, $optParams = [])
+    public function batchRunPivotReports($property, BatchRunPivotReportsRequest $postBody, $optParams = [])
     {
         $params = ['property' => $property, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchRunPivotReports', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BatchRunPivotReportsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchRunPivotReports', [$params], BatchRunPivotReportsResponse::class);
     }
     /**
      * Returns multiple reports in a batch. All reports must be for the same Google
@@ -76,11 +76,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return BatchRunReportsResponse
      * @throws \Google\Service\Exception
      */
-    public function batchRunReports($property, \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BatchRunReportsRequest $postBody, $optParams = [])
+    public function batchRunReports($property, BatchRunReportsRequest $postBody, $optParams = [])
     {
         $params = ['property' => $property, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchRunReports', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BatchRunReportsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchRunReports', [$params], BatchRunReportsResponse::class);
     }
     /**
      * This compatibility method lists dimensions and metrics that can be added to a
@@ -102,11 +102,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return CheckCompatibilityResponse
      * @throws \Google\Service\Exception
      */
-    public function checkCompatibility($property, \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CheckCompatibilityRequest $postBody, $optParams = [])
+    public function checkCompatibility($property, CheckCompatibilityRequest $postBody, $optParams = [])
     {
         $params = ['property' => $property, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('checkCompatibility', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CheckCompatibilityResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('checkCompatibility', [$params], CheckCompatibilityResponse::class);
     }
     /**
      * Returns metadata for dimensions and metrics available in reporting methods.
@@ -133,8 +133,8 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function getMetadata($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getMetadata', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Metadata::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getMetadata', [$params], Metadata::class);
     }
     /**
      * Returns a customized pivot report of your Google Analytics event data. Pivot
@@ -154,11 +154,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return RunPivotReportResponse
      * @throws \Google\Service\Exception
      */
-    public function runPivotReport($property, \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunPivotReportRequest $postBody, $optParams = [])
+    public function runPivotReport($property, RunPivotReportRequest $postBody, $optParams = [])
     {
         $params = ['property' => $property, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('runPivotReport', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunPivotReportResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('runPivotReport', [$params], RunPivotReportResponse::class);
     }
     /**
      * Returns a customized report of realtime event data for your property. Events
@@ -179,11 +179,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return RunRealtimeReportResponse
      * @throws \Google\Service\Exception
      */
-    public function runRealtimeReport($property, \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunRealtimeReportRequest $postBody, $optParams = [])
+    public function runRealtimeReport($property, RunRealtimeReportRequest $postBody, $optParams = [])
     {
         $params = ['property' => $property, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('runRealtimeReport', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunRealtimeReportResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('runRealtimeReport', [$params], RunRealtimeReportResponse::class);
     }
     /**
      * Returns a customized report of your Google Analytics event data. Reports
@@ -207,12 +207,12 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return RunReportResponse
      * @throws \Google\Service\Exception
      */
-    public function runReport($property, \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunReportRequest $postBody, $optParams = [])
+    public function runReport($property, RunReportRequest $postBody, $optParams = [])
     {
         $params = ['property' => $property, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('runReport', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunReportResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('runReport', [$params], RunReportResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Resource\Properties::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Resource_Properties');
+class_alias(Properties::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Resource_Properties');

@@ -41,9 +41,9 @@ class AccountsPayments extends \Google\Site_Kit_Dependencies\Google\Service\Reso
     public function listAccountsPayments($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListPaymentsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListPaymentsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsPayments::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsPayments');
+class_alias(AccountsPayments::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsPayments');

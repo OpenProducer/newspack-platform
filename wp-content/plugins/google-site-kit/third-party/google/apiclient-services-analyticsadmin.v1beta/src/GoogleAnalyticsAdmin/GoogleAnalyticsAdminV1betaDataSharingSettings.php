@@ -190,4 +190,4 @@ class GoogleAnalyticsAdminV1betaDataSharingSettings extends \Google\Site_Kit_Dep
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataSharingSettings::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaDataSharingSettings');
+class_alias(GoogleAnalyticsAdminV1betaDataSharingSettings::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaDataSharingSettings');

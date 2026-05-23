@@ -53,6 +53,17 @@ class Bylines {
 	 * @return bool True if the feature is enabled, false otherwise.
 	 */
 	public static function is_enabled() {
+		/**
+		 * Disables Newspack's custom bylines feature which provides enhanced
+		 * author attribution capabilities beyond standard WordPress.
+		 *
+		 * @constant NEWSPACK_CUSTOM_BYLINES_DISABLED
+		 * @type     bool
+		 * @default  Custom bylines feature enabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_CUSTOM_BYLINES_DISABLED', true );
+		 */
 		return ! defined( 'NEWSPACK_CUSTOM_BYLINES_DISABLED' ) || ! NEWSPACK_CUSTOM_BYLINES_DISABLED;
 	}
 

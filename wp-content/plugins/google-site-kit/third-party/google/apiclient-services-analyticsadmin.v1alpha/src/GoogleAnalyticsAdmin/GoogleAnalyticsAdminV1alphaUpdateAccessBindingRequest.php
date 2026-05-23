@@ -19,14 +19,14 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaUpdateAccessBindingRequest extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $accessBindingType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessBinding::class;
+    protected $accessBindingType = GoogleAnalyticsAdminV1alphaAccessBinding::class;
     protected $accessBindingDataType = '';
     /**
      * Required. The access binding to update.
      *
      * @param GoogleAnalyticsAdminV1alphaAccessBinding $accessBinding
      */
-    public function setAccessBinding(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessBinding $accessBinding)
+    public function setAccessBinding(GoogleAnalyticsAdminV1alphaAccessBinding $accessBinding)
     {
         $this->accessBinding = $accessBinding;
     }
@@ -39,4 +39,4 @@ class GoogleAnalyticsAdminV1alphaUpdateAccessBindingRequest extends \Google\Site
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaUpdateAccessBindingRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaUpdateAccessBindingRequest');
+class_alias(GoogleAnalyticsAdminV1alphaUpdateAccessBindingRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaUpdateAccessBindingRequest');

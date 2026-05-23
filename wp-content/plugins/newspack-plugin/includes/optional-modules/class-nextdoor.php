@@ -142,12 +142,34 @@ class Nextdoor {
 		$client_id     = '';
 		$client_secret = '';
 
+		/**
+		 * OAuth Client ID for Nextdoor integration. Can also be set
+		 * via environment variable.
+		 *
+		 * @constant NEWSPACK_NEXTDOOR_CLIENT_ID
+		 * @type     string
+		 * @default  Nextdoor integration unavailable
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_NEXTDOOR_CLIENT_ID', 'your-client-id' );
+		 */
 		if ( defined( 'NEWSPACK_NEXTDOOR_CLIENT_ID' ) ) {
 			$client_id = NEWSPACK_NEXTDOOR_CLIENT_ID;
 		} elseif ( getenv( 'NEWSPACK_NEXTDOOR_CLIENT_ID' ) ) {
 			$client_id = getenv( 'NEWSPACK_NEXTDOOR_CLIENT_ID' );
 		}
 
+		/**
+		 * OAuth Client Secret for Nextdoor integration. Can also be set
+		 * via environment variable.
+		 *
+		 * @constant NEWSPACK_NEXTDOOR_CLIENT_SECRET
+		 * @type     string
+		 * @default  Nextdoor integration unavailable
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_NEXTDOOR_CLIENT_SECRET', 'your-client-secret' );
+		 */
 		if ( defined( 'NEWSPACK_NEXTDOOR_CLIENT_SECRET' ) ) {
 			$client_secret = NEWSPACK_NEXTDOOR_CLIENT_SECRET;
 		} elseif ( getenv( 'NEWSPACK_NEXTDOOR_CLIENT_SECRET' ) ) {

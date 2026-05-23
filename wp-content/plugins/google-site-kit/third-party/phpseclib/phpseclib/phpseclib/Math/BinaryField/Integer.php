@@ -28,7 +28,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\Common\FiniteField\Integer as B
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\FiniteField\Integer
+class Integer extends Base
 {
     /**
      * Holds the BinaryField's value
@@ -60,7 +60,7 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
     public function __construct($instanceID, $num = '')
     {
         $this->instanceID = $instanceID;
-        if (!\strlen($num)) {
+        if (!strlen($num)) {
             $this->value = '';
         } else {
             $reduce = static::$reduce[$instanceID];
@@ -91,7 +91,7 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
     private static function checkInstance(self $x, self $y)
     {
         if ($x->instanceID != $y->instanceID) {
-            throw new \UnexpectedValueException('The instances of the two BinaryField\\Integer objects do not match');
+            throw new \UnexpectedValueException('The instances of the two BinaryField\Integer objects do not match');
         }
     }
     /**
@@ -114,10 +114,10 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
         static::checkInstance($this, $x);
         $a = $this->value;
         $b = $x->value;
-        $length = \max(\strlen($a), \strlen($b));
-        $a = \str_pad($a, $length, "\x00", \STR_PAD_LEFT);
-        $b = \str_pad($b, $length, "\x00", \STR_PAD_LEFT);
-        return \strcmp($a, $b);
+        $length = max(strlen($a), strlen($b));
+        $a = str_pad($a, $length, "\x00", \STR_PAD_LEFT);
+        $b = str_pad($b, $length, "\x00", \STR_PAD_LEFT);
+        return strcmp($a, $b);
     }
     /**
      * Returns the degree of the polynomial
@@ -127,14 +127,14 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     private static function deg($x)
     {
-        $x = \ltrim($x, "\x00");
-        $xbit = \decbin(\ord($x[0]));
-        $xlen = $xbit == '0' ? 0 : \strlen($xbit);
-        $len = \strlen($x);
+        $x = ltrim($x, "\x00");
+        $xbit = decbin(ord($x[0]));
+        $xlen = $xbit == '0' ? 0 : strlen($xbit);
+        $len = strlen($x);
         if (!$len) {
             return -1;
         }
-        return 8 * \strlen($x) - 9 + $xlen;
+        return 8 * strlen($x) - 9 + $xlen;
     }
     /**
      * Perform polynomial division
@@ -146,19 +146,19 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
     {
         // in wikipedia's description of the algorithm, lc() is the leading coefficient. over a binary field that's
         // always going to be 1.
-        $q = \chr(0);
+        $q = chr(0);
         $d = static::deg($y);
         $r = $x;
         while (($degr = static::deg($r)) >= $d) {
-            $s = '1' . \str_repeat('0', $degr - $d);
-            $s = \Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField::base2ToBase256($s);
-            $length = \max(\strlen($s), \strlen($q));
-            $q = !isset($q) ? $s : \str_pad($q, $length, "\x00", \STR_PAD_LEFT) ^ \str_pad($s, $length, "\x00", \STR_PAD_LEFT);
+            $s = '1' . str_repeat('0', $degr - $d);
+            $s = BinaryField::base2ToBase256($s);
+            $length = max(strlen($s), strlen($q));
+            $q = !isset($q) ? $s : str_pad($q, $length, "\x00", \STR_PAD_LEFT) ^ str_pad($s, $length, "\x00", \STR_PAD_LEFT);
             $s = static::polynomialMultiply($s, $y);
-            $length = \max(\strlen($r), \strlen($s));
-            $r = \str_pad($r, $length, "\x00", \STR_PAD_LEFT) ^ \str_pad($s, $length, "\x00", \STR_PAD_LEFT);
+            $length = max(strlen($r), strlen($s));
+            $r = str_pad($r, $length, "\x00", \STR_PAD_LEFT) ^ str_pad($s, $length, "\x00", \STR_PAD_LEFT);
         }
-        return [\ltrim($q, "\x00"), \ltrim($r, "\x00")];
+        return [ltrim($q, "\x00"), ltrim($r, "\x00")];
     }
     /**
      * Perform polynomial multiplation in the traditional way
@@ -168,28 +168,28 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     private static function regularPolynomialMultiply($x, $y)
     {
-        $precomputed = [\ltrim($x, "\x00")];
-        $x = \strrev(\Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField::base256ToBase2($x));
-        $y = \strrev(\Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField::base256ToBase2($y));
-        if (\strlen($x) == \strlen($y)) {
-            $length = \strlen($x);
+        $precomputed = [ltrim($x, "\x00")];
+        $x = strrev(BinaryField::base256ToBase2($x));
+        $y = strrev(BinaryField::base256ToBase2($y));
+        if (strlen($x) == strlen($y)) {
+            $length = strlen($x);
         } else {
-            $length = \max(\strlen($x), \strlen($y));
-            $x = \str_pad($x, $length, '0');
-            $y = \str_pad($y, $length, '0');
+            $length = max(strlen($x), strlen($y));
+            $x = str_pad($x, $length, '0');
+            $y = str_pad($y, $length, '0');
         }
-        $result = \str_repeat('0', 2 * $length - 1);
-        $result = \Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField::base2ToBase256($result);
-        $size = \strlen($result);
-        $x = \strrev($x);
+        $result = str_repeat('0', 2 * $length - 1);
+        $result = BinaryField::base2ToBase256($result);
+        $size = strlen($result);
+        $x = strrev($x);
         // precompute left shift 1 through 7
         for ($i = 1; $i < 8; $i++) {
-            $precomputed[$i] = \Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField::base2ToBase256($x . \str_repeat('0', $i));
+            $precomputed[$i] = BinaryField::base2ToBase256($x . str_repeat('0', $i));
         }
-        for ($i = 0; $i < \strlen($y); $i++) {
+        for ($i = 0; $i < strlen($y); $i++) {
             if ($y[$i] == '1') {
-                $temp = $precomputed[$i & 7] . \str_repeat("\x00", $i >> 3);
-                $result ^= \str_pad($temp, $size, "\x00", \STR_PAD_LEFT);
+                $temp = $precomputed[$i & 7] . str_repeat("\x00", $i >> 3);
+                $result ^= str_pad($temp, $size, "\x00", \STR_PAD_LEFT);
             }
         }
         return $result;
@@ -204,30 +204,30 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     private static function polynomialMultiply($x, $y)
     {
-        if (\strlen($x) == \strlen($y)) {
-            $length = \strlen($x);
+        if (strlen($x) == strlen($y)) {
+            $length = strlen($x);
         } else {
-            $length = \max(\strlen($x), \strlen($y));
-            $x = \str_pad($x, $length, "\x00", \STR_PAD_LEFT);
-            $y = \str_pad($y, $length, "\x00", \STR_PAD_LEFT);
+            $length = max(strlen($x), strlen($y));
+            $x = str_pad($x, $length, "\x00", \STR_PAD_LEFT);
+            $y = str_pad($y, $length, "\x00", \STR_PAD_LEFT);
         }
         switch (\true) {
             case \PHP_INT_SIZE == 8 && $length <= 4:
-                return $length != 4 ? self::subMultiply(\str_pad($x, 4, "\x00", \STR_PAD_LEFT), \str_pad($y, 4, "\x00", \STR_PAD_LEFT)) : self::subMultiply($x, $y);
+                return $length != 4 ? self::subMultiply(str_pad($x, 4, "\x00", \STR_PAD_LEFT), str_pad($y, 4, "\x00", \STR_PAD_LEFT)) : self::subMultiply($x, $y);
             case \PHP_INT_SIZE == 4 || $length > 32:
                 return self::regularPolynomialMultiply($x, $y);
         }
         $m = $length >> 1;
-        $x1 = \substr($x, 0, -$m);
-        $x0 = \substr($x, -$m);
-        $y1 = \substr($y, 0, -$m);
-        $y0 = \substr($y, -$m);
+        $x1 = substr($x, 0, -$m);
+        $x0 = substr($x, -$m);
+        $y1 = substr($y, 0, -$m);
+        $y0 = substr($y, -$m);
         $z2 = self::polynomialMultiply($x1, $y1);
         $z0 = self::polynomialMultiply($x0, $y0);
         $z1 = self::polynomialMultiply(self::subAdd2($x1, $x0), self::subAdd2($y1, $y0));
         $z1 = self::subAdd3($z1, $z2, $z0);
-        $xy = self::subAdd3($z2 . \str_repeat("\x00", 2 * $m), $z1 . \str_repeat("\x00", $m), $z0);
-        return \ltrim($xy, "\x00");
+        $xy = self::subAdd3($z2 . str_repeat("\x00", 2 * $m), $z1 . str_repeat("\x00", $m), $z0);
+        return ltrim($xy, "\x00");
     }
     /**
      * Perform polynomial multiplication on 2x 32-bit numbers, returning
@@ -240,8 +240,8 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     private static function subMultiply($x, $y)
     {
-        $x = \unpack('N', $x)[1];
-        $y = \unpack('N', $y)[1];
+        $x = unpack('N', $x)[1];
+        $y = unpack('N', $y)[1];
         $x0 = $x & 0x11111111;
         $x1 = $x & 0x22222222;
         $x2 = $x & 0x44444444;
@@ -260,7 +260,7 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
         $z3 &= -8608480567731124088;
         // 0x8888888888888888 gets interpreted as a float
         $z = $z0 | $z1 | $z2 | $z3;
-        return \pack('J', $z);
+        return pack('J', $z);
     }
     /**
      * Adds two numbers
@@ -271,9 +271,9 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     private static function subAdd2($x, $y)
     {
-        $length = \max(\strlen($x), \strlen($y));
-        $x = \str_pad($x, $length, "\x00", \STR_PAD_LEFT);
-        $y = \str_pad($y, $length, "\x00", \STR_PAD_LEFT);
+        $length = max(strlen($x), strlen($y));
+        $x = str_pad($x, $length, "\x00", \STR_PAD_LEFT);
+        $y = str_pad($y, $length, "\x00", \STR_PAD_LEFT);
         return $x ^ $y;
     }
     /**
@@ -285,10 +285,10 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     private static function subAdd3($x, $y, $z)
     {
-        $length = \max(\strlen($x), \strlen($y), \strlen($z));
-        $x = \str_pad($x, $length, "\x00", \STR_PAD_LEFT);
-        $y = \str_pad($y, $length, "\x00", \STR_PAD_LEFT);
-        $z = \str_pad($z, $length, "\x00", \STR_PAD_LEFT);
+        $length = max(strlen($x), strlen($y), strlen($z));
+        $x = str_pad($x, $length, "\x00", \STR_PAD_LEFT);
+        $y = str_pad($y, $length, "\x00", \STR_PAD_LEFT);
+        $z = str_pad($z, $length, "\x00", \STR_PAD_LEFT);
         return $x ^ $y ^ $z;
     }
     /**
@@ -299,9 +299,9 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
     public function add(self $y)
     {
         static::checkInstance($this, $y);
-        $length = \strlen(static::$modulo[$this->instanceID]);
-        $x = \str_pad($this->value, $length, "\x00", \STR_PAD_LEFT);
-        $y = \str_pad($y->value, $length, "\x00", \STR_PAD_LEFT);
+        $length = strlen(static::$modulo[$this->instanceID]);
+        $x = str_pad($this->value, $length, "\x00", \STR_PAD_LEFT);
+        $y = str_pad($y->value, $length, "\x00", \STR_PAD_LEFT);
         return new static($this->instanceID, $x ^ $y);
     }
     /**
@@ -345,12 +345,12 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
             // row n-2 and the product of the quotient and the auxiliary in row
             // n-1
             $temp = static::polynomialMultiply($aux1, $q);
-            $aux = \str_pad($aux0, \strlen($temp), "\x00", \STR_PAD_LEFT) ^ \str_pad($temp, \strlen($aux0), "\x00", \STR_PAD_LEFT);
+            $aux = str_pad($aux0, strlen($temp), "\x00", \STR_PAD_LEFT) ^ str_pad($temp, strlen($aux0), "\x00", \STR_PAD_LEFT);
             $aux0 = $aux1;
             $aux1 = $aux;
         }
         $temp = new static($this->instanceID);
-        $temp->value = \ltrim($aux1, "\x00");
+        $temp->value = ltrim($aux1, "\x00");
         return $temp;
     }
     /**
@@ -374,7 +374,7 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     public function negate()
     {
-        $x = \str_pad($this->value, \strlen(static::$modulo[$this->instanceID]), "\x00", \STR_PAD_LEFT);
+        $x = str_pad($this->value, strlen(static::$modulo[$this->instanceID]), "\x00", \STR_PAD_LEFT);
         return new static($this->instanceID, $x ^ static::$modulo[$this->instanceID]);
     }
     /**
@@ -393,7 +393,7 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     public function toBytes()
     {
-        return \str_pad($this->value, \strlen(static::$modulo[$this->instanceID]), "\x00", \STR_PAD_LEFT);
+        return str_pad($this->value, strlen(static::$modulo[$this->instanceID]), "\x00", \STR_PAD_LEFT);
     }
     /**
      * Converts an Integer to a hex string (eg. base-16).
@@ -402,7 +402,7 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     public function toHex()
     {
-        return \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::bin2hex($this->toBytes());
+        return Strings::bin2hex($this->toBytes());
     }
     /**
      * Converts an Integer to a bit string (eg. base-2).
@@ -412,7 +412,7 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
     public function toBits()
     {
         //return str_pad(BinaryField::base256ToBase2($this->value), strlen(static::$modulo[$this->instanceID]), '0', STR_PAD_LEFT);
-        return \Google\Site_Kit_Dependencies\phpseclib3\Math\BinaryField::base256ToBase2($this->value);
+        return BinaryField::base256ToBase2($this->value);
     }
     /**
      * Converts an Integer to a BigInteger
@@ -421,7 +421,7 @@ class Integer extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\Finit
      */
     public function toBigInteger()
     {
-        return new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($this->value, 256);
+        return new BigInteger($this->value, 256);
     }
     /**
      *  __toString() magic method

@@ -19,11 +19,11 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 
 class DimensionExpression extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $concatenateType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ConcatenateExpression::class;
+    protected $concatenateType = ConcatenateExpression::class;
     protected $concatenateDataType = '';
-    protected $lowerCaseType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CaseExpression::class;
+    protected $lowerCaseType = CaseExpression::class;
     protected $lowerCaseDataType = '';
-    protected $upperCaseType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CaseExpression::class;
+    protected $upperCaseType = CaseExpression::class;
     protected $upperCaseDataType = '';
     /**
      * Used to combine dimension values to a single dimension. For example,
@@ -31,7 +31,7 @@ class DimensionExpression extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param ConcatenateExpression $concatenate
      */
-    public function setConcatenate(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ConcatenateExpression $concatenate)
+    public function setConcatenate(ConcatenateExpression $concatenate)
     {
         $this->concatenate = $concatenate;
     }
@@ -47,7 +47,7 @@ class DimensionExpression extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param CaseExpression $lowerCase
      */
-    public function setLowerCase(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CaseExpression $lowerCase)
+    public function setLowerCase(CaseExpression $lowerCase)
     {
         $this->lowerCase = $lowerCase;
     }
@@ -63,7 +63,7 @@ class DimensionExpression extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param CaseExpression $upperCase
      */
-    public function setUpperCase(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CaseExpression $upperCase)
+    public function setUpperCase(CaseExpression $upperCase)
     {
         $this->upperCase = $upperCase;
     }
@@ -76,4 +76,4 @@ class DimensionExpression extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_DimensionExpression');
+class_alias(DimensionExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_DimensionExpression');

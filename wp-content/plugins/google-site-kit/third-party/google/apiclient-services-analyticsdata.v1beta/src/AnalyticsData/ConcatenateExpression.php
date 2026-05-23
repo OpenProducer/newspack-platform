@@ -76,4 +76,4 @@ class ConcatenateExpression extends \Google\Site_Kit_Dependencies\Google\Collect
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ConcatenateExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_ConcatenateExpression');
+class_alias(ConcatenateExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_ConcatenateExpression');

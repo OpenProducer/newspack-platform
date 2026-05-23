@@ -38,11 +38,11 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
      * @return UserPermission
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission $postBody, $optParams = [])
+    public function create($parent, UserPermission $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], UserPermission::class);
     }
     /**
      * Removes a user from the account, revoking access to it and all of its
@@ -55,7 +55,7 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -69,8 +69,8 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], UserPermission::class);
     }
     /**
      * List all users that have access to the account along with Account and
@@ -88,8 +88,8 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
     public function listAccountsUserPermissions($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListUserPermissionsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListUserPermissionsResponse::class);
     }
     /**
      * Updates a user's Account & Container access. (user_permissions.update)
@@ -100,12 +100,12 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
      * @return UserPermission
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission $postBody, $optParams = [])
+    public function update($path, UserPermission $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], UserPermission::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsUserPermissions::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsUserPermissions');
+class_alias(AccountsUserPermissions::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsUserPermissions');

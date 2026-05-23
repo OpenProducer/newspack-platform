@@ -87,23 +87,11 @@ class Contact_Sync_Connector {
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
 	public static function reader_registered( $timestamp, $data, $client_id ) {
-		$metadata = [
-			'account'           => $data['user_id'],
-			'registration_date' => gmdate( Sync_Metadata::DATE_FORMAT, $timestamp ),
-		];
-		if ( isset( $data['metadata']['current_page_url'] ) ) {
-			$metadata['registration_page'] = $data['metadata']['current_page_url'];
-		}
-		if ( isset( $data['metadata']['registration_method'] ) ) {
-			$metadata['registration_method'] = $data['metadata']['registration_method'];
+		if ( empty( $data['user_id'] ) ) {
+			return;
 		}
 
-		$contact = [
-			'email'    => $data['email'],
-			'metadata' => $metadata,
-		];
-
-		Contact_Sync::sync( $contact, 'RAS Reader registration' );
+		Contact_Sync::sync_contact( $data['user_id'], 'RAS Reader registration' );
 	}
 
 	/**
@@ -125,9 +113,7 @@ class Contact_Sync_Connector {
 			return;
 		}
 
-		$contact = Sync_WooCommerce::get_contact_from_customer( $customer );
-
-		Contact_Sync::sync( $contact, 'RAS Reader login' );
+		Contact_Sync::sync_contact( $data['user_id'], 'RAS Reader login' );
 	}
 
 	/**
@@ -138,7 +124,7 @@ class Contact_Sync_Connector {
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
 	public static function order_completed( $timestamp, $data, $client_id ) {
-		if ( ! isset( $data['platform_data']['order_id'] ) ) {
+		if ( ! isset( $data['platform_data']['order_id'] ) || ! function_exists( 'wc_get_order' ) ) {
 			return;
 		}
 
@@ -149,13 +135,13 @@ class Contact_Sync_Connector {
 		}
 
 		$order_id = $data['platform_data']['order_id'];
-		$contact  = Sync_WooCommerce::get_contact_from_order( $order_id, $data['referer'] );
+		$order = \wc_get_order( $order_id );
 
-		if ( ! $contact ) {
+		if ( ! $order instanceof \WC_Order ) {
 			return;
 		}
 
-		Contact_Sync::sync( $contact, 'RAS Order completed' );
+		Contact_Sync::sync_contact( $order, 'RAS Order completed' );
 	}
 
 	/**
@@ -166,18 +152,18 @@ class Contact_Sync_Connector {
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
 	public static function subscription_updated( $timestamp, $data, $client_id ) {
-		if ( empty( $data['status_before'] ) || empty( $data['status_after'] ) || empty( $data['subscription_id'] ) ) {
+		if ( empty( $data['status_before'] ) || empty( $data['status_after'] ) || empty( $data['subscription_id'] ) || ! function_exists( 'wcs_get_subscription' ) ) {
 			return;
 		}
 
-		$contact = Sync_WooCommerce::get_contact_from_order( $data['subscription_id'] );
+		$order = \wcs_get_subscription( $data['subscription_id'] );
 
-		if ( ! $contact ) {
+		if ( ! $order instanceof \WC_Order ) {
 			return;
 		}
 
-		Contact_Sync::sync(
-			$contact,
+		Contact_Sync::sync_contact(
+			$order,
 			sprintf(
 				'RAS Woo Subscription updated. Status changed from %s to %s',
 				$data['status_before'],
@@ -203,7 +189,7 @@ class Contact_Sync_Connector {
 		* second one setting it back to active. This sometimes creates a race condition on the ESP side.
 		* This third request will make sure the ESP always has the correct and most up to date data about the reader.
 		*/
-		self::schedule_sync(
+		Contact_Sync::schedule_sync(
 			$data['user_id'],
 			sprintf(
 				// Translators: %d is the subscription ID and %s is the customer's email address.
@@ -323,26 +309,8 @@ class Contact_Sync_Connector {
 		$user_id = $data['user_id'];
 		$registration_site = $data['registration_site'];
 
-		$contact = Sync_WooCommerce::get_contact_from_customer( new \WC_Customer( $user_id ) );
-
-		if ( ! $contact ) {
-			return;
-		}
-
-		// Ensure email is set as the user probably won't have a billing email.
-		if ( empty( $contact['email'] ) ) {
-			$user = get_userdata( $user_id );
-			$contact['email'] = $user->user_email;
-		}
-
-		if ( empty( $contact['metadata'] ) ) {
-			$contact['metadata'] = [];
-		}
-
-		$contact['metadata']['network_registration_site'] = $registration_site;
-
 		$site_url = get_site_url();
-		Contact_Sync::sync( $contact, sprintf( 'RAS Newspack Network: User propagated from another site in the network. Propagated from %s to %s.', $registration_site, $site_url ) );
+		Contact_Sync::sync_contact( $user_id, sprintf( 'RAS Newspack Network: User propagated from another site in the network. Propagated from %s to %s.', $registration_site, $site_url ) );
 	}
 }
 Contact_Sync_Connector::init_hooks();

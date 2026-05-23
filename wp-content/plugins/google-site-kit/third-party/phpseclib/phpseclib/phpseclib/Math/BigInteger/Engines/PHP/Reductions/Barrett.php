@@ -19,7 +19,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Base;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Base
+abstract class Barrett extends Base
 {
     /**
      * Barrett Modular Reduction
@@ -47,9 +47,9 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
     protected static function reduce(array $n, array $m, $class)
     {
         static $cache = [self::VARIABLE => [], self::DATA => []];
-        $m_length = \count($m);
+        $m_length = count($m);
         // if (self::compareHelper($n, $static::square($m)) >= 0) {
-        if (\count($n) > 2 * $m_length) {
+        if (count($n) > 2 * $m_length) {
             $lhs = new $class();
             $rhs = new $class();
             $lhs->value = $n;
@@ -65,12 +65,12 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
         $correctionNeeded = \false;
         if ($m_length & 1) {
             $correctionNeeded = \true;
-            \array_unshift($n, 0);
-            \array_unshift($m, 0);
+            array_unshift($n, 0);
+            array_unshift($m, 0);
             $m_length++;
         }
-        if (($key = \array_search($m, $cache[self::VARIABLE])) === \false) {
-            $key = \count($cache[self::VARIABLE]);
+        if (($key = array_search($m, $cache[self::VARIABLE])) === \false) {
+            $key = count($cache[self::VARIABLE]);
             $cache[self::VARIABLE][] = $m;
             $lhs = new $class();
             $lhs_value =& $lhs->value;
@@ -87,12 +87,14 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
                 'm1' => $m1,
             ];
         } else {
-            \extract($cache[self::DATA][$key]);
+            $cacheValues = $cache[self::DATA][$key];
+            $u = $cacheValues['u'];
+            $m1 = $cacheValues['m1'];
         }
         $cutoff = $m_length + ($m_length >> 1);
-        $lsd = \array_slice($n, 0, $cutoff);
+        $lsd = array_slice($n, 0, $cutoff);
         // m.length + (m.length >> 1)
-        $msd = \array_slice($n, $cutoff);
+        $msd = array_slice($n, $cutoff);
         // m.length >> 1
         $lsd = self::trim($lsd);
         $temp = $class::multiplyHelper($msd, \false, $m1, \false);
@@ -103,7 +105,7 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
         //    return self::regularBarrett($n[self::VALUE], $m, $class);
         //}
         // (m.length + (m.length >> 1) + 1) - (m.length - 1) == (m.length >> 1) + 2
-        $temp = \array_slice($n[self::VALUE], $m_length - 1);
+        $temp = array_slice($n[self::VALUE], $m_length - 1);
         // if even: ((m.length >> 1) + 2) + (m.length >> 1) == m.length + 2
         // if odd:  ((m.length >> 1) + 2) + (m.length >> 1) == (m.length - 1) + 2 == m.length + 1
         // note that these are upper bounds. let's say m.length is 2. then you'd be multiplying a
@@ -113,7 +115,7 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
         $temp = $class::multiplyHelper($temp, \false, $u, \false);
         // if even: (m.length + 2) - ((m.length >> 1) + 1) = m.length - (m.length >> 1) + 1
         // if odd:  (m.length + 1) - ((m.length >> 1) + 1) = m.length - (m.length >> 1)
-        $temp = \array_slice($temp[self::VALUE], ($m_length >> 1) + 1);
+        $temp = array_slice($temp[self::VALUE], ($m_length >> 1) + 1);
         // if even: (m.length - (m.length >> 1) + 1) + m.length = 2 * m.length - (m.length >> 1) + 1
         // if odd:  (m.length - (m.length >> 1)) + m.length     = 2 * m.length - (m.length >> 1)
         $temp = $class::multiplyHelper($temp, \false, $m, \false);
@@ -125,7 +127,7 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
             $result = $class::subtractHelper($result[self::VALUE], $result[self::SIGN], $m, \false);
         }
         if ($correctionNeeded) {
-            \array_shift($result[self::VALUE]);
+            array_shift($result[self::VALUE]);
         }
         return $result[self::VALUE];
     }
@@ -143,8 +145,8 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
     private static function regularBarrett(array $x, array $n, $class)
     {
         static $cache = [self::VARIABLE => [], self::DATA => []];
-        $n_length = \count($n);
-        if (\count($x) > 2 * $n_length) {
+        $n_length = count($n);
+        if (count($x) > 2 * $n_length) {
             $lhs = new $class();
             $rhs = new $class();
             $lhs->value = $x;
@@ -152,8 +154,8 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
             list(, $temp) = $lhs->divide($rhs);
             return $temp->value;
         }
-        if (($key = \array_search($n, $cache[self::VARIABLE])) === \false) {
-            $key = \count($cache[self::VARIABLE]);
+        if (($key = array_search($n, $cache[self::VARIABLE])) === \false) {
+            $key = count($cache[self::VARIABLE]);
             $cache[self::VARIABLE][] = $n;
             $lhs = new $class();
             $lhs_value =& $lhs->value;
@@ -166,19 +168,19 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
             $cache[self::DATA][] = $temp->value;
         }
         // 2 * m.length - (m.length - 1) = m.length + 1
-        $temp = \array_slice($x, $n_length - 1);
+        $temp = array_slice($x, $n_length - 1);
         // (m.length + 1) + m.length = 2 * m.length + 1
         $temp = $class::multiplyHelper($temp, \false, $cache[self::DATA][$key], \false);
         // (2 * m.length + 1) - (m.length - 1) = m.length + 2
-        $temp = \array_slice($temp[self::VALUE], $n_length + 1);
+        $temp = array_slice($temp[self::VALUE], $n_length + 1);
         // m.length + 1
-        $result = \array_slice($x, 0, $n_length + 1);
+        $result = array_slice($x, 0, $n_length + 1);
         // m.length + 1
         $temp = self::multiplyLower($temp, \false, $n, \false, $n_length + 1, $class);
         // $temp == array_slice($class::regularMultiply($temp, false, $n, false)->value, 0, $n_length + 1)
         if (self::compareHelper($result, \false, $temp[self::VALUE], $temp[self::SIGN]) < 0) {
             $corrector_value = self::array_repeat(0, $n_length + 1);
-            $corrector_value[\count($corrector_value)] = 1;
+            $corrector_value[count($corrector_value)] = 1;
             $result = $class::addHelper($result, \false, $corrector_value, \false);
             $result = $result[self::VALUE];
         }
@@ -205,8 +207,8 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
      */
     private static function multiplyLower(array $x_value, $x_negative, array $y_value, $y_negative, $stop, $class)
     {
-        $x_length = \count($x_value);
-        $y_length = \count($y_value);
+        $x_length = count($x_value);
+        $y_length = count($y_value);
         if (!$x_length || !$y_length) {
             // a 0 is being multiplied
             return [self::VALUE => [], self::SIGN => \false];
@@ -215,8 +217,8 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
             $temp = $x_value;
             $x_value = $y_value;
             $y_value = $temp;
-            $x_length = \count($x_value);
-            $y_length = \count($y_value);
+            $x_length = count($x_value);
+            $y_length = count($y_value);
         }
         $product_value = self::array_repeat(0, $x_length + $y_length);
         // the following for loop could be removed if the for loop following it
@@ -229,7 +231,7 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
             // ie. $i = 0, $k = $i
             $temp = $x_value[$j] * $y_value[0] + $carry;
             // $product_value[$k] == 0
-            $carry = $class::BASE === 26 ? \intval($temp / 0x4000000) : $temp >> 31;
+            $carry = $class::BASE === 26 ? intval($temp / 0x4000000) : $temp >> 31;
             $product_value[$j] = (int) ($temp - $class::BASE_FULL * $carry);
         }
         if ($j < $stop) {
@@ -241,7 +243,7 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
             $carry = 0;
             for ($j = 0, $k = $i; $j < $x_length && $k < $stop; ++$j, ++$k) {
                 $temp = $product_value[$k] + $x_value[$j] * $y_value[$i] + $carry;
-                $carry = $class::BASE === 26 ? \intval($temp / 0x4000000) : $temp >> 31;
+                $carry = $class::BASE === 26 ? intval($temp / 0x4000000) : $temp >> 31;
                 $product_value[$k] = (int) ($temp - $class::BASE_FULL * $carry);
             }
             if ($k < $stop) {

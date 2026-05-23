@@ -33,7 +33,7 @@ use Google\Site_Kit_Dependencies\Monolog\Utils;
  *
  * @author Andrius Putna <fordnox@gmail.com>
  */
-class FluentdFormatter implements \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+class FluentdFormatter implements FormatterInterface
 {
     /**
      * @var bool $levelTag should message level be a part of the fluentd tag
@@ -41,29 +41,29 @@ class FluentdFormatter implements \Google\Site_Kit_Dependencies\Monolog\Formatte
     protected $levelTag = \false;
     public function __construct(bool $levelTag = \false)
     {
-        if (!\function_exists('json_encode')) {
+        if (!function_exists('json_encode')) {
             throw new \RuntimeException('PHP\'s json extension is required to use Monolog\'s FluentdUnixFormatter');
         }
         $this->levelTag = $levelTag;
     }
-    public function isUsingLevelsInTag() : bool
+    public function isUsingLevelsInTag(): bool
     {
         return $this->levelTag;
     }
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         $tag = $record['channel'];
         if ($this->levelTag) {
-            $tag .= '.' . \strtolower($record['level_name']);
+            $tag .= '.' . strtolower($record['level_name']);
         }
         $message = ['message' => $record['message'], 'context' => $record['context'], 'extra' => $record['extra']];
         if (!$this->levelTag) {
             $message['level'] = $record['level'];
             $message['level_name'] = $record['level_name'];
         }
-        return \Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode([$tag, $record['datetime']->getTimestamp(), $message]);
+        return Utils::jsonEncode([$tag, $record['datetime']->getTimestamp(), $message]);
     }
-    public function formatBatch(array $records) : string
+    public function formatBatch(array $records): string
     {
         $message = '';
         foreach ($records as $record) {

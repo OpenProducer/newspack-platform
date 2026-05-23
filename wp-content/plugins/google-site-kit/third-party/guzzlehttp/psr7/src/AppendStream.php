@@ -9,7 +9,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
  *
  * This is a read-only stream decorator.
  */
-final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
+final class AppendStream implements StreamInterface
 {
     /** @var StreamInterface[] Streams being decorated */
     private $streams = [];
@@ -29,7 +29,7 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
             $this->addStream($stream);
         }
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         try {
             $this->rewind();
@@ -38,7 +38,7 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
             if (\PHP_VERSION_ID >= 70400) {
                 throw $e;
             }
-            \trigger_error(\sprintf('%s::__toString exception: %s', self::class, (string) $e), \E_USER_ERROR);
+            trigger_error(sprintf('%s::__toString exception: %s', self::class, (string) $e), \E_USER_ERROR);
             return '';
         }
     }
@@ -49,7 +49,7 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
      *
      * @throws \InvalidArgumentException if the stream is not readable
      */
-    public function addStream(\Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface $stream) : void
+    public function addStream(StreamInterface $stream): void
     {
         if (!$stream->isReadable()) {
             throw new \InvalidArgumentException('Each stream must be readable');
@@ -60,14 +60,14 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
         }
         $this->streams[] = $stream;
     }
-    public function getContents() : string
+    public function getContents(): string
     {
-        return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::copyToString($this);
+        return Utils::copyToString($this);
     }
     /**
      * Closes each attached stream.
      */
-    public function close() : void
+    public function close(): void
     {
         $this->pos = $this->current = 0;
         $this->seekable = \true;
@@ -91,7 +91,7 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
         $this->streams = [];
         return null;
     }
-    public function tell() : int
+    public function tell(): int
     {
         return $this->pos;
     }
@@ -101,7 +101,7 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
      * If any of the streams do not return a valid number, then the size of the
      * append stream cannot be determined and null is returned.
      */
-    public function getSize() : ?int
+    public function getSize(): ?int
     {
         $size = 0;
         foreach ($this->streams as $stream) {
@@ -113,18 +113,18 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
         }
         return $size;
     }
-    public function eof() : bool
+    public function eof(): bool
     {
-        return !$this->streams || $this->current >= \count($this->streams) - 1 && $this->streams[$this->current]->eof();
+        return !$this->streams || $this->current >= count($this->streams) - 1 && $this->streams[$this->current]->eof();
     }
-    public function rewind() : void
+    public function rewind(): void
     {
         $this->seek(0);
     }
     /**
      * Attempts to seek to the given position. Only supports SEEK_SET.
      */
-    public function seek($offset, $whence = \SEEK_SET) : void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         if (!$this->seekable) {
             throw new \RuntimeException('This AppendStream is not seekable');
@@ -142,7 +142,7 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
         }
         // Seek to the actual position by reading from each stream
         while ($this->pos < $offset && !$this->eof()) {
-            $result = $this->read(\min(8096, $offset - $this->pos));
+            $result = $this->read(min(8096, $offset - $this->pos));
             if ($result === '') {
                 break;
             }
@@ -151,10 +151,10 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
     /**
      * Reads from all of the appended streams until the length is met or EOF.
      */
-    public function read($length) : string
+    public function read($length): string
     {
         $buffer = '';
-        $total = \count($this->streams) - 1;
+        $total = count($this->streams) - 1;
         $remaining = $length;
         $progressToNext = \false;
         while ($remaining > 0) {
@@ -172,24 +172,24 @@ final class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Messa
                 continue;
             }
             $buffer .= $result;
-            $remaining = $length - \strlen($buffer);
+            $remaining = $length - strlen($buffer);
         }
-        $this->pos += \strlen($buffer);
+        $this->pos += strlen($buffer);
         return $buffer;
     }
-    public function isReadable() : bool
+    public function isReadable(): bool
     {
         return \true;
     }
-    public function isWritable() : bool
+    public function isWritable(): bool
     {
         return \false;
     }
-    public function isSeekable() : bool
+    public function isSeekable(): bool
     {
         return $this->seekable;
     }
-    public function write($string) : int
+    public function write($string): int
     {
         throw new \RuntimeException('Cannot write to an AppendStream');
     }

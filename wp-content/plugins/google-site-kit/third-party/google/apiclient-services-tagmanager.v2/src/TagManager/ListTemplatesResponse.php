@@ -26,7 +26,7 @@ class ListTemplatesResponse extends \Google\Site_Kit_Dependencies\Google\Collect
      * @var string
      */
     public $nextPageToken;
-    protected $templateType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class;
+    protected $templateType = CustomTemplate::class;
     protected $templateDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListTemplatesResponse extends \Google\Site_Kit_Dependencies\Google\Collect
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListTemplatesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListTemplatesResponse');
+class_alias(ListTemplatesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListTemplatesResponse');

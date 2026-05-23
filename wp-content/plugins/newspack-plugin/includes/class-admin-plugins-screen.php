@@ -214,6 +214,28 @@ class Admin_Plugins_Screen {
 		$installed_plugins   = array_values( array_intersect( array_keys( Plugin_Manager::get_managed_plugins() ), array_keys( Plugin_Manager::get_installed_plugins() ) ) );
 		$installed_plugins[] = 'newspack';
 
+		/**
+		 * URL to a plugin review request form. When set, displays a link
+		 * on the plugins screen for users to request plugin reviews.
+		 *
+		 * @constant NEWSPACK_PLUGIN_REVIEW_FORM_URL
+		 * @type     string
+		 * @default  No review form link shown
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_PLUGIN_REVIEW_FORM_URL', 'https://example.com/plugin-review' );
+		 */
+		/**
+		 * URL to an approved plugins list. When set, displays a link
+		 * on the plugins screen to view pre-approved plugins.
+		 *
+		 * @constant NEWSPACK_APPROVED_PLUGINS_LIST_LINK
+		 * @type     string
+		 * @default  No approved plugins list link shown
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_APPROVED_PLUGINS_LIST_LINK', 'https://example.com/approved-plugins' );
+		 */
 		$newspack_plugin_info = [
 			'plugins'                    => $plugins,
 			'installed_plugins'          => $installed_plugins,

@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 
 class Cohort extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $dateRangeType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DateRange::class;
+    protected $dateRangeType = DateRange::class;
     protected $dateRangeDataType = '';
     /**
      * Dimension used by the cohort. Required and only supports
@@ -55,7 +55,7 @@ class Cohort extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param DateRange $dateRange
      */
-    public function setDateRange(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DateRange $dateRange)
+    public function setDateRange(DateRange $dateRange)
     {
         $this->dateRange = $dateRange;
     }
@@ -104,4 +104,4 @@ class Cohort extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Cohort::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Cohort');
+class_alias(Cohort::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Cohort');

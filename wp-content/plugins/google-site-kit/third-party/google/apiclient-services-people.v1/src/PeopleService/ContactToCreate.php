@@ -19,14 +19,14 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class ContactToCreate extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $contactPersonType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $contactPersonType = Person::class;
     protected $contactPersonDataType = '';
     /**
      * Required. The person data to populate a newly created source.
      *
      * @param Person $contactPerson
      */
-    public function setContactPerson(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person $contactPerson)
+    public function setContactPerson(Person $contactPerson)
     {
         $this->contactPerson = $contactPerson;
     }
@@ -39,4 +39,4 @@ class ContactToCreate extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactToCreate::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ContactToCreate');
+class_alias(ContactToCreate::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ContactToCreate');

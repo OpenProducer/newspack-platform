@@ -67,4 +67,4 @@ class SetupTag extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\SetupTag::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_SetupTag');
+class_alias(SetupTag::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_SetupTag');

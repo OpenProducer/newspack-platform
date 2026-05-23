@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class NoticeReference
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['organization' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DisplayText::MAP, 'noticeNumbers' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'min' => 1, 'max' => 200, 'children' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER]]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['organization' => DisplayText::MAP, 'noticeNumbers' => ['type' => ASN1::TYPE_SEQUENCE, 'min' => 1, 'max' => 200, 'children' => ['type' => ASN1::TYPE_INTEGER]]]];
 }

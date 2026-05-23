@@ -16,7 +16,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-final class Parameters extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC
+final class Parameters extends EC
 {
     /**
      * Returns the parameters

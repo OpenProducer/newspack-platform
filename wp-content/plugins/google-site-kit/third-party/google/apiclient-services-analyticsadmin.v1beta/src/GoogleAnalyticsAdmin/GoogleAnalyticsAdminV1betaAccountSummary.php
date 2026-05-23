@@ -40,7 +40,7 @@ class GoogleAnalyticsAdminV1betaAccountSummary extends \Google\Site_Kit_Dependen
      * @var string
      */
     public $name;
-    protected $propertySummariesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaPropertySummary::class;
+    protected $propertySummariesType = GoogleAnalyticsAdminV1betaPropertySummary::class;
     protected $propertySummariesDataType = 'array';
     /**
      * Resource name of account referred to by this account summary Format:
@@ -110,4 +110,4 @@ class GoogleAnalyticsAdminV1betaAccountSummary extends \Google\Site_Kit_Dependen
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccountSummary::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccountSummary');
+class_alias(GoogleAnalyticsAdminV1betaAccountSummary::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccountSummary');

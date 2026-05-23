@@ -21,10 +21,10 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
 abstract class OrganizationalUnitNames
 {
     const MAP = [
-        'type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE,
+        'type' => ASN1::TYPE_SEQUENCE,
         'min' => 1,
         'max' => 4,
         // ub-organizational-units
-        'children' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_PRINTABLE_STRING],
+        'children' => ['type' => ASN1::TYPE_PRINTABLE_STRING],
     ];
 }

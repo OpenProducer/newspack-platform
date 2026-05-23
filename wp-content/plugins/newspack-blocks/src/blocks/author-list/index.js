@@ -20,7 +20,7 @@ import edit from './edit';
 import './editor.scss';
 import './view.scss';
 import metadata from './block.json';
-const { name, attributes, category } = metadata;
+const { name, attributes, apiVersion, category } = metadata;
 
 // Name must be exported separately.
 export { name };
@@ -37,19 +37,20 @@ authorCustomFields.forEach( field => {
 } );
 
 export const settings = {
+	apiVersion,
 	title,
 	icon: {
 		src: listView,
 		foreground: colors[ 'primary-400' ],
 	},
+	attributes,
+	category,
 	keywords: [ __( 'author', 'newspack-blocks' ), __( 'profile', 'newspack-blocks' ) ],
 	description: __( 'Display a list of author profile cards.', 'newspack-blocks' ),
 	styles: [
 		{ name: 'default', label: _x( 'Default', 'block style', 'newspack-blocks' ), isDefault: true },
 		{ name: 'center', label: _x( 'Centered', 'block style', 'newspack-blocks' ) },
 	],
-	attributes,
-	category,
 	supports: {
 		html: false,
 		default: '',

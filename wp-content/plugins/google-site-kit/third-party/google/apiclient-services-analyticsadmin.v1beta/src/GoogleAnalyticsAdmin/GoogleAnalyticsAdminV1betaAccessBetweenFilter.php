@@ -19,16 +19,16 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1betaAccessBetweenFilter extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $fromValueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaNumericValue::class;
+    protected $fromValueType = GoogleAnalyticsAdminV1betaNumericValue::class;
     protected $fromValueDataType = '';
-    protected $toValueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaNumericValue::class;
+    protected $toValueType = GoogleAnalyticsAdminV1betaNumericValue::class;
     protected $toValueDataType = '';
     /**
      * Begins with this number.
      *
      * @param GoogleAnalyticsAdminV1betaNumericValue $fromValue
      */
-    public function setFromValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaNumericValue $fromValue)
+    public function setFromValue(GoogleAnalyticsAdminV1betaNumericValue $fromValue)
     {
         $this->fromValue = $fromValue;
     }
@@ -44,7 +44,7 @@ class GoogleAnalyticsAdminV1betaAccessBetweenFilter extends \Google\Site_Kit_Dep
      *
      * @param GoogleAnalyticsAdminV1betaNumericValue $toValue
      */
-    public function setToValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaNumericValue $toValue)
+    public function setToValue(GoogleAnalyticsAdminV1betaNumericValue $toValue)
     {
         $this->toValue = $toValue;
     }
@@ -57,4 +57,4 @@ class GoogleAnalyticsAdminV1betaAccessBetweenFilter extends \Google\Site_Kit_Dep
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessBetweenFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessBetweenFilter');
+class_alias(GoogleAnalyticsAdminV1betaAccessBetweenFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessBetweenFilter');

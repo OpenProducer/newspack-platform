@@ -26,7 +26,7 @@ class ListVariablesResponse extends \Google\Site_Kit_Dependencies\Google\Collect
      * @var string
      */
     public $nextPageToken;
-    protected $variableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class;
+    protected $variableType = Variable::class;
     protected $variableDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListVariablesResponse extends \Google\Site_Kit_Dependencies\Google\Collect
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListVariablesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListVariablesResponse');
+class_alias(ListVariablesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListVariablesResponse');

@@ -52,6 +52,13 @@ final class Newspack_Popups_Model {
 	protected static $current_popup = null;
 
 	/**
+	 * Override for block theme detection (used in tests).
+	 *
+	 * @var boolean|null
+	 */
+	protected static $block_theme_override = null;
+
+	/**
 	 * Retrieve all Popups (first 100).
 	 *
 	 * @param  boolean $include_unpublished Whether to include unpublished posts.
@@ -279,13 +286,16 @@ final class Newspack_Popups_Model {
 	/**
 	 * Retrieve popup preview CPT post.
 	 *
-	 * @param string $post_id Post id.
-	 * @return object Popup object.
+	 * @param int|string $post_id Post id. Often a query-parameter string.
+	 * @return array|null Popup object array, or null if the post id does not resolve to a post.
 	 */
 	public static function retrieve_preview_popup( $post_id ) {
 		// Up-to-date post data is stored in an autosave.
 		$autosave    = wp_get_post_autosave( $post_id );
 		$post_object = $autosave ? $autosave : get_post( $post_id );
+		if ( ! $post_object ) {
+			return null;
+		}
 		// Setting proper id for correct API calls.
 		$post_object->ID = $post_id;
 
@@ -476,7 +486,7 @@ final class Newspack_Popups_Model {
 				'archive_insertion_is_repeating' => false,
 				'utm_suppression'                => null,
 				'post_types'                     => self::get_default_popup_post_types(),
-				'archive_page_types'             => self::get_supported_archive_page_types(),
+				'archive_page_types'             => self::get_archive_page_types_meta_default(),
 				'additional_classes'             => '',
 				'excluded_categories'            => [],
 				'excluded_tags'                  => [],
@@ -543,32 +553,37 @@ final class Newspack_Popups_Model {
 			[
 				'name'  => 'category',
 				/* translators: archive page */
-				'label' => __( 'Categories' ),
+				'label' => __( 'Categories', 'newspack-popups' ),
 			],
 			[
 				'name'  => 'tag',
 				/* translators: archive page */
-				'label' => __( 'Tags' ),
+				'label' => __( 'Tags', 'newspack-popups' ),
 			],
 			[
 				'name'  => 'author',
 				/* translators: archive page */
-				'label' => __( 'Authors' ),
+				'label' => __( 'Authors', 'newspack-popups' ),
 			],
 			[
 				'name'  => 'date',
 				/* translators: archive page */
-				'label' => __( 'Date' ),
+				'label' => __( 'Date', 'newspack-popups' ),
 			],
 			[
 				'name'  => 'post-type',
 				/* translators: archive page */
-				'label' => __( 'Custom Post Types' ),
+				'label' => __( 'Custom Post Types', 'newspack-popups' ),
 			],
 			[
 				'name'  => 'taxonomy',
 				/* translators: archive page */
-				'label' => __( 'Taxonomies' ),
+				'label' => __( 'Taxonomies', 'newspack-popups' ),
+			],
+			[
+				'name'  => 'home',
+				/* translators: the "Posts page" configured under Settings > Reading when a static front page is set. */
+				'label' => __( 'Posts Page', 'newspack-popups' ),
 			],
 		];
 	}
@@ -620,7 +635,26 @@ final class Newspack_Popups_Model {
 	 * Get the default supported archive page types.
 	 */
 	public static function get_default_popup_archive_page_types() {
-		return [ 'category', 'tag', 'author', 'date', 'post-type', 'taxonomy' ];
+		return [ 'home', 'category', 'tag', 'author', 'date', 'post-type', 'taxonomy' ];
+	}
+
+	/**
+	 * Default value for the `archive_page_types` meta when a prompt has no
+	 * stored value.
+	 *
+	 * Returns the full default set minus opt-in additions (like 'home') so that
+	 * prompts created before a new page type was introduced keep their
+	 * pre-existing behavior — adding a new page type should never retroactively
+	 * widen where existing prompts render.
+	 *
+	 * Two call sites must stay in sync; both should keep calling this method
+	 * rather than inlining a value:
+	 *   - The `default` for the `archive_page_types` register_meta() call in
+	 *     Newspack_Popups::register_meta() (class-newspack-popups.php).
+	 *   - The wp_parse_args fallback in self::create_popup_options() above.
+	 */
+	public static function get_archive_page_types_meta_default() {
+		return array_values( array_diff( self::get_default_popup_archive_page_types(), [ 'home' ] ) );
 	}
 
 	/**
@@ -953,6 +987,28 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
+	 * Check if the current theme is a block theme.
+	 *
+	 * @return boolean True if the current theme is a block theme.
+	 */
+	public static function is_block_theme() {
+		if ( null !== self::$block_theme_override ) {
+			return self::$block_theme_override;
+		}
+
+		return function_exists( 'wp_is_block_theme' ) && wp_is_block_theme();
+	}
+
+	/**
+	 * Override block theme detection (intended for tests).
+	 *
+	 * @param boolean|null $is_block_theme Override value; null resets.
+	 */
+	public static function set_block_theme_override( $is_block_theme ) {
+		self::$block_theme_override = $is_block_theme;
+	}
+
+	/**
 	 * Generate markup for an inline popup.
 	 *
 	 * @param string $popup The popup object.
@@ -977,12 +1033,14 @@ final class Newspack_Popups_Model {
 		$is_newsletter_prompt = self::has_newsletter_prompt( $popup );
 		$classes              = [ 'newspack-popup-container', 'newspack-popup', 'hidden' ];
 		$classes[]            = 'above_header' === $popup['options']['placement'] ? 'newspack-above-header-popup' : null;
+		$classes[]            = 'above_header' === $popup['options']['placement'] && self::is_block_theme() ? 'has-global-padding' : null;
 		$classes[]            = ! self::is_above_header( $popup ) ? 'newspack-inline-popup' : null;
 		$classes[]            = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
 		$classes[]            = $hide_border ? 'newspack-lightbox-no-border' : null;
 		$classes[]            = $large_border ? 'newspack-lightbox-large-border' : null;
 		$classes[]            = $no_padding ? 'newspack-lightbox-no-padding' : null;
 		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
+		$classes[]            = self::is_block_theme() ? 'is-layout-constrained' : null;
 		$classes              = array_merge( $classes, explode( ' ', $popup['options']['additional_classes'] ) );
 		$assigned_segments    = Newspack_Segments_Model::get_popup_segments_ids_string( $popup['id'] );
 		$frequency_config     = self::get_frequency_config( $popup );
@@ -1039,7 +1097,10 @@ final class Newspack_Popups_Model {
 
 		// If previewing a single prompt, override saved settings with preview settings. Allow manual and custom placement prompts to be displayed as usual.
 		if ( $previewed_popup_id && ( ! $is_manual_or_custom_placement || $popup['id'] === $previewed_popup_id ) ) {
-			$popup = self::retrieve_preview_popup( $previewed_popup_id );
+			$preview_popup = self::retrieve_preview_popup( $previewed_popup_id );
+			if ( $preview_popup ) {
+				$popup = $preview_popup;
+			}
 		}
 		if ( Newspack_Popups::preset_popup_id() ) {
 			$popup = Newspack_Popups_Presets::retrieve_preset_popup( Newspack_Popups::preset_popup_id() );
@@ -1125,7 +1186,7 @@ final class Newspack_Popups_Model {
 							<?php echo ! empty( $popup['options']['featured_image_id'] ) ? wp_get_attachment_image( $popup['options']['featured_image_id'], 'large' ) : get_the_post_thumbnail( $popup['id'], 'large' ); ?>
 						</div>
 					<?php endif; ?>
-					<div class="newspack-popup__content">
+					<div class="newspack-popup__content <?php echo esc_attr( self::is_block_theme() ? 'is-layout-flow' : '' ); ?>">
 						<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</div>
 					<button class="newspack-lightbox__close" style="<?php echo esc_attr( $close_button_styles ); ?>" aria-label="<?php esc_html_e( 'Close Pop-up', 'newspack-popups' ); // phpcs:ignore WordPressVIPMinimum.Security.ProperEscapingFunction.htmlAttrNotByEscHTML ?>">

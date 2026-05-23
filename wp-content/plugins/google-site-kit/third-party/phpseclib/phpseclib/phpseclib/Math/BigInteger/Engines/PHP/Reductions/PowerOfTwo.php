@@ -18,7 +18,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Base;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class PowerOfTwo extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Base
+abstract class PowerOfTwo extends Base
 {
     /**
      * Prepare a number for use in Montgomery Modular Reductions

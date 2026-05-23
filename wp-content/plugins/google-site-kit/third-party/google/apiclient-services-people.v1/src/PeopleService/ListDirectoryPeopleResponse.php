@@ -35,7 +35,7 @@ class ListDirectoryPeopleResponse extends \Google\Site_Kit_Dependencies\Google\C
      * @var string
      */
     public $nextSyncToken;
-    protected $peopleType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $peopleType = Person::class;
     protected $peopleDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -90,4 +90,4 @@ class ListDirectoryPeopleResponse extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListDirectoryPeopleResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ListDirectoryPeopleResponse');
+class_alias(ListDirectoryPeopleResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ListDirectoryPeopleResponse');

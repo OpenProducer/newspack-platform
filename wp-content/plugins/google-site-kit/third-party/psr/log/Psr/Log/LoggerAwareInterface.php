@@ -14,5 +14,5 @@ interface LoggerAwareInterface
      *
      * @return void
      */
-    public function setLogger(\Google\Site_Kit_Dependencies\Psr\Log\LoggerInterface $logger);
+    public function setLogger(LoggerInterface $logger);
 }

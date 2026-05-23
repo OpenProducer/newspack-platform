@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaAccessRow extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'metricValues';
-    protected $dimensionValuesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessDimensionValue::class;
+    protected $dimensionValuesType = GoogleAnalyticsAdminV1betaAccessDimensionValue::class;
     protected $dimensionValuesDataType = 'array';
-    protected $metricValuesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessMetricValue::class;
+    protected $metricValuesType = GoogleAnalyticsAdminV1betaAccessMetricValue::class;
     protected $metricValuesDataType = 'array';
     /**
      * List of dimension values. These values are in the same order as specified
@@ -60,4 +60,4 @@ class GoogleAnalyticsAdminV1betaAccessRow extends \Google\Site_Kit_Dependencies\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessRow::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessRow');
+class_alias(GoogleAnalyticsAdminV1betaAccessRow::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessRow');

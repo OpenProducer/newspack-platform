@@ -25,9 +25,9 @@ class QuickPreviewResponse extends \Google\Site_Kit_Dependencies\Google\Model
      * @var bool
      */
     public $compilerError;
-    protected $containerVersionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class;
+    protected $containerVersionType = ContainerVersion::class;
     protected $containerVersionDataType = '';
-    protected $syncStatusType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\SyncStatus::class;
+    protected $syncStatusType = SyncStatus::class;
     protected $syncStatusDataType = '';
     /**
      * Were there compiler errors or not.
@@ -50,7 +50,7 @@ class QuickPreviewResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param ContainerVersion $containerVersion
      */
-    public function setContainerVersion(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion $containerVersion)
+    public function setContainerVersion(ContainerVersion $containerVersion)
     {
         $this->containerVersion = $containerVersion;
     }
@@ -67,7 +67,7 @@ class QuickPreviewResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param SyncStatus $syncStatus
      */
-    public function setSyncStatus(\Google\Site_Kit_Dependencies\Google\Service\TagManager\SyncStatus $syncStatus)
+    public function setSyncStatus(SyncStatus $syncStatus)
     {
         $this->syncStatus = $syncStatus;
     }
@@ -80,4 +80,4 @@ class QuickPreviewResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\QuickPreviewResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_QuickPreviewResponse');
+class_alias(QuickPreviewResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_QuickPreviewResponse');

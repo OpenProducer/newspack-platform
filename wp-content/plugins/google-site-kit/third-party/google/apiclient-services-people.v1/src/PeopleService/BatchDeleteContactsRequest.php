@@ -46,4 +46,4 @@ class BatchDeleteContactsRequest extends \Google\Site_Kit_Dependencies\Google\Co
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchDeleteContactsRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_BatchDeleteContactsRequest');
+class_alias(BatchDeleteContactsRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_BatchDeleteContactsRequest');

@@ -11,6 +11,7 @@
 namespace Google\Site_Kit\Core\Email_Reporting;
 
 use Google\Site_Kit\Core\User\Email_Reporting_Settings as Reporting_Settings;
+use Google\Site_Kit\Core\Util\BC_Functions;
 use Google\Site_Kit\Core\Util\Method_Proxy_Trait;
 
 /**
@@ -88,6 +89,13 @@ final class Email_Log {
 	const META_TEMPLATE_TYPE = '_template_type';
 
 	/**
+	 * Admin notified meta key.
+	 *
+	 * @since 1.175.0
+	 */
+	const META_ADMIN_NOTIFIED = '_admin_notified';
+
+	/**
 	 * Email log post statuses.
 	 *
 	 * Slugs must stay within the posts table varchar(20) limit.
@@ -123,7 +131,7 @@ final class Email_Log {
 		$normalized = array();
 		$keys       = array(
 			'startDate'        => 'startDate',
-			'sendDate'         => 'endDate',
+			'endDate'          => 'endDate',
 			'compareStartDate' => 'compareStartDate',
 			'compareEndDate'   => 'compareEndDate',
 		);
@@ -195,7 +203,15 @@ final class Email_Log {
 			return null;
 		}
 
-		$timestamp = is_numeric( $value ) ? (int) $value : strtotime( $value );
+		if ( is_numeric( $value ) ) {
+			$timestamp = (int) $value;
+		} else {
+			// Parse date strings in site timezone for consistent round-tripping.
+			$timezone  = BC_Functions::wp_timezone();
+			$date      = date_create_immutable( $value, $timezone );
+			$timestamp = $date ? $date->getTimestamp() : false;
+		}
+
 		if ( empty( $timestamp ) || $timestamp < 0 ) {
 			return null;
 		}
@@ -217,8 +233,8 @@ final class Email_Log {
 			return null;
 		}
 
-		if ( function_exists( 'wp_timezone' ) && function_exists( 'wp_date' ) ) {
-			$timezone = wp_timezone();
+		if ( function_exists( 'wp_date' ) ) {
+			$timezone = BC_Functions::wp_timezone();
 			if ( $timezone ) {
 				return wp_date( 'Y-m-d', $timestamp, $timezone );
 			}
@@ -378,6 +394,17 @@ final class Email_Log {
 				'sanitize_callback' => array( __CLASS__, 'sanitize_template_type' ),
 			)
 		);
+
+		register_post_meta(
+			self::POST_TYPE,
+			self::META_ADMIN_NOTIFIED,
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'auth_callback'     => $auth_callback,
+				'sanitize_callback' => array( __CLASS__, 'sanitize_admin_notified' ),
+			)
+		);
 	}
 
 	/**
@@ -534,6 +561,18 @@ final class Email_Log {
 	}
 
 	/**
+	 * Sanitizes the admin notified meta value.
+	 *
+	 * @since 1.175.0
+	 *
+	 * @param mixed $value Meta value.
+	 * @return string Sanitized value: '1' if truthy, empty string otherwise.
+	 */
+	public static function sanitize_admin_notified( $value ) {
+		return $value ? '1' : '';
+	}
+
+	/**
 	 * Normalizes reference date values into timestamps for storage.
 	 *
 	 * @since 1.170.0
@@ -542,7 +581,7 @@ final class Email_Log {
 	 * @return array Normalized timestamps keyed by meta field.
 	 */
 	protected static function normalize_reference_dates( array $raw_dates ) {
-		$keys       = array( 'startDate', 'sendDate', 'compareStartDate', 'compareEndDate' );
+		$keys       = array( 'startDate', 'endDate', 'compareStartDate', 'compareEndDate' );
 		$normalized = array();
 
 		foreach ( $keys as $key ) {
@@ -589,7 +628,12 @@ final class Email_Log {
 		if ( is_numeric( $raw_value ) ) {
 			$timestamp = $raw_value;
 		} else {
-			$timestamp = strtotime( $raw_value );
+			// Parse date strings in the site timezone so the resulting UTC
+			// timestamp represents the correct calendar day when converted
+			// back via format_reference_date().
+			$timezone  = BC_Functions::wp_timezone();
+			$date      = date_create_immutable( $raw_value, $timezone );
+			$timestamp = $date ? $date->getTimestamp() : false;
 		}
 
 		if ( false === $timestamp || $timestamp <= 0 ) {

@@ -367,48 +367,6 @@
 			} );
 		} );
 
-		// Only show 'time ago' cutoff field when enabled.
-		wp.customize( 'post_time_ago', function ( setting ) {
-			wp.customize.control( 'post_time_ago_cut_off', function ( control ) {
-				const visibility = function () {
-					if ( true === setting.get() ) {
-						control.container.slideDown( 180 );
-					} else {
-						control.container.slideUp( 180 );
-					}
-				};
-				visibility();
-				setting.bind( visibility );
-			} );
-		} );
-
-		wp.customize( 'post_updated_date', function ( setting ) {
-			// Disable 'time ago cutoff' when post updated date is enabled.
-			wp.customize.control( 'post_time_ago_cut_off', function ( control ) {
-				const visibility = function () {
-					if ( true === setting.get() ) {
-						$( 'input', control.selector ).prop( 'disabled', true );
-					} else {
-						$( 'input', control.selector ).prop( 'disabled', false );
-					}
-				};
-				visibility();
-				setting.bind( visibility );
-			} );
-			// Only show 'updated date threshold' when post updated date is enabled.
-			wp.customize.control( 'post_updated_date_threshold', function ( control ) {
-				const visibility = function () {
-					if ( true === setting.get() ) {
-						control.container.slideDown( 180 );
-					} else {
-						control.container.slideUp( 180 );
-					}
-				};
-				visibility();
-				setting.bind( visibility );
-			} );
-		} );
-
 		// Lets you jump to specific sections in the Customizer
 		$( [ 'control', 'section', 'panel' ] ).each( function ( i, type ) {
 			$( 'a[rel="goto-' + type + '"]' ).click( function ( e ) {

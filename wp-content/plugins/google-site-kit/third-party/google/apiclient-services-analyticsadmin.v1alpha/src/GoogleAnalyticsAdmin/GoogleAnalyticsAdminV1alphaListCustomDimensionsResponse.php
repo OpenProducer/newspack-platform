@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaListCustomDimensionsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'customDimensions';
-    protected $customDimensionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomDimension::class;
+    protected $customDimensionsType = GoogleAnalyticsAdminV1alphaCustomDimension::class;
     protected $customDimensionsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListCustomDimensionsResponse extends \Google\Si
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListCustomDimensionsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListCustomDimensionsResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListCustomDimensionsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListCustomDimensionsResponse');

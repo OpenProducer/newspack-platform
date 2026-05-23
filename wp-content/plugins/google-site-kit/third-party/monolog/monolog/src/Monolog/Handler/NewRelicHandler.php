@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
  * @see https://docs.newrelic.com/docs/agents/php-agent
  * @see https://docs.newrelic.com/docs/accounts-partnerships/accounts/security/high-security
  */
-class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class NewRelicHandler extends AbstractProcessingHandler
 {
     /**
      * Name of the New Relic application that will receive logs from this handler.
@@ -52,7 +52,7 @@ class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      * @param bool        $explodeArrays
      * @param string|null $transactionName
      */
-    public function __construct($level = \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR, bool $bubble = \true, ?string $appName = null, bool $explodeArrays = \false, ?string $transactionName = null)
+    public function __construct($level = Logger::ERROR, bool $bubble = \true, ?string $appName = null, bool $explodeArrays = \false, ?string $transactionName = null)
     {
         parent::__construct($level, $bubble);
         $this->appName = $appName;
@@ -62,10 +62,10 @@ class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         if (!$this->isNewRelicEnabled()) {
-            throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The newrelic PHP extension is required to use the NewRelicHandler');
+            throw new MissingExtensionException('The newrelic PHP extension is required to use the NewRelicHandler');
         }
         if ($appName = $this->getAppName($record['context'])) {
             $this->setNewRelicAppName($appName);
@@ -75,14 +75,14 @@ class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
             unset($record['formatted']['context']['transaction_name']);
         }
         if (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Throwable) {
-            \newrelic_notice_error($record['message'], $record['context']['exception']);
+            newrelic_notice_error($record['message'], $record['context']['exception']);
             unset($record['formatted']['context']['exception']);
         } else {
-            \newrelic_notice_error($record['message']);
+            newrelic_notice_error($record['message']);
         }
-        if (isset($record['formatted']['context']) && \is_array($record['formatted']['context'])) {
+        if (isset($record['formatted']['context']) && is_array($record['formatted']['context'])) {
             foreach ($record['formatted']['context'] as $key => $parameter) {
-                if (\is_array($parameter) && $this->explodeArrays) {
+                if (is_array($parameter) && $this->explodeArrays) {
                     foreach ($parameter as $paramKey => $paramValue) {
                         $this->setNewRelicParameter('context_' . $key . '_' . $paramKey, $paramValue);
                     }
@@ -91,9 +91,9 @@ class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
                 }
             }
         }
-        if (isset($record['formatted']['extra']) && \is_array($record['formatted']['extra'])) {
+        if (isset($record['formatted']['extra']) && is_array($record['formatted']['extra'])) {
             foreach ($record['formatted']['extra'] as $key => $parameter) {
-                if (\is_array($parameter) && $this->explodeArrays) {
+                if (is_array($parameter) && $this->explodeArrays) {
                     foreach ($parameter as $paramKey => $paramValue) {
                         $this->setNewRelicParameter('extra_' . $key . '_' . $paramKey, $paramValue);
                     }
@@ -108,9 +108,9 @@ class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      *
      * @return bool
      */
-    protected function isNewRelicEnabled() : bool
+    protected function isNewRelicEnabled(): bool
     {
-        return \extension_loaded('newrelic');
+        return extension_loaded('newrelic');
     }
     /**
      * Returns the appname where this log should be sent. Each log can override the default appname, set in this
@@ -118,7 +118,7 @@ class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      *
      * @param mixed[] $context
      */
-    protected function getAppName(array $context) : ?string
+    protected function getAppName(array $context): ?string
     {
         if (isset($context['appname'])) {
             return $context['appname'];
@@ -131,7 +131,7 @@ class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      *
      * @param mixed[] $context
      */
-    protected function getTransactionName(array $context) : ?string
+    protected function getTransactionName(array $context): ?string
     {
         if (isset($context['transaction_name'])) {
             return $context['transaction_name'];
@@ -141,34 +141,34 @@ class NewRelicHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
     /**
      * Sets the NewRelic application that should receive this log.
      */
-    protected function setNewRelicAppName(string $appName) : void
+    protected function setNewRelicAppName(string $appName): void
     {
-        \newrelic_set_appname($appName);
+        newrelic_set_appname($appName);
     }
     /**
      * Overwrites the name of the current transaction
      */
-    protected function setNewRelicTransactionName(string $transactionName) : void
+    protected function setNewRelicTransactionName(string $transactionName): void
     {
-        \newrelic_name_transaction($transactionName);
+        newrelic_name_transaction($transactionName);
     }
     /**
      * @param string $key
      * @param mixed  $value
      */
-    protected function setNewRelicParameter(string $key, $value) : void
+    protected function setNewRelicParameter(string $key, $value): void
     {
-        if (null === $value || \is_scalar($value)) {
-            \newrelic_add_custom_parameter($key, $value);
+        if (null === $value || is_scalar($value)) {
+            newrelic_add_custom_parameter($key, $value);
         } else {
-            \newrelic_add_custom_parameter($key, \Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode($value, null, \true));
+            newrelic_add_custom_parameter($key, Utils::jsonEncode($value, null, \true));
         }
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        return new \Google\Site_Kit_Dependencies\Monolog\Formatter\NormalizerFormatter();
+        return new NormalizerFormatter();
     }
 }

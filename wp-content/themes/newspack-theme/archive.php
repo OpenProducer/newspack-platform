@@ -17,6 +17,8 @@ if ( function_exists( 'newspack_get_all_sponsors' ) ) {
 
 $feature_latest_post = get_theme_mod( 'archive_feature_latest_post', true );
 $show_excerpt        = get_theme_mod( 'archive_show_excerpt', false );
+// Shared avatar image size for author archive + author bio templates.
+$author_avatar_size = get_theme_mod( 'author_avatar_size', 120 );
 
 // Hide author on collection category archives.
 if ( class_exists( '\Newspack\Optional_Modules\Collections' ) &&
@@ -35,10 +37,10 @@ if ( class_exists( '\Newspack\Optional_Modules\Collections' ) &&
 				$author_avatar = '';
 
 				if ( function_exists( 'coauthors_posts_links' ) ) {
-					$author_avatar = coauthors_get_avatar( $queried, 120 );
+					$author_avatar = coauthors_get_avatar( $queried, absint( $author_avatar_size ) );
 				} else {
 					$author_id     = get_query_var( 'author' );
-					$author_avatar = get_avatar( $author_id, 120 );
+					$author_avatar = get_avatar( $author_id, absint( $author_avatar_size ) );
 				}
 
 				if ( $author_avatar ) {

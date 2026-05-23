@@ -15,6 +15,7 @@ body {
 /** === Content Width === */
 
 .wp-block {
+	box-sizing: border-box;
 	max-width: 810px; // 780px + 30px to offset padding
 }
 
@@ -421,6 +422,19 @@ div[data-align="full"] {
 	}
 }
 
+/** === Icon === */
+// stylelint-disable-next-line no-duplicate-selectors
+[data-align="left"],
+[data-align="right"] {
+	.wp-block-icon {
+		max-width: 50%;
+		svg {
+			height: auto;
+			max-width: 100%;
+		}
+	}
+}
+
 /** === Audio & Video === */
 
 .wp-block-audio figcaption,
@@ -564,6 +578,11 @@ html :where(.wp-block)[data-align="right"] {
 	padding: structure.$size__spacing-unit 0;
 	text-align: left;
 
+	// Match WP 7.0's `:root :where(...)` specificity to override its default font-size.
+	:root :where(&) {
+		font-size: inherit;
+	}
+
 	&.is-style-solid-color blockquote p,
 	p {
 		font-size: var(--newspack-theme-font-size-md);
@@ -638,10 +657,6 @@ html :where(.wp-block)[data-align="right"] {
 	.wp-block-pullquote {
 		max-width: 50%;
 		width: 50%;
-
-		@include utilities.media( tablet ) {
-			border-bottom: 0;
-		}
 
 		&:not(.is-style-solid-color) {
 			padding: 0;
@@ -846,8 +861,11 @@ html :where(.wp-block)[data-align="right"] {
 .wp-block-archives,
 .wp-block-categories,
 .wp-block-latest-posts {
+	list-style-type: none;
+	margin-left: 0;
 	padding: 0;
 
+	// TODO: The whole UL selector can be removed after WP 7.0 is released.
 	ul {
 		padding: 0;
 		margin-left: 0;

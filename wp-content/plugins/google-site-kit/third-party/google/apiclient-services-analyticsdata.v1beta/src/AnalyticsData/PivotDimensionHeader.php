@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class PivotDimensionHeader extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'dimensionValues';
-    protected $dimensionValuesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionValue::class;
+    protected $dimensionValuesType = DimensionValue::class;
     protected $dimensionValuesDataType = 'array';
     /**
      * Values of multiple dimensions in a pivot.
@@ -40,4 +40,4 @@ class PivotDimensionHeader extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PivotDimensionHeader::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_PivotDimensionHeader');
+class_alias(PivotDimensionHeader::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_PivotDimensionHeader');

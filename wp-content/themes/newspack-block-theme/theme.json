@@ -6,6 +6,21 @@
 			"defaultPalette": false,
 			"palette": [
 				{
+					"color": "#003DA5",
+					"name": "Accent",
+					"slug": "accent"
+				},
+				{
+					"color": "#2055B0",
+					"name": "Accent / Two",
+					"slug": "accent-2"
+				},
+				{
+					"color": "#9FB6DD",
+					"name": "Accent / Three",
+					"slug": "accent-3"
+				},
+				{
 					"color": "#ffffff",
 					"name": "Base",
 					"slug": "base"
@@ -44,21 +59,6 @@
 					"color": "#6C6C6C",
 					"name": "Contrast / Three",
 					"slug": "contrast-3"
-				},
-				{
-					"color": "#003DA5",
-					"name": "Accent",
-					"slug": "accent"
-				},
-				{
-					"color": "#2055B0",
-					"name": "Accent / Two",
-					"slug": "accent-2"
-				},
-				{
-					"color": "#26D07C",
-					"name": "Accent / Three",
-					"slug": "accent-3"
 				}
 			]
 		},
@@ -144,11 +144,6 @@
 			"fluid": true,
 			"fontFamilies": [
 				{
-					"fontFamily": "system-ui, sans-serif",
-					"name": "System Font",
-					"slug": "system"
-				},
-				{
 					"fontFace": [
 						{
 							"fontFamily": "Inter",
@@ -169,7 +164,7 @@
 							]
 						}
 					],
-					"fontFamily": "Inter, var( --wp--preset--font-family--system )",
+					"fontFamily": "\"Inter\", system-ui, sans-serif",
 					"name": "Inter",
 					"slug": "inter"
 				},
@@ -194,7 +189,7 @@
 							]
 						}
 					],
-					"fontFamily": "JetBrainsMono, monospace",
+					"fontFamily": "\"JetBrainsMono\", ui-monospace, monospace",
 					"name": "JetBrainsMono",
 					"slug": "jetbrainsmono"
 				}
@@ -1031,7 +1026,6 @@
 					"lineHeight": "var( --wp--custom--line-height--x-small )",
 					"textDecoration": "none",
 					"textTransform": "none"
-
 				}
 			},
 			"h1": {
@@ -1192,11 +1186,6 @@
 			"area": "header",
 			"name": "header-mobile",
 			"title": "Header (Mobile)"
-		},
-		{
-			"area": "uncategorized",
-			"name": "mobile-contents",
-			"title": "Mobile Menu Contents"
 		},
 		{
 			"area": "footer",

@@ -20,7 +20,11 @@
 			}
 		}
 		.components-base-control {
-			margin: 0;
+			margin: 0 0 8px;
+
+			&:last-of-type {
+				margin-bottom: 0;
+			}
 		}
 	}
 }

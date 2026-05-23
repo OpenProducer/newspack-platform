@@ -44,7 +44,7 @@ final class Blocks {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'manage_editor_assets' ] );
+		add_action( 'enqueue_block_assets', [ __CLASS__, 'manage_block_assets' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'custom_scripts' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'custom_styles' ] );
 		add_action( 'init', [ __CLASS__, 'manage_view_assets' ] );
@@ -53,7 +53,11 @@ final class Blocks {
 	/**
 	 * Enqueue editor assets.
 	 */
-	public static function manage_editor_assets() {
+	public static function manage_block_assets() {
+		if ( ! wp_should_load_block_editor_scripts_and_styles() ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			'newspack-listings-editor',
 			NEWSPACK_LISTINGS_URL . 'dist/editor.js',
@@ -161,6 +165,7 @@ final class Blocks {
 				register_block_type(
 					$block_name,
 					[
+						'api_version'     => 3,
 						'render_callback' => function( $attributes, $content ) use ( $type ) {
 							Newspack_Blocks::enqueue_view_assets( $type );
 							return $content;

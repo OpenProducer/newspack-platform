@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListAccountSummariesResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'accountSummaries';
-    protected $accountSummariesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccountSummary::class;
+    protected $accountSummariesType = GoogleAnalyticsAdminV1betaAccountSummary::class;
     protected $accountSummariesDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1betaListAccountSummariesResponse extends \Google\Sit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListAccountSummariesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListAccountSummariesResponse');
+class_alias(GoogleAnalyticsAdminV1betaListAccountSummariesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListAccountSummariesResponse');

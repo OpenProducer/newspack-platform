@@ -26,11 +26,11 @@ class FolderEntities extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $nextPageToken;
-    protected $tagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class;
+    protected $tagType = Tag::class;
     protected $tagDataType = 'array';
-    protected $triggerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class;
+    protected $triggerType = Trigger::class;
     protected $triggerDataType = 'array';
-    protected $variableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class;
+    protected $variableType = Variable::class;
     protected $variableDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -98,4 +98,4 @@ class FolderEntities extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\FolderEntities::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_FolderEntities');
+class_alias(FolderEntities::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_FolderEntities');

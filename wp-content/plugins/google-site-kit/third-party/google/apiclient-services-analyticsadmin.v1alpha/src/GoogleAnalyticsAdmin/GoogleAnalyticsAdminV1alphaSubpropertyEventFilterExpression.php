@@ -19,11 +19,11 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $filterConditionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition::class;
+    protected $filterConditionType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition::class;
     protected $filterConditionDataType = '';
-    protected $notExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression::class;
+    protected $notExpressionType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression::class;
     protected $notExpressionDataType = '';
-    protected $orGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList::class;
+    protected $orGroupType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList::class;
     protected $orGroupDataType = '';
     /**
      * Creates a filter that matches a specific event. This cannot be set on the
@@ -31,7 +31,7 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression extends \Googl
      *
      * @param GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition $filterCondition
      */
-    public function setFilterCondition(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition $filterCondition)
+    public function setFilterCondition(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterCondition $filterCondition)
     {
         $this->filterCondition = $filterCondition;
     }
@@ -49,7 +49,7 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression extends \Googl
      *
      * @param GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression $notExpression
      */
-    public function setNotExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression $notExpression)
+    public function setNotExpression(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression $notExpression)
     {
         $this->notExpression = $notExpression;
     }
@@ -66,7 +66,7 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression extends \Googl
      *
      * @param GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList $orGroup
      */
-    public function setOrGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList $orGroup)
+    public function setOrGroup(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList $orGroup)
     {
         $this->orGroup = $orGroup;
     }
@@ -79,4 +79,4 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression extends \Googl
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression');
+class_alias(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression');

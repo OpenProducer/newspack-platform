@@ -20,14 +20,14 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class PuTTY extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Keys\PuTTY
+abstract class PuTTY extends Progenitor
 {
     /**
      * Public Handler
      *
      * @var string
      */
-    const PUBLIC_HANDLER = 'Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\RSA\\Formats\\Keys\\OpenSSH';
+    const PUBLIC_HANDLER = 'Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA\Formats\Keys\OpenSSH';
     /**
      * Algorithm Identifier
      *
@@ -45,21 +45,24 @@ abstract class PuTTY extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     {
         static $one;
         if (!isset($one)) {
-            $one = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(1);
+            $one = new BigInteger(1);
         }
         $components = parent::load($key, $password);
         if (!isset($components['private'])) {
             return $components;
         }
-        \extract($components);
+        $type = $components['type'];
+        $comment = $components['comment'];
+        $public = $components['public'];
+        $private = $components['private'];
         unset($components['public'], $components['private']);
         $isPublicKey = \false;
-        $result = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('ii', $public);
+        $result = Strings::unpackSSH2('ii', $public);
         if ($result === \false) {
             throw new \UnexpectedValueException('Key appears to be malformed');
         }
         list($publicExponent, $modulus) = $result;
-        $result = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('iiii', $private);
+        $result = Strings::unpackSSH2('iiii', $private);
         if ($result === \false) {
             throw new \UnexpectedValueException('Key appears to be malformed');
         }
@@ -69,7 +72,7 @@ abstract class PuTTY extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
         $exponents = [1 => $publicExponent->modInverse($temp)];
         $temp = $primes[2]->subtract($one);
         $exponents[] = $publicExponent->modInverse($temp);
-        return \compact('publicExponent', 'modulus', 'privateExponent', 'primes', 'coefficients', 'exponents', 'comment', 'isPublicKey');
+        return compact('publicExponent', 'modulus', 'privateExponent', 'primes', 'coefficients', 'exponents', 'comment', 'isPublicKey');
     }
     /**
      * Convert a private key to the appropriate format.
@@ -84,13 +87,13 @@ abstract class PuTTY extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      * @param array $options optional
      * @return string
      */
-    public static function savePrivateKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
+    public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
     {
-        if (\count($primes) != 2) {
+        if (count($primes) != 2) {
             throw new \InvalidArgumentException('PuTTY does not support multi-prime RSA keys');
         }
-        $public = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ii', $e, $n);
-        $private = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('iiii', $d, $primes[1], $primes[2], $coefficients[2]);
+        $public = Strings::packSSH2('ii', $e, $n);
+        $private = Strings::packSSH2('iiii', $d, $primes[1], $primes[2], $coefficients[2]);
         return self::wrapPrivateKey($public, $private, 'ssh-rsa', $password, $options);
     }
     /**
@@ -100,8 +103,8 @@ abstract class PuTTY extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      * @param BigInteger $e
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e)
+    public static function savePublicKey(BigInteger $n, BigInteger $e)
     {
-        return self::wrapPublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ii', $e, $n), 'ssh-rsa');
+        return self::wrapPublicKey(Strings::packSSH2('ii', $e, $n), 'ssh-rsa');
     }
 }

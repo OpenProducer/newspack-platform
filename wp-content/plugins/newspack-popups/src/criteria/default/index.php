@@ -26,10 +26,11 @@ $criteria = [
 		'matching_function' => 'range',
 	],
 	'favorite_categories'      => [
-		'name'              => __( 'Favorite Categories', 'newspack-popups' ),
-		'description'       => __( 'Most read categories of reader.', 'newspack-popups' ),
-		'category'          => 'reader_engagement',
-		'matching_function' => 'list__in',
+		'name'               => __( 'Favorite Categories', 'newspack-popups' ),
+		'description'        => __( 'Most read categories of reader.', 'newspack-popups' ),
+		'category'           => 'reader_engagement',
+		'matching_function'  => 'list__in',
+		'matching_attribute' => 'favorite_categories',
 	],
 	'devices'                  => [
 		'name'        => __( 'Devices', 'newspack-popups' ),

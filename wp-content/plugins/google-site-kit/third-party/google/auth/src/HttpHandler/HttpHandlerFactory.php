@@ -31,30 +31,30 @@ class HttpHandlerFactory
      * @return Guzzle6HttpHandler|Guzzle7HttpHandler
      * @throws \Exception
      */
-    public static function build(?\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $client = null)
+    public static function build(?ClientInterface $client = null)
     {
-        if (\is_null($client)) {
+        if (is_null($client)) {
             $stack = null;
-            if (\class_exists(\Google\Site_Kit_Dependencies\GuzzleHttp\BodySummarizer::class)) {
+            if (class_exists(BodySummarizer::class)) {
                 // double the # of characters before truncation by default
-                $bodySummarizer = new \Google\Site_Kit_Dependencies\GuzzleHttp\BodySummarizer(240);
-                $stack = \Google\Site_Kit_Dependencies\GuzzleHttp\HandlerStack::create();
+                $bodySummarizer = new BodySummarizer(240);
+                $stack = HandlerStack::create();
                 $stack->remove('http_errors');
-                $stack->unshift(\Google\Site_Kit_Dependencies\GuzzleHttp\Middleware::httpErrors($bodySummarizer), 'http_errors');
+                $stack->unshift(Middleware::httpErrors($bodySummarizer), 'http_errors');
             }
-            $client = new \Google\Site_Kit_Dependencies\GuzzleHttp\Client(['handler' => $stack]);
+            $client = new Client(['handler' => $stack]);
         }
         $version = null;
-        if (\defined('Google\\Site_Kit_Dependencies\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
-            $version = \Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface::MAJOR_VERSION;
-        } elseif (\defined('Google\\Site_Kit_Dependencies\\GuzzleHttp\\ClientInterface::VERSION')) {
-            $version = (int) \substr(\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface::VERSION, 0, 1);
+        if (defined('Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface::MAJOR_VERSION')) {
+            $version = ClientInterface::MAJOR_VERSION;
+        } elseif (defined('Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface::VERSION')) {
+            $version = (int) substr(ClientInterface::VERSION, 0, 1);
         }
         switch ($version) {
             case 6:
-                return new \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\Guzzle6HttpHandler($client);
+                return new Guzzle6HttpHandler($client);
             case 7:
-                return new \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\Guzzle7HttpHandler($client);
+                return new Guzzle7HttpHandler($client);
             default:
                 throw new \Exception('Version not supported');
         }

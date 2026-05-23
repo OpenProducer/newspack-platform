@@ -14,7 +14,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
  * the read() function of the PumpStream. The provided callable MUST return
  * false when there is no more data to read.
  */
-final class PumpStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
+final class PumpStream implements StreamInterface
 {
     /** @var callable(int): (string|false|null)|null */
     private $source;
@@ -41,21 +41,21 @@ final class PumpStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message
         $this->source = $source;
         $this->size = $options['size'] ?? null;
         $this->metadata = $options['metadata'] ?? [];
-        $this->buffer = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\BufferStream();
+        $this->buffer = new BufferStream();
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         try {
-            return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::copyToString($this);
+            return Utils::copyToString($this);
         } catch (\Throwable $e) {
             if (\PHP_VERSION_ID >= 70400) {
                 throw $e;
             }
-            \trigger_error(\sprintf('%s::__toString exception: %s', self::class, (string) $e), \E_USER_ERROR);
+            trigger_error(sprintf('%s::__toString exception: %s', self::class, (string) $e), \E_USER_ERROR);
             return '';
         }
     }
-    public function close() : void
+    public function close(): void
     {
         $this->detach();
     }
@@ -65,56 +65,56 @@ final class PumpStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message
         $this->source = null;
         return null;
     }
-    public function getSize() : ?int
+    public function getSize(): ?int
     {
         return $this->size;
     }
-    public function tell() : int
+    public function tell(): int
     {
         return $this->tellPos;
     }
-    public function eof() : bool
+    public function eof(): bool
     {
         return $this->source === null;
     }
-    public function isSeekable() : bool
+    public function isSeekable(): bool
     {
         return \false;
     }
-    public function rewind() : void
+    public function rewind(): void
     {
         $this->seek(0);
     }
-    public function seek($offset, $whence = \SEEK_SET) : void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         throw new \RuntimeException('Cannot seek a PumpStream');
     }
-    public function isWritable() : bool
+    public function isWritable(): bool
     {
         return \false;
     }
-    public function write($string) : int
+    public function write($string): int
     {
         throw new \RuntimeException('Cannot write to a PumpStream');
     }
-    public function isReadable() : bool
+    public function isReadable(): bool
     {
         return \true;
     }
-    public function read($length) : string
+    public function read($length): string
     {
         $data = $this->buffer->read($length);
-        $readLen = \strlen($data);
+        $readLen = strlen($data);
         $this->tellPos += $readLen;
         $remaining = $length - $readLen;
         if ($remaining) {
             $this->pump($remaining);
             $data .= $this->buffer->read($remaining);
-            $this->tellPos += \strlen($data) - $readLen;
+            $this->tellPos += strlen($data) - $readLen;
         }
         return $data;
     }
-    public function getContents() : string
+    public function getContents(): string
     {
         $result = '';
         while (!$this->eof()) {
@@ -132,7 +132,7 @@ final class PumpStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message
         }
         return $this->metadata[$key] ?? null;
     }
-    private function pump(int $length) : void
+    private function pump(int $length): void
     {
         if ($this->source !== null) {
             do {
@@ -142,7 +142,7 @@ final class PumpStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message
                     return;
                 }
                 $this->buffer->write($data);
-                $length -= \strlen($data);
+                $length -= strlen($data);
             } while ($length > 0);
         }
     }

@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'the-events-calendar/the-events-calendar',
-        'pretty_version' => 'dev-release/M26.blaziken',
-        'version' => 'dev-release/M26.blaziken',
-        'reference' => '5daf5c19ecea7a934f7ae292542d9678f1386a58',
+        'pretty_version' => 'dev-release/harbor-1.2.0',
+        'version' => 'dev-release/harbor-1.2.0',
+        'reference' => '3106dba8c0afc310d9a48fbd6743c57cd1b3c3f4',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'the-events-calendar/the-events-calendar' => array(
-            'pretty_version' => 'dev-release/M26.blaziken',
-            'version' => 'dev-release/M26.blaziken',
-            'reference' => '5daf5c19ecea7a934f7ae292542d9678f1386a58',
+            'pretty_version' => 'dev-release/harbor-1.2.0',
+            'version' => 'dev-release/harbor-1.2.0',
+            'reference' => '3106dba8c0afc310d9a48fbd6743c57cd1b3c3f4',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

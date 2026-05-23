@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertTemplateResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $templateType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class;
+    protected $templateType = CustomTemplate::class;
     protected $templateDataType = '';
     /**
      * Template as it appears in the latest container version since the last
@@ -28,7 +28,7 @@ class RevertTemplateResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param CustomTemplate $template
      */
-    public function setTemplate(\Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate $template)
+    public function setTemplate(CustomTemplate $template)
     {
         $this->template = $template;
     }
@@ -41,4 +41,4 @@ class RevertTemplateResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertTemplateResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertTemplateResponse');
+class_alias(RevertTemplateResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertTemplateResponse');

@@ -26,7 +26,7 @@ class SipAddress extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $formattedType;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The type of the SIP address. The type can be custom or or one of these
@@ -64,7 +64,7 @@ class SipAddress extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -111,4 +111,4 @@ class SipAddress extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\SipAddress::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_SipAddress');
+class_alias(SipAddress::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_SipAddress');

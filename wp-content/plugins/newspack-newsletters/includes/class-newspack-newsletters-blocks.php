@@ -16,18 +16,22 @@ final class Newspack_Newsletters_Blocks {
 	 */
 	public static function init() {
 		require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/src/blocks/subscribe/index.php';
-		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
+		add_action( 'enqueue_block_assets', [ __CLASS__, 'enqueue_block_assets' ] );
 	}
 
 	/**
 	 * Enqueue blocks scripts and styles for editor.
 	 */
-	public static function enqueue_block_editor_assets() {
+	public static function enqueue_block_assets() {
+		if ( ! is_admin() ) {
+			return;
+		}
 		$handle = 'newspack-newsletters-blocks';
+		$asset  = include NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/blocks.asset.php';
 		wp_enqueue_script(
 			$handle,
 			plugins_url( '../dist/blocks.js', __FILE__ ),
-			[],
+			$asset['dependencies'],
 			filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/blocks.js' ),
 			true
 		);

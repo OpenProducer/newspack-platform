@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaBatchGetAccessBindingsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'accessBindings';
-    protected $accessBindingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessBinding::class;
+    protected $accessBindingsType = GoogleAnalyticsAdminV1alphaAccessBinding::class;
     protected $accessBindingsDataType = 'array';
     /**
      * The requested access bindings.
@@ -40,4 +40,4 @@ class GoogleAnalyticsAdminV1alphaBatchGetAccessBindingsResponse extends \Google\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchGetAccessBindingsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaBatchGetAccessBindingsResponse');
+class_alias(GoogleAnalyticsAdminV1alphaBatchGetAccessBindingsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaBatchGetAccessBindingsResponse');

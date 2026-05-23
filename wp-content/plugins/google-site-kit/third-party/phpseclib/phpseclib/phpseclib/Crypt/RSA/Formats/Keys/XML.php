@@ -39,20 +39,20 @@ abstract class XML
      */
     public static function load($key, $password = '')
     {
-        if (!\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::is_stringable($key)) {
-            throw new \UnexpectedValueException('Key should be a string - not a ' . \gettype($key));
+        if (!Strings::is_stringable($key)) {
+            throw new \UnexpectedValueException('Key should be a string - not a ' . gettype($key));
         }
-        if (!\class_exists('DOMDocument')) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException('The dom extension is not setup correctly on this system');
+        if (!class_exists('DOMDocument')) {
+            throw new BadConfigurationException('The dom extension is not setup correctly on this system');
         }
         $components = ['isPublicKey' => \false, 'primes' => [], 'exponents' => [], 'coefficients' => []];
-        $use_errors = \libxml_use_internal_errors(\true);
+        $use_errors = libxml_use_internal_errors(\true);
         $dom = new \DOMDocument();
-        if (\substr($key, 0, 5) != '<?xml') {
+        if (substr($key, 0, 5) != '<?xml') {
             $key = '<xml>' . $key . '</xml>';
         }
         if (!$dom->loadXML($key)) {
-            \libxml_use_internal_errors($use_errors);
+            libxml_use_internal_errors($use_errors);
             throw new \UnexpectedValueException('Key does not appear to contain XML');
         }
         $xpath = new \DOMXPath($dom);
@@ -63,7 +63,7 @@ abstract class XML
             if (!$temp->length) {
                 continue;
             }
-            $value = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_decode($temp->item(0)->nodeValue), 256);
+            $value = new BigInteger(Strings::base64_decode($temp->item(0)->nodeValue), 256);
             switch ($key) {
                 case 'modulus':
                     $components['modulus'] = $value;
@@ -90,14 +90,14 @@ abstract class XML
                     $components['privateExponent'] = $value;
             }
         }
-        \libxml_use_internal_errors($use_errors);
+        libxml_use_internal_errors($use_errors);
         foreach ($components as $key => $value) {
-            if (\is_array($value) && !\count($value)) {
+            if (is_array($value) && !count($value)) {
                 unset($components[$key]);
             }
         }
         if (isset($components['modulus']) && isset($components['publicExponent'])) {
-            if (\count($components) == 3) {
+            if (count($components) == 3) {
                 $components['isPublicKey'] = \true;
             }
             return $components;
@@ -116,15 +116,15 @@ abstract class XML
      * @param string $password optional
      * @return string
      */
-    public static function savePrivateKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '')
+    public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '')
     {
-        if (\count($primes) != 2) {
+        if (count($primes) != 2) {
             throw new \InvalidArgumentException('XML does not support multi-prime RSA keys');
         }
-        if (!empty($password) && \is_string($password)) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedFormatException('XML private keys do not support encryption');
+        if (!empty($password) && is_string($password)) {
+            throw new UnsupportedFormatException('XML private keys do not support encryption');
         }
-        return "<RSAKeyPair>\r\n" . '  <Modulus>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($n->toBytes()) . "</Modulus>\r\n" . '  <Exponent>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($e->toBytes()) . "</Exponent>\r\n" . '  <P>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($primes[1]->toBytes()) . "</P>\r\n" . '  <Q>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($primes[2]->toBytes()) . "</Q>\r\n" . '  <DP>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($exponents[1]->toBytes()) . "</DP>\r\n" . '  <DQ>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($exponents[2]->toBytes()) . "</DQ>\r\n" . '  <InverseQ>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($coefficients[2]->toBytes()) . "</InverseQ>\r\n" . '  <D>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($d->toBytes()) . "</D>\r\n" . '</RSAKeyPair>';
+        return "<RSAKeyPair>\r\n" . '  <Modulus>' . Strings::base64_encode($n->toBytes()) . "</Modulus>\r\n" . '  <Exponent>' . Strings::base64_encode($e->toBytes()) . "</Exponent>\r\n" . '  <P>' . Strings::base64_encode($primes[1]->toBytes()) . "</P>\r\n" . '  <Q>' . Strings::base64_encode($primes[2]->toBytes()) . "</Q>\r\n" . '  <DP>' . Strings::base64_encode($exponents[1]->toBytes()) . "</DP>\r\n" . '  <DQ>' . Strings::base64_encode($exponents[2]->toBytes()) . "</DQ>\r\n" . '  <InverseQ>' . Strings::base64_encode($coefficients[2]->toBytes()) . "</InverseQ>\r\n" . '  <D>' . Strings::base64_encode($d->toBytes()) . "</D>\r\n" . '</RSAKeyPair>';
     }
     /**
      * Convert a public key to the appropriate format
@@ -133,8 +133,8 @@ abstract class XML
      * @param BigInteger $e
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e)
+    public static function savePublicKey(BigInteger $n, BigInteger $e)
     {
-        return "<RSAKeyValue>\r\n" . '  <Modulus>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($n->toBytes()) . "</Modulus>\r\n" . '  <Exponent>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($e->toBytes()) . "</Exponent>\r\n" . '</RSAKeyValue>';
+        return "<RSAKeyValue>\r\n" . '  <Modulus>' . Strings::base64_encode($n->toBytes()) . "</Modulus>\r\n" . '  <Exponent>' . Strings::base64_encode($e->toBytes()) . "</Exponent>\r\n" . '</RSAKeyValue>';
     }
 }

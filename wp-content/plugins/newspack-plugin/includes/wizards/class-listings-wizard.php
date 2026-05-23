@@ -60,6 +60,17 @@ class Listings_Wizard extends Wizard {
 	 */
 	public function __construct() {
 
+		/**
+		 * Path to the Newspack Listings plugin file.
+		 * Defined by the Newspack Listings plugin when active.
+		 *
+		 * @constant NEWSPACK_LISTINGS_FILE
+		 * @type     string
+		 * @default  Listings plugin not installed
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_LISTINGS_FILE', '/path/to/plugin/file.php' );
+		 */
 		if ( ! defined( 'NEWSPACK_LISTINGS_FILE' ) ) {
 			return;
 		}

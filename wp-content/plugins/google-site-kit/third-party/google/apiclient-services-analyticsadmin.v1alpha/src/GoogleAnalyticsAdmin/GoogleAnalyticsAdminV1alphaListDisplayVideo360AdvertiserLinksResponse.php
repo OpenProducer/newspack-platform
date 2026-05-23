@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'displayVideo360AdvertiserLinks';
-    protected $displayVideo360AdvertiserLinksType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class;
+    protected $displayVideo360AdvertiserLinksType = GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class;
     protected $displayVideo360AdvertiserLinksDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse exte
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse');

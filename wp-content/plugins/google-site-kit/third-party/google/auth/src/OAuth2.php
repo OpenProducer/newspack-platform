@@ -35,7 +35,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface;
  * - service account authorization
  * - authorization where a user already has an access token
  */
-class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface
+class OAuth2 implements FetchAuthTokenInterface
 {
     const DEFAULT_EXPIRY_SECONDS = 3600;
     // 1 hour
@@ -252,7 +252,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      * represents the identity of the party on behalf of whom the request is
      * being made.
      */
-    private ?\Google\Site_Kit_Dependencies\Google\Auth\ExternalAccountCredentialSourceInterface $subjectTokenFetcher;
+    private ?ExternalAccountCredentialSourceInterface $subjectTokenFetcher;
     /**
      * For STS requests.
      * An identifier, that indicates the type of the security token in the
@@ -374,7 +374,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function __construct(array $config)
     {
-        $opts = \array_merge(['expiry' => self::DEFAULT_EXPIRY_SECONDS, 'extensionParams' => [], 'authorizationUri' => null, 'redirectUri' => null, 'tokenCredentialUri' => null, 'state' => null, 'username' => null, 'password' => null, 'clientId' => null, 'clientSecret' => null, 'issuer' => null, 'sub' => null, 'audience' => null, 'signingKey' => null, 'signingKeyId' => null, 'signingAlgorithm' => null, 'scope' => null, 'additionalClaims' => [], 'codeVerifier' => null, 'resource' => null, 'subjectTokenFetcher' => null, 'subjectTokenType' => null, 'actorToken' => null, 'actorTokenType' => null, 'additionalOptions' => []], $config);
+        $opts = array_merge(['expiry' => self::DEFAULT_EXPIRY_SECONDS, 'extensionParams' => [], 'authorizationUri' => null, 'redirectUri' => null, 'tokenCredentialUri' => null, 'state' => null, 'username' => null, 'password' => null, 'clientId' => null, 'clientSecret' => null, 'issuer' => null, 'sub' => null, 'audience' => null, 'signingKey' => null, 'signingKeyId' => null, 'signingAlgorithm' => null, 'scope' => null, 'additionalClaims' => [], 'codeVerifier' => null, 'resource' => null, 'subjectTokenFetcher' => null, 'subjectTokenType' => null, 'actorToken' => null, 'actorTokenType' => null, 'additionalOptions' => []], $config);
         $this->setAuthorizationUri($opts['authorizationUri']);
         $this->setRedirectUri($opts['redirectUri']);
         $this->setTokenCredentialUri($opts['tokenCredentialUri']);
@@ -431,11 +431,11 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
     public function verifyIdToken($publicKey = null, $allowed_algs = [])
     {
         $idToken = $this->getIdToken();
-        if (\is_null($idToken)) {
+        if (is_null($idToken)) {
             return null;
         }
         $resp = $this->jwtDecode($idToken, $publicKey, $allowed_algs);
-        if (!\property_exists($resp, 'aud')) {
+        if (!property_exists($resp, 'aud')) {
             throw new \DomainException('No audience found the id token');
         }
         if ($resp->aud != $this->getAudience()) {
@@ -451,34 +451,34 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function toJwt(array $config = [])
     {
-        if (\is_null($this->getSigningKey())) {
+        if (is_null($this->getSigningKey())) {
             throw new \DomainException('No signing key available');
         }
-        if (\is_null($this->getSigningAlgorithm())) {
+        if (is_null($this->getSigningAlgorithm())) {
             throw new \DomainException('No signing algorithm specified');
         }
-        $now = \time();
-        $opts = \array_merge(['skew' => self::DEFAULT_SKEW_SECONDS], $config);
+        $now = time();
+        $opts = array_merge(['skew' => self::DEFAULT_SKEW_SECONDS], $config);
         $assertion = ['iss' => $this->getIssuer(), 'exp' => $now + $this->getExpiry(), 'iat' => $now - $opts['skew']];
         foreach ($assertion as $k => $v) {
-            if (\is_null($v)) {
+            if (is_null($v)) {
                 throw new \DomainException($k . ' should not be null');
             }
         }
-        if (!\is_null($this->getAudience())) {
+        if (!is_null($this->getAudience())) {
             $assertion['aud'] = $this->getAudience();
         }
-        if (!\is_null($this->getScope())) {
+        if (!is_null($this->getScope())) {
             $assertion['scope'] = $this->getScope();
         }
         if (empty($assertion['scope']) && empty($assertion['aud'])) {
             throw new \DomainException('one of scope or aud should not be null');
         }
-        if (!\is_null($this->getSub())) {
+        if (!is_null($this->getSub())) {
             $assertion['sub'] = $this->getSub();
         }
         $assertion += $this->getAdditionalClaims();
-        return \Google\Site_Kit_Dependencies\Firebase\JWT\JWT::encode($assertion, $this->getSigningKey(), $this->getSigningAlgorithm(), $this->getSigningKeyId());
+        return JWT::encode($assertion, $this->getSigningKey(), $this->getSigningAlgorithm(), $this->getSigningKeyId());
     }
     /**
      * Generates a request for token credentials.
@@ -489,7 +489,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
     public function generateCredentialsRequest(?callable $httpHandler = null)
     {
         $uri = $this->getTokenCredentialUri();
-        if (\is_null($uri)) {
+        if (is_null($uri)) {
             throw new \DomainException('No token credential URI was set.');
         }
         $grantType = $this->getGrantType();
@@ -519,25 +519,25 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
                 $token = $this->subjectTokenFetcher->fetchSubjectToken($httpHandler);
                 $params['subject_token'] = $token;
                 $params['subject_token_type'] = $this->subjectTokenType;
-                $params += \array_filter(['resource' => $this->resource, 'audience' => $this->audience, 'scope' => $this->getScope(), 'requested_token_type' => self::STS_REQUESTED_TOKEN_TYPE, 'actor_token' => $this->actorToken, 'actor_token_type' => $this->actorTokenType]);
+                $params += array_filter(['resource' => $this->resource, 'audience' => $this->audience, 'scope' => $this->getScope(), 'requested_token_type' => self::STS_REQUESTED_TOKEN_TYPE, 'actor_token' => $this->actorToken, 'actor_token_type' => $this->actorTokenType]);
                 if ($this->additionalOptions) {
-                    $params['options'] = \json_encode($this->additionalOptions);
+                    $params['options'] = json_encode($this->additionalOptions);
                 }
                 break;
             default:
-                if (!\is_null($this->getRedirectUri())) {
+                if (!is_null($this->getRedirectUri())) {
                     # Grant type was supposed to be 'authorization_code', as there
                     # is a redirect URI.
                     throw new \DomainException('Missing authorization code');
                 }
                 unset($params['grant_type']);
-                if (!\is_null($grantType)) {
+                if (!is_null($grantType)) {
                     $params['grant_type'] = $grantType;
                 }
-                $params = \array_merge($params, $this->getExtensionParams());
+                $params = array_merge($params, $this->getExtensionParams());
         }
         $headers = ['Cache-Control' => 'no-store', 'Content-Type' => 'application/x-www-form-urlencoded'];
-        return new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('POST', $uri, $headers, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query::build($params));
+        return new Request('POST', $uri, $headers, Query::build($params));
     }
     /**
      * Fetches the auth tokens based on the current state.
@@ -547,8 +547,8 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function fetchAuthToken(?callable $httpHandler = null)
     {
-        if (\is_null($httpHandler)) {
-            $httpHandler = \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build(\Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
+        if (is_null($httpHandler)) {
+            $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         }
         $response = $httpHandler($this->generateCredentialsRequest($httpHandler));
         $credentials = $this->parseTokenResponse($response);
@@ -567,8 +567,8 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function getCacheKey()
     {
-        if (\is_array($this->scope)) {
-            return \implode(':', $this->scope);
+        if (is_array($this->scope)) {
+            return implode(':', $this->scope);
         }
         if ($this->audience) {
             return $this->audience;
@@ -583,16 +583,16 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      * @return array<mixed> the tokens parsed from the response body.
      * @throws \Exception
      */
-    public function parseTokenResponse(\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $resp)
+    public function parseTokenResponse(ResponseInterface $resp)
     {
         $body = (string) $resp->getBody();
         if ($resp->hasHeader('Content-Type') && $resp->getHeaderLine('Content-Type') == 'application/x-www-form-urlencoded') {
             $res = [];
-            \parse_str($body, $res);
+            parse_str($body, $res);
             return $res;
         }
         // Assume it's JSON; if it's not throw an exception
-        if (null === ($res = \json_decode($body, \true))) {
+        if (null === $res = json_decode($body, \true)) {
             throw new \Exception('Invalid JSON response');
         }
         return $res;
@@ -634,12 +634,12 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function updateToken(array $config)
     {
-        $opts = \array_merge(['extensionParams' => [], 'access_token' => null, 'id_token' => null, 'expires_in' => null, 'expires_at' => null, 'issued_at' => null, 'scope' => null], $config);
+        $opts = array_merge(['extensionParams' => [], 'access_token' => null, 'id_token' => null, 'expires_in' => null, 'expires_at' => null, 'issued_at' => null, 'scope' => null], $config);
         $this->setExpiresAt($opts['expires_at']);
         $this->setExpiresIn($opts['expires_in']);
         // By default, the token is issued at `Time.now` when `expiresIn` is set,
         // but this can be used to supply a more precise time.
-        if (!\is_null($opts['issued_at'])) {
+        if (!is_null($opts['issued_at'])) {
             $this->setIssuedAt($opts['issued_at']);
         }
         $this->setAccessToken($opts['access_token']);
@@ -647,12 +647,12 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
         // The refresh token should only be updated if a value is explicitly
         // passed in, as some access token responses do not include a refresh
         // token.
-        if (\array_key_exists('refresh_token', $opts)) {
+        if (array_key_exists('refresh_token', $opts)) {
             $this->setRefreshToken($opts['refresh_token']);
         }
         // Required for STS response. An identifier for the representation of
         // the issued security token.
-        if (\array_key_exists('issued_token_type', $opts)) {
+        if (array_key_exists('issued_token_type', $opts)) {
             $this->issuedTokenType = $opts['issued_token_type'];
         }
     }
@@ -665,19 +665,19 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function buildFullAuthorizationUri(array $config = [])
     {
-        if (\is_null($this->getAuthorizationUri())) {
-            throw new \InvalidArgumentException('requires an authorizationUri to have been set');
+        if (is_null($this->getAuthorizationUri())) {
+            throw new InvalidArgumentException('requires an authorizationUri to have been set');
         }
-        $params = \array_merge(['response_type' => 'code', 'access_type' => 'offline', 'client_id' => $this->clientId, 'redirect_uri' => $this->redirectUri, 'state' => $this->state, 'scope' => $this->getScope()], $config);
+        $params = array_merge(['response_type' => 'code', 'access_type' => 'offline', 'client_id' => $this->clientId, 'redirect_uri' => $this->redirectUri, 'state' => $this->state, 'scope' => $this->getScope()], $config);
         // Validate the auth_params
-        if (\is_null($params['client_id'])) {
-            throw new \InvalidArgumentException('missing the required client identifier');
+        if (is_null($params['client_id'])) {
+            throw new InvalidArgumentException('missing the required client identifier');
         }
-        if (\is_null($params['redirect_uri'])) {
-            throw new \InvalidArgumentException('missing the required redirect URI');
+        if (is_null($params['redirect_uri'])) {
+            throw new InvalidArgumentException('missing the required redirect URI');
         }
         if (!empty($params['prompt']) && !empty($params['approval_prompt'])) {
-            throw new \InvalidArgumentException('prompt and approval_prompt are mutually exclusive');
+            throw new InvalidArgumentException('prompt and approval_prompt are mutually exclusive');
         }
         if ($this->codeVerifier) {
             $params['code_challenge'] = $this->getCodeChallenge($this->codeVerifier);
@@ -685,17 +685,17 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
         }
         // Construct the uri object; return it if it is valid.
         $result = clone $this->authorizationUri;
-        $existingParams = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query::parse($result->getQuery());
-        $result = $result->withQuery(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query::build(\array_merge($existingParams, $params)));
+        $existingParams = Query::parse($result->getQuery());
+        $result = $result->withQuery(Query::build(array_merge($existingParams, $params)));
         if ($result->getScheme() != 'https') {
-            throw new \InvalidArgumentException('Authorization endpoint must be protected by TLS');
+            throw new InvalidArgumentException('Authorization endpoint must be protected by TLS');
         }
         return $result;
     }
     /**
      * @return string|null
      */
-    public function getCodeVerifier() : ?string
+    public function getCodeVerifier(): ?string
     {
         return $this->codeVerifier;
     }
@@ -711,7 +711,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      *
      * @param string|null $codeVerifier
      */
-    public function setCodeVerifier(?string $codeVerifier) : void
+    public function setCodeVerifier(?string $codeVerifier): void
     {
         $this->codeVerifier = $codeVerifier;
     }
@@ -725,26 +725,26 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      *
      * @return string
      */
-    public function generateCodeVerifier() : string
+    public function generateCodeVerifier(): string
     {
         return $this->codeVerifier = $this->generateRandomString(128);
     }
-    private function getCodeChallenge(string $randomString) : string
+    private function getCodeChallenge(string $randomString): string
     {
-        return \rtrim(\strtr(\base64_encode(\hash('sha256', $randomString, \true)), '+/', '-_'), '=');
+        return rtrim(strtr(base64_encode(hash('sha256', $randomString, \true)), '+/', '-_'), '=');
     }
-    private function getCodeChallengeMethod() : string
+    private function getCodeChallengeMethod(): string
     {
         return 'S256';
     }
-    private function generateRandomString(int $length) : string
+    private function generateRandomString(int $length): string
     {
         $validChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~';
-        $validCharsLen = \strlen($validChars);
+        $validCharsLen = strlen($validChars);
         $str = '';
         $i = 0;
         while ($i++ < $length) {
-            $str .= $validChars[\random_int(0, $validCharsLen - 1)];
+            $str .= $validChars[random_int(0, $validCharsLen - 1)];
         }
         return $str;
     }
@@ -807,7 +807,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function setRedirectUri($uri)
     {
-        if (\is_null($uri)) {
+        if (is_null($uri)) {
             $this->redirectUri = null;
             return;
         }
@@ -816,7 +816,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
             // "postmessage" is a reserved URI string in Google-land
             // @see https://developers.google.com/identity/sign-in/web/server-side-flow
             if ('postmessage' !== (string) $uri) {
-                throw new \InvalidArgumentException('Redirect URI must be absolute');
+                throw new InvalidArgumentException('Redirect URI must be absolute');
             }
         }
         $this->redirectUri = (string) $uri;
@@ -828,10 +828,10 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function getScope()
     {
-        if (\is_null($this->scope)) {
+        if (is_null($this->scope)) {
             return $this->scope;
         }
-        return \implode(' ', $this->scope);
+        return implode(' ', $this->scope);
     }
     /**
      * Sets the scope of the access request, expressed either as an Array or as
@@ -843,20 +843,20 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function setScope($scope)
     {
-        if (\is_null($scope)) {
+        if (is_null($scope)) {
             $this->scope = null;
-        } elseif (\is_string($scope)) {
-            $this->scope = \explode(' ', $scope);
-        } elseif (\is_array($scope)) {
+        } elseif (is_string($scope)) {
+            $this->scope = explode(' ', $scope);
+        } elseif (is_array($scope)) {
             foreach ($scope as $s) {
-                $pos = \strpos($s, ' ');
+                $pos = strpos($s, ' ');
                 if ($pos !== \false) {
-                    throw new \InvalidArgumentException('array scope values should not contain spaces');
+                    throw new InvalidArgumentException('array scope values should not contain spaces');
                 }
             }
             $this->scope = $scope;
         } else {
-            throw new \InvalidArgumentException('scopes should be a string or array of strings');
+            throw new InvalidArgumentException('scopes should be a string or array of strings');
         }
     }
     /**
@@ -866,24 +866,24 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function getGrantType()
     {
-        if (!\is_null($this->grantType)) {
+        if (!is_null($this->grantType)) {
             return $this->grantType;
         }
         // Returns the inferred grant type, based on the current object instance
         // state.
-        if (!\is_null($this->code)) {
+        if (!is_null($this->code)) {
             return 'authorization_code';
         }
-        if (!\is_null($this->refreshToken)) {
+        if (!is_null($this->refreshToken)) {
             return 'refresh_token';
         }
-        if (!\is_null($this->username) && !\is_null($this->password)) {
+        if (!is_null($this->username) && !is_null($this->password)) {
             return 'password';
         }
-        if (!\is_null($this->issuer) && !\is_null($this->signingKey)) {
+        if (!is_null($this->issuer) && !is_null($this->signingKey)) {
             return self::JWT_URN;
         }
-        if (!\is_null($this->subjectTokenFetcher) && !\is_null($this->subjectTokenType)) {
+        if (!is_null($this->subjectTokenFetcher) && !is_null($this->subjectTokenType)) {
             return self::STS_URN;
         }
         return null;
@@ -897,12 +897,12 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function setGrantType($grantType)
     {
-        if (\in_array($grantType, self::$knownGrantTypes)) {
+        if (in_array($grantType, self::$knownGrantTypes)) {
             $this->grantType = $grantType;
         } else {
             // validate URI
             if (!$this->isAbsoluteUri($grantType)) {
-                throw new \InvalidArgumentException('invalid grant type');
+                throw new InvalidArgumentException('invalid grant type');
             }
             $this->grantType = (string) $grantType;
         }
@@ -1137,10 +1137,10 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function setSigningAlgorithm($signingAlgorithm)
     {
-        if (\is_null($signingAlgorithm)) {
+        if (is_null($signingAlgorithm)) {
             $this->signingAlgorithm = null;
-        } elseif (!\in_array($signingAlgorithm, self::$knownSigningAlgorithms)) {
-            throw new \InvalidArgumentException('unknown signing algorithm');
+        } elseif (!in_array($signingAlgorithm, self::$knownSigningAlgorithms)) {
+            throw new InvalidArgumentException('unknown signing algorithm');
         } else {
             $this->signingAlgorithm = $signingAlgorithm;
         }
@@ -1202,11 +1202,11 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function setExpiresIn($expiresIn)
     {
-        if (\is_null($expiresIn)) {
+        if (is_null($expiresIn)) {
             $this->expiresIn = null;
             $this->issuedAt = null;
         } else {
-            $this->issuedAt = \time();
+            $this->issuedAt = time();
             $this->expiresIn = (int) $expiresIn;
         }
     }
@@ -1217,10 +1217,10 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     public function getExpiresAt()
     {
-        if (!\is_null($this->expiresAt)) {
+        if (!is_null($this->expiresAt)) {
             return $this->expiresAt;
         }
-        if (!\is_null($this->issuedAt) && !\is_null($this->expiresIn)) {
+        if (!is_null($this->issuedAt) && !is_null($this->expiresIn)) {
             return $this->issuedAt + $this->expiresIn;
         }
         return null;
@@ -1233,8 +1233,8 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
     public function isExpired()
     {
         $expiration = $this->getExpiresAt();
-        $now = \time();
-        return !\is_null($expiration) && $now >= $expiration;
+        $now = time();
+        return !is_null($expiration) && $now >= $expiration;
     }
     /**
      * Sets the time the current access token expires at.
@@ -1417,10 +1417,10 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
      */
     private function coerceUri($uri)
     {
-        if (\is_null($uri)) {
+        if (is_null($uri)) {
             return null;
         }
-        return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::uriFor($uri);
+        return Utils::uriFor($uri);
     }
     /**
      * @param string $idToken
@@ -1437,7 +1437,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
         $e = new \InvalidArgumentException('Key may not be empty');
         foreach ($keys as $key) {
             try {
-                return \Google\Site_Kit_Dependencies\Firebase\JWT\JWT::decode($idToken, $key);
+                return JWT::decode($idToken, $key);
             } catch (\Exception $e) {
                 // try next alg
             }
@@ -1452,44 +1452,44 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
     private function getFirebaseJwtKeys($publicKey, $allowedAlgs)
     {
         // If $publicKey is instance of Key, return it
-        if ($publicKey instanceof \Google\Site_Kit_Dependencies\Firebase\JWT\Key) {
+        if ($publicKey instanceof Key) {
             return [$publicKey];
         }
         // If $allowedAlgs is empty, $publicKey must be Key or Key[].
         if (empty($allowedAlgs)) {
             $keys = [];
             foreach ((array) $publicKey as $kid => $pubKey) {
-                if (!$pubKey instanceof \Google\Site_Kit_Dependencies\Firebase\JWT\Key) {
-                    throw new \InvalidArgumentException(\sprintf('When allowed algorithms is empty, the public key must' . 'be an instance of %s or an array of %s objects', \Google\Site_Kit_Dependencies\Firebase\JWT\Key::class, \Google\Site_Kit_Dependencies\Firebase\JWT\Key::class));
+                if (!$pubKey instanceof Key) {
+                    throw new \InvalidArgumentException(sprintf('When allowed algorithms is empty, the public key must' . 'be an instance of %s or an array of %s objects', Key::class, Key::class));
                 }
                 $keys[$kid] = $pubKey;
             }
             return $keys;
         }
         $allowedAlg = null;
-        if (\is_string($allowedAlgs)) {
+        if (is_string($allowedAlgs)) {
             $allowedAlg = $allowedAlgs;
-        } elseif (\is_array($allowedAlgs)) {
-            if (\count($allowedAlgs) > 1) {
-                throw new \InvalidArgumentException('To have multiple allowed algorithms, You must provide an' . ' array of Firebase\\JWT\\Key objects.' . ' See https://github.com/firebase/php-jwt for more information.');
+        } elseif (is_array($allowedAlgs)) {
+            if (count($allowedAlgs) > 1) {
+                throw new \InvalidArgumentException('To have multiple allowed algorithms, You must provide an' . ' array of Firebase\JWT\Key objects.' . ' See https://github.com/firebase/php-jwt for more information.');
             }
-            $allowedAlg = \array_pop($allowedAlgs);
+            $allowedAlg = array_pop($allowedAlgs);
         } else {
             throw new \InvalidArgumentException('allowed algorithms must be a string or array.');
         }
-        if (\is_array($publicKey)) {
+        if (is_array($publicKey)) {
             // When publicKey is greater than 1, create keys with the single alg.
             $keys = [];
             foreach ($publicKey as $kid => $pubKey) {
-                if ($pubKey instanceof \Google\Site_Kit_Dependencies\Firebase\JWT\Key) {
+                if ($pubKey instanceof Key) {
                     $keys[$kid] = $pubKey;
                 } else {
-                    $keys[$kid] = new \Google\Site_Kit_Dependencies\Firebase\JWT\Key($pubKey, $allowedAlg);
+                    $keys[$kid] = new Key($pubKey, $allowedAlg);
                 }
             }
             return $keys;
         }
-        return [new \Google\Site_Kit_Dependencies\Firebase\JWT\Key($publicKey, $allowedAlg)];
+        return [new Key($publicKey, $allowedAlg)];
     }
     /**
      * Determines if the URI is absolute based on its scheme and host or path

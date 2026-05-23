@@ -39,11 +39,11 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
      * @return Client
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client $postBody, $optParams = [])
+    public function create($parent, Client $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Client::class);
     }
     /**
      * Deletes a GTM Client. (clients.delete)
@@ -55,7 +55,7 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -69,8 +69,8 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Client::class);
     }
     /**
      * Lists all GTM Clients of a GTM container workspace.
@@ -87,8 +87,8 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
     public function listAccountsContainersWorkspacesClients($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListClientsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListClientsResponse::class);
     }
     /**
      * Reverts changes to a GTM Client in a GTM Workspace. (clients.revert)
@@ -104,8 +104,8 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
     public function revert($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('revert', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertClientResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('revert', [$params], RevertClientResponse::class);
     }
     /**
      * Updates a GTM Client. (clients.update)
@@ -119,12 +119,12 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
      * @return Client
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client $postBody, $optParams = [])
+    public function update($path, Client $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Client::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesClients::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesClients');
+class_alias(AccountsContainersWorkspacesClients::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesClients');

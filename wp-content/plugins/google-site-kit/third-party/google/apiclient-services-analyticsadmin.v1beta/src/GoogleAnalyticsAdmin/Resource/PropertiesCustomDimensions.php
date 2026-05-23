@@ -41,11 +41,11 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
      * @return GoogleProtobufEmpty
      * @throws \Google\Service\Exception
      */
-    public function archive($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaArchiveCustomDimensionRequest $postBody, $optParams = [])
+    public function archive($name, GoogleAnalyticsAdminV1betaArchiveCustomDimensionRequest $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('archive', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('archive', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Creates a CustomDimension. (customDimensions.create)
@@ -56,11 +56,11 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
      * @return GoogleAnalyticsAdminV1betaCustomDimension
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomDimension $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1betaCustomDimension $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomDimension::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1betaCustomDimension::class);
     }
     /**
      * Lookup for a single CustomDimension. (customDimensions.get)
@@ -74,8 +74,8 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomDimension::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1betaCustomDimension::class);
     }
     /**
      * Lists CustomDimensions on a property.
@@ -97,8 +97,8 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
     public function listPropertiesCustomDimensions($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListCustomDimensionsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1betaListCustomDimensionsResponse::class);
     }
     /**
      * Updates a CustomDimension on a property. (customDimensions.patch)
@@ -114,12 +114,12 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
      * @return GoogleAnalyticsAdminV1betaCustomDimension
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomDimension $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1betaCustomDimension $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomDimension::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1betaCustomDimension::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource\PropertiesCustomDimensions::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_Resource_PropertiesCustomDimensions');
+class_alias(PropertiesCustomDimensions::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_Resource_PropertiesCustomDimensions');

@@ -46,9 +46,9 @@ class MockHandler implements \Countable
      * @param callable|null $onFulfilled Callback to invoke when the return value is fulfilled.
      * @param callable|null $onRejected  Callback to invoke when the return value is rejected.
      */
-    public static function createWithMiddleware(?array $queue = null, ?callable $onFulfilled = null, ?callable $onRejected = null) : \Google\Site_Kit_Dependencies\GuzzleHttp\HandlerStack
+    public static function createWithMiddleware(?array $queue = null, ?callable $onFulfilled = null, ?callable $onRejected = null): HandlerStack
     {
-        return \Google\Site_Kit_Dependencies\GuzzleHttp\HandlerStack::create(new self($queue, $onFulfilled, $onRejected));
+        return HandlerStack::create(new self($queue, $onFulfilled, $onRejected));
     }
     /**
      * The passed in value must be an array of
@@ -65,10 +65,10 @@ class MockHandler implements \Countable
         $this->onRejected = $onRejected;
         if ($queue) {
             // array_values included for BC
-            $this->append(...\array_values($queue));
+            $this->append(...array_values($queue));
         }
     }
-    public function __invoke(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public function __invoke(RequestInterface $request, array $options): PromiseInterface
     {
         if (!$this->queue) {
             throw new \OutOfBoundsException('Mock queue is empty');
@@ -87,14 +87,14 @@ class MockHandler implements \Countable
                 $options['on_headers']($response);
             } catch (\Exception $e) {
                 $msg = 'An error was encountered during the on_headers event';
-                $response = new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\RequestException($msg, $request, $response, $e);
+                $response = new RequestException($msg, $request, $response, $e);
             }
         }
         if (\is_callable($response)) {
             $response = $response($request, $options);
         }
-        $response = $response instanceof \Throwable ? \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::rejectionFor($response) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::promiseFor($response);
-        return $response->then(function (?\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $value) use($request, $options) {
+        $response = $response instanceof \Throwable ? P\Create::rejectionFor($response) : P\Create::promiseFor($response);
+        return $response->then(function (?ResponseInterface $value) use ($request, $options) {
             $this->invokeStats($request, $options, $value);
             if ($this->onFulfilled) {
                 ($this->onFulfilled)($value);
@@ -106,17 +106,17 @@ class MockHandler implements \Countable
                     \fwrite($sink, $contents);
                 } elseif (\is_string($sink)) {
                     \file_put_contents($sink, $contents);
-                } elseif ($sink instanceof \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface) {
+                } elseif ($sink instanceof StreamInterface) {
                     $sink->write($contents);
                 }
             }
             return $value;
-        }, function ($reason) use($request, $options) {
+        }, function ($reason) use ($request, $options) {
             $this->invokeStats($request, $options, null, $reason);
             if ($this->onRejected) {
                 ($this->onRejected)($reason);
             }
-            return \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::rejectionFor($reason);
+            return P\Create::rejectionFor($reason);
         });
     }
     /**
@@ -125,49 +125,49 @@ class MockHandler implements \Countable
      *
      * @param mixed ...$values
      */
-    public function append(...$values) : void
+    public function append(...$values): void
     {
         foreach ($values as $value) {
-            if ($value instanceof \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface || $value instanceof \Throwable || $value instanceof \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface || \is_callable($value)) {
+            if ($value instanceof ResponseInterface || $value instanceof \Throwable || $value instanceof PromiseInterface || \is_callable($value)) {
                 $this->queue[] = $value;
             } else {
-                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . \Google\Site_Kit_Dependencies\GuzzleHttp\Utils::describeType($value));
+                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . Utils::describeType($value));
             }
         }
     }
     /**
      * Get the last received request.
      */
-    public function getLastRequest() : ?\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface
+    public function getLastRequest(): ?RequestInterface
     {
         return $this->lastRequest;
     }
     /**
      * Get the last received request options.
      */
-    public function getLastOptions() : array
+    public function getLastOptions(): array
     {
         return $this->lastOptions;
     }
     /**
      * Returns the number of remaining items in the queue.
      */
-    public function count() : int
+    public function count(): int
     {
         return \count($this->queue);
     }
-    public function reset() : void
+    public function reset(): void
     {
         $this->queue = [];
     }
     /**
      * @param mixed $reason Promise or reason.
      */
-    private function invokeStats(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options, ?\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response = null, $reason = null) : void
+    private function invokeStats(RequestInterface $request, array $options, ?ResponseInterface $response = null, $reason = null): void
     {
         if (isset($options['on_stats'])) {
             $transferTime = $options['transfer_time'] ?? 0;
-            $stats = new \Google\Site_Kit_Dependencies\GuzzleHttp\TransferStats($request, $response, $transferTime, $reason);
+            $stats = new TransferStats($request, $response, $transferTime, $reason);
             $options['on_stats']($stats);
         }
     }

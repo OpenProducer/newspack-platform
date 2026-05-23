@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class ListLinkedCustomChannelsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'customChannels';
-    protected $customChannelsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel::class;
+    protected $customChannelsType = CustomChannel::class;
     protected $customChannelsDataType = 'array';
     /**
      * Continuation token used to page through alerts. To retrieve the next page
@@ -64,4 +64,4 @@ class ListLinkedCustomChannelsResponse extends \Google\Site_Kit_Dependencies\Goo
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListLinkedCustomChannelsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListLinkedCustomChannelsResponse');
+class_alias(ListLinkedCustomChannelsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListLinkedCustomChannelsResponse');

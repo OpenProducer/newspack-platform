@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class AccessDescription
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['accessMethod' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_OBJECT_IDENTIFIER], 'accessLocation' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\GeneralName::MAP]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['accessMethod' => ['type' => ASN1::TYPE_OBJECT_IDENTIFIER], 'accessLocation' => GeneralName::MAP]];
 }

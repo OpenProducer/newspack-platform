@@ -53,7 +53,7 @@ class Pivot extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $offset;
-    protected $orderBysType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\OrderBy::class;
+    protected $orderBysType = OrderBy::class;
     protected $orderBysDataType = 'array';
     /**
      * Dimension names for visible columns in the report response. Including
@@ -150,4 +150,4 @@ class Pivot extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Pivot::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Pivot');
+class_alias(Pivot::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Pivot');

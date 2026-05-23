@@ -22,5 +22,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class SpecifiedECDomain
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['version' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER, 'mapping' => [1 => 'ecdpVer1', 'ecdpVer2', 'ecdpVer3']], 'fieldID' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\FieldID::MAP, 'curve' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Curve::MAP, 'base' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\ECPoint::MAP, 'order' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER], 'cofactor' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER, 'optional' => \true], 'hash' => ['optional' => \true] + \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\HashAlgorithm::MAP]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['version' => ['type' => ASN1::TYPE_INTEGER, 'mapping' => [1 => 'ecdpVer1', 'ecdpVer2', 'ecdpVer3']], 'fieldID' => FieldID::MAP, 'curve' => Curve::MAP, 'base' => ECPoint::MAP, 'order' => ['type' => ASN1::TYPE_INTEGER], 'cofactor' => ['type' => ASN1::TYPE_INTEGER, 'optional' => \true], 'hash' => ['optional' => \true] + HashAlgorithm::MAP]];
 }

@@ -24,7 +24,7 @@ class SearchAnalyticsQueryResponse extends \Google\Site_Kit_Dependencies\Google\
     public const RESPONSE_AGGREGATION_TYPE_BY_PAGE = 'BY_PAGE';
     public const RESPONSE_AGGREGATION_TYPE_BY_NEWS_SHOWCASE_PANEL = 'BY_NEWS_SHOWCASE_PANEL';
     protected $collection_key = 'rows';
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Metadata::class;
+    protected $metadataType = Metadata::class;
     protected $metadataDataType = '';
     /**
      * How the results were aggregated.
@@ -32,7 +32,7 @@ class SearchAnalyticsQueryResponse extends \Google\Site_Kit_Dependencies\Google\
      * @var string
      */
     public $responseAggregationType;
-    protected $rowsType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\ApiDataRow::class;
+    protected $rowsType = ApiDataRow::class;
     protected $rowsDataType = 'array';
     /**
      * An object that may be returned with your query results, providing context
@@ -40,7 +40,7 @@ class SearchAnalyticsQueryResponse extends \Google\Site_Kit_Dependencies\Google\
      *
      * @param Metadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Metadata $metadata)
+    public function setMetadata(Metadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -87,4 +87,4 @@ class SearchAnalyticsQueryResponse extends \Google\Site_Kit_Dependencies\Google\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\SearchAnalyticsQueryResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_SearchAnalyticsQueryResponse');
+class_alias(SearchAnalyticsQueryResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_SearchAnalyticsQueryResponse');

@@ -19,13 +19,13 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1betaAccessFilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $accessFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilter::class;
+    protected $accessFilterType = GoogleAnalyticsAdminV1betaAccessFilter::class;
     protected $accessFilterDataType = '';
-    protected $andGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpressionList::class;
+    protected $andGroupType = GoogleAnalyticsAdminV1betaAccessFilterExpressionList::class;
     protected $andGroupDataType = '';
-    protected $notExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpression::class;
+    protected $notExpressionType = GoogleAnalyticsAdminV1betaAccessFilterExpression::class;
     protected $notExpressionDataType = '';
-    protected $orGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpressionList::class;
+    protected $orGroupType = GoogleAnalyticsAdminV1betaAccessFilterExpressionList::class;
     protected $orGroupDataType = '';
     /**
      * A primitive filter. In the same FilterExpression, all of the filter's field
@@ -33,7 +33,7 @@ class GoogleAnalyticsAdminV1betaAccessFilterExpression extends \Google\Site_Kit_
      *
      * @param GoogleAnalyticsAdminV1betaAccessFilter $accessFilter
      */
-    public function setAccessFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilter $accessFilter)
+    public function setAccessFilter(GoogleAnalyticsAdminV1betaAccessFilter $accessFilter)
     {
         $this->accessFilter = $accessFilter;
     }
@@ -49,7 +49,7 @@ class GoogleAnalyticsAdminV1betaAccessFilterExpression extends \Google\Site_Kit_
      *
      * @param GoogleAnalyticsAdminV1betaAccessFilterExpressionList $andGroup
      */
-    public function setAndGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpressionList $andGroup)
+    public function setAndGroup(GoogleAnalyticsAdminV1betaAccessFilterExpressionList $andGroup)
     {
         $this->andGroup = $andGroup;
     }
@@ -65,7 +65,7 @@ class GoogleAnalyticsAdminV1betaAccessFilterExpression extends \Google\Site_Kit_
      *
      * @param GoogleAnalyticsAdminV1betaAccessFilterExpression $notExpression
      */
-    public function setNotExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpression $notExpression)
+    public function setNotExpression(GoogleAnalyticsAdminV1betaAccessFilterExpression $notExpression)
     {
         $this->notExpression = $notExpression;
     }
@@ -81,7 +81,7 @@ class GoogleAnalyticsAdminV1betaAccessFilterExpression extends \Google\Site_Kit_
      *
      * @param GoogleAnalyticsAdminV1betaAccessFilterExpressionList $orGroup
      */
-    public function setOrGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpressionList $orGroup)
+    public function setOrGroup(GoogleAnalyticsAdminV1betaAccessFilterExpressionList $orGroup)
     {
         $this->orGroup = $orGroup;
     }
@@ -94,4 +94,4 @@ class GoogleAnalyticsAdminV1betaAccessFilterExpression extends \Google\Site_Kit_
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessFilterExpression');
+class_alias(GoogleAnalyticsAdminV1betaAccessFilterExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessFilterExpression');

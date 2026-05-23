@@ -89,4 +89,4 @@ class ComparisonMetadata extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ComparisonMetadata::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_ComparisonMetadata');
+class_alias(ComparisonMetadata::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_ComparisonMetadata');

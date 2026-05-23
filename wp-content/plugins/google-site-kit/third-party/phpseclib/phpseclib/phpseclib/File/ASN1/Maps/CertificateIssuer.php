@@ -19,5 +19,5 @@ namespace Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps;
  */
 abstract class CertificateIssuer
 {
-    const MAP = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\GeneralNames::MAP;
+    const MAP = GeneralNames::MAP;
 }

@@ -24,5 +24,5 @@ interface UploadedFileFactoryInterface
      *
      * @throws \InvalidArgumentException If the file resource is not readable.
      */
-    public function createUploadedFile(\Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface $stream, ?int $size = null, int $error = \UPLOAD_ERR_OK, ?string $clientFilename = null, ?string $clientMediaType = null) : \Google\Site_Kit_Dependencies\Psr\Http\Message\UploadedFileInterface;
+    public function createUploadedFile(StreamInterface $stream, ?int $size = null, int $error = \UPLOAD_ERR_OK, ?string $clientFilename = null, ?string $clientMediaType = null): UploadedFileInterface;
 }

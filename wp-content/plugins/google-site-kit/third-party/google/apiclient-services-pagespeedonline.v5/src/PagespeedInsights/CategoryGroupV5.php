@@ -65,4 +65,4 @@ class CategoryGroupV5 extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\CategoryGroupV5::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_CategoryGroupV5');
+class_alias(CategoryGroupV5::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_CategoryGroupV5');

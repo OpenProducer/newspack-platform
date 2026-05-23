@@ -62,4 +62,4 @@ class GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue extends \G
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue');
+class_alias(GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue');

@@ -43,8 +43,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\Account::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Account::class);
     }
     /**
      * Gets the ad blocking recovery tag of an account.
@@ -59,8 +59,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function getAdBlockingRecoveryTag($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getAdBlockingRecoveryTag', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdBlockingRecoveryTag::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getAdBlockingRecoveryTag', [$params], AdBlockingRecoveryTag::class);
     }
     /**
      * Lists all accounts available to this user. (accounts.listAccounts)
@@ -81,8 +81,8 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listAccounts($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListAccountsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListAccountsResponse::class);
     }
     /**
      * Lists all accounts directly managed by the given AdSense account.
@@ -106,9 +106,9 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listChildAccounts($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('listChildAccounts', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListChildAccountsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('listChildAccounts', [$params], ListChildAccountsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\Accounts::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_Accounts');
+class_alias(Accounts::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_Accounts');

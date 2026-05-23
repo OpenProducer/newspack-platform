@@ -29,7 +29,7 @@ class GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse e
      * @var string
      */
     public $nextPageToken;
-    protected $skadnetworkConversionValueSchemasType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class;
+    protected $skadnetworkConversionValueSchemasType = GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class;
     protected $skadnetworkConversionValueSchemasDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -69,4 +69,4 @@ class GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse e
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSKAdNetworkConversionValueSchemasResponse');

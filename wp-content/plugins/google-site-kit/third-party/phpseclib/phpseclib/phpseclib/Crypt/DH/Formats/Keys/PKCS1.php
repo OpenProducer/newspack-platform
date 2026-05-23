@@ -29,7 +29,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class PKCS1 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Keys\PKCS1
+abstract class PKCS1 extends Progenitor
 {
     /**
      * Break a public or private key down into its constituent components
@@ -41,12 +41,12 @@ abstract class PKCS1 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     public static function load($key, $password = '')
     {
         $key = parent::load($key, $password);
-        $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($key);
+        $decoded = ASN1::decodeBER($key);
         if (!$decoded) {
             throw new \RuntimeException('Unable to decode BER');
         }
-        $components = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DHParameter::MAP);
-        if (!\is_array($components)) {
+        $components = ASN1::asn1map($decoded[0], Maps\DHParameter::MAP);
+        if (!is_array($components)) {
             throw new \RuntimeException('Unable to perform ASN1 mapping on parameters');
         }
         return $components;
@@ -56,10 +56,10 @@ abstract class PKCS1 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      *
      * @return string
      */
-    public static function saveParameters(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $prime, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $base, array $options = [])
+    public static function saveParameters(BigInteger $prime, BigInteger $base, array $options = [])
     {
         $params = ['prime' => $prime, 'base' => $base];
-        $params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($params, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DHParameter::MAP);
-        return "-----BEGIN DH PARAMETERS-----\r\n" . \chunk_split(\base64_encode($params), 64) . "-----END DH PARAMETERS-----\r\n";
+        $params = ASN1::encodeDER($params, Maps\DHParameter::MAP);
+        return "-----BEGIN DH PARAMETERS-----\r\n" . chunk_split(base64_encode($params), 64) . "-----END DH PARAMETERS-----\r\n";
     }
 }

@@ -10,7 +10,7 @@ namespace Google\Site_Kit_Dependencies\Psr\Log;
  * is a good way to avoid littering your code with `if ($this->logger) { }`
  * blocks.
  */
-class NullLogger extends \Google\Site_Kit_Dependencies\Psr\Log\AbstractLogger
+class NullLogger extends AbstractLogger
 {
     /**
      * Logs with an arbitrary level.

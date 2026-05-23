@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Auth;
 /**
  * Describes a class which supports signing arbitrary strings.
  */
-interface SignBlobInterface extends \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface
+interface SignBlobInterface extends FetchAuthTokenInterface
 {
     /**
      * Sign a string using the method which is best for a given credentials type.

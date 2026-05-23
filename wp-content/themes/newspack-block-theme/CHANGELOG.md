@@ -1,3 +1,121 @@
+## [1.28.1](https://github.com/Automattic/newspack-block-theme/compare/v1.28.0...v1.28.1) (2026-05-18)
+
+
+### Bug Fixes
+
+* **block-theme:** remove MJML image-caption filter moved to newsletters plugin ([#442](https://github.com/Automattic/newspack-block-theme/issues/442)) ([93c9b4b](https://github.com/Automattic/newspack-block-theme/commit/93c9b4b352ce568539ca789a3275824fb1d31f7c))
+* fine-tune code removing patterns to skip Woo Coming Soon patterns ([#439](https://github.com/Automattic/newspack-block-theme/issues/439)) ([1cf68d0](https://github.com/Automattic/newspack-block-theme/commit/1cf68d029cd4ea732fefbd3243fc18adefc789fe))
+
+## [1.28.1-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.28.0...v1.28.1-alpha.1) (2026-05-07)
+
+
+### Bug Fixes
+
+* **block-theme:** remove MJML image-caption filter moved to newsletters plugin ([#442](https://github.com/Automattic/newspack-block-theme/issues/442)) ([93c9b4b](https://github.com/Automattic/newspack-block-theme/commit/93c9b4b352ce568539ca789a3275824fb1d31f7c))
+* fine-tune code removing patterns to skip Woo Coming Soon patterns ([#439](https://github.com/Automattic/newspack-block-theme/issues/439)) ([1cf68d0](https://github.com/Automattic/newspack-block-theme/commit/1cf68d029cd4ea732fefbd3243fc18adefc789fe))
+
+# [1.28.0](https://github.com/Automattic/newspack-block-theme/compare/v1.27.0...v1.28.0) (2026-05-04)
+
+
+### Bug Fixes
+
+* improve pagination, linking directly to comments ([#431](https://github.com/Automattic/newspack-block-theme/issues/431)) ([461def0](https://github.com/Automattic/newspack-block-theme/commit/461def0a3491733c023702dc2ce82595b89babf2))
+* **post-date:** use block bindings instead of deprecated displayType ([#430](https://github.com/Automattic/newspack-block-theme/issues/430)) ([b65b8c3](https://github.com/Automattic/newspack-block-theme/commit/b65b8c34b93a2239f71330bda0f19bfd67ba5983))
+
+
+### Features
+
+* add newsletters templates ([#437](https://github.com/Automattic/newspack-block-theme/issues/437)) ([cc8d244](https://github.com/Automattic/newspack-block-theme/commit/cc8d244b3f4d1f8138058ddd406ee6855bb3b730))
+* copy newsletters compatibility ([#436](https://github.com/Automattic/newspack-block-theme/issues/436)) ([214f73a](https://github.com/Automattic/newspack-block-theme/commit/214f73aa876184d7c036cfd3b919a34777df6347))
+* swap in Overlay Menu block to replace template parts ([30be676](https://github.com/Automattic/newspack-block-theme/commit/30be67680cc32bad0c579a4cd04ede93bbbe80d1))
+
+# [1.28.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.27.0...v1.28.0-alpha.1) (2026-04-16)
+
+
+### Bug Fixes
+
+* improve pagination, linking directly to comments ([#431](https://github.com/Automattic/newspack-block-theme/issues/431)) ([461def0](https://github.com/Automattic/newspack-block-theme/commit/461def0a3491733c023702dc2ce82595b89babf2))
+* **post-date:** use block bindings instead of deprecated displayType ([#430](https://github.com/Automattic/newspack-block-theme/issues/430)) ([b65b8c3](https://github.com/Automattic/newspack-block-theme/commit/b65b8c34b93a2239f71330bda0f19bfd67ba5983))
+
+
+### Features
+
+* add newsletters templates ([#437](https://github.com/Automattic/newspack-block-theme/issues/437)) ([cc8d244](https://github.com/Automattic/newspack-block-theme/commit/cc8d244b3f4d1f8138058ddd406ee6855bb3b730))
+* copy newsletters compatibility ([#436](https://github.com/Automattic/newspack-block-theme/issues/436)) ([214f73a](https://github.com/Automattic/newspack-block-theme/commit/214f73aa876184d7c036cfd3b919a34777df6347))
+* swap in Overlay Menu block to replace template parts ([30be676](https://github.com/Automattic/newspack-block-theme/commit/30be67680cc32bad0c579a4cd04ede93bbbe80d1))
+
+# [1.27.0](https://github.com/Automattic/newspack-block-theme/compare/v1.26.0...v1.27.0) (2026-04-13)
+
+
+### Bug Fixes
+
+* avoid race condition by setting up a reference for the subtitle ([82c430e](https://github.com/Automattic/newspack-block-theme/commit/82c430e341283e8d778e3b4b5ede72754133f6bb))
+* clean up timeout and rework subtitle saves to prevent reruns from mangling input ([517a8d4](https://github.com/Automattic/newspack-block-theme/commit/517a8d4535f53a08c927324980e98597e56822f6))
+* ensure context by setting in `block.json` and also adding a(n empty) default ([f0c478d](https://github.com/Automattic/newspack-block-theme/commit/f0c478dac9ebebaa4d36abfbfa5e8e58cf7edae5))
+* escaped output and switched to `textContent` as an extra guard against naughty subtitles ([cb60c98](https://github.com/Automattic/newspack-block-theme/commit/cb60c98d0bb6eec7fce94b656bd74b3af9bb71e5))
+* guard against `null` from `get_current_screen()` ([e298edb](https://github.com/Automattic/newspack-block-theme/commit/e298edb82ba156806e4ed3292eadbc26761b2ade))
+* normalize subtitle to avoid race condition ([d26534d](https://github.com/Automattic/newspack-block-theme/commit/d26534d73a5dc97e9e245e621bc3647cd61f604d))
+* separate mount and update effects ([d4d4892](https://github.com/Automattic/newspack-block-theme/commit/d4d48929c7a9a61e5bba21f189a1e89f6fa93851))
+* **subtitle:** use CSS variable for content width in post editor ([#434](https://github.com/Automattic/newspack-block-theme/issues/434)) ([aed2e69](https://github.com/Automattic/newspack-block-theme/commit/aed2e693dd746a7e83a07b9724db57de3ba78718))
+* update subtitle block for compatibility with iframed Post Editor ([36c1bd6](https://github.com/Automattic/newspack-block-theme/commit/36c1bd6a8dc27ec15f0382321ff654364d833d9e))
+* update subtitle block for compatibility with iframed Post Editor ([76e9135](https://github.com/Automattic/newspack-block-theme/commit/76e913567869ea775a1bc234f6ad3fdbe26133f7))
+* use asset file for dependencies ([4ecefa4](https://github.com/Automattic/newspack-block-theme/commit/4ecefa4537c83a08afaa76557c0fe0209bd8dd38))
+* work around non-string subtitles ([e081213](https://github.com/Automattic/newspack-block-theme/commit/e081213e5b817aba9e7aa09b7a3982b265b5776a))
+
+
+### Features
+
+* **patterns:** use author profile block in author bio patterns ([#424](https://github.com/Automattic/newspack-block-theme/issues/424)) ([cf8d5e8](https://github.com/Automattic/newspack-block-theme/commit/cf8d5e837a00a289a56405c9b897907ee11c1257))
+* **post-date:** add modified date block to post-meta patterns ([#428](https://github.com/Automattic/newspack-block-theme/issues/428)) ([656831c](https://github.com/Automattic/newspack-block-theme/commit/656831c1a3be5fbf423c8342cee062c6d98a7070))
+* switch header/footer to use WordPress's block visibility ([#432](https://github.com/Automattic/newspack-block-theme/issues/432)) ([914a41c](https://github.com/Automattic/newspack-block-theme/commit/914a41c93208c2dfd76498606d43bb404e74dd82))
+
+# [1.27.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.26.0...v1.27.0-alpha.1) (2026-04-02)
+
+
+### Bug Fixes
+
+* avoid race condition by setting up a reference for the subtitle ([82c430e](https://github.com/Automattic/newspack-block-theme/commit/82c430e341283e8d778e3b4b5ede72754133f6bb))
+* clean up timeout and rework subtitle saves to prevent reruns from mangling input ([517a8d4](https://github.com/Automattic/newspack-block-theme/commit/517a8d4535f53a08c927324980e98597e56822f6))
+* ensure context by setting in `block.json` and also adding a(n empty) default ([f0c478d](https://github.com/Automattic/newspack-block-theme/commit/f0c478dac9ebebaa4d36abfbfa5e8e58cf7edae5))
+* escaped output and switched to `textContent` as an extra guard against naughty subtitles ([cb60c98](https://github.com/Automattic/newspack-block-theme/commit/cb60c98d0bb6eec7fce94b656bd74b3af9bb71e5))
+* guard against `null` from `get_current_screen()` ([e298edb](https://github.com/Automattic/newspack-block-theme/commit/e298edb82ba156806e4ed3292eadbc26761b2ade))
+* normalize subtitle to avoid race condition ([d26534d](https://github.com/Automattic/newspack-block-theme/commit/d26534d73a5dc97e9e245e621bc3647cd61f604d))
+* separate mount and update effects ([d4d4892](https://github.com/Automattic/newspack-block-theme/commit/d4d48929c7a9a61e5bba21f189a1e89f6fa93851))
+* **subtitle:** use CSS variable for content width in post editor ([#434](https://github.com/Automattic/newspack-block-theme/issues/434)) ([aed2e69](https://github.com/Automattic/newspack-block-theme/commit/aed2e693dd746a7e83a07b9724db57de3ba78718))
+* update subtitle block for compatibility with iframed Post Editor ([36c1bd6](https://github.com/Automattic/newspack-block-theme/commit/36c1bd6a8dc27ec15f0382321ff654364d833d9e))
+* update subtitle block for compatibility with iframed Post Editor ([76e9135](https://github.com/Automattic/newspack-block-theme/commit/76e913567869ea775a1bc234f6ad3fdbe26133f7))
+* use asset file for dependencies ([4ecefa4](https://github.com/Automattic/newspack-block-theme/commit/4ecefa4537c83a08afaa76557c0fe0209bd8dd38))
+* work around non-string subtitles ([e081213](https://github.com/Automattic/newspack-block-theme/commit/e081213e5b817aba9e7aa09b7a3982b265b5776a))
+
+
+### Features
+
+* **patterns:** use author profile block in author bio patterns ([#424](https://github.com/Automattic/newspack-block-theme/issues/424)) ([cf8d5e8](https://github.com/Automattic/newspack-block-theme/commit/cf8d5e837a00a289a56405c9b897907ee11c1257))
+* **post-date:** add modified date block to post-meta patterns ([#428](https://github.com/Automattic/newspack-block-theme/issues/428)) ([656831c](https://github.com/Automattic/newspack-block-theme/commit/656831c1a3be5fbf423c8342cee062c6d98a7070))
+* switch header/footer to use WordPress's block visibility ([#432](https://github.com/Automattic/newspack-block-theme/issues/432)) ([914a41c](https://github.com/Automattic/newspack-block-theme/commit/914a41c93208c2dfd76498606d43bb404e74dd82))
+
+# [1.26.0](https://github.com/Automattic/newspack-block-theme/compare/v1.25.0...v1.26.0) (2026-03-16)
+
+
+### Features
+
+* add AGENTS.md and CLAUDE.md; update README.md ([#420](https://github.com/Automattic/newspack-block-theme/issues/420)) ([7494928](https://github.com/Automattic/newspack-block-theme/commit/7494928ab6d11c941bc153842fde0eb641b9f349))
+* add featured image caption block to templates ([#415](https://github.com/Automattic/newspack-block-theme/issues/415)) ([7db45fe](https://github.com/Automattic/newspack-block-theme/commit/7db45fe737d7cdf36b4c4ca435c090d3efd9e90b))
+* add new styles ([#416](https://github.com/Automattic/newspack-block-theme/issues/416)) ([37e82db](https://github.com/Automattic/newspack-block-theme/commit/37e82dbcdbd00a06adb4f70571783f5234ebb0a4))
+* remove newspack-grid, newspack-grid-small, newspack-grid-sidebar ([#417](https://github.com/Automattic/newspack-block-theme/issues/417)) ([86b8292](https://github.com/Automattic/newspack-block-theme/commit/86b8292489d51fdab5430f70bace3c50d32eb332))
+* use dynamic copyright date block in footer patterns ([#414](https://github.com/Automattic/newspack-block-theme/issues/414)) ([22c9bc8](https://github.com/Automattic/newspack-block-theme/commit/22c9bc826b385098379a5139511658c62880bba5))
+
+# [1.26.0-alpha.1](https://github.com/Automattic/newspack-block-theme/compare/v1.25.0...v1.26.0-alpha.1) (2026-03-05)
+
+
+### Features
+
+* add AGENTS.md and CLAUDE.md; update README.md ([#420](https://github.com/Automattic/newspack-block-theme/issues/420)) ([7494928](https://github.com/Automattic/newspack-block-theme/commit/7494928ab6d11c941bc153842fde0eb641b9f349))
+* add featured image caption block to templates ([#415](https://github.com/Automattic/newspack-block-theme/issues/415)) ([7db45fe](https://github.com/Automattic/newspack-block-theme/commit/7db45fe737d7cdf36b4c4ca435c090d3efd9e90b))
+* add new styles ([#416](https://github.com/Automattic/newspack-block-theme/issues/416)) ([37e82db](https://github.com/Automattic/newspack-block-theme/commit/37e82dbcdbd00a06adb4f70571783f5234ebb0a4))
+* remove newspack-grid, newspack-grid-small, newspack-grid-sidebar ([#417](https://github.com/Automattic/newspack-block-theme/issues/417)) ([86b8292](https://github.com/Automattic/newspack-block-theme/commit/86b8292489d51fdab5430f70bace3c50d32eb332))
+* use dynamic copyright date block in footer patterns ([#414](https://github.com/Automattic/newspack-block-theme/issues/414)) ([22c9bc8](https://github.com/Automattic/newspack-block-theme/commit/22c9bc826b385098379a5139511658c62880bba5))
+
 # [1.25.0](https://github.com/Automattic/newspack-block-theme/compare/v1.24.0...v1.25.0) (2026-03-02)
 
 

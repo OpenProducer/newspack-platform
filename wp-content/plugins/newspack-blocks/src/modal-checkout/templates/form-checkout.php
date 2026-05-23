@@ -25,6 +25,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 ?>
 
 <form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
+	<?php wp_nonce_field( 'newspack_modal_checkout_nonce', 'newspack_checkout_nonce' ); ?>
 	<?php if ( $checkout->get_checkout_fields() ) : ?>
 		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 		<div id="customer_details">
@@ -34,6 +35,11 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 			<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--wide" id="checkout_continue" type="submit"><?php esc_html_e( 'Continue', 'newspack-blocks' ); ?></button>
 		</div>
 		<div id="after_customer_details">
+			<?php
+			if ( wp_is_block_theme() && function_exists( 'woocommerce_checkout_payment' ) ) {
+				woocommerce_checkout_payment();
+			}
+			?>
 			<div class="order-review-wrapper hidden">
 				<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
 				<button id="order_review_heading" aria-expanded="false" aria-controls="order_review_content" class="newspack-ui__button newspack-ui__button--ghost" type="button">
@@ -46,7 +52,13 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 					<div class="transaction-details-content-inner" id="order_review_content">
 						<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
 						<div id="order_review" class="woocommerce-checkout-review-order newspack-ui__box">
-							<?php do_action( 'woocommerce_checkout_order_review' ); ?>
+							<?php
+							if ( wp_is_block_theme() && function_exists( 'woocommerce_order_review' ) ) {
+								woocommerce_order_review();
+							} else {
+								do_action( 'woocommerce_checkout_order_review' );
+							}
+							?>
 						</div>
 						<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
 					</div>
