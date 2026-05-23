@@ -823,6 +823,29 @@ function newspack_customize_register( $wp_customize ) {
 		)
 	);
 
+	// Shared avatar image size for author archive and author bio templates.
+	$wp_customize->add_setting(
+		'author_avatar_size',
+		array(
+			'default'           => 120,
+			'sanitize_callback' => 'newspack_sanitize_author_avatar_size',
+		)
+	);
+	$wp_customize->add_control(
+		'author_avatar_size',
+		array(
+			'type'        => 'number',
+			'label'       => esc_html__( 'Author Avatar Size', 'newspack-theme' ),
+			'description' => esc_html__( 'One shared setting for author archive and author bio avatars. Values are saved in the 32-512px range. This controls the requested image size, but the final on-screen size is still controlled by CSS -- both will need to be changed to change the visual size of the avatar.', 'newspack-theme' ),
+			'input_attrs' => array(
+				'min'  => 32,
+				'max'  => 512,
+				'step' => 1,
+			),
+			'section'     => 'author_bio_options',
+		)
+	);
+
 	/**
 	 * Template Settings
 	 */
@@ -892,93 +915,6 @@ function newspack_customize_register( $wp_customize ) {
 			'section'     => 'post_default_settings',
 		)
 	);
-	// Add option to use a time ago date format
-	$wp_customize->add_setting(
-		'post_time_ago',
-		array(
-			'default'           => false,
-			'sanitize_callback' => 'newspack_sanitize_checkbox',
-		)
-	);
-	$wp_customize->add_control(
-		'post_time_ago',
-		array(
-			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Use "time ago" date format', 'newspack-theme' ),
-			'section' => 'post_default_settings',
-		)
-	);
-
-	$wp_customize->add_setting(
-		'post_time_ago_cut_off',
-		array(
-			'default'           => NP_DEFAULT_POST_TIME_AGO_CUT_OFF_DAYS,
-			'sanitize_callback' => 'absint',
-		)
-	);
-
-	$wp_customize->add_control(
-		'post_time_ago_cut_off',
-		array(
-			'type'    => 'number',
-			'label'   => esc_html__( 'Cut off for "time ago" date in days.', 'newspack-theme' ),
-			'section' => 'post_default_settings',
-		)
-	);
-	// Add option to display updated date.
-	$wp_customize->add_setting(
-		'post_updated_date',
-		array(
-			'default'           => false,
-			'sanitize_callback' => 'newspack_sanitize_checkbox',
-		)
-	);
-	$wp_customize->add_control(
-		'post_updated_date',
-		array(
-			'type'        => 'checkbox',
-			'label'       => esc_html__( 'Show "last updated" date on single posts', 'newspack-theme' ),
-			'description' => esc_html__( 'When paired with the "time ago" date format, the cut off for that format will automatically be switched to one day.', 'newspack-theme' ),
-			'section'     => 'post_default_settings',
-		)
-	);
-	// Add option to determine updated date threshold.
-	$wp_customize->add_setting(
-		'post_updated_date_threshold',
-		array(
-			'default'           => 24,
-			'sanitize_callback' => 'sanitize_text_field',
-		)
-	);
-	$wp_customize->add_control(
-		'post_updated_date_threshold',
-		array(
-			'type'        => 'number',
-			'label'       => esc_html__( 'Updated date threshold', 'newspack-theme' ),
-			'description' => esc_html__( 'The number of hours after publishing a post before updates cause the "last updated" date to appear.', 'newspack-theme' ),
-			'section'     => 'post_default_settings',
-		)
-	);
-
-	// Add option to turn off Yoast's Primary Category functionality.
-	if ( class_exists( 'WPSEO_Primary_Term' ) ) {
-		$wp_customize->add_setting(
-			'post_primary_category',
-			array(
-				'default'           => 'true',
-				'sanitize_callback' => 'newspack_sanitize_checkbox',
-			)
-		);
-		$wp_customize->add_control(
-			'post_primary_category',
-			array(
-				'type'    => 'checkbox',
-				'label'   => __( 'Use Yoast\'s primary category functionality', 'newspack-theme' ),
-				'section' => 'post_default_settings',
-			)
-		);
-	}
-
 	// Add option to display previous and next links on single posts.
 	$wp_customize->add_setting(
 		'post_previous_next',
@@ -1693,6 +1629,27 @@ function newspack_sanitize_checkbox( $input ) {
 }
 
 /**
+ * Sanitize author avatar image size.
+ *
+ * @param int|string $input Requested avatar size.
+ *
+ * @return int Clamped avatar size.
+ */
+function newspack_sanitize_author_avatar_size( $input ) {
+	$size = absint( $input );
+
+	if ( $size < 32 ) {
+		return 32;
+	}
+
+	if ( $size > 512 ) {
+		return 512;
+	}
+
+	return $size;
+}
+
+/**
  * Sanitize the radio buttons.
  */
 function newspack_sanitize_radio( $input, $setting ) {
@@ -1763,12 +1720,3 @@ function newspack_sanitize_font_stack( $stack_id ) {
 	}
 	return null;
 }
-
-/**
- * Adds CSS to the Customizer controls.
- */
-function newspack_default_post_template_customize_css() {
-	wp_add_inline_style( 'customize-controls', '#customize-control-post_updated_date_threshold { padding-left: 24px; }' );
-	wp_add_inline_style( 'customize-controls', '#customize-control-post_time_ago_cut_off { padding-left: 24px; }' );
-}
-add_action( 'customize_controls_enqueue_scripts', 'newspack_default_post_template_customize_css' );

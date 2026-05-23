@@ -6,26 +6,40 @@
  */
 import { registerPlugin } from '@wordpress/plugins';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useCallback, useRef } from '@wordpress/element';
 
 const META_FIELD_NAME = newspack_block_theme_subtitle_block.post_meta_name;
 
 const SUBTITLE_ID = 'newspack-post-subtitle-element';
 const SUBTITLE_STYLE_ID = 'newspack-post-subtitle-element-style';
 
-const appendSubtitleToTitleDOMElement = ( subtitle, callback ) => {
-	const titleWrapperEl = document.querySelector( '.edit-post-visual-editor__post-title-wrapper' );
+/**
+ * Get the correct document for the editor canvas.
+ * In iframe mode, the editor content is inside an iframe with name="editor-canvas".
+ * In non-iframe mode, falls back to the admin document.
+ */
+const getEditorCanvas = () => {
+	const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+	if ( iframe?.contentDocument ) {
+		return iframe.contentDocument;
+	}
+	return document;
+};
 
-	if ( titleWrapperEl && typeof subtitle === 'string' ) {
-		let subtitleEl = document.getElementById( SUBTITLE_ID );
+const appendSubtitleToTitleDOMElement = ( subtitle, editorDoc, callback ) => {
+	const titleWrapperEl = editorDoc.querySelector( '.edit-post-visual-editor__post-title-wrapper' );
+
+	if ( titleWrapperEl ) {
+		let subtitleEl = editorDoc.getElementById( SUBTITLE_ID );
 		const titleParent = titleWrapperEl.parentNode;
 
-		if ( ! document.getElementById( SUBTITLE_STYLE_ID ) ) {
-			const style = document.createElement( 'style' );
+		if ( ! editorDoc.getElementById( SUBTITLE_STYLE_ID ) ) {
+			const style = editorDoc.createElement( 'style' );
+			style.id = SUBTITLE_STYLE_ID;
 			style.innerHTML = `
                 #${ SUBTITLE_ID } {
                     font-style: italic;
-                    max-width: calc(632px + var(--wp--preset--spacing--30)* 2);
+                    max-width: calc(var(--wp--style--global--content-size, 632px) + var(--wp--preset--spacing--30)* 2);
                     margin-left: auto;
                     margin-right: auto;
                     margin-bottom: 2em;
@@ -33,19 +47,23 @@ const appendSubtitleToTitleDOMElement = ( subtitle, callback ) => {
                     padding-right: var(--wp--preset--spacing--30);
                 }
             `;
-			document.head.appendChild( style );
+			editorDoc.head.appendChild( style );
 		}
 
 		if ( ! subtitleEl ) {
-			subtitleEl = document.createElement( 'div' );
+			subtitleEl = editorDoc.createElement( 'div' );
 			subtitleEl.setAttribute( 'contenteditable', 'plaintext-only' );
 			subtitleEl.addEventListener( 'input', () => {
-				callback( subtitleEl.innerHTML );
+				callback( subtitleEl.textContent );
 			} );
 			subtitleEl.id = SUBTITLE_ID;
 			titleParent.insertBefore( subtitleEl, titleWrapperEl.nextSibling );
 		}
-		subtitleEl.innerHTML = subtitle;
+		// Only update textContent if it differs, to avoid frustrating fast typists.
+		const subtitleText = subtitle ?? '';
+		if ( subtitleEl.textContent !== subtitleText ) {
+			subtitleEl.textContent = subtitleText;
+		}
 	}
 };
 
@@ -56,17 +74,53 @@ const appendSubtitleToTitleDOMElement = ( subtitle, callback ) => {
  */
 const NewspackSubtitlePanel = () => {
 	const subtitle = useSelect( select => select( 'core/editor' ).getEditedPostAttribute( 'meta' )[ META_FIELD_NAME ] );
-	const dispatch = useDispatch();
-	const saveSubtitle = updatedSubtitle => {
-		dispatch( 'core/editor' ).editPost( {
-			meta: {
-				[ META_FIELD_NAME ]: updatedSubtitle,
-			},
-		} );
-	};
+	const { editPost } = useDispatch( 'core/editor' );
+	const saveSubtitle = useCallback(
+		updatedSubtitle => {
+			editPost( {
+				meta: {
+					[ META_FIELD_NAME ]: updatedSubtitle,
+				},
+			} );
+		},
+		[ editPost ]
+	);
+	// Keep current subtitle state visible within effect.
+	const subtitleRef = useRef( subtitle );
 	useEffect( () => {
-		appendSubtitleToTitleDOMElement( subtitle, saveSubtitle );
-	}, [] );
+		subtitleRef.current = subtitle;
+	}, [ subtitle ] );
+	// Mount effect: poll for canvas, then create element.
+	const timeoutRef = useRef();
+	useEffect( () => {
+		let retryCount = 0;
+		const maxRetries = 50; // 5 seconds at 100ms intervals.
+		const tryAppend = () => {
+			const editorDoc = getEditorCanvas();
+			const titleWrapperEl = editorDoc.querySelector( '.edit-post-visual-editor__post-title-wrapper' );
+			if ( titleWrapperEl ) {
+				appendSubtitleToTitleDOMElement( subtitleRef.current, editorDoc, saveSubtitle );
+			} else if ( retryCount < maxRetries ) {
+				retryCount++;
+				timeoutRef.current = setTimeout( tryAppend, 100 );
+			}
+		};
+		tryAppend();
+		return () => {
+			clearTimeout( timeoutRef.current );
+		};
+	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Sync effect: update element when subtitle changes.
+	// Extracted from appendSubtitleToTitleDOMElement() above.
+	useEffect( () => {
+		const editorDoc = getEditorCanvas();
+		const subtitleEl = editorDoc.getElementById( SUBTITLE_ID );
+		const subtitleText = typeof subtitle === 'string' ? subtitle : '';
+		if ( subtitleEl && subtitleEl.textContent !== subtitleText ) {
+			subtitleEl.textContent = subtitleText;
+		}
+	}, [ subtitle ] );
 };
 
 registerPlugin( 'plugin-document-setting-panel-newspack-subtitle', {

@@ -400,8 +400,13 @@ blockquote {
 
 //! Pullquote
 .wp-block-pullquote {
-	border-width: 16px 0 4px;
 	font-weight: bold;
+
+	&:not([style*="border-"]) {
+		border-width: 16px 0 4px;
+		border-style: solid;
+		border-color: currentcolor;
+	}
 
 	blockquote p,
 	&.is-style-solid-color blockquote p {
@@ -469,7 +474,7 @@ blockquote {
 		}
 
 		&.is-style-solid-color::before,
-		&[style*="border-width"]::before {
+		&[style*="border-"]::before {
 			display: none;
 		}
 	}

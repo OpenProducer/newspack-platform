@@ -31,7 +31,6 @@ if ( '' !== get_theme_mod( 'newspack_footer_logo', '' ) && 0 !== get_theme_mod( 
 
 	<footer id="colophon" class="site-footer">
 
-		<?php remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 ); ?>
 		<?php get_template_part( 'template-parts/footer/footer', 'branding' ); ?>
 		<?php get_template_part( 'template-parts/footer/footer', 'widgets' ); ?>
 

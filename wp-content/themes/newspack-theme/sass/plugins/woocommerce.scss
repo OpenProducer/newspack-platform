@@ -1464,8 +1464,8 @@ table.woocommerce-table--order-details.shop_table,
 
 	.payment_box {
 		padding: 1rem;
-		background: var(--newspack-theme-color-bg-pre);
-		font-size: var(--newspack-theme-font-size-sm);
+		background: var(--newspack-theme-color-bg-pre, var(--newspack-ui-color-neutral-20));
+		font-size: var(--newspack-theme-font-size-sm, var(--newspack-ui-font-size-s));
 
 		ul,
 		ol {
@@ -1520,6 +1520,7 @@ table.woocommerce-table--order-details.shop_table,
 				height: 16px;
 				border: 2px solid white;
 				box-shadow: 0 0 0 2px black;
+				box-sizing: border-box;
 				background: white;
 				margin-left: 4px;
 				margin-right: 0.5rem;
@@ -1542,15 +1543,6 @@ table.woocommerce-table--order-details.shop_table,
 
 .woocommerce-table--order-details {
 	margin-bottom: 2rem;
-}
-
-.woocommerce-terms-and-conditions-wrapper {
-	font-size: var(--newspack-theme-font-size-sm);
-	margin-bottom: 2 * structure.$size__spacing-unit;
-
-	input[type="checkbox"] {
-		margin-right: 0.5 * structure.$size__spacing-unit;
-	}
 }
 
 /**

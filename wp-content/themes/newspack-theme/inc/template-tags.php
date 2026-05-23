@@ -14,68 +14,60 @@ if ( ! function_exists( 'newspack_posted_on' ) ) :
 			return;
 		}
 
-		$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
-		if ( get_the_time( 'U' ) < get_the_modified_time( 'U' ) ) {
-			$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time>%3$s<time class="updated" datetime="%4$s">%5$s</time>';
-		}
+		$is_modified = get_the_time( 'U' ) !== get_the_modified_time( 'U' );
+		$time_string = sprintf(
+			'<time class="entry-date published%1$s" datetime="%2$s">%3$s</time>',
+			$is_modified ? '' : ' updated',
+			esc_attr( get_the_date( DATE_W3C ) ),
+			esc_html( get_the_date() )
+		);
 
-		if ( newspack_should_display_updated_date() ) {
-			add_filter( 'get_the_modified_date', 'newspack_convert_modified_to_time_ago', 10, 3 );
+		/**
+		 * Filters whether to include a hidden <time class="updated"> element.
+		 *
+		 * The theme outputs a hidden updated time for publishers who use
+		 * custom CSS to show it. Plugins that render their own updated
+		 * date can return false to suppress the duplicate.
+		 *
+		 * @param bool $include Whether to include the hidden updated time. Default true.
+		 */
+		$include_hidden_updated = apply_filters( 'newspack_theme_include_hidden_updated_time', true );
 
-			$time_string = sprintf(
-				$time_string,
-				esc_attr( get_the_date( DATE_W3C ) ),
-				esc_html( get_the_date() ),
-				'<span class="updated-label">' . esc_html__( 'Updated', 'newspack-theme' ) . ' </span>',
-				esc_attr( get_the_modified_date( DATE_W3C ) ),
-				esc_html( get_the_modified_date() )
-			);
-
-			remove_filter( 'get_the_modified_date', 'newspack_convert_modified_to_time_ago', 10, 3 );
-		} else {
-
-			$time_string = sprintf(
-				$time_string,
-				esc_attr( get_the_date( DATE_W3C ) ),
-				esc_html( get_the_date() ),
-				'',
+		if ( $is_modified && $include_hidden_updated ) {
+			$time_string .= sprintf(
+				'<time class="updated" datetime="%1$s">%2$s</time>',
 				esc_attr( get_the_modified_date( DATE_W3C ) ),
 				esc_html( get_the_modified_date() )
 			);
 		}
+
+		$allowed_tags = array(
+			'time' => array(
+				'class'    => array(),
+				'datetime' => array(),
+			),
+		);
+		$time_string = wp_kses( $time_string, $allowed_tags );
 
 		if ( is_single() ) {
-			printf(
-				'<span class="posted-on">%1$s</span>',
-				wp_kses(
-					$time_string,
-					array(
-						'time' => array(
-							'class'    => array(),
-							'datetime' => array(),
-						),
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				)
-			);
+			echo '<span class="posted-on">' . $time_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped via wp_kses above.
 		} else {
 			printf(
-				'<span class="posted-on"><a href="%1$s" rel="bookmark">%2$s</a></span>',
+				'<span class="posted-on"><a href="%1$s" rel="bookmark">%2$s</a>',
 				esc_url( get_permalink() ),
-				wp_kses(
-					$time_string,
-					array(
-						'time' => array(
-							'class'    => array(),
-							'datetime' => array(),
-						),
-						'span' => array(),
-					)
-				)
+				$time_string // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped via wp_kses above.
 			);
 		}
+
+		/**
+		 * Fires inside the .posted-on span, after the publish date.
+		 *
+		 * Used by newspack-plugin to render the "Updated" date
+		 * inside the same markup container as the publish date.
+		 */
+		do_action( 'newspack_theme_posted_on' );
+
+		echo '</span>';
 	}
 endif;
 
@@ -169,7 +161,8 @@ if ( ! function_exists( 'newspack_post_subtitle' ) ) :
 	 * Prints the post subtitle.
 	 */
 	function newspack_post_subtitle() {
-		$subtitle              = get_post_meta( get_the_ID(), 'newspack_post_subtitle', true );
+		$subtitle = get_post_meta( get_the_ID(), 'newspack_post_subtitle', true );
+		// TODO: Keep in sync with SUBTITLE_ALLOWED_TAGS in js/src/post-subtitle/utils.js.
 		$subtitle_allowed_tags = array(
 			'b'      => true,
 			'strong' => true,
@@ -181,9 +174,7 @@ if ( ! function_exists( 'newspack_post_subtitle' ) ) :
 			'sub'    => true,
 			'sup'    => true,
 			'a'      => array(
-				'href'   => true,
-				'target' => true,
-				'rel'    => true,
+				'href' => true,
 			),
 		);
 		if ( $subtitle ) :
@@ -280,18 +271,13 @@ if ( ! function_exists( 'newspack_categories' ) ) :
 	 * Prints HTML with the current post's categories.
 	 */
 	function newspack_categories() {
-		$categories_list     = '';
-		$primary_cat_enabled = get_theme_mod( 'post_primary_category', true );
+		$categories_list = '';
 
-		// Only display Yoast primary category if set.
-		if ( class_exists( 'WPSEO_Primary_Term' ) && $primary_cat_enabled ) {
-			$primary_term = new WPSEO_Primary_Term( 'category', get_the_ID() );
-			$category_id  = $primary_term->get_primary_term();
-			if ( $category_id ) {
-				$category = get_term( $category_id );
-				if ( $category ) {
-					$categories_list = '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '" rel="category tag">' . $category->name . '</a>';
-				}
+		// Use the shared Primary_Category utility from newspack-plugin if available.
+		if ( class_exists( 'Newspack\Primary_Category' ) ) {
+			$primary = \Newspack\Primary_Category::get();
+			if ( $primary ) {
+				$categories_list = '<a href="' . esc_url( get_category_link( $primary->term_id ) ) . '" rel="category tag">' . esc_html( $primary->name ) . '</a>';
 			}
 		}
 

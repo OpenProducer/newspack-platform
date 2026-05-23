@@ -113,7 +113,7 @@ figure.wp-block-pullquote {
 	font-weight: bold;
 	position: relative;
 
-	&:not(.is-style-solid-color):not(.has-background) {
+	&:not(.is-style-solid-color):not(.has-background):not([style*="border-"]) {
 		blockquote {
 			padding-left: #{2 * structure.$size__spacing-unit};
 		}
@@ -121,7 +121,7 @@ figure.wp-block-pullquote {
 		&::before {
 			border-top: 8px solid;
 			border-left: 8px solid;
-			border-color: inherit;
+			border-color: var(--newspack-theme-color-primary);
 			content: "";
 			display: block;
 			height: 40px;
@@ -162,6 +162,7 @@ figure.wp-block-pullquote {
 
 [data-align="left"] .wp-block-pullquote,
 [data-align="right"] .wp-block-pullquote {
+	text-align: left;
 	@include utilities.media( tablet ) {
 		blockquote p,
 		&.is-style-solid-color blockquote p {
@@ -172,12 +173,14 @@ figure.wp-block-pullquote {
 	&:not(.is-style-solid-color) {
 		padding-top: structure.$size__spacing-unit;
 
-		blockquote {
-			padding-left: 0;
-		}
+		&:not(.has-background):not([style*="border-"]) {
+			blockquote {
+				padding-left: 0;
+			}
 
-		&::before {
-			border-left: 0;
+			&::before {
+				border-left: 0;
+			}
 		}
 	}
 }

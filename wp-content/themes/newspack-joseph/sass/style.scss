@@ -359,13 +359,16 @@ textarea {
 
 //! Pullquote
 .wp-block-pullquote {
-	border: 0;
-	border-bottom: 2px solid;
-	border-top: 1px solid;
 	font-family: var(--newspack-theme-font-heading);
 	font-style: normal;
 	font-weight: bold;
 	text-align: center;
+
+	&:not([style*='border']) {
+		border: 0;
+		border-bottom: 2px solid;
+		border-top: 1px solid;
+	}
 
 	p {
 		font-style: inherit;

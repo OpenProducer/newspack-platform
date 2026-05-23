@@ -28,7 +28,9 @@ $registry = WP_Block_Type_Registry::get_instance();
 
 <?php endif; ?>
 
-<!-- wp:post-date {"format":"F j, Y","lock":{"move":true,"remove":true}} /--></div>
+<!-- wp:post-date {"format":"F j, Y","lock":{"move":true,"remove":true}} /-->
+
+<!-- wp:post-date {"metadata":{"bindings":{"datetime":{"source":"core/post-data","args":{"field":"modified"}}}},"className":"wp-block-post-date__modified-date","format":"F j, Y","lock":{"move":true,"remove":true}} /--></div>
 <!-- /wp:group -->
 
 <!-- wp:pattern {"slug":"newspack-block-theme/jetpack-sharing-buttons"} /-->

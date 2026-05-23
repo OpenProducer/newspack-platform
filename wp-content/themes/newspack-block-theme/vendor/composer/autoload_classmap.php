@@ -9,6 +9,7 @@ return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Newspack_Block_Theme\\Core' => $baseDir . '/includes/class-core.php',
     'Newspack_Block_Theme\\Jetpack' => $baseDir . '/includes/class-jetpack.php',
+    'Newspack_Block_Theme\\Newspack_Newsletters' => $baseDir . '/includes/class-newspack-newsletters.php',
     'Newspack_Block_Theme\\Patterns' => $baseDir . '/includes/class-patterns.php',
     'Newspack_Block_Theme\\Subtitle_Block' => $baseDir . '/includes/blocks/subtitle-block/class-subtitle-block.php',
     'Newspack_Block_Theme\\WooCommerce' => $baseDir . '/includes/class-woocommerce.php',
