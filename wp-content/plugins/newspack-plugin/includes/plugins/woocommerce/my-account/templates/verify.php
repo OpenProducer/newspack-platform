@@ -16,24 +16,9 @@ defined( 'ABSPATH' ) || exit;
 
 $newspack_reset_password_arg  = WooCommerce_My_Account::RESET_PASSWORD_URL_PARAM;
 $newspack_send_magic_link_arg = WooCommerce_My_Account::SEND_MAGIC_LINK_PARAM;
-
-$message = false;
-if ( isset( $_GET['message'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$message = sanitize_text_field( $_GET['message'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-}
-
-$is_error = false;
-if ( isset( $_GET['is_error'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$is_error = boolval( $_GET['is_error'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-}
 ?>
 
 <?php
-if ( $message ) {
-	\wc_add_notice( $message, $is_error ? 'error' : 'notice' );
-	\wc_print_notices();
-}
-
 $magic_link_args                                     = [];
 $magic_link_args[ $newspack_send_magic_link_arg ]    = wp_create_nonce( $newspack_send_magic_link_arg );
 $magic_link_url                                      = \add_query_arg(

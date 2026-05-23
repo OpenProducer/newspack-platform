@@ -54,8 +54,8 @@ class ContactGroups extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     public function batchGet($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchGet', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchGetContactGroupsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchGet', [$params], BatchGetContactGroupsResponse::class);
     }
     /**
      * Create a new contact group owned by the authenticated user. Created contact
@@ -69,11 +69,11 @@ class ContactGroups extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * @return ContactGroup
      * @throws \Google\Service\Exception
      */
-    public function create(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\CreateContactGroupRequest $postBody, $optParams = [])
+    public function create(CreateContactGroupRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], ContactGroup::class);
     }
     /**
      * Delete an existing contact group owned by the authenticated user by
@@ -93,8 +93,8 @@ class ContactGroups extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     public function delete($resourceName, $optParams = [])
     {
         $params = ['resourceName' => $resourceName];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\PeopleEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], PeopleEmpty::class);
     }
     /**
      * Get a specific contact group owned by the authenticated user by specifying a
@@ -116,8 +116,8 @@ class ContactGroups extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     public function get($resourceName, $optParams = [])
     {
         $params = ['resourceName' => $resourceName];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], ContactGroup::class);
     }
     /**
      * List all contact groups owned by the authenticated user. Members of the
@@ -145,8 +145,8 @@ class ContactGroups extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     public function listContactGroups($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListContactGroupsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListContactGroupsResponse::class);
     }
     /**
      * Update the name of an existing contact group owned by the authenticated user.
@@ -163,12 +163,12 @@ class ContactGroups extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * @return ContactGroup
      * @throws \Google\Service\Exception
      */
-    public function update($resourceName, \Google\Site_Kit_Dependencies\Google\Service\PeopleService\UpdateContactGroupRequest $postBody, $optParams = [])
+    public function update($resourceName, UpdateContactGroupRequest $postBody, $optParams = [])
     {
         $params = ['resourceName' => $resourceName, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], ContactGroup::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Resource\ContactGroups::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Resource_ContactGroups');
+class_alias(ContactGroups::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Resource_ContactGroups');

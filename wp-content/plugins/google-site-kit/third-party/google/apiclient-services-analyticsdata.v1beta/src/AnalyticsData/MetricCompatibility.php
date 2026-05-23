@@ -40,7 +40,7 @@ class MetricCompatibility extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $compatibility;
-    protected $metricMetadataType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricMetadata::class;
+    protected $metricMetadataType = MetricMetadata::class;
     protected $metricMetadataDataType = '';
     /**
      * The compatibility of this metric. If the compatibility is COMPATIBLE, this
@@ -68,7 +68,7 @@ class MetricCompatibility extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param MetricMetadata $metricMetadata
      */
-    public function setMetricMetadata(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricMetadata $metricMetadata)
+    public function setMetricMetadata(MetricMetadata $metricMetadata)
     {
         $this->metricMetadata = $metricMetadata;
     }
@@ -81,4 +81,4 @@ class MetricCompatibility extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricCompatibility::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_MetricCompatibility');
+class_alias(MetricCompatibility::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_MetricCompatibility');

@@ -26,7 +26,7 @@ class ListTriggersResponse extends \Google\Site_Kit_Dependencies\Google\Collecti
      * @var string
      */
     public $nextPageToken;
-    protected $triggerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class;
+    protected $triggerType = Trigger::class;
     protected $triggerDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListTriggersResponse extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListTriggersResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListTriggersResponse');
+class_alias(ListTriggersResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListTriggersResponse');

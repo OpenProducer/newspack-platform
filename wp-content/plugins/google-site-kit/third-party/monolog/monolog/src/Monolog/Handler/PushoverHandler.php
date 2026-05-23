@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Psr\Log\LogLevel;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class PushoverHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\SocketHandler
+class PushoverHandler extends SocketHandler
 {
     /** @var string */
     private $token;
@@ -75,19 +75,19 @@ class PushoverHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Sock
      * @phpstan-param Level|LevelName|LogLevel::* $highPriorityLevel
      * @phpstan-param Level|LevelName|LogLevel::* $emergencyLevel
      */
-    public function __construct(string $token, $users, ?string $title = null, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL, bool $bubble = \true, bool $useSSL = \true, $highPriorityLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL, $emergencyLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::EMERGENCY, int $retry = 30, int $expire = 25200, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
+    public function __construct(string $token, $users, ?string $title = null, $level = Logger::CRITICAL, bool $bubble = \true, bool $useSSL = \true, $highPriorityLevel = Logger::CRITICAL, $emergencyLevel = Logger::EMERGENCY, int $retry = 30, int $expire = 25200, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
     {
         $connectionString = $useSSL ? 'ssl://api.pushover.net:443' : 'api.pushover.net:80';
         parent::__construct($connectionString, $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
         $this->token = $token;
         $this->users = (array) $users;
-        $this->title = $title ?: (string) \gethostname();
-        $this->highPriorityLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($highPriorityLevel);
-        $this->emergencyLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($emergencyLevel);
+        $this->title = $title ?: (string) gethostname();
+        $this->highPriorityLevel = Logger::toMonologLevel($highPriorityLevel);
+        $this->emergencyLevel = Logger::toMonologLevel($emergencyLevel);
         $this->retry = $retry;
         $this->expire = $expire;
     }
-    protected function generateDataStream(array $record) : string
+    protected function generateDataStream(array $record): string
     {
         $content = $this->buildContent($record);
         return $this->buildHeader($content) . $content;
@@ -95,12 +95,12 @@ class PushoverHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Sock
     /**
      * @phpstan-param FormattedRecord $record
      */
-    private function buildContent(array $record) : string
+    private function buildContent(array $record): string
     {
         // Pushover has a limit of 512 characters on title and message combined.
-        $maxMessageLength = 512 - \strlen($this->title);
+        $maxMessageLength = 512 - strlen($this->title);
         $message = $this->useFormattedMessage ? $record['formatted'] : $record['message'];
-        $message = \Google\Site_Kit_Dependencies\Monolog\Utils::substr($message, 0, $maxMessageLength);
+        $message = Utils::substr($message, 0, $maxMessageLength);
         $timestamp = $record['datetime']->getTimestamp();
         $dataArray = ['token' => $this->token, 'user' => $this->user, 'message' => $message, 'title' => $this->title, 'timestamp' => $timestamp];
         if (isset($record['level']) && $record['level'] >= $this->emergencyLevel) {
@@ -111,26 +111,26 @@ class PushoverHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Sock
             $dataArray['priority'] = 1;
         }
         // First determine the available parameters
-        $context = \array_intersect_key($record['context'], $this->parameterNames);
-        $extra = \array_intersect_key($record['extra'], $this->parameterNames);
+        $context = array_intersect_key($record['context'], $this->parameterNames);
+        $extra = array_intersect_key($record['extra'], $this->parameterNames);
         // Least important info should be merged with subsequent info
-        $dataArray = \array_merge($extra, $context, $dataArray);
+        $dataArray = array_merge($extra, $context, $dataArray);
         // Only pass sounds that are supported by the API
-        if (isset($dataArray['sound']) && !\in_array($dataArray['sound'], $this->sounds)) {
+        if (isset($dataArray['sound']) && !in_array($dataArray['sound'], $this->sounds)) {
             unset($dataArray['sound']);
         }
-        return \http_build_query($dataArray);
+        return http_build_query($dataArray);
     }
-    private function buildHeader(string $content) : string
+    private function buildHeader(string $content): string
     {
         $header = "POST /1/messages.json HTTP/1.1\r\n";
         $header .= "Host: api.pushover.net\r\n";
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         foreach ($this->users as $user) {
             $this->user = $user;
@@ -144,9 +144,9 @@ class PushoverHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Sock
      *
      * @phpstan-param Level|LevelName|LogLevel::* $value
      */
-    public function setHighPriorityLevel($value) : self
+    public function setHighPriorityLevel($value): self
     {
-        $this->highPriorityLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($value);
+        $this->highPriorityLevel = Logger::toMonologLevel($value);
         return $this;
     }
     /**
@@ -154,15 +154,15 @@ class PushoverHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Sock
      *
      * @phpstan-param Level|LevelName|LogLevel::* $value
      */
-    public function setEmergencyLevel($value) : self
+    public function setEmergencyLevel($value): self
     {
-        $this->emergencyLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($value);
+        $this->emergencyLevel = Logger::toMonologLevel($value);
         return $this;
     }
     /**
      * Use the formatted message?
      */
-    public function useFormattedMessage(bool $value) : self
+    public function useFormattedMessage(bool $value): self
     {
         $this->useFormattedMessage = $value;
         return $this;

@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class AuthorityInfoAccessSyntax
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'min' => 1, 'max' => -1, 'children' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\AccessDescription::MAP];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'min' => 1, 'max' => -1, 'children' => AccessDescription::MAP];
 }

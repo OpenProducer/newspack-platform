@@ -45,8 +45,8 @@ class Publications extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function checkFreeAccess($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('checkFreeAccess', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\CheckFreeAccessResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('checkFreeAccess', [$params], CheckFreeAccessResponse::class);
     }
     /**
      * List all publications based on the filter, only the publications owned by the
@@ -69,9 +69,9 @@ class Publications extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listPublications($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ListPublicationsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListPublicationsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Resource\Publications::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_Resource_Publications');
+class_alias(Publications::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_Resource_Publications');

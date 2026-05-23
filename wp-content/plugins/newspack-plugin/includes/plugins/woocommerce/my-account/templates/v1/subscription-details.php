@@ -12,6 +12,9 @@
 namespace Newspack;
 
 defined( 'ABSPATH' ) || exit;
+
+$is_group_member_subscription = Group_Subscription::is_group_subscription( $subscription ) && Group_Subscription::user_is_member( get_current_user_id(), $subscription );
+
 ?>
 <table class="shop_table subscription_details">
 	<tbody>
@@ -69,13 +72,31 @@ defined( 'ABSPATH' ) || exit;
 				</td>
 			</tr>
 		<?php endif; ?>
-		<?php do_action( 'wcs_subscription_details_table_before_payment_method', $subscription ); ?>
+		<?php
+		if ( $is_group_member_subscription ) :
+			$owner = get_user_by( 'id', $subscription->get_user_id() );
+			if ( $owner ) :
+				?>
+				<tr>
+					<td><?php esc_html_e( 'Subscription owner', 'newspack-plugin' ); ?></td>
+					<td>
+						<?php
+						echo wp_kses_post(
+							'<a href="mailto:' . esc_attr( sanitize_email( $owner->user_email ) ) . '">' . esc_html( $owner->display_name ? $owner->display_name : $owner->user_email ) . '</a>'
+						);
+						?>
+					</td>
+				</tr>
+			<?php endif; ?>
+		<?php else : ?>
+			<?php do_action( 'wcs_subscription_details_table_before_payment_method', $subscription ); ?>
 		<tr>
 			<td><?php esc_html_e( 'Payment method', 'newspack-plugin' ); ?></td>
 			<td>
 				<span data-is_manual="<?php echo esc_attr( wc_bool_to_string( $subscription->is_manual() ) ); ?>" class="subscription-payment-method"><?php echo esc_html( $subscription->get_payment_method_to_display( 'customer' ) ); ?></span>
 			</td>
 		</tr>
+		<?php endif; ?>
 		<?php do_action( 'woocommerce_subscription_before_actions', $subscription ); ?>
 		<?php // Action buttons moved to Newspack's subscription-header.php template. ?>
 		<?php do_action( 'woocommerce_subscription_after_actions', $subscription ); ?>
@@ -83,7 +104,7 @@ defined( 'ABSPATH' ) || exit;
 </table>
 
 <?php
-$notes = $subscription->get_customer_order_notes();
+$notes = ! $is_group_member_subscription ? $subscription->get_customer_order_notes() : false;
 if ( $notes ) :
 	?>
 	<h2><?php esc_html_e( 'Subscription updates', 'newspack-plugin' ); ?></h2>

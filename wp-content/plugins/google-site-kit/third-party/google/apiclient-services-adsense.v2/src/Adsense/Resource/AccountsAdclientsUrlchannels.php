@@ -41,8 +41,8 @@ class AccountsAdclientsUrlchannels extends \Google\Site_Kit_Dependencies\Google\
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\UrlChannel::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], UrlChannel::class);
     }
     /**
      * Lists active url channels. (urlchannels.listAccountsAdclientsUrlchannels)
@@ -65,9 +65,9 @@ class AccountsAdclientsUrlchannels extends \Google\Site_Kit_Dependencies\Google\
     public function listAccountsAdclientsUrlchannels($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListUrlChannelsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListUrlChannelsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsAdclientsUrlchannels::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsAdclientsUrlchannels');
+class_alias(AccountsAdclientsUrlchannels::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsAdclientsUrlchannels');

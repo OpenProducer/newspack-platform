@@ -21,12 +21,12 @@ use Throwable;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  */
-class FallbackGroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\GroupHandler
+class FallbackGroupHandler extends GroupHandler
 {
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if ($this->processors) {
             /** @var Record $record */
@@ -36,7 +36,7 @@ class FallbackGroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
             try {
                 $handler->handle($record);
                 break;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // What throwable?
             }
         }
@@ -45,7 +45,7 @@ class FallbackGroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         if ($this->processors) {
             $processed = [];
@@ -59,7 +59,7 @@ class FallbackGroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler
             try {
                 $handler->handleBatch($records);
                 break;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // What throwable?
             }
         }

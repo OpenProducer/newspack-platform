@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class EncryptedPrivateKeyInfo
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['encryptionAlgorithm' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\AlgorithmIdentifier::MAP, 'encryptedData' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\EncryptedData::MAP]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['encryptionAlgorithm' => AlgorithmIdentifier::MAP, 'encryptedData' => EncryptedData::MAP]];
 }

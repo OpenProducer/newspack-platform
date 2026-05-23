@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 
 class Dimension extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $dimensionExpressionType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionExpression::class;
+    protected $dimensionExpressionType = DimensionExpression::class;
     protected $dimensionExpressionDataType = '';
     /**
      * The name of the dimension. See the [API Dimensions](https://developers.goog
@@ -48,7 +48,7 @@ class Dimension extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param DimensionExpression $dimensionExpression
      */
-    public function setDimensionExpression(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionExpression $dimensionExpression)
+    public function setDimensionExpression(DimensionExpression $dimensionExpression)
     {
         $this->dimensionExpression = $dimensionExpression;
     }
@@ -92,4 +92,4 @@ class Dimension extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Dimension::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Dimension');
+class_alias(Dimension::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Dimension');

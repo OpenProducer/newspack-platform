@@ -95,4 +95,4 @@ class GoogleAnalyticsAdminV1betaFirebaseLink extends \Google\Site_Kit_Dependenci
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaFirebaseLink::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaFirebaseLink');
+class_alias(GoogleAnalyticsAdminV1betaFirebaseLink::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaFirebaseLink');

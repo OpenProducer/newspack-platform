@@ -51,9 +51,9 @@ class GoogleAnalyticsAdminV1alphaReportingDataAnnotation extends \Google\Site_Ki
      * Orange color. (Only used for system-generated annotations)
      */
     public const COLOR_ORANGE = 'ORANGE';
-    protected $annotationDateType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleTypeDate::class;
+    protected $annotationDateType = GoogleTypeDate::class;
     protected $annotationDateDataType = '';
-    protected $annotationDateRangeType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange::class;
+    protected $annotationDateRangeType = GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange::class;
     protected $annotationDateRangeDataType = '';
     /**
      * Required. The color used for display of this Reporting Data Annotation.
@@ -95,7 +95,7 @@ class GoogleAnalyticsAdminV1alphaReportingDataAnnotation extends \Google\Site_Ki
      *
      * @param GoogleTypeDate $annotationDate
      */
-    public function setAnnotationDate(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleTypeDate $annotationDate)
+    public function setAnnotationDate(GoogleTypeDate $annotationDate)
     {
         $this->annotationDate = $annotationDate;
     }
@@ -112,7 +112,7 @@ class GoogleAnalyticsAdminV1alphaReportingDataAnnotation extends \Google\Site_Ki
      *
      * @param GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange $annotationDateRange
      */
-    public function setAnnotationDateRange(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange $annotationDateRange)
+    public function setAnnotationDateRange(GoogleAnalyticsAdminV1alphaReportingDataAnnotationDateRange $annotationDateRange)
     {
         $this->annotationDateRange = $annotationDateRange;
     }
@@ -211,4 +211,4 @@ class GoogleAnalyticsAdminV1alphaReportingDataAnnotation extends \Google\Site_Ki
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaReportingDataAnnotation');
+class_alias(GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaReportingDataAnnotation');

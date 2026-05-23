@@ -23,6 +23,7 @@ export const name = 'youtube-video-playlist';
 export const title = __( 'YouTube Video Playlist (DEPRECATED)', 'newspack-blocks' );
 
 export const settings = {
+	apiVersion: 3,
 	title,
 	icon: {
 		src: icon,

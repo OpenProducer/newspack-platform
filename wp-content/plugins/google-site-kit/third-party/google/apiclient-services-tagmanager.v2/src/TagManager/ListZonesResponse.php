@@ -26,7 +26,7 @@ class ListZonesResponse extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $nextPageToken;
-    protected $zoneType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Zone::class;
+    protected $zoneType = Zone::class;
     protected $zoneDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListZonesResponse extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListZonesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListZonesResponse');
+class_alias(ListZonesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListZonesResponse');

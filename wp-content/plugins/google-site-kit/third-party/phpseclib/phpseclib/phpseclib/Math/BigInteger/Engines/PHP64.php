@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP
+class PHP64 extends PHP
 {
     // Constants used by PHP.php
     const BASE = 31;
@@ -51,7 +51,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
         $val = $this->value;
         $this->value = [];
         $vals =& $this->value;
-        $i = \strlen($val);
+        $i = strlen($val);
         if (!$i) {
             return;
         }
@@ -61,15 +61,15 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
                 if ($i == -4) {
                     break;
                 }
-                $val = \substr($val, 0, 4 + $i);
-                $val = \str_pad($val, 4, "\x00", \STR_PAD_LEFT);
+                $val = substr($val, 0, 4 + $i);
+                $val = str_pad($val, 4, "\x00", \STR_PAD_LEFT);
                 if ($val == "\x00\x00\x00\x00") {
                     break;
                 }
                 $i = 0;
             }
-            list(, $digit) = \unpack('N', \substr($val, $i, 4));
-            $step = \count($vals) & 7;
+            list(, $digit) = unpack('N', substr($val, $i, 4));
+            $step = count($vals) & 7;
             if (!$step) {
                 $digit &= static::MAX_DIGIT;
                 $i++;
@@ -78,15 +78,15 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
                 $digit >>= $shift;
                 $shift = 32 - $shift;
                 $digit &= (1 << $shift) - 1;
-                $temp = $i > 0 ? \ord($val[$i - 1]) : 0;
+                $temp = $i > 0 ? ord($val[$i - 1]) : 0;
                 $digit |= $temp << $shift & 0x7f000000;
             }
             $vals[] = $digit;
         }
-        while (\end($vals) === 0) {
-            \array_pop($vals);
+        while (end($vals) === 0) {
+            array_pop($vals);
         }
-        \reset($vals);
+        reset($vals);
     }
     /**
      * Test for engine validity
@@ -104,7 +104,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $y
      * @return PHP64
      */
-    public function add(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $y)
+    public function add(PHP64 $y)
     {
         $temp = self::addHelper($this->value, $this->is_negative, $y->value, $y->is_negative);
         return $this->convertToObj($temp);
@@ -115,7 +115,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $y
      * @return PHP64
      */
-    public function subtract(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $y)
+    public function subtract(PHP64 $y)
     {
         $temp = self::subtractHelper($this->value, $this->is_negative, $y->value, $y->is_negative);
         return $this->convertToObj($temp);
@@ -126,7 +126,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $y
      * @return PHP64
      */
-    public function multiply(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $y)
+    public function multiply(PHP64 $y)
     {
         $temp = self::multiplyHelper($this->value, $this->is_negative, $y->value, $y->is_negative);
         return $this->convertToObj($temp);
@@ -142,7 +142,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $y
      * @return array{PHP64, PHP64}
      */
-    public function divide(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $y)
+    public function divide(PHP64 $y)
     {
         return $this->divideHelper($y);
     }
@@ -153,7 +153,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $n
      * @return false|PHP64
      */
-    public function modInverse(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $n)
+    public function modInverse(PHP64 $n)
     {
         return $this->modInverseHelper($n);
     }
@@ -164,7 +164,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $n
      * @return PHP64[]
      */
-    public function extendedGCD(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $n)
+    public function extendedGCD(PHP64 $n)
     {
         return $this->extendedGCDHelper($n);
     }
@@ -176,7 +176,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $n
      * @return PHP64
      */
-    public function gcd(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $n)
+    public function gcd(PHP64 $n)
     {
         return $this->extendedGCD($n)['gcd'];
     }
@@ -186,7 +186,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $x
      * @return PHP64
      */
-    public function bitwise_and(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $x)
+    public function bitwise_and(PHP64 $x)
     {
         return $this->bitwiseAndHelper($x);
     }
@@ -196,7 +196,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $x
      * @return PHP64
      */
-    public function bitwise_or(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $x)
+    public function bitwise_or(PHP64 $x)
     {
         return $this->bitwiseOrHelper($x);
     }
@@ -206,7 +206,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $x
      * @return PHP64
      */
-    public function bitwise_xor(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $x)
+    public function bitwise_xor(PHP64 $x)
     {
         return $this->bitwiseXorHelper($x);
     }
@@ -228,7 +228,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @return int in case < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal.
      * @see self::equals()
      */
-    public function compare(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $y)
+    public function compare(PHP64 $y)
     {
         return parent::compareHelper($this->value, $this->is_negative, $y->value, $y->is_negative);
     }
@@ -240,7 +240,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $x
      * @return bool
      */
-    public function equals(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $x)
+    public function equals(PHP64 $x)
     {
         return $this->value === $x->value && $this->is_negative == $x->is_negative;
     }
@@ -251,7 +251,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $n
      * @return PHP64
      */
-    public function modPow(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $n)
+    public function modPow(PHP64 $e, PHP64 $n)
     {
         return $this->powModOuter($e, $n);
     }
@@ -264,7 +264,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $n
      * @return PHP64|false
      */
-    public function powMod(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $n)
+    public function powMod(PHP64 $e, PHP64 $n)
     {
         return $this->powModOuter($e, $n);
     }
@@ -277,7 +277,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $max
      * @return false|PHP64
      */
-    public static function randomRangePrime(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $max)
+    public static function randomRangePrime(PHP64 $min, PHP64 $max)
     {
         return self::randomRangePrimeOuter($min, $max);
     }
@@ -294,7 +294,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $max
      * @return PHP64
      */
-    public static function randomRange(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $max)
+    public static function randomRange(PHP64 $min, PHP64 $max)
     {
         return self::randomRangeHelper($min, $max);
     }
@@ -304,7 +304,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $n
      * @return PHP64
      */
-    public function pow(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $n)
+    public function pow(PHP64 $n)
     {
         return $this->powHelper($n);
     }
@@ -314,7 +314,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 ...$nums
      * @return PHP64
      */
-    public static function min(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 ...$nums)
+    public static function min(PHP64 ...$nums)
     {
         return self::minHelper($nums);
     }
@@ -324,7 +324,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 ...$nums
      * @return PHP64
      */
-    public static function max(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 ...$nums)
+    public static function max(PHP64 ...$nums)
     {
         return self::maxHelper($nums);
     }
@@ -335,7 +335,7 @@ class PHP64 extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Eng
      * @param PHP64 $max
      * @return bool
      */
-    public function between(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP64 $max)
+    public function between(PHP64 $min, PHP64 $max)
     {
         return $this->compare($min) >= 0 && $this->compare($max) <= 0;
     }

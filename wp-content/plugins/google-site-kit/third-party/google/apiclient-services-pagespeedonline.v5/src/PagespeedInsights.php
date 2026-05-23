@@ -56,8 +56,8 @@ class PagespeedInsights extends \Google\Site_Kit_Dependencies\Google\Service
         $this->batchPath = 'batch';
         $this->version = 'v5';
         $this->serviceName = 'pagespeedonline';
-        $this->pagespeedapi = new \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Resource\Pagespeedapi($this, $this->serviceName, 'pagespeedapi', ['methods' => ['runpagespeed' => ['path' => 'pagespeedonline/v5/runPagespeed', 'httpMethod' => 'GET', 'parameters' => ['url' => ['location' => 'query', 'type' => 'string', 'required' => \true], 'captchaToken' => ['location' => 'query', 'type' => 'string'], 'category' => ['location' => 'query', 'type' => 'string', 'repeated' => \true], 'locale' => ['location' => 'query', 'type' => 'string'], 'strategy' => ['location' => 'query', 'type' => 'string'], 'utm_campaign' => ['location' => 'query', 'type' => 'string'], 'utm_source' => ['location' => 'query', 'type' => 'string']]]]]);
+        $this->pagespeedapi = new PagespeedInsights\Resource\Pagespeedapi($this, $this->serviceName, 'pagespeedapi', ['methods' => ['runpagespeed' => ['path' => 'pagespeedonline/v5/runPagespeed', 'httpMethod' => 'GET', 'parameters' => ['url' => ['location' => 'query', 'type' => 'string', 'required' => \true], 'captchaToken' => ['location' => 'query', 'type' => 'string'], 'category' => ['location' => 'query', 'type' => 'string', 'repeated' => \true], 'locale' => ['location' => 'query', 'type' => 'string'], 'strategy' => ['location' => 'query', 'type' => 'string'], 'utm_campaign' => ['location' => 'query', 'type' => 'string'], 'utm_source' => ['location' => 'query', 'type' => 'string']]]]]);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights');
+class_alias(PagespeedInsights::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights');

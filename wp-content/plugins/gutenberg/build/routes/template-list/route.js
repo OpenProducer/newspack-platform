@@ -59,9 +59,16 @@ var require_preferences = __commonJS({
   }
 });
 
+// package-external:@wordpress/private-apis
+var require_private_apis = __commonJS({
+  "package-external:@wordpress/private-apis"(exports, module) {
+    module.exports = window.wp.privateApis;
+  }
+});
+
 // routes/template-list/route.ts
-var import_data3 = __toESM(require_data());
-var import_core_data = __toESM(require_core_data());
+var import_data4 = __toESM(require_data());
+var import_core_data2 = __toESM(require_core_data());
 var import_i18n = __toESM(require_i18n());
 
 // packages/views/build-module/use-view.mjs
@@ -147,16 +154,30 @@ async function loadView(config) {
   const baseView = persistedView ?? defaultView;
   const page = queryParams?.page ?? 1;
   const search = queryParams?.search ?? "";
+  const rawDefaults = config.defaultLayouts?.[baseView?.type];
+  const layoutTypeDefaults = !rawDefaults || rawDefaults === true ? {} : rawDefaults;
+  const combinedOverrides = { ...layoutTypeDefaults, ...activeViewOverrides };
   return mergeActiveViewOverrides(
     {
       ...baseView,
       page,
       search
     },
-    activeViewOverrides,
+    combinedOverrides,
     defaultView
   );
 }
+
+// packages/views/build-module/use-view-config.mjs
+var import_data3 = __toESM(require_data(), 1);
+var import_core_data = __toESM(require_core_data(), 1);
+
+// packages/views/build-module/lock-unlock.mjs
+var import_private_apis = __toESM(require_private_apis(), 1);
+var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
+  "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
+  "@wordpress/views"
+);
 
 // routes/template-list/view-utils.ts
 var DEFAULT_VIEW = {
@@ -251,7 +272,7 @@ var route = {
       };
     }
     const query = viewToQuery(view);
-    const posts = await (0, import_data3.resolveSelect)(import_core_data.store).getEntityRecords(
+    const posts = await (0, import_data4.resolveSelect)(import_core_data2.store).getEntityRecords(
       "postType",
       "wp_template",
       { ...query, per_page: 1 }

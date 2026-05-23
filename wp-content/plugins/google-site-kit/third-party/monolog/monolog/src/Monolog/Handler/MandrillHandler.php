@@ -19,7 +19,7 @@ use Google\Site_Kit_Dependencies\Swift_Message;
  *
  * @author Adam Nicholson <adamnicholson10@gmail.com>
  */
-class MandrillHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\MailHandler
+class MandrillHandler extends MailHandler
 {
     /** @var Swift_Message */
     protected $message;
@@ -31,13 +31,13 @@ class MandrillHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Mail
      * @param string                 $apiKey  A valid Mandrill API key
      * @param callable|Swift_Message $message An example message for real messages, only the body will be replaced
      */
-    public function __construct(string $apiKey, $message, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR, bool $bubble = \true)
+    public function __construct(string $apiKey, $message, $level = Logger::ERROR, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
-        if (!$message instanceof \Google\Site_Kit_Dependencies\Swift_Message && \is_callable($message)) {
+        if (!$message instanceof Swift_Message && is_callable($message)) {
             $message = $message();
         }
-        if (!$message instanceof \Google\Site_Kit_Dependencies\Swift_Message) {
+        if (!$message instanceof Swift_Message) {
             throw new \InvalidArgumentException('You must provide either a Swift_Message instance or a callable returning it');
         }
         $this->message = $message;
@@ -46,7 +46,7 @@ class MandrillHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Mail
     /**
      * {@inheritDoc}
      */
-    protected function send(string $content, array $records) : void
+    protected function send(string $content, array $records): void
     {
         $mime = 'text/plain';
         if ($this->isHtmlBody($content)) {
@@ -55,17 +55,17 @@ class MandrillHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Mail
         $message = clone $this->message;
         $message->setBody($content, $mime);
         /** @phpstan-ignore-next-line */
-        if (\version_compare(\Google\Site_Kit_Dependencies\Swift::VERSION, '6.0.0', '>=')) {
+        if (version_compare(Swift::VERSION, '6.0.0', '>=')) {
             $message->setDate(new \DateTimeImmutable());
         } else {
             /** @phpstan-ignore-next-line */
-            $message->setDate(\time());
+            $message->setDate(time());
         }
-        $ch = \curl_init();
-        \curl_setopt($ch, \CURLOPT_URL, 'https://mandrillapp.com/api/1.0/messages/send-raw.json');
-        \curl_setopt($ch, \CURLOPT_POST, 1);
-        \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
-        \curl_setopt($ch, \CURLOPT_POSTFIELDS, \http_build_query(['key' => $this->apiKey, 'raw_message' => (string) $message, 'async' => \false]));
-        \Google\Site_Kit_Dependencies\Monolog\Handler\Curl\Util::execute($ch);
+        $ch = curl_init();
+        curl_setopt($ch, \CURLOPT_URL, 'https://mandrillapp.com/api/1.0/messages/send-raw.json');
+        curl_setopt($ch, \CURLOPT_POST, 1);
+        curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, \CURLOPT_POSTFIELDS, http_build_query(['key' => $this->apiKey, 'raw_message' => (string) $message, 'async' => \false]));
+        Curl\Util::execute($ch);
     }
 }

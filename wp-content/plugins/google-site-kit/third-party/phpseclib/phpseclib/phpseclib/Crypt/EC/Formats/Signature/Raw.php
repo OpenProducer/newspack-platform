@@ -18,6 +18,6 @@ use Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Signature\Raw a
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class Raw extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Signature\Raw
+abstract class Raw extends Progenitor
 {
 }

@@ -19,22 +19,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaAccessQuota extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $concurrentRequestsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
+    protected $concurrentRequestsType = GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
     protected $concurrentRequestsDataType = '';
-    protected $serverErrorsPerProjectPerHourType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
+    protected $serverErrorsPerProjectPerHourType = GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
     protected $serverErrorsPerProjectPerHourDataType = '';
-    protected $tokensPerDayType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
+    protected $tokensPerDayType = GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
     protected $tokensPerDayDataType = '';
-    protected $tokensPerHourType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
+    protected $tokensPerHourType = GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
     protected $tokensPerHourDataType = '';
-    protected $tokensPerProjectPerHourType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
+    protected $tokensPerProjectPerHourType = GoogleAnalyticsAdminV1alphaAccessQuotaStatus::class;
     protected $tokensPerProjectPerHourDataType = '';
     /**
      * Properties can use up to 50 concurrent requests.
      *
      * @param GoogleAnalyticsAdminV1alphaAccessQuotaStatus $concurrentRequests
      */
-    public function setConcurrentRequests(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus $concurrentRequests)
+    public function setConcurrentRequests(GoogleAnalyticsAdminV1alphaAccessQuotaStatus $concurrentRequests)
     {
         $this->concurrentRequests = $concurrentRequests;
     }
@@ -51,7 +51,7 @@ class GoogleAnalyticsAdminV1alphaAccessQuota extends \Google\Site_Kit_Dependenci
      *
      * @param GoogleAnalyticsAdminV1alphaAccessQuotaStatus $serverErrorsPerProjectPerHour
      */
-    public function setServerErrorsPerProjectPerHour(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus $serverErrorsPerProjectPerHour)
+    public function setServerErrorsPerProjectPerHour(GoogleAnalyticsAdminV1alphaAccessQuotaStatus $serverErrorsPerProjectPerHour)
     {
         $this->serverErrorsPerProjectPerHour = $serverErrorsPerProjectPerHour;
     }
@@ -68,7 +68,7 @@ class GoogleAnalyticsAdminV1alphaAccessQuota extends \Google\Site_Kit_Dependenci
      *
      * @param GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerDay
      */
-    public function setTokensPerDay(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerDay)
+    public function setTokensPerDay(GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerDay)
     {
         $this->tokensPerDay = $tokensPerDay;
     }
@@ -86,7 +86,7 @@ class GoogleAnalyticsAdminV1alphaAccessQuota extends \Google\Site_Kit_Dependenci
      *
      * @param GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerHour
      */
-    public function setTokensPerHour(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerHour)
+    public function setTokensPerHour(GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerHour)
     {
         $this->tokensPerHour = $tokensPerHour;
     }
@@ -105,7 +105,7 @@ class GoogleAnalyticsAdminV1alphaAccessQuota extends \Google\Site_Kit_Dependenci
      *
      * @param GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerProjectPerHour
      */
-    public function setTokensPerProjectPerHour(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerProjectPerHour)
+    public function setTokensPerProjectPerHour(GoogleAnalyticsAdminV1alphaAccessQuotaStatus $tokensPerProjectPerHour)
     {
         $this->tokensPerProjectPerHour = $tokensPerProjectPerHour;
     }
@@ -118,4 +118,4 @@ class GoogleAnalyticsAdminV1alphaAccessQuota extends \Google\Site_Kit_Dependenci
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessQuota::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAccessQuota');
+class_alias(GoogleAnalyticsAdminV1alphaAccessQuota::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAccessQuota');

@@ -44,8 +44,19 @@ function newspack_blocks_hpb_maximum_image_width() {
  * @param array $sizes Sizes for the sizes attribute.
  */
 function newspack_blocks_filter_hpb_sizes( $sizes ) {
+	/**
+	 * Disables automatic image sizes optimization for Homepage Posts Block.
+	 * By default, Newspack optimizes the 'sizes' attribute based on the
+	 * computed maximum image width. Set to true to use default WordPress behavior.
+	 *
+	 * @constant NEWSPACK_DISABLE_HPB_IMAGE_OPTIMISATION
+	 * @type     bool
+	 * @default  Image optimization enabled
+	 * @status   draft
+	 *
+	 * @example define( 'NEWSPACK_DISABLE_HPB_IMAGE_OPTIMISATION', true );
+	 */
 	if ( defined( 'NEWSPACK_DISABLE_HPB_IMAGE_OPTIMISATION' ) && NEWSPACK_DISABLE_HPB_IMAGE_OPTIMISATION ) {
-		// Allow disabling the image optimisation per-site.
 		return $sizes;
 	}
 	global $newspack_blocks_hpb_current_theme;
@@ -429,6 +440,7 @@ function newspack_blocks_register_homepage_articles() {
 		apply_filters(
 			'newspack_blocks_block_args',
 			array(
+				'api_version'     => $block['apiVersion'],
 				'attributes'      => $block['attributes'],
 				'render_callback' => 'newspack_blocks_render_block_homepage_articles',
 				'supports'        => [],

@@ -23,7 +23,7 @@ import {
 	Button,
 	Notice,
 } from '@wordpress/components';
-import { BlockControls, ColorPaletteControl, InspectorControls } from '@wordpress/block-editor';
+import { BlockControls, ColorPaletteControl, InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { isEmpty, pick } from 'lodash';
 import { Icon, formatListBullets, grid } from '@wordpress/icons';
 
@@ -40,7 +40,7 @@ import RedirectAfterSuccess from '../../../components/redirect-after-success';
 
 const TIER_LABELS = [ __( 'Low-tier', 'newspack-blocks' ), __( 'Mid-tier', 'newspack-blocks' ), __( 'High-tier', 'newspack-blocks' ) ];
 
-const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
+const Edit = ( { attributes, setAttributes }: EditProps ) => {
 	const [ isLoading, setIsLoading ] = useState( true );
 	const [ error, setError ] = useState( '' );
 
@@ -99,39 +99,51 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 			.finally( () => setIsLoading( false ) );
 	}, [] );
 
+	const blockProps = useBlockProps();
 	if ( error.length ) {
 		return (
-			<Placeholder icon="warning" label={ __( 'Error', 'newspack-blocks' ) } instructions={ error }>
-				<ExternalLink href="/wp-admin/admin.php?page=newspack-audience#/payment">
-					{ __( 'Go to checkout & payment settings to troubleshoot.', 'newspack-blocks' ) }
-				</ExternalLink>
-			</Placeholder>
+			<div { ...blockProps }>
+				<Placeholder icon="warning" label={ __( 'Error', 'newspack-blocks' ) } instructions={ error }>
+					<ExternalLink href="/wp-admin/admin.php?page=newspack-audience#/payment">
+						{ __( 'Go to checkout & payment settings to troubleshoot.', 'newspack-blocks' ) }
+					</ExternalLink>
+				</Placeholder>
+			</div>
 		);
 	}
 
 	if ( settings.platform === 'other' ) {
 		return (
-			<Placeholder
-				icon="warning"
-				label={ __( 'The Donate block will not be rendered.', 'newspack-blocks' ) }
-				instructions={ __( 'The Reader Revenue platform is set to "other".', 'newspack-blocks' ) }
-			>
-				<ExternalLink href="/wp-admin/admin.php?page=newspack-audience#/payment">
-					{ __( 'Go to checkout & payment settings to update the platform.', 'newspack-blocks' ) }
-				</ExternalLink>
-			</Placeholder>
+			<div { ...blockProps }>
+				<Placeholder
+					icon="warning"
+					label={ __( 'The Donate block will not be rendered.', 'newspack-blocks' ) }
+					instructions={ __( 'The Reader Revenue platform is set to "other".', 'newspack-blocks' ) }
+				>
+					<ExternalLink href="/wp-admin/admin.php?page=newspack-audience#/payment">
+						{ __( 'Go to checkout & payment settings to update the platform.', 'newspack-blocks' ) }
+					</ExternalLink>
+				</Placeholder>
+			</div>
 		);
 	}
 
 	if ( isLoading ) {
-		return <Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />;
+		return (
+			<div { ...blockProps }>
+				<Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />
+			</div>
+		);
 	}
 
-	const canUseNameYourPrice = window.newspack_blocks_data?.can_use_name_your_price;
+	const canUseNameYourPrice = window?.newspack_blocks_data?.can_use_name_your_price;
 	const isManual = attributes.manual && canUseNameYourPrice;
 	const isTiered = isManual ? attributes.tiered : settings.tiered;
 	const isTierBasedLayoutEnabled = isTiered && attributes.layoutOption === 'tiers';
 	const tierLayoutStyle = attributes.tierStyle;
+	const hasRecaptcha = window?.newspack_blocks_data?.has_recaptcha;
+	const supportsRecaptcha = window?.newspack_blocks_data?.supports_recaptcha;
+	const recaptchaURL = window?.newspack_blocks_data?.recaptcha_url || '';
 
 	const amounts = isManual ? attributes.amounts : settings.amounts;
 
@@ -139,6 +151,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 		isManual ? ! attributes.disabledFrequencies[ slug ] : ! settings.disabledFrequencies[ slug ]
 	);
 
+	let className = attributes?.className || '';
 	// Editor bug – initially, the default style is selected, but the class not applied.
 	if ( className.indexOf( 'is-style' ) === -1 ) {
 		className += ' is-style-default';
@@ -200,22 +213,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 	);
 
 	return (
-		<>
-			{ isTierBasedLayoutEnabled ? (
-				<>
-					<div className={ getWrapperClassNames() }>
-						<TierBasedLayout { ...componentProps } amounts={ displayedAmounts } />
-					</div>
-					<BlockControls>
-						<Toolbar controls={ tiersLayoutControls } />
-					</BlockControls>
-				</>
-			) : (
-				<div className={ getWrapperClassNames( [ isTiered ? 'tiered' : 'untiered' ] ) }>
-					<FrequencyBasedLayout isTiered={ isTiered } { ...componentProps } amounts={ displayedAmounts } />
-				</div>
-			) }
-
+		<Fragment>
 			<InspectorControls>
 				<PanelBody title={ __( 'Layout', 'newspack-blocks' ) }>
 					{ canUseNameYourPrice && (
@@ -395,16 +393,16 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 						/>
 					</PanelBody>
 				) }
-				{ window.newspack_blocks_data.supports_recaptcha && (
+				{ supportsRecaptcha && (
 					<PanelBody title={ __( 'Spam protection', 'newspack' ) }>
 						<p>
 							{ sprintf(
 								// translators: %s is either 'enabled' or 'disabled'.
 								__( 'reCAPTCHA is currently %s.', 'newspack' ),
-								window.newspack_blocks_data.has_recaptcha ? __( 'enabled', 'newspack' ) : __( 'disabled', 'newspack' )
+								hasRecaptcha ? __( 'enabled', 'newspack' ) : __( 'disabled', 'newspack' )
 							) }
 						</p>
-						{ ! window.newspack_blocks_data.has_recaptcha && (
+						{ ! hasRecaptcha && (
 							<p>
 								{ __(
 									"It's highly recommended that you enable reCAPTCHA protection to prevent spambots from using this form!",
@@ -413,7 +411,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 							</p>
 						) }
 						<p>
-							<a href={ window.newspack_blocks_data.recaptcha_url }>{ __( 'Configure your reCAPTCHA settings.', 'newspack' ) }</a>
+							<a href={ recaptchaURL }>{ __( 'Configure your reCAPTCHA settings.', 'newspack' ) }</a>
 						</p>
 					</PanelBody>
 				) }
@@ -421,7 +419,26 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 					<RedirectAfterSuccess setAttributes={ setAttributes } attributes={ attributes } />
 				</PanelBody>
 			</InspectorControls>
-		</>
+			{ isTierBasedLayoutEnabled && (
+				<BlockControls>
+					<Toolbar controls={ tiersLayoutControls } />
+				</BlockControls>
+			) }
+			{ isTierBasedLayoutEnabled ? (
+				<div { ...blockProps } className={ classNames( blockProps.className, getWrapperClassNames() ) }>
+					<TierBasedLayout { ...componentProps } amounts={ displayedAmounts } />
+				</div>
+			) : (
+				<div { ...blockProps } className={ classNames( blockProps.className, getWrapperClassNames( [ isTiered ? 'tiered' : 'untiered' ] ) ) }>
+					<FrequencyBasedLayout
+						isTiered={ isTiered }
+						canUseNameYourPrice={ canUseNameYourPrice }
+						amounts={ displayedAmounts }
+						{ ...componentProps }
+					/>
+				</div>
+			) }
+		</Fragment>
 	);
 };
 

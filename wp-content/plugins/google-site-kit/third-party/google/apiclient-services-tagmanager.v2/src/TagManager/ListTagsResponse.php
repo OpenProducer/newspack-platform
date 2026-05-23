@@ -26,7 +26,7 @@ class ListTagsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $nextPageToken;
-    protected $tagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class;
+    protected $tagType = Tag::class;
     protected $tagDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListTagsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListTagsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListTagsResponse');
+class_alias(ListTagsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListTagsResponse');

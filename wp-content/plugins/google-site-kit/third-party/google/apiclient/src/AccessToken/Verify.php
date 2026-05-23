@@ -60,13 +60,13 @@ class Verify
      * Instantiates the class, but does not initiate the login flow, leaving it
      * to the discretion of the caller.
      */
-    public function __construct(?\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $http = null, ?\Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null, $jwt = null)
+    public function __construct(?ClientInterface $http = null, ?CacheItemPoolInterface $cache = null, $jwt = null)
     {
         if (null === $http) {
-            $http = new \Google\Site_Kit_Dependencies\GuzzleHttp\Client();
+            $http = new Client();
         }
         if (null === $cache) {
-            $cache = new \Google\Site_Kit_Dependencies\Google\Auth\Cache\MemoryCacheItemPool();
+            $cache = new MemoryCacheItemPool();
         }
         $this->http = $http;
         $this->cache = $cache;
@@ -85,7 +85,7 @@ class Verify
     public function verifyIdToken($idToken, $audience = null)
     {
         if (empty($idToken)) {
-            throw new \LogicException('id_token cannot be null');
+            throw new LogicException('id_token cannot be null');
         }
         // set phpseclib constants if applicable
         $this->setPhpsecConstants();
@@ -95,14 +95,14 @@ class Verify
             try {
                 $args = [$idToken];
                 $publicKey = $this->getPublicKey($cert);
-                if (\class_exists(\Google\Site_Kit_Dependencies\Firebase\JWT\Key::class)) {
-                    $args[] = new \Google\Site_Kit_Dependencies\Firebase\JWT\Key($publicKey, 'RS256');
+                if (class_exists(Key::class)) {
+                    $args[] = new Key($publicKey, 'RS256');
                 } else {
                     $args[] = $publicKey;
                     $args[] = ['RS256'];
                 }
                 $payload = \call_user_func_array([$this->jwt, 'decode'], $args);
-                if (\property_exists($payload, 'aud')) {
+                if (property_exists($payload, 'aud')) {
                     if ($audience && $payload->aud != $audience) {
                         return \false;
                     }
@@ -110,18 +110,18 @@ class Verify
                 // support HTTP and HTTPS issuers
                 // @see https://developers.google.com/identity/sign-in/web/backend-auth
                 $issuers = [self::OAUTH2_ISSUER, self::OAUTH2_ISSUER_HTTPS];
-                if (!isset($payload->iss) || !\in_array($payload->iss, $issuers)) {
+                if (!isset($payload->iss) || !in_array($payload->iss, $issuers)) {
                     return \false;
                 }
                 return (array) $payload;
-            } catch (\Google\Site_Kit_Dependencies\ExpiredException $e) {
+            } catch (ExpiredException $e) {
                 // @phpstan-ignore-line
                 return \false;
-            } catch (\Google\Site_Kit_Dependencies\Firebase\JWT\ExpiredException $e) {
+            } catch (ExpiredExceptionV3 $e) {
                 return \false;
-            } catch (\Google\Site_Kit_Dependencies\Firebase\JWT\SignatureInvalidException $e) {
+            } catch (SignatureInvalidException $e) {
                 // continue
-            } catch (\DomainException $e) {
+            } catch (DomainException $e) {
                 // continue
             }
         }
@@ -141,18 +141,18 @@ class Verify
     private function retrieveCertsFromLocation($url)
     {
         // If we're retrieving a local file, just grab it.
-        if (0 !== \strpos($url, 'http')) {
-            if (!($file = \file_get_contents($url))) {
-                throw new \Google\Site_Kit_Dependencies\Google\Exception("Failed to retrieve verification certificates: '" . $url . "'.");
+        if (0 !== strpos($url, 'http')) {
+            if (!$file = file_get_contents($url)) {
+                throw new GoogleException("Failed to retrieve verification certificates: '" . $url . "'.");
             }
-            return \json_decode($file, \true);
+            return json_decode($file, \true);
         }
         // @phpstan-ignore-next-line
         $response = $this->http->get($url);
         if ($response->getStatusCode() == 200) {
-            return \json_decode((string) $response->getBody(), \true);
+            return json_decode((string) $response->getBody(), \true);
         }
-        throw new \Google\Site_Kit_Dependencies\Google\Exception(\sprintf('Failed to retrieve verification certificates: "%s".', $response->getBody()->getContents()), $response->getStatusCode());
+        throw new GoogleException(sprintf('Failed to retrieve verification certificates: "%s".', $response->getBody()->getContents()), $response->getStatusCode());
     }
     // Gets federated sign-on certificates to use for verifying identity tokens.
     // Returns certs as array structure, where keys are key ids, and values
@@ -167,19 +167,19 @@ class Verify
         if (!$certs) {
             $certs = $this->retrieveCertsFromLocation(self::FEDERATED_SIGNON_CERT_URL);
             if ($cache) {
-                $cacheItem->expiresAt(new \DateTime('+1 hour'));
+                $cacheItem->expiresAt(new DateTime('+1 hour'));
                 $cacheItem->set($certs);
                 $cache->save($cacheItem);
             }
         }
         if (!isset($certs['keys'])) {
-            throw new \InvalidArgumentException('federated sign-on certs expects "keys" to be set');
+            throw new InvalidArgumentException('federated sign-on certs expects "keys" to be set');
         }
         return $certs['keys'];
     }
     private function getJwtService()
     {
-        $jwt = new \Google\Site_Kit_Dependencies\Firebase\JWT\JWT();
+        $jwt = new JWT();
         if ($jwt::$leeway < 1) {
             // Ensures JWT leeway is at least 1
             // @see https://github.com/google/google-api-php-client/issues/827
@@ -189,10 +189,10 @@ class Verify
     }
     private function getPublicKey($cert)
     {
-        $modulus = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($this->jwt->urlsafeB64Decode($cert['n']), 256);
-        $exponent = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($this->jwt->urlsafeB64Decode($cert['e']), 256);
+        $modulus = new BigInteger($this->jwt->urlsafeB64Decode($cert['n']), 256);
+        $exponent = new BigInteger($this->jwt->urlsafeB64Decode($cert['e']), 256);
         $component = ['n' => $modulus, 'e' => $exponent];
-        $loader = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\PublicKeyLoader::load($component);
+        $loader = PublicKeyLoader::load($component);
         return $loader->toString('PKCS8');
     }
     /**
@@ -205,12 +205,12 @@ class Verify
      */
     private function setPhpsecConstants()
     {
-        if (\filter_var(\getenv('GAE_VM'), \FILTER_VALIDATE_BOOLEAN)) {
-            if (!\defined('Google\\Site_Kit_Dependencies\\MATH_BIGINTEGER_OPENSSL_ENABLED')) {
-                \define('Google\\Site_Kit_Dependencies\\MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
+        if (filter_var(getenv('GAE_VM'), \FILTER_VALIDATE_BOOLEAN)) {
+            if (!defined('Google\Site_Kit_Dependencies\MATH_BIGINTEGER_OPENSSL_ENABLED')) {
+                define('Google\Site_Kit_Dependencies\MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
             }
-            if (!\defined('Google\\Site_Kit_Dependencies\\CRYPT_RSA_MODE')) {
-                \define('Google\\Site_Kit_Dependencies\\CRYPT_RSA_MODE', \Google\Site_Kit_Dependencies\phpseclib3\Crypt\AES::ENGINE_OPENSSL);
+            if (!defined('Google\Site_Kit_Dependencies\CRYPT_RSA_MODE')) {
+                define('Google\Site_Kit_Dependencies\CRYPT_RSA_MODE', AES::ENGINE_OPENSSL);
             }
         }
     }

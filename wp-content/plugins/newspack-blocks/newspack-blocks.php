@@ -7,7 +7,7 @@
  * Author URI:      https://newspack.com/
  * Text Domain:     newspack-blocks
  * Domain Path:     /languages
- * Version:         4.24.1
+ * Version:         4.26.3
  *
  * @package         Newspack_Blocks
  */
@@ -15,7 +15,7 @@
 define( 'NEWSPACK_BLOCKS__PLUGIN_FILE', __FILE__ );
 define( 'NEWSPACK_BLOCKS__BLOCKS_DIRECTORY', 'dist/' );
 define( 'NEWSPACK_BLOCKS__PLUGIN_DIR', plugin_dir_path( NEWSPACK_BLOCKS__PLUGIN_FILE ) );
-define( 'NEWSPACK_BLOCKS__VERSION', '4.24.1' );
+define( 'NEWSPACK_BLOCKS__VERSION', '4.26.3' );
 
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks-api.php';
@@ -81,9 +81,9 @@ function newspack_iframe_block_register_rest_routes() { // phpcs:ignore WordPres
 add_action( 'rest_api_init', 'newspack_iframe_block_register_rest_routes' );
 
 Newspack_Blocks::manage_view_scripts();
-add_action( 'enqueue_block_editor_assets', array( 'Newspack_Blocks', 'enqueue_block_editor_assets' ) );
-add_action( 'enqueue_block_editor_assets', array( 'Newspack_Blocks', 'enqueue_placeholder_blocks_assets' ), 9999 );
-add_action( 'wp_enqueue_scripts', array( 'Newspack_Blocks', 'enqueue_block_styles_assets' ) );
+add_action( 'enqueue_block_assets', array( 'Newspack_Blocks', 'enqueue_block_assets' ) );
+add_action( 'enqueue_block_assets', array( 'Newspack_Blocks', 'enqueue_placeholder_blocks_assets' ), 9999 );
+add_action( 'enqueue_block_assets', array( 'Newspack_Blocks', 'enqueue_block_styles_assets' ) );
 
 /**
  * Load language files

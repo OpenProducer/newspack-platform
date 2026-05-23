@@ -141,3 +141,13 @@
 		}
 	}
 }
+
+// Force visibility on parent blocks the user has hidden when they contain an ad unit.
+.wp-block-hidden-desktop,
+.wp-block-hidden-tablet,
+.wp-block-hidden-mobile {
+	// This CSS class seems wrong, but please don't fix! The double prefix matches what's output by the plugin.
+	&:has(.wp-block-newspack-blocks-wp-block-newspack-ads-blocks-ad-unit) {
+		display: revert !important;
+	}
+}

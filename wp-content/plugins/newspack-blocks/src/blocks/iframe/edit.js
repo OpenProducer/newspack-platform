@@ -7,7 +7,7 @@ import { iframe as icon } from 'newspack-icons';
  * WordPress dependencies
  */
 import { Fragment, useState } from '@wordpress/element';
-import { InspectorControls, BlockControls } from '@wordpress/block-editor';
+import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	ToggleControl,
@@ -27,6 +27,7 @@ import apiFetch from '@wordpress/api-fetch';
 import IframePlaceholder from './iframe-placeholder';
 
 const IframeEdit = ( { attributes, setAttributes } ) => {
+	const blockProps = useBlockProps();
 	const label = __( 'Iframe', 'block title' );
 	const { mode, src, archiveFolder, isFullScreen, height, width } = attributes;
 	const [ showPreview, setShowPreview ] = useState( true );
@@ -156,39 +157,6 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 
 	return (
 		<Fragment>
-			{ isFullScreen && (
-				<Notice status="warning" className="wp-block-newspack-blocks-iframe-notice" isDismissible={ false }>
-					{ __( 'This block will take over the page content.', 'newspack-blocks' ) }
-				</Notice>
-			) }
-			{ src && showPreview ? (
-				<div className="iframe-container">
-					<FocusableIframe
-						title={ __( 'Newspack embedded iframe', 'newspack-blocks' ) }
-						src={ 'document' === mode ? `https://docs.google.com/gview?embedded=true&url=${ encodeURIComponent( src ) }` : src }
-						style={ {
-							width: isFullScreen ? '100vw' : width,
-							height: isFullScreen ? '100vh' : height,
-							maxWidth: '100%',
-							maxHeight: '100%',
-							pointerEvents: 'none',
-						} }
-					/>
-				</div>
-			) : (
-				<IframePlaceholder
-					icon={ icon }
-					label={ label }
-					src={ src }
-					onSelectURL={ embedURL }
-					onSelectMedia={ setIframeArchiveFromMedia }
-					isUploadingArchive={ isUploadingArchive }
-					archiveFolder={ archiveFolder }
-					uploadIframeArchive={ uploadIframeArchive }
-					error={ error }
-				/>
-			) }
-
 			<BlockControls>
 				<Toolbar controls={ src && iframeControls } />
 			</BlockControls>
@@ -223,6 +191,40 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 					</Fragment>
 				</PanelBody>
 			</InspectorControls>
+			<div { ...blockProps }>
+				{ isFullScreen && (
+					<Notice status="warning" className="wp-block-newspack-blocks-iframe-notice" isDismissible={ false }>
+						{ __( 'This block will take over the page content.', 'newspack-blocks' ) }
+					</Notice>
+				) }
+				{ src && showPreview ? (
+					<div className="iframe-container">
+						<FocusableIframe
+							title={ __( 'Newspack embedded iframe', 'newspack-blocks' ) }
+							src={ 'document' === mode ? `https://docs.google.com/gview?embedded=true&url=${ encodeURIComponent( src ) }` : src }
+							style={ {
+								width: isFullScreen ? '100vw' : width,
+								height: isFullScreen ? '100vh' : height,
+								maxWidth: '100%',
+								maxHeight: '100%',
+								pointerEvents: 'none',
+							} }
+						/>
+					</div>
+				) : (
+					<IframePlaceholder
+						icon={ icon }
+						label={ label }
+						src={ src }
+						onSelectURL={ embedURL }
+						onSelectMedia={ setIframeArchiveFromMedia }
+						isUploadingArchive={ isUploadingArchive }
+						archiveFolder={ archiveFolder }
+						uploadIframeArchive={ uploadIframeArchive }
+						error={ error }
+					/>
+				) }
+			</div>
 		</Fragment>
 	);
 };

@@ -40,7 +40,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Keys\PKCS
+abstract class PKCS8 extends PKCS
 {
     /**
      * Default encryption algorithm
@@ -126,41 +126,41 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      */
     private static function getPBES1EncryptionObject($algo)
     {
-        $algo = \preg_match('#^pbeWith(?:MD2|MD5|SHA1|SHA)And(.*?)-CBC$#', $algo, $matches) ? $matches[1] : \substr($algo, 13);
+        $algo = preg_match('#^pbeWith(?:MD2|MD5|SHA1|SHA)And(.*?)-CBC$#', $algo, $matches) ? $matches[1] : substr($algo, 13);
         // strlen('pbeWithSHAAnd') == 13
         switch ($algo) {
             case 'DES':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DES('cbc');
+                $cipher = new DES('cbc');
                 break;
             case 'RC2':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC2('cbc');
+                $cipher = new RC2('cbc');
                 $cipher->setKeyLength(64);
                 break;
             case '3-KeyTripleDES':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\TripleDES('cbc');
+                $cipher = new TripleDES('cbc');
                 break;
             case '2-KeyTripleDES':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\TripleDES('cbc');
+                $cipher = new TripleDES('cbc');
                 $cipher->setKeyLength(128);
                 break;
             case '128BitRC2':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC2('cbc');
+                $cipher = new RC2('cbc');
                 $cipher->setKeyLength(128);
                 break;
             case '40BitRC2':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC2('cbc');
+                $cipher = new RC2('cbc');
                 $cipher->setKeyLength(40);
                 break;
             case '128BitRC4':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC4();
+                $cipher = new RC4();
                 $cipher->setKeyLength(128);
                 break;
             case '40BitRC4':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC4();
+                $cipher = new RC4();
                 $cipher->setKeyLength(40);
                 break;
             default:
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException("{$algo} is not a supported algorithm");
+                throw new UnsupportedAlgorithmException("{$algo} is not a supported algorithm");
         }
         return $cipher;
     }
@@ -172,7 +172,7 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      */
     private static function getPBES1Hash($algo)
     {
-        if (\preg_match('#^pbeWith(MD2|MD5|SHA1|SHA)And.*?-CBC$#', $algo, $matches)) {
+        if (preg_match('#^pbeWith(MD2|MD5|SHA1|SHA)And.*?-CBC$#', $algo, $matches)) {
             return $matches[1] == 'SHA' ? 'sha1' : $matches[1];
         }
         return 'sha1';
@@ -206,26 +206,26 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     {
         switch ($algo) {
             case 'desCBC':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DES('cbc');
+                $cipher = new DES('cbc');
                 break;
             case 'des-EDE3-CBC':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\TripleDES('cbc');
+                $cipher = new TripleDES('cbc');
                 break;
             case 'rc2CBC':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC2('cbc');
+                $cipher = new RC2('cbc');
                 // in theory this can be changed
                 $cipher->setKeyLength(128);
                 break;
             case 'rc5-CBC-PAD':
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('rc5-CBC-PAD is not supported for PBES2 PKCS#8 keys');
+                throw new UnsupportedAlgorithmException('rc5-CBC-PAD is not supported for PBES2 PKCS#8 keys');
             case 'aes128-CBC-PAD':
             case 'aes192-CBC-PAD':
             case 'aes256-CBC-PAD':
-                $cipher = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\AES('cbc');
-                $cipher->setKeyLength(\substr($algo, 3, 3));
+                $cipher = new AES('cbc');
+                $cipher->setKeyLength(substr($algo, 3, 3));
                 break;
             default:
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException("{$algo} is not supported");
+                throw new UnsupportedAlgorithmException("{$algo} is not supported");
         }
         return $cipher;
     }
@@ -236,15 +236,15 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     private static function initialize_static_variables()
     {
         if (!isset(static::$childOIDsLoaded)) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\InsufficientSetupException('This class should not be called directly');
+            throw new InsufficientSetupException('This class should not be called directly');
         }
         if (!static::$childOIDsLoaded) {
-            \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::loadOIDs(\is_array(static::OID_NAME) ? \array_combine(static::OID_NAME, static::OID_VALUE) : [static::OID_NAME => static::OID_VALUE]);
+            ASN1::loadOIDs(is_array(static::OID_NAME) ? array_combine(static::OID_NAME, static::OID_VALUE) : [static::OID_NAME => static::OID_VALUE]);
             static::$childOIDsLoaded = \true;
         }
         if (!self::$oidsLoaded) {
             // from https://tools.ietf.org/html/rfc2898
-            \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::loadOIDs([
+            ASN1::loadOIDs([
                 // PBES1 encryption schemes
                 'pbeWithMD2AndDES-CBC' => '1.2.840.113549.1.5.1',
                 'pbeWithMD2AndRC2-CBC' => '1.2.840.113549.1.5.4',
@@ -292,15 +292,15 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      */
     protected static function load($key, $password = '')
     {
-        if (!\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::is_stringable($key)) {
-            throw new \UnexpectedValueException('Key should be a string - not a ' . \gettype($key));
+        if (!Strings::is_stringable($key)) {
+            throw new \UnexpectedValueException('Key should be a string - not a ' . gettype($key));
         }
-        $isPublic = \strpos($key, 'PUBLIC') !== \false;
-        $isPrivate = \strpos($key, 'PRIVATE') !== \false;
+        $isPublic = strpos($key, 'PUBLIC') !== \false;
+        $isPrivate = strpos($key, 'PRIVATE') !== \false;
         $decoded = self::preParse($key);
         $meta = [];
-        $decrypted = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\EncryptedPrivateKeyInfo::MAP);
-        if (\strlen($password) && \is_array($decrypted)) {
+        $decrypted = ASN1::asn1map($decoded[0], Maps\EncryptedPrivateKeyInfo::MAP);
+        if (strlen($password) && is_array($decrypted)) {
             $algorithm = $decrypted['encryptionAlgorithm']['algorithm'];
             switch ($algorithm) {
                 // PBES1
@@ -320,43 +320,49 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
                     $hash = self::getPBES1Hash($algorithm);
                     $kdf = self::getPBES1KDF($algorithm);
                     $meta['meta']['algorithm'] = $algorithm;
-                    $temp = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($decrypted['encryptionAlgorithm']['parameters']);
+                    $temp = ASN1::decodeBER($decrypted['encryptionAlgorithm']['parameters']);
                     if (!$temp) {
                         throw new \RuntimeException('Unable to decode BER');
                     }
-                    \extract(\Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($temp[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBEParameter::MAP));
+                    $map = ASN1::asn1map($temp[0], Maps\PBEParameter::MAP);
+                    $salt = $map['salt'];
+                    $iterationCount = $map['iterationCount'];
                     $iterationCount = (int) $iterationCount->toString();
                     $cipher->setPassword($password, $kdf, $hash, $salt, $iterationCount);
                     $key = $cipher->decrypt($decrypted['encryptedData']);
-                    $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($key);
+                    $decoded = ASN1::decodeBER($key);
                     if (!$decoded) {
                         throw new \RuntimeException('Unable to decode BER 2');
                     }
                     break;
                 case 'id-PBES2':
                     $meta['meta']['algorithm'] = $algorithm;
-                    $temp = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($decrypted['encryptionAlgorithm']['parameters']);
+                    $temp = ASN1::decodeBER($decrypted['encryptionAlgorithm']['parameters']);
                     if (!$temp) {
                         throw new \RuntimeException('Unable to decode BER');
                     }
-                    $temp = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($temp[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBES2params::MAP);
-                    \extract($temp);
+                    $temp = ASN1::asn1map($temp[0], Maps\PBES2params::MAP);
+                    $keyDerivationFunc = $temp['keyDerivationFunc'];
+                    $encryptionScheme = $temp['encryptionScheme'];
                     $cipher = self::getPBES2EncryptionObject($encryptionScheme['algorithm']);
                     $meta['meta']['cipher'] = $encryptionScheme['algorithm'];
-                    $temp = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($decrypted['encryptionAlgorithm']['parameters']);
+                    $temp = ASN1::decodeBER($decrypted['encryptionAlgorithm']['parameters']);
                     if (!$temp) {
                         throw new \RuntimeException('Unable to decode BER');
                     }
-                    $temp = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($temp[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBES2params::MAP);
-                    \extract($temp);
-                    if (!$cipher instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC2) {
+                    $temp = ASN1::asn1map($temp[0], Maps\PBES2params::MAP);
+                    $keyDerivationFunc = $temp['keyDerivationFunc'];
+                    $encryptionScheme = $temp['encryptionScheme'];
+                    if (!$cipher instanceof RC2) {
                         $cipher->setIV($encryptionScheme['parameters']['octetString']);
                     } else {
-                        $temp = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($encryptionScheme['parameters']);
+                        $temp = ASN1::decodeBER($encryptionScheme['parameters']);
                         if (!$temp) {
                             throw new \RuntimeException('Unable to decode BER');
                         }
-                        \extract(\Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($temp[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\RC2CBCParameter::MAP));
+                        $map = ASN1::asn1map($temp[0], Maps\RC2CBCParameter::MAP);
+                        $rc2ParametersVersion = $map['rc2ParametersVersion'];
+                        $iv = $map['iv'];
                         $effectiveKeyLength = (int) $rc2ParametersVersion->toString();
                         switch ($effectiveKeyLength) {
                             case 160:
@@ -375,60 +381,62 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
                     $meta['meta']['keyDerivationFunc'] = $keyDerivationFunc['algorithm'];
                     switch ($keyDerivationFunc['algorithm']) {
                         case 'id-PBKDF2':
-                            $temp = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($keyDerivationFunc['parameters']);
+                            $temp = ASN1::decodeBER($keyDerivationFunc['parameters']);
                             if (!$temp) {
                                 throw new \RuntimeException('Unable to decode BER');
                             }
-                            $prf = ['algorithm' => 'id-hmacWithSHA1'];
-                            $params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($temp[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBKDF2params::MAP);
-                            \extract($params);
+                            $params = ASN1::asn1map($temp[0], Maps\PBKDF2params::MAP);
+                            if (empty($params['prf'])) {
+                                $params['prf'] = ['algorithm' => 'id-hmacWithSHA1'];
+                            }
+                            $salt = $params['salt'];
+                            $iterationCount = $params['iterationCount'];
+                            $prf = $params['prf'];
                             $meta['meta']['prf'] = $prf['algorithm'];
-                            $hash = \str_replace('-', '/', \substr($prf['algorithm'], 11));
+                            $hash = str_replace('-', '/', substr($prf['algorithm'], 11));
                             $params = [$password, 'pbkdf2', $hash, $salt, (int) $iterationCount->toString()];
                             if (isset($keyLength)) {
                                 $params[] = (int) $keyLength->toString();
                             }
                             $cipher->setPassword(...$params);
                             $key = $cipher->decrypt($decrypted['encryptedData']);
-                            $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($key);
+                            $decoded = ASN1::decodeBER($key);
                             if (!$decoded) {
                                 throw new \RuntimeException('Unable to decode BER 3');
                             }
                             break;
                         default:
-                            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only PBKDF2 is supported for PBES2 PKCS#8 keys');
+                            throw new UnsupportedAlgorithmException('Only PBKDF2 is supported for PBES2 PKCS#8 keys');
                     }
                     break;
                 case 'id-PBMAC1':
                     //$temp = ASN1::decodeBER($decrypted['encryptionAlgorithm']['parameters']);
                     //$value = ASN1::asn1map($temp[0], Maps\PBMAC1params::MAP);
                     // since i can't find any implementation that does PBMAC1 it is unsupported
-                    throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only PBES1 and PBES2 PKCS#8 keys are supported.');
+                    throw new UnsupportedAlgorithmException('Only PBES1 and PBES2 PKCS#8 keys are supported.');
             }
         }
-        $private = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\OneAsymmetricKey::MAP);
-        if (\is_array($private)) {
+        $private = ASN1::asn1map($decoded[0], Maps\OneAsymmetricKey::MAP);
+        if (is_array($private)) {
             if ($isPublic) {
                 throw new \UnexpectedValueException('Human readable string claims public key but DER encoded string claims private key');
             }
-            if (isset($private['privateKeyAlgorithm']['parameters']) && !$private['privateKeyAlgorithm']['parameters'] instanceof \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element && isset($decoded[0]['content'][1]['content'][1])) {
+            if (isset($private['privateKeyAlgorithm']['parameters']) && !$private['privateKeyAlgorithm']['parameters'] instanceof ASN1\Element && isset($decoded[0]['content'][1]['content'][1])) {
                 $temp = $decoded[0]['content'][1]['content'][1];
-                $private['privateKeyAlgorithm']['parameters'] = new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element(\substr($key, $temp['start'], $temp['length']));
+                $private['privateKeyAlgorithm']['parameters'] = new ASN1\Element(substr($key, $temp['start'], $temp['length']));
             }
-            if (\is_array(static::OID_NAME)) {
-                if (!\in_array($private['privateKeyAlgorithm']['algorithm'], static::OID_NAME)) {
-                    throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException($private['privateKeyAlgorithm']['algorithm'] . ' is not a supported key type');
+            if (is_array(static::OID_NAME)) {
+                if (!in_array($private['privateKeyAlgorithm']['algorithm'], static::OID_NAME)) {
+                    throw new UnsupportedAlgorithmException($private['privateKeyAlgorithm']['algorithm'] . ' is not a supported key type');
                 }
-            } else {
-                if ($private['privateKeyAlgorithm']['algorithm'] != static::OID_NAME) {
-                    throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only ' . static::OID_NAME . ' keys are supported; this is a ' . $private['privateKeyAlgorithm']['algorithm'] . ' key');
-                }
+            } else if ($private['privateKeyAlgorithm']['algorithm'] != static::OID_NAME) {
+                throw new UnsupportedAlgorithmException('Only ' . static::OID_NAME . ' keys are supported; this is a ' . $private['privateKeyAlgorithm']['algorithm'] . ' key');
             }
             if (isset($private['publicKey'])) {
                 if ($private['publicKey'][0] != "\x00") {
-                    throw new \UnexpectedValueException('The first byte of the public key should be null - not ' . \bin2hex($private['publicKey'][0]));
+                    throw new \UnexpectedValueException('The first byte of the public key should be null - not ' . bin2hex($private['publicKey'][0]));
                 }
-                $private['publicKey'] = \substr($private['publicKey'], 1);
+                $private['publicKey'] = substr($private['publicKey'], 1);
             }
             return $private + $meta;
         }
@@ -436,28 +444,26 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
         // is that the former has an octet string and the later has a bit string. the first byte of a bit
         // string represents the number of bits in the last byte that are to be ignored but, currently,
         // bit strings wanting a non-zero amount of bits trimmed are not supported
-        $public = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PublicKeyInfo::MAP);
-        if (\is_array($public)) {
+        $public = ASN1::asn1map($decoded[0], Maps\PublicKeyInfo::MAP);
+        if (is_array($public)) {
             if ($isPrivate) {
                 throw new \UnexpectedValueException('Human readable string claims private key but DER encoded string claims public key');
             }
             if ($public['publicKey'][0] != "\x00") {
-                throw new \UnexpectedValueException('The first byte of the public key should be null - not ' . \bin2hex($public['publicKey'][0]));
+                throw new \UnexpectedValueException('The first byte of the public key should be null - not ' . bin2hex($public['publicKey'][0]));
             }
-            if (\is_array(static::OID_NAME)) {
-                if (!\in_array($public['publicKeyAlgorithm']['algorithm'], static::OID_NAME)) {
-                    throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException($public['publicKeyAlgorithm']['algorithm'] . ' is not a supported key type');
+            if (is_array(static::OID_NAME)) {
+                if (!in_array($public['publicKeyAlgorithm']['algorithm'], static::OID_NAME)) {
+                    throw new UnsupportedAlgorithmException($public['publicKeyAlgorithm']['algorithm'] . ' is not a supported key type');
                 }
-            } else {
-                if ($public['publicKeyAlgorithm']['algorithm'] != static::OID_NAME) {
-                    throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only ' . static::OID_NAME . ' keys are supported; this is a ' . $public['publicKeyAlgorithm']['algorithm'] . ' key');
-                }
+            } else if ($public['publicKeyAlgorithm']['algorithm'] != static::OID_NAME) {
+                throw new UnsupportedAlgorithmException('Only ' . static::OID_NAME . ' keys are supported; this is a ' . $public['publicKeyAlgorithm']['algorithm'] . ' key');
             }
-            if (isset($public['publicKeyAlgorithm']['parameters']) && !$public['publicKeyAlgorithm']['parameters'] instanceof \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element && isset($decoded[0]['content'][0]['content'][1])) {
+            if (isset($public['publicKeyAlgorithm']['parameters']) && !$public['publicKeyAlgorithm']['parameters'] instanceof ASN1\Element && isset($decoded[0]['content'][0]['content'][1])) {
                 $temp = $decoded[0]['content'][0]['content'][1];
-                $public['publicKeyAlgorithm']['parameters'] = new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element(\substr($key, $temp['start'], $temp['length']));
+                $public['publicKeyAlgorithm']['parameters'] = new ASN1\Element(substr($key, $temp['start'], $temp['length']));
             }
-            $public['publicKey'] = \substr($public['publicKey'], 1);
+            $public['publicKey'] = substr($public['publicKey'], 1);
             return $public;
         }
         throw new \RuntimeException('Unable to parse using either OneAsymmetricKey or PublicKeyInfo ASN1 maps');
@@ -488,8 +494,8 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     protected static function wrapPrivateKey($key, $attr, $params, $password, $oid = null, $publicKey = '', array $options = [])
     {
         self::initialize_static_variables();
-        $key = ['version' => 'v1', 'privateKeyAlgorithm' => ['algorithm' => \is_string(static::OID_NAME) ? static::OID_NAME : $oid], 'privateKey' => $key];
-        if ($oid != 'id-Ed25519' && $oid != 'id-Ed448') {
+        $key = ['version' => 'v1', 'privateKeyAlgorithm' => ['algorithm' => is_string(static::OID_NAME) ? static::OID_NAME : $oid], 'privateKey' => $key];
+        if ($oid != 'id-Ed25519' && $oid != 'id-Ed448' && $oid != 'id-X25519' && $oid != 'id-X448') {
             $key['privateKeyAlgorithm']['parameters'] = $params;
         }
         if (!empty($attr)) {
@@ -499,50 +505,50 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
             $key['version'] = 'v2';
             $key['publicKey'] = $publicKey;
         }
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($key, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\OneAsymmetricKey::MAP);
-        if (!empty($password) && \is_string($password)) {
-            $salt = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Random::string(8);
+        $key = ASN1::encodeDER($key, Maps\OneAsymmetricKey::MAP);
+        if (!empty($password) && is_string($password)) {
+            $salt = Random::string(8);
             $iterationCount = isset($options['iterationCount']) ? $options['iterationCount'] : self::$defaultIterationCount;
             $encryptionAlgorithm = isset($options['encryptionAlgorithm']) ? $options['encryptionAlgorithm'] : self::$defaultEncryptionAlgorithm;
             $encryptionScheme = isset($options['encryptionScheme']) ? $options['encryptionScheme'] : self::$defaultEncryptionScheme;
             $prf = isset($options['PRF']) ? $options['PRF'] : self::$defaultPRF;
             if ($encryptionAlgorithm == 'id-PBES2') {
                 $crypto = self::getPBES2EncryptionObject($encryptionScheme);
-                $hash = \str_replace('-', '/', \substr($prf, 11));
+                $hash = str_replace('-', '/', substr($prf, 11));
                 $kdf = 'pbkdf2';
-                $iv = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Random::string($crypto->getBlockLength() >> 3);
+                $iv = Random::string($crypto->getBlockLength() >> 3);
                 $PBKDF2params = ['salt' => $salt, 'iterationCount' => $iterationCount, 'prf' => ['algorithm' => $prf, 'parameters' => null]];
-                $PBKDF2params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($PBKDF2params, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBKDF2params::MAP);
-                if (!$crypto instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC2) {
+                $PBKDF2params = ASN1::encodeDER($PBKDF2params, Maps\PBKDF2params::MAP);
+                if (!$crypto instanceof RC2) {
                     $params = ['octetString' => $iv];
                 } else {
                     $params = ['rc2ParametersVersion' => 58, 'iv' => $iv];
-                    $params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($params, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\RC2CBCParameter::MAP);
-                    $params = new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element($params);
+                    $params = ASN1::encodeDER($params, Maps\RC2CBCParameter::MAP);
+                    $params = new ASN1\Element($params);
                 }
-                $params = ['keyDerivationFunc' => ['algorithm' => 'id-PBKDF2', 'parameters' => new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element($PBKDF2params)], 'encryptionScheme' => ['algorithm' => $encryptionScheme, 'parameters' => $params]];
-                $params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($params, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBES2params::MAP);
+                $params = ['keyDerivationFunc' => ['algorithm' => 'id-PBKDF2', 'parameters' => new ASN1\Element($PBKDF2params)], 'encryptionScheme' => ['algorithm' => $encryptionScheme, 'parameters' => $params]];
+                $params = ASN1::encodeDER($params, Maps\PBES2params::MAP);
                 $crypto->setIV($iv);
             } else {
                 $crypto = self::getPBES1EncryptionObject($encryptionAlgorithm);
                 $hash = self::getPBES1Hash($encryptionAlgorithm);
                 $kdf = self::getPBES1KDF($encryptionAlgorithm);
                 $params = ['salt' => $salt, 'iterationCount' => $iterationCount];
-                $params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($params, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBEParameter::MAP);
+                $params = ASN1::encodeDER($params, Maps\PBEParameter::MAP);
             }
             $crypto->setPassword($password, $kdf, $hash, $salt, $iterationCount);
             $key = $crypto->encrypt($key);
-            $key = ['encryptionAlgorithm' => ['algorithm' => $encryptionAlgorithm, 'parameters' => new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element($params)], 'encryptedData' => $key];
-            $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($key, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\EncryptedPrivateKeyInfo::MAP);
+            $key = ['encryptionAlgorithm' => ['algorithm' => $encryptionAlgorithm, 'parameters' => new ASN1\Element($params)], 'encryptedData' => $key];
+            $key = ASN1::encodeDER($key, Maps\EncryptedPrivateKeyInfo::MAP);
             if (isset($options['binary']) ? $options['binary'] : self::$binary) {
                 return $key;
             }
-            return "-----BEGIN ENCRYPTED PRIVATE KEY-----\r\n" . \chunk_split(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($key), 64) . "-----END ENCRYPTED PRIVATE KEY-----";
+            return "-----BEGIN ENCRYPTED PRIVATE KEY-----\r\n" . chunk_split(Strings::base64_encode($key), 64) . "-----END ENCRYPTED PRIVATE KEY-----";
         }
         if (isset($options['binary']) ? $options['binary'] : self::$binary) {
             return $key;
         }
-        return "-----BEGIN PRIVATE KEY-----\r\n" . \chunk_split(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($key), 64) . "-----END PRIVATE KEY-----";
+        return "-----BEGIN PRIVATE KEY-----\r\n" . chunk_split(Strings::base64_encode($key), 64) . "-----END PRIVATE KEY-----";
     }
     /**
      * Wrap a public key appropriately
@@ -555,15 +561,15 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     protected static function wrapPublicKey($key, $params, $oid = null, array $options = [])
     {
         self::initialize_static_variables();
-        $key = ['publicKeyAlgorithm' => ['algorithm' => \is_string(static::OID_NAME) ? static::OID_NAME : $oid], 'publicKey' => "\x00" . $key];
-        if ($oid != 'id-Ed25519' && $oid != 'id-Ed448') {
+        $key = ['publicKeyAlgorithm' => ['algorithm' => is_string(static::OID_NAME) ? static::OID_NAME : $oid], 'publicKey' => "\x00" . $key];
+        if ($oid != 'id-Ed25519' && $oid != 'id-Ed448' && $oid != 'id-X25519' && $oid != 'id-X448') {
             $key['publicKeyAlgorithm']['parameters'] = $params;
         }
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($key, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PublicKeyInfo::MAP);
+        $key = ASN1::encodeDER($key, Maps\PublicKeyInfo::MAP);
         if (isset($options['binary']) ? $options['binary'] : self::$binary) {
             return $key;
         }
-        return "-----BEGIN PUBLIC KEY-----\r\n" . \chunk_split(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($key), 64) . "-----END PUBLIC KEY-----";
+        return "-----BEGIN PUBLIC KEY-----\r\n" . chunk_split(Strings::base64_encode($key), 64) . "-----END PUBLIC KEY-----";
     }
     /**
      * Perform some preliminary parsing of the key
@@ -575,14 +581,14 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     {
         self::initialize_static_variables();
         if (self::$format != self::MODE_DER) {
-            $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::extractBER($key);
+            $decoded = ASN1::extractBER($key);
             if ($decoded !== \false) {
                 $key = $decoded;
             } elseif (self::$format == self::MODE_PEM) {
                 throw new \UnexpectedValueException('Expected base64-encoded PEM format but was unable to decode base64 text');
             }
         }
-        $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($key);
+        $decoded = ASN1::decodeBER($key);
         if (!$decoded) {
             throw new \RuntimeException('Unable to decode BER');
         }
@@ -596,28 +602,28 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      */
     public static function extractEncryptionAlgorithm($key)
     {
-        if (!\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::is_stringable($key)) {
-            throw new \UnexpectedValueException('Key should be a string - not a ' . \gettype($key));
+        if (!Strings::is_stringable($key)) {
+            throw new \UnexpectedValueException('Key should be a string - not a ' . gettype($key));
         }
         $decoded = self::preParse($key);
-        $r = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\EncryptedPrivateKeyInfo::MAP);
-        if (!\is_array($r)) {
+        $r = ASN1::asn1map($decoded[0], Maps\EncryptedPrivateKeyInfo::MAP);
+        if (!is_array($r)) {
             throw new \RuntimeException('Unable to parse using EncryptedPrivateKeyInfo map');
         }
         if ($r['encryptionAlgorithm']['algorithm'] == 'id-PBES2') {
-            $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($r['encryptionAlgorithm']['parameters']->element);
+            $decoded = ASN1::decodeBER($r['encryptionAlgorithm']['parameters']->element);
             if (!$decoded) {
                 throw new \RuntimeException('Unable to decode BER');
             }
-            $r['encryptionAlgorithm']['parameters'] = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBES2params::MAP);
+            $r['encryptionAlgorithm']['parameters'] = ASN1::asn1map($decoded[0], Maps\PBES2params::MAP);
             $kdf =& $r['encryptionAlgorithm']['parameters']['keyDerivationFunc'];
             switch ($kdf['algorithm']) {
                 case 'id-PBKDF2':
-                    $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($kdf['parameters']->element);
+                    $decoded = ASN1::decodeBER($kdf['parameters']->element);
                     if (!$decoded) {
                         throw new \RuntimeException('Unable to decode BER');
                     }
-                    $kdf['parameters'] = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PBKDF2params::MAP);
+                    $kdf['parameters'] = ASN1::asn1map($decoded[0], Maps\PBKDF2params::MAP);
             }
         }
         return $r['encryptionAlgorithm'];

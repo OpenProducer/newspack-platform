@@ -34,10 +34,13 @@ class Reader_Activation_Emails {
 	public static function init() {
 		add_filter( 'newspack_email_configs', [ __CLASS__, 'add_email_configs' ] );
 
-		// Disable the default WC password reset email and replace it with ours.
-		add_filter( 'woocommerce_email_enabled_customer_reset_password', '__return_false' );
-		add_action( 'woocommerce_reset_password_notification', [ __CLASS__, 'send_reset_password_email' ], 10, 2 );
-		add_action( 'woocommerce_customer_reset_password', [ __CLASS__, 'redirect_non_reader' ] );
+		// Only override WC password reset emails when Reader Activation is enabled,
+		// since the My Account handlers that process the reset link require it.
+		if ( Reader_Activation::is_enabled() ) {
+			add_filter( 'woocommerce_email_enabled_customer_reset_password', '__return_false' );
+			add_action( 'woocommerce_reset_password_notification', [ __CLASS__, 'send_reset_password_email' ], 10, 2 );
+			add_action( 'woocommerce_customer_reset_password', [ __CLASS__, 'redirect_non_reader' ] );
+		}
 	}
 
 	/**

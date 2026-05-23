@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListClientsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'client';
-    protected $clientType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client::class;
+    protected $clientType = Client::class;
     protected $clientDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListClientsResponse extends \Google\Site_Kit_Dependencies\Google\Collectio
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListClientsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListClientsResponse');
+class_alias(ListClientsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListClientsResponse');

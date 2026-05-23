@@ -18,7 +18,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Montgome
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Montgomery
+abstract class Montgomery extends Progenitor
 {
     /**
      * Prepare a number for use in Montgomery Modular Reductions
@@ -31,7 +31,7 @@ abstract class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Math\
     protected static function prepareReduce(array $x, array $n, $class)
     {
         $lhs = new $class();
-        $lhs->value = \array_merge(self::array_repeat(0, \count($n)), $x);
+        $lhs->value = array_merge(self::array_repeat(0, count($n)), $x);
         $rhs = new $class();
         $rhs->value = $n;
         list(, $temp) = $lhs->divide($rhs);
@@ -51,21 +51,21 @@ abstract class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Math\
     protected static function reduce(array $x, array $n, $class)
     {
         static $cache = [self::VARIABLE => [], self::DATA => []];
-        if (($key = \array_search($n, $cache[self::VARIABLE])) === \false) {
-            $key = \count($cache[self::VARIABLE]);
+        if (($key = array_search($n, $cache[self::VARIABLE])) === \false) {
+            $key = count($cache[self::VARIABLE]);
             $cache[self::VARIABLE][] = $x;
             $cache[self::DATA][] = self::modInverse67108864($n, $class);
         }
-        $k = \count($n);
+        $k = count($n);
         $result = [self::VALUE => $x];
         for ($i = 0; $i < $k; ++$i) {
             $temp = $result[self::VALUE][$i] * $cache[self::DATA][$key];
-            $temp = $temp - $class::BASE_FULL * ($class::BASE === 26 ? \intval($temp / 0x4000000) : $temp >> 31);
+            $temp = $temp - $class::BASE_FULL * ($class::BASE === 26 ? intval($temp / 0x4000000) : $temp >> 31);
             $temp = $class::regularMultiply([$temp], $n);
-            $temp = \array_merge(self::array_repeat(0, $i), $temp);
+            $temp = array_merge(self::array_repeat(0, $i), $temp);
             $result = $class::addHelper($result[self::VALUE], \false, $temp, \false);
         }
-        $result[self::VALUE] = \array_slice($result[self::VALUE], $k);
+        $result[self::VALUE] = array_slice($result[self::VALUE], $k);
         if (self::compareHelper($result, \false, $n, \false) >= 0) {
             $result = $class::subtractHelper($result[self::VALUE], \false, $n, \false);
         }
@@ -107,7 +107,7 @@ abstract class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Math\
         // x**-1 mod 2**8
         $result = $result * (2 - ($x & 0xffff) * $result & 0xffff) & 0xffff;
         // x**-1 mod 2**16
-        $result = $class::BASE == 26 ? \fmod($result * (2 - \fmod($x * $result, $class::BASE_FULL)), $class::BASE_FULL) : $result * (2 - $x * $result % $class::BASE_FULL) % $class::BASE_FULL;
+        $result = $class::BASE == 26 ? fmod($result * (2 - fmod($x * $result, $class::BASE_FULL)), $class::BASE_FULL) : $result * (2 - $x * $result % $class::BASE_FULL) % $class::BASE_FULL;
         return $result & $class::MAX_DIGIT;
     }
 }

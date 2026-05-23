@@ -56,7 +56,7 @@ class GoogleAnalyticsAdminV1alphaKeyEvent extends \Google\Site_Kit_Dependencies\
      * @var bool
      */
     public $custom;
-    protected $defaultValueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaKeyEventDefaultValue::class;
+    protected $defaultValueType = GoogleAnalyticsAdminV1alphaKeyEventDefaultValue::class;
     protected $defaultValueDataType = '';
     /**
      * Output only. If set to true, this event can be deleted.
@@ -139,7 +139,7 @@ class GoogleAnalyticsAdminV1alphaKeyEvent extends \Google\Site_Kit_Dependencies\
      *
      * @param GoogleAnalyticsAdminV1alphaKeyEventDefaultValue $defaultValue
      */
-    public function setDefaultValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaKeyEventDefaultValue $defaultValue)
+    public function setDefaultValue(GoogleAnalyticsAdminV1alphaKeyEventDefaultValue $defaultValue)
     {
         $this->defaultValue = $defaultValue;
     }
@@ -201,4 +201,4 @@ class GoogleAnalyticsAdminV1alphaKeyEvent extends \Google\Site_Kit_Dependencies\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaKeyEvent::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaKeyEvent');
+class_alias(GoogleAnalyticsAdminV1alphaKeyEvent::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaKeyEvent');

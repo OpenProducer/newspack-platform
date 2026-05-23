@@ -27,7 +27,7 @@ class GoogleAnalyticsAdminV1alphaListSubpropertySyncConfigsResponse extends \Goo
      * @var string
      */
     public $nextPageToken;
-    protected $subpropertySyncConfigsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertySyncConfig::class;
+    protected $subpropertySyncConfigsType = GoogleAnalyticsAdminV1alphaSubpropertySyncConfig::class;
     protected $subpropertySyncConfigsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListSubpropertySyncConfigsResponse extends \Goo
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListSubpropertySyncConfigsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSubpropertySyncConfigsResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListSubpropertySyncConfigsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSubpropertySyncConfigsResponse');

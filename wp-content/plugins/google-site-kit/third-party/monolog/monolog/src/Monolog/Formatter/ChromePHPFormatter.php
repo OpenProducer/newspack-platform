@@ -17,14 +17,14 @@ use Google\Site_Kit_Dependencies\Monolog\Logger;
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-class ChromePHPFormatter implements \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+class ChromePHPFormatter implements FormatterInterface
 {
     /**
      * Translates Monolog log levels to Wildfire levels.
      *
      * @var array<int, 'log'|'info'|'warn'|'error'>
      */
-    private $logLevels = [\Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG => 'log', \Google\Site_Kit_Dependencies\Monolog\Logger::INFO => 'info', \Google\Site_Kit_Dependencies\Monolog\Logger::NOTICE => 'info', \Google\Site_Kit_Dependencies\Monolog\Logger::WARNING => 'warn', \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR => 'error', \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL => 'error', \Google\Site_Kit_Dependencies\Monolog\Logger::ALERT => 'error', \Google\Site_Kit_Dependencies\Monolog\Logger::EMERGENCY => 'error'];
+    private $logLevels = [Logger::DEBUG => 'log', Logger::INFO => 'info', Logger::NOTICE => 'info', Logger::WARNING => 'warn', Logger::ERROR => 'error', Logger::CRITICAL => 'error', Logger::ALERT => 'error', Logger::EMERGENCY => 'error'];
     /**
      * {@inheritDoc}
      */
@@ -43,8 +43,8 @@ class ChromePHPFormatter implements \Google\Site_Kit_Dependencies\Monolog\Format
         if ($record['extra']) {
             $message['extra'] = $record['extra'];
         }
-        if (\count($message) === 1) {
-            $message = \reset($message);
+        if (count($message) === 1) {
+            $message = reset($message);
         }
         return [$record['channel'], $message, $backtrace, $this->logLevels[$record['level']]];
     }

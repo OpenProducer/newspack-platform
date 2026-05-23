@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class PolicyMappings
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'min' => 1, 'max' => -1, 'children' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['issuerDomainPolicy' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\CertPolicyId::MAP, 'subjectDomainPolicy' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\CertPolicyId::MAP]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'min' => 1, 'max' => -1, 'children' => ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['issuerDomainPolicy' => CertPolicyId::MAP, 'subjectDomainPolicy' => CertPolicyId::MAP]]];
 }

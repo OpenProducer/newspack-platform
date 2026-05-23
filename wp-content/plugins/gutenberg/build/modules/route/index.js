@@ -674,6 +674,43 @@ function createBrowserHistory(opts) {
   };
   return history;
 }
+function createMemoryHistory(opts = {
+  initialEntries: ["/"]
+}) {
+  const entries = opts.initialEntries;
+  let index = opts.initialIndex ? Math.min(Math.max(opts.initialIndex, 0), entries.length - 1) : entries.length - 1;
+  const states = entries.map(
+    (_entry, index2) => assignKeyAndIndex(index2, void 0)
+  );
+  const getLocation = () => parseHref(entries[index], states[index]);
+  return createHistory({
+    getLocation,
+    getLength: () => entries.length,
+    pushState: (path, state) => {
+      if (index < entries.length - 1) {
+        entries.splice(index + 1);
+        states.splice(index + 1);
+      }
+      states.push(state);
+      entries.push(path);
+      index = Math.max(entries.length - 1, 0);
+    },
+    replaceState: (path, state) => {
+      states[index] = state;
+      entries[index] = path;
+    },
+    back: () => {
+      index = Math.max(index - 1, 0);
+    },
+    forward: () => {
+      index = Math.min(index + 1, entries.length - 1);
+    },
+    go: (n) => {
+      index = Math.min(Math.max(index + n, 0), entries.length - 1);
+    },
+    createHref: (path) => path
+  });
+}
 function parseHref(href, state) {
   const hashIndex = href.indexOf("#");
   const searchIndex = href.indexOf("?");
@@ -5628,6 +5665,7 @@ lock(privateApis, {
   // Router creation and setup
   createBrowserHistory,
   createLazyRoute,
+  createMemoryHistory,
   createRouter,
   createRootRoute,
   createRoute,

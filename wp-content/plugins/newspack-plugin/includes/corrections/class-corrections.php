@@ -53,6 +53,7 @@ class Corrections {
 		add_action( 'admin_init', [ __CLASS__, 'register_corrections_block_patterns' ] );
 		add_action( 'init', [ __CLASS__, 'register_corrections_template' ] );
 		add_action( 'transition_post_status', [ __CLASS__, 'update_corrections_status' ], 10, 3 );
+		add_filter( 'republication_tracker_tool_republish_content', [ __CLASS__, 'append_corrections_to_republished_content' ], 10, 2 );
 	}
 
 	/**
@@ -227,6 +228,10 @@ class Corrections {
 			return rest_ensure_response( new WP_Error( 'invalid_post_id', 'Invalid post ID.', [ 'status' => 400 ] ) );
 		}
 
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return rest_ensure_response( new WP_Error( 'unauthorized', 'You do not have permission to edit this post.', [ 'status' => 403 ] ) );
+		}
+
 		$existing_corrections = self::get_corrections( $post_id );
 		$existing_ids         = wp_list_pluck( $existing_corrections, 'ID' );
 
@@ -242,6 +247,10 @@ class Corrections {
 
 			// ID will be null if it's a new correction.
 			if ( ! empty( $correction_id ) ) {
+				// Verify the correction belongs to this post.
+				if ( ! in_array( $correction_id, $existing_ids, true ) ) {
+					return rest_ensure_response( new WP_Error( 'invalid_correction', 'The correction does not belong to this post.', [ 'status' => 400 ] ) );
+				}
 				// Update existing correction.
 				self::update_correction( $post_id, $correction_id, $correction );
 				$processed_ids[] = $correction_id;
@@ -490,6 +499,71 @@ class Corrections {
 		<!-- /wp:newspack/correction-box -->
 		<?php
 		return ob_get_clean();
+	}
+
+	/**
+	 * Appends corrections to republished content via the Republication Tracker Tool.
+	 *
+	 * @param string  $content The republished content.
+	 * @param WP_Post $post    The post being republished.
+	 *
+	 * @return string The content with corrections appended.
+	 */
+	public static function append_corrections_to_republished_content( $content, $post ) {
+		$corrections = self::get_corrections( $post->ID );
+		if ( empty( $corrections ) ) {
+			return $content;
+		}
+
+		// Separate corrections by priority.
+		$high_priority_corrections = [];
+		$low_priority_corrections  = [];
+
+		foreach ( $corrections as $correction ) {
+			if ( 'high' === $correction->correction_priority ) {
+				$high_priority_corrections[] = $correction;
+			} else {
+				$low_priority_corrections[] = $correction;
+			}
+		}
+
+		$top_markup    = ! empty( $high_priority_corrections ) ? self::get_republish_corrections_markup( $high_priority_corrections, 'high' ) : '';
+		$bottom_markup = ! empty( $low_priority_corrections ) ? self::get_republish_corrections_markup( $low_priority_corrections, 'low' ) : '';
+
+		return $top_markup . $content . $bottom_markup;
+	}
+
+	/**
+	 * Generates simplified corrections markup for republished content.
+	 *
+	 * Uses only basic HTML elements (<p>, <strong>) that render
+	 * distinctly without CSS, since republished content is stripped of styles.
+	 *
+	 * @param array $corrections Array of correction post objects.
+	 *
+	 * @return string The simplified corrections markup.
+	 */
+	private static function get_republish_corrections_markup( $corrections ) {
+		if ( empty( $corrections ) ) {
+			return '';
+		}
+
+		$markup = '';
+
+		foreach ( $corrections as $correction ) {
+			$correction_date = \get_the_date( get_option( 'date_format' ), $correction->ID );
+			$correction_time = \get_the_time( get_option( 'time_format' ), $correction->ID );
+			$heading         = sprintf(
+				'%s, %s%s:',
+				self::get_correction_type( $correction->ID ),
+				$correction_date,
+				$correction_time ? ' ' . $correction_time : ''
+			);
+
+			$markup .= '<p><strong>' . esc_html( $heading ) . '</strong> ' . esc_html( $correction->post_content ) . '</p>';
+		}
+
+		return $markup;
 	}
 
 	/**

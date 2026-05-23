@@ -37,6 +37,7 @@ class WooCommerce_Connection {
 		include_once __DIR__ . '/class-woocommerce-emails.php';
 		include_once __DIR__ . '/class-woocommerce-order-utm.php';
 		include_once __DIR__ . '/class-woocommerce-products.php';
+		include_once __DIR__ . '/class-woocommerce-checkout.php';
 		include_once __DIR__ . '/class-woocommerce-product-validator.php';
 		include_once __DIR__ . '/class-woocommerce-duplicate-orders.php';
 		include_once __DIR__ . '/class-woocommerce-update-payment-notice.php';
@@ -113,6 +114,17 @@ class WooCommerce_Connection {
 	 * It's not necessary because all sites use modal or ajax checkout.
 	 */
 	public static function disable_legacy_form_checkout() {
+		/**
+		 * Re-enables the legacy WooCommerce form-based checkout process.
+		 * By default, Newspack uses modal or AJAX checkout for better UX.
+		 *
+		 * @constant NEWSPACK_ALLOW_LEGACY_FORM_CHECKOUT
+		 * @type     bool
+		 * @default  Legacy form checkout disabled (uses modal/ajax checkout)
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_ALLOW_LEGACY_FORM_CHECKOUT', true );
+		 */
 		if ( defined( 'NEWSPACK_ALLOW_LEGACY_FORM_CHECKOUT' ) && NEWSPACK_ALLOW_LEGACY_FORM_CHECKOUT ) {
 			return;
 		}
@@ -136,6 +148,17 @@ class WooCommerce_Connection {
 	 * @return array
 	 */
 	public static function disable_related_products( $related_products ) {
+		/**
+		 * Re-enables WooCommerce related products display on product pages.
+		 * Newspack disables these by default for a cleaner donation/membership experience.
+		 *
+		 * @constant NEWSPACK_ALLOW_RELATED_PRODUCTS
+		 * @type     bool
+		 * @default  Related products disabled on product pages
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_ALLOW_RELATED_PRODUCTS', true );
+		 */
 		if ( defined( 'NEWSPACK_ALLOW_RELATED_PRODUCTS' ) && NEWSPACK_ALLOW_RELATED_PRODUCTS ) {
 			return $related_products;
 		}
@@ -190,6 +213,18 @@ class WooCommerce_Connection {
 	 * @return bool
 	 */
 	public static function rate_limiting_enabled() {
+		/**
+		 * Number of seconds to wait before allowing the same user to attempt
+		 * another checkout action. Set to 0 to disable rate limiting.
+		 * Helps prevent duplicate orders and abuse.
+		 *
+		 * @constant NEWSPACK_CHECKOUT_RATE_LIMIT
+		 * @type     int
+		 * @default  Rate limiting disabled (0)
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_CHECKOUT_RATE_LIMIT', 90 );
+		 */
 		return defined( 'NEWSPACK_CHECKOUT_RATE_LIMIT' ) && is_int( NEWSPACK_CHECKOUT_RATE_LIMIT ) && 0 !== NEWSPACK_CHECKOUT_RATE_LIMIT && class_exists( 'WC_Rate_Limiter' );
 	}
 
@@ -386,6 +421,18 @@ class WooCommerce_Connection {
 	 * @return string Option value.
 	 */
 	public static function force_allow_subscription_switching( $can_switch, $option_name ) {
+		/**
+		 * Prevents Newspack from forcing subscription switching options to ON.
+		 * By default, Newspack enables switching between variations, grouped
+		 * subscriptions, and Name Your Price amounts.
+		 *
+		 * @constant NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE
+		 * @type     bool
+		 * @default  Subscription switching forced ON
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE', true );
+		 */
 		if ( defined( 'NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE' ) && NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE ) {
 			return $can_switch;
 		}
@@ -410,6 +457,17 @@ class WooCommerce_Connection {
 	 * @return string Option value.
 	 */
 	public static function force_allow_failed_payment_retry( $should_retry ) {
+		/**
+		 * Prevents Newspack from forcing failed payment automatic retries to ON.
+		 * By default, Newspack enables automatic retry of failed subscription payments.
+		 *
+		 * @constant NEWSPACK_PREVENT_WC_ALLOW_FAILED_PAYMENT_RETRIES_OVERRIDE
+		 * @type     bool
+		 * @default  Failed payment retries forced ON
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_PREVENT_WC_ALLOW_FAILED_PAYMENT_RETRIES_OVERRIDE', true );
+		 */
 		if ( defined( 'NEWSPACK_PREVENT_WC_ALLOW_FAILED_PAYMENT_RETRIES_OVERRIDE' ) && NEWSPACK_PREVENT_WC_ALLOW_FAILED_PAYMENT_RETRIES_OVERRIDE ) {
 			return $should_retry;
 		}
@@ -701,6 +759,17 @@ class WooCommerce_Connection {
 	 * Should override the template for the given page?
 	 */
 	private static function should_override_template() {
+		/**
+		 * Disables Newspack's WooCommerce template overrides for checkout,
+		 * cart, and my-account pages. Set to true to use default WC templates.
+		 *
+		 * @constant NEWSPACK_DISABLE_WC_TEMPLATE_OVERRIDE
+		 * @type     bool
+		 * @default  WooCommerce template overrides enabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_DISABLE_WC_TEMPLATE_OVERRIDE', true );
+		 */
 		if ( defined( 'NEWSPACK_DISABLE_WC_TEMPLATE_OVERRIDE' ) && NEWSPACK_DISABLE_WC_TEMPLATE_OVERRIDE ) {
 			return false;
 		}

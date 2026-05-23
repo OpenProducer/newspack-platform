@@ -40,11 +40,11 @@ class PropertiesReportingDataAnnotations extends \Google\Site_Kit_Dependencies\G
      * @return GoogleAnalyticsAdminV1alphaReportingDataAnnotation
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaReportingDataAnnotation $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class);
     }
     /**
      * Deletes a Reporting Data Annotation. (reportingDataAnnotations.delete)
@@ -60,8 +60,8 @@ class PropertiesReportingDataAnnotations extends \Google\Site_Kit_Dependencies\G
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup a single Reporting Data Annotation. (reportingDataAnnotations.get)
@@ -77,8 +77,8 @@ class PropertiesReportingDataAnnotations extends \Google\Site_Kit_Dependencies\G
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class);
     }
     /**
      * List all Reporting Data Annotations on a property.
@@ -122,8 +122,8 @@ class PropertiesReportingDataAnnotations extends \Google\Site_Kit_Dependencies\G
     public function listPropertiesReportingDataAnnotations($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListReportingDataAnnotationsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListReportingDataAnnotationsResponse::class);
     }
     /**
      * Updates a Reporting Data Annotation. (reportingDataAnnotations.patch)
@@ -142,12 +142,12 @@ class PropertiesReportingDataAnnotations extends \Google\Site_Kit_Dependencies\G
      * @return GoogleAnalyticsAdminV1alphaReportingDataAnnotation
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaReportingDataAnnotation $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesReportingDataAnnotations::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesReportingDataAnnotations');
+class_alias(PropertiesReportingDataAnnotations::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesReportingDataAnnotations');

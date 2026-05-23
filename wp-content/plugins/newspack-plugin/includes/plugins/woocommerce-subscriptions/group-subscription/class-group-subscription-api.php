@@ -78,13 +78,95 @@ class Group_Subscription_API {
 				],
 			]
 		);
+		\register_rest_route(
+			self::NAMESPACE,
+			'/invite',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ __CLASS__, 'api_invite' ],
+				'permission_callback' => [ __CLASS__, 'permission_callback' ],
+				'args'                => [
+					'subscription_id' => [
+						'type'              => 'integer',
+						'required'          => true,
+						'sanitize_callback' => 'absint',
+					],
+					'email'           => [
+						'type'              => 'string',
+						'required'          => true,
+						'sanitize_callback' => 'sanitize_email',
+					],
+				],
+			]
+		);
+		\register_rest_route(
+			self::NAMESPACE,
+			'/invite',
+			[
+				'methods'             => \WP_REST_Server::DELETABLE,
+				'callback'            => [ __CLASS__, 'api_cancel_invite' ],
+				'permission_callback' => [ __CLASS__, 'permission_callback' ],
+				'args'                => [
+					'subscription_id' => [
+						'type'              => 'integer',
+						'required'          => true,
+						'sanitize_callback' => 'absint',
+					],
+					'email'           => [
+						'type'              => 'string',
+						'required'          => true,
+						'sanitize_callback' => 'sanitize_email',
+					],
+				],
+			]
+		);
+		\register_rest_route(
+			self::NAMESPACE,
+			'/invite-link',
+			[
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => [ __CLASS__, 'api_generate_invite_link' ],
+				'permission_callback' => [ __CLASS__, 'permission_callback' ],
+				'args'                => [
+					'subscription_id' => [
+						'type'              => 'integer',
+						'required'          => true,
+						'sanitize_callback' => 'absint',
+					],
+				],
+			]
+		);
+		\register_rest_route(
+			self::NAMESPACE,
+			'/invite-link',
+			[
+				'methods'             => \WP_REST_Server::DELETABLE,
+				'callback'            => [ __CLASS__, 'api_delete_invite_link' ],
+				'permission_callback' => [ __CLASS__, 'permission_callback' ],
+				'args'                => [
+					'subscription_id' => [
+						'type'              => 'integer',
+						'required'          => true,
+						'sanitize_callback' => 'absint',
+					],
+				],
+			]
+		);
 	}
 
 	/**
-	 * Permission callback for the add_members route.
+	 * Permission callback for managing group subscriptions.
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 * @return bool Whether the user has permission to invite to the group subscription.
 	 */
-	public static function permission_callback() {
-		return \current_user_can( 'manage_woocommerce' );
+	public static function permission_callback( $request ) {
+		$subscription_id = $request->get_param( 'subscription_id' );
+		$subscription    = WooCommerce_Subscriptions::sanitize_subscription( $subscription_id );
+		if ( ! $subscription ) {
+			return false;
+		}
+		return current_user_can( 'manage_woocommerce' ) || Group_Subscription::user_is_manager( get_current_user_id(), $subscription );
 	}
 
 	/**
@@ -189,6 +271,60 @@ class Group_Subscription_API {
 		$members_to_remove = $request->get_param( 'members_to_remove' );
 		$results           = Group_Subscription::update_members( $subscription_id, $members_to_add ?? [], $members_to_remove ?? [] );
 		return \rest_ensure_response( $results );
+	}
+
+	/**
+	 * Invite a user to a group subscription.
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 *
+	 * @return \WP_REST_Response The response object.
+	 */
+	public static function api_invite( $request ) {
+		$subscription_id = $request->get_param( 'subscription_id' );
+		$email           = $request->get_param( 'email' );
+		$invite = Group_Subscription_Invite::generate_invite( $subscription_id, $email );
+		return \rest_ensure_response( $invite );
+	}
+
+	/**
+	 * Cancel an invite for a group subscription.
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 *
+	 * @return \WP_REST_Response The response object.
+	 */
+	public static function api_cancel_invite( $request ) {
+		$subscription_id = $request->get_param( 'subscription_id' );
+		$email           = $request->get_param( 'email' );
+		$result = Group_Subscription_Invite::cancel_invite( $subscription_id, $email );
+		return \rest_ensure_response( $result );
+	}
+
+	/**
+	 * Generate an invite-link for a group subscription.
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 *
+	 * @return \WP_REST_Response The response object.
+	 */
+	public static function api_generate_invite_link( $request ) {
+		$subscription_id = $request->get_param( 'subscription_id' );
+		$result = Group_Subscription_Invite::generate_link_invite( $subscription_id, get_current_user_id() );
+		return \rest_ensure_response( $result );
+	}
+
+	/**
+	 * Delete an invite-link for a group subscription.
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 *
+	 * @return \WP_REST_Response The response object.
+	 */
+	public static function api_delete_invite_link( $request ) {
+		$subscription_id = $request->get_param( 'subscription_id' );
+		$result = Group_Subscription_Invite::delete_link_invite( $subscription_id, get_current_user_id() );
+		return \rest_ensure_response( $result );
 	}
 }
 Group_Subscription_API::init();

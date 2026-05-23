@@ -39,11 +39,11 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @return GoogleAnalyticsAdminV1betaDataStream
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1betaDataStream $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1betaDataStream::class);
     }
     /**
      * Deletes a DataStream on a property. (dataStreams.delete)
@@ -57,8 +57,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single DataStream. (dataStreams.get)
@@ -72,8 +72,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1betaDataStream::class);
     }
     /**
      * Lists DataStreams on a property. (dataStreams.listPropertiesDataStreams)
@@ -94,8 +94,8 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
     public function listPropertiesDataStreams($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListDataStreamsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1betaListDataStreamsResponse::class);
     }
     /**
      * Updates a DataStream on a property. (dataStreams.patch)
@@ -112,12 +112,12 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @return GoogleAnalyticsAdminV1betaDataStream
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1betaDataStream $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1betaDataStream::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource\PropertiesDataStreams::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_Resource_PropertiesDataStreams');
+class_alias(PropertiesDataStreams::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_Resource_PropertiesDataStreams');

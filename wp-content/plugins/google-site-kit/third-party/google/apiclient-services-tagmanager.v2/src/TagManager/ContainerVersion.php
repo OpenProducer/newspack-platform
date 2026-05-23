@@ -26,11 +26,11 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $accountId;
-    protected $builtInVariableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\BuiltInVariable::class;
+    protected $builtInVariableType = BuiltInVariable::class;
     protected $builtInVariableDataType = 'array';
-    protected $clientType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client::class;
+    protected $clientType = Client::class;
     protected $clientDataType = 'array';
-    protected $containerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class;
+    protected $containerType = Container::class;
     protected $containerDataType = '';
     /**
      * GTM Container ID.
@@ -44,7 +44,7 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $containerVersionId;
-    protected $customTemplateType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class;
+    protected $customTemplateType = CustomTemplate::class;
     protected $customTemplateDataType = 'array';
     /**
      * A value of true indicates this container version has been deleted.
@@ -65,9 +65,9 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $fingerprint;
-    protected $folderType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class;
+    protected $folderType = Folder::class;
     protected $folderDataType = 'array';
-    protected $gtagConfigType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig::class;
+    protected $gtagConfigType = GtagConfig::class;
     protected $gtagConfigDataType = 'array';
     /**
      * Container version display name.
@@ -81,7 +81,7 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $path;
-    protected $tagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class;
+    protected $tagType = Tag::class;
     protected $tagDataType = 'array';
     /**
      * Auto generated link to the tag manager UI
@@ -89,13 +89,13 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $tagManagerUrl;
-    protected $transformationType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation::class;
+    protected $transformationType = Transformation::class;
     protected $transformationDataType = 'array';
-    protected $triggerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class;
+    protected $triggerType = Trigger::class;
     protected $triggerDataType = 'array';
-    protected $variableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class;
+    protected $variableType = Variable::class;
     protected $variableDataType = 'array';
-    protected $zoneType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Zone::class;
+    protected $zoneType = Zone::class;
     protected $zoneDataType = 'array';
     /**
      * GTM Account ID.
@@ -150,7 +150,7 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Container $container
      */
-    public function setContainer(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Container $container)
+    public function setContainer(Container $container)
     {
         $this->container = $container;
     }
@@ -420,4 +420,4 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ContainerVersion');
+class_alias(ContainerVersion::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ContainerVersion');

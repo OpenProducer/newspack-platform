@@ -41,7 +41,7 @@ use Throwable;
  *
  * @see https://github.com/petkaantonov/bluebird/blob/master/API.md#generators inspiration
  */
-final class Coroutine implements \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+final class Coroutine implements PromiseInterface
 {
     /**
      * @var PromiseInterface|null
@@ -58,29 +58,29 @@ final class Coroutine implements \Google\Site_Kit_Dependencies\GuzzleHttp\Promis
     public function __construct(callable $generatorFn)
     {
         $this->generator = $generatorFn();
-        $this->result = new \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Promise(function () : void {
+        $this->result = new Promise(function (): void {
             while (isset($this->currentPromise)) {
                 $this->currentPromise->wait();
             }
         });
         try {
             $this->nextCoroutine($this->generator->current());
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->result->reject($throwable);
         }
     }
     /**
      * Create a new coroutine.
      */
-    public static function of(callable $generatorFn) : self
+    public static function of(callable $generatorFn): self
     {
         return new self($generatorFn);
     }
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         return $this->result->then($onFulfilled, $onRejected);
     }
-    public function otherwise(callable $onRejected) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public function otherwise(callable $onRejected): PromiseInterface
     {
         return $this->result->otherwise($onRejected);
     }
@@ -88,31 +88,31 @@ final class Coroutine implements \Google\Site_Kit_Dependencies\GuzzleHttp\Promis
     {
         return $this->result->wait($unwrap);
     }
-    public function getState() : string
+    public function getState(): string
     {
         return $this->result->getState();
     }
-    public function resolve($value) : void
+    public function resolve($value): void
     {
         $this->result->resolve($value);
     }
-    public function reject($reason) : void
+    public function reject($reason): void
     {
         $this->result->reject($reason);
     }
-    public function cancel() : void
+    public function cancel(): void
     {
         $this->currentPromise->cancel();
         $this->result->cancel();
     }
-    private function nextCoroutine($yielded) : void
+    private function nextCoroutine($yielded): void
     {
-        $this->currentPromise = \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::promiseFor($yielded)->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
+        $this->currentPromise = Create::promiseFor($yielded)->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
     }
     /**
      * @internal
      */
-    public function _handleSuccess($value) : void
+    public function _handleSuccess($value): void
     {
         unset($this->currentPromise);
         try {
@@ -122,21 +122,21 @@ final class Coroutine implements \Google\Site_Kit_Dependencies\GuzzleHttp\Promis
             } else {
                 $this->result->resolve($value);
             }
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->result->reject($throwable);
         }
     }
     /**
      * @internal
      */
-    public function _handleFailure($reason) : void
+    public function _handleFailure($reason): void
     {
         unset($this->currentPromise);
         try {
-            $nextYield = $this->generator->throw(\Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::exceptionFor($reason));
+            $nextYield = $this->generator->throw(Create::exceptionFor($reason));
             // The throw was caught, so keep iterating on the coroutine
             $this->nextCoroutine($nextYield);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->result->reject($throwable);
         }
     }

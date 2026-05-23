@@ -47,11 +47,11 @@ class RetryMiddleware
      *
      * @return int milliseconds.
      */
-    public static function exponentialDelay(int $retries) : int
+    public static function exponentialDelay(int $retries): int
     {
         return (int) 2 ** ($retries - 1) * 1000;
     }
-    public function __invoke(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public function __invoke(RequestInterface $request, array $options): PromiseInterface
     {
         if (!isset($options['retries'])) {
             $options['retries'] = 0;
@@ -62,9 +62,9 @@ class RetryMiddleware
     /**
      * Execute fulfilled closure
      */
-    private function onFulfilled(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options) : callable
+    private function onFulfilled(RequestInterface $request, array $options): callable
     {
-        return function ($value) use($request, $options) {
+        return function ($value) use ($request, $options) {
             if (!($this->decider)($options['retries'], $request, $value, null)) {
                 return $value;
             }
@@ -74,16 +74,16 @@ class RetryMiddleware
     /**
      * Execute rejected closure
      */
-    private function onRejected(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $req, array $options) : callable
+    private function onRejected(RequestInterface $req, array $options): callable
     {
-        return function ($reason) use($req, $options) {
+        return function ($reason) use ($req, $options) {
             if (!($this->decider)($options['retries'], $req, null, $reason)) {
-                return \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::rejectionFor($reason);
+                return P\Create::rejectionFor($reason);
             }
             return $this->doRetry($req, $options);
         };
     }
-    private function doRetry(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options, ?\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response = null) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    private function doRetry(RequestInterface $request, array $options, ?ResponseInterface $response = null): PromiseInterface
     {
         $options['delay'] = ($this->delay)(++$options['retries'], $response, $request);
         return $this($request, $options);

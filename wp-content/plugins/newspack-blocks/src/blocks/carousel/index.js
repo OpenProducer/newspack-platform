@@ -20,7 +20,7 @@ import edit from './edit';
 import './view.scss';
 import './editor.scss';
 import metadata from './block.json';
-const { name, attributes, category } = metadata;
+const { name, attributes, apiVersion, category } = metadata;
 
 // Name must be exported separately.
 export { name };
@@ -28,6 +28,7 @@ export { name };
 export const title = __( 'Content Carousel', 'newspack-blocks' );
 
 export const settings = {
+	apiVersion,
 	title,
 	icon: {
 		src: icon,

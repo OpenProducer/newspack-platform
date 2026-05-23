@@ -48,9 +48,9 @@ class PublicationsEntitlements extends \Google\Site_Kit_Dependencies\Google\Serv
     public function listPublicationsEntitlements($publicationId, $optParams = [])
     {
         $params = ['publicationId' => $publicationId];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ListEntitlementsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListEntitlementsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Resource\PublicationsEntitlements::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_Resource_PublicationsEntitlements');
+class_alias(PublicationsEntitlements::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_Resource_PublicationsEntitlements');

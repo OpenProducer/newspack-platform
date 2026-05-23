@@ -413,7 +413,7 @@ var wp;
   var abs = Math.abs;
   var min = (a, b) => a < b ? a : b;
   var max = (a, b) => a > b ? a : b;
-  var isNaN = Number.isNaN;
+  var isNaN2 = Number.isNaN;
   var isNegativeZero = (n) => n !== 0 ? n < 0 : 1 / n < 0;
 
   // node_modules/lib0/binary.js
@@ -463,8 +463,8 @@ var wp;
   var MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER;
   var LOWEST_INT32 = 1 << 31;
   var isInteger = Number.isInteger || ((num) => typeof num === "number" && isFinite(num) && floor(num) === num);
-  var isNaN2 = Number.isNaN;
-  var parseInt = Number.parseInt;
+  var isNaN3 = Number.isNaN;
+  var parseInt2 = Number.parseInt;
 
   // node_modules/lib0/string.js
   var fromCharCode = String.fromCharCode;
@@ -9028,7 +9028,7 @@ var wp;
   }
   glo[importIdentifier] = true;
 
-  // packages/sync/node_modules/y-protocols/awareness.js
+  // node_modules/y-protocols/awareness.js
   var outdatedTimeout = 3e4;
   var Awareness = class extends Observable {
     /**
@@ -9167,6 +9167,24 @@ var wp;
   var CRDT_STATE_MAP_VERSION_KEY = "version";
   var LOCAL_EDITOR_ORIGIN = "gutenberg";
   var LOCAL_SYNC_MANAGER_ORIGIN = "syncManager";
+  var LOCAL_UNDO_IGNORED_ORIGIN = "gutenberg-undo-ignored";
+
+  // packages/sync/build-module/errors.mjs
+  var ConnectionErrorCode = /* @__PURE__ */ ((ConnectionErrorCode2) => {
+    ConnectionErrorCode2["AUTHENTICATION_FAILED"] = "authentication-failed";
+    ConnectionErrorCode2["CONNECTION_EXPIRED"] = "connection-expired";
+    ConnectionErrorCode2["CONNECTION_LIMIT_EXCEEDED"] = "connection-limit-exceeded";
+    ConnectionErrorCode2["DOCUMENT_SIZE_LIMIT_EXCEEDED"] = "document-size-limit-exceeded";
+    ConnectionErrorCode2["UNKNOWN_ERROR"] = "unknown-error";
+    return ConnectionErrorCode2;
+  })(ConnectionErrorCode || {});
+  var ConnectionError = class extends Error {
+    constructor(code = "unknown-error", message) {
+      super(message);
+      this.code = code;
+      this.name = "ConnectionError";
+    }
+  };
 
   // packages/sync/build-module/lock-unlock.mjs
   var import_private_apis = __toESM(require_private_apis(), 1);
@@ -9199,9 +9217,12 @@ var wp;
   }
 
   // packages/sync/build-module/providers/index.mjs
-  var import_hooks = __toESM(require_hooks(), 1);
+  var import_hooks3 = __toESM(require_hooks(), 1);
 
-  // packages/sync/node_modules/y-protocols/sync.js
+  // packages/sync/build-module/providers/http-polling/polling-manager.mjs
+  var import_hooks2 = __toESM(require_hooks(), 1);
+
+  // node_modules/y-protocols/sync.js
   var messageYjsSyncStep1 = 0;
   var messageYjsSyncStep2 = 1;
   var messageYjsUpdate = 2;
@@ -9244,6 +9265,40 @@ var wp;
     }
     return messageType;
   };
+
+  // packages/sync/build-module/providers/http-polling/config.mjs
+  var import_hooks = __toESM(require_hooks(), 1);
+  var DEFAULT_CLIENT_LIMIT_PER_ROOM = 3;
+  var ERROR_RETRY_DELAYS_SOLO_MS = [
+    2e3,
+    4e3,
+    8e3,
+    12e3
+    // Solo: 26s total retry time solo before dialog
+  ];
+  var ERROR_RETRY_DELAYS_WITH_COLLABORATORS_MS = [
+    1e3,
+    2e3,
+    4e3,
+    8e3
+    // With collaborators: 15s total retry time before dialog
+  ];
+  var DISCONNECT_DIALOG_RETRY_MS = 3e4;
+  var MANUAL_RETRY_INTERVAL_MS = 15e3;
+  var MAX_ENCODED_UPDATE_SIZE_IN_BYTES = 1 * 1024 * 1024;
+  var MAX_UPDATE_SIZE_IN_BYTES = Math.floor(MAX_ENCODED_UPDATE_SIZE_IN_BYTES / 4) * 3;
+  var MAX_ROOMS_PER_REQUEST = 50;
+  var POLLING_INTERVAL_IN_MS = (0, import_hooks.applyFilters)(
+    "sync.pollingManager.pollingInterval",
+    4e3
+    // 4 seconds
+  );
+  var POLLING_INTERVAL_WITH_COLLABORATORS_IN_MS = (0, import_hooks.applyFilters)(
+    "sync.pollingManager.pollingIntervalWithCollaborators",
+    1e3
+    // 1 second
+  );
+  var POLLING_INTERVAL_BACKGROUND_TAB_IN_MS = 25 * 1e3;
 
   // packages/sync/build-module/providers/http-polling/types.mjs
   var SyncUpdateType = /* @__PURE__ */ ((SyncUpdateType2) => {
@@ -9322,44 +9377,99 @@ var wp;
       }
     };
   }
-  async function postSyncUpdate(payload) {
-    const response = await (0, import_api_fetch.default)({
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json"
-      },
+  function postSyncUpdate(payload) {
+    return (0, import_api_fetch.default)({
       method: "POST",
-      parse: false,
-      path: SYNC_API_PATH
+      path: SYNC_API_PATH,
+      data: payload
     });
-    if (!response.ok) {
-      throw new Error(
-        `Sync update failed with status ${response.status}`
-      );
-    }
-    return await response.json();
   }
   function postSyncUpdateNonBlocking(payload) {
     if (payload.rooms.length === 0) {
       return;
     }
     (0, import_api_fetch.default)({
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/json" },
-      keepalive: true,
       method: "POST",
-      parse: false,
-      path: SYNC_API_PATH
+      path: SYNC_API_PATH,
+      data: payload,
+      keepalive: true
     }).catch(() => {
     });
   }
+  function intValueOrDefault(value, defaultValue) {
+    const intValue = parseInt(String(value), 10);
+    return isNaN(intValue) ? defaultValue : intValue;
+  }
+  function rotateWindow(items, offset, size2) {
+    if (items.length === 0) {
+      return { window: [], nextOffset: 0 };
+    }
+    const start = (offset % items.length + items.length) % items.length;
+    const wrapped = [...items.slice(start), ...items.slice(0, start)];
+    return {
+      window: wrapped.slice(0, Math.max(0, size2)),
+      nextOffset: (start + Math.max(0, size2)) % items.length
+    };
+  }
 
   // packages/sync/build-module/providers/http-polling/polling-manager.mjs
-  var POLLING_INTERVAL_IN_MS = 1e3;
-  var POLLING_INTERVAL_WITH_COLLABORATORS_IN_MS = 250;
-  var POLLING_INTERVAL_BACKGROUND_TAB_IN_MS = 25 * 1e3;
-  var MAX_ERROR_BACKOFF_IN_MS = 30 * 1e3;
   var POLLING_MANAGER_ORIGIN = "polling-manager";
+  function isForbiddenError(error) {
+    return error?.data?.status === 403;
+  }
+  function identifyForbiddenRoom(error, rooms) {
+    const message = typeof error.message === "string" ? error.message : "";
+    const sortedRooms = [...rooms].sort((a, b) => b.length - a.length);
+    for (const room of sortedRooms) {
+      if (message.includes(room)) {
+        return room;
+      }
+    }
+    return null;
+  }
+  function handleForbiddenError(error, requestedRooms) {
+    const forbiddenRoom = identifyForbiddenRoom(
+      error,
+      requestedRooms.map((r) => r.room)
+    );
+    if (forbiddenRoom) {
+      const state = roomStates.get(forbiddenRoom);
+      if (state) {
+        state.log(
+          "Permission denied, unregistering room",
+          { error },
+          "error",
+          true
+          // force
+        );
+        unregisterRoom(forbiddenRoom, { sendDisconnectSignal: false });
+      }
+      for (const room of requestedRooms) {
+        if (room.room === forbiddenRoom || !roomStates.has(room.room)) {
+          continue;
+        }
+        const remainingState = roomStates.get(room.room);
+        if (room.updates.length > 0) {
+          remainingState.updateQueue.restore(room.updates);
+        }
+      }
+    } else {
+      const rooms = [...roomStates.keys()];
+      for (const room of rooms) {
+        const state = roomStates.get(room);
+        if (state) {
+          state.log(
+            "Permission denied, unregistering room",
+            { error },
+            "error",
+            true
+            // force
+          );
+          unregisterRoom(room, { sendDisconnectSignal: false });
+        }
+      }
+    }
+  }
   var roomStates = /* @__PURE__ */ new Map();
   function createDeprecatedCompactionUpdate(updates) {
     const mergeable = updates.filter(
@@ -9368,7 +9478,7 @@ var wp;
       )
     ).map((u) => base64ToUint8Array(u.data));
     return createSyncUpdate(
-      mergeUpdates(mergeable),
+      mergeUpdatesV2(mergeable),
       SyncUpdateType.COMPACTION
     );
   }
@@ -9399,7 +9509,9 @@ var wp;
     const added = /* @__PURE__ */ new Set();
     const updated = /* @__PURE__ */ new Set();
     const removed = new Set(
-      currentStates.keys().filter((clientId) => !state[clientId])
+      Array.from(currentStates.keys()).filter(
+        (clientId) => !state[clientId]
+      )
     );
     Object.entries(state).forEach(([clientIdString, awarenessState]) => {
       const clientId = Number(clientIdString);
@@ -9460,17 +9572,46 @@ var wp;
       }
       case SyncUpdateType.COMPACTION:
       case SyncUpdateType.UPDATE: {
-        applyUpdate(doc2, data, POLLING_MANAGER_ORIGIN);
+        applyUpdateV2(doc2, data, POLLING_MANAGER_ORIGIN);
       }
     }
   }
+  function checkConnectionLimit(awareness, roomState) {
+    if (!roomState.isPrimaryRoom || hasCheckedConnectionLimit) {
+      return false;
+    }
+    hasCheckedConnectionLimit = true;
+    const maxClientsPerRoom = (0, import_hooks2.applyFilters)(
+      "sync.pollingProvider.maxClientsPerRoom",
+      DEFAULT_CLIENT_LIMIT_PER_ROOM,
+      roomState.room
+    );
+    const clientCount = Object.keys(awareness).length;
+    const validatedLimit = intValueOrDefault(
+      maxClientsPerRoom,
+      DEFAULT_CLIENT_LIMIT_PER_ROOM
+    );
+    if (clientCount > validatedLimit) {
+      roomState.log("Connection limit exceeded", {
+        clientCount,
+        maxClientsPerRoom: validatedLimit,
+        room: roomState.room
+      });
+      return true;
+    }
+    return false;
+  }
   var areListenersRegistered = false;
+  var consecutiveFailures = 0;
+  var hasCheckedConnectionLimit = false;
+  var isManualRetry = false;
   var hasCollaborators = false;
   var isActiveBrowser = "visible" === document.visibilityState;
   var isPolling = false;
   var isUnloadPending = false;
   var pollInterval = POLLING_INTERVAL_IN_MS;
   var pollingTimeoutId = null;
+  var roomOverflowOffset = 0;
   function handleBeforeUnload() {
     isUnloadPending = true;
   }
@@ -9484,7 +9625,11 @@ var wp;
         updates: []
       })
     );
-    postSyncUpdateNonBlocking({ rooms });
+    for (let i = 0; i < rooms.length; i += MAX_ROOMS_PER_REQUEST) {
+      postSyncUpdateNonBlocking({
+        rooms: rooms.slice(i, i + MAX_ROOMS_PER_REQUEST)
+      });
+    }
   }
   function handleVisibilityChange() {
     const wasActive = isActiveBrowser;
@@ -9497,6 +9642,25 @@ var wp;
       }
     }
   }
+  function selectRoomsForRequest() {
+    const allRooms = Array.from(roomStates.values());
+    if (allRooms.length <= MAX_ROOMS_PER_REQUEST) {
+      return allRooms;
+    }
+    const primaryRoom = allRooms.find((state) => state.isPrimaryRoom);
+    const overflowRooms = allRooms.filter((state) => state !== primaryRoom);
+    const overflowSlotsPerRequest = MAX_ROOMS_PER_REQUEST - (primaryRoom ? 1 : 0);
+    const { window: overflowSlice, nextOffset } = rotateWindow(
+      overflowRooms,
+      roomOverflowOffset,
+      overflowSlotsPerRequest
+    );
+    roomOverflowOffset = nextOffset;
+    if (primaryRoom) {
+      return [primaryRoom, ...overflowSlice];
+    }
+    return overflowSlice;
+  }
   function poll() {
     isPolling = true;
     pollingTimeoutId = null;
@@ -9506,39 +9670,71 @@ var wp;
         return;
       }
       isUnloadPending = false;
-      roomStates.forEach((state) => {
+      const roomsInRequest = selectRoomsForRequest();
+      const payload = {
+        rooms: roomsInRequest.map((state) => ({
+          after: state.endCursor ?? 0,
+          awareness: state.localAwarenessState,
+          client_id: state.clientId,
+          room: state.room,
+          updates: state.updateQueue.get()
+        }))
+      };
+      roomsInRequest.forEach((state) => {
         state.onStatusChange({ status: "connecting" });
       });
-      const payload = {
-        rooms: Array.from(roomStates.entries()).map(
-          ([room, state]) => ({
-            after: state.endCursor ?? 0,
-            awareness: state.localAwarenessState,
-            client_id: state.clientId,
-            room,
-            updates: state.updateQueue.get()
-          })
-        )
-      };
       try {
         const { rooms } = await postSyncUpdate(payload);
-        roomStates.forEach((state) => {
+        consecutiveFailures = 0;
+        isManualRetry = false;
+        roomsInRequest.forEach((state) => {
+          if (roomStates.get(state.room) !== state) {
+            return;
+          }
           state.onStatusChange({ status: "connected" });
         });
+        hasCollaborators = false;
         rooms.forEach((room) => {
           if (!roomStates.has(room.room)) {
             return;
           }
           const roomState = roomStates.get(room.room);
           roomState.endCursor = room.end_cursor;
-          roomState.processAwarenessUpdate(room.awareness);
-          if (Object.keys(room.awareness).length > 1) {
-            hasCollaborators = true;
-            roomState.updateQueue.resume();
+          if (checkConnectionLimit(room.awareness, roomState)) {
+            roomState.onStatusChange({
+              status: "disconnected",
+              error: new ConnectionError(
+                ConnectionErrorCode.CONNECTION_LIMIT_EXCEEDED,
+                "Connection limit exceeded"
+              )
+            });
+            unregisterRoom(room.room);
+            return;
           }
-          const responseUpdates = room.updates.map((update) => roomState.processDocUpdate(update)).filter(
-            (update) => Boolean(update)
-          );
+          roomState.processAwarenessUpdate(room.awareness);
+          if (roomState.isPrimaryRoom && Object.keys(room.awareness).length > 1) {
+            hasCollaborators = true;
+            roomStates.forEach((state) => {
+              state.updateQueue.resume();
+            });
+          }
+          const responseUpdates = [];
+          for (const update of room.updates) {
+            try {
+              const response = roomState.processDocUpdate(update);
+              if (response) {
+                responseUpdates.push(response);
+              }
+            } catch (error) {
+              roomState.log(
+                "Failed to apply sync update",
+                { error, update },
+                "error",
+                true
+                // force
+              );
+            }
+          }
           roomState.updateQueue.addBulk(responseUpdates);
           if (room.should_compact) {
             roomState.log("Server requested compaction update");
@@ -9563,31 +9759,58 @@ var wp;
           pollInterval = POLLING_INTERVAL_BACKGROUND_TAB_IN_MS;
         }
       } catch (error) {
-        pollInterval = Math.min(
-          pollInterval * 2,
-          MAX_ERROR_BACKOFF_IN_MS
-        );
-        for (const room of payload.rooms) {
-          if (!roomStates.has(room.room)) {
-            continue;
+        if (isForbiddenError(error)) {
+          handleForbiddenError(error, payload.rooms);
+          if (roomStates.size === 0) {
+            isPolling = false;
+            return;
           }
-          const state = roomStates.get(room.room);
-          state.updateQueue.restore(room.updates);
-          state.log(
-            "Error posting sync update, will retry with backoff",
-            {
-              error,
-              nextPoll: pollInterval
+        } else {
+          consecutiveFailures++;
+          const retrySchedule = hasCollaborators ? ERROR_RETRY_DELAYS_WITH_COLLABORATORS_MS : ERROR_RETRY_DELAYS_SOLO_MS;
+          if (consecutiveFailures <= retrySchedule.length) {
+            pollInterval = retrySchedule[consecutiveFailures - 1];
+          } else {
+            pollInterval = DISCONNECT_DIALOG_RETRY_MS;
+          }
+          if (isManualRetry) {
+            pollInterval = MANUAL_RETRY_INTERVAL_MS;
+            isManualRetry = false;
+          }
+          for (const room of payload.rooms) {
+            if (!roomStates.has(room.room)) {
+              continue;
             }
-          );
-        }
-        if (!isUnloadPending) {
-          roomStates.forEach((state) => {
-            state.onStatusChange({
-              status: "disconnected",
-              retryInMs: pollInterval
+            const state = roomStates.get(room.room);
+            if (room.updates.length > 0 && state.endCursor > 0) {
+              state.updateQueue.clear();
+              state.updateQueue.add(state.createCompactionUpdate());
+            } else if (room.updates.length > 0) {
+              state.updateQueue.restore(room.updates);
+            }
+            state.log(
+              "Error posting sync update, will retry with backoff",
+              { error, nextPoll: pollInterval },
+              "error",
+              true
+              // force
+            );
+          }
+          if (!isUnloadPending) {
+            const backgroundRetriesFailed = consecutiveFailures > retrySchedule.length;
+            roomsInRequest.forEach((state) => {
+              if (roomStates.get(state.room) !== state) {
+                return;
+              }
+              state.onStatusChange({
+                status: "disconnected",
+                canManuallyRetry: true,
+                consecutiveFailures,
+                backgroundRetriesFailed,
+                willAutoRetryInMs: pollInterval
+              });
             });
-          });
+          }
         }
       }
       pollingTimeoutId = setTimeout(poll, pollInterval);
@@ -9606,6 +9829,7 @@ var wp;
       return;
     }
     const updateQueue = createUpdateQueue([createSyncStep1Update(doc2)]);
+    const isPrimaryRoom = 0 === roomStates.size;
     function onAwarenessUpdate() {
       roomState.localAwarenessState = awareness.getLocalState() ?? {};
     }
@@ -9613,29 +9837,50 @@ var wp;
       if (POLLING_MANAGER_ORIGIN === origin2) {
         return;
       }
+      if (update.byteLength > MAX_UPDATE_SIZE_IN_BYTES) {
+        const state = roomStates.get(room);
+        if (!state) {
+          return;
+        }
+        state.log("Document size limit exceeded", {
+          maxUpdateSizeInBytes: MAX_UPDATE_SIZE_IN_BYTES,
+          updateSizeInBytes: update.byteLength
+        });
+        state.onStatusChange({
+          status: "disconnected",
+          error: new ConnectionError(
+            ConnectionErrorCode.DOCUMENT_SIZE_LIMIT_EXCEEDED,
+            "Document size limit exceeded"
+          )
+        });
+        unregisterRoom(room);
+        return;
+      }
       updateQueue.add(createSyncUpdate(update, SyncUpdateType.UPDATE));
     }
     function unregister() {
-      doc2.off("update", onDocUpdate);
+      doc2.off("updateV2", onDocUpdate);
       awareness.off("change", onAwarenessUpdate);
       updateQueue.clear();
     }
     const roomState = {
       clientId: doc2.clientID,
       createCompactionUpdate: () => createSyncUpdate(
-        encodeStateAsUpdate(doc2),
+        encodeStateAsUpdateV2(doc2),
         SyncUpdateType.COMPACTION
       ),
       endCursor: 0,
+      isPrimaryRoom,
       localAwarenessState: awareness.getLocalState() ?? {},
       log,
       onStatusChange,
       processAwarenessUpdate: (state) => processAwarenessUpdate(state, awareness),
       processDocUpdate: (update) => processDocUpdate(update, doc2, onSync),
+      room,
       unregister,
       updateQueue
     };
-    doc2.on("update", onDocUpdate);
+    doc2.on("updateV2", onDocUpdate);
     awareness.on("change", onAwarenessUpdate);
     roomStates.set(room, roomState);
     if (!areListenersRegistered) {
@@ -9648,19 +9893,21 @@ var wp;
       poll();
     }
   }
-  function unregisterRoom(room) {
+  function unregisterRoom(room, { sendDisconnectSignal = true } = {}) {
     const state = roomStates.get(room);
     if (state) {
-      const rooms = [
-        {
-          after: 0,
-          awareness: null,
-          client_id: state.clientId,
-          room,
-          updates: []
-        }
-      ];
-      postSyncUpdateNonBlocking({ rooms });
+      if (sendDisconnectSignal) {
+        const rooms = [
+          {
+            after: 0,
+            awareness: null,
+            client_id: state.clientId,
+            room,
+            updates: []
+          }
+        ];
+        postSyncUpdateNonBlocking({ rooms });
+      }
       state.unregister();
       roomStates.delete(room);
     }
@@ -9672,10 +9919,13 @@ var wp;
         handleVisibilityChange
       );
       areListenersRegistered = false;
+      hasCheckedConnectionLimit = false;
+      consecutiveFailures = 0;
+      roomOverflowOffset = 0;
     }
   }
   function retryNow() {
-    pollInterval = POLLING_INTERVAL_IN_MS * 2;
+    isManualRetry = true;
     if (pollingTimeoutId) {
       clearTimeout(pollingTimeoutId);
       pollingTimeoutId = null;
@@ -9731,7 +9981,7 @@ var wp;
     }
     /**
      * Emit connection status, passing the full object through so that
-     * additional fields (e.g. `retryInMs`) are preserved for consumers.
+     * additional fields (e.g. `willAutoRetryInMs`) are preserved for consumers.
      *
      * @param connectionStatus The connection status object
      */
@@ -9751,16 +10001,20 @@ var wp;
     /**
      * Log debug messages if debugging is enabled.
      *
-     * @param message The debug message
-     * @param debug   Additional debug information
+     * @param message    The debug message
+     * @param debug      Additional debug information
+     * @param errorLevel The console method to use for logging
+     * @param force      Whether to force logging regardless of debug setting
      */
-    log = (message, debug = {}) => {
-      if (this.options.debug) {
-        console.log(`[${this.constructor.name}]: ${message}`, {
-          room: this.options.room,
-          ...debug
-        });
+    log = (message, debug = {}, errorLevel = "log", force = false) => {
+      if (!this.options.debug && !force) {
+        return;
       }
+      const logFn = console[errorLevel] || console.log;
+      logFn(`[${this.constructor.name}]: ${message}`, {
+        room: this.options.room,
+        ...debug
+      });
     };
     /**
      * Handle synchronization events from the polling manager.
@@ -9812,7 +10066,7 @@ var wp;
     if (!window._wpCollaborationEnabled) {
       return [];
     }
-    const filteredProviderCreators = (0, import_hooks.applyFilters)(
+    const filteredProviderCreators = (0, import_hooks3.applyFilters)(
       "sync.providers",
       getDefaultProviderCreators()
     );
@@ -10013,6 +10267,7 @@ var wp;
 
   // packages/sync/build-module/undo-manager.mjs
   function createUndoManager() {
+    const undoMetaHandlers = /* @__PURE__ */ new Map();
     const yUndoManager = new YMultiDocUndoManager([], {
       // Throttle undo/redo captures after 500ms of inactivity.
       // 500 was selected from subjective local UX testing, shorter timeouts
@@ -10021,6 +10276,20 @@ var wp;
       // Ensure that we only scope the undo/redo to the current editor.
       // The yjs document's clientID is added once it's available.
       trackedOrigins: /* @__PURE__ */ new Set([LOCAL_EDITOR_ORIGIN])
+    });
+    yUndoManager.on("stack-item-added", (event) => {
+      const handlers = undoMetaHandlers.get(event.ydoc);
+      if (!handlers) {
+        return;
+      }
+      handlers.addUndoMeta(event.ydoc, event.stackItem.meta);
+    });
+    yUndoManager.on("stack-item-popped", (event) => {
+      const handlers = undoMetaHandlers.get(event.ydoc);
+      if (!handlers) {
+        return;
+      }
+      handlers.restoreUndoMeta(event.ydoc, event.stackItem.meta);
     });
     return {
       /**
@@ -10047,13 +10316,10 @@ var wp;
         }
         const ydoc = ymap.doc;
         yUndoManager.addToScope(ymap);
-        const { addUndoMeta, restoreUndoMeta } = handlers;
-        yUndoManager.on("stack-item-added", (event) => {
-          addUndoMeta(ydoc, event.stackItem.meta);
-        });
-        yUndoManager.on("stack-item-popped", (event) => {
-          restoreUndoMeta(ydoc, event.stackItem.meta);
-        });
+        if (!undoMetaHandlers.has(ydoc)) {
+          ydoc.on("destroy", () => undoMetaHandlers.delete(ydoc));
+        }
+        undoMetaHandlers.set(ydoc, handlers);
       },
       /**
        * Undo the last recorded changes.
@@ -10139,7 +10405,7 @@ var wp;
       applyUpdateV2(ydoc, yupdate);
       ydoc.clientID = pseudoRandomID();
       return ydoc;
-    } catch (e) {
+    } catch {
       return null;
     }
   }
@@ -10173,15 +10439,19 @@ var wp;
         log("loadEntity", "already loaded", entityId);
         return;
       }
+      if (false === syncConfig.shouldSync?.(objectType, objectId)) {
+        log("loadEntity", "shouldSync false, skipping", entityId);
+        return;
+      }
       log("loadEntity", "loading", entityId);
       handlers = {
         addUndoMeta: debugWrap(handlers.addUndoMeta),
         editRecord: debugWrap(handlers.editRecord),
         getEditedRecord: debugWrap(handlers.getEditedRecord),
         onStatusChange: debugWrap(handlers.onStatusChange),
+        persistCRDTDoc: debugWrap(handlers.persistCRDTDoc),
         refetchRecord: debugWrap(handlers.refetchRecord),
-        restoreUndoMeta: debugWrap(handlers.restoreUndoMeta),
-        saveRecord: debugWrap(handlers.saveRecord)
+        restoreUndoMeta: debugWrap(handlers.restoreUndoMeta)
       };
       const ydoc = createYjsDoc({ objectType });
       const recordMap = ydoc.getMap(CRDT_RECORD_MAP_KEY);
@@ -10251,10 +10521,10 @@ var wp;
           return provider;
         })
       );
-      recordMap.observeDeep(onRecordUpdate);
-      stateMap.observe(onStateMapUpdate);
       initializeYjsDoc(ydoc);
       internal.applyPersistedCrdtDoc(objectType, objectId, record);
+      recordMap.observeDeep(onRecordUpdate);
+      stateMap.observe(onStateMapUpdate);
     }
     async function loadCollection(syncConfig, objectType, handlers) {
       const providerCreators2 = getProviderCreators();
@@ -10265,6 +10535,10 @@ var wp;
       }
       if (collectionStates.has(objectType)) {
         log("loadCollection", "already loaded", entityId);
+        return;
+      }
+      if (false === syncConfig.shouldSync?.(objectType, null)) {
+        log("loadCollection", "shouldSync false, skipping", entityId);
         return;
       }
       log("loadCollection", "loading", entityId);
@@ -10356,7 +10630,7 @@ var wp;
         log("applyPersistedCrdtDoc", "no persisted doc", entityId);
         targetDoc.transact(() => {
           applyChangesToCRDTDoc(targetDoc, record);
-          handlers.saveRecord();
+          handlers.persistCRDTDoc();
         }, LOCAL_SYNC_MANAGER_ORIGIN);
         return;
       }
@@ -10380,7 +10654,7 @@ var wp;
       );
       targetDoc.transact(() => {
         applyChangesToCRDTDoc(targetDoc, changes);
-        handlers.saveRecord();
+        handlers.persistCRDTDoc();
       }, LOCAL_SYNC_MANAGER_ORIGIN);
     }
     function updateCRDTDoc(objectType, objectId, changes, origin2, options = {}) {
@@ -10667,6 +10941,54 @@ var wp;
     return characterDiff.diff(oldStr, newStr, options);
   }
 
+  // packages/sync/node_modules/diff/libesm/diff/line.js
+  var LineDiff = class extends Diff {
+    constructor() {
+      super(...arguments);
+      this.tokenize = tokenize;
+    }
+    equals(left, right, options) {
+      if (options.ignoreWhitespace) {
+        if (!options.newlineIsToken || !left.includes("\n")) {
+          left = left.trim();
+        }
+        if (!options.newlineIsToken || !right.includes("\n")) {
+          right = right.trim();
+        }
+      } else if (options.ignoreNewlineAtEof && !options.newlineIsToken) {
+        if (left.endsWith("\n")) {
+          left = left.slice(0, -1);
+        }
+        if (right.endsWith("\n")) {
+          right = right.slice(0, -1);
+        }
+      }
+      return super.equals(left, right, options);
+    }
+  };
+  var lineDiff = new LineDiff();
+  function diffLines(oldStr, newStr, options) {
+    return lineDiff.diff(oldStr, newStr, options);
+  }
+  function tokenize(value, options) {
+    if (options.stripTrailingCr) {
+      value = value.replace(/\r\n/g, "\n");
+    }
+    const retLines = [], linesAndNewlines = value.split(/(\n|\r\n)/);
+    if (!linesAndNewlines[linesAndNewlines.length - 1]) {
+      linesAndNewlines.pop();
+    }
+    for (let i = 0; i < linesAndNewlines.length; i++) {
+      const line = linesAndNewlines[i];
+      if (i % 2 && !options.newlineIsToken) {
+        retLines[retLines.length - 1] += line;
+      } else {
+        retLines.push(line);
+      }
+    }
+    return retLines;
+  }
+
   // packages/sync/build-module/quill-delta/Delta.mjs
   var import_es62 = __toESM(require_es6(), 1);
 
@@ -10871,6 +11193,7 @@ var wp;
     return JSON.parse(JSON.stringify(value));
   }
   var NULL_CHARACTER = String.fromCharCode(0);
+  var STRING_TOO_LARGE_THRESHOLD = 1e4;
   function normalizeChangeCounts(changes) {
     return changes.map((change) => ({
       ...change,
@@ -11299,6 +11622,12 @@ var wp;
      * Given a Delta and a cursor position, do a diff and attempt to adjust
      * the diff to place insertions or deletions at the cursor position.
      *
+     * @todo There are at least a few known cases where this produces a corrupted
+     *       diff. When this is fixed, it should not be necessary to verify that the
+     *       transformed diff applies cleanly.
+     *
+     * @see import("@wordpress/core-data/src/utils/crdt-blocks").mergeRichTextUpdate()
+     *
      * @param other             - The other Delta to diff against.
      * @param cursorAfterChange - The cursor position index after the change.
      * @return A Delta that attempts to place insertions or deletions at the cursor position.
@@ -11306,10 +11635,25 @@ var wp;
     diffWithCursor(other, cursorAfterChange) {
       if (this.ops === other.ops) {
         return new _Delta();
+      }
+      const strings = this.deltasToStrings(other);
+      const maxStringLength = Math.max(
+        ...strings.map((str) => str.length)
+      );
+      if (maxStringLength > STRING_TOO_LARGE_THRESHOLD) {
+        const diffResult = normalizeChangeCounts(
+          diffLines(strings[0], strings[1])
+        );
+        const thisIterLarge = new Iterator(this.ops);
+        const otherIterLarge = new Iterator(other.ops);
+        return this.convertChangesToDelta(
+          diffResult,
+          thisIterLarge,
+          otherIterLarge
+        ).chop();
       } else if (cursorAfterChange === null) {
         return this.diff(other);
       }
-      const strings = this.deltasToStrings(other);
       let diffs = normalizeChangeCounts(
         diffChars(strings[0], strings[1])
       );
@@ -11536,11 +11880,13 @@ var wp;
   // packages/sync/build-module/private-apis.mjs
   var privateApis = {};
   lock(privateApis, {
+    ConnectionErrorCode,
     createSyncManager,
     Delta: Delta_default,
     CRDT_DOC_META_PERSISTENCE_KEY,
     CRDT_RECORD_MAP_KEY,
     LOCAL_EDITOR_ORIGIN,
+    LOCAL_UNDO_IGNORED_ORIGIN,
     retrySyncConnection: () => pollingManager.retryNow()
   });
 

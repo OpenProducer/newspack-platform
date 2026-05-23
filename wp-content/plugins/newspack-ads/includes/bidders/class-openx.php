@@ -27,8 +27,17 @@ final class OpenX {
 	 * Register bidder and its hooks.
 	 */
 	public static function init() {
-
-		// Require environment variable due to its experimental nature.
+		/**
+		 * Enables experimental header bidding integrations (OpenX, PubMatic, MediaNet, Sovrn).
+		 * These bidders are not fully tested and may have issues.
+		 *
+		 * @constant NEWSPACK_ADS_EXPERIMENTAL_BIDDERS
+		 * @type     bool
+		 * @default  Experimental bidders disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_ADS_EXPERIMENTAL_BIDDERS', true );
+		 */
 		if ( ! defined( 'NEWSPACK_ADS_EXPERIMENTAL_BIDDERS' ) ) {
 			return;
 		}

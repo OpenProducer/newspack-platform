@@ -20,11 +20,11 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaRunAccessReportRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'orderBys';
-    protected $dateRangesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessDateRange::class;
+    protected $dateRangesType = GoogleAnalyticsAdminV1alphaAccessDateRange::class;
     protected $dateRangesDataType = 'array';
-    protected $dimensionFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpression::class;
+    protected $dimensionFilterType = GoogleAnalyticsAdminV1alphaAccessFilterExpression::class;
     protected $dimensionFilterDataType = '';
-    protected $dimensionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessDimension::class;
+    protected $dimensionsType = GoogleAnalyticsAdminV1alphaAccessDimension::class;
     protected $dimensionsDataType = 'array';
     /**
      * Optional. Decides whether to return the users within user groups. This
@@ -59,9 +59,9 @@ class GoogleAnalyticsAdminV1alphaRunAccessReportRequest extends \Google\Site_Kit
      * @var string
      */
     public $limit;
-    protected $metricFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpression::class;
+    protected $metricFilterType = GoogleAnalyticsAdminV1alphaAccessFilterExpression::class;
     protected $metricFilterDataType = '';
-    protected $metricsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessMetric::class;
+    protected $metricsType = GoogleAnalyticsAdminV1alphaAccessMetric::class;
     protected $metricsDataType = 'array';
     /**
      * The row count of the start row. The first row is counted as row 0. If
@@ -73,7 +73,7 @@ class GoogleAnalyticsAdminV1alphaRunAccessReportRequest extends \Google\Site_Kit
      * @var string
      */
     public $offset;
-    protected $orderBysType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessOrderBy::class;
+    protected $orderBysType = GoogleAnalyticsAdminV1alphaAccessOrderBy::class;
     protected $orderBysDataType = 'array';
     /**
      * Toggles whether to return the current state of this Analytics Property's
@@ -122,7 +122,7 @@ class GoogleAnalyticsAdminV1alphaRunAccessReportRequest extends \Google\Site_Kit
      *
      * @param GoogleAnalyticsAdminV1alphaAccessFilterExpression $dimensionFilter
      */
-    public function setDimensionFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpression $dimensionFilter)
+    public function setDimensionFilter(GoogleAnalyticsAdminV1alphaAccessFilterExpression $dimensionFilter)
     {
         $this->dimensionFilter = $dimensionFilter;
     }
@@ -221,7 +221,7 @@ class GoogleAnalyticsAdminV1alphaRunAccessReportRequest extends \Google\Site_Kit
      *
      * @param GoogleAnalyticsAdminV1alphaAccessFilterExpression $metricFilter
      */
-    public function setMetricFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessFilterExpression $metricFilter)
+    public function setMetricFilter(GoogleAnalyticsAdminV1alphaAccessFilterExpression $metricFilter)
     {
         $this->metricFilter = $metricFilter;
     }
@@ -325,4 +325,4 @@ class GoogleAnalyticsAdminV1alphaRunAccessReportRequest extends \Google\Site_Kit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaRunAccessReportRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaRunAccessReportRequest');
+class_alias(GoogleAnalyticsAdminV1alphaRunAccessReportRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaRunAccessReportRequest');

@@ -32,4 +32,4 @@ function oauth2client_php_autoload($className)
         require_once $filePath;
     }
 }
-\spl_autoload_register('oauth2client_php_autoload');
+\spl_autoload_register('Google\Site_Kit_Dependencies\oauth2client_php_autoload');

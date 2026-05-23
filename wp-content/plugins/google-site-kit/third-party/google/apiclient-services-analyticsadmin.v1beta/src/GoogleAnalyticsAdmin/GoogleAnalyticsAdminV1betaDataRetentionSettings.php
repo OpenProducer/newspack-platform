@@ -173,4 +173,4 @@ class GoogleAnalyticsAdminV1betaDataRetentionSettings extends \Google\Site_Kit_D
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaDataRetentionSettings');
+class_alias(GoogleAnalyticsAdminV1betaDataRetentionSettings::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaDataRetentionSettings');

@@ -25,9 +25,9 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilter extends \Google\Site_Kit_Dep
      * @var string
      */
     public $fieldName;
-    protected $inListFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterInListFilter::class;
+    protected $inListFilterType = GoogleAnalyticsAdminV1alphaChannelGroupFilterInListFilter::class;
     protected $inListFilterDataType = '';
-    protected $stringFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterStringFilter::class;
+    protected $stringFilterType = GoogleAnalyticsAdminV1alphaChannelGroupFilterStringFilter::class;
     protected $stringFilterDataType = '';
     /**
      * Required. Immutable. The dimension name to filter.
@@ -50,7 +50,7 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilter extends \Google\Site_Kit_Dep
      *
      * @param GoogleAnalyticsAdminV1alphaChannelGroupFilterInListFilter $inListFilter
      */
-    public function setInListFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterInListFilter $inListFilter)
+    public function setInListFilter(GoogleAnalyticsAdminV1alphaChannelGroupFilterInListFilter $inListFilter)
     {
         $this->inListFilter = $inListFilter;
     }
@@ -66,7 +66,7 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilter extends \Google\Site_Kit_Dep
      *
      * @param GoogleAnalyticsAdminV1alphaChannelGroupFilterStringFilter $stringFilter
      */
-    public function setStringFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterStringFilter $stringFilter)
+    public function setStringFilter(GoogleAnalyticsAdminV1alphaChannelGroupFilterStringFilter $stringFilter)
     {
         $this->stringFilter = $stringFilter;
     }
@@ -79,4 +79,4 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilter extends \Google\Site_Kit_Dep
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaChannelGroupFilter');
+class_alias(GoogleAnalyticsAdminV1alphaChannelGroupFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaChannelGroupFilter');

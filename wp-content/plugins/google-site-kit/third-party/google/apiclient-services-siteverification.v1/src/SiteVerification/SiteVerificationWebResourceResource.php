@@ -33,7 +33,7 @@ class SiteVerificationWebResourceResource extends \Google\Site_Kit_Dependencies\
      * @var string[]
      */
     public $owners;
-    protected $siteType = \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResourceSite::class;
+    protected $siteType = SiteVerificationWebResourceResourceSite::class;
     protected $siteDataType = '';
     /**
      * The string used to identify this site. This value should be used in the
@@ -73,7 +73,7 @@ class SiteVerificationWebResourceResource extends \Google\Site_Kit_Dependencies\
      *
      * @param SiteVerificationWebResourceResourceSite $site
      */
-    public function setSite(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResourceSite $site)
+    public function setSite(SiteVerificationWebResourceResourceSite $site)
     {
         $this->site = $site;
     }
@@ -86,4 +86,4 @@ class SiteVerificationWebResourceResource extends \Google\Site_Kit_Dependencies\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SiteVerification_SiteVerificationWebResourceResource');
+class_alias(SiteVerificationWebResourceResource::class, 'Google\Site_Kit_Dependencies\Google_Service_SiteVerification_SiteVerificationWebResourceResource');

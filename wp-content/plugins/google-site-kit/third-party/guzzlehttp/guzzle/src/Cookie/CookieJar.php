@@ -7,7 +7,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface;
 /**
  * Cookie jar that stores cookies as an array
  */
-class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\CookieJarInterface
+class CookieJar implements CookieJarInterface
 {
     /**
      * @var SetCookie[] Loaded cookie data
@@ -28,8 +28,8 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
     {
         $this->strictMode = $strictMode;
         foreach ($cookieArray as $cookie) {
-            if (!$cookie instanceof \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie) {
-                $cookie = new \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie($cookie);
+            if (!$cookie instanceof SetCookie) {
+                $cookie = new SetCookie($cookie);
             }
             $this->setCookie($cookie);
         }
@@ -40,11 +40,11 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
      * @param array  $cookies Cookies to create the jar from
      * @param string $domain  Domain to set the cookies to
      */
-    public static function fromArray(array $cookies, string $domain) : self
+    public static function fromArray(array $cookies, string $domain): self
     {
         $cookieJar = new self();
         foreach ($cookies as $name => $value) {
-            $cookieJar->setCookie(new \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie(['Domain' => $domain, 'Name' => $name, 'Value' => $value, 'Discard' => \true]));
+            $cookieJar->setCookie(new SetCookie(['Domain' => $domain, 'Name' => $name, 'Value' => $value, 'Discard' => \true]));
         }
         return $cookieJar;
     }
@@ -55,7 +55,7 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
      * @param SetCookie $cookie              Being evaluated.
      * @param bool      $allowSessionCookies If we should persist session cookies
      */
-    public static function shouldPersist(\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie, bool $allowSessionCookies = \false) : bool
+    public static function shouldPersist(SetCookie $cookie, bool $allowSessionCookies = \false): bool
     {
         if ($cookie->getExpires() || $allowSessionCookies) {
             if (!$cookie->getDiscard()) {
@@ -71,7 +71,7 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
      *
      * @return SetCookie|null cookie that was found or null if not found
      */
-    public function getCookieByName(string $name) : ?\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie
+    public function getCookieByName(string $name): ?SetCookie
     {
         foreach ($this->cookies as $cookie) {
             if ($cookie->getName() !== null && \strcasecmp($cookie->getName(), $name) === 0) {
@@ -80,38 +80,38 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
         }
         return null;
     }
-    public function toArray() : array
+    public function toArray(): array
     {
-        return \array_map(static function (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) : array {
+        return \array_map(static function (SetCookie $cookie): array {
             return $cookie->toArray();
         }, $this->getIterator()->getArrayCopy());
     }
-    public function clear(?string $domain = null, ?string $path = null, ?string $name = null) : void
+    public function clear(?string $domain = null, ?string $path = null, ?string $name = null): void
     {
         if (!$domain) {
             $this->cookies = [];
             return;
         } elseif (!$path) {
-            $this->cookies = \array_filter($this->cookies, static function (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) use($domain) : bool {
+            $this->cookies = \array_filter($this->cookies, static function (SetCookie $cookie) use ($domain): bool {
                 return !$cookie->matchesDomain($domain);
             });
         } elseif (!$name) {
-            $this->cookies = \array_filter($this->cookies, static function (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) use($path, $domain) : bool {
+            $this->cookies = \array_filter($this->cookies, static function (SetCookie $cookie) use ($path, $domain): bool {
                 return !($cookie->matchesPath($path) && $cookie->matchesDomain($domain));
             });
         } else {
-            $this->cookies = \array_filter($this->cookies, static function (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) use($path, $domain, $name) {
+            $this->cookies = \array_filter($this->cookies, static function (SetCookie $cookie) use ($path, $domain, $name) {
                 return !($cookie->getName() == $name && $cookie->matchesPath($path) && $cookie->matchesDomain($domain));
             });
         }
     }
-    public function clearSessionCookies() : void
+    public function clearSessionCookies(): void
     {
-        $this->cookies = \array_filter($this->cookies, static function (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) : bool {
+        $this->cookies = \array_filter($this->cookies, static function (SetCookie $cookie): bool {
             return !$cookie->getDiscard() && $cookie->getExpires();
         });
     }
-    public function setCookie(\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) : bool
+    public function setCookie(SetCookie $cookie): bool
     {
         // If the name string is empty (but not 0), ignore the set-cookie
         // string entirely.
@@ -158,22 +158,22 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
         $this->cookies[] = $cookie;
         return \true;
     }
-    public function count() : int
+    public function count(): int
     {
         return \count($this->cookies);
     }
     /**
      * @return \ArrayIterator<int, SetCookie>
      */
-    public function getIterator() : \ArrayIterator
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator(\array_values($this->cookies));
     }
-    public function extractCookies(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response) : void
+    public function extractCookies(RequestInterface $request, ResponseInterface $response): void
     {
         if ($cookieHeader = $response->getHeader('Set-Cookie')) {
             foreach ($cookieHeader as $cookie) {
-                $sc = \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie::fromString($cookie);
+                $sc = SetCookie::fromString($cookie);
                 if (!$sc->getDomain()) {
                     $sc->setDomain($request->getUri()->getHost());
                 }
@@ -194,7 +194,7 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
      *
      * @see https://datatracker.ietf.org/doc/html/rfc6265#section-5.1.4
      */
-    private function getCookiePathFromRequest(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request) : string
+    private function getCookiePathFromRequest(RequestInterface $request): string
     {
         $uriPath = $request->getUri()->getPath();
         if ('' === $uriPath) {
@@ -212,7 +212,7 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
         }
         return \substr($uriPath, 0, $lastSlashPos);
     }
-    public function withCookieHeader(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request) : \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface
+    public function withCookieHeader(RequestInterface $request): RequestInterface
     {
         $values = [];
         $uri = $request->getUri();
@@ -230,7 +230,7 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
      * If a cookie already exists and the server asks to set it again with a
      * null value, the cookie must be deleted.
      */
-    private function removeCookieIfEmpty(\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) : void
+    private function removeCookieIfEmpty(SetCookie $cookie): void
     {
         $cookieValue = $cookie->getValue();
         if ($cookieValue === null || $cookieValue === '') {

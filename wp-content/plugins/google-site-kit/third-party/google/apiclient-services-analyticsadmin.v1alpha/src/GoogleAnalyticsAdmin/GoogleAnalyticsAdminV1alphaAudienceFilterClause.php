@@ -37,9 +37,9 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterClause extends \Google\Site_Kit_D
      * @var string
      */
     public $clauseType;
-    protected $sequenceFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceSequenceFilter::class;
+    protected $sequenceFilterType = GoogleAnalyticsAdminV1alphaAudienceSequenceFilter::class;
     protected $sequenceFilterDataType = '';
-    protected $simpleFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceSimpleFilter::class;
+    protected $simpleFilterType = GoogleAnalyticsAdminV1alphaAudienceSimpleFilter::class;
     protected $simpleFilterDataType = '';
     /**
      * Required. Specifies whether this is an include or exclude filter clause.
@@ -65,7 +65,7 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterClause extends \Google\Site_Kit_D
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceSequenceFilter $sequenceFilter
      */
-    public function setSequenceFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceSequenceFilter $sequenceFilter)
+    public function setSequenceFilter(GoogleAnalyticsAdminV1alphaAudienceSequenceFilter $sequenceFilter)
     {
         $this->sequenceFilter = $sequenceFilter;
     }
@@ -81,7 +81,7 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterClause extends \Google\Site_Kit_D
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceSimpleFilter $simpleFilter
      */
-    public function setSimpleFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceSimpleFilter $simpleFilter)
+    public function setSimpleFilter(GoogleAnalyticsAdminV1alphaAudienceSimpleFilter $simpleFilter)
     {
         $this->simpleFilter = $simpleFilter;
     }
@@ -94,4 +94,4 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterClause extends \Google\Site_Kit_D
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterClause::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceFilterClause');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceFilterClause::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceFilterClause');

@@ -22,7 +22,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class OpenSSH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Keys\OpenSSH
+abstract class OpenSSH extends Progenitor
 {
     /**
      * Supported Key Types
@@ -41,16 +41,16 @@ abstract class OpenSSH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Co
     {
         $parsed = parent::load($key, $password);
         if (isset($parsed['paddedKey'])) {
-            list($type) = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('s', $parsed['paddedKey']);
+            list($type) = Strings::unpackSSH2('s', $parsed['paddedKey']);
             if ($type != $parsed['type']) {
                 throw new \RuntimeException("The public and private keys are not of the same type ({$type} vs {$parsed['type']})");
             }
-            list($p, $q, $g, $y, $x, $comment) = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('i5s', $parsed['paddedKey']);
-            return \compact('p', 'q', 'g', 'y', 'x', 'comment');
+            list($p, $q, $g, $y, $x, $comment) = Strings::unpackSSH2('i5s', $parsed['paddedKey']);
+            return compact('p', 'q', 'g', 'y', 'x', 'comment');
         }
-        list($p, $q, $g, $y) = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('iiii', $parsed['publicKey']);
+        list($p, $q, $g, $y) = Strings::unpackSSH2('iiii', $parsed['publicKey']);
         $comment = $parsed['comment'];
-        return \compact('p', 'q', 'g', 'y', 'comment');
+        return compact('p', 'q', 'g', 'y', 'comment');
     }
     /**
      * Convert a public key to the appropriate format
@@ -62,7 +62,7 @@ abstract class OpenSSH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Co
      * @param array $options optional
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $p, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $q, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $g, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $y, array $options = [])
+    public static function savePublicKey(BigInteger $p, BigInteger $q, BigInteger $g, BigInteger $y, array $options = [])
     {
         if ($q->getLength() != 160) {
             throw new \InvalidArgumentException('SSH only supports keys with an N (length of Group Order q) of 160');
@@ -73,12 +73,12 @@ abstract class OpenSSH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Co
         // mpint     q
         // mpint     g
         // mpint     y
-        $DSAPublicKey = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('siiii', 'ssh-dss', $p, $q, $g, $y);
+        $DSAPublicKey = Strings::packSSH2('siiii', 'ssh-dss', $p, $q, $g, $y);
         if (isset($options['binary']) ? $options['binary'] : self::$binary) {
             return $DSAPublicKey;
         }
         $comment = isset($options['comment']) ? $options['comment'] : self::$comment;
-        $DSAPublicKey = 'ssh-dss ' . \base64_encode($DSAPublicKey) . ' ' . $comment;
+        $DSAPublicKey = 'ssh-dss ' . base64_encode($DSAPublicKey) . ' ' . $comment;
         return $DSAPublicKey;
     }
     /**
@@ -93,10 +93,10 @@ abstract class OpenSSH extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Co
      * @param array $options optional
      * @return string
      */
-    public static function savePrivateKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $p, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $q, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $g, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $y, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $x, $password = '', array $options = [])
+    public static function savePrivateKey(BigInteger $p, BigInteger $q, BigInteger $g, BigInteger $y, BigInteger $x, $password = '', array $options = [])
     {
         $publicKey = self::savePublicKey($p, $q, $g, $y, ['binary' => \true]);
-        $privateKey = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('si5', 'ssh-dss', $p, $q, $g, $y, $x);
+        $privateKey = Strings::packSSH2('si5', 'ssh-dss', $p, $q, $g, $y, $x);
         return self::wrapPrivateKey($publicKey, $privateKey, $password, $options);
     }
 }

@@ -43,4 +43,4 @@ class GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse extends \Google\S
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse');
+class_alias(GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse');

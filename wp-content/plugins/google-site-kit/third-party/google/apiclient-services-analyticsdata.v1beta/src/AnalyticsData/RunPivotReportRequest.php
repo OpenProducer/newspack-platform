@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class RunPivotReportRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'pivots';
-    protected $cohortSpecType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CohortSpec::class;
+    protected $cohortSpecType = CohortSpec::class;
     protected $cohortSpecDataType = '';
-    protected $comparisonsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Comparison::class;
+    protected $comparisonsType = Comparison::class;
     protected $comparisonsDataType = 'array';
     /**
      * A currency code in ISO4217 format, such as "AED", "USD", "JPY". If the
@@ -31,11 +31,11 @@ class RunPivotReportRequest extends \Google\Site_Kit_Dependencies\Google\Collect
      * @var string
      */
     public $currencyCode;
-    protected $dateRangesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DateRange::class;
+    protected $dateRangesType = DateRange::class;
     protected $dateRangesDataType = 'array';
-    protected $dimensionFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $dimensionFilterType = FilterExpression::class;
     protected $dimensionFilterDataType = '';
-    protected $dimensionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Dimension::class;
+    protected $dimensionsType = Dimension::class;
     protected $dimensionsDataType = 'array';
     /**
      * If false or unspecified, each row with all metrics equal to 0 will not be
@@ -49,11 +49,11 @@ class RunPivotReportRequest extends \Google\Site_Kit_Dependencies\Google\Collect
      * @var bool
      */
     public $keepEmptyRows;
-    protected $metricFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $metricFilterType = FilterExpression::class;
     protected $metricFilterDataType = '';
-    protected $metricsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Metric::class;
+    protected $metricsType = Metric::class;
     protected $metricsDataType = 'array';
-    protected $pivotsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Pivot::class;
+    protected $pivotsType = Pivot::class;
     protected $pivotsDataType = 'array';
     /**
      * A Google Analytics property identifier whose events are tracked. Specified
@@ -79,7 +79,7 @@ class RunPivotReportRequest extends \Google\Site_Kit_Dependencies\Google\Collect
      *
      * @param CohortSpec $cohortSpec
      */
-    public function setCohortSpec(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\CohortSpec $cohortSpec)
+    public function setCohortSpec(CohortSpec $cohortSpec)
     {
         $this->cohortSpec = $cohortSpec;
     }
@@ -151,7 +151,7 @@ class RunPivotReportRequest extends \Google\Site_Kit_Dependencies\Google\Collect
      *
      * @param FilterExpression $dimensionFilter
      */
-    public function setDimensionFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression $dimensionFilter)
+    public function setDimensionFilter(FilterExpression $dimensionFilter)
     {
         $this->dimensionFilter = $dimensionFilter;
     }
@@ -208,7 +208,7 @@ class RunPivotReportRequest extends \Google\Site_Kit_Dependencies\Google\Collect
      *
      * @param FilterExpression $metricFilter
      */
-    public function setMetricFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression $metricFilter)
+    public function setMetricFilter(FilterExpression $metricFilter)
     {
         $this->metricFilter = $metricFilter;
     }
@@ -296,4 +296,4 @@ class RunPivotReportRequest extends \Google\Site_Kit_Dependencies\Google\Collect
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunPivotReportRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_RunPivotReportRequest');
+class_alias(RunPivotReportRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_RunPivotReportRequest');

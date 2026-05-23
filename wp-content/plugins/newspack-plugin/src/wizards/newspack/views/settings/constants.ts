@@ -58,10 +58,17 @@ export const ADVANCED_SETTINGS_DEFAULTS = {
 	newspack_image_credits_prefix_label: 'Credit:',
 	newspack_image_credits_placeholder: null,
 	newspack_image_credits_auto_populate: false,
+	// Post Date.
+	post_time_ago: false,
+	post_time_ago_cut_off: 14,
+	post_updated_date: false,
+	post_updated_date_threshold: 24,
 	// PWA Display Mode.
 	pwa_display_mode: 'minimal-ui',
 	// Post content fallback image.
 	newspack_default_image_url: undefined,
+	// Private Tags settings (populated from server when NEWSPACK_PRIVATE_TAGS_ENABLED is active).
+	newspack_private_tags_settings: undefined,
 };
 
 export const DEFAULT_THEME_MODS: ThemeMods = {

@@ -25,7 +25,7 @@ class CreateContainerVersionResponse extends \Google\Site_Kit_Dependencies\Googl
      * @var bool
      */
     public $compilerError;
-    protected $containerVersionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class;
+    protected $containerVersionType = ContainerVersion::class;
     protected $containerVersionDataType = '';
     /**
      * Auto generated workspace path created as a result of version creation. This
@@ -35,7 +35,7 @@ class CreateContainerVersionResponse extends \Google\Site_Kit_Dependencies\Googl
      * @var string
      */
     public $newWorkspacePath;
-    protected $syncStatusType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\SyncStatus::class;
+    protected $syncStatusType = SyncStatus::class;
     protected $syncStatusDataType = '';
     /**
      * Compiler errors or not.
@@ -58,7 +58,7 @@ class CreateContainerVersionResponse extends \Google\Site_Kit_Dependencies\Googl
      *
      * @param ContainerVersion $containerVersion
      */
-    public function setContainerVersion(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion $containerVersion)
+    public function setContainerVersion(ContainerVersion $containerVersion)
     {
         $this->containerVersion = $containerVersion;
     }
@@ -93,7 +93,7 @@ class CreateContainerVersionResponse extends \Google\Site_Kit_Dependencies\Googl
      *
      * @param SyncStatus $syncStatus
      */
-    public function setSyncStatus(\Google\Site_Kit_Dependencies\Google\Service\TagManager\SyncStatus $syncStatus)
+    public function setSyncStatus(SyncStatus $syncStatus)
     {
         $this->syncStatus = $syncStatus;
     }
@@ -106,4 +106,4 @@ class CreateContainerVersionResponse extends \Google\Site_Kit_Dependencies\Googl
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\CreateContainerVersionResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_CreateContainerVersionResponse');
+class_alias(CreateContainerVersionResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_CreateContainerVersionResponse');

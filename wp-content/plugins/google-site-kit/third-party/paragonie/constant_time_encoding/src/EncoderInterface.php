@@ -38,7 +38,7 @@ interface EncoderInterface
      * @param string $binString (raw binary)
      * @return string
      */
-    public static function encode(string $binString) : string;
+    public static function encode(string $binString): string;
     /**
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
@@ -47,5 +47,5 @@ interface EncoderInterface
      * @param bool $strictPadding Error on invalid padding
      * @return string (raw binary)
      */
-    public static function decode(string $encodedString, bool $strictPadding = \false) : string;
+    public static function decode(string $encodedString, bool $strictPadding = \false): string;
 }

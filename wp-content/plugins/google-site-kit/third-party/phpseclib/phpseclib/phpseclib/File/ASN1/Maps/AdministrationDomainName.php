@@ -21,11 +21,11 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
 abstract class AdministrationDomainName
 {
     const MAP = [
-        'type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_CHOICE,
+        'type' => ASN1::TYPE_CHOICE,
         // if class isn't present it's assumed to be \phpseclib3\File\ASN1::CLASS_UNIVERSAL or
         // (if constant is present) \phpseclib3\File\ASN1::CLASS_CONTEXT_SPECIFIC
-        'class' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::CLASS_APPLICATION,
+        'class' => ASN1::CLASS_APPLICATION,
         'cast' => 2,
-        'children' => ['numeric' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_NUMERIC_STRING], 'printable' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_PRINTABLE_STRING]],
+        'children' => ['numeric' => ['type' => ASN1::TYPE_NUMERIC_STRING], 'printable' => ['type' => ASN1::TYPE_PRINTABLE_STRING]],
     ];
 }

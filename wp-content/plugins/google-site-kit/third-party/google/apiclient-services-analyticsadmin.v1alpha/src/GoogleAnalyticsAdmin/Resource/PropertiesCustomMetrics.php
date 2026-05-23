@@ -41,11 +41,11 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
      * @return GoogleProtobufEmpty
      * @throws \Google\Service\Exception
      */
-    public function archive($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaArchiveCustomMetricRequest $postBody, $optParams = [])
+    public function archive($name, GoogleAnalyticsAdminV1alphaArchiveCustomMetricRequest $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('archive', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('archive', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Creates a CustomMetric. (customMetrics.create)
@@ -56,11 +56,11 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
      * @return GoogleAnalyticsAdminV1alphaCustomMetric
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomMetric $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaCustomMetric $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomMetric::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaCustomMetric::class);
     }
     /**
      * Lookup for a single CustomMetric. (customMetrics.get)
@@ -74,8 +74,8 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomMetric::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaCustomMetric::class);
     }
     /**
      * Lists CustomMetrics on a property.
@@ -97,8 +97,8 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
     public function listPropertiesCustomMetrics($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListCustomMetricsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListCustomMetricsResponse::class);
     }
     /**
      * Updates a CustomMetric on a property. (customMetrics.patch)
@@ -114,12 +114,12 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
      * @return GoogleAnalyticsAdminV1alphaCustomMetric
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomMetric $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaCustomMetric $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomMetric::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaCustomMetric::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesCustomMetrics::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesCustomMetrics');
+class_alias(PropertiesCustomMetrics::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesCustomMetrics');

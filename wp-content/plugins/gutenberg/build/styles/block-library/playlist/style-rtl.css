@@ -332,6 +332,10 @@
     font-size: 10px;
   }
 }
+.wp-block-playlist {
+  overflow: hidden;
+  overflow: clip;
+}
 .wp-block-playlist .wp-block-playlist__waveform-player {
   width: 100%;
   margin: var(--wp--preset--spacing--20, 0.625em) 0;

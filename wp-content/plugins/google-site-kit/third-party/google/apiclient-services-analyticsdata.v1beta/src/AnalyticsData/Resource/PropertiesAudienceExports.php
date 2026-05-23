@@ -59,11 +59,11 @@ class PropertiesAudienceExports extends \Google\Site_Kit_Dependencies\Google\Ser
      * @return Operation
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\AudienceExport $postBody, $optParams = [])
+    public function create($parent, AudienceExport $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Operation::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Operation::class);
     }
     /**
      * Gets configuration metadata about a specific audience export. This method can
@@ -85,8 +85,8 @@ class PropertiesAudienceExports extends \Google\Site_Kit_Dependencies\Google\Ser
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\AudienceExport::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], AudienceExport::class);
     }
     /**
      * Lists all audience exports for a property. This method can be used for you to
@@ -120,8 +120,8 @@ class PropertiesAudienceExports extends \Google\Site_Kit_Dependencies\Google\Ser
     public function listPropertiesAudienceExports($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ListAudienceExportsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListAudienceExportsResponse::class);
     }
     /**
      * Retrieves an audience export of users. After creating an audience, the users
@@ -146,12 +146,12 @@ class PropertiesAudienceExports extends \Google\Site_Kit_Dependencies\Google\Ser
      * @return QueryAudienceExportResponse
      * @throws \Google\Service\Exception
      */
-    public function query($name, \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QueryAudienceExportRequest $postBody, $optParams = [])
+    public function query($name, QueryAudienceExportRequest $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('query', [$params], \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QueryAudienceExportResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('query', [$params], QueryAudienceExportResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Resource\PropertiesAudienceExports::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Resource_PropertiesAudienceExports');
+class_alias(PropertiesAudienceExports::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Resource_PropertiesAudienceExports');

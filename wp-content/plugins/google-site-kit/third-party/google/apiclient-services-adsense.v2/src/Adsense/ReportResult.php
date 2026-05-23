@@ -20,15 +20,15 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class ReportResult extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'warnings';
-    protected $averagesType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Row::class;
+    protected $averagesType = Row::class;
     protected $averagesDataType = '';
-    protected $endDateType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Date::class;
+    protected $endDateType = Date::class;
     protected $endDateDataType = '';
-    protected $headersType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Header::class;
+    protected $headersType = Header::class;
     protected $headersDataType = 'array';
-    protected $rowsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Row::class;
+    protected $rowsType = Row::class;
     protected $rowsDataType = 'array';
-    protected $startDateType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Date::class;
+    protected $startDateType = Date::class;
     protected $startDateDataType = '';
     /**
      * The total number of rows matched by the report request.
@@ -36,7 +36,7 @@ class ReportResult extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $totalMatchedRows;
-    protected $totalsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Row::class;
+    protected $totalsType = Row::class;
     protected $totalsDataType = '';
     /**
      * Any warnings associated with generation of the report. These warnings are
@@ -51,7 +51,7 @@ class ReportResult extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Row $averages
      */
-    public function setAverages(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Row $averages)
+    public function setAverages(Row $averages)
     {
         $this->averages = $averages;
     }
@@ -67,7 +67,7 @@ class ReportResult extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Date $endDate
      */
-    public function setEndDate(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Date $endDate)
+    public function setEndDate(Date $endDate)
     {
         $this->endDate = $endDate;
     }
@@ -117,7 +117,7 @@ class ReportResult extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Date $startDate
      */
-    public function setStartDate(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Date $startDate)
+    public function setStartDate(Date $startDate)
     {
         $this->startDate = $startDate;
     }
@@ -150,7 +150,7 @@ class ReportResult extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Row $totals
      */
-    public function setTotals(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Row $totals)
+    public function setTotals(Row $totals)
     {
         $this->totals = $totals;
     }
@@ -180,4 +180,4 @@ class ReportResult extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ReportResult::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ReportResult');
+class_alias(ReportResult::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ReportResult');

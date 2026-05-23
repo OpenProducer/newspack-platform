@@ -10,7 +10,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
  *      - Request is invalid (e.g. method is missing)
  *      - Runtime request errors (e.g. the body stream is not seekable)
  */
-interface RequestExceptionInterface extends \Google\Site_Kit_Dependencies\Psr\Http\Client\ClientExceptionInterface
+interface RequestExceptionInterface extends ClientExceptionInterface
 {
     /**
      * Returns the request.
@@ -19,5 +19,5 @@ interface RequestExceptionInterface extends \Google\Site_Kit_Dependencies\Psr\Ht
      *
      * @return RequestInterface
      */
-    public function getRequest() : \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
+    public function getRequest(): RequestInterface;
 }

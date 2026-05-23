@@ -21,14 +21,14 @@ use Google\Site_Kit_Dependencies\Monolog\LogRecord;
  *
  * @author Luís Cobucci <lcobucci@gmail.com>
  */
-final class GoogleCloudLoggingFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\JsonFormatter
+final class GoogleCloudLoggingFormatter extends JsonFormatter
 {
     /** {@inheritdoc} **/
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         // Re-key level for GCP logging
         $record['severity'] = $record['level_name'];
-        $record['time'] = $record['datetime']->format(\DateTimeInterface::RFC3339_EXTENDED);
+        $record['time'] = $record['datetime']->format(DateTimeInterface::RFC3339_EXTENDED);
         // Remove keys that are not used by GCP
         unset($record['level'], $record['level_name'], $record['datetime']);
         return parent::format($record);

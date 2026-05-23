@@ -94,4 +94,4 @@ class Status extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Status::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Status');
+class_alias(Status::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Status');

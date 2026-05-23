@@ -281,6 +281,22 @@ trait Content_Gate_Layout {
 	}
 
 	/**
+	 * Get the inline gate content.
+	 */
+	public static function get_inline_gate_content() {
+		return self::get_inline_gate_content_for_post( self::get_gate_layout_id() );
+	}
+
+	/**
+	 * Get the inline gate HTML for rendering.
+	 *
+	 * @return string
+	 */
+	public static function get_inline_gate_html() {
+		return apply_filters( 'newspack_gate_content', self::get_inline_gate_content() );
+	}
+
+	/**
 	 * Render the overlay gate HTML.
 	 *
 	 * @param int $gate_post_id The gate post ID.

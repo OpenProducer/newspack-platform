@@ -26,7 +26,7 @@ class RelationshipStatus extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $formattedValue;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The relationship status. The value can be custom or one of these predefined
@@ -59,7 +59,7 @@ class RelationshipStatus extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -91,4 +91,4 @@ class RelationshipStatus extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\RelationshipStatus::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_RelationshipStatus');
+class_alias(RelationshipStatus::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_RelationshipStatus');

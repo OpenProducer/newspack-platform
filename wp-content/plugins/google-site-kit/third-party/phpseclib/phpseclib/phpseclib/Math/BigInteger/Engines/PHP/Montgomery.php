@@ -20,7 +20,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Reductio
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Base
+abstract class Montgomery extends Base
 {
     /**
      * Test for engine validity
@@ -41,7 +41,7 @@ abstract class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Math\
      * @param class-string<T> $class
      * @return T
      */
-    protected static function slidingWindow(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\Engine $x, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\Engine $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\Engine $n, $class)
+    protected static function slidingWindow(Engine $x, Engine $e, Engine $n, $class)
     {
         // is the modulo odd?
         if ($n->value[0] & 1) {
@@ -49,10 +49,10 @@ abstract class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Math\
         }
         // if it's not, it's even
         // find the lowest set bit (eg. the max pow of 2 that divides $n)
-        for ($i = 0; $i < \count($n->value); ++$i) {
+        for ($i = 0; $i < count($n->value); ++$i) {
             if ($n->value[$i]) {
-                $temp = \decbin($n->value[$i]);
-                $j = \strlen($temp) - \strrpos($temp, '1') - 1;
+                $temp = decbin($n->value[$i]);
+                $j = strlen($temp) - strrpos($temp, '1') - 1;
                 $j += $class::BASE * $i;
                 break;
             }
@@ -64,7 +64,7 @@ abstract class Montgomery extends \Google\Site_Kit_Dependencies\phpseclib3\Math\
         $mod2->value = [1];
         $mod2->lshift($j);
         $part1 = $mod1->value != [1] ? parent::slidingWindow($x, $e, $mod1, $class) : new $class();
-        $part2 = \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Reductions\PowerOfTwo::slidingWindow($x, $e, $mod2, $class);
+        $part2 = PowerOfTwo::slidingWindow($x, $e, $mod2, $class);
         $y1 = $mod2->modInverse($mod1);
         $y2 = $mod1->modInverse($mod2);
         $result = $part1->multiply($mod2);

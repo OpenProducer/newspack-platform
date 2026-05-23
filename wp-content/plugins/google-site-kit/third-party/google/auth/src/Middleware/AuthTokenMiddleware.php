@@ -58,7 +58,7 @@ class AuthTokenMiddleware
      * @param callable $httpHandler (optional) callback which delivers psr7 request
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      */
-    public function __construct(\Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
+    public function __construct(FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
         $this->fetcher = $fetcher;
         $this->httpHandler = $httpHandler;
@@ -91,14 +91,14 @@ class AuthTokenMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options) use($handler) {
+        return function (RequestInterface $request, array $options) use ($handler) {
             // Requests using "auth"="google_auth" will be authorized.
             if (!isset($options['auth']) || $options['auth'] !== 'google_auth') {
                 return $handler($request, $options);
             }
             $request = $this->addAuthHeaders($request);
             if ($quotaProject = $this->getQuotaProject()) {
-                $request = $request->withHeader(\Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
+                $request = $request->withHeader(GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
             }
             return $handler($request, $options);
         };
@@ -109,18 +109,18 @@ class AuthTokenMiddleware
      * @param RequestInterface $request
      * @return RequestInterface
      */
-    private function addAuthHeaders(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request)
+    private function addAuthHeaders(RequestInterface $request)
     {
-        if (!$this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\UpdateMetadataInterface || $this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenCache && !$this->fetcher->getFetcher() instanceof \Google\Site_Kit_Dependencies\Google\Auth\UpdateMetadataInterface) {
+        if (!$this->fetcher instanceof UpdateMetadataInterface || $this->fetcher instanceof FetchAuthTokenCache && !$this->fetcher->getFetcher() instanceof UpdateMetadataInterface) {
             $token = $this->fetcher->fetchAuthToken();
             $request = $request->withHeader('authorization', 'Bearer ' . ($token['access_token'] ?? $token['id_token'] ?? ''));
         } else {
             $headers = $this->fetcher->updateMetadata($request->getHeaders(), null, $this->httpHandler);
-            $request = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::modifyRequest($request, ['set_headers' => $headers]);
+            $request = Utils::modifyRequest($request, ['set_headers' => $headers]);
         }
-        if ($this->tokenCallback && ($token = $this->fetcher->getLastReceivedToken())) {
-            if (\array_key_exists('access_token', $token)) {
-                \call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $token['access_token']);
+        if ($this->tokenCallback && $token = $this->fetcher->getLastReceivedToken()) {
+            if (array_key_exists('access_token', $token)) {
+                call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $token['access_token']);
             }
         }
         return $request;
@@ -130,7 +130,7 @@ class AuthTokenMiddleware
      */
     private function getQuotaProject()
     {
-        if ($this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface) {
+        if ($this->fetcher instanceof GetQuotaProjectInterface) {
             return $this->fetcher->getQuotaProject();
         }
         return null;

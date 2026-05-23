@@ -25,9 +25,9 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilter extends \Google\Site_Kit_
      * @var string
      */
     public $fieldName;
-    protected $inListFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterInListFilter::class;
+    protected $inListFilterType = GoogleAnalyticsAdminV1alphaExpandedDataSetFilterInListFilter::class;
     protected $inListFilterDataType = '';
-    protected $stringFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterStringFilter::class;
+    protected $stringFilterType = GoogleAnalyticsAdminV1alphaExpandedDataSetFilterStringFilter::class;
     protected $stringFilterDataType = '';
     /**
      * Required. The dimension name to filter.
@@ -50,7 +50,7 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilter extends \Google\Site_Kit_
      *
      * @param GoogleAnalyticsAdminV1alphaExpandedDataSetFilterInListFilter $inListFilter
      */
-    public function setInListFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterInListFilter $inListFilter)
+    public function setInListFilter(GoogleAnalyticsAdminV1alphaExpandedDataSetFilterInListFilter $inListFilter)
     {
         $this->inListFilter = $inListFilter;
     }
@@ -66,7 +66,7 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilter extends \Google\Site_Kit_
      *
      * @param GoogleAnalyticsAdminV1alphaExpandedDataSetFilterStringFilter $stringFilter
      */
-    public function setStringFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterStringFilter $stringFilter)
+    public function setStringFilter(GoogleAnalyticsAdminV1alphaExpandedDataSetFilterStringFilter $stringFilter)
     {
         $this->stringFilter = $stringFilter;
     }
@@ -79,4 +79,4 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSetFilter extends \Google\Site_Kit_
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaExpandedDataSetFilter');
+class_alias(GoogleAnalyticsAdminV1alphaExpandedDataSetFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaExpandedDataSetFilter');

@@ -43,4 +43,4 @@ class GoogleAnalyticsAdminV1betaAccessDimensionHeader extends \Google\Site_Kit_D
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessDimensionHeader::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessDimensionHeader');
+class_alias(GoogleAnalyticsAdminV1betaAccessDimensionHeader::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAccessDimensionHeader');

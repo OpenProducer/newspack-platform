@@ -14,17 +14,17 @@ namespace Google\Site_Kit_Dependencies\GuzzleHttp\Promise;
  *
  * @final
  */
-class TaskQueue implements \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\TaskQueueInterface
+class TaskQueue implements TaskQueueInterface
 {
     private $enableShutdown = \true;
     private $queue = [];
     public function __construct(bool $withShutdown = \true)
     {
         if ($withShutdown) {
-            \register_shutdown_function(function () : void {
+            register_shutdown_function(function (): void {
                 if ($this->enableShutdown) {
                     // Only run the tasks if an E_ERROR didn't occur.
-                    $err = \error_get_last();
+                    $err = error_get_last();
                     if (!$err || $err['type'] ^ \E_ERROR) {
                         $this->run();
                     }
@@ -32,17 +32,17 @@ class TaskQueue implements \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Task
             });
         }
     }
-    public function isEmpty() : bool
+    public function isEmpty(): bool
     {
         return !$this->queue;
     }
-    public function add(callable $task) : void
+    public function add(callable $task): void
     {
         $this->queue[] = $task;
     }
-    public function run() : void
+    public function run(): void
     {
-        while ($task = \array_shift($this->queue)) {
+        while ($task = array_shift($this->queue)) {
             /** @var callable $task */
             $task();
         }
@@ -58,7 +58,7 @@ class TaskQueue implements \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Task
      *
      * Note: This shutdown will occur before any destructors are triggered.
      */
-    public function disableShutdown() : void
+    public function disableShutdown(): void
     {
         $this->enableShutdown = \false;
     }

@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class ListConnectionsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'connections';
-    protected $connectionsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $connectionsType = Person::class;
     protected $connectionsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -141,4 +141,4 @@ class ListConnectionsResponse extends \Google\Site_Kit_Dependencies\Google\Colle
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListConnectionsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ListConnectionsResponse');
+class_alias(ListConnectionsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ListConnectionsResponse');

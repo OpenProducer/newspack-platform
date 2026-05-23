@@ -1,12 +1,14 @@
 declare module '@wordpress/block-editor';
+import type { Icon } from '@wordpress/icons';
 
 type HeaderAction = {
 	type: 'primary' | 'secondary' | 'more';
 	label: string;
-	icon: React.ReactNode;
-	action: () => void;
+	icon?: Icon | string;
 	disabled?: boolean;
 	destructive?: boolean;
+	action?: () => void;
+	href?: string;
 };
 
 type GateAccessRuleValue = string | string[] | boolean;
@@ -26,6 +28,8 @@ type ContentRule = {
 	name: string;
 	default: GateContentRuleValue;
 	description?: string;
+	endpoint?: string;
+	include_only?: boolean;
 	options?: { value: string; label: string }[];
 	value: GateContentRuleValue;
 };
@@ -36,15 +40,25 @@ type Metering = {
 	period: 'week' | 'month';
 };
 
-type GateRuleProps = {
-	config: AccessRule | ContentRule;
-	rule?: GateAccessRule | GateContentRule;
+type GateAccessRuleProps = {
+	config: AccessRule;
+	rule?: GateAccessRule;
 	enabled?: boolean;
 	onToggle?: (slug: string) => void;
 	slug: string;
 	exclusion?: boolean;
 	onChange: (value: GateRuleValue) => void;
+};
+
+type GateContentRuleProps = {
+	config: ContentRule;
+	rule?: GateContentRule;
+	enabled?: boolean;
+	onToggle?: (slug: string) => void;
+	slug: string;
+	onChange: (value: GateContentRuleValue) => void;
 	onChangeExclusion?: (value: boolean) => void;
+	isNewsletter?: boolean;
 };
 
 type GateRuleControlProps = {
@@ -53,6 +67,7 @@ type GateRuleControlProps = {
 	exclusion?: boolean;
 	onChange: (value: GateRuleValue) => void;
 	onChangeExclusion?: (value: boolean) => void;
+	isStatic?: boolean;
 };
 
 type AccessRules = {
@@ -110,8 +125,12 @@ type ContentGiftingConfig = {
 	interval: string;
 	expiration_time: number;
 	expiration_time_unit: string;
+	style: string;
 	cta_label: string;
 	button_label: string;
+	cta_type: string;
+	cta_product_id: number;
+	cta_url: string;
 };
 
 type MeteringCountdownConfig = {
@@ -120,14 +139,38 @@ type MeteringCountdownConfig = {
 	cta_label: string;
 	button_label: string;
 	cta_url: string;
+	cta_type: string;
+	cta_product_id: number;
+};
+
+type AdvancedSettingsConfig = {
+	restrict_feeds: boolean;
 };
 
 type GateSettings = {
 	content_gifting?: ContentGiftingConfig;
 	countdown_banner?: MeteringCountdownConfig;
+	advanced_settings?: AdvancedSettingsConfig;
 };
 
 type GateConfig = {
 	gates: Gate[];
-	config: GateSettings
+	config: GateSettings;
+};
+
+type Institution = {
+	id: number;
+	title: { raw: string; rendered: string };
+	excerpt: { raw: string; rendered: string };
+	featured_media: number;
+	slug: string;
+	status: string;
+	meta: {
+		np_institution_email_domain: string;
+		np_institution_ip_range: string;
+		np_institution_reader_data: string;
+	};
+	_embedded?: {
+		'wp:featuredmedia'?: Array<{ source_url: string }>;
+	};
 };

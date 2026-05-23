@@ -38,10 +38,10 @@ class IAMCredentials
      */
     public function __construct($selector, $token)
     {
-        if (!\is_string($selector)) {
+        if (!is_string($selector)) {
             throw new \InvalidArgumentException('selector must be a string');
         }
-        if (!\is_string($token)) {
+        if (!is_string($token)) {
             throw new \InvalidArgumentException('token must be a string');
         }
         $this->selector = $selector;

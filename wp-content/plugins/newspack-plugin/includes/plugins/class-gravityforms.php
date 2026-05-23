@@ -477,6 +477,17 @@ TEMPLATE;
 	 * @return @bool Whether to use this feature.
 	 */
 	private static function is_amp_plus_handling_enabled() {
+		/**
+		 * Enables Gravity Forms scripts on AMP pages when AMP Plus is active.
+		 * Requires NEWSPACK_AMP_PLUS_ENABLED to also be set.
+		 *
+		 * @constant NEWSPACK_AMP_PLUS_GRAVITYFORMS
+		 * @type     bool
+		 * @default  Gravity Forms AMP Plus handling disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_AMP_PLUS_GRAVITYFORMS', true );
+		 */
 		if ( defined( 'NEWSPACK_AMP_PLUS_GRAVITYFORMS' ) ) {
 			return true === NEWSPACK_AMP_PLUS_GRAVITYFORMS;
 		}

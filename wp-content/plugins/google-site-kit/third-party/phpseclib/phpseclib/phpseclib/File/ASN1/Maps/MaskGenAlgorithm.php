@@ -19,5 +19,5 @@ namespace Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps;
  */
 abstract class MaskGenAlgorithm
 {
-    const MAP = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\AlgorithmIdentifier::MAP;
+    const MAP = AlgorithmIdentifier::MAP;
 }

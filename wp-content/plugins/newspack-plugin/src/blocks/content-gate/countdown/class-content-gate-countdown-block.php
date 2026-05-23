@@ -95,6 +95,17 @@ class Content_Gate_Countdown_Block {
 	 * @return bool
 	 */
 	public static function is_active() {
+		/**
+		 * Enables the content gate countdown block which displays a
+		 * countdown timer for metered content access limits.
+		 *
+		 * @constant NEWSPACK_CONTENT_GATE_COUNTDOWN_BLOCK
+		 * @type     bool
+		 * @default  Countdown block disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_CONTENT_GATE_COUNTDOWN_BLOCK', true );
+		 */
 		return defined( 'NEWSPACK_CONTENT_GATE_COUNTDOWN_BLOCK' ) && NEWSPACK_CONTENT_GATE_COUNTDOWN_BLOCK;
 	}
 }

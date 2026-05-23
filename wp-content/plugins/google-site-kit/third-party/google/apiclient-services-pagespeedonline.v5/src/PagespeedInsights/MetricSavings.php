@@ -97,4 +97,4 @@ class MetricSavings extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\MetricSavings::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_MetricSavings');
+class_alias(MetricSavings::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_MetricSavings');

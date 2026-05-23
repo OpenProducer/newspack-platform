@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertFolderResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $folderType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class;
+    protected $folderType = Folder::class;
     protected $folderDataType = '';
     /**
      * Folder as it appears in the latest container version since the last
@@ -28,7 +28,7 @@ class RevertFolderResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Folder $folder
      */
-    public function setFolder(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder $folder)
+    public function setFolder(Folder $folder)
     {
         $this->folder = $folder;
     }
@@ -41,4 +41,4 @@ class RevertFolderResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertFolderResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertFolderResponse');
+class_alias(RevertFolderResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertFolderResponse');

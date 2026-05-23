@@ -38,7 +38,7 @@ class Container extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string[]
      */
     public $domainName;
-    protected $featuresType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerFeatures::class;
+    protected $featuresType = ContainerFeatures::class;
     protected $featuresDataType = '';
     /**
      * The fingerprint of the GTM Container as computed at storage time. This
@@ -150,7 +150,7 @@ class Container extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param ContainerFeatures $features
      */
-    public function setFeatures(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerFeatures $features)
+    public function setFeatures(ContainerFeatures $features)
     {
         $this->features = $features;
     }
@@ -310,4 +310,4 @@ class Container extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Container');
+class_alias(Container::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Container');

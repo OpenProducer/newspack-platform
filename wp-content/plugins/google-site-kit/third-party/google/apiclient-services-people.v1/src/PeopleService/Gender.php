@@ -34,7 +34,7 @@ class Gender extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $formattedValue;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The gender for the person. The gender can be custom or one of these
@@ -83,7 +83,7 @@ class Gender extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -113,4 +113,4 @@ class Gender extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Gender::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Gender');
+class_alias(Gender::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Gender');

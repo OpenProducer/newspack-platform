@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class RevokedCertificate
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['userCertificate' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\CertificateSerialNumber::MAP, 'revocationDate' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Time::MAP, 'crlEntryExtensions' => ['optional' => \true] + \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Extensions::MAP]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['userCertificate' => CertificateSerialNumber::MAP, 'revocationDate' => Time::MAP, 'crlEntryExtensions' => ['optional' => \true] + Extensions::MAP]];
 }

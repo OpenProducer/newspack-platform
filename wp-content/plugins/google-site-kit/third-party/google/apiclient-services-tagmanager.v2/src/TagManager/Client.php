@@ -57,7 +57,7 @@ class Client extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $notes;
-    protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $parameterType = Parameter::class;
     protected $parameterDataType = 'array';
     /**
      * Parent folder id.
@@ -306,4 +306,4 @@ class Client extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Client::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Client');
+class_alias(Client::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Client');

@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListKeyEventsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'keyEvents';
-    protected $keyEventsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaKeyEvent::class;
+    protected $keyEventsType = GoogleAnalyticsAdminV1betaKeyEvent::class;
     protected $keyEventsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1betaListKeyEventsResponse extends \Google\Site_Kit_D
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListKeyEventsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListKeyEventsResponse');
+class_alias(GoogleAnalyticsAdminV1betaListKeyEventsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListKeyEventsResponse');

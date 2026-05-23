@@ -20,11 +20,11 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaRunAccessReportRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'orderBys';
-    protected $dateRangesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessDateRange::class;
+    protected $dateRangesType = GoogleAnalyticsAdminV1betaAccessDateRange::class;
     protected $dateRangesDataType = 'array';
-    protected $dimensionFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpression::class;
+    protected $dimensionFilterType = GoogleAnalyticsAdminV1betaAccessFilterExpression::class;
     protected $dimensionFilterDataType = '';
-    protected $dimensionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessDimension::class;
+    protected $dimensionsType = GoogleAnalyticsAdminV1betaAccessDimension::class;
     protected $dimensionsDataType = 'array';
     /**
      * Optional. Decides whether to return the users within user groups. This
@@ -59,9 +59,9 @@ class GoogleAnalyticsAdminV1betaRunAccessReportRequest extends \Google\Site_Kit_
      * @var string
      */
     public $limit;
-    protected $metricFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpression::class;
+    protected $metricFilterType = GoogleAnalyticsAdminV1betaAccessFilterExpression::class;
     protected $metricFilterDataType = '';
-    protected $metricsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessMetric::class;
+    protected $metricsType = GoogleAnalyticsAdminV1betaAccessMetric::class;
     protected $metricsDataType = 'array';
     /**
      * The row count of the start row. The first row is counted as row 0. If
@@ -73,7 +73,7 @@ class GoogleAnalyticsAdminV1betaRunAccessReportRequest extends \Google\Site_Kit_
      * @var string
      */
     public $offset;
-    protected $orderBysType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessOrderBy::class;
+    protected $orderBysType = GoogleAnalyticsAdminV1betaAccessOrderBy::class;
     protected $orderBysDataType = 'array';
     /**
      * Toggles whether to return the current state of this Analytics Property's
@@ -122,7 +122,7 @@ class GoogleAnalyticsAdminV1betaRunAccessReportRequest extends \Google\Site_Kit_
      *
      * @param GoogleAnalyticsAdminV1betaAccessFilterExpression $dimensionFilter
      */
-    public function setDimensionFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpression $dimensionFilter)
+    public function setDimensionFilter(GoogleAnalyticsAdminV1betaAccessFilterExpression $dimensionFilter)
     {
         $this->dimensionFilter = $dimensionFilter;
     }
@@ -221,7 +221,7 @@ class GoogleAnalyticsAdminV1betaRunAccessReportRequest extends \Google\Site_Kit_
      *
      * @param GoogleAnalyticsAdminV1betaAccessFilterExpression $metricFilter
      */
-    public function setMetricFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccessFilterExpression $metricFilter)
+    public function setMetricFilter(GoogleAnalyticsAdminV1betaAccessFilterExpression $metricFilter)
     {
         $this->metricFilter = $metricFilter;
     }
@@ -325,4 +325,4 @@ class GoogleAnalyticsAdminV1betaRunAccessReportRequest extends \Google\Site_Kit_
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaRunAccessReportRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaRunAccessReportRequest');
+class_alias(GoogleAnalyticsAdminV1betaRunAccessReportRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaRunAccessReportRequest');

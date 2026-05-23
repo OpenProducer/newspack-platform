@@ -44,6 +44,19 @@ class Newspack_Newsletters_Contacts {
 	public static function subscribe( $contact, $lists = false, $async = false, $context = 'Subscribe contact' ) {
 		$provider = Newspack_Newsletters::get_service_provider();
 
+		/**
+		 * Enables asynchronous contact subscription processing. When enabled,
+		 * subscription requests return immediately and contacts are added
+		 * in the background. This improves front-end performance for high-traffic
+		 * sites but requires the caller to handle the request optimistically.
+		 *
+		 * @constant NEWSPACK_NEWSLETTERS_ASYNC_SUBSCRIPTION_ENABLED
+		 * @type     bool
+		 * @default  Async subscriptions disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_NEWSLETTERS_ASYNC_SUBSCRIPTION_ENABLED', true );
+		 */
 		if ( defined( 'NEWSPACK_NEWSLETTERS_ASYNC_SUBSCRIPTION_ENABLED' ) && NEWSPACK_NEWSLETTERS_ASYNC_SUBSCRIPTION_ENABLED && true === $async ) {
 			Newspack_Newsletters_Subscription::add_subscription_intent( $contact, $lists, $context );
 			return true;
@@ -248,15 +261,7 @@ class Newspack_Newsletters_Contacts {
 		);
 
 		if ( $errors->has_errors() ) {
-			// Get a reader-friendly error message to show to the user.
-			$reader_error = $provider->get_reader_error_message(
-				[
-					'email' => $contact['email'],
-					'lists' => $lists,
-				],
-				is_wp_error( $result ) ? $result : $errors
-			);
-			return Newspack_Newsletters::debug_mode() ? $errors : new \WP_Error( 'newspack_newsletters_upsert_contact_error', $reader_error );
+			return $errors;
 		}
 
 		return $result;
@@ -293,7 +298,7 @@ class Newspack_Newsletters_Contacts {
 					'provider' => $provider->service,
 					'errors'   => is_wp_error( $result ) ? $result->get_error_message() : [],
 				],
-				'user_email' => $user['data']['user_email'],
+				'user_email' => $email,
 				'file'       => 'newspack_esp_sync',
 			]
 		);
@@ -386,5 +391,23 @@ class Newspack_Newsletters_Contacts {
 		);
 
 		return $result;
+	}
+
+	/**
+	 * Get the contact fields from the provider.
+	 *
+	 * Used by Newspack integrations sync.
+	 *
+	 * @param string|null $list_id Optional list ID to get the fields for. Needed for Mailchimp.
+	 *
+	 * @return array|WP_Error Array of fields or error if failed.
+	 */
+	public static function get_fields( $list_id = null ) {
+		$provider = Newspack_Newsletters::get_service_provider();
+		if ( empty( $provider ) ) {
+			return new WP_Error( 'newspack_newsletters_invalid_provider', __( 'Provider is not set.' ) );
+		}
+
+		return $provider->get_contact_fields_for_integrations( $list_id );
 	}
 }

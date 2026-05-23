@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaListCalculatedMetricsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'calculatedMetrics';
-    protected $calculatedMetricsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCalculatedMetric::class;
+    protected $calculatedMetricsType = GoogleAnalyticsAdminV1alphaCalculatedMetric::class;
     protected $calculatedMetricsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListCalculatedMetricsResponse extends \Google\S
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListCalculatedMetricsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListCalculatedMetricsResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListCalculatedMetricsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListCalculatedMetricsResponse');

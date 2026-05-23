@@ -26,7 +26,7 @@ class FieldMetadata extends \Google\Site_Kit_Dependencies\Google\Model
      * @var bool
      */
     public $primary;
-    protected $sourceType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Source::class;
+    protected $sourceType = Source::class;
     protected $sourceDataType = '';
     /**
      * True if the field is the primary field for the source. Each source must
@@ -65,7 +65,7 @@ class FieldMetadata extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Source $source
      */
-    public function setSource(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Source $source)
+    public function setSource(Source $source)
     {
         $this->source = $source;
     }
@@ -113,4 +113,4 @@ class FieldMetadata extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_FieldMetadata');
+class_alias(FieldMetadata::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_FieldMetadata');

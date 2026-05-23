@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class GeneralSubtree
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['base' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\GeneralName::MAP, 'minimum' => ['constant' => 0, 'optional' => \true, 'implicit' => \true, 'default' => '0'] + \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\BaseDistance::MAP, 'maximum' => ['constant' => 1, 'optional' => \true, 'implicit' => \true] + \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\BaseDistance::MAP]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['base' => GeneralName::MAP, 'minimum' => ['constant' => 0, 'optional' => \true, 'implicit' => \true, 'default' => '0'] + BaseDistance::MAP, 'maximum' => ['constant' => 1, 'optional' => \true, 'implicit' => \true] + BaseDistance::MAP]];
 }

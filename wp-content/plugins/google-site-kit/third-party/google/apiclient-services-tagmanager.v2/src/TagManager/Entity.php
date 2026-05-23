@@ -36,7 +36,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      * The entity has been updated in the workspace.
      */
     public const CHANGE_STATUS_updated = 'updated';
-    protected $builtInVariableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\BuiltInVariable::class;
+    protected $builtInVariableType = BuiltInVariable::class;
     protected $builtInVariableDataType = '';
     /**
      * Represents how the entity has been changed in the workspace.
@@ -44,30 +44,30 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $changeStatus;
-    protected $clientType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client::class;
+    protected $clientType = Client::class;
     protected $clientDataType = '';
-    protected $customTemplateType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class;
+    protected $customTemplateType = CustomTemplate::class;
     protected $customTemplateDataType = '';
-    protected $folderType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class;
+    protected $folderType = Folder::class;
     protected $folderDataType = '';
-    protected $gtagConfigType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig::class;
+    protected $gtagConfigType = GtagConfig::class;
     protected $gtagConfigDataType = '';
-    protected $tagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class;
+    protected $tagType = Tag::class;
     protected $tagDataType = '';
-    protected $transformationType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation::class;
+    protected $transformationType = Transformation::class;
     protected $transformationDataType = '';
-    protected $triggerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class;
+    protected $triggerType = Trigger::class;
     protected $triggerDataType = '';
-    protected $variableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class;
+    protected $variableType = Variable::class;
     protected $variableDataType = '';
-    protected $zoneType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Zone::class;
+    protected $zoneType = Zone::class;
     protected $zoneDataType = '';
     /**
      * The built in variable being represented by the entity.
      *
      * @param BuiltInVariable $builtInVariable
      */
-    public function setBuiltInVariable(\Google\Site_Kit_Dependencies\Google\Service\TagManager\BuiltInVariable $builtInVariable)
+    public function setBuiltInVariable(BuiltInVariable $builtInVariable)
     {
         $this->builtInVariable = $builtInVariable;
     }
@@ -101,7 +101,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Client $client
      */
-    public function setClient(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Client $client)
+    public function setClient(Client $client)
     {
         $this->client = $client;
     }
@@ -117,7 +117,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param CustomTemplate $customTemplate
      */
-    public function setCustomTemplate(\Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate $customTemplate)
+    public function setCustomTemplate(CustomTemplate $customTemplate)
     {
         $this->customTemplate = $customTemplate;
     }
@@ -133,7 +133,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Folder $folder
      */
-    public function setFolder(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder $folder)
+    public function setFolder(Folder $folder)
     {
         $this->folder = $folder;
     }
@@ -149,7 +149,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param GtagConfig $gtagConfig
      */
-    public function setGtagConfig(\Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig $gtagConfig)
+    public function setGtagConfig(GtagConfig $gtagConfig)
     {
         $this->gtagConfig = $gtagConfig;
     }
@@ -165,7 +165,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Tag $tag
      */
-    public function setTag(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag $tag)
+    public function setTag(Tag $tag)
     {
         $this->tag = $tag;
     }
@@ -181,7 +181,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Transformation $transformation
      */
-    public function setTransformation(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation $transformation)
+    public function setTransformation(Transformation $transformation)
     {
         $this->transformation = $transformation;
     }
@@ -197,7 +197,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Trigger $trigger
      */
-    public function setTrigger(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger $trigger)
+    public function setTrigger(Trigger $trigger)
     {
         $this->trigger = $trigger;
     }
@@ -213,7 +213,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Variable $variable
      */
-    public function setVariable(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable $variable)
+    public function setVariable(Variable $variable)
     {
         $this->variable = $variable;
     }
@@ -229,7 +229,7 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Zone $zone
      */
-    public function setZone(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Zone $zone)
+    public function setZone(Zone $zone)
     {
         $this->zone = $zone;
     }
@@ -242,4 +242,4 @@ class Entity extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Entity');
+class_alias(Entity::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Entity');

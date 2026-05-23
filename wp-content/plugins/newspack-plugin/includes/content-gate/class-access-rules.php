@@ -35,12 +35,20 @@ class Access_Rules {
 	 * @param array $config {
 	 *     The rule configuration.
 	 *
-	 *     @type string   $id          The rule ID.
-	 *     @type string   $label       The rule label.
-	 *     @type string   $description The rule description.
-	 *     @type string   $default     The rule default value.
-	 *     @type array    $options     The rule options.
-	 *     @type callable $callback    The rule callback.
+	 *     @type string   $id                 The rule ID.
+	 *     @type string   $name               The rule name.
+	 *     @type string   $description        The rule description.
+	 *     @type mixed    $default            The rule default value.
+	 *     @type array    $options            The rule options.
+	 *     @type callable $callback           The rule callback.
+	 *     @type bool     $is_boolean         Whether the rule is a boolean rule.
+	 *     @type bool     $supports_anonymous Whether the rule's callback can evaluate access for
+	 *                                        a logged-out visitor (`user_id = 0`). Defaults to
+	 *                                        false — `evaluate_rule` short-circuits to false for
+	 *                                        anonymous users on rules that don't opt in. Rules
+	 *                                        that opt in are responsible for cache-safety
+	 *                                        (e.g. only running per-IP logic when the page is
+	 *                                        already uncached).
 	 * }
 	 *
 	 * @return void|\WP_Error
@@ -102,6 +110,13 @@ class Access_Rules {
 				'description' => __( 'Set custom conditions based on reader data key/value pairs.', 'newspack-plugin' ),
 				'callback'    => [ __CLASS__, 'has_reader_data' ],
 			],
+			'institution'  => [
+				'name'               => __( 'Institutional access', 'newspack-plugin' ),
+				'description'        => __( 'Grant access to readers from selected institutions.', 'newspack-plugin' ),
+				'options'            => [ Institution::class, 'get_options' ],
+				'callback'           => [ Institution::class, 'evaluate' ],
+				'supports_anonymous' => true,
+			],
 		];
 
 		foreach ( $rules as $id => $rule ) {
@@ -154,9 +169,9 @@ class Access_Rules {
 			return true;
 		}
 
-		// If evaluating for the current user, they must be logged in.
+		// If evaluating for the current user, they must be logged in (unless the rule supports anonymous evaluation).
 		$user_id = $user_id ?? \get_current_user_id();
-		if ( ! $user_id ) {
+		if ( ! $user_id && empty( $rule['supports_anonymous'] ) ) {
 			return false;
 		}
 
@@ -169,6 +184,60 @@ class Access_Rules {
 	}
 
 	/**
+	 * Determine whether the gate's custom_access rules grant access to an
+	 * anonymous (logged-out) visitor.
+	 *
+	 * Only rules that (a) declare `supports_anonymous` and (b) have a populated
+	 * `value` are considered. An unpopulated rule is treated as "not configured"
+	 * rather than "matches everyone" — Access_Rules's underlying evaluators
+	 * return true for empty values as the rule's own no-constraint semantics,
+	 * which is correct for the rule in isolation but must not silently bypass
+	 * registration here.
+	 *
+	 * Groups containing any non-eligible rule are dropped (the AND-within-group
+	 * semantics would force the group to fail for an anonymous visitor anyway,
+	 * since non-anonymous rules return false for `user_id = 0`).
+	 *
+	 * @param array $access_rules Custom access rules in grouped or flat format.
+	 *
+	 * @return bool True if a populated, anonymous-capable rule grants access.
+	 */
+	public static function evaluate_anonymous_rules( $access_rules ) {
+		if ( empty( $access_rules ) ) {
+			return false;
+		}
+		$eligible_groups = [];
+		foreach ( self::normalize_rules( $access_rules ) as $group ) {
+			if ( empty( $group ) || ! is_array( $group ) ) {
+				continue;
+			}
+			$group_eligible = true;
+			foreach ( $group as $rule ) {
+				// `empty()` is acceptable for `value` while the only `supports_anonymous` rule
+				// (`institution`) stores an array of post IDs — empty array means "no institutions
+				// selected." If a future anonymous-capable rule uses a falsy-but-valid scalar (e.g.
+				// `0`, `'0'`, `false`), tighten this check accordingly.
+				if ( ! isset( $rule['slug'] ) || empty( $rule['value'] ) ) {
+					$group_eligible = false;
+					break;
+				}
+				$rule_def = self::get_rule( $rule['slug'] );
+				if ( empty( $rule_def['supports_anonymous'] ) ) {
+					$group_eligible = false;
+					break;
+				}
+			}
+			if ( $group_eligible ) {
+				$eligible_groups[] = $group;
+			}
+		}
+		if ( empty( $eligible_groups ) ) {
+			return false;
+		}
+		return self::evaluate_rules( $eligible_groups, 0 );
+	}
+
+	/**
 	 * Evaluate access rules with OR logic between groups and AND logic within groups.
 	 *
 	 * Rules structure: [ [ rule1, rule2 ], [ rule3, rule4 ] ]
@@ -176,10 +245,11 @@ class Access_Rules {
 	 * - Rules within a group use AND logic: reader must pass all rules in the group
 	 *
 	 * @param array $access_rules The access rules (array of groups, each group is an array of rules).
+	 * @param int   $user_id     Optional. User ID to evaluate rules for. Defaults to current user.
 	 *
 	 * @return bool True if access is granted, false if restricted.
 	 */
-	public static function evaluate_rules( $access_rules ) {
+	public static function evaluate_rules( $access_rules, $user_id = null ) {
 		if ( empty( $access_rules ) ) {
 			return true;
 		}
@@ -189,7 +259,7 @@ class Access_Rules {
 
 		// Evaluate each group with OR logic - if any group passes, grant access.
 		foreach ( $access_rules as $group ) {
-			if ( self::evaluate_rules_group( $group ) ) {
+			if ( self::evaluate_rules_group( $group, $user_id ) ) {
 				return true;
 			}
 		}
@@ -201,11 +271,12 @@ class Access_Rules {
 	/**
 	 * Evaluate a single group of access rules with AND logic.
 	 *
-	 * @param array $group Array of rules in the group.
+	 * @param array $group   Array of rules in the group.
+	 * @param int   $user_id Optional. User ID to evaluate rules for. Defaults to current user.
 	 *
 	 * @return bool True if all rules in the group pass, false otherwise.
 	 */
-	private static function evaluate_rules_group( $group ) {
+	private static function evaluate_rules_group( $group, $user_id = null ) {
 		if ( empty( $group ) || ! is_array( $group ) ) {
 			return true;
 		}
@@ -214,7 +285,7 @@ class Access_Rules {
 			if ( ! isset( $rule['slug'] ) ) {
 				continue;
 			}
-			if ( ! self::evaluate_rule( $rule['slug'], $rule['value'] ?? null ) ) {
+			if ( ! self::evaluate_rule( $rule['slug'], $rule['value'] ?? null, $user_id ) ) {
 				return false;
 			}
 		}
@@ -225,7 +296,8 @@ class Access_Rules {
 	/**
 	 * Normalize access rules to grouped format.
 	 *
-	 * Converts legacy flat rules [ rule1, rule2 ] to grouped format [ [ rule1, rule2 ] ].
+	 * Converts flat rules [ rule1, rule2 ] to grouped format [ [ rule1 ], [ rule2 ] ],
+	 * where each rule is its own group (OR logic). Already grouped rules are left as-is.
 	 *
 	 * @param array $access_rules The access rules.
 	 *
@@ -245,8 +317,13 @@ class Access_Rules {
 			return $access_rules;
 		}
 
-		// Convert flat format to single group.
-		return [ $access_rules ];
+		// Convert flat format to OR logic: each rule becomes its own group.
+		return array_map(
+			function ( $rule ) {
+				return [ $rule ];
+			},
+			$access_rules
+		);
 	}
 
 	/**
@@ -278,11 +355,22 @@ class Access_Rules {
 	 * Whether the user has an active subscription for one of the given products.
 	 * Also checks if the user is a member of a group subscription with the required products.
 	 *
-	 * @param int   $user_id User ID.
+	 * Note: `$strict` only constrains the built-in ownership / group-membership checks.
+	 * The `newspack_access_rules_has_active_subscription` filter is always applied and
+	 * its return value is the final result, so a third-party filter callback can grant
+	 * access even when `$strict` is true. Filter authors should opt in to the 4th `$strict`
+	 * arg (`accepted_args` >= 4) and respect it — e.g., short-circuit and return
+	 * `$has_subscription` unchanged when `$strict` is true and the access claim isn't
+	 * strictly an owned subscription. Otherwise callers using `$strict` to distinguish
+	 * owner-vs-member access (e.g., `Content_Gate` source labels) may misclassify
+	 * filter-granted access as local ownership.
+	 *
+	 * @param int   $user_id     User ID.
 	 * @param array $product_ids Required product IDs.
+	 * @param bool  $strict      If true, only consider active subscriptions owned by $user_id (ignore group subscription memberships).
 	 * @return bool
 	 */
-	public static function has_active_subscription( $user_id, $product_ids ) {
+	public static function has_active_subscription( $user_id, $product_ids, $strict = false ) {
 		$has_subscription = false;
 
 		// Check user's own subscriptions.
@@ -291,7 +379,7 @@ class Access_Rules {
 		}
 
 		// Check group subscriptions the user is a member of.
-		if ( ! $has_subscription && function_exists( 'wcs_get_subscription' ) ) {
+		if ( ! $strict && ! $has_subscription && function_exists( 'wcs_get_subscription' ) ) {
 			$group_subscriptions = Group_Subscription::get_group_subscriptions_for_user( $user_id );
 			foreach ( $group_subscriptions as $subscription ) {
 				if ( ! $subscription || ! $subscription->has_status( WooCommerce_Connection::ACTIVE_SUBSCRIPTION_STATUSES ) ) {
@@ -318,8 +406,9 @@ class Access_Rules {
 		 * @param bool  $has_subscription Whether the user has an active subscription.
 		 * @param int   $user_id          User ID.
 		 * @param array $product_ids      Required product IDs.
+		 * @param bool  $strict           If true, only consider active subscriptions owned by $user_id (ignore group subscription memberships).
 		 */
-		return apply_filters( 'newspack_access_rules_has_active_subscription', $has_subscription, $user_id, $product_ids );
+		return apply_filters( 'newspack_access_rules_has_active_subscription', $has_subscription, $user_id, $product_ids, $strict );
 	}
 
 	/**
@@ -343,6 +432,9 @@ class Access_Rules {
 		}
 		$email = $user->data->user_email;
 		if ( ! $email ) {
+			return false;
+		}
+		if ( Reader_Activation::is_reader_verified( $user ) === false ) {
 			return false;
 		}
 		$email_domain = substr( $email, strrpos( $email, '@' ) + 1 );

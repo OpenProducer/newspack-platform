@@ -58,7 +58,7 @@ class GoogleAnalyticsAdminV1alphaAudience extends \Google\Site_Kit_Dependencies\
      * @var string
      */
     public $displayName;
-    protected $eventTriggerType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceEventTrigger::class;
+    protected $eventTriggerType = GoogleAnalyticsAdminV1alphaAudienceEventTrigger::class;
     protected $eventTriggerDataType = '';
     /**
      * Immutable. Specifies how long an exclusion lasts for users that meet the
@@ -68,7 +68,7 @@ class GoogleAnalyticsAdminV1alphaAudience extends \Google\Site_Kit_Dependencies\
      * @var string
      */
     public $exclusionDurationMode;
-    protected $filterClausesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterClause::class;
+    protected $filterClausesType = GoogleAnalyticsAdminV1alphaAudienceFilterClause::class;
     protected $filterClausesDataType = 'array';
     /**
      * Required. Immutable. The duration a user should stay in an Audience. It
@@ -155,7 +155,7 @@ class GoogleAnalyticsAdminV1alphaAudience extends \Google\Site_Kit_Dependencies\
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceEventTrigger $eventTrigger
      */
-    public function setEventTrigger(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceEventTrigger $eventTrigger)
+    public function setEventTrigger(GoogleAnalyticsAdminV1alphaAudienceEventTrigger $eventTrigger)
     {
         $this->eventTrigger = $eventTrigger;
     }
@@ -240,4 +240,4 @@ class GoogleAnalyticsAdminV1alphaAudience extends \Google\Site_Kit_Dependencies\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudience::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudience');
+class_alias(GoogleAnalyticsAdminV1alphaAudience::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudience');

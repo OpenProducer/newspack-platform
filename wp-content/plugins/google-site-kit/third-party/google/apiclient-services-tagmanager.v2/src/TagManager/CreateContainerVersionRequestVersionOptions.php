@@ -65,4 +65,4 @@ class CreateContainerVersionRequestVersionOptions extends \Google\Site_Kit_Depen
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\CreateContainerVersionRequestVersionOptions::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_CreateContainerVersionRequestVersionOptions');
+class_alias(CreateContainerVersionRequestVersionOptions::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_CreateContainerVersionRequestVersionOptions');

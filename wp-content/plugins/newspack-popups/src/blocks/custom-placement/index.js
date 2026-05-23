@@ -22,6 +22,7 @@ export const registerCustomPlacementBlock = () => {
 	}
 
 	registerBlockType( name, {
+		...metadata,
 		title: __( 'Campaigns: Custom Placement', 'newspack-listing' ),
 		icon: {
 			src: <Icon icon={ megaphone } />,

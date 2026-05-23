@@ -60,9 +60,9 @@ class RecurringPlanDetails extends \Google\Site_Kit_Dependencies\Google\Model
      * this plan. If they want access again, they'll have to purchase a new plan.
      */
     public const RECURRING_PLAN_STATE_CANCELED = 'CANCELED';
-    protected $canceledDetailsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\CanceledDetails::class;
+    protected $canceledDetailsType = CanceledDetails::class;
     protected $canceledDetailsDataType = '';
-    protected $recurrenceTermsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceTerms::class;
+    protected $recurrenceTermsType = RecurrenceTerms::class;
     protected $recurrenceTermsDataType = '';
     /**
      * The state the recurring plan is in eg WAITING_TO_RECUR, CANCELED etc.
@@ -70,7 +70,7 @@ class RecurringPlanDetails extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $recurringPlanState;
-    protected $suspendedDetailsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\SuspendedDetails::class;
+    protected $suspendedDetailsType = SuspendedDetails::class;
     protected $suspendedDetailsDataType = '';
     /**
      * Timestamp when this plan was most recently updated.
@@ -78,7 +78,7 @@ class RecurringPlanDetails extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $updateTime;
-    protected $waitingToRecurDetailsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\WaitingToRecurDetails::class;
+    protected $waitingToRecurDetailsType = WaitingToRecurDetails::class;
     protected $waitingToRecurDetailsDataType = '';
     /**
      * Contains additional details about the plan if the plan is in CANCELED
@@ -86,7 +86,7 @@ class RecurringPlanDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param CanceledDetails $canceledDetails
      */
-    public function setCanceledDetails(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\CanceledDetails $canceledDetails)
+    public function setCanceledDetails(CanceledDetails $canceledDetails)
     {
         $this->canceledDetails = $canceledDetails;
     }
@@ -102,7 +102,7 @@ class RecurringPlanDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param RecurrenceTerms $recurrenceTerms
      */
-    public function setRecurrenceTerms(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceTerms $recurrenceTerms)
+    public function setRecurrenceTerms(RecurrenceTerms $recurrenceTerms)
     {
         $this->recurrenceTerms = $recurrenceTerms;
     }
@@ -138,7 +138,7 @@ class RecurringPlanDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param SuspendedDetails $suspendedDetails
      */
-    public function setSuspendedDetails(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\SuspendedDetails $suspendedDetails)
+    public function setSuspendedDetails(SuspendedDetails $suspendedDetails)
     {
         $this->suspendedDetails = $suspendedDetails;
     }
@@ -171,7 +171,7 @@ class RecurringPlanDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param WaitingToRecurDetails $waitingToRecurDetails
      */
-    public function setWaitingToRecurDetails(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\WaitingToRecurDetails $waitingToRecurDetails)
+    public function setWaitingToRecurDetails(WaitingToRecurDetails $waitingToRecurDetails)
     {
         $this->waitingToRecurDetails = $waitingToRecurDetails;
     }
@@ -184,4 +184,4 @@ class RecurringPlanDetails extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurringPlanDetails::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_RecurringPlanDetails');
+class_alias(RecurringPlanDetails::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_RecurringPlanDetails');

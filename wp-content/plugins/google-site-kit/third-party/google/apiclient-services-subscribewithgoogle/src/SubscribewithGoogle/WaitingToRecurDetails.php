@@ -69,4 +69,4 @@ class WaitingToRecurDetails extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\WaitingToRecurDetails::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_WaitingToRecurDetails');
+class_alias(WaitingToRecurDetails::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_WaitingToRecurDetails');

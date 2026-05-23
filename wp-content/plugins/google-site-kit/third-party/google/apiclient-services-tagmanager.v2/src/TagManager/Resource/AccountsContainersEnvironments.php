@@ -38,11 +38,11 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * @return Environment
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment $postBody, $optParams = [])
+    public function create($parent, Environment $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Environment::class);
     }
     /**
      * Deletes a GTM Environment. (environments.delete)
@@ -54,7 +54,7 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -68,8 +68,8 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Environment::class);
     }
     /**
      * Lists all GTM Environments of a GTM Container.
@@ -86,8 +86,8 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
     public function listAccountsContainersEnvironments($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListEnvironmentsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListEnvironmentsResponse::class);
     }
     /**
      * Re-generates the authorization code for a GTM Environment.
@@ -99,11 +99,11 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * @return Environment
      * @throws \Google\Service\Exception
      */
-    public function reauthorize($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment $postBody, $optParams = [])
+    public function reauthorize($path, Environment $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('reauthorize', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('reauthorize', [$params], Environment::class);
     }
     /**
      * Updates a GTM Environment. (environments.update)
@@ -117,12 +117,12 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * @return Environment
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment $postBody, $optParams = [])
+    public function update($path, Environment $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Environment::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersEnvironments::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersEnvironments');
+class_alias(AccountsContainersEnvironments::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersEnvironments');

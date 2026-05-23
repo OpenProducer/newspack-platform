@@ -91,6 +91,17 @@ class Performance {
 	 * Process the HTML output.
 	 */
 	public static function process_output_html() {
+		/**
+		 * Disables HTML output processing for performance optimizations.
+		 * Set to true to bypass any filters registered on 'newspack_output_html'.
+		 *
+		 * @constant NEWSPACK_DISABLE_HTML_PERF_PROCESSING
+		 * @type     bool
+		 * @default  HTML performance processing enabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_DISABLE_HTML_PERF_PROCESSING', true );
+		 */
 		if ( defined( 'NEWSPACK_DISABLE_HTML_PERF_PROCESSING' ) && NEWSPACK_DISABLE_HTML_PERF_PROCESSING ) {
 			return;
 		}

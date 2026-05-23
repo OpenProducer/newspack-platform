@@ -49,11 +49,11 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
      * @return AdUnit
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit $postBody, $optParams = [])
+    public function create($parent, AdUnit $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], AdUnit::class);
     }
     /**
      * Gets an ad unit from a specified account and ad client. (adunits.get)
@@ -67,8 +67,8 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], AdUnit::class);
     }
     /**
      * Gets the ad unit code for a given ad unit. For more information, see [About
@@ -85,8 +85,8 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
     public function getAdcode($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getAdcode', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnitAdCode::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getAdcode', [$params], AdUnitAdCode::class);
     }
     /**
      * Lists all ad units under a specified account and ad client.
@@ -110,8 +110,8 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
     public function listAccountsAdclientsAdunits($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListAdUnitsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListAdUnitsResponse::class);
     }
     /**
      * Lists all the custom channels available for an ad unit.
@@ -136,8 +136,8 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
     public function listLinkedCustomChannels($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('listLinkedCustomChannels', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListLinkedCustomChannelsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('listLinkedCustomChannels', [$params], ListLinkedCustomChannelsResponse::class);
     }
     /**
      * Updates an ad unit. This method can be called only by a restricted set of
@@ -157,12 +157,12 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
      * @return AdUnit
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit $postBody, $optParams = [])
+    public function patch($name, AdUnit $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], AdUnit::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsAdclientsAdunits::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsAdclientsAdunits');
+class_alias(AccountsAdclientsAdunits::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsAdclientsAdunits');

@@ -1,20 +1,22 @@
+@use '../../../colors/colors.module.scss' as colors;
+
 /**
  * Newspack Icon
  */
 
 .newspack-icon {
-	background: var(--wp-admin-theme-color);
+	background: colors.$primary-600;
 	fill: white;
 	padding: 12px;
 
 	&--white {
 		background: white;
-		fill: var(--wp-admin-theme-color);
+		fill: colors.$primary-600;
 	}
 
 	&--simple {
 		background: none;
-		fill: var(--wp-admin-theme-color);
+		fill: colors.$primary-600;
 		padding: 0;
 	}
 

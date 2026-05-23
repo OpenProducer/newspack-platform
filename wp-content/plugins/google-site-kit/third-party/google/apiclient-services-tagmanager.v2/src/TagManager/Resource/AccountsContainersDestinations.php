@@ -40,8 +40,8 @@ class AccountsContainersDestinations extends \Google\Site_Kit_Dependencies\Googl
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Destination::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Destination::class);
     }
     /**
      * Adds a Destination to this Container and removes it from the Container to
@@ -61,8 +61,8 @@ class AccountsContainersDestinations extends \Google\Site_Kit_Dependencies\Googl
     public function link($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('link', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Destination::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('link', [$params], Destination::class);
     }
     /**
      * Lists all Destinations linked to a GTM Container.
@@ -76,9 +76,9 @@ class AccountsContainersDestinations extends \Google\Site_Kit_Dependencies\Googl
     public function listAccountsContainersDestinations($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListDestinationsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListDestinationsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersDestinations::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersDestinations');
+class_alias(AccountsContainersDestinations::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersDestinations');

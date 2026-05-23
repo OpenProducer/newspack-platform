@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights;
 class LighthouseCategoryV5 extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'auditRefs';
-    protected $auditRefsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\AuditRefs::class;
+    protected $auditRefsType = AuditRefs::class;
     protected $auditRefsDataType = 'array';
     /**
      * A more detailed description of the category and its importance.
@@ -152,4 +152,4 @@ class LighthouseCategoryV5 extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseCategoryV5::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_LighthouseCategoryV5');
+class_alias(LighthouseCategoryV5::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_LighthouseCategoryV5');

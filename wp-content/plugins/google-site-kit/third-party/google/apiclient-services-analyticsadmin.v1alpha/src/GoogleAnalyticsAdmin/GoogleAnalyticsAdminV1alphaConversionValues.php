@@ -50,7 +50,7 @@ class GoogleAnalyticsAdminV1alphaConversionValues extends \Google\Site_Kit_Depen
      * @var string
      */
     public $displayName;
-    protected $eventMappingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventMapping::class;
+    protected $eventMappingsType = GoogleAnalyticsAdminV1alphaEventMapping::class;
     protected $eventMappingsDataType = 'array';
     /**
      * The fine-grained conversion value. This is applicable only to the first
@@ -165,4 +165,4 @@ class GoogleAnalyticsAdminV1alphaConversionValues extends \Google\Site_Kit_Depen
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionValues::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaConversionValues');
+class_alias(GoogleAnalyticsAdminV1alphaConversionValues::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaConversionValues');

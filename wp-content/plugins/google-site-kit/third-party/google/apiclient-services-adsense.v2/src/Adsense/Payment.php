@@ -26,7 +26,7 @@ class Payment extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $amount;
-    protected $dateType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Date::class;
+    protected $dateType = Date::class;
     protected $dateDataType = '';
     /**
      * Output only. Resource name of the payment. Format: -
@@ -63,7 +63,7 @@ class Payment extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Date $date
      */
-    public function setDate(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Date $date)
+    public function setDate(Date $date)
     {
         $this->date = $date;
     }
@@ -97,4 +97,4 @@ class Payment extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Payment::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Payment');
+class_alias(Payment::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Payment');

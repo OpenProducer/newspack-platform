@@ -47,11 +47,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionResponse
      * @throws \Google\Service\Exception
      */
-    public function acknowledgeUserDataCollection($property, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest $postBody, $optParams = [])
+    public function acknowledgeUserDataCollection($property, GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest $postBody, $optParams = [])
     {
         $params = ['property' => $property, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('acknowledgeUserDataCollection', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('acknowledgeUserDataCollection', [$params], GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionResponse::class);
     }
     /**
      * Creates a Google Analytics property with the specified location and
@@ -62,11 +62,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1betaProperty
      * @throws \Google\Service\Exception
      */
-    public function create(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty $postBody, $optParams = [])
+    public function create(GoogleAnalyticsAdminV1betaProperty $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1betaProperty::class);
     }
     /**
      * Marks target Property as soft-deleted (ie: "trashed") and returns it. This
@@ -86,8 +86,8 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleAnalyticsAdminV1betaProperty::class);
     }
     /**
      * Lookup for a single GA Property. (properties.get)
@@ -101,8 +101,8 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1betaProperty::class);
     }
     /**
      * Returns the singleton data retention settings for this property.
@@ -118,8 +118,8 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function getDataRetentionSettings($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getDataRetentionSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getDataRetentionSettings', [$params], GoogleAnalyticsAdminV1betaDataRetentionSettings::class);
     }
     /**
      * Returns child Properties under the specified parent Account. Properties will
@@ -157,8 +157,8 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listProperties($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListPropertiesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1betaListPropertiesResponse::class);
     }
     /**
      * Updates a property. (properties.patch)
@@ -175,11 +175,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1betaProperty
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1betaProperty $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1betaProperty::class);
     }
     /**
      * Returns a customized report of data access records. The report provides
@@ -211,11 +211,11 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1betaRunAccessReportResponse
      * @throws \Google\Service\Exception
      */
-    public function runAccessReport($entity, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaRunAccessReportRequest $postBody, $optParams = [])
+    public function runAccessReport($entity, GoogleAnalyticsAdminV1betaRunAccessReportRequest $postBody, $optParams = [])
     {
         $params = ['entity' => $entity, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('runAccessReport', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaRunAccessReportResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('runAccessReport', [$params], GoogleAnalyticsAdminV1betaRunAccessReportResponse::class);
     }
     /**
      * Updates the singleton data retention settings for this property.
@@ -233,12 +233,12 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return GoogleAnalyticsAdminV1betaDataRetentionSettings
      * @throws \Google\Service\Exception
      */
-    public function updateDataRetentionSettings($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings $postBody, $optParams = [])
+    public function updateDataRetentionSettings($name, GoogleAnalyticsAdminV1betaDataRetentionSettings $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('updateDataRetentionSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('updateDataRetentionSettings', [$params], GoogleAnalyticsAdminV1betaDataRetentionSettings::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource\Properties::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_Resource_Properties');
+class_alias(Properties::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_Resource_Properties');

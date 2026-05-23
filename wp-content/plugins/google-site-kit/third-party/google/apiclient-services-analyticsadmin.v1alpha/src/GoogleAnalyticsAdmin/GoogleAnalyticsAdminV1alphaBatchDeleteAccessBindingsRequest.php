@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaBatchDeleteAccessBindingsRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'requests';
-    protected $requestsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDeleteAccessBindingRequest::class;
+    protected $requestsType = GoogleAnalyticsAdminV1alphaDeleteAccessBindingRequest::class;
     protected $requestsDataType = 'array';
     /**
      * Required. The requests specifying the access bindings to delete. A maximum
@@ -41,4 +41,4 @@ class GoogleAnalyticsAdminV1alphaBatchDeleteAccessBindingsRequest extends \Googl
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchDeleteAccessBindingsRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaBatchDeleteAccessBindingsRequest');
+class_alias(GoogleAnalyticsAdminV1alphaBatchDeleteAccessBindingsRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaBatchDeleteAccessBindingsRequest');

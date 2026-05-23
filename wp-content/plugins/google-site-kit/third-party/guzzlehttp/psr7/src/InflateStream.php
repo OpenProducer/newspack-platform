@@ -15,19 +15,19 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
  * @see https://datatracker.ietf.org/doc/html/rfc1952
  * @see https://www.php.net/manual/en/filters.compression.php
  */
-final class InflateStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
+final class InflateStream implements StreamInterface
 {
     use StreamDecoratorTrait;
     /** @var StreamInterface */
     private $stream;
-    public function __construct(\Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface $stream)
+    public function __construct(StreamInterface $stream)
     {
-        $resource = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\StreamWrapper::getResource($stream);
+        $resource = StreamWrapper::getResource($stream);
         // Specify window=15+32, so zlib will use header detection to both gzip (with header) and zlib data
         // See https://www.zlib.net/manual.html#Advanced definition of inflateInit2
         // "Add 32 to windowBits to enable zlib and gzip decoding with automatic header detection"
         // Default window size is 15.
-        \stream_filter_append($resource, 'zlib.inflate', \STREAM_FILTER_READ, ['window' => 15 + 32]);
-        $this->stream = $stream->isSeekable() ? new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Stream($resource) : new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\NoSeekStream(new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Stream($resource));
+        stream_filter_append($resource, 'zlib.inflate', \STREAM_FILTER_READ, ['window' => 15 + 32]);
+        $this->stream = $stream->isSeekable() ? new Stream($resource) : new NoSeekStream(new Stream($resource));
     }
 }

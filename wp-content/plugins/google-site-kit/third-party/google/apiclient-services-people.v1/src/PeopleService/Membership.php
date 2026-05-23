@@ -19,18 +19,18 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class Membership extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $contactGroupMembershipType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroupMembership::class;
+    protected $contactGroupMembershipType = ContactGroupMembership::class;
     protected $contactGroupMembershipDataType = '';
-    protected $domainMembershipType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\DomainMembership::class;
+    protected $domainMembershipType = DomainMembership::class;
     protected $domainMembershipDataType = '';
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The contact group membership.
      *
      * @param ContactGroupMembership $contactGroupMembership
      */
-    public function setContactGroupMembership(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroupMembership $contactGroupMembership)
+    public function setContactGroupMembership(ContactGroupMembership $contactGroupMembership)
     {
         $this->contactGroupMembership = $contactGroupMembership;
     }
@@ -46,7 +46,7 @@ class Membership extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param DomainMembership $domainMembership
      */
-    public function setDomainMembership(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\DomainMembership $domainMembership)
+    public function setDomainMembership(DomainMembership $domainMembership)
     {
         $this->domainMembership = $domainMembership;
     }
@@ -62,7 +62,7 @@ class Membership extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -75,4 +75,4 @@ class Membership extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Membership::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Membership');
+class_alias(Membership::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Membership');

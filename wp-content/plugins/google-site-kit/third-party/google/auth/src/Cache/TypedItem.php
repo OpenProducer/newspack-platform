@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Psr\Cache\CacheItemInterface;
  * on PHP 8.0 and above. It is compatible with psr/cache 3.0 (PSR-6).
  * @see Item for compatiblity with previous versions of PHP.
  */
-final class TypedItem implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemInterface
+final class TypedItem implements CacheItemInterface
 {
     /**
      * @var mixed
@@ -50,21 +50,21 @@ final class TypedItem implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheIt
     /**
      * {@inheritdoc}
      */
-    public function getKey() : string
+    public function getKey(): string
     {
         return $this->key;
     }
     /**
      * {@inheritdoc}
      */
-    public function get() : mixed
+    public function get(): mixed
     {
         return $this->isHit() ? $this->value : null;
     }
     /**
      * {@inheritdoc}
      */
-    public function isHit() : bool
+    public function isHit(): bool
     {
         if (!$this->isHit) {
             return \false;
@@ -77,7 +77,7 @@ final class TypedItem implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheIt
     /**
      * {@inheritdoc}
      */
-    public function set(mixed $value) : static
+    public function set(mixed $value): static
     {
         $this->isHit = \true;
         $this->value = $value;
@@ -86,21 +86,21 @@ final class TypedItem implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheIt
     /**
      * {@inheritdoc}
      */
-    public function expiresAt($expiration) : static
+    public function expiresAt($expiration): static
     {
         if ($this->isValidExpiration($expiration)) {
             $this->expiration = $expiration;
             return $this;
         }
-        $error = \sprintf('Argument 1 passed to %s::expiresAt() must implement interface DateTimeInterface, %s given', \get_class($this), \gettype($expiration));
+        $error = sprintf('Argument 1 passed to %s::expiresAt() must implement interface DateTimeInterface, %s given', get_class($this), gettype($expiration));
         throw new \TypeError($error);
     }
     /**
      * {@inheritdoc}
      */
-    public function expiresAfter($time) : static
+    public function expiresAfter($time): static
     {
-        if (\is_int($time)) {
+        if (is_int($time)) {
             $this->expiration = $this->currentTime()->add(new \DateInterval("PT{$time}S"));
         } elseif ($time instanceof \DateInterval) {
             $this->expiration = $this->currentTime()->add($time);
@@ -108,7 +108,7 @@ final class TypedItem implements \Google\Site_Kit_Dependencies\Psr\Cache\CacheIt
             $this->expiration = $time;
         } else {
             $message = 'Argument 1 passed to %s::expiresAfter() must be an ' . 'instance of DateInterval or of the type integer, %s given';
-            $error = \sprintf($message, \get_class($this), \gettype($time));
+            $error = sprintf($message, get_class($this), gettype($time));
             throw new \TypeError($error);
         }
         return $this;

@@ -45,11 +45,11 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
      * @return CustomChannel
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel $postBody, $optParams = [])
+    public function create($parent, CustomChannel $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], CustomChannel::class);
     }
     /**
      * Deletes a custom channel. This method can be called only by a restricted set
@@ -67,8 +67,8 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdsenseEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], AdsenseEmpty::class);
     }
     /**
      * Gets information about the selected custom channel. (customchannels.get)
@@ -82,8 +82,8 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], CustomChannel::class);
     }
     /**
      * Lists all the custom channels available in an ad client.
@@ -107,8 +107,8 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
     public function listAccountsAdclientsCustomchannels($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListCustomChannelsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListCustomChannelsResponse::class);
     }
     /**
      * Lists all the ad units available for a custom channel.
@@ -133,8 +133,8 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
     public function listLinkedAdUnits($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('listLinkedAdUnits', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListLinkedAdUnitsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('listLinkedAdUnits', [$params], ListLinkedAdUnitsResponse::class);
     }
     /**
      * Updates a custom channel. This method can be called only by a restricted set
@@ -153,12 +153,12 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
      * @return CustomChannel
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel $postBody, $optParams = [])
+    public function patch($name, CustomChannel $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], CustomChannel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsAdclientsCustomchannels::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsAdclientsCustomchannels');
+class_alias(AccountsAdclientsCustomchannels::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsAdclientsCustomchannels');

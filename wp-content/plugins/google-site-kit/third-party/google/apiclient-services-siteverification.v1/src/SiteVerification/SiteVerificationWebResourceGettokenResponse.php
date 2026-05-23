@@ -75,4 +75,4 @@ class SiteVerificationWebResourceGettokenResponse extends \Google\Site_Kit_Depen
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SiteVerification_SiteVerificationWebResourceGettokenResponse');
+class_alias(SiteVerificationWebResourceGettokenResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_SiteVerification_SiteVerificationWebResourceGettokenResponse');

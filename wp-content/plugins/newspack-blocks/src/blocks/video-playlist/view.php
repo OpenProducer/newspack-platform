@@ -26,6 +26,7 @@ function newspack_blocks_register_video_playlist() {
 	register_block_type(
 		'newspack-blocks/youtube-video-playlist',
 		array(
+			'api_version'     => 3,
 			'attributes'      => array(
 				'className'    => array(
 					'type' => 'string',

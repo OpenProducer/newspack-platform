@@ -21,7 +21,7 @@ use Throwable;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  */
-class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\NormalizerFormatter
+class JsonFormatter extends NormalizerFormatter
 {
     public const BATCH_MODE_JSON = 1;
     public const BATCH_MODE_NEWLINES = 2;
@@ -51,21 +51,21 @@ class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Norm
      * compatibility with some API endpoints, alternative styles
      * are available.
      */
-    public function getBatchMode() : int
+    public function getBatchMode(): int
     {
         return $this->batchMode;
     }
     /**
      * True if newlines are appended to every formatted record
      */
-    public function isAppendingNewlines() : bool
+    public function isAppendingNewlines(): bool
     {
         return $this->appendNewline;
     }
     /**
      * {@inheritDoc}
      */
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         $normalized = $this->normalize($record);
         if (isset($normalized['context']) && $normalized['context'] === []) {
@@ -87,7 +87,7 @@ class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Norm
     /**
      * {@inheritDoc}
      */
-    public function formatBatch(array $records) : string
+    public function formatBatch(array $records): string
     {
         switch ($this->batchMode) {
             case static::BATCH_MODE_NEWLINES:
@@ -100,7 +100,7 @@ class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Norm
     /**
      * @return self
      */
-    public function includeStacktraces(bool $include = \true) : self
+    public function includeStacktraces(bool $include = \true): self
     {
         $this->includeStacktraces = $include;
         return $this;
@@ -110,7 +110,7 @@ class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Norm
      *
      * @phpstan-param Record[] $records
      */
-    protected function formatBatchJson(array $records) : string
+    protected function formatBatchJson(array $records): string
     {
         return $this->toJson($this->normalize($records), \true);
     }
@@ -120,16 +120,16 @@ class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Norm
      *
      * @phpstan-param Record[] $records
      */
-    protected function formatBatchNewlines(array $records) : string
+    protected function formatBatchNewlines(array $records): string
     {
         $instance = $this;
         $oldNewline = $this->appendNewline;
         $this->appendNewline = \false;
-        \array_walk($records, function (&$value, $key) use($instance) {
+        array_walk($records, function (&$value, $key) use ($instance) {
             $value = $instance->format($value);
         });
         $this->appendNewline = $oldNewline;
-        return \implode("\n", $records);
+        return implode("\n", $records);
     }
     /**
      * Normalizes given $data.
@@ -143,23 +143,23 @@ class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Norm
         if ($depth > $this->maxNormalizeDepth) {
             return 'Over ' . $this->maxNormalizeDepth . ' levels deep, aborting normalization';
         }
-        if (\is_array($data)) {
+        if (is_array($data)) {
             $normalized = [];
             $count = 1;
             foreach ($data as $key => $value) {
                 if ($count++ > $this->maxNormalizeItemCount) {
-                    $normalized['...'] = 'Over ' . $this->maxNormalizeItemCount . ' items (' . \count($data) . ' total), aborting normalization';
+                    $normalized['...'] = 'Over ' . $this->maxNormalizeItemCount . ' items (' . count($data) . ' total), aborting normalization';
                     break;
                 }
                 $normalized[$key] = $this->normalize($value, $depth + 1);
             }
             return $normalized;
         }
-        if (\is_object($data)) {
+        if (is_object($data)) {
             if ($data instanceof \DateTimeInterface) {
                 return $this->formatDate($data);
             }
-            if ($data instanceof \Throwable) {
+            if ($data instanceof Throwable) {
                 return $this->normalizeException($data, $depth);
             }
             // if the object has specific json serializability we want to make sure we skip the __toString treatment below
@@ -169,12 +169,12 @@ class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Norm
             if (\get_class($data) === '__PHP_Incomplete_Class') {
                 return new \ArrayObject($data);
             }
-            if (\method_exists($data, '__toString')) {
+            if (method_exists($data, '__toString')) {
                 return $data->__toString();
             }
             return $data;
         }
-        if (\is_resource($data)) {
+        if (is_resource($data)) {
             return parent::normalize($data);
         }
         return $data;
@@ -185,7 +185,7 @@ class JsonFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Norm
      *
      * {@inheritDoc}
      */
-    protected function normalizeException(\Throwable $e, int $depth = 0) : array
+    protected function normalizeException(Throwable $e, int $depth = 0): array
     {
         $data = parent::normalizeException($e, $depth);
         if (!$this->includeStacktraces) {

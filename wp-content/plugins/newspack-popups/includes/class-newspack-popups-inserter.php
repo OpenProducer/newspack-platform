@@ -46,6 +46,13 @@ final class Newspack_Popups_Inserter {
 	private static $is_apple_news_exporting = false;
 
 	/**
+	 * Whether above-header prompts have already been rendered.
+	 *
+	 * @var boolean
+	 */
+	private static $header_template_part_has_rendered = false;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -53,7 +60,9 @@ final class Newspack_Popups_Inserter {
 		add_shortcode( 'newspack-popup', [ $this, 'popup_shortcode' ] );
 		add_action( 'after_header', [ $this, 'insert_popups_after_header' ] ); // This is a Newspack theme hook. When used with other themes, popups won't be inserted on archive pages.
 		add_action( 'wp_body_open', [ $this, 'insert_before_header' ] );
+		add_filter( 'render_block_core/template-part', [ $this, 'insert_before_header_in_template_part' ], 10, 2 );
 		add_action( 'after_archive_post', [ $this, 'insert_inline_prompt_in_archive_pages' ] );
+		add_filter( 'render_block', [ $this, 'insert_inline_prompt_in_block_theme_archives' ], 10, 3 );
 		add_action( 'wp_before_admin_bar_render', [ $this, 'add_preview_toggle' ] );
 
 		// Always enqueue scripts, since this plugin's scripts are handling pageview sending via GTAG.
@@ -116,7 +125,7 @@ final class Newspack_Popups_Inserter {
 		// Get the previewed popup and return early.
 		if ( Newspack_Popups::previewed_popup_id() ) {
 			$preview_popup = Newspack_Popups_Model::retrieve_preview_popup( Newspack_Popups::previewed_popup_id() );
-			return [ $preview_popup ];
+			return $preview_popup ? [ $preview_popup ] : [];
 		}
 		if ( Newspack_Popups::preset_popup_id() ) {
 			$preset_popup = Newspack_Popups_Presets::retrieve_preset_popup( Newspack_Popups::preset_popup_id() );
@@ -260,6 +269,33 @@ final class Newspack_Popups_Inserter {
 		$block_content   .= self::get_inner_block_content( $block );
 
 		return $block_content;
+	}
+
+	/**
+	 * Sort overlay prompts so that segment-assigned ones appear first, ordered by
+	 * ascending segment count (i.e., decreasing specificity). Overlays with no
+	 * segments assigned appear last.
+	 *
+	 * Ensures segment-specific overlays claim the single visible overlay slot before
+	 * unsegmented "show to everyone" overlays, since only one overlay can be displayed
+	 * at a time and the first eligible one in the DOM wins.
+	 *
+	 * @param array $overlays Array of overlay popup objects.
+	 * @return array Sorted array, segment-assigned overlays first by ascending segment count.
+	 */
+	private static function sort_overlays_by_specificity( $overlays ) {
+		usort(
+			$overlays,
+			function( $a, $b ) {
+				$a_count = isset( $a['segments'] ) && is_array( $a['segments'] ) ? count( $a['segments'] ) : 0;
+				$b_count = isset( $b['segments'] ) && is_array( $b['segments'] ) ? count( $b['segments'] ) : 0;
+				// Map zero-segment overlays to PHP_INT_MAX so they sort last.
+				$a_key = 0 === $a_count ? PHP_INT_MAX : $a_count;
+				$b_key = 0 === $b_count ? PHP_INT_MAX : $b_count;
+				return $a_key - $b_key;
+			}
+		);
+		return $overlays;
 	}
 
 	/**
@@ -421,6 +457,10 @@ final class Newspack_Popups_Inserter {
 		}
 
 		// 4. Insert overlay prompts at the top of content.
+		// To leave the existing behavior (prepending each overlay) in place,
+		// we reverse our sorted overlays to ensure the most specific appear
+		// first in the DOM, and get priority for the single available slot.
+		$overlay_popups = array_reverse( self::sort_overlays_by_specificity( $overlay_popups ) );
 		foreach ( $overlay_popups as $overlay_popup ) {
 			$output = '<!-- wp:html -->' . Newspack_Popups_Model::generate_popup( $overlay_popup ) . '<!-- /wp:html -->' . $output;
 		}
@@ -465,7 +505,7 @@ final class Newspack_Popups_Inserter {
 		}
 
 		$filtered_content = explode( "\n", self::get_validation_content( $content ) );
-		$post_content     = explode( "\n", $post->post_content );
+		$post_content     = explode( "\n", ltrim( $post->post_content ) );
 		if (
 			// If prompts are disabled for this post.
 			self::assess_has_disabled_popups()
@@ -524,19 +564,120 @@ final class Newspack_Popups_Inserter {
 				return Newspack_Popups_Model::should_be_inserted_in_page_content( $popup ) && Newspack_Popups_Model::is_overlay( $popup );
 			}
 		);
+		$popups = self::sort_overlays_by_specificity( array_values( $popups ) );
 		foreach ( $popups as $popup ) {
 			echo Newspack_Popups_Model::generate_popup( $popup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
 	/**
-	 * Insert popups markup before header.
+	 * Get the combined markup for all above-header prompts: overlays (sorted by specificity)
+	 * first, then inline prompts in their original order.
+	 *
+	 * @return string HTML markup, or empty string if there are no above-header prompts.
+	 */
+	private static function get_before_header_markup() {
+		$before_header_popups = array_filter( self::popups_for_post(), [ 'Newspack_Popups_Model', 'should_be_inserted_above_page_header' ] );
+		if ( empty( $before_header_popups ) ) {
+			return '';
+		}
+
+		// Sort only the overlay subset by specificity — above-header inline prompts are
+		// not subject to the single visible overlay slot constraint and are left in their
+		// original order.
+		$overlay_popups = self::sort_overlays_by_specificity(
+			array_values( array_filter( $before_header_popups, [ 'Newspack_Popups_Model', 'is_overlay' ] ) )
+		);
+		$inline_popups  = array_values(
+			array_filter(
+				$before_header_popups,
+				function( $popup ) {
+					return ! Newspack_Popups_Model::is_overlay( $popup );
+				}
+			)
+		);
+
+		$markup = '';
+		foreach ( $overlay_popups as $popup ) {
+			$markup .= Newspack_Popups_Model::generate_popup( $popup );
+		}
+		foreach ( $inline_popups as $popup ) {
+			$markup .= Newspack_Popups_Model::generate_popup( $popup );
+		}
+		return $markup;
+	}
+
+	/**
+	 * Insert popups markup before header (classic themes via wp_body_open).
 	 */
 	public static function insert_before_header() {
-		$before_header_popups = array_filter( self::popups_for_post(), [ 'Newspack_Popups_Model', 'should_be_inserted_above_page_header' ] );
-		foreach ( $before_header_popups as $popup ) {
-			echo Newspack_Popups_Model::generate_popup( $popup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// In block themes, prompts are inserted via the header template-part render filter.
+		if ( Newspack_Popups_Model::is_block_theme() ) {
+			return;
 		}
+
+		$markup = self::get_before_header_markup();
+		if ( empty( $markup ) ) {
+			return;
+		}
+
+		echo $markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 * Insert popups markup before the header template part in block themes.
+	 *
+	 * @param string $block_content The rendered block content.
+	 * @param array  $block         The full block.
+	 * @return string Rendered content with campaign markup prepended when applicable.
+	 */
+	public static function insert_before_header_in_template_part( $block_content, $block ) {
+		if ( ! Newspack_Popups_Model::is_block_theme() || is_admin() || self::$header_template_part_has_rendered ) {
+			return $block_content;
+		}
+
+		if ( ! self::is_header_template_part_block( $block ) ) {
+			return $block_content;
+		}
+
+		// Set the guard before generating markup to prevent it running again before finishing.
+		self::$header_template_part_has_rendered = true;
+
+		$markup = self::get_before_header_markup();
+		if ( empty( $markup ) ) {
+			return $block_content;
+		}
+
+		return $markup . $block_content;
+	}
+
+	/**
+	 * Whether a template-part block appears to be a header template part.
+	 *
+	 * Some themes use custom header slugs (for example "header-post"), and in some
+	 * contexts area metadata is missing. Use progressively looser checks.
+	 *
+	 * @param array $block Parsed block data.
+	 * @return boolean True if this block is likely a header template part.
+	 */
+	private static function is_header_template_part_block( $block ) {
+		if ( empty( $block['blockName'] ) || 'core/template-part' !== $block['blockName'] ) {
+			return false;
+		}
+
+		$attrs = isset( $block['attrs'] ) ? $block['attrs'] : [];
+
+		// Most reliable signal when present.
+		if ( isset( $attrs['area'] ) && 'header' === $attrs['area'] ) {
+			return true;
+		}
+
+		// Many themes use non-exact slugs such as "header-post" or "site-header".
+		if ( isset( $attrs['slug'] ) && preg_match( '/(^|[-_])header([-_]|$)/', $attrs['slug'] ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -547,19 +688,36 @@ final class Newspack_Popups_Inserter {
 	 * @return void
 	 */
 	public static function insert_inline_prompt_in_archive_pages( $post_count ) {
+		echo self::get_inline_prompt_html_for_archive_pages( $post_count, 'article', null, 'class="entry"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 * Get the HTML for an inline prompt on archive pages.
+	 *
+	 * @param integer $post_count      Order of the post in the posts loop.
+	 * @param string  $tag             Wrapper element tag name. Defaults to 'article'.
+	 * @param array   $archives_popups Pre-filtered list of archive popups. If null, popups_for_post() is filtered internally.
+	 * @param string  $attrs           Optional HTML attributes string for the wrapper element (e.g. 'class="entry"').
+	 * @return string HTML output, or empty string.
+	 */
+	public static function get_inline_prompt_html_for_archive_pages( $post_count, $tag = 'article', $archives_popups = null, $attrs = '' ) {
 		global $wp_query;
 
-		$archives_popups = array_filter( self::popups_for_post(), [ 'Newspack_Popups_Model', 'should_be_inserted_in_archive_pages' ] );
+		if ( null === $archives_popups ) {
+			$archives_popups = array_filter( self::popups_for_post(), [ 'Newspack_Popups_Model', 'should_be_inserted_in_archive_pages' ] );
+		}
+		$output = '';
 		foreach ( $archives_popups as $popup ) {
-			// insert popup only on selected archive page types.
-			if ( is_category() && ! in_array( 'category', $popup['options']['archive_page_types'] )
-				|| ( is_tag() && ! in_array( 'tag', $popup['options']['archive_page_types'] ) ) // phpcs:ignore Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses
-				|| ( is_author() && ! in_array( 'author', $popup['options']['archive_page_types'] ) )
-				|| ( is_date() && ! in_array( 'date', $popup['options']['archive_page_types'] ) )
-				|| ( is_post_type_archive() && ! in_array( 'post-type', $popup['options']['archive_page_types'] ) )
-				|| ( is_tax() && ! in_array( 'taxonomy', $popup['options']['archive_page_types'] ) )
+			$page_types = $popup['options']['archive_page_types'];
+			if ( ( is_home() && ! in_array( 'home', $page_types ) )
+				|| ( is_category() && ! in_array( 'category', $page_types ) )
+				|| ( is_tag() && ! in_array( 'tag', $page_types ) )
+				|| ( is_author() && ! in_array( 'author', $page_types ) )
+				|| ( is_date() && ! in_array( 'date', $page_types ) )
+				|| ( is_post_type_archive() && ! in_array( 'post-type', $page_types ) )
+				|| ( is_tax() && ! in_array( 'taxonomy', $page_types ) )
 			) {
-					return;
+				continue;
 			}
 
 			$archive_insertion_posts_count = intval( $popup['options']['archive_insertion_posts_count'] );
@@ -570,10 +728,79 @@ final class Newspack_Popups_Inserter {
 				|| ( $popup['options']['archive_insertion_is_repeating'] && 0 === $post_count % $archive_insertion_posts_count )
 				|| ( $archive_insertion_posts_count >= $wp_query->post_count && $post_count === $wp_query->post_count )
 			) {
-				// Wrapping the popup in an article with `entry` class element to keep the archive page markup.
-				echo '<article class="entry">' . Newspack_Popups_Model::generate_popup( $popup ) . '</article>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					$open_tag = ! empty( $attrs ) ? $tag . ' ' . $attrs : $tag;
+				$output  .= '<' . $open_tag . '>' . Newspack_Popups_Model::generate_popup( $popup ) . '</' . $tag . '>';
 			}
 		}
+		return $output;
+	}
+
+	/**
+	 * Insert inline prompts into a rendered core/post-template block on archive/home pages.
+	 *
+	 * Uses the render_block filter so this works with block themes. Only targets
+	 * the primary Query Loop (the one that inherits the global/main query) so
+	 * that secondary loops like "featured posts" or "you may also like" don't
+	 * receive prompt injection.
+	 *
+	 * @param string   $block_content Rendered block HTML.
+	 * @param array    $block         Block data array, including 'blockName'.
+	 * @param WP_Block $instance      The block instance (available since WP 5.9).
+	 * @return string Filtered block HTML.
+	 */
+	public static function insert_inline_prompt_in_block_theme_archives( $block_content, $block, $instance = null ) {
+		if ( 'core/post-template' !== $block['blockName'] ) {
+			return $block_content;
+		}
+
+		if ( ! is_archive() && ! is_home() ) {
+			return $block_content;
+		}
+
+		// Only inject into the Query Loop that inherits the main/global query.
+		// Secondary loops (custom queryId, inherit=false) should not get prompts.
+		if ( $instance instanceof WP_Block ) {
+			$query_context = $instance->context['query'] ?? [];
+			$inherits_main = ! empty( $query_context['inherit'] );
+			if ( ! $inherits_main ) {
+				return $block_content;
+			}
+		}
+
+		$archives_popups = array_filter( self::popups_for_post(), [ 'Newspack_Popups_Model', 'should_be_inserted_in_archive_pages' ] );
+
+		// Split on each post item boundary. core/post-template wraps each post in
+		// <li class="wp-block-post ...">. Use [\s"'] to avoid false matches on child element
+		// classes like wp-block-post-title, wp-block-post-excerpt, etc.
+		$parts = preg_split( '/(?=<li[^>]*\bwp-block-post[\s"\'])/', $block_content );
+
+		if ( ! $parts || count( $parts ) < 2 ) {
+			return $block_content;
+		}
+
+		// $parts[0] is the opening <ul>; $parts[1..n] are the post items.
+		$post_count = count( $parts ) - 1;
+
+		// The closing </ul> (and any content that follows it) lives in the last part because
+		// preg_split's lookahead puts everything after the final post item there. Strip it off
+		// so that any injected prompt <li> elements are inserted before </ul>, not after it.
+		$trailing = '';
+		$close_ul = strripos( $parts[ $post_count ], '</ul' );
+		if ( false !== $close_ul ) {
+			$trailing            = substr( $parts[ $post_count ], $close_ul );
+			$parts[ $post_count ] = substr( $parts[ $post_count ], 0, $close_ul );
+		}
+
+		$output = $parts[0];
+
+		for ( $i = 1; $i <= $post_count; $i++ ) {
+			$output .= $parts[ $i ];
+			$output .= self::get_inline_prompt_html_for_archive_pages( $i, 'li', $archives_popups );
+		}
+
+		$output .= $trailing;
+
+		return $output;
 	}
 
 	/**
@@ -640,6 +867,18 @@ final class Newspack_Popups_Inserter {
 	 * @return boolean
 	 */
 	private static function should_log_debug_info() {
+		/**
+		 * Enables debug logging for Newspack Popups (Campaigns).
+		 * When enabled, debugging info is logged to the newspack_popups_debug
+		 * JavaScript object, helpful for troubleshooting popup display issues.
+		 *
+		 * @constant NEWSPACK_POPUPS_DEBUG
+		 * @type     bool
+		 * @default  Debug disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_POPUPS_DEBUG', true );
+		 */
 		return ( defined( 'WP_DEBUG' ) && WP_DEBUG ) || ( defined( 'NEWSPACK_LOG_LEVEL' ) && 1 < NEWSPACK_LOG_LEVEL ) || ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG );
 	}
 
@@ -708,6 +947,7 @@ final class Newspack_Popups_Inserter {
 				foreach ( $segments as $segment ) {
 					if ( ! empty( $segment ) && ! empty( $segment['criteria'] ) && ! isset( self::$segments[ $segment['id'] ] ) ) {
 						self::$segments[ $segment['id'] ] = [
+							'name'     => $segment['name'],
 							'criteria' => $segment['criteria'],
 							'priority' => $segment['priority'],
 						];

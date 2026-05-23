@@ -27,7 +27,7 @@ class Operation extends \Google\Site_Kit_Dependencies\Google\Model
      * @var bool
      */
     public $done;
-    protected $errorType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Status::class;
+    protected $errorType = Status::class;
     protected $errorDataType = '';
     /**
      * Service-specific metadata associated with the operation. It typically
@@ -81,7 +81,7 @@ class Operation extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Status $error
      */
-    public function setError(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Status $error)
+    public function setError(Status $error)
     {
         $this->error = $error;
     }
@@ -153,4 +153,4 @@ class Operation extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Operation::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Operation');
+class_alias(Operation::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Operation');

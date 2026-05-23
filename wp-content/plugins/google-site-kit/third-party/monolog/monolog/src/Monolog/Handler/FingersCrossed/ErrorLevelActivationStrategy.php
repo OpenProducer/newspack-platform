@@ -21,7 +21,7 @@ use Google\Site_Kit_Dependencies\Psr\Log\LogLevel;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class ErrorLevelActivationStrategy implements \Google\Site_Kit_Dependencies\Monolog\Handler\FingersCrossed\ActivationStrategyInterface
+class ErrorLevelActivationStrategy implements ActivationStrategyInterface
 {
     /**
      * @var Level
@@ -34,9 +34,9 @@ class ErrorLevelActivationStrategy implements \Google\Site_Kit_Dependencies\Mono
      */
     public function __construct($actionLevel)
     {
-        $this->actionLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($actionLevel);
+        $this->actionLevel = Logger::toMonologLevel($actionLevel);
     }
-    public function isHandlerActivated(array $record) : bool
+    public function isHandlerActivated(array $record): bool
     {
         return $record['level'] >= $this->actionLevel;
     }

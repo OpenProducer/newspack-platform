@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class SyncWorkspaceResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'mergeConflict';
-    protected $mergeConflictType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\MergeConflict::class;
+    protected $mergeConflictType = MergeConflict::class;
     protected $mergeConflictDataType = 'array';
-    protected $syncStatusType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\SyncStatus::class;
+    protected $syncStatusType = SyncStatus::class;
     protected $syncStatusDataType = '';
     /**
      * The merge conflict after sync. If this field is not empty, the sync is
@@ -47,7 +47,7 @@ class SyncWorkspaceResponse extends \Google\Site_Kit_Dependencies\Google\Collect
      *
      * @param SyncStatus $syncStatus
      */
-    public function setSyncStatus(\Google\Site_Kit_Dependencies\Google\Service\TagManager\SyncStatus $syncStatus)
+    public function setSyncStatus(SyncStatus $syncStatus)
     {
         $this->syncStatus = $syncStatus;
     }
@@ -60,4 +60,4 @@ class SyncWorkspaceResponse extends \Google\Site_Kit_Dependencies\Google\Collect
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\SyncWorkspaceResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_SyncWorkspaceResponse');
+class_alias(SyncWorkspaceResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_SyncWorkspaceResponse');

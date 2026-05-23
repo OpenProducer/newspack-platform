@@ -260,6 +260,135 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 	}
 
 	/**
+	 * Lorem ipsum word list used by {@see self::get_lipsum()}.
+	 *
+	 * @var string[]
+	 */
+	private const LIPSUM_WORDS = [
+		'lorem',
+		'ipsum',
+		'dolor',
+		'sit',
+		'amet',
+		'consectetur',
+		'adipiscing',
+		'elit',
+		'sed',
+		'do',
+		'eiusmod',
+		'tempor',
+		'incididunt',
+		'ut',
+		'labore',
+		'et',
+		'dolore',
+		'magna',
+		'aliqua',
+		'enim',
+		'ad',
+		'minim',
+		'veniam',
+		'quis',
+		'nostrud',
+		'exercitation',
+		'ullamco',
+		'laboris',
+		'nisi',
+		'aliquip',
+		'ex',
+		'ea',
+		'commodo',
+		'consequat',
+		'duis',
+		'aute',
+		'irure',
+		'in',
+		'reprehenderit',
+		'voluptate',
+		'velit',
+		'esse',
+		'cillum',
+		'eu',
+		'fugiat',
+		'nulla',
+		'pariatur',
+		'excepteur',
+		'sint',
+		'occaecat',
+		'cupidatat',
+		'non',
+		'proident',
+		'sunt',
+		'culpa',
+		'qui',
+		'officia',
+		'deserunt',
+		'mollit',
+		'anim',
+		'id',
+		'est',
+		'laborum',
+		'at',
+		'vero',
+		'eos',
+		'accusamus',
+		'accusantium',
+		'doloremque',
+		'laudantium',
+		'totam',
+		'rem',
+		'aperiam',
+		'eaque',
+		'ipsa',
+		'quae',
+		'ab',
+		'illo',
+		'inventore',
+		'veritatis',
+		'quasi',
+		'architecto',
+		'beatae',
+		'vitae',
+		'dicta',
+		'explicabo',
+		'nemo',
+		'ipsam',
+		'voluptas',
+		'aspernatur',
+		'odit',
+		'aut',
+		'sequi',
+		'nesciunt',
+		'neque',
+		'porro',
+		'quisquam',
+		'dolorem',
+		'adipisci',
+		'numquam',
+		'eius',
+		'modi',
+		'tempora',
+		'incidunt',
+		'magnam',
+		'quaerat',
+		'etiam',
+		'minima',
+		'nostrum',
+		'exercitationem',
+		'corporis',
+		'suscipit',
+		'laboriosam',
+		'aliquid',
+		'commodi',
+		'consequatur',
+		'quo',
+		'vel',
+		'illum',
+		'eum',
+		'iure',
+	];
+
+	/**
 	 * Generate dummy text.
 	 *
 	 * @param string $type The type of Lorem Ipsum to retrieve: paras|words.
@@ -270,18 +399,46 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 		if ( Starter_Content::is_e2e() ) {
 			return file_get_contents( NEWSPACK_ABSPATH . 'includes/raw_assets/markup/body.txt' );
 		}
-		$lipsum = new \joshtronic\LoremIpsum();
-		switch ( $type ) {
-			case 'paras':
-				$text = $lipsum->paragraphs( $amount + 1 );
-				$text = implode( PHP_EOL, array_slice( explode( PHP_EOL, $text ), 1 ) );
-				break;
-			default:
-				$text = $lipsum->words( $amount + 12 );
-				$text = implode( ' ', array_slice( explode( ' ', $text ), 12 ) );
-				break;
+		if ( 'paras' === $type ) {
+			return implode( PHP_EOL, self::lipsum_paragraphs( $amount ) );
 		}
-		return $text;
+		return implode( ' ', self::lipsum_words( $amount ) );
+	}
+
+	/**
+	 * Pick $count random words from the lorem ipsum pool.
+	 *
+	 * @param int $count Number of words to return.
+	 * @return string[]
+	 */
+	private static function lipsum_words( $count ) {
+		$max    = count( self::LIPSUM_WORDS ) - 1;
+		$output = [];
+		for ( $i = 0; $i < $count; $i++ ) {
+			$output[] = self::LIPSUM_WORDS[ wp_rand( 0, $max ) ];
+		}
+		return $output;
+	}
+
+	/**
+	 * Build $count lorem ipsum paragraphs.
+	 *
+	 * @param int $count Number of paragraphs to return.
+	 * @return string[]
+	 */
+	private static function lipsum_paragraphs( $count ) {
+		$paragraphs = [];
+		for ( $i = 0; $i < $count; $i++ ) {
+			$sentences = [];
+			$num       = wp_rand( 4, 7 );
+			for ( $j = 0; $j < $num; $j++ ) {
+				$words       = self::lipsum_words( wp_rand( 6, 14 ) );
+				$words[0]    = ucfirst( $words[0] );
+				$sentences[] = implode( ' ', $words ) . '.';
+			}
+			$paragraphs[] = implode( ' ', $sentences );
+		}
+		return $paragraphs;
 	}
 
 	/**

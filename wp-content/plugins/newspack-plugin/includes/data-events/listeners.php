@@ -11,6 +11,14 @@ use Newspack\Data_Events;
 use Newspack\Reader_Activation;
 use Newspack\Donations;
 use Newspack\Memberships;
+use Newspack\Reader_Data;
+
+/**
+ * Register the v2 transactional Woo actions. These are dispatched by the listeners below
+ * (one event per line item per status change). See the README for payload schema.
+ */
+Data_Events::register_action( 'woo_order_updated' );
+Data_Events::register_action( 'woo_subscription_updated' );
 
 /**
  * For when a reader registers.
@@ -493,4 +501,89 @@ Data_Events::register_listener(
 			'membership_end_date'   => $membership->get_end_date(),
 		];
 	}
+);
+
+/**
+ * For every WC order status transition. Fires one woo_order_updated event per product line item.
+ *
+ * Uses raw add_action (not Data_Events::register_listener) because register_listener only supports
+ * a single dispatch per hook fire — multi-line orders need one event per line item.
+ * Runs at PHP_INT_MAX so any earlier handlers that mutate the order are reflected in the payload,
+ * matching the convention in Data_Events::register_listener.
+ * The action is registered at the top of this file.
+ */
+add_action(
+	'woocommerce_order_status_changed',
+	function ( $order_id, $status_from, $status_to, $order = null ) {
+		if ( ! $order instanceof \WC_Order ) {
+			$order = \wc_get_order( $order_id );
+		}
+		if ( ! $order ) {
+			return;
+		}
+		foreach ( \Newspack\Data_Events\Utils::get_woo_order_updated_payloads( $order, $status_to, $status_from ) as $payload ) {
+			Data_Events::dispatch( 'woo_order_updated', $payload );
+		}
+	},
+	PHP_INT_MAX,
+	4
+);
+
+/**
+ * For every WC Subscription status transition. Fires one woo_subscription_updated event per line item.
+ *
+ * Uses raw add_action (not Data_Events::register_listener) because register_listener only supports
+ * a single dispatch per hook fire — multi-line subscriptions need one event per line item.
+ * Runs at PHP_INT_MAX so any earlier handlers that mutate the subscription are reflected in the payload,
+ * matching the convention in Data_Events::register_listener.
+ * The action is registered at the top of this file.
+ */
+add_action(
+	'woocommerce_subscription_status_updated',
+	function ( $subscription, $status_to, $status_from ) {
+		if ( ! $subscription instanceof \WC_Subscription ) {
+			return;
+		}
+		foreach ( \Newspack\Data_Events\Utils::get_woo_subscription_updated_payloads( $subscription, $status_to, $status_from ) as $payload ) {
+			Data_Events::dispatch( 'woo_subscription_updated', $payload );
+		}
+	},
+	PHP_INT_MAX,
+	3
+);
+
+/**
+ * For WC Subscription switches (recurrence/amount changes without a status change).
+ * Fires woo_subscription_updated with the post-switch status for each affected subscription.
+ *
+ * Uses raw add_action because each switch order can affect multiple subscriptions and
+ * each subscription can have multiple line items — N events per hook fire.
+ * Runs at PHP_INT_MAX so the dispatched status reflects post-switch adjustments made by other
+ * callbacks on the same hook, matching the convention in Data_Events::register_listener.
+ * The action is registered at the top of this file.
+ */
+add_action(
+	'woocommerce_subscriptions_switch_completed',
+	function ( $order ) {
+		if ( ! function_exists( 'wcs_get_objects_property' ) || ! function_exists( 'wcs_get_subscription' ) ) {
+			return;
+		}
+		$switch_data = \wcs_get_objects_property( $order, 'subscription_switch_data' );
+		if ( empty( $switch_data ) || ! is_array( $switch_data ) ) {
+			return;
+		}
+		foreach ( array_keys( $switch_data ) as $subscription_id ) {
+			$subscription = \wcs_get_subscription( $subscription_id );
+			if ( ! $subscription instanceof \WC_Subscription ) {
+				continue;
+			}
+			$current_status = $subscription->get_status();
+			// For switches, no status transition occurs — pass the current status as both from/to.
+			foreach ( \Newspack\Data_Events\Utils::get_woo_subscription_updated_payloads( $subscription, $current_status, $current_status, true ) as $payload ) {
+				Data_Events::dispatch( 'woo_subscription_updated', $payload );
+			}
+		}
+	},
+	PHP_INT_MAX,
+	1
 );

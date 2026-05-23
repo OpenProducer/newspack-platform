@@ -8,7 +8,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
  * Lazily reads or writes to a file that is opened only after an IO operation
  * take place on the stream.
  */
-final class LazyOpenStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
+final class LazyOpenStream implements StreamInterface
 {
     use StreamDecoratorTrait;
     /** @var string */
@@ -34,8 +34,8 @@ final class LazyOpenStream implements \Google\Site_Kit_Dependencies\Psr\Http\Mes
     /**
      * Creates the underlying stream lazily when required.
      */
-    protected function createStream() : \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
+    protected function createStream(): StreamInterface
     {
-        return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::tryFopen($this->filename, $this->mode));
+        return Utils::streamFor(Utils::tryFopen($this->filename, $this->mode));
     }
 }

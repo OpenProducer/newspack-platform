@@ -1,5 +1,9 @@
 /**
  * Select Control
+ *
+ * @deprecated For new features, use the core `SelectControl` (and `__experimentalToggleGroupControl` for
+ * grouped/button-style selections) from `@wordpress/components` instead of this wrapper. This component
+ * is kept only for existing usages and should not be used in new code.
  */
 
 /**

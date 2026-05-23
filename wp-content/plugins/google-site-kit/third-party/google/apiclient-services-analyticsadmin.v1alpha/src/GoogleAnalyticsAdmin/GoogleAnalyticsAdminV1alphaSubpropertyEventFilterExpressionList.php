@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'filterExpressions';
-    protected $filterExpressionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression::class;
+    protected $filterExpressionsType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression::class;
     protected $filterExpressionsDataType = 'array';
     /**
      * Required. Unordered list. A list of Subproperty event filter expressions
@@ -40,4 +40,4 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList extends \G
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList');
+class_alias(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpressionList');

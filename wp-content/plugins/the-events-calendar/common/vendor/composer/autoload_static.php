@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7460e3b88c77139583bebf977199b732
+class ComposerStaticInit5e54f1abf06911ccadf581d127013576
 {
     public static $prefixLengthsPsr4 = array (
         'T' =>
@@ -33,14 +33,19 @@ class ComposerStaticInit7460e3b88c77139583bebf977199b732
             'TEC\\Common\\StellarWP\\Arrays\\' => 28,
             'TEC\\Common\\StellarWP\\AdminNotices\\' => 34,
             'TEC\\Common\\Psr\\Log\\' => 19,
+            'TEC\\Common\\Psr\\Http\\Message\\' => 28,
+            'TEC\\Common\\Psr\\Http\\Client\\' => 27,
             'TEC\\Common\\Psr\\Container\\' => 25,
+            'TEC\\Common\\Nyholm\\Psr7\\' => 23,
             'TEC\\Common\\Monolog\\' => 19,
+            'TEC\\Common\\LiquidWeb\\LicensingApiClient\\' => 40,
+            'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\' => 49,
+            'TEC\\Common\\LiquidWeb\\Harbor\\Views\\' => 34,
+            'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dir\\' => 38,
+            'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dev_Dir\\' => 42,
+            'TEC\\Common\\LiquidWeb\\Harbor\\' => 28,
             'TEC\\Common\\Firebase\\JWT\\' => 24,
             'TEC\\Common\\' => 11,
-        ),
-        'S' =>
-        array (
-            'ScssPhp\\ScssPhp\\' => 16,
         ),
     );
 
@@ -141,13 +146,50 @@ class ComposerStaticInit7460e3b88c77139583bebf977199b732
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'TEC\\Common\\Psr\\Http\\Message\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'TEC\\Common\\Psr\\Http\\Client\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
         'TEC\\Common\\Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'TEC\\Common\\Nyholm\\Psr7\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/nyholm/psr7/src',
+        ),
         'TEC\\Common\\Monolog\\' =>
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src',
+        ),
+        'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/licensing-api-client-wordpress/src',
+        ),
+        'TEC\\Common\\LiquidWeb\\Harbor\\Views\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/harbor/src/views',
+        ),
+        'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dir\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/harbor/build',
+        ),
+        'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dev_Dir\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/harbor/build-dev',
+        ),
+        'TEC\\Common\\LiquidWeb\\Harbor\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor',
         ),
         'TEC\\Common\\Firebase\\JWT\\' =>
         array (
@@ -156,10 +198,6 @@ class ComposerStaticInit7460e3b88c77139583bebf977199b732
         'TEC\\Common\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src/Common',
-        ),
-        'ScssPhp\\ScssPhp\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/scssphp/scssphp/src',
         ),
     );
 
@@ -170,9 +208,9 @@ class ComposerStaticInit7460e3b88c77139583bebf977199b732
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7460e3b88c77139583bebf977199b732::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7460e3b88c77139583bebf977199b732::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7460e3b88c77139583bebf977199b732::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5e54f1abf06911ccadf581d127013576::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5e54f1abf06911ccadf581d127013576::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5e54f1abf06911ccadf581d127013576::$classMap;
 
         }, null, ClassLoader::class);
     }

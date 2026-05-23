@@ -27,7 +27,7 @@ class GoogleAnalyticsAdminV1alphaListPropertiesResponse extends \Google\Site_Kit
      * @var string
      */
     public $nextPageToken;
-    protected $propertiesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty::class;
+    protected $propertiesType = GoogleAnalyticsAdminV1alphaProperty::class;
     protected $propertiesDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListPropertiesResponse extends \Google\Site_Kit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListPropertiesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListPropertiesResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListPropertiesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListPropertiesResponse');

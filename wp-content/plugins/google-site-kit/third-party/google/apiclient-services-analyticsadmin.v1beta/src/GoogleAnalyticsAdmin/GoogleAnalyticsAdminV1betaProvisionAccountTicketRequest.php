@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccount::class;
+    protected $accountType = GoogleAnalyticsAdminV1betaAccount::class;
     protected $accountDataType = '';
     /**
      * Redirect URI where the user will be sent after accepting Terms of Service.
@@ -33,7 +33,7 @@ class GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest extends \Google\Si
      *
      * @param GoogleAnalyticsAdminV1betaAccount $account
      */
-    public function setAccount(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccount $account)
+    public function setAccount(GoogleAnalyticsAdminV1betaAccount $account)
     {
         $this->account = $account;
     }
@@ -63,4 +63,4 @@ class GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest extends \Google\Si
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest');
+class_alias(GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest');

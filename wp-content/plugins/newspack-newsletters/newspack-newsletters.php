@@ -8,7 +8,7 @@
  * License: GPL2
  * Text Domain:     newspack-newsletters
  * Domain Path:     /languages
- * Version:         3.28.5
+ * Version:         3.33.3
  *
  * @package         Newspack_Newsletters
  */
@@ -21,8 +21,15 @@ if ( ! defined( 'NEWSPACK_NEWSLETTERS_PLUGIN_FILE' ) ) {
 }
 
 /**
- * If a Letterhead endpoint hasn't been added, for instance for development or to point at
- * a separate instance, we'll set a default.
+ * API endpoint for Letterhead integration.
+ * Override for development or to use a different instance.
+ *
+ * @constant NEWSPACK_NEWSLETTERS_LETTERHEAD_ENDPOINT
+ * @type     string
+ * @default  https://api.tryletterhead.com
+ * @status   draft
+ *
+ * @example define( 'NEWSPACK_NEWSLETTERS_LETTERHEAD_ENDPOINT', 'https://custom-api.example.com' );
  */
 if ( ! defined( 'NEWSPACK_NEWSLETTERS_LETTERHEAD_ENDPOINT' ) ) {
 	define( 'NEWSPACK_NEWSLETTERS_LETTERHEAD_ENDPOINT', 'https://api.tryletterhead.com' );

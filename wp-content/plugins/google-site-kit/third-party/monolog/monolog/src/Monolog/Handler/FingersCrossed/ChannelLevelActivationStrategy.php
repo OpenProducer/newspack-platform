@@ -37,7 +37,7 @@ use Google\Site_Kit_Dependencies\Psr\Log\LogLevel;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class ChannelLevelActivationStrategy implements \Google\Site_Kit_Dependencies\Monolog\Handler\FingersCrossed\ActivationStrategyInterface
+class ChannelLevelActivationStrategy implements ActivationStrategyInterface
 {
     /**
      * @var Level
@@ -56,13 +56,13 @@ class ChannelLevelActivationStrategy implements \Google\Site_Kit_Dependencies\Mo
      */
     public function __construct($defaultActionLevel, array $channelToActionLevel = [])
     {
-        $this->defaultActionLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($defaultActionLevel);
-        $this->channelToActionLevel = \array_map('Monolog\\Logger::toMonologLevel', $channelToActionLevel);
+        $this->defaultActionLevel = Logger::toMonologLevel($defaultActionLevel);
+        $this->channelToActionLevel = array_map('Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel', $channelToActionLevel);
     }
     /**
      * @phpstan-param Record $record
      */
-    public function isHandlerActivated(array $record) : bool
+    public function isHandlerActivated(array $record): bool
     {
         if (isset($this->channelToActionLevel[$record['channel']])) {
             return $record['level'] >= $this->channelToActionLevel[$record['channel']];

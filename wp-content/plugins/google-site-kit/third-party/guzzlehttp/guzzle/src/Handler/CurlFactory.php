@@ -17,7 +17,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface;
  *
  * @final
  */
-class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\CurlFactoryInterface
+class CurlFactory implements CurlFactoryInterface
 {
     public const CURL_VERSION_STR = 'curl_version';
     /**
@@ -39,21 +39,21 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
     {
         $this->maxHandles = $maxHandles;
     }
-    public function create(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options) : \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle
+    public function create(RequestInterface $request, array $options): EasyHandle
     {
         $protocolVersion = $request->getProtocolVersion();
         if ('2' === $protocolVersion || '2.0' === $protocolVersion) {
             if (!self::supportsHttp2()) {
-                throw new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ConnectException('HTTP/2 is supported by the cURL handler, however libcurl is built without HTTP/2 support.', $request);
+                throw new ConnectException('HTTP/2 is supported by the cURL handler, however libcurl is built without HTTP/2 support.', $request);
             }
         } elseif ('1.0' !== $protocolVersion && '1.1' !== $protocolVersion) {
-            throw new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ConnectException(\sprintf('HTTP/%s is not supported by the cURL handler.', $protocolVersion), $request);
+            throw new ConnectException(sprintf('HTTP/%s is not supported by the cURL handler.', $protocolVersion), $request);
         }
         if (isset($options['curl']['body_as_string'])) {
             $options['_body_as_string'] = $options['curl']['body_as_string'];
             unset($options['curl']['body_as_string']);
         }
-        $easy = new \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle();
+        $easy = new EasyHandle();
         $easy->request = $request;
         $easy->options = $options;
         $conf = $this->getDefaultConf($easy);
@@ -67,18 +67,18 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
         }
         $conf[\CURLOPT_HEADERFUNCTION] = $this->createHeaderFn($easy);
         $easy->handle = $this->handles ? \array_pop($this->handles) : \curl_init();
-        \curl_setopt_array($easy->handle, $conf);
+        curl_setopt_array($easy->handle, $conf);
         return $easy;
     }
-    private static function supportsHttp2() : bool
+    private static function supportsHttp2(): bool
     {
         static $supportsHttp2 = null;
         if (null === $supportsHttp2) {
-            $supportsHttp2 = self::supportsTls12() && \defined('CURL_VERSION_HTTP2') && \CURL_VERSION_HTTP2 & \curl_version()['features'];
+            $supportsHttp2 = self::supportsTls12() && defined('CURL_VERSION_HTTP2') && \CURL_VERSION_HTTP2 & \curl_version()['features'];
         }
         return $supportsHttp2;
     }
-    private static function supportsTls12() : bool
+    private static function supportsTls12(): bool
     {
         static $supportsTls12 = null;
         if (null === $supportsTls12) {
@@ -86,20 +86,22 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
         }
         return $supportsTls12;
     }
-    private static function supportsTls13() : bool
+    private static function supportsTls13(): bool
     {
         static $supportsTls13 = null;
         if (null === $supportsTls13) {
-            $supportsTls13 = \defined('CURL_SSLVERSION_TLSv1_3') && \CURL_SSLVERSION_TLSv1_3 & \curl_version()['features'];
+            $supportsTls13 = defined('CURL_SSLVERSION_TLSv1_3') && \CURL_SSLVERSION_TLSv1_3 & \curl_version()['features'];
         }
         return $supportsTls13;
     }
-    public function release(\Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy) : void
+    public function release(EasyHandle $easy): void
     {
         $resource = $easy->handle;
         unset($easy->handle);
         if (\count($this->handles) >= $this->maxHandles) {
-            \curl_close($resource);
+            if (\PHP_VERSION_ID < 80000) {
+                \curl_close($resource);
+            }
         } else {
             // Remove all callback functions as they can hold onto references
             // and are not cleaned up by curl_reset. Using curl_setopt_array
@@ -120,7 +122,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
      * @param callable(RequestInterface, array): PromiseInterface $handler
      * @param CurlFactoryInterface                                $factory Dictates how the handle is released
      */
-    public static function finish(callable $handler, \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy, \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\CurlFactoryInterface $factory) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public static function finish(callable $handler, EasyHandle $easy, CurlFactoryInterface $factory): PromiseInterface
     {
         if (isset($easy->options['on_stats'])) {
             self::invokeStats($easy);
@@ -135,19 +137,19 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
         if ($body->isSeekable()) {
             $body->rewind();
         }
-        return new \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\FulfilledPromise($easy->response);
+        return new FulfilledPromise($easy->response);
     }
-    private static function invokeStats(\Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy) : void
+    private static function invokeStats(EasyHandle $easy): void
     {
         $curlStats = \curl_getinfo($easy->handle);
         $curlStats['appconnect_time'] = \curl_getinfo($easy->handle, \CURLINFO_APPCONNECT_TIME);
-        $stats = new \Google\Site_Kit_Dependencies\GuzzleHttp\TransferStats($easy->request, $easy->response, $curlStats['total_time'], $easy->errno, $curlStats);
+        $stats = new TransferStats($easy->request, $easy->response, $curlStats['total_time'], $easy->errno, $curlStats);
         $easy->options['on_stats']($stats);
     }
     /**
      * @param callable(RequestInterface, array): PromiseInterface $handler
      */
-    private static function finishError(callable $handler, \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy, \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\CurlFactoryInterface $factory) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    private static function finishError(callable $handler, EasyHandle $easy, CurlFactoryInterface $factory): PromiseInterface
     {
         // Get error information and release the handle to the factory.
         $ctx = ['errno' => $easy->errno, 'error' => \curl_error($easy->handle), 'appconnect_time' => \curl_getinfo($easy->handle, \CURLINFO_APPCONNECT_TIME)] + \curl_getinfo($easy->handle);
@@ -159,7 +161,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
         }
         return self::createRejection($easy, $ctx);
     }
-    private static function getCurlVersion() : string
+    private static function getCurlVersion(): string
     {
         static $curlVersion = null;
         if (null === $curlVersion) {
@@ -167,16 +169,16 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
         }
         return $curlVersion;
     }
-    private static function createRejection(\Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy, array $ctx) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    private static function createRejection(EasyHandle $easy, array $ctx): PromiseInterface
     {
         static $connectionErrors = [\CURLE_OPERATION_TIMEOUTED => \true, \CURLE_COULDNT_RESOLVE_HOST => \true, \CURLE_COULDNT_CONNECT => \true, \CURLE_SSL_CONNECT_ERROR => \true, \CURLE_GOT_NOTHING => \true];
         if ($easy->createResponseException) {
-            return \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::rejectionFor(new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\RequestException('An error was encountered while creating the response', $easy->request, $easy->response, $easy->createResponseException, $ctx));
+            return P\Create::rejectionFor(new RequestException('An error was encountered while creating the response', $easy->request, $easy->response, $easy->createResponseException, $ctx));
         }
         // If an exception was encountered during the onHeaders event, then
         // return a rejected promise that wraps that exception.
         if ($easy->onHeadersException) {
-            return \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::rejectionFor(new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\RequestException('An error was encountered during the on_headers event', $easy->request, $easy->response, $easy->onHeadersException, $ctx));
+            return P\Create::rejectionFor(new RequestException('An error was encountered during the on_headers event', $easy->request, $easy->response, $easy->onHeadersException, $ctx));
         }
         $uri = $easy->request->getUri();
         $sanitizedError = self::sanitizeCurlError($ctx['error'] ?? '', $uri);
@@ -188,10 +190,10 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             }
         }
         // Create a connection exception if it was a specific error code.
-        $error = isset($connectionErrors[$easy->errno]) ? new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ConnectException($message, $easy->request, null, $ctx) : new \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\RequestException($message, $easy->request, $easy->response, null, $ctx);
-        return \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\Create::rejectionFor($error);
+        $error = isset($connectionErrors[$easy->errno]) ? new ConnectException($message, $easy->request, null, $ctx) : new RequestException($message, $easy->request, $easy->response, null, $ctx);
+        return P\Create::rejectionFor($error);
     }
-    private static function sanitizeCurlError(string $error, \Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $uri) : string
+    private static function sanitizeCurlError(string $error, UriInterface $uri): string
     {
         if ('' === $error) {
             return $error;
@@ -202,12 +204,12 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             return $error;
         }
         $redactedUriString = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::redactUserInfo($baseUri)->__toString();
-        return \str_replace($baseUriString, $redactedUriString, $error);
+        return str_replace($baseUriString, $redactedUriString, $error);
     }
     /**
      * @return array<int|string, mixed>
      */
-    private function getDefaultConf(\Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy) : array
+    private function getDefaultConf(EasyHandle $easy): array
     {
         $conf = ['_headers' => $easy->request->getHeaders(), \CURLOPT_CUSTOMREQUEST => $easy->request->getMethod(), \CURLOPT_URL => (string) $easy->request->getUri()->withFragment(''), \CURLOPT_RETURNTRANSFER => \false, \CURLOPT_HEADER => \false, \CURLOPT_CONNECTTIMEOUT => 300];
         if (\defined('CURLOPT_PROTOCOLS')) {
@@ -223,7 +225,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
         }
         return $conf;
     }
-    private function applyMethod(\Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy, array &$conf) : void
+    private function applyMethod(EasyHandle $easy, array &$conf): void
     {
         $body = $easy->request->getBody();
         $size = $body->getSize();
@@ -242,7 +244,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             unset($conf[\CURLOPT_WRITEFUNCTION], $conf[\CURLOPT_READFUNCTION], $conf[\CURLOPT_FILE], $conf[\CURLOPT_INFILE]);
         }
     }
-    private function applyBody(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options, array &$conf) : void
+    private function applyBody(RequestInterface $request, array $options, array &$conf): void
     {
         $size = $request->hasHeader('Content-Length') ? (int) $request->getHeaderLine('Content-Length') : null;
         // Send the body as a string if the size is less than 1MB OR if the
@@ -262,7 +264,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             if ($body->isSeekable()) {
                 $body->rewind();
             }
-            $conf[\CURLOPT_READFUNCTION] = static function ($ch, $fd, $length) use($body) {
+            $conf[\CURLOPT_READFUNCTION] = static function ($ch, $fd, $length) use ($body) {
                 return $body->read($length);
             };
         }
@@ -275,7 +277,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             $conf[\CURLOPT_HTTPHEADER][] = 'Content-Type:';
         }
     }
-    private function applyHeaders(\Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy, array &$conf) : void
+    private function applyHeaders(EasyHandle $easy, array &$conf): void
     {
         foreach ($conf['_headers'] as $name => $values) {
             foreach ($values as $value) {
@@ -300,7 +302,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
      * @param string $name    Case-insensitive header to remove
      * @param array  $options Array of options to modify
      */
-    private function removeHeader(string $name, array &$options) : void
+    private function removeHeader(string $name, array &$options): void
     {
         foreach (\array_keys($options['_headers']) as $key) {
             if (!\strcasecmp($key, $name)) {
@@ -309,7 +311,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             }
         }
     }
-    private function applyHandlerOptions(\Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy, array &$conf) : void
+    private function applyHandlerOptions(EasyHandle $easy, array &$conf): void
     {
         $options = $easy->options;
         if (isset($options['verify'])) {
@@ -361,10 +363,10 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             // Ensure that the directory exists before failing in curl.
             throw new \RuntimeException(\sprintf('Directory %s does not exist for sink value of %s', \dirname($sink), $sink));
         } else {
-            $sink = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\LazyOpenStream($sink, 'w+');
+            $sink = new LazyOpenStream($sink, 'w+');
         }
         $easy->sink = $sink;
-        $conf[\CURLOPT_WRITEFUNCTION] = static function ($ch, $write) use($sink) : int {
+        $conf[\CURLOPT_WRITEFUNCTION] = static function ($ch, $write) use ($sink): int {
             return $sink->write($write);
         };
         $timeoutRequiresNoSignal = \false;
@@ -394,7 +396,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
                 $scheme = $easy->request->getUri()->getScheme();
                 if (isset($options['proxy'][$scheme])) {
                     $host = $easy->request->getUri()->getHost();
-                    if (isset($options['proxy']['no']) && \Google\Site_Kit_Dependencies\GuzzleHttp\Utils::isHostInNoProxy($host, $options['proxy']['no'])) {
+                    if (isset($options['proxy']['no']) && Utils::isHostInNoProxy($host, $options['proxy']['no'])) {
                         unset($conf[\CURLOPT_PROXY]);
                     } else {
                         $conf[\CURLOPT_PROXY] = $options['proxy'][$scheme];
@@ -408,7 +410,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             if ('2' === $protocolVersion || '2.0' === $protocolVersion) {
                 if (\STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT === $options['crypto_method'] || \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT === $options['crypto_method'] || \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT === $options['crypto_method']) {
                     $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_2;
-                } elseif (\defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT') && \STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT === $options['crypto_method']) {
+                } elseif (defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT') && \STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT === $options['crypto_method']) {
                     if (!self::supportsTls13()) {
                         throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.3 not supported by your version of cURL');
                     }
@@ -425,7 +427,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
                     throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.2 not supported by your version of cURL');
                 }
                 $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_2;
-            } elseif (\defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT') && \STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT === $options['crypto_method']) {
+            } elseif (defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT') && \STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT === $options['crypto_method']) {
                 if (!self::supportsTls13()) {
                     throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.3 not supported by your version of cURL');
                 }
@@ -445,9 +447,9 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
             }
             // OpenSSL (versions 0.9.3 and later) also support "P12" for PKCS#12-encoded files.
             // see https://curl.se/libcurl/c/CURLOPT_SSLCERTTYPE.html
-            $ext = \pathinfo($cert, \PATHINFO_EXTENSION);
-            if (\preg_match('#^(der|p12)$#i', $ext)) {
-                $conf[\CURLOPT_SSLCERTTYPE] = \strtoupper($ext);
+            $ext = pathinfo($cert, \PATHINFO_EXTENSION);
+            if (preg_match('#^(der|p12)$#i', $ext)) {
+                $conf[\CURLOPT_SSLCERTTYPE] = strtoupper($ext);
             }
             $conf[\CURLOPT_SSLCERT] = $cert;
         }
@@ -471,12 +473,12 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
                 throw new \InvalidArgumentException('progress client option must be callable');
             }
             $conf[\CURLOPT_NOPROGRESS] = \false;
-            $conf[\CURLOPT_PROGRESSFUNCTION] = static function ($resource, int $downloadSize, int $downloaded, int $uploadSize, int $uploaded) use($progress) {
+            $conf[\CURLOPT_PROGRESSFUNCTION] = static function ($resource, int $downloadSize, int $downloaded, int $uploadSize, int $uploaded) use ($progress) {
                 $progress($downloadSize, $downloaded, $uploadSize, $uploaded);
             };
         }
         if (!empty($options['debug'])) {
-            $conf[\CURLOPT_STDERR] = \Google\Site_Kit_Dependencies\GuzzleHttp\Utils::debugResource($options['debug']);
+            $conf[\CURLOPT_STDERR] = Utils::debugResource($options['debug']);
             $conf[\CURLOPT_VERBOSE] = \true;
         }
     }
@@ -491,7 +493,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
      *
      * @param callable(RequestInterface, array): PromiseInterface $handler
      */
-    private static function retryFailedRewind(callable $handler, \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy, array $ctx) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    private static function retryFailedRewind(callable $handler, EasyHandle $easy, array $ctx): PromiseInterface
     {
         try {
             // Only rewind if the body has been read from.
@@ -514,7 +516,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
         }
         return $handler($easy->request, $easy->options);
     }
-    private function createHeaderFn(\Google\Site_Kit_Dependencies\GuzzleHttp\Handler\EasyHandle $easy) : callable
+    private function createHeaderFn(EasyHandle $easy): callable
     {
         if (isset($easy->options['on_headers'])) {
             $onHeaders = $easy->options['on_headers'];
@@ -524,7 +526,7 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
         } else {
             $onHeaders = null;
         }
-        return static function ($ch, $h) use($onHeaders, $easy, &$startingResponse) {
+        return static function ($ch, $h) use ($onHeaders, $easy, &$startingResponse) {
             $value = \trim($h);
             if ($value === '') {
                 $startingResponse = \true;
@@ -556,7 +558,9 @@ class CurlFactory implements \Google\Site_Kit_Dependencies\GuzzleHttp\Handler\Cu
     public function __destruct()
     {
         foreach ($this->handles as $id => $handle) {
-            \curl_close($handle);
+            if (\PHP_VERSION_ID < 80000) {
+                \curl_close($handle);
+            }
             unset($this->handles[$id]);
         }
     }

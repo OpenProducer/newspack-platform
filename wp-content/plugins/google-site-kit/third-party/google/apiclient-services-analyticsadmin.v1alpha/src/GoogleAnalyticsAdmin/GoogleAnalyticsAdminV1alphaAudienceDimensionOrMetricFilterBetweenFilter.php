@@ -19,16 +19,16 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $fromValueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue::class;
+    protected $fromValueType = GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue::class;
     protected $fromValueDataType = '';
-    protected $toValueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue::class;
+    protected $toValueType = GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue::class;
     protected $toValueDataType = '';
     /**
      * Required. Begins with this number, inclusive.
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $fromValue
      */
-    public function setFromValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $fromValue)
+    public function setFromValue(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $fromValue)
     {
         $this->fromValue = $fromValue;
     }
@@ -44,7 +44,7 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter ex
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $toValue
      */
-    public function setToValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $toValue)
+    public function setToValue(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterNumericValue $toValue)
     {
         $this->toValue = $toValue;
     }
@@ -57,4 +57,4 @@ class GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter ex
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilterBetweenFilter');

@@ -27,7 +27,7 @@ class GoogleAnalyticsAdminV1alphaListReportingDataAnnotationsResponse extends \G
      * @var string
      */
     public $nextPageToken;
-    protected $reportingDataAnnotationsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class;
+    protected $reportingDataAnnotationsType = GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class;
     protected $reportingDataAnnotationsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListReportingDataAnnotationsResponse extends \G
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListReportingDataAnnotationsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListReportingDataAnnotationsResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListReportingDataAnnotationsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListReportingDataAnnotationsResponse');

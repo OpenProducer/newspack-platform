@@ -23,7 +23,7 @@ use UnexpectedValueException;
 /**
  * Retrieve a token from a file.
  */
-class FileSource implements \Google\Site_Kit_Dependencies\Google\Auth\ExternalAccountCredentialSourceInterface
+class FileSource implements ExternalAccountCredentialSourceInterface
 {
     private string $file;
     private ?string $format;
@@ -37,21 +37,21 @@ class FileSource implements \Google\Site_Kit_Dependencies\Google\Auth\ExternalAc
     public function __construct(string $file, ?string $format = null, ?string $subjectTokenFieldName = null)
     {
         $this->file = $file;
-        if ($format === 'json' && \is_null($subjectTokenFieldName)) {
-            throw new \InvalidArgumentException('subject_token_field_name must be set when format is JSON');
+        if ($format === 'json' && is_null($subjectTokenFieldName)) {
+            throw new InvalidArgumentException('subject_token_field_name must be set when format is JSON');
         }
         $this->format = $format;
         $this->subjectTokenFieldName = $subjectTokenFieldName;
     }
-    public function fetchSubjectToken(?callable $httpHandler = null) : string
+    public function fetchSubjectToken(?callable $httpHandler = null): string
     {
-        $contents = \file_get_contents($this->file);
+        $contents = file_get_contents($this->file);
         if ($this->format === 'json') {
-            if (!($json = \json_decode((string) $contents, \true))) {
-                throw new \UnexpectedValueException('Unable to decode JSON file');
+            if (!$json = json_decode((string) $contents, \true)) {
+                throw new UnexpectedValueException('Unable to decode JSON file');
             }
             if (!isset($json[$this->subjectTokenFieldName])) {
-                throw new \UnexpectedValueException('subject_token_field_name not found in JSON file');
+                throw new UnexpectedValueException('subject_token_field_name not found in JSON file');
             }
             $contents = $json[$this->subjectTokenFieldName];
         }

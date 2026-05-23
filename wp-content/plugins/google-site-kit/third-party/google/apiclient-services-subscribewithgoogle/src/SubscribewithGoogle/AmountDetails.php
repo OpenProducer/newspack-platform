@@ -19,22 +19,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle;
 
 class AmountDetails extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $canceledAmountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails::class;
+    protected $canceledAmountType = PriceDetails::class;
     protected $canceledAmountDataType = '';
-    protected $chargeableAmountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails::class;
+    protected $chargeableAmountType = PriceDetails::class;
     protected $chargeableAmountDataType = '';
-    protected $chargedAmountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails::class;
+    protected $chargedAmountType = PriceDetails::class;
     protected $chargedAmountDataType = '';
-    protected $declinedAmountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails::class;
+    protected $declinedAmountType = PriceDetails::class;
     protected $declinedAmountDataType = '';
-    protected $refundedAmountType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails::class;
+    protected $refundedAmountType = PriceDetails::class;
     protected $refundedAmountDataType = '';
     /**
      * The canceled amount of this transaction.
      *
      * @param PriceDetails $canceledAmount
      */
-    public function setCanceledAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails $canceledAmount)
+    public function setCanceledAmount(PriceDetails $canceledAmount)
     {
         $this->canceledAmount = $canceledAmount;
     }
@@ -52,7 +52,7 @@ class AmountDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param PriceDetails $chargeableAmount
      */
-    public function setChargeableAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails $chargeableAmount)
+    public function setChargeableAmount(PriceDetails $chargeableAmount)
     {
         $this->chargeableAmount = $chargeableAmount;
     }
@@ -68,7 +68,7 @@ class AmountDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param PriceDetails $chargedAmount
      */
-    public function setChargedAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails $chargedAmount)
+    public function setChargedAmount(PriceDetails $chargedAmount)
     {
         $this->chargedAmount = $chargedAmount;
     }
@@ -84,7 +84,7 @@ class AmountDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param PriceDetails $declinedAmount
      */
-    public function setDeclinedAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails $declinedAmount)
+    public function setDeclinedAmount(PriceDetails $declinedAmount)
     {
         $this->declinedAmount = $declinedAmount;
     }
@@ -100,7 +100,7 @@ class AmountDetails extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param PriceDetails $refundedAmount
      */
-    public function setRefundedAmount(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PriceDetails $refundedAmount)
+    public function setRefundedAmount(PriceDetails $refundedAmount)
     {
         $this->refundedAmount = $refundedAmount;
     }
@@ -113,4 +113,4 @@ class AmountDetails extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\AmountDetails::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_AmountDetails');
+class_alias(AmountDetails::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_AmountDetails');

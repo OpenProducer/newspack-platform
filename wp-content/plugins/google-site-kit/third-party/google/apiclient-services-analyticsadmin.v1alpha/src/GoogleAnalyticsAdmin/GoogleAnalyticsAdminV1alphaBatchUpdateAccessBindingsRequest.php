@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'requests';
-    protected $requestsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaUpdateAccessBindingRequest::class;
+    protected $requestsType = GoogleAnalyticsAdminV1alphaUpdateAccessBindingRequest::class;
     protected $requestsDataType = 'array';
     /**
      * Required. The requests specifying the access bindings to update. A maximum
@@ -41,4 +41,4 @@ class GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsRequest extends \Googl
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsRequest');
+class_alias(GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsRequest');

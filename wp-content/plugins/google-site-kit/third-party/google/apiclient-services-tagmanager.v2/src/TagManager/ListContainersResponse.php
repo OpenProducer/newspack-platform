@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListContainersResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'container';
-    protected $containerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class;
+    protected $containerType = Container::class;
     protected $containerDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListContainersResponse extends \Google\Site_Kit_Dependencies\Google\Collec
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListContainersResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListContainersResponse');
+class_alias(ListContainersResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListContainersResponse');

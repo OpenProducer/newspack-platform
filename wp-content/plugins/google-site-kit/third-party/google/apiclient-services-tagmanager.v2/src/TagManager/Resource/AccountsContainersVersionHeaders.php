@@ -40,8 +40,8 @@ class AccountsContainersVersionHeaders extends \Google\Site_Kit_Dependencies\Goo
     public function latest($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('latest', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersionHeader::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('latest', [$params], ContainerVersionHeader::class);
     }
     /**
      * Lists all Container Versions of a GTM Container.
@@ -60,9 +60,9 @@ class AccountsContainersVersionHeaders extends \Google\Site_Kit_Dependencies\Goo
     public function listAccountsContainersVersionHeaders($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListContainerVersionsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListContainerVersionsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersVersionHeaders::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersVersionHeaders');
+class_alias(AccountsContainersVersionHeaders::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersVersionHeaders');

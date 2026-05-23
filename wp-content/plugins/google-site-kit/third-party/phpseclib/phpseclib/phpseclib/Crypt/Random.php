@@ -45,7 +45,7 @@ abstract class Random
             return '';
         }
         try {
-            return \random_bytes($length);
+            return random_bytes($length);
         } catch (\Exception $e) {
             // random_compat will throw an Exception, which in PHP 5 does not implement Throwable
         } catch (\Throwable $e) {
@@ -77,37 +77,35 @@ abstract class Random
         static $crypto = \false, $v;
         if ($crypto === \false) {
             // save old session data
-            $old_session_id = \session_id();
-            $old_use_cookies = \ini_get('session.use_cookies');
-            $old_session_cache_limiter = \session_cache_limiter();
+            $old_session_id = session_id();
+            $old_use_cookies = ini_get('session.use_cookies');
+            $old_session_cache_limiter = session_cache_limiter();
             $_OLD_SESSION = isset($_SESSION) ? $_SESSION : \false;
             if ($old_session_id != '') {
-                \session_write_close();
+                session_write_close();
             }
-            \session_id(1);
-            \ini_set('session.use_cookies', 0);
-            \session_cache_limiter('');
-            \session_start();
-            $v = (isset($_SERVER) ? self::safe_serialize($_SERVER) : '') . (isset($_POST) ? self::safe_serialize($_POST) : '') . (isset($_GET) ? self::safe_serialize($_GET) : '') . (isset($_COOKIE) ? self::safe_serialize($_COOKIE) : '') . (\version_compare(\PHP_VERSION, '8.1.0', '>=') ? \serialize($GLOBALS) : self::safe_serialize($GLOBALS)) . self::safe_serialize($_SESSION) . self::safe_serialize($_OLD_SESSION);
-            $v = $seed = $_SESSION['seed'] = \sha1($v, \true);
+            session_id(1);
+            ini_set('session.use_cookies', 0);
+            session_cache_limiter('');
+            session_start();
+            $v = (isset($_SERVER) ? self::safe_serialize($_SERVER) : '') . (isset($_POST) ? self::safe_serialize($_POST) : '') . (isset($_GET) ? self::safe_serialize($_GET) : '') . (isset($_COOKIE) ? self::safe_serialize($_COOKIE) : '') . (version_compare(\PHP_VERSION, '8.1.0', '>=') ? serialize($GLOBALS) : self::safe_serialize($GLOBALS)) . self::safe_serialize($_SESSION) . self::safe_serialize($_OLD_SESSION);
+            $v = $seed = $_SESSION['seed'] = sha1($v, \true);
             if (!isset($_SESSION['count'])) {
                 $_SESSION['count'] = 0;
             }
             $_SESSION['count']++;
-            \session_write_close();
+            session_write_close();
             // restore old session data
             if ($old_session_id != '') {
-                \session_id($old_session_id);
-                \session_start();
-                \ini_set('session.use_cookies', $old_use_cookies);
-                \session_cache_limiter($old_session_cache_limiter);
+                session_id($old_session_id);
+                session_start();
+                ini_set('session.use_cookies', $old_use_cookies);
+                session_cache_limiter($old_session_cache_limiter);
+            } else if ($_OLD_SESSION !== \false) {
+                $_SESSION = $_OLD_SESSION;
+                unset($_OLD_SESSION);
             } else {
-                if ($_OLD_SESSION !== \false) {
-                    $_SESSION = $_OLD_SESSION;
-                    unset($_OLD_SESSION);
-                } else {
-                    unset($_SESSION);
-                }
+                unset($_SESSION);
             }
             // in SSH2 a shared secret and an exchange hash are generated through the key exchange process.
             // the IV client to server is the hash of that "nonce" with the letter A and for the encryption key it's the letter C.
@@ -117,35 +115,35 @@ abstract class Random
             // http://tools.ietf.org/html/rfc4253#section-7.2
             //
             // see the is_string($crypto) part for an example of how to expand the keys
-            $key = \sha1($seed . 'A', \true);
-            $iv = \sha1($seed . 'C', \true);
+            $key = sha1($seed . 'A', \true);
+            $iv = sha1($seed . 'C', \true);
             // ciphers are used as per the nist.gov link below. also, see this link:
             //
             // http://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator#Designs_based_on_cryptographic_primitives
             switch (\true) {
-                case \class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\AES'):
-                    $crypto = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\AES('ctr');
+                case class_exists('Google\Site_Kit_Dependencies\phpseclib3\Crypt\AES'):
+                    $crypto = new AES('ctr');
                     break;
-                case \class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\Twofish'):
-                    $crypto = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Twofish('ctr');
+                case class_exists('Google\Site_Kit_Dependencies\phpseclib3\Crypt\Twofish'):
+                    $crypto = new Twofish('ctr');
                     break;
-                case \class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\Blowfish'):
-                    $crypto = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Blowfish('ctr');
+                case class_exists('Google\Site_Kit_Dependencies\phpseclib3\Crypt\Blowfish'):
+                    $crypto = new Blowfish('ctr');
                     break;
-                case \class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\TripleDES'):
-                    $crypto = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\TripleDES('ctr');
+                case class_exists('Google\Site_Kit_Dependencies\phpseclib3\Crypt\TripleDES'):
+                    $crypto = new TripleDES('ctr');
                     break;
-                case \class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\DES'):
-                    $crypto = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DES('ctr');
+                case class_exists('Google\Site_Kit_Dependencies\phpseclib3\Crypt\DES'):
+                    $crypto = new DES('ctr');
                     break;
-                case \class_exists('Google\\Site_Kit_Dependencies\\phpseclib3\\Crypt\\RC4'):
-                    $crypto = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC4();
+                case class_exists('Google\Site_Kit_Dependencies\phpseclib3\Crypt\RC4'):
+                    $crypto = new RC4();
                     break;
                 default:
                     throw new \RuntimeException(__CLASS__ . ' requires at least one symmetric cipher be loaded');
             }
-            $crypto->setKey(\substr($key, 0, $crypto->getKeyLength() >> 3));
-            $crypto->setIV(\substr($iv, 0, $crypto->getBlockLength() >> 3));
+            $crypto->setKey(substr($key, 0, $crypto->getKeyLength() >> 3));
+            $crypto->setIV(substr($iv, 0, $crypto->getBlockLength() >> 3));
             $crypto->enableContinuousBuffer();
         }
         //return $crypto->encrypt(str_repeat("\0", $length));
@@ -158,8 +156,8 @@ abstract class Random
         // http://www.opensource.apple.com/source/OpenSSL/OpenSSL-38/openssl/fips-1.0/rand/fips_rand.c
         // (do a search for "ANS X9.31 A.2.4")
         $result = '';
-        while (\strlen($result) < $length) {
-            $i = $crypto->encrypt(\microtime());
+        while (strlen($result) < $length) {
+            $i = $crypto->encrypt(microtime());
             // strlen(microtime()) == 21
             $r = $crypto->encrypt($i ^ $v);
             // strlen($v) == 20
@@ -167,7 +165,7 @@ abstract class Random
             // strlen($r) == 20
             $result .= $r;
         }
-        return \substr($result, 0, $length);
+        return substr($result, 0, $length);
     }
     /**
      * Safely serialize variables
@@ -178,11 +176,11 @@ abstract class Random
      */
     private static function safe_serialize(&$arr)
     {
-        if (\is_object($arr)) {
+        if (is_object($arr)) {
             return '';
         }
-        if (!\is_array($arr)) {
-            return \serialize($arr);
+        if (!is_array($arr)) {
+            return serialize($arr);
         }
         // prevent circular array recursion
         if (isset($arr['__phpseclib_marker'])) {
@@ -190,13 +188,13 @@ abstract class Random
         }
         $safearr = [];
         $arr['__phpseclib_marker'] = \true;
-        foreach (\array_keys($arr) as $key) {
+        foreach (array_keys($arr) as $key) {
             // do not recurse on the '__phpseclib_marker' key itself, for smaller memory usage
             if ($key !== '__phpseclib_marker') {
                 $safearr[$key] = self::safe_serialize($arr[$key]);
             }
         }
         unset($arr['__phpseclib_marker']);
-        return \serialize($safearr);
+        return serialize($safearr);
     }
 }

@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class ListAudienceExportsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'audienceExports';
-    protected $audienceExportsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\AudienceExport::class;
+    protected $audienceExportsType = AudienceExport::class;
     protected $audienceExportsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class ListAudienceExportsResponse extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ListAudienceExportsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_ListAudienceExportsResponse');
+class_alias(ListAudienceExportsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_ListAudienceExportsResponse');

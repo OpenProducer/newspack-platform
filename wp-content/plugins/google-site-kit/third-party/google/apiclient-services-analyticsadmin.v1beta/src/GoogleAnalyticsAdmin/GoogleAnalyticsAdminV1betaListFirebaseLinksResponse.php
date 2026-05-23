@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListFirebaseLinksResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'firebaseLinks';
-    protected $firebaseLinksType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaFirebaseLink::class;
+    protected $firebaseLinksType = GoogleAnalyticsAdminV1betaFirebaseLink::class;
     protected $firebaseLinksDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -68,4 +68,4 @@ class GoogleAnalyticsAdminV1betaListFirebaseLinksResponse extends \Google\Site_K
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListFirebaseLinksResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListFirebaseLinksResponse');
+class_alias(GoogleAnalyticsAdminV1betaListFirebaseLinksResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaListFirebaseLinksResponse');

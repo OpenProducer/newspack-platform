@@ -45,9 +45,9 @@ class Parameter extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $key;
-    protected $listType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $listType = Parameter::class;
     protected $listDataType = 'array';
-    protected $mapType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $mapType = Parameter::class;
     protected $mapDataType = 'array';
     /**
      * The parameter type. Valid values are: - boolean: The value represents a
@@ -182,4 +182,4 @@ class Parameter extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Parameter');
+class_alias(Parameter::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Parameter');

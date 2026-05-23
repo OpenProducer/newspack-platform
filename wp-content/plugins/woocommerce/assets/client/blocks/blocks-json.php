@@ -995,16 +995,11 @@ return array(
 		),
 		'example' => array(
 			'attributes' => array(
-				'isPreview' => true,
 				'cartIcon' => 'cart',
 				'content' => 'Cart'
 			)
 		),
 		'attributes' => array(
-			'isPreview' => array(
-				'type' => 'boolean',
-				'default' => false
-			),
 			'cartIcon' => array(
 				'type' => 'string',
 				'default' => 'cart'
@@ -1144,17 +1139,9 @@ return array(
 			'multiple' => false
 		),
 		'example' => array(
-			'attributes' => array(
-				'isPreview' => true
-			),
 			'viewportWidth' => 800
 		),
 		'attributes' => array(
-			'isPreview' => array(
-				'type' => 'boolean',
-				'default' => false,
-				'save' => false
-			),
 			'align' => array(
 				'type' => 'string',
 				'default' => 'wide'
@@ -1277,13 +1264,11 @@ return array(
 			'My Account'
 		),
 		'supports' => array(
-			'interactivity' => array(
-				'clientNavigation' => true
-			),
 			'align' => true,
 			'color' => array(
 				'text' => true
 			),
+			'interactivity' => true,
 			'typography' => array(
 				'fontSize' => true,
 				'__experimentalFontFamily' => true
@@ -1298,6 +1283,10 @@ return array(
 				'type' => 'string',
 				'default' => 'icon_and_text'
 			),
+			'hasDropdownNavigation' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
 			'iconStyle' => array(
 				'type' => 'string',
 				'default' => 'default'
@@ -1307,6 +1296,9 @@ return array(
 				'default' => 'icon'
 			)
 		),
+		'viewScriptModule' => 'woocommerce/customer-account',
+		'style' => 'file:../woocommerce/customer-account-style.css',
+		'editorStyle' => 'file:../woocommerce/customer-account-editor.css',
 		'textdomain' => 'woocommerce',
 		'apiVersion' => 3,
 		'$schema' => 'https://schemas.wp.org/trunk/block.json'
@@ -1714,15 +1706,10 @@ return array(
 		),
 		'example' => array(
 			'attributes' => array(
-				'isPreview' => true,
 				'className' => 'wc-block-mini-cart--preview'
 			)
 		),
 		'attributes' => array(
-			'isPreview' => array(
-				'type' => 'boolean',
-				'default' => false
-			),
 			'miniCartIcon' => array(
 				'type' => 'string',
 				'default' => 'cart'
@@ -1793,10 +1780,6 @@ return array(
 			)
 		),
 		'attributes' => array(
-			'isPreview' => array(
-				'type' => 'boolean',
-				'default' => false
-			),
 			'lock' => array(
 				'type' => 'object',
 				'default' => array(

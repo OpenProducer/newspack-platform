@@ -20,6 +20,6 @@ namespace Google\Site_Kit_Dependencies\Google\AuthHandler;
 /**
  * This supports Guzzle 7
  */
-class Guzzle7AuthHandler extends \Google\Site_Kit_Dependencies\Google\AuthHandler\Guzzle6AuthHandler
+class Guzzle7AuthHandler extends Guzzle6AuthHandler
 {
 }

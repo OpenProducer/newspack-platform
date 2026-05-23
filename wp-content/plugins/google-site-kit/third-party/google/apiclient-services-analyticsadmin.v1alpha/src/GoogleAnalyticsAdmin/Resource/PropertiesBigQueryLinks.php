@@ -39,11 +39,11 @@ class PropertiesBigQueryLinks extends \Google\Site_Kit_Dependencies\Google\Servi
      * @return GoogleAnalyticsAdminV1alphaBigQueryLink
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBigQueryLink $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaBigQueryLink $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBigQueryLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaBigQueryLink::class);
     }
     /**
      * Deletes a BigQueryLink on a property. (bigQueryLinks.delete)
@@ -57,8 +57,8 @@ class PropertiesBigQueryLinks extends \Google\Site_Kit_Dependencies\Google\Servi
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single BigQuery Link. (bigQueryLinks.get)
@@ -73,8 +73,8 @@ class PropertiesBigQueryLinks extends \Google\Site_Kit_Dependencies\Google\Servi
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBigQueryLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaBigQueryLink::class);
     }
     /**
      * Lists BigQuery Links on a property.
@@ -98,8 +98,8 @@ class PropertiesBigQueryLinks extends \Google\Site_Kit_Dependencies\Google\Servi
     public function listPropertiesBigQueryLinks($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListBigQueryLinksResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListBigQueryLinksResponse::class);
     }
     /**
      * Updates a BigQueryLink. (bigQueryLinks.patch)
@@ -117,12 +117,12 @@ class PropertiesBigQueryLinks extends \Google\Site_Kit_Dependencies\Google\Servi
      * @return GoogleAnalyticsAdminV1alphaBigQueryLink
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBigQueryLink $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaBigQueryLink $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBigQueryLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaBigQueryLink::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesBigQueryLinks::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesBigQueryLinks');
+class_alias(PropertiesBigQueryLinks::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesBigQueryLinks');

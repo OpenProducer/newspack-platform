@@ -42,8 +42,8 @@ class AccountsAdclients extends \Google\Site_Kit_Dependencies\Google\Service\Res
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdClient::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], AdClient::class);
     }
     /**
      * Gets the AdSense code for a given ad client. This returns what was previously
@@ -61,8 +61,8 @@ class AccountsAdclients extends \Google\Site_Kit_Dependencies\Google\Service\Res
     public function getAdcode($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getAdcode', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdClientAdCode::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getAdcode', [$params], AdClientAdCode::class);
     }
     /**
      * Lists all the ad clients available in an account.
@@ -86,9 +86,9 @@ class AccountsAdclients extends \Google\Site_Kit_Dependencies\Google\Service\Res
     public function listAccountsAdclients($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListAdClientsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListAdClientsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource\AccountsAdclients::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Resource_AccountsAdclients');
+class_alias(AccountsAdclients::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Resource_AccountsAdclients');

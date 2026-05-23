@@ -26,7 +26,7 @@ class UserPageLoadMetricV5 extends \Google\Site_Kit_Dependencies\Google\Collecti
      * @var string
      */
     public $category;
-    protected $distributionsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Bucket::class;
+    protected $distributionsType = Bucket::class;
     protected $distributionsDataType = 'array';
     /**
      * Identifies the form factor of the metric being collected.
@@ -152,4 +152,4 @@ class UserPageLoadMetricV5 extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\UserPageLoadMetricV5::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_UserPageLoadMetricV5');
+class_alias(UserPageLoadMetricV5::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_UserPageLoadMetricV5');

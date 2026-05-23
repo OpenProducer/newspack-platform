@@ -20,11 +20,11 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class Metadata extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'metrics';
-    protected $comparisonsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ComparisonMetadata::class;
+    protected $comparisonsType = ComparisonMetadata::class;
     protected $comparisonsDataType = 'array';
-    protected $dimensionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionMetadata::class;
+    protected $dimensionsType = DimensionMetadata::class;
     protected $dimensionsDataType = 'array';
-    protected $metricsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricMetadata::class;
+    protected $metricsType = MetricMetadata::class;
     protected $metricsDataType = 'array';
     /**
      * Resource name of this metadata.
@@ -98,4 +98,4 @@ class Metadata extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Metadata::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Metadata');
+class_alias(Metadata::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Metadata');

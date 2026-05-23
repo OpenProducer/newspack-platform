@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Newspack Campaigns plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Campaigns 3.8.4\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
+"Project-Id-Version: Newspack Campaigns 3.11.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/newspack-popups\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-20T14:13:59+00:00\n"
+"POT-Creation-Date: 2026-05-06T09:46:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-popups\n"
@@ -67,61 +67,96 @@ msgstr ""
 msgid "resetting every %s"
 msgstr ""
 
-#: includes/class-newspack-popups-inserter.php:673
-#: includes/class-newspack-popups-inserter.php:972
+#: includes/class-newspack-popups-inserter.php:912
+#: includes/class-newspack-popups-inserter.php:1212
 msgid "Prompts Visible"
 msgstr ""
 
-#: includes/class-newspack-popups-inserter.php:674
+#: includes/class-newspack-popups-inserter.php:913
 msgid "Prompts Hidden"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:103
-#: includes/class-newspack-popups-model.php:144
+#: includes/class-newspack-popups-model.php:110
+#: includes/class-newspack-popups-model.php:151
 msgid "The prompt specified does not exist."
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:113
+#: includes/class-newspack-popups-model.php:120
 msgid "Invalid taxonomy."
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:157
+#: includes/class-newspack-popups-model.php:164
 msgid "Invalid frequency value."
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:176
+#: includes/class-newspack-popups-model.php:183
 msgid "Invalid placement value."
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:516
+#: includes/class-newspack-popups-model.php:526
 msgid "Extra Small"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:520
+#: includes/class-newspack-popups-model.php:530
 msgid "Small"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:524
+#: includes/class-newspack-popups-model.php:534
 msgid "Medium"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:528
+#: includes/class-newspack-popups-model.php:538
 msgid "Large"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:532
+#: includes/class-newspack-popups-model.php:542
 msgid "Full-Width"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:866
+#. translators: archive page
+#: includes/class-newspack-popups-model.php:556
+msgid "Categories"
+msgstr ""
+
+#. translators: archive page
+#: includes/class-newspack-popups-model.php:561
+msgid "Tags"
+msgstr ""
+
+#. translators: archive page
+#: includes/class-newspack-popups-model.php:566
+msgid "Authors"
+msgstr ""
+
+#. translators: archive page
+#: includes/class-newspack-popups-model.php:571
+msgid "Date"
+msgstr ""
+
+#. translators: archive page
+#: includes/class-newspack-popups-model.php:576
+msgid "Custom Post Types"
+msgstr ""
+
+#. translators: archive page
+#: includes/class-newspack-popups-model.php:581
+msgid "Taxonomies"
+msgstr ""
+
+#. translators: the "Posts page" configured under Settings > Reading when a static front page is set.
+#: includes/class-newspack-popups-model.php:586
+msgid "Posts Page"
+msgstr ""
+
+#: includes/class-newspack-popups-model.php:900
 msgid "scheduled"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:867
+#: includes/class-newspack-popups-model.php:901
 msgid "draft"
 msgstr ""
 
-#: includes/class-newspack-popups-model.php:1131
+#: includes/class-newspack-popups-model.php:1192
 msgid "Close Pop-up"
 msgstr ""
 
@@ -278,28 +313,28 @@ msgstr ""
 msgid "No Prompts found in Trash."
 msgstr ""
 
-#: includes/class-newspack-popups.php:631
+#: includes/class-newspack-popups.php:632
 msgid "Campaigns"
 msgstr ""
 
-#: includes/class-newspack-popups.php:632
+#: includes/class-newspack-popups.php:633
 msgid "Campaign"
 msgstr ""
 
-#: includes/class-newspack-popups.php:633
+#: includes/class-newspack-popups.php:634
 msgid "Add Campaign"
 msgstr ""
 
-#: includes/class-newspack-popups.php:806
+#: includes/class-newspack-popups.php:810
 #: dist/editor.js:43
 #: src/editor/Sidebar.js:75
 msgid "Inline"
 msgstr ""
 
 #. translators: %s: Duplicate prompt title
-#: includes/class-newspack-popups.php:1212
-#: includes/class-newspack-popups.php:1218
-#: includes/class-newspack-popups.php:1245
+#: includes/class-newspack-popups.php:1217
+#: includes/class-newspack-popups.php:1223
+#: includes/class-newspack-popups.php:1250
 #, php-format
 msgid "%s copy"
 msgstr ""
@@ -600,284 +635,284 @@ msgstr ""
 msgid "Most read categories of reader."
 msgstr ""
 
-#: src/criteria/default/index.php:35
+#: src/criteria/default/index.php:36
 msgid "Devices"
 msgstr ""
 
-#: src/criteria/default/index.php:36
+#: src/criteria/default/index.php:37
 msgid "The device the user is viewing the site on – e.g. mobile, tablet, etc."
 msgstr ""
 
-#: src/criteria/default/index.php:40
+#: src/criteria/default/index.php:41
 msgid "Desktop - 1280 px and above"
 msgstr ""
 
-#: src/criteria/default/index.php:48
+#: src/criteria/default/index.php:49
 msgid "Laptop - between 1024 and 1280 px wide"
 msgstr ""
 
-#: src/criteria/default/index.php:56
+#: src/criteria/default/index.php:57
 msgid "Tablet - between 768 and 1024 px wide"
 msgstr ""
 
-#: src/criteria/default/index.php:64
+#: src/criteria/default/index.php:65
 msgid "Mobile (large phones) - between 480 and 786 px wide"
 msgstr ""
 
-#: src/criteria/default/index.php:72
+#: src/criteria/default/index.php:73
 msgid "Mobile (small phones) - 480 px and below wide"
 msgstr ""
 
-#: src/criteria/default/index.php:85
+#: src/criteria/default/index.php:86
 msgid "User Account"
 msgstr ""
 
-#: src/criteria/default/index.php:89
+#: src/criteria/default/index.php:90
 msgid "All users"
 msgstr ""
 
-#: src/criteria/default/index.php:93
+#: src/criteria/default/index.php:94
 msgid "Has user account"
 msgstr ""
 
-#: src/criteria/default/index.php:97
+#: src/criteria/default/index.php:98
 msgid "Does not have user account"
 msgstr ""
 
-#: src/criteria/default/index.php:103
+#: src/criteria/default/index.php:104
 msgid "Newsletter"
 msgstr ""
 
-#: src/criteria/default/index.php:104
+#: src/criteria/default/index.php:105
 msgid "Subscriber status based on any newsletter list."
 msgstr ""
 
-#: src/criteria/default/index.php:108
+#: src/criteria/default/index.php:109
 msgid "Subscribers and non-subscribers"
 msgstr ""
 
-#: src/criteria/default/index.php:112
+#: src/criteria/default/index.php:113
 msgid "Subscribers"
 msgstr ""
 
-#: src/criteria/default/index.php:116
+#: src/criteria/default/index.php:117
 msgid "Non-subscribers"
 msgstr ""
 
-#: src/criteria/default/index.php:122
+#: src/criteria/default/index.php:123
 msgid "Subscribed to newsletter lists"
 msgstr ""
 
-#: src/criteria/default/index.php:123
+#: src/criteria/default/index.php:124
 msgid "If the reader is subscribed to any of the selected newsletter lists."
 msgstr ""
 
-#: src/criteria/default/index.php:129
+#: src/criteria/default/index.php:130
 msgid "Not subscribed to newsletter lists"
 msgstr ""
 
-#: src/criteria/default/index.php:130
+#: src/criteria/default/index.php:131
 msgid "If the reader is NOT subscribed to any of the selected newsletter lists."
 msgstr ""
 
-#: src/criteria/default/index.php:136
+#: src/criteria/default/index.php:137
 msgid "Donation"
 msgstr ""
 
-#: src/criteria/default/index.php:137
+#: src/criteria/default/index.php:138
 msgid "If the reader has completed an onsite donation."
 msgstr ""
 
-#: src/criteria/default/index.php:141
+#: src/criteria/default/index.php:142
 msgid "Donors and non-donors"
 msgstr ""
 
-#: src/criteria/default/index.php:145
+#: src/criteria/default/index.php:146
 msgid "Donors"
 msgstr ""
 
-#: src/criteria/default/index.php:149
+#: src/criteria/default/index.php:150
 msgid "Non-donors"
 msgstr ""
 
-#: src/criteria/default/index.php:153
+#: src/criteria/default/index.php:154
 msgid "Former donors (who cancelled a recurring donation)"
 msgstr ""
 
-#: src/criteria/default/index.php:159
+#: src/criteria/default/index.php:160
 msgid "Has active subscription(s)"
 msgstr ""
 
-#: src/criteria/default/index.php:160
+#: src/criteria/default/index.php:161
 msgid "If the reader is an active subscriber to non-donation products."
 msgstr ""
 
-#: src/criteria/default/index.php:166
+#: src/criteria/default/index.php:167
 msgid "Does not have active subscription(s)"
 msgstr ""
 
-#: src/criteria/default/index.php:167
+#: src/criteria/default/index.php:168
 msgid "If the reader is NOT an active subscriber to non-donation products."
 msgstr ""
 
-#: src/criteria/default/index.php:173
+#: src/criteria/default/index.php:174
 msgid "Has active membership(s)"
 msgstr ""
 
-#: src/criteria/default/index.php:174
+#: src/criteria/default/index.php:175
 msgid "If the reader is a member of membership plans."
 msgstr ""
 
-#: src/criteria/default/index.php:180
+#: src/criteria/default/index.php:181
 msgid "Does not have active membership(s)"
 msgstr ""
 
-#: src/criteria/default/index.php:181
+#: src/criteria/default/index.php:182
 msgid "If the reader is NOT a member of membership plans."
 msgstr ""
 
-#: src/criteria/default/index.php:190
+#: src/criteria/default/index.php:191
 msgid "Sources to match"
 msgstr ""
 
-#: src/criteria/default/index.php:191
+#: src/criteria/default/index.php:192
 msgid "Segment based on traffic source"
 msgstr ""
 
-#: src/criteria/default/index.php:192
-#: src/criteria/default/index.php:201
+#: src/criteria/default/index.php:193
+#: src/criteria/default/index.php:202
 msgid "A comma-separated list of domains."
 msgstr ""
 
-#: src/criteria/default/index.php:199
+#: src/criteria/default/index.php:200
 msgid "Sources to exclude"
 msgstr ""
 
-#: src/criteria/default/index.php:200
+#: src/criteria/default/index.php:201
 msgid "Segment based on traffic source - hide campaigns for visitors coming from specific sources."
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/custom-placement/edit.js:19
+#: src/blocks/custom-placement/edit.js:20
 msgid "Choose a custom placement"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/custom-placement/edit.js:45
+#: src/blocks/custom-placement/edit.js:47
 msgid "There was an error fetching prompts for this custom placement."
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/custom-placement/edit.js:80
+#: src/blocks/custom-placement/edit.js:83
 msgid "Custom Placement"
 msgstr ""
 
 #: dist/blocks.js:1
-#: src/blocks/custom-placement/edit.js:104
+#: src/blocks/custom-placement/edit.js:107
 msgid "No active prompts found for this custom placement."
 msgstr ""
 
 #. translators: %1$s: max number of popups displayed. %2$s: plural modifier.
 #: dist/blocks.js:4
-#: src/blocks/custom-placement/edit.js:112
+#: src/blocks/custom-placement/edit.js:115
 #, js-format
 msgid "This custom placement will display at most %1$sthe following active prompt%2$s, depending on the reader’s top-priority segment:"
 msgstr ""
 
 #. translators: %s: segment name.
 #: dist/blocks.js:7
-#: src/blocks/custom-placement/edit.js:131
+#: src/blocks/custom-placement/edit.js:134
 #, js-format
 msgid "Segment: %s"
 msgstr ""
 
 #: dist/blocks.js:7
-#: src/blocks/custom-placement/edit.js:137
+#: src/blocks/custom-placement/edit.js:140
 msgid "Segment:"
 msgstr ""
 
 #: dist/blocks.js:7
-#: src/blocks/custom-placement/edit.js:140
+#: src/blocks/custom-placement/edit.js:143
 msgid "else"
 msgstr ""
 
 #. translators: %s: an id of a popup.
 #: dist/blocks.js:19
-#: src/blocks/single-prompt/edit.js:40
+#: src/blocks/single-prompt/edit.js:41
 #, js-format
 msgid "No active prompts found with ID %s. Try choosing another prompt."
 msgstr ""
 
 #. translators: %s: an id of a popup.
 #: dist/blocks.js:22
-#: src/blocks/single-prompt/edit.js:54
+#: src/blocks/single-prompt/edit.js:55
 #, js-format
 msgid "There was an error fetching prompt with ID %s."
 msgstr ""
 
 #: dist/blocks.js:22
-#: src/blocks/single-prompt/edit.js:72
-msgid "(no title)"
-msgstr ""
-
-#: dist/blocks.js:22
-#: src/blocks/single-prompt/edit.js:73
-msgid "edit"
-msgstr ""
-
-#: dist/blocks.js:22
-#: src/blocks/single-prompt/edit.js:90
+#: src/blocks/single-prompt/edit.js:78
 msgid "Single Prompt"
 msgstr ""
 
 #. translators: %s: an id of a popup.
 #: dist/blocks.js:25
-#: src/blocks/single-prompt/edit.js:95
+#: src/blocks/single-prompt/edit.js:85
 #, js-format
 msgid "Loading prompt with ID %s…"
 msgstr ""
 
 #: dist/blocks.js:25
-#: src/blocks/custom-placement/index.js:32
-#: src/blocks/single-prompt/index.js:32
-msgid "newspack"
+#: src/blocks/single-prompt/edit.js:149
+msgid "(no title)"
+msgstr ""
+
+#: dist/blocks.js:25
+#: src/blocks/single-prompt/edit.js:150
+msgid "edit"
 msgstr ""
 
 #: dist/blocks.js:25
 #: src/blocks/custom-placement/index.js:33
 #: src/blocks/single-prompt/index.js:33
-msgid "campaigns"
+msgid "newspack"
 msgstr ""
 
 #: dist/blocks.js:25
 #: src/blocks/custom-placement/index.js:34
 #: src/blocks/single-prompt/index.js:34
-msgid "campaign"
+msgid "campaigns"
 msgstr ""
 
 #: dist/blocks.js:25
 #: src/blocks/custom-placement/index.js:35
-#: src/blocks/single-prompt/index.js:36
-msgid "prompt"
+#: src/blocks/single-prompt/index.js:35
+msgid "campaign"
 msgstr ""
 
 #: dist/blocks.js:25
 #: src/blocks/custom-placement/index.js:36
-msgid "custom"
+#: src/blocks/single-prompt/index.js:37
+msgid "prompt"
 msgstr ""
 
 #: dist/blocks.js:25
 #: src/blocks/custom-placement/index.js:37
+msgid "custom"
+msgstr ""
+
+#: dist/blocks.js:25
+#: src/blocks/custom-placement/index.js:38
 msgid "placement"
 msgstr ""
 
 #: dist/blocks.js:25
-#: src/blocks/single-prompt/index.js:25
+#: src/blocks/single-prompt/index.js:26
 msgid "Campaigns: Single Prompt"
 msgstr ""
 
 #: dist/blocks.js:25
-#: src/blocks/single-prompt/index.js:35
+#: src/blocks/single-prompt/index.js:36
 msgid "single"
 msgstr ""
 
@@ -1065,69 +1100,69 @@ msgstr ""
 
 #. translators: %s: custom placement name.
 #: dist/editor.js:31
-#: src/editor/utils.js:184
+#: src/editor/utils.js:266
 #, js-format
 msgid "The prompt will appear where %s is inserted using the Custom Placement block."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:185
+#: src/editor/utils.js:267
 msgid "this custom placement"
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:191
+#: src/editor/utils.js:273
 msgid "The prompt will be displayed as an overlay at the center of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:193
+#: src/editor/utils.js:275
 msgid "The prompt will be displayed as an overlay at the center left of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:195
+#: src/editor/utils.js:277
 msgid "The prompt will be displayed as an overlay at the center right of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:197
+#: src/editor/utils.js:279
 msgid "The prompt will be displayed as an overlay at the top of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:199
+#: src/editor/utils.js:281
 msgid "The prompt will be displayed as an overlay at the top left of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:201
+#: src/editor/utils.js:283
 msgid "The prompt will be displayed as an overlay at the top right of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:203
+#: src/editor/utils.js:285
 msgid "The prompt will be displayed as an overlay at the bottom of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:205
+#: src/editor/utils.js:287
 msgid "The prompt will be displayed as an overlay at the bottom left of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:207
+#: src/editor/utils.js:289
 msgid "The prompt will be displayed as an overlay at the bottom right of the viewport."
 msgstr ""
 
 #: dist/editor.js:31
-#: src/editor/utils.js:209
+#: src/editor/utils.js:291
 msgid "The prompt will be automatically inserted at the very top of the page, above the header."
 msgstr ""
 
 #. translators: %s: blocks count until insertion.
 #: dist/editor.js:34
-#: src/editor/utils.js:214
+#: src/editor/utils.js:296
 #, js-format
 msgid "The prompt will be automatically inserted after %s block of content."
 msgid_plural "The prompt will be automatically inserted after %s blocks of content."
@@ -1136,32 +1171,32 @@ msgstr[1] ""
 
 #. translators: %s: article percentage count until insertion.
 #: dist/editor.js:37
-#: src/editor/utils.js:224
+#: src/editor/utils.js:306
 #, js-format
 msgid "The prompt will be automatically inserted about %s into article content."
 msgstr ""
 
 #. translators: %d: insertion period.
 #: dist/editor.js:40
-#: src/editor/utils.js:231
+#: src/editor/utils.js:313
 #, js-format
 msgid "The prompt will be automatically inserted every %d articles in the archive pages."
 msgstr ""
 
 #. translators: %d: insertion period articles count.
 #: dist/editor.js:43
-#: src/editor/utils.js:236
+#: src/editor/utils.js:318
 #, js-format
 msgid "The prompt will be automatically inserted after %d articles in the archive pages."
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/utils.js:240
+#: src/editor/utils.js:322
 msgid "The prompt will appear only where inserted using the Single Prompt block or a shortcode."
 msgstr ""
 
 #: dist/editor.js:43
-#: src/editor/utils.js:242
+#: src/editor/utils.js:324
 msgid "The placement where the prompt can appear."
 msgstr ""
 

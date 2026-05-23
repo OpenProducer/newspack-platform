@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class DeleteContactPhotoResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $personType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $personType = Person::class;
     protected $personDataType = '';
     /**
      * The updated person, if person_fields is set in the
@@ -27,7 +27,7 @@ class DeleteContactPhotoResponse extends \Google\Site_Kit_Dependencies\Google\Mo
      *
      * @param Person $person
      */
-    public function setPerson(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person $person)
+    public function setPerson(Person $person)
     {
         $this->person = $person;
     }
@@ -40,4 +40,4 @@ class DeleteContactPhotoResponse extends \Google\Site_Kit_Dependencies\Google\Mo
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\DeleteContactPhotoResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_DeleteContactPhotoResponse');
+class_alias(DeleteContactPhotoResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_DeleteContactPhotoResponse');

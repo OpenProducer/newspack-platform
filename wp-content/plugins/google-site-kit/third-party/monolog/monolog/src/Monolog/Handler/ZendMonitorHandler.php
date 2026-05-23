@@ -22,7 +22,7 @@ use Google\Site_Kit_Dependencies\Monolog\Logger;
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
  */
-class ZendMonitorHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class ZendMonitorHandler extends AbstractProcessingHandler
 {
     /**
      * Monolog level / ZendMonitor Custom Event priority map
@@ -33,21 +33,21 @@ class ZendMonitorHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\A
     /**
      * @throws MissingExtensionException
      */
-    public function __construct($level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct($level = Logger::DEBUG, bool $bubble = \true)
     {
-        if (!\function_exists('Google\\Site_Kit_Dependencies\\zend_monitor_custom_event')) {
-            throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('You must have Zend Server installed with Zend Monitor enabled in order to use this handler');
+        if (!function_exists('Google\Site_Kit_Dependencies\zend_monitor_custom_event')) {
+            throw new MissingExtensionException('You must have Zend Server installed with Zend Monitor enabled in order to use this handler');
         }
         //zend monitor constants are not defined if zend monitor is not enabled.
-        $this->levelMap = [\Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_INFO, \Google\Site_Kit_Dependencies\Monolog\Logger::INFO => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_INFO, \Google\Site_Kit_Dependencies\Monolog\Logger::NOTICE => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_INFO, \Google\Site_Kit_Dependencies\Monolog\Logger::WARNING => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_WARNING, \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \Google\Site_Kit_Dependencies\Monolog\Logger::ALERT => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \Google\Site_Kit_Dependencies\Monolog\Logger::EMERGENCY => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_ERROR];
+        $this->levelMap = [Logger::DEBUG => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::INFO => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::NOTICE => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::WARNING => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_WARNING, Logger::ERROR => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::CRITICAL => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::ALERT => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::EMERGENCY => \Google\Site_Kit_Dependencies\ZEND_MONITOR_EVENT_SEVERITY_ERROR];
         parent::__construct($level, $bubble);
     }
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
-        $this->writeZendMonitorCustomEvent(\Google\Site_Kit_Dependencies\Monolog\Logger::getLevelName($record['level']), $record['message'], $record['formatted'], $this->levelMap[$record['level']]);
+        $this->writeZendMonitorCustomEvent(Logger::getLevelName($record['level']), $record['message'], $record['formatted'], $this->levelMap[$record['level']]);
     }
     /**
      * Write to Zend Monitor Events
@@ -58,21 +58,21 @@ class ZendMonitorHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\A
      *
      * @phpstan-param FormattedRecord $formatted
      */
-    protected function writeZendMonitorCustomEvent(string $type, string $message, array $formatted, int $severity) : void
+    protected function writeZendMonitorCustomEvent(string $type, string $message, array $formatted, int $severity): void
     {
         zend_monitor_custom_event($type, $message, $formatted, $severity);
     }
     /**
      * {@inheritDoc}
      */
-    public function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    public function getDefaultFormatter(): FormatterInterface
     {
-        return new \Google\Site_Kit_Dependencies\Monolog\Formatter\NormalizerFormatter();
+        return new NormalizerFormatter();
     }
     /**
      * @return array<int, int>
      */
-    public function getLevelMap() : array
+    public function getLevelMap(): array
     {
         return $this->levelMap;
     }

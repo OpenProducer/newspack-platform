@@ -54,9 +54,9 @@ class ResponseMetaData extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $emptyReason;
-    protected $samplingMetadatasType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\SamplingMetadata::class;
+    protected $samplingMetadatasType = SamplingMetadata::class;
     protected $samplingMetadatasDataType = 'array';
-    protected $schemaRestrictionResponseType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\SchemaRestrictionResponse::class;
+    protected $schemaRestrictionResponseType = SchemaRestrictionResponse::class;
     protected $schemaRestrictionResponseDataType = '';
     /**
      * If `subjectToThresholding` is true, this report is subject to thresholding
@@ -171,7 +171,7 @@ class ResponseMetaData extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param SchemaRestrictionResponse $schemaRestrictionResponse
      */
-    public function setSchemaRestrictionResponse(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\SchemaRestrictionResponse $schemaRestrictionResponse)
+    public function setSchemaRestrictionResponse(SchemaRestrictionResponse $schemaRestrictionResponse)
     {
         $this->schemaRestrictionResponse = $schemaRestrictionResponse;
     }
@@ -224,4 +224,4 @@ class ResponseMetaData extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ResponseMetaData::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_ResponseMetaData');
+class_alias(ResponseMetaData::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_ResponseMetaData');

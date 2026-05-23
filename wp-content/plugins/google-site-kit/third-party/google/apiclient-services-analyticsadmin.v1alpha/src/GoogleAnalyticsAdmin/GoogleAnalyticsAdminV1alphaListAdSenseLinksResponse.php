@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaListAdSenseLinksResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'adsenseLinks';
-    protected $adsenseLinksType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAdSenseLink::class;
+    protected $adsenseLinksType = GoogleAnalyticsAdminV1alphaAdSenseLink::class;
     protected $adsenseLinksDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListAdSenseLinksResponse extends \Google\Site_K
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListAdSenseLinksResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListAdSenseLinksResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListAdSenseLinksResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListAdSenseLinksResponse');

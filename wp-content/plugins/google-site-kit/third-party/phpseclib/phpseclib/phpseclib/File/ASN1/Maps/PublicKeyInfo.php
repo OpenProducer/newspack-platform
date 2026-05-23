@@ -23,5 +23,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class PublicKeyInfo
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['publicKeyAlgorithm' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\AlgorithmIdentifier::MAP, 'publicKey' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_BIT_STRING]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['publicKeyAlgorithm' => AlgorithmIdentifier::MAP, 'publicKey' => ['type' => ASN1::TYPE_BIT_STRING]]];
 }

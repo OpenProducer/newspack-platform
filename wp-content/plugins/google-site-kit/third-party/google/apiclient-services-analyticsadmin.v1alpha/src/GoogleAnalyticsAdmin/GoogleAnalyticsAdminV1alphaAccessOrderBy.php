@@ -26,9 +26,9 @@ class GoogleAnalyticsAdminV1alphaAccessOrderBy extends \Google\Site_Kit_Dependen
      * @var bool
      */
     public $desc;
-    protected $dimensionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy::class;
+    protected $dimensionType = GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy::class;
     protected $dimensionDataType = '';
-    protected $metricType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessOrderByMetricOrderBy::class;
+    protected $metricType = GoogleAnalyticsAdminV1alphaAccessOrderByMetricOrderBy::class;
     protected $metricDataType = '';
     /**
      * If true, sorts by descending order. If false or unspecified, sorts in
@@ -52,7 +52,7 @@ class GoogleAnalyticsAdminV1alphaAccessOrderBy extends \Google\Site_Kit_Dependen
      *
      * @param GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy $dimension
      */
-    public function setDimension(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy $dimension)
+    public function setDimension(GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy $dimension)
     {
         $this->dimension = $dimension;
     }
@@ -68,7 +68,7 @@ class GoogleAnalyticsAdminV1alphaAccessOrderBy extends \Google\Site_Kit_Dependen
      *
      * @param GoogleAnalyticsAdminV1alphaAccessOrderByMetricOrderBy $metric
      */
-    public function setMetric(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessOrderByMetricOrderBy $metric)
+    public function setMetric(GoogleAnalyticsAdminV1alphaAccessOrderByMetricOrderBy $metric)
     {
         $this->metric = $metric;
     }
@@ -81,4 +81,4 @@ class GoogleAnalyticsAdminV1alphaAccessOrderBy extends \Google\Site_Kit_Dependen
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessOrderBy::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAccessOrderBy');
+class_alias(GoogleAnalyticsAdminV1alphaAccessOrderBy::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAccessOrderBy');

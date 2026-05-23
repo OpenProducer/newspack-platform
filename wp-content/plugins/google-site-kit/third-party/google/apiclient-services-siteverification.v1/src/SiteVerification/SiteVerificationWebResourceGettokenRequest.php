@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SiteVerification;
 
 class SiteVerificationWebResourceGettokenRequest extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $siteType = \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenRequestSite::class;
+    protected $siteType = SiteVerificationWebResourceGettokenRequestSite::class;
     protected $siteDataType = '';
     /**
      * The verification method that will be used to verify this site. For sites,
@@ -33,7 +33,7 @@ class SiteVerificationWebResourceGettokenRequest extends \Google\Site_Kit_Depend
      *
      * @param SiteVerificationWebResourceGettokenRequestSite $site
      */
-    public function setSite(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenRequestSite $site)
+    public function setSite(SiteVerificationWebResourceGettokenRequestSite $site)
     {
         $this->site = $site;
     }
@@ -63,4 +63,4 @@ class SiteVerificationWebResourceGettokenRequest extends \Google\Site_Kit_Depend
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SiteVerification_SiteVerificationWebResourceGettokenRequest');
+class_alias(SiteVerificationWebResourceGettokenRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_SiteVerification_SiteVerificationWebResourceGettokenRequest');

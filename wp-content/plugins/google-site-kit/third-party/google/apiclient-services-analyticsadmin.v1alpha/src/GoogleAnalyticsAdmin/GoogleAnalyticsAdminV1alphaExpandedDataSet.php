@@ -33,7 +33,7 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSet extends \Google\Site_Kit_Depend
      * @var string
      */
     public $description;
-    protected $dimensionFilterExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression::class;
+    protected $dimensionFilterExpressionType = GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression::class;
     protected $dimensionFilterExpressionDataType = '';
     /**
      * Immutable. The list of dimensions included in the ExpandedDataSet. See the
@@ -104,7 +104,7 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSet extends \Google\Site_Kit_Depend
      *
      * @param GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression $dimensionFilterExpression
      */
-    public function setDimensionFilterExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression $dimensionFilterExpression)
+    public function setDimensionFilterExpression(GoogleAnalyticsAdminV1alphaExpandedDataSetFilterExpression $dimensionFilterExpression)
     {
         $this->dimensionFilterExpression = $dimensionFilterExpression;
     }
@@ -186,4 +186,4 @@ class GoogleAnalyticsAdminV1alphaExpandedDataSet extends \Google\Site_Kit_Depend
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSet::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaExpandedDataSet');
+class_alias(GoogleAnalyticsAdminV1alphaExpandedDataSet::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaExpandedDataSet');

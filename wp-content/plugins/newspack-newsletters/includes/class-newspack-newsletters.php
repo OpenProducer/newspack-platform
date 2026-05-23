@@ -233,6 +233,19 @@ final class Newspack_Newsletters {
 	}
 
 	/**
+	 * Test the active provider's API connection.
+	 *
+	 * @return true|WP_Error True if the connection is successful, WP_Error otherwise.
+	 */
+	public static function test_connection() {
+		$provider = self::get_service_provider();
+		if ( ! $provider ) {
+			return new \WP_Error( 'newspack_newsletters_no_provider', __( 'No newsletter service provider configured.', 'newspack-newsletters' ) );
+		}
+		return $provider->test_connection();
+	}
+
+	/**
 	 * Register custom fields for use in the editor only.
 	 * These have to be registered so the updates are handles correctly.
 	 */
@@ -654,8 +667,8 @@ final class Newspack_Newsletters {
 				'supports'        => $block_definition['supports'],
 			]
 		);
-		register_block_type(
-			'newspack-newsletters/share',
+		register_block_type_from_metadata(
+			__DIR__ . '/../src/editor/blocks/share/block.json',
 			[
 				'render_callback' => [ __CLASS__, 'render_share_block' ],
 			]
@@ -1232,6 +1245,18 @@ final class Newspack_Newsletters {
 	 * @return boolean Is debug mode on?
 	 */
 	public static function debug_mode() {
+		/**
+		 * Enables debug mode for Newspack Newsletters, providing additional
+		 * logging and diagnostic information for troubleshooting email
+		 * campaign issues.
+		 *
+		 * @constant NEWSPACK_NEWSLETTERS_DEBUG_MODE
+		 * @type     bool
+		 * @default  Debug mode disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_NEWSLETTERS_DEBUG_MODE', true );
+		 */
 		return defined( 'NEWSPACK_NEWSLETTERS_DEBUG_MODE' ) ? NEWSPACK_NEWSLETTERS_DEBUG_MODE : false;
 	}
 

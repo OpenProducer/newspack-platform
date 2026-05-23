@@ -18,6 +18,6 @@
 namespace Google\Site_Kit_Dependencies\Google\Auth\Cache;
 
 use Google\Site_Kit_Dependencies\Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
-class InvalidArgumentException extends \InvalidArgumentException implements \Google\Site_Kit_Dependencies\Psr\Cache\InvalidArgumentException
+class InvalidArgumentException extends \InvalidArgumentException implements PsrInvalidArgumentException
 {
 }

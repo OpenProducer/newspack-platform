@@ -67,4 +67,4 @@ class SiteVerificationWebResourceResourceSite extends \Google\Site_Kit_Dependenc
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResourceSite::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SiteVerification_SiteVerificationWebResourceResourceSite');
+class_alias(SiteVerificationWebResourceResourceSite::class, 'Google\Site_Kit_Dependencies\Google_Service_SiteVerification_SiteVerificationWebResourceResourceSite');

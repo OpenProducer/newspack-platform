@@ -38,5 +38,5 @@ abstract class Integer implements \JsonSerializable
      *
      * @return string
      */
-    public abstract function toHex();
+    abstract public function toHex();
 }

@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class SubjectPublicKeyInfo
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['algorithm' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\AlgorithmIdentifier::MAP, 'subjectPublicKey' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_BIT_STRING]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['algorithm' => AlgorithmIdentifier::MAP, 'subjectPublicKey' => ['type' => ASN1::TYPE_BIT_STRING]]];
 }

@@ -18,6 +18,8 @@ defined( 'ABSPATH' ) || exit;
 $actions      = $args['actions'];
 $subscription = $args['subscription'];
 
+$is_group_subscription = Group_Subscription::is_group_subscription( $subscription );
+
 // Ensure the cancel action is shown last.
 if ( ! empty( $actions['cancel'] ) ) {
 	$cancel_action         = $actions['cancel'];
@@ -52,6 +54,13 @@ if ( ! empty( $actions['change_payment_method']['name'] ) ) {
 				<?php echo \esc_html( $product->get_name() ); ?>
 			</h2>
 			<?php
+			if ( $is_group_subscription ) :
+				?>
+					<span class="newspack-ui__badge newspack-ui__badge--secondary">
+					<?php esc_html_e( 'Group', 'newspack-plugin' ); ?>
+					</span>
+				<?php
+				endif;
 			if ( ! $subscription->has_status( 'active' ) ) :
 				$classes = [ 'newspack-ui__badge' ];
 				if ( $subscription->has_status( [ 'cancelled', 'expired' ] ) ) {
@@ -68,7 +77,7 @@ if ( ! empty( $actions['change_payment_method']['name'] ) ) {
 			<?php endif; ?>
 		</div>
 			<?php
-		endif;
+			endif;
 	}
 	?>
 	<div class="newspack-my-account__subscription--actions">
@@ -184,4 +193,28 @@ if ( ! empty( $actions['change_payment_method']['name'] ) ) {
 	</div>
 </header>
 <?php
+$is_group_member_subscription = $is_group_subscription && Group_Subscription::user_is_member( get_current_user_id(), $subscription );
+
+if ( $is_group_member_subscription ) :
+	$owner = get_user_by( 'id', $subscription->get_user_id() );
+	if ( $owner ) :
+		?>
+		<div class="newspack-ui__notice">
+			<div>
+				<p>
+					<?php
+						echo wp_kses_post(
+							sprintf(
+							// translators: %s is the email link to the display name of the subscription owner.
+								__( 'You are a member of this group subscription. It is managed by %s.', 'newspack-plugin' ),
+								'<a href="mailto:' . esc_attr( sanitize_email( $owner->user_email ) ) . '">' . esc_html( $owner->display_name ? $owner->display_name : $owner->user_email ) . '</a>'
+							)
+						);
+					?>
+				</p>
+			</div>
+		</div>
+		<?php
+	endif;
+endif;
 \do_action( 'newspack_woocommerce_after_subscription_header', $subscription, $actions );

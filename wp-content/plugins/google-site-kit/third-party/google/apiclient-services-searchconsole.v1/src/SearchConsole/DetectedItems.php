@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 class DetectedItems extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'items';
-    protected $itemsType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Item::class;
+    protected $itemsType = Item::class;
     protected $itemsDataType = 'array';
     /**
      * Rich Results type
@@ -62,4 +62,4 @@ class DetectedItems extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\DetectedItems::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_DetectedItems');
+class_alias(DetectedItems::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_DetectedItems');

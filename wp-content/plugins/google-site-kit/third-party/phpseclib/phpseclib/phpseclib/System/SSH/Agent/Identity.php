@@ -35,7 +35,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\System\SSH\Common\Traits\ReadBytes;
  * @author  Jim Wigginton <terrafrost@php.net>
  * @internal
  */
-class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\PrivateKey
+class Identity implements PrivateKey
 {
     use ReadBytes;
     // Signature Flags
@@ -99,11 +99,11 @@ class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      *
      * @param PublicKey $key
      */
-    public function withPublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\PublicKey $key)
+    public function withPublicKey(PublicKey $key)
     {
-        if ($key instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC) {
-            if (\is_array($key->getCurve()) || !isset(self::$curveAliases[$key->getCurve()])) {
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('The only supported curves are nistp256, nistp384, nistp512 and Ed25519');
+        if ($key instanceof EC) {
+            if (is_array($key->getCurve()) || !isset(self::$curveAliases[$key->getCurve()])) {
+                throw new UnsupportedAlgorithmException('The only supported curves are nistp256, nistp384, nistp512 and Ed25519');
             }
         }
         $new = clone $this;
@@ -143,8 +143,8 @@ class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
     public function withHash($hash)
     {
         $new = clone $this;
-        $hash = \strtolower($hash);
-        if ($this->key instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA) {
+        $hash = strtolower($hash);
+        if ($this->key instanceof RSA) {
             $new->flags = 0;
             switch ($hash) {
                 case 'sha1':
@@ -156,10 +156,10 @@ class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
                     $new->flags = self::SSH_AGENT_RSA2_512;
                     break;
                 default:
-                    throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('The only supported hashes for RSA are sha1, sha256 and sha512');
+                    throw new UnsupportedAlgorithmException('The only supported hashes for RSA are sha1, sha256 and sha512');
             }
         }
-        if ($this->key instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC) {
+        if ($this->key instanceof EC) {
             switch ($this->key->getCurve()) {
                 case 'secp256r1':
                     $expectedHash = 'sha256';
@@ -173,12 +173,12 @@ class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
                     $expectedHash = 'sha512';
             }
             if ($hash != $expectedHash) {
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('The only supported hash for ' . self::$curveAliases[$this->key->getCurve()] . ' is ' . $expectedHash);
+                throw new UnsupportedAlgorithmException('The only supported hash for ' . self::$curveAliases[$this->key->getCurve()] . ' is ' . $expectedHash);
             }
         }
-        if ($this->key instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\DSA) {
+        if ($this->key instanceof DSA) {
             if ($hash != 'sha1') {
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('The only supported hash for DSA is sha1');
+                throw new UnsupportedAlgorithmException('The only supported hash for DSA is sha1');
             }
         }
         return $new;
@@ -192,11 +192,11 @@ class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      */
     public function withPadding($padding)
     {
-        if (!$this->key instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only RSA keys support padding');
+        if (!$this->key instanceof RSA) {
+            throw new UnsupportedAlgorithmException('Only RSA keys support padding');
         }
-        if ($padding != \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA::SIGNATURE_PKCS1 && $padding != \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA::SIGNATURE_RELAXED_PKCS1) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('ssh-agent can only create PKCS1 signatures');
+        if ($padding != RSA::SIGNATURE_PKCS1 && $padding != RSA::SIGNATURE_RELAXED_PKCS1) {
+            throw new UnsupportedAlgorithmException('ssh-agent can only create PKCS1 signatures');
         }
         return $this;
     }
@@ -209,11 +209,11 @@ class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      */
     public function withSignatureFormat($format)
     {
-        if ($this->key instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only DSA and EC keys support signature format setting');
+        if ($this->key instanceof RSA) {
+            throw new UnsupportedAlgorithmException('Only DSA and EC keys support signature format setting');
         }
         if ($format != 'SSH2') {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only SSH2-formatted signatures are currently supported');
+            throw new UnsupportedAlgorithmException('Only SSH2-formatted signatures are currently supported');
         }
         return $this;
     }
@@ -226,8 +226,8 @@ class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
      */
     public function getCurve()
     {
-        if (!$this->key instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only EC keys have curves');
+        if (!$this->key instanceof EC) {
+            throw new UnsupportedAlgorithmException('Only EC keys have curves');
         }
         return $this->key->getCurve();
     }
@@ -244,21 +244,21 @@ class Identity implements \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\
     public function sign($message)
     {
         // the last parameter (currently 0) is for flags and ssh-agent only defines one flag (for ssh-dss): SSH_AGENT_OLD_SIGNATURE
-        $packet = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('CssN', \Google\Site_Kit_Dependencies\phpseclib3\System\SSH\Agent::SSH_AGENTC_SIGN_REQUEST, $this->key_blob, $message, $this->flags);
-        $packet = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('s', $packet);
-        if (\strlen($packet) != \fputs($this->fsock, $packet)) {
+        $packet = Strings::packSSH2('CssN', Agent::SSH_AGENTC_SIGN_REQUEST, $this->key_blob, $message, $this->flags);
+        $packet = Strings::packSSH2('s', $packet);
+        if (strlen($packet) != fputs($this->fsock, $packet)) {
             throw new \RuntimeException('Connection closed during signing');
         }
-        $length = \current(\unpack('N', $this->readBytes(4)));
+        $length = current(unpack('N', $this->readBytes(4)));
         $packet = $this->readBytes($length);
-        list($type, $signature_blob) = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('Cs', $packet);
-        if ($type != \Google\Site_Kit_Dependencies\phpseclib3\System\SSH\Agent::SSH_AGENT_SIGN_RESPONSE) {
+        list($type, $signature_blob) = Strings::unpackSSH2('Cs', $packet);
+        if ($type != Agent::SSH_AGENT_SIGN_RESPONSE) {
             throw new \RuntimeException('Unable to retrieve signature');
         }
-        if (!$this->key instanceof \Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA) {
+        if (!$this->key instanceof RSA) {
             return $signature_blob;
         }
-        list($type, $signature_blob) = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::unpackSSH2('ss', $signature_blob);
+        list($type, $signature_blob) = Strings::unpackSSH2('ss', $signature_blob);
         return $signature_blob;
     }
     /**

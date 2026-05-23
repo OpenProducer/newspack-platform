@@ -25,11 +25,11 @@ interface FormattableHandlerInterface
      * @param  FormatterInterface $formatter
      * @return HandlerInterface   self
      */
-    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface;
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface;
     /**
      * Gets the formatter.
      *
      * @return FormatterInterface
      */
-    public function getFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
+    public function getFormatter(): FormatterInterface;
 }

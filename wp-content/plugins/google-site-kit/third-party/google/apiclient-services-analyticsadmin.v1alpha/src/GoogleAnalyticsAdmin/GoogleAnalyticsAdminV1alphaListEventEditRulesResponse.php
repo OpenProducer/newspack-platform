@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaListEventEditRulesResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'eventEditRules';
-    protected $eventEditRulesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventEditRule::class;
+    protected $eventEditRulesType = GoogleAnalyticsAdminV1alphaEventEditRule::class;
     protected $eventEditRulesDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -65,4 +65,4 @@ class GoogleAnalyticsAdminV1alphaListEventEditRulesResponse extends \Google\Site
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListEventEditRulesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListEventEditRulesResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListEventEditRulesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListEventEditRulesResponse');

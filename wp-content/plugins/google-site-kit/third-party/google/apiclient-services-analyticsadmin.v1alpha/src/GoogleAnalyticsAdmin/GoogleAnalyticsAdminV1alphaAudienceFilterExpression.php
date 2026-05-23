@@ -19,15 +19,15 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaAudienceFilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $andGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList::class;
+    protected $andGroupType = GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList::class;
     protected $andGroupDataType = '';
-    protected $dimensionOrMetricFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter::class;
+    protected $dimensionOrMetricFilterType = GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter::class;
     protected $dimensionOrMetricFilterDataType = '';
-    protected $eventFilterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceEventFilter::class;
+    protected $eventFilterType = GoogleAnalyticsAdminV1alphaAudienceEventFilter::class;
     protected $eventFilterDataType = '';
-    protected $notExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
+    protected $notExpressionType = GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
     protected $notExpressionDataType = '';
-    protected $orGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList::class;
+    protected $orGroupType = GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList::class;
     protected $orGroupDataType = '';
     /**
      * A list of expressions to be AND’ed together. It can only contain
@@ -36,7 +36,7 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterExpression extends \Google\Site_K
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList $andGroup
      */
-    public function setAndGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList $andGroup)
+    public function setAndGroup(GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList $andGroup)
     {
         $this->andGroup = $andGroup;
     }
@@ -53,7 +53,7 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterExpression extends \Google\Site_K
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter $dimensionOrMetricFilter
      */
-    public function setDimensionOrMetricFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter $dimensionOrMetricFilter)
+    public function setDimensionOrMetricFilter(GoogleAnalyticsAdminV1alphaAudienceDimensionOrMetricFilter $dimensionOrMetricFilter)
     {
         $this->dimensionOrMetricFilter = $dimensionOrMetricFilter;
     }
@@ -70,7 +70,7 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterExpression extends \Google\Site_K
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceEventFilter $eventFilter
      */
-    public function setEventFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceEventFilter $eventFilter)
+    public function setEventFilter(GoogleAnalyticsAdminV1alphaAudienceEventFilter $eventFilter)
     {
         $this->eventFilter = $eventFilter;
     }
@@ -88,7 +88,7 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterExpression extends \Google\Site_K
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceFilterExpression $notExpression
      */
-    public function setNotExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression $notExpression)
+    public function setNotExpression(GoogleAnalyticsAdminV1alphaAudienceFilterExpression $notExpression)
     {
         $this->notExpression = $notExpression;
     }
@@ -105,7 +105,7 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterExpression extends \Google\Site_K
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList $orGroup
      */
-    public function setOrGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList $orGroup)
+    public function setOrGroup(GoogleAnalyticsAdminV1alphaAudienceFilterExpressionList $orGroup)
     {
         $this->orGroup = $orGroup;
     }
@@ -118,4 +118,4 @@ class GoogleAnalyticsAdminV1alphaAudienceFilterExpression extends \Google\Site_K
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceFilterExpression');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceFilterExpression');

@@ -35,7 +35,7 @@ class ListOtherContactsResponse extends \Google\Site_Kit_Dependencies\Google\Col
      * @var string
      */
     public $nextSyncToken;
-    protected $otherContactsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
+    protected $otherContactsType = Person::class;
     protected $otherContactsDataType = 'array';
     /**
      * The total number of other contacts in the list without pagination.
@@ -114,4 +114,4 @@ class ListOtherContactsResponse extends \Google\Site_Kit_Dependencies\Google\Col
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListOtherContactsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ListOtherContactsResponse');
+class_alias(ListOtherContactsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ListOtherContactsResponse');

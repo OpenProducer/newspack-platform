@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class FilterExpressionList extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'expressions';
-    protected $expressionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $expressionsType = FilterExpression::class;
     protected $expressionsDataType = 'array';
     /**
      * A list of filter expressions.
@@ -40,4 +40,4 @@ class FilterExpressionList extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpressionList::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_FilterExpressionList');
+class_alias(FilterExpressionList::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_FilterExpressionList');

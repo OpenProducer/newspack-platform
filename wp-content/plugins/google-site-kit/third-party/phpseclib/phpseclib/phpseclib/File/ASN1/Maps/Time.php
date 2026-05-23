@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class Time
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_CHOICE, 'children' => ['utcTime' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_UTC_TIME], 'generalTime' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_GENERALIZED_TIME]]];
+    const MAP = ['type' => ASN1::TYPE_CHOICE, 'children' => ['utcTime' => ['type' => ASN1::TYPE_UTC_TIME], 'generalTime' => ['type' => ASN1::TYPE_GENERALIZED_TIME]]];
 }

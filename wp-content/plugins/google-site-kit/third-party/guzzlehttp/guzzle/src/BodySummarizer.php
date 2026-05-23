@@ -3,7 +3,7 @@
 namespace Google\Site_Kit_Dependencies\GuzzleHttp;
 
 use Google\Site_Kit_Dependencies\Psr\Http\Message\MessageInterface;
-final class BodySummarizer implements \Google\Site_Kit_Dependencies\GuzzleHttp\BodySummarizerInterface
+final class BodySummarizer implements BodySummarizerInterface
 {
     /**
      * @var int|null
@@ -16,8 +16,8 @@ final class BodySummarizer implements \Google\Site_Kit_Dependencies\GuzzleHttp\B
     /**
      * Returns a summarized message body.
      */
-    public function summarize(\Google\Site_Kit_Dependencies\Psr\Http\Message\MessageInterface $message) : ?string
+    public function summarize(MessageInterface $message): ?string
     {
-        return $this->truncateAt === null ? \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Message::bodySummary($message) : \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Message::bodySummary($message, $this->truncateAt);
+        return $this->truncateAt === null ? Psr7\Message::bodySummary($message) : Psr7\Message::bodySummary($message, $this->truncateAt);
     }
 }

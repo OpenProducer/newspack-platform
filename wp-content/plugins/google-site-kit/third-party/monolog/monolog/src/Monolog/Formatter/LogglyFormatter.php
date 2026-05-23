@@ -16,7 +16,7 @@ namespace Google\Site_Kit_Dependencies\Monolog\Formatter;
  *
  * @author Adam Pancutt <adam@pancutt.com>
  */
-class LogglyFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\JsonFormatter
+class LogglyFormatter extends JsonFormatter
 {
     /**
      * Overrides the default batch mode to new lines for compatibility with the
@@ -32,7 +32,7 @@ class LogglyFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\Js
      * @see https://www.loggly.com/docs/automated-parsing/#json
      * @see \Monolog\Formatter\JsonFormatter::format()
      */
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         if (isset($record["datetime"]) && $record["datetime"] instanceof \DateTimeInterface) {
             $record["timestamp"] = $record["datetime"]->format("Y-m-d\\TH:i:s.uO");

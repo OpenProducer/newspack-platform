@@ -51,11 +51,11 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return BatchCreateContactsResponse
      * @throws \Google\Service\Exception
      */
-    public function batchCreateContacts(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchCreateContactsRequest $postBody, $optParams = [])
+    public function batchCreateContacts(BatchCreateContactsRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchCreateContacts', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchCreateContactsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchCreateContacts', [$params], BatchCreateContactsResponse::class);
     }
     /**
      * Delete a batch of contacts. Any non-contact data will not be deleted. Mutate
@@ -67,11 +67,11 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return PeopleEmpty
      * @throws \Google\Service\Exception
      */
-    public function batchDeleteContacts(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchDeleteContactsRequest $postBody, $optParams = [])
+    public function batchDeleteContacts(BatchDeleteContactsRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchDeleteContacts', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\PeopleEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchDeleteContacts', [$params], PeopleEmpty::class);
     }
     /**
      * Update a batch of contacts and return a map of resource names to
@@ -84,11 +84,11 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return BatchUpdateContactsResponse
      * @throws \Google\Service\Exception
      */
-    public function batchUpdateContacts(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchUpdateContactsRequest $postBody, $optParams = [])
+    public function batchUpdateContacts(BatchUpdateContactsRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchUpdateContacts', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchUpdateContactsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchUpdateContacts', [$params], BatchUpdateContactsResponse::class);
     }
     /**
      * Create a new contact and return the person resource for that contact. The
@@ -113,11 +113,11 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return Person
      * @throws \Google\Service\Exception
      */
-    public function createContact(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person $postBody, $optParams = [])
+    public function createContact(Person $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('createContact', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('createContact', [$params], Person::class);
     }
     /**
      * Delete a contact person. Any non-contact data will not be deleted. Mutate
@@ -133,8 +133,8 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function deleteContact($resourceName, $optParams = [])
     {
         $params = ['resourceName' => $resourceName];
-        $params = \array_merge($params, $optParams);
-        return $this->call('deleteContact', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\PeopleEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('deleteContact', [$params], PeopleEmpty::class);
     }
     /**
      * Delete a contact's photo. Mutate requests for the same user should be done
@@ -161,8 +161,8 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function deleteContactPhoto($resourceName, $optParams = [])
     {
         $params = ['resourceName' => $resourceName];
-        $params = \array_merge($params, $optParams);
-        return $this->call('deleteContactPhoto', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\DeleteContactPhotoResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('deleteContactPhoto', [$params], DeleteContactPhotoResponse::class);
     }
     /**
      * Provides information about a person by specifying a resource name. Use
@@ -196,8 +196,8 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function get($resourceName, $optParams = [])
     {
         $params = ['resourceName' => $resourceName];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Person::class);
     }
     /**
      * Provides information about a list of specific people by specifying a list of
@@ -233,8 +233,8 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function getBatchGet($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getBatchGet', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\GetPeopleResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('getBatchGet', [$params], GetPeopleResponse::class);
     }
     /**
      * Provides a list of domain profiles and domain contacts in the authenticated
@@ -285,8 +285,8 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function listDirectoryPeople($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('listDirectoryPeople', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListDirectoryPeopleResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('listDirectoryPeople', [$params], ListDirectoryPeopleResponse::class);
     }
     /**
      * Provides a list of contacts in the authenticated user's grouped contacts that
@@ -322,8 +322,8 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function searchContacts($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('searchContacts', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\SearchResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('searchContacts', [$params], SearchResponse::class);
     }
     /**
      * Provides a list of domain profiles and domain contacts in the authenticated
@@ -359,8 +359,8 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
     public function searchDirectoryPeople($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('searchDirectoryPeople', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\SearchDirectoryPeopleResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('searchDirectoryPeople', [$params], SearchDirectoryPeopleResponse::class);
     }
     /**
      * Update contact data for an existing contact person. Any non-contact data will
@@ -407,11 +407,11 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return Person
      * @throws \Google\Service\Exception
      */
-    public function updateContact($resourceName, \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person $postBody, $optParams = [])
+    public function updateContact($resourceName, Person $postBody, $optParams = [])
     {
         $params = ['resourceName' => $resourceName, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('updateContact', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('updateContact', [$params], Person::class);
     }
     /**
      * Update a contact's photo. Mutate requests for the same user should be sent
@@ -424,12 +424,12 @@ class People extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @return UpdateContactPhotoResponse
      * @throws \Google\Service\Exception
      */
-    public function updateContactPhoto($resourceName, \Google\Site_Kit_Dependencies\Google\Service\PeopleService\UpdateContactPhotoRequest $postBody, $optParams = [])
+    public function updateContactPhoto($resourceName, UpdateContactPhotoRequest $postBody, $optParams = [])
     {
         $params = ['resourceName' => $resourceName, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('updateContactPhoto', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\UpdateContactPhotoResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('updateContactPhoto', [$params], UpdateContactPhotoResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Resource\People::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Resource_People');
+class_alias(People::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Resource_People');

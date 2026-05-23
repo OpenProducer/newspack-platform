@@ -47,7 +47,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCipher;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCipher
+class RC4 extends StreamCipher
 {
     /**
      * @see \phpseclib3\Crypt\RC4::_crypt()
@@ -68,7 +68,7 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
     /**
      * The mcrypt specific name of the cipher
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cipher_name_mcrypt
+     * @see Common\SymmetricKey::cipher_name_mcrypt
      * @var string
      */
     protected $cipher_name_mcrypt = 'arcfour';
@@ -91,7 +91,7 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
      *
      * This is mainly just a wrapper to set things up for \phpseclib3\Crypt\Common\SymmetricKey::isValidEngine()
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::__construct()
+     * @see Common\SymmetricKey::__construct()
      * @param int $engine
      * @return bool
      */
@@ -104,7 +104,7 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
             // quoting https://www.openssl.org/news/openssl-3.0-notes.html, OpenSSL 3.0.1
             // "Moved all variations of the EVP ciphers CAST5, BF, IDEA, SEED, RC2, RC4, RC5, and DES to the legacy provider"
             // in theory openssl_get_cipher_methods() should catch this but, on GitHub Actions, at least, it does not
-            if (\defined('OPENSSL_VERSION_TEXT') && \version_compare(\preg_replace('#OpenSSL (\\d+\\.\\d+\\.\\d+) .*#', '$1', \OPENSSL_VERSION_TEXT), '3.0.1', '>=')) {
+            if (defined('OPENSSL_VERSION_TEXT') && version_compare(preg_replace('#OpenSSL (\d+\.\d+\.\d+) .*#', '$1', \OPENSSL_VERSION_TEXT), '3.0.1', '>=')) {
                 return \false;
             }
             $this->cipher_name_openssl = 'rc4-40';
@@ -136,7 +136,7 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
      */
     public function setKey($key)
     {
-        $length = \strlen($key);
+        $length = strlen($key);
         if ($length < 1 || $length > 256) {
             throw new \LengthException('Key size of ' . $length . ' bytes is not supported by RC4. Keys must be between 1 and 256 bytes long');
         }
@@ -145,7 +145,7 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
     /**
      * Encrypts a message.
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::decrypt()
+     * @see Common\SymmetricKey::decrypt()
      * @see self::crypt()
      * @param string $plaintext
      * @return string $ciphertext
@@ -163,7 +163,7 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
      * $this->decrypt($this->encrypt($plaintext)) == $this->encrypt($this->encrypt($plaintext)).
      * At least if the continuous buffer is disabled.
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::encrypt()
+     * @see Common\SymmetricKey::encrypt()
      * @see self::crypt()
      * @param string $ciphertext
      * @return string $plaintext
@@ -196,16 +196,16 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
     /**
      * Setup the key (expansion)
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::_setupKey()
+     * @see Common\SymmetricKey::_setupKey()
      */
     protected function setupKey()
     {
         $key = $this->key;
-        $keyLength = \strlen($key);
-        $keyStream = \range(0, 255);
+        $keyLength = strlen($key);
+        $keyStream = range(0, 255);
         $j = 0;
         for ($i = 0; $i < 256; $i++) {
-            $j = $j + $keyStream[$i] + \ord($key[$i % $keyLength]) & 255;
+            $j = $j + $keyStream[$i] + ord($key[$i % $keyLength]) & 255;
             $temp = $keyStream[$i];
             $keyStream[$i] = $keyStream[$j];
             $keyStream[$j] = $temp;
@@ -243,7 +243,7 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
             $j = $stream[1];
             $keyStream = $stream[2];
         }
-        $len = \strlen($text);
+        $len = strlen($text);
         for ($k = 0; $k < $len; ++$k) {
             $i = $i + 1 & 255;
             $ksi = $keyStream[$i];
@@ -251,7 +251,7 @@ class RC4 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\StreamCi
             $ksj = $keyStream[$j];
             $keyStream[$i] = $ksj;
             $keyStream[$j] = $ksi;
-            $text[$k] = $text[$k] ^ \chr($keyStream[$ksj + $ksi & 255]);
+            $text[$k] = $text[$k] ^ chr($keyStream[$ksj + $ksi & 255]);
         }
         return $text;
     }

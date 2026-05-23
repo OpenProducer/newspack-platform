@@ -33,7 +33,7 @@ class GoogleAnalyticsAdminV1alphaChannelGroup extends \Google\Site_Kit_Dependenc
      * @var string
      */
     public $displayName;
-    protected $groupingRuleType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaGroupingRule::class;
+    protected $groupingRuleType = GoogleAnalyticsAdminV1alphaGroupingRule::class;
     protected $groupingRuleDataType = 'array';
     /**
      * Output only. The resource name for this Channel Group resource. Format:
@@ -166,4 +166,4 @@ class GoogleAnalyticsAdminV1alphaChannelGroup extends \Google\Site_Kit_Dependenc
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroup::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaChannelGroup');
+class_alias(GoogleAnalyticsAdminV1alphaChannelGroup::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaChannelGroup');

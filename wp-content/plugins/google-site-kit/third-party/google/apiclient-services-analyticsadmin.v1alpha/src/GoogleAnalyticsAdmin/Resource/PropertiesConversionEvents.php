@@ -41,11 +41,11 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
      * @return GoogleAnalyticsAdminV1alphaConversionEvent
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionEvent $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaConversionEvent $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionEvent::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaConversionEvent::class);
     }
     /**
      * Deprecated: Use `DeleteKeyEvent` instead. Deletes a conversion event in a
@@ -61,8 +61,8 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Deprecated: Use `GetKeyEvent` instead. Retrieve a single conversion event.
@@ -78,8 +78,8 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionEvent::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaConversionEvent::class);
     }
     /**
      * Deprecated: Use `ListKeyEvents` instead. Returns a list of conversion events
@@ -103,8 +103,8 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
     public function listPropertiesConversionEvents($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListConversionEventsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListConversionEventsResponse::class);
     }
     /**
      * Deprecated: Use `UpdateKeyEvent` instead. Updates a conversion event with the
@@ -122,12 +122,12 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
      * @return GoogleAnalyticsAdminV1alphaConversionEvent
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionEvent $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaConversionEvent $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionEvent::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaConversionEvent::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesConversionEvents::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesConversionEvents');
+class_alias(PropertiesConversionEvents::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesConversionEvents');

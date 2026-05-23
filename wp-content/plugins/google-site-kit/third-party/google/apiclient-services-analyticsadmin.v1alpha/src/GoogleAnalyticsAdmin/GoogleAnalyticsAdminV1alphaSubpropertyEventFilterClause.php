@@ -37,7 +37,7 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause extends \Google\Si
      * @var string
      */
     public $filterClauseType;
-    protected $filterExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression::class;
+    protected $filterExpressionType = GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression::class;
     protected $filterExpressionDataType = '';
     /**
      * Required. The type for the filter clause.
@@ -63,7 +63,7 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause extends \Google\Si
      *
      * @param GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression $filterExpression
      */
-    public function setFilterExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression $filterExpression)
+    public function setFilterExpression(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterExpression $filterExpression)
     {
         $this->filterExpression = $filterExpression;
     }
@@ -76,4 +76,4 @@ class GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause extends \Google\Si
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause');
+class_alias(GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSubpropertyEventFilterClause');

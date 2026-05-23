@@ -12,6 +12,7 @@ namespace Google\Site_Kit\Core\Email_Reporting;
 
 use Google\Site_Kit\Context;
 use Google\Site_Kit\Core\Golinks\Golinks;
+use Google\Site_Kit\Core\Util\BC_Functions;
 use Google\Site_Kit\Core\User\Email_Reporting_Settings;
 use WP_Error;
 use WP_Post;
@@ -54,19 +55,31 @@ class Email_Template_Formatter {
 	private $golinks;
 
 	/**
+	 * Email notices resolver.
+	 *
+	 * @since 1.175.0
+	 *
+	 * @var Email_Notices
+	 */
+	private $email_notices;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.170.0
 	 * @since 1.174.0 Added golinks dependency.
+	 * @since 1.175.0 Added email notices dependency.
 	 *
 	 * @param Context                      $context         Plugin context.
 	 * @param Email_Report_Section_Builder $section_builder Section builder instance.
 	 * @param Golinks                      $golinks         Golinks instance.
+	 * @param Email_Notices                $email_notices   Email notices resolver.
 	 */
-	public function __construct( Context $context, Email_Report_Section_Builder $section_builder, Golinks $golinks ) {
+	public function __construct( Context $context, Email_Report_Section_Builder $section_builder, Golinks $golinks, Email_Notices $email_notices ) {
 		$this->context         = $context;
 		$this->section_builder = $section_builder;
 		$this->golinks         = $golinks;
+		$this->email_notices   = $email_notices;
 	}
 
 	/**
@@ -120,12 +133,13 @@ class Email_Template_Formatter {
 	 *
 	 * @since 1.170.0
 	 *
-	 * @param array  $sections   Sections.
-	 * @param string $frequency  Frequency slug.
-	 * @param array  $date_range Date range.
+	 * @param array   $sections   Sections.
+	 * @param string  $frequency  Frequency slug.
+	 * @param array   $date_range Date range.
+	 * @param WP_User $user      User receiving the report.
 	 * @return array|WP_Error Template payload or WP_Error.
 	 */
-	public function build_template_payload( $sections, $frequency, $date_range ) {
+	public function build_template_payload( $sections, $frequency, $date_range, WP_User $user ) {
 		$sections_payload = $this->prepare_sections_payload( $sections, $date_range );
 
 		if ( empty( $sections_payload ) ) {
@@ -145,7 +159,11 @@ class Email_Template_Formatter {
 
 		return array(
 			'sections_payload' => $sections_payload,
-			'template_data'    => $this->prepare_template_data( $frequency, $date_range ),
+			'template_data'    => $this->prepare_template_data(
+				$frequency,
+				$date_range,
+				$user
+			),
 		);
 	}
 
@@ -163,10 +181,6 @@ class Email_Template_Formatter {
 		$change_context = $this->get_change_context_label( $date_range );
 
 		foreach ( $sections as $section ) {
-			if ( ! $section instanceof Email_Report_Data_Section_Part ) {
-				continue;
-			}
-
 			$values           = $section->get_values();
 			$labels           = $section->get_labels();
 			$trends           = $section->get_trends();
@@ -314,7 +328,6 @@ class Email_Template_Formatter {
 		$site_domain        = $this->get_site_domain();
 		$dashboard_url      = $this->golinks->get_url( 'dashboard' );
 		$email_settings_url = $this->golinks->get_url( 'manage-subscription-email-reporting' );
-		$help_center_url    = add_query_arg( 'doc', 'get-support', 'https://sitekit.withgoogle.com/support/' );
 
 		$data = array(
 			'subject'                => $subject,
@@ -331,20 +344,6 @@ class Email_Template_Formatter {
 			'footer'                 => array(
 				'copy'            => $email_data['footer_copy'] ?? '',
 				'unsubscribe_url' => $email_settings_url,
-				'links'           => array(
-					array(
-						'label' => __( 'Manage subscription', 'google-site-kit' ),
-						'url'   => $email_settings_url,
-					),
-					array(
-						'label' => __( 'Privacy Policy', 'google-site-kit' ),
-						'url'   => 'https://policies.google.com/privacy',
-					),
-					array(
-						'label' => __( 'Help center', 'google-site-kit' ),
-						'url'   => $help_center_url,
-					),
-				),
 			),
 		);
 
@@ -365,7 +364,6 @@ class Email_Template_Formatter {
 		$first_report_date  = $this->get_first_report_date_label( $frequency );
 		$dashboard_url      = $this->golinks->get_url( 'dashboard' );
 		$email_settings_url = $this->golinks->get_url( 'manage-subscription-email-reporting' );
-		$help_center_url    = add_query_arg( 'doc', 'get-support', 'https://sitekit.withgoogle.com/support/' );
 
 		return array(
 			'subject'                => sprintf(
@@ -386,7 +384,7 @@ class Email_Template_Formatter {
 					$first_report_date,
 				)
 			),
-			'learn_more_url'         => 'https://sitekit.withgoogle.com/documentation/email-reports/',
+			'learn_more_url'         => add_query_arg( 'doc', 'email-reporting', 'https://sitekit.withgoogle.com/support/' ),
 			'primary_call_to_action' => array(
 				'label' => __( 'View dashboard', 'google-site-kit' ),
 				'url'   => $dashboard_url,
@@ -394,21 +392,9 @@ class Email_Template_Formatter {
 			'footer'                 => array(
 				'copy'            => __( 'You received this email because you signed up to receive email reports from Site Kit. If you do not want to receive these emails in the future you can unsubscribe', 'google-site-kit' ),
 				'unsubscribe_url' => $email_settings_url,
-				'links'           => array(
-					array(
-						'label' => __( 'Manage subscription', 'google-site-kit' ),
-						'url'   => $email_settings_url,
-					),
-					array(
-						'label' => __( 'Privacy Policy', 'google-site-kit' ),
-						'url'   => 'https://policies.google.com/privacy',
-					),
-					array(
-						'label' => __( 'Help center', 'google-site-kit' ),
-						'url'   => $help_center_url,
-					),
-				),
 			),
+			'graphic'                => Content_Map::get_graphic_config( 'subscription-confirmation' ),
+			'footer_type'            => 'standard',
 		);
 	}
 
@@ -417,14 +403,14 @@ class Email_Template_Formatter {
 	 *
 	 * @since 1.170.0
 	 *
-	 * @param string $frequency  Frequency slug.
-	 * @param array  $date_range Date range.
+	 * @param string  $frequency  Frequency slug.
+	 * @param array   $date_range Date range.
+	 * @param WP_User $user       User receiving the report.
 	 * @return array Template data.
 	 */
-	private function prepare_template_data( $frequency, $date_range ) {
+	private function prepare_template_data( $frequency, $date_range, WP_User $user ) {
 		$dashboard_url      = $this->golinks->get_url( 'dashboard' );
 		$email_settings_url = $this->golinks->get_url( 'manage-subscription-email-reporting' );
-		$help_center_url    = add_query_arg( 'doc', 'get-support', 'https://sitekit.withgoogle.com/support/' );
 
 		return array(
 			'subject'                => $this->build_subject( $frequency ),
@@ -437,6 +423,7 @@ class Email_Template_Formatter {
 				'label'   => $this->build_date_label( $date_range ),
 				'context' => $this->get_change_context_label( $date_range ),
 			),
+			'header_notices'         => $this->email_notices->get_header_notices( $user ),
 			'primary_call_to_action' => array(
 				'label' => __( 'View dashboard', 'google-site-kit' ),
 				'url'   => $dashboard_url,
@@ -444,20 +431,6 @@ class Email_Template_Formatter {
 			'footer'                 => array(
 				'copy'            => __( 'You received this email because you signed up to receive email reports from Site Kit. If you do not want to receive these emails in the future you can unsubscribe', 'google-site-kit' ), // The space and unsubscribe link are handled in the template.
 				'unsubscribe_url' => $email_settings_url,
-				'links'           => array(
-					array(
-						'label' => __( 'Manage subscription', 'google-site-kit' ),
-						'url'   => $email_settings_url,
-					),
-					array(
-						'label' => __( 'Privacy Policy', 'google-site-kit' ),
-						'url'   => 'https://policies.google.com/privacy',
-					),
-					array(
-						'label' => __( 'Help center', 'google-site-kit' ),
-						'url'   => $help_center_url,
-					),
-				),
 			),
 		);
 	}
@@ -476,17 +449,17 @@ class Email_Template_Formatter {
 		}
 
 		$format_date = static function ( $value ) {
-			$timestamp = strtotime( $value );
-			if ( ! $timestamp ) {
+			$timezone = BC_Functions::wp_timezone();
+			$date     = date_create_immutable( $value, $timezone );
+			if ( ! $date ) {
 				return $value;
 			}
 
-			$timezone = function_exists( 'wp_timezone' ) ? wp_timezone() : null;
-			if ( $timezone && function_exists( 'wp_date' ) ) {
-				return wp_date( 'M j', $timestamp, $timezone );
+			if ( function_exists( 'wp_date' ) ) {
+				return wp_date( 'M j', $date->getTimestamp(), $timezone );
 			}
 
-			return gmdate( 'M j', $timestamp );
+			return $date->format( 'M j' );
 		};
 
 		return sprintf(

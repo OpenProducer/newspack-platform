@@ -31,7 +31,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class PKCS1 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Keys\PKCS1
+abstract class PKCS1 extends Progenitor
 {
     /**
      * Break a public or private key down into its constituent components
@@ -42,23 +42,23 @@ abstract class PKCS1 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      */
     public static function load($key, $password = '')
     {
-        if (!\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::is_stringable($key)) {
-            throw new \UnexpectedValueException('Key should be a string - not a ' . \gettype($key));
+        if (!Strings::is_stringable($key)) {
+            throw new \UnexpectedValueException('Key should be a string - not a ' . gettype($key));
         }
-        if (\strpos($key, 'PUBLIC') !== \false) {
+        if (strpos($key, 'PUBLIC') !== \false) {
             $components = ['isPublicKey' => \true];
-        } elseif (\strpos($key, 'PRIVATE') !== \false) {
+        } elseif (strpos($key, 'PRIVATE') !== \false) {
             $components = ['isPublicKey' => \false];
         } else {
             $components = [];
         }
         $key = parent::load($key, $password);
-        $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($key);
+        $decoded = ASN1::decodeBER($key);
         if (!$decoded) {
             throw new \RuntimeException('Unable to decode BER');
         }
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\RSAPrivateKey::MAP);
-        if (\is_array($key)) {
+        $key = ASN1::asn1map($decoded[0], Maps\RSAPrivateKey::MAP);
+        if (is_array($key)) {
             $components += ['modulus' => $key['modulus'], 'publicExponent' => $key['publicExponent'], 'privateExponent' => $key['privateExponent'], 'primes' => [1 => $key['prime1'], $key['prime2']], 'exponents' => [1 => $key['exponent1'], $key['exponent2']], 'coefficients' => [2 => $key['coefficient']]];
             if ($key['version'] == 'multi') {
                 foreach ($key['otherPrimeInfos'] as $primeInfo) {
@@ -72,12 +72,25 @@ abstract class PKCS1 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
             }
             return $components;
         }
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\RSAPublicKey::MAP);
-        if (!\is_array($key)) {
+        $key = ASN1::asn1map($decoded[0], Maps\RSAPublicKey::MAP);
+        if (!is_array($key)) {
             throw new \RuntimeException('Unable to perform ASN1 mapping');
         }
         if (!isset($components['isPublicKey'])) {
             $components['isPublicKey'] = \true;
+        }
+        $components = $components + $key;
+        foreach ($components as &$val) {
+            if ($val instanceof BigInteger) {
+                $val = self::makePositive($val);
+            }
+            if (is_array($val)) {
+                foreach ($val as &$subval) {
+                    if ($subval instanceof BigInteger) {
+                        $subval = self::makePositive($subval);
+                    }
+                }
+            }
         }
         return $components + $key;
     }
@@ -94,14 +107,14 @@ abstract class PKCS1 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      * @param array $options optional
      * @return string
      */
-    public static function savePrivateKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
+    public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
     {
-        $num_primes = \count($primes);
+        $num_primes = count($primes);
         $key = ['version' => $num_primes == 2 ? 'two-prime' : 'multi', 'modulus' => $n, 'publicExponent' => $e, 'privateExponent' => $d, 'prime1' => $primes[1], 'prime2' => $primes[2], 'exponent1' => $exponents[1], 'exponent2' => $exponents[2], 'coefficient' => $coefficients[2]];
         for ($i = 3; $i <= $num_primes; $i++) {
             $key['otherPrimeInfos'][] = ['prime' => $primes[$i], 'exponent' => $exponents[$i], 'coefficient' => $coefficients[$i]];
         }
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($key, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\RSAPrivateKey::MAP);
+        $key = ASN1::encodeDER($key, Maps\RSAPrivateKey::MAP);
         return self::wrapPrivateKey($key, 'RSA', $password, $options);
     }
     /**
@@ -111,10 +124,20 @@ abstract class PKCS1 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      * @param BigInteger $e
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e)
+    public static function savePublicKey(BigInteger $n, BigInteger $e)
     {
         $key = ['modulus' => $n, 'publicExponent' => $e];
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($key, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\RSAPublicKey::MAP);
+        $key = ASN1::encodeDER($key, Maps\RSAPublicKey::MAP);
         return self::wrapPublicKey($key, 'RSA');
+    }
+    /**
+     * Negative numbers make no sense in RSA so convert them to positive
+     *
+     * @param BigInteger $x
+     * @return string
+     */
+    private static function makePositive(BigInteger $x)
+    {
+        return $x->isNegative() ? new BigInteger($x->toBytes(\true), 256) : $x;
     }
 }

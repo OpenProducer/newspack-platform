@@ -17,7 +17,7 @@ use DateTimeInterface;
  *
  * @author Avtandil Kikabidze <akalongman@gmail.com>
  */
-class ElasticsearchFormatter extends \Google\Site_Kit_Dependencies\Monolog\Formatter\NormalizerFormatter
+class ElasticsearchFormatter extends NormalizerFormatter
 {
     /**
      * @var string Elasticsearch index name
@@ -34,7 +34,7 @@ class ElasticsearchFormatter extends \Google\Site_Kit_Dependencies\Monolog\Forma
     public function __construct(string $index, string $type)
     {
         // Elasticsearch requires an ISO 8601 format date with optional millisecond precision.
-        parent::__construct(\DateTimeInterface::ISO8601);
+        parent::__construct(DateTimeInterface::ISO8601);
         $this->index = $index;
         $this->type = $type;
     }
@@ -51,7 +51,7 @@ class ElasticsearchFormatter extends \Google\Site_Kit_Dependencies\Monolog\Forma
      *
      * @return string
      */
-    public function getIndex() : string
+    public function getIndex(): string
     {
         return $this->index;
     }
@@ -60,7 +60,7 @@ class ElasticsearchFormatter extends \Google\Site_Kit_Dependencies\Monolog\Forma
      *
      * @return string
      */
-    public function getType() : string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -70,7 +70,7 @@ class ElasticsearchFormatter extends \Google\Site_Kit_Dependencies\Monolog\Forma
      * @param  mixed[] $record Log message
      * @return mixed[]
      */
-    protected function getDocument(array $record) : array
+    protected function getDocument(array $record): array
     {
         $record['_index'] = $this->index;
         $record['_type'] = $this->type;

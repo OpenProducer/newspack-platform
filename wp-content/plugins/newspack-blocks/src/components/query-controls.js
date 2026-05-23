@@ -8,6 +8,7 @@ import {
 	CheckboxControl,
 	SelectControl,
 	QueryControls as BasicQueryControls,
+	ToggleControl,
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
@@ -263,6 +264,8 @@ class QueryControls extends Component {
 			customTaxonomyExclusions,
 			onCustomTaxonomyExclusionsChange,
 			enableSpecific,
+			onAllowDedupeChange,
+			allowDedupeCurrentValue,
 		} = this.props;
 
 		const registeredCustomTaxonomies = window.newspack_blocks_data?.custom_taxonomies;
@@ -417,6 +420,15 @@ class QueryControls extends Component {
 									tokens={ getTermsOfCustomTaxonomy( customTaxonomyExclusions, slug ) }
 								/>
 							) ) }
+
+						{ onAllowDedupeChange && (
+							<ToggleControl
+								label={ __( 'Allow duplicate content', 'newspack-blocks' ) }
+								help={ __( "Exclude this block from the page's deduplication logic.", 'newspack-blocks' ) }
+								checked={ allowDedupeCurrentValue }
+								onChange={ value => onAllowDedupeChange( value ) }
+							/>
+						) }
 					</>
 				) }
 			</>

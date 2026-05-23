@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListContainerVersionsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'containerVersionHeader';
-    protected $containerVersionHeaderType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersionHeader::class;
+    protected $containerVersionHeaderType = ContainerVersionHeader::class;
     protected $containerVersionHeaderDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListContainerVersionsResponse extends \Google\Site_Kit_Dependencies\Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListContainerVersionsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListContainerVersionsResponse');
+class_alias(ListContainerVersionsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListContainerVersionsResponse');

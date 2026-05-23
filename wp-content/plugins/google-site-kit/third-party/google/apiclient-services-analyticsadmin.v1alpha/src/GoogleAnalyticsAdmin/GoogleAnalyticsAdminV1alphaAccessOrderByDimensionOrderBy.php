@@ -89,4 +89,4 @@ class GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy extends \Google\S
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy');
+class_alias(GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAccessOrderByDimensionOrderBy');

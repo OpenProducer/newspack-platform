@@ -27,6 +27,17 @@ class Contact_Sync_Admin {
 	 * Initializes hooks.
 	 */
 	public static function init_hooks() {
+		/**
+		 * Enables ESP sync administrative tools in the WordPress admin.
+		 * Provides UI for managing reader data synchronization.
+		 *
+		 * @constant NEWSPACK_ESP_SYNC_ADMIN
+		 * @type     bool
+		 * @default  ESP sync admin tools disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_ESP_SYNC_ADMIN', true );
+		 */
 		if ( ! defined( 'NEWSPACK_ESP_SYNC_ADMIN' ) || ! NEWSPACK_ESP_SYNC_ADMIN ) {
 			return;
 		}
@@ -125,7 +136,7 @@ class Contact_Sync_Admin {
 			\wp_die( \esc_html__( 'You do not have permission to do that.', 'newspack-plugin' ) );
 		}
 		foreach ( $items as $user_id ) {
-			as_schedule_single_action( time(), 'newspack_sync_admin_batch', [ 'user_id' => $user_id ] );
+			as_schedule_single_action( time(), 'newspack_sync_admin_batch', [ 'user_id' => $user_id ], 'newspack-sync' );
 		}
 		$sendback = \add_query_arg(
 			[

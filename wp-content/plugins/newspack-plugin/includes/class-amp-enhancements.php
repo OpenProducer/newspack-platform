@@ -62,6 +62,18 @@ class AMP_Enhancements {
 	 * @return bool Is AMP plus mode configured.
 	 */
 	public static function is_amp_plus_configured() {
+		/**
+		 * Enables AMP Plus mode which allows certain non-AMP-compatible scripts
+		 * to run on AMP pages. This includes Jetpack modules and Gravity Forms.
+		 * Use with caution as it may affect AMP validation.
+		 *
+		 * @constant NEWSPACK_AMP_PLUS_ENABLED
+		 * @type     bool
+		 * @default  AMP Plus mode disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_AMP_PLUS_ENABLED', true );
+		 */
 		return defined( 'NEWSPACK_AMP_PLUS_ENABLED' ) && NEWSPACK_AMP_PLUS_ENABLED;
 	}
 

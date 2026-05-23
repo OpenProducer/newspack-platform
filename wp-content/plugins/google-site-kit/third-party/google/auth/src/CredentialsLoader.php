@@ -28,7 +28,7 @@ use UnexpectedValueException;
  * CredentialsLoader contains the behaviour used to locate and find default
  * credentials files on the file system.
  */
-abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google\Auth\GetUniverseDomainInterface, \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface, \Google\Site_Kit_Dependencies\Google\Auth\UpdateMetadataInterface
+abstract class CredentialsLoader implements GetUniverseDomainInterface, FetchAuthTokenInterface, UpdateMetadataInterface
 {
     use UpdateMetadataTrait;
     const TOKEN_CREDENTIAL_URI = 'https://oauth2.googleapis.com/token';
@@ -54,7 +54,7 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      */
     private static function isOnWindows()
     {
-        return \strtoupper(\substr(\PHP_OS, 0, 3)) === 'WIN';
+        return strtoupper(substr(\PHP_OS, 0, 3)) === 'WIN';
     }
     /**
      * Load a JSON key from the path specified in the environment.
@@ -67,16 +67,16 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      */
     public static function fromEnv()
     {
-        $path = \getenv(self::ENV_VAR);
+        $path = getenv(self::ENV_VAR);
         if (empty($path)) {
             return null;
         }
-        if (!\file_exists($path)) {
+        if (!file_exists($path)) {
             $cause = 'file ' . $path . ' does not exist';
             throw new \DomainException(self::unableToReadEnv($cause));
         }
-        $jsonKey = \file_get_contents($path);
-        return \json_decode((string) $jsonKey, \true);
+        $jsonKey = file_get_contents($path);
+        return json_decode((string) $jsonKey, \true);
     }
     /**
      * Load a JSON key from a well known path.
@@ -93,17 +93,17 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
     public static function fromWellKnownFile()
     {
         $rootEnv = self::isOnWindows() ? 'APPDATA' : 'HOME';
-        $path = [\getenv($rootEnv)];
+        $path = [getenv($rootEnv)];
         if (!self::isOnWindows()) {
             $path[] = self::NON_WINDOWS_WELL_KNOWN_PATH_BASE;
         }
         $path[] = self::WELL_KNOWN_PATH;
-        $path = \implode(\DIRECTORY_SEPARATOR, $path);
-        if (!\file_exists($path)) {
+        $path = implode(\DIRECTORY_SEPARATOR, $path);
+        if (!file_exists($path)) {
             return null;
         }
-        $jsonKey = \file_get_contents($path);
-        return \json_decode((string) $jsonKey, \true);
+        $jsonKey = file_get_contents($path);
+        return json_decode((string) $jsonKey, \true);
     }
     /**
      * Create a new Credentials instance.
@@ -119,24 +119,24 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      */
     public static function makeCredentials($scope, array $jsonKey, $defaultScope = null)
     {
-        if (!\array_key_exists('type', $jsonKey)) {
+        if (!array_key_exists('type', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the type field');
         }
         if ($jsonKey['type'] == 'service_account') {
             // Do not pass $defaultScope to ServiceAccountCredentials
-            return new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\ServiceAccountCredentials($scope, $jsonKey);
+            return new ServiceAccountCredentials($scope, $jsonKey);
         }
         if ($jsonKey['type'] == 'authorized_user') {
             $anyScope = $scope ?: $defaultScope;
-            return new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\UserRefreshCredentials($anyScope, $jsonKey);
+            return new UserRefreshCredentials($anyScope, $jsonKey);
         }
         if ($jsonKey['type'] == 'impersonated_service_account') {
             $anyScope = $scope ?: $defaultScope;
-            return new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\ImpersonatedServiceAccountCredentials($anyScope, $jsonKey);
+            return new ImpersonatedServiceAccountCredentials($anyScope, $jsonKey);
         }
         if ($jsonKey['type'] == 'external_account') {
             $anyScope = $scope ?: $defaultScope;
-            return new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\ExternalAccountCredentials($anyScope, $jsonKey);
+            return new ExternalAccountCredentials($anyScope, $jsonKey);
         }
         throw new \InvalidArgumentException('invalid value in the type field');
     }
@@ -149,9 +149,9 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      * @return \GuzzleHttp\Client
      */
-    public static function makeHttpClient(\Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface $fetcher, array $httpClientOptions = [], ?callable $httpHandler = null, ?callable $tokenCallback = null)
+    public static function makeHttpClient(FetchAuthTokenInterface $fetcher, array $httpClientOptions = [], ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
-        $middleware = new \Google\Site_Kit_Dependencies\Google\Auth\Middleware\AuthTokenMiddleware($fetcher, $httpHandler, $tokenCallback);
+        $middleware = new Middleware\AuthTokenMiddleware($fetcher, $httpHandler, $tokenCallback);
         $stack = \Google\Site_Kit_Dependencies\GuzzleHttp\HandlerStack::create();
         $stack->push($middleware);
         return new \Google\Site_Kit_Dependencies\GuzzleHttp\Client(['handler' => $stack, 'auth' => 'google_auth'] + $httpClientOptions);
@@ -163,7 +163,7 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      */
     public static function makeInsecureCredentials()
     {
-        return new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\InsecureCredentials();
+        return new InsecureCredentials();
     }
     /**
      * Fetch a quota project from the environment variable
@@ -174,7 +174,7 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      */
     public static function quotaProjectFromEnv()
     {
-        return \getenv(self::QUOTA_PROJECT_ENV_VAR) ?: null;
+        return getenv(self::QUOTA_PROJECT_ENV_VAR) ?: null;
     }
     /**
      * Gets a callable which returns the default device certification.
@@ -184,17 +184,17 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      */
     public static function getDefaultClientCertSource()
     {
-        if (!($clientCertSourceJson = self::loadDefaultClientCertSourceFile())) {
+        if (!$clientCertSourceJson = self::loadDefaultClientCertSourceFile()) {
             return null;
         }
         $clientCertSourceCmd = $clientCertSourceJson['cert_provider_command'];
-        return function () use($clientCertSourceCmd) {
-            $cmd = \array_map('escapeshellarg', $clientCertSourceCmd);
-            \exec(\implode(' ', $cmd), $output, $returnVar);
+        return function () use ($clientCertSourceCmd) {
+            $cmd = array_map('escapeshellarg', $clientCertSourceCmd);
+            exec(implode(' ', $cmd), $output, $returnVar);
             if (0 === $returnVar) {
-                return \implode(\PHP_EOL, $output);
+                return implode(\PHP_EOL, $output);
             }
-            throw new \RuntimeException('"cert_provider_command" failed with a nonzero exit code');
+            throw new RuntimeException('"cert_provider_command" failed with a nonzero exit code');
         };
     }
     /**
@@ -204,7 +204,7 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      */
     public static function shouldLoadClientCertSource()
     {
-        return \filter_var(\getenv(self::MTLS_CERT_ENV_VAR), \FILTER_VALIDATE_BOOLEAN);
+        return filter_var(getenv(self::MTLS_CERT_ENV_VAR), \FILTER_VALIDATE_BOOLEAN);
     }
     /**
      * @return array{cert_provider_command:string[]}|null
@@ -212,20 +212,20 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
     private static function loadDefaultClientCertSourceFile()
     {
         $rootEnv = self::isOnWindows() ? 'APPDATA' : 'HOME';
-        $path = \sprintf('%s/%s', \getenv($rootEnv), self::MTLS_WELL_KNOWN_PATH);
-        if (!\file_exists($path)) {
+        $path = sprintf('%s/%s', getenv($rootEnv), self::MTLS_WELL_KNOWN_PATH);
+        if (!file_exists($path)) {
             return null;
         }
-        $jsonKey = \file_get_contents($path);
-        $clientCertSourceJson = \json_decode((string) $jsonKey, \true);
+        $jsonKey = file_get_contents($path);
+        $clientCertSourceJson = json_decode((string) $jsonKey, \true);
         if (!$clientCertSourceJson) {
-            throw new \UnexpectedValueException('Invalid client cert source JSON');
+            throw new UnexpectedValueException('Invalid client cert source JSON');
         }
         if (!isset($clientCertSourceJson['cert_provider_command'])) {
-            throw new \UnexpectedValueException('cert source requires "cert_provider_command"');
+            throw new UnexpectedValueException('cert source requires "cert_provider_command"');
         }
-        if (!\is_array($clientCertSourceJson['cert_provider_command'])) {
-            throw new \UnexpectedValueException('cert source expects "cert_provider_command" to be an array');
+        if (!is_array($clientCertSourceJson['cert_provider_command'])) {
+            throw new UnexpectedValueException('cert source expects "cert_provider_command" to be an array');
         }
         return $clientCertSourceJson;
     }
@@ -235,7 +235,7 @@ abstract class CredentialsLoader implements \Google\Site_Kit_Dependencies\Google
      *
      * @return string
      */
-    public function getUniverseDomain() : string
+    public function getUniverseDomain(): string
     {
         return self::DEFAULT_UNIVERSE_DOMAIN;
     }

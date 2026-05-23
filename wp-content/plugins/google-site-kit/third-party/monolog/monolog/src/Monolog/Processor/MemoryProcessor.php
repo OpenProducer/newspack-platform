@@ -16,7 +16,7 @@ namespace Google\Site_Kit_Dependencies\Monolog\Processor;
  *
  * @author Rob Jensen
  */
-abstract class MemoryProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\ProcessorInterface
+abstract class MemoryProcessor implements ProcessorInterface
 {
     /**
      * @var bool If true, get the real size of memory allocated from system. Else, only the memory used by emalloc() is reported.
@@ -47,9 +47,9 @@ abstract class MemoryProcessor implements \Google\Site_Kit_Dependencies\Monolog\
             return $bytes;
         }
         if ($bytes > 1024 * 1024) {
-            return \round($bytes / 1024 / 1024, 2) . ' MB';
+            return round($bytes / 1024 / 1024, 2) . ' MB';
         } elseif ($bytes > 1024) {
-            return \round($bytes / 1024, 2) . ' KB';
+            return round($bytes / 1024, 2) . ' KB';
         }
         return $bytes . ' B';
     }

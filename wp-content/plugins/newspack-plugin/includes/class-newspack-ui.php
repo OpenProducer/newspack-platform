@@ -26,9 +26,8 @@ class Newspack_UI {
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
 		\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
-		\add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_assets' ] );
+		\add_action( 'enqueue_block_assets', [ __CLASS__, 'enqueue_assets' ] );
 		\add_filter( 'the_content', [ __CLASS__, 'load_demo' ] );
 		\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'theme_colors_css' ] );
 		// Only run if the site is using a block theme.
@@ -775,7 +774,7 @@ class Newspack_UI {
 					</ul>
 				</div>
 			</div>
-			<div class="newspack-ui__spacing-top--16"></div>
+			<div class="newspack-ui__spacing-top--3"></div>
 			<div class="newspack-ui__dropdown">
 				<button class="newspack-ui__button newspack-ui__button--outline newspack-ui__button--small newspack-ui__dropdown__toggle">
 					<span>Actions</span>
@@ -850,7 +849,7 @@ class Newspack_UI {
 				</div>
 			</div>
 
-			<div class="newspack-ui__segmented-control__form-control newspack-ui__spacing-top--32">
+			<div class="newspack-ui__segmented-control__form-control newspack-ui__spacing-top--6">
 				<label>Segmented Control (Form) <abbr class="newspack-ui__required" title="required">*</abbr></label>
 				<div class="newspack-ui__segmented-control__tabs">
 					<button class="newspack-ui__button newspack-ui__button--small selected">True</button>
@@ -1125,7 +1124,7 @@ class Newspack_UI {
 			<div class="newspack-ui__box">
 				<div class="newspack-ui__modal newspack-ui__modal--small">
 					<header class="newspack-ui__modal__header">
-						<h2>Auth Modal Newsletter Sign Up</h2>
+						<h2>Newsletters Signup Form</h2>
 
 						<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost newspack-ui__modal__close">
 							<span class="screen-reader-text"><?php esc_html_e( 'Close', 'newspack-plugin' ); ?></span>
@@ -1136,25 +1135,140 @@ class Newspack_UI {
 					<section class="newspack-ui__modal__content">
 
 						<p>Get the best of The News Paper directly to your email inbox.<br>
-						<span class="newspack-ui__color-text-gray">Sending to: email@address.</span></p>
+						<span class="newspack-ui__color-text-gray">Sending to: <strong>email@address.</strong></span></p>
 
-						<label class="newspack-ui__input-card">
-							<input type="checkbox" name="checkbox-option-1">
-							<span>
-								<strong>The Weekly</strong>
-								<span class="newspack-ui__helper-text">Friday roundup of the most relevant stories.</span>
-							</span>
-						</label>
+						<?php
+						// Sample data for testing the newsletters signup form.
+						$demo_email_address = 'demo@example.com';
+						$demo_newsletters_lists = [
+							[
+								'id'          => '1',
+								'title'       => 'Daily News',
+								'description' => 'Get the latest news delivered to your inbox every morning.',
+								'checked'     => true,
+							],
+							[
+								'id'          => '2',
+								'title'       => 'Weekly Digest',
+								'description' => 'A weekly summary of our top stories.',
+								'checked'     => false,
+							],
+							[
+								'id'          => '3',
+								'title'       => 'Breaking News',
+								'description' => 'Receive instant alerts for breaking news stories.',
+								'checked'     => false,
+							],
+							[
+								'id'          => '4',
+								'title'       => 'Sports Updates',
+								'description' => 'Stay up to date with all the latest sports news.',
+								'checked'     => false,
+							],
+							[
+								'id'          => '5',
+								'title'       => 'Technology News',
+								'description' => 'The latest in technology and innovation.',
+								'checked'     => false,
+							],
+						];
+						$demo_default_list_size = 2;
 
-						<label class="newspack-ui__input-card">
-							<input type="checkbox" name="checkbox-option-2">
-							<span>
-								<strong>The Weekly</strong>
-								<span class="newspack-ui__helper-text">Friday roundup of the most relevant stories.</span>
-							</span>
-						</label>
+						// Render the newsletters signup form, replicating the function structure.
+						$loop_index = 0;
+						?>
+						<div class="newspack-ui newspack-newsletters-signup">
+							<form method="post" target="_top">
+								<input type="hidden" name="reader-activation-newsletters-signup" value="1" />
+								<input type="hidden" name="email_address" value="<?php echo esc_attr( $demo_email_address ); ?>" />
 
-						<button class="newspack-ui__button newspack-ui__button--primary newspack-ui__button--wide">Continue</button>
+								<div class="newspack-ui__stack newspack-ui__stack--vertical newspack-ui__stack--gap-2 overflow-hidden position-relative newsletter-list-container" data-list-default-size="<?php echo esc_attr( $demo_default_list_size ); ?>">
+								<?php
+								foreach ( $demo_newsletters_lists as $list ) {
+									$checkbox_id = sprintf( 'newspack-plugin-list-%s', $list['id'] );
+									$is_hidden   = $loop_index <= $demo_default_list_size ? '' : 'hidden';
+									$loop_index++;
+									?>
+									<label class="newspack-ui__input-card <?php echo esc_attr( $is_hidden ); ?>" for="<?php echo esc_attr( $checkbox_id ); ?>">
+										<input
+											type="checkbox"
+											name="lists[]"
+											value="<?php echo esc_attr( $list['id'] ); ?>"
+											id="<?php echo esc_attr( $checkbox_id ); ?>"
+											<?php
+											if ( isset( $list['checked'] ) && $list['checked'] ) {
+												echo 'checked';
+											}
+											?>
+										>
+										<strong><?php echo esc_html( $list['title'] ); ?></strong>
+										<?php if ( ! empty( $list['description'] ) ) : ?>
+											<span class="newspack-ui__helper-text"><?php echo esc_html( $list['description'] ); ?></span>
+										<?php endif; ?>
+									</label>
+									<?php
+									if ( $loop_index === (int) $demo_default_list_size && count( $demo_newsletters_lists ) > $demo_default_list_size ) :
+										?>
+										<div class="newspack-ui__gradient-divider"></div>
+										<?php
+									endif;
+								}
+								?>
+								</div>
+
+								<div class="newspack-ui__stack newspack-ui__stack--vertical newspack-ui__stack--gap-2 newspack-ui__spacing-top--5">
+									<?php if ( count( $demo_newsletters_lists ) > $demo_default_list_size ) : ?>
+										<button type="button" class="newspack-ui__button newspack-ui__button--wide newspack-ui__button--secondary see-all-button" aria-label="<?php esc_attr_e( 'See all newsletters', 'newspack-plugin' ); ?>">
+											<span aria-hidden="true"><?php esc_html_e( 'See all', 'newspack-plugin' ); ?></span>
+											<?php Newspack_UI_Icons::print_svg( 'chevronDownSmall' ); ?>
+										</button>
+									<?php endif; ?>
+									<button type="submit" class="newspack-ui__button newspack-ui__button--wide newspack-ui__button--primary"><?php esc_html_e( 'Continue', 'newspack-plugin' ); ?></button>
+								</div>
+							</form>
+						</div>
+						<script>
+							( function() {
+								const container = document.querySelector( '.newspack-newsletters-signup' );
+								if ( ! container ) {
+									return;
+								}
+								const seeAllButton = container.querySelector( '.see-all-button' );
+								const newsletterContainer = container.querySelector( '.newsletter-list-container' );
+								if ( seeAllButton && newsletterContainer ) {
+									const divider = newsletterContainer.querySelector( '.newspack-ui__gradient-divider' );
+									seeAllButton.addEventListener( 'click', function() {
+										newsletterContainer.querySelectorAll( '.hidden' ).forEach( function( item ) {
+											item.classList.remove( 'hidden' );
+										} );
+										newsletterContainer.style.maxHeight = 'none';
+										if ( divider ) {
+											divider.classList.add( 'hidden' );
+										}
+										seeAllButton.classList.add( 'hidden' );
+									} );
+
+									// Set the initial height to show partially visible.
+									const listDefaultSize = parseInt( newsletterContainer.dataset.listDefaultSize, 10 );
+									const newsletterItems = newsletterContainer.querySelectorAll( '.newspack-ui__input-card' );
+
+									if ( newsletterItems.length > listDefaultSize ) {
+										const gap = 12;
+										const extraSpace = 32;
+
+										let totalHeight = 0;
+										newsletterItems.forEach( function( item, index ) {
+											if ( index < listDefaultSize ) {
+												totalHeight += item.offsetHeight;
+											}
+										} );
+
+										const maxHeight = totalHeight + listDefaultSize * gap + extraSpace;
+										newsletterContainer.style.maxHeight = maxHeight + 'px';
+									}
+								}
+							} )();
+						</script>
 					</section>
 				</div><!-- .newspack-ui__modal--small -->
 			</div><!-- .newspack-ui__box -->

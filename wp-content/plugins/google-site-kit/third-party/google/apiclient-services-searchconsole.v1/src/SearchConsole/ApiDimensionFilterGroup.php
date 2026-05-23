@@ -21,7 +21,7 @@ class ApiDimensionFilterGroup extends \Google\Site_Kit_Dependencies\Google\Colle
 {
     public const GROUP_TYPE_AND = 'AND';
     protected $collection_key = 'filters';
-    protected $filtersType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\ApiDimensionFilter::class;
+    protected $filtersType = ApiDimensionFilter::class;
     protected $filtersDataType = 'array';
     /**
      * @var string
@@ -57,4 +57,4 @@ class ApiDimensionFilterGroup extends \Google\Site_Kit_Dependencies\Google\Colle
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\ApiDimensionFilterGroup::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_ApiDimensionFilterGroup');
+class_alias(ApiDimensionFilterGroup::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_ApiDimensionFilterGroup');

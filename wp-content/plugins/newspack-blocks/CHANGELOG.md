@@ -1,3 +1,85 @@
+## [4.26.3](https://github.com/Automattic/newspack-blocks/compare/v4.26.2...v4.26.3) (2026-05-18)
+
+
+### Bug Fixes
+
+* change defaultFrequency approach in the Donate block to match tiered layout ([#2330](https://github.com/Automattic/newspack-blocks/issues/2330)) ([3f7da1f](https://github.com/Automattic/newspack-blocks/commit/3f7da1f94381bdf5bd5a37ffd219e0d136ac5949))
+* ensure block option spacing for checkout button block is consistent ([#2335](https://github.com/Automattic/newspack-blocks/issues/2335)) ([ecc3c2c](https://github.com/Automattic/newspack-blocks/commit/ecc3c2c054fb0c3ded71ade097d1ab3da0f881f5))
+* **modal-checkout:** suppress WooPayments express checkout when Stripe is active ([#2304](https://github.com/Automattic/newspack-blocks/issues/2304)) ([b9607ea](https://github.com/Automattic/newspack-blocks/commit/b9607eaeb822e5345ab6002600f4619c08b85245))
+
+## [4.26.2](https://github.com/Automattic/newspack-blocks/compare/v4.26.1...v4.26.2) (2026-05-04)
+
+
+### Bug Fixes
+
+* **modal-checkout:** retrieve order from query vars in thankyou template ([#2324](https://github.com/Automattic/newspack-blocks/issues/2324)) ([c483abd](https://github.com/Automattic/newspack-blocks/commit/c483abdc471e844e75fd0732b8cc878b52e58100))
+
+## [4.26.1](https://github.com/Automattic/newspack-blocks/compare/v4.26.0...v4.26.1) (2026-04-13)
+
+
+### Bug Fixes
+
+* **modal-checkout:** register NYP AJAX handler for logged-out users ([#2323](https://github.com/Automattic/newspack-blocks/issues/2323)) ([291223e](https://github.com/Automattic/newspack-blocks/commit/291223e5f52bf3af096a07466199d625bdd68e50))
+* reinstate WP 7.0 enqueue_block_assets workaround ([#2319](https://github.com/Automattic/newspack-blocks/issues/2319)) ([4cff5a6](https://github.com/Automattic/newspack-blocks/commit/4cff5a625e5244e2c5b4f78e32328af956446af5))
+* track seen blocks to prevent infinite recursion in cache checks ([#2327](https://github.com/Automattic/newspack-blocks/issues/2327)) ([9116fc0](https://github.com/Automattic/newspack-blocks/commit/9116fc0e1a9e6b4cf75cd30f3d6286f63a3d744c))
+
+# [4.26.0](https://github.com/Automattic/newspack-blocks/compare/v4.25.4...v4.26.0) (2026-03-30)
+
+
+### Bug Fixes
+
+* **author-profile:** correct avatar-right mobile stacking order ([#2312](https://github.com/Automattic/newspack-blocks/issues/2312)) ([7bd89c2](https://github.com/Automattic/newspack-blocks/commit/7bd89c2d481b18f78c3b9f95f9445e7a3be724b1))
+* **block-theme:** modal checkout for block theme ([#2311](https://github.com/Automattic/newspack-blocks/issues/2311)) ([eefa9ab](https://github.com/Automattic/newspack-blocks/commit/eefa9ab8f5c31ed020f7228857c8f47ace4740dd))
+
+
+### Features
+
+* add dedupe option to Carousel block ([#2309](https://github.com/Automattic/newspack-blocks/issues/2309)) ([18f625e](https://github.com/Automattic/newspack-blocks/commit/18f625e16dbfa0ff61e46f2fa3b2bb8effe62f44))
+* **author-profile:** add block variations for layout selection ([#2302](https://github.com/Automattic/newspack-blocks/issues/2302)) ([1ba67ba](https://github.com/Automattic/newspack-blocks/commit/1ba67ba0bdfd8339c8209257e45c089edc48f3ae))
+
+## [4.25.4](https://github.com/Automattic/newspack-blocks/compare/v4.25.3...v4.25.4) (2026-03-26)
+
+
+### Bug Fixes
+
+* **modal-checkout:** prevent empty error notices and fix padding ([#2322](https://github.com/Automattic/newspack-blocks/issues/2322)) ([0c9307d](https://github.com/Automattic/newspack-blocks/commit/0c9307db777f0e3343e0c1e2129f8ecd887c26ab))
+
+## [4.25.3](https://github.com/Automattic/newspack-blocks/compare/v4.25.2...v4.25.3) (2026-03-23)
+
+
+### Bug Fixes
+
+* update payment gateway check to make more specific ([#2321](https://github.com/Automattic/newspack-blocks/issues/2321)) ([205ae60](https://github.com/Automattic/newspack-blocks/commit/205ae602a1cec474bddc287143fe548fa9035070))
+
+## [4.25.2](https://github.com/Automattic/newspack-blocks/compare/v4.25.1...v4.25.2) (2026-03-17)
+
+
+### Bug Fixes
+
+* restore editing tools to Carousel block ([ee1354a](https://github.com/Automattic/newspack-blocks/commit/ee1354ae5f97475dc2afebfea05f6019599959dd))
+
+## [4.25.1](https://github.com/Automattic/newspack-blocks/compare/v4.25.0...v4.25.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* reinstate enqueue block editor assets for the blocks ([#2314](https://github.com/Automattic/newspack-blocks/issues/2314)) ([3695d09](https://github.com/Automattic/newspack-blocks/commit/3695d09465fe07d626da39b4d0a1eb454d21722b))
+
+# [4.25.0](https://github.com/Automattic/newspack-blocks/compare/v4.24.1...v4.25.0) (2026-03-16)
+
+
+### Bug Fixes
+
+* iframe editor compatibility ([#2289](https://github.com/Automattic/newspack-blocks/issues/2289)) ([cdc0858](https://github.com/Automattic/newspack-blocks/commit/cdc085887f01c28ae1684dde07097951a21ae52e))
+* remove styles config ([#2301](https://github.com/Automattic/newspack-blocks/issues/2301)) ([60eae46](https://github.com/Automattic/newspack-blocks/commit/60eae467b685cacd3f0d36ce62f93aaa934968ec))
+* tweak the payment gateway to include enabled gateways not in get_available_payment_gateways() ([#2306](https://github.com/Automattic/newspack-blocks/issues/2306)) ([f82fe2d](https://github.com/Automattic/newspack-blocks/commit/f82fe2dfe1e20b59efb3a4016afcf9c7d860dc95))
+
+
+### Features
+
+* **author-profile:** add block theme compatibility ([#2286](https://github.com/Automattic/newspack-blocks/issues/2286)) ([d10fe2f](https://github.com/Automattic/newspack-blocks/commit/d10fe2fd525616ad77003afec9db0c901554d349))
+* **author-profile:** allow spacer and separator blocks ([#2300](https://github.com/Automattic/newspack-blocks/issues/2300)) ([0b77d71](https://github.com/Automattic/newspack-blocks/commit/0b77d71292a8e0a2fe56981a39135d68177d828d))
+
 ## [4.24.1](https://github.com/Automattic/newspack-blocks/compare/v4.24.0...v4.24.1) (2026-03-02)
 
 

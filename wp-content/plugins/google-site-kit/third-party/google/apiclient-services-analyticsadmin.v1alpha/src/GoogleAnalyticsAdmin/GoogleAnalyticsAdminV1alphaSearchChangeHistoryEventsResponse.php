@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'changeHistoryEvents';
-    protected $changeHistoryEventsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChangeHistoryEvent::class;
+    protected $changeHistoryEventsType = GoogleAnalyticsAdminV1alphaChangeHistoryEvent::class;
     protected $changeHistoryEventsDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse extends \Goog
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse');
+class_alias(GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse');

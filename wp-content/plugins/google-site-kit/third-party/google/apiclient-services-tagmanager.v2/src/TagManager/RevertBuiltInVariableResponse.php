@@ -43,4 +43,4 @@ class RevertBuiltInVariableResponse extends \Google\Site_Kit_Dependencies\Google
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertBuiltInVariableResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertBuiltInVariableResponse');
+class_alias(RevertBuiltInVariableResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertBuiltInVariableResponse');

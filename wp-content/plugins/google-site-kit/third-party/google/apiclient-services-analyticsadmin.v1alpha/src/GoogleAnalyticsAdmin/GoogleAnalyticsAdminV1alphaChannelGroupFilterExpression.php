@@ -19,13 +19,13 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $andGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList::class;
+    protected $andGroupType = GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList::class;
     protected $andGroupDataType = '';
-    protected $filterType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilter::class;
+    protected $filterType = GoogleAnalyticsAdminV1alphaChannelGroupFilter::class;
     protected $filterDataType = '';
-    protected $notExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression::class;
+    protected $notExpressionType = GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression::class;
     protected $notExpressionDataType = '';
-    protected $orGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList::class;
+    protected $orGroupType = GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList::class;
     protected $orGroupDataType = '';
     /**
      * A list of expressions to be AND’ed together. It can only contain
@@ -34,7 +34,7 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression extends \Google\Si
      *
      * @param GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList $andGroup
      */
-    public function setAndGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList $andGroup)
+    public function setAndGroup(GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList $andGroup)
     {
         $this->andGroup = $andGroup;
     }
@@ -51,7 +51,7 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression extends \Google\Si
      *
      * @param GoogleAnalyticsAdminV1alphaChannelGroupFilter $filter
      */
-    public function setFilter(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilter $filter)
+    public function setFilter(GoogleAnalyticsAdminV1alphaChannelGroupFilter $filter)
     {
         $this->filter = $filter;
     }
@@ -69,7 +69,7 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression extends \Google\Si
      *
      * @param GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression $notExpression
      */
-    public function setNotExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression $notExpression)
+    public function setNotExpression(GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression $notExpression)
     {
         $this->notExpression = $notExpression;
     }
@@ -86,7 +86,7 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression extends \Google\Si
      *
      * @param GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList $orGroup
      */
-    public function setOrGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList $orGroup)
+    public function setOrGroup(GoogleAnalyticsAdminV1alphaChannelGroupFilterExpressionList $orGroup)
     {
         $this->orGroup = $orGroup;
     }
@@ -99,4 +99,4 @@ class GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression extends \Google\Si
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression');
+class_alias(GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaChannelGroupFilterExpression');

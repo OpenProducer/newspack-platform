@@ -154,4 +154,4 @@ class LhrEntity extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LhrEntity::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_LhrEntity');
+class_alias(LhrEntity::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_LhrEntity');

@@ -20,9 +20,9 @@ final class Each
      *
      * @param mixed $iterable Iterator or array to iterate over.
      */
-    public static function of($iterable, ?callable $onFulfilled = null, ?callable $onRejected = null) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public static function of($iterable, ?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
-        return (new \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected]))->promise();
+        return (new EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected]))->promise();
     }
     /**
      * Like of, but only allows a certain number of outstanding promises at any
@@ -35,9 +35,9 @@ final class Each
      * @param mixed        $iterable
      * @param int|callable $concurrency
      */
-    public static function ofLimit($iterable, $concurrency, ?callable $onFulfilled = null, ?callable $onRejected = null) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public static function ofLimit($iterable, $concurrency, ?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
-        return (new \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected, 'concurrency' => $concurrency]))->promise();
+        return (new EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected, 'concurrency' => $concurrency]))->promise();
     }
     /**
      * Like limit, but ensures that no promise in the given $iterable argument
@@ -47,9 +47,9 @@ final class Each
      * @param mixed        $iterable
      * @param int|callable $concurrency
      */
-    public static function ofLimitAll($iterable, $concurrency, ?callable $onFulfilled = null) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public static function ofLimitAll($iterable, $concurrency, ?callable $onFulfilled = null): PromiseInterface
     {
-        return self::ofLimit($iterable, $concurrency, $onFulfilled, function ($reason, $idx, \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface $aggregate) : void {
+        return self::ofLimit($iterable, $concurrency, $onFulfilled, function ($reason, $idx, PromiseInterface $aggregate): void {
             $aggregate->reject($reason);
         });
     }

@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class ListAccountsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'accounts';
-    protected $accountsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Account::class;
+    protected $accountsType = Account::class;
     protected $accountsDataType = 'array';
     /**
      * Continuation token used to page through accounts. To retrieve the next page
@@ -64,4 +64,4 @@ class ListAccountsResponse extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListAccountsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListAccountsResponse');
+class_alias(ListAccountsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListAccountsResponse');

@@ -18,7 +18,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath\Base;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath\Base
+abstract class Barrett extends Base
 {
     /**
      * Cache constants
@@ -57,9 +57,9 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
     protected static function reduce($n, $m)
     {
         static $cache = [self::VARIABLE => [], self::DATA => []];
-        $m_length = \strlen($m);
-        if (\strlen($n) > 2 * $m_length) {
-            return \bcmod($n, $m);
+        $m_length = strlen($m);
+        if (strlen($n) > 2 * $m_length) {
+            return self::BCMOD_THREE_PARAMS ? bcmod($n, $m, 0) : bcmod($n, $m);
         }
         // if (m.length >> 1) + 2 <= m.length then m is too small and n can't be reduced
         if ($m_length < 5) {
@@ -73,54 +73,56 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
             $m .= '0';
             $m_length++;
         }
-        if (($key = \array_search($m, $cache[self::VARIABLE])) === \false) {
-            $key = \count($cache[self::VARIABLE]);
+        if (($key = array_search($m, $cache[self::VARIABLE])) === \false) {
+            $key = count($cache[self::VARIABLE]);
             $cache[self::VARIABLE][] = $m;
-            $lhs = '1' . \str_repeat('0', $m_length + ($m_length >> 1));
-            $u = \bcdiv($lhs, $m, 0);
-            $m1 = \bcsub($lhs, \bcmul($u, $m));
+            $lhs = '1' . str_repeat('0', $m_length + ($m_length >> 1));
+            $u = bcdiv($lhs, $m, 0);
+            $m1 = bcsub($lhs, bcmul($u, $m, 0), 0);
             $cache[self::DATA][] = [
                 'u' => $u,
                 // m.length >> 1 (technically (m.length >> 1) + 1)
                 'm1' => $m1,
             ];
         } else {
-            \extract($cache[self::DATA][$key]);
+            $cacheValues = $cache[self::DATA][$key];
+            $u = $cacheValues['u'];
+            $m1 = $cacheValues['m1'];
         }
         $cutoff = $m_length + ($m_length >> 1);
-        $lsd = \substr($n, -$cutoff);
-        $msd = \substr($n, 0, -$cutoff);
-        $temp = \bcmul($msd, $m1);
+        $lsd = substr($n, -$cutoff);
+        $msd = substr($n, 0, -$cutoff);
+        $temp = bcmul($msd, $m1, 0);
         // m.length + (m.length >> 1)
-        $n = \bcadd($lsd, $temp);
+        $n = bcadd($lsd, $temp, 0);
         // m.length + (m.length >> 1) + 1 (so basically we're adding two same length numbers)
         //if ($m_length & 1) {
         //    return self::regularBarrett($n, $m);
         //}
         // (m.length + (m.length >> 1) + 1) - (m.length - 1) == (m.length >> 1) + 2
-        $temp = \substr($n, 0, -$m_length + 1);
+        $temp = substr($n, 0, -$m_length + 1);
         // if even: ((m.length >> 1) + 2) + (m.length >> 1) == m.length + 2
         // if odd:  ((m.length >> 1) + 2) + (m.length >> 1) == (m.length - 1) + 2 == m.length + 1
-        $temp = \bcmul($temp, $u);
+        $temp = bcmul($temp, $u, 0);
         // if even: (m.length + 2) - ((m.length >> 1) + 1) = m.length - (m.length >> 1) + 1
         // if odd:  (m.length + 1) - ((m.length >> 1) + 1) = m.length - (m.length >> 1)
-        $temp = \substr($temp, 0, -($m_length >> 1) - 1);
+        $temp = substr($temp, 0, -($m_length >> 1) - 1);
         // if even: (m.length - (m.length >> 1) + 1) + m.length = 2 * m.length - (m.length >> 1) + 1
         // if odd:  (m.length - (m.length >> 1)) + m.length     = 2 * m.length - (m.length >> 1)
-        $temp = \bcmul($temp, $m);
+        $temp = bcmul($temp, $m, 0);
         // at this point, if m had an odd number of digits, we'd be subtracting a 2 * m.length - (m.length >> 1) digit
         // number from a m.length + (m.length >> 1) + 1 digit number.  ie. there'd be an extra digit and the while loop
         // following this comment would loop a lot (hence our calling _regularBarrett() in that situation).
-        $result = \bcsub($n, $temp);
+        $result = bcsub($n, $temp, 0);
         //if (bccomp($result, '0') < 0) {
         if ($result[0] == '-') {
-            $temp = '1' . \str_repeat('0', $m_length + 1);
-            $result = \bcadd($result, $temp);
+            $temp = '1' . str_repeat('0', $m_length + 1);
+            $result = bcadd($result, $temp, 0);
         }
-        while (\bccomp($result, $m) >= 0) {
-            $result = \bcsub($result, $m);
+        while (bccomp($result, $m, 0) >= 0) {
+            $result = bcsub($result, $m, 0);
         }
-        return $correctionNeeded ? \substr($result, 0, -1) : $result;
+        return $correctionNeeded && $result != '0' ? substr($result, 0, -1) : $result;
     }
     /**
      * (Regular) Barrett Modular Reduction
@@ -135,29 +137,29 @@ abstract class Barrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\Big
     private static function regularBarrett($x, $n)
     {
         static $cache = [self::VARIABLE => [], self::DATA => []];
-        $n_length = \strlen($n);
-        if (\strlen($x) > 2 * $n_length) {
-            return \bcmod($x, $n);
+        $n_length = strlen($n);
+        if (strlen($x) > 2 * $n_length) {
+            return self::BCMOD_THREE_PARAMS ? bcmod($x, $n, 0) : bcmod($x, $n);
         }
-        if (($key = \array_search($n, $cache[self::VARIABLE])) === \false) {
-            $key = \count($cache[self::VARIABLE]);
+        if (($key = array_search($n, $cache[self::VARIABLE])) === \false) {
+            $key = count($cache[self::VARIABLE]);
             $cache[self::VARIABLE][] = $n;
-            $lhs = '1' . \str_repeat('0', 2 * $n_length);
-            $cache[self::DATA][] = \bcdiv($lhs, $n, 0);
+            $lhs = '1' . str_repeat('0', 2 * $n_length);
+            $cache[self::DATA][] = bcdiv($lhs, $n, 0);
         }
-        $temp = \substr($x, 0, -$n_length + 1);
-        $temp = \bcmul($temp, $cache[self::DATA][$key]);
-        $temp = \substr($temp, 0, -$n_length - 1);
-        $r1 = \substr($x, -$n_length - 1);
-        $r2 = \substr(\bcmul($temp, $n), -$n_length - 1);
-        $result = \bcsub($r1, $r2);
+        $temp = substr($x, 0, -$n_length + 1);
+        $temp = bcmul($temp, $cache[self::DATA][$key], 0);
+        $temp = substr($temp, 0, -$n_length - 1);
+        $r1 = substr($x, -$n_length - 1);
+        $r2 = substr(bcmul($temp, $n, 0), -$n_length - 1);
+        $result = bcsub($r1, $r2);
         //if (bccomp($result, '0') < 0) {
         if ($result[0] == '-') {
-            $q = '1' . \str_repeat('0', $n_length + 1);
-            $result = \bcadd($result, $q);
+            $q = '1' . str_repeat('0', $n_length + 1);
+            $result = bcadd($result, $q, 0);
         }
-        while (\bccomp($result, $n) >= 0) {
-            $result = \bcsub($result, $n);
+        while (bccomp($result, $n, 0) >= 0) {
+            $result = bcsub($result, $n, 0);
         }
         return $result;
     }
